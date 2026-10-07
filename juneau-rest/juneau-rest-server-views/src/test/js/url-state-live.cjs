@@ -39,7 +39,7 @@ if (!urlStateJsPath || !rendersJsPath || !viewsJsPath) {
 
 const { env, I, NS } = loadViews(rendersJsPath, viewsJsPath);
 // NOSONAR javascript:S1523 -- loading a production JS source into a VM sandbox is this harness's intended mechanism; the input is a fixed local file supplied by the test.
-vm.runInNewContext(
+vm.runInNewContext( // NOSONAR javascript:S1523 -- the harness evaluates the module's own bundled script
 	fs.readFileSync(path.resolve(urlStateJsPath), 'utf8'),
 	{ window: env.window, console: console },
 	{ filename: 'juneau-urlstate.js' }
@@ -59,8 +59,8 @@ if (!out.hasWire || !out.hasUrlState) {
 
 const window = env.window;
 
-function fakeCol(idx, data, searchVal) {
-	let _search = searchVal || '';
+function fakeCol(idx, data, searchVal = '') {
+	let _search = searchVal;
 	return {
 		index: function () { return idx; },
 		search: function (v) {
@@ -260,7 +260,7 @@ out.f1NoThrowOnUnusualTabIds = true;
 tabNames.forEach(function (name) {
 	try {
 		I.applyShareableOpenState(f1Table, f1Ctx, { tab: name, filters: [], sort: null });
-	} catch (error) {
+	} catch (error) { // NOSONAR javascript:S2486 -- the failure is recorded in the result flag asserted below
 		out.f1NoThrowOnUnusualTabIds = false;
 	}
 });

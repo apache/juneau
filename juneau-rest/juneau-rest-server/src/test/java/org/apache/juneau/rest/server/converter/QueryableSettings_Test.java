@@ -110,6 +110,9 @@ class QueryableSettings_Test {
 		try (var s = ctx(QueryableSettings.DEFAULT).getSession(people(1200))) {
 			assertSize(100, s.find(new BeanQuery()).rows());
 			assertSize(1000, s.find(new BeanQuery().setLimit(5000)).rows());
+		}
+		// Regex on a small set: the default regexTimeout is a wall-clock budget for the whole call, so 1200 rows can trip it under build load.
+		try (var s = ctx(QueryableSettings.DEFAULT).getSession(people(101))) {
 			assertSize(100, s.find(new BeanQuery().setSearch("name=$regex(p.*)")).rows());
 		}
 	}

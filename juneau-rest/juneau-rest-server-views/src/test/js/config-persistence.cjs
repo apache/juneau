@@ -52,7 +52,7 @@ const PROBE = async function () {
 	// NOSONAR javascript:S7721 -- must stay nested: page.evaluate(PROBE) ships only PROBE's own source into the
 	// browser context, so a helper hoisted to this file's Node module scope would be undefined in the page and
 	// break every caller below.
-	function makeTable(pageId, viewId, savedViewsBase) {
+	function makeTable(pageId, viewId, savedViewsBase) { // NOSONAR javascript:S7721 -- must stay nested: page.evaluate(PROBE) ships only the probe's own source into the browser context
 		const page = document.createElement('div');
 		page.dataset.juneauPage = pageId;
 		if (savedViewsBase != null) page.dataset.juneauSavedViews = savedViewsBase;

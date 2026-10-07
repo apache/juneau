@@ -70,7 +70,7 @@ const PROBE = async function () {
 
 	// NOSONAR javascript:S7721 -- must stay nested: page.evaluate(PROBE) ships only PROBE's own source into the
 	// browser context, so a helper hoisted to this file's Node module scope would be undefined in the page.
-	function overlapsAnyTab(r) {
+	function overlapsAnyTab(r) { // NOSONAR javascript:S7721 -- must stay nested: page.evaluate(PROBE) ships only the probe's own source into the browser context
 		return r.tabs.some(function (t) {
 			return r.slot.left < t.right && t.left < r.slot.right && r.slot.top < t.bottom && t.top < r.slot.bottom;
 		});

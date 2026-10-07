@@ -169,7 +169,7 @@ async function openAndConfirm(opts) {
 
 const success = (extra) => () => Promise.resolve(jsonResponse({ outcome: 'success', ...extra }));
 
-(async function main() {
+(async function main() { // NOSONAR javascript:S3776 -- linear test scenario; complexity is inherent
 
 	// --- 1) T8-receipt: the swap.  Same layer, no submit controls, the submitted form torn down ---------------
 	{
@@ -199,8 +199,7 @@ const success = (extra) => () => Promise.resolve(jsonResponse({ outcome: 'succes
 			return dl?.querySelectorAll('dd').length === 2 && dl.querySelectorAll('dt').length === 2;
 		})();
 		out.receipt_exactlyOneFieldList = env.body.querySelectorAll('.juneau-view-dialog-fields').length === 1;
-		out.receipt_codeFieldIsPre = q(env, '.juneau-view-dialog-field-code') != null
-			&& q(env, '.juneau-view-dialog-field-code').textContent === 'tok-9';
+		out.receipt_codeFieldIsPre = q(env, '.juneau-view-dialog-field-code')?.textContent === 'tok-9';
 		out.receipt_codeFieldHasCopyButton = q(env, '[data-testid="dialog-field-copy"]') != null;
 		// The row banner is SUPPRESSED: the dialog is on screen, so rendering it too would show one outcome twice.
 		out.receipt_noRowBanner = !anyRowBanner(env);
@@ -233,7 +232,7 @@ const success = (extra) => () => Promise.resolve(jsonResponse({ outcome: 'succes
 		const env = r.env;
 		out.f4_dialogClosedAsToday = r.I.dialogLayerCount() === 0;
 		out.f4_noFollowUpGet = receiptGets === 0;
-		out.f4_successBannerUnchanged = rowOutcome(env) != null && rowOutcome(env).dataset.state === 'success';
+		out.f4_successBannerUnchanged = rowOutcome(env)?.dataset.state === 'success';
 		const diag = q(env, '[data-testid="result-form-ignored"]');
 		out.f4_diagnosticPresent = diag != null;
 		// role=status, not alert: the write SUCCEEDED, and a consumer authoring bug must not look like a failure.
@@ -315,7 +314,7 @@ const success = (extra) => () => Promise.resolve(jsonResponse({ outcome: 'succes
 		out.t1_stillOpen = r.I.dialogLayerCount() === 1;
 		out.t1_noticePresent = heldNotice(env) != null;
 		// Retryable: nothing was sent, so the operator can fix the declaration and press Confirm again.
-		out.t1_confirmReEnabled = confirmBtn(env) != null && confirmBtn(env).disabled === false;
+		out.t1_confirmReEnabled = confirmBtn(env)?.disabled === false;
 		out.t1_busyCleared = dialogEl(env).dataset.juneauDialogBusy === undefined;
 		out.t1_noCloseOnlyRow = q(env, '[data-testid="dialog-result-close"]') === null;
 		out.t1_noRowBanner = !anyRowBanner(env);
@@ -350,7 +349,7 @@ const success = (extra) => () => Promise.resolve(jsonResponse({ outcome: 'succes
 		const env = r.env;
 		out.t4_stillOpen = r.I.dialogLayerCount() === 1;
 		out.t4_noticePresent = heldNotice(env) != null;
-		out.t4_confirmReEnabled = confirmBtn(env) != null && confirmBtn(env).disabled === false;
+		out.t4_confirmReEnabled = confirmBtn(env)?.disabled === false;
 		out.t4_noCloseOnlyRow = q(env, '[data-testid="dialog-result-close"]') === null;
 		out.t4_busyCleared = dialogEl(env).dataset.juneauDialogBusy === undefined;
 	}
@@ -374,7 +373,7 @@ const success = (extra) => () => Promise.resolve(jsonResponse({ outcome: 'succes
 			submit: () => Promise.resolve(jsonResponse({ outcome: 'refusal', refusalCode: 'write-guard:not-armed' }))
 		});
 		const env = r.env;
-		out.t8refuse_confirmReEnabled = confirmBtn(env) != null && confirmBtn(env).disabled === false;
+		out.t8refuse_confirmReEnabled = confirmBtn(env)?.disabled === false;
 		out.t8refuse_noCloseOnlyRow = q(env, '[data-testid="dialog-result-close"]') === null;
 		out.t8refuse_noticePresent = heldNotice(env) != null;
 	}
@@ -409,7 +408,7 @@ const success = (extra) => () => Promise.resolve(jsonResponse({ outcome: 'succes
 		// no-SSE-transport fallback - which is itself a ROW paint, and therefore proves the same ordering: the
 		// close already happened, and the row was reachable when the job path ran.
 		out.t5_rowAnchoredSignalVisible = rowOutcome(env) != null;
-		out.t5_rowSignalIsNotInADialog = rowOutcome(env) != null && rowOutcome(env).closest('.juneau-view-dialog') === null;
+		out.t5_rowSignalIsNotInADialog = rowOutcome(env)?.closest('.juneau-view-dialog') === null;
 	}
 
 	// --- 12) Cancel mid-flight: the layer is gone, so the outcome falls back to the row banner -----------

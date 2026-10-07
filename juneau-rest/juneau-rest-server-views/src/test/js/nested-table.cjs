@@ -56,7 +56,7 @@ if (!viewsJsPath || !dataTablesJsPath || !ribbonJsPath) {
 // matches one token kind at a time (class / attr / tag); splitting the token kinds into further helpers would
 // scatter the matcher's early-return short-circuiting across files without reducing real complexity.
 function elMatchesCompound(node, sel) {
-	if (!node || node.nodeType !== 1) return false;
+	if (node?.nodeType !== 1) return false;
 	const re = /\.[\w-]+|\[[\w:-]+(?:="[^"]*")?\]|^[a-zA-Z][\w-]*/g;
 	let m;
 	let matchedSomething = false;
@@ -88,7 +88,7 @@ function elMatches(node, sel) {
 	let n = node.parentNode;
 	for (let i = parts.length - 2; i >= 0; i--) {
 		while (n?.nodeType === 1 && !elMatchesCompound(n, parts[i])) n = n.parentNode;
-		if (!n || n.nodeType !== 1) return false;
+		if (n?.nodeType !== 1) return false;
 		n = n.parentNode;
 	}
 	return true;
@@ -201,9 +201,9 @@ const sandbox = {
 };
 // NOSONAR javascript:S1523 -- this is the test harness deliberately loading the real juneau-datatables.js,
 // juneau-ribbon.js and juneau-views.js under test into an isolated vm sandbox; there is no untrusted input.
-vm.runInNewContext(fs.readFileSync(path.resolve(dataTablesJsPath), 'utf8'), sandbox, { filename: 'juneau-datatables.js' });
-vm.runInNewContext(fs.readFileSync(path.resolve(ribbonJsPath), 'utf8'), sandbox, { filename: 'juneau-ribbon.js' });
-vm.runInNewContext(fs.readFileSync(path.resolve(viewsJsPath), 'utf8'), sandbox, { filename: 'juneau-views.js' });
+vm.runInNewContext(fs.readFileSync(path.resolve(dataTablesJsPath), 'utf8'), sandbox, { filename: 'juneau-datatables.js' }); // NOSONAR javascript:S1523 -- the harness evaluates the module's own bundled script
+vm.runInNewContext(fs.readFileSync(path.resolve(ribbonJsPath), 'utf8'), sandbox, { filename: 'juneau-ribbon.js' }); // NOSONAR javascript:S1523 -- the harness evaluates the module's own bundled script
+vm.runInNewContext(fs.readFileSync(path.resolve(viewsJsPath), 'utf8'), sandbox, { filename: 'juneau-views.js' }); // NOSONAR javascript:S1523 -- the harness evaluates the module's own bundled script
 
 const NS = window.JuneauViews;
 const I = NS?.init;
@@ -451,8 +451,7 @@ function nestedWrapper(o) {
 }
 
 const fnsW = nestedWrapper({ viewId: 'events' });
-out.find_byId = I.findNestedSidecar(fnsW.wrap, 'events') != null
-	&& I.findNestedSidecar(fnsW.wrap, 'events').dataset.juneauNestedMeta === 'events';
+out.find_byId = I.findNestedSidecar(fnsW.wrap, 'events')?.dataset.juneauNestedMeta === 'events';
 // id skew -> falls back to first meta node (present, not silent no-init).
 const skewW = nestedWrapper({ viewId: 'events', metaId: 'other' });
 out.find_fallbackFirst = I.findNestedSidecar(skewW.wrap, 'events') != null;

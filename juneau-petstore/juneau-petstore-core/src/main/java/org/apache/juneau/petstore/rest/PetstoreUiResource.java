@@ -16,6 +16,9 @@
  */
 package org.apache.juneau.petstore.rest;
 
+import java.util.*;
+
+import org.apache.juneau.http.*;
 import org.apache.juneau.rest.server.*;
 import org.apache.juneau.rest.server.servlet.*;
 import org.apache.juneau.rest.server.staticfile.*;
@@ -28,6 +31,10 @@ import org.apache.juneau.rest.server.staticfile.*;
  * {@code static/petstore-ui.html} is reachable at {@code GET /petstore-ui/static/petstore-ui.html}.  The HTML
  * loads React + Babel and uses {@code fetch()} against {@code /petstore/pets} to demonstrate the headless-JSON +
  * decoupled-SPA pattern alongside the server-rendered HTML-doc UI.
+ *
+ * <p>
+ * The app is also served at the resource root ({@code GET /petstore-ui}), so the console can embed and link it without
+ * knowing the static mount.
  *
  * <p>
  * Lives in {@code juneau-petstore-core} so both the Jetty and Spring Boot deployments inherit it for free.
@@ -48,4 +55,16 @@ import org.apache.juneau.rest.server.staticfile.*;
 public class PetstoreUiResource extends BasicRestServlet {
 
 	private static final long serialVersionUID = 1L;
+
+	/**
+	 * [GET /] &mdash; the single-page app.
+	 *
+	 * @param req The current request.
+	 * @param locale The request locale.
+	 * @return The app's HTML page.
+	 */
+	@RestGet(path="/", summary="The React app", swagger=@OpSwagger(ignore=true))
+	public HttpResource app(RestRequest req, Locale locale) {
+		return StaticFilesMixin.resolveStaticFile(req, "petstore-ui.html", locale);
+	}
 }

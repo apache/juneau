@@ -66,7 +66,7 @@ if (!out.hasGetColumnExpr || !out.hasSetColumnExpr || !out.hasCompile) {
 // ---------------------------------------------------------------------------------------------------------------
 
 function op(name, extra) {
-	return Object.assign({ name: name, help: name + ' help.', minArgs: 1, maxArgs: 1, combinator: false, custom: false }, extra || {});
+	return Object.assign({ name: name, help: name + ' help.', minArgs: 1, maxArgs: 1, combinator: false, custom: false }, { ...extra });
 }
 
 const ENUM_OPS = [op('$eq'), op('$ne'), op('$in', { maxArgs: -1 }), op('$not', { combinator: true })];
@@ -115,7 +115,7 @@ function fakeCol(idx, opts) {
 	const fixed = {};
 	const header = headerCell(opts.title || ('Col' + idx));
 	const api = { draw: function () { draws++; return api; } };
-	const search = function (v) {
+	const search = function (v) { // NOSONAR javascript:S3800 -- mirrors DataTables' column.search() getter/setter overload: returns the value or the chainable api
 		if (arguments.length === 0) return applied;
 		applied = v == null ? '' : String(v);
 		return api;
@@ -160,7 +160,7 @@ function fakeDt(cols) {
  */
 function makeTable(mode, colOpts) {
 	const optsColumns = COLUMNS.map(function (c) { return { data: c.data, title: c.data }; });
-	const cols = COLUMNS.map(function (c, i) { return fakeCol(i, Object.assign({ title: c.data }, (colOpts || {})[c.data])); });
+	const cols = COLUMNS.map(function (c, i) { return fakeCol(i, { title: c.data, ...colOpts?.[c.data] }); });
 	const ctx = {
 		viewDef: { id: 't-' + mode, dataMode: mode === 'client' ? 'client' : 'server', columns: COLUMNS },
 		optsColumns: optsColumns,
@@ -286,8 +286,8 @@ out.clientFilteredInline = I.isClientFiltered({ viewDef: { dataMode: 'server' },
 	out.strictBadCode = r.error ? r.error.code : null;
 	out.strictKeptRows = JSON.stringify(visible(t)) === JSON.stringify(before);
 	out.strictKeptExpr = I.getColumnExpr(t.ctx, colByName(t, 'priority'));
-	out.strictUnknownOpCode = (setExpr(t, 'priority', '$nope(1)').error || {}).code;
-	out.strictOutOfTypeCode = (setExpr(t, 'status', '$gt(1)').error || {}).code;
+	out.strictUnknownOpCode = setExpr(t, 'priority', '$nope(1)').error?.code;
+	out.strictOutOfTypeCode = setExpr(t, 'status', '$gt(1)').error?.code;
 	// Blank clears: the fixed predicate is removed and the store entry dropped.
 	const cleared = setExpr(t, 'priority', '');
 	out.strictClearOk = cleared.ok;
@@ -440,7 +440,7 @@ if (datesJsonPath) {
 		};
 		const t = { ctx: ctx, cols: cols };
 		const r = I.setColumnExpr(ctx, cols[0], '$between(2026-02-01,2026-03-31)');
-		out.dateBetween[c] = r.ok ? visible(t, rows) : ('error:' + (r.error && r.error.code));
+		out.dateBetween[c] = r.ok ? visible(t, rows) : ('error:' + r.error?.code);
 	});
 	// Popover UTC note on a timestamp column.
 	const cols = [fakeCol(0, { title: 'date' })];

@@ -24,7 +24,7 @@ import java.time.*;
  * <p>
  * {@link PetStore} appends one entry for every successful create, update or delete, whether it came from the
  * {@code /petstore} API (actor {@code "api"}) or from the console (actor {@code "console:<user>"}).  Failed mutations
- * append nothing.  The P7 Audit console page lists these entries.
+ * append nothing.  The Audit console page lists these entries.
  *
  * <h5 class='section'>Example:</h5>
  * <p class='bjava'>

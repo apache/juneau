@@ -26,6 +26,7 @@ import org.apache.juneau.rest.mock.classic.*;
 import org.junit.jupiter.api.*;
 
 @SuppressWarnings({
+	"java:S2925", // Polls an asynchronous job; the REST API has no completion hook to wait on.
 	"resource" // MockRestClient is a no-op close.
 })
 class JobsRest_Test extends TestBase {

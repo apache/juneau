@@ -116,7 +116,7 @@ function run(contract, templates, opts) {
 
 	try {
 		// NOSONAR javascript:S1523 -- loading a production JS source into a VM sandbox is this harness's intended mechanism; the input is a fixed local file supplied by the test.
-		vm.runInNewContext(shellSrc, sandbox, { filename: 'juneau-console.js' });
+		vm.runInNewContext(shellSrc, sandbox, { filename: 'juneau-console.js' }); // NOSONAR javascript:S1523 -- harness evaluates the module's own bundled script, a fixed local file
 	} catch (error) {
 		threw = { name: error.name, code: error.code, message: error.message };
 	}
@@ -159,10 +159,10 @@ const out = {};
 	out.golden.rows = r.doc.querySelectorAll('.juneau-page-nav-children').length;
 	out.golden.mainText = txt(r.doc, 'main.jc-main');
 	out.golden.templatesLeft = r.doc.querySelectorAll('template').length;
-	out.golden.cardType = r.JC.card('jc-seg-1') && r.JC.card('jc-seg-1').type;
+	out.golden.cardType = r.JC.card('jc-seg-1')?.type;
 	out.golden.activeNavSource = r.result?.activeNavSource;
 	out.golden.activeNav = r.result?.activeNav;
-	out.golden.contractHeaderTitle = r.JC.contract() && r.JC.contract().header.title;
+	out.golden.contractHeaderTitle = r.JC.contract()?.header.title;
 })();
 
 //----------------------------------------------------------------------------------------------------------------

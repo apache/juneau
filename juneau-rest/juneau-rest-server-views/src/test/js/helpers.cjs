@@ -239,7 +239,7 @@ await (async function dataPaneTests() {
 	const pane3 = env.el('div');
 	const populate3 = H.dataPane({ load: function () { return Promise.reject(new Error('kaboom')); }, render: function () { return env.el('span'); } });
 	let threw3 = false;
-	try { await populate3(pane3, {}); } catch (error) { threw3 = true; }
+	try { await populate3(pane3, {}); } catch (error) { threw3 = true; } // NOSONAR javascript:S2486 -- the thrown flag is the recorded result: the test asserts nothing is rethrown
 	out.dataPane_otherRejectionNeverRethrows = threw3 === false;
 	out.dataPane_otherRejectionPaintsErrorStatus = pane3.querySelectorAll('[role="status"]').length === 1;
 
@@ -247,7 +247,7 @@ await (async function dataPaneTests() {
 	const pane3b = env.el('div');
 	const populate3b = H.dataPane({ load: function () { throw new Error('sync throw'); }, render: function () { return env.el('span'); } });
 	let threw3b = false;
-	try { await populate3b(pane3b, {}); } catch (error) { threw3b = true; }
+	try { await populate3b(pane3b, {}); } catch (error) { threw3b = true; } // NOSONAR javascript:S2486 -- the thrown flag is the recorded result: the test asserts nothing is rethrown
 	out.dataPane_syncThrowNeverRethrows = threw3b === false;
 
 	// empty result (array of length 0) -> the empty node, custom empty() honored
@@ -299,7 +299,7 @@ function keyOnTab(wrapper, focusedBtn, key) {
 	stripOf(wrapper).dispatch('keydown', { key: key, target: focusedBtn, preventDefault: function () { /* no-op */ } });
 }
 function selectedTabId(wrapper) {
-	const sel = wrapper.querySelectorAll('[role="tab"]').filter(b => b.getAttribute('aria-selected') === 'true')[0];
+	const sel = wrapper.querySelectorAll('[role="tab"]').find(b => b.getAttribute('aria-selected') === 'true');
 	return sel ? sel.dataset.juneauStripTab : null;
 }
 
@@ -403,7 +403,7 @@ await (async function tabStripTests() {
 	out.tabStrip_arrowRight_skipsDisabled = selectedTabId(wrap10) === 't4';
 	// unhandled key changes nothing
 	const beforeKey = selectedTabId(wrap10);
-	keyOnTab(wrap10, btns.filter(b => b.getAttribute('aria-selected') === 'true')[0], 'x');
+	keyOnTab(wrap10, btns.find(b => b.getAttribute('aria-selected') === 'true'), 'x');
 	out.tabStrip_unhandledKeyChangesNothing = selectedTabId(wrap10) === beforeKey;
 
 	// two independent instances: fill-once state does not leak between them (purity, positive half of test 29)
@@ -483,7 +483,7 @@ function clickPencil(leaf) {
 	btn.dispatch('click', { target: btn });
 }
 
-await (async function editableFieldTests() {
+await (async function editableFieldTests() { // NOSONAR javascript:S3776 -- linear test scenario; complexity is inherent
 	out.editableField_missingOnSaveThrows = !!throws(function () { H.editableField({ label: 'T', value: 'x' }); });
 	out.editableField_unknownTypeThrows = !!throws(function () { H.editableField({ type: 'date', onSave: function () { /* no-op */ } }); });
 	out.editableField_selectWithoutOptionsThrows = !!throws(function () {
@@ -514,7 +514,7 @@ await (async function editableFieldTests() {
 
 	const cb = H.editableField({ label: 'On', type: 'checkbox', value: false, onSave: function () { return Promise.resolve(); } });
 	out.editableField_checkboxHasNoPencil = !cb.querySelector('.jc-editable-field-pencil');
-	out.editableField_checkboxIsInput = cb.querySelector('input') && cb.querySelector('input').type === 'checkbox';
+	out.editableField_checkboxIsInput = cb.querySelector('input')?.type === 'checkbox';
 
 	let disabledSaved = 0;
 	const disabledLeaf = H.editableField({
@@ -592,7 +592,7 @@ await (async function editableFieldTests() {
 	await flush();
 	out.editableField_explicitBlurDoesNotSave = explicitSaves.length === 0 && cls(explicitLeaf, 'is-editing');
 	const explicitBtns = explicitLeaf.querySelectorAll('button');
-	const saveBtn = explicitBtns.filter(b => textOf(b).indexOf('Save') >= 0)[0];
+	const saveBtn = explicitBtns.find(b => textOf(b).indexOf('Save') >= 0);
 	saveBtn.dispatch('click', {});
 	await flush();
 	out.editableField_explicitSaveButtonSaves = explicitSaves.length === 1 && explicitSaves[0] === 'typed';
@@ -604,7 +604,7 @@ await (async function editableFieldTests() {
 	});
 	clickPencil(cancelLeaf);
 	cancelLeaf.querySelector('input').value = 'nope';
-	cancelLeaf.querySelectorAll('button').filter(b => textOf(b).indexOf('Cancel') >= 0)[0].dispatch('click', {});
+	cancelLeaf.querySelectorAll('button').find(b => textOf(b).indexOf('Cancel') >= 0).dispatch('click', {});
 	out.editableField_explicitCancelDiscards = cancelSaves === 0 && !cls(cancelLeaf, 'is-editing');
 
 	let selectSaved = [];

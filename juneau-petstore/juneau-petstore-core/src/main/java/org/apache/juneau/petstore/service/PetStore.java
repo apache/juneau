@@ -531,7 +531,7 @@ public class PetStore {
 	 * Appends an audit entry stamped with this store's clock.
 	 *
 	 * <p>
-	 * Public so console operations that are not plain CRUD (P6 restock, P10 apply/discard) are audited too.
+	 * Public so console operations that are not plain CRUD (restock, apply/discard pending changes) are audited too.
 	 *
 	 * @param actor Who did it.
 	 * @param entity The entity kind.
@@ -551,7 +551,7 @@ public class PetStore {
 	}
 
 	/**
-	 * Returns the staging area for console inline edits (P4 -> P10).
+	 * Returns the staging area for console inline edits (pet detail to Pending changes).
 	 *
 	 * @return The pending-changes staging area.  Never <jk>null</jk>.
 	 */
@@ -590,7 +590,7 @@ public class PetStore {
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
-	// BeanQuery views (D-P5)
+	// BeanQuery views
 	//------------------------------------------------------------------------------------------------------------------
 
 	/**

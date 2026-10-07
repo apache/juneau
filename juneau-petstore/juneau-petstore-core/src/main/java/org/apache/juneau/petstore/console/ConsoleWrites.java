@@ -18,6 +18,7 @@ package org.apache.juneau.petstore.console;
 
 import java.util.*;
 
+import org.apache.juneau.commons.settings.*;
 import org.apache.juneau.http.response.*;
 import org.apache.juneau.petstore.auth.*;
 import org.apache.juneau.rest.server.*;
@@ -37,7 +38,7 @@ import org.apache.juneau.rest.server.auth.*;
  */
 public final class ConsoleWrites {
 
-	/** System property that turns on the console write gate. */
+	/** Setting (system property, environment, or any registered source) that turns on the console write gate. */
 	public static final String SECURE_PROPERTY = "petstore.secure";
 
 	private static final StubBearerTokenValidator VALIDATOR = new StubBearerTokenValidator();
@@ -80,9 +81,14 @@ public final class ConsoleWrites {
 	 */
 	public static String actor(RestRequest req) {
 		var user = user(req);
-		if (user == null && Boolean.getBoolean(SECURE_PROPERTY))  // Q:  Can we use Settings here?
+		if (user == null && secure())
 			throw new Unauthorized("Console writes need the demo bearer token").setHeader("WWW-Authenticate", "Bearer realm=\"petstore\"");
 		return user == null ? "console" : "console:" + user;
+	}
+
+	// Resolved on every call, so a changed setting (or a test override) takes effect immediately.
+	private static boolean secure() {
+		return Settings.get().get(SECURE_PROPERTY).asBoolean().orElse(false);
 	}
 
 	/**

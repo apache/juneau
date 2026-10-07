@@ -185,7 +185,7 @@ public final class RemoteClient {
 			// the design's precedence table collapsed to the surfaces this engine actually exposes).
 			var allowPrivateUrls = meta.isAllowPrivateUrls() || client.isAllowPrivateUrls();
 
-			// Apply the call-time @Url parameter / declarative baseUrl override (computed per call;
+			// Apply the call-time @Url parameter / declarative baseUrl override (computed per call and
 			// never cached on the shared meta objects).  Path-token substitution still runs at request time so @Path params
 			// can fill tokens inside the resolved URL.
 			var effectivePath = resolveEffectiveUrl(methodMeta, method, args, fullPath, allowPrivateUrls);

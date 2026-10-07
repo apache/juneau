@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.petstore.springboot;
 
+import static org.apache.juneau.test.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.*;
@@ -25,6 +26,8 @@ import java.net.http.HttpResponse.*;
 import java.time.*;
 
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.params.*;
+import org.junit.jupiter.params.provider.*;
 import org.springframework.boot.test.context.*;
 import org.springframework.boot.test.context.SpringBootTest.*;
 import org.springframework.boot.test.web.server.*;
@@ -171,6 +174,22 @@ class PetstoreSpringboot_Test {
 		assertTrue(resp.body().contains("id=\"juneau-page\""), "expected the page contract element: " + resp.body());
 	}
 
+	/**
+	 * The console pages link their chrome assets at context-root {@code /juneau-console/*} URLs and their views
+	 * toolkit assets page-relative; both must be served for the console to style and start in a browser.
+	 */
+	@ParameterizedTest(name="{0}")
+	@ValueSource(strings={
+		"/juneau-console/chrome.css",
+		"/juneau-console/themes/juneau-theme-open.css",
+		"/juneau-console/juneau-console.js",
+		"/console/store/juneau-views.js",
+		"/console/ops/audit/juneau-datatables.js"
+	})
+	void a03_consoleAssetIsServed(String path) throws Exception {
+		assertEquals(200, get(path, "*/*").statusCode(), path);
+	}
+
 	//-----------------------------------------------------------------------------------------------------------------
 	// b — petstore CRUD over real HTTP
 	//-----------------------------------------------------------------------------------------------------------------
@@ -245,47 +264,52 @@ class PetstoreSpringboot_Test {
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
-	// e — view-engine demos (parity with jetty deployment — both inherit from core)
+	// e — rendering flavors (parity with jetty deployment — both inherit from core)
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@Test void e01_mustacheView_rendersPet() throws Exception {
-		var resp = get("/pet-views/mustache/pets/1/view", "text/html");
+	@Test void e01_mustacheFlavorFragment() throws Exception {
+		var resp = get("/console/dev/flavors/mustache/fragment", "text/html");
 		assertEquals(200, resp.statusCode(), "body: " + resp.body());
-		assertTrue(resp.body().contains("Mr. Frisky"), "expected pet name in mustache view: " + resp.body());
-		assertTrue(resp.body().contains("Rendered via Mustache."), "expected mustache marker: " + resp.body());
+		assertContainsAll(resp.body(), "data-flavor=\"mustache\"", "Mr. Frisky");
 	}
 
-	@Test void e02_freemarkerView_rendersPet() throws Exception {
-		var resp = get("/pet-views/freemarker/pets/1/view", "text/html");
+	@Test void e02_freemarkerFlavorFragment() throws Exception {
+		var resp = get("/console/dev/flavors/freemarker/fragment", "text/html");
 		assertEquals(200, resp.statusCode(), "body: " + resp.body());
-		assertTrue(resp.body().contains("Mr. Frisky"), "expected pet name in freemarker view: " + resp.body());
-		assertTrue(resp.body().contains("Rendered via FreeMarker."), "expected freemarker marker: " + resp.body());
+		assertContainsAll(resp.body(), "data-flavor=\"freemarker\"", "Mr. Frisky");
+	}
+
+	@Test void e03_flavorPageRendersInConsole() throws Exception {
+		var resp = get("/console/dev/flavors/html", "text/html");
+		assertEquals(200, resp.statusCode(), "body: " + resp.body());
+		assertContainsAll(resp.body(), "/console/dev/flavors/html/fragment", "View source");
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
-	// f — AuthFilterChain gating /petstore-secure/* (parity with jetty deployment)
+	// f — BearerTokenGuard gating /console/dev/secure/api/* (parity with jetty deployment)
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Test void f01_secureEndpoint_noAuth_401() throws Exception {
-		var resp = get("/petstore-secure/pets", "application/json");
+		var resp = get("/console/dev/secure/api/pets", "application/json");
 		assertEquals(401, resp.statusCode(), "body: " + resp.body());
 		var challenge = resp.headers().firstValue("WWW-Authenticate").orElse("");
 		assertTrue(challenge.contains("Bearer"), "WWW-Authenticate should advertise Bearer scheme: " + challenge);
+		assertContains("realm=\"petstore\"", challenge);
 	}
 
 	@Test void f02_secureEndpoint_validToken_200() throws Exception {
-		var resp = getWithAuth("/petstore-secure/pets", "application/json", "Bearer petstore-user");
+		var resp = getWithAuth("/console/dev/secure/api/pets", "application/json", "Bearer petstore-user");
 		assertEquals(200, resp.statusCode(), "body: " + resp.body());
 		assertTrue(resp.body().contains("Mr. Frisky"), "body: " + resp.body());
 	}
 
 	@Test void f03_secureEndpoint_unknownToken_401() throws Exception {
-		var resp = getWithAuth("/petstore-secure/pets", "application/json", "Bearer wrong-token");
+		var resp = getWithAuth("/console/dev/secure/api/pets", "application/json", "Bearer wrong-token");
 		assertEquals(401, resp.statusCode(), "body: " + resp.body());
 	}
 
 	@Test void f04_secureEndpoint_whoami_returnsPrincipalName() throws Exception {
-		var resp = getWithAuth("/petstore-secure/whoami", "application/json", "Bearer petstore-admin");
+		var resp = getWithAuth("/console/dev/secure/api/whoami", "application/json", "Bearer petstore-admin");
 		assertEquals(200, resp.statusCode(), "body: " + resp.body());
 		assertTrue(resp.body().contains("\"name\":\"admin\""), "body: " + resp.body());
 	}
@@ -293,6 +317,22 @@ class PetstoreSpringboot_Test {
 	@Test void f05_unsecuredEndpoint_stillOpen() throws Exception {
 		var resp = get("/petstore/pets/1", "application/json");
 		assertEquals(200, resp.statusCode(), "body: " + resp.body());
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// g — retired one-off resources (parity with jetty f)
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@ParameterizedTest(name="{0}")
+	@ValueSource(strings={
+		"/pet-views/mustache/pets/1/view",
+		"/pet-views/freemarker/pets/1/view",
+		"/petstore-html/card/1",
+		"/petstore-secure/pets",
+		"/petstore-info/BeanDescription"
+	})
+	void g01_retiredPathIs404(String path) throws Exception {
+		assertEquals(404, get(path, "text/html").statusCode(), path);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

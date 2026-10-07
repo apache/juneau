@@ -78,21 +78,21 @@ const PROBE = async function () {
 		return true;
 	}
 
-	function infoText(id) {
+	function infoText(id) { // NOSONAR javascript:S7721 -- must stay nested: page.evaluate(PROBE) ships only the probe's own source into the browser context
 		const el = document.querySelector('#' + id + '_wrapper .dt-info, #' + id + '_wrapper .dataTables_info');
 		return el ? el.textContent : null;
 	}
-	function firstRowText(id, col) {
+	function firstRowText(id, col) { // NOSONAR javascript:S7721 -- must stay nested: page.evaluate(PROBE) ships only the probe's own source into the browser context
 		const row = document.querySelector('#' + id + ' tbody tr');
 		return row?.children[col] ? row.children[col].textContent : null;
 	}
-	function searchInput(id) {
+	function searchInput(id) { // NOSONAR javascript:S7721 -- must stay nested: page.evaluate(PROBE) ships only the probe's own source into the browser context
 		return document.querySelector('#' + id + '_wrapper input[type=search]');
 	}
-	function nextButton(id) {
+	function nextButton(id) { // NOSONAR javascript:S7721 -- must stay nested: page.evaluate(PROBE) ships only the probe's own source into the browser context
 		return document.querySelector('#' + id + '_wrapper .dt-paging-button.next, #' + id + '_wrapper .paginate_button.next');
 	}
-	function nameHeader(id) {
+	function nameHeader(id) { // NOSONAR javascript:S7721 -- must stay nested: page.evaluate(PROBE) ships only the probe's own source into the browser context
 		return document.querySelector('#' + id + ' thead th:nth-child(2)');
 	}
 	function isFiltered(id) {

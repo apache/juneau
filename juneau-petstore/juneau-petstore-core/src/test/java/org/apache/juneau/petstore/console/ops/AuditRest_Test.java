@@ -67,4 +67,21 @@ class AuditRest_Test extends TestBase {
 		var list = new JsonList(client().get("/console/ops/audit/rows").run().assertStatus(200).getContent().asString());
 		assertTrue(list.getMap(0).getString("at").compareTo(list.getMap(list.size() - 1).getString("at")) >= 0, "newest first");
 	}
+
+	private static JsonMap globalSearch(String value) throws Exception {
+		var body = "{\"draw\":1,\"length\":25,\"search\":{\"value\":\"" + value + "\"},\"columns\":["
+			+ "{\"data\":\"at\"},{\"data\":\"actor\"},{\"data\":\"action\"},{\"data\":\"entity\"},{\"data\":\"entityId\"},{\"data\":\"detail\"}]}";
+		return new JsonMap(client().post("/console/ops/audit/query", body).contentType("application/json").run().assertStatus(200).getContent().asString());
+	}
+
+	@Test void a05_globalSearchFindsSeededEntitiesAndOnlyRestockJobEntries() throws Exception {
+		// The browser test searches the audit table; the seed has Pet/Order/User entries.
+		var hit = globalSearch("Order");
+		assertTrue(hit.getInt("recordsFiltered") > 0, "seed has Order entries");
+		for (var row : hit.getList("data").elements(JsonMap.class))
+			assertString("Order", row.getString("entity"));
+		// The store is shared with JobsRest_Test, so restock jobs may already have run; no seed entry may match.
+		for (var row : globalSearch("restock").getList("data").elements(JsonMap.class))
+			assertTrue(row.getString("actor").startsWith("job:restock"), row.toString());
+	}
 }

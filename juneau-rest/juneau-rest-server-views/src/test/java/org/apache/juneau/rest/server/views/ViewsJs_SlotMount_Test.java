@@ -164,4 +164,9 @@ class ViewsJs_SlotMount_Test extends TestBase {
 		assertAllTrue(r, "t18_relativeKept", "t18_sameOriginAbsKept", "t18_noWarnYet", "t18_crossOriginNotStamped",
 			"t18_warned");
 	}
+
+	@Test void b15_documentScanLeavesASlotBuiltTableAlone() {
+		var r = report();
+		assertAllTrue(r, "t19_tableMounted", "t19_scanLogsNoMissingSidecar");
+	}
 }

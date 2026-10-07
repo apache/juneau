@@ -161,8 +161,9 @@ async function runScenario(opts) {
 	const sandbox = {
 		window: env.window, document: env.document, console: sandboxConsole,
 		setTimeout: function (fn) {
-			if (typeof fn !== 'function') return 0;
-			if (opts.deferTimers) timers.push(fn); else fn();
+			if (typeof fn === 'function') {
+				if (opts.deferTimers) timers.push(fn); else fn();
+			}
 			return 0;
 		},
 		clearTimeout: function () { /* no-op */ },
@@ -172,7 +173,7 @@ async function runScenario(opts) {
 	};
 	// NOSONAR javascript:S1523 -- loading the production juneau-icons.js source into a VM sandbox is this
 	// harness's intended mechanism for exercising it under the SVG-sprite shim; the path is a fixed local file.
-	vm.runInNewContext(ICONS_JS, sandbox, { filename: 'juneau-icons.js' });
+	vm.runInNewContext(ICONS_JS, sandbox, { filename: 'juneau-icons.js' }); // NOSONAR javascript:S1523 -- harness evaluates the module's own bundled script, a fixed local file
 
 	const NS = env.window.JuneauViews;
 	const ctx = {
@@ -367,7 +368,7 @@ const OVR_SVG =
 		const s = await runScenario({ replacementUrl: '/app/repl.svg', replacementSvg: REPL_SVG });
 		const stems = s.NS.icons.stems().slice();
 		out.s_catalog = {
-			stemsMatchShipped: JSON.stringify(stems.sort((a, b) => Number(a > b) - Number(a < b))) === JSON.stringify(shipped.sort((a, b) => Number(a > b) - Number(a < b))),
+			stemsMatchShipped: JSON.stringify(stems.toSorted((a, b) => Number(a > b) - Number(a < b))) === JSON.stringify(shipped.toSorted((a, b) => Number(a > b) - Number(a < b))),
 			brandnewInStems: stems.indexOf('brandnew') !== -1,
 			brandnewResolves: typeof s.NS.icons.resolveIcon('brandnew') === 'string'
 		};

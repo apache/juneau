@@ -25,8 +25,8 @@ import java.util.function.*;
 import org.apache.juneau.petstore.dto.*;
 
 /**
- * The staging area for P4 inline edits (R11): edits are staged here instead of mutating the pet, then applied
- * (perRow, with retry on failure) or discarded (aggregate) from the P10 Pending changes page.
+ * The staging area for pet-detail inline edits: edits are staged here instead of mutating the pet, then applied
+ * (perRow, with retry on failure) or discarded (aggregate) from the Pending changes page.
  *
  * <p>
  * Obtained from {@link PetStore#pendingChanges()}.  All methods are synchronized; the store is a demo, not a
@@ -44,7 +44,7 @@ import org.apache.juneau.petstore.dto.*;
 public class PendingChanges {
 
 	/**
-	 * Result of an aggregate discard, mapped 1:1 onto C2's {@code BulkResult} by {@code ChangesRest}.
+	 * Result of an aggregate discard, mapped 1:1 onto the console's {@code BulkResult} by {@code ChangesRest}.
 	 *
 	 * @param succeeded Discarded change ids.
 	 * @param notFound Ids that name no change (including unparseable ids).

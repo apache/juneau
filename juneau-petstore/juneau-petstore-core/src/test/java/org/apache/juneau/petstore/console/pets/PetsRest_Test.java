@@ -52,7 +52,7 @@ class PetsRest_Test extends TestBase {
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
-	// a - server-mode query (G-BQ6a)
+	// a - server-mode query
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Test void a01_queryPagesAndCounts() throws Exception {
@@ -142,7 +142,7 @@ class PetsRest_Test extends TestBase {
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
-	// c - stage (R11) and the P4 JSON feeds
+	// c - stage (inline edit) and the P4 JSON feeds
 	//-----------------------------------------------------------------------------------------------------------------
 
 	private static long create(MockRestClient c, String name) throws Exception {
@@ -218,7 +218,7 @@ class PetsRest_Test extends TestBase {
 		var id = json(c.post("/console/pets", "{\"name\":\"Keeper\",\"species\":\"CAT\",\"price\":3,\"tags\":[\"a\"],\"photo\":\"p\"}").contentType("application/json").run().getContent().asString()).getMap("row").getLong("id");
 		c.put("/console/pets/" + id, "{\"name\":\"Keeper2\",\"price\":4}").contentType("application/json").run().assertStatus(200);
 		var pet = json(c.get("/petstore/pets/" + id).run().getContent().asString());
-		assertBean(pet, "name,species,price,photo", "Keeper2,CAT,4.0,p");
+		assertBean(pet, "name,species,price,photo,status", "Keeper2,CAT,4.0,p,AVAILABLE");
 		assertList(pet.getList("tags"), "a");
 	}
 

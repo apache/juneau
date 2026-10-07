@@ -26,7 +26,7 @@ import org.apache.juneau.marshall.json.*;
  *
  * <h5 class='topic'>Media types</h5>
  * <p>
- * Handles <c>Content-Type</c> types:  <bc>application/jsonl, application/x-ndjson, text/jsonl</bc>
+ * Handles <c>Content-Type</c> types:  <bc>application/jsonl, application/jsonlines, application/x-ndjson, text/jsonl</bc>
  *
  * <h5 class='topic'>Description</h5>
  * <p>
@@ -102,7 +102,7 @@ public class JsonlParser extends JsonParser {
 	})
 	public static JsonParser.Builder<?> create() {
 		return JsonParser.create()
-			.consumes("application/jsonl,application/x-ndjson,text/jsonl")
+			.consumes("application/jsonl,application/jsonlines,application/x-ndjson,text/jsonl")
 			.type(JsonlParser.class);
 	}
 

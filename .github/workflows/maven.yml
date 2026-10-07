@@ -96,29 +96,51 @@ jobs:
     # The ~200MB browser download is the only slow part (~60s cold, versus ~2s to actually run the harness).  Cached
     # at Playwright's own default location, which is why the profile lets -Djuneau.jsTests.browsers move it out of
     # target/: this workflow's Maven runs use the reactor's "clean verify" defaultGoal, so a cache restored into
-    # target/ would be deleted before it was ever read.  Keyed on the pom that pins the Playwright version rather than
+    # target/ would be deleted before it was ever read.  Keyed on the poms that pin the Playwright version rather than
     # on the literal version, so a bump cannot leave a stale key behind; the restore-keys prefix still gives a
     # partial hit on any other pom edit, and `playwright install` then simply verifies and skips.
     - name: Cache Playwright browsers
       uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6
       with:
         path: ~/.cache/ms-playwright
-        key: ${{ runner.os }}-playwright-${{ hashFiles('juneau-rest/juneau-rest-server-views/pom.xml') }}
+        key: ${{ runner.os }}-playwright-${{ hashFiles('juneau-rest/juneau-rest-server-views/pom.xml', 'juneau-petstore/juneau-petstore-core/pom.xml') }}
         restore-keys: ${{ runner.os }}-playwright-
     # Recorded so a future failure log says which Node actually ran, rather than "whatever the runner image had".
     - name: Show Node version
       run: node --version && npm --version
     # -pl/-am rather than -f: -f would resolve the module's SNAPSHOT dependencies from ~/.m2, which a cold runner does
-    # not have.  -pl -am builds the upstream modules but does not re-test them; the matrix job above is what runs
-    # their suites, including the always-on markup/CSS half of this same contract.  This step runs the module's
-    # full *_BrowserTest suite.
+    # not have.  -pl -am builds the upstream modules, and -Dtest then restricts surefire to this module's
+    # *_BrowserTest classes (package-qualified; -Dsurefire.failIfNoSpecifiedTests=false lets the upstream modules,
+    # which have no match, pass), so the upstream suites are not re-run here: the matrix job above runs them,
+    # including the always-on markup/CSS half of this same contract.  The browser tests are the only classes the
+    # js-tests profile switches on, so nothing it enables is left out.
     - name: Run JS harness
       run: >
         mvn --no-transfer-progress --batch-mode --show-version
         -Pjs-tests
         -pl juneau-rest/juneau-rest-server-views -am
         test
+        -Dtest='org.apache.juneau.rest.server.views.*_BrowserTest' -Dsurefire.failIfNoSpecifiedTests=false
         -Djuneau.jsTests.browsers="${HOME}/.cache/ms-playwright"
+    # The petstore console's browser tests: real Jetty on an ephemeral port, the same pinned Playwright and the same
+    # browser cache as the step above.  -pl/-am for the same reason as above; -Dtest is package-qualified because a
+    # bare '*_BrowserTest' would also match the views module's suite, which is in the reactor and enabled by its own
+    # js-tests profile, so it would run twice.
+    - name: js-tests-petstore
+      run: >
+        mvn --no-transfer-progress --batch-mode
+        -Pjs-tests
+        -pl juneau-petstore/juneau-petstore-core -am
+        test
+        -Dtest='org.apache.juneau.petstore.**.*_BrowserTest' -Dsurefire.failIfNoSpecifiedTests=false
+        -Djuneau.jsTests.browsers="${HOME}/.cache/ms-playwright"
+    - name: Upload petstore theme screenshots
+      if: always()
+      uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
+      with:
+        name: petstore-theme-screenshots
+        path: juneau-petstore/juneau-petstore-core/target/js/snapshots/
+        if-no-files-found: ignore
     # Surefire already prints each failed assertion with the full rendered-state JSON attached, which is the actual
     # diagnosis (a panel reported as "jc-subpanel jc-active" with "visible":false is the blank-tab defect, stated).
     # This step adds what Surefire cannot know: how to reproduce it, and the prober's own stderr for the case where
@@ -143,3 +165,6 @@ jobs:
         cat "${VIEWS}"/target/surefire-reports/*_BrowserTest.txt 2>/dev/null || echo '(none - the failure was before the tests ran)'
         echo '--- Prober stderr (non-empty only if Chromium or Node itself failed) ---'
         cat "${VIEWS}/target/js/prober-stderr.txt" 2>/dev/null || echo '(none)'
+        echo 'Petstore browser tests:'
+        echo '  mvn -Pjs-tests -pl juneau-petstore/juneau-petstore-core -am test -Dtest="org.apache.juneau.petstore.**.*_BrowserTest" -Dsurefire.failIfNoSpecifiedTests=false'
+        echo '  Per-suite stderr: juneau-petstore/juneau-petstore-core/target/js/<suite>-stderr.txt'

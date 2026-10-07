@@ -136,7 +136,8 @@ class PetstoreAssetOrder_Test extends TestBase {
 	@Test void b01_syntheticCssBandViolation_isCaught() {
 		var reversed = "<link rel=\"stylesheet\" href=\"/juneau-config.css\">"
 			+ "<link rel=\"stylesheet\" href=\"/juneau-views.css\">";
-		var err = assertThrows(AssertionError.class, () -> assertBandOrder(cssBandSequence(reversed), "synthetic"));
+		var seq = cssBandSequence(reversed);
+		var err = assertThrows(AssertionError.class, () -> assertBandOrder(seq, "synthetic"));
 		assertTrue(err.getMessage().contains("juneau-views.css"), err.getMessage());
 	}
 

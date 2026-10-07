@@ -61,7 +61,7 @@
 	 * {@code dtIndex} (selection offset + client reorder).
 	 */
 	function optionParam(viewDef, opt, optsColumns) {
-		if (opt == null || opt.value == null) return null;
+		if (opt?.value == null) return null;
 		if (opt.column != null) {
 			const idx = indexForRibbonColumn(viewDef, opt.column, optsColumns);
 			if (idx < 0) return null;
@@ -367,7 +367,7 @@
 		if (!moving.length) return actions;
 		const kept = actions.filter(function (a) { return !(a.type === "refresh" && a.group == null); });
 		while (kept.length && kept.at(-1).type === "divider") kept.pop();
-		const moved = moving.map(function (a) { return Object.assign({}, a, { group: "__refresh" }); });
+		const moved = moving.map(function (a) { return { ...a, group: "__refresh" }; });
 		return kept.concat(moved);
 	}
 
@@ -377,7 +377,7 @@
 
 	function safeStorage() {
 		// A SecurityError (private-mode/disabled storage) means no storage is available - not an error to surface.
-		try { return window.localStorage; } catch (e) { return null; }
+		try { return window.localStorage; } catch (e) { return null; } // NOSONAR javascript:S2486 -- storage access can throw in privacy modes; treat as unavailable
 	}
 
 	/**
@@ -467,7 +467,7 @@
 			openGroup.el.appendChild(el);
 		}
 
-		actions.forEach(function (a) {
+		actions.forEach(function (a) { // NOSONAR javascript:S3776 -- one dispatch branch per RibbonAction.type; complexity is inherent
 			if (a.type === "divider") {
 				openGroup = null;
 				const d = document.createElement("span");

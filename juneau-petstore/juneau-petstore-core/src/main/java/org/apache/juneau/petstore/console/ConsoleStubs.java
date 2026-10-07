@@ -53,7 +53,8 @@ public final class ConsoleStubs {
 		new Stub("pets/sold", "/console/pets/sold", "Sold pets", "The list of pets that have been sold."),
 		new Stub("pets/changes", "/console/pets/changes", "Pending changes", "Review and apply staged pet edits."),
 		new Stub("orders", "/console/orders", "Orders", "The orders table and order details."),
-		new Stub("users", "/console/users", "Users", "The users table and user details.")
+		new Stub("users", "/console/users", "Users", "The users table and user details."),
+		new Stub("dev/cards", "/console/dev/cards", "Custom cards", "Adopter-defined card types: a JSON-only kpi card and a server-validated inventory gauge.")
 	);
 
 	private ConsoleStubs() {}
@@ -69,5 +70,15 @@ public final class ConsoleStubs {
 		var s = ALL.stream().filter(x -> x.tab().equals(tab)).findFirst()
 			.orElseThrow(() -> new IllegalArgumentException("No console stub for '" + tab + "'"));
 		return FreemarkerView.of("stub.ftlh").attr("tab", s.tab()).attr("title", s.title()).attr("pending", s.pending());
+	}
+
+	/**
+	 * Returns the stub view for a tab path, or empty if there is no such stub.
+	 *
+	 * @param tab The nav id path, for example {@code "dev/flavors/html"}.
+	 * @return The stub view, or empty.
+	 */
+	public static Optional<View> find(String tab) {
+		return ALL.stream().anyMatch(x -> x.tab().equals(tab)) ? Optional.of(view(tab)) : Optional.empty();
 	}
 }

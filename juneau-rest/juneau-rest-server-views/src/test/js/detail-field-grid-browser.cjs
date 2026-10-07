@@ -38,7 +38,7 @@ const { chromium } = require('playwright');
 
 /** Fills the client-painted slots the way the runtime does, so the grid measures against real content. */
 const SETUP = function (longValue) {
-	const q = function (sel) { return document.querySelector(sel); };
+	const q = function (sel) { return document.querySelector(sel); }; // NOSONAR javascript:S7721 -- must stay nested: page.evaluate(PROBE) ships only the probe's own source into the browser context
 	q('[data-juneau-field="name"]').textContent = 'alerts-primary';
 	q('[data-juneau-field="owner"]').textContent = 'Platform';
 	q('[data-juneau-field="region"]').textContent = 'us-east-1';

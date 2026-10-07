@@ -26,7 +26,7 @@ import org.apache.juneau.marshall.json5.*;
  *
  * <h5 class='topic'>Media types</h5>
  * <p>
- * Handles <c>Content-Type</c> types:  <bc>application/json5l, text/json5l</bc>
+ * Handles <c>Content-Type</c> types:  <bc>application/json5l, application/json5lines, text/json5l</bc>
  *
  * <h5 class='topic'>Description</h5>
  * <p>
@@ -80,7 +80,7 @@ public class Json5lParser extends Json5Parser {
 		 * Constructor, default settings.
 		 */
 		protected Builder() {
-			consumes("application/json5l,text/json5l,application/jsonl,application/x-ndjson,text/jsonl")
+			consumes("application/json5l,application/json5lines,text/json5l,application/jsonl,application/jsonlines,application/x-ndjson,text/jsonl")
 				.type(Json5lParser.class);
 		}
 

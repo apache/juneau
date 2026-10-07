@@ -77,7 +77,7 @@ const window = { document: document, console: console, prompt: function () { ret
 // NOSONAR javascript:S1523 -- loading the production juneau-config.js source into a VM sandbox is this harness's
 // intended mechanism for exercising it against a minimal fake window/document; the input is a fixed local file
 // path supplied by the test, never attacker-controlled data.
-vm.runInNewContext(fs.readFileSync(path.resolve(configJsPath), 'utf8'), { window: window, document: document, console: console }, { filename: 'juneau-config.js' });
+vm.runInNewContext(fs.readFileSync(path.resolve(configJsPath), 'utf8'), { window: window, document: document, console: console }, { filename: 'juneau-config.js' }); // NOSONAR javascript:S1523 -- harness evaluates the module's own bundled script, a fixed local file
 
 const NS = window.JuneauViews;
 const out = { hasConfig: !!NS?.config };

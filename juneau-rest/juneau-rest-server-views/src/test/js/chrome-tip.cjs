@@ -75,7 +75,7 @@ function leave(target, related) {
 	out.paging_tipAttr = btn.dataset.jcTip;
 	out.paging_ariaKept = btn.getAttribute('aria-label') === 'Next page';
 	out.paging_tipText = tip ? tip.textContent : null;
-	out.paging_tipVisible = !!(tip?.style.display === 'block');
+	out.paging_tipVisible = tip?.style.display === 'block';
 	out.paging_tipClass = tip ? tip.className : null;
 	out.paging_tipLeft = tip ? tip.style.left : null;
 	out.paging_tipTop = tip ? tip.style.top : null;
@@ -102,7 +102,7 @@ function leave(target, related) {
 	out.ribbon_tipAttr = btn.dataset.jcTip;
 	out.ribbon_ariaKept = btn.getAttribute('aria-label') === 'Refresh';
 	out.ribbon_tipText = tipNode() ? tipNode().textContent : null;
-	out.ribbon_tipVisible = tipNode() && tipNode().style.display === 'block';
+	out.ribbon_tipVisible = tipNode()?.style.display === 'block';
 	leave(btn, env.body);
 })();
 
@@ -145,7 +145,7 @@ function leave(target, related) {
 	out.helper_tipAttr = btn.dataset.jcTip;
 	out.helper_ariaKept = btn.getAttribute('aria-label') === 'Acknowledge';
 	out.helper_tipText = tipNode() ? tipNode().textContent : null;
-	out.helper_tipVisible = tipNode() && tipNode().style.display === 'block';
+	out.helper_tipVisible = tipNode()?.style.display === 'block';
 	leave(btn, env.body);
 })();
 
@@ -156,9 +156,9 @@ function leave(target, related) {
 
 	hover(span, 30, 40);
 	out.explicit_tipText = tipNode() ? tipNode().textContent : null;
-	out.explicit_tipVisible = tipNode() && tipNode().style.display === 'block';
+	out.explicit_tipVisible = tipNode()?.style.display === 'block';
 	leave(span, env.body);
-	out.explicit_hiddenOnLeave = tipNode() && tipNode().style.display === 'none';
+	out.explicit_hiddenOnLeave = tipNode()?.style.display === 'none';
 })();
 
 (function idempotentInit() {
@@ -174,7 +174,7 @@ function leave(target, related) {
 	env.body.appendChild(pill);
 	hover(btn, 12, 12);
 	out.reinit_stillWorks = btn.dataset.jcTip === 'Previous page'
-		&& tipNode() && tipNode().textContent === 'Previous page'
+		&& tipNode()?.textContent === 'Previous page'
 		&& tipNode().style.display === 'block';
 	leave(btn, env.body);
 })();
@@ -193,7 +193,7 @@ function leave(target, related) {
 	hover(btn, 40, 50);
 	out.menubtn_stillNoNativeTitle = btn.getAttribute('title') == null && (btn.title === '' || btn.title == null);
 	out.menubtn_tipText = tipNode() ? tipNode().textContent : null;
-	out.menubtn_tipVisible = !!(tipNode() && tipNode().style.display === 'block');
+	out.menubtn_tipVisible = !!(tipNode()?.style.display === 'block');
 	leave(btn, env.body);
 })();
 

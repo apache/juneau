@@ -34,6 +34,7 @@ import org.junit.jupiter.api.*;
  * landed are {@code @Disabled} with the gate that blocks them; none is invented here.
  */
 @SuppressWarnings({
+	"java:S1186", // Empty bodies are @Disabled placeholder rows; each names the gate that blocks it.
 	"resource" // MockRestClient is a no-op close.
 })
 class PetstoreFailLoud_Test extends TestBase {
@@ -63,7 +64,8 @@ class PetstoreFailLoud_Test extends TestBase {
 	}
 
 	@Test void a02_badNavPath() throws Exception {
-		assert500("bad-nav-path", "<@page tab='pets/nope'> does not match a visible <@node> path; known paths: 'store, pets, pets/sold, pets/changes, orders, users, ops, ops/jobs, ops/audit'.");
+		assert500("bad-nav-path", "<@page tab='pets/nope'> does not match a visible <@node> path; known paths: 'store, pets, pets/sold, pets/changes, orders, users, ops, ops/jobs, ops/audit, dev, dev/cards, dev/themes, "
+			+ "dev/flavors, dev/flavors/html, dev/flavors/freemarker, dev/flavors/mustache, dev/flavors/react, dev/secure, about'.");
 	}
 
 	@Test void a04_malformedJson5() throws Exception {
@@ -74,51 +76,51 @@ class PetstoreFailLoud_Test extends TestBase {
 		assert500("bad-custom-type-id", "<@card> type= must be one of html|datatables; got 'Gauge_1'.");
 	}
 
-	@Disabled("G-C2/C6: missing-slot E-code not landed")
+	@Disabled("Not implemented yet: an error code for a page that leaves a required slot empty")
 	@Test void a03_missingSlot() {}
 
-	@Disabled("G-C3: <@node under> / E-B14 not landed")
+	@Disabled("Not implemented yet: E-B14 for a <@node under=...> used outside a page or inside the navigation")
 	@Test void a05_nodeUnderOutsidePage() {}
 
-	@Disabled("G-C3: <@node under> / E-B14 not landed")
+	@Disabled("Not implemented yet: E-B14 for a <@node under=...> used outside a page or inside the navigation")
 	@Test void a06_nodeUnderInNavigation() {}
 
-	@Disabled("G-C3: <@node under> / E-B8 not landed")
+	@Disabled("Not implemented yet: E-B8 for a <@node under=...> naming an unknown parent")
 	@Test void a07_nodeUnderUnknownParent() {}
 
-	@Disabled("C1 E-3 is asserted by console-ui-freemarker (bad-dup-node); the production chrome has a fixed nav, so no petstore fixture can duplicate a sibling")
+	@Disabled("Duplicate-sibling error E-3 is asserted by the console FreeMarker bridge tests (bad-dup-node); the production chrome has a fixed nav, so no petstore fixture can duplicate a sibling")
 	@Test void a08_nodeDuplicateSibling() {}
 
-	@Disabled("G-C3: E-B12 not landed")
+	@Disabled("Not implemented yet: E-B12 for a page whose view has no registered renderer")
 	@Test void a09_missingViewRenderer() {}
 
-	@Disabled("G-C3: PageSpec.badge / E-B15 not landed")
+	@Disabled("Not implemented yet: E-B15 for a duplicate PageSpec.badge")
 	@Test void a10_badgeDuplicate() {}
 
-	@Disabled("G-C3: facts leaf / E-B16 not landed")
+	@Disabled("Not implemented yet: E-B16 for a duplicate facts leaf")
 	@Test void a11_factsDuplicate() {}
 
-	@Disabled("G-C3: <@facts> / E-B17 not landed")
+	@Disabled("Not implemented yet: E-B17 for a <@facts> with a bad type")
 	@Test void a12_factsBadType() {}
 
-	@Disabled("G-C6: visibleWhen unknown-op E-code not landed")
+	@Disabled("Not implemented yet: an error code for a visibleWhen expression with an unknown operator")
 	@Test void a13_visibleWhenBadOp() {}
 
-	@Disabled("G-C3: <@badge> scope / E-68 not landed")
+	@Disabled("Not implemented yet: E-68 for a <@badge> scoped to an unknown node")
 	@Test void a14_badgeScopeUnknownNode() {}
 
-	@Disabled("G-C2: CardTypeHandler / E-22 not landed")
+	@Disabled("Not implemented yet: E-22 for an adopter-registered CardTypeHandler")
 	@Test void a15_adopterCardTypeHandler() {}
 
-	@Disabled("G-C2: E-23 not landed (a datatables body setting title renders 200)")
+	@Disabled("Not implemented yet: E-23 (a datatables body that sets a reserved title key still renders 200)")
 	@Test void a16_reservedKey() {}
 
-	@Disabled("G-C2: E-25 not landed (markup in a datatables body renders 200)")
+	@Disabled("Not implemented yet: E-25 (markup in a datatables body still renders 200)")
 	@Test void a17_markupOnDatatables() {}
 
-	@Disabled("Blocked on P4 pet summary page (G-C3 <@node under>)")
+	@Disabled("Blocked on the pet summary page, which needs <@node under=...> support")
 	@Test void b01_scriptInPetNameIsEscaped() {}
 
-	@Disabled("G-C1 dev mode only rejects an invalid page contract (no overlay marker, no juneau.console.devMode property)")
+	@Disabled("Dev mode only rejects an invalid page contract (there is no overlay marker and no juneau.console.devMode property yet)")
 	@Test void b02_devModeOverlay() {}
 }

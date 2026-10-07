@@ -139,7 +139,7 @@ function load(rendersJsPath, viewsJsPath, regionsJsPath, opts) {
 		// (and, when supplied, juneau-helpers.js) sources into a VM sandbox is this harness's
 		// intended mechanism for exercising them under the DOM shim; inputs are fixed local file paths supplied by
 		// the test, never attacker-controlled data.
-		vm.runInNewContext(fs.readFileSync(path.resolve(file), 'utf8'), sandbox, { filename: path.basename(file) });
+		vm.runInNewContext(fs.readFileSync(path.resolve(file), 'utf8'), sandbox, { filename: path.basename(file) }); // NOSONAR javascript:S1523 -- the harness evaluates the module's own bundled script
 	}
 
 	const NS = env.window.JuneauViews;

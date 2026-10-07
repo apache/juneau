@@ -179,4 +179,52 @@ public class Pet {
 		photo = value;
 		return this;
 	}
+
+	/**
+	 * Sets the species only if it is currently <jk>null</jk>.
+	 *
+	 * @param value The fallback value.
+	 * @return This object.
+	 */
+	public Pet defaultSpecies(Species value) {
+		if (species == null)
+			species = value;
+		return this;
+	}
+
+	/**
+	 * Sets the tags only if they are currently <jk>null</jk>.
+	 *
+	 * @param value The fallback value.
+	 * @return This object.
+	 */
+	public Pet defaultTags(List<String> value) {
+		if (tags == null)
+			tags = cp(value);
+		return this;
+	}
+
+	/**
+	 * Sets the lifecycle status only if it is currently <jk>null</jk>.
+	 *
+	 * @param value The fallback value.
+	 * @return This object.
+	 */
+	public Pet defaultStatus(PetStatus value) {
+		if (status == null)
+			status = value;
+		return this;
+	}
+
+	/**
+	 * Sets the photo URI only if it is currently <jk>null</jk>.
+	 *
+	 * @param value The fallback value.
+	 * @return This object.
+	 */
+	public Pet defaultPhoto(String value) {
+		if (photo == null)
+			photo = value;
+		return this;
+	}
 }

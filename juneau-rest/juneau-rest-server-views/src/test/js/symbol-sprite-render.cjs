@@ -265,7 +265,7 @@ const PIXEL_DIFF = async function (args) {
 			img.src = dataUrl;
 		});
 	};
-	const toLum = function (img) {
+	const toLum = function (img) { // NOSONAR javascript:S7721 -- must stay nested: page.evaluate() serializes only the evaluated function's own source into the browser
 		const c = document.createElement('canvas');
 		c.width = img.naturalWidth;
 		c.height = img.naturalHeight;
@@ -291,7 +291,7 @@ const PIXEL_DIFF = async function (args) {
 
 /** Composites a sheet from already-rendered tiles.  Pure canvas drawing; no measurement happens here. */
 const COMPOSE = async function (spec) {
-	const load = function (dataUrl) {
+	const load = function (dataUrl) { // NOSONAR javascript:S7721 -- must stay nested: page.evaluate() serializes only the evaluated function's own source into the browser
 		return new Promise(function (resolve, reject) {
 			const i = new Image();
 			i.onload = function () { resolve(i); };
@@ -349,7 +349,7 @@ async function shoot(page) {
 	return 'data:image/png;base64,' + buf.toString('base64');
 }
 
-(async () => {
+(async () => { // NOSONAR javascript:S3776 -- linear test scenario
 	const [fixture, requestJson] = process.argv.slice(2);
 	if (!fixture || !requestJson) {
 		process.stderr.write('usage: node symbol-sprite-render.cjs <fixture.html> <request-json>\n');
@@ -419,15 +419,19 @@ async function shoot(page) {
 		sheetOps.push({ op: 'text', text: legend, x: 12, y: 38, font: '11px sans-serif', color: INK });
 		stems.forEach(function (stem, i) {
 			const top = headerH + i * rowH;
-			sheetOps.push({ op: 'rule', x1: 0, x2: magX12 + small * MAG + 12, y1: top, color: RULE });
-			sheetOps.push({ op: 'text', text: stem, x: 12, y: top + rowH / 2 + 4, font: '12px sans-serif', color: INK });
+			sheetOps.push(
+				{ op: 'rule', x1: 0, x2: magX12 + small * MAG + 12, y1: top, color: RULE },
+				{ op: 'text', text: stem, x: 12, y: top + rowH / 2 + 4, font: '12px sans-serif', color: INK }
+			);
 			sizes.forEach(function (size) {
 				const t = tiles[stem][size];
 				sheetOps.push({ op: 'img', dataUrl: t.dataUrl, x: colX[size], y: top + (rowH - size) / 2 });
 			});
-			sheetOps.push({ op: 'img', dataUrl: tiles[stem][ribbon].magnified, x: magX16, y: top + ROW_PAD });
-			sheetOps.push({ op: 'img', dataUrl: tiles[stem][small].magnified, x: magX12,
-				y: top + ROW_PAD + (ribbon - small) * MAG / 2 });
+			sheetOps.push(
+				{ op: 'img', dataUrl: tiles[stem][ribbon].magnified, x: magX16, y: top + ROW_PAD },
+				{ op: 'img', dataUrl: tiles[stem][small].magnified, x: magX12,
+					y: top + ROW_PAD + (ribbon - small) * MAG / 2 }
+			);
 		});
 		writePng(path.join(req.outputDir, 'sheet.png'), await page.evaluate(COMPOSE, {
 			width: magX12 + small * MAG + 16,
@@ -459,19 +463,23 @@ async function shoot(page) {
 			+ ribbon + 'px, magnified ' + MAG + 'x', x: 12, y: 22, font: 'bold 14px sans-serif', color: INK });
 		req.family.forEach(function (stem, i) {
 			const left = 12 + i * famColW;
-			famOps.push({ op: 'text', text: stem, x: left, y: 44, font: '12px sans-serif', color: INK });
-			famOps.push({ op: 'img', dataUrl: tiles[stem][ribbon].dataUrl, x: left, y: 52 });
-			famOps.push({ op: 'img', dataUrl: tiles[stem][ribbon].magnified, x: left, y: 52 + ribbon + 8 });
+			famOps.push(
+				{ op: 'text', text: stem, x: left, y: 44, font: '12px sans-serif', color: INK },
+				{ op: 'img', dataUrl: tiles[stem][ribbon].dataUrl, x: left, y: 52 },
+				{ op: 'img', dataUrl: tiles[stem][ribbon].magnified, x: left, y: 52 + ribbon + 8 }
+			);
 		});
 		const pairTop = 52 + ribbon + 8 + ribbon * MAG + 28;
 		famOps.push({ op: 'text', text: 'named ' + ribbon + 'px distinguishability checks',
 			x: 12, y: pairTop - 8, font: 'bold 14px sans-serif', color: INK });
 		pairs.forEach(function (p, i) {
 			const left = 12 + i * (p.tile.width * MAG + 40);
-			famOps.push({ op: 'text', text: p.names.join(' vs '), x: left, y: pairTop + 14,
-				font: '12px sans-serif', color: INK });
-			famOps.push({ op: 'img', dataUrl: p.dataUrl, x: left, y: pairTop + 22 });
-			famOps.push({ op: 'img', dataUrl: p.tile.magnified, x: left, y: pairTop + 22 + p.tile.height + 8 });
+			famOps.push(
+				{ op: 'text', text: p.names.join(' vs '), x: left, y: pairTop + 14,
+					font: '12px sans-serif', color: INK },
+				{ op: 'img', dataUrl: p.dataUrl, x: left, y: pairTop + 22 },
+				{ op: 'img', dataUrl: p.tile.magnified, x: left, y: pairTop + 22 + p.tile.height + 8 }
+			);
 		});
 		const famPairH = pairs.length ? pairs[0].tile.height * (MAG + 1) + 40 : 0;
 		writePng(path.join(req.outputDir, 'family.png'), await page.evaluate(COMPOSE, {
@@ -516,16 +524,20 @@ async function shoot(page) {
 		const pillMag = await page.evaluate(MEASURE_AND_MAGNIFY, { dataUrl: pillShot, mag: CONTEXT_MAG });
 
 		const ctxOps = [];
-		ctxOps.push({ op: 'text', text: 'ribbon export cluster at ' + ribbon + 'px (real served CSS)',
-			x: 12, y: 22, font: 'bold 14px sans-serif', color: INK });
-		ctxOps.push({ op: 'img', dataUrl: ribbonShot, x: 12, y: 30 });
-		ctxOps.push({ op: 'img', dataUrl: ribbonMag.magnified, x: 12, y: 30 + ribbonMag.height + 10 });
+		ctxOps.push(
+			{ op: 'text', text: 'ribbon export cluster at ' + ribbon + 'px (real served CSS)',
+				x: 12, y: 22, font: 'bold 14px sans-serif', color: INK },
+			{ op: 'img', dataUrl: ribbonShot, x: 12, y: 30 },
+			{ op: 'img', dataUrl: ribbonMag.magnified, x: 12, y: 30 + ribbonMag.height + 10 }
+		);
 		const pillTop = 30 + ribbonMag.height + 10 + ribbonMag.height * CONTEXT_MAG + 34;
-		ctxOps.push({ op: 'text', text: 'paging pill at ' + small
-			+ 'px - mirrored chevron and the doubled first/last composition',
-			x: 12, y: pillTop - 8, font: 'bold 14px sans-serif', color: INK });
-		ctxOps.push({ op: 'img', dataUrl: pillShot, x: 12, y: pillTop });
-		ctxOps.push({ op: 'img', dataUrl: pillMag.magnified, x: 12, y: pillTop + pillMag.height + 10 });
+		ctxOps.push(
+			{ op: 'text', text: 'paging pill at ' + small
+				+ 'px - mirrored chevron and the doubled first/last composition',
+				x: 12, y: pillTop - 8, font: 'bold 14px sans-serif', color: INK },
+			{ op: 'img', dataUrl: pillShot, x: 12, y: pillTop },
+			{ op: 'img', dataUrl: pillMag.magnified, x: 12, y: pillTop + pillMag.height + 10 }
+		);
 		writePng(path.join(req.outputDir, 'contexts.png'), await page.evaluate(COMPOSE, {
 			width: Math.max(ribbonMag.width * CONTEXT_MAG, pillMag.width * CONTEXT_MAG) + 24,
 			height: pillTop + pillMag.height + 10 + pillMag.height * CONTEXT_MAG + 16,
@@ -538,19 +550,21 @@ async function shoot(page) {
 		const pad = function (s, n) { return String(s).padEnd(n); };
 		const num = function (v, n) { return String(v).padStart(n); };
 		const lines = [];
-		lines.push('juneau-symbols.svg rasterisation metrics');
-		lines.push('');
-		lines.push('ink       total coverage: sum over the box of (1 - luminance/255).  Comparable to a pixel count.');
-		lines.push('solid     pixels at luminance <= 60 (essentially full-strength ink).');
-		lines.push('gradient  mean |luminance(x+1,y) - luminance(x,y)| over the box.  Higher is crisper.');
-		lines.push('mush      share of the box in the ambiguous 60..215 luminance band.  Higher is smearier.');
-		lines.push('');
-		lines.push('These are a REPORT, not thresholds.  They are coupled to the pinned Chromium build, so they are');
-		lines.push('reproducible for a given Playwright pin and not stable across a pin bump.  Do not assert on them.');
-		lines.push('');
-		lines.push(pad('stem', 26) + pad('size', 6) + num('ink', 9) + num('solid', 7) + num('gradient', 10)
-			+ num('mush', 8));
-		lines.push('-'.repeat(66));
+		lines.push(
+			'juneau-symbols.svg rasterisation metrics',
+			'',
+			'ink       total coverage: sum over the box of (1 - luminance/255).  Comparable to a pixel count.',
+			'solid     pixels at luminance <= 60 (essentially full-strength ink).',
+			'gradient  mean |luminance(x+1,y) - luminance(x,y)| over the box.  Higher is crisper.',
+			'mush      share of the box in the ambiguous 60..215 luminance band.  Higher is smearier.',
+			'',
+			'These are a REPORT, not thresholds.  They are coupled to the pinned Chromium build, so they are',
+			'reproducible for a given Playwright pin and not stable across a pin bump.  Do not assert on them.',
+			'',
+			pad('stem', 26) + pad('size', 6) + num('ink', 9) + num('solid', 7) + num('gradient', 10)
+				+ num('mush', 8),
+			'-'.repeat(66)
+		);
 		for (const stem of all) {
 			for (const size of sizes) {
 				const t = tiles[stem][size];
@@ -558,12 +572,14 @@ async function shoot(page) {
 					+ num(t.gradient.toFixed(3), 10) + num((t.mush * 100).toFixed(2) + '%', 8));
 			}
 		}
-		lines.push('');
-		lines.push('SET-LEVEL SPREAD across the document family (' + req.family.join(', ') + ')');
-		lines.push('The number per-glyph review cannot see: how far apart the four are on each metric.');
-		lines.push('');
-		lines.push(pad('metric', 12) + pad('size', 6) + num('min', 10) + num('max', 10) + num('spread', 10));
-		lines.push('-'.repeat(48));
+		lines.push(
+			'',
+			'SET-LEVEL SPREAD across the document family (' + req.family.join(', ') + ')',
+			'The number per-glyph review cannot see: how far apart the four are on each metric.',
+			'',
+			pad('metric', 12) + pad('size', 6) + num('min', 10) + num('max', 10) + num('spread', 10),
+			'-'.repeat(48)
+		);
 		const spreads = {};
 		for (const size of sizes) {
 			for (const key of ['ink', 'solid', 'gradient', 'mush']) {
@@ -575,13 +591,15 @@ async function shoot(page) {
 					+ num((hi - lo).toFixed(3), 10));
 			}
 		}
-		lines.push('');
-		lines.push('NAMED ADJACENCY PIXEL DIFFS - mean per-pixel luminance diff (0..255) between two glyphs at');
-		lines.push('the same size, same run, same Chromium build; unlike the metrics above, THIS one is asserted');
-		lines.push('on (see SymbolSprite_Render_BrowserTest) because both sides move together across a pin bump.');
-		lines.push('');
-		lines.push(pad('pair', 26) + num('ribbonPx', 10) + num('smallPx', 10));
-		lines.push('-'.repeat(46));
+		lines.push(
+			'',
+			'NAMED ADJACENCY PIXEL DIFFS - mean per-pixel luminance diff (0..255) between two glyphs at',
+			'the same size, same run, same Chromium build; unlike the metrics above, THIS one is asserted',
+			'on (see SymbolSprite_Render_BrowserTest) because both sides move together across a pin bump.',
+			'',
+			pad('pair', 26) + num('ribbonPx', 10) + num('smallPx', 10),
+			'-'.repeat(46)
+		);
 		pairs.forEach(function (p) {
 			lines.push(pad(p.names.join(' vs '), 26) + num(p.pixelDiff.ribbon.toFixed(3), 10)
 				+ num(p.pixelDiff.small.toFixed(3), 10));

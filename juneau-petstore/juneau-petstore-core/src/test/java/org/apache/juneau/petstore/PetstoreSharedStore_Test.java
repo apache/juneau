@@ -20,6 +20,8 @@ import static org.apache.juneau.test.bct.BctAssertions.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.commons.inject.*;
+import org.apache.juneau.marshall.collections.*;
+import org.apache.juneau.petstore.console.*;
 import org.apache.juneau.petstore.console.data.*;
 import org.apache.juneau.petstore.dto.*;
 import org.apache.juneau.petstore.rest.*;
@@ -49,7 +51,7 @@ class PetstoreSharedStore_Test extends TestBase {
 		return PetstoreSeed.create().populate(new PetStore(PetstoreSeed.DEFAULT_CLOCK));
 	}
 
-	@Rest(children={PetStoreResource.class, PetHtmlResource.class})
+	@Rest(children={PetStoreResource.class, PetstoreConsoleResource.class})
 	public static class Host extends BasicRestServletGroup {
 		private static final long serialVersionUID = 1L;
 
@@ -81,15 +83,20 @@ class PetstoreSharedStore_Test extends TestBase {
 		var c = MockRestClient.buildJsonLax(Host.class);
 		var created = c.post("/petstore/pets", new Pet().setName("Sharedpet").setSpecies(Species.FISH).setStatus(PetStatus.AVAILABLE))
 			.run().assertStatus(200).getContent().as(Pet.class);
-		var html = c.get("/petstore-html/card/" + created.getId()).accept("text/html").run().assertStatus(200).getContent().asString();
-		assertContains("Sharedpet", html);
+		var q = "{\"draw\":1,\"start\":0,\"length\":10,\"search\":{\"value\":\"Sharedpet\"},"
+			+ "\"columns\":[{\"data\":\"id\"},{\"data\":\"name\"}]}";
+		// A JsonMap body, so the JSON client sends the request object rather than a quoted string.
+		var r = new JsonMap(c.post("/console/pets/query", new JsonMap(q)).accept("application/json")
+			.run().assertStatus(200).getContent().asString());
+		assertBean(r, "recordsFiltered", "1");
+		assertBean(r.getList("data").getMap(0), "id,name", created.getId() + ",Sharedpet");
 	}
 
 	@Test void a03_standaloneResourceFallsBackToClassicStore() throws Exception {
 		MockRestClient.buildJsonLax(PetStoreResource.class).get("/pets/500").run().assertStatus(404);
 	}
 
-	// Plan Q12: does the store reach a resource two levels below the group that registered it?
+	// Does the store reach a resource two levels below the group that registered it?
 	@Test void a04_twoLevelsDeepSeesTheSeededStore() throws Exception {
 		var c = MockRestClient.buildJsonLax(DeepHost.class);
 		c.get("/mid/petstore/pets/500").run().assertStatus(200);

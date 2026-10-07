@@ -34,7 +34,7 @@ import org.apache.juneau.rest.server.views.*;
 import org.apache.juneau.rest.server.widgets.*;
 
 /**
- * P6 Jobs: the console's async-job reference (spec R11/R12).  A restock submits once per idempotency key, answers
+ * Jobs: the console's async-job reference.  A restock submits once per idempotency key, answers
  * 202 with an {@link AsyncJobRef}, and the views runtime follows its {@code streamUrl} until the job settles.
  *
  * <p>
@@ -54,6 +54,12 @@ import org.apache.juneau.rest.server.widgets.*;
  * </p>
  */
 @Rest(path="/jobs", title="Jobs")
+@SuppressWarnings({
+	"java:S110", // Inheritance depth comes from the BasicRestServlet hierarchy, not this demo page.
+	"java:S1192", // Duplicated literals are wire keys of the job rows; constants would obscure the schema.
+	"java:S2654", // The demo intentionally runs restocks on its own pool and serializes the idempotency check.
+	"resource" // The registry and pool are owned by this resource and closed in closeJobs(); Eclipse JDT @Owning warning is by design.
+})
 public class JobsRest extends PetstoreConsolePage implements AsyncJobsMixin {
 
 	private static final long serialVersionUID = 1L;
@@ -69,7 +75,7 @@ public class JobsRest extends PetstoreConsolePage implements AsyncJobsMixin {
 		t.setDaemon(true);
 		return t;
 	});
-	/** Submitted jobs, newest first, for the P6 table. */
+	/** Submitted jobs, newest first, for the Jobs table. */
 	private final transient Deque<JsonMap> submitted = new ConcurrentLinkedDeque<>();
 
 	/** How many submitted jobs the table remembers. */
@@ -123,7 +129,16 @@ public class JobsRest extends PetstoreConsolePage implements AsyncJobsMixin {
 	public AsyncJobRegistry asyncJobRegistry() { return jobs; }
 
 	/**
-	 * Renders P6.
+	 * Stops the restock pool and the registry's timeout scheduler when the resource is destroyed.
+	 */
+	@RestDestroy
+	public void closeJobs() {
+		pool.shutdownNow();
+		jobs.close();
+	}
+
+	/**
+	 * Renders the Jobs page.
 	 *
 	 * @return The page view.
 	 */

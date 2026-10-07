@@ -68,7 +68,7 @@
 			<version>2.3.35</version>
 		</dependency>
 
-		<!-- Console UI (C7 Plan A): chrome, FreeMarker bridge, DataTables, views and widgets. -->
+		<!-- Console UI: chrome, FreeMarker bridge, DataTables, views and widgets. -->
 		<dependency>
 			<groupId>org.apache.juneau</groupId>
 			<artifactId>juneau-rest-server-console-ui</artifactId>
@@ -100,6 +100,25 @@
 			<version>${project.version}</version>
 		</dependency>
 
+		<!-- Browser libraries the console's datatables cards bind to; served by VendorRest at /console/vendor/*. -->
+		<dependency>
+			<groupId>org.webjars</groupId>
+			<artifactId>jquery</artifactId>
+			<version>${webjars-jquery.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.webjars.bowergithub.datatables</groupId>
+			<artifactId>dist-datatables</artifactId>
+			<version>${webjars-datatables.version}</version>
+			<exclusions>
+				<!-- Declared as an open version range; jquery above is the copy that is served. -->
+				<exclusion>
+					<groupId>org.webjars.bowergithub.jquery</groupId>
+					<artifactId>jquery-dist</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+
 		<!-- Test dependencies -->
 		<dependency>
 			<groupId>org.junit.jupiter</groupId>
@@ -125,7 +144,125 @@
 			<version>${project.version}</version>
 			<scope>test</scope>
 		</dependency>
+		<!-- Browser tests: a real Jetty server on an ephemeral port. -->
+		<dependency>
+			<groupId>org.apache.juneau</groupId>
+			<artifactId>juneau-microservice-jetty</artifactId>
+			<version>${project.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.juneau</groupId>
+			<artifactId>juneau-microservice-jetty</artifactId>
+			<version>${project.version}</version>
+			<type>test-jar</type>
+			<scope>test</scope>
+		</dependency>
+		<!-- PetstoreSql_Test: the SQL BeanQuery adapter over H2, compared against the in-memory store. -->
+		<dependency>
+			<groupId>org.apache.juneau</groupId>
+			<artifactId>juneau-beanquery-sql</artifactId>
+			<version>${project.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.juneau</groupId>
+			<artifactId>juneau-beanquery-postgres</artifactId>
+			<version>${project.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.h2database</groupId>
+			<artifactId>h2</artifactId>
+			<version>${h2.version}</version>
+			<scope>test</scope>
+		</dependency>
 	</dependencies>
+
+	<profiles>
+		<!--
+			Browser tests: the *_BrowserTest classes drive the real console JS in headless Chromium against a live
+			petstore server.  NOT activated by default; a normal build needs no Node, npm, browser or network, and the
+			classes are skipped because no "juneau.jsTests" system property is set:
+
+			    mvn -Pjs-tests -pl juneau-petstore/juneau-petstore-core -am test -Dtest='org.apache.juneau.petstore.**.*_BrowserTest' -Dsurefire.failIfNoSpecifiedTests=false
+
+			A copy of juneau-rest-server-views' js-tests profile (see the notes there on target/js, the browser cache
+			and the -Djuneau.jsTests.* overrides), with only the harness path and the npm packages changed: the
+			petstore pages load jQuery and DataTables from the server (VendorRest, backed by the WebJars).
+		-->
+		<profile>
+			<id>js-tests</id>
+			<properties>
+				<!-- Keep in step with juneau-rest-server-views/pom.xml: one Playwright version, one CI cache. -->
+				<playwright.version>1.49.1</playwright.version>
+				<juneau.jsTests.node>node</juneau.jsTests.node>
+				<juneau.jsTests.npm>npm</juneau.jsTests.npm>
+				<js.tests.dir>${project.build.directory}/js</js.tests.dir>
+				<juneau.jsTests.browsers>${js.tests.dir}/browsers</juneau.jsTests.browsers>
+			</properties>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.codehaus.mojo</groupId>
+						<artifactId>exec-maven-plugin</artifactId>
+						<version>3.3.0</version>
+						<executions>
+							<execution>
+								<id>js-install-playwright</id>
+								<phase>process-test-classes</phase>
+								<goals>
+									<goal>exec</goal>
+								</goals>
+								<configuration>
+									<executable>${juneau.jsTests.npm}</executable>
+									<arguments>
+										<argument>install</argument>
+										<argument>--no-fund</argument>
+										<argument>--no-audit</argument>
+										<argument>--prefix</argument>
+										<argument>${js.tests.dir}</argument>
+										<argument>playwright@${playwright.version}</argument>
+									</arguments>
+								</configuration>
+							</execution>
+							<execution>
+								<id>js-install-chromium</id>
+								<phase>process-test-classes</phase>
+								<goals>
+									<goal>exec</goal>
+								</goals>
+								<configuration>
+									<executable>${juneau.jsTests.node}</executable>
+									<environmentVariables>
+										<PLAYWRIGHT_BROWSERS_PATH>${juneau.jsTests.browsers}</PLAYWRIGHT_BROWSERS_PATH>
+									</environmentVariables>
+									<arguments>
+										<argument>${js.tests.dir}/node_modules/playwright/cli.js</argument>
+										<argument>install</argument>
+										<argument>chromium</argument>
+									</arguments>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-surefire-plugin</artifactId>
+						<configuration>
+							<systemPropertyVariables>
+								<juneau.jsTests>true</juneau.jsTests>
+								<juneau.jsTests.dir>${js.tests.dir}</juneau.jsTests.dir>
+								<juneau.jsTests.harness>${project.basedir}/src/test/js/petstore-browser.cjs</juneau.jsTests.harness>
+								<juneau.jsTests.node>${juneau.jsTests.node}</juneau.jsTests.node>
+								<juneau.jsTests.browsers>${juneau.jsTests.browsers}</juneau.jsTests.browsers>
+							</systemPropertyVariables>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
 
 	<build>
 		<plugins>

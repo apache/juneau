@@ -74,7 +74,8 @@ import jakarta.servlet.http.*;
  * 	<li><b>SSE</b> ({@code text/event-stream}) &mdash; each element is emitted as a Server-Sent-Events
  * 		frame. {@link SseEvent} elements are written verbatim; any other element type is JSON-encoded
  * 		into the {@code data:} field.
- * 	<li><b>NDJSON</b> ({@code application/x-ndjson}, {@code application/jsonl}, {@code application/json5l}) &mdash; each element is
+ * 	<li><b>NDJSON</b> ({@code application/x-ndjson}, {@code application/jsonl}, {@code application/jsonlines},
+ * 		{@code application/json5l}, {@code application/json5lines}) &mdash; each element is
  * 		JSON-encoded on its own line.
  * 	<li><b>Buffer</b> (default, any other media type) &mdash; all elements are collected into a
  * 		{@link List List} and serialized through the normal serializer chain (e.g. a JSON

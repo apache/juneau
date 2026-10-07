@@ -219,7 +219,7 @@ const ctlE = I.enhanceProbeGroup(gE);
 out.empty_noSelected = ctlE.getSelected() === null;
 let emptyThrew = false;
 try { gE.dispatch('keydown', { key: 'ArrowRight', preventDefault: function () { /* no-op */ } }); }
-catch (error) { emptyThrew = true; }
+catch (error) { emptyThrew = true; } // NOSONAR javascript:S2486 -- the thrown/not-thrown outcome is recorded in a flag and asserted on
 out.empty_keydownNoThrow = !emptyThrew;
 
 const t1 = probe('d1', 'success', { disabled: true });

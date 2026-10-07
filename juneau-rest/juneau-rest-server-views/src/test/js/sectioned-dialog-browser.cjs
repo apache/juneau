@@ -50,11 +50,11 @@ const PROBE = async function () {
 	// NOSONAR javascript:S7721 -- shown()/makeRow()/parts() below stay nested inside PROBE even though they
 	// close over no outer locals: page.evaluate() serializes only PROBE's own source text across the
 	// Playwright process boundary, so a module-scope sibling would be undefined inside the browser.
-	function shown(el) { if (!el) { return false; } const r = el.getBoundingClientRect(); return r.width > 0 && r.height > 0; }
+	function shown(el) { if (!el) { return false; } const r = el.getBoundingClientRect(); return r.width > 0 && r.height > 0; } // NOSONAR javascript:S7721 -- must stay nested: page.evaluate(PROBE) serializes only PROBE's own source into the browser
 	function drain() { while (init.topLayer()) init.popLayer(); }
 	function displayOf(el) { return el ? window.getComputedStyle(el).display : null; }
 
-	function makeRow(rowId) {
+	function makeRow(rowId) { // NOSONAR javascript:S7721 -- must stay nested: page.evaluate(PROBE) serializes only PROBE's own source into the browser
 		const table = document.createElement('table');
 		const tbody = document.createElement('tbody');
 		const tr = document.createElement('tr');
@@ -94,7 +94,7 @@ const PROBE = async function () {
 	}
 
 	// NOSONAR javascript:S7721 -- same cross-process-boundary reason as shown()/makeRow() above.
-	function parts() {
+	function parts() { // NOSONAR javascript:S7721 -- must stay nested: page.evaluate(PROBE) serializes only PROBE's own source into the browser
 		const backdrop = document.querySelector('.juneau-view-dialog-backdrop');
 		const wrap = backdrop ? backdrop.querySelector('.juneau-view-dialog-form') : null;
 		const strip = wrap ? wrap.querySelector('[data-testid="dialog-sections"]') : null;

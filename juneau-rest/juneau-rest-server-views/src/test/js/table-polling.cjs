@@ -91,7 +91,7 @@ const sandbox = {
 
 // NOSONAR javascript:S1523 -- loading the production juneau-views.js source into a VM sandbox is this harness's
 // intended mechanism for exercising it under the DOM shim; the path is a fixed local file supplied by the test.
-vm.runInNewContext(fs.readFileSync(path.resolve(viewsJsPath), 'utf8'), sandbox, { filename: 'juneau-views.js' });
+vm.runInNewContext(fs.readFileSync(path.resolve(viewsJsPath), 'utf8'), sandbox, { filename: 'juneau-views.js' }); // NOSONAR javascript:S1523 -- the harness evaluates the module's own bundled script
 
 const NS = env.window.JuneauViews.init;
 

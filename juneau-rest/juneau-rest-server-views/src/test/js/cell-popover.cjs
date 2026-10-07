@@ -105,7 +105,7 @@ const VOID_TAGS = { br: 1, hr: 1, img: 1, input: 1, meta: 1, link: 1, base: 1 };
 
 function parseAttrs(raw, node) {
 	if (!raw) return;
-	const re = /([:@\w-]+)(?:\s*=\s*(?:"([^"]*)"|'([^']*)'|([^\s>]+)))?/g;
+	const re = /([:@\w-]+)(?:\s*=\s*(?:"([^"]*)"|'([^']*)'|([^\s>]+)))?/g; // NOSONAR javascript:S5843 -- mini attribute tokenizer; alternation shape is inherent to the quoting forms it accepts
 	let m;
 	for (m = re.exec(raw); m; m = re.exec(raw))
 		node.setAttribute(m[1], m[2] ?? m[3] ?? m[4] ?? '');
@@ -174,15 +174,15 @@ const sandbox = { window: window, document: document, console: console, DOMParse
 // NOSONAR javascript:S1523 -- loading the production juneau-renders.js/juneau-views.js sources into a VM sandbox
 // is this harness's intended mechanism for exercising them under the local DOM shim; inputs are fixed local file
 // paths supplied by the test, never attacker-controlled data.
-vm.runInNewContext(fs.readFileSync(path.resolve(rendersJsPath), 'utf8'), sandbox, { filename: 'juneau-renders.js' });
+vm.runInNewContext(fs.readFileSync(path.resolve(rendersJsPath), 'utf8'), sandbox, { filename: 'juneau-renders.js' }); // NOSONAR javascript:S1523 -- harness evaluates the module's own bundled script, a fixed local file
 // NOSONAR javascript:S1523 -- same fixed-local-file harness mechanism as above, for juneau-views.js.
-vm.runInNewContext(fs.readFileSync(path.resolve(viewsJsPath), 'utf8'), sandbox, { filename: 'juneau-views.js' });
+vm.runInNewContext(fs.readFileSync(path.resolve(viewsJsPath), 'utf8'), sandbox, { filename: 'juneau-views.js' }); // NOSONAR javascript:S1523 -- harness evaluates the module's own bundled script, a fixed local file
 
 const NS = window.JuneauViews;
 const I = NS?.init;
 /** True when {@code n} or any descendant element carries a {@code data-juneau-ts} host stamp. */
 function hasTsHost(n) {
-	if (!n || n.nodeType !== 1) return false;
+	if (n?.nodeType !== 1) return false;
 	if (n.dataset.juneauTs) return true;
 	for (const c of n.childNodes) {
 		if (hasTsHost(c)) return true;
@@ -192,7 +192,7 @@ function hasTsHost(n) {
 
 /** True when {@code n} or a descendant, other than {@code root} itself, is a SPAN element. */
 function hasSpanBelow(n, root) {
-	if (!n || n.nodeType !== 1) return false;
+	if (n?.nodeType !== 1) return false;
 	if (n !== root && n.tagName === 'SPAN') return true;
 	for (const c of n.childNodes) {
 		if (hasSpanBelow(c, root)) return true;

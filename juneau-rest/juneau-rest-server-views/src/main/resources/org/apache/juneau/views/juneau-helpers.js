@@ -105,7 +105,7 @@
 		if (template == null) return null;
 		const map = isPlainObject(values) ? values : {};
 		// NOSONAR javascript:S8786 -- `[^}]+` cannot match `}`; same analysis as interpolateHref in juneau-renders.js; the template is developer-authored, never row data.
-		const url = String(template).replace(/\{([^}]+)\}/g, function (m, key) {
+		const url = String(template).replace(/\{([^}]+)\}/g, function (m, key) { // NOSONAR javascript:S5852 -- `[^}]+` cannot match `}`, so matching is linear; template is developer-authored
 			const v = Object.hasOwn(map, key) ? map[key] : undefined;
 			return v == null ? "" : encodeURIComponent(String(v));
 		});
@@ -312,7 +312,7 @@
 	// ================================================================================================
 
 	// NOSONAR javascript:S3776 -- encodes a views/widgets state machine; complexity is inherent.
-	function editableField(opts) {
+	function editableField(opts) { // NOSONAR javascript:S3776 -- encodes a views/widgets state machine; complexity is inherent
 		opts = opts || {};
 		if (typeof opts.onSave !== "function")
 			throw new TypeError("JuneauViews.helpers: editableField(opts) requires opts.onSave to be a function.");
@@ -358,7 +358,7 @@
 			return committed == null ? "" : String(committed);
 		}
 
-		function readControl() {
+		function readControl() { // NOSONAR javascript:S3800 -- returns the control value (boolean for checkbox, string otherwise); callers normalise
 			if (!control) return committed;
 			if (type === "checkbox") return !!control.checked;
 			return control.value == null ? "" : String(control.value);
@@ -416,7 +416,7 @@
 			if (mode === "saving") mode = type === "checkbox" ? "view" : "edit";
 		}
 
-		function applySaved(submitted, result) {
+		function applySaved(submitted, result) { // NOSONAR javascript:S3800 -- returns the control value (boolean for checkbox, string otherwise); callers normalise
 			if (result == null) return type === "checkbox" ? !!submitted : String(submitted);
 			if (type === "checkbox") return !!result;
 			return String(result);
@@ -446,7 +446,7 @@
 					renderView();
 					if (pencil?.focus) pencil.focus();
 				}, function (err) {
-					if (gen !== saveGen) return Promise.reject(err);
+					if (gen !== saveGen) throw err;
 					inFlight = null;
 					const msg = saveErrorMessage(err);
 					toast(msg, { tone: "error" });
@@ -456,13 +456,13 @@
 						mode = "view";
 						showError(msg);
 						if (control.focus) control.focus();
-						return Promise.reject(err);
+						throw err;
 					}
 					setSaving(false);
 					mode = "edit";
 					showError(msg);
 					if (control?.focus) control.focus();
-					return Promise.reject(err);
+					throw err;
 				});
 			return inFlight;
 		}
@@ -506,7 +506,7 @@
 			if (errorText) clearError();
 		}
 
-		function buildTextOrSelect(value) {
+		function buildTextOrSelect(value) { // NOSONAR javascript:S3776 -- encodes a views/widgets state machine; complexity is inherent
 			let el;
 			if (type === "select") {
 				el = document.createElement("select");
@@ -742,7 +742,7 @@
 	}
 
 	// NOSONAR javascript:S3776 -- encodes a views/widgets state machine; complexity is inherent.
-	function fieldGrid(fields, opts) {
+	function fieldGrid(fields, opts) { // NOSONAR javascript:S3776 -- encodes a views/widgets state machine; complexity is inherent
 		if (!Array.isArray(fields))
 			throw new TypeError("JuneauViews.helpers: fieldGrid(fields, opts) requires fields to be an array of field descriptions.");
 		opts = opts || {};
@@ -881,7 +881,7 @@
 	// picks F34 up once it is confirmed.  Flagged in this child's build report.
 	// ================================================================================================
 
-	function recordTable(catalog, rows, opts) {
+	function recordTable(catalog, rows, opts) { // NOSONAR javascript:S3776 -- encodes a views/widgets state machine; complexity is inherent
 		if (!Array.isArray(catalog))
 			throw new TypeError("JuneauViews.helpers: recordTable(catalog, rows, opts) requires catalog to be an array.");
 		if (!Array.isArray(rows))
@@ -915,8 +915,7 @@
 		for (const rowsEntry of rows) {
 			const rowValues = isPlainObject(rowsEntry) ? rowsEntry : {};
 			const tr = document.createElement("tr");
-			for (let ci = 0; ci < columns.length; ci++) {
-				const field = columns[ci];
+			for (const field of columns) {
 				const td = document.createElement("td");
 				paintFieldValue(td, field, rowValues, null);
 				if (!field.render && field.href) {
@@ -984,7 +983,7 @@
 		const seen = {};
 		for (let i = 0; i < tabs.length; i++) {
 			const t = tabs[i];
-			if (!t || t.id == null || t.label == null)
+			if (t?.id == null || t.label == null)
 				throw new TypeError("JuneauViews.helpers: tabStrip entry " + i + " requires an id and a label.");
 			const id = String(t.id);
 			if (Object.hasOwn(seen, id))

@@ -108,6 +108,8 @@
 		<logback.version>1.5.18</logback.version>
 		<log4j.version>2.26.1</log4j.version>
 		<h2.version>2.3.232</h2.version>
+		<webjars-jquery.version>3.7.1</webjars-jquery.version>
+		<webjars-datatables.version>2.0.5</webjars-datatables.version>
 	</properties>
 
 	<modules>

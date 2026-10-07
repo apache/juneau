@@ -67,7 +67,7 @@ function loadRibbon(withExportFeature) {
 		setInterval: function () { return 0; }, clearInterval: function () { /* no-op */ }
 	};
 	// NOSONAR javascript:S1523 -- loading a production JS source into a VM sandbox is this harness's intended mechanism; the input is a fixed local file supplied by the test.
-	vm.runInNewContext(ribbonJsSource, sandbox, { filename: 'juneau-ribbon.js' });
+	vm.runInNewContext(ribbonJsSource, sandbox, { filename: 'juneau-ribbon.js' }); // NOSONAR javascript:S1523 -- the harness evaluates the module's own bundled script
 	return { env: env, NS: env.window.JuneauViews };
 }
 
@@ -295,7 +295,7 @@ function buildBar(NS, ribbon) {
 	const btn = groups.length > 0 ? groups[0].childNodes[0] : null;
 	out.dom_dialog_noViewRuntime_buttonRendered = btn != null;
 	let threw = false;
-	try { if (btn) btn.dispatch('click'); } catch (error) { threw = true; }
+	try { if (btn) btn.dispatch('click'); } catch (error) { threw = true; } // NOSONAR javascript:S2486 -- the thrown/not-thrown outcome is recorded in a flag and asserted on
 	out.dom_dialog_noViewRuntime_clickDidNotThrow = ! threw;
 }
 

@@ -193,7 +193,7 @@ async function run(opts) {
 	// The property every consumer actually depends on, asserted the way they resolve it.
 	const region = ok.fx.panel.querySelector('[data-juneau-region]');
 	out.regionResolvesRowIdByClosest =
-		region.closest('[data-juneau-row-id]')?.getAttribute('data-juneau-row-id') === ROW_ID;
+		region.closest('[data-juneau-row-id]')?.getAttribute('data-juneau-row-id') === ROW_ID; // NOSONAR javascript:S7761 -- deliberately asserts the literal data-juneau-row-id attribute name consumers resolve
 
 	// End to end: the region's declared `{id}` url was substituted with the REAL id.
 	out.regionFetchedSubstitutedUrl = ok.fetches.indexOf('/scripts/' + ROW_ID + '/source') >= 0;

@@ -46,7 +46,7 @@ const PROBE = async function () {
 	// NOSONAR javascript:S7721 -- must stay nested: page.evaluate(PROBE) ships only PROBE's own source into the
 	// browser context, so a helper hoisted to this file's Node module scope would be undefined in the page and
 	// break every caller below.
-	function makeRow(rowId) {
+	function makeRow(rowId) { // NOSONAR javascript:S7721 -- must stay nested: page.evaluate(PROBE) serializes only PROBE's own source into the browser
 		const table = document.createElement('table');
 		const tbody = document.createElement('tbody');
 		const tr = document.createElement('tr');

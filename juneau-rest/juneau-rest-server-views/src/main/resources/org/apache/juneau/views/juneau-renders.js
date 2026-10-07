@@ -94,7 +94,7 @@
 	// as-is: `[^}]` → `[^{}]` would change the matched language, and this is fed developer-authored `meta.href`,
 	// never row data.
 	function interpolateHref(template, rowData) {
-		return String(template).replace(/\{([^}]+)\}/g, function (m, key) {
+		return String(template).replace(/\{([^}]+)\}/g, function (m, key) { // NOSONAR javascript:S5852 -- `[^}]+` cannot match `}`, so matching is linear; template is developer-authored
 			const v = rowData ? rowData[key] : undefined;
 			return v == null ? "" : encodeURIComponent(String(v));
 		});
@@ -122,8 +122,8 @@
 		// for ~2.2s (javascript:S5852).  This walk is linear and yields exactly the same string.
 		let i = 0;
 		let j = collapsed.length;
-		while (i < j && collapsed.charCodeAt(i) === 45) i++;
-		while (j > i && collapsed.charCodeAt(j - 1) === 45) j--;
+		while (i < j && collapsed.codePointAt(i) === 45) i++;
+		while (j > i && collapsed.codePointAt(j - 1) === 45) j--;
 		return collapsed.slice(i, j);
 	}
 
@@ -272,7 +272,7 @@
 			if (cellData == null) return "";
 			let s;
 			// A circular/BigInt/etc. value that JSON.stringify refuses: fall back to the plain string form.
-			try { s = JSON.stringify(cellData); } catch (e) { s = String(cellData); }
+			try { s = JSON.stringify(cellData); } catch (e) { s = String(cellData); } // NOSONAR javascript:S2486 -- an unserializable cell falls back to String()
 			return "<code>" + escHtml(s) + "</code>";
 		}
 	});

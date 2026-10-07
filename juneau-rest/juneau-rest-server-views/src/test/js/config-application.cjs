@@ -45,7 +45,7 @@ const source = fs.readFileSync(path.resolve(configJsPath), 'utf8');
 const window = {};
 // NOSONAR javascript:S1523 -- this is the test harness deliberately loading the real
 // juneau-config.js under test into an isolated vm sandbox; there is no untrusted input.
-vm.runInNewContext(source, { window: window, console: console }, { filename: 'juneau-config.js' });
+vm.runInNewContext(source, { window: window, console: console }, { filename: 'juneau-config.js' }); // NOSONAR javascript:S1523 -- harness evaluates the module's own bundled script, a fixed local file
 
 const NS = window.JuneauViews;
 const out = { hasConfig: !!NS?.config };

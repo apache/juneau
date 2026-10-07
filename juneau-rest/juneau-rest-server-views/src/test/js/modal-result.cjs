@@ -52,7 +52,7 @@ const PROBE = async function () {
 	// NOSONAR javascript:S7721 -- must stay nested: page.evaluate(PROBE) ships only PROBE's own source into the
 	// browser context, so a helper hoisted to this file's Node module scope would be undefined in the page and
 	// break every caller below.
-	function rendered(el) {
+	function rendered(el) { // NOSONAR javascript:S7721 -- must stay nested: page.evaluate(PROBE) ships only the probe's own source into the browser context
 		if (!el) return false;
 		const r = el.getBoundingClientRect();
 		return r.width > 0 && r.height > 0;
@@ -62,7 +62,7 @@ const PROBE = async function () {
 	// browser context, so a helper hoisted to this file's Node module scope would be undefined in the page and
 	// break every caller below.
 	// A minimal row with an actions cell and a trigger button (setRowInFlight disables the trigger).
-	function makeRow(rowId) {
+	function makeRow(rowId) { // NOSONAR javascript:S7721 -- must stay nested: page.evaluate(PROBE) ships only the probe's own source into the browser context
 		const table = document.createElement('table');
 		table.dataset.juneauView = 'v';
 		const tbody = document.createElement('tbody');
@@ -84,11 +84,11 @@ const PROBE = async function () {
 	// browser context, so a helper hoisted to this file's Node module scope would be undefined in the page and
 	// break every caller below.
 	// A fake fetch Response with a synchronous headers.get and an async text().
-	function resp(o) {
+	function resp(o) { // NOSONAR javascript:S7721 -- must stay nested: page.evaluate(PROBE) ships only the probe's own source into the browser context
 		return {
 			ok: o.ok,
 			status: o.status,
-			headers: { get: n => (o.headers || {})[n] || null },
+			headers: { get: n => o.headers?.[n] || null },
 			text: () => Promise.resolve(o.body != null ? o.body : '')
 		};
 	}
@@ -178,7 +178,7 @@ const PROBE = async function () {
 		const dds = fieldsEl ? Array.from(fieldsEl.querySelectorAll('dd')) : [];
 		out.modal = {
 			backdropVisible: rendered(backdrop),
-			title: backdrop ? (backdrop.querySelector('.juneau-view-dialog-title') || {}).textContent : null,
+			title: backdrop ? backdrop.querySelector('.juneau-view-dialog-title')?.textContent : null,
 			fieldCount: dds.length,
 			evilFieldText: dds.length > 1 ? dds[1].textContent : null,
 			// The XSS proof: the HTML-shaped value must NOT have become an <img> element anywhere in the dialog.

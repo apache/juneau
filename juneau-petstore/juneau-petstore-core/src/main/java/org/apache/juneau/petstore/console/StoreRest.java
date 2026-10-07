@@ -21,7 +21,7 @@ import org.apache.juneau.rest.server.view.*;
 import org.apache.juneau.rest.server.view.freemarker.*;
 
 /**
- * P1 Store: the petstore dashboard.
+ * Store: the petstore dashboard.
  *
  * <h5 class='section'>Example:</h5>
  * <p class='bjava'>
@@ -35,12 +35,15 @@ import org.apache.juneau.rest.server.view.freemarker.*;
  * </p>
  */
 @Rest(path="/store", title="Store")
+@SuppressWarnings({
+	"java:S110" // Inheritance depth comes from the BasicRestServlet hierarchy, not this page.
+})
 public class StoreRest extends PetstoreConsolePage {
 
 	private static final long serialVersionUID = 1L;
 
 	/**
-	 * Renders P1.
+	 * Renders the Store page.
 	 *
 	 * @return The page view.
 	 */

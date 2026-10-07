@@ -72,7 +72,7 @@ const PROBE = function () {
 
 	// NOSONAR javascript:S7721 -- must stay nested: page.evaluate(PROBE) ships only PROBE's own source into the
 	// browser context, so a helper hoisted to this file's Node module scope would be undefined in the page.
-	function makeTable(tokenValue) {
+	function makeTable(tokenValue) { // NOSONAR javascript:S7721 -- must stay nested: page.evaluate(PROBE) serializes only PROBE's own source into the browser
 		const table = document.createElement('table');
 		table.dataset.juneauView = 'v';
 		if (tokenValue != null) table.dataset.juneauCsrf = tokenValue;
@@ -89,7 +89,7 @@ const PROBE = function () {
 
 	// NOSONAR javascript:S7721 -- must stay nested: page.evaluate(PROBE) ships only PROBE's own source into the
 	// browser context, so a helper hoisted to this file's Node module scope would be undefined in the page.
-	function rendered(el) {
+	function rendered(el) { // NOSONAR javascript:S7721 -- must stay nested: page.evaluate(PROBE) serializes only PROBE's own source into the browser
 		if (!el) return false;
 		const r = el.getBoundingClientRect();
 		return r.width > 0 && r.height > 0;

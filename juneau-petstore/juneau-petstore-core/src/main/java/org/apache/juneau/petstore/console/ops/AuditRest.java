@@ -29,7 +29,7 @@ import org.apache.juneau.rest.server.view.*;
 import org.apache.juneau.rest.server.view.freemarker.*;
 
 /**
- * P7 Audit log: a read-only, server-mode table over the store's audit trail.
+ * Audit log: a read-only, server-mode table over the store's audit trail.
  *
  * <p>
  * The table's {@code at} column takes a timestamp range as a column search value; the query layer parses the ISO-8601
@@ -49,6 +49,9 @@ import org.apache.juneau.rest.server.view.freemarker.*;
  * </p>
  */
 @Rest(path="/audit", title="Audit")
+@SuppressWarnings({
+	"java:S110" // Inheritance depth comes from the BasicRestServlet hierarchy, not this page.
+})
 public class AuditRest extends PetstoreConsolePage {
 
 	private static final long serialVersionUID = 1L;
@@ -56,7 +59,7 @@ public class AuditRest extends PetstoreConsolePage {
 	private static final int ROWS_CAP = 200;
 
 	/**
-	 * Renders P7.
+	 * Renders the Audit page.
 	 *
 	 * @return The page view.
 	 */

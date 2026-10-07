@@ -41,9 +41,16 @@ class PetstorePages_ContractTest extends TestBase {
 	}
 
 	static final List<Page> PAGES = List.of(
-		new Page("P1", "/console/store", p -> p.hasActiveNav("store").hasCard("welcome", "html")),
-		new Page("P6", "/console/ops/jobs", p -> p.hasActiveNav("ops", "jobs").hasCard("jobs", "datatables")),
-		new Page("P7", "/console/ops/audit", p -> p.hasActiveNav("ops", "audit").hasCard("audit", "datatables"))
+		new Page("store", "/console/store", p -> p.hasActiveNav("store").hasCard("welcome", "html")),
+		new Page("jobs", "/console/ops/jobs", p -> p.hasActiveNav("ops", "jobs").hasCard("jobs", "datatables")),
+		new Page("audit", "/console/ops/audit", p -> p.hasActiveNav("ops", "audit").hasCard("audit", "datatables")),
+		new Page("flavors-html", "/console/dev/flavors/html", p -> p.hasActiveNav("dev", "flavors", "html").hasCardOrder("caption", "flavor")),
+		new Page("flavors-freemarker", "/console/dev/flavors/freemarker", p -> p.hasActiveNav("dev", "flavors", "freemarker").hasCardOrder("caption", "flavor")),
+		new Page("flavors-mustache", "/console/dev/flavors/mustache", p -> p.hasActiveNav("dev", "flavors", "mustache").hasCardOrder("caption", "flavor")),
+		new Page("flavors-react", "/console/dev/flavors/react", p -> p.hasActiveNav("dev", "flavors", "react").hasCardOrder("caption", "flavor")),
+		new Page("secure", "/console/dev/secure", p -> p.hasActiveNav("dev", "secure").hasCardOrder("about", "try")),
+		new Page("about", "/console/about", p -> p.hasActiveNav("about").hasCardOrder("overview", "links", "beans")),
+		new Page("themes", "/console/dev/themes", p -> p.hasActiveNav("dev", "themes").hasCardOrder("swatches", "picker", "authoring").hasTheme("open"))
 		// Later tasks append rows here.
 	);
 

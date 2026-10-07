@@ -362,6 +362,20 @@ class ReactiveResponseProcessor_Test extends TestBase {
 		assertTrue(c.contains("\"name\":\"p\""), c);
 	}
 
+	@Test void f02_acceptJsonlines_triggersNdjsonShape() throws Exception {
+		var c = CF.get("/ndjsonViaJsonl").header("Accept", "application/jsonlines").run()
+			.assertStatus(200).getContent().asString();
+		assertTrue(c.contains("\"name\":\"p\""), c);
+		assertFalse(c.startsWith("["), c);
+	}
+
+	@Test void f03_acceptJson5lines_triggersNdjsonShape() throws Exception {
+		var c = CF.get("/ndjsonViaJsonl").header("Accept", "application/json5lines").run()
+			.assertStatus(200).getContent().asString();
+		assertTrue(c.contains("\"name\":\"p\""), c);
+		assertFalse(c.startsWith("["), c);
+	}
+
 	// -----------------------------------------------------------------------------------------------------------------
 	// G: CharSequence elements — writeSseFrame (line 288) and writeNdjsonFrame (line 298) each have a
 	// CharSequence branch that writes the element's toString() directly instead of JSON-encoding it.

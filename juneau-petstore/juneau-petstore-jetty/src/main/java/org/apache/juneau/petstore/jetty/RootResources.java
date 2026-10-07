@@ -46,7 +46,7 @@ import org.apache.juneau.rest.server.widget.*;
  * {@code .cfg}/{@code Config} equivalent.
  *
  * <p>
- * Registers the one seeded {@link PetStore} shared by every child resource (D-P6/D-P10).
+ * Registers the one seeded {@link PetStore} shared by every child resource.
  *
  * <h5 class='section'>Example:</h5>
  * <p class='bjava'>
@@ -66,13 +66,9 @@ import org.apache.juneau.rest.server.widget.*;
 	description="Apache Juneau petstore sample application running under Jetty/Microservice.",
 	children={
 		PetstoreConsoleResource.class,
+		ConsoleAssetsRest.class,
 		PetStoreResource.class,
-		PetSecureResource.class,
-		PetMustacheViewResource.class,
-		PetFreemarkerViewResource.class,
 		PetstoreUiResource.class,
-		PetInfoResource.class,
-		PetHtmlResource.class,
 		ConfigResource.class,
 		LogsResource.class,
 		ShutdownResource.class
@@ -128,7 +124,7 @@ public class RootResources extends BasicRestServletGroup {
 	}
 
 	/**
-	 * {@code GET /} goes to the console store page (D-P6).
+	 * {@code GET /} goes to the console store page.
 	 *
 	 * @param req The request.
 	 * @return A 303 to {@code /console/store}.

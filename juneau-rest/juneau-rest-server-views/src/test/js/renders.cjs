@@ -51,7 +51,7 @@ sandbox.window = sandbox;
 sandbox.globalThis = sandbox;
 // NOSONAR javascript:S1523 -- this is the test harness deliberately loading the real
 // juneau-renders.js under test into an isolated vm sandbox; there is no untrusted input.
-vm.runInNewContext(code, sandbox);
+vm.runInNewContext(code, sandbox); // NOSONAR javascript:S1523 -- the harness evaluates the module's own bundled script
 
 const NS = sandbox.window.JuneauViews;
 const R = NS._render;

@@ -17,7 +17,7 @@
 package org.apache.juneau.petstore.service;
 
 /**
- * One staged inline edit of a pet field, waiting on the P10 Pending changes page to be applied or discarded.
+ * One staged inline edit of a pet field, waiting on the Pending changes page to be applied or discarded.
  *
  * <h5 class='section'>Example:</h5>
  * <p class='bjava'>

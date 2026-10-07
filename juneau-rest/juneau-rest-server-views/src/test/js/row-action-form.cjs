@@ -55,7 +55,7 @@ function loadViewsOnly(env) {
 		fetch: function (...args) { return env.callFetch(...args); }
 	};
 	// NOSONAR javascript:S1523 -- loading the production juneau-views.js under test into the sandbox.
-	vm.runInNewContext(fs.readFileSync(path.resolve(viewsJsPath), 'utf8'), sandbox, { filename: 'juneau-views.js' });
+	vm.runInNewContext(fs.readFileSync(path.resolve(viewsJsPath), 'utf8'), sandbox, { filename: 'juneau-views.js' }); // NOSONAR javascript:S1523 -- the harness evaluates the module's own bundled script
 	const NS = env.window.JuneauViews;
 	return { env: env, NS: NS, I: NS?.init };
 }

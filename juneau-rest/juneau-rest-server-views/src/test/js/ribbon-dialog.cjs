@@ -73,7 +73,7 @@ function loadBoth() {
 	};
 	// NOSONAR javascript:S1523 -- loading the production juneau-ribbon.js source into a VM sandbox is this
 	// harness's intended mechanism; the path is a fixed local file supplied by the test.
-	vm.runInNewContext(ribbonJsSource, sandbox, { filename: 'juneau-ribbon.js' });
+	vm.runInNewContext(ribbonJsSource, sandbox, { filename: 'juneau-ribbon.js' }); // NOSONAR javascript:S1523 -- the harness evaluates the module's own bundled script
 	return { env: env, NS: env.window.JuneauViews, I: loaded.I };
 }
 
@@ -316,7 +316,7 @@ function anyRowBanner(env) {
 		await flush();
 
 		out.mergeRowless_redrawCalledOnce = fx.ctx.redrawCount() === 1;
-		out.mergeRowless_outcomeStillRendered = (ribbonOutcome(env) || {}).dataset?.state === 'success';
+		out.mergeRowless_outcomeStillRendered = ribbonOutcome(env)?.dataset?.state === 'success';
 	})();
 
 	process.stdout.write(JSON.stringify(out));

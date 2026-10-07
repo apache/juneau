@@ -126,7 +126,7 @@
 	 * S3: Reading value (looking for top-level ',' or end); '(' / ')' adjust depth.
 	 * S4: Saw '\', next char is a value literal.
 	 */
-	function parseClauses(s) {
+	function parseClauses(s) { // NOSONAR javascript:S3776 -- URL state parsing; complexity is inherent
 		const out = [];
 		if (s == null || s === '') return out;
 		const S1 = 1, S2 = 2, S3 = 3, S4 = 4;
@@ -202,12 +202,12 @@
 	 *     as the prior {@code parseDirective} requirement that the token end with `)`).
 	 * S4: Discarding until the next top-level `;` after a malformed directive.
 	 */
-	function decodeState(str) {
+	function decodeState(str) { // NOSONAR javascript:S3776 -- URL state parsing; complexity is inherent
 		const state = { tab: null, filters: [], sort: null };
 		if (str == null) return state;
 		let raw = String(str);
 		if (raw.indexOf('%') >= 0) {
-			try { raw = decodeURIComponent(raw); } catch (e) { /* keep raw on a malformed %-sequence */ }
+			try { raw = decodeURIComponent(raw); } catch (e) { /* keep raw on a malformed %-sequence */ } // NOSONAR javascript:S2486 -- a malformed %-sequence keeps the raw text
 		}
 
 		const S1 = 1, S2 = 2, S3 = 3, S4 = 4;
@@ -323,7 +323,7 @@
 	function readFromSearch(search) {
 		if (search == null) return null;
 		let s = String(search);
-		if (s.charAt(0) === '?') s = s.substring(1);
+		if (s.startsWith('?')) s = s.substring(1);
 		if (s === '') return null;
 		const parts = s.split('&');
 		const prefix = STATE_PARAM + '=';
@@ -336,7 +336,7 @@
 	/** Rebuilds a search string, replacing (or dropping, when `encoded` is empty) the `state` param and keeping the rest. */
 	function buildSearch(existingSearch, encoded) {
 		let s = existingSearch == null ? '' : String(existingSearch);
-		if (s.charAt(0) === '?') s = s.substring(1);
+		if (s.startsWith('?')) s = s.substring(1);
 		const kept = [];
 		const prefix = STATE_PARAM + '=';
 		if (s !== '') {
@@ -359,11 +359,11 @@
 	 * address bar then stays clean while the user works, and only Copy link carries the state.
 	 */
 	function writeToAddressBar(history, location, state, opts) {
-		if (opts && opts.clean) return false;
+		if (opts?.clean) return false;
 		if (typeof history?.replaceState !== 'function' || ! location) return false;
 		const newSearch = buildSearch(location.search, encodeState(state));
 		const path = (location.pathname || '') + newSearch + (location.hash || '');
-		try { history.replaceState(history.state || null, '', path); } catch (e) { return false; }
+		try { history.replaceState(history.state || null, '', path); } catch (e) { return false; } // NOSONAR javascript:S2486 -- replaceState can throw (sandboxed frames); report false
 		return true;
 	}
 
@@ -383,7 +383,7 @@
 		try {
 			if (typeof navigatorLike?.clipboard?.writeText === 'function')
 				return Promise.resolve(navigatorLike.clipboard.writeText(text)).then(function () { return true; }, function () { return false; });
-		} catch (e) { /* fall through to the resolved-false path */ }
+		} catch (e) { /* fall through to the resolved-false path */ } // NOSONAR javascript:S2486 -- falls through to the resolved-false path
 		return Promise.resolve(false);
 	}
 

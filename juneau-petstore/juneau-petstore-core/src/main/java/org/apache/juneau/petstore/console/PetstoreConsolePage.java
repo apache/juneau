@@ -19,9 +19,11 @@ package org.apache.juneau.petstore.console;
 import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.petstore.service.*;
 import org.apache.juneau.rest.server.*;
+import org.apache.juneau.rest.server.datatables.*;
 import org.apache.juneau.rest.server.servlet.*;
 import org.apache.juneau.rest.server.view.freemarker.*;
 import org.apache.juneau.rest.server.view.freemarker.console.*;
+import org.apache.juneau.rest.server.views.*;
 
 /**
  * Base class for every petstore console page resource: registers the console FreeMarker mixin with
@@ -30,6 +32,10 @@ import org.apache.juneau.rest.server.view.freemarker.console.*;
  * <p>
  * Children don't inherit the parent's mixins, so every page class extends this one instead of re-declaring the
  * mixin, which E-B12 would reject.
+ *
+ * <p>
+ * The views and DataTables toolkit packs link their assets page-relative (e.g. {@code /console/store/juneau-views.js}),
+ * so every page also composes {@link ViewsMixin} and {@link DataTablesMixin} to serve them from its own mount.
  *
  * <h5 class='section'>Example:</h5>
  * <p class='bjava'>
@@ -40,7 +46,7 @@ import org.apache.juneau.rest.server.view.freemarker.console.*;
  * 	}
  * </p>
  */
-@Rest(mixins=FreemarkerMixin.class, responseProcessors=FreemarkerViewRenderer.class)
+@Rest(mixins={FreemarkerMixin.class, ViewsMixin.class, DataTablesMixin.class}, responseProcessors=FreemarkerViewRenderer.class)
 public abstract class PetstoreConsolePage extends BasicRestServlet {
 
 	private static final long serialVersionUID = 1L;
@@ -68,7 +74,7 @@ public abstract class PetstoreConsolePage extends BasicRestServlet {
 	 * @return The shared store.
 	 * @throws IllegalStateException If no {@link PetStore} {@code @Bean} was wired into the host.
 	 */
-	protected synchronized PetStore store() {
+	protected PetStore store() {
 		if (store == null)
 			throw new IllegalStateException("No PetStore bean is wired: declare a @Bean PetStore on the host that mounts " + getClass().getSimpleName());
 		return store;

@@ -55,13 +55,9 @@ import org.apache.juneau.rest.server.widget.*;
 	description="Apache Juneau petstore sample application running under Spring Boot.",
 	children={
 		PetstoreConsoleResource.class,
+		ConsoleAssetsRest.class,
 		PetStoreResource.class,
-		PetSecureResource.class,
-		PetMustacheViewResource.class,
-		PetFreemarkerViewResource.class,
 		PetstoreUiResource.class,
-		PetInfoResource.class,
-		PetHtmlResource.class,
 		HelloResource.class
 	}
 )
@@ -110,7 +106,7 @@ public class RootResources extends BasicSpringRestServletGroup {
 	}
 
 	/**
-	 * {@code GET /} goes to the console store page (D-P6).
+	 * {@code GET /} goes to the console store page.
 	 *
 	 * @param req The request.
 	 * @return A 303 to {@code /console/store}.

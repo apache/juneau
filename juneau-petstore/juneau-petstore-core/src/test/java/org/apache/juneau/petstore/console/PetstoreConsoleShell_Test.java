@@ -39,7 +39,7 @@ class PetstoreConsoleShell_Test extends TestBase {
 
 	@Test void a02_staticNavTree() throws Exception {
 		assertPage(page(client(), "/console/store"))
-			.hasNavPath("store").hasNavPath("pets").hasNavPath("orders").hasNavPath("users").hasNavPath("ops")
+			.hasNavPath("store").hasNavPath("pets").hasNavPath("orders").hasNavPath("users").hasNavPath("ops").hasNavPath("dev").hasNavPath("about")
 			.hasNavChildren("pets", "sold", "changes")
 			.hasNavChildren("ops", "jobs", "audit")
 			.hasNavHref("pets/sold", "/console/pets/sold");
@@ -60,9 +60,11 @@ class PetstoreConsoleShell_Test extends TestBase {
 		links.put("store", "/console/store");
 		links.put("ops/jobs", "/console/ops/jobs");
 		links.put("ops/audit", "/console/ops/audit");
+		for (var f : new String[]{"html", "freemarker", "mustache", "react"})
+			links.put("dev/flavors/" + f, "/console/dev/flavors/" + f);
 		for (var stub : ConsoleStubs.ALL)
 			links.put(stub.tab(), stub.href());
-		links.forEach((path, href) -> nav.hasNavHref(path, href));
+		links.forEach(nav::hasNavHref);
 		for (var href : links.values())
 			c.get(href).accept("text/html").run().assertStatus(200);
 	}
@@ -73,7 +75,8 @@ class PetstoreConsoleShell_Test extends TestBase {
 	}
 
 	@Test void a07_missingStoreBeanFailsLoudly() {
-		var e = org.junit.jupiter.api.Assertions.assertThrows(IllegalStateException.class, () -> new StoreRest().store());
+		var r = new StoreRest();
+		var e = org.junit.jupiter.api.Assertions.assertThrows(IllegalStateException.class, r::store);
 		assertContains("No PetStore bean is wired", e.getMessage());
 	}
 }

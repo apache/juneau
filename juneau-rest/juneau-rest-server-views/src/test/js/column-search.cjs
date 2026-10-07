@@ -45,7 +45,7 @@ if (!searchJsPath || !corpusPath) {
 
 const context = vm.createContext({ window: {} });
 // NOSONAR javascript:S1523 -- loading a production JS source into a VM sandbox is this harness's intended mechanism; the input is a fixed local file supplied by the test.
-vm.runInContext(fs.readFileSync(searchJsPath, 'utf8'), context, { filename: 'juneau-search.js' });
+vm.runInContext(fs.readFileSync(searchJsPath, 'utf8'), context, { filename: 'juneau-search.js' }); // NOSONAR javascript:S1523 -- harness evaluates the module's own bundled script, a fixed local file
 const S = context.window.JuneauViews?.search;
 if (!S || typeof S.createEngine !== 'function' || typeof S.parseExprStrict !== 'function' || typeof S.resolveStrict !== 'function') {
 	console.error('juneau-search.js did not publish window.JuneauViews.search');
@@ -209,7 +209,7 @@ function resolvesCleanly(kase) {
 	if (type === null || (kase.operators?.custom))
 		return true;  // Custom operators are unknown to the builtin-only strict path.
 	try { S.resolveStrict(exprStringOf(kase.search), type); return true; }
-	catch (error) { return false; }
+	catch (error) { return false; } // NOSONAR javascript:S2486 -- a throw means the strict resolver rejected the expression; that is reported as false
 }
 
 // -----------------------------------------------------------------------------------------------------------------
@@ -225,7 +225,7 @@ function runCase(kase) {
 		if (kase.tree) {
 			let ok = false;
 			try { ok = deepEqual(treeOf(S.parseExprStrict(exprStringOf(kase.search))), kase.tree.expr); }
-			catch (error) { ok = false; }
+			catch (error) { ok = false; } // NOSONAR javascript:S2486 -- a throw means the strict parser rejected the expression; recorded as a failed comparison
 			pass = pass && ok;
 		}
 		if (kase.rows)

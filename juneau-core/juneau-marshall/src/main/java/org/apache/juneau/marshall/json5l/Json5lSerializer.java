@@ -27,7 +27,7 @@ import org.apache.juneau.marshall.jsonl.*;
  *
  * <h5 class='topic'>Media types</h5>
  * <p>
- * Handles <c>Accept</c> types:  <bc>application/json5l, text/json5l</bc>
+ * Handles <c>Accept</c> types:  <bc>application/json5l, application/json5lines, text/json5l</bc>
  * <p>
  * Produces <c>Content-Type</c> types:  <bc>application/json5l</bc>
  *
@@ -92,7 +92,7 @@ public class Json5lSerializer extends JsonlSerializer {
 		 */
 		protected Builder() {
 			produces("application/json5l")
-				.accept("application/json5l,text/json5l,application/jsonl;q=0.9,application/x-ndjson;q=0.9,text/jsonl;q=0.9")
+				.accept("application/json5l,application/json5lines,text/json5l,application/jsonl;q=0.9,application/jsonlines;q=0.9,application/x-ndjson;q=0.9,text/jsonl;q=0.9")
 				.type(Json5lSerializer.class)
 				.useWhitespace(false);
 		}

@@ -57,13 +57,13 @@ sandbox.globalThis = sandbox;
 // NOSONAR javascript:S1523 -- this harness's entire purpose is to load the production runtime under test (a
 // repo-local file path from argv, not attacker-controlled input) into an isolated VM sandbox; that IS the test.
 if (rendersJsPath)
-	vm.runInNewContext(fs.readFileSync(path.resolve(rendersJsPath), 'utf8'), sandbox, { filename: 'juneau-renders.js' });
+	vm.runInNewContext(fs.readFileSync(path.resolve(rendersJsPath), 'utf8'), sandbox, { filename: 'juneau-renders.js' }); // NOSONAR javascript:S1523 -- the harness evaluates the module's own bundled script
 // NOSONAR javascript:S1523 -- same rationale: loading the production juneau-views.js under test into the sandbox.
-vm.runInNewContext(fs.readFileSync(path.resolve(viewsJsPath), 'utf8'), sandbox, { filename: 'juneau-views.js' });
+vm.runInNewContext(fs.readFileSync(path.resolve(viewsJsPath), 'utf8'), sandbox, { filename: 'juneau-views.js' }); // NOSONAR javascript:S1523 -- the harness evaluates the module's own bundled script
 
 const NS = window.JuneauViews;
 const I = NS?.init;
-const out = { hasInit: !!(typeof I?.buildActionRequest === 'function') };
+const out = { hasInit: typeof I?.buildActionRequest === 'function' };
 if (!out.hasInit) {
 	process.stdout.write(JSON.stringify(out));
 	process.exit(0);

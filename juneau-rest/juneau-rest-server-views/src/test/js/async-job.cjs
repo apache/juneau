@@ -54,7 +54,7 @@ const PROBE = async function () {
 
 	// NOSONAR javascript:S7721 -- must stay nested inside PROBE: page.evaluate(PROBE) serializes only this
 	// function's own source, so a helper moved to module scope would not exist in the browser page it runs in.
-	function rendered(el) {
+	function rendered(el) { // NOSONAR javascript:S7721 -- must stay nested: page.evaluate(PROBE) ships only the probe's own source into the browser context
 		if (!el) return false;
 		const r = el.getBoundingClientRect();
 		return r.width > 0 && r.height > 0;
@@ -62,7 +62,7 @@ const PROBE = async function () {
 
 	// A minimal row with an actions cell and a trigger button (setRowJobRunning disables the trigger).
 	// NOSONAR javascript:S7721 -- must stay nested inside PROBE (see `rendered` above for why).
-	function makeRow(rowId) {
+	function makeRow(rowId) { // NOSONAR javascript:S7721 -- must stay nested: page.evaluate(PROBE) ships only the probe's own source into the browser context
 		const table = document.createElement('table');
 		table.dataset.juneauView = 'v';
 		table.dataset.juneauCsrf = 'tok-xyz';   // so the fail-closed cancel POST is armed
@@ -83,11 +83,11 @@ const PROBE = async function () {
 
 	// A fake fetch Response with a synchronous headers.get and an async text().
 	// NOSONAR javascript:S7721 -- must stay nested inside PROBE (see `rendered` above for why).
-	function resp(o) {
+	function resp(o) { // NOSONAR javascript:S7721 -- must stay nested: page.evaluate(PROBE) ships only the probe's own source into the browser context
 		return {
 			ok: o.ok,
 			status: o.status,
-			headers: { get: n => (o.headers || {})[n] || null },
+			headers: { get: n => o.headers?.[n] || null },
 			text: () => Promise.resolve(o.body != null ? o.body : '')
 		};
 	}
@@ -114,7 +114,7 @@ const PROBE = async function () {
 
 	function lastEs() { return esInstances.at(-1); }
 	// NOSONAR javascript:S7721 -- must stay nested inside PROBE (see `rendered` above for why).
-	function jobBanner(dom) { return dom.td.querySelector('.juneau-view-job-progress'); }
+	function jobBanner(dom) { return dom.td.querySelector('.juneau-view-job-progress'); } // NOSONAR javascript:S7721 -- must stay nested: page.evaluate(PROBE) ships only the probe's own source into the browser context
 	function jobMsg(dom) {
 		const b = jobBanner(dom);
 		const m = b ? b.querySelector('.juneau-view-job-progress-msg') : null;
@@ -193,7 +193,7 @@ const PROBE = async function () {
 		if (fetchCalls.length > 0) {
 			out.cancel.url = fetchCalls[0].url;
 			out.cancel.method = fetchCalls[0].opts.method;
-			out.cancel.csrfHeader = (fetchCalls[0].opts.headers || {})['X-Csrf-Token'];
+			out.cancel.csrfHeader = fetchCalls[0].opts.headers?.['X-Csrf-Token'];
 		}
 		// The authoritative terminal outcome still arrives over the stream: cancelled.
 		lastEs().emit('result', JSON.stringify({ contractVersion: V, outcome: 'cancelled' }));

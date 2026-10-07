@@ -62,8 +62,8 @@ function matchesAttrToken(node, name, value) {
 	return value === undefined || v === value;
 }
 
-function elMatches(node, sel) {
-	if (!node || node.nodeType !== 1) return false;
+function elMatches(node, sel) { // NOSONAR javascript:S3776 -- linear test scenario; complexity is inherent
+	if (node?.nodeType !== 1) return false;
 	if (sel.indexOf(',') >= 0)
 		return sel.split(',').some(function (part) { return elMatches(node, part.trim()); });
 	let rest = sel.trim();
@@ -318,11 +318,11 @@ const sandbox = {
 // NOSONAR javascript:S1523 -- this harness's entire purpose is to load the production runtime under test (a
 // repo-local file path from argv, not attacker-controlled input) into an isolated VM sandbox; that IS the test.
 if (rendersJsPath)
-	vm.runInNewContext(fs.readFileSync(path.resolve(rendersJsPath), 'utf8'), sandbox, { filename: 'juneau-renders.js' });
+	vm.runInNewContext(fs.readFileSync(path.resolve(rendersJsPath), 'utf8'), sandbox, { filename: 'juneau-renders.js' }); // NOSONAR javascript:S1523 -- harness evaluates the module's own bundled script, a fixed local file
 // NOSONAR javascript:S1523 -- same rationale: loading the production juneau-views.js under test into the sandbox.
-vm.runInNewContext(fs.readFileSync(path.resolve(viewsJsPath), 'utf8'), sandbox, { filename: 'juneau-views.js' });
+vm.runInNewContext(fs.readFileSync(path.resolve(viewsJsPath), 'utf8'), sandbox, { filename: 'juneau-views.js' }); // NOSONAR javascript:S1523 -- harness evaluates the module's own bundled script, a fixed local file
 // NOSONAR javascript:S1523 -- same rationale: loading the production juneau-console.js under test into the sandbox.
-vm.runInNewContext(fs.readFileSync(path.resolve(consoleJsPath), 'utf8'), sandbox, { filename: 'juneau-console.js' });
+vm.runInNewContext(fs.readFileSync(path.resolve(consoleJsPath), 'utf8'), sandbox, { filename: 'juneau-console.js' }); // NOSONAR javascript:S1523 -- harness evaluates the module's own bundled script, a fixed local file
 
 const VNS = window.JuneauViews;
 const V = VNS?.init;
@@ -331,11 +331,11 @@ const C = CNS?.chrome;
 
 const out = {
 	hasViews: !!(typeof V?.buildRibbonStrip === 'function' && typeof V?.relocateDetailBarSlot === 'function'),
-	hasChrome: !!(typeof C?.initAll === 'function'),
-	hasRelocate: !!(typeof V?.relocateDetailBarSlot === 'function'),
-	hasMint: !!(typeof V?.mintDetailBarSlotIdentity === 'function'),
-	hasTeardown: !!(typeof V?.teardownDetailBarSlot === 'function'),
-	hasEnhance: !!(typeof V?.enhanceChromeInPanel === 'function')
+	hasChrome: typeof C?.initAll === 'function',
+	hasRelocate: typeof V?.relocateDetailBarSlot === 'function',
+	hasMint: typeof V?.mintDetailBarSlotIdentity === 'function',
+	hasTeardown: typeof V?.teardownDetailBarSlot === 'function',
+	hasEnhance: typeof V?.enhanceChromeInPanel === 'function'
 };
 if (!(out.hasViews && out.hasChrome && out.hasRelocate && out.hasMint && out.hasTeardown && out.hasEnhance)) {
 	process.stdout.write(JSON.stringify(out));
@@ -582,8 +582,8 @@ let stripB = null;
 	// Each minted id round-trips through the shipped readSidecar (prefix + marker), and the AUTHOR id no longer does.
 	const rtA = C.readSidecar(SIDECAR_PREFIX, out.mint_markerA);
 	const rtB = C.readSidecar(SIDECAR_PREFIX, out.mint_markerB);
-	out.mint_roundTripA = !!(rtA?.badges?.['bar:open'] === 3);
-	out.mint_roundTripB = !!(rtB?.badges?.['bar:open'] === 7);
+	out.mint_roundTripA = rtA?.badges?.['bar:open'] === 3;
+	out.mint_roundTripB = rtB?.badges?.['bar:open'] === 7;
 	out.mint_authorIdUnresolvable = document.getElementById(SIDECAR_PREFIX + AUTHOR_ID) === null;
 	out.mint_authorSidecarUnresolvable = C.readSidecar(SIDECAR_PREFIX, AUTHOR_ID) === null;
 })();

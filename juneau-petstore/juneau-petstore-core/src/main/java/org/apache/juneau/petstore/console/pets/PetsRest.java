@@ -35,7 +35,7 @@ import org.apache.juneau.rest.server.views.*;
 
 /**
  * The pets JSON endpoints (server-mode datatable query over BeanQuery, create/replace/delete, sell, stage, and the
- * per-pet feeds).  The P2 Pets, P3 Sold and P10 Pending changes pages are still "Coming soon" placeholders
+ * per-pet feeds).  The Pets, Sold and Pending changes pages are still "Coming soon" placeholders
  * ({@link ConsoleStubs}).
  *
  * <h5 class='section'>Example:</h5>
@@ -54,12 +54,15 @@ import org.apache.juneau.rest.server.views.*;
  * 	&lt;/@card&gt;
  * </p>
  * <p class='bjava'>
- * 	<jc>// The same table in the C3 builder twin.</jc>
+ * 	<jc>// The same table in the builder twin.</jc>
  * 	TableSpec.<jsm>create</jsm>(<js>"pets"</js>).dataMode(DataMode.<jsf>SERVER</jsf>).dataUrl(<js>"/console/pets/query"</js>)
  * 		.columns(Column.<jsm>create</jsm>(<js>"name"</js>).label(<js>"Name"</js>));
  * </p>
  */
 @Rest(path="/pets", title="Pets")
+@SuppressWarnings({
+	"java:S110" // Inheritance depth comes from the BasicRestServlet hierarchy, not this page.
+})
 public class PetsRest extends PetstoreConsolePage {
 
 	private static final long serialVersionUID = 1L;
@@ -126,14 +129,7 @@ public class PetsRest extends PetstoreConsolePage {
 		var old = require(id);
 		validate(pet);
 		pet.setId(id);
-		if (pet.getStatus() == null)  // Let's use defaultX() methods here like we use on DAOs in IRS.
-			pet.setStatus(old.getStatus());
-		if (pet.getSpecies() == null)
-			pet.setSpecies(old.getSpecies());
-		if (pet.getTags() == null)
-			pet.setTags(old.getTags());
-		if (pet.getPhoto() == null)
-			pet.setPhoto(old.getPhoto());
+		pet.defaultStatus(old.getStatus()).defaultSpecies(old.getSpecies()).defaultTags(old.getTags()).defaultPhoto(old.getPhoto());
 		return ActionResult.success(store().updatePet(pet, actor)).message(f("Saved '%s'", pet.getName()));
 	}
 
@@ -154,7 +150,7 @@ public class PetsRest extends PetstoreConsolePage {
 	}
 
 	/**
-	 * Marks a pet sold.  The P2 bulk "Mark sold (N)" action calls this per row.
+	 * Marks a pet sold.  The Pets page bulk "Mark sold (N)" action calls this per row.
 	 *
 	 * @param req The request.
 	 * @param id The pet id.
@@ -175,11 +171,11 @@ public class PetsRest extends PetstoreConsolePage {
 	}
 
 	/**
-	 * Stages an inline edit (R11) for review on P10.  The pet itself is not changed until the change is applied.
+	 * Stages an inline edit for review on the Pending changes page.  The pet itself is not changed until the change is applied.
 	 *
 	 * <p>
 	 * {@link PendingChanges#stage} owns which fields are stageable and its messages.  The photo is deliberately not
-	 * stageable: the P4 Photo tab edits it directly through the API's own {@code PUT /petstore/pets/{id}/photo}.
+	 * stageable: the pet detail Photo tab edits it directly through the API's own {@code PUT /petstore/pets/{id}/photo}.
 	 *
 	 * @param req The request.
 	 * @param id The pet id.
@@ -203,7 +199,7 @@ public class PetsRest extends PetstoreConsolePage {
 
 	/**
 	 * @param id The pet id.
-	 * @return This pet's orders (the R12 related list), by id.
+	 * @return This pet's orders (the related list), by id.
 	 * @throws NotFound If the pet does not exist.
 	 */
 	@RestGet(path="/{id}/orders/rows")

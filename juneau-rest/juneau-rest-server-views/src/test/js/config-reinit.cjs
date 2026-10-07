@@ -61,10 +61,10 @@ const window = { document: document, console: console, jQuery: undefined };
 const sandbox = { window: window, document: document, console: console };
 // NOSONAR javascript:S1523 -- this is the test harness deliberately loading the real
 // juneau-config.js under test into an isolated vm sandbox; there is no untrusted input.
-vm.runInNewContext(fs.readFileSync(path.resolve(configJsPath), 'utf8'), sandbox, { filename: 'juneau-config.js' });
+vm.runInNewContext(fs.readFileSync(path.resolve(configJsPath), 'utf8'), sandbox, { filename: 'juneau-config.js' }); // NOSONAR javascript:S1523 -- harness evaluates the module's own bundled script, a fixed local file
 // NOSONAR javascript:S1523 -- same rationale: deliberately loading the real juneau-views.js under test
 // into an isolated vm sandbox; there is no untrusted input.
-vm.runInNewContext(fs.readFileSync(path.resolve(viewsJsPath), 'utf8'), sandbox, { filename: 'juneau-views.js' });
+vm.runInNewContext(fs.readFileSync(path.resolve(viewsJsPath), 'utf8'), sandbox, { filename: 'juneau-views.js' }); // NOSONAR javascript:S1523 -- harness evaluates the module's own bundled script, a fixed local file
 
 const NS = window.JuneauViews;
 const out = {

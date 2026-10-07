@@ -299,7 +299,7 @@
 
 	/** Rejects an unknown/newer blob schemaVersion as 'malformed' (§3.2 stale-load handling) - never crashes. */
 	function assertSupportedSchema(blob) {
-		if (!blob || blob.schemaVersion !== CURRENT_SCHEMA_VERSION)
+		if (blob?.schemaVersion !== CURRENT_SCHEMA_VERSION)
 			throw malformedError("saved-view blob has an unsupported schemaVersion (expected " + CURRENT_SCHEMA_VERSION + ")");
 		return blob;
 	}
@@ -444,7 +444,7 @@
 	function defaultVisibleKeys(catalog) {
 		const out = [];
 		(catalog || []).forEach(function (c) {
-			if (!c || c.data == null) return;
+			if (c?.data == null) return;
 			if (c.pinned || c.defaultVisible !== false) out.push(c.data);
 		});
 		return out;
@@ -623,7 +623,7 @@
 		let blob = raw;
 		if (typeof raw === "string") {
 			try { blob = JSON.parse(raw); }
-			catch (e) { throw malformedError("saved-view blob is not valid JSON"); }
+			catch (e) { throw malformedError("saved-view blob is not valid JSON"); } // NOSONAR javascript:S2486 -- the parse failure is rethrown as a typed malformed error
 		}
 		assertSupportedSchema(blob);
 		return {
@@ -644,7 +644,7 @@
 	/** Non-blank label overrides only (a blank override means "use catalog title" and is omitted from the blob). */
 	function serializeLabels(view) {
 		const out = {};
-		if (!view || !view.labels || typeof view.labels !== "object") return out;
+		if (!view?.labels || typeof view.labels !== "object") return out;
 		for (const k in view.labels) {
 			if (!Object.hasOwn(view.labels, k)) continue;
 			const v = view.labels[k];
@@ -656,7 +656,7 @@
 	/** Format overrides only (nullish values are omitted from the blob). */
 	function serializeFormats(view) {
 		const out = {};
-		if (!view || !view.formats || typeof view.formats !== "object") return out;
+		if (!view?.formats || typeof view.formats !== "object") return out;
 		for (const k in view.formats)
 			if (Object.hasOwn(view.formats, k) && view.formats[k] != null) out[k] = view.formats[k];
 		return out;
@@ -737,7 +737,7 @@
 	function readActiveRaw(scope) {
 		const raw = window.localStorage.getItem(activeKeyFor(scope));
 		if (raw == null) return null;
-		try { return decSegment(raw); } catch (e) { return raw; }
+		try { return decSegment(raw); } catch (e) { return raw; } // NOSONAR javascript:S2486 -- an undecodable segment falls back to the raw text
 	}
 
 	// NOSONAR javascript:S7721 -- must stay inside this file's module IIFE: hoisting past the closing `})()`
@@ -757,7 +757,7 @@
 		for (let i = 0; i < window.localStorage.length; i++) {
 			const k = window.localStorage.key(i);
 			if (k?.startsWith(prefix)) {
-				try { out.push({ name: decSegment(k.slice(prefix.length)) }); } catch (e) { /* skip unreadable key */ }
+				try { out.push({ name: decSegment(k.slice(prefix.length)) }); } catch (e) { /* skip unreadable key */ } // NOSONAR javascript:S2486 -- an unreadable key is skipped
 			}
 		}
 		return out;
@@ -790,24 +790,24 @@
 			// every consumer (in this file and the chooser UI) reads only `.code`/`.message`, and widening
 			// this to an Error would risk changing enumerable-property/JSON-serialization behavior for
 			// callers outside this file that we cannot fully audit.
-			try { resolve(fn()); } catch (e) { reject(toTypedError(e)); }
+			try { resolve(fn()); } catch (e) { reject(toTypedError(e)); } // NOSONAR javascript:S6671 -- typed {code,message} failure contract, not an Error subclass; see above
 		});
 	}
 
-	function createLocalStorageProvider() {
+	/** Enforces the per-blob/per-scope/per-user bounds (§3.2) INSIDE the write op, never as a racy pre-flight. */
+	function enforceBounds(scope, name, blob) {
+		const json = JSON.stringify(blob);
+		if (byteLength(json) > LOCALSTORAGE_MAX_BLOB_BYTES)
+			throw quotaError("saved view exceeds the per-blob size cap (" + LOCALSTORAGE_MAX_BLOB_BYTES + " bytes)");
+		const existing = listViews(scope);
+		const isReplace = existing.some(function (v) { return v.name === name; });
+		if (!isReplace && existing.length >= LOCALSTORAGE_MAX_VIEWS_PER_SCOPE)
+			throw quotaError("scope already has " + LOCALSTORAGE_MAX_VIEWS_PER_SCOPE + " saved views (MAX_VIEWS_PER_SCOPE)");
+		if (!isReplace && countAllViewsForThisUser() >= LOCALSTORAGE_MAX_VIEWS_PER_USER)
+			throw quotaError("aggregate saved-view count reached MAX_VIEWS_PER_USER (" + LOCALSTORAGE_MAX_VIEWS_PER_USER + ")");
+	}
 
-		/** Enforces the per-blob/per-scope/per-user bounds (§3.2) INSIDE the write op, never as a racy pre-flight. */
-		function enforceBounds(scope, name, blob) {
-			const json = JSON.stringify(blob);
-			if (byteLength(json) > LOCALSTORAGE_MAX_BLOB_BYTES)
-				throw quotaError("saved view exceeds the per-blob size cap (" + LOCALSTORAGE_MAX_BLOB_BYTES + " bytes)");
-			const existing = listViews(scope);
-			const isReplace = existing.some(function (v) { return v.name === name; });
-			if (!isReplace && existing.length >= LOCALSTORAGE_MAX_VIEWS_PER_SCOPE)
-				throw quotaError("scope already has " + LOCALSTORAGE_MAX_VIEWS_PER_SCOPE + " saved views (MAX_VIEWS_PER_SCOPE)");
-			if (!isReplace && countAllViewsForThisUser() >= LOCALSTORAGE_MAX_VIEWS_PER_USER)
-				throw quotaError("aggregate saved-view count reached MAX_VIEWS_PER_USER (" + LOCALSTORAGE_MAX_VIEWS_PER_USER + ")");
-		}
+	function createLocalStorageProvider() {
 
 		function persistBlob(scope, name, blob) {
 			const v = validateNameForLocalStorage(name);
@@ -834,7 +834,7 @@
 					const raw = window.localStorage.getItem(viewKeyFor(ctx.scope, v.encoded));
 					if (raw == null) return null;
 					let blob;
-					try { blob = JSON.parse(raw); } catch (e) { throw malformedError("stored saved-view blob is not valid JSON"); }
+					try { blob = JSON.parse(raw); } catch (e) { throw malformedError("stored saved-view blob is not valid JSON"); } // NOSONAR javascript:S2486 -- the parse failure is rethrown as a typed malformed error
 					return assertSupportedSchema(blob);
 				});
 			},
@@ -960,7 +960,7 @@
 	function readJsonBody(resp) {
 		return resp.text().then(function (text) {
 			if (text == null || text === "") return null;
-			try { return JSON.parse(text); } catch (e) { throw malformedError("saved-views response was not valid JSON"); }
+			try { return JSON.parse(text); } catch (e) { throw malformedError("saved-views response was not valid JSON"); } // NOSONAR javascript:S2486 -- the parse failure is rethrown as a typed malformed error
 		});
 	}
 
@@ -999,31 +999,31 @@
 			// changing enumerable-property/JSON-serialization behavior for callers we cannot fully audit.
 			return Promise.resolve(fn()).then(null, function (e) { throw toTypedError(e); });
 		} catch (e) {
-			return Promise.reject(toTypedError(e));
+			return Promise.reject(toTypedError(e)); // NOSONAR javascript:S6671 -- typed {code,message} failure contract, not an Error subclass; see above
 		}
+	}
+
+	function queryFor(table, extra) {
+		const params = { view: requireViewId(table) };
+		const pageId = resolvePageId(table);
+		if (pageId != null) params.page = pageId;
+		if (extra) for (const k in extra) if (Object.hasOwn(extra, k) && extra[k] != null) params[k] = extra[k];
+		return buildQuery(params);
+	}
+
+	function httpError(status, bodyText) {
+		let env = null;
+		try { env = bodyText ? JSON.parse(bodyText) : null; } catch (e) { env = null; /* non-JSON body: fall back to the generic HTTP-status message below */ } // NOSONAR javascript:S2486 -- a non-JSON body falls back to the generic HTTP-status message
+		const err = typedError(classifyStatus(status), env?.message ? env.message : ("saved-views request failed (HTTP " + status + ")"));
+		err.httpStatus = status;
+		return err;
 	}
 
 	function createServerProvider() {
 
-		function queryFor(table, extra) {
-			const params = { view: requireViewId(table) };
-			const pageId = resolvePageId(table);
-			if (pageId != null) params.page = pageId;
-			if (extra) for (const k in extra) if (Object.hasOwn(extra, k) && extra[k] != null) params[k] = extra[k];
-			return buildQuery(params);
-		}
-
-		function httpError(status, bodyText) {
-			let env = null;
-			try { env = bodyText ? JSON.parse(bodyText) : null; } catch (e) { env = null; /* non-JSON body: fall back to the generic HTTP-status message below */ }
-			const err = typedError(classifyStatus(status), env?.message ? env.message : ("saved-views request failed (HTTP " + status + ")"));
-			err.httpStatus = status;
-			return err;
-		}
-
 		function doFetch(url, init) {
 			let req;
-			try { req = fetch(url, init); } catch (e) { return Promise.reject(networkError("the saved-views request could not be sent")); }
+			try { req = fetch(url, init); } catch (e) { return Promise.reject(networkError("the saved-views request could not be sent")); } // NOSONAR javascript:S2486 javascript:S4822 -- a synchronous fetch throw becomes a typed network error; fetch returns a promise otherwise
 			return req.then(function (resp) {
 				if (resp.ok) return resp;
 				return resp.text().then(function (text) { throw httpError(resp.status, text); },
@@ -1172,12 +1172,12 @@
 	NS.persistence.getItem = function (key) {
 		try {
 			return window.localStorage.getItem(key);
-		} catch (e) { return null; /* quota / private mode — ribbon click path stays synchronous and must not throw */ }
+		} catch (e) { return null; /* quota / private mode — ribbon click path stays synchronous and must not throw */ } // NOSONAR javascript:S2486 -- storage quota or private mode must not throw on the synchronous ribbon click path
 	};
 	NS.persistence.setItem = function (key, value) {
 		try {
 			window.localStorage.setItem(key, String(value));
-		} catch (e) { /* quota / private mode — ribbon click path stays synchronous and must not throw */ }
+		} catch (e) { /* quota / private mode — ribbon click path stays synchronous and must not throw */ } // NOSONAR javascript:S2486 -- storage quota or private mode must not throw on the synchronous ribbon click path
 	};
 
 	// Exposed for the pure-logic/source-shape tests and for later slices (chooser UI, config-application layer).
@@ -1225,11 +1225,11 @@
 	function resolveActiveView(table, viewDef) {
 		if (!NS.persistence) return Promise.resolve(null);
 		return NS.persistence.getActive(table).then(function (r) {
-			if (!r || r.name == null) return null;
+			if (r?.name == null) return null;
 			return NS.persistence.load(table, r.name).then(function (blob) {
 				if (blob == null) return null;
 				try { return deserializeSavedView(blob); }
-				catch (e) { return null; /* stale/unknown-schema blob resolves as Default, per the doc above */ }
+				catch (e) { return null; /* stale/unknown-schema blob resolves as Default, per the doc above */ } // NOSONAR javascript:S2486 -- a stale or unknown-schema blob resolves as Default
 			});
 		});
 	}
@@ -1244,7 +1244,7 @@
 	 */
 	function applyView(table, savedView, overrides) {
 		const ctx = table?.__juneauCtx;
-		if (!ctx || !ctx.viewDef) return { ok: false, reason: "not-initialized" };
+		if (!ctx?.viewDef) return { ok: false, reason: "not-initialized" };
 		if (!NS.init || typeof NS.init.buildTable !== "function") return { ok: false, reason: "no-buildTable" };
 		let effective;
 		try {
@@ -1255,7 +1255,7 @@
 		if (overrides?.searchMembership != null)
 			effective = applySearchMembershipToColumns(effective, overrides.searchMembership);
 		const viewDef = overrides?.defaultOrder
-			? Object.assign({}, ctx.viewDef, { defaultOrder: overrides.defaultOrder })
+			? { ...ctx.viewDef, defaultOrder: overrides.defaultOrder }
 			: ctx.viewDef;
 		return NS.init.buildTable(table, viewDef, effective, ctx);
 	}
@@ -1379,7 +1379,7 @@
 		if (searchMembership == null) return effectiveColumns;
 		const member = new Set(searchMembership);
 		return (effectiveColumns || []).map(function (c) {
-			if (!c || c.data == null || c.searchable === false || member.has(c.data)) return c;
+			if (c?.data == null || c.searchable === false || member.has(c.data)) return c;
 			const copy = {};
 			for (const k in c) if (Object.hasOwn(c, k)) copy[k] = c[k];
 			copy.searchable = false;
@@ -1402,7 +1402,7 @@
 		const out = [];
 		const seen = Object.create(null);
 		sortList.forEach(function (e) {
-			if (!e || e.column == null) return;
+			if (e?.column == null) return;
 			const key = String(e.column);
 			if (!allowed[key] || seen[key]) return;
 			seen[key] = true;
@@ -1418,7 +1418,7 @@
 		// (intersected with the sort-capable columns) so an untouched Apply never replaces it with "every column".
 		if (Array.isArray(defaultOrder)) {
 			return intersectSortOrder(defaultOrder.map(function (e) {
-				return { column: e && e.data, dir: e && e.dir };
+				return { column: e?.data, dir: e?.dir };
 			}), capable);
 		}
 		return intersectSortOrder(null, capable);
@@ -1467,7 +1467,7 @@
 		const order = [];
 		const visible = [];
 		cols.forEach(function (c) {
-			if (!c || c.data == null) return;
+			if (c?.data == null) return;
 			order.push(c.data);
 			if (c.pinned || c.defaultVisible !== false) visible.push(c.data);
 		});
@@ -1634,7 +1634,7 @@
 	 */
 	function copyShareLink(table) {
 		if (typeof NS.init?.copyShareableUrl === "function")
-			return NS.init.copyShareableUrl(table, table && table.__juneauCtx);
+			return NS.init.copyShareableUrl(table, table?.__juneauCtx);
 		if (!NS.urlState || typeof NS.urlState.buildShareUrl !== "function")
 			return Promise.resolve({ ok: false, url: "" });
 		const url = NS.urlState.buildShareUrl(window.location, { tab: null, filters: [], sort: null });
@@ -1652,7 +1652,7 @@
 		const byData = catalogByDataLocal(catalog);
 		const col = byData[dataKey];
 		if (col?.pinned) return false;
-		if (!draft || !draft.visible) return false;
+		if (!draft?.visible) return false;
 		if (draft.visible.indexOf(dataKey) < 0) return true;
 		return visibleCount(draft) > 1;
 	}
@@ -2605,10 +2605,10 @@
 	function stampChromeTip(el, text) {
 		const t = text == null ? "" : String(text);
 		if (t !== "") {
-			el.setAttribute("data-jc-tip", t);
+			el.setAttribute("data-jc-tip", t); // NOSONAR javascript:S7761 -- el may be a minimal stub without dataset; the attribute name is pinned by CSS selectors
 			el.setAttribute("aria-label", t);
 		} else if (typeof el.removeAttribute === "function") {
-			el.removeAttribute("data-jc-tip");
+			el.removeAttribute("data-jc-tip"); // NOSONAR javascript:S7761 -- el may be a minimal stub without dataset; the attribute name is pinned by CSS selectors
 		}
 		if (typeof el.removeAttribute === "function") el.removeAttribute("title");
 		el.title = "";
@@ -2619,7 +2619,7 @@
 	 * {@code constructTable} on first init AND every Apply rebuild.
 	 */
 	function mountChooser(table, ctx, toolbarRow) {
-		if (!ctx || !ctx.viewDef || !ctx.viewDef.columnConfig) return;
+		if (!ctx?.viewDef?.columnConfig) return;
 		const host = resolveChooserHost(table, toolbarRow);
 		if (!host) return;
 		if (host.querySelector?.(".juneau-config-chooser-btn")) return;

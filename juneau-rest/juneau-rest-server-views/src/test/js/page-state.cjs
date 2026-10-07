@@ -80,7 +80,7 @@ let threw = false;
 try {
 	ps.table('blocked').set('x', 1);
 	out.blockedGet = ps.table('blocked').get('x');   // expect null - blocked read swallowed
-} catch (error) {
+} catch (error) { // NOSONAR javascript:S2486 -- the thrown/not-thrown outcome is recorded in a flag and asserted on
 	threw = true;
 }
 out.blockedNoThrow = !threw;

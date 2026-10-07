@@ -105,7 +105,7 @@ class RestClient_Negotiation_Test extends TestBase {
 	void a06_defaultAcceptExactOrder() throws Exception {
 		var pset = ParserSet.create().add(JsonParser.DEFAULT, JsonlParser.DEFAULT).build();
 		try (var c = RestClient.builder().parsers(pset).build()) {
-			assertEquals("application/json, text/json, application/jcs+json, application/jsonl, application/x-ndjson, text/jsonl", c.getDefaultAccept());
+			assertEquals("application/json, text/json, application/jcs+json, application/jsonl, application/jsonlines, application/x-ndjson, text/jsonl", c.getDefaultAccept());
 		}
 	}
 

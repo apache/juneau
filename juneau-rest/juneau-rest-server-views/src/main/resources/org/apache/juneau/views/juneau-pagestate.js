@@ -57,7 +57,7 @@
 			ls.setItem(probe, '1');   // a blocked-storage browser throws here, not on the property read above.
 			ls.removeItem(probe);
 			return ls;
-		} catch (e) {
+		} catch (e) { // NOSONAR javascript:S2486 -- storage blocked: degrade to the no-op store
 			// Storage is blocked: degrade to the no-op store (the error itself carries nothing actionable).
 			return NOOP_STORE;
 		}
@@ -67,22 +67,22 @@
 
 	// Every store call is guarded: a store that starts fine but later throws (quota, eviction) degrades to a no-op
 	// for THAT call rather than surfacing to the caller.
-	function rawGet(key) { try { return store.getItem(key); } catch (e) { return null; } }
-	function rawSet(key, value) { try { store.setItem(key, value); } catch (e) { /* no-op */ } }
-	function rawRemove(key) { try { store.removeItem(key); } catch (e) { /* no-op */ } }
+	function rawGet(key) { try { return store.getItem(key); } catch (e) { return null; } } // NOSONAR javascript:S2486 -- a store that throws later degrades to null for that call
+	function rawSet(key, value) { try { store.setItem(key, value); } catch (e) { /* no-op */ } } // NOSONAR javascript:S2486 -- a store that throws later degrades to a no-op for that call
+	function rawRemove(key) { try { store.removeItem(key); } catch (e) { /* no-op */ } } // NOSONAR javascript:S2486 -- a store that throws later degrades to a no-op for that call
 
 	/** Reads and JSON-decodes `key`; a missing key OR an undecodable value both read as null. */
 	function get(key) {
 		const raw = rawGet(key);
 		if (raw == null) return null;
-		try { return JSON.parse(raw); } catch (e) { return null; }
+		try { return JSON.parse(raw); } catch (e) { return null; } // NOSONAR javascript:S2486 -- an undecodable value reads as null
 	}
 
 	/** JSON-encodes and writes `value` under `key`; an `undefined` value (or an unserializable one) clears it. */
 	function set(key, value) {
 		if (value === undefined) { rawRemove(key); return; }
 		let enc;
-		try { enc = JSON.stringify(value); } catch (e) { return; }
+		try { enc = JSON.stringify(value); } catch (e) { return; } // NOSONAR javascript:S2486 -- an unserializable value is not stored
 		rawSet(key, enc);
 	}
 

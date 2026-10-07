@@ -74,7 +74,7 @@ function fakeCol(idx, header) {
 	return {
 		index: function () { return idx; },
 		header: function () { return header; },
-		search: function (v) {
+		search: function (v) { // NOSONAR javascript:S3800 -- mirrors DataTables' column.search() getter/setter overload: returns the value or the chainable api
 			if (arguments.length === 0) return applied;
 			applied = v == null ? '' : String(v);
 			return api;

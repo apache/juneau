@@ -976,7 +976,7 @@
 	/** A never-throwing JSON parse - a malformed body is a fail-closed rejection, not an uncaught exception. */
 	function safeParseJson(text) {
 		if (blank(text)) return null;
-		try { return JSON.parse(text); } catch (e) { return null; }
+		try { return JSON.parse(text); } catch (e) { return null; } // NOSONAR javascript:S2486 -- a non-JSON body is treated as no data
 	}
 
 	function declaredFetchError(kind, message) {
@@ -1169,7 +1169,7 @@
 		}).then(function (res) {
 			return res.text().then(function (text) {
 				let data = null;
-				try { data = text ? JSON.parse(text) : null; } catch (e) { data = null; }
+				try { data = text ? JSON.parse(text) : null; } catch (e) { data = null; } // NOSONAR javascript:S2486 -- a non-JSON body is treated as no data
 				return { ok: res.ok, status: res.status, data: data };
 			});
 		});
@@ -1247,7 +1247,7 @@
 
 	/** The client twin of {@code RegionDef.MIN_REFRESH_MS}'s clamp - belt-and-suspenders over the server's own. */
 	function clampRefreshMs(ms) {
-		return ms < MIN_REFRESH_MS ? MIN_REFRESH_MS : ms;
+		return Math.max(ms, MIN_REFRESH_MS);
 	}
 
 	/**
@@ -1721,7 +1721,7 @@
 	 * @param {Object<string, string|{table: string|Object}>} hookup Map of element id → populator name or table binding.
 	 * @returns {Promise<Array>} Thenable resolving to the region handles initRegion minted.
 	 */
-	function mount(hookup) {
+	function mount(hookup) { // NOSONAR javascript:S3776 -- encodes a views/widgets state machine; complexity is inherent
 		if (hookup == null || typeof hookup !== "object" || Array.isArray(hookup)) {
 			const message = "JuneauViews.regions.mount: expected a map of slot id -> populator name.";
 			window.console.error(message);

@@ -36,6 +36,9 @@ import org.apache.juneau.rest.server.*;
  * </p>
  */
 @Rest(path="/ops", title="Operations", children={JobsRest.class, AuditRest.class})
+@SuppressWarnings({
+	"java:S110" // Inheritance depth comes from the BasicRestServlet hierarchy, not this page.
+})
 public class OpsRest extends PetstoreConsolePage {
 
 	private static final long serialVersionUID = 1L;

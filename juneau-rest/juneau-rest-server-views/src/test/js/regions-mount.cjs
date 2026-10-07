@@ -43,7 +43,7 @@ function slot(env, id) {
 	return el;
 }
 
-(async function () {
+(async function () { // NOSONAR javascript:S3776 -- linear test scenario
 
 	// =================================================================================================================
 	// Happy path: mount stamps enrolment attrs, enrols, and populate fills the BODY only.
@@ -143,7 +143,7 @@ function slot(env, id) {
 		let threw = false;
 		try {
 			R.mount({ probes: '  ' });
-		} catch (error) {
+		} catch (error) { // NOSONAR javascript:S2486 -- the thrown/not-thrown outcome is recorded in a flag and asserted on
 			threw = true;
 		}
 		out.t4_threw = threw;

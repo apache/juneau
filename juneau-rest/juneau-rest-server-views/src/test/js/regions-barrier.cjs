@@ -51,7 +51,8 @@ function scene() {
 	const h = H.load(rendersJsPath, viewsJsPath, regionsJsPath);
 	h.log = {};
 	h.note = function (id, msg) {
-		(h.log[id] = h.log[id] || []).push({ kind: msg.kind, at: h.clock.now() });
+		h.log[id] = h.log[id] || [];
+		h.log[id].push({ kind: msg.kind, at: h.clock.now() });
 	};
 	h.kinds = function (id) { return (h.log[id] || []).map(function (r) { return r.kind; }); };
 	h.at = function (id) { return (h.log[id] || []).map(function (r) { return r.at; }); };
@@ -100,7 +101,7 @@ function emitOnce(h, id, msg) {
 	return el;
 }
 
-(async function () {
+(async function () { // NOSONAR javascript:S3776 -- linear test scenario
 
 	// =================================================================================================================
 	// Test 49(a) - a control region that emits during its own reason:"initial" populate and initializes FIRST still
@@ -230,7 +231,7 @@ function emitOnce(h, id, msg) {
 		const h = scene();
 		out.t49d_value = h.R.BARRIER_DEADLINE_MS;
 		// Not settable through the published namespace...
-		try { h.R.BARRIER_DEADLINE_MS = 5; } catch (error) { /* strict-mode refusal is also an acceptable answer */ }
+		try { h.R.BARRIER_DEADLINE_MS = 5; } catch (error) { /* strict-mode refusal is also an acceptable answer */ } // NOSONAR javascript:S2486 -- the thrown/not-thrown outcome is recorded in a flag and asserted on
 		// ...nor through a global the runtime might have consulted...
 		h.env.window.JUNEAU_BARRIER_DEADLINE_MS = 5;
 		h.env.window.juneauBarrierDeadlineMs = 5;
@@ -503,7 +504,7 @@ function emitOnce(h, id, msg) {
 			if (arm === 'released') {
 				// (iv) The bounds hold under appending: a late-ENROLLED region and a region enrolled at boot while
 				// HIDDEN both still receive nothing, and the buffer is discarded once the last window closes.
-				const lateEnrolled = subscriber(h, 'lateEnrolled');
+				subscriber(h, 'lateEnrolled');
 				const hiddenAtBoot = subscriber(h, 'hiddenAtBoot', { hiddenPanel: true });
 				H.activatePanel(hiddenAtBoot);
 				h.R.activateRegion(hiddenAtBoot._juneauRegion);
@@ -675,7 +676,7 @@ function emitOnce(h, id, msg) {
 			// B subscribes synchronously during its own populate and settles BEFORE the live emit, so B is a live
 			// subscriber whose OWN window has already closed - leaving C as the LAST open window.  Its handler is
 			// what makes C's close condition become true partway through the fan-out.
-			const mkB = function () {
+			const mkB = function () { // NOSONAR javascript:S7721 -- closes over this scenario's h, cCtx, cSync and bFetch
 				subscriber(h, 'B', {
 					subscribeNow: false,
 					captureCtx: function (ctx) {

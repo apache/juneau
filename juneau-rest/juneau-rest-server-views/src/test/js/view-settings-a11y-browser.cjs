@@ -129,7 +129,7 @@ const DIALOG_STATE = () => {
 			// juneau-search.js engine validating it; native col.search() is never written.
 			let dslNative = '';
 			const dslFixed = {};
-			const dslSearch = function (v) {
+			const dslSearch = function (v) { // NOSONAR javascript:S3800 -- mirrors the DataTables column.search() getter/setter: returns the column when setting, the string when reading
 				if (arguments.length) { dslNative = v == null ? '' : String(v); return dslCol; }
 				return dslNative;
 			};

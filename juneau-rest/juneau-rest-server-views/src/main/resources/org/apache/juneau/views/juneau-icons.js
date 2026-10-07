@@ -295,7 +295,7 @@
 	function parseSvg(xml) {
 		const doc = new DOMParser().parseFromString(xml, "image/svg+xml");
 		const root = doc.documentElement;
-		if (!root || root.nodeName.toLowerCase() !== "svg" || root.querySelector("parsererror"))
+		if (root?.nodeName.toLowerCase() !== "svg" || root.querySelector("parsererror"))
 			return null;
 		return root;
 	}

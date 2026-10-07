@@ -39,7 +39,7 @@ if (!viewsJsPath) {
 
 /** Minimal CSS-selector matcher: tag, `.class`, `[attr]` / `[attr="v"]`, comma lists, and tag[attr] combos. */
 function elMatches(node, sel) {
-	if (!node || node.nodeType !== 1) return false;
+	if (node?.nodeType !== 1) return false;
 	if (sel.indexOf(',') >= 0)
 		return sel.split(',').some(function (part) { return elMatches(node, part.trim()); });
 	let rest = sel;
@@ -214,7 +214,7 @@ function parseAttrs(raw, node) {
 	// unquoted HTML attribute values for the test-fixture HTML parser below; collapsing the 3-way alternation
 	// (e.g. via a backreference to the opening quote) would change which characters are permitted inside quoted
 	// values with no behavior-preserving equivalent, so it is left as-is.
-	const re = /([:@\w-]+)(?:\s*=\s*(?:"([^"]*)"|'([^']*)'|([^\s>]+)))?/g;
+	const re = /([:@\w-]+)(?:\s*=\s*(?:"([^"]*)"|'([^']*)'|([^\s>]+)))?/g; // NOSONAR javascript:S5843 -- see above: three attribute-value forms
 	let m;
 	for (m = re.exec(raw); m; m = re.exec(raw))
 		node.setAttribute(m[1], firstDefined(m[2], m[3], m[4]));
@@ -268,13 +268,13 @@ const rendersJsPath = process.argv[3];
 // NOSONAR javascript:S1523 -- this harness's entire purpose is to load the production runtime under test (a
 // repo-local file path from argv, not attacker-controlled input) into an isolated VM sandbox; that IS the test.
 if (rendersJsPath)
-	vm.runInNewContext(fs.readFileSync(path.resolve(rendersJsPath), 'utf8'), sandbox, { filename: 'juneau-renders.js' });
+	vm.runInNewContext(fs.readFileSync(path.resolve(rendersJsPath), 'utf8'), sandbox, { filename: 'juneau-renders.js' }); // NOSONAR javascript:S1523 -- the harness evaluates the module's own bundled script
 // NOSONAR javascript:S1523 -- same rationale: loading the production juneau-views.js under test into the sandbox.
-vm.runInNewContext(fs.readFileSync(path.resolve(viewsJsPath), 'utf8'), sandbox, { filename: 'juneau-views.js' });
+vm.runInNewContext(fs.readFileSync(path.resolve(viewsJsPath), 'utf8'), sandbox, { filename: 'juneau-views.js' }); // NOSONAR javascript:S1523 -- the harness evaluates the module's own bundled script
 
 const NS = window.JuneauViews;
 const I = NS?.init;
-const out = { hasInit: !!(typeof I?.fillDetailSlots === 'function') };
+const out = { hasInit: typeof I?.fillDetailSlots === 'function' };
 if (!out.hasInit) {
 	process.stdout.write(JSON.stringify(out));
 	process.exit(0);
@@ -436,13 +436,13 @@ function markdownSlot() {
 	return s;
 }
 function collectTags(node, acc) {
-	if (!node || node.nodeType !== 1) return acc;
+	if (node?.nodeType !== 1) return acc;
 	acc.push(node.tagName);
 	for (const c of node.childNodes) collectTags(c, acc);
 	return acc;
 }
 function findTag(node, tag, list) {
-	if (!node || node.nodeType !== 1) return list;
+	if (node?.nodeType !== 1) return list;
 	if (node.tagName === tag) list.push(node);
 	for (const c of node.childNodes) findTag(c, tag, list);
 	return list;
@@ -503,7 +503,7 @@ out.href_fragment = I.isSafeMarkdownHref('#frag');
 
 /** Every attribute name present anywhere in the painted subtree - the global "no handler survived" sweep. */
 function collectAttrNames(node, acc) {
-	if (!node || node.nodeType !== 1) return acc;
+	if (node?.nodeType !== 1) return acc;
 	for (const k in node.attrs || {}) acc.push(k.toLowerCase());
 	for (const c of node.childNodes) collectAttrNames(c, acc);
 	return acc;
@@ -598,12 +598,12 @@ let deepThrew = false;
 let deepResult = null;
 try {
 	deepResult = sanitizedPaint(deepHtml);
-} catch (error) {
+} catch (error) { // NOSONAR javascript:S2486 -- the thrown/not-thrown outcome is recorded in a flag and asserted on
 	deepThrew = true;
 }
 out.sh_deepNesting_doesNotThrow = !deepThrew;
 function maxElementDepth(node) {
-	if (!node || node.nodeType !== 1 || !node.childNodes || node.childNodes.length === 0) return 0;
+	if (node?.nodeType !== 1 || !node.childNodes?.length) return 0;
 	let m = 0;
 	for (const c of node.childNodes) m = Math.max(m, maxElementDepth(c));
 	return 1 + m;
@@ -678,7 +678,7 @@ out.sh_nullClears = blank.childNodes.length === 0;
 // 6. isSafeImageSrc directly.
 out.shSrc_https = I.isSafeImageSrc('https://x/p.png');
 // NOSONAR javascript:S5332 -- fixture URL, not a production endpoint.
-out.shSrc_http = I.isSafeImageSrc('http://x/p.png');
+out.shSrc_http = I.isSafeImageSrc('http://x/p.png'); // NOSONAR javascript:S5332 -- fixture URL, never fetched
 out.shSrc_data = I.isSafeImageSrc('data:image/png;base64,AAA');
 out.shSrc_js = I.isSafeImageSrc('javascript:alert(1)');
 out.shSrc_vbscript = I.isSafeImageSrc('vbscript:msgbox(1)');

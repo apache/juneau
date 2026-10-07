@@ -32,6 +32,9 @@ import org.apache.juneau.rest.server.servlet.*;
  * 	<jk>var</jk> <jv>html</jv> = PetstoreConsoleFixture.<jsm>page</jsm>(PetstoreConsoleFixture.<jsm>client</jsm>(), <js>"/console/store"</js>);
  * </p>
  */
+@SuppressWarnings({
+	"resource" // client()/rawClient() return Closeables owned by the caller, and page() consumes its response; Eclipse JDT @Owning warning is by design.
+})
 public final class PetstoreConsoleFixture {
 
 	/** The host group. */

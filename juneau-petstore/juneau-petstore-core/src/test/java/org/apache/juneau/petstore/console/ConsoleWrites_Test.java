@@ -19,6 +19,7 @@ package org.apache.juneau.petstore.console;
 import static org.apache.juneau.test.bct.BctAssertions.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.commons.settings.*;
 import org.apache.juneau.rest.server.*;
 import org.apache.juneau.rest.mock.classic.*;
 import org.junit.jupiter.api.*;
@@ -33,6 +34,11 @@ class ConsoleWrites_Test extends TestBase {
 		@RestGet(path="/roles")
 		public String roles(RestRequest req) {
 			return String.join(",", ConsoleWrites.roles(req));
+		}
+
+		@RestGet(path="/actor")
+		public String actor(RestRequest req) {
+			return ConsoleWrites.actor(req);
 		}
 	}
 
@@ -54,5 +60,30 @@ class ConsoleWrites_Test extends TestBase {
 
 	@Test void a04_bearerPrefixIsCaseInsensitive() throws Exception {
 		assertString("admin", client().get("/roles").header("Authorization", "BEARER petstore-admin").run().assertStatus(200).getContent().asString());
+	}
+
+	@Test void b01_gateIsOffByDefault() throws Exception {
+		assertString("console", client().get("/actor").run().assertStatus(200).getContent().asString());
+	}
+
+	@Test void b02_settingTurnsGateOn() throws Exception {
+		Settings.get().setLocal(ConsoleWrites.SECURE_PROPERTY, "true");
+		try {
+			var c = client();
+			c.get("/actor").run().assertStatus(401);
+			assertString("console:admin", c.get("/actor").header("Authorization", "Bearer petstore-admin").run().assertStatus(200).getContent().asString());
+		} finally {
+			Settings.get().unsetLocal(ConsoleWrites.SECURE_PROPERTY);
+		}
+		assertString("console", client().get("/actor").run().assertStatus(200).getContent().asString());
+	}
+
+	@Test void b03_settingFalseKeepsGateOff() throws Exception {
+		Settings.get().setLocal(ConsoleWrites.SECURE_PROPERTY, "false");
+		try {
+			assertString("console", client().get("/actor").run().assertStatus(200).getContent().asString());
+		} finally {
+			Settings.get().unsetLocal(ConsoleWrites.SECURE_PROPERTY);
+		}
 	}
 }

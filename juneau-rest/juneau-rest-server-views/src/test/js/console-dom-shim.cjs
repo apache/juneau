@@ -38,7 +38,7 @@ const shim = require('./views-dom-shim.cjs');
  * DocumentFragment (nodeType 11) - importing it must yield a real fragment (its children flattened on append),
  * never a wrapper element literally named `template-content`.
  */
-function cloneDeep(doc, node, deep) {
+function cloneDeep(doc, node, deep) { // NOSONAR javascript:S3776 -- shim DOM clone mirrors node-type cases; complexity is inherent
 	if (node.nodeType === 3) return doc.createTextNode(node.textContent);
 	if (node.nodeType === 11 || node.tagName === 'TEMPLATE-CONTENT') {
 		const frag = doc.createDocumentFragment();
@@ -80,7 +80,7 @@ function decodeEntities(s) {
 function parseHtmlFragment(doc, html) {
 	const frag = makeFragment();
 	const stack = [frag];
-	const tagRe = /<\/?[a-zA-Z][a-zA-Z0-9-]*[^>]*>/g;
+	const tagRe = /<\/?[a-zA-Z][^>]*>/g;
 	let last = 0, m;
 	function appendText(text) {
 		const decoded = decodeEntities(text);
@@ -220,7 +220,8 @@ function makeConsoleEnv(opts) {
 	const listenerCounts = {};
 	const origAddEventListener = doc.addEventListener.bind(doc);
 	doc.addEventListener = function (type, fn) {
-		(listenerCounts[type] = listenerCounts[type] || []).push(fn);
+		listenerCounts[type] = listenerCounts[type] || [];
+		listenerCounts[type].push(fn);
 		origAddEventListener(type, fn);
 	};
 	doc.dispatchEvent = function (ev) {

@@ -61,10 +61,10 @@ const PROBE = async function () {
 
 	// Direct-child selectors: a nested table (and the DataTables child row hosting it) also lives inside the root
 	// table's <tbody>, so a descendant selector would count nested rows as root rows.
-	function rootRows() {
+	function rootRows() { // NOSONAR javascript:S7721 -- must stay nested: page.evaluate(PROBE) serializes only PROBE's own source into the browser
 		return document.querySelectorAll('table[data-juneau-view="root"] > tbody > tr[data-juneau-row-id]');
 	}
-	function nestedRows() {
+	function nestedRows() { // NOSONAR javascript:S7721 -- must stay nested: page.evaluate(PROBE) serializes only PROBE's own source into the browser
 		return document.querySelectorAll('table[data-juneau-view="events"] > tbody > tr');
 	}
 	// The root table has a row-detail template, so column 0 is the expander (td.juneau-view-detail-control):
@@ -91,11 +91,11 @@ const PROBE = async function () {
 		const tr = nestedDataRow();
 		return tr ? tr.children[0].textContent : null;
 	}
-	function nestedHasExpander() {
+	function nestedHasExpander() { // NOSONAR javascript:S7721 -- must stay nested: page.evaluate(PROBE) serializes only PROBE's own source into the browser
 		return document.querySelector('table[data-juneau-view="events"] td.juneau-view-detail-control, '
 			+ 'table[data-juneau-view="events"] th.juneau-view-detail-th') != null;
 	}
-	function sleep(ms) {
+	function sleep(ms) { // NOSONAR javascript:S7721 -- must stay nested: page.evaluate(PROBE) serializes only PROBE's own source into the browser
 		return new Promise(r => setTimeout(r, ms));
 	}
 	async function waitFor(pred, ms) {

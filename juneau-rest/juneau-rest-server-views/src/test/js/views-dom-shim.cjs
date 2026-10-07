@@ -34,7 +34,7 @@ const vm = require('node:vm');
 function parseSimple(sel) {
 	sel = sel.trim();
 	const notDisabled = /:not\(\[disabled\]\)/.test(sel);
-	sel = sel.replaceAll(/:not\(\[disabled\]\)/g, '');
+	sel = sel.replaceAll(':not([disabled])', '');
 	let tag = null, cls = null, attr = null, attrVal = null;
 	const tagM = /^([a-zA-Z][\w-]*)/.exec(sel);
 	if (tagM) { tag = tagM[1].toUpperCase(); sel = sel.slice(tagM[0].length); }
@@ -54,7 +54,7 @@ function compileSelector(selector) {
 			if (s.tag && n.tagName !== s.tag) return false;
 			if (s.cls && (' ' + (n.className || '') + ' ').indexOf(' ' + s.cls + ' ') < 0) return false;
 			if (s.attr) {
-				const has = n.attrs && Object.hasOwn(n.attrs, s.attr);
+				const has = Object.hasOwn(n.attrs ?? {}, s.attr);
 				if (!has) return false;
 				if (s.attrVal !== undefined && String(n.attrs[s.attr]) !== s.attrVal) return false;
 			}
@@ -72,6 +72,22 @@ function toDataAttr(prop) {
 function matchesAny(matchers, n) {
 	for (const m of matchers) if (m(n)) return true;
 	return false;
+}
+
+/** A real (nodeType 3) text node: no attrs/children/query methods - just what a helper's `text()` needs. */
+function textNode(value) {
+	return {
+		nodeType: 3,
+		parentNode: null,
+		_text: value == null ? '' : String(value),
+		get textContent() { return this._text; },
+		set textContent(v) { this._text = v == null ? '' : String(v); },
+		get nodeValue() { return this._text; },
+		set nodeValue(v) { this._text = v == null ? '' : String(v); },
+		remove: function () {
+			if (this.parentNode) this.parentNode.removeChild(this); // NOSONAR javascript:S7762 -- this IS the shim's remove(); it must delegate to the shim's own removeChild().
+		}
+	};
 }
 
 function makeEnv() {
@@ -228,12 +244,10 @@ function makeEnv() {
 				const all = this.querySelectorAll(selector);
 				return all.length ? all[0] : null;
 			},
-			// NOSONAR javascript:S7740 -- `n` walks the ancestor chain starting at this node (not a self-alias for
-			// closures); it is reassigned to `n.parentNode` each iteration, so it needs its own mutable binding
-			// separate from `this`.
+			// `n` walks the ancestor chain starting at this node and is reassigned to `n.parentNode` each iteration.
 			closest: function (selector) {
 				const matchers = compileSelector(selector);
-				let n = this;
+				let n = this; // NOSONAR javascript:S7740 -- `n` walks the ancestor chain (reassigned each iteration); not a self-alias for closures
 				while (n?.nodeType === 1) {
 					if (matchesAny(matchers, n)) return n;
 					n = n.parentNode;
@@ -256,10 +270,9 @@ function makeEnv() {
 				const l = this._listeners[type] || [];
 				l.slice().forEach(function (fn) { fn(ev); });
 			},
-			// NOSONAR javascript:S7740 -- this node's own `this` is captured into the shared `activeElement`
-			// tracking var (real focus-tracking state, not a self-alias workaround); an arrow function would
-			// rebind `this` to the enclosing `el()` scope and break focus tracking.
-			focus: function () { activeElement = this; },
+			// Captures this node into the shared `activeElement` tracking var; an arrow function would rebind `this`
+			// to the enclosing `el()` scope and break focus tracking.
+			focus: function () { activeElement = this; }, // NOSONAR javascript:S7740 -- real focus-tracking state, not a self-alias workaround
 			// A text-input `select()` is a no-op here: the shim has no selection model, but popovers call it after
 			// focusing their input, so it must exist to not throw.
 			select: function () { /* no-op */ },
@@ -282,22 +295,6 @@ function makeEnv() {
 		if (node.tagName === 'TEMPLATE')
 			node.content = el('template-content');
 		return node;
-	}
-
-	/** A real (nodeType 3) text node: no attrs/children/query methods - just what a helper's `text()` needs. */
-	function textNode(value) {
-		return {
-			nodeType: 3,
-			parentNode: null,
-			_text: value == null ? '' : String(value),
-			get textContent() { return this._text; },
-			set textContent(v) { this._text = v == null ? '' : String(v); },
-			get nodeValue() { return this._text; },
-			set nodeValue(v) { this._text = v == null ? '' : String(v); },
-			remove: function () {
-				if (this.parentNode) this.parentNode.removeChild(this); // NOSONAR javascript:S7762 -- this IS the shim's remove(); it must delegate to the shim's own removeChild().
-			}
-		};
 	}
 
 	const body = el('body');
@@ -402,7 +399,7 @@ function loadScripts(scriptPaths, env) {
 	(scriptPaths || []).forEach(function (p) {
 		// NOSONAR javascript:S1523 -- loading a production JS source into a VM sandbox is this harness's intended
 		// mechanism for exercising it under the DOM shim; the path is a fixed local file supplied by the test.
-		vm.runInNewContext(fs.readFileSync(path.resolve(p), 'utf8'), sandbox, { filename: path.basename(p) });
+		vm.runInNewContext(fs.readFileSync(path.resolve(p), 'utf8'), sandbox, { filename: path.basename(p) }); // NOSONAR javascript:S1523 -- the harness evaluates the module's own bundled script
 	});
 	return { env: env, NS: env.window.JuneauViews };
 }
@@ -429,12 +426,12 @@ function loadViews(rendersJsPath, viewsJsPath, env, searchJsPath) {
 	// NOSONAR javascript:S1523 -- loading the production juneau-renders.js/juneau-views.js sources into a VM
 	// sandbox is this harness's intended mechanism for exercising them under the DOM shim; inputs are fixed local
 	// file paths supplied by the test, never attacker-controlled data.
-	vm.runInNewContext(fs.readFileSync(path.resolve(rendersJsPath), 'utf8'), sandbox, { filename: 'juneau-renders.js' });
+	vm.runInNewContext(fs.readFileSync(path.resolve(rendersJsPath), 'utf8'), sandbox, { filename: 'juneau-renders.js' }); // NOSONAR javascript:S1523 -- the harness evaluates the module's own bundled script
 	// NOSONAR javascript:S1523 -- same fixed-local-file harness mechanism as above, for juneau-views.js.
-	vm.runInNewContext(fs.readFileSync(path.resolve(viewsJsPath), 'utf8'), sandbox, { filename: 'juneau-views.js' });
+	vm.runInNewContext(fs.readFileSync(path.resolve(viewsJsPath), 'utf8'), sandbox, { filename: 'juneau-views.js' }); // NOSONAR javascript:S1523 -- the harness evaluates the module's own bundled script
 	if (searchJsPath) {
 		// NOSONAR javascript:S1523 -- same fixed-local-file harness mechanism, for juneau-search.js (JuneauViews.search).
-		vm.runInNewContext(fs.readFileSync(path.resolve(searchJsPath), 'utf8'), sandbox, { filename: 'juneau-search.js' });
+		vm.runInNewContext(fs.readFileSync(path.resolve(searchJsPath), 'utf8'), sandbox, { filename: 'juneau-search.js' }); // NOSONAR javascript:S1523 -- the harness evaluates the module's own bundled script
 	}
 	const NS = env.window.JuneauViews;
 	return { env: env, NS: NS, I: NS?.init };

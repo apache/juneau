@@ -217,7 +217,7 @@
 		});
 		if (out.length === 0 && optsColumns) {
 			for (const [i, c] of optsColumns.entries()) {
-				if (!c || c.data == null || c.visible === false || c.orderable === false) continue;
+				if (c?.data == null || c.visible === false || c.orderable === false) continue;
 				out.push([i, "asc"]);
 				break;
 			}
@@ -291,7 +291,7 @@
 		const loc = window.location;
 		if (loc?.origin && loc.href && typeof URL === "function") {
 			try { return new URL(s, loc.href).origin === loc.origin; }
-			catch (e) { return false; }
+			catch (e) { return false; } // NOSONAR javascript:S2486 -- an unparseable URL is treated as cross-origin
 		}
 		return !/^([a-z][a-z0-9+.-]*:|[\\/]{2}|\/\\)/i.test(s);
 	}
@@ -462,7 +462,7 @@
 	 */
 	function hasBlankSubstitution(template, rowData) {
 		if (template == null) return false;
-		for (const m of String(template).matchAll(new RegExp(ROW_ACTION_TOKEN_RE, "g")))
+		for (const m of String(template).matchAll(new RegExp(ROW_ACTION_TOKEN_RE, "g"))) // NOSONAR javascript:S5852 -- ROW_ACTION_TOKEN_RE is linear ([^}] cannot match the closing brace); the template is developer-authored
 			if (isBlankToken(rowData ? rowData[m[1]] : undefined)) return true;
 		return false;
 	}
@@ -568,7 +568,7 @@
 	/** JSON.parse guarded against a null/blank/malformed body - returns the parsed value or null, never throws. */
 	function parseJsonSafe(text) {
 		if (text == null || text === "") return null;
-		try { return JSON.parse(text); } catch (e) { return null; }
+		try { return JSON.parse(text); } catch (e) { return null; } // NOSONAR javascript:S2486 -- malformed JSON deliberately yields null (documented parseJsonSafe contract)
 	}
 
 	/**
@@ -680,7 +680,7 @@
 	// NOSONAR javascript:S3504 -- the `var` keyword is load-bearing here, not an oversight; a05 of that test
 	// asserts on the literal string "var MIN_POLL_INTERVAL_MS = 5000;", so modernizing this declaration breaks
 	// the parity contract rather than tidying it.
-	var MIN_POLL_INTERVAL_MS = 5000;
+	var MIN_POLL_INTERVAL_MS = 5000; // NOSONAR javascript:S3504 -- `var` is load-bearing: a test pins this exact declaration text (see above)
 
 	/** Clamps a declared poll interval up to {@link #MIN_POLL_INTERVAL_MS} (mirrors the server-side clamp). */
 	function clampPollInterval(ms) {
@@ -787,7 +787,7 @@
 				let html = data == null ? "" : String(data);
 				if (renderer?.display) {
 						try { html = renderer.display(data, rowData, meta); }
-						catch (e) { html = data == null ? "" : String(data); }
+						catch (e) { html = data == null ? "" : String(data); } // NOSONAR javascript:S2486 -- a throwing renderer falls back to the escaped raw value
 						if (html == null) html = "";
 						else html = String(html);
 					}
@@ -802,8 +802,8 @@
 	function escapingTextRender(data, type) {
 		if (type && type !== "display") return data;
 		if (data == null) return "";
-		return String(data).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
-			.replace(/"/g, "&quot;").replace(/'/g, "&#39;");
+		return String(data).replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;")
+			.replaceAll('"', "&quot;").replaceAll("'", "&#39;");
 	}
 
 	/**
@@ -820,7 +820,7 @@
 	function appendRendererClass(def, renderer, meta) {
 		if (!renderer || typeof renderer["class"] !== "function") return;
 		let cls;
-		try { cls = renderer["class"](meta); } catch (e) { return; }
+		try { cls = renderer["class"](meta); } catch (e) { return; } // NOSONAR javascript:S2486 -- a throwing class() renderer means no CSS class
 		if (cls == null) return;
 		cls = String(cls).trim();
 		if (!cls) return;
@@ -1058,7 +1058,7 @@
 	 * case) is a no-op.  Pure: mutates the passed `opts` and touches no DOM/jQuery.
 	 */
 	function applyNestedScope(opts, scope) {
-		if (!opts || !opts.ajax || !scope || !scope.param) return;
+		if (!opts?.ajax || !scope?.param) return;
 		const parentId = function () {
 			const pid = typeof scope.parentId === "function" ? scope.parentId() : scope.parentId;
 			return pid != null && String(pid) !== "" ? pid : null;
@@ -1133,7 +1133,7 @@
 	 * of focus leaving the control entirely).
 	 */
 	// NOSONAR javascript:S3776 -- encodes a views/widgets state machine; complexity is inherent.
-	function buildPageSizeMenu(ctx) {
+	function buildPageSizeMenu(ctx) { // NOSONAR javascript:S3776 -- encodes a views/widgets state machine; complexity is inherent.
 		const wrap = document.createElement("span");
 		wrap.className = "juneau-view-pagingpill-menuwrap";
 
@@ -1186,7 +1186,7 @@
 			menuEl.hidden = false;
 			btn.setAttribute("aria-expanded", "true");
 			const idx = indexOfSelected();
-			options[idx >= 0 ? idx : 0].el.focus();
+			options[Math.max(idx, 0)].el.focus();
 		}
 
 		function closeMenu(returnFocusToButton) {
@@ -1334,7 +1334,7 @@
 			const header = typeof col.header === "function" ? col.header() : null;
 			if (!header) return;
 			const def = (ctx.optsColumns || [])[col.index()];
-			const isSynthetic = !def || def.data == null;
+			const isSynthetic = def?.data == null;
 			const hidden = def?.visible === false;
 			if (hidden) return;
 			if (!isSynthetic && def.orderable !== false)
@@ -1439,7 +1439,7 @@
 		const def = (ctx?.optsColumns || [])[col.index()];
 		const dataName = def?.data != null ? String(def.data) : null;
 		if (dataName == null) return null;
-		const cols = (ctx?.viewDef && ctx.viewDef.columns) || [];
+		const cols = ctx?.viewDef?.columns || [];
 		for (const c of cols) {
 			if (c?.data != null && String(c.data) === dataName) return c.search || null;
 		}
@@ -1466,7 +1466,7 @@
 	 */
 	function isClientFiltered(ctx) {
 		if (typeof ctx?.clientFiltered === "boolean") return ctx.clientFiltered;
-		return !(ctx?.viewDef && ctx.viewDef.dataMode === "server");
+		return ctx?.viewDef?.dataMode !== "server";
 	}
 
 	/** Whether the column's own `search.operators` list offers `$regex` (S8: a shared link cannot smuggle one in). */
@@ -1685,7 +1685,7 @@
 			const helpList = document.createElement("div");
 			helpList.className = "juneau-view-col-search-popover-help";
 			meta.operators.forEach(function (o) {
-				if (!o || !o.name) return;
+				if (!o?.name) return;
 				// D4: on a client-filtered table a custom operator is only offered once the page registered its predicate.
 				if (dsl && o.custom && !(typeof search?.hasCustom === "function" && search.hasCustom(o.name))) return;
 				const row = document.createElement("div");
@@ -2151,7 +2151,7 @@
 	 * {@code WORK-J0516}.
 	 */
 	function isProtocolRelativeUrl(t) {
-		return t.replace(/[\t\r\n]/g, "").replace(/\\/g, "/").charAt(1) === "/";
+		return t.replaceAll(/[\t\r\n]/g, "").replaceAll("\\", "/").charAt(1) === "/";
 	}
 
 	/**
@@ -2180,9 +2180,9 @@
 			return false;
 		if (lower.startsWith("http://") || lower.startsWith("https://") || lower.startsWith("mailto:"))
 			return true;
-		if (t.charAt(0) === "#")
+		if (t.startsWith("#"))
 			return true;
-		if (t.charAt(0) === "/" || t.charAt(0) === "\\")
+		if (t.startsWith("/") || t.startsWith("\\"))
 			return !isProtocolRelativeUrl(t);
 		return lower.indexOf(":") < 0;
 	}
@@ -2294,14 +2294,14 @@
 		let parsed;
 		try {
 			parsed = new Parser().parseFromString("<div>" + String(html) + "</div>", "text/html");
-		} catch (e) {
+		} catch (e) { // NOSONAR javascript:S2486 -- parser failure is reported through the unsupported flag
 			return { doc: doc, wrap: null, unsupported: true };
 		}
 		return { doc: doc, wrap: parsed?.body?.firstChild || null, unsupported: false };
 	}
 
 	// NOSONAR javascript:S3776 -- encodes a views/widgets state machine; complexity is inherent.
-	function fillMarkdownSlot(el, html) {
+	function fillMarkdownSlot(el, html) { // NOSONAR javascript:S3776 -- encodes a views/widgets state machine; complexity is inherent.
 		clearElementChildren(el);
 		if (html == null || html === "") return;
 		const src = String(html);
@@ -2378,9 +2378,9 @@
 			return false;
 		if (lower.startsWith("http://") || lower.startsWith("https://"))
 			return true;
-		if (t.charAt(0) === "/" || t.charAt(0) === "\\")
+		if (t.startsWith("/") || t.startsWith("\\"))
 			return !isProtocolRelativeUrl(t);
-		return t.charAt(0) !== "#" && lower.indexOf(":") < 0;
+		return !t.startsWith("#") && lower.indexOf(":") < 0;
 	}
 
 	/** Copies `name` from `from` to `to` when its value is an integer in [min,max].  Rejects everything else. */
@@ -2583,7 +2583,7 @@
 		const m = mergeRenderMeta(meta, href);
 		let html;
 		try { html = renderer.display(value, fields, m); }
-		catch (e) {
+		catch (e) { // NOSONAR javascript:S2486 -- a throwing renderer falls back to plain text
 			slot.textContent = value;
 			return;
 		}
@@ -2598,7 +2598,7 @@
 	}
 
 	function parseDetailFieldRenderMeta(slot) {
-		const metaRaw = slot.getAttribute("data-juneau-field-render-meta");
+		const metaRaw = slot.getAttribute("data-juneau-field-render-meta"); // NOSONAR javascript:S7761 -- reads are deliberately attribute-based; this file's duck-typed/test-shim DOM does not guarantee the .dataset API (see the notes above)
 		if (!metaRaw) return {};
 		try {
 			const parsed = JSON.parse(metaRaw);
@@ -2613,15 +2613,15 @@
 	// row-detail panel, but reachable from server-rendered markup or a test double), and is read via
 	// getAttribute rather than assumed to expose the full `.dataset` API.
 	function paintDetailFieldSlot(slot, map) {
-		const key = slot.getAttribute("data-juneau-field");
+		const key = slot.getAttribute("data-juneau-field"); // NOSONAR javascript:S7761 -- reads are deliberately attribute-based; this file's duck-typed/test-shim DOM does not guarantee the .dataset API (see the notes above)
 		const value = Object.hasOwn(map, key) ? scalarFieldValue(map[key]) : "";
-		const renderId = slot.getAttribute("data-juneau-field-render");
+		const renderId = slot.getAttribute("data-juneau-field-render"); // NOSONAR javascript:S7761 -- reads are deliberately attribute-based; this file's duck-typed/test-shim DOM does not guarantee the .dataset API (see the notes above)
 		if (renderId) {
 			const meta = parseDetailFieldRenderMeta(slot);
-			const href = slot.getAttribute("data-juneau-field-render-href");
+			const href = slot.getAttribute("data-juneau-field-render-href"); // NOSONAR javascript:S7761 -- reads are deliberately attribute-based; this file's duck-typed/test-shim DOM does not guarantee the .dataset API (see the notes above)
 			fillRenderSlot(slot, value, renderId, meta, href, map);
 		} else {
-			const fmt = slot.getAttribute("data-juneau-field-format");
+			const fmt = slot.getAttribute("data-juneau-field-format"); // NOSONAR javascript:S7761 -- reads are deliberately attribute-based; this file's duck-typed/test-shim DOM does not guarantee the .dataset API (see the notes above)
 			if (fmt === "markdown")
 				fillMarkdownSlot(slot, value);
 			else if (fmt === "sanitizedHtml")
@@ -2633,9 +2633,9 @@
 
 	// NOSONAR javascript:S7761 -- same caller-supplied-DOM rationale as paintDetailFieldSlot above.
 	function paintDetailTitleSlot(el, map, allow) {
-		const tmpl = el.getAttribute("data-juneau-detail-title-template") || "";
+		const tmpl = el.getAttribute("data-juneau-detail-title-template") || ""; // NOSONAR javascript:S7761 -- reads are deliberately attribute-based; this file's duck-typed/test-shim DOM does not guarantee the .dataset API (see the notes above)
 		el.textContent = tmpl.replace(/\{(\w+)\}/g, function (_, key) {
-			if (!allow || !allow.has(key)) return "";
+			if (!allow?.has(key)) return "";
 			return Object.hasOwn(map, key) ? scalarFieldValue(map[key]) : "";
 		});
 	}
@@ -2656,7 +2656,7 @@
 	 * `data-juneau-title-fields` allowlist (copied from the template at expand time) are substituted.
 	 */
 	function fillDetailSlots(root, fields) {
-		if (!root || !root.querySelectorAll) return;
+		if (!root?.querySelectorAll) return;
 		const map = fields && typeof fields === "object" ? fields : {};
 		for (const slot of root.querySelectorAll("[data-juneau-field]")) paintDetailFieldSlot(slot, map);
 		const allow = titleFieldAllowlist(root);
@@ -2687,7 +2687,7 @@
 	 * Paints an action's message into the first field slot of the section that owns that action button
 	 * (in-tab Diagnose findings).  TEXT slots use textContent; markdown slots use fillMarkdownSlot.
 	 */
-	function paintActionMessageIntoDetail(tr, actionId, message) {
+	function paintActionMessageIntoDetail(tr, actionId, message) { // NOSONAR javascript:S3776 -- encodes a views/widgets state machine; complexity is inherent.
 		const panel = tr?._juneauDetailPanel;
 		if (!panel || typeof panel.querySelectorAll !== "function") return;
 		const want = String(actionId == null ? "" : actionId);
@@ -2824,7 +2824,7 @@
 	}
 
 	function buildRibbonStrip(items, opts) {
-		if (!items || !items.length) return null;
+		if (!items?.length) return null;
 		const o = opts || {};
 		const activeIndex = o.activeIndex == null ? 0 : o.activeIndex;
 		const strip = document.createElement("div");
@@ -2909,7 +2909,7 @@
 	function probeIsDisabled(el) {
 		if (!el) return true;
 		const cn = classStringOf(el);
-		if (cn && cn.split(/\s+/).includes("is-disabled")) return true;
+		if (cn?.split(/\s+/).includes("is-disabled")) return true;
 		return el.getAttribute ? el.getAttribute("aria-disabled") === "true" : false;
 	}
 
@@ -2939,7 +2939,7 @@
 	 * no probe is enabled).  Right/Down step forward, Left/Up step back - both skip disabled probes and wrap; Home/End
 	 * jump to the first/last ENABLED probe.  Pure - no DOM - so the arrow-key contract is unit-checkable.
 	 */
-	function probeTargetIndex(key, currentIndex, enabled) {
+	function probeTargetIndex(key, currentIndex, enabled) { // NOSONAR javascript:S3776 -- encodes a views/widgets state machine; complexity is inherent.
 		const n = enabled.length;
 		if (n === 0 || enabled.indexOf(true) < 0) return -1;
 		if (key === "Home") {
@@ -2962,6 +2962,9 @@
 		return -1;
 	}
 
+	/** Reads a probe's stable id attribute, or {@code null} when absent. */
+	function idOf(el) { return el?.getAttribute?.(PROBE_ID_ATTR) ?? null; }
+
 	/**
 	 * Enhances a server-painted probe group in place: wires radiogroup/radio roles, the roving tabindex, click and
 	 * arrow-key selection, and returns an imperative handle {group, getSelected(), select(idOrEl), repaint()}.
@@ -2981,7 +2984,6 @@
 		if (group.setAttribute) group.setAttribute("role", "radiogroup");
 
 		function probes() { return probesInGroup(group); }
-		function idOf(el) { return el?.getAttribute?.(PROBE_ID_ATTR) ?? null; }
 		function findById(id) {
 			if (id == null) return null;
 			for (const el of probes()) if (idOf(el) === id) return el;
@@ -2996,7 +2998,7 @@
 
 		// Repaints aria-checked (by identity) and the roving tabindex: the single tab stop is the selected probe, or the
 		// first enabled probe when nothing is selected.  Selection colour is chrome.css's job; this touches only state.
-		function paint() {
+		function paint() { // NOSONAR javascript:S3776 -- encodes a views/widgets state machine; complexity is inherent.
 			const list = probes();
 			const enabled = list.map(function (el) { return !probeIsDisabled(el); });
 			let tabStop = -1;
@@ -3216,7 +3218,7 @@
 	// back to dataset so both real DOM elements and those mocks are recognized uniformly.
 	function isActionRefPill(b) {
 		return b.getAttribute?.("role") === "button"
-			&& (b.hasAttribute ? b.hasAttribute("data-juneau-pill") : b.dataset.juneauPill != null);
+			&& (b.hasAttribute ? b.hasAttribute("data-juneau-pill") : b.dataset.juneauPill != null); // NOSONAR javascript:S7761 -- reads are deliberately attribute-based; this file's duck-typed/test-shim DOM does not guarantee the .dataset API (see the notes above)
 	}
 
 	function setPillDisabledVisual(b, enabled) {
@@ -3231,7 +3233,7 @@
 
 	/** Enables or disables ActionRef buttons; SafeAction.COLLAPSE is never touched. */
 	function setActionRefEnabled(root, enabled) {
-		if (!root || !root.querySelectorAll) return;
+		if (!root?.querySelectorAll) return;
 		for (const b of root.querySelectorAll("[data-juneau-action]")) {
 			b.disabled = !enabled;
 			if (isActionRefPill(b)) setPillDisabledVisual(b, enabled);
@@ -3240,7 +3242,7 @@
 
 	/** Hides ActionRef buttons (404/500 / contract-fail closed) while leaving COLLAPSE in place. */
 	function hideActionRefs(root) {
-		if (!root || !root.querySelectorAll) return;
+		if (!root?.querySelectorAll) return;
 		const buttons = root.querySelectorAll("[data-juneau-action]");
 		for (const b of buttons) {
 			b.disabled = true;
@@ -3292,7 +3294,7 @@
 
 	/** Whether one rule matches the expand payload's `fields` map (a matching rule leaves the action offered). */
 	function actionRuleMatches(rule, map) {
-		if (!rule || rule.field == null) return true;
+		if (rule?.field == null) return true;
 		// FAIL CLOSED on a field the payload does not carry.  RowDetailDef.validate rejects a rule keyed on an
 		// undeclared field at startup, so an absent key here is a broken expand contract rather than a state to
 		// interpret - including for `absent`, which tests a field that came back empty, not one that never came.
@@ -3323,7 +3325,7 @@
 	function actionDescNodeFor(btn) {
 		const parent = btn.parentNode;
 		if (!parent || typeof parent.querySelectorAll !== "function") return null;
-		const want = btn.getAttribute("data-juneau-action");
+		const want = btn.getAttribute("data-juneau-action"); // NOSONAR javascript:S7761 -- reads are deliberately attribute-based; this file's duck-typed/test-shim DOM does not guarantee the .dataset API (see the notes above)
 		for (const n of parent.querySelectorAll("[" + ACTION_DESC_ATTR + "]"))
 			if (n.getAttribute(ACTION_DESC_ATTR) === want) return n;
 		return null;
@@ -3361,7 +3363,7 @@
 	 * fresh expand GET through the same path.
 	 */
 	function applyActionRefRules(root, fields) {
-		if (!root || !root.querySelectorAll) return;
+		if (!root?.querySelectorAll) return;
 		const map = fields && typeof fields === "object" ? fields : {};
 		for (const b of root.querySelectorAll("[" + ACTION_RULES_ATTR + "]")) {
 			const failing = firstFailingActionRule(parseActionRefRules(b), map);
@@ -3413,7 +3415,7 @@
 	 */
 	function firstFailingRowActionRule(action, rowData) {
 		const rules = action?.enabledWhen;
-		if (!rules || !rules.length) return null;
+		if (!rules?.length) return null;
 		const map = rowData && typeof rowData === "object" ? rowData : {};
 		return firstFailingActionRule(rules, map);
 	}
@@ -3563,7 +3565,7 @@
 		const tr = control.closest("tr.juneau-view-detail-row");
 		if (!tr) return;
 		const row = dt.row(tr);
-		if (!row || !row.length) return;
+		if (!row?.length) return;
 		if (row.child.isShown()) {
 			// Removal path 2/5: tear down enrolled regions + nested DataTables before hiding (their child-row
 			// DOM is about to be detached).  Region teardown ordered first, matching handleDetailSafeCollapseClick's
@@ -3603,7 +3605,7 @@
 		let collapsedAny = false;
 		openRows.forEach(function (tr) {
 			const row = dt.row(tr);
-			if (!row || !row.length || !row.child.isShown()) return;
+			if (!row?.length || !row.child.isShown()) return;
 			// Removal path 3/5: same region-teardown-first ordering as toggleDetailRow's own collapse branch.
 			if (tr._juneauDetailPanel) {
 				NS.regions?.teardownRegionsIn(tr._juneauDetailPanel);
@@ -3679,7 +3681,7 @@
 				const n = v ? Number.parseInt(String(v).trim(), 10) : Number.NaN;
 				if (! Number.isNaN(n)) return n;
 			}
-		} catch (e) { /* fall through to the fallback */ }
+		} catch (e) { /* fall through to the fallback */ } // NOSONAR javascript:S2486 -- best-effort lookup; the fallback below is the defined result
 		return fallback;
 	}
 
@@ -3713,7 +3715,7 @@
 	function focusFirstInLayer(rec) {
 		const f = focusablesIn(rec.el);
 		const target = f.length ? f[0] : rec.el;
-		if (typeof target?.focus === "function") { try { target.focus(); } catch (e) { /* ignore */ } }
+		if (typeof target?.focus === "function") { try { target.focus(); } catch (e) { /* ignore */ } } // NOSONAR javascript:S2486 -- focus restore is best-effort
 	}
 
 	/**
@@ -3761,14 +3763,14 @@
 	function dismissRemovedLayers(removed) {
 		for (const rec of removed.slice().reverse()) {
 			if (rec.detachOnPop && rec.el?.parentNode) rec.el.remove();
-			if (rec.onDismiss) { try { rec.onDismiss(); } catch (e) { /* ignore */ } }
+			if (rec.onDismiss) { try { rec.onDismiss(); } catch (e) { /* ignore */ } } // NOSONAR javascript:S2486 -- a throwing onDismiss hook must not block the pop
 		}
 	}
 
 	function restoreLayerFocus(target) {
 		if (typeof target?.focus !== "function") return;
 		if (typeof document !== "undefined" && typeof document.contains === "function" && !document.contains(target)) return;
-		try { target.focus(); } catch (e) { /* ignore */ }
+		try { target.focus(); } catch (e) { /* ignore */ } // NOSONAR javascript:S2486 -- focus restore is best-effort
 	}
 
 	function popLayer(el) {
@@ -3787,7 +3789,7 @@
 
 	function handleLayerTab(e) {
 		const top = topLayer();
-		if (! top || ! top.trapFocus) return;
+		if (!top?.trapFocus) return;
 		const f = focusablesIn(top.el);
 		if (! f.length) { e.preventDefault(); return; }
 		const first = f[0], last = f.at(-1);
@@ -3814,7 +3816,7 @@
 		// ONE document pointerdown: an outside click dismisses the TOP layer only, and only when it is light-dismiss.
 		document.addEventListener("pointerdown", function (e) {
 			const top = topLayer();
-			if (! top || ! top.lightDismiss) return;
+			if (!top?.lightDismiss) return;
 			const t = e.target;
 			if (t && top.el?.contains?.(t)) return;
 			popLayer();
@@ -3952,7 +3954,7 @@
 		const meta = popoverRenderMeta(spec);
 		let html;
 		try { html = renderer.display(value, rowData, meta); }
-		catch (e) {
+		catch (e) { // NOSONAR javascript:S2486 -- a throwing renderer falls back to plain text
 			paintPopoverTextValue(cell, value);
 			return;
 		}
@@ -3979,7 +3981,7 @@
 	}
 
 	function appendCellPopoverFieldRow(el, doc, f, rowData) {
-		if (!f || f.data == null) return;
+		if (f?.data == null) return;
 		const row = doc.createElement("div");
 		row.className = "jc-cell-popover-row";
 		const lab = doc.createElement("div");
@@ -4411,7 +4413,7 @@
 	// specifically documents a `null` (not `undefined`) return for a missing token; `dataset.juneauCsrf`
 	// would return `undefined` instead, changing this public function's documented contract.
 	function resolveCsrfToken(table) {
-		return table.getAttribute("data-juneau-csrf");
+		return table.getAttribute("data-juneau-csrf"); // NOSONAR javascript:S7761 -- the documented contract returns null (not undefined) for a missing token, which .dataset cannot
 	}
 
 	/** The per-table CSRF header-name override (`data-juneau-csrf-header`), else the framework default. */
@@ -4752,7 +4754,7 @@
 	 *   - 2xx + no typed body -> a bare success (the pre-416 behavior: redraw for an onSuccess=redraw action).
 	 */
 	// NOSONAR javascript:S3776 -- encodes a views/widgets state machine; complexity is inherent.
-	function settleActionResponse(resp, action, table, tr, ctx) {
+	function settleActionResponse(resp, action, table, tr, ctx) { // NOSONAR javascript:S3776 -- encodes a views/widgets state machine, so complexity is inherent.
 		setRowInFlight(tr, false);   // EVERY terminal outcome clears the marker first - polling must always resume.
 		if (! resp) {
 			// T3: an absent response does not prove the write didn't land, so `unknown` never re-enables Confirm.
@@ -4777,7 +4779,7 @@
 			return;
 		}
 
-		readBodyText(resp).then(function (text) {
+		readBodyText(resp).then(function (text) { // NOSONAR javascript:S3776 -- encodes a views/widgets state machine; complexity is inherent.
 			// Async-SSE-job feature: an ASYNC action's start POST returns a job pointer (not a terminal result).  The in-flight
 			// marker was ALREADY cleared above (first line of settle), so table polling has resumed BEFORE the long
 			// job runs - the job then uses the DISTINCT job-running affordance (data-juneau-job), never
@@ -4860,7 +4862,7 @@
 	/** Reads a fetch Response body as text, defensively (a stubbed/absent body resolves to "" rather than throwing). */
 	function readBodyText(resp) {
 		if (typeof resp?.text === "function") {
-			try { return Promise.resolve(resp.text()); } catch (e) { return Promise.resolve(""); }
+			try { return Promise.resolve(resp.text()); } catch (e) { return Promise.resolve(""); } // NOSONAR javascript:S2486 -- an unreadable body deliberately reads as empty
 		}
 		return Promise.resolve("");
 	}
@@ -4901,7 +4903,7 @@
 					mergedViaDt = true;
 				}
 			}
-		} catch (e) { mergedViaDt = false; }
+		} catch (e) { mergedViaDt = false; } // NOSONAR javascript:S2486 -- failure is recorded in mergedViaDt and handled by the mergeRow fallback
 		if (! mergedViaDt && typeof ctx?.mergeRow === "function") ctx.mergeRow(tr, rowData);
 		if (tr?.dataset) tr.dataset.juneauRowMerged = "1";
 	}
@@ -5232,7 +5234,7 @@
 		}
 		fetch(resolved.url, { method: "GET", credentials: "same-origin", headers: { "Accept": "application/json" } })
 			.then(function (resp) {
-				if (! resp || ! resp.ok) {
+				if (! resp?.ok) {
 					// A non-2xx on the read-only confirmation fetch is itself a visible transport refusal - the
 					// modal never opens optimistically on a boundary rejection.
 					const boundaryReason = (typeof resp?.headers?.get === "function")
@@ -5522,7 +5524,7 @@
 	function buildSelectFormControl(f) {
 		const control = document.createElement("select");
 		for (const o of (f.options || [])) {
-			if (! o || o.value == null) continue;
+			if (o?.value == null) continue;
 			const opt = document.createElement("option");
 			opt.value = String(o.value);
 			opt.textContent = o.label != null ? String(o.label) : String(o.value);
@@ -5745,7 +5747,7 @@
 		const top = topLayer();
 		const el = top?.el;
 		const host = (el?.querySelector?.(".juneau-view-dialog")) || el;
-		if (! host || ! host.appendChild) return;
+		if (! host?.appendChild) return;
 		let banner = host.querySelector ? host.querySelector("." + cls) : null;
 		if (! banner) {
 			banner = document.createElement("div");
@@ -5769,7 +5771,7 @@
 		// A sectioned form and a flat one are mutually exclusive on the server (FormDef.validate rejects both), so
 		// sections win here without needing to reconcile the two.
 		if (form.sections?.length) { appendSectionedDialogForm(dialog, form, table, tr, ctx, seq, childCatalog); return; }
-		if (!form.fields || !form.fields.length) return;
+		if (!form.fields?.length) return;
 		const wrap = document.createElement("div");
 		wrap.className = "juneau-view-dialog-form";
 		wrap.dataset.testid = "dialog-form";
@@ -5808,8 +5810,8 @@
 		bindControlValidation(dialog, control);
 	}
 
-	function appendDialogFormRow(host, dialog, f, table, tr, ctx, seq, childCatalog) {
-		if (!f || f.name == null || String(f.name) === "") return;
+	function appendDialogFormRow(host, dialog, f, table, tr, ctx, seq, childCatalog) { // NOSONAR javascript:S107 -- every parameter is dialog-build context threaded through unchanged; collapsing them into an object would only move the count
+		if (f?.name == null || String(f.name) === "") return;
 		const type = (f.type == null || f.type === "") ? "text" : String(f.type);
 		if (! isTypedFormInputType(type)) return;
 		const row = document.createElement("div");
@@ -5847,7 +5849,7 @@
 
 		const items = [];
 		for (const s of form.sections) {
-			if (!s || s.id == null || String(s.id) === "") continue;
+			if (s?.id == null || String(s.id) === "") continue;
 			const pane = document.createElement("div");
 			pane.className = "juneau-view-dialog-form-section";
 			pane.dataset.juneauFormSection = String(s.id);
@@ -5880,7 +5882,7 @@
 	 */
 	function revealDialogSectionFor(el) {
 		const pane = (typeof el?.closest === "function") ? el.closest("[data-juneau-form-section]") : null;
-		if (! pane || ! pane.hidden) return;
+		if (! pane?.hidden) return;
 		const wrap = (typeof pane.closest === "function") ? pane.closest(".juneau-view-dialog-form") : null;
 		const activate = wrap?._juneauActivateSection ?? null;
 		if (typeof activate === "function") activate(pane.dataset.juneauFormSection);
@@ -5906,12 +5908,12 @@
 	function focusFirstInvalidControl(el) {
 		revealDialogSectionFor(el);
 		if (typeof el.focus === "function") {
-			try { el.focus(); } catch (e) { /* ignore */ }
+			try { el.focus(); } catch (e) { /* ignore */ } // NOSONAR javascript:S2486 -- focus is best-effort
 		}
 	}
 
 	function validateDialogForm(dialog, fromConfirm) {
-		if (!dialog || !dialog.querySelectorAll) return true;
+		if (!dialog?.querySelectorAll) return true;
 		const nodes = dialog.querySelectorAll("[data-juneau-form-field]");
 		let firstInvalid = null;
 		for (const el of nodes) {
@@ -5931,7 +5933,7 @@
 			return "Must be at most " + max + " characters.";
 		if (pat) {
 			let re = null;
-			try { re = new RegExp(pat); } catch (e) { re = null; }   // FAIL-OPEN on a Java-only pattern
+			try { re = new RegExp(pat); } catch (e) { re = null; }   // FAIL-OPEN on a Java-only pattern // NOSONAR javascript:S2486 -- fail-open on a pattern the browser regex engine cannot compile (Java-only syntax)
 			if (re && ! re.test(value)) return "Value is not in the expected format.";
 		}
 		return null;
@@ -6003,7 +6005,7 @@
 
 	function collectDialogFormFields(dialog) {
 		const out = {};
-		if (!dialog || !dialog.querySelectorAll) return out;
+		if (!dialog?.querySelectorAll) return out;
 		for (const el of dialog.querySelectorAll("[data-juneau-form-field]")) {
 			const entry = collectDialogFormFieldEntry(el);
 			if (entry) out[entry.name] = entry.value;
@@ -6348,9 +6350,9 @@
 		btn.addEventListener("click", function () {
 			const clip = (typeof navigator === "undefined") ? null : navigator?.clipboard;
 			if (typeof clip?.writeText !== "function") return;
-			try {
+			try { // NOSONAR javascript:S4822 -- the try only guards a synchronous throw from clipboard.writeText; the rejection is handled by the .catch inside
 				Promise.resolve(clip.writeText(value)).catch(function () { /* denied - the <pre> stays selectable */ });
-			} catch (e) { /* a copy affordance never throws */ }
+			} catch (e) { /* a copy affordance never throws */ } // NOSONAR javascript:S2486 -- a copy affordance never throws
 		});
 		return btn;
 	}
@@ -6458,7 +6460,7 @@
 		}
 		fetch(url, { method: "GET", credentials: "same-origin", headers: { "Accept": "application/json" } })
 			.then(function (resp) {
-				if (! resp || ! resp.ok) { resultFormTerminal(RESULT_FORM_UNAVAILABLE_NOTICE); return null; }
+				if (! resp?.ok) { resultFormTerminal(RESULT_FORM_UNAVAILABLE_NOTICE); return null; }
 				return readBodyText(resp).then(function (text) {
 					const payload = parseJsonSafe(text);
 					if (! payload) { resultFormTerminal(RESULT_FORM_UNAVAILABLE_NOTICE); return; }
@@ -6779,7 +6781,7 @@
 		}
 		if (ctx._jobSources) {
 			ctx._jobSources.forEach(function (es) {
-				try { if (es?.close) es.close(); } catch (e) { /* already closed */ }
+				try { if (es?.close) es.close(); } catch (e) { /* already closed */ } // NOSONAR javascript:S2486 -- best-effort cleanup; the source may already be closed
 			});
 			ctx._jobSources.clear();
 		}
@@ -6801,11 +6803,11 @@
 		}
 		// DT1 table-overflow-wrap discipline: disconnect the scroll-region ResizeObserver before destroy (re-stamped on reconstruct).
 		if (ctx._scrollRegionObserver) {
-			try { ctx._scrollRegionObserver.disconnect(); } catch (e) { /* already gone */ }
+			try { ctx._scrollRegionObserver.disconnect(); } catch (e) { /* already gone */ } // NOSONAR javascript:S2486 -- best-effort cleanup; the observer may already be gone
 			ctx._scrollRegionObserver = null;
 		}
 		if (ctx.dataTable) {
-			try { ctx.dataTable.destroy(); } catch (e) { /* already destroyed */ }
+			try { ctx.dataTable.destroy(); } catch (e) { /* already destroyed */ } // NOSONAR javascript:S2486 -- best-effort cleanup; the table may already be destroyed
 			ctx.dataTable = null;
 		}
 		stripGeneratedDom(table);
@@ -6896,10 +6898,10 @@
 		box.className = TABLE_SCROLL_CLASS;
 		// NOSONAR javascript:S7768 -- `table.before(box)` would be equivalent, but the Node test-harness DOM
 		// shim (views-dom-shim.cjs) implements insertBefore/appendChild only, not `.before()`.
-		parent.insertBefore(box, table);
+		parent.insertBefore(box, table); // NOSONAR javascript:S7768 -- the Node test-harness DOM shim implements insertBefore/appendChild only, not .before()
 		box.appendChild(table);
 		if (ctx?.dataTable?.columns) {
-			try { ctx.dataTable.columns.adjust(); } catch (e) { /* not yet drawable */ }
+			try { ctx.dataTable.columns.adjust(); } catch (e) { /* not yet drawable */ } // NOSONAR javascript:S2486 -- best-effort resize; the table may not be drawable yet
 		}
 	}
 
@@ -6909,14 +6911,14 @@
 	 * overflow box.  No-op on the DT2 path (there is no JS-inserted wrap to remove).
 	 */
 	function unwrapTableScroll(table) {
-		if (!table || !table.parentNode) return;
+		if (!table?.parentNode) return;
 		const box = table.parentNode;
 		if (!box.className || (" " + box.className + " ").indexOf(" " + TABLE_SCROLL_CLASS + " ") < 0) return;
 		const grandparent = box.parentNode;
 		if (!grandparent) return;
 		// NOSONAR javascript:S7768 -- `box.before(table)` would be equivalent, but the Node test-harness DOM
 		// shim (views-dom-shim.cjs) implements insertBefore/appendChild only, not `.before()`.
-		grandparent.insertBefore(table, box);
+		grandparent.insertBefore(table, box); // NOSONAR javascript:S7768 -- the Node test-harness DOM shim implements insertBefore/appendChild only, not .before()
 		box.remove();
 	}
 
@@ -6953,7 +6955,7 @@
 		};
 		recheck();
 		if (ctx?._scrollRegionObserver) {
-			try { ctx._scrollRegionObserver.disconnect(); } catch (e) { /* already gone */ }
+			try { ctx._scrollRegionObserver.disconnect(); } catch (e) { /* already gone */ } // NOSONAR javascript:S2486 -- best-effort cleanup; the observer may already be gone
 			ctx._scrollRegionObserver = null;
 		}
 		if (typeof window.ResizeObserver === "function") {
@@ -7138,7 +7140,7 @@
 	}
 
 	/** Live Page Tab id for the shareable URL, or {@code null} when the page has no tab signal. */
-	function readLiveShareTab() {
+	function readLiveShareTab() { // NOSONAR javascript:S3776 -- encodes a views/widgets state machine; complexity is inherent.
 		const meta = typeof document.querySelector === "function"
 			? document.querySelector('meta[name="page-tab"]') : null;
 		if (meta?.getAttribute) {
@@ -7173,7 +7175,7 @@
 			dt.columns().every(function () {
 				const col = this; // NOSONAR javascript:S7740 -- DataTables columns().every() binds `this` to the column API; an arrow function cannot receive it
 				const def = cols[col.index()];
-				if (!def || def.data == null) return;
+				if (def?.data == null) return;
 				const expr = getColumnExpr(ctx, col);
 				if (String(expr) !== "") filters.push({ column: String(def.data), expr: String(expr) });
 			});
@@ -7199,8 +7201,8 @@
 	 * DSL column it must also pass the strict server-parity gate (WORK-J0612 D3), which skips a `$regex` the column
 	 * does not offer or one over the server's pattern-length cap (S8), so a crafted link cannot hang the tab.
 	 */
-	function applyShareableOpenState(table, ctx, state) {
-		if (!state || !ctx || !ctx.dataTable) return;
+	function applyShareableOpenState(table, ctx, state) { // NOSONAR javascript:S3776 -- encodes a views/widgets state machine; complexity is inherent.
+		if (!state || !ctx?.dataTable) return;
 		const U = NS.urlState;
 		if (U && typeof U.isEmptyState === "function" && U.isEmptyState(state)) return;
 
@@ -7214,27 +7216,27 @@
 			if (typeof document.querySelectorAll === "function") {
 				const candidates = document.querySelectorAll('[role="tab"][data-juneau-strip-tab]');
 				for (const c of candidates) {
-					if (c?.dataset && c.dataset.juneauStripTab === tabId) { btn = c; break; }
+					if (c?.dataset?.juneauStripTab === tabId) { btn = c; break; }
 				}
 			}
 			if (btn && typeof btn.click === "function") {
-				try { btn.click(); } catch (e) { /* host tab strip unavailable */ }
+				try { btn.click(); } catch (e) { /* host tab strip unavailable */ } // NOSONAR javascript:S2486 -- the host tab strip may be unavailable
 			}
 			try {
 				if (typeof CustomEvent === "function")
 					document.dispatchEvent(new CustomEvent("juneau:share-tab", { detail: { tab: tabId } }));
-			} catch (e2) { /* CustomEvent unavailable in the harness */ }
+			} catch (error_) { /* CustomEvent unavailable in the harness */ } // NOSONAR javascript:S2486 -- CustomEvent is unavailable in some harnesses
 		}
 
 		const cols = ctx.optsColumns || [];
 		const search = NS.search;
 		const filters = state.filters || [];
 		for (const f of filters) {
-			if (!f || f.column == null || f.expr == null || String(f.expr) === "") continue;
+			if (f?.column == null || f.expr == null || String(f.expr) === "") continue;
 			const expr = String(f.expr);
 			let colIdx = -1;
 			for (let c = 0; c < cols.length; c++) {
-				if (cols[c] && cols[c].data != null && String(cols[c].data) === String(f.column)) {
+				if (cols[c]?.data != null && String(cols[c].data) === String(f.column)) {
 					colIdx = c;
 					break;
 				}
@@ -7257,7 +7259,7 @@
 		if (state.sort?.column != null && state.sort.dir != null) {
 			let sortIdx = -1;
 			for (let c = 0; c < cols.length; c++) {
-				if (cols[c] && cols[c].data != null && String(cols[c].data) === String(state.sort.column)) {
+				if (cols[c]?.data != null && String(cols[c].data) === String(state.sort.column)) {
 					sortIdx = c;
 					break;
 				}
@@ -7310,8 +7312,8 @@
 	 * called from {@code constructTable} on first init AND every Apply rebuild, and a second call never duplicates
 	 * the button.
 	 */
-	function mountCopyLinkButton(table, ctx, toolbarRow) {
-		if (!ctx || !ctx.viewDef) return;
+	function mountCopyLinkButton(table, ctx, toolbarRow) { // NOSONAR javascript:S3776 -- encodes a views/widgets state machine; complexity is inherent.
+		if (!ctx?.viewDef) return;
 		if (!isCopyLinkVisible(table, ctx.viewDef)) return;
 		// No URL-state module -> nothing to copy; don't render a button that can only fail.
 		if (!NS.urlState || typeof NS.urlState.buildShareUrl !== "function") return;
@@ -7351,8 +7353,8 @@
 	 * Wires live address-bar sync (T17/T18) and open precedence (T19) for the primary table. Nested / non-primary
 	 * tables are a no-op. Idempotent per table.
 	 */
-	function wireShareableUrlState(table, ctx) {
-		if (!table || !ctx || !ctx.dataTable) return;
+	function wireShareableUrlState(table, ctx) { // NOSONAR javascript:S3776 -- encodes a views/widgets state machine; complexity is inherent.
+		if (!table || !ctx?.dataTable) return;
 		if (!isShareablePrimaryTable(table, ctx.viewDef)) return;
 		if (table.dataset?.juneauUrlStateWired === "1") return;
 		if (table.dataset) table.dataset.juneauUrlStateWired = "1";
@@ -7373,7 +7375,7 @@
 		}
 
 		const onLiveChange = function (e) {
-			if (e && e.target && e.target !== table) return;
+			if (e?.target && e.target !== table) return;
 			syncShareableUrlState(table, ctx);
 		};
 		if (typeof ctx.dataTable.on === "function") {
@@ -7580,7 +7582,7 @@
 		let viewDef;
 		try {
 			viewDef = JSON.parse(sidecar.textContent);
-		} catch (e) {
+		} catch (e) { // NOSONAR javascript:S2486 -- the failure is reported via error() just below
 			error("Juneau nested table '" + id + "': malformed nested sidecar; refusing to init.");
 			renderBanner(table, "Juneau nested table '" + id + "': malformed configuration.");
 			return;
@@ -7656,7 +7658,7 @@
 	function adjustNestedColumns(table) {
 		const ctx = table?.__juneauCtx;
 		if (ctx?.dataTable?.columns)
-			try { ctx.dataTable.columns.adjust(); } catch (e) { /* not yet drawable */ }
+			try { ctx.dataTable.columns.adjust(); } catch (e) { /* not yet drawable */ } // NOSONAR javascript:S2486 -- best-effort resize; the table may not be drawable yet
 	}
 
 	/**
@@ -7707,7 +7709,7 @@
 			const t = tables[i];
 			const ctx = t.__juneauCtx;
 			if (ctx) {
-				try { teardownTable(t, ctx); } catch (e) { /* already gone */ }
+				try { teardownTable(t, ctx); } catch (e) { /* already gone */ } // NOSONAR javascript:S2486 -- best-effort teardown; the table may already be gone
 				t.__juneauCtx = null;
 			}
 			t.removeAttribute(NESTED_INIT_ATTR);
@@ -7774,7 +7776,7 @@
 		let viewDef;
 		try {
 			viewDef = JSON.parse(sidecar.textContent);
-		} catch (e) {
+		} catch (e) { // NOSONAR javascript:S2486 -- the failure is reported via error() just below
 			error("Juneau view '" + id + "': malformed JSON sidecar; refusing to init.");
 			renderBanner(table, "Juneau view '" + id + "': malformed configuration.");
 			return null;
@@ -7821,7 +7823,7 @@
 		const $ = window.jQuery;
 		if ($?.fn?.dataTable?.isDataTable(table)) return;
 		const id = table.dataset.juneauView;
-		if (!viewDef || viewDef.contractVersion !== JUNEAU_VIEW_CONTRACT_VERSION) {
+		if (viewDef?.contractVersion !== JUNEAU_VIEW_CONTRACT_VERSION) {
 			const m = "Juneau view '" + id + "': contract version mismatch (page='" +
 				(viewDef?.contractVersion) + "', runtime='" + JUNEAU_VIEW_CONTRACT_VERSION
 				+ "'). Refusing to init - reload to clear a stale cached script.";
@@ -7898,7 +7900,7 @@
 			let effective = resolveEffectiveColumns(viewDef, viewSaved);
 			let effectiveViewDef = viewDef;
 			if (draft && tabOn("sort") && draft.sort?.length)
-				effectiveViewDef = Object.assign({}, viewDef, { defaultOrder: defaultOrderFromSort(draft.sort) });
+				effectiveViewDef = { ...viewDef, defaultOrder: defaultOrderFromSort(draft.sort) };
 			if (draft && tabOn("search") && typeof NS.config?.applySearchMembershipToColumns === "function")
 				effective = NS.config.applySearchMembershipToColumns(effective, draft.search);
 			// Routed through the NS.init export (rather than the closed-over `buildTable` reference directly) so
@@ -7938,7 +7940,7 @@
 		const fetchFn = window.fetch || fetch;
 		return fetchFn(url, { credentials: "same-origin", headers: { Accept: "application/json" } })
 			.then(function (resp) {
-				if (!resp || !resp.ok)
+				if (!resp?.ok)
 					throw new Error("Juneau slot: envelope GET failed (" + (resp?.status) + ").");
 				return resp.text();
 			})
@@ -7946,7 +7948,7 @@
 				try {
 					return JSON.parse(text);
 				} catch (e) {
-					throw new Error("Juneau slot: malformed JSON envelope.");
+					throw new Error("Juneau slot: malformed JSON envelope.", { cause: e });
 				}
 			});
 	}
@@ -7967,7 +7969,7 @@
 		});
 	}
 
-	function paintSlotTable(slot, envelope) {
+	function paintSlotTable(slot, envelope) { // NOSONAR javascript:S3776 -- encodes a views/widgets state machine; complexity is inherent.
 		if (!envelope || typeof envelope !== "object")
 			throw new Error("Juneau slot: envelope is not an object.");
 		if (envelope.contractVersion !== JUNEAU_SLOT_CONTRACT_VERSION) {
@@ -8053,7 +8055,7 @@
 			table.dataset.juneauCsrfHeader = header;
 	}
 
-	function buildSlotTableEl(viewDef, selection, detail, rows) {
+	function buildSlotTableEl(viewDef, selection, detail, rows) { // NOSONAR javascript:S3776 -- encodes a views/widgets state machine; complexity is inherent.
 		const table = document.createElement("table");
 		table.id = viewDef.id;
 		table.dataset.juneauView = viewDef.id;
@@ -8373,11 +8375,18 @@
 	 * DOMContentLoaded scan below - DataTables mis-sizes columns initialized inside a display:none panel.
 	 * A standalone page with no page-id ancestor is unaffected - every one of its tables is still inited
 	 * exactly as before.  HTML-slot nav stamps `data-juneau-page` on the nav itself, not around tables.
+	 *
+	 * Also skipped: a table inside a [data-juneau-slot-table] wrapper (built by `mountTableSlot`).  Slot tables carry no
+	 * `juneau-view:<id>` sidecar - the card envelope is their definition - and `paintSlotTable` already inits them, so
+	 * a scan that raced the slot mount would only log "missing JSON sidecar" for a table that is being set up correctly.
 	 */
 	function initAll() {
 		const tables = document.querySelectorAll("table[data-juneau-view]");
 		Array.prototype.forEach.call(tables, function (t) {
 			if (t.closest?.("[data-juneau-page]")) return;
+			// Skip tables built into a slot by mountTableSlot: they carry no sidecar (the envelope is their definition)
+			// and paintSlotTable already inits them, so a scan that races the slot mount would only log a missing sidecar.
+			if (t.closest?.("[data-juneau-slot-table]")) return;
 			// Skip nested tables (a table inside a row-detail section).  They init lazily - after the
 			// parent detail GET succeeds and their pane is visible (see prepareNestedTable) - never on this eager
 			// page-load scan.  At DOMContentLoaded a nested table is still inert inside its <template> and is not
@@ -8493,14 +8502,14 @@
 	 * or a titled node inside ribbon/paging/toolbar chrome whose {@code title} is then moved onto
 	 * {@code data-jc-tip}.  Form fields never qualify.
 	 */
-	function cursorTipHost(t) {
+	function cursorTipHost(t) { // NOSONAR javascript:S3776 -- encodes a views/widgets state machine; complexity is inherent.
 		const start = elementFromEventTarget(t);
 		if (!start) return null;
 
 		let n = start;
 		while (n?.nodeType === 1) {
 			if (isFormFieldTag(n)) return null;
-			const explicit = typeof n.getAttribute === "function" ? n.getAttribute("data-jc-tip") : null;
+			const explicit = typeof n.getAttribute === "function" ? n.getAttribute("data-jc-tip") : null; // NOSONAR javascript:S7761 -- reads are deliberately attribute-based; this file's duck-typed/test-shim DOM does not guarantee the .dataset API (see the notes above)
 			if (explicit != null) return String(explicit).trim() === "" ? null : n;
 			n = n.parentNode;
 		}
@@ -8573,7 +8582,7 @@
 		cursorTipBound = true;
 		document.addEventListener("mouseover", function (e) {
 			const host = cursorTipHost(e.target);
-			if (host) cursorTipShow(host.getAttribute("data-jc-tip") || "", e.clientX, e.clientY);
+			if (host) cursorTipShow(host.getAttribute("data-jc-tip") || "", e.clientX, e.clientY); // NOSONAR javascript:S7761 -- reads are deliberately attribute-based; this file's duck-typed/test-shim DOM does not guarantee the .dataset API (see the notes above)
 		});
 		document.addEventListener("mousemove", function (e) {
 			const el = document.getElementById(JC_TIP_ID);

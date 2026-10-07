@@ -48,7 +48,7 @@ function probe(resolveIcon) {
 		setInterval: function () { return 0; }, clearInterval: function () { /* no-op */ }
 	};
 	// NOSONAR javascript:S1523 -- loading a production JS source into a VM sandbox is this harness's intended mechanism; the input is a fixed local file supplied by the test.
-	vm.runInNewContext(ribbonJsSource, sandbox, { filename: 'juneau-ribbon.js' });
+	vm.runInNewContext(ribbonJsSource, sandbox, { filename: 'juneau-ribbon.js' }); // NOSONAR javascript:S1523 -- the harness evaluates the module's own bundled script
 	const NS = env.window.JuneauViews;
 	NS.icons = { resolveIcon: resolveIcon };
 	const bar = NS.ribbon.build({ ribbon: [{ type: 'refresh', title: 'Reload it' }] }, { dataTable: {}, redraw: function () { /* no-op */ } });

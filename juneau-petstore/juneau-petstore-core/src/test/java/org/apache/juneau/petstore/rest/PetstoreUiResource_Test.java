@@ -48,4 +48,12 @@ class PetstoreUiResource_Test extends TestBase {
 			.run()
 			.assertStatus(404);
 	}
+
+	@Test void a04_resourceRoot_servesTheApp() throws Exception {
+		// The console iframes and links the bare /petstore-ui URL; it must answer, not 404.
+		CLIENT.get("/")
+			.run()
+			.assertStatus(200)
+			.assertContent().asString().isContains("<title>Juneau Petstore — React UI</title>");
+	}
 }

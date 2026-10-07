@@ -57,7 +57,7 @@ function envelope(NS, extra) {
 	return out;
 }
 
-(async function () {
+(async function () { // NOSONAR javascript:S3776 -- linear test scenario
 	const out = {};
 
 	// =================================================================================================================
@@ -84,7 +84,7 @@ function envelope(NS, extra) {
 	// URL fetch; 500 / malformed / version mismatch banner in THAT slot; sibling region stays.
 	// =================================================================================================================
 	{
-		const { env, NS, R, rec } = H.load(rendersJsPath, viewsJsPath, regionsJsPath);
+		const { env, R, rec } = H.load(rendersJsPath, viewsJsPath, regionsJsPath);
 		R.register('ssc-probes', function (ctx, container) {
 			container.appendChild(env.el('span'));
 		});
@@ -109,7 +109,7 @@ function envelope(NS, extra) {
 	}
 
 	{
-		const { env, NS, R, rec } = H.load(rendersJsPath, viewsJsPath, regionsJsPath);
+		const { env, R, rec } = H.load(rendersJsPath, viewsJsPath, regionsJsPath);
 		const incidents = slot(env, 'incidents');
 		env.setFetch(function () { return Promise.resolve(H.jsonResponse('not-json{')); });
 		await Promise.resolve(R.mount({ incidents: { table: '/releases/slot' } }));
@@ -178,7 +178,7 @@ function envelope(NS, extra) {
 		let threw = false;
 		try {
 			R.mount({ incidents: { table: '   ' } });
-		} catch (error) {
+		} catch (error) { // NOSONAR javascript:S2486 -- the thrown/not-thrown outcome is recorded in a flag and asserted on
 			threw = true;
 		}
 		out.t7_wsThrew = threw;
@@ -195,7 +195,7 @@ function envelope(NS, extra) {
 		let threw = false;
 		try {
 			R.mount({ probes: 'ssc-probes', incidents: { table: envelope(NS) } });
-		} catch (error) {
+		} catch (error) { // NOSONAR javascript:S2486 -- the thrown/not-thrown outcome is recorded in a flag and asserted on
 			threw = true;
 		}
 		out.t8_missingIdThrew = threw;
@@ -210,7 +210,7 @@ function envelope(NS, extra) {
 		let threw = false;
 		try {
 			R.mount({ probes: 'ssc-probes', incidents: { foo: 1 } });
-		} catch (error) {
+		} catch (error) { // NOSONAR javascript:S2486 -- the thrown/not-thrown outcome is recorded in a flag and asserted on
 			threw = true;
 		}
 		out.t9_badShapeThrew = threw;
@@ -295,7 +295,7 @@ function envelope(NS, extra) {
 		let declared = null;
 		try {
 			declared = region ? JSON.parse(region.dataset.juneauRegionDeclared) : null;
-		} catch (error) { declared = null; }
+		} catch (error) { declared = null; } // NOSONAR javascript:S2486 -- an unparsable declaration is recorded as null and asserted on
 		out.t12_declaredDataUrlOnly = !!(declared?.dataUrl === '/data/{id}'
 			&& Object.keys(declared).length === 1);
 		out.t12_noRegionMeta = incidents.querySelector('[data-juneau-region-meta]') == null
@@ -425,8 +425,7 @@ function envelope(NS, extra) {
 		out.t17_hasTable = table != null;
 		out.t17_noFetch = fetched === 0;
 		out.t17_rowsStashed = table?.__juneauRows === rows;
-		out.t17_rowIdField = table?.getAttribute('data-juneau-row-id-field') === 'id'
-			|| table?.dataset.juneauRowIdField === 'id';
+		out.t17_rowIdField = table?.dataset.juneauRowIdField === 'id';
 		out.t17_noDomRows = table?.querySelector('tbody') == null;
 		const opts = NS.init.buildOptions(envl.view, {
 			table: table, parseRenderId: NS.parseRenderId, resolveRenderer: NS.resolveRenderer, warn: function () {}
@@ -458,7 +457,7 @@ function envelope(NS, extra) {
 		env.window.location = { href: 'https://app.example.com/ctx/page', origin: 'https://app.example.com' };
 		function mountOne(id, extra) {
 			const el = slot(env, id);
-			return Promise.resolve(R.mount({ [id]: { table: envelope(NS, Object.assign({ viewId: 'v' + id }, extra)) } })).then(function () {
+			return Promise.resolve(R.mount({ [id]: { table: envelope(NS, { viewId: 'v' + id, ...extra }) } })).then(function () {
 				return {
 					saved: el.querySelector('[data-juneau-slot-table]')?.dataset.juneauSavedViews,
 					detail: el.querySelector('template[data-juneau-row-detail]')?.dataset.juneauDetailUrl
@@ -483,6 +482,19 @@ function envelope(NS, extra) {
 			&& x2.saved === undefined && x2.detail === undefined && x3.saved === undefined;
 		out.t18_warned = rec.warnsMatching('savedViewsBase').length === 3
 			&& rec.warnsMatching('detail.endpoint').length === 2;
+	}
+
+	// =================================================================================================================
+	// The document-wide table scan leaves a slot-built table alone: the envelope is its definition (no sidecar), and
+	// the slot mount already inits it.
+	// =================================================================================================================
+	{
+		const { env, NS, R, rec } = H.load(rendersJsPath, viewsJsPath, regionsJsPath);
+		const incidents = slot(env, 'incidents');
+		await Promise.resolve(R.mount({ incidents: { table: envelope(NS) } }));
+		out.t19_tableMounted = incidents.querySelector('table[data-juneau-view="releases"]') != null;
+		NS.init.initAll();
+		out.t19_scanLogsNoMissingSidecar = rec.errorsMatching('missing JSON sidecar').length === 0;
 	}
 
 	process.stdout.write(JSON.stringify(out));

@@ -24,6 +24,8 @@ import java.util.*;
 
 import org.apache.juneau.marshall.collections.*;
 import org.apache.juneau.marshall.marshaller.*;
+import org.apache.juneau.marshall.parser.*;
+import org.apache.juneau.marshall.serializer.*;
 import org.junit.jupiter.api.*;
 
 /**
@@ -69,5 +71,30 @@ class Json5lMediaType_Test {
 		assertNotNull(json5l);
 		var b = (List<JsonMap>) Json5l.to(json5l, List.class, JsonMap.class);
 		assertBean(b, "0{k}", "{v}");
+	}
+
+	@Test
+	void a05_json5linesAliasAccepted() {
+		var types = new ArrayList<String>();
+		Json5lSerializer.DEFAULT.forEachAcceptMediaType(mt -> types.add(mt.getType() + "/" + mt.getSubType()));
+		assertTrue(types.contains("application/json5lines"), "Expected application/json5lines: " + types);
+		assertTrue(types.contains("application/jsonlines"), "Expected application/jsonlines cross-accept: " + types);
+
+		var consumed = Json5lParser.DEFAULT.getMediaTypes().stream()
+			.map(mt -> mt.getType() + "/" + mt.getSubType())
+			.toList();
+		assertTrue(consumed.contains("application/json5lines"), "Expected application/json5lines: " + consumed);
+		assertTrue(consumed.contains("application/jsonlines"), "Expected application/jsonlines cross-accept: " + consumed);
+	}
+
+	@Test
+	void a06_json5linesAliasResolvesInSets() {
+		var sset = SerializerSet.create().add(Json5lSerializer.class).build();
+		assertTrue(sset.getSerializer("application/json5lines").orElseThrow() instanceof Json5lSerializer);
+		// The produced Content-Type stays canonical.
+		assertEquals("application/json5l", sset.getSerializer("application/json5lines").orElseThrow().getResponseContentType().toString());
+
+		var pset = ParserSet.create().add(Json5lParser.class).build();
+		assertTrue(pset.getParser("application/json5lines").orElseThrow() instanceof Json5lParser);
 	}
 }

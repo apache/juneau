@@ -17,6 +17,7 @@
 package org.apache.juneau.petstore.console;
 
 import org.apache.juneau.http.response.*;
+import org.apache.juneau.petstore.console.dev.*;
 import org.apache.juneau.petstore.console.ops.*;
 import org.apache.juneau.petstore.console.pets.*;
 import org.apache.juneau.rest.server.*;
@@ -51,9 +52,15 @@ import org.apache.juneau.rest.server.view.*;
 	children={
 		StoreRest.class,
 		PetsRest.class,
-		OpsRest.class
+		OpsRest.class,
+		DevRest.class,
+		AboutRest.class,
+		VendorRest.class
 	}
 )
+@SuppressWarnings({
+	"java:S110" // Inheritance depth comes from the BasicRestServlet hierarchy, not this page.
+})
 public class PetstoreConsoleResource extends PetstoreConsolePage {
 
 	private static final long serialVersionUID = 1L;

@@ -106,7 +106,7 @@ function kinds(list) {
 		out.t18_keys = [p.ctxs.a.key, p.ctxs.b.key, p.ctxs.c.key];
 
 		let threw = false;
-		try { p.ctxs.a.emit({ kind: 'nowhere' }, { to: 'does-not-exist' }); } catch (error) { threw = true; }
+		try { p.ctxs.a.emit({ kind: 'nowhere' }, { to: 'does-not-exist' }); } catch (error) { threw = true; } // NOSONAR javascript:S2486 -- the thrown/not-thrown outcome is recorded in a flag and asserted on
 		out.t19_noThrow = threw === false;
 		out.t19_warned = p.rec.warnsMatching("no region matches emit target 'does-not-exist'").length === 1;
 		out.t19_nobodyGotIt = kinds(p.received.b).indexOf('nowhere') < 0 && kinds(p.received.c).indexOf('nowhere') < 0;

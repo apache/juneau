@@ -47,10 +47,10 @@ const out = {};
 // by different code paths that may set attributes in a different order), and children recursively - which is a
 // stricter, not a looser, check than a literal innerHTML byte-compare would be for two independently-built trees.
 function escapeText(s) {
-	return String(s == null ? '' : s).replaceAll(/&/g, '&amp;').replaceAll(/</g, '&lt;').replaceAll(/>/g, '&gt;');
+	return String(s == null ? '' : s).replaceAll('&', '&amp;').replaceAll('<', '&lt;').replaceAll('>', '&gt;');
 }
 function escapeAttr(s) {
-	return escapeText(s).replaceAll(/"/g, '&quot;');
+	return escapeText(s).replaceAll('"', '&quot;');
 }
 function serializeNode(n) {
 	if (n.nodeType === 3) return escapeText(n.textContent);
@@ -162,7 +162,7 @@ function load(opts) {
 		});
 		const calls = H.abortableFetch(env);
 		R.initRegion(el); // the region's own R14a pre-fetch issues calls[0]
-		out.t13_fetchUrl = calls[0] && calls[0].url;
+		out.t13_fetchUrl = calls[0]?.url;
 		calls.resolve(0, { contractVersion: '1', fields: { status: 'ok', count: 3 } });
 		await H.flush();
 		out.t13_valuesMap = ctx.data; // the pre-fetch's own resolution, already unwrapped onto ctx.data
@@ -238,8 +238,8 @@ function load(opts) {
 		const body = bodyMatch ? bodyMatch[0] : '';
 		const fetchCallSites = (body.match(/fetchDeclared\(\)/g) || []).length;
 		out.t16g_oneFetchDeclaredCallSite = fetchCallSites;
-		out.t16g_guardedByNullish = /ctx\.data\s*!=\s*null[\s\S]*?:\s*ctx\.fetchDeclared\(\)/.test(body)
-			|| /ctx\.data\s*\?\?\s*[\s\S]*?fetchDeclared/.test(body);
+		out.t16g_guardedByNullish = /ctx\.data\s*!=\s*null[\s\S]*?:\s*ctx\.fetchDeclared\(\)/.test(body) // NOSONAR javascript:S5852 -- lazy scan of a small, fixed local source slice (the test's own input)
+			|| /ctx\.data\s*\?\?\s*[\s\S]*?fetchDeclared/.test(body); // NOSONAR javascript:S5852 -- lazy scan of a small, fixed local source slice (the test's own input)
 	}
 	{
 		// Behavioral half: pre-set ctx.data (as R14a's own pre-fetch would), call the default directly, and count

@@ -41,7 +41,7 @@ const window = {};
 // NOSONAR javascript:S1523 -- loading the production juneau-urlstate.js source into a VM sandbox is this harness's
 // intended mechanism for exercising it against a minimal fake window; the input is a fixed local file path
 // supplied by the test, never attacker-controlled data.
-vm.runInNewContext(fs.readFileSync(path.resolve(urlStateJsPath), 'utf8'), { window: window, console: console }, { filename: 'juneau-urlstate.js' });
+vm.runInNewContext(fs.readFileSync(path.resolve(urlStateJsPath), 'utf8'), { window: window, console: console }, { filename: 'juneau-urlstate.js' }); // NOSONAR javascript:S1523 -- the harness evaluates the module's own bundled script
 
 const NS = window.JuneauViews;
 const out = { hasUrlState: !!(NS?.urlState) };

@@ -36,6 +36,9 @@ import org.junit.jupiter.api.*;
  */
 class ChromeCss_NavRules_Test extends TestBase {
 
+	@SuppressWarnings({
+		"java:S5852" // Possessive quantifiers: no backtracking; input is the module's own bundled stylesheet.
+	})
 	private static final Pattern RULE = Pattern.compile("([^{}]++)\\{[^}]*+\\}");
 
 	private static String read(Class<?> anchor, String path) throws IOException {

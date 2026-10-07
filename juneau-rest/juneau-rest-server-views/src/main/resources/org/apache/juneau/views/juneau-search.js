@@ -117,8 +117,8 @@
 	];
 
 	const BUILTINS = {};
-	for (let bi = 0; bi < BUILTIN_LIST.length; bi++)
-		BUILTINS[BUILTIN_LIST[bi].name.toLowerCase()] = BUILTIN_LIST[bi];
+	for (const builtin of BUILTIN_LIST)
+		BUILTINS[builtin.name.toLowerCase()] = builtin;
 
 	const SearchOperators = {
 		/** All built-in operators in canonical order. */
@@ -239,7 +239,7 @@
 		} else {
 			body = s;
 		}
-		return body.split('$$').join('$');
+		return body.replaceAll('$$', '$');
 	}
 
 	/** Parses one (already trimmed, non-empty) token into a node. */
@@ -269,7 +269,7 @@
 	 * comma-separated argument slot was empty (a stray or trailing comma) - `$blank()`'s zero-argument call is
 	 * NOT a blank arg.
 	 */
-	function scanArgs(s, open) {
+	function scanArgs(s, open) { // NOSONAR javascript:S3776 -- recursive-descent parsing; complexity is inherent
 		let state = S1, depth = 0, argStart = open + 1, blankArg = false;
 		const rawArgs = [];
 
@@ -505,7 +505,7 @@
 	// Signed ISO-8601 duration (mirror of ValueParse.isoDurationMillis / java.time.Duration.parse): one leading sign only,
 	// days/hours/minutes/seconds (fractional seconds, '.' or ','), case-insensitive; years/months/weeks and per-component signs are invalid.
 	const ISO_START_RE = /^[+-]?P/i;
-	const ISO_RE = /^([+-])?P(?:(\d+)D)?(T(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)(?:[.,](\d{0,9}))?S)?)?$/i;
+	const ISO_RE = /^([+-])?P(?:(\d+)D)?(T(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)(?:[.,](\d{0,9}))?S)?)?$/i; // NOSONAR javascript:S5843 -- ISO-8601 duration grammar; splitting the pattern would obscure it
 	const UNIT_MS = { ms: 1, s: 1000, m: 60000, h: 3600000, d: 86400000 };
 	const LONG_MAX = typeof BigInt === "function" ? BigInt("9223372036854775807") : null;
 
@@ -533,7 +533,7 @@
 	}
 
 	/** Signed milliseconds (fractions floored) of an ISO-8601 duration; NaN when it is malformed or its total overflows a Java long (Java: BAD_VALUE). */
-	function isoDurationMillis(v) {
+	function isoDurationMillis(v) { // NOSONAR javascript:S3776 -- one branch per ISO-8601 duration component; complexity is inherent
 		const m = ISO_RE.exec(v);
 		if (m == null || (m[3] === "T" && m[4] == null && m[5] == null && m[6] == null) || (m[2] == null && m[3] == null))
 			return Number.NaN;
@@ -634,7 +634,7 @@
 	function eqCi(cell, arg, type) {
 		if (type === T_TEXT || type === T_ID || type === T_ENUM) {
 			const v = strVal(cell);
-			return v != null && v.toLowerCase() === String(arg).toLowerCase();
+			return v?.toLowerCase() === String(arg).toLowerCase();
 		}
 		return typedEquals(cell, arg, type);
 	}
@@ -704,14 +704,14 @@
 
 	function contains(cell, arg) {
 		const v = strVal(cell);
-		return v != null && v.toLowerCase().includes(String(arg).toLowerCase());
+		return v?.toLowerCase().includes(String(arg).toLowerCase()) === true;
 	}
 
 	function prefix(cell, arg, type) {
 		if (type === T_VER)
 			return versionPrefix(strVal(cell), arg);
 		const v = strVal(cell);
-		return v != null && v.toLowerCase().startsWith(String(arg).toLowerCase());
+		return v?.toLowerCase().startsWith(String(arg).toLowerCase()) === true;
 	}
 
 	/** Translates the portable i/m/s flag chars into a JS RegExp flag string (design section 4.1). */
@@ -735,7 +735,7 @@
 		try {
 			// Java Matcher.matches() is a full-string match; anchor the pattern to reproduce it.
 			return new RegExp("^(?:" + args[0] + ")$", flags);
-		} catch (e) {
+		} catch (e) { // NOSONAR javascript:S2486 -- an invalid regex simply does not match
 			return null;  // Bad pattern matches nothing (PatternSyntaxException parity).
 		}
 	}
@@ -745,13 +745,13 @@
 		if (v == null)
 			return false;
 		const re = buildRegex(args);
-		return re != null && re.test(v);
+		return re?.test(v) === true;
 	}
 
 	/** `$regex` against a pattern `compile()` already built once (null = bad pattern, which matches nothing). */
 	function matchCompiledRegex(re, cell) {
 		const v = strVal(cell);
-		return v != null && re != null && re.test(v);
+		return v != null && re?.test(v) === true;
 	}
 
 	function between(cell, args, type) {
@@ -1021,7 +1021,7 @@
 	 * Mirrors Java's `SearchExpressionParser` throw sites one for one (MALFORMED_OPERATOR, INVALID_OPERATOR_NAME,
 	 * UNKNOWN_OPERATOR, UNTERMINATED_QUOTE, UNBALANCED, EMPTY_ARGUMENT, TRAILING_TEXT, BAD_ARG_COUNT).
 	 */
-	function parseFuncStrict(s, customs) {
+	function parseFuncStrict(s, customs) { // NOSONAR javascript:S3776 -- recursive-descent parsing; complexity is inherent
 		if (s.length > 1 && s.charAt(0) === '$' && IS_LETTER.test(s.charAt(1))) {
 			const open = s.indexOf('(');
 			if (open < 0)
@@ -1187,7 +1187,7 @@
 			return;
 		}
 		const o = SearchOperators.get(node.name);
-		if (o != null && o.combinator) {
+		if (o?.combinator) {
 			node.args.forEach(function (a) { checkValues(a, type, column); });  // Bare literals under a combinator are validated too (as in Java typeTree).
 			return;
 		}
@@ -1251,7 +1251,7 @@
 		if (name == null || typeof fn !== "function")
 			throw new TypeError("JuneauViews.search.registerCustom requires a \"$\"-name and a predicate function.");
 		const n = String(name).trim();
-		if (n.charAt(0) !== "$" || ! isValidName(n) || ! IS_LETTER.test(n.charAt(1)))
+		if (! n.startsWith("$") || ! isValidName(n) || ! IS_LETTER.test(n.charAt(1)))
 			throw new TypeError("JuneauViews.search.registerCustom: invalid operator name '" + n + "'.");
 		if (SearchOperators.isBuiltin(n))
 			throw new TypeError("JuneauViews.search.registerCustom: '" + n + "' is a builtin operator.");

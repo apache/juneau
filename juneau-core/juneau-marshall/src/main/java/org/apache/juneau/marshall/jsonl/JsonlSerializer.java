@@ -24,7 +24,7 @@ import org.apache.juneau.marshall.swap.spi.*;
  *
  * <h5 class='topic'>Media types</h5>
  * <p>
- * Handles <c>Accept</c> types:  <bc>application/jsonl, application/x-ndjson, text/jsonl</bc>
+ * Handles <c>Accept</c> types:  <bc>application/jsonl, application/jsonlines, application/x-ndjson, text/jsonl</bc>
  * <p>
  * Produces <c>Content-Type</c> types:  <bc>application/jsonl</bc>
  *
@@ -112,7 +112,7 @@ public class JsonlSerializer extends JsonSerializer {
 	public static JsonSerializer.Builder<?> create() {
 		return JsonSerializer.create()
 			.produces("application/jsonl")
-			.accept("application/jsonl,application/x-ndjson,text/jsonl")
+			.accept("application/jsonl,application/jsonlines,application/x-ndjson,text/jsonl")
 			.type(JsonlSerializer.class)
 			.useWhitespace(false);
 	}

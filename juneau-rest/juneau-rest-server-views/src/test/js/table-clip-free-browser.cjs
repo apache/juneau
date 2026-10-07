@@ -52,7 +52,7 @@ const PROBE = async function () {
 	 */
 	// NOSONAR javascript:S7721 -- must stay nested: page.evaluate(PROBE) ships only PROBE's own source into the
 	// browser context, so a helper hoisted to this file's Node module scope would be undefined in the page.
-	function clippingAncestors(el) {
+	function clippingAncestors(el) { // NOSONAR javascript:S7721 -- must stay nested: page.evaluate(PROBE) serializes only PROBE's own source into the browser
 		const bad = [];
 		let n = el?.parentElement;
 		while (n && n !== document.documentElement) {
@@ -66,14 +66,14 @@ const PROBE = async function () {
 
 	// NOSONAR javascript:S7721 -- must stay nested: page.evaluate(PROBE) ships only PROBE's own source into the
 	// browser context, so a helper hoisted to this file's Node module scope would be undefined in the page.
-	function rectOf(el) {
+	function rectOf(el) { // NOSONAR javascript:S7721 -- must stay nested: page.evaluate(PROBE) serializes only PROBE's own source into the browser
 		const r = el.getBoundingClientRect();
 		return { left: Math.round(r.left), top: Math.round(r.top), w: Math.round(r.width), h: Math.round(r.height) };
 	}
 
 	// NOSONAR javascript:S7721 -- must stay nested: page.evaluate(PROBE) ships only PROBE's own source into the
 	// browser context, so a helper hoisted to this file's Node module scope would be undefined in the page.
-	function sameRect(a, b) {
+	function sameRect(a, b) { // NOSONAR javascript:S7721 -- must stay nested: page.evaluate(PROBE) serializes only PROBE's own source into the browser
 		return a.left === b.left && a.top === b.top && a.w === b.w && a.h === b.h;
 	}
 

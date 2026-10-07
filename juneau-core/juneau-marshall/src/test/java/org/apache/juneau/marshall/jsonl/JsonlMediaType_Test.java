@@ -25,6 +25,8 @@ import java.util.*;
 
 import org.apache.juneau.marshall.collections.*;
 import org.apache.juneau.marshall.marshaller.*;
+import org.apache.juneau.marshall.parser.*;
+import org.apache.juneau.marshall.serializer.*;
 import org.junit.jupiter.api.*;
 
 /**
@@ -67,5 +69,28 @@ class JsonlMediaType_Test {
 		assertNotNull(jsonl);
 		var b = (List<JsonMap>) Jsonl.to(jsonl, List.class, JsonMap.class);
 		assertBean(b, "0{k}", "{v}");
+	}
+
+	@Test
+	void a05_jsonlinesAliasAccepted() {
+		var types = new ArrayList<String>();
+		JsonlSerializer.DEFAULT.forEachAcceptMediaType(mt -> types.add(mt.getType() + "/" + mt.getSubType()));
+		assertTrue(types.contains("application/jsonlines"), "Expected application/jsonlines: " + types);
+
+		var consumed = JsonlParser.DEFAULT.getMediaTypes().stream()
+			.map(mt -> mt.getType() + "/" + mt.getSubType())
+			.toList();
+		assertTrue(consumed.contains("application/jsonlines"), "Expected application/jsonlines: " + consumed);
+	}
+
+	@Test
+	void a06_jsonlinesAliasResolvesInSets() {
+		var sset = SerializerSet.create().add(JsonlSerializer.class).build();
+		assertTrue(sset.getSerializer("application/jsonlines").orElseThrow() instanceof JsonlSerializer);
+		// The produced Content-Type stays canonical.
+		assertEquals("application/jsonl", sset.getSerializer("application/jsonlines").orElseThrow().getResponseContentType().toString());
+
+		var pset = ParserSet.create().add(JsonlParser.class).build();
+		assertTrue(pset.getParser("application/jsonlines").orElseThrow() instanceof JsonlParser);
 	}
 }

@@ -97,7 +97,7 @@ const PROBE = async function () {
 	// NOSONAR javascript:S7721 -- stays nested inside PROBE: page.evaluate() serializes this function
 	// source across the Playwright process boundary with no access to outer Node-module scope, so it
 	// cannot be hoisted to module level without breaking in-browser execution.
-	function fakeDt() {
+	function fakeDt() { // NOSONAR javascript:S7721 -- must stay nested: page.evaluate(PROBE) serializes only PROBE's own source into the browser
 		const handlers = {};
 		return {
 			on: function (evt, cb) {
@@ -110,7 +110,7 @@ const PROBE = async function () {
 
 	// NOSONAR javascript:S7721 -- stays nested inside PROBE for the same cross-process-boundary reason
 	// as fakeDt() above.
-	function dispatchChange(el) {
+	function dispatchChange(el) { // NOSONAR javascript:S7721 -- must stay nested: page.evaluate(PROBE) serializes only PROBE's own source into the browser
 		el.dispatchEvent(new Event('change', { bubbles: true }));
 	}
 

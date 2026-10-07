@@ -42,7 +42,7 @@ function stateOf(el) {
 	return el.dataset.juneauRegionState ?? null;
 }
 
-(async function () {
+(async function () { // NOSONAR javascript:S3776 -- linear test scenario
 
 	// =================================================================================================================
 	// Test 1 - the container is EMPTY and IN-DOCUMENT at the first call, for each of the three region types.
@@ -340,11 +340,9 @@ function stateOf(el) {
 	// =================================================================================================================
 	{
 		const { env, R } = H.load(rendersJsPath, viewsJsPath, regionsJsPath);
-		let ctx = null;
 		let topLevelSignal = null;
 		let forkSignal = null;
 		R.register('fetcher', function (c) {
-			ctx = c;
 			topLevelSignal = c.signal;
 			forkSignal = c.signal.fork();
 		});
@@ -450,7 +448,7 @@ function stateOf(el) {
 	{
 		const { env, R, rec } = H.load(rendersJsPath, viewsJsPath, regionsJsPath);
 		const reasons = {};
-		R.register('noter', function (ctx) { (reasons[ctx.id] = reasons[ctx.id] || []).push(ctx.reason); });
+		R.register('noter', function (ctx) { reasons[ctx.id] = reasons[ctx.id] || []; reasons[ctx.id].push(ctx.reason); });
 		const scope = env.el('div');
 		env.body.appendChild(scope);
 		const visible = H.mkRegion(env, { id: 'vis', type: 'card-body', populate: 'noter', parent: scope });

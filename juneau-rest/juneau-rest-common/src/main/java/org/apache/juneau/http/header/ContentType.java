@@ -56,8 +56,12 @@ public class ContentType extends HttpMediaTypeHeader {
 	public static final ContentType APPLICATION_JSON5 = new ContentType("application/json5");
 	/** Content-Type for {@code application/json5l} (Juneau {@code Json5lSerializer}/{@code Json5lParser}). */
 	public static final ContentType APPLICATION_JSON5L = new ContentType("application/json5l");
+	/** Content-Type for {@code application/json5lines} (alias for {@code application/json5l}). */
+	public static final ContentType APPLICATION_JSON5LINES = new ContentType("application/json5lines");
 	/** Content-Type for {@code application/jsonl} (Juneau {@code JsonlSerializer}/{@code JsonlParser}). */
 	public static final ContentType APPLICATION_JSONL = new ContentType("application/jsonl");
+	/** Content-Type for {@code application/jsonlines} (alias for {@code application/jsonl}; the type suggested by the JSON Lines spec). */
+	public static final ContentType APPLICATION_JSONLINES = new ContentType("application/jsonlines");
 	/** Content-Type for {@code application/json-patch+json} (RFC 6902). */
 	public static final ContentType APPLICATION_JSON_PATCH = new ContentType("application/json-patch+json");
 	/** Content-Type for {@code application/ld+json} (JSON-LD). */

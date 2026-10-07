@@ -44,13 +44,13 @@ const PROBE = async function () {
 	// NOSONAR javascript:S7721 -- must stay nested: page.evaluate(PROBE) ships only PROBE's own source into the
 	// browser context, so a helper hoisted to this file's Node module scope would be undefined in the page and
 	// break every caller below.
-	function rendered(el) { if (!el) { return false; } const r = el.getBoundingClientRect(); return r.width > 0 && r.height > 0; }
+	function rendered(el) { if (!el) { return false; } const r = el.getBoundingClientRect(); return r.width > 0 && r.height > 0; } // NOSONAR javascript:S7721 -- must stay nested: page.evaluate(PROBE) ships only the probe's own source into the browser context
 	function drain() { while (init.topLayer()) init.popLayer(); }
 
 	// NOSONAR javascript:S7721 -- must stay nested: page.evaluate(PROBE) ships only PROBE's own source into the
 	// browser context, so a helper hoisted to this file's Node module scope would be undefined in the page and
 	// break every caller below.
-	function makeRow(rowId) {
+	function makeRow(rowId) { // NOSONAR javascript:S7721 -- must stay nested: page.evaluate(PROBE) ships only the probe's own source into the browser context
 		const table = document.createElement('table');
 		const tbody = document.createElement('tbody');
 		const tr = document.createElement('tr');
@@ -71,7 +71,7 @@ const PROBE = async function () {
 	// NOSONAR javascript:S7721 -- must stay nested: page.evaluate(PROBE) ships only PROBE's own source into the
 	// browser context, so a helper hoisted to this file's Node module scope would be undefined in the page and
 	// break every caller below.
-	function sixTypeForm() {
+	function sixTypeForm() { // NOSONAR javascript:S7721 -- must stay nested: page.evaluate(PROBE) ships only the probe's own source into the browser context
 		return {
 			title: 'Acknowledge?',
 			idempotencyKey: 'key-ack',
