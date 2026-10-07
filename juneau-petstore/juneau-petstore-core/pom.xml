@@ -65,7 +65,7 @@
 		<dependency>
 			<groupId>org.freemarker</groupId>
 			<artifactId>freemarker</artifactId>
-			<version>2.3.34</version>
+			<version>2.3.35</version>
 		</dependency>
 
 		<!-- Console UI (C7 Plan A): chrome, FreeMarker bridge, DataTables, views and widgets. -->
