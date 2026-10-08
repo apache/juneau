@@ -14,7 +14,8 @@
     "navLayout": { "enum": ["horizontal", "vertical"], "default": "horizontal" },
     "nav":       { "type": "array", "items": { "$ref": "#/$defs/navNode" } },
     "activeNav": { "type": "array", "items": { "$ref": "#/$defs/id" } },
-    "cards":     { "type": "array", "items": { "$ref": "#/$defs/card" } }
+    "cards":     { "type": "array", "items": { "$ref": "#/$defs/card" } },
+    "facts":     { "type": "object", "description": "Page-level facts (for example the viewer's roles) that visibleWhen rules test; presentation only, never an authorization gate." }
   },
   "$defs": {
     "id":       { "type": "string", "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,63}$" },
@@ -76,7 +77,8 @@
         "slots": {
           "allOf": [ { "$ref": "#/$defs/slots" } ],
           "propertyNames": { "enum": ["brand", "actions", "replace", "banner"] }
-        }
+        },
+        "badges":   { "type": "array", "items": { "$ref": "#/$defs/badge" } }
       }
     },
     "footer": {
@@ -116,6 +118,7 @@
         "src":      { "$ref": "#/$defs/url" },
         "title":    { "type": "string" },
         "template": { "type": "string", "description": "id of a <template data-card> element" },
+        "class":    { "type": "string", "pattern": "^[A-Za-z_-][A-Za-z0-9_-]*( [A-Za-z_-][A-Za-z0-9_-]*)*$", "description": "space-separated CSS classes stamped on the card wrapper element" },
         "visibleWhen": { "$ref": "#/$defs/visibleWhen" }
       },
       "oneOf": [
@@ -129,7 +132,7 @@
     "htmlCard": {
       "properties": {
         "type": { "const": "html" },
-        "id": true, "src": true, "title": true, "template": true,
+        "id": true, "src": true, "title": true, "template": true, "class": true,
         "bare": { "type": "boolean", "default": false }
       },
       "additionalProperties": false,
@@ -138,13 +141,10 @@
     "datatablesCard": {
       "properties": {
         "type":  { "const": "datatables" },
-        "id": true, "title": true, "visibleWhen": true,
+        "id": true, "title": true, "visibleWhen": true, "class": true,
         "src":   { "$ref": "#/$defs/url" },
         "page":  { "type": "object" },
-        "table": { "anyOf": [
-          { "$ref": "#/$defs/tableCatalog" },
-          { "type": "object", "required": ["view"], "properties": { "view": { "type": "object" } } }
-        ] }
+        "table": { "$ref": "#/$defs/tableCatalog" }
       },
       "additionalProperties": false,
       "oneOf": [
@@ -226,13 +226,81 @@
     "rowAction":   { "type": "object", "required": ["id", "endpoint"], "description": "RowAction wire shape; later work adds tone/confirmLabel/confirmRenderer/visibleWhen." },
     "enabledRule": { "type": "object", "required": ["field", "op"], "properties": { "field": { "type": "string" }, "op": { "type": "string" }, "value": true, "reason": { "type": "string" } } },
     "rowDetail":   { "type": "object", "required": ["endpoint"], "properties": { "contractVersion": false } },
-    "visibleWhen": { "description": "Declarative per-card visibility rule; shape defined with the visibility work." },
-    "urlState":    { "description": "URL-state options; shape defined with the URL-state work." },
+    "visibleRule": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["field", "op"],
+      "properties": {
+        "field": { "type": "string", "minLength": 1, "description": "Dotted path into the page facts, e.g. viewer.roles." },
+        "op":    { "enum": ["eq", "ne", "present", "absent", "in", "contains"] },
+        "value": true
+      }
+    },
+    "badge": {
+      "description": "A count badge fed by a same-origin JSON endpoint returning {total, mine?, items?[]}. Presentation only; the endpoint must authorize the caller.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "src"],
+      "properties": {
+        "id":          { "$ref": "#/$defs/id" },
+        "src":         { "$ref": "#/$defs/url" },
+        "params":      { "type": "object", "additionalProperties": { "type": ["string", "number", "boolean"] } },
+        "refreshMs":   { "type": "integer", "default": 60000 },
+        "scope":       { "type": "object", "additionalProperties": false, "required": ["param"],
+                         "properties": { "param": { "type": "string" }, "by": { "enum": ["nav", "view"], "default": "nav" },
+                                         "values": { "type": "object", "additionalProperties": { "type": "array", "items": { "type": "string" } } } } },
+        "label":       { "type": "object", "additionalProperties": false,
+                         "properties": { "one": { "type": "string" }, "other": { "type": "string" }, "mine": { "type": "string" } } },
+        "tooltipMax":  { "type": "integer", "default": 10 },
+        "href":        { "$ref": "#/$defs/url" },
+        "stateFilter": { "type": "object", "additionalProperties": false, "required": ["column"], "properties": { "column": { "type": "string" } } },
+        "refreshes":   { "type": "array", "items": { "$ref": "#/$defs/id" } },
+        "placement":   { "enum": ["header", "toolbar"], "default": "header" },
+        "table":       { "$ref": "#/$defs/id" },
+        "tone":        { "enum": ["info", "warning", "danger"], "default": "warning" },
+        "visibleWhen": { "$ref": "#/$defs/visibleWhen" }
+      }
+    },
+    "visibleWhen": {
+      "description": "Declarative visibility rule, or a list of rules that must all match; tested against the page's top-level facts. Presentation only.",
+      "oneOf": [
+        { "$ref": "#/$defs/visibleRule" },
+        { "type": "array", "items": { "$ref": "#/$defs/visibleRule" } }
+      ]
+    },
+    "urlState": {
+      "description": "Registers the built-in ?state= directives for this table. Each key present enables that directive.",
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "window": {
+          "description": "window(start=<iso>;end=<iso>): a time window sent as two request params.",
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "params": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": { "start": { "type": "string", "minLength": 1 }, "end": { "type": "string", "minLength": 1 } }
+            }
+          }
+        },
+        "ids": {
+          "description": "ids(a,b,c): a de-duplicated id list sent as one comma-joined request param.",
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "param": { "type": "string", "minLength": 1 },
+            "max": { "type": "integer" }
+          }
+        }
+      }
+    },
     "consoleOutputCard": {
       "description": "Console-output bridge card; the shell calls JuneauViews.consoleOutput.mount(body, output). Ranges are checked by ConsoleOutputDef.",
       "properties": {
         "type":   { "const": "console-output" },
-        "id": true, "title": true,
+        "id": true, "title": true, "class": true,
         "output": {
           "type": "object",
           "properties": {
@@ -259,7 +327,7 @@
       "description": "Run-view bridge card; the shell calls JuneauViews.runView.mount(body, runView). Ranges are checked by RunViewDef. eventsUrl is required unless poll is false (anyOf, because the subset validator has no if/then).",
       "properties": {
         "type":   { "const": "run-view" },
-        "id": true, "title": true,
+        "id": true, "title": true, "class": true,
         "runView": {
           "type": "object",
           "properties": {

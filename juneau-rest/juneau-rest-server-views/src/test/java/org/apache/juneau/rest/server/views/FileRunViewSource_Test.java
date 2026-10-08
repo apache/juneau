@@ -24,6 +24,7 @@ import java.util.*;
 import java.util.concurrent.atomic.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.rest.server.runreport.*;
 import org.apache.juneau.rest.server.views.RunViewSource.*;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.io.*;

@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.rest.server.view.freemarker.console;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
+
 import java.io.*;
 import java.util.*;
 
@@ -78,7 +80,7 @@ public final class ConsoleDirectiveModel implements TemplateDirectiveModel {
 		FtlAttrLists.rejectUnknown(p, NAME, ATTRS);
 
 		var req = FreemarkerRenderScope.request();
-		if (req == null)
+		if (n(req))
 			throw FtlAttrLists.reject("<@console> needs FreemarkerRenderScope.request() (renderer wrap).");
 
 		var cap = PageCapture.of(env);
@@ -111,7 +113,7 @@ public final class ConsoleDirectiveModel implements TemplateDirectiveModel {
 
 		cap.consoleOpen = true;
 		try {
-			if (body != null)
+			if (nn(body))
 				body.render(cap.consoleBuffer());
 		} finally {
 			cap.consoleOpen = false;
@@ -119,14 +121,14 @@ public final class ConsoleDirectiveModel implements TemplateDirectiveModel {
 		cap.checkConsoleClose();
 		cap.resolveActiveNav();
 
-		if (cap.themeCssUrl == null) {
+		if (n(cap.themeCssUrl)) {
 			cap.themeCssUrl = ConsoleChromeMixin.themeAssetUrl(req, themeName);
 			cap.theme(themeName);
 		}
 
 		var token = req.getAttribute(LoopbackBoundaryFilter.TOKEN_ATTRIBUTE).asString().orElse(null);
 		var csrfHeader = req.getAttribute(LoopbackBoundaryFilter.HEADER_ATTRIBUTE).asString().orElse(null);
-		var hasCsrf = token != null && ! token.isBlank();
+		var hasCsrf = inb(token);
 
 		if (devMode) {
 			var findings = PageContractSchema.get().validate(cap.toContractJson(), cap.templates().keySet());
@@ -148,10 +150,10 @@ public final class ConsoleDirectiveModel implements TemplateDirectiveModel {
 			out.write("<link rel=\"icon\" href=\"" + attrEscape(favicon) + "\">\n");
 		out.write("<link rel=\"stylesheet\" href=\"" + attrEscape(ConsoleChromeMixin.chromeCssUrl(req)) + "\">\n");
 		out.write("<link rel=\"stylesheet\" href=\"" + attrEscape(cap.themeCssUrl) + "\">\n");
-		if (cap.themeOverrideBlock != null)
+		if (nn(cap.themeOverrideBlock))
 			out.write("<style>" + cap.themeOverrideBlock + "</style>\n");
 		// App CSS that must lose to page-local css=: emitted BEFORE the page css so a page rule still wins.
-		if (cap.headBeforePageCss != null)
+		if (nn(cap.headBeforePageCss))
 			out.write(cap.headBeforePageCss);
 		for (var href : cap.vendorCss())
 			out.write("<link rel=\"stylesheet\" href=\"" + attrEscape(href) + "\" data-toolkit-css>\n");
@@ -159,17 +161,17 @@ public final class ConsoleDirectiveModel implements TemplateDirectiveModel {
 			out.write("<link rel=\"stylesheet\" href=\"" + attrEscape(href) + "\">\n");
 		for (var href : cap.runtimeCss())
 			out.write("<link rel=\"stylesheet\" href=\"" + attrEscape(href) + "\" data-toolkit-css>\n");
-		if (cap.head != null)
+		if (nn(cap.head))
 			out.write(cap.head);
 		out.write("\n</head>\n");
 
 		out.write("<body");
 		if (hasCsrf) {
 			out.write(" data-juneau-csrf=\"" + attrEscape(token) + "\"");
-			if (csrfHeader != null && ! csrfHeader.isBlank())
+			if (inb(csrfHeader))
 				out.write(" data-juneau-csrf-header=\"" + attrEscape(csrfHeader) + "\"");
 		}
-		if (cap.bodyAttrs != null && ! cap.bodyAttrs.isBlank())
+		if (inb(cap.bodyAttrs))
 			out.write(" " + cap.bodyAttrs.trim());
 		out.write(">\n");
 
@@ -182,11 +184,11 @@ public final class ConsoleDirectiveModel implements TemplateDirectiveModel {
 		for (var src : cap.runtimeJs())
 			out.write("<script src=\"" + attrEscape(src) + "\" data-toolkit-js></script>\n");
 		// App scripts that must run after the toolkit pack but before the page-local init= scripts.
-		if (cap.scriptsAfterToolkit != null)
+		if (nn(cap.scriptsAfterToolkit))
 			out.write(cap.scriptsAfterToolkit);
 		for (var src : cap.initScripts())
 			out.write("<script src=\"" + attrEscape(src) + "\"></script>\n");
-		if (cap.scripts != null)
+		if (nn(cap.scripts))
 			out.write(cap.scripts);
 		out.write("\n</body>\n</html>\n");
 		cap.consoleDone = true;

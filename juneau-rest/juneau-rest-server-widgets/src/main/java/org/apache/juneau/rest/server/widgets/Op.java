@@ -20,10 +20,14 @@ package org.apache.juneau.rest.server.widgets;
  * The comparison operator of a declarative single-field rule.
  *
  * <p>
- * One vocabulary, one place.  Every rule in the toolkit that tests one row field against one value shares these four
+ * One vocabulary, one place.  Every rule in the toolkit that tests one row field against one value shares these
  * constants &mdash; {@link ActionRef#enabledWhen(String,Op,Object,String) the action-bar state rule} here, and the
- * {@code RowClassRule} row decorator in the views module.  It lives in this module because the widgets&rarr;views
+ * {@code RowClassRule} row decorator in the views module, and the views module's {@code VisibilityRule}.  It lives in this module because the widgets&rarr;views
  * dependency does not exist, so the shared type has to sit on the side both can see.
+ *
+ * <p>
+ * {@link #IN}/{@link #CONTAINS} are collection operators (the value is a list, or the tested field is) used by
+ * visibility rules only.
  *
  * <p>
  * {@link #EQ}/{@link #NE} <b>require</b> a comparison value; {@link #PRESENT}/{@link #ABSENT} test only whether the
@@ -47,7 +51,13 @@ public enum Op {
 	PRESENT("present"),
 
 	/** Matches when the tested field is missing/null (no value needed). */
-	ABSENT("absent");
+	ABSENT("absent"),
+
+	/** Matches when the tested field equals one of the values in the rule's value list (the value is a list). */
+	IN("in"),
+
+	/** Matches when the tested field (itself a list) contains the rule's value. */
+	CONTAINS("contains");
 
 	private final String wire;
 
@@ -71,6 +81,18 @@ public enum Op {
 	 * 	{@link #ABSENT}.
 	 */
 	public boolean requiresValue() {
-		return this == EQ || this == NE;
+		return this == EQ || this == NE || this == IN || this == CONTAINS;
+	}
+
+	/**
+	 * Whether this operator is a collection operator ({@link #IN}/{@link #CONTAINS}).
+	 *
+	 * <p>
+	 * Only the visibility rule evaluator understands these; the disable-with-reason rules accept the original four.
+	 *
+	 * @return <jk>true</jk> for {@link #IN} and {@link #CONTAINS}.
+	 */
+	public boolean isCollectionOp() {
+		return this == IN || this == CONTAINS;
 	}
 }

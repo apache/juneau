@@ -60,10 +60,15 @@ class DatatablesCardType_Test extends TestBase {
 		assertEquals("<@card id='t'> type='datatables' requires src= or a body with 'columns' and exactly one of 'dataUrl' or 'rows'.", ex.getMessage());
 	}
 
-	@Test void preBuiltSlotMetaEscapeHatch_passesThroughUnchanged() {
-		var card = h.toFragment(src("t", "{contractVersion:'1', view:{id:'t', dataUrl:'/x', columns:[]}}"));
-		var table = (JsonMap) card.get("table");
-		assertEquals("1", table.get("contractVersion"));
+	@Test void preBuiltSlotMeta_throwsE28() {
+		var expected = "<@card id='t'> type='datatables' body is a pre-built SLOT_META envelope; "
+			+ "remove 'contractVersion', 'layout' and 'view' and author the catalog form.";
+		var ex = assertThrows(IllegalArgumentException.class,
+			() -> h.toFragment(src("t", "{contractVersion:'1', view:{id:'t', dataUrl:'/x', columns:[]}}")));
+		assertEquals(expected, ex.getMessage());
+		ex = assertThrows(IllegalArgumentException.class,
+			() -> h.toFragment(src("t", "{view:{id:'t', dataUrl:'/x', columns:[]}}")));
+		assertEquals(expected, ex.getMessage());
 	}
 
 	@Test void columnMissingKeyAndData_throwsE29() {
@@ -131,12 +136,6 @@ class DatatablesCardType_Test extends TestBase {
 		assertEquals("a", table.getList("columns").getMap(0).get("key"));
 	}
 
-	@Test void preBuiltEnvelope_withoutSlotContractVersion_passesThrough() {
-		var card = h.toFragment(src("t", "{view:{id:'t', dataUrl:'/x', columns:[]}}"));
-		assertNull(((JsonMap) card.get("table")).get("contractVersion"));
-		assertNotNull(((JsonMap) card.get("table")).get("view"));
-	}
-
 	@Test void inlineRows_only_ok() {
 		var table = (JsonMap) h.toFragment(src("t", "{rows:[{a:1}], columns:[{key:'a'}]}")).get("table");
 		assertEquals(1, table.getList("rows").size());
@@ -172,12 +171,6 @@ class DatatablesCardType_Test extends TestBase {
 			() -> h.toFragment(src("t", "{rows:[], pollIntervalMs:5000, columns:[{key:'a'}]}")));
 		assertTrue(poll.getMessage().contains("pollIntervalMs"), poll.getMessage());
 		assertDoesNotThrow(() -> h.toFragment(src("t", "{rows:[], dataMode:'client', columns:[{key:'a'}]}")));
-	}
-
-	@Test void prebuiltEnvelope_withRowsAndDataUrl_passesThroughUntouched() {
-		var table = (JsonMap) h.toFragment(src("t", "{contractVersion:'1', view:{id:'t', dataUrl:'/d', columns:[]}, rows:[{a:1}]}")).get("table");
-		assertNotNull(table.get("view"));
-		assertEquals(1, table.getList("rows").size());
 	}
 
 	@Test void pageKey_isHoistedToFragment() {

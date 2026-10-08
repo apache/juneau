@@ -20,6 +20,7 @@ import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.rest.server.views.ConsoleOutputChecks.clip;
 
 import java.util.*;
+import org.apache.juneau.rest.server.runreport.*;
 
 /**
  * The author-facing declaration of a run-view region, compiled to a {@link RegionDef}.

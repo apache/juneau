@@ -35,7 +35,6 @@ import org.junit.jupiter.api.*;
  * <p>
  * Per the plan's Phase-6 test-fixture-discipline note (S4), this local {@link LocalFixtureRender} is deliberately
  * NOT {@code TagHtmlRender}/{@code console-ui} &mdash; this module gains no test-scope dependency on {@code console-ui}.
- * The real {@code .tag}-markup-in-a-real-datatable proof is Phase 7's job, via the actual {@code <@datatable>} macro.
  */
 class DataTablesTable_HtmlRenderHonoring_Test extends TestBase {
 

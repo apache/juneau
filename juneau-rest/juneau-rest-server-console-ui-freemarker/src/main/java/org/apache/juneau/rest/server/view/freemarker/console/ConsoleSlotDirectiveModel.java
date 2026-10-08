@@ -86,9 +86,9 @@ public final class ConsoleSlotDirectiveModel implements TemplateDirectiveModel {
 
 	/** @return The attributes this slot accepts (read by {@link ConsoleTemplateValidator}). */
 	Set<String> attrs() {
-		if (HEAD.equals(slot) || SCRIPTS.equals(slot))
+		if (eq(HEAD, slot) || eq(SCRIPTS, slot))
 			return Set.of(PHASE);
-		if (FOOTER.equals(slot))
+		if (eq(FOOTER, slot))
 			return Set.of(TEXT);
 		return Set.of();
 	}
@@ -107,14 +107,14 @@ public final class ConsoleSlotDirectiveModel implements TemplateDirectiveModel {
 
 		var phase = FtlAttrLists.scalar(p, PHASE);
 		if (! phase.isEmpty()) {
-			var ok = (HEAD.equals(slot) && eq(phase, PHASE_BEFORE_PAGE_CSS))
-				|| (SCRIPTS.equals(slot) && eq(phase, PHASE_AFTER_TOOLKIT));
+			var ok = (eq(HEAD, slot) && eq(phase, PHASE_BEFORE_PAGE_CSS))
+				|| (eq(SCRIPTS, slot) && eq(phase, PHASE_AFTER_TOOLKIT));
 			if (! ok)
 				throw FtlAttrLists.reject("<@" + slot + "> unknown phase '" + phase + "'.");
 		}
 
 		var cap = PageCapture.get(env);
-		if (cap == null || ! cap.consoleOpen)
+		if (n(cap) || ! cap.consoleOpen)
 			throw FtlAttrLists.reject(String.format("<@%s> must be nested inside <@console>.", slot));
 
 		var markup = PageCapture.render(body);

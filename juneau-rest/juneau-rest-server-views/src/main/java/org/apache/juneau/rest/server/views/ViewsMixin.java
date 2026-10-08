@@ -350,26 +350,9 @@ public class ViewsMixin {
 	 * catalogs emit this on the lifted {@code view} object.
 	 *
 	 * <p>
-	 * Templates should normally <b>omit</b> {@code view.contractVersion}: when a pre-built envelope leaves it out, the
-	 * framework injects this value, so a contract bump never touches adopter templates. A template that pins a
-	 * different value logs a {@code WARNING} naming the template, card and both versions, and fails the render in dev
-	 * mode and tests (and is flagged statically by {@code ConsoleTemplateValidator}'s {@code view-contract-version}
-	 * rule). Pin a version only to deliberately test the mismatch path.
-	 *
-	 * <h5 class='section'>Example:</h5>
-	 * <p class='bcode'>
-	 * 	&lt;@card type="datatables" id="orders"&gt;
-	 * 	{
-	 * 	    layout: 'wide',
-	 * 	    view: {
-	 * 	        <jc>// No contractVersion here: the runtime's "{@value #CONTRACT_VERSION}" is injected.</jc>
-	 * 	        id: 'orders',
-	 * 	        dataUrl: '/orders/data',
-	 * 	        columns: [ { data: 'name', title: 'Name' } ]
-	 * 	    }
-	 * 	}
-	 * 	&lt;/@card&gt;
-	 * </p>
+	 * Templates never author {@code view.contractVersion}: the framework stamps this value when it lifts the catalog,
+	 * so a contract bump never touches adopter templates. A pre-built envelope body is rejected at render time, and
+	 * {@code ConsoleTemplateValidator}'s {@code view-contract-version} rule flags a literal pin statically.
 	 */
 	public static final String CONTRACT_VERSION = "5";
 

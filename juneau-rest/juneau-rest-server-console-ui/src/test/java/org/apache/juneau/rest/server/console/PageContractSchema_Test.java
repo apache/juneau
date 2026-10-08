@@ -43,7 +43,7 @@ class PageContractSchema_Test extends TestBase {
 	@ValueSource(strings = {"valid-example.json", "valid-minimal.json", "valid-deep.json", "valid-console-output.json",
 		"valid-run-view.json", "valid-run-view-nopoll.json",
 		"valid-datatables-table.json", "valid-datatables-table-full.json", "valid-datatables-rows.json",
-		"valid-datatables-src.json", "valid-datatables-slotmeta.json"})
+		"valid-datatables-src.json", "valid-badge.json"})
 	void a01_validCorpusPasses(String name) throws Exception {
 		var errors = PageContractSchema.get().validate(fixture(name));
 		assertTrue(errors.isEmpty(), () -> name + ": " + errors);
@@ -52,6 +52,8 @@ class PageContractSchema_Test extends TestBase {
 	@ParameterizedTest
 	@CsvSource(delimiter = '|', value = {
 		"invalid-version.json|$.contractVersion: must equal 1",
+		"invalid-badge-unknown-key.json|bogus: not allowed",
+		"invalid-badge-refreshms.json|refreshMs",
 		"invalid-legacy-version.json|missing required 'contractVersion'",
 		"invalid-legacy-version.json|$.version: not allowed",
 		"invalid-both-versions.json|$.version: not allowed",
@@ -80,6 +82,7 @@ class PageContractSchema_Test extends TestBase {
 		"invalid-r3.json|failed at 'b'",
 		"invalid-datatables-both.json|oneOf",
 		"invalid-datatables-rows-and-dataurl.json|oneOf",
+		"invalid-datatables-slotmeta.json|oneOf",
 		"invalid-tablecolumn-no-key.json|oneOf",
 		"invalid-tablecolumn-extra.json|oneOf",
 		"invalid-selection-norowid.json|oneOf",

@@ -19,13 +19,16 @@ package org.apache.juneau.rest.server.views;
 import static org.apache.juneau.BasicTestUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.nio.file.*;
 import java.util.*;
 import java.util.concurrent.*;
 import java.util.stream.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.rest.server.views.RunEvent.*;
+import org.apache.juneau.rest.server.runreport.*;
+import org.apache.juneau.rest.server.runreport.RunEvent.*;
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.io.*;
 
 class RunViewLog_Test extends TestBase {
 
@@ -152,5 +155,16 @@ class RunViewLog_Test extends TestBase {
 		assertTrue(latch.await(20, TimeUnit.SECONDS));
 		pool.shutdown();
 		assertEquals(LongStream.rangeClosed(1, 4000).boxed().toList(), seqs(log.page(null, 10_000)));
+	}
+
+	@Test void z01_reportResultFeedsTheLog(@TempDir Path d) throws Exception {
+		Files.writeString(d.resolve("TEST-x.xml"), "<testsuite name=\"com.example.X\"><testcase name=\"ok\" classname=\"com.example.X\"/>"
+			+ "<testcase name=\"bad\" classname=\"com.example.X\"><failure message=\"no\">trace</failure></testcase></testsuite>");
+		var log = RunViewLog.create();
+		ReportReaders.forKind("surefire").read(d).toEvents("tests").forEach(log::append);
+		var page = log.page(null, 100);
+		assertEquals("replace", page.events().get(0).toContractMap().get("ev"));
+		assertEquals(3, page.events().size());
+		assertDoesNotThrow(() -> page.validate());
 	}
 }

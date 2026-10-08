@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.server.view.freemarker.console;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.rest.server.view.freemarker.console.ToolkitPack.Kind.*;
 
 import java.util.*;
@@ -227,7 +228,7 @@ public final class ToolkitPackRegistry {
 		for (var pack : packs.values()) {
 			for (var dep : pack.dependsOn()) {
 				var target = packs.get(dep);
-				if (target == null)
+				if (n(target))
 					throw new IllegalArgumentException(String.format("Unknown toolkit pack '%s' (dependsOn of pack '%s').", dep, pack.name()));
 				if (pack.kind() == VENDOR && target.kind() == RUNTIME)
 					throw new IllegalArgumentException(String.format("VENDOR toolkit pack '%s' cannot depend on RUNTIME pack '%s'.", pack.name(), dep));
@@ -278,9 +279,9 @@ public final class ToolkitPackRegistry {
 	 * @throws IllegalStateException If the request is missing or a resolver fails (e.g. a WebJar isn't on the classpath).
 	 */
 	public Resolved resolve(List<String> names, RestRequest req, List<String> pageUrls, String template) {
-		if (names == null || names.isEmpty())
+		if (n(names) || names.isEmpty())
 			return Resolved.EMPTY;
-		if (req == null)
+		if (n(req))
 			throw new IllegalStateException("<@page toolkit> needs FreemarkerRenderScope.request() (renderer wrap).");
 		List<ToolkitPack> order;
 		Set<String> skip;
@@ -331,7 +332,7 @@ public final class ToolkitPackRegistry {
 				throw new IllegalStateException("Pack '" + pack.name() + "' " + e.getMessage(), e);
 			}
 			var dup = pageFiles.get(fileName(url));
-			if (dup != null) {
+			if (nn(dup)) {
 				LOG.warning(String.format("Template '%s': skipped pack '%s' asset %s; the page already loads %s.", template, pack.name(), url, dup));
 				continue;
 			}
@@ -357,7 +358,7 @@ public final class ToolkitPackRegistry {
 			throw new IllegalArgumentException("Toolkit pack cycle: " + String.join(" → ", cycle) + ".");
 		}
 		var pack = packs.get(name);
-		if (pack == null)
+		if (n(pack))
 			throw new IllegalArgumentException(String.format("Unknown toolkit pack '%s' (%s).", name, source));
 		path.add(name);
 		for (var dep : pack.dependsOn())

@@ -176,7 +176,7 @@ public final class ConsoleTemplateValidator {
 	 */
 	public List<Finding> validate(String templateName) {
 		var src = load(templateName);
-		if (src == null)
+		if (n(src))
 			throw new IllegalArgumentException(String.format("Template '%s' not found under templateRoot or classpathRoot.", templateName));
 		return validateSource(templateName, src);
 	}
@@ -188,7 +188,7 @@ public final class ConsoleTemplateValidator {
 	 * @throws IllegalStateException If no template root is set.
 	 */
 	public List<Finding> validateAll() {
-		if (templateRoot == null)
+		if (n(templateRoot))
 			throw new IllegalStateException("validateAll() requires templateRoot(Path); a classpath root cannot be listed.");
 		try (Stream<Path> s = Files.walk(templateRoot)) {
 			var names = s.filter(Files::isRegularFile)
@@ -218,9 +218,9 @@ public final class ConsoleTemplateValidator {
 		var macros = new HashSet<String>(allowed);
 		var namespaces = new HashSet<String>();
 		collectScope(name, text, macros, namespaces, new HashSet<>());
-		if (chromeTemplate != null && neq(chromeTemplate, name)) {
+		if (nn(chromeTemplate) && neq(chromeTemplate, name)) {
 			var chrome = load(chromeTemplate);
-			if (chrome == null)
+			if (n(chrome))
 				throw new IllegalArgumentException(String.format("Chrome template '%s' not found under templateRoot or classpathRoot.", chromeTemplate));
 			collectScope(chromeTemplate, blankComments(chrome), macros, namespaces, new HashSet<>());
 		}
@@ -242,7 +242,7 @@ public final class ConsoleTemplateValidator {
 			if (closing) {
 				if ((dname.equals(NodeDirectiveModel.NAME) || dname.equals(NavigationDirectiveModel.NAME)) && siblings.size() > 1)
 					siblings.pop();
-			} else if (known == null) {
+			} else if (n(known)) {
 				var dot = dname.indexOf('.');
 				var ok = dot > 0 ? namespaces.contains(dname.substring(0, dot)) : macros.contains(dname);
 				if (! ok)
@@ -254,7 +254,7 @@ public final class ConsoleTemplateValidator {
 						add(out, name, lines, at, "unknown-attribute", String.format("<@%s> unknown attribute '%s'.", dname, a));
 				for (var a : STRICT.getOrDefault(dname, Set.of())) {
 					var v = attrs.get(a);
-					if (v != null && v.literal && !eqa(v.value, "true", "false"))
+					if (nn(v) && v.literal && !eqa(v.value, "true", "false"))
 						add(out, name, lines, at, "strict-boolean", String.format("<@%s> %s= must be true or false; got '%s'.", dname, a, v.value));
 				}
 				var id = attrs.get("id");
@@ -264,26 +264,26 @@ public final class ConsoleTemplateValidator {
 							siblings.push(new HashSet<>());
 					}
 					case NodeDirectiveModel.NAME -> {
-						if (id != null && id.literal && ! siblings.peek().add(id.value))
+						if (nn(id) && id.literal && ! siblings.peek().add(id.value))
 							add(out, name, lines, at, "duplicate-id", String.format("<@node id='%s'> duplicates a sibling id.", id.value));
 						if (! selfClosing)
 							siblings.push(new HashSet<>());
 					}
 					case CardDirectiveModel.NAME -> {
-						if (id != null && id.literal && ! cardIds.add(id.value))
+						if (nn(id) && id.literal && ! cardIds.add(id.value))
 							add(out, name, lines, at, "duplicate-id", String.format("<@card id='%s'> duplicates an existing card id.", id.value));
 						var type = attrs.get("type");
-						if (type != null && type.literal && REMOVED_TYPES.contains(type.value))
+						if (nn(type) && type.literal && REMOVED_TYPES.contains(type.value))
 							add(out, name, lines, at, "removed-card-type", String.format(
 								"<@card id='%s'> type='%s' was removed in 10.0.0; use type='html' with a <template>, or a registered card type.",
-								id == null ? "" : id.value, type.value));
+								n(id) ? "" : id.value, type.value));
 						var tpl = attrs.get("template");
-						if (tpl != null && tpl.literal)
+						if (nn(tpl) && tpl.literal)
 							templateRefs.add(new Object[]{tpl.value, at});
-						if (type != null && type.literal && eq(type.value, "datatables") && ! selfClosing)
-							checkViewVersion(out, name, lines, text, m.end(), id == null ? "" : id.value);
+						if (nn(type) && type.literal && eq(type.value, "datatables") && ! selfClosing)
+							checkViewVersion(out, name, lines, text, m.end(), n(id) ? "" : id.value);
 						if (! selfClosing)
-							checkCardBody(out, name, lines, at, text, m.end(), id, type, attrs.get("src"));
+							checkCardBody(out, name, lines, at, text, m.end(), id, attrs.get("src"));
 					}
 					case ConsoleDirectiveModel.NAME -> {
 						if (consoleAt < 0)
@@ -311,7 +311,7 @@ public final class ConsoleTemplateValidator {
 
 		var a = ASSET_REF.matcher(text);
 		while (a.find()) {
-			var url = a.group(1) != null ? a.group(1) : a.group(2);
+			var url = nn(a.group(1)) ? a.group(1) : a.group(2);
 			if (! url.contains("${") && ! url.contains("<#") && JUNEAU_ASSET.matcher(url).find())
 				add(out, name, lines, a.start(), "hardcoded-asset-url", String.format(
 					"Hard-coded Juneau asset URL '%s' is unversioned and goes stale in browser caches; use viewAssetUrl(...), consoleJsUrl(...), chromeCssUrl(...) or themeAssetUrl(...) so it carries ?v= (an adopter's own assets can use assetUrl(...)).", url));
@@ -358,33 +358,28 @@ public final class ConsoleTemplateValidator {
 	private static final Set<String> RESERVED_BODY_KEYS = Set.of("id", "type", "title", "src", "template", "ref");
 
 	/**
-	 * The C2 card-body rules: {@code card-src-and-body}, {@code inline-slot-meta} and {@code card-reserved-key}.
+	 * The C2 card-body rules: {@code card-src-and-body} and {@code card-reserved-key}.
 	 * Reads the body the same way {@link #checkViewVersion} does, up to the next {@code </@card}.
 	 */
-	private static void checkCardBody(List<Finding> out, String name, int[] lines, int at, String text, int bodyStart, Value id, Value type, Value src) {
+	private static void checkCardBody(List<Finding> out, String name, int[] lines, int at, String text, int bodyStart, Value id, Value src) {
 		var end = text.indexOf("</@card", bodyStart);
 		var body = text.substring(bodyStart, end < 0 ? text.length() : end);
-		var cardId = id == null ? "" : id.value;
+		var cardId = n(id) ? "" : id.value;
 		var trimmed = body.trim();
-		if (! trimmed.isEmpty() && src != null && src.literal)
+		if (! trimmed.isEmpty() && nn(src) && src.literal)
 			add(out, name, lines, at, "card-src-and-body", String.format(
 				"<@card id='%s'> has both src='%s' and a body; use exactly one.", cardId, src.value));
 		if (trimmed.isEmpty() || body.contains("${"))
 			return;
 		var keys = topLevelJson5Keys(trimmed);
-		// Same detection as DatatablesCardType's escape hatch (a top-level 'view' object).
-		if (type != null && type.literal && eq(type.value, "datatables") && keys.contains("view"))
-			add(out, name, lines, at, "inline-slot-meta", String.format(
-				"<@card id='%s'> body is a pre-built SLOT_META (has a 'view' object); author the table catalog "
-					+ "in author shape instead. This becomes an error at GC-1.", cardId));
 		for (var k : keys)
 			if (RESERVED_BODY_KEYS.contains(k))
 				add(out, name, lines, at, "card-reserved-key", String.format(
 					"<@card id='%s'> body key '%s' is reserved; set it as an attribute.", cardId, k));
 	}
 
-	// Hand-rolled, like attrs() below: finds JSON5 object keys at brace-depth 0, skipping quoted strings. Not a
-	// general parser — enough to catch literal top-level keys for the three card-body lint rules above.
+	// Hand-rolled, like attrs() below: finds JSON5 object keys at brace-depth 0, skipping quoted strings (backslash escapes honored). Not a
+	// general parser — enough to catch literal top-level keys for the two card-body lint rules above.
 	private static Set<String> topLevelJson5Keys(String body) {
 		var s = body.trim();
 		if (s.startsWith("{") && s.endsWith("}"))
@@ -395,8 +390,11 @@ public final class ConsoleTemplateValidator {
 		while (i < s.length()) {
 			var c = s.charAt(i);
 			if (c == '"' || c == '\'') {
-				var close = s.indexOf(c, i + 1);
-				i = close < 0 ? s.length() : close + 1;
+				// Honor backslash escapes in both quote styles: skip the escaped character wholesale.
+				var j = i + 1;
+				while (j < s.length() && s.charAt(j) != c)
+					j += s.charAt(j) == '\\' ? 2 : 1;
+				i = j >= s.length() ? s.length() : j + 1;
 			} else if (c == '{' || c == '[') {
 				depth++;
 				i++;
@@ -426,8 +424,8 @@ public final class ConsoleTemplateValidator {
 		while (m.find()) {
 			String v;
 			boolean literal;
-			if (m.group(2) != null || m.group(3) != null) {
-				v = m.group(2) != null ? m.group(2) : m.group(3);
+			if (nn(m.group(2)) || nn(m.group(3))) {
+				v = nn(m.group(2)) ? m.group(2) : m.group(3);
 				literal = ! v.contains("${");
 			} else {
 				v = m.group(4);
@@ -451,7 +449,7 @@ public final class ConsoleTemplateValidator {
 		while (inc.find()) {
 			var target = resolve(name, inc.group(1));
 			var src = load(target);
-			if (src != null)
+			if (nn(src))
 				collectScope(target, blankComments(src), macros, namespaces, seen);
 		}
 	}
@@ -467,14 +465,14 @@ public final class ConsoleTemplateValidator {
 	private String load(String name) {
 		var rel = name.startsWith("/") ? name.substring(1) : name;
 		try {
-			if (templateRoot != null) {
+			if (nn(templateRoot)) {
 				var p = templateRoot.resolve(rel);
 				if (Files.isRegularFile(p))
 					return Files.readString(p, UTF_8);
 			}
-			if (classpathRoot != null) {
+			if (nn(classpathRoot)) {
 				var s = resource(classpathRoot + rel);
-				if (s != null)
+				if (nn(s))
 					return s;
 			}
 			return name.startsWith("/") ? resource(name) : null;
@@ -485,10 +483,10 @@ public final class ConsoleTemplateValidator {
 
 	private static String resource(String absPath) throws IOException {
 		var cl = Thread.currentThread().getContextClassLoader();
-		if (cl == null)
+		if (n(cl))
 			cl = ConsoleTemplateValidator.class.getClassLoader();
 		try (var in = cl.getResourceAsStream(absPath.substring(1))) {
-			return in == null ? null : new String(in.readAllBytes(), UTF_8);
+			return n(in) ? null : new String(in.readAllBytes(), UTF_8);
 		}
 	}
 

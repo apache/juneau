@@ -79,6 +79,42 @@
 		return msg.replace(/%s/g, () => String(args[i++]));
 	}
 
+	// Card visibility: the page's top-level `facts` tested by the card's `visibleWhen` rule (one rule object, or a
+	// list that must all match).  Presentation only.  This is a deliberate small twin of JuneauViews.rules.test,
+	// because the shell must decide before any card handler (and possibly before the views toolkit) has loaded;
+	// both are held to one shared corpus.  A field absent from the facts fails closed, except for `absent`.
+	const FACT_MISSING = {};
+	function factAt(facts, path) {
+		let cur = facts;
+		for (const part of String(path).split(".")) {
+			if (cur === null || typeof cur !== "object" || !(part in cur)) return FACT_MISSING;
+			cur = cur[part];
+		}
+		return cur;
+	}
+	function blankFact(v) { return v === null || v === undefined || String(v).trim() === ""; }
+	function factRuleMatches(rule, facts) {
+		const actual = factAt(facts, rule && rule.field);
+		const missing = actual === FACT_MISSING;
+		switch (rule && rule.op) {
+			case "eq": return !missing && actual === rule.value;
+			case "ne": return !missing && actual !== rule.value;
+			case "present": return !missing && !blankFact(actual);
+			case "absent": return missing || blankFact(actual);
+			case "in": return !missing && Array.isArray(rule.value) && rule.value.includes(actual);
+			case "contains": return !missing && Array.isArray(actual) && actual.includes(rule.value);
+			default:
+				console.error("[juneau-console] " + fmt("visibleWhen rule on field '%s' has unknown op '%s'", rule && rule.field, rule && rule.op));
+				return false;
+		}
+	}
+	function cardVisible(card, facts) {
+		const w = card.visibleWhen;
+		if (w === undefined || w === null) return true;
+		const rules = Array.isArray(w) ? w : [w];
+		return rules.every(r => factRuleMatches(r, facts));
+	}
+
 	// Every loud failure: one banner listing all failures, console.error, and a throw for fatal codes.
 	function fail(doc, msgKey, ...args) {
 		const msg = fmt(MSG[msgKey], ...args);
@@ -582,7 +618,8 @@
 			const opts = Object.assign({ credentials: "same-origin" }, init);
 			const method = (opts.method || "GET").toUpperCase();
 			opts.method = method;
-			opts.headers = Object.assign({}, init && init.headers, csrfHeaders(doc, method));
+			// Ask for JSON explicitly: a content-negotiating endpoint answers the browser's default */* with HTML.
+			opts.headers = Object.assign({ Accept: "application/json" }, init && init.headers, csrfHeaders(doc, method));
 			opts.signal = controller.signal;
 			return fetch(url, opts).then(function (r) {
 				if (state.inflight === controller) state.inflight = null;
@@ -737,7 +774,9 @@
 			if (!t) throw new Error("no <template data-card=\"" + id + "\">");
 			return clone(doc, t);
 		};
+		const facts = contract.facts && typeof contract.facts === "object" ? contract.facts : {};
 		for (const card of contract.cards || []) {
+			if (!cardVisible(card, facts)) continue;   // hidden by its visibleWhen rule: never mounted, never fetched
 			frozenCards.set(card.id, Object.freeze(Object.assign({}, card)));
 			const bare = card.type === "html" && card.bare === true;
 			let host;
@@ -746,6 +785,10 @@
 			} else {
 				host = el(doc, "div", "jc-card");
 				host.id = card.id;
+				// Adopter classes follow the built-in one; only well-formed tokens are applied.
+				if (typeof card.class === "string")
+					for (const t of card.class.split(/\s+/))
+						if (/^[A-Za-z_-][A-Za-z0-9_-]*$/.test(t)) host.classList.add(t);
 				if (card.title) {
 					const t = el(doc, "h2", "jc-card-title");
 					t.textContent = card.title;

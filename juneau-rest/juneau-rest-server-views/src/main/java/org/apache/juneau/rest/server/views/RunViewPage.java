@@ -21,6 +21,7 @@ import static org.apache.juneau.commons.utils.Shorts.*;
 import java.util.*;
 
 import org.apache.juneau.marshall.json.*;
+import org.apache.juneau.rest.server.runreport.*;
 
 /**
  * One page of a run-view event stream: the envelope the events endpoint returns and the client polls.

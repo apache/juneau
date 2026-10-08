@@ -24,6 +24,7 @@ import org.apache.juneau.http.response.Gone;
 import org.apache.juneau.http.response.NotFound;
 import org.apache.juneau.marshall.json.*;
 import org.apache.juneau.rest.server.*;
+import org.apache.juneau.rest.server.runreport.*;
 
 /**
  * Static helpers that implement the run-view events endpoint.

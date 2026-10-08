@@ -22,7 +22,8 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.util.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.rest.server.views.RunEvent.*;
+import org.apache.juneau.rest.server.runreport.*;
+import org.apache.juneau.rest.server.runreport.RunEvent.*;
 import org.junit.jupiter.api.*;
 
 class RunViewPage_Test extends TestBase {

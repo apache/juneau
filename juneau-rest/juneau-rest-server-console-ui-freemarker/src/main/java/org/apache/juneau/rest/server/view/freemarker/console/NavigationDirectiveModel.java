@@ -56,7 +56,7 @@ public final class NavigationDirectiveModel implements TemplateDirectiveModel {
 		FtlAttrLists.rejectUnknown(p, NAME, ATTRS);
 
 		var cap = PageCapture.get(env);
-		if (cap == null || ! cap.consoleOpen)
+		if (n(cap) || ! cap.consoleOpen)
 			throw FtlAttrLists.reject(String.format("<@%s> must be nested inside <@console>.", NAME));
 		if (cap.navOpen)
 			throw FtlAttrLists.reject("<@navigation> cannot be nested inside another <@navigation>.");
@@ -72,7 +72,7 @@ public final class NavigationDirectiveModel implements TemplateDirectiveModel {
 		cap.navOpen = true;
 		cap.navCursor.push(cap.navRoot());
 		try (var sink = new StringWriter()) {
-			if (body != null)
+			if (nn(body))
 				body.render(sink);
 		} finally {
 			cap.navCursor.pop();

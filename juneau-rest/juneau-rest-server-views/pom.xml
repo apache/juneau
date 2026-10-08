@@ -37,6 +37,11 @@
 	<dependencies>
 		<dependency>
 			<groupId>org.apache.juneau</groupId>
+			<artifactId>juneau-run-report</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.juneau</groupId>
 			<artifactId>juneau-rest-server-widgets</artifactId>
 			<version>${project.version}</version>
 		</dependency>
@@ -185,6 +190,9 @@
 								<juneau.jsTests>true</juneau.jsTests>
 								<juneau.jsTests.dir>${js.tests.dir}</juneau.jsTests.dir>
 								<juneau.jsTests.harness>${project.basedir}/src/test/js/row-actions.cjs</juneau.jsTests.harness>
+								<!-- Later *_BrowserTest classes resolve their own prober from this directory by name, so each
+								     needs neither its own system property nor its own pom edit. -->
+								<juneau.jsTests.harnessDir>${project.basedir}/src/test/js</juneau.jsTests.harnessDir>
 								<juneau.jsTests.node>${juneau.jsTests.node}</juneau.jsTests.node>
 								<juneau.jsTests.browsers>${juneau.jsTests.browsers}</juneau.jsTests.browsers>
 							</systemPropertyVariables>

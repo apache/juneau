@@ -24,6 +24,7 @@ import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.marshall.marshaller.*;
+import org.apache.juneau.rest.server.runreport.*;
 import org.junit.jupiter.api.*;
 
 class RunViewChecks_Test extends TestBase {

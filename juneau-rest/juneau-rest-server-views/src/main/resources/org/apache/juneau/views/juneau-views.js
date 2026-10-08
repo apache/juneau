@@ -209,8 +209,6 @@
 	 * Lift a datatables card's author catalog (`card.table`) into the SLOT_META envelope `paintSlotTable` consumes,
 	 * stamping every contract version (slot, view, bulk, detail, quickStats).
 	 *
-	 * A catalog whose `view` is an object is a pre-built SLOT_META envelope (escape hatch) and passes through unchanged.
-	 *
 	 * @example
 	 * NS.card.liftCatalog('releases', {dataUrl: '/rest/releases/data',
 	 *   columns: [{key: 'version', label: 'Version'}], selection: {rowIdField: 'version'}});
@@ -226,7 +224,6 @@
 	NS.card.liftCatalog = function liftCatalog(cardId, catalog) {
 		if (!catalog || typeof catalog !== "object" || Array.isArray(catalog))
 			throw new Error("datatables card '" + cardId + "': 'table' must be an object");
-		if (catalog.view && typeof catalog.view === "object") return catalog;
 		if (!Array.isArray(catalog.columns) || catalog.columns.length === 0)
 			throw new Error("datatables card '" + cardId + "': 'columns' must be a non-empty array");
 		const hasUrl = typeof catalog.dataUrl === "string" && catalog.dataUrl.trim() !== "";
@@ -1100,6 +1097,7 @@
 		} else {
 			opts.serverSide = false;
 			opts.ajax = { url: viewDef.dataUrl, dataSrc: "" };
+			if (deps?.urlStateParams) opts.ajax.data = function () { return deps.urlStateParams(); };
 		}
 
 		// Nested-table parent scoping.  `deps.nestedScope`, present ONLY for a nested table, merges exactly ONE extra
@@ -1187,7 +1185,7 @@
 			// URL-only params (any `param:`-scoped ribbon option; applyNestedScope wraps this to add the
 			// nested-table parent-scope param) - never a column-scoped one; those go through `data` above.
 			beforeSend: function (jqXHR, settings) {
-				const extra = ribbon ? ribbon.ribbonQueryParams(viewDef, activeState()) : {};
+				const extra = Object.assign({}, ribbon ? ribbon.ribbonQueryParams(viewDef, activeState()) : {}, deps?.urlStateParams ? deps.urlStateParams() : {});
 				settings.url = appendQueryParams(viewDef.dataUrl, extra);
 				// Send the CSRF token with the server-mode data request, resolved per request exactly as the
 				// row-action path does (table attribute first, then the page meta tag); no token, no header.
@@ -3576,6 +3574,77 @@
 	}
 
 	// ==================================================================================================================
+	// VISIBILITY RULES - declarative hide-when-irrelevant, shared by row actions, detail fields, regions, ribbon items
+	// ==================================================================================================================
+	//
+	// A rule is {field, op, value?} with op one of eq/ne/present/absent/in/contains; a list of rules is an AND.  This
+	// is deliberately NOT actionRuleMatches: that evaluator keeps its string-coerced eq and its own fail-closed
+	// `absent` for enabledWhen, and changing it would change every existing disabled-with-reason gate.  Here `field`
+	// is a dotted path, comparison is strict, and a field absent from the evaluation map fails closed for every op
+	// except `absent`.  JuneauViews.rules.test is held to the same corpus as the Java VisibilityRule.test.
+	//
+	// The evaluation map is the row plus the page's facts under `facts` (row actions, detail fields, regions), or the
+	// facts alone (ribbon items).  Hiding is presentation only - the endpoint must still authorize.
+
+	const RULE_FIELD_MISSING = {};
+
+	function ruleValueAt(map, dottedPath) {
+		let cur = map;
+		for (const part of String(dottedPath).split(".")) {
+			if (cur === null || typeof cur !== "object" || !(part in cur)) return RULE_FIELD_MISSING;
+			cur = cur[part];
+		}
+		return cur;
+	}
+
+	function isBlankRuleValue(v) {
+		return v === null || v === undefined || String(v).trim() === "";
+	}
+
+	function visibilityRuleMatches(rule, map) {
+		const actual = ruleValueAt(map, rule?.field);
+		const missing = actual === RULE_FIELD_MISSING;
+		switch (rule?.op) {
+			case "eq": return !missing && actual === rule.value;
+			case "ne": return !missing && actual !== rule.value;
+			case "present": return !missing && !isBlankRuleValue(actual);
+			case "absent": return missing || isBlankRuleValue(actual);
+			case "in": return !missing && Array.isArray(rule.value) && rule.value.includes(actual);
+			case "contains": return !missing && Array.isArray(actual) && actual.includes(rule.value);
+			default:
+				// E-JS-73: an unknown op hides the element (fail closed) but never throws, so the rest of the table still renders.
+				console.error("[juneau-views] E-JS-73: visibleWhen rule on field '" + rule?.field + "' has unknown op '" + rule?.op + "'");
+				return false;
+		}
+	}
+
+	/** True when every rule matches `map`; null/empty matches; a single rule object is a list of one. */
+	function evaluateRules(rules, map) {
+		if (rules === null || rules === undefined) return true;
+		const list = Array.isArray(rules) ? rules : [rules];
+		const scope = map && typeof map === "object" ? map : {};
+		return list.every(function (r) { return visibilityRuleMatches(r, scope); });
+	}
+
+	/** The mounted console page's top-level `facts`, or `{}` when there is no console page or it declares none. */
+	function pageFacts() {
+		let contract = null;
+		try { contract = window.JuneauConsole?.contract?.(); } catch (e) { contract = null; }
+		const facts = contract?.facts;
+		return facts && typeof facts === "object" ? facts : {};
+	}
+
+	/** The evaluation map for a row-level element: the row's own fields plus the page facts under `facts`. */
+	function rowRuleScope(rowData) {
+		return Object.assign({}, rowData && typeof rowData === "object" ? rowData : {}, { facts: pageFacts() });
+	}
+
+	/** Whether `action` is shown for the row; an action with no `visibleWhen` always is. */
+	function isRowActionVisible(action, rowData) {
+		return !action?.visibleWhen?.length || evaluateRules(action.visibleWhen, rowRuleScope(rowData));
+	}
+
+	// ==================================================================================================================
 	// ROWACTION.ENABLEDWHEN - row-state disable-with-reason gate
 	// ==================================================================================================================
 	//
@@ -3652,8 +3721,35 @@
 		if (!rowEl || typeof rowEl.querySelectorAll !== "function" || !viewDef?.rowActions?.length) return;
 		for (const pill of rowEl.querySelectorAll("[data-juneau-pill][data-juneau-action]")) {
 			const action = findRowActionById(viewDef, pill.dataset.juneauAction);
+			if (action && !isRowActionVisible(action, rowData)) {
+				pill.hidden = true;
+				pill.setAttribute("aria-hidden", "true");
+				continue;
+			}
 			const failing = firstFailingRowActionRule(action, rowData);
 			if (failing) disableRowActionPill(pill, failing.reason);
+		}
+		// The menu trigger has nothing to open when every action is hidden for this row.
+		const anyVisible = viewDef.rowActions.some(function (a) { return isRowActionVisible(a, rowData); });
+		const trigger = rowEl.querySelector(".juneau-view-action-trigger");
+		if (trigger && !anyVisible) trigger.hidden = true;
+	}
+
+	/**
+	 * Gates the pencil of every `edit` renderer cell on the row: hidden when the action it commits through is not
+	 * visible for this row (`visibleWhen`), disabled with the failing rule's reason when `enabledWhen` fails.  An
+	 * action the view does not declare hides the pencil and is reported once per table draw.
+	 */
+	function applyInlineEditGates(rowEl, rowData, viewDef) {
+		if (!rowEl || typeof rowEl.querySelectorAll !== "function") return;
+		for (const pencil of rowEl.querySelectorAll("[data-juneau-edit]")) {
+			const action = findRowActionById(viewDef, pencil.getAttribute("data-juneau-edit"));
+			if (!action || !isRowActionVisible(action, rowData)) {
+				pencil.hidden = true;
+				continue;
+			}
+			const failing = firstFailingRowActionRule(action, rowData);
+			if (failing) disableRowActionControl(pencil, failing.reason);
 		}
 	}
 
@@ -4233,6 +4329,129 @@
 			kind: "popover", portal: false, detachOnPop: false, lightDismiss: true, trapFocus: false,
 			returnFocusTo: btn,
 			onDismiss: function () { hidePopoverEl(el, btn); }
+		});
+	}
+
+	// ==================================================================================================================
+	// INLINE CELL EDIT (the `edit` renderer): the cell shows the value and a pencil; the pencil swaps the cell to an
+	// input that commits through the named row action.
+	// ==================================================================================================================
+
+	/** Parses the `options` of a `select` edit cell: an array, or a comma-separated string (render meta values are strings). */
+	function parseEditOptions(raw) {
+		if (Array.isArray(raw)) return raw.map(String);
+		if (typeof raw !== "string" || raw === "") return [];
+		const parsed = parseJsonSafe(raw);
+		if (Array.isArray(parsed)) return parsed.map(String);
+		return raw.split(",").map(function (o) { return o.trim(); }).filter(function (o) { return o !== ""; });
+	}
+
+	function buildEditInput(input, options, current) {
+		let field;
+		if (input === "select" && options.length) {
+			field = document.createElement("select");
+			for (const o of options) {
+				const opt = document.createElement("option");
+				opt.value = o;
+				opt.textContent = o;
+				field.appendChild(opt);
+			}
+			field.value = current;
+		} else {
+			field = document.createElement("input");
+			field.type = input === "number" ? "number" : "text";
+			field.value = current;
+		}
+		field.className = "juneau-edit-input";
+		return field;
+	}
+
+	/** Swaps the pencil's cell into edit mode.  A cell already being edited is left alone. */
+	function startInlineEdit(pencil, table, ctx, viewDef) {
+		const cell = pencil.closest ? pencil.closest("td") : null;
+		const tr = cell?.parentNode;
+		if (!cell || !tr || cell._juneauEditing) return;
+		const action = findRowActionById(viewDef, pencil.getAttribute("data-juneau-edit"));
+		const rowData = rowDataForTr(ctx, tr) || {};
+		// Re-checked at activation, not only at draw, so a stale or bypassed gate can never open the editor.
+		if (!action || !isRowActionVisible(action, rowData) || firstFailingRowActionRule(action, rowData)) return;
+		const column = pencil.getAttribute("data-juneau-edit-col");
+		const current = rowData[column] == null ? "" : String(rowData[column]);
+		const field = buildEditInput(pencil.getAttribute("data-juneau-edit-input"),
+			parseEditOptions(pencil.getAttribute("data-juneau-edit-options")), current);
+		field.setAttribute("aria-label", "Edit " + column);
+		const error = document.createElement("span");
+		error.className = "juneau-edit-error";
+		error.setAttribute("role", "alert");
+		error.hidden = true;
+		const editor = document.createElement("span");
+		editor.className = "juneau-edit-editor";
+		editor.appendChild(field);
+		editor.appendChild(error);
+		const saved = Array.from(cell.childNodes);
+		for (const n of saved) cell.removeChild(n);
+		cell.appendChild(editor);
+		const state = { busy: false, failed: false, done: false };
+		cell._juneauEditing = state;
+
+		function close(newValue) {
+			if (state.done) return;
+			state.done = true;
+			delete cell._juneauEditing;
+			if (editor.parentNode === cell) cell.removeChild(editor);
+			for (const n of saved) cell.appendChild(n);
+			if (newValue != null) {
+				const shown = cell.querySelector(".juneau-edit-value");
+				if (shown) shown.textContent = newValue;
+			}
+			if (typeof pencil.focus === "function") pencil.focus();
+		}
+		function commit() {
+			if (state.busy || state.done) return;
+			const value = field.value;
+			if (value === current) { close(null); return; }
+			state.busy = true;
+			state.failed = false;
+			field.disabled = true;
+			error.hidden = true;
+			const fields = {};
+			fields[column] = value;
+			submitRowActionForOutcome(action, table, tr, ctx, { fields: fields }).then(function (o) {
+				state.busy = false;
+				field.disabled = false;
+				if (o.outcome === "success") {
+					applySuccessBehavior(action, table, tr, ctx, o.result);
+					const redrawn = action.onSuccess === "redraw" || (action.onSuccess === "mergeRow" && o.result?.row != null);
+					if (!redrawn && ctx?.dataTable) reloadTableData(ctx.dataTable, true);   // keep the current page
+					close(value);
+					return;
+				}
+				state.failed = true;
+				error.textContent = o.message || "The change could not be saved.";
+				error.hidden = false;
+				if (typeof field.focus === "function") field.focus();
+			});
+		}
+		field.addEventListener("keydown", function (e) {
+			if (e.key === "Enter") { e.preventDefault(); commit(); }
+			else if (e.key === "Escape") { e.preventDefault(); e.stopPropagation(); if (!state.busy) close(null); }
+		});
+		// A failed save stays open until the operator retries (Enter) or cancels (Escape); only an untried edit commits on blur.
+		field.addEventListener("blur", function () { if (!state.failed) commit(); });
+		if (typeof field.focus === "function") field.focus();
+	}
+
+	/** ONE delegated listener per table that opens the editor from an `edit` renderer's pencil. */
+	function initInlineEdit(table, ctx, viewDef) {
+		if (!table || typeof table.addEventListener !== "function" || table._juneauInlineEditBound) return;
+		table._juneauInlineEditBound = true;
+		table.addEventListener("click", function (e) {
+			if (!isOwnTableEvent(table, e)) return;   // a nested table owns its own cells
+			const pencil = e.target?.closest ? e.target.closest("[data-juneau-edit]") : null;
+			if (!pencil || pencil.disabled || pencil.hidden) return;
+			e.preventDefault();
+			e.stopPropagation();
+			startInlineEdit(pencil, table, ctx, viewDef);
 		});
 	}
 
@@ -4958,6 +5177,89 @@
 		return { el: el, refresh: refresh };
 	}
 
+	/** Confirm renderers registered by name (see {@link #registerConfirmRenderer}); prototype-less so a name is never inherited. */
+	const confirmRenderers = Object.create(null);
+
+	/** Dialog chromes registered by name (see {@link #registerDialogChrome}). */
+	const dialogChromes = Object.create(null);
+
+	/** Renderer names that always mean the built-in modal: the bulk path's historical "list" token, and "default". */
+	const BUILT_IN_CONFIRM_RENDERERS = { "default": 1, "list": 1 };
+
+	/** The page-default confirm renderer name, set by registering a renderer with {@code {asDefault:true}}. */
+	let defaultConfirmRendererName = null;
+
+	/**
+	 * Registers a named confirm renderer: {@code fn(modal, request)} paints its own UI and returns a boolean (or a
+	 * Promise of one) - true to proceed.  Registering a name twice keeps the first and logs.
+	 */
+	function registerConfirmRenderer(name, fn, opts) {
+		if (typeof fn !== "function" || isBlankToken(name) || Object.hasOwn(BUILT_IN_CONFIRM_RENDERERS, name)) {
+			console.error("[juneau-views] " + fmt("confirm renderer '%s' cannot be registered", name));
+			return;
+		}
+		if (confirmRenderers[name]) { console.error("[juneau-views] " + fmt("confirm renderer '%s' is already registered", name)); return; }
+		confirmRenderers[name] = fn;
+		if (opts?.asDefault) defaultConfirmRendererName = name;
+	}
+
+	/** Registers a named dialog chrome: {@code fn(parts, modal)} may restyle the header/footer parts of a dialog. */
+	function registerDialogChrome(name, fn) {
+		if (typeof fn !== "function" || isBlankToken(name)) {
+			console.error("[juneau-views] " + fmt("dialog chrome '%s' cannot be registered", name));
+			return;
+		}
+		if (dialogChromes[name]) { console.error("[juneau-views] " + fmt("dialog chrome '%s' is already registered", name)); return; }
+		dialogChromes[name] = fn;
+	}
+
+	/** One confirm list entry as text: a string verbatim, a row object by its label field then its id. */
+	function confirmItemLabel(item, request) {
+		if (typeof item === "string") return item;
+		const label = request?.labelField ? item?.[request.labelField] : null;
+		return String(label ?? item?.id ?? item?.[request?.rowIdField] ?? "");
+	}
+
+	/** The renderer-facing description of a confirm request (everything a custom renderer needs to paint it). */
+	function describeConfirm(request) {
+		return {
+			title: request.title || "",
+			body: request.body || null,
+			items: (request.items || []).map(function (it) { return confirmItemLabel(it, request); }),
+			confirmLabel: request.confirmLabel || "Confirm",
+			cancelLabel: request.cancelLabel || "Cancel",
+			tone: request.tone || "default"
+		};
+	}
+
+	/**
+	 * The one confirm entry point (`JuneauViews.dialogs.confirm`): picks the renderer (request, then the action's
+	 * `confirmRenderer`, then the page default, else the built-in modal) and resolves to whether the user confirmed.
+	 * A request carrying a function `action` also has it invoked on confirm, which is the bulk path's contract.
+	 * A renderer name that was never registered logs E-JS-71 and rejects without running anything.
+	 */
+	function confirmPipeline(request) {
+		request = request || {};
+		const act = request.action;
+		const name = request.renderer || (act && typeof act === "object" ? act.confirmRenderer : null) || defaultConfirmRendererName;
+		const builtIn = !name || Object.hasOwn(BUILT_IN_CONFIRM_RENDERERS, name);
+		const render = builtIn ? null : confirmRenderers[name];
+		if (!builtIn && !render) {
+			console.error("[juneau-views] E-JS-71: " + fmt("confirm renderer '%s' is not registered", name));
+			return Promise.reject(new Error("E-JS-71"));
+		}
+		const modal = describeConfirm(request);
+		// The executor runs synchronously, so the built-in modal is on the layer stack by the time confirm() returns.
+		return new Promise(function (resolve) {
+			resolve(render ? render(modal, request) : buildFallbackConfirmModal(Object.assign({}, request, modal), null, null));
+		})
+			.then(function (ok) {
+				if (ok !== true) return false;
+				if (typeof act === "function" && render) act();
+				return true;
+			});
+	}
+
 	/**
 	 * Gates a bulk action behind the mandatory confirm (an action opts out only with `confirm === false`).  Prefers a
 	 * host-provided `JuneauViews.dialogs.confirm(opts)` and otherwise falls back to the built-in modal below.  The rows
@@ -4979,11 +5281,14 @@
 			confirmLabel: action.label || action.id,
 			tone: action.tone || "default",
 			rows: rows,
+			labelField: selectionState.labelField,
+			rowIdField: selectionState.rowIdField,
 			renderer: action.confirmRenderer || "list",
 			action: function () { runBulkActionDeferred(action, table, ctx, selectionState, ids); }
 		};
 		if (window.JuneauViews?.dialogs?.confirm) {
-			window.JuneauViews.dialogs.confirm(opts);
+			const pending = window.JuneauViews.dialogs.confirm(opts);
+			if (typeof pending?.catch === "function") pending.catch(function () { /* already logged by the pipeline */ }); // NOSONAR javascript:S2486 -- a rejected confirm (unregistered renderer) is logged where it is raised
 			return;
 		}
 		buildFallbackConfirmModal(opts, table, selectionState);
@@ -4999,61 +5304,68 @@
 	 * Lists up to 20 selected rows by `labelField` (falling back to the row id) and summarises the remainder.
 	 */
 	function buildFallbackConfirmModal(opts, table, selectionState) { // NOSONAR javascript:S1172 -- table kept for call-site symmetry with the dialogs.confirm path.
-		const backdrop = document.createElement("div");
-		backdrop.className = "juneau-view-dialog-backdrop juneau-view-confirm-modal juneau-view-confirm-modal-" + opts.tone;
-		const dialog = document.createElement("div");
-		dialog.className = "juneau-view-dialog";
-		dialog.setAttribute("role", "dialog");
-		dialog.setAttribute("aria-modal", "true");
+		return new Promise(function (resolve) {
+			let settled = false;
+			function settle(ok) { if (!settled) { settled = true; resolve(ok); } }
+			const backdrop = document.createElement("div");
+			backdrop.className = "juneau-view-dialog-backdrop juneau-view-confirm-modal juneau-view-confirm-modal-" + opts.tone;
+			const dialog = document.createElement("div");
+			dialog.className = "juneau-view-dialog";
+			dialog.setAttribute("role", "dialog");
+			dialog.setAttribute("aria-modal", "true");
 
-		const title = document.createElement("h2");
-		title.className = "juneau-view-dialog-title";
-		title.textContent = opts.title;
-		dialog.appendChild(title);
+			const title = document.createElement("h2");
+			title.className = "juneau-view-dialog-title";
+			title.textContent = opts.title;
+			dialog.appendChild(title);
 
-		if (opts.body) {
-			const body = document.createElement("p");
-			body.textContent = opts.body;
-			dialog.appendChild(body);
-		}
+			if (opts.body) {
+				const body = document.createElement("p");
+				body.textContent = opts.body;
+				dialog.appendChild(body);
+			}
 
-		const cap = 20;
-		const list = document.createElement("ul");
-		list.className = "juneau-view-confirm-list";
-		opts.items.slice(0, cap).forEach(function (row) {
-			const li = document.createElement("li");
-			const label = selectionState.labelField ? row[selectionState.labelField] : null;
-			li.textContent = String(label != null ? label : (row.id ?? row[selectionState.rowIdField]));
-			list.appendChild(li);
+			const cap = 20;
+			const items = opts.items || [];
+			const list = document.createElement("ul");
+			list.className = "juneau-view-confirm-list";
+			items.slice(0, cap).forEach(function (row) {
+				const li = document.createElement("li");
+				li.textContent = typeof row === "string" ? row : confirmItemLabel(row, selectionState || opts);
+				list.appendChild(li);
+			});
+			if (items.length > cap) {
+				const more = document.createElement("li");
+				more.textContent = "\u2026and " + (items.length - cap) + " more";
+				list.appendChild(more);
+			}
+			if (items.length) dialog.appendChild(list);
+
+			const actions = document.createElement("div");
+			actions.className = "juneau-view-dialog-actions";
+			const cancelBtn = document.createElement("button");
+			cancelBtn.type = "button";
+			cancelBtn.className = "juneau-view-dialog-cancel";
+			cancelBtn.textContent = opts.cancelLabel || "Cancel";
+			cancelBtn.addEventListener("click", function () { settle(false); popLayer(backdrop); });
+			const confirmBtn = document.createElement("button");
+			confirmBtn.type = "button";
+			confirmBtn.className = "juneau-view-dialog-confirm" + (opts.tone === "danger" ? " juneau-view-dialog-confirm-danger" : "");
+			confirmBtn.textContent = opts.confirmLabel;
+			confirmBtn.addEventListener("click", function () {
+				settle(true);
+				popLayer(backdrop);
+				if (typeof opts.action === "function") opts.action();
+			});
+			actions.appendChild(cancelBtn);
+			actions.appendChild(confirmBtn);
+			dialog.appendChild(actions);
+
+			backdrop.appendChild(dialog);
+			// Cancel precedes Confirm in tab order, so it is the first focus target; a danger confirm makes that explicit.
+			pushLayer(backdrop, { kind: "dialog", trapFocus: true, lightDismiss: false, detachOnPop: true, onDismiss: function () { settle(false); } });
+			if (opts.tone === "danger" && typeof cancelBtn.focus === "function") cancelBtn.focus();
 		});
-		if (opts.items.length > cap) {
-			const more = document.createElement("li");
-			more.textContent = "\u2026and " + (opts.items.length - cap) + " more";
-			list.appendChild(more);
-		}
-		dialog.appendChild(list);
-
-		const actions = document.createElement("div");
-		actions.className = "juneau-view-dialog-actions";
-		const cancelBtn = document.createElement("button");
-		cancelBtn.type = "button";
-		cancelBtn.className = "juneau-view-dialog-cancel";
-		cancelBtn.textContent = "Cancel";
-		cancelBtn.addEventListener("click", function () { popLayer(backdrop); });
-		const confirmBtn = document.createElement("button");
-		confirmBtn.type = "button";
-		confirmBtn.className = "juneau-view-dialog-confirm";
-		confirmBtn.textContent = opts.confirmLabel;
-		confirmBtn.addEventListener("click", function () {
-			popLayer(backdrop);
-			opts.action();
-		});
-		actions.appendChild(cancelBtn);
-		actions.appendChild(confirmBtn);
-		dialog.appendChild(actions);
-
-		backdrop.appendChild(dialog);
-		pushLayer(backdrop, { kind: "dialog", trapFocus: true, lightDismiss: false, detachOnPop: true, onDismiss: null });
 	}
 
 	/** Max per-row bulk writes in flight at once - enough to be quick, few enough not to flood a shared backend. */
@@ -5265,6 +5577,39 @@
 				// the operator a one-click duplicate of a non-idempotent write.  Terminal + Close-only instead.
 				if (settleDialogResultHold(ctx, "terminal")) renderHeldResultNotice(REQUEST_UNCONFIRMED_NOTICE);
 				else renderActionRefusalFor(tr, action, "request-failed", ctx);
+			});
+	}
+
+	/**
+	 * Like {@link submitRowAction}, but resolves to the outcome instead of painting it into the row: `{outcome, message,
+	 * result}` where `outcome` is a normalized outcome token ("success", "failure", "refusal", "unknown", ...).  The
+	 * caller owns showing a failure and applying a success (see applySuccessBehavior).  Used by the inline cell editor,
+	 * which reports a failure inside the cell it is editing rather than in the row's action banner.
+	 */
+	function submitRowActionForOutcome(action, table, tr, ctx, extra) {
+		const rowId = tr?.getAttribute ? tr.getAttribute(ROW_ID_ATTR) : null;
+		const req = buildActionRequest(
+			action, resolveCsrfToken(table), resolveCsrfHeaderName(table),
+			Object.assign(rowId == null ? {} : { targetId: rowId }, extra), rowDataForTr(ctx, tr));
+		if (req.refuse) return Promise.resolve({ outcome: "refusal", message: actionRefusalMessage(req.reason) });
+		setRowInFlight(tr, true);
+		return fetch(req.url, { method: req.method, headers: req.headers, body: req.body, credentials: "same-origin" })
+			.then(function (resp) {
+				setRowInFlight(tr, false);
+				if (!resp.ok) {
+					const boundary = (typeof resp.headers?.get === "function") ? resp.headers.get("X-Loopback-Boundary") : null;
+					return readBodyText(resp).then(function (text) {
+						return { outcome: "refusal", message: transportRefusal(resp.status, boundary, parseJsonSafe(text)).message };
+					});
+				}
+				return readBodyText(resp).then(function (text) {
+					const result = parseActionResult(text);
+					if (!result) return { outcome: "success", result: null };
+					return { outcome: normalizeOutcome(result), message: result.message, result: result };
+				});
+			}, function () {
+				setRowInFlight(tr, false);
+				return { outcome: "unknown", message: REQUEST_UNCONFIRMED_NOTICE };
 			});
 	}
 
@@ -5755,6 +6100,42 @@
 	 * and in the ribbon-anchored host when there is not.  A ribbon click otherwise died here, on an open FAILURE,
 	 * before the submit path was ever reached.
 	 */
+	/**
+	 * Fills a single-row `confirm` prompt's `{field}` tokens from the row (plain text, unlike the URL-escaped endpoint
+	 * substitution).  A token whose row value is absent or blank refuses, as it does for `endpoint`.
+	 */
+	function resolveConfirmText(text, rowData) {
+		if (typeof text !== "string" || !ROW_ACTION_TOKEN_RE.test(text)) return { text: text };
+		if (hasBlankSubstitution(text, rowData)) return { refuse: true, reason: "empty-substitution" };
+		return { text: text.replace(new RegExp(ROW_ACTION_TOKEN_RE, "g"), function (m, key) { return String(rowData[key]); }) }; // NOSONAR javascript:S5852 -- ROW_ACTION_TOKEN_RE is linear ([^}] cannot match the closing brace)
+	}
+
+	/**
+	 * The confirm-only (no form URL) dialog.  The prompt is the action's `confirm` text with its `{field}` tokens
+	 * filled, else its name.  An action naming a `confirmRenderer` goes through the confirm pipeline and submits only
+	 * on a true answer; every other action keeps the built-in dialog, carrying `confirmLabel` and `tone`.
+	 */
+	function openConfirmOnlyDialog(action, table, tr, ctx) {
+		const resolved = resolveConfirmText(action.confirm, rowDataForTr(ctx, tr));
+		if (resolved.refuse) {
+			renderActionRefusalFor(tr, action, resolved.reason, ctx);
+			return;
+		}
+		const modal = { title: resolved.text || actionDisplayName(action) };
+		if (isBlankToken(action.confirmRenderer)) {
+			showActionDialog(modal, action, table, tr, ctx);
+			return;
+		}
+		confirmPipeline({
+			title: modal.title,
+			confirmLabel: action.confirmLabel || action.label || "Confirm",
+			tone: action.tone,
+			action: action
+		}).then(function (ok) {
+			if (ok) submitActionDialog(modal, action, table, tr, ctx, null);
+		}).catch(function () { /* already logged by the pipeline; the action does not run */ }); // NOSONAR javascript:S2486 -- the unregistered-renderer rejection is logged where it is raised
+	}
+
 	// NOSONAR javascript:S3776 -- encodes a views/widgets state machine; complexity is inherent.
 	function openActionDialog(action, table, tr, ctx) {
 		// v1 depth cap (counts dialog-kind layers): a third dialog is a visible refusal inside the current top dialog.
@@ -5763,7 +6144,7 @@
 			// Confirm-only LOCAL path (no form-source URL): unversioned, and never fail-loud on a missing version.
 			// The name read is widened (label, then title, then id) so a ribbon-hosted action - which carries
 			// `title` and no `label` - prompts with its own name rather than its raw id.
-			showActionDialog({ title: action.confirm || actionDisplayName(action) }, action, table, tr, ctx);
+			openConfirmOnlyDialog(action, table, tr, ctx);
 			return;
 		}
 		const rowData = rowDataForTr(ctx, tr);
@@ -6003,7 +6384,11 @@
 		const confirmBtn = document.createElement("button");
 		confirmBtn.type = "button";
 		confirmBtn.className = "juneau-view-dialog-confirm";
-		confirmBtn.textContent = action?.label || "Confirm";
+		confirmBtn.textContent = modal?.confirmLabel || action?.confirmLabel || action?.label || "Confirm";
+		if ((modal?.tone || action?.tone) === "danger") {
+			confirmBtn.classList.add("juneau-view-dialog-confirm-danger");
+			dialog.classList.add("juneau-view-dialog-danger");
+		}
 		actions.appendChild(cancelBtn);
 		actions.appendChild(confirmBtn);
 		dialog.appendChild(actions);
@@ -6110,8 +6495,10 @@
 		// signal to its author today.  (4) A miss in both stays today's fail-closed disabled+marked paint.
 		if (dialogActionIsOpenable(ctx, actionId)) {
 			const target = findRowActionById(ctx?.viewDef, actionId);
-			const failing = firstFailingRowActionRule(target, rowDataForTr(ctx, tr));
-			if (failing) disableRowActionControl(control, failing.reason);
+			const rowData = rowDataForTr(ctx, tr);
+			const failing = firstFailingRowActionRule(target, rowData);
+			if (!isRowActionVisible(target, rowData)) control.hidden = true;   // visibleWhen: irrelevant for this row
+			else if (failing) disableRowActionControl(control, failing.reason);
 		} else if (rowActionIdExists(ctx, actionId) || ! childActionById(childCatalog, actionId)) {
 			control.disabled = true;
 			control.setAttribute("aria-disabled", "true");
@@ -6228,7 +6615,9 @@
 		let target = null;
 		const catalog = (ctx?.viewDef?.rowActions) || [];
 		for (const c of catalog) if (c?.id === actionId) { target = c; break; }
-		const failing = firstFailingRowActionRule(target, rowDataForTr(ctx, tr));
+		const rowData = rowDataForTr(ctx, tr);
+		if (!isRowActionVisible(target, rowData)) { renderDialogActionRefusal(actionId); return; }
+		const failing = firstFailingRowActionRule(target, rowData);
 		if (failing) { renderDialogActionRefusal(actionId, failing.reason); return; }
 		openActionDialog(target, table, tr, ctx);
 	}
@@ -6553,6 +6942,115 @@
 		return out;
 	}
 
+	/** Hands a registered dialog chrome the header/footer parts of a freshly built dialog; a throwing chrome is logged, not fatal. */
+	function applyDialogChrome(modal, ui) {
+		const parts = {
+			dialog: ui.dialog,
+			header: ui.dialog.querySelector(".juneau-view-dialog-header"),
+			actions: ui.dialog.querySelector(".juneau-view-dialog-actions"),
+			confirmBtn: ui.confirmBtn,
+			cancelBtn: ui.cancelBtn,
+			dismissBtn: ui.dismissBtn
+		};
+		try { dialogChromes[modal.chrome](parts, modal); }
+		catch (e) { console.error("[juneau-views] " + fmt("dialog chrome '%s' threw: %s", modal.chrome, e?.message ?? e)); } // NOSONAR javascript:S2486 -- a throwing chrome must not stop the dialog opening
+	}
+
+	/** Paints one wizard step's display fields into `host` (textContent only). */
+	function paintStepFields(host, step) {
+		const dl = document.createElement("dl");
+		dl.className = "juneau-view-dialog-fields";
+		(step.fields || []).forEach(function (f) {
+			const dt = document.createElement("dt");
+			dt.textContent = (f?.label != null) ? String(f.label) : "";
+			const dd = document.createElement("dd");
+			buildModalFieldValueNode(dd, f);
+			dl.appendChild(dt);
+			dl.appendChild(dd);
+		});
+		host.appendChild(dl);
+	}
+
+	/**
+	 * Turns the dialog `ui` into the scripting handle (`dialogs.open`'s return value) and returns the private state the
+	 * confirm wiring needs.  Steps (`modal.steps`) render one at a time with Back and Next; the last step's button is
+	 * the dialog's own confirm.  A script drives dynamic flows through `setStep` / `setConfirmLabel` / `onConfirm`.
+	 */
+	// NOSONAR javascript:S3776 -- encodes a views/widgets state machine; complexity is inherent.
+	function wireDialogHandle(ui, modal, action, table, tr, ctx) { // NOSONAR javascript:S107 -- dialog-build context threaded through unchanged
+		const steps = Array.isArray(modal?.steps) ? modal.steps.filter(function (st) { return st && st.id != null; }) : [];
+		const finalLabel = ui.confirmBtn.textContent;
+		const state = { confirmHandler: null, cancelHandler: null, submitted: false, proceed: null };
+		let stepIndex = steps.length ? 0 : -1;
+		let freeStep = null;
+		let closedResolve = null;
+		const closed = new Promise(function (resolve) { closedResolve = resolve; });
+		let backBtn = null;
+		if (steps.length) {
+			backBtn = document.createElement("button");
+			backBtn.type = "button";
+			backBtn.className = "juneau-view-dialog-back";
+			backBtn.textContent = "Back";
+			backBtn.hidden = true;
+			ui.cancelBtn.parentNode.insertBefore(backBtn, ui.confirmBtn);
+			backBtn.addEventListener("click", function () { if (stepIndex > 0) { stepIndex--; renderStep(); } });
+		}
+		let bodyEl = null;
+
+		function body() {
+			if (!bodyEl) {
+				bodyEl = document.createElement("div");
+				bodyEl.className = "juneau-view-dialog-body";
+				ui.dialog.insertBefore(bodyEl, ui.cancelBtn.parentNode);
+			}
+			return bodyEl;
+		}
+
+		function renderStep() {
+			const st = steps[stepIndex];
+			const host = body();
+			while (host.firstChild) host.removeChild(host.firstChild);
+			paintStepFields(host, st);
+			const titleEl = ui.dialog.querySelector(".juneau-view-dialog-title");
+			if (titleEl && st.title != null) titleEl.textContent = String(st.title);
+			const last = stepIndex === steps.length - 1;
+			ui.confirmBtn.textContent = st.confirmLabel != null ? String(st.confirmLabel) : (last ? finalLabel : "Next");
+			backBtn.hidden = stepIndex === 0;
+		}
+
+		if (steps.length) renderStep();
+
+		state.nextStep = function () {
+			if (stepIndex < 0 || stepIndex >= steps.length - 1) return null;
+			return function () { stepIndex++; renderStep(); };
+		};
+		state.dismissed = function () {
+			closedResolve(state.submitted ? "submitted" : "cancelled");
+			if (!state.submitted && state.cancelHandler) state.cancelHandler();
+		};
+
+		ui.fields = function () { return collectDialogFormFields(ui.dialog); };
+		ui.body = body;
+		ui.step = function () { return stepIndex >= 0 ? steps[stepIndex].id : freeStep; };
+		ui.setStep = function (id) {
+			const i = steps.findIndex(function (st) { return st.id === id; });
+			if (i >= 0) { stepIndex = i; renderStep(); return; }
+			if (steps.length) { console.error("[juneau-views] " + fmt("dialog step '%s' is not defined", id)); return; }
+			freeStep = id;
+		};
+		ui.setConfirmLabel = function (label) { ui.confirmBtn.textContent = label == null ? "" : String(label); };
+		ui.setCancelLabel = function (label) { ui.cancelBtn.textContent = label == null ? "" : String(label); };
+		ui.onConfirm = function (fn) { state.confirmHandler = typeof fn === "function" ? fn : null; };
+		ui.onCancel = function (fn) { state.cancelHandler = typeof fn === "function" ? fn : null; };
+		ui.submit = function (extra) {
+			state.proceed(extra?.fields ?? collectDialogFormFields(ui.dialog));
+			return Promise.resolve({});
+		};
+		ui.close = function () { popLayer(ui.backdrop); };   // pops this dialog's layer (and anything stacked above it), never a sibling below
+		ui.closed = closed;
+		return state;
+	}
+
 	/**
 	 * Shows a dialog overlay for an action as a modal layer on the shared {@code popupLayerStack} and wires its confirm
 	 * (validate -> submit) / cancel (dismiss) buttons.  The backdrop is pushed as a {@code kind:"dialog"} focus-trapping
@@ -6563,15 +7061,19 @@
 	 */
 	// NOSONAR javascript:S3776 -- encodes a views/widgets state machine; complexity is inherent.
 	function showActionDialog(modal, action, table, tr, ctx) {
+		if (modal?.chrome && !dialogChromes[modal.chrome]) {
+			console.error("[juneau-views] E-JS-72: " + fmt("dialog chrome '%s' is not registered", modal.chrome));
+			return null;
+		}
 		if (dialogLayerCount() >= MAX_DIALOG_DEPTH) { renderDialogDepthRefusal(); return null; }
 		const seq = ++dialogSeq;
 		const ui = buildDialogOverlay(modal, action, table, tr, ctx, seq);
+		if (modal?.chrome) applyDialogChrome(modal, ui);
+		const state = wireDialogHandle(ui, modal, action, table, tr, ctx);
 		function close() { popLayer(ui.backdrop); }
 		ui.cancelBtn.addEventListener("click", close);
 		if (ui.dismissBtn) ui.dismissBtn.addEventListener("click", close);
-		ui.confirmBtn.addEventListener("click", function () {
-			if (! validateDialogForm(ui.dialog, true)) return;   // fail-loud client validation before the submit
-			const fields = collectDialogFormFields(ui.dialog);
+		function proceed(fields) {
 			// A modal that opted in to hosting its own result KEEPS ITS LAYER and registers a hold instead of
 			// closing; the settle then decides that layer's fate from the outcome.  Registration happens BEFORE the
 			// submit because the submit's client-refusal terminal can settle synchronously.  The hold is passed
@@ -6579,10 +7081,23 @@
 			// J0512's targetId precedence and its tripwire keep covering the only submit path there is.
 			// No ctx means no hold registry AND no dialog stack to check liveness against, so it closes as today -
 			// the fail-safe direction: today's behavior, not a dialog nothing can ever settle.
+			state.submitted = true;
 			if (modal?.keepOpenOnSubmit && ctx) beginDialogResultHold(ui, action, modal, ctx);
 			else close();
 			submitActionDialog(modal, action, table, tr, ctx, fields);
+		}
+		ui.confirmBtn.addEventListener("click", function () {
+			if (! validateDialogForm(ui.dialog, true)) return;   // fail-loud client validation before the submit
+			const fields = collectDialogFormFields(ui.dialog);
+			const advance = state.nextStep();   // null when there is nothing to advance to (no steps, or on the last)
+			function go() { if (advance) advance(); else proceed(fields); }
+			if (! state.confirmHandler) { go(); return; }
+			// onConfirm decides: exactly `true` (or a Promise of it) continues, anything else keeps the dialog as-is.
+			const verdict = state.confirmHandler(fields);
+			if (typeof verdict?.then === "function") verdict.then(function (ok) { if (ok === true) go(); });
+			else if (verdict === true) go();
 		});
+		state.proceed = proceed;
 		if (ctx) {
 			if (! ctx._dialogStack) ctx._dialogStack = [];
 			ctx._dialogStack.push(ui.backdrop);
@@ -6598,8 +7113,10 @@
 					ctx._actionDialog = ctx._dialogStack.at(-1) ?? null;
 				}
 				notifyPollPausedChange(ctx);
+				state.dismissed();
 			}
 		});
+		if ((modal?.tone || action?.tone) === "danger" && typeof ui.cancelBtn.focus === "function") ui.cancelBtn.focus();
 		notifyPollPausedChange(ctx);
 		// Enhance-on-insert for a dialog-hosted bar slot: MUST run after pushLayer has portalled the dialog into the
 		// document (initAll() scans document-wide), reusing the SAME chrome entry + shared wired marker the
@@ -7126,6 +7643,7 @@
 		menu.dataset.testid = "action-menu";
 		const rowData = rowDataForTr(ctx, tr);
 		(viewDef.rowActions || []).forEach(function (action) {
+			if (!isRowActionVisible(action, rowData)) return;   // hidden for this row by visibleWhen
 			const li = document.createElement("li");
 			li.setAttribute("role", "none");
 			const item = document.createElement("button");
@@ -7140,7 +7658,8 @@
 			item.addEventListener("click", function () {
 				// Fresh, fail-closed re-check: a gated-and-failing action must never fire, even if its disabled
 				// state was somehow bypassed or the menu is stale.
-				if (firstFailingRowActionRule(action, rowDataForTr(ctx, tr))) return;
+				const freshRow = rowDataForTr(ctx, tr);
+				if (!isRowActionVisible(action, freshRow) || firstFailingRowActionRule(action, freshRow)) return;
 				closeRowActionMenus(table);
 				// A present=dialog action opens the modal (confirmation + optional form) before its submit;
 				// everything else is the direct fail-closed submit.
@@ -7194,7 +7713,9 @@
 		const tr = pill.closest ? pill.closest("tr") : null;
 		if (!tr) return;
 		if (tr.dataset?.juneauInflight) return;   // in-flight guard (no double submit)
-		if (firstFailingRowActionRule(action, rowDataForTr(ctx, tr))) return;
+		const rowData = rowDataForTr(ctx, tr);
+		if (!isRowActionVisible(action, rowData)) return;   // a hidden action never fires, even if the pill was un-hidden
+		if (firstFailingRowActionRule(action, rowData)) return;
 		if (isDialogAction(action)) openActionDialog(action, table, tr, ctx);
 		else submitRowAction(action, table, tr, ctx);
 	}
@@ -7408,6 +7929,7 @@
 			const field = ctx.selectionState?.rowIdField ?? null;
 			stampRowId(rowEl, rowData, field);
 			applyRowActionPillGates(rowEl, rowData, viewDef);
+			applyInlineEditGates(rowEl, rowData, viewDef);
 		};
 		opts.order = resolveOrder(viewDef, opts.columns);
 	}
@@ -7737,7 +8259,78 @@
 					sort = { column: String(def.data), dir: String(dir) };
 			}
 		}
-		return { tab: readLiveShareTab(), filters: filters, sort: sort };
+		return { tab: readLiveShareTab(), filters: filters, sort: sort, ext: Object.assign({}, ctx?.urlExt) };
+	}
+
+	/**
+	 * Registers the built-in directives a view's {@code urlState} config names and seeds {@code ctx.urlExt} from the
+	 * address bar, so the FIRST data request already carries the deep-linked params. Primary table only; idempotent.
+	 */
+	function prepareUrlStateDirectives(table, viewDef, ctx) {
+		const U = NS.urlState;
+		if (!U || typeof U.registerDirective !== "function" || ctx._urlDirectivesPrepared) return;
+		if (!viewDef?.urlState || !isShareablePrimaryTable(table, viewDef)) return;
+		ctx._urlDirectivesPrepared = true;
+		for (const name of Object.keys(viewDef.urlState)) {
+			const factory = U.builtins?.[name];
+			if (typeof factory !== "function" || U.hasDirective(name)) continue;
+			U.registerDirective(name, factory(viewDef.urlState[name] || {}));
+		}
+		const fromUrl = typeof U.readFromSearch === "function" ? U.readFromSearch(window.location.search) : null;
+		ctx.urlExt = Object.assign({}, fromUrl?.ext);
+		announceUrlStateStatus(table, ctx);
+	}
+
+	/** Merges every registered directive's {@code toParams} over the live {@code ctx.urlExt}. */
+	function urlStateRequestParams(ctx) {
+		const out = {};
+		const U = NS.urlState;
+		for (const name of Object.keys(ctx?.urlExt || {})) {
+			const codec = U?.directiveCodec?.(name);
+			if (typeof codec?.toParams === "function") Object.assign(out, codec.toParams(ctx.urlExt[name]));
+		}
+		return out;
+	}
+
+	/** Announces a directive's {@code statusMessage} (e.g. the {@code ids} cap) through the table's live region. */
+	function announceUrlStateStatus(table, ctx) {
+		const U = NS.urlState;
+		for (const name of Object.keys(ctx?.urlExt || {})) {
+			const msg = U?.directiveCodec?.(name)?.statusMessage?.(ctx.urlExt[name]);
+			if (msg) announce(table, msg);
+		}
+	}
+
+	/** Runs each registered directive's {@code apply(value, table)} against the current {@code ctx.urlExt}. */
+	function applyUrlStateDirectives(table, ctx) {
+		const U = NS.urlState;
+		for (const name of Object.keys(ctx?.urlExt || {})) {
+			const codec = U?.directiveCodec?.(name);
+			if (typeof codec?.apply !== "function") continue;
+			try { codec.apply(ctx.urlExt[name], table); } catch (e) { error("[juneau-views] E-JS-68: url-state directive '" + name + "' apply failed: " + (e?.message || e)); }
+		}
+	}
+
+	/**
+	 * Sets (or, with a null/empty value, clears) one registered {@code ?state=} directive on a live table: updates the
+	 * address bar (replaceState, honoring clean-address) and refetches with the new request params.
+	 *
+	 * @example
+	 *   NS.urlState.setDirective(tableEl, "window", { start: "2026-10-01T00:00:00Z", end: "2026-10-02T00:00:00Z" });
+	 */
+	function setUrlStateDirective(tableEl, name, value) {
+		const ctx = tableEl?.__juneauCtx;
+		const U = NS.urlState;
+		if (!ctx || !U?.hasDirective?.(name)) {
+			error("[juneau-views] E-JS-67: url-state directive '" + name + "' is not registered for this table");
+			return false;
+		}
+		ctx.urlExt = ctx.urlExt || {};
+		if (value == null) delete ctx.urlExt[name]; else ctx.urlExt[name] = value;
+		syncShareableUrlState(tableEl, ctx);
+		announceUrlStateStatus(tableEl, ctx);
+		if (ctx.dataTable) reloadTableData(ctx.dataTable);
+		return true;
 	}
 
 	/**
@@ -7930,6 +8523,17 @@
 		}
 		// Reflect the post-open state once (skipped under clean-address).
 		syncShareableUrlState(table, ctx);
+		applyUrlStateDirectives(table, ctx);
+		// Back / Forward: re-read the registered directives from the address bar, re-apply them, and refetch.
+		if (U.directiveNames?.().length && typeof window.addEventListener === "function") {
+			window.addEventListener("popstate", function () {
+				const st = U.readFromSearch(window.location.search);
+				ctx.urlExt = Object.assign({}, st?.ext);
+				announceUrlStateStatus(table, ctx);
+				applyUrlStateDirectives(table, ctx);
+				if (ctx.dataTable) reloadTableData(ctx.dataTable);
+			});
+		}
 	}
 
 	/**
@@ -7996,8 +8600,11 @@
 			// buildOptions merges no parent-scope parameter.
 			nestedScope: ctx.nestedScope,
 			// The view table, so a server-mode data request can carry the CSRF token (read per request).
-			table: table
+			table: table,
+			// Request params contributed by registered ?state= directives (window / ids), read at REQUEST time.
+			urlStateParams: function () { return urlStateRequestParams(ctx); }
 		};
+		prepareUrlStateDirectives(table, viewDef, ctx);
 
 		const opts = buildOptions(viewDef, deps);
 		assembleFullColumnArray(opts, viewDef, ctx);
@@ -8250,6 +8857,7 @@
 		if (findRowDetailTemplate(table))
 			initDetailsExpander(table, ctx, viewDef);
 		initCellPopover(table, ctx, viewDef);
+		initInlineEdit(table, ctx, viewDef);
 		if (viewDef.rowActions?.length)
 			initRowActions(table, viewDef, ctx);
 		if (selectionState)
@@ -8399,6 +9007,7 @@
 	function initTableWidgets(table, ctx, viewDef) {
 		if (findRowDetailTemplate(table)) initDetailsExpander(table, ctx, viewDef);
 		initCellPopover(table, ctx, viewDef);
+		initInlineEdit(table, ctx, viewDef);
 		if (viewDef.rowActions?.length) initRowActions(table, viewDef, ctx);
 	}
 
@@ -9243,6 +9852,10 @@
 		mergeMeta: mergeMeta,
 		buildOptions: buildOptions,
 		initAll: initAll,
+		// ?state= directive hook behind NS.urlState.setDirective (the codec module has no live table).
+		setUrlStateDirective: setUrlStateDirective,
+		urlStateRequestParams: urlStateRequestParams,
+		prepareUrlStateDirectives: prepareUrlStateDirectives,
 		// Previously private - exposed so a host (HTML-slot `regions.mount`, or any lazy panel) can init one
 		// specific view's table on demand.  Always returns a thenable; overlapping calls coalesce on the in-flight
 		// promise (data-juneau-init-pending).  Already idempotent (isDataTable guard), so re-entry after the
@@ -9368,6 +9981,8 @@
 		ownRowsWithId: ownRowsWithId,
 		fillCellPopover: fillCellPopover,
 		initCellPopover: initCellPopover,
+		initInlineEdit: initInlineEdit,
+		applyInlineEditGates: applyInlineEditGates,
 		closeCellPopover: closeCellPopover,
 		appendPopoverTrigger: appendPopoverTrigger,
 		// Row actions + fail-closed CSRF submit - exposed for manual verification and the fail-closed canary.
@@ -9495,6 +10110,147 @@
 		renderInlineError: renderInlineError,
 		renderAsyncStatus: renderAsyncStatus
 	};
+
+	// ==================================================================================================================
+	// SANCTIONED HOOKS - thin wrappers over the internals above.  Every namespace here is frozen; nothing outside one
+	// of these namespaces (or NS.init, which is deprecated) is public API.
+	// ==================================================================================================================
+
+	/** Substitutes each {@code %s} in {@code msg} with the next argument. */
+	function fmt(msg, ...args) {
+		let i = 0;
+		return String(msg).replaceAll("%s", () => String(args[i++]));
+	}
+
+	/**
+	 * Resolves the row context (table, tr, row, viewDef) for any element inside a view table row or its row-detail
+	 * panel.  Walks up via owningViewTable first; when that misses (the element lives inside a portalled row-detail
+	 * panel), falls back to the panel's _juneauParentTr back-reference.
+	 */
+	function hookContextOf(el) {
+		if (!el) return null;
+		let table = owningViewTable(el);
+		let tr = null;
+		if (table) {
+			tr = typeof el.closest === "function" ? el.closest("tbody tr") : null;
+		} else {
+			const panel = typeof el.closest === "function" ? el.closest("[data-juneau-row-detail]") : null;
+			tr = panel?._juneauParentTr || null;
+			table = tr ? owningViewTable(tr) : null;
+		}
+		if (!table || !tr) return null;
+		const ctx = table.__juneauCtx;
+		if (!ctx) return null;
+		return { table: table, tr: tr, row: rowDataForTr(ctx, tr) || {}, viewDef: ctx.viewDef || {} };
+	}
+
+	/** The table-handle shape returned by {@code tables.ready} / {@code tables.handle}. */
+	function hookTableHandleFor(el) {
+		const ctx = el.__juneauCtx;
+		return {
+			element: el,
+			dataTable: ctx.dataTable,
+			viewDef: ctx.viewDef,
+			contextOf: function (tr) { return { table: el, tr: tr, row: rowDataForTr(ctx, tr) || {}, viewDef: ctx.viewDef }; }
+		};
+	}
+
+	/** The element a CSRF lookup should read: the owning view table of {@code el}, else {@code el} itself. */
+	function hookCsrfTable(el) {
+		return el ? (owningViewTable(el) || el) : null;
+	}
+
+	NS.rowActions = Object.freeze({
+		contextOf: hookContextOf,
+		find: function (viewDefOrEl, actionId) {
+			const viewDef = viewDefOrEl?.rowActions ? viewDefOrEl : (hookContextOf(viewDefOrEl) || {}).viewDef;
+			return findRowActionById(viewDef, actionId);
+		},
+		isDialog: isDialogAction,
+		run: function (el, actionId, opts) {
+			const rc = hookContextOf(el);
+			if (!rc) {
+				console.error("[juneau-views] " + fmt("rowActions.run: element is not inside a view table row"));
+				return Promise.reject(new Error("E-JS-74"));
+			}
+			const action = findRowActionById(rc.viewDef, actionId);
+			if (!action) {
+				console.error("[juneau-views] " + fmt("row action '%s' not found on view '%s'", actionId, rc.viewDef.id || ""));
+				return Promise.reject(new Error("E-JS-70"));
+			}
+			const ctx = rc.table.__juneauCtx;
+			if (isDialogAction(action)) return Promise.resolve(openActionDialog(action, rc.table, rc.tr, ctx));
+			return Promise.resolve(submitRowAction(action, rc.table, rc.tr, ctx, opts?.extra || {}));
+		},
+		open: function (action, rc) { return openActionDialog(action, rc.table, rc.tr, rc.table.__juneauCtx); },
+		submit: function (action, rc, extra) { return submitRowAction(action, rc.table, rc.tr, rc.table.__juneauCtx, extra || {}); },
+		submitForOutcome: function (action, rc, extra) { return submitRowActionForOutcome(action, rc.table, rc.tr, rc.table.__juneauCtx, extra || {}); },
+		registerConfirmRenderer: registerConfirmRenderer
+	});
+
+	NS.dialogs = Object.freeze({
+		// opts.action (a row action, or the id of one on the row's view) is what a confirming dialog submits; without it
+		// a confirm has nothing to send and the dialog is a pure prompt.
+		open: function (modal, rc, opts) {
+			const a = opts?.action;
+			const action = typeof a === "string" ? findRowActionById(rc.viewDef, a) : (a ?? null);
+			return showActionDialog(modal, action, rc.table, rc.tr, rc.table.__juneauCtx);
+		},
+		confirm: confirmPipeline,
+		registerChrome: registerDialogChrome,
+		depth: dialogLayerCount
+	});
+
+	NS.probeSelection = Object.freeze({
+		enhance: enhanceProbeGroup,
+		initAll: function (root) {
+			for (const g of ownNodes(root || document, null, "[data-juneau-probe-group]")) enhanceProbeGroup(g);
+		}
+	});
+
+	NS.tables = Object.freeze({
+		columnIndex: function (tableOrDt, dataKey) {
+			const dt = typeof tableOrDt?.row === "function" ? tableOrDt : tableOrDt?.__juneauCtx?.dataTable;
+			return liveDtIndex(dataKey, dt ? dt.columns().header().toArray() : null);
+		},
+		ready: function (el) {
+			return new Promise(function (resolve) {
+				(function poll() {
+					if (el.__juneauCtx?.dataTable) resolve(hookTableHandleFor(el));
+					else setTimeout(poll, 20);
+				})();
+			});
+		},
+		handle: function (el) { return el?.__juneauCtx ? hookTableHandleFor(el) : null; },
+		reload: function (el, opts) {
+			const dt = el?.__juneauCtx?.dataTable;
+			if (dt) dt.ajax.reload(null, opts?.resetPaging === true);
+		}
+	});
+
+	NS.status = Object.freeze({ render: renderAsyncStatus });
+	NS.csrf = Object.freeze({
+		token: function (el) { const t = hookCsrfTable(el); return t ? resolveCsrfToken(t) : null; },
+		headerName: function (el) { const t = hookCsrfTable(el); return t ? resolveCsrfHeaderName(t) : DEFAULT_CSRF_HEADER; },
+		headers: function (el) {
+			const t = hookCsrfTable(el);
+			const token = t ? resolveCsrfToken(t) : null;
+			if (isBlankToken(token)) return {};
+			return { [resolveCsrfHeaderName(t)]: token };
+		}
+	});
+	NS.rules = Object.freeze({
+		test: evaluateRules,
+		facts: pageFacts,
+		/** Tests `rules` against `row` merged with the page facts under `facts` (the row-level evaluation map). */
+		testRow: function (rules, row) { return evaluateRules(rules, rowRuleScope(row)); }
+	});
+	NS.details = Object.freeze({ fillSlots: fillDetailSlots });
+	NS.html = Object.freeze({
+		// NS._render (juneau-renders.js) is a sibling <script>; never assume load order.
+		esc: function (s) { return typeof NS._render?.escHtml === "function" ? NS._render.escHtml(s) : String(s ?? ""); },
+		escAttr: viewEscAttr
+	});
 
 	initCursorTooltip();
 	if (document.readyState === "loading") {

@@ -19,6 +19,7 @@
  * juneau-ribbon.js - ribbon/toolbar runtime for the Apache Juneau rich-view toolkit.
  *
  * Builds the toolbar from viewDef.ribbon: export (feature-detected copy/csv/print via DataTables Buttons, with
+ * a hard `buttons` entry whose JSZip/pdfMake is missing rendered disabled and logged as E-JS-69, never dropped, and
  * excel/pdf lit up only when JSZip/pdfMake are present), refresh, pausePolling, collapseAll,
  * dialog (a row-less, ribbon-hosted dialog, opened through juneau-views.js's ribbon-catalog resolver),
  * option/optionGroup server-query toggles (with persisted state), and divider.
@@ -49,6 +50,13 @@
 	"use strict";
 
 	const NS = window.JuneauViews = window.JuneauViews || {};
+
+	/** One-line `%s`-replacer for this file's own error strings (each script keeps its own private copy). */
+	function fmt(msg) {
+		const args = Array.prototype.slice.call(arguments, 1);
+		let i = 0;
+		return String(msg).replace(/%s/g, function () { return i < args.length ? String(args[i++]) : "%s"; });
+	}
 
 	// ==================================================================================================================
 	// PURE LOGIC LAYER  (no DOM, no jQuery, no DataTables)
@@ -263,20 +271,39 @@
 	}
 
 	/**
-	 * Given an `export` action and detected features, returns the button ids that should actually be offered.  With no
-	 * Buttons extension the result is empty (graceful degrade); optional excel/pdf are included only when their extra
-	 * dep is present, otherwise omitted.
+	 * Button id -> `features` key of the extra dependency it needs, for ids a caller may put in the HARD `buttons` list.
+	 * `copy`/`csv`/`print`/`collapse` need nothing beyond the Buttons extension itself, so they have no entry here.
+	 */
+	const EXPORT_BUTTON_DEPS = { excel: "jszip", pdf: "pdfmake" };
+
+	/** Message (and E-JS-69 log text) for a hard export button whose extra library is absent. */
+	const EXPORT_MISSING_MSG = "ribbon export '%s' needs '%s'; load it before juneau-views.js or list the button in optional.";
+
+	/** Human-readable library name for a `features` key, for the disabled-button tip and the E-JS-69 log. */
+	const EXPORT_LIB_DISPLAY_NAME = { jszip: "JSZip", pdfmake: "pdfMake" };
+
+	/**
+	 * Given an `export` action and detected features, returns `{ok, missing}`.  `ok` is the button ids to render and
+	 * register with DataTables Buttons.  `missing` is `{id, needs}` for every id in the HARD `buttons` list whose
+	 * required extra dependency is absent: those are not silently dropped, the caller renders them disabled instead.
+	 * An id in the opt-in `optional` list whose dependency is absent is simply omitted (that list exists to opt out of
+	 * a hard requirement).  With no Buttons extension at all both arrays are empty (graceful degrade).
 	 */
 	function resolveExportButtons(action, features) {
-		const out = [];
-		if (!features?.buttons) return out;   // degrade gracefully - no export cluster at all
-		(action.buttons || []).forEach(function (b) { out.push(b); });
-		(action.optional || []).forEach(function (b) {
+		const ok = [];
+		const missing = [];
+		if (!features?.buttons) return { ok: ok, missing: missing };   // degrade gracefully - no export cluster at all
+		for (const b of (action.buttons || [])) {
+			const needs = EXPORT_BUTTON_DEPS[b];
+			if (needs && !features[needs]) missing.push({ id: b, needs: needs });
+			else ok.push(b);
+		}
+		for (const b of (action.optional || [])) {
 			// Both branches merely gate on their own extra dep being present - combined rather than duplicated.
-			if ((b === "excel" && features.jszip) || (b === "pdf" && features.pdfmake)) out.push(b);
-			// else: dep absent - omit/grey (feature-detected)
-		});
-		return out;
+			if ((b === "excel" && features.jszip) || (b === "pdf" && features.pdfmake)) ok.push(b);
+			// else: dep absent - omitted, not "missing" (opt-in degrade)
+		}
+		return { ok: ok, missing: missing };
 	}
 
 	/** localStorage key for a persisted ribbon toggle (VIEW_META §6.8: juneau.view.<viewId>.ribbon.<optionId>). */
@@ -452,8 +479,19 @@
 	// few lines and several are pinned verbatim by the wiring canary tests below `functionBody(body, "function
 	// buildRibbon(")`, so splitting them into further helpers would reduce test/code locality without reducing
 	// real complexity.
+	/**
+	 * Whether a ribbon item is shown: one with no {@code visibleWhen} always is.  A rule list is tested against the
+	 * page's top-level facts alone (a ribbon item has no row).  Presentation only; a page that somehow loaded this
+	 * runtime without the rules runtime shows the item rather than hiding it.
+	 */
+	function ribbonItemVisible(a) {
+		if (a?.visibleWhen == null) return true;
+		const rules = NS.rules;
+		return typeof rules?.test !== "function" || rules.test(a.visibleWhen, rules.facts());
+	}
+
 	function buildRibbon(viewDef, ctx) {
-		const actions = normalizeRibbon(viewDef.ribbon || []);
+		const actions = normalizeRibbon(viewDef.ribbon || []).filter(ribbonItemVisible);
 		if (!actions.length) return null;
 
 		const $ = window.jQuery;
@@ -487,7 +525,17 @@
 				return;
 			}
 			if (a.type === "export") {
-				const ids = resolveExportButtons(a, features);
+				const resolved = resolveExportButtons(a, features);
+				const ids = resolved.ok;
+				const exportGroupId = a.group ?? "__ungrouped";
+				// A button in the HARD `buttons` list whose library is absent renders DISABLED with a tip naming the
+				// library; the first miss on this ctx is logged once as E-JS-69.
+				if (resolved.missing.length && !ctx.__exportLibWarned) {
+					ctx.__exportLibWarned = true;
+					const first = resolved.missing[0];
+					console.error("[juneau-ribbon] E-JS-69: " + fmt(EXPORT_MISSING_MSG, first.id, EXPORT_LIB_DISPLAY_NAME[first.needs] || first.needs));
+				}
+				let registered = false;
 				if (ids.length && ctx.dataTable && $?.fn?.dataTable?.Buttons) {
 					try {
 						// Still registers/feature-gates each button with DataTables Buttons - but renders our own
@@ -497,13 +545,25 @@
 							buttons: ids,
 							exportOptions: { columns: ":visible" }
 						});
-						const exportGroupId = a.group ?? "__ungrouped";
-						for (const id of ids) {
-							place(button(id, resolveButtonIcon(null, id), function () {
-								ctx.dataTable.button(id).trigger();
-							}, a.appearance), exportGroupId);
-						}
+						registered = true;
 					} catch (e) { /* Buttons present but init failed - degrade silently */ } // NOSONAR javascript:S2486 -- documented best-effort degrade
+				}
+				// Declared order is kept: a missing-library button sits where it was listed, disabled.
+				const declared = (a.buttons || []).concat(a.optional || []);
+				const rendered = (registered ? ids : []).concat(resolved.missing.map(function (m) { return m.id; }));
+				rendered.sort(function (x, y) { return declared.indexOf(x) - declared.indexOf(y); });
+				for (const id of rendered) {
+					const miss = resolved.missing.find(function (m) { return m.id === id; });
+					if (miss) {
+						const dead = button(id, resolveButtonIcon(null, id), function () { /* disabled: nothing to run */ }, a.appearance);
+						dead.disabled = true;
+						stampChromeTip(dead, fmt(EXPORT_MISSING_MSG, id, EXPORT_LIB_DISPLAY_NAME[miss.needs] || miss.needs));
+						place(dead, exportGroupId);
+					} else {
+						place(button(id, resolveButtonIcon(null, id), function () {
+							ctx.dataTable.button(id).trigger();
+						}, a.appearance), exportGroupId);
+					}
 				}
 				return;
 			}

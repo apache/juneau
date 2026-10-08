@@ -28,8 +28,8 @@ import org.junit.jupiter.api.*;
 /**
  * Phase 5 module-graph re-check (now with real code): no class under {@code console-ui-freemarker}'s MAIN source
  * imports {@code org.apache.juneau.rest.server.datatables.*}. A chrome-only consumer of this module never drags
- * {@code -datatables} onto the classpath (the {@code console-ui-freemarker-datatables} module is the only one
- * allowed to import that package &mdash; see Phase 7's own module-graph re-check).
+ * {@code -datatables} onto the classpath (no console module imports that package; {@code datatables} cards reach
+ * DataTables through the {@code datatables-glue} toolkit pack).
  */
 class ModuleGraph_ImportScan_Test extends TestBase {
 

@@ -39,7 +39,6 @@ import org.junit.jupiter.params.provider.*;
  * <pre>
  * console-ui                       → rest-server
  * console-ui-freemarker            → console-ui + view-freemarker     (NOT -datatables)
- * console-ui-freemarker-datatables → console-ui-freemarker + datatables (the ONLY module allowed to touch both)
  * datatables                       → rest-server + bean-html5          (NOT console-ui — stays generic)
  * view-freemarker                  → rest-server + freemarker          (NOT -datatables — untouched)
  * </pre>
@@ -77,12 +76,6 @@ class ModuleGraph_Test extends TestBase {
 		var pom = pomOf("juneau-rest-server-datatables");
 		assertFalse(hasDependency(pom, "juneau-rest-server-console-ui"));
 		assertFalse(hasDependency(pom, "juneau-rest-server-console-ui-freemarker"));
-		assertFalse(hasDependency(pom, "juneau-rest-server-console-ui-freemarker-datatables"));
-	}
-
-	@Test void a05_consoleUiFreemarkerDatatables_dependsOnBothHalves() throws IOException {
-		var pom = pomOf("juneau-rest-server-console-ui-freemarker-datatables");
-		assertContainsAll(pom, "<artifactId>juneau-rest-server-console-ui-freemarker</artifactId>", "<artifactId>juneau-rest-server-datatables</artifactId>");
 	}
 
 	@Test void a06_consoleUi_dependsOnlyOnRestServer() throws IOException {
@@ -107,6 +100,12 @@ class ModuleGraph_Test extends TestBase {
 	@Test void a13_restParentPom_listsNoThemePacksModule() throws IOException {
 		var restPom = Files.readString(new File(new File(System.getProperty("user.dir")).getParentFile(), "pom.xml").toPath());
 		assertFalse(restPom.contains("<module>juneau-rest-server-theme-packs</module>"));
+	}
+
+	/** The console-ui-freemarker-datatables module (the old <@datatable> macro) was deleted; datatables cards go through the card registry. */
+	@Test void a14_restParentPom_listsNoConsoleUiFreemarkerDatatablesModule() throws IOException {
+		var restPom = Files.readString(new File(new File(System.getProperty("user.dir")).getParentFile(), "pom.xml").toPath());
+		assertFalse(restPom.contains("<module>juneau-rest-server-console-ui-freemarker-datatables</module>"));
 	}
 
 	/**

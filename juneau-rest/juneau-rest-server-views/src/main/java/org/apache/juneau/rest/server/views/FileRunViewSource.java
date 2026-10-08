@@ -29,6 +29,7 @@ import java.util.regex.*;
 
 import org.apache.juneau.marshall.json.JsonSerializer;
 import org.apache.juneau.marshall.marshaller.Json;
+import org.apache.juneau.rest.server.runreport.*;
 
 /**
  * A {@link RunViewSource} over one growing JSON Lines file, one event per line, paged through a

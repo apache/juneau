@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.rest.server.view.freemarker.console;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
+
 import java.util.*;
 
 import freemarker.core.*;
@@ -53,6 +55,6 @@ public final class HasToolkitMethodModel implements TemplateMethodModelEx {
 		if (! (a instanceof TemplateScalarModel s))
 			throw FtlAttrLists.reject(String.format("%s(name) takes a string; got '%s'.", NAME, a));
 		var cap = PageCapture.get(Environment.getCurrentEnvironment());
-		return cap != null && cap.toolkits().contains(s.getAsString().trim()) ? TemplateBooleanModel.TRUE : TemplateBooleanModel.FALSE;
+		return nn(cap) && cap.toolkits().contains(s.getAsString().trim()) ? TemplateBooleanModel.TRUE : TemplateBooleanModel.FALSE;
 	}
 }

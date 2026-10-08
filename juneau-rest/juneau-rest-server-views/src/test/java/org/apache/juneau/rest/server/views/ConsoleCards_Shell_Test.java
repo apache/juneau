@@ -235,8 +235,8 @@ class ConsoleCards_Shell_Test extends TestBase {
 
 	@Test void b02_csrfHeaderOnNonGetOnly() {
 		var calls = list(context("csrf").get("calls"));
-		assertEquals(Map.of("url", "/get", "method", "GET", "headers", Map.of()), calls.get(0));
-		assertEquals(Map.of("url", "/post", "method", "POST", "headers", Map.of("X-My-Csrf", "tok-123")), calls.get(1));
+		assertEquals(Map.of("url", "/get", "method", "GET", "headers", Map.of("Accept", "application/json")), calls.get(0));
+		assertEquals(Map.of("url", "/post", "method", "POST", "headers", Map.of("Accept", "application/json", "X-My-Csrf", "tok-123")), calls.get(1));
 	}
 
 	@Test void b03_errorMessagePrecedence() {

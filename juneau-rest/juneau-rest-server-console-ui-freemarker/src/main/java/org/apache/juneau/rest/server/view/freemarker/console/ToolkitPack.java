@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.rest.server.view.freemarker.console;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
+
 import java.util.*;
 
 /**
@@ -78,7 +80,7 @@ public final class ToolkitPack {
 	 * @return A new builder.
 	 */
 	public static Builder create(String name) {
-		if (name == null || name.isBlank())
+		if (ib(name))
 			throw new IllegalArgumentException("Toolkit pack name must not be blank.");
 		return new Builder(name.trim());
 	}
@@ -185,7 +187,7 @@ public final class ToolkitPack {
 		 * @param value The kind.
 		 * @return This object.
 		 */
-		public Builder kind(Kind value) { kind = Objects.requireNonNull(value, "kind"); return this; }
+		public Builder kind(Kind value) { kind = rnn(value); return this; }
 
 		/**
 		 * Sets the asset-URL resolver.  Defaults to {@link ToolkitPackRegistry#VIEWS_RESOLVER}.
@@ -193,7 +195,7 @@ public final class ToolkitPack {
 		 * @param value The resolver.
 		 * @return This object.
 		 */
-		public Builder resolver(ToolkitPackRegistry.AssetUrlResolver value) { resolver = Objects.requireNonNull(value, "resolver"); return this; }
+		public Builder resolver(ToolkitPackRegistry.AssetUrlResolver value) { resolver = rnn(value); return this; }
 
 		/**
 		 * Builds the pack.
@@ -202,7 +204,7 @@ public final class ToolkitPack {
 		 * @throws IllegalArgumentException If no kind was set.
 		 */
 		public ToolkitPack build() {
-			if (kind == null)
+			if (n(kind))
 				throw new IllegalArgumentException(String.format("Toolkit pack '%s' needs kind(VENDOR) or kind(RUNTIME).", name));
 			return new ToolkitPack(this);
 		}

@@ -18,6 +18,8 @@ package org.apache.juneau.rest.server.views;
 
 import java.util.regex.*;
 
+import org.apache.juneau.rest.server.runreport.*;
+
 /**
  * Shared grammars for console-output data: colours, line hrefs, image sources, icon names, tokens.
  *
@@ -29,7 +31,6 @@ final class ConsoleOutputChecks {
 
 	static final Pattern HEX_COLOR = Pattern.compile("^#(?:[0-9a-fA-F]{3}|[0-9a-fA-F]{6})$");
 	static final Pattern RGB_COLOR = Pattern.compile("^rgb\\(\\s*(\\d{1,3})\\s*,\\s*(\\d{1,3})\\s*,\\s*(\\d{1,3})\\s*\\)$");
-	static final Pattern FRAGMENT_HREF = Pattern.compile("^#[A-Za-z0-9._:~-]{0,128}$");
 	static final Pattern ICON_NAME = Pattern.compile("^[a-z][A-Za-z0-9.-]{0,63}$");
 	static final Pattern TOKEN = Pattern.compile("^[A-Za-z0-9._~-]{1,128}$");
 	static final Pattern LOG_ID = Pattern.compile("^[A-Za-z0-9_-]{1,128}$");
@@ -58,12 +59,7 @@ final class ConsoleOutputChecks {
 	 * @return <jk>true</jk> if the href is safe.
 	 */
 	static boolean isSafeLineHref(String s) {
-		if (s == null)
-			return false;
-		var t = stripTabCrLf(s);
-		if (t.startsWith("#"))
-			return FRAGMENT_HREF.matcher(t).matches();
-		return isSafePath(t);
+		return RunViewChecks.isSafeLineHref(s);
 	}
 
 	static boolean isSafeLineImageSrc(String s) {
@@ -91,9 +87,7 @@ final class ConsoleOutputChecks {
 
 	/** Truncates a value for an error message: 64 chars plus an ellipsis. */
 	static String clip(String s) {
-		if (s == null)
-			return "null";
-		return s.length() > 64 ? s.substring(0, 64) + "…" : s;
+		return RunViewChecks.clip(s);
 	}
 
 	private static String stripTabCrLf(String s) {
@@ -101,6 +95,6 @@ final class ConsoleOutputChecks {
 	}
 
 	private static boolean isSafePath(String t) {
-		return RegionDef.isSafeDetailEndpoint(t.replace('\\', '/'));
+		return RunViewChecks.isSameOriginPath(t.replace('\\', '/'));
 	}
 }

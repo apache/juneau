@@ -163,7 +163,7 @@ class ConsoleTemplateValidator_Test extends TestBase {
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
-	// card-src-and-body, inline-slot-meta, card-reserved-key (C2)
+	// card-src-and-body, card-reserved-key (C2)
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Test void cb01_cardSrcAndBody() {
@@ -176,20 +176,10 @@ class ConsoleTemplateValidator_Test extends TestBase {
 		assertClean("<@page><@card id=\"t\" type=\"datatables\" src=\"/rest/t\"/></@page>");
 	}
 
-	@Test void cb03_inlineSlotMeta() {
-		assertOne("<@page><@card id=\"t\" type=\"datatables\">{layout:'wide',view:{}}</@card></@page>",
-			1, 8, "inline-slot-meta",
-			"<@card id='t'> body is a pre-built SLOT_META (has a 'view' object); author the table catalog in author shape instead. This becomes an error at GC-1.");
-	}
-
-	@Test void cb03b_inlineSlotMeta_staleVersionAlsoReportsViewContractVersion() {
-		// C1's view-contract-version rule stays (Auto-decision 4); both rules fire on a stale pinned escape hatch.
+	@Test void cb03_prebuiltSlotMeta_reportsOnlyViewContractVersionAfterGc1() {
+		// inline-slot-meta is gone at GC-1 (E-28 at render); C1's view-contract-version rule stays (Auto-decision 4).
 		var f = lint("<@page><@card id=\"t\" type=\"datatables\">{view:{contractVersion:'0',id:'t'}}</@card></@page>");
-		assertEquals(List.of("inline-slot-meta", "view-contract-version"), f.stream().map(x -> x.rule()).sorted().toList());
-	}
-
-	@Test void cb04_inlineSlotMeta_onlyForDatatables() {
-		assertClean("<@page><@card id=\"t\" type=\"kpi\">{contractVersion:'1',view:{}}</@card></@page>");
+		assertEquals(List.of("view-contract-version"), f.stream().map(x -> x.rule()).toList());
 	}
 
 	@Test void cb05_cardReservedKey() {
@@ -207,6 +197,25 @@ class ConsoleTemplateValidator_Test extends TestBase {
 
 	@Test void cb08_plainHtmlCard_isClean() {
 		assertClean("<@page><@card id=\"t\">{value:1}</@card></@page>");
+	}
+
+	@Test void cb09_classAttr_isAcceptedOnCard() {
+		assertClean("<@page><@card id=\"t\" class=\"ssc-skills x\"><p>x</p></@card></@page>");
+	}
+
+	@Test void cb10_escapedQuoteInSingleQuotedString_isNotAReservedKey() {
+		assertClean("<@page><@card id=\"t\" type=\"kpi\">{ label: 'item\\'s', note: 'id: 1, type: 2', value: 1 }</@card></@page>");
+	}
+
+	@Test void cb11_escapedQuoteInDoubleQuotedString_isNotAReservedKey() {
+		assertClean("<@page><@card id=\"t\" type=\"kpi\">{ \"say\": \"say \\\"hi\\\" id: x\", value: 1 }</@card></@page>");
+	}
+
+	@Test void cb12_reservedKeyAfterEscapedQuote_isStillCaught() {
+		assertOne("<@page><@card id=\"t\" type=\"kpi\">{ label: 'item\\'s', src: 'x', value: 1 }</@card></@page>",
+			1, 8, "card-reserved-key", "<@card id='t'> body key 'src' is reserved; set it as an attribute.");
+		assertOne("<@page><@card id=\"t\" type=\"kpi\">{ label: \"say \\\"hi\\\"\", id: 'x' }</@card></@page>",
+			1, 8, "card-reserved-key", "<@card id='t'> body key 'id' is reserved; set it as an attribute.");
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

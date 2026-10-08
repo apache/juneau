@@ -81,6 +81,8 @@ public class RowActionEnabledRule {
 	public static RowActionEnabledRule of(String field, Op op, Object value, String reason) {
 		if (field == null || field.isBlank())
 			throw iaex("RowActionEnabledRule field must not be null or blank.");
+		if (op != null && op.isCollectionOp())
+			throw iaex("RowActionEnabledRule op '%s' is a visibility-rule operator; use eq or ne.", op.wire());
 		if (op == null || ! op.requiresValue())
 			throw iaex("RowActionEnabledRule op '%s' does not take a value; use the (field, op, reason) form.",
 				op == null ? "null" : op.wire());

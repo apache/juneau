@@ -69,21 +69,21 @@ public final class CardDirectiveModel implements TemplateDirectiveModel {
 	/** The shared-variable name this directive registers under. */
 	public static final String NAME = "card";
 
-	static final Set<String> ATTRS = Set.of("type", "id", "title", "src", "template", "requires");
+	static final Set<String> ATTRS = Set.of("type", "id", "title", "src", "template", "requires", "class");
 
 	private static final Set<String> REMOVED_TYPES = Set.of("js", "json", "calendar");
+
+	private static final Pattern CLASS_TOKEN_RE = Pattern.compile("^[A-Za-z_-][A-Za-z0-9_-]*$");
 
 	private static final Pattern TYPE_RE = Pattern.compile("^[a-z][a-z0-9-]{0,31}$");
 
 	/** Contract base keys copied onto {@link CardSpec}'s own setters rather than {@link CardSpec#body}. */
 	private static final Set<String> BASE_KEYS = Set.of("id", "type", "title", "src", "template");
 
-	private final boolean devMode;
 	private final CardRequirements requirements;
 	private final CardTypeRegistry cardTypes;
 
-	CardDirectiveModel(boolean devMode, CardRequirements requirements, CardTypeRegistry cardTypes) {
-		this.devMode = devMode;
+	CardDirectiveModel(CardRequirements requirements, CardTypeRegistry cardTypes) {
 		this.requirements = requirements;
 		this.cardTypes = cardTypes;
 	}
@@ -102,6 +102,7 @@ public final class CardDirectiveModel implements TemplateDirectiveModel {
 		var type = FtlAttrLists.scalar(p, "type");
 		var authoredId = FtlAttrLists.scalar(p, "id");
 		var requires = FtlAttrLists.list(p, NAME, "requires");
+		var cssClass = cssClass(p, authoredId);
 		if (REMOVED_TYPES.contains(type))
 			throw FtlAttrLists.reject(String.format(
 				"<@card id='%s'> type='%s' was removed in 10.0.0; use type='html' with a <template>, or a registered card type.",
@@ -110,7 +111,7 @@ public final class CardDirectiveModel implements TemplateDirectiveModel {
 			throw FtlAttrLists.reject(String.format("<@card id='%s'> type='%s' must match ^[a-z][a-z0-9-]{0,31}$.", authoredId, type));
 
 		var cap = PageCapture.get(env);
-		if (cap == null || ! cap.pageOpen)
+		if (n(cap) || ! cap.pageOpen)
 			throw FtlAttrLists.reject("<@card> must be nested inside <@page>.");
 		if (cap.cardOpen)
 			throw FtlAttrLists.reject("<@card> cannot be nested inside another <@card>.");
@@ -134,12 +135,29 @@ public final class CardDirectiveModel implements TemplateDirectiveModel {
 		var cardType = type.isEmpty() ? "html" : type;
 		var id = authoredId.isEmpty() && eq(cardType, "html") ? cap.nextCardId() : authoredId;
 		if (eq(cardType, "run-view"))
-			runViewCard(cap, id, title, src, template, markup);
+			runViewCard(cap, id, title, src, template, markup, cssClass);
 		else if (eq(cardType, "html"))
-			htmlCard(cap, id, title, src, template, markup);
+			htmlCard(cap, id, title, src, template, markup, cssClass);
 		else
-			registryCard(cap, cardType, id, title, src, template, markup, env.getCurrentTemplate().getName());
+			registryCard(cap, cardType, id, title, src, template, markup, cssClass);
 		recordRequirements(cap, cardType, id, requires);
+	}
+
+	/**
+	 * Reads {@code class=}: a space-separated list of CSS class tokens, each matching
+	 * {@code [A-Za-z_-][A-Za-z0-9_-]*}. Returns the tokens joined by single spaces, or {@code ""} when absent.
+	 */
+	private static String cssClass(Map<String, TemplateModel> p, String authoredId) throws TemplateModelException {
+		var raw = FtlAttrLists.scalar(p, "class");
+		if (raw.isEmpty())
+			return "";
+		var tokens = raw.split("\\s+");
+		for (var t : tokens)
+			if (! CLASS_TOKEN_RE.matcher(t).matches())
+				throw FtlAttrLists.reject(String.format(
+					"<@card id='%s'> class='%s' must be a space-separated list of CSS class names matching [A-Za-z_-][A-Za-z0-9_-]*.",
+					authoredId, raw));
+		return String.join(" ", tokens);
 	}
 
 	// The one place a card's packs are recorded; <@page> resolves them after its body.
@@ -151,7 +169,8 @@ public final class CardDirectiveModel implements TemplateDirectiveModel {
 		}
 	}
 
-	private static void htmlCard(PageCapture cap, String id, String title, String src, String template, String markup)
+	private static void htmlCard(PageCapture cap, String id, String title, String src, String template, String markup,
+			String cssClass)
 			throws TemplateModelException {
 		var hasBody = ! markup.isBlank();
 		var sources = (hasBody ? 1 : 0) + (src.isEmpty() ? 0 : 1) + (template.isEmpty() ? 0 : 1);
@@ -167,6 +186,8 @@ public final class CardDirectiveModel implements TemplateDirectiveModel {
 			card.src(src);
 		if (! template.isEmpty())
 			card.template(template);
+		if (! cssClass.isEmpty())
+			card.cssClass(cssClass);
 		cap.addCard(card, hasBody ? markup : null);
 	}
 
@@ -176,7 +197,7 @@ public final class CardDirectiveModel implements TemplateDirectiveModel {
 	 * generic passthrough for an unregistered type).
 	 */
 	private void registryCard(PageCapture cap, String type, String id, String title, String src, String template,
-			String markup, String ftlName) throws TemplateModelException {
+			String markup, String cssClass) throws TemplateModelException {
 		if (id.isEmpty())
 			throw FtlAttrLists.reject(String.format("<@card type=\"%s\"> requires id=.", type));
 		var hasBody = ! markup.isBlank();
@@ -205,12 +226,13 @@ public final class CardDirectiveModel implements TemplateDirectiveModel {
 		JsonMap card;
 		try {
 			card = cardTypes.toCard(source.build());
-			if (eq(type, "datatables") && card.get("table") instanceof JsonMap t && t.get("view") instanceof Map)
-				DatatablesCardType.reconcileViewVersion(id, t, ftlName, devMode);
 		} catch (IllegalArgumentException e) {
 			throw FtlAttrLists.reject(e.getMessage());
 		}
-		cap.addCard(toCardSpec(card), captured[0] ? markup : null);
+		var spec = toCardSpec(card);
+		if (! cssClass.isEmpty())
+			spec.cssClass(cssClass);
+		cap.addCard(spec, captured[0] ? markup : null);
 	}
 
 	/** Converts the flat {@link CardTypeRegistry#toCard} result into the {@link CardSpec} {@link PageCapture} wants. */
@@ -239,7 +261,7 @@ public final class CardDirectiveModel implements TemplateDirectiveModel {
 		"unchecked" // JSON5 object keys are always strings.
 	})
 	private static void runViewCard(PageCapture cap, String id, String title, String src, String template,
-			String markup) throws TemplateModelException {
+			String markup, String cssClass) throws TemplateModelException {
 		if (id.isEmpty())
 			throw FtlAttrLists.reject("<@card type=\"run-view\"> requires id=.");
 		if (! (src.isEmpty() && template.isEmpty()))
@@ -260,7 +282,7 @@ public final class CardDirectiveModel implements TemplateDirectiveModel {
 				throw FtlAttrLists.reject(String.format(
 					"<@card id='%s'> type='run-view' unknown key '%s'; allowed: contractVersion, runView.", id, k));
 		var version = envelope.get("contractVersion");
-		if (! "1".equals(version))
+		if (! eq("1", version))
 			throw FtlAttrLists.reject(String.format(
 				"<@card id='%s'> type='run-view' requires contractVersion: '1'; got '%s'.", id, version));
 		if (! (envelope.get("runView") instanceof Map<?,?> runView))
@@ -269,6 +291,8 @@ public final class CardDirectiveModel implements TemplateDirectiveModel {
 		var card = CardSpec.of("run-view", id);
 		if (! title.isEmpty())
 			card.title(title);
+		if (! cssClass.isEmpty())
+			card.cssClass(cssClass);
 		card.body("runView", def.toMap());
 		cap.addCard(card, null);
 	}

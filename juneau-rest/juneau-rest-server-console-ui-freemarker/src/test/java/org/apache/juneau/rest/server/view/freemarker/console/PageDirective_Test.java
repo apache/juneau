@@ -126,7 +126,7 @@ class PageDirective_Test extends TestBase {
 	}
 
 	@Test void freeze_demoDatatableMacro_isNotTypeDatatables() throws Exception {
-		// The demo <@datatable> macro lives in the datatables module; this module must NOT define a shared
+		// The old <@datatable> macro module is gone; nothing may re-introduce a shared variable named "datatable".
 		// variable named "datatable".  type="datatables" on <@card> is the framework surface, not a directive.
 		var cfg = ConsoleFreemarkerMixin.create().basePath("/templates/")
 			.chromeTemplate("admin/console-chrome-bare.ftlh").build()

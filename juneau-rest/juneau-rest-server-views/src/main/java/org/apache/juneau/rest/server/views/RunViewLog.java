@@ -21,6 +21,7 @@ import static org.apache.juneau.commons.utils.Shorts.*;
 import java.util.*;
 import java.util.concurrent.*;
 import java.util.regex.*;
+import org.apache.juneau.rest.server.runreport.*;
 
 /**
  * A thread-safe, in-memory {@link RunViewSource} that a producer appends to directly.

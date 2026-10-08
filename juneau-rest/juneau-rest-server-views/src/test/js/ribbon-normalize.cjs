@@ -134,7 +134,7 @@ if (out.hasNormalizeRibbon) {
 	out.pure_print_icon = first.NS.ribbon.resolveButtonIcon(null, 'print');
 	out.pure_print_resolvedFromAlwaysOnButtons = first.NS.ribbon.resolveExportButtons(
 		action('export', { buttons: ['copy', 'print'] }), { buttons: true, jszip: false, pdfmake: false }
-	).join(',');
+	).ok.join(',');
 
 	// 7) resolveButtonIcon('collapse') resolves to the wired "collapse" icon key (no longer purely
 	// forward-compatible now that the collapseAll action type dispatches to it).

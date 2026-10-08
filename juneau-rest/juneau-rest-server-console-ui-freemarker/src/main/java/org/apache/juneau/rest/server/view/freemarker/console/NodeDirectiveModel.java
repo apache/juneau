@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.rest.server.view.freemarker.console;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
+
 import java.io.*;
 import java.util.*;
 
@@ -81,7 +83,7 @@ public final class NodeDirectiveModel implements TemplateDirectiveModel {
 		var selected = FtlAttrLists.strictBoolean(p, NAME, "selected", false);
 
 		var cap = PageCapture.get(env);
-		if (cap == null || ! cap.navOpen)
+		if (n(cap) || ! cap.navOpen)
 			throw FtlAttrLists.reject("<@node> must be nested inside <@navigation>.");
 
 		// visible=false omits the node and its whole subtree; the body is not rendered.
@@ -91,13 +93,13 @@ public final class NodeDirectiveModel implements TemplateDirectiveModel {
 		var node = cap.navCursor.peek().add(id, label, href.isEmpty() ? null : href);
 		cap.navCursor.push(node);
 		try (var sink = new StringWriter()) {
-			if (body != null)
+			if (nn(body))
 				body.render(sink);
 		} finally {
 			cap.navCursor.pop();
 		}
 
-		if (node.children().isEmpty() && node.href() == null)
+		if (node.children().isEmpty() && n(node.href()))
 			throw FtlAttrLists.reject(String.format("<@node id='%s'> leaf requires href=.", id));
 		if (selected)
 			cap.select(node.idPath());

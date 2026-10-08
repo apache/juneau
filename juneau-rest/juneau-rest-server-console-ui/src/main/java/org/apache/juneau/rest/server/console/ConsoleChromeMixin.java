@@ -179,6 +179,15 @@ public class ConsoleChromeMixin {
 	/** Classpath location of the console shell script. */
 	public static final String CONSOLE_JS_RESOURCE = "/org/apache/juneau/console/juneau-console.js";
 
+	/** Context-root-absolute path of the count-badge script. */
+	public static final String BADGES_JS_PATH = "/juneau-console/juneau-badges.js";
+
+	/** {@link #BADGES_JS_PATH} minus the {@code /juneau-console} prefix. */
+	public static final String BADGES_JS_PATH_UNPREFIXED = "/juneau-badges.js";
+
+	/** Classpath location of the count-badge script. */
+	public static final String BADGES_JS_RESOURCE = "/org/apache/juneau/console/juneau-badges.js";
+
 	/** Context-root-absolute path of the page-contract schema. */
 	public static final String SCHEMA_PATH = "/juneau-console/juneau-page.schema.json";
 
@@ -355,6 +364,21 @@ public class ConsoleChromeMixin {
 	}
 
 	/**
+	 * [GET /juneau-console/juneau-badges.js] &mdash; serve the count-badge script.
+	 *
+	 * @return The script.
+	 */
+	@RestGet(
+		path={BADGES_JS_PATH, BADGES_JS_PATH_UNPREFIXED},
+		summary="Console count-badge script",
+		description="Polls and renders the header.badges entries of the #juneau-page contract.",
+		swagger=@OpSwagger(ignore=true)
+	)
+	public HttpResource getBadgesJs() {
+		return ASSET_CACHE.serve(BADGES_JS_RESOURCE, JS_CONTENT_TYPE, CACHE_CONTROL);
+	}
+
+	/**
 	 * [GET /juneau-console/juneau-page.schema.json] &mdash; serve the page-contract schema.
 	 *
 	 * @return The schema.
@@ -416,6 +440,16 @@ public class ConsoleChromeMixin {
 	 */
 	public static String consoleJsUrl(RestRequest req) {
 		return consoleMountUrl(req, CONSOLE_JS_PATH, CONSOLE_JS_RESOURCE);
+	}
+
+	/**
+	 * Context-root-absolute, cache-busted URL of the count-badge script.
+	 *
+	 * @param req The current request.
+	 * @return The URL.
+	 */
+	public static String badgesJsUrl(RestRequest req) {
+		return consoleMountUrl(req, BADGES_JS_PATH, BADGES_JS_RESOURCE);
 	}
 
 	/**

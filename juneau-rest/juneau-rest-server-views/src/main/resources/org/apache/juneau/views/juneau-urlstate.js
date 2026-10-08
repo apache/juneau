@@ -19,7 +19,7 @@
  * juneau-urlstate.js - the shareable "Copy link" URL-state codec (design section 6.3).
  *
  * A single, dependency-free codec for the ONE opaque query parameter named `state`, whose value uses the Juneau
- * directives tab(...), filter(...), and sort(...) and NOTHING else.  It attaches to window.JuneauViews.urlState
+ * directives tab(...), filter(...), and sort(...) plus any directive a page registers via registerDirective.  It attaches to window.JuneauViews.urlState
  * (mirroring the other dependency-free pre-views globals: the icon registry, the column-search engine, and the
  * page-state store), so it loads as a plain <script> BEFORE juneau-views.js and juneau-config.js, which consume it.
  *
@@ -47,6 +47,135 @@
 	function isBlank(v) { return v == null || String(v) === ''; }
 
 	// -------------------------------------------------------------------------------------------------------------
+	// Directive registry: tab/filter/sort are built in; a page may add more (the built-ins `window` and `ids` below).
+	// -------------------------------------------------------------------------------------------------------------
+
+	const RESERVED_DIRECTIVES = { tab: true, filter: true, sort: true };
+	const DIRECTIVE_NAME_RE = /^[a-z][a-zA-Z0-9]{0,31}$/;
+	const registry = Object.create(null);
+	const directiveOrder = []; // registration order, so encodeState appends ext directives deterministically
+
+	/**
+	 * Registers a `?state=` directive beyond the built-in tab/filter/sort.
+	 *
+	 * <p>
+	 * `codec` is `{ parse(body) -> value, serialize(value) -> body, isEmpty?(value), toParams?(value) -> object,
+	 * apply?(value, table) }`.  `parse` and `serialize` must be inverses; build bodies with {@link encodeArg} so a value
+	 * carrying the grammar's own separators round-trips.  A reserved, malformed, or already-registered name logs
+	 * E-JS-67 and the directive simply does not exist.
+	 *
+	 * @example
+	 *   NS.urlState.registerDirective('view', { parse: String, serialize: String });
+	 */
+	function registerDirective(name, codec) {
+		if (RESERVED_DIRECTIVES[name] || ! DIRECTIVE_NAME_RE.test(String(name)) || registry[name]
+			|| ! codec || typeof codec.parse !== 'function' || typeof codec.serialize !== 'function') {
+			console.error('[juneau-urlstate] E-JS-67: url-state directive \'' + name + '\' is reserved, malformed, or already registered');
+			return false;
+		}
+		registry[name] = { codec: codec };
+		directiveOrder.push(name);
+		return true;
+	}
+
+	/** Whether a directive is registered under `name` (built-in tab/filter/sort are not registry entries). */
+	function hasDirective(name) { return !! registry[name]; }
+
+	/** The registered codec for `name`, or null. */
+	function directiveCodec(name) { return registry[name] ? registry[name].codec : null; }
+
+	/** The registered directive names, in registration order. */
+	function directiveNames() { return directiveOrder.slice(); }
+
+	/** Percent-encodes the characters the directive grammar is sensitive to, so a codec body always parses. */
+	function encodeArg(s) {
+		return String(s == null ? '' : s).replace(/[;(),=%]/g, function (c) { return '%' + c.charCodeAt(0).toString(16).toUpperCase(); });
+	}
+
+	/** Decodes an {@link encodeArg} value; a malformed %-sequence is kept as-is. */
+	function decodeArg(s) {
+		try { return decodeURIComponent(String(s)); } catch (e) { return String(s); } // NOSONAR javascript:S2486 -- a malformed %-sequence keeps the raw text
+	}
+
+	/** Whether a registered directive's value is empty (so it is omitted from the encoded state). */
+	function extValueEmpty(codec, value) {
+		return codec.isEmpty ? !! codec.isEmpty(value) : (value == null || value === '');
+	}
+
+	/** Built-in `window` directive: body `start=<iso>;end=<iso>`, either half optional; `params` renames the request params. */
+	function windowDirectiveCodec(cfg) {
+		const params = (cfg && cfg.params) || {};
+		const startParam = params.start || 'start';
+		const endParam = params.end || 'end';
+		return {
+			parse: function (body) {
+				const out = {};
+				for (const part of String(body || '').split(';')) {
+					const eq = part.indexOf('=');
+					if (eq <= 0) continue;
+					const k = part.substring(0, eq);
+					if (k === 'start' || k === 'end') out[k] = decodeArg(part.substring(eq + 1));
+				}
+				return out;
+			},
+			serialize: function (v) {
+				const out = [];
+				if (v?.start) out.push('start=' + encodeArg(v.start));
+				if (v?.end) out.push('end=' + encodeArg(v.end));
+				return out.join(';');
+			},
+			isEmpty: function (v) { return ! v || (! v.start && ! v.end); },
+			toParams: function (v) {
+				const out = {};
+				if (v?.start) out[startParam] = v.start;
+				if (v?.end) out[endParam] = v.end;
+				return out;
+			}
+		};
+	}
+
+	/** Built-in `ids` directive: body `a,b,c`; trims, drops blanks, dedupes, and caps at `max` (default 200). */
+	function idsDirectiveCodec(cfg) {
+		const param = cfg?.param || 'ids';
+		const max = cfg?.max || 200;
+		function normalize(raw) {
+			const seen = Object.create(null);
+			const ids = [];
+			for (const part of String(raw || '').split(',')) {
+				const v = decodeArg(part).trim();
+				if (v === '') continue;
+				if (seen[v] || ids.length >= max) continue;
+				seen[v] = true;
+				ids.push(v);
+			}
+			return { ids: ids, truncated: hasDroppedBeyondCap(raw, ids, max) };
+		}
+		return {
+			parse: function (body) { return normalize(body); },
+			serialize: function (v) { return (v?.ids || []).map(encodeArg).join(','); },
+			isEmpty: function (v) { return ! v?.ids || v.ids.length === 0; },
+			toParams: function (v) {
+				const out = {};
+				out[param] = (v?.ids || []).join(',');
+				return out;
+			},
+			statusMessage: function (v) { return v?.truncated ? ('Showing the first ' + max + ' ids') : null; }
+		};
+	}
+
+	/** Whether any distinct non-blank id in `raw` was left out of `kept` purely because of the cap (dupes do not count). */
+	function hasDroppedBeyondCap(raw, kept, max) {
+		if (kept.length < max) return false;
+		const keptSet = Object.create(null);
+		for (const k of kept) keptSet[k] = true;
+		for (const part of String(raw || '').split(',')) {
+			const v = decodeArg(part).trim();
+			if (v !== '' && ! keptSet[v]) return true;
+		}
+		return false;
+	}
+
+	// -------------------------------------------------------------------------------------------------------------
 	// Codec: {tab, filters:[{column,expr}], sort:{column,dir}} <-> "tab(x);filter(col=expr);sort(col=dir)"
 	// -------------------------------------------------------------------------------------------------------------
 
@@ -72,6 +201,14 @@
 		const sort = state.sort;
 		if (sort && ! isBlank(sort.column) && ! isBlank(sort.dir))
 			parts.push('sort(' + clauseEscape(String(sort.column)) + '=' + sort.dir + ')');
+		const ext = state.ext || {};
+		for (const extName of directiveOrder) {
+			if (! (extName in ext)) continue;
+			const codec = registry[extName].codec;
+			if (extValueEmpty(codec, ext[extName])) continue;
+			// '%' is doubled so decodeState's one whole-string percent-decode leaves the codec's own %XX escapes intact.
+			parts.push(extName + '(' + String(codec.serialize(ext[extName])).replace(/%/g, '%25') + ')');
+		}
 		return parts.join(';');
 	}
 
@@ -203,7 +340,7 @@
 	 * S4: Discarding until the next top-level `;` after a malformed directive.
 	 */
 	function decodeState(str) { // NOSONAR javascript:S3776 -- URL state parsing; complexity is inherent
-		const state = { tab: null, filters: [], sort: null };
+		const state = { tab: null, filters: [], sort: null, ext: {} };
 		if (str == null) return state;
 		let raw = String(str);
 		if (raw.indexOf('%') >= 0) {
@@ -233,8 +370,15 @@
 				const sortClauses = parseClauses(b);
 				if (sortClauses.length > 0 && sortClauses[0].key !== '')
 					state.sort = { column: sortClauses[0].key, dir: sortClauses[0].value };
+			} else if (registry[n]) {
+				try {
+					state.ext[n] = registry[n].codec.parse(b);
+				} catch (e) {
+					// E-JS-68: the directive is dropped; tab/filter/sort already decoded are kept.
+					console.error('[juneau-urlstate] E-JS-68: url-state directive \'' + n + '\' could not be parsed: ' + (e?.message || e));
+				}
 			}
-			// Any other directive name is deliberately ignored (design section 6.3: tab/filter/sort ONLY).
+			// An unregistered directive name is dropped (design section 6.3, extended: tab/filter/sort plus whatever the page registered).
 		}
 
 		function flushPending() {
@@ -310,9 +454,16 @@
 		return state;
 	}
 
-	/** Whether a decoded state carries no tab, no filters, and no sort (i.e. nothing to restore). */
+	/** Whether a decoded state carries no tab, no filters, and no sort (i.e. nothing to restore); registered directives count too. */
 	function isEmptyState(state) {
-		return ! state || (isBlank(state.tab) && (! state.filters || state.filters.length === 0) && ! state.sort);
+		if (! state) return true;
+		if (! isBlank(state.tab) || (state.filters && state.filters.length > 0) || state.sort) return false;
+		const ext = state.ext || {};
+		for (const name of Object.keys(ext)) {
+			const codec = registry[name]?.codec;
+			if (codec && ! extValueEmpty(codec, ext[name])) return false;
+		}
+		return true;
 	}
 
 	// -------------------------------------------------------------------------------------------------------------
@@ -417,6 +568,23 @@
 		buildShareUrl: buildShareUrl,
 		copy: copy,
 		cleanAddressEnabled: cleanAddressEnabled,
-		resolveOpenState: resolveOpenState
+		resolveOpenState: resolveOpenState,
+		registerDirective: registerDirective,
+		hasDirective: hasDirective,
+		directiveCodec: directiveCodec,
+		directiveNames: directiveNames,
+		encodeArg: encodeArg,
+		decodeArg: decodeArg,
+		builtins: { window: windowDirectiveCodec, ids: idsDirectiveCodec },
+		// Needs a live table, which this DOM-free module never has: delegates to juneau-views.js at call time, so
+		// either script load order works.
+		setDirective: function (tableEl, name, value) {
+			const run = NS.init?.setUrlStateDirective;
+			if (typeof run !== 'function') {
+				console.error('[juneau-urlstate] E-JS-67: setDirective needs juneau-views.js loaded');
+				return false;
+			}
+			return run(tableEl, name, value);
+		}
 	};
 })();

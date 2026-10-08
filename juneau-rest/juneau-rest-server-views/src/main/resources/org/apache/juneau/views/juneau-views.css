@@ -2871,6 +2871,54 @@ input[type="checkbox"].jc-editable-field-input {
 	box-sizing: border-box;
 }
 
+/*
+ * Inline cell edit (the edit renderer): a value with a pencil that swaps the cell to an input.
+ */
+.juneau-edit-pencil {
+	margin-left: 0.35em;
+	padding: 0;
+	border: 0;
+	background: transparent;
+	cursor: pointer;
+	vertical-align: middle;
+	width: 1em;
+	height: 1em;
+	line-height: 1;
+	opacity: 0.55;
+}
+
+.juneau-edit-pencil::before {
+	content: "\270E";
+}
+
+.juneau-edit-pencil:hover,
+.juneau-edit-pencil:focus-visible {
+	opacity: 1;
+}
+
+.juneau-edit-pencil[disabled],
+.juneau-edit-pencil[aria-disabled="true"] {
+	cursor: not-allowed;
+	opacity: 0.3;
+}
+
+.juneau-edit-editor {
+	display: inline-flex;
+	flex-direction: column;
+	gap: 0.2em;
+}
+
+.juneau-edit-input {
+	font: inherit;
+	max-width: 100%;
+	box-sizing: border-box;
+}
+
+.juneau-edit-error {
+	font-size: 0.85em;
+	color: var(--jc-chrome-danger, currentColor);
+}
+
 .jc-cell-popover {
 	position: fixed;
 	z-index: var(--jc-popover-z);
@@ -3438,6 +3486,36 @@ input[type="checkbox"].jc-editable-field-input {
 
 .juneau-rv-step {
 	padding: var(--jc-space-1) 0;
+}
+
+.juneau-rv-attempts-toggle {
+	font: inherit;
+	color: var(--jc-tone-info);
+	background: none;
+	border: 0;
+	padding: 0;
+	text-align: left;
+	cursor: pointer;
+}
+
+.juneau-rv-attempts-toggle:hover .juneau-rv-attempts-label {
+	text-decoration: underline;
+}
+
+.juneau-rv-attempts-chevron {
+	display: inline-block;
+	width: 1.2em;
+}
+
+.juneau-rv-attempts {
+	list-style: none;
+	margin: 0;
+	padding: 0 0 0 var(--jc-space-4);
+	opacity: 0.85;
+}
+
+.juneau-rv-attempts[hidden] {
+	display: none;
 }
 
 .juneau-rv-step-head {

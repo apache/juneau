@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.rest.server.view.freemarker.console;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
+
 import java.io.*;
 import java.util.*;
 
@@ -52,11 +54,11 @@ public final class MainDirectiveModel implements TemplateDirectiveModel {
 		if (p.containsKey("format"))
 			throw FtlAttrLists.reject("<@main> has no format= attribute.");
 		FtlAttrLists.rejectUnknown(p, NAME, ATTRS);
-		if (body != null)
+		if (nn(body))
 			throw FtlAttrLists.reject("<@main/> is self-closing; the page body is the main content and takes no nested body.");
 
 		var cap = PageCapture.get(env);
-		if (cap == null || ! cap.consoleOpen)
+		if (n(cap) || ! cap.consoleOpen)
 			throw FtlAttrLists.reject(String.format("<@%s> must be nested inside <@console>.", NAME));
 		cap.markMain();
 	}

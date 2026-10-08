@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.rest.server.view.freemarker.console;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
+
 import java.io.*;
 import java.util.*;
 import java.util.concurrent.*;
@@ -85,7 +87,7 @@ public final class AssetUrlMethodModel implements TemplateMethodModelEx {
 	private String token(String path) {
 		var resource = root + path.substring(1);
 		try (var in = loader.getResourceAsStream(resource)) {
-			if (in != null)
+			if (nn(in))
 				return ChecksumUtils.hash8(in.readAllBytes());
 		} catch (IOException e) {
 			LOG.log(Level.WARNING, e, () -> "assetUrl: cannot read bundled resource '" + resource + "'.");

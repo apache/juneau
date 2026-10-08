@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.rest.server.view.freemarker.console;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
+
 import java.util.*;
 import java.util.logging.*;
 
@@ -49,6 +51,8 @@ public final class DatatablesCardType implements CardTypeHandler {
 
 	private static final String E27 = "type='datatables' requires src= or a body with 'columns' and exactly one of 'dataUrl' or 'rows'.";
 
+	private static final String E28 = "type='datatables' body is a pre-built SLOT_META envelope; remove 'contractVersion', 'layout' and 'view' and author the catalog form.";
+
 	private static final Set<String> KNOWN_COLUMN_KEYS = Set.of(
 		"key", "data", "label", "title", "search", "render", "href", "className",
 		"orderable", "searchable", "defaultVisible", "pinned", "formats",
@@ -65,8 +69,8 @@ public final class DatatablesCardType implements CardTypeHandler {
 	@Override
 	@SuppressWarnings("unchecked")
 	public JsonMap toFragment(CardSource source) {
-		var hasSrc = source.src() != null && ! source.src().isEmpty();
-		var hasBody = source.body() != null && ! source.body().isEmpty();
+		var hasSrc = nn(source.src()) && ! source.src().isEmpty();
+		var hasBody = nn(source.body()) && ! source.body().isEmpty();
 		if (hasSrc && hasBody)
 			throw source.error("type='datatables' takes src= or a body, not both.");
 		if (hasSrc)
@@ -76,18 +80,13 @@ public final class DatatablesCardType implements CardTypeHandler {
 
 		var catalog = source.json(); // E-25 for a non-JSON5 body (the dropped bare-URL form), E-24 for bad JSON5.
 
-		// The pre-built SLOT_META escape hatch (until GC-1): pass through unchanged, no further validation.
-		// CardDirectiveModel calls reconcileViewVersion on it, since only it knows the template name and devMode.
-		if (catalog.get("view") instanceof Map) {
-			var frag = new JsonMap();
-			frag.put("table", catalog);
-			return frag;
-		}
+		if (catalog.get("view") instanceof Map)
+			throw source.error(E28);
 
 		var columns = catalog.getList("columns");
-		var hasDataUrl = catalog.get("dataUrl") != null;
+		var hasDataUrl = nn(catalog.get("dataUrl"));
 		var hasRows = catalog.containsKey("rows");
-		if (columns == null || hasDataUrl == hasRows)
+		if (n(columns) || hasDataUrl == hasRows)
 			throw source.error(E27);
 		if (hasRows)
 			validateRows(source, catalog);
@@ -100,7 +99,7 @@ public final class DatatablesCardType implements CardTypeHandler {
 				throw source.error("columns['%s'] requires 'key'.", i);
 			var col = (Map<String,Object>) raw;
 			var ident = columnIdent(col);
-			if (ident == null)
+			if (n(ident))
 				throw source.error("columns['%s'] requires 'key'.", i);
 			for (var key : col.keySet())
 				if (! KNOWN_COLUMN_KEYS.contains(key))
@@ -111,13 +110,13 @@ public final class DatatablesCardType implements CardTypeHandler {
 			resolveSearch(source, col, ident);
 		}
 
-		if (catalog.get("bulk") != null && catalog.get("selection") == null)
+		if (nn(catalog.get("bulk")) && n(catalog.get("selection")))
 			throw source.error("sets bulk without selection.");
 		checkAggregateEndpoints(catalog);
 
 		var frag = new JsonMap();
 		var page = catalog.remove("page");
-		if (page != null)
+		if (nn(page))
 			frag.put("page", page);
 		frag.put("table", catalog);
 		return frag;
@@ -131,45 +130,18 @@ public final class DatatablesCardType implements CardTypeHandler {
 			if (! (r instanceof Map<?, ?>))
 				throw source.error("type='datatables' each 'rows' element must be an object.");
 		// Q:  Use Shorts here and elsewhere in this module.
-		if ("server".equals(catalog.getString("dataMode")))
+		if (eq("server", catalog.getString("dataMode")))
 			throw source.error("type='datatables' inline 'rows' cannot be combined with dataMode:'server'; use 'dataUrl'.");
-		if (catalog.get("pollIntervalMs") != null)
+		if (nn(catalog.get("pollIntervalMs")))
 			throw source.error("type='datatables' inline 'rows' cannot be combined with 'pollIntervalMs' (nothing to poll); use 'dataUrl'.");
 		if (list.size() > ROWS_WARN_THRESHOLD)
 			LOG.log(Level.WARNING, "<@card type=\"datatables\"> inline 'rows' has {0} entries; prefer 'dataUrl' for large data sets.", list.size());
 	}
 
-	/**
-	 * Stamps a missing slot/view {@code contractVersion} on a pre-built SLOT_META and warns (throws in devMode) on a
-	 * stale pinned view version.
-	 */
-	@SuppressWarnings({
-		"unchecked" // The view of a pre-built envelope is a parsed JsonMap; it is mutated in place to inject the version.
-	})
-	static void reconcileViewVersion(String cardId, JsonMap slot, String template, boolean devMode) {
-		if (! slot.containsKey("contractVersion"))
-			slot.put("contractVersion", ViewsMixin.SLOT_CONTRACT_VERSION);
-		var view = (Map<String,Object>)slot.get("view");
-		var stated = view.get("contractVersion");
-		if (stated == null) {
-			view.put("contractVersion", ViewsMixin.CONTRACT_VERSION);
-			return;
-		}
-		if (ViewsMixin.CONTRACT_VERSION.equals(String.valueOf(stated)))
-			return;
-		var msg = String.format(
-			"Template '%s' card '%s': view.contractVersion is '%s' but the runtime ViewsMixin.CONTRACT_VERSION is '%s'. "
-			+ "Omit view.contractVersion to track the runtime automatically.",
-			template, cardId, stated, ViewsMixin.CONTRACT_VERSION);
-		LOG.log(Level.WARNING, msg);
-		if (devMode)
-			throw new IllegalArgumentException(msg);
-	}
-
 	private static String columnIdent(Map<String,Object> col) {
 		var data = col.get("data");
 		var key = col.get("key");
-		return data != null ? data.toString() : (key != null ? key.toString() : null);
+		return nn(data) ? data.toString() : (nn(key) ? key.toString() : null);
 	}
 
 	/** E-31: a {@code contractVersion} key anywhere in the catalog (table, detail, quickStats, bulk) — JS stamps versions. */
@@ -188,9 +160,9 @@ public final class DatatablesCardType implements CardTypeHandler {
 	@SuppressWarnings("unchecked")
 	private static void resolveSearch(CardSource source, Map<String,Object> col, String ident) {
 		var searchType = str(col.get("searchType"));
-		if (searchType == null || searchType.isBlank())
+		if (ib(searchType))
 			return; // Non-searchable column: no search block.
-		if (SearchType.fromWire(searchType) == null)
+		if (n(SearchType.fromWire(searchType)))
 			throw source.error("column '%s' searchType '%s' is unknown; known: '%s'.", ident, searchType, knownSearchTypes());
 
 		var customs = new LinkedHashMap<String,String>(); // name -> help
@@ -207,7 +179,7 @@ public final class DatatablesCardType implements CardTypeHandler {
 			allow = new ArrayList<>();
 			for (var n : a) {
 				var name = str(n);
-				if (! customs.containsKey(name) && SearchOperatorSet.standard().get(name) == null)
+				if (! customs.containsKey(name) && n(SearchOperatorSet.standard().get(name)))
 					throw source.error("column '%s' searchOperators names unknown operator '%s'; known: '%s'.",
 						ident, name, knownOperators(customs.keySet()));
 				allow.add(name);
@@ -255,10 +227,10 @@ public final class DatatablesCardType implements CardTypeHandler {
 			return;
 		for (var raw : actions) {
 			var action = (Map<String,Object>) raw;
-			if (! "aggregate".equals(action.get("mode")))
+			if (! eq("aggregate", action.get("mode")))
 				continue;
 			var endpoint = str(action.get("endpoint"));
-			if (endpoint != null && endpoint.matches(".*\\{[^}]+\\}.*"))
+			if (nn(endpoint) && endpoint.matches(".*\\{[^}]+\\}.*"))
 				throw new IllegalArgumentException(String.format(
 					"Bulk action '%s' has mode 'aggregate' but its endpoint '%s' contains a {field} token; "
 					+ "aggregate endpoints receive {ids} in the body.", action.get("id"), endpoint));
@@ -266,6 +238,6 @@ public final class DatatablesCardType implements CardTypeHandler {
 	}
 
 	private static String str(Object o) {
-		return o == null ? null : o.toString();
+		return n(o) ? null : o.toString();
 	}
 }

@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.rest.server.view.freemarker.console;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
+
 import java.io.*;
 import java.util.*;
 
@@ -60,7 +62,7 @@ public final class PageDirectiveModel implements TemplateDirectiveModel {
 		if (p.containsKey("format"))
 			throw FtlAttrLists.reject("<@page> has no format= attribute.");
 		FtlAttrLists.rejectUnknown(p, NAME, ATTRS);
-		if (body == null)
+		if (n(body))
 			throw FtlAttrLists.reject("<@page> requires a nested body.");
 
 		var cap = PageCapture.of(env);

@@ -34,6 +34,8 @@
 	const TEST_STATUSES = ["pass", "fail", "skip", "error"], LEVELS = ["info", "warn", "error"], DONE_STATUSES = ["ok", "fail", "cancelled"];
 	const KINDS = ["step", "end", "suite", "test", "replace", "note", "done"];
 	const FRAGMENT_HREF = /^#[A-Za-z0-9._:~-]{0,128}$/;
+	// A re-run of a step is "<id>.2", "<id>.3", ... titled "<title> (attempt 2)", ...; the first attempt keeps the plain id.
+	const ATTEMPT_ID = /^(.+)\.([2-9]|[1-9][0-9]+)$/, ATTEMPT_TITLE = /^(.*) \(attempt ([2-9]|[1-9][0-9]+)\)$/;
 
 	// @section:checks
 
@@ -388,6 +390,38 @@
 	}
 
 	/**
+	 * Groups the re-runs of a step.  An attempt is a step whose id is "<base>.<n>" (n >= 2) for an existing step "<base>",
+	 * or, failing that, whose title is "<title> (attempt <n>)" for an existing step titled "<title>".  Returns an array of
+	 * {base, latest, earlier} (stream order, the last attempt being the latest) for every step that has at least one
+	 * earlier attempt.
+	 */
+	function attemptGroups(model) {
+		const byBase = new Map();
+		const byTitle = new Map();
+		for (const st of model.steps)
+			if (!byTitle.has(st.title)) byTitle.set(st.title, st);
+		for (const st of model.steps) {
+			let base = null;
+			const mi = ATTEMPT_ID.exec(st.id);
+			if (mi && model.stepIndex.has(mi[1])) {
+				base = mi[1];
+			} else {
+				const mt = ATTEMPT_TITLE.exec(st.title);
+				const first = mt ? byTitle.get(mt[1]) : null;
+				if (first && first !== st) base = first.id;
+			}
+			if (base !== null) {
+				let g = byBase.get(base);
+				if (!g) { g = [model.stepIndex.get(base)]; byBase.set(base, g); }
+				g.push(st);
+			}
+		}
+		const out = [];
+		byBase.forEach(function (g, base) { out.push({ base: base, latest: g[g.length - 1], earlier: g.slice(0, g.length - 1) }); });
+		return out;
+	}
+
+	/**
 	 * The derived view of a model: run status and headline, each step's shown state (open steps close to fail/skip once a
 	 * done exists), exact per-framework counts and the failures list (step order, then suite order, then arrival order).
 	 */
@@ -433,7 +467,8 @@
 			}
 		}
 		const counts = model.fwOrder.filter(function (fw) { return byFw.has(fw); }).map(function (fw) { return byFw.get(fw); });
-		return { status: status, headline: headline, glyph: glyph, steps: shown, counts: counts, failures: failures };
+		return { status: status, headline: headline, glyph: glyph, steps: shown, counts: counts, failures: failures,
+			attempts: attemptGroups(model) };
 	}
 
 	// @section:render
@@ -729,6 +764,63 @@
 		st.dirty = false;
 	}
 
+	/**
+	 * Nests the earlier attempts of a re-run step under its latest attempt, behind an "N earlier attempts" toggle that is
+	 * collapsed by default.  A run with no re-run steps is untouched.
+	 */
+	function renderAttempts(inst, d) {
+		const latestIds = new Set();
+		inst.attemptOf = new Map();
+		for (const g of d.attempts) {
+			const rec = inst.recs.get(g.latest.id);
+			if (!rec) continue;
+			latestIds.add(g.latest.id);
+			const open = inst.attemptsOpen.has(g.base);
+			if (!rec.attemptsBtn) {
+				const btn = mk("button", "juneau-rv-attempts-toggle");
+				attr(btn, "type", "button");
+				attr(btn, "data-juneau-rv-act", "toggle-attempts");
+				rec.attemptsChev = mk("span", "juneau-rv-attempts-chevron");
+				rec.attemptsLabel = mk("span", "juneau-rv-attempts-label");
+				attr(rec.attemptsChev, "aria-hidden", "true");
+				btn.appendChild(rec.attemptsChev);
+				btn.appendChild(rec.attemptsLabel);
+				rec.attemptsBtn = btn;
+				rec.attemptsEl = mk("ul", "juneau-rv-attempts");
+				rec.li.insertBefore(btn, rec.suitesEl);
+				rec.li.insertBefore(rec.attemptsEl, rec.suitesEl);
+			}
+			const n = g.earlier.length;
+			attr(rec.attemptsBtn, "data-juneau-rv-key", g.base);
+			attr(rec.attemptsBtn, "aria-expanded", open ? "true" : "false");
+			rec.attemptsChev.textContent = open ? "▾" : "▸";
+			rec.attemptsLabel.textContent = n + (n === 1 ? " earlier attempt" : " earlier attempts");
+			rec.attemptsEl.hidden = !open;
+			g.earlier.forEach(function (st, i) {
+				inst.attemptOf.set(st.id, g.base);
+				const r = inst.recs.get(st.id);
+				if (!r) return;
+				attr(r.li, "data-juneau-rv-attempt", "earlier");
+				if (r.attemptsBtn) {
+					r.attemptsBtn.remove();
+					r.attemptsEl.remove();
+					r.attemptsBtn = null;
+					r.attemptsEl = null;
+				}
+				if (rec.attemptsEl.childNodes[i] !== r.li)
+					rec.attemptsEl.appendChild(r.li);
+			});
+		}
+		inst.recs.forEach(function (rec, id) {
+			if (rec.attemptsBtn && !latestIds.has(id)) {
+				rec.attemptsBtn.remove();
+				rec.attemptsEl.remove();
+				rec.attemptsBtn = null;
+				rec.attemptsEl = null;
+			}
+		});
+	}
+
 	function failureText(f) {
 		if (f.test === null)
 			return f.suite.suite + ": " + f.suite.fail + " failed";
@@ -793,6 +885,7 @@
 		for (const x of d.steps)
 			if (x.step.dirty || closing || !inst.recs.has(x.step.id))
 				renderStep(inst, x.step, x.shown);
+		renderAttempts(inst, d);
 		if (m.runDirty) {
 			renderNotes(inst.runNotesEl, m.runNotes);
 			m.runDirty = false;
@@ -948,6 +1041,8 @@
 
 	function revealFailure(inst, info, withTrace) {
 		const ek = ekeyOf(info.step, info.suite);
+		const base = inst.attemptOf.get(info.step.id);
+		if (base !== undefined) inst.attemptsOpen.add(base);
 		inst.expanded.set(ek, true);
 		if (withTrace && info.test) inst.trace.set(ek, info.test);
 		info.step.dirty = true;
@@ -978,6 +1073,11 @@
 				return;
 			}
 			const key = act.getAttribute("data-juneau-rv-key");
+			if (a === "toggle-attempts") {
+				if (inst.attemptsOpen.has(key)) inst.attemptsOpen.delete(key); else inst.attemptsOpen.add(key);
+				renderNow(inst);
+				return;
+			}
 			const stepId = a === "toggle-clean" ? key : key.slice(0, key.indexOf("/"));
 			const st = inst.model.stepIndex.get(stepId);
 			const ek = a === "toggle-clean" ? key + "/*clean" : key;
@@ -1088,6 +1188,8 @@
 		inst.recs = new Map();
 		inst.lastDone = null;
 		inst.trace = new Map();
+		inst.attemptsOpen = new Set();
+		inst.attemptOf = new Map();
 		inst.stepsEl.replaceChildren();
 		inst.runNotesEl.replaceChildren();
 		hideTip(inst);
@@ -1122,7 +1224,7 @@
 		const o = checkOptions(el, options);
 		const inst = {
 			id: o.id, host: el, compact: o.compact, rawHref: o.rawHref, emit: o.emit, model: newModel(), recs: new Map(),
-			expanded: new Map(), trace: new Map(), warned: new Set(), listeners: [], timer: null, renders: 0, destroyed: false,
+			expanded: new Map(), trace: new Map(), attemptsOpen: new Set(), attemptOf: new Map(), warned: new Set(), listeners: [], timer: null, renders: 0, destroyed: false,
 			lastDone: null, lastStatus: "empty", errored: false, tipFor: null, stopPoll: null, api: null, banner: null, connEl: null
 		};
 		const root = mk("section", "juneau-rv" + (o.compact ? " juneau-rv-compact" : ""));

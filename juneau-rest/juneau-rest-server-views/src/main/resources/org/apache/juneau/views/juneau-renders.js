@@ -453,6 +453,24 @@
 		"class": function () { return "pill-cell juneau-cell-wrap"; }
 	});
 
+	// `edit:<actionId>`: the cell shows the value and a pencil button.  juneau-views.js owns the behavior: it gates the
+	// pencil on the action's visibleWhen/enabledWhen and, on click, swaps the cell to an input that commits through the
+	// action.  meta: `action` (or the `:<actionId>` sugar), `input` (`text` | `number` | `select`), `options` for select.
+	registerRenderer("edit", {
+		display: function (cellData, rowData, meta) {
+			const action = meta?.action ?? meta?.field;
+			const value = cellData == null ? "" : String(cellData);
+			if (!action) return escHtml(value);
+			const input = meta?.input === "number" || meta?.input === "select" ? meta.input : "text";
+			const options = meta?.options == null ? "" : (Array.isArray(meta.options) ? JSON.stringify(meta.options) : String(meta.options));
+			return '<span class="juneau-edit-cell"><span class="juneau-edit-value">' + escHtml(value) + "</span>"
+				+ '<button type="button" class="juneau-edit-pencil" aria-label="Edit" data-juneau-edit="' + escAttr(action) + '"'
+				+ ' data-juneau-edit-col="' + escAttr(meta?.column ?? "") + '" data-juneau-edit-input="' + input + '"'
+				+ (options ? ' data-juneau-edit-options="' + escAttr(options) + '"' : "") + "></button></span>";
+		},
+		"class": function () { return "juneau-cell-wrap"; }
+	});
+
 	// The fill-sink variant of `pill`, registered straight into the frozen set rather than snapshotted from the
 	// registry above: a sink pill is unconditionally DISPLAY-ONLY.  A fill sink has no rowActions in scope, so it can
 	// never emit `role="button"`/`tabindex`/`data-juneau-action` even if an author smuggles a `meta.action` past the

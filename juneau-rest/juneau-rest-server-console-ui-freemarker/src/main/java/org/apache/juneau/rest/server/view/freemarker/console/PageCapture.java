@@ -180,7 +180,7 @@ public final class PageCapture {
 	 */
 	public static PageCapture of(Environment env) {
 		var c = (PageCapture)env.getCustomState(KEY);
-		if (c == null) {
+		if (n(c)) {
 			c = new PageCapture();
 			env.setCustomState(KEY, c);
 		}
@@ -206,7 +206,7 @@ public final class PageCapture {
 	 * @throws IOException On an I/O error.
 	 */
 	public static String render(TemplateDirectiveBody body) throws TemplateException, IOException {
-		if (body == null)
+		if (n(body))
 			return "";
 		var sw = new StringWriter();
 		body.render(sw);
@@ -224,7 +224,7 @@ public final class PageCapture {
 	public PageCapture theme(String name) { theme = name; return this; }
 
 	/** @param v The {@code <@page tab>} value. @return This object. */
-	public PageCapture tab(String v) { tab = v == null ? "" : v; return this; }
+	public PageCapture tab(String v) { tab = n(v) ? "" : v; return this; }
 
 	/** @param names Toolkit names from {@code <@page toolkit>}. @return This object. */
 	public PageCapture toolkit(List<String> names) { toolkits = List.copyOf(names); return this; }
@@ -249,7 +249,7 @@ public final class PageCapture {
 	 * @throws TemplateModelException If a path is already selected (E-6).
 	 */
 	public PageCapture select(List<String> idPath) throws TemplateModelException {
-		if (selected != null)
+		if (nn(selected))
 			throw FtlAttrLists.reject(String.format("<@node id='%s'> selected=true but '%s' is already selected.",
 				idPath.get(idPath.size() - 1), String.join("/", selected)));
 		selected = List.copyOf(idPath);
@@ -268,7 +268,7 @@ public final class PageCapture {
 		for (var c : cards)
 			if (c.id().equals(card.id()))
 				throw FtlAttrLists.reject(String.format("<@card id='%s'> duplicates an existing card id.", card.id()));
-		if (markupOrNull != null) {
+		if (nn(markupOrNull)) {
 			card.template(card.id());
 			templates.put(card.id(), markupOrNull);
 		}
@@ -327,7 +327,7 @@ public final class PageCapture {
 	/** @return <jk>true</jk> while a {@code <@page>} body is rendering. */
 	public boolean inPage() { return pageOpen; }
 	String title() { return title; }
-	boolean hasHeaderTitle() { return header.title != null; }
+	boolean hasHeaderTitle() { return nn(header.title); }
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Lifecycle hooks used by the directives
@@ -367,7 +367,7 @@ public final class PageCapture {
 
 	/** §4.3: explicit selection, else tab (E-7 when it does not resolve), else empty. */
 	void resolveActiveNav() throws TemplateModelException {
-		if (selected != null) {
+		if (nn(selected)) {
 			activeNav = selected;
 			return;
 		}
@@ -439,7 +439,7 @@ public final class PageCapture {
 		var m = new LinkedHashMap<String,Object>();
 		m.put("contractVersion", CONTRACT_VERSION);
 		m.put("title", title);
-		if (theme != null)
+		if (nn(theme))
 			m.put("theme", Map.of("name", theme));
 		var h = headerMap();
 		if (! h.isEmpty())
@@ -447,7 +447,7 @@ public final class PageCapture {
 		var f = footerMap();
 		if (! f.isEmpty())
 			m.put("footer", f);
-		if (navLayout != null)
+		if (nn(navLayout))
 			m.put("navLayout", navLayout);
 		m.put("nav", navRoot.toList());
 		m.put("activeNav", activeNav);
@@ -480,17 +480,17 @@ public final class PageCapture {
 
 	private Map<String,Object> headerMap() {
 		var m = new LinkedHashMap<String,Object>();
-		if (header.title != null) m.put("title", header.title);
-		if (header.subtitle != null) m.put("subtitle", header.subtitle);
-		if (header.logoSrc != null) {
+		if (nn(header.title)) m.put("title", header.title);
+		if (nn(header.subtitle)) m.put("subtitle", header.subtitle);
+		if (nn(header.logoSrc)) {
 			var l = new LinkedHashMap<String,Object>();
 			l.put("src", header.logoSrc);
-			if (header.logoHref != null) l.put("href", header.logoHref);
-			if (header.logoAlt != null) l.put("alt", header.logoAlt);
+			if (nn(header.logoHref)) l.put("href", header.logoHref);
+			if (nn(header.logoAlt)) l.put("alt", header.logoAlt);
 			m.put("logo", l);
 		}
 		if (! header.links.isEmpty()) m.put("links", header.links);
-		if (header.userMenu != null) m.put("userMenu", header.userMenu);
+		if (nn(header.userMenu)) m.put("userMenu", header.userMenu);
 		if (header.chrome) m.put("chrome", true);
 		if (slots.containsKey("header")) m.put("slots", slots.get("header"));
 		return m;
@@ -498,7 +498,7 @@ public final class PageCapture {
 
 	private Map<String,Object> footerMap() {
 		var m = new LinkedHashMap<String,Object>();
-		if (footer.text != null) m.put("text", footer.text);
+		if (nn(footer.text)) m.put("text", footer.text);
 		if (! footer.links.isEmpty()) m.put("links", footer.links);
 		if (slots.containsKey("footer")) m.put("slots", slots.get("footer"));
 		return m;

@@ -802,6 +802,8 @@
 
 		for (const fieldsEntry of fields) {
 			const field = fieldsEntry;
+			// visibleWhen: tested against the values map plus the page facts under `facts`; presentation only.
+			if (field.visibleWhen && typeof NS.rules?.testRow === "function" && !NS.rules.testRow(field.visibleWhen, values)) continue;
 
 			const item = document.createElement("div");
 			item.className = "juneau-view-detail-field" + (field.span ? " juneau-view-detail-field-span-" + field.span : "");

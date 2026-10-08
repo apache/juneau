@@ -933,6 +933,75 @@ test('gold04_idempotentAppend', function (t) {
 });
 
 
+// @cases:attempts
+
+function attemptIds(c) { return c.all('.juneau-rv-step').filter(function (l) { return l.getAttribute('data-juneau-rv-attempt') === 'earlier'; }).map(function (l) { return l.getAttribute('data-step'); }); }
+function attemptToggle(c, id) { return c.step(id).querySelector('.juneau-rv-attempts-toggle'); }
+
+test('att01_groupingByIdAndTitle', function (t) {
+	const x = mkModel(t);
+	feed(x, [stepEv('build', { title: 'Build' }), stepEv('build.2', { title: 'Build (attempt 2)' }), stepEv('other', { title: 'Other' }),
+		stepEv('build.3', { title: 'Build (attempt 3)' }), stepEv('lone.2', { title: 'Lone' }), stepEv('x1', { title: 'Deploy' }),
+		stepEv('x2', { title: 'Deploy (attempt 2)' }), stepEv('y', { title: 'Y' }), stepEv('y.1', { title: 'Y again' })]);
+	const g = RT(t).derive(x.m).attempts;
+	expectSame(g.map(function (a) { return [a.base, a.latest.id, a.earlier.map(function (e) { return e.id; })]; }),
+		[['build', 'build.3', ['build', 'build.2']], ['x1', 'x2', ['x1']]], 'groups');
+});
+
+test('att02_collapsedByDefaultWithToggle', function (t) {
+	const c = mkRun(t, { id: 'r' });
+	c.send([stepOk('build'), { ev: 'end', id: 'build', status: 'fail' }, stepOk('build.2', { title: 'BUILD (attempt 2)' })]);
+	const tg = attemptToggle(c, 'build.2');
+	expect(tg !== null && attemptToggle(c, 'build') === null, 'toggle on the latest attempt only');
+	expect(tg.querySelector('.juneau-rv-attempts-label').textContent === '1 earlier attempt', 'label: ' + tg.textContent);
+	expect(tg.getAttribute('aria-expanded') === 'false' && tg.getAttribute('data-juneau-rv-act') === 'toggle-attempts', 'collapsed');
+	const ul = c.step('build.2').querySelector('.juneau-rv-attempts');
+	expect(ul.hidden === true && attemptIds(c).join() === 'build', 'earlier attempt nested under the latest and hidden');
+	expect(c.root().querySelector('.juneau-rv-steps').children.length === 1, 'only the latest is a top-level step');
+	click(c, tg);
+	expect(attemptToggle(c, 'build.2').getAttribute('aria-expanded') === 'true' && ul.hidden === false, 'expanded');
+	click(c, attemptToggle(c, 'build.2'));
+	expect(ul.hidden === true && attemptToggle(c, 'build.2').getAttribute('aria-expanded') === 'false', 'collapsed again');
+});
+
+test('att03_newAttemptRegroupsAndKeepsExpansion', function (t) {
+	const c = mkRun(t);
+	c.send([stepOk('b'), { ev: 'end', id: 'b', status: 'fail' }, stepOk('b.2'), { ev: 'end', id: 'b.2', status: 'fail' }]);
+	click(c, attemptToggle(c, 'b.2'));
+	c.send(stepOk('b.3'));
+	expect(c.step('b.2') !== null && attemptToggle(c, 'b.2') === null, 'the old latest loses its toggle');
+	const tg = attemptToggle(c, 'b.3');
+	expect(tg.querySelector('.juneau-rv-attempts-label').textContent === '2 earlier attempts', 'label: ' + tg.textContent);
+	expect(tg.getAttribute('aria-expanded') === 'true', 'expansion survives the new attempt');
+	expect(attemptIds(c).join() === 'b,b.2', 'oldest first: ' + attemptIds(c).join());
+	expect(c.root().querySelector('.juneau-rv-steps').children.length === 1, 'one top-level step');
+});
+
+test('att04_noAttemptsNoToggle', function (t) {
+	const c = mkRun(t);
+	c.send([stepOk('a'), stepOk('b'), stepOk('a.1x')]);
+	expect(c.all('.juneau-rv-attempts-toggle').length === 0 && c.all('.juneau-rv-attempts').length === 0, 'no attempt UI');
+	expect(c.root().querySelector('.juneau-rv-steps').children.length === 3, 'three steps');
+});
+
+test('att05_failureLinkOpensEarlierAttempt', function (t) {
+	const c = mkRun(t);
+	c.send([stepOk('b')].concat(testEvs('b', 'jest', 'S', [['one', 'fail', { msg: 'no' }]]), [{ ev: 'end', id: 'b', status: 'fail' }, stepOk('b.2')]));
+	const ul = c.step('b.2').querySelector('.juneau-rv-attempts');
+	expect(ul.hidden === true, 'collapsed');
+	click(c, c.q('.juneau-rv-failure'));
+	expect(ul.hidden === false && attemptToggle(c, 'b.2').getAttribute('aria-expanded') === 'true', 'the failure link expands the group');
+});
+
+test('att06_resetClearsAttemptState', function (t) {
+	const c = mkRun(t);
+	c.send([stepOk('b'), stepOk('b.2')]);
+	click(c, attemptToggle(c, 'b.2'));
+	c.api.reset();
+	c.send([stepOk('b'), stepOk('b.2')]);
+	expect(attemptToggle(c, 'b.2').getAttribute('aria-expanded') === 'false', 'collapsed after reset');
+});
+
 // @golden
 
 // Reviewed by eye against the render design; regenerate with UPDATE_GOLDEN=1 (prints GOLD lines to stderr).

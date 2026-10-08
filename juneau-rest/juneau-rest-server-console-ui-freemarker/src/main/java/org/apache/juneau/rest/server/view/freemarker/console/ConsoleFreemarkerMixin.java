@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.rest.server.view.freemarker.console;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
+
 import java.util.*;
 
 import org.apache.juneau.rest.server.*;
@@ -200,7 +202,7 @@ public class ConsoleFreemarkerMixin extends FreemarkerMixin {
 			return;
 		var console = new ClassTemplateLoader(getClass().getClassLoader(), "");
 		var existing = cfg.getTemplateLoader();
-		if (existing == null)
+		if (n(existing))
 			cfg.setTemplateLoader(console);
 		else
 			cfg.setTemplateLoader(new MultiTemplateLoader(new TemplateLoader[]{ existing, console }));
@@ -213,11 +215,11 @@ public class ConsoleFreemarkerMixin extends FreemarkerMixin {
 	 */
 	private static boolean reservedTemplateResolves(Configuration cfg) {
 		var loader = cfg.getTemplateLoader();
-		if (loader == null)
+		if (n(loader))
 			return false;
 		try {
 			var source = loader.findTemplateSource(BASE_TEMPLATE_PATH);
-			if (source == null)
+			if (n(source))
 				return false;
 			loader.closeTemplateSource(source);
 			return true;
@@ -230,32 +232,32 @@ public class ConsoleFreemarkerMixin extends FreemarkerMixin {
 	 * Sets each reserved console shared variable only when that name is unset on {@code cfg}.
 	 */
 	private void fillMissingConsoleSharedVariables(Configuration cfg) {
-		if (cfg.getSharedVariable(TagMethodModel.NAME) == null)
+		if (n(cfg.getSharedVariable(TagMethodModel.NAME)))
 			cfg.setSharedVariable(TagMethodModel.NAME, new TagMethodModel());
-		if (cfg.getSharedVariable(PageDirectiveModel.NAME) == null) {
+		if (n(cfg.getSharedVariable(PageDirectiveModel.NAME))) {
 			cfg.setSharedVariable(PageDirectiveModel.NAME, new PageDirectiveModel(chromeTemplate, packs));
 		}
-		if (cfg.getSharedVariable(CardDirectiveModel.NAME) == null)
-			cfg.setSharedVariable(CardDirectiveModel.NAME, new CardDirectiveModel(devMode, cardRequirements, cardTypes));
-		if (cfg.getSharedVariable(NavigationDirectiveModel.NAME) == null)
+		if (n(cfg.getSharedVariable(CardDirectiveModel.NAME)))
+			cfg.setSharedVariable(CardDirectiveModel.NAME, new CardDirectiveModel(cardRequirements, cardTypes));
+		if (n(cfg.getSharedVariable(NavigationDirectiveModel.NAME)))
 			cfg.setSharedVariable(NavigationDirectiveModel.NAME, new NavigationDirectiveModel());
-		if (cfg.getSharedVariable(NodeDirectiveModel.NAME) == null)
+		if (n(cfg.getSharedVariable(NodeDirectiveModel.NAME)))
 			cfg.setSharedVariable(NodeDirectiveModel.NAME, new NodeDirectiveModel());
-		if (cfg.getSharedVariable(ThemeDirectiveModel.NAME) == null)
+		if (n(cfg.getSharedVariable(ThemeDirectiveModel.NAME)))
 			cfg.setSharedVariable(ThemeDirectiveModel.NAME, new ThemeDirectiveModel());
-		if (cfg.getSharedVariable(TokenDirectiveModel.NAME) == null)
+		if (n(cfg.getSharedVariable(TokenDirectiveModel.NAME)))
 			cfg.setSharedVariable(TokenDirectiveModel.NAME, new TokenDirectiveModel());
-		if (cfg.getSharedVariable(ConsoleDirectiveModel.NAME) == null)
+		if (n(cfg.getSharedVariable(ConsoleDirectiveModel.NAME)))
 			cfg.setSharedVariable(ConsoleDirectiveModel.NAME, new ConsoleDirectiveModel(devMode));
-		if (cfg.getSharedVariable(MainDirectiveModel.NAME) == null)
+		if (n(cfg.getSharedVariable(MainDirectiveModel.NAME)))
 			cfg.setSharedVariable(MainDirectiveModel.NAME, new MainDirectiveModel());
-		if (cfg.getSharedVariable(HasToolkitMethodModel.NAME) == null)
+		if (n(cfg.getSharedVariable(HasToolkitMethodModel.NAME)))
 			cfg.setSharedVariable(HasToolkitMethodModel.NAME, new HasToolkitMethodModel());
-		if (adopterLoader != null && cfg.getSharedVariable(AssetUrlMethodModel.NAME) == null)
+		if (nn(adopterLoader) && n(cfg.getSharedVariable(AssetUrlMethodModel.NAME)))
 			cfg.setSharedVariable(AssetUrlMethodModel.NAME, new AssetUrlMethodModel(adopterLoader, adopterRoot, devMode));
 		// The seven capture-only slot directives share one parameterized class, one instance registered per slot name.
 		for (var slot : ConsoleSlotDirectiveModel.SLOT_NAMES)
-			if (cfg.getSharedVariable(slot) == null)
+			if (n(cfg.getSharedVariable(slot)))
 				cfg.setSharedVariable(slot, new ConsoleSlotDirectiveModel(slot));
 	}
 
@@ -331,7 +333,7 @@ public class ConsoleFreemarkerMixin extends FreemarkerMixin {
 		 * @return This object.
 		 */
 		public Builder registerToolkitPack(ToolkitPack pack) {
-			extraPacks.add(Objects.requireNonNull(pack, "pack"));
+			extraPacks.add(rnn(pack));
 			return this;
 		}
 
@@ -432,8 +434,8 @@ public class ConsoleFreemarkerMixin extends FreemarkerMixin {
 		 */
 		public Builder adopterAssets(ClassLoader loader, String resourceRoot) {
 			// Q:  Use Shorts here and in this module.
-			this.adopterLoader = Objects.requireNonNull(loader, "loader");
-			this.adopterRoot = Objects.requireNonNull(resourceRoot, "resourceRoot");
+			this.adopterLoader = rnn(loader);
+			this.adopterRoot = rnn(resourceRoot);
 			return this;
 		}
 

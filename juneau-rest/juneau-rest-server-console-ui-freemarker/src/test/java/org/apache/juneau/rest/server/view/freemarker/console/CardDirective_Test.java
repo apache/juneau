@@ -72,6 +72,12 @@ class CardDirective_Test extends TestBase {
 		public View cardDatatablesSearch() { return FreemarkerView.of("admin/page-card-datatables-search.ftlh"); }
 		@RestGet(path="/card-datatables-badcustom")
 		public View cardDatatablesBadCustom() { return FreemarkerView.of("admin/page-card-datatables-badcustom.ftlh"); }
+		@RestGet(path="/cards-class")
+		public View cardsClass() { return FreemarkerView.of("admin/page-cards-class.ftlh"); }
+		@RestGet(path="/cards-class-bad")
+		public View cardsClassBad() { return FreemarkerView.of("admin/page-cards-class-bad.ftlh"); }
+		@RestGet(path="/cards-class-digit")
+		public View cardsClassDigit() { return FreemarkerView.of("admin/page-cards-class-digit.ftlh"); }
 		@RestGet(path="/card-html-template")
 		public View cardHtmlTemplate() { return FreemarkerView.of("admin/page-card-html-template.ftlh"); }
 	}
@@ -205,5 +211,30 @@ class CardDirective_Test extends TestBase {
 	@Test void b14_noSidecars() throws Exception {
 		for (var path : new String[] {"/cards-html", "/card-datatables", "/card-html-template"})
 			assertFalse(get(path).contains("juneau-card-sidecar"), path);
+	}
+
+	@Test void b15_classAttr_singleClass_isInContract() throws Exception {
+		var body = get("/cards-class");
+		assertEquals("ssc-skills", card(body, "one").getString("class"));
+		assertEquals("ssc-scripts", card(body, "dt").getString("class"));
+	}
+
+	@Test void b16_classAttr_multipleClasses_areNormalizedToSingleSpaces() throws Exception {
+		assertEquals("ssc-skills x_1 -y", card(get("/cards-class"), "many").getString("class"));
+	}
+
+	@Test void b17_classAttr_absent_emitsNoClassKey() throws Exception {
+		assertFalse(card(get("/cards-class"), "none").containsKey("class"));
+	}
+
+	@Test void b18_classAttr_invalidToken_failsTheRender() throws Exception {
+		for (var path : new String[] {"/cards-class-bad", "/cards-class-digit"})
+			try (var c = MockRestClient.buildLax(Host.class);
+				var rsp = c.get(path).run()) {
+				rsp.assertStatus(500);
+				var body = rsp.getContent().asString();
+				assertTrue(body.contains("<@card id='bad'> class='"), () -> body);
+				assertTrue(body.contains("must be a space-separated list of CSS class names"), () -> body);
+			}
 	}
 }

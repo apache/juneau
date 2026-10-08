@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.rest.server.view.freemarker.console;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
+
 import java.util.*;
 
 import org.apache.juneau.marshall.collections.*;
@@ -58,7 +60,7 @@ public final class ConsoleOutputCardType implements CardTypeHandler {
 			if (! BODY_KEYS.contains(k))
 				throw source.error("type='console-output' unknown key '%s'; allowed: contractVersion, output.", k);
 		var version = envelope.get("contractVersion");
-		if (! "1".equals(version))
+		if (! eq("1", version))
 			throw source.error("type='console-output' requires contractVersion: '1'; got '%s'.", version);
 		if (! (envelope.get("output") instanceof Map<?,?> output))
 			throw source.error("type='console-output' requires an output object.");

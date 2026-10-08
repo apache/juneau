@@ -97,8 +97,9 @@ public class ActionRef implements ActionBarItem {
 	 *
 	 * <h5 class='section'>Disabled, never hidden:</h5>
 	 * <p>
-	 * There is deliberately no {@code visibleWhen(...)} and no hidden mode.  Removing a momentarily-impossible
-	 * action makes the bar's contents jump between rows and hides the fact that the action exists at all.  When an
+	 * Prefer disabled; hide only when the action is irrelevant.  A detail-panel action has no
+	 * {@code visibleWhen(...)}: removing a momentarily-impossible action makes the bar's contents jump between rows
+	 * and hides the fact that the action exists at all.  When an
 	 * action is invalid for an <b>entire</b> view rather than per row, omit it from that view's action list
 	 * &mdash; that is the right tool, and it is why per-row hiding is not offered.
 	 *
@@ -129,6 +130,8 @@ public class ActionRef implements ActionBarItem {
 	 * @return This object.
 	 */
 	public ActionRef enabledWhen(String field, Op op, Object value, String reason) {
+		if (op != null && op.isCollectionOp())
+			throw iaex("enabledWhen op '%s' is a visibility-rule operator; use eq or ne.", op.wire());
 		if (op == null || ! op.requiresValue())
 			throw iaex("enabledWhen op '%s' does not take a value; use the (field, op, reason) form.",
 				op == null ? "null" : op.wire());

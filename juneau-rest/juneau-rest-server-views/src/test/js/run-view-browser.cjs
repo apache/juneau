@@ -147,6 +147,13 @@ kase('a03', async page => {
 kase('a04', async page => {
 	await open(page, 'a04');
 	await waitText(page, HEAD, 'Failed at');
+	// Each view reads the run on its own, so the second can still be catching up when the first settles; wait for the
+	// two to agree instead of comparing at the moment the first one does.
+	await page.waitForFunction(() => {
+		const f = document.querySelector('.juneau-rv:not(.juneau-rv-compact) .juneau-rv-headline');
+		const c = document.querySelector('.juneau-rv.juneau-rv-compact .juneau-rv-headline');
+		return !!f && !!c && f.textContent.indexOf('Failed at') >= 0 && f.textContent === c.textContent;
+	}, null, { timeout: 10000 }).catch(() => {});
 	return page.evaluate(() => {
 		const full = document.querySelector('.juneau-rv:not(.juneau-rv-compact)');
 		const compact = document.querySelector('.juneau-rv.juneau-rv-compact');

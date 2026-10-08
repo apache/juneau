@@ -98,24 +98,6 @@
       }
     },
     {
-      "name": "prebuilt-slot-meta-passes-through-unchanged",
-      "catalog": {
-        "contractVersion": "1",
-        "layout": "wide",
-        "view": {"contractVersion": "5", "id": "prebuilt-slot-meta-passes-through-unchanged", "dataUrl": "/rest/x", "columns": [{"data": "a", "title": "A"}]}
-      },
-      "expected": {
-        "contractVersion": "1",
-        "layout": "wide",
-        "view": {"contractVersion": "5", "id": "prebuilt-slot-meta-passes-through-unchanged", "dataUrl": "/rest/x", "columns": [{"data": "a", "title": "A"}]}
-      }
-    },
-    {
-      "name": "escape-hatch-view-object-without-slot-version",
-      "catalog": {"view": {"id": "escape-hatch-view-object-without-slot-version", "columns": []}},
-      "expected": {"view": {"id": "escape-hatch-view-object-without-slot-version", "columns": []}}
-    },
-    {
       "name": "view-passthrough-keys",
       "catalog": {
         "dataUrl": "/rest/releases/data",

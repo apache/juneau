@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.rest.server.view.freemarker.console;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
+
 import java.io.*;
 import java.util.*;
 
@@ -93,12 +95,12 @@ public final class ThemeDirectiveModel implements TemplateDirectiveModel {
 				+ String.join(", ", ConsoleChromeMixin.BUILTIN_THEME_NAMES) + ".");
 
 		var cap = PageCapture.get(env);
-		if (cap == null || ! cap.consoleOpen)
+		if (n(cap) || ! cap.consoleOpen)
 			throw FtlAttrLists.reject(String.format(
 				"<@theme name='%s'> must be nested inside <@console>; the legacy pageThemeCss path was removed in 10.0.0.", name));
 
 		var req = FreemarkerRenderScope.request();
-		if (req == null)
+		if (n(req))
 			throw FtlAttrLists.reject("<@theme> needs FreemarkerRenderScope.request() (renderer wrap).");
 
 		// Capture any nested <@token> overrides against the stock-palette seed.  The context is cleared afterward so a
@@ -110,7 +112,7 @@ public final class ThemeDirectiveModel implements TemplateDirectiveModel {
 		var ctx = new ThemeBuildContext(name, themeBuilder);
 		cap.themeBuild = ctx;
 		try (var sink = new StringWriter()) {
-			if (body != null)
+			if (nn(body))
 				body.render(sink);
 		} finally {
 			cap.themeBuild = null;

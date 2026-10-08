@@ -47,12 +47,12 @@
 		<module>juneau-rest-server-tracing-otel</module>
 		<module>juneau-rest-server-management-logging</module>
 		<module>juneau-rest-server-datatables</module>
+		<module>juneau-run-report</module>
 		<module>juneau-rest-server-widgets</module>
 		<module>juneau-rest-server-views</module>
 		<module>juneau-rest-server-views-markdown</module>
 		<module>juneau-rest-server-console-ui</module>
 		<module>juneau-rest-server-console-ui-freemarker</module>
-		<module>juneau-rest-server-console-ui-freemarker-datatables</module>
 		<module>juneau-rest-server-reactive</module>
 		<module>juneau-rest-server-reactive-reactor</module>
 		<module>juneau-rest-server-view-jsp</module>

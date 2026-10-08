@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.rest.server.view.freemarker.console;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
+
 import java.util.*;
 
 import freemarker.template.*;
@@ -66,7 +68,7 @@ public final class NavNode {
 		for (var c : children)
 			if (c.id.equals(nodeId))
 				throw FtlAttrLists.reject(String.format("<@node id='%s'> duplicates a sibling id under '%s'.", nodeId,
-					this.id == null ? "(root)" : String.join("/", idPath())));
+					n(this.id) ? "(root)" : String.join("/", idPath())));
 		var n = new NavNode(this, nodeId, label, hrefOrNull);
 		children.add(n);
 		return n;
@@ -85,7 +87,7 @@ public final class NavNode {
 			for (var c : n.children)
 				if (c.id.equals(step))
 					next = c;
-			if (next == null)
+			if (n(next))
 				return Optional.empty();
 			n = next;
 		}
@@ -106,7 +108,7 @@ public final class NavNode {
 
 	List<String> idPath() {
 		var out = new LinkedList<String>();
-		for (var n = this; n != null && n.id != null; n = n.parent)
+		for (var n = this; nn(n) && nn(n.id); n = n.parent)
 			out.addFirst(n.id);
 		return out;
 	}
@@ -126,7 +128,7 @@ public final class NavNode {
 			var m = new LinkedHashMap<String,Object>();
 			m.put("id", c.id);
 			m.put("label", c.label);
-			if (c.href != null)
+			if (nn(c.href))
 				m.put("href", c.href);
 			if (! c.children.isEmpty())
 				m.put("children", c.toList());

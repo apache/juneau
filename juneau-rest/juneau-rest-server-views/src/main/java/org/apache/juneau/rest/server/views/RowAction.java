@@ -59,6 +59,14 @@ import org.apache.juneau.rest.server.widgets.Op;
  * 		<td>What the runtime does with a successful result (see {@link OnSuccess}).</td></tr>
  * 	<tr><td>{@code enabledWhen}</td><td>{@code [{field,op,value?,reason}, ...]}</td>
  * 		<td>Row-state disable-with-reason rules (see {@link #enabledWhen(String,Op,Object,String)}).</td></tr>
+ * 	<tr><td>{@code visibleWhen}</td><td>{@code [{field,op,value?}, ...]}</td>
+ * 		<td>Row-state visibility rules (see {@link #visibleWhen(VisibilityRule...)}).</td></tr>
+ * 	<tr><td>{@code tone}</td><td>{@code default}|{@code danger}</td>
+ * 		<td>Styling of the confirmation (see {@link Tone}); {@code danger} focuses Cancel first.</td></tr>
+ * 	<tr><td>{@code confirmLabel}</td><td>string</td>
+ * 		<td>Text of the confirm button; defaults to the action's {@code label}.</td></tr>
+ * 	<tr><td>{@code confirmRenderer}</td><td>string</td>
+ * 		<td>Name of a confirm renderer registered with the client runtime; absent means the built-in modal.</td></tr>
  * </table>
  *
  * <p>
@@ -89,13 +97,14 @@ import org.apache.juneau.rest.server.widgets.Op;
  *
  * <h5 class='section'>Example:</h5>
  * <p class='bjava'>
- * 	RowAction <jv>ack</jv> = RowAction.<jsm>create</jsm>(<js>"ack"</js>)
- * 		.label(<js>"Acknowledge"</js>)
- * 		.endpoint(<js>"servlet:/incidents/{id}/ack"</js>)
- * 		.method(RowAction.Method.<jsf>POST</jsf>)
- * 		.confirm(<js>"Acknowledge this incident?"</js>)
- * 		.present(RowAction.Present.<jsf>DIALOG</jsf>)
- * 		.onSuccess(RowAction.OnSuccess.<jsf>MERGE_ROW</jsf>);
+ * 	RowAction <jv>delete</jv> = RowAction.<jsm>create</jsm>(<js>"delete"</js>)
+ * 		.label(<js>"Delete"</js>)
+ * 		.endpoint(<js>"servlet:/incidents/{id}"</js>)
+ * 		.method(RowAction.Method.<jsf>DELETE</jsf>)
+ * 		.confirm(<js>"Delete incident {id}?"</js>)
+ * 		.confirmLabel(<js>"Delete forever"</js>)
+ * 		.tone(RowAction.Tone.<jsf>DANGER</jsf>)
+ * 		.visibleWhen(VisibilityRule.<jsm>when</jsm>(<js>"locked"</js>).ne(<jk>true</jk>));
  * </p>
  *
  * <h5 class='section'>See Also:</h5>
@@ -105,7 +114,7 @@ import org.apache.juneau.rest.server.widgets.Op;
  *
  * @since 10.0.0
  */
-@BeanType(properties="id,label,icon,endpoint,method,confirm,confirmTitle,bulkMode,form,present,onSuccess,enabledWhen")
+@BeanType(properties="id,label,icon,endpoint,method,confirm,confirmTitle,bulkMode,form,present,onSuccess,enabledWhen,visibleWhen,tone,confirmLabel,confirmRenderer")
 @SuppressWarnings({
 	"java:S1845" // Fluent-builder setters intentionally mirror field names (Juneau DSL convention).
 })
@@ -141,6 +150,37 @@ public class RowAction {
 		 */
 		public String wire() {
 			return name();
+		}
+	}
+
+	/**
+	 * The visual tone of a row action's confirmation.
+	 *
+	 * <p>
+	 * Each constant carries the lowercase wire token emitted for the {@code tone} field.  {@link #DANGER} styles the
+	 * confirmation as destructive and focuses its Cancel button first.
+	 */
+	public enum Tone {
+
+		/** The ordinary confirmation styling. */
+		DEFAULT("default"),
+
+		/** A destructive confirmation: danger styling, Cancel focused first. */
+		DANGER("danger");
+
+		private final String wire;
+
+		Tone(String wire) {
+			this.wire = wire;
+		}
+
+		/**
+		 * Returns the lowercase wire token for this tone.
+		 *
+		 * @return The wire token (e.g. {@code "danger"}).
+		 */
+		public String wire() {
+			return wire;
 		}
 	}
 
@@ -287,6 +327,28 @@ public class RowAction {
 	 * disabled never hidden, first-declared-rule-wins, and a field the row does not carry fails closed.
 	 */
 	public List<RowActionEnabledRule> enabledWhen;
+
+	/**
+	 * The rules that must all match for this action to render at all.  <jk>null</jk> or empty means always visible.
+	 *
+	 * <p>
+	 * Unlike {@link #enabledWhen}, which disables but never hides, a row whose data does not satisfy every rule
+	 * here has this action hidden entirely (re-evaluated on every draw).  Prefer {@code enabledWhen}, which tells
+	 * the user why an action is unavailable, and hide only when the action is irrelevant to the row.  Still
+	 * presentation only &mdash; the endpoint must authorize independently.  The evaluation map is the row, plus the
+	 * page's {@code facts} under a {@code facts.} prefix, so a rule can test either {@code "status"} or
+	 * {@code "facts.viewer.roles"}.
+	 */
+	public List<VisibilityRule> visibleWhen;
+
+	/** Optional confirmation tone wire token (see {@link Tone#wire()}). */
+	public String tone;
+
+	/** Optional text of the confirm button; <jk>null</jk> means the action's {@link #label}. */
+	public String confirmLabel;
+
+	/** Optional name of a confirm renderer registered with the client runtime; <jk>null</jk> means the built-in modal. */
+	public String confirmRenderer;
 
 	/**
 	 * Starts a new {@link RowAction} with the specified stable action id.
@@ -530,6 +592,54 @@ public class RowAction {
 		if (enabledWhen == null)
 			enabledWhen = l();
 		enabledWhen.add(rule);
+		return this;
+	}
+
+	/**
+	 * Hides this action, per row, unless every rule matches (see {@link #visibleWhen} for the semantics).
+	 *
+	 * @param rules The rules; all must match.  Replaces any rules set by an earlier call.
+	 * @return This object.
+	 */
+	public RowAction visibleWhen(VisibilityRule...rules) {
+		visibleWhen = l(rules);
+		return this;
+	}
+
+	/**
+	 * Sets the confirmation tone.
+	 *
+	 * @param value The tone.  Must not be <jk>null</jk>.
+	 * @return This object.
+	 */
+	public RowAction tone(Tone value) {
+		tone = value.wire();
+		return this;
+	}
+
+	/**
+	 * Sets the text of the confirm button.
+	 *
+	 * @param value The label.  Can be <jk>null</jk> to fall back to {@link #label}.
+	 * @return This object.
+	 */
+	public RowAction confirmLabel(String value) {
+		confirmLabel = value;
+		return this;
+	}
+
+	/**
+	 * Sets the name of the confirm renderer to use for this action's confirmation.
+	 *
+	 * <p>
+	 * The name must be registered on the client with {@code JuneauViews.rowActions.registerConfirmRenderer}; an
+	 * unregistered name refuses the confirmation.
+	 *
+	 * @param value The renderer name.  Can be <jk>null</jk> for the built-in modal.
+	 * @return This object.
+	 */
+	public RowAction confirmRenderer(String value) {
+		confirmRenderer = value;
 		return this;
 	}
 }

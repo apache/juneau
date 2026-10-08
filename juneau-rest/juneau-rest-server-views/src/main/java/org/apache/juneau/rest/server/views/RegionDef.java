@@ -21,6 +21,7 @@ import static org.apache.juneau.commons.utils.Shorts.*;
 import java.util.*;
 
 import org.apache.juneau.commons.http.*;
+import org.apache.juneau.rest.server.runreport.RunViewChecks;
 
 /**
  * A page "region": a named container whose contents a client-side populator fills in, chosen by name via
@@ -307,6 +308,23 @@ public class RegionDef {
 	}
 
 	/**
+	 * The rules that must all match for the whole region to render.  <jk>null</jk> or empty means always visible.
+	 * See {@link RowAction#visibleWhen} for the shared semantics and evaluation-map convention.
+	 */
+	public List<VisibilityRule> visibleWhen;
+
+	/**
+	 * Hides this region unless every rule matches.
+	 *
+	 * @param rules The rules; all must match.  Replaces any rules set by an earlier call.
+	 * @return This object.
+	 */
+	public RegionDef visibleWhen(VisibilityRule...rules) {
+		visibleWhen = l(rules);
+		return this;
+	}
+
+	/**
 	 * Sets the field catalog.
 	 *
 	 * @param value The catalog, in declaration order. Card/tab regions only &mdash; see {@link #fields}.
@@ -393,21 +411,7 @@ public class RegionDef {
 	 * @return <jk>true</jk> if the string is a same-origin path template.
 	 */
 	public static boolean isSafeDetailEndpoint(String endpoint) {
-		if (endpoint == null || endpoint.isBlank())
-			return false;
-		if (endpoint.contains("://"))
-			return false;
-		if (endpoint.startsWith("//"))
-			return false;
-		var colon = endpoint.indexOf(':');
-		var slash = endpoint.indexOf('/');
-		if (colon >= 0 && (slash < 0 || colon < slash))
-			return false;
-		for (var seg : endpoint.split("/", -1)) {
-			if (eq(seg, ".."))
-				return false;
-		}
-		return true;
+		return RunViewChecks.isSameOriginPath(endpoint);
 	}
 
 	private void validateDataUrlAndParams() {
@@ -503,6 +507,8 @@ public class RegionDef {
 		if (fields != null && !fields.isEmpty()) {
 			m.put("fields", fields.stream().map(Field::toContractMap).toList());
 		}
+		if (visibleWhen != null && !visibleWhen.isEmpty())
+			m.put("visibleWhen", VisibilityRule.toMaps(visibleWhen));
 		return m;
 	}
 
@@ -637,6 +643,23 @@ public class RegionDef {
 		}
 
 		/**
+		 * The rules that must all match for this one detail field to render.  <jk>null</jk> or empty means always
+		 * visible.  See {@link RowAction#visibleWhen} for the shared semantics.
+		 */
+		public List<VisibilityRule> visibleWhen;
+
+		/**
+		 * Hides this field unless every rule matches.
+		 *
+		 * @param rules The rules; all must match.  Replaces any rules set by an earlier call.
+		 * @return This object.
+		 */
+		public Field visibleWhen(VisibilityRule...rules) {
+			visibleWhen = l(rules);
+			return this;
+		}
+
+		/**
 		 * Fail-closed validation of this one entry: a non-blank {@link #data}.
 		 *
 		 * @param regionId The enclosing region's id, for the error message only.
@@ -668,6 +691,8 @@ public class RegionDef {
 				m.put("span", "full");
 			if (actions != null && !actions.isEmpty())
 				m.put("actions", actions);
+			if (visibleWhen != null && !visibleWhen.isEmpty())
+				m.put("visibleWhen", VisibilityRule.toMaps(visibleWhen));
 			return m;
 		}
 	}

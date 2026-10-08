@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.rest.server.view.freemarker.console;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
+
 import java.util.*;
 
 import org.apache.juneau.bean.html5.*;
@@ -80,7 +82,7 @@ final class TagMethodModel implements TemplateMethodModelEx {
 	}
 
 	private static String normalize(String argName, String raw) {
-		if (raw == null)
+		if (n(raw))
 			throw new IllegalArgumentException("Tag " + argName + " must not be null.");
 		var lower = raw.toLowerCase(Locale.ROOT);
 		if (! lower.matches("^[a-z0-9_-]+$"))

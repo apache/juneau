@@ -59,6 +59,17 @@ class ConsoleChromeMixin_Serving_Test extends TestBase {
 		assertEquals(PageContractSchema.get().schemaJson(), body);
 	}
 
+	@ParameterizedTest
+	@ValueSource(strings = {"/juneau-console/juneau-badges.js", "/juneau-badges.js"})
+	void a04_badgesJs(String path) throws Exception {
+		var body = C.get(path).run()
+			.assertStatus(200)
+			.assertHeader("Content-Type").isContains("javascript")
+			.assertHeader("Cache-Control").isContains("max-age")
+			.getContent().asString();
+		assertTrue(body.contains("window.JuneauConsoleBadges"), "badges body");
+	}
+
 	@Test void a03_constants() {
 		assertEquals("/juneau-console/juneau-console.js", ConsoleChromeMixin.CONSOLE_JS_PATH);
 		assertEquals("/juneau-console/juneau-page.schema.json", ConsoleChromeMixin.SCHEMA_PATH);

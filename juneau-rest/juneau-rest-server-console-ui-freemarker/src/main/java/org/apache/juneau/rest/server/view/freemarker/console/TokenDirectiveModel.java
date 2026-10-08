@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.rest.server.view.freemarker.console;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
+
 import java.io.*;
 import java.util.*;
 
@@ -85,8 +87,8 @@ public final class TokenDirectiveModel implements TemplateDirectiveModel {
 		FtlAttrLists.rejectUnknown(p, NAME, ATTRS);
 
 		var cap = PageCapture.get(env);
-		var ctx = cap == null ? null : cap.themeBuild;
-		if (ctx == null)
+		var ctx = n(cap) ? null : cap.themeBuild;
+		if (n(ctx))
 			throw FtlAttrLists.reject("<@token> must be nested inside <@theme>.");
 
 		var name = FtlAttrLists.scalar(p, "name");

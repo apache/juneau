@@ -56,7 +56,9 @@ class ViewsJs_RunView_Test extends TestBase {
 		"tip03_stepExitTooltip", "cap01_domBounds", "cap02_collapsedBuildsNoBlocks",
 		"inc01_untouchedStepKeepsItsNode", "inc02_rowRebuiltOnlyWhenSuiteChanged", "cmp01_compactMode",
 		"gold01_fullGolden", "gold02_compactGolden", "gold03_replaceFlow",
-		"gold04_idempotentAppend"
+		"gold04_idempotentAppend",
+		"att01_groupingByIdAndTitle", "att02_collapsedByDefaultWithToggle", "att03_newAttemptRegroupsAndKeepsExpansion",
+		"att04_noAttemptsNoToggle", "att05_failureLinkOpensEarlierAttempt", "att06_resetClearsAttemptState"
 	));
 
 	static Map<?,?> report(String harness) {
@@ -133,6 +135,12 @@ class ViewsJs_RunView_Test extends TestBase {
 	@Test void n02_compactGolden() { assertAllTrue(r(), "gold02_compactGolden"); }
 	@Test void n03_replaceFlow() { assertAllTrue(r(), "gold03_replaceFlow"); }
 	@Test void n04_idempotentAppend() { assertAllTrue(r(), "gold04_idempotentAppend"); }
+	@Test void o01_groupingByIdAndTitle() { assertAllTrue(r(), "att01_groupingByIdAndTitle"); }
+	@Test void o02_collapsedByDefaultWithToggle() { assertAllTrue(r(), "att02_collapsedByDefaultWithToggle"); }
+	@Test void o03_newAttemptRegroupsAndKeepsExpansion() { assertAllTrue(r(), "att03_newAttemptRegroupsAndKeepsExpansion"); }
+	@Test void o04_noAttemptsNoToggle() { assertAllTrue(r(), "att04_noAttemptsNoToggle"); }
+	@Test void o05_failureLinkOpensEarlierAttempt() { assertAllTrue(r(), "att05_failureLinkOpensEarlierAttempt"); }
+	@Test void o06_resetClearsAttemptState() { assertAllTrue(r(), "att06_resetClearsAttemptState"); }
 
 	@Test void z01_everyCasePassesAndNoneIsMissing() {
 		var r = r();

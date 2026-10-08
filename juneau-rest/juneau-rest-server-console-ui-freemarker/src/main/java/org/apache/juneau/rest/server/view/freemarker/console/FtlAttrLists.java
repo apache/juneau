@@ -59,10 +59,10 @@ final class FtlAttrLists {
 
 	static String scalar(Map<String, TemplateModel> params, String name) throws TemplateModelException {
 		var raw = params.get(name);
-		if (raw == null)
+		if (n(raw))
 			return "";
 		var u = DeepUnwrap.unwrap(raw);
-		return u == null ? "" : String.valueOf(u).trim();
+		return n(u) ? "" : String.valueOf(u).trim();
 	}
 
 	@SuppressWarnings({
@@ -70,7 +70,7 @@ final class FtlAttrLists {
 	})
 	static List<String> list(Map<String, TemplateModel> params, String directive, String name) throws TemplateModelException {
 		var raw = params.get(name);
-		if (raw == null)
+		if (n(raw))
 			return List.of();
 		var u = DeepUnwrap.unwrap(raw);
 		if (u instanceof String s) {
@@ -87,7 +87,7 @@ final class FtlAttrLists {
 		if (u instanceof Collection<?> c) {
 			var out = new ArrayList<String>();
 			for (var item : c) {
-				if (item == null)
+				if (n(item))
 					continue;
 				var t = String.valueOf(item).trim();
 				if (! t.isEmpty())
@@ -135,14 +135,14 @@ final class FtlAttrLists {
 	static boolean strictBoolean(Map<String, TemplateModel> params, String directive, String name, boolean dflt)
 			throws TemplateModelException {
 		var raw = params.get(name);
-		if (raw == null)
+		if (n(raw))
 			return dflt;
 		if (raw instanceof TemplateBooleanModel b)
 			return b.getAsBoolean();
 		var u = DeepUnwrap.unwrap(raw);
 		if (u instanceof Boolean b)
 			return b;
-		var s = u == null ? "" : String.valueOf(u);
+		var s = n(u) ? "" : String.valueOf(u);
 		if (eq(s, "true"))
 			return true;
 		if (eq(s, "false"))

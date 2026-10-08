@@ -1232,15 +1232,18 @@
 				+ REGION_CONTRACT_VERSION + "'); it is read as identity-only.");
 			return empty;
 		}
+		const declared = {
+			dataUrl: body.dataUrl != null ? String(body.dataUrl) : null,
+			renderer: body.renderer != null ? String(body.renderer) : null,
+			lazy: typeof body.lazy === "boolean" ? body.lazy : defaultLazyFor(type),
+			refreshMs: typeof body.refreshMs === "number" ? clampRefreshMs(body.refreshMs) : null,
+			fields: Array.isArray(body.fields) ? body.fields : null,
+			titleFields: Array.isArray(body.titleFields) ? body.titleFields : null
+		};
+		// Present only when the region declares one, so a region without it keeps its exact prior shape.
+		if (Array.isArray(body.visibleWhen) && body.visibleWhen.length) declared.visibleWhen = body.visibleWhen;
 		return {
-			declared: {
-				dataUrl: body.dataUrl != null ? String(body.dataUrl) : null,
-				renderer: body.renderer != null ? String(body.renderer) : null,
-				lazy: typeof body.lazy === "boolean" ? body.lazy : defaultLazyFor(type),
-				refreshMs: typeof body.refreshMs === "number" ? clampRefreshMs(body.refreshMs) : null,
-				fields: Array.isArray(body.fields) ? body.fields : null,
-				titleFields: Array.isArray(body.titleFields) ? body.titleFields : null
-			},
+			declared: declared,
 			params: (body.params && typeof body.params === "object" && !Array.isArray(body.params)) ? body.params : {}
 		};
 	}
@@ -1366,6 +1369,10 @@
 		liveRegions.push(region);
 		el.setAttribute(REGION_STATE_ATTR, "idle");
 		armBarrier();
+		if (hiddenByVisibleWhen(region)) {
+			el.hidden = true;
+			el.setAttribute("data-juneau-region-hidden", "rule");
+		}
 		if (isRegionHidden(el)) {
 			region.deferred = true;
 			return region;
@@ -1373,6 +1380,18 @@
 		enterBarrier(region);
 		runPopulate(region, "initial");
 		return region;
+	}
+
+	/**
+	 * Whether the region's {@code visibleWhen} rules say it should not show.  The evaluation map is the owning row
+	 * (when the region sits in a row-detail panel) plus the page facts under {@code facts}.  A hidden region takes the
+	 * existing hidden path: it is enrolled but deferred, and never populates.  Presentation only.
+	 */
+	function hiddenByVisibleWhen(region) {
+		const rules = region.declared.visibleWhen;
+		if (!rules || typeof NS.rules?.testRow !== "function") return false;
+		const row = NS.rowActions?.contextOf?.(region.el)?.row;
+		return !NS.rules.testRow(rules, row);
 	}
 
 	/**

@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.rest.server.view.freemarker.console;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
+
 import java.util.*;
 
 /**
@@ -40,6 +42,7 @@ public final class CardSpec {
 	private String src;
 	private String template;
 	private boolean bare;
+	private String cssClass;
 	private final Map<String,Object> body = new LinkedHashMap<>();
 
 	private CardSpec(String type, String id) {
@@ -69,6 +72,9 @@ public final class CardSpec {
 	/** @param v Whether an html card is inserted without the {@code .jc-card} wrapper. @return This object. */
 	public CardSpec bare(boolean v) { bare = v; return this; }
 
+	/** @param v Space-separated CSS class names stamped on the card wrapper element. @return This object. */
+	public CardSpec cssClass(String v) { cssClass = v; return this; }
+
 	/** @param key A type-specific field. @param value Its value. @return This object. */
 	public CardSpec body(String key, Object value) { body.put(key, value); return this; }
 
@@ -86,10 +92,11 @@ public final class CardSpec {
 		var m = new LinkedHashMap<String,Object>();
 		m.put("id", id);
 		m.put("type", type);
-		if (title != null) m.put("title", title);
-		if (src != null) m.put("src", src);
-		if (template != null) m.put("template", template);
+		if (nn(title)) m.put("title", title);
+		if (nn(src)) m.put("src", src);
+		if (nn(template)) m.put("template", template);
 		if (bare) m.put("bare", true);
+		if (nn(cssClass)) m.put("class", cssClass);
 		m.putAll(body);
 		return m;
 	}

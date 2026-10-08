@@ -26,8 +26,9 @@ import org.apache.juneau.*;
 import org.apache.juneau.marshall.marshaller.*;
 import org.apache.juneau.rest.mock.classic.*;
 import org.apache.juneau.rest.server.*;
+import org.apache.juneau.rest.server.runreport.*;
 import org.apache.juneau.rest.server.servlet.*;
-import org.apache.juneau.rest.server.views.RunEvent.*;
+import org.apache.juneau.rest.server.runreport.RunEvent.*;
 import org.junit.jupiter.api.*;
 
 class RunViewMixin_Test extends TestBase {
