@@ -43,6 +43,9 @@ import org.apache.juneau.rest.server.view.View;
 import org.apache.juneau.rest.server.view.freemarker.FreemarkerMixin;
 import org.apache.juneau.rest.server.view.freemarker.FreemarkerViewRenderer;
 import org.apache.juneau.rest.server.view.freemarker.console.ConsoleFreemarkerMixin;
+import org.apache.juneau.rest.server.view.freemarker.console.ToolkitPack;
+import org.apache.juneau.rest.server.view.freemarker.console.ToolkitPackRegistry;
+import org.apache.juneau.rest.server.staticfile.WebJarResolver;
 import org.apache.juneau.rest.server.staticfile.WebJarsMixin;
 import org.apache.juneau.rest.server.views.ViewsMixin;
 
@@ -98,6 +101,10 @@ public class ReleaseRest extends BasicRestResource {
 
 	/**
 	 * The Freemarker mixin used to render this resource's templates.
+	 *
+	 * <p>
+	 * Registers the app-local {@code datatables-export} pack (JSZip, pdfmake and its fonts, from WebJars) that the
+	 * releases card requires for Excel and PDF export; it loads after the built-in Buttons pack.
 	 */
 	// Return type stays FreemarkerMixin - FreemarkerViewRenderer does an exact-type bean lookup (see
 	// ConsoleFreemarkerMixin's class Javadoc).
@@ -105,6 +112,15 @@ public class ReleaseRest extends BasicRestResource {
 	public FreemarkerMixin freemarker() {
 		var builder = ConsoleFreemarkerMixin.create();
 		builder.adopterAssets(getClass().getClassLoader(), "static");
+		builder.registerToolkitPack(ToolkitPack.create("datatables-export")
+			.js(
+				WebJarResolver.asset("org.webjars.npm", "jszip", "jszip/{version}/dist/jszip.min.js"),
+				WebJarResolver.asset("org.webjars.npm", "pdfmake", "pdfmake/{version}/build/pdfmake.min.js"),
+				WebJarResolver.asset("org.webjars.npm", "pdfmake", "pdfmake/{version}/build/vfs_fonts.js"))
+			.dependsOn(ToolkitPackRegistry.PACK_DATATABLES_BUTTONS)
+			.kind(ToolkitPack.Kind.VENDOR)
+			.resolver(ToolkitPackRegistry.WEBJAR_RESOLVER)
+			.build());
 		builder.basePath("/templates/").templateSuffix(".ftlh");
 		return builder.build();
 	}

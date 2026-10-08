@@ -177,9 +177,20 @@ class ReleaseRestTest {
 				assertTrue(body.contains("/webjars/"), "Pack assets should be served as WebJars: " + body);
 				assertFalse(body.contains("cdn.datatables.net"), "Buttons must not come from the CDN: " + body);
 				assertFalse(body.contains("/datatables/jquery.min.js"), "Bundled jQuery should be gone: " + body);
-				assertTrue(body.contains("jszip.min.js"), "Missing jszip.min.js script include: " + body);
-				assertTrue(body.contains("pdfmake.min.js"), "Missing pdfmake.min.js script include: " + body);
-				assertTrue(body.contains("vfs_fonts.min.js"), "Missing vfs_fonts.min.js script include: " + body);
+				var jszipIdx = body.indexOf("jszip.min.js");
+				var pdfmakeIdx = body.indexOf("pdfmake.min.js");
+				var vfsIdx = body.indexOf("vfs_fonts.js");
+				assertTrue(jszipIdx >= 0, "Missing jszip.min.js script include: " + body);
+				assertTrue(pdfmakeIdx >= 0, "Missing pdfmake.min.js script include: " + body);
+				assertTrue(vfsIdx >= 0, "Missing vfs_fonts.js script include: " + body);
+				assertTrue(buttonsHtml5Idx < jszipIdx, "Buttons must precede JSZip: " + body);
+				assertTrue(jszipIdx < pdfmakeIdx && pdfmakeIdx < vfsIdx, "Export libraries out of order: " + body);
+				assertEquals(jszipIdx, body.lastIndexOf("jszip.min.js"), "JSZip loaded more than once: " + body);
+				assertEquals(pdfmakeIdx, body.lastIndexOf("pdfmake.min.js"), "pdfmake loaded more than once: " + body);
+				assertEquals(vfsIdx, body.lastIndexOf("vfs_fonts.js"), "vfs_fonts loaded more than once: " + body);
+				assertTrue(body.contains("/webjars/jszip/3.10.1/dist/jszip.min.js"), "JSZip should be served as a WebJar: " + body);
+				assertTrue(body.contains("/webjars/pdfmake/0.2.7/build/pdfmake.min.js"), "pdfmake should be served as a WebJar: " + body);
+				assertFalse(body.contains("cdnjs"), "No cdnjs URL should remain: " + body);
 			}
 		}
 	}

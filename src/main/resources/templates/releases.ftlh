@@ -16,12 +16,12 @@
 -->
 
 <@page tab="releases" toolkit="views"
-    init="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js,https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js,https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.min.js,/js/releases-detail.js">
+    init="/js/releases-detail.js">
     <div class="jc-page-header">
         <h1>All Releases</h1>
         <p class="jc-page-sub">Every Apache Juneau release, from the current vote candidate back through GA history.</p>
     </div>
-    <@card type="datatables" id="releases" requires="datatables-buttons">
+    <@card type="datatables" id="releases" requires="datatables-export">
     {
         rowType: 'Release',
         dataMode: 'server',

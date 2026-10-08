@@ -91,6 +91,20 @@
             <artifactId>juneau-secret-macos-keychain</artifactId>
             <version>${juneau.version}</version>
         </dependency>
+        <!-- Excel/PDF export libraries for the "datatables-export" toolkit pack. Their npm transitive deps are not
+             needed (both ship a self-contained browser bundle), so exclude them. -->
+        <dependency>
+            <groupId>org.webjars.npm</groupId>
+            <artifactId>jszip</artifactId>
+            <version>3.10.1</version>
+            <exclusions><exclusion><groupId>*</groupId><artifactId>*</artifactId></exclusion></exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.webjars.npm</groupId>
+            <artifactId>pdfmake</artifactId>
+            <version>0.2.7</version>
+            <exclusions><exclusion><groupId>*</groupId><artifactId>*</artifactId></exclusion></exclusions>
+        </dependency>
         <!-- FreeMarker engine (provided-scope in the bridge module; supply it here). -->
         <dependency>
             <groupId>org.freemarker</groupId>
