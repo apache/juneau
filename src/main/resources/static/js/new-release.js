@@ -92,8 +92,25 @@
     JuneauViews.runView.mount(runViewEl, {
       eventsUrl: '/rest/runs/juneau-run-view/' + encodeURIComponent(runViewEl.dataset.runId) + '/events',
       refreshMs: 3000,
-      title: 'Run progress'
+      title: 'Run progress',
+      rawHref: '#raw-L{line}'
     }, {});
+
+    // A step's title links to line 1 of its console log (#raw-L1). The console-output region scrolls to and
+    // highlights a line named by the hash, but it shows one step's log at a time, so first select the clicked
+    // step (the run view numbers its steps as the rail does), then let the hash do the scrolling.
+    runViewEl.addEventListener('click', (ev) => {
+      const a = ev.target.closest && ev.target.closest('a.juneau-rv-title');
+      const href = a && a.getAttribute('href');
+      const m = href && /^#raw-L\d+$/.test(href) && /^(\d+)\. /.exec(a.textContent);
+      const item = m && layout.querySelectorAll('.rm-rail-item')[Number(m[1]) - 1];
+      if (!item) return;
+      ev.preventDefault();
+      if (location.hash === href) history.replaceState(null, '', location.pathname + location.search);
+      location.hash = href;  // an open console scrolls on hashchange; a console mounted below reads it at creation
+      if (!item.classList.contains('selected')) nrSelect(item.dataset.step);
+      document.getElementById('nr-console')?.scrollIntoView({ block: 'nearest' });
+    });
   }
 
   // Exactly one console-output region at a time — one console visible at a time. Switching the selected
@@ -168,6 +185,7 @@
       downloadUrl: base + 'download',
       tail: 2000,
       rows: 20,
+      anchorPrefix: 'raw-L',
       title: meta.title + ' output'
     }, { signal: consoleAbort.signal });
   }

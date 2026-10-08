@@ -28,7 +28,7 @@ import org.apache.juneau.releng.email.EmailService;
 import org.apache.juneau.releng.milestone.MilestoneService;
 import org.apache.juneau.releng.nexus.NexusStagingClient;
 import org.apache.juneau.releng.util.ProcessRunner;
-import org.apache.juneau.rest.server.views.RunEvent.Level;
+import org.apache.juneau.rest.server.runreport.RunEvent.Level;
 
 /**
  * Injected into every {@link ReleaseStep#preview}/{@link ReleaseStep#apply}.

@@ -27,11 +27,11 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
-import org.apache.juneau.rest.server.views.RunEvent;
-import org.apache.juneau.rest.server.views.report.ReportLimits;
-import org.apache.juneau.rest.server.views.report.ReportResult;
-import org.apache.juneau.rest.server.views.report.ReportTest;
-import org.apache.juneau.rest.server.views.report.SurefireReportReader;
+import org.apache.juneau.rest.server.runreport.RunEvent;
+import org.apache.juneau.rest.server.runreport.ReportLimits;
+import org.apache.juneau.rest.server.runreport.ReportResult;
+import org.apache.juneau.rest.server.runreport.ReportTest;
+import org.apache.juneau.rest.server.runreport.SurefireReportReader;
 
 /**
  * Turns the Surefire and Failsafe reports that a Maven step left in the staging clone into run-view test events.

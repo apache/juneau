@@ -22,9 +22,9 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
-import org.apache.juneau.rest.server.views.RunEvent;
-import org.apache.juneau.rest.server.views.RunEvent.DoneStatus;
-import org.apache.juneau.rest.server.views.RunEvent.EndStatus;
+import org.apache.juneau.rest.server.runreport.RunEvent;
+import org.apache.juneau.rest.server.runreport.RunEvent.DoneStatus;
+import org.apache.juneau.rest.server.runreport.RunEvent.EndStatus;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
@@ -53,7 +53,9 @@ class RunEventStoreTest {
 		var store = new RunEventStore(dir);
 		assertEquals("build", store.begin("9.2.1", "build", "Build", 3));
 		store.end("9.2.1", "build", EndStatus.OK, 1200);
-		assertEquals("step:build end:build:ok", ids(read(store, false)));
+		var events = read(store, false);
+		assertEquals("step:build end:build:ok", ids(events));
+		assertEquals(1, events.get(0).toContractMap().get("rawLine"), "a step links to the first line of its console log");
 	}
 
 	@Test
@@ -66,6 +68,9 @@ class RunEventStoreTest {
 		var events = read(store, false);
 		assertEquals("step:build end:build:fail step:build.2 end:build.2:skip step:build.3", ids(events));
 		assertEquals("Build (attempt 3)", events.get(4).toContractMap().get("title"));
+		// The run-view region folds "<id>.<n>" (n >= 2) steps under the plain-id step; keep that naming.
+		assertTrue(events.get(2).toContractMap().get("id").toString().matches("build\\.[2-9]"));
+		assertTrue(events.get(2).toContractMap().get("title").toString().endsWith("(attempt 2)"));
 	}
 
 	@Test

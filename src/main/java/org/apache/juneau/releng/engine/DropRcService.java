@@ -29,8 +29,8 @@ import org.apache.juneau.releng.log.RunLog;
 import org.apache.juneau.releng.nexus.NexusStagingClient;
 import org.apache.juneau.releng.util.ProcessRunner;
 import org.apache.juneau.releng.util.SvnArgs;
-import org.apache.juneau.rest.server.views.RunEvent.EndStatus;
-import org.apache.juneau.rest.server.views.RunEvent.Level;
+import org.apache.juneau.rest.server.runreport.RunEvent.EndStatus;
+import org.apache.juneau.rest.server.runreport.RunEvent.Level;
 
 /**
  * The one coarse Drop-RC action: drop remote state, bump RC, reset from workspace-setup.

@@ -168,6 +168,8 @@ class ReleaseRunRestOutputTest {
 				assertFalse(text.contains("/events/' + encodeURIComponent(version) + '/' + encodeURIComponent(stepId)"), path);
 				if (path.endsWith(".js"))
 					assertTrue(text.contains("JuneauViews.consoleOutput.mount(") && text.contains("JuneauViews.runView.mount("), path);
+				if (path.endsWith(".js"))
+					assertTrue(text.contains("rawHref: '#raw-L{line}'") && text.contains("anchorPrefix: 'raw-L'"), path);
 				if (path.endsWith(".ftlh"))
 					assertTrue(text.contains("nr-runview"), path);
 			}

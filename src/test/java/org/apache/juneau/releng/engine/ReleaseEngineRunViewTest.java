@@ -30,7 +30,7 @@ import java.util.function.Consumer;
 import org.apache.juneau.releng.config.TargetProfile;
 import org.apache.juneau.releng.nexus.NexusStagingClient;
 import org.apache.juneau.releng.util.ProcessRunner;
-import org.apache.juneau.rest.server.views.RunEvent;
+import org.apache.juneau.rest.server.runreport.RunEvent;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 

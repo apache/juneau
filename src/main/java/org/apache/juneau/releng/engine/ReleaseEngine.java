@@ -38,8 +38,8 @@ import org.apache.juneau.releng.milestone.MilestoneService;
 import org.apache.juneau.releng.nexus.NexusStagingClient;
 import org.apache.juneau.releng.util.ProcessRunner;
 import org.apache.juneau.rest.server.views.ConsoleOutputSource;
-import org.apache.juneau.rest.server.views.RunEvent.DoneStatus;
-import org.apache.juneau.rest.server.views.RunEvent.EndStatus;
+import org.apache.juneau.rest.server.runreport.RunEvent.DoneStatus;
+import org.apache.juneau.rest.server.runreport.RunEvent.EndStatus;
 import org.apache.juneau.rest.server.views.RunViewSource;
 
 /**
