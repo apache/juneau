@@ -29,27 +29,27 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.junit.jupiter.api.Test;
 
-class SseLogServletTest {
+class RunStateSseServletTest {
 
 	@Test
 	void a01_framesALineAsAnSseDataEvent() {
-		assertEquals("data: hello\n\n", SseLogServlet.sse("hello"));
+		assertEquals("data: hello\n\n", RunStateSseServlet.sse("hello"));
 	}
 
 	@Test
 	void a02_framesMultilinePayloadWithPerLineDataPrefix() {
-		assertEquals("data: a\ndata: b\n\n", SseLogServlet.sse("a\nb"));
+		assertEquals("data: a\ndata: b\n\n", RunStateSseServlet.sse("a\nb"));
 	}
 
 	@Test
 	void a03_heartbeatIsAnSseComment() {
-		assertEquals(": heartbeat\n\n", SseLogServlet.HEARTBEAT);
+		assertEquals(": heartbeat\n\n", RunStateSseServlet.HEARTBEAT);
 	}
 
 	@Test
 	void a04_stateSegmentConstantIsNeverARealStepId() {
-		// StepRegistry.standard()'s 24 step ids never collide with this; doGet's routing relies on that.
-		assertEquals("state", SseLogServlet.STATE_SEGMENT);
+		// the state channel is selected by this trailing segment.
+		assertEquals("state", RunStateSseServlet.STATE_SEGMENT);
 	}
 
 	private HttpServletRequest requestFor(String pathInfo) {
@@ -68,29 +68,24 @@ class SseLogServletTest {
 	}
 
 	@Test
-	void b01_consoleOnlyConstructorTreatsStateSegmentAsNoActiveRun() throws IOException {
-		// The 2-arg (pre-existing) constructor defaults the state resolvers to always-empty, so a client
-		// hitting .../state against a servlet built the old way gets the same graceful fallback as an
-		// unknown step — never a 500 or an unrecognized-route surprise.
-		var servlet = new SseLogServlet((v, s) -> Optional.empty(), (v, s) -> Optional.empty());
-		var capture = new java.io.StringWriter();
-		var out = new PrintWriter(capture);
+	void b01_aChannelOtherThanStateIs404() {
+		var servlet = new RunStateSseServlet(v -> Optional.empty(), v -> Optional.empty());
+		var resp = mock(HttpServletResponse.class);
 
-		servlet.doGet(requestFor("/9.2.1/state"), responseWriting(out));
+		servlet.doGet(requestFor("/9.2.1/preflight"), resp);
 
-		assertEquals(SseLogServlet.sse("(no active run for 9.2.1)"), capture.toString());
+		verify(resp).setStatus(HttpServletResponse.SC_NOT_FOUND);
 	}
 
 	@Test
 	void b02_stateChannelSendsNoActiveRunWhenNoBroadcasterResolves() throws IOException {
-		var servlet = new SseLogServlet((v, s) -> Optional.empty(), (v, s) -> Optional.empty(),
-				v -> Optional.empty(), v -> Optional.empty());
+		var servlet = new RunStateSseServlet(v -> Optional.empty(), v -> Optional.empty());
 		var capture = new java.io.StringWriter();
 		var out = new PrintWriter(capture);
 
 		servlet.doGet(requestFor("/9.2.1/state"), responseWriting(out));
 
-		assertEquals(SseLogServlet.sse("(no active run for 9.2.1)"), capture.toString());
+		assertEquals(RunStateSseServlet.sse("(no active run for 9.2.1)"), capture.toString());
 	}
 
 	/**
@@ -138,8 +133,7 @@ class SseLogServletTest {
 		var writer = new FailableWriter(initialSeen, updateSeen);
 		try (var out = new PrintWriter(writer)) {
 			var bc = new RunStateBroadcaster();
-			var servlet = new SseLogServlet((v, s) -> Optional.empty(), (v, s) -> Optional.empty(),
-					v -> Optional.of("INITIAL_SNAPSHOT"), v -> Optional.of(bc));
+			var servlet = new RunStateSseServlet(v -> Optional.of("INITIAL_SNAPSHOT"), v -> Optional.of(bc));
 			var req = requestFor("/9.2.1/state");
 			var resp = responseWriting(out);
 
@@ -162,7 +156,7 @@ class SseLogServletTest {
 			worker.join(2000);
 			assertFalse(worker.isAlive(), "the tail loop must exit once writes to the client start failing");
 
-			assertEquals(SseLogServlet.sse("INITIAL_SNAPSHOT") + SseLogServlet.sse("UPDATED_SNAPSHOT"),
+			assertEquals(RunStateSseServlet.sse("INITIAL_SNAPSHOT") + RunStateSseServlet.sse("UPDATED_SNAPSHOT"),
 					writer.captured.toString());
 		}
 	}

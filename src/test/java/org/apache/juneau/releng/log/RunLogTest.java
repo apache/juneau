@@ -20,8 +20,6 @@ package org.apache.juneau.releng.log;
 import static org.junit.jupiter.api.Assertions.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
@@ -31,50 +29,33 @@ class RunLogTest {
 	// convention is applied by the caller when constructing one RunLog per step.
 
 	@Test
-	@SuppressWarnings({
-		"try" // Subscription is held only so close() unsubscribes at scope exit; the body never reads it.
-	})
-	void a01_appendsToDiskAndFansOutToBroadcaster(@TempDir Path dir) throws Exception {
-		var bc = new LogBroadcaster();
-		var got = new ArrayList<String>();
-		try (var subscription = bc.subscribe(got::add)) {
-			var log = new RunLog(dir.resolve("9.2.1-RC1-preflight.log"), bc);
+	void a01_appendsToDiskOneLinePerAppend(@TempDir Path dir) throws Exception {
+		var log = new RunLog(dir.resolve("9.2.1-RC1-preflight.log"));
 
-			log.append("line one");
-			log.append("line two");
+		log.append("line one");
+		log.append("line two");
 
-			var onDisk = Files.readString(dir.resolve("9.2.1-RC1-preflight.log"));
-			assertEquals("line one\nline two\n", onDisk);
-			assertEquals(List.of("line one", "line two"), got);
-		}
+		assertEquals("line one\nline two\n", Files.readString(dir.resolve("9.2.1-RC1-preflight.log")));
 	}
 
 	@Test
 	void a02_sizeReportsCurrentByteOffset(@TempDir Path dir) {
-		var log = new RunLog(dir.resolve("9.2.1-RC1-preflight.log"), new LogBroadcaster());
+		var log = new RunLog(dir.resolve("9.2.1-RC1-preflight.log"));
 		log.append("abc");
 		assertEquals(4, log.size()); // "abc\n"
 	}
 
 	@Test
-	@SuppressWarnings({
-		"try" // Subscription is held only so close() unsubscribes at scope exit; the body never reads it.
-	})
-	void a03_lineSinkFeedsBothDiskAndBroadcaster(@TempDir Path dir) throws Exception {
-		var bc = new LogBroadcaster();
-		var got = new ArrayList<String>();
-		try (var subscription = bc.subscribe(got::add)) {
-			var log = new RunLog(dir.resolve("9.2.1-RC1-preflight.log"), bc);
-			log.lineSink().accept("x");
-			assertEquals("x\n", Files.readString(dir.resolve("9.2.1-RC1-preflight.log")));
-			assertEquals(List.of("x"), got);
-		}
+	void a03_lineSinkAppendsToDisk(@TempDir Path dir) throws Exception {
+		var log = new RunLog(dir.resolve("9.2.1-RC1-preflight.log"));
+		log.lineSink().accept("x");
+		assertEquals("x\n", Files.readString(dir.resolve("9.2.1-RC1-preflight.log")));
 	}
 
 	@Test
 	void b01_resetTruncatesOnDiskContentForInPlaceOverwrite(@TempDir Path dir) throws Exception {
 		// An ad-hoc re-run overwrites the step's log from scratch.
-		var log = new RunLog(dir.resolve("9.2.1-RC1-release-prepare.log"), new LogBroadcaster());
+		var log = new RunLog(dir.resolve("9.2.1-RC1-release-prepare.log"));
 		log.append("first invocation, line 1");
 		log.append("first invocation, line 2");
 
@@ -88,7 +69,7 @@ class RunLogTest {
 	void b02_resetOnANeverWrittenLogIsANoOp(@TempDir Path dir) {
 		// A step's first-ever invocation also calls reset() before appending; must not fail
 		// just because the file doesn't exist yet.
-		var log = new RunLog(dir.resolve("9.2.1-RC1-build-verify.log"), new LogBroadcaster());
+		var log = new RunLog(dir.resolve("9.2.1-RC1-build-verify.log"));
 		assertDoesNotThrow(log::reset);
 		log.append("first line ever");
 		assertEquals("first line ever\n", contentsOrEmpty(dir.resolve("9.2.1-RC1-build-verify.log")));

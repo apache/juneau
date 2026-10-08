@@ -20,7 +20,9 @@ package org.apache.juneau.releng.rest;
 import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.escapeForScript;
 
+import java.io.IOException;
 import java.util.Map;
+import java.util.Optional;
 import org.apache.juneau.commons.inject.Bean;
 import org.apache.juneau.marshall.marshaller.Json;
 import org.apache.juneau.http.Content;
@@ -28,10 +30,17 @@ import org.apache.juneau.http.Path;
 import org.apache.juneau.http.response.Conflict;
 import org.apache.juneau.http.response.NotFound;
 import org.apache.juneau.rest.server.Mutating;
+import org.apache.juneau.rest.server.OpSwagger;
 import org.apache.juneau.rest.server.Rest;
 import org.apache.juneau.rest.server.RestGet;
 import org.apache.juneau.rest.server.RestPost;
+import org.apache.juneau.rest.server.RestRequest;
+import org.apache.juneau.rest.server.RestResponse;
 import org.apache.juneau.rest.server.servlet.BasicRestResource;
+import org.apache.juneau.rest.server.views.ConsoleOutputEndpoints;
+import org.apache.juneau.rest.server.views.RunViewMixin;
+import org.apache.juneau.rest.server.views.RunViewSource;
+import org.apache.juneau.rest.server.views.ViewsMixin;
 import org.apache.juneau.rest.server.view.View;
 import org.apache.juneau.rest.server.view.freemarker.FreemarkerMixin;
 import org.apache.juneau.rest.server.view.freemarker.FreemarkerViewRenderer;
@@ -52,8 +61,8 @@ import jakarta.servlet.http.HttpServletRequest;
  * history and access logs. The boundary refuses that shape from a hostile page; this closes the accidental use of it.
  */
 @Rest(path = "/runs", title = "New Release", responseProcessors = FreemarkerViewRenderer.class,
-	disableContentParam = "true")
-public class ReleaseRunRest extends BasicRestResource {
+	disableContentParam = "true", mixins = ViewsMixin.class)
+public class ReleaseRunRest extends BasicRestResource implements RunViewMixin {
 
 	private final ReleaseEngine engine;
 	private final DropRcService dropRc;
@@ -125,6 +134,35 @@ public class ReleaseRunRest extends BasicRestResource {
 		for (var step : steps)
 			meta.put(step.id(), m("title", step.title(), "mutating", Boolean.valueOf(step.mutating())));
 		return escapeForScript(Json.of(meta));
+	}
+
+	/**
+	 * One page of a step's console output, in the console-output lines contract. The step's own log file is the
+	 * source, so the page reads the same lines after a restart as during the run.
+	 */
+	@RestGet(path = "/{version}/steps/{stepId}/output/lines", summary = "Step console output lines", swagger = @OpSwagger(ignore = true))
+	public void outputLines(@Path("version") String version, @Path("stepId") String stepId, RestRequest req, RestResponse res)
+			throws IOException {
+		ConsoleOutputEndpoints.lines(engine.stepOutput(version, stepId), req, res);
+	}
+
+	/**
+	 * The run-view events of a run, served by {@link RunViewMixin}. The run id is the version with its dots written as
+	 * underscores, since a run id has no dots.
+	 */
+	@Override /* RunViewMixin */
+	public Optional<RunViewSource> runViewSource(String runId, RestRequest req) {
+		return engine.runViewSource(runId);
+	}
+
+	/**
+	 * A step's whole console output as JSONL, one line record per JSONL line, named {@code <version>-<stepId>.jsonl}
+	 * with the version's dots written as underscores (the download name is a log id, which has no dots).
+	 */
+	@RestGet(path = "/{version}/steps/{stepId}/output/download", summary = "Step console output download", swagger = @OpSwagger(ignore = true))
+	public void outputDownload(@Path("version") String version, @Path("stepId") String stepId, RestResponse res)
+			throws IOException {
+		ConsoleOutputEndpoints.download(engine.stepOutput(version, stepId), version.replace('.', '_') + "-" + stepId, res);
 	}
 
 	/**

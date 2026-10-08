@@ -28,6 +28,7 @@ import org.apache.juneau.releng.email.EmailService;
 import org.apache.juneau.releng.milestone.MilestoneService;
 import org.apache.juneau.releng.nexus.NexusStagingClient;
 import org.apache.juneau.releng.util.ProcessRunner;
+import org.apache.juneau.rest.server.views.RunEvent.Level;
 
 /**
  * Injected into every {@link ReleaseStep#preview}/{@link ReleaseStep#apply}.
@@ -50,7 +51,46 @@ public class StepContext {
 	public NexusStagingClient nexus;
 	public EmailService email;
 	public MilestoneService milestone;
+	public Notes notes; // Null outside an apply (previews, tests); the note methods then do nothing.
 	public Map<String, String> formInputs; // developmentVersion, voteOutcome, tally, repoIdOverride, checklist...
+
+	/**
+	 * Receives the notes a step records for the run-view; the engine binds it to the step being applied.
+	 */
+	@FunctionalInterface
+	public interface Notes {
+		/**
+		 * Records one note.
+		 *
+		 * @param level The note level.
+		 * @param text The note text.
+		 * @param href A link for the note, or null.
+		 */
+		void note(Level level, String text, String href);
+	}
+
+	/**
+	 * Records an informational note under this step in the run-view.
+	 */
+	public void note(String text) {
+		note(text, null);
+	}
+
+	/**
+	 * Records an informational note with a link under this step in the run-view.
+	 */
+	public void note(String text, String href) {
+		if (notes != null)
+			notes.note(Level.INFO, text, href);
+	}
+
+	/**
+	 * Records a warning note under this step in the run-view.
+	 */
+	public void warnNote(String text) {
+		if (notes != null)
+			notes.note(Level.WARN, text, null);
+	}
 
 	/**
 	 * Runs a subprocess with output teed to the SSE log (helper for step apply/preview implementations).

@@ -15,18 +15,18 @@
  * limitations under the License.
  */
 
-package org.apache.juneau.releng.log;
+import { test, expect } from '@playwright/test';
 
-import java.util.function.Consumer;
+test.describe('run progress region', () => {
+  test('execution page loads the run-view module', async ({ page }) => {
+    await page.goto('/rest/runs?tab=exec');
+    await expect(page.locator('#nr-panel-exec')).toBeAttached();
+    const html = await page.content();
+    expect(html).toContain('juneau-run-view.js');
+  });
 
-/**
- * Subscribe shape of {@link RunStateBroadcaster} (run/step status snapshots), as consumed by
- * {@link RunStateSseServlet}'s tail loop.
- */
-public interface Broadcaster {
-
-	/**
-	 * Subscribes {@code sink} to every payload published from now on; closing the return unsubscribes it.
-	 */
-	AutoCloseable subscribe(Consumer<String> sink);
-}
+  test('events endpoint answers 404 for an unknown run', async ({ request }) => {
+    const res = await request.get('/rest/runs/juneau-run-view/0_0_0-none/events');
+    expect(res.status()).toBe(404);
+  });
+});

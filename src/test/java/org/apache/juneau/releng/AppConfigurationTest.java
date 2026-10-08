@@ -68,34 +68,6 @@ class AppConfigurationTest {
 	}
 
 	@Test
-	void a01_broadcasterResolverIsEmptyForUnknownVersionAndStep(@TempDir Path dir) {
-		var store = new RunStateStore(dir);
-		var eng = engine(dir);
-		var resolver = AppConfiguration.broadcasterForStep(eng, store);
-		assertTrue(resolver.apply("nope", "nope").isEmpty());
-	}
-
-	@Test
-	void a02_broadcasterResolverIsEmptyForKnownVersionButUnknownStep(@TempDir Path dir) {
-		var store = new RunStateStore(dir);
-		var eng = engine(dir);
-		eng.start("9.2.1", null);
-		var resolver = AppConfiguration.broadcasterForStep(eng, store);
-		assertTrue(resolver.apply("9.2.1", "not-a-real-step").isEmpty());
-	}
-
-	@Test
-	void a03_broadcasterResolverIsPresentForRealActiveRunAndStep(@TempDir Path dir) {
-		var store = new RunStateStore(dir);
-		var eng = engine(dir);
-		eng.start("9.2.1", null);
-		var resolver = AppConfiguration.broadcasterForStep(eng, store);
-		var bc = resolver.apply("9.2.1", "preflight");
-		assertTrue(bc.isPresent());
-		assertSame(eng.broadcaster("9.2.1", "preflight"), bc.get());
-	}
-
-	@Test
 	void b01_stateBroadcasterResolverIsEmptyForUnknownVersion(@TempDir Path dir) {
 		var store = new RunStateStore(dir);
 		var eng = engine(dir);
@@ -112,22 +84,6 @@ class AppConfigurationTest {
 		var bc = resolver.apply("9.2.1");
 		assertTrue(bc.isPresent());
 		assertSame(eng.stateBroadcaster("9.2.1"), bc.get());
-	}
-
-	@Test
-	void c01_logPathResolverIsEmptyForUnknownVersionAndStep(@TempDir Path dir) {
-		var store = new RunStateStore(dir);
-		var resolver = AppConfiguration.logPathForStep(store);
-		assertTrue(resolver.apply("nope", "nope").isEmpty());
-	}
-
-	@Test
-	void c02_logPathResolverIsEmptyForKnownVersionButUnknownStep(@TempDir Path dir) {
-		var store = new RunStateStore(dir);
-		var eng = engine(dir);
-		eng.start("9.2.1", null);
-		var resolver = AppConfiguration.logPathForStep(store);
-		assertTrue(resolver.apply("9.2.1", "not-a-real-step").isEmpty());
 	}
 
 	@Test

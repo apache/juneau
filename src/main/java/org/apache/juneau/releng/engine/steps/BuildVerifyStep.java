@@ -33,6 +33,11 @@ public class BuildVerifyStep implements ReleaseStep {
 	}
 
 	@Override
+	public boolean runsTests() {
+		return true;
+	}
+
+	@Override
 	public String title() {
 		return "Build & verify";
 	}

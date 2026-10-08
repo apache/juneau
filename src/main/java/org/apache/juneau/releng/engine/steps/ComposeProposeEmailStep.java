@@ -49,6 +49,7 @@ public class ComposeProposeEmailStep implements ReleaseStep {
 	@Override
 	public StepResult apply(StepContext ctx) {
 		var path = ctx.email.compose(EmailTemplate.PROPOSE, ctx.run);
+		ctx.note("Composed the PROPOSE email draft: " + path.getFileName());
 		return StepResult.ok("Opened draft: " + path);
 	}
 }

@@ -47,6 +47,12 @@ public class TallyVoteResultStep implements ReleaseStep {
 		if (!outcome.equals("passed") && !outcome.equals("rejected"))
 			return StepResult.fail("voteOutcome must be 'passed' or 'rejected'.");
 		ctx.log.accept("Vote outcome recorded: " + outcome);
+		var tally = ctx.formInputs.getOrDefault("tally", "").strip();
+		var line = tally.isEmpty() ? "" : " \u2014 " + tally.lines().findFirst().orElse("");
+		if (outcome.equals("passed"))
+			ctx.note("Vote passed" + line);
+		else
+			ctx.warnNote("Vote rejected" + line);
 		// 'rejected' is routed to Drop-RC by ReleaseEngine.applyStep, not here.
 		return StepResult.ok("Vote outcome: " + outcome + ".");
 	}

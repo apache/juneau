@@ -210,14 +210,13 @@ class ReleaseEngineTest {
 	}
 
 	@Test
-	void b05_eachStepGetsItsOwnBroadcasterAndLogPath(@TempDir Path dir) {
+	void b05_eachStepGetsItsOwnLogPath(@TempDir Path dir) {
 		var eng = engine(dir);
 		eng.start("9.2.1", null);
 		eng.apply("9.2.1", "preflight", Map.of());
 		eng.apply("9.2.1", "compose-propose-email", Map.of());
 		eng.apply("9.2.1", "workspace-setup", Map.of());
 		assertNotEquals(eng.state("9.2.1").step("preflight").logRef, eng.state("9.2.1").step("workspace-setup").logRef);
-		assertNotSame(eng.broadcaster("9.2.1", "preflight"), eng.broadcaster("9.2.1", "workspace-setup"));
 	}
 
 	/**

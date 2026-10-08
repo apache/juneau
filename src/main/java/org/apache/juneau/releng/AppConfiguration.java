@@ -21,7 +21,6 @@ import java.nio.file.Path;
 import java.util.EnumMap;
 import java.util.Map;
 import java.util.Optional;
-import java.util.function.BiFunction;
 import java.util.function.Function;
 import java.util.function.Supplier;
 import org.apache.juneau.commons.secret.SecretStore;
@@ -39,9 +38,8 @@ import org.apache.juneau.releng.engine.DropRcService;
 import org.apache.juneau.releng.engine.ReleaseEngine;
 import org.apache.juneau.releng.engine.RunStateStore;
 import org.apache.juneau.releng.engine.StepRegistry;
-import org.apache.juneau.releng.log.LogBroadcaster;
 import org.apache.juneau.releng.log.RunStateBroadcaster;
-import org.apache.juneau.releng.log.SseLogServlet;
+import org.apache.juneau.releng.log.RunStateSseServlet;
 import org.apache.juneau.releng.milestone.GithubPrSource;
 import org.apache.juneau.releng.milestone.MilestoneService;
 import org.apache.juneau.releng.nexus.NexusStagingClient;
@@ -407,7 +405,7 @@ public class AppConfiguration {
 			@Value("${rm.staging.dir}") String stagingDir,
 			@Value("${rm.state.dir}") String stateDir) {
 		return new DropRcService(store, registry, runner, Path.of(stagingDir).resolve("git/juneau"), Path.of(stateDir),
-				secrets.nexus(), target, engine::broadcaster);
+				secrets.nexus(), target, engine.runEvents());
 	}
 
 	/**
@@ -419,44 +417,22 @@ public class AppConfiguration {
 	}
 
 	/**
-	 * The SSE servlet — a plain HttpServlet, registered alongside RootRest. Serves the per-step console
-	 * channel keyed by {@code (version, stepId)} (resolving each step's log path from its
-	 * {@code StepState.logRef} rather than a run-level {@code logFile}), and the run-state channel keyed
-	 * by {@code version} alone (trailing segment {@code state}) that pushes rail-status snapshots to
-	 * every connected New-Release tab.
+	 * The SSE servlet — a plain HttpServlet, registered alongside RootRest. Serves the run-state channel keyed
+	 * by {@code version} (trailing segment {@code state}) that pushes rail-status snapshots to every connected
+	 * New-Release tab. Step console output is not streamed; the console-output region polls it from
+	 * {@link ReleaseRunRest}.
 	 */
 	@Bean
 	public ServletRegistrationBean<Servlet> sseLogRegistration(ReleaseEngine engine, RunStateStore store) {
-		var servlet = new SseLogServlet(logPathForStep(store), broadcasterForStep(engine, store),
-				engine::snapshotJson, stateBroadcasterForVersion(engine, store));
+		var servlet = new RunStateSseServlet(engine::snapshotJson, stateBroadcasterForVersion(engine, store));
 		return new ServletRegistrationBean<>(servlet, "/events/*");
 	}
 
 	/**
-	 * That step's on-disk log path, or empty when there's no persisted run for {@code version} or that run
-	 * has no such {@code stepId}. Package-private for {@code AppConfigurationTest}.
-	 */
-	static BiFunction<String, String, Optional<Path>> logPathForStep(RunStateStore store) {
-		return (version, stepId) -> store.load(version).map(rs -> rs.step(stepId))
-				.filter(ss -> ss != null && ss.logRef != null).map(ss -> store.stateDir().resolve(ss.logRef));
-	}
-
-	/**
-	 * That step's live {@link LogBroadcaster}, or empty when there's no persisted run for {@code version}
-	 * or that run has no such {@code stepId}. Returning empty (rather than always minting a broadcaster via
-	 * {@code engine.broadcaster()}'s {@code computeIfAbsent}) lets {@code SseLogServlet} take its immediate
-	 * "(no active run/step …)" branch for a bogus key instead of blocking a worker thread for the full
-	 * heartbeat interval. Package-private for {@code AppConfigurationTest}.
-	 */
-	static BiFunction<String, String, Optional<LogBroadcaster>> broadcasterForStep(ReleaseEngine engine,
-			RunStateStore store) {
-		return (version, stepId) -> store.load(version).filter(rs -> rs.step(stepId) != null)
-				.map(rs -> engine.broadcaster(version, stepId));
-	}
-
-	/**
 	 * That version's live {@link RunStateBroadcaster}, or empty when there's no persisted run for
-	 * {@code version} — same "no active run" fast-path rationale as {@link #broadcasterForStep} above.
+	 * {@code version}. Returning empty (rather than always minting a broadcaster via
+	 * {@code engine.stateBroadcaster()}'s {@code computeIfAbsent}) lets {@code RunStateSseServlet} take its immediate
+	 * "(no active run …)" branch for a bogus version instead of blocking a worker thread for the full heartbeat interval.
 	 * Package-private for {@code AppConfigurationTest}.
 	 */
 	static Function<String, Optional<RunStateBroadcaster>> stateBroadcasterForVersion(ReleaseEngine engine,

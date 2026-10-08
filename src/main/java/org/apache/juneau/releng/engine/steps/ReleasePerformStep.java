@@ -33,6 +33,11 @@ public class ReleasePerformStep implements ReleaseStep {
 	}
 
 	@Override
+	public boolean runsTests() {
+		return true;
+	}
+
+	@Override
 	public String title() {
 		return "release:perform";
 	}

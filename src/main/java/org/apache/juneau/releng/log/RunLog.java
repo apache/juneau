@@ -28,19 +28,17 @@ import java.util.function.Consumer;
 import org.apache.juneau.releng.engine.StepState;
 
 /**
- * Appends output lines to the current RC's log file and fans them out to the {@link LogBroadcaster}.
+ * Appends output lines to the current RC's log file; the console-output region reads that file back (see {@link StepOutputSources}).
  */
 public class RunLog {
 
 	private final Path file;
-	private final LogBroadcaster broadcaster;
 
 	/**
-	 * Creates a log backed by {@code file}, fanning out appended lines to {@code broadcaster}.
+	 * Creates a log backed by {@code file}.
 	 */
-	public RunLog(Path file, LogBroadcaster broadcaster) {
+	public RunLog(Path file) {
 		this.file = file;
-		this.broadcaster = broadcaster;
 		try {
 			Files.createDirectories(file.getParent());
 		} catch (IOException e) {
@@ -49,7 +47,7 @@ public class RunLog {
 	}
 
 	/**
-	 * Append one line (newline-terminated) to disk, flushed, then broadcast it live.
+	 * Append one line (newline-terminated) to disk, flushed.
 	 */
 	public synchronized void append(String line) {
 		try {
@@ -58,12 +56,11 @@ public class RunLog {
 		} catch (IOException e) {
 			throw isex(e, "Cannot append to log %s", file);
 		}
-		broadcaster.publish(line);
 	}
 
 	/**
 	 * Truncates this step's log file to empty, so it always reflects only the most recent run. A no-op if
-	 * the file doesn't exist yet. Already-connected SSE clients keep seeing old lines until they reconnect.
+	 * the file doesn't exist yet. A console already reading the old content is told to reload.
 	 */
 	public synchronized void reset() {
 		try {
@@ -96,12 +93,5 @@ public class RunLog {
 	 */
 	public Path file() {
 		return file;
-	}
-
-	/**
-	 * The {@link LogBroadcaster} this instance publishes appended lines to.
-	 */
-	public LogBroadcaster broadcaster() {
-		return broadcaster;
 	}
 }

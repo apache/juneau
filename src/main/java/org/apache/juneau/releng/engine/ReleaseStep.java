@@ -54,6 +54,13 @@ public interface ReleaseStep {
 	}
 
 	/**
+	 * Does apply() run Maven's test phase, leaving Surefire or Failsafe reports for the run-view?
+	 */
+	default boolean runsTests() {
+		return false;
+	}
+
+	/**
 	 * Compute the dry-run preview without mutating anything.
 	 */
 	Preview preview(StepContext ctx);

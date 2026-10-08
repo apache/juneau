@@ -35,6 +35,11 @@ public class ReleasePrepareStep implements ReleaseStep {
 	}
 
 	@Override
+	public boolean runsTests() {
+		return true;
+	}
+
+	@Override
 	public String title() {
 		return "release:prepare";
 	}

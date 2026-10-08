@@ -20,7 +20,9 @@ package org.apache.juneau.releng.engine;
 import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.nio.file.Path;
+import java.time.Duration;
 import java.time.Instant;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.Optional;
@@ -28,12 +30,17 @@ import java.util.concurrent.ConcurrentHashMap;
 import org.apache.juneau.marshall.marshaller.Json;
 import org.apache.juneau.releng.config.TargetProfile;
 import org.apache.juneau.releng.email.EmailService;
-import org.apache.juneau.releng.log.LogBroadcaster;
+import org.apache.juneau.releng.log.RunEventStore;
 import org.apache.juneau.releng.log.RunLog;
 import org.apache.juneau.releng.log.RunStateBroadcaster;
+import org.apache.juneau.releng.log.StepOutputSources;
 import org.apache.juneau.releng.milestone.MilestoneService;
 import org.apache.juneau.releng.nexus.NexusStagingClient;
 import org.apache.juneau.releng.util.ProcessRunner;
+import org.apache.juneau.rest.server.views.ConsoleOutputSource;
+import org.apache.juneau.rest.server.views.RunEvent.DoneStatus;
+import org.apache.juneau.rest.server.views.RunEvent.EndStatus;
+import org.apache.juneau.rest.server.views.RunViewSource;
 
 /**
  * Single-active-run orchestrator. One run advances at a time; state is persisted after every step.
@@ -57,8 +64,11 @@ public class ReleaseEngine {
 	private final SecretResolver secrets;
 	private final TargetProfile target;
 
-	// In-memory per-step broadcasters, keyed "version/stepId". Lost on restart; log files survive.
-	private final Map<String, LogBroadcaster> broadcasters = new ConcurrentHashMap<>();
+	// Serves each step's log file to the console-output region; the log files themselves are the source of truth.
+	private final StepOutputSources stepOutputs;
+
+	// Each run's run-view events, persisted beside the step logs; the file is the source of truth.
+	private final RunEventStore events;
 
 	// In-memory per-run run-state broadcasters, keyed by version. Lost on restart; a reconnecting SSE
 	// client gets a fresh initial snapshot instead (see AppConfiguration's state resolver).
@@ -113,6 +123,8 @@ public class ReleaseEngine {
 		this.runner = runner;
 		this.branches = branches;
 		this.stateDir = stateDir;
+		this.stepOutputs = new StepOutputSources(store);
+		this.events = new RunEventStore(stateDir);
 		this.stagingRoot = stagingRoot;
 		this.repoDir = repoDir;
 		this.committerEmail = committerEmail;
@@ -163,10 +175,38 @@ public class ReleaseEngine {
 	}
 
 	/**
-	 * One broadcaster per (version, step).
+	 * The console-output source for one step's log.
+	 *
+	 * @param version The run version.
+	 * @param stepId The step id.
+	 * @return The source, or empty when there is no such run or step, or the step has not written a log yet.
 	 */
-	public LogBroadcaster broadcaster(String version, String stepId) {
-		return broadcasters.computeIfAbsent(version + "/" + stepId, k -> new LogBroadcaster());
+	public Optional<ConsoleOutputSource> stepOutput(String version, String stepId) {
+		return stepOutputs.find(version, stepId);
+	}
+
+	/**
+	 * The run-view source for one run.
+	 *
+	 * @param runId The run id: the version with its dots written as underscores.
+	 * @return The source, or empty when there is no such run.
+	 */
+	public Optional<RunViewSource> runViewSource(String runId) {
+		var run = store.load(runId.replace('_', '.')).filter(rs -> RunEventStore.runId(rs.version).equals(runId));
+		if (run.isEmpty())
+			run = store.loadAll().stream().filter(rs -> RunEventStore.runId(rs.version).equals(runId)).findFirst();
+		return run.map(rs -> events.source(rs.version, () -> isReleased(rs.version)));
+	}
+
+	/**
+	 * The store this engine writes run-view events to; shared with {@link DropRcService}.
+	 */
+	public RunEventStore runEvents() {
+		return events;
+	}
+
+	private boolean isReleased(String version) {
+		return store.load(version).map(rs -> rs.status == RunStatus.RELEASED).orElse(true);
 	}
 
 	/**
@@ -306,7 +346,7 @@ public class ReleaseEngine {
 	public Preview preview(String version, String stepId, Map<String, String> form) {
 		var rs = require(version);
 		var step = requireStep(stepId);
-		return step.preview(context(rs, stepId, form, false));
+		return step.preview(context(rs, stepId, form, false, null));
 	}
 
 	/**
@@ -332,7 +372,8 @@ public class ReleaseEngine {
 		store.save(rs);
 
 		StepResult result;
-		var ctx = context(rs, stepId, form, true); // true = reset (truncate) this step's log first
+		var attempt = events.begin(version, stepId, step.title(), registry.ids().indexOf(stepId) + 1);
+		var ctx = context(rs, stepId, form, true, attempt); // true = reset (truncate) this step's log first
 		ss.logRef = stepLogRelativePath(rs, stepId);
 		try {
 			result = step.apply(ctx);
@@ -361,6 +402,7 @@ public class ReleaseEngine {
 				if (gate != null) {
 					gate.status = StepStatus.SUCCEEDED;
 					gate.completedAt = ss.completedAt;
+					events.end(version, VOTE_GATE, EndStatus.OK, elapsedMs(gate.startedAt, gate.completedAt));
 				}
 			}
 			if (stepId.equals("finalize-run")) {
@@ -375,8 +417,46 @@ public class ReleaseEngine {
 			ss.error = result.message;
 			rs.status = RunStatus.FAILED;
 		}
+		recordOutcome(rs, step, ss, attempt);
 		store.save(rs);
 		return result;
+	}
+
+	/**
+	 * Mirrors a step's settled state into the run-view: its test results, then how it ended. A step that finished its
+	 * work but waits for a person (the vote gate, a review gate) stays open as {@code waiting}.
+	 */
+	private void recordOutcome(RunState rs, ReleaseStep step, StepState ss, String attempt) {
+		var id = step.id();
+		if (step.runsTests()) {
+			var since = parseInstant(ss.startedAt);
+			if (since != null)
+				events.appendAll(rs.version, TestReportEvents.collect(stagingRoot.resolve("git/juneau"), since, attempt));
+		}
+		switch (ss.status) {
+			case AWAITING_VOTE, AWAITING_REVIEW -> events.waiting(rs.version, id, step.title());
+			case FAILED -> events.end(rs.version, id, EndStatus.FAIL, elapsedMs(ss.startedAt, Instant.now().toString()));
+			default -> events.end(rs.version, id, EndStatus.OK, elapsedMs(ss.startedAt, ss.completedAt));
+		}
+		if (ss.status == StepStatus.SUCCEEDED && id.equals("finalize-run"))
+			events.done(rs.version, DoneStatus.OK);
+	}
+
+	private static Instant parseInstant(String iso) {
+		try {
+			return iso == null ? null : Instant.parse(iso);
+		} catch (DateTimeParseException e) {
+			return null;
+		}
+	}
+
+	/**
+	 * Milliseconds between two ISO-8601 instants, or -1 when either is missing or unparseable.
+	 */
+	private static long elapsedMs(String from, String to) {
+		var a = parseInstant(from);
+		var b = parseInstant(to);
+		return a == null || b == null ? -1 : Math.max(0, Duration.between(a, b).toMillis());
 	}
 
 	/**
@@ -391,6 +471,8 @@ public class ReleaseEngine {
 			return StepResult.fail(stepId + " is not skippable.");
 		var ss = rs.step(stepId);
 		ss.status = StepStatus.SKIPPED;
+		events.begin(version, stepId, step.title(), registry.ids().indexOf(stepId) + 1);
+		events.end(version, stepId, EndStatus.SKIP, -1);
 		store.save(rs);
 		return StepResult.ok(stepId + " skipped.");
 	}
@@ -408,6 +490,7 @@ public class ReleaseEngine {
 			return StepResult.fail(stepId + " is not awaiting review.");
 		ss.status = StepStatus.SUCCEEDED;
 		ss.completedAt = Instant.now().toString();
+		events.end(version, stepId, EndStatus.OK, elapsedMs(ss.startedAt, ss.completedAt));
 		store.save(rs);
 		return StepResult.ok(stepId + " review confirmed.");
 	}
@@ -474,6 +557,7 @@ public class ReleaseEngine {
 			if (current != null && current.status == StepStatus.RUNNING) {
 				current.status = StepStatus.FAILED;
 				current.error = "interrupted by server restart";
+				events.end(rs.version, current.id, EndStatus.FAIL, -1);
 				rs.status = RunStatus.FAILED;
 				store.save(rs);
 			}
@@ -492,13 +576,13 @@ public class ReleaseEngine {
 	 * {@code resetLog} is true (an actual apply/resume/re-run, never a preview), the log is truncated first
 	 * so a re-run overwrites in place rather than appending after a stale prior invocation's output.
 	 */
-	private StepContext context(RunState rs, String stepId, Map<String, String> form, boolean resetLog) {
+	private StepContext context(RunState rs, String stepId, Map<String, String> form, boolean resetLog, String attempt) {
 		var ctx = new StepContext();
 		ctx.run = rs;
 		ctx.runner = runner;
 		ctx.target = target;
 		ctx.nexus = secrets.nexus();
-		var log = new RunLog(stateDir.resolve(stepLogRelativePath(rs, stepId)), broadcaster(rs.version, stepId));
+		var log = new RunLog(stateDir.resolve(stepLogRelativePath(rs, stepId)));
 		if (resetLog)
 			log.reset();
 		ctx.log = log.lineSink();
@@ -514,6 +598,8 @@ public class ReleaseEngine {
 		ctx.email = email;
 		ctx.milestone = milestone;
 		ctx.formInputs = form == null ? Map.of() : form;
+		if (attempt != null)
+			ctx.notes = (level, text, href) -> events.note(rs.version, level, text, href, attempt);
 		return ctx;
 	}
 

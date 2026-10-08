@@ -43,6 +43,7 @@ import org.apache.juneau.rest.server.view.View;
 import org.apache.juneau.rest.server.view.freemarker.FreemarkerMixin;
 import org.apache.juneau.rest.server.view.freemarker.FreemarkerViewRenderer;
 import org.apache.juneau.rest.server.view.freemarker.console.ConsoleFreemarkerMixin;
+import org.apache.juneau.rest.server.staticfile.WebJarsMixin;
 import org.apache.juneau.rest.server.views.ViewsMixin;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -60,9 +61,10 @@ import jakarta.servlet.http.HttpServletRequest;
  * {@link DataTablesQuery#run} against a fresh {@link InMemoryBeanQueryContext} session built from
  * {@link ReleaseListService#list()}. Toolkit assets are served by the composed {@link ViewsMixin} at this resource's
  * mount and pulled in by the page's {@code toolkit="views"} pack; the composed {@link DataTablesMixin} serves the
- * {@code /juneau-datatables.js} glue that defines {@code JuneauDataTables.ajax()}.
+ * {@code /juneau-datatables.js} glue that defines {@code JuneauDataTables.ajax()}, and the composed {@link WebJarsMixin}
+ * serves the jQuery, DataTables and Buttons libraries the card's asset packs load.
  */
-@Rest(path = "/releases", title = "Releases", responseProcessors = FreemarkerViewRenderer.class, mixins = { ViewsMixin.class, DataTablesMixin.class })
+@Rest(path = "/releases", title = "Releases", responseProcessors = FreemarkerViewRenderer.class, mixins = { ViewsMixin.class, DataTablesMixin.class, WebJarsMixin.class })
 public class ReleaseRest extends BasicRestResource {
 
 	/**

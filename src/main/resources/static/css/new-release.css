@@ -32,8 +32,7 @@
         triad is overridden by base.ftlh's nested <@token> declarations to this
         app's own danger palette (matching .tag.armed/.pill.invalid) rather than
         the framework's Bootstrap-maroon default, so both are reused as-is.
-     3. Per-step console styling (shared by all 3 options).
-     4. Layout-specific rules for option A (rail), B (stepper), C (datatable),
+     3. Layout-specific rules for option A (rail), B (stepper), C (datatable),
         clearly namespaced/commented per section.
    ========================================================================== */
 
@@ -137,67 +136,6 @@
 }
 
 /* ==========================================================================
-   Per-step console (shared by all 3 options)
-   ========================================================================== */
-
-.rm-console {
-  background: #1e1e1e;
-  color: #d4d4d4;
-  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-  font-size: 0.75rem;
-  line-height: 1.65;
-  padding: 12px 14px;
-  border-radius: var(--jc-radius);
-  flex: 1 1 0%;
-  min-height: 0;
-  overflow-y: auto;
-  white-space: pre-wrap;
-  overflow-wrap: break-word;
-}
-
-.rm-console .l-cmd   { color: #7ec9ff; }
-.rm-console .l-ok    { color: #8fd19e; }
-.rm-console .l-warn  { color: #e8c766; }
-.rm-console .l-muted { color: #9a9a9a; }
-
-.rm-console .rm-cursor {
-  display: inline-block;
-  width: 6px;
-  height: 12px;
-  background: #8fd19e;
-  vertical-align: text-bottom;
-  margin-left: 1px;
-  animation: rm-blink 1s steps(1) infinite;
-}
-
-@keyframes rm-blink { 50% { opacity: 0; } }
-
-.rm-console-empty {
-  color: #8a8a8a;
-  font-style: italic;
-  font-size: 0.75rem;
-  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-}
-
-.rm-console-label {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  font-size: 0.6875rem;
-  text-transform: uppercase;
-  letter-spacing: 0.3px;
-  color: var(--jc-text-muted);
-  margin: 14px 0 6px;
-}
-
-.rm-console-label .rm-console-hint {
-  text-transform: none;
-  letter-spacing: 0;
-  font-size: 0.6875rem;
-  color: var(--jc-text-muted);
-}
-
-/* ==========================================================================
    Shared step-detail bits (title row, description, action buttons)
    ========================================================================== */
 
@@ -285,6 +223,10 @@
    OPTION A — left rail + right detail/console
    ========================================================================== */
 
+.rm-runview-card {
+  margin: 0 0 16px;
+}
+
 .rm-rail-layout {
   display: grid;
   grid-template-columns: 340px minmax(0, 1fr);
@@ -355,8 +297,7 @@
 }
 
 .rm-detail-col > .rm-step-title-row,
-.rm-detail-col > .rm-actions-row,
-.rm-detail-col > .rm-console-label {
+.rm-detail-col > .rm-actions-row {
   flex: 0 0 auto;
 }
 
@@ -496,12 +437,6 @@ tr.step-detail-row td {
   background: var(--jc-tag-amber-bg);
   color: var(--jc-tag-amber-text);
   border-color: var(--jc-tag-amber-border);
-}
-
-/* new-release.js renders the console into a <pre>, not the mockup's <div> —
-   reset the browser default block margin so .rm-console's own padding governs spacing. */
-pre.rm-console {
-  margin: 0;
 }
 
 /* A review-gate step held after its read-only work ran — reuses the same paused affordance as the

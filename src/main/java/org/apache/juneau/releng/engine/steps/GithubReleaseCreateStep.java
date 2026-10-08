@@ -54,16 +54,21 @@ public class GithubReleaseCreateStep implements ReleaseStep {
 	public StepResult apply(StepContext ctx) {
 		var tag = "juneau-" + ctx.run.version + "-RC" + ctx.run.rc;
 		var env = Map.of("GH_TOKEN", ctx.githubToken);
+		var releaseUrl = "https://github.com/" + ctx.target.ghSlug() + "/releases/tag/" + tag;
 		// Idempotency: treat "already exists" as success.
 		var exists = ctx.runner.run(List.of("gh", "release", "view", tag, "--repo", ctx.target.ghSlug()), null,
 				env);
 		if (exists.ok()) {
 			ctx.log.accept("GitHub Release already exists for " + tag);
+			ctx.note("The GitHub release " + tag + " already exists", releaseUrl);
 			return StepResult.ok("Already exists.");
 		}
 		var notes = ctx.formInputs.getOrDefault("releaseNotes", "See release notes.");
 		var res = ctx.exec(List.of("gh", "release", "create", tag, "--repo", ctx.target.ghSlug(), "--title",
 				ctx.run.version, "--notes", notes), null, env);
-		return res.ok() ? StepResult.ok("GitHub Release created.") : StepResult.fail("gh release create failed.");
+		if (! res.ok())
+			return StepResult.fail("gh release create failed.");
+		ctx.note("Created the GitHub release " + tag, releaseUrl);
+		return StepResult.ok("GitHub Release created.");
 	}
 }

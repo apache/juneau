@@ -141,9 +141,6 @@
                 <configuration>
                     <consoleOutput>true</consoleOutput>
                     <excludes>
-                        <!-- Vendored third-party MIT assets - keep their own upstream headers -->
-                        <exclude>src/main/resources/static/datatables/**</exclude>
-
                         <!-- Docs / release metadata - no license-header comment syntax -->
                         <exclude>**/*.md</exclude>
                         <exclude>LICENSE</exclude>

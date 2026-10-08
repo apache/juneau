@@ -20,83 +20,59 @@ package org.apache.juneau.releng.log;
 import static org.apache.juneau.commons.utils.Shorts.*;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.Optional;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.TimeUnit;
-import java.util.function.BiFunction;
 import java.util.function.Function;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 /**
- * Streams {@code text/event-stream} for two channels — per-step console log, and run/step-status
- * snapshots — registered as one servlet since both live under the same {@code /events/*} URL space.
+ * Streams the run/step-status snapshots as {@code text/event-stream}: on connect the run's current snapshot, then
+ * every later snapshot from that version's {@link RunStateBroadcaster}. Step console output is not streamed here; the
+ * console-output region polls it from {@code ReleaseRunRest}.
  *
- * <p>The console channel replays that step's on-disk log on connect, then tails that step's
- * {@link LogBroadcaster} live. The state channel (trailing segment {@value #STATE_SEGMENT}) sends the
- * run's current snapshot on connect, then tails that version's {@link RunStateBroadcaster} live.
- *
- * <p>Mapped at {@code /events/*}; the two trailing path segments are {@code {version}/{stepId}}, where
- * {@code {stepId}} may instead be the literal {@value #STATE_SEGMENT} to select the state channel.
+ * <p>Mapped at {@code /events/*}; the two trailing path segments are {@code {version}/state}.
  */
-public class SseLogServlet extends HttpServlet {
+public class RunStateSseServlet extends HttpServlet {
 
 	private static final long serialVersionUID = 1L;
 	private static final long HEARTBEAT_MS = 25_000;
 
 	/**
-	 * Trailing-segment sentinel selecting the run-state channel instead of a per-step console.
+	 * The trailing path segment that selects the state channel.
 	 */
 	public static final String STATE_SEGMENT = "state";
 
 	/**
-	 * SSE comment frame sent when no log line arrives within the heartbeat interval (keeps the connection alive).
+	 * An SSE comment frame, sent when nothing was published for {@value #HEARTBEAT_MS} ms, so proxies keep the
+	 * connection open and a dead client is noticed by the failed write.
 	 */
 	public static final String HEARTBEAT = ": heartbeat\n\n";
 
-	/**
-	 * (version, stepId) -> that step's current-RC log Path (from RunStateStore's StepState.logRef).
-	 */
-	private final transient BiFunction<String, String, Optional<Path>> logPathForStep;
-	/**
-	 * (version, stepId) -> that step's LogBroadcaster.
-	 */
-	private final transient BiFunction<String, String, Optional<LogBroadcaster>> broadcasterForStep;
-	/**
-	 * version -> that run's current snapshot, as JSON.
-	 */
 	private final transient Function<String, Optional<String>> initialStateJsonForVersion;
-	/**
-	 * version -> that run's RunStateBroadcaster.
-	 */
 	private final transient Function<String, Optional<RunStateBroadcaster>> stateBroadcasterForVersion;
 
 	/**
-	 * Console-only constructor (no state channel); used where a caller has no run-state wiring to offer.
+	 * Wires the two lookups the state channel needs.
+	 *
+	 * @param initialStateJsonForVersion {@code version} to that run's current snapshot JSON, or empty when there is
+	 * 	no persisted run.
+	 * @param stateBroadcasterForVersion {@code version} to that run's live broadcaster, or empty when there is no
+	 * 	persisted run.
 	 */
-	public SseLogServlet(BiFunction<String, String, Optional<Path>> logPathForStep,
-			BiFunction<String, String, Optional<LogBroadcaster>> broadcasterForStep) {
-		this(logPathForStep, broadcasterForStep, version -> Optional.empty(), version -> Optional.empty());
-	}
-
-	/**
-	 * Full constructor, wiring both the per-step console channel and the run-state channel.
-	 */
-	public SseLogServlet(BiFunction<String, String, Optional<Path>> logPathForStep,
-			BiFunction<String, String, Optional<LogBroadcaster>> broadcasterForStep,
-			Function<String, Optional<String>> initialStateJsonForVersion,
+	public RunStateSseServlet(Function<String, Optional<String>> initialStateJsonForVersion,
 			Function<String, Optional<RunStateBroadcaster>> stateBroadcasterForVersion) {
-		this.logPathForStep = logPathForStep;
-		this.broadcasterForStep = broadcasterForStep;
 		this.initialStateJsonForVersion = initialStateJsonForVersion;
 		this.stateBroadcasterForVersion = stateBroadcasterForVersion;
 	}
 
 	/**
-	 * SSE frame for a (possibly multi-line) payload: each physical line gets its own {@code data:} prefix.
+	 * Frames {@code payload} as one SSE event, one {@code data:} line per payload line.
+	 *
+	 * @param payload The event payload.
+	 * @return The frame, ending in a blank line.
 	 */
 	public static String sse(String payload) {
 		var sb = new StringBuilder();
@@ -112,52 +88,25 @@ public class SseLogServlet extends HttpServlet {
 	})
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) {
 		var seg = trailingTwoSegments(req.getPathInfo());
-		var version = seg[0];
-		var stepId = seg[1];
+		if (! STATE_SEGMENT.equals(seg[1])) {
+			resp.setStatus(HttpServletResponse.SC_NOT_FOUND);
+			return;
+		}
 		resp.setContentType("text/event-stream");
 		resp.setCharacterEncoding("UTF-8");
 		resp.setHeader("Cache-Control", "no-cache");
 		resp.setHeader("Connection", "keep-alive");
 
 		try {
-			var out = resp.getWriter();
-
-			if (STATE_SEGMENT.equals(stepId)) {
-				streamState(version, out);
-				return;
-			}
-
-			// 1) Replay this step's on-disk log (handles reload, step reselection, restart, and post-vote
-			//    reconnect). Each step's log is dedicated to that step alone, so replay is always
-			//    small/bounded, never a whole-RC file.
-			var logPath = logPathForStep.apply(version, stepId).orElse(null);
-			if (logPath != null && Files.isRegularFile(logPath)) {
-				for (var line : Files.readAllLines(logPath))
-					out.print(sse(line));
-				out.flush();
-			}
-
-			// 2) Tail live via that step's broadcaster.
-			var bc = broadcasterForStep.apply(version, stepId).orElse(null);
-			if (bc == null) {
-				out.print(sse("(no active run/step for " + version + "/" + stepId + ")"));
-				out.flush();
-				return;
-			}
-			tail(bc, out);
+			streamState(seg[0], resp.getWriter());
 		} catch (IOException e) {
-			// SSE is one-way and best-effort: a broken pipe (client navigated away) or an unreadable log
-			// file just ends the stream. There's nothing to retry, so close quietly instead of letting the
-			// exception escape doGet as a 500.
-			if (!resp.isCommitted())
+			// SSE is one-way and best-effort: a broken pipe (client navigated away) just ends the stream.
+			// There's nothing to retry, so close quietly instead of letting the exception escape doGet as a 500.
+			if (! resp.isCommitted())
 				resp.setStatus(HttpServletResponse.SC_NO_CONTENT);
 		}
 	}
 
-	/**
-	 * The state channel: sends {@code version}'s current snapshot on connect, then tails that version's
-	 * {@link RunStateBroadcaster} live.
-	 */
 	private void streamState(String version, PrintWriter out) {
 		var initial = initialStateJsonForVersion.apply(version).orElse(null);
 		if (initial != null) {
@@ -173,9 +122,6 @@ public class SseLogServlet extends HttpServlet {
 		tail(bc, out);
 	}
 
-	/**
-	 * Tails {@code bc} to {@code out}, emitting a heartbeat when idle, until the client disconnects.
-	 */
 	private void tail(Broadcaster bc, PrintWriter out) {
 		var queue = new LinkedBlockingQueue<String>();
 		var subscription = bc.subscribe(queue::offer);
@@ -206,7 +152,7 @@ public class SseLogServlet extends HttpServlet {
 	}
 
 	/**
-	 * Splits {@code /{version}/{stepId}} into {@code [version, stepId]}; either may be empty if absent.
+	 * Splits {@code /{version}/{channel}} into {@code [version, channel]}; either may be empty if absent.
 	 */
 	private static String[] trailingTwoSegments(String pathInfo) {
 		if (ib(pathInfo))

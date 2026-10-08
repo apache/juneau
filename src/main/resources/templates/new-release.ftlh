@@ -18,7 +18,7 @@
 <#assign _navTab = navTab!'new/input'>
 <#assign _subtab = subtab!'input'>
 <#assign hasRun = run??>
-<@page tab=_navTab css=assetUrl("/css/new-release.css") init=assetUrl("/js/new-release.js")>
+<@page tab=_navTab toolkit="views" css=assetUrl("/css/new-release.css") init=assetUrl("/js/new-release.js")>
     <div class="jc-page-header">
         <h1>New Release</h1>
         <p class="jc-page-sub">Cut an Apache Juneau release candidate, from input through vote and publish.</p>
@@ -44,6 +44,10 @@
             <div class="rm-run-meta" style="margin-top:10px;">
                 <span class="rm-meta-chip">Branch <b>${run.branch}</b></span>
             </div>
+        </div>
+
+        <div class="jc-card rm-runview-card">
+            <div id="nr-runview" data-run-id="${run.version?replace('.', '_')}"></div>
         </div>
 
         <div class="rm-rail-layout" data-version="${run.version}" data-rc="${run.rc}">

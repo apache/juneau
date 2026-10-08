@@ -21,15 +21,16 @@ import java.nio.file.Path;
 import java.time.Instant;
 import java.util.List;
 import java.util.Map;
-import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 import org.apache.juneau.releng.config.TargetProfile;
-import org.apache.juneau.releng.log.LogBroadcaster;
+import org.apache.juneau.releng.log.RunEventStore;
 import org.apache.juneau.releng.log.RunLog;
 import org.apache.juneau.releng.nexus.NexusStagingClient;
 import org.apache.juneau.releng.util.ProcessRunner;
 import org.apache.juneau.releng.util.SvnArgs;
+import org.apache.juneau.rest.server.views.RunEvent.EndStatus;
+import org.apache.juneau.rest.server.views.RunEvent.Level;
 
 /**
  * The one coarse Drop-RC action: drop remote state, bump RC, reset from workspace-setup.
@@ -37,7 +38,7 @@ import org.apache.juneau.releng.util.SvnArgs;
 public class DropRcService {
 
 	/**
-	 * Pseudo-step id under which Drop-RC's own log file + broadcaster are keyed (it isn't a registry step).
+	 * Pseudo-step id under which Drop-RC's own log file is keyed (it isn't a registry step).
 	 */
 	public static final String LOG_STEP_ID = "drop-rc";
 
@@ -48,7 +49,7 @@ public class DropRcService {
 	private final Path stateDir;
 	private final NexusStagingClient nexus;
 	private final TargetProfile target;
-	private final BiFunction<String, String, LogBroadcaster> broadcasterFn;
+	private final RunEventStore events;
 
 	/**
 	 * Constructor injecting all of this service's collaborators.
@@ -57,8 +58,19 @@ public class DropRcService {
 		"java:S107" // Constructor-injected collaborators; a parameter object would obscure the wiring.
 	})
 	public DropRcService(RunStateStore store, StepRegistry registry, ProcessRunner runner, Path stagingRepo,
-			Path stateDir, NexusStagingClient nexus, TargetProfile target,
-			BiFunction<String, String, LogBroadcaster> broadcasterFn) {
+			Path stateDir, NexusStagingClient nexus, TargetProfile target) {
+		this(store, registry, runner, stagingRepo, stateDir, nexus, target, new RunEventStore(stateDir));
+	}
+
+	/**
+	 * Constructor injecting all of this service's collaborators, including the run-view event store the engine writes to.
+	 */
+	@SuppressWarnings({
+		"java:S107" // Constructor-injected collaborators; a parameter object would obscure the wiring.
+	})
+	public DropRcService(RunStateStore store, StepRegistry registry, ProcessRunner runner, Path stagingRepo,
+			Path stateDir, NexusStagingClient nexus, TargetProfile target, RunEventStore events) {
+		this.events = events;
 		this.store = store;
 		this.registry = registry;
 		this.runner = runner;
@@ -66,7 +78,6 @@ public class DropRcService {
 		this.stateDir = stateDir;
 		this.nexus = nexus;
 		this.target = target == null ? TargetProfile.prodDefault() : target;
-		this.broadcasterFn = broadcasterFn == null ? (v, s) -> new LogBroadcaster() : broadcasterFn;
 	}
 
 	/**
@@ -74,7 +85,7 @@ public class DropRcService {
 	 */
 	private Consumer<String> logSink(RunState rs) {
 		var path = stateDir.resolve("logs/" + rs.version + "-RC" + rs.rc + "-" + LOG_STEP_ID + ".log");
-		var log = new RunLog(path, broadcasterFn.apply(rs.version, LOG_STEP_ID));
+		var log = new RunLog(path);
 		log.reset();
 		return log.lineSink();
 	}
@@ -120,6 +131,9 @@ public class DropRcService {
 		runner.run(List.of("mvn", "-f", git + "/pom.xml", "release:rollback"), null, null);
 
 		rs.rcHistory.add(new RcHistoryEntry(rs.rc, Instant.now().toString(), reason));
+		events.endOpen(rs.version, EndStatus.SKIP);
+		events.note(rs.version, Level.WARN, "RC" + rs.rc + " dropped" + (reason == null || reason.isBlank() ? "" : ": " + reason)
+			+ "; continuing with RC" + (rs.rc + 1), null, null);
 		rs.rc = rs.rc + 1;
 		rs.status = RunStatus.RUNNING;
 		rs.nexusRepoId = null;

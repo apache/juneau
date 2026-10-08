@@ -152,31 +152,34 @@ class ReleaseRestTest {
 	}
 
 	/**
-	 * DataTables Buttons' HTML5 export reads {@code window.JSZip} / {@code window.pdfMake} as
-	 * {@code buttons.html5.min.js} initializes, so those scripts must be included and ordered before it.
-	 * Asserts the served page carries the JSZip, pdfMake, and pdfMake {@code vfs_fonts} includes, each ahead
-	 * of {@code buttons.html5.min.js}.
+	 * The page gets jQuery, DataTables and Buttons from the asset packs its card declares (served as WebJars),
+	 * each exactly once and in dependency order, with nothing bundled or fetched from a CDN. Excel/PDF export
+	 * still loads JSZip and pdfMake through {@code init=}; Buttons reads them lazily, when an export runs.
 	 */
 	@Test
-	void b02_pageIncludesExportDependencyScriptsBeforeButtonsHtml5() throws Exception {
+	void b02_pageLoadsPackAssetsOnceInDependencyOrder() throws Exception {
 		try (var client = client(rest(List.of(release("9.2.1", "RELEASED"))))) {
 			try (var resp = client.request("GET", "/").run()) {
 				assertEquals(200, resp.getStatusCode());
 				var body = resp.getBodyAsString();
-				var jszipIdx = body.indexOf("jszip.min.js");
-				var pdfmakeIdx = body.indexOf("pdfmake.min.js");
-				var vfsIdx = body.indexOf("vfs_fonts.min.js");
+				var jqueryIdx = body.indexOf("jquery.min.js");
+				var dataTablesIdx = body.indexOf("dataTables.min.js");
+				var buttonsIdx = body.indexOf("dataTables.buttons.min.js");
 				var buttonsHtml5Idx = body.indexOf("buttons.html5.min.js");
-				assertTrue(jszipIdx >= 0, "Missing jszip.min.js script include: " + body);
-				assertTrue(pdfmakeIdx >= 0, "Missing pdfmake.min.js script include: " + body);
-				assertTrue(vfsIdx >= 0, "Missing vfs_fonts.min.js script include: " + body);
+				assertTrue(jqueryIdx >= 0, "Missing jquery.min.js script include: " + body);
+				assertTrue(dataTablesIdx >= 0, "Missing dataTables.min.js script include: " + body);
+				assertTrue(buttonsIdx >= 0, "Missing dataTables.buttons.min.js script include: " + body);
 				assertTrue(buttonsHtml5Idx >= 0, "Missing buttons.html5.min.js script include: " + body);
-				assertTrue(jszipIdx < buttonsHtml5Idx,
-					"jszip.min.js must be included before buttons.html5.min.js: " + body);
-				assertTrue(pdfmakeIdx < buttonsHtml5Idx,
-					"pdfmake.min.js must be included before buttons.html5.min.js: " + body);
-				assertTrue(vfsIdx < buttonsHtml5Idx,
-					"vfs_fonts.min.js must be included before buttons.html5.min.js: " + body);
+				assertTrue(jqueryIdx < dataTablesIdx, "jQuery must precede DataTables: " + body);
+				assertTrue(dataTablesIdx < buttonsIdx, "DataTables must precede Buttons: " + body);
+				assertEquals(jqueryIdx, body.lastIndexOf("jquery.min.js"), "jQuery loaded more than once: " + body);
+				assertEquals(dataTablesIdx, body.lastIndexOf("dataTables.min.js"), "DataTables loaded more than once: " + body);
+				assertTrue(body.contains("/webjars/"), "Pack assets should be served as WebJars: " + body);
+				assertFalse(body.contains("cdn.datatables.net"), "Buttons must not come from the CDN: " + body);
+				assertFalse(body.contains("/datatables/jquery.min.js"), "Bundled jQuery should be gone: " + body);
+				assertTrue(body.contains("jszip.min.js"), "Missing jszip.min.js script include: " + body);
+				assertTrue(body.contains("pdfmake.min.js"), "Missing pdfmake.min.js script include: " + body);
+				assertTrue(body.contains("vfs_fonts.min.js"), "Missing vfs_fonts.min.js script include: " + body);
 			}
 		}
 	}
@@ -251,9 +254,12 @@ class ReleaseRestTest {
 			try (var resp = client.request("GET", "/").run()) {
 				assertEquals(200, resp.getStatusCode());
 				var body = resp.getBodyAsString();
-				assertPage(body).isValid().hasCard("releases", "datatables");
-				assertTrue(body.contains("\"contractVersion\":\"5\""), "Missing lifted VIEW_META view contract: " + body);
-				assertTrue(body.contains("\"id\":\"releases\""), "Missing view id in the lifted catalog: " + body);
+				var table = assertPage(body).isValid().hasCard("releases", "datatables").card("releases").getMap("table");
+				assertNull(table.get("contractVersion"), "Catalog-form cards carry no hand-written contract version: " + table);
+				assertNull(table.get("view"), "Catalog-form cards carry no pre-built view: " + table);
+				assertNull(table.get("layout"), "Catalog-form cards carry no layout: " + table);
+				assertNull(table.getMap("detail").get("contractVersion"), "The console stamps detail's contract version: " + table);
+				assertEquals("/rest/releases/data", table.getString("dataUrl"), body);
 				assertTrue(body.contains("version-cell"), body);
 				assertTrue(body.contains("/rest/releases/expand/{id}"), body);
 				assertTrue(body.contains("releases-detail"), body);

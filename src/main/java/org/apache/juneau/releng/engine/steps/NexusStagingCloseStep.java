@@ -67,6 +67,7 @@ public class NexusStagingCloseStep implements ReleaseStep {
 		ctx.run.nexusRepoId = id;
 		ctx.log.accept("Closing Nexus staging repo " + id);
 		ctx.nexus.close(id);
+		ctx.note("Closed Nexus staging repository " + id);
 		return StepResult.ok("Closed staging repo " + id + ".");
 	}
 }

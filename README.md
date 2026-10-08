@@ -47,6 +47,4 @@ mvn clean verify        # build + run tests + apache-rat license check
 
 ## License
 
-Apache License 2.0. See `LICENSE` (which also reproduces the MIT attribution
-notices for the vendored jQuery 3.7.1 and DataTables 2.1.8 assets under
-`src/main/resources/static/datatables/`).
+Apache License 2.0. See `LICENSE`.

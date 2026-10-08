@@ -85,9 +85,20 @@
   const metaEl = document.getElementById('nr-step-meta');
   const STEP_META = metaEl ? JSON.parse(metaEl.textContent) : {};
 
-  // Exactly one EventSource at a time — one console visible at a time. Switching the selected
-  // step closes the old connection and opens a new one against that step's own /events/{version}/{stepId}.
-  let es = null;
+  // The whole-run progress view: one run-view region, fed by the run's persisted event stream. It polls and
+  // stops itself once the run is released; the per-step console below is a separate region.
+  const runViewEl = document.getElementById('nr-runview');
+  if (runViewEl && globalThis.JuneauViews?.runView) {
+    JuneauViews.runView.mount(runViewEl, {
+      eventsUrl: '/rest/runs/juneau-run-view/' + encodeURIComponent(runViewEl.dataset.runId) + '/events',
+      refreshMs: 3000,
+      title: 'Run progress'
+    }, {});
+  }
+
+  // Exactly one console-output region at a time — one console visible at a time. Switching the selected
+  // step aborts the old region's controller (which destroys it) and mounts a new one over that step's own log.
+  let consoleAbort = null;
 
   function statusOf(stepId) {
     const el = layout.querySelector('.rm-rail-item[data-step="' + stepId + '"]');
@@ -145,13 +156,20 @@
   }
 
   function connectConsole(stepId) {
-    if (es) es.close();
+    if (consoleAbort) consoleAbort.abort();
     const consoleEl = document.getElementById('nr-console');
     if (!consoleEl) return;
-    consoleEl.textContent = '';
-    // Replay-then-tail, scoped to this one step (SseLogServlet).
-    es = new EventSource('/events/' + encodeURIComponent(version) + '/' + encodeURIComponent(stepId));
-    es.onmessage = (e) => { consoleEl.textContent += e.data + '\n'; consoleEl.scrollTop = consoleEl.scrollHeight; };
+    const base = '/rest/runs/' + encodeURIComponent(version) + '/steps/' + encodeURIComponent(stepId) + '/output/';
+    const meta = STEP_META[stepId] || { title: stepId };
+    consoleAbort = new AbortController();
+    // The region polls the lines endpoint, tails while the step runs, and stops once the step settles.
+    JuneauViews.consoleOutput.mount(consoleEl, {
+      linesUrl: base + 'lines',
+      downloadUrl: base + 'download',
+      tail: 2000,
+      rows: 20,
+      title: meta.title + ' output'
+    }, { signal: consoleAbort.signal });
   }
 
   globalThis.nrSelect = function (stepId) {
@@ -160,8 +178,7 @@
     document.getElementById('nr-detail').innerHTML =
       '<div class="rm-step-title-row" id="nr-detail-title-row">' + topRowHtml(stepId, status) + '</div>' +
       '<div class="rm-actions-row" id="nr-actions">' + renderActions(stepId, status) + '</div>' +
-      '<div class="rm-console-label"><span>Console output &mdash; this step only</span></div>' +
-      '<pre id="nr-console" class="rm-console"></pre>';
+      '<div id="nr-console"></div>';
     connectConsole(stepId);
   };
 
@@ -206,10 +223,10 @@
     location.reload();
   };
 
-  // Live rail updates: a second EventSource, independent of the per-step console one above, so every
+  // Live rail updates: an EventSource, independent of the per-step console region above, so every
   // connected New-Release tab — including a passive second browser that never clicks anything — tracks
   // run/step status as it changes, with no polling or page reload. Opened once for the page's lifetime
-  // (not reopened on step reselection); never touches #nr-console or its own EventSource.
+  // (not reopened on step reselection); never touches #nr-console.
   const STATUS_CLASS = (s) => s.toLowerCase().replace(/_/g, '-');
 
   // Swaps el's single status class for statusClass, leaving its other (non-status) classes alone. Used on
@@ -240,7 +257,7 @@
 
     // Keep the currently-selected step's own status tag + action buttons correct (e.g. running ->
     // succeeded unlocks Re-run; pending -> awaiting-vote swaps in the vote form) — but leave the console
-    // <pre> and its EventSource alone; only reselecting a different step touches those (nrSelect above).
+    // region alone; only reselecting a different step touches it (nrSelect above).
     if (selected) {
       const status = STATUS_CLASS(selected.status);
       const titleRow = document.getElementById('nr-detail-title-row');

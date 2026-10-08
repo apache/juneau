@@ -35,7 +35,6 @@ import org.apache.juneau.releng.engine.RunStateStore;
 import org.apache.juneau.releng.engine.RunStatus;
 import org.apache.juneau.releng.engine.StepRegistry;
 import org.apache.juneau.releng.engine.StepStatus;
-import org.apache.juneau.releng.log.LogBroadcaster;
 import org.apache.juneau.releng.milestone.MilestoneService;
 import org.apache.juneau.releng.nexus.NexusMockModel;
 import org.apache.juneau.releng.nexus.NexusMockRest;
@@ -88,8 +87,7 @@ class ReleaseRunRestTest {
 		var registry = StepRegistry.standard(branches);
 		var engine = ReleaseEngine.forTests(store, registry, runner, branches, dir);
 		var dropRc = new DropRcService(store, registry, runner, dir.resolve("staging/git/juneau"), dir,
-				NexusStagingClient.forTests((m, p, b) -> ""), TargetProfile.prodDefault(),
-				(v, s) -> new LogBroadcaster());
+				NexusStagingClient.forTests((m, p, b) -> ""), TargetProfile.prodDefault());
 		return new ReleaseRunRest(engine, dropRc);
 	}
 
@@ -148,7 +146,7 @@ class ReleaseRunRestTest {
 				"test@apache.org", new EmailService(dir, runner), new MilestoneService(), secrets,
 				TargetProfile.prodDefault());
 		var dropRc = new DropRcService(store, registry, runner, dir.resolve("staging/git/juneau"), dir, nexus,
-				TargetProfile.prodDefault(), (v, s) -> new LogBroadcaster());
+				TargetProfile.prodDefault());
 		return new ReleaseRunRest(engine, dropRc);
 	}
 

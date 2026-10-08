@@ -16,43 +16,35 @@
 -->
 
 <@page tab="releases" toolkit="views"
-    css="/datatables/dataTables.dataTables.min.css,https://cdn.datatables.net/buttons/3.2.0/css/buttons.dataTables.min.css"
-    init="/datatables/jquery.min.js,/datatables/dataTables.min.js,https://cdn.datatables.net/buttons/3.2.0/js/dataTables.buttons.min.js,https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js,https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js,https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.min.js,https://cdn.datatables.net/buttons/3.2.0/js/buttons.html5.min.js,/js/releases-detail.js">
+    init="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js,https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js,https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.min.js,/js/releases-detail.js">
     <div class="jc-page-header">
         <h1>All Releases</h1>
         <p class="jc-page-sub">Every Apache Juneau release, from the current vote candidate back through GA history.</p>
     </div>
-    <@card type="datatables" id="releases">
+    <@card type="datatables" id="releases" requires="datatables-buttons">
     {
-        contractVersion: '1',
-        layout: 'wide',
-        view: {
-            contractVersion: '5',
-            id: 'releases',
-            rowType: 'Release',
-            dataMode: 'server',
-            dataUrl: '/rest/releases/data',
-            defaultOrder: [ { data: 'version', dir: 'desc' } ],
-            columns: [
-                { data: 'version', title: 'Version', orderable: true, searchable: true, className: 'version-cell', pinned: true },
-                { data: 'rc', title: 'RC', orderable: true, searchable: true },
-                { data: 'status', title: 'Status', orderable: true, searchable: true, render: { id: 'pill', meta: { field: 'status' } } },
-                { data: 'stage', title: 'Stage', orderable: true, searchable: true, render: { id: 'pill', meta: { field: 'stage' } } },
-                { data: 'voteCloses', title: 'Vote closes', orderable: true, searchable: true, render: { id: 'ts-zulu' }, formats: [ 'ts-zulu', 'datetime', 'date' ] },
-                { data: 'released', title: 'Released', orderable: true, searchable: true, render: { id: 'date' }, formats: [ 'date', 'datetime', 'ts-zulu' ] },
-                { data: 'githubReleaseUrl', title: 'GitHub', orderable: false, searchable: true, render: { id: 'linked' }, href: '{githubReleaseUrl}', defaultVisible: false },
-                { data: 'milestoneUrl', title: 'Milestone', orderable: false, searchable: true, render: { id: 'linked' }, href: '{milestoneUrl}', defaultVisible: false }
-            ],
-            ribbon: [
-                { type: 'option', id: 'dropped-only', title: 'Dropped only', group: 'filters', column: 'status', value: 'DROPPED', persist: true, symbol: 'filter_alt' },
-                { type: 'export', buttons: [ 'copy', 'csv' ], optional: [ 'excel', 'pdf' ] },
-                { type: 'refresh' }
-            ],
-            columnConfig: true,
-            primary: true
-        },
+        rowType: 'Release',
+        dataMode: 'server',
+        dataUrl: '/rest/releases/data',
+        defaultOrder: [ { data: 'version', dir: 'desc' } ],
+        columns: [
+            { data: 'version', title: 'Version', orderable: true, searchable: true, className: 'version-cell', pinned: true },
+            { data: 'rc', title: 'RC', orderable: true, searchable: true },
+            { data: 'status', title: 'Status', orderable: true, searchable: true, render: { id: 'pill', meta: { field: 'status' } } },
+            { data: 'stage', title: 'Stage', orderable: true, searchable: true, render: { id: 'pill', meta: { field: 'stage' } } },
+            { data: 'voteCloses', title: 'Vote closes', orderable: true, searchable: true, render: { id: 'ts-zulu' }, formats: [ 'ts-zulu', 'datetime', 'date' ] },
+            { data: 'released', title: 'Released', orderable: true, searchable: true, render: { id: 'date' }, formats: [ 'date', 'datetime', 'ts-zulu' ] },
+            { data: 'githubReleaseUrl', title: 'GitHub', orderable: false, searchable: true, render: { id: 'linked' }, href: '{githubReleaseUrl}', defaultVisible: false },
+            { data: 'milestoneUrl', title: 'Milestone', orderable: false, searchable: true, render: { id: 'linked' }, href: '{milestoneUrl}', defaultVisible: false }
+        ],
+        ribbon: [
+            { type: 'option', id: 'dropped-only', title: 'Dropped only', group: 'filters', column: 'status', value: '$eq(DROPPED)', persist: true, symbol: 'filter_alt' },
+            { type: 'export', buttons: [ 'copy', 'csv' ], optional: [ 'excel', 'pdf' ] },
+            { type: 'refresh' }
+        ],
+        columnConfig: true,
+        primary: true,
         detail: {
-            contractVersion: '1',
             endpoint: '/rest/releases/expand/{id}',
             icon: 'release',
             title: '{version}',

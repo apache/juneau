@@ -80,6 +80,7 @@ public class ComposeVoteEmailStep implements ReleaseStep {
 		if ("(unknown)".equals(data.get("commitHash")) || data.get("srcSha512").isBlank())
 			ctx.log.accept("Note: RC tag/checksums absent — composing draft with placeholders.");
 		var path = ctx.email.compose(EmailTemplate.VOTE, ctx.run, data);
+		ctx.note("Composed the VOTE email draft: " + path.getFileName());
 		return StepResult.ok("Opened draft: " + path);
 	}
 }
