@@ -61,7 +61,7 @@ function envelope(NS, region) {
 async function build(region) {
 	const ctx = H.load(rendersJsPath, viewsJsPath, regionsJsPath);
 	const host = slot(ctx.env, 'runs-slot');
-	await Promise.resolve(ctx.R.mount({ 'runs-slot': { table: envelope(ctx.NS, region) } }));
+	await Promise.resolve(ctx.NS.init.mountTableSlot(host, envelope(ctx.NS, region)));
 	const tpl = host.querySelector('template[data-juneau-row-detail]');
 	const content = tpl && tpl.content ? tpl.content : null;
 	ctx.region = content ? content.querySelector('[data-juneau-region="' + region.id + '"]') : null;

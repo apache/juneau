@@ -51,8 +51,8 @@ class Regions_Mount_Test extends TestBase {
 		assertFalse(body.contains("NS.pages.mount"), "mount must not publish under NS.pages");
 		assertTrue(body.contains("no populator is registered under the name"), body);
 		assertTrue(body.contains("no element with id"), body);
-		assertTrue(body.contains("the string 'juneau-table' is not a populator"), body);
-		assertTrue(body.contains("{ table: url }"), body);
+		assertFalse(body.contains("is not a populator"), "the juneau-table guard is retired");
+		assertFalse(body.contains("{ table: url"), "the table hookup form is retired");
 	}
 
 	@Test void a02_sourceShape_mountDoesNotFallThroughToDefaultPopulate() throws Exception {
@@ -105,9 +105,9 @@ class Regions_Mount_Test extends TestBase {
 		assertAllTrue(r, "t6_pageNavNotExported", "t6_authorAriaPreserved", "t6_noSelectedClass", "t6_noPillClass");
 	}
 
-	@Test void b07_juneauTableStringThrowsNewMessageAndEnrolsNothing() {
+	@Test void b07_retiredTableFormAndJuneauTableStringAreRejectedAndEnrolNothing() {
 		var r = report();
-		assertAllTrue(r, "t7_threw", "t7_pointsAtTableUrl", "t7_notUnregisteredName", "t7_consoleError",
+		assertAllTrue(r, "t7_tableFormRejectedAsUnrecognized", "t7_juneauTableStringRejectedAsUnknownPopulator",
 			"t7_notStamped", "t7_defaultDidNotRun");
 	}
 }

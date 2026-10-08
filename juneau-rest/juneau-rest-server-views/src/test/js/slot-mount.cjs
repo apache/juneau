@@ -16,7 +16,7 @@
  */
 
 /*
- * slot-mount.cjs - always-on Node harness for table-in-slot: JuneauViews.regions.mount({ slotId: { table } }).
+ * slot-mount.cjs - always-on Node harness for table-in-slot: JuneauViews.init.mountTableSlot(slot, urlOrEnvelope).
  *
  *   Usage:  node slot-mount.cjs <juneau-renders.js> <juneau-views.js> <juneau-regions.js>
  */
@@ -64,10 +64,10 @@ function envelope(NS, extra) {
 	// Inline envelope into an empty slot: table marker, thead, wrapper attrs; no region stamp on the slot.
 	// =================================================================================================================
 	{
-		const { env, NS, R, rec } = H.load(rendersJsPath, viewsJsPath, regionsJsPath);
+		const { env, NS, rec } = H.load(rendersJsPath, viewsJsPath, regionsJsPath);
 		const incidents = slot(env, 'incidents');
 		out.t1_emptyBefore = incidents.childNodes.length === 0;
-		await Promise.resolve(R.mount({ incidents: { table: envelope(NS) } }));
+		await Promise.resolve(NS.init.mountTableSlot(incidents, envelope(NS)));
 		const table = incidents.querySelector('table[data-juneau-view="releases"]');
 		const wrap = incidents.querySelector('[data-juneau-slot-table]');
 		out.t1_hasTable = table != null;
@@ -84,7 +84,7 @@ function envelope(NS, extra) {
 	// URL fetch; 500 / malformed / version mismatch banner in THAT slot; sibling region stays.
 	// =================================================================================================================
 	{
-		const { env, R, rec } = H.load(rendersJsPath, viewsJsPath, regionsJsPath);
+		const { env, NS, R, rec } = H.load(rendersJsPath, viewsJsPath, regionsJsPath);
 		R.register('ssc-probes', function (ctx, container) {
 			container.appendChild(env.el('span'));
 		});
@@ -95,10 +95,8 @@ function envelope(NS, extra) {
 			fetches.push(url);
 			return Promise.resolve(H.jsonResponse({}, { status: 500 }));
 		});
-		const handles = await Promise.resolve(R.mount({
-			probes: 'ssc-probes',
-			incidents: { table: '/releases/slot' }
-		}));
+		const handles = await Promise.resolve(R.mount({ probes: 'ssc-probes' }));
+		await Promise.resolve(NS.init.mountTableSlot(incidents, '/releases/slot'));
 		out.t2_fetchedUrl = fetches[0] === '/releases/slot';
 		out.t2_bannerInSlot = incidents.querySelector('.juneau-view-error') != null;
 		out.t2_noTable = incidents.querySelector('table[data-juneau-view]') == null;
@@ -109,119 +107,43 @@ function envelope(NS, extra) {
 	}
 
 	{
-		const { env, R, rec } = H.load(rendersJsPath, viewsJsPath, regionsJsPath);
+		const { env, NS, rec } = H.load(rendersJsPath, viewsJsPath, regionsJsPath);
 		const incidents = slot(env, 'incidents');
 		env.setFetch(function () { return Promise.resolve(H.jsonResponse('not-json{')); });
-		await Promise.resolve(R.mount({ incidents: { table: '/releases/slot' } }));
+		await Promise.resolve(NS.init.mountTableSlot(incidents, '/releases/slot'));
 		out.t3_malformedBanner = incidents.querySelector('.juneau-view-error') != null;
 		out.t3_malformedLogged = rec.errorsMatching('malformed JSON envelope').length >= 1;
 	}
 
 	{
-		const { env, NS, R, rec } = H.load(rendersJsPath, viewsJsPath, regionsJsPath);
+		const { env, NS, rec } = H.load(rendersJsPath, viewsJsPath, regionsJsPath);
 		const incidents = slot(env, 'incidents');
 		const bad = envelope(NS);
 		bad.contractVersion = '99';
-		await Promise.resolve(R.mount({ incidents: { table: bad } }));
+		await Promise.resolve(NS.init.mountTableSlot(incidents, bad));
 		out.t4_versionBanner = incidents.querySelector('.juneau-view-error') != null;
 		out.t4_versionLogged = rec.errorsMatching('contract version mismatch').length >= 1;
 		out.t4_noTable = incidents.querySelector('table[data-juneau-view]') == null;
 	}
 
 	{
-		const { env, NS, R } = H.load(rendersJsPath, viewsJsPath, regionsJsPath);
+		const { env, NS } = H.load(rendersJsPath, viewsJsPath, regionsJsPath);
 		const incidents = slot(env, 'incidents');
 		const fetches = [];
 		env.setFetch(function (url) {
 			fetches.push(url);
 			return Promise.resolve(H.jsonResponse(envelope(NS)));
 		});
-		await Promise.resolve(R.mount({ incidents: { table: '/releases/slot' } }));
+		await Promise.resolve(NS.init.mountTableSlot(incidents, '/releases/slot'));
 		out.t5_urlUsed = fetches.length === 1 && fetches[0] === '/releases/slot';
 		out.t5_tableFromUrl = incidents.querySelector('table[data-juneau-view="releases"]') != null;
-	}
-
-	// =================================================================================================================
-	// Blank / whitespace table URL throws at validate; no fetch("").
-	// =================================================================================================================
-	{
-		const { env, R, rec } = H.load(rendersJsPath, viewsJsPath, regionsJsPath);
-		const incidents = slot(env, 'incidents');
-		const fetches = [];
-		env.setFetch(function (url) {
-			fetches.push(url);
-			return Promise.resolve(H.jsonResponse({}, { status: 200 }));
-		});
-		let threw = false;
-		let message = '';
-		try {
-			R.mount({ incidents: { table: '' } });
-		} catch (error) {
-			threw = true;
-			message = String(error?.message ? error.message : error);
-		}
-		out.t6_blankThrew = threw;
-		out.t6_blankNamesUrl = message.indexOf('blank or missing table URL') >= 0;
-		out.t6_blankNoFetch = fetches.length === 0;
-		out.t6_blankLogged = rec.errorsMatching('blank or missing table URL').length >= 1;
-		out.t6_blankNotStamped = incidents.dataset.juneauRegion == null;
-	}
-
-	{
-		const { env, R } = H.load(rendersJsPath, viewsJsPath, regionsJsPath);
-		slot(env, 'incidents');
-		const fetches = [];
-		env.setFetch(function (url) {
-			fetches.push(url);
-			return Promise.resolve(H.jsonResponse({}, { status: 200 }));
-		});
-		let threw = false;
-		try {
-			R.mount({ incidents: { table: '   ' } });
-		} catch (error) { // NOSONAR javascript:S2486 -- the thrown/not-thrown outcome is recorded in a flag and asserted on
-			threw = true;
-		}
-		out.t7_wsThrew = threw;
-		out.t7_wsNoFetch = fetches.length === 0;
-	}
-
-	// =================================================================================================================
-	// Missing slot id / bad shape fails the whole mount (nothing enrolled).
-	// =================================================================================================================
-	{
-		const { env, NS, R } = H.load(rendersJsPath, viewsJsPath, regionsJsPath);
-		R.register('ssc-probes', function () { /* present so mixed map still fails on the missing id */ });
-		const probes = slot(env, 'probes');
-		let threw = false;
-		try {
-			R.mount({ probes: 'ssc-probes', incidents: { table: envelope(NS) } });
-		} catch (error) { // NOSONAR javascript:S2486 -- the thrown/not-thrown outcome is recorded in a flag and asserted on
-			threw = true;
-		}
-		out.t8_missingIdThrew = threw;
-		out.t8_probesNotStamped = probes.dataset.juneauRegion == null;
-	}
-
-	{
-		const { env, R } = H.load(rendersJsPath, viewsJsPath, regionsJsPath);
-		R.register('ssc-probes', function () { /* no-op */ });
-		const probes = slot(env, 'probes');
-		slot(env, 'incidents');
-		let threw = false;
-		try {
-			R.mount({ probes: 'ssc-probes', incidents: { foo: 1 } });
-		} catch (error) { // NOSONAR javascript:S2486 -- the thrown/not-thrown outcome is recorded in a flag and asserted on
-			threw = true;
-		}
-		out.t9_badShapeThrew = threw;
-		out.t9_probesNotStamped = probes.dataset.juneauRegion == null;
 	}
 
 	// =================================================================================================================
 	// CSRF: ancestor copy; data-ssc-csrf is not a substitute; mutating submit fail-closed.
 	// =================================================================================================================
 	{
-		const { env, NS, R } = H.load(rendersJsPath, viewsJsPath, regionsJsPath);
+		const { env, NS } = H.load(rendersJsPath, viewsJsPath, regionsJsPath);
 		const shell = env.el('div');
 		shell.dataset.juneauCsrf = 'tok-abc';
 		shell.dataset.juneauCsrfHeader = 'X-CSRF-Token';
@@ -229,14 +151,14 @@ function envelope(NS, extra) {
 		incidents.id = 'incidents';
 		shell.appendChild(incidents);
 		env.body.appendChild(shell);
-		await Promise.resolve(R.mount({ incidents: { table: envelope(NS) } }));
+		await Promise.resolve(NS.init.mountTableSlot(incidents, envelope(NS)));
 		const table = incidents.querySelector('table[data-juneau-view]');
 		out.t10_csrfCopied = table?.dataset.juneauCsrf === 'tok-abc';
 		out.t10_csrfHeaderCopied = table?.dataset.juneauCsrfHeader === 'X-CSRF-Token';
 	}
 
 	{
-		const { env, NS, R } = H.load(rendersJsPath, viewsJsPath, regionsJsPath);
+		const { env, NS } = H.load(rendersJsPath, viewsJsPath, regionsJsPath);
 		const shell = env.el('div');
 		shell.dataset.sscCsrf = 'ssc-secret';
 		shell.dataset.sscCsrfHeader = 'X-Ssc-Csrf';
@@ -246,7 +168,7 @@ function envelope(NS, extra) {
 		env.body.appendChild(shell);
 		const envl = envelope(NS);
 		envl.view.rowActions = [{ id: 'ack', method: 'POST', endpoint: '/ack' }];
-		await Promise.resolve(R.mount({ incidents: { table: envl } }));
+		await Promise.resolve(NS.init.mountTableSlot(incidents, envl));
 		const table = incidents.querySelector('table[data-juneau-view]');
 		const token = table ? table.dataset.juneauCsrf : 'leaked';
 		out.t11_noJuneauToken = token == null || token === '';
@@ -263,7 +185,7 @@ function envelope(NS, extra) {
 	// Detail template: existing expander DOM + declared {dataUrl} only; no REGION_META sidecar.
 	// =================================================================================================================
 	{
-		const { env, NS, R } = H.load(rendersJsPath, viewsJsPath, regionsJsPath);
+		const { env, NS } = H.load(rendersJsPath, viewsJsPath, regionsJsPath);
 		const incidents = slot(env, 'incidents');
 		const envl = envelope(NS);
 		envl.detail = {
@@ -283,7 +205,7 @@ function envelope(NS, extra) {
 				fields: [{ data: 'status', title: 'Status' }]
 			}]
 		};
-		await Promise.resolve(R.mount({ incidents: { table: envl } }));
+		await Promise.resolve(NS.init.mountTableSlot(incidents, envl));
 		const tpl = incidents.querySelector('template[data-juneau-row-detail]');
 		const dest = tpl?.content ? tpl.content : null;
 		out.t12_hasTemplate = tpl != null;
@@ -308,7 +230,7 @@ function envelope(NS, extra) {
 	// Leftover detail.sections[].table must not reconstruct a nested table (F24 host retired with .sections()).
 	// =================================================================================================================
 	{
-		const { env, NS, R } = H.load(rendersJsPath, viewsJsPath, regionsJsPath);
+		const { env, NS } = H.load(rendersJsPath, viewsJsPath, regionsJsPath);
 		const incidents = slot(env, 'incidents');
 		const envl = envelope(NS);
 		envl.detail = {
@@ -334,7 +256,7 @@ function envelope(NS, extra) {
 				}
 			}]
 		};
-		await Promise.resolve(R.mount({ incidents: { table: envl } }));
+		await Promise.resolve(NS.init.mountTableSlot(incidents, envl));
 		const tpl = incidents.querySelector('template[data-juneau-row-detail]');
 		const dest = tpl?.content ? tpl.content : tpl;
 		out.t13_noNested = dest?.querySelector('[data-juneau-nested]') == null;
@@ -346,12 +268,12 @@ function envelope(NS, extra) {
 	// Bulk mismatch withholds bulk only.
 	// =================================================================================================================
 	{
-		const { env, NS, R, rec } = H.load(rendersJsPath, viewsJsPath, regionsJsPath);
+		const { env, NS, rec } = H.load(rendersJsPath, viewsJsPath, regionsJsPath);
 		const incidents = slot(env, 'incidents');
 		const envl = envelope(NS);
 		envl.selection = { rowIdField: 'id', selectAll: true };
 		envl.bulk = { contractVersion: '99', actions: [{ id: 'ack' }] };
-		await Promise.resolve(R.mount({ incidents: { table: envl } }));
+		await Promise.resolve(NS.init.mountTableSlot(incidents, envl));
 		const table = incidents.querySelector('table[data-juneau-view]');
 		out.t14_hasTable = table != null;
 		out.t14_hasSelect = table?.dataset.juneauSelect === '1';
@@ -363,7 +285,7 @@ function envelope(NS, extra) {
 	// QuickStats painter + unknown item type fail-loud.
 	// =================================================================================================================
 	{
-		const { env, NS, R } = H.load(rendersJsPath, viewsJsPath, regionsJsPath);
+		const { env, NS } = H.load(rendersJsPath, viewsJsPath, regionsJsPath);
 		const incidents = slot(env, 'incidents');
 		const envl = envelope(NS);
 		envl.quickStats = {
@@ -377,7 +299,7 @@ function envelope(NS, extra) {
 				{ id: 'mix', label: 'Mix', segments: [{ count: 1, label: 'a' }] }
 			]
 		};
-		await Promise.resolve(R.mount({ incidents: { table: envl } }));
+		await Promise.resolve(NS.init.mountTableSlot(incidents, envl));
 		out.t15_tile = incidents.querySelector('.jc-stat-tile') != null;
 		out.t15_bar = incidents.querySelector('.jc-stat-bar') != null;
 		out.t15_segments = incidents.querySelector('.jc-stat-segments') != null;
@@ -392,7 +314,7 @@ function envelope(NS, extra) {
 	}
 
 	{
-		const { env, NS, R, rec } = H.load(rendersJsPath, viewsJsPath, regionsJsPath);
+		const { env, NS, rec } = H.load(rendersJsPath, viewsJsPath, regionsJsPath);
 		const incidents = slot(env, 'incidents');
 		const envl = envelope(NS);
 		envl.quickStats = {
@@ -400,7 +322,7 @@ function envelope(NS, extra) {
 			id: 'qs',
 			items: [{ id: 'chart', type: 'chart', label: 'Nope' }]
 		};
-		await Promise.resolve(R.mount({ incidents: { table: envl } }));
+		await Promise.resolve(NS.init.mountTableSlot(incidents, envl));
 		out.t16_unknownBanner = incidents.querySelector('.juneau-view-error') != null;
 		out.t16_unknownLogged = rec.errorsMatching('unknown item type').length >= 1;
 		out.t16_noTable = incidents.querySelector('table[data-juneau-view]') == null;
@@ -411,7 +333,7 @@ function envelope(NS, extra) {
 	// plain-text columns forced through an escaping renderer; selection.rowIdField is kept on the table.
 	// =================================================================================================================
 	{
-		const { env, NS, R, rec } = H.load(rendersJsPath, viewsJsPath, regionsJsPath);
+		const { env, NS, rec } = H.load(rendersJsPath, viewsJsPath, regionsJsPath);
 		const incidents = slot(env, 'incidents');
 		let fetched = 0;
 		env.setFetch(function () { fetched++; return Promise.resolve(H.jsonResponse([])); });
@@ -420,7 +342,7 @@ function envelope(NS, extra) {
 			{ id: 8, name: 'a&b', hidden: 'kept2' }
 		];
 		const envl = envelope(NS, { rows: rows, selection: { rowIdField: 'id', selectAll: true } });
-		await Promise.resolve(R.mount({ incidents: { table: envl } }));
+		await Promise.resolve(NS.init.mountTableSlot(incidents, envl));
 		const table = incidents.querySelector('table[data-juneau-view="releases"]');
 		out.t17_hasTable = table != null;
 		out.t17_noFetch = fetched === 0;
@@ -453,11 +375,11 @@ function envelope(NS, extra) {
 	// detail.endpoint must be same-origin; cross-origin warns and is not stamped.
 	// =================================================================================================================
 	{
-		const { env, NS, R, rec } = H.load(rendersJsPath, viewsJsPath, regionsJsPath);
+		const { env, NS, rec } = H.load(rendersJsPath, viewsJsPath, regionsJsPath);
 		env.window.location = { href: 'https://app.example.com/ctx/page', origin: 'https://app.example.com' };
 		function mountOne(id, extra) {
 			const el = slot(env, id);
-			return Promise.resolve(R.mount({ [id]: { table: envelope(NS, { viewId: 'v' + id, ...extra }) } })).then(function () {
+			return Promise.resolve(NS.init.mountTableSlot(el, envelope(NS, { viewId: 'v' + id, ...extra }))).then(function () {
 				return {
 					detail: el.querySelector('template[data-juneau-row-detail]')?.dataset.juneauDetailUrl
 				};
@@ -485,9 +407,9 @@ function envelope(NS, extra) {
 	// the slot mount already inits it.
 	// =================================================================================================================
 	{
-		const { env, NS, R, rec } = H.load(rendersJsPath, viewsJsPath, regionsJsPath);
+		const { env, NS, rec } = H.load(rendersJsPath, viewsJsPath, regionsJsPath);
 		const incidents = slot(env, 'incidents');
-		await Promise.resolve(R.mount({ incidents: { table: envelope(NS) } }));
+		await Promise.resolve(NS.init.mountTableSlot(incidents, envelope(NS)));
 		out.t19_tableMounted = incidents.querySelector('table[data-juneau-view="releases"]') != null;
 		NS.init.initAll();
 		out.t19_scanLogsNoMissingSidecar = rec.errorsMatching('missing JSON sidecar').length === 0;

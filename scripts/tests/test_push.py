@@ -896,3 +896,31 @@ class TestRunDocsFollowup:
         assert "smoke check" in capsys.readouterr().out.lower()
         assert _run(docs_repo, "git", "log", "-1", "--format=%s") == "step 6 message"
         assert _run(docs_remote_repo, "git", "rev-parse", "master") == _run(docs_repo, "git", "rev-parse", "HEAD")
+
+
+class TestResolveCommitMessage:
+    """A missing commit message is prompted for, not rejected; an empty or aborted answer exits."""
+
+    def test_cli_message_used_without_prompting(self, push_module, monkeypatch):
+        monkeypatch.setattr("builtins.input", lambda _prompt: pytest.fail("should not prompt"))
+        assert push_module.resolve_commit_message("Fix a thing") == "Fix a thing"
+
+    def test_missing_message_is_prompted_for(self, push_module, monkeypatch):
+        prompts = []
+        monkeypatch.setattr("builtins.input", lambda prompt: prompts.append(prompt) or "  Typed message  ")
+        assert push_module.resolve_commit_message(None) == "Typed message"
+        assert prompts == ["Commit message: "]
+
+    def test_empty_answer_exits(self, push_module, monkeypatch):
+        monkeypatch.setattr("builtins.input", lambda _prompt: "   ")
+        with pytest.raises(SystemExit) as e:
+            push_module.resolve_commit_message(None)
+        assert e.value.code == 1
+
+    def test_eof_exits(self, push_module, monkeypatch):
+        def _eof(_prompt):
+            raise EOFError
+        monkeypatch.setattr("builtins.input", _eof)
+        with pytest.raises(SystemExit) as e:
+            push_module.resolve_commit_message(None)
+        assert e.value.code == 1

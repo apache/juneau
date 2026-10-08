@@ -225,9 +225,10 @@ def test_push_test_only_does_not_need_a_message(push_mod, gates, monkeypatch):
 
 def test_push_without_message_still_requires_one(push_mod, gates, monkeypatch):
     monkeypatch.setattr(sys, "argv", ["push.py"])
+    monkeypatch.setattr("builtins.input", lambda _prompt: "")
     with pytest.raises(SystemExit) as exc:
         push_mod.main()
-    assert exc.value.code == 2
+    assert exc.value.code == 1
 
 
 @pytest.mark.parametrize("flag", ["--docs-only", "--sonarqube", "--tracker-audit", "--skip-tests"])

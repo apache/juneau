@@ -432,6 +432,24 @@ def maybe_run_tracker_audit_gate(args, juneau_root, step_num):
 REQUIRED_GIT_EMAIL = "jamesbognar@apache.org"
 
 
+def resolve_commit_message(cli_message):
+    """Use the CLI-supplied message, or prompt for one; abort if still empty."""
+    if cli_message:
+        return cli_message
+
+    try:
+        message = input("Commit message: ").strip()
+    except (EOFError, KeyboardInterrupt):
+        print("\n❌ Aborted: no commit message provided.")
+        sys.exit(1)
+
+    if not message:
+        print("❌ Aborted: commit message cannot be empty.")
+        sys.exit(1)
+
+    return message
+
+
 def verify_apache_identity(repo_dir):
     """Refuse to proceed unless git is configured with the ASF committer identity."""
     try:
@@ -1144,7 +1162,7 @@ Examples:
     parser.add_argument(
         "message",
         nargs="?",
-        help="Git commit message (not used, and not required, with --test-only)"
+        help="Git commit message; prompted for if omitted (not used with --test-only)"
     )
 
     parser.add_argument(
@@ -1231,8 +1249,8 @@ Examples:
         parser.error("--js-tests and --no-js-tests are mutually exclusive")
     if args.test_only and (args.docs_only or args.sonarqube or args.tracker_audit or args.skip_tests):
         parser.error("--test-only cannot be combined with --docs-only, --sonarqube, --tracker-audit or --skip-tests")
-    if args.message is None and not args.test_only:
-        parser.error("the following arguments are required: message")
+    if not args.test_only:
+        args.message = resolve_commit_message(args.message)
     
     # Get the Juneau root directory
     script_dir = Path(__file__).parent

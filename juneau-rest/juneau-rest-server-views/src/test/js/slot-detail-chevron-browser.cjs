@@ -25,7 +25,7 @@
  *
  * Chromium is the subject: buildDetailTemplate must paint into tpl.content (the fragment expandDetailRow clones).
  * template.appendChild leaves that fragment empty in Chromium, which expands to a ~26px blank gap.  The fixture
- * is a ViewSlot envelope mounted through JuneauViews.regions.mount({ table }), so the template under test is the
+ * is a ViewSlot envelope mounted through JuneauViews.init.mountTableSlot, so the template under test is the
  * production slot path.  No jQuery/DataTables is provisioned for this profile: after mount, the prober synthesizes
  * one body row with the production chevron markup and a DataTables child-row stand-in, matching TableClipFree.
  * Prints ONE JSON object to stdout; every assertion is in Java.
@@ -58,7 +58,7 @@ const PROBE = async function () {
 	// The canary's RegionDef.populate("p") is a named populator; register a stub so chevron expand
 	// does not console.error "no populator is registered under the name 'p'" into jsFailures.
 	R.register('p', function () { /* stub: region-only DETAIL_SLOT chrome is what this canary asserts */ });
-	await Promise.resolve(R.mount({ gacks: { table: envelope } }));
+	await Promise.resolve(NS.init.mountTableSlot(slot, envelope));
 
 	const tpl = slot.querySelector('template[data-juneau-row-detail]');
 	const dest = tpl?.content ? tpl.content : null;

@@ -227,25 +227,31 @@ function slot(env, id) {
 	}
 
 	// =================================================================================================================
-	// String "juneau-table" throws a NEW message pointing at { table: url }; enrols nothing.
+	// The retired { table: ... } hookup form is an unrecognized binding, and "juneau-table" is just an unknown
+	// populator name; neither enrols anything.
 	// =================================================================================================================
 	{
 		const { env, R, rec } = H.load(rendersJsPath, viewsJsPath, regionsJsPath);
 		let defaultRan = false;
 		R.builtins.default = function () { defaultRan = true; };
 		const incidents = slot(env, 'incidents');
-		let threw = false;
-		let message = '';
+		let tableMessage = '';
+		try {
+			R.mount({ incidents: { table: '/x' } });
+		} catch (error) {
+			tableMessage = String(error?.message ? error.message : error);
+		}
+		out.t7_tableFormRejectedAsUnrecognized = tableMessage.indexOf('has an unrecognized binding') >= 0
+			&& rec.errorsMatching('unrecognized binding').length >= 1;
+		let stringMessage = '';
 		try {
 			R.mount({ incidents: 'juneau-table' });
 		} catch (error) {
-			threw = true;
-			message = String(error?.message ? error.message : error);
+			stringMessage = String(error?.message ? error.message : error);
 		}
-		out.t7_threw = threw;
-		out.t7_pointsAtTableUrl = message.indexOf('{ table: url }') >= 0;
-		out.t7_notUnregisteredName = message.indexOf('no populator is registered under the name') < 0;
-		out.t7_consoleError = rec.errorsMatching('juneau-table').length >= 1;
+		out.t7_juneauTableStringRejectedAsUnknownPopulator
+			= stringMessage.indexOf("no populator is registered under the name 'juneau-table'") >= 0
+			&& rec.errorsMatching('juneau-table').length >= 1;
 		out.t7_notStamped = incidents.dataset.juneauRegion == null;
 		out.t7_defaultDidNotRun = defaultRan === false;
 	}

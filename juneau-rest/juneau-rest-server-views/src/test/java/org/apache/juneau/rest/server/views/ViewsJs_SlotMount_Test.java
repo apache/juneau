@@ -110,17 +110,6 @@ class ViewsJs_SlotMount_Test extends TestBase {
 		assertAllTrue(r, "t5_urlUsed", "t5_tableFromUrl");
 	}
 
-	@Test void b06_blankTableUrlThrowsWithoutFetch() {
-		var r = report();
-		assertAllTrue(r, "t6_blankThrew", "t6_blankNamesUrl", "t6_blankNoFetch", "t6_blankLogged",
-			"t6_blankNotStamped", "t7_wsThrew", "t7_wsNoFetch");
-	}
-
-	@Test void b07_missingIdOrBadShapeEnrolsNothing() {
-		var r = report();
-		assertAllTrue(r, "t8_missingIdThrew", "t8_probesNotStamped", "t9_badShapeThrew", "t9_probesNotStamped");
-	}
-
 	@Test void b08_csrfCopiedFromAncestorNotFromSsc() {
 		var r = report();
 		assertAllTrue(r, "t10_csrfCopied", "t10_csrfHeaderCopied", "t11_noJuneauToken",
