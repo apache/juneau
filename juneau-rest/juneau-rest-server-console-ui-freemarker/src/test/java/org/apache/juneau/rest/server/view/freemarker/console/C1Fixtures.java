@@ -66,6 +66,18 @@ final class C1Fixtures {
 		}
 	}
 
+	@Rest(mixins=FreemarkerMixin.class, renderResponseStackTraces="true")
+	public static class KpiHost extends BasicRestServlet {
+		private static final long serialVersionUID = 1L;
+		@Bean public FreemarkerMixin freemarker() {
+			return ConsoleFreemarkerMixin.create().basePath("/templates/").chromeTemplate("c1/chrome.ftlh").cardType(new KpiCardType()).build();
+		}
+		@RestGet(path="/t/{name}")
+		public View t(@Path("name") String name, RestRequest req) {
+			return C1Fixtures.view(name, req);
+		}
+	}
+
 	static View view(String name, RestRequest req) {
 		if (name.startsWith("csrf-")) {
 			req.setAttribute(LoopbackBoundaryFilter.TOKEN_ATTRIBUTE, "tok-123");
@@ -76,6 +88,7 @@ final class C1Fixtures {
 
 	private static final MockRestClient HOST = MockRestClient.buildLax(Host.class);
 	private static final MockRestClient SELECTED = MockRestClient.buildLax(SelectedHost.class);
+	private static final MockRestClient KPI = MockRestClient.buildLax(KpiHost.class);
 
 	/** Renders {@code c1/{name}.ftlh} under {@code c1/chrome.ftlh} and expects HTTP 200. */
 	static String render(String name) {
@@ -85,6 +98,11 @@ final class C1Fixtures {
 	/** Renders {@code c1/{name}.ftlh} under {@code c1/chrome-selected.ftlh} and expects HTTP 200. */
 	static String renderSelected(String name) {
 		return get(SELECTED, name, 200);
+	}
+
+	/** Renders {@code c1/{name}.ftlh} on a host whose mixin registered {@link KpiCardType} and expects HTTP 200. */
+	static String renderKpi(String name) {
+		return get(KPI, name, 200);
 	}
 
 	/** Renders {@code c1/{name}.ftlh} and expects HTTP 500; returns the error body. */

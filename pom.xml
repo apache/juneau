@@ -109,7 +109,8 @@
 		<log4j.version>2.26.1</log4j.version>
 		<h2.version>2.3.232</h2.version>
 		<webjars-jquery.version>3.7.1</webjars-jquery.version>
-		<webjars-datatables.version>2.0.5</webjars-datatables.version>
+		<webjars-datatables.version>2.3.8</webjars-datatables.version>
+		<webjars-datatables-buttons.version>3.2.6</webjars-datatables-buttons.version>
 	</properties>
 
 	<modules>
@@ -120,6 +121,7 @@
 		<module>juneau-microservice</module>
 		<module>juneau-sc</module>
 		<module>juneau-secret-macos-keychain</module>
+		<module>juneau-run</module>
 		<module>juneau-examples</module>
 		<module>juneau-petstore</module>
 		<module>juneau-integration-tests</module>
@@ -362,7 +364,7 @@
 					<artifactId>maven-surefire-plugin</artifactId>
 					<configuration>
 						<!-- Sandbox-writable temp dir; @{argLine} carries jacoco's agent when it is active. -->
-						<argLine>@{argLine} -Djava.io.tmpdir=${project.build.directory} ${surefire.extraArgs}</argLine>
+						<argLine>@{argLine} -Djava.io.tmpdir=${project.build.directory} -Djava.util.logging.config.file=${maven.multiModuleProjectDirectory}/src/test/resources/logging.properties ${surefire.extraArgs}</argLine>
 						<systemPropertyVariables>
 							<logback.configurationFile>${maven.multiModuleProjectDirectory}/src/test/resources/logback-test.xml</logback.configurationFile>
 							<java.util.logging.config.file>${maven.multiModuleProjectDirectory}/src/test/resources/logging.properties</java.util.logging.config.file>

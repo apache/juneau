@@ -628,7 +628,7 @@ public class BeanMeta<T> {
 				m.setAsConstructorArg();
 			}
 
-			// @BeanProp(required=true) must be satisfiable from input (WORK-J0585).
+			// @BeanProp(required=true) must be satisfiable from input.
 			for (var p : normalProps.values())
 				if (p.isRequired() && ! p.canSatisfyRequired())
 					throw brex(c, "Property '%s' on class '%s' is marked @BeanProp(required=true) but cannot be written (read-only, dynamic, or no field, setter or constructor argument).", p.name, ci.getNameSimple());
@@ -641,7 +641,7 @@ public class BeanMeta<T> {
 			var recordComponentOrder = ci.isRecord() && config.isRecordComponentOrder();
 			unsortedPropertiesTemp = recordComponentOrder || config.isUnsortedProperties() || bfo.map(x -> x.isUnsortedProperties()).orElse(false) || !fixedBeanProps.isEmpty();
 
-			// Declaration-order seeding (WORK-J0585).  Skipped when an explicit @BeanType(properties) list exists
+			// Declaration-order seeding.  Skipped when an explicit @BeanType(properties) list exists
 			// (that list keeps absolute precedence) and on the java.beans.Introspector path.
 			if (unsortedPropertiesTemp && fixedBeanProps.isEmpty() && ! config.isUseJavaBeanIntrospector())
 				orderByDeclaration(normalProps);

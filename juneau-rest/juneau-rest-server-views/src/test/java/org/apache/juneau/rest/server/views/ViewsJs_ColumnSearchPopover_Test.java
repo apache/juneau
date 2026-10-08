@@ -45,7 +45,7 @@ import org.junit.jupiter.api.*;
  * announcer (politely live, outside the wrapper, reused on repeat); {@code c01}-{@code c05} the dismiss announcements
  * (a revert names the column title, a never-previewed {@code $}-draft still announces, an Enter commit or a typed-then-
  * restored value never announces, and two reverts in a row both announce); {@code d01} the client-mode DSL store
- * path (WORK-J0612: writes go to the per-table store and one {@code search.fixed} predicate, never native search).
+ * path (writes go to the per-table store and one {@code search.fixed} predicate, never native search).
  */
 class ViewsJs_ColumnSearchPopover_Test extends TestBase {
 
@@ -149,6 +149,14 @@ class ViewsJs_ColumnSearchPopover_Test extends TestBase {
 			"true,true,[$eq,$in,$contains],[Exact match.,Any of the listed values.,Case-insensitive substring.]");
 	}
 
+	@Test void a01b_builtinHelpFallsBackToJuneauSearchJs() {
+		var r = report();
+		// Built-ins arrive without help (Column.searchMeta omits it); the popover reads juneau-search.js.  A custom
+		// operator's own help text still wins.
+		assertBean(r, "fallbackOps,fallbackTexts",
+			"[$eq,$contains,$near],[Exact, case-sensitive match. Example: $eq(OPEN),Case-insensitive substring match. Example: $contains(err),Within N units. Example: $near(5)]");
+	}
+
 	@Test void a02_incompleteDollarDraft_leavesGridUntouched() {
 		var r = report();
 		// A still-being-typed "$eq(" must not blank/refilter the grid (design §5): zero draws, incomplete flagged.
@@ -220,7 +228,7 @@ class ViewsJs_ColumnSearchPopover_Test extends TestBase {
 
 	@Test void d01_clientDslColumn_writesGoToTheStoreAndFixedPredicate() {
 		var r = report();
-		// WORK-J0612 D2: with DataTables' search.fixed available, the live bare preview and the Enter commit both go to
+		// with DataTables' search.fixed available, the live bare preview and the Enter commit both go to
 		// the per-table store + one "juneau-dsl" predicate (server semantics: $eq is exact and case-sensitive); native
 		// col.search() is never written, and a reopened popover starts from the store's value.
 		assertBean(r, "dslLiveNative,dslLiveFixedNames,dslLiveStore,dslLiveDraws,dslReopenValue,dslCommitStore,dslPredicateExact,dslPredicateCaseSensitive,dslCommitNative",

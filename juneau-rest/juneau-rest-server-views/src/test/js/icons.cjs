@@ -367,8 +367,12 @@ const OVR_SVG =
 		for (m = re.exec(SHIPPED_SVG); m; m = re.exec(SHIPPED_SVG)) shipped.push(m[1]);
 		const s = await runScenario({ replacementUrl: '/app/repl.svg', replacementSvg: REPL_SVG });
 		const stems = s.NS.icons.stems().slice();
+		// Sorted in place rather than with toSorted(): both arrays are local copies, and CI runs a Node older than 20.
+		const byCodePoint = (a, b) => Number(a > b) - Number(a < b);
+		stems.sort(byCodePoint);
+		shipped.sort(byCodePoint);
 		out.s_catalog = {
-			stemsMatchShipped: JSON.stringify(stems.toSorted((a, b) => Number(a > b) - Number(a < b))) === JSON.stringify(shipped.toSorted((a, b) => Number(a > b) - Number(a < b))),
+			stemsMatchShipped: JSON.stringify(stems) === JSON.stringify(shipped),
 			brandnewInStems: stems.indexOf('brandnew') !== -1,
 			brandnewResolves: typeof s.NS.icons.resolveIcon('brandnew') === 'string'
 		};

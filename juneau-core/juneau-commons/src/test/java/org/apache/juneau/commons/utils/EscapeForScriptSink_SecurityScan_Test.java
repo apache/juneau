@@ -166,7 +166,7 @@ class EscapeForScriptSink_SecurityScan_Test extends TestBase {
 	 *
 	 * <p>
 	 * {@code RegionTable} currently has one escaped {@code <script>}-JSON sidecar. ViewTable's VIEW_META /
-	 * BulkMutateDef sidecars retired with the MOVE Java delete (WORK-J0550a). The blanket
+	 * BulkMutateDef sidecars retired with the MOVE Java delete. The blanket
 	 * {@code escapeForScript}&rarr;{@code noEscape} mutation must flag that remaining sink.
 	 */
 	@Test void a12_realRegionTable_passesButFailsWhenEscaperRemoved() throws Exception {

@@ -1,0 +1,31 @@
+# ***************************************************************************************************************************
+# * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+# * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+# * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+# * with the License.  You may obtain a copy of the License at
+# *
+# *  http://www.apache.org/licenses/LICENSE-2.0
+# *
+# * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+# * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+# * specific language governing permissions and limitations under the License.
+# ***************************************************************************************************************************
+# Golden transcript for run protocol v1. Scenario (see test_golden_transcript):
+#   run(mode="push", project="demo", branch="main", head="abc1234")
+#   step build (n=1) succeeds
+#   step tests (n=2) reports surefire then fails with exit 1
+#   step push (n=3) is skipped
+#   note warn "Tests failed; nothing pushed" on step tests
+#   note info "Docs" with href https://example.org/runs
+#   done fail
+##run {"ev":"run","v":1,"mode":"push","project":"demo","branch":"main","head":"abc1234"}
+##run {"ev":"step","id":"build","n":1,"title":"Build"}
+##run {"ev":"end","id":"build","status":"ok","ms":0}
+##run {"ev":"step","id":"tests","n":2,"title":"Tests"}
+##run {"ev":"report","step":"tests","kind":"surefire","path":"target/surefire-reports"}
+##run {"ev":"end","id":"tests","status":"fail","ms":0,"exit":1}
+##run {"ev":"step","id":"push","n":3,"title":"Push"}
+##run {"ev":"end","id":"push","status":"skip","ms":0}
+##run {"ev":"note","level":"warn","text":"Tests failed; nothing pushed","step":"tests"}
+##run {"ev":"note","level":"info","text":"Docs","href":"https://example.org/runs"}
+##run {"ev":"done","status":"fail"}

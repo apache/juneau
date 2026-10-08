@@ -30,7 +30,7 @@ import org.apache.juneau.marshall.marshaller.*;
 import org.junit.jupiter.api.*;
 
 /**
- * WORK-J0522d, design test <b>35a</b> (§13.6): <b>a populate's own buttons do not reach {@code submitRowAction}</b>.
+ * Design test <b>35a</b> (§13.6): <b>a populate's own buttons do not reach {@code submitRowAction}</b>.
  *
  * <p>
  * {@code handleDetailActionRefClick} is bound at the <b>table</b> level and matches {@code [data-juneau-action]}

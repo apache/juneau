@@ -384,7 +384,7 @@ public class ModalDef implements Widget {
 	 *
 	 * <p>
 	 * Defaults to {@link #CONTRACT_VERSION} on <b>every</b> modal, confirm-only or form-bearing, from the instant
-	 * it is constructed &mdash; the guarantee does not depend on {@link #checked()} being called (WORK-J0520).
+	 * it is constructed &mdash; the guarantee does not depend on {@link #checked()} being called.
 	 * Guaranteed <b>present</b> is not the same as guaranteed <b>valid</b>: presence is this field's whole job,
 	 * structural well-formedness is {@link #validate()}'s (see {@link #checked()}).
 	 */
@@ -578,7 +578,7 @@ public class ModalDef implements Widget {
 	 * it delegates to {@link FormDef#validate()}.  Does <b>not</b> require {@link #contractVersion} to be set to
 	 * {@link #CONTRACT_VERSION} (or set at all) &mdash; a modal whose version was explicitly cleared, or that
 	 * arrived from a foreign producer that never set one, must not false-refuse on that alone.  Version-presence
-	 * and structural well-formedness are deliberately independent properties (design note, WORK-J0520 &sect;5.4).
+	 * and structural well-formedness are deliberately independent properties (design note, &sect;5.4).
 	 *
 	 * <p>
 	 * Also rejects, fail-closed at serve time rather than silently on the wire: a {@link Field#kind} outside the
@@ -648,14 +648,14 @@ public class ModalDef implements Widget {
 	 *
 	 * <p>
 	 * {@link #contractVersion} is guaranteed present on every modal from construction, so this is <b>no longer
-	 * required for versioning</b> (WORK-J0520).  It stays <b>strongly recommended</b> for one remaining duty and
+	 * required for versioning</b>.  It stays <b>strongly recommended</b> for one remaining duty and
 	 * is <b>redundant-but-harmless</b> for another:
 	 * <ul>
 	 * 	<li><b>Non-REST producers</b> (a direct {@code Json.of(...)} serialization, or any consumer marshalling a
 	 * 		modal outside a REST response) have no other gate: calling this is the only fail-closed structural
 	 * 		{@link #validate() validation} they get, and skipping it means a malformed modal/form serializes as
 	 * 		contract-<i>valid</i> with no complaint.
-	 * 	<li><b>REST responses</b> are validated independently as of WORK-J0525:
+	 * 	<li><b>REST responses</b> are validated independently:
 	 * 		{@link org.apache.juneau.rest.server.widgets.WidgetsMixin.WidgetValidationProcessor
 	 * 		WidgetsMixin.WidgetValidationProcessor} calls {@link #validate()} on every REST response that is a
 	 * 		{@code Widget}, fail-closed with a 500, whether or not the producing endpoint called this method.

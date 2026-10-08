@@ -31,7 +31,7 @@ import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.condition.*;
 
 /**
- * The real-browser canary for client-mode column-search DSL evaluation (WORK-J0612): real DataTables 2.1.8, a
+ * The real-browser canary for client-mode column-search DSL evaluation: real DataTables 2.1.8, a
  * client-side table, and {@code JuneauViews.init.setColumnExpr(...)} installing the {@code juneau-dsl}
  * {@code column().search.fixed} predicate built by {@code juneau-search.js}.
  *

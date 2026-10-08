@@ -29,13 +29,13 @@ import org.junit.jupiter.params.provider.*;
 
 /**
  * Always-on source-shape coverage for {@code juneau-config.js} (slice 2): the client-side async
- * persistence SPI, the strict localStorage key codec, and the two first-party persistence providers.
+ * persistence SPI, the strict localStorage key codec, and the first-party localStorage persistence provider.
  *
  * <p>
  * Mirrors {@link ViewsJs_RowActions_Test}'s served-script substring style, but reads the asset straight off the
  * classpath ({@link #CONFIG_JS_RESOURCE}) so the persistence SPI can be pinned without going through a mixin route.
  * {@link ViewsMixin} now serves the same bytes at {@link ViewsMixin#CONFIG_JS_PATH} (slice 6).  Behavioral
- * (real-DOM/localStorage/fetch) proof of this contract lives in the opt-in {@code ConfigPersistence_BrowserTest}
+ * (real-DOM/localStorage) proof of this contract lives in the opt-in {@code ConfigPersistence_BrowserTest}
  * canary.
  */
 @SuppressWarnings({
@@ -90,9 +90,8 @@ class ViewsJs_ConfigPersistence_Test extends TestBase {
 
 	/**
 	 * Extracts an ENTIRE top-level factory function's body (from `function <name>(` to the next `// ====` section
-	 * divider) - needed because both provider factories define same-named object-literal methods
-	 * (e.g. both have a {@code saveAndActivate:} method), so a plain {@link String#indexOf} for a nested method
-	 * signature would silently match the FIRST provider rather than the intended one.
+	 * divider) - needed so a nested object-literal method signature is searched within the intended
+	 * factory only.
 	 */
 	private static String factoryBody(String body, String factoryName) {
 		var start = body.indexOf("function " + factoryName + "(");
@@ -126,8 +125,7 @@ class ViewsJs_ConfigPersistence_Test extends TestBase {
 	 * Six independent single-function pinning checks, each extracting one named function's body and asserting it
 	 * contains two expected substrings: strict decSegment decoding (lowercase hex / truncated escape / unsafe char
 	 * all throw 'malformed'), the exact safe-alphabet chars, the dangling-active default+notice shape, the
-	 * cross-tab storage-event watch/unwatch pair, the shell-attribute base-URL resolution with its fail-closed
-	 * error, and the schema-version-mismatch fail-closed path.
+	 * cross-tab storage-event watch/unwatch pair, and the schema-version-mismatch fail-closed path.
 	 */
 	@ParameterizedTest
 	@MethodSource("b02_functionBodyContainsTwoSubstringsProvider")
@@ -145,7 +143,6 @@ class ViewsJs_ConfigPersistence_Test extends TestBase {
 			Arguments.of("function resolveActiveAgainstViews(", "dangling: true", "name: null"),
 			Arguments.of("watchExternalChanges: function (table, onChange) {",
 				"window.addEventListener(\"storage\"", "function unwatch()"),
-			Arguments.of("function baseFor(table) {", "resolveSavedViewsBase(table)", "unavailableError("),
 			Arguments.of("function assertSupportedSchema(", "malformedError(", "CURRENT_SCHEMA_VERSION"));
 	}
 
@@ -165,13 +162,12 @@ class ViewsJs_ConfigPersistence_Test extends TestBase {
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
-	// c) pageId/viewId/base-URL resolution (§3.1/§3.3) - cross-checked against the server-side marker constants
+	// c) pageId/viewId resolution (§3.1) - cross-checked against the server-side marker constants
 	//------------------------------------------------------------------------------------------------------------------
 
 	/**
 	 * Three independent single-substring pins that each read the whole served asset directly (no function-body
-	 * extraction needed): the pageId/viewId marker attributes cross-checked against their server-side constants,
-	 * and the server-provider transport's same-origin credentials mode.
+	 * extraction needed): the pageId/viewId marker attributes cross-checked against their server-side constants.
 	 */
 	@ParameterizedTest
 	@MethodSource("c01_bodyContainsSingleSubstringProvider")
@@ -183,8 +179,7 @@ class ViewsJs_ConfigPersistence_Test extends TestBase {
 	static Stream<String> c01_bodyContainsSingleSubstringProvider() {
 		return Stream.of(
 			"const PAGE_ID_ATTR = \"data-juneau-page\";",
-			"const VIEW_ID_ATTR = \"" + ViewTable.MARKER_ATTR + "\";",
-			"credentials: \"same-origin\"");
+			"const VIEW_ID_ATTR = \"" + ViewTable.MARKER_ATTR + "\";");
 	}
 
 	@Test void c03_resolvePageId_usesClosestOnThePageIdAttr() throws Exception {
@@ -193,19 +188,11 @@ class ViewsJs_ConfigPersistence_Test extends TestBase {
 		assertTrue(fn.contains("table.closest(\"[\" + PAGE_ID_ATTR + \"]\")"), fn);
 	}
 
-	@Test void c04_resolveSavedViewsBase_failsClosedWhenShellAbsent() throws Exception {
-		var body = configJs();
-		assertTrue(body.contains("const SAVED_VIEWS_BASE_ATTR = \"data-juneau-saved-views\";"), body);
-		var fn = functionBody(body, "function resolveSavedViewsBase(");
-		assertTrue(fn.contains("table.closest(\"[\" + SAVED_VIEWS_BASE_ATTR + \"]\")"), fn);
-		assertTrue(fn.contains("isBlank(v) ? null : v"), fn);
-	}
-
 	//------------------------------------------------------------------------------------------------------------------
-	// d) localStorage bounds - a SEPARATE, independently-named copy of the server defaults
+	// d) localStorage bounds
 	//------------------------------------------------------------------------------------------------------------------
 
-	@Test void d01_localStorageBounds_areSeparatelyNamedFromAnyServerConstant() throws Exception {
+	@Test void d01_localStorageBounds_areNamedConstants() throws Exception {
 		var body = configJs();
 		assertTrue(body.contains("const LOCALSTORAGE_MAX_VIEWS_PER_SCOPE = 50;"), body);
 		assertTrue(body.contains("const LOCALSTORAGE_MAX_BLOB_BYTES = 64 * 1024;"), body);
@@ -227,59 +214,6 @@ class ViewsJs_ConfigPersistence_Test extends TestBase {
 	// alongside four other structurally-identical single-function two-substring pins.
 
 	//------------------------------------------------------------------------------------------------------------------
-	// e) Server-persisted provider transport envelope (§3.3)
-	//------------------------------------------------------------------------------------------------------------------
-
-	@Test void e01_writeRequest_usesJsonContentTypeAndTheSharedCsrfHelpers_failsClosedOnBlankToken() throws Exception {
-		var body = configJs();
-		var fn = functionBody(body, "function writeRequest(");
-		assertTrue(fn.contains("\"Content-Type\": \"application/json\""), fn);
-		assertTrue(fn.contains("init.resolveCsrfToken(table)"), fn);
-		assertTrue(fn.contains("init.resolveCsrfHeaderName(table)"), fn);
-		assertTrue(fn.contains("init.isBlankToken(token)"), fn);
-		assertTrue(fn.contains("refuse: true"), fn);
-	}
-
-	// e02 (same-origin credentials) is covered by c01 above, alongside two other single-substring pins.
-
-	@Test void e03_getRequests_arePlainCsrfFreeFetch() throws Exception {
-		var body = configJs();
-		var fn = functionBody(body, "function get(table, path, extraParams) {");
-		assertTrue(fn.contains("{ method: \"GET\", credentials: \"same-origin\" }"), fn);
-		assertFalse(fn.contains("CsrfToken"), fn);
-	}
-
-	/**
-	 * Three independent server-provider-region pins: saveAndActivate uses the {@code activate} query flag (never a
-	 * blob field), setActive always sends a real JSON body (never empty), and delete sends the name as a query
-	 * param (never a path segment).
-	 */
-	@ParameterizedTest
-	@MethodSource("e04_serverProviderRegionContainsSubstringProvider")
-	void e04_serverProviderRegionContainsExpectedSubstring(String expected) throws Exception {
-		var region = factoryBody(configJs(), "createServerProvider");
-		assertTrue(region.contains(expected), region);
-	}
-
-	static Stream<String> e04_serverProviderRegionContainsSubstringProvider() {
-		return Stream.of(
-			"{ name: name, activate: 1 }",
-			"name == null ? {} : { name: name }",
-			"write(table, \"DELETE\", \"/item\", { name: name }, {})");
-	}
-
-	// e07 (shell-attribute base-URL resolution, fail-closed) is covered by b02 above.
-
-	@Test void e08_serverProvider_neverEmitsHttpForCrossTabReconcile() throws Exception {
-		// The server provider's own object literal must not DEFINE watchExternalChanges (that method-def token,
-		// not a mere substring match, since the region's own comment explaining the omission legitimately
-		// contains the plain word "watchExternalChanges").
-		var region = factoryBody(configJs(), "createServerProvider");
-		assertFalse(region.contains("watchExternalChanges: function"), region);
-		assertTrue(region.contains("storage` event never fires for an HTTP write"), region);
-	}
-
-	//------------------------------------------------------------------------------------------------------------------
 	// f) The seven-method async SPI + provider-selection seam (§3.2/§5)
 	//------------------------------------------------------------------------------------------------------------------
 
@@ -290,13 +224,11 @@ class ViewsJs_ConfigPersistence_Test extends TestBase {
 			assertTrue(body.contains(method), () -> "missing SPI method '" + method + "':\n" + body);
 	}
 
-	@Test void f02_bothProviderFactoriesImplementAllSevenMethods() throws Exception {
+	@Test void f02_localStorageProviderFactoryImplementsAllSixProviderMethods() throws Exception {
 		var body = configJs();
-		for (var factory : new String[]{"createLocalStorageProvider", "createServerProvider"}) {
-			var region = factoryBody(body, factory);
-			for (var method : new String[]{"list:", "load:", "save:", "saveAndActivate:", "setActive:", "\"delete\":"})
-				assertTrue(region.contains(method), () -> factory + " missing '" + method + "':\n" + region);
-		}
+		var region = factoryBody(body, "createLocalStorageProvider");
+		for (var method : new String[]{"list:", "load:", "save:", "saveAndActivate:", "setActive:", "\"delete\":"})
+			assertTrue(region.contains(method), () -> "createLocalStorageProvider missing '" + method + "':\n" + region);
 	}
 
 	@Test void f03_providerSelectionSeam_defaultsToLocalStorage_swappableViaSetPersistenceProvider() throws Exception {
@@ -304,7 +236,6 @@ class ViewsJs_ConfigPersistence_Test extends TestBase {
 		assertTrue(body.contains("NS.setPersistenceProvider = function (provider) {"), body);
 		assertTrue(body.contains("NS.persistenceProviders = {"), body);
 		assertTrue(body.contains("localStorage: createLocalStorageProvider"), body);
-		assertTrue(body.contains("server: createServerProvider"), body);
 		var fn = functionBody(body, "function activeProvider() {");
 		assertTrue(fn.contains("createLocalStorageProvider()"), fn);
 	}
@@ -343,21 +274,12 @@ class ViewsJs_ConfigPersistence_Test extends TestBase {
 	// g02 (schema-version-mismatch fail-closed) is covered by b02 above.
 
 	//------------------------------------------------------------------------------------------------------------------
-	// h) Reserved-name rule (shared by both providers, so slice 3's mixin must enforce the identical rule)
+	// h) Reserved-name rule
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Test void h01_defaultIsReservedCaseInsensitively() throws Exception {
 		var body = configJs();
 		var fn = functionBody(body, "function isReservedName(");
 		assertTrue(fn.contains(".toLowerCase() === \"default\""), fn);
-	}
-
-	@Test void h02_validateNameBasic_isSharedByBothProviders_notJustLocalStorage() throws Exception {
-		// The server provider's load/save/saveAndActivate/setActive/delete all call validateNameBasic (not the
-		// localStorage-only validateNameForLocalStorage) - proves the two providers share ONE name-validity rule.
-		var region = factoryBody(configJs(), "createServerProvider");
-		var occurrences = region.split("validateNameBasic\\(name\\)", -1).length - 1;
-		assertTrue(occurrences >= 4, () -> "expected validateNameBasic(name) called at least 4x in the server provider, found " + occurrences + ":\n" + region);
-		assertFalse(region.contains("validateNameForLocalStorage"), region);
 	}
 }

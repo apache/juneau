@@ -42,8 +42,7 @@ class CardDirective_RemovedTypes_Test extends TestBase {
 		"bad-card-dup|<@card id='a'> duplicates an existing card id.",
 		"bad-card-nested|<@card> cannot be nested inside another <@card>.",
 		"bad-card-orphan|<@card> must be nested inside <@page>.",
-		"bad-card-type|<@card> type= must be one of html|datatables; got 'kpi'.",
-		"bad-card-dt-src|<@card id='t'> type='datatables' takes its table URL or catalog as the body; src= and template= are not allowed."
+		"bad-card-dt-src|<@card id='t'> type='datatables' takes src= or a body, not both."
 	})
 	void a01_errors(String fixture, String message) {
 		assertError(fixture, message);

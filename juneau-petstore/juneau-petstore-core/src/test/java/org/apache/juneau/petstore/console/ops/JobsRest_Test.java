@@ -160,4 +160,66 @@ class JobsRest_Test extends TestBase {
 	@Test void c01_opsIndexRedirects() throws Exception {
 		PetstoreConsoleFixture.rawClient().get("/console/ops").run().assertStatus(303).assertHeader("Location").isContains("/console/ops/jobs");
 	}
+
+	private static JsonMap groom(MockRestClient c, String body) throws Exception {
+		return new JsonMap(c.post("/console/ops/jobs/groom", body).contentType("application/json").run().assertStatus(200).getContent().asString());
+	}
+
+	@Test void d01_groomStartsARunAndListsIt() throws Exception {
+		var c = client();
+		var r = groom(c, "{\"pet\":\"Rex\"}");
+		assertBean(r, "outcome,message,row{pet,state,verbose}", "success,Grooming Rex,{Rex,RUNNING,false}");
+		var id = r.getMap("row").getString("id");
+		assertTrue(id.matches("[0-9a-f]{32}"), id);
+		c.get("/console/ops/jobs/groom-rows").run().assertStatus(200).assertContent().isContains(id);
+	}
+
+	@Test void d02_dialogShapeAndKeyReplay() throws Exception {
+		var c = client();
+		var body = "{\"action\":\"groom\",\"targetId\":\"k-d02\",\"idempotencyKey\":\"k-d02\",\"fields\":{\"pet\":\"Max\",\"verbose\":true}}";
+		var a = groom(c, body);
+		var b = groom(c, body);
+		assertBean(a, "row{pet,verbose}", "{Max,true}");
+		assertString(a.getMap("row").getString("id"), b.getMap("row").getString("id"));
+	}
+
+	@Test void d03_mixinServesBothSources() throws Exception {
+		var c = client();
+		var id = groom(c, "{\"pet\":\"Rex\",\"verbose\":true}").getMap("row").getString("id");
+		var p = new JsonMap(c.get("/console/ops/jobs/juneau-console-output/" + id + "/lines?tail=5000").run().assertStatus(200).getContent().asString());
+		assertBean(p, "contractVersion,hasEarlier,terminal,state", "1,true,false,RUNNING");
+		c.get("/console/ops/jobs/juneau-console-output/" + id + "-file/lines").run().assertStatus(200).assertContent().isContains("\"contractVersion\":\"1\"");
+		c.get("/console/ops/jobs/juneau-console-output/" + id + "/download").run().assertStatus(200).assertHeader("Content-Type").isContains("application/jsonl");
+		c.get("/console/ops/jobs/juneau-console-output/nope/lines").run().assertStatus(404);
+	}
+
+	@Test void d04_rowDetailEnvelope() throws Exception {
+		var c = client();
+		var id = groom(c, "{\"pet\":\"Rex\"}").getMap("row").getString("id");
+		var d = new JsonMap(c.get("/console/ops/jobs/groom-runs/" + id).run().assertStatus(200).getContent().asString());
+		assertBean(d, "contractVersion,fields{id,pet}", "1,{" + id + ",Rex}");
+		c.get("/console/ops/jobs/groom-runs/nope").run().assertStatus(404).assertContent().isContains("Unknown groom run 'nope'");
+	}
+
+	@Test void d05_groomFormHasPetAndVerbose() throws Exception {
+		client().get("/console/ops/jobs/groom-form").run().assertStatus(200)
+			.assertContent().isContains("\"pet\"", "\"verbose\"", "\"checkbox\"", "idempotencyKey");
+	}
+
+	@Test void d06_photoIsSvg() throws Exception {
+		client().get("/console/ops/jobs/groom-photo.svg").header("Accept", "*/*").run().assertStatus(200)
+			.assertHeader("Content-Type").isContains("image/svg+xml").assertContent().isContains("<svg");
+	}
+
+	@Test void d07_pageShowsTheRequestedRun() throws Exception {
+		var c = client();
+		var id = groom(c, "{\"pet\":\"Rex\"}").getMap("row").getString("id");
+		var lines = "/console/ops/jobs/juneau-console-output/" + id + "/lines";
+		c.get("/console/ops/jobs").header("Accept", "text/html").run().assertStatus(200).assertContent().isContains(lines, lines.replace("/lines", "-file/lines"));
+		c.get("/console/ops/jobs?run=nope").header("Accept", "text/html").run().assertStatus(200).assertContent().isContains("/juneau-console-output/");
+	}
+
+	@Test void d08_inlinedParamsCannotBreakOutOfTheScript() {
+		assertString("{\"a\":\"<\\/script>\\u2028\\u2029\"}", JobsRest.scriptSafe("{\"a\":\"</script>\u2028\u2029\"}"));
+	}
 }

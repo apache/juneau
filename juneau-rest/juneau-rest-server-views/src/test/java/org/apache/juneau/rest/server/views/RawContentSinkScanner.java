@@ -163,12 +163,16 @@ final class RawContentSinkScanner {
 		VIEWS_JS_DIR + "/juneau-views.js",
 		VIEWS_JS_DIR + "/juneau-ribbon.js",
 		VIEWS_JS_DIR + "/juneau-helpers.js",
-		// The REGION RUNTIME.  Omitted until WORK-J0522d, which is backwards: this is the one shipped asset that
+		// The REGION RUNTIME.  Omitted until the region emitter landed, which is backwards: this is the one shipped asset that
 		// takes an author-supplied populator NAME off a DOM attribute and hands a container to author-registered
 		// populate functions, so it is the file where an HTML sink would matter most (R11/R36, design §13.5).  It
 		// has zero sinks today - every state message goes out through renderAsyncStatus's textContent - and listing
 		// it here is what keeps that true rather than merely currently-so.
 		VIEWS_JS_DIR + "/juneau-regions.js",
+		// The console-output module renders untrusted log lines, so it must stay sink-free.
+		VIEWS_JS_DIR + "/juneau-console-output.js",
+		// The run-view module renders untrusted report text (test names, messages, traces), so it must stay sink-free.
+		VIEWS_JS_DIR + "/juneau-run-view.js",
 		WIDGETS_JS_DIR + "/juneau-calendar.js",
 		CONSOLE_JS_DIR + "/juneau-console.js"
 	);

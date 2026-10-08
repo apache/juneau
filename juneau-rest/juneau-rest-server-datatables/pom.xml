@@ -51,6 +51,75 @@
 			<version>${project.version}</version>
 		</dependency>
 
+		<!-- WebJars for the console "jquery", "datatables" and "datatables-buttons" toolkit packs.  All MIT.
+			The npm WebJars declare open-range npm jQuery and DataTables dependencies; each artifact is
+			declared directly here instead, so the versions stay pinned. -->
+		<dependency>
+			<groupId>org.webjars</groupId>
+			<artifactId>jquery</artifactId>
+			<version>${webjars-jquery.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.webjars.npm</groupId>
+			<artifactId>datatables.net</artifactId>
+			<version>${webjars-datatables.version}</version>
+				<exclusions>
+					<exclusion>
+						<groupId>org.webjars.npm</groupId>
+						<artifactId>jquery</artifactId>
+					</exclusion>
+				</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>org.webjars.npm</groupId>
+			<artifactId>datatables.net-dt</artifactId>
+			<version>${webjars-datatables.version}</version>
+				<exclusions>
+					<exclusion>
+						<groupId>org.webjars.npm</groupId>
+						<artifactId>jquery</artifactId>
+					</exclusion>
+					<exclusion>
+						<groupId>org.webjars.npm</groupId>
+						<artifactId>datatables.net</artifactId>
+					</exclusion>
+				</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>org.webjars.npm</groupId>
+			<artifactId>datatables.net-buttons</artifactId>
+			<version>${webjars-datatables-buttons.version}</version>
+				<exclusions>
+					<exclusion>
+						<groupId>org.webjars.npm</groupId>
+						<artifactId>jquery</artifactId>
+					</exclusion>
+					<exclusion>
+						<groupId>org.webjars.npm</groupId>
+						<artifactId>datatables.net</artifactId>
+					</exclusion>
+				</exclusions>
+		</dependency>
+		<dependency>
+			<groupId>org.webjars.npm</groupId>
+			<artifactId>datatables.net-buttons-dt</artifactId>
+			<version>${webjars-datatables-buttons.version}</version>
+				<exclusions>
+					<exclusion>
+						<groupId>org.webjars.npm</groupId>
+						<artifactId>jquery</artifactId>
+					</exclusion>
+					<exclusion>
+						<groupId>org.webjars.npm</groupId>
+						<artifactId>datatables.net-dt</artifactId>
+					</exclusion>
+					<exclusion>
+						<groupId>org.webjars.npm</groupId>
+						<artifactId>datatables.net-buttons</artifactId>
+					</exclusion>
+				</exclusions>
+		</dependency>
+
 		<!-- Test scope -->
 		<dependency>
 			<groupId>org.junit.jupiter</groupId>

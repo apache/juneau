@@ -459,7 +459,7 @@
 	reg("forceStop", "forceStop");
 	reg("push", "push");
 	reg("openPr", "openPr");
-	// WORK-J0557 U1 — real sprite stems (no CSS-composed / flipped stand-ins).  sort is an ordinary <use> host;
+	// Real sprite stems (no CSS-composed / flipped stand-ins).  sort is an ordinary <use> host;
 	// the header asc/desc tint is driven by CSS custom properties on the host (they inherit into the <use> shadow tree).
 	reg("first_page", "first_page");
 	reg("last_page", "last_page");

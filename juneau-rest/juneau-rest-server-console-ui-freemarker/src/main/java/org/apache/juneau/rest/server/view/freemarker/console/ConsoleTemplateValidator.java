@@ -282,6 +282,8 @@ public final class ConsoleTemplateValidator {
 							templateRefs.add(new Object[]{tpl.value, at});
 						if (type != null && type.literal && eq(type.value, "datatables") && ! selfClosing)
 							checkViewVersion(out, name, lines, text, m.end(), id == null ? "" : id.value);
+						if (! selfClosing)
+							checkCardBody(out, name, lines, at, text, m.end(), id, type, attrs.get("src"));
 					}
 					case ConsoleDirectiveModel.NAME -> {
 						if (consoleAt < 0)
@@ -351,6 +353,72 @@ public final class ConsoleTemplateValidator {
 	}
 
 	private record Value(String value, boolean literal) {}
+
+	// Mirrors CardTypeRegistry.BASE_KEYS (E-23); visibleWhen is deliberately excluded, same as there.
+	private static final Set<String> RESERVED_BODY_KEYS = Set.of("id", "type", "title", "src", "template", "ref");
+
+	/**
+	 * The C2 card-body rules: {@code card-src-and-body}, {@code inline-slot-meta} and {@code card-reserved-key}.
+	 * Reads the body the same way {@link #checkViewVersion} does, up to the next {@code </@card}.
+	 */
+	private static void checkCardBody(List<Finding> out, String name, int[] lines, int at, String text, int bodyStart, Value id, Value type, Value src) {
+		var end = text.indexOf("</@card", bodyStart);
+		var body = text.substring(bodyStart, end < 0 ? text.length() : end);
+		var cardId = id == null ? "" : id.value;
+		var trimmed = body.trim();
+		if (! trimmed.isEmpty() && src != null && src.literal)
+			add(out, name, lines, at, "card-src-and-body", String.format(
+				"<@card id='%s'> has both src='%s' and a body; use exactly one.", cardId, src.value));
+		if (trimmed.isEmpty() || body.contains("${"))
+			return;
+		var keys = topLevelJson5Keys(trimmed);
+		// Same detection as DatatablesCardType's escape hatch (a top-level 'view' object).
+		if (type != null && type.literal && eq(type.value, "datatables") && keys.contains("view"))
+			add(out, name, lines, at, "inline-slot-meta", String.format(
+				"<@card id='%s'> body is a pre-built SLOT_META (has a 'view' object); author the table catalog "
+					+ "in author shape instead. This becomes an error at GC-1.", cardId));
+		for (var k : keys)
+			if (RESERVED_BODY_KEYS.contains(k))
+				add(out, name, lines, at, "card-reserved-key", String.format(
+					"<@card id='%s'> body key '%s' is reserved; set it as an attribute.", cardId, k));
+	}
+
+	// Hand-rolled, like attrs() below: finds JSON5 object keys at brace-depth 0, skipping quoted strings. Not a
+	// general parser — enough to catch literal top-level keys for the three card-body lint rules above.
+	private static Set<String> topLevelJson5Keys(String body) {
+		var s = body.trim();
+		if (s.startsWith("{") && s.endsWith("}"))
+			s = s.substring(1, s.length() - 1);
+		var keys = new LinkedHashSet<String>();
+		var depth = 0;
+		var i = 0;
+		while (i < s.length()) {
+			var c = s.charAt(i);
+			if (c == '"' || c == '\'') {
+				var close = s.indexOf(c, i + 1);
+				i = close < 0 ? s.length() : close + 1;
+			} else if (c == '{' || c == '[') {
+				depth++;
+				i++;
+			} else if (c == '}' || c == ']') {
+				depth--;
+				i++;
+			} else if (depth == 0 && (Character.isLetter(c) || c == '_')) {
+				var start = i;
+				while (i < s.length() && (Character.isLetterOrDigit(s.charAt(i)) || s.charAt(i) == '_'))
+					i++;
+				var word = s.substring(start, i);
+				var j = i;
+				while (j < s.length() && Character.isWhitespace(s.charAt(j)))
+					j++;
+				if (j < s.length() && s.charAt(j) == ':')
+					keys.add(word);
+			} else {
+				i++;
+			}
+		}
+		return keys;
+	}
 
 	private static Map<String,Value> attrs(String s) {
 		var out = new LinkedHashMap<String,Value>();

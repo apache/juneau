@@ -251,7 +251,7 @@
 	--jc-chrome-disabled-color: #a0a0a1;
 	--jc-chrome-disabled-bg: #f6f6f9;
 	/*
-	 * Chrome-wide control border/text grey (WORK-J0518 DF-3 / WORK-J0546): toolbar Search, ribbon
+	 * Chrome-wide control border/text grey: toolbar Search, ribbon
 	 * buttons, and paging-pill edges are one role.  Themeless default is #ced4da.  When console-ui
 	 * chrome.css is linked, --jc-control-border (alias of themed --jc-border-2) wins via the var()
 	 * fallback so OPEN/RED/LIGHT_RED/LIGHT_BROWN/GRAY keep search vs ribbon matched *within* that
@@ -539,7 +539,7 @@
 }
 
 /*
- * DataTables table density/shape (compact 4px 5px cells, 0.8333rem/13.333px IRS body type - WORK-J0518 DF-4,
+ * DataTables table density/shape (compact 4px 5px cells, 0.8333rem/13.333px IRS body type,
  * outer frame + cell grid).  NEUTRAL - shape only (font-size,
  * padding, border WIDTH/style); no color/background-color/border-color palette here (console-ui's
  * chrome.css themes the SAME selectors with --jc-* colors).  Selectors list BOTH
@@ -550,7 +550,7 @@
  */
 table[data-juneau-view],
 table.dataTable {
-	font-size: 0.8333rem;         /* IRS body-type parity (13.333px/10pt, WORK-J0518 DF-4); see the cell-level pin below */
+	font-size: 0.8333rem;         /* IRS body-type parity (13.333px/10pt); see the cell-level pin below */
 	border-collapse: collapse;
 	border-spacing: 0;
 	/* Longhand width/style only — a colourless `border: N solid` shorthand resets the
@@ -575,8 +575,8 @@ table[data-juneau-view] > thead > tr > td,
 table.dataTable > thead > tr > th,
 table.dataTable > thead > tr > td {
 	/*
-	 * Header type is its OWN, smaller step than the body cell's 0.8333rem (IRS visual-parity pass,
-	 * WORK-J0518 DF-4 follow-up): IRS's own `table.dataTable thead th` sets 0.75rem/12px, one notch below
+	 * Header type is its OWN, smaller step than the body cell's 0.8333rem (IRS visual-parity pass):
+	 * IRS's own `table.dataTable thead th` sets 0.75rem/12px, one notch below
 	 * its 0.8333rem/13.333px body row - a header/body size split this toolkit's shared cell rule below did
 	 * not have.  Declared here, not folded into the shared rule, precisely BECAUSE it must NOT match the
 	 * body pin: this file's own em-spacing warning on that rule is about the tbody cell only (the child-row/
@@ -633,7 +633,7 @@ table[data-juneau-view] > tbody > tr > th,
 table[data-juneau-view] > tbody > tr > td,
 table.dataTable > tbody > tr > th,
 table.dataTable > tbody > tr > td {
-	font-size: 0.8333rem;         /* IRS body-type parity (WORK-J0518 DF-4); not tokenized, see comment above */
+	font-size: 0.8333rem;         /* IRS body-type parity; not tokenized, see comment above */
 	padding: 4px 5px;             /* IRS pages/style.css: table.dataTable thead th, tbody td */
 	/*
 	 * Body row HEIGHT (IRS visual-parity follow-up): IRS does not set an explicit min-height on tbody td.
@@ -1071,7 +1071,7 @@ table.dataTable thead .sorting_desc_disabled:after {
 }
 
 /*
- * Skip glyph correction (WORK-J0518 DF-2): each "chevronright" host's visible filled
+ * Skip glyph correction: each "chevronright" host's visible filled
  * chevron sits in the middle of its 24x24 viewBox (path spans x=7.2..17.4), so two hosts
  * placed edge-to-edge with no overlap read as two separated arrows ("&gt;  &gt;") rather than one merged
  * double-chevron ("&gt;&gt;") the way IRS's own skip glyph does. Rather than ship a second IRS-sourced path (the
@@ -1182,7 +1182,7 @@ table.dataTable thead .sorting_desc_disabled:after {
 /* Same model as .juneau-view-ribbon-group: rest = top/bottom on every segment + first left + last
    right.  chrome.css colors those edges gray, then recolors the same edges --jc-accent on hover.
    Longhand width/style only; a colourless shorthand would reset border-*-color and steal the theme.
-   No inner verticals (WORK-J0518 DF-2).  No overflow:hidden (that would clip the page-size menu). */
+   No inner verticals.  No overflow:hidden (that would clip the page-size menu). */
 .juneau-view-pagingpill > *:first-child {
 	border-radius: var(--jc-chrome-control-radius) 0 0 var(--jc-chrome-control-radius);
 	border-left-width: 1px;
@@ -1195,7 +1195,7 @@ table.dataTable thead .sorting_desc_disabled:after {
 }
 
 /*
- * No inner divider between the four nav buttons (First/Prev/Next/Last) - WORK-J0518 DF-2. The segmented-group
+ * No inner divider between the four nav buttons (First/Prev/Next/Last). The segmented-group
  * treatment above (".juneau-view-ribbon-group") already dropped this same inner-border pattern for the ribbon;
  * J0449 was ribbon-format only and never reached the paging pill's own nav buttons, so they kept the old
  * per-button "border-right: 1px solid" divider this rule used to carry. The menu-button segment
@@ -1399,7 +1399,7 @@ div.dt-container .juneau-view-pagingpill .juneau-view-pagingpill-btn[disabled] s
 }
 
 /*
- * Grey control border + grey text at passing contrast (WORK-J0518 DF-3) - this input previously had no colour
+ * Grey control border + grey text at passing contrast - this input previously had no colour
  * of its own (border: 1px solid resolved to currentColor; text inherited whatever colour surrounded it), which
  * is why console-ui's own MT-11 fix had to fork a second border colour in console.css rather than getting one
  * from here. Fixing the framework default instead: --jc-chrome-control-border/-text are still overridable by a
@@ -1539,7 +1539,7 @@ div.dataTables_wrapper div.dataTables_filter input:focus-visible {
 }
 
 /*
- * Per-column header search icon (WORK-J0547): Juneau search glyph in the header flex row, immediately
+ * Per-column header search icon: Juneau search glyph in the header flex row, immediately
  * left of the sort control.  Click opens .juneau-view-col-search-popover (not a second search row).
  * NEUTRAL shape; chrome.css tints idle/active/popover.
  */
@@ -1890,7 +1890,7 @@ table.dataTable > tbody > tr.child .jc-card {
 }
 
 /*
- * `code` fill-sink renderer output (WORK-J0508, Foundry WORK-P0063 row-detail-subtabs follow-up): a monospace,
+ * `code` fill-sink renderer output: a monospace,
  * whitespace-preserving block for source text, scoped to its own class rather than styling the bare
  * `<pre><code>` the renderer emits - a caller nesting unrelated `<pre>`/`<code>` markup elsewhere in a detail
  * section is untouched.  NEUTRAL - no new palette color; reuses the existing --jc-popover-bg/-border light-
@@ -2687,7 +2687,7 @@ input[type="checkbox"].jc-editable-field-input {
 
 /*
  * The RIBBON-ANCHORED banner host and its two banners - where a ROW-LESS (ribbon-hosted) dialog's refusals and
- * settled outcomes land, since there is no row actions cell to put them in (WORK-J0512).  Sits directly under the
+ * settled outcomes land, since there is no row actions cell to put them in.  Sits directly under the
  * toolbar row that holds the ribbon, so the message reads as belonging to the control that opened the dialog.
  * Same neutral treatment as the row banners above: the role, not the color, carries the assistive meaning.
  */
@@ -2744,7 +2744,7 @@ input[type="checkbox"].jc-editable-field-input {
 	cursor: pointer;
 }
 
-/* The bulk-actions toolbar - inserted into the unified toolbar row's LEFT cluster, after the paging pill. */
+/* The bulk-actions toolbar - placed at the far end of the unified toolbar row's RIGHT cluster. */
 .juneau-view-bulk-toolbar {
 	display: flex;
 	align-items: center;
@@ -2756,6 +2756,52 @@ input[type="checkbox"].jc-editable-field-input {
 	white-space: nowrap;
 }
 
+.juneau-view-bulk-toolbar[hidden] {
+	display: none;
+}
+
+/* Bulk-run summary toast: fixed so a table redraw never removes it; failures are sticky with a Close button. */
+.juneau-view-bulk-toast {
+	position: fixed;
+	right: var(--jc-space-4);
+	bottom: var(--jc-space-4);
+	z-index: var(--jc-dialog-z, 1000);
+	display: flex;
+	align-items: center;
+	gap: var(--jc-space-3);
+	max-width: 30em;
+	padding: var(--jc-space-2) var(--jc-space-3);
+	border: 1px solid var(--jc-tone-info);
+	border-radius: var(--jc-space-1);
+	background: Canvas;
+	color: CanvasText;
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.juneau-view-bulk-toast-status { border-color: var(--jc-tone-success); }
+
+.juneau-view-bulk-toast-alert { border-color: var(--jc-tone-error); }
+
+.juneau-view-bulk-toast-close {
+	cursor: pointer;
+	border: 1px solid;
+	border-radius: var(--jc-space-1);
+	padding: 0 var(--jc-space-2);
+	background: transparent;
+	color: inherit;
+}
+
+.juneau-view-bulk-clear {
+	padding: 0;
+	border: 0;
+	background: transparent;
+	font-size: var(--jc-chrome-font-size-2);
+	text-decoration: underline;
+	cursor: pointer;
+}
+
+.juneau-view-bulk-select,
+.juneau-view-bulk-go,
 .juneau-view-bulk-action-btn {
 	padding: 0.3em 0.75em;
 	border: 1px solid;            /* currentColor - no palette color set here */
@@ -2765,6 +2811,7 @@ input[type="checkbox"].jc-editable-field-input {
 	cursor: pointer;
 }
 
+.juneau-view-bulk-go:disabled,
 .juneau-view-bulk-action-btn:disabled {
 	opacity: 0.4;
 	cursor: not-allowed;
@@ -2983,4 +3030,516 @@ input[type="checkbox"].jc-editable-field-input {
 	margin: 0;
 	min-width: 0;
 	overflow-wrap: anywhere;
+}
+
+/*
+ * Console output (juneau-console-output.js).
+ *
+ * A live-tailing log pane.  The surface reuses the .juneau-code font stack and the popover tokens; every colour is a
+ * --jc-tone-* or --jc-text-muted reference, so a host that loads only this file still gets coloured styles.
+ * Marker modes are root classes (juneau-co-markers-dim|hide|show).  The [hidden] override is the last rule on
+ * purpose: several controls below set an explicit display and are toggled with the hidden attribute.
+ */
+.juneau-co {
+	/* Muted text that keeps 4.5:1 on the popover background (--jc-text-muted alone is a little lighter). */
+	--juneau-co-muted: #5f5f5f;
+	font-family: ui-monospace, SFMono-Regular, Consolas, "Liberation Mono", Menlo, monospace;
+	font-size: var(--jc-chrome-font-size-2);
+	line-height: 1.4;
+	background: var(--jc-popover-bg);
+	border: 1px solid var(--jc-popover-border);
+	border-radius: 4px;
+	position: relative;
+	min-width: 0;
+}
+
+.juneau-co-header {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: var(--jc-space-2);
+	padding: var(--jc-space-1) var(--jc-space-2);
+	border-bottom: 1px solid var(--jc-popover-border);
+	font-family: inherit;
+}
+
+.juneau-co-title {
+	font-weight: 600;
+	margin-right: auto;
+}
+
+.juneau-co-state-label,
+.juneau-co-elapsed {
+	color: var(--jc-text-muted, #6b6b6b);
+}
+
+.juneau-co-state {
+	color: inherit;
+	font-weight: 600;
+}
+
+.juneau-co-markers,
+.juneau-co-more {
+	font: inherit;
+	color: var(--jc-chrome-control-text);
+	background: transparent;
+	border: var(--jc-chrome-button-border);
+	border-radius: var(--jc-chrome-control-radius);
+	padding: 0 var(--jc-space-2);
+	cursor: pointer;
+}
+
+.juneau-co-markers[aria-pressed="true"] {
+	font-weight: 600;
+}
+
+.juneau-co-download {
+	color: var(--jc-tone-info);
+}
+
+.juneau-co-menu {
+	position: absolute;
+	right: var(--jc-space-2);
+	z-index: var(--jc-popover-z);
+	display: flex;
+	flex-direction: column;
+	gap: var(--jc-space-1);
+	padding: var(--jc-space-2);
+	background: var(--jc-popover-bg);
+	border: 1px solid var(--jc-popover-border);
+	border-radius: var(--jc-chrome-control-radius);
+}
+
+/* Height is rows x line-height plus the vertical padding; 1.4em is the fallback where lh is unsupported. */
+.juneau-co-pane {
+	height: calc(var(--juneau-co-rows, 20) * 1.4em + 2 * var(--jc-space-1));
+	height: calc(var(--juneau-co-rows, 20) * 1lh + 2 * var(--jc-space-1));
+	overflow-y: auto;
+	resize: vertical;
+	padding: var(--jc-space-1) 0;
+	box-sizing: border-box;
+}
+
+.juneau-co-pane:focus-visible {
+	outline: 2px solid var(--jc-tone-info);
+	outline-offset: -2px;
+}
+
+/* The top-of-pane "Load earlier lines" control or the "Earlier lines not shown" notice. */
+.juneau-co-control {
+	position: sticky;
+	top: 0;
+	z-index: 1;
+	color: var(--jc-text-muted, #6b6b6b);
+	background: var(--jc-popover-bg);
+	border-bottom: 1px solid var(--jc-popover-border);
+	padding: 0 var(--jc-space-2);
+}
+
+.juneau-co-earlier {
+	font: inherit;
+	color: inherit;
+	background: transparent;
+	border: 0;
+	padding: 0;
+	cursor: pointer;
+	text-decoration: underline;
+}
+
+.juneau-co-earlier:disabled {
+	cursor: default;
+	text-decoration: none;
+}
+
+.juneau-co-earlier-download {
+	color: var(--jc-tone-info);
+}
+
+/* One row.  The transparent left border is reserved so the target highlight does not shift the text. */
+.juneau-co-line {
+	display: flex;
+	align-items: flex-start;
+	gap: var(--jc-space-2);
+	padding: 0 var(--jc-space-2);
+	border-left: 3px solid transparent;
+}
+
+.juneau-co-gutter {
+	flex: 0 0 auto;
+	min-width: 3em;
+	text-align: right;
+	color: var(--jc-text-muted, #6b6b6b);
+	text-decoration: none;
+	user-select: none;
+}
+
+.juneau-co-gutter:hover,
+.juneau-co-gutter:focus-visible {
+	text-decoration: underline;
+}
+
+.juneau-co-time {
+	flex: 0 0 auto;
+	color: var(--jc-text-muted, #6b6b6b);
+	user-select: none;
+}
+
+.juneau-co-icon {
+	flex: 0 0 auto;
+	width: var(--jc-chrome-glyph-size-small);
+	height: var(--jc-chrome-glyph-size-small);
+	margin-top: 0.2em;
+	fill: currentColor;
+}
+
+.juneau-co-text {
+	flex: 1 1 auto;
+	min-width: 0;
+	white-space: pre-wrap;
+	overflow-wrap: anywhere;
+}
+
+.juneau-co-b {
+	font-weight: 600;
+}
+
+/* Style -> token map (spec 6.2).  A validated author colour is set inline through the CSSOM and wins. */
+.juneau-co-s-success {
+	color: var(--jc-tone-success);
+}
+
+.juneau-co-s-warn {
+	color: var(--jc-tone-warning);
+}
+
+.juneau-co-s-error {
+	color: var(--jc-tone-error);
+}
+
+.juneau-co-s-muted {
+	color: var(--juneau-co-muted);
+}
+
+.juneau-co-s-accent {
+	color: var(--jc-tone-info);
+}
+
+/* Block fragments: a small swatch, optionally a link or a tooltip target. */
+.juneau-co-block {
+	display: inline-block;
+	width: 10px;
+	height: var(--jc-chrome-glyph-size-small);
+	vertical-align: -1px;
+	border-radius: 2px;
+	margin-right: 1px;
+	background-color: currentColor;
+}
+
+.juneau-co-block-empty {
+	background-color: transparent;
+	box-shadow: inset 0 0 0 1px var(--jc-popover-border);
+}
+
+.juneau-co-block:focus-visible {
+	outline: 2px solid var(--jc-tone-info);
+	outline-offset: 1px;
+}
+
+.juneau-co-fill-success {
+	background-color: var(--jc-tone-success);
+}
+
+.juneau-co-fill-warn {
+	background-color: var(--jc-tone-warning);
+}
+
+.juneau-co-fill-error {
+	background-color: var(--jc-tone-error);
+}
+
+.juneau-co-fill-muted {
+	background-color: var(--juneau-co-muted);
+}
+
+.juneau-co-fill-accent {
+	background-color: var(--jc-tone-info);
+}
+
+/* Images reserve space before they load, so following stays pinned (the load handler re-pins as well). */
+.juneau-co-image {
+	display: block;
+	max-width: 100%;
+	min-height: 4em;
+	object-fit: contain;
+	margin: var(--jc-space-1) 0;
+}
+
+/* Hash target / scrollToLine highlight: a border as well as a tint, so it does not rely on colour alone. */
+.juneau-co-target {
+	border-left-color: var(--jc-tone-info);
+	background: var(--jc-tip-bg);
+}
+
+/* Marker modes.  dim uses the muted colour with no opacity, so it keeps the 4.5:1 contrast floor. */
+.juneau-co-markers-dim .juneau-co-marker {
+	color: var(--juneau-co-muted);
+}
+
+.juneau-co-markers-hide .juneau-co-marker {
+	display: none;
+}
+
+.juneau-co-markers-hide .juneau-co-marker.juneau-co-reveal {
+	display: flex;
+}
+
+.juneau-co-jump {
+	position: absolute;
+	right: var(--jc-space-4);
+	bottom: var(--jc-space-2);
+	z-index: 2;
+	font: inherit;
+	color: var(--jc-chrome-control-text);
+	background: var(--jc-tip-bg);
+	border: var(--jc-chrome-button-border);
+	border-radius: var(--jc-chrome-control-radius);
+	box-shadow: var(--jc-tip-shadow);
+	padding: var(--jc-space-1) var(--jc-space-2);
+	cursor: pointer;
+}
+
+.juneau-co-tooltip {
+	position: fixed;
+	z-index: var(--jc-tip-z);
+	max-width: 32em;
+	padding: var(--jc-space-1) var(--jc-space-2);
+	color: var(--jc-tip-text);
+	background: var(--jc-tip-bg);
+	border: 1px solid var(--jc-tip-border);
+	border-radius: var(--jc-chrome-control-radius);
+	box-shadow: var(--jc-tip-shadow);
+	white-space: pre-line;
+	pointer-events: none;
+}
+
+/* Visually hidden; the same recipe as .juneau-view-announcer. */
+.juneau-co-sr {
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	overflow: hidden;
+	clip-path: inset(50%);
+	white-space: nowrap;
+}
+
+/* Compact (inside a Detail View): one inline header line, no title, one font step down. */
+.juneau-co-compact {
+	font-size: var(--jc-chrome-font-size-1);
+}
+
+.juneau-co-compact .juneau-co-title {
+	display: none;
+}
+
+.juneau-co-compact .juneau-co-header {
+	flex-wrap: nowrap;
+	padding: 0 var(--jc-space-2);
+}
+
+.juneau-co-compact .juneau-co-more {
+	margin-left: auto;
+}
+
+.juneau-co [hidden] {
+	display: none !important;
+}
+
+/*
+ * Run view (juneau-run-view.js).
+ *
+ * A live test and build run summary: headline, counts, a failures list, then one record per step with a row per
+ * suite and a strip of per-test blocks (the .juneau-co-block swatches and fills above are reused).  Every colour
+ * is a --jc-tone-* or --jc-text-muted reference; there are no literals and no animation.  The status root attribute
+ * is data-juneau-rv-status (ok | fail | waiting | running | cancelled | empty).
+ */
+.juneau-rv {
+	font: inherit;
+	min-width: 0;
+}
+
+.juneau-rv-summary {
+	border: 1px solid var(--jc-popover-border);
+	border-radius: var(--jc-chrome-control-radius);
+	padding: var(--jc-space-2) var(--jc-space-3);
+	margin-bottom: var(--jc-space-2);
+}
+
+.juneau-rv-headline {
+	margin: 0;
+	font-size: var(--jc-chrome-font-size-3);
+	font-weight: 600;
+}
+
+.juneau-rv[data-juneau-rv-status="ok"] .juneau-rv-headline {
+	color: var(--jc-tone-success);
+}
+
+.juneau-rv[data-juneau-rv-status="fail"] .juneau-rv-headline {
+	color: var(--jc-tone-error);
+}
+
+.juneau-rv[data-juneau-rv-status="waiting"] .juneau-rv-headline {
+	color: var(--jc-tone-warning);
+}
+
+.juneau-rv[data-juneau-rv-status="running"] .juneau-rv-headline {
+	color: var(--jc-tone-info);
+}
+
+.juneau-rv[data-juneau-rv-status="cancelled"] .juneau-rv-headline,
+.juneau-rv[data-juneau-rv-status="empty"] .juneau-rv-headline {
+	color: var(--jc-text-muted);
+}
+
+.juneau-rv-counts {
+	margin: var(--jc-space-1) 0 0;
+	color: var(--jc-text-muted);
+}
+
+.juneau-rv-failures,
+.juneau-rv-steps,
+.juneau-rv-notes,
+.juneau-rv-run-notes {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+
+.juneau-rv-failures {
+	margin-top: var(--jc-space-1);
+}
+
+.juneau-rv-failure,
+.juneau-rv-failure-trace,
+.juneau-rv-suite-toggle {
+	font: inherit;
+	color: var(--jc-tone-info);
+	background: none;
+	border: 0;
+	padding: 0;
+	text-align: left;
+	text-decoration: underline;
+	cursor: pointer;
+}
+
+.juneau-rv-failure-trace {
+	margin-left: var(--jc-space-2);
+}
+
+.juneau-rv-step {
+	padding: var(--jc-space-1) 0;
+}
+
+.juneau-rv-step-head {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: baseline;
+	gap: var(--jc-space-2);
+}
+
+.juneau-rv-glyph {
+	font-weight: 600;
+}
+
+.juneau-rv-state-ok {
+	color: var(--jc-tone-success);
+}
+
+.juneau-rv-state-fail {
+	color: var(--jc-tone-error);
+}
+
+.juneau-rv-state-skip {
+	color: var(--jc-text-muted);
+}
+
+.juneau-rv-state-running {
+	color: var(--jc-tone-info);
+}
+
+.juneau-rv-state-waiting {
+	color: var(--jc-tone-warning);
+}
+
+.juneau-rv-dur,
+.juneau-rv-suite-sum,
+.juneau-rv-more,
+.juneau-rv-running,
+.juneau-rv-reconnect {
+	color: var(--jc-text-muted);
+}
+
+.juneau-rv-suites {
+	padding-left: var(--jc-space-4);
+}
+
+.juneau-rv-suite {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: baseline;
+	gap: var(--jc-space-2);
+	padding: 1px 0;
+}
+
+.juneau-rv-strip {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 1px;
+}
+
+.juneau-rv-notes {
+	padding-left: var(--jc-space-4);
+}
+
+.juneau-rv-note {
+	padding: 1px 0;
+}
+
+.juneau-rv-note-info .juneau-rv-note-glyph {
+	color: var(--jc-tone-info);
+}
+
+.juneau-rv-note-warn .juneau-rv-note-glyph {
+	color: var(--jc-tone-warning);
+}
+
+.juneau-rv-note-error .juneau-rv-note-glyph {
+	color: var(--jc-tone-error);
+}
+
+.juneau-rv-trace {
+	flex-basis: 100%;
+	border-left: 2px solid var(--jc-popover-border);
+	padding-left: var(--jc-space-2);
+}
+
+.juneau-rv-trace-msg,
+.juneau-rv-trace-text {
+	margin: var(--jc-space-1) 0 0;
+	white-space: pre-wrap;
+	overflow-wrap: anywhere;
+}
+
+.juneau-rv-compact {
+	font-size: var(--jc-chrome-font-size-1);
+}
+
+.juneau-rv button:focus-visible,
+.juneau-rv a:focus-visible {
+	outline: 2px solid var(--jc-tone-info);
+	outline-offset: 1px;
+}
+
+.juneau-rv [hidden] {
+	display: none !important;
 }

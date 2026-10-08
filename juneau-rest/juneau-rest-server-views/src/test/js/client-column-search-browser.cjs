@@ -16,7 +16,7 @@
  */
 
 /*
- * client-column-search-browser.cjs - real-browser prober for client-mode column-search DSL evaluation (WORK-J0612)
+ * client-column-search-browser.cjs - real-browser prober for client-mode column-search DSL evaluation
  * against REAL DataTables 2.1.8: a client-side table (inline data, no server) whose `status` column carries search
  * metadata is filtered through JuneauViews.init.setColumnExpr(...) -> column().search.fixed("juneau-dsl", fn).
  * Proves that $in(Triaged,New) shows exactly the two matching rows, that DataTables' own global search box still

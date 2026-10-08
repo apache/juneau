@@ -104,6 +104,7 @@ class RibbonIcons_Resolution_Test extends TestBase {
 		var load = functionBody(body, "function loadPersistedState(");
 		assertTrue(load.contains("storageGet(ribbonStorageKey(viewDef.id, a.id))"), load);
 		assertFalse(load.contains("store.getItem("), load);
+		assertTrue(load.contains("a.default"), load);
 		var persistFn = functionBody(body, "function persist(");
 		assertTrue(persistFn.contains("storageSet(ribbonStorageKey(viewDef.id, id), String(value))"), persistFn);
 		assertFalse(persistFn.contains("store.setItem("), persistFn);

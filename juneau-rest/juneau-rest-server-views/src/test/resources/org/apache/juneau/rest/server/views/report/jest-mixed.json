@@ -1,0 +1,6 @@
+{"numTotalTests":3,"testResults":[
+{"name":"/ci/work/repo/src/a.test.js","status":"passed","message":"","assertionResults":[
+ {"ancestorTitles":["math"],"title":"adds","fullName":"math adds","status":"passed","duration":4,"failureMessages":[]},
+ {"ancestorTitles":["math"],"title":"later","fullName":"math later","status":"pending","duration":null,"failureMessages":[]}]},
+{"name":"/ci/work/repo/src/b.test.js","status":"failed","message":"","assertionResults":[
+ {"ancestorTitles":["api","get"],"title":"returns 200","fullName":"","status":"failed","duration":12,"failureMessages":["\u001b[31mexpected\u001b[39m 1\nat x","second\nat y"]}]}]}

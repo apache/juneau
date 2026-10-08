@@ -26,8 +26,8 @@
  * registry, serverSide/ajax per dataMode, order from defaultOrder field->index resolution, rowClassRules applied in
  * createdRow) and calls $(table).DataTable(opts), then wires the ribbon.
  *
- * The DataTables library itself (jQuery + DataTables JS/CSS) is NOT bundled - its license is not an ASF category-A
- * license - so it stays caller-provided (CDN or self-hosted).  The distinct `data-juneau-view` marker guarantees no
+ * The DataTables library itself (jQuery + DataTables JS/CSS) is not copied into Juneau's jars; the console
+ * "datatables-glue" toolkit pack loads it from the WebJars before this script.  The distinct `data-juneau-view` marker guarantees no
  * collision with juneau-datatables.js (which only touches data-juneau-datatable).
  *
  * Everything in the "PURE LOGIC LAYER" is DOM/jQuery/DataTables-free (plain data in, plain data out), per the
@@ -56,7 +56,9 @@
 	 * differs is refused (fail-loud), leaving row selection itself fully functional - only the bulk toolbar is
 	 * withheld, per the two-independent-opt-ins separability guarantee (HIGH-5).
 	 */
-	const JUNEAU_BULK_CONTRACT_VERSION = "1";
+	const JUNEAU_BULK_CONTRACT_VERSION = "2";
+	/** BulkResult's OWN wire contract - independent of the bulk-def version above (MUST equal BulkResult.CONTRACT_VERSION). */
+	const JUNEAU_BULK_RESULT_CONTRACT_VERSION = "1";
 
 	/** Independently-versioned row-detail expand envelope ({@code RowDetailDef.CONTRACT_VERSION}). */
 	const JUNEAU_ROW_DETAIL_CONTRACT_VERSION = "1";
@@ -129,6 +131,9 @@
 	const SELECT_ALL_ATTR = "data-juneau-select-all";
 	const BULK_ATTR = "data-juneau-bulk";
 	const BULK_SIDECAR_ID_PREFIX = "juneau-view-bulk:";
+	const SELECT_SCOPE_ATTR = "data-juneau-select-scope";
+	const SELECT_LABEL_FIELD_ATTR = "data-juneau-select-label-field";
+	const SELECTABLE_WHEN_SIDECAR_ID_PREFIX = "juneau-view-selectable-when:";
 	const SIDECAR_ID_PREFIX = "juneau-view:";
 
 	/**
@@ -162,6 +167,170 @@
 	NS.ROW_DETAIL_CONTRACT_VERSION = JUNEAU_ROW_DETAIL_CONTRACT_VERSION;
 	NS.NESTED_CONTRACT_VERSION = JUNEAU_NESTED_CONTRACT_VERSION;
 	NS.SLOT_CONTRACT_VERSION = JUNEAU_SLOT_CONTRACT_VERSION;
+
+	NS.card = {};
+
+	function liftColumn(col) {
+		const out = Object.assign({}, col);
+		if (out.data === undefined && out.key !== undefined) out.data = out.key;
+		if (out.title === undefined && out.label !== undefined) out.title = out.label;
+		delete out.key;
+		delete out.label;
+		return out;
+	}
+
+	function liftDefaultOrder(order) {
+		return (order || []).map(function (o) {
+			const out = Object.assign({}, o);
+			if (out.data === undefined && out.key !== undefined) out.data = out.key;
+			delete out.key;
+			return out;
+		});
+	}
+
+	// Lifts a catalog bulk block: stamps the bulk contract version and renames author 'mode' to wire 'bulkMode'.
+	function liftBulk(bulk) {
+		const out = Object.assign({}, bulk, { contractVersion: JUNEAU_BULK_CONTRACT_VERSION });
+		if (Array.isArray(bulk.actions))
+			out.actions = bulk.actions.map(function (a) {
+				if (!a || a.mode === undefined) return a;
+				const b = Object.assign({}, a, { bulkMode: a.mode });
+				delete b.mode;
+				return b;
+			});
+		return out;
+	}
+
+	// View-level catalog keys copied verbatim onto view (defaultOrder is lifted separately).
+	const VIEW_KEYS = ["dataUrl", "rowType", "dataMode", "ribbon", "pollIntervalMs", "pausePollingWhileEditing",
+		"columnConfig", "cleanAddress", "primary", "copyLink", "rowActions", "rowClassRules"];
+
+	/**
+	 * Lift a datatables card's author catalog (`card.table`) into the SLOT_META envelope `paintSlotTable` consumes,
+	 * stamping every contract version (slot, view, bulk, detail, quickStats).
+	 *
+	 * A catalog whose `view` is an object is a pre-built SLOT_META envelope (escape hatch) and passes through unchanged.
+	 *
+	 * @example
+	 * NS.card.liftCatalog('releases', {dataUrl: '/rest/releases/data',
+	 *   columns: [{key: 'version', label: 'Version'}], selection: {rowIdField: 'version'}});
+	 * // -> {contractVersion:'1', layout:'wide', selection:{rowIdField:'version', selectAll:true, scope:'persistent'},
+	 * //     view:{contractVersion:'5', id:'releases', dataUrl:'/rest/releases/data',
+	 * //           columns:[{data:'version', title:'Version'}]}}
+	 *
+	 * @param {string} cardId Becomes view.id.
+	 * @param {object} catalog card.table.
+	 * @returns {object} SLOT_META.
+	 * @throws {Error} "datatables card '<cardId>': <reason>" (E-JS-24) on a shape error Java did not catch.
+	 */
+	NS.card.liftCatalog = function liftCatalog(cardId, catalog) {
+		if (!catalog || typeof catalog !== "object" || Array.isArray(catalog))
+			throw new Error("datatables card '" + cardId + "': 'table' must be an object");
+		if (catalog.view && typeof catalog.view === "object") return catalog;
+		if (!Array.isArray(catalog.columns) || catalog.columns.length === 0)
+			throw new Error("datatables card '" + cardId + "': 'columns' must be a non-empty array");
+		const hasUrl = typeof catalog.dataUrl === "string" && catalog.dataUrl.trim() !== "";
+		const hasRows = catalog.rows != null;
+		if (hasUrl === hasRows)
+			throw new Error("datatables card '" + cardId + "': requires exactly one of 'dataUrl' or 'rows'");
+
+		const view = { contractVersion: JUNEAU_VIEW_CONTRACT_VERSION, id: cardId };
+		for (const k of VIEW_KEYS) if (catalog[k] !== undefined) view[k] = catalog[k];
+		view.columns = catalog.columns.map(liftColumn);
+		if (catalog.defaultOrder !== undefined) view.defaultOrder = liftDefaultOrder(catalog.defaultOrder);
+
+		const envelope = { contractVersion: JUNEAU_SLOT_CONTRACT_VERSION, layout: catalog.layout || "wide", view: view };
+		if (hasRows) envelope.rows = catalog.rows;
+		if (catalog.selection !== undefined) {
+			const s = catalog.selection;
+			const sel = {
+				rowIdField: s.rowIdField,
+				selectAll: s.selectAll !== false,
+				scope: s.scope || "persistent"
+			};
+			if (s.labelField !== undefined) sel.labelField = s.labelField;
+			if (s.selectableWhen !== undefined) sel.selectableWhen = s.selectableWhen;
+			envelope.selection = sel;
+		}
+		if (catalog.bulk !== undefined) envelope.bulk = liftBulk(catalog.bulk);
+		if (catalog.detail !== undefined) envelope.detail = Object.assign({}, catalog.detail, { contractVersion: JUNEAU_ROW_DETAIL_CONTRACT_VERSION });
+		if (catalog.quickStats !== undefined) envelope.quickStats = Object.assign({}, catalog.quickStats, { contractVersion: JUNEAU_QUICKSTATS_CONTRACT_VERSION });
+		return envelope;
+	};
+
+	const cardTables = new Map();
+
+	NS.card.mountDatatables = function mountDatatables(card, el, ctx) {
+		// The view's table takes view.id === card.id, so the body gets a derived id and the host gives up its own
+		// (no duplicate DOM ids).
+		const body = ctx.document.createElement("div");
+		body.id = card.id + "-body";
+		body.className = "jc-card-body";
+		body.setAttribute("data-juneau-layout", "wide");
+		el.setAttribute("data-juneau-card", "datatables");
+		el.removeAttribute("id");
+		el.appendChild(body);
+
+		let envelope;
+		let failure = null;
+		let work;
+		if (card.src) {
+			work = ctx.fetchJson(card.src).then(function (json) {
+				envelope = json;
+			}, function (e) {
+				if (!ctx.isAbort(e)) failure = "datatables card '" + card.id + "' src '" + card.src + "' failed: '" + (e && e.message) + "'";
+				throw e;
+			});
+		} else {
+			work = Promise.resolve().then(function () {
+				envelope = NS.card.liftCatalog(card.id, card.table);
+			});
+		}
+		return work.then(function () {
+			return paintSlotTable(body, envelope);
+		}).then(function (table) {
+			cardTables.set(card.id, { el: body, table: table });
+			ctx.setApi({
+				reload: function () { return NS.card.reload(card.id); },
+				selection: function () {
+					const st = table.__juneauCtx && table.__juneauCtx.selectionState;
+					return st ? Array.from(st.selected) : [];
+				}
+			});
+			ctx.onDestroy(function () { cardTables.delete(card.id); });
+			return table;
+		}, function (e) {
+			if (ctx.isAbort(e)) throw e;
+			// Card-level (E-JS-24/E-JS-25, and paintSlotTable refusals): paint and log here, and mark the rejection so
+			// the shell does not repeat it on the page banner.
+			const message = failure || (e && e.message) || String(e);
+			error(message);
+			ctx.paintError(body, new Error(message));
+			const reported = new Error(message);
+			reported.cardReported = true;
+			throw reported;
+		});
+	};
+
+	NS.card.reload = function reload(cardId) {
+		const entry = cardTables.get(cardId);
+		if (!entry || !entry.table.__juneauCtx) return Promise.resolve();
+		entry.table.__juneauCtx.redraw();
+		return Promise.resolve();
+	};
+
+	NS.card.teardown = function teardown(cardId) {
+		const entry = cardTables.get(cardId);
+		if (!entry) return;
+		NS.regions.teardownRegionsIn(entry.el);
+		cardTables.delete(cardId);
+	};
+
+	(window.JuneauConsoleCards = window.JuneauConsoleCards || []).push(["datatables", {
+		render: function (card, el, ctx) { return NS.card.mountDatatables(card, el, ctx); },
+		refresh: function (card) { return NS.card.reload(card.id); },
+		destroy: function (card) { NS.card.teardown(card.id); }
+	}]);
 
 	// ==================================================================================================================
 	// PURE LOGIC LAYER  (no DOM, no jQuery, no DataTables)
@@ -253,7 +422,7 @@
 	}
 
 	/**
-	 * True when `url` contains a `..` path segment.  The ONE dot-dot predicate in this file (WORK-J0521) - the
+	 * True when `url` contains a `..` path segment.  The ONE dot-dot predicate in this file - the
 	 * read path ({@link #isSafeDetailUrl}) and the row-action write path ({@link #buildActionRequest}) MUST agree,
 	 * so neither carries its own copy of the regex and the two can never drift apart.
 	 */
@@ -278,9 +447,9 @@
 	}
 
 	/**
-	 * True when `url` resolves to the page's own origin (WORK-J0615).  Relative URLs and same-origin absolute URLs
+	 * True when `url` resolves to the page's own origin.  Relative URLs and same-origin absolute URLs
 	 * pass; anything that resolves elsewhere (`https://other/..`, `//other/..`, `javascript:`, `data:`) or does not
-	 * parse fails.  Used on the CardEnvelope-supplied `detail.endpoint` and `savedViewsBase`, which a template may
+	 * parse fails.  Used on the CardEnvelope-supplied `detail.endpoint`, which a template may
 	 * have interpolated from untrusted data.  Falls back to a scheme/authority-prefix test where `URL` or
 	 * `window.location.origin` is unavailable.
 	 */
@@ -419,7 +588,7 @@
 
 	/**
 	 * Substitutes `{property}` tokens in a RowAction's `endpoint` against the row's own already-fetched data
-	 * (WORK-J0509) - delegating to the EXACT SAME `interpolateHref` helper {@code Column.href}'s `linked` renderer
+	 * by delegating to the EXACT SAME `interpolateHref` helper {@code Column.href}'s `linked` renderer
 	 * uses (juneau-renders.js; also reused by the row-detail field-grid `href` slot).  Same token grammar (any
 	 * `{property}`, not a special-cased `{id}`), same per-value `encodeURIComponent` escaping, and the same
 	 * "row lacks the field, or its value is null" -> empty-string substitution - never a throw, never a literal
@@ -438,7 +607,7 @@
 	}
 
 	/**
-	 * The `{property}` token grammar (WORK-J0521) - MUST stay byte-identical to juneau-renders.js's
+	 * The `{property}` token grammar - MUST stay byte-identical to juneau-renders.js's
 	 * `interpolateHref` literal (`/\{([^}]+)\}/g`), or this guard and the substitution itself would disagree about
 	 * what counts as a token: a token this regex missed would substitute empty (or stay unresolved) and still be
 	 * issued.  Pinned by a source-shape test that compares both literals in the two shipped assets.  Declared
@@ -453,7 +622,7 @@
 
 	/**
 	 * True when `template` carries a `{property}` token whose row value is absent, `null`, or blank
-	 * (WORK-J0521, B1b).  Judged on the token INPUTS, not the substituted output string, because
+	 * Judged on the token INPUTS, not the substituted output string, because
 	 * `interpolateHref` returns a plain string with no record of which tokens collapsed to `""` - an output-side
 	 * `//`-detector would both false-positive on a template that legitimately contains `//` and false-negative on
 	 * a trailing empty segment.  Blankness uses {@link #isBlankToken} (trim-based), a deliberate slight widening
@@ -468,7 +637,7 @@
 	}
 
 	/**
-	 * True when a resolved endpoint still carries an unsubstituted `{property}` token (WORK-J0521, S5) - the
+	 * True when a resolved endpoint still carries an unsubstituted `{property}` token - the
 	 * `juneau-renders.js`-absent degradation path, where the row value may be perfectly present but the token was
 	 * never replaced at all, so the fired URL is not the one the action's author declared.
 	 */
@@ -483,23 +652,23 @@
 	 * VISIBLE refusal) OR a ready-to-issue `{url, method, headers, body}`:
 	 *   - a missing or SAFE method refuses (`reason:"safe-method"`) - HIGH-7;
 	 *   - a blank/absent/whitespace token refuses (`reason:"missing-token"`) - HIGH-1 fail-closed;
-	 *   - a blank/absent `action.endpoint` refuses (`reason:"no-endpoint"`) - WORK-J0521, mirrors
+	 *   - a blank/absent `action.endpoint` refuses (`reason:"no-endpoint"`), mirrors
 	 *     {@link #buildJobCancelRequest}'s `no-cancel-url`;
 	 *   - a `{property}` token whose row value is absent/`null`/blank refuses (`reason:"empty-substitution"`) -
-	 *     WORK-J0521 B1b: refusing a mutating write against a malformed `/x//y` is the safe default, unlike
+	 *     refusing a mutating write against a malformed `/x//y` is the safe default, unlike
 	 *     `Column.href`'s rendering use of the SAME `interpolateHref` helper, where empty substitution is correct;
 	 *   - a resolved endpoint still carrying an unsubstituted `{property}` token refuses
-	 *     (`reason:"unresolved-endpoint"`) - WORK-J0521 S5: the `juneau-renders.js`-absent degradation must not
+	 *     (`reason:"unresolved-endpoint"`) - the `juneau-renders.js`-absent degradation must not
 	 *     fire a literal-token URL the author never wrote;
-	 *   - a resolved endpoint containing a `..` path segment refuses (`reason:"unsafe-endpoint"`) - WORK-J0521
-	 *     B1a: a row value of `..` would otherwise ride `encodeURIComponent` unescaped (`.` is RFC 3986
+	 *   - a resolved endpoint containing a `..` path segment refuses (`reason:"unsafe-endpoint"`) -
+	 *     a row value of `..` would otherwise ride `encodeURIComponent` unescaped (`.` is RFC 3986
 	 *     unreserved) and browser URL resolution would normalize it to a different, undeclared endpoint;
 	 *   - otherwise `url` is `action.endpoint` with any `{property}` token substituted via
-	 *     {@link #substituteRowActionEndpoint} (WORK-J0509), and the body is JSON with the headers carrying
+	 *     {@link #substituteRowActionEndpoint}, and the body is JSON with the headers carrying
 	 *     `Content-Type: application/json` (so the write passes `LoopbackBoundary.isJson`) plus the CSRF token
 	 *     under `headerName` (defaulting to DEFAULT_CSRF_HEADER).
 	 *
-	 * The four WORK-J0521 guards are appended AFTER the two original guards (`b07`'s invariant: a refusal never
+	 * The four endpoint guards are appended AFTER the two original guards (`b07`'s invariant: a refusal never
 	 * reaches substitution work), and are judged against the resolved URL where relevant - which is what closes
 	 * the row-less ribbon-dialog seam (S3) for free, since every row-less path funnels through this same pure
 	 * builder without needing its own guard.
@@ -508,7 +677,7 @@
 	 * the server-minted `idempotencyKey` and the `targetId`, so a double-click/re-submit/browser-retry all carry the
 	 * same key and the server can check the key's `(action, targetId)` binding.  A bare submit (no `extra`) sends
 	 * exactly `{action}` as before.  `rowData` is optional (absent/`null` mirrors a Column-href row with no id: every
-	 * `{property}` token substitutes to `""`), so every pre-WORK-J0509 caller of this pure function keeps working.
+	 * `{property}` token substitutes to `""`), so every earlier caller of this pure function keeps working.
 	 */
 	function buildActionRequest(action, token, headerName, extra, rowData) {
 		if (!action || isSafeMethod(action.method) || !action.method)
@@ -917,7 +1086,7 @@
 
 		const staticRows = deps?.table?.__juneauRows;
 		if (Array.isArray(staticRows)) {
-			// Inline `rows` (WORK-J0606): the data is the envelope's own, so there is nothing to fetch.  No `opts.ajax`
+			// Inline `rows`: the data is the envelope's own, so there is nothing to fetch.  No `opts.ajax`
 			// (a missing url would make DataTables GET the current page and clear the rows).  Every column without a
 			// named renderer is forced through a text renderer - DataTables renders cell data as HTML by default.
 			opts.serverSide = false;
@@ -1296,7 +1465,7 @@
 	}
 
 	/**
-	 * Header sort + per-column search icons (WORK-J0547).  DataTables sorts on a click anywhere in the
+	 * Header sort + per-column search icons.  DataTables sorts on a click anywhere in the
 	 * {@code th}; we capture-stop that unless the click is on the sort control ({@code span.dt-column-order}
 	 * or a DT1 fallback {@code .juneau-view-col-sort-icon}).  Searchable columns get a Juneau {@code search}
 	 * glyph that opens a small popover (not an IRS/SLDS copy).  Idempotent per header cell.
@@ -1447,7 +1616,7 @@
 	}
 
 	// ---------------------------------------------------------------------------------------------------------------
-	// Client-filtered column-search DSL (WORK-J0612).  On a table DataTables filters itself (dataMode:'client', or
+	// Client-filtered column-search DSL.  On a table DataTables filters itself (dataMode:'client', or
 	// inline `rows`), a column carrying `search` metadata keeps its expression in a per-table store
 	// (`ctx._colExprs[data]`) and filters through ONE `column().search.fixed("juneau-dsl", fn)` predicate built from
 	// `JuneauViews.search.compile(...)` - the same engine and server-parity semantics as BeanQuery's InMemoryMatch.
@@ -1604,7 +1773,7 @@
 	 * incomplete} = a still-being-typed {@code $} draft that must not touch the grid.
 	 *
 	 * <p>
-	 * {@code strict} (optional, WORK-J0612 D3) is a {@code function (trimmed) -> JuneauViews.search.compile(...)
+	 * {@code strict} (optional) is a {@code function (trimmed) -> JuneauViews.search.compile(...)
 	 * result} for a client-filtered DSL column: an expression that parses but that the server would reject
 	 * (unknown/unregistered operator, wrong arity, operator on the wrong type, bad typed value, disallowed or
 	 * over-length {@code $regex}) is then {@code rejected} too, with the engine's coded error in {@code error}.
@@ -1637,6 +1806,26 @@
 		};
 	}
 
+	/**
+	 * Resolves the help text shown for one operator row of the column-search popover.  Server metadata wins (custom
+	 * operators always carry help); built-ins fall back to juneau-search.js.  An operator with neither is a contract
+	 * break, so it is reported and renders an empty description.
+	 *
+	 * @param {{name: string, help?: string}} o operator metadata from the column's search block.
+	 * @param {?Object} search the juneau-search.js namespace, or null when it is not loaded.
+	 * @returns {string}
+	 * @example
+	 *   operatorHelpText({ name: "$near", help: "Within N units." }, search);  // "Within N units."
+	 *   operatorHelpText({ name: "$eq" }, search);                              // juneau-search.js text for $eq
+	 */
+	function operatorHelpText(o, search) {
+		if (o.help != null && String(o.help) !== "") return String(o.help);
+		const builtin = search?.SearchOperators?.help?.(o.name);
+		if (builtin) return builtin;
+		error("column-search popover: no help text for search operator '" + o.name + "'. Custom operators must set help; built-ins need juneau-search.js loaded.");
+		return "";
+	}
+
 	function openColumnSearchPopover(iconEl, col, ctx, table) {
 		closeColumnSearchPopover(ctx);
 		const header = typeof col.header === "function" ? col.header() : iconEl.closest("th,td");
@@ -1646,7 +1835,7 @@
 		const meta = columnSearchMeta(ctx, col);
 		const search = window.JuneauViews?.search;
 		const serverSide = !isClientFiltered(ctx);
-		// Client-filtered DSL column (WORK-J0612): commits go through the strict server-parity gate (D3).
+		// Client-filtered DSL column: commits go through the strict server-parity gate (D3).
 		const dsl = dslColumnInfo(ctx, col);
 		const strict = dsl ? function (t) { return compileColumnExpr(ctx, dsl, t); } : null;
 		const el = document.createElement("div");
@@ -1693,11 +1882,9 @@
 				const code = document.createElement("code");
 				code.textContent = o.name;
 				row.appendChild(code);
-				if (o.help != null && String(o.help) !== "") {
-					const desc = document.createElement("span");
-					desc.textContent = String(o.help);
-					row.appendChild(desc);
-				}
+				const desc = document.createElement("span");
+				desc.textContent = operatorHelpText(o, search);
+				row.appendChild(desc);
 				helpList.appendChild(row);
 			});
 			el.appendChild(helpList);
@@ -2147,8 +2334,7 @@
 	 * special-scheme URL parser folds "\" into "/" before resolving).  A resulting SECOND slash right after the
 	 * first -- a literal "//host", a triple-slash "///host", a two-backslash "\\host", or an interior-obfuscated
 	 * "/\t/host" -- resolves to a THIRD-PARTY origin, not the same-site relative/absolute path a bare single
-	 * leading "/" is.  Used by both {@link #isSafeMarkdownHref} and {@link #isSafeImageSrc} -- see
-	 * {@code WORK-J0516}.
+	 * leading "/" is.  Used by both {@link #isSafeMarkdownHref} and {@link #isSafeImageSrc}.
 	 */
 	function isProtocolRelativeUrl(t) {
 		return t.replaceAll(/[\t\r\n]/g, "").replaceAll("\\", "/").charAt(1) === "/";
@@ -2168,8 +2354,7 @@
 	 * <p>A leading "/" is accepted ONLY when {@link #isProtocolRelativeUrl} says it is not protocol-relative --
 	 * a bare "//evil.example/x" resolves to a THIRD-PARTY origin, not the "relative path" a naive check would
 	 * accept it as, and the same is true of its backslash/tab/CR/LF/triple-slash-obfuscated equivalents.  This is
-	 * a phishing/open-redirect defense, not an XSS one: a protocol-relative URL cannot run JS.  See
-	 * {@code WORK-J0516}.
+	 * a phishing/open-redirect defense, not an XSS one: a protocol-relative URL cannot run JS.
 	 */
 	function isSafeMarkdownHref(href) {
 		if (href == null) return false;
@@ -2366,8 +2551,7 @@
 	 * <p>A leading "/" is accepted ONLY when {@link #isProtocolRelativeUrl} says it is not protocol-relative --
 	 * a literal "//host/x", its backslash/tab/CR/LF/triple-slash-obfuscated equivalents ("\\host", "/\t/host"),
 	 * and a leading-whitespace variant (stripped by `trim()` above, then caught by the same check) all resolve
-	 * to a THIRD-PARTY origin, which for an {@code <img>} is a silent tracking-pixel/pixel-leak fetch.  See
-	 * {@code WORK-J0516}.
+	 * to a THIRD-PARTY origin, which for an {@code <img>} is a silent tracking-pixel/pixel-leak fetch.
 	 */
 	function isSafeImageSrc(src) {
 		if (src == null) return false;
@@ -3587,7 +3771,7 @@
 	/**
 	 * Collapses every currently-open row-detail expansion in {@code table} back down, in one call - the DOM/
 	 * DataTables counterpart of {@code RibbonAction.collapseAll()} / {@code juneau-ribbon.js}'s {@code "collapseAll"}
-	 * dispatch (Foundry {@code WORK-P0063} toolbar follow-up, {@code WORK-J0507}).
+	 * dispatch.
 	 *
 	 * <p>Table-scoped like every other per-table detail helper here ({@code hasInFlightRow}/{@code hasJobRow}):
 	 * {@link #ownNodes} excludes any row a NESTED view table owns, so a nested table's own open child rows are
@@ -4472,10 +4656,46 @@
 		if (id != null) rowEl.setAttribute(ROW_ID_ATTR, String(id));
 	}
 
-	/** The selection checkbox cell's markup - a bare, unlabeled-by-design checkbox (the row IS its own label). */
-	function selectionCellMarkup(checked) {
-		return '<input type="checkbox" class="juneau-view-select-checkbox" aria-label="Select row"' +
-			(checked ? " checked" : "") + '>';
+	/**
+	 * The selection checkbox cell's markup - a bare, unlabeled-by-design checkbox (the row IS its own label).  When
+	 * `disabledReason` is set (a failing selectableWhen rule) the box is disabled and carries the reason on both
+	 * channels: a `title` and an `aria-describedby` pointing at a screen-reader-only span.
+	 */
+	function selectionCellMarkup(checked, id, disabledReason) {
+		const base = '<input type="checkbox" class="juneau-view-select-checkbox" aria-label="Select row"';
+		if (!disabledReason) return base + (checked ? " checked" : "") + ">";
+		const descId = "juneau-view-select-reason-" + viewEscAttr(String(id));
+		return base + ' disabled title="' + viewEscAttr(disabledReason) + '" aria-describedby="' + descId + '">' +
+			'<span id="' + descId + '" class="juneau-view-select-reason-sr-only">' + viewEscAttr(disabledReason) + "</span>";
+	}
+
+	/** Records the latest data of a selected row so a later bulk submit can read it after the row leaves the page. */
+	function captureRowSnapshot(selectionState, id, rowData) {
+		if (id == null || !rowData) return;
+		selectionState.snapshots[String(id)] = rowData;
+	}
+
+	/**
+	 * Tri-state select-all header: checked when every selectable row on the page is selected, indeterminate when
+	 * some but not all are.  Rows failing a selectableWhen rule are not counted.
+	 */
+	function refreshSelectAllHeaderState(table, ctx) {
+		const selectionState = ctx.selectionState;
+		if (!selectionState) return;
+		const allCb = table.querySelector(".juneau-view-select-all-checkbox");
+		if (!allCb) return;
+		let selectable = 0, selected = 0;
+		ownRowsWithId(table).forEach(function (tr) {
+			const id = tr.getAttribute(ROW_ID_ATTR);
+			const cb = tr.querySelector(".juneau-view-select-checkbox");
+			const failing = selectionState.selectableWhen
+				? firstFailingActionRule(selectionState.selectableWhen, rowDataForTr(ctx, tr) || {}) : null;
+			if (failing || cb?.disabled) return;
+			selectable++;
+			if (selectionState.selected.has(id)) selected++;
+		});
+		allCb.checked = selectable > 0 && selected === selectable;
+		allCb.indeterminate = selected > 0 && selected < selectable;
 	}
 
 	/**
@@ -4517,7 +4737,7 @@
 	 * live `Set` of currently-selected stable row ids, so a redraw always paints each row's checkbox from the
 	 * CURRENT selection, never a stale snapshot.
 	 */
-	function buildSelectionColumnDef(selectionState) {
+	function buildSelectionColumnDef(selectionState, ctx) { // NOSONAR javascript:S1172 -- ctx kept for call-site symmetry
 		return {
 			data: null,
 			orderable: false,
@@ -4528,7 +4748,10 @@
 			render: function (data, type, rowData) {
 				if (type && type !== "display") return "";
 				const id = rowIdOf(rowData, selectionState.rowIdField);
-				return selectionCellMarkup(id != null && selectionState.selected.has(String(id)));
+				const checked = id != null && selectionState.selected.has(String(id));
+				const failing = selectionState.selectableWhen
+					? firstFailingActionRule(selectionState.selectableWhen, rowData || {}) : null;
+				return selectionCellMarkup(checked, id, failing ? failing.reason : null);
 			}
 		};
 	}
@@ -4543,6 +4766,7 @@
 	function initSelection(table, ctx) {
 		function refresh() {
 			if (ctx?.bulkToolbar) ctx.bulkToolbar.refresh(ctx.selectionState.selected.size);
+			refreshSelectAllHeaderState(table, ctx);
 		}
 
 		table.addEventListener("change", function (e) {
@@ -4553,10 +4777,16 @@
 			if (allCb) {
 				// Scoped to this table's OWN rows: select-all must never reach into a nested table's rows.
 				ownRowsWithId(table).forEach(function (tr) {
-					const id = tr.getAttribute(ROW_ID_ATTR);
 					const cb = tr.querySelector(".juneau-view-select-checkbox");
-					if (cb) cb.checked = allCb.checked;
-					if (allCb.checked) selectionState.selected.add(id); else selectionState.selected.delete(id);
+					if (!cb || cb.disabled) return;
+					const id = tr.getAttribute(ROW_ID_ATTR);
+					cb.checked = allCb.checked;
+					if (allCb.checked) {
+						selectionState.selected.add(id);
+						captureRowSnapshot(selectionState, id, rowDataForTr(ctx, tr));
+					} else {
+						selectionState.selected.delete(id);
+					}
 				});
 				refresh();
 				return;
@@ -4566,7 +4796,12 @@
 			const tr = cb.closest("tr");
 			const id = tr ? tr.getAttribute(ROW_ID_ATTR) : null;
 			if (id == null) return;
-			if (cb.checked) selectionState.selected.add(id); else selectionState.selected.delete(id);
+			if (cb.checked) {
+				selectionState.selected.add(id);
+				captureRowSnapshot(selectionState, id, rowDataForTr(ctx, tr));
+			} else {
+				selectionState.selected.delete(id);
+			}
 			refresh();
 		});
 
@@ -4587,9 +4822,17 @@
 			// inside an expanded detail panel would otherwise pick up).
 			if (e && e.target !== table) return;
 			const selectionState = ctx.selectionState;
-			const ids = ownRowsWithId(table).map(function (tr) { return tr.getAttribute(ROW_ID_ATTR); });
-			const pruned = pruneSelection(Array.from(selectionState.selected), ids);
-			selectionState.selected = new Set(pruned);
+			const rows = ownRowsWithId(table);
+			// PERSISTENT (default) keeps off-screen ids across paging/sorting/searching; only PAGE scope drops them.
+			if (selectionState.scope === "page") {
+				const ids = rows.map(function (tr) { return tr.getAttribute(ROW_ID_ATTR); });
+				selectionState.selected = new Set(pruneSelection(Array.from(selectionState.selected), ids));
+			}
+			rows.forEach(function (tr) {
+				const id = tr.getAttribute(ROW_ID_ATTR);
+				if (selectionState.selected.has(id)) captureRowSnapshot(selectionState, id, rowDataForTr(ctx, tr));
+			});
+			refreshSelectAllHeaderState(table, ctx);
 			if (ctx.bulkToolbar) ctx.bulkToolbar.refresh(selectionState.selected.size);
 		});
 	}
@@ -4620,61 +4863,358 @@
 	}
 
 	/**
-	 * Builds the bulk-actions toolbar: a live "N selected" count plus one button per declared bulk action, each
-	 * disabled while the selection is empty (there is nothing for a bulk action to target).  A click drives
-	 * executeBulkAction(...) - the per-target submit path, never an aggregate one.
+	 * Reads the selectableWhen rules (`SELECTABLE_WHEN_SIDECAR_ID_PREFIX + id`) - an array of the same rule objects
+	 * `RowAction.enabledWhen` uses.  Returns `null` when absent, empty, or malformed (a malformed sidecar is warned
+	 * about and ignored, so every row stays selectable rather than none).
 	 */
-	function buildBulkToolbar(bulkDef, table, ctx, selectionState) {
-		const bar = document.createElement("div");
-		bar.className = "juneau-view-bulk-toolbar";
-		bar.dataset.testid = "bulk-toolbar";
-
-		const countEl = document.createElement("span");
-		countEl.className = "juneau-view-bulk-count";
-		bar.appendChild(countEl);
-
-		const buttons = (bulkDef.actions || []).map(function (action) {
-			const btn = document.createElement("button");
-			btn.type = "button";
-			btn.className = "juneau-view-bulk-action-btn";
-			btn.textContent = action.label || action.id;
-			btn.disabled = true;
-			btn.addEventListener("click", function () { executeBulkAction(action, table, ctx, selectionState); });
-			bar.appendChild(btn);
-			return btn;
-		});
-
-		return {
-			el: bar,
-			refresh: function (count) {
-				countEl.textContent = count > 0 ? (count + " selected") : "";
-				buttons.forEach(function (b) { b.disabled = count === 0; });
-			}
-		};
+	function readSelectableWhen(id, table) {
+		const node = table?.__juneauSelectableWhenSidecar || findSidecarNode(SELECTABLE_WHEN_SIDECAR_ID_PREFIX + id, table);
+		if (!node) return null;
+		const rules = parseJsonSafe(node.textContent);
+		if (rules == null) {
+			warn("Juneau view '" + id + "': selectableWhen sidecar is not valid JSON; ignoring.");
+			return null;
+		}
+		return Array.isArray(rules) && rules.length ? rules : null;
 	}
 
 	/**
-	 * Executes ONE bulk action over the current selection as N INDEPENDENT per-row writes (HIGH-5) - it is a
-	 * plain loop calling the SAME submitRowAction(...) the single-row action-menu uses, once per selected id, each
-	 * carrying that row's stable id as `targetId` in the JSON body (the same `extra` convention the declarative-modal
-	 * submit path already uses for `idempotencyKey`/`targetId`).  There is deliberately NO aggregate request and
-	 * NO aggregate result: each row gets its own in-flight marker and its own typed ActionResult,
-	 * rendered independently, so one target's failure/refusal/unknown can never be hidden behind an overall
-	 * "success" - and each clears ITS OWN `data-juneau-inflight` on ITS OWN terminal outcome (MED-4), so a stuck
-	 * target can never halt the whole table's polling.  A selected id whose row is no longer on screen (e.g. it
-	 * left the page between the click and this loop running) is silently skipped - the persistence rule (MED-11)
-	 * never lets an off-screen row become an actionable target.
+	 * Builds the bulk-actions toolbar: "N selected \u00b7 Clear selection" plus the action control - ONE declared action
+	 * renders as a single "{label} selected ({count})" button, several render as a `<select aria-label="Bulk action">`
+	 * and a Go button that stays disabled until an action is chosen.  The whole toolbar is hidden while nothing is
+	 * selected.  Every trigger goes through confirmBulkAction(...) - a bulk write is never one click from firing.
+	 * Returns `{el, refresh(count)}`; the caller (wireToolbarRightClusterBulk) places `el` at the far end of the
+	 * toolbar row's right cluster.
 	 */
-	function executeBulkAction(action, table, ctx, selectionState) {
+	function buildBulkToolbar(bulkDef, table, ctx, selectionState) { // NOSONAR javascript:S3776 -- one builder for the single/dropdown forms; splitting would scatter the shared refresh closure.
+		const actions = bulkDef.actions || [];
+		const el = document.createElement("div");
+		el.className = "juneau-view-bulk-toolbar";
+		el.dataset.testid = "bulk-toolbar";
+		el.hidden = true;
+
+		const countEl = document.createElement("span");
+		countEl.className = "juneau-view-bulk-count";
+
+		const clearLink = document.createElement("button");
+		clearLink.type = "button";
+		clearLink.className = "juneau-view-bulk-clear";
+		clearLink.textContent = "Clear selection";
+		clearLink.addEventListener("click", function () {
+			selectionState.selected.clear();
+			Array.prototype.forEach.call(table.querySelectorAll(".juneau-view-select-checkbox"), function (cb) { cb.checked = false; });
+			refreshSelectAllHeaderState(table, ctx);
+			refresh(0);
+		});
+
+		let actionTrigger = null;
+		let goBtn = null;
+		if (actions.length === 1) {
+			const only = actions[0];
+			actionTrigger = document.createElement("button");
+			actionTrigger.type = "button";
+			actionTrigger.className = "juneau-view-bulk-action-btn";
+			actionTrigger.addEventListener("click", function () { confirmBulkAction(only, table, ctx, selectionState); });
+		} else if (actions.length > 1) {
+			const selectEl = document.createElement("select");
+			selectEl.className = "juneau-view-bulk-select";
+			selectEl.setAttribute("aria-label", "Bulk action");
+			const placeholder = document.createElement("option");
+			placeholder.value = "";
+			placeholder.textContent = "Choose an action\u2026";
+			selectEl.appendChild(placeholder);
+			actions.forEach(function (a) {
+				const opt = document.createElement("option");
+				opt.value = a.id;
+				opt.textContent = a.label || a.id;
+				selectEl.appendChild(opt);
+			});
+			goBtn = document.createElement("button");
+			goBtn.type = "button";
+			goBtn.className = "juneau-view-bulk-go";
+			goBtn.textContent = "Go";
+			goBtn.disabled = true;
+			selectEl.addEventListener("change", function () { goBtn.disabled = !selectEl.value; });
+			goBtn.addEventListener("click", function () {
+				const chosen = actions.find(function (a) { return a.id === selectEl.value; });
+				if (chosen) confirmBulkAction(chosen, table, ctx, selectionState);
+			});
+			actionTrigger = selectEl;
+		}
+
+		el.appendChild(countEl);
+		el.appendChild(clearLink);
+		if (actionTrigger) el.appendChild(actionTrigger);
+		if (goBtn) el.appendChild(goBtn);
+
+		function refresh(count) {
+			el.hidden = count === 0;
+			countEl.textContent = count > 0 ? (count + " selected \u00b7") : "";
+			clearLink.hidden = count === 0;
+			if (actions.length === 1) actionTrigger.textContent = (actions[0].label || actions[0].id) + " selected (" + count + ")";
+		}
+		refresh(selectionState ? selectionState.selected.size : 0);
+
+		return { el: el, refresh: refresh };
+	}
+
+	/**
+	 * Gates a bulk action behind the mandatory confirm (an action opts out only with `confirm === false`).  Prefers a
+	 * host-provided `JuneauViews.dialogs.confirm(opts)` and otherwise falls back to the built-in modal below.  The rows
+	 * shown are the per-id snapshots captured while each row was visible, so an id that has since left the page is still
+	 * listed by its label rather than as a bare id.
+	 */
+	function confirmBulkAction(action, table, ctx, selectionState) {
 		const ids = Array.from(selectionState.selected);
 		if (!ids.length) return;
-		const byId = {};
-		ownRowsWithId(table).forEach(function (tr) { byId[tr.getAttribute(ROW_ID_ATTR)] = tr; });
-		ids.forEach(function (id) {
-			const tr = byId[id];
-			if (!tr) return;
-			submitRowAction(action, table, tr, ctx, { targetId: id });
+		const rows = ids.map(function (id) { return selectionState.snapshots[id] || { id: id }; });
+		if (action.confirm === false) {
+			runBulkActionDeferred(action, table, ctx, selectionState, ids);
+			return;
+		}
+		const opts = {
+			title: String(action.confirmTitle || "Confirm").replace("{count}", String(ids.length)),
+			body: typeof action.confirm === "string" ? action.confirm : null,
+			items: rows,
+			confirmLabel: action.label || action.id,
+			tone: action.tone || "default",
+			rows: rows,
+			renderer: action.confirmRenderer || "list",
+			action: function () { runBulkActionDeferred(action, table, ctx, selectionState, ids); }
+		};
+		if (window.JuneauViews?.dialogs?.confirm) {
+			window.JuneauViews.dialogs.confirm(opts);
+			return;
+		}
+		buildFallbackConfirmModal(opts, table, selectionState);
+	}
+
+	/** Hands a confirmed bulk action to the executor; read at click time so the executor can change independently. */
+	function runBulkActionDeferred(action, table, ctx, selectionState, ids) {
+		runBulkAction(action, table, ctx, selectionState, ids);
+	}
+
+	/**
+	 * The built-in confirm modal (a real layer on the popup stack: focus-trapped, Esc-dismissable, restored focus).
+	 * Lists up to 20 selected rows by `labelField` (falling back to the row id) and summarises the remainder.
+	 */
+	function buildFallbackConfirmModal(opts, table, selectionState) { // NOSONAR javascript:S1172 -- table kept for call-site symmetry with the dialogs.confirm path.
+		const backdrop = document.createElement("div");
+		backdrop.className = "juneau-view-dialog-backdrop juneau-view-confirm-modal juneau-view-confirm-modal-" + opts.tone;
+		const dialog = document.createElement("div");
+		dialog.className = "juneau-view-dialog";
+		dialog.setAttribute("role", "dialog");
+		dialog.setAttribute("aria-modal", "true");
+
+		const title = document.createElement("h2");
+		title.className = "juneau-view-dialog-title";
+		title.textContent = opts.title;
+		dialog.appendChild(title);
+
+		if (opts.body) {
+			const body = document.createElement("p");
+			body.textContent = opts.body;
+			dialog.appendChild(body);
+		}
+
+		const cap = 20;
+		const list = document.createElement("ul");
+		list.className = "juneau-view-confirm-list";
+		opts.items.slice(0, cap).forEach(function (row) {
+			const li = document.createElement("li");
+			const label = selectionState.labelField ? row[selectionState.labelField] : null;
+			li.textContent = String(label != null ? label : (row.id ?? row[selectionState.rowIdField]));
+			list.appendChild(li);
 		});
+		if (opts.items.length > cap) {
+			const more = document.createElement("li");
+			more.textContent = "\u2026and " + (opts.items.length - cap) + " more";
+			list.appendChild(more);
+		}
+		dialog.appendChild(list);
+
+		const actions = document.createElement("div");
+		actions.className = "juneau-view-dialog-actions";
+		const cancelBtn = document.createElement("button");
+		cancelBtn.type = "button";
+		cancelBtn.className = "juneau-view-dialog-cancel";
+		cancelBtn.textContent = "Cancel";
+		cancelBtn.addEventListener("click", function () { popLayer(backdrop); });
+		const confirmBtn = document.createElement("button");
+		confirmBtn.type = "button";
+		confirmBtn.className = "juneau-view-dialog-confirm";
+		confirmBtn.textContent = opts.confirmLabel;
+		confirmBtn.addEventListener("click", function () {
+			popLayer(backdrop);
+			opts.action();
+		});
+		actions.appendChild(cancelBtn);
+		actions.appendChild(confirmBtn);
+		dialog.appendChild(actions);
+
+		backdrop.appendChild(dialog);
+		pushLayer(backdrop, { kind: "dialog", trapFocus: true, lightDismiss: false, detachOnPop: true, onDismiss: null });
+	}
+
+	/** Max per-row bulk writes in flight at once - enough to be quick, few enough not to flood a shared backend. */
+	const BULK_PER_ROW_CONCURRENCY = 4;
+
+	/**
+	 * The summary line every bulk run ends in: `{label}: {s} succeeded[, {n} not found][, {f} failed (ids: ...)]`.
+	 * Counts of zero are omitted for the optional clauses so a clean run reads as just "Abort: 3 succeeded".
+	 */
+	function buildBulkSummaryMessage(label, succeeded, notFound, failedIds) {
+		let msg = label + ": " + succeeded + " succeeded";
+		if (notFound > 0) msg += ", " + notFound + " not found";
+		if (failedIds.length > 0) msg += ", " + failedIds.length + " failed (ids: " + failedIds.join(", ") + ")";
+		return msg;
+	}
+
+	/**
+	 * Shows a bulk run's outcome as a toast: a failure is `role=alert` and sticky with a Close button, a clean run is
+	 * `role=status` and dismisses itself after 6 seconds.  Appended to the body so a table redraw can never take it down.
+	 */
+	function showBulkSummaryToast(message, hasFailure) {
+		const toast = document.createElement("div");
+		toast.className = "juneau-view-bulk-toast " + (hasFailure ? "juneau-view-bulk-toast-alert" : "juneau-view-bulk-toast-status");
+		toast.setAttribute("role", hasFailure ? "alert" : "status");
+		const text = document.createElement("span");
+		text.textContent = message;
+		toast.appendChild(text);
+		if (hasFailure) {
+			const closeBtn = document.createElement("button");
+			closeBtn.type = "button";
+			closeBtn.className = "juneau-view-bulk-toast-close";
+			closeBtn.textContent = "Close";
+			closeBtn.addEventListener("click", function () { toast.remove(); });
+			toast.appendChild(closeBtn);
+		}
+		document.body.appendChild(toast);
+		if (!hasFailure) setTimeout(function () { toast.remove(); }, 6000);
+		return toast;
+	}
+
+	/** Reports a whole-run bulk failure (E-JS-26 / E-JS-27): a console error carrying the message plus a sticky alert toast, never a page banner. */
+	function reportBulkFailure(code, message, table) {
+		error(message);
+		showBulkSummaryToast(message, true);
+		announce(table, message);
+	}
+
+	/**
+	 * Submits ONE per-row bulk write for `id` and resolves to its outcome - `"succeeded"`, `"notFound"` (HTTP 404) or
+	 * `"failed"` - without touching the row's own outcome UI (the row may be on another page; the run's one summary
+	 * toast reports for all of them).  The request is the same fail-closed descriptor the single-row action path uses,
+	 * built against the row SNAPSHOT captured while the row was visible, so `{field}` tokens in the endpoint still
+	 * resolve for a row that has since left the page.  Never rejects.
+	 */
+	function submitRowActionForId(action, table, id, rowSnapshot, ctx, extra) {
+		const tr = ownRowsWithId(table).find(function (t) { return t.getAttribute(ROW_ID_ATTR) === String(id); });
+		const rowData = rowSnapshot || (tr ? rowDataForTr(ctx, tr) : null);
+		const req = buildActionRequest(
+			action, resolveCsrfToken(table), resolveCsrfHeaderName(table), Object.assign({ targetId: id }, extra), rowData);
+		if (req.refuse) return Promise.resolve({ status: "failed", message: actionRefusalMessage(req.reason) });
+		setRowInFlight(tr, true);
+		return fetch(req.url, { method: req.method, headers: req.headers, body: req.body, credentials: "same-origin" })
+			.then(function (resp) {
+				if (resp.status === 404) return { status: "notFound" };
+				if (!resp.ok) return { status: "failed", message: "HTTP " + resp.status };
+				return readBodyText(resp).then(function (text) {
+					const result = parseActionResult(text);
+					// A bare 2xx (no typed result) is a success, exactly as the single-row path treats it.
+					if (!result || normalizeOutcome(result) === "success") return { status: "succeeded" };
+					return { status: "failed", message: result.message };
+				});
+			})
+			.catch(function (e) { return { status: "failed", message: e?.message }; })
+			.then(function (outcome) { setRowInFlight(tr, false); return outcome; });
+	}
+
+	/** One aggregate POST of `{ids, idempotencyKey}`; resolves to the parsed BulkResult, or null after reporting E-JS-26/27. */
+	async function submitAggregateBulk(action, table, ids) {
+		const where = "bulk action '" + action.id + "' on table '" + (table.id || table.dataset.juneauView || "") + "'";
+		const idempotencyKey = typeof crypto !== "undefined" && crypto.randomUUID
+			? crypto.randomUUID() : Date.now() + "-" + Math.random();
+		const req = buildActionRequest(action, resolveCsrfToken(table), resolveCsrfHeaderName(table), null, null);
+		if (req.refuse) {
+			reportBulkFailure("E-JS-26", where + " failed: '" + actionRefusalMessage(req.reason) + "'", table);
+			return null;
+		}
+		let resp;
+		try {
+			resp = await fetch(req.url, {
+				method: req.method, headers: req.headers, credentials: "same-origin",
+				body: JSON.stringify({ ids: ids, idempotencyKey: idempotencyKey })
+			});
+		} catch (e) {
+			reportBulkFailure("E-JS-26", where + " failed: '" + (e?.message || "request failed") + "'", table);
+			return null;
+		}
+		if (!resp.ok) {
+			reportBulkFailure("E-JS-26", where + " failed: 'HTTP " + resp.status + "'", table);
+			return null;
+		}
+		const body = parseJsonSafe(await readBodyText(resp));
+		if (!body || body.contractVersion !== JUNEAU_BULK_RESULT_CONTRACT_VERSION || !Array.isArray(body.succeeded)
+			|| !Array.isArray(body.notFound) || !Array.isArray(body.failed)) {
+			reportBulkFailure("E-JS-27", where + ": response is not a BulkResult (contractVersion '" + body?.contractVersion + "')", table);
+			return null;
+		}
+		return body;
+	}
+
+	/** Runs the per-row writes at most BULK_PER_ROW_CONCURRENCY at a time; resolves to `{succeeded, notFound, failed}` id lists. */
+	async function submitPerRowBulk(action, table, ctx, selectionState, ids) {
+		const out = { succeeded: [], notFound: [], failed: [] };
+		const queue = ids.slice();
+		const inFlight = new Set();
+		while (queue.length || inFlight.size) {
+			while (queue.length && inFlight.size < BULK_PER_ROW_CONCURRENCY) {
+				const id = queue.shift();
+				const p = submitRowActionForId(action, table, id, selectionState.snapshots[id], ctx, null).then(function (o) {
+					out[o.status].push(id);
+					inFlight.delete(p);
+				});
+				inFlight.add(p);
+			}
+			if (inFlight.size) await Promise.race(inFlight);
+		}
+		return out;
+	}
+
+	/**
+	 * Executes one CONFIRMED bulk action over `ids`.  `bulkMode` "aggregate" sends ONE request carrying every id and
+	 * reads a BulkResult back; anything else (the default) is N independent per-row writes at <= 4 in flight.  Either
+	 * way the run ends in ONE summary toast (also announced politely), the succeeded and not-found ids leave the
+	 * selection while failed ids stay selected for a retry, and the table reloads unless the action says
+	 * `onSuccess: "none"`.  A whole-run failure (E-JS-26 transport, E-JS-27 non-BulkResult) leaves the selection intact.
+	 */
+	async function runBulkAction(action, table, ctx, selectionState, ids) {
+		let outcome;
+		if (action.bulkMode === "aggregate") {
+			const body = await submitAggregateBulk(action, table, ids);
+			if (!body) return;
+			outcome = { succeeded: body.succeeded, notFound: body.notFound, failed: body.failed.map(function (f) { return f.id; }) };
+		} else {
+			outcome = await submitPerRowBulk(action, table, ctx, selectionState, ids);
+		}
+
+		outcome.succeeded.concat(outcome.notFound).forEach(function (id) {
+			selectionState.selected.delete(String(id));
+			delete selectionState.snapshots[String(id)];
+		});
+		ownRowsWithId(table).forEach(function (tr) {
+			const cb = tr.querySelector(".juneau-view-select-checkbox");
+			if (cb && !selectionState.selected.has(tr.getAttribute(ROW_ID_ATTR))) cb.checked = false;
+		});
+		refreshSelectAllHeaderState(table, ctx);
+		if (ctx.bulkToolbar) ctx.bulkToolbar.refresh(selectionState.selected.size);
+
+		const message = buildBulkSummaryMessage(action.label || action.id, outcome.succeeded.length, outcome.notFound.length, outcome.failed);
+		showBulkSummaryToast(message, outcome.failed.length > 0);
+		announce(table, message);
+
+		if (action.onSuccess !== "none" && ctx.dataTable) reloadTableData(ctx.dataTable, true);
 	}
 
 	/** Renders a VISIBLE, non-blocking inline error line (anti-silent-degradation) into `container`. */
@@ -4690,7 +5230,7 @@
 	 * Issues one row action, FAIL-CLOSED.  Resolves the table's token + header name and this row's own
 	 * already-fetched data (rowDataForTr - the SAME lookup the `enabledWhen` gate uses, so no second DataTables
 	 * read), asks the pure buildActionRequest(...) for a request descriptor - which substitutes any `{property}`
-	 * token in `action.endpoint` against that row data (WORK-J0509, mirroring Column.href) - and:
+	 * token in `action.endpoint` against that row data - and:
 	 *   - on a refusal marker (safe method, or blank/absent/whitespace token) renders a VISIBLE refusal and sends
 	 *     NOTHING - no silent degradation, and never an empty-header request the server would 403;
 	 *   - otherwise marks the row in-flight and issues the JSON fetch with the CSRF header, then settles
@@ -4930,7 +5470,7 @@
 	}
 
 	// ==================================================================================================================
-	// ROW-LESS (RIBBON-HOSTED) DIALOG SEAM (WORK-J0512): the same dialog machinery, with no `tr` behind it
+	// ROW-LESS (RIBBON-HOSTED) DIALOG SEAM: the same dialog machinery, with no `tr` behind it
 	// ==================================================================================================================
 
 	const RIBBON_BANNER_HOST_CLASS = "juneau-view-ribbon-banner-host";
@@ -5209,7 +5749,7 @@
 	 * (never `innerHTML`, never raw markup - BLK-1/MED-9).  With no form URL the dialog is a confirm-only prompt
 	 * from the declared `confirm` text.  The mutation is the SEPARATE non-safe submit the confirm button issues.
 	 *
-	 * <p>Also the entry point for a ROW-LESS, ribbon-hosted dialog (`tr == null`, WORK-J0512): every refusal and
+	 * <p>Also the entry point for a ROW-LESS, ribbon-hosted dialog (`tr == null`): every refusal and
 	 * outcome this function renders - on the open path as well as the submit path - is routed through
 	 * renderActionRefusalFor / renderActionOutcomeFor, which put it in the row's actions cell when there is a row
 	 * and in the ribbon-anchored host when there is not.  A ribbon click otherwise died here, on an open FAILURE,
@@ -5623,7 +6163,7 @@
 
 	/**
 	 * Resolves `actionId` against this view's RIBBON catalog (`viewDef.ribbon`), returning the `type="dialog"`
-	 * action or null (WORK-J0512).
+	 * action or null.
 	 *
 	 * <p>A SEPARATE catalog on purpose, rather than widening dialogActionIsOpenable to look in `rowActions` too: a
 	 * ribbon action injected into the row-action catalog would also surface in every row's action menu
@@ -5694,7 +6234,7 @@
 	}
 
 	/**
-	 * Opens a STACKED step declared in the enclosing dialog's own `childActions` catalog (WORK-J0513 Scope B).
+	 * Opens a STACKED step declared in the enclosing dialog's own `childActions` catalog.
 	 *
 	 * <p>Deliberately NOT a RowAction: a child action is reachable only from the form of the dialog that declares it,
 	 * so it never surfaces in buildRowActionMenu, never surfaces in the ribbon resolver, and needs no exclusion
@@ -6076,7 +6616,7 @@
 	 *
 	 * <p>The submitted target is the row's id, EXCEPT for a modal that has explicitly opted in with
 	 * `selfTargeted` - a key minted with its own value as its bound target, because the dialog that opened it had
-	 * no artifact to bind to (WORK-J0512 B2).  Such a modal sends the key's own value as the target, uniformly
+	 * no artifact to bind to.  Such a modal sends the key's own value as the target, uniformly
 	 * whether or not there is a row: with no row this is the difference between a submit that carries a target and
 	 * one that omits it entirely and fails closed on the server's binding check.
 	 *
@@ -6100,7 +6640,7 @@
 	}
 
 	// ==================================================================================================================
-	// THE NON-SUBMITTABLE IN-DIALOG RESULT HOST (WORK-J0513 Scope A): one mechanism, terminal by construction
+	// THE NON-SUBMITTABLE IN-DIALOG RESULT HOST: one mechanism, terminal by construction
 	// ==================================================================================================================
 	//
 	// A dialog that opted in with ModalDef.keepOpenOnSubmit is NOT closed at confirm-click time; instead its Confirm
@@ -6479,7 +7019,7 @@
 	}
 
 	// ==================================================================================================================
-	// THE DIALOG-SCOPED CHILD-ACTION CATALOG (WORK-J0513 Scope B): reaching a stacked step from inside a dialog
+	// THE DIALOG-SCOPED CHILD-ACTION CATALOG: reaching a stacked step from inside a dialog
 	// ==================================================================================================================
 	//
 	// A `type=action` input resolves its actionId against ctx.viewDef.rowActions and nothing else, so a stacked
@@ -6794,7 +7334,7 @@
 		closeActionDialog(ctx);
 		closeRowActionMenus(table);
 		closeColumnSearchPopover(ctx);
-		// WORK-J0612 D7: a rebuild drops column filters, exactly as it always has for native col.search() (destroy()
+		// a rebuild drops column filters, exactly as it always has for native col.search() (destroy()
 		// discards them and nothing re-applies them), so the client-mode DSL store is cleared with them.
 		ctx._colExprs = {};
 		if (table?.dataset) {
@@ -6844,7 +7384,7 @@
 			cols.push(dc);
 		}
 		if (ctx.selectionState) {
-			const sel = buildSelectionColumnDef(ctx.selectionState);
+			const sel = buildSelectionColumnDef(ctx.selectionState, ctx);
 			sel._juneau = "selection";
 			cols.push(sel);
 		}
@@ -7003,8 +7543,14 @@
 		if (!toolbarRow) return;
 		const leftCluster = toolbarRow.querySelector(".juneau-view-toolbar-left");
 		if (!leftCluster) return;
-		if (ctx.bulkToolbar) leftCluster.appendChild(ctx.bulkToolbar.el);
-		else if (ctx._bulkError) renderInlineError(leftCluster, ctx._bulkError);
+		if (!ctx.bulkToolbar && ctx._bulkError) renderInlineError(leftCluster, ctx._bulkError);
+	}
+
+	/** Places the bulk toolbar at the FAR END of the toolbar row's right cluster (after search and the ribbon bar). */
+	function wireToolbarRightClusterBulk(toolbarRow, ctx) {
+		if (!toolbarRow || !ctx.bulkToolbar) return;
+		const right = toolbarRow.querySelector(".juneau-view-toolbar-right");
+		if (right) right.appendChild(ctx.bulkToolbar.el);
 	}
 
 	function wireTablePolling(table, ctx, viewDef, toolbarRow) {
@@ -7198,7 +7744,7 @@
 	 * Applies an open {@code ?state=} payload to the live grid (T19). Incomplete / rejected filter expressions are
 	 * skipped so a bad link cannot blank the grid. Does not touch View Settings (columns / membership / options).
 	 * Each filter is checked against its column's own `search` metadata (operator membership); on a client-filtered
-	 * DSL column it must also pass the strict server-parity gate (WORK-J0612 D3), which skips a `$regex` the column
+	 * DSL column it must also pass the strict server-parity gate, which skips a `$regex` the column
 	 * does not offer or one over the server's pattern-length cap (S8), so a crafted link cannot hang the tab.
 	 */
 	function applyShareableOpenState(table, ctx, state) { // NOSONAR javascript:S3776 -- encodes a views/widgets state machine; complexity is inherent.
@@ -7386,6 +7932,52 @@
 		syncShareableUrlState(table, ctx);
 	}
 
+	/**
+	 * Client mode only: installs a DataTables {@code ext.search} filter, scoped to {@code table}, that applies the
+	 * active column-scoped ribbon options through {@code NS.ribbon.clientRowFilter}.  Defines
+	 * {@code ctx.refreshRibbonRowFilter}, which ctx.redraw calls before drawing.  The filter is removed when the
+	 * DataTable is destroyed (re-init installs a fresh one).  No-op for a ribbon with no column-scoped entries.
+	 *
+	 * @param {HTMLTableElement} table the table element.
+	 * @param {object} viewDef the view definition.
+	 * @param {object} ctx the table context (activeState, optsColumns).
+	 * @example
+	 *   installClientRibbonFilter(table, viewDef, ctx);   // before $(table).DataTable(opts)
+	 *   ctx.activeState["dropped-only"] = true; ctx.redraw();   // only DROPPED rows remain visible
+	 */
+	function installClientRibbonFilter(table, viewDef, ctx) {
+		const $ = window.jQuery;
+		const columnScoped = (viewDef.ribbon || []).some(function (a) {
+			return (a.type === "option" && a.column != null)
+				|| (a.type === "optionGroup" && (a.options || []).some(function (o) { return o.column != null; }));
+		});
+		if (!columnScoped) return;
+		if (!NS.search?.createEngine || !NS.ribbon?.clientRowFilter) {
+			error("Juneau view '" + viewDef.id + "': client-mode ribbon options need juneau-search.js and juneau-ribbon.js loaded; ribbon filters are not applied.");
+			return;
+		}
+		const typedColumns = function () {
+			return (ctx.optsColumns || []).map(function (c) {
+				const def = (viewDef.columns || []).find(function (v) { return v.data === c?.data; });
+				return { data: c?.data, type: def?.search?.type };
+			});
+		};
+		ctx.refreshRibbonRowFilter = function () {
+			const merged = NS.ribbon.mergeColumnSearches({}, NS.ribbon.ribbonColumnSearches(viewDef, ctx.activeState, ctx.optsColumns));
+			ctx._ribbonRowFilter = NS.ribbon.clientRowFilter(merged, typedColumns(), NS.search.createEngine);
+		};
+		const filter = function (settings, searchData, dataIndex, rowData) {
+			if (settings.nTable !== table) return true;
+			return ctx._ribbonRowFilter ? ctx._ribbonRowFilter(rowData) : true;
+		};
+		$.fn.dataTable.ext.search.push(filter);
+		$(table).one("destroy.dt", function () {
+			const i = $.fn.dataTable.ext.search.indexOf(filter);
+			if (i >= 0) $.fn.dataTable.ext.search.splice(i, 1);
+		});
+		ctx.refreshRibbonRowFilter();
+	}
+
 	function constructTable(table, viewDef, effectiveColumns, ctx) {
 		const $ = window.jQuery;
 		restoreHeaderShell(table, ctx);
@@ -7411,7 +8003,7 @@
 		assembleFullColumnArray(opts, viewDef, ctx);
 		ctx.optsColumns = opts.columns;
 		ctx.effectiveColumns = effectiveColumns;
-		// WORK-J0612 S4: the one switch for client-side DSL evaluation - DataTables filters this table itself
+		// the one switch for client-side DSL evaluation - DataTables filters this table itself
 		// (dataMode:'client', or inline `rows`, which forces serverSide:false whatever the dataMode says).
 		ctx.clientFiltered = !opts.serverSide;
 
@@ -7420,6 +8012,7 @@
 		if (NS.config && typeof NS.config.sanitizeColumnTitlesForDataTables === "function")
 			NS.config.sanitizeColumnTitlesForDataTables(opts.columns);
 
+		if (ctx.clientFiltered) installClientRibbonFilter(table, viewDef, ctx);
 		ctx.dataTable = $(table).DataTable(opts);
 		// N2: re-anchor relative-duration column filters ($gte(-24h)) on every data reload.
 		if (ctx.clientFiltered && typeof ctx.dataTable.on === "function")
@@ -7434,6 +8027,7 @@
 			// This draw is the operator's, not the timer's - clear the marker so a poll still in flight cannot make
 			// ctx._shouldCancelPollDraw swallow a refresh that was explicitly asked for.
 			ctx._pollDrawPending = false;
+			if (ctx.refreshRibbonRowFilter) ctx.refreshRibbonRowFilter();
 			if (d.ajax) reloadTableData(d); else d.draw();
 		};
 		ctx.collapseAllDetailRows = function () { collapseAllDetailRows(table, ctx); };
@@ -7452,6 +8046,9 @@
 		// Chooser affordance: no-op when juneau-config.js is absent (v4 JS without the opt-in file).
 		if (viewDef.columnConfig && typeof NS.config?.mountChooser === "function")
 			NS.config.mountChooser(table, ctx, toolbarRow);
+
+		// Last, so the bulk toolbar lands at the far end of the right cluster, after search/ribbon/staleness/chooser.
+		wireToolbarRightClusterBulk(toolbarRow, ctx);
 
 		// Copy-link affordance (framework parity): independent of columnConfig - shown by default on the page's
 		// primary view (isCopyLinkVisible), with its own opt-outs (viewDef.primary === false / copyLink === false).
@@ -7546,7 +8143,7 @@
 	 * <p>A depth-2 nested table runs the SAME init path a root table runs - row detail, cell popovers, row actions,
 	 * and (when the server stamped {@code SELECT_ATTR}) its own live selection state.  Two affordances are clamped off
 	 * instead, because they belong to the enclosing table alone: {@code columnConfig} (the column chooser and its
-	 * saved-views identity) and {@code pollIntervalMs} (a nested table refreshes with its parent, not on its own
+	 * column configuration) and {@code pollIntervalMs} (a nested table refreshes with its parent, not on its own
 	 * timer).  A nested mutating action rides the token the server painted onto this table from the enclosing
 	 * response; a token-less nested table refuses visibly rather than submitting.  The parent-row scope is applied by
 	 * seeding {@code ctx.nestedScope}, which buildOptions merges into the request in both data modes (a re-derived
@@ -7612,14 +8209,21 @@
 		// Live selection state, read from the attributes the server stamped on THIS table (never from VIEW_META) -
 		// exactly as a root table reads them.  Bulk mutation is deliberately not consulted: it stays on the parent.
 		const selectionState = hasSelection(table)
-			? { selected: new Set(), rowIdField: table.getAttribute(ROW_ID_FIELD_ATTR) }
+			? {
+				selected: new Set(),
+				rowIdField: table.getAttribute(ROW_ID_FIELD_ATTR),
+				scope: table.getAttribute(SELECT_SCOPE_ATTR) || "persistent",
+				labelField: table.getAttribute(SELECT_LABEL_FIELD_ATTR) || null,
+				selectableWhen: readSelectableWhen(id, table),
+				snapshots: {}
+			}
 			: null;
 
 		const ctx = {
 			table: table,
 			viewDef: viewDef,
 			dataTable: null,
-			activeState: {},
+			activeState: NS.ribbon?.loadPersistedState ? NS.ribbon.loadPersistedState(viewDef) : {},
 			selectionState: selectionState,
 			nested: true,
 			nestedDepth: depth,
@@ -7635,6 +8239,7 @@
 			redraw: function () {
 				const d = ctx.dataTable;
 				if (!d) return;
+				if (ctx.refreshRibbonRowFilter) ctx.refreshRibbonRowFilter();
 				if (d.ajax) reloadTableData(d); else d.draw();
 			}
 		};
@@ -7814,7 +8419,7 @@
 
 	/**
 	 * Inits a table from an already-loaded VIEW_META object.  Assumes CSRF/selection/bulk attrs, wrapper
-	 * saved-views/layout, optional detail {@code <template>}, and optional QuickStats are already stamped.
+	 * layout, optional detail {@code <template>}, and optional QuickStats are already stamped.
 	 * {@code extras.bulk} is the envelope bulk object (slot path) or the sidecar parse (HTML path); mismatch
 	 * withholds bulk only.
 	 */
@@ -7839,7 +8444,14 @@
 
 		const activeState = NS.ribbon?.loadPersistedState ? NS.ribbon.loadPersistedState(viewDef) : {};
 		const selectionState = hasSelection(table)
-			? { selected: new Set(), rowIdField: table.getAttribute(ROW_ID_FIELD_ATTR) }
+			? {
+				selected: new Set(),
+				rowIdField: table.getAttribute(ROW_ID_FIELD_ATTR),
+				scope: table.getAttribute(SELECT_SCOPE_ATTR) || "persistent",
+				labelField: table.getAttribute(SELECT_LABEL_FIELD_ATTR) || null,
+				selectableWhen: readSelectableWhen(id, table),
+				snapshots: {}
+			}
 			: null;
 
 		const ctx = {
@@ -7855,6 +8467,7 @@
 			redraw: function () {
 				const d = ctx.dataTable;
 				if (!d) return;
+				if (ctx.refreshRibbonRowFilter) ctx.refreshRibbonRowFilter();
 				if (d.ajax) reloadTableData(d); else d.draw();
 			}
 		};
@@ -8013,13 +8626,6 @@
 		const wrapper = document.createElement("div");
 		wrapper.dataset.juneauLayout = envelope.layout || "wide";
 		wrapper.dataset.juneauSlotTable = "1";
-		if (envelope.savedViewsBase) {
-			if (isSameOriginUrl(envelope.savedViewsBase))
-				wrapper.dataset.juneauSavedViews = envelope.savedViewsBase;
-			else
-				warn("Juneau view '" + viewDef.id + "': savedViewsBase '" + envelope.savedViewsBase
-					+ "' is not same-origin; saved-views fetches skipped.");
-		}
 
 		if (quickStats) wrapper.appendChild(paintQuickStats(quickStats));
 
@@ -8033,6 +8639,7 @@
 			table.setAttribute(SELECT_ATTR, "1");
 			table.setAttribute(ROW_ID_FIELD_ATTR, envelope.selection.rowIdField);
 			table.setAttribute(SELECT_ALL_ATTR, envelope.selection.selectAll === false ? "0" : "1");
+			stampSelectionExtras(table, viewDef.id, envelope.selection);
 		}
 		if (envelope.bulk && bulkOk)
 			table.setAttribute(BULK_ATTR, "1");
@@ -8042,6 +8649,22 @@
 
 		slot.appendChild(wrapper);
 		return Promise.resolve(initTableFromDef(table, viewDef, extras));
+	}
+
+	/**
+	 * Stamps the persistent-selection attributes (scope, label field) and the selectableWhen sidecar from a
+	 * selection envelope onto `table`.  The sidecar is a sibling `<script type="application/json">` placed right
+	 * before the table so a card-scoped lookup finds it; it is skipped when the envelope declares no rules.
+	 */
+	function stampSelectionExtras(table, id, selection) {
+		if (selection.scope) table.setAttribute(SELECT_SCOPE_ATTR, String(selection.scope));
+		if (selection.labelField) table.setAttribute(SELECT_LABEL_FIELD_ATTR, String(selection.labelField));
+		if (!Array.isArray(selection.selectableWhen) || !selection.selectableWhen.length) return;
+		const sidecar = document.createElement("script");
+		sidecar.type = "application/json";
+		sidecar.id = SELECTABLE_WHEN_SIDECAR_ID_PREFIX + id;
+		sidecar.textContent = JSON.stringify(selection.selectableWhen);
+		table.__juneauSelectableWhenSidecar = sidecar;
 	}
 
 	function copyCsrfOntoTable(slot, table) {
@@ -8269,6 +8892,9 @@
 			d.dataset.juneauRegionPopulate = region.populate;
 		const declared = {};
 		if (region.dataUrl) declared.dataUrl = region.dataUrl;
+		// Catalog region params (for example a row-detail console-output region) reach readDeclaredDescriptor.
+		if (region.params && typeof region.params === "object" && !Array.isArray(region.params))
+			declared.params = region.params;
 		d.dataset.juneauRegionDeclared = JSON.stringify(declared);
 		return d;
 	}
@@ -8305,6 +8931,7 @@
 			table.setAttribute(SELECT_ATTR, "1");
 			table.setAttribute(ROW_ID_FIELD_ATTR, nested.selection.rowIdField);
 			table.setAttribute(SELECT_ALL_ATTR, nested.selection.selectAll === false ? "0" : "1");
+			stampSelectionExtras(table, v.id, nested.selection);
 		}
 		const thead = document.createElement("thead");
 		const tr = document.createElement("tr");
@@ -8804,7 +9431,7 @@
 		renderActionOutcomeFor: renderActionOutcomeFor,
 		renderDialogActionRefusal: renderDialogActionRefusal,
 		renderDialogDepthRefusal: renderDialogDepthRefusal,
-		// In-dialog result receipt + dialog-scoped child-action catalog (WORK-J0513) - exposed for the harnesses.
+		// In-dialog result receipt + dialog-scoped child-action catalog - exposed for the harnesses.
 		MAX_DRAFT_QUERY_BYTES: MAX_DRAFT_QUERY_BYTES,
 		isModalFieldKind: isModalFieldKind,
 		buildModalFieldValueNode: buildModalFieldValueNode,
@@ -8849,13 +9476,22 @@
 		hasBulk: hasBulk,
 		stampRowId: stampRowId,
 		selectionCellMarkup: selectionCellMarkup,
+		captureRowSnapshot: captureRowSnapshot,
+		refreshSelectAllHeaderState: refreshSelectAllHeaderState,
+		readSelectableWhen: readSelectableWhen,
 		buildSelectionColumnDef: buildSelectionColumnDef,
 		initSelection: initSelection,
 		bindSelectionPrune: bindSelectionPrune,
 		ensureSelectAllCheckbox: ensureSelectAllCheckbox,
 		readBulkDef: readBulkDef,
 		buildBulkToolbar: buildBulkToolbar,
-		executeBulkAction: executeBulkAction,
+		confirmBulkAction: confirmBulkAction,
+		buildFallbackConfirmModal: buildFallbackConfirmModal,
+		wireToolbarRightClusterBulk: wireToolbarRightClusterBulk,
+		runBulkAction: runBulkAction,
+		submitRowActionForId: submitRowActionForId,
+		buildBulkSummaryMessage: buildBulkSummaryMessage,
+		showBulkSummaryToast: showBulkSummaryToast,
 		renderInlineError: renderInlineError,
 		renderAsyncStatus: renderAsyncStatus
 	};

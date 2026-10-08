@@ -124,11 +124,10 @@ class CardDirective_Test extends TestBase {
 		assertPage(body).hasCardOrder("jc-card-1", "releases").hasCard("releases", "datatables")
 			.templateContains("jc-card-1", "<h1>All Releases</h1>");
 		var table = card(body, "releases").getMap("table");
-		assertBean(table, "contractVersion,layout", "1,wide"); // ViewSlot.CONTRACT_VERSION
-		var view = table.getMap("view");
-		assertBean(view, "contractVersion,id,dataUrl", "5,releases,/rest/releases/data");  // ViewDef.CONTRACT_VERSION
-		var col0 = view.getList("columns").getMap(0);
-		assertBean(col0, "data,title", "name,Name");
+		// The contract carries the author catalog; the browser lifts it to VIEW_META at mount time.
+		assertEquals("/rest/releases/data", table.getString("dataUrl"));
+		var col0 = table.getList("columns").getMap(0);
+		assertBean(col0, "key,label", "name,Name");
 		// The bridge card has no server markup; the shell renders its mount (spec §4.6).
 		assertFalse(body.contains("data-juneau-layout=\"wide\""), () -> body);
 	}
@@ -146,6 +145,8 @@ class CardDirective_Test extends TestBase {
 		try (var c = MockRestClient.buildLax(Host.class);
 			var rsp = c.get("/card-datatables-nocols").run()) {
 			rsp.assertStatus(500);
+			var b = rsp.getContent().asString();
+			assertTrue(b.contains("'columns'"), () -> b);
 		}
 	}
 
@@ -158,7 +159,7 @@ class CardDirective_Test extends TestBase {
 	}
 
 	@Test void b10a_typeDatatables_emitsPerColumnSearchMetadata() throws Exception {
-		var view = card(get("/card-datatables-search"), "releases").getMap("table").getMap("view");
+		var view = card(get("/card-datatables-search"), "releases").getMap("table");
 		var cols = view.getList("columns");
 
 		// Column 0 (text, list absent) → the full text universe, each operator carrying help; no custom leaked in.
@@ -168,7 +169,7 @@ class CardDirective_Test extends TestBase {
 			opNames(name.getList("operators")));
 		var eq = name.getList("operators").getMap(0);
 		assertBean(eq, "name,minArgs,maxArgs,combinator,custom", "$eq,1,1,false,false");
-		assertFalse(eq.getString("help").isBlank());
+		assertFalse(eq.containsKey("help"));
 
 		// Column 1 (numeric, explicit allow-list) → exactly the named applicable operators, in the author's order.
 		var count = cols.getMap(1).getMap("search");

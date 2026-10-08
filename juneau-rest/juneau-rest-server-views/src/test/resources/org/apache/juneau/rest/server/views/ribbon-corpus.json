@@ -1,0 +1,212 @@
+{
+  "version": 1,
+  "rows": [
+    {"id": 1, "status": "ACTIVE",  "stream": "out", "phase": "Waiting",                     "isNew": "yes"},
+    {"id": 2, "status": "DROPPED", "stream": "err", "phase": "Partially reviewed",          "isNew": "no"},
+    {"id": 3, "status": "DROPPED", "stream": "out", "phase": "Ready to push",               "isNew": "yes"},
+    {"id": 4, "status": "ACTIVE",  "stream": "err", "phase": "Completed",                   "isNew": "no"},
+    {"id": 5, "status": "ACTIVE",  "stream": "out", "phase": "Armed · awaiting daemon", "isNew": "no"},
+    {"id": 6, "status": "DROPPED", "stream": "err", "phase": "Committed, not pushed",       "isNew": "yes"}
+  ],
+  "columns": [
+    {"data": "id",     "name": "id",     "searchable": false},
+    {"data": "status", "name": "status", "searchable": true},
+    {"data": "stream", "name": "stream", "searchable": true},
+    {"data": "phase",  "name": "phase",  "searchable": true},
+    {"data": "isNew",  "name": "isNew",  "searchable": true}
+  ],
+  "cases": [
+    {
+      "name": "single-option-on",
+      "ribbon": [{"type": "option", "id": "dropped-only", "column": "status", "value": "$eq(DROPPED)", "persist": true}],
+      "state": {"dropped-only": true}, "userSearch": {},
+      "expect": {"columnSearches": {"1": "$eq(DROPPED)"}, "queryParams": {}, "search": "status=$eq(DROPPED)", "rowIds": [2, 3, 6]}
+    },
+    {
+      "name": "single-option-off",
+      "ribbon": [{"type": "option", "id": "dropped-only", "column": "status", "value": "$eq(DROPPED)"}],
+      "state": {}, "userSearch": {},
+      "expect": {"columnSearches": {}, "queryParams": {}, "search": null, "rowIds": [1, 2, 3, 4, 5, 6]}
+    },
+    {
+      "name": "option-group-member",
+      "ribbon": [{"type": "optionGroup", "id": "phase", "options": [
+        {"id": "pending", "column": "phase", "value": "$in(Waiting,\"Partially reviewed\")"},
+        {"id": "done",    "column": "phase", "value": "$in(\"Ready to push\",Completed)"}
+      ]}],
+      "state": {"phase": "done"}, "userSearch": {},
+      "expect": {"columnSearches": {"3": "$in(\"Ready to push\",Completed)"}, "queryParams": {}, "search": "phase=$in(\"Ready to push\",Completed)", "rowIds": [3, 4]}
+    },
+    {
+      "name": "option-group-none",
+      "ribbon": [{"type": "optionGroup", "id": "phase", "options": [
+        {"id": "all", "title": "All"},
+        {"id": "pending", "column": "phase", "value": "$in(Waiting,\"Partially reviewed\")"}
+      ]}],
+      "state": {"phase": "all"}, "userSearch": {},
+      "expect": {"columnSearches": {}, "queryParams": {}, "search": null, "rowIds": [1, 2, 3, 4, 5, 6]}
+    },
+    {
+      "name": "two-options-different-columns",
+      "ribbon": [
+        {"type": "option", "id": "dropped-only", "column": "status", "value": "$eq(DROPPED)"},
+        {"type": "option", "id": "stdout", "column": "stream", "value": "$eq(out)"}
+      ],
+      "state": {"dropped-only": true, "stdout": true}, "userSearch": {},
+      "expect": {"columnSearches": {"1": "$eq(DROPPED)", "2": "$eq(out)"}, "queryParams": {}, "search": "status=$eq(DROPPED),stream=$eq(out)", "rowIds": [3]}
+    },
+    {
+      "name": "two-options-same-column",
+      "ribbon": [
+        {"type": "option", "id": "early", "column": "phase", "value": "$in(Waiting,\"Ready to push\",\"Committed, not pushed\")"},
+        {"type": "option", "id": "not-waiting", "column": "phase", "value": "$ne(Waiting)"}
+      ],
+      "state": {"early": true, "not-waiting": true}, "userSearch": {},
+      "expect": {
+        "columnSearches": {"3": "$and($in(Waiting,\"Ready to push\",\"Committed, not pushed\"),$ne(Waiting))"},
+        "queryParams": {},
+        "search": "phase=$and($in(Waiting,\"Ready to push\",\"Committed, not pushed\"),$ne(Waiting))",
+        "rowIds": [3, 6]
+      }
+    },
+    {
+      "name": "two-options-same-param",
+      "ribbon": [
+        {"type": "option", "id": "s-dropped", "param": "search", "value": "status=$eq(DROPPED)"},
+        {"type": "option", "id": "s-out", "param": "search", "value": "stream=$eq(out)"}
+      ],
+      "state": {"s-dropped": true, "s-out": true}, "userSearch": {},
+      "expect": {"columnSearches": {}, "queryParams": {"search": "status=$eq(DROPPED),stream=$eq(out)"}, "search": null, "rowIds": null}
+    },
+    {
+      "name": "combine-user-and-ribbon",
+      "ribbon": [{"type": "option", "id": "dropped-only", "column": "status", "value": "$eq(DROPPED)"}],
+      "state": {"dropped-only": true}, "userSearch": {"2": "$eq(out)"},
+      "expect": {"columnSearches": {"1": "$eq(DROPPED)"}, "queryParams": {}, "merged": {"1": "$eq(DROPPED)", "2": "$eq(out)"}, "search": "status=$eq(DROPPED),stream=$eq(out)", "rowIds": [3]}
+    },
+    {
+      "name": "user-and-ribbon-same-column",
+      "ribbon": [{"type": "option", "id": "dropped-only", "column": "status", "value": "$eq(DROPPED)"}],
+      "state": {"dropped-only": true}, "userSearch": {"1": "$eq(ACTIVE)"},
+      "expect": {"columnSearches": {"1": "$eq(DROPPED)"}, "queryParams": {}, "merged": {"1": "$and($eq(ACTIVE),$eq(DROPPED))"}, "search": "status=$and($eq(ACTIVE),$eq(DROPPED))", "rowIds": []}
+    },
+    {
+      "name": "user-only",
+      "ribbon": [{"type": "option", "id": "dropped-only", "column": "status", "value": "$eq(DROPPED)"}],
+      "state": {}, "userSearch": {"2": "$eq(err)"},
+      "expect": {"columnSearches": {}, "queryParams": {}, "search": "stream=$eq(err)", "rowIds": [2, 4, 6]}
+    },
+    {
+      "name": "column-hidden-dtindex",
+      "columns": [
+        {"data": null,     "name": "select", "searchable": false},
+        {"data": "id",     "name": "id",     "searchable": false},
+        {"data": "status", "name": "status", "searchable": true},
+        {"data": "stream", "name": "stream", "searchable": true},
+        {"data": "phase",  "name": "phase",  "searchable": true},
+        {"data": "isNew",  "name": "isNew",  "searchable": true}
+      ],
+      "ribbon": [{"type": "option", "id": "dropped-only", "column": "status", "value": "$eq(DROPPED)"}],
+      "state": {"dropped-only": true}, "userSearch": {},
+      "expect": {"columnSearches": {"2": "$eq(DROPPED)"}, "queryParams": {}, "search": "status=$eq(DROPPED)", "rowIds": [2, 3, 6]}
+    },
+    {
+      "name": "quoted-comma-value",
+      "ribbon": [{"type": "option", "id": "committed", "column": "phase", "value": "$eq(\"Committed, not pushed\")"}],
+      "state": {"committed": true}, "userSearch": {},
+      "expect": {"columnSearches": {"3": "$eq(\"Committed, not pushed\")"}, "queryParams": {}, "search": "phase=$eq(\"Committed, not pushed\")", "rowIds": [6]}
+    },
+    {
+      "name": "two-options-same-opt-param",
+      "ribbon": [
+        {"type": "option", "id": "counts", "param": "opt", "value": "counts=true"},
+        {"type": "option", "id": "compact", "param": "opt", "value": "density=compact"}
+      ],
+      "state": {"counts": true, "compact": true}, "userSearch": {},
+      "expect": {"columnSearches": {}, "queryParams": {"opt": "density=compact"}, "search": null, "rowIds": null}
+    },
+    {
+      "name": "param-option",
+      "ribbon": [{"type": "option", "id": "mine", "param": "owner", "value": "me"}],
+      "state": {"mine": true}, "userSearch": {},
+      "expect": {"columnSearches": {}, "queryParams": {"owner": "me"}, "search": null, "rowIds": null}
+    },
+    {
+      "name": "jrm-dropped-only",
+      "ribbon": [
+        {"type": "columnSearchToggle", "group": "filters"},
+        {"type": "option", "id": "dropped-only", "title": "Dropped only", "group": "filters", "column": "status", "value": "$eq(DROPPED)", "persist": true, "symbol": "filter_alt"},
+        {"type": "export", "buttons": ["copy", "csv"], "optional": ["excel", "pdf"]},
+        {"type": "refresh"}
+      ],
+      "state": {"dropped-only": true}, "userSearch": {},
+      "expect": {"columnSearches": {"1": "$eq(DROPPED)"}, "queryParams": {}, "search": "status=$eq(DROPPED)", "rowIds": [2, 3, 6]}
+    },
+    {
+      "name": "foundry-daemon-stream",
+      "ribbon": [{"type": "optionGroup", "id": "stream", "options": [
+        {"id": "all", "title": "All"},
+        {"id": "out", "title": "stdout", "column": "stream", "value": "$eq(out)"},
+        {"id": "err", "title": "stderr", "column": "stream", "value": "$eq(err)"}
+      ]}],
+      "state": {"stream": "err"}, "userSearch": {},
+      "expect": {"columnSearches": {"2": "$eq(err)"}, "queryParams": {}, "search": "stream=$eq(err)", "rowIds": [2, 4, 6]}
+    },
+    {
+      "name": "foundry-review-phase",
+      "ribbon": [{"type": "optionGroup", "id": "reviewStateBucket", "options": [
+        {"id": "all", "title": "All"},
+        {"id": "waiting", "title": "Waiting", "column": "phase", "value": "$in(Waiting,\"Partially reviewed\")"},
+        {"id": "reviewed", "title": "Reviewed", "column": "phase", "value": "$in(\"Ready to push\",\"Committed, not pushed\",Completed)"}
+      ]}],
+      "state": {"reviewStateBucket": "reviewed"}, "userSearch": {},
+      "expect": {"columnSearches": {"3": "$in(\"Ready to push\",\"Committed, not pushed\",Completed)"}, "queryParams": {}, "search": "phase=$in(\"Ready to push\",\"Committed, not pushed\",Completed)", "rowIds": [3, 4, 6]}
+    },
+    {
+      "name": "foundry-work-flavor",
+      "ribbon": [{"type": "optionGroup", "id": "workNotReadyFlavor", "options": [
+        {"id": "all", "title": "All"},
+        {"id": "awaiting-you", "title": "Awaiting you", "column": "phase", "value": "$eq(\"Awaiting you\")"},
+        {"id": "armed", "title": "Armed · awaiting daemon", "column": "phase", "value": "$eq(\"Armed · awaiting daemon\")"}
+      ]}],
+      "state": {"workNotReadyFlavor": "armed"}, "userSearch": {},
+      "expect": {"columnSearches": {"3": "$eq(\"Armed · awaiting daemon\")"}, "queryParams": {}, "search": "phase=$eq(\"Armed · awaiting daemon\")", "rowIds": [5]}
+    },
+    {
+      "name": "foundry-review-detail-isnew",
+      "ribbon": [{"type": "optionGroup", "id": "sonarIssueFilter", "options": [
+        {"id": "new", "title": "New only", "column": "isNew", "value": "$eq(yes)"},
+        {"id": "all", "title": "All"}
+      ]}],
+      "state": {"sonarIssueFilter": "new"}, "userSearch": {},
+      "expect": {"columnSearches": {"4": "$eq(yes)"}, "queryParams": {}, "search": "isNew=$eq(yes)", "rowIds": [1, 3, 6]}
+    },
+    {
+      "name": "option-default-applied",
+      "ribbon": [{"type": "option", "id": "dropped-only", "column": "status", "value": "$eq(DROPPED)", "persist": true, "default": true}],
+      "persisted": {}, "userSearch": {},
+      "expect": {"state": {"dropped-only": true}, "columnSearches": {"1": "$eq(DROPPED)"}, "queryParams": {}, "search": "status=$eq(DROPPED)", "rowIds": [2, 3, 6]}
+    },
+    {
+      "name": "group-default-applied",
+      "ribbon": [{"type": "optionGroup", "id": "phase", "persist": true, "default": "pending", "options": [
+        {"id": "pending", "column": "phase", "value": "$in(Waiting,\"Partially reviewed\")"},
+        {"id": "done",    "column": "phase", "value": "$in(\"Ready to push\",Completed)"}
+      ]}],
+      "persisted": {}, "userSearch": {},
+      "expect": {"state": {"phase": "pending"}, "columnSearches": {"3": "$in(Waiting,\"Partially reviewed\")"}, "queryParams": {}, "search": "phase=$in(Waiting,\"Partially reviewed\")", "rowIds": [1, 2]}
+    },
+    {
+      "name": "default-overridden-by-persisted",
+      "ribbon": [
+        {"type": "option", "id": "dropped-only", "column": "status", "value": "$eq(DROPPED)", "persist": true, "default": true},
+        {"type": "optionGroup", "id": "phase", "persist": true, "default": "pending", "options": [
+          {"id": "pending", "column": "phase", "value": "$in(Waiting,\"Partially reviewed\")"},
+          {"id": "done",    "column": "phase", "value": "$in(\"Ready to push\",Completed)"}
+        ]}
+      ],
+      "persisted": {"dropped-only": "false", "phase": "done"}, "userSearch": {},
+      "expect": {"state": {"dropped-only": false, "phase": "done"}, "columnSearches": {"3": "$in(\"Ready to push\",Completed)"}, "queryParams": {}, "search": "phase=$in(\"Ready to push\",Completed)", "rowIds": [3, 4]}
+    }
+  ]
+}

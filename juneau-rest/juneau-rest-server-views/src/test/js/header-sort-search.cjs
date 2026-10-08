@@ -119,7 +119,7 @@ out.nonOrderableColumnGlyphOrder = glyphOrder(h2);
 out.unfilteredColumnActive = searchActive(h0);
 out.filteredColumnActive = searchActive(h1);
 
-// --- WORK-J0612: a client-filtered DSL column keeps its expression in the per-table store (col.search() stays ""),
+// --- a client-filtered DSL column keeps its expression in the per-table store (col.search() stays ""),
 // and the icon's first-render active state must read that store.  A minimal engine stub stands in for
 // juneau-search.js (this harness does not load it); only the routing is under test here. ---------------------------
 NS.search = {

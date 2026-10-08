@@ -82,7 +82,7 @@ class AsyncJobsMixin_Serving_Test extends TestBase {
 		var ref = Json.to(body, Map.class);
 		var jobId = String.valueOf(ref.get("jobId"));
 		assertTrue(jobId.matches("[0-9a-f]{64}"), jobId);
-		// streamUrl/cancelUrl are @Uri-annotated (WORK-J0519): Juneau's serializer resolves the "servlet:"
+		// streamUrl/cancelUrl are @Uri-annotated: Juneau's serializer resolves the "servlet:"
 		// pseudo-scheme against the request's UriContext before the value ever reaches the wire, so under this
 		// root-mounted MockRestClient (no context/servlet path) the resolved, browser-usable form is identical
 		// to the un-prefixed mixin path - see a02 below for the literal-scheme regression guard.
@@ -93,7 +93,7 @@ class AsyncJobsMixin_Serving_Test extends TestBase {
 	}
 
 	@Test void a02_streamUrlAndCancelUrl_areResolved_notLiteralServletScheme() throws Exception {
-		// WORK-J0519 regression guard: AsyncJobRef.streamUrl/cancelUrl used to be plain, un-annotated Strings, so
+		// AsyncJobRef.streamUrl/cancelUrl used to be plain, un-annotated Strings, so
 		// no serializer ever resolved the "servlet:" pseudo-scheme - the browser EventSource received the literal
 		// "servlet:/juneau-jobs/<id>/stream" and silently rejected the unsupported scheme (Hank's report). @Uri
 		// opts these fields into the same per-request URI resolution ViewsMixin's asset URLs already rely on

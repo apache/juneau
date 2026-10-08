@@ -74,25 +74,34 @@ class PetstoreAssets_Test extends TestBase {
 		org.junit.jupiter.api.Assertions.assertEquals(200, status("/petstore-ui"));
 	}
 
-	@Test void b02_everyDatatablesPageLoadsJqueryAndDataTablesLocallyAfterTheToolkit() throws Exception {
-		// The views runtime binds datatables cards to jQuery and DataTables; Juneau does not bundle them, so the app serves its WebJars.
+	private static final String JQUERY = "/webjars/jquery/3.7.1/jquery.min.js";
+	private static final String DATATABLES = "/webjars/datatables.net/2.3.8/js/dataTables.min.js";
+
+	@Test void b02_everyDatatablesPageLoadsJqueryAndDataTablesFromTheWebJarsBeforeTheToolkit() throws Exception {
 		for (var path : java.util.List.of("/console/ops/jobs", "/console/ops/audit")) {
 			var html = html(path);
+			var jquery = html.indexOf(JQUERY);
+			var dataTables = html.indexOf(DATATABLES);
+			var glue = html.indexOf("juneau-datatables.js");
 			var toolkit = html.indexOf("juneau-views.js");
-			var jquery = html.indexOf("/console/vendor/jquery/3.7.1/jquery.min.js");
-			var dataTables = html.indexOf("/console/vendor/datatables.net/js/dataTables.min.js");
-			org.junit.jupiter.api.Assertions.assertTrue(toolkit > 0 && jquery > toolkit && dataTables > jquery, () -> path + ": views=" + toolkit + ", jquery=" + jquery + ", dataTables=" + dataTables);
+			org.junit.jupiter.api.Assertions.assertTrue(jquery > 0 && dataTables > jquery && glue > dataTables && toolkit > glue,
+				() -> path + ": jquery=" + jquery + ", dataTables=" + dataTables + ", glue=" + glue + ", views=" + toolkit);
+			assertContains("dataTables.dataTables.min.css", html);
+			org.junit.jupiter.api.Assertions.assertEquals(html.indexOf(JQUERY), html.lastIndexOf(JQUERY), () -> path + ": jQuery loads once");
 			org.junit.jupiter.api.Assertions.assertFalse(html.contains("cdn."), () -> path + " must not load a library from a CDN");
+			org.junit.jupiter.api.Assertions.assertFalse(html.contains("/console/vendor/"), () -> path + " still loads the old vendor copies");
 		}
+		org.junit.jupiter.api.Assertions.assertFalse(html("/console/about").contains("jquery"), "a page without a table loads no jQuery");
 	}
 
-	@Test void b03_theVendorLibrariesAreServedFromTheWebJars() throws Exception {
-		for (var url : java.util.List.of("/console/vendor/jquery/3.7.1/jquery.min.js", "/console/vendor/datatables.net/js/dataTables.min.js"))
+	@Test void b03_theWebJarsAreServed() throws Exception {
+		for (var url : java.util.List.of("/console/ops/audit" + JQUERY, "/console/ops/audit" + DATATABLES))
 			C.get(url).run().assertStatus(200).assertHeader("Content-Type").asString().isContains("javascript");
 	}
 
-	@Test void b04_aVendorPathOutsideTheWebJarsDoesNotResolve() throws Exception {
-		C.get("/console/vendor/org/apache/juneau/petstore/console/VendorRest.class").run().assertStatus(404);
-		org.junit.jupiter.api.Assertions.assertEquals(404, status("/console/vendor/no-such/file.js"));
+	@Test void b04_aPathOutsideTheWebJarsDoesNotResolve() throws Exception {
+		org.junit.jupiter.api.Assertions.assertEquals(404, status("/console/ops/audit/webjars/../x"));
+		org.junit.jupiter.api.Assertions.assertEquals(404, status("/console/ops/audit/webjars/no-such/file.js"));
+		org.junit.jupiter.api.Assertions.assertEquals(404, status("/console/vendor/jquery/3.7.1/jquery.min.js"));
 	}
 }

@@ -19,6 +19,7 @@ package org.apache.juneau.rest.server.auth.saml;
 import javax.xml.parsers.*;
 
 import org.apache.commons.xml.secure.SecureDocumentBuilderFactory;
+import org.xml.sax.*;
 
 /**
  * Shared JAXP setup for SAML response and metadata parsing.
@@ -47,5 +48,36 @@ final class SamlXml {
 		dbf.setXIncludeAware(false);
 		dbf.setExpandEntityReferences(false);
 		return dbf;
+	}
+
+	/**
+	 * Creates a document builder from {@link #documentBuilderFactory()} whose parse errors are rethrown.
+	 *
+	 * <p>
+	 * The JDK default error handler prints {@code [Fatal Error]} to stderr before throwing.  Rethrowing
+	 * from the handler yields the same {@link SAXParseException} without the stderr output.
+	 *
+	 * @return A new document builder.
+	 * @throws ParserConfigurationException If the JDK parser cannot apply the required features.
+	 */
+	static DocumentBuilder newDocumentBuilder() throws ParserConfigurationException {
+		var db = documentBuilderFactory().newDocumentBuilder();
+		db.setErrorHandler(new ErrorHandler() {
+			@Override /* ErrorHandler */
+			public void warning(SAXParseException e) {
+				// Non-fatal; ignored as with the JDK default handler (which only prints).
+			}
+
+			@Override /* ErrorHandler */
+			public void error(SAXParseException e) throws SAXException {
+				throw e;
+			}
+
+			@Override /* ErrorHandler */
+			public void fatalError(SAXParseException e) throws SAXException {
+				throw e;
+			}
+		});
+		return db;
 	}
 }

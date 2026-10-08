@@ -19,6 +19,7 @@ package org.apache.juneau.rest.server.view.freemarker.console;
 import java.util.*;
 
 import org.apache.juneau.rest.server.*;
+import org.apache.juneau.rest.server.console.*;
 import org.apache.juneau.rest.server.view.freemarker.*;
 
 import freemarker.cache.*;
@@ -95,7 +96,9 @@ public class ConsoleFreemarkerMixin extends FreemarkerMixin {
 	public static final String DEFAULT_CHROME_TEMPLATE = "base.ftlh";
 
 	private final String chromeTemplate;
-	private final List<ExtraPack> extraPacks;
+	private final ToolkitPackRegistry packs;
+	private final CardRequirements cardRequirements;
+	private final CardTypeRegistry cardTypes;
 	private final boolean devMode;
 	private final ClassLoader adopterLoader;
 	private final String adopterRoot;
@@ -112,18 +115,20 @@ public class ConsoleFreemarkerMixin extends FreemarkerMixin {
 	 * Builder constructor.
 	 *
 	 * @param builder The builder. Must not be {@code null}.
+	 * @throws IllegalArgumentException If the toolkit packs, provided packs or card requirements don't validate.
 	 */
 	protected ConsoleFreemarkerMixin(Builder builder) {
 		super(builder);
 		this.chromeTemplate = builder.chromeTemplate;
-		this.extraPacks = List.copyOf(builder.extraPacks);
+		this.packs = new ToolkitPackRegistry();
+		builder.extraPacks.forEach(packs::register);
+		packs.provide(builder.providedPacks).validate();
+		this.cardRequirements = builder.cardRequirements.build(packs);
+		this.cardTypes = builder.cardTypes.build();
 		this.devMode = builder.devMode;
 		this.adopterLoader = builder.adopterLoader;
 		this.adopterRoot = builder.adopterRoot;
 	}
-
-	/** Extra toolkit pack registered through the builder, applied when {@code resolveConfiguration} builds the registry. */
-	private record ExtraPack(String name, List<String> cssPaths, List<String> jsPaths) {}
 
 	/**
 	 * Creates a new builder.
@@ -228,13 +233,10 @@ public class ConsoleFreemarkerMixin extends FreemarkerMixin {
 		if (cfg.getSharedVariable(TagMethodModel.NAME) == null)
 			cfg.setSharedVariable(TagMethodModel.NAME, new TagMethodModel());
 		if (cfg.getSharedVariable(PageDirectiveModel.NAME) == null) {
-			var packs = new ToolkitPackRegistry();
-			for (var extra : extraPacks)
-				packs.register(extra.name(), extra.cssPaths(), extra.jsPaths());
 			cfg.setSharedVariable(PageDirectiveModel.NAME, new PageDirectiveModel(chromeTemplate, packs));
 		}
 		if (cfg.getSharedVariable(CardDirectiveModel.NAME) == null)
-			cfg.setSharedVariable(CardDirectiveModel.NAME, new CardDirectiveModel(devMode));
+			cfg.setSharedVariable(CardDirectiveModel.NAME, new CardDirectiveModel(devMode, cardRequirements, cardTypes));
 		if (cfg.getSharedVariable(NavigationDirectiveModel.NAME) == null)
 			cfg.setSharedVariable(NavigationDirectiveModel.NAME, new NavigationDirectiveModel());
 		if (cfg.getSharedVariable(NodeDirectiveModel.NAME) == null)
@@ -263,7 +265,10 @@ public class ConsoleFreemarkerMixin extends FreemarkerMixin {
 	public static class Builder extends FreemarkerMixin.Builder {
 
 		String chromeTemplate = DEFAULT_CHROME_TEMPLATE;
-		final List<ExtraPack> extraPacks = new ArrayList<>();
+		final List<ToolkitPack> extraPacks = new ArrayList<>();
+		final List<String> providedPacks = new ArrayList<>();
+		final CardRequirements.Builder cardRequirements = CardRequirements.create();
+		final CardTypeRegistry.Builder cardTypes = CardTypeRegistry.standard().copy();
 		boolean devMode = Boolean.getBoolean("juneau.console.devMode");
 		ClassLoader adopterLoader;
 		String adopterRoot = "";
@@ -277,7 +282,7 @@ public class ConsoleFreemarkerMixin extends FreemarkerMixin {
 		 * <p>
 		 * Covariantly narrowed to this {@code Builder} so a fluent chain can mix inherited setters
 		 * (e.g. {@link #basePath(String)}) with the console-specific {@link #chromeTemplate(String)} /
-		 * {@link #registerToolkitPack(String, java.util.List, java.util.List)} in any order.
+		 * {@link #registerToolkitPack(ToolkitPack)} in any order.
 		 */
 		@Override
 		public Builder basePath(String value) {
@@ -301,12 +306,10 @@ public class ConsoleFreemarkerMixin extends FreemarkerMixin {
 		}
 
 		/**
-		 * Registers an app-supplied toolkit pack (Q7 A / I2 public seam).
+		 * Registers an app-supplied {@link ToolkitPack.Kind#RUNTIME} toolkit pack with no dependencies.
 		 *
 		 * <p>
-		 * Extra packs are applied when {@code resolveConfiguration} constructs the
-		 * {@link ToolkitPackRegistry}, alongside the built-in {@code "views"} pack. A second pack after
-		 * GA must not need a new public method.
+		 * Same as {@link #registerToolkitPack(ToolkitPack)} with {@code kind(RUNTIME)} and the default resolver.
 		 *
 		 * @param name The pack name.
 		 * @param cssPaths Ordered CSS asset paths.
@@ -314,7 +317,63 @@ public class ConsoleFreemarkerMixin extends FreemarkerMixin {
 		 * @return This object.
 		 */
 		public Builder registerToolkitPack(String name, List<String> cssPaths, List<String> jsPaths) {
-			extraPacks.add(new ExtraPack(name, List.copyOf(cssPaths), List.copyOf(jsPaths)));
+			return registerToolkitPack(ToolkitPack.create(name).css(cssPaths).js(jsPaths).kind(ToolkitPack.Kind.RUNTIME).build());
+		}
+
+		/**
+		 * Registers an app-supplied toolkit pack.
+		 *
+		 * <p>
+		 * A pack with the name of a built-in or earlier pack replaces it completely, including its
+		 * {@code dependsOn}.  {@link #build()} validates the pack graph.
+		 *
+		 * @param pack The pack.
+		 * @return This object.
+		 */
+		public Builder registerToolkitPack(ToolkitPack pack) {
+			extraPacks.add(Objects.requireNonNull(pack, "pack"));
+			return this;
+		}
+
+		/**
+		 * Names packs the app's chrome already loads.  A provided pack contributes no URLs; its dependencies still load
+		 * unless they are provided too.
+		 *
+		 * @param names Registered pack names.
+		 * @return This object.
+		 */
+		public Builder providedPacks(String...names) {
+			providedPacks.addAll(Arrays.asList(names));
+			return this;
+		}
+
+		/**
+		 * Adds packs every card of a type requires, after the built-in one
+		 * ({@code datatables} &rarr; {@code "datatables-glue"}).
+		 *
+		 * @param type The card type.
+		 * @param packs Registered pack names.
+		 * @return This object.
+		 */
+		public Builder cardRequires(String type, String...packs) {
+			cardRequirements.add(type, packs);
+			return this;
+		}
+
+		/**
+		 * Registers a server-side card type handler for this mixin's {@code <@card>} directive, on top of
+		 * {@link CardTypeRegistry#standard()}.
+		 *
+		 * <p>
+		 * Most custom cards need only a JS handler; register a {@link CardTypeHandler} here when the server must
+		 * validate or enrich the body. To also load toolkit packs for the type, use {@link #cardRequires(String, String...)}.
+		 *
+		 * @param handler The handler. Must not be <jk>null</jk>.
+		 * @return This object.
+		 * @throws IllegalArgumentException E-21 bad type name; E-22 reserved type; E-20 already registered.
+		 */
+		public Builder cardType(CardTypeHandler handler) {
+			cardTypes.add(handler);
 			return this;
 		}
 

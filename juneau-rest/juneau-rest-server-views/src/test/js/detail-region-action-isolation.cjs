@@ -154,7 +154,7 @@ function run(opts) {
 }
 
 // Literal (non-templated) endpoints deliberately: this harness's `ctx.dataTable` is a bare `{}` stub with no real
-// row lookup, so a `{property}`-templated endpoint would now (WORK-J0521, B1b) refuse the submission as
+// row lookup, so a `{property}`-templated endpoint would now refuse the submission as
 // empty-substitution - a fact about the fixture, not about region isolation, which is what this harness tests.
 const PLAIN = { id: 'ack', label: 'Ack', method: 'POST', endpoint: '/rows/42/ack' };
 const DIALOG = { id: 'esc', present: 'dialog', label: 'Escalate', method: 'POST', endpoint: '/rows/42/esc',

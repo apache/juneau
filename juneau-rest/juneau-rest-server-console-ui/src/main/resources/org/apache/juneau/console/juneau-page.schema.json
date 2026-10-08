@@ -1,6 +1,6 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "$id": "https://juneau.apache.org/schemas/juneau-page/1.0/juneau-page.schema.json",
+  "$id": "https://juneau.apache.org/schemas/juneau-page/1.1/juneau-page.schema.json",
   "title": "Juneau console page contract",
   "type": "object",
   "additionalProperties": false,
@@ -115,12 +115,15 @@
         "type":     { "type": "string", "pattern": "^[a-z][a-z0-9-]{0,31}$" },
         "src":      { "$ref": "#/$defs/url" },
         "title":    { "type": "string" },
-        "template": { "type": "string", "description": "id of a <template data-card> element" }
+        "template": { "type": "string", "description": "id of a <template data-card> element" },
+        "visibleWhen": { "$ref": "#/$defs/visibleWhen" }
       },
       "oneOf": [
         { "$ref": "#/$defs/htmlCard" },
         { "$ref": "#/$defs/datatablesCard" },
-        { "properties": { "type": { "not": { "enum": ["html", "datatables"] } } } }
+        { "$ref": "#/$defs/consoleOutputCard" },
+        { "$ref": "#/$defs/runViewCard" },
+        { "properties": { "type": { "not": { "enum": ["html", "datatables", "console-output", "run-view", "chart"] } } } }
       ]
     },
     "htmlCard": {
@@ -133,15 +136,149 @@
       "oneOf": [ { "required": ["template"] }, { "required": ["src"] } ]
     },
     "datatablesCard": {
-      "description": "C1 bridge only. C2 replaces this definition.",
       "properties": {
         "type":  { "const": "datatables" },
-        "id": true, "src": true, "title": true,
-        "table": { "oneOf": [ { "type": "string", "minLength": 1 }, { "type": "object" } ] },
-        "page":  { "type": "object" }
+        "id": true, "title": true, "visibleWhen": true,
+        "src":   { "$ref": "#/$defs/url" },
+        "page":  { "type": "object" },
+        "table": { "anyOf": [
+          { "$ref": "#/$defs/tableCatalog" },
+          { "type": "object", "required": ["view"], "properties": { "view": { "type": "object" } } }
+        ] }
       },
       "additionalProperties": false,
-      "required": ["table"]
+      "oneOf": [
+        { "required": ["src"], "not": { "required": ["table"] } },
+        { "required": ["table"], "not": { "required": ["src"] } }
+      ]
+    },
+    "tableCatalog": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["columns"],
+      "oneOf": [ { "required": ["dataUrl"] }, { "required": ["rows"] } ],
+      "properties": {
+        "dataUrl":       { "$ref": "#/$defs/url" },
+        "columns":       { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/tableColumn" } },
+        "rowType":       { "type": "string" },
+        "dataMode":      { "enum": ["client", "server"] },
+        "layout":        { "enum": ["wide", "narrow"] },
+        "defaultOrder":  { "type": "array", "items": { "type": "object" } },
+        "ribbon":        { "type": "array", "items": { "type": "object", "required": ["type"] } },
+        "pollIntervalMs":{ "type": "integer" },
+        "pausePollingWhileEditing": { "type": "boolean" },
+        "columnConfig":  { "anyOf": [ { "type": "boolean" }, { "type": "object" } ] },
+        "cleanAddress":  { "type": "boolean" },
+        "primary":       { "type": "boolean" },
+        "copyLink":      { "type": "boolean" },
+        "rowClassRules": { "type": "array", "items": { "type": "object" } },
+        "rowActions":    { "type": "array", "items": { "$ref": "#/$defs/rowAction" } },
+        "rows":          { "type": "array" },
+        "selection":     { "$ref": "#/$defs/selection" },
+        "bulk":          { "$ref": "#/$defs/bulk" },
+        "detail":        { "$ref": "#/$defs/rowDetail" },
+        "quickStats":    { "type": "object", "required": ["items"] },
+        "urlState":      { "$ref": "#/$defs/urlState" }
+      }
+    },
+    "tableColumn": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "key": { "type": "string", "minLength": 1 }, "data": { "type": "string", "minLength": 1 },
+        "label": { "type": "string" }, "title": { "type": "string" },
+        "search": { "type": "object" },
+        "render": { "type": "object", "required": ["id"] },
+        "href": { "type": "string" }, "className": { "type": "string" },
+        "orderable": { "type": "boolean" }, "searchable": { "type": "boolean" },
+        "defaultVisible": { "type": "boolean" }, "pinned": { "type": "boolean" },
+        "formats": { "type": "array", "items": { "type": "string" } }
+      },
+      "anyOf": [ { "required": ["key"] }, { "required": ["data"] } ]
+    },
+    "selection": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["rowIdField"],
+      "properties": {
+        "rowIdField":     { "type": "string", "minLength": 1 },
+        "selectAll":      { "type": "boolean", "default": true },
+        "scope":          { "enum": ["persistent", "page"], "default": "persistent" },
+        "selectableWhen": { "type": "array", "items": { "$ref": "#/$defs/enabledRule" } },
+        "labelField":     { "type": "string" }
+      }
+    },
+    "bulk": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["actions"],
+      "properties": { "actions": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/bulkAction" } } }
+    },
+    "bulkAction": {
+      "allOf": [ { "$ref": "#/$defs/rowAction" } ],
+      "properties": {
+        "mode":            { "enum": ["perRow", "aggregate"], "default": "perRow" },
+        "confirmTitle":    { "type": "string" },
+        "confirmRenderer": { "type": "string", "description": "Confirm renderer name; forwarded to dialogs.confirm. The built-in fallback modal ignores it." },
+        "confirm":         { "oneOf": [ { "type": "string" }, { "const": false } ] }
+      }
+    },
+    "rowAction":   { "type": "object", "required": ["id", "endpoint"], "description": "RowAction wire shape; later work adds tone/confirmLabel/confirmRenderer/visibleWhen." },
+    "enabledRule": { "type": "object", "required": ["field", "op"], "properties": { "field": { "type": "string" }, "op": { "type": "string" }, "value": true, "reason": { "type": "string" } } },
+    "rowDetail":   { "type": "object", "required": ["endpoint"], "properties": { "contractVersion": false } },
+    "visibleWhen": { "description": "Declarative per-card visibility rule; shape defined with the visibility work." },
+    "urlState":    { "description": "URL-state options; shape defined with the URL-state work." },
+    "consoleOutputCard": {
+      "description": "Console-output bridge card; the shell calls JuneauViews.consoleOutput.mount(body, output). Ranges are checked by ConsoleOutputDef.",
+      "properties": {
+        "type":   { "const": "console-output" },
+        "id": true, "title": true,
+        "output": {
+          "type": "object",
+          "properties": {
+            "linesUrl":     { "type": "string", "minLength": 1 },
+            "downloadUrl":  { "type": "string", "minLength": 1 },
+            "refreshMs":    { "type": "integer" },
+            "tail":         { "type": "integer" },
+            "earlierLimit": { "type": "integer" },
+            "rows":         { "type": "integer" },
+            "compact":      { "type": "boolean" },
+            "anchorPrefix": { "type": "string", "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,31}$" },
+            "showTime":     { "type": "boolean" },
+            "markers":      { "enum": ["dim", "hide", "show"] },
+            "title":        { "type": "string" }
+          },
+          "additionalProperties": false,
+          "required": ["linesUrl"]
+        }
+      },
+      "additionalProperties": false,
+      "required": ["output"]
+    },
+    "runViewCard": {
+      "description": "Run-view bridge card; the shell calls JuneauViews.runView.mount(body, runView). Ranges are checked by RunViewDef. eventsUrl is required unless poll is false (anyOf, because the subset validator has no if/then).",
+      "properties": {
+        "type":   { "const": "run-view" },
+        "id": true, "title": true,
+        "runView": {
+          "type": "object",
+          "properties": {
+            "eventsUrl": { "type": "string", "minLength": 1 },
+            "refreshMs": { "type": "integer" },
+            "poll":      { "type": "boolean" },
+            "compact":   { "type": "boolean" },
+            "title":     { "type": "string" },
+            "rawHref":   { "type": "string", "minLength": 1 }
+          },
+          "additionalProperties": false,
+          "anyOf": [
+            { "required": ["eventsUrl"] },
+            { "required": ["poll"], "properties": { "poll": { "const": false } } }
+          ]
+        }
+      },
+      "additionalProperties": false,
+      "required": ["runView"]
     }
   }
 }

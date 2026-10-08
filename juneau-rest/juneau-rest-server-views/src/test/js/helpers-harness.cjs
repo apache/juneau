@@ -17,7 +17,7 @@
 
 /*
  * helpers-harness.cjs - the shared loader for the always-on Node behavioral harness that exercises
- * juneau-helpers.js (WORK-J0522b).
+ * juneau-helpers.js.
  *
  * Deliberately loads only juneau-renders.js + juneau-views.js + juneau-helpers.js - NO juneau-regions.js.
  * Design §9.2 requires every helper to be testable with no region at all, so a harness that pulled in the

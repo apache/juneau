@@ -16,7 +16,7 @@
  */
 
 /*
- * juneau-console.cjs - Node harness for juneau-console.js (WORK-J0559 C1 Task 5). Builds #juneau-page contract
+ * juneau-console.cjs - Node harness for juneau-console.js. Builds #juneau-page contract
  * pages, loads the real production script into a fresh vm sandbox PER CASE (via console-dom-shim.cjs), and prints
  * ONE JSON report that ConsoleJs_Shell_Test.java asserts against.
  *
@@ -104,7 +104,7 @@ function run(contract, templates, opts) {
 		console: { error: m => errors.push(String(m)), log: () => { /* no-op */ }, warn: () => { /* no-op */ } },
 		URLSearchParams: env.window.URLSearchParams,
 		CustomEvent: env.window.CustomEvent,
-		WeakSet, Map, Set, Promise, JSON, Object, Array, Error, TypeError, String, Number,
+		WeakSet, Map, Set, Promise, JSON, Object, Array, Error, TypeError, String, Number, AbortController,
 		fetch: () => Promise.reject(new Error('no fetch in harness')),
 		setTimeout: fn => fn()
 	};
@@ -244,7 +244,7 @@ const out = {};
 })();
 
 //----------------------------------------------------------------------------------------------------------------
-// E-JS-1 .. E-JS-12
+// E-JS-1 .. E-JS-14
 //----------------------------------------------------------------------------------------------------------------
 out.errors = {};
 
@@ -273,7 +273,7 @@ out.errors = {};
 	out.errors['3'] = { threw: r.threw, errors: r.errors, banner: bannerText(r.doc) };
 })();
 
-// E-JS-4: unknown card type (not fatal; mount continues, card absent from result.cards).
+// E-JS-4: a card type still unregistered at DOMContentLoaded (not fatal; the card stays in result.cards as a pending host).
 (function () {
 	const r = run(C({ cards: [{ id: 'k', type: 'kpi' }] }), []);
 	out.errors['4'] = {
@@ -303,7 +303,7 @@ out.errors = {};
 	out.errors['7'] = { threw: r.threw, errors: r.errors, banner: bannerText(r.doc) };
 })();
 
-// E-JS-8: a registered handler throws (not fatal; card absent from result.cards). registerCard() must run against
+// E-JS-8: a registered handler throws (not fatal; the card host stays in result.cards). registerCard() must run against
 // the SAME sandbox/realm the shell auto-mounted into, so this drives mount() manually (no island) rather than
 // trying to register the type before an auto-mounting load.
 (function () {
@@ -324,7 +324,7 @@ out.errors = {};
 
 	// registerCard contract: bad type name.
 	let bad = null;
-	try { r.JC.registerCard('Bad', () => { /* no-op */ }); } catch (error) { bad = error.name; }
+	try { r.JC.registerCard('Bad', () => { /* no-op */ }); } catch (error) { bad = { name: error.name, code: error.code }; }
 	out.registerBadType = bad;
 })();
 
@@ -339,7 +339,7 @@ out.errors = {};
 	};
 })();
 
-// E-JS-10: datatables card with no JuneauViews.regions loaded (not fatal; deferred to DOMContentLoaded).
+// E-JS-10: datatables card still pending at DOMContentLoaded (not fatal).
 (function () {
 	const r = run(C({ cards: [{ id: 't', type: 'datatables', table: {} }] }), []);
 	out.errors['10'] = { threw: r.threw, errors: r.errors, banner: bannerText(r.doc) };
@@ -371,6 +371,48 @@ out.errors = {};
 	out.errors['12'] = { threw: threw2 };
 })();
 
+// E-JS-13: console-output card with no JuneauViews.consoleOutput loaded (not fatal; deferred to DOMContentLoaded).
+(function () {
+	const r = run(C({ cards: [{ id: 'co', type: 'console-output', output: { linesUrl: '/runs/1/lines' } }] }), []);
+	out.errors['13'] = {
+		threw: r.threw,
+		errors: r.errors,
+		banner: bannerText(r.doc),
+		bodyRendered: !!r.doc.querySelector('#co-body.jc-card-body')
+	};
+})();
+
+// E-JS-14: run-view card with no JuneauViews.runView loaded (not fatal; deferred to DOMContentLoaded).
+(function () {
+	const r = run(C({ cards: [{ id: 'rv', type: 'run-view', runView: { eventsUrl: '/runs/1/events' } }] }), []);
+	out.errors['14'] = {
+		threw: r.threw,
+		errors: r.errors,
+		banner: bannerText(r.doc),
+		bodyRendered: !!r.doc.querySelector('#rv-body.jc-card-body')
+	};
+})();
+
+// E-JS-8 (console-output): JuneauViews.consoleOutput.mount throws synchronously inside onReady.  Not fatal; the card
+// host stays in the DOM because the throw happens after mount() returned.
+(function () {
+	const r = run(C({ cards: [{ id: 'co', type: 'console-output', output: {} }] }), [], {
+		before: sandbox => {
+			sandbox.window.JuneauViews = {
+				consoleOutput: {
+					mount: function () { throw new Error("console-output region 'co-body': linesUrl is required"); }
+				}
+			};
+		}
+	});
+	out.errors['8co'] = {
+		threw: r.threw,
+		errors: r.errors,
+		banner: bannerText(r.doc),
+		hostRendered: !!r.doc.querySelector('#co')
+	};
+})();
+
 //----------------------------------------------------------------------------------------------------------------
 // Custom card type registration
 //----------------------------------------------------------------------------------------------------------------
@@ -389,37 +431,108 @@ out.errors = {};
 })();
 
 //----------------------------------------------------------------------------------------------------------------
-// Datatables bridge: with JuneauViews.regions stubbed, mount() must hand it the pending-tables hookup map.
+// Console-output bridge: with JuneauViews.consoleOutput stubbed, each console-output card calls mount() once on
+// DOMContentLoaded with (its own "<id>-body" element, a copy of card.output, {}).
 //----------------------------------------------------------------------------------------------------------------
-(function datatablesBridge() {
-	let captured = null;
-	const r = run(C({ cards: [{ id: 'dt1', type: 'datatables', table: { ajax: '/api/x' } }] }), [], {
+(function consoleOutputBridge() {
+	const calls = [];
+	let callsBeforeReady = -1;
+	const r = run(C({ cards: [
+		{ id: 'co1', type: 'console-output', title: 'Output', output: { linesUrl: '/runs/1/lines', rows: 20, title: 'Build' } },
+		{ id: 'co2', type: 'console-output', output: { linesUrl: '/runs/2/lines' } }
+	] }), [], {
 		before: sandbox => {
 			sandbox.window.JuneauViews = {
-				regions: { mount: function (hookup) { captured = hookup; } }
+				consoleOutput: {
+					mount: function (el, options, ctx) {
+						calls.push({
+							elId: el.id,
+							elClass: el.className,
+							hostId: el.parentNode ? el.parentNode.id : null,
+							options: options,
+							ctx: ctx
+						});
+						return function () { /* cleanup is discarded by the shell */ };
+					}
+				}
+			};
+		},
+		after: () => { callsBeforeReady = calls.length; }
+	});
+	const idCounts = {};
+	for (const e of r.doc.querySelectorAll('[id]')) idCounts[e.id] = (idCounts[e.id] || 0) + 1;
+	out.consoleOutput = {
+		threw: r.threw,
+		errors: r.errors,
+		callsBeforeReady: callsBeforeReady,
+		calls: calls,
+		cardTitle: txt(r.doc, '.jc-card-title'),
+		resultCards: r.result ? Object.keys(r.result.cards) : null,
+		duplicateIds: Object.keys(idCounts).filter(k => idCounts[k] > 1)
+	};
+})();
+
+//----------------------------------------------------------------------------------------------------------------
+// Run-view bridge: with JuneauViews.runView stubbed, each run-view card calls mount() once on DOMContentLoaded with
+// (its own "<id>-body" element, a copy of card.runView, {}), and a throwing mount is an E-JS-8 that keeps the host.
+//----------------------------------------------------------------------------------------------------------------
+(function runViewBridge() {
+	const calls = [];
+	let callsBeforeReady = -1;
+	const r = run(C({ cards: [
+		{ id: 'rv1', type: 'run-view', title: 'Run', runView: { eventsUrl: '/runs/1/events', compact: true } },
+		{ id: 'rv2', type: 'run-view', runView: { poll: false } }
+	] }), [], {
+		before: sandbox => {
+			sandbox.window.JuneauViews = {
+				runView: {
+					mount: function (el, options, ctx) {
+						calls.push({
+							elId: el.id,
+							elClass: el.className,
+							hostId: el.parentNode ? el.parentNode.id : null,
+							options: options,
+							ctx: ctx
+						});
+						return function () { /* cleanup is discarded by the shell */ };
+					}
+				}
+			};
+		},
+		after: () => { callsBeforeReady = calls.length; }
+	});
+	const idCounts = {};
+	for (const e of r.doc.querySelectorAll('[id]')) idCounts[e.id] = (idCounts[e.id] || 0) + 1;
+	out.runView = {
+		threw: r.threw,
+		errors: r.errors,
+		callsBeforeReady: callsBeforeReady,
+		calls: calls,
+		cardTitle: txt(r.doc, '.jc-card-title'),
+		resultCards: r.result ? Object.keys(r.result.cards) : null,
+		duplicateIds: Object.keys(idCounts).filter(k => idCounts[k] > 1)
+	};
+})();
+
+(function runViewThrows() {
+	const r = run(C({ cards: [{ id: 'rv', type: 'run-view', runView: {} }] }), [], {
+		before: sandbox => {
+			sandbox.window.JuneauViews = {
+				runView: { mount: function () { throw new Error("run-view region 'rv-body': eventsUrl is required"); } }
 			};
 		}
 	});
-	// Simulate the engine: the view's table takes the card id, inside the mount body.  Ids must stay unique.
-	const body = r.doc.querySelector('.jc-card-body');
-	const table = r.doc.createElement('table');
-	table.id = 'dt1';
-	body.appendChild(table);
-	const idCounts = {};
-	for (const e of r.doc.querySelectorAll('[id]')) idCounts[e.id] = (idCounts[e.id] || 0) + 1;
-	out.bridge = {
-		bodyId: body.id,
-		duplicateIds: Object.keys(idCounts).filter(k => idCounts[k] > 1),
+	out.errors['8rv'] = {
 		threw: r.threw,
 		errors: r.errors,
-		captured: captured,
-		bodyRendered: !!r.doc.querySelector('#dt1-body.jc-card-body[data-juneau-layout="wide"]')
+		banner: bannerText(r.doc),
+		hostRendered: !!r.doc.querySelector('#rv')
 	};
 })();
 
 //----------------------------------------------------------------------------------------------------------------
 // ADDENDUM 1: href safety, exercised indirectly via nav-link rendering (isSafeHref/isProtocolRelativeUrl are not
-// exported - see WORK-J0559 Task 5 addendum).  A rejected href never gets a DOM element at all (see link()'s
+// exported - see the Task 5 addendum).  A rejected href never gets a DOM element at all (see link()'s
 // `if (!a) continue;` in renderNav's row() closure); an accepted href keeps the exact original string.
 //----------------------------------------------------------------------------------------------------------------
 (function hrefSafetyNav() {
@@ -455,7 +568,8 @@ out.errors = {};
 		const r = run(C({ cards: [{ id: 'hs' + i, type: 'html', src: src }] }), []);
 		results[src] = {
 			errors: r.errors,
-			mainChildren: (r.doc.querySelector('main.jc-main') || { children: [] }).childNodes.filter(n => n.nodeType === 1).length
+			// The failed card's host stays in <main>, but nothing is painted inside it.
+			hostContent: ((r.doc.querySelector('main.jc-main') || { childNodes: [] }).childNodes.find(n => n.id === 'hs' + i) || { childNodes: [] }).childNodes.length
 		};
 	});
 	out.hrefSafety.htmlCardSrc = results;

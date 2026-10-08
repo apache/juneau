@@ -36,7 +36,8 @@
 
 	const SUPPORTED_CONTRACT_VERSIONS = Object.freeze(["1"]);
 	const TYPE_RE = /^[a-z][a-z0-9-]{0,31}$/;
-	const FATAL = new Set(["E-JS-1", "E-JS-2", "E-JS-3", "E-JS-5", "E-JS-6", "E-JS-7", "E-JS-11", "E-JS-12"]);
+	const FATAL = new Set(["E-JS-1", "E-JS-2", "E-JS-3", "E-JS-5", "E-JS-6", "E-JS-7", "E-JS-11", "E-JS-12",
+		"E-JS-20", "E-JS-21", "E-JS-23"]);
 	const MSG = {
 		"E-JS-1": "missing or unparseable <script id=\"juneau-page\">: '%s'",
 		"E-JS-2": "unsupported page contract version '%s'; this shell supports '%s'",
@@ -50,7 +51,13 @@
 		"E-JS-9": "unsafe href '%s' on %s '%s'",
 		"E-JS-10": "datatables card '%s' needs JuneauViews.regions; load the views toolkit",
 		"E-JS-11": "JuneauConsole.mount called twice on the same root",
-		"E-JS-12": "card type '%s' is already registered"
+		"E-JS-12": "card type '%s' is already registered",
+		"E-JS-13": "console-output card '%s' needs JuneauViews.consoleOutput; load the views toolkit",
+		"E-JS-14": "run-view card '%s' needs JuneauViews.runView; load the views toolkit",
+		"E-JS-20": "card type '%s' must match /^[a-z][a-z0-9-]{0,31}$/",
+		"E-JS-21": "card type '%s' handler must be a function or an object with render(); got '%s'",
+		"E-JS-22": "card '%s' is not mounted",
+		"E-JS-23": "JuneauConsoleCards entry '%s' is not a [type, handler] pair"
 	};
 
 	class JuneauConsoleError extends Error {
@@ -61,8 +68,10 @@
 		}
 	}
 
-	const handlers = new Map();
+	const handlers = new Map();              // type -> {render, refresh, destroy}
 	const mountedRoots = new WeakSet();
+	const cardState = new Map();              // id -> {card, el, type, handler, ctx, destroyed, ...}
+	const pendingByType = new Map();          // type -> [{card, host, state}]
 	let mounted = null;   // { contract, cards: Map<id, frozen card> }
 
 	function fmt(msg, ...args) {
@@ -101,7 +110,7 @@
 	 * special-scheme URL parser folds "\" into "/" before resolving). A resulting SECOND slash right after the
 	 * first - a literal "//host", a triple-slash "///host", a two-backslash "\\host", or an interior-obfuscated
 	 * "/\t/host" - resolves to a THIRD-PARTY origin, not the same-site relative/absolute path a bare single
-	 * leading "/" is. Local duplicate of juneau-views.js's identically-named helper (WORK-J0516): console-ui
+	 * leading "/" is. Local duplicate of juneau-views.js's identically-named helper: console-ui
 	 * must not depend on views (the module graph runs the other way), so the algorithm is copied verbatim here
 	 * rather than imported.
 	 */
@@ -121,7 +130,7 @@
 	 * ONLY when {@link isProtocolRelativeUrl} says it is not protocol-relative - a bare "//evil.example/x"
 	 * resolves to a THIRD-PARTY origin, not the "relative path" a naive check would accept it as (a
 	 * phishing/open-redirect defense, not an XSS one - a protocol-relative URL cannot run JS). Mirrors
-	 * juneau-views.js's isSafeMarkdownHref (WORK-J0516); duplicated rather than imported for the same
+	 * juneau-views.js's isSafeMarkdownHref; duplicated rather than imported for the same
 	 * module-graph reason as {@link isProtocolRelativeUrl} above.
 	 */
 	function isSafeHref(href) {
@@ -461,35 +470,210 @@
 			.catch(e => fail(ctx.document, "E-JS-8", card.id, card.type, e.message));
 	}
 
-	// C1 bridge (§4.6): one regions.mount(hookup) on DOMContentLoaded for all datatables cards.
-	const pendingTables = {};
-	let tablesScheduled = false;
-
-	function datatablesCard(card, el0, ctx) {
+	// Console-output bridge: one JuneauViews.consoleOutput.mount per card on DOMContentLoaded, by which time the views
+	// toolkit scripts (written after the shell) have run.  The returned cleanup is discarded: the shell has no card
+	// teardown, so polling ends with the page.
+	function consoleOutputCard(card, el0, ctx) {
 		const body = ctx.document.createElement("div");
-		// Derived id: the view's own table takes the card id (view.id), so the body must not repeat it (duplicate DOM ids).
 		body.id = card.id + "-body";
 		body.className = "jc-card-body";
-		body.setAttribute("data-juneau-layout", "wide");
-		el0.setAttribute("data-juneau-card", "datatables");
-		el0.removeAttribute("id");
+		el0.setAttribute("data-juneau-card", "console-output");
 		el0.appendChild(body);
-		pendingTables[body.id] = { table: card.table };
-		if (tablesScheduled) return;
-		tablesScheduled = true;
+		const output = card.output && typeof card.output === "object" && !Array.isArray(card.output) ? card.output : {};
 		ctx.onReady(function () {
-			const regions = window.JuneauViews && window.JuneauViews.regions;
-			if (!regions || typeof regions.mount !== "function") {
-				for (const id of Object.keys(pendingTables)) fail(ctx.document, "E-JS-10", id.replace(/-body$/, ""));
+			const co = window.JuneauViews && window.JuneauViews.consoleOutput;
+			if (!co || typeof co.mount !== "function") {
+				fail(ctx.document, "E-JS-13", card.id);
 				return;
 			}
-			regions.mount(Object.assign({}, pendingTables));
+			try {
+				co.mount(body, Object.assign({}, output), {});
+			} catch (e) {
+				fail(ctx.document, "E-JS-8", card.id, card.type, e && e.message);
+			}
+		});
+	}
+
+	// Run-view bridge: one JuneauViews.runView.mount per card on DOMContentLoaded, as for console-output.  The returned
+	// cleanup is discarded: the shell has no card teardown, so polling ends with the page.
+	function runViewCard(card, el0, ctx) {
+		const body = ctx.document.createElement("div");
+		body.id = card.id + "-body";
+		body.className = "jc-card-body";
+		el0.setAttribute("data-juneau-card", "run-view");
+		el0.appendChild(body);
+		const runView = card.runView && typeof card.runView === "object" && !Array.isArray(card.runView) ? card.runView : {};
+		ctx.onReady(function () {
+			const rv = window.JuneauViews && window.JuneauViews.runView;
+			if (!rv || typeof rv.mount !== "function") {
+				fail(ctx.document, "E-JS-14", card.id);
+				return;
+			}
+			try {
+				rv.mount(body, Object.assign({}, runView), {});
+			} catch (e) {
+				fail(ctx.document, "E-JS-8", card.id, card.type, e && e.message);
+			}
 		});
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
 	// Mount
 	//-----------------------------------------------------------------------------------------------------------------
+
+	const DEFAULT_CSRF_HEADER = "X-Csrf-Token";
+
+	function csrfHeaders(doc, method) {
+		if (method === "GET" || method === "HEAD") return {};
+		const token = doc.body && doc.body.getAttribute("data-juneau-csrf");
+		if (!token) return {};
+		const name = (doc.body.getAttribute("data-juneau-csrf-header") || DEFAULT_CSRF_HEADER);
+		const h = {};
+		h[name] = token;
+		return h;
+	}
+
+	let announceRegion = null;
+
+	function announce(doc, text) {
+		if (window.JuneauViews && window.JuneauViews.announce && typeof window.JuneauViews.announce === "function") {
+			window.JuneauViews.announce(text);
+			return;
+		}
+		if (!announceRegion || announceRegion.ownerDocument !== doc) {
+			announceRegion = el(doc, "div", "jc-sr-announce");
+			announceRegion.setAttribute("role", "status");
+			announceRegion.setAttribute("aria-live", "polite");
+			announceRegion.style.position = "absolute";
+			announceRegion.style.left = "-9999px";
+			doc.body.appendChild(announceRegion);
+		}
+		announceRegion.textContent = "";
+		announceRegion.textContent = text;
+	}
+
+	function paintLoading(doc, target) {
+		const t = target || doc.body;
+		while (t.firstChild) t.removeChild(t.firstChild);
+		const p = el(doc, "div", "jc-card-loading");
+		p.setAttribute("role", "status");
+		p.textContent = "Loading\u2026";
+		t.appendChild(p);
+	}
+
+	function paintError(doc, target, err) {
+		const t = target || doc.body;
+		while (t.firstChild) t.removeChild(t.firstChild);
+		const p = el(doc, "div", "jc-card-error");
+		p.setAttribute("role", "alert");
+		p.textContent = (err && err.message) || String(err);
+		t.appendChild(p);
+	}
+
+	function isAbort(err) {
+		return !!err && (err.name === "AbortError" || err.code === 20);
+	}
+
+	function makeFetchJson(doc, state) {
+		return function fetchJson(url, init) {
+			if (state.inflight) state.inflight.abort();
+			const controller = new AbortController();
+			state.inflight = controller;
+			const opts = Object.assign({ credentials: "same-origin" }, init);
+			const method = (opts.method || "GET").toUpperCase();
+			opts.method = method;
+			opts.headers = Object.assign({}, init && init.headers, csrfHeaders(doc, method));
+			opts.signal = controller.signal;
+			return fetch(url, opts).then(function (r) {
+				if (state.inflight === controller) state.inflight = null;
+				if (r.ok) return r.json ? r.json().catch(function () { return null; }) : null;
+				const parsed = r.json ? r.json().catch(function () { return null; }) : Promise.resolve(null);
+				return parsed.then(function (body) {
+					const msg = (body && body.message) || ("HTTP " + r.status);
+					throw new Error(msg);
+				});
+			}, function (e) {
+				if (state.inflight === controller) state.inflight = null;
+				if (isAbort(e)) throw e;
+				throw new Error("Request failed");
+			});
+		};
+	}
+
+	function makeEvery(doc, state) {
+		return function every(ms, fn, opts) {
+			const pauseWhen = opts && opts.pauseWhen;
+			let msRef = ms;
+			const tick = function () {
+				if (state.destroyed) return;
+				if (doc.hidden) return;
+				if (pauseWhen && pauseWhen()) return;
+				fn();
+			};
+			const id = setInterval(tick, msRef);
+			const handle = {
+				stop: function () { clearInterval(id); state.intervals.delete(handle); },
+				setMs: function (n) { msRef = n; }
+			};
+			state.intervals.add(handle);
+			return handle;
+		};
+	}
+
+	function makePrefs(id) {
+		return function prefs(namespace) {
+			const ns = namespace ? (id + ":" + namespace) : id;
+			const key = k => "juneau-card:" + ns + ":" + k;
+			return {
+				get: function (k, dflt) {
+					try {
+						const raw = localStorage.getItem(key(k));
+						if (raw == null) return dflt;
+						return JSON.parse(raw);
+					} catch (e) {
+						return dflt;
+					}
+				},
+				set: function (k, v) {
+					try {
+						localStorage.setItem(key(k), JSON.stringify(v));
+					} catch (e) {
+						// unavailable or quota-exceeded storage never throws into card code
+					}
+				},
+				remove: function (k) {
+					try {
+						localStorage.removeItem(key(k));
+					} catch (e) {
+						// as above
+					}
+				}
+			};
+		};
+	}
+
+	function buildCtx(doc, state, templateFn) {
+		return {
+			document: doc,
+			template: templateFn,
+			fail: msg => { throw new Error(msg); },
+			onReady: fn => onReady(doc, fn),
+			fetchJson: makeFetchJson(doc, state),
+			isAbort: isAbort,
+			paintLoading: target => paintLoading(doc, target || state.el),
+			// paintError(err) or paintError(target, err).
+			paintError: (target, err) => {
+				if (err === undefined && target instanceof Error) { err = target; target = state.el; }
+				paintError(doc, target || state.el, err);
+			},
+			every: makeEvery(doc, state),
+			prefs: namespace => makePrefs(state.card.id)(namespace),
+			onDestroy: fn => { state.destroyCallbacks.push(fn); },
+			announce: text => announce(doc, text),
+			setApi: api => { state.api = api; },
+			signal: state.controller.signal
+		};
+	}
 
 	function mount(contract, opts) {
 		const doc = (opts && opts.document) || window.document;
@@ -548,13 +732,13 @@
 
 		const result = { activeNav: active.slice(), activeNavSource: source, cards: {} };
 		const frozenCards = new Map();
+		const templateFn = id => {
+			const t = tpl.byCard.get(id);
+			if (!t) throw new Error("no <template data-card=\"" + id + "\">");
+			return clone(doc, t);
+		};
 		for (const card of contract.cards || []) {
 			frozenCards.set(card.id, Object.freeze(Object.assign({}, card)));
-			const handler = handlers.get(card.type);
-			if (!handler) {
-				fail(doc, "E-JS-4", card.id, card.type, Array.from(handlers.keys()).join(", "));
-				continue;
-			}
 			const bare = card.type === "html" && card.bare === true;
 			let host;
 			if (bare) {
@@ -568,25 +752,48 @@
 					host.appendChild(t);
 				}
 			}
-			const ctx = {
-				document: doc,
-				template: id => {
-					const t = tpl.byCard.get(id);
-					if (!t) throw new Error("no <template data-card=\"" + id + "\">");
-					return clone(doc, t);
-				},
-				fail: msg => { throw new Error(msg); },
-				onReady: fn => onReady(doc, fn)
+			const state = {
+				card: card, el: host, type: card.type, handler: null, ctx: null,
+				controller: new AbortController(), inflight: null,
+				intervals: new Set(), destroyCallbacks: [], api: null,
+				destroyed: false, refreshing: null, refreshQueued: false
 			};
-			try {
-				handler(card, host, ctx);
-			} catch (e) {
-				fail(doc, "E-JS-8", card.id, card.type, e && e.message);
+			state.ctx = buildCtx(doc, state, templateFn);
+			cardState.set(card.id, state);
+			const handler = handlers.get(card.type);
+			if (!handler) {
+				if (!bare) host.setAttribute("data-juneau-card-pending", "");
+				// Appended, not paintLoading(host): that clears the host and would drop the card title.
+				const loading = el(doc, "div", "jc-card-loading");
+				loading.setAttribute("role", "status");
+				loading.textContent = "Loading\u2026";
+				host.appendChild(loading);
+				const list = pendingByType.get(card.type) || [];
+				list.push({ card: card, host: host, state: state });
+				pendingByType.set(card.type, list);
+				result.cards[card.id] = bare ? host.firstElementChild || null : host;
+				main.appendChild(host);
 				continue;
 			}
+			state.handler = handler;
+			renderCard(doc, card, host, state, handler, bare);
 			result.cards[card.id] = bare ? host.firstElementChild || null : host;
 			main.appendChild(host);
 		}
+
+		onReady(doc, function () {
+			for (const [type, list] of pendingByType) {
+				if (!handlers.has(type)) {
+					for (const pending of list) {
+						if (type === "datatables") fail(doc, "E-JS-10", pending.card.id);
+						else fail(doc, "E-JS-4", pending.card.id, type, Array.from(handlers.keys()).join(", "));
+						dispatchCardEvent(pending.host, "juneau:card-failed", { id: pending.card.id, type: type, error: MSG[type === "datatables" ? "E-JS-10" : "E-JS-4"] });
+					}
+					pendingByType.delete(type);
+				}
+			}
+		});
+
 
 		for (const t of tpl.byCard.values()) t.parentNode && t.parentNode.removeChild(t);
 		for (const t of tpl.bySlot.values()) t.parentNode && t.parentNode.removeChild(t);
@@ -606,12 +813,134 @@
 		return o;
 	}
 
+	function dispatchCardEvent(host, type, detail) {
+		// A bare html card's host is a DocumentFragment, which cannot dispatch; its event goes to the document.
+		const target = host && typeof host.dispatchEvent === "function" ? host : window.document;
+		target.dispatchEvent(new CustomEvent(type, { detail: detail, bubbles: true }));
+	}
+
+	// A handler that already painted and logged a card-level error rejects with err.cardReported = true: the card
+	// still fails (juneau:card-failed), but the page banner does not repeat it as E-JS-8.
+	function handlerFailed(doc, card, host, e) {
+		if (!(e && e.cardReported === true)) fail(doc, "E-JS-8", card.id, card.type, e && e.message);
+		dispatchCardEvent(host, "juneau:card-failed", { id: card.id, type: card.type, error: e && e.message });
+	}
+
+	function renderCard(doc, card, host, state, handler, bare) {
+		if (host.hasAttribute && host.hasAttribute("data-juneau-card-pending")) {
+			host.removeAttribute("data-juneau-card-pending");
+			for (const c of Array.from(host.childNodes)) if (c.className === "jc-card-loading") host.removeChild(c);
+		}
+		let settled;
+		try {
+			settled = Promise.resolve(handler.render(card, host, state.ctx));
+		} catch (e) {
+			handlerFailed(doc, card, host, e);
+			return;
+		}
+		settled.then(function () {
+			dispatchCardEvent(host, "juneau:card-mounted", { id: card.id, type: card.type, el: host });
+		}, function (e) {
+			handlerFailed(doc, card, host, e);
+		});
+	}
+
+	function normalizeHandler(type, handler) {
+		const doc = window.document;
+		if (typeof type !== "string" || !TYPE_RE.test(type)) fail(doc, "E-JS-20", type);
+		let obj;
+		if (typeof handler === "function") obj = { render: handler };
+		else if (handler && typeof handler === "object" && typeof handler.render === "function") obj = handler;
+		else fail(doc, "E-JS-21", type, typeof handler);
+		return {
+			render: obj.render,
+			refresh: typeof obj.refresh === "function" ? obj.refresh : obj.render,
+			destroy: typeof obj.destroy === "function" ? obj.destroy : function () {}
+		};
+	}
+
 	function registerCard(type, handler) {
 		const doc = window.document;
-		if (typeof type !== "string" || !TYPE_RE.test(type) || typeof handler !== "function")
-			throw new TypeError("registerCard(type, handler): type must match " + TYPE_RE + " and handler must be a function");
+		const normalized = normalizeHandler(type, handler);
 		if (handlers.has(type)) fail(doc, "E-JS-12", type);
-		handlers.set(type, handler);
+		handlers.set(type, normalized);
+		const list = pendingByType.get(type);
+		if (list && list.length) {
+			pendingByType.delete(type);
+			for (const pending of list) {
+				pending.state.handler = normalized;
+				renderCard(doc, pending.card, pending.host, pending.state, normalized, false);
+			}
+		}
+	}
+
+	function register(entry) {
+		const doc = window.document;
+		if (!Array.isArray(entry) || entry.length !== 2) fail(doc, "E-JS-23", JSON.stringify(entry));
+		registerCard(entry[0], entry[1]);
+	}
+
+	function drainCardQueue() {
+		const existing = Array.isArray(window.JuneauConsoleCards) ? window.JuneauConsoleCards.slice() : [];
+		for (const entry of existing) register(entry);
+		window.JuneauConsoleCards = { push: function (entry) { register(entry); } };
+	}
+
+	function refreshCard(id) {
+		const state = cardState.get(id);
+		if (!state || state.destroyed) throw new JuneauConsoleError("E-JS-22", fmt(MSG["E-JS-22"], id));
+		if (state.refreshing) {
+			state.refreshQueued = true;
+			return state.refreshing;
+		}
+		state.refreshing = runRefresh(state).then(function () {
+			const again = state.refreshQueued;
+			state.refreshing = null;
+			state.refreshQueued = false;
+			if (again) return refreshCard(id);
+		});
+		return state.refreshing;
+	}
+
+	function runRefresh(state) {
+		const doc = window.document;
+		const fn = state.handler.refresh;
+		let settled;
+		try {
+			settled = Promise.resolve(fn(state.card, state.el, state.ctx));
+		} catch (e) {
+			handlerFailed(doc, state.card, state.el, e);
+			return Promise.resolve();
+		}
+		return settled.then(function () {
+			dispatchCardEvent(state.el, "juneau:card-mounted", { id: state.card.id, type: state.card.type, el: state.el });
+		}, function (e) {
+			handlerFailed(doc, state.card, state.el, e);
+		});
+	}
+
+	function destroyCard(id) {
+		const state = cardState.get(id);
+		if (!state || state.destroyed) throw new JuneauConsoleError("E-JS-22", fmt(MSG["E-JS-22"], id));
+		state.destroyed = true;
+		for (const h of Array.from(state.intervals)) h.stop();
+		if (state.inflight) state.inflight.abort();
+		state.controller.abort();
+		try {
+			state.handler.destroy(state.card, state.el, state.ctx);
+		} finally {
+			for (const cb of state.destroyCallbacks) cb();
+		}
+	}
+
+	function cardApi(id) {
+		const state = cardState.get(id);
+		if (!state || state.destroyed) throw new JuneauConsoleError("E-JS-22", fmt(MSG["E-JS-22"], id));
+		return state.api || null;
+	}
+
+	function cardTypes() {
+		return Array.from(handlers.keys()).sort();
 	}
 
 	// ---- chrome section: absorbed from the retired standalone chrome script (C1 P12) ----
@@ -1032,18 +1361,26 @@
 		JUNEAU_BAR_CONTRACT_VERSION: JUNEAU_BAR_CONTRACT_VERSION
 	});
 
-	handlers.set("html", htmlCard);
-	handlers.set("datatables", datatablesCard);
+	handlers.set("html", normalizeHandler("html", htmlCard));
+	handlers.set("console-output", normalizeHandler("console-output", consoleOutputCard));
+	handlers.set("run-view", normalizeHandler("run-view", runViewCard));
 
 	window.JuneauConsole = {
 		SUPPORTED_CONTRACT_VERSIONS: SUPPORTED_CONTRACT_VERSIONS,
 		JuneauConsoleError: JuneauConsoleError,
 		mount: mount,
 		registerCard: registerCard,
+		refreshCard: refreshCard,
+		destroyCard: destroyCard,
+		cardApi: cardApi,
+		cardTypes: cardTypes,
 		contract: () => mounted ? mounted.contract : null,
 		card: id => mounted ? mounted.cards.get(id) || null : null,
 		chrome: chrome
 	};
+
+	// Drain after the built-ins and the export: a queued built-in type hits E-JS-12, and queued handlers may use JuneauConsole.
+	drainCardQueue();
 
 	// Auto-mount, synchronously (§2 rule 4).
 	const doc = window.document;

@@ -193,7 +193,7 @@ class ViewsJs_DialogForm_Test extends TestBase {
 	}
 
 	/**
-	 * The trailing {@code childCatalog} parameter (WORK-J0513) is additive at the CALL SITE, not just in the
+	 * The trailing {@code childCatalog} parameter is additive at the CALL SITE, not just in the
 	 * signature: the six-argument calls above are byte-identical to their pre-J0513 form and still paint today's
 	 * fail-closed control, while the same field resolves once a catalog is supplied.
 	 */

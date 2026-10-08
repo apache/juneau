@@ -163,6 +163,53 @@ class ConsoleTemplateValidator_Test extends TestBase {
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
+	// card-src-and-body, inline-slot-meta, card-reserved-key (C2)
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Test void cb01_cardSrcAndBody() {
+		assertOne("<@page><@card id=\"t\" type=\"datatables\" src=\"/rest/t\">{dataUrl:'/rest/t'}</@card></@page>",
+			1, 8, "card-src-and-body", "<@card id='t'> has both src='/rest/t' and a body; use exactly one.");
+	}
+
+	@Test void cb02_cardSrcAndBody_blankBodyIsClean() {
+		assertClean("<@page><@card id=\"t\" type=\"datatables\" src=\"/rest/t\"> </@card></@page>");
+		assertClean("<@page><@card id=\"t\" type=\"datatables\" src=\"/rest/t\"/></@page>");
+	}
+
+	@Test void cb03_inlineSlotMeta() {
+		assertOne("<@page><@card id=\"t\" type=\"datatables\">{layout:'wide',view:{}}</@card></@page>",
+			1, 8, "inline-slot-meta",
+			"<@card id='t'> body is a pre-built SLOT_META (has a 'view' object); author the table catalog in author shape instead. This becomes an error at GC-1.");
+	}
+
+	@Test void cb03b_inlineSlotMeta_staleVersionAlsoReportsViewContractVersion() {
+		// C1's view-contract-version rule stays (Auto-decision 4); both rules fire on a stale pinned escape hatch.
+		var f = lint("<@page><@card id=\"t\" type=\"datatables\">{view:{contractVersion:'0',id:'t'}}</@card></@page>");
+		assertEquals(List.of("inline-slot-meta", "view-contract-version"), f.stream().map(x -> x.rule()).sorted().toList());
+	}
+
+	@Test void cb04_inlineSlotMeta_onlyForDatatables() {
+		assertClean("<@page><@card id=\"t\" type=\"kpi\">{contractVersion:'1',view:{}}</@card></@page>");
+	}
+
+	@Test void cb05_cardReservedKey() {
+		assertOne("<@page><@card id=\"t\" type=\"kpi\">{id:'x',value:42}</@card></@page>",
+			1, 8, "card-reserved-key", "<@card id='t'> body key 'id' is reserved; set it as an attribute.");
+	}
+
+	@Test void cb06_cardReservedKey_visibleWhenIsAdmitted() {
+		assertClean("<@page><@card id=\"t\" type=\"kpi\">{visibleWhen:{field:'x',op:'eq',value:1},value:1}</@card></@page>");
+	}
+
+	@Test void cb07_literalBodyWithInterpolation_isSkipped() {
+		assertClean("<@page><@card id=\"t\" type=\"datatables\">{dataUrl:'${url}'}</@card></@page>");
+	}
+
+	@Test void cb08_plainHtmlCard_isClean() {
+		assertClean("<@page><@card id=\"t\">{value:1}</@card></@page>");
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
 	// removed-card-type, removed-global
 	//-----------------------------------------------------------------------------------------------------------------
 

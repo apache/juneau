@@ -159,7 +159,7 @@ class ViewsJs_SlotMount_Test extends TestBase {
 			"t17_nullBlank", "t17_noErrors", "t17_dataUrlKeepsAjax");
 	}
 
-	@Test void b14_crossOriginDetailEndpointAndSavedViewsBaseAreRefusedWithWarning() {
+	@Test void b14_crossOriginDetailEndpointIsRefusedWithWarning() {
 		var r = report();
 		assertAllTrue(r, "t18_relativeKept", "t18_sameOriginAbsKept", "t18_noWarnYet", "t18_crossOriginNotStamped",
 			"t18_warned");

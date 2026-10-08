@@ -25,7 +25,7 @@ import org.apache.juneau.rest.server.*;
 import org.junit.jupiter.api.*;
 
 /**
- * Tests that a missing {@code @BeanProp(required=true)} property in a request body produces 400 (WORK-J0585).
+ * Tests that a missing {@code @BeanProp(required=true)} property in a request body produces 400.
  */
 class RestRequiredProperty_Test extends TestBase {
 

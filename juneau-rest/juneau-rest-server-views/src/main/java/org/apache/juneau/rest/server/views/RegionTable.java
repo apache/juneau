@@ -108,6 +108,16 @@ public class RegionTable {
 	 */
 	public static final String REGION_CSRF_ATTR = ViewTable.CSRF_ATTR;
 
+	/**
+	 * Attribute carrying the region's own contract descriptor (its {@code params} included) as JSON, for a region
+	 * placed outside a sidecar-bearing host.
+	 *
+	 * <p>
+	 * Stamped by {@link #of(RegionDef, String)} only when the region declares {@code params}; the region runtime
+	 * reads it as the placeholder's declared descriptor.
+	 */
+	public static final String REGION_DECLARED_ATTR = "data-juneau-region-declared";
+
 	/** Attribute the {@code id}-less {@link #detailSidecar(List)} form is found by. */
 	public static final String REGION_META_ATTR = "data-juneau-region-meta";
 
@@ -163,6 +173,10 @@ public class RegionTable {
 		// what mintRegion infers from a null read.  Stamping a blank would be a third state nobody handles.
 		if (region.populate != null && ! region.populate.isBlank())
 			d.attr(REGION_POPULATE_ATTR, region.populate);
+		// A region with no params needs nothing beyond the attributes above; one with params has nowhere else to carry
+		// them when it is placed on its own (a card body), so the contract descriptor travels on the container.
+		if (region.params != null && ! region.params.isEmpty())
+			d.attr(REGION_DECLARED_ATTR, Json.of(region.toContractMap()));
 		if (csrfToken != null && ! csrfToken.isBlank())
 			d.attr(REGION_CSRF_ATTR, csrfToken);
 		return d;

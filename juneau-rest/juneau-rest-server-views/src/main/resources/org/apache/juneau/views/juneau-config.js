@@ -23,8 +23,7 @@
  * non-configurable table never loads it and pays nothing.
  *
  * LANDED SLICES:
- *   - Slice 2: async persistence SPI, strict localStorage key codec (enc/dec), localStorage + server providers.
- *   - Slice 3: (Java) SavedViewsMixin + SavedViewStore; this file's server-provider HTTP mapping stays as-is.
+ *   - Slice 2: async persistence SPI, strict localStorage key codec (enc/dec), localStorage provider.
  *   - Slice 4: pure DOM-free config-application layer - computeEffectiveColumns / validateView / saved-view
  *     (de)serialization / dtIndex (the INDEX MODEL only).
  *   - Slice 5: resolveActiveView (awaited before first draw) + applyView (programmatic reinit entry point).
@@ -34,14 +33,8 @@
  *
  * Every provider implements the SAME seven-method async contract (Promise-based; design doc #444 §3.2/§3.3, refined by
  * the round-3 saveAndActivate addendum): list/load/save/saveAndActivate/setActive/delete/getActive.  Each method
- * takes the LIVE table element as its first argument (never a raw pageId/viewId string) - both providers derive
- * their own scope from it, mirroring how the pageId is discovered (table.closest('[data-juneau-page]')).  This is
- * a deliberate refinement of the design doc's illustrative §3.2 pseudocode (a generic string-keyed load/save/
- * remove/list(prefix) KV interface): the server provider cannot honor a generic opaque string key - it keys on
- * the STRUCTURED tuple (principal, pageId, viewId, name) the REST endpoint expects (§3.3) - so both providers are
- * built against the domain-shaped SavedViewStore method set instead (list/load/save/saveAndActivate/setActive/
- * delete), with getActive added as a client-side convenience derived uniformly from list() (see the "PUBLIC API"
- * section below).
+ * takes the LIVE table element as its first argument (never a raw pageId/viewId string).  The localStorage provider
+ * is the built-in implementation; a host may install its own through setPersistenceProvider.
  */
 (function () {
 	"use strict";
@@ -63,34 +56,20 @@
 
 	/**
 	 * Encoded key-SEGMENT cap (§3.1) - a DISTINCT number from {@link #MAX_NAME_LEN}: a 128-multibyte-char name can
-	 * enc() to far more than 128 bytes, so the encoded cap must be named and checked independently or JS/Java could
-	 * drift on where a pathological name is actually rejected.  localStorage-only (the server keys on a structured
-	 * tuple and never enc()s a name - see createServerProvider below).
+	 * enc() to far more than 128 bytes, so the encoded cap must be named and checked independently of the decoded
+	 * name cap.
 	 */
 	const MAX_ENCODED_SEGMENT_LEN = 512;
 
 	/**
-	 * localStorage's OWN copy of the default per-(user,page,view)/per-blob/per-user bounds (§3.2) - a deliberate,
-	 * textually SEPARATE copy of the same three numbers the slice-3 Java SavedViewStore default will enforce.  Per
-	 * the plan's should-fix: the client and server sides must never share one source-of-truth across the JS/Java
-	 * boundary (there isn't one), so keeping two independently-named copies turns "these must stay equal" into a
-	 * stated, testable invariant instead of an accidental one.  If you change one of these three numbers, change
-	 * its Java mirror in the SAME commit.
+	 * The localStorage provider's per-(user,page,view)/per-blob/per-user bounds (§3.2).
 	 */
-	const LOCALSTORAGE_MAX_VIEWS_PER_SCOPE = 50;      // mirrors the server default MAX_VIEWS_PER_SCOPE
-	const LOCALSTORAGE_MAX_BLOB_BYTES = 64 * 1024;    // mirrors the server default per-blob cap (64 KB)
-	const LOCALSTORAGE_MAX_VIEWS_PER_USER = 500;      // mirrors the server default MAX_VIEWS_PER_USER (aggregate)
+	const LOCALSTORAGE_MAX_VIEWS_PER_SCOPE = 50;      // localStorage provider cap
+	const LOCALSTORAGE_MAX_BLOB_BYTES = 64 * 1024;    // localStorage provider cap
+	const LOCALSTORAGE_MAX_VIEWS_PER_USER = 500;      // localStorage provider cap
 
 	/** The shell attribute a page host stamps the page id onto (§3.1) - read via closest(...). */
 	const PAGE_ID_ATTR = "data-juneau-page";
-
-	/**
-	 * The shell attribute the slice-3 emitter (ViewTable) stamps the resolved, context-path-aware
-	 * saved-views REST base onto (§3.3 DECISION option (b)) - read via closest(...), mirroring PAGE_ID_ATTR
-	 * exactly.  Absent/blank means the server-persisted provider is UNAVAILABLE for this table - never a
-	 * hardcoded "/"-rooted fallback path.
-	 */
-	const SAVED_VIEWS_BASE_ATTR = "data-juneau-saved-views";
 
 	/** The attribute juneau-views.js reads a table's own stable view id off (reused here - no new attribute). */
 	const VIEW_ID_ATTR = "data-juneau-view";
@@ -112,7 +91,6 @@
 	function malformedError(message) { return typedError("malformed", message); }
 	function quotaError(message) { return typedError("quota", message); }
 	function unavailableError(message) { return typedError("unavailable", message); }
-	function networkError(message) { return typedError("network", message); }
 
 	/**
 	 * Normalizes ANY thrown value into the typed {code,message} shape (§3.2 "typed failure, never silent
@@ -189,8 +167,7 @@
 	 * Strict segment encoder (§3.1 finding - Blocker: key codec).  Percent-encodes every UTF-8 byte OUTSIDE the
 	 * alphabet [A-Za-z0-9_-] as "%HH" with UPPERCASE hex - deliberately NOT encodeURIComponent (which leaves
 	 * ".", "!", "~", "*", "'", "(", ")" and space unescaped; an unescaped "." would climb this grammar's "."
-	 * path separator).  This is the STORAGE-KEY encoder only - never the wire/query-string encoder (see
-	 * createServerProvider, which uses ordinary encodeURIComponent instead and never calls this function).
+	 * path separator).  This is the STORAGE-KEY encoder only - never a wire/query-string encoder.
 	 */
 	function encSegment(s) {
 		const str = s == null ? "" : String(s);
@@ -236,7 +213,7 @@
 	 * {@code enc(viewId)} for a standalone one.  The "~" join is outside the allowed segment alphabet, so it can
 	 * never appear INSIDE an encoded segment - two encoded segments joined by it can always be split back apart
 	 * unambiguously.  Page-qualification is load-bearing (not "view-only for simplicity"): two different pages
-	 * embedding a view with the same ViewDef.id would otherwise collide on one shared saved-views namespace.
+	 * embedding a view with the same ViewDef.id would otherwise collide on one shared column-configuration namespace.
 	 */
 	function scopeKey(pageId, viewId) {
 		return isBlank(pageId) ? encSegment(viewId) : (encSegment(pageId) + "~" + encSegment(viewId));
@@ -252,9 +229,7 @@
 	}
 
 	/**
-	 * The wire-side name check (§3.1/§3.2): blank/reserved/too-long - shared by BOTH providers, since the server
-	 * mixin (slice 3) will enforce the exact same MAX_NAME_LEN + reserved-word rule on the raw DECODED name it
-	 * receives as a query param.  Deliberately does NOT touch encSegment/MAX_ENCODED_SEGMENT_LEN - that check is
+	 * The wire-side name check (§3.1/§3.2): blank/reserved/too-long - applied to the raw DECODED name.  Deliberately does NOT touch encSegment/MAX_ENCODED_SEGMENT_LEN - that check is
 	 * localStorage-key-specific (see validateNameForLocalStorage below).
 	 */
 	function validateNameBasic(name) {
@@ -319,17 +294,6 @@
 	/** Resolves the table's own stable view id - reuses the SAME attribute juneau-views.js's initTable reads. */
 	function resolveViewId(table) {
 		const v = table ? table.dataset.juneauView : null;
-		return isBlank(v) ? null : v;
-	}
-
-	/**
-	 * Resolves the server-persisted provider's context-path-aware REST base (§3.3 DECISION option (b)):
-	 * {@code table.closest('[data-juneau-saved-views]')}'s own attribute value, mirroring resolvePageId exactly.
-	 * Returns null (never a hardcoded "/"-rooted guess) when absent/blank - the caller MUST fail closed.
-	 */
-	function resolveSavedViewsBase(table) {
-		const host = table?.closest ? table.closest("[" + SAVED_VIEWS_BASE_ATTR + "]") : null;
-		const v = host ? host.dataset.juneauSavedViews : null;
 		return isBlank(v) ? null : v;
 	}
 
@@ -898,217 +862,6 @@
 	}
 
 	// ==================================================================================================================
-	// SERVER-PERSISTED PROVIDER  (client side of the SavedViewsMixin REST endpoint - slice 3 ships the server half)
-	// ==================================================================================================================
-
-	/**
-	 * Builds the server-persisted persistence provider (§3.3).  EVERY method resolves the REST base fresh, per
-	 * call, via {@code table.closest('[data-juneau-saved-views]')} and FAILS CLOSED (typed 'unavailable', no
-	 * request issued) when it is absent/blank - never a hardcoded "/"-rooted path.  `page`/`view`/`name` are
-	 * ordinary WIRE-encoded query-param values (plain {@code encodeURIComponent}) - this provider never calls
-	 * encSegment/decSegment, because the server keys on the STRUCTURED tuple (principal,pageId,viewId,name), not
-	 * a delimited string, so it needs no delimiter-safety codec (§3.3 "enc()/dec() is the localStorage KEY codec,
-	 * NOT a server delimiter-safety mechanism").  Writes assemble the transport ENVELOPE directly (JSON content
-	 * type + the CSRF header via the SAME resolveCsrfToken/resolveCsrfHeaderName/isBlankToken helpers
-	 * juneau-views.js's row-action path uses, fail-closed on a blank token) - this deliberately does NOT call
-	 * buildActionRequest, which refuses safe methods and hard-codes the body to {action:id} (neither fits a
-	 * saved-views write).  GET (list/load) is a plain, CSRF-free fetch - never an EventSource/SSE.
-	 */
-	// NOSONAR javascript:S7721 -- must stay inside this file's module IIFE: hoisting past the closing `})()`
-	// would leak it globally.
-	function baseFor(table) {
-		const base = resolveSavedViewsBase(table);
-		if (base == null)
-			throw unavailableError("no [" + SAVED_VIEWS_BASE_ATTR + "] shell found for this table; " +
-				"the server-persisted provider is unavailable");
-		return base;
-	}
-
-	// NOSONAR javascript:S7721 -- must stay inside this file's module IIFE: hoisting past the closing `})()`
-	// would leak it globally.
-	function requireViewId(table) {
-		const v = resolveViewId(table);
-		if (v == null) throw unavailableError("table has no " + VIEW_ID_ATTR + " id");
-		return v;
-	}
-
-	/** Ordinary wire-side query-string assembly - plain encodeURIComponent, deliberately never encSegment. */
-	// NOSONAR javascript:S7721 -- must stay inside this file's module IIFE: hoisting past the closing `})()`
-	// would leak it globally.
-	function buildQuery(params) {
-		const parts = [];
-		for (const k in params) {
-			if (Object.hasOwn(params, k) && params[k] != null)
-				parts.push(encodeURIComponent(k) + "=" + encodeURIComponent(params[k]));
-		}
-		return parts.length ? ("?" + parts.join("&")) : "";
-	}
-
-	/** HTTP-status -> typed-error-code classification (flagged for slice 3 to lock down together - see the
-	 *  implementer report: the plan does not pin exact statuses for a quota rejection vs. a plain bad request). */
-	// NOSONAR javascript:S7721 -- must stay inside this file's module IIFE: hoisting past the closing `})()`
-	// would leak it globally.
-	function classifyStatus(status) {
-		if (status === 413 || status === 429 || status === 507) return "quota";
-		if (status >= 500) return "network";
-		if (status === 401 || status === 403) return "unavailable";
-		return "malformed";
-	}
-
-	// NOSONAR javascript:S7721 -- must stay inside this file's module IIFE: hoisting past the closing `})()`
-	// would leak it globally.
-	function readJsonBody(resp) {
-		return resp.text().then(function (text) {
-			if (text == null || text === "") return null;
-			try { return JSON.parse(text); } catch (e) { throw malformedError("saved-views response was not valid JSON"); } // NOSONAR javascript:S2486 -- the parse failure is rethrown as a typed malformed error
-		});
-	}
-
-	/**
-	 * Assembles the fail-closed transport envelope for a non-safe write - JSON content type, the CSRF header
-	 * (via juneau-views.js's own resolveCsrfToken/resolveCsrfHeaderName/isBlankToken, so the two files agree
-	 * by construction), and `credentials:'same-origin'`.  The body is ALWAYS real JSON, never empty (a `{}`
-	 * for a body-less DELETE/clear-active, per §3.2/§3.3).
-	 */
-	// NOSONAR javascript:S7721 -- must stay inside this file's module IIFE: hoisting past the closing `})()`
-	// would leak it globally.
-	function writeRequest(table, method, url, body) {
-		const init = NS.init;
-		const token = init ? init.resolveCsrfToken(table) : null;
-		if (!init || init.isBlankToken(token))
-			return { refuse: true, reason: "missing-token" };
-		const headerName = init.resolveCsrfHeaderName(table);
-		const headers = { "Content-Type": "application/json" };
-		headers[headerName] = token;
-		return { url: url, method: method, headers: headers, body: JSON.stringify(body == null ? {} : body) };
-	}
-
-	/** Runs `fn` (which may throw synchronously, e.g. baseFor's fail-closed check) as a typed-rejecting Promise. */
-	// NOSONAR javascript:S7721 -- must stay inside this file's module IIFE: hoisting past the closing `})()`
-	// would leak it globally.
-	function serverAsAsync(fn) {
-		// NOSONAR javascript:S4822 -- this try/catch is deliberately scoped to fn()'s SYNCHRONOUS throw only
-		// (per the doc above); the chained `.then(null, ...)` immediately below is the separate, correct
-		// handler for fn()'s promise rejecting ASYNCHRONOUSLY - rewriting this to async/await to satisfy the
-		// rule would fold both failure modes through one mechanism and change the microtask timing of the
-		// synchronous-throw path, which we cannot fully verify against every caller in this file.
-		try {
-			// NOSONAR javascript:S6671 -- toTypedError() deliberately returns the plain {code,message}
-			// shape documented at its definition (§3.2 "typed failure" contract), not an Error subclass;
-			// every consumer reads only `.code`/`.message`, and widening this to an Error would risk
-			// changing enumerable-property/JSON-serialization behavior for callers we cannot fully audit.
-			return Promise.resolve(fn()).then(null, function (e) { throw toTypedError(e); });
-		} catch (e) {
-			return Promise.reject(toTypedError(e)); // NOSONAR javascript:S6671 -- typed {code,message} failure contract, not an Error subclass; see above
-		}
-	}
-
-	function queryFor(table, extra) {
-		const params = { view: requireViewId(table) };
-		const pageId = resolvePageId(table);
-		if (pageId != null) params.page = pageId;
-		if (extra) for (const k in extra) if (Object.hasOwn(extra, k) && extra[k] != null) params[k] = extra[k];
-		return buildQuery(params);
-	}
-
-	function httpError(status, bodyText) {
-		let env = null;
-		try { env = bodyText ? JSON.parse(bodyText) : null; } catch (e) { env = null; /* non-JSON body: fall back to the generic HTTP-status message below */ } // NOSONAR javascript:S2486 -- a non-JSON body falls back to the generic HTTP-status message
-		const err = typedError(classifyStatus(status), env?.message ? env.message : ("saved-views request failed (HTTP " + status + ")"));
-		err.httpStatus = status;
-		return err;
-	}
-
-	function createServerProvider() {
-
-		function doFetch(url, init) {
-			let req;
-			try { req = fetch(url, init); } catch (e) { return Promise.reject(networkError("the saved-views request could not be sent")); } // NOSONAR javascript:S2486 javascript:S4822 -- a synchronous fetch throw becomes a typed network error; fetch returns a promise otherwise
-			return req.then(function (resp) {
-				if (resp.ok) return resp;
-				return resp.text().then(function (text) { throw httpError(resp.status, text); },
-					function () { throw httpError(resp.status, null); });
-			}, function () {
-				throw networkError("the saved-views request failed (network error)");
-			});
-		}
-
-		function get(table, path, extraParams) {
-			const url = baseFor(table) + path + queryFor(table, extraParams);
-			return doFetch(url, { method: "GET", credentials: "same-origin" }).then(readJsonBody);
-		}
-
-		function write(table, method, path, extraParams, body) {
-			const url = baseFor(table) + path + queryFor(table, extraParams);
-			const req = writeRequest(table, method, url, body);
-			if (req.refuse)
-				return Promise.reject(unavailableError("no CSRF token available for this table; the write was not sent"));
-			return doFetch(req.url, { method: req.method, headers: req.headers, body: req.body, credentials: "same-origin" });
-		}
-
-		return {
-
-			list: function (table) {
-				return serverAsAsync(function () { return get(table, ""); });
-			},
-
-			load: function (table, name) {
-				return serverAsAsync(function () {
-					const basic = validateNameBasic(name);
-					if (!basic.ok) throw malformedError(basic.message);
-					return get(table, "/item", { name: name }).then(
-						function (blob) { return blob == null ? null : assertSupportedSchema(blob); },
-						function (e) { if (e?.httpStatus === 404) { return null; } throw e; });
-				});
-			},
-
-			save: function (table, name, blob) {
-				return serverAsAsync(function () {
-					const basic = validateNameBasic(name);
-					if (!basic.ok) throw malformedError(basic.message);
-					assertSupportedSchema(blob);
-					return write(table, "PUT", "/item", { name: name }, blob).then(function () {});
-				});
-			},
-
-			saveAndActivate: function (table, name, blob) {
-				return serverAsAsync(function () {
-					const basic = validateNameBasic(name);
-					if (!basic.ok) throw malformedError(basic.message);
-					assertSupportedSchema(blob);
-					// The save-vs-save+activate fork is this explicit ?activate=1 QUERY FLAG (§3.3 finding -
-					// Blocker) - never a field inside the persisted blob, which would then wrongly persist into
-					// every saved view.
-					return write(table, "PUT", "/item", { name: name, activate: 1 }, blob).then(function () {});
-				});
-			},
-
-			setActive: function (table, name) {
-				return serverAsAsync(function () {
-					if (name != null) {
-						const basic = validateNameBasic(name);
-						if (!basic.ok) throw malformedError(basic.message);
-					}
-					// PUT .../active always sends a real JSON body - {name} to set, {} to clear - never empty.
-					return write(table, "PUT", "/active", null, name == null ? {} : { name: name }).then(function () {});
-				});
-			},
-
-			"delete": function (table, name) {
-				return serverAsAsync(function () {
-					const basic = validateNameBasic(name);
-					if (!basic.ok) throw malformedError(basic.message);
-					return write(table, "DELETE", "/item", { name: name }, {}).then(function () {});
-				});
-			}
-
-			// Deliberately NO watchExternalChanges: the `storage` event never fires for an HTTP write (§3.2).
-			// The server provider's multi-tab story is "reload to see another tab's change" - nothing more; do
-			// not imply a live reconcile exists here.
-		};
-	}
-
-	// ==================================================================================================================
 	// PUBLIC API  (the provider-selection seam + the uniform facade both providers are called through)
 	// ==================================================================================================================
 
@@ -1121,15 +874,14 @@
 		return lazyDefaultProvider;
 	}
 
-	/** Swaps the active persistence provider (§3.2/§5) - e.g. `JuneauViews.setPersistenceProvider(JuneauViews.persistenceProviders.server())`. */
+	/** Swaps the active persistence provider (§3.2/§5) - e.g. `JuneauViews.setPersistenceProvider(myProvider)`. */
 	NS.setPersistenceProvider = function (provider) {
 		currentProvider = provider;
 	};
 
-	/** The provider-selection seam (§5): factories for the two first-party providers this file ships. */
+	/** The provider-selection seam (§5): factory for the first-party provider this file ships. */
 	NS.persistenceProviders = {
-		localStorage: createLocalStorageProvider,
-		server: createServerProvider
+		localStorage: createLocalStorageProvider
 	};
 
 	/**
@@ -1189,7 +941,6 @@
 	NS.config.LOCALSTORAGE_MAX_BLOB_BYTES = LOCALSTORAGE_MAX_BLOB_BYTES;
 	NS.config.LOCALSTORAGE_MAX_VIEWS_PER_USER = LOCALSTORAGE_MAX_VIEWS_PER_USER;
 	NS.config.PAGE_ID_ATTR = PAGE_ID_ATTR;
-	NS.config.SAVED_VIEWS_BASE_ATTR = SAVED_VIEWS_BASE_ATTR;
 	NS.config.VIEW_ID_ATTR = VIEW_ID_ATTR;
 	NS.config.encSegment = encSegment;
 	NS.config.decSegment = decSegment;
@@ -1204,9 +955,7 @@
 	NS.config.assertSupportedSchema = assertSupportedSchema;
 	NS.config.resolvePageId = resolvePageId;
 	NS.config.resolveViewId = resolveViewId;
-	NS.config.resolveSavedViewsBase = resolveSavedViewsBase;
 	NS.config.createLocalStorageProvider = createLocalStorageProvider;
-	NS.config.createServerProvider = createServerProvider;
 	// Slice 4 — pure config-application layer (§4.3) + the dtIndex index model (§4.2 INDEX MODEL only).
 	NS.config.validateView = validateView;
 	NS.config.computeEffectiveColumns = computeEffectiveColumns;
@@ -1965,11 +1714,11 @@
 	/** Bumped once per {@code openChooser} call so each dialog's tab/panel ids are unique on the page (F3). */
 	let configDialogSeq = 0;
 
-	/** Public JSON key per internal tab id (Gap-g, WORK-J0559 Q7/R7): `columnConfig.tabs` lists these public names. */
+	/** Public JSON key per internal tab id (Gap-g): `columnConfig.tabs` lists these public names. */
 	const CONFIG_TAB_PUBLIC_KEYS = { view: "columns", search: "search", sort: "sort", options: "options" };
 
 	/**
-	 * Resolves which of the four tabs {@code viewDef.columnConfig} allows (Gap-g, IRS parity / WORK-J0559 Q7/R7).
+	 * Resolves which of the four tabs {@code viewDef.columnConfig} allows (Gap-g, IRS parity).
 	 * {@code columnConfig: true} (or any other non-object truthy value - the pre-existing default) means "all four
 	 * tabs", in {@link #CONFIG_TABS}'s fixed order regardless of the order names are given in. {@code columnConfig:
 	 * {tabs: [...]}} restricts to the named public keys; unknown names are dropped, and an empty or all-unknown

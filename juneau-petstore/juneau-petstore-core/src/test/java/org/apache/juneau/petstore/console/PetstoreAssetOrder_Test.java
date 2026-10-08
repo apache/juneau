@@ -37,7 +37,7 @@ import org.junit.jupiter.api.*;
  *
  * <pre>
  * 1. console chrome.css and theme            (emitted first by the chrome)
- * 2. vendor stylesheets
+ * 2. vendor stylesheets                 (the DataTables WebJar stylesheet)
  * 3. juneau-views.css                        (the views base layer)
  * 4. first-party widget stylesheets          (e.g. juneau-datatables.css, juneau-config.css)
  * 5. page-local &lt;style&gt;
@@ -68,7 +68,7 @@ class PetstoreAssetOrder_Test extends TestBase {
 	private static int cssBandPosition(String href) {
 		if (href.contains("/juneau-console/chrome.css") || href.contains("/juneau-console/themes/"))
 			return CHROME_THEME;
-		if (href.contains("dataTables.dataTables") || href.contains("/vendor/"))
+		if (href.contains("dataTables.dataTables") || href.contains("/webjars/"))
 			return VENDOR;
 		if (href.contains("/juneau-views.css"))
 			return VIEWS_BASE;

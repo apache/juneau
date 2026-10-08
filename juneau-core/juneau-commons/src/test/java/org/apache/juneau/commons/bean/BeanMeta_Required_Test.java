@@ -24,7 +24,7 @@ import org.apache.juneau.commons.reflect.*;
 import org.junit.jupiter.api.*;
 
 /**
- * Tests {@code @BeanProp(required)} metadata (WORK-J0585).
+ * Tests {@code @BeanProp(required)} metadata.
  */
 @SuppressWarnings("unused")
 class BeanMeta_Required_Test extends TestBase {

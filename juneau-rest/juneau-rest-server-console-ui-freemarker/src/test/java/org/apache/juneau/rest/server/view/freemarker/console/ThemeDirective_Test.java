@@ -30,8 +30,8 @@ import org.junit.jupiter.api.*;
 
 /**
  * Golden-HTML tests for the {@code <@theme name="…"/>} chrome directive: a named theme emits that
- * shipped pack's {@code <link rel="stylesheet">} and no other (and the contract's {@code theme.name});
- * omitting the directive defaults to the {@code open} pack; an unknown attribute (and {@code theme=} on
+ * shipped stock theme's {@code <link rel="stylesheet">} and no other (and the contract's {@code theme.name});
+ * omitting the directive defaults to the {@code open} stock theme; an unknown attribute (and {@code theme=} on
  * {@code <@page>}) are rejected. {@code <@theme>} is only valid inside {@code <@console>} (E-18 is covered
  * in {@link ConsoleDirective_Errors_Test}).
  *

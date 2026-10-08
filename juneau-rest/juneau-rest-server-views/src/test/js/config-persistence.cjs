@@ -17,8 +17,7 @@
 
 /*
  * config-persistence.cjs - real-browser prober for the juneau-config.js client-side persistence SPI: the
- * localStorage provider (real Web Storage, not a Node shim) and the server-persisted provider's
- * transport envelope (a stubbed window.fetch).
+ * localStorage provider (real Web Storage, not a Node shim).
  *
  * Never runs in a default build.  It is driven by ConfigPersistence_BrowserTest, which itself only runs under
  * `mvn -Pjs-tests`; see that class's javadoc and the profile comment in this module's pom.xml.
@@ -28,8 +27,7 @@
  * Loads <page.html> - a self-contained fixture the Java test writes from the REAL served juneau-views.js +
  * juneau-config.js - in headless Chromium, then, entirely inside the page, exercises the async persistence
  * facade (NS.persistence) against REAL window.localStorage (Node has no Web Storage API, so this is the one
- * place localStorage-provider behavior can be proven end-to-end) and against a stubbed fetch for the
- * server-persisted provider.  Prints ONE JSON object to stdout.
+ * place localStorage-provider behavior can be proven end-to-end).  Prints ONE JSON object to stdout.
  *
  * DIVISION OF LABOUR (mirrors row-actions.cjs): this script only OBSERVES; every assertion lives in the Java test.
  */
@@ -52,10 +50,9 @@ const PROBE = async function () {
 	// NOSONAR javascript:S7721 -- must stay nested: page.evaluate(PROBE) ships only PROBE's own source into the
 	// browser context, so a helper hoisted to this file's Node module scope would be undefined in the page and
 	// break every caller below.
-	function makeTable(pageId, viewId, savedViewsBase) { // NOSONAR javascript:S7721 -- must stay nested: page.evaluate(PROBE) ships only the probe's own source into the browser context
+	function makeTable(pageId, viewId) { // NOSONAR javascript:S7721 -- must stay nested: page.evaluate(PROBE) ships only the probe's own source into the browser context
 		const page = document.createElement('div');
 		page.dataset.juneauPage = pageId;
-		if (savedViewsBase != null) page.dataset.juneauSavedViews = savedViewsBase;
 		const table = document.createElement('table');
 		table.dataset.juneauView = viewId;
 		page.appendChild(table);
@@ -114,53 +111,6 @@ const PROBE = async function () {
 	window.dispatchEvent(new StorageEvent('storage', { key: 'juneau.view.' + NS.config.scopeKey('watchPage', 'watchView') + '.columns.views.afterUnwatch', oldValue: null, newValue: '{}' }));
 	out.c_storageEventsSeen = seen;
 
-	// ---- d) server-persisted provider transport envelope (stubbed fetch) ----
-	const calls = [];
-	const realFetch = window.fetch;
-	window.fetch = function (url, init) {
-		calls.push({ url: url, init: { method: init.method, headers: init.headers, body: init.body, credentials: init.credentials } });
-		if (init.method === 'GET')
-			return Promise.resolve({ ok: true, status: 200, text: () => Promise.resolve(JSON.stringify({ active: null, views: [] })) });
-		return Promise.resolve({ ok: true, status: 200, text: () => Promise.resolve('') });
-	};
-
-	NS.setPersistenceProvider(NS.persistenceProviders.server());
-	const tableE = makeTable('serverPage', 'serverView', '/ctx/juneau-saved-views');
-	// writeRequest reads the token straight off the table (mirrors juneau-views.js's own resolveCsrfToken) - a
-	// real host stamps this from its own CSRF-issuance story, out of scope for this prober.
-	tableE.dataset.juneauCsrf = 'tok-123';
-
-	calls.length = 0;
-	await NS.persistence.list(tableE);
-	out.d_listCall = calls[0];
-
-	calls.length = 0;
-	await NS.persistence.save(tableE, 'My View', { schemaVersion: 2 });
-	out.d_saveCall = calls[0];
-
-	calls.length = 0;
-	await NS.persistence.saveAndActivate(tableE, 'My View', { schemaVersion: 2 });
-	out.d_saveAndActivateCall = calls[0];
-
-	calls.length = 0;
-	await NS.persistence.setActive(tableE, null);
-	out.d_clearActiveCall = calls[0];
-
-	calls.length = 0;
-	await NS.persistence.delete(tableE, 'My View');
-	out.d_deleteCall = calls[0];
-
-	// Fail-closed: no [data-juneau-saved-views] shell -> 'unavailable', zero fetch calls.
-	calls.length = 0;
-	const tableF = makeTable('noShellPage', 'noShellView', null);
-	try {
-		await NS.persistence.list(tableF);
-		out.d_noShell = { threw: false, calls: calls.length };
-	} catch (error) {
-		out.d_noShell = { threw: true, code: error.code, calls: calls.length };
-	}
-
-	window.fetch = realFetch;
 	return out;
 };
 

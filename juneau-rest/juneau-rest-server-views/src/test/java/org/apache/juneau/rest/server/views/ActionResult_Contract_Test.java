@@ -71,7 +71,7 @@ class ActionResult_Contract_Test extends TestBase {
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
-	// resultForm - the additive receipt pointer (WORK-J0513 Scope A)
+	// resultForm - the additive receipt pointer
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Test void a05_resultForm_isAppendedLast_neverInterleaved() {

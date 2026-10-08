@@ -146,7 +146,7 @@ class ViewsJs_Reinit_Test extends TestBase {
 		assertTrue(fn.contains("selected: new Set()"), fn);
 		assertTrue(fn.contains("selectionState: selectionState"), fn);
 		var assemble = functionBody(viewsJs(), "function assembleFullColumnArray(");
-		assertTrue(assemble.contains("buildSelectionColumnDef(ctx.selectionState)"), assemble);
+		assertTrue(assemble.contains("buildSelectionColumnDef(ctx.selectionState, ctx)"), assemble);
 	}
 
 	@Test void b05_jobSourcesTrackedAsSet_notLastSlot() throws Exception {
@@ -191,10 +191,11 @@ class ViewsJs_Reinit_Test extends TestBase {
 		assertTrue(fn.contains("new $.fn.dataTable.Buttons(ctx.dataTable"), fn);
 	}
 
-	@Test void c04_ribbonToQueryParams_usesLiveOptsColumns() throws Exception {
-		var fn = functionBody(ribbonJs(), "function ribbonToQueryParams(");
-		assertTrue(fn.contains("optsColumns"), fn);
-		assertTrue(fn.contains("optionParam(viewDef, a, optsColumns)"), fn);
+	@Test void c04_ribbonColumnSearches_usesLiveOptsColumns() throws Exception {
+		var fn = functionBody(ribbonJs(), "function ribbonColumnSearches(");
+		assertTrue(fn.matches("(?s).*indexForRibbonColumn\\(viewDef, \\w+\\.column, optsColumns\\).*"), fn);
+		var views = functionBody(viewsJs(), "function buildServerAjax(");
+		assertTrue(views.contains("ribbon.ribbonColumnSearches(viewDef, activeState(), opts.columns)"), views);
 	}
 
 	@Test void c05_config_exportsApplyViewAndResolveActiveView() throws Exception {

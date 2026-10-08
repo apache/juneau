@@ -31,7 +31,7 @@ import org.apache.juneau.marshall.marshaller.*;
 import org.junit.jupiter.api.*;
 
 /**
- * An icon name found in none of the sprite layers draws nothing on a ribbon button (WORK-J0557 U11): the raw label
+ * An icon name found in none of the sprite layers draws nothing on a ribbon button: the raw label
  * is no longer painted as on-screen text, while it stays the accessible name ({@code aria-label}) and the tooltip.
  * Drives the real {@code buildRibbon(...)} path through {@code ribbon-icon-fallback.cjs}; skipped when Node is absent.
  */

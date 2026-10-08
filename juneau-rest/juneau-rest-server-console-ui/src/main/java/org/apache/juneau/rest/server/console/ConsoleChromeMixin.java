@@ -144,8 +144,8 @@ public class ConsoleChromeMixin {
 	/**
 	 * The built-in stock-theme names - the kebab-case of the {@link Theme} constants ({@link Theme#OPEN},
 	 * {@link Theme#LIGHT_RED}, {@link Theme#LIGHT_BROWN}, {@link Theme#RED}, {@link Theme#GRAY}). Each maps to a
-	 * shipped {@code juneau-theme-<name>.css} pack. Consumed by the FTL {@code <@theme>} directive to fail an
-	 * unknown name closed, and here to bound the served {@code {file}} to a known pack.
+	 * shipped {@code juneau-theme-<name>.css} stylesheet. Consumed by the FTL {@code <@theme>} directive to fail an
+	 * unknown name closed, and here to bound the served {@code {file}} to a known stock theme.
 	 */
 	public static final List<String> BUILTIN_THEME_NAMES = List.copyOf(STOCK_THEMES.keySet());
 

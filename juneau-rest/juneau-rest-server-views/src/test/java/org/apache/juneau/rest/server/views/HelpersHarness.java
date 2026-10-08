@@ -27,7 +27,7 @@ import java.util.concurrent.*;
 import org.apache.juneau.marshall.marshaller.*;
 
 /**
- * Node plumbing for the {@code juneau-helpers.js} behavioral harness (WORK-J0522b), sibling to {@link
+ * Node plumbing for the {@code juneau-helpers.js} behavioral harness, sibling to {@link
  * RegionsHarness}.
  *
  * <p>

@@ -153,9 +153,11 @@ public final class ConsoleDirectiveModel implements TemplateDirectiveModel {
 		// App CSS that must lose to page-local css=: emitted BEFORE the page css so a page rule still wins.
 		if (cap.headBeforePageCss != null)
 			out.write(cap.headBeforePageCss);
+		for (var href : cap.vendorCss())
+			out.write("<link rel=\"stylesheet\" href=\"" + attrEscape(href) + "\" data-toolkit-css>\n");
 		for (var href : cap.cssHrefs())
 			out.write("<link rel=\"stylesheet\" href=\"" + attrEscape(href) + "\">\n");
-		for (var href : cap.toolkitCss())
+		for (var href : cap.runtimeCss())
 			out.write("<link rel=\"stylesheet\" href=\"" + attrEscape(href) + "\" data-toolkit-css>\n");
 		if (cap.head != null)
 			out.write(cap.head);
@@ -175,7 +177,9 @@ public final class ConsoleDirectiveModel implements TemplateDirectiveModel {
 		cap.writeBody(out);
 		out.write("\n");
 
-		for (var src : cap.toolkitJs())
+		for (var src : cap.vendorJs())
+			out.write("<script src=\"" + attrEscape(src) + "\" data-toolkit-js></script>\n");
+		for (var src : cap.runtimeJs())
 			out.write("<script src=\"" + attrEscape(src) + "\" data-toolkit-js></script>\n");
 		// App scripts that must run after the toolkit pack but before the page-local init= scripts.
 		if (cap.scriptsAfterToolkit != null)

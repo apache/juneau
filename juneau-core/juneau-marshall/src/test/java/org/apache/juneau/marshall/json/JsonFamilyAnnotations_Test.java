@@ -31,7 +31,7 @@ import org.junit.jupiter.api.*;
 
 /**
  * Verifies that the JSON-derived formats (JSON5, JSONL, JSON5L, JCS) share the {@link JsonConfig @JsonConfig} and
- * {@link Json @Json} annotations with {@link JsonSerializer} (WORK-J0577), rather than needing their own annotation set.
+ * {@link Json @Json} annotations with {@link JsonSerializer}, rather than needing their own annotation set.
  */
 class JsonFamilyAnnotations_Test extends TestBase {
 

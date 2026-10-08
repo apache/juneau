@@ -194,8 +194,7 @@ public final class SamlMetadataResolvers {
 			if (resp.statusCode() < 200 || resp.statusCode() >= 300) // HTT: false branch (2xx success) requires live SAML metadata endpoint; covered by integration tests
 				throw ioex("Failed to fetch SAML metadata from %s (HTTP %s)", url, resp.statusCode());
 
-			var dbf = SamlXml.documentBuilderFactory();
-			var doc = dbf.newDocumentBuilder().parse(new ByteArrayInputStream(resp.body()));
+			var doc = SamlXml.newDocumentBuilder().parse(new ByteArrayInputStream(resp.body()));
 			Element root = doc.getDocumentElement();
 
 			var resolver = new DOMMetadataResolver(root);

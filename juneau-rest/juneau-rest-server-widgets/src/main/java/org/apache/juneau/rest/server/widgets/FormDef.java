@@ -53,7 +53,7 @@ import org.apache.juneau.commons.bean.*;
  * <h5 class='section'>Per-widget contract version (fail-loud when a form is present)</h5>
  * <p>
  * This bean {@link Widget#validate() validates} fail-closed and carries an instance {@link #contractVersion}.  The
- * version defaults to {@link #CONTRACT_VERSION} from the instant the form is constructed (WORK-J0520) &mdash; a raw
+ * version defaults to {@link #CONTRACT_VERSION} from the instant the form is constructed &mdash; a raw
  * builder no longer leaks an unversioned form regardless of whether {@link #checked()} is invoked.  The client
  * refuses to open a form-bearing dialog whose version does not match the one its runtime bakes in.
  * </p>
@@ -491,7 +491,7 @@ public class FormDef implements Widget {
 	 *
 	 * <p>
 	 * Defaults to {@link #CONTRACT_VERSION} from the instant this form is constructed, independent of
-	 * {@link #checked()} (WORK-J0520).  Guaranteed <b>present</b> is not the same as guaranteed <b>valid</b>: presence
+	 * {@link #checked()}.  Guaranteed <b>present</b> is not the same as guaranteed <b>valid</b>: presence
 	 * is this field's whole job, structural well-formedness is {@link #validate()}'s (see {@link #checked()}).
 	 */
 	public String contractVersion = CONTRACT_VERSION;
@@ -643,11 +643,11 @@ public class FormDef implements Widget {
 	}
 
 	/**
-	 * The serving-path hook: re-stamps {@link #CONTRACT_VERSION} (already set by construction, WORK-J0520; this
+	 * The serving-path hook: re-stamps {@link #CONTRACT_VERSION} (already set by construction; this
 	 * repairs a version a caller explicitly cleared) then {@link #validate() validates}.
 	 *
 	 * <p>
-	 * {@link #contractVersion} no longer depends on this being called. As of WORK-J0525, structural validation
+	 * {@link #contractVersion} no longer depends on this being called. Structural validation
 	 * no longer depends on it either for a form served over REST: nested inside a returned {@link ModalDef},
 	 * this form is reached by
 	 * {@link org.apache.juneau.rest.server.widgets.WidgetsMixin.WidgetValidationProcessor

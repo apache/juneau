@@ -84,7 +84,7 @@
 	 * marker (`data-juneau-region-contract="1"`) and carries the actual descriptor in a SEPARATE per-HOST sidecar
 	 * (`&lt;script type="application/json" id="juneau-region:{host}"&gt;{contractVersion,regions:[...]}`), because
 	 * one sidecar per host beats one per region (the same reasoning `VIEW_META`/`PAGE_META` already follow). That
-	 * is emitter behavior, and &sect;19.2 assigns every emitter change to `WORK-J0522d` ("host enrolment walks").
+	 * is emitter behavior, and &sect;19.2 assigns every emitter change to the "host enrolment walks" child.
 	 * This child owns the boundary L12 exists to prove is safe to change independently of everything on the other
 	 * side of it: whatever ATTACHES a descriptor to a region is free to change (`d`'s host-enrolment walk will
 	 * replace this attribute with a real per-host sidecar lookup) without touching `ctx.declared`,

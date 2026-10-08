@@ -1,0 +1,3 @@
+{"contractVersion":"1","title":"T","nav":[],"activeNav":[],"cards":[
+  {"id":"releases","type":"datatables","src":"/rest/releases/card"}
+]}

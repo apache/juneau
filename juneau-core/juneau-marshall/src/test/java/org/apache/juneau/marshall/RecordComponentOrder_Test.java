@@ -29,7 +29,7 @@ import org.apache.juneau.marshall.json5.*;
 import org.junit.jupiter.api.*;
 
 /**
- * Tests the {@code recordComponentOrder} setting (WORK-J0585).
+ * Tests the {@code recordComponentOrder} setting.
  */
 class RecordComponentOrder_Test extends TestBase {
 

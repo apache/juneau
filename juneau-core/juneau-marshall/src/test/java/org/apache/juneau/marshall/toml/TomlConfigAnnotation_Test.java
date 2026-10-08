@@ -29,7 +29,7 @@ import org.apache.juneau.marshall.*;
 import org.junit.jupiter.api.*;
 
 /**
- * Tests the properties of the {@link TomlConfig @TomlConfig} annotation (WORK-J0577).
+ * Tests the properties of the {@link TomlConfig @TomlConfig} annotation.
  */
 class TomlConfigAnnotation_Test extends TestBase {
 

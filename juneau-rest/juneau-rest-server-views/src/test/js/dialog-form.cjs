@@ -120,7 +120,7 @@ out.missing_ariaDisabled = xbtn.getAttribute('aria-disabled') === 'true';
 out.missing_marker = xbtn.dataset.juneauActionMissing === '1';
 
 // --- the trailing childCatalog parameter is OPTIONAL: every existing positional call is unchanged -----------
-// The call above passes six arguments, exactly as it did before WORK-J0513, and still paints today's fail-closed
+// The call above passes six arguments, exactly as it did before the in-dialog child-action catalog, and still paints today's fail-closed
 // control.  With the catalog supplied, the SAME field resolves instead - so the parameter is additive at the call
 // site as well as in the signature.
 const dialog3 = env.el('div');

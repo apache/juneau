@@ -25,7 +25,7 @@ import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
 
 /**
- * Always-on behavioral coverage for {@code juneau-helpers.js} (WORK-J0522b, design §16.4 tests 28/28a/28b/30/31).
+ * Always-on behavioral coverage for {@code juneau-helpers.js}.
  *
  * <p>
  * The paint library is exercised under a DOM shim with NO {@code juneau-regions.js} loaded (see {@code

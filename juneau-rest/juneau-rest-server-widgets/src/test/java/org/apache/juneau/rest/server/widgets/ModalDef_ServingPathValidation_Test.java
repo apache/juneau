@@ -30,14 +30,14 @@ import org.apache.juneau.rest.server.servlet.*;
 import org.junit.jupiter.api.*;
 
 /**
- * REST-boundary tests for {@link WidgetsMixin.WidgetValidationProcessor} (WORK-J0525) &mdash; the
+ * REST-boundary tests for {@link WidgetsMixin.WidgetValidationProcessor} &mdash; the
  * {@code ServiceLoader}-registered {@link org.apache.juneau.rest.server.processor.ResponseProcessor
  * ResponseProcessor} that calls {@link Widget#validate()} on any REST response content that is a {@link Widget},
  * giving the JSON serving path ({@link ModalDef}/{@link FormDef}) the same fail-closed gate the
  * {@code juneau-rest-server-views} HTML emitters already give every {@code Widget} they consume.
  *
  * <p>
- * This is the REST-boundary inverse of {@code WORK-J0520}'s (f1)/(f2) tests: those pin that a malformed,
+ * This is the REST-boundary inverse of the (f1)/(f2) tests: those pin that a malformed,
  * never-{@code checked()} modal/form serializes successfully with the current contract version and does not
  * throw. Here, served over a real REST response instead of a bare {@link Json#of(Object) Json.of(...)} call, the
  * same malformed shapes now fail loud with a 500 &mdash; which is this item's entire reason to exist (see
@@ -276,7 +276,7 @@ class ModalDef_ServingPathValidation_Test extends TestBase {
 	@Test void h2_jsonOf_malformedModal_stillSucceeds_notTheSerializerLevelGate() {
 		// A ResponseProcessor never runs for Json.of(...): this is the pin that this item did not accidentally
 		// become the serializer-level gate the design rejected (design doc fork F12(f), section 4.3(d)).  It is
-		// deliberately uncomfortable to read, exactly like WORK-J0520's own (f1).
+		// deliberately uncomfortable to read, exactly like the (f1) test.
 		assertDoesNotThrow(() -> Json.of(noOptionSelect()));
 	}
 }

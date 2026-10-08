@@ -46,7 +46,8 @@ class PetstoreCoverage_Test extends TestBase {
 		PetstoreSecure_BrowserTest.class,
 		PetstoreThemes_BrowserTest.class,
 		PetstoreAsyncJob_BrowserTest.class,
-		PetstoreDatatable_BrowserTest.class);
+		PetstoreDatatable_BrowserTest.class,
+		PetstoreConsoleOutput_BrowserTest.class);
 
 	/** Parity ids not yet covered, each with what it waits on.  Remove a row when its browser test lands. */
 	static final Map<String,String> PENDING = Map.ofEntries(
@@ -57,7 +58,6 @@ class PetstoreCoverage_Test extends TestBase {
 		Map.entry("bulk-select", "P2 bulk select: needs console custom card types"),
 		Map.entry("per-view-tab-restriction", "per-view tab restriction: needs BeanQuery view restriction and the orders/users query endpoints"),
 		Map.entry("url-state", "URL state: needs the console hook namespaces"),
-		Map.entry("job-log-card", "job-log card: needs the console's stock job-log card type"),
 		Map.entry("confirm-dialogs", "confirm renderers and dialogs: needs the console hook namespaces"),
 		Map.entry("inline-edit", "inline edit: needs the console hook namespaces and the P4 pet page"),
 		Map.entry("related-list", "related list: needs the console hook namespaces and the P4 pet page"),

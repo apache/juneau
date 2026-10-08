@@ -45,7 +45,7 @@ class ModalDef_FormDef_Test extends TestBase {
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Test void a01_fullModal_serializesToFrozenShape() {
-		// WORK-J0520: raw builder, never .checked() -- both levels are stamped by construction now, not by the
+		// raw builder, never .checked() -- both levels are stamped by construction now, not by the
 		// serving-path hook, which is the incident this design closes.
 		var modal = ModalDef.create("Acknowledge this incident?")
 			.field("Incident", "INC-42")
@@ -67,7 +67,7 @@ class ModalDef_FormDef_Test extends TestBase {
 	}
 
 	@Test void a02_topLevelKeyOrder() {
-		// WORK-J0520: contractVersion is stamped FIRST on both beans by construction now; checked() merely
+		// contractVersion is stamped FIRST on both beans by construction now; checked() merely
 		// re-affirms it (and still validates) -- key order comes from @BeanType, which is unchanged.
 		var modal = ModalDef.create("t").field("A", "1").form(FormDef.ofTemplate("u")).idempotencyKey("k").checked();
 		Map<?,?> actual = Json.to(Json.of(modal), Map.class);
@@ -77,7 +77,7 @@ class ModalDef_FormDef_Test extends TestBase {
 
 	@Test void a03_confirmOnlyModal_omitsFieldsFormAndKey() {
 		// A bare confirm-only modal (no fields, no form, no key) - every optional field omitted, not null.
-		// WORK-J0520: contractVersion is NOT one of the omitted ones any more -- it is stamped by construction on
+		// contractVersion is NOT one of the omitted ones any more -- it is stamped by construction on
 		// every modal, confirm-only included.
 		var json = Json.of(ModalDef.create("Really delete?"));
 		assertEquals(Json.to("{\"contractVersion\":\"2\",\"title\":\"Really delete?\"}", Map.class), Json.to(json, Map.class), json);
@@ -114,14 +114,14 @@ class ModalDef_FormDef_Test extends TestBase {
 
 	@Test void a08_selfTargeted_doesNotBumpTheContractVersion() {
 		// Additive-only, like barSlot: opting in does not change the version a v2-aware client checks.
-		// WORK-J0520 note: this is now true by construction rather than by checked() -- kept because it still pins
+		// this is now true by construction rather than by checked() -- kept because it still pins
 		// the constant's value, not because it exercises the stamping path.
 		var modal = ModalDef.create("t").form(FormDef.ofTemplate("u")).idempotencyKey("k").selfTargeted(true).checked();
 		assertEquals(ModalDef.CONTRACT_VERSION, modal.contractVersion);
 	}
 
 	@Test void a05_confirmOnlyChecked_keepsTheStamp() {
-		// WORK-J0520 anti-drift pin: checked()'s else-branch that used to NULL a confirm-only modal's version is
+		// checked()'s else-branch that used to NULL a confirm-only modal's version is
 		// deleted.  If it were left in, checked() would un-stamp what the initializer had just stamped -- this test
 		// is what catches that regression.
 		var modal = ModalDef.create("Really delete?").field("Note", "gone").checked();
@@ -157,7 +157,7 @@ class ModalDef_FormDef_Test extends TestBase {
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Test void c01_formDef_serializesTemplateOnly() {
-		// WORK-J0520: a pure FormDef golden with no modal in sight -- stamped by construction too.
+		// a pure FormDef golden with no modal in sight -- stamped by construction too.
 		var json = Json.of(FormDef.ofTemplate("servlet:/x/form.ftl"));
 		assertEquals(Json.to("{\"contractVersion\":\"2\",\"template\":\"servlet:/x/form.ftl\"}", Map.class), Json.to(json, Map.class), json);
 	}
@@ -340,14 +340,14 @@ class ModalDef_FormDef_Test extends TestBase {
 	}
 
 	@Test void e02_rawFormDefIsStamped() {
-		// WORK-J0520 headline: a raw builder carries the version from construction, independent of checked().
+		// a raw builder carries the version from construction, independent of checked().
 		var form = FormDef.create().field(FormDef.Input.of("r", "R", "textarea"));
 		assertEquals(FormDef.CONTRACT_VERSION, form.contractVersion);
 		assertTrue(Json.of(form).contains("\"contractVersion\":\"2\""), Json.of(form));
 	}
 
 	@Test void e03_checkedStampsBothVersionsFirst() {
-		// WORK-J0520 note: both are stamped by construction already; checked() re-affirms rather than originates
+		// both are stamped by construction already; checked() re-affirms rather than originates
 		// the stamp.  Kept because it still pins that checked() does not disturb it.
 		var modal = ModalDef.create("t")
 			.form(FormDef.create().field(FormDef.Input.of("r", "R", "textarea"))).checked();
@@ -360,7 +360,7 @@ class ModalDef_FormDef_Test extends TestBase {
 	}
 
 	@Test void e04_validateDoesNotRequireVersionSet() {
-		// WORK-J0520: the initializer now stamps at construction, so the null case must be re-created deliberately --
+		// the initializer now stamps at construction, so the null case must be re-created deliberately --
 		// validate() must still not false-refuse a modal whose version was explicitly cleared (or that arrived from a
 		// producer that never stamped one).  This is the pin on fork F3 -- validate() gains no version check.
 		var modal = ModalDef.create("t").form(FormDef.create().field(FormDef.Input.of("r", "R", "textarea")));
@@ -392,7 +392,7 @@ class ModalDef_FormDef_Test extends TestBase {
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
-	// e) Per-widget contract version (cont'd) - WORK-J0520 construction-time stamping guarantee
+	// e) Per-widget contract version (cont'd) - construction-time stamping guarantee
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Test void e08_nestedFormStampsIndependentlyOfModal() {
@@ -446,10 +446,10 @@ class ModalDef_FormDef_Test extends TestBase {
 	}
 
 	/**
-	 * The accepted cost of construction-time stamping (design WORK-J0520, fork F5): version-presence is guaranteed,
+	 * The accepted cost of construction-time stamping (fork F5): version-presence is guaranteed,
 	 * structural validity is NOT.  A malformed form that never reached checked() now serializes as contract-VALID
 	 * and the client will render it, where before the missing version refused it.  This test exists so that
-	 * behavior is a recorded decision rather than a discovery.  See WORK-J0525 for the serving-path
+	 * behavior is a recorded decision rather than a discovery.  See the serving-path
 	 * Widget.validate() hook that closes it.
 	 */
 	@Test void e14_malformedUncheckedForm_serializesAsContractValid() {

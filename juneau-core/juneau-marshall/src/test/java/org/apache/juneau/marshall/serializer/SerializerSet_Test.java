@@ -24,6 +24,9 @@ import org.apache.juneau.commons.http.MediaType;
 import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.marshall.*;
 import org.apache.juneau.marshall.json.*;
+import org.apache.juneau.marshall.json5.*;
+import org.apache.juneau.marshall.json5l.*;
+import org.apache.juneau.marshall.jsonl.*;
 import org.junit.jupiter.api.*;
 
 @SuppressWarnings({
@@ -332,5 +335,30 @@ class SerializerSet_Test extends TestBase {
 		var s = SerializerSet.create().add(SB1.class).build();
 		assertTrue(s.getStreamSerializer(MediaType.of("text/unknown")).isEmpty());
 		assertTrue(s.getStreamSerializer("text/unknown").isEmpty());
+	}
+
+	@Test void c01_fallbackAcceptDoesNotWinOverExactMatch_regardlessOfOrder() {
+		var json5First = SerializerSet.create().add(Json5Serializer.DEFAULT, JsonSerializer.DEFAULT).build();
+		var jsonFirst = SerializerSet.create().add(JsonSerializer.DEFAULT, Json5Serializer.DEFAULT).build();
+		for (var sg : new SerializerSet[]{json5First, jsonFirst}) {
+			assertEquals(JsonSerializer.class, sg.getSerializer("application/json").orElseThrow().getClass());
+			assertEquals(Json5Serializer.class, sg.getSerializer("application/json5").orElseThrow().getClass());
+		}
+	}
+
+	@Test void c02_jsonlFallbackAcceptDoesNotWinOverExactMatch_regardlessOfOrder() {
+		var json5lFirst = SerializerSet.create().add(Json5lSerializer.DEFAULT, JsonlSerializer.DEFAULT).build();
+		var jsonlFirst = SerializerSet.create().add(JsonlSerializer.DEFAULT, Json5lSerializer.DEFAULT).build();
+		for (var sg : new SerializerSet[]{json5lFirst, jsonlFirst}) {
+			assertEquals(JsonlSerializer.class, sg.getSerializer("application/jsonl").orElseThrow().getClass());
+			assertEquals(JsonlSerializer.class, sg.getSerializer("application/jsonlines").orElseThrow().getClass());
+			assertEquals(Json5lSerializer.class, sg.getSerializer("application/json5l").orElseThrow().getClass());
+			assertEquals(Json5lSerializer.class, sg.getSerializer("application/json5lines").orElseThrow().getClass());
+		}
+	}
+
+	@Test void c03_onlyFallbackSerializer_stillMatches() {
+		var sg = SerializerSet.create().add(Json5lSerializer.DEFAULT).build();
+		assertEquals(Json5lSerializer.class, sg.getSerializer("application/jsonl").orElseThrow().getClass());
 	}
 }

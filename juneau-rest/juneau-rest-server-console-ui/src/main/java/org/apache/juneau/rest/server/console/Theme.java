@@ -546,7 +546,7 @@ public final class Theme {
 	 * </ul>
 	 *
 	 * <p>
-	 * <b>It fires on the declared name only, never on a target.</b> Aliasing a pack token <i>to</i> a ladder step
+	 * <b>It fires on the declared name only, never on a target.</b> Aliasing a stock-theme token <i>to</i> a ladder step
 	 * is legal and useful; <i>declaring</i> a ladder step is not.
 	 *
 	 * <p>

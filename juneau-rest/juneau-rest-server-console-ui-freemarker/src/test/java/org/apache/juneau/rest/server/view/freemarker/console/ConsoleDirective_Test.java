@@ -19,6 +19,8 @@ package org.apache.juneau.rest.server.view.freemarker.console;
 import static org.apache.juneau.rest.server.console.test.PageContractAssert.*;
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.util.*;
+
 import org.apache.juneau.*;
 import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.rest.mock.classic.*;
@@ -108,6 +110,10 @@ class ConsoleDirective_Test extends TestBase {
 				.basePath("/templates/")
 				.chromeTemplate("admin/console-chrome-sticky.ftlh")
 				.build();
+		}
+		@RestGet(path="/wire-order")
+		public View wireOrder() {
+			return FreemarkerView.of("admin/page-wire-order.ftlh");
 		}
 		@RestGet(path="/assets")
 		public View assets() {
@@ -382,6 +388,25 @@ class ConsoleDirective_Test extends TestBase {
 		assertTrue(body.indexOf("app-early.css") < body.indexOf("href=\"a.css\""), () -> body);
 		assertTrue(body.indexOf("mid-toolkit.js") < body.indexOf("src=\"one.js\""), () -> body);
 		assertPage(body).isValid().hasFooterSlot("content");
+	}
+
+	@Test void c11b_stickyChrome_vendorAssetsKeepThePhaseOrder() throws Exception {
+		String body;
+		try (var c = MockRestClient.buildLax(StickyHost.class);
+			var rsp = c.get("/wire-order").run()) {
+			rsp.assertStatus(200);
+			body = rsp.getContent().asString();
+		}
+		var order = List.of("app-early.css", "dataTables.dataTables.min.css", "href=\"page.css\"", "juneau-views.css", "</head>",
+			"juneau-console.js", "/jquery.min.js", "/js/dataTables.min.js", "juneau-datatables.js", "juneau-renders.js",
+			"juneau-views.js", "mid-toolkit.js", "src=\"page-init.js\"");
+		var last = -1;
+		for (var s : order) {
+			var i2 = body.indexOf(s);
+			var prev = last;
+			assertTrue(i2 > prev, () -> "'" + s + "' out of order in:\n" + body);
+			last = i2;
+		}
 	}
 
 	@Test void c13_consoleAssetHrefs_areContextRootAbsoluteUnderANestedPagePath() throws Exception {

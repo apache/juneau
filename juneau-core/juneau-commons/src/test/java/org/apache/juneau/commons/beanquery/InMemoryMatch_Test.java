@@ -338,7 +338,7 @@ class InMemoryMatch_Test extends TestBase {
 	void i01_unrecognizedBuiltinName_fewerArgsThanBetween_throwsClearException() {
 		// Shaped like $gt (1 arg); matchLeaf's default must not fall into the "$between" branch and call
 		// args.get(1) on a 1-element list.
-		var unrecognized = SearchOperator.builtin("$notreal1", 1, 1, false, "help", SearchType.NUMERIC);
+		var unrecognized = SearchOperator.builtin("$notreal1", 1, 1, false, SearchType.NUMERIC);
 		var node = SearchExpression.func(unrecognized, List.of(SearchExpression.literal("5", false)));
 		var e = assertThrows(IllegalArgumentException.class, () -> InMemoryMatch.matches(node, 10, SearchType.NUMERIC));
 		assertEquals("Unsupported operator '$notreal1' for in-memory evaluation.", e.getMessage());
@@ -349,7 +349,7 @@ class InMemoryMatch_Test extends TestBase {
 		// Shaped like $between (2 args), so the old default branch wouldn't have crashed at all -- it would have
 		// silently evaluated this operator as if it were a real $between call. The fix's unconditional throw must
 		// catch this case too, not just the lower-arity crash in i01.
-		var unrecognized = SearchOperator.builtin("$notreal2", 2, 2, false, "help", SearchType.NUMERIC);
+		var unrecognized = SearchOperator.builtin("$notreal2", 2, 2, false, SearchType.NUMERIC);
 		var node = SearchExpression.func(unrecognized, List.of(SearchExpression.literal("1", false), SearchExpression.literal("5", false)));
 		var e = assertThrows(IllegalArgumentException.class, () -> InMemoryMatch.matches(node, 3, SearchType.NUMERIC));
 		assertEquals("Unsupported operator '$notreal2' for in-memory evaluation.", e.getMessage());

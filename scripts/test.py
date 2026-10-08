@@ -28,6 +28,9 @@ Options:
     --js-tests               Also run the headless-browser JS harness (mvn -Pjs-tests, *_BrowserTest in
                              juneau-rest-server-views).  Fails if Node/npm are missing.
     --no-js-tests            Never run the JS harness (overrides auto-detect)
+    --console <mode>         Maven output on the console: full (default), condensed or none
+    --full-log <path>        Also write every byte Maven prints to this file (appended)
+    --condensed-log <path>   Also write the condensed one-line-per-event stream to this file (appended)
     --profile <module>       Run one-shot JFR profile for module tests
     --help, -h               Show this help message
 
@@ -35,7 +38,7 @@ Environment:
     JUNEAU_MVN_WRAPPER       Optional prefix for every mvn command (e.g. a lock script that serializes
                              concurrent runs on one checkout).
 
-JS tests (WORK-J0608):
+JS tests:
     CI's js-tests job is the only thing that normally runs the browser tests (-Pjs-tests).  When neither
     --js-tests nor --no-js-tests is given, this script enables them automatically if any .js, .css or .ftl
     file under a src/ tree differs from origin/master (committed, uncommitted or untracked).  If Node/npm
@@ -59,10 +62,12 @@ Perf guard (per-module, TODO-160):
 """
 
 import argparse
+import importlib.util
 import json
 import os
 import re
 import shutil
+import signal
 import subprocess
 import sys
 import time
@@ -71,8 +76,39 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 
-def run_command(cmd):
-	"""Run a command, streaming its output live, and return exit code and full output."""
+RUN_MODULE_PATH = Path(__file__).resolve().parent.parent / "juneau-run" / "src" / "main" / "python" / "juneau_run.py"
+_step_n = 0
+
+
+def run_module():
+	"""The in-tree juneau_run module (shared if already loaded), or None if its source is not there."""
+	module = sys.modules.get("juneau_run")
+	if module is None and RUN_MODULE_PATH.exists():
+		spec = importlib.util.spec_from_file_location("juneau_run", RUN_MODULE_PATH)
+		module = importlib.util.module_from_spec(spec)
+		sys.modules["juneau_run"] = module
+		# Keep the module's source directory free of __pycache__ (the Maven build's RAT check scans it).
+		previous, sys.dont_write_bytecode = sys.dont_write_bytecode, True
+		try:
+			spec.loader.exec_module(module)
+		finally:
+			sys.dont_write_bytecode = previous
+	return module
+
+
+def next_step_number():
+	"""Top-level step numbers continue after JUNEAU_RUN_N_BASE, which push.py sets for the steps it spawns us for."""
+	global _step_n
+	_step_n += 1
+	return int(os.environ.get("JUNEAU_RUN_N_BASE", "0")) + _step_n
+
+
+def run_command(cmd, step_id=None, title=None):
+	"""Run a command, streaming its output live, and return exit code and full output.
+
+	With run markers on, or console/log routing requested (see juneau_run), the command runs as the protocol step
+	`step_id` through juneau_run.  Otherwise it behaves exactly as it always has.
+	"""
 	script_dir = Path(__file__).parent
 	project_root = script_dir.parent
 	# Optional command prefix (e.g. a lock script that serializes concurrent mvn runs on one checkout).
@@ -81,6 +117,12 @@ def run_command(cmd):
 		cmd = f"{wrapper} {cmd}"
 	print(f"Running: {cmd}")
 	print("-" * 80, flush=True)
+	run = run_module()
+	if run is not None and step_id and (run.enabled() or not run.Sinks().is_default):
+		# Through a shell, like the default path, so a JUNEAU_MVN_WRAPPER prefix (which may use && or quoting) keeps its meaning.
+		result = run.run_tool(["/bin/sh", "-c", cmd], "maven", step_id, title or step_id, n=next_step_number(),
+			cwd=str(project_root), capture=True)
+		return result.exit, result.output
 	# Echo each line as it arrives so a long or hung build is visible, and keep it for parse_test_results().
 	lines = []
 	with subprocess.Popen(cmd, shell=True, cwd=str(project_root), stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
@@ -388,14 +430,14 @@ PARALLELISM = "-T1C"
 
 
 def build():
-	return run_command(f"mvn clean install {PARALLELISM} -DskipTests")
+	return run_command(f"mvn clean install {PARALLELISM} -DskipTests", "build", "Build")
 
 
 def test(no_container=False):
 	cmd = f"mvn test {PARALLELISM} -Drat.skip=true"
 	if no_container:
 		cmd += " -DexcludedGroups=container"
-	return run_command(cmd)
+	return run_command(cmd, "tests", "Tests")
 
 
 JS_TEST_MODULE = "juneau-rest/juneau-rest-server-views"
@@ -442,7 +484,7 @@ def js_prereq_problem():
 def js_tests():
 	cmd = (f"mvn -Pjs-tests -pl {JS_TEST_MODULE} -am test -Drat.skip=true "
 		"-Dtest='*_BrowserTest' -Dsurefire.failIfNoSpecifiedTests=false")
-	return run_command(cmd)
+	return run_command(cmd, "js-tests", "JS browser tests")
 
 
 def maybe_run_js_tests(js_flag, no_js_flag, changed_files, runner=None):
@@ -472,13 +514,13 @@ def profile(module):
 	# Overriding argLine deliberately drops the JaCoCo agent so instrumentation doesn't skew the profile.
 	argline = f"-XX:StartFlightRecording=filename={output_file},settings=profile,dumponexit=true"
 	cmd = f"mvn test -pl {module} -Drat.skip=true -DargLine='{argline}'"
-	code, out = run_command(cmd)
+	code, out = run_command(cmd, "profile", "Profile")
 	if code == 0:
 		print(f"\n✅ JFR profile captured at {output_file}")
 	return code, out
 
 
-def main():  # NOSONAR python:S3776 -- Cognitive complexity is acceptable for this main function
+def _main():  # NOSONAR python:S3776 -- Cognitive complexity is acceptable for this main function
 	parser = argparse.ArgumentParser(add_help=False)
 	parser.add_argument("--build-only", "-b", action="store_true")
 	parser.add_argument("--test-only", "-t", action="store_true")
@@ -490,6 +532,9 @@ def main():  # NOSONAR python:S3776 -- Cognitive complexity is acceptable for th
 	parser.add_argument("--js-tests", action="store_true", dest="js_tests")
 	parser.add_argument("--no-js-tests", action="store_true", dest="no_js_tests")
 	parser.add_argument("--profile")
+	parser.add_argument("--console", choices=("full", "condensed", "none"))
+	parser.add_argument("--full-log")
+	parser.add_argument("--condensed-log")
 	parser.add_argument("--help", "-h", action="store_true")
 	args, unknown = parser.parse_known_args()
 	if args.help:
@@ -499,6 +544,11 @@ def main():  # NOSONAR python:S3776 -- Cognitive complexity is acceptable for th
 		print(f"Unknown option(s): {' '.join(unknown)}")
 		print(__doc__)
 		return 1
+	# juneau_run reads its output routing from the environment; an argument beats a value already set there.
+	for flag, variable in ((args.console, "JUNEAU_RUN_CONSOLE"), (args.full_log, "JUNEAU_RUN_FULL_LOG"),
+			(args.condensed_log, "JUNEAU_RUN_CONDENSED_LOG")):
+		if flag:
+			os.environ[variable] = flag
 
 	build_only = args.build_only
 	test_only = args.test_only
@@ -553,6 +603,36 @@ def main():  # NOSONAR python:S3776 -- Cognitive complexity is acceptable for th
 		if js_exit != 0:
 			return js_exit
 	return exit_code
+
+
+def main():
+	"""Owns the run-protocol `run`/`done` markers (both are no-ops unless RUN_MARKERS=1 and no enclosing run exists)."""
+	run = run_module()
+	previous_sigterm = None
+	if run is not None and run.enabled():
+		# Unwind to the KeyboardInterrupt handler below; run_tool tears the Maven process group down on the way.
+		def on_sigterm(signum, frame):
+			raise KeyboardInterrupt
+		previous_sigterm = signal.signal(signal.SIGTERM, on_sigterm)
+	try:
+		if run is not None:
+			run.run(mode="test", project=Path(__file__).resolve().parent.parent.name,
+				branch=git_value(["rev-parse", "--abbrev-ref", "HEAD"]), head=git_value(["rev-parse", "--short", "HEAD"]))
+		try:
+			code = _main()
+		except KeyboardInterrupt:
+			if run is None or not run.enabled():
+				raise
+			run.done("cancelled")
+			print("Cancelled.", file=sys.stderr)
+			return 130
+		if run is not None:
+			run.done("ok" if code == 0 else "fail")
+		return code
+	finally:
+		if previous_sigterm is not None:
+			signal.signal(signal.SIGTERM, previous_sigterm)
+
 
 if __name__ == '__main__':
     sys.exit(main())

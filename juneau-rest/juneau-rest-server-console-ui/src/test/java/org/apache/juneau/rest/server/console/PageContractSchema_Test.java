@@ -25,6 +25,7 @@ import java.util.*;
 import java.util.function.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.marshall.collections.*;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.*;
 import org.junit.jupiter.params.provider.*;
@@ -39,7 +40,10 @@ class PageContractSchema_Test extends TestBase {
 	}
 
 	@ParameterizedTest
-	@ValueSource(strings = {"valid-example.json", "valid-minimal.json", "valid-deep.json"})
+	@ValueSource(strings = {"valid-example.json", "valid-minimal.json", "valid-deep.json", "valid-console-output.json",
+		"valid-run-view.json", "valid-run-view-nopoll.json",
+		"valid-datatables-table.json", "valid-datatables-table-full.json", "valid-datatables-rows.json",
+		"valid-datatables-src.json", "valid-datatables-slotmeta.json"})
 	void a01_validCorpusPasses(String name) throws Exception {
 		var errors = PageContractSchema.get().validate(fixture(name));
 		assertTrue(errors.isEmpty(), () -> name + ": " + errors);
@@ -64,10 +68,23 @@ class PageContractSchema_Test extends TestBase {
 		"invalid-html-neither.json|oneOf",
 		"invalid-html-extra.json|oneOf",
 		"invalid-datatables-notable.json|oneOf",
+		"invalid-console-output-src.json|oneOf",
+		"invalid-console-output-nolines.json|oneOf",
+		"invalid-console-output-extra.json|oneOf",
+		"invalid-run-view-src.json|oneOf",
+		"invalid-run-view-extra.json|oneOf",
+		"invalid-run-view-nourl.json|oneOf",
 		"invalid-card-type.json|does not match",
 		"invalid-r1.json|R-1: duplicate nav id 'a'",
 		"invalid-r2.json|R-2: duplicate card id 'c'",
 		"invalid-r3.json|failed at 'b'",
+		"invalid-datatables-both.json|oneOf",
+		"invalid-datatables-rows-and-dataurl.json|oneOf",
+		"invalid-tablecolumn-no-key.json|oneOf",
+		"invalid-tablecolumn-extra.json|oneOf",
+		"invalid-selection-norowid.json|oneOf",
+		"invalid-bulk-noactions.json|oneOf",
+		"invalid-rowaction-noendpoint.json|oneOf",
 	})
 	void a02_invalidCorpusFails(String name, String expected) throws Exception {
 		var errors = PageContractSchema.get().validate(fixture(name));
@@ -84,5 +101,10 @@ class PageContractSchema_Test extends TestBase {
 	@Test void a04_unparseable() {
 		var errors = PageContractSchema.get().validate("{nope");
 		assertList(errors, (Predicate<String>) e -> e.startsWith("$: unparseable JSON"));
+	}
+
+	@Test void a05_c2_schemaIdBumpedTo1_1() throws Exception {
+		var id = JsonMap.ofString(PageContractSchema.get().schemaJson()).getString("$id");
+		assertTrue(id.endsWith("1.1/juneau-page.schema.json") || id.endsWith("1.1"), () -> "expected $id to carry '1.1'; got '" + id + "'");
 	}
 }

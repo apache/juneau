@@ -1,0 +1,23 @@
+{
+  "runId":   [["run-42", true], ["a", true], ["", false], ["a b", false], ["../x", false], ["a/b", false]],
+  "token":   [["k3x9ab.17", true], ["a", true], ["", false], ["a b", false], ["x/y", false]],
+  "stepId":  [["tests", true], ["mvn.test-1", true], ["_x", false], ["-x", false], ["", false], ["a b", false]],
+  "fw":      [["jest", true], ["junit-xml", true], ["Jest", false], ["", false], ["a b", false]],
+  "noteHref": [
+    ["https://example.org/pr/1", true], ["http://example.org", true], ["/runs/42", true], ["#raw-L12", true],
+    ["javascript:alert(1)", false], ["data:text/html,x", false], ["//evil.example", false], ["\\\\evil", false],
+    ["/a/../b", false], ["ftp://example.org", false], ["", false], ["ht\ttps://example.org", true],
+    ["HTTP://example.org", false], ["ftp:", false], ["http:/x", false], ["https://", false], ["https:///path", false],
+    ["javascript:", false]
+  ],
+  "rawHref": [
+    ["#raw-L{line}", true], ["/runs/42/raw#L{line}", true], ["#raw-L", false], ["#a{line}{line}", false],
+    ["https://evil.example/{line}", false], ["javascript:{line}", false], ["", false]
+  ],
+  "duration": [[0, "0 ms"], [850, "850 ms"], [1200, "1.2 s"], [2000, "2.0 s"], [9999, "9.9 s"], [42000, "42 s"],
+               [245000, "4 m 05 s"], [3720000, "1 h 02 m"], [-1, ""]],
+  "status": [
+    ["ok", true], ["fail", true], ["running", true], ["waiting", true], ["skip", true], ["empty", true],
+    ["stopped", true], ["cancelled", true], ["", false], ["OK", false], ["done", false]
+  ]
+}

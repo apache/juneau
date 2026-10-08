@@ -32,6 +32,10 @@ import freemarker.template.*;
  * 	&lt;/#if&gt;
  * </p>
  *
+ * <p>
+ * Only {@code toolkit=} counts.  Packs that cards require (for example {@code "datatables-glue"} for a
+ * {@code type="datatables"} card) are loaded but don't make {@code jcHasToolkit} return <jk>true</jk>.
+ *
  * @since 10.0.0
  */
 public final class HasToolkitMethodModel implements TemplateMethodModelEx {

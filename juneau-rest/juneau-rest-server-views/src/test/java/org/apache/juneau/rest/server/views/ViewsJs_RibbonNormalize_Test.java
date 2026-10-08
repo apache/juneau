@@ -215,7 +215,7 @@ class ViewsJs_RibbonNormalize_Test extends TestBase {
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
-	// WORK-J0507 (Foundry WORK-P0063 toolbar follow-up): print export button + collapseAll action
+	// print export button + collapseAll action
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Test void d01_printIconResolvesToItsOwnKey_notTheNeutralFallback() {
@@ -291,11 +291,11 @@ class ViewsJs_RibbonNormalize_Test extends TestBase {
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
-	// f) ribbonToQueryParams joins multiple clauses into the ONE `search` / ONE `opt` string (design §5.3): the wire
-	//    carries a single search parameter and a single opt parameter, never repeated params.
+	// f) the flat query-param form joins multiple clauses into the ONE `search` string (design §5.3): the wire
+	//    carries a single search parameter, never repeated params.
 	//------------------------------------------------------------------------------------------------------------------
 
-	@Test void f01_multipleActiveTogglesJoinIntoOneSearchAndOneOptString() {
+	@Test void f01_multipleActiveTogglesJoinIntoOneSearchString() {
 		var r = report();
 		// Left as 3 separate assertEquals, not collapsed into one assertBean: each checks a distinct §5.3 join
 		// rule (search-clause join, opt-clause join, column-scoped exemption) and keeps its own explanatory
@@ -303,9 +303,9 @@ class ViewsJs_RibbonNormalize_Test extends TestBase {
 		// Two active `search`-param toggles fold into ONE comma-joined search string (declared order preserved)...
 		assertEquals("status=$eq(OPEN),owner=$eq(me)", r.get("pure_joinSearchClauses"),
 			() -> "repeated `search` params are not the API - the browser must join the clauses into one string: " + r);
-		// ...and a top-level `opt` option plus a selected `opt` group member fold into ONE opt string.
-		assertEquals("counts=true,density=compact", r.get("pure_joinOptClauses"),
-			() -> "repeated `opt` params are not the API - the browser must join the clauses into one string: " + r);
+		// ...while `opt` is single-valued: the last contribution wins.
+		assertEquals("density=compact", r.get("pure_joinOptClauses"),
+			() -> "opt is no longer comma-joined (BQ#5 renamed it to opts; nothing joins on it): last contribution wins: " + r);
 		// A column-scoped toggle is untouched by the join: it stays the native per-index DataTables param.
 		assertEquals("$eq(OPEN)", r.get("pure_joinColumnStillNative"),
 			() -> "column-scoped options keep their native columns[N][search][value] shape (folded server-side): " + r);
@@ -322,5 +322,26 @@ class ViewsJs_RibbonNormalize_Test extends TestBase {
 		assertEquals("status=$in(OPEN,CLOSED),tier=$eq(gold)", r.get("pure_joinProtectsInnerCommas"),
 			() -> "a comma inside a clause value's $in(...) belongs to that clause; the join adds only a top-level "
 				+ "separator between clauses: " + r);
+	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// g) The ribbon splits into column searches (per dtIndex) and query params, merged with user searches.
+	//------------------------------------------------------------------------------------------------------------------
+
+	@Test void g01_columnScopedOptionsBecomePerIndexSearches_sameColumnAnds() throws Exception {
+		assertEquals("{\"1\":\"$eq(DROPPED)\",\"2\":\"$and($in(Waiting,\\\"Ready to push\\\"),$ne(Waiting))\"}",
+			Json.of(report().get("split_columnSearches")));
+	}
+
+	@Test void g02_paramScopedOptionsBecomeQueryParams() throws Exception {
+		assertEquals("{\"owner\":\"me\"}", Json.of(report().get("split_queryParams")));
+	}
+
+	@Test void g03_mergeDropsBlankUserValues_andAndsASharedColumn() throws Exception {
+		assertEquals("{\"1\":\"$and($eq(ACTIVE),$eq(DROPPED))\",\"2\":\"$ne(Waiting)\"}", Json.of(report().get("split_merged")));
+	}
+
+	@Test void g04_ribbonToQueryParamsWrapperRemoved() throws Exception {
+		assertEquals(Boolean.TRUE, report().get("split_wrapperRemoved"), () -> report().toString());
 	}
 }

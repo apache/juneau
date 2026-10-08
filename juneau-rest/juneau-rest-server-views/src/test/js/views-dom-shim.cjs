@@ -178,6 +178,7 @@ function makeEnv() {
 				if (k === 'class') this.className = this.attrs[k];
 				if (k === 'id') byId[this.attrs[k]] = this;
 			},
+			hasAttribute: function (k) { return k === 'class' ? !!this.className : Object.hasOwn(this.attrs, k); },
 			removeAttribute: function (k) { delete this.attrs[k]; if (k === 'class') this.className = ''; },
 			/** Live `data-*` view, mirroring real DOM `dataset` (camelCase prop <-> kebab-case `data-` attr). */
 			get dataset() {

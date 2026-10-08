@@ -93,7 +93,7 @@ public final class BulkMutateDef {
 	 * {@code VIEW_META} (see the class javadoc). Bumped only on a breaking wire change to this
 	 * contract.
 	 */
-	public static final String CONTRACT_VERSION = "1";
+	public static final String CONTRACT_VERSION = "2";
 
 	/** The frozen contract-version discriminator (always {@value #CONTRACT_VERSION} for this contract). */
 	public String contractVersion = CONTRACT_VERSION;
@@ -147,6 +147,9 @@ public final class BulkMutateDef {
 	public BulkMutateDef actions(RowAction...value) {
 		if (value == null || value.length == 0)
 			throw iaex("BulkMutateDef requires at least one action.");
+		for (var a : value)
+			if (RowAction.BulkMode.AGGREGATE.wire().equals(a.bulkMode) && a.endpoint != null && a.endpoint.contains("{"))
+				throw iaex("Bulk action '%s' has mode 'aggregate' but its endpoint '%s' contains a {field} token; aggregate endpoints receive {ids} in the body.", a.id, a.endpoint);
 		actions = l(value);
 		return this;
 	}

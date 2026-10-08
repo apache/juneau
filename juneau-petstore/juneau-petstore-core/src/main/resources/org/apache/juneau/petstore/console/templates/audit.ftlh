@@ -17,14 +17,14 @@
 <@card type="datatables" id="audit">{
   dataMode: 'server',
   dataUrl: '/console/ops/audit/query',
-  defaultOrder: [[0, 'desc']],
+  defaultOrder: [{ key: 'at', dir: 'desc' }],
   columns: [
     { key: 'at', label: 'When', render: { id: 'timestamp' }, searchType: 'timestamp' },
-    { key: 'actor', label: 'Actor', searchType: 'string' },
-    { key: 'action', label: 'Action', searchType: 'string' },
-    { key: 'entity', label: 'Entity', searchType: 'string' },
-    { key: 'entityId', label: 'Id', searchType: 'string' },
-    { key: 'detail', label: 'Detail', searchType: 'string' }
+    { key: 'actor', label: 'Actor', searchType: 'text' },
+    { key: 'action', label: 'Action', searchType: 'text' },
+    { key: 'entity', label: 'Entity', searchType: 'text' },
+    { key: 'entityId', label: 'Id', searchType: 'text' },
+    { key: 'detail', label: 'Detail', searchType: 'text' }
   ],
   ribbon: [
     { type: 'export', id: 'export' },

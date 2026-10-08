@@ -26,7 +26,7 @@ import org.apache.juneau.marshall.parser.*;
 import org.junit.jupiter.api.*;
 
 /**
- * Tests {@code @BeanProp(required)} enforcement in the RDF parsers (WORK-J0585).
+ * Tests {@code @BeanProp(required)} enforcement in the RDF parsers.
  */
 @SuppressWarnings("unused") // Fixture fields are read reflectively.
 class RdfRequired_Test extends TestBase {

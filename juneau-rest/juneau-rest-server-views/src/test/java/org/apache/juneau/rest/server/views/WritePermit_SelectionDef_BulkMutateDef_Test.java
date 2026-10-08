@@ -24,6 +24,7 @@ import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.marshall.marshaller.*;
+import org.apache.juneau.rest.server.widgets.Op;
 import org.junit.jupiter.api.*;
 
 /**
@@ -82,6 +83,41 @@ class WritePermit_SelectionDef_BulkMutateDef_Test extends TestBase {
 	@Test void b03_noPublicConstructor() {
 		for (var c : SelectionDef.class.getDeclaredConstructors())
 			assertFalse(Modifier.isPublic(c.getModifiers()), () -> "SelectionDef must not expose a public constructor: " + c);
+	}
+
+	@Test void b05_scope_defaultsToPersistent_andIsSettable() {
+		var s = SelectionDef.create("id");
+		assertEquals(SelectionDef.Scope.PERSISTENT, s.scope());
+		assertEquals("persistent", s.scope().wire());
+		s.scope(SelectionDef.Scope.PAGE);
+		assertEquals(SelectionDef.Scope.PAGE, s.scope());
+		assertEquals("page", s.scope().wire());
+	}
+
+	@Test void b06_scope_nullResetsToPersistent() {
+		var s = SelectionDef.create("id").scope(SelectionDef.Scope.PAGE).scope(null);
+		assertEquals(SelectionDef.Scope.PERSISTENT, s.scope());
+	}
+
+	@Test void b07_selectableWhen_defaultsToNull_andIsSettable() {
+		var s = SelectionDef.create("id");
+		assertNull(s.selectableWhen());
+		var r = RowActionEnabledRule.of("state", Op.EQ, "PENDING", "Only pending changes can be aborted.");
+		s.selectableWhen(r);
+		assertEquals(List.of(r), s.selectableWhen());
+	}
+
+	@Test void b08_selectableWhen_emptyVarargsClearsToNull() {
+		var s = SelectionDef.create("id").selectableWhen(RowActionEnabledRule.of("state", Op.EQ, "PENDING", "x"));
+		s.selectableWhen(new RowActionEnabledRule[0]);
+		assertNull(s.selectableWhen());
+	}
+
+	@Test void b09_labelField_defaultsToNull_andIsSettable() {
+		var s = SelectionDef.create("id");
+		assertNull(s.labelField());
+		s.labelField("name");
+		assertEquals("name", s.labelField());
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -161,7 +197,7 @@ class WritePermit_SelectionDef_BulkMutateDef_Test extends TestBase {
 		// class javadoc; this test only pins that the constant exists and is its own string, not that it must
 		// differ numerically (an incidental "3" vs "1" tells us nothing) - the independence is structural
 		// (three separate constants, never aliased), which the ViewTable render tests further verify at the wire.
-		assertEquals("1", BulkMutateDef.CONTRACT_VERSION);
+		assertEquals("2", BulkMutateDef.CONTRACT_VERSION);
 	}
 
 	@Test void d02_serializedForm_carriesOnlyContractVersionAndActions_neverThePermitOrSelection() {
@@ -172,5 +208,73 @@ class WritePermit_SelectionDef_BulkMutateDef_Test extends TestBase {
 		assertFalse(json.toLowerCase().contains("rowidfield"), () -> "the SelectionDef must never reach the wire: " + json);
 		var parsed = Json.to(json, Map.class);
 		assertEquals(Set.of("contractVersion", "actions"), parsed.keySet(), json);
+	}
+
+	@Test void d03_actions_aggregateModeWithFieldTokenInEndpoint_throws() {
+		var bad = RowAction.create("abort").label("Abort").endpoint("/changes/{id}/abort").bulkMode(RowAction.BulkMode.AGGREGATE);
+		var b = BulkMutateDef.create(WritePermit.forCapability("cap"), SelectionDef.create("id"));
+		var ex = assertThrows(IllegalArgumentException.class, () -> b.actions(bad));
+		assertTrue(ex.getMessage().contains("abort"), ex.getMessage());
+		assertTrue(ex.getMessage().contains("/changes/{id}/abort"), ex.getMessage());
+		assertTrue(ex.getMessage().contains("aggregate"), ex.getMessage());
+	}
+
+	@Test void d04_actions_aggregateModeWithoutFieldToken_isAccepted() {
+		var ok = RowAction.create("abort").label("Abort").endpoint("/changes/abort").bulkMode(RowAction.BulkMode.AGGREGATE);
+		var b = BulkMutateDef.create(WritePermit.forCapability("cap"), SelectionDef.create("id")).actions(ok);
+		assertEquals(List.of(ok), b.actions);
+	}
+
+	@Test void d05_actions_perRowModeWithFieldToken_isAccepted() {
+		var ok = RowAction.create("retry").label("Retry").endpoint("/changes/{id}/retry");
+		var b = BulkMutateDef.create(WritePermit.forCapability("cap"), SelectionDef.create("id")).actions(ok);
+		assertEquals(List.of(ok), b.actions);
+	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// RowAction: bulk mode, confirm title, noConfirm
+	//------------------------------------------------------------------------------------------------------------------
+
+	@Test void e01_bulkMode_defaultsToPerRow_andIsSettable() {
+		var a = RowAction.create("abort").label("Abort");
+		assertNull(a.bulkMode);
+		assertEquals("perRow", RowAction.BulkMode.PER_ROW.wire());
+		a.bulkMode(RowAction.BulkMode.AGGREGATE);
+		assertEquals("aggregate", a.bulkMode);
+	}
+
+	@Test void e02_bulkMode_nullResetsToUnset() {
+		var a = RowAction.create("abort").label("Abort").bulkMode(RowAction.BulkMode.AGGREGATE).bulkMode(null);
+		assertNull(a.bulkMode);
+	}
+
+	@Test void e03_confirmTitle_defaultsToNull_andIsSettable() {
+		var a = RowAction.create("abort").label("Abort");
+		assertNull(a.confirmTitle);
+		a.confirmTitle("Abort {count} pending changes");
+		assertEquals("Abort {count} pending changes", a.confirmTitle);
+	}
+
+	@Test void e04_noConfirm_writesLiteralFalseOntoConfirm() {
+		var a = RowAction.create("abort").label("Abort").confirm("Abort these changes?").noConfirm();
+		assertEquals(Boolean.FALSE, a.confirm);
+	}
+
+	@Test void e05_serializedForm_carriesBulkModeAndConfirmTitle() {
+		var a = RowAction.create("abort").label("Abort").bulkMode(RowAction.BulkMode.AGGREGATE).confirmTitle("Abort {count} pending changes");
+		var m = Json.to(Json.of(a), Map.class);
+		assertEquals("aggregate", m.get("bulkMode"));
+		assertEquals("Abort {count} pending changes", m.get("confirmTitle"));
+	}
+
+	@Test void e06_serializedForm_unsetBulkModeAndConfirmTitleStayOffTheWire() {
+		var m = Json.to(Json.of(RowAction.create("ack").label("Ack")), Map.class);
+		assertFalse(m.containsKey("bulkMode"), m.toString());
+		assertFalse(m.containsKey("confirmTitle"), m.toString());
+	}
+
+	@Test void e07_serializedForm_noConfirmIsLiteralFalse() {
+		var m = Json.to(Json.of(RowAction.create("ack").label("Ack").noConfirm()), Map.class);
+		assertEquals(Boolean.FALSE, m.get("confirm"));
 	}
 }

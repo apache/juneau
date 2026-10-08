@@ -1,0 +1,5 @@
+{"contractVersion":"1","title":"T","nav":[],"activeNav":[],"cards":[
+  {"id":"run-output","type":"console-output","title":"Output","output":{
+    "linesUrl":"/runs/1/lines","downloadUrl":"/runs/1/download","refreshMs":2000,"tail":5000,"earlierLimit":2000,
+    "rows":20,"compact":false,"anchorPrefix":"raw-L","showTime":true,"markers":"dim","title":"Build output"}}
+]}

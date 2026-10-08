@@ -1,0 +1,12 @@
+{"suites":[
+{"title":"tests/a.spec.ts","file":"tests/a.spec.ts","specs":[],"suites":[
+ {"title":"Login","file":"tests/a.spec.ts","specs":[
+  {"title":"works","file":"tests/a.spec.ts","tests":[{"projectName":"","status":"expected","results":[{"status":"passed","duration":40}]}]},
+  {"title":"breaks","file":"tests/a.spec.ts","tests":[{"projectName":"chromium","status":"unexpected","results":[{"status":"failed","duration":25,"error":{"message":"\u001b[31mexpected visible\u001b[39m\nCall log: x"}}]}]},
+  {"title":"flaky one","file":"tests/a.spec.ts","tests":[{"projectName":"","status":"flaky","results":[{"status":"failed","duration":30,"error":{"message":"first try"}},{"status":"passed","duration":50}]}]},
+  {"title":"skipped","file":"tests/a.spec.ts","tests":[{"projectName":"","status":"skipped","results":[{"status":"skipped","duration":0}]}]}
+ ]}]},
+{"title":"tests/b.spec.ts","file":"tests/b.spec.ts","specs":[
+  {"title":"hangs","file":"tests/b.spec.ts","tests":[{"projectName":"","results":[{"status":"timedOut","duration":30000,"errors":[{"message":"Test timeout of 30000ms exceeded."}]}]}]}
+],"suites":[]}
+]}

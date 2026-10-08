@@ -85,7 +85,7 @@ function buildFixture() {
 	tr.appendChild(chevronTd);
 
 	const plainTd = env.el('td');
-	plainTd.textContent = 'WORK-D0012';
+	plainTd.textContent = 'row D0012';
 	tr.appendChild(plainTd);
 
 	// The row-actions "..." trigger: a <button>, but with NO data-juneau-action - the exact shape of the

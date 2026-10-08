@@ -46,7 +46,7 @@ import org.junit.jupiter.params.*;
 import org.junit.jupiter.params.provider.*;
 
 /**
- * Tests {@code @BeanProp(required)} enforcement across parser formats (WORK-J0585).
+ * Tests {@code @BeanProp(required)} enforcement across parser formats.
  */
 @SuppressWarnings("unused") // Fixture fields are read reflectively.
 class MissingRequiredProperty_Formats_Test extends TestBase {

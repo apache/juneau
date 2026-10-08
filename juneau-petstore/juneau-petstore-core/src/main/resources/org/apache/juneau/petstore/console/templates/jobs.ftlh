@@ -33,4 +33,47 @@ Submitting twice from the same dialog runs one job.</p></div>
     { type: 'refresh', id: 'refresh' }
   ]
 }</@card>
+<@card type="console-output" id="groom-output" title="Groom run">
+{
+  contractVersion: '1',
+  output: {
+    linesUrl: '${groomLinesUrl?json_string?no_esc}',
+    downloadUrl: '${groomDownloadUrl?json_string?no_esc}',
+    tail: 5000,
+    rows: 24,
+    anchorPrefix: 'groom-L',
+    markers: 'dim',
+    title: 'Groom log'
+  }
+}
+</@card>
+<@card type="console-output" id="groom-file" title="Groom transcript (file)">
+{
+  contractVersion: '1',
+  output: {
+    linesUrl: '${groomFileLinesUrl?json_string?no_esc}',
+    downloadUrl: '${groomFileDownloadUrl?json_string?no_esc}',
+    rows: 12,
+    title: 'Transcript file'
+  }
+}
+</@card>
+<@card type="datatables" id="groom-runs">{
+  dataMode: 'client',
+  dataUrl: '/console/ops/jobs/groom-rows',
+  columns: [
+    { key: 'pet', label: 'Pet' },
+    { key: 'submitted', label: 'Submitted', render: { id: 'timestamp' } },
+    { key: 'state', label: 'State', render: { id: 'pill' } },
+    { key: 'lines', label: 'Lines' }
+  ],
+  detail: {
+    endpoint: '/console/ops/jobs/groom-runs/{id}',
+    region: { id: 'output', type: 'row-detail', populate: 'console-output', params: ${groomDetailParams?no_esc} }
+  },
+  ribbon: [
+    { type: 'dialog', id: 'groom', title: 'Groom', endpoint: '/console/ops/jobs/groom', method: 'POST', form: '/console/ops/jobs/groom-form', present: 'dialog' },
+    { type: 'refresh', id: 'groom-refresh' }
+  ]
+}</@card>
 </@page>

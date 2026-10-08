@@ -249,7 +249,7 @@ class PagingPill_Wiring_Test extends TestBase {
 	}
 
 	/**
-	 * Regression (WORK-J0518 DF-2, superseded by the IRS visual-parity follow-up below): no inner vertical
+	 * Regression: no inner vertical
 	 * border between the four nav buttons (First/Prev/Next/Last) - J0449 dropped this same inner-border pattern
 	 * for the ribbon group but never reached the paging pill's own nav buttons, which kept a per-button
 	 * "border-right" segment divider.
@@ -282,7 +282,7 @@ class PagingPill_Wiring_Test extends TestBase {
 		assertFalse(wrapRegion.contains("border-left"), wrapRegion);
 	}
 
-	/** Skip-glyph correction (WORK-J0518 DF-2): the doubled chevron pulls its second host left to close the gap. */
+	/** Skip-glyph correction: the doubled chevron pulls its second host left to close the gap. */
 	@Test void c09_viewsCss_pagingDoubleGlyphsAreTightened() throws Exception {
 		var body = cWithMixin.get(ViewsMixin.VIEWS_CSS_PATH).run().assertStatus(200).getContent().asString();
 		assertTrue(body.contains(".juneau-view-paging-double svg + svg {"), body);
@@ -404,7 +404,7 @@ class PagingPill_Wiring_Test extends TestBase {
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
-	// Control-row layout item 4 - the legacy hidden per-column search row is gone (WORK-J0547 icon popover replaced it)
+	// Control-row layout item 4 - the legacy hidden per-column search row is gone
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Test void e05_legacyColumnSearchRow_isNoLongerBuiltOrWired() throws Exception {

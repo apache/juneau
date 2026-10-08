@@ -22,7 +22,7 @@ import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
 
 /**
- * Source-shape purity scan for {@code juneau-helpers.js} (WORK-J0522b, design §9.2 / test 29).
+ * Source-shape purity scan for {@code juneau-helpers.js}.
  *
  * <p>
  * Design §9.2's invariants for the helper library:

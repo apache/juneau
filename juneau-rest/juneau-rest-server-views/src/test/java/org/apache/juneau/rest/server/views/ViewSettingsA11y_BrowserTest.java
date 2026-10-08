@@ -166,7 +166,7 @@ class ViewSettingsA11y_BrowserTest extends TestBase {
 	}
 
 	@Test void f1_03_onAClientDslColumnTheFilterLandsInTheStoreAndPredicate() {
-		// WORK-J0612: real juneau-search.js validates the restored $eq(OK); it installs the "juneau-dsl" predicate and
+		// real juneau-search.js validates the restored $eq(OK); it installs the "juneau-dsl" predicate and
 		// the per-table store, never native col.search().
 		assertBean(report::toString, obj("f1"), "dslStoredExpr,dslNativeExpr,dslPredicateMatchesOk,dslPredicateRejectsOther",
 			"$eq(OK),,true,true");

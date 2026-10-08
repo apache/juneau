@@ -30,7 +30,7 @@ import org.apache.juneau.marshall.marshaller.*;
 import org.junit.jupiter.api.*;
 
 /**
- * The in-dialog result <b>receipt</b> (WORK-J0513 Scope A): a dialog that opted in with
+ * The in-dialog result <b>receipt</b>: a dialog that opted in with
  * {@code ModalDef.keepOpenOnSubmit} keeps its layer across the submit, and the runtime paints the write's result
  * into that already-open dialog instead of closing it and painting a row banner.
  *
@@ -81,7 +81,7 @@ class ViewsJs_DialogReceipt_Test extends TestBase {
 	 *
 	 * <p>The receipt needs to know, at settle time, which dialog to paint into - and the obvious way to arrange
 	 * that is a callback parameter on the submit.  {@code submitActionDialog} is the one function EVERY
-	 * {@code present=dialog} submit goes through, and WORK-J0512 put its {@code targetId} precedence rule and that
+	 * {@code present=dialog} submit goes through, and the row-less dialog work put its {@code targetId} precedence rule and that
 	 * rule's tripwire there precisely because it is the only path.  Threading a receipt parameter through it would
 	 * re-open a reviewed function to add a feature that has nothing to do with what it decides.  The coupling
 	 * therefore runs through a ctx-scoped hold registered at CLICK time instead, which leaves this function

@@ -141,8 +141,11 @@ public final class PageCapture {
 	private List<String> toolkits = List.of();
 	private List<String> init = List.of();
 	private List<String> css = List.of();
-	private List<String> toolkitCss = List.of();
-	private List<String> toolkitJs = List.of();
+	private List<String> vendorCss = List.of();
+	private List<String> vendorJs = List.of();
+	private List<String> runtimeCss = List.of();
+	private List<String> runtimeJs = List.of();
+	private final Set<String> requiredPacks = new LinkedHashSet<>();
 	private int segments;
 	private int mainCount;
 	private int autoCards;
@@ -290,14 +293,39 @@ public final class PageCapture {
 
 	void css(List<String> v) { css = List.copyOf(v); }
 	void init(List<String> v) { init = List.copyOf(v); }
-	void toolkitAssets(List<String> cssUrls, List<String> jsUrls) { toolkitCss = List.copyOf(cssUrls); toolkitJs = List.copyOf(jsUrls); }
+	void toolkitAssets(ToolkitPackRegistry.Resolved r) {
+		vendorCss = r.vendorCss();
+		vendorJs = r.vendorJs();
+		runtimeCss = r.runtimeCss();
+		runtimeJs = r.runtimeJs();
+	}
 	void shellUrl(String v) { shellUrl = v; }
 	StringWriter pageBuffer() { return pageBuffer; }
 	StringWriter consoleBuffer() { return consoleBuffer; }
 	List<String> cssHrefs() { return css; }
 	List<String> initScripts() { return init; }
-	List<String> toolkitCss() { return toolkitCss; }
-	List<String> toolkitJs() { return toolkitJs; }
+	List<String> vendorCss() { return vendorCss; }
+	List<String> vendorJs() { return vendorJs; }
+	List<String> runtimeCss() { return runtimeCss; }
+	List<String> runtimeJs() { return runtimeJs; }
+
+	/**
+	 * Records toolkit packs the page needs, in first-seen order.  Called by {@code <@card>} for each authored card
+	 * and by other directives that emit markup needing a pack.
+	 *
+	 * @param packs The pack names.
+	 * @return This object.
+	 */
+	public PageCapture require(Collection<String> packs) {
+		requiredPacks.addAll(packs);
+		return this;
+	}
+
+	/** @return The recorded pack names, in first-seen order. */
+	public Set<String> requiredPacks() { return Collections.unmodifiableSet(requiredPacks); }
+
+	/** @return <jk>true</jk> while a {@code <@page>} body is rendering. */
+	public boolean inPage() { return pageOpen; }
 	String title() { return title; }
 	boolean hasHeaderTitle() { return header.title != null; }
 
@@ -375,6 +403,10 @@ public final class PageCapture {
 	 * A card qualifies when its {@code table} is a bare URL string (the view envelope is fetched client-side, so its
 	 * {@code dataMode} cannot be known here; assumed server-capable) or an envelope whose {@code view.dataMode} is
 	 * {@code "server"}.  A catalog or envelope with any other {@code dataMode} is client-mode and does not qualify.
+	 *
+	 * <p>
+	 * No longer used by the renderer: every {@code type="datatables"} card now requires the {@code "datatables-glue"}
+	 * pack.  Kept because it is public.
 	 *
 	 * @return <jk>true</jk> if the glue should be emitted.
 	 */

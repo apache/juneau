@@ -26,6 +26,7 @@ import java.util.concurrent.atomic.*;
 import java.util.function.*;
 import java.util.logging.*;
 
+import org.apache.juneau.commons.http.MediaRanges;
 import org.apache.juneau.http.response.*;
 import org.apache.juneau.marshall.marshaller.*;
 import org.apache.juneau.marshall.serializer.*;
@@ -75,8 +76,11 @@ import jakarta.servlet.http.*;
  * 		frame. {@link SseEvent} elements are written verbatim; any other element type is JSON-encoded
  * 		into the {@code data:} field.
  * 	<li><b>NDJSON</b> ({@code application/x-ndjson}, {@code application/jsonl}, {@code application/jsonlines},
- * 		{@code application/json5l}, {@code application/json5lines}) &mdash; each element is
- * 		JSON-encoded on its own line.
+ * 		{@code application/json5l}, {@code application/json5lines}, {@code application/json-seq}) &mdash; each
+ * 		element is JSON-encoded on its own line. Unless the handler set a Content-Type, the response echoes the
+ * 		highest-ranked NDJSON-family {@code Accept} range in canonical form ({@code jsonlines} becomes
+ * 		{@code jsonl}, {@code json5lines} becomes {@code json5l}, {@code json-seq} becomes {@code x-ndjson});
+ * 		otherwise it is {@code application/x-ndjson}. See {@link #NDJSON_ALIASES}.
  * 	<li><b>Buffer</b> (default, any other media type) &mdash; all elements are collected into a
  * 		{@link List List} and serialized through the normal serializer chain (e.g. a JSON
  * 		array). The collection is wrapped in a {@link CompletableFuture} and handed to the async path,
@@ -124,6 +128,42 @@ public class ReactiveResponseProcessor implements ResponseProcessor {
 	private static volatile List<ReactiveStreamsAdapter> adapters;
 
 	private enum Shape { BUFFER, SSE, NDJSON }
+
+	/**
+	 * NDJSON-family media types accepted from {@code Accept}, mapped to the Content-Type echoed on an NDJSON-shape
+	 * response. {@code application/json-seq} maps to {@code application/x-ndjson} because this writer does not emit
+	 * RFC 7464 record separators.
+	 */
+	static final Map<String,String> NDJSON_ALIASES = Map.of(
+		"application/jsonl", "application/jsonl",
+		"application/jsonlines", "application/jsonl",
+		"application/json5l", "application/json5l",
+		"application/json5lines", "application/json5l",
+		"application/x-ndjson", "application/x-ndjson",
+		"application/json-seq", "application/x-ndjson"
+	);
+
+	/**
+	 * Returns the canonical NDJSON-family type of the highest-ranked {@code Accept} range in that family.
+	 *
+	 * <p>
+	 * Ranges are walked in {@link MediaRanges} order (q descending, then its own tie-break). Ranges with
+	 * {@code q=0} are skipped; parameters other than {@code q} are ignored; matching is case-insensitive.
+	 *
+	 * @param accept The raw {@code Accept} header, possibly <jk>null</jk>.
+	 * @return The canonical type, or <jk>null</jk> when no NDJSON-family range is acceptable.
+	 */
+	static String negotiatedNdjsonType(String accept) {
+		for (var r : MediaRanges.of(accept).toList()) {
+			var q = r.getQValue();
+			if (q != null && q <= 0f)
+				continue;
+			var echoed = NDJSON_ALIASES.get((r.getType() + "/" + r.getSubType()).toLowerCase(Locale.ROOT));
+			if (echoed != null)
+				return echoed;
+		}
+		return null;
+	}
 
 	@FunctionalInterface
 	private interface FrameEncoder {
@@ -183,7 +223,7 @@ public class ReactiveResponseProcessor implements ResponseProcessor {
 	})
 	private int handleStream(RestOpSession opSession, Flow.Publisher<?> pub, Shape shape) throws IOException {
 		var res = opSession.getResponse();
-		prepareStreamingHeaders(res, shape);
+		prepareStreamingHeaders(res, shape, opSession.getRequest().getHttpServletRequest().getHeader("Accept"));
 
 		var writer = res.getNegotiatedWriter();
 		FrameEncoder encoder = shape == Shape.SSE
@@ -248,14 +288,15 @@ public class ReactiveResponseProcessor implements ResponseProcessor {
 		return FINISHED;
 	}
 
-	private static void prepareStreamingHeaders(RestResponse res, Shape shape) {
+	private static void prepareStreamingHeaders(RestResponse res, Shape shape, String accept) {
 		var ct = res.getContentType();
 		if (shape == Shape.SSE) {
 			if (ct == null || ! ct.contains("event-stream"))
 				res.setContentType(SseSerializer.MEDIA_TYPE);
 			res.setHeader("X-Content-Type-Options", "nosniff");
 		} else if (ct == null) {
-			res.setContentType("application/x-ndjson");
+			var echoed = negotiatedNdjsonType(accept);
+			res.setContentType(echoed == null ? "application/x-ndjson" : echoed);
 		}
 		res.setHeader("Cache-Control", "no-cache");
 		res.setHeader("Content-Encoding", "identity");

@@ -17,8 +17,12 @@
 package org.apache.juneau.petstore.console;
 
 import static org.apache.juneau.test.bct.BctAssertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.apache.juneau.*;
+import org.apache.juneau.marshall.collections.*;
+import org.apache.juneau.rest.server.console.*;
 import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.http.Path;
 import org.apache.juneau.rest.mock.classic.*;
@@ -59,8 +63,13 @@ class PetstoreFailLoud_Test extends TestBase {
 		assertContains(message, body);
 	}
 
-	@Test void a01_unknownCardType() throws Exception {
-		assert500("unknown-card-type", "<@card> type= must be one of html|datatables; got 'nope'.");
+	private static String render200(String fixture) throws Exception {
+		return MockRestClient.buildLax(FixtureHost.class).get("/t/" + fixture).run().assertStatus(200).getContent().asString();
+	}
+
+	@Test void a01_unknownCardType_rendersThroughTheGenericPassthrough() throws Exception {
+		// A well-formed unregistered type is no longer a server error; the JS shell raises E-JS-4 instead.
+		assertContains("\"type\":\"nope\"", render200("unknown-card-type"));
 	}
 
 	@Test void a02_badNavPath() throws Exception {
@@ -72,8 +81,33 @@ class PetstoreFailLoud_Test extends TestBase {
 		assert500("malformed-json5", "Card JSON5 is invalid:");
 	}
 
+	@Test void a15_adopterHandlerForAReservedType_failsAtMixinBuild() {
+		var ex = assertThrows(IllegalArgumentException.class,
+			() -> ConsoleFreemarkerMixin.create().cardType(new ImpostorDatatables()).build());
+		assertEquals("Card type 'datatables' is reserved and cannot be replaced; reserved: 'chart, console-output, datatables, html, run-view'.",
+			ex.getMessage());
+	}
+
+	@Test void a16_reservedBodyKey() throws Exception {
+		assert500("reserved-key", "<@card id='x'> body key 'title' is reserved; set it as an attribute.");
+	}
+
+	@Test void a17_markupOnDatatables() throws Exception {
+		assert500("markup-on-datatables", "<@card id='x'> type='datatables' requires a JSON5 object body; got '");
+	}
+
 	@Test void a18_badCustomTypeId() throws Exception {
-		assert500("bad-custom-type-id", "<@card> type= must be one of html|datatables; got 'Gauge_1'.");
+		assert500("bad-custom-type-id", "<@card id='x'> type='Gauge_1' must match ^[a-z][a-z0-9-]{0,31}$.");
+	}
+
+	/** An adopter handler that tries to take over the reserved {@code datatables} type. */
+	private static final class ImpostorDatatables implements CardTypeHandler {
+		@Override public String type() { return "datatables"; }
+		@Override public JsonMap toFragment(CardSource source) { return new JsonMap(); }
+	}
+
+	@Test void a19_consoleOutputUnsafeLinesUrl() throws Exception {
+		assert500("console-output-unsafe", "ConsoleOutputDef 'log' linesUrl must be a same-origin path");
 	}
 
 	@Disabled("Not implemented yet: an error code for a page that leaves a required slot empty")
@@ -108,15 +142,6 @@ class PetstoreFailLoud_Test extends TestBase {
 
 	@Disabled("Not implemented yet: E-68 for a <@badge> scoped to an unknown node")
 	@Test void a14_badgeScopeUnknownNode() {}
-
-	@Disabled("Not implemented yet: E-22 for an adopter-registered CardTypeHandler")
-	@Test void a15_adopterCardTypeHandler() {}
-
-	@Disabled("Not implemented yet: E-23 (a datatables body that sets a reserved title key still renders 200)")
-	@Test void a16_reservedKey() {}
-
-	@Disabled("Not implemented yet: E-25 (markup in a datatables body still renders 200)")
-	@Test void a17_markupOnDatatables() {}
 
 	@Disabled("Blocked on the pet summary page, which needs <@node under=...> support")
 	@Test void b01_scriptInPetNameIsEscaped() {}

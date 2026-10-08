@@ -1,0 +1,4 @@
+{"numTotalTests":3,"testResults":[
+{"name":"/ci/work/repo/src/a.test.js","status":"passed","message":"","assertionResults":[
+ {"ancestorTitles":["math"],"title":"adds","fullName":"math adds","status":"passed","duration":4,"failureMessages":[]},
+ {"ancestorTitl

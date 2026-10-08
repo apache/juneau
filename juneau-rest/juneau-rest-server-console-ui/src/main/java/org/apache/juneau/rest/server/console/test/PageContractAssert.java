@@ -48,6 +48,7 @@ import org.apache.juneau.rest.server.console.*;
  * 		.hasFooterText(<js>"Sandbox Support Console"</js>)
  * 		.hasHeaderSlot(<js>"banner"</js>)
  * 		.hasCard(<js>"releases"</js>, <js>"datatables"</js>)
+ * 		.hasCardKey(<js>"releases"</js>, <js>"/table/dataUrl"</js>, <js>"/rest/releases/data"</js>)
  * 		.templateContains(<js>"jc-seg-1"</js>, <js>"id=\"ssc-table-slot\""</js>);
  * </p>
  *
@@ -210,6 +211,28 @@ public final class PageContractAssert {
 	}
 
 	/**
+	 * @param id The card id.
+	 * @param src The expected {@code src} value.
+	 * @return This object.
+	 */
+	public PageContractAssert hasCardSrc(String id, String src) {
+		return eq("card '" + id + "' src", src, card(id).getString("src"));
+	}
+
+	/**
+	 * @param id The card id.
+	 * @param jsonPointer A {@code /}-separated path into the card's JSON, for example {@code "/table/dataUrl"}.
+	 * @param expected The expected value at that path.
+	 * @return This object.
+	 */
+	public PageContractAssert hasCardKey(String id, String jsonPointer, Object expected) {
+		var actual = resolvePointer(card(id), jsonPointer);
+		if (! Objects.equals(expected, actual))
+			throw new AssertionError("card '" + id + "' " + jsonPointer + ": expected '" + expected + "' but was '" + actual + "'");
+		return this;
+	}
+
+	/**
 	 * @param templateId A {@code data-card} or {@code data-slot} template id.
 	 * @param fragment Markup that must appear in the template.
 	 * @return This object.
@@ -270,7 +293,11 @@ public final class PageContractAssert {
 		return found;
 	}
 
-	private JsonMap card(String id) {
+	/**
+	 * @param id The card id.
+	 * @return The card's parsed JSON.
+	 */
+	public JsonMap card(String id) {
 		for (var o : contract.getList("cards"))
 			if (id.equals(((JsonMap)o).getString("id")))
 				return (JsonMap)o;
@@ -279,6 +306,26 @@ public final class PageContractAssert {
 
 	private List<String> cardIds() {
 		return contract.getList("cards").stream().map(o -> ((JsonMap)o).getString("id")).toList();
+	}
+
+	private static Object resolvePointer(Object node, String pointer) {
+		if (pointer.isEmpty())
+			return node;
+		if (! pointer.startsWith("/"))
+			throw new AssertionError("json pointer '" + pointer + "' must start with '/'");
+		var cur = node;
+		for (var raw : pointer.substring(1).split("/", -1)) {
+			var seg = raw.replace("~1", "/").replace("~0", "~");
+			if (cur instanceof Map<?,?> m) {
+				cur = m.get(seg);
+			} else if (cur instanceof List<?> l) {
+				var idx = Integer.parseInt(seg);
+				cur = idx >= 0 && idx < l.size() ? l.get(idx) : null;
+			} else {
+				throw new AssertionError("json pointer '" + pointer + "' hit a leaf before '" + seg + "'; node was: " + cur);
+			}
+		}
+		return cur;
 	}
 
 	private static List<String> strings(List<?> l) {

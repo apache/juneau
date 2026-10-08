@@ -18,6 +18,7 @@ package org.apache.juneau.petstore.console.ops;
 
 import static org.apache.juneau.commons.utils.Shorts.*;
 
+import java.io.*;
 import java.time.*;
 import java.util.*;
 import java.util.concurrent.*;
@@ -25,6 +26,7 @@ import java.util.concurrent.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.http.response.*;
 import org.apache.juneau.marshall.collections.*;
+import org.apache.juneau.marshall.marshaller.*;
 import org.apache.juneau.petstore.console.*;
 import org.apache.juneau.petstore.dto.*;
 import org.apache.juneau.rest.server.*;
@@ -40,6 +42,11 @@ import org.apache.juneau.rest.server.widgets.*;
  * <p>
  * The registry de-duplicates on the idempotency key itself ({@link AsyncJobRegistry#tryCreate(IdempotencyKey)}), so a
  * resubmit with the same key returns the same job and this resource keeps no key map of its own.
+ *
+ * <p>
+ * The page also hosts the console-output demo: a "groom pet" job ({@link GroomRuns}) whose log is served by
+ * {@link ConsoleOutputMixin} and shown three ways &mdash; a FreeMarker console card over the in-memory log, a second
+ * card over the same run's file-backed transcript, and a compact console in the Groom runs table's row detail.
  *
  * <h5 class='section'>Example:</h5>
  * <p class='bjava'>
@@ -60,7 +67,7 @@ import org.apache.juneau.rest.server.widgets.*;
 	"java:S2654", // The demo intentionally runs restocks on its own pool and serializes the idempotency check.
 	"resource" // The registry and pool are owned by this resource and closed in closeJobs(); Eclipse JDT @Owning warning is by design.
 })
-public class JobsRest extends PetstoreConsolePage implements AsyncJobsMixin {
+public class JobsRest extends PetstoreConsolePage implements AsyncJobsMixin, ConsoleOutputMixin {
 
 	private static final long serialVersionUID = 1L;
 
@@ -68,6 +75,14 @@ public class JobsRest extends PetstoreConsolePage implements AsyncJobsMixin {
 	public static final String LIMIT_PROPERTY = "petstore.jobs.limit";
 
 	private static final String ACTION = "restock";
+
+	/** Where this resource is mounted; the console-output URLs are built from it. */
+	public static final String MOUNT = "/console/ops/jobs";
+
+	private static final String GROOM = "groom";
+
+	/** The groom-pet demo runs; one verbose run is seeded so the page always has a log. */
+	private final transient GroomRuns groom = GroomRuns.seeded(Long.getLong(GroomRuns.PERIOD_PROPERTY, GroomRuns.DEFAULT_PERIOD_MS));
 
 	private final transient AsyncJobRegistry jobs = new AsyncJobRegistry(Duration.ofSeconds(30));
 	private final transient ExecutorService pool = Executors.newCachedThreadPool(r -> {
@@ -129,21 +144,48 @@ public class JobsRest extends PetstoreConsolePage implements AsyncJobsMixin {
 	public AsyncJobRegistry asyncJobRegistry() { return jobs; }
 
 	/**
-	 * Stops the restock pool and the registry's timeout scheduler when the resource is destroyed.
+	 * Stops the restock pool, the registry's timeout scheduler and the groom runs when the resource is destroyed.
 	 */
 	@RestDestroy
 	public void closeJobs() {
 		pool.shutdownNow();
 		jobs.close();
+		groom.close();
 	}
 
 	/**
 	 * Renders the Jobs page.
 	 *
+	 * @param run The groom run to show, or <jk>null</jk> for the newest.
 	 * @return The page view.
+	 * @throws NotFound If there is no groom run to show.
 	 */
 	@RestGet(path="/")
-	public View page() { return FreemarkerView.of("jobs.ftlh"); }
+	public View page(@Query("run") String run) {
+		var r = groom.get(run).orElseGet(groom::latest);
+		if (r == null)
+			throw new NotFound("No groom run to show");
+		var main = ConsoleOutputDef.forMixin("groom-output", MOUNT, r.id()).toMap();
+		var file = ConsoleOutputDef.forMixin("groom-file", MOUNT, r.id() + GroomRuns.FILE_SUFFIX).toMap();
+		var detail = ConsoleOutputDef.forMixin("output", MOUNT, "{id}").type(RegionDef.TYPE_ROW_DETAIL).compact(true).rows(12).validate().toMap();
+		return FreemarkerView.of("jobs.ftlh")
+			.attr("groomLinesUrl", main.get("linesUrl"))
+			.attr("groomDownloadUrl", main.get("downloadUrl"))
+			.attr("groomFileLinesUrl", file.get("linesUrl"))
+			.attr("groomFileDownloadUrl", file.get("downloadUrl"))
+			.attr("groomDetailParams", scriptSafe(Json.of(detail)));
+	}
+
+	/**
+	 * Makes JSON safe to inline in a {@code <script>} block: {@code </} cannot end the block and the two line
+	 * separators cannot end a JavaScript string.
+	 *
+	 * @param json The JSON text.
+	 * @return The text with {@code </} as {@code <\/}, U+2028 as {@code \u2028} and U+2029 as {@code \u2029}.
+	 */
+	static String scriptSafe(String json) {
+		return json.replace("</", "<\\/").replace("\u2028", "\\u2028").replace("\u2029", "\\u2029");
+	}
 
 	/**
 	 * The restock dialog's form source: a read-only GET returning the modal with a freshly minted self-targeted key.
@@ -244,5 +286,82 @@ public class JobsRest extends PetstoreConsolePage implements AsyncJobsMixin {
 		return j.get().isTerminal()
 			? JsonMap.of("state", "DONE", "result", j.get().result())
 			: JsonMap.of("state", "RUNNING");
+	}
+
+	@Override /* ConsoleOutputMixin */
+	public Optional<ConsoleOutputSource> consoleOutputSource(String logId, RestRequest req) {
+		return groom.source(logId); // The run id is an unguessable 128-bit secret; knowing it is the access rule.
+	}
+
+	/**
+	 * The Groom dialog's form source.
+	 *
+	 * @return The modal.
+	 */
+	@RestGet(path="/groom-form")
+	public ModalDef groomForm() {
+		var form = FormDef.create();
+		form.field(FormDef.Input.of("pet", "Pet name", "text").value("Rex"));
+		form.field(FormDef.Input.of("verbose", "Verbose (8000 extra lines)", "checkbox"));
+		return ModalDef.create("Groom a pet").form(form)
+			.idempotencyKey(IdempotencyKey.mintSelfTargeted(GROOM).value()).selfTargeted(true);
+	}
+
+	/**
+	 * Starts a groom run.
+	 *
+	 * <p>
+	 * Accepts the API form {@code {pet, verbose}} or the dialog form {@code {action, targetId, idempotencyKey,
+	 * fields:{pet, verbose}}}; a resubmit with the same {@code idempotencyKey} returns the same run.
+	 *
+	 * @param json The body.
+	 * @return The new run's row.
+	 * @throws IOException If the run's temp file cannot be created.
+	 */
+	@RestPost(path="/groom")
+	public ActionResult groom(@Content JsonMap json) throws IOException {
+		var fields = json.getMap("fields");
+		var src = fields != null ? fields : json;
+		var run = groom.start(src.getString("pet"), isOn(src.get("verbose")), json.getString("idempotencyKey"));
+		return ActionResult.success(run.row()).message(f("Grooming %s", run.pet()));
+	}
+
+	private static boolean isOn(Object v) {
+		var s = v == null ? "" : String.valueOf(v);
+		return "true".equals(s) || "on".equals(s);
+	}
+
+	/**
+	 * @return The groom runs, newest first.
+	 */
+	@RestGet(path="/groom-rows")
+	public List<JsonMap> groomRows() {
+		return groom.list().stream().map(GroomRuns.Run::row).toList();
+	}
+
+	/**
+	 * The Groom runs table's row-detail envelope.
+	 *
+	 * @param id The run id.
+	 * @return {@code {contractVersion:'1', fields:{...}}}.
+	 * @throws NotFound If the run is unknown or has been dropped.
+	 */
+	@RestGet(path="/groom-runs/{id}")
+	public JsonMap groomRun(@Path("id") String id) {
+		var r = groom.get(id).orElseThrow(() -> new NotFound("Unknown groom run '%s'", id));
+		return JsonMap.of("contractVersion", "1", "fields", r.row());
+	}
+
+	/**
+	 * The same-origin image the groom log shows.
+	 *
+	 * @param res The response.
+	 * @throws IOException If the response cannot be written.
+	 */
+	@RestGet(path="/groom-photo.svg")
+	public void groomPhoto(RestResponse res) throws IOException {
+		var w = res.getDirectWriter("image/svg+xml");
+		w.write(GroomRuns.PHOTO_SVG);
+		w.flush();
 	}
 }

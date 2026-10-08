@@ -23,7 +23,7 @@ import org.apache.juneau.commons.*;
 import org.junit.jupiter.api.*;
 
 /**
- * Tests declaration-order property seeding in {@link BeanMeta} (WORK-J0585).
+ * Tests declaration-order property seeding in {@link BeanMeta}.
  */
 @SuppressWarnings("unused")
 class BeanMeta_DeclarationOrder_Test extends TestBase {

@@ -16,7 +16,7 @@
  */
 
 /*
- * regions-declarative-default.cjs - always-on Node harness for WORK-J0522c: the `RegionDef` descriptor's client
+ * regions-declarative-default.cjs - always-on Node harness for the declarative default: the `RegionDef` descriptor's client
  * twin (`ctx.declared`), `ctx.fetchDeclared()`'s handshake-checked fetch, the reserved `"default"` populator's
  * §8.5-normative algorithm, R14a's pre-fetch matrix, the poll lifecycle (§8.3.1), and - the acceptance gate for
  * this whole child - L12's non-privilege proof (tests 11 and 12).

@@ -277,7 +277,7 @@
 		}
 	});
 
-	// WORK-J0508 (Foundry WORK-P0063 row-detail-subtabs follow-up): minimal `code` renderer for source text -
+	// Minimal `code` renderer for source text -
 	// plain-text, HTML-escaped, whitespace-preserving, monospace via the `.juneau-code` class (juneau-views.css).
 	// Intentionally NO language hint / syntax-highlighting param on this first pass (see the corresponding
 	// board item's design-fork note); a future `meta.lang` can be layered on without changing this shape.

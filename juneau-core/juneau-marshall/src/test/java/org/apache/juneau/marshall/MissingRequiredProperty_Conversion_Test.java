@@ -29,7 +29,7 @@ import org.apache.juneau.marshall.parser.*;
 import org.junit.jupiter.api.*;
 
 /**
- * Tests {@code @BeanProp(required)} enforcement in Map-to-bean conversion (WORK-J0585).
+ * Tests {@code @BeanProp(required)} enforcement in Map-to-bean conversion.
  */
 class MissingRequiredProperty_Conversion_Test extends TestBase {
 

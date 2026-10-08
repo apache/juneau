@@ -34,10 +34,10 @@ import org.junit.jupiter.params.*;
 import org.junit.jupiter.params.provider.*;
 
 /**
- * Node-sandbox integration coverage for {@code juneau-console.js} (WORK-J0559 C1 Task 5): loads the real production
+ * Node-sandbox integration coverage for {@code juneau-console.js}: loads the real production
  * shell into a hand-rolled DOM shim (no jsdom) per case, exercising the full {@code #juneau-page} contract surface -
  * header/nav/cards/footer rendering, nav-depth and §5.3 prefix-fallback matching, every {@code E-JS-1}..{@code
- * E-JS-12} loud-failure code, custom card-type registration, and the datatables bridge - plus a permanent regression
+ * E-JS-13}/{@code E-JS-14} loud-failure codes, custom card-type registration, the pending-card path, and the console-output and run-view bridges - plus a permanent regression
  * pin for the {@code isSafeHref}/{@code isProtocolRelativeUrl} security hardening reviewed during Task 4 (a
  * scheme-bypass and a keydown-listener-leak bug, both already fixed in the shipped shell; this is the test that was
  * missing).
@@ -223,7 +223,7 @@ class ConsoleJs_Shell_Test extends TestBase {
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
-	// a04 - E-JS-1 .. E-JS-10 fire with the exact user-facing wording the MSG templates in juneau-console.js produce
+	// a04 - E-JS-1 .. E-JS-10, E-JS-13 and E-JS-14 fire with the exact user-facing wording the MSG templates in juneau-console.js produce
 	// (pinning the real message text, not just fatal/non-fatal shape) - both the console.error line and the DOM
 	// ".jc-console-error" banner fail() renders. E-JS-11/E-JS-12 are covered separately by a05/a5-adjacent fatal-shape
 	// assertions, since they record only a thrown JuneauConsoleError, not a console.error-backed `errors` list.
@@ -235,13 +235,17 @@ class ConsoleJs_Shell_Test extends TestBase {
 		"2|unsupported page contract version '9'; this shell supports '1'",
 		"2r|page contract key 'version' was renamed to 'contractVersion'; regenerate the page with a current Juneau",
 		"3|card 'c' references template 'missing', but no <template data-card=\"missing\"> exists",
-		"4|card 'k' has unknown type 'kpi'; registered types: 'html, datatables'",
+		"4|card 'k' has unknown type 'kpi'; registered types: 'html, console-output, run-view'",
 		"5|activeNav 'a/b' is not a path in the nav tree (failed at 'b')",
 		"6|duplicate nav id 'a'",
 		"7|duplicate <template data-card=\"c\">",
 		"8|card 'b' (type 'boom') handler threw: 'kaput'",
 		"9|unsafe href 'javascript:alert(1)' on nav 'X'",
 		"10|datatables card 't' needs JuneauViews.regions; load the views toolkit",
+		"13|console-output card 'co' needs JuneauViews.consoleOutput; load the views toolkit",
+		"14|run-view card 'rv' needs JuneauViews.runView; load the views toolkit",
+		"8co|card 'co' (type 'console-output') handler threw: 'console-output region 'co-body': linesUrl is required'",
+		"8rv|card 'rv' (type 'run-view') handler threw: 'run-view region 'rv-body': eventsUrl is required'",
 	})
 	void a04_loudFailure(String code, String message) {
 		var e = map(map(r().get("errors")).get(code));
@@ -252,18 +256,18 @@ class ConsoleJs_Shell_Test extends TestBase {
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
-	// a05 - non-fatal card-level failures let mount() continue: the failing card is simply absent from the result;
-	// plus registerCard()'s TypeError input-validation path for a non-lowercase-kebab type name (distinct from
+	// a05 - non-fatal card-level failures let mount() continue: the failing card's host stays in the result;
+	// plus registerCard()'s E-JS-20 input-validation path for a non-lowercase-kebab type name (distinct from
 	// E-JS-12's duplicate-registration failure).
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Test void a05_fatalVsCardLevel() {
 		var byCode = map(r().get("errors"));
 		var e4 = map(byCode.get("4"));
-		assertEquals(List.of(), e4.get("resultCards"), () -> "unknown-type card must be absent from result.cards: " + e4);
+		assertEquals(List.of("k"), e4.get("resultCards"), () -> "unknown-type card stays in result.cards as a pending host: " + e4);
 		var e8 = map(byCode.get("8"));
-		assertEquals(List.of(), e8.get("resultCards"), () -> "throwing-handler card must be absent from result.cards: " + e8);
-		assertEquals("TypeError", r().get("registerBadType"));
+		assertEquals(List.of("b"), e8.get("resultCards"), () -> "throwing-handler card host stays in result.cards: " + e8);
+		assertBean(map(r().get("registerBadType")), "name,code", "JuneauConsoleError,E-JS-20");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -274,21 +278,6 @@ class ConsoleJs_Shell_Test extends TestBase {
 		var c = map(r().get("custom"));
 		assertEquals("Users: 42", c.get("cardText"));
 		assertEquals(true, c.get("resultHasCard"));
-	}
-
-	//------------------------------------------------------------------------------------------------------------------
-	// a07 - the datatables card hands JuneauViews.regions.mount() a {id: {table}} hookup map on DOMContentLoaded
-	//------------------------------------------------------------------------------------------------------------------
-
-	@Test void a07_datatablesBridge() {
-		var c = map(r().get("bridge"));
-		assertNull(c.get("threw"));
-		assertEquals(List.of(), c.get("errors"), () -> "the stubbed regions bridge must take the card with no E-JS-10: " + c);
-		assertEquals(true, c.get("bodyRendered"));
-		var captured = map(c.get("captured"));
-		assertNotNull(captured, () -> "JuneauViews.regions.mount() was never called: " + c);
-		assertTrue(captured.containsKey("dt1-body"));
-		assertBean(c, "bodyId,duplicateIds", "dt1-body,[]");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -338,7 +327,7 @@ class ConsoleJs_Shell_Test extends TestBase {
 			assertFalse(errors.isEmpty(), () -> "src '" + src + "' must surface a card-level E-JS-8: " + c);
 			assertTrue(errors.stream().anyMatch(e -> ((String) e).contains("is not same-origin")),
 				() -> "src '" + src + "' must fail the same-origin/isSafeHref gate: " + c);
-			assertEquals(0, intOf(c.get("mainChildren")), () -> "a gated src card must paint nothing: " + c);
+			assertEquals(0, intOf(c.get("hostContent")), () -> "a gated src card must paint nothing inside its host: " + c);
 		}
 	}
 
@@ -353,5 +342,53 @@ class ConsoleJs_Shell_Test extends TestBase {
 		var href = map(r().get("hrefSafety"));
 		assertEquals(1, intOf(href.get("keydownListenerCountAfterTwoMounts")),
 			() -> "two mounts on the same document must wire exactly one keydown listener, not one per mount: " + href);
+	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// a09 - the console-output card calls JuneauViews.consoleOutput.mount(body, copy of card.output, {}) once per card,
+	// on DOMContentLoaded; E-JS-13 and the deferred E-JS-8 are non-fatal and keep the card host.
+	//------------------------------------------------------------------------------------------------------------------
+
+	@Test void a09a_consoleOutputBridge() {
+		var c = map(r().get("consoleOutput"));
+		assertBean(c, "threw,errors,callsBeforeReady,cardTitle,resultCards,duplicateIds", "<null>,[],0,Output,[co1,co2],[]");
+		var calls = list(c.get("calls"));
+		assertEquals(2, calls.size(), c::toString);
+		assertBean(calls.get(0), "elId,elClass,hostId,ctx", "co1-body,jc-card-body,co1,{}");
+		assertBean(calls.get(1), "elId,elClass,hostId,ctx", "co2-body,jc-card-body,co2,{}");
+		assertEquals(Json5.to("{linesUrl:'/runs/1/lines',rows:20,title:'Build'}", Map.class),
+			Json.to(Json.of(map(calls.get(0)).get("options")), Map.class));
+		assertEquals(Json5.to("{linesUrl:'/runs/2/lines'}", Map.class),
+			Json.to(Json.of(map(calls.get(1)).get("options")), Map.class));
+	}
+
+	@Test void a09b_consoleOutputCardFailuresKeepTheHost() {
+		var byCode = map(r().get("errors"));
+		assertBean(map(byCode.get("13")), "threw,bodyRendered", "<null>,true");
+		assertBean(map(byCode.get("8co")), "threw,hostRendered", "<null>,true");
+	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// a10 - the run-view card calls JuneauViews.runView.mount(body, copy of card.runView, {}) once per card, on
+	// DOMContentLoaded; E-JS-14 and the deferred E-JS-8 are non-fatal and keep the card host.
+	//------------------------------------------------------------------------------------------------------------------
+
+	@Test void a10a_runViewBridge() {
+		var c = map(r().get("runView"));
+		assertBean(c, "threw,errors,callsBeforeReady,cardTitle,resultCards,duplicateIds", "<null>,[],0,Run,[rv1,rv2],[]");
+		var calls = list(c.get("calls"));
+		assertEquals(2, calls.size(), c::toString);
+		assertBean(calls.get(0), "elId,elClass,hostId,ctx", "rv1-body,jc-card-body,rv1,{}");
+		assertBean(calls.get(1), "elId,elClass,hostId,ctx", "rv2-body,jc-card-body,rv2,{}");
+		assertEquals(Json5.to("{eventsUrl:'/runs/1/events',compact:true}", Map.class),
+			Json.to(Json.of(map(calls.get(0)).get("options")), Map.class));
+		assertEquals(Json5.to("{poll:false}", Map.class),
+			Json.to(Json.of(map(calls.get(1)).get("options")), Map.class));
+	}
+
+	@Test void a10b_runViewCardFailuresKeepTheHost() {
+		var byCode = map(r().get("errors"));
+		assertBean(map(byCode.get("14")), "threw,bodyRendered", "<null>,true");
+		assertBean(map(byCode.get("8rv")), "threw,hostRendered", "<null>,true");
 	}
 }

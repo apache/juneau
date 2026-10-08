@@ -54,8 +54,7 @@ import org.apache.juneau.rest.server.view.*;
 		PetsRest.class,
 		OpsRest.class,
 		DevRest.class,
-		AboutRest.class,
-		VendorRest.class
+		AboutRest.class
 	}
 )
 @SuppressWarnings({

@@ -14,7 +14,7 @@
  */
 
 /*
- * juneau-helpers.js - the paint library for a `data-juneau-region` populator (WORK-J0522b).
+ * juneau-helpers.js - the paint library for a `data-juneau-region` populator.
  *
  * Namespaced `JuneauViews.helpers.*`, published onto the same `window.JuneauViews` namespace
  * `juneau-views.js` and `juneau-regions.js` create.  `ctx.helpers` (juneau-regions.js's `buildCtx`) is
@@ -139,7 +139,7 @@
 
 	/**
 	 * Whether a rejection carries the framework's "empty" kind (§8.5/§12.3.3 rule 2b - a 404 is a
-	 * REJECTION carrying this kind).  No declarative default has landed yet (that is WORK-J0522c's
+	 * REJECTION carrying this kind).  No declarative default has landed yet (that is the
 	 * `fetchDeclared`), so there is no existing runtime convention for this to match; `dataPane`'s own
 	 * contract is `err.kind === "empty"`, which an author's `load` thunk sets before rejecting (e.g. on a
 	 * 404 response).  Documented here rather than assumed - see this child's build report.

@@ -25,8 +25,9 @@ import java.util.*;
  * it applies to, and its popup help text.
  *
  * <p>
- * Every operator, built-in ({@link SearchOperatorSet#standard()}) or custom, carries its own help text on this one
- * API.  A custom operator additionally may carry a {@link SearchPredicate} the in-memory context calls when it hits
+ * A custom operator always carries its own help text; the help text of a built-in ({@link SearchOperatorSet#standard()})
+ * operator is owned by the browser runtime, so {@link #help()} is <jk>null</jk> for built-ins.  A custom operator
+ * additionally may carry a {@link SearchPredicate} the in-memory context calls when it hits
  * that {@code $}-name &mdash; Juneau never invents one.  Anything else a downstream module (for example a SQL
  * renderer) needs to attach lives in the typed {@link #extension(Class) extension} slot: it is keyed by the
  * extension's own {@link Class}, so this module (commons) never needs to depend on that module's types (design
@@ -87,10 +88,9 @@ public final class SearchOperator {
 	 * Creates a built-in operator definition.  Package-private &mdash; the canonical set is
 	 * {@link SearchOperatorSet#standard()}; applications add operators through {@link #create(String, String)}.
 	 */
-	static SearchOperator builtin(String name, int minArgs, int maxArgs, boolean combinator, String help, SearchType...types) {
+	static SearchOperator builtin(String name, int minArgs, int maxArgs, boolean combinator, SearchType...types) {
 		var b = new Builder();
 		b.name = name;
-		b.help = help;
 		b.minArgs = minArgs;
 		b.maxArgs = maxArgs;
 		b.custom = false;
@@ -172,9 +172,21 @@ public final class SearchOperator {
 	}
 
 	/**
-	 * The popup help text shown under the value box.
+	 * The human-readable help text for this operator, shown in the column-search popup.
 	 *
-	 * @return The help text.
+	 * <p>
+	 * Built-in operators return <jk>null</jk>: their help text is owned by <c>juneau-search.js</c>, which the popup
+	 * falls back to.  Custom operators always return non-blank text, because {@link Builder#build()} rejects a custom
+	 * operator without it.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	SearchOperator <jv>near</jv> = SearchOperator.<jsm>create</jsm>(<js>"$near"</js>, <js>"Within N units. Example: $near(5)"</js>).build();
+	 * 	<jv>near</jv>.help();                                                <jc>// "Within N units. Example: $near(5)"</jc>
+	 * 	SearchOperatorSet.<jsm>standard</jsm>().get(<js>"$eq"</js>).help();  <jc>// null</jc>
+	 * </p>
+	 *
+	 * @return The help text, or <jk>null</jk> for a built-in operator.
 	 */
 	public String help() {
 		return help;
@@ -439,13 +451,14 @@ public final class SearchOperator {
 		 *
 		 * @return A new, immutable operator.
 		 * @throws IllegalArgumentException If {@code name} is <jk>null</jk> or blank, {@code help} is <jk>null</jk> or
-		 * 	blank, {@code minArgs} is negative, {@code maxArgs} is neither {@code -1} nor {@code >= minArgs}, or this
+		 * 	blank on a custom operator, {@code minArgs} is negative, {@code maxArgs} is neither {@code -1} nor {@code >= minArgs}, or this
 		 * 	builder was seeded from {@link SearchOperator#copy() copy()} of a built-in operator and {@code name} has
 		 * 	been changed since.
 		 */
 		public SearchOperator build() {
 			reqnb("name", name);
-			reqnb("help", help);
+			if (custom)
+				reqnb("help", help);
 			req(minArgs >= 0, "SearchOperator '%s' minArgs must not be negative: %s", name, minArgs);
 			req(maxArgs == -1 || maxArgs >= minArgs,
 				"SearchOperator '%s' maxArgs (%s) must be -1 (unbounded) or >= minArgs (%s).", name, maxArgs, minArgs);

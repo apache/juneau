@@ -68,7 +68,11 @@ public final class PageDirectiveModel implements TemplateDirectiveModel {
 			throw FtlAttrLists.reject("<@page> must be the outermost console directive; it cannot be nested or repeated.");
 
 		var toolkit = FtlAttrLists.list(p, NAME, "toolkit");
-		packs.resolve(toolkit, FreemarkerRenderScope.request());  // Fail fast on an unknown pack, before the body renders.
+		try {
+			packs.requireKnown(toolkit, "<@page toolkit=>");  // Fail fast on an unknown pack, before the body renders.
+		} catch (IllegalArgumentException e) {
+			throw FtlAttrLists.reject(e.getMessage());
+		}
 		cap.tab(FtlAttrLists.scalar(p, "tab")).toolkit(toolkit);
 		cap.init(FtlAttrLists.list(p, NAME, "init"));
 		cap.css(FtlAttrLists.list(p, NAME, "css"));
@@ -81,9 +85,16 @@ public final class PageDirectiveModel implements TemplateDirectiveModel {
 		}
 		cap.flushSegment();
 
-		// Resolved after the body so the card set is known: the DataTables glue rides only with a server-mode table card.
-		var resolved = packs.resolve(toolkit, FreemarkerRenderScope.request(), cap.hasServerModeTable());
-		cap.toolkitAssets(resolved.cssUrls(), resolved.jsUrls());
+		// Resolved after the body so the card requirements are known.
+		var roots = new java.util.ArrayList<>(toolkit);
+		roots.addAll(cap.requiredPacks());
+		try {
+			var pageUrls = new java.util.ArrayList<String>(cap.initScripts());
+			pageUrls.addAll(cap.cssHrefs());
+			cap.toolkitAssets(packs.resolve(roots, FreemarkerRenderScope.request(), pageUrls, env.getMainTemplate().getName()));
+		} catch (IllegalArgumentException | IllegalStateException e) {
+			throw FtlAttrLists.reject(e.getMessage());
+		}
 
 		env.include(env.getConfiguration().getTemplate(chromeTemplate));
 

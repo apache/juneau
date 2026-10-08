@@ -560,8 +560,7 @@ public class SamlAssertionValidator {
 
 	private Response parseResponse(String xml) throws AuthenticationException {
 		try {
-			var dbf = SamlXml.documentBuilderFactory();
-			var doc = dbf.newDocumentBuilder().parse(new ByteArrayInputStream(xml.getBytes(java.nio.charset.StandardCharsets.UTF_8)));
+			var doc = SamlXml.newDocumentBuilder().parse(new ByteArrayInputStream(xml.getBytes(java.nio.charset.StandardCharsets.UTF_8)));
 			Element root = doc.getDocumentElement();
 			var registry = org.opensaml.core.xml.config.XMLObjectProviderRegistrySupport.getUnmarshallerFactory();
 			var unmarshaller = registry.getUnmarshaller(root);

@@ -18,9 +18,9 @@
 /*
  * juneau-datatables.js - first-party glue for the Apache Juneau DataTables integration.
  *
- * This is the ONLY DataTables-related asset Juneau ships.  The DataTables library itself (jQuery + the DataTables
- * JS/CSS) is NOT bundled here - its license is not an ASF category-A license - so it must be supplied by the caller,
- * either from a CDN or self-hosted.
+ * Juneau's jars don't copy the DataTables library or jQuery.  juneau-rest-server-datatables declares their WebJars
+ * as dependencies and WebJarsMixin serves them; a console page loads them through the "datatables-glue" toolkit
+ * pack, ahead of this script.
  *
  * Two independent things live here:
  *

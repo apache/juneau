@@ -21,6 +21,7 @@ import java.util.*;
 import org.apache.juneau.bean.html5.*;
 import org.apache.juneau.marshall.html.*;
 import org.apache.juneau.rest.server.datatables.*;
+import org.apache.juneau.rest.server.view.freemarker.console.*;
 
 import freemarker.core.*;
 import freemarker.template.*;
@@ -74,6 +75,10 @@ final class DataTableMethodModel implements TemplateMethodModelEx {
 			throw new TemplateModelException(ex.getMessage(), ex);
 		}
 		table.class_("jc-table");
+		// A server-mode table outside a <@card> still needs the glue; record it on the enclosing <@page>.
+		var cap = PageCapture.get(Environment.getCurrentEnvironment());
+		if (cap != null && cap.inPage())
+			cap.require(List.of(ToolkitPackRegistry.PACK_DATATABLES_GLUE));
 		var markup = HtmlSerializer.DEFAULT_SIMPLE_SQ.toString(table);
 		return HTMLOutputFormat.INSTANCE.fromMarkup(markup);
 	}

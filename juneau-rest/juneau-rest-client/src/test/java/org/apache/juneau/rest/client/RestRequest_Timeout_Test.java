@@ -23,7 +23,7 @@ import java.time.*;
 import org.junit.jupiter.api.*;
 
 /**
- * Verifies the positive-duration rule for per-request timeouts (WORK-J0596).
+ * Verifies the positive-duration rule for per-request timeouts.
  */
 @SuppressWarnings({
 	"resource" // Client is a short-lived test fixture.

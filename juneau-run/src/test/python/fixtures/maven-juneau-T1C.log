@@ -1,0 +1,542 @@
+Running: mvn test -T1C -Drat.skip=true
+--------------------------------------------------------------------------------
+[INFO] Scanning for projects...
+[INFO] ------------------------------------------------------------------------
+[INFO] Reactor Build Order:
+[INFO] 
+[INFO] Apache Juneau                                                      [pom]
+[INFO] Apache Juneau Bill of Materials                                    [pom]
+[INFO] Apache Juneau Core                                                 [pom]
+[INFO] Apache Juneau Commons                                           [bundle]
+[INFO] Apache Juneau Test Utilities                                       [jar]
+[INFO] Apache Juneau Testing Toolkit                                   [bundle]
+[INFO] Apache Juneau Marshall                                          [bundle]
+[INFO] Apache Juneau Beans                                                [pom]
+[INFO] Apache Juneau RFC 7807 Beans                                    [bundle]
+[INFO] Apache Juneau Marshall Test Utilities                           [bundle]
+[INFO] Apache Juneau REST                                                 [pom]
+[INFO] Apache Juneau REST Common                                       [bundle]
+[INFO] Apache Juneau Config                                            [bundle]
+[INFO] Apache Juneau Common Beans                                      [bundle]
+[INFO] Apache Juneau HTML5 Beans                                       [bundle]
+[INFO] Apache Juneau JSON Schema Beans                                 [bundle]
+[INFO] Apache Juneau Swagger 2.0 Beans                                 [bundle]
+[INFO] Apache Juneau OpenAPI 3.0 Beans                                 [bundle]
+[INFO] Apache Juneau REST Server                                       [bundle]
+[INFO] Apache Juneau REST Client                                       [bundle]
+[INFO] Apache Juneau REST Common (Classic)                             [bundle]
+[INFO] Apache Juneau REST Client (Classic)                             [bundle]
+[INFO] Apache Juneau REST Mock                                         [bundle]
+[INFO] Apache Juneau Microservices                                        [pom]
+[INFO] Apache Juneau Microservice                                      [bundle]
+[INFO] Apache Juneau Microservice Jetty                                   [jar]
+[INFO] Apache Juneau Dependency Bundles                                   [pom]
+[INFO] Apache Juneau Jetty Microservice Bundle                            [pom]
+[INFO] Apache Juneau Microservice Tomcat                                  [jar]
+[INFO] Apache Juneau Tomcat Microservice Bundle                           [pom]
+[INFO] Apache Juneau REST Server Spring Boot                           [bundle]
+[INFO] Apache Juneau Spring Boot Bundle                                   [pom]
+[INFO] Apache Juneau REST Server Micrometer                            [bundle]
+[INFO] Apache Juneau REST Server OpenTelemetry                         [bundle]
+[INFO] Apache Juneau OTLP Observability Bundle                            [pom]
+[INFO] Apache Juneau BeanQuery SQL                                        [jar]
+[INFO] Apache Juneau BeanQuery Postgres                                   [jar]
+[INFO] juneau/core/marshall-rdf                                        [bundle]
+[INFO] Apache Juneau REST Server RDF                                   [bundle]
+[INFO] Apache Juneau JSON-RPC Beans                                    [bundle]
+[INFO] Apache Juneau REST Server MCP                                   [bundle]
+[INFO] Apache Juneau MCP Beans (2025-06-18)                            [bundle]
+[INFO] Apache Juneau REST Server MCP (2025-06-18)                      [bundle]
+[INFO] Apache Juneau MCP Beans (2026-07-28)                            [bundle]
+[INFO] Apache Juneau REST Server Reactive Streams Core                 [bundle]
+[INFO] Apache Juneau REST Auth OAuth Flow                              [bundle]
+[INFO] Apache Juneau REST Server JWT                                   [bundle]
+[INFO] Apache Juneau REST Server OAuth                                 [bundle]
+[INFO] Apache Juneau REST Server MCP (2026-07-28)                      [bundle]
+[INFO] Apache Juneau REST Server SAML                                  [bundle]
+[INFO] Apache Juneau REST Server OIDC Relying Party                    [bundle]
+[INFO] Apache Juneau REST Server Logging Backends                      [bundle]
+[INFO] Apache Juneau REST Server DataTables                            [bundle]
+[INFO] Apache Juneau REST Server Widgets                               [bundle]
+[INFO] Apache Juneau REST Server Console UI                            [bundle]
+[INFO] Apache Juneau REST Server Views                                 [bundle]
+[INFO] Apache Juneau REST Server Views Markdown                        [bundle]
+[INFO] Apache Juneau REST Server View — FreeMarker                     [bundle]
+[INFO] Apache Juneau REST Server Console UI — FreeMarker               [bundle]
+[INFO] Apache Juneau REST Server Console UI — FreeMarker DataTables    [bundle]
+[INFO] Apache Juneau REST Server Reactive Streams                      [bundle]
+[INFO] Apache Juneau REST Server View — JSP                            [bundle]
+[INFO] Apache Juneau REST Server View — Thymeleaf                      [bundle]
+[INFO] Apache Juneau REST Server View — Mustache                       [bundle]
+[INFO] Apache Juneau REST Client MCP                                   [bundle]
+[INFO] Apache Juneau REST Client MCP (2025-06-18)                      [bundle]
+[INFO] Apache Juneau REST Client MCP (2026-07-28)                      [bundle]
+[INFO] Apache Juneau REST Client MCP Auth                              [bundle]
+[INFO] Apache Juneau NG REST Client — Apache HttpClient 4.5 Transport  [bundle]
+[INFO] Apache Juneau NG REST Client — Apache HttpClient 5.x Transport  [bundle]
+[INFO] Apache Juneau NG REST Client — OkHttp Transport                 [bundle]
+[INFO] Apache Juneau NG REST Client — Jetty HttpClient Transport       [bundle]
+[INFO] Apache Juneau Microservice Test Support                         [bundle]
+[INFO] Apache Juneau Microservice Examples                                [jar]
+[INFO] Apache Juneau Server Config                                        [pom]
+[INFO] Apache Juneau Server Config Server                                 [jar]
+[INFO] Apache Juneau Secret Store - macOS Keychain                     [bundle]
+[INFO] Apache Juneau Atom Beans                                        [bundle]
+[INFO] Apache Juneau Examples                                             [pom]
+[INFO] Apache Juneau Core Examples                                     [bundle]
+[INFO] Apache Juneau MCP Examples                                         [jar]
+[INFO] Apache Juneau Petstore                                             [pom]
+[INFO] Apache Juneau Petstore Core                                        [jar]
+[INFO] Apache Juneau Petstore Jetty                                       [jar]
+[INFO] Apache Juneau Petstore Spring Boot                                 [jar]
+[INFO] Apache Juneau HAL Beans                                         [bundle]
+[INFO] Apache Juneau JSON:API Beans                                    [bundle]
+[INFO] Apache Juneau JSON Patch Beans                                  [bundle]
+[INFO] Apache Juneau Integration Tests                                 [bundle]
+[INFO] Apache Juneau Shaded Artifacts                                     [pom]
+[INFO] Apache Juneau Core (Shaded)                                        [jar]
+[INFO] Apache Juneau REST Client (Shaded)                                 [jar]
+[INFO] Apache Juneau REST Server (Shaded)                                 [jar]
+[INFO] Apache Juneau REST Server Spring Boot (Shaded)                     [jar]
+[INFO] Apache Juneau All (Shaded)                                         [jar]
+[INFO] Apache Juneau Distribution                                         [pom]
+[INFO] 
+[INFO] Using the MultiThreadedBuilder implementation with a thread count of 16
+[INFO] 
+[INFO] ----------------------< org.apache.juneau:juneau >----------------------
+[INFO] Building Apache Juneau 10.0.0-SNAPSHOT                            [1/96]
+[INFO]   from pom.xml
+[INFO] --------------------------------[ pom ]---------------------------------
+[INFO] 
+[INFO] --- enforcer:3.6.2:enforce (enforce-maven-version) @ juneau ---
+[INFO] Rule 0: org.apache.maven.enforcer.rules.version.RequireMavenVersion passed
+[INFO] 
+[INFO] --- enforcer:3.6.2:enforce (enforce-java-version) @ juneau ---
+[INFO] Rule 0: org.apache.maven.enforcer.rules.version.RequireJavaVersion passed
+[INFO] 
+[INFO] --- enforcer:3.6.2:enforce (enforce-maven) @ juneau ---
+[INFO] Rule 0: org.apache.maven.enforcer.rules.version.RequireMavenVersion passed
+[INFO] 
+[INFO] --- jacoco:0.8.15:prepare-agent (prepare-agent) @ juneau ---
+[INFO] argLine set to -javaagent:/home/user/.m2/repository/org/jacoco/org.jacoco.agent/0.8.15/org.jacoco.agent-0.8.15-runtime.jar=destfile=/home/user/git/apache/juneau/target/jacoco.exec
+[INFO] 
+[INFO] --- remote-resources:3.3.0:process (process-resource-bundles) @ juneau ---
+[INFO] Preparing remote bundle org.apache.apache.resources:apache-jar-resource-bundle:1.7
+[INFO] Copying 3 resources from 1 bundle.
+[INFO] 
+[INFO] --- jacoco:0.8.15:report (report) @ juneau ---
+[INFO] Skipping JaCoCo execution due to missing execution data file.
+[INFO] 
+[INFO] --------------------< org.apache.juneau:juneau-bom >--------------------
+[INFO] 
+[INFO] Building Apache Juneau Bill of Materials 10.0.0-SNAPSHOT          [2/96]
+[INFO] 
+[INFO]   from juneau-bom/pom.xml
+[INFO] -------------------< org.apache.juneau:juneau-bean >--------------------
+[INFO] -------------------< org.apache.juneau:juneau-core >--------------------
+[INFO] Building Apache Juneau Beans 10.0.0-SNAPSHOT                      [3/96]
+[INFO] 
+[INFO] --------------------------------[ pom ]---------------------------------
+[INFO] -------------------< org.apache.juneau:juneau-rest >--------------------
+[INFO]   from juneau-bean/pom.xml
+[INFO] 
+[INFO] Building Apache Juneau Core 10.0.0-SNAPSHOT                       [4/96]
+[INFO] 
+[INFO]   from juneau-core/pom.xml
+[INFO] --------------------------------[ pom ]---------------------------------
+[INFO] ------------< org.apache.juneau:juneau-microservice-parent >------------
+[INFO] --------------------------------[ pom ]---------------------------------
+[INFO] Building Apache Juneau REST 10.0.0-SNAPSHOT                       [5/96]
+[INFO] 
+[INFO] Building Apache Juneau Microservices 10.0.0-SNAPSHOT              [6/96]
+[INFO] 
+[INFO]   from juneau-microservice/pom.xml
+[INFO] ------------------< org.apache.juneau:juneau-bundles >------------------
+[INFO] --------------------------------[ pom ]---------------------------------
+[INFO] --------------------< org.apache.juneau:juneau-sc >---------------------
+[INFO] 
+[INFO]   from juneau-rest/pom.xml
+[INFO] -----------------< org.apache.juneau:juneau-petstore >------------------
+[INFO] Building Apache Juneau Server Config 10.0.0-SNAPSHOT              [8/96]
+[INFO] -----------------< org.apache.juneau:juneau-examples >------------------
+[INFO] Building Apache Juneau Dependency Bundles 10.0.0-SNAPSHOT         [7/96]
+[INFO] Building Apache Juneau Examples 10.0.0-SNAPSHOT                  [10/96]
+[INFO]   from juneau-bundles/pom.xml
+[INFO] --------------------------------[ pom ]---------------------------------
+[INFO]   from juneau-examples/pom.xml
+[INFO] --------------------------------[ pom ]---------------------------------
+[INFO]   from juneau-sc/pom.xml
+[INFO] Building Apache Juneau Petstore 10.0.0-SNAPSHOT                   [9/96]
+[INFO] --------------------------------[ pom ]---------------------------------
+[INFO] --------------------------------[ pom ]---------------------------------
+[INFO]   from juneau-petstore/pom.xml
+[INFO] --------------------------------[ pom ]---------------------------------
+[INFO] 
+[INFO] ------------------< org.apache.juneau:juneau-shaded >-------------------
+[INFO] Building Apache Juneau Shaded Artifacts 10.0.0-SNAPSHOT          [11/96]
+[INFO]   from juneau-shaded/pom.xml
+[INFO] --------------------------------[ pom ]---------------------------------
+[INFO] 
+[INFO] --- enforcer:3.6.2:enforce (enforce-maven-version) @ juneau-core ---
+[INFO] 
+[INFO] --- enforcer:3.6.2:enforce (enforce-maven-version) @ juneau-bean ---
+[INFO] 
+[INFO] --- enforcer:3.6.2:enforce (enforce-maven-version) @ juneau-bundles ---
+[INFO] 
+[INFO] --- enforcer:3.6.2:enforce (enforce-maven-version) @ juneau-microservice-parent ---
+[INFO] 
+[INFO] --- enforcer:3.6.2:enforce (enforce-maven-version) @ juneau-rest ---
+[INFO] 
+[INFO] --- enforcer:3.6.2:enforce (enforce-maven-version) @ juneau-petstore ---
+[INFO] 
+[INFO] --- enforcer:3.6.2:enforce (enforce-maven-version) @ juneau-shaded ---
+[INFO] 
+[INFO] --- enforcer:3.6.2:enforce (enforce-maven-version) @ juneau-sc ---
+[INFO] 
+[INFO] --- enforcer:3.6.2:enforce (enforce-maven-version) @ juneau-bom ---
+[INFO] 
+[INFO] 
+[INFO] 
+[INFO] 
+[INFO] --- enforcer:3.6.2:enforce (enforce-java-version) @ juneau-rest ---
+[INFO] --- enforcer:3.6.2:enforce (enforce-java-version) @ juneau-microservice-parent ---
+[INFO] --- enforcer:3.6.2:enforce (enforce-java-version) @ juneau-bean ---
+[INFO] 
+[INFO] --- enforcer:3.6.2:enforce (enforce-maven-version) @ juneau-examples ---
+[INFO] 
+[INFO] --- enforcer:3.6.2:enforce (enforce-java-version) @ juneau-shaded ---
+[INFO] --- enforcer:3.6.2:enforce (enforce-java-version) @ juneau-core ---
+[INFO] 
+[INFO] --- enforcer:3.6.2:enforce (enforce-java-version) @ juneau-sc ---
+[INFO] 
+[INFO] 
+[INFO] --- enforcer:3.6.2:enforce (enforce-java-version) @ juneau-bom ---
+[INFO] --- enforcer:3.6.2:enforce (enforce-java-version) @ juneau-bundles ---
+[INFO] 
+[INFO] --- enforcer:3.6.2:enforce (enforce-maven) @ juneau-microservice-parent ---
+[INFO] 
+[INFO] --- enforcer:3.6.2:enforce (enforce-maven) @ juneau-bean ---
+[INFO] 
+[INFO] --- enforcer:3.6.2:enforce (enforce-java-version) @ juneau-examples ---
+[INFO] 
+[INFO] --- enforcer:3.6.2:enforce (enforce-java-version) @ juneau-petstore ---
+[INFO] 
+[INFO] --- enforcer:3.6.2:enforce (enforce-maven) @ juneau-bundles ---
+[INFO] 
+[INFO] 
+[INFO] 
+[INFO] --- enforcer:3.6.2:enforce (enforce-maven) @ juneau-shaded ---
+[INFO] 
+[INFO] --- jacoco:0.8.15:prepare-agent (prepare-agent) @ juneau-bean ---
+[INFO] 
+[INFO] --- enforcer:3.6.2:enforce (enforce-maven) @ juneau-bom ---
+[INFO] --- enforcer:3.6.2:enforce (enforce-maven) @ juneau-core ---
+[INFO] 
+[INFO] --- enforcer:3.6.2:enforce (enforce-maven) @ juneau-examples ---
+[INFO] 
+[INFO] --- enforcer:3.6.2:enforce (enforce-maven) @ juneau-sc ---
+[INFO] 
+[INFO] --- jacoco:0.8.15:prepare-agent (prepare-agent) @ juneau-core ---
+[INFO] 
+[INFO] --- enforcer:3.6.2:enforce (enforce-maven) @ juneau-rest ---
+[INFO] 
+[INFO] --- jacoco:0.8.15:prepare-agent (prepare-agent) @ juneau-shaded ---
+[INFO] 
+[INFO] argLine set to -javaagent:/home/user/.m2/repository/org/jacoco/org.jacoco.agent/0.8.15/org.jacoco.agent-0.8.15-runtime.jar=destfile=/home/user/git/apache/juneau/juneau-bean/target/jacoco.exec
+[INFO] --- jacoco:0.8.15:prepare-agent (prepare-agent) @ juneau-microservice-parent ---
+[INFO] --- jacoco:0.8.15:prepare-agent (prepare-agent) @ juneau-bom ---
+[INFO] 
+[INFO] 
+[INFO] 
+[INFO] 
+[INFO] --- enforcer:3.6.2:enforce (enforce-maven) @ juneau-petstore ---
+[INFO] argLine set to -javaagent:/home/user/.m2/repository/org/jacoco/org.jacoco.agent/0.8.15/org.jacoco.agent-0.8.15-runtime.jar=destfile=/home/user/git/apache/juneau/juneau-shaded/target/jacoco.exec
+[INFO] --- jacoco:0.8.15:prepare-agent (prepare-agent) @ juneau-bundles ---
+[INFO] --- remote-resources:3.3.0:process (process-resource-bundles) @ juneau-bean ---
+[INFO] argLine set to -javaagent:/home/user/.m2/repository/org/jacoco/org.jacoco.agent/0.8.15/org.jacoco.agent-0.8.15-runtime.jar=destfile=/home/user/git/apache/juneau/juneau-core/target/jacoco.exec
+[INFO] 
+[INFO] --- remote-resources:3.3.0:process (process-resource-bundles) @ juneau-core ---
+[INFO] 
+[INFO] --- remote-resources:3.3.0:process (process-resource-bundles) @ juneau-shaded ---
+[INFO] 
+[INFO] --- jacoco:0.8.15:prepare-agent (prepare-agent) @ juneau-rest ---
+[INFO] --- jacoco:0.8.15:prepare-agent (prepare-agent) @ juneau-sc ---
+[INFO] argLine set to -javaagent:/home/user/.m2/repository/org/jacoco/org.jacoco.agent/0.8.15/org.jacoco.agent-0.8.15-runtime.jar=destfile=/home/user/git/apache/juneau/juneau-microservice/target/jacoco.exec
+[INFO] 
+[INFO] 
+[INFO] --- remote-resources:3.3.0:process (process-resource-bundles) @ juneau-microservice-parent ---
+[INFO] --- jacoco:0.8.15:prepare-agent (prepare-agent) @ juneau-examples ---
+[INFO] argLine set to -javaagent:/home/user/.m2/repository/org/jacoco/org.jacoco.agent/0.8.15/org.jacoco.agent-0.8.15-runtime.jar=destfile=/home/user/git/apache/juneau/juneau-bom/target/jacoco.exec
+[INFO] argLine set to -javaagent:/home/user/.m2/repository/org/jacoco/org.jacoco.agent/0.8.15/org.jacoco.agent-0.8.15-runtime.jar=destfile=/home/user/git/apache/juneau/juneau-sc/target/jacoco.exec
+[INFO] 
+[INFO] 
+[INFO] --- remote-resources:3.3.0:process (process-resource-bundles) @ juneau-bom ---
+[INFO] argLine set to -javaagent:/home/user/.m2/repository/org/jacoco/org.jacoco.agent/0.8.15/org.jacoco.agent-0.8.15-runtime.jar=destfile=/home/user/git/apache/juneau/juneau-bundles/target/jacoco.exec
+[INFO] --- jacoco:0.8.15:prepare-agent (prepare-agent) @ juneau-petstore ---
+[INFO] 
+[INFO] 
+[INFO] --- remote-resources:3.3.0:process (process-resource-bundles) @ juneau-sc ---
+[INFO] --- remote-resources:3.3.0:process (process-resource-bundles) @ juneau-bundles ---
+[INFO] argLine set to -javaagent:/home/user/.m2/repository/org/jacoco/org.jacoco.agent/0.8.15/org.jacoco.agent-0.8.15-runtime.jar=destfile=/home/user/git/apache/juneau/juneau-examples/target/jacoco.exec
+[INFO] argLine set to -javaagent:/home/user/.m2/repository/org/jacoco/org.jacoco.agent/0.8.15/org.jacoco.agent-0.8.15-runtime.jar=destfile=/home/user/git/apache/juneau/juneau-rest/target/jacoco.exec
+[INFO] 
+[INFO] Preparing remote bundle org.apache.apache.resources:apache-jar-resource-bundle:1.7
+[INFO] Preparing remote bundle org.apache.apache.resources:apache-jar-resource-bundle:1.7
+[INFO] Preparing remote bundle org.apache.apache.resources:apache-jar-resource-bundle:1.7
+[INFO] --- remote-resources:3.3.0:process (process-resource-bundles) @ juneau-examples ---
+[INFO] 
+[INFO] Preparing remote bundle org.apache.apache.resources:apache-jar-resource-bundle:1.7
+[INFO] argLine set to -javaagent:/home/user/.m2/repository/org/jacoco/org.jacoco.agent/0.8.15/org.jacoco.agent-0.8.15-runtime.jar=destfile=/home/user/git/apache/juneau/juneau-petstore/target/jacoco.exec
+[INFO] --- remote-resources:3.3.0:process (process-resource-bundles) @ juneau-rest ---
+[INFO] 
+[INFO] --- remote-resources:3.3.0:process (process-resource-bundles) @ juneau-petstore ---
+[INFO] Preparing remote bundle org.apache.apache.resources:apache-jar-resource-bundle:1.7
+[INFO] Preparing remote bundle org.apache.apache.resources:apache-jar-resource-bundle:1.7
+[INFO] Preparing remote bundle org.apache.apache.resources:apache-jar-resource-bundle:1.7
+[INFO] Preparing remote bundle org.apache.apache.resources:apache-jar-resource-bundle:1.7
+[INFO] Preparing remote bundle org.apache.apache.resources:apache-jar-resource-bundle:1.7
+[INFO] Preparing remote bundle org.apache.apache.resources:apache-jar-resource-bundle:1.7
+[INFO] Copying 3 resources from 1 bundle.
+[INFO] Copying 3 resources from 1 bundle.
+[INFO] Copying 3 resources from 1 bundle.
+[INFO] Copying 3 resources from 1 bundle.
+[INFO] Copying 3 resources from 1 bundle.
+[INFO] Copying 3 resources from 1 bundle.
+[INFO] Copying 3 resources from 1 bundle.
+[INFO] Copying 3 resources from 1 bundle.
+[INFO] Copying 3 resources from 1 bundle.
+[INFO] Copying 3 resources from 1 bundle.
+[INFO] 
+[INFO] --- jacoco:0.8.15:report (report) @ juneau-bean ---
+[INFO] Skipping JaCoCo execution due to missing execution data file.
+[INFO] 
+[INFO] --- jacoco:0.8.15:report (report) @ juneau-microservice-parent ---
+[INFO] Skipping JaCoCo execution due to missing execution data file.
+[INFO] 
+[INFO] --- jacoco:0.8.15:report (report) @ juneau-bundles ---
+[INFO] 
+[INFO] 
+[INFO] --- jacoco:0.8.15:report (report) @ juneau-core ---
+[INFO] Skipping JaCoCo execution due to missing execution data file.
+[INFO] --- jacoco:0.8.15:report (report) @ juneau-shaded ---
+[INFO] Skipping JaCoCo execution due to missing execution data file.
+[INFO] Skipping JaCoCo execution due to missing execution data file.
+[INFO] 
+[INFO] --- jacoco:0.8.15:report (report) @ juneau-bom ---
+[INFO] 
+[INFO] ------------------< org.apache.juneau:juneau-commons >------------------
+[INFO] Building Apache Juneau Commons 10.0.0-SNAPSHOT                   [12/96]
+[INFO]   from juneau-core/juneau-commons/pom.xml
+[INFO] -------------------------------[ bundle ]-------------------------------
+[INFO] Skipping JaCoCo execution due to missing execution data file.
+[INFO] 
+[INFO] --- jacoco:0.8.15:report (report) @ juneau-petstore ---
+[INFO] 
+[INFO] --- jacoco:0.8.15:report (report) @ juneau-examples ---
+[INFO] 
+[INFO] --- jacoco:0.8.15:report (report) @ juneau-rest ---
+[INFO] 
+[INFO] --- jacoco:0.8.15:report (report) @ juneau-sc ---
+[INFO] Skipping JaCoCo execution due to missing execution data file.
+[INFO] Skipping JaCoCo execution due to missing execution data file.
+[INFO] Skipping JaCoCo execution due to missing execution data file.
+[INFO] Skipping JaCoCo execution due to missing execution data file.
+[INFO] 
+[INFO] --- enforcer:3.6.2:enforce (enforce-maven-version) @ juneau-commons ---
+[INFO] Rule 0: org.apache.maven.enforcer.rules.version.RequireMavenVersion passed
+[INFO] 
+[INFO] --- enforcer:3.6.2:enforce (enforce-java-version) @ juneau-commons ---
+[INFO] Rule 0: org.apache.maven.enforcer.rules.version.RequireJavaVersion passed
+[INFO] 
+[INFO] --- enforcer:3.6.2:enforce (enforce-maven) @ juneau-commons ---
+[INFO] Rule 0: org.apache.maven.enforcer.rules.version.RequireMavenVersion passed
+[INFO] 
+[INFO] --- jacoco:0.8.15:prepare-agent (prepare-agent) @ juneau-commons ---
+[INFO] argLine set to -javaagent:/home/user/.m2/repository/org/jacoco/org.jacoco.agent/0.8.15/org.jacoco.agent-0.8.15-runtime.jar=destfile=/home/user/git/apache/juneau/juneau-core/juneau-commons/target/jacoco.exec
+[INFO] 
+[INFO] --- jacoco:0.8.15:prepare-agent (default-prepare-agent) @ juneau-commons ---
+[INFO] argLine set to -javaagent:/home/user/.m2/repository/org/jacoco/org.jacoco.agent/0.8.15/org.jacoco.agent-0.8.15-runtime.jar=destfile=/home/user/git/apache/juneau/juneau-core/juneau-commons/target/jacoco.exec
+[INFO] 
+[INFO] --- remote-resources:3.3.0:process (process-resource-bundles) @ juneau-commons ---
+[INFO] Preparing remote bundle org.apache.apache.resources:apache-jar-resource-bundle:1.7
+[INFO] Copying 3 resources from 1 bundle.
+[INFO] 
+[INFO] --- resources:3.4.0:resources (default-resources) @ juneau-commons ---
+[INFO] Copying 4 resources from src/main/resources to target/classes
+[INFO] Copying 3 resources from target/maven-shared-archive-resources to target/classes
+[INFO] 
+[INFO] --- compiler:3.16.0:compile (default-compile) @ juneau-commons ---
+[INFO] Nothing to compile - all classes are up to date.
+[INFO] 
+[INFO] --- bundle:6.2.0:manifest (bundle-manifest) @ juneau-commons ---
+[INFO] Stale files detected, re-generating manifest.
+[INFO] Writing manifest: /home/user/git/apache/juneau/juneau-core/juneau-commons/target/classes/META-INF/MANIFEST.MF
+[INFO] 
+[INFO] --- resources:3.4.0:testResources (default-testResources) @ juneau-commons ---
+[INFO] Copying 108 resources from src/test/resources to target/test-classes
+[INFO] Copying 3 resources from target/maven-shared-archive-resources to target/test-classes
+[INFO] 
+[INFO] --- compiler:3.16.0:testCompile (default-testCompile) @ juneau-commons ---
+[INFO] Nothing to compile - all classes are up to date.
+[INFO] 
+[INFO] --- surefire:3.5.4:test (default-test) @ juneau-commons ---
+[INFO] Using auto detected provider org.apache.maven.surefire.junitplatform.JUnitPlatformProvider
+[INFO] 
+[INFO] -------------------------------------------------------
+[INFO]  T E S T S
+[INFO] -------------------------------------------------------
+[INFO] Running org.apache.juneau.commons.settings.Settings_Test
+[INFO] Tests run: 101, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.094 s -- in org.apache.juneau.commons.settings.Settings_Test
+[INFO] Running org.apache.juneau.commons.settings.RelaxedPropertySource_Test
+[INFO] Tests run: 11, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.003 s -- in org.apache.juneau.commons.settings.RelaxedPropertySource_Test
+[INFO] Running org.apache.juneau.commons.settings.PropertySources_Test
+[INFO] Tests run: 34, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.016 s -- in org.apache.juneau.commons.settings.PropertySources_Test
+[INFO] Running org.apache.juneau.commons.AppliedOnClassAnnotationObject_Test
+[INFO] Tests run: 31, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.013 s -- in org.apache.juneau.commons.AppliedOnClassAnnotationObject_Test
+[INFO] Running org.apache.juneau.commons.inject.BeanAnnotation_Test
+[INFO] Tests run: 7, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.005 s -- in org.apache.juneau.commons.inject.BeanAnnotation_Test
+[INFO] Running org.apache.juneau.commons.inject.Conditional_Test
+[INFO] Tests run: 20, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.023 s -- in org.apache.juneau.commons.inject.Conditional_Test
+[INFO] Running org.apache.juneau.commons.inject.BeanInstantiator_OptionD_Test
+[INFO] Tests run: 5, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.004 s -- in org.apache.juneau.commons.inject.BeanInstantiator_OptionD_Test
+[INFO] Running org.apache.juneau.commons.inject.ConfigProperties_Test
+[INFO] Tests run: 11, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.037 s -- in org.apache.juneau.commons.inject.ConfigProperties_Test
+[INFO] Running org.apache.juneau.commons.inject.Value_SupplierTypedFieldType_Test
+[INFO] Tests run: 7, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.002 s -- in org.apache.juneau.utils.StringVarResolver_Test
+[INFO] Running org.apache.juneau.utils.Tuple5_Test
+[INFO] Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.001 s -- in org.apache.juneau.utils.Tuple5_Test
+[INFO] Running org.apache.juneau.utils.Tuple2_Test
+[INFO] Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0 s -- in org.apache.juneau.utils.Tuple2_Test
+[INFO] 
+[INFO] Results:
+[INFO] 
+[INFO] Tests run: 7138, Failures: 0, Errors: 0, Skipped: 0
+[INFO] 
+[INFO] 
+[INFO] --- jacoco:0.8.15:report (report) @ juneau-commons ---
+[INFO] Loading execution data file /home/user/git/apache/juneau/juneau-core/juneau-commons/target/jacoco.exec
+[INFO] Running org.apache.juneau.rest.server.views.markdown.CommonmarkMarkdownRenderer_Test
+[INFO] Tests run: 12, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.392 s -- in org.apache.juneau.secret.macos.keychain.KeychainSecretStore_Test
+[INFO] Running org.apache.juneau.secret.macos.keychain.KeychainSecretStoreProvider_Test
+[WARNING] Tests run: 4, Failures: 0, Errors: 0, Skipped: 1, Time elapsed: 0.008 s -- in org.apache.juneau.secret.macos.keychain.KeychainSecretStoreProvider_Test
+[INFO] 
+[INFO] Results:
+[INFO] 
+[WARNING] Tests run: 16, Failures: 0, Errors: 0, Skipped: 1
+[INFO] 
+[INFO] 
+[INFO] --- jacoco:0.8.15:report (report) @ juneau-secret-macos-keychain ---
+[INFO] Loading execution data file /home/user/git/apache/juneau/juneau-secret-macos-keychain/target/jacoco.exec
+[INFO] Analyzed bundle 'Apache Juneau Secret Store - macOS Keychain' with 4 classes
+[INFO] Tests run: 14, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.169 s -- in org.apache.juneau.rest.server.views.markdown.CommonmarkMarkdownRenderer_Test
+[INFO] Running org.apache.juneau.rest.server.views.markdown.MarkdownRenderer_Test
+[INFO] Tests run: 5, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.006 s -- in org.apache.juneau.rest.server.views.markdown.MarkdownRenderer_Test
+[INFO] 
+[INFO] Results:
+[INFO] 
+[INFO] Tests run: 19, Failures: 0, Errors: 0, Skipped: 0
+[INFO] 
+[INFO] 
+[INFO] --- jacoco:0.8.15:report (report) @ juneau-rest-server-views-markdown ---
+[INFO] Reactor Summary for Apache Juneau 10.0.0-SNAPSHOT:
+[INFO] 
+[INFO] Apache Juneau ...................................... SUCCESS [  0.203 s]
+[INFO] Apache Juneau Bill of Materials .................... SUCCESS [  0.032 s]
+[INFO] Apache Juneau Core ................................. SUCCESS [  0.031 s]
+[INFO] Apache Juneau Commons .............................. SUCCESS [  7.513 s]
+[INFO] Apache Juneau Test Utilities ....................... SUCCESS [  0.343 s]
+[INFO] Apache Juneau Testing Toolkit ...................... SUCCESS [  3.115 s]
+[INFO] Apache Juneau Marshall ............................. SUCCESS [ 25.929 s]
+[INFO] Apache Juneau Beans ................................ SUCCESS [  0.019 s]
+[INFO] Apache Juneau RFC 7807 Beans ....................... SUCCESS [  1.685 s]
+[INFO] Apache Juneau Marshall Test Utilities .............. SUCCESS [  0.147 s]
+[INFO] Apache Juneau REST ................................. SUCCESS [  0.032 s]
+[INFO] Apache Juneau REST Common .......................... SUCCESS [  6.898 s]
+[INFO] Apache Juneau Config ............................... SUCCESS [  7.771 s]
+[INFO] Apache Juneau Common Beans ......................... SUCCESS [  5.491 s]
+[INFO] Apache Juneau HTML5 Beans .......................... SUCCESS [  9.506 s]
+[INFO] Apache Juneau JSON Schema Beans .................... SUCCESS [  5.735 s]
+[INFO] Apache Juneau Swagger 2.0 Beans .................... SUCCESS [  3.024 s]
+[INFO] Apache Juneau OpenAPI 3.0 Beans .................... SUCCESS [  3.254 s]
+[INFO] Apache Juneau REST Server .......................... SUCCESS [  9.999 s]
+[INFO] Apache Juneau REST Client .......................... SUCCESS [  8.017 s]
+[INFO] Apache Juneau REST Common (Classic) ................ SUCCESS [  3.683 s]
+[INFO] Apache Juneau REST Client (Classic) ................ SUCCESS [  5.646 s]
+[INFO] Apache Juneau REST Mock ............................ SUCCESS [  8.617 s]
+[INFO] Apache Juneau Microservices ........................ SUCCESS [  0.028 s]
+[INFO] Apache Juneau Microservice ......................... SUCCESS [ 12.094 s]
+[INFO] Apache Juneau Microservice Jetty ................... SUCCESS [  6.312 s]
+[INFO] Apache Juneau Dependency Bundles ................... SUCCESS [  0.031 s]
+[INFO] Apache Juneau Jetty Microservice Bundle ............ SUCCESS [  0.055 s]
+[INFO] Apache Juneau Microservice Tomcat .................. SUCCESS [  3.802 s]
+[INFO] Apache Juneau Tomcat Microservice Bundle ........... SUCCESS [  0.032 s]
+[INFO] Apache Juneau REST Server Spring Boot .............. SUCCESS [  7.487 s]
+[INFO] Apache Juneau Spring Boot Bundle ................... SUCCESS [  0.039 s]
+[INFO] Apache Juneau REST Server Micrometer ............... SUCCESS [ 10.038 s]
+[INFO] Apache Juneau REST Server OpenTelemetry ............ SUCCESS [  9.422 s]
+[INFO] Apache Juneau OTLP Observability Bundle ............ SUCCESS [  0.051 s]
+[INFO] Apache Juneau BeanQuery SQL ........................ SUCCESS [  2.061 s]
+[INFO] Apache Juneau BeanQuery Postgres ................... SUCCESS [  0.897 s]
+[INFO] juneau/core/marshall-rdf ........................... SUCCESS [ 20.666 s]
+[INFO] Apache Juneau REST Server RDF ...................... SUCCESS [  0.273 s]
+[INFO] Apache Juneau JSON-RPC Beans ....................... SUCCESS [  4.125 s]
+[INFO] Apache Juneau REST Server MCP ...................... SUCCESS [ 11.723 s]
+[INFO] Apache Juneau MCP Beans (2025-06-18) ............... SUCCESS [  2.927 s]
+[INFO] Apache Juneau REST Server MCP (2025-06-18) ......... SUCCESS [  9.856 s]
+[INFO] Apache Juneau MCP Beans (2026-07-28) ............... SUCCESS [  2.594 s]
+[INFO] Apache Juneau REST Server Reactive Streams Core .... SUCCESS [  7.162 s]
+[INFO] Apache Juneau REST Auth OAuth Flow ................. SUCCESS [  1.297 s]
+[INFO] Apache Juneau REST Server JWT ...................... SUCCESS [  5.699 s]
+[INFO] Apache Juneau REST Server OAuth .................... SUCCESS [  1.695 s]
+[INFO] Apache Juneau REST Server MCP (2026-07-28) ......... SUCCESS [ 16.087 s]
+[INFO] Apache Juneau REST Server SAML ..................... SUCCESS [ 19.490 s]
+[INFO] Apache Juneau REST Server OIDC Relying Party ....... SUCCESS [ 15.634 s]
+[INFO] Apache Juneau REST Server Logging Backends ......... SUCCESS [  2.133 s]
+[INFO] Apache Juneau REST Server DataTables ............... SUCCESS [  8.559 s]
+[INFO] Apache Juneau REST Server Widgets .................. SUCCESS [ 11.777 s]
+[INFO] Apache Juneau REST Server Console UI ............... SUCCESS [  8.889 s]
+[INFO] Apache Juneau REST Server Views .................... SUCCESS [ 14.078 s]
+[INFO] Apache Juneau REST Server Views Markdown ........... SUCCESS [  1.296 s]
+[INFO] Apache Juneau REST Server View — FreeMarker ........ SUCCESS [ 11.833 s]
+[INFO] Apache Juneau REST Server Console UI — FreeMarker .. SUCCESS [ 23.226 s]
+[INFO] Apache Juneau REST Server Console UI — FreeMarker DataTables SUCCESS [  5.713 s]
+[INFO] Apache Juneau REST Server Reactive Streams ......... SUCCESS [  3.630 s]
+[INFO] Apache Juneau REST Server View — JSP ............... SUCCESS [ 13.762 s]
+[INFO] Apache Juneau REST Server View — Thymeleaf ......... SUCCESS [ 11.352 s]
+[INFO] Apache Juneau REST Server View — Mustache .......... SUCCESS [ 11.324 s]
+[INFO] Apache Juneau REST Client MCP ...................... SUCCESS [  3.422 s]
+[INFO] Apache Juneau REST Client MCP (2025-06-18) ......... SUCCESS [  2.233 s]
+[INFO] Apache Juneau REST Client MCP (2026-07-28) ......... SUCCESS [  2.961 s]
+[INFO] Apache Juneau REST Client MCP Auth ................. SUCCESS [  2.466 s]
+[INFO] Apache Juneau NG REST Client — Apache HttpClient 4.5 Transport SUCCESS [  7.178 s]
+[INFO] Apache Juneau NG REST Client — Apache HttpClient 5.x Transport SUCCESS [  7.258 s]
+[INFO] Apache Juneau NG REST Client — OkHttp Transport .... SUCCESS [  7.299 s]
+[INFO] Apache Juneau NG REST Client — Jetty HttpClient Transport SUCCESS [  8.557 s]
+[INFO] Apache Juneau Microservice Test Support ............ SUCCESS [  2.731 s]
+[INFO] Apache Juneau Microservice Examples ................ SUCCESS [ 13.046 s]
+[INFO] Apache Juneau Server Config ........................ SUCCESS [  0.032 s]
+[INFO] Apache Juneau Server Config Server ................. SUCCESS [  1.928 s]
+[INFO] Apache Juneau Secret Store - macOS Keychain ........ SUCCESS [  1.557 s]
+[INFO] Apache Juneau Atom Beans ........................... SUCCESS [  4.589 s]
+[INFO] Apache Juneau Examples ............................. SUCCESS [  0.032 s]
+[INFO] Apache Juneau Core Examples ........................ SUCCESS [  0.190 s]
+[INFO] Apache Juneau MCP Examples ......................... SUCCESS [  7.089 s]
+[INFO] Apache Juneau Petstore ............................. SUCCESS [  0.032 s]
+[INFO] Apache Juneau Petstore Core ........................ SUCCESS [ 15.420 s]
+[INFO] Apache Juneau Petstore Jetty ....................... SUCCESS [  7.730 s]
+[INFO] Apache Juneau Petstore Spring Boot ................. SUCCESS [  6.921 s]
+[INFO] Apache Juneau HAL Beans ............................ SUCCESS [  4.323 s]
+[INFO] Apache Juneau JSON:API Beans ....................... SUCCESS [  4.409 s]
+[INFO] Apache Juneau JSON Patch Beans ..................... SUCCESS [  4.266 s]
+[INFO] Apache Juneau Integration Tests .................... SUCCESS [01:09 min]
+[INFO] Apache Juneau Shaded Artifacts ..................... SUCCESS [  0.031 s]
+[INFO] Apache Juneau Core (Shaded) ........................ SUCCESS [  0.016 s]
+[INFO] Apache Juneau REST Client (Shaded) ................. SUCCESS [  0.033 s]
+[INFO] Apache Juneau REST Server (Shaded) ................. SUCCESS [  0.038 s]
+[INFO] Apache Juneau REST Server Spring Boot (Shaded) ..... SUCCESS [  0.044 s]
+[INFO] Apache Juneau All (Shaded) ......................... SUCCESS [  0.093 s]
+[INFO] Apache Juneau Distribution ......................... SUCCESS [  0.019 s]
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  02:45 min (Wall Clock)

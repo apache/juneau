@@ -59,7 +59,7 @@ class ExampleMcpEndToEnd_Test extends TestBase {
 		var start = System.nanoTime();
 		server.close();
 		var elapsed = Duration.ofNanos(System.nanoTime() - start);
-		// Regression guard (WORK-J0603): a lingering subscriptions/listen stream used to hold Jetty's graceful
+		// Regression guard: a lingering subscriptions/listen stream used to hold Jetty's graceful
 		// drain open for its full 30s stopTimeout.  Shutdown must now end open streams and return promptly.
 		assertTrue(elapsed.compareTo(Duration.ofSeconds(10)) < 0, "Server shutdown took " + elapsed + "; open SSE streams are blocking the graceful drain.");
 	}

@@ -261,7 +261,10 @@ public final class Column {
 	/**
 	 * Serializes this column's effective search configuration to the {@code VIEW_META} {@code search} block
 	 * (design §4.3&ndash;§4.5): the wire {@link SearchType} token plus one entry per
-	 * {@link #effectiveOperators() effective operator}, each carrying the help text the header popup renders.
+	 * {@link #effectiveOperators() effective operator}, each carrying the metadata the header popup renders.
+	 *
+	 * <p>
+	 * <c>help</c> is present only for custom operators; the popup supplies built-in help text from <c>juneau-search.js</c>.
 	 *
 	 * @return The {@code {type, operators:[{name,help,minArgs,maxArgs,combinator,custom}]}} block, or <jk>null</jk>
 	 * 	if this column is not searchable.
@@ -287,7 +290,8 @@ public final class Column {
 		for (var op : effectiveOperators(tableDefault)) {
 			var o = new JsonMap();
 			o.put("name", op.name());
-			o.put("help", op.help());
+			if (op.help() != null)
+				o.put("help", op.help());
 			o.put("minArgs", op.minArgs());
 			o.put("maxArgs", op.maxArgs());
 			o.put("combinator", op.isCombinator());

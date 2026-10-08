@@ -124,7 +124,7 @@ const DIALOG_STATE = () => {
 			// The DSL restore below re-applies the same state (and so re-clicks the tab); report only the first pass.
 			const clickedFirstPass = clicked.slice();
 
-			// WORK-J0612: the same link restored onto a client-filtered column that has search metadata and a
+			// the same link restored onto a client-filtered column that has search metadata and a
 			// DataTables search.fixed lands in the per-table store + "juneau-dsl" predicate, with the REAL
 			// juneau-search.js engine validating it; native col.search() is never written.
 			let dslNative = '';

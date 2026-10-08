@@ -83,7 +83,7 @@ class ModalDef_ResultHost_Test extends TestBase {
 	}
 
 	@Test void a05_noContractVersionBump() {
-		// WORK-J0520: every modal carries a stamped version now (construction-time, not checked()-conditional); a
+		// every modal carries a stamped version now (construction-time, not checked()-conditional); a
 		// form-bearing one is used here simply because it is the shape whose version the client actually inspects.
 		assertEquals("2", ModalDef.CONTRACT_VERSION);
 		var json = Json.of(ModalDef.create("Delete?").form(form()).keepOpenOnSubmit(true).checked());

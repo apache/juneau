@@ -68,7 +68,7 @@ class SinkRenderAllowlist_Test extends TestBase {
 		var expected = String.join(",", SinkRenderAllowlist.BUILTIN_IDS.stream().sorted().toList());
 		// The JS array is not sorted the same way as Set.of iteration; pin membership via the snapshot list.
 		assertTrue(body.contains("\"progress\""), body);
-		// Lockstep count: 12 built-in fill-sink ids, the eleventh being "pill" and the twelfth "code" (WORK-J0508).
+		// Lockstep count: 12 built-in fill-sink ids, the eleventh being "pill" and the twelfth "code".
 		assertEquals(12, SinkRenderAllowlist.BUILTIN_IDS.size());
 		assertTrue(expected.contains("progress"));
 		assertTrue(expected.contains("tag"));
@@ -104,7 +104,7 @@ class SinkRenderAllowlist_Test extends TestBase {
 	}
 
 	@Test void a09_codeIsABuiltinFillSink_minimalMonospaceSourceRenderer() {
-		// "code" (WORK-J0508, Foundry WORK-P0063 row-detail-subtabs follow-up) is a fill-sink built-in; the count
+		// "code" is a fill-sink built-in; the count
 		// moved 11 -> 12 with this addition and nothing else.
 		assertEquals(12, SinkRenderAllowlist.BUILTIN_IDS.size());
 		assertTrue(SinkRenderAllowlist.BUILTIN_IDS.contains("code"), "code must be a fill-sink built-in");

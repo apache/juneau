@@ -128,7 +128,7 @@ if (out.hasNormalizeRibbon) {
 	const nonTrailingDividerResult = normalizeRibbon(nonTrailingDivider);
 	out.pure_nonTrailingDivider_order = nonTrailingDividerResult.map(function (x) { return x.type; }).join(',');
 
-	// 6) WORK-J0507 (Foundry WORK-P0063) - resolveButtonIcon('print') resolves via DEFAULT_ICONS to its own "print"
+	// 6) resolveButtonIcon('print') resolves via DEFAULT_ICONS to its own "print"
 	// key, not the neutral "tune" fallback; and it needs no extra dep (unlike excel/pdf), so it survives
 	// resolveExportButtons' feature gate even with jszip/pdfmake both absent, as long as Buttons itself is present.
 	out.pure_print_icon = first.NS.ribbon.resolveButtonIcon(null, 'print');
@@ -136,11 +136,11 @@ if (out.hasNormalizeRibbon) {
 		action('export', { buttons: ['copy', 'print'] }), { buttons: true, jszip: false, pdfmake: false }
 	).join(',');
 
-	// 7) WORK-J0507 - resolveButtonIcon('collapse') resolves to the wired "collapse" icon key (no longer purely
+	// 7) resolveButtonIcon('collapse') resolves to the wired "collapse" icon key (no longer purely
 	// forward-compatible now that the collapseAll action type dispatches to it).
 	out.pure_collapse_icon = first.NS.ribbon.resolveButtonIcon(null, 'collapse');
 
-	// 8) WORK-J0512 - the ninth type is normalizer-neutral: only `refresh` relocates, so a `dialog` action keeps
+	// 8) the ninth type is normalizer-neutral: only `refresh` relocates, so a `dialog` action keeps
 	// its declared position (here, ahead of the refresh that moves past it) and its group stays unset.
 	const withDialog = [action('dialog', { id: 'add-project', title: 'Add project' }), action('refresh')];
 	const withDialogResult = normalizeRibbon(withDialog);
@@ -233,7 +233,7 @@ function buildBar(NS, ribbon) {
 	out.dom_trailingDivider_lastGroupButtonCount = groups.length > 0 ? groups.at(-1).childNodes.length : -1;
 }
 
-// Case 6 (WORK-J0507, Foundry WORK-P0063 toolbar follow-up) - a `print` id in an `export` action's always-on
+// Case 6 - a `print` id in an `export` action's always-on
 // `buttons` list (no `optional` feature-gating needed, unlike excel/pdf) renders as its OWN button in the export
 // cluster, alongside `copy` - it is not silently dropped for lack of an extra dependency.
 {
@@ -247,7 +247,7 @@ function buildBar(NS, ribbon) {
 		: null;
 }
 
-// Case 7 (WORK-J0507) - a `collapseAll` action renders one "Collapse all" button that, on click, calls
+// Case 7 - a `collapseAll` action renders one "Collapse all" button that, on click, calls
 // ctx.collapseAllDetailRows() (the juneau-views.js-side wiring) rather than ctx.redraw() or any export path.
 {
 	const { NS } = loadRibbon(true);
@@ -263,7 +263,7 @@ function buildBar(NS, ribbon) {
 	out.dom_collapseAll_clickInvokedHook = collapseAllCalled;
 }
 
-// Case 8 (WORK-J0512) - a `dialog` action renders one icon button that hands its id to the VIEW runtime's
+// Case 8 - a `dialog` action renders one icon button that hands its id to the VIEW runtime's
 // ribbon-catalog resolver.  This harness loads the ribbon runtime alone, which is the point: the hop is
 // optional-chained, so it can be observed with a stand-in and, when the view runtime is absent entirely, the
 // button must be inert rather than throwing on click.  (The full seam, with both runtimes loaded, is
@@ -309,13 +309,19 @@ function buildBar(NS, ribbon) {
 }
 
 // ------------------------------------------------------------------------------------------------------------------
-// Pure function: ribbonToQueryParams(viewDef, activeState) - the browser JOINS multiple active toggles that target
-// the SAME single-string parameter (`search` / `opt`) into ONE comma-separated clause string (design §5.3: the wire
-// carries ONE `search` and ONE `opt`, never repeated params).  A column-scoped option stays a native
+// Pure functions: ribbonQueryParams + ribbonColumnSearches - the browser JOINS multiple active toggles that target
+// the SAME single-string parameter (`search`) into ONE comma-separated clause string (design §5.3: the wire
+// carries ONE `search`, never repeated params).  A column-scoped option stays a native
 // columns[N][search][value] param; any other custom param stays single-valued (last contribution wins).
 // ------------------------------------------------------------------------------------------------------------------
-if (first.NS?.ribbon && typeof first.NS.ribbon.ribbonToQueryParams === 'function') {
-	const toQuery = first.NS.ribbon.ribbonToQueryParams;
+if (first.NS?.ribbon && typeof first.NS.ribbon.ribbonQueryParams === 'function') {
+	// The flat form (query params plus one columns[N][search][value] entry per column search), composed from the split API.
+	const toQuery = function (viewDef, activeState, optsColumns) {
+		const q = first.NS.ribbon.ribbonQueryParams(viewDef, activeState);
+		const cs = first.NS.ribbon.ribbonColumnSearches(viewDef, activeState, optsColumns);
+		Object.keys(cs).forEach(function (k) { q['columns[' + k + '][search][value]'] = cs[k]; });
+		return q;
+	};
 	const viewDef = {
 		columns: [{ data: 'status' }, { data: 'owner' }],
 		ribbon: [
@@ -329,11 +335,11 @@ if (first.NS?.ribbon && typeof first.NS.ribbon.ribbonToQueryParams === 'function
 			{ type: 'option', id: 'colScoped', column: 'status', value: '$eq(OPEN)' }
 		]
 	};
-	// Two active `search`-param toggles + one `opt` option + the selected `opt` group member all join into ONE
-	// string apiece; the column-scoped toggle stays a native per-index param.
+	// Two active `search`-param toggles + one `opt` option + the selected `opt` group member: `search` joins into ONE
+	// string, `opt` is single-valued (last wins); the column-scoped toggle stays a native per-index param.
 	const joined = toQuery(viewDef, { onlyOpen: true, mine: true, withCounts: true, density: 'compact', colScoped: true });
 	out.pure_joinSearchClauses = joined.search;                            // "status=$eq(OPEN),owner=$eq(me)"
-	out.pure_joinOptClauses = joined.opt;                                  // "counts=true,density=compact"
+	out.pure_joinOptClauses = joined.opt;                                  // "density=compact" (opt is single-valued: last wins)
 	out.pure_joinColumnStillNative = joined['columns[0][search][value]'];  // "$eq(OPEN)" - unaffected by the join
 
 	// One active `search` toggle -> the single clause, with no leading/trailing separator comma.
@@ -345,6 +351,30 @@ if (first.NS?.ribbon && typeof first.NS.ribbon.ribbonToQueryParams === 'function
 		{ type: 'option', id: 'b', param: 'search', value: 'tier=$eq(gold)' }
 	] };
 	out.pure_joinProtectsInnerCommas = toQuery(parenView, { a: true, b: true }).search;
+}
+
+// ------------------------------------------------------------------------------------------------------------------
+// Pure functions: ribbonColumnSearches / ribbonQueryParams / mergeColumnSearches.  Column-scoped options become
+// per-dtIndex $-expressions (same column twice -> $and); param-scoped options become query params; user and
+// ribbon searches on one column merge to $and(user,ribbon).
+// ------------------------------------------------------------------------------------------------------------------
+if (first.NS?.ribbon && typeof first.NS.ribbon.ribbonColumnSearches === 'function') {
+	const R = first.NS.ribbon;
+	const vd = {
+		id: 'split',
+		columns: [{ data: 'id' }, { data: 'status' }, { data: 'phase' }],
+		ribbon: [
+			{ type: 'option', id: 'dropped', column: 'status', value: '$eq(DROPPED)' },
+			{ type: 'option', id: 'early', column: 'phase', value: '$in(Waiting,"Ready to push")' },
+			{ type: 'option', id: 'notWaiting', column: 'phase', value: '$ne(Waiting)' },
+			{ type: 'option', id: 'mine', param: 'owner', value: 'me' }
+		]
+	};
+	const all = { dropped: true, early: true, notWaiting: true, mine: true };
+	out.split_columnSearches = R.ribbonColumnSearches(vd, all, null);
+	out.split_queryParams = R.ribbonQueryParams(vd, all);
+	out.split_merged = R.mergeColumnSearches({ '1': '$eq(ACTIVE)', '0': '  ' }, { '1': '$eq(DROPPED)', '2': '$ne(Waiting)' });
+	out.split_wrapperRemoved = (typeof R.ribbonToQueryParams === 'undefined');
 }
 
 process.stdout.write(JSON.stringify(out));

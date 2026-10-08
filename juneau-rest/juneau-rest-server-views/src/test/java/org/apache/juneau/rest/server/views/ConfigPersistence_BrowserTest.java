@@ -32,8 +32,8 @@ import org.junit.jupiter.api.condition.*;
 
 /**
  * The persistence half of the module's <b>JavaScript-execution harness</b>: runs the REAL served
- * {@code juneau-config.js} in a real headless browser against REAL {@code window.localStorage}
- * and a stubbed {@code fetch}, and asserts the async persistence facade actually behaves as documented at
+ * {@code juneau-config.js} in a real headless browser against REAL {@code window.localStorage},
+ * and asserts the async persistence facade actually behaves as documented at
  * runtime &mdash; not merely that the shipped source CONTAINS the right shapes.
  *
  * <h5 class='section'>Why this exists (beyond {@link ViewsJs_ConfigPersistence_Test}):</h5>
@@ -41,8 +41,7 @@ import org.junit.jupiter.api.condition.*;
  * That sibling class proves the served script's <i>source shape</i> - the right constants, methods and string
  * literals are present.  It cannot prove a save actually round-trips through {@code localStorage}, that a
  * dangling {@code active} pointer actually resolves to Default, that a 51st view in one scope is actually
- * refused, that a synthetic {@code storage} event actually reaches {@code watchExternalChanges}' callback, or
- * that the server provider's stubbed {@code fetch} calls actually carry the documented URL/method/headers/body.
+ * refused, or that a synthetic {@code storage} event actually reaches {@code watchExternalChanges}' callback.
  * Node has no Web Storage API at all, so the localStorage half of this canary is the ONLY place in the module's
  * test suite that exercises the real browser API rather than a hand-rolled shim that could quietly diverge from
  * it.
@@ -65,7 +64,7 @@ import org.junit.jupiter.api.condition.*;
 @EnabledIfSystemProperty(named=ConfigPersistence_BrowserTest.GATE, matches="true",
 	disabledReason="JS-execution harness is opt-in; run with `mvn -Pjs-tests -f juneau-rest/juneau-rest-server-views/pom.xml test`")
 @SuppressWarnings({
-	"unchecked" // obj()/list()/views()/init() cast values of the JS-harness JSON report to Map<String,Object>/List<Object>
+	"unchecked" // obj()/list()/views() cast values of the JS-harness JSON report to Map<String,Object>/List<Object>
 })
 class ConfigPersistence_BrowserTest extends TestBase {
 
@@ -88,8 +87,8 @@ class ConfigPersistence_BrowserTest extends TestBase {
 		// so it is derived from that property's directory rather than adding a new pom property.
 		var harness = Path.of(requiredProperty("juneau.jsTests.harness")).getParent().resolve("config-persistence.cjs");
 
-		// The fixture restates nothing under test: it loads the REAL served juneau-views.js (for NS.init's CSRF
-		// helpers, which the server provider calls), then juneau-pagestate.js (so NS.pageState - the localStorage-
+		// The fixture restates nothing under test: it loads the REAL served juneau-views.js (the namespace
+		// juneau-config.js extends), then juneau-pagestate.js (so NS.pageState - the localStorage-
 		// backed store the View Settings reload round-trip rides on - exists), then the REAL juneau-config.js,
 		// exactly the load order the module's own doc comment requires.
 		var fixture = "<!DOCTYPE html><html><head><meta charset=\"utf-8\"></head><body>\n<script>\n"
@@ -222,69 +221,6 @@ class ConfigPersistence_BrowserTest extends TestBase {
 		var key = (String) seen.get(0);
 		assertTrue(key.endsWith(".columns.views.someKey"), () -> "wrong key observed: " + key);
 		assertFalse(key.contains("SOME-OTHER-SCOPE"), () -> "an out-of-scope key leaked through: " + key);
-	}
-
-	//------------------------------------------------------------------------------------------------------------------
-	// e) the server-persisted provider's stubbed-fetch calls carry the exact locked transport envelope
-	//------------------------------------------------------------------------------------------------------------------
-
-	private static String url(Map<String,Object> call) { return (String) call.get("url"); }
-
-	private static Map<String,Object> init(Map<String,Object> call) { return (Map<String,Object>) call.get("init"); }
-
-	@Test void e01_list_isAPlainCsrfFreeGetWithSameOriginCredentials() {
-		var call = obj("d_listCall");
-		var i = init(call);
-		assertEquals("GET", i.get("method"), () -> report.toString());
-		assertEquals("same-origin", i.get("credentials"), () -> report.toString());
-		assertTrue(url(call).contains("view=serverView") && url(call).contains("page=serverPage"),
-			() -> "list() must carry view+page query params: " + url(call));
-		assertNull(i.get("body"), () -> "a GET must never carry a body: " + report);
-	}
-
-	@Test void e02_save_isAJsonPutCarryingTheCsrfHeaderAndNameAsAQueryParam_neverAPathSegment() {
-		var call = obj("d_saveCall");
-		assertBean(call, "init{method,credentials,headers{Content-Type,X-Csrf-Token}}",
-			"{PUT,same-origin,{application/json,tok-123}}");
-		assertTrue(url(call).contains("name=My%20View") || url(call).contains("name=My+View"),
-			() -> "name must ride as a QUERY PARAM: " + url(call));
-		assertFalse(url(call).contains("/My%20View") || url(call).contains("/My+View"),
-			() -> "name must NEVER be a path segment: " + url(call));
-		assertFalse(url(call).contains("activate="), () -> "a bare save() must not set the activate flag: " + url(call));
-	}
-
-	@Test void e03_saveAndActivate_usesTheDedicatedActivateQueryFlag_neverAFieldInsideTheBlob() {
-		var call = obj("d_saveAndActivateCall");
-		var i = init(call);
-		assertTrue(url(call).contains("activate=1"), () -> "saveAndActivate must set ?activate=1: " + url(call));
-		assertFalse(String.valueOf(i.get("body")).contains("activate"),
-			() -> "the activate flag must never leak into the persisted blob body: " + i.get("body"));
-	}
-
-	@Test void e04_clearingActiveStillSendsARealJsonBody_neverEmpty() {
-		var call = obj("d_clearActiveCall");
-		var i = init(call);
-		assertEquals("PUT", i.get("method"), () -> report.toString());
-		assertTrue(url(call).endsWith("/active") || url(call).contains("/active?"),
-			() -> "setActive must target the /active sub-path: " + url(call));
-		assertEquals("{}", i.get("body"), () -> "clearing active must send {} - never an empty string: " + report);
-	}
-
-	@Test void e05_delete_sendsNameAsAQueryParamWithARealJsonBody() {
-		var call = obj("d_deleteCall");
-		var i = init(call);
-		assertEquals("DELETE", i.get("method"), () -> report.toString());
-		assertTrue(url(call).contains("name=My%20View") || url(call).contains("name=My+View"),
-			() -> "delete's name must ride as a query param: " + url(call));
-		assertEquals("{}", i.get("body"), () -> report.toString());
-	}
-
-	@Test void e06_missingShellAttribute_failsClosed_zeroFetchCallsIssued() {
-		var r = obj("d_noShell");
-		assertEquals(Boolean.TRUE, r.get("threw"), () -> "an absent [data-juneau-saved-views] shell must reject: " + report);
-		assertEquals("unavailable", r.get("code"), () -> report.toString());
-		assertEquals(0.0, ((Number) r.get("calls")).doubleValue(),
-			() -> "a fail-closed provider must never have issued a request: " + report);
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

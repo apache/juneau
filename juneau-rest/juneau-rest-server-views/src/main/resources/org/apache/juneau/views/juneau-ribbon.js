@@ -23,14 +23,23 @@
  * dialog (a row-less, ribbon-hosted dialog, opened through juneau-views.js's ribbon-catalog resolver),
  * option/optionGroup server-query toggles (with persisted state), and divider.
  *
- * CONSISTENCY REQUIREMENT (mirrors the server): when a column-scoped `option`/`optionGroup` toggle is ACTIVE, the
- * client contributes the SAME `columns[N][search][value]=<value>` request param that the server-side
- * RibbonAction.toQueryParams(ViewDef) produces (custom `param` options contribute `param=value` verbatim).  The
- * server maps unconditionally (it has no notion of "active"); the CLIENT owns active state, so ONLY active toggles
- * contribute here.  ribbonToQueryParams(viewDef, activeState) below is the pure counterpart of the Java mapping and
- * shares its fixtures so the two implementations cannot drift.  A SERVER-mode table (POST/JSON wire) does not send
- * these column-scoped params on the URL at all: ribbonColumnSearches + mergeColumnSearches below put them into the
- * JSON body's columns[N].search.value, and only `param` options ride the URL (ribbonQueryParams).
+ * ENCODING CONTRACT: this file is the ONLY encoder of ribbon state.  ribbonColumnSearches(...) turns active
+ * column-scoped option/optionGroup entries into per-column BeanQuery $-expressions (keyed by the live DataTables
+ * column index); ribbonQueryParams(...) turns active param-scoped entries into URL query params;
+ * mergeColumnSearches(...) folds them into the user's column searches ($and on a shared column).  Server mode sends
+ * the merged values as the request body's columns[i].search.value, which Java DataTablesQuery decodes; client mode
+ * evaluates them through clientRowFilter(...) and juneau-search.js.  ribbon-corpus.json (views test resources) is the
+ * contract both sides are tested against - change the encoding and the corpus in the same change.
+ *
+ * RIBBON ENTRY SCHEMA (query-contributing entries):
+ *   { type: 'option', id, title, column | param, value, persist?, default?: true }
+ *   { type: 'optionGroup', id, persist?, deselectable?, default?: '<memberId>',
+ *     options: [ { id, title, column | param, value? } ... ] }
+ * `value` is a BeanQuery $-expression for column-scoped entries (never a regex).  `default` applies only when
+ * nothing is persisted for that id; a stored choice always wins.  Example:
+ *   { type: 'optionGroup', id: 'phase', default: 'pending', options: [
+ *     { id: 'pending', column: 'phase', value: '$in(Waiting,"Partially reviewed")' },
+ *     { id: 'done',    column: 'phase', value: '$in("Ready to push","Committed, not pushed",Completed)' } ] }
  *
  * Everything in the "PURE LOGIC LAYER" is DOM/jQuery/DataTables-free (feature-detection takes its environment as an
  * argument), so it is unit-checkable (Option B) and Option-B-portable.  The "DOM/JQUERY BINDING LAYER" is the thin
@@ -45,30 +54,12 @@
 	// PURE LOGIC LAYER  (no DOM, no jQuery, no DataTables)
 	// ==================================================================================================================
 
-	/** Resolves a column `data` key to its zero-based index in the view (mirrors RibbonAction.columnIndex). */
+	/** Resolves a column `data` key to its zero-based index in the view. */
 	function columnIndex(viewDef, columnKey) {
 		const cols = viewDef.columns || [];
 		for (let i = 0; i < cols.length; i++)
 			if (cols[i].data === columnKey) return i;
 		return -1;
-	}
-
-	/**
-	 * Maps ONE option/opt to the {name, value} request param it contributes, or null.  Column-scoped options resolve
-	 * to `columns[<index>][search][value]`; custom-param options contribute `param=value` verbatim; a valueless (or
-	 * column+param-less) option contributes nothing.  Byte-for-byte identical to the Java addOptionParam(...) for
-	 * the no-selection/no-reorder catalog index; when `optsColumns` is supplied, the index is the live
-	 * {@code dtIndex} (selection offset + client reorder).
-	 */
-	function optionParam(viewDef, opt, optsColumns) {
-		if (opt?.value == null) return null;
-		if (opt.column != null) {
-			const idx = indexForRibbonColumn(viewDef, opt.column, optsColumns);
-			if (idx < 0) return null;
-			return { name: "columns[" + idx + "][search][value]", value: opt.value };
-		}
-		if (opt.param != null) return { name: opt.param, value: opt.value };
-		return null;
 	}
 
 	/** Live {@code dtIndex} when {@code optsColumns} is the actual DataTables array; else catalog index. */
@@ -83,37 +74,8 @@
 		return columnIndex(viewDef, columnKey);
 	}
 
-	/**
-	 * The pure counterpart of RibbonAction.toQueryParams(ViewDef): the request params the ribbon contributes given the
-	 * client's ACTIVE toggle state.  `activeState` is a map keyed by option/group id:
-	 *   - a top-level `option` contributes iff activeState[option.id] is truthy;
-	 *   - an `optionGroup` contributes its member whose id === activeState[group.id] (the selected radio value).
-	 * refresh/pausePolling/divider/export are not query-contributing and are skipped.
-	 */
-	/** The single-string, comma-joined request parameters (design §5.3): `search` and `opt`. */
-	const CLAUSE_JOIN_PARAMS = { search: true, opt: true };
-
-	function ribbonToQueryParams(viewDef, activeState, optsColumns) {
-		const out = {};
-		const state = activeState || {};
-		(viewDef.ribbon || []).forEach(function (a) {
-			if (a.type === "option") {
-				if (state[a.id]) {
-					const p = optionParam(viewDef, a, optsColumns);
-					if (p) addQueryParam(out, p.name, p.value);
-				}
-			} else if (a.type === "optionGroup" && a.options) {
-				const selected = state[a.id];
-				a.options.forEach(function (o) {
-					if (o.id === selected) {
-						const p = optionParam(viewDef, o, optsColumns);
-						if (p) addQueryParam(out, p.name, p.value);
-					}
-				});
-			}
-		});
-		return out;
-	}
+	/** The single-string, comma-joined request parameter: `search` (one search string on the wire). */
+	const CLAUSE_JOIN_PARAMS = { search: true };
 
 	/**
 	 * The HTTP API carries exactly ONE `search` query parameter and ONE `opt` query parameter (design §5.3: no
@@ -136,13 +98,13 @@
 	 * `option` whose `activeState[id]` is truthy, and the selected member of each `optionGroup`. Calls
 	 * `fn(opt, ownerId)` once per active entry, in `viewDef.ribbon`'s own declared order — `ownerId` is the
 	 * option's own id for a top-level option, or the enclosing group's id for a selected group member, which is
-	 * the id a later per-option diagnostic (a regex-value guard) keys its messages by. Other
+	 * the id a per-option diagnostic would key its messages by. Other
 	 * ribbon action types (`export`, `refresh`, `divider`, ...) are skipped; they contribute no query state.
 	 * `ribbonColumnSearches` and `ribbonQueryParams` both walk through this one function, so the two can never
-	 * disagree about which options count as "active", and a future consumer (like a regex-value guard) only has one place
+	 * disagree about which options count as "active", and any future consumer has only one place
 	 * to hook in.
 	 * @param {object} viewDef - the VIEW_META view definition (`viewDef.ribbon`).
-	 * @param {object} activeState - map keyed by option/group id; see `ribbonToQueryParams`'s own doc for the shape.
+	 * @param {object} activeState - map keyed by option/group id; a top-level `option` contributes iff `activeState[option.id]` is truthy, and an `optionGroup` contributes its member whose id equals `activeState[group.id]`.
 	 * @param {function(object, string)} fn - called once per active entry, as `fn(opt, ownerId)`.
 	 * @example
 	 *   // viewDef.ribbon = [{type:'optionGroup', id:'phase', options:[{id:'done', ...}]}]
@@ -164,14 +126,14 @@
 	 * The pure counterpart of the server-side column-scoped ribbon mapping (BeanQuery DataTables design §3.1):
 	 * the column-scoped search expressions the ribbon's ACTIVE toggle state contributes, keyed by live `dtIndex`
 	 * (the same index the outgoing `columns[]` array in a BeanQuery DataTables POST body uses) — never by a
-	 * URL-shaped param name. This is the half of `ribbonToQueryParams`'s mapping that MUST land in the JSON body:
+	 * URL-shaped param name. This is the half of the ribbon-to-request mapping that MUST land in the JSON body:
 	 * a POST/JSON server-mode endpoint (BeanQuery datatables design doc §3.1/D8) does not read URL query params at
 	 * all, so the old behavior of putting every ribbon contribution on the URL silently dropped column-scoped
 	 * filters once that switch happened (the bug this split fixes). Pair with `mergeColumnSearches` to AND a
 	 * contribution onto the user's own typed search on the same column, and never with `ribbonQueryParams`'s
 	 * output, which is the other, URL-legitimate half.
 	 * @param {object} viewDef - the VIEW_META view definition (`viewDef.ribbon`, `viewDef.columns`).
-	 * @param {object} activeState - map keyed by option/group id; see `ribbonToQueryParams`'s own doc for the shape.
+	 * @param {object} activeState - map keyed by option/group id; a top-level `option` contributes iff `activeState[option.id]` is truthy, and an `optionGroup` contributes its member whose id equals `activeState[group.id]`.
 	 * @param {Array} [optsColumns] - the live, post-chooser `columns[]` array (gives the live `dtIndex`); omitted,
 	 *   falls back to the catalog order.
 	 * @returns {object} map of `{<dtIndex>: "<$-expression>"}` — empty when no column-scoped option is active. Two
@@ -209,7 +171,7 @@
 	 * active contributions to the SAME single-string parameter name are comma-joined rather than one clobbering
 	 * another; any other parameter name is single-valued (last contribution wins).
 	 * @param {object} viewDef - the VIEW_META view definition (`viewDef.ribbon`).
-	 * @param {object} activeState - map keyed by option/group id; see `ribbonToQueryParams`'s own doc for the shape.
+	 * @param {object} activeState - map keyed by option/group id; a top-level `option` contributes iff `activeState[option.id]` is truthy, and an `optionGroup` contributes its member whose id equals `activeState[group.id]`.
 	 * @returns {object} map of `{<param>: "<value>"}` — empty when no `param:`-scoped option is active.
 	 * @example
 	 *   // viewDef.ribbon = [{type:'option', id:'mine', param:'owner', value:'me'}]
@@ -259,6 +221,36 @@
 	}
 
 	/**
+	 * Builds the client-mode row predicate for merged per-column searches (the output of mergeColumnSearches).  Each
+	 * key is a DataTables column index into {@code columns}; that column's {@code data} names the row property and its
+	 * {@code type} (or {@code search.type}) the search type (default "text").  Evaluation goes through ONE
+	 * juneau-search.js engine, so client mode matches exactly what the $-language means everywhere else.
+	 * Returns null when there is nothing to filter (every row passes).
+	 *
+	 * @param {Object<string,string>} merged dtIndex -> $-expression.
+	 * @param {Array<{data: ?string, type?: string, search?: {type?: string}}>} columns the live column array.
+	 * @param {function(): object} searchEngineFactory JuneauViews.search.createEngine.
+	 * @returns {?function(object): boolean}
+	 * @example
+	 *   var keep = clientRowFilter({ "1": "$eq(DROPPED)" }, [{ data: "id" }, { data: "status" }], JuneauViews.search.createEngine);
+	 *   keep({ id: 2, status: "DROPPED" });   // true
+	 *   keep({ id: 1, status: "ACTIVE" });    // false
+	 */
+	function clientRowFilter(merged, columns, searchEngineFactory) {
+		const engine = searchEngineFactory();
+		const terms = [];
+		Object.keys(merged || {}).forEach(function (k) {
+			const col = (columns || [])[Number(k)];
+			const key = col?.data;
+			if (key == null) return;
+			engine.accessor(key, function (row) { return row == null ? null : row[key]; });
+			terms.push({ column: key, type: col.type || col.search?.type || "text", expression: merged[k] });
+		});
+		if (!terms.length) return null;
+		return function (row) { return engine.rows([row]).search(terms).length === 1; };
+	}
+
+	/**
 	 * Feature-detects the caller-provided export extensions in the given environment (defaults to window).  Returns
 	 * `{buttons, jszip, pdfmake}` booleans.  Export degrades gracefully: with no DataTables Buttons, no export button
 	 * is offered at all; excel needs JSZip; pdf needs pdfMake.
@@ -296,11 +288,11 @@
 	 * Default built-in id -> icon-name lookup (visual-parity design doc §4.A).  Keyed by *button id* for the export
 	 * cluster (one export action renders one button per resolved id) and by *action type* for refresh
 	 * (which renders exactly one button).  `print` is a button id like `copy`/`csv`/`excel`/`pdf` -
-	 * a caller opts into it via `RibbonAction.export("copy", "csv", "print")`; unlike `excel`/`pdf` it needs no extra
+	 * a caller opts into it via an `export` ribbon action (`buttons: ["copy", "csv", "print"]`); unlike `excel`/`pdf` it needs no extra
 	 * dependency (DataTables Buttons ships a native `print` button that opens the browser print dialog), so a
 	 * caller may put it in the always-on `buttons` list rather than the feature-gated `optional` one. `collapse` IS
-	 * now wired, to the `collapseAll` action type below (added alongside `print` for the same Foundry WORK-P0063
-	 * toolbar follow-up, `WORK-J0507`) - it no longer ships purely for forward-compatibility.
+	 * now wired, to the `collapseAll` action type below (added alongside `print` for the same toolbar
+	 * follow-up) - it no longer ships purely for forward-compatibility.
 	 *
 	 * <p>{@code pausePolling} maps to {@code cancel} - "stop the auto-refresh" - and NOT to the neutral "tune"
 	 * fallback, which would be an outright bug rather than a cosmetic compromise: "tune" resolves to the settings
@@ -402,15 +394,34 @@
 		if (store) store.setItem(key, String(value));
 	}
 
+	/**
+	 * The ribbon's initial active state.  A persisted choice always wins (including an explicit "off"); otherwise an
+	 * opt-in {@code default} applies: {@code default:true} on an {@code option}, {@code default:'<memberId>'} on an
+	 * {@code optionGroup}.  Nothing auto-selects without {@code default}.  A group default that names no member is a
+	 * configuration bug: it is reported with console.error and ignored.
+	 *
+	 * @param {object} viewDef the view definition (id, ribbon).
+	 * @returns {object} option id -> boolean, group id -> member id.
+	 * @example
+	 *   // nothing stored yet:
+	 *   loadPersistedState({ id: "review", ribbon: [{ type: "optionGroup", id: "phase", persist: true, default: "pending",
+	 *     options: [{ id: "pending", column: "phase", value: "$in(Waiting,\"Partially reviewed\")" }] }] });
+	 *   // -> { phase: "pending" }
+	 */
 	function loadPersistedState(viewDef) {
 		const state = {};
 		(viewDef.ribbon || []).forEach(function (a) {
-			if (a.type === "option" && a.persist) {
-				const raw = storageGet(ribbonStorageKey(viewDef.id, a.id));
+			if (a.type === "option") {
+				const raw = a.persist ? storageGet(ribbonStorageKey(viewDef.id, a.id)) : null;
 				if (raw != null) state[a.id] = (raw === "true");
-			} else if (a.type === "optionGroup" && a.persist) {
-				const sel = storageGet(ribbonStorageKey(viewDef.id, a.id));
+				else if (a.default === true) state[a.id] = true;
+			} else if (a.type === "optionGroup") {
+				const sel = a.persist ? storageGet(ribbonStorageKey(viewDef.id, a.id)) : null;
 				if (sel != null) state[a.id] = sel;
+				else if (a.default != null) {
+					if ((a.options || []).some(function (o) { return o.id === a.default; })) state[a.id] = a.default;
+					else console.error("Juneau ribbon optionGroup '" + a.id + "': default '" + a.default + "' is not one of its option ids; ignored.");
+				}
 			}
 		});
 		return state;
@@ -437,7 +448,7 @@
 	 * control reads as self-contained rather than welded to whatever ungrouped buttons happen to sit beside it.
 	 * A {@code refresh} with an explicit {@code group} opts out of that move entirely.
 	 */
-	// NOSONAR javascript:S3776 -- one dispatch branch per RibbonAction.type (design doc §4.A); each branch is a
+	// NOSONAR javascript:S3776 -- one dispatch branch per ribbon action type (design doc §4.A); each branch is a
 	// few lines and several are pinned verbatim by the wiring canary tests below `functionBody(body, "function
 	// buildRibbon(")`, so splitting them into further helpers would reduce test/code locality without reducing
 	// real complexity.
@@ -467,7 +478,7 @@
 			openGroup.el.appendChild(el);
 		}
 
-		actions.forEach(function (a) { // NOSONAR javascript:S3776 -- one dispatch branch per RibbonAction.type; complexity is inherent
+		actions.forEach(function (a) { // NOSONAR javascript:S3776 -- one dispatch branch per ribbon action type; complexity is inherent
 			if (a.type === "divider") {
 				openGroup = null;
 				const d = document.createElement("span");
@@ -508,7 +519,7 @@
 			}
 			if (a.type === "dialog") {
 				// The ninth type, and the only mutating one: a ribbon-hosted dialog with NO row behind it
-				// (WORK-J0512).  The dialog machinery itself lives in juneau-views.js (openActionDialog and the
+				// The dialog machinery itself lives in juneau-views.js (openActionDialog and the
 				// whole already-reviewed submit/settle path), so this branch only renders the trigger and hands the
 				// action id to that module's ribbon-catalog resolver - the same one-way NS.<module> hop this file
 				// already makes for NS.config/NS.persistence.  A page that somehow loaded the ribbon runtime without
@@ -620,12 +631,11 @@
 	NS.ribbon = {
 		// pure
 		columnIndex: columnIndex,
-		optionParam: optionParam,
 		indexForRibbonColumn: indexForRibbonColumn,
-		ribbonToQueryParams: ribbonToQueryParams,
 		ribbonColumnSearches: ribbonColumnSearches,
 		ribbonQueryParams: ribbonQueryParams,
 		mergeColumnSearches: mergeColumnSearches,
+		clientRowFilter: clientRowFilter,
 		detectExportFeatures: detectExportFeatures,
 		resolveExportButtons: resolveExportButtons,
 		ribbonStorageKey: ribbonStorageKey,

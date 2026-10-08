@@ -36,15 +36,22 @@ import org.apache.juneau.rest.server.*;
  * {@code /juneau-datatables.js} URL then becomes available alongside the host's own endpoints, so browser pages can
  * load the glue without the application hosting it itself.
  *
- * <h5 class='section'>What this ships (and what it deliberately does not):</h5>
+ * <h5 class='section'>Where the DataTables library comes from:</h5>
  *
  * <p>
- * This is an Apache project, and the <a class="doclink" href="https://datatables.net">DataTables</a> library's license
- * is <b>not</b> an ASF category-A license, so <b>Juneau does not bundle DataTables' own JS/CSS (nor jQuery).</b> The
- * only asset served here is the thin, first-party {@code juneau-datatables.js} glue &mdash; it auto-initializes any
- * server-rendered {@code <table data-juneau-datatable>} (e.g. one built by {@link DataTablesTable}) by calling
- * {@code $(table).DataTable(opts)} once the DataTables library is present.  The DataTables library itself is
- * <b>caller-provided</b>: reference it from a CDN or self-host it.
+ * This module declares the jQuery and DataTables WebJars ({@code org.webjars:jquery},
+ * {@code org.webjars.npm:datatables.net}, {@code datatables.net-dt}, {@code datatables.net-buttons},
+ * {@code datatables.net-buttons-dt}) as dependencies; Juneau's own jars don't copy their files.
+ * {@link org.apache.juneau.rest.server.staticfile.WebJarsMixin} serves them from the classpath.  This mixin serves
+ * only the first-party {@code juneau-datatables.js} glue, which auto-initializes any server-rendered
+ * {@code <table data-juneau-datatable>} (e.g. one built by {@link DataTablesTable}) by calling
+ * {@code $(table).DataTable(opts)} once the library is present.
+ *
+ * <p>
+ * On a console page ({@code juneau-rest-server-console-ui-freemarker}), every {@code <@card type="datatables">}
+ * requires the {@code "datatables-glue"} toolkit pack, which pulls jQuery and DataTables in before the glue.  Compose
+ * this mixin and {@code WebJarsMixin} into the host; the page never loads the library by hand.  Outside a console
+ * page, wire the assets yourself as below.
  *
  * <h5 class='section'>Wiring the page assets (caller-side {@code @HtmlDocConfig}):</h5>
  *
@@ -75,8 +82,8 @@ import org.apache.juneau.rest.server.*;
  * </p>
  *
  * <p>
- * The convenience constants {@link #JQUERY_CDN_URL}, {@link #DATATABLES_JS_CDN_URL}, and
- * {@link #DATATABLES_CSS_CDN_URL} document known-good CDN coordinates for the caller-supplied library.
+ * The constants {@link #JQUERY_CDN_URL}, {@link #DATATABLES_JS_CDN_URL}, and {@link #DATATABLES_CSS_CDN_URL} give CDN
+ * coordinates for a page that loads the library from a CDN instead of the WebJars.
  *
  * <h5 class='section'>Server-side processing ({@code JuneauDataTables.ajax}):</h5>
  *
@@ -112,7 +119,8 @@ import org.apache.juneau.rest.server.*;
  * <p>
  * This resource is designed for composition via {@code @Rest(mixins=...)}.  The mount path is pinned at the op level by
  * {@link RestGet @RestGet(path="/juneau-datatables.js")} on {@link #getGlueScript}; a class-level
- * {@code @Rest(paths=...)} declaration would be silently ignored under the mixin pattern.
+ * {@code @Rest(paths=...)} declaration would be silently ignored under the mixin pattern.  {@code WebJarsMixin} follows the same
+ * pattern for {@code /webjars/*}.
  *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='jc'>{@link DataTablesTable}
@@ -145,13 +153,13 @@ public class DataTablesMixin {
 	})
 	private static volatile byte[] glueScript;
 
-	/** A known-good CDN URL for jQuery (the caller-supplied DataTables dependency).  Documentation aid. */
+	/** A known-good CDN URL for jQuery (CDN alternative to the WebJar).  Documentation aid. */
 	public static final String JQUERY_CDN_URL = "https://code.jquery.com/jquery-3.7.1.min.js";
 
-	/** A known-good CDN URL for the DataTables JavaScript (caller-supplied).  Documentation aid. */
+	/** A known-good CDN URL for the DataTables JavaScript (CDN alternative to the WebJar).  Documentation aid. */
 	public static final String DATATABLES_JS_CDN_URL = "https://cdn.datatables.net/2.1.8/js/dataTables.min.js";
 
-	/** A known-good CDN URL for the DataTables stylesheet (caller-supplied).  Documentation aid. */
+	/** A known-good CDN URL for the DataTables stylesheet (CDN alternative to the WebJar).  Documentation aid. */
 	public static final String DATATABLES_CSS_CDN_URL = "https://cdn.datatables.net/2.1.8/css/dataTables.dataTables.min.css";
 
 	/**

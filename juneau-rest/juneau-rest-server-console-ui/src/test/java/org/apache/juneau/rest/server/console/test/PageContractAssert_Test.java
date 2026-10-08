@@ -35,7 +35,8 @@ class PageContractAssert_Test extends TestBase {
 		+ "{\"id\":\"slo\",\"label\":\"SLO\",\"href\":\"/slo\"}],"
 		+ "\"activeNav\":[\"home\",\"setup\"],"
 		+ "\"cards\":[{\"id\":\"jc-seg-1\",\"type\":\"html\",\"template\":\"jc-seg-1\",\"bare\":true},"
-		+ "{\"id\":\"releases\",\"type\":\"datatables\",\"table\":\"/rest/releases/data\"}]}"
+		+ "{\"id\":\"releases\",\"type\":\"datatables\",\"table\":{\"dataUrl\":\"/rest/releases/data\","
+		+ "\"columns\":[{\"key\":\"name\",\"label\":\"Name\"}]}}]}"
 		+ "</script>"
 		+ "<template data-slot=\"header.banner\"><div class=\"demo\">\\u003cdemo</div></template>"
 		+ "<template data-card=\"jc-seg-1\"><p id=\"ssc-table-slot\">x</p><template id=\"inner\"><i>i</i></template><b>after</b></template>"
@@ -105,5 +106,30 @@ class PageContractAssert_Test extends TestBase {
 	private static void assertMessage(Runnable r, String expected) {
 		var e = assertThrows(AssertionError.class, r::run);
 		assertEquals(expected, e.getMessage());
+	}
+
+	@Test void a07_hasCardKey() {
+		PageContractAssert.assertPage(HTML)
+			.hasCardKey("releases", "/table/dataUrl", "/rest/releases/data")
+			.hasCardKey("releases", "/table/columns/0/key", "name");
+		assertMessage(() -> PageContractAssert.assertPage(HTML).hasCardKey("releases", "/table/dataUrl", "/wrong"),
+			"card 'releases' /table/dataUrl: expected '/wrong' but was '/rest/releases/data'");
+	}
+
+	@Test void a08_hasCardSrc() {
+		var html = HTML.replace(
+			"{\"id\":\"releases\",\"type\":\"datatables\",\"table\":{\"dataUrl\":\"/rest/releases/data\","
+				+ "\"columns\":[{\"key\":\"name\",\"label\":\"Name\"}]}}",
+			"{\"id\":\"releases\",\"type\":\"datatables\",\"table\":{\"dataUrl\":\"/rest/releases/data\","
+				+ "\"columns\":[{\"key\":\"name\",\"label\":\"Name\"}]}},{\"id\":\"open\",\"type\":\"datatables\",\"src\":\"/rest/open/data\"}");
+		PageContractAssert.assertPage(html).hasCardSrc("open", "/rest/open/data");
+		assertMessage(() -> PageContractAssert.assertPage(html).hasCardSrc("open", "/wrong"),
+			"card 'open' src: expected '/wrong' but was '/rest/open/data'");
+	}
+
+	@Test void a09_card_isPublic() throws Exception {
+		var m = PageContractAssert.class.getMethod("card", String.class);
+		assertTrue(java.lang.reflect.Modifier.isPublic(m.getModifiers()), "card(String) must be public");
+		assertEquals("datatables", PageContractAssert.assertPage(HTML).card("releases").getString("type"));
 	}
 }

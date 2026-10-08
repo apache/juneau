@@ -11,7 +11,7 @@
 # * specific language governing permissions and limitations under the License.
 # ***************************************************************************************************************************
 """
-Tests for the --js-tests / --no-js-tests support in scripts/test.py and scripts/push.py (WORK-J0608):
+Tests for the --js-tests / --no-js-tests support in scripts/test.py and scripts/push.py:
 flag parsing, auto-detect of changed JS/CSS/FTL files (driven by a fake changed-file list, no git),
 and the prerequisite-missing path (skip with notice when auto-enabled, fail when explicit).
 Nothing here runs mvn, git against a real remote, or push.py's main().

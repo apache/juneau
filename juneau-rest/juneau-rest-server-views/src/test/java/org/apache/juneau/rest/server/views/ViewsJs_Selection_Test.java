@@ -114,7 +114,7 @@ class ViewsJs_Selection_Test extends TestBase {
 		return Stream.of(
 			Arguments.of("function stampRowId(", "rowIdOf(rowData, rowIdField)", "rowEl.setAttribute(ROW_ID_ATTR"),
 			Arguments.of("function pruneSelection(", "present[String(id)] = true", "Object.hasOwn(present, String(id))"),
-			Arguments.of("function buildBulkToolbar(", "btn.disabled = true", "b.disabled = count === 0"));
+			Arguments.of("function buildBulkToolbar(", "goBtn.disabled = true", "el.hidden = count === 0"));
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -130,8 +130,10 @@ class ViewsJs_Selection_Test extends TestBase {
 
 		var pruneFn = functionBody(body, "function bindSelectionPrune(");
 		assertTrue(pruneFn.contains("\"draw.dt\""), pruneFn);
+		// Scope-aware: only PAGE scope drops off-screen ids; PERSISTENT (the default) keeps them.
+		assertTrue(pruneFn.contains("selectionState.scope === \"page\""), pruneFn);
 		assertTrue(pruneFn.contains("pruneSelection(Array.from(selectionState.selected), ids)"), pruneFn);
-		assertTrue(pruneFn.contains("selectionState.selected = new Set(pruned)"), pruneFn);
+		assertTrue(pruneFn.contains("selectionState.selected = new Set(pruneSelection("), pruneFn);
 	}
 
 	@Test void e01_selectAll_isScopedToTheCurrentDrawsRowsOnly() throws Exception {
@@ -168,7 +170,7 @@ class ViewsJs_Selection_Test extends TestBase {
 	@Test void f02_buildTable_prependsASyntheticLeadingSelectionColumn_beforeResolveOrder() throws Exception {
 		var body = viewsJs();
 		var fn = functionBody(body, "function assembleFullColumnArray(");
-		assertTrue(fn.contains("buildSelectionColumnDef(ctx.selectionState)"), fn);
+		assertTrue(fn.contains("buildSelectionColumnDef(ctx.selectionState, ctx)"), fn);
 		assertTrue(fn.contains("cols.push(sel)"), fn);
 		assertTrue(fn.contains("opts.order = resolveOrder(viewDef, opts.columns)"), fn);
 		assertFalse(fn.contains("opts.columns.unshift"), fn);
@@ -188,21 +190,17 @@ class ViewsJs_Selection_Test extends TestBase {
 	// g) Per-target bulk execution (HIGH-5) - N independent submitRowAction(...) calls, never one aggregate request.
 	//------------------------------------------------------------------------------------------------------------------
 
-	@Test void g01_executeBulkAction_isAPerTargetLoop_notAnAggregateCall() throws Exception {
+	@Test void g01_runBulkAction_replacesExecuteBulkAction_perRowIsTheDefault() throws Exception {
 		var body = viewsJs();
-		var fn = functionBody(body, "function executeBulkAction(");
-		assertTrue(fn.contains("ids.forEach(function (id) {"), fn);
-		assertTrue(fn.contains("submitRowAction(action, table, tr, ctx, { targetId: id })"), fn);
-		// No aggregate transport - a bulk action never opens its own fetch/Promise.all; it only reuses the
-		// single-row submit path once per target.
-		assertFalse(fn.contains("Promise.all"), fn);
-		assertFalse(fn.contains("fetch("), fn);
+		assertFalse(body.contains("executeBulkAction"), "executeBulkAction must be gone");
+		var fn = functionBody(body, "async function runBulkAction(");
+		assertTrue(fn.contains("submitPerRowBulk("), fn);
+		assertTrue(fn.contains("submitAggregateBulk("), fn);
 	}
 
-	@Test void g02_executeBulkAction_skipsIdsThatHaveGoneOffScreen() throws Exception {
-		var body = viewsJs();
-		var fn = functionBody(body, "function executeBulkAction(");
-		assertTrue(fn.contains("if (!tr) return;"), fn);
+	@Test void g02_perRow_usesSnapshotsSoOffScreenRowsStillSubmit() throws Exception {
+		var fn = functionBody(viewsJs(), "async function submitPerRowBulk(");
+		assertTrue(fn.contains("selectionState.snapshots[id]"), fn);
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -219,5 +217,125 @@ class ViewsJs_Selection_Test extends TestBase {
 		var fn = functionBody(body, "function resolveTableBulkDef(");
 		assertTrue(fn.contains("bulkDef.contractVersion !== JUNEAU_BULK_CONTRACT_VERSION"), fn);
 		assertTrue(fn.contains("bulk mutation withheld"), fn);
+	}
+
+	@Test void h01_bulkContractVersion_isBumpedToTwo() throws Exception {
+		assertTrue(viewsJs().contains("JUNEAU_BULK_CONTRACT_VERSION = \"2\""));
+	}
+
+	@Test void h02_selectScopeAndLabelFieldAttrConstants_exist() throws Exception {
+		var body = viewsJs();
+		assertTrue(body.contains("SELECT_SCOPE_ATTR"));
+		assertTrue(body.contains("SELECT_LABEL_FIELD_ATTR"));
+		assertTrue(body.contains("SELECTABLE_WHEN_SIDECAR_ID_PREFIX"));
+	}
+
+	@Test void h03_bindSelectionPrune_isScopeAware_pageScopePrunesPersistentDoesNot() throws Exception {
+		var fn = functionBody(viewsJs(), "function bindSelectionPrune(table, ctx)");
+		assertTrue(fn.contains("scope"));
+		assertTrue(fn.contains("pruneSelection"));
+		assertTrue(fn.contains("\"page\""));
+	}
+
+	@Test void h04_refreshSelectAllHeaderState_computesTriState() throws Exception {
+		var fn = functionBody(viewsJs(), "function refreshSelectAllHeaderState(table, ctx)");
+		assertTrue(fn.contains(".indeterminate"));
+		assertTrue(fn.contains(".checked"));
+	}
+
+	@Test void h05_buildSelectionColumnDef_rendersDisabledCheckboxWithReason() throws Exception {
+		var fn = functionBody(viewsJs(), "function selectionCellMarkup(");
+		assertTrue(fn.contains("disabled"));
+		assertTrue(fn.contains("aria-describedby"));
+		assertTrue(fn.contains("title="));
+	}
+
+	@Test void h06_initSelection_selectAllSkipsDisabledRows() throws Exception {
+		var fn = functionBody(viewsJs(), "function initSelection(table, ctx)");
+		assertTrue(fn.contains(".disabled"));
+	}
+
+	@Test void h07_captureRowSnapshot_isExported() throws Exception {
+		assertTrue(viewsJs().contains("captureRowSnapshot:"));
+	}
+
+	@Test void i01_buildBulkToolbar_singleAction_rendersButtonNotDropdown() throws Exception {
+		var fn = functionBody(viewsJs(), "function buildBulkToolbar(");
+		assertTrue(fn.contains("selected ("), fn);
+		assertTrue(fn.contains("juneau-view-bulk-select"), fn);
+	}
+
+	@Test void i02_buildBulkToolbar_rendersClearSelectionLink() throws Exception {
+		var fn = functionBody(viewsJs(), "function buildBulkToolbar(");
+		assertTrue(fn.contains("Clear selection"), fn);
+		assertTrue(fn.contains("selected \\u00b7"), fn);
+	}
+
+	@Test void i03_wireRightCluster_placesBulkToolbarAtFarEndOfRightCluster() throws Exception {
+		var body = viewsJs();
+		assertTrue(body.contains("function wireToolbarRightClusterBulk("));
+		var leftFn = functionBody(body, "function wireToolbarLeftCluster(");
+		assertFalse(leftFn.contains("bulkToolbar.el"), leftFn);
+	}
+
+	@Test void i04_confirmBulkAction_prefersWindowDialogsConfirm_fallsBackToBuiltIn() throws Exception {
+		var fn = functionBody(viewsJs(), "function confirmBulkAction(");
+		assertTrue(fn.contains("window.JuneauViews?.dialogs?.confirm"), fn);
+		assertTrue(fn.contains("buildFallbackConfirmModal("), fn);
+		assertTrue(functionBody(viewsJs(), "function buildFallbackConfirmModal(").contains("pushLayer"));
+	}
+
+	@Test void i05_builtInConfirmFallback_capsListAtTwentyWithAndNMore() throws Exception {
+		var fn = functionBody(viewsJs(), "function buildFallbackConfirmModal(");
+		assertTrue(fn.contains("cap = 20"), fn);
+		assertTrue(fn.contains(" more"), fn);
+	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// j) Bulk execution: per-row concurrency, summary toast, selection clearing, aggregate failures.
+	//------------------------------------------------------------------------------------------------------------------
+
+	@Test void j01_submitRowActionForId_isExported() throws Exception {
+		var body = viewsJs();
+		assertTrue(body.contains("submitRowActionForId: submitRowActionForId"), body.length() + "");
+		assertTrue(body.contains("runBulkAction: runBulkAction"));
+	}
+
+	@Test void j02_perRow_concurrencyIsCappedAtFour() throws Exception {
+		var body = viewsJs();
+		assertTrue(body.contains("const BULK_PER_ROW_CONCURRENCY = 4;"));
+		assertTrue(functionBody(body, "async function submitPerRowBulk(").contains("BULK_PER_ROW_CONCURRENCY"));
+	}
+
+	@Test void j03_summaryToast_formatMatchesSpecExactly() throws Exception {
+		var fn = functionBody(viewsJs(), "function buildBulkSummaryMessage(");
+		assertTrue(fn.contains("\" succeeded\""), fn);
+		assertTrue(fn.contains("\" not found\""), fn);
+		assertTrue(fn.contains("\" failed (ids: \""), fn);
+	}
+
+	@Test void j04_onSuccess_clearsSucceededAndNotFound_keepsFailedSelected() throws Exception {
+		var fn = functionBody(viewsJs(), "async function runBulkAction(");
+		assertTrue(fn.contains("outcome.succeeded.concat(outcome.notFound)"), fn);
+		assertTrue(fn.contains("selectionState.selected.delete("), fn);
+		assertFalse(fn.contains("outcome.failed.forEach"), fn);
+	}
+
+	@Test void j05_onSuccessNone_skipsReload() throws Exception {
+		var fn = functionBody(viewsJs(), "async function runBulkAction(");
+		assertTrue(fn.contains("action.onSuccess !== \"none\""), fn);
+		assertTrue(fn.contains("reloadTableData("), fn);
+	}
+
+	@Test void j06_aggregateTransportFailure_raisesEJS26() throws Exception {
+		var fn = functionBody(viewsJs(), "async function submitAggregateBulk(");
+		assertTrue(fn.contains("E-JS-26"), fn);
+		assertTrue(fn.contains("JSON.stringify({ ids: ids, idempotencyKey: idempotencyKey })"), fn);
+	}
+
+	@Test void j07_aggregateNonBulkResultResponse_raisesEJS27() throws Exception {
+		var fn = functionBody(viewsJs(), "async function submitAggregateBulk(");
+		assertTrue(fn.contains("E-JS-27"), fn);
+		assertTrue(fn.contains("response is not a BulkResult (contractVersion '"), fn);
 	}
 }

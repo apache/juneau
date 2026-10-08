@@ -2492,7 +2492,7 @@
       "status": "ENUM"
     },
     "operators": "standard",
-    "comment": "client-mode cell shapes (WORK-J0612): a row with the property missing entirely",
+    "comment": "client-mode cell shapes: a row with the property missing entirely",
     "rows": [
       {
         "id": "r1",
@@ -2519,7 +2519,7 @@
       "v": "TEXT"
     },
     "operators": "standard",
-    "comment": "client-mode cell shapes (WORK-J0612): HTML markup in the RAW cell is matched literally, never stripped",
+    "comment": "client-mode cell shapes: HTML markup in the RAW cell is matched literally, never stripped",
     "rows": [
       "<b>bold</b>",
       "bold"
@@ -2536,7 +2536,7 @@
       "v": "TEXT"
     },
     "operators": "standard",
-    "comment": "client-mode cell shapes (WORK-J0612): markup substring",
+    "comment": "client-mode cell shapes: markup substring",
     "rows": [
       "x<b>y",
       "b",
@@ -2555,7 +2555,7 @@
       "v": "TEXT"
     },
     "operators": "standard",
-    "comment": "client-mode cell shapes (WORK-J0612, D6): an array cell is matched as its string form",
+    "comment": "client-mode cell shapes: an array cell is matched as its string form",
     "rows": [
       [
         "a",

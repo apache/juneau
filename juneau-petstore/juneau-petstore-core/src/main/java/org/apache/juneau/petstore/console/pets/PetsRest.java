@@ -50,7 +50,7 @@ import org.apache.juneau.rest.server.views.*;
  * </p>
  * <p class='bcode'>
  * 	&lt;@card type="datatables" id="pets"&gt;
- * 	{ dataMode:'server', dataUrl:'/console/pets/query', columns:[{data:'name', title:'Name'}, ...] }
+ * 	{ dataMode:'server', dataUrl:'/console/pets/query', columns:[{key:'name', label:'Name'}, ...] }
  * 	&lt;/@card&gt;
  * </p>
  * <p class='bjava'>

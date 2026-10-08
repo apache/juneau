@@ -39,8 +39,8 @@ import com.sun.net.httpserver.*;
 
 /**
  * The real-browser, real-server canary for design §3.1/D8: the REAL {@code juneau-views.js} runtime booting a
- * server-mode root table (the same VIEW_META/sidecar shape {@code <@card type="datatables">}'s
- * {@code CardEnvelope.liftTable} emits) with a nested table in its row detail, against a JDK {@link HttpServer}
+ * server-mode root table (the pre-built VIEW_META/sidecar shape of a
+ * {@code <@card type="datatables">} card) with a nested table in its row detail, against a JDK {@link HttpServer}
  * backed by {@link DataTablesQuery#run}.
  *
  * <p>

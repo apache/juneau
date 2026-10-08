@@ -63,11 +63,20 @@ final class RegionsHarness {
 	 * helper library the three original harnesses (primitive/bus/barrier) deliberately do not load.
 	 */
 	static Map<?,?> reportWithHelpers(String harnessName) {
-		return reportImpl(harnessName, ViewsMixin.HELPERS_JS_RESOURCE);
+		return reportImpl(harnessName, List.of(ViewsMixin.HELPERS_JS_RESOURCE));
 	}
 
-	private static Map<?,?> reportImpl(String harnessName, String extraResource) {
-		var cacheKey = (extraResource == null ? "" : extraResource + ":") + harnessName;
+	/**
+	 * Runs the named harness with extra classpath resources written to temp files and appended to its argv, in the
+	 * given order, after the renders/views/regions trio.  Each temp file keeps its resource's extension, so a
+	 * {@code .json} resource stays {@code .json}.
+	 */
+	static Map<?,?> reportWith(String harnessName, String... extraResources) {
+		return reportImpl(harnessName, List.of(extraResources));
+	}
+
+	private static Map<?,?> reportImpl(String harnessName, List<String> extras) {
+		var cacheKey = (extras == null || extras.isEmpty() ? "" : String.join(",", extras) + ":") + harnessName;
 		if (FAILED.contains(cacheKey))
 			return null;
 		var cached = CACHE.get(cacheKey);
@@ -79,7 +88,7 @@ final class RegionsHarness {
 			var harness = locate(harnessName);
 			if (harness == null)
 				return markUnavailable(cacheKey);
-			var report = Json.to(run(harness, harnessName, extraResource), Map.class);
+			var report = Json.to(run(harness, harnessName, extras == null ? List.of() : extras), Map.class);
 			CACHE.put(cacheKey, report);
 			return report;
 		} catch (Exception e) {
@@ -93,21 +102,24 @@ final class RegionsHarness {
 		return null;
 	}
 
-	private static String run(Path harness, String harnessName, String extraResource) throws Exception {
+	private static String run(Path harness, String harnessName, List<String> extras) throws Exception {
 		var renders = Files.createTempFile("juneau-renders-", ".js");
 		var views = Files.createTempFile("juneau-views-", ".js");
 		var regions = Files.createTempFile("juneau-regions-", ".js");
-		var extra = extraResource != null ? Files.createTempFile("juneau-extra-", ".js") : null;
 		var stdout = Files.createTempFile("regions-stdout-", ".json");
 		var stderr = Files.createTempFile("regions-stderr-", ".txt");
+		var cleanup = new ArrayList<Path>(List.of(renders, views, regions, stdout, stderr));
 		try {
 			Files.writeString(renders, asset(ViewsMixin.RENDERS_JS_RESOURCE), UTF_8);
 			Files.writeString(views, asset(ViewsMixin.VIEWS_JS_RESOURCE), UTF_8);
 			Files.writeString(regions, asset(ViewsMixin.REGIONS_JS_RESOURCE), UTF_8);
 			var args = new ArrayList<String>(List.of(
 				"node", harness.toString(), renders.toString(), views.toString(), regions.toString()));
-			if (extra != null) {
-				Files.writeString(extra, asset(extraResource), UTF_8);
+			for (var res : extras) {
+				var dot = res.lastIndexOf('.');
+				var extra = Files.createTempFile("juneau-extra-", dot < 0 ? ".js" : res.substring(dot));
+				cleanup.add(extra);
+				Files.writeString(extra, asset(res), UTF_8);
 				args.add(extra.toString());
 			}
 			var p = new ProcessBuilder(args)
@@ -123,9 +135,6 @@ final class RegionsHarness {
 					+ "\nstdout:\n" + quietRead(stdout));
 			return Files.readString(stdout, UTF_8);
 		} finally {
-			var cleanup = new ArrayList<Path>(List.of(renders, views, regions, stdout, stderr));
-			if (extra != null)
-				cleanup.add(extra);
 			for (var f : cleanup)
 				Files.deleteIfExists(f);
 		}

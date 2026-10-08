@@ -266,7 +266,7 @@ tabNames.forEach(function (name) {
 });
 out.f1ClickedExactlyMatchingTabs = JSON.stringify(clicked) === JSON.stringify(tabNames);
 
-// WORK-J0612: Copy link / address-bar collect must read a client-filtered DSL column's per-table store, since
+// Copy link / address-bar collect must read a client-filtered DSL column's per-table store, since
 // col.search() stays "" on that path.  A minimal engine stub stands in for juneau-search.js (not loaded here).
 NS.search = {
 	parse: function () { return { incomplete: false, invalid: false }; },

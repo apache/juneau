@@ -184,7 +184,9 @@ class PetstoreSpringboot_Test {
 		"/juneau-console/themes/juneau-theme-open.css",
 		"/juneau-console/juneau-console.js",
 		"/console/store/juneau-views.js",
-		"/console/ops/audit/juneau-datatables.js"
+		"/console/ops/audit/juneau-datatables.js",
+		"/console/ops/audit/webjars/jquery/3.7.1/jquery.min.js",
+		"/console/ops/audit/webjars/datatables.net/2.3.8/js/dataTables.min.js"
 	})
 	void a03_consoleAssetIsServed(String path) throws Exception {
 		assertEquals(200, get(path, "*/*").statusCode(), path);

@@ -33,6 +33,7 @@ import org.apache.juneau.rest.server.servlet.*;
 import org.apache.juneau.rest.server.view.*;
 import org.apache.juneau.rest.server.view.freemarker.*;
 import org.apache.juneau.rest.server.view.freemarker.console.*;
+import org.apache.juneau.rest.server.views.*;
 import org.junit.jupiter.api.*;
 
 import freemarker.cache.*;
@@ -102,11 +103,17 @@ class ConsoleDataTablesFreemarkerMixin_Test extends TestBase {
 	// inside a <td> inside a <table class="jc-table" data-juneau-datatable ...>.
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@Rest(mixins=FreemarkerMixin.class)
+	@Rest(mixins={FreemarkerMixin.class, ViewsMixin.class})
 	public static class DataTablesHost extends BasicRestServlet {
 		private static final long serialVersionUID = 1L;
 		@Bean public FreemarkerMixin freemarker() {
-			return ConsoleDataTablesFreemarkerMixin.create().basePath("/templates/").build();
+			return ConsoleDataTablesFreemarkerMixin.create().basePath("/templates/").chromeTemplate("admin/chrome.ftlh").build();
+		}
+		@RestGet(path="/page-releases")
+		public View pageReleases() {
+			return FreemarkerView.of("admin/page-datatable.ftlh")
+				.attr("releases", List.of(new ReleaseRow()))
+				.attr("rowTypeName", ReleaseRow.class.getName());
 		}
 		@RestGet(path="/releases")
 		public View releases() {
@@ -127,6 +134,17 @@ class ConsoleDataTablesFreemarkerMixin_Test extends TestBase {
 			() -> "expected <span class='tag status released'> nested inside a <td>, body:\n" + body);
 		assertTrue(body.contains("widget"), () -> "expected the plain property's raw value too, body:\n" + body);
 		assertFalse(body.contains("&lt;span"), () -> "macro output was HTML-escaped (double-escaped), body:\n" + body);
+		assertFalse(body.contains("jquery"), () -> "no <@page>, nothing recorded, body:\n" + body);
+	}
+
+	@Test void a02b_datatableInsidePage_recordsTheGlue() throws Exception {
+		var c = MockRestClient.buildLax(DataTablesHost.class);
+		var body = c.get("/page-releases").run().assertStatus(200).getContent().asString();
+		var jq = body.indexOf("/jquery.min.js");
+		var dt = body.indexOf("/js/dataTables.min.js");
+		var glue = body.indexOf("juneau-datatables.js");
+		var views = body.indexOf("juneau-views.js");
+		assertTrue(jq >= 0 && jq < dt && dt < glue && glue < views, () -> body);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

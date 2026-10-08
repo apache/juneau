@@ -143,6 +143,23 @@ final class ConsoleBrowserFixture {
 			+ "</body></html>\n";
 	}
 
+	/**
+	 * The views pack as inline {@code <script>} blocks: jQuery, DataTables, then the {@code ViewsMixin.*_JS_RESOURCE}
+	 * list in the order {@code ToolkitPackRegistry} registers it (pinned by {@code ToolkitPackRegistry_Test}).
+	 */
+	static String viewsPack() throws IOException {
+		var nodeModules = Path.of(requiredProperty("juneau.jsTests.dir")).resolve("node_modules");
+		var sb = new StringBuilder();
+		sb.append("<script>\n").append(Files.readString(nodeModules.resolve("jquery/dist/jquery.min.js"))).append("\n</script>\n");
+		sb.append("<script>\n").append(Files.readString(nodeModules.resolve("datatables.net/js/dataTables.min.js"))).append("\n</script>\n");
+		for (var r : List.of(ViewsMixin.RENDERS_JS_RESOURCE, ViewsMixin.ICONS_JS_RESOURCE, ViewsMixin.SEARCH_JS_RESOURCE,
+				ViewsMixin.PAGESTATE_JS_RESOURCE, ViewsMixin.URLSTATE_JS_RESOURCE, ViewsMixin.RIBBON_JS_RESOURCE,
+				ViewsMixin.DATATABLES_JS_RESOURCE, ViewsMixin.VIEWS_JS_RESOURCE, ViewsMixin.CONFIG_JS_RESOURCE,
+				ViewsMixin.REGIONS_JS_RESOURCE, ViewsMixin.CONSOLE_OUTPUT_JS_RESOURCE, ViewsMixin.HELPERS_JS_RESOURCE))
+			sb.append("<script>\n").append(resource(r)).append("\n</script>\n");
+		return sb.toString();
+	}
+
 	static String contractPage(String contractJson, String templates) {
 		return contractPage(contractJson, templates, "", "");
 	}

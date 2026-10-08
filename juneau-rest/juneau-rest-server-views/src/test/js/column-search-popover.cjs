@@ -134,6 +134,23 @@ function popHasClass(ctx, cls) { return (popEl(ctx).className || '').indexOf(cls
 	I.closeColumnSearchPopover(ctx);
 })();
 
+// --- Scenario: built-in operators arrive WITHOUT help; the popover falls back to juneau-search.js -------------
+// Column.searchMeta omits help for built-ins, so the popover supplies it.  A custom operator's own help still wins.
+(function helpFallback() {
+	const ctx = makeCtx('client');
+	ctx.viewDef.columns[0].search.operators = [
+		{ name: '$eq', minArgs: 1, maxArgs: 1, combinator: false, custom: false },
+		{ name: '$contains', minArgs: 1, maxArgs: 1, combinator: false, custom: false },
+		{ name: '$near', help: 'Within N units. Example: $near(5)', minArgs: 1, maxArgs: 1, combinator: false, custom: false }
+	];
+	const col = fakeCol(0, headerCell('Status'));
+	I.openColumnSearchPopover(makeIcon(), col, ctx, env.el('table'));
+	const rows = popEl(ctx).querySelectorAll('.juneau-view-col-search-popover-help-op');
+	out.fallbackOps = rows.map(function (r) { const c = r.querySelector('code'); return c ? c.textContent : null; });
+	out.fallbackTexts = rows.map(function (r) { const s = r.querySelector('span'); return s ? s.textContent : null; });
+	I.closeColumnSearchPopover(ctx);
+})();
+
 // --- Scenario: the per-type bare-value help line renders before the operator help list -----------------------
 (function bareHelp() {
 	const ctx = makeCtx('client');
@@ -323,7 +340,7 @@ function wrappedTable() {
 	out.sameAnnouncerReusedAcrossReverts = firstAnnouncer === secondAnnouncer;
 })();
 
-// --- Scenario (WORK-J0612): a client-filtered column whose DataTables API has search.fixed routes every write
+// --- Scenario: a client-filtered column whose DataTables API has search.fixed routes every write
 // through the per-table store + one "juneau-dsl" predicate; native col.search() never sees the expression ----------
 (function dslStore() {
 	const ctx = makeCtx('client');

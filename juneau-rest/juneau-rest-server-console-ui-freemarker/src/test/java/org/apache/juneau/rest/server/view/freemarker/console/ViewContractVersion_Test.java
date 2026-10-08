@@ -22,6 +22,8 @@ import org.apache.juneau.*;
 import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.http.Path;
 import org.apache.juneau.marshall.collections.*;
+import org.apache.juneau.marshall.json5.*;
+import org.apache.juneau.marshall.parser.*;
 import org.apache.juneau.rest.mock.classic.*;
 import org.apache.juneau.rest.server.*;
 import org.apache.juneau.rest.server.servlet.*;
@@ -31,7 +33,7 @@ import org.apache.juneau.rest.server.views.*;
 import org.junit.jupiter.api.*;
 
 /**
- * {@code view.contractVersion} auto-injection (WORK-J0560): omitted &rarr; injected, matching &rarr; silent, mismatched
+ * {@code view.contractVersion} auto-injection: omitted &rarr; injected, matching &rarr; silent, mismatched
  * &rarr; WARNING naming the template and both versions, plus a loud failure in dev mode and a static validator finding.
  *
  * @since 10.0.0
@@ -43,7 +45,7 @@ class ViewContractVersion_Test extends TestBase {
 
 	private static final String RUNTIME = ViewsMixin.CONTRACT_VERSION;
 
-	/** Captures WARNING-and-above records emitted by {@link CardEnvelope}. */
+	/** Captures WARNING-and-above records emitted by {@link DatatablesCardType}. */
 	private static final class Capture extends Handler {
 		final List<String> messages = new ArrayList<>();
 		@Override public void publish(LogRecord r) { messages.add(r.getLevel() + ": " + r.getMessage()); }
@@ -52,7 +54,7 @@ class ViewContractVersion_Test extends TestBase {
 	}
 
 	private static List<String> warningsFrom(Runnable r) {
-		var log = Logger.getLogger(CardEnvelope.class.getName());
+		var log = Logger.getLogger(DatatablesCardType.class.getName());
 		var cap = new Capture();
 		log.addHandler(cap);
 		try {
@@ -63,33 +65,41 @@ class ViewContractVersion_Test extends TestBase {
 		return cap.messages;
 	}
 
+	private static JsonMap parse(String json5) {
+		try {
+			return Json5Parser.DEFAULT.read(json5, JsonMap.class);
+		} catch (ParseException e) {
+			throw new IllegalArgumentException(e);
+		}
+	}
+
 	private static JsonMap catalog(String versionClause) {
-		return CardEnvelope.parse("{contractVersion:'1', layout:'wide', view:{" + versionClause + "id:'t', dataUrl:'/d', columns:[]}}");
+		return parse("{contractVersion:'1', layout:'wide', view:{" + versionClause + "id:'t', dataUrl:'/d', columns:[]}}");
 	}
 
 	@Test void a01_omitted_isInjected() {
 		var slot = catalog("");
-		var warnings = warningsFrom(() -> CardEnvelope.liftTable("t", slot, "p.ftlh", true));
+		var warnings = warningsFrom(() -> DatatablesCardType.reconcileViewVersion("t", slot, "p.ftlh", true));
 		assertEquals(RUNTIME, slot.getMap("view").getString("contractVersion"));
 		assertTrue(warnings.isEmpty(), warnings::toString);
 	}
 
 	@Test void a02_omittedSlotVersion_isAlsoDefaulted() {
-		var slot = CardEnvelope.parse("{view:{id:'t', dataUrl:'/d', columns:[]}}");
-		CardEnvelope.liftTable("t", slot, "p.ftlh", false);
+		var slot = parse("{view:{id:'t', dataUrl:'/d', columns:[]}}");
+		DatatablesCardType.reconcileViewVersion("t", slot, "p.ftlh", false);
 		assertBean(slot, "contractVersion,view{contractVersion}", "1,{" + RUNTIME + "}");
 	}
 
 	@Test void a03_matching_noWarning() {
 		var slot = catalog("contractVersion:'" + RUNTIME + "',");
-		var warnings = warningsFrom(() -> CardEnvelope.liftTable("t", slot, "p.ftlh", true));
+		var warnings = warningsFrom(() -> DatatablesCardType.reconcileViewVersion("t", slot, "p.ftlh", true));
 		assertTrue(warnings.isEmpty(), warnings::toString);
 		assertEquals(RUNTIME, slot.getMap("view").getString("contractVersion"));
 	}
 
 	@Test void a04_mismatched_warnsNamingTemplateAndBothVersions_notDev() {
 		var slot = catalog("contractVersion:'0',");
-		var warnings = warningsFrom(() -> CardEnvelope.liftTable("t", slot, "p.ftlh", false));
+		var warnings = warningsFrom(() -> DatatablesCardType.reconcileViewVersion("t", slot, "p.ftlh", false));
 		assertEquals(1, warnings.size(), warnings::toString);
 		assertTrue(warnings.get(0).startsWith("WARNING: "), warnings::toString);
 		assertContainsAll(warnings.get(0), "'p.ftlh'", "card 't'", "is '0'", "is '" + RUNTIME + "'");
@@ -98,7 +108,7 @@ class ViewContractVersion_Test extends TestBase {
 
 	@Test void a05_mismatched_failsLoudlyInDevMode() {
 		var slot = catalog("contractVersion:'0',");
-		var ex = assertThrows(IllegalArgumentException.class, () -> CardEnvelope.liftTable("t", slot, "p.ftlh", true));
+		var ex = assertThrows(IllegalArgumentException.class, () -> DatatablesCardType.reconcileViewVersion("t", slot, "p.ftlh", true));
 		assertContainsAll(ex.getMessage(), "'p.ftlh'", "is '0'", "is '" + RUNTIME + "'");
 	}
 
@@ -143,7 +153,8 @@ class ViewContractVersion_Test extends TestBase {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	private static List<ConsoleTemplateValidator.Finding> lint(String source) {
-		return ConsoleTemplateValidator.create().validateSource("t.ftlh", source);
+		// Only the version rule is under test; the fixtures' pre-built view objects also trip the unrelated inline-slot-meta rule.
+		return ConsoleTemplateValidator.create().validateSource("t.ftlh", source).stream().filter(x -> "view-contract-version".equals(x.rule())).toList();
 	}
 
 	@Test void c01_validator_flagsStalePin() {

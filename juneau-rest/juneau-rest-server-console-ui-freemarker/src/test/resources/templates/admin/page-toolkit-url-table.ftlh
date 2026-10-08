@@ -14,5 +14,5 @@
   See the License for the specific language governing permissions and
   limitations under the License.
 --><@page toolkit="views">
-<@card type="datatables" id="rel">/rest/rel/table</@card>
+<@card type="datatables" id="rel" src="/rest/rel/table"></@card>
 </@page>

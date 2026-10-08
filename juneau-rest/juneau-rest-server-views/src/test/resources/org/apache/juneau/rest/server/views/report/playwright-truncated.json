@@ -1,0 +1,5 @@
+{"suites":[
+{"title":"tests/a.spec.ts","file":"tests/a.spec.ts","specs":[],"suites":[
+ {"title":"Login","file":"tests/a.spec.ts","specs":[
+  {"title":"works","file":"tests/a.spec.ts","tests":[{"projectName":"","status":"expected","results":[{"status":"passed","duration":40}]}]},
+  {"title":"breaks","file":"tests/a.spec.ts","tests":[{"projectName":"chromium","status":"unexpected","results":[{"statu

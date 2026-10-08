@@ -1,0 +1,10 @@
+{"contractVersion":"1","title":"T","nav":[],"activeNav":[],"cards":[
+  {"id":"releases","type":"datatables","table":{
+    "dataUrl":"/rest/releases/data",
+    "columns":[{"key":"name","label":"Name"},{"key":"status","label":"Status"}],
+    "selection":{"rowIdField":"id","selectAll":true,"scope":"persistent"},
+    "bulk":{"actions":[{"id":"close","endpoint":"/rest/releases/close","mode":"perRow"}]},
+    "rowActions":[{"id":"open","endpoint":"/rest/releases/open"}],
+    "detail":{"endpoint":"/rest/releases/detail"}
+  }}
+]}

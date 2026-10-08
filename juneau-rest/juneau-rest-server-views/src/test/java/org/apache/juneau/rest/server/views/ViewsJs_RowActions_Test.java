@@ -36,7 +36,7 @@ import org.junit.jupiter.api.*;
 
 /**
  * Always-on source-shape coverage for the {@code juneau-views.js} row-action + fail-closed CSRF plumbing, plus
- * (WORK-J0509) the {@code RowAction.endpoint} {@code {property}} substitution.  Source-shape always runs;
+ * the {@code RowAction.endpoint} {@code {property}} substitution.  Source-shape always runs;
  * the substitution's behavioral proof runs via a Node harness when {@code node} is on {@code PATH} (no
  * {@code -Pjs-tests}/browser required - {@code buildActionRequest} is pure).  Mirrors
  * {@code ViewsMixin_Serving_Test}'s served-script substring style: proves the load-bearing pieces of the
@@ -173,14 +173,14 @@ class ViewsJs_RowActions_Test extends TestBase {
 	}
 
 	// -----------------------------------------------------------------------------------------------------------
-	// WORK-J0509: RowAction.endpoint `{property}` substitution, mirroring Column.href's `linked`-renderer
+	// RowAction.endpoint `{property}` substitution, mirroring Column.href's `linked`-renderer
 	// mechanism exactly (same interpolateHref helper, same token grammar, same escaping, same no-value behavior).
 	// -----------------------------------------------------------------------------------------------------------
 
 	@Test void a13_buildActionRequestSubstitutesEndpointViaTheSameHelperColumnHrefUses() throws Exception {
 		var body = viewsJs();
 		var fn = functionBody(body, "function buildActionRequest(");
-		// The 5th param, and the substitution call hoisted into a local (WORK-J0521, so the resolved-URL guards
+		// The 5th param, and the substitution call hoisted into a local (so the resolved-URL guards
 		// can see it) - `url: url`, not `url: action.endpoint` and not the inline substitution call anymore.
 		assertTrue(fn.contains("buildActionRequest(action, token, headerName, extra, rowData)"), fn);
 		assertTrue(fn.contains("substituteRowActionEndpoint(action.endpoint, rowData)"), fn);
@@ -216,7 +216,7 @@ class ViewsJs_RowActions_Test extends TestBase {
 	}
 
 	// -----------------------------------------------------------------------------------------------------------
-	// WORK-J0521: write-path URL-safety hardening - four fail-closed guards appended to buildActionRequest
+	// write-path URL-safety hardening - four fail-closed guards appended to buildActionRequest
 	// (no-endpoint, empty-substitution, unresolved-endpoint, unsafe-endpoint), a shared hasDotDotSegment
 	// predicate adopted by both the read path (isSafeDetailUrl) and this write path, and a shared
 	// `{property}` token-grammar literal that MUST stay in sync with juneau-renders.js's interpolateHref.
@@ -387,7 +387,7 @@ class ViewsJs_RowActions_Test extends TestBase {
 
 	@Test void b01_idTemplateResolvesAgainstTheCurrentRow_exactlyLikeColumnHref() {
 		// The whole marker is captured (not a bare url string) because this SAME call, re-run by the harness a
-		// second time with juneau-renders.js absent, becomes a WORK-J0521/S5 refusal instead (see b09).
+		// second time with juneau-renders.js absent, becomes a refusal instead (see b09).
 		assertEquals("servlet:/incidents/a1/ack", ((Map<?,?>) report().get("idTemplate_resolved")).get("url"));
 	}
 
@@ -399,7 +399,7 @@ class ViewsJs_RowActions_Test extends TestBase {
 	}
 
 	@Test void b03_noIdOrNullIdRowRefusesTheSubmission_WORK_J0521_B1b() {
-		// WORK-J0521 (B1b): this REPLACES the previous empty-substitution SUCCESS pin.  Column.href's
+		// this REPLACES the previous empty-substitution SUCCESS pin.  Column.href's
 		// interpolateHref still substitutes a missing/null/absent-rowData `{id}` to "" - that part is unchanged
 		// and correct for RENDERING - but firing a WRITE against the resulting malformed "/x//y" is not a safe
 		// default, so the runtime now refuses the submission instead: no `url` key at all on the marker, the
@@ -446,7 +446,7 @@ class ViewsJs_RowActions_Test extends TestBase {
 
 	@Test void b09_gracefullyDegradesButRefusesATemplatedEndpoint_whenRendersJsIsNotLoaded_WORK_J0521_S5() {
 		// If a caller ships juneau-views.js without its juneau-renders.js peer, substitution is unavailable -
-		// the SAME degradation DETECTION as before (hasInterpolateHref stays false) - but WORK-J0521/S5 FLIPS
+		// the SAME degradation DETECTION as before (hasInterpolateHref stays false) - but S5 FLIPS
 		// what happens to a TEMPLATED endpoint: it now REFUSES (reason "unresolved-endpoint", no `url`) instead
 		// of firing the literal-token URL `servlet:/incidents/{id}/ack`, which is a URL the action's author
 		// demonstrably did not write.  The valuable, UNCHANGED half is the real point of this test: a
@@ -458,7 +458,7 @@ class ViewsJs_RowActions_Test extends TestBase {
 	}
 
 	// -----------------------------------------------------------------------------------------------------------
-	// WORK-J0521 behavioral coverage: B1a (`..` path-walk), B1c (blank endpoint), S3 (row-less inheritance),
+	// B1a (`..` path-walk), B1c (blank endpoint), S3 (row-less inheritance),
 	// S5 (residual token, above), plus Terra's query-context should-fix and two false-positive boundary checks.
 	// -----------------------------------------------------------------------------------------------------------
 

@@ -16,7 +16,7 @@
  */
 
 /*
- * row-action-endpoint.cjs - always-on Node harness for the WORK-J0509 RowAction.endpoint `{property}`
+ * row-action-endpoint.cjs - always-on Node harness for the RowAction.endpoint `{property}`
  * substitution: buildActionRequest(action, token, headerName, extra, rowData) and its helper
  * substituteRowActionEndpoint(endpoint, rowData), both pure/DOM-fetch-free.
  *
@@ -78,7 +78,7 @@ const multiAction = { id: 'ack', endpoint: '/x/{id}/status/{status}', method: 'P
 
 // Case 1: a `{id}` template resolves against the current row - same token grammar as Column.href.  The whole
 // marker is captured (not `.url`) because this SAME call, re-run by the harness a second time with
-// juneau-renders.js absent, becomes a WORK-J0521/S5 refusal (`unresolved-endpoint`) rather than a fired URL.
+// juneau-renders.js absent, becomes a refusal (`unresolved-endpoint`) rather than a fired URL.
 out.idTemplate_resolved = I.buildActionRequest(ackAction, TOKEN, null, null, { id: 'a1' });
 
 // Case 2: backward compatibility - a literal endpoint with NO `{...}` token is preserved byte-identical,
@@ -87,7 +87,7 @@ out.literal_withRowData = I.buildActionRequest(literalAction, TOKEN, null, null,
 out.literal_noRowData = I.buildActionRequest(literalAction, TOKEN, null, null).url;
 out.literal_preFeatureCallSignature = I.buildActionRequest(literalAction, TOKEN, null).url;   // pre-J0509 4-arg call
 
-// Case 3 (WORK-J0521, B1b flip): a missing/null/absent-rowData row value for a `{property}` token now REFUSES
+// Case 3: a missing/null/absent-rowData row value for a `{property}` token now REFUSES
 // the write (empty-substitution would otherwise collapse the URL to a malformed "/x//y") rather than firing the
 // substituted-to-empty-string URL - so the whole marker is captured, not `.url` (a refusal carries no `url`).
 out.noId_missingKey = I.buildActionRequest(ackAction, TOKEN, null, null, {});
@@ -117,7 +117,7 @@ out.helper_direct = I.substituteRowActionEndpoint('/x/{id}', { id: 'a1' });
 out.helper_noToken = I.substituteRowActionEndpoint('/x/ack', { id: 'a1' });
 
 // -----------------------------------------------------------------------------------------------------------
-// WORK-J0521: write-path URL-safety hardening for RowAction.endpoint substitution - B1 (`..` path-walk +
+// write-path URL-safety hardening for RowAction.endpoint substitution - B1 (`..` path-walk +
 // empty-substitution refusal), S3 (row-less inheritance, closed for free), S5 (residual-token refusal).
 // -----------------------------------------------------------------------------------------------------------
 

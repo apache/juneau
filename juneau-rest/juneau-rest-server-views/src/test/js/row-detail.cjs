@@ -367,7 +367,7 @@ if (out.hasPaintActionMessageIntoDetail) {
 	out.paint_text = paintSlot.textContent;
 	out.paint_xssNotInterpreted = paintSlot.textContent === paintMsg;
 
-	// LD-1 (work item WORK-J0474): a field-hosted bar paints into its OWN field's slot, not the section's first field.
+	// LD-1: a field-hosted bar paints into its OWN field's slot, not the section's first field.
 	// Two fields in the section, the SECOND one hosting the bar, so "first field happens to be the bar's own
 	// field" cannot make this pass by accident -- painting the first field's slot instead of the second's would
 	// be exactly the pre-fix defect this case exists to catch.
@@ -473,7 +473,7 @@ out.href_js = I.isSafeMarkdownHref('javascript:alert(1)');
 out.href_https = I.isSafeMarkdownHref('https://x');
 out.href_data = I.isSafeMarkdownHref('data:text/html,x');
 
-// WORK-J0516: protocol-relative hrefs -- literal and backslash/tab/CR/LF/triple-slash/leading-whitespace
+// protocol-relative hrefs -- literal and backslash/tab/CR/LF/triple-slash/leading-whitespace
 // obfuscated -- resolve to a THIRD-PARTY origin under the WHATWG URL parser, not the same-site relative path a
 // bare single leading "/" is.  All of these must be rejected.  '\u005C\u005C' below is two literal backslash
 // characters (the classic "\\host" bypass, equivalent to "//host").
@@ -691,9 +691,9 @@ out.shSrc_mixedCaseJs = I.isSafeImageSrc('JaVaScRiPt:alert(1)');
 out.shSrc_empty = I.isSafeImageSrc('');
 out.shSrc_null = I.isSafeImageSrc(null);
 
-// WORK-J0516: same protocol-relative variant list as isSafeMarkdownHref above (literal "//" is already rejected
+// same protocol-relative variant list as isSafeMarkdownHref above (literal "//" is already rejected
 // by shSrc_protoRel above -- that predates this item -- but the backslash/tab/CR/LF-obfuscated variants are not,
-// per the WORK-J0515 adversarial review that widened this item to isSafeImageSrc too).
+// per the adversarial review that widened this item to isSafeImageSrc too).
 out.shSrc_backslashProtoRel = I.isSafeImageSrc('\u005C\u005Cevil.example');
 out.shSrc_tabProtoRel = I.isSafeImageSrc('/\t/evil.example');
 out.shSrc_lfProtoRel = I.isSafeImageSrc('/\n/evil.example');

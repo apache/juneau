@@ -1,0 +1,121 @@
+[INFO] Scanning for projects...
+[INFO] ------------------------------------------------------------------------
+[INFO] Reactor Build Order:
+[INFO] 
+[INFO] Demo Parent                                                        [pom]
+[INFO] Demo Module A                                                      [jar]
+[INFO] Demo Module B                                                      [jar]
+[INFO] Demo Module C                                                      [jar]
+[INFO] 
+[INFO] Using the MultiThreadedBuilder implementation with a thread count of 2
+[INFO] 
+[INFO] --------------------------< demo:demo-parent >--------------------------
+[INFO] Building Demo Parent 1.0                                           [1/4]
+[INFO]   from pom.xml
+[INFO] --------------------------------[ pom ]---------------------------------
+[INFO] 
+[INFO] 
+[INFO] -----------------------------< demo:mod-a >-----------------------------
+[INFO] -----------------------------< demo:mod-b >-----------------------------
+[INFO] Building Demo Module A 1.0                                         [2/4]
+[INFO] Building Demo Module B 1.0                                         [3/4]
+[INFO]   from mod-a/pom.xml
+[INFO]   from mod-b/pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] 
+[INFO] --- resources:3.3.1:resources (default-resources) @ mod-a ---
+[INFO] --- resources:3.3.1:resources (default-resources) @ mod-b ---
+[INFO] skip non existing resourceDirectory /work/demo/mod-a/src/main/resources
+[INFO] skip non existing resourceDirectory /work/demo/mod-b/src/main/resources
+[INFO] 
+[INFO] 
+[INFO] --- compiler:3.14.0:compile (default-compile) @ mod-b ---
+[INFO] --- compiler:3.14.0:compile (default-compile) @ mod-a ---
+[INFO] Nothing to compile - all classes are up to date.
+[INFO] Nothing to compile - all classes are up to date.
+[INFO] 
+[INFO] 
+[INFO] --- resources:3.3.1:testResources (default-testResources) @ mod-b ---
+[INFO] --- resources:3.3.1:testResources (default-testResources) @ mod-a ---
+[INFO] skip non existing resourceDirectory /work/demo/mod-b/src/test/resources
+[INFO] skip non existing resourceDirectory /work/demo/mod-a/src/test/resources
+[INFO] 
+[INFO] 
+[INFO] --- compiler:3.14.0:testCompile (default-testCompile) @ mod-b ---
+[INFO] --- compiler:3.14.0:testCompile (default-testCompile) @ mod-a ---
+[INFO] Nothing to compile - all classes are up to date.
+[INFO] Nothing to compile - all classes are up to date.
+[INFO] 
+[INFO] --- surefire:3.5.4:test (default-test) @ mod-b ---
+[INFO] 
+[INFO] --- surefire:3.5.4:test (default-test) @ mod-a ---
+[INFO] Using auto detected provider org.apache.maven.surefire.junitplatform.JUnitPlatformProvider
+[INFO] Using auto detected provider org.apache.maven.surefire.junitplatform.JUnitPlatformProvider
+[INFO] 
+[INFO] -------------------------------------------------------
+[INFO]  T E S T S
+[INFO] -------------------------------------------------------
+[INFO] 
+[INFO] -------------------------------------------------------
+[INFO]  T E S T S
+[INFO] -------------------------------------------------------
+[INFO] Running x.CalcTest
+[INFO] Running x.CalcTest
+[INFO] Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.015 s -- in x.CalcTest
+[WARNING] Tests run: 3, Failures: 0, Errors: 0, Skipped: 1, Time elapsed: 0.016 s -- in x.CalcTest
+[INFO] 
+[INFO] Results:
+[INFO] 
+[INFO] Tests run: 2, Failures: 0, Errors: 0, Skipped: 0
+[INFO] 
+[INFO] 
+[INFO] -----------------------------< demo:mod-c >-----------------------------
+[INFO] Building Demo Module C 1.0                                         [4/4]
+[INFO]   from mod-c/pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- resources:3.3.1:resources (default-resources) @ mod-c ---
+[INFO] skip non existing resourceDirectory /work/demo/mod-c/src/main/resources
+[INFO] 
+[INFO] --- compiler:3.14.0:compile (default-compile) @ mod-c ---
+[INFO] Nothing to compile - all classes are up to date.
+[INFO] 
+[INFO] --- resources:3.3.1:testResources (default-testResources) @ mod-c ---
+[INFO] skip non existing resourceDirectory /work/demo/mod-c/src/test/resources
+[INFO] 
+[INFO] --- compiler:3.14.0:testCompile (default-testCompile) @ mod-c ---
+[INFO] Nothing to compile - all classes are up to date.
+[INFO] 
+[INFO] --- surefire:3.5.4:test (default-test) @ mod-c ---
+[INFO] Using auto detected provider org.apache.maven.surefire.junitplatform.JUnitPlatformProvider
+[INFO] 
+[INFO] Results:
+[INFO] 
+[WARNING] Tests run: 3, Failures: 0, Errors: 0, Skipped: 1
+[INFO] 
+[INFO] 
+[INFO] -------------------------------------------------------
+[INFO]  T E S T S
+[INFO] -------------------------------------------------------
+[INFO] Running x.CalcTest
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.013 s -- in x.CalcTest
+[INFO] 
+[INFO] Results:
+[INFO] 
+[INFO] Tests run: 1, Failures: 0, Errors: 0, Skipped: 0
+[INFO] 
+[INFO] ------------------------------------------------------------------------
+[INFO] Reactor Summary for Demo Parent 1.0:
+[INFO] 
+[INFO] Demo Parent ........................................ SUCCESS [  0.000 s]
+[INFO] Demo Module A ...................................... SUCCESS [  0.542 s]
+[INFO] Demo Module B ...................................... SUCCESS [  0.553 s]
+[INFO] Demo Module C ...................................... SUCCESS [  0.274 s]
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  0.852 s (Wall Clock)
+[INFO] Finished at: 2026-10-07T17:38:15-04:00
+[INFO] ------------------------------------------------------------------------

@@ -74,7 +74,7 @@ class RowDetailsExpander_Wiring_Test extends TestBase {
 		var body = cWithMixin.get(ViewsMixin.VIEWS_JS_PATH).run().assertStatus(200).getContent().asString();
 		var fnBody = functionBody(body, "function isSafeDetailUrl(");
 		assertTrue(fnBody.contains("://"), fnBody);
-		// WORK-J0521: the `..` predicate was extracted into the shared hasDotDotSegment (also used by the
+		// the `..` predicate was extracted into the shared hasDotDotSegment (also used by the
 		// row-action write-path guard), so isSafeDetailUrl no longer carries the regex literal itself - it
 		// delegates.  The `..`-rejection property still holds; it is asserted on the shared predicate's own body.
 		assertTrue(fnBody.contains("hasDotDotSegment("), fnBody);

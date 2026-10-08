@@ -133,6 +133,20 @@
 		isBuiltin: function (name) {
 			return name != null && Object.hasOwn(BUILTINS, String(name).toLowerCase());
 		},
+		/**
+		 * Returns the help text of a built-in operator, or null when the name is not a built-in.  This file is the
+		 * only source of built-in help text; the server sends help only for custom operators.
+		 *
+		 * @param {string} name operator name including the leading "$".
+		 * @returns {?string}
+		 * @example
+		 *   JuneauViews.search.SearchOperators.help("$eq");    // "Exact, case-sensitive match. Example: $eq(OPEN)"
+		 *   JuneauViews.search.SearchOperators.help("$near");  // null (custom operators carry their own help)
+		 */
+		help: function (name) {
+			const builtin = this.get(name);
+			return builtin ? builtin.help : null;
+		},
 		/** Built-in operators offered for `type` (design section 6), combinators included, in canonical order. */
 		forType: function (type) {
 			const out = [];
@@ -1220,7 +1234,7 @@
 	}
 
 	// -----------------------------------------------------------------------------------------------------------------
-	// Client-side custom-operator registry + compile(): the client-mode grid's row predicate (WORK-J0612).
+	// Client-side custom-operator registry + compile(): the client-mode grid's row predicate.
 	// -----------------------------------------------------------------------------------------------------------------
 
 	// Mirrors QuerySettings.MAX_REGEX_LENGTH: a longer $regex pattern is REGEX_TOO_LONG, exactly as the server rejects it.
@@ -1301,7 +1315,7 @@
 
 	/**
 	 * Validates one column expression with the server's rules and compiles it into a reusable row predicate - the
-	 * client-filtered grid's single entry point (WORK-J0612).  Parsing, strict validation (`resolveStrict`: syntax,
+	 * client-filtered grid's single entry point.  Parsing, strict validation (`resolveStrict`: syntax,
 	 * unknown operator, arity, OPERATOR_TYPE, BAD_VALUE, plus the server's regex checks) and `$regex` compilation
 	 * all happen ONCE here; `test(cell, nowMs)` then evaluates the cached tree per row with no re-parse.
 	 *

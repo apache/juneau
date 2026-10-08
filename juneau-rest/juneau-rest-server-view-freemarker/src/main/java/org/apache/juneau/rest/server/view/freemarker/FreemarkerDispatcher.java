@@ -221,6 +221,11 @@ public class FreemarkerDispatcher implements RawTemplateDispatcher {
 	 * {@code null}/missing.
 	 *
 	 * <p>
+	 * Template exceptions are not logged by FreeMarker ({@code LogTemplateExceptions} is {@code false}):
+	 * every caller rethrows them as an {@code InternalServerError} carrying the cause, so logging them
+	 * as well would only duplicate the stack trace.
+	 *
+	 * <p>
 	 * Subclasses may override to plug in custom loaders / encodings / output formats without
 	 * registering a separate {@code @Bean Configuration}.
 	 *
@@ -230,6 +235,7 @@ public class FreemarkerDispatcher implements RawTemplateDispatcher {
 		var cfg = new Configuration(Configuration.VERSION_2_3_34);
 		cfg.setClassLoaderForTemplateLoading(FreemarkerDispatcher.class.getClassLoader(), toResourceRoot(basePath));
 		cfg.setDefaultEncoding("UTF-8");
+		cfg.setLogTemplateExceptions(false);
 		cfg.setOutputFormat(HTMLOutputFormat.INSTANCE);
 		cfg.setTemplateUpdateDelayMilliseconds(cacheTemplates ? Long.MAX_VALUE : 0L);
 		cfg.setObjectWrapper(objectWrapper != null ? objectWrapper : buildDefaultObjectWrapper());

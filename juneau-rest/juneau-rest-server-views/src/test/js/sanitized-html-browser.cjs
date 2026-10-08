@@ -31,7 +31,7 @@
  * SANITIZED_HTML value is copied through the allowlist (no script/handler executes), while benign markup
  * (a <b> and a <table>) survives as real elements.
  *
- * WORK-J0517 extends this file (beyond the WORK-J0515 XSS/benign smoke pair above) with four more
+ * This file extends the XSS/benign smoke pair above with four more
  * real-browser-parser behaviors a regex shim cannot prove:
  *   - HTML entity decoding (decoded text must stay text, never re-parsed into an element).
  *   - <table> foster-parenting (misplaced non-table-structure content is relocated by the HTML5 tree
@@ -85,7 +85,7 @@ const PROBE = async function () {
 	out.okTextHasMarkup = slot.textContent.indexOf('<b>') >= 0;
 
 	// -------------------------------------------------------------------------------------------------
-	// WORK-J0517: entity decoding - "&lt;script&gt;" in text content must decode to LITERAL text
+	// entity decoding - "&lt;script&gt;" in text content must decode to LITERAL text
 	// ("<script>alert(1)</script>" as characters), never be re-parsed into an actual element.  The
 	// copier cannot "re-parse" this even in principle (it copies the already-decoded text-node value via
 	// createTextNode), but the regex shim's naive substring view could plausibly get this wrong, so this
@@ -98,7 +98,7 @@ const PROBE = async function () {
 	out.entityTextIsLiteral = slot.textContent.indexOf('<script>alert(1)</script>') >= 0;
 
 	// -------------------------------------------------------------------------------------------------
-	// WORK-J0517: <table> foster-parenting.  A non-table-structure element opened directly inside <table>
+	// <table> foster-parenting.  A non-table-structure element opened directly inside <table>
 	// (before any <tr>) is relocated ("foster-parented") by the HTML5 tree builder to become a PRECEDING
 	// SIBLING of the table, not a descendant - this happens during parsing, before the copier ever sees
 	// the tree.  First capture the real parser's own ground-truth shape (mirroring the module's own
@@ -124,7 +124,7 @@ const PROBE = async function () {
 	out.fosterCopySpanSurvived = slot.textContent.indexOf('after') >= 0;
 
 	// -------------------------------------------------------------------------------------------------
-	// WORK-J0517: <template> - its content lives in an INERT DocumentFragment (`.content`), never in the
+	// <template> - its content lives in an INERT DocumentFragment (`.content`), never in the
 	// element's own `.childNodes` - a real-parser property the regex shim's substring view cannot model.
 	// TEMPLATE is a SANITIZED_HTML_DROP_TAGS entry, so the copier must drop the tag AND its content
 	// wholesale (never execute the nested <script>, never leak the nested <b> text) while a sibling
@@ -144,7 +144,7 @@ const PROBE = async function () {
 	out.templateSiblingSurvived = slot.textContent.indexOf('aftertpl') >= 0;
 
 	// -------------------------------------------------------------------------------------------------
-	// WORK-J0517: <noscript> - a DOMParser-created document has no browsing context, so scripting is
+	// <noscript> - a DOMParser-created document has no browsing context, so scripting is
 	// DISABLED, and per the HTML5 spec that means <noscript> content is parsed as REAL child elements
 	// (not raw text the way a scripting-ENABLED page would treat it) - the opposite of the naive
 	// assumption. NOSCRIPT is also a SANITIZED_HTML_DROP_TAGS entry, so regardless of that real-element
@@ -163,7 +163,7 @@ const PROBE = async function () {
 	out.noscriptSiblingSurvived = slot.textContent.indexOf('afterns') >= 0;
 
 	// -------------------------------------------------------------------------------------------------
-	// WORK-J0517: namespace / foreign content.  <svg> switches the HTML5 tree builder into the
+	// namespace / foreign content.  <svg> switches the HTML5 tree builder into the
 	// foreign-content algorithm, producing REAL SVG-namespace nodes (including an SVG-namespace <script>
 	// and <a>, both distinct nodes from their HTML-namespace counterparts even though `tagName` collides
 	// case-insensitively).  SVG is a SANITIZED_HTML_DROP_TAGS entry so the whole foreign subtree - script,

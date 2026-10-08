@@ -21,6 +21,7 @@ import org.apache.juneau.petstore.service.*;
 import org.apache.juneau.rest.server.*;
 import org.apache.juneau.rest.server.datatables.*;
 import org.apache.juneau.rest.server.servlet.*;
+import org.apache.juneau.rest.server.staticfile.*;
 import org.apache.juneau.rest.server.view.freemarker.*;
 import org.apache.juneau.rest.server.view.freemarker.console.*;
 import org.apache.juneau.rest.server.views.*;
@@ -46,7 +47,7 @@ import org.apache.juneau.rest.server.views.*;
  * 	}
  * </p>
  */
-@Rest(mixins={FreemarkerMixin.class, ViewsMixin.class, DataTablesMixin.class}, responseProcessors=FreemarkerViewRenderer.class)
+@Rest(mixins={FreemarkerMixin.class, ViewsMixin.class, DataTablesMixin.class, WebJarsMixin.class}, responseProcessors=FreemarkerViewRenderer.class)
 public abstract class PetstoreConsolePage extends BasicRestServlet {
 
 	private static final long serialVersionUID = 1L;

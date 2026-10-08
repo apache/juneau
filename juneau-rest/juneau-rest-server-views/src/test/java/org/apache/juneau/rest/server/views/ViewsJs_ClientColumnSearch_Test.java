@@ -32,7 +32,7 @@ import org.apache.juneau.marshall.marshaller.*;
 import org.junit.jupiter.api.*;
 
 /**
- * Behavioral coverage for client-mode column-search DSL evaluation (WORK-J0612): on a table DataTables filters
+ * Behavioral coverage for client-mode column-search DSL evaluation: on a table DataTables filters
  * itself, a column carrying {@code search} metadata is filtered by {@code JuneauViews.search.compile(...)} through
  * one {@code column().search.fixed("juneau-dsl", fn)} predicate, with its expression kept in a per-table store.
  *

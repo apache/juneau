@@ -20,9 +20,6 @@
 <@token name="--jc-tab-bar-bg" alias="var(--jc-card-bg)"/>
 </@theme>
 </#if>
-<#-- The views runtime binds datatables cards to jQuery and DataTables, which Juneau does not bundle; this app serves them from its WebJars. -->
-<@scripts phase="after-toolkit"><script src="/console/vendor/jquery/3.7.1/jquery.min.js"></script>
-<script src="/console/vendor/datatables.net/js/dataTables.min.js"></script></@scripts>
 <@navigation>
 <@node id="store" label="Store" href="/console/store"/>
 <@node id="pets" label="Pets" href="/console/pets">

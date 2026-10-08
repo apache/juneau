@@ -26,7 +26,7 @@ import org.apache.juneau.marshall.marshaller.*;
 import org.junit.jupiter.api.*;
 
 /**
- * Tests the {@code ActionResult.ok()} readability aliases (WORK-J0563): they must be indistinguishable from the
+ * Tests the {@code ActionResult.ok()} readability aliases: they must be indistinguishable from the
  * {@code success(...)} factory they alias.
  */
 class ActionResult_Ok_Test extends TestBase {

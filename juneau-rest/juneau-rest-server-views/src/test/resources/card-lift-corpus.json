@@ -1,0 +1,220 @@
+{
+  "cases": [
+    {
+      "name": "minimal-no-selection",
+      "catalog": {
+        "dataUrl": "/rest/releases/data",
+        "columns": [
+          {"key": "version", "label": "Version"},
+          {"key": "status", "label": "Status"}
+        ]
+      },
+      "expected": {
+        "contractVersion": "1",
+        "layout": "wide",
+        "view": {
+          "contractVersion": "5",
+          "id": "minimal-no-selection",
+          "dataUrl": "/rest/releases/data",
+          "columns": [
+            {"data": "version", "title": "Version"},
+            {"data": "status", "title": "Status"}
+          ]
+        }
+      }
+    },
+    {
+      "name": "selection-defaults-filled-in",
+      "catalog": {
+        "dataUrl": "/rest/releases/data",
+        "columns": [{"key": "version", "label": "Version"}],
+        "selection": {"rowIdField": "version"}
+      },
+      "expected": {
+        "contractVersion": "1",
+        "layout": "wide",
+        "selection": {"rowIdField": "version", "selectAll": true, "scope": "persistent"},
+        "view": {
+          "contractVersion": "5",
+          "id": "selection-defaults-filled-in",
+          "dataUrl": "/rest/releases/data",
+          "columns": [{"data": "version", "title": "Version"}]
+        }
+      }
+    },
+    {
+      "name": "selection-explicit-page-scope-and-selectableWhen",
+      "catalog": {
+        "dataUrl": "/rest/releases/data",
+        "columns": [{"key": "version", "label": "Version"}],
+        "selection": {
+          "rowIdField": "version",
+          "selectAll": false,
+          "scope": "page",
+          "labelField": "version",
+          "selectableWhen": [{"field": "status", "op": "ne", "value": "locked"}]
+        }
+      },
+      "expected": {
+        "contractVersion": "1",
+        "layout": "wide",
+        "selection": {
+          "rowIdField": "version",
+          "selectAll": false,
+          "scope": "page",
+          "labelField": "version",
+          "selectableWhen": [{"field": "status", "op": "ne", "value": "locked"}]
+        },
+        "view": {
+          "contractVersion": "5",
+          "id": "selection-explicit-page-scope-and-selectableWhen",
+          "dataUrl": "/rest/releases/data",
+          "columns": [{"data": "version", "title": "Version"}]
+        }
+      }
+    },
+    {
+      "name": "bulk-and-defaultOrder-and-layout",
+      "catalog": {
+        "dataUrl": "/rest/releases/data",
+        "layout": "narrow",
+        "columns": [{"key": "version", "label": "Version"}, {"key": "status", "label": "Status"}],
+        "defaultOrder": [{"key": "version", "dir": "desc"}],
+        "selection": {"rowIdField": "version"},
+        "bulk": {"actions": [{"id": "abort", "label": "Abort", "mode": "aggregate", "endpoint": "/rest/releases/abort"}]}
+      },
+      "expected": {
+        "contractVersion": "1",
+        "layout": "narrow",
+        "selection": {"rowIdField": "version", "selectAll": true, "scope": "persistent"},
+        "bulk": {"contractVersion": "2", "actions": [{"id": "abort", "label": "Abort", "bulkMode": "aggregate", "endpoint": "/rest/releases/abort"}]},
+        "view": {
+          "contractVersion": "5",
+          "id": "bulk-and-defaultOrder-and-layout",
+          "dataUrl": "/rest/releases/data",
+          "columns": [{"data": "version", "title": "Version"}, {"data": "status", "title": "Status"}],
+          "defaultOrder": [{"data": "version", "dir": "desc"}]
+        }
+      }
+    },
+    {
+      "name": "prebuilt-slot-meta-passes-through-unchanged",
+      "catalog": {
+        "contractVersion": "1",
+        "layout": "wide",
+        "view": {"contractVersion": "5", "id": "prebuilt-slot-meta-passes-through-unchanged", "dataUrl": "/rest/x", "columns": [{"data": "a", "title": "A"}]}
+      },
+      "expected": {
+        "contractVersion": "1",
+        "layout": "wide",
+        "view": {"contractVersion": "5", "id": "prebuilt-slot-meta-passes-through-unchanged", "dataUrl": "/rest/x", "columns": [{"data": "a", "title": "A"}]}
+      }
+    },
+    {
+      "name": "escape-hatch-view-object-without-slot-version",
+      "catalog": {"view": {"id": "escape-hatch-view-object-without-slot-version", "columns": []}},
+      "expected": {"view": {"id": "escape-hatch-view-object-without-slot-version", "columns": []}}
+    },
+    {
+      "name": "view-passthrough-keys",
+      "catalog": {
+        "dataUrl": "/rest/releases/data",
+        "columns": [{"key": "version", "label": "Version"}],
+        "rowType": "release", "dataMode": "server", "ribbon": {"field": "status"}, "pollIntervalMs": 5000,
+        "pausePollingWhileEditing": true, "columnConfig": {"chooser": true}, "cleanAddress": true, "primary": false,
+        "copyLink": false, "rowActions": [{"id": "open", "label": "Open"}],
+        "rowClassRules": [{"field": "status", "equals": "failed", "className": "is-failed"}]
+      },
+      "expected": {
+        "contractVersion": "1",
+        "layout": "wide",
+        "view": {
+          "contractVersion": "5",
+          "id": "view-passthrough-keys",
+          "dataUrl": "/rest/releases/data",
+          "columns": [{"data": "version", "title": "Version"}],
+          "rowType": "release", "dataMode": "server", "ribbon": {"field": "status"}, "pollIntervalMs": 5000,
+          "pausePollingWhileEditing": true, "columnConfig": {"chooser": true}, "cleanAddress": true, "primary": false,
+          "copyLink": false, "rowActions": [{"id": "open", "label": "Open"}],
+          "rowClassRules": [{"field": "status", "equals": "failed", "className": "is-failed"}]
+        }
+      }
+    },
+    {
+      "name": "slot-passthrough-detail-and-quickStats-stamped",
+      "catalog": {
+        "dataUrl": "/rest/releases/data",
+        "columns": [{"key": "version", "label": "Version"}],
+        "detail": {"endpoint": "/rest/releases/{version}"},
+        "quickStats": {"items": [{"id": "open", "label": "Open"}]}
+      },
+      "expected": {
+        "contractVersion": "1",
+        "layout": "wide",
+        "detail": {"contractVersion": "1", "endpoint": "/rest/releases/{version}"},
+        "quickStats": {"contractVersion": "1", "items": [{"id": "open", "label": "Open"}]},
+        "view": {
+          "contractVersion": "5",
+          "id": "slot-passthrough-detail-and-quickStats-stamped",
+          "dataUrl": "/rest/releases/data",
+          "columns": [{"data": "version", "title": "Version"}]
+        }
+      }
+    },
+    {
+      "name": "inline-rows-no-dataUrl",
+      "catalog": {
+        "rows": [{"version": "1.0"}, {"version": "1.1"}],
+        "columns": [{"key": "version", "label": "Version"}]
+      },
+      "expected": {
+        "contractVersion": "1",
+        "layout": "wide",
+        "rows": [{"version": "1.0"}, {"version": "1.1"}],
+        "view": {
+          "contractVersion": "5",
+          "id": "inline-rows-no-dataUrl",
+          "columns": [{"data": "version", "title": "Version"}]
+        }
+      }
+    },
+    {
+      "name": "search-block-passes-through-untouched",
+      "catalog": {
+        "dataUrl": "/rest/x",
+        "columns": [{"key": "a", "label": "A", "search": {"type": "text", "operators": [
+          {"name": "$eq", "minArgs": 1, "maxArgs": 1, "combinator": false, "custom": false},
+          {"name": "$mine", "help": "Mine only", "minArgs": 1, "maxArgs": 1, "combinator": false, "custom": true}
+        ]}}]
+      },
+      "expected": {
+        "contractVersion": "1",
+        "layout": "wide",
+        "view": {
+          "contractVersion": "5",
+          "id": "search-block-passes-through-untouched",
+          "dataUrl": "/rest/x",
+          "columns": [{"data": "a", "title": "A", "search": {"type": "text", "operators": [
+            {"name": "$eq", "minArgs": 1, "maxArgs": 1, "combinator": false, "custom": false},
+            {"name": "$mine", "help": "Mine only", "minArgs": 1, "maxArgs": 1, "combinator": false, "custom": true}
+          ]}}]
+        }
+      }
+    },
+    {
+      "name": "shape-error-missing-columns",
+      "catalog": {"dataUrl": "/rest/x"},
+      "expectedError": "columns"
+    },
+    {
+      "name": "shape-error-dataUrl-and-rows",
+      "catalog": {"dataUrl": "/rest/x", "rows": [], "columns": [{"key": "a"}]},
+      "expectedError": "exactly one of 'dataUrl' or 'rows'"
+    },
+    {
+      "name": "shape-error-neither-dataUrl-nor-rows",
+      "catalog": {"columns": [{"key": "a"}]},
+      "expectedError": "exactly one of 'dataUrl' or 'rows'"
+    }
+  ]
+}

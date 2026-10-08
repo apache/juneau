@@ -30,7 +30,7 @@ import org.junit.jupiter.api.*;
 import com.sun.net.httpserver.*;
 
 /**
- * Verifies that {@link TransportRequest#getTimeout()} is honored per request by {@code JettyHttpTransport} (WORK-J0596).
+ * Verifies that {@link TransportRequest#getTimeout()} is honored per request by {@code JettyHttpTransport}.
  *
  * <p>
  * Uses an embedded server whose {@code /slow} endpoint delays 2s before responding.

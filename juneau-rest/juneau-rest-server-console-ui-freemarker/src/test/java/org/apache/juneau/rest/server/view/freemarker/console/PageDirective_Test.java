@@ -197,33 +197,38 @@ class PageDirective_Test extends TestBase {
 		}
 	}
 
-	@Test void a05_toolkitViews_emitsViewsPack_noPageCards_noGlueWithoutServerTable() throws Exception {
+	@Test void a05_toolkitViews_noCards_noVendor() throws Exception {
 		var body = toolkitBody("/toolkit");
 		// The "views" pack is emitted (marked so a consumer chrome can find it); page-cards is no longer part of it.
 		assertTrue(body.contains("data-toolkit-js"), () -> body);
 		assertTrue(body.contains("juneau-views.js"), () -> body);
 		assertFalse(body.contains("juneau-page-cards.js"), () -> body);
 		assertTrue(body.indexOf("juneau-views.js") < body.indexOf("juneau-helpers.js"), () -> body);
-		// No server-mode table card: the DataTables glue is NOT requested (a host without DataTablesMixin would 404),
-		// and the DataTables library and jQuery stay caller-provided.
+		// No table card: no glue, no DataTables, no jQuery.
 		assertFalse(body.toLowerCase().contains("datatables"), () -> body);
-		assertFalse(body.contains("jquery"), () -> body);
+		assertFalse(body.contains("/webjars/jquery/"), () -> body);
 		assertFalse(body.contains("slds-"), () -> body);
 	}
 
-	@Test void a05b_toolkitViews_serverModeCard_emitsGlueBeforeViewsJs() throws Exception {
-		for (var path : java.util.List.of("/toolkit-server", "/toolkit-url")) {
-			var body = toolkitBody(path);
-			assertTrue(body.contains("juneau-datatables.js"), () -> path + ": " + body);
-			assertTrue(body.indexOf("juneau-datatables.js") < body.indexOf("juneau-views.js"), () -> path + ": " + body);
-			assertEquals(body.indexOf("juneau-datatables.js"), body.lastIndexOf("juneau-datatables.js"), () -> path + ": emitted once: " + body);
-		}
+	@Test void a05b_toolkitViews_serverModeCard_emitsVendorBeforeViewsJs() throws Exception {
+		for (var path : java.util.List.of("/toolkit-server", "/toolkit-url"))
+			assertTableVendor(path, toolkitBody(path));
 	}
 
-	@Test void a05c_toolkitViews_clientModeCard_noGlue() throws Exception {
-		var body = toolkitBody("/toolkit-client");
-		assertTrue(body.contains("juneau-views.js"), () -> body);
-		assertFalse(body.contains("juneau-datatables.js"), () -> body);
+	@Test void a05c_toolkitViews_clientModeCard_emitsVendorBeforeViewsJs() throws Exception {
+		assertTableVendor("/toolkit-client", toolkitBody("/toolkit-client"));
+	}
+
+	// Every datatables card, client or server mode, pulls jQuery, DataTables and the glue, once each, before the runtime.
+	private static void assertTableVendor(String path, String body) {
+		var jq = body.indexOf("/jquery.min.js");
+		var dt = body.indexOf("/js/dataTables.min.js");
+		var glue = body.indexOf("juneau-datatables.js");
+		var views = body.indexOf("juneau-views.js");
+		assertTrue(jq >= 0 && jq < dt && dt < glue && glue < views, () -> path + ": " + body);
+		assertTrue(body.contains("/css/dataTables.dataTables.min.css"), () -> path + ": " + body);
+		for (var s : java.util.List.of("/jquery.min.js", "/js/dataTables.min.js", "juneau-datatables.js"))
+			assertEquals(body.indexOf(s), body.lastIndexOf(s), () -> path + ": " + s + " emitted once: " + body);
 	}
 
 	@Test void a04_unknownAttr_isRejected() throws Exception {

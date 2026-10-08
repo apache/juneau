@@ -17,7 +17,7 @@
 
 /*
  * ribbon-icon-fallback.cjs - proves an icon name found in none of the sprite layers draws NOTHING on a ribbon
- * button (WORK-J0557 U11): no raw-label text fallback, while the label stays the accessible name (aria-label) and
+ * button: no raw-label text fallback, while the label stays the accessible name (aria-label) and
  * the custom tooltip (data-jc-tip).  Also runs a control with a resolving registry so the test cannot pass merely
  * because the button never draws.
  *

@@ -407,7 +407,7 @@ function envelope(NS, extra) {
 	}
 
 	// =================================================================================================================
-	// WORK-J0606: rows-only table.  No dataUrl: no fetch, no opts.ajax, whole row objects handed over as opts.data,
+	// rows-only table.  No dataUrl: no fetch, no opts.ajax, whole row objects handed over as opts.data,
 	// plain-text columns forced through an escaping renderer; selection.rowIdField is kept on the table.
 	// =================================================================================================================
 	{
@@ -450,7 +450,7 @@ function envelope(NS, extra) {
 	}
 
 	// =================================================================================================================
-	// WORK-J0615: detail.endpoint / savedViewsBase must be same-origin; cross-origin warns and is not stamped.
+	// detail.endpoint must be same-origin; cross-origin warns and is not stamped.
 	// =================================================================================================================
 	{
 		const { env, NS, R, rec } = H.load(rendersJsPath, viewsJsPath, regionsJsPath);
@@ -459,7 +459,6 @@ function envelope(NS, extra) {
 			const el = slot(env, id);
 			return Promise.resolve(R.mount({ [id]: { table: envelope(NS, { viewId: 'v' + id, ...extra }) } })).then(function () {
 				return {
-					saved: el.querySelector('[data-juneau-slot-table]')?.dataset.juneauSavedViews,
 					detail: el.querySelector('template[data-juneau-row-detail]')?.dataset.juneauDetailUrl
 				};
 			});
@@ -467,21 +466,18 @@ function envelope(NS, extra) {
 		function det(endpoint) {
 			return { contractVersion: NS.ROW_DETAIL_CONTRACT_VERSION, endpoint: endpoint };
 		}
-		const rel = await mountOne('s1', { savedViewsBase: 'saved', detail: det('detail/{id}') });
-		const abs = await mountOne('s2', { savedViewsBase: 'https://app.example.com/ctx/saved',
+		const rel = await mountOne('s1', { detail: det('detail/{id}') });
+		const abs = await mountOne('s2', {
 			detail: det('https://app.example.com/ctx/d/{id}') });
-		out.t18_relativeKept = rel.saved === 'saved' && rel.detail === 'detail/{id}';
-		out.t18_sameOriginAbsKept = abs.saved === 'https://app.example.com/ctx/saved'
-			&& abs.detail === 'https://app.example.com/ctx/d/{id}';
+		out.t18_relativeKept = rel.detail === 'detail/{id}';
+		out.t18_sameOriginAbsKept = abs.detail === 'https://app.example.com/ctx/d/{id}';
 		out.t18_noWarnYet = rec.warnsMatching('not same-origin').length === 0;
-		const x1 = await mountOne('s3', { savedViewsBase: 'https://evil.example.org/saved',
+		const x1 = await mountOne('s3', {
 			detail: det('https://evil.example.org/d/{id}') });
-		const x2 = await mountOne('s4', { savedViewsBase: '//evil.example.org/saved', detail: det('//evil.example.org/d') });
-		const x3 = await mountOne('s5', { savedViewsBase: 'http://app.example.com/saved' });
-		out.t18_crossOriginNotStamped = x1.saved === undefined && x1.detail === undefined
-			&& x2.saved === undefined && x2.detail === undefined && x3.saved === undefined;
-		out.t18_warned = rec.warnsMatching('savedViewsBase').length === 3
-			&& rec.warnsMatching('detail.endpoint').length === 2;
+		const x2 = await mountOne('s4', { detail: det('//evil.example.org/d') });
+		const x3 = await mountOne('s5', { detail: det('http://app.example.com/d/{id}') });
+		out.t18_crossOriginNotStamped = x1.detail === undefined && x2.detail === undefined && x3.detail === undefined;
+		out.t18_warned = rec.warnsMatching('detail.endpoint').length === 3;
 	}
 
 	// =================================================================================================================

@@ -126,7 +126,7 @@ class SanitizedHtml_BrowserTest extends TestBase {
 	}
 
 	// ---------------------------------------------------------------------------------------------------
-	// WORK-J0517: entity decoding - a regex shim cannot decode "&lt;script&gt;" the way a real HTML
+	// entity decoding - a regex shim cannot decode "&lt;script&gt;" the way a real HTML
 	// parser does, so this proves the decoded text stays literal text and is never re-parsed as markup.
 	// ---------------------------------------------------------------------------------------------------
 
@@ -139,7 +139,7 @@ class SanitizedHtml_BrowserTest extends TestBase {
 	}
 
 	// ---------------------------------------------------------------------------------------------------
-	// WORK-J0517: <table> foster-parenting - the HTML5 tree builder relocates a misplaced non-table-
+	// <table> foster-parenting - the HTML5 tree builder relocates a misplaced non-table-
 	// structure child to a PRECEDING SIBLING of the table before the copier ever walks the tree. a05
 	// proves that is real-parser ground truth (not a harness assumption); a06 proves the copier's output
 	// mirrors that already-fostered shape rather than assuming a naive nested read.
@@ -161,7 +161,7 @@ class SanitizedHtml_BrowserTest extends TestBase {
 	}
 
 	// ---------------------------------------------------------------------------------------------------
-	// WORK-J0517: <template> - content lives in an inert DocumentFragment, never the element's own
+	// <template> - content lives in an inert DocumentFragment, never the element's own
 	// childNodes (real-parser property a regex shim's substring view cannot model). a07 proves that
 	// ground truth; a08 proves the copier drops the (DROP_TAGS) tag and its content wholesale.
 	// ---------------------------------------------------------------------------------------------------
@@ -183,7 +183,7 @@ class SanitizedHtml_BrowserTest extends TestBase {
 	}
 
 	// ---------------------------------------------------------------------------------------------------
-	// WORK-J0517: <noscript> - a DOMParser document has no browsing context, so scripting is DISABLED,
+	// <noscript> - a DOMParser document has no browsing context, so scripting is DISABLED,
 	// which per spec means <noscript> content parses as REAL child elements (opposite of a scripting-
 	// enabled page's raw-text treatment). a09 proves that ground truth; a10 proves the copier drops the
 	// (DROP_TAGS) tag and its now-real-element children wholesale regardless.
@@ -204,7 +204,7 @@ class SanitizedHtml_BrowserTest extends TestBase {
 	}
 
 	// ---------------------------------------------------------------------------------------------------
-	// WORK-J0517: namespace / foreign content - <svg> switches the HTML5 tree builder into the
+	// namespace / foreign content - <svg> switches the HTML5 tree builder into the
 	// foreign-content algorithm, producing REAL SVG-namespace nodes. a11 proves that ground truth; a12
 	// proves the (DROP_TAGS) tag-name-only allowlist match drops the whole foreign subtree wholesale,
 	// never smuggling a same-named allowed HTML tag (e.g. an SVG-namespace <a>) through by namespace-blind

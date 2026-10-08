@@ -100,6 +100,7 @@ function makeConsole() {
 /**
  * Loads juneau-renders.js, juneau-views.js and juneau-regions.js into one fresh environment.
  *
+ * `opts.decorate` / `opts.extraJsPaths`: see the comment at the call site; used by console-output-env.cjs.
  * `opts.noAbortController` withholds the platform baseline for the fail-loud test.
  * `opts.helpersJsPath` ALSO loads juneau-helpers.js into the same sandbox (afterward, same load order the browser
  * uses) - only the declarative-default harness needs this, since the reserved default paints via `ctx.helpers[...]`.
@@ -132,8 +133,12 @@ function load(rendersJsPath, viewsJsPath, regionsJsPath, opts) {
 		sandbox.DOMException = DOMException;
 	}
 
+	// `opts.decorate(env, sandbox, clock)` runs BEFORE any script is evaluated, so a decorated environment is what
+	// the runtimes see at load time.  `opts.extraJsPaths` load after juneau-helpers.js, in order.
+	if (typeof opts.decorate === 'function') opts.decorate(env, sandbox, clock);
 	const files = [rendersJsPath, viewsJsPath, regionsJsPath];
 	if (opts.helpersJsPath) files.push(opts.helpersJsPath);
+	for (const extra of opts.extraJsPaths || []) files.push(extra);
 	for (const file of files) {
 		// NOSONAR javascript:S1523 -- loading the production juneau-renders.js/juneau-views.js/juneau-regions.js
 		// (and, when supplied, juneau-helpers.js) sources into a VM sandbox is this harness's
@@ -143,7 +148,7 @@ function load(rendersJsPath, viewsJsPath, regionsJsPath, opts) {
 	}
 
 	const NS = env.window.JuneauViews;
-	return { env: env, NS: NS, R: NS?.regions, H: NS?.helpers, I: NS?.init, rec: rec, clock: clock };
+	return { env: env, NS: NS, R: NS?.regions, H: NS?.helpers, I: NS?.init, rec: rec, clock: clock, sandbox: sandbox };
 }
 
 /**
@@ -249,6 +254,8 @@ function syncThenable() {
 }
 
 module.exports = {
+	makeClock: makeClock,
+	makeConsole: makeConsole,
 	load: load,
 	mkRegion: mkRegion,
 	activatePanel: activatePanel,

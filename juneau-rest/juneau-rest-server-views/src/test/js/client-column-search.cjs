@@ -16,7 +16,7 @@
  */
 
 /*
- * client-column-search.cjs - always-on Node harness for client-mode column-search DSL evaluation (WORK-J0612).
+ * client-column-search.cjs - always-on Node harness for client-mode column-search DSL evaluation.
  * Loads juneau-search.js into the SAME sandbox as views, then drives the per-table expression store
  * (getColumnExpr/setColumnExpr), the popover, the shareable-URL collect/restore pair and teardown against fake
  * DataTables columns that implement `search()` AND `search.fixed(name, fn)`.  A fake filter pass runs every

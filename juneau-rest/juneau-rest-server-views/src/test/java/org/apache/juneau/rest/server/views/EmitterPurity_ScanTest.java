@@ -26,7 +26,7 @@ import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
 
 /**
- * WORK-J0522d, design test <b>33</b>: the <b>emitter-purity scan</b> &mdash; every {@code rawText(...)} call site in
+ * Design test <b>33</b>: the <b>emitter-purity scan</b> &mdash; every {@code rawText(...)} call site in
  * the <b>main</b> Java of the views and widgets trees hands the verbatim writer a JSON-sidecar payload (or provably
  * nothing), and the content-bearing sites are a closed, individually-named set that <b>cannot grow</b>.
  *
@@ -110,7 +110,7 @@ class EmitterPurity_ScanTest extends TestBase {
 		var args = sites().stream().map(RawContentSinkScanner.RawTextSite::arg).toList();
 		assertTrue(args.contains("json"),
 			() -> "expected the RegionTable sidecar payload shape to still exist: " + args);
-		// ViewTable bulkJson sidecar retired with the MOVE Java delete (WORK-J0550a).
+		// ViewTable bulkJson sidecar retired with the MOVE Java delete.
 	}
 
 	@Test void a04_scanFindsTheKnownContentSinks() throws Exception {

@@ -122,25 +122,16 @@ class SearchOperatorSet_Test extends TestBase {
 	}
 
 	@Test
-	void d03_eq_helpTextIsExact() {
-		assertEquals("Exact, case-sensitive match. Example: $eq(OPEN)", SearchOperatorSet.standard().get("$eq").help());
+	void d03_builtinsCarryNoHelpText() {
+		// Built-in help text lives in juneau-search.js; Java only carries help for custom operators.
+		for (var op : SearchOperatorSet.standard().operators())
+			assertNull(op.help(), "built-in '" + op.name() + "' still carries help text");
 	}
 
 	@Test
-	void d04_eqic_helpText() {
-		assertEquals("Case-insensitive match. Example: $eqic(open)", SearchOperatorSet.standard().get("$eqic").help());
-	}
-
-	@Test
-	void d05_in_helpTextMentionsCaseSensitive() {
-		assertEquals("Any of the given values, case-sensitive (1 or more). Example: $in(OPEN,CLOSED)",
-			SearchOperatorSet.standard().get("$in").help());
-	}
-
-	@Test
-	void d06_ne_helpTextMentionsCaseSensitive() {
-		assertEquals("None of the given values, case-sensitive (1 or more). Blank cells are kept. Example: $ne(OPEN,CLOSED)",
-			SearchOperatorSet.standard().get("$ne").help());
+	void d04_customOperatorStillRequiresHelp() {
+		assertThrows(IllegalArgumentException.class, () -> SearchOperator.create("$near", " ").build());
+		assertThrows(IllegalArgumentException.class, () -> SearchOperator.create("$near", "x").help(null).build());
 	}
 
 	//====================================================================================================

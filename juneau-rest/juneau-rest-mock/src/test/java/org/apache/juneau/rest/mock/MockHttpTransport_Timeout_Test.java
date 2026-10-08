@@ -27,7 +27,7 @@ import org.apache.juneau.rest.client.*;
 import org.junit.jupiter.api.*;
 
 /**
- * Verifies that {@link MockHttpTransport} simulates {@link TransportRequest#getTimeout()} (WORK-J0596).
+ * Verifies that {@link MockHttpTransport} simulates {@link TransportRequest#getTimeout()}.
  */
 @SuppressWarnings({
 	"java:S2925", // The handler sleeps to simulate a slow upstream.

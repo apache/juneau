@@ -35,16 +35,16 @@ import org.junit.jupiter.api.condition.*;
  * it, that:
  * <ul>
  * 	<li>per-row selection and select-all toggle a live selection set keyed by the STABLE row id (never a DOM index);
- * 	<li>a poll/sort/page draw silently DROPS any selected id no longer on screen (MED-11's persistence rule);
+ * 	<li>selection is persistent by default (a draw that removes a row keeps its id selected) and pruned per draw only
+ * 		under the {@code page} scope; the select-all header is tri-state and skips {@code selectableWhen}-disabled rows;
  * 	<li>row-selection and bulk-mutation are two INDEPENDENT opt-ins - a selection-only (e.g. export) table never
  * 		carries the bulk marker, even though both are declared via the same {@code hasSelection}/{@code hasBulk}
  * 		DOM-attribute mechanism (HIGH-5);
- * 	<li>a bulk action fires N INDEPENDENT per-row writes - never one aggregate request - each with its OWN
- * 		in-flight marker and its OWN typed {@code ActionResult}, so one target's failure/refusal can never be
- * 		hidden behind an overall "success" (MED-4);
- * 	<li>a selected id whose row is no longer present (went off-screen between the click and execution) is silently
- * 		skipped rather than targeted;
- * 	<li>the bulk toolbar's buttons are live-gated on the selection count, and the independently-versioned bulk
+ * 	<li>a bulk action goes through a mandatory confirm dialog and then runs either as N independent per-row writes
+ * 		(at most four in flight) or, for {@code aggregate} mode, as one POST of {@code {ids, idempotencyKey}} answered
+ * 		by a {@code BulkResult}; either way the run ends in one summary toast, succeeded and not-found ids leave the
+ * 		selection and failed ids stay selected;
+ * 	<li>the bulk toolbar sits in the right cluster, is hidden at a zero count, and the independently-versioned bulk
  * 		sidecar is read/contract-checked correctly at runtime (R2).
  * </ul>
  *
@@ -94,6 +94,7 @@ class RowSelectionBulk_BrowserTest extends TestBase {
 		var harness = Path.of(requiredProperty("juneau.jsTests.harness")).getParent().resolve("row-selection-bulk.cjs");
 
 		var fixture = "<!DOCTYPE html><html><head><meta charset=\"utf-8\"></head><body>\n<script>\n"
+			+ resource(ViewsMixin.RENDERS_JS_RESOURCE) + "\n</script>\n<script>\n"
 			+ resource(ViewsMixin.VIEWS_JS_RESOURCE)
 			+ "\n</script></body></html>";
 		var fixtureFile = Files.createDirectories(dir.resolve("fixtures")).resolve("row-selection-bulk.html");
@@ -144,7 +145,7 @@ class RowSelectionBulk_BrowserTest extends TestBase {
 	@Test void a01_runtimeLoadedAtBulkContractVersion() {
 		assertEquals(Boolean.TRUE, report.get("hasInit"), () -> "juneau-views.js did not populate JuneauViews.init: " + report);
 		assertEquals(BulkMutateDef.CONTRACT_VERSION, report.get("bulkContractVersion"), () -> report.toString());
-		assertEquals("1", BulkMutateDef.CONTRACT_VERSION);
+		assertEquals("2", BulkMutateDef.CONTRACT_VERSION);
 		assertEquals(List.of(), report.get("jsFailures"), () -> "the runtime logged errors: " + report.get("jsFailures"));
 	}
 
@@ -166,92 +167,204 @@ class RowSelectionBulk_BrowserTest extends TestBase {
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
-	// c) The off-screen-id-drop persistence rule (MED-11/Q2) actually prunes on a draw
+	// c) Scope: persistent (default) survives a draw that removes the row; page prunes it
 	//------------------------------------------------------------------------------------------------------------------
 
-	@Test void c01_aDrawDropsAnIdThatLeftTheScreen() {
-		// Row '3' was removed from the DOM (simulating it leaving the current page/sort/poll draw) before the
-		// draw.dt tick fired - the persistence rule must drop it, keeping only '1' and '2'.
-		assertEquals(List.of("1", "2"), report.get("selectedAfterOffScreenDraw"), () -> report.toString());
+	@Test void c01_persistentScope_aDrawRemovingTheRowDoesNotDropIt() {
+		assertEquals(List.of("1", "2", "3"), report.get("persistentSelectedAfterOffScreenDraw"), () -> report.toString());
+	}
+
+	@Test void c02_pageScope_aDrawRemovingTheRowDropsIt() {
+		assertEquals(List.of("1", "2"), report.get("pageScopeSelectedAfterOffScreenDraw"), () -> report.toString());
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
-	// d) Two INDEPENDENT opt-ins (HIGH-5) - verified against the ACTUAL DOM-attribute detection at runtime
+	// d) Tri-state select-all header and selectableWhen-disabled rows
 	//------------------------------------------------------------------------------------------------------------------
 
-	@Test void d01_selectionOnlyTableNeverCarriesTheBulkMarker() {
+	@Test void d01_selectAllCheckbox_startsUnchecked_notIndeterminate() {
+		assertEquals(Boolean.FALSE, report.get("headerCheckedInitially"), () -> report.toString());
+		assertEquals(Boolean.FALSE, report.get("headerIndeterminateInitially"), () -> report.toString());
+	}
+
+	@Test void d02_selectingSomeButNotAllRows_setsIndeterminate() {
+		assertEquals(Boolean.FALSE, report.get("headerCheckedAfterSomeSelected"), () -> report.toString());
+		assertEquals(Boolean.TRUE, report.get("headerIndeterminateAfterSomeSelected"), () -> report.toString());
+	}
+
+	@Test void d03_selectingEverySelectableRow_setsCheckedNotIndeterminate() {
+		assertEquals(Boolean.TRUE, report.get("headerCheckedAfterAllSelected"), () -> report.toString());
+		assertEquals(Boolean.FALSE, report.get("headerIndeterminateAfterAllSelected"), () -> report.toString());
+	}
+
+	@Test void d04_selectAll_skipsDisabledRows() {
+		assertEquals(List.of("1", "2"), report.get("afterSelectAllWithOneDisabledRow"), () -> report.toString());
+	}
+
+	@Test void d05_disabledRow_checkboxCarriesTitleAndAriaDescribedBy() {
+		assertEquals(Boolean.TRUE, report.get("disabledCheckboxHasTitle"), () -> report.toString());
+		assertEquals(Boolean.TRUE, report.get("disabledCheckboxHasAriaDescribedBy"), () -> report.toString());
+	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// e) Two INDEPENDENT opt-ins (HIGH-5) - verified against the ACTUAL DOM-attribute detection at runtime
+	//------------------------------------------------------------------------------------------------------------------
+
+	@Test void e01_selectionOnlyTableNeverCarriesTheBulkMarker() {
 		assertEquals(Boolean.TRUE, report.get("selectOnlyHasSelection"), () -> report.toString());
 		assertEquals(Boolean.FALSE, report.get("selectOnlyHasBulk"),
 			() -> "a selection-only (export) table must never surface a bulk-mutate control: " + report);
 	}
 
-	@Test void d02_bulkTableCarriesBothMarkers() {
+	@Test void e02_bulkTableCarriesBothMarkers() {
 		assertEquals(Boolean.TRUE, report.get("withBulkHasSelection"), () -> report.toString());
 		assertEquals(Boolean.TRUE, report.get("withBulkHasBulk"), () -> report.toString());
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
-	// e) Bulk = N INDEPENDENT per-row writes; per-target typed result; per-row in-flight marker; off-screen skip
+	// f) Toolbar: single-action button vs. dropdown + Go, right cluster, hidden at a zero count
 	//------------------------------------------------------------------------------------------------------------------
 
-	@Test void e01_bulkIssuesExactlyOneRequestPerSelectedOnScreenTarget() {
-		var bulk = sub("bulk");
-		// Four ids were "selected" but only three ('1','2','3') have an on-screen row; '9' must be silently
-		// skipped rather than targeted - never a fourth, aggregate, or missing-target request.
-		assertEquals(3L, ((Number) bulk.get("fetchCount")).longValue(), () -> report.toString());
-		assertEquals(List.of("1", "2", "3"), bulk.get("targetIds"), () -> report.toString());
-		assertEquals(List.of("ack", "ack", "ack"), bulk.get("actionIds"), () -> report.toString());
+	@Test void f01_singleBulkAction_rendersButtonNotDropdown_inRightCluster() {
+		assertEquals(Boolean.TRUE, report.get("singleActionIsButton"), () -> report.toString());
+		assertEquals(Boolean.FALSE, report.get("singleActionHasDropdown"), () -> report.toString());
+		assertEquals(Boolean.TRUE, report.get("toolbarIsInRightCluster"), () -> report.toString());
+		assertTrue(String.valueOf(report.get("singleActionButtonTextWithTwoSelected")).contains("selected (2)"), () -> report.toString());
 	}
 
-	@Test void e02_eachTargetWasMarkedInFlightBeforeItsOwnRequest() {
-		var bulk = sub("bulk");
-		var atFetch = (Map<String,Object>) bulk.get("inflightAtFetchTime");
-		assertEquals(Boolean.TRUE, atFetch.get("1"), () -> report.toString());
-		assertEquals(Boolean.TRUE, atFetch.get("2"), () -> report.toString());
-		assertEquals(Boolean.TRUE, atFetch.get("3"), () -> report.toString());
+	@Test void f02_multipleBulkActions_rendersDropdownAndDisabledGoUntilChosen() {
+		assertEquals(Boolean.TRUE, report.get("multiActionHasDropdown"), () -> report.toString());
+		assertEquals(Boolean.TRUE, report.get("goDisabledBeforeChoice"), () -> report.toString());
+		assertEquals(Boolean.FALSE, report.get("goDisabledAfterChoice"), () -> report.toString());
 	}
 
-	@Test void e03_everyTargetsInFlightMarkerClearedOnItsOwnTerminalOutcome() {
-		// MED-4: per-target marker clearing on every terminal outcome - success, failure, AND refusal.
-		var bulk = sub("bulk");
-		var after = (Map<String,Object>) bulk.get("inflightAfter");
-		assertEquals(Boolean.FALSE, after.get("1"), () -> report.toString());
-		assertEquals(Boolean.FALSE, after.get("2"), () -> report.toString());
-		assertEquals(Boolean.FALSE, after.get("3"), () -> report.toString());
-	}
-
-	@Test void e04_perTargetResultsAreIndependent_noAggregateSuccessMasksAFailure() {
-		// The load-bearing HIGH-5/MED-4 case: target '1' succeeds, '2' fails, '3' is refused - all three render
-		// their OWN outcome; none is hidden behind (or overwritten by) another target's result.
-		var bulk = sub("bulk");
-		var o1 = (Map<String,Object>) bulk.get("outcome1");
-		var o2 = (Map<String,Object>) bulk.get("outcome2");
-		var o3 = (Map<String,Object>) bulk.get("outcome3");
-		assertEquals("success", o1.get("state"), () -> report.toString());
-		assertTrue(String.valueOf(o1.get("text")).contains("Done"), () -> report.toString());
-		assertEquals("failure", o2.get("state"), () -> report.toString());
-		assertTrue(String.valueOf(o2.get("text")).contains("nope"), () -> report.toString());
-		assertEquals("refusal", o3.get("state"), () -> report.toString());
-		assertTrue(String.valueOf(o3.get("text")).contains("write-guard:not-armed"), () -> report.toString());
-	}
-
-	//------------------------------------------------------------------------------------------------------------------
-	// f) The bulk toolbar live-gates its buttons on the selection count
-	//------------------------------------------------------------------------------------------------------------------
-
-	@Test void f01_toolbarButtonsAreDisabledUntilSomethingIsSelected() {
+	@Test void f03_toolbarIsHiddenUntilSomethingIsSelected() {
 		var toolbar = sub("toolbar");
-		assertEquals(Boolean.TRUE, toolbar.get("disabledInitially"), () -> report.toString());
-		assertEquals(Boolean.FALSE, toolbar.get("disabledWithSelection"), () -> report.toString());
+		assertEquals(Boolean.TRUE, toolbar.get("hiddenInitially"), () -> report.toString());
+		assertEquals(Boolean.FALSE, toolbar.get("hiddenWithSelection"), () -> report.toString());
 		assertTrue(String.valueOf(toolbar.get("countTextWithSelection")).contains("2"), () -> report.toString());
-		assertEquals(Boolean.TRUE, toolbar.get("disabledAfterCleared"), () -> report.toString());
+		assertEquals(Boolean.TRUE, toolbar.get("hiddenAfterCleared"), () -> report.toString());
+	}
+
+	@Test void f04_clearSelectionLink_clearsSelection() {
+		assertEquals(List.of(), report.get("afterClearSelectionLinkClicked"), () -> report.toString());
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
-	// g) The independently-versioned bulk sidecar is actually read + contract-checked at runtime (R2)
+	// g) The mandatory confirm dialog gates every bulk submit (built-in fallback: this page defines no
+	//    JuneauViews.dialogs.confirm; the host-dialog path is covered by bulk-selection.cjs)
 	//------------------------------------------------------------------------------------------------------------------
 
-	@Test void g01_bulkSidecarIsReadAndContractChecked() {
+	@Test void g01_clickingTheBulkButton_showsFallbackConfirmModal_beforeAnyFetch() {
+		assertEquals(Boolean.TRUE, report.get("confirmModalShown"), () -> report.toString());
+		assertEquals(0L, ((Number)report.get("fetchCountBeforeConfirm")).longValue(), () -> report.toString());
+	}
+
+	@Test void g02_confirmModalListsSelectedRowsCappedAtTwenty() {
+		var text = String.valueOf(report.get("confirmModalListText"));
+		assertTrue(text.contains("Change 1"), () -> text);
+		assertTrue(text.contains("and 5 more"), () -> text);
+		assertFalse(text.contains("Change 25"), () -> text);
+	}
+
+	@Test void g03_cancellingTheConfirmModal_submitsNothing() {
+		assertEquals(0L, ((Number)report.get("fetchCountAfterCancel")).longValue(), () -> report.toString());
+		assertEquals(Boolean.TRUE, report.get("modalGoneAfterCancel"), () -> report.toString());
+		assertEquals(25L, ((Number)report.get("selectionKeptAfterCancel")).longValue(), () -> report.toString());
+	}
+
+	@Test void g04_actionWithConfirmFalse_skipsTheDialogEntirely() {
+		assertEquals(Boolean.FALSE, report.get("noConfirmActionShowedModal"), () -> report.toString());
+	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// h) PER_ROW (default bulkMode): N independent writes and ONE summary
+	//------------------------------------------------------------------------------------------------------------------
+
+	@Test void h01_perRowMode_issuesExactlyOneRequestPerSelectedTarget() {
+		var bulk = sub("perRowBulk");
+		assertEquals(3L, ((Number)bulk.get("fetchCount")).longValue(), () -> report.toString());
+		assertEquals(List.of("1", "2", "3"), bulk.get("targetIds"), () -> report.toString());
+		assertEquals(List.of("abort", "abort", "abort"), bulk.get("actionIds"), () -> report.toString());
+		assertEquals(List.of("/x/1/abort", "/x/2/abort", "/x/3/abort"), bulk.get("urls"), () -> report.toString());
+	}
+
+	@Test void h02_perRowMode_capsAtFourInFlight() {
+		var bulk = sub("perRowConcurrency");
+		assertEquals(4L, ((Number)bulk.get("maxConcurrentInFlight")).longValue(), () -> report.toString());
+		assertEquals(0L, ((Number)bulk.get("selectionAfter")).longValue(), () -> report.toString());
+	}
+
+	@Test void h03_perRowMode_resultsAreIndependent_oneFailureIsNeverMaskedBySuccess() {
+		// '1' succeeds (200), '2' fails (500), '3' is gone (404): each is counted on its own.
+		var bulk = sub("perRowBulk");
+		assertEquals("Abort: 1 succeeded, 1 not found, 1 failed (ids: 2)", bulk.get("toastText"), () -> report.toString());
+		assertEquals("alert", bulk.get("toastRole"), () -> report.toString());
+	}
+
+	@Test void h04_succeededAndNotFoundLeaveTheSelection_failedStaysSelectedAndChecked() {
+		var bulk = sub("perRowBulk");
+		assertEquals(List.of("2"), bulk.get("selectionAfterApply"), () -> report.toString());
+		assertEquals(List.of("1", "3"), bulk.get("uncheckedIds"), () -> report.toString());
+	}
+
+	@Test void h05_runEndsInOneAnnouncementAndAReload() {
+		var bulk = sub("perRowBulk");
+		assertEquals(bulk.get("toastText"), bulk.get("announceText"), () -> report.toString());
+		assertEquals(Boolean.TRUE, bulk.get("reloadCalled"), () -> report.toString());
+	}
+
+	@Test void h06_cleanRun_isAStatusToastThatAutoDismissesAfterSixSeconds() {
+		var bulk = sub("perRowBulkOk");
+		assertEquals("status", bulk.get("toastRole"), () -> report.toString());
+		assertEquals("Abort: 3 succeeded", bulk.get("toastText"), () -> report.toString());
+		assertEquals(6000L, ((Number)bulk.get("toastAutoDismissMs")).longValue(), () -> report.toString());
+	}
+
+	@Test void h07_onSuccessNone_skipsTheReload() {
+		assertEquals(Boolean.FALSE, sub("perRowBulkOnSuccessNone").get("reloadCalled"), () -> report.toString());
+	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// i) AGGREGATE: one CSRF-protected POST of {ids, idempotencyKey}, answered by a BulkResult
+	//------------------------------------------------------------------------------------------------------------------
+
+	@Test void i01_aggregateMode_issuesExactlyOnePost_withIdsAndIdempotencyKey() {
+		var bulk = sub("aggregateBulk");
+		assertEquals(1L, ((Number)bulk.get("fetchCount")).longValue(), () -> report.toString());
+		assertEquals(List.of("1", "2", "3"), bulk.get("requestBody_ids"), () -> report.toString());
+		assertNotNull(bulk.get("requestBody_idempotencyKey"), () -> report.toString());
+		assertEquals(List.of("idempotencyKey", "ids"), bulk.get("requestBodyKeys"), () -> report.toString());
+		assertEquals(Boolean.TRUE, bulk.get("requestHadCsrfHeader"), () -> report.toString());
+	}
+
+	@Test void i02_aggregateMode_appliesTheReturnedBulkResult() {
+		var bulk = sub("aggregateBulk");
+		assertEquals("Abort: 2 succeeded, 1 not found, 1 failed (ids: 3)", bulk.get("toastText"), () -> report.toString());
+		assertEquals(bulk.get("toastText"), bulk.get("announceText"), () -> report.toString());
+		assertEquals(List.of("3"), bulk.get("selectionAfterApply"), () -> report.toString());
+	}
+
+	@Test void i03_aggregateMode_transportFailure_isAStickyAlertToast_notABanner() {
+		var bulk = sub("aggregateTransportFailure");
+		assertEquals(List.of(), bulk.get("banner"), () -> "a whole-run failure must not show in the page banner: " + bulk);
+		assertEquals("alert", bulk.get("toastRole"), () -> report.toString());
+		assertEquals(Boolean.TRUE, bulk.get("toastIsSticky"), () -> report.toString());
+		assertTrue(String.valueOf(bulk.get("consoleErrorText")).startsWith("bulk action 'abort' on table"), () -> report.toString());
+		assertEquals(List.of("1", "2"), bulk.get("selectionAfter"), () -> report.toString());
+	}
+
+	@Test void i04_aggregateMode_nonBulkResultResponse_isRefusedAndKeepsTheSelection() {
+		var bulk = sub("aggregateBadResponseShape");
+		assertTrue(String.valueOf(bulk.get("consoleErrorText")).contains("response is not a BulkResult"), () -> report.toString());
+		assertEquals(List.of("1", "2"), bulk.get("selectionAfter"), () -> report.toString());
+	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// j) The independently-versioned bulk sidecar is actually read + contract-checked at runtime (R2)
+	//------------------------------------------------------------------------------------------------------------------
+
+	@Test void j01_bulkSidecarIsReadAndContractChecked() {
 		var sidecar = sub("bulkSidecar");
 		assertEquals(BulkMutateDef.CONTRACT_VERSION, sidecar.get("contractVersion"), () -> report.toString());
 		assertEquals(1L, ((Number) sidecar.get("actionCount")).longValue(), () -> report.toString());

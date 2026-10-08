@@ -23,7 +23,7 @@ import org.apache.juneau.commons.*;
 import org.junit.jupiter.api.*;
 
 /**
- * Tests {@link ClassInfo#getDeclaredFieldsInDeclarationOrder()} (WORK-J0585).
+ * Tests {@link ClassInfo#getDeclaredFieldsInDeclarationOrder()}.
  */
 class ClassInfo_DeclarationOrder_Test extends TestBase {
 

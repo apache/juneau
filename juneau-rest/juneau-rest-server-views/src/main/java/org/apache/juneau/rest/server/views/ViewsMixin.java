@@ -41,9 +41,9 @@ import org.apache.juneau.rest.server.widgets.*;
  *
  * <h5 class='section'>What this ships (and what it deliberately does not):</h5>
  * <p>
- * This is an Apache project; the <a class="doclink" href="https://datatables.net">DataTables</a> library and jQuery are
- * <b>not</b> ASF category-A licensed, so <b>they are not bundled here.</b>  Only the thin, first-party, clean-room
- * runtime is served; the DataTables/jQuery/Buttons libraries stay <b>caller-provided</b> (CDN or self-hosted).  The
+ * Juneau's jars don't copy the <a class="doclink" href="https://datatables.net">DataTables</a> library or jQuery.  Only
+ * the thin, first-party runtime is served here; the DataTables, jQuery and Buttons files come from the WebJars that
+ * {@code juneau-rest-server-datatables} declares, served by {@code WebJarsMixin}.  The
  * base {@code juneau-views.css} {@code .tag} chip is dependency-free (neutral, no colors); {@code console-ui}'s
  * {@code chrome.css} themes the same {@code .tag.<domain>.<value>} classes when present, but this module takes
  * <b>no</b> dependency on it.
@@ -109,13 +109,12 @@ public class ViewsMixin {
 
 	/**
 	 * The URL path at which the client initializer is served (relative to the host mount).  A page with any
-	 * server-mode card ({@code dataMode: "server"}) must load {@code juneau-datatables.js}
-	 * ({@link #DATATABLES_JS_PATH}) <b>before</b> this script, so {@code window.JuneauDataTables} is already present
-	 * when {@code buildOptions} wires up that card's ajax (design doc §3.1/D8).  This mixin does not serve
-	 * {@code juneau-datatables.js} itself &mdash; the resource
+	 * datatables card must load {@code juneau-datatables.js} ({@link #DATATABLES_JS_PATH}) <b>before</b> this script,
+	 * so {@code window.JuneauDataTables} is already present when {@code buildOptions} wires up that card's ajax.
+	 * This mixin does not serve {@code juneau-datatables.js} itself &mdash; the resource
 	 * mixes in {@code DataTablesMixin} for that, the same way it already mixes in {@code ViewsMixin} for this
 	 * script; a duplicate {@code @RestGet} for the same path on two mixed-in classes would fail route
-	 * registration.  A missing {@code window.JuneauDataTables} at server-mode init fails loudly (console warning,
+	 * registration.  A missing {@code window.JuneauDataTables} when a server-side table initializes fails loudly (console warning,
 	 * no silent GET fallback) rather than silently misbehaving.  A page with any ribbon options should likewise load
 	 * {@code juneau-ribbon.js} before this script, so {@code window.JuneauViews.ribbon} is present when
 	 * {@code buildOptions} merges that view's active ribbon state into the request; unlike the
@@ -130,17 +129,17 @@ public class ViewsMixin {
 	 * {@link DataTablesMixin#GLUE_PATH}).
 	 *
 	 * <p>
-	 * Named here only so {@link #viewAssetUrl(RestRequest, String)} can build its cache-busted URL for an asset list
-	 * such as the console {@code "views"} toolkit pack.  This mixin does <b>not</b> serve it (see
-	 * {@link #VIEWS_JS_PATH} for why); a host that renders server-mode tables must also mix in {@link DataTablesMixin}.
-	 * The console {@code "views"} pack emits this script only on a page that has a server-mode table card, so a host
-	 * whose pages have no such card does not need {@link DataTablesMixin} (and never requests this path).
+	 * Named here only so {@link #viewAssetUrl(RestRequest, String)} can build its cache-busted URL.  This mixin does
+	 * <b>not</b> serve it (see {@link #VIEWS_JS_PATH} for why); {@link DataTablesMixin} does.  On a console page the
+	 * {@code "datatables-glue"} toolkit pack emits it for every {@code type="datatables"} card, client or server mode,
+	 * after jQuery and DataTables and before {@code juneau-views.js}.  A host with datatables cards composes
+	 * {@link DataTablesMixin} and {@code WebJarsMixin}.
 	 *
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
-	 * 	<ja>@Rest</ja>(mixins={ViewsMixin.<jk>class</jk>, DataTablesMixin.<jk>class</jk>})
+	 * 	<ja>@Rest</ja>(mixins={ViewsMixin.<jk>class</jk>, DataTablesMixin.<jk>class</jk>, WebJarsMixin.<jk>class</jk>})
 	 * 	<jk>public class</jk> MyResource <jk>extends</jk> BasicRestServlet {
-	 * 		<jc>// Load before juneau-views.js:</jc>
+	 * 		<jc>// Emitted by the "datatables-glue" pack before juneau-views.js:</jc>
 	 * 		<jc>//   ViewsMixin.viewAssetUrl(req, ViewsMixin.DATATABLES_JS_PATH)</jc>
 	 * 	}
 	 * </p>
@@ -254,6 +253,34 @@ public class ViewsMixin {
 	 * (a bare pass-through of this asset's exports) is a field of the {@code ctx} {@code juneau-regions.js} freezes.
 	 */
 	public static final String HELPERS_JS_PATH = "/juneau-helpers.js";
+
+	/**
+	 * The URL path at which the opt-in console-output module is served (relative to the host mount).
+	 *
+	 * <h5 class='section'>Load order is a contract, not a preference:</h5>
+	 * <p>
+	 * This {@code <script>} MUST come after {@code juneau-regions.js} (itself after {@code juneau-views.js}) and
+	 * before {@code juneau-helpers.js}.  It reads the URL helpers {@code juneau-views.js} exports and registers its
+	 * populator with {@code juneau-regions.js}; icons are built through {@code JuneauViews.helpers.icon}, which is
+	 * resolved at call time, so loading before {@code juneau-helpers.js} is safe.
+	 *
+	 * @since 10.0.0
+	 */
+	public static final String CONSOLE_OUTPUT_JS_PATH = "/juneau-console-output.js";
+
+	/**
+	 * The URL path at which the opt-in run-view module is served (relative to the host mount).
+	 *
+	 * <h5 class='section'>Load order is a contract, not a preference:</h5>
+	 * <p>
+	 * This {@code <script>} MUST come after {@code juneau-regions.js} (itself after {@code juneau-views.js}) and
+	 * before {@code juneau-helpers.js}.  It registers its populator with {@code juneau-regions.js} at load time;
+	 * icons are built through {@code JuneauViews.helpers.icon}, which is resolved at call time, so loading before
+	 * {@code juneau-helpers.js} is safe.
+	 *
+	 * @since 10.0.0
+	 */
+	public static final String RUN_VIEW_JS_PATH = "/juneau-run-view.js";
 
 	/**
 	 * The URL path at which the opt-in column-chooser runtime is served (relative to the host mount).  A
@@ -404,6 +431,12 @@ public class ViewsMixin {
 
 	/** Classpath location of the shipped region-populate paint library. */
 	static final String HELPERS_JS_RESOURCE = "/org/apache/juneau/views/juneau-helpers.js";
+
+	/** Classpath location of the shipped console-output module. */
+	static final String CONSOLE_OUTPUT_JS_RESOURCE = "/org/apache/juneau/views/juneau-console-output.js";
+
+	/** Classpath location of the shipped run-view module. */
+	static final String RUN_VIEW_JS_RESOURCE = "/org/apache/juneau/views/juneau-run-view.js";
 
 	/** Classpath location of the shipped column-chooser runtime. */
 	static final String CONFIG_JS_RESOURCE = "/org/apache/juneau/views/juneau-config.js";
@@ -654,6 +687,38 @@ public class ViewsMixin {
 	}
 
 	/**
+	 * [GET /juneau-console-output.js] &mdash; serve the opt-in console-output module.
+	 *
+	 * @return The console-output module as a JavaScript {@link HttpResource}.
+	 * @since 10.0.0
+	 */
+	@RestGet(
+		path=CONSOLE_OUTPUT_JS_PATH,
+		summary="Juneau rich-view console-output module",
+		description="First-party, opt-in JavaScript for the console-output region: a live-tailing, append-only log pane.",
+		swagger=@OpSwagger(ignore=true)
+	)
+	public HttpResource getConsoleOutputScript() {
+		return serve(CONSOLE_OUTPUT_JS_RESOURCE, JS_CONTENT_TYPE);
+	}
+
+	/**
+	 * [GET /juneau-run-view.js] &mdash; serve the opt-in run-view module.
+	 *
+	 * @return The run-view module as a JavaScript {@link HttpResource}.
+	 * @since 10.0.0
+	 */
+	@RestGet(
+		path=RUN_VIEW_JS_PATH,
+		summary="Juneau rich-view run-view module",
+		description="First-party, opt-in JavaScript for the run-view region: a live test and build run summary with suites, failures and notes.",
+		swagger=@OpSwagger(ignore=true)
+	)
+	public HttpResource getRunViewScript() {
+		return serve(RUN_VIEW_JS_RESOURCE, JS_CONTENT_TYPE);
+	}
+
+	/**
 	 * [GET /juneau-config.js] &mdash; serve the opt-in column-chooser runtime (column configuration is localStorage-persisted).
 	 *
 	 * @return The column-chooser runtime as a JavaScript {@link HttpResource}.
@@ -690,7 +755,7 @@ public class ViewsMixin {
 	 *
 	 * @param path One of the asset path constants ({@link #VIEWS_JS_PATH}, {@link #RIBBON_JS_PATH},
 	 * 	{@link #RENDERS_JS_PATH}, {@link #VIEWS_CSS_PATH}, {@link #ICONS_JS_PATH}, {@link #SYMBOLS_SVG_PATH},
-	 * 	{@link #SYMBOLS_MATERIAL_SVG_PATH}, {@link #REGIONS_JS_PATH}, {@link #CONFIG_JS_PATH}, {@link #CONFIG_CSS_PATH},
+	 * 	{@link #SYMBOLS_MATERIAL_SVG_PATH}, {@link #REGIONS_JS_PATH}, {@link #HELPERS_JS_PATH}, {@link #CONSOLE_OUTPUT_JS_PATH}, {@link #RUN_VIEW_JS_PATH}, {@link #CONFIG_JS_PATH}, {@link #CONFIG_CSS_PATH},
 	 * 	{@link #CALENDAR_JS_PATH}, {@link #CALENDAR_CSS_PATH}, {@link #DATATABLES_JS_PATH}).
 	 * @return The servlet-relative asset URL with the version+content-hash cache-buster appended.
 	 */
@@ -714,7 +779,7 @@ public class ViewsMixin {
 	 * @param req The current request, supplying the context path/mount to resolve against.
 	 * @param path One of the asset path constants ({@link #VIEWS_JS_PATH}, {@link #RIBBON_JS_PATH},
 	 * 	{@link #RENDERS_JS_PATH}, {@link #VIEWS_CSS_PATH}, {@link #ICONS_JS_PATH}, {@link #SYMBOLS_SVG_PATH},
-	 * 	{@link #SYMBOLS_MATERIAL_SVG_PATH}, {@link #REGIONS_JS_PATH}, {@link #CONFIG_JS_PATH}, {@link #CONFIG_CSS_PATH},
+	 * 	{@link #SYMBOLS_MATERIAL_SVG_PATH}, {@link #REGIONS_JS_PATH}, {@link #HELPERS_JS_PATH}, {@link #CONSOLE_OUTPUT_JS_PATH}, {@link #RUN_VIEW_JS_PATH}, {@link #CONFIG_JS_PATH}, {@link #CONFIG_CSS_PATH},
 	 * 	{@link #CALENDAR_JS_PATH}, {@link #CALENDAR_CSS_PATH}, {@link #DATATABLES_JS_PATH}).
 	 * @return The absolute asset URL with the version+content-hash cache-buster appended.
 	 */
@@ -808,6 +873,8 @@ public class ViewsMixin {
 		if (eq(path, SYMBOLS_MATERIAL_SVG_PATH)) return SYMBOLS_MATERIAL_SVG_RESOURCE;
 		if (eq(path, REGIONS_JS_PATH)) return REGIONS_JS_RESOURCE;
 		if (eq(path, HELPERS_JS_PATH)) return HELPERS_JS_RESOURCE;
+		if (eq(path, CONSOLE_OUTPUT_JS_PATH)) return CONSOLE_OUTPUT_JS_RESOURCE;
+		if (eq(path, RUN_VIEW_JS_PATH)) return RUN_VIEW_JS_RESOURCE;
 		if (eq(path, CONFIG_JS_PATH)) return CONFIG_JS_RESOURCE;
 		if (eq(path, CONFIG_CSS_PATH)) return CONFIG_CSS_RESOURCE;
 		if (eq(path, CALENDAR_JS_PATH)) return CALENDAR_JS_RESOURCE;

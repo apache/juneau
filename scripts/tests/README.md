@@ -44,7 +44,7 @@ Do **not** `pip install --user pytest` / `pip install pytest` on a Homebrew-mana
   disabled.
 
 - `test_js_tests_flags.py` -- the `--js-tests` / `--no-js-tests` support in `scripts/test.py` and
-  `scripts/push.py` (WORK-J0608): flag parsing (incl. conflict rejection and push.py forwarding the
+  `scripts/push.py`: flag parsing (incl. conflict rejection and push.py forwarding the
   flags to test.py), auto-detect of changed `.js`/`.css`/`.ftl` files under `src/` (driven by a fake
   changed-file list, no git), and the Node/npm-missing path (skip with notice when auto-enabled, fail
   when explicit). Never runs mvn or push.py's real flow.

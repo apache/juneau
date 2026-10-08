@@ -20,8 +20,8 @@
  * juneau-console.js needs that no other harness exercises: a settable window.location (prefix-fallback matching),
  * window.CustomEvent + document.dispatchEvent (the "juneau:console-mounted" handshake), document.importNode +
  * document.createDocumentFragment (<template> cloning, including a BARE html card host), a listener-count
- * tracker for the keydown-listener-leak regression (WORK-J0559 Task 5 addendum), and a real `<template>.innerHTML`
- * setter (entity decode + nested-element parse) so renderFooter's trusted-HTML footer.text (WORK-J0559 P24
+ * tracker for the keydown-listener-leak regression, and a real `<template>.innerHTML`
+ * setter (entity decode + nested-element parse) so renderFooter's trusted-HTML footer.text (P24
  * revised) actually parses under this harness instead of just storing a string.
  *
  * This file never modifies views-dom-shim.cjs - it only wraps the env that shim returns.
@@ -215,7 +215,7 @@ function makeConsoleEnv(opts) {
 	// Listener bookkeeping kept ALONGSIDE (not instead of) the base shim's own dispatch registry: forwarding to the
 	// original addEventListener keeps env.dispatchDocument()/doc.dispatchEvent() working, while this harness-only
 	// map lets a test ask "how many listeners of type X are registered" - the console-ui keydown-listener-leak
-	// regression (WORK-J0559 Task 5 addendum): mounting on two different roots of the SAME document must wire the
+	// regression: mounting on two different roots of the SAME document must wire the
 	// Escape-to-close-user-menu keydown listener exactly once, not once per mount.
 	const listenerCounts = {};
 	const origAddEventListener = doc.addEventListener.bind(doc);

@@ -152,7 +152,7 @@ final class ChromeScaleScanner {
 	 *
 	 * <p>
 	 * The table/cell type-context pin (formerly recorded here as a duplicate of {@code --jc-chrome-font-size-1})
-	 * moved to {@code 0.8333rem} - IRS body-type parity, {@code WORK-J0518} DF-4 - which does not equal any
+	 * moved to {@code 0.8333rem} - IRS body-type parity - which does not equal any
 	 * declared step, so it no longer triggers {@link #findDuplicatedStep} at all and needs no exception here.
 	 * The pin itself is still a deliberate literal in the stylesheet (still not a token, for the same {@code em}-
 	 * context reason that first recorded it); it simply no longer needs an ENTRY IN THIS TABLE, because that

@@ -27,7 +27,7 @@ import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
 
 /**
- * WORK-J0522d, design test <b>35</b> (R11, §13): <b>the populator name is never interpolated into a selector or into
+ * Design test <b>35</b> (R11, §13): <b>the populator name is never interpolated into a selector or into
  * markup</b>.
  *
  * <p>

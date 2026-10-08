@@ -25,7 +25,7 @@ import org.apache.juneau.marshall.collections.*;
 import org.junit.jupiter.api.*;
 
 /**
- * Tests native TOML arrays and arrays-of-tables for non-scalar lists (WORK-J0594).
+ * Tests native TOML arrays and arrays-of-tables for non-scalar lists.
  */
 class TomlArrays_Test {
 

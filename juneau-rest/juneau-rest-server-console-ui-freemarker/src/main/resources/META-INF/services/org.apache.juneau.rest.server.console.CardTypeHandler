@@ -1,0 +1,2 @@
+org.apache.juneau.rest.server.view.freemarker.console.ConsoleOutputCardType
+org.apache.juneau.rest.server.view.freemarker.console.DatatablesCardType

@@ -271,7 +271,7 @@ out.overlaidSort = overlaid.sort;
 out.overlaidOptions = overlaid.options;
 
 // -----------------------------------------------------------------------------------------------------------------
-// Gap-g (WORK-J0559 Q7/R7) - per-view tab restriction. columnConfig.tabs restricts which of the four dialog tabs
+// Gap-g - per-view tab restriction. columnConfig.tabs restricts which of the four dialog tabs
 // are offered, in CONFIG_TABS' fixed order regardless of the input array's order; an absent/boolean columnConfig,
 // or an empty/all-unknown tabs array, means "all four tabs".
 // -----------------------------------------------------------------------------------------------------------------

@@ -90,7 +90,7 @@ function clickAction(fx) {
 	// --- A dialog-declared action clicked from the detail header MUST open the dialog seam, not submit direct ---
 	(function () {
 		// Literal (non-templated) endpoint deliberately: this fixture's `ctx.dataTable` is a bare `{}` stub with no
-		// real row lookup, so a `{property}`-templated endpoint would now (WORK-J0521, B1b) refuse the submission
+		// real row lookup, so a `{property}`-templated endpoint would now refuse the submission
 		// as empty-substitution - a fact about the fixture, not about dialog routing, which is what this test
 		// actually exercises.
 		const action = {

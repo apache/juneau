@@ -66,7 +66,7 @@ import org.apache.juneau.rest.server.util.*;
  * {@code buildVersion} resolves this module's implementation version rather than a neighbouring module's.  The two
  * modules share the hash function, not a cache.
  *
- * <h5 class='section'>The serving-path {@code Widget.validate()} gate (WORK-J0525)</h5>
+ * <h5 class='section'>The serving-path {@code Widget.validate()} gate</h5>
  * <p>
  * This class also nests {@link WidgetValidationProcessor}, a {@link ResponseProcessor} that calls
  * {@link Widget#validate()} on any REST response content that is a {@link Widget}, fail-closed, ahead of every
@@ -247,7 +247,7 @@ public class WidgetsMixin {
 	}
 
 	/**
-	 * The serving-path {@link Widget#validate()} gate (WORK-J0525): fail-closed structural validation for any
+	 * The serving-path {@link Widget#validate()} gate: fail-closed structural validation for any
 	 * REST response content that is a {@link Widget}, giving the JSON serving path the same gate the
 	 * {@code juneau-rest-server-views} HTML emitters already give every {@code Widget} they consume.
 	 *

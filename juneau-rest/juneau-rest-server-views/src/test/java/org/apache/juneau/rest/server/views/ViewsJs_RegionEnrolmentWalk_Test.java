@@ -25,7 +25,7 @@ import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
 
 /**
- * WORK-J0522d: source-shape pins for {@code juneau-views.js}'s ONE real enrolment call site (caller #3 of 3,
+ * Source-shape pins for {@code juneau-views.js}'s ONE real enrolment call site (caller #3 of 3,
  * {@code expandDetailRow}) and all FIVE region removal paths (design §9.3's teardown table, including the B3
  * {@code teardownTable} reinit row) - the {@code juneau-views.js} slice of the design's round-4 region-enrolment
  * fix.

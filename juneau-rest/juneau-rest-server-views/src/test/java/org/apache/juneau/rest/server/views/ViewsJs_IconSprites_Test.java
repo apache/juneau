@@ -31,7 +31,7 @@ import org.apache.juneau.marshall.marshaller.*;
 import org.junit.jupiter.api.*;
 
 /**
- * Always-on coverage for {@code juneau-icons.js}'s page-level sprite layering API (WORK-J0557).
+ * Always-on coverage for {@code juneau-icons.js}'s page-level sprite layering API.
  *
  * <p>The runtime resolves every chrome glyph through up to three sprite layers - per-icon override, then the
  * app's replacement sprite, then Juneau's shipped set - merged once into a single in-document
@@ -219,7 +219,7 @@ class ViewsJs_IconSprites_Test extends TestBase {
 		var s = scenario("s_shipped");
 		var layers = (Map<?,?>) s.get("layers");
 		assertBean(layers, "shipped,replacement,override", "loaded,absent,absent");
-		// WORK-J0557 U1 — sort / first_page / last_page / chevron directions are real shipped stems.
+		// sort / first_page / last_page / chevron directions are real shipped stems.
 		assertBean(s, "w_search,w_settings,hasSearchStem,hasSort,hasFirstPage,hasLastPage,hasChevronleft",
 			"shipped,shipped,true,true,true,true,true");
 	}

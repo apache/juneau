@@ -195,7 +195,7 @@ class ChromeScale_ContractScan_Test extends TestBase {
 	/**
 	 * The three DataTables density literals ({@code table[data-juneau-view]}/{@code thead}/{@code tbody} cell
 	 * type context) moved from {@code 0.75rem} (a duplicate of {@code --jc-chrome-font-size-1}) to
-	 * {@code 0.8333rem} - IRS body-type parity, {@code WORK-J0518} DF-4. {@code 0.8333rem} does not equal any
+	 * {@code 0.8333rem} - IRS body-type parity. {@code 0.8333rem} does not equal any
 	 * declared step, so the {@code font-size} {@code rem} carve-out never even reaches
 	 * {@link ChromeScaleScanner#recordedLiterals()} for these three sites any more: no duplicate, no violation,
 	 * no exception needed. Reproduces the three pinned sites synthetically, by selector shape rather than by

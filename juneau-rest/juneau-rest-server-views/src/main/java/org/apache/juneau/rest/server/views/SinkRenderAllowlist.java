@@ -42,7 +42,7 @@ public final class SinkRenderAllowlist {
 	 * sink has no {@code rowActions} in scope to bind one to).
 	 *
 	 * <p>
-	 * {@code code} (WORK-J0508, Foundry WORK-P0063 row-detail-subtabs follow-up) is a minimal monospace,
+	 * {@code code} is a minimal monospace,
 	 * whitespace-preserving, HTML-escaped source-text renderer intended for a field-grid catalog entry inside a
 	 * row-detail region &mdash; no language hint or syntax highlighting on this first pass.
 	 */

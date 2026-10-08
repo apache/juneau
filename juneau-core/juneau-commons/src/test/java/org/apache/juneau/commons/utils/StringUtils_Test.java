@@ -4698,7 +4698,7 @@ class StringUtils_Test extends TestBase {
 		assertEquals(123.45f, parseNumber("123.45", Float.class));
 		assertEquals(123.45f, parseNumber("123.45", Float.TYPE));
 
-		// Untyped (auto-detect) decimals are Double, never Float (WORK-J0588 regression guard).
+		// Untyped (auto-detect) decimals are Double, never Float.
 		assertEquals(Double.class, parseNumber("1.5", null).getClass());
 		assertEquals(Double.class, parseNumber("3.4028235E38", Number.class).getClass());
 		assertEquals(Double.class, parseNumber("0.1", Number.class).getClass());

@@ -19,7 +19,7 @@
  * column-search.cjs - always-on Node parity harness for juneau-search.js.
  *
  * Loads the served juneau-search.js asset (path: process.argv[2]) into a vm sandbox with a minimal `window`
- * global, then runs the SAME shared JSON corpus (path: process.argv[3]) the Java-side SearchCorpus_Test runs
+ * global, then runs the SAME shared JSON corpus (path: process.argv[3], plus an optional JSON array of Java built-in operator names at process.argv[4]) the Java-side SearchCorpus_Test runs
  * against the Java engine, emitting one pass/fail flag per case id. ColumnSearch_Parity_Test asserts every id is
  * true, so the client-mode grid is proven to filter byte-for-byte the way the server would.
  *
@@ -282,6 +282,11 @@ checkExtra('rt_iso_matchesParityWithRelativeLiteral', S.matches('$gte(-PT24H)', 
 	&& S.matches('$gte(-PT24H)', -86400000, 'numeric', null, T0) === true
 	&& S.matches('$gte(P1D)', 86400000, 'numeric', null, T0) === true
 	&& S.matches('$lt(P1D)', 86400000, 'numeric', null, T0) === false);
+
+if (process.argv[4]) {
+	const javaNames = JSON.parse(require('fs').readFileSync(process.argv[4], 'utf8'));
+	report.helpMissing = javaNames.filter(n => ! S.SearchOperators.help(n));
+}
 
 report.caseCount = count;
 report.allPass = failures.length === 0;

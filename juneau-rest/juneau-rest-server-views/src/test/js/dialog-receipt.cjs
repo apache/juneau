@@ -16,7 +16,7 @@
  */
 
 /*
- * dialog-receipt.cjs - always-on Node harness for the in-dialog result RECEIPT (WORK-J0513 Scope A): a dialog that
+ * dialog-receipt.cjs - always-on Node harness for the in-dialog result RECEIPT: a dialog that
  * opted in with `ModalDef.keepOpenOnSubmit` keeps its layer across the submit, and the runtime paints the write's
  * result into that already-open dialog rather than closing it and painting a row banner.
  *

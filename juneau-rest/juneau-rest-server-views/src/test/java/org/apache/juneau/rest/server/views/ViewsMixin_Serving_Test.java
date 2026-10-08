@@ -90,6 +90,8 @@ class ViewsMixin_Serving_Test extends TestBase {
 		cNoMixin.get(ViewsMixin.CONFIG_CSS_PATH).run().assertStatus(404);
 		cNoMixin.get(ViewsMixin.REGIONS_JS_PATH).run().assertStatus(404);
 		cNoMixin.get(ViewsMixin.HELPERS_JS_PATH).run().assertStatus(404);
+		cNoMixin.get(ViewsMixin.CONSOLE_OUTPUT_JS_PATH).run().assertStatus(404);
+		cNoMixin.get(ViewsMixin.RUN_VIEW_JS_PATH).run().assertStatus(404);
 	}
 
 	@Test void h01_hostWithoutMixin_iconsJsRouteIs404() throws Exception {
@@ -191,6 +193,23 @@ class ViewsMixin_Serving_Test extends TestBase {
 			.assertHeader("Content-Type").isContains("text/javascript")
 			.assertHeader("Cache-Control").isContains("max-age")
 			.assertContent().asString().isContains("juneau-helpers.js");
+	}
+
+	@Test void b14_consoleOutputJs_served() throws Exception {
+		cWithMixin.get(ViewsMixin.CONSOLE_OUTPUT_JS_PATH).run()
+			.assertStatus(200)
+			.assertHeader("Content-Type").isContains("text/javascript")
+			.assertHeader("Cache-Control").isContains("max-age")
+			.assertContent().asString().isContains("juneau-console-output.js");
+	}
+
+	@Test void b15_runViewJs_served() throws Exception {
+		cWithMixin.get(ViewsMixin.RUN_VIEW_JS_PATH).run()
+			.assertStatus(200)
+			.assertHeader("Content-Type").isContains("text/javascript")
+			.assertHeader("Cache-Control").isContains("max-age")
+			.assertContent().asString().isContains("Licensed to the Apache Software Foundation")
+			.assertContent().asString().isContains("runView");
 	}
 
 	@Test void b04_viewsCss_served() throws Exception {
@@ -307,7 +326,7 @@ class ViewsMixin_Serving_Test extends TestBase {
 	}
 
 	@Test void c02_viewAssetUrl_worksForEveryAssetPath() {
-		for (var path : new String[]{ViewsMixin.VIEWS_JS_PATH, ViewsMixin.RIBBON_JS_PATH, ViewsMixin.RENDERS_JS_PATH, ViewsMixin.VIEWS_CSS_PATH, ViewsMixin.ICONS_JS_PATH, ViewsMixin.SEARCH_JS_PATH, ViewsMixin.PAGESTATE_JS_PATH, ViewsMixin.URLSTATE_JS_PATH, ViewsMixin.SYMBOLS_SVG_PATH, ViewsMixin.SYMBOLS_MATERIAL_SVG_PATH, ViewsMixin.REGIONS_JS_PATH, ViewsMixin.HELPERS_JS_PATH, ViewsMixin.CONFIG_JS_PATH, ViewsMixin.CONFIG_CSS_PATH})
+		for (var path : new String[]{ViewsMixin.VIEWS_JS_PATH, ViewsMixin.RIBBON_JS_PATH, ViewsMixin.RENDERS_JS_PATH, ViewsMixin.VIEWS_CSS_PATH, ViewsMixin.ICONS_JS_PATH, ViewsMixin.SEARCH_JS_PATH, ViewsMixin.PAGESTATE_JS_PATH, ViewsMixin.URLSTATE_JS_PATH, ViewsMixin.SYMBOLS_SVG_PATH, ViewsMixin.SYMBOLS_MATERIAL_SVG_PATH, ViewsMixin.REGIONS_JS_PATH, ViewsMixin.HELPERS_JS_PATH, ViewsMixin.CONSOLE_OUTPUT_JS_PATH, ViewsMixin.RUN_VIEW_JS_PATH, ViewsMixin.CONFIG_JS_PATH, ViewsMixin.CONFIG_CSS_PATH})
 			assertTrue(ViewsMixin.viewAssetUrl(path).contains("?v="), path);
 	}
 
@@ -333,7 +352,7 @@ class ViewsMixin_Serving_Test extends TestBase {
 				ViewsMixin.VIEWS_CSS_PATH, ViewsMixin.ICONS_JS_PATH, ViewsMixin.SEARCH_JS_PATH,
 				ViewsMixin.PAGESTATE_JS_PATH, ViewsMixin.URLSTATE_JS_PATH, ViewsMixin.SYMBOLS_SVG_PATH,
 				ViewsMixin.SYMBOLS_MATERIAL_SVG_PATH,
-				ViewsMixin.REGIONS_JS_PATH, ViewsMixin.HELPERS_JS_PATH,
+				ViewsMixin.REGIONS_JS_PATH, ViewsMixin.HELPERS_JS_PATH, ViewsMixin.CONSOLE_OUTPUT_JS_PATH, ViewsMixin.RUN_VIEW_JS_PATH,
 				ViewsMixin.CONFIG_JS_PATH, ViewsMixin.CONFIG_CSS_PATH}) {
 			var servedBytes = cWithMixin.get(path).run().assertStatus(200).getContent().asBytes();
 			var expectedHash = ChecksumUtils.hash8(servedBytes);
@@ -345,9 +364,9 @@ class ViewsMixin_Serving_Test extends TestBase {
 	/**
 	 * {@link ViewsMixin#DATATABLES_JS_PATH} is named here but served by {@link DataTablesMixin}: its URL is busted
 	 * with the datatables module's version and the hash of the bytes that mixin serves, and this mixin alone does
-	 * not mount it (a second mount of the same path would fail route registration).  Because of that, the console
-	 * {@code "views"} pack emits the glue only for a page with a server-mode table card; only such hosts need
-	 * {@code DataTablesMixin} (see {@code PageDirective_Test#a05_*}).
+	 * not mount it (a second mount of the same path would fail route registration).  The console
+	 * "datatables-glue" pack emits it for every datatables card, so a host with such cards needs
+	 * {@code DataTablesMixin} (see {@code PageDirective_Test#a05b_*} and {@code #a05c_*}).
 	 */
 	@Test void c05_viewAssetUrl_datatablesGlue_bustsDataTablesMixinBytes_notServedHere() throws Exception {
 		var served = MockRestClient.buildLax(WithDataTablesMixin.class).get(DataTablesMixin.GLUE_PATH).run()
@@ -534,7 +553,7 @@ class ViewsMixin_Serving_Test extends TestBase {
 
 	/**
 	 * The legacy {@code columnSearchToggle} ribbon type (and its hidden per-column search row) is gone, superseded by
-	 * the per-column header search icon + popover (WORK-J0547): neither the ribbon runtime nor the views runtime may
+	 * the per-column header search icon + popover: neither the ribbon runtime nor the views runtime may
 	 * ship the type, its toggle function or its icon-map entry any more.
 	 */
 	@Test void f05_ribbonJs_noLongerShipsTheLegacyColumnSearchToggle() throws Exception {
@@ -925,7 +944,7 @@ class ViewsMixin_Serving_Test extends TestBase {
 	@Test void o04_viewsCss_hasCompactDataTableDensityAndHairlineGrid() throws Exception {
 		var body = cWithMixin.get(ViewsMixin.VIEWS_CSS_PATH).run().assertStatus(200).getContent().asString();
 		assertTrue(body.contains("padding: 4px 5px"), body);
-		// IRS body-type parity (WORK-J0518 DF-4): 0.75rem/12px -> 0.8333rem/13.333px. Toolbar stays 12px
+		// IRS body-type parity: 0.75rem/12px -> 0.8333rem/13.333px. Toolbar stays 12px
 		// (unchanged, C0016b) via var(--jc-chrome-font-size-1) rather than this cell-level literal.
 		assertTrue(body.contains("font-size: 0.8333rem"), body);
 		assertTrue(body.contains("font-weight: normal"), body);
@@ -947,7 +966,7 @@ class ViewsMixin_Serving_Test extends TestBase {
 	}
 
 	/**
-	 * IRS visual-parity pass (WORK-J0518 DF-4 follow-up), issue 1+2 (header): its font-size is its OWN, smaller
+	 * IRS visual-parity pass, issue 1+2 (header): its font-size is its OWN, smaller
 	 * step ({@code var(--jc-chrome-font-size-1)}, 0.75rem/12px) rather than the body row's 0.8333rem/13.333px
 	 * pin from {@code o04} above. Scoped to the thead cell rule specifically, not the shared table-level
 	 * font-size at the top of the file (which stays the body-row size - see {@code o04}'s comment).
@@ -1035,7 +1054,7 @@ class ViewsMixin_Serving_Test extends TestBase {
 	}
 
 	/**
-	 * IRS visual-parity pass (WORK-J0518 DF-4 follow-up): the header/body boundary is painted on the first BODY
+	 * IRS visual-parity pass: the header/body boundary is painted on the first BODY
 	 * row's own top edge (mirroring IRS's {@code table.dataTable>tbody>tr:first-child>td} exactly), not repeated
 	 * on every row.  Colour is {@code --jc-table-rule} / {@code #bbbbbb} — the same stroke as the table floor —
 	 * so a later chrome {@code border-color: --jc-table-border} cannot restore {@code #dee2e6} on the seam.
@@ -1107,7 +1126,7 @@ class ViewsMixin_Serving_Test extends TestBase {
 	}
 
 	/**
-	 * Regression guard, superseded (Foundry WORK-P0063 follow-up {@code WORK-J0506}, replaced by an IRS
+	 * Regression guard, superseded (replaced by an IRS
 	 * visual-parity follow-up): {@code o11} used to guard the paging-pill's central-segment divider's border
 	 * color null-out. That divider is now removed outright rather than recoloured - it was the actual root
 	 * cause of a visual-parity item that repeated console-side band-aids never fixed, since a color/override in
@@ -1127,7 +1146,7 @@ class ViewsMixin_Serving_Test extends TestBase {
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
-	// p) WORK-J0518 - ViewTable/Detail chrome IRS leftovers (toolbar search colour, detail expander opacity)
+	// p) ViewTable/Detail chrome IRS leftovers (toolbar search colour, detail expander opacity)
 	//------------------------------------------------------------------------------------------------------------------
 
 	/**
@@ -1208,7 +1227,7 @@ class ViewsMixin_Serving_Test extends TestBase {
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
-	// q) WORK-J0559 Task 5 - views composes the console-ui shell script
+	// q) views composes the console-ui shell script
 	//------------------------------------------------------------------------------------------------------------------
 
 	/**

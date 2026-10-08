@@ -264,13 +264,13 @@ class ViewsJs_Renders_Test extends TestBase {
 		assertEquals(true, r.get("freeze_sinkStillBuiltin"));
 		assertEquals(true, r.get("freeze_sinkDisplaySafe"));
 		// 12 ids, lockstep with SinkRenderAllowlist.BUILTIN_IDS.  `pill` is the hand-registered display-only
-		// variant; `code` (WORK-J0508) is the twelfth, added alongside the snapshot-pass ids.
+		// variant; `code` is the twelfth, added alongside the snapshot-pass ids.
 		assertEquals(
 			"bool,code,date,datetime,decimal,json,linked,pill,progress,tag,truncate,ts-zulu", r.get("freeze_ids"));
 	}
 
 	// -----------------------------------------------------------------------------------------------------------
-	// `code` renderer (WORK-J0508, Foundry WORK-P0063 row-detail-subtabs follow-up) - minimal monospace,
+	// `code` renderer - minimal monospace,
 	// whitespace-preserving, HTML-escaped source-text fill-sink built-in.
 	// -----------------------------------------------------------------------------------------------------------
 

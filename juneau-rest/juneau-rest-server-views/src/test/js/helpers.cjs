@@ -16,7 +16,7 @@
  */
 
 /*
- * helpers.cjs - always-on Node behavioral harness for juneau-helpers.js (WORK-J0522b, design §16.4 tests
+ * helpers.cjs - always-on Node behavioral harness for juneau-helpers.js (design §16.4 tests
  * 28/28a/28b/29/30/31).  Every assertion lives in the paired Java test; this script only computes facts.
  *
  *   Usage:  node helpers.cjs <juneau-renders.js> <juneau-views.js> <juneau-helpers.js>

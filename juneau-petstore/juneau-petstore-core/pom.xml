@@ -81,11 +81,6 @@
 		</dependency>
 		<dependency>
 			<groupId>org.apache.juneau</groupId>
-			<artifactId>juneau-rest-server-console-ui-freemarker-datatables</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.juneau</groupId>
 			<artifactId>juneau-rest-server-views</artifactId>
 			<version>${project.version}</version>
 		</dependency>
@@ -98,25 +93,6 @@
 			<groupId>org.apache.juneau</groupId>
 			<artifactId>juneau-rest-server-datatables</artifactId>
 			<version>${project.version}</version>
-		</dependency>
-
-		<!-- Browser libraries the console's datatables cards bind to; served by VendorRest at /console/vendor/*. -->
-		<dependency>
-			<groupId>org.webjars</groupId>
-			<artifactId>jquery</artifactId>
-			<version>${webjars-jquery.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>org.webjars.bowergithub.datatables</groupId>
-			<artifactId>dist-datatables</artifactId>
-			<version>${webjars-datatables.version}</version>
-			<exclusions>
-				<!-- Declared as an open version range; jquery above is the copy that is served. -->
-				<exclusion>
-					<groupId>org.webjars.bowergithub.jquery</groupId>
-					<artifactId>jquery-dist</artifactId>
-				</exclusion>
-			</exclusions>
 		</dependency>
 
 		<!-- Test dependencies -->
@@ -189,7 +165,7 @@
 
 			A copy of juneau-rest-server-views' js-tests profile (see the notes there on target/js, the browser cache
 			and the -Djuneau.jsTests.* overrides), with only the harness path and the npm packages changed: the
-			petstore pages load jQuery and DataTables from the server (VendorRest, backed by the WebJars).
+			petstore pages load jQuery and DataTables from the WebJars the console serves (WebJarsMixin).
 		-->
 		<profile>
 			<id>js-tests</id>

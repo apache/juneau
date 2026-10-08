@@ -207,7 +207,9 @@ public class MediaRanges {
 				var mt = mediaTypes.get(i);
 				var matchQuant2 = mr.match(mt, false);
 
-				if (matchQuant2 > matchQuant) {
+				// On an equally good match, prefer the candidate that declares itself with a higher q-value
+				// (e.g. a serializer that only handles "application/jsonl;q=0.9" as a fallback).
+				if (matchQuant2 > matchQuant || (matchQuant2 > 0 && matchQuant2 == matchQuant && q2 == q && qValueOf(mt) > qValueOf(mediaTypes.get(matchIndex)))) {
 					matchIndex = i;
 					matchQuant = matchQuant2;
 					q = q2;
@@ -216,6 +218,10 @@ public class MediaRanges {
 		}
 
 		return matchIndex;
+	}
+
+	private static float qValueOf(MediaType mt) {
+		return mt instanceof MediaRange mr ? mr.getQValue() : 1f;
 	}
 
 	/**

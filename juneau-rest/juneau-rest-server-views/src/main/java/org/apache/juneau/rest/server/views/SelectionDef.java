@@ -18,6 +18,8 @@ package org.apache.juneau.rest.server.views;
 
 import static org.apache.juneau.commons.utils.Shorts.*;
 
+import java.util.*;
+
 /**
  * The row-selection opt-in for a {@link ViewTable} &mdash; the first of the view table's two INDEPENDENT
  * opt-ins (design doc §9.3/§6.2; HIGH-5).
@@ -59,7 +61,11 @@ import static org.apache.juneau.commons.utils.Shorts.*;
  * <h5 class='section'>Example:</h5>
  * <p class='bjava'>
  * 	<jc>// Selectable for export, with NO bulk-mutate capability - satisfies the separability condition by construction.</jc>
- * 	SelectionDef <jv>selection</jv> = SelectionDef.<jsm>create</jsm>(<js>"id"</js>);
+ * 	SelectionDef <jv>selection</jv> = SelectionDef.<jsm>create</jsm>(<js>"id"</js>)
+ * 		.selectAll(<jk>true</jk>)
+ * 		.selectableWhen(RowActionEnabledRule.<jsm>of</jsm>(<js>"state"</js>, Op.<jsf>EQ</jsf>, <js>"PENDING"</js>,
+ * 			<js>"Only pending changes can be aborted."</js>))
+ * 		.labelField(<js>"name"</js>);
  * </p>
  *
  * <h5 class='section'>See Also:</h5>
@@ -72,8 +78,40 @@ import static org.apache.juneau.commons.utils.Shorts.*;
  */
 public final class SelectionDef {
 
+	/**
+	 * Where a {@link SelectionDef}'s row selection lives across a view's lifetime.
+	 *
+	 * @since 10.0.0
+	 */
+	public enum Scope {
+
+		/** Selection survives paging, sorting, searching and refresh. */
+		PERSISTENT("persistent"),
+
+		/** Selection is dropped for any row not in the current draw. */
+		PAGE("page");
+
+		private final String wire;
+
+		Scope(String wire) {
+			this.wire = wire;
+		}
+
+		/**
+		 * The wire-form string for this scope.
+		 *
+		 * @return The wire string ({@code "persistent"} or {@code "page"}).
+		 */
+		public String wire() {
+			return wire;
+		}
+	}
+
 	private final String rowIdField;
 	private boolean selectAll = true;
+	private Scope scope = Scope.PERSISTENT;
+	private List<RowActionEnabledRule> selectableWhen;
+	private String labelField;
 
 	private SelectionDef(String rowIdField) {
 		this.rowIdField = rowIdField;
@@ -125,5 +163,70 @@ public final class SelectionDef {
 	 */
 	public boolean selectAll() {
 		return selectAll;
+	}
+
+	/**
+	 * Sets whether selection persists across paging/sorting/searching/refresh ({@link Scope#PERSISTENT}, the
+	 * default) or is dropped for any row not in the current draw ({@link Scope#PAGE}).
+	 *
+	 * @param value The new scope. A <jk>null</jk> value resets to {@link Scope#PERSISTENT}.
+	 * @return This object.
+	 */
+	public SelectionDef scope(Scope value) {
+		scope = value == null ? Scope.PERSISTENT : value;
+		return this;
+	}
+
+	/**
+	 * Sets the rules that gate which rows can be selected at all.
+	 *
+	 * <p>
+	 * A row failing any rule renders its checkbox disabled, carrying the failing rule's reason as both a tooltip
+	 * and an accessible description; select-all skips such rows entirely.
+	 *
+	 * @param value The gating rules. An empty or <jk>null</jk> array clears this to <jk>null</jk> (no gating).
+	 * @return This object.
+	 */
+	public SelectionDef selectableWhen(RowActionEnabledRule...value) {
+		selectableWhen = value == null || value.length == 0 ? null : l(value);
+		return this;
+	}
+
+	/**
+	 * Sets the row-data field used as this row's human-readable label in a confirm dialog's target list.
+	 *
+	 * @param value The field name. May be <jk>null</jk> (falls back to the row id).
+	 * @return This object.
+	 */
+	public SelectionDef labelField(String value) {
+		labelField = value;
+		return this;
+	}
+
+	/**
+	 * This selection's scope.
+	 *
+	 * @return The scope. Never <jk>null</jk>.
+	 */
+	public Scope scope() {
+		return scope;
+	}
+
+	/**
+	 * This selection's gating rules.
+	 *
+	 * @return The rules, or <jk>null</jk> if none were set.
+	 */
+	public List<RowActionEnabledRule> selectableWhen() {
+		return selectableWhen;
+	}
+
+	/**
+	 * This selection's label field.
+	 *
+	 * @return The field name, or <jk>null</jk> if none was set.
+	 */
+	public String labelField() {
+		return labelField;
 	}
 }

@@ -208,7 +208,7 @@ class AsyncJobRegistry_Test extends TestBase {
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
-	// i) De-duplication by IdempotencyKey (WORK-J0562)
+	// i) De-duplication by IdempotencyKey
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Test void i01_duplicateSubmitReturnsSameJob() {
@@ -281,7 +281,7 @@ class AsyncJobRegistry_Test extends TestBase {
 		assertThrows(IllegalArgumentException.class, () -> r.create((IdempotencyKey) null));
 	}
 	//------------------------------------------------------------------------------------------------------------------
-	// j) The concurrent-job cap is atomic under contention (WORK-J0576)
+	// j) The concurrent-job cap is atomic under contention
 	//------------------------------------------------------------------------------------------------------------------
 
 	private static final int RACE_THREADS = 32;

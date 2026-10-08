@@ -42,7 +42,8 @@ class PetstorePages_ContractTest extends TestBase {
 
 	static final List<Page> PAGES = List.of(
 		new Page("store", "/console/store", p -> p.hasActiveNav("store").hasCard("welcome", "html")),
-		new Page("jobs", "/console/ops/jobs", p -> p.hasActiveNav("ops", "jobs").hasCard("jobs", "datatables")),
+		new Page("jobs", "/console/ops/jobs", p -> p.hasActiveNav("ops", "jobs").hasCard("jobs", "datatables")
+			.hasCard("groom-output", "console-output").hasCard("groom-file", "console-output").hasCard("groom-runs", "datatables")),
 		new Page("audit", "/console/ops/audit", p -> p.hasActiveNav("ops", "audit").hasCard("audit", "datatables")),
 		new Page("flavors-html", "/console/dev/flavors/html", p -> p.hasActiveNav("dev", "flavors", "html").hasCardOrder("caption", "flavor")),
 		new Page("flavors-freemarker", "/console/dev/flavors/freemarker", p -> p.hasActiveNav("dev", "flavors", "freemarker").hasCardOrder("caption", "flavor")),

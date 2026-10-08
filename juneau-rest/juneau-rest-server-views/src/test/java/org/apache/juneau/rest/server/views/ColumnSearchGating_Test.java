@@ -248,7 +248,7 @@ class ColumnSearchGating_Test extends TestBase {
 			// $eq is a non-combinator built-in; $and is a combinator; each entry carries the full field set.
 			var eq = search.getList("operators").getMap(0);
 			assertBean(eq, "name,minArgs,combinator,custom", "$eq,1,false,false");
-			assertTrue(eq.getString("help").startsWith("Exact, case-sensitive match."), eq::toString);
+			assertFalse(eq.containsKey("help"), eq::toString);
 			assertTrue(opNames(search).contains("$and"));
 			var and = search.getList("operators").stream()
 				.map(o -> (JsonMap) o).filter(o -> eq(o.getString("name"), "$and")).findFirst().orElseThrow();

@@ -16,8 +16,8 @@
  */
 
 /*
- * dialog-child-catalog.cjs - always-on Node harness for the DIALOG-SCOPED child-action catalog (WORK-J0513 Scope
- * B): `ModalDef.childActions` lets a `type="action"` input inside one dialog's form open a STACKED step that is
+ * dialog-child-catalog.cjs - always-on Node harness for the DIALOG-SCOPED child-action catalog:
+ * `ModalDef.childActions` lets a `type="action"` input inside one dialog's form open a STACKED step that is
  * not a row action, and therefore appears in no row's action menu and in no ribbon.
  *
  * The properties worth a DOM harness rather than a source pin, in the order the resolver decides them:

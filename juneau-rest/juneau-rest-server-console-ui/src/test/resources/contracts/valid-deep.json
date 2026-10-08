@@ -26,7 +26,7 @@
   "activeNav": ["a", "b", "c", "d"],
   "cards": [
     { "id": "h1", "type": "html", "template": "tmpl-h1" },
-    { "id": "d1", "type": "datatables", "table": "/rest/x/data" },
+    { "id": "d1", "type": "datatables", "src": "/rest/x/data" },
     { "id": "k", "type": "kpi", "value": 3 }
   ]
 }

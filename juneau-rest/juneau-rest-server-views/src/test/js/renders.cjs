@@ -221,7 +221,7 @@ out.freeze_sinkStillBuiltin = builtinTag === NS.resolveSinkRenderer('tag');
 out.freeze_sinkDisplaySafe = String(NS.resolveSinkRenderer('tag').display('Released', {}, { field: 'status' })).indexOf('class="tag') >= 0;
 out.freeze_ids = (NS._render.frozenBuiltinIds || []).slice().sort((a, b) => Number(a > b) - Number(a < b)).join(',');
 
-// WORK-J0508 (Foundry WORK-P0063 row-detail-subtabs follow-up): `code` renderer - HTML-escaped, whitespace-
+// `code` renderer - HTML-escaped, whitespace-
 // preserving, monospace via `.juneau-code`; a frozen fill-sink built-in like `json`/`tag`/`pill` above.
 out.code_escapesHtml = NS.resolveRenderer('code').display('<script>alert(1)</script>');
 out.code_preservesWhitespaceAndNewlines = NS.resolveRenderer('code').display('line1\n  line2\tindented');

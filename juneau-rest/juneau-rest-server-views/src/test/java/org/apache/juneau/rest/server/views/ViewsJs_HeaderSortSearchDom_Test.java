@@ -153,7 +153,7 @@ class ViewsJs_HeaderSortSearchDom_Test extends TestBase {
 
 	@Test void a04_activeStateReadsTheClientDslStore() {
 		var r = report();
-		// WORK-J0612: a client-filtered DSL column's expression lives in the per-table store (col.search() is "").
+		// a client-filtered DSL column's expression lives in the per-table store (col.search() is "").
 		assertBean(r, "dslStoredColumnActive,dslEmptyColumnActive", "true,false");
 	}
 }

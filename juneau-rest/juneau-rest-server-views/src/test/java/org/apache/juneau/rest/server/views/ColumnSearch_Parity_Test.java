@@ -62,6 +62,11 @@ class ColumnSearch_Parity_Test extends TestBase {
 		assertEquals(true, r.get("allPass"), () -> "column-search parity failures: " + r.get("failures"));
 	}
 
+	@Test void z01_everyJavaBuiltinHasJsHelpText() {
+		var r = report();
+		assertEquals(List.of(), r.get("helpMissing"), "built-in operators with no help text in juneau-search.js");
+	}
+
 	// -----------------------------------------------------------------------------------------------------------------
 	// Corpus case ids (mirror of SearchCorpus_Test.loadCorpus(), but only the "id" field is needed here).
 	// -----------------------------------------------------------------------------------------------------------------
@@ -120,9 +125,11 @@ class ColumnSearch_Parity_Test extends TestBase {
 		var search = Files.createTempFile("juneau-search-", ".js");
 		var stdout = Files.createTempFile("column-search-stdout-", ".json");
 		var stderr = Files.createTempFile("column-search-stderr-", ".txt");
+		var names = Files.createTempFile("column-search-names-", ".json");
 		try {
 			Files.writeString(search, asset(ViewsMixin.SEARCH_JS_RESOURCE), UTF_8);
-			var p = new ProcessBuilder(List.of("node", harness.toString(), search.toString(), corpus.toString()))
+			Files.writeString(names, Json.of(SearchOperatorSet.standard().operators().stream().map(SearchOperator::name).toList()), UTF_8);
+			var p = new ProcessBuilder(List.of("node", harness.toString(), search.toString(), corpus.toString(), names.toString()))
 				.redirectOutput(stdout.toFile())
 				.redirectError(stderr.toFile())
 				.start();
@@ -135,7 +142,7 @@ class ColumnSearch_Parity_Test extends TestBase {
 					+ "\nstdout:\n" + quietRead(stdout));
 			return Files.readString(stdout, UTF_8);
 		} finally {
-			for (var f : List.of(search, stdout, stderr))
+			for (var f : List.of(search, stdout, stderr, names))
 				Files.deleteIfExists(f);
 		}
 	}

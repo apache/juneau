@@ -105,7 +105,7 @@ import org.apache.juneau.rest.server.widgets.Op;
  *
  * @since 10.0.0
  */
-@BeanType(properties="id,label,icon,endpoint,method,confirm,form,present,onSuccess,enabledWhen")
+@BeanType(properties="id,label,icon,endpoint,method,confirm,confirmTitle,bulkMode,form,present,onSuccess,enabledWhen")
 @SuppressWarnings({
 	"java:S1845" // Fluent-builder setters intentionally mirror field names (Juneau DSL convention).
 })
@@ -212,6 +212,35 @@ public class RowAction {
 		}
 	}
 
+	/**
+	 * How an action behaves when driven from a bulk-mutate toolbar.
+	 *
+	 * @since 10.0.0
+	 */
+	public enum BulkMode {
+
+		/** One call per selected row. */
+		PER_ROW("perRow"),
+
+		/** A single call carrying every selected id. */
+		AGGREGATE("aggregate");
+
+		private final String wire;
+
+		BulkMode(String wire) {
+			this.wire = wire;
+		}
+
+		/**
+		 * Returns the wire token for this mode.
+		 *
+		 * @return The wire token ({@code "perRow"} or {@code "aggregate"}).
+		 */
+		public String wire() {
+			return wire;
+		}
+	}
+
 	/** The stable action id (menu-item key; also the submit's logical name). */
 	public String id;
 
@@ -230,8 +259,14 @@ public class RowAction {
 	/** The non-safe HTTP method wire token (see {@link Method#wire()}). */
 	public String method;
 
-	/** Optional confirmation prompt shown before the submit. */
-	public String confirm;
+	/** Optional confirmation prompt shown before the submit, or literal <jk>false</jk> for none (see {@link #noConfirm()}). */
+	public Object confirm;
+
+	/** Optional confirm-dialog title when this action is driven in bulk. */
+	public String confirmTitle;
+
+	/** Optional bulk-mode wire token (see {@link BulkMode#wire()}); <jk>null</jk> means {@code perRow}. */
+	public String bulkMode;
 
 	/** Optional form-source URL supplying the action's input fields. */
 	public String form;
@@ -317,7 +352,7 @@ public class RowAction {
 	 * not a write.
 	 *
 	 * <p>
-	 * <b>Backward compatible, narrowed (WORK-J0521):</b> an {@code endpoint} with no {@code {...}} token is still
+	 * <b>Backward compatible, narrowed:</b> an {@code endpoint} with no {@code {...}} token is still
 	 * issued byte-identical to how it always was (three of the four guards above cannot fire on it; the fourth,
 	 * the {@code ..} check, only fires on an author-declared {@code ..}).  An {@code endpoint} WITH a token now
 	 * refuses in cases that previously submitted a malformed URL (e.g. {@code "servlet:/incidents//ack"} for a
@@ -354,6 +389,41 @@ public class RowAction {
 	 */
 	public RowAction confirm(String value) {
 		confirm = value;
+		return this;
+	}
+
+	/**
+	 * Sets how this action behaves when driven from a bulk-mutate toolbar: one call per selected row
+	 * ({@link BulkMode#PER_ROW}, the default) or a single call carrying every selected id
+	 * ({@link BulkMode#AGGREGATE}).
+	 *
+	 * @param value The new mode. A <jk>null</jk> value clears it (the default, {@link BulkMode#PER_ROW}).
+	 * @return This object.
+	 */
+	public RowAction bulkMode(BulkMode value) {
+		bulkMode = value == null ? null : value.wire();
+		return this;
+	}
+
+	/**
+	 * Sets the confirm dialog's title when this action is driven in bulk (e.g. {@code "Abort {count} pending changes"}).
+	 *
+	 * @param value The title template. May be <jk>null</jk>.
+	 * @return This object.
+	 */
+	public RowAction confirmTitle(String value) {
+		confirmTitle = value;
+		return this;
+	}
+
+	/**
+	 * Marks this action as never requiring a confirm dialog, in bulk or otherwise &mdash; writes a literal
+	 * <jk>false</jk> onto the same {@link #confirm} wire key a confirm message would otherwise occupy.
+	 *
+	 * @return This object.
+	 */
+	public RowAction noConfirm() {
+		confirm = Boolean.FALSE;
 		return this;
 	}
 

@@ -1,0 +1,3 @@
+{"contractVersion":"1","title":"T","nav":[],"activeNav":[],"cards":[
+  {"id":"releases","type":"datatables","table":{"dataUrl":"/rest/releases/data","columns":[{"key":"name","label":"Name"}]}}
+]}

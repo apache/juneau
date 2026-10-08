@@ -76,7 +76,11 @@ import org.springframework.test.annotation.*;
  * @since 10.0.0
  */
 @org.apache.juneau.testing.SpringbootTest
-@SpringBootTest(classes = McpSpringBootIntegration_Test.TestApp.class, webEnvironment = WebEnvironment.RANDOM_PORT)
+@SpringBootTest(
+	classes = McpSpringBootIntegration_Test.TestApp.class,
+	webEnvironment = WebEnvironment.RANDOM_PORT,
+	// Tomcat's leak check flags the process-wide daemon validation pool as a leaked thread on every context close.
+	properties = "logging.level.org.apache.catalina.loader.WebappClassLoaderBase=ERROR")
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_CLASS)
 class McpSpringBootIntegration_Test {
 

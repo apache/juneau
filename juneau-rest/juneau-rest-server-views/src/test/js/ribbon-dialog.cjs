@@ -16,7 +16,7 @@
  */
 
 /*
- * ribbon-dialog.cjs - always-on Node harness for the ROW-LESS (ribbon-hosted) dialog seam (WORK-J0512 §2a): a
+ * ribbon-dialog.cjs - always-on Node harness for the ROW-LESS (ribbon-hosted) dialog seam: a
  * `RibbonAction.dialog(...)` opened from a view's ribbon, with NO `<tr>` behind it.
  *
  * Loads BOTH runtimes into ONE window, because the seam spans them: juneau-ribbon.js renders the trigger and hops

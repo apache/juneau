@@ -1,0 +1,1 @@
+{"testResults":[{"name":"/ci/work/repo/src/c.test.js","status":"failed","message":"Cannot find module './x'\n  at require","assertionResults":[]}]}

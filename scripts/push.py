@@ -31,6 +31,7 @@ Usage: python3 push.py "commit message"
        python3 push.py "commit message" --docs-only
        python3 push.py "commit message" --js-tests      (force the headless-browser JS harness)
        python3 push.py "commit message" --no-js-tests   (never run it)
+       python3 push.py --test-only                      (build and test gates only; no commit or push)
 
 JS harness (-Pjs-tests): with neither flag, test.py runs it automatically when a .js/.css/.ftl file
 under a src/ tree differs from origin/master, and skips it with a notice if Node/npm are missing.
@@ -43,10 +44,13 @@ LINUX_SUCCESS_SOUND = "/usr/share/sounds/freedesktop/stereo/complete.oga"
 LINUX_FAILURE_SOUND = "/usr/share/sounds/freedesktop/stereo/dialog-error.oga"
 
 import argparse
+import contextlib
+import importlib.util
 import os
 import platform
 import shlex
 import shutil
+import signal
 import subprocess
 import sys
 import time
@@ -72,7 +76,72 @@ STARTER_REPO_PATHS = [
 ]
 
 
-def run_command(cmd, description, cwd=None):
+RUN_MODULE_PATH = Path(__file__).resolve().parent.parent / "juneau-run" / "src" / "main" / "python" / "juneau_run.py"
+_step_n = 0
+_run_started = False
+
+
+def run_module():
+    """The in-tree juneau_run module (shared if already loaded), or None if its source is not there."""
+    module = sys.modules.get("juneau_run")
+    if module is None and RUN_MODULE_PATH.exists():
+        spec = importlib.util.spec_from_file_location("juneau_run", RUN_MODULE_PATH)
+        module = importlib.util.module_from_spec(spec)
+        sys.modules["juneau_run"] = module
+        # Keep the module's source directory free of __pycache__ (the Maven build's RAT check scans it).
+        previous, sys.dont_write_bytecode = sys.dont_write_bytecode, True
+        try:
+            spec.loader.exec_module(module)
+        finally:
+            sys.dont_write_bytecode = previous
+    return module
+
+
+def next_step_number(count=1):
+    """The next top-level step number; count > 1 reserves a block for the steps of a script we spawn."""
+    global _step_n
+    first = _step_n + 1
+    _step_n += count
+    return first
+
+
+class _NoStep:
+    """Stands in for juneau_run.Step when the module is not available."""
+
+    def fail(self, exit=None):  # NOSONAR python:S5806 - mirrors juneau_run.Step.fail
+        pass
+
+    def skip(self):
+        pass
+
+
+@contextlib.contextmanager
+def marked_step(step_id, title):
+    """A run-protocol step around a block.  Silent unless RUN_MARKERS=1, and a no-op without juneau_run."""
+    run = run_module()
+    if run is None:
+        yield _NoStep()
+        return
+    with run.step(step_id, next_step_number(), title) as step:
+        yield step
+
+
+def run_marked(step_id, title, cmd, description, cwd=None, tool=None):
+    """
+    run_command() as the protocol step `step_id`.  With `tool` ("maven", "generic", ...) juneau_run runs the
+    command and reports its progress; without it the call is just wrapped in a step.
+    """
+    run = run_module()
+    if tool is not None and run is not None and run.enabled():
+        return run_command(cmd, description, cwd, tool=tool, step_id=step_id, title=title, n=next_step_number())
+    with marked_step(step_id, title) as step:
+        ok = run_command(cmd, description, cwd)
+        if not ok:
+            step.fail()
+        return ok
+
+
+def run_command(cmd, description, cwd=None, tool=None, step_id=None, title=None, n=None, parent=None):
     """
     Run a shell command and handle errors.
     
@@ -80,6 +149,8 @@ def run_command(cmd, description, cwd=None):
         cmd: Command to run (string or list)
         description: Description of the step for output
         cwd: Working directory (defaults to script parent directory)
+        tool: juneau_run parser name; with it (and a list cmd) the command runs as the protocol step `step_id`
+        step_id, title, n, parent: the protocol step fields, used only with `tool`
     
     Returns:
         True if successful, False otherwise
@@ -91,14 +162,21 @@ def run_command(cmd, description, cwd=None):
     print(f"Running: {' '.join(cmd) if isinstance(cmd, list) else cmd}")
     
     try:
-        subprocess.run(
-            cmd,
-            cwd=cwd,
-            shell=isinstance(cmd, str),
-            check=True,
-            capture_output=False,
-            text=True
-        )
+        run = run_module()
+        # Only with markers on does run_tool take over; otherwise the original call below runs unchanged.
+        if tool is not None and run is not None and run.enabled() and isinstance(cmd, list):
+            result = run.run_tool(cmd, tool, step_id, title or description.strip(), n=n, parent=parent, cwd=cwd)
+            if result.exit != 0:
+                raise subprocess.CalledProcessError(result.exit, cmd)
+        else:
+            subprocess.run(
+                cmd,
+                cwd=cwd,
+                shell=isinstance(cmd, str),
+                check=True,
+                capture_output=False,
+                text=True
+            )
         print(f"✅ {description} - SUCCESS")
         return True
     except subprocess.CalledProcessError as e:
@@ -539,6 +617,36 @@ def current_branch(repo_dir):
         return "unknown"
 
 
+def run_test_script(cmd, cwd, run):
+    """
+    Run test.py.  With markers on it gets its own session, so a signal aimed at this script's group does not
+    reach it unannounced; on cancellation it is sent SIGTERM itself (its handler stops Maven and ends the step
+    cleanly) and, if it ignores that for 30 seconds, its whole group is killed.
+    """
+    if run is None or not run.enabled():
+        return subprocess.run(cmd, cwd=cwd, check=False)
+    proc = subprocess.Popen(cmd, cwd=cwd, start_new_session=True)
+    try:
+        return subprocess.CompletedProcess(cmd, proc.wait())
+    except KeyboardInterrupt:
+        try:
+            proc.send_signal(signal.SIGTERM)
+            proc.wait(timeout=30)
+        except subprocess.TimeoutExpired:
+            os.killpg(proc.pid, signal.SIGKILL)
+            proc.wait()
+        raise
+
+
+def git_short_head(repo_dir):
+    """Abbreviated HEAD sha, or "unknown"."""
+    try:
+        return subprocess.run(["git", "rev-parse", "--short", "HEAD"], cwd=repo_dir, capture_output=True,
+                              text=True, check=True).stdout.strip()
+    except Exception:
+        return "unknown"
+
+
 def timing_log_path(repo_dir):
     """Out-of-repo branch-specific timing history location."""
     branch = current_branch(repo_dir).replace("/", "__")
@@ -610,14 +718,15 @@ def verify_starter_repos(step_num):
     """
     print(f"\n🌱 Step {step_num}: Verifying external starter repos against local SNAPSHOT...")
     any_present = False
-    for repo in STARTER_REPO_PATHS:
+    for index, repo in enumerate(STARTER_REPO_PATHS, start=1):
         if not repo.exists():
             print(f"  ⏭️  Skipping missing starter repo: {repo}")
             continue
         any_present = True
         wrapper = repo / ("mvnw.cmd" if platform.system() == "Windows" else "mvnw")
         cmd = [str(wrapper), "-q", "verify"] if wrapper.exists() else ["mvn", "-q", "verify"]
-        if not run_command(cmd, f"  Building starter: {repo.name}", cwd=repo):
+        if not run_command(cmd, f"  Building starter: {repo.name}", cwd=repo, tool="generic",
+                           step_id=f"starters/{repo.name}", title=repo.name, n=index, parent="starters"):
             print(f"\n❌ Starter repo build FAILED: {repo}")
             return False
     if not any_present:
@@ -988,7 +1097,34 @@ def run_docs_only(args, juneau_root):  # NOSONAR python:S3776 -- Cognitive compl
     return 0
 
 
-def main():  # NOSONAR python:S3776 -- Cognitive complexity is acceptable for this main function
+def main():
+    """Owns the run-protocol `done` marker; `run` is emitted by _main() once the arguments say which mode this is."""
+    run = run_module()
+    previous_sigterm = None
+    if run is not None and run.enabled():
+        # Unwind to the KeyboardInterrupt handler below; nothing is torn down inside the signal handler.
+        def on_sigterm(signum, frame):
+            raise KeyboardInterrupt
+        previous_sigterm = signal.signal(signal.SIGTERM, on_sigterm)
+    try:
+        try:
+            code = _main()
+        except KeyboardInterrupt:
+            if run is None or not run.enabled():
+                raise
+            if _run_started:
+                run.done("cancelled")
+            print("Cancelled.", file=sys.stderr)
+            return 130
+        if run is not None and _run_started:
+            run.done("ok" if code == 0 else "fail")
+        return code
+    finally:
+        if previous_sigterm is not None:
+            signal.signal(signal.SIGTERM, previous_sigterm)
+
+
+def _main():  # NOSONAR python:S3776 -- Cognitive complexity is acceptable for this main function
     parser = argparse.ArgumentParser(
         description="Build, test, and push Juneau project to Git repository",
         formatter_class=argparse.RawDescriptionHelpFormatter,
@@ -1007,7 +1143,19 @@ Examples:
     
     parser.add_argument(
         "message",
-        help="Git commit message"
+        nargs="?",
+        help="Git commit message (not used, and not required, with --test-only)"
+    )
+
+    parser.add_argument(
+        "--test-only",
+        action="store_true",
+        dest="test_only",
+        help=(
+            "Run only the build and test gates (container tags, BOM completeness, tests, build and install, "
+            "starter repos). No identity check, commit, push or juneau-docs follow-up. Not the same flag as "
+            "test.py's --test-only, which means 'tests without the build'."
+        )
     )
     
     parser.add_argument(
@@ -1081,6 +1229,10 @@ Examples:
     args = parser.parse_args()
     if args.js_tests and args.no_js_tests:
         parser.error("--js-tests and --no-js-tests are mutually exclusive")
+    if args.test_only and (args.docs_only or args.sonarqube or args.tracker_audit or args.skip_tests):
+        parser.error("--test-only cannot be combined with --docs-only, --sonarqube, --tracker-audit or --skip-tests")
+    if args.message is None and not args.test_only:
+        parser.error("the following arguments are required: message")
     
     # Get the Juneau root directory
     script_dir = Path(__file__).parent
@@ -1095,7 +1247,10 @@ Examples:
     print("🚀 Juneau Build and Push Script")
     print("=" * 70)
     print(f"Working directory: {juneau_root}")
-    print(f"Commit message: '{args.message}'")
+    if args.test_only:
+        print("🧪 TEST-ONLY MODE (--test-only) - build and test gates only; nothing is committed or pushed")
+    else:
+        print(f"Commit message: '{args.message}'")
     if args.skip_tests:
         print("⚠ Tests will be SKIPPED")
     if args.sonarqube:
@@ -1136,24 +1291,34 @@ Examples:
         step_num += 1
         print(f"  {step_num}. Verify external starter repos against local SNAPSHOT (./mvnw -q verify; missing paths skipped)")
         step_num += 1
-        print(f"  {step_num}. Commit whatever is already staged: git commit -m \"{args.message}\" "
-              "(refuses if anything is unstaged/untracked-and-not-gitignored -- stage or discard it first)")
-        step_num += 1
-        print(f"  {step_num}. Push to remote: git push")
+        if not args.test_only:
+            print(f"  {step_num}. Commit whatever is already staged: git commit -m \"{args.message}\" "
+                  "(refuses if anything is unstaged/untracked-and-not-gitignored -- stage or discard it first)")
+            step_num += 1
+            print(f"  {step_num}. Push to remote: git push")
         print("\nDry run complete. Use without --dry-run to execute.")
         return 0
 
     step_num = 1
 
+    global _run_started
+    run = run_module()
+    if run is not None:
+        run.run(mode="test" if args.test_only else "push", project=juneau_root.name,
+                branch=current_branch(juneau_root), head=git_short_head(juneau_root))
+        _run_started = True
+
     # Identity gate — must hold before the expensive build/test gate and any commit/push.
     # Extended (maintainer-approved) from the --docs-only path to the default flow too;
     # juneau-docs gets its own check further down, right before its Step 6 commit/push,
     # since the two repos can have independent git config user.email.
-    print("\n🔐 Verifying git identity (apache.org email) on juneau...")
-    if not verify_apache_identity(juneau_root):
-        play_sound(success=False)
-        return 1
-    print("✅ Git identity verified")
+    # --test-only never commits or pushes, so it has no identity to verify.
+    if not args.test_only:
+        print("\n🔐 Verifying git identity (apache.org email) on juneau...")
+        if not verify_apache_identity(juneau_root):
+            play_sound(success=False)
+            return 1
+        print("✅ Git identity verified")
 
     # Step 0 (opt-in, --sonarqube/--sonar): SonarQube report gate. Runs first so it
     # aborts cheaply, before the container-tags/BOM checks, tests, and build.
@@ -1212,7 +1377,8 @@ Examples:
     if not args.skip_tests:
         check_container_tags = script_dir / "check-container-tags.py"
         if check_container_tags.exists():
-            if not run_command(
+            if not run_marked(
+                "container-tags", "Container test tags",
                 [sys.executable, str(check_container_tags)],
                 f"🔎 Step {step_num}: Checking container test tags...",
                 juneau_root
@@ -1224,7 +1390,8 @@ Examples:
 
         check_bom = script_dir / "check-bom-completeness.py"
         if check_bom.exists():
-            if not run_command(
+            if not run_marked(
+                "bom", "BOM completeness",
                 [sys.executable, str(check_bom)],
                 f"🔎 Step {step_num}: Checking BOM completeness...",
                 juneau_root
@@ -1238,13 +1405,13 @@ Examples:
         timing_file = timing_log_path(juneau_root)
         if test_script.exists():
             print(f"\n🧪 Step {step_num}: Running tests via test.py...")
+            if run is not None and run.enabled():
+                # test.py contributes the build and tests steps (JUNEAU_RUN_ACTIVE is inherited); reserve
+                # their numbers so the whole run stays in order.
+                os.environ["JUNEAU_RUN_N_BASE"] = str(next_step_number(3) - 1)
             try:
                 _test_start = time.time()
-                result = subprocess.run(
-                    build_test_command(test_script, timing_file, args),
-                    cwd=juneau_root,
-                    check=False
-                )
+                result = run_test_script(build_test_command(test_script, timing_file, args), juneau_root, run)
                 _test_wall_sec = int(time.time() - _test_start)
                 if result.returncode != 0:
                     print("\n❌ Build process aborted due to test failures.")
@@ -1259,10 +1426,12 @@ Examples:
         else:
             # Fallback to direct mvn test if test.py doesn't exist
             _test_start = time.time()
-            _mvn_ok = run_command(
+            _mvn_ok = run_marked(
+                "tests", "Tests",
                 ["mvn", "test"],
                 f"🧪 Step {step_num}: Running tests...",
-                juneau_root
+                juneau_root,
+                tool="maven"
             )
             _test_wall_sec = int(time.time() - _test_start)
             if not _mvn_ok:
@@ -1283,10 +1452,12 @@ Examples:
         step_num += 1
     
     # Step 2: Build and install (skip tests - already run in Step 1)
-    if not run_command(
+    if not run_marked(
+        "install", "Build and install",
         ["mvn", "clean", "package", "install", "-DskipTests"],
         f"🏗️  Step {step_num}: Building and installing project...",
-        juneau_root
+        juneau_root,
+        tool="maven"
     ):
         print("\n❌ Build process aborted due to build failure.")
         play_sound(success=False)
@@ -1294,12 +1465,25 @@ Examples:
     step_num += 1
 
     # Step 3 (TODO-158): Build external starter repos against the freshly-installed local SNAPSHOT (blocking gate)
-    if not verify_starter_repos(step_num):
+    with marked_step("starters", "Starter repos") as starters_step:
+        starters_ok = verify_starter_repos(step_num)
+        if not starters_ok:
+            starters_step.fail()
+    if not starters_ok:
         print("\n❌ Build process aborted due to external starter repo verification failure.")
         play_sound(success=False)
         return 1
     step_num += 1
     
+    if args.test_only:
+        if run is not None:
+            run.note("info", "Test-only run: nothing was committed or pushed")
+        print("\n" + "=" * 70)
+        print("🧪 Test-only run completed successfully; nothing was committed or pushed.")
+        print("=" * 70)
+        play_sound(success=True)
+        return 0
+
     # Step 4/5: Commit (whatever is staged) and push (if there's anything ahead) --
     # extracted into commit_and_push() so the "nothing staged != nothing to push" fix and the
     # unreviewed-changes guard are unit-testable against real git without invoking the mvn

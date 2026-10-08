@@ -1,0 +1,3 @@
+{"contractVersion":"1","title":"T","nav":[],"activeNav":[],"cards":[
+  {"id":"c","type":"datatables","table":{"dataUrl":"/rest/x","columns":[{"key":"a"}],"bulk":{}}}
+]}

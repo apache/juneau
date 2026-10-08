@@ -20,6 +20,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
 
+import org.apache.http.entity.*;
 import org.apache.juneau.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.marshall.json5l.*;
@@ -67,6 +68,12 @@ class JsonLinesMediaTypeAliases_Test extends TestBase {
 		private static final long serialVersionUID = 1L;
 		@RestGet("/items")
 		public List<Item> items() { return List.of(new Item("a", 1), new Item("b", 2)); }
+
+		@RestPost("/echo")
+		public String echo(@Content List<Item> items) { return items.size() + ":" + items.get(0).name; }
+
+		@RestPost("/echoArray")
+		public String echoArray(@Content Item[] items) { return items.length + ":" + items[0].name; }
 	}
 
 	private static final MockRestClient j = MockRestClient.buildLax(J.class);
@@ -106,5 +113,96 @@ class JsonLinesMediaTypeAliases_Test extends TestBase {
 	@Test void a05_universalConfig_acceptsAliases() throws Exception {
 		u.get("/items").accept("application/jsonlines").run().assertStatus(200);
 		u.get("/items").accept("application/json5lines").run().assertStatus(200);
+	}
+
+	@Test void a06_universalConfig_acceptJsonl_returnsJsonl() throws Exception {
+		u.get("/items").accept("application/jsonl").run()
+			.assertStatus(200)
+			.assertHeader("Content-Type").is("application/jsonl");
+	}
+
+	@Test void a07_universalConfig_acceptJsonlines_returnsJsonl() throws Exception {
+		u.get("/items").accept("application/jsonlines").run()
+			.assertStatus(200)
+			.assertHeader("Content-Type").is("application/jsonl");
+	}
+
+	@Test void a08_universalConfig_acceptJson5l_returnsJson5l() throws Exception {
+		u.get("/items").accept("application/json5l").run()
+			.assertStatus(200)
+			.assertHeader("Content-Type").is("application/json5l");
+	}
+
+	@Test void a09_universalConfig_acceptJson5lines_returnsJson5l() throws Exception {
+		u.get("/items").accept("application/json5lines").run()
+			.assertStatus(200)
+			.assertHeader("Content-Type").is("application/json5l");
+	}
+
+	@Test void b01_universalConfig_multiLineJsonlBody_boundToList() throws Exception {
+		u.post("/echo", "{\"name\":\"x\",\"age\":1}\n{\"name\":\"y\",\"age\":2}\n")
+			.contentType("application/jsonl").accept("text/plain").run()
+			.assertStatus(200)
+			.assertContent("2:x");
+	}
+
+	@Test void b02_universalConfig_multiLineJsonlBody_boundToArray() throws Exception {
+		u.post("/echoArray", "{\"name\":\"x\",\"age\":1}\n{\"name\":\"y\",\"age\":2}\n")
+			.contentType("application/jsonl").accept("text/plain").run()
+			.assertStatus(200)
+			.assertContent("2:x");
+	}
+
+	@Test void b03_universalConfig_singleLineJsonlBody_boundToList() throws Exception {
+		u.post("/echo", "{\"name\":\"x\",\"age\":1}\n")
+			.contentType("application/jsonl").accept("text/plain").run()
+			.assertStatus(200)
+			.assertContent("1:x");
+	}
+
+	@Test void b04_universalConfig_multiLineJson5lBody_boundToList() throws Exception {
+		u.post("/echo", "{name:'x',age:1}\n{name:'y',age:2}\n")
+			.contentType("application/json5l").accept("text/plain").run()
+			.assertStatus(200)
+			.assertContent("2:x");
+	}
+
+	@Test void b05_jsonlOnly_multiLineBody_boundToList() throws Exception {
+		j.post("/echo", "{\"name\":\"x\",\"age\":1}\n{\"name\":\"y\",\"age\":2}\n")
+			.contentType("application/jsonl").accept("text/plain").run()
+			.assertStatus(200)
+			.assertContent("2:x");
+	}
+
+	@Test void b06_jsonlOnly_singleLineBody_boundToList() throws Exception {
+		j.post("/echo", "{\"name\":\"x\",\"age\":1}\n")
+			.contentType("application/jsonl").accept("text/plain").run()
+			.assertStatus(200)
+			.assertContent("1:x");
+	}
+
+	@Test void c01_noTrailingNewline() throws Exception {
+		u.post("/echo", "{\"name\":\"x\",\"age\":1}\n{\"name\":\"y\",\"age\":2}")
+			.contentType("application/jsonl").accept("text/plain").run().assertStatus(200).assertContent("2:x");
+	}
+
+	@Test void c02_crlf() throws Exception {
+		u.post("/echo", "{\"name\":\"x\",\"age\":1}\r\n{\"name\":\"y\",\"age\":2}\r\n")
+			.contentType("application/jsonl").accept("text/plain").run().assertStatus(200).assertContent("2:x");
+	}
+
+	@Test void c03_ndjson() throws Exception {
+		u.post("/echo", "{\"name\":\"x\",\"age\":1}\n{\"name\":\"y\",\"age\":2}\n")
+			.contentType("application/x-ndjson").accept("text/plain").run().assertStatus(200).assertContent("2:x");
+	}
+
+	@Test void c04_httpEntityBody() throws Exception {
+		u.post("/echo", new StringEntity("{\"name\":\"x\",\"age\":1}\n{\"name\":\"y\",\"age\":2}\n", ContentType.create("application/jsonl")))
+			.accept("text/plain").run().assertStatus(200).assertContent("2:x");
+	}
+
+	@Test void c05_blankLine() throws Exception {
+		u.post("/echo", "{\"name\":\"x\",\"age\":1}\n\n{\"name\":\"y\",\"age\":2}\n")
+			.contentType("application/jsonl").accept("text/plain").run().assertStatus(200).assertContent("2:x");
 	}
 }

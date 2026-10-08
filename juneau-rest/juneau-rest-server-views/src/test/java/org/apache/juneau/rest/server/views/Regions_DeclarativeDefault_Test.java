@@ -26,7 +26,7 @@ import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
 
 /**
- * Always-on coverage for WORK-J0522c: the {@code RegionDef} descriptor's client twin ({@code ctx.declared}),
+ * Always-on coverage for the declarative default: the {@code RegionDef} descriptor's client twin ({@code ctx.declared}),
  * {@code ctx.fetchDeclared()}'s handshake-checked fetch, the reserved {@code "default"} populator's
  * &sect;8.5-normative algorithm, R14a's pre-fetch matrix, the poll lifecycle (&sect;8.3.1), and - the ACCEPTANCE
  * GATE for this child - L12's non-privilege proof.

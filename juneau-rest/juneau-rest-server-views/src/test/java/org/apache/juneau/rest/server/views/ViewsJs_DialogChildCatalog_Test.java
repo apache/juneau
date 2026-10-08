@@ -30,7 +30,7 @@ import org.apache.juneau.marshall.marshaller.*;
 import org.junit.jupiter.api.*;
 
 /**
- * The dialog-scoped child-action catalog (WORK-J0513 Scope B): {@code ModalDef.childActions} lets a
+ * The dialog-scoped child-action catalog: {@code ModalDef.childActions} lets a
  * {@code type="action"} input inside one dialog's form open a STACKED step that is not a row action, and therefore
  * appears in no row's action menu and in no ribbon.
  *
@@ -71,7 +71,7 @@ class ViewsJs_DialogChildCatalog_Test extends TestBase {
 	 * The catalog is DIALOG-SCOPED structurally: it is read from the per-open payload, so the row-action menu and
 	 * the ribbon resolver never see it.
 	 *
-	 * <p>This is the same disjoint-catalog argument WORK-J0512 made for ribbon dialogs, and it matters for the same
+	 * <p>This is the same disjoint-catalog argument made for ribbon dialogs, and it matters for the same
 	 * reason: an exclusion filter in {@code buildRowActionMenu} would be a thing to maintain, and a thing to
 	 * forget.  Nothing to filter is stronger than a filter that works.
 	 */

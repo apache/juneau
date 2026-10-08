@@ -25,7 +25,7 @@ import org.apache.juneau.rest.server.servlet.*;
 import org.junit.jupiter.api.*;
 
 /**
- * Header sort + per-column search icons (WORK-J0547). Option-A content-substring coverage: sort
+ * Header sort + per-column search icons. Option-A content-substring coverage: sort
  * only from {@code span.dt-column-order} / {@code .juneau-view-col-sort-icon}, searchable columns
  * get a Juneau {@code search} glyph, not an IRS/SLDS copy.
  */
@@ -98,7 +98,7 @@ class ViewsJs_HeaderSortSearch_Test extends TestBase {
 	@Test void a04c_searchIcon_activeWhenColumnAlreadyFiltered() throws Exception {
 		var body = cWithMixin.get(ViewsMixin.VIEWS_JS_PATH).run().assertStatus(200).getContent().asString();
 		var fn = functionBody(body, "function renderHeaderSearchIcon(");
-		// WORK-J0612: read through the store adapter, so a client-filtered DSL column (col.search() === "") still paints active.
+		// read through the store adapter, so a client-filtered DSL column (col.search() === "") still paints active.
 		assertTrue(fn.contains("getColumnExpr(ctx, col)"), fn);
 		assertTrue(fn.contains("classList.add(\"is-active\")"), fn);
 	}
@@ -106,7 +106,7 @@ class ViewsJs_HeaderSortSearch_Test extends TestBase {
 	@Test void a05_searchPopover_appliesColumnSearch() throws Exception {
 		var body = cWithMixin.get(ViewsMixin.VIEWS_JS_PATH).run().assertStatus(200).getContent().asString();
 		var fn = functionBody(body, "function openColumnSearchPopover(");
-		// WORK-J0612: every write goes through the store adapter (native col.search(value) off the DSL path).
+		// every write goes through the store adapter (native col.search(value) off the DSL path).
 		assertTrue(fn.contains("setColumnExpr(ctx, col, value)"), fn);
 		assertTrue(fn.contains("drawColumnExpr(ctx, r)"), fn);
 		assertTrue(fn.contains("juneau-view-col-search-popover"), fn);
@@ -147,11 +147,11 @@ class ViewsJs_HeaderSortSearch_Test extends TestBase {
 		var fn = functionBody(body, "function teardownTable(");
 		assertTrue(fn.contains("closeColumnSearchPopover(ctx)"), fn);
 		assertTrue(fn.contains("delete table.dataset.juneauHeaderSortSearch"), fn);
-		// WORK-J0612 D7: a rebuild drops the client-mode DSL store along with the native filters destroy() discards.
+		// a rebuild drops the client-mode DSL store along with the native filters destroy() discards.
 		assertTrue(fn.contains("ctx._colExprs = {}"), fn);
 	}
 
-	// WORK-J0612 D2: the store adapter keeps native col.search() for server mode / no-metadata columns and routes a
+	// the store adapter keeps native col.search() for server mode / no-metadata columns and routes a
 	// client-filtered DSL column through ONE named search.fixed predicate.
 	@Test void a06b_setColumnExpr_routesDslColumnsThroughSearchFixed() throws Exception {
 		var body = cWithMixin.get(ViewsMixin.VIEWS_JS_PATH).run().assertStatus(200).getContent().asString();

@@ -1,0 +1,22 @@
+{
+	"color": {
+		"accept": ["#abc", "#A1b2C3", "#000", "rgb(0,0,0)", "rgb( 255 , 128 , 0 )", "rgb(1,2,3)"],
+		"reject": ["", "red", "#abcd", "#abcdeg", "#ab", "rgb(256,0,0)", "rgb(1111,0,0)", "rgb(1,2)", "rgba(0,0,0,1)", "hsl(0,0%,0%)", "var(--x)", "url(x)", "#abc;", " #abc", "rgb(1,2,3);color:red", "RGB(1,2,3)"]
+	},
+	"href": {
+		"accept": ["#", "#step-3", "#a.b:c~d_e", "/run/42", "/x/y?z=1", "/ops/jobs/7/cancel", "/a\\b", "chart.png", "jobs/7/lines", "relative/path", "./x"],
+		"reject": ["", "javascript:alert(1)", "java\tscript:alert(1)", "data:text/html,x", "http://e.x/", "https://e.x/", "//e.x/a", "\\\\e.x\\a", "/a/../b", "/..", "../x", "#a b", "#<x>", "mailto:a@b"]
+	},
+	"imageSrc": {
+		"accept": ["/run/42/chart.png", "/a/b.png?x=1", "/a\\b.png", "chart.png", "run/42/chart.png"],
+		"reject": ["", "#x", "data:image/png;base64,AA", "blob:http://x/1", "http://e.x/a.png", "//e.x/a.png", "/a/../b.png", "../b.png", "\\\\e.x\\a.png"]
+	},
+	"icon": {
+		"accept": ["check", "cancel", "a", "x.y-Z9"],
+		"reject": ["", "Check", "9a", "a b", "a_b", "<svg>", "abcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyzabcdefghijklm"]
+	},
+	"token": {
+		"accept": ["0", "18342", "409.17", "k3x9qa.48213.412", "A-z_~."],
+		"reject": ["", "a b", "a/b", "a?b", "a&b", "é"]
+	}
+}

@@ -16,7 +16,7 @@
  */
 
 /*
- * selftargeted-idempotency.cjs - always-on Node harness for WORK-J0512's B2 tripwire: what `submitActionDialog`
+ * selftargeted-idempotency.cjs - always-on Node harness for the B2 tripwire: what `submitActionDialog`
  * ACTUALLY TRANSMITS as `extra.targetId`, for each branch of the opt-in-gated precedence rule
  *
  *     const targetId = (modal?.selfTargeted && modal?.idempotencyKey != null)

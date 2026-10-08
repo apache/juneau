@@ -21,7 +21,7 @@ import org.apache.juneau.marshall.collections.*;
 import org.junit.jupiter.api.*;
 
 /**
- * Round-trip tests for repeated fields (lists, arrays, nested messages) in compact and whitespace modes (WORK-J0595).
+ * Round-trip tests for repeated fields (lists, arrays, nested messages) in compact and whitespace modes.
  */
 class PrototextRepeatedFields_Test {
 

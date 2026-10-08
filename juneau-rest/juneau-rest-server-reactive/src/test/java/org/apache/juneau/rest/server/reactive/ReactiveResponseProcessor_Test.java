@@ -23,6 +23,7 @@ import java.util.concurrent.*;
 import java.util.concurrent.atomic.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.commons.http.MediaRanges;
 import org.apache.juneau.marshall.json.*;
 import org.apache.juneau.marshall.sse.*;
 import org.apache.juneau.rest.mock.classic.*;
@@ -482,5 +483,144 @@ class ReactiveResponseProcessor_Test extends TestBase {
 		var c = CI.get("/json5l").header("Accept", "application/json5l").run()
 			.assertStatus(200).getContent().asString();
 		assertTrue(c.contains("\"name\":\"r\""), c);
+	}
+
+	// -----------------------------------------------------------------------------------------------------------------
+	// J: NDJSON shape echoes the negotiated NDJSON-family type.
+	// -----------------------------------------------------------------------------------------------------------------
+
+	@Rest(serializers = JsonSerializer.class)
+	public static class J {
+		@RestGet("/plain")
+		public Flow.Publisher<Pojo> plain() {
+			return ListPublisher.of(new Pojo("j", 1));
+		}
+
+		@RestGet("/explicitJson5l")
+		public Flow.Publisher<Pojo> explicitJson5l(RestResponse res) {
+			res.setContentType("application/json5l");
+			return ListPublisher.of(new Pojo("j", 2));
+		}
+
+		@RestGet("/explicitJsonlSse")
+		public Flow.Publisher<SseEvent> explicitJsonlSse(RestResponse res) {
+			res.setContentType("application/jsonl");
+			return ListPublisher.of(new SseEvent("tick", "sse-wins"));
+		}
+
+		@RestGet("/sse")
+		public Flow.Publisher<SseEvent> sse() {
+			return ListPublisher.of(new SseEvent("tick", "plain-sse"));
+		}
+	}
+
+	private static final MockRestClient CJ = MockRestClient.buildLax(J.class);
+
+	private static String ndjsonType(String accept) throws Exception {
+		var r = CJ.get("/plain").header("Accept", accept).run().assertStatus(200);
+		assertTrue(r.getContent().asString().contains("\"name\":\"j\""));
+		var ct = r.getStringHeader("Content-Type").orElse(null);
+		return ct == null ? null : ct.split(";")[0].trim();
+	}
+
+	@Test void j01_echoesJsonl() throws Exception {
+		assertEquals("application/jsonl", ndjsonType("application/jsonl"));
+	}
+
+	@Test void j02_jsonlinesCanonicalisedToJsonl() throws Exception {
+		assertEquals("application/jsonl", ndjsonType("application/jsonlines"));
+	}
+
+	@Test void j03_echoesJson5l() throws Exception {
+		assertEquals("application/json5l", ndjsonType("application/json5l"));
+	}
+
+	@Test void j04_json5linesCanonicalisedToJson5l() throws Exception {
+		assertEquals("application/json5l", ndjsonType("application/json5lines"));
+	}
+
+	@Test void j05_echoesXNdjson() throws Exception {
+		assertEquals("application/x-ndjson", ndjsonType("application/x-ndjson"));
+	}
+
+	@Test void j06_jsonSeqFallsBackToXNdjson() throws Exception {
+		assertEquals("application/x-ndjson", ndjsonType("application/json-seq"));
+	}
+
+	@Test void j07_highestQWins() throws Exception {
+		assertEquals("application/jsonl", ndjsonType("application/x-ndjson;q=0.5, application/jsonl"));
+	}
+
+	@Test void j08_qZeroExcluded() throws Exception {
+		assertEquals("application/x-ndjson", ndjsonType("application/jsonl;q=0, application/x-ndjson"));
+		assertEquals("application/json5l", ndjsonType("application/jsonl;q=0, application/json5l;q=0.2"));
+	}
+
+	@Test void j09_caseInsensitive() throws Exception {
+		assertEquals("application/jsonl", ndjsonType("Application/JSONL"));
+	}
+
+	@Test void j10_explicitContentTypeWins() throws Exception {
+		var r = CJ.get("/explicitJson5l").header("Accept", "application/jsonl").run().assertStatus(200);
+		r.assertHeader("Content-Type").isContains("application/json5l");
+	}
+
+	@Test void j11_explicitJsonlWithSseAcceptStaysSse() throws Exception {
+		var r = CJ.get("/explicitJsonlSse").header("Accept", "text/event-stream").run().assertStatus(200);
+		assertTrue(r.getContent().asString().contains("data: sse-wins"));
+	}
+
+	@Test void j12_tieFollowsMediaRangesOrder() throws Exception {
+		var accept = "application/x-ndjson, application/jsonl";
+		var first = MediaRanges.of(accept).toList().get(0);
+		var expected = ReactiveResponseProcessor.negotiatedNdjsonType(accept);
+		assertEquals(ReactiveResponseProcessor.NDJSON_ALIASES.get((first.getType() + "/" + first.getSubType()).toLowerCase(Locale.ROOT)), expected);
+		assertEquals(expected, ndjsonType(accept));
+	}
+
+	@Test void j13_sseUnchanged() throws Exception {
+		var r = CJ.get("/sse").header("Accept", "text/event-stream").run().assertStatus(200);
+		r.assertHeader("Content-Type").isContains("text/event-stream");
+		assertTrue(r.getContent().asString().contains("data: plain-sse"));
+	}
+
+	@Test void j14_helperDirect() {
+		assertNull(ReactiveResponseProcessor.negotiatedNdjsonType(null));
+		assertNull(ReactiveResponseProcessor.negotiatedNdjsonType(""));
+		assertNull(ReactiveResponseProcessor.negotiatedNdjsonType("*/*"));
+		assertNull(ReactiveResponseProcessor.negotiatedNdjsonType("application/json"));
+		assertEquals("application/jsonl", ReactiveResponseProcessor.negotiatedNdjsonType("text/html;q=0.9, application/jsonl;charset=utf-8;q=0.8"));
+	}
+
+	// -----------------------------------------------------------------------------------------------------------------
+	// K: the NDJSON shape writes each element as one compact JSON line (console-output custom download path).
+	// -----------------------------------------------------------------------------------------------------------------
+
+	@Rest(serializers = JsonSerializer.class)
+	public static class K {
+		@RestGet("/maps")
+		public Flow.Publisher<Map<String,Object>> maps(RestResponse res) {
+			res.setContentType("application/jsonl");
+			var a = new LinkedHashMap<String,Object>();
+			a.put("n", 1);
+			a.put("text", "two\nlines");
+			a.put("ui", Map.of("style", "error"));
+			var b = new LinkedHashMap<String,Object>();
+			b.put("n", 2);
+			b.put("text", "plain");
+			return ListPublisher.<Map<String,Object>>of(a, b);
+		}
+	}
+
+	private static final MockRestClient CK = MockRestClient.buildLax(K.class);
+
+	@Test void k01_ndjsonElementsAreSingleLineCompactJson() throws Exception {
+		var r = CK.get("/maps").header("Accept", "application/jsonl").run().assertStatus(200);
+		r.assertHeader("Content-Type").isContains("application/jsonl");
+		var body = r.getContent().asString();
+		var rows = body.split("\n");
+		assertEquals(2, rows.length, body);
+		assertEquals("{\"n\":1,\"text\":\"two\\nlines\",\"ui\":{\"style\":\"error\"}}", rows[0]);
+		assertEquals("{\"n\":2,\"text\":\"plain\"}", rows[1]);
 	}
 }

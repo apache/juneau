@@ -31,6 +31,7 @@ A module is "consumer-facing publishable" when it is a leaf artifact
   - juneau-examples/*, juneau-petstore/* (sample apps, not published)
   - juneau-microservice-examples         (sample/demo REST resources, not shipped)
   - juneau-integration-tests             (test-only)
+  - juneau-run                           (build tooling, ships a .py script)
   - juneau-distrib                       (assembly only)
 
 Exit 0 when the BOM is complete (and free of stale entries); exit 1 otherwise.
@@ -58,6 +59,7 @@ EXCLUDED_ARTIFACTS = {
     "juneau-test-utils",         # test-only support module
     "juneau-test-marshall-utils",  # test-only support module (marshall-level fixtures)
     "juneau-integration-tests",  # cross-module test harness, not published
+    "juneau-run",                # build tooling: a pom module that attaches juneau_run.py, not a library artifact
     "juneau-microservice-examples",  # sample/demo REST resources, not shipped as a framework artifact
     "juneau",                    # reactor root (defensive; also an aggregator)
 }

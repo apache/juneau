@@ -28,7 +28,7 @@ import org.apache.juneau.marshall.json.*;
 import org.junit.jupiter.api.*;
 
 /**
- * Tests {@code @BeanProp(required)} enforcement in the JSON parser (WORK-J0585).
+ * Tests {@code @BeanProp(required)} enforcement in the JSON parser.
  */
 @SuppressWarnings("unused") // Fixture fields are read reflectively.
 class MissingRequiredProperty_Json_Test extends TestBase {

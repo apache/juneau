@@ -172,6 +172,19 @@ class PageCapture_Contract_Test extends TestBase {
 		assertTrue(html.endsWith("\n</body>\n</html>\n"), html);
 	}
 
+	@Test void a22b_wireOrder_vendor() {
+		var html = render("page-wire-order");
+		var order = List.of("dataTables.dataTables.min.css", "href=\"page.css\"", "juneau-views.css", "</head>",
+			"juneau-console.js", "/jquery.min.js", "/js/dataTables.min.js", "juneau-datatables.js", "juneau-renders.js",
+			"juneau-views.js", "juneau-helpers.js", "src=\"page-init.js\"");
+		var last = -1;
+		for (var s : order) {
+			var i = html.indexOf(s);
+			assertTrue(i > last, () -> "'" + s + "' out of order in:\n" + html);
+			last = i;
+		}
+	}
+
 	@Test void a23_consoleWithoutPage() {
 		var a = assertPage(render("console-min")).isValid().hasNoActiveNav();
 		assertEquals(List.of(), a.contract().getList("nav"));
