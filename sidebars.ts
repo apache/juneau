@@ -1848,6 +1848,7 @@ const sidebars: SidebarsConfig = {
 							link: { type: 'doc', id: 'topics/10.64.00.AdminConsoleChrome' },
 							items: [
 								{ type: 'doc', id: 'topics/10.64.01.BuildingAConsolePage', label: '10.64.1. Building a Console Page' },
+								{ type: 'doc', id: 'topics/10.64.02.CardAssetDependencies', label: '10.64.2. Card Asset Dependencies' },
 							],
 						},
 						{
@@ -1880,6 +1881,8 @@ const sidebars: SidebarsConfig = {
 								{ type: 'doc', id: 'topics/10.68.07.RichTableViewsRegions', label: '10.68.7. Regions' },
 								{ type: 'doc', id: 'topics/10.68.08.RichTableViewsAsyncJobs', label: '10.68.8. Async Jobs' },
 								{ type: 'doc', id: 'topics/10.68.09.RichTableViewsIcons', label: '10.68.9. Icons and Sprites' },
+								{ type: 'doc', id: 'topics/10.68.10.ConsoleOutputRegion', label: '10.68.10. Console Output Region' },
+								{ type: 'doc', id: 'topics/10.68.11.RunViewRegion', label: '10.68.11. Run View Region' },
 							],
 						},
 						{
