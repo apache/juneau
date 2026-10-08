@@ -64,11 +64,11 @@
     "61": 1,
     "62": 1,
     "63": 1,
-    "64": 2,
+    "64": 3,
     "65": 1,
     "66": 1,
     "67": 1,
-    "68": 10,
+    "68": 12,
     "69": 1,
     "JuneauExamples": 1,
     "JuneauMicroserviceTomcat": 1,
@@ -84,6 +84,6 @@
   "source_types": {
     "api-metadata": 16,
     "release-note": 84,
-    "topic": 441
+    "topic": 444
   }
 }
