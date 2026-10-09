@@ -70,7 +70,7 @@ class PageSpecTable_BrowserTest extends TestBase {
 		assertNoShellErrors(report.get("table"));
 	}
 
-	// defaultVisible(false) only takes effect with columnConfig on (juneau-config.js); the plain table keeps every column.
+	// defaultVisible(false) only takes effect with columnConfig on (juneau-config.js); corpus 03 has no columnConfig, so the table keeps every column.
 	@Test void a02_headerHasEveryColumn_withLabelsLiftedToTitles() {
 		var ths = probeList("ths");
 		assertTrue(ths.containsAll(List.of("Pod", "Incident", "Root cause")), ths::toString);

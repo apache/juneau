@@ -270,8 +270,23 @@ public class Shorts {
 	 * @return <jk>true</jk> if at least one value is <jk>true</jk>.
 	 * @see ObjectUtils#anyTrue(boolean...)
 	 */
-	@SafeVarargs
-	public static boolean or(boolean...v) { return ObjectUtils.anyTrue(v); }
+	public static boolean any(boolean...v) { return ObjectUtils.anyTrue(v); }
+
+	/**
+	 * Null-safe map: returns <jk>null</jk> when the value is <jk>null</jk>, else the mapper's result.
+	 *
+	 * <p>
+	 * Replaces <c>x == null ? null : f(x)</c>.  This is not {@link #or(Object...)}, which returns its first non-null
+	 * argument (so <c>x</c>, not <c>f(x)</c>) and evaluates <c>f(x)</c> even when <c>x</c> is null.
+	 *
+	 * @param <T> The value type.
+	 * @param <R> The result type.
+	 * @param v The value to map. Can be <jk>null</jk>.
+	 * @param m The mapping function; never called with <jk>null</jk>.
+	 * @return The mapped value, or <jk>null</jk>.
+	 * @see ObjectUtils#mapOrNull(Object, Function)
+	 */
+	public static <T,R> R nm(T v, Function<? super T,? extends R> m) { return ObjectUtils.mapOrNull(v, m); }
 
 	/**
 	 * Returns <jk>true</jk> if all of the specified booleans are <jk>true</jk>.

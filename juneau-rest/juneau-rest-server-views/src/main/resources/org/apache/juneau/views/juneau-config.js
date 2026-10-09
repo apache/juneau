@@ -2430,4 +2430,6 @@
 	NS.config.copyShareLink = copyShareLink;
 	NS.config.selectConfigTab = selectConfigTab;
 	NS.config.resetDraftToDefaults = resetDraftToDefaults;
+	// Tables built before this file registered (a shell-first page) are rebuilt now that the chooser exists.
+	if (typeof NS.init?.flushLateConfigRebuilds === "function") NS.init.flushLateConfigRebuilds();
 })();

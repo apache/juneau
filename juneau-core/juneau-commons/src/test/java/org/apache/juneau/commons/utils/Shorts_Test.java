@@ -425,4 +425,40 @@ class Shorts_Test extends TestBase {
 	void h001_dtf_getDateTimeFormatter() {
 		assertNotNull(DateUtils.getDateTimeFormatter("yyyy-MM-dd"));
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// nm / any / or with Boolean
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Test
+	void i001_nm_nullInputSkipsMapper() {
+		var calls = new int[1];
+		String r = nm((String)null, x -> { calls[0]++; return x + "!"; });
+		assertNull(r);
+		assertEquals(0, calls[0]);
+	}
+
+	@Test
+	void i002_nm_mapsNonNull() {
+		assertEquals(Integer.valueOf(3), nm("abc", String::length));
+	}
+
+	@Test
+	void i003_nm_mapperReturningNullGivesNull() {
+		assertNull(nm("abc", x -> null));
+	}
+
+	@Test
+	void i004_any_trueIfAnyTrue() {
+		assertTrue(any(false, true));
+		assertFalse(any(false, false));
+		assertFalse(any());
+	}
+
+	@Test
+	void i005_or_booleanBoxedCoalesces() {
+		Boolean n = null;
+		assertEquals(Boolean.TRUE, or(n, true));
+		assertEquals(Boolean.FALSE, or(Boolean.FALSE, true));
+	}
 }

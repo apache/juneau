@@ -165,6 +165,44 @@ class TableSpec_ToCardBody_Test extends TestBase {
 		assertEquals(List.of("key", "label", "render", "href"), List.copyOf(col.keySet()).subList(0, 4));
 	}
 
+	private static TableSpec minimal() {
+		return TableSpec.create("slo").dataUrl("/rest/slo/data").columns(Column.create("pod"));
+	}
+
+	@Test void b01_viewKeys_absentWhenUnset() {
+		var body = minimal().toCardBody();
+		for (var key : List.of("columnConfig", "copyLink", "cleanAddress", "pausePollingWhileEditing"))
+			assertFalse(body.containsKey(key), key);
+	}
+
+	@Test void b02_viewKeys_emittedWhenSet() {
+		var body = minimal().columnConfig(true).copyLink(true).cleanAddress(true).pausePollingWhileEditing(true).toCardBody();
+		assertPlain(body);
+		assertEquals(true, body.get("columnConfig"));
+		assertEquals(true, body.get("copyLink"));
+		assertEquals(true, body.get("cleanAddress"));
+		assertEquals(true, body.get("pausePollingWhileEditing"));
+	}
+
+	@Test void b03_viewKeys_falseIsEmitted() {
+		var body = minimal().columnConfig(false).copyLink(false).cleanAddress(false).pausePollingWhileEditing(false).toCardBody();
+		assertEquals(false, body.get("columnConfig"));
+		assertEquals(false, body.get("copyLink"));
+		assertEquals(false, body.get("cleanAddress"));
+		assertEquals(false, body.get("pausePollingWhileEditing"));
+	}
+
+	@Test void b04_columnConfig_objectForm() {
+		var body = minimal().columnConfig(Map.of("chooser", true)).toCardBody();
+		assertPlain(body);
+		assertEquals(Map.of("chooser", true), body.get("columnConfig"));
+	}
+
+	@Test void b05_columnConfig_nullOptionsRejected() {
+		var t = minimal();
+		assertThrows(NullPointerException.class, () -> t.columnConfig((Map<String,Object>)null));
+	}
+
 	private static void assertPlain(Object o) {
 		if (o instanceof Map<?,?> m)
 			m.values().forEach(TableSpec_ToCardBody_Test::assertPlain);

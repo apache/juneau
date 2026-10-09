@@ -217,6 +217,17 @@ public class ObjectUtils {
 		return null;
 	}
 
+	/**
+	 * Returns <jk>null</jk> when the value is <jk>null</jk>, else the mapper's result; the mapper is never called on <jk>null</jk>.
+	 *
+	 * @param <T> The value type.
+	 * @param <R> The result type.
+	 * @param value The value to map. Can be <jk>null</jk>.
+	 * @param mapper The mapping function.
+	 * @return The mapped value, or <jk>null</jk> if {@code value} is <jk>null</jk> or the mapper returns <jk>null</jk>.
+	 */
+	public static <T,R> R mapOrNull(T value, Function<? super T,? extends R> mapper) { return value == null ? null : mapper.apply(value); }
+
 	/** Boolean AND-fold (vacuously true when empty). */
 	public static boolean allTrue(boolean...values) {
 		if (values == null || values.length == 0) return true;

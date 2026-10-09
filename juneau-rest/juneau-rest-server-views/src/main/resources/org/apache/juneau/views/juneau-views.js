@@ -9125,6 +9125,7 @@
 		extras = extras || {};
 		const $ = window.jQuery;
 		if ($?.fn?.dataTable?.isDataTable(table)) return;
+		if (configDeferred.has(table)) return;
 		const id = table.dataset.juneauView;
 		if (viewDef?.contractVersion !== JUNEAU_VIEW_CONTRACT_VERSION) {
 			const m = "Juneau view '" + id + "': contract version mismatch (page='" +
@@ -9223,7 +9224,38 @@
 
 		if (viewDef.columnConfig && typeof NS.config?.resolveActiveView === "function")
 			return NS.config.resolveActiveView(table, viewDef).then(go);
+		if (viewDef.columnConfig && typeof NS.config?.resolveActiveView !== "function")
+			return deferUntilConfig(table, function () { return NS.config.resolveActiveView(table, viewDef).then(go); }, function () { go(null); });
 		go(null);
+	}
+
+	const configDeferred = new Map();
+
+	/**
+	 * Holds a {@code columnConfig} table whose build must wait for juneau-config.js (a shell-first page renders the
+	 * card as soon as this script registers it, before the next script in the pack has run).  {@code withConfig} runs
+	 * once when the config layer registers; {@code withoutConfig} runs if it never does, once the document has finished
+	 * parsing, so a views-only page still renders (every column, no chooser).  Whichever fires first wins.
+	 */
+	function deferUntilConfig(table, withConfig, withoutConfig) {
+		return new Promise(function (resolve, reject) {
+			let fired = false;
+			const fire = function (run) {
+				if (fired) return;
+				fired = true;
+				configDeferred.delete(table);
+				try { resolve(run()); } catch (err) { reject(err); }
+			};
+			configDeferred.set(table, function () { fire(withConfig); });
+			if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", function () { fire(withoutConfig); });
+			else setTimeout(function () { fire(withoutConfig); }, 0);
+		});
+	}
+
+	/** Builds, with the config layer, every table that was waiting for juneau-config.js. */
+	function flushLateConfigRebuilds() {
+		if (typeof NS.config?.resolveActiveView !== "function") return;
+		for (const run of Array.from(configDeferred.values())) run();
 	}
 
 	function beginInitTable(table) {
@@ -10418,6 +10450,7 @@
 		initTableFromDef: initTableFromDef,
 		mountTableSlot: mountTableSlot,
 		buildTable: buildTable,
+		flushLateConfigRebuilds: flushLateConfigRebuilds,
 		liveDtIndex: liveDtIndex,
 		assembleFullColumnArray: assembleFullColumnArray,
 		restoreHeaderShell: restoreHeaderShell,

@@ -123,6 +123,10 @@ public final class TableSpec {
 	private String quickStatsId;
 	private List<QuickStat> quickStats;
 	private boolean primary;
+	private Object columnConfig;
+	private Boolean copyLink;
+	private Boolean cleanAddress;
+	private Boolean pausePollingWhileEditing;
 	private String cssClass;
 
 	private TableSpec(String id) {
@@ -413,6 +417,62 @@ public final class TableSpec {
 	}
 
 	/**
+	 * Sets whether this table offers the View Settings dialog (column chooser, search and sort settings).
+	 *
+	 * @param v The new value.
+	 * @return This object.
+	 */
+	public TableSpec columnConfig(boolean v) {
+		columnConfig = v;
+		return this;
+	}
+
+	/**
+	 * Sets the View Settings dialog options, serialized as the {@code columnConfig} object (for example
+	 * {@code {"chooser": true}}).
+	 *
+	 * @param options The options, copied at call time. Must not be <jk>null</jk>.
+	 * @return This object.
+	 */
+	public TableSpec columnConfig(Map<String,Object> options) {
+		columnConfig = new LinkedHashMap<>(rnn(options));
+		return this;
+	}
+
+	/**
+	 * Sets whether the table offers a copy-link control for its current view state.
+	 *
+	 * @param v The new value.
+	 * @return This object.
+	 */
+	public TableSpec copyLink(boolean v) {
+		copyLink = v;
+		return this;
+	}
+
+	/**
+	 * Sets whether the browser address bar is cleaned of the table's view-state parameters.
+	 *
+	 * @param v The new value.
+	 * @return This object.
+	 */
+	public TableSpec cleanAddress(boolean v) {
+		cleanAddress = v;
+		return this;
+	}
+
+	/**
+	 * Sets whether polling pauses while an editing surface (an open detail row or action dialog) is bound to this table.
+	 *
+	 * @param v The new value.
+	 * @return This object.
+	 */
+	public TableSpec pausePollingWhileEditing(boolean v) {
+		pausePollingWhileEditing = v;
+		return this;
+	}
+
+	/**
 	 * Sets the CSS class applied to this table's card.  It is carried on the card placement, not in the card body
 	 * returned by {@link #toCardBody()}.
 	 *
@@ -523,6 +583,14 @@ public final class TableSpec {
 			t.put("pollIntervalMs", pollIntervalMs);
 		if (primary)
 			t.put("primary", true);
+		if (columnConfig != null)
+			t.put("columnConfig", columnConfig);
+		if (copyLink != null)
+			t.put("copyLink", copyLink);
+		if (cleanAddress != null)
+			t.put("cleanAddress", cleanAddress);
+		if (pausePollingWhileEditing != null)
+			t.put("pausePollingWhileEditing", pausePollingWhileEditing);
 		if (! rowClassRules.isEmpty())
 			t.put("rowClassRules", List.copyOf(rowClassRules));
 		if (! rowActions.isEmpty())
