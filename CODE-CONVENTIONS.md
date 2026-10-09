@@ -37,6 +37,8 @@ Each item: a one-line rule, then **Applied** or **N/A** (with rationale).
   (`NexusMockRestHttpTest` wrapping a caught `Exception`, `SseLogServletTest` simulated broken-pipe
   `IOException`, `RunStateBroadcasterTest` `"dead client"` subscriber) — constructors stay; `rex`/`ioex`
   would not be clearer there.
+- **Always-suppress Sonar rules.** JRM uses the always-suppress table in `@juneau-code-conventions` (S1192, S3776, S6539, S6541, S110, S115, S9149). When one fires, suppress it; don't refactor to satisfy it. **`java:S1192`: inline and suppress, never extract.** Do not add `private static final String PROJECT = "project";`-style constants for duplicated literals. Keep the literal inline and suppress `java:S1192` once at class level, with a rationale (James 2026-10-09).
+- **Everyday `Shorts` idioms** — In new and touched code, use the Shorts forms from `@juneau-code-conventions` → "Shorts for everyday idioms" (`b(x)` for `Boolean.TRUE.equals(x)`, `eq`/`neq`, `ie`/`ine`, `ib`/`inb`, `sw`/`ew`/`co`, `lc`/`uc`/`tr`, `ein`/`nie`, `s`, `f`, `or`, `o`/`oo`, `u`, `cn`/`cns`, `rnn`) instead of the JDK spelling (James 2026-10-09).
 - **Collection factories (`Shorts` `l`/`m`/`tl`/`los`/`cp`)** — **Applied** at real candidates only
   (leftover pass 2026-09-13). Copy constructor → `tl` (`ReleaseListService`); empty insertion-ordered
   map → `m()` (`MilestoneService`, `ReleaseListService`, `ReleaseRunRest` meta); known ≤10-pair map →
@@ -101,9 +103,9 @@ and re-swept 2026-09-13 (WORK-R0008 leftover pass):
 - **First-non-null coalesce (`Shorts.or(...)`)** — **N/A (not a null-safe mapper).** Re-triaged
   2026-09-13: ~12 `x == null ? null : f(x)` ternaries remain in `src/main` (`EmailService`,
   `NexusStagingClient`, `MilestoneService`, `ReleaseRunRest`, `ReleaseEngine`, `DistPromoteStep`,
-  `MavenSettingsCredentials`, `GithubReleaseSource`). Each is a null-safe mapper (`f(x)` is not
-  independently null-safe). `or(x, f(x))` still evaluates `f(x)` when `x` is null and would change
-  behavior; leave the ternary.
+  `MavenSettingsCredentials`, `GithubReleaseSource`). Each is a null-safe mapper, and Shorts has no helper for that.
+  `or()` returns its first non-null argument, so `or(x, f(x))` returns `x`, not `f(x)`. It also
+  evaluates `f(x)` when `x` is null. Leave the ternary.
 - **Injectable wall-clock `Clock`** — **N/A (none found).** Reconfirmed 2026-09-13: no direct
   `System.currentTimeMillis()` calls in `src/main`.
 - **Size assertions (`assertSize`)** — **Applied** (leftover pass 2026-09-13). R0005 recorded N/A
@@ -208,13 +210,12 @@ trailing comment.
 | `java:S110` (inheritance depth) | `RootRest` | Depth is imposed by the Juneau REST servlet base-class hierarchy; flattening isn't appropriate. Class-level. |
 | `java:S6539` (Monster Class / too many deps) | `AppConfiguration` | A Spring `@Configuration` legitimately aggregates bean wiring; splitting fragments cohesive wiring. Juneau suppresses S6539 unconditionally. Class-level. |
 | `java:S107` (too many params) | `ReleaseEngine` constructor | Constructor-injected collaborators; a parameter object would obscure the DI wiring. Suppress at the constructor only when a holder/record refactor would read worse than plain constructor injection (document the choice). |
-| `java:S1192` (duplicate literals) | — | Suppress at class level **only** when the repeated literal is a protocol-wire value, annotation attribute, or config key where a constant would obscure meaning. Ordinary duplicated strings → extract a constant instead (see below). |
+| `java:S1192` (duplicate literals) | — | **Always** suppress at class level; never extract a constant to satisfy it (James 2026-10-09, overriding the earlier "extract ordinary literals" rule). |
 | `java:S115` (constant naming) | — | Suppress at **class** level (never on the field) for `UPPER_camelCase` constants or constants mirroring an external-protocol literal. |
 | `unchecked` (parsed-JSON casts) | JSON parse sites | Assigning a raw `Json.DEFAULT.read(…, List.class/Map.class)` result to its known parameterized shape is an unchecked conversion; keep the multiline-form suppression with a rationale. |
 
 **Fix, don't suppress (rules handled by real changes in this repo):**
 
-- `java:S1192` — extract a constant for ordinary duplicated string literals (not protocol/annotation/config keys). E.g. `EmailTemplate.DEV` (dev-list address), `DefaultProcessRunner.MSG_INTERRUPTED`/`MSG_ERROR`.
 - `java:S125` — delete genuinely commented-out code; if it's explanatory prose that Sonar's recognizer misclassifies (e.g. a comment containing `Type.method()`), reword it so it isn't code-shaped rather than deleting the explanation.
 - `java:S1845` — rename to remove a method/field name clash (prefer renaming the field): `CredentialSpec.name`→`id`, `StepResult.ok` field→`success` (keeping the `ok(…)`/`fail(…)` factory pair). Update all references + tests; keep behavior identical.
 - `java:S1172` — remove unused parameters and simplify callers/tests.

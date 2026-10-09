@@ -65,13 +65,7 @@ final class TestReportEvents {
 	static List<RunEvent> collect(Path root, Instant since, String stepId) {
 		if (root == null || ! Files.isDirectory(root))
 			return List.of();
-		var limits = ReportLimits.DEFAULT;
-		var cutoff = since.toEpochMilli() - CLOCK_SLACK_MS;
-		var reader = new SurefireReportReader();
-		var tests = new ArrayList<ReportTest>();
-		var warnings = new ArrayList<String>();
-		var found = new boolean[1];
-		var capped = new boolean[1];
+		var c = new Collector(since.toEpochMilli() - CLOCK_SLACK_MS);
 		try {
 			Files.walkFileTree(root, Set.of(), MAX_DEPTH, new SimpleFileVisitor<>() {
 				@Override /* FileVisitor */
@@ -81,31 +75,57 @@ final class TestReportEvents {
 						return FileVisitResult.SKIP_SUBTREE;
 					if (! REPORT_DIRS.contains(name))
 						return FileVisitResult.CONTINUE;
-					try (var files = Files.newDirectoryStream(dir, "TEST-*.xml")) {
-						for (var f : files) {
-							if (Files.getLastModifiedTime(f).toMillis() < cutoff)
-								continue;
-							found[0] = true;
-							if (tests.size() >= limits.maxTests()) {
-								capped[0] = true;
-								break;
-							}
-							var r = reader.read(f, limits);
-							tests.addAll(r.tests());
-							warnings.addAll(r.warnings());
-						}
-					}
+					c.readDir(dir);
 					return FileVisitResult.SKIP_SUBTREE;
 				}
 			});
 		} catch (IOException e) {
-			warnings.add("test reports unreadable: " + e.getClass().getSimpleName());
-			found[0] = true;
+			c.warnings.add("test reports unreadable: " + e.getClass().getSimpleName());
+			c.found = true;
 		}
-		if (! found[0])
+		if (! c.found)
 			return List.of();
-		if (capped[0])
-			warnings.add("test reports truncated at " + limits.maxTests() + " tests");
-		return new ReportResult(reader.fw(), tests, warnings, capped[0], 0).toEvents(stepId);
+		if (c.capped)
+			c.warnings.add("test reports truncated at " + c.limits.maxTests() + " tests");
+		return new ReportResult(c.reader.fw(), c.tests, c.warnings, c.capped, 0).toEvents(stepId);
+	}
+
+	/**
+	 * The reports read so far, and whether any were found or the test cap was reached.
+	 */
+	private static final class Collector {
+		final ReportLimits limits = ReportLimits.DEFAULT;
+		final SurefireReportReader reader = new SurefireReportReader();
+		final List<ReportTest> tests = new ArrayList<>();
+		final List<String> warnings = new ArrayList<>();
+		final long cutoff;
+		boolean found;
+		boolean capped;
+
+		Collector(long cutoff) {
+			this.cutoff = cutoff;
+		}
+
+		/** Reads the fresh {@code TEST-*.xml} files in {@code dir}, stopping at the test cap. */
+		void readDir(Path dir) throws IOException {
+			try (var files = Files.newDirectoryStream(dir, "TEST-*.xml")) {
+				for (var f : files)
+					if (Files.getLastModifiedTime(f).toMillis() >= cutoff && ! read(f))
+						break;
+			}
+		}
+
+		/** Reads one report; returns false once the test cap is reached. */
+		private boolean read(Path f) {
+			found = true;
+			if (tests.size() >= limits.maxTests()) {
+				capped = true;
+				return false;
+			}
+			var r = reader.read(f, limits);
+			tests.addAll(r.tests());
+			warnings.addAll(r.warnings());
+			return true;
+		}
 	}
 }

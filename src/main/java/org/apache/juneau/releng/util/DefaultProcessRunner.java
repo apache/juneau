@@ -39,8 +39,6 @@ import java.util.function.Consumer;
  * </p>
  */
 public class DefaultProcessRunner implements ProcessRunner {
-	private static final String MSG_INTERRUPTED = "Interrupted running: %s";
-	private static final String MSG_ERROR = "Error running: %s";
 	private static final int CODE_TIMEOUT = 124;
 
 	@Override
@@ -120,9 +118,9 @@ public class DefaultProcessRunner implements ProcessRunner {
 			return new ProcResult(p.exitValue(), sb.toString());
 		} catch (InterruptedException e) {
 			Thread.currentThread().interrupt();
-			throw isex(e, MSG_INTERRUPTED, command);
+			throw isex(e, "Interrupted running: %s", command);
 		} catch (Exception e) {
-			throw isex(e, MSG_ERROR, command);
+			throw isex(e, "Error running: %s", command);
 		}
 	}
 }

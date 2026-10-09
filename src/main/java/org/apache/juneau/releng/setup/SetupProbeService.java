@@ -17,6 +17,8 @@
 
 package org.apache.juneau.releng.setup;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
+
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.Duration;
@@ -233,7 +235,7 @@ public class SetupProbeService {
 				warn(p, "Stored — not tested");
 				return p;
 			}
-			if (Boolean.TRUE.equals(st.lastValid))
+			if (b(st.lastValid))
 				pass(p, spec.label + " is valid");
 			else
 				fail(p, spec.label + " failed validation");

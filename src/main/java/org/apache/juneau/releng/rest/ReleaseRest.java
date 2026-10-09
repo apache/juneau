@@ -67,6 +67,9 @@ import jakarta.servlet.http.HttpServletRequest;
  * {@code /juneau-datatables.js} glue that defines {@code JuneauDataTables.ajax()}, and the composed {@link WebJarsMixin}
  * serves the jQuery, DataTables and Buttons libraries the card's asset packs load.
  */
+@SuppressWarnings({
+	"java:S1192" // WebJar coordinates read more clearly inline than as constants.
+})
 @Rest(path = "/releases", title = "Releases", responseProcessors = FreemarkerViewRenderer.class, mixins = { ViewsMixin.class, DataTablesMixin.class, WebJarsMixin.class })
 public class ReleaseRest extends BasicRestResource {
 

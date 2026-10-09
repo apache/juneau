@@ -161,7 +161,7 @@ public class NexusStagingClient {
 			// The raw status field may be named "type" or "state" depending on the endpoint; fall back
 			// to "state" when "type" is absent.
 			r.status = str(m.getOrDefault("type", m.get("state")));
-			r.transitioning = Boolean.TRUE.equals(m.get("transitioning"));
+			r.transitioning = b(m.get("transitioning"));
 			r.created = str(m.get("created"));
 			r.description = str(m.get("description"));
 			return r;
@@ -181,7 +181,7 @@ public class NexusStagingClient {
 		r.id = str(m.get("repositoryId"));
 		r.profileId = str(m.get("profileId"));
 		r.status = str(m.getOrDefault("type", m.get("state")));
-		r.transitioning = Boolean.TRUE.equals(m.get("transitioning"));
+		r.transitioning = b(m.get("transitioning"));
 		return r;
 	}
 

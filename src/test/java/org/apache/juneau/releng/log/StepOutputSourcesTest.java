@@ -29,15 +29,15 @@ import org.apache.juneau.rest.server.views.ConsoleOutputLine.Style;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
+@SuppressWarnings({
+	"java:S1192" // Fixture version and step ids read more clearly inline than as constants.
+})
 class StepOutputSourcesTest {
-
-	private static final String VERSION = "9.2.1";
-	private static final String STEP = "preflight";
 
 	private RunStateStore storeWithRun(Path dir, StepStatus status, String logRef) {
 		var store = new RunStateStore(dir);
-		var rs = RunState.create(VERSION, "juneau-9.2.1-branch", List.of(STEP, "workspace-setup"));
-		var step = rs.step(STEP);
+		var rs = RunState.create("9.2.1", "juneau-9.2.1-branch", List.of("preflight", "workspace-setup"));
+		var step = rs.step("preflight");
 		step.status = status;
 		step.logRef = logRef;
 		step.startedAt = "2026-10-08T10:00:00Z";
@@ -51,16 +51,16 @@ class StepOutputSourcesTest {
 	void a01_unknownRunStepOrNeverWrittenLogHasNoSource(@TempDir Path dir) {
 		var store = storeWithRun(dir, StepStatus.PENDING, null);
 		var sources = new StepOutputSources(store);
-		assertTrue(sources.find("nope", STEP).isEmpty());
-		assertTrue(sources.find(VERSION, "not-a-step").isEmpty());
-		assertTrue(sources.find(VERSION, STEP).isEmpty(), "no logRef until the step first runs");
+		assertTrue(sources.find("nope", "preflight").isEmpty());
+		assertTrue(sources.find("9.2.1", "not-a-step").isEmpty());
+		assertTrue(sources.find("9.2.1", "preflight").isEmpty(), "no logRef until the step first runs");
 	}
 
 	@Test
 	void a02_logRefEscapingTheStateDirIsRefused(@TempDir Path dir) throws Exception {
 		var outside = Files.writeString(dir.getParent().resolve("outside-" + dir.getFileName() + ".log"), "secret\n");
 		var store = storeWithRun(dir, StepStatus.SUCCEEDED, "../" + outside.getFileName());
-		assertTrue(new StepOutputSources(store).find(VERSION, STEP).isEmpty());
+		assertTrue(new StepOutputSources(store).find("9.2.1", "preflight").isEmpty());
 	}
 
 	@Test
@@ -69,13 +69,13 @@ class StepOutputSourcesTest {
 		Files.writeString(dir.resolve("logs/step.log"), "first\nsecond\n");
 		var sources = new StepOutputSources(storeWithRun(dir, StepStatus.SUCCEEDED, "logs/step.log"));
 
-		var src = sources.find(VERSION, STEP).orElseThrow();
+		var src = sources.find("9.2.1", "preflight").orElseThrow();
 		var page = src.page(null, 100);
 
 		var contract = page.toContractMap();
 		assertEquals(2, ((List<?>)contract.get("lines")).size());
 		assertEquals(Boolean.TRUE, contract.get("terminal"));
-		assertSame(src, sources.find(VERSION, STEP).orElseThrow());
+		assertSame(src, sources.find("9.2.1", "preflight").orElseThrow());
 	}
 
 	@Test
@@ -90,7 +90,7 @@ class StepOutputSourcesTest {
 			StepStatus.AWAITING_REVIEW, List.of("AWAITING REVIEW", true));
 		for (var e : expect.entrySet()) {
 			var sources = new StepOutputSources(storeWithRun(dir, e.getKey(), "logs/step.log"));
-			var st = sources.status(VERSION, STEP);
+			var st = sources.status("9.2.1", "preflight");
 			assertEquals(e.getValue().get(0), st.state(), e.getKey().name());
 			assertEquals(e.getValue().get(1), st.terminal(), e.getKey().name());
 		}
@@ -98,7 +98,7 @@ class StepOutputSourcesTest {
 
 	@Test
 	void b02_settledStepReportsStyleAndServerDuration(@TempDir Path dir) {
-		var st = new StepOutputSources(storeWithRun(dir, StepStatus.FAILED, "logs/step.log")).status(VERSION, STEP);
+		var st = new StepOutputSources(storeWithRun(dir, StepStatus.FAILED, "logs/step.log")).status("9.2.1", "preflight");
 		assertEquals(Style.ERROR, st.stateStyle());
 		assertEquals(Instant.parse("2026-10-08T10:00:00Z"), st.startedAt());
 		assertEquals(83_000L, st.durationMs());
@@ -106,7 +106,7 @@ class StepOutputSourcesTest {
 
 	@Test
 	void b03_runningStepHasNoDurationYet(@TempDir Path dir) {
-		var st = new StepOutputSources(storeWithRun(dir, StepStatus.RUNNING, "logs/step.log")).status(VERSION, STEP);
+		var st = new StepOutputSources(storeWithRun(dir, StepStatus.RUNNING, "logs/step.log")).status("9.2.1", "preflight");
 		assertEquals(Style.ACCENT, st.stateStyle());
 		assertNull(st.durationMs());
 	}
@@ -114,10 +114,10 @@ class StepOutputSourcesTest {
 	@Test
 	void b04_unparseableTimestampsDegradeToNoDuration(@TempDir Path dir) {
 		var store = storeWithRun(dir, StepStatus.SUCCEEDED, "logs/step.log");
-		var rs = store.load(VERSION).orElseThrow();
-		rs.step(STEP).startedAt = "not-a-time";
+		var rs = store.load("9.2.1").orElseThrow();
+		rs.step("preflight").startedAt = "not-a-time";
 		store.save(rs);
-		var st = new StepOutputSources(store).status(VERSION, STEP);
+		var st = new StepOutputSources(store).status("9.2.1", "preflight");
 		assertNull(st.startedAt());
 		assertNull(st.durationMs());
 	}

@@ -45,10 +45,10 @@ import org.apache.juneau.rest.server.views.RunViewSource;
 /**
  * Single-active-run orchestrator. One run advances at a time; state is persisted after every step.
  */
+@SuppressWarnings({
+	"java:S1192" // Step ids and failure messages read more clearly inline than as constants.
+})
 public class ReleaseEngine {
-
-	private static final String VOTE_GATE = "vote-gate";
-	private static final String UNKNOWN_STEP = "Unknown step: ";
 
 	private final RunStateStore store;
 	private final StepRegistry registry;
@@ -361,7 +361,7 @@ public class ReleaseEngine {
 		var rs = require(version);
 		var step = registry.byId(stepId);
 		if (step == null)
-			return StepResult.fail(UNKNOWN_STEP + stepId);
+			return StepResult.fail("Unknown step: " + stepId);
 		var blocked = forwardApplyGuardMessage(rs, stepId);
 		if (blocked.isPresent())
 			return StepResult.fail(blocked.get());
@@ -383,7 +383,7 @@ public class ReleaseEngine {
 
 		if (result.success) {
 			ss.error = null; // a later success of the same step must not keep a leftover failure message
-			if (stepId.equals(VOTE_GATE)) {
+			if (stepId.equals("vote-gate")) {
 				ss.status = StepStatus.AWAITING_VOTE;
 				rs.status = RunStatus.AWAITING_VOTE;
 			} else if (step.reviewGate()) {
@@ -398,11 +398,11 @@ public class ReleaseEngine {
 				// status to terminal so the forward-apply guard (and finalize-run's prerequisite check)
 				// treat it as satisfied. A rejected tally leaves vote-gate AWAITING_VOTE; that path forks
 				// to Drop-RC instead of advancing the linear pipeline.
-				var gate = rs.step(VOTE_GATE);
+				var gate = rs.step("vote-gate");
 				if (gate != null) {
 					gate.status = StepStatus.SUCCEEDED;
 					gate.completedAt = ss.completedAt;
-					events.end(version, VOTE_GATE, EndStatus.OK, elapsedMs(gate.startedAt, gate.completedAt));
+					events.end(version, "vote-gate", EndStatus.OK, elapsedMs(gate.startedAt, gate.completedAt));
 				}
 			}
 			if (stepId.equals("finalize-run")) {
@@ -466,7 +466,7 @@ public class ReleaseEngine {
 		var rs = require(version);
 		var step = registry.byId(stepId);
 		if (step == null)
-			return StepResult.fail(UNKNOWN_STEP + stepId);
+			return StepResult.fail("Unknown step: " + stepId);
 		if (!step.skippable())
 			return StepResult.fail(stepId + " is not skippable.");
 		var ss = rs.step(stepId);
@@ -485,7 +485,7 @@ public class ReleaseEngine {
 		requireStep(stepId);
 		var ss = rs.step(stepId);
 		if (ss == null)
-			return StepResult.fail(UNKNOWN_STEP + stepId);
+			return StepResult.fail("Unknown step: " + stepId);
 		if (ss.status != StepStatus.AWAITING_REVIEW)
 			return StepResult.fail(stepId + " is not awaiting review.");
 		ss.status = StepStatus.SUCCEEDED;
@@ -536,7 +536,7 @@ public class ReleaseEngine {
 			// A predecessor is satisfied when it's absent, terminal-success, or the still-open vote-gate that
 			// the tally step is specifically allowed to resolve — none of those block forward apply.
 			var satisfied = priorState == null || isTerminalSuccess(registry.byId(priorId), priorState.status)
-					|| (priorId.equals(VOTE_GATE) && stepId.equals("tally-vote-result")
+					|| (priorId.equals("vote-gate") && stepId.equals("tally-vote-result")
 							&& priorState.status == StepStatus.AWAITING_VOTE);
 			if (satisfied)
 				continue;

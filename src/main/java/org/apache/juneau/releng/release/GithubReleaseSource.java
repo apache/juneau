@@ -17,6 +17,8 @@
 
 package org.apache.juneau.releng.release;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -54,7 +56,7 @@ public class GithubReleaseSource {
 		for (var m : parsed) {
 			var tag = String.valueOf(m.getOrDefault("tag_name", ""));
 			var v = ReleaseVersion.ofTag(tag);
-			var draft = Boolean.TRUE.equals(m.get("draft"));
+			var draft = b(m.get("draft"));
 			var r = new Release(v.version(), draft ? "DRAFT" : "RELEASED", "github");
 			r.stage = "Distributed";
 			r.githubReleaseUrl = str(m.get("html_url"));

@@ -246,17 +246,15 @@ public class RunEventStore {
 	 * The ids of the attempts of {@code stepId}, oldest first.
 	 */
 	private static List<String> attempts(Path file, String stepId) {
-		List<String> out = new ArrayList<>();
-		for (var id : scan(file).keySet())
-			if (id.equals(stepId) || (id.startsWith(stepId + ".") && id.substring(stepId.length() + 1).chars().allMatch(Character::isDigit)))
-				out.add(id);
-		return out;
+		return scan(file).keySet().stream()
+			.filter(id -> id.equals(stepId) || (id.startsWith(stepId + ".") && id.substring(stepId.length() + 1).chars().allMatch(Character::isDigit)))
+			.toList();
 	}
 
 	private static List<String> openIds(Path file) {
 		List<String> out = new ArrayList<>();
 		scan(file).forEach((id, open) -> {
-			if (open)
+			if (b(open))
 				out.add(id);
 		});
 		return out;

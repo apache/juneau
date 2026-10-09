@@ -38,9 +38,10 @@ import org.junit.jupiter.api.io.TempDir;
  * The engine's mirror of each step into the run-view event stream: one step per invocation, how it ended, the notes it
  * recorded, and the test results of the Maven steps.
  */
+@SuppressWarnings({
+	"java:S1192" // Fixture version and step ids read more clearly inline than as constants.
+})
 class ReleaseEngineRunViewTest {
-
-	private static final String V = "9.2.1";
 
 	private static final String REPORT = """
 		<?xml version="1.0" encoding="UTF-8"?>
@@ -108,7 +109,7 @@ class ReleaseEngineRunViewTest {
 
 	private void satisfyAllPredecessorsOf(Path dir, String stepId) {
 		var store = new RunStateStore(dir);
-		var rs = store.load(V).orElseThrow();
+		var rs = store.load("9.2.1").orElseThrow();
 		var ids = StepRegistry.standard(new BranchResolver(runner(dir, 0, false), "/repo")).ids();
 		for (var i = 0; i < ids.indexOf(stepId); i++)
 			rs.step(ids.get(i)).status = StepStatus.SUCCEEDED;
@@ -116,7 +117,7 @@ class ReleaseEngineRunViewTest {
 	}
 
 	private List<RunEvent> events(ReleaseEngine eng) {
-		return eng.runViewSource(V.replace('.', '_')).orElseThrow().page(null, 5000).events();
+		return eng.runViewSource("9_2_1").orElseThrow().page(null, 5000).events();
 	}
 
 	/** One compact token per event: {@code step:id}, {@code end:id:status}, {@code note:level:step}, {@code test:status}. */
@@ -142,8 +143,8 @@ class ReleaseEngineRunViewTest {
 	@Test
 	void a01_aSuccessfulStepIsAStepThenAnOkEnd(@TempDir Path dir) {
 		var eng = engine(dir);
-		eng.start(V, null);
-		eng.apply(V, "preflight", Map.of());
+		eng.start("9.2.1", null);
+		eng.apply("9.2.1", "preflight", Map.of());
 
 		assertEquals(List.of("step:preflight", "end:preflight:ok"), summary(eng));
 		var step = first(eng, RunEvent.Kind.STEP);
@@ -155,11 +156,11 @@ class ReleaseEngineRunViewTest {
 	@Test
 	void a02_aFailedStepEndsFailAndAResumeIsANewAttempt(@TempDir Path dir) {
 		var eng = engine(dir);
-		eng.start(V, null);
+		eng.start("9.2.1", null);
 		satisfyAllPredecessorsOf(dir, "tally-vote-result");
 
-		assertFalse(eng.apply(V, "tally-vote-result", Map.of()).success);
-		assertTrue(eng.apply(V, "tally-vote-result", Map.of("voteOutcome", "passed", "tally", "+3 binding\nsecond line")).success);
+		assertFalse(eng.apply("9.2.1", "tally-vote-result", Map.of()).success);
+		assertTrue(eng.apply("9.2.1", "tally-vote-result", Map.of("voteOutcome", "passed", "tally", "+3 binding\nsecond line")).success);
 
 		assertEquals(List.of("step:tally-vote-result", "end:tally-vote-result:fail", "step:tally-vote-result.2",
 			"note:info:tally-vote-result.2", "end:tally-vote-result.2:ok"), summary(eng).stream().filter(s -> ! s.startsWith("end:vote-gate")).toList());
@@ -170,13 +171,13 @@ class ReleaseEngineRunViewTest {
 	@Test
 	void a03_theVoteGateStaysOpenAsWaitingUntilTheTallyPasses(@TempDir Path dir) {
 		var eng = engine(dir);
-		eng.start(V, null);
+		eng.start("9.2.1", null);
 		satisfyAllPredecessorsOf(dir, "vote-gate");
 
-		eng.apply(V, "vote-gate", Map.of());
+		eng.apply("9.2.1", "vote-gate", Map.of());
 		assertEquals(List.of("step:vote-gate", "step:vote-gate:waiting"), summary(eng));
 
-		eng.apply(V, "tally-vote-result", Map.of("voteOutcome", "passed", "tally", "+3 binding\nsecond line"));
+		eng.apply("9.2.1", "tally-vote-result", Map.of("voteOutcome", "passed", "tally", "+3 binding\nsecond line"));
 		var tail = summary(eng).subList(2, summary(eng).size());
 		assertEquals(List.of("step:tally-vote-result", "note:info:tally-vote-result", "end:vote-gate:ok", "end:tally-vote-result:ok"), tail);
 		var note = events(eng).stream().filter(e -> e.kind() == RunEvent.Kind.NOTE).findFirst().orElseThrow().toContractMap();
@@ -186,11 +187,11 @@ class ReleaseEngineRunViewTest {
 	@Test
 	void a04_aRejectedTallyIsAWarningAndLeavesTheGateWaiting(@TempDir Path dir) {
 		var eng = engine(dir);
-		eng.start(V, null);
+		eng.start("9.2.1", null);
 		satisfyAllPredecessorsOf(dir, "vote-gate");
-		eng.apply(V, "vote-gate", Map.of());
+		eng.apply("9.2.1", "vote-gate", Map.of());
 
-		eng.apply(V, "tally-vote-result", Map.of("voteOutcome", "rejected"));
+		eng.apply("9.2.1", "tally-vote-result", Map.of("voteOutcome", "rejected"));
 
 		var s = summary(eng);
 		assertTrue(s.contains("note:warn:tally-vote-result"), s.toString());
@@ -200,22 +201,22 @@ class ReleaseEngineRunViewTest {
 	@Test
 	void a05_aReviewGateWaitsThenEndsWhenConfirmed(@TempDir Path dir) {
 		var eng = engine(dir);
-		eng.start(V, null);
+		eng.start("9.2.1", null);
 		satisfyAllPredecessorsOf(dir, "javadoc-verify");
 
-		eng.apply(V, "javadoc-verify", Map.of());
+		eng.apply("9.2.1", "javadoc-verify", Map.of());
 		assertEquals(List.of("step:javadoc-verify", "step:javadoc-verify:waiting"), summary(eng));
 
-		eng.confirmReview(V, "javadoc-verify");
+		eng.confirmReview("9.2.1", "javadoc-verify");
 		assertEquals("end:javadoc-verify:ok", summary(eng).get(2));
 	}
 
 	@Test
 	void a06_aSkippedStepIsAStepThenASkipEnd(@TempDir Path dir) {
 		var eng = engine(dir);
-		eng.start(V, null);
+		eng.start("9.2.1", null);
 
-		eng.skip(V, "test-workspace-verify");
+		eng.skip("9.2.1", "test-workspace-verify");
 
 		assertEquals(List.of("step:test-workspace-verify", "end:test-workspace-verify:skip"), summary(eng));
 	}
@@ -223,10 +224,10 @@ class ReleaseEngineRunViewTest {
 	@Test
 	void a07_composedEmailsAreNotesUnderTheirStep(@TempDir Path dir) {
 		var eng = engine(dir);
-		eng.start(V, null);
+		eng.start("9.2.1", null);
 		satisfyAllPredecessorsOf(dir, "compose-propose-email");
 
-		eng.apply(V, "compose-propose-email", Map.of());
+		eng.apply("9.2.1", "compose-propose-email", Map.of());
 
 		assertEquals(List.of("step:compose-propose-email", "note:info:compose-propose-email", "end:compose-propose-email:ok"), summary(eng));
 		var text = (String)first(eng, RunEvent.Kind.NOTE).get("text");
@@ -237,10 +238,10 @@ class ReleaseEngineRunViewTest {
 	@Test
 	void b01_aMavenStepFeedsItsFreshSurefireReportsBeforeItEnds(@TempDir Path dir) {
 		var eng = engine(dir, runner(dir, 0, true));
-		eng.start(V, null);
+		eng.start("9.2.1", null);
 		satisfyAllPredecessorsOf(dir, "build-verify");
 
-		eng.apply(V, "build-verify", Map.of());
+		eng.apply("9.2.1", "build-verify", Map.of());
 
 		assertEquals(List.of("step:build-verify", "replace", "test:pass", "test:pass", "end:build-verify:ok"), summary(eng));
 		var test = first(eng, RunEvent.Kind.TEST);
@@ -252,10 +253,10 @@ class ReleaseEngineRunViewTest {
 	@Test
 	void b02_aFailingMavenStepKeepsTheFailedTestsAndEndsFail(@TempDir Path dir) {
 		var eng = engine(dir, runner(dir, 1, true));
-		eng.start(V, null);
+		eng.start("9.2.1", null);
 		satisfyAllPredecessorsOf(dir, "build-verify");
 
-		assertFalse(eng.apply(V, "build-verify", Map.of()).success);
+		assertFalse(eng.apply("9.2.1", "build-verify", Map.of()).success);
 
 		assertEquals(List.of("step:build-verify", "replace", "test:pass", "test:fail", "end:build-verify:fail"), summary(eng));
 	}
@@ -265,10 +266,10 @@ class ReleaseEngineRunViewTest {
 		var stale = writeReport(dir, true);
 		Files.setLastModifiedTime(stale, FileTime.fromMillis(1_000));
 		var eng = engine(dir);
-		eng.start(V, null);
+		eng.start("9.2.1", null);
 		satisfyAllPredecessorsOf(dir, "build-verify");
 
-		eng.apply(V, "build-verify", Map.of());
+		eng.apply("9.2.1", "build-verify", Map.of());
 
 		assertEquals(List.of("step:build-verify", "end:build-verify:ok"), summary(eng));
 	}
@@ -276,12 +277,12 @@ class ReleaseEngineRunViewTest {
 	@Test
 	void c01_finalizingTheRunIsDoneAndMakesTheSourceTerminal(@TempDir Path dir) {
 		var eng = engine(dir);
-		eng.start(V, null);
+		eng.start("9.2.1", null);
 		satisfyAllPredecessorsOf(dir, "finalize-run");
 		var source = eng.runViewSource("9_2_1").orElseThrow();
 		assertFalse(source.page(null, 100).terminal());
 
-		eng.apply(V, "finalize-run", Map.of());
+		eng.apply("9.2.1", "finalize-run", Map.of());
 
 		var s = summary(eng);
 		assertEquals(List.of("step:finalize-run", "end:finalize-run:ok", "done"), s);
@@ -291,7 +292,7 @@ class ReleaseEngineRunViewTest {
 	@Test
 	void c02_aRunNobodyStartedHasNoSource(@TempDir Path dir) {
 		var eng = engine(dir);
-		eng.start(V, null);
+		eng.start("9.2.1", null);
 		assertTrue(eng.runViewSource("9_9_9").isEmpty());
 		assertTrue(eng.runViewSource("9_2_1").isPresent());
 		assertTrue(eng.runViewSource("9_2_1").orElseThrow().page(null, 100).events().isEmpty(), "nothing has run yet");
@@ -300,10 +301,10 @@ class ReleaseEngineRunViewTest {
 	@Test
 	void c03_aStepInterruptedByARestartEndsFail(@TempDir Path dir) {
 		var eng = engine(dir);
-		var rs = eng.start(V, null);
-		eng.runEvents().begin(V, "preflight", "Preflight", 1);
+		eng.start("9.2.1", null);
+		eng.runEvents().begin("9.2.1", "preflight", "Preflight", 1);
 		var store = new RunStateStore(dir);
-		rs = store.load(V).orElseThrow();
+		var rs = store.load("9.2.1").orElseThrow();
 		rs.step("preflight").status = StepStatus.RUNNING;
 		rs.currentStepId = "preflight";
 		store.save(rs);
@@ -317,13 +318,13 @@ class ReleaseEngineRunViewTest {
 	void c04_droppingTheCandidateEndsOpenStepsAndSaysSo(@TempDir Path dir) {
 		var runner = runner(dir, 0, false);
 		var eng = engine(dir, runner);
-		eng.start(V, null);
+		eng.start("9.2.1", null);
 		satisfyAllPredecessorsOf(dir, "vote-gate");
-		eng.apply(V, "vote-gate", Map.of());
+		eng.apply("9.2.1", "vote-gate", Map.of());
 		var drop = new DropRcService(new RunStateStore(dir), eng.registry(), runner, dir.resolve("staging/git/juneau"), dir,
 			NexusStagingClient.forTests((m, p, b) -> ""), TargetProfile.prodDefault(), eng.runEvents());
 
-		drop.apply(V, "vote rejected", () -> "me", () -> "pw");
+		drop.apply("9.2.1", "vote rejected", () -> "me", () -> "pw");
 
 		var s = summary(eng);
 		assertEquals(List.of("step:vote-gate", "step:vote-gate:waiting", "end:vote-gate:skip", "note:warn:null"), s);
