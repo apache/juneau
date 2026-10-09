@@ -1883,6 +1883,7 @@ const sidebars: SidebarsConfig = {
 								{ type: 'doc', id: 'topics/10.68.09.RichTableViewsIcons', label: '10.68.9. Icons and Sprites' },
 								{ type: 'doc', id: 'topics/10.68.10.ConsoleOutputRegion', label: '10.68.10. Console Output Region' },
 								{ type: 'doc', id: 'topics/10.68.11.RunViewRegion', label: '10.68.11. Run View Region' },
+								{ type: 'doc', id: 'topics/10.68.12.TerminalRegion', label: '10.68.12. Terminal Region' },
 							],
 						},
 						{
