@@ -23,6 +23,7 @@ import static org.mockito.Mockito.*;
 import java.lang.reflect.*;
 import java.util.*;
 
+import org.apache.juneau.commons.logging.*;
 import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.http.response.*;
 import org.apache.juneau.marshall.InvalidDataConversionException;
@@ -558,6 +559,8 @@ class RestContext_CoverageSweep_Test extends org.apache.juneau.TestBase {
 
 	@Test void r01_destroy_hookThrows_isCaughtAndLogged_notPropagated() throws Exception {
 		var ctx = new RestContext(argsOf(Fix_RestDestroyThrows.class, Fix_RestDestroyThrows::new));
-		assertDoesNotThrow(ctx::destroy);
+		var records = LogRecordCapture.quietly(Fix_RestDestroyThrows.class, () -> assertDoesNotThrow(ctx::destroy));
+		assertEquals(1, records.size(), records::toString);
+		assertTrue(records.get(0).getMessage().contains("servlet-destroy method"), records.get(0).getMessage());
 	}
 }

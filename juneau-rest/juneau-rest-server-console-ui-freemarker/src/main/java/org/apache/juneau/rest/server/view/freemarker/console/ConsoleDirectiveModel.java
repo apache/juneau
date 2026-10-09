@@ -58,12 +58,14 @@ public final class ConsoleDirectiveModel implements TemplateDirectiveModel {
 	/** The shared-variable name this directive registers under. */
 	public static final String NAME = "console";
 
-	static final Set<String> ATTRS = Set.of("theme", "icon", "favicon", "brand", "title", "chrome");
+	static final Set<String> ATTRS = Set.of("theme", "icon", "favicon", "brand", "title", "chrome", "facts");
 
 	private final boolean devMode;
+	private final CardTypeRegistry cardTypes;
 
-	ConsoleDirectiveModel(boolean devMode) {
+	ConsoleDirectiveModel(boolean devMode, CardTypeRegistry cardTypes) {
 		this.devMode = devMode;
+		this.cardTypes = cardTypes;
 	}
 
 	@Override
@@ -99,6 +101,7 @@ public final class ConsoleDirectiveModel implements TemplateDirectiveModel {
 		var brand = FtlAttrLists.scalar(p, "brand");
 		var titleAttr = FtlAttrLists.scalar(p, "title");
 		var chrome = FtlAttrLists.strictBoolean(p, NAME, "chrome", false);
+		var factsAttr = FtlAttrLists.map(p, NAME, "facts");
 
 		// Document <title>: a title seeded by a page spec wins; else the title= attribute, else brand=; omitted when none.
 		var docTitle = ! titleAttr.isEmpty() ? titleAttr : brand;
@@ -111,6 +114,10 @@ public final class ConsoleDirectiveModel implements TemplateDirectiveModel {
 			h.chrome(chrome);
 		});
 
+		// Chrome-side facts: last-wins against <@facts>; the one strict check against PageSpec.facts runs at </@console>.
+		if (! factsAttr.isEmpty())
+			cap.mergeChromeFacts(factsAttr);
+
 		cap.consoleOpen = true;
 		try {
 			if (nn(body))
@@ -119,6 +126,11 @@ public final class ConsoleDirectiveModel implements TemplateDirectiveModel {
 			cap.consoleOpen = false;
 		}
 		cap.checkConsoleClose();
+		try {
+			cap.checkWiring(cardTypes);
+		} catch (IllegalArgumentException e) {
+			throw FtlAttrLists.reject(e.getMessage());
+		}
 		cap.resolveActiveNav();
 
 		if (n(cap.themeCssUrl)) {
@@ -137,7 +149,7 @@ public final class ConsoleDirectiveModel implements TemplateDirectiveModel {
 		if (devMode) {
 			var findings = PageContractSchema.get().validate(cap.toContractJson(), cap.templates().keySet());
 			if (! findings.isEmpty())
-				throw FtlAttrLists.reject(String.format("Page contract failed schema validation: '%s'.", String.join("; ", findings)));
+				throw FtlAttrLists.reject(f("Page contract failed schema validation: '%s'.", String.join("; ", findings)));
 		}
 
 		var out = env.getOut();

@@ -81,9 +81,12 @@ class FileRunViewSource_Test extends TestBase {
 
 	@Test void b02_badLinesAreSkippedWithSeqGap() throws Exception {
 		write("not json", "{\"ev\":\"bogus\"}", "{\"ev\":\"done\",\"status\":\"ok\"}");
-		var p = src().page(null, 10).validate();
+		var page = new RunViewPage[1];
+		var msgs = warnings(() -> page[0] = src().page(null, 10).validate());
+		var p = page[0];
 		assertEquals(List.of(3L), seqs(p));
 		assertTrue(p.next().endsWith(".3"));
+		assertEquals(1, msgs.size(), msgs::toString);
 	}
 
 	private static final class Capture extends Handler {
@@ -96,11 +99,14 @@ class FileRunViewSource_Test extends TestBase {
 	private static List<String> warnings(Runnable r) {
 		var log = Logger.getLogger(FileRunViewSource.class.getName());
 		var cap = new Capture();
+		var useParent = log.getUseParentHandlers();
+		log.setUseParentHandlers(false);
 		log.addHandler(cap);
 		try {
 			r.run();
 		} finally {
 			log.removeHandler(cap);
+			log.setUseParentHandlers(useParent);
 		}
 		return cap.messages;
 	}
@@ -124,7 +130,10 @@ class FileRunViewSource_Test extends TestBase {
 
 	@Test void b03_overlongLineSkipped() throws Exception {
 		write("{\"ev\":\"note\",\"level\":\"info\",\"text\":\"" + "x".repeat(70_000) + "\"}", note(2));
-		assertEquals(List.of(2L), seqs(src().page(null, 10)));
+		var page = new RunViewPage[1];
+		var msgs = warnings(() -> page[0] = src().page(null, 10));
+		assertEquals(List.of(2L), seqs(page[0]));
+		assertEquals(1, msgs.size(), msgs::toString);
 	}
 
 	@Test void b04_blankLineAndBomAndCr() throws Exception {

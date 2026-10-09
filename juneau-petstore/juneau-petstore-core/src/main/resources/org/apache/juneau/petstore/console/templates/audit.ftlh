@@ -27,7 +27,7 @@
     { key: 'detail', label: 'Detail', searchType: 'text' }
   ],
   ribbon: [
-    { type: 'export', id: 'export' },
+    { type: 'export', buttons: ['copy', 'csv'] },
     { type: 'refresh', id: 'refresh' }
   ]
 }</@card>

@@ -23,6 +23,7 @@ import static org.mockito.Mockito.*;
 import java.util.*;
 import java.util.logging.*;
 
+import org.apache.juneau.commons.logging.*;
 import org.apache.juneau.*;
 import org.apache.juneau.http.response.*;
 import org.apache.juneau.rest.mock.*;
@@ -155,7 +156,9 @@ class RestServlet_Test extends TestBase {
 		// because RestContext.postInit catches and rethrows as ServletException. That falls into the
 		// catch(ServletException) branch (line 260-263) which sets initException AND re-throws. // NOSONAR
 		var s = new E_PostInitThrows();
-		assertThrows(ServletException.class, () -> s.init(mockServletConfig()));
+		var records = LogRecordCapture.quietly(E_PostInitThrows.class, () -> assertThrows(ServletException.class, () -> s.init(mockServletConfig())));
+		assertEquals(1, records.size(), records::toString);
+		assertEquals(java.util.logging.Level.SEVERE, records.get(0).getLevel());
 		// initException is now set; subsequent service() should re-throw it through the catch-and-sendError.
 		var req = mock(HttpServletRequest.class);
 		var resp = mock(HttpServletResponse.class);
@@ -169,11 +172,14 @@ class RestServlet_Test extends TestBase {
 		// In practice RestContext wraps everything as ServletException, but we still try to exercise the path.
 		var s = new F_PostInitThrowsHttp();
 		// Either path: ServletException catch (rethrow) or BasicHttpException catch (no rethrow).  Exercise it. // NOSONAR
-		try {
-			s.init(mockServletConfig());
-		} catch (ServletException ignored) {
-			// Falls into ServletException catch — also acceptable; both branches exercised across the suite.
-		}
+		var records = LogRecordCapture.quietly(F_PostInitThrowsHttp.class, () -> {
+			try {
+				s.init(mockServletConfig());
+			} catch (ServletException ignored) {
+				// Falls into ServletException catch — also acceptable; both branches exercised across the suite.
+			}
+		});
+		assertEquals(1, records.size(), records::toString);
 		// Subsequent service() should also report 500.
 		var req = mock(HttpServletRequest.class);
 		var resp = mock(HttpServletResponse.class);

@@ -115,7 +115,7 @@ public final class ConsoleSlotDirectiveModel implements TemplateDirectiveModel {
 
 		var cap = PageCapture.get(env);
 		if (n(cap) || ! cap.consoleOpen)
-			throw FtlAttrLists.reject(String.format("<@%s> must be nested inside <@console>.", slot));
+			throw FtlAttrLists.reject(f("<@%s> must be nested inside <@console>.", slot));
 
 		String markup;
 		cap.slotOpen = true;
@@ -150,7 +150,7 @@ public final class ConsoleSlotDirectiveModel implements TemplateDirectiveModel {
 	private static void footer(PageCapture cap, String text, String markup) throws TemplateModelException {
 		if (! text.isEmpty()) {
 			if (! markup.isBlank())
-				throw FtlAttrLists.reject(String.format(
+				throw FtlAttrLists.reject(f(
 					"<@footer text='%s'> also has a body; use text= for plain text or the body for markup, not both.", text));
 			cap.footer(f -> f.text(text));
 		} else if (! markup.isBlank()) {

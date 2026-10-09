@@ -21,6 +21,7 @@ import static org.apache.juneau.commons.utils.Shorts.*;
 import java.util.*;
 
 import org.apache.juneau.rest.server.console.*;
+import org.apache.juneau.rest.server.views.*;
 
 /**
  * Type-agnostic card entry in the page contract: {@code id}, {@code type}, optional {@code src},
@@ -47,6 +48,7 @@ public final class CardSpec {
 	private String cssClass;
 	private final Map<String,Object> body = new LinkedHashMap<>();
 	private final List<Map<String,Object>> publishes = new ArrayList<>(), subscribes = new ArrayList<>();
+	private List<VisibilityRule> visibleWhen = List.of();
 
 	private CardSpec(String type, String id) {
 		this.type = type;
@@ -81,7 +83,7 @@ public final class CardSpec {
 	/** @param key A type-specific field. @param value Its value. @return This object. */
 	public CardSpec body(String key, Object value) {
 		if ("publishes".equals(key) || "subscribes".equals(key))
-			throw new IllegalArgumentException(String.format("card '%s': '%s' is a base key; use %s(...)", id, key, key));
+			throw iaex("card '%s': '%s' is a base key; use %s(...)", id, key, key);
 		body.put(key, value);
 		return this;
 	}
@@ -95,6 +97,19 @@ public final class CardSpec {
 	public CardSpec publishes(TopicDecl... v) {
 		for (var d : v)
 			publishes.add(d.toPublicationMap());
+		return this;
+	}
+
+	/**
+	 * Sets card-level visibility rules.  The client evaluates them against the page's facts; this only serializes them.
+	 *
+	 * @param rules The rules, ANDed together.  None clears them.
+	 * @return This object.
+	 */
+	public CardSpec visibleWhen(VisibilityRule... rules) {
+		if (rules == null || Arrays.stream(rules).anyMatch(Objects::isNull))
+			throw iaex("CardSpec visibleWhen rules must not be null.");
+		visibleWhen = List.of(rules);
 		return this;
 	}
 
@@ -135,10 +150,12 @@ public final class CardSpec {
 		return this;
 	}
 
-	/** @param other The card whose {@code publishes} / {@code subscribes} are appended to this one's. @return This object. */
+	/** @param other The card whose {@code publishes} / {@code subscribes} are appended to this one's, and whose {@code visibleWhen} replaces (does not merge with) this one's when it has any. @return This object. */
 	CardSpec wiringFrom(CardSpec other) {
 		publishes.addAll(other.publishes);
 		subscribes.addAll(other.subscribes);
+		if (! other.visibleWhen.isEmpty())
+			visibleWhen = other.visibleWhen;
 		return this;
 	}
 
@@ -171,6 +188,7 @@ public final class CardSpec {
 		if (nn(template)) m.put("template", template);
 		if (bare) m.put("bare", true);
 		if (nn(cssClass)) m.put("class", cssClass);
+		if (! visibleWhen.isEmpty()) m.put("visibleWhen", visibleWhen.stream().map(VisibilityRule::toMap).toList());
 		if (! publishes.isEmpty()) m.put("publishes", List.copyOf(publishes));
 		if (! subscribes.isEmpty()) m.put("subscribes", List.copyOf(subscribes));
 		m.putAll(body);

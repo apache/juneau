@@ -22,6 +22,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.io.*;
 import java.util.*;
 
+import org.apache.juneau.commons.logging.*;
 import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.commons.svl.*;
 import org.apache.juneau.http.header.*;
@@ -193,7 +194,11 @@ class RestContext_PathsAndBeans_Test extends org.apache.juneau.TestBase {
 	}
 
 	@Test void d01_beanMethodListOverrides_allSevenNamedSlots_resolveToOverride() throws Exception {
-		var ctx = new RestContext(argsOf(Fix_MethodListBeans.class, Fix_MethodListBeans::new));
+		var holder = new RestContext[1];
+		var records = LogRecordCapture.quietly(RestContext.class, () -> holder[0] = new RestContext(argsOf(Fix_MethodListBeans.class, Fix_MethodListBeans::new)));
+		assertEquals(1, records.size(), records::toString);
+		assertTrue(records.get(0).getMessage().contains("declares multiple @Bean methods"), records.get(0).getMessage());
+		var ctx = holder[0];
 		assertNotNull(ctx.getDestroyMethods());
 		assertNotNull(ctx.getEndCallMethods());
 		assertNotNull(ctx.getPostCallMethods());
@@ -221,7 +226,10 @@ class RestContext_PathsAndBeans_Test extends org.apache.juneau.TestBase {
 	}
 
 	@Test void e01_beanOverrides_replaceAnnotationDerivedDefaults() throws Exception {
-		var ctx = new RestContext(argsOf(Fix_DefaultHeaderBeans.class, Fix_DefaultHeaderBeans::new));
+		var holder = new RestContext[1];
+		var records = LogRecordCapture.quietly(RestContext.class, () -> holder[0] = new RestContext(argsOf(Fix_DefaultHeaderBeans.class, Fix_DefaultHeaderBeans::new)));
+		assertEquals(1, records.size(), records::toString);
+		var ctx = holder[0];
 		assertNotNull(ctx.getDefaultRequestAttributes().get("fromBean"));
 		assertNull(ctx.getDefaultRequestAttributes().get("fromAnno"));
 		assertTrue(ctx.getDefaultRequestHeaders().stream().anyMatch(h -> eqic("X-From-Bean", h.getName())));

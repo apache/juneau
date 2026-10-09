@@ -98,6 +98,28 @@ final class FtlAttrLists {
 		throw reject("<@" + directive + "> " + name + "= must be a string or sequence.");
 	}
 
+	/**
+	 * Hash-valued attribute (used by {@code <@console facts=>}): absent gives an empty map; a hash is deep-unwrapped and
+	 * its keys stringified.  Any other shape is rejected.
+	 *
+	 * @param params The directive params.
+	 * @param directive The directive name, without {@code <@}.
+	 * @param name The attribute name.
+	 * @return The map, in iteration order; empty when the attribute is absent.
+	 * @throws TemplateModelException If the value is not a hash.
+	 */
+	static Map<String,Object> map(Map<String, TemplateModel> params, String directive, String name) throws TemplateModelException {
+		var raw = params.get(name);
+		if (n(raw))
+			return Map.of();
+		if (! (DeepUnwrap.unwrap(raw) instanceof Map<?,?> m))
+			throw reject("<@" + directive + "> " + name + "= must be a hash.");
+		var out = new LinkedHashMap<String,Object>();
+		for (var e : m.entrySet())
+			out.put(String.valueOf(e.getKey()), e.getValue());
+		return out;
+	}
+
 	static void rejectUnknown(Map<String, TemplateModel> params, String directive, Set<String> allowed)
 			throws TemplateModelException {
 		for (var key : params.keySet()) {
@@ -118,7 +140,7 @@ final class FtlAttrLists {
 	 */
 	static void checkId(String directive, String id) throws TemplateModelException {
 		if (! ID_PATTERN.matcher(id).matches())
-			throw reject(String.format("<@%s> id '%s' must match ^[A-Za-z][A-Za-z0-9_-]{0,63}$.", directive, id));
+			throw reject(f("<@%s> id '%s' must match ^[A-Za-z][A-Za-z0-9_-]{0,63}$.", directive, id));
 	}
 
 	/**
@@ -147,6 +169,6 @@ final class FtlAttrLists {
 			return true;
 		if (eq(s, "false"))
 			return false;
-		throw reject(String.format("<@%s> %s= must be true or false; got '%s'.", directive, name, s));
+		throw reject(f("<@%s> %s= must be true or false; got '%s'.", directive, name, s));
 	}
 }

@@ -29,6 +29,7 @@ import java.util.concurrent.atomic.*;
 import java.util.logging.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.commons.logging.*;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.io.*;
 
@@ -38,8 +39,9 @@ class FileTerminalSource_Test extends TestBase {
 
 	private Path log;
 
-	@BeforeEach void setup() {
+	@BeforeEach void setup() throws Exception {
 		log = dir.resolve("run.log");
+		size("{\"cols\":120,\"rows\":40}");  // A valid sidecar so only the tests about a missing one log a warning.
 	}
 
 	private void append(String s) throws Exception {
@@ -97,30 +99,21 @@ class FileTerminalSource_Test extends TestBase {
 
 	@Test void a04_missingOrMalformedSidecarDefaultsAndWarnsOnce() throws Exception {
 		append("x");
-		var records = new CopyOnWriteArrayList<LogRecord>();
-		var h = new Handler() {
-			@Override public void publish(LogRecord r) { records.add(r); }
-			@Override public void flush() {}
-			@Override public void close() {}
-		};
-		var logger = Logger.getLogger(FileTerminalSource.class.getName());
-		logger.addHandler(h);
-		try {
-			var s = FileTerminalSource.create(log).build();
+		Files.delete(dir.resolve("run.log.size"));
+		var s = FileTerminalSource.create(log).build();
+		var records = LogRecordCapture.quietly(FileTerminalSource.class, () -> {
 			var c = s.read(0, 10);
 			assertEquals(120, c.cols());
 			assertEquals(40, c.rows());
 			size("{\"cols\":0,\"rows\":24}");
 			assertEquals(120, s.read(0, 10).cols());
-			assertEquals(1, records.size());
-			assertEquals(Level.WARNING, records.get(0).getLevel());
-			assertTrue(records.get(0).getMessage().contains("120x40"), records.get(0).getMessage());
-			size("{\"cols\":100,\"rows\":30}");
-			assertEquals(100, s.read(0, 10).cols());
-			assertEquals(30, s.read(0, 10).rows());
-		} finally {
-			logger.removeHandler(h);
-		}
+		});
+		assertEquals(1, records.size());
+		assertEquals(Level.WARNING, records.get(0).getLevel());
+		assertTrue(records.get(0).getMessage().contains("120x40"), records.get(0).getMessage());
+		size("{\"cols\":100,\"rows\":30}");
+		assertEquals(100, s.read(0, 10).cols());
+		assertEquals(30, s.read(0, 10).rows());
 	}
 
 	@Test void a05_parseSize() throws Exception {

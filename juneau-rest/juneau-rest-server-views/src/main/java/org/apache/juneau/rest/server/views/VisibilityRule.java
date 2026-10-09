@@ -49,7 +49,7 @@ import org.apache.juneau.rest.server.widgets.Op;
 public final class VisibilityRule {
 
 	private static final Object MISSING = new Object();
-	private static final Set<String> KNOWN_OPS = Set.of("eq", "ne", "present", "absent", "in", "contains");
+	static final Set<String> KNOWN_OPS = Set.of("eq", "ne", "present", "absent", "in", "contains");
 
 	/** The field this rule tests, a dotted path into the evaluation map (e.g. {@code "facts.viewer.roles"}). */
 	public String field;

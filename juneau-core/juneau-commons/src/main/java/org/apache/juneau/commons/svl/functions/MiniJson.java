@@ -40,8 +40,6 @@ import java.util.*;
 	"unchecked" // Cast is safe: type verified by caller context.
 })
 final class MiniJson {
-	// Q:  Anything here good candidates for state machines?
-
 	private final String src;
 	private int pos;
 

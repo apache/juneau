@@ -21,6 +21,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.security.*;
 import java.util.*;
 
+import org.apache.juneau.commons.logging.*;
 import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
 
@@ -37,7 +38,8 @@ class AuthResultAccumulator_Test extends TestBase {
 	@Test void a01_addFromDifferentPrincipal_rolesNotUnioned_firstPrincipalWins() {
 		var acc = new AuthResultAccumulator();
 		acc.add(AuthResult.of(ALICE, "r1"));
-		acc.add(AuthResult.of(BOB, "r2"));      // ADD: principal stays alice; bob's roles are NOT unioned (different subject)
+		var records = LogRecordCapture.quietly(AuthResultAccumulator.class, () -> acc.add(AuthResult.of(BOB, "r2")));  // ADD: principal stays alice; bob's roles are NOT unioned (different subject)
+		assertEquals(1, records.size(), records::toString);
 		var r = acc.result().orElseThrow();
 		assertSame(ALICE, r.getPrincipal());
 		assertEquals(Set.of("r1"), r.getRoles());

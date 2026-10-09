@@ -59,7 +59,16 @@ jobs:
       with:
         distribution: 'temurin'
         java-version: ${{ matrix.java }}
-        cache: 'maven'
+    # Not setup-java's cache: 'maven', which keys on an exact hash of every pom.xml, so any pom edit misses entirely and
+    # the build refetches everything live, including the OpenSAML jars that are only served by build.shibboleth.net
+    # (which times out).  The restore-keys prefix gives a partial restore on a pom change and keeps those jars.
+    # Keys are per job: js-tests resolves only a subset without SAML and must not seed the full build.
+    - name: Cache Maven repository
+      uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6
+      with:
+        path: ~/.m2/repository
+        key: ${{ runner.os }}-maven-build-${{ hashFiles('**/pom.xml') }}
+        restore-keys: ${{ runner.os }}-maven-build-
     - name: Build with Maven
       run: mvn --no-transfer-progress --batch-mode --show-version
 
@@ -92,7 +101,16 @@ jobs:
       with:
         distribution: 'temurin'
         java-version: 17
-        cache: 'maven'
+    # Not setup-java's cache: 'maven', which keys on an exact hash of every pom.xml, so any pom edit misses entirely and
+    # the build refetches everything live, including the OpenSAML jars that are only served by build.shibboleth.net
+    # (which times out).  The restore-keys prefix gives a partial restore on a pom change and keeps those jars.
+    # Keys are per job: js-tests resolves only a subset without SAML and must not seed the full build.
+    - name: Cache Maven repository
+      uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6
+      with:
+        path: ~/.m2/repository
+        key: ${{ runner.os }}-maven-jstests-${{ hashFiles('**/pom.xml') }}
+        restore-keys: ${{ runner.os }}-maven-jstests-
     # The ~200MB browser download is the only slow part (~60s cold, versus ~2s to actually run the harness).  Cached
     # at Playwright's own default location, which is why the profile lets -Djuneau.jsTests.browsers move it out of
     # target/: this workflow's Maven runs use the reactor's "clean verify" defaultGoal, so a cache restored into
@@ -134,6 +152,19 @@ jobs:
         test
         -Dtest='org.apache.juneau.petstore.**.*_BrowserTest' -Dsurefire.failIfNoSpecifiedTests=false
         -Djuneau.jsTests.browsers="${HOME}/.cache/ms-playwright"
+    # The terminal module's browser tests (Terminal_BrowserTest; TerminalSmoke_BrowserTest also matches but
+    # skips itself unless its own opt-in property is set): same pinned Playwright and
+    # browser cache as the steps above.  -pl/-am and the package-qualified -Dtest for the same reasons as above.  The
+    # plain-Node harness (ViewsJs_Terminal_Test) is deliberately not selected: it is not gated on -Pjs-tests and the
+    # matrix job already runs it in the default build whenever node is on the PATH.
+    - name: js-tests-terminal
+      run: >
+        mvn --no-transfer-progress --batch-mode
+        -Pjs-tests
+        -pl juneau-rest/juneau-rest-server-terminal -am
+        test
+        -Dtest='org.apache.juneau.rest.server.terminal.*_BrowserTest' -Dsurefire.failIfNoSpecifiedTests=false
+        -Djuneau.jsTests.browsers="${HOME}/.cache/ms-playwright"
     - name: Upload petstore theme screenshots
       if: always()
       uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
@@ -168,3 +199,5 @@ jobs:
         echo 'Petstore browser tests:'
         echo '  mvn -Pjs-tests -pl juneau-petstore/juneau-petstore-core -am test -Dtest="org.apache.juneau.petstore.**.*_BrowserTest" -Dsurefire.failIfNoSpecifiedTests=false'
         echo '  Per-suite stderr: juneau-petstore/juneau-petstore-core/target/js/<suite>-stderr.txt'
+        echo 'Terminal browser tests:'
+        echo '  mvn -Pjs-tests -pl juneau-rest/juneau-rest-server-terminal -am test -Dtest="org.apache.juneau.rest.server.terminal.*_BrowserTest" -Dsurefire.failIfNoSpecifiedTests=false'

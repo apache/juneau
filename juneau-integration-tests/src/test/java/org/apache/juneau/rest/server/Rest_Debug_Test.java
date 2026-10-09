@@ -16,7 +16,11 @@
  */
 package org.apache.juneau.rest.server;
 
+import static org.junit.jupiter.api.Assertions.*;
+
 import org.apache.juneau.*;
+import org.apache.juneau.commons.logging.LogRecordCapture;
+import org.apache.juneau.rest.client.classic.RestClient;
 import org.apache.juneau.rest.mock.classic.*;
 import org.apache.juneau.rest.server.config.*;
 import org.junit.jupiter.api.*;
@@ -47,6 +51,13 @@ class Rest_Debug_Test extends TestBase {
 
 	@Test void a02_isDebugTrueWhenLoggerRaised() throws Exception {
 		// debug() raises the resource-class logger to FINEST → loggable at FINE → isDebug() true.
-		MockRestClient.create(A.class).json5().debug().build().get("/a").run().assertContent("true");
+		var records = LogRecordCapture.quietly(RestClient.class, () -> {
+			try {
+				MockRestClient.create(A.class).json5().debug().build().get("/a").run().assertContent("true");
+			} catch (Exception e) {
+				throw new RuntimeException(e);
+			}
+		});
+		assertEquals(1, records.size());
 	}
 }

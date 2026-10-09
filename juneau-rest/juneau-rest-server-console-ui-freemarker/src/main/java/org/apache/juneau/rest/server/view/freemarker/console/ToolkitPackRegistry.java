@@ -253,14 +253,14 @@ public final class ToolkitPackRegistry {
 			for (var dep : pack.dependsOn()) {
 				var target = packs.get(dep);
 				if (n(target))
-					throw new IllegalArgumentException(String.format("Unknown toolkit pack '%s' (dependsOn of pack '%s').", dep, pack.name()));
+					throw iaex("Unknown toolkit pack '%s' (dependsOn of pack '%s').", dep, pack.name());
 				if (pack.kind() == VENDOR && target.kind() == RUNTIME)
-					throw new IllegalArgumentException(String.format("VENDOR toolkit pack '%s' cannot depend on RUNTIME pack '%s'.", pack.name(), dep));
+					throw iaex("VENDOR toolkit pack '%s' cannot depend on RUNTIME pack '%s'.", pack.name(), dep);
 			}
 		}
 		for (var name : provided)
 			if (! packs.containsKey(name))
-				throw new IllegalArgumentException(String.format("Unknown toolkit pack '%s' (providedPacks).", name));
+				throw iaex("Unknown toolkit pack '%s' (providedPacks).", name);
 		expand(packs.keySet(), "registered");
 		return this;
 	}
@@ -275,7 +275,7 @@ public final class ToolkitPackRegistry {
 	public synchronized void requireKnown(Collection<String> names, String source) {
 		for (var name : names)
 			if (! packs.containsKey(name))
-				throw new IllegalArgumentException(String.format("Unknown toolkit pack '%s' (%s).", name, source));
+				throw iaex("Unknown toolkit pack '%s' (%s).", name, source);
 	}
 
 	/**
@@ -306,7 +306,7 @@ public final class ToolkitPackRegistry {
 		if (n(names) || names.isEmpty())
 			return Resolved.EMPTY;
 		if (n(req))
-			throw new IllegalStateException("<@page toolkit> needs FreemarkerRenderScope.request() (renderer wrap).");
+			throw isex("<@page toolkit> needs FreemarkerRenderScope.request() (renderer wrap).");
 		List<ToolkitPack> order;
 		Set<String> skip;
 		synchronized (this) {
@@ -357,7 +357,7 @@ public final class ToolkitPackRegistry {
 			}
 			var dup = pageFiles.get(fileName(url));
 			if (nn(dup)) {
-				LOG.warning(String.format("Template '%s': skipped pack '%s' asset %s; the page already loads %s.", template, pack.name(), url, dup));
+				LOG.warning(f("Template '%s': skipped pack '%s' asset %s; the page already loads %s.", template, pack.name(), url, dup));
 				continue;
 			}
 			out.add(url);
@@ -377,13 +377,13 @@ public final class ToolkitPackRegistry {
 			return;
 		var at = path.indexOf(name);
 		if (at >= 0) {
-			var cycle = new ArrayList<>(path.subList(at, path.size()));
+			var cycle = tl(path.subList(at, path.size()));
 			cycle.add(name);
 			throw new IllegalArgumentException("Toolkit pack cycle: " + String.join(" → ", cycle) + ".");
 		}
 		var pack = packs.get(name);
 		if (n(pack))
-			throw new IllegalArgumentException(String.format("Unknown toolkit pack '%s' (%s).", name, source));
+			throw iaex("Unknown toolkit pack '%s' (%s).", name, source);
 		path.add(name);
 		for (var dep : pack.dependsOn())
 			visit(dep, "dependsOn of pack '" + name + "'", path, out);

@@ -321,10 +321,23 @@ class ViewsJs_Reinit_Test extends TestBase {
 		assertEquals("asc", r.get("orderDir"));
 	}
 
-	@Test void d02_hiddenOrderedColumn_fallsBackToFirstVisibleOrderable() {
+	@Test void d02_userHiddenOrderedColumn_isStillHonored() {
 		var r = report();
-		assertEquals("A", r.get("hiddenFallbackData"));
-		assertEquals(1, ((Number)r.get("hiddenFallbackIndex")).intValue());
+		assertEquals("B", r.get("hiddenOrderData"));
+		assertEquals("desc", r.get("hiddenOrderDir"));
+	}
+
+	@Test void d02b_catalogHiddenOrderedColumn_isStillHonored() {
+		var r = report();
+		assertEquals("Created", r.get("catalogHiddenOrderData"));
+		assertEquals("desc", r.get("catalogHiddenOrderDir"));
+		assertEquals(1, ((Number)r.get("catalogHiddenOrderLength")).intValue());
+	}
+
+	@Test void d02c_unknownOrderedField_fallsBackToFirstVisibleOrderable() {
+		var r = report();
+		assertEquals("A", r.get("unknownFallbackData"));
+		assertEquals("asc", r.get("unknownFallbackDir"));
 	}
 
 	@Test void d03_applyView_withoutCtx_returnsNotInitialized() {

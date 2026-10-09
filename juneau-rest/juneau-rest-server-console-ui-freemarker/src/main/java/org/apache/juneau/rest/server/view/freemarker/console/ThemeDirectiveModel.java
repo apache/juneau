@@ -96,7 +96,7 @@ public final class ThemeDirectiveModel implements TemplateDirectiveModel {
 
 		var cap = PageCapture.get(env);
 		if (n(cap) || ! cap.consoleOpen)
-			throw FtlAttrLists.reject(String.format(
+			throw FtlAttrLists.reject(f(
 				"<@theme name='%s'> must be nested inside <@console>; the legacy pageThemeCss path was removed in 10.0.0.", name));
 
 		var req = FreemarkerRenderScope.request();

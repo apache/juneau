@@ -104,13 +104,13 @@ public final class NodeDirectiveModel implements TemplateDirectiveModel {
 		if (p.containsKey("under"))
 			for (var segment : under.split("/", -1))
 				if (segment.isBlank())
-					throw FtlAttrLists.reject(String.format(
+					throw FtlAttrLists.reject(f(
 						"<@node id='%s'> under must name a '/'-separated nav id path; got '%s'.", id, under));
 
 		var cap = PageCapture.get(env);
 		if (! under.isEmpty()) {
 			if (n(cap) || cap.navOpen || cap.cardOpen || cap.slotOpen || ! (cap.pageOpen || cap.consoleOpen))
-				throw FtlAttrLists.reject(String.format(
+				throw FtlAttrLists.reject(f(
 					"<@node id='%s' under='%s'> must be a direct child of <@page> or <@console>, outside <@navigation>.", id, under));
 		} else if (n(cap) || ! cap.navOpen) {
 			throw FtlAttrLists.reject("<@node> must be nested inside <@navigation>.");
@@ -135,11 +135,11 @@ public final class NodeDirectiveModel implements TemplateDirectiveModel {
 		}
 
 		if (node.children().isEmpty() && n(node.href()))
-			throw FtlAttrLists.reject(String.format("<@node id='%s'> leaf requires href=.", id));
+			throw FtlAttrLists.reject(f("<@node id='%s'> leaf requires href=.", id));
 		if (selected) {
 			if (cap.underRootOpen) {
 				if (nn(cap.underRootSelected))
-					throw FtlAttrLists.reject(String.format("<@node id='%s'> selected=true but '%s' is already selected.",
+					throw FtlAttrLists.reject(f("<@node id='%s'> selected=true but '%s' is already selected.",
 						node.id(), underFullPath(cap, cap.underRootSelected)));
 				cap.underRootSelected = node;
 			} else {
@@ -166,13 +166,13 @@ public final class NodeDirectiveModel implements TemplateDirectiveModel {
 			cap.underRootOpen = false;
 		}
 		if (top.children().isEmpty() && n(top.href()))
-			throw FtlAttrLists.reject(String.format("<@node id='%s'> leaf requires href=.", id));
+			throw FtlAttrLists.reject(f("<@node id='%s'> leaf requires href=.", id));
 
 		var selectedMarker = cap.underRootSelected;
 		cap.underRootSelected = null;
 		if (selected) {
 			if (nn(selectedMarker))
-				throw FtlAttrLists.reject(String.format("<@node id='%s'> selected=true but '%s' is already selected.",
+				throw FtlAttrLists.reject(f("<@node id='%s'> selected=true but '%s' is already selected.",
 					id, underFullPath(cap, selectedMarker)));
 			selectedMarker = top;
 		}

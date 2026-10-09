@@ -250,6 +250,11 @@ test('f03_findNextWrapsBothWays', function (t) {
 	expect(t.JT.findNext(buf, 'zzz', null, false) === null && t.JT.findNext(buf, '', null, false) === null, 'no match');
 });
 
+test('h01_handleIsNullUntilMounted', function (t) {
+	expect(typeof t.JT.handle === 'function', 'handle is exported');
+	expect(t.JT.handle('t') === null && t.JT.handle(undefined) === null, 'no handle for a card that is not mounted');
+});
+
 test('c01_cardHandlerIsQueued', function (t) {
 	const q = t.win.JuneauConsoleCards;
 	expect(Array.isArray(q) && q.length === 1 && q[0][0] === 'terminal', 'queued as ["terminal", handler]');

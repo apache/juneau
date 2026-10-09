@@ -44,7 +44,7 @@
 			<artifactId>juneau-rest-client-mcp</artifactId>
 			<version>${project.version}</version>
 		</dependency>
-		<!-- Imported directly (Shorts / AssertionUtils); declared explicitly rather than relying on the
+		<!-- Imported directly (Shorts); declared explicitly rather than relying on the
 			transitive chain through juneau-rest-client-mcp -> juneau-rest-client -> juneau-rest-common. -->
 		<dependency>
 			<groupId>org.apache.juneau</groupId>

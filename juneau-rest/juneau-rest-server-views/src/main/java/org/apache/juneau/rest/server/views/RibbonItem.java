@@ -64,16 +64,17 @@ public final class RibbonItem {
 	private static final List<String> APPEARANCES = List.of("icon");
 
 	// The keys juneau-ribbon.js reads for each item type (everything else is ignored there, so toMap() rejects it).
-	private static final Set<String> COMMON = Set.of("type", "id", "title", "group", "appearance", "symbol");
+	private static final Set<String> COMMON = Set.of("type", "id", "title", "group", "appearance", "symbol", "visibleWhen");
 	private static final Map<String,Set<String>> ALLOWED = Map.of(
 		"refresh", union(COMMON, "target"),
 		"collapseAll", union(COMMON, "target"),
 		"pausePolling", union(COMMON, "target"),
 		"dialog", union(COMMON, "form", "endpoint", "method", "onSuccess"),
-		"export", Set.of("type", "group", "appearance", "buttons", "optional"),
+		"export", Set.of("type", "group", "appearance", "buttons", "optional", "visibleWhen"),
 		"option", union(COMMON, "column", "param", "value", "persist", "default", "target"),
-		"optionGroup", Set.of("type", "id", "appearance", "persist", "default", "deselectable", "options", "target"),
-		"publish", union(COMMON, "topic", "payload")
+		"optionGroup", Set.of("type", "id", "appearance", "persist", "default", "deselectable", "options", "target", "visibleWhen"),
+		"publish", union(COMMON, "topic", "payload"),
+		"divider", Set.of("type", "visibleWhen")
 	);
 	private static final java.util.regex.Pattern CARD_ID = java.util.regex.Pattern.compile("^[A-Za-z][A-Za-z0-9_-]{0,63}$");
 	private static final Set<String> MEMBER_ALLOWED = Set.of("id", "title", "symbol", "column", "param", "value");
@@ -98,11 +99,21 @@ public final class RibbonItem {
 	private Boolean deselectable;
 	private List<RibbonItem> options;
 	private String target;
+	private List<VisibilityRule> visibleWhen;
 	private String topic;
 	private Map<String,Object> payload;
 
 	private RibbonItem(String type) {
 		this.type = type;
+	}
+
+	/**
+	 * A visual separator between ribbon items; it also closes any open item cluster.
+	 *
+	 * @return A new {@link RibbonItem}.
+	 */
+	public static RibbonItem divider() {
+		return new RibbonItem("divider");
 	}
 
 	/**
@@ -251,6 +262,20 @@ public final class RibbonItem {
 		if (cardId == null || ! CARD_ID.matcher(cardId).matches())
 			throw iaex("RibbonItem target '%s' must match ^[A-Za-z][A-Za-z0-9_-]{0,63}$.", cardId);
 		target = cardId;
+		return this;
+	}
+
+	/**
+	 * Hides this item unless every rule matches the console's facts.  Evaluated by the client; this only serializes the
+	 * rules.  Accepted on every item type; not on an {@code optionGroup} member.
+	 *
+	 * @param rules The rules, ANDed together.  None clears them.
+	 * @return This object.
+	 */
+	public RibbonItem visibleWhen(VisibilityRule...rules) {
+		if (rules == null || Arrays.stream(rules).anyMatch(Objects::isNull))
+			throw iaex("RibbonItem visibleWhen rules must not be null.");
+		visibleWhen = rules.length == 0 ? null : List.of(rules);
 		return this;
 	}
 
@@ -457,11 +482,12 @@ public final class RibbonItem {
 	 * 	{@code target} is set on a type the runtime does not route.
 	 */
 	public JsonMap toMap() {
-		return toMap(null);
+		var m = toMap(true);
+		check(m, null);
+		return m;
 	}
 
-	private JsonMap toMap(RibbonItem parent) {
-		var withType = parent == null;
+	private JsonMap toMap(boolean withType) {
 		var m = new JsonMap();
 		if (withType)
 			m.put("type", type);
@@ -493,10 +519,6 @@ public final class RibbonItem {
 			m.put("buttons", buttons);
 		if (optional != null)
 			m.put("optional", optional);
-		if ("export".equals(type) && buttons == null && optional == null)
-			throw iaex("RibbonItem export requires at least one button.");
-		if ("option".equals(type))
-			checkScope(withType);
 		if (column != null)
 			m.put("column", column);
 		if (param != null)
@@ -505,48 +527,121 @@ public final class RibbonItem {
 			m.put("value", value);
 		if (persist != null)
 			m.put("persist", persist);
-		if (dflt != null) {
-			checkDefault();
+		if (dflt != null)
 			m.put("default", dflt);
-		}
 		if (deselectable != null)
 			m.put("deselectable", deselectable);
+		if (visibleWhen != null)
+			m.put("visibleWhen", VisibilityRule.toMaps(visibleWhen));
 		if (options != null) {
 			var list = new JsonList();
 			for (var o : options)
-				list.add(o.toMap(this));
+				list.add(o.toMap(false));
 			m.put("options", list);
 		}
-		checkKeys(m, parent);
 		return m;
 	}
 
-	private void checkKeys(JsonMap m, RibbonItem parent) {
-		var allowed = parent == null ? ALLOWED.get(type) : MEMBER_ALLOWED;
+	/**
+	 * Validates an authored ribbon item map (for example from a JSON5 card body) with exactly the rules
+	 * {@link #toMap()} applies to a built item: a known {@code type}, only keys the runtime reads, an
+	 * {@code export} with at least one valid button, an {@code option} with exactly one of {@code column} or
+	 * {@code param} plus a {@code value}, a {@code default} that suits the item, a valid {@code appearance} and
+	 * {@code target}, a well-formed {@code visibleWhen} (a list of {@code field}/{@code op} rules with a known op), and the same rules for each {@code optionGroup} member.
+	 *
+	 * @param item The authored item.  Must not be <jk>null</jk>.
+	 * @throws IllegalArgumentException If the item is not valid.
+	 */
+	public static void validate(Map<?,?> item) {
+		check(item, null);
+	}
+
+	// The one rule set behind toMap() and validate().  parentId is non-null only for an optionGroup member (a map with no 'type').
+	private static void check(Map<?,?> m, String parentId) {
+		var isMember = parentId != null;
+		var t = m.get("type");
+		var type = isMember ? "option" : (t instanceof String ts ? ts : null);
+		if (! isMember && (type == null || ! ALLOWED.containsKey(type))) {
+			if (t == null)
+				throw iaex("RibbonItem requires a 'type'; one of '%s'.", String.join(", ", new TreeSet<>(ALLOWED.keySet())));
+			if (! (t instanceof String))
+				throw iaex("RibbonItem 'type' must be a string, not '%s'; one of '%s'.", t, String.join(", ", new TreeSet<>(ALLOWED.keySet())));
+			throw iaex("RibbonItem type '%s' is not one of '%s'.", t, String.join(", ", new TreeSet<>(ALLOWED.keySet())));
+		}
+		var id = m.get("id");
+		if (! isMember) {
+			if ("export".equals(type)) {
+				if (m.get("buttons") == null && m.get("optional") == null)
+					throw iaex("RibbonItem export requires at least one button.");
+				checkAll(m.get("buttons"), EXPORT_BUTTONS, "export button");
+				checkAll(m.get("optional"), EXPORT_OPTIONAL, "optional export button");
+			}
+			if (m.get("appearance") != null)
+				checkOneOf(String.valueOf(m.get("appearance")), APPEARANCES, "appearance");
+			if (m.get("target") != null && ! (m.get("target") instanceof String ts && CARD_ID.matcher(ts).matches()))
+				throw iaex("RibbonItem target '%s' must match ^[A-Za-z][A-Za-z0-9_-]{0,63}$.", m.get("target"));
+		}
+		if (isMember || "option".equals(type))
+			checkScope(m, id, ! isMember);
+		if (! isMember && m.get("default") != null)
+			checkDefault(m, type, id);
+		if (! isMember && m.get("visibleWhen") != null)
+			checkVisibleWhen(m.get("visibleWhen"), type, id);
+		if ("optionGroup".equals(type) && m.get("options") != null) {
+			if (! (m.get("options") instanceof List<?> members))
+				throw iaex("RibbonItem optionGroup '%s' options must be a list.", id);
+			for (var o : members) {
+				if (! (o instanceof Map<?,?> mm))
+					throw iaex("RibbonItem optionGroup '%s' each option must be an object.", id);
+				check(mm, String.valueOf(id));
+			}
+		}
+		var allowed = isMember ? MEMBER_ALLOWED : ALLOWED.get(type);
 		for (var k : m.keySet())
-			if (! allowed.contains(k)) {
-				if (parent == null)
-					throw iaex("RibbonItem %s%s does not accept '%s'.", type, id == null ? "" : " '" + id + "'", k);
-				throw iaex("RibbonItem optionGroup '%s' member '%s' does not accept '%s'.", parent.id, id, k);
+			if (! allowed.contains(String.valueOf(k))) {
+				if (isMember)
+					throw iaex("RibbonItem optionGroup '%s' member '%s' does not accept '%s'.", parentId, id, k);
+				throw iaex("RibbonItem %s%s does not accept '%s'.", type, id == null ? "" : " '" + id + "'", k);
 			}
 	}
 
-	private void checkScope(boolean topLevel) {
+	private static void checkVisibleWhen(Object v, String type, Object id) {
+		var ok = v instanceof List<?> l && l.stream().allMatch(r -> r instanceof Map<?,?> rm
+			&& rm.get("field") instanceof String f && ! f.isBlank()
+			&& rm.get("op") instanceof String op && VisibilityRule.KNOWN_OPS.contains(op));
+		if (! ok)
+			throw iaex("RibbonItem %s%s visibleWhen must be a list of {field, op[, value]} rules with a known op.", type, id == null ? "" : " '" + id + "'");
+	}
+
+	private static void checkAll(Object v, List<String> allowed, String what) {
+		if (v == null)
+			return;
+		if (! (v instanceof List<?> l))
+			throw iaex("RibbonItem %s list must be a list.", what);
+		for (var b : l)
+			checkOneOf(String.valueOf(b), allowed, what);
+	}
+
+	private static void checkScope(Map<?,?> m, Object id, boolean topLevel) {
+		var column = m.get("column");
+		var param = m.get("param");
 		if (column != null && param != null)
 			throw iaex("RibbonItem option '%s' sets both column '%s' and param '%s'.", id, column, param);
 		if (topLevel && column == null && param == null)
 			throw iaex("RibbonItem option '%s' sets neither column nor param.", id);
-		if (topLevel && value == null)
+		if (topLevel && m.get("value") == null)
 			throw iaex("RibbonItem option '%s' requires a value.", id);
 	}
 
-	private void checkDefault() {
+	private static void checkDefault(Map<?,?> m, String type, Object id) {
+		var d = m.get("default");
 		if ("optionGroup".equals(type)) {
-			var d = dflt;
-			if (! (d instanceof String) || options.stream().noneMatch(o -> o.id.equals(d)))
+			var ok = d instanceof String && m.get("options") instanceof List<?> l
+				&& l.stream().anyMatch(o -> o instanceof Map<?,?> mm && d.equals(mm.get("id")));
+			if (! ok)
 				throw iaex("RibbonItem optionGroup '%s' default '%s' is not one of its options.", id, d);
-		} else if ("option".equals(type) && ! Boolean.TRUE.equals(dflt)) {
-			throw iaex("RibbonItem option '%s' default '%s' must be on; use defaultOn().", id, dflt);
+		} else if ("option".equals(type) && ! Boolean.TRUE.equals(d)) {
+			throw iaex("RibbonItem option '%s' default '%s' must be on; use defaultOn().", id, d);
 		}
 	}
 

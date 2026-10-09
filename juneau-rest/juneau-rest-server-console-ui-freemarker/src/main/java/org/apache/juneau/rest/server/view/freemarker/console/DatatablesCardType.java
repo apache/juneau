@@ -131,11 +131,14 @@ public final class DatatablesCardType implements CardTypeHandler {
 
 		checkNoContractVersion(source, catalog, "table");
 
+		// The authored body (and its lists) may be immutable, so the normalized columns go into a fresh list of copies.
+		var normalized = new ArrayList<Object>(columns.size());
 		var seen = new HashSet<String>();
 		for (var i = 0; i < columns.size(); i++) {
 			if (! (columns.get(i) instanceof Map<?,?> raw))
 				throw source.error("columns['%s'] requires 'key'.", i);
-			var col = (Map<String,Object>) raw;
+			var col = new LinkedHashMap<>((Map<String,Object>) raw);
+			normalized.add(col);
 			var ident = columnIdent(col);
 			if (n(ident))
 				throw source.error("columns['%s'] requires 'key'.", i);
@@ -145,8 +148,33 @@ public final class DatatablesCardType implements CardTypeHandler {
 						ident, key, String.join(", ", new TreeSet<>(KNOWN_COLUMN_KEYS)));
 			if (! seen.add(ident))
 				throw source.error("declares column '%s' twice.", ident);
+			if (col.get("render") instanceof String r) {
+				Render parsed;
+				try {
+					parsed = Render.parse(r);
+				} catch (IllegalArgumentException e) {
+					throw source.error("column '%s' render: %s", ident, e.getMessage());
+				}
+				var rm = new LinkedHashMap<String,Object>();
+				rm.put("id", parsed.id);
+				if (parsed.meta != null)
+					rm.put("meta", parsed.meta);
+				col.put("render", rm);
+			}
 			resolveSearch(source, col, ident);
 		}
+		catalog.put("columns", normalized);
+
+		if (catalog.get("ribbon") instanceof List<?> ribbon)
+			for (var item : ribbon) {
+				if (! (item instanceof Map<?,?> im))
+					throw source.error("ribbon each item must be an object.");
+				try {
+					RibbonItem.validate(im);
+				} catch (IllegalArgumentException e) {
+					throw source.error("%s", e.getMessage());
+				}
+			}
 
 		if (nn(catalog.get("bulk")) && n(catalog.get("selection")))
 			throw source.error("sets bulk without selection.");
@@ -156,6 +184,8 @@ public final class DatatablesCardType implements CardTypeHandler {
 		var page = catalog.remove("page");
 		if (nn(page))
 			frag.put("page", page);
+		// toCard lifts a body visibleWhen to the card top level; leaving it in the catalog would emit it twice.
+		catalog.remove("visibleWhen");
 		frag.put("table", catalog);
 		return frag;
 	}
@@ -167,7 +197,6 @@ public final class DatatablesCardType implements CardTypeHandler {
 		for (var r : list)
 			if (! (r instanceof Map<?, ?>))
 				throw source.error("type='datatables' each 'rows' element must be an object.");
-		// Q:  Use Shorts here and elsewhere in this module.
 		if (eq("server", catalog.getString("dataMode")))
 			throw source.error("type='datatables' inline 'rows' cannot be combined with dataMode:'server'; use 'dataUrl'.");
 		if (nn(catalog.get("pollIntervalMs")))
@@ -270,9 +299,9 @@ public final class DatatablesCardType implements CardTypeHandler {
 				continue;
 			var endpoint = str(action.get("endpoint"));
 			if (nn(endpoint) && endpoint.matches(".*\\{[^}]+\\}.*"))
-				throw new IllegalArgumentException(String.format(
+				throw iaex(
 					"Bulk action '%s' has mode 'aggregate' but its endpoint '%s' contains a {field} token; "
-					+ "aggregate endpoints receive {ids} in the body.", action.get("id"), endpoint));
+					+ "aggregate endpoints receive {ids} in the body.", action.get("id"), endpoint);
 		}
 	}
 

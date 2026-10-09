@@ -19,14 +19,19 @@ package org.apache.juneau.marshall.html;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.LogRecord;
+import java.util.logging.Logger;
 
 import org.apache.juneau.*;
+import org.apache.juneau.commons.logging.LogRecordCapture;
 import org.apache.juneau.commons.svl.*;
 import org.apache.juneau.rest.mock.classic.*;
 import org.apache.juneau.rest.server.*;
 import org.apache.juneau.rest.server.config.*;
 import org.apache.juneau.rest.server.remote.*;
 import org.apache.juneau.rest.server.servlet.*;
+import org.apache.juneau.rest.server.swagger.BasicSwaggerProviderSession;
 import org.apache.juneau.rest.server.vars.*;
 import org.junit.jupiter.api.*;
 
@@ -336,7 +341,28 @@ class BasicHtmlDocTemplate_ChromeSvlEncoding_Test extends TestBase {
 
 	@Test
 	void f01_noResultsEncodesRequestQuery() throws Exception {
-		assertChromeEncoded(htmlGet(F01_NoResults.class, "/page?" + SAMPLE_QUERY));
+		// The chrome template resolves the swagger, whose generation logs (at FINE) the media types it cannot render examples for.
+		var html = new String[1];
+		var jul = Logger.getLogger(BasicSwaggerProviderSession.class.getName());
+		var oldLevel = jul.getLevel();
+		jul.setLevel(Level.FINE);
+		List<LogRecord> records;
+		try {
+			records = LogRecordCapture.quietly(jul.getName(), () -> {
+				try {
+					html[0] = htmlGet(F01_NoResults.class, "/page?" + SAMPLE_QUERY);
+				} catch (Exception e) {
+					throw new RuntimeException(e);
+				}
+			});
+		} finally {
+			jul.setLevel(oldLevel);
+		}
+		assertTrue(records.stream().allMatch(r -> r.getLevel().equals(Level.FINE)));
+		assertEquals(2, records.size());
+		assertTrue(records.get(0).getMessage().startsWith("Could not serialize to media type [text/ini]: INI format requires"), records.get(0).getMessage());
+		assertTrue(records.get(1).getMessage().startsWith("Could not serialize to media type [text/x-ini]: INI format requires"), records.get(1).getMessage());
+		assertChromeEncoded(html[0]);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

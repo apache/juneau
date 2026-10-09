@@ -39,9 +39,6 @@
  * 	<li class='jc'>{@link org.apache.juneau.rest.server.auth.oauth.CachingClientCredentialsFlow}
  * 		&mdash; server-side caching decorator layering a {@link org.apache.juneau.rest.server.auth.oauth.TokenCache}
  * 		over the role-neutral {@code OAuthClientCredentialsFlow}.
- * 	<li class='jp'>{@link org.apache.juneau.rest.server.auth.oauth.flow flow}
- * 		&mdash; the discouraged resource-owner password-credentials flow (the role-neutral grant flows and the
- * 		{@code OAuthToken} record live in module {@code juneau-rest-auth-oauth-flow}).
  * </ul>
  *
  * <h5 class='section'>See Also:</h5><ul>

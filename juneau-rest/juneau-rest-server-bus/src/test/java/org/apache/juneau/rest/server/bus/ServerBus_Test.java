@@ -25,6 +25,7 @@ import java.util.*;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.*;
 
+import org.apache.juneau.commons.logging.*;
 import org.apache.juneau.*;
 import org.apache.juneau.marshall.collections.*;
 import org.apache.juneau.marshall.marshaller.*;
@@ -561,7 +562,8 @@ class ServerBus_Test extends TestBase {
 	@Test void f03_aHandlerFailureIsGeneric() throws Exception {
 		var bus = bus(policy().build());
 		var sink = connectWs(bus, List.of("ops.explode"));
-		bus.receive(only(bus), up("ops.explode", "{}"));
+		var records = LogRecordCapture.quietly(ServerBus.class, () -> bus.receive(only(bus), up("ops.explode", "{}")));
+		assertEquals(1, records.size(), records::toString);
 		assertEquals(JsonMap.of("v", 1, "type", "error", "code", "bus:upstream-failed", "message", "handler failed",
 			"topic", "ops.explode"), sink.last());
 		assertFalse(sink.frames.get(0).contains("secret detail"), "no exception text crosses the wire");

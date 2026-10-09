@@ -134,6 +134,7 @@ class TerminalMixin_Test extends TestBase {
 
 	@Test void b06_goneLogAnswersFromWhateverItIs(@org.junit.jupiter.api.io.TempDir Path dir) throws Exception {
 		var log = dir.resolve("g.log");
+		Files.writeString(dir.resolve("g.log.size"), "{\"cols\":80,\"rows\":24}");
 		Files.writeString(log, "abc");
 		R.SOURCES.put("gone", FileTerminalSource.create(log).build());
 		// A source that reports its own offsets as 0 when gone: the endpoint still answers with from.
@@ -213,6 +214,7 @@ class TerminalMixin_Test extends TestBase {
 
 	@Test void d02_rawOfAGoneSourceIsEmptyAndSaysGone(@org.junit.jupiter.api.io.TempDir Path dir) throws Exception {
 		var log = dir.resolve("g.log");
+		Files.writeString(dir.resolve("g.log.size"), "{\"cols\":80,\"rows\":24}");
 		Files.writeString(log, "abc");
 		var src = FileTerminalSource.create(log).build();
 		src.read(0, 10);

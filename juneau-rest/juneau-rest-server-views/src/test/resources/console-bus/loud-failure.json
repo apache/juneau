@@ -1,0 +1,27 @@
+{
+  "contractVersion": "1",
+  "title": "Changes",
+  "nav": [],
+  "activeNav": [],
+  "topics": [
+    { "topic": "app.region-picked", "retain": true, "publisher": "script" }
+  ],
+  "cards": [
+    { "id": "changes", "type": "datatables",
+      "table": {
+        "dataUrl": "/api/changes", "dataMode": "server",
+        "columns": [ { "key": "id" }, { "key": "owner" }, { "key": "state" } ],
+        "selection": { "rowIdField": "id" }
+      } },
+
+    { "id": "tasks", "type": "datatables",
+      "table": {
+        "dataUrl": "/api/changes/{changeId}/tasks", "dataMode": "server",
+        "columns": [ { "key": "id" }, { "key": "name" } ]
+      },
+      "subscribes": [
+        { "topic": "app.region-picked", "as": "params", "map": { "changeId": "region" }, "whenEmpty": "clear",
+          "emptyText": "Select a change to see its tasks." }
+      ] }
+  ]
+}

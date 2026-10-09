@@ -263,11 +263,10 @@ public class DirectoryResource extends BasicRestServlet {
 	 * @param c The microservice configuration.
 	 */
 	public DirectoryResource(Config c) {
-		// Q:  Can you concatenate these strings?
-		rootDir = new File(c.get("DirectoryResource." + "rootDir.s").orElse("."));
-		allowViews = c.get("DirectoryResource." + "allowViews.b").asBoolean().orElse(false);
-		allowDeletes = c.get("DirectoryResource." + "allowDeletes.b").asBoolean().orElse(false);
-		allowUploads = c.get("DirectoryResource." + "allowUploads.b").asBoolean().orElse(false);
+		rootDir = new File(c.get("DirectoryResource.rootDir.s").orElse("."));
+		allowViews = c.get("DirectoryResource.allowViews.b").asBoolean().orElse(false);
+		allowDeletes = c.get("DirectoryResource.allowDeletes.b").asBoolean().orElse(false);
+		allowUploads = c.get("DirectoryResource.allowUploads.b").asBoolean().orElse(false);
 	}
 	/**
 	 * Deletes a file on the file system.

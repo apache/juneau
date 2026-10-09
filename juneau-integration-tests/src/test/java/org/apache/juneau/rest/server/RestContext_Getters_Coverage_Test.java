@@ -20,6 +20,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
 
+import org.apache.juneau.commons.logging.*;
 import org.apache.juneau.*;
 import org.apache.juneau.marshall.*;
 import org.junit.jupiter.api.*;
@@ -186,7 +187,7 @@ class RestContext_Getters_Coverage_Test extends TestBase {
 		// Async-completion executor returns null when not configured.
 		c.getAsyncCompletionExecutor();
 		// Virtual thread executor — returns null on Java <21 or when not configured.
-		c.getVirtualThreadExecutor();
+		LogRecordCapture.quietly(RestContext.class, c::getVirtualThreadExecutor);
 	}
 
 	@Test void a13_method_lists() throws Exception {

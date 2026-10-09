@@ -81,7 +81,7 @@ public final class ToolkitPack {
 	 */
 	public static Builder create(String name) {
 		if (ib(name))
-			throw new IllegalArgumentException("Toolkit pack name must not be blank.");
+			throw iaex("Toolkit pack name must not be blank.");
 		return new Builder(name.trim());
 	}
 
@@ -205,7 +205,7 @@ public final class ToolkitPack {
 		 */
 		public ToolkitPack build() {
 			if (n(kind))
-				throw new IllegalArgumentException(String.format("Toolkit pack '%s' needs kind(VENDOR) or kind(RUNTIME).", name));
+				throw iaex("Toolkit pack '%s' needs kind(VENDOR) or kind(RUNTIME).", name);
 			return new ToolkitPack(this);
 		}
 	}

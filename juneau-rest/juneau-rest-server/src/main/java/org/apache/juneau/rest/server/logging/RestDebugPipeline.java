@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.rest.server.logging;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
+
 import java.util.logging.*;
 
 import org.apache.juneau.commons.logging.LogRecordContext;
@@ -170,10 +172,7 @@ public class RestDebugPipeline {
 	 */
 	private static boolean isNoTrace(HttpServletRequest req) {
 		var attr = req.getAttribute("NoTrace");
-		// Q:  Do we have Shorts for the boolean methods?
-		if (attr != null)
-			return Boolean.parseBoolean(attr.toString());
-		return Boolean.parseBoolean(req.getHeader(NoTrace.NAME));
+		return b(or(attr, req.getHeader(NoTrace.NAME)));
 	}
 
 	private static String render(RestSession session, RestOpSession opSession, RestDebugSnapshot snapshot) {

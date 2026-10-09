@@ -67,7 +67,7 @@ public final class AssetUrlMethodModel implements TemplateMethodModelEx {
 	@Override
 	public Object exec(@SuppressWarnings("rawtypes") List args) throws TemplateModelException {
 		if (args.size() != 1)
-			throw FtlAttrLists.reject(String.format("%s(path) takes exactly one argument; got '%s'.", NAME, args.size()));
+			throw FtlAttrLists.reject(f("%s(path) takes exactly one argument; got '%s'.", NAME, args.size()));
 		return versioned(String.valueOf(args.get(0)));
 	}
 

@@ -30,6 +30,7 @@ import org.apache.juneau.rest.server.views.*;
 
 import freemarker.core.*;
 import freemarker.template.*;
+import freemarker.template.utility.*;
 
 /**
  * The {@code <@card>} FreeMarker directive: adds one entry to the page contract's {@code cards[]}.
@@ -71,7 +72,7 @@ public final class CardDirectiveModel implements TemplateDirectiveModel {
 	/** The shared-variable name this directive registers under. */
 	public static final String NAME = "card";
 
-	static final Set<String> ATTRS = Set.of("type", "id", "title", "src", "template", "requires", "class");
+	static final Set<String> ATTRS = Set.of("type", "id", "title", "src", "template", "requires", "class", "ref", "subscribes", "publishes");
 
 	static final Set<String> REMOVED_TYPES = Set.of("js", "json", "calendar");
 
@@ -101,16 +102,25 @@ public final class CardDirectiveModel implements TemplateDirectiveModel {
 			throw FtlAttrLists.reject("<@card> uses type= only; format= is not a valid attribute.");
 		FtlAttrLists.rejectUnknown(p, NAME, ATTRS);
 
+		if (p.containsKey("ref")) {
+			placeByRef(env, p, FtlAttrLists.scalar(p, "ref"), body);
+			return;
+		}
+
 		var type = FtlAttrLists.scalar(p, "type");
 		var authoredId = FtlAttrLists.scalar(p, "id");
 		var requires = FtlAttrLists.list(p, NAME, "requires");
 		var cssClass = cssClass(p, authoredId);
+		var subsAttr = p.containsKey("subscribes") ? DeepUnwrap.unwrap(p.get("subscribes")) : null;
+		var pubsAttr = p.containsKey("publishes") ? DeepUnwrap.unwrap(p.get("publishes")) : null;
+		if ((subsAttr != null || pubsAttr != null) && authoredId.isEmpty())
+			throw FtlAttrLists.reject("<@card> with subscribes= or publishes= needs id=.");
 		if (REMOVED_TYPES.contains(type))
-			throw FtlAttrLists.reject(String.format(
+			throw FtlAttrLists.reject(f(
 				"<@card id='%s'> type='%s' was removed in 10.0.0; use type='html' with a <template>, or a registered card type.",
 				authoredId, type));
 		if (! type.isEmpty() && ! TYPE_RE.matcher(type).matches())
-			throw FtlAttrLists.reject(String.format("<@card id='%s'> type='%s' must match ^[a-z][a-z0-9-]{0,31}$.", authoredId, type));
+			throw FtlAttrLists.reject(f("<@card id='%s'> type='%s' must match ^[a-z][a-z0-9-]{0,31}$.", authoredId, type));
 
 		var cap = PageCapture.get(env);
 		if (n(cap) || ! cap.pageOpen)
@@ -137,12 +147,47 @@ public final class CardDirectiveModel implements TemplateDirectiveModel {
 		var cardType = type.isEmpty() ? "html" : type;
 		var id = authoredId.isEmpty() && eq(cardType, "html") ? cap.nextCardId() : authoredId;
 		if (eq(cardType, "run-view"))
-			runViewCard(cap, id, title, src, template, markup, cssClass);
+			runViewCard(cap, id, title, src, template, markup, cssClass, pubsAttr, subsAttr);
 		else if (eq(cardType, "html"))
-			htmlCard(cap, id, title, src, template, markup, cssClass);
+			htmlCard(cap, id, title, src, template, markup, cssClass, pubsAttr, subsAttr);
 		else
-			registryCard(cap, cardType, id, title, src, template, markup, cssClass);
+			registryCard(cap, cardType, id, title, src, template, markup, cssClass, pubsAttr, subsAttr);
 		recordRequirements(cap, cardType, id, requires);
+	}
+
+	/**
+	 * {@code <@card ref="id"/>}: places a PageSpec-built card at this point in the card order.  Present-but-empty
+	 * {@code ref=} takes this path too and fails as an unknown card.  Guards run in order: another attribute (E-B7),
+	 * then page and nesting, then a non-blank body (E-B7), then the placement checks (E-B5, E-B6).
+	 */
+	private static void placeByRef(Environment env, Map<String, TemplateModel> p, String ref, TemplateDirectiveBody body)
+			throws TemplateException, IOException {
+		var other = firstOtherAttr(p);
+		if (other != null)
+			throw FtlAttrLists.reject(f("<@card ref='%s'> must not also set '%s' or a body.", ref, other));
+		var cap = PageCapture.get(env);
+		if (n(cap) || ! cap.pageOpen)
+			throw FtlAttrLists.reject("<@card> must be nested inside <@page>.");
+		if (cap.cardOpen)
+			throw FtlAttrLists.reject("<@card> cannot be nested inside another <@card>.");
+		String markup;
+		cap.cardOpen = true;
+		try {
+			markup = PageCapture.render(body);
+		} finally {
+			cap.cardOpen = false;
+		}
+		if (! markup.isBlank())
+			throw FtlAttrLists.reject(f("<@card ref='%s'> must not have a body.", ref));
+		cap.flushSegment();
+		cap.placeBuiltCard(ref);
+	}
+
+	private static String firstOtherAttr(Map<String, TemplateModel> p) {
+		for (var a : List.of("type", "id", "title", "src", "template", "requires", "class", "subscribes", "publishes"))
+			if (p.containsKey(a))
+				return a;
+		return null;
 	}
 
 	/**
@@ -156,10 +201,21 @@ public final class CardDirectiveModel implements TemplateDirectiveModel {
 		var tokens = raw.split("\\s+");
 		for (var t : tokens)
 			if (! CLASS_TOKEN_RE.matcher(t).matches())
-				throw FtlAttrLists.reject(String.format(
+				throw FtlAttrLists.reject(f(
 					"<@card id='%s'> class='%s' must be a space-separated list of CSS class names matching [A-Za-z_-][A-Za-z0-9_-]*.",
 					authoredId, raw));
 		return String.join(" ", tokens);
+	}
+
+	// Lowers subscribes= / publishes= (attribute or JSON5 body) onto the card through the Subscription / TopicDecl builders.
+	private static void wire(CardSpec card, Object pubs, Object subs) throws TemplateModelException {
+		if (pubs == null && subs == null)
+			return;
+		try {
+			card.wiring(CardBusAttrs.publications(card.id(), pubs), CardBusAttrs.subscriptions(card.id(), subs));
+		} catch (IllegalArgumentException e) {
+			throw FtlAttrLists.reject(e.getMessage());
+		}
 	}
 
 	// The one place a card's packs are recorded; <@page> resolves them after its body.
@@ -172,14 +228,14 @@ public final class CardDirectiveModel implements TemplateDirectiveModel {
 	}
 
 	private static void htmlCard(PageCapture cap, String id, String title, String src, String template, String markup,
-			String cssClass)
+			String cssClass, Object pubs, Object subs)
 			throws TemplateModelException {
 		var hasBody = ! markup.isBlank();
 		var sources = (hasBody ? 1 : 0) + (src.isEmpty() ? 0 : 1) + (template.isEmpty() ? 0 : 1);
 		if (sources == 0)
-			throw FtlAttrLists.reject(String.format("<@card id='%s'> type='html' requires a body or src=.", id));
+			throw FtlAttrLists.reject(f("<@card id='%s'> type='html' requires a body or src=.", id));
 		if (sources > 1)
-			throw FtlAttrLists.reject(String.format(
+			throw FtlAttrLists.reject(f(
 				"<@card id='%s'> type='html' takes exactly one of a body, template= or src=.", id));
 		var card = CardSpec.html(id);
 		if (! title.isEmpty())
@@ -190,6 +246,7 @@ public final class CardDirectiveModel implements TemplateDirectiveModel {
 			card.template(template);
 		if (! cssClass.isEmpty())
 			card.cssClass(cssClass);
+		wire(card, pubs, subs);
 		cap.addCard(card, hasBody ? markup : null);
 	}
 
@@ -199,20 +256,20 @@ public final class CardDirectiveModel implements TemplateDirectiveModel {
 	 * generic passthrough for an unregistered type).
 	 */
 	private void registryCard(PageCapture cap, String type, String id, String title, String src, String template,
-			String markup, String cssClass) throws TemplateModelException {
+			String markup, String cssClass, Object pubs, Object subs) throws TemplateModelException {
 		if (id.isEmpty())
-			throw FtlAttrLists.reject(String.format("<@card type=\"%s\"> requires id=.", type));
+			throw FtlAttrLists.reject(f("<@card type=\"%s\"> requires id=.", type));
 		var hasBody = ! markup.isBlank();
 		if (eq(type, "console-output") || eq(type, "terminal")) {
 			if (! (src.isEmpty() && template.isEmpty()))
-				throw FtlAttrLists.reject(String.format(
+				throw FtlAttrLists.reject(f(
 					"<@card id='%s'> type='%s' takes its options as the body; src= and template= are not allowed.", id, type));
 		} else if (eq(type, "datatables")) {
 			if (! template.isEmpty())
-				throw FtlAttrLists.reject(String.format(
+				throw FtlAttrLists.reject(f(
 					"<@card id='%s'> type='datatables' takes src= or a JSON5 body; template= is not allowed.", id));
 		} else if ((hasBody ? 1 : 0) + (src.isEmpty() ? 0 : 1) + (template.isEmpty() ? 0 : 1) > 1) {
-			throw FtlAttrLists.reject(String.format(
+			throw FtlAttrLists.reject(f(
 				"<@card id='%s'> type='%s' takes at most one of a body, template= or src=.", id, type));
 		}
 		var captured = new boolean[1];
@@ -231,9 +288,16 @@ public final class CardDirectiveModel implements TemplateDirectiveModel {
 		} catch (IllegalArgumentException e) {
 			throw FtlAttrLists.reject(e.getMessage());
 		}
+		var bodySubs = card.remove("subscribes");
+		var bodyPubs = card.remove("publishes");
+		if (subs != null && bodySubs != null)
+			throw FtlAttrLists.reject(f("<@card id='%s'> body key 'subscribes' is reserved; set it as an attribute.", id));
+		if (pubs != null && bodyPubs != null)
+			throw FtlAttrLists.reject(f("<@card id='%s'> body key 'publishes' is reserved; set it as an attribute.", id));
 		var spec = toCardSpec(card);
 		if (! cssClass.isEmpty())
 			spec.cssClass(cssClass);
+		wire(spec, pubs != null ? pubs : bodyPubs, subs != null ? subs : bodySubs);
 		cap.addCard(spec, captured[0] ? markup : null);
 	}
 
@@ -275,15 +339,15 @@ public final class CardDirectiveModel implements TemplateDirectiveModel {
 		"unchecked" // JSON5 object keys are always strings.
 	})
 	private static void runViewCard(PageCapture cap, String id, String title, String src, String template,
-			String markup, String cssClass) throws TemplateModelException {
+			String markup, String cssClass, Object pubs, Object subs) throws TemplateModelException {
 		if (id.isEmpty())
 			throw FtlAttrLists.reject("<@card type=\"run-view\"> requires id=.");
 		if (! (src.isEmpty() && template.isEmpty()))
-			throw FtlAttrLists.reject(String.format(
+			throw FtlAttrLists.reject(f(
 				"<@card id='%s'> type='run-view' takes its options as the body; src= and template= are not allowed.", id));
 		var trimmed = markup.trim();
 		if (! trimmed.startsWith("{"))
-			throw FtlAttrLists.reject(String.format(
+			throw FtlAttrLists.reject(f(
 				"<@card id='%s'> type='run-view' requires a JSON5 body { contractVersion: '1', runView: {...} }.", id));
 		JsonMap envelope;
 		try {
@@ -291,16 +355,22 @@ public final class CardDirectiveModel implements TemplateDirectiveModel {
 		} catch (org.apache.juneau.marshall.parser.ParseException ex) {
 			throw FtlAttrLists.reject("Card JSON5 is invalid: " + ex.getMessage());
 		}
+		var bodySubs = envelope.remove("subscribes");
+		var bodyPubs = envelope.remove("publishes");
+		if (subs != null && bodySubs != null)
+			throw FtlAttrLists.reject(f("<@card id='%s'> body key 'subscribes' is reserved; set it as an attribute.", id));
+		if (pubs != null && bodyPubs != null)
+			throw FtlAttrLists.reject(f("<@card id='%s'> body key 'publishes' is reserved; set it as an attribute.", id));
 		for (var k : envelope.keySet())
 			if (! RUN_VIEW_BODY_KEYS.contains(k))
-				throw FtlAttrLists.reject(String.format(
-					"<@card id='%s'> type='run-view' unknown key '%s'; allowed: contractVersion, runView.", id, k));
+				throw FtlAttrLists.reject(f(
+					"<@card id='%s'> type='run-view' unknown key '%s'; allowed: contractVersion, runView, subscribes, publishes.", id, k));
 		var version = envelope.get("contractVersion");
 		if (! eq("1", version))
-			throw FtlAttrLists.reject(String.format(
+			throw FtlAttrLists.reject(f(
 				"<@card id='%s'> type='run-view' requires contractVersion: '1'; got '%s'.", id, version));
 		if (! (envelope.get("runView") instanceof Map<?,?> runView))
-			throw FtlAttrLists.reject(String.format("<@card id='%s'> type='run-view' requires a runView object.", id));
+			throw FtlAttrLists.reject(f("<@card id='%s'> type='run-view' requires a runView object.", id));
 		var def = RunViewDef.fromMap(id, (Map<String,?>)runView).validate();
 		var card = CardSpec.of("run-view", id);
 		if (! title.isEmpty())
@@ -308,6 +378,7 @@ public final class CardDirectiveModel implements TemplateDirectiveModel {
 		if (! cssClass.isEmpty())
 			card.cssClass(cssClass);
 		card.body("runView", def.toMap());
+		wire(card, pubs != null ? pubs : bodyPubs, subs != null ? subs : bodySubs);
 		cap.addCard(card, null);
 	}
 }

@@ -322,7 +322,7 @@ public class HtmlParserSession extends XmlParserSession {
 			if (nn(cm)) {
 				sType = eType = cm;
 				typeName = sType.isCollectionOrArray() ? "array" : "object";
-			} else if (neq(typeName, "array")) {  // Q:  Use Shorts?
+			} else if (neq(typeName, "array")) {
 				// Type name could be a subtype name.
 				typeName = sType.isCollectionOrArray() ? "array" : "object";
 			}

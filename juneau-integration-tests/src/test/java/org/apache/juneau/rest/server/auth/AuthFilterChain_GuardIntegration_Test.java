@@ -27,6 +27,7 @@ import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.commons.inject.*;
+import org.apache.juneau.commons.logging.LogRecordCapture;
 import org.apache.juneau.rest.mock.classic.*;
 import org.apache.juneau.rest.server.*;
 import org.apache.juneau.rest.server.guard.*;
@@ -158,7 +159,17 @@ class AuthFilterChain_GuardIntegration_Test extends TestBase {
 		// Both bearer-user (alice, user role) and apikey-admin (bob, admin role) present.
 		// Bearer is registered first → alice wins for principal; bob is a DIFFERENT principal, so his
 		// admin role must NOT be unioned onto alice's identity.
-		var r = runChain(buildChain(), "Bearer bearer-user", "apikey-admin");
+		var holder = new Result[1];
+		var records = LogRecordCapture.quietly(AuthResultAccumulator.class, () -> {
+			try {
+				holder[0] = runChain(buildChain(), "Bearer bearer-user", "apikey-admin");
+			} catch (Exception e) {
+				throw rex(e);
+			}
+		});
+		assertEquals(1, records.size());
+		assertTrue(records.get(0).getMessage().contains("Ignoring roles from a distinct authenticated principal"));
+		var r = holder[0];
 		assertNotNull(r.captured);
 		var w = (AuthenticatedRequestWrapper) r.captured;
 		assertEquals("alice", w.getUserPrincipal().getName());

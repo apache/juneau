@@ -324,7 +324,7 @@ public final class PageContractAssert {
 	 */
 	public PageContractAssert hasCardKey(String id, String jsonPointer, Object expected) {
 		var actual = resolvePointer(card(id), jsonPointer);
-		if (! Objects.equals(expected, actual))
+		if (neq(expected, actual))
 			throw new AssertionError("card '" + id + "' " + jsonPointer + ": expected '" + expected + "' but was '" + actual + "'");
 		return this;
 	}
@@ -347,6 +347,13 @@ public final class PageContractAssert {
 	 */
 	public JsonMap contract() {
 		return contract;
+	}
+
+	/**
+	 * @return Every {@code <template data-card|data-slot>} id mapped to its inner markup, in document order.
+	 */
+	public Map<String,String> templates() {
+		return u(templates);
 	}
 
 	/**

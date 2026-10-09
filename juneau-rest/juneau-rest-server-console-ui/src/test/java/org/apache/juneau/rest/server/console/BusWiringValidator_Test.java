@@ -134,6 +134,15 @@ class BusWiringValidator_Test extends TestBase {
 		), ps);
 	}
 
+	@Test void a08b_misspelledSelectionTopicIsE42() throws Exception {
+		// The browser defers this check to the server on purpose (juneau-bus.js), so it is pinned here.
+		var ps = problems(page("\"cards\":["
+			+ "{\"id\":\"changes\",\"type\":\"html\",\"template\":\"c\"},"
+			+ "{\"id\":\"tasks\",\"type\":\"html\",\"template\":\"t\",\"src\":\"/t/{changeId}\",\"subscribes\":["
+			+ "{\"topic\":\"selection:chanegs\",\"as\":\"params\",\"map\":{\"changeId\":\"ids.0\"}}]}]"));
+		assertEquals(List.of("E-42 topic 'selection:chanegs' names card 'chanegs', which is not on this page"), ps.stream().map(x -> x.split("; ")[0]).filter(x -> x.startsWith("E-42")).toList());
+	}
+
 	@Test void a09_schemaInvalidWiringDoesNotThrow() throws Exception {
 		// A topics entry with no publisher, carried by a bridge and a ribbon publish item.
 		assertDoesNotThrow(() -> problems(page("\"topics\":[{\"topic\":\"app.a\",\"retain\":true}],"

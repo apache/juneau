@@ -254,7 +254,7 @@ public class ConsoleFreemarkerMixin extends FreemarkerMixin {
 		if (n(cfg.getSharedVariable(TokenDirectiveModel.NAME)))
 			cfg.setSharedVariable(TokenDirectiveModel.NAME, new TokenDirectiveModel());
 		if (n(cfg.getSharedVariable(ConsoleDirectiveModel.NAME)))
-			cfg.setSharedVariable(ConsoleDirectiveModel.NAME, new ConsoleDirectiveModel(devMode));
+			cfg.setSharedVariable(ConsoleDirectiveModel.NAME, new ConsoleDirectiveModel(devMode, cardTypes));
 		if (n(cfg.getSharedVariable(MainDirectiveModel.NAME)))
 			cfg.setSharedVariable(MainDirectiveModel.NAME, new MainDirectiveModel());
 		if (n(cfg.getSharedVariable(HasToolkitMethodModel.NAME)))
@@ -265,6 +265,14 @@ public class ConsoleFreemarkerMixin extends FreemarkerMixin {
 		for (var slot : ConsoleSlotDirectiveModel.SLOT_NAMES)
 			if (n(cfg.getSharedVariable(slot)))
 				cfg.setSharedVariable(slot, new ConsoleSlotDirectiveModel(slot));
+		if (n(cfg.getSharedVariable(TopicDirectiveModel.NAME)))
+			cfg.setSharedVariable(TopicDirectiveModel.NAME, new TopicDirectiveModel());
+		if (n(cfg.getSharedVariable(BridgeDirectiveModel.NAME)))
+			cfg.setSharedVariable(BridgeDirectiveModel.NAME, new BridgeDirectiveModel());
+		if (n(cfg.getSharedVariable(BadgeDirectiveModel.NAME)))
+			cfg.setSharedVariable(BadgeDirectiveModel.NAME, new BadgeDirectiveModel());
+		if (n(cfg.getSharedVariable(FactsDirectiveModel.NAME)))
+			cfg.setSharedVariable(FactsDirectiveModel.NAME, new FactsDirectiveModel());
 	}
 
 	/**
@@ -439,7 +447,6 @@ public class ConsoleFreemarkerMixin extends FreemarkerMixin {
 		 * @return This object.
 		 */
 		public Builder adopterAssets(ClassLoader loader, String resourceRoot) {
-			// Q:  Use Shorts here and in this module.
 			this.adopterLoader = rnn(loader);
 			this.adopterRoot = rnn(resourceRoot);
 			return this;

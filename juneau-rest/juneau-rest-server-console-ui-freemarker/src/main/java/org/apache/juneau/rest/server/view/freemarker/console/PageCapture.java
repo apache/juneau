@@ -26,6 +26,7 @@ import java.util.regex.*;
 import org.apache.juneau.marshall.collections.*;
 import org.apache.juneau.marshall.marshaller.*;
 import org.apache.juneau.rest.server.console.*;
+import org.apache.juneau.rest.server.views.*;
 
 import freemarker.core.*;
 import freemarker.template.*;
@@ -144,6 +145,8 @@ public final class PageCapture {
 	private final Map<String,Map<String,Object>> topics = new LinkedHashMap<>();
 	private final Map<String,String> topicWhere = new HashMap<>();
 	private final Map<String,Map<String,Object>> bridges = new LinkedHashMap<>();
+	private final Map<String,BadgeDef> badges = new LinkedHashMap<>();
+	private Map<String,Object> javaFacts = Map.of(), chromeFacts = Map.of(), facts = Map.of();
 	// Cards from a PageSpec, held until placed or the page closes.  builtCards: not yet placed, in declaration order.
 	// builtCardIds: every id ever registered here, kept after placement.
 	private final Map<String,CardSpec> builtCards = new LinkedHashMap<>();
@@ -310,7 +313,7 @@ public final class PageCapture {
 	 */
 	public PageCapture select(List<String> idPath) throws TemplateModelException {
 		if (nn(selected))
-			throw FtlAttrLists.reject(String.format("<@node id='%s'> selected=true but '%s' is already selected.",
+			throw FtlAttrLists.reject(f("<@node id='%s'> selected=true but '%s' is already selected.",
 				idPath.get(idPath.size() - 1), String.join("/", selected)));
 		selected = List.copyOf(idPath);
 		return this;
@@ -327,9 +330,9 @@ public final class PageCapture {
 	public PageCapture addCard(CardSpec card, String markupOrNull) throws TemplateModelException {
 		for (var c : cards)
 			if (c.id().equals(card.id()))
-				throw FtlAttrLists.reject(String.format("<@card id='%s'> duplicates an existing card id.", card.id()));
+				throw FtlAttrLists.reject(f("<@card id='%s'> duplicates an existing card id.", card.id()));
 		if (builtCardIds.contains(card.id()))
-			throw FtlAttrLists.reject(String.format("<@card id='%s'> duplicates an existing card id.", card.id()));
+			throw FtlAttrLists.reject(f("<@card id='%s'> duplicates an existing card id.", card.id()));
 		if (nn(markupOrNull)) {
 			card.template(card.id());
 			templates.put(card.id(), markupOrNull);
@@ -349,15 +352,38 @@ public final class PageCapture {
 	void addBuiltCard(CardSpec card, String markupOrNull) throws TemplateModelException {
 		for (var c : cards)
 			if (c.id().equals(card.id()))
-				throw FtlAttrLists.reject(String.format("<@card id='%s'> duplicates an existing card id.", card.id()));
+				throw FtlAttrLists.reject(f("<@card id='%s'> duplicates an existing card id.", card.id()));
 		if (builtCards.containsKey(card.id()) || builtCardIds.contains(card.id()))
-			throw FtlAttrLists.reject(String.format("<@card id='%s'> duplicates an existing card id.", card.id()));
+			throw FtlAttrLists.reject(f("<@card id='%s'> duplicates an existing card id.", card.id()));
 		if (nn(markupOrNull)) {
 			card.template(card.id());
 			templates.put(card.id(), markupOrNull);
 		}
 		builtCards.put(card.id(), card);
 		builtCardIds.add(card.id());
+	}
+
+	/**
+	 * Places a built card at the current position in the card order.
+	 *
+	 * @param id The built card id.
+	 * @throws TemplateModelException If the card was already placed, or no built card has that id.
+	 */
+	void placeBuiltCard(String id) throws TemplateModelException {
+		var card = builtCards.remove(id);
+		if (n(card)) {
+			if (builtCardIds.contains(id))
+				throw FtlAttrLists.reject(f("<@card ref='%s'> places a PageSpec card that was already placed.", id));
+			throw FtlAttrLists.reject(f("<@card ref='%s'> names no PageSpec card; declared: '%s'.", id,
+				String.join(", ", builtCardIds)));
+		}
+		cards.add(card);
+	}
+
+	/** Appends every still-unplaced built card after the authored and placed cards, in declaration order. */
+	void flushUnplacedBuiltCards() {
+		cards.addAll(builtCards.values());
+		builtCards.clear();
 	}
 
 	/**
@@ -390,12 +416,12 @@ public final class PageCapture {
 		if (prior == null) {
 			topics.put(topic, decl);
 			topicWhere.put(topic, where);
-		} else if (! Objects.equals(prior.get("retain"), decl.get("retain"))) {
-			throw new IllegalArgumentException(String.format("topic '%s' is declared with retain=%s here and retain=%s at %s",
-				topic, decl.get("retain"), prior.get("retain"), topicWhere.get(topic)));
-		} else if (! Objects.equals(prior.get("publisher"), decl.get("publisher"))) {
-			throw new IllegalArgumentException(String.format("topic '%s' is declared with publisher=%s here and publisher=%s at %s",
-				topic, decl.get("publisher"), prior.get("publisher"), topicWhere.get(topic)));
+		} else if (neq(prior.get("retain"), decl.get("retain"))) {
+			throw iaex("topic '%s' is declared with retain=%s here and retain=%s at %s",
+				topic, decl.get("retain"), prior.get("retain"), topicWhere.get(topic));
+		} else if (neq(prior.get("publisher"), decl.get("publisher"))) {
+			throw iaex("topic '%s' is declared with publisher=%s here and publisher=%s at %s",
+				topic, decl.get("publisher"), prior.get("publisher"), topicWhere.get(topic));
 		}
 		return this;
 	}
@@ -410,7 +436,7 @@ public final class PageCapture {
 	PageCapture addBridge(Map<String,Object> bridge) {
 		var id = (String)bridge.get("id");
 		if (bridges.containsKey(id))
-			throw new IllegalArgumentException(String.format("bridge '%s': %s", id, "duplicate id"));
+			throw iaex("bridge '%s': %s", id, "duplicate id");
 		bridges.put(id, bridge);
 		return this;
 	}
@@ -431,6 +457,125 @@ public final class PageCapture {
 		}
 		if (! problems.isEmpty())
 			throw new IllegalArgumentException(problems.get(0).message());
+	}
+
+	/**
+	 * Appends a header badge.
+	 *
+	 * @param badge The badge.  Must not be <jk>null</jk>.
+	 * @return This object.
+	 * @throws TemplateModelException On a duplicate badge id.
+	 */
+	public PageCapture addBadge(BadgeDef badge) throws TemplateModelException {
+		var id = (String)badge.toContractMap().get("id");
+		if (badges.containsKey(id))
+			throw FtlAttrLists.reject(f("Badge id '%s' is declared twice (PageSpec and/or <@badge>).", id));
+		badges.put(id, badge);
+		return this;
+	}
+
+	/**
+	 * Non-strict, last-wins merge: same-side repeats of facts, and the base of the strict Java-vs-chrome merge.
+	 *
+	 * @param base The base map.
+	 * @param overlay The overlay; its values win.
+	 * @return A new merged map.
+	 */
+	static Map<String,Object> mergeFactsLastWins(Map<String,Object> base, Map<String,Object> overlay) {
+		var out = new LinkedHashMap<String,Object>(base);
+		out.putAll(overlay);
+		return out;
+	}
+
+	/** @param v Facts seeded from a {@code PageSpec}; merged last-wins with earlier seeds. */
+	void seedJavaFacts(Map<String,Object> v) {
+		javaFacts = mergeFactsLastWins(javaFacts, v);
+	}
+
+	/** @param v Facts from {@code <@console facts=>} or {@code <@facts>}; merged last-wins with earlier ones. @return This object. */
+	PageCapture mergeChromeFacts(Map<String,Object> v) throws TemplateModelException {
+		try {
+			PageSpec.checkFactTypes("", v);
+		} catch (IllegalArgumentException e) {
+			throw FtlAttrLists.reject(e.getMessage());
+		}
+		chromeFacts = mergeFactsLastWins(chromeFacts, v);
+		return this;
+	}
+
+	/**
+	 * {@code </@console>}: strictly deep-merges the Java and chrome facts, naming the dotted path of any leaf set by both.
+	 *
+	 * @throws TemplateModelException On a leaf set by both sides.
+	 */
+	void resolveFacts() throws TemplateModelException {
+		facts = deepMergeFacts("", javaFacts, chromeFacts);
+	}
+
+	@SuppressWarnings("unchecked")
+	private static Map<String,Object> deepMergeFacts(String prefix, Map<String,Object> a, Map<String,Object> b) throws TemplateModelException {
+		var out = new LinkedHashMap<String,Object>(a);
+		for (var e : b.entrySet()) {
+			var path = prefix.isEmpty() ? e.getKey() : prefix + "." + e.getKey();
+			if (! out.containsKey(e.getKey())) {
+				out.put(e.getKey(), e.getValue());
+				continue;
+			}
+			var existing = out.get(e.getKey());
+			if (existing instanceof Map<?,?> && e.getValue() instanceof Map<?,?>)
+				out.put(e.getKey(), deepMergeFacts(path, (Map<String,Object>)existing, (Map<String,Object>)e.getValue()));
+			else
+				throw FtlAttrLists.reject(f("Fact '%s' is set by both PageSpec.facts and the chrome; set it in one place.", path));
+		}
+		return out;
+	}
+
+	/**
+	 * {@code </@console>}: checks each badge against the finished page.  {@code table} and every {@code refreshes}
+	 * entry must name a card on the page; when {@code scope.by} is {@code nav}, each {@code scope.values} key must
+	 * name a node in the resolved nav tree.
+	 *
+	 * @throws TemplateModelException On an unknown card id or nav node.
+	 */
+	@SuppressWarnings("unchecked")
+	void checkBadges() throws TemplateModelException {
+		var cardIds = new HashSet<String>(builtCardIds);
+		for (var c : cards)
+			cardIds.add(c.id());
+		var navIds = new HashSet<String>();
+		collectNavIds(navRoot, navIds);
+		for (var b : badges.values()) {
+			var m = b.toContractMap();
+			var id = (String)m.get("id");
+			for (var card : badgeCardRefs(m))
+				if (! cardIds.contains(card))
+					throw FtlAttrLists.reject(f(BADGE_CARD_MSG, id, card));
+			if (m.get("scope") instanceof Map<?,?> scope && "nav".equals(scope.get("by")) && scope.get("values") instanceof Map<?,?> values)
+				for (var key : ((Map<String,Object>)values).keySet())
+					if (! navIds.contains(key))
+						throw FtlAttrLists.reject(f(BADGE_NAV_MSG, id, key));
+		}
+	}
+
+	static final String BADGE_CARD_MSG = "<@badge id='%s'> references card '%s', which is not on the page.";
+	static final String BADGE_NAV_MSG = "<@badge id='%s'> scope names nav node '%s', which is not in the nav tree.";
+
+	/** @param badge A badge's contract map. @return Its {@code table} followed by its {@code refreshes} entries. */
+	static List<String> badgeCardRefs(Map<String,Object> badge) {
+		var out = new ArrayList<String>();
+		if (badge.get("table") instanceof String t)
+			out.add(t);
+		if (badge.get("refreshes") instanceof List<?> r)
+			for (var e : r)
+				out.add(String.valueOf(e));
+		return out;
+	}
+
+	private static void collectNavIds(NavNode node, Set<String> out) {
+		if (nn(node.id()))
+			out.add(node.id());
+		for (var c : node.children())
+			collectNavIds(c, out);
 	}
 
 	/**
@@ -455,7 +600,7 @@ public final class PageCapture {
 		for (var p : batch) {
 			var parent = navRoot.find(List.of(p.parentIdPath().split("/")));
 			if (parent.isEmpty())
-				throw FtlAttrLists.reject(String.format(
+				throw FtlAttrLists.reject(f(
 					"Nav addition under '%s' does not match a <@node> path in the chrome; known paths: '%s'.",
 					p.parentIdPath(), String.join(", ", navRoot.paths())));
 			p.adder().accept(parent.get());
@@ -471,13 +616,13 @@ public final class PageCapture {
 	 * @throws TemplateModelException If a non-blank tab was already set.
 	 */
 	public PageCapture mergeTab(String tab) throws TemplateModelException {
-		if (tab == null || tab.isBlank())
+		if (ib(tab))
 			return this;
 		if (this.tab.isEmpty()) {
 			this.tab = tab;
 			return this;
 		}
-		throw FtlAttrLists.reject(String.format(
+		throw FtlAttrLists.reject(f(
 			"PageSpec sets tab='%s' and <@page tab='%s'> also sets it; set it in one place.", this.tab, tab));
 	}
 
@@ -490,9 +635,9 @@ public final class PageCapture {
 	 * @throws TemplateModelException If a different, non-blank theme was already set.
 	 */
 	public PageCapture mergeTheme(String name) throws TemplateModelException {
-		if (name == null || name.isBlank())
+		if (ib(name))
 			return this;
-		if (theme == null || theme.isBlank()) {
+		if (ib(theme)) {
 			theme = name;
 			themeFromDirective = true;
 			return this;
@@ -500,9 +645,9 @@ public final class PageCapture {
 		if (theme.equals(name))
 			return this;
 		if (themeFromDirective)
-			throw FtlAttrLists.reject(String.format(
+			throw FtlAttrLists.reject(f(
 				"<@theme name='%s'> conflicts with an earlier <@theme name='%s'> on this page; use one.", name, theme));
-		throw FtlAttrLists.reject(String.format(
+		throw FtlAttrLists.reject(f(
 			"PageSpec theme '%s' conflicts with <@theme name='%s'>; remove name= from <@theme> to inherit the "
 				+ "page theme.", theme, name));
 	}
@@ -521,16 +666,16 @@ public final class PageCapture {
 	 * @throws TemplateModelException If an attribute name already set is set again.
 	 */
 	public PageCapture mergeBodyAttrs(String attrs) throws TemplateModelException {
-		if (attrs == null || attrs.isBlank())
+		if (ib(attrs))
 			return this;
-		if (bodyAttrs == null || bodyAttrs.isBlank()) {
+		if (ib(bodyAttrs)) {
 			bodyAttrs = attrs;
 			return this;
 		}
 		var existing = bodyAttrNames(bodyAttrs);
 		for (var name : bodyAttrNames(attrs))
 			if (existing.contains(name))
-				throw FtlAttrLists.reject(String.format(
+				throw FtlAttrLists.reject(f(
 					"PageSpec body attribute '%s' is also set by <@body>; set it in one place.", name));
 		bodyAttrs = (bodyAttrs + " " + attrs).strip();
 		return this;
@@ -594,7 +739,7 @@ public final class PageCapture {
 
 	// Dedupes within a single list too, not only across the two sources: css=["a.css","a.css"] yields one link.
 	private static List<String> mergeUnion(List<String> existing, List<String> additions) {
-		var out = new ArrayList<>(existing);
+		var out = tl(existing);
 		for (var a : additions)
 			if (! out.contains(a))
 				out.add(a);
@@ -632,7 +777,7 @@ public final class PageCapture {
 	}
 
 	/** @return The recorded pack names, in first-seen order. */
-	public Set<String> requiredPacks() { return Collections.unmodifiableSet(requiredPacks); }
+	public Set<String> requiredPacks() { return u(requiredPacks); }
 
 	/** @return <jk>true</jk> while a {@code <@page>} body is rendering. */
 	public boolean inPage() { return pageOpen; }
@@ -675,12 +820,15 @@ public final class PageCapture {
 	 * resolve pending nav additions (E-B8), all before the caller's own {@code resolveActiveNav()}. */
 	void checkConsoleClose() throws TemplateModelException {
 		if (mainCount != 1)
-			throw FtlAttrLists.reject(String.format("<@console> requires exactly one <@main/>; found '%s'.", mainCount));
+			throw FtlAttrLists.reject(f("<@console> requires exactly one <@main/>; found '%s'.", mainCount));
 		if (! consoleBuffer.toString().isBlank())
 			throw FtlAttrLists.reject("<@console> has markup after <@main/>; move it into <@footer> or <@scripts>.");
 		if (ftlBodyAttrs != null)
 			mergeBodyAttrs(ftlBodyAttrs);
 		applyPendingNavAdds();
+		flushUnplacedBuiltCards();
+		resolveFacts();
+		checkBadges();
 	}
 
 	/** §4.3: explicit selection, else tab (E-7 when it does not resolve), else empty. */
@@ -695,7 +843,7 @@ public final class PageCapture {
 		}
 		var path = List.of(tab.split("/"));
 		if (navRoot.find(path).isEmpty())
-			throw FtlAttrLists.reject(String.format("<@page tab='%s'> does not match a visible <@node> path; known paths: '%s'.",
+			throw FtlAttrLists.reject(f("<@page tab='%s'> does not match a visible <@node> path; known paths: '%s'.",
 				tab, String.join(", ", navRoot.paths())));
 		activeNav = path;
 	}
@@ -743,10 +891,10 @@ public final class PageCapture {
 	}
 
 	/** @return The cards, in page order. */
-	public List<CardSpec> cards() { return Collections.unmodifiableList(cards); }
+	public List<CardSpec> cards() { return u(cards); }
 
 	/** @return Template id to markup, in emit order. */
-	public Map<String,String> templates() { return Collections.unmodifiableMap(templates); }
+	public Map<String,String> templates() { return u(templates); }
 
 	/**
 	 * Serializes the contract.
@@ -774,6 +922,8 @@ public final class PageCapture {
 			m.put("topics", List.copyOf(topics.values()));
 		if (! bridges.isEmpty())
 			m.put("bridges", List.copyOf(bridges.values()));
+		if (! facts.isEmpty())
+			m.put("facts", facts);
 		return scriptSafeJson(Json.DEFAULT.write(m));
 	}
 
@@ -815,6 +965,7 @@ public final class PageCapture {
 		if (nn(header.userMenu)) m.put("userMenu", header.userMenu);
 		if (header.chrome) m.put("chrome", true);
 		if (slots.containsKey("header")) m.put("slots", slots.get("header"));
+		if (! badges.isEmpty()) m.put("badges", badges.values().stream().map(BadgeDef::toContractMap).toList());
 		return m;
 	}
 

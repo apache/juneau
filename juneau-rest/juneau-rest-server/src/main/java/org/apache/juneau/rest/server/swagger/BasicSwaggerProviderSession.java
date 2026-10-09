@@ -676,7 +676,7 @@ public class BasicSwaggerProviderSession {
 						// @formatter:on
 						examples.put(s2.getPrimaryMediaType().toString(), eVal);
 					} catch (Exception e) {
-						LOG.warning("Could not serialize to media type [{}]: {}", mt, localizedMessage(e));  // NOT DEBUG
+						LOG.fine("Could not serialize to media type [%s]: %s", mt, localizedMessage(e));
 					}
 				}
 			}

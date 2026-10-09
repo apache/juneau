@@ -24,6 +24,7 @@ import java.util.*;
 import org.apache.juneau.*;
 import org.apache.juneau.commons.bean.*;
 import org.apache.juneau.commons.http.MediaType;
+import org.apache.juneau.commons.logging.LogRecordCapture;
 import org.apache.juneau.commons.reflect.*;
 import org.junit.jupiter.api.*;
 
@@ -130,14 +131,16 @@ class MarshallingSession_Coverage_Test extends TestBase {
 
 	@Test void c01_addWarning_debugNoArgs() {
 		var s = MarshallingSession.create(ctx).debug(true).build();
-		s.addWarning("plain message with no args");
+		var records = LogRecordCapture.quietly(MarshallingSession.class, () -> s.addWarning("plain message with no args"));
 		assertEquals(1, s.getWarnings().size());
+		assertEquals(1, records.size());
 	}
 
 	@Test void c02_addWarning_debugWithArgs() {
 		var s = MarshallingSession.create(ctx).debug(true).build();
-		s.addWarning("formatted %s message", "warning");
+		var records = LogRecordCapture.quietly(MarshallingSession.class, () -> s.addWarning("formatted %s message", "warning"));
 		assertEquals(1, s.getWarnings().size());
+		assertEquals(1, records.size());
 		assertTrue(s.getWarnings().get(0).contains("formatted warning message"));
 	}
 

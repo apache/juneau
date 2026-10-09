@@ -55,21 +55,21 @@ class RestDebugFinishContainment_Test {
 	}
 
 	@Test void a01_formatterThrowsRuntimeAtFinest_requestStillCompletes_fixedTokenOnly() throws Exception {
-		try (var c = RichLogger.getLogger(FINISH_LOGGER).captureEvents(Level.WARNING)) {
+		var records = LogRecordCapture.quietly(FINISH_LOGGER, () -> LogRecordCapture.quietly(org.apache.juneau.rest.client.classic.RestClient.class, () -> {
 			var client = org.apache.juneau.rest.mock.classic.MockRestClient.create(A_ThrowsRuntimeInBody.class).debug().build();
 
 			// The request thread must not fail even though the formatter throws during finish().
 			client.post("/echo", "request-payload").run().assertStatus().asCode().is(200).assertContent("request-payload");
+		}));
 
-			var rec = c.getRecords().stream()
-				.filter(r -> eq(r.getLoggerName(), FINISH_LOGGER))
-				.reduce((a, b) -> b)
-				.orElse(null);
-			assertNotNull(rec, "a fixed diagnostic-failure token should be logged");
-			assertEquals("debug formatter failed", rec.getMessage());
-			assertFalse(rec.getMessage().contains("secret-in-formatter-BODY"), rec.getMessage());
-			assertNull(rec.getThrown(), "the failure must not attach the formatter's exception (which carries the body)");
-		}
+		var rec = records.stream()
+			.filter(r -> eq(r.getLoggerName(), FINISH_LOGGER))
+			.reduce((a, b) -> b)
+			.orElse(null);
+		assertNotNull(rec, "a fixed diagnostic-failure token should be logged");
+		assertEquals("debug formatter failed", rec.getMessage());
+		assertFalse(rec.getMessage().contains("secret-in-formatter-BODY"), rec.getMessage());
+		assertNull(rec.getThrown(), "the failure must not attach the formatter's exception (which carries the body)");
 	}
 
 	/** A resource that IS its own formatter and throws an {@code Error} while rendering the basic line ({@code INFO}). */
@@ -88,12 +88,14 @@ class RestDebugFinishContainment_Test {
 		var target = Logger.getLogger(B_ThrowsErrorInBasic.class.getName());
 		var prevLevel = target.getLevel();
 		target.setLevel(Level.INFO);
-		try (var c = RichLogger.getLogger(FINISH_LOGGER).captureEvents(Level.WARNING)) {
-			var client = org.apache.juneau.rest.mock.classic.MockRestClient.create(B_ThrowsErrorInBasic.class).build();
+		try {
+			var records = LogRecordCapture.quietly(FINISH_LOGGER, () -> {
+				var client = org.apache.juneau.rest.mock.classic.MockRestClient.create(B_ThrowsErrorInBasic.class).build();
 
-			client.post("/echo", "request-payload").run().assertStatus().asCode().is(200).assertContent("request-payload");
+				client.post("/echo", "request-payload").run().assertStatus().asCode().is(200).assertContent("request-payload");
+			});
 
-			var rec = c.getRecords().stream()
+			var rec = records.stream()
 				.filter(r -> eq(r.getLoggerName(), FINISH_LOGGER))
 				.reduce((a, b) -> b)
 				.orElse(null);

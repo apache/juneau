@@ -22,6 +22,7 @@ import java.time.*;
 import java.util.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.commons.logging.*;
 import org.apache.juneau.commons.concurrent.*;
 import org.apache.juneau.rest.server.auth.*;
 import org.junit.jupiter.api.*;
@@ -86,7 +87,9 @@ class SamlAssertionValidator_SingleUse_Test extends TestBase {
 		// A cache that cannot answer (throws) must cause the assertion to be rejected, not accepted.
 		ReplayCache throwing = (id, expiresAtMs) -> { throw new IllegalStateException("store down"); };
 		var validator = base(cred).replayCache(throwing).build();
-		assertThrows(AuthenticationException.class, () -> validator.validate(xml));
+		var records = LogRecordCapture.quietly(SamlAssertionValidator.class, () -> assertThrows(AuthenticationException.class, () -> validator.validate(xml)));
+		assertEquals(1, records.size(), records::toString);
+		assertTrue(records.get(0).getMessage().contains("fail-closed"), records.get(0).getMessage());
 	}
 
 	@Test void b02_distinctAssertions_bothAccepted() throws Exception {

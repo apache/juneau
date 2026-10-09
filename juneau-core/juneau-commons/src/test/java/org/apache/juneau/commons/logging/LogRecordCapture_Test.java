@@ -414,4 +414,52 @@ class LogRecordCapture_Test extends TestBase {
 			assertEquals(2, capture.matching("abc").size());
 		}
 	}
+
+	//====================================================================================================
+	// quietly
+	//====================================================================================================
+
+	@Test void q01_quietly_capturesAndRestoresParentHandlers() {
+		var logger = RichLogger.getLogger("q01");
+		logger.setLevel(Level.WARNING);
+		var jul = Logger.getLogger("q01");
+		var before = jul.getUseParentHandlers();
+		var records = LogRecordCapture.quietly("q01", () -> {
+			assertFalse(jul.getUseParentHandlers());
+			logger.warning("hello %s", "there");
+			logger.info("below the level");
+		});
+		assertSize(1, records);
+		assertEquals(Level.WARNING, records.get(0).getLevel());
+		assertEquals(before, jul.getUseParentHandlers());
+		assertEquals(0, jul.getHandlers().length);
+	}
+
+	@Test void q02_quietly_restoresOnException() {
+		var jul = Logger.getLogger("q02");
+		var before = jul.getUseParentHandlers();
+		assertThrows(IllegalStateException.class, () -> LogRecordCapture.quietly("q02", () -> { throw new IllegalStateException("x"); }));
+		assertEquals(before, jul.getUseParentHandlers());
+		assertEquals(0, jul.getHandlers().length);
+	}
+
+	@Test void q03_quietly_wrapsCheckedExceptions() {
+		var e = assertThrows(RuntimeException.class, () -> LogRecordCapture.quietly(LogRecordCapture_Test.class, () -> { throw new java.io.IOException("io"); }));
+		assertInstanceOf(java.io.IOException.class, e.getCause());
+	}
+
+	@Test void q04_quiet_overlappingHandlesRestoreOnlyWhenLastCloses() {
+		var jul = Logger.getLogger("q04");
+		var before = jul.getUseParentHandlers();
+		var first = LogRecordCapture.quiet("q04");
+		var second = LogRecordCapture.quiet("q04");
+		assertFalse(jul.getUseParentHandlers());
+		first.close();
+		assertFalse(jul.getUseParentHandlers());
+		var records = LogRecordCapture.quietly("q04", () -> RichLogger.getLogger("q04").warning("x"));
+		assertSize(1, records);
+		assertFalse(jul.getUseParentHandlers());
+		second.close();
+		assertEquals(before, jul.getUseParentHandlers());
+	}
 }

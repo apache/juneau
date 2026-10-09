@@ -98,6 +98,8 @@ public final class PageSpec {
 	/** Body attribute name to its HTML-attribute-escaped value; the last call for a name wins. */
 	final Map<String,String> bodyAttrs = new LinkedHashMap<>();
 	final List<PageCapture.PendingNavAdd> navUnders = new ArrayList<>();
+	final List<BadgeDef> badges = new ArrayList<>();
+	Map<String,Object> facts = Map.of();
 
 	private PageSpec() {}
 
@@ -179,7 +181,7 @@ public final class PageSpec {
 	 * @throws IllegalArgumentException If blank, or any {@code '/'}-separated segment is blank.
 	 */
 	static String checkIdPath(String method, String idPath) {
-		if (idPath == null || idPath.isBlank())
+		if (ib(idPath))
 			throw iaex("PageSpec %s path must be a non-empty '/'-separated id path; got '%s'.", method, idPath);
 		for (var segment : idPath.split("/", -1))
 			if (segment.isBlank())
@@ -423,7 +425,7 @@ public final class PageSpec {
 		if (card == null)
 			throw iaex("PageSpec.card requires a non-null card.");
 		var type = card.type();
-		if (type == null || type.isBlank())
+		if (ib(type))
 			throw iaex("PageSpec.card id '%s' requires a non-blank type.", card.id());
 		if (CardDirectiveModel.REMOVED_TYPES.contains(type))
 			throw iaex("PageSpec.card type '%s' was removed in 10.0.0; use PageSpec.html(...) with a markup/template, or a registered card type.", type);
@@ -484,6 +486,92 @@ public final class PageSpec {
 	 */
 	public Optional<CardSpec> card(String id) {
 		return cards.stream().filter(c -> c.id().equals(id)).findFirst();
+	}
+
+	/**
+	 * Adds a header badge.  The Java twin of {@code <@badge>}.
+	 *
+	 * @param def The badge.  Must not be <jk>null</jk>.
+	 * @return This object.
+	 * @throws IllegalArgumentException If {@link BadgeDef#validate()} rejects it.
+	 */
+	public PageSpec badge(BadgeDef def) {
+		def.validate();
+		badges.add(def);
+		return this;
+	}
+
+	/**
+	 * Seeds page-level facts, which {@code visibleWhen} rules test on the client.  Repeated calls merge, last wins, on
+	 * this side only; the strict check against chrome-supplied facts runs once, at {@code </@console>}.
+	 *
+	 * @param v The facts.  Leaves must be strings, numbers, booleans, string lists or maps.
+	 * @return This object.
+	 * @throws IllegalArgumentException On a leaf of any other type.
+	 */
+	public PageSpec facts(Map<String,Object> v) {
+		checkFactTypes("", v);
+		facts = PageCapture.mergeFactsLastWins(facts, copyFacts(v));
+		return this;
+	}
+
+	// Deep, unmodifiable copy, so a caller that later mutates its maps or lists cannot change the page.
+	private static Map<String,Object> copyFacts(Map<String,Object> m) {
+		var out = new LinkedHashMap<String,Object>();
+		for (var e : m.entrySet())
+			out.put(e.getKey(), copyFact(e.getValue()));
+		return u(out);
+	}
+
+	@SuppressWarnings("unchecked")
+	private static Object copyFact(Object v) {
+		if (v instanceof Map<?,?> nested)
+			return copyFacts((Map<String,Object>)nested);
+		if (v instanceof List<?> list)
+			return List.copyOf(list);
+		return v;
+	}
+
+	static void checkFactTypes(String prefix, Map<?,?> m) {
+		for (var e : m.entrySet()) {
+			var path = prefix.isEmpty() ? String.valueOf(e.getKey()) : prefix + "." + e.getKey();
+			var v = e.getValue();
+			if (v instanceof Map<?,?> nested) {
+				checkFactTypes(path, nested);
+			} else if (v instanceof List<?> list) {
+				for (var item : list)
+					if (! (item instanceof String))
+						throw badFact(path, item);
+			} else if (! (v instanceof String || v instanceof Boolean || isPlainNumber(v))) {
+				throw badFact(path, v);
+			}
+		}
+	}
+
+	private static boolean isPlainNumber(Object v) {
+		return v instanceof Integer || v instanceof Long || v instanceof Short || v instanceof Byte || v instanceof Float
+			|| v instanceof Double || v instanceof java.math.BigInteger || v instanceof java.math.BigDecimal;
+	}
+
+	private static IllegalArgumentException badFact(String path, Object v) {
+		return iaex("Fact '%s' has unsupported value type '%s'; use string, number, boolean, string list or map.",
+			path, v == null ? "null" : v.getClass().getSimpleName());
+	}
+
+	/**
+	 * Java twin of the {@code </@console>} card-reference check, run early when this spec's own card set is final.  The
+	 * nav-node check needs the resolved chrome, so it only runs at {@code </@console>}.
+	 */
+	private void checkBadgesAgainstOwnCards() {
+		var cardIds = new HashSet<String>();
+		for (var c : cards)
+			cardIds.add(c.id());
+		for (var b : badges) {
+			var m = b.toContractMap();
+			for (var card : PageCapture.badgeCardRefs(m))
+				if (! cardIds.contains(card))
+					throw isex(PageCapture.BADGE_CARD_MSG, m.get("id"), card);
+		}
 	}
 
 	/**
@@ -582,7 +670,7 @@ public final class PageSpec {
 
 		@Override /* Overridden from FreemarkerView.MustConsume */
 		public String notConsumedMessage(String templateName) {
-			return String.format("Template '%s' was rendered with a PageSpec, but the spec was never adopted; the "
+			return f("Template '%s' was rendered with a PageSpec, but the spec was never adopted; the "
 				+ "template must use <@page> or include the console chrome.", templateName);
 		}
 	}
@@ -610,6 +698,7 @@ public final class PageSpec {
 		} else {
 			var ccm = resolveConsoleMixin(req);
 			checkWiringEarly(ccm.cardTypes(), req);
+			checkBadgesAgainstOwnCards();
 			templateName = ccm.chromeTemplate();
 		}
 		var v = FreemarkerView.of(templateName).attr(ATTR, new Seed(this));
@@ -697,6 +786,10 @@ public final class PageSpec {
 		}
 		for (var p : navUnders)
 			cap.addPendingNavUnder(p.parentIdPath(), p.adder());
+		for (var b : badges)
+			cap.addBadge(b);
+		if (! facts.isEmpty())
+			cap.seedJavaFacts(facts);
 	}
 
 	private CardSpec liftTable(CardSpec card, CardDirectiveModel cardModel) throws TemplateModelException {

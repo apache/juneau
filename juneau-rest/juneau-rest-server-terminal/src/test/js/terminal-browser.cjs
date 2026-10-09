@@ -185,6 +185,31 @@ const CASES = [
 		await page.waitForTimeout(100);
 		expect((await rows(page))[0] === 'line 150', 'a hash for another card is ignored');
 	}],
+	['b11_handleScrollsWithoutAHashChange', async function (page) {
+		const events = [
+			{ ev: 'step', id: 'a', title: 'A', rawOffset: 500 },
+			{ ev: 'step', id: 'b', title: 'B', rawOffset: 1500 },
+			{ ev: 'done', status: 'ok' }
+		];
+		await page.route(ORIGIN + '/**', server({ log: lines(300), events: events }));
+		await page.goto(ORIGIN + '/page');
+		await page.waitForFunction(function () { return typeof window.Terminal === 'function' && !!window.JuneauTerminal; });
+		expect(await page.evaluate(function () { return window.JuneauTerminal.handle('t'); }) === null, 'no handle before the card is mounted');
+		await page.evaluate(function () {
+			window.__len = history.length;
+			window.__cleanup = window.JuneauTerminal.mount(document.getElementById('host'), { id: 't', bytesUrl: '/t/bytes', eventsUrl: '/t/events' });
+		});
+		await page.waitForFunction(function () {
+			const b = document.querySelector('.juneau-term-badge');
+			return b && b.textContent !== 'Connecting' && b.textContent !== 'Running';
+		});
+		await page.evaluate(function () { window.JuneauTerminal.handle('t').scrollToOffset(1500); });
+		await waitRow0(page, 'line 150');
+		const r = await page.evaluate(function () { return { hash: location.hash, len: history.length - window.__len }; });
+		expect(r.hash === '' && r.len === 0, 'no hash change and no history entry: ' + JSON.stringify(r));
+		await page.evaluate(function () { window.__cleanup(); });
+		expect(await page.evaluate(function () { return window.JuneauTerminal.handle('t'); }) === null, 'the handle goes away with the card');
+	}],
 	['b07_fontScalesWithThePanelWhileColsAndRowsStay', async function (page) {
 		await open(page, { log: Buffer.from('x'.repeat(80) + '\r\n'), cols: 80, rows: 24 });
 		const measure = function () {

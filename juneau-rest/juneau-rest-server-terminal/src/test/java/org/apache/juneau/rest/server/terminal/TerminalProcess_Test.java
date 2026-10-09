@@ -25,7 +25,9 @@ import java.util.*;
 import java.util.concurrent.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.commons.logging.*;
 import org.apache.juneau.rest.server.runreport.*;
+import org.apache.juneau.rest.server.views.*;
 import org.apache.juneau.rest.server.terminal.TerminalProcess.*;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.condition.*;
@@ -109,9 +111,12 @@ class TerminalProcess_Test extends TestBase {
 		assertEquals(4, lines.size(), lines.toString());
 		assertEquals("{\"ev\":\"note\",\"level\":\"warn\",\"text\":\"runner exited without done, exit 5\"}", lines.get(2));
 		assertEquals("{\"ev\":\"done\",\"status\":\"fail\"}", lines.get(3));
-		var page = p.events().page(null, 100);
-		assertTrue(page.terminal());
-		assertEquals(RunEvent.Kind.DONE, page.events().get(page.events().size() - 1).kind());
+		var page = new RunViewPage[1];
+		var records = LogRecordCapture.quietly(FileRunViewSource.class, () -> page[0] = p.events().page(null, 100));
+		assertEquals(1, records.size(), records::toString);
+		assertTrue(records.get(0).getMessage().contains("skipped malformed line 2"), records.get(0).getMessage());
+		assertTrue(page[0].terminal());
+		assertEquals(RunEvent.Kind.DONE, page[0].events().get(page[0].events().size() - 1).kind());
 	}
 
 	@DisabledOnOs(OS.WINDOWS)
@@ -229,10 +234,15 @@ class TerminalProcess_Test extends TestBase {
 	@Test void b08_exitHookFailureStillFinishes() throws Exception {
 		fakePython("exit 3");
 		DoneWriter boom = (f, code) -> { throw new IllegalStateException("boom"); };
-		var p = TerminalProcess.start("generic", List.of("true"), 80, 24, run, host("/x.py", null), boom);
-		assertEquals(3, p.waitFor(30, TimeUnit.SECONDS));
-		assertTrue(p.isDone());
-		assertTrue(p.executor().isShutdown());
+		var p = new TerminalProcess[1];
+		var records = LogRecordCapture.quietly(TerminalProcess.class, () -> {
+			p[0] = TerminalProcess.start("generic", List.of("true"), 80, 24, run, host("/x.py", null), boom);
+			assertEquals(3, p[0].waitFor(30, TimeUnit.SECONDS));
+		});
+		assertEquals(1, records.size(), records::toString);
+		assertTrue(records.get(0).getMessage().contains("Could not append the done event"), records.get(0).getMessage());
+		assertTrue(p[0].isDone());
+		assertTrue(p[0].executor().isShutdown());
 	}
 
 	@DisabledOnOs(OS.WINDOWS)

@@ -39,7 +39,7 @@
 	</properties>
 
 	<dependencies>
-		<!-- Imported directly (Shorts / AssertionUtils / UriUtils). -->
+		<!-- Imported directly (Shorts / UriUtils). -->
 		<dependency>
 			<groupId>org.apache.juneau</groupId>
 			<artifactId>juneau-commons</artifactId>

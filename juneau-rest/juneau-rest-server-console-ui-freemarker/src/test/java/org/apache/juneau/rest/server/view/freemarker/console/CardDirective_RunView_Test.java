@@ -79,7 +79,7 @@ class CardDirective_RunView_Test extends TestBase {
 		"rv-card-notjson|<@card id='run'> type='run-view' requires a JSON5 body { contractVersion: '1', runView: {...} }.",
 		"rv-card-noversion|<@card id='run'> type='run-view' requires contractVersion: '1'; got 'null'.",
 		"rv-card-badversion|<@card id='run'> type='run-view' requires contractVersion: '1'; got '2'.",
-		"rv-card-extra|<@card id='run'> type='run-view' unknown key 'poll'; allowed: contractVersion, runView.",
+		"rv-card-extra|<@card id='run'> type='run-view' unknown key 'poll'; allowed: contractVersion, runView, subscribes, publishes.",
 		"rv-card-norunview|<@card id='run'> type='run-view' requires a runView object.",
 		"rv-card-badkey|RunViewDef 'run' unknown key 'colour'",
 		"rv-card-nourl|eventsUrl is required unless poll is false",

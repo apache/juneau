@@ -29,7 +29,7 @@ Submitting twice from the same dialog runs one job.</p></div>
     { key: 'result.message', label: 'Result' }
   ],
   ribbon: [
-    { type: 'dialog', id: 'restock', title: 'Restock', endpoint: '/console/ops/jobs/restock', method: 'POST', form: '/console/ops/jobs/restock-form', present: 'dialog' },
+    { type: 'dialog', id: 'restock', title: 'Restock', endpoint: '/console/ops/jobs/restock', method: 'POST', form: '/console/ops/jobs/restock-form' },
     { type: 'refresh', id: 'refresh' }
   ]
 }</@card>
@@ -72,7 +72,7 @@ Submitting twice from the same dialog runs one job.</p></div>
     region: { id: 'output', type: 'row-detail', populate: 'console-output', params: ${groomDetailParams?no_esc} }
   },
   ribbon: [
-    { type: 'dialog', id: 'groom', title: 'Groom', endpoint: '/console/ops/jobs/groom', method: 'POST', form: '/console/ops/jobs/groom-form', present: 'dialog' },
+    { type: 'dialog', id: 'groom', title: 'Groom', endpoint: '/console/ops/jobs/groom', method: 'POST', form: '/console/ops/jobs/groom-form' },
     { type: 'refresh', id: 'groom-refresh' }
   ]
 }</@card>

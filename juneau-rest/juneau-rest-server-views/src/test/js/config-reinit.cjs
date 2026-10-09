@@ -110,10 +110,27 @@ const hiddenOrder = I.resolveOrder(
 	{ columns: catalog, defaultOrder: [{ data: 'B', dir: 'desc' }] },
 	optsColumns
 );
-out.hiddenFallbackIndex = hiddenOrder?.[0] ? hiddenOrder[0][0] : null;
-out.hiddenFallbackData = hiddenOrder?.[0]
+out.hiddenOrderIndex = hiddenOrder?.[0] ? hiddenOrder[0][0] : null;
+out.hiddenOrderData = hiddenOrder?.[0]
 	? optsColumns[hiddenOrder[0][0]]?.data
 	: null;
+out.hiddenOrderDir = hiddenOrder?.[0] ? hiddenOrder[0][1] : null;
+
+// A column the catalog hides (defaultVisible:false) is honored the same way: its effective opts column is visible:false.
+const catalogHiddenColumns = C.buildOptsColumnSpace(
+	C.computeEffectiveColumns([{ data: 'A' }, { data: 'Created', defaultVisible: false }], { hasSelection: false }),
+	{ hasSelection: false, hasActions: false }
+);
+catalogHiddenColumns.forEach(function (c) { if (c.data === 'Created') c.visible = false; else if (c.data) { c.visible = true; c.orderable = true; } });
+const catalogHiddenOrder = I.resolveOrder({ columns: [], defaultOrder: [{ data: 'Created', dir: 'desc' }] }, catalogHiddenColumns);
+out.catalogHiddenOrderData = catalogHiddenOrder?.[0] ? catalogHiddenColumns[catalogHiddenOrder[0][0]]?.data : null;
+out.catalogHiddenOrderDir = catalogHiddenOrder?.[0] ? catalogHiddenOrder[0][1] : null;
+out.catalogHiddenOrderLength = catalogHiddenOrder.length;
+
+// An unknown field is the only case that falls back: first visible orderable column, ascending.
+const unknownOrder = I.resolveOrder({ columns: catalog, defaultOrder: [{ data: 'nope', dir: 'desc' }] }, optsColumns);
+out.unknownFallbackData = unknownOrder?.[0] ? optsColumns[unknownOrder[0][0]]?.data : null;
+out.unknownFallbackDir = unknownOrder?.[0] ? unknownOrder[0][1] : null;
 
 out.applyViewNotInit = C.applyView({}, null);
 

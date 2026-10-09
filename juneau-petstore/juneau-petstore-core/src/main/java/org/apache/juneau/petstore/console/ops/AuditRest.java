@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.petstore.console.ops;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
+
 import java.util.*;
 
 import org.apache.juneau.commons.beanquery.*;
@@ -86,7 +88,7 @@ public class AuditRest extends PetstoreConsolePage {
 	 */
 	@RestGet(path="/rows")
 	public List<AuditEntry> rows() {
-		var all = new ArrayList<>(store().getAudit()); // Q:  Can we use a stream here?
+		var all = tl(store().getAudit());
 		Collections.reverse(all);
 		return all.size() > ROWS_CAP ? all.subList(0, ROWS_CAP) : all;
 	}

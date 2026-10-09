@@ -22,6 +22,7 @@ import java.util.function.*;
 
 import org.apache.juneau.TestBase;
 import org.apache.juneau.commons.*;
+import org.apache.juneau.commons.logging.LogRecordCapture;
 import org.apache.juneau.http.*;
 import org.apache.juneau.rest.client.classic.*;
 import org.apache.juneau.rest.mock.classic.*;
@@ -45,9 +46,17 @@ class Debug_Test extends TestBase {
 	@Test void a01_basic() throws Exception {
 		var c = client().build();
 
-		c.get().header(debug(VALUE)).run().assertContent(VALUE);
-		c.get().header(debug(PARSED)).run().assertContent(VALUE);
-		c.get().header(debug(()->PARSED)).run().assertContent(VALUE);
+		// Each request that turns debug on makes the client log the call to the console; the log is not what is under test.
+		var records = LogRecordCapture.quietly(RestClient.class, () -> {
+			try {
+				c.get().header(debug(VALUE)).run().assertContent(VALUE);
+				c.get().header(debug(PARSED)).run().assertContent(VALUE);
+				c.get().header(debug(()->PARSED)).run().assertContent(VALUE);
+			} catch (Exception e) {
+				throw new RuntimeException(e);
+			}
+		});
+		assertEquals(3, records.size());
 
 		c.get().header(debug((String)null)).run().assertContent().isEmpty();
 		c.get().header(debug((Supplier<Boolean>)null)).run().assertContent().isEmpty();

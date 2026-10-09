@@ -145,6 +145,8 @@ class RrpcInterfaceMeta_Test extends TestBase {
 			@Override public void close() { /* Test-harness no-op. */ }
 		};
 		var log = java.util.logging.Logger.getLogger("org.apache.juneau.http.remote");
+		var useParent = log.getUseParentHandlers();
+		log.setUseParentHandlers(false);
 		log.addHandler(handler);
 		try {
 			// First resolution warns; subsequent resolutions are de-duplicated (one-time).
@@ -152,6 +154,7 @@ class RrpcInterfaceMeta_Test extends TestBase {
 			RrpcInterfaceMeta.of(HeaderListIface.class);
 		} finally {
 			log.removeHandler(handler);
+			log.setUseParentHandlers(useParent);
 		}
 		var matches = records.stream().filter(r -> r.getMessage().contains("headerList")).count();
 		assertEquals(1L, matches);
@@ -168,11 +171,14 @@ class RrpcInterfaceMeta_Test extends TestBase {
 			@Override public void close() { /* Test-harness no-op. */ }
 		};
 		var log = java.util.logging.Logger.getLogger("org.apache.juneau.http.remote");
+		var useParent = log.getUseParentHandlers();
+		log.setUseParentHandlers(false);
 		log.addHandler(handler);
 		try {
 			RrpcInterfaceMeta.of(NoHeaderListIface.class);
 		} finally {
 			log.removeHandler(handler);
+			log.setUseParentHandlers(useParent);
 		}
 		assertEquals(0L, records.stream().filter(r -> r.getMessage().contains("headerList")).count());
 	}

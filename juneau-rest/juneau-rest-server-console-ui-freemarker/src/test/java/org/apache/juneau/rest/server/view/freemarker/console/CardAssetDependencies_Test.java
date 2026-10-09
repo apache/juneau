@@ -22,6 +22,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.util.*;
 import java.util.regex.*;
 
+import org.apache.juneau.commons.logging.*;
 import org.apache.juneau.*;
 import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.http.Path;
@@ -265,7 +266,10 @@ class CardAssetDependencies_Test extends TestBase {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Test void e01_initJquery_skipsPackJquery() throws Exception {
-		var body = get(Host.class, "dup-init");
+		var holder = new String[1];
+		var records = LogRecordCapture.quietly(ToolkitPackRegistry.class, () -> holder[0] = get(Host.class, "dup-init"));
+		assertEquals(1, records.size(), records::toString);
+		var body = holder[0];
 		assertEquals(1, count(body, "jquery.min.js"), () -> body);
 		assertTrue(body.contains("/app/static/jquery.min.js"), () -> body);
 		assertFalse(body.contains("/webjars/jquery/"), () -> body);

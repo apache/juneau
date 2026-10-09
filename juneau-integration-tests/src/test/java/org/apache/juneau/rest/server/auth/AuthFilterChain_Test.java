@@ -27,6 +27,7 @@ import java.util.*;
 import java.util.concurrent.atomic.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.commons.logging.LogRecordCapture;
 import org.junit.jupiter.api.*;
 
 import jakarta.servlet.*;
@@ -104,6 +105,14 @@ class AuthFilterChain_Test extends TestBase {
 	// Tests.
 	// -----------------------------------------------------------------------------------------
 
+	private void doFilter(AuthFilterChain chain, CapturingChain capturing) {
+		try {
+			chain.doFilter(req("/"), capturingResponse(), capturing);
+		} catch (Exception e) {
+			throw rex(e);
+		}
+	}
+
 	@Test void a01_noMatchingFilters_passThroughUnchanged() throws Exception {
 		var original = req("/public/page");
 		var chain = AuthFilterChain.create(null)
@@ -151,7 +160,8 @@ class AuthFilterChain_Test extends TestBase {
 			.append(succeeds(BOB, "admin"))
 			.build();
 		var capturing = new CapturingChain();
-		chain.doFilter(req("/"), capturingResponse(), capturing);
+		var records = LogRecordCapture.quietly(AuthResultAccumulator.class, () -> doFilter(chain, capturing));
+		assertEquals(1, records.size());
 		var w = (AuthenticatedRequestWrapper) capturing.captured;
 		// ALICE registered first — her principal must win
 		assertSame(ALICE, w.getUserPrincipal());
@@ -163,7 +173,8 @@ class AuthFilterChain_Test extends TestBase {
 			.append(succeeds(BOB, "admin", "billing"))
 			.build();
 		var capturing = new CapturingChain();
-		chain.doFilter(req("/"), capturingResponse(), capturing);
+		var records = LogRecordCapture.quietly(AuthResultAccumulator.class, () -> doFilter(chain, capturing));
+		assertEquals(1, records.size());
 		var w = (AuthenticatedRequestWrapper) capturing.captured;
 		// Bob is a distinct principal from alice — his roles must NOT be unioned onto alice's identity.
 		assertTrue(w.isUserInRole("user"));

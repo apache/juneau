@@ -27,6 +27,7 @@ import java.util.concurrent.atomic.*;
 import java.util.stream.*;
 
 import org.apache.juneau.commons.beanquery.*;
+import org.apache.juneau.commons.logging.*;
 import org.junit.jupiter.api.*;
 
 @SuppressWarnings({
@@ -76,6 +77,15 @@ class SqlBeanQuerySession_Test {
 
 	private static List<String> names(List<Person> rows) {
 		return rows.stream().map(Person::name).toList();
+	}
+
+	/** Asserts the body fails with a {@link BeanQueryExecutionException} and that the session logged the failure once. */
+	private static BeanQueryExecutionException assertFailsLogged(org.junit.jupiter.api.function.Executable body) {
+		var thrown = new BeanQueryExecutionException[1];
+		var records = LogRecordCapture.quietly(SqlBeanQuerySession.class, () -> thrown[0] = assertThrows(BeanQueryExecutionException.class, body));
+		assertEquals(1, records.size(), records::toString);
+		assertTrue(records.get(0).getMessage().startsWith("Bean query failed: "), records.get(0).getMessage());
+		return thrown[0];
 	}
 
 	@Test
@@ -197,7 +207,7 @@ class SqlBeanQuerySession_Test {
 	void s12_sqlFailureIsGenericExecutionError() {
 		try (var s = builder().table("missing").build().getSession()) {
 			var hoistedArg3 = new BeanQuery();
-			var e = assertThrows(BeanQueryExecutionException.class, () -> s.find(hoistedArg3));
+			var e = assertFailsLogged(() -> s.find(hoistedArg3));
 			assertEquals("Query execution failed for table 'missing'.", e.getMessage());
 			assertInstanceOf(SQLException.class, e.getCause());
 		}
@@ -288,7 +298,7 @@ class SqlBeanQuerySession_Test {
 	void s19_rowMapperFailureInFindIsExecutionError() {
 		try (var s = throwingRowMapperContext(new RuntimeException("boom")).getSession()) {
 			var hoistedArg8 = new BeanQuery();
-			var e = assertThrows(BeanQueryExecutionException.class, () -> s.find(hoistedArg8));
+			var e = assertFailsLogged(() -> s.find(hoistedArg8));
 			assertBean(e, "message,cause{message}", "Query execution failed for table 'person'.,{boom}");
 		}
 	}
@@ -297,7 +307,7 @@ class SqlBeanQuerySession_Test {
 	void s20_rowMapperFailureInStreamClosesTheCursor() {
 		try (var s = throwingRowMapperContext(new RuntimeException("boom")).getSession()) {
 			var hoistedTarget1 = s.stream(new BeanQuery()).iterator();
-			var e = assertThrows(BeanQueryExecutionException.class, hoistedTarget1::next);
+			var e = assertFailsLogged(hoistedTarget1::next);
 			assertBean(e, "message,cause{message}", "Query execution failed for table 'person'.,{boom}");
 			assertEquals(List.of("rs.close", "ps.close"), r.events.stream().filter(x -> x.endsWith(".close")).toList());  // The cursor closed itself; the session's own connection is still open.
 		}
@@ -310,7 +320,7 @@ class SqlBeanQuerySession_Test {
 		// IllegalStateException (from assertOpen(), checked before the try) passes through unwrapped - see s14.
 		try (var s = throwingRowMapperContext(new IllegalStateException("boom")).getSession()) {
 			var hoistedArg9 = new BeanQuery();
-			var e = assertThrows(BeanQueryExecutionException.class, () -> s.find(hoistedArg9));
+			var e = assertFailsLogged(() -> s.find(hoistedArg9));
 			assertBean(e, "message,cause{message}", "Query execution failed for table 'person'.,{boom}");
 			assertInstanceOf(IllegalStateException.class, e.getCause());
 		}

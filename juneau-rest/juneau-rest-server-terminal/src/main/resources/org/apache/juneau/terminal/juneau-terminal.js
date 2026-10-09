@@ -18,7 +18,7 @@
 /*
  * juneau-terminal.js - the terminal region: a command's raw output rendered by xterm.js.
  *
- * Publishes window.JuneauTerminal = { mount, createEngine, fitFont, findNext, parseHash, formatSize, linkHandlerFor }
+ * Publishes window.JuneauTerminal = { mount, createEngine, fitFont, findNext, parseHash, formatSize, linkHandlerFor, handle }
  * and queues the "terminal" console card handler on window.JuneauConsoleCards.
  *
  * LOAD ORDER: after xterm.js (window.Terminal).  The console shell may load before or after this file: the card
@@ -767,7 +767,13 @@
 		engine.start();
 		onHash();
 
+		const handle = Object.freeze({ scrollToOffset: engine.scrollToOffset });
+		if (isStr(opts.id) && opts.id)
+			HANDLES.set(opts.id, handle);
+
 		return function cleanup() {
+			if (HANDLES.get(opts.id) === handle)
+				HANDLES.delete(opts.id);
 			engine.stop();
 			win.removeEventListener("hashchange", onHash);
 			if (ro)
@@ -777,6 +783,14 @@
 			if (root.parentNode)
 				root.parentNode.removeChild(root);
 		};
+	}
+
+	/** Card id -> the {scrollToOffset} handle of the terminal currently mounted for it. */
+	const HANDLES = new Map();
+
+	/** The handle of the terminal mounted for the card, or null when the card is not mounted (yet). */
+	function handle(id) {
+		return HANDLES.get(id) || null;
 	}
 
 	/** Host element -> cleanup of the region mounted in it. */
@@ -800,7 +814,7 @@
 
 	window.JuneauTerminal = Object.freeze({
 		mount: mount, createEngine: createEngine, fitFont: fitFont, findNext: findNext, parseHash: parseHash,
-		formatSize: formatSize, linkHandlerFor: linkHandlerFor
+		formatSize: formatSize, linkHandlerFor: linkHandlerFor, handle: handle
 	});
 	(window.JuneauConsoleCards = window.JuneauConsoleCards || []).push(["terminal", cardHandler]);
 })();

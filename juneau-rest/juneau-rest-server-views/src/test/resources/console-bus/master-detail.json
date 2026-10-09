@@ -1,0 +1,46 @@
+{
+  "contractVersion": "1",
+  "title": "Changes",
+  "nav": [],
+  "activeNav": [],
+  "topics": [
+    { "topic": "app.region-picked", "retain": true, "publisher": "script" }
+  ],
+  "cards": [
+    { "id": "changes", "type": "datatables",
+      "table": {
+        "dataUrl": "/api/changes", "dataMode": "server",
+        "columns": [ { "key": "id" }, { "key": "owner" }, { "key": "state" }, { "key": "region" } ],
+        "selection": { "rowIdField": "id" },
+        "ribbon": [
+          { "type": "refresh" },
+          { "type": "option", "id": "mine", "title": "Mine only" },
+          { "type": "option", "id": "openOnly", "title": "Open only", "column": "state", "value": "open" },
+          { "type": "refresh", "title": "Refresh tasks", "target": "tasks" },
+          { "type": "publish", "title": "Focus east", "topic": "app.region-picked", "payload": { "region": "east" } }
+        ]
+      } },
+
+    { "id": "tasks", "type": "datatables",
+      "table": {
+        "dataUrl": "/api/changes/{changeId}/tasks", "dataMode": "server",
+        "columns": [ { "key": "id" }, { "key": "name" } ]
+      },
+      "subscribes": [
+        { "topic": "selection:changes", "as": "params", "map": { "changeId": "ids.0" }, "whenEmpty": "clear",
+          "emptyText": "Select a change to see its tasks." }
+      ] },
+
+    { "id": "peers", "type": "datatables",
+      "table": {
+        "dataUrl": "/api/peers", "dataMode": "server",
+        "columns": [ { "key": "id" }, { "key": "region" } ]
+      },
+      "subscribes": [
+        { "topic": "app.region-picked", "as": "filter", "map": { "columns.region": "region" } }
+      ] },
+
+    { "id": "byOwner", "type": "recorder",
+      "subscribes": [ { "topic": "filter:changes", "as": "filter" } ] }
+  ]
+}

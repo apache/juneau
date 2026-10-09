@@ -44,8 +44,6 @@ import org.apache.juneau.marshall.stream.*;
 	"resource" // Resource management handled externally
 })
 public class JcsSerializerSession extends JsonSerializerSession {
-	// Q:  Any good candidates for state machines in here?
-
 	/**
 	 * Builder class.
 	 */

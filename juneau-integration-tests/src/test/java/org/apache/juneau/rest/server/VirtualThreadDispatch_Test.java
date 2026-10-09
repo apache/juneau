@@ -20,9 +20,9 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.condition.JRE.*;
 
 import java.util.concurrent.*;
-import java.util.logging.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.commons.logging.*;
 import org.apache.juneau.marshall.json.*;
 import org.apache.juneau.rest.mock.classic.*;
 import org.junit.jupiter.api.*;
@@ -122,7 +122,8 @@ class VirtualThreadDispatch_Test extends TestBase {
 	@Test void b01_degradation_handlerStillWorks() throws Exception {
 		// Whether we're on Java 17 (graceful degradation) or Java 21 (real VT), the handler must respond.
 		var c = MockRestClient.buildLax(B.class);
-		c.get("/ok").run().assertStatus(200).assertContent().isContains("ok");
+		var records = LogRecordCapture.quietly(RestContext.class, () -> c.get("/ok").run().assertStatus(200).assertContent().isContains("ok"));
+		assertEquals(Runtime.version().feature() < 21 ? 1 : 0, records.size(), records::toString);
 	}
 
 	@Rest(virtualThreads = "true", serializers = JsonSerializer.class)
@@ -135,24 +136,10 @@ class VirtualThreadDispatch_Test extends TestBase {
 	@DisabledForJreRange(min = JAVA_21)
 	void b02_java17_logsWarningOnce() throws Exception {
 		// Capture the WARNING emitted by RestContext when @Rest(virtualThreads=true) is configured on Java < 21.
-		var captured = new StringBuilder();
-		var logger = Logger.getLogger(RestContext.class.getName() + ".async");
-		var handler = new Handler() {
-			@Override public void publish(LogRecord r) {
-				if (r.getLevel() == Level.WARNING)
-					captured.append(r.getMessage());
-			}
-			@Override public void flush() { /* intentionally empty */ }
-			@Override public void close() { /* intentionally empty */ }
-		};
-		logger.addHandler(handler);
-		try {
-			MockRestClient.buildLax(BWarning.class).get("/x").run().assertStatus(200);
-			assertTrue(captured.toString().contains("virtual-thread") || captured.toString().contains("virtualThreads"),
-				"expected warning about virtual threads on Java <21, captured: " + captured);
-		} finally {
-			logger.removeHandler(handler);
-		}
+		var records = LogRecordCapture.quietly(RestContext.class, () -> MockRestClient.buildLax(BWarning.class).get("/x").run().assertStatus(200));
+		assertEquals(1, records.size(), records::toString);
+		assertEquals(java.util.logging.Level.WARNING, records.get(0).getLevel());
+		assertTrue(records.get(0).getMessage().contains("virtualThreads"), records.get(0).getMessage());
 	}
 
 	// -----------------------------------------------------------------------------------------------------------------

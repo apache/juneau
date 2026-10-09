@@ -67,7 +67,7 @@ public final class NavNode {
 	public NavNode add(String nodeId, String label, String hrefOrNull) throws TemplateModelException {
 		for (var c : children)
 			if (c.id.equals(nodeId))
-				throw FtlAttrLists.reject(String.format("<@node id='%s'> duplicates a sibling id under '%s'.", nodeId,
+				throw FtlAttrLists.reject(f("<@node id='%s'> duplicates a sibling id under '%s'.", nodeId,
 					n(this.id) ? "(root)" : String.join("/", idPath())));
 		var n = new NavNode(this, nodeId, label, hrefOrNull);
 		children.add(n);
@@ -104,7 +104,7 @@ public final class NavNode {
 	public String href() { return href; }
 
 	/** @return The children, unmodifiable. */
-	public List<NavNode> children() { return Collections.unmodifiableList(children); }
+	public List<NavNode> children() { return u(children); }
 
 	List<String> idPath() {
 		var out = new LinkedList<String>();

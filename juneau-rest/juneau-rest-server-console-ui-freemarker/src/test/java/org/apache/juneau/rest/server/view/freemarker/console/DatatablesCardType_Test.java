@@ -77,6 +77,14 @@ class DatatablesCardType_Test extends TestBase {
 		assertEquals("/rest/slo/data", ((Map<?,?>)f.get("table")).get("dataUrl"));
 	}
 
+	@Test void bodyVisibleWhen_isLiftedOnce_notLeftInTheCatalog() {
+		var catalog = new JsonMap().append("dataUrl", "/rest/t/data").append("columns", List.of(Map.of("key", "a")))
+			.append("visibleWhen", List.of(Map.of("field", "x", "op", "present")));
+		var card = CardTypeRegistry.standard().toCard(CardSource.create("datatables", "t").bodyMap(catalog).build());
+		assertNotNull(card.get("visibleWhen"));
+		assertFalse(((Map<?,?>)card.get("table")).containsKey("visibleWhen"), card.toString());
+	}
+
 	@Test void bodyMap_withoutColumns_throwsE27() {
 		var s = CardSource.create("datatables", "t").bodyMap(Map.of("dataUrl", "/x")).build();
 		var ex = assertThrows(IllegalArgumentException.class, () -> h.toFragment(s));
@@ -161,6 +169,83 @@ class DatatablesCardType_Test extends TestBase {
 		var ex = assertThrows(IllegalArgumentException.class,
 			() -> h.toFragment(src("t", "{dataUrl:'/x', columns:[{key:'a', bogus:1}]}")));
 		assertTrue(ex.getMessage().startsWith("<@card id='t'> column 'a' has unknown key 'bogus'; known: '"), ex.getMessage());
+	}
+
+	@Test void ribbonUnknownType_isRejected_columnSearchToggle() {
+		var ex = assertThrows(IllegalArgumentException.class,
+			() -> h.toFragment(src("t", "{dataUrl:'/x', columns:[{key:'a'}], ribbon:[{type:'columnSearchToggle'}]}")));
+		assertTrue(ex.getMessage().startsWith("<@card id='t'> RibbonItem type 'columnSearchToggle' is not one of '"), ex.getMessage());
+	}
+
+	@Test void ribbonUnknownKey_isRejected() {
+		var ex = assertThrows(IllegalArgumentException.class,
+			() -> h.toFragment(src("t", "{dataUrl:'/x', columns:[{key:'a'}], ribbon:[{type:'refresh', bogus:1}]}")));
+		assertEquals("<@card id='t'> RibbonItem refresh does not accept 'bogus'.", ex.getMessage());
+	}
+
+	@Test void ribbonExportWithoutButtons_isRejected() {
+		var ex = assertThrows(IllegalArgumentException.class,
+			() -> h.toFragment(src("t", "{dataUrl:'/x', columns:[{key:'a'}], ribbon:[{type:'export'}]}")));
+		assertEquals("<@card id='t'> RibbonItem export requires at least one button.", ex.getMessage());
+	}
+
+	@Test void ribbonDivider_isAccepted() {
+		var table = (Map<?,?>)h.toFragment(src("t", "{dataUrl:'/x', columns:[{key:'a'}], ribbon:[{type:'refresh'}, {type:'divider'}]}")).get("table");
+		assertEquals(2, ((List<?>)table.get("ribbon")).size());
+	}
+
+	@Test void ribbonDividerWithGroup_isRejected() {
+		var ex = assertThrows(IllegalArgumentException.class,
+			() -> h.toFragment(src("t", "{dataUrl:'/x', columns:[{key:'a'}], ribbon:[{type:'divider', group:'g'}]}")));
+		assertEquals("<@card id='t'> RibbonItem divider does not accept 'group'.", ex.getMessage());
+	}
+
+	@Test void ribbonVisibleWhen_isChecked() {
+		var ex = assertThrows(IllegalArgumentException.class,
+			() -> h.toFragment(src("t", "{dataUrl:'/x', columns:[{key:'a'}], ribbon:[{type:'refresh', visibleWhen:5}]}")));
+		assertTrue(ex.getMessage().contains("visibleWhen must be a list"), ex.getMessage());
+	}
+
+	@Test void immutableBodyMap_isNotMutated_andColumnsAreNormalized() {
+		var col = Map.<String,Object>of("key", "a", "render", "tag:status");
+		var cols = List.<Object>of(col);
+		var body = Map.<String,Object>of("dataUrl", "/x", "columns", cols);
+		var s = CardSource.create("datatables", "t").bodyMap(body).build();
+		var table = (Map<?,?>)h.toFragment(s).get("table");
+		assertEquals("tag:status", col.get("render"));
+		var out = (Map<?,?>)((List<?>)table.get("columns")).get(0);
+		assertEquals("tag", ((Map<?,?>)out.get("render")).get("id"));
+	}
+
+	@Test void ribbonBadOptionGroupMemberKey_isRejected() {
+		var ex = assertThrows(IllegalArgumentException.class, () -> h.toFragment(src("t",
+			"{dataUrl:'/x', columns:[{key:'a'}], ribbon:[{type:'optionGroup', id:'g', options:[{id:'a', persist:true}]}]}")));
+		assertEquals("<@card id='t'> RibbonItem optionGroup 'g' member 'a' does not accept 'persist'.", ex.getMessage());
+	}
+
+	@Test void ribbonNonMapItem_isRejected() {
+		var ex = assertThrows(IllegalArgumentException.class,
+			() -> h.toFragment(src("t", "{dataUrl:'/x', columns:[{key:'a'}], ribbon:['refresh']}")));
+		assertEquals("<@card id='t'> ribbon each item must be an object.", ex.getMessage());
+	}
+
+	@Test void ribbonMissingType_saysSo() {
+		var ex = assertThrows(IllegalArgumentException.class,
+			() -> h.toFragment(src("t", "{dataUrl:'/x', columns:[{key:'a'}], ribbon:[{id:'x'}]}")));
+		assertTrue(ex.getMessage().startsWith("<@card id='t'> RibbonItem requires a 'type'"), ex.getMessage());
+	}
+
+	@Test void ribbonOptionWithoutScope_isRejected() {
+		var ex = assertThrows(IllegalArgumentException.class,
+			() -> h.toFragment(src("t", "{dataUrl:'/x', columns:[{key:'a'}], ribbon:[{type:'option', id:'o', value:'v'}]}")));
+		assertEquals("<@card id='t'> RibbonItem option 'o' sets neither column nor param.", ex.getMessage());
+	}
+
+	@Test void renderStringSugar_normalizesToObject() {
+		var frag = h.toFragment(src("t", "{dataUrl:'/x', columns:[{key:'a', render:'tag:status'}, {key:'b', render:'linked'}]}"));
+		var cols = ((Map<?,?>)frag.get("table")).get("columns");
+		assertEquals("[{key:'a',render:{id:'tag',meta:{field:'status'}}},{key:'b',render:{id:'linked'}}]",
+			org.apache.juneau.marshall.marshaller.Json5.DEFAULT.write(cols));
 	}
 
 	@Test void validCatalog_returnsTableFragmentInAuthorShape() {

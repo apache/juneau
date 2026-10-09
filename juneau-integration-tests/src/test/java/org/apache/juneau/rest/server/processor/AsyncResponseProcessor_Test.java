@@ -48,6 +48,19 @@ import org.junit.jupiter.api.*;
  */
 class AsyncResponseProcessor_Test extends TestBase {
 
+	// The debug-mode mock clients log each call to the console; these tests assert on the server-side log records instead.
+	private static LogRecordCapture.Quiet clientQuiet;
+
+	@BeforeAll
+	static void quietClientLog() {
+		clientQuiet = LogRecordCapture.quiet(org.apache.juneau.rest.client.classic.RestClient.class);
+	}
+
+	@AfterAll
+	static void restoreClientLog() {
+		clientQuiet.close();
+	}
+
 	// -----------------------------------------------------------------------------------------------------------------
 	// A: Happy path — CompletableFuture<String> handler returns the unwrapped string body.
 	// -----------------------------------------------------------------------------------------------------------------

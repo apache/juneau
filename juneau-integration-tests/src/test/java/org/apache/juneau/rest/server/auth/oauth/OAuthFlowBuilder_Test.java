@@ -22,20 +22,18 @@ import java.net.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.rest.auth.oauth.flow.*;
-import org.apache.juneau.rest.server.auth.oauth.flow.*;
 import org.junit.jupiter.api.*;
 
 import com.nimbusds.oauth2.sdk.pkce.*;
 
 /**
  * Builder validation tests for the flow helpers: the role-neutral client-credentials, authorization-code, and
- * refresh-token flows plus the server-only resource-owner flow.
+ * refresh-token flows.
  * Network round-trips are not exercised here; those need a stub IdP fixture.
  *
  * @since 10.0.0
  */
 @SuppressWarnings({
-	"deprecation", // Deprecated API used intentionally for backward compatibility testing.
 	"java:S5778" // assertThrows lambdas with chained calls; intermediate invocations do not throw in practice
 })
 class OAuthFlowBuilder_Test extends TestBase {
@@ -80,24 +78,6 @@ class OAuthFlowBuilder_Test extends TestBase {
 		assertTrue(q.contains("state=state-123"));
 		assertTrue(q.contains("code_challenge_method=S256"));
 		assertTrue(q.contains("code_challenge="));
-	}
-
-	@Test void c01_resourceOwner_requiredFields() {
-		assertThrows(IllegalStateException.class, () -> OAuthResourceOwnerFlow.create().build());
-		assertThrows(IllegalStateException.class, () -> OAuthResourceOwnerFlow.create()
-			.tokenEndpoint(URI.create("https://x.example.com/token"))
-			.clientId("id").clientSecret("secret").username("alice").build());
-	}
-
-	@Test void c02_resourceOwner_buildsWithMinimum() {
-		var f = OAuthResourceOwnerFlow.create()
-			.tokenEndpoint(URI.create("https://x.example.com/token"))
-			.clientId("id")
-			.clientSecret("secret")
-			.username("alice")
-			.password("p")
-			.build();
-		assertNotNull(f);
 	}
 
 	@Test void d01_refresh_requiredFields() {

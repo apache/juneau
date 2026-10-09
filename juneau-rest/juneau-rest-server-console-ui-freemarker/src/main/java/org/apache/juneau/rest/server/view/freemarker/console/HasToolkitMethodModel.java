@@ -50,10 +50,10 @@ public final class HasToolkitMethodModel implements TemplateMethodModelEx {
 	@Override
 	public Object exec(@SuppressWarnings("rawtypes") List args) throws TemplateModelException {
 		if (args.size() != 1)
-			throw FtlAttrLists.reject(String.format("%s(name) takes exactly one argument; got '%s'.", NAME, args.size()));
+			throw FtlAttrLists.reject(f("%s(name) takes exactly one argument; got '%s'.", NAME, args.size()));
 		var a = args.get(0);
 		if (! (a instanceof TemplateScalarModel s))
-			throw FtlAttrLists.reject(String.format("%s(name) takes a string; got '%s'.", NAME, a));
+			throw FtlAttrLists.reject(f("%s(name) takes a string; got '%s'.", NAME, a));
 		var cap = PageCapture.get(Environment.getCurrentEnvironment());
 		return nn(cap) && cap.toolkits().contains(s.getAsString().trim()) ? TemplateBooleanModel.TRUE : TemplateBooleanModel.FALSE;
 	}

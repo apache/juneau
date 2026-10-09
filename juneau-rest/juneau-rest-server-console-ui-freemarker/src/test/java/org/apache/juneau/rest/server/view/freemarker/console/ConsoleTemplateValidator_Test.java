@@ -335,4 +335,8 @@ class ConsoleTemplateValidator_Test extends TestBase {
 		var e = assertThrows(IllegalArgumentException.class, () -> validator.validate("nope.ftlh"));
 		assertEquals("Template 'nope.ftlh' not found under templateRoot or classpathRoot.", e.getMessage());
 	}
+
+	@Test void z01_factsDirective_rejectsAnyAttribute() {
+		assertOne("<@console><@facts foo=1>{}</@facts><@main/></@console>", 1, 11, "unknown-attribute", "<@facts> unknown attribute 'foo'.");
+	}
 }

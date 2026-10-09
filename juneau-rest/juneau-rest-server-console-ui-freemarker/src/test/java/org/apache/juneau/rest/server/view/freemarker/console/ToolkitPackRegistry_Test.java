@@ -288,11 +288,14 @@ class ToolkitPackRegistry_Test extends TestBase {
 	private static List<String> warnings(Runnable r) {
 		var log = Logger.getLogger(ToolkitPackRegistry.class.getName());
 		var cap = new Capture();
+		var useParent = log.getUseParentHandlers();
+		log.setUseParentHandlers(false);
 		log.addHandler(cap);
 		try {
 			r.run();
 		} finally {
 			log.removeHandler(cap);
+			log.setUseParentHandlers(useParent);
 		}
 		return cap.messages;
 	}
@@ -308,8 +311,11 @@ class ToolkitPackRegistry_Test extends TestBase {
 	}
 
 	@Test void c02_cssDuplicate_skipped() throws Exception {
-		var r = new ToolkitPackRegistry().resolve(List.of(ToolkitPackRegistry.PACK_DATATABLES), dummyRequest(), List.of("https://cdn.example/dataTables.dataTables.min.css"), "t.ftlh");
-		assertEmpty(r.vendorCss());
+		var out = new Object[1];
+		var req = dummyRequest();
+		var msgs = warnings(() -> out[0] = new ToolkitPackRegistry().resolve(List.of(ToolkitPackRegistry.PACK_DATATABLES), req, List.of("https://cdn.example/dataTables.dataTables.min.css"), "t.ftlh"));
+		assertEmpty(((ToolkitPackRegistry.Resolved)out[0]).vendorCss());
+		assertEquals(1, msgs.size(), msgs::toString);
 	}
 
 	@Test void c03_fileName_lastSegment_noQueryOrFragment_lowerCase() {

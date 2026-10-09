@@ -77,6 +77,21 @@ final class ConsoleBrowserFixture {
 		return add(caseName, url, html, false, queries);
 	}
 
+	/**
+	 * Makes the most recently added case wait (up to 10s) for {@code selector} to match before it is probed, for
+	 * content a card paints after an asynchronous fetch.
+	 */
+	ConsoleBrowserFixture waitFor(String selector) {
+		cases.get(cases.size() - 1).put("waitFor", selector);
+		return this;
+	}
+
+	/** Makes the most recently added case click {@code selector} (after any wait) before it is probed; may be repeated. */
+	ConsoleBrowserFixture click(String selector) {
+		((List<String>)cases.get(cases.size() - 1).computeIfAbsent("clicks", k -> new ArrayList<String>())).add(selector);
+		return this;
+	}
+
 	/** Like {@link #page}, and also records the Task 0 computed styles of the nav selectors. */
 	ConsoleBrowserFixture computedPage(String caseName, String url, String html) {
 		return add(caseName, url, html, true);
@@ -148,6 +163,11 @@ final class ConsoleBrowserFixture {
 	 * list in the order {@code ToolkitPackRegistry} registers it (pinned by {@code ToolkitPackRegistry_Test}).
 	 */
 	static String viewsPack() throws IOException {
+		return viewsPack(true);
+	}
+
+	/** Like {@link #viewsPack()}, and without {@code juneau-bus.js} when {@code withBus} is false (for the missing-bus case). */
+	static String viewsPack(boolean withBus) throws IOException {
 		var nodeModules = Path.of(requiredProperty("juneau.jsTests.dir")).resolve("node_modules");
 		var sb = new StringBuilder();
 		sb.append("<script>\n").append(Files.readString(nodeModules.resolve("jquery/dist/jquery.min.js"))).append("\n</script>\n");
@@ -156,8 +176,21 @@ final class ConsoleBrowserFixture {
 				ViewsMixin.PAGESTATE_JS_RESOURCE, ViewsMixin.URLSTATE_JS_RESOURCE, ViewsMixin.RIBBON_JS_RESOURCE,
 				ViewsMixin.DATATABLES_JS_RESOURCE, ViewsMixin.VIEWS_JS_RESOURCE, ViewsMixin.CONFIG_JS_RESOURCE,
 				ViewsMixin.REGIONS_JS_RESOURCE, ViewsMixin.CONSOLE_OUTPUT_JS_RESOURCE, ViewsMixin.HELPERS_JS_RESOURCE))
-			sb.append("<script>\n").append(resource(r)).append("\n</script>\n");
+			if (withBus || ! r.equals(ViewsMixin.BUS_JS_RESOURCE))
+				sb.append("<script>\n").append(resource(r)).append("\n</script>\n");
 		return sb.toString();
+	}
+
+	/**
+	 * A page built from a {@code pagespec-corpus/<name>.json} fixture (what {@code PageSpec} produced for a parity case;
+	 * kept fresh by {@code PageSpec_BrowserCorpus_Test}): its contract island and its {@code <template data-card>} set.
+	 */
+	static String corpusPage(String name, String beforeShell, String afterShell) throws IOException {
+		var corpus = (Map<String,Object>)Json.to(resource("/pagespec-corpus/" + name + ".json"), Map.class);
+		var templates = new StringBuilder();
+		((Map<String,Object>)corpus.get("templates")).forEach((id, html) ->
+			templates.append("<template data-card=\"").append(id).append("\">").append(html).append("</template>\n"));
+		return contractPage(Json.of(corpus.get("contract")), templates.toString(), beforeShell, afterShell);
 	}
 
 	static String contractPage(String contractJson, String templates) {

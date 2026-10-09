@@ -22,6 +22,7 @@ import static org.mockito.Mockito.*;
 import java.util.concurrent.*;
 import java.util.logging.*;
 
+import org.apache.juneau.commons.logging.*;
 import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.commons.svl.*;
 import org.apache.juneau.marshall.httppart.*;
@@ -239,7 +240,9 @@ class RestContext_Construction_Test extends org.apache.juneau.TestBase {
 
 	@Test void g01_asyncTimeoutMillis_invalidValue_fallsBackToDefault() throws Exception {
 		var ctx = new RestContext(argsOf(Fix_AsyncTimeoutInvalid.class, Fix_AsyncTimeoutInvalid::new));
-		assertEquals(-1L, ctx.getAsyncTimeoutMillis());
+		var records = LogRecordCapture.quietly(RestContext.class, () -> assertEquals(-1L, ctx.getAsyncTimeoutMillis()));
+		assertEquals(1, records.size(), records::toString);
+		assertTrue(records.get(0).getMessage().contains("'not-a-number'"), records.get(0).getMessage());
 	}
 
 	@Rest(asyncTimeoutMillis = "5000")
@@ -262,11 +265,13 @@ class RestContext_Construction_Test extends org.apache.juneau.TestBase {
 		assertTrue(ctx.isVirtualThreadsEnabled());
 		// On runtimes older than Java 21 this is null (with a one-shot WARNING logged); on 21+ it's non-null.
 		// Either way, calling it must not throw, and the result must be internally consistent with the runtime.
-		var executor = ctx.getVirtualThreadExecutor();
+		var executor = new Object[1];
+		var records = LogRecordCapture.quietly(RestContext.class, () -> executor[0] = ctx.getVirtualThreadExecutor());
+		assertEquals(Runtime.version().feature() < 21 ? 1 : 0, records.size(), records::toString);
 		if (Runtime.version().feature() < 21)
-			assertNull(executor);
+			assertNull(executor[0]);
 		else
-			assertNotNull(executor);
+			assertNotNull(executor[0]);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------

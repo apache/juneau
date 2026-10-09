@@ -2713,7 +2713,7 @@ public class RestContext extends Context {
 			});
 			frameworkMethods.forEach((type, methods) -> {
 				if (methods.size() > 1)
-					LOG.warning("Resource class {} declares multiple @Bean methods {} of framework type {}.  A framework type has one per-context instance, so all of these names alias it.", resourceClass().getName(), methods, type.getName());
+					LOG.warning("Resource class %s declares multiple @Bean methods %s of framework type %s.  A framework type has one per-context instance, so all of these names alias it.", resourceClass().getName(), methods, type.getName());
 			});
 
 			// Run @RestInit-annotated methods on the resource object (deduplicated by signature, top-down order).
@@ -3862,7 +3862,7 @@ public class RestContext extends Context {
 
 		// Must be careful not to bleed thread-locals.
 		if (nn(localSession.get()))
-			LOG.warning("WARNING:  Thread-local call object was not cleaned up from previous request.  {}, thread=[{}]", this, Thread.currentThread().getName());
+			LOG.warning("WARNING:  Thread-local call object was not cleaned up from previous request.  %s, thread=[%s]", this, Thread.currentThread().getName());
 
 		RestSession.Builder sb = createSession().resource(resource).req(r1).res(r2);
 

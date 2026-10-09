@@ -87,8 +87,10 @@ class Terminal_BrowserTest extends TestBase {
 	@Test void a09_onlyHttpLinksOpen() { ok("b09_onlyHttpLinksOpen"); }
 	@Test void a10_rawLinkOnlyForHttpUrls() { ok("b10_rawLinkOnlyForHttpUrls"); }
 
+	@Test void a11_handleScrollsWithoutAHashChange() { ok("b11_handleScrollsWithoutAHashChange"); }
+
 	@Test void z01_everyCaseHasAMethod() {
 		var cases = (Map<?,?>)report.get("cases");
-		assertEquals(10, cases.size(), () -> "case count changed; add a method per new case: " + cases.keySet());
+		assertEquals(11, cases.size(), () -> "case count changed; add a method per new case: " + cases.keySet());
 	}
 }

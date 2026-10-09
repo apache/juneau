@@ -33,6 +33,10 @@ import org.apache.juneau.rest.server.widgets.Op;
  * produces. All behavior (paging, search, rendering, actions) stays in {@code juneau-views.js}; this type never
  * calls a card-type handler directly — see the class's rendering note on {@link #toCardBody()}.
  *
+ * <p>
+ * {@link Column#defaultVisible(boolean) Column.defaultVisible(false)} only hides a column when the client's
+ * {@code columnConfig} (juneau-config.js) is on.
+ *
  * <h5 class='section'>Example:</h5>
  * <p class='bjava'>
  * 	TableSpec <jv>t</jv> = TableSpec.<jsm>create</jsm>(<js>"slo"</js>)

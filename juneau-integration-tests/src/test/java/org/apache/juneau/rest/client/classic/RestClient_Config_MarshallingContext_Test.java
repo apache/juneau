@@ -26,6 +26,7 @@ import java.util.*;
 import org.apache.juneau.*;
 import org.apache.juneau.commons.bean.*;
 import org.apache.juneau.commons.http.MediaType;
+import org.apache.juneau.commons.logging.LogRecordCapture;
 import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.marshall.*;
 import org.apache.juneau.marshall.collections.*;
@@ -512,7 +513,8 @@ class RestClient_Config_MarshallingContext_Test extends TestBase {
 	@Test void a14_debug() {
 		var x = new A14();
 		x.f = x;
-		assertThrowsWithMessage(Exception.class, "Recursion occurred", ()->client().debug().build().post("/echo",x).run());
+		var records = LogRecordCapture.quietly(MarshallingSession.class, () -> assertThrowsWithMessage(Exception.class, "Recursion occurred", ()->client().debug().build().post("/echo",x).run()));
+		assertEquals(1, records.size());
 	}
 
 	@Marshalled(typeName="foo")

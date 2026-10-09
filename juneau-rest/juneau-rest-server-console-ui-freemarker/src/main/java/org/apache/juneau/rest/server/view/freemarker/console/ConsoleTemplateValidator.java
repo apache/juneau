@@ -107,9 +107,13 @@ public final class ConsoleTemplateValidator {
 		m.put(ThemeDirectiveModel.NAME, ThemeDirectiveModel.ATTRS);
 		m.put(TokenDirectiveModel.NAME, TokenDirectiveModel.ATTRS);
 		m.put(CardDirectiveModel.NAME, CardDirectiveModel.ATTRS);
+		m.put(TopicDirectiveModel.NAME, TopicDirectiveModel.ATTRS);
+		m.put(BridgeDirectiveModel.NAME, BridgeDirectiveModel.ATTRS);
+		m.put(BadgeDirectiveModel.NAME, BadgeDirectiveModel.ATTRS);
+		m.put(FactsDirectiveModel.NAME, Set.of());
 		for (var s : ConsoleSlotDirectiveModel.SLOT_NAMES)
 			m.put(s, new ConsoleSlotDirectiveModel(s).attrs());
-		return Collections.unmodifiableMap(m);
+		return u(m);
 	}
 
 	private static final Configuration PARSE_CFG = parseConfig();
@@ -177,7 +181,7 @@ public final class ConsoleTemplateValidator {
 	public List<Finding> validate(String templateName) {
 		var src = load(templateName);
 		if (n(src))
-			throw new IllegalArgumentException(String.format("Template '%s' not found under templateRoot or classpathRoot.", templateName));
+			throw iaex("Template '%s' not found under templateRoot or classpathRoot.", templateName);
 		return validateSource(templateName, src);
 	}
 
@@ -189,7 +193,7 @@ public final class ConsoleTemplateValidator {
 	 */
 	public List<Finding> validateAll() {
 		if (n(templateRoot))
-			throw new IllegalStateException("validateAll() requires templateRoot(Path); a classpath root cannot be listed.");
+			throw isex("validateAll() requires templateRoot(Path); a classpath root cannot be listed.");
 		try (Stream<Path> s = Files.walk(templateRoot)) {
 			var names = s.filter(Files::isRegularFile)
 				.map(p -> templateRoot.relativize(p).toString().replace(File.separatorChar, '/'))
@@ -221,7 +225,7 @@ public final class ConsoleTemplateValidator {
 		if (nn(chromeTemplate) && neq(chromeTemplate, name)) {
 			var chrome = load(chromeTemplate);
 			if (n(chrome))
-				throw new IllegalArgumentException(String.format("Chrome template '%s' not found under templateRoot or classpathRoot.", chromeTemplate));
+				throw iaex("Chrome template '%s' not found under templateRoot or classpathRoot.", chromeTemplate);
 			collectScope(chromeTemplate, blankComments(chrome), macros, namespaces, new HashSet<>());
 		}
 
@@ -249,16 +253,16 @@ public final class ConsoleTemplateValidator {
 				var dot = dname.indexOf('.');
 				var ok = dot > 0 ? namespaces.contains(dname.substring(0, dot)) : macros.contains(dname);
 				if (! ok)
-					add(out, name, lines, at, "unknown-directive", String.format("<@%s> is not a console directive, a macro in scope, or allow-listed.", dname));
+					add(out, name, lines, at, "unknown-directive", f("<@%s> is not a console directive, a macro in scope, or allow-listed.", dname));
 			} else {
 				var attrs = attrs(m.group(3));
 				for (var a : attrs.keySet())
 					if (! known.contains(a))
-						add(out, name, lines, at, "unknown-attribute", String.format("<@%s> unknown attribute '%s'.", dname, a));
+						add(out, name, lines, at, "unknown-attribute", f("<@%s> unknown attribute '%s'.", dname, a));
 				for (var a : STRICT.getOrDefault(dname, Set.of())) {
 					var v = attrs.get(a);
 					if (nn(v) && v.literal && !eqa(v.value, "true", "false"))
-						add(out, name, lines, at, "strict-boolean", String.format("<@%s> %s= must be true or false; got '%s'.", dname, a, v.value));
+						add(out, name, lines, at, "strict-boolean", f("<@%s> %s= must be true or false; got '%s'.", dname, a, v.value));
 				}
 				var id = attrs.get("id");
 				switch (dname) {
@@ -270,18 +274,18 @@ public final class ConsoleTemplateValidator {
 					}
 					case NodeDirectiveModel.NAME -> {
 						if (nn(id) && id.literal && ! siblings.peek().add(id.value))
-							add(out, name, lines, at, "duplicate-id", String.format("<@node id='%s'> duplicates a sibling id.", id.value));
+							add(out, name, lines, at, "duplicate-id", f("<@node id='%s'> duplicates a sibling id.", id.value));
 						if (navDepth > 0 && attrs.containsKey("under"))
-							add(out, name, lines, at, "unknown-attribute", String.format("<@%s> unknown attribute '%s'.", dname, "under"));
+							add(out, name, lines, at, "unknown-attribute", f("<@%s> unknown attribute '%s'.", dname, "under"));
 						if (! selfClosing)
 							siblings.push(new HashSet<>());
 					}
 					case CardDirectiveModel.NAME -> {
 						if (nn(id) && id.literal && ! cardIds.add(id.value))
-							add(out, name, lines, at, "duplicate-id", String.format("<@card id='%s'> duplicates an existing card id.", id.value));
+							add(out, name, lines, at, "duplicate-id", f("<@card id='%s'> duplicates an existing card id.", id.value));
 						var type = attrs.get("type");
 						if (nn(type) && type.literal && REMOVED_TYPES.contains(type.value))
-							add(out, name, lines, at, "removed-card-type", String.format(
+							add(out, name, lines, at, "removed-card-type", f(
 								"<@card id='%s'> type='%s' was removed in 10.0.0; use type='html' with a <template>, or a registered card type.",
 								n(id) ? "" : id.value, type.value));
 						var tpl = attrs.get("template");
@@ -305,14 +309,14 @@ public final class ConsoleTemplateValidator {
 		for (var r : templateRefs) {
 			var v = (String)r[0];
 			if (! cardIds.contains(v) && ! v.startsWith("header.") && ! v.startsWith("footer."))
-				add(out, name, lines, (Integer)r[1], "dangling-template", String.format("<@card> template='%s' names no <@card id> or slot in this template.", v));
+				add(out, name, lines, (Integer)r[1], "dangling-template", f("<@card> template='%s' names no <@card id> or slot in this template.", v));
 		}
 		if (consoleAt >= 0 && mains != 1)
-			add(out, name, lines, consoleAt, "main-count", String.format("<@console> requires exactly one <@main/>; found '%s'.", mains));
+			add(out, name, lines, consoleAt, "main-count", f("<@console> requires exactly one <@main/>; found '%s'.", mains));
 
 		var g = GLOBAL.matcher(text);
 		while (g.find()) {
-			add(out, name, lines, g.start(), "removed-global", String.format("'%s' was removed in 10.0.0; %s", g.group(1),
+			add(out, name, lines, g.start(), "removed-global", f("'%s' was removed in 10.0.0; %s", g.group(1),
 				eq(g.group(1), "pageToolkit") ? "use jcHasToolkit(\"views\")." : "<@page> captures the page into the contract."));
 		}
 
@@ -320,7 +324,7 @@ public final class ConsoleTemplateValidator {
 		while (a.find()) {
 			var url = nn(a.group(1)) ? a.group(1) : a.group(2);
 			if (! url.contains("${") && ! url.contains("<#") && JUNEAU_ASSET.matcher(url).find())
-				add(out, name, lines, a.start(), "hardcoded-asset-url", String.format(
+				add(out, name, lines, a.start(), "hardcoded-asset-url", f(
 					"Hard-coded Juneau asset URL '%s' is unversioned and goes stale in browser caches; use viewAssetUrl(...), consoleJsUrl(...), chromeCssUrl(...) or themeAssetUrl(...) so it carries ?v= (an adopter's own assets can use assetUrl(...)).", url));
 		}
 
@@ -350,7 +354,7 @@ public final class ConsoleTemplateValidator {
 			else if (depth == 1 && c == 'c') {
 				var v = VIEW_VERSION.matcher(body.substring(i));
 				if (v.find() && ! eq(v.group(1), ViewsMixin.CONTRACT_VERSION)) {
-					add(out, name, lines, bodyStart + i, "view-contract-version", String.format(
+					add(out, name, lines, bodyStart + i, "view-contract-version", f(
 						"<@card id='%s'> view.contractVersion is '%s' but the runtime is '%s'; omit it to track the runtime automatically.",
 						cardId, v.group(1), ViewsMixin.CONTRACT_VERSION));
 					return;
@@ -374,14 +378,14 @@ public final class ConsoleTemplateValidator {
 		var cardId = n(id) ? "" : id.value;
 		var trimmed = body.trim();
 		if (! trimmed.isEmpty() && nn(src) && src.literal)
-			add(out, name, lines, at, "card-src-and-body", String.format(
+			add(out, name, lines, at, "card-src-and-body", f(
 				"<@card id='%s'> has both src='%s' and a body; use exactly one.", cardId, src.value));
 		if (trimmed.isEmpty() || body.contains("${"))
 			return;
 		var keys = topLevelJson5Keys(trimmed);
 		for (var k : keys)
 			if (RESERVED_BODY_KEYS.contains(k))
-				add(out, name, lines, at, "card-reserved-key", String.format(
+				add(out, name, lines, at, "card-reserved-key", f(
 					"<@card id='%s'> body key '%s' is reserved; set it as an attribute.", cardId, k));
 	}
 

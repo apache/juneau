@@ -21,6 +21,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.*;
 
+import org.apache.juneau.commons.logging.*;
 import org.apache.juneau.*;
 import org.apache.juneau.rest.mock.classic.*;
 import org.apache.juneau.rest.server.*;
@@ -69,7 +70,11 @@ class AssetUrl_Test extends TestBase {
 
 	@Test void a04_devModeMissing_stillPassesThrough() throws Exception {
 		var m = builder().devMode(true).adopterAssets(AssetUrl_Test.class.getClassLoader(), "adopter-static").build();
-		assertEquals("/js/missing.js", render(m, "${assetUrl('/js/missing.js')}"));
+		var out = new String[1];
+		var records = LogRecordCapture.quietly(AssetUrlMethodModel.class, () -> out[0] = render(m, "${assetUrl('/js/missing.js')}"));
+		assertEquals("/js/missing.js", out[0]);
+		assertEquals(1, records.size(), records::toString);
+		assertTrue(records.get(0).getMessage().contains("no bundled resource"), records.get(0).getMessage());
 	}
 
 	@Test void a05_notConfigured_functionAbsent() throws Exception {

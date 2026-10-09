@@ -193,6 +193,10 @@ public final class Column {
 	 * <p>
 	 * Defaults to <jk>true</jk>; only {@code false} is ever emitted by {@link #toCatalogMap()}.
 	 *
+	 * <p>
+	 * A {@code false} value only hides the column when the client's {@code columnConfig} (juneau-config.js) is on; without it
+	 * the column stays visible.
+	 *
 	 * @param v Whether the column starts visible.
 	 * @return This object.
 	 */

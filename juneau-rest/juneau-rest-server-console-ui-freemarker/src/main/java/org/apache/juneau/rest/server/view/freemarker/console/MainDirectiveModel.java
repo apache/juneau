@@ -59,7 +59,7 @@ public final class MainDirectiveModel implements TemplateDirectiveModel {
 
 		var cap = PageCapture.get(env);
 		if (n(cap) || ! cap.consoleOpen)
-			throw FtlAttrLists.reject(String.format("<@%s> must be nested inside <@console>.", NAME));
+			throw FtlAttrLists.reject(f("<@%s> must be nested inside <@console>.", NAME));
 		cap.markMain();
 	}
 }

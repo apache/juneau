@@ -765,6 +765,28 @@ test('blk03f_onBlockClickGetsOffset', function (t) {
 	expectSame(got, [{ stepId: 'a', line: 7, offset: 900, kind: 'fail' }, { stepId: 'a', kind: 'fail' }], 'hook payloads');
 });
 
+test('blk03g_stepLinkScrollsAMountedTerminalWithoutNavigating', function (t) {
+	const calls = [];
+	const mounted = { t: { scrollToOffset: function (o) { calls.push(o); } } };
+	t.env.window.JuneauTerminal = { handle: function (id) { return mounted[id] || null; } };
+	const c = mkRun(t, { rawHref: '#t-O{offset}' });
+	c.send([stepOk('a', { rawOffset: 3400 })]);
+	const link = c.step('a').querySelector('.juneau-rv-title');
+	let prevented = 0;
+	const fire = function (extra) { c.root().dispatch('click', Object.assign({ target: link, preventDefault: function () { prevented++; } }, extra)); };
+	fire();
+	expectSame(calls, [3400], 'the mounted terminal scrolls');
+	expect(prevented === 1, 'the hash navigation is cancelled');
+	fire({ ctrlKey: true });
+	expect(calls.length === 1 && prevented === 1, 'a modified click keeps the link');
+	delete mounted.t;
+	fire();
+	expect(calls.length === 1 && prevented === 1, 'no handle: falls back to the hash');
+	t.env.window.JuneauTerminal = undefined;
+	fire();
+	expect(calls.length === 1 && prevented === 1, 'no terminal runtime: falls back to the hash');
+});
+
 test('blk03d_onBlockClickMustBeFunction', function (t) {
 	const host = t.env.document.createElement('div');
 	let err = null;

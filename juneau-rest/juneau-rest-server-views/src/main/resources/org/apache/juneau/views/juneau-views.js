@@ -364,15 +364,16 @@
 	 * Resolves `defaultOrder` [{data,dir}] to DataTables' positional `order` [[colIndex, dir]] by field name (m2) -
 	 * indices are not pinned server-side, so client-side column reorder stays correct.  Unknown fields are skipped.
 	 * When `optsColumns` (the ACTUAL DataTables column array) is supplied, indices go through {@link #liveDtIndex}
-	 * so a leading selection column cannot off-by-one the ordered field; a now-hidden ordered column falls back
-	 * to the first visible orderable catalog column.
+	 * so a leading selection column cannot off-by-one the ordered field.  A hidden ordered column is still honored,
+	 * whether the catalog hid it ({@code defaultVisible:false}) or the user did, because DataTables can order by an
+	 * invisible column.  Only when no entry names a known field does the order fall back to the first visible
+	 * orderable column, ascending.
 	 */
 	function resolveOrder(viewDef, optsColumns) {
 		const out = [];
 		(viewDef.defaultOrder || []).forEach(function (e) {
 			const idx = optsColumns ? liveDtIndex(e.data, optsColumns) : columnIndexOf(viewDef, e.data);
 			if (idx < 0) return;
-			if (optsColumns?.[idx]?.visible === false) return;
 			out.push([idx, e.dir]);
 		});
 		if (out.length === 0 && optsColumns) {

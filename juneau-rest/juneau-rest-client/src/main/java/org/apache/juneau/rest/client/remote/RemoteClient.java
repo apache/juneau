@@ -24,7 +24,10 @@ import java.io.*;
 import java.lang.reflect.*;
 import java.nio.charset.*;
 import java.time.*;
+import java.time.temporal.Temporal;
+import java.time.temporal.TemporalAmount;
 import java.util.*;
+import java.util.Date;
 import java.util.concurrent.*;
 import java.util.function.*;
 
@@ -1149,10 +1152,9 @@ public final class RemoteClient {
 				|| arg instanceof Character || arg instanceof Enum || isDateTime(arg);
 		}
 
-		/** Returns <jk>true</jk> for {@link java.util.Date}, {@link java.util.Calendar} and {@code java.time} values (Instant, LocalDate, Duration, Period, ...), which are scalars. */
+		/** Returns <jk>true</jk> for {@link Date}, {@link Calendar} and {@code java.time} values (Instant, LocalDate, Duration, Period, ...), which are scalars. */
 		private static boolean isDateTime(Object arg) {
-			// Q: Don't use FQCNs here.
-			return arg instanceof java.util.Date || arg instanceof java.util.Calendar || arg instanceof java.time.temporal.Temporal || arg instanceof java.time.temporal.TemporalAmount;
+			return arg instanceof Date || arg instanceof Calendar || arg instanceof Temporal || arg instanceof TemporalAmount;
 		}
 
 		/**

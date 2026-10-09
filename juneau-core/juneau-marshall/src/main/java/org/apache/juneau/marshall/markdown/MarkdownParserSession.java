@@ -55,8 +55,6 @@ import org.apache.juneau.marshall.swap.spi.*;
 })
 public class MarkdownParserSession extends ReaderParserSession implements RecordReadable {
 
-	// Q:  Use eq/neq in this file?
-	
 	final String nullValue;
 	private final Memoizer<JsonParser> json5Parser = memoizer(() -> {
 		var b = Json5Parser.create().marshallingContext((MarshallingContext) getContext());
@@ -423,7 +421,7 @@ public class MarkdownParserSession extends ReaderParserSession implements Record
 		// Check if all cells are null - if so, return null for the entire row
 		boolean allNull = true;
 		for (var cell : cells) {
-			if (cell != null && !cell.equals(nullValue) && !cell.trim().isEmpty()) {
+			if (cell != null && neq(cell, nullValue) && !cell.trim().isEmpty()) {
 				allNull = false;
 				break;
 			}
@@ -592,7 +590,7 @@ public class MarkdownParserSession extends ReaderParserSession implements Record
 		if (val == null)
 			return null;
 		val = val.trim();
-		if (nullValue != null && val.equals(nullValue))
+		if (eq(val, nullValue))
 			return null;
 		if (isTrimStrings())
 			val = val.trim();
@@ -675,7 +673,7 @@ public class MarkdownParserSession extends ReaderParserSession implements Record
 	 * Everything else is single-quoted as a JSON5 string.
 	 */
 	private String cellToJson5(String cell) {
-		if (cell == null || cell.equals(nullValue))
+		if (cell == null || eq(cell, nullValue))
 			return "null";
 		cell = cell.trim();
 		if (cell.isEmpty())

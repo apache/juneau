@@ -16,7 +16,11 @@
  */
 package org.apache.juneau.rest.validation;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
+import static org.junit.jupiter.api.Assertions.*;
+
 import org.apache.juneau.*;
+import org.apache.juneau.commons.logging.LogRecordCapture;
 import org.apache.juneau.http.*;
 import org.apache.juneau.marshall.json.*;
 import org.apache.juneau.rest.mock.classic.*;
@@ -71,11 +75,18 @@ class RestValidation_MissingProvider_Test extends TestBase {
 		var a = MockRestClient.buildLax(A.class);
 		// Even though @Valid is present and the bean has a @NotBlank-violating field, with the provider
 		// simulated as missing the validator is skipped and the bean reaches the handler unchanged.
-		a.post("/echo", "{\"name\":\"\"}")
-			.contentType("application/json")
-			.run()
-			.assertStatus(200)
-			.assertContent("\"ok:[]\"");
+		var records = LogRecordCapture.quietly(BeanValidator.class, () -> {
+			try {
+				a.post("/echo", "{\"name\":\"\"}")
+					.contentType("application/json")
+					.run()
+					.assertStatus(200)
+					.assertContent("\"ok:[]\"");
+			} catch (Exception e) {
+				throw rex(e);
+			}
+		});
+		assertEquals(1, records.size());
 	}
 
 	@Test
@@ -84,10 +95,17 @@ class RestValidation_MissingProvider_Test extends TestBase {
 		var a = MockRestClient.buildLax(A.class);
 		// Sanity check &mdash; the missing-provider path also lets valid payloads through. We're verifying the
 		// no-op behavior is symmetric (not biased toward letting only good requests through by coincidence).
-		a.post("/echo", "{\"name\":\"alice\"}")
-			.contentType("application/json")
-			.run()
-			.assertStatus(200)
-			.assertContent("\"ok:[alice]\"");
+		var records = LogRecordCapture.quietly(BeanValidator.class, () -> {
+			try {
+				a.post("/echo", "{\"name\":\"alice\"}")
+					.contentType("application/json")
+					.run()
+					.assertStatus(200)
+					.assertContent("\"ok:[alice]\"");
+			} catch (Exception e) {
+				throw rex(e);
+			}
+		});
+		assertEquals(1, records.size());
 	}
 }

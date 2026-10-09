@@ -89,6 +89,36 @@ class CardTypeRegistry_Test {
 		assertEquals("<@card id='k'> body key 'id' is reserved; set it as an attribute.", ex.getMessage());
 	}
 
+	@Test void toCard_subscribesAndPublishes_arePromotedOntoTheCard() {
+		var r = CardTypeRegistry.standard();
+		var src = CardSource.create("kpi", "k").body("{value:3, subscribes:['a'], publishes:['b']}").build();
+		var card = r.toCard(src);
+		assertEquals(List.of("a"), card.get("subscribes"));
+		assertEquals(List.of("b"), card.get("publishes"));
+		assertEquals(3, card.get("value"));
+	}
+
+	@Test void toCard_subscribesAndPublishes_areNotReservedKeys() {
+		var r = CardTypeRegistry.standard();
+		var src = CardSource.create("kpi", "k").body("{subscribes:'a', publishes:'b'}").build();
+		assertDoesNotThrow(() -> r.toCard(src));
+	}
+
+	@Test void toCard_subscribesAndPublishes_absentWhenNotAuthored() {
+		var card = CardTypeRegistry.standard().toCard(CardSource.create("kpi", "k").body("{value:3}").build());
+		assertFalse(card.containsKey("subscribes"));
+		assertFalse(card.containsKey("publishes"));
+	}
+
+	@Test void toCard_keySetAsAttributeAndBody_isRejectedAtTheCaller() {
+		// The registry never sees attributes: a base key in the body is E-23 here; subscribes/publishes duplicates are
+		// rejected by <@card> after promotion (see CardDirective_Bus_Test).
+		var r = CardTypeRegistry.standard();
+		var src = CardSource.create("kpi", "k").title("T").body("{title:'x', subscribes:'a'}").build();
+		var ex = assertThrows(IllegalArgumentException.class, () -> r.toCard(src));
+		assertEquals("<@card id='k'> body key 'title' is reserved; set it as an attribute.", ex.getMessage());
+	}
+
 	@Test void toCard_visibleWhenIsAdmittedInAnyCardBody() {
 		var r = CardTypeRegistry.standard().copy().add(new TableLikeCardType()).build();
 		var src = CardSource.create("tablelike", "t").body("{visibleWhen:{field:'x',op:'present'}, rows:[]}").build();

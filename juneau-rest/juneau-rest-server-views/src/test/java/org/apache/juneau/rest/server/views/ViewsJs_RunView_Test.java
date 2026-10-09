@@ -38,7 +38,7 @@ class ViewsJs_RunView_Test extends TestBase {
 	private static final Set<String> EXPECTED = new TreeSet<>(List.of(
 		"chk01_vectors", "chk02_validateEventAccepts", "chk03_validateEventDrops",
 		"chk04_unknownEvIsIgnored", "chk05_unknownMembersIgnored", "chk06_overlongStringsTruncated",
-		"chk07_noteHrefRemovedNotDropped", "chk08_rawOffsetValidated", "step02b_rawOffsetLink", "blk03f_onBlockClickGetsOffset", "red01_stepUpsert", "red02_waitingThenRunning",
+		"chk07_noteHrefRemovedNotDropped", "chk08_rawOffsetValidated", "step02b_rawOffsetLink", "blk03f_onBlockClickGetsOffset", "blk03g_stepLinkScrollsAMountedTerminalWithoutNavigating", "red01_stepUpsert", "red02_waitingThenRunning",
 		"red03_stepAfterEndDropped", "red04_endSetsFinalAndReplacementEndWins", "red05_endUnknownStepDropped",
 		"red06_suitePlaceholderThenReplaceCounts", "red07_testsWinOverPlaceholders", "red08_testsNotDeduplicated",
 		"red09_replaceClearsStep", "red10_noteAttachment", "red11_doneLatestWinsAndLateNoteApplies",
@@ -131,6 +131,7 @@ class ViewsJs_RunView_Test extends TestBase {
 	@Test void i09_onBlockClickOnKeyboardNoDoubleFire() { assertAllTrue(r(), "blk03e_onBlockClickOnKeyboardNoDoubleFire"); }
 	@Test void i08_onBlockClickMustBeFunction() { assertAllTrue(r(), "blk03d_onBlockClickMustBeFunction"); }
 	@Test void i10_onBlockClickGetsOffset() { assertAllTrue(r(), "blk03f_onBlockClickGetsOffset"); }
+	@Test void i11_stepLinkScrollsAMountedTerminalWithoutNavigating() { assertAllTrue(r(), "blk03g_stepLinkScrollsAMountedTerminalWithoutNavigating"); }
 	@Test void j01_showHide() { assertAllTrue(r(), "tip01_showHide"); }
 	@Test void j02_positionStaysInViewport() { assertAllTrue(r(), "tip02_positionStaysInViewport"); }
 	@Test void j03_stepExitTooltip() { assertAllTrue(r(), "tip03_stepExitTooltip"); }

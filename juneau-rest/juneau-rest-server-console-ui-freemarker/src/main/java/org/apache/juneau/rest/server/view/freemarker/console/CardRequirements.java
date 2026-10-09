@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.rest.server.view.freemarker.console;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
+
 import java.util.*;
 
 /**
@@ -63,7 +65,7 @@ final class CardRequirements {
 	List<String> forCard(String type, String id, List<String> requires) {
 		for (var name : requires)
 			if (! packs.contains(name))
-				throw new IllegalArgumentException(String.format("Unknown toolkit pack '%s' (<@card id='%s'> requires=).", name, id));
+				throw iaex("Unknown toolkit pack '%s' (<@card id='%s'> requires=).", name, id);
 		var out = new LinkedHashSet<>(forType(type));
 		out.addAll(requires);
 		return List.copyOf(out);
@@ -87,7 +89,7 @@ final class CardRequirements {
 			byType.forEach((type, names) -> {
 				for (var name : names)
 					if (! packs.contains(name))
-						throw new IllegalArgumentException(String.format("Unknown toolkit pack '%s' (cardRequires for type '%s').", name, type));
+						throw iaex("Unknown toolkit pack '%s' (cardRequires for type '%s').", name, type);
 			});
 			return new CardRequirements(this, packs);
 		}

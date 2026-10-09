@@ -56,6 +56,7 @@ class ViewsJs_Terminal_Test extends TestBase {
 	@Test void b07_hiddenTabPausesAndResumes() { ok("v01_hiddenTabPausesAndResumes"); }
 	@Test void b08_eventsThatNeverFinishGiveUp() { ok("p06_eventsThatNeverFinishGiveUp"); }
 	@Test void b09_zeroProgressCatchUpStops() { ok("p07_zeroProgressCatchUpStops"); }
+	@Test void a06_handleIsNullUntilMounted() { ok("h01_handleIsNullUntilMounted"); }
 	@Test void c01_retryLadderKeepsTheTerminal() { ok("r01_retryLadderKeepsTheTerminal"); }
 	@Test void c02_fiveHundredRetriesAndFourHundredStops() { ok("r02_fiveHundredRetriesAndFourHundredStops"); }
 	@Test void c03_416ResetsAndReplays() { ok("r03_416ResetsAndReplays"); }
@@ -76,7 +77,7 @@ class ViewsJs_Terminal_Test extends TestBase {
 
 	@Test void z01_everyCasePasses() {
 		var r = r();
-		assertEquals(31, r.size(), () -> "case count changed; add a method per new case: " + r.keySet());
+		assertEquals(32, r.size(), () -> "case count changed; add a method per new case: " + r.keySet());
 		for (var e : r.entrySet())
 			assertEquals(true, e.getValue(), () -> e.getKey() + " -> " + e.getValue());
 	}

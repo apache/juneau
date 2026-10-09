@@ -25,6 +25,7 @@ import java.util.function.*;
 
 import org.apache.juneau.bean.jsonrpc.*;
 import org.apache.juneau.bean.mcp.v20260728.*;
+import org.apache.juneau.commons.logging.*;
 import org.apache.juneau.commons.concurrent.*;
 import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.marshall.collections.*;
@@ -651,7 +652,11 @@ class McpMrtrDispatch_Test {
 		var config = new McpServerConfig().addTool(tool("ask", (args, c) -> { calls.incrementAndGet(); return text("done"); }));
 		var token = codec.seal(new McpRequestState("cont-1", "tools/call", 1, System.currentTimeMillis() + 60_000L, "jti-1", NO_ARGS_HASH), aad("tools/call", "ask"));
 		var params = JsonMap.of("name", "ask", "requestState", token, "inputResponses", JsonMap.of("q1", "answer"));
-		var resp = send(rev, config, req(1, "tools/call", params, true), hdrs("tools/call", "ask"));
+		var respHolder = new Object[1];
+		var records = LogRecordCapture.quietly(McpRevision.class, () -> respHolder[0] = send(rev, config, req(1, "tools/call", params, true), hdrs("tools/call", "ask")));
+		assertEquals(1, records.size(), records::toString);
+		assertTrue(records.get(0).getMessage().contains("fail-open"), records.get(0).getMessage());
+		var resp = (JsonRpcResponse) respHolder[0];
 		assertNull(resp.getError());
 		assertEquals(1, calls.get());
 		assertEquals(1, replayCache.calls.get());  // the throwing cache WAS consulted -- fail-open is not vacuous

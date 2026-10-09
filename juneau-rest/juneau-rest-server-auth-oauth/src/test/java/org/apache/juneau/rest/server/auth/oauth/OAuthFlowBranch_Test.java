@@ -26,7 +26,6 @@ import java.util.concurrent.atomic.*;
 import org.apache.juneau.*;
 import org.apache.juneau.rest.auth.oauth.flow.*;
 import org.apache.juneau.rest.auth.oauth.oidc.*;
-import org.apache.juneau.rest.server.auth.oauth.flow.*;
 import org.junit.jupiter.api.*;
 
 import com.nimbusds.oauth2.sdk.pkce.*;
@@ -38,7 +37,6 @@ import com.nimbusds.oauth2.sdk.pkce.*;
  * @since 10.0.0
  */
 @SuppressWarnings({
-	"deprecation", // OAuthResourceOwnerFlow is deprecated API; tested intentionally for coverage
 	"java:S5778" // assertThrows lambdas with chained calls; intermediate invocations do not throw in practice
 })
 class OAuthFlowBranch_Test extends TestBase {
@@ -199,33 +197,6 @@ class OAuthFlowBranch_Test extends TestBase {
 	}
 
 	// -----------------------------------------------------------------------------------------------------------------
-	// D: OAuthResourceOwnerFlow — scope empty vs. non-empty.
-	// -----------------------------------------------------------------------------------------------------------------
-
-	@Test void d01_acquire_noScope() {
-		var f = OAuthResourceOwnerFlow.create()
-			.tokenEndpoint(URI.create("http://127.0.0.1:1/token"))
-			.clientId("id")
-			.clientSecret("s")
-			.username("alice")
-			.password("pw")
-			.build();
-		assertThrows(OAuthFlowException.class, f::acquire);
-	}
-
-	@Test void d02_acquire_withScope() {
-		var f = OAuthResourceOwnerFlow.create()
-			.tokenEndpoint(URI.create("http://127.0.0.1:1/token"))
-			.clientId("id")
-			.clientSecret("s")
-			.username("alice")
-			.password("pw")
-			.scope("read")
-			.build();
-		assertThrows(OAuthFlowException.class, f::acquire);
-	}
-
-	// -----------------------------------------------------------------------------------------------------------------
 	// E: OidcDiscoveryClient builder — httpRequestConfigurator null/non-null, discover() error path.
 	// -----------------------------------------------------------------------------------------------------------------
 
@@ -317,24 +288,6 @@ class OAuthFlowBranch_Test extends TestBase {
 		assertThrows(IllegalStateException.class, () -> OAuthRefreshTokenFlow.create()
 			.tokenEndpoint(URI.create("https://x.example.com/token"))
 			.clientId("id").build());
-	}
-
-	// -----------------------------------------------------------------------------------------------------------------
-	// J: OAuthResourceOwnerFlow builder — each guard step (lines 206/208/210)
-	// -----------------------------------------------------------------------------------------------------------------
-
-	@Test void j01_resourceOwner_eachBuilderGuard() {
-		// tokenEndpoint present but clientId null → line 206
-		assertThrows(IllegalStateException.class, () -> OAuthResourceOwnerFlow.create()
-			.tokenEndpoint(URI.create("https://x.example.com/token")).build());
-		// clientId present but clientSecretSupplier null → line 208
-		assertThrows(IllegalStateException.class, () -> OAuthResourceOwnerFlow.create()
-			.tokenEndpoint(URI.create("https://x.example.com/token"))
-			.clientId("id").build());
-		// clientSecret present but username null → line 210
-		assertThrows(IllegalStateException.class, () -> OAuthResourceOwnerFlow.create()
-			.tokenEndpoint(URI.create("https://x.example.com/token"))
-			.clientId("id").clientSecret("s").build());
 	}
 
 	// -----------------------------------------------------------------------------------------------------------------

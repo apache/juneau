@@ -103,7 +103,7 @@ public final class PageDirectiveModel implements TemplateDirectiveModel {
 		env.include(env.getConfiguration().getTemplate(chromeTemplate));
 
 		if (! cap.consoleDone)
-			throw FtlAttrLists.reject(String.format(
+			throw FtlAttrLists.reject(f(
 				"<@page> chrome template '%s' rendered no <@console>; the legacy chrome was removed in 10.0.0.", chromeTemplate));
 	}
 }

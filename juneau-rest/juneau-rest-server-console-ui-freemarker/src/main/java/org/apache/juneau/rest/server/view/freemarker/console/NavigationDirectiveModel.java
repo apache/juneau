@@ -57,14 +57,14 @@ public final class NavigationDirectiveModel implements TemplateDirectiveModel {
 
 		var cap = PageCapture.get(env);
 		if (n(cap) || ! cap.consoleOpen)
-			throw FtlAttrLists.reject(String.format("<@%s> must be nested inside <@console>.", NAME));
+			throw FtlAttrLists.reject(f("<@%s> must be nested inside <@console>.", NAME));
 		if (cap.navOpen)
 			throw FtlAttrLists.reject("<@navigation> cannot be nested inside another <@navigation>.");
 
 		var layout = FtlAttrLists.scalar(p, "layout");
 		if (! layout.isEmpty()) {
 			if (! (eqa(layout, "horizontal", "vertical")))
-				throw FtlAttrLists.reject(String.format(
+				throw FtlAttrLists.reject(f(
 					"<@navigation> layout= must be horizontal or vertical; got '%s'.", layout));
 			cap.navLayout(layout);
 		}

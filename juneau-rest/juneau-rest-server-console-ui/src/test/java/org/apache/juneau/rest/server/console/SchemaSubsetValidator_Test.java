@@ -51,4 +51,17 @@ class SchemaSubsetValidator_Test extends TestBase {
 	@Test void a04_null_rejectsNonNull() {
 		assertEquals(List.of("$: expected null"), validator("null").validate("x"));
 	}
+
+	@Test void a05_typeList_matchesAnyAlternative() {
+		var v = new SchemaSubsetValidator(Map.of("type", List.of("string", "number")));
+		assertEquals(List.of(), v.validate("x"));
+		assertEquals(List.of(), v.validate(3));
+		assertEquals(List.of("$: expected [string, number]"), v.validate(true));
+	}
+
+	@Test void a06_typeList_nonStringEntry_isUnsupportedType() {
+		var v = new SchemaSubsetValidator(Map.of("type", List.of("string", 3)));
+		var e = assertThrows(IllegalStateException.class, () -> v.validate(true));
+		assertEquals("Unsupported type: 3", e.getMessage());
+	}
 }

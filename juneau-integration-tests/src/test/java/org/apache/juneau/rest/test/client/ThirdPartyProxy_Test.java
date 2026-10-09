@@ -50,6 +50,7 @@ import org.apache.juneau.marshall.urlencoding.*;
 import org.apache.juneau.marshall.xml.*;
 import org.apache.juneau.rest.mock.classic.*;
 import org.apache.juneau.testutils.pojos.*;
+import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.*;
 import org.junit.jupiter.params.provider.*;
 import org.opentest4j.*;

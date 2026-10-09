@@ -1084,10 +1084,29 @@
 		return true;
 	}
 
+	/**
+	 * A plain click on a "#<card>-O<offset>" raw link scrolls that card's mounted terminal directly, with no hash change
+	 * and no history entry.  Any other click, or a card with no mounted terminal, keeps the link's own navigation.
+	 */
+	function scrollTerminal(ev, link) {
+		if (ev.ctrlKey || ev.metaKey || ev.shiftKey || ev.altKey || (ev.button !== undefined && ev.button !== 0))
+			return;
+		const m = /^#(.+)-O(\d+)$/.exec(link.getAttribute("href") || "");
+		const term = window.JuneauTerminal;
+		const h = m && term && typeof term.handle === "function" ? term.handle(m[1]) : null;
+		if (!h || !Number.isSafeInteger(Number(m[2])))
+			return;
+		ev.preventDefault();
+		h.scrollToOffset(Number(m[2]));
+	}
+
 	function onClick(inst, ev) {
 		const t = ev.target;
 		if (!t || typeof t.closest !== "function")
 			return;
+		const link = t.closest("a[href]");
+		if (link)
+			scrollTerminal(ev, link);
 		const act = t.closest("[data-juneau-rv-act]");
 		if (act) {
 			const a = act.getAttribute("data-juneau-rv-act");

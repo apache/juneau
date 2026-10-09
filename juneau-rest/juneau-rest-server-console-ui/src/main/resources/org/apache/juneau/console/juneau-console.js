@@ -146,7 +146,8 @@
 			banner.setAttribute("role", "alert");
 			body.insertBefore(banner, body.firstChild);
 		}
-		if (banner) {
+		// One item per distinct error: a page-level failure (E-JS-46) reaches here once per card.
+		if (banner && !Array.from(banner.querySelectorAll(".jc-console-error-item")).some(i => i.getAttribute("data-juneau-error") === code && i.textContent === msg)) {
 			const item = doc.createElement("div");
 			item.className = "jc-console-error-item";
 			item.setAttribute("data-juneau-error", code);
@@ -1018,7 +1019,9 @@
 				own.claim("card:" + id);
 				state.wired = true;
 				own.publish("card:" + id, lifecycle(state));
-				own.subscribe("cmd:" + id, cmd => onCmd(doc, state, cmd));
+				// echo: the card's own ribbon publishes cmd:<own id> too, and a self-echo would swallow it.
+				// A handler that publishes cmd:<own id> again loops; the bus hop/drain cap bounds it.
+				own.subscribe("cmd:" + id, cmd => onCmd(doc, state, cmd), { echo: true });
 			});
 			if (!state.handler) continue;
 			let implicit = [];

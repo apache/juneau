@@ -57,7 +57,7 @@ public final class CardTypeRegistry {
 		"chart", "ChartCardType"
 	);
 
-	/** Reserved body keys (E-23); {@code visibleWhen} is deliberately excluded — admitted in any card's body. */
+	/** Reserved body keys (E-23); {@code visibleWhen}, {@code subscribes} and {@code publishes} are deliberately excluded — admitted in any card's body. */
 	private static final Set<String> BASE_KEYS = Set.of("id", "type", "title", "src", "template", "ref");
 
 	private static final CardTypeRegistry STANDARD = buildStandard();
@@ -113,13 +113,15 @@ public final class CardTypeRegistry {
 	/**
 	 * The single server path for both {@code <@card>} and C3's {@code PageSpec}: validates the body (E-23),
 	 * dispatches to {@link #handler(String)}, and merges the fragment flat onto the card's base keys.
+	 * A JSON body's {@code visibleWhen}, {@code subscribes} and {@code publishes} are promoted onto the card itself
+	 * (the handler never sees {@code subscribes}/{@code publishes}).
 	 *
 	 * @param source The authored card.
 	 * @return The card object: base keys plus the handler's fragment, flat.
 	 * @throws IllegalArgumentException E-23 if the body sets a reserved key; or from the handler itself.
 	 */
 	public JsonMap toCard(CardSource source) {
-		Object visibleWhen = null;
+		Object visibleWhen = null, subscribes = null, publishes = null;
 		if (source.hasJsonBody()) {
 			var body = source.json();
 			for (var key : body.keySet()) {
@@ -127,6 +129,8 @@ public final class CardTypeRegistry {
 					throw source.error("body key '%s' is reserved; set it as an attribute.", key);
 			}
 			visibleWhen = body.get("visibleWhen");
+			subscribes = body.remove("subscribes");
+			publishes = body.remove("publishes");
 		}
 
 		var frag = handler(source.type()).toFragment(source);
@@ -142,6 +146,10 @@ public final class CardTypeRegistry {
 			card.put("template", source.template());
 		if (visibleWhen != null)
 			card.put("visibleWhen", visibleWhen);
+		if (subscribes != null)
+			card.put("subscribes", subscribes);
+		if (publishes != null)
+			card.put("publishes", publishes);
 		card.putAll(frag);
 		return card;
 	}

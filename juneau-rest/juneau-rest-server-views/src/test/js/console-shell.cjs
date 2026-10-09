@@ -113,6 +113,10 @@ const PROBE = function (arg) {
 			page.on('pageerror', e => pageErrors.push(String(e?.message || e)));
 			page.on('console', m => { if (m.type() === 'error') consoleErrors.push(m.text()); });
 			await page.goto(c.url);
+			if (c.waitFor)
+				await page.waitForSelector(c.waitFor, { state: 'attached', timeout: 10000 });
+			for (const sel of c.clicks || [])
+				await page.click(sel, { timeout: 10000 });
 			await page.evaluate(() => new Promise(requestAnimationFrame));
 			const r = await page.evaluate(PROBE, { queries: c.queries || {}, computed: !!c.computed, selectors: SELECTORS, props: PROPS });
 			r.consoleErrors = consoleErrors.slice();

@@ -238,7 +238,7 @@ public class GitControl implements AutoCloseable {
 		try {
 			var it = pc.call().iterator();
 			if (it.hasNext()) {
-				RichLogger.getLogger(GitControl.class).info("{}", it.next().toString());
+				RichLogger.getLogger(GitControl.class).info("%s", it.next().toString());
 			}
 		} catch (InvalidRemoteException e) {
 			RichLogger.getLogger(GitControl.class).warning(e, "Error pushing to remote repository.");

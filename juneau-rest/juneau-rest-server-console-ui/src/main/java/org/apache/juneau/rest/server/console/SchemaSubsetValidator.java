@@ -63,7 +63,7 @@ final class SchemaSubsetValidator {
 		var s = (Map<String,Object>)schemaNode;
 		if (s.containsKey("$ref"))
 			check(resolve((String)s.get("$ref")), v, path, errors);
-		if (s.containsKey("type") && ! typeMatches((String)s.get("type"), v)) {
+		if (s.containsKey("type") && ! typesMatch(s.get("type"), v)) {
 			errors.add(path + ": expected " + s.get("type"));
 			return;
 		}
@@ -142,6 +142,19 @@ final class SchemaSubsetValidator {
 
 	private static int num(Map<String,Object> s, String k) {
 		return ((Number)s.get(k)).intValue();
+	}
+
+	// "type" is a single name or, as in a badge's params values, a list of alternatives.
+	private static boolean typesMatch(Object type, Object v) {
+		if (type instanceof List<?> alternatives)
+			return alternatives.stream().anyMatch(t -> typeMatches(typeName(t), v));
+		return typeMatches(typeName(type), v);
+	}
+
+	private static String typeName(Object type) {
+		if (type instanceof String s)
+			return s;
+		throw new IllegalStateException("Unsupported type: " + type);
 	}
 
 	private static boolean typeMatches(String type, Object v) {

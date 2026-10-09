@@ -18,6 +18,8 @@ package org.apache.juneau.rest.server.console.test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.util.*;
+
 import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
 
@@ -131,5 +133,11 @@ class PageContractAssert_Test extends TestBase {
 		var m = PageContractAssert.class.getMethod("card", String.class);
 		assertTrue(java.lang.reflect.Modifier.isPublic(m.getModifiers()), "card(String) must be public");
 		assertEquals("datatables", PageContractAssert.assertPage(HTML).card("releases").getString("type"));
+	}
+
+	@Test void a10_templates_inDocumentOrder() {
+		var t = PageContractAssert.assertPage(HTML).templates();
+		assertEquals(List.of("header.banner", "jc-seg-1"), List.copyOf(t.keySet()));
+		assertThrows(UnsupportedOperationException.class, () -> t.put("x", "y"));
 	}
 }

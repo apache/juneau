@@ -1,0 +1,18 @@
+{
+  "contractVersion": "1",
+  "title": "Jobs",
+  "nav": [],
+  "activeNav": [],
+  "topics": [
+    { "topic": "ops.jobs", "retain": true, "publisher": "server" }
+  ],
+  "bridges": [
+    { "id": "ops", "transport": "sse", "session": "/rest/ops/jobs/juneau-bus/session", "downstream": ["ops.jobs"] }
+  ],
+  "cards": [
+    { "id": "jobs", "type": "recorder",
+      "subscribes": [ { "topic": "ops.jobs", "as": "refresh" } ] },
+    { "id": "opsStatus", "type": "recorder",
+      "subscribes": [ { "topic": "bridge:ops", "as": "state" } ] }
+  ]
+}
