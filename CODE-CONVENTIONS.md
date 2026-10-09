@@ -103,9 +103,9 @@ and re-swept 2026-09-13 (WORK-R0008 leftover pass):
 - **First-non-null coalesce (`Shorts.or(...)`)** — **N/A (not a null-safe mapper).** Re-triaged
   2026-09-13: ~12 `x == null ? null : f(x)` ternaries remain in `src/main` (`EmailService`,
   `NexusStagingClient`, `MilestoneService`, `ReleaseRunRest`, `ReleaseEngine`, `DistPromoteStep`,
-  `MavenSettingsCredentials`, `GithubReleaseSource`). Each is a null-safe mapper, and Shorts has no helper for that.
+  `MavenSettingsCredentials`, `GithubReleaseSource`). Each is a null-safe mapper; use `nm(x, X::f)` in new and touched code.
   `or()` returns its first non-null argument, so `or(x, f(x))` returns `x`, not `f(x)`. It also
-  evaluates `f(x)` when `x` is null. Leave the ternary.
+  evaluates `f(x)` when `x` is null.
 - **Injectable wall-clock `Clock`** — **N/A (none found).** Reconfirmed 2026-09-13: no direct
   `System.currentTimeMillis()` calls in `src/main`.
 - **Size assertions (`assertSize`)** — **Applied** (leftover pass 2026-09-13). R0005 recorded N/A
