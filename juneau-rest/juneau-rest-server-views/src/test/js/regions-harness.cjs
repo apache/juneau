@@ -102,6 +102,8 @@ function makeConsole() {
  *
  * `opts.decorate` / `opts.extraJsPaths`: see the comment at the call site; used by console-output-env.cjs.
  * `opts.noAbortController` withholds the platform baseline for the fail-loud test.
+ * `opts.busJsPath` ALSO loads juneau-bus.js, FIRST, the order the "views" toolkit pack emits it - only the
+ * page-bus harness (regions-bus-topics.cjs) needs this, since ctx.publish / ctx.subscribe delegate to JuneauViews.bus.
  * `opts.helpersJsPath` ALSO loads juneau-helpers.js into the same sandbox (afterward, same load order the browser
  * uses) - only the declarative-default harness needs this, since the reserved default paints via `ctx.helpers[...]`.
  */
@@ -137,6 +139,7 @@ function load(rendersJsPath, viewsJsPath, regionsJsPath, opts) {
 	// the runtimes see at load time.  `opts.extraJsPaths` load after juneau-helpers.js, in order.
 	if (typeof opts.decorate === 'function') opts.decorate(env, sandbox, clock);
 	const files = [rendersJsPath, viewsJsPath, regionsJsPath];
+	if (opts.busJsPath) files.unshift(opts.busJsPath);
 	if (opts.helpersJsPath) files.push(opts.helpersJsPath);
 	for (const extra of opts.extraJsPaths || []) files.push(extra);
 	for (const file of files) {

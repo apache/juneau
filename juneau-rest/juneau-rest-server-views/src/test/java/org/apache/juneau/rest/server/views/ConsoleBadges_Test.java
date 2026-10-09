@@ -118,4 +118,64 @@ class ConsoleBadges_Test extends TestBase {
 		assertEquals("/ui/changes", r.get("plainNav"));
 		assertEquals("/ui/changes?state=filter(beanType%3D%24eq(Suspension))", r.get("filteredNav"));
 	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// JuneauViews.bus wrap (the harness loads juneau-bus.js ahead of the badges)
+	//------------------------------------------------------------------------------------------------------------------
+
+	private static Map<?,?> busReport() {
+		var r = NodeHarness.report("badges.cjs", ConsoleChromeMixin.BADGES_JS_RESOURCE, ViewsMixin.BUS_JS_RESOURCE);
+		assumeTrue(r != null, "node (or badges.cjs) not available - JS layer skipped");
+		assertEquals(true, r.get("bus_hasBus"), () -> "juneau-bus.js did not define JuneauViews.bus: " + r);
+		return r;
+	}
+
+	@Test void bus01_badgeTopicPublishedOnEveryPoll() {
+		var r = busReport();
+		assertEquals(Map.of("schemaVersion", 1, "badgeId", "pending", "total", 3), normalize(r.get("bus_badge_first")));
+		assertEquals("badge:pending", r.get("bus_badge_from"));
+		assertEquals(Map.of("schemaVersion", 1, "badgeId", "pending", "total", 2), normalize(r.get("bus_badge_second")));
+		assertEquals(Map.of("schemaVersion", 1, "badgeId", "zero", "total", 0), normalize(r.get("bus_zero")), "total 0 must publish too");
+	}
+
+	@Test void bus02_drainPublishesCmdRefresh_insteadOfReloading() {
+		var r = busReport();
+		assertEquals(0, ((Number)r.get("bus_cmd_afterFirst")).intValue(), "growth/first poll is not a drain");
+		assertEquals(List.of(Map.of("schemaVersion", 1, "op", "refresh")),
+			((List<?>)r.get("bus_cmd")).stream().map(ConsoleBadges_Test::normalize).toList());
+		assertEquals(0, ((Number)r.get("bus_directReloads")).intValue(), "with the bus the shell's cmd handler refreshes, not reloadCard");
+	}
+
+	@Test void bus03_removeAndUnmountDisposeTheOwner() {
+		var r = busReport();
+		assertNotNull(r.get("bus_retained_beforeRemove"));
+		assertEquals(true, r.get("bus_removed"));
+		assertNull(r.get("bus_retained_afterRemove"), "a removed badge must not leave a retained badge:<id> behind");
+		assertNull(r.get("bus_afterUnmountAll"));
+	}
+
+	@Test void bus04_claimedElsewhere_fallsBackToDirectReload() {
+		var r = busReport();
+		assertEquals(0, ((Number)r.get("bus_claimed_published")).intValue());
+		assertEquals(0, ((Number)r.get("bus_claimed_cmds")).intValue());
+		assertEquals(List.of("tasks"), r.get("bus_claimed_reloaded"));
+	}
+
+	@Test void bus05_sourceShape() throws java.io.IOException {
+		var js = BusHarness.source(ConsoleChromeMixin.BADGES_JS_RESOURCE);
+		assertTrue(js.contains("owner.publish(\"cmd:\" + cardId, { schemaVersion: 1, op: \"refresh\" })"), "drain must publish cmd:<id>");
+		assertTrue(js.contains("else reloadCard(cardId);"), "the no-bus fallback must stay");
+	}
+
+	/** JSON numbers come back as Integer/Long/Double depending on the parser; compare them as ints. */
+	private static Object normalize(Object o) {
+		if (o instanceof Map<?,?> m) {
+			var out = new LinkedHashMap<String,Object>();
+			m.forEach((k, v) -> out.put((String)k, normalize(v)));
+			return out;
+		}
+		if (o instanceof Number n && n.doubleValue() == n.intValue())
+			return n.intValue();
+		return o;
+	}
 }

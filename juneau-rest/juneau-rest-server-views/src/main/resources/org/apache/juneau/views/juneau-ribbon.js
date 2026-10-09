@@ -422,9 +422,9 @@
 	}
 
 	/**
-	 * The ribbon's initial active state.  A persisted choice always wins (including an explicit "off"); otherwise an
+	 * The ribbon's initial active state.  A persisted choice always wins (including an explicit "off" and a deselected group, stored as ""); otherwise an
 	 * opt-in {@code default} applies: {@code default:true} on an {@code option}, {@code default:'<memberId>'} on an
-	 * {@code optionGroup}.  Nothing auto-selects without {@code default}.  A group default that names no member is a
+	 * {@code optionGroup}.  A stored group value that names no member counts as not stored.  Nothing auto-selects without {@code default}.  A group default that names no member is a
 	 * configuration bug: it is reported with console.error and ignored.
 	 *
 	 * @param {object} viewDef the view definition (id, ribbon).
@@ -443,8 +443,11 @@
 				if (raw != null) state[a.id] = (raw === "true");
 				else if (a.default === true) state[a.id] = true;
 			} else if (a.type === "optionGroup") {
-				const sel = a.persist ? storageGet(ribbonStorageKey(viewDef.id, a.id)) : null;
-				if (sel != null) state[a.id] = sel;
+				let sel = a.persist ? storageGet(ribbonStorageKey(viewDef.id, a.id)) : null;
+				// A stored value that names no member (an old "null", a removed member) is not a choice: it falls through to default.
+				if (sel && !(a.options || []).some(function (o) { return o.id === sel; })) sel = null;
+				if (sel === "") state[a.id] = null;   // an explicit deselect stays deselected; it does not fall back to default
+				else if (sel != null) state[a.id] = sel;
 				else if (a.default != null) {
 					if ((a.options || []).some(function (o) { return o.id === a.default; })) state[a.id] = a.default;
 					else console.error("Juneau ribbon optionGroup '" + a.id + "': default '" + a.default + "' is not one of its option ids; ignored.");
@@ -456,6 +459,81 @@
 
 	function persist(viewDef, id, value) {
 		storageSet(ribbonStorageKey(viewDef.id, id), String(value));
+	}
+
+	/**
+	 * The ribbon's message channel (message bus addendum, spec 5.5).  `send` delivers one cmd:<target> payload: on a
+	 * console page (`ctx.bus`) it is ALWAYS published - even to the ribbon's own table, so the click is on the trace;
+	 * on a plain page an own-table command runs NS.tableBus.applyCmd directly and a cross-card target is refused
+	 * loudly.  `onOptions` registers a painter fed by filter:<target> (or the own table's onFilter without a bus);
+	 * `listen` subscribes the painters and remembers the unsubscribes on ctx so a rebuilt ribbon disposes the old ones.
+	 *
+	 * @example
+	 * // A ribbon on card `side` toggling the `changes` table; both tables' ribbons paint from filter:changes.
+	 * {type: 'option', id: 'openOnly', title: 'Open only', target: 'changes'}
+	 * // ...publishes on click:
+	 * JuneauViews.bus.publish('cmd:changes', {schemaVersion: 1, op: 'set-filter', options: {openOnly: true}});
+	 */
+	function ribbonBus(viewDef, ctx) {
+		const own = ctx.bus ? ctx.bus.cardId : viewDef.id;
+		const painters = {};   // target card id -> [fn(options)]
+		const seen = {};       // target card id -> the last filter:<target> options seen
+		function paint(target, options) {
+			seen[target] = options || {};
+			(painters[target] || []).forEach(function (p) { p(seen[target]); });
+		}
+		return {
+			target: function (a) { return a.target == null ? own : a.target; },
+			optionsOf: function (target) { return seen[target] || (target === own ? ctx.activeState : {}); },
+			onOptions: function (target, fn) { (painters[target] = painters[target] || []).push(fn); },
+			send: function (target, op, extra) {
+				const cmd = Object.assign({ schemaVersion: 1, op: op }, extra);
+				if (ctx.bus) {
+					ctx.bus.publish("cmd:" + target, cmd);
+				} else if (target !== own) {
+					console.error("Juneau view '" + viewDef.id + "': ribbon item targets card '" + target +
+						"', but this table is not on a console page (no message bus); ignored.");
+				} else if (NS.tableBus?.applyCmd && ctx.table) {
+					NS.tableBus.applyCmd(ctx.table, ctx, cmd);
+				} else {
+					applyCmdLocally(viewDef, ctx, cmd);
+					paint(own, ctx.activeState);
+				}
+			},
+			listen: function () {
+				Object.keys(painters).forEach(function (target) {
+					const fn = function (f) { if (f) paint(target, f.options); };
+					let unsub = null;
+					// echo: the own table's ribbon runs on the card that publishes filter:<id>, which the bus would
+					// otherwise withhold from its owner (self-echo).
+					if (ctx.bus) unsub = ctx.bus.subscribe("filter:" + target, fn, { echo: true });
+					else if (target === own && NS.tableBus?.onFilter) unsub = NS.tableBus.onFilter(ctx, fn);
+					if (typeof unsub === "function") ctx._ribbonUnsubs.push(unsub);
+				});
+			}
+		};
+	}
+
+	/**
+	 * Pre-bus behaviour, kept ONLY for a page that loaded juneau-ribbon.js without juneau-views.js (no NS.tableBus):
+	 * the ribbon applies its own command to its own ctx.  Every real view page goes through NS.tableBus.applyCmd.
+	 */
+	function applyCmdLocally(viewDef, ctx, cmd) {
+		if (cmd.op === "reload") {
+			ctx.redraw();
+		} else if (cmd.op === "collapse-all") {
+			if (typeof ctx.collapseAllDetailRows === "function") ctx.collapseAllDetailRows();
+		} else if (cmd.op === "pause-polling" || cmd.op === "resume-polling") {
+			ctx._pollPaused = cmd.op === "pause-polling";
+			if (typeof ctx._onPollPausedChange === "function") ctx._onPollPausedChange();
+		} else if (cmd.op === "set-filter") {
+			Object.keys(cmd.options || {}).forEach(function (id) {
+				const item = (viewDef.ribbon || []).find(function (a) { return a.id === id; });
+				ctx.activeState[id] = cmd.options[id];
+				if (item?.persist) persist(viewDef, id, item.type === "option" ? !!cmd.options[id] : cmd.options[id]);
+			});
+			ctx.redraw();
+		}
 	}
 
 	/**
@@ -491,8 +569,12 @@
 	}
 
 	function buildRibbon(viewDef, ctx) {
+		(ctx._ribbonUnsubs || []).forEach(function (u) { u(); });   // a rebuilt ribbon drops the previous one's listeners
+		ctx._ribbonUnsubs = [];
+		ctx.activeState = ctx.activeState || {};
 		const actions = normalizeRibbon(viewDef.ribbon || []).filter(ribbonItemVisible);
 		if (!actions.length) return null;
+		const rb = ribbonBus(viewDef, ctx);
 
 		const $ = window.jQuery;
 		const features = detectExportFeatures(window);
@@ -568,12 +650,26 @@
 				return;
 			}
 			if (a.type === "refresh") {
-				place(button(a.title || "Refresh", resolveButtonIcon(a, "refresh"), function () { ctx.redraw(); }, a.appearance), a.group || "__ungrouped");
+				place(button(a.title || "Refresh", resolveButtonIcon(a, "refresh"), function () {
+					rb.send(rb.target(a), "reload");
+				}, a.appearance), a.group || "__ungrouped");
 				return;
 			}
 			if (a.type === "collapseAll") {
 				place(button(a.title || "Collapse all", resolveButtonIcon(a, "collapse"), function () {
-					if (typeof ctx.collapseAllDetailRows === "function") ctx.collapseAllDetailRows();
+					rb.send(rb.target(a), "collapse-all");
+				}, a.appearance), a.group || "__ungrouped");
+				return;
+			}
+			if (a.type === "publish") {
+				// A custom-topic (or cmd:<cardId>) publish (spec 5.5).  Topics exist only on a console page.
+				if (!ctx.bus) {
+					console.error("Juneau view '" + viewDef.id + "': ribbon publish item '" + (a.title || a.topic) +
+						"' needs a console page (no message bus); not rendered.");
+					return;
+				}
+				place(button(a.title || a.topic, resolveButtonIcon(a, null), function () {
+					ctx.bus.publish(a.topic, JSON.parse(JSON.stringify(a.payload === undefined ? {} : a.payload)));
 				}, a.appearance), a.group || "__ungrouped");
 				return;
 			}
@@ -591,8 +687,9 @@
 			}
 			if (a.type === "pausePolling") {
 				// A pause control on a view that never polls is a lie - wireTablePolling only calls initPolling when
-				// viewDef.pollIntervalMs is set, so there would be no timer for the button to hold.  Skip it.
-				if (! viewDef.pollIntervalMs) return;
+				// viewDef.pollIntervalMs is set, so there would be no timer for the button to hold.  Skip it.  A
+				// cross-card pause targets ANOTHER table's polling, so only an own-table pause needs this view to poll.
+				if (a.target == null && ! viewDef.pollIntervalMs) return;
 				// The name stays put across the toggle, as it does for Column search above: an accessible name that
 				// swapped to "Resume auto-refresh" on press would move the state INTO the name, and a screen reader
 				// reading the name and aria-pressed together would then announce it twice and contradict itself.
@@ -600,11 +697,11 @@
 				// name has to be the MODE ("Pause auto-refresh", pressed = the pause is on) and not the feature
 				// ("Auto-refresh"), which would read as pressed = refreshing - the exact inverse of the truth.
 				const ppBtn = button(a.title || "Pause auto-refresh", resolveButtonIcon(a, "pausePolling"), function () {
-					ctx._pollPaused = ! ctx._pollPaused;
-					ppBtn.setAttribute("aria-pressed", ctx._pollPaused ? "true" : "false");
-					// initPolling installs this so the staleness pill flips on the click; absent only if this ribbon
-					// outlived its poll wiring, in which case there is nothing to repaint.
-					if (typeof ctx._onPollPausedChange === "function") ctx._onPollPausedChange();
+					// The button tracks what IT last asked for: the target table's notifyPollPausedChange repaints that
+					// table's staleness pill; this ribbon only needs its own pressed state.
+					const pause = ppBtn.getAttribute("aria-pressed") !== "true";
+					rb.send(rb.target(a), pause ? "pause-polling" : "resume-polling");
+					ppBtn.setAttribute("aria-pressed", pause ? "true" : "false");
 				}, a.appearance);
 				// Read the flag back rather than assume false: ctx survives a column-config Apply, so a view paused
 				// before the rebuild stays paused - and its button has to come back already pressed to say so.
@@ -613,14 +710,15 @@
 				return;
 			}
 			if (a.type === "option") {
-				place(optionToggle(viewDef, a, ctx), a.group || "__ungrouped");
+				place(optionToggle(viewDef, a, ctx, rb), a.group || "__ungrouped");
 				return;
 			}
 			if (a.type === "optionGroup") {
 				openGroup = null;
-				bar.appendChild(optionGroup(viewDef, a, ctx));
+				bar.appendChild(optionGroup(viewDef, a, ctx, rb));
 			}
 		});
+		rb.listen();
 		return bar;
 	}
 
@@ -659,26 +757,29 @@
 		return b;
 	}
 
-	function optionToggle(viewDef, action, ctx) {
+	function optionToggle(viewDef, action, ctx, rb) {
+		const target = rb.target(action);
 		const b = button(action.title || action.id, resolveButtonIcon(action, null), function () {
-			ctx.activeState[action.id] = !ctx.activeState[action.id];
-			b.setAttribute("aria-pressed", ctx.activeState[action.id] ? "true" : "false");
-			if (action.persist) persist(viewDef, action.id, !!ctx.activeState[action.id]);
-			ctx.redraw();
+			rb.send(target, "set-filter", { options: { [action.id]: !rb.optionsOf(target)[action.id] } });
 		}, action.appearance);
-		b.setAttribute("aria-pressed", ctx.activeState[action.id] ? "true" : "false");
+		function paint(options) { b.setAttribute("aria-pressed", options[action.id] ? "true" : "false"); }
+		rb.onOptions(target, paint);
+		paint(rb.optionsOf(target));
 		return b;
 	}
 
-	function optionGroup(viewDef, group, ctx) {
+	function optionGroup(viewDef, group, ctx, rb) {
+		const target = rb.target(group);
 		const wrap = document.createElement("span");
 		wrap.className = "juneau-view-ribbon-group";
 		(group.options || []).forEach(function (o) {
 			const b = button(o.title || o.id, resolveButtonIcon(o, null), function () {
-				ctx.activeState[group.id] = (ctx.activeState[group.id] === o.id && group.deselectable) ? null : o.id;
-				if (group.persist) persist(viewDef, group.id, ctx.activeState[group.id]);
-				ctx.redraw();
+				const cur = rb.optionsOf(target)[group.id];
+				rb.send(target, "set-filter", { options: { [group.id]: (cur === o.id && group.deselectable) ? null : o.id } });
 			}, group.appearance);
+			function paint(options) { b.setAttribute("aria-pressed", options[group.id] === o.id ? "true" : "false"); }
+			rb.onOptions(target, paint);
+			paint(rb.optionsOf(target));
 			wrap.appendChild(b);
 		});
 		return wrap;
@@ -703,6 +804,7 @@
 		normalizeRibbon: normalizeRibbon,
 		// binding
 		loadPersistedState: loadPersistedState,
+		persist: persist,
 		build: buildRibbon
 	};
 })();

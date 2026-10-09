@@ -15,6 +15,8 @@
     "nav":       { "type": "array", "items": { "$ref": "#/$defs/navNode" } },
     "activeNav": { "type": "array", "items": { "$ref": "#/$defs/id" } },
     "cards":     { "type": "array", "items": { "$ref": "#/$defs/card" } },
+    "topics":    { "type": "array", "items": { "$ref": "#/$defs/topicDecl" } },
+    "bridges":   { "type": "array", "items": { "$ref": "#/$defs/bridgeDecl" } },
     "facts":     { "type": "object", "description": "Page-level facts (for example the viewer's roles) that visibleWhen rules test; presentation only, never an authorization gate." }
   },
   "$defs": {
@@ -119,20 +121,23 @@
         "title":    { "type": "string" },
         "template": { "type": "string", "description": "id of a <template data-card> element" },
         "class":    { "type": "string", "pattern": "^[A-Za-z_-][A-Za-z0-9_-]*( [A-Za-z_-][A-Za-z0-9_-]*)*$", "description": "space-separated CSS classes stamped on the card wrapper element" },
-        "visibleWhen": { "$ref": "#/$defs/visibleWhen" }
+        "visibleWhen": { "$ref": "#/$defs/visibleWhen" },
+        "publishes":  { "type": "array", "items": { "$ref": "#/$defs/publication" } },
+        "subscribes": { "type": "array", "items": { "$ref": "#/$defs/subscription" } }
       },
       "oneOf": [
         { "$ref": "#/$defs/htmlCard" },
         { "$ref": "#/$defs/datatablesCard" },
         { "$ref": "#/$defs/consoleOutputCard" },
         { "$ref": "#/$defs/runViewCard" },
-        { "properties": { "type": { "not": { "enum": ["html", "datatables", "console-output", "run-view", "chart"] } } } }
+        { "$ref": "#/$defs/terminalCard" },
+        { "properties": { "type": { "not": { "enum": ["html", "datatables", "console-output", "run-view", "terminal", "chart"] } } } }
       ]
     },
     "htmlCard": {
       "properties": {
         "type": { "const": "html" },
-        "id": true, "src": true, "title": true, "template": true, "class": true,
+        "id": true, "src": true, "title": true, "template": true, "class": true, "publishes": true, "subscribes": true,
         "bare": { "type": "boolean", "default": false }
       },
       "additionalProperties": false,
@@ -141,7 +146,7 @@
     "datatablesCard": {
       "properties": {
         "type":  { "const": "datatables" },
-        "id": true, "title": true, "visibleWhen": true, "class": true,
+        "id": true, "title": true, "visibleWhen": true, "class": true, "publishes": true, "subscribes": true,
         "src":   { "$ref": "#/$defs/url" },
         "page":  { "type": "object" },
         "table": { "$ref": "#/$defs/tableCatalog" }
@@ -268,6 +273,70 @@
         { "type": "array", "items": { "$ref": "#/$defs/visibleRule" } }
       ]
     },
+    "topic": {
+      "description": "A bus topic: a framework family or a namespaced custom family, with an optional key.",
+      "type": "string",
+      "pattern": "^(card|selection|filter|redraw|detail|bulk|cmd|probe|job|badge|bridge|[a-z][a-z0-9-]{0,31}\\.[a-z][a-z0-9-]{0,31})(:[A-Za-z0-9_.-]{1,128})?$"
+    },
+    "topicDecl": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["topic", "retain", "publisher"],
+      "properties": {
+        "topic":     { "type": "string", "pattern": "^([a-z][a-z0-9-]{0,31}\\.[a-z][a-z0-9-]{0,31}(:([A-Za-z0-9_.-]{1,128}|\\*))?|job:\\*)$" },
+        "retain":    { "type": "boolean" },
+        "publisher": { "enum": ["script", "server", "ribbon"] }
+      }
+    },
+    "publication": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["topic", "retain"],
+      "properties": {
+        "topic":  { "type": "string", "pattern": "^[a-z][a-z0-9-]{0,31}\\.[a-z][a-z0-9-]{0,31}(:([A-Za-z0-9_.-]{1,128}|\\*))?$" },
+        "retain": { "type": "boolean" }
+      }
+    },
+    "subscription": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["topic", "as"],
+      "properties": {
+        "topic":     { "$ref": "#/$defs/topic" },
+        "as":        { "type": "string", "pattern": "^[a-z][a-z0-9-]{0,31}$" },
+        "map":       { "type": "object", "additionalProperties": { "type": "string", "pattern": "^[A-Za-z0-9_-]+(\\.[A-Za-z0-9_-]+)*$" } },
+        "whenEmpty": { "enum": ["clear", "keep"] },
+        "emptyText": { "type": "string" }
+      }
+    },
+    "bridgeDecl": {
+      "description": "A server-fed bridge into the page bus. maxAttempts below 1 is reported by BusWiringValidator (E-51); the subset validator has no minimum keyword.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "transport", "session", "downstream"],
+      "properties": {
+        "id":          { "$ref": "#/$defs/id" },
+        "transport":   { "enum": ["sse", "websocket"] },
+        "session":     { "type": "string", "minLength": 1 },
+        "downstream":  { "type": "array", "items": { "type": "string" } },
+        "upstream":    { "type": "array", "items": { "type": "string" } },
+        "maxAttempts": { "type": "integer" }
+      }
+    },
+    "ribbonPublish": {
+      "description": "The publish ribbon item. Enforced by BusWiringValidator (E-48); tableCatalog keeps ribbon items open, so nothing references this.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["type", "title", "topic"],
+      "properties": {
+        "type":        { "const": "publish" },
+        "title":       { "type": "string" },
+        "icon":        { "type": "string" },
+        "topic":       { "$ref": "#/$defs/topic" },
+        "payload":     { "type": "object" },
+        "visibleWhen": { "$ref": "#/$defs/visibleWhen" }
+      }
+    },
     "urlState": {
       "description": "Registers the built-in ?state= directives for this table. Each key present enables that directive.",
       "type": "object",
@@ -300,7 +369,7 @@
       "description": "Console-output bridge card; the shell calls JuneauViews.consoleOutput.mount(body, output). Ranges are checked by ConsoleOutputDef.",
       "properties": {
         "type":   { "const": "console-output" },
-        "id": true, "title": true, "class": true,
+        "id": true, "title": true, "class": true, "publishes": true, "subscribes": true,
         "output": {
           "type": "object",
           "properties": {
@@ -327,7 +396,7 @@
       "description": "Run-view bridge card; the shell calls JuneauViews.runView.mount(body, runView). Ranges are checked by RunViewDef. eventsUrl is required unless poll is false (anyOf, because the subset validator has no if/then).",
       "properties": {
         "type":   { "const": "run-view" },
-        "id": true, "title": true, "class": true,
+        "id": true, "title": true, "class": true, "publishes": true, "subscribes": true,
         "runView": {
           "type": "object",
           "properties": {
@@ -347,6 +416,27 @@
       },
       "additionalProperties": false,
       "required": ["runView"]
+    },
+    "terminalCard": {
+      "description": "Terminal card; juneau-terminal.js mounts xterm.js over the bytes endpoint. Ranges are checked by TerminalDef.",
+      "properties": {
+        "type":   { "const": "terminal" },
+        "id": true, "title": true, "class": true, "publishes": true, "subscribes": true,
+        "terminal": {
+          "type": "object",
+          "properties": {
+            "bytesUrl":  { "type": "string", "minLength": 1 },
+            "eventsUrl": { "type": "string", "minLength": 1 },
+            "refreshMs": { "type": "integer" },
+            "title":     { "type": "string" },
+            "tailBytes": { "type": "integer" }
+          },
+          "additionalProperties": false,
+          "required": ["bytesUrl"]
+        }
+      },
+      "additionalProperties": false,
+      "required": ["terminal"]
     }
   }
 }

@@ -20,6 +20,7 @@ import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.util.*;
 import java.util.regex.*;
+import java.util.stream.*;
 
 import org.apache.juneau.marshall.collections.*;
 import org.apache.juneau.rest.server.console.*;
@@ -50,6 +51,12 @@ import org.apache.juneau.rest.server.console.*;
  * 		.hasCard(<js>"releases"</js>, <js>"datatables"</js>)
  * 		.hasCardKey(<js>"releases"</js>, <js>"/table/dataUrl"</js>, <js>"/rest/releases/data"</js>)
  * 		.templateContains(<js>"jc-seg-1"</js>, <js>"id=\"ssc-table-slot\""</js>);
+ *
+ * 	PageContractAssert.<jsm>assertPage</jsm>(<jv>html</jv>)
+ * 		.subscribes(<js>"tasks"</js>, <js>"selection:changes"</js>, <js>"params"</js>)
+ * 		.declaresTopic(<js>"ops.jobs"</js>)
+ * 		.hasBridge(<js>"ops"</js>)
+ * 		.hasNoWiringErrors();
  * </p>
  *
  * @since 10.0.0
@@ -208,6 +215,96 @@ public final class PageContractAssert {
 		if (! actual.equals(List.of(ids)))
 			throw new AssertionError("card order: expected " + List.of(ids) + " but was " + actual);
 		return this;
+	}
+
+	/** @param cardId The card id. @param topic A topic the card must subscribe to. @return This object. */
+	public PageContractAssert subscribes(String cardId, String topic) {
+		subscription(cardId, topic, null);
+		return this;
+	}
+
+	/**
+	 * @param cardId The card id.
+	 * @param topic A topic the card must subscribe to.
+	 * @param role The role it must be wired to.
+	 * @return This object.
+	 */
+	public PageContractAssert subscribes(String cardId, String topic, String role) {
+		subscription(cardId, topic, role);
+		return this;
+	}
+
+	/** @param cardId The card id. @param topic A custom topic the card must declare in {@code publishes}. @return This object. */
+	public PageContractAssert publishes(String cardId, String topic) {
+		var topics = topicsOf(card(cardId).getList("publishes"));
+		if (! topics.contains(topic))
+			throw new AssertionError("card '" + cardId + "' does not publish '" + topic + "'; publishes: " + topics);
+		return this;
+	}
+
+	/** @param topic A top-level {@code topics} entry that must exist. @return This object. */
+	public PageContractAssert declaresTopic(String topic) {
+		var topics = topicsOf(contract.getList("topics"));
+		if (! topics.contains(topic))
+			throw new AssertionError("no topics entry '" + topic + "'; topics: " + topics);
+		return this;
+	}
+
+	/** @param id A top-level {@code bridges} id that must exist. @return This object. */
+	public PageContractAssert hasBridge(String id) {
+		var ids = new ArrayList<String>();
+		var l = contract.getList("bridges");
+		if (l != null)
+			for (var o : l)
+				ids.add(((JsonMap)o).getString("id"));
+		if (! ids.contains(id))
+			throw new AssertionError("no bridge '" + id + "'; bridges: " + ids);
+		return this;
+	}
+
+	/**
+	 * Runs R-10 and R-11 against the standard card-type registry. Pair it with {@code BusPolicy.check(contract())}
+	 * (juneau-rest-server-bus) for the server-grant side (E-55). A page with custom card types needs the
+	 * {@link #hasNoWiringErrors(CardTypeRegistry)} overload with the registry that knows them.
+	 *
+	 * @return This object.
+	 */
+	public PageContractAssert hasNoWiringErrors() {
+		return hasNoWiringErrors(CardTypeRegistry.standard());
+	}
+
+	/** @param registry The registry that knows the page's card types. @return This object. */
+	public PageContractAssert hasNoWiringErrors(CardTypeRegistry registry) {
+		var problems = BusWiringValidator.validate(contract, registry);
+		if (! problems.isEmpty())
+			throw new AssertionError("page wiring has errors:\n"
+				+ problems.stream().map(p -> p.code() + " " + p.message()).collect(Collectors.joining("\n")));
+		return this;
+	}
+
+	private JsonMap subscription(String cardId, String topic, String role) {
+		var l = card(cardId).getList("subscribes");
+		var roles = new ArrayList<String>();
+		if (l != null)
+			for (var o : l) {
+				var m = (JsonMap)o;
+				if (! topic.equals(m.getString("topic")))
+					continue;
+				if (role == null || role.equals(m.getString("as")))
+					return m;
+				roles.add(m.getString("as"));
+			}
+		if (! roles.isEmpty())
+			throw new AssertionError("card '" + cardId + "' subscribes to '" + topic + "' as " + roles + ", not '" + role + "'");
+		throw new AssertionError("card '" + cardId + "' does not subscribe to '" + topic + "'; subscribes: " + topicsOf(l));
+	}
+
+	private static List<String> topicsOf(List<?> l) {
+		var out = new ArrayList<String>();
+		if (l != null)
+			for (var o : l)
+				out.add(((JsonMap)o).getString("topic"));
+		return out;
 	}
 
 	/**

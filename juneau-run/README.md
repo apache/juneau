@@ -51,6 +51,19 @@ if juneau_run:
 Adopters whose stdout is captured by a consumer must use `console="full"` so the consumer's raw log stays
 complete. Quiet Maven calls (`-q`) should use the `generic` parser.
 
+Progress on one line: `juneau_run.open_line("ORDERS: filling UID")`, then `dot()` or `append(text)` while working, and
+`close_line(" 1819 rows in 4s")` to finish. `set_tail(text)` rewrites everything after the head, as in a counter
+(`set_tail("100 of 200 complete")`). The helpers always write, with markers on or off. A marker written while a line is
+open first ends that line. The console card shows the open line growing in place.
+
+## PTY mode
+
+`juneau_run.py --pty --full-log LOG --events EVENTS [--size COLSxROWS] <tool> -- <cmd...>` runs the tool under
+a pseudo-terminal of a fixed size (default `120x40`), so tools that colour, redraw or draw progress bars behave as they
+do in a terminal. `LOG` keeps every byte unchanged, and `EVENTS` gets run-view events with `rawOffset`, for the
+terminal region in `juneau-rest-server-terminal`. Every option comes before `<tool>`. POSIX only. See "PTY mode" in
+`docs/run-protocol-v1.md`.
+
 ## In this repository
 
 `scripts/test.py` and `scripts/push.py` load the script straight from `juneau-run/src/main/python/` (no Maven involved).

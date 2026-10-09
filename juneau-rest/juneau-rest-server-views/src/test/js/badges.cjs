@@ -20,7 +20,11 @@
  * hide-at-zero and pulse, 401/403 removal, stale + backoff, visibleWhen gating, scope resolution, drain-triggered
  * card refresh, tooltip open/close, and click navigation.  Prints one JSON report.
  *
- *   Usage:  node badges.cjs <juneau-badges.js>
+ *   Usage:  node badges.cjs <juneau-badges.js> [<juneau-bus.js>]
+ *
+ * With the optional second path, an extra block loads the bus into the badge sandbox ahead of the badges and records
+ * the bus wrap (badge:<id> on every poll, cmd:<card> refresh on a drain, owner disposal) under `bus_*` keys.  Every
+ * other case runs without a bus, which proves the no-bus behaviour is unchanged.
  */
 'use strict';
 
@@ -35,6 +39,7 @@ if (!badgesPath) {
 	process.exit(2);
 }
 const src = fs.readFileSync(badgesPath, 'utf8');
+const busSrc = process.argv[3] ? fs.readFileSync(process.argv[3], 'utf8') : null;
 
 /** Builds a fresh page + script instance.  `responses` is a queue of {status, body|throws} consumed per fetch. */
 function setup(responses, opts) {
@@ -71,6 +76,7 @@ function setup(responses, opts) {
 		setTimeout: (fn, ms) => { timers.push({ fn, ms }); return timers.length; },
 		clearTimeout: () => {}
 	};
+	if (opts.bus && busSrc) vm.runInNewContext(busSrc, sandbox, { filename: 'juneau-bus.js' });
 	vm.runInNewContext(src, sandbox, { filename: 'juneau-badges.js' });
 	return { env, doc, win, NS: win.JuneauConsoleBadges, errors, urls, assigned, timers, reloaded, header };
 }
@@ -244,6 +250,68 @@ async function tick(h) {
 		report.plainNav = h.assigned[0];
 		report.filteredNav = h.assigned[1];
 		report.encodeArg = encoded[0] && encoded[0].filters[0];
+	}
+
+	if (busSrc) {
+		// badge:<id> on every successful poll (zero included); a drain publishes cmd:<card> refresh INSTEAD of reloading.
+		{
+			const contract = { activeNav: [], facts: {} };
+			const h = setup([
+				{ body: { total: 3, items: [{ id: 'a' }, { id: 'b' }, { id: 'c' }] } },
+				{ body: { total: 2, items: [{ id: 'b' }, { id: 'c' }] } },
+				{ status: 403, body: {} }
+			], { contract, bus: true });
+			const bus = h.win.JuneauViews.bus;
+			report.bus_hasBus = !!bus;
+			const badgeMsgs = [], cmdMsgs = [];
+			bus.subscribe('badge:pending', p => badgeMsgs.push(p));
+			bus.subscribe('cmd:tasks', p => cmdMsgs.push(p));
+			h.NS.mount([{ id: 'pending', src: '/p', refreshes: ['tasks'] }]);
+			await flush();
+			report.bus_badge_first = badgeMsgs[0] || null;
+			report.bus_badge_from = (bus.history().filter(e => e.topic === 'badge:pending')[0] || {}).from || null;
+			report.bus_cmd_afterFirst = cmdMsgs.length;
+			await tick(h);
+			report.bus_badge_second = badgeMsgs[1] || null;
+			report.bus_cmd = cmdMsgs.slice();
+			report.bus_directReloads = h.reloaded.length;
+			report.bus_retained_beforeRemove = bus.get('badge:pending') || null;
+			await tick(h);   // 403 removes the badge and disposes its owner
+			report.bus_removed = badge(h.doc, 'pending') === null;
+			report.bus_retained_afterRemove = bus.get('badge:pending') === undefined ? null : bus.get('badge:pending');
+		}
+
+		// A zero total still publishes (the badge is hidden, the topic is not silent).
+		{
+			const h = setup([{ body: { total: 0, items: [] } }], { bus: true });
+			const bus = h.win.JuneauViews.bus;
+			const got = [];
+			bus.subscribe('badge:zero', p => got.push(p));
+			h.NS.mount([{ id: 'zero', src: '/p' }]);
+			await flush();
+			report.bus_zero = got[0] || null;
+			h.NS.unmountAll();
+			report.bus_afterUnmountAll = bus.get('badge:zero') === undefined ? null : bus.get('badge:zero');
+		}
+
+		// A badge:<id> another owner already holds: the wrap steps aside, polling and the direct reload are untouched.
+		{
+			const contract = { activeNav: [], facts: {} };
+			const h = setup([
+				{ body: { total: 2, items: [{ id: '1' }, { id: '2' }] } },
+				{ body: { total: 1, items: [{ id: '2' }] } }
+			], { contract, bus: true });
+			const bus = h.win.JuneauViews.bus;
+			bus.claim('badge:taken', 'someone-else');
+			const cmds = [];
+			bus.subscribe('cmd:tasks', p => cmds.push(p));
+			h.NS.mount([{ id: 'taken', src: '/p', refreshes: ['tasks'] }]);
+			await flush();
+			await tick(h);
+			report.bus_claimed_cmds = cmds.length;
+			report.bus_claimed_reloaded = h.reloaded.slice();
+			report.bus_claimed_published = bus.history().filter(e => e.topic === 'badge:taken').length;
+		}
 	}
 
 	console.log(JSON.stringify(report));

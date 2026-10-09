@@ -60,6 +60,13 @@ class ConfigFileStoreTest extends TestBase {
 		assertFileNotExists("X.cfg");
 	}
 
+	@Test void a03b_overwriteWithShorterContents() throws Exception {
+		var fs = FileStore.create().directory(DIR).build();
+		assertNull(fs.write("X.cfg", null, "foo bar baz"));
+		assertNull(fs.write("X.cfg", null, "foo"));
+		assertEquals("foo", fs.read("X.cfg"));
+	}
+
 	@Test void a04_simpleCreateAndDeleteWithNoExtension() throws Exception {
 		var fs = FileStore.create().directory(DIR).build();
 		assertNull(fs.write("X", null, "foo"));

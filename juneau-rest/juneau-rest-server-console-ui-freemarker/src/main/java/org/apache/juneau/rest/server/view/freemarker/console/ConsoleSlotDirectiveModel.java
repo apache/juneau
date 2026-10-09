@@ -117,7 +117,13 @@ public final class ConsoleSlotDirectiveModel implements TemplateDirectiveModel {
 		if (n(cap) || ! cap.consoleOpen)
 			throw FtlAttrLists.reject(String.format("<@%s> must be nested inside <@console>.", slot));
 
-		var markup = PageCapture.render(body);
+		String markup;
+		cap.slotOpen = true;
+		try {
+			markup = PageCapture.render(body);
+		} finally {
+			cap.slotOpen = false;
+		}
 		switch (slot) {
 			case HEAD -> {
 				if (phase.isEmpty())
@@ -131,7 +137,8 @@ public final class ConsoleSlotDirectiveModel implements TemplateDirectiveModel {
 				else
 					cap.scriptsAfterToolkit = markup;
 			}
-			case BODY -> cap.bodyAttrs = markup;
+			// Captured, not merged, here: the merge needs the spec side too, so it runs once at </@console>.
+			case BODY -> cap.ftlBodyAttrs = markup;
 			case BRAND -> cap.addSlot("header", "brand", markup);
 			case ACTIONS -> cap.addSlot("header", "actions", markup);
 			case TITLE -> cap.addSlot("header", "replace", markup);

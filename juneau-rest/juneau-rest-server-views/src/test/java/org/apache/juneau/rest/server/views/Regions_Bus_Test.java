@@ -27,8 +27,9 @@ import org.junit.jupiter.api.*;
 /**
  * Always-on coverage for the region MESSAGE BUS in {@code juneau-regions.js}: broadcast by default, opt-in targeted
  * delivery, opaque payloads, per-subscriber error isolation, subscription-ordered synchronous delivery with
- * emit-during-delivery queued rather than nested, unsubscribe on teardown, the closed set of framework-emitted
- * schemas, and both directions of SD-2's emit-ownership invariant.
+ * emit-during-delivery queued rather than nested, unsubscribe on teardown, and the negative half of SD-2's
+ * emit-ownership invariant.  The chrome half (selection, detail, redraw) moved to the page bus's topics and is
+ * covered with the datatables publishers.
  *
  * <p>
  * The behavioral half runs the real runtime source under a DOM shim (see {@code src/test/js/regions-bus.cjs}).
@@ -206,42 +207,6 @@ class Regions_Bus_Test extends TestBase {
 		var r = report();
 		assertEquals(List.of("m1"), r.get("t_step4_cGot"), r::toString);
 		assertEquals(true, r.get("t_step4_queuedMessageDropped"), r::toString);
-	}
-
-	/**
-	 * The framework-emitted set is SMALL AND CLOSED - selection changed, detail toggled, table redrew - every kind is
-	 * namespaced, and 27a/27c's chrome half of SD-2 holds: a region beside the chrome is driven with NO author emit
-	 * code at all, only a {@code ctx.on} plus a {@code msg.viewId} filter.
-	 */
-	@Test void b27_theFrameworkEmittedSetIsClosedAndChromeAutoEmits() {
-		var r = report();
-		assertEquals(List.of("juneau:selection-changed", "juneau:detail-toggled", "juneau:table-redrew"),
-			r.get("t27_kinds"), r::toString);
-		assertEquals("juneau:framework", r.get("t27_senderIsFramework"));
-		assertEquals(true, r.get("t27_allNamespaced"), r::toString);
-		assertEquals(List.of("juneau:selection-changed", "juneau:detail-toggled", "juneau:table-redrew"),
-			r.get("t27a_drivenWithNoAuthorEmit"), "chrome auto-emits: the consumer wrote no emit call");
-	}
-
-	/**
-	 * A GOLDEN per framework-emitted message - kind, {@code schemaVersion} and the whole field set - plus the
-	 * two-tables-on-one-page disambiguation case.  {@code viewId} on the payload is what makes that case answerable
-	 * at all: {@code meta.from} names the framework rather than a table, and a framework broadcast has no host for a
-	 * short target to resolve against, so without {@code viewId} a subscriber cannot tell WHICH table's selection
-	 * changed.
-	 */
-	@Test void b51_frameworkMessageSchemasAreGoldenAndCarryViewId() {
-		var r = report();
-		assertEquals(List.of("added", "ids", "kind", "removed", "rows", "schemaVersion", "viewId"),
-			r.get("t51_selectionKeys"), r::toString);
-		assertEquals(List.of("expanded", "generation", "kind", "rowId", "schemaVersion", "viewId"),
-			r.get("t51_detailKeys"), r::toString);
-		assertEquals(List.of("kind", "nested", "page", "rowCount", "schemaVersion", "viewId"),
-			r.get("t51_redrewKeys"), r::toString);
-		assertEquals(true, r.get("t51_schemaVersionsIndependentOfContract"),
-			"a message schema version is its own, not the region contract version");
-		assertEquals(true, r.get("t51_filteredByViewId"), r::toString);
-		assertEquals(List.of("gacks", "other"), r.get("t51_viewIdsSeen"), r::toString);
 	}
 
 	/**

@@ -36,6 +36,7 @@ class ConsoleTemplateValidator_SelfLint_Test extends TestBase {
 	private static final Set<String> INTENTIONALLY_INVALID = Set.of(
 		"admin/console-format.ftlh",      // ConsoleDirective_Test.c08_formatAttr_isRejected expects a format= rejection
 		"admin/console-nav-bogus.ftlh",   // NavigationDirective_Test.c02_unknownNodeAttr_isRejected expects E-? unknown attribute
+		"admin/console-nav-under-bogus.ftlh", // NodeDirective_Under_Test.f02_insideNavigation_isEB14 expects the under= rejection
 		"admin/console-theme-bogus.ftlh", // ThemeDirective_Test.d03_unknownThemeAttr_isRejected expects E-? unknown attribute
 		"admin/page-cards-bogus.ftlh",    // CardDirective_Test.b03_unknownAttr_isRejected expects E-? unknown attribute
 		"admin/page-cards-format.ftlh",   // CardDirective_Test.b02_formatAttr_isRejected expects a format= rejection
@@ -49,6 +50,7 @@ class ConsoleTemplateValidator_SelfLint_Test extends TestBase {
 		"c1/bool-chrome-empty.ftlh",      // NodeDirective_StrictBoolean_Test.a04_rejected_E5 expects E-5 strict-boolean
 		"c1/rv-card-src.ftlh",            // CardDirective_RunView_Test expects the src= rejection; card-src-and-body also flags it
 		"c1/co-card-src.ftlh",            // CardDirective_ConsoleOutput_Test expects the src= rejection; card-src-and-body also flags it
+		"c1/tm-card-src.ftlh",            // CardDirective_Terminal_Test expects the src= rejection; card-src-and-body also flags it
 		"c1/cv-pinned-stale.ftlh",        // ViewContractVersion_Test.b03_render_prebuiltSlotMeta_failsWithE28 expects E-28
 		"c1/rv-card-template.ftlh"        // CardDirective_RunView_Test rejects template= on a run-view card
 	);

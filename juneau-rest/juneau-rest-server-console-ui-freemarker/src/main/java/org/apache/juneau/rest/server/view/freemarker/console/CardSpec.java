@@ -20,6 +20,8 @@ import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.util.*;
 
+import org.apache.juneau.rest.server.console.*;
+
 /**
  * Type-agnostic card entry in the page contract: {@code id}, {@code type}, optional {@code src},
  * {@code title}, {@code template}, plus a type-specific body map. C2 extends the card grammar.
@@ -44,6 +46,7 @@ public final class CardSpec {
 	private boolean bare;
 	private String cssClass;
 	private final Map<String,Object> body = new LinkedHashMap<>();
+	private final List<Map<String,Object>> publishes = new ArrayList<>(), subscribes = new ArrayList<>();
 
 	private CardSpec(String type, String id) {
 		this.type = type;
@@ -76,7 +79,36 @@ public final class CardSpec {
 	public CardSpec cssClass(String v) { cssClass = v; return this; }
 
 	/** @param key A type-specific field. @param value Its value. @return This object. */
-	public CardSpec body(String key, Object value) { body.put(key, value); return this; }
+	public CardSpec body(String key, Object value) {
+		if ("publishes".equals(key) || "subscribes".equals(key))
+			throw new IllegalArgumentException(String.format("card '%s': '%s' is a base key; use %s(...)", id, key, key));
+		body.put(key, value);
+		return this;
+	}
+
+	/**
+	 * Declares custom topics this card's JS publishes; repeatable, appends.
+	 *
+	 * @param v The declarations; each needs {@code retain} and must not set {@code publisher}.
+	 * @return This object.
+	 */
+	public CardSpec publishes(TopicDecl... v) {
+		for (var d : v)
+			publishes.add(d.toPublicationMap());
+		return this;
+	}
+
+	/**
+	 * Wires topics to roles this card's type implements; repeatable, appends.
+	 *
+	 * @param v The subscriptions.
+	 * @return This object.
+	 */
+	public CardSpec subscribes(Subscription... v) {
+		for (var s : v)
+			subscribes.add(s.toMap());
+		return this;
+	}
 
 	/** @return The id. */
 	public String id() { return id; }
@@ -84,8 +116,50 @@ public final class CardSpec {
 	/** @return The type. */
 	public String type() { return type; }
 
+	/** @return An independent copy of this card, safe to mutate without affecting this one. */
+	CardSpec copy() {
+		var c = new CardSpec(type, id);
+		c.title = title;
+		c.src = src;
+		c.template = template;
+		c.bare = bare;
+		c.cssClass = cssClass;
+		c.body.putAll(body);
+		return c.wiringFrom(this);
+	}
+
+	/** Wiring already lowered to contract maps (FTL attributes or a JSON5 body). */
+	CardSpec wiring(List<?> publishesMaps, List<?> subscribesMaps) {
+		if (publishesMaps != null) for (var o : publishesMaps) publishes.add(asMap(o));
+		if (subscribesMaps != null) for (var o : subscribesMaps) subscribes.add(asMap(o));
+		return this;
+	}
+
+	/** @param other The card whose {@code publishes} / {@code subscribes} are appended to this one's. @return This object. */
+	CardSpec wiringFrom(CardSpec other) {
+		publishes.addAll(other.publishes);
+		subscribes.addAll(other.subscribes);
+		return this;
+	}
+
+	@SuppressWarnings("unchecked")
+	private static Map<String,Object> asMap(Object o) {
+		if (! (o instanceof Map))
+			throw new IllegalArgumentException("card wiring entries must be objects; got " + (o == null ? "null" : o.getClass().getSimpleName()) + ".");
+		return (Map<String,Object>)o;
+	}
+
 	/** @return The template id, or <jk>null</jk>. */
 	String template() { return template; }
+
+	/** @return The title, or <jk>null</jk>. */
+	String title() { return title; }
+
+	/** @return The {@code src} URL, or <jk>null</jk>. */
+	String src() { return src; }
+
+	/** @return The wrapper CSS classes, or <jk>null</jk>. */
+	String cssClass() { return cssClass; }
 
 	/** @return The contract entry, common fields first. */
 	public Map<String,Object> toMap() {
@@ -97,6 +171,8 @@ public final class CardSpec {
 		if (nn(template)) m.put("template", template);
 		if (bare) m.put("bare", true);
 		if (nn(cssClass)) m.put("class", cssClass);
+		if (! publishes.isEmpty()) m.put("publishes", List.copyOf(publishes));
+		if (! subscribes.isEmpty()) m.put("subscribes", List.copyOf(subscribes));
 		m.putAll(body);
 		return m;
 	}

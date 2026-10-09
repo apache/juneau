@@ -210,14 +210,27 @@ public class ProfileConfigStore extends ConfigStore {
 		return delegate.write(name, expectedContents, newContents);
 	}
 
+	@Override /* Overridden from ConfigStore */
+	public String getNotifiedContents(String name, String written) throws IOException {
+		if (! eq(name, baseName))
+			return written;
+		return mergeWithOverlays(written);
+	}
+
 	/**
 	 * Reads the base + each active profile from the delegate and merges them (profile-wins, last-active-wins).
+	 */
+	private String mergedContents() throws IOException {
+		return mergeWithOverlays(delegate.read(baseName));
+	}
+
+	/**
+	 * Merges the specified base text with the current contents of each active profile overlay.
 	 */
 	@SuppressWarnings({
 		"java:S9391" // Loop body throws checked IOException, which a stream lambda cannot propagate.
 	})
-	private String mergedContents() throws IOException {
-		var base = delegate.read(baseName);
+	private String mergeWithOverlays(String base) throws IOException {
 		if (profiles.isEmpty())
 			return base;
 		var overlays = new ArrayList<String>(profiles.size());

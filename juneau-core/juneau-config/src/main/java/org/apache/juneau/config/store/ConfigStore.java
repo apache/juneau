@@ -262,6 +262,26 @@ public abstract class ConfigStore extends Context implements Closeable {
 	public abstract String write(String name, String expectedContents, String newContents) throws IOException;
 
 	/**
+	 * Returns the contents that listeners will be notified with after the specified contents are written.
+	 *
+	 * <p>
+	 * Stores that notify listeners with text other than what was written (e.g. after merging in overlays) should
+	 * override this method.
+	 *
+	 * <p>
+	 * This is called before the write, so any processing that fails (e.g. merging unparseable written text) fails
+	 * before anything is persisted.
+	 *
+	 * @param name The config name.
+	 * @param written The contents being written.
+	 * @return The contents that listeners will receive.  The default implementation returns <c>written</c>.
+	 * @throws IOException Thrown by underlying stream.
+	 */
+	public String getNotifiedContents(String name, String written) throws IOException {
+		return written;
+	}
+
+	/**
 	 * Subclasses can override this method to convert config names to internal forms.
 	 *
 	 * <p>

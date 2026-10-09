@@ -82,6 +82,19 @@
 			<version>${project.version}</version>
 			<scope>test</scope>
 		</dependency>
+		<!-- Opt-in BusWebSocket_JettyIT (-Djuneau.busIt=true) only; Juneau ships no container WebSocket dependency. -->
+		<dependency>
+			<groupId>org.apache.juneau</groupId>
+			<artifactId>juneau-rest-server-bus-websocket</artifactId>
+			<version>${project.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.eclipse.jetty.ee${jetty.ee.version}.websocket</groupId>
+			<artifactId>jetty-ee${jetty.ee.version}-websocket-jakarta-server</artifactId>
+			<version>${jetty.version}</version>
+			<scope>test</scope>
+		</dependency>
 	</dependencies>
 
 	<build>

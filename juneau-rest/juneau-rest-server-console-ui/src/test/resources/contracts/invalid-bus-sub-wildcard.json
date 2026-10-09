@@ -1,0 +1,1 @@
+{"contractVersion":"1","title":"T","nav":[],"activeNav":[],"cards":[{"id":"h","type":"html","template":"h","subscribes":[{"topic":"app.a:*","as":"refresh"}]}]}

@@ -51,6 +51,7 @@ public class SseResponseSupport implements AutoCloseable {
 		this.scheduler = response.getContext().getBeanStore().getBean(ScheduledExecutorService.class).orElse(null);
 		response.setContentType("text/event-stream");
 		response.setHeader("Cache-Control", "no-cache");
+		response.setHeader("X-Accel-Buffering", "no");
 		response.setHeader("X-Content-Type-Options", "nosniff");
 		response.setHeader("Content-Encoding", "identity");
 		writer = response.getNegotiatedWriter();

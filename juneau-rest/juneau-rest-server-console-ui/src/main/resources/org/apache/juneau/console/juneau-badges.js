@@ -52,6 +52,25 @@
 
 	let mounted = {}; // badge id -> state
 
+	// JuneauViews.bus wrap: badge:<id> on every successful poll, cmd:<cardId> {op:'refresh'} on a drain.  The bus is
+	// resolved lazily, so script order cannot matter; without it, render/detectDrain behave exactly as before.
+	function badgeOwner(st) {
+		const bus = window.JuneauViews && window.JuneauViews.bus;
+		if (!bus || st.busOff) return null;
+		if (!st.owner) {
+			const owner = bus.owner("badge:" + st.def.id);
+			// Another owner already holds badge:<id> (the bus reports the E-JS-49): the wrap steps aside.
+			try { owner.claim("badge:" + st.def.id); } catch { st.busOff = true; return null; }
+			st.owner = owner;
+		}
+		return st.owner;
+	}
+
+	function disposeOwner(st) {
+		if (st.owner) st.owner.dispose();
+		st.owner = null;
+	}
+
 	/**
 	 * Supplies the page context a badge is scoped and gated by: `{activeNav: [ids], tableTab: {cardId: tabId},
 	 * facts: {...}}`. The default reads the mounted JuneauConsole contract and the `?state=` tab.
@@ -86,6 +105,7 @@
 		for (const id of Object.keys(mounted)) {
 			const st = mounted[id];
 			if (st.timer) clearTimeout(st.timer);
+			disposeOwner(st);
 			closeTooltip(st);
 			if (st.el && st.el.parentNode) st.el.parentNode.removeChild(st.el);
 		}
@@ -198,6 +218,8 @@
 				}
 				st.backoffMs = 0;
 				render(st, body);
+				const owner = badgeOwner(st);
+				if (owner) owner.publish("badge:" + def.id, { schemaVersion: 1, badgeId: def.id, total: body.total });
 				detectDrain(st, body);
 				scheduleNext(st, interval(def));
 			});
@@ -290,6 +312,7 @@
 
 	function removeBadge(st) {
 		if (st.timer) clearTimeout(st.timer);
+		disposeOwner(st);
 		closeTooltip(st);
 		if (st.el && st.el.parentNode) st.el.parentNode.removeChild(st.el);
 		if (mounted[st.def.id] === st) delete mounted[st.def.id];
@@ -315,8 +338,13 @@
 
 	function detectDrain(st, body) {
 		const ids = (body.items || []).map(it => it.id);
-		if (st.seenIds && st.def.refreshes && st.seenIds.some(id => ids.indexOf(id) < 0))
-			for (const cardId of st.def.refreshes) reloadCard(cardId);
+		if (st.seenIds && st.def.refreshes && st.seenIds.some(id => ids.indexOf(id) < 0)) {
+			const owner = badgeOwner(st);
+			for (const cardId of st.def.refreshes) {
+				if (owner) owner.publish("cmd:" + cardId, { schemaVersion: 1, op: "refresh" });
+				else reloadCard(cardId);
+			}
+		}
 		st.seenIds = ids;
 	}
 

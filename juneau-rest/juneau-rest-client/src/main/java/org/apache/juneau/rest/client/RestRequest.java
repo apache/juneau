@@ -125,6 +125,18 @@ public final class RestRequest {
 	}
 
 	/**
+	 * Adds a <c>No-Trace: true</c> header, asking the server to keep the stack trace of a failed call out of its log.
+	 *
+	 * <p>
+	 * The server still logs the one-line access record; only the attached exception is omitted.
+	 *
+	 * @return This object.
+	 */
+	public RestRequest noTrace() {
+		return header(NoTrace.NAME, "true");
+	}
+
+	/**
 	 * Returns <jk>true</jk> if a header with the given name (case-insensitive) is already set on this request.
 	 *
 	 * <p>

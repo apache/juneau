@@ -111,6 +111,7 @@
 		<webjars-jquery.version>3.7.1</webjars-jquery.version>
 		<webjars-datatables.version>2.3.8</webjars-datatables.version>
 		<webjars-datatables-buttons.version>3.2.6</webjars-datatables-buttons.version>
+		<webjars-xterm.version>5.5.0</webjars-xterm.version>
 	</properties>
 
 	<modules>

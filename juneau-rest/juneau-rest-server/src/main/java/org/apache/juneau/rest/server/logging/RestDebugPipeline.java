@@ -20,7 +20,10 @@ import java.util.logging.*;
 
 import org.apache.juneau.commons.logging.LogRecordContext;
 import org.apache.juneau.commons.logging.RichLogger;
+import org.apache.juneau.http.header.NoTrace;
 import org.apache.juneau.rest.server.*;
+
+import jakarta.servlet.http.*;
 
 /**
  * The Phase B (request-completion) half of the JUL-level-driven REST debug pipeline.
@@ -150,7 +153,7 @@ public class RestDebugPipeline {
 		var logRecord = new LogRecord(Level.INFO, msg);
 		logRecord.setLoggerName(snapshot.logger().getName());
 		var thrown = session.getException();
-		if (thrown != null)
+		if (thrown != null && ! isNoTrace(session.getRequest()))
 			logRecord.setThrown(thrown);
 		// Pre-seed the record's correlation context from the request-thread snapshot BEFORE log(). Because log()'s own
 		// attach (RichLogger) is attachIfAbsent and the completion thread's live LogContext is empty, the pre-seeded
@@ -158,6 +161,19 @@ public class RestDebugPipeline {
 		// inside attachIfAbsent when the map is empty (the common synchronous case).
 		LogRecordContext.attachIfAbsent(logRecord, snapshot.context());
 		snapshot.logger().log(logRecord);
+	}
+
+	/**
+	 * Returns <jk>true</jk> if the caller asked for the stack trace to be left off the log record, either with a
+	 * <c>No-Trace: true</c> request header or by setting the <js>"NoTrace"</js> request attribute
+	 * (see {@link RestRequest#setNoTrace()}).
+	 */
+	private static boolean isNoTrace(HttpServletRequest req) {
+		var attr = req.getAttribute("NoTrace");
+		// Q:  Do we have Shorts for the boolean methods?
+		if (attr != null)
+			return Boolean.parseBoolean(attr.toString());
+		return Boolean.parseBoolean(req.getHeader(NoTrace.NAME));
 	}
 
 	private static String render(RestSession session, RestOpSession opSession, RestDebugSnapshot snapshot) {

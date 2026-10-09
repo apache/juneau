@@ -142,7 +142,15 @@ public class FreemarkerViewRenderer implements ViewRenderer {
 			// for the duration of the render; always cleared so open() never leaks on the thread.
 			try {
 				FreemarkerRenderScope.open(req);
-				template.process(content2.getAttributes(), res.getWriter());
+				if (hasMustConsume(content2)) {
+					// Buffer first, so a failed adoption check can never follow output that is already committed.
+					var buffer = new StringWriter();
+					template.process(content2.getAttributes(), buffer);
+					checkConsumed(content2, templateName);
+					res.getWriter().write(buffer.toString());
+				} else {
+					template.process(content2.getAttributes(), res.getWriter());
+				}
 				res.getWriter().flush();
 				return FINISHED;
 			} finally {
@@ -159,6 +167,25 @@ public class FreemarkerViewRenderer implements ViewRenderer {
 			// trace in the response.  Appending the root-cause message makes the diagnostic deterministic
 			// regardless of which buffer FreeMarker happened to be writing to.
 			throw new InternalServerError(ex, "FreeMarker render failed for '%s': %s", templateName, rootMessage(ex));
+		}
+	}
+
+	private static boolean hasMustConsume(FreemarkerView view) {
+		for (var v : view.getAttributes().values())
+			if (v instanceof FreemarkerView.MustConsume)
+				return true;
+		return false;
+	}
+
+	// A MustConsume attribute that was never adopted means the template never reached the directive meant to consume
+	// it, which would otherwise drop the attribute silently.  The message is carried as the deepest cause so it
+	// reaches the response body undecorated, as rootMessage() unwraps it.
+	private static void checkConsumed(FreemarkerView view, String templateName) throws TemplateModelException {
+		for (var v : view.getAttributes().values()) {
+			if (v instanceof FreemarkerView.MustConsume mc && ! mc.consumed()) {
+				var msg = mc.notConsumedMessage(templateName);
+				throw new TemplateModelException(msg, new IllegalArgumentException(msg));
+			}
 		}
 	}
 

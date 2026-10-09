@@ -407,6 +407,15 @@ class RunView_BrowserTest extends TestBase {
 		assertEquals(List.of(), failures, () -> "contrast: " + all);
 	}
 
+	/** Written but not run: Playwright needs network access. */
+	@Test void a09_blocksCarryStepIdAndFireOnBlockClick() {
+		clean("a09");
+		var m = c("a09");
+		assertEquals(List.of("build", "build"), m.get("stepIds"), () -> m.toString());
+		assertEquals(List.of(Map.of("stepId", "build", "kind", "pass"), Map.of("stepId", "build", "line", 12, "kind", "fail")),
+			m.get("clicks"), () -> m.toString());
+	}
+
 	@Test void a08_twelveThousandTestsStayBounded() {
 		clean("a08");
 		var m = c("a08");

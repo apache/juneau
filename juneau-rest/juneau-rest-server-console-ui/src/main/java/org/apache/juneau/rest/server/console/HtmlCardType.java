@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.rest.server.console;
 
+import java.util.*;
+
 import org.apache.juneau.marshall.collections.*;
 
 /**
@@ -40,6 +42,18 @@ public final class HtmlCardType implements CardTypeHandler {
 	@Override
 	public String type() {
 		return "html";
+	}
+
+	/** An html card is markup: it takes only the shell's {@code refresh} / {@code params} roles. */
+	@Override
+	public Set<String> acceptedRoles() {
+		return Set.of();
+	}
+
+	/** An html card handles only the shell's {@code refresh} op. */
+	@Override
+	public Set<String> acceptedOps() {
+		return Set.of();
 	}
 
 	@Override

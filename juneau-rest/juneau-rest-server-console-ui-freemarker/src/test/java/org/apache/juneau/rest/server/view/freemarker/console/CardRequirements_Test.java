@@ -31,6 +31,7 @@ class CardRequirements_Test extends TestBase {
 	@Test void a01_builtInMappings() {
 		var r = CardRequirements.create().build(PACKS);
 		assertList(r.forType("datatables"), "datatables-glue");
+		assertList(r.forType("terminal"), "terminal");
 		assertEmpty(r.forType("console-output"));
 		assertEmpty(r.forType("html"));
 	}

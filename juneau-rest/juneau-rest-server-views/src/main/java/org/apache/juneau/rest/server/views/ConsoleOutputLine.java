@@ -365,6 +365,11 @@ public class ConsoleOutputLine {
 	public List<Frag> frags;
 	/** Display hints. */
 	public Ui ui;
+	/**
+	 * Whether this is the log's open trailing line, which may still grow or be rewritten. Serialized only when
+	 * <jk>true</jk>. Only the last line of a log can be open; see {@link ConsoleOutputSource}.
+	 */
+	public Boolean open;
 
 	/**
 	 * Creates a text line.
@@ -418,6 +423,8 @@ public class ConsoleOutputLine {
 	public ConsoleOutputLine icon(String value) { ui().icon = value; return this; }
 	/** @param value The marker flag. @return This object. */
 	public ConsoleOutputLine marker(boolean value) { ui().marker = value ? Boolean.TRUE : null; return this; }
+	/** @param value The open flag. @return This object. */
+	public ConsoleOutputLine open(boolean value) { open = value ? Boolean.TRUE : null; return this; }
 
 	/**
 	 * Sets an inline image.
@@ -457,6 +464,7 @@ public class ConsoleOutputLine {
 				c.frags.add(f.copy());
 		}
 		c.ui = ui == null ? null : ui.copy();
+		c.open = open;
 		return c;
 	}
 
@@ -515,6 +523,8 @@ public class ConsoleOutputLine {
 		}
 		if (ui != null && ! ui.isEmpty())
 			m.put("ui", ui.toContractMap());
+		if (Boolean.TRUE.equals(open))
+			m.put("open", true);
 		return m;
 	}
 
@@ -530,6 +540,21 @@ public class ConsoleOutputLine {
 			}
 		}
 		return sb == null ? s : sb.toString();
+	}
+
+	/**
+	 * The text a terminal shows for one line with bare carriage returns: trailing {@code \r} are dropped, then
+	 * everything after the last remaining {@code \r} is kept. A stray trailing {@code \r} therefore never blanks a line.
+	 *
+	 * @param s The line, without its {@code \n}.
+	 * @return The final segment.
+	 */
+	static String afterLastCr(String s) {
+		var end = s.length();
+		while (end > 0 && s.charAt(end - 1) == '\r')
+			end--;
+		var cr = s.lastIndexOf('\r', end - 1);
+		return s.substring(cr + 1, end);
 	}
 
 	/** Cut point for {@code s} at {@code max} chars that never splits a surrogate pair. */
@@ -613,6 +638,20 @@ public class ConsoleOutputLine {
 			bold = false;
 			dim = false;
 			return this;
+		}
+
+		/**
+		 * Returns a decoder with the same SGR state, so a partial line can be decoded without advancing this one.
+		 *
+		 * @return A new decoder.
+		 */
+		AnsiDecoder copy() {
+			var c = new AnsiDecoder();
+			c.fgStyle = fgStyle;
+			c.fgColor = fgColor;
+			c.bold = bold;
+			c.dim = dim;
+			return c;
 		}
 
 		/**

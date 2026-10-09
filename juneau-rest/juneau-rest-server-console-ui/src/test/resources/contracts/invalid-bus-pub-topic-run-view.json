@@ -1,0 +1,1 @@
+{"contractVersion":"1","title":"T","nav":[],"activeNav":[],"cards":[{"id":"r","type":"run-view","runView":{"poll":false},"publishes":[{"topic":"selection:r","retain":true}]}]}

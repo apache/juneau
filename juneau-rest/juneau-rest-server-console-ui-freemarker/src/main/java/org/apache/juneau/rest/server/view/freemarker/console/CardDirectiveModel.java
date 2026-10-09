@@ -35,7 +35,7 @@ import freemarker.template.*;
  * The {@code <@card>} FreeMarker directive: adds one entry to the page contract's {@code cards[]}.
  *
  * <p>
- * {@code html} (the default) and {@code run-view} are built in. {@code datatables}, {@code console-output} and every other
+ * {@code html} (the default) and {@code run-view} are built in. {@code datatables}, {@code console-output}, {@code terminal} and every other
  * well-formed type name is dispatched through the host's {@link CardTypeRegistry}: a registered
  * {@link CardTypeHandler} validates it, and an unregistered type falls back to the generic passthrough. Every type other
  * than {@code html} requires {@code id=}.
@@ -46,7 +46,9 @@ import freemarker.template.*;
  * same-origin by the shell). {@code type="datatables"} takes {@code src=} or a JSON5 catalog body and becomes the C1
  * bridge card. {@code type="console-output"} takes a JSON5 {@code {contractVersion: '1', output: {...}}} body and
  * becomes the console-output bridge card (see {@link ConsoleOutputDef}). {@code type="run-view"} takes a JSON5
- * {@code {contractVersion: '1', runView: {...}}} body and becomes the run-view bridge card (see {@link RunViewDef}). A card without {@code id=} gets {@code jc-card-N}. {@code <@card>} is only valid inside
+ * {@code {contractVersion: '1', runView: {...}}} body and becomes the run-view bridge card (see {@link RunViewDef}).
+ * {@code type="terminal"} takes a JSON5 {@code {contractVersion: '1', terminal: {...}}} body and becomes the terminal
+ * card (see {@code TerminalDef}). A card without {@code id=} gets {@code jc-card-N}. {@code <@card>} is only valid inside
  * {@code <@page>}; markup around it becomes {@code jc-seg-N} segments, so the authored order is kept.
  *
  * <h5 class='section'>Example:</h5>
@@ -71,7 +73,7 @@ public final class CardDirectiveModel implements TemplateDirectiveModel {
 
 	static final Set<String> ATTRS = Set.of("type", "id", "title", "src", "template", "requires", "class");
 
-	private static final Set<String> REMOVED_TYPES = Set.of("js", "json", "calendar");
+	static final Set<String> REMOVED_TYPES = Set.of("js", "json", "calendar");
 
 	private static final Pattern CLASS_TOKEN_RE = Pattern.compile("^[A-Za-z_-][A-Za-z0-9_-]*$");
 
@@ -161,7 +163,7 @@ public final class CardDirectiveModel implements TemplateDirectiveModel {
 	}
 
 	// The one place a card's packs are recorded; <@page> resolves them after its body.
-	private void recordRequirements(PageCapture cap, String type, String id, List<String> requires) throws TemplateModelException {
+	void recordRequirements(PageCapture cap, String type, String id, List<String> requires) throws TemplateModelException {
 		try {
 			cap.require(requirements.forCard(type, id, requires));
 		} catch (IllegalArgumentException e) {
@@ -193,7 +195,7 @@ public final class CardDirectiveModel implements TemplateDirectiveModel {
 
 	/**
 	 * Every type other than {@code html} and {@code run-view}: validated and lifted by the host's
-	 * {@link CardTypeRegistry} (a registered handler such as {@code datatables} or {@code console-output}, or the
+	 * {@link CardTypeRegistry} (a registered handler such as {@code datatables}, {@code console-output} or {@code terminal}, or the
 	 * generic passthrough for an unregistered type).
 	 */
 	private void registryCard(PageCapture cap, String type, String id, String title, String src, String template,
@@ -201,10 +203,10 @@ public final class CardDirectiveModel implements TemplateDirectiveModel {
 		if (id.isEmpty())
 			throw FtlAttrLists.reject(String.format("<@card type=\"%s\"> requires id=.", type));
 		var hasBody = ! markup.isBlank();
-		if (eq(type, "console-output")) {
+		if (eq(type, "console-output") || eq(type, "terminal")) {
 			if (! (src.isEmpty() && template.isEmpty()))
 				throw FtlAttrLists.reject(String.format(
-					"<@card id='%s'> type='console-output' takes its options as the body; src= and template= are not allowed.", id));
+					"<@card id='%s'> type='%s' takes its options as the body; src= and template= are not allowed.", id, type));
 		} else if (eq(type, "datatables")) {
 			if (! template.isEmpty())
 				throw FtlAttrLists.reject(String.format(
@@ -233,6 +235,18 @@ public final class CardDirectiveModel implements TemplateDirectiveModel {
 		if (! cssClass.isEmpty())
 			spec.cssClass(cssClass);
 		cap.addCard(spec, captured[0] ? markup : null);
+	}
+
+	/**
+	 * Lifts a card source through the registry into the {@link CardSpec} {@link PageCapture} wants; the same path
+	 * {@code <@card>} takes for a registered type.
+	 */
+	CardSpec lift(CardSource source) throws TemplateModelException {
+		try {
+			return toCardSpec(cardTypes.toCard(source));
+		} catch (IllegalArgumentException e) {
+			throw FtlAttrLists.reject(e.getMessage());
+		}
 	}
 
 	/** Converts the flat {@link CardTypeRegistry#toCard} result into the {@link CardSpec} {@link PageCapture} wants. */

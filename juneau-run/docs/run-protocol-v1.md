@@ -62,11 +62,45 @@ An adopting `push.py` accepts `--test-only`:
   - A parent step's totals are counted directly, not summed from its children.
 - **Producer rule:** a producer emits `end` for every open child, children first, before the parent's `end`. The `done` consumer rule above therefore stays valid and unchanged.
 - **Consumers ignore unknown fields on a known `ev`.**
+- **Open output lines.**
+  - **Producer rule:** a marker always starts on a fresh line. A producer that has written unterminated output first writes `\n`.
+  - **Consumer rule:** text after the last `\n` is the open trailing output line. It is never parsed as a marker until it is
+    terminated, and a consumer may show it while it grows.
+  - **Bare `\r`:** a `\r` that is not part of `\r\n` rewrites the line. Consumers show only the text after the last bare `\r` of a
+    line, open or closed, and ignore a trailing `\r`. Line parsers match that same last segment.
+  - Scripts that write with `print(..., end="")` directly must end their line before the next marker. The `juneau_run.py` helpers
+    (`open_line`, `append`, `dot`, `set_tail`, `close_line`) and its marker functions do this for you.
 
 ## Nesting
 
 `run()` sets `JUNEAU_RUN_ACTIVE=1` in the environment. A process that inherits it (a script spawned by the one that owns the run)
 emits `step`, `end`, `report`, `note` and `tests` markers, but its `run()` and `done()` do nothing. The owner keeps emitting its own `done`.
+
+## PTY mode
+
+`juneau_run.py --pty --full-log LOG --events EVENTS [--size COLSxROWS] <tool> -- <cmd...>` runs the tool under a pseudo-terminal
+of the given size (default `120x40`), so tools that colour, redraw or draw progress bars behave as they do in a terminal.
+Every option comes before `<tool>`. POSIX only; anywhere else it exits 2. `--events` appends to its file, so pass a fresh path
+for each run.
+
+- **Log.** `LOG` gets the tool's bytes exactly as written. The PTY turns `\n` into `\r\n`. `LOG.size` gets `{"cols":C,"rows":R}`,
+  written before the tool starts.
+- **Events.** `EVENTS` gets run-view events, one JSON object per line. These are not `##run` markers, and they are written whether or
+  not `RUN_MARKERS` is set:
+  - `step` → `step {id,title,n,rawOffset}`. `parent` is dropped.
+  - `end` → `end {id,status,ms,exit}`.
+  - `tests` → a `suite` placeholder `{step,fw:<tool>,suite:<step>,counts:{pass,fail:fail+err,skip},rawOffset}`.
+  - `note` → `note`.
+  - The last line is always `done {status: ok|fail|cancelled}`.
+  - `run` and `report` are not written.
+  - Step ids are mapped onto `^[A-Za-z0-9][A-Za-z0-9._-]{0,63}$`: `/` becomes `.`, so `mvn/mod-a` becomes `mvn.mod-a`.
+- **`rawOffset`** is the byte offset in `LOG` of the start of the line whose parsing produced the event. A line longer than 1 MiB is force-split for parsing, and an event from its
+  continuation carries the offset of the split, in the middle of the line.
+- **Parsers** see each line with escape sequences and C0 controls removed, and only the text after its last `\r`.
+- **The child** gets `TERM=xterm-256color` and no `RUN_MARKERS`.
+- **Exit codes.** The tool's exit code passes through. A tool killed by signal *n* exits `128+n` and adds a `warn` note
+  `<step> killed by SIG…`. A command that can't start exits 127.
+- **Stdout.** `--console` defaults to `none`; `--console full` also copies the raw bytes to stdout.
 
 ## Adopting it
 

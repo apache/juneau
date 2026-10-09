@@ -1,0 +1,86 @@
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/*
+ * juneau-terminal.css - chrome around the xterm.js screen: the control bar, the trimmed-start banner and the badge.
+ * xterm.css (the "xterm" toolkit pack) styles the screen itself.
+ */
+
+.juneau-term {
+	display: flex;
+	flex-direction: column;
+	gap: var(--jc-space-1, 4px);
+	min-width: 0;
+}
+
+.juneau-term-bar {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: var(--jc-space-2, 8px);
+	font-size: var(--jc-chrome-font-size-1, 12px);
+}
+
+.juneau-term-search {
+	min-width: 12em;
+}
+
+.juneau-term-search[aria-invalid="true"] {
+	outline: 1px solid var(--jc-tone-error, #b3261e);
+}
+
+.juneau-term-badge {
+	margin-left: auto;
+	padding: 0 var(--jc-space-2, 8px);
+	border-radius: var(--jc-chrome-control-radius, 4px);
+	font-weight: 600;
+	background: var(--jc-tone-info, #e8f0fe);
+}
+
+.juneau-term-ok {
+	background: var(--jc-tone-success, #e6f4ea);
+}
+
+.juneau-term-fail,
+.juneau-term-error {
+	color: #fff;
+	background: var(--jc-tone-error, #b3261e);
+}
+
+.juneau-term-chip {
+	padding: 0 var(--jc-space-2, 8px);
+	border-radius: var(--jc-chrome-control-radius, 4px);
+	background: var(--jc-tone-warning, #fef7e0);
+}
+
+.juneau-term-banner {
+	padding: var(--jc-space-1, 4px) var(--jc-space-2, 8px);
+	background: var(--jc-tone-warning, #fef7e0);
+	font-size: var(--jc-chrome-font-size-1, 12px);
+}
+
+.juneau-term-banner[hidden],
+.juneau-term-chip[hidden] {
+	display: none;
+}
+
+/* The screen keeps the producer's cols x rows; the font scales to the width, so nothing here may resize it. */
+.juneau-term-screen {
+	overflow: hidden;
+	min-width: 0;
+	background: #000;
+}

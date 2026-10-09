@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one or more
+  contributor license agreements.  See the NOTICE file distributed with
+  this work for additional information regarding copyright ownership.
+  The ASF licenses this file to You under the Apache License, Version 2.0
+  (the "License"); you may not use this file except in compliance with
+  the License.  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>org.apache.juneau</groupId>
+		<artifactId>juneau-rest</artifactId>
+		<version>10.0.0-SNAPSHOT</version>
+	</parent>
+
+	<artifactId>juneau-rest-server-terminal</artifactId>
+	<name>Apache Juneau REST Server Terminal</name>
+	<description>Apache Juneau REST Server - Terminal region: a command's raw output rendered by xterm.js, fed by a byte-offset endpoint (opt-in)</description>
+	<packaging>bundle</packaging>
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	</properties>
+
+	<dependencies>
+		<dependency>
+			<groupId>org.apache.juneau</groupId>
+			<artifactId>juneau-rest-server-views</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.webjars.npm</groupId>
+			<artifactId>xterm__xterm</artifactId>
+			<version>${webjars-xterm.version}</version>
+		</dependency>
+
+		<!-- Test scope -->
+		<dependency>
+			<groupId>org.junit.jupiter</groupId>
+			<artifactId>junit-jupiter</artifactId>
+			<version>${junit.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.juneau</groupId>
+			<artifactId>juneau-test-utils</artifactId>
+			<version>${project.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.juneau</groupId>
+			<artifactId>juneau-test</artifactId>
+			<version>${project.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.juneau</groupId>
+			<artifactId>juneau-rest-mock</artifactId>
+			<version>${project.version}</version>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+
+	<profiles>
+		<!--
+			Real-browser tests (Terminal_BrowserTest, TerminalSmoke_BrowserTest).  Off by default, exactly like the
+			js-tests profile in juneau-rest-server-views, whose note covers the details: without it no Node, npm,
+			browser or network is needed, and the two classes see no "juneau.jsTests" property and are skipped.
+			Everything fetched lands under target/js.  The plain-Node harness (ViewsJs_Terminal_Test) runs in the
+			default build whenever node is on the PATH, and skips otherwise.
+		-->
+		<profile>
+			<id>js-tests</id>
+			<properties>
+				<!-- The same pin as juneau-rest-server-views. -->
+				<playwright.version>1.49.1</playwright.version>
+				<juneau.jsTests.node>node</juneau.jsTests.node>
+				<juneau.jsTests.npm>npm</juneau.jsTests.npm>
+				<js.tests.dir>${project.build.directory}/js</js.tests.dir>
+				<juneau.jsTests.browsers>${js.tests.dir}/browsers</juneau.jsTests.browsers>
+			</properties>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.codehaus.mojo</groupId>
+						<artifactId>exec-maven-plugin</artifactId>
+						<version>3.6.4</version>
+						<executions>
+							<execution>
+								<id>js-install-playwright</id>
+								<phase>process-test-classes</phase>
+								<goals>
+									<goal>exec</goal>
+								</goals>
+								<configuration>
+									<executable>${juneau.jsTests.npm}</executable>
+									<arguments>
+										<argument>install</argument>
+										<argument>--no-fund</argument>
+										<argument>--no-audit</argument>
+										<argument>--prefix</argument>
+										<argument>${js.tests.dir}</argument>
+										<argument>playwright@${playwright.version}</argument>
+									</arguments>
+								</configuration>
+							</execution>
+							<execution>
+								<id>js-install-chromium</id>
+								<phase>process-test-classes</phase>
+								<goals>
+									<goal>exec</goal>
+								</goals>
+								<configuration>
+									<executable>${juneau.jsTests.node}</executable>
+									<environmentVariables>
+										<PLAYWRIGHT_BROWSERS_PATH>${juneau.jsTests.browsers}</PLAYWRIGHT_BROWSERS_PATH>
+									</environmentVariables>
+									<arguments>
+										<argument>${js.tests.dir}/node_modules/playwright/cli.js</argument>
+										<argument>install</argument>
+										<argument>chromium</argument>
+									</arguments>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-surefire-plugin</artifactId>
+						<configuration>
+							<systemPropertyVariables>
+								<juneau.jsTests>true</juneau.jsTests>
+								<juneau.jsTests.dir>${js.tests.dir}</juneau.jsTests.dir>
+								<juneau.jsTests.harnessDir>${project.basedir}/src/test/js</juneau.jsTests.harnessDir>
+								<juneau.jsTests.node>${juneau.jsTests.node}</juneau.jsTests.node>
+								<juneau.jsTests.browsers>${juneau.jsTests.browsers}</juneau.jsTests.browsers>
+							</systemPropertyVariables>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-source-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>attach-sources</id>
+						<phase>verify</phase>
+						<goals>
+							<goal>jar-no-fork</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.felix</groupId>
+				<artifactId>maven-bundle-plugin</artifactId>
+				<extensions>true</extensions>
+				<configuration>
+					<supportIncrementalBuild>true</supportIncrementalBuild>
+				</configuration>
+				<executions>
+					<execution>
+						<id>bundle-manifest</id>
+						<phase>process-classes</phase>
+						<goals>
+							<goal>manifest</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-jar-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<groupId>org.jacoco</groupId>
+				<artifactId>jacoco-maven-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>default-prepare-agent</id>
+						<goals>
+							<goal>prepare-agent</goal>
+						</goals>
+					</execution>
+					<execution>
+						<id>default-report</id>
+						<phase>prepare-package</phase>
+						<goals>
+							<goal>report</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+</project>

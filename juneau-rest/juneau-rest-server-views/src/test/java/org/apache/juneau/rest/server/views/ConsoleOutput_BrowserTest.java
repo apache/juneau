@@ -183,6 +183,8 @@ class ConsoleOutput_BrowserTest extends TestBase {
 		log("a16", 30, true);
 		log("a17", 0, false);
 		log("a18", 10, true);
+		log("a19", 2, true);
+		log("a20", 0, true);
 	}
 
 	private static byte[] png() throws IOException {
@@ -390,6 +392,10 @@ class ConsoleOutput_BrowserTest extends TestBase {
 					Files.writeString(file, sb.toString(), UTF_8, StandardOpenOption.APPEND);
 				}
 				case "truncate" -> Files.writeString(file, "a different log\n", UTF_8, StandardOpenOption.TRUNCATE_EXISTING);
+				case "open" -> log.openLine(ConsoleOutputLine.info(Optional.ofNullable(queryParam(q, "text")).orElse(id + " filling")));
+				case "dot" -> log.dot();
+				case "settail" -> log.setTail(queryParam(q, "text"));
+				case "closeline" -> log.closeLine(Optional.ofNullable(queryParam(q, "text")).orElse(" done"));
 				case "count" -> {
 					var m = new TreeMap<String,Integer>();
 					LINE_REQUESTS.forEach((k, v) -> m.put(k, v.get()));
@@ -621,5 +627,15 @@ class ConsoleOutput_BrowserTest extends TestBase {
 		clean("a18");
 		var m = c("a18");
 		assertBean(m, "before,after,grew", "a18 line 3,a18 line 3,true");
+	}
+
+	@Test void a19_dotsGrowOnOneRowThenClose() {
+		clean("a19");
+		assertBean(c("a19"), "openClass,sameNode,rows,dupes", "true,true,3,1");
+	}
+
+	@Test void a20_counterRewritesItsTailOnOneRow() {
+		clean("a20");
+		assertBean(c("a20"), "text,rows", "Performing task x: 2 of 2 complete,1");
 	}
 }

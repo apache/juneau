@@ -22,7 +22,7 @@ import java.util.*;
  * The toolkit packs each card type requires, plus the per-card {@code requires=} check.
  *
  * <p>
- * Built-in mapping: {@code datatables} &rarr; {@code "datatables-glue"}.  Apps append more through
+ * Built-in mappings: {@code datatables} &rarr; {@code "datatables-glue"}, {@code terminal} &rarr; {@code "terminal"}.  Apps append more through
  * {@code ConsoleFreemarkerMixin.Builder.cardRequires(...)}.
  *
  * @since 10.0.0
@@ -44,7 +44,7 @@ final class CardRequirements {
 	}
 
 	/**
-	 * @param type The card type ({@code html}, {@code datatables}, {@code console-output}, {@code run-view}).
+	 * @param type The card type ({@code html}, {@code datatables}, {@code console-output}, {@code run-view}, {@code terminal}).
 	 * @return The packs the type requires, in order.
 	 */
 	List<String> forType(String type) {
@@ -75,6 +75,7 @@ final class CardRequirements {
 
 		Builder() {
 			add("datatables", ToolkitPackRegistry.PACK_DATATABLES_GLUE);
+			add("terminal", ToolkitPackRegistry.PACK_TERMINAL);
 		}
 
 		Builder add(String type, String...names) {

@@ -198,4 +198,10 @@ class ConsoleOutputCss_Test extends TestBase {
 			for (var cls : Pattern.compile("\\.([A-Za-z0-9_-]+)").matcher(s).results().map(r -> r.group(1)).toList())
 				assertTrue(cls.equals("juneau-co") || cls.startsWith("juneau-co-"), () -> "'" + s + "' uses a class outside the juneau-co- prefix: " + cls);
 	}
+
+	@Test void a17_openRowShowsAStaticCaret() {
+		assertDecl(".juneau-co-open .juneau-co-text::after", "content", "\"\\00258D\"");
+		assertDecl(".juneau-co-open .juneau-co-text::after", "color", CO_MUTED);
+		assertNull(rule(".juneau-co-open .juneau-co-text::after").get("animation"), "no animation, so nothing to reduce for reduced motion");
+	}
 }

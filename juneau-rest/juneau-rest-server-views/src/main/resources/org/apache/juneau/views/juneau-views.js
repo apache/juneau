@@ -323,12 +323,6 @@
 		cardTables.delete(cardId);
 	};
 
-	(window.JuneauConsoleCards = window.JuneauConsoleCards || []).push(["datatables", {
-		render: function (card, el, ctx) { return NS.card.mountDatatables(card, el, ctx); },
-		refresh: function (card) { return NS.card.reload(card.id); },
-		destroy: function (card) { NS.card.teardown(card.id); }
-	}]);
-
 	// ==================================================================================================================
 	// PURE LOGIC LAYER  (no DOM, no jQuery, no DataTables)
 	// ==================================================================================================================
@@ -972,13 +966,18 @@
 			.replaceAll('"', "&quot;").replaceAll("'", "&#39;");
 	}
 
+	/** Whether {@code d} is an inline-`rows` DataTable: it has an ajax namespace like any other, but no source to reload. */
+	function isInlineRows(d) {
+		const node = typeof d.table === "function" ? d.table().node() : null;
+		return !!node && Array.isArray(node.__juneauRows);
+	}
+
 	/**
 	 * Re-reads a table's data: an ajax reload, or a plain redraw for an inline-`rows` table (which has no ajax source -
 	 * a reload there would GET the current page).  `holdPosition` keeps the current page.
 	 */
 	function reloadTableData(d, holdPosition) {
-		const node = typeof d.table === "function" ? d.table().node() : null;
-		if (node && Array.isArray(node.__juneauRows)) { d.draw(holdPosition ? false : undefined); return; }
+		if (isInlineRows(d)) { d.draw(holdPosition ? false : undefined); return; }
 		if (holdPosition) d.ajax.reload(null, false); else d.ajax.reload();
 	}
 
@@ -3147,6 +3146,71 @@
 	/** Reads a probe's stable id attribute, or {@code null} when absent. */
 	function idOf(el) { return el?.getAttribute?.(PROBE_ID_ATTR) ?? null; }
 
+	// ---- JuneauViews.bus wraps: probe group + async job ---------------------------------------------------------
+	// Additive: each wrap resolves NS.bus at publish time (never at load, so script order cannot matter), is a silent
+	// no-op without it, and never throws into its host.
+
+	const BUS_TOPIC_KEY = /^[A-Za-z0-9_.-]{1,128}$/;
+
+	/**
+	 * The probe:<key> topic key for a probe group: data-juneau-probe-group's value, else the element id, else null
+	 * (that group publishes nothing).  A key outside the topic-key grammar is also null.
+	 */
+	function probeGroupTopicKey(group) {
+		const k = group?.getAttribute?.(PROBE_GROUP_ATTR) || group?.getAttribute?.("id") || null;
+		return k && BUS_TOPIC_KEY.test(k) ? k : null;
+	}
+
+	/**
+	 * Publishes probe:<group> {schemaVersion:1, group, id}.  Called ONLY from enhanceProbeGroup's emit(), which selectId
+	 * calls only for a user-driven change - so the default selection, select() and re-clicks never publish.
+	 */
+	function publishProbeSelection(group, id) {
+		const bus = NS.bus;
+		const key = probeGroupTopicKey(group);
+		if (!bus || !key) return;
+		if (!group._juneauProbeBus) {
+			const owner = bus.owner("probe:" + key);
+			// A page script that already claimed probe:<key> wins: the wrap steps aside (the bus reports the E-JS-49).
+			try { owner.claim("probe:" + key); group._juneauProbeBus = { owner: owner }; }
+			catch { group._juneauProbeBus = { off: true }; }
+		}
+		if (group._juneauProbeBus.off) return;
+		group._juneauProbeBus.owner.publish("probe:" + key, { schemaVersion: 1, group: key, id: id });
+	}
+
+	const JOB_STATE_BY_OUTCOME = { "success": "succeeded", "cancelled": "cancelled", "cancelled-after-effect": "cancelled" };
+	const JOB_OWNERS = new Map();   // jobId -> owner | null (null: another owner, e.g. a bridge, holds job:<jobId>)
+
+	/**
+	 * Mirrors an async job's lifecycle onto job:<jobId>: "start" -> running, "progress" -> running with the progress
+	 * text, "result" -> succeeded / cancelled / failed (+ result).  A stream error publishes nothing: an interrupted
+	 * stream says nothing about the job, which may still be running server-side.
+	 */
+	function publishJobEvent(started, kind, data) {
+		const bus = NS.bus;
+		const jobId = started?.jobId;
+		if (!bus || typeof jobId !== "string" || !BUS_TOPIC_KEY.test(jobId)) return;
+		let payload;
+		if (kind === "start") payload = { schemaVersion: 1, jobId: jobId, state: "running" };
+		else if (kind === "progress") payload = { schemaVersion: 1, jobId: jobId, state: "running", message: String(data) };
+		else if (kind === "result") payload = data
+			? { schemaVersion: 1, jobId: jobId, state: JOB_STATE_BY_OUTCOME[normalizeOutcome(data)] || "failed", result: data }
+			: { schemaVersion: 1, jobId: jobId, state: "failed", message: "the job produced no readable result" };
+		else return;
+		try {
+			let owner = JOB_OWNERS.get(jobId);
+			if (owner === undefined) {
+				owner = bus.owner("job:" + jobId);
+				// A job:<id> topic a bridge owns is server-authoritative: the local wrap stays silent.
+				try { owner.claim("job:" + jobId); } catch { owner = null; }
+				JOB_OWNERS.set(jobId, owner);
+			}
+			if (owner) owner.publish("job:" + jobId, payload);
+		} catch { /* a bus failure must never reach the job stream's host */ }
+		if (kind === "result") JOB_OWNERS.delete(jobId);   // terminal: the claim stays on the bus, the map must not grow
+	}
+
 	/**
 	 * Enhances a server-painted probe group in place: wires radiogroup/radio roles, the roving tabindex, click and
 	 * arrow-key selection, and returns an imperative handle {group, getSelected(), select(idOrEl), repaint()}.
@@ -3198,10 +3262,15 @@
 			if (onSelect) onSelect(id, el, group);
 			if (typeof group.dispatchEvent === "function" && typeof CustomEvent === "function")
 				group.dispatchEvent(new CustomEvent("juneau:probe-select", { detail: { id: id, probe: el, group: group } }));
+			// Bus last, so a throwing subscriber can never pre-empt the app's own callback or event.  emit() runs only
+			// for a user-driven change (selectId's `changed && notify`), so probe:<group> is never published for the
+			// default selection.
+			publishProbeSelection(group, id);
 		}
 
-		// Selects by identity.  `notify` gates onSelect/the event (false for init + imperative select()); an unknown or
-		// disabled id is rejected, and re-selecting the current id is a no-op that never notifies.
+		// Selects by identity.  `notify` gates onSelect/the event/the probe:<group> bus message (false for init +
+		// imperative select()); an unknown or disabled id is rejected, and re-selecting the current id is a no-op that
+		// never notifies.
 		function selectId(id, notify) {
 			const el = findById(id);
 			if (!el || probeIsDisabled(el)) return false;
@@ -3783,6 +3852,7 @@
 			row.child.hide();
 			parentTr.classList.remove("juneau-view-detail-open");
 			setDetailToggleExpanded(parentTr, false);
+			publishDetail(ctx, parentTr.getAttribute(ROW_ID_ATTR), false, ctx._detailGeneration?.get(parentTr) || 0);
 			notifyPollPausedChange(ctx);
 		}
 		return true;
@@ -3858,6 +3928,7 @@
 			row.child.hide();
 			tr.classList.remove("juneau-view-detail-open");
 			setDetailToggleExpanded(tr, false);
+			publishDetail(ctx, tr.getAttribute(ROW_ID_ATTR), false, ctx._detailGeneration?.get(tr) || 0);
 			notifyPollPausedChange(ctx);
 			return;
 		}
@@ -3895,6 +3966,7 @@
 			row.child.hide();
 			tr.classList.remove("juneau-view-detail-open");
 			setDetailToggleExpanded(tr, false);
+			publishDetail(ctx, tr.getAttribute(ROW_ID_ATTR), false, ctx._detailGeneration?.get(tr) || 0);
 			collapsedAny = true;
 		});
 		if (collapsedAny) notifyPollPausedChange(ctx);
@@ -4499,6 +4571,7 @@
 		const gen = (ctx._detailGeneration.get(tr) || 0) + 1;
 		ctx._detailGeneration.set(tr, gen);
 		const rowId = tr.getAttribute(ROW_ID_ATTR);
+		publishDetail(ctx, rowId, true, gen);
 		const key = detailCoalesceKey(rowId, gen);
 
 		const panel = document.createElement("div");
@@ -4986,6 +5059,7 @@
 		function refresh() {
 			if (ctx?.bulkToolbar) ctx.bulkToolbar.refresh(ctx.selectionState.selected.size);
 			refreshSelectAllHeaderState(table, ctx);
+			emitSelection(table, ctx);
 		}
 
 		table.addEventListener("change", function (e) {
@@ -5053,6 +5127,7 @@
 			});
 			refreshSelectAllHeaderState(table, ctx);
 			if (ctx.bulkToolbar) ctx.bulkToolbar.refresh(selectionState.selected.size);
+			emitSelection(table, ctx);
 		});
 	}
 
@@ -5124,6 +5199,7 @@
 			Array.prototype.forEach.call(table.querySelectorAll(".juneau-view-select-checkbox"), function (cb) { cb.checked = false; });
 			refreshSelectAllHeaderState(table, ctx);
 			refresh(0);
+			emitSelection(table, ctx);
 		});
 
 		let actionTrigger = null;
@@ -5430,7 +5506,7 @@
 		return fetch(req.url, { method: req.method, headers: req.headers, body: req.body, credentials: "same-origin" })
 			.then(function (resp) {
 				if (resp.status === 404) return { status: "notFound" };
-				if (!resp.ok) return { status: "failed", message: "HTTP " + resp.status };
+				if (!resp.ok) return { status: "failed", message: "HTTP " + resp.status, httpStatus: resp.status };
 				return readBodyText(resp).then(function (text) {
 					const result = parseActionResult(text);
 					// A bare 2xx (no typed result) is a success, exactly as the single-row path treats it.
@@ -5477,7 +5553,7 @@
 
 	/** Runs the per-row writes at most BULK_PER_ROW_CONCURRENCY at a time; resolves to `{succeeded, notFound, failed}` id lists. */
 	async function submitPerRowBulk(action, table, ctx, selectionState, ids) {
-		const out = { succeeded: [], notFound: [], failed: [] };
+		const out = { succeeded: [], notFound: [], failed: [], failedStatus: {} };
 		const queue = ids.slice();
 		const inFlight = new Set();
 		while (queue.length || inFlight.size) {
@@ -5485,6 +5561,7 @@
 				const id = queue.shift();
 				const p = submitRowActionForId(action, table, id, selectionState.snapshots[id], ctx, null).then(function (o) {
 					out[o.status].push(id);
+					if (o.status === "failed") out.failedStatus[id] = o.httpStatus || 0;
 					inFlight.delete(p);
 				});
 				inFlight.add(p);
@@ -5503,12 +5580,15 @@
 	 */
 	async function runBulkAction(action, table, ctx, selectionState, ids) {
 		let outcome;
+		let failedRows;
 		if (action.bulkMode === "aggregate") {
 			const body = await submitAggregateBulk(action, table, ids);
 			if (!body) return;
 			outcome = { succeeded: body.succeeded, notFound: body.notFound, failed: body.failed.map(function (f) { return f.id; }) };
+			failedRows = body.failed.map(function (f) { return { id: f.id, status: f.status || 0 }; });
 		} else {
 			outcome = await submitPerRowBulk(action, table, ctx, selectionState, ids);
+			failedRows = outcome.failed.map(function (id) { return { id: id, status: outcome.failedStatus[id] || 0 }; });
 		}
 
 		outcome.succeeded.concat(outcome.notFound).forEach(function (id) {
@@ -5521,10 +5601,12 @@
 		});
 		refreshSelectAllHeaderState(table, ctx);
 		if (ctx.bulkToolbar) ctx.bulkToolbar.refresh(selectionState.selected.size);
+		emitSelection(table, ctx);
 
 		const message = buildBulkSummaryMessage(action.label || action.id, outcome.succeeded.length, outcome.notFound.length, outcome.failed);
 		showBulkSummaryToast(message, outcome.failed.length > 0);
 		announce(table, message);
+		publishBulk(ctx, action.id, outcome.succeeded.slice(), outcome.notFound.slice(), failedRows);   // after its toast (spec 4.4)
 
 		if (action.onSuccess !== "none" && ctx.dataTable) reloadTableData(ctx.dataTable, true);
 	}
@@ -6000,6 +6082,7 @@
 		renderJobProgress(tr, "Working\u2026", started, table);
 		const es = new EventSource(started.streamUrl);
 		const st = { settled: false };
+		publishJobEvent(started, "start");
 		function finish(result, fallback) {
 			if (st.settled) return;
 			st.settled = true;
@@ -6014,10 +6097,14 @@
 			if (! st.settled) {
 				renderJobProgress(tr, e.data, started, table);
 				paintActionMessageIntoDetail(tr, action?.id, e.data);
+				publishJobEvent(started, "progress", e.data);
 			}
 		});
 		es.addEventListener("result", function (e) {
-			finish(parseActionResult(e.data), { outcome: "unknown", message: "the job produced no readable result" });
+			const result = parseActionResult(e.data);
+			const first = ! st.settled;
+			finish(result, { outcome: "unknown", message: "the job produced no readable result" });
+			if (first) publishJobEvent(started, "result", result);   // after finish(): the row has settled before any subscriber reacts
 		});
 		es.addEventListener("error", function () {
 			finish(null, { outcome: "unknown", message: "the progress stream was interrupted" });
@@ -8669,6 +8756,7 @@
 		// .dt-layout-cell already scrolls via CSS), then the scroll region gets an overflow-detected tabindex.
 		ensureTableScroll(table, ctx);
 		applyScrollRegionA11y(table, ctx);
+		bindTable(table, ctx);
 	}
 
 	/**
@@ -9081,6 +9169,7 @@
 			}
 		};
 		table.__juneauCtx = ctx;
+		ctx.bus = findBus(table);
 
 		initTableWidgets(table, ctx, viewDef);
 
@@ -9836,6 +9925,470 @@
 	}
 
 	// ==================================================================================================================
+	// BUS BINDING  (message bus addendum, spec 4.2-4.5, 5.3, 5.4)
+	// ==================================================================================================================
+
+	/**
+	 * The datatables card type's message-bus surface: the five framework topics a table owns (selection:, filter:,
+	 * redraw:, detail:, bulk:), the cmd:<id> ops it handles, and the {@code filter} subscription role.
+	 *
+	 * <p>A table finds its bus through its console card host ({@link #findBus}); a table on a plain page has
+	 * {@code ctx.bus === null}, every publisher is a no-op, and the ops still run - the ribbon calls
+	 * {@link #applyCmd} directly there.
+	 *
+	 * <p>Option filters are never DataTables column searches.  In CLIENT mode an option is a row predicate:
+	 * {@code ctx.refreshRibbonRowFilter} rebuilds it from {@code ctx.activeState} and a {@code draw()} applies it.  In
+	 * SERVER mode {@code ctx.redraw()} reloads, and the request derives the options from {@code ctx.activeState}.
+	 *
+	 * <p>{@code detail:<id>} reports a panel the user or an op opens or closes.  A redraw (sort, search or page)
+	 * discards every open panel without publishing {@code expanded:false}, because DataTables drops child rows on
+	 * {@code draw.dt}; a subscriber that tracks open rows should clear them on {@code redraw:<id>}.
+	 *
+	 * @example
+	 * // Any card, script or ribbon item filters the `changes` table; it applies the patch, redraws, then publishes
+	 * // the resulting state itself (the one-writer rule):
+	 * JuneauViews.bus.publish('cmd:changes', {schemaVersion: 1, op: 'set-filter', options: {age: 'new'}, columns: {owner: 'jb'}});
+	 * JuneauViews.bus.subscribe('filter:changes', function (f) {
+	 *   console.log(f.search, f.columns, f.options);   // {search: '', columns: {owner: 'jb'}, options: {age: 'new', ...}}
+	 * });
+	 * // A plain (non-console) page drives the same op without a bus:
+	 * const t = document.querySelector('table[data-juneau-view="changes"]');
+	 * JuneauViews.tableBus.applyCmd(t, t.__juneauCtx, {schemaVersion: 1, op: 'reload', resetPaging: true});
+	 */
+
+	/** Rows carried in selection:<id> before rowsTruncated is set (spec 4.2); a card's selectionRowsCap overrides it. */
+	const SELECTION_ROWS_CAP = 200;
+
+	/** The cmd:<id> ops the datatables type handles.  The shell owns `refresh` for every type (spec 4.5). */
+	const TABLE_OP_IMPLS = {
+		"reload": function (table, ctx, cmd) {
+			const d = ctx.dataTable;
+			if (!d) return;
+			ctx._pollDrawPending = false;   // the operator's draw, not the poll timer's (see ctx.redraw)
+			reloadTableData(d, cmd.resetPaging !== true);
+		},
+		"clear-selection": function (table, ctx) { setSelection(table, ctx, []); },
+		"select": function (table, ctx, cmd) { setSelection(table, ctx, Array.isArray(cmd.ids) ? cmd.ids : []); },
+		"set-filter": function (table, ctx, cmd) { applyFilterPatch(table, ctx, cmd); },
+		"pause-polling": function (table, ctx) { setPollPaused(ctx, true); },
+		"resume-polling": function (table, ctx) { setPollPaused(ctx, false); },
+		"collapse-all": function (table, ctx) {
+			if (typeof ctx.collapseAllDetailRows === "function") ctx.collapseAllDetailRows();
+		}
+	};
+	const TABLE_OPS = Object.keys(TABLE_OP_IMPLS);
+
+	// ---- pure ----
+
+	function selectionPayload(viewId, prevIds, ids, rowFor, cap) {
+		const prev = new Set(prevIds || []);
+		const now = new Set(ids);
+		const limit = cap > 0 ? cap : SELECTION_ROWS_CAP;
+		const out = {
+			schemaVersion: 1, viewId: viewId, ids: ids.slice(),
+			rows: ids.slice(0, limit).map(function (id) { return rowFor(id); }),
+			added: ids.filter(function (id) { return !prev.has(id); }),
+			removed: (prevIds || []).filter(function (id) { return !now.has(id); }),
+			count: ids.length
+		};
+		if (ids.length > limit) out.rowsTruncated = true;
+		return out;
+	}
+
+	/** Only non-empty columns appear, keys sorted so two equal filters serialize identically (spec 4.3). */
+	function filterPayload(viewId, search, columns, options) {
+		const cols = {};
+		Object.keys(columns || {}).sort().forEach(function (k) {
+			const v = columns[k];
+			if (v != null && v !== "") cols[k] = String(v);
+		});
+		return { schemaVersion: 1, viewId: viewId, search: search || "", columns: cols, options: Object.assign({}, options) };
+	}
+
+	function redrawPayload(viewId, info, nested) {
+		return {
+			schemaVersion: 1, viewId: viewId, rowCount: info.recordsDisplay,
+			page: { index: info.page, size: info.length, total: info.pages }, nested: !!nested
+		};
+	}
+
+	function detailPayload(viewId, rowId, expanded, generation) {
+		return { schemaVersion: 1, viewId: viewId, rowId: rowId, expanded: !!expanded, generation: generation };
+	}
+
+	function bulkPayload(viewId, action, succeeded, notFound, failed) {
+		return { schemaVersion: 1, viewId: viewId, action: action, succeeded: succeeded, notFound: notFound, failed: failed };
+	}
+
+	/** Every declared ribbon option/optionGroup id with its current value (false / null when off). */
+	function optionState(viewDef, activeState) {
+		const state = activeState || {};
+		const out = {};
+		(viewDef.ribbon || []).forEach(function (a) {
+			if (a.type === "option") out[a.id] = !!state[a.id];
+			else if (a.type === "optionGroup") out[a.id] = state[a.id] == null ? null : state[a.id];
+		});
+		return out;
+	}
+
+	/**
+	 * The framework topics a datatables card publishes without declaring them (spec 5.4).  The same rule as the Java
+	 * {@code DatatablesCardType.implicitTopics}: a card with no {@code dataUrl} (its columns come from a catalog,
+	 * which this runs before knowing) gets all five; one with a {@code dataUrl} gets only the optional topics it sets.
+	 */
+	function implicitTopics(card) {
+		const id = card.id;
+		const view = card.table && typeof card.table === "object" ? card.table : card;
+		const all = view.dataUrl == null;
+		const out = [];
+		if (all || view.selection != null) out.push("selection:" + id);
+		out.push("filter:" + id, "redraw:" + id);
+		if (all || view.detail != null) out.push("detail:" + id);
+		if (all || view.bulk != null) out.push("bulk:" + id);
+		return out;
+	}
+
+	// ---- binding ----
+
+	/** The bus handle a card host carries; built by the datatables card handler from the shell's card context. */
+	function cardBus(card, cardCtx) {
+		const topics = new Set(implicitTopics(card));
+		const has = function (family) { return topics.has(family + ":" + card.id); };
+		return {
+			cardId: card.id,
+			publish: function (topic, payload) { return cardCtx.publish(topic, payload); },
+			subscribe: function (topic, fn, opts) { return cardCtx.subscribe(topic, fn, opts); },
+			selectionRowsCap: card.selectionRowsCap,
+			topics: { selection: has("selection"), detail: has("detail"), bulk: has("bulk") }
+		};
+	}
+
+	/** The nearest ancestor's __juneauBus, or null.  Stops at an enclosing view table: nested tables never publish. */
+	function findBus(table) {
+		let n = table?.parentNode;
+		while (n) {
+			if (n.__juneauBus) return n.__juneauBus;
+			if (n.tagName === "TABLE") return null;
+			n = n.parentNode;
+		}
+		return null;
+	}
+
+	function publishOn(ctx, family, payload) {
+		if (ctx.bus) ctx.bus.publish(family + ":" + ctx.bus.cardId, payload);
+	}
+
+	function cardIdOf(ctx) { return ctx.bus ? ctx.bus.cardId : ctx.viewDef.id; }
+
+	function busError(code, message) {
+		if (NS.bus?.BusError) return new NS.bus.BusError(code, message);
+		const e = new Error(code + ": " + message);
+		e.code = code;
+		return e;
+	}
+
+	function ribbonOptionItem(viewDef, id) {
+		return (viewDef.ribbon || []).find(function (a) {
+			return (a.type === "option" || a.type === "optionGroup") && a.id === id;
+		}) || null;
+	}
+
+	/** The current page's row data by id: the rows a `select` may pick (the same drop rule as bindSelectionPrune). */
+	function loadedRowsById(ctx) {
+		const out = new Map();
+		const field = ctx.selectionState?.rowIdField;
+		const dt = ctx.dataTable;
+		if (!dt || !field) return out;
+		dt.rows({ page: "current" }).data().toArray().forEach(function (r) {
+			if (r && r[field] != null) out.set(String(r[field]), r);
+		});
+		return out;
+	}
+
+	/** A JSON copy of one selected row: the selection snapshot when present, else the loaded row, else {id}. */
+	function rowSnapshot(ctx, id) {
+		const data = ctx.selectionState.snapshots?.[id] || loadedRowsById(ctx).get(id);
+		return data == null ? { id: id } : JSON.parse(JSON.stringify(data));
+	}
+
+	function readFilter(ctx) {
+		const dt = ctx.dataTable;
+		const columns = {};
+		(ctx.optsColumns || []).forEach(function (c, i) {
+			if (typeof c?.data !== "string") return;
+			const v = getColumnExpr(ctx, dt.column(i));   // a DSL column's expression lives in ctx._colExprs, not col.search()
+			if (v) columns[c.data] = v;
+		});
+		return filterPayload(ctx.viewDef.id, dt.search(), columns, optionState(ctx.viewDef, ctx.activeState));
+	}
+
+	/** Publishes filter:<id> (and feeds onFilter listeners) only when it differs from the last value sent. */
+	function emitFilter(ctx) {
+		if (!ctx.dataTable) return;
+		if (!ctx.bus && !ctx._filterListeners?.length) return;
+		const payload = readFilter(ctx);
+		const json = JSON.stringify(payload);
+		if (json === ctx._lastFilterJson) return;
+		ctx._lastFilterJson = json;
+		(ctx._filterListeners || []).slice().forEach(function (fn) { fn(payload); });
+		publishOn(ctx, "filter", payload);
+	}
+
+	function emitRedraw(ctx) {
+		if (!ctx.bus || !ctx.dataTable) return;
+		publishOn(ctx, "redraw", redrawPayload(ctx.viewDef.id, ctx.dataTable.page.info(), !!ctx.nestedScope));
+	}
+
+	/** Publishes selection:<id> when the selected ids (in selection order) changed since the last publish. */
+	function emitSelection(table, ctx) {
+		const bus = ctx?.bus;
+		if (!bus?.topics.selection || !ctx.selectionState) return;
+		const ids = Array.from(ctx.selectionState.selected);
+		const prev = ctx._busSelectionIds;
+		if (prev?.length === ids.length && prev.every(function (id, i) { return id === ids[i]; })) return;
+		ctx._busSelectionIds = ids;
+		publishOn(ctx, "selection", selectionPayload(ctx.viewDef.id, prev, ids,
+			function (id) { return rowSnapshot(ctx, id); }, bus.selectionRowsCap));
+	}
+
+	function publishDetail(ctx, rowId, expanded, generation) {
+		if (ctx?.bus?.topics.detail) publishOn(ctx, "detail", detailPayload(ctx.viewDef.id, rowId, expanded, generation));
+	}
+
+	function publishBulk(ctx, action, succeeded, notFound, failed) {
+		if (ctx?.bus?.topics.bulk) publishOn(ctx, "bulk", bulkPayload(ctx.viewDef.id, action, succeeded, notFound, failed));
+	}
+
+	/** Registers a local filter listener (the ribbon uses it on a page with no bus).  Returns the unregister. */
+	function onFilter(ctx, fn) {
+		ctx._filterListeners = ctx._filterListeners || [];
+		ctx._filterListeners.push(fn);
+		return function () {
+			const i = ctx._filterListeners.indexOf(fn);
+			if (i >= 0) ctx._filterListeners.splice(i, 1);
+		};
+	}
+
+	/** Replaces the selection with `ids`, limited to selectable rows on the current page (bindSelectionPrune's drop rule). */
+	function setSelection(table, ctx, ids) {
+		const st = ctx.selectionState;
+		if (!st) return;
+		const loaded = loadedRowsById(ctx);
+		const blocked = new Set();
+		ownRowsWithId(table).forEach(function (tr) {
+			const cb = tr.querySelector(".juneau-view-select-checkbox");
+			if (cb?.disabled) blocked.add(tr.getAttribute(ROW_ID_ATTR));
+		});
+		st.selected = new Set(ids.map(String).filter(function (id) { return loaded.has(id) && !blocked.has(id); }));
+		if (st.snapshots) {
+			Object.keys(st.snapshots).forEach(function (id) { if (!st.selected.has(id)) delete st.snapshots[id]; });
+			st.selected.forEach(function (id) { st.snapshots[id] = loaded.get(id); });
+		}
+		ownRowsWithId(table).forEach(function (tr) {
+			const cb = tr.querySelector(".juneau-view-select-checkbox");
+			if (cb) cb.checked = st.selected.has(tr.getAttribute(ROW_ID_ATTR));
+		});
+		refreshSelectAllHeaderState(table, ctx);
+		if (ctx.bulkToolbar) ctx.bulkToolbar.refresh(st.selected.size);
+		emitSelection(table, ctx);
+	}
+
+	function setPollPaused(ctx, paused) {
+		ctx._pollPaused = paused;
+		notifyPollPausedChange(ctx);
+	}
+
+	/**
+	 * The set-filter op (spec 4.5): options -> activeState (+ persist), then search/columns, then ONE redraw, then
+	 * filter:<id>.  CLIENT mode rebuilds the ribbon row filter and draws in memory; SERVER mode reloads, so the
+	 * request derivation carries the options.  A column goes through setColumnExpr, so a client-filtered column with
+	 * search metadata installs its DSL predicate and an expression the engine rejects is logged and not applied.
+	 *
+	 * <p>{@code quiet} skips an option or column this table lacks without logging (the filter role, whose source
+	 * payload is foreign and expected to carry extras).  Returns the option ids and column keys it applied.
+	 */
+	function applyFilterPatch(table, ctx, patch, quiet) {
+		const viewDef = ctx.viewDef;
+		const dt = ctx.dataTable;
+		const applied = { options: [], columns: [] };
+		const refuse = function (message) { if (!quiet) error("Juneau view '" + viewDef.id + "': " + message + "; ignored."); };
+		Object.keys(patch.options || {}).forEach(function (id) {
+			const item = ribbonOptionItem(viewDef, id);
+			if (!item) {
+				refuse("set-filter names unknown ribbon option '" + id + "'");
+				return;
+			}
+			const v = patch.options[id];
+			if (item.type === "optionGroup" && v != null && !(item.options || []).some(function (o) { return o.id === v; })) {
+				refuse("optionGroup '" + id + "' has no member '" + v + "'");
+				return;
+			}
+			ctx.activeState[id] = item.type === "option" ? !!v : v;
+			// A deselected group persists "" (never "null"), so the deselect survives a reload instead of the old member returning.
+			if (item.persist && NS.ribbon?.persist) {
+				if (ctx.activeState[id] != null) NS.ribbon.persist(viewDef, id, ctx.activeState[id]);
+				else if (item.type === "optionGroup") NS.ribbon.persist(viewDef, id, "");
+			}
+			applied.options.push(id);
+		});
+		if (!dt) return applied;
+		if (patch.search != null) dt.search(String(patch.search));
+		Object.keys(patch.columns || {}).forEach(function (key) {
+			const idx = liveDtIndex(key, ctx.optsColumns);
+			if (idx < 0) {
+				refuse("set-filter names unknown column '" + key + "'");
+				return;
+			}
+			const v = patch.columns[key];
+			const res = setColumnExpr(ctx, dt.column(idx), v == null ? "" : String(v));
+			if (res.ok) applied.columns.push(key);
+			else error("Juneau view '" + viewDef.id + "': set-filter column '" + key + "' rejected: " + (res.error?.message || "invalid expression") + "; ignored.");
+		});
+		if (ctx.clientFiltered) {
+			if (ctx.refreshRibbonRowFilter) ctx.refreshRibbonRowFilter();
+			dt.draw();
+		} else {
+			ctx.redraw();
+		}
+		emitFilter(ctx);
+		return applied;
+	}
+
+	/** Runs one cmd:<id> payload against a table.  An op this type does not handle is E-JS-48 (spec 4.5). */
+	function applyCmd(table, ctx, cmd) {
+		const op = Object.hasOwn(TABLE_OP_IMPLS, cmd?.op) ? TABLE_OP_IMPLS[cmd.op] : null;
+		if (!op)
+			throw busError("E-JS-48", "card '" + cardIdOf(ctx) + "' (type 'datatables') has no op '" + cmd?.op + "'");
+		return op(table, ctx, cmd);
+	}
+
+	/**
+	 * The `filter` role (spec 5.3): a filter:-shaped payload, or `map`ped fields whose targets are dotted
+	 * ("columns.region", "options.age", "search"), applied as a set-filter patch.  An option or column this table
+	 * lacks is skipped quietly (the source is foreign).  The role remembers which columns and options it last applied;
+	 * one the next payload no longer carries is cleared, so a cleared source column clears this table's, while a
+	 * filter the table's own user set is never touched.  A cleared source (null) leaves this table's filter alone.
+	 */
+	function filterRole(table, ctx, payload) {
+		if (payload == null) return;
+		const patch = {};
+		Object.keys(payload).forEach(function (k) {
+			const dot = k.indexOf(".");
+			const head = dot < 0 ? k : k.slice(0, dot);
+			if (head !== "search" && head !== "columns" && head !== "options") return;
+			if (dot < 0) { patch[k] = payload[k]; return; }
+			patch[head] = Object.assign({}, patch[head]);
+			patch[head][k.slice(dot + 1)] = payload[k];
+		});
+		const prev = ctx._roleApplied || { options: [], columns: [] };
+		["options", "columns"].forEach(function (head) {
+			prev[head].forEach(function (key) {
+				if (patch[head] && Object.hasOwn(patch[head], key)) return;
+				patch[head] = Object.assign({}, patch[head]);
+				patch[head][key] = null;
+			});
+		});
+		const applied = applyFilterPatch(table, ctx, patch, true);
+		ctx._roleApplied = {   // a key this pass cleared is no longer the role's to remember
+			options: applied.options.filter(function (k) { return patch.options[k] != null; }),
+			columns: applied.columns.filter(function (k) { return patch.columns[k] != null; })
+		};
+	}
+
+	/**
+	 * Called at the end of every constructTable (first build and every rebuild): binds redraw:/filter: to the fresh
+	 * DataTables instance's draw.dt and publishes the table's starting filter: and selection:.  An inline-rows table
+	 * has no ajax load, so its first draw already happened before this bind and its starting redraw: goes out here.
+	 */
+	function bindTable(table, ctx) {
+		const dt = ctx.dataTable;
+		if (!dt) return;
+		ctx._lastFilterJson = null;
+		if (typeof dt.on === "function") {
+			dt.on("draw.dt", function (e) {
+				if (e && e.target !== table) return;   // a nested table's draw bubbles up; it is not this table's
+				emitRedraw(ctx);
+				emitFilter(ctx);
+			});
+		}
+		if (isInlineRows(dt)) emitRedraw(ctx);
+		emitFilter(ctx);
+		emitSelection(table, ctx);
+	}
+
+	/**
+	 * Re-publishes a live table's filter:<id> and redraw:<id> even when unchanged: a View Settings restore that changed
+	 * options on the live grid WITHOUT a rebuild calls this so linked cards follow.  It has no production caller yet; it is
+	 * the hook for restoring saved state.  A rebuild (applyView / applyDraft
+	 * -> buildTable) does not need it: constructTable's bindTable already publishes.
+	 */
+	function publishState(table) {
+		const ctx = table?.__juneauCtx;
+		if (!ctx?.dataTable) return;
+		ctx._lastFilterJson = null;
+		emitFilter(ctx);
+		emitRedraw(ctx);
+	}
+
+	/** The datatables card handler's `ops`: each cmd:<id> op, resolved against the card's mounted view table. */
+	function cardOps() {
+		const out = {};
+		TABLE_OPS.forEach(function (op) {
+			out[op] = function (cmd, card, el) {
+				const table = el.querySelector("table[data-juneau-view]");
+				if (!table?.__juneauCtx)
+					throw busError("E-JS-48", "card '" + card.id + "' (type 'datatables') cannot run op '" + op + "' before its table is mounted");
+				return applyCmd(table, table.__juneauCtx, cmd);
+			};
+		});
+		return out;
+	}
+
+	function cardFilterRole(payload, meta, card, el) {
+		const table = el.querySelector("table[data-juneau-view]");
+		if (table?.__juneauCtx) filterRole(table, table.__juneauCtx, payload);
+	}
+
+	NS.tableBus = {
+		SELECTION_ROWS_CAP: SELECTION_ROWS_CAP,
+		OPS: TABLE_OPS,
+		// pure
+		selectionPayload: selectionPayload,
+		filterPayload: filterPayload,
+		redrawPayload: redrawPayload,
+		detailPayload: detailPayload,
+		bulkPayload: bulkPayload,
+		optionState: optionState,
+		implicitTopics: implicitTopics,
+		// binding
+		cardBus: cardBus,
+		findBus: findBus,
+		bindTable: bindTable,
+		publishState: publishState,
+		applyCmd: applyCmd,
+		filterRole: filterRole,
+		onFilter: onFilter,
+		emitFilter: emitFilter,
+		emitSelection: emitSelection,
+		publishDetail: publishDetail,
+		publishBulk: publishBulk,
+		cardOps: cardOps,
+		cardFilterRole: cardFilterRole
+	};
+
+	(window.JuneauConsoleCards = window.JuneauConsoleCards || []).push(["datatables", {
+		render: function (card, el, ctx) {
+			el.__juneauBus = NS.tableBus.cardBus(card, ctx);   // read by initTableFromDef's findBus
+			return NS.card.mountDatatables(card, el, ctx);
+		},
+		refresh: function (card) { return NS.card.reload(card.id); },
+		destroy: function (card, el) { NS.card.teardown(card.id); if (el) delete el.__juneauBus; },
+		roles: { filter: NS.tableBus.cardFilterRole },
+		ops: NS.tableBus.cardOps(),
+		implicit: NS.tableBus.implicitTopics
+	}]);
+
+	// ==================================================================================================================
 	// PUBLIC API + bootstrap
 	// ==================================================================================================================
 
@@ -9944,6 +10497,8 @@
 		probeIsDisabled: probeIsDisabled,
 		probesInGroup: probesInGroup,
 		enhanceProbeGroup: enhanceProbeGroup,
+		probeGroupTopicKey: probeGroupTopicKey,
+		publishJobEvent: publishJobEvent,
 		initProbeGroups: initProbeGroups,
 		relocateDetailBarSlot: relocateDetailBarSlot,
 		mintDetailBarSlotIdentity: mintDetailBarSlotIdentity,
@@ -9960,6 +10515,7 @@
 		applyActionRefRules: applyActionRefRules,
 		mintActionDescIdentity: mintActionDescIdentity,
 		initDetailsExpander: initDetailsExpander,
+		collapseAllDetailRows: collapseAllDetailRows,
 		buildDetailsControlColumnDef: buildDetailsControlColumnDef,
 		detailsControlCellMarkup: detailsControlCellMarkup,
 		// Nested tables inside a row-detail section - exposed for the node harness + manual verification.

@@ -86,7 +86,7 @@ public final class ViewDef {
 	 * @throws IllegalArgumentException If {@code value} is <jk>null</jk>.
 	 */
 	public ViewDef column(Column value) {
-		req(value != null, "ViewDef ''%s'' column must not be null.", id);
+		req(value != null, "ViewDef '%s' column must not be null.", id);
 		columns.put(value.name(), value);
 		return this;
 	}

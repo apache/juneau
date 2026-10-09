@@ -61,16 +61,54 @@ public final class DatatablesCardType implements CardTypeHandler {
 	/** Public no-arg constructor, required by {@link java.util.ServiceLoader}. */
 	public DatatablesCardType() {}
 
+	/** The {@code cmd:<id>} ops the datatables JS handles (spec §4.5), beyond the shell's {@code refresh}. */
+	static final Set<String> TABLE_OPS = Set.of(
+		"reload", "clear-selection", "select", "set-filter", "pause-polling", "resume-polling", "collapse-all");
+
 	@Override
 	public String type() {
 		return "datatables";
+	}
+
+	/**
+	 * Spec §5.4: {@code filter:} and {@code redraw:} always; {@code selection:}, {@code detail:} and {@code bulk:}
+	 * only when the catalog sets that key.  A {@code src}-only card's catalog arrives at runtime, so it is credited
+	 * with all five.  The JS side applies this same rule and does not re-check once the catalog is known: a topic the
+	 * catalog turns out not to need stays claimed and is simply never published.
+	 */
+	@Override
+	public List<String> implicitTopics(JsonMap card) {
+		var id = card.getString("id");
+		var view = card.get("table") instanceof Map<?,?> t ? t : card;
+		var all = view.get("dataUrl") == null;
+		var out = new ArrayList<String>();
+		if (all || view.get("selection") != null)
+			out.add("selection:" + id);
+		out.add("filter:" + id);
+		out.add("redraw:" + id);
+		if (all || view.get("detail") != null)
+			out.add("detail:" + id);
+		if (all || view.get("bulk") != null)
+			out.add("bulk:" + id);
+		return out;
+	}
+
+	/** Spec §5.3: a table applies {@code filter:}-shaped (or mapped) payloads as a {@code set-filter} patch. */
+	@Override
+	public Set<String> acceptedRoles() {
+		return Set.of("filter");
+	}
+
+	@Override
+	public Set<String> acceptedOps() {
+		return TABLE_OPS;
 	}
 
 	@Override
 	@SuppressWarnings("unchecked")
 	public JsonMap toFragment(CardSource source) {
 		var hasSrc = nn(source.src()) && ! source.src().isEmpty();
-		var hasBody = nn(source.body()) && ! source.body().isEmpty();
+		var hasBody = source.hasJsonBody() || (nn(source.body()) && ! source.body().isEmpty());
 		if (hasSrc && hasBody)
 			throw source.error("type='datatables' takes src= or a body, not both.");
 		if (hasSrc)
@@ -227,7 +265,8 @@ public final class DatatablesCardType implements CardTypeHandler {
 			return;
 		for (var raw : actions) {
 			var action = (Map<String,Object>) raw;
-			if (! eq("aggregate", action.get("mode")))
+			var mode = nn(action.get("mode")) ? action.get("mode") : action.get("bulkMode");
+			if (! eq("aggregate", mode))
 				continue;
 			var endpoint = str(action.get("endpoint"));
 			if (nn(endpoint) && endpoint.matches(".*\\{[^}]+\\}.*"))

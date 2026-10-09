@@ -525,14 +525,24 @@ public class ConfigMap implements ConfigStoreListener {
 
 		if (synchronous) {
 			final var latch = new CountDownLatch(1);
-			var listener = (ConfigStoreListener)x -> latch.countDown();
+			// The store may notify with text that differs from what was written (e.g. a profile store notifies with the
+			// merged text), so wait for the notification the store says this write will cause.  A late event for an
+			// earlier change never equals it, so it can't release us.
+			var expected = store.getNotifiedContents(name, contents);
+			var listener = (ConfigStoreListener)x -> {
+				if (eq(x, expected))
+					latch.countDown();
+			};
 			store.register(name, listener);
-			store.write(name, null, contents);
-		if (latch.await(30, TimeUnit.SECONDS)) {
-			store.unregister(name, listener);
-		} else {
-			throw new ConfigException("Unable to store contents of config to store."); // HTT - timeout requires a store that doesn't fire change events within 30 seconds
-		}
+			try {
+				store.write(name, null, contents);
+				if (! latch.await(30, TimeUnit.SECONDS))
+					throw new ConfigException("Unable to store contents of config to store."); // HTT - timeout requires a store that doesn't fire change events within 30 seconds
+				// Listeners fire in no particular order, so this map may not have seen the event yet.
+				onChange(expected);
+			} finally {
+				store.unregister(name, listener);
+			}
 		} else {
 			store.write(name, null, contents);
 		}

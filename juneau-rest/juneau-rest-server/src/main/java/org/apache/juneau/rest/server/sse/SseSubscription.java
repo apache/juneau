@@ -19,6 +19,7 @@ package org.apache.juneau.rest.server.sse;
 import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
 
+import java.time.*;
 import java.util.*;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.*;
@@ -39,6 +40,9 @@ public class SseSubscription implements AutoCloseable, Iterable<SseEvent> {
 	// pollFirst()/offerLast() retry can't interleave with another's and evict a just-inserted event instead
 	// of the true oldest one.
 	private final Object offerLock = new Object();
+
+	/** How often {@link #poll(Duration)} re-checks {@link #isClosed()} while it waits. */
+	private static final long CLOSE_CHECK_NANOS = TimeUnit.MILLISECONDS.toNanos(50);
 
 	SseSubscription(String id, int queueSize, Consumer<String> closeCallback) {
 		if (isEmpty(id))
@@ -67,7 +71,17 @@ public class SseSubscription implements AutoCloseable, Iterable<SseEvent> {
 		return closed.get();
 	}
 
-	boolean offer(SseEvent event) {
+	/**
+	 * Queues an event, dropping the oldest queued event when the queue is full.
+	 *
+	 * <p>
+	 * Does nothing once the subscription is closed.  {@link SseBroadcaster#publish(SseEvent)} calls this for every
+	 * subscriber; call it directly to address a single subscriber.
+	 *
+	 * @param event The event.  Must not be <jk>null</jk>.
+	 * @return {@code true} if the oldest queued event was dropped to make room.
+	 */
+	public boolean offer(SseEvent event) {
 		if (isClosed())
 			return false;
 		synchronized (offerLock) {
@@ -88,6 +102,32 @@ public class SseSubscription implements AutoCloseable, Iterable<SseEvent> {
 	 */
 	public SseEvent take() throws InterruptedException {
 		return queue.takeFirst();
+	}
+
+	/**
+	 * Waits up to a timeout for the next event.
+	 *
+	 * <p>
+	 * Unlike {@link #take()}, returns once the subscription is closed (within about 50 ms of the close), so a caller
+	 * whose subscription was replaced or closed from another thread never hangs.  The 50 ms bound applies to a waiting
+	 * {@code poll}; {@link #take()} is not woken by {@link #close()}.
+	 *
+	 * @param timeout How long to wait.  Must not be <jk>null</jk>.
+	 * @return The next event, or <jk>null</jk> on timeout or once the subscription is closed.
+	 * @throws InterruptedException If the wait was interrupted.
+	 */
+	public SseEvent poll(Duration timeout) throws InterruptedException {
+		reqnn("timeout", timeout);
+		var deadline = System.nanoTime() + timeout.toNanos();
+		while (! isClosed()) {
+			var left = deadline - System.nanoTime();
+			if (left <= 0)
+				return null;
+			var event = queue.pollFirst(Math.min(left, CLOSE_CHECK_NANOS), TimeUnit.NANOSECONDS);
+			if (event != null)
+				return event;
+		}
+		return null;
 	}
 
 	@Override /* Iterable */

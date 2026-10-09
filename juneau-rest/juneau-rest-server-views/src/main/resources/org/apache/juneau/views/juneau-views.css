@@ -3398,6 +3398,11 @@ input[type="checkbox"].jc-editable-field-input {
 	margin-left: auto;
 }
 
+.juneau-co-open .juneau-co-text::after {
+	content: "\00258D";
+	color: var(--juneau-co-muted);
+}
+
 .juneau-co [hidden] {
 	display: none !important;
 }

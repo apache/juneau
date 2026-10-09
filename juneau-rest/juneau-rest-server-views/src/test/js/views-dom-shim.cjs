@@ -395,7 +395,8 @@ function loadScripts(scriptPaths, env) {
 		setInterval: function () { return 0; },
 		clearInterval: function () { /* no-op */ },
 		Promise: Promise,
-		fetch: function (...args) { return env.callFetch(...args); }
+		fetch: function (...args) { return env.callFetch(...args); },
+		EventSource: env.EventSource   // undefined unless a test installs a fake: typeof EventSource stays "undefined"
 	};
 	(scriptPaths || []).forEach(function (p) {
 		// NOSONAR javascript:S1523 -- loading a production JS source into a VM sandbox is this harness's intended
@@ -422,7 +423,8 @@ function loadViews(rendersJsPath, viewsJsPath, env, searchJsPath) {
 		setInterval: function () { return 0; },
 		clearInterval: function () { /* no-op */ },
 		Promise: Promise,
-		fetch: function (...args) { return env.callFetch(...args); }
+		fetch: function (...args) { return env.callFetch(...args); },
+		EventSource: env.EventSource   // undefined unless a test installs a fake: typeof EventSource stays "undefined"
 	};
 	// NOSONAR javascript:S1523 -- loading the production juneau-renders.js/juneau-views.js sources into a VM
 	// sandbox is this harness's intended mechanism for exercising them under the DOM shim; inputs are fixed local

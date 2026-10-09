@@ -37,7 +37,7 @@
 	const SUPPORTED_CONTRACT_VERSIONS = Object.freeze(["1"]);
 	const TYPE_RE = /^[a-z][a-z0-9-]{0,31}$/;
 	const FATAL = new Set(["E-JS-1", "E-JS-2", "E-JS-3", "E-JS-5", "E-JS-6", "E-JS-7", "E-JS-11", "E-JS-12",
-		"E-JS-20", "E-JS-21", "E-JS-23"]);
+		"E-JS-20", "E-JS-21", "E-JS-23", "E-JS-46"]);
 	const MSG = {
 		"E-JS-1": "missing or unparseable <script id=\"juneau-page\">: '%s'",
 		"E-JS-2": "unsupported page contract version '%s'; this shell supports '%s'",
@@ -57,7 +57,11 @@
 		"E-JS-20": "card type '%s' must match /^[a-z][a-z0-9-]{0,31}$/",
 		"E-JS-21": "card type '%s' handler must be a function or an object with render(); got '%s'",
 		"E-JS-22": "card '%s' is not mounted",
-		"E-JS-23": "JuneauConsoleCards entry '%s' is not a [type, handler] pair"
+		"E-JS-23": "JuneauConsoleCards entry '%s' is not a [type, handler] pair",
+		"E-JS-41": "card '%s' subscribes to '%s', which is declared publisher=script, but no page script declared it by DOMContentLoaded",
+		"E-JS-46": "page wires topics but juneau-bus.js is not loaded",
+		"E-JS-48": "card '%s' (type '%s') has no op '%s'",
+		"E-JS-51": "map path '%s' in card '%s' resolved to a non-scalar"
 	};
 
 	class JuneauConsoleError extends Error {
@@ -72,6 +76,13 @@
 	const mountedRoots = new WeakSet();
 	const cardState = new Map();              // id -> {card, el, type, handler, ctx, destroyed, ...}
 	const pendingByType = new Map();          // type -> [{card, host, state}]
+	// Page bus.  Banner codes go to the page banner, inline codes onto the card they name.
+	const BUS_BANNER_CODES = Object.freeze(["E-JS-52", "E-JS-53", "E-JS-56", "E-JS-57"]);
+	const BUS_INLINE_CODES = new Set(["E-JS-41", "E-JS-44", "E-JS-47", "E-JS-48", "E-JS-49", "E-JS-51"]);
+	const DEFAULT_EMPTY_TEXT = "Nothing selected.";
+	let busState = "waiting";   // "waiting" until DOMContentLoaded, then "started" or "absent"
+	const busQueue = [];        // {state, fn}: ctx.publish / ctx.subscribe calls made before DOMContentLoaded
+	let busPainter = null;      // the bus.onError registration, made once per page
 	let mounted = null;   // { contract, cards: Map<id, frozen card> }
 
 	function fmt(msg, ...args) {
@@ -119,6 +130,14 @@
 	function fail(doc, msgKey, ...args) {
 		const msg = fmt(MSG[msgKey], ...args);
 		const code = msgKey.replace(/-renamed$/, "");
+		paintBanner(doc, code, msg);
+		console.error("[juneau-console] " + msg);
+		if (FATAL.has(code))
+			throw new JuneauConsoleError(code, msg);
+	}
+
+	// The page banner (the contract-error channel); the bus painter writes to it too.
+	function paintBanner(doc, code, msg) {
 		const body = doc.body;
 		let banner = body && body.querySelector(".jc-console-error");
 		if (body && !banner) {
@@ -134,9 +153,6 @@
 			item.textContent = msg;
 			banner.appendChild(item);
 		}
-		console.error("[juneau-console] " + msg);
-		if (FATAL.has(code))
-			throw new JuneauConsoleError(code, msg);
 	}
 
 	/**
@@ -708,8 +724,333 @@
 			onDestroy: fn => { state.destroyCallbacks.push(fn); },
 			announce: text => announce(doc, text),
 			setApi: api => { state.api = api; },
-			signal: state.controller.signal
+			signal: state.controller.signal,
+			publish: (topic, payload, opts) => viaBus(doc, state, own => own.publish(topic, payload, opts)),
+			subscribe: (topic, fn, opts) => subscribeVia(doc, state, topic, fn, opts),
+			refresh: () => refreshCard(state.card.id)
 		};
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Page bus (spec 4.1, 4.5, 5.2-5.4, 6.3): card:<id>, cmd:<id>, declared roles, ctx.publish
+	//-----------------------------------------------------------------------------------------------------------------
+
+	const TOKEN_RE = /\{([A-Za-z0-9_.-]+)\}/g;
+	const HAS_TOKEN_RE = /\{[A-Za-z0-9_.-]+\}/;
+
+	function arr(v) { return Array.isArray(v) ? v : []; }
+	function tableView(card) { return card.table && typeof card.table === "object" ? card.table : card; }
+	function ribbonOf(card) { return arr(tableView(card).ribbon); }
+
+	// The card's bus owner, created on first use: every shell write for the card goes through it (spec 4.1).
+	function ownerFor(state) {
+		if (!state.bus) state.bus = window.JuneauViews.bus.owner(state.card.id);
+		return state.bus;
+	}
+
+	// Runs fn(owner) now once the bus is up, at DOMContentLoaded while it may still load, else E-JS-46.
+	function viaBus(doc, state, fn) {
+		if (state.destroyed) return undefined;    // a late ctx call from a dead card must not mint a never-disposed owner
+		if (busState === "started") return fn(ownerFor(state));
+		if (busState === "waiting") {
+			busQueue.push({ state: state, fn: fn });
+			return undefined;
+		}
+		fail(doc, "E-JS-46");
+	}
+
+	// ctx.subscribe: the unsubscribe works before and after the bus starts; a re-render calls it (renderOffs).
+	function subscribeVia(doc, state, topic, fn, opts) {
+		let off = null, cancelled = false;
+		viaBus(doc, state, function (own) { if (!cancelled) off = own.subscribe(topic, fn, opts); });
+		const unsubscribe = function () {
+			cancelled = true;
+			if (off) off();
+			off = null;
+		};
+		state.renderOffs.push(unsubscribe);
+		return unsubscribe;
+	}
+
+	function lifecycle(state) {
+		const p = { schemaVersion: 1, id: state.card.id, type: state.type, state: state.phase };
+		if (state.error) p.error = state.error;
+		return p;
+	}
+
+	// Tracks the card's phase from mount on; publishes card:<id> once the card is wired.
+	function setPhase(state, phase, error) {
+		state.phase = phase;
+		state.error = phase === "failed" ? error : null;
+		if (state.wired) state.bus.publish("card:" + state.card.id, lifecycle(state));
+	}
+
+	function unwireCard(state) {
+		setPhase(state, "destroyed");
+		if (state.bus) state.bus.dispose();    // clears card:<id> and every implicit topic (spec 4.1)
+	}
+
+	function paramsSubs(card) { return arr(card.subscribes).filter(s => s && s.as === "params"); }
+
+	function hasTokens(card) {
+		return [card.src, card.dataUrl, tableView(card).dataUrl].some(u => typeof u === "string" && HAS_TOKEN_RE.test(u));
+	}
+
+	function awaitingParams(state) { return paramsSubs(state.origCard).length > 0 && hasTokens(state.card); }
+
+	function fill(url, params) {
+		return url.replace(TOKEN_RE, (m, k) => Object.hasOwn(params, k) ? encodeURIComponent(String(params[k])) : m);
+	}
+
+	// The contract card with every resolvable {token} in src / dataUrl / table.dataUrl filled in.
+	function resolveCard(card, params) {
+		const out = Object.assign({}, card);
+		if (typeof card.src === "string") out.src = fill(card.src, params);
+		if (typeof card.dataUrl === "string") out.dataUrl = fill(card.dataUrl, params);
+		if (card.table && typeof card.table === "object" && typeof card.table.dataUrl === "string")
+			out.table = Object.assign({}, card.table, { dataUrl: fill(card.table.dataUrl, params) });
+		return Object.freeze(out);
+	}
+
+	function urlKey(card) { return JSON.stringify([card.src, card.dataUrl, tableView(card).dataUrl]); }
+
+	// Everything but the title: the card element itself stays, so its id, listeners and place on the page do too.
+	function clearBody(host) {
+		for (const n of Array.from(host.childNodes))
+			if (!(n.classList && n.classList.contains("jc-card-title"))) host.removeChild(n);
+	}
+
+	function paintAwaiting(doc, state) {
+		clearBody(state.el);
+		const sub = paramsSubs(state.origCard).find(s => typeof s.emptyText === "string");
+		const p = el(doc, "div", "jc-card-empty");
+		p.setAttribute("role", "status");
+		p.textContent = sub ? sub.emptyText : DEFAULT_EMPTY_TEXT;
+		state.el.appendChild(p);
+	}
+
+	// Undoes one render: its ctx.subscribe calls, ctx.every timers, in-flight fetch and the handler's own state.
+	// ctx.onDestroy callbacks belong to the card's lifetime and wait for destroyCard.
+	function unrender(doc, state) {
+		state.renderSeq = (state.renderSeq || 0) + 1;
+		for (const off of state.renderOffs.splice(0)) off();
+		for (const h of Array.from(state.intervals)) h.stop();
+		if (state.inflight) state.inflight.abort();
+		if (state.rendered) {
+			state.rendered = false;
+			settle(doc, state, () => state.handler.destroy(state.card, state.el, state.ctx));
+		}
+		clearBody(state.el);
+	}
+
+	function applyParams(doc, state) {
+		const next = resolveCard(state.origCard, state.params);
+		const key = urlKey(next);
+		if (key === state.paramsKey) return;
+		state.paramsKey = key;
+		unrender(doc, state);
+		setPhase(state, "pending");
+		if (hasTokens(next)) {
+			state.card = state.origCard;
+			paintAwaiting(doc, state);
+			return;
+		}
+		state.card = next;
+		renderCard(doc, next, state.el, state, state.handler, false);
+	}
+
+	// {value} for a usable message, {empty: true} for a clear or a missing path, {bad: path} for E-JS-51.
+	function mapped(bus, sub, payload, scalar) {
+		if (payload == null) return { empty: true };
+		if (!sub.map || typeof sub.map !== "object") return { value: payload };
+		const value = {};
+		for (const target of Object.keys(sub.map)) {
+			const v = bus.util.resolvePath(payload, sub.map[target]);
+			if (v == null) return { empty: true };
+			if (scalar && typeof v === "object") return { bad: sub.map[target] };
+			value[target] = v;
+		}
+		return { value: value };
+	}
+
+	function onParams(doc, bus, state, sub, payload) {
+		if (state.destroyed) return;
+		const m = mapped(bus, sub, payload, true);
+		if (m.bad) return paintCardError(doc, state, "E-JS-51", fmt(MSG["E-JS-51"], m.bad, state.card.id));
+		if (m.empty) {
+			if (sub.whenEmpty === "keep") return;
+			for (const k of Object.keys(sub.map || {})) delete state.params[k];
+		} else {
+			Object.assign(state.params, m.value);
+		}
+		applyParams(doc, state);
+	}
+
+	// Card lifetime subscriptions: owner-bound, so destroyCard's dispose() ends them.
+	function wireSubscription(doc, bus, state, sub) {
+		const own = ownerFor(state);
+		if (sub.as === "refresh") {
+			own.subscribe(sub.topic, () => shellRefresh(state), { retained: false });
+		} else if (sub.as === "params") {
+			own.subscribe(sub.topic, payload => onParams(doc, bus, state, sub, payload));
+		} else {
+			const role = Object.hasOwn(state.handler.roles, sub.as) ? state.handler.roles[sub.as] : null;
+			if (typeof role !== "function") return;    // E-JS-47, already reported by bus.wiring.validate
+			own.subscribe(sub.topic, function (payload, meta) {
+				const m = mapped(bus, sub, payload, false);
+				if (m.empty && sub.whenEmpty === "keep") return;
+				settle(doc, state, () => role(m.empty ? null : m.value, meta, state.card, state.el, state.ctx));
+			});
+		}
+	}
+
+	function shellRefresh(state) {
+		if (state.destroyed || !state.handler || awaitingParams(state)) return;
+		refreshCard(state.card.id);
+	}
+
+	function onCmd(doc, state, cmd) {
+		if (state.destroyed || !state.handler || !cmd || typeof cmd.op !== "string") return;
+		if (cmd.op === "refresh") return shellRefresh(state);
+		if (awaitingParams(state)) {
+			console.warn("[juneau-console] card '" + state.card.id + "' is waiting for its params; op '" + cmd.op + "' ignored");
+			return;
+		}
+		const op = state.handler.ops[cmd.op];
+		if (typeof op !== "function")
+			return paintCardError(doc, state, "E-JS-48", fmt(MSG["E-JS-48"], state.card.id, state.type, cmd.op));
+		settle(doc, state, () => op(cmd, state.card, state.el, state.ctx));
+	}
+
+	// A handler call the shell makes for the bus: a throw or a rejection is E-JS-8, like render's.
+	function settle(doc, state, fn) {
+		let r;
+		try {
+			r = fn();
+		} catch (e) {
+			fail(doc, "E-JS-8", state.card.id, state.type, e && e.message);
+			return;
+		}
+		if (r && typeof r.then === "function")
+			r.then(null, e => fail(doc, "E-JS-8", state.card.id, state.type, e && e.message));
+	}
+
+	// An inline bus error: appended to the card, so the card's own content stays.  A bare card has no element
+	// of its own, so its errors go to the page banner.
+	function paintCardError(doc, state, code, msg, logged) {
+		if (!logged) console.error("[juneau-console] " + msg);
+		const host = state && state.el;
+		if (!host || host.nodeType !== 1) return paintBanner(doc, code, msg);
+		const slot = el(doc, "div", "jc-card-bus-error");
+		slot.setAttribute("data-juneau-error", code);
+		paintError(doc, slot, { message: msg });
+		host.appendChild(slot);
+	}
+
+	// bus.onError: the bus has already logged the error; this only paints it.
+	function routeBusError(doc, err) {
+		const d = err.detail || {};
+		if (d.banner || BUS_BANNER_CODES.includes(err.code)) return paintBanner(doc, err.code, err.message);
+		const state = BUS_INLINE_CODES.has(err.code) && d.paintOn != null ? cardState.get(d.paintOn) : null;
+		if (state) paintCardError(doc, state, err.code, err.message, true);
+	}
+
+	// A BusError the shell itself catches (declare, claim, a buffered ctx call) is painted like a reported one.
+	function guarded(doc, paintOn, fn) {
+		try {
+			return fn();
+		} catch (e) {
+			const code = (e && e.code) || "E-JS-8";
+			const d = (e && e.detail) || {};
+			console.error("[juneau-console] " + (e && e.message));
+			const state = d.banner || BUS_BANNER_CODES.includes(code) ? null : cardState.get(d.paintOn != null ? d.paintOn : paintOn);
+			if (state) paintCardError(doc, state, code, e.message, true);
+			else paintBanner(doc, code, e && e.message);
+		}
+	}
+
+	function paintWiringProblems(doc, problems) {
+		for (const p of problems) {
+			const state = p.card != null ? cardState.get(p.card) : null;
+			if (state) {
+				paintCardError(doc, state, p.code, p.message);
+			} else {
+				console.error("[juneau-console] " + p.message);
+				paintBanner(doc, p.code, p.message);
+			}
+		}
+	}
+
+	function wiresTopics(contract) {
+		if (arr(contract.topics).length || arr(contract.bridges).length) return true;
+		return arr(contract.cards).some(c => arr(c.publishes).length || arr(c.subscribes).length
+			|| ribbonOf(c).some(i => i && (i.target != null || i.type === "publish")));
+	}
+
+	// The card-type table bus.wiring.validate reads: roles and ops a type accepts, and its implicit topics.
+	function cardTypeTable() {
+		const out = {};
+		for (const [type, h] of handlers) out[type] = { roles: Object.keys(h.roles), ops: Object.keys(h.ops), implicit: h.implicit };
+		return out;
+	}
+
+	function startBus(doc, bus, contract) {
+		busState = "started";
+		if (!busPainter) busPainter = bus.onError(err => routeBusError(doc, err));
+		for (const t of arr(contract.topics))
+			if (t && t.publisher !== "script")
+				guarded(doc, null, () => {
+					if (!bus.util.parseTopic(t.topic, { pattern: true }).framework) bus.declare(t.topic, { retain: t.retain, by: "contract" });
+				});
+		for (const c of arr(contract.cards))
+			for (const p of arr(c.publishes))
+				guarded(doc, c.id, () => bus.declare(p.topic, { retain: p.retain, by: c.id }));
+	}
+
+	// Pass 1 claims and publishes every card's own topics; pass 2 subscribes.  A retained value that a
+	// subscription replays into a role can then never race a claim.
+	function wireCards(doc, bus, contract) {
+		const live = arr(contract.cards).map(c => cardState.get(c.id)).filter(s => s && !s.destroyed);
+		for (const state of live) {
+			const id = state.card.id;
+			guarded(doc, id, () => {
+				const own = ownerFor(state);
+				own.claim("card:" + id);
+				state.wired = true;
+				own.publish("card:" + id, lifecycle(state));
+				own.subscribe("cmd:" + id, cmd => onCmd(doc, state, cmd));
+			});
+			if (!state.handler) continue;
+			let implicit = [];
+			guarded(doc, id, () => { implicit = arr(state.handler.implicit(state.origCard)); });
+			for (const t of implicit)
+				guarded(doc, id, () => {
+					const p = bus.util.parseTopic(t);
+					if (p.framework && p.kind !== "command") ownerFor(state).claim(t);
+				});
+		}
+		for (const state of live)
+			if (state.handler)
+				for (const sub of arr(state.origCard.subscribes))
+					if (sub && typeof sub.topic === "string")
+						guarded(doc, state.card.id, () => wireSubscription(doc, bus, state, sub));
+	}
+
+	function flushBusQueue(doc) {
+		for (const q of busQueue.splice(0))
+			if (!q.state.destroyed) guarded(doc, q.state.card.id, () => q.fn(ownerFor(q.state)));
+	}
+
+	// E-JS-41 at runtime: a publisher=script topic no page script declared by DOMContentLoaded (spec 6.1).
+	function checkScriptTopics(doc, bus, contract) {
+		const declared = new Set(bus.topics().filter(t => t.declared).map(t => t.topic));
+		for (const t of arr(contract.topics)) {
+			if (!t || t.publisher !== "script" || declared.has(t.topic)) continue;
+			for (const c of arr(contract.cards))
+				for (const s of arr(c.subscribes))
+					if (s && bus.util.topicMatches(t.topic, s.topic))
+						paintCardError(doc, cardState.get(c.id), "E-JS-41", fmt(MSG["E-JS-41"], c.id, s.topic));
+		}
 	}
 
 	function mount(contract, opts) {
@@ -799,7 +1140,9 @@
 				card: card, el: host, type: card.type, handler: null, ctx: null,
 				controller: new AbortController(), inflight: null,
 				intervals: new Set(), destroyCallbacks: [], api: null,
-				destroyed: false, refreshing: null, refreshQueued: false
+				destroyed: false, refreshing: null, refreshQueued: false,
+				origCard: card, phase: "pending", error: null, bus: null, wired: false, rendered: false,
+				params: {}, paramsKey: null, renderOffs: []
 			};
 			state.ctx = buildCtx(doc, state, templateFn);
 			cardState.set(card.id, state);
@@ -830,13 +1173,34 @@
 					for (const pending of list) {
 						if (type === "datatables") fail(doc, "E-JS-10", pending.card.id);
 						else fail(doc, "E-JS-4", pending.card.id, type, Array.from(handlers.keys()).join(", "));
-						dispatchCardEvent(pending.host, "juneau:card-failed", { id: pending.card.id, type: type, error: MSG[type === "datatables" ? "E-JS-10" : "E-JS-4"] });
+						dispatchCardEvent(pending.host, "juneau:card-failed", { id: pending.card.id, type: type, code: type === "datatables" ? "E-JS-10" : "E-JS-4", error: MSG[type === "datatables" ? "E-JS-10" : "E-JS-4"] });
 					}
 					pendingByType.delete(type);
 				}
 			}
 		});
 
+
+		// After the pending sweep, so card:<id> starts from each card's settled phase (spec 4.1).  The bus is read
+		// here and nowhere earlier: on a <@console> page this script loads before juneau-bus.js and auto-mounts
+		// synchronously, so JuneauViews.bus does not exist yet while mount() runs.
+		onReady(doc, function () {
+			const bus = window.JuneauViews && window.JuneauViews.bus;
+			if (!bus) {
+				busState = "absent";
+				if (wiresTopics(contract) || busQueue.length) fail(doc, "E-JS-46");
+				return;
+			}
+			startBus(doc, bus, contract);
+			paintWiringProblems(doc, bus.wiring.validate(contract, cardTypeTable()));
+			// ---- bus: bridges attach here (Task 13) ----
+			// Server bridges (spec 11.5): one stock source per contract bridges[] entry.  attachBridges detaches them all on
+			// pagehide; a bad entry is E-JS-52 on the page banner, through the error painter registered above.
+			if (Array.isArray(contract.bridges) && contract.bridges.length) bus.wiring.attachBridges(contract);
+			wireCards(doc, bus, contract);
+			flushBusQueue(doc);
+			checkScriptTopics(doc, bus, contract);
+		});
 
 		for (const t of tpl.byCard.values()) t.parentNode && t.parentNode.removeChild(t);
 		for (const t of tpl.bySlot.values()) t.parentNode && t.parentNode.removeChild(t);
@@ -857,6 +1221,14 @@
 	}
 
 	function dispatchCardEvent(host, type, detail) {
+		const state = cardState.get(detail.id);
+		// A throwing phase publish is reported, never allowed to skip the DOM event below.
+		if (state && !state.destroyed) {
+			guarded(window.document, detail.id, () => {
+				if (type === "juneau:card-mounted") setPhase(state, "mounted");
+				else setPhase(state, "failed", { code: detail.code || "E-JS-8", message: String(detail.error) });
+			});
+		}
 		// A bare html card's host is a DocumentFragment, which cannot dispatch; its event goes to the document.
 		const target = host && typeof host.dispatchEvent === "function" ? host : window.document;
 		target.dispatchEvent(new CustomEvent(type, { detail: detail, bubbles: true }));
@@ -874,6 +1246,13 @@
 			host.removeAttribute("data-juneau-card-pending");
 			for (const c of Array.from(host.childNodes)) if (c.className === "jc-card-loading") host.removeChild(c);
 		}
+		if (!bare && awaitingParams(state)) {
+			state.paramsKey = urlKey(state.card);
+			paintAwaiting(doc, state);
+			return;
+		}
+		state.rendered = true;
+		const seq = state.renderSeq = (state.renderSeq || 0) + 1;    // unrender bumps it: a settle from an older render is stale
 		let settled;
 		try {
 			settled = Promise.resolve(handler.render(card, host, state.ctx));
@@ -882,12 +1261,40 @@
 			return;
 		}
 		settled.then(function () {
+			if (state.renderSeq !== seq) return;
 			dispatchCardEvent(host, "juneau:card-mounted", { id: card.id, type: card.type, el: host });
 		}, function (e) {
+			if (state.renderSeq !== seq) return;
 			handlerFailed(doc, card, host, e);
 		});
 	}
 
+	/**
+	 * Normalizes a card-type handler.  Besides C2's render / refresh / destroy, a handler may declare its page-bus
+	 * surface (spec 5.2-5.5).  Every key is optional:
+	 *   roles      {as: fn(payload, meta, card, el, ctx)}  the custom `as` values its cards accept in `subscribes`
+	 *   ops        {op: fn(cmd, card, el, ctx)}           the cmd:<id> ops it handles; 'refresh' is always the shell's
+	 *   publishes  [topic]                                custom topics every card of the type may publish
+	 *   implicit   fn(card) -> [topic]                    topics the card publishes without listing them; the shell
+	 *                                                     claims the framework ones (default: () => publishes)
+	 *
+	 * @example
+	 * JuneauConsole.registerCard('gauge', {
+	 *   render(card, el, ctx) {
+	 *     ctx.subscribe('app.threshold', t => { el.dataset.threshold = t.value; });
+	 *     return ctx.fetchJson(card.src).then(v => {
+	 *       el.textContent = String(v.value);
+	 *       if (v.value > Number(el.dataset.threshold)) ctx.publish('app.gauge-crossed', {card: card.id, value: v.value});
+	 *     });
+	 *   },
+	 *   publishes: ['app.gauge-crossed'],
+	 *   roles: {highlight(payload, meta, card, el) { el.classList.toggle('jc-hot', !!(payload && payload.hot)); }},
+	 *   ops: {reset(cmd, card, el, ctx) { return ctx.refresh(); }}
+	 * });
+	 * // contract: {"id": "g1", "type": "gauge", "src": "/api/gauge",
+	 * //            "subscribes": [{"topic": "app.region-picked", "as": "highlight", "map": {"hot": "region"}}]}
+	 * // page:     JuneauViews.bus.publish('cmd:g1', {schemaVersion: 1, op: 'reset'});
+	 */
 	function normalizeHandler(type, handler) {
 		const doc = window.document;
 		if (typeof type !== "string" || !TYPE_RE.test(type)) fail(doc, "E-JS-20", type);
@@ -895,10 +1302,15 @@
 		if (typeof handler === "function") obj = { render: handler };
 		else if (handler && typeof handler === "object" && typeof handler.render === "function") obj = handler;
 		else fail(doc, "E-JS-21", type, typeof handler);
+		const publishes = Array.isArray(obj.publishes) ? obj.publishes.slice() : [];
 		return {
 			render: obj.render,
 			refresh: typeof obj.refresh === "function" ? obj.refresh : obj.render,
-			destroy: typeof obj.destroy === "function" ? obj.destroy : function () {}
+			destroy: typeof obj.destroy === "function" ? obj.destroy : function () {},
+			roles: obj.roles && typeof obj.roles === "object" ? obj.roles : {},
+			ops: obj.ops && typeof obj.ops === "object" ? obj.ops : {},
+			publishes: publishes,
+			implicit: typeof obj.implicit === "function" ? obj.implicit : function () { return publishes; }
 		};
 	}
 
@@ -932,6 +1344,7 @@
 	function refreshCard(id) {
 		const state = cardState.get(id);
 		if (!state || state.destroyed) throw new JuneauConsoleError("E-JS-22", fmt(MSG["E-JS-22"], id));
+		if (awaitingParams(state)) return Promise.resolve();    // nothing is rendered yet; the params render comes first
 		if (state.refreshing) {
 			state.refreshQueued = true;
 			return state.refreshing;
@@ -970,9 +1383,13 @@
 		if (state.inflight) state.inflight.abort();
 		state.controller.abort();
 		try {
-			state.handler.destroy(state.card, state.el, state.ctx);
+			if (state.rendered) state.handler.destroy(state.card, state.el, state.ctx);
 		} finally {
-			for (const cb of state.destroyCallbacks) cb();
+			try {
+				for (const cb of state.destroyCallbacks) cb();
+			} finally {
+				unwireCard(state);
+			}
 		}
 	}
 
@@ -1417,6 +1834,7 @@
 		destroyCard: destroyCard,
 		cardApi: cardApi,
 		cardTypes: cardTypes,
+		BUS_BANNER_CODES: BUS_BANNER_CODES,
 		contract: () => mounted ? mounted.contract : null,
 		card: id => mounted ? mounted.cards.get(id) || null : null,
 		chrome: chrome

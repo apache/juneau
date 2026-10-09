@@ -81,6 +81,10 @@ public final class Column {
 	private String label;
 	private SearchType searchType;
 	private SearchOperatorSet operators;  // null means "inherit the table-level set".
+	private Render render;
+	private String href;
+	private String className;
+	private boolean defaultVisible = true;
 
 	private Column(String name) {
 		this.name = name;
@@ -133,6 +137,141 @@ public final class Column {
 	public Column operators(SearchOperatorSet value) {
 		operators = value;
 		return this;
+	}
+
+	/**
+	 * Sets this column's cell renderer from the compact {@code "id:field"} string sugar.
+	 *
+	 * @param spec The render-id string, e.g. {@code "tag:status"}.  Must not be <jk>null</jk> or blank.
+	 * @return This object.
+	 */
+	public Column render(String spec) {
+		render = Render.parse(spec);
+		return this;
+	}
+
+	/**
+	 * Sets this column's cell renderer.
+	 *
+	 * @param value The renderer.  Can be <jk>null</jk> to unset.
+	 * @return This object.
+	 */
+	public Column render(Render value) {
+		render = value;
+		return this;
+	}
+
+	/**
+	 * Sets the row-data interpolation template this column's rendered cell links to.
+	 *
+	 * <p>
+	 * Requires a {@link #render(String) render} to already be set; that is checked by {@link #toCatalogMap()}, since a
+	 * column built in pieces may set {@code href} before {@code render}.
+	 *
+	 * @param template The href template, e.g. {@code "{incidentUrl}"}.  Can be <jk>null</jk> to unset.
+	 * @return This object.
+	 */
+	public Column href(String template) {
+		href = template;
+		return this;
+	}
+
+	/**
+	 * Sets a CSS class applied to this column's cells.
+	 *
+	 * @param css The class name(s).  Can be <jk>null</jk> to unset.
+	 * @return This object.
+	 */
+	public Column className(String css) {
+		className = css;
+		return this;
+	}
+
+	/**
+	 * Sets whether this column starts visible.
+	 *
+	 * <p>
+	 * Defaults to <jk>true</jk>; only {@code false} is ever emitted by {@link #toCatalogMap()}.
+	 *
+	 * @param v Whether the column starts visible.
+	 * @return This object.
+	 */
+	public Column defaultVisible(boolean v) {
+		defaultVisible = v;
+		return this;
+	}
+
+	/**
+	 * Builds this column's catalog entry: {@code key} and {@code label} plus the display ({@code render},
+	 * {@code href}, {@code className}, {@code defaultVisible}) and search ({@code searchType},
+	 * {@code searchOperators}, {@code customOperators}) metadata, flattened onto one entry, in the form the
+	 * {@code datatables} card type resolves.
+	 *
+	 * <p>
+	 * {@code searchOperators} is a list of operator <i>names</i> and {@code customOperators} a list of
+	 * {@code {name,help}} maps for the custom ones.  Both are emitted only when this column has its own
+	 * {@link #operators(SearchOperatorSet) operator set}; a column inheriting the table-level set emits just
+	 * {@code searchType}, and a column with no search type emits neither.  See
+	 * {@link #toCatalogMap(SearchOperatorSet)} to resolve the table-level set into the entry.
+	 *
+	 * <p>
+	 * {@code label} falls back to {@link #name()} when unset.
+	 *
+	 * @return The catalog entry.
+	 * @throws IllegalArgumentException If {@code href} is set without a {@code render}.
+	 */
+	public JsonMap toCatalogMap() {
+		return toCatalogMap(null);
+	}
+
+	/**
+	 * Builds this column's catalog entry like {@link #toCatalogMap()}, but emits the column's <i>effective</i>
+	 * operator set: its own set if it has one, else {@code tableDefault}.
+	 *
+	 * <p>
+	 * This is how a table-level set reaches the {@code datatables} card type, which reads operators per column.
+	 * With no column set and a <jk>null</jk> {@code tableDefault}, only {@code searchType} is emitted.
+	 *
+	 * @param tableDefault The table-level operator set inherited by a column with none of its own.  Can be
+	 * 	<jk>null</jk>.
+	 * @return The catalog entry.
+	 * @throws IllegalArgumentException If {@code href} is set without a {@code render}.
+	 */
+	public JsonMap toCatalogMap(SearchOperatorSet tableDefault) {
+		if (href != null && render == null)
+			throw iaex("Column '%s' sets href '%s' without a render; use render(\"linked\").", name, href);
+		var m = new JsonMap();
+		m.put("key", name);
+		m.put("label", label != null ? label : name);
+		if (render != null)
+			m.put("render", render);
+		if (href != null)
+			m.put("href", href);
+		if (className != null)
+			m.put("className", className);
+		if (! defaultVisible)
+			m.put("defaultVisible", false);
+		if (searchType != null) {
+			m.put("searchType", searchType.wire());
+			var effective = operators != null ? operators : tableDefault;
+			if (effective != null) {
+				var names = new ArrayList<String>();
+				var customs = new ArrayList<Map<String,String>>();
+				for (var op : effective.forType(searchType)) {
+					names.add(op.name());
+					if (op.isCustom()) {
+						var cm = new LinkedHashMap<String,String>();
+						cm.put("name", op.name());
+						cm.put("help", op.help());
+						customs.add(cm);
+					}
+				}
+				m.put("searchOperators", names);
+				if (! customs.isEmpty())
+					m.put("customOperators", customs);
+			}
+		}
+		return m;
 	}
 
 	/** @return The column name. */

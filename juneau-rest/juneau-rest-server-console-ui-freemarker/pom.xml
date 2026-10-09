@@ -51,6 +51,12 @@
 			<artifactId>juneau-rest-server-views</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+		<!-- The "terminal" card type validates through TerminalDef; the "terminal" toolkit pack names TerminalMixin. -->
+		<dependency>
+			<groupId>org.apache.juneau</groupId>
+			<artifactId>juneau-rest-server-terminal</artifactId>
+			<version>${project.version}</version>
+		</dependency>
 		<!--
 			The "calendar" toolkit pack resolves its asset URLs through WidgetsMixin.widgetAssetUrl and names
 			WidgetsMixin.CALENDAR_CSS_PATH / CALENDAR_JS_PATH directly (Task 14). Declared as a direct compile

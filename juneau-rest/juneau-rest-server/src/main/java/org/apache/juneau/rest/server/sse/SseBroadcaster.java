@@ -28,7 +28,7 @@ import org.apache.juneau.marshall.sse.*;
  * In-memory server-side SSE broadcaster.
  */
 @SuppressWarnings({
-	"resource" // SseSubscription returned by subscribe() is owned by the caller; the broadcaster only closes replaced or removed ones in subscribe()/removeSubscriber()
+	"resource" // SseSubscription returned by subscribe() is owned by the caller; the broadcaster only closes replaced or removed ones in subscribe()
 })
 public class SseBroadcaster {
 
@@ -90,8 +90,8 @@ public class SseBroadcaster {
 	}
 
 	void removeSubscriber(String id) {
-		var removed = subscriptions.remove(id);
-		if (removed != null && ! removed.isClosed())
-			removed.close();
+		// Called back from SseSubscription.close().  Only remove the entry when it is the closed subscription: when
+		// subscribe(id) replaces a subscriber, the map already holds the new one, which must stay open.
+		subscriptions.computeIfPresent(id, (k, v) -> v.isClosed() ? null : v);
 	}
 }

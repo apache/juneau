@@ -22,6 +22,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.nio.file.*;
 import java.util.*;
 import java.util.concurrent.atomic.*;
+import java.util.logging.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.rest.server.runreport.*;
@@ -83,6 +84,42 @@ class FileRunViewSource_Test extends TestBase {
 		var p = src().page(null, 10).validate();
 		assertEquals(List.of(3L), seqs(p));
 		assertTrue(p.next().endsWith(".3"));
+	}
+
+	private static final class Capture extends Handler {
+		final List<String> messages = new ArrayList<>();
+		@Override public void publish(LogRecord r) { messages.add(r.getLevel() + ": " + r.getMessage()); }
+		@Override public void flush() { /* no-op */ }
+		@Override public void close() { /* no-op */ }
+	}
+
+	private static List<String> warnings(Runnable r) {
+		var log = Logger.getLogger(FileRunViewSource.class.getName());
+		var cap = new Capture();
+		log.addHandler(cap);
+		try {
+			r.run();
+		} finally {
+			log.removeHandler(cap);
+		}
+		return cap.messages;
+	}
+
+	@Test void b05_oneWarningPerSource() throws Exception {
+		write("not json", note(2), "{\"ev\":\"bogus\"}", "", "x".repeat(RunEvent.MAX_EVENT_CHARS + 1), note(6));
+		var s = src();
+		var msgs = warnings(() -> {
+			s.page(null, 10);
+			s.page(null, 10);
+		});
+		assertEquals(1, msgs.size(), msgs::toString);
+		assertTrue(msgs.get(0).startsWith("WARNING: FileRunViewSource '" + f + "' skipped malformed line 1 ("), msgs.get(0));
+		assertEquals(1, warnings(() -> src().page(null, 10)).size(), "a new source warns again");
+	}
+
+	@Test void b06_blankAndGoodLinesDoNotWarn() throws Exception {
+		write(note(1), "", note(3));
+		assertEquals(List.of(), warnings(() -> src().page(null, 10)));
 	}
 
 	@Test void b03_overlongLineSkipped() throws Exception {

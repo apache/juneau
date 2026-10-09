@@ -132,4 +132,18 @@ class ConsoleOutputPage_Test extends TestBase {
 		assertEquals("1", ConsoleOutputPage.CONTRACT_VERSION);
 		assertEquals(8_388_608, ConsoleOutputPage.MAX_PAGE_CHARS);
 	}
+
+	@Test void d01_openLineMustBeLast() {
+		var open = ConsoleOutputLine.info("a").n(1).open(true);
+		var closed = ConsoleOutputLine.info("b").n(2);
+		assertThrowsWithMessage(IllegalArgumentException.class, "open but not the last line",
+			() -> ConsoleOutputPage.forward().lines(List.of(open, closed)).next("1").validate());
+		ConsoleOutputPage.forward().lines(List.of(closed.copy().n(1), open.copy().n(2))).next("1").validate();
+	}
+
+	@Test void d02_terminalPageHasNoOpenLine() {
+		var open = ConsoleOutputLine.info("a").n(1).open(true);
+		assertThrowsWithMessage(IllegalArgumentException.class, "terminal page cannot end on an open line",
+			() -> ConsoleOutputPage.forward().lines(List.of(open)).next("0").status("DONE", null, true, null, null).validate());
+	}
 }

@@ -38,7 +38,7 @@ class ViewsJs_RunView_Test extends TestBase {
 	private static final Set<String> EXPECTED = new TreeSet<>(List.of(
 		"chk01_vectors", "chk02_validateEventAccepts", "chk03_validateEventDrops",
 		"chk04_unknownEvIsIgnored", "chk05_unknownMembersIgnored", "chk06_overlongStringsTruncated",
-		"chk07_noteHrefRemovedNotDropped", "red01_stepUpsert", "red02_waitingThenRunning",
+		"chk07_noteHrefRemovedNotDropped", "chk08_rawOffsetValidated", "step02b_rawOffsetLink", "blk03f_onBlockClickGetsOffset", "red01_stepUpsert", "red02_waitingThenRunning",
 		"red03_stepAfterEndDropped", "red04_endSetsFinalAndReplacementEndWins", "red05_endUnknownStepDropped",
 		"red06_suitePlaceholderThenReplaceCounts", "red07_testsWinOverPlaceholders", "red08_testsNotDeduplicated",
 		"red09_replaceClearsStep", "red10_noteAttachment", "red11_doneLatestWinsAndLateNoteApplies",
@@ -52,7 +52,8 @@ class ViewsJs_RunView_Test extends TestBase {
 		"esc01_hostileTextIsInert", "api01_resetStateStats", "suite01_cleanCollapsedFailingExpanded",
 		"suite02_toggleAndPersistence", "suite03_placeholderShowsCounts", "blk01_blockClassesAndAttributes",
 		"blk02_anchorOnlyWithRawLineAndTemplate", "blk03_eventCannotSupplyHref", "blk04_traceDisclosure",
-		"blk05_traceReachableFromFailuresList", "tip01_showHide", "tip02_positionStaysInViewport",
+		"blk05_traceReachableFromFailuresList", "blk03b_blocksCarryStepId",
+		"blk03c_onBlockClickGetsStepLineKind", "blk03e_onBlockClickOnKeyboardNoDoubleFire", "blk03d_onBlockClickMustBeFunction", "tip01_showHide", "tip02_positionStaysInViewport",
 		"tip03_stepExitTooltip", "cap01_domBounds", "cap02_collapsedBuildsNoBlocks",
 		"inc01_untouchedStepKeepsItsNode", "inc02_rowRebuiltOnlyWhenSuiteChanged", "cmp01_compactMode",
 		"gold01_fullGolden", "gold02_compactGolden", "gold03_replaceFlow",
@@ -81,6 +82,7 @@ class ViewsJs_RunView_Test extends TestBase {
 	@Test void a05_unknownMembersIgnored() { assertAllTrue(r(), "chk05_unknownMembersIgnored"); }
 	@Test void a06_overlongStringsTruncated() { assertAllTrue(r(), "chk06_overlongStringsTruncated"); }
 	@Test void a07_noteHrefRemovedNotDropped() { assertAllTrue(r(), "chk07_noteHrefRemovedNotDropped"); }
+	@Test void a08_rawOffsetValidated() { assertAllTrue(r(), "chk08_rawOffsetValidated"); }
 	@Test void b01_stepUpsert() { assertAllTrue(r(), "red01_stepUpsert"); }
 	@Test void b02_waitingThenRunning() { assertAllTrue(r(), "red02_waitingThenRunning"); }
 	@Test void b03_stepAfterEndDropped() { assertAllTrue(r(), "red03_stepAfterEndDropped"); }
@@ -110,6 +112,7 @@ class ViewsJs_RunView_Test extends TestBase {
 	@Test void d04_busEmitsOnStatusChangeOnly() { assertAllTrue(r(), "sum04_busEmitsOnStatusChangeOnly"); }
 	@Test void e01_createdOnceUpdatedInPlace() { assertAllTrue(r(), "step01_createdOnceUpdatedInPlace"); }
 	@Test void e02_rawLinkNeedsLineAndTemplate() { assertAllTrue(r(), "step02_rawLinkNeedsLineAndTemplate"); }
+	@Test void e02b_rawOffsetLink() { assertAllTrue(r(), "step02b_rawOffsetLink"); }
 	@Test void e03_exitCodeTooltip() { assertAllTrue(r(), "step03_exitCodeTooltip"); }
 	@Test void e04_doneClosesOpenSteps() { assertAllTrue(r(), "step04_doneClosesOpenSteps"); }
 	@Test void e05_notes() { assertAllTrue(r(), "step05_notes"); }
@@ -123,6 +126,11 @@ class ViewsJs_RunView_Test extends TestBase {
 	@Test void i03_eventCannotSupplyHref() { assertAllTrue(r(), "blk03_eventCannotSupplyHref"); }
 	@Test void i04_traceDisclosure() { assertAllTrue(r(), "blk04_traceDisclosure"); }
 	@Test void i05_traceReachableFromFailuresList() { assertAllTrue(r(), "blk05_traceReachableFromFailuresList"); }
+	@Test void i06_blocksCarryStepId() { assertAllTrue(r(), "blk03b_blocksCarryStepId"); }
+	@Test void i07_onBlockClickGetsStepLineKind() { assertAllTrue(r(), "blk03c_onBlockClickGetsStepLineKind"); }
+	@Test void i09_onBlockClickOnKeyboardNoDoubleFire() { assertAllTrue(r(), "blk03e_onBlockClickOnKeyboardNoDoubleFire"); }
+	@Test void i08_onBlockClickMustBeFunction() { assertAllTrue(r(), "blk03d_onBlockClickMustBeFunction"); }
+	@Test void i10_onBlockClickGetsOffset() { assertAllTrue(r(), "blk03f_onBlockClickGetsOffset"); }
 	@Test void j01_showHide() { assertAllTrue(r(), "tip01_showHide"); }
 	@Test void j02_positionStaysInViewport() { assertAllTrue(r(), "tip02_positionStaysInViewport"); }
 	@Test void j03_stepExitTooltip() { assertAllTrue(r(), "tip03_stepExitTooltip"); }

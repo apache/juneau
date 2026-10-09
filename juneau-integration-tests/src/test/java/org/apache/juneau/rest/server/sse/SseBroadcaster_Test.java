@@ -56,4 +56,16 @@ class SseBroadcaster_Test {
 			assertTrue(b.isClosed());
 		}
 	}
+
+	@Test
+	void a04_resubscribingAnIdClosesOnlyThePreviousSubscription() throws Exception {
+		var a = SseBroadcaster.create();
+		var first = a.subscribe("k");
+		try (var second = a.subscribe("k")) {
+			assertTrue(first.isClosed(), "the previous subscription is closed");
+			assertFalse(second.isClosed(), "the replacement must stay open");
+			a.publish(new SseEvent("e", "d1"));
+			assertEquals("d1", second.take().getData());
+		}
+	}
 }

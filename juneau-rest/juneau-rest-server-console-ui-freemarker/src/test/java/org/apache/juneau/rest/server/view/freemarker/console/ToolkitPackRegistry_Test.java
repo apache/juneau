@@ -85,12 +85,15 @@ class ToolkitPackRegistry_Test extends TestBase {
 	@Test void a01_views_runtimeOrder_helpersLast_noGlue() throws Exception {
 		var r = new ToolkitPackRegistry().resolve(List.of(ToolkitPackRegistry.PACK_VIEWS), dummyRequest());
 		assertList(files(r.runtimeCss()), "juneau-views.css", "juneau-config.css");
-		// JS load order is a contract: renders, icons, search, pagestate, urlstate (Copy link), ribbon, views, config,
+		// JS load order is a contract: bus FIRST (dependency-free; views, regions and the console shell all read
+		// JuneauViews.bus), then renders, icons, search, pagestate, urlstate (Copy link), ribbon, views, config,
 		// regions, console-output, run-view, helpers LAST.  The DataTables glue is its own pack now.
 		assertList(files(r.runtimeJs()),
-			"juneau-renders.js", "juneau-icons.js", "juneau-search.js", "juneau-pagestate.js", "juneau-urlstate.js",
+			"juneau-bus.js", "juneau-renders.js", "juneau-icons.js", "juneau-search.js", "juneau-pagestate.js", "juneau-urlstate.js",
 			"juneau-ribbon.js", "juneau-views.js", "juneau-config.js", "juneau-regions.js", "juneau-console-output.js",
 			"juneau-run-view.js", "juneau-helpers.js");
+		// The bus is the very first runtime JS entry.
+		assertTrue(r.runtimeJs().get(0).toString().contains("juneau-bus.js"), () -> r.runtimeJs().toString());
 		assertEmpty(r.vendorCss());
 		assertEmpty(r.vendorJs());
 	}
@@ -135,6 +138,22 @@ class ToolkitPackRegistry_Test extends TestBase {
 		assertContains("/webjars/datatables.net/" + dt + "/js/dataTables.min.js?v=" + dt, r.vendorJs().get(1));
 		assertContains("/juneau-datatables.js?v=", r.vendorJs().get(2));
 		assertEmpty(r.runtimeJs());
+	}
+
+	@Test void a08_terminal_pullsViewsAndXterm_runtimeLast() throws Exception {
+		var r = new ToolkitPackRegistry().resolve(List.of(ToolkitPackRegistry.PACK_TERMINAL), dummyRequest());
+		assertList(files(r.vendorCss()), "xterm.css");
+		assertList(files(r.vendorJs()), "xterm.js");
+		var css = files(r.runtimeCss());
+		var js = files(r.runtimeJs());
+		assertEquals("juneau-terminal.css", css.get(css.size() - 1), css::toString);
+		assertEquals("juneau-terminal.js", js.get(js.size() - 1), js::toString);
+		assertTrue(css.contains("juneau-views.css"), css::toString);
+		assertTrue(js.indexOf("juneau-views.js") >= 0 && js.indexOf("juneau-views.js") < js.size() - 1, js::toString);
+		var v = WebJarResolver.version("org.webjars.npm", "xterm__xterm");
+		assertContains("/webjars/xterm__xterm/" + v + "/lib/xterm.js?v=" + v, r.vendorJs().get(0));
+		assertContains("/webjars/xterm__xterm/" + v + "/css/xterm.css?v=" + v, r.vendorCss().get(0));
+		assertContains("/juneau-terminal.js?v=", r.runtimeJs().get(r.runtimeJs().size() - 1));
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

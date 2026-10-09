@@ -438,6 +438,46 @@ kase('a18', async page => {
 	return { before: before, after: after, grew: true };
 });
 
+kase('a19', async page => {
+	const row = '.juneau-co-line[data-n="3"]';
+	await open(page, 'a19');
+	await waitLines(page, 2);
+	await ctl(page, 'a19', 'open');
+	await waitText(page, row, 'a19 filling');
+	const node = await page.evaluateHandle(sel => document.querySelector(sel), row);
+	const openClass = await page.evaluate(sel => document.querySelector(sel).classList.contains('juneau-co-open'), row);
+	for (let i = 0; i < 3; i++)
+		await ctl(page, 'a19', 'dot');
+	await waitText(page, row, 'a19 filling...');
+	await ctl(page, 'a19', 'closeline');
+	await waitText(page, row, 'a19 filling... done');
+	await page.waitForFunction(sel => !document.querySelector(sel).classList.contains('juneau-co-open'), row, { timeout: 10000 });
+	const s = await page.evaluate(a => ({
+		same: document.querySelector(a[0]) === a[1],
+		rows: document.querySelectorAll('.juneau-co-line').length,
+		dupes: document.querySelectorAll(a[0]).length
+	}), [row, node]);
+	return { openClass: openClass, sameNode: s.same, rows: s.rows, dupes: s.dupes };
+});
+
+kase('a20', async page => {
+	const text = '.juneau-co-line[data-n="1"] .juneau-co-text';
+	await open(page, 'a20');
+	await ctl(page, 'a20', 'open', 'text=' + encodeURIComponent('Performing task x: '));
+	await waitLines(page, 1);
+	await ctl(page, 'a20', 'settail', 'text=' + encodeURIComponent('1 of 2 complete'));
+	await waitText(page, text, 'Performing task x: 1 of 2 complete');
+	await ctl(page, 'a20', 'settail', 'text=' + encodeURIComponent('2 of 2 complete'));
+	await waitText(page, text, 'Performing task x: 2 of 2 complete');
+	await ctl(page, 'a20', 'closeline', 'text=');
+	await page.waitForFunction(() => !document.querySelector('.juneau-co-line[data-n="1"]').classList.contains('juneau-co-open'), null, { timeout: 10000 });
+	const s = await page.evaluate(sel => ({
+		text: document.querySelector(sel).textContent,
+		rows: document.querySelectorAll('.juneau-co-line').length
+	}), text);
+	return { text: s.text, rows: s.rows };
+});
+
 function attachDiagnostics(page, log) {
 	page.on('console', m => log.push('console.' + m.type() + ': ' + m.text()));
 	page.on('pageerror', e => log.push('pageerror: ' + String(e)));

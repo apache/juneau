@@ -946,6 +946,81 @@ test('mk07_noStubsLeft', function (t) {
 	expect(dup.length === 0, 'each function declared exactly once: ' + dup.join(', '));
 });
 
+// @cases:open
+
+function textOf(row) { return row.querySelector('.juneau-co-text').textContent; }
+
+test('open01_sameNReplacesTheOpenRow', function (t) {
+	const c = mkConsole(t);
+	expect(c.api.append([{ n: 1, text: 'a' }, { n: 2, text: 'dots.', open: true }]) === 2, 'two added');
+	const node = c.row(2);
+	expect(node.classList.contains('juneau-co-open'), 'open class');
+	expect(c.api.append({ n: 2, text: 'dots..', open: true }) === 0, 'a replacement is not an addition');
+	expect(c.row(2) === node, 'same node');
+	expect(textOf(node) === 'dots..', 'text: ' + textOf(node));
+	expectSame(c.ns(), [1, 2], 'no duplicate row');
+	expect(c.api.append([{ n: 2, text: 'dots... done' }, { n: 3, text: 'next' }]) === 1, 'close and one new row');
+	expect(!node.classList.contains('juneau-co-open'), 'open class removed');
+	expect(textOf(node) === 'dots... done', 'final text');
+	expectSame(c.ns(), [1, 2, 3]);
+});
+
+test('open02_closedRowIsNeverReplaced', function (t) {
+	const c = mkConsole(t);
+	c.api.append({ n: 1, text: 'work', open: true });
+	c.api.append({ n: 1, text: 'work done' });
+	c.api.append({ n: 1, text: 'rewritten' });
+	c.api.append({ n: 1, text: 'reopened', open: true });
+	expect(textOf(c.row(1)) === 'work done', textOf(c.row(1)));
+	expect(!c.row(1).classList.contains('juneau-co-open'), 'stays closed');
+});
+
+test('open03_openRowIsNotAnnounced', function (t) {
+	const c = mkConsole(t);
+	c.api.append({ n: 1, text: 'x', open: true });
+	expect(c.row(1).getAttribute('aria-live') === 'off', 'open row is a silent nested region');
+	expect(c.pane.getAttribute('aria-live') === 'polite', 'pane stays polite');
+	c.api.append({ n: 1, text: 'x done' });
+	expect(!c.row(1).hasAttribute('aria-live'), 'closed row inherits the pane again');
+});
+
+test('open04_tailFollowKept', function (t) {
+	const c = mkConsole(t);
+	c.pane.clientHeight = 100;
+	fill(c, 1, 20);
+	c.api.append({ n: 21, text: 'w', open: true });
+	const pinned = 21 * E.ROW_H - 100;
+	expect(c.pane.scrollTop === pinned, 'pinned: ' + c.pane.scrollTop);
+	c.api.append({ n: 21, text: 'w.', open: true });
+	expect(c.pane.scrollTop === pinned, 'still pinned: ' + c.pane.scrollTop);
+	expect(c.q('.juneau-co-jump').hidden === true, 'no jump button');
+	E.userScroll(c.pane, 0);
+	c.api.append({ n: 21, text: 'w..', open: true });
+	expect(c.pane.scrollTop === 0, 'view stays put');
+	expect(c.q('.juneau-co-jump').textContent === 'Jump to latest', 'a replacement is not counted: ' + c.q('.juneau-co-jump').textContent);
+});
+
+test('open05_validateKeepsOnlyOpenTrue', function (t) {
+	const V = t.CO.validateLine;
+	expect(V({ text: 'x', open: true }).line.open === true, 'true kept');
+	expect(V({ text: 'x', open: false }).line.open === undefined, 'false dropped');
+	expect(V({ text: 'x', open: 'yes' }).line.open === undefined, 'non-boolean dropped');
+	expect(V({ text: 'x', open: 'yes' }).problems.length === 0, 'silently, like other unknown values');
+});
+
+test('open06_patchKeepsTargetState', function (t) {
+	const c = mkConsole(t);
+	c.api.append([{ n: 1, text: 'a' }, { n: 2, text: 'work', open: true }]);
+	c.api.scrollToLine(2);
+	expect(c.row(2).classList.contains('juneau-co-target'), 'targeted before the patch');
+	c.api.append({ n: 2, text: 'work.', open: true });
+	expect(c.row(2).classList.contains('juneau-co-target'), 'still targeted after the patch');
+	expect(c.row(2).classList.contains('juneau-co-open'), 'still open');
+	c.api.scrollToLine(1);
+	expect(!c.row(2).classList.contains('juneau-co-target'), 'the highlight moves off the patched row');
+	expect(c.row(1).classList.contains('juneau-co-target'), 'and onto the new target');
+});
+
 // @cases:end
 
 (async function main() {

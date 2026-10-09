@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.rest.server.console;
 
+import java.util.*;
+
 import org.apache.juneau.marshall.collections.*;
 
 /**
@@ -62,4 +64,49 @@ public interface CardTypeHandler {
 	 * @throws IllegalArgumentException via {@link CardSource#error(String, Object...)} on invalid input.
 	 */
 	JsonMap toFragment(CardSource source);
+
+	/**
+	 * Topics this card publishes without declaring them, for R-10. Default: none (the shell adds card:/cmd:).
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 *   <ja>@Override</ja>
+	 *   <jk>public</jk> List&lt;String&gt; implicitTopics(JsonMap <jv>card</jv>) {
+	 *     <jk>return</jk> List.<jsm>of</jsm>(<js>"kpi.threshold-crossed"</js>);
+	 *   }
+	 * </p>
+	 *
+	 * @param card The card object from the page contract (base keys plus this type's fragment).
+	 * @return The concrete topics (or {@code ns.name:*} patterns) the type's JS publishes for this card.
+	 */
+	default List<String> implicitTopics(JsonMap card) { return List.of(); }
+
+	/**
+	 * Roles this type accepts in {@code subscribes[].as}, beyond {@code refresh} and {@code params}.
+	 * {@code null} (the default) means "unknown to Java": the Java validator skips E-44 and the JS check (E-JS-47) decides.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 *   <ja>@Override</ja>
+	 *   <jk>public</jk> Set&lt;String&gt; acceptedRoles() { <jk>return</jk> Set.<jsm>of</jsm>(<js>"highlight"</js>); }
+	 * </p>
+	 *
+	 * @return The accepted role names, or {@code null} if unknown.
+	 */
+	default Set<String> acceptedRoles() { return null; }
+
+	/**
+	 * {@code cmd:<id>} ops this type handles, beyond the shell's {@code refresh}, for E-43 on a ribbon {@code target}.
+	 * {@code null} (the default) means "unknown to Java": the Java validator skips the check and the JS shell reports
+	 * an unhandled op at runtime (E-JS-48).
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 *   <ja>@Override</ja>
+	 *   <jk>public</jk> Set&lt;String&gt; acceptedOps() { <jk>return</jk> Set.<jsm>of</jsm>(<js>"set-target"</js>); }
+	 * </p>
+	 *
+	 * @return The handled op names, or {@code null} if unknown.
+	 */
+	default Set<String> acceptedOps() { return null; }
 }

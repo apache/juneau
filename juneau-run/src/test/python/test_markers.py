@@ -17,6 +17,7 @@ import inspect
 import io
 import json
 import os
+import re
 import unittest
 from unittest import mock
 
@@ -52,6 +53,23 @@ def golden_sections(path):
         elif line.startswith(jr.PREFIX):
             sections[current].append(json.loads(line[len(jr.PREFIX):]))
     return sections
+
+
+def golden_transcript(path, name):
+    """The whole stdout of one scenario: '##run ' lines as-is, '| ' lines as raw output with a literal \\r meaning CR."""
+    out, current = [], None
+    for line in path.read_text(encoding="utf-8").splitlines():
+        if line.startswith("# scenario:"):
+            current = line.split(":", 1)[1].strip()
+        elif current == name and line.startswith(jr.PREFIX):
+            out.append(line)
+        elif current == name and line.startswith("| "):
+            out.append(line[2:].replace("\\r", "\r"))
+    return "".join(l + "\n" for l in out)
+
+
+def normalized(out):
+    return re.sub(r'"ms":\d+', '"ms":0', out)
 
 
 class MarkersTest(unittest.TestCase):
@@ -174,6 +192,77 @@ class MarkersTest(unittest.TestCase):
             {"ev": "step", "id": "x", "n": 1, "title": "X"},
             {"ev": "end", "id": "x", "status": "ok", "ms": 0},
         ])
+
+    # ---- open lines ---------------------------------------------------------------------------------------------
+
+    def test_marker_after_partial_output_starts_on_a_fresh_line(self):
+        def scenario():
+            jr.append("partial")
+            jr.emit("note", level="info", text="x")
+        self.assertEqual(capture(scenario), 'partial\n##run {"ev":"note","level":"info","text":"x"}\n')
+
+    def test_marker_at_line_start_gets_no_extra_newline(self):
+        def scenario():
+            jr.open_line("a")
+            jr.close_line()
+            jr.emit("note", level="info", text="x")
+        self.assertEqual(capture(scenario), 'a\n##run {"ev":"note","level":"info","text":"x"}\n')
+
+    def test_disabled_marker_leaves_the_line_open(self):
+        def scenario():
+            jr.open_line("a")
+            with mock.patch.dict(os.environ, {"RUN_MARKERS": "0"}):
+                jr.emit("note", level="info", text="x")
+            jr.dot()
+        self.assertEqual(capture(scenario), "a.")
+
+    def test_helpers(self):
+        def scenario():
+            jr.open_line("ORDERS: filling UID")
+            jr.dot()
+            jr.append("..")
+            jr.close_line(" 1819 rows in 4s")
+            jr.open_line("Performing task x: ")
+            jr.set_tail("1 of 2 complete")
+            jr.set_tail("2 of 2 complete")
+            jr.close_line()
+        self.assertEqual(capture(scenario),
+                         "ORDERS: filling UID... 1819 rows in 4s\n"
+                         "Performing task x: \rPerforming task x: 1 of 2 complete\rPerforming task x: 2 of 2 complete\n")
+
+    def test_open_line_closes_an_open_line_first(self):
+        def scenario():
+            jr.open_line("a")
+            jr.open_line("b")
+            jr.close_line()
+        self.assertEqual(capture(scenario), "a\nb\n")
+
+    def test_set_tail_without_open_line_has_no_head(self):
+        self.assertEqual(capture(lambda: jr.set_tail("x")), "\rx")
+
+    def test_helpers_work_with_markers_off(self):
+        with mock.patch.dict(os.environ):
+            os.environ.pop("RUN_MARKERS")
+            self.assertEqual(capture(lambda: (jr.open_line("a"), jr.dot(), jr.close_line())), "a.\n")
+
+    def test_extension_golden_dots_then_marker(self):
+        def scenario():
+            with jr.step("load", 1, "Load"):
+                jr.open_line("ORDERS: filling UID")
+                jr.dot()
+                jr.dot()
+                jr.dot()
+        path = DOCS / "run-protocol-v1-golden-extensions.txt"
+        self.assertEqual(normalized(capture(scenario)), golden_transcript(path, "dots-then-marker"))
+
+    def test_extension_golden_set_tail_counter_then_marker(self):
+        def scenario():
+            with jr.step("task", 1, "Task x"):
+                jr.open_line("Performing task x: ")
+                jr.set_tail("1 of 2 complete")
+                jr.set_tail("2 of 2 complete")
+        path = DOCS / "run-protocol-v1-golden-extensions.txt"
+        self.assertEqual(normalized(capture(scenario)), golden_transcript(path, "set-tail-counter-then-marker"))
 
     def extension(self, name):
         return golden_sections(DOCS / "run-protocol-v1-golden-extensions.txt")[name]

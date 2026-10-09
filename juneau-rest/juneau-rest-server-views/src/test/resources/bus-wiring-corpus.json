@@ -1,0 +1,280 @@
+{
+	"cardTypes": {
+		"gauge": {"roles":["highlight"],"ops":["set-target"],"publishes":["gauge.threshold-crossed"]},
+		"opaque": {"roles":null,"ops":null,"publishes":[]}
+	},
+	"cases": [
+		{
+			"name": "c01-no-wiring",
+			"contract": {"contractVersion":"1","title":"T","nav":[],"activeNav":[],"cards":[{"id":"a","type":"datatables","table":{"dataUrl":"/api/a","columns":[{"key":"id"}]}},{"id":"b","type":"html","template":"b"}]},
+			"expect": [],
+			"expectJs": []
+		},
+		{
+			"name": "c02-spec-5.1-master-detail",
+			"contract": {"contractVersion":"1","title":"T","nav":[],"activeNav":[],"topics":[{"topic":"app.region-picked","retain":true,"publisher":"script"}],"cards":[{"id":"changes","type":"datatables","table":{"dataUrl":"/api/changes","columns":[{"key":"id"}],"selection":{"rowIdField":"id"},"ribbon":[{"type":"refresh"},{"type":"option","id":"mine","title":"Mine only"},{"type":"refresh","title":"Refresh tasks","target":"tasks"},{"type":"publish","title":"Focus east","topic":"app.region-picked","payload":{"region":"east"}}]},"subscribes":[{"topic":"app.region-picked","as":"filter","map":{"columns.region":"region"}}]},{"id":"tasks","type":"datatables","table":{"dataUrl":"/api/changes/{changeId}/tasks","columns":[{"key":"id"}]},"subscribes":[{"topic":"selection:changes","as":"params","map":{"changeId":"ids.0"},"whenEmpty":"clear","emptyText":"Select a change to see its tasks."}]},{"id":"byOwner","type":"chart","title":"Open changes by owner","src":"/api/changes/by-owner","subscribes":[{"topic":"filter:changes","as":"filter"}]}]},
+			"expect": [],
+			"expectJs": []
+		},
+		{
+			"name": "c03-selection-not-enabled",
+			"contract": {"contractVersion":"1","title":"T","nav":[],"activeNav":[],"cards":[{"id":"changes","type":"datatables","table":{"dataUrl":"/api/changes","columns":[{"key":"id"}]}},{"id":"tasks","type":"datatables","table":{"dataUrl":"/api/tasks","columns":[{"key":"id"}]},"subscribes":[{"topic":"selection:changes","as":"refresh"}]}]},
+			"expect": [
+				{"code":"E-41","message":"card 'tasks' subscribes to 'selection:changes' but nothing publishes it; card 'changes' does not enable selection"}
+			],
+			"expectJs": [
+				{"code":"E-JS-41","message":"card 'tasks' subscribes to 'selection:changes' but nothing publishes it; card 'changes' does not enable selection"}
+			]
+		},
+		{
+			"name": "c04-detail-bulk-redraw-filter",
+			"contract": {"contractVersion":"1","title":"T","nav":[],"activeNav":[],"cards":[{"id":"changes","type":"datatables","table":{"dataUrl":"/api/changes","columns":[{"key":"id"}],"detail":{"endpoint":"/api/changes/detail"}}},{"id":"log","type":"html","template":"log","subscribes":[{"topic":"detail:changes","as":"refresh"},{"topic":"bulk:changes","as":"refresh"},{"topic":"redraw:changes","as":"refresh"},{"topic":"filter:changes","as":"refresh"}]}]},
+			"expect": [
+				{"code":"E-41","message":"card 'log' subscribes to 'bulk:changes' but nothing publishes it; card 'changes' does not enable bulk"}
+			],
+			"expectJs": [
+				{"code":"E-JS-41","message":"card 'log' subscribes to 'bulk:changes' but nothing publishes it; card 'changes' does not enable bulk"}
+			]
+		},
+		{
+			"name": "c05-missing-card",
+			"contract": {"contractVersion":"1","title":"T","nav":[],"activeNav":[],"cards":[{"id":"log","type":"html","template":"log","subscribes":[{"topic":"selection:gone","as":"refresh"},{"topic":"card:gone","as":"refresh"}]}]},
+			"expect": [
+				{"code":"E-42","message":"topic 'selection:gone' names card 'gone', which is not on this page"},
+				{"code":"E-42","message":"topic 'card:gone' names card 'gone', which is not on this page"}
+			],
+			"expectJs": []
+		},
+		{
+			"name": "c06-html-publishes-nothing",
+			"contract": {"contractVersion":"1","title":"T","nav":[],"activeNav":[],"cards":[{"id":"a","type":"html","template":"a"},{"id":"b","type":"html","template":"b","subscribes":[{"topic":"redraw:a","as":"refresh"},{"topic":"card:a","as":"refresh"}]}]},
+			"expect": [
+				{"code":"E-43","message":"card 'a' (type 'html') does not publish 'redraw:a'"}
+			],
+			"expectJs": []
+		},
+		{
+			"name": "c07-own-topic",
+			"contract": {"contractVersion":"1","title":"T","nav":[],"activeNav":[],"cards":[{"id":"a","type":"datatables","table":{"dataUrl":"/api/a","columns":[{"key":"id"}]},"subscribes":[{"topic":"filter:a","as":"refresh"},{"topic":"cmd:a","as":"refresh"}]}]},
+			"expect": [
+				{"code":"E-49","message":"card 'a' subscribes to its own topic 'filter:a'; use ctx.subscribe with {echo:true} in JS if this is intended"},
+				{"code":"E-49","message":"card 'a' subscribes to its own topic 'cmd:a'; use ctx.subscribe with {echo:true} in JS if this is intended"}
+			],
+			"expectJs": []
+		},
+		{
+			"name": "c08-did-you-mean",
+			"contract": {"contractVersion":"1","title":"T","nav":[],"activeNav":[],"topics":[{"topic":"app.region-picked","retain":true,"publisher":"script"}],"cards":[{"id":"map","type":"html","template":"map","subscribes":[{"topic":"app.region-pick","as":"refresh"}]}]},
+			"expect": [
+				{"code":"E-41","message":"card 'map' subscribes to 'app.region-pick' but nothing publishes it; did you mean 'app.region-picked'?"}
+			],
+			"expectJs": [
+				{"code":"E-JS-41","message":"card 'map' subscribes to 'app.region-pick' but nothing publishes it; did you mean 'app.region-picked'?"}
+			]
+		},
+		{
+			"name": "c09-no-suggestion",
+			"contract": {"contractVersion":"1","title":"T","nav":[],"activeNav":[],"topics":[{"topic":"app.region-picked","retain":true,"publisher":"script"}],"cards":[{"id":"map","type":"html","template":"map","subscribes":[{"topic":"ops.something-else-entirely","as":"refresh"}]}]},
+			"expect": [
+				{"code":"E-41","message":"card 'map' subscribes to 'ops.something-else-entirely' but nothing publishes it"}
+			],
+			"expectJs": [
+				{"code":"E-JS-41","message":"card 'map' subscribes to 'ops.something-else-entirely' but nothing publishes it"}
+			]
+		},
+		{
+			"name": "c10-wildcard-server-topic",
+			"contract": {"contractVersion":"1","title":"T","nav":[],"activeNav":[],"topics":[{"topic":"ssc.alert:*","retain":false,"publisher":"server"}],"bridges":[{"id":"live","transport":"sse","session":"/bus/session","downstream":["ssc.alert:*"]}],"cards":[{"id":"alerts","type":"html","template":"alerts","subscribes":[{"topic":"ssc.alert:disk","as":"refresh"}]}]},
+			"expect": [],
+			"expectJs": []
+		},
+		{
+			"name": "c11-server-topic-without-bridge",
+			"contract": {"contractVersion":"1","title":"T","nav":[],"activeNav":[],"topics":[{"topic":"ops.jobs","retain":true,"publisher":"server"},{"topic":"ops.feed:*","retain":false,"publisher":"server"}],"bridges":[{"id":"live","transport":"sse","session":"/bus/session","downstream":["ops.feed:east"]}],"cards":[{"id":"a","type":"html","template":"a"}]},
+			"expect": [
+				{"code":"E-52","message":"topic 'ops.jobs' is declared publisher=server but no bridge carries it downstream"},
+				{"code":"E-52","message":"topic 'ops.feed:*' is declared publisher=server but no bridge carries it downstream"}
+			],
+			"expectJs": [
+				{"code":"E-JS-52","message":"topic 'ops.jobs' is declared publisher=server but no bridge carries it downstream"},
+				{"code":"E-JS-52","message":"topic 'ops.feed:*' is declared publisher=server but no bridge carries it downstream"}
+			]
+		},
+		{
+			"name": "c12-handler-and-card-publishes",
+			"contract": {"contractVersion":"1","title":"T","nav":[],"activeNav":[],"cards":[{"id":"k","type":"gauge","publishes":[{"topic":"gauge.picked","retain":false}]},{"id":"a","type":"html","template":"a","subscribes":[{"topic":"gauge.threshold-crossed","as":"refresh"},{"topic":"gauge.picked","as":"refresh"}]}]},
+			"expect": [],
+			"expectJs": []
+		},
+		{
+			"name": "c13-ribbon-publish-declared",
+			"contract": {"contractVersion":"1","title":"T","nav":[],"activeNav":[],"topics":[{"topic":"app.go-live","retain":false,"publisher":"ribbon"}],"cards":[{"id":"a","type":"datatables","table":{"dataUrl":"/api/a","columns":[{"key":"id"}],"ribbon":[{"type":"publish","title":"Go","topic":"app.go-live"}]}},{"id":"b","type":"html","template":"b","subscribes":[{"topic":"app.go-live","as":"refresh"}]}]},
+			"expect": [],
+			"expectJs": []
+		},
+		{
+			"name": "c14-ribbon-publish-undeclared",
+			"contract": {"contractVersion":"1","title":"T","nav":[],"activeNav":[],"cards":[{"id":"a","type":"datatables","table":{"dataUrl":"/api/a","columns":[{"key":"id"}],"ribbon":[{"type":"publish","title":"Go","topic":"app.go-live"}]}},{"id":"b","type":"html","template":"b","subscribes":[{"topic":"app.go-live","as":"refresh"}]}]},
+			"expect": [
+				{"code":"E-48","message":"ribbon item #0 (publish) on card 'a': topic 'app.go-live' is not declared in topics or by any card's publishes"}
+			],
+			"expectJs": []
+		},
+		{
+			"name": "c15-bridge-state",
+			"contract": {"contractVersion":"1","title":"T","nav":[],"activeNav":[],"bridges":[{"id":"live","transport":"sse","session":"/bus/session","downstream":[]}],"cards":[{"id":"s","type":"html","template":"s","subscribes":[{"topic":"bridge:live","as":"refresh"},{"topic":"bridge:lve","as":"refresh"}]}]},
+			"expect": [
+				{"code":"E-41","message":"card 's' subscribes to 'bridge:lve' but nothing publishes it; did you mean 'bridge:live'?"}
+			],
+			"expectJs": [
+				{"code":"E-JS-41","message":"card 's' subscribes to 'bridge:lve' but nothing publishes it; did you mean 'bridge:live'?"}
+			]
+		},
+		{
+			"name": "c16-job-topics",
+			"contract": {"contractVersion":"1","title":"T","nav":[],"activeNav":[],"topics":[{"topic":"job:*","retain":true,"publisher":"server"}],"bridges":[{"id":"jobs","transport":"sse","session":"/bus/session","downstream":["job:*"]}],"cards":[{"id":"j","type":"html","template":"j","subscribes":[{"topic":"job:j-91","as":"refresh"}]},{"id":"k","type":"html","template":"k","subscribes":[{"topic":"job:j-92","as":"refresh"}]}]},
+			"expect": [],
+			"expectJs": []
+		},
+		{
+			"name": "c17-job-unpublished-probe-badge-runtime",
+			"contract": {"contractVersion":"1","title":"T","nav":[],"activeNav":[],"cards":[{"id":"j","type":"html","template":"j","subscribes":[{"topic":"job:j-91","as":"refresh"},{"topic":"probe:probes","as":"refresh"},{"topic":"badge:pending","as":"refresh"}]}]},
+			"expect": [
+				{"code":"E-41","message":"card 'j' subscribes to 'job:j-91' but nothing publishes it"}
+			],
+			"expectJs": [
+				{"code":"E-JS-41","message":"card 'j' subscribes to 'job:j-91' but nothing publishes it"}
+			]
+		},
+		{
+			"name": "c18-roles",
+			"contract": {"contractVersion":"1","title":"T","nav":[],"activeNav":[],"cards":[{"id":"t","type":"datatables","table":{"dataUrl":"/api/t","columns":[{"key":"id"}],"selection":{"rowIdField":"id"}}},{"id":"k","type":"gauge","subscribes":[{"topic":"selection:t","as":"highlight"},{"topic":"selection:t","as":"sparkle"}]},{"id":"h","type":"html","template":"h","subscribes":[{"topic":"selection:t","as":"filter"},{"topic":"filter:t","as":"refresh"}]},{"id":"u","type":"datatables","table":{"dataUrl":"/api/u","columns":[{"key":"id"}]},"subscribes":[{"topic":"selection:t","as":"filter"},{"topic":"filter:t","as":"highlight"}]},{"id":"o","type":"opaque","subscribes":[{"topic":"selection:t","as":"anything"}]},{"id":"x","type":"mystery","subscribes":[{"topic":"selection:t","as":"anything"}]}]},
+			"expect": [
+				{"code":"E-44","message":"card 'k' (type 'gauge') has no role 'sparkle'; accepted: highlight, params, refresh"},
+				{"code":"E-44","message":"card 'h' (type 'html') has no role 'filter'; accepted: params, refresh"},
+				{"code":"E-44","message":"card 'u' (type 'datatables') has no role 'highlight'; accepted: filter, params, refresh"}
+			],
+			"expectJs": [
+				{"code":"E-JS-47","message":"card 'k' (type 'gauge') does not accept role 'sparkle'"},
+				{"code":"E-JS-47","message":"card 'h' (type 'html') does not accept role 'filter'"},
+				{"code":"E-JS-47","message":"card 'u' (type 'datatables') does not accept role 'highlight'"}
+			]
+		},
+		{
+			"name": "c19-params-needs-map",
+			"contract": {"contractVersion":"1","title":"T","nav":[],"activeNav":[],"cards":[{"id":"t","type":"datatables","table":{"dataUrl":"/api/t","columns":[{"key":"id"}],"selection":{"rowIdField":"id"}}},{"id":"h","type":"html","template":"h","src":"/api/h","subscribes":[{"topic":"selection:t","as":"params"}]}]},
+			"expect": [
+				{"code":"E-47","message":"card 'h': params subscription needs map"}
+			],
+			"expectJs": []
+		},
+		{
+			"name": "c20-params-tokens",
+			"contract": {"contractVersion":"1","title":"T","nav":[],"activeNav":[],"cards":[{"id":"t","type":"datatables","table":{"dataUrl":"/api/t","columns":[{"key":"id"}],"selection":{"rowIdField":"id"}}},{"id":"d","type":"datatables","table":{"dataUrl":"/api/{changeId}/tasks/{owner}","columns":[{"key":"id"}]},"subscribes":[{"topic":"selection:t","as":"params","map":{"changeId":"ids.0"}}]},{"id":"h","type":"html","template":"h","src":"/api/{a}/{b}/{a}","subscribes":[{"topic":"selection:t","as":"params","map":{"a":"ids.0"}}]},{"id":"n","type":"html","template":"n","src":"/api/{free}"}]},
+			"expect": [
+				{"code":"E-47","message":"card 'd': token '{owner}' in dataUrl is not mapped by any params subscription"},
+				{"code":"E-47","message":"card 'h': token '{b}' in src is not mapped by any params subscription"}
+			],
+			"expectJs": []
+		},
+		{
+			"name": "c21-bad-declarations",
+			"contract": {"contractVersion":"1","title":"T","nav":[],"activeNav":[],"topics":[{"topic":"job:*","retain":true,"publisher":"script"},{"topic":"filter:a","retain":true,"publisher":"script"},{"topic":"alerts:*","retain":false,"publisher":"script"},{"topic":"App.Bad","retain":false,"publisher":"script"}],"cards":[{"id":"a","type":"html","template":"a","publishes":[{"topic":"selection:a","retain":true},{"topic":"focus","retain":false}]}]},
+			"expect": [
+				{"code":"E-45","message":"'job' is a framework family; framework topics are implicit and may not be declared"},
+				{"code":"E-45","message":"'filter' is a framework family; framework topics are implicit and may not be declared"},
+				{"code":"E-45","message":"custom topic family 'alerts' must be namespaced (e.g. 'app.alerts')"},
+				{"code":"E-40","message":"invalid topic 'App.Bad': expected family[:key] (see the topic syntax)"},
+				{"code":"E-45","message":"'selection' is a framework family; framework topics are implicit and may not be declared"},
+				{"code":"E-45","message":"custom topic family 'focus' must be namespaced (e.g. 'app.focus')"}
+			],
+			"expectJs": []
+		},
+		{
+			"name": "c22-retain-conflict",
+			"contract": {"contractVersion":"1","title":"T","nav":[],"activeNav":[],"topics":[{"topic":"app.focus","retain":true,"publisher":"script"}],"cards":[{"id":"a","type":"html","template":"a","publishes":[{"topic":"app.focus","retain":false}]},{"id":"b","type":"html","template":"b","publishes":[{"topic":"app.focus","retain":true}]}]},
+			"expect": [
+				{"code":"E-46","message":"topic 'app.focus' is declared with retain=false here and retain=true at topics[0]"}
+			],
+			"expectJs": []
+		},
+		{
+			"name": "c23-bridge-shape",
+			"contract": {"contractVersion":"1","title":"T","nav":[],"activeNav":[],"topics":[{"topic":"app.feed","retain":false,"publisher":"server"},{"topic":"app.ask","retain":false,"publisher":"script"}],"bridges":[{"id":"9bad","transport":"sse","session":"/bus/s","downstream":["app.feed"]},{"id":"dup","transport":"sse","session":"/bus/s","downstream":[]},{"id":"dup","transport":"carrier-pigeon","session":"https://other.example/s","downstream":[]},{"id":"net","transport":"sse","session":"//other.example/s","downstream":[],"upstream":["app.ask"],"maxAttempts":0},{"id":"loop","transport":"websocket","session":"/bus/s","downstream":["app.feed","app.ask"],"upstream":["app.ask"]}],"cards":[{"id":"a","type":"html","template":"a"}]},
+			"expect": [
+				{"code":"E-51","message":"bridge '9bad': id must match ^[A-Za-z][A-Za-z0-9_-]{0,63}$"},
+				{"code":"E-51","message":"bridge 'dup': duplicate id"},
+				{"code":"E-51","message":"bridge 'dup': unknown transport 'carrier-pigeon'"},
+				{"code":"E-51","message":"bridge 'dup': session must be a same-origin path, got 'https://other.example/s'"},
+				{"code":"E-51","message":"bridge 'net': session must be a same-origin path, got '//other.example/s'"},
+				{"code":"E-51","message":"bridge 'net': maxAttempts must be an integer of at least 1"},
+				{"code":"E-51","message":"bridge 'net': upstream is only allowed on a websocket bridge"},
+				{"code":"E-51","message":"bridge 'loop': downstream 'app.ask' is not declared in topics with publisher=server"},
+				{"code":"E-51","message":"bridge 'loop': topic 'app.ask' is both downstream and upstream"}
+			],
+			"expectJs": [
+				{"code":"E-JS-52","message":"bridge '9bad': id must match ^[A-Za-z][A-Za-z0-9_-]{0,63}$"},
+				{"code":"E-JS-52","message":"bridge 'dup': duplicate id"},
+				{"code":"E-JS-52","message":"bridge 'dup': unknown transport 'carrier-pigeon'"},
+				{"code":"E-JS-52","message":"bridge 'dup': session must be a same-origin path, got 'https://other.example/s'"},
+				{"code":"E-JS-52","message":"bridge 'net': session must be a same-origin path, got '//other.example/s'"},
+				{"code":"E-JS-52","message":"bridge 'net': maxAttempts must be an integer of at least 1"},
+				{"code":"E-JS-52","message":"bridge 'net': upstream is only allowed on a websocket bridge"},
+				{"code":"E-JS-52","message":"bridge 'loop': downstream 'app.ask' is not declared in topics with publisher=server"},
+				{"code":"E-JS-52","message":"bridge 'loop': topic 'app.ask' is both downstream and upstream"}
+			]
+		},
+		{
+			"name": "c24-bridge-topics",
+			"contract": {"contractVersion":"1","title":"T","nav":[],"activeNav":[],"topics":[{"topic":"app.feed","retain":false,"publisher":"server"},{"topic":"app.local","retain":false,"publisher":"script"}],"bridges":[{"id":"ws","transport":"websocket","session":"/bus/s","downstream":["app.feed","selection:t","cmd:t","cmd:gone","job:*","app.unlisted","Bad Topic"],"upstream":["app.local","filter:t","app.nobody"]}],"cards":[{"id":"t","type":"datatables","table":{"dataUrl":"/api/t","columns":[{"key":"id"}]}}]},
+			"expect": [
+				{"code":"E-54","message":"bridge 'ws' may not carry framework state topic 'selection:t' (only job:*, and cmd:<cardId> downstream)"},
+				{"code":"E-42","message":"topic 'cmd:gone' names card 'gone', which is not on this page"},
+				{"code":"E-51","message":"bridge 'ws': downstream 'app.unlisted' is not declared in topics with publisher=server"},
+				{"code":"E-51","message":"bridge 'ws': invalid topic 'Bad Topic'"},
+				{"code":"E-54","message":"bridge 'ws' may not carry framework state topic 'filter:t' (only job:*, and cmd:<cardId> downstream)"},
+				{"code":"E-53","message":"bridge 'ws' sends 'app.nobody' upstream, but no topics entry or card publishes declares it"}
+			],
+			"expectJs": [
+				{"code":"E-JS-52","message":"bridge 'ws' may not carry framework state topic 'selection:t' (only job:*, and cmd:<cardId> downstream)"},
+				{"code":"E-JS-52","message":"bridge 'ws': downstream 'app.unlisted' is not declared in topics with publisher=server"},
+				{"code":"E-JS-52","message":"bridge 'ws': invalid topic 'Bad Topic'"},
+				{"code":"E-JS-52","message":"bridge 'ws' may not carry framework state topic 'filter:t' (only job:*, and cmd:<cardId> downstream)"},
+				{"code":"E-JS-52","message":"bridge 'ws' sends 'app.nobody' upstream, but no topics entry or card publishes declares it"}
+			]
+		},
+		{
+			"name": "c25-ribbon-targets",
+			"contract": {"contractVersion":"1","title":"T","nav":[],"activeNav":[],"cards":[{"id":"a","type":"datatables","table":{"dataUrl":"/api/a","columns":[{"key":"id"}],"ribbon":[{"type":"refresh","target":"gone"},{"type":"refresh","target":"h"},{"type":"option","id":"mine","title":"Mine","target":"b"},{"type":"optionGroup","id":"range","title":"Range","target":"b"},{"type":"pausePolling","target":"b"},{"type":"export","target":"b"},{"type":"publish","topic":"cmd:b","payload":{"op":"reload"}},{"type":"publish","title":"Bad","topic":"selection:b"},{"type":"publish","title":"Gone","topic":"cmd:gone"},{"type":"publish","title":"Syntax","topic":"Nope!"}]}},{"id":"b","type":"datatables","table":{"dataUrl":"/api/b","columns":[{"key":"id"}],"ribbon":[{"type":"optionGroup","id":"range","title":"Range"}]}},{"id":"h","type":"html","template":"h"}]},
+			"expect": [
+				{"code":"E-42","message":"topic 'cmd:gone' names card 'gone', which is not on this page"},
+				{"code":"E-43","message":"card 'h' (type 'html') does not handle op 'reload'"},
+				{"code":"E-48","message":"ribbon item #2 (option) on card 'a': option 'mine' is not declared on target card 'b'"},
+				{"code":"E-48","message":"ribbon item #5 (export) on card 'a': 'target' is not allowed on a 'export' item"},
+				{"code":"E-48","message":"ribbon item #6 (publish) on card 'a': a publish item needs a title"},
+				{"code":"E-48","message":"ribbon item #7 (publish) on card 'a': 'selection:b' is a framework topic; a publish item may only publish custom topics or cmd:<cardId>"},
+				{"code":"E-42","message":"topic 'cmd:gone' names card 'gone', which is not on this page"},
+				{"code":"E-40","message":"invalid topic 'Nope!': expected family[:key] (see the topic syntax)"}
+			],
+			"expectJs": []
+		},
+		{
+			"name": "c26-src-only-datatables",
+			"contract": {"contractVersion":"1","title":"T","nav":[],"activeNav":[],"cards":[{"id":"s","type":"datatables","src":"/api/s"},{"id":"h","type":"html","template":"h","subscribes":[{"topic":"selection:s","as":"refresh"},{"topic":"bulk:s","as":"refresh"},{"topic":"detail:s","as":"refresh"}]}]},
+			"expect": [],
+			"expectJs": []
+		},
+		{
+			"name": "c27-bad-topic-syntax",
+			"contract": {"contractVersion":"1","title":"T","nav":[],"activeNav":[],"cards":[{"id":"h","type":"html","template":"h","subscribes":[{"topic":"selection","as":"refresh"},{"topic":"Bad.Topic","as":"refresh"},{"topic":"app.x:*","as":"refresh"}]}]},
+			"expect": [
+				{"code":"E-41","message":"card 'h' subscribes to 'selection' but nothing publishes it"},
+				{"code":"E-40","message":"invalid topic 'Bad.Topic': expected family[:key] (see the topic syntax)"},
+				{"code":"E-40","message":"invalid topic 'app.x:*': expected family[:key] (see the topic syntax)"}
+			],
+			"expectJs": [
+				{"code":"E-JS-41","message":"card 'h' subscribes to 'selection' but nothing publishes it"}
+			]
+		}
+	]
+}

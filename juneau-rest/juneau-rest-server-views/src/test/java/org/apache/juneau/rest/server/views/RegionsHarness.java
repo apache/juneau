@@ -75,6 +75,15 @@ final class RegionsHarness {
 		return reportImpl(harnessName, List.of(extraResources));
 	}
 
+	/**
+	 * Runs the named harness with {@code juneau-bus.js} ALSO passed (a fourth argv path), for the page-bus harness:
+	 * {@code ctx.publish} / {@code ctx.subscribe} delegate to {@code JuneauViews.bus}, and the harness hands the path
+	 * to {@code load(..., {busJsPath})}, which loads it FIRST - the order the "views" toolkit pack emits it.
+	 */
+	static Map<?,?> reportWithBus(String harnessName) {
+		return reportImpl(harnessName, List.of(ViewsMixin.BUS_JS_RESOURCE));
+	}
+
 	private static Map<?,?> reportImpl(String harnessName, List<String> extras) {
 		var cacheKey = (extras == null || extras.isEmpty() ? "" : String.join(",", extras) + ":") + harnessName;
 		if (FAILED.contains(cacheKey))

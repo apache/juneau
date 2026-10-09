@@ -210,6 +210,19 @@ class PageDirective_Test extends TestBase {
 		assertFalse(body.contains("slds-"), () -> body);
 	}
 
+	@Test void a05d_toolkitViews_emitsBusFirst_beforeEveryBusConsumer() throws Exception {
+		var body = toolkitBody("/toolkit");
+		// juneau-bus.js is dependency-free and every bus consumer reads JuneauViews.bus, so it must precede them all.
+		var bus = body.indexOf("juneau-bus.js");
+		assertTrue(bus >= 0, () -> body);
+		assertTrue(bus < body.indexOf("juneau-renders.js"), () -> body);
+		assertTrue(bus < body.indexOf("juneau-views.js"), () -> body);
+		assertTrue(bus < body.indexOf("juneau-regions.js"), () -> body);
+		// It is the first toolkit script tag.
+		var firstToolkitScript = body.lastIndexOf("<script", body.indexOf("data-toolkit-js"));
+		assertTrue(firstToolkitScript >= 0 && body.indexOf("juneau-bus.js", firstToolkitScript) < body.indexOf(">", firstToolkitScript), () -> body);
+	}
+
 	@Test void a05b_toolkitViews_serverModeCard_emitsVendorBeforeViewsJs() throws Exception {
 		for (var path : java.util.List.of("/toolkit-server", "/toolkit-url"))
 			assertTableVendor(path, toolkitBody(path));

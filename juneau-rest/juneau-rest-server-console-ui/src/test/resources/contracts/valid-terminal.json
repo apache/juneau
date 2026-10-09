@@ -1,0 +1,3 @@
+{"contractVersion":"1","title":"T","nav":[],"activeNav":[],"cards":[
+  {"id":"build","type":"terminal","title":"Build","terminal":{"bytesUrl":"/runs/juneau-terminal/r1/bytes","eventsUrl":"/runs/juneau-run-view/r1/events","refreshMs":1000,"title":"mvn test","tailBytes":2097152}}
+]}

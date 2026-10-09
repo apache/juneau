@@ -106,10 +106,10 @@ public final class RunEvent {
 	private static final int MAX_COUNT = 1_000_000_000;
 
 	private static final Map<Kind,List<String>> KEY_ORDER = Map.of(
-		Kind.STEP, List.of("id", "title", "n", "status", "rawLine"),
+		Kind.STEP, List.of("id", "title", "n", "status", "rawLine", "rawOffset"),
 		Kind.END, List.of("id", "status", "ms", "exit"),
-		Kind.SUITE, List.of("step", "fw", "suite", "counts", "rawLine"),
-		Kind.TEST, List.of("step", "fw", "suite", "name", "status", "ms", "msg", "trace", "rawLine"),
+		Kind.SUITE, List.of("step", "fw", "suite", "counts", "rawLine", "rawOffset"),
+		Kind.TEST, List.of("step", "fw", "suite", "name", "status", "ms", "msg", "trace", "rawLine", "rawOffset"),
 		Kind.REPLACE, List.of("step"),
 		Kind.NOTE, List.of("level", "text", "href", "step"),
 		Kind.DONE, List.of("status")
@@ -287,6 +287,23 @@ public final class RunEvent {
 	}
 
 	/**
+	 * Sets the raw byte offset of a <c>step</c>, <c>suite</c> or <c>test</c> event.
+	 *
+	 * <p>
+	 * The 0-based offset into the raw output log of the start of the line that produced the event; a terminal view
+	 * scrolls to it.
+	 *
+	 * @param offset The offset, 0 to 9007199254740991.
+	 * @return A copy with the member set.
+	 */
+	public RunEvent withRawOffset(long offset) {
+		requireKind("rawOffset", Kind.STEP, Kind.SUITE, Kind.TEST);
+		if (offset < 0 || offset > MAX_SAFE_INT)
+			throw iaex("RunEvent %s rawOffset must be 0-%s; got '%s'", wireName(kind), MAX_SAFE_INT, offset);
+		return with("rawOffset", offset);
+	}
+
+	/**
 	 * Sets the duration of an <c>end</c> or <c>test</c> event.
 	 *
 	 * @param ms The duration in milliseconds, 0 to 9007199254740991.
@@ -455,6 +472,8 @@ public final class RunEvent {
 					e = e.withState(parse(StepState.class, "step", "status", map.get("status")));
 				if (map.get("rawLine") != null)
 					e = e.withRawLine(toInt(map, "step", "rawLine"));
+				if (map.get("rawOffset") != null)
+					e = e.withRawOffset(toLong(map, "step", "rawOffset"));
 			}
 			case "end" -> {
 				e = end(str(map, "end", "id"), parse(EndStatus.class, "end", "status", map.get("status")));
@@ -470,6 +489,8 @@ public final class RunEvent {
 					toInt(c, "suite", "counts.pass"), toInt(c, "suite", "counts.fail"), toInt(c, "suite", "counts.skip"));
 				if (map.get("rawLine") != null)
 					e = e.withRawLine(toInt(map, "suite", "rawLine"));
+				if (map.get("rawOffset") != null)
+					e = e.withRawOffset(toLong(map, "suite", "rawOffset"));
 			}
 			case "test" -> {
 				e = test(str(map, "test", "step"), str(map, "test", "fw"), str(map, "test", "suite"), str(map, "test", "name"),
@@ -482,6 +503,8 @@ public final class RunEvent {
 					e = e.withTrace(str(map, "test", "trace"));
 				if (map.get("rawLine") != null)
 					e = e.withRawLine(toInt(map, "test", "rawLine"));
+				if (map.get("rawOffset") != null)
+					e = e.withRawOffset(toLong(map, "test", "rawOffset"));
 			}
 			case "replace" -> e = replace(str(map, "replace", "step"));
 			case "note" -> {

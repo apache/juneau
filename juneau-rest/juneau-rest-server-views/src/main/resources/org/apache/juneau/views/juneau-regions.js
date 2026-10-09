@@ -34,6 +34,23 @@
  * [data-juneau-region] element never needs to load it, and a page that loads it but has no regions pays nothing: the
  * bus and the barrier are both created at first enrolment, never by a document scan.
  *
+ * THE PAGE BUS IS SEPARATE AND OPTIONAL.  ctx.emit / ctx.on are this file's own region bus.  ctx.publish /
+ * ctx.subscribe reach the page-wide topic bus, JuneauViews.bus, which juneau-bus.js provides and which MUST load
+ * before this file.  The region's owner id on that bus is its key, so meta.from names the region and the region never
+ * hears its own publishes.  A page whose regions never call them does not need juneau-bus.js; a region that calls one
+ * without it fails loudly with E-JS-46.  A ctx.refresh() from a ctx.subscribe handler is a "message" re-populate with
+ * a live ctx.messageSignal, exactly like one from a ctx.on handler:
+ *
+ *     JuneauViews.regions.register("probe-details", function populate(ctx, container) {
+ *         var probe = JuneauViews.bus.get("probe:checks");     // the current value, read here...
+ *         container.textContent = probe ? probe.label : "Pick a probe";
+ *         // ...so only NEW messages re-populate: {retained: false}.
+ *         ctx.subscribe("probe:checks", function () { ctx.refresh(); }, {retained: false});
+ *     });
+ *
+ *     // In another region's populate (meta.from is that region's key):
+ *     ctx.publish("app.zoom", {level: 2});
+ *
  * NO EMITTER IS WIRED HERE.  This file is the seam and the channel; the chrome call sites that enrol regions and the
  * chrome events that auto-emit onto the bus are a separate, later edit.  Nothing that ships today behaves
  * differently because this asset exists, which is the property that lets the riskiest construction in the design land
@@ -688,65 +705,62 @@
 		emitEntry({ msg: msg, from: region.key, to: to, fromRegion: region });
 	}
 
-	/**
-	 * Emits a framework-authored message.  `meta.from` names the framework rather than a region, so a broadcast
-	 * reaches every subscriber including the one whose chrome caused it.
-	 *
-	 * This is the CHROME half of the ownership invariant: Juneau-drawn chrome auto-emits, author-drawn content emits
-	 * explicitly, and the framework never auto-emits for content it did not draw.  There is no framework listener
-	 * anywhere inside a region container, and there must never be one - a "helpful" click delegate over author DOM
-	 * would make the framework-emitted set open-ended and break the invariant at the click level.  The dividing line
-	 * is drawn where knowledge actually is: the framework is the authoritative source for selection, expansion and
-	 * redraw, and would have to guess at everything inside a region container.
-	 */
-	function emitFramework(msg, opts) {
-		const to = opts?.to != null ? String(opts.to) : null;
-		emitEntry({ msg: msg, from: FRAMEWORK_SENDER_KEY, to: to, fromRegion: null });
-	}
-
-	// --- the closed set of framework message schemas ------------------------------------------------------------------
+	// --- the page bus: ctx.publish / ctx.subscribe over JuneauViews.bus (juneau-bus.js) ------------------------------
 
 	/**
-	 * `viewId` is mandatory on all three schemas.  Broadcast plus two tables on one page otherwise leaves a
-	 * subscriber unable to tell WHOSE selection arrived, and `meta.from` cannot disambiguate it either: for a
-	 * framework-emitted message `meta.from` names the framework, so there is no host for a short target to resolve
-	 * against.  The identity has to be in the payload, which is why the framework authoring these payloads is
-	 * load-bearing rather than incidental.  `schemaVersion` is per-message and independent of the region contract
-	 * version, for the same reason the envelopes are independent: adding a field here must not force a
-	 * region-envelope bump.
+	 * How many page-bus deliveries into a region's ctx.subscribe handlers are on the stack.  A ctx.refresh() made from
+	 * one is a "message" re-populate, exactly like one made from a ctx.on handler.  It is deliberately NOT
+	 * bus.fanOutDepth: that counter gates the region bus's own queue and replay windows, and raising it here would
+	 * queue every ctx.emit made from a ctx.subscribe handler behind a region-bus drain that is not running.
 	 */
-	function selectionChangedMessage(o) {
-		return {
-			kind: FRAMEWORK_KIND_PREFIX + "selection-changed",
-			schemaVersion: 1,
-			viewId: o.viewId,
-			ids: o.ids || [],
-			rows: o.rows || [],
-			added: o.added || [],
-			removed: o.removed || []
-		};
+	let pageBusDepth = 0;
+
+	/**
+	 * The region's owner on the page bus, created on first use and disposed at teardown.  The owner id is the region
+	 * KEY: meta.from names the region, the region never hears its own publishes unless it subscribes with
+	 * `{echo: true}`, and its first publish to a framework state or event topic claims that topic for it.  The bus is
+	 * looked up here rather than at load, so a page whose regions never wire topics does not need juneau-bus.js.
+	 */
+	function pageBusOwner(region, what) {
+		if (!NS.bus) {
+			window.console.error("JuneauViews.regions: E-JS-46: page wires topics but juneau-bus.js is not loaded"
+				+ " (region '" + region.key + "' called ctx." + what + "); load juneau-bus.js before juneau-regions.js.");
+			const e = new Error("page wires topics but juneau-bus.js is not loaded");
+			e.code = "E-JS-46";
+			throw e;
+		}
+		if (!region.busOwner) {
+			region.busOwner = NS.bus.owner(region.key);
+			if (region.torn) region.busOwner.dispose();     // a late call from a torn region is ignored, not revived
+		}
+		return region.busOwner;
 	}
 
-	function detailToggledMessage(o) {
-		return {
-			kind: FRAMEWORK_KIND_PREFIX + "detail-toggled",
-			schemaVersion: 1,
-			viewId: o.viewId,
-			rowId: o.rowId,
-			expanded: !!o.expanded,
-			generation: o.generation
-		};
+	function pageBusPublish(region, topic, payload) {
+		return pageBusOwner(region, "publish").publish(topic, payload);
 	}
 
-	function tableRedrewMessage(o) {
-		return {
-			kind: FRAMEWORK_KIND_PREFIX + "table-redrew",
-			schemaVersion: 1,
-			viewId: o.viewId,
-			nested: !!o.nested,
-			rowCount: o.rowCount,
-			page: o.page
-		};
+	/**
+	 * Subscribes for the CURRENT invocation: like ctx.on, the subscription is swept on re-populate and on teardown.
+	 * A live delivery first supersedes the region's previous messageSignal and then runs the handler as a message
+	 * delivery, so a handler that calls ctx.refresh() gets a "message" re-populate whose messageSignal the NEXT
+	 * delivery aborts.  The retained replay inside this call is the value the region already had, so it supersedes
+	 * nothing.
+	 */
+	function pageBusSubscribe(region, topic, fn, opts) {
+		const owner = pageBusOwner(region, "subscribe");
+		if (typeof fn !== "function") return owner.subscribe(topic, fn, opts);    // the bus throws its own TypeError
+		const off = owner.subscribe(topic, function (payload, meta) {
+			if (!meta.retained) abortPriorMessageSignal(region);
+			pageBusDepth++;
+			try {
+				fn(payload, meta);
+			} finally {
+				pageBusDepth--;
+			}
+		}, opts);
+		region.busSubs.push(off);
+		return off;
 	}
 
 	// ==================================================================================================================
@@ -899,6 +913,8 @@
 			selection: region.selection,
 			emit: function (msg, opts) { emitFrom(region, msg, opts); },
 			on: function (handler) { return subscribe(region, handler); },
+			publish: function (topic, payload) { return pageBusPublish(region, topic, payload); },
+			subscribe: function (topic, fn, opts) { return pageBusSubscribe(region, topic, fn, opts); },
 			helpers: NS.helpers,
 			host: region.host,
 			generation: region.generation,
@@ -1290,6 +1306,8 @@
 			pendingReason: null,
 			selfRefreshed: false,
 			subs: [],
+			busOwner: null,
+			busSubs: [],
 			deferred: false,
 			barrierMember: false,
 			releasedWindowOpen: false,
@@ -1633,7 +1651,8 @@
 	/**
 	 * Asks the framework to re-invoke this region's populate, so re-entrancy stays the framework's problem rather
 	 * than a consumer's recursive call.  `reason` tracks the CAUSAL EVENT, not the API that was invoked: a refresh
-	 * requested synchronously inside a bus fan-out arrives as "message", and the identical call from a timer or a
+	 * requested synchronously inside a delivery - a region-bus fan-out to ctx.on, or a page-bus delivery to
+	 * ctx.subscribe - arrives as "message", and the identical call from a timer or a
 	 * click arrives as "refresh".  The field exists so an author can animate a data-driven update differently from a
 	 * first paint, and "a message changed my inputs" is the distinction that matters - not which framework function
 	 * was on the stack.
@@ -1644,7 +1663,7 @@
 	 * one permitted spin.
 	 */
 	function requestRefresh(region) {
-		const reason = isDelivering() ? "message" : "refresh";
+		const reason = isDelivering() || pageBusDepth > 0 ? "message" : "refresh";
 		if (region.invoking) {
 			if (region.selfRefreshed) {
 				window.console.warn("JuneauViews.regions: region '" + region.key + "' called ctx.refresh() from"
@@ -1687,9 +1706,10 @@
 					+ " the rest of the teardown ran anyway.", e);
 			}
 		}
-		// 3. Unsubscribe every handler the region registered through ctx.on.
+		// 3. Unsubscribe every handler the region registered through ctx.on or ctx.subscribe.
 		for (const sub of region.subs.slice()) unsubscribeOne(sub);
 		region.subs.length = 0;
+		for (const off of region.busSubs.splice(0)) off();
 		// 4. Discard any message this region queued that has not yet been delivered.
 		bus.queue = bus.queue.filter(function (e) { return e.fromRegion !== region; });
 		// 5. Clear the container.
@@ -1701,6 +1721,9 @@
 		if (!region || region.torn) return;
 		region.torn = true;
 		disposeInvocation(region, TEARDOWN_REASON);
+		// The page-bus owner goes with the region: the framework state topics it claimed are cleared, so a late
+		// subscriber is not handed a selection from a region that no longer exists.
+		if (region.busOwner) region.busOwner.dispose();
 		region.el.removeAttribute(REGION_STATE_ATTR);
 		delete region.el._juneauRegion;
 		const i = liveRegions.indexOf(region);
@@ -1817,10 +1840,6 @@
 		defaultPopulate: defaultPopulate,
 		serializeParams: serializeParams,
 		MIN_REFRESH_MS: MIN_REFRESH_MS,
-		builtins: builtins,
-		emitFramework: emitFramework,
-		selectionChangedMessage: selectionChangedMessage,
-		detailToggledMessage: detailToggledMessage,
-		tableRedrewMessage: tableRedrewMessage
+		builtins: builtins
 	};
 })();

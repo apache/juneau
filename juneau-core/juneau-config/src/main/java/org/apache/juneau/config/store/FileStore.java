@@ -508,6 +508,7 @@ public class FileStore extends ConfigStore {
 						}
 						fc.position(0);
 						fc.write(charset.encode(newContents));
+						fc.truncate(fc.position()); // Drop leftovers when the new contents are shorter.
 					}
 				}
 			}

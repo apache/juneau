@@ -1,0 +1,47 @@
+{
+	"version": 1,
+	"encode": [
+		{ "name": "pub-retained", "frame": {"v":1,"type":"pub","topic":"ops.jobs","payload":{"schemaVersion":1,"running":[]},"retained":true,"seq":2}, "text": "{\"v\":1,\"type\":\"pub\",\"topic\":\"ops.jobs\",\"payload\":{\"schemaVersion\":1,\"running\":[]},\"retained\":true,\"seq\":2}" },
+		{ "name": "pub-event-keyed", "frame": {"v":1,"type":"pub","topic":"ops.alert:east","payload":{"level":"warn","count":3},"retained":false,"seq":7}, "text": "{\"v\":1,\"type\":\"pub\",\"topic\":\"ops.alert:east\",\"payload\":{\"level\":\"warn\",\"count\":3},\"retained\":false,\"seq\":7}" },
+		{ "name": "pub-upstream", "frame": {"v":1,"type":"pub","topic":"ops.cancel-all","payload":{}}, "text": "{\"v\":1,\"type\":\"pub\",\"topic\":\"ops.cancel-all\",\"payload\":{}}" },
+		{ "name": "clear", "frame": {"v":1,"type":"clear","topic":"ops.jobs","seq":9}, "text": "{\"v\":1,\"type\":\"clear\",\"topic\":\"ops.jobs\",\"seq\":9}" },
+		{ "name": "resync-begin", "frame": {"v":1,"type":"resync-begin","seq":1}, "text": "{\"v\":1,\"type\":\"resync-begin\",\"seq\":1}" },
+		{ "name": "resync-end", "frame": {"v":1,"type":"resync-end","seq":4}, "text": "{\"v\":1,\"type\":\"resync-end\",\"seq\":4}" },
+		{ "name": "ping", "frame": {"v":1,"type":"ping"}, "text": "{\"v\":1,\"type\":\"ping\"}" },
+		{ "name": "error-with-topic", "frame": {"v":1,"type":"error","code":"bus:upstream-denied","message":"topic not granted upstream","topic":"ops.secret"}, "text": "{\"v\":1,\"type\":\"error\",\"code\":\"bus:upstream-denied\",\"message\":\"topic not granted upstream\",\"topic\":\"ops.secret\"}" },
+		{ "name": "error-escaping", "frame": {"v":1,"type":"error","code":"bus:bad-frame","message":"line1\nsaid \"no\"\\ok\t\u0001"}, "text": "{\"v\":1,\"type\":\"error\",\"code\":\"bus:bad-frame\",\"message\":\"line1\\nsaid \\\"no\\\"\\\\ok\\t\\u0001\"}" },
+		{ "name": "error-lone-surrogate", "frame": {"v":1,"type":"error","code":"bus:bad-frame","message":"a\ud800b"}, "text": "{\"v\":1,\"type\":\"error\",\"code\":\"bus:bad-frame\",\"message\":\"a\\ud800b\"}" },
+		{ "name": "error-non-bmp", "frame": {"v":1,"type":"error","code":"bus:bad-frame","message":"😀"}, "text": "{\"v\":1,\"type\":\"error\",\"code\":\"bus:bad-frame\",\"message\":\"😀\"}" }
+	],
+	"decode": [
+		{ "name": "reordered-with-whitespace", "text": "{ \"seq\": 3, \"type\": \"pub\", \"v\": 1, \"topic\": \"ops.jobs\", \"payload\": {\"a\": 1}, \"retained\": false }", "frame": {"v":1,"type":"pub","topic":"ops.jobs","payload":{"a":1},"retained":false,"seq":3} },
+		{ "name": "unknown-field-dropped", "text": "{\"v\":1,\"type\":\"ping\",\"extra\":true}", "frame": {"v":1,"type":"ping"} },
+		{ "name": "upstream-pub", "text": "{\"v\":1,\"type\":\"pub\",\"topic\":\"ops.cancel-all\",\"payload\":{\"reason\":\"maintenance\"}}", "frame": {"v":1,"type":"pub","topic":"ops.cancel-all","payload":{"reason":"maintenance"}} },
+		{ "name": "error-without-topic", "text": "{\"v\":1,\"type\":\"error\",\"code\":\"bus:slow-consumer\",\"message\":\"slow consumer\"}", "frame": {"v":1,"type":"error","code":"bus:slow-consumer","message":"slow consumer"} },
+		{ "name": "resync-end", "text": "{\"v\":1,\"type\":\"resync-end\",\"seq\":12}", "frame": {"v":1,"type":"resync-end","seq":12} },
+		{ "name": "clear-without-seq", "text": "{\"v\":1,\"type\":\"clear\",\"topic\":\"ops.jobs\"}", "frame": {"v":1,"type":"clear","topic":"ops.jobs"} },
+		{ "name": "seq-float-integral", "text": "{\"v\":1,\"type\":\"clear\",\"topic\":\"ops.jobs\",\"seq\":1.0}", "frame": {"v":1,"type":"clear","topic":"ops.jobs","seq":1} },
+		{ "name": "seq-exponent-integral", "text": "{\"v\":1,\"type\":\"resync-end\",\"seq\":1e3}", "frame": {"v":1,"type":"resync-end","seq":1000} }
+	],
+	"bad": [
+		{ "name": "not-json", "text": "{\"v\":1," },
+		{ "name": "json5-not-json", "text": "{v:1,type:'ping'}" },
+		{ "name": "not-an-object", "text": "[1,2]" },
+		{ "name": "empty", "text": "" },
+		{ "name": "missing-version", "text": "{\"type\":\"ping\"}" },
+		{ "name": "wrong-version", "text": "{\"v\":2,\"type\":\"ping\"}" },
+		{ "name": "unknown-type", "text": "{\"v\":1,\"type\":\"subscribe\",\"topic\":\"ops.jobs\"}" },
+		{ "name": "pub-without-topic", "text": "{\"v\":1,\"type\":\"pub\",\"payload\":{}}" },
+		{ "name": "pub-topic-not-string", "text": "{\"v\":1,\"type\":\"pub\",\"topic\":5,\"payload\":{}}" },
+		{ "name": "pub-empty-topic", "text": "{\"v\":1,\"type\":\"pub\",\"topic\":\"\",\"payload\":{}}" },
+		{ "name": "pub-without-payload", "text": "{\"v\":1,\"type\":\"pub\",\"topic\":\"ops.jobs\"}" },
+		{ "name": "retained-not-boolean", "text": "{\"v\":1,\"type\":\"pub\",\"topic\":\"ops.jobs\",\"payload\":{},\"retained\":\"yes\"}" },
+		{ "name": "seq-fractional", "text": "{\"v\":1,\"type\":\"clear\",\"topic\":\"ops.jobs\",\"seq\":1.5}" },
+		{ "name": "seq-negative", "text": "{\"v\":1,\"type\":\"resync-begin\",\"seq\":-1}" },
+		{ "name": "error-without-code", "text": "{\"v\":1,\"type\":\"error\",\"message\":\"x\"}" },
+		{ "name": "error-without-message", "text": "{\"v\":1,\"type\":\"error\",\"code\":\"bus:x\"}" },
+		{ "name": "trailing-garbage", "text": "{\"v\":1,\"type\":\"ping\"} junk" },
+		{ "name": "trailing-object", "text": "{\"v\":1,\"type\":\"ping\"}{}" },
+		{ "name": "seq-too-large", "text": "{\"v\":1,\"type\":\"clear\",\"topic\":\"ops.jobs\",\"seq\":9007199254740992}" }
+	]
+}

@@ -18,8 +18,9 @@
 /*
  * regions-bus.cjs - always-on Node harness for the region message bus: broadcast-by-default, opt-in targeted
  * delivery, payload opacity, per-subscriber error isolation, subscription-ordered synchronous delivery with
- * emit-during-delivery queued under an independent depth cap, unsubscribe both returned and swept at teardown, the
- * closed set of framework-emitted message schemas, and SD-2's emit-ownership invariant in both directions.
+ * emit-during-delivery queued under an independent depth cap, unsubscribe both returned and swept at teardown, and
+ * the negative half of SD-2's emit-ownership invariant (content never auto-emits).  The chrome half - selection,
+ * detail and redraw - is published on the page bus's selection:/detail:/redraw: topics (message bus addendum, 9.2).
  *
  *   Usage:  node regions-bus.cjs <juneau-renders.js> <juneau-views.js> <juneau-regions.js>
  */
@@ -272,58 +273,6 @@ function kinds(list) {
 		p.ctxs.driver.emit({ kind: 'm1' });
 		out.t_step4_cGot = kinds(p.received.c);
 		out.t_step4_queuedMessageDropped = kinds(p.received.c).indexOf('from-b') < 0;
-	}
-
-	// =================================================================================================================
-	// Test 27 / 27a / 27c / 51 - the framework-emitted set is SMALL and CLOSED: selection changed, detail toggled,
-	// table redrew, and nothing else.  27a/27c are the CHROME half of SD-2's ownership invariant: a region beside the
-	// chrome is driven with NO author emit code at all - only a ctx.on plus a msg.viewId filter.
-	// =================================================================================================================
-	{
-		const h = H.load(rendersJsPath, viewsJsPath, regionsJsPath);
-		const R = h.R;
-		const seen = [];
-		let mine = [];
-		R.register('chart', function (ctx) {
-			// The entire consumer-side contract for a chrome-driven region: subscribe, filter on viewId.  No emit.
-			ctx.on(function (msg) {
-				seen.push(msg);
-				if (msg.viewId === 'gacks') mine.push(msg.kind);
-			});
-		});
-		R.initRegion(H.mkRegion(h.env, { id: 'chart', type: 'card-body', populate: 'chart' }));
-
-		// 27a - selection changed.  Emitted BY THE FRAMEWORK, so it reaches every subscriber including one whose own
-		// chrome caused it: meta.from names the framework rather than a region.
-		R.emitFramework(R.selectionChangedMessage({ viewId: 'gacks', ids: ['42'], rows: [{ id: '42' }], added: ['42'], removed: [] }));
-		// 27c - detail expand/collapse.
-		R.emitFramework(R.detailToggledMessage({ viewId: 'gacks', rowId: '42', expanded: true, generation: 7 }));
-		// table redrew.
-		R.emitFramework(R.tableRedrewMessage({ viewId: 'gacks', nested: false, rowCount: 25, page: 0 }));
-
-		out.t27_kinds = seen.map(function (m) { return m.kind; });
-		out.t27_allNamespaced = seen.every(function (m) { return m.kind.startsWith('juneau:'); });
-		out.t27_senderIsFramework = R.FRAMEWORK_SENDER_KEY;
-		out.t27a_drivenWithNoAuthorEmit = mine.slice();
-
-		// 51 - a golden per framework message: kind including the prefix, schemaVersion, and the full field set.
-		out.t51_selectionKeys = Object.keys(seen[0]).sort((a, b) => Number(a > b) - Number(a < b));
-		out.t51_selection = seen[0];
-		out.t51_detailKeys = Object.keys(seen[1]).sort((a, b) => Number(a > b) - Number(a < b));
-		out.t51_detail = seen[1];
-		out.t51_redrewKeys = Object.keys(seen[2]).sort((a, b) => Number(a > b) - Number(a < b));
-		out.t51_redrew = seen[2];
-		out.t51_schemaVersionsIndependentOfContract = seen.every(function (m) { return m.schemaVersion === 1; })
-			&& R.CONTRACT_VERSION === '1';
-
-		// 51 - the DISAMBIGUATION case: two tables on one page, each emitting selection, and a subscriber correctly
-		// filtering on msg.viewId.  Without viewId on the payload this is unanswerable, because meta.from names the
-		// framework and there is no host for a short target to resolve against.
-		mine = [];
-		R.emitFramework(R.selectionChangedMessage({ viewId: 'gacks', ids: ['1'] }));
-		R.emitFramework(R.selectionChangedMessage({ viewId: 'other', ids: ['2'] }));
-		out.t51_filteredByViewId = mine.length === 1;
-		out.t51_viewIdsSeen = seen.slice(3).map(function (m) { return m.viewId; });
 	}
 
 	// =================================================================================================================

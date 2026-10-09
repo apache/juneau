@@ -87,11 +87,11 @@ public final class ConsoleDirectiveModel implements TemplateDirectiveModel {
 		if (cap.consoleOpen || cap.consoleDone)
 			throw FtlAttrLists.reject("<@console> cannot be nested inside another <@console>.");
 
-		// Resolve (and fail-closed validate) the theme= attribute up front; a nested <@theme> may still win below.
+		// Fail-closed validate an explicit theme= attribute up front; a nested <@theme> (or, absent both, a theme seeded
+		// by a page spec) decides the final name below.
 		var themeAttr = FtlAttrLists.scalar(p, "theme");
-		var themeName = themeAttr.isEmpty() ? ConsoleChromeMixin.BUILTIN_THEME_NAMES.get(0) : themeAttr;
-		if (! ConsoleChromeMixin.BUILTIN_THEME_NAMES.contains(themeName))
-			throw FtlAttrLists.reject("<@console> unknown theme name '" + themeName + "'.  Built-in themes: "
+		if (! themeAttr.isEmpty() && ! ConsoleChromeMixin.BUILTIN_THEME_NAMES.contains(themeAttr))
+			throw FtlAttrLists.reject("<@console> unknown theme name '" + themeAttr + "'.  Built-in themes: "
 				+ String.join(", ", ConsoleChromeMixin.BUILTIN_THEME_NAMES) + ".");
 
 		var icon = FtlAttrLists.scalar(p, "icon");
@@ -100,9 +100,9 @@ public final class ConsoleDirectiveModel implements TemplateDirectiveModel {
 		var titleAttr = FtlAttrLists.scalar(p, "title");
 		var chrome = FtlAttrLists.strictBoolean(p, NAME, "chrome", false);
 
-		// Document <title>: the title= attribute wins, else fall back to brand=; omit when neither is authored.
+		// Document <title>: a title seeded by a page spec wins; else the title= attribute, else brand=; omitted when none.
 		var docTitle = ! titleAttr.isEmpty() ? titleAttr : brand;
-		cap.title(docTitle);
+		cap.titleDefault(docTitle);
 		cap.header(h -> {
 			if (! brand.isEmpty())
 				h.title(brand);
@@ -122,6 +122,10 @@ public final class ConsoleDirectiveModel implements TemplateDirectiveModel {
 		cap.resolveActiveNav();
 
 		if (n(cap.themeCssUrl)) {
+			// No <@theme> ran: an explicit theme= wins, else a theme seeded by a page spec is inherited, else the default.
+			var themeName = ! themeAttr.isEmpty() ? themeAttr : cap.themeOrNull();
+			if (themeName == null)
+				themeName = ConsoleChromeMixin.BUILTIN_THEME_NAMES.get(0);
 			cap.themeCssUrl = ConsoleChromeMixin.themeAssetUrl(req, themeName);
 			cap.theme(themeName);
 		}
@@ -140,8 +144,8 @@ public final class ConsoleDirectiveModel implements TemplateDirectiveModel {
 		out.write("<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n");
 		out.write("<meta charset=\"utf-8\">\n");
 		out.write("<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n");
-		if (! docTitle.isEmpty())
-			out.write("<title>" + attrEscape(docTitle) + "</title>\n");
+		if (! cap.title().isEmpty())
+			out.write("<title>" + attrEscape(cap.title()) + "</title>\n");
 		if (! cap.tab().isEmpty())
 			out.write("<meta name=\"page-tab\" content=\"" + attrEscape(cap.tab()) + "\">\n");
 		if (hasCsrf)
@@ -166,7 +170,9 @@ public final class ConsoleDirectiveModel implements TemplateDirectiveModel {
 		out.write("\n</head>\n");
 
 		out.write("<body");
-		if (hasCsrf) {
+		// A spec- or <@body>-authored csrf attribute (merged by checkConsoleClose above) wins over the auto-detection.
+		// Either name suppresses both auto attributes, so a token and its header never come from different sources.
+		if (hasCsrf && ! cap.hasBodyAttr("data-juneau-csrf") && ! cap.hasBodyAttr("data-juneau-csrf-header")) {
 			out.write(" data-juneau-csrf=\"" + attrEscape(token) + "\"");
 			if (inb(csrfHeader))
 				out.write(" data-juneau-csrf-header=\"" + attrEscape(csrfHeader) + "\"");

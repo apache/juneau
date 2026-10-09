@@ -216,4 +216,37 @@ class ConsoleOutputLine_Test extends TestBase {
 		c.frags.get(0).tooltip = "changed";
 		assertEquals("t", line.frags.get(0).tooltip);
 	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// e - open line
+	//------------------------------------------------------------------------------------------------------------------
+
+	@Test void e01_openIsSerializedOnlyWhenTrue() {
+		assertJson("{'n':3,'level':'INFO','text':'abc','open':true}", ConsoleOutputLine.info("abc").n(3).open(true).validate().toContractMap());
+		assertJson("{'n':3,'level':'INFO','text':'abc'}", ConsoleOutputLine.info("abc").n(3).open(false).validate().toContractMap());
+		assertNull(ConsoleOutputLine.info("abc").open(false).open);
+	}
+
+	@Test void e02_copyKeepsOpen() {
+		assertEquals(Boolean.TRUE, ConsoleOutputLine.info("abc").open(true).copy().open);
+	}
+
+	@Test void e03_afterLastCr() {
+		assertEquals("b", ConsoleOutputLine.afterLastCr("a\rb"));
+		assertEquals("abc", ConsoleOutputLine.afterLastCr("abc\r"));
+		assertEquals("b", ConsoleOutputLine.afterLastCr("a\rb\r\r"));
+		assertEquals("", ConsoleOutputLine.afterLastCr(""));
+		assertEquals("", ConsoleOutputLine.afterLastCr("\r"));
+		assertEquals("plain", ConsoleOutputLine.afterLastCr("plain"));
+	}
+
+	@Test void e04_decoderCopyIsIndependent() {
+		var d = new AnsiDecoder();
+		d.line(Level.INFO, "\u001b[31mred");
+		var c = d.copy();
+		c.line(Level.INFO, "\u001b[0m");
+		var f = d.line(Level.INFO, "still").frags.get(0);
+		assertEquals("still", f.text);
+		assertEquals(Style.ERROR, f.style);
+	}
 }

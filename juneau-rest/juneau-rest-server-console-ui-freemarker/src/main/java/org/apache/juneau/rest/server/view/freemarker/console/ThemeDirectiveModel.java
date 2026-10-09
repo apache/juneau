@@ -129,8 +129,9 @@ public final class ThemeDirectiveModel implements TemplateDirectiveModel {
 			}
 		}
 
+		// Merge-checked before any field write, so a conflict leaves nothing half-applied.
+		cap.mergeTheme(name);
 		cap.themeCssUrl = ConsoleChromeMixin.themeAssetUrl(req, name);
 		cap.themeOverrideBlock = overrideBlock;
-		cap.theme(name);
 	}
 }

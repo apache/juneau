@@ -228,6 +228,7 @@ public final class ConsoleTemplateValidator {
 		var siblings = new ArrayDeque<Set<String>>();
 		siblings.push(new HashSet<>());
 		var cardIds = new HashSet<String>();
+		var navDepth = 0;
 		var templateRefs = new ArrayList<Object[]>();   // each entry pairs a template name with its source offset
 		var consoleAt = -1;
 		var mains = 0;
@@ -242,6 +243,8 @@ public final class ConsoleTemplateValidator {
 			if (closing) {
 				if ((dname.equals(NodeDirectiveModel.NAME) || dname.equals(NavigationDirectiveModel.NAME)) && siblings.size() > 1)
 					siblings.pop();
+				if (dname.equals(NavigationDirectiveModel.NAME) && navDepth > 0)
+					navDepth--;
 			} else if (n(known)) {
 				var dot = dname.indexOf('.');
 				var ok = dot > 0 ? namespaces.contains(dname.substring(0, dot)) : macros.contains(dname);
@@ -260,12 +263,16 @@ public final class ConsoleTemplateValidator {
 				var id = attrs.get("id");
 				switch (dname) {
 					case NavigationDirectiveModel.NAME -> {
-						if (! selfClosing)
+						if (! selfClosing) {
 							siblings.push(new HashSet<>());
+							navDepth++;
+						}
 					}
 					case NodeDirectiveModel.NAME -> {
 						if (nn(id) && id.literal && ! siblings.peek().add(id.value))
 							add(out, name, lines, at, "duplicate-id", String.format("<@node id='%s'> duplicates a sibling id.", id.value));
+						if (navDepth > 0 && attrs.containsKey("under"))
+							add(out, name, lines, at, "unknown-attribute", String.format("<@%s> unknown attribute '%s'.", dname, "under"));
 						if (! selfClosing)
 							siblings.push(new HashSet<>());
 					}

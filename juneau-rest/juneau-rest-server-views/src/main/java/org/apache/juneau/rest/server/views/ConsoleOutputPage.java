@@ -214,7 +214,11 @@ public class ConsoleOutputPage {
 				throw iaex("ConsoleOutputPage lines must be strictly increasing in n; got %s after %s.", l.n, last);
 			last = l.n;
 			l.validate();
+			if (Boolean.TRUE.equals(l.open) && i != lines.size() - 1)
+				throw iaex("ConsoleOutputPage lines[%s] is open but not the last line.", i);
 		}
+		if (terminal && ! lines.isEmpty() && Boolean.TRUE.equals(lines.get(lines.size() - 1).open))
+			throw iaex("ConsoleOutputPage a terminal page cannot end on an open line.");
 		if (kind == Kind.FORWARD && next == null)
 			throw iaex("ConsoleOutputPage forward page needs next.");
 		if (kind == Kind.EARLIER && next != null)

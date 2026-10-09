@@ -1016,7 +1016,8 @@ public class RestResponse extends HttpServletResponseWrapper {
 	 * Sets the <js>"NoTrace"</js> attribute to the specified boolean.
 	 *
 	 * <p>
-	 * This flag tells the framework not to trace the current request.
+	 * This flag tells the framework not to trace the current request: the access-log record for the call is still
+	 * emitted, but without the exception's stack trace.  A <c>No-Trace: true</c> request header has the same effect; when both are present, the attribute wins.
 	 *
 	 * @param b The attribute value.
 	 * @return This object.

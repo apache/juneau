@@ -24,6 +24,7 @@ import java.util.logging.*;
 
 import org.apache.juneau.rest.server.*;
 import org.apache.juneau.rest.server.staticfile.*;
+import org.apache.juneau.rest.server.terminal.*;
 import org.apache.juneau.rest.server.views.*;
 import org.apache.juneau.rest.server.widgets.*;
 
@@ -39,11 +40,17 @@ import org.apache.juneau.rest.server.widgets.*;
  * 	<li>{@code "datatables-glue"} ({@link ToolkitPack.Kind#VENDOR}) &mdash; the first-party glue
  * 		({@link ViewsMixin#DATATABLES_JS_PATH}, served by {@code DataTablesMixin}); depends on {@code "datatables"}.
  * 		Every {@code <@card type="datatables">} requires it.
- * 	<li>{@code "views"} ({@link ToolkitPack.Kind#RUNTIME}) &mdash; the views runtime.  JS order is a contract: renders,
+ * 	<li>{@code "views"} ({@link ToolkitPack.Kind#RUNTIME}) &mdash; the views runtime.  JS order is a contract: bus (first), renders,
  * 		icons, search, pagestate, urlstate, ribbon, views, config, regions, console-output, run-view, helpers.
  * 		{@code juneau-urlstate.js} must precede {@code juneau-views.js} / {@code juneau-config.js}.
  * 	<li>{@code "calendar"} ({@link ToolkitPack.Kind#RUNTIME}) &mdash; the {@code juneau-calendar.*} runtime from
  * 		{@code juneau-rest-server-widgets}, resolved through {@link #WIDGETS_RESOLVER}.
+ * 	<li>{@code "xterm"} ({@link ToolkitPack.Kind#VENDOR}) &mdash; the xterm.js WebJar (library and stylesheet), resolved
+ * 		through {@link #WEBJAR_RESOLVER}.
+ * 	<li>{@code "terminal"} ({@link ToolkitPack.Kind#RUNTIME}) &mdash; the {@code juneau-terminal.*} runtime from
+ * 		{@code juneau-rest-server-terminal}, resolved through {@link TerminalMixin#terminalAssetUrl(RestRequest, String)};
+ * 		depends on {@code "views"} and {@code "xterm"}.  Every {@code <@card type="terminal">} requires it, so a page
+ * 		with a terminal card needs no {@code toolkit=}.
  * </ul>
  *
  * <p>
@@ -81,6 +88,12 @@ public final class ToolkitPackRegistry {
 
 	/** The built-in DataTables Buttons WebJar pack (copy and CSV export, no JSZip or pdfmake). */
 	public static final String PACK_DATATABLES_BUTTONS = "datatables-buttons";
+
+	/** The built-in xterm.js WebJar pack (library plus stylesheet). */
+	public static final String PACK_XTERM = "xterm";
+
+	/** The built-in terminal runtime pack; depends on {@code "views"} and {@code "xterm"}. */
+	public static final String PACK_TERMINAL = "terminal";
 
 	private static final String NPM = "org.webjars.npm";
 
@@ -144,6 +157,8 @@ public final class ToolkitPackRegistry {
 		register(ToolkitPack.create(PACK_VIEWS).kind(RUNTIME).resolver(VIEWS_RESOLVER)
 			.css(ViewsMixin.VIEWS_CSS_PATH, ViewsMixin.CONFIG_CSS_PATH)
 			.js(
+				// Dependency-free and read by views, regions and the console shell: it must load first (E-JS-46).
+				ViewsMixin.BUS_JS_PATH,
 				ViewsMixin.RENDERS_JS_PATH,
 				ViewsMixin.ICONS_JS_PATH,
 				ViewsMixin.SEARCH_JS_PATH,
@@ -164,6 +179,15 @@ public final class ToolkitPackRegistry {
 			List.of(WidgetsMixin.CALENDAR_CSS_PATH),
 			List.of(WidgetsMixin.CALENDAR_JS_PATH),
 			WIDGETS_RESOLVER);
+		register(ToolkitPack.create(PACK_XTERM).kind(VENDOR).resolver(WEBJAR_RESOLVER)
+			.css(TerminalMixin.XTERM_CSS_ASSET)
+			.js(TerminalMixin.XTERM_JS_ASSET)
+			.build());
+		register(ToolkitPack.create(PACK_TERMINAL).kind(RUNTIME).resolver(TerminalMixin::terminalAssetUrl)
+			.css(TerminalMixin.CSS_PATH)
+			.js(TerminalMixin.JS_PATH)
+			.dependsOn(PACK_VIEWS, PACK_XTERM)
+			.build());
 	}
 
 	/**

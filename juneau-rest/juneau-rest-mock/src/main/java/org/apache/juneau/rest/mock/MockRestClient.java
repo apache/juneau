@@ -25,6 +25,7 @@ import java.util.concurrent.*;
 import java.util.logging.*;
 
 import org.apache.juneau.commons.inject.*;
+import org.apache.juneau.http.header.NoTrace;
 import org.apache.juneau.marshall.json.*;
 import org.apache.juneau.marshall.parser.*;
 import org.apache.juneau.rest.client.*;
@@ -194,6 +195,7 @@ public final class MockRestClient implements Closeable {
 		private String contextPath;
 		private BeanStore overridingBeanStore;
 		private Parser defaultParser;
+		private boolean noTrace;
 
 		private Builder(Object impl) {
 			this.impl = impl;
@@ -267,6 +269,28 @@ public final class MockRestClient implements Closeable {
 		}
 
 		/**
+		 * Sends a <c>No-Trace: true</c> header with every request, so the server leaves the stack trace of a failed
+		 * call out of its log record.
+		 *
+		 * <p>
+		 * Opt-in only; no other builder option turns it on. The one-line access record is still logged.  To do the
+		 * same for a single call, use {@link RestRequest#noTrace()}.
+		 *
+		 * <h5 class='section'>Example:</h5>
+		 * <p class='bjava'>
+		 * 	<jk>try</jk> (<jv>client</jv> = MockRestClient.<jsm>builder</jsm>(MyResource.<jk>class</jk>).noTrace().build()) {
+		 * 		<jv>client</jv>.get(<js>"/missing"</js>).run().assertStatus().is(404);
+		 * 	}
+		 * </p>
+		 *
+		 * @return This object.
+		 */
+		public Builder noTrace() {
+			noTrace = true;
+			return this;
+		}
+
+		/**
 		 * Builds and returns the {@link MockRestClient}.
 		 *
 		 * @return A new instance. Never <jk>null</jk>.
@@ -301,6 +325,8 @@ public final class MockRestClient implements Closeable {
 				.defaultSerializer(JsonSerializer.DEFAULT);
 			if (defaultParser != null)
 				clientBuilder.defaultParser(defaultParser);
+			if (noTrace)
+				clientBuilder.header(NoTrace.NAME, "true");
 			var ngClient = clientBuilder.build();
 
 				return new MockRestClient(ngClient);

@@ -116,6 +116,16 @@ class RunEvent_Test extends TestBase {
 		assertThrowsWithMessage(IllegalArgumentException.class, "does not have", () -> RunEvent.done(DoneStatus.OK).withN(1));
 	}
 
+	@Test void b08_rawOffset() {
+		var s = RunEvent.step("a", "T").withRawOffset(0);
+		assertEquals(0L, s.toContractMap().get("rawOffset"));
+		assertEquals(RunEvent.MAX_SAFE_INT, RunEvent.suite("a", "jest", "s", 1, 0, 0).withRawOffset(RunEvent.MAX_SAFE_INT).toContractMap().get("rawOffset"));
+		assertEquals(7L, RunEvent.test("a", "jest", "s", "n", TestStatus.PASS).withRawOffset(7).toContractMap().get("rawOffset"));
+		assertThrowsWithMessage(IllegalArgumentException.class, "rawOffset must be 0-", () -> s.withRawOffset(-1));
+		assertThrowsWithMessage(IllegalArgumentException.class, "rawOffset must be 0-", () -> s.withRawOffset(RunEvent.MAX_SAFE_INT + 1));
+		assertThrowsWithMessage(IllegalArgumentException.class, "does not have", () -> RunEvent.end("a", EndStatus.OK).withRawOffset(1));
+	}
+
 	@Test void c01_fromMapRoundTripsEveryKind() {
 		for (var e : List.of(STEP_EVENT, END_EVENT, SUITE_EVENT, TEST_EVENT, REPLACE_EVENT, NOTE_EVENT, DONE_EVENT)) {
 			assertEquals(e.toContractMap(), RunEvent.fromMap(e.toContractMap()).toContractMap());
@@ -157,5 +167,18 @@ class RunEvent_Test extends TestBase {
 		var counts = (Map<String,Object>)m.get("counts");
 		counts.put("pass", 99);
 		assertBean(SUITE_EVENT.toContractMap(), "counts", "{pass=3,fail=1,skip=0}");
+	}
+
+	@Test void c08_rawOffsetRoundTripsAndOrders() {
+		var step = RunEvent.step("a", "T").withRawLine(3).withRawOffset(120);
+		var suite = RunEvent.suite("a", "jest", "s", 1, 0, 0).withRawOffset(5);
+		var test = RunEvent.test("a", "jest", "s", "n", TestStatus.FAIL).withRawLine(2).withRawOffset(9);
+		for (var e : List.of(step, suite, test))
+			assertEquals(e, RunEvent.fromMap(e.toContractMap()));
+		assertEquals(List.of("ev", "id", "title", "rawLine", "rawOffset"), new ArrayList<>(step.toContractMap().keySet()));
+		assertEquals(List.of("ev", "step", "fw", "suite", "counts", "rawOffset"), new ArrayList<>(suite.toContractMap().keySet()));
+		assertEquals(List.of("ev", "step", "fw", "suite", "name", "status", "rawLine", "rawOffset"), new ArrayList<>(test.toContractMap().keySet()));
+		assertEquals(120L, RunEvent.fromMap(Map.of("ev", "step", "id", "a", "title", "T", "rawOffset", 120.0)).toContractMap().get("rawOffset"));
+		assertThrowsWithMessage(IllegalArgumentException.class, "rawOffset", () -> RunEvent.fromMap(Map.of("ev", "step", "id", "a", "title", "T", "rawOffset", 1.5)));
 	}
 }

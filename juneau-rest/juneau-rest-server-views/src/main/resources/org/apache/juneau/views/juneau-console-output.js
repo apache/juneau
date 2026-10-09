@@ -244,6 +244,8 @@
 			if (ui)
 				line.ui = ui;
 		}
+		if (input.open === true)
+			line.open = true;
 		return { line: line, problems: problems };
 	}
 
@@ -434,6 +436,10 @@
 		const row = mk("div", "juneau-co-line");
 		row.setAttribute("data-n", String(line.n));
 		row.setAttribute("data-level", line.level);
+		if (line.open) {
+			row.classList.add("juneau-co-open");
+			row.setAttribute("aria-live", "off");
+		}
 		if (isMarkerLine(inst, line)) {
 			row.setAttribute("data-marker", "");
 			row.classList.add("juneau-co-marker");
@@ -1283,7 +1289,28 @@
 		}
 	}
 
-	/** THE ingestion API (spec 5.1).  Returns the number of rows added. */
+	/** Re-renders an open row in place: the node, its id and its rowsByN entry stay, so nothing is added to the log. */
+	function patchRow(inst, old, line) {
+		const row = renderLine(inst, line);
+		const target = old.classList.contains("juneau-co-target");
+		const revealed = old.classList.contains("juneau-co-reveal");
+		old.className = row.className;
+		if (target)
+			old.classList.add("juneau-co-target");
+		if (revealed)
+			old.classList.add("juneau-co-reveal");
+		for (const a of ["data-level", "data-marker", "aria-live"]) {
+			if (row.hasAttribute(a))
+				old.setAttribute(a, row.getAttribute(a));
+			else
+				old.removeAttribute(a);
+		}
+		old.replaceChildren();
+		while (row.firstChild)
+			old.appendChild(row.firstChild);
+	}
+
+	/** THE ingestion API (spec 5.1).  Returns the number of rows added; an open row re-sent under its n is patched in place and not counted. */
 	function append(inst, lines) {
 		if (inst.destroyed || inst.dead)
 			return 0;
@@ -1292,6 +1319,7 @@
 		const frag = document.createDocumentFragment();
 		let added = 0;
 		let dropped = 0;
+		let replaced = 0;
 		let firstBad;
 		for (const raw of list) {
 			const r = validateLine(raw);
@@ -1304,8 +1332,14 @@
 			const line = r.line;
 			if (line.n === undefined)
 				line.n = inst.last + 1;
-			if (line.n <= inst.last)
+			if (line.n <= inst.last) {
+				const old = line.n === inst.last ? inst.rowsByN.get(line.n) : null;
+				if (old && old.classList.contains("juneau-co-open")) {
+					patchRow(inst, old, line);
+					replaced++;
+				}
 				continue;
+			}
 			const row = renderLine(inst, line);
 			frag.appendChild(row);
 			inst.rowsByN.set(line.n, row);
@@ -1323,6 +1357,8 @@
 			afterAppend(inst, wasStuck, added);
 			resolveQueuedTarget(inst);
 		}
+		else if (replaced)
+			afterAppend(inst, wasStuck, 0);
 		return added;
 	}
 

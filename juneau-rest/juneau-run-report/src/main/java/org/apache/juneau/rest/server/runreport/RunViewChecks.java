@@ -35,8 +35,11 @@ public final class RunViewChecks {
 	private static final Pattern TAB_CR_LF = Pattern.compile("[\t\r\n]");
 	private static final Pattern FRAGMENT_HREF = Pattern.compile("^#[A-Za-z0-9._:~-]{0,128}$");
 
-	/** The placeholder a raw-href template must contain exactly once. */
+	/** The line placeholder; a raw-href template contains it or {@link #OFFSET_PLACEHOLDER}, exactly once. */
 	public static final String LINE_PLACEHOLDER = "{line}";
+
+	/** The byte-offset placeholder; a raw-href template contains it or {@link #LINE_PLACEHOLDER}, exactly once. */
+	public static final String OFFSET_PLACEHOLDER = "{offset}";
 
 	private RunViewChecks() {}
 
@@ -113,7 +116,8 @@ public final class RunViewChecks {
 	 * Whether the string is a valid raw-href template.
 	 *
 	 * <p>
-	 * It must contain exactly one <c>{line}</c> and, with <c>1</c> substituted, be a safe line href.
+	 * It must contain exactly one placeholder in total, either <c>{line}</c> or <c>{offset}</c>, and, with <c>1</c>
+	 * substituted, be a safe line href.
 	 *
 	 * @param s The candidate.  May be <jk>null</jk>.
 	 * @return <jk>true</jk> if valid.
@@ -121,10 +125,16 @@ public final class RunViewChecks {
 	public static boolean isRawHrefTemplate(String s) {
 		if (s == null)
 			return false;
-		var i = s.indexOf(LINE_PLACEHOLDER);
-		if (i < 0 || s.indexOf(LINE_PLACEHOLDER, i + 1) >= 0)
+		if (count(s, LINE_PLACEHOLDER) + count(s, OFFSET_PLACEHOLDER) != 1)
 			return false;
-		return isSafeLineHref(s.replace(LINE_PLACEHOLDER, "1"));
+		return isSafeLineHref(s.replace(LINE_PLACEHOLDER, "1").replace(OFFSET_PLACEHOLDER, "1"));
+	}
+
+	private static int count(String s, String token) {
+		var n = 0;
+		for (var i = s.indexOf(token); i >= 0; i = s.indexOf(token, i + token.length()))
+			n++;
+		return n;
 	}
 
 	/**

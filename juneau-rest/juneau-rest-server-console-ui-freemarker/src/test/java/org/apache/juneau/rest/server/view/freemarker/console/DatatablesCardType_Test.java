@@ -24,6 +24,8 @@ import java.util.*;
 import org.apache.juneau.*;
 import org.apache.juneau.marshall.collections.*;
 import org.apache.juneau.rest.server.console.*;
+import org.apache.juneau.rest.server.views.*;
+import org.apache.juneau.rest.server.widgets.Op;
 import org.junit.jupiter.api.*;
 
 class DatatablesCardType_Test extends TestBase {
@@ -53,6 +55,38 @@ class DatatablesCardType_Test extends TestBase {
 		var s = CardSource.create("datatables", "t").build();
 		var ex = assertThrows(IllegalArgumentException.class, () -> h.toFragment(s));
 		assertEquals("<@card id='t'> type='datatables' requires src= or a body with 'columns' and exactly one of 'dataUrl' or 'rows'.", ex.getMessage());
+	}
+
+	@Test void bodyMap_isAcceptedAsTheCatalog() {
+		var catalog = Map.<String,Object>of("dataUrl", "/rest/t/data", "columns", List.of(Map.of("key", "a")));
+		var f = h.toFragment(CardSource.create("datatables", "t").bodyMap(catalog).build());
+		assertEquals("/rest/t/data", ((Map<?,?>)f.get("table")).get("dataUrl"));
+	}
+
+	@Test void bodyMap_fromTableSpec_withBulkRowActionsAndSelection() {
+		var permit = WritePermit.forCapability("slo:bulk");
+		var selection = SelectionDef.create("id").selectableWhen(RowActionEnabledRule.of("state", Op.EQ, "open", "Not open"));
+		var bulk = BulkMutateDef.create(permit, selection)
+			.actions(RowAction.create("abort").endpoint("/rest/slo/abort").bulkMode(RowAction.BulkMode.AGGREGATE));
+		var spec = TableSpec.create("slo").dataUrl("/rest/slo/data").columns(Column.create("pod"))
+			.rowActions(RowAction.create("ack").endpoint("/rest/slo/ack"))
+			.selection(selection).bulk(bulk)
+			.detail(RowDetail.create("/rest/slo/data/{id}").region(RegionDef.create("d").populate("d").allowPopulators("d")));
+		spec.validate();
+		var f = h.toFragment(CardSource.create("datatables", "slo").bodyMap(spec.toCardBody()).build());
+		assertEquals("/rest/slo/data", ((Map<?,?>)f.get("table")).get("dataUrl"));
+	}
+
+	@Test void bodyMap_withoutColumns_throwsE27() {
+		var s = CardSource.create("datatables", "t").bodyMap(Map.of("dataUrl", "/x")).build();
+		var ex = assertThrows(IllegalArgumentException.class, () -> h.toFragment(s));
+		assertEquals("<@card id='t'> type='datatables' requires src= or a body with 'columns' and exactly one of 'dataUrl' or 'rows'.", ex.getMessage());
+	}
+
+	@Test void bodyMapAndSrc_throwsE26() {
+		var s = CardSource.create("datatables", "t").src("/rest/t").bodyMap(Map.of("dataUrl", "/x")).build();
+		var ex = assertThrows(IllegalArgumentException.class, () -> h.toFragment(s));
+		assertEquals("<@card id='t'> type='datatables' takes src= or a body, not both.", ex.getMessage());
 	}
 
 	@Test void missingDataUrlOrColumns_throwsE27() {

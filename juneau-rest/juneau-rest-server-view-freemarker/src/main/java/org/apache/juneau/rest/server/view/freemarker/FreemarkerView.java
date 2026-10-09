@@ -144,7 +144,7 @@ public final class FreemarkerView implements View {
 			throw iaex("attribute value must not be null (attribute '%s')", key);
 		var copy = new LinkedHashMap<>(attributes);
 		copy.put(key, value);
-		return new FreemarkerView(templateName, Map.copyOf(copy), responseHeaders);
+		return new FreemarkerView(templateName, Collections.unmodifiableMap(copy), responseHeaders);
 	}
 
 	/**
@@ -168,7 +168,7 @@ public final class FreemarkerView implements View {
 				throw iaex("attribute value must not be null (attribute '%s')", k);
 			copy.put(k, v);
 		});
-		return new FreemarkerView(templateName, Map.copyOf(copy), responseHeaders);
+		return new FreemarkerView(templateName, Collections.unmodifiableMap(copy), responseHeaders);
 	}
 
 	/**
@@ -194,6 +194,28 @@ public final class FreemarkerView implements View {
 		var copy = new LinkedHashMap<>(responseHeaders);
 		copy.put(name, value);
 		return new FreemarkerView(templateName, attributes, Map.copyOf(copy));
+	}
+
+	/**
+	 * Marker for an attribute value that promises to be adopted during the render (unwrapped from the data model by
+	 * some directive and applied to render-scoped state), and wants the render to fail if that never happens
+	 * instead of silently behaving as if the attribute was absent.
+	 *
+	 * <p>
+	 * {@link FreemarkerViewRenderer} checks every attribute value after a successful {@code Template.process(...)}:
+	 * any value implementing this interface whose {@link #consumed()} is still {@code false} fails the render with
+	 * {@link #notConsumedMessage(String)}.
+	 */
+	public interface MustConsume {
+
+		/** @return Whether this attribute was adopted during the render. */
+		boolean consumed();
+
+		/**
+		 * @param templateName The template that was rendered.
+		 * @return The message to raise when {@link #consumed()} is still {@code false} after the render.
+		 */
+		String notConsumedMessage(String templateName);
 	}
 
 	@Override /* Overridden from View */

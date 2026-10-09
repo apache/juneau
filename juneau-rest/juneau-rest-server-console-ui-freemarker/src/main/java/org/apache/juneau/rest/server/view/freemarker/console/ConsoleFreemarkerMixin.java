@@ -132,6 +132,12 @@ public class ConsoleFreemarkerMixin extends FreemarkerMixin {
 		this.adopterRoot = builder.adopterRoot;
 	}
 
+	/** @return The configured consumer chrome template name; read by {@code PageSpec.view()} when no template is set. */
+	String chromeTemplate() { return chromeTemplate; }
+
+	/** @return The card-type registry, including custom {@code Builder.cardType(...)} handlers. */
+	CardTypeRegistry cardTypes() { return cardTypes; }
+
 	/**
 	 * Creates a new builder.
 	 *

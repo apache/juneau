@@ -41,7 +41,7 @@ class PageContractSchema_Test extends TestBase {
 
 	@ParameterizedTest
 	@ValueSource(strings = {"valid-example.json", "valid-minimal.json", "valid-deep.json", "valid-console-output.json",
-		"valid-run-view.json", "valid-run-view-nopoll.json",
+		"valid-run-view.json", "valid-run-view-nopoll.json", "valid-terminal.json",
 		"valid-datatables-table.json", "valid-datatables-table-full.json", "valid-datatables-rows.json",
 		"valid-datatables-src.json", "valid-badge.json"})
 	void a01_validCorpusPasses(String name) throws Exception {
@@ -76,6 +76,9 @@ class PageContractSchema_Test extends TestBase {
 		"invalid-run-view-src.json|oneOf",
 		"invalid-run-view-extra.json|oneOf",
 		"invalid-run-view-nourl.json|oneOf",
+		"invalid-terminal-src.json|oneOf",
+		"invalid-terminal-nourl.json|oneOf",
+		"invalid-terminal-extra.json|oneOf",
 		"invalid-card-type.json|does not match",
 		"invalid-r1.json|R-1: duplicate nav id 'a'",
 		"invalid-r2.json|R-2: duplicate card id 'c'",

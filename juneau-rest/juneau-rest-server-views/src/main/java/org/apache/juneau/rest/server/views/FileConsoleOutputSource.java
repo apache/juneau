@@ -47,8 +47,13 @@ import org.apache.juneau.rest.server.views.ConsoleOutputLine.*;
  * the start of line {@code n}, throws {@link ConsoleOutputSource.UnknownTokenException UnknownTokenException}.
  *
  * <p>
- * <b>Partial last line.</b> Bytes after the last {@code \n} are held back until the {@link Status} is terminal; the
- * status is read before the index is refreshed, so a terminal status guarantees the writer has finished.
+ * <b>Partial last line.</b> While the {@link Status} is not terminal, bytes after the last {@code \n} are served as the
+ * open trailing line ({@code open: true}). They are re-read on every call, never indexed, and {@code next} points before
+ * them. A trailing incomplete UTF-8 sequence is held back. Once terminal, they are served as an ordinary closed line.
+ * The status is read before the index is refreshed, so a terminal status guarantees the writer has finished.
+ *
+ * <p>
+ * <b>Bare {@code \r}.</b> A line keeps only the text after its last bare {@code \r}, with or without ANSI decoding.
  *
  * <p>
  * Keep <b>one instance per log</b> (for example in a {@code ConcurrentHashMap} keyed by run id); a new instance
@@ -221,6 +226,16 @@ public final class FileConsoleOutputSource implements ConsoleOutputSource {
 			}
 			if (! more)
 				more = r.hasMore();
+			if (! more && ! st.terminal()) {
+				var raw = openRaw(s);
+				if (raw != null) {
+					var open = convert(raw, dec).open(true);
+					if (lines.size() >= limit || (! lines.isEmpty() && chars + ConsoleOutputPage.visibleChars(open) > ConsoleOutputPage.MAX_PAGE_CHARS))
+						more = true;
+					else
+						lines.add(open);
+				}
+			}
 		} catch (IOException e) {
 			throw new UncheckedIOException(e);
 		}
@@ -233,12 +248,13 @@ public final class FileConsoleOutputSource implements ConsoleOutputSource {
 	public ConsoleOutputPage tail(int n) {
 		var st = status();
 		var s = refresh();
-		var partial = st.terminal() && s.fileSize() > s.indexedBytes();
-		var total = s.indexedLines() + (partial ? 1 : 0);
+		var trailing = s.fileSize() > s.indexedBytes();
+		var partial = st.terminal() && trailing;
+		var total = s.indexedLines() + (trailing ? 1 : 0);
 		var startN = Math.max(1, total - Math.max(0, Math.min(n, MAX_LIMIT)) + 1);
 		var start = new Pos(seek(Math.min(startN, s.indexedLines() + 1)), startN);
 		var end = partial ? new Pos(s.fileSize(), s.indexedLines() + 2) : new Pos(s.indexedBytes(), s.indexedLines() + 1);
-		var kept = newest(start, end.offset());
+		var kept = newest(start, end.offset(), st.terminal() ? null : s);
 		var p = ConsoleOutputPage.forward().lines(lines(kept)).next(token(s, end)).before(first(s, kept, end));
 		return status(p, st, true);
 	}
@@ -252,7 +268,7 @@ public final class FileConsoleOutputSource implements ConsoleOutputSource {
 		var to = position(token, s, st);
 		var startN = Math.max(1, to.n() - Math.max(1, Math.min(limit, MAX_LIMIT)));
 		var start = new Pos(seek(Math.min(startN, s.indexedLines() + 1)), startN);
-		var kept = newest(start, to.offset());
+		var kept = newest(start, to.offset(), null);
 		var p = ConsoleOutputPage.earlier().lines(lines(kept)).before(first(s, kept, to));
 		return status(p, st, false);
 	}
@@ -267,6 +283,8 @@ public final class FileConsoleOutputSource implements ConsoleOutputSource {
 		var it = new Iterator<ConsoleOutputLine>() {
 			private Raw pending;
 			private boolean done;
+			private boolean openTried;
+			private boolean pendingOpen;
 
 			@Override
 			public boolean hasNext() {
@@ -275,6 +293,11 @@ public final class FileConsoleOutputSource implements ConsoleOutputSource {
 						pending = r.next();
 					} catch (IOException e) {
 						throw new UncheckedIOException(e);
+					}
+					if (pending == null && ! openTried && ! st.terminal()) {
+						openTried = true;
+						pending = openRaw(s);
+						pendingOpen = pending != null;
 					}
 					done = pending == null;
 				}
@@ -286,8 +309,11 @@ public final class FileConsoleOutputSource implements ConsoleOutputSource {
 				if (! hasNext())
 					throw new NoSuchElementException();
 				var raw = pending;
+				var open = pendingOpen;
 				pending = null;
-				return convert(raw, dec);
+				pendingOpen = false;
+				var line = convert(raw, dec);
+				return open ? line.open(true) : line;
 			}
 		};
 		return StreamSupport.stream(Spliterators.spliteratorUnknownSize(it, Spliterator.ORDERED | Spliterator.NONNULL), false)
@@ -297,6 +323,27 @@ public final class FileConsoleOutputSource implements ConsoleOutputSource {
 	/** Number of currently open file readers (test hook). */
 	static int openReaders() {
 		return OPEN_READERS.get();
+	}
+
+	/**
+	 * Returns the length of {@code b[0, len)} without a trailing incomplete UTF-8 sequence.
+	 *
+	 * @param b The bytes.
+	 * @param len The length to consider.
+	 * @return The trimmed length.
+	 */
+	static int completeUtf8(byte[] b, int len) {
+		var i = len - 1;
+		var cont = 0;
+		while (i >= 0 && cont < 3 && (b[i] & 0xC0) == 0x80) {
+			i--;
+			cont++;
+		}
+		if (i < 0)
+			return len;
+		var lead = b[i] & 0xFF;
+		var need = lead >= 0xF0 ? 4 : lead >= 0xE0 ? 3 : lead >= 0xC0 ? 2 : 1;
+		return need > cont + 1 ? i : len;
 	}
 
 	/**
@@ -322,6 +369,48 @@ public final class FileConsoleOutputSource implements ConsoleOutputSource {
 		}
 		var s = new String(b, from, len - from, UTF_8);
 		return cut ? s + "… [truncated, line was " + total + " bytes]" : s;
+	}
+
+	/**
+	 * Reads the unterminated bytes after the last indexed line of a snapshot.
+	 *
+	 * @return The open line's raw form, or <jk>null</jk> when there are no complete characters after the last {@code \n}.
+	 */
+	private Raw openRaw(FileLineIndex.Snapshot s) {
+		var from = s.indexedBytes();
+		var total = s.fileSize() - from;
+		if (total <= 0)
+			return null;
+		var b = new byte[(int)Math.min(total, MAX_LINE_BYTES + 1L)];
+		var len = 0;
+		try (var ch = FileChannel.open(file, StandardOpenOption.READ)) {
+			var buf = ByteBuffer.wrap(b);
+			while (buf.hasRemaining()) {
+				var r = ch.read(buf, from + len);
+				if (r <= 0)
+					break;
+				len += r;
+			}
+		} catch (NoSuchFileException e) {
+			return null;
+		} catch (IOException e) {
+			throw new UncheckedIOException(e);
+		}
+		for (var i = 0; i < len; i++) {
+			if (b[i] == '\n') {
+				len = i;
+				total = i;
+				break;
+			}
+		}
+		if (total <= MAX_LINE_BYTES) {
+			len = completeUtf8(b, len);
+			total = len;
+		}
+		if (len == 0)
+			return null;
+		var bytes = total <= MAX_LINE_BYTES ? Arrays.copyOf(b, len) : b;
+		return new Raw(from, s.indexedLines() + 1, s.fileSize(), decode(bytes, total, s.indexedLines() == 0));
 	}
 
 	private Status status() {
@@ -371,25 +460,30 @@ public final class FileConsoleOutputSource implements ConsoleOutputSource {
 		return p.n() > 1 ? token(s, p) : null;
 	}
 
-	/** Reads [start, endOffset) keeping the newest lines that fit the page budget. */
-	private Deque<Kept> newest(Pos start, long endOffset) {
+	/** Reads [start, endOffset) keeping the newest lines that fit the page budget, then the open line of {@code open}. */
+	private Deque<Kept> newest(Pos start, long endOffset, FileLineIndex.Snapshot open) {
 		var kept = new ArrayDeque<Kept>();
 		try (var r = new LineReader(file, start, endOffset)) {
 			var dec = new AnsiDecoder();
 			var chars = 0L;
 			Raw raw;
-			while ((raw = r.next()) != null) {
-				var line = convert(raw, dec);
-				var c = ConsoleOutputPage.visibleChars(line);
-				kept.addLast(new Kept(raw, line, c));
-				chars += c;
-				while (kept.size() > 1 && chars > ConsoleOutputPage.MAX_PAGE_CHARS)
-					chars -= kept.removeFirst().chars();
-			}
+			while ((raw = r.next()) != null)
+				chars = keep(kept, chars, raw, convert(raw, dec));
+			if (open != null && (raw = openRaw(open)) != null)
+				keep(kept, chars, raw, convert(raw, dec).open(true));
 		} catch (IOException e) {
 			throw new UncheckedIOException(e);
 		}
 		return kept;
+	}
+
+	private static long keep(Deque<Kept> kept, long chars, Raw raw, ConsoleOutputLine line) {
+		var c = ConsoleOutputPage.visibleChars(line);
+		kept.addLast(new Kept(raw, line, c));
+		chars += c;
+		while (kept.size() > 1 && chars > ConsoleOutputPage.MAX_PAGE_CHARS)
+			chars -= kept.removeFirst().chars();
+		return chars;
 	}
 
 	private static List<ConsoleOutputLine> lines(Deque<Kept> kept) {
@@ -400,7 +494,7 @@ public final class FileConsoleOutputSource implements ConsoleOutputSource {
 	}
 
 	private ConsoleOutputLine convert(Raw raw, AnsiDecoder dec) {
-		var line = ansi ? dec.line(Level.INFO, raw.text()) : ConsoleOutputLine.info(raw.text());
+		var line = ansi ? dec.line(Level.INFO, raw.text()) : ConsoleOutputLine.info(ConsoleOutputLine.afterLastCr(raw.text()));
 		line.n(raw.n());
 		if (decorate != null) {
 			line = decorate.apply(raw.text(), line);

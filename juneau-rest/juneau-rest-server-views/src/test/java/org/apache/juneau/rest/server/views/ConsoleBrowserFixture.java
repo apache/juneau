@@ -152,7 +152,7 @@ final class ConsoleBrowserFixture {
 		var sb = new StringBuilder();
 		sb.append("<script>\n").append(Files.readString(nodeModules.resolve("jquery/dist/jquery.min.js"))).append("\n</script>\n");
 		sb.append("<script>\n").append(Files.readString(nodeModules.resolve("datatables.net/js/dataTables.min.js"))).append("\n</script>\n");
-		for (var r : List.of(ViewsMixin.RENDERS_JS_RESOURCE, ViewsMixin.ICONS_JS_RESOURCE, ViewsMixin.SEARCH_JS_RESOURCE,
+		for (var r : List.of(ViewsMixin.BUS_JS_RESOURCE, ViewsMixin.RENDERS_JS_RESOURCE, ViewsMixin.ICONS_JS_RESOURCE, ViewsMixin.SEARCH_JS_RESOURCE,
 				ViewsMixin.PAGESTATE_JS_RESOURCE, ViewsMixin.URLSTATE_JS_RESOURCE, ViewsMixin.RIBBON_JS_RESOURCE,
 				ViewsMixin.DATATABLES_JS_RESOURCE, ViewsMixin.VIEWS_JS_RESOURCE, ViewsMixin.CONFIG_JS_RESOURCE,
 				ViewsMixin.REGIONS_JS_RESOURCE, ViewsMixin.CONSOLE_OUTPUT_JS_RESOURCE, ViewsMixin.HELPERS_JS_RESOURCE))

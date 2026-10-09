@@ -160,6 +160,18 @@ class RunnerTest(unittest.TestCase):
         self.go(child("import sys; sys.stdout.write('tail')"), parser)
         self.assertEqual((parser.lines, parser.finished), (["tail"], 0))
 
+    def test_marker_after_a_partial_chunk_starts_on_a_fresh_line(self):
+        code = ("import sys, time; sys.stdout.buffer.write(b'first\\npart'); sys.stdout.flush(); time.sleep(0.3); "
+                "sys.stdout.buffer.write(b'ial\\n'); sys.stdout.flush()")
+        parser = Recording(open_child=True)
+        _, out, _ = self.go(child(code), parser)
+        self.assertIn("part\n" + jr.PREFIX, out)
+        self.assertNotIn("part" + jr.PREFIX, out)
+        for line in out.splitlines():
+            if jr.PREFIX in line:
+                self.assertTrue(line.startswith(jr.PREFIX), line)
+        self.assertEqual(parser.lines, ["first", "partial"])
+
     # ---- isolation and closing ----------------------------------------------------------------------------------
 
     def test_failing_parser_is_disabled_with_one_warning_and_output_keeps_flowing(self):

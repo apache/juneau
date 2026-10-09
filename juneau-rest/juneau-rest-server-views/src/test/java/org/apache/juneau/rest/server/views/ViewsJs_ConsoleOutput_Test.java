@@ -96,6 +96,13 @@ class ViewsJs_ConsoleOutput_Test extends TestBase {
 	@Test void e12_queuedTargetAutoLoads() { assertAllTrue(r(), "earlier12_queuedTargetAutoLoads"); }
 	@Test void e13_autoLoadExhaustedFallsBack() { assertAllTrue(r(), "earlier13_autoLoadExhaustedFallsBack"); }
 
+	@Test void h01_sameNReplacesTheOpenRow() { assertAllTrue(r(), "open01_sameNReplacesTheOpenRow"); }
+	@Test void h02_closedRowIsNeverReplaced() { assertAllTrue(r(), "open02_closedRowIsNeverReplaced"); }
+	@Test void h03_openRowIsNotAnnounced() { assertAllTrue(r(), "open03_openRowIsNotAnnounced"); }
+	@Test void h04_tailFollowKept() { assertAllTrue(r(), "open04_tailFollowKept"); }
+	@Test void h05_validateKeepsOnlyOpenTrue() { assertAllTrue(r(), "open05_validateKeepsOnlyOpenTrue"); }
+	@Test void h06_patchKeepsTargetState() { assertAllTrue(r(), "open06_patchKeepsTargetState"); }
+
 	@Test void z01_everyCasePasses() {
 		var r = r();
 		assertFalse(r.isEmpty(), "harness reported no cases");

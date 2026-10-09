@@ -98,15 +98,26 @@ class FileConsoleOutputSource_Test extends TestBase {
 		assertBean(p2, "hasEarlier,before", "true," + p1.next);
 	}
 
-	@Test void a02_partialLineHeld() throws Exception {
+	@Test void a02_partialLineServedOpen() throws Exception {
 		lines(1, 3);
 		var src = source();
 		var p1 = src.page(null, 100);
 		write("abc");
 		var p2 = src.page(p1.next, 100).validate();
-		assertEquals(0, p2.lines.size());
+		assertList(texts(p2), "abc");
+		assertList(ns(p2), 4L);
+		assertEquals(Boolean.TRUE, p2.lines.get(0).open);
 		assertEquals(p1.next, p2.next);
 		assertBean(p2, "more,terminal", "false,false");
+		write("def");
+		var p3 = src.page(p2.next, 100).validate();
+		assertList(texts(p3), "abcdef");
+		assertList(ns(p3), 4L);
+		write("\nnext\n");
+		var p4 = src.page(p3.next, 100).validate();
+		assertList(texts(p4), "abcdef", "next");
+		assertList(ns(p4), 4L, 5L);
+		assertNull(p4.lines.get(0).open);
 	}
 
 	@Test void a03_partialLineFlushedWhenTerminal() throws Exception {
@@ -114,11 +125,13 @@ class FileConsoleOutputSource_Test extends TestBase {
 		write("abc");
 		var src = source();
 		var p1 = src.page(null, 100);
-		assertEquals(3, p1.lines.size());
+		assertList(ns(p1), 1L, 2L, 3L, 4L);
+		assertEquals(Boolean.TRUE, p1.lines.get(3).open);
 		status.set(DONE);
 		var p2 = src.page(p1.next, 100).validate();
 		assertList(texts(p2), "abc");
 		assertList(ns(p2), 4L);
+		assertNull(p2.lines.get(0).open);
 		assertBean(p2, "more,terminal,state,durationMs", "false,true,DONE,5000");
 		var size = Files.size(f);
 		assertEquals(epochOf(p1.next) + "." + size + ".5", p2.next);
@@ -372,6 +385,8 @@ class FileConsoleOutputSource_Test extends TestBase {
 					while (last < 100_000) {
 						var p = src.page(token, 2000).validate();
 						for (var l : p.lines) {
+							if (l.open != null)
+								continue;
 							assertEquals(++last, l.n.longValue());
 							assertEquals("line " + last, l.text);
 						}
@@ -447,5 +462,114 @@ class FileConsoleOutputSource_Test extends TestBase {
 			() -> FileConsoleOutputSource.create(f).index(FileLineIndex.of(dir.resolve("other.log"))).build());
 		var p = FileConsoleOutputSource.create(f).build().page(null, 1).validate();
 		assertBean(p, "state,terminal", "RUNNING,false");
+	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// h - the open trailing line
+	//------------------------------------------------------------------------------------------------------------------
+
+	@Test void h01_openLineNeverIndexed() throws Exception {
+		lines(1, 2);
+		write("dots...");
+		var src = source();
+		var p = src.page(null, 100).validate();
+		assertList(ns(p), 1L, 2L, 3L);
+		assertEquals(epochOf(p.next) + ".14.3", p.next);
+		var back = src.before(p.next, 10).validate();
+		assertList(ns(back), 1L, 2L);
+	}
+
+	@Test void h02_pageFullStopsBeforeTheOpenLine() throws Exception {
+		lines(1, 3);
+		write("abc");
+		var p = source().page(null, 3).validate();
+		assertList(ns(p), 1L, 2L, 3L);
+		assertBean(p, "more", "true");
+		assertTrue(p.lines.stream().allMatch(l -> l.open == null));
+	}
+
+	@Test void h03_tailIncludesTheOpenLine() throws Exception {
+		lines(1, 5);
+		write("work");
+		var t = source().tail(2).validate();
+		assertList(texts(t), "line 5", "work");
+		assertEquals(Boolean.TRUE, t.lines.get(1).open);
+		assertEquals(epochOf(t.next) + "." + (Files.size(f) - 4) + ".6", t.next);
+		assertBean(t, "terminal", "false");
+	}
+
+	@Test void h04_streamEndsWithTheOpenLine() throws Exception {
+		lines(1, 2);
+		write("work");
+		try (var s = source().stream()) {
+			var l = s.collect(Collectors.toList());
+			assertEquals(3, l.size());
+			assertBean(l.get(2), "n,text,open", "3,work,true");
+		}
+	}
+
+	@Test void h05_splitUtf8SequenceTrimmed() throws Exception {
+		lines(1, 1);
+		var e = "é".getBytes(UTF_8);
+		Files.write(f, new byte[] {'a', e[0]}, StandardOpenOption.APPEND);
+		var src = source();
+		assertList(texts(src.page(null, 10)), "line 1", "a");
+		Files.write(f, new byte[] {e[1]}, StandardOpenOption.APPEND);
+		assertList(texts(src.page(null, 10)), "line 1", "aé");
+	}
+
+	@Test void h06_onlyAnIncompleteSequenceShowsNoOpenLine() throws Exception {
+		lines(1, 1);
+		Files.write(f, new byte[] {(byte)0xE2, (byte)0x82}, StandardOpenOption.APPEND);
+		assertList(ns(source().page(null, 10)), 1L);
+	}
+
+	@Test void h07_bareCrRuleOnOpenAndIndexedLines() throws Exception {
+		write("1 of 2\r2 of 2\r\ndone\n");
+		write("x: 1\rx: 2");
+		for (var ansi : new boolean[] {true, false}) {
+			var src = FileConsoleOutputSource.create(f).status(status::get).ansi(ansi).build();
+			var p = src.page(null, 10).validate();
+			assertList(texts(p), "2 of 2", "done", "x: 2");
+			assertEquals(Boolean.TRUE, p.lines.get(2).open);
+		}
+	}
+
+	@Test void h08_trailingCrNeverBlanksTheOpenLine() throws Exception {
+		write("abc\r");
+		var p = source().page(null, 10).validate();
+		assertList(texts(p), "abc");
+	}
+
+	@Test void h09_decoratorSeesTheOpenLine() throws Exception {
+		write("##run step\n##run partial");
+		var src = FileConsoleOutputSource.create(f).status(status::get)
+			.decorate((raw, line) -> raw.startsWith("##run ") ? line.marker(true) : line).build();
+		var p = src.page(null, 10).validate();
+		assertEquals(Boolean.TRUE, p.lines.get(1).open);
+		assertEquals(Boolean.TRUE, p.lines.get(1).ui.marker);
+	}
+
+	@Test void h10_pagesCloseTheirChannelWithAnOpenLine() throws Exception {
+		lines(1, 2);
+		write("work");
+		var before = FileConsoleOutputSource.openReaders();
+		var src = source();
+		src.page(null, 10);
+		src.tail(10);
+		try (var s = src.stream()) {
+			s.count();
+		}
+		assertEquals(before, FileConsoleOutputSource.openReaders());
+	}
+
+	@Test void h11_completeUtf8() {
+		var euro = "€".getBytes(UTF_8);
+		var face = "😀".getBytes(UTF_8);
+		assertEquals(1, FileConsoleOutputSource.completeUtf8(new byte[] {'a', euro[0], euro[1]}, 3));
+		assertEquals(4, FileConsoleOutputSource.completeUtf8(new byte[] {'a', euro[0], euro[1], euro[2]}, 4));
+		assertEquals(1, FileConsoleOutputSource.completeUtf8(new byte[] {'a', face[0], face[1], face[2]}, 4));
+		assertEquals(2, FileConsoleOutputSource.completeUtf8(new byte[] {'a', 'b'}, 2));
+		assertEquals(0, FileConsoleOutputSource.completeUtf8(new byte[0], 0));
 	}
 }

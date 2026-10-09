@@ -126,15 +126,15 @@ class Regions_Primitive_Test extends TestBase {
 		var r = report();
 		assertEquals(List.of(
 			"contractVersion", "data", "declared", "defaultPopulate", "emit", "fetchDeclared", "generation",
-			"helpers", "host", "id", "ids", "key", "messageSignal", "on", "params", "reason", "refresh",
-			"selection", "signal", "type", "write"), r.get("t2_keys"), r::toString);
+			"helpers", "host", "id", "ids", "key", "messageSignal", "on", "params", "publish", "reason", "refresh",
+			"selection", "signal", "subscribe", "type", "write"), r.get("t2_keys"), r::toString);
 		assertEquals(List.of("dataUrl", "fields", "lazy", "refreshMs", "renderer", "titleFields"),
 			r.get("t2_declaredKeys"), r::toString);
 		assertEquals(List.of("cardId", "gridId", "pageId", "rowId", "sectionId", "subtabId", "tabId", "viewId"),
 			r.get("t2_idsKeys"), r::toString);
 
 		var types = (Map<?,?>)r.get("t2_types");
-		for (var fn : List.of("defaultPopulate", "emit", "fetchDeclared", "on", "refresh", "write"))
+		for (var fn : List.of("defaultPopulate", "emit", "fetchDeclared", "on", "publish", "refresh", "subscribe", "write"))
 			assertEquals("function", types.get(fn), () -> fn + " must be a function on ctx");
 		assertEquals("string", types.get("contractVersion"));
 		assertEquals("number", types.get("generation"));

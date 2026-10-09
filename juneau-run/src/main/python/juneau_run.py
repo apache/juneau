@@ -15,18 +15,25 @@
 Run wrapper: run-protocol v1 markers, output routing and tool-output parsers for Maven, pytest and Playwright.
 
 Stdlib-only and standalone, so it can be copied or loaded from anywhere.  Every marker function is a no-op
-unless the environment has RUN_MARKERS=1.  Sections, in order: markers, sinks, parsers, runner, CLI.
+unless the environment has RUN_MARKERS=1; the open-line helpers (open_line, append, dot, set_tail, close_line)
+always write.  A marker always starts on a fresh line.  Sections, in order: markers, sinks, parsers, runner, CLI.
 
 CLI:  python3 juneau_run.py [--console full|condensed|none] [--full-log PATH] [--condensed-log PATH]
-                            [--step ID] [--title T] <maven|pytest|playwright|generic> -- <cmd...>
+                            [--step ID] [--title T] [--pty --events PATH [--size CxR]]
+                            <maven|pytest|playwright|generic> -- <cmd...>
+
+With --pty the tool runs under a pseudo-terminal of the given size (default 120x40); its raw bytes go to --full-log,
+the size to <full-log>.size, and run-view events (not ##run markers) to the --events JSONL file.  POSIX only.
 """
 
 import argparse
 import codecs
 import collections
+import errno
 import json
 import os
 import re
+import select
 import signal
 import subprocess
 import sys
@@ -47,6 +54,10 @@ TESTS_INTERVAL = 0.5
 # ---------------------------------------------------------------------------------------------------------------------
 
 _owns_run = False
+_at_line_start = True   # whether the last character this process put on stdout was "\n" (or nothing was written)
+_head = None            # the open line's head, for set_tail
+_events = None          # the --events writer in PTY mode; when set, every marker goes there instead of stdout
+_line_offset = 0        # in PTY mode, the log offset of the start of the line being parsed
 
 
 def enabled():
@@ -55,14 +66,67 @@ def enabled():
 
 
 def emit(ev, **fields):
-    """Print one marker line: `##run {"ev":...}`.  None-valued fields are omitted; oversized markers are dropped."""
+    """Print one marker line: `##run {"ev":...}`.  None-valued fields are omitted; oversized markers are dropped.
+
+    In PTY mode the marker is translated into a run-view event and written to the --events file instead.
+    """
+    if _events is not None:
+        _events.write(ev, {k: v for k, v in fields.items() if v is not None})
+        return
     if not enabled():
         return
     obj = {"ev": ev, **{k: v for k, v in fields.items() if v is not None}}
     line = PREFIX + json.dumps(obj, ensure_ascii=False, separators=(",", ":"))
     if len(line.encode("utf-8")) > MAX_BYTES:
         return
-    print(line, flush=True)
+    _out(line + "\n" if _at_line_start else "\n" + line + "\n")
+
+
+def _out(text):
+    """Write text to stdout, flush, and record whether stdout now ends a line."""
+    global _at_line_start
+    if not text:
+        return
+    sys.stdout.write(text)
+    sys.stdout.flush()
+    _at_line_start = text.endswith("\n")
+
+
+def _seen(ends_line):
+    """Record the line state after output written to stdout by other means (the raw tee, condensed lines)."""
+    global _at_line_start
+    _at_line_start = ends_line
+
+
+def open_line(text):
+    """Start an open output line whose head is text, ending any line still open.  Always writes."""
+    global _head
+    if not _at_line_start:
+        _out("\n")
+    _head = text
+    _out(text)
+
+
+def append(text):
+    """Extend the open line.  Always writes."""
+    _out(text)
+
+
+def dot():
+    """Same as append(".")."""
+    _out(".")
+
+
+def set_tail(text):
+    """Rewrite everything after the open line's head: writes a bare \\r, the head and text.  Always writes."""
+    _out("\r" + (_head or "") + text)
+
+
+def close_line(text=""):
+    """Append text and end the open line.  Always writes."""
+    global _head
+    _head = None
+    _out(text + "\n")
 
 
 def _nested():
@@ -208,6 +272,8 @@ class Sinks:
             else:
                 sys.stdout.write(chunk.decode("utf-8", errors="replace"))
                 sys.stdout.flush()
+            if chunk:
+                _seen(chunk.endswith(b"\n"))
 
     def write_condensed(self, text):
         """text is one condensed line without its newline."""
@@ -215,7 +281,7 @@ class Sinks:
             self._condensed.write((text + "\n").encode("utf-8"))
             self._condensed.flush()
         if self.console == "condensed":
-            print(text, flush=True)
+            _out(text + "\n")
 
 
 # ---------------------------------------------------------------------------------------------------------------------
@@ -909,6 +975,311 @@ def run_tool(cmd, parser, step_id, title, *, n=None, parent=None, cwd=None, env=
 
 
 # ---------------------------------------------------------------------------------------------------------------------
+# PTY mode
+#
+# The tool runs under a pseudo-terminal; its bytes go to the full log unchanged and the parser sees a cleaned copy of
+# each line.  Markers are translated into run-view events (step, end, suite, note, done) and written to a JSONL file.
+# ---------------------------------------------------------------------------------------------------------------------
+
+DEFAULT_SIZE = (120, 40)
+SIZE_RE = re.compile(r"^(\d{1,4})x(\d{1,4})$")
+STEP_ID_RE = re.compile(r"^[A-Za-z0-9][A-Za-z0-9._-]{0,63}$")
+FW_RE = re.compile(r"^[a-z0-9][a-z0-9._-]{0,31}$")
+MAX_TITLE = 200
+MAX_NOTE = 1000
+MAX_PTY_LINE = 1 << 20
+
+# CSI, OSC, DCS/SOS/PM/APC, other two-byte escapes, then C0 controls other than TAB, LF and CR, and DEL.
+PTY_ESC_RE = re.compile(
+    r"\x1b\[[0-?]*[ -/]*[@-~]"
+    r"|\x1b\][^\x07\x1b]*(?:\x07|\x1b\\)?"
+    r"|\x1b[PX^_][^\x1b]*(?:\x1b\\)?"
+    r"|\x1b[ -/]*[0-~]"
+    r"|[\x00-\x08\x0b\x0c\x0e-\x1f\x7f]")
+
+
+def pty_clean(raw):
+    """The text a parser sees for one PTY line: escapes and controls removed, then only what follows the last \\r."""
+    text = PTY_ESC_RE.sub("", raw.decode("utf-8", errors="replace"))
+    return text.rstrip("\r").rsplit("\r", 1)[-1]
+
+
+def _event_id(value):
+    """Maps a marker step id onto the run-view step-id grammar: / becomes ., anything else invalid becomes -."""
+    s = re.sub(r"[^A-Za-z0-9._-]", "-", str(value).replace("/", "."))
+    if not re.match(r"[A-Za-z0-9]", s):
+        s = "s" + s
+    return s[:64]
+
+
+def _clip(text, limit):
+    """text cut to at most limit UTF-16 code units, the unit the run-view contract counts in."""
+    text = str(text)
+    out, units = [], 0
+    for ch in text:
+        units += 2 if ord(ch) > 0xFFFF else 1
+        if units > limit:
+            break
+        out.append(ch)
+    return "".join(out)
+
+
+class _EventsFile:
+    """Writes run-view events to a JSONL file, one flushed line per event, so a reader never sees half a line."""
+
+    def __init__(self, path, fw):
+        self.fw = fw if FW_RE.match(fw) else "generic"
+        Path(path).parent.mkdir(parents=True, exist_ok=True)
+        self._f = open(path, "a", encoding="utf-8")
+
+    def close(self):
+        self._f.close()
+
+    def write(self, ev, fields):
+        obj = self._translate(ev, fields)
+        if obj is None:
+            return
+        line = json.dumps(obj, ensure_ascii=False, separators=(",", ":"))
+        if len(line.encode("utf-8")) > MAX_BYTES:   # not reachable from PTY mode: titles and notes are clipped well below this
+            return
+        self._f.write(line + "\n")
+        self._f.flush()
+
+    def _translate(self, ev, f):
+        if ev == "step":
+            out = {"ev": "step", "id": _event_id(f["id"]), "title": _clip(f.get("title") or f["id"], MAX_TITLE) or "-"}
+            n = f.get("n")
+            if isinstance(n, int) and 1 <= n <= 9999:
+                out["n"] = n
+            out["rawOffset"] = _line_offset
+            return out
+        if ev == "end":
+            out = {"ev": "end", "id": _event_id(f["id"]), "status": f["status"]}
+            for k in ("ms", "exit"):
+                if k in f:
+                    out[k] = f[k]
+            return out
+        if ev == "tests":
+            fail = f["fail"] + f["err"]
+            sid = _event_id(f["step"])
+            counts = {"pass": max(0, f["total"] - fail - f["skip"]), "fail": fail, "skip": f["skip"]}
+            return {"ev": "suite", "step": sid, "fw": self.fw, "suite": sid, "counts": counts, "rawOffset": _line_offset}
+        if ev == "note":
+            out = {"ev": "note", "level": f["level"], "text": _clip(f["text"], MAX_NOTE) or "-"}
+            if "href" in f:
+                out["href"] = f["href"]
+            if "step" in f:
+                out["step"] = _event_id(f["step"])
+            return out
+        if ev == "done":
+            return {"ev": "done", "status": f["status"]}
+        return None   # run and report have no run-view form
+
+
+def _set_ctty():
+    """In the child, after setsid: make the PTY slave (stdin) the controlling terminal."""
+    import fcntl
+    import termios
+    try:
+        fcntl.ioctl(0, termios.TIOCSCTTY, 0)
+    except OSError:
+        pass
+
+
+def run_pty(cmd, parser, step_id, title, *, cols, rows, sinks, cwd=None, env=None):
+    """Run one tool under a cols x rows PTY as one step and return Result(exit, ms, summary).
+
+    The tool's bytes go to the full log exactly as written (the PTY turns \\n into \\r\\n).  Each line is cleaned with
+    pty_clean() before the parser sees it, and _line_offset holds the log offset of its start while its events are
+    written.  A signal death exits 128+n with a warn note.  SIGINT/SIGTERM cancel as in run_tool().
+    """
+    global _line_offset
+    import fcntl
+    import struct
+    import termios
+    t0 = time.monotonic()
+    parser = _resolve_parser(parser)
+    parser.step_id = step_id
+    guard = _Isolated(parser)
+    env = dict(os.environ if env is None else env)
+    env.pop("RUN_MARKERS", None)
+    env.pop(ACTIVE_ENV, None)
+    env["TERM"] = "xterm-256color"
+    try:
+        cmd, env = parser.prepare(cmd, env, cwd)
+    except Exception as e:
+        warn(f"parser {getattr(parser, 'name', '?')} prepare failed ({e!r}); using the original command")
+    dispatch = _Dispatcher(step_id, sinks)
+    sinks.open()
+    base = sinks.full_path.stat().st_size
+    _line_offset = base
+    emit("step", id=step_id, n=1, title=title)
+
+    master, slave = os.openpty()
+    fcntl.ioctl(slave, termios.TIOCSWINSZ, struct.pack("HHHH", rows, cols, 0, 0))
+    try:
+        proc = subprocess.Popen(cmd, cwd=cwd, env=env, stdin=slave, stdout=slave, stderr=slave,
+                                start_new_session=True, preexec_fn=_set_ctty, close_fds=True)
+    except OSError as e:
+        os.close(master)
+        os.close(slave)
+        sinks.close()
+        warn(f"cannot start {cmd[0]}: {e}")
+        ms = int((time.monotonic() - t0) * 1000)
+        emit("end", id=step_id, status="fail", ms=ms, exit=127)
+        return Result(127, ms)
+    os.close(slave)
+    cancelled = []
+
+    def on_signal(signum, frame):
+        cancelled.append(signum)
+        raise KeyboardInterrupt
+
+    previous = {}
+    try:
+        for sig in (signal.SIGINT, signal.SIGTERM):
+            previous[sig] = signal.signal(sig, on_signal)
+    except ValueError:
+        previous = {}
+
+    line = bytearray()
+    line_start = base
+
+    def parse(raw, start):
+        global _line_offset
+        _line_offset = start
+        dispatch.apply(guard.call("on_line", pty_clean(bytes(raw))))
+
+    def feed(chunk):
+        nonlocal line_start
+        line.extend(chunk)
+        while True:
+            i = line.find(b"\n")
+            if i < 0:
+                break
+            parse(line[:i], line_start)
+            del line[:i + 1]
+            line_start += i + 1
+        if len(line) > MAX_PTY_LINE:   # a line with no end in sight: parse what there is and start a new one
+            parse(line, line_start)
+            line_start += len(line)
+            line.clear()
+
+    def drain(fd):
+        """Reads whatever is still buffered on the PTY master without blocking, until it is empty or reports EIO."""
+        while select.select([fd], [], [], 0)[0]:
+            try:
+                chunk = os.read(fd, 65536)
+            except OSError as e:
+                if e.errno != errno.EIO:
+                    raise
+                return
+            if not chunk:
+                return
+            sinks.write_full(chunk)
+            feed(chunk)
+
+    try:
+        try:
+            while True:
+                try:
+                    ready, _, _ = select.select([master], [], [], 0.1)
+                    if not ready:
+                        if proc.poll() is not None:
+                            drain(master)   # the child may have written its last bytes after select() timed out
+                            break
+                        continue
+                    chunk = os.read(master, 65536)
+                except InterruptedError:
+                    continue
+                except OSError as e:
+                    if e.errno != errno.EIO:   # EIO is how a PTY master reports that the slave side has closed
+                        raise
+                    chunk = b""
+                if not chunk:
+                    break
+                sinks.write_full(chunk)
+                feed(chunk)
+            proc.wait()
+            if line:
+                parse(line, line_start)
+                line_start += len(line)
+            _line_offset = line_start
+            dispatch.apply(guard.call("finish", proc.returncode))
+        except KeyboardInterrupt:
+            if not cancelled:
+                cancelled.append(signal.SIGINT)
+            for sig in previous:
+                signal.signal(sig, signal.SIG_IGN)
+            _terminate_group(proc)
+    finally:
+        if proc.poll() is None:   # an unexpected error escaped the read loop: do not leave the child running
+            try:
+                os.killpg(proc.pid, signal.SIGKILL)
+            except OSError:
+                proc.kill()
+            proc.wait()
+        for sig, handler in previous.items():
+            signal.signal(sig, handler)
+        os.close(master)
+        sinks.close()
+
+    ms = int((time.monotonic() - t0) * 1000)
+    if cancelled:
+        dispatch.close_children("fail")
+        emit("end", id=step_id, status="fail", ms=ms, exit=130)
+        raise KeyboardInterrupt
+    rc = proc.returncode
+    if rc < 0:
+        try:
+            name = signal.Signals(-rc).name
+        except ValueError:
+            name = f"signal {-rc}"
+        note("warn", f"{step_id} killed by {name}", step=step_id)
+        rc = 128 - rc
+    status = "ok" if rc == 0 else "fail"
+    dispatch.close_children(status)
+    dispatch.flush_tests(step_id)
+    emit("end", id=step_id, status=status, ms=ms, exit=None if rc == 0 else rc)
+    return Result(rc, ms, dispatch.summary)
+
+
+def _main_pty(ap, ns, cmd):
+    """The --pty CLI: check the options, write the .size sidecar, run the tool and always end with a done event."""
+    global _events
+    if not ns.pty:
+        ap.error("--events and --size need --pty")
+    if not ns.events:
+        ap.error("--pty needs --events PATH")
+    if not ns.full_log:
+        ap.error("--pty needs --full-log PATH")
+    if os.name != "posix":
+        ap.error("--pty is only supported on POSIX systems")
+    cols, rows = DEFAULT_SIZE
+    if ns.size:
+        m = SIZE_RE.match(ns.size)
+        if not m or not (1 <= int(m.group(1)) <= 9999 and 1 <= int(m.group(2)) <= 9999):
+            ap.error(f"--size must be COLSxROWS, e.g. 120x40; got {ns.size!r}")
+        cols, rows = int(m.group(1)), int(m.group(2))
+    sinks = Sinks(ns.console or "none", ns.full_log, ns.condensed_log)
+    sinks.full_path.parent.mkdir(parents=True, exist_ok=True)
+    Path(str(sinks.full_path) + ".size").write_text(json.dumps({"cols": cols, "rows": rows}), encoding="utf-8")
+    _events = _EventsFile(Sinks._resolve(ns.events), ns.tool)
+    try:
+        try:
+            result = run_pty(cmd, ns.tool, ns.step or ns.tool, ns.title or " ".join(cmd[:2]),
+                             cols=cols, rows=rows, sinks=sinks)
+        except KeyboardInterrupt:
+            _events.write("done", {"status": "cancelled"})
+            return 130
+        _events.write("done", {"status": "ok" if result.exit == 0 else "fail"})
+        return result.exit
+    finally:
+        _events.close()
+        _events = None
+
+
+# ---------------------------------------------------------------------------------------------------------------------
 # CLI
 # ---------------------------------------------------------------------------------------------------------------------
 
@@ -928,12 +1299,17 @@ def main(argv=None):
     ap.add_argument("--condensed-log")
     ap.add_argument("--step")
     ap.add_argument("--title")
+    ap.add_argument("--pty", action="store_true")
+    ap.add_argument("--size")
+    ap.add_argument("--events")
     ap.add_argument("tool", choices=sorted(PARSERS))
     ap.add_argument("cmd", nargs=argparse.REMAINDER)
     ns = ap.parse_args(argv)
     cmd = ns.cmd[1:] if ns.cmd[:1] == ["--"] else ns.cmd
     if not cmd:
         ap.error("no command given after --")
+    if ns.pty or ns.events or ns.size:
+        return _main_pty(ap, ns, cmd)
     sinks = Sinks(ns.console, ns.full_log, ns.condensed_log)
     owner = enabled() and not _nested()
     if owner:

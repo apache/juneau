@@ -66,7 +66,9 @@ class RunViewDef_Test extends TestBase {
 
 	@Test void b04_rawHrefTemplate() {
 		assertDoesNotThrow(() -> RunViewDef.create("r").eventsUrl("/x").rawHref("#raw-L{line}").validate());
+		assertDoesNotThrow(() -> RunViewDef.create("r").eventsUrl("/x").rawHref("#term-O{offset}").validate());
 		assertThrowsWithMessage(IllegalArgumentException.class, "rawHref", () -> RunViewDef.create("r").eventsUrl("/x").rawHref("#raw-L").validate());
+		assertThrowsWithMessage(IllegalArgumentException.class, "exactly one {line} or one {offset}", () -> RunViewDef.create("r").eventsUrl("/x").rawHref("#a{line}{offset}").validate());
 	}
 
 	@Test void b05_typeAndIdAndRefresh() {

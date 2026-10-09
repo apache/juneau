@@ -196,6 +196,23 @@ public class ViewsMixin {
 	public static final String URLSTATE_JS_PATH = "/juneau-urlstate.js";
 
 	/**
+	 * The URL path at which the in-page message bus is served (relative to the host mount).  This dependency-free
+	 * {@code <script>} publishes {@code JuneauViews.bus} &mdash; topic declare/claim, publish/subscribe with optional
+	 * retention, and the frame and source bridges &mdash; and it <b>must</b> load before {@code juneau-views.js},
+	 * {@code juneau-regions.js} and {@code juneau-console.js}, all of which read it.  The {@code "views"} toolkit pack
+	 * lists it first.  A page that wires topics without it fails loud with {@code E-JS-46}.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// A hand-written page head that does not use the "views" toolkit pack: the bus goes first.</jc>
+	 * 	<jk>var</jk> <jv>bus</jv> = ViewsMixin.<jsm>viewAssetUrl</jsm>(<jv>req</jv>, ViewsMixin.<jsf>BUS_JS_PATH</jsf>);
+	 * 	<jk>var</jk> <jv>views</jv> = ViewsMixin.<jsm>viewAssetUrl</jsm>(<jv>req</jv>, ViewsMixin.<jsf>VIEWS_JS_PATH</jsf>);
+	 * 	<jc>// &lt;script src="${bus}"&gt;&lt;/script&gt;&lt;script src="${views}"&gt;&lt;/script&gt;</jc>
+	 * </p>
+	 */
+	public static final String BUS_JS_PATH = "/juneau-bus.js";
+
+	/**
 	 * The URL path at which the shared SVG symbol sprite is served (relative to the host mount).
 	 * {@code juneau-icons.js} fetches this next to itself by default (pack {@code original}); the key/legend
 	 * file is not served to browsers.  An app replaces part or all of this shipped set per page with a replacement
@@ -396,6 +413,9 @@ public class ViewsMixin {
 
 	/** Classpath location of the shipped column-search engine (client mirror of the Java column-search engine). */
 	static final String SEARCH_JS_RESOURCE = "/org/apache/juneau/views/juneau-search.js";
+
+	/** Classpath location of the shipped in-page message bus ({@code JuneauViews.bus}). */
+	static final String BUS_JS_RESOURCE = "/org/apache/juneau/views/juneau-bus.js";
 
 	/** Classpath location of the shipped general page-state store. */
 	static final String PAGESTATE_JS_RESOURCE = "/org/apache/juneau/views/juneau-pagestate.js";
@@ -610,6 +630,21 @@ public class ViewsMixin {
 	}
 
 	/**
+	 * [GET /juneau-bus.js] &mdash; serve the in-page message bus.
+	 *
+	 * @return The message bus as a JavaScript {@link HttpResource}.
+	 */
+	@RestGet(
+		path=BUS_JS_PATH,
+		summary="Juneau in-page message bus",
+		description="Dependency-free topic bus (JuneauViews.bus): declare/claim, publish/subscribe with retention, frame and source bridges.",
+		swagger=@OpSwagger(ignore=true)
+	)
+	public HttpResource getBusScript() {
+		return serve(BUS_JS_RESOURCE, JS_CONTENT_TYPE);
+	}
+
+	/**
 	 * [GET /juneau-symbols.svg] &mdash; serve the shared SVG symbol sprite.
 	 *
 	 * @return The sprite as an SVG {@link HttpResource}.
@@ -737,7 +772,7 @@ public class ViewsMixin {
 	 * section for why the buster is content- rather than purely version-keyed).
 	 *
 	 * @param path One of the asset path constants ({@link #VIEWS_JS_PATH}, {@link #RIBBON_JS_PATH},
-	 * 	{@link #RENDERS_JS_PATH}, {@link #VIEWS_CSS_PATH}, {@link #ICONS_JS_PATH}, {@link #SYMBOLS_SVG_PATH},
+	 * 	{@link #BUS_JS_PATH}, {@link #RENDERS_JS_PATH}, {@link #VIEWS_CSS_PATH}, {@link #ICONS_JS_PATH}, {@link #SYMBOLS_SVG_PATH},
 	 * 	{@link #SYMBOLS_MATERIAL_SVG_PATH}, {@link #REGIONS_JS_PATH}, {@link #HELPERS_JS_PATH}, {@link #CONSOLE_OUTPUT_JS_PATH}, {@link #RUN_VIEW_JS_PATH}, {@link #CONFIG_JS_PATH}, {@link #CONFIG_CSS_PATH},
 	 * 	{@link #CALENDAR_JS_PATH}, {@link #CALENDAR_CSS_PATH}, {@link #DATATABLES_JS_PATH}).
 	 * @return The servlet-relative asset URL with the version+content-hash cache-buster appended.
@@ -761,7 +796,7 @@ public class ViewsMixin {
 	 *
 	 * @param req The current request, supplying the context path/mount to resolve against.
 	 * @param path One of the asset path constants ({@link #VIEWS_JS_PATH}, {@link #RIBBON_JS_PATH},
-	 * 	{@link #RENDERS_JS_PATH}, {@link #VIEWS_CSS_PATH}, {@link #ICONS_JS_PATH}, {@link #SYMBOLS_SVG_PATH},
+	 * 	{@link #BUS_JS_PATH}, {@link #RENDERS_JS_PATH}, {@link #VIEWS_CSS_PATH}, {@link #ICONS_JS_PATH}, {@link #SYMBOLS_SVG_PATH},
 	 * 	{@link #SYMBOLS_MATERIAL_SVG_PATH}, {@link #REGIONS_JS_PATH}, {@link #HELPERS_JS_PATH}, {@link #CONSOLE_OUTPUT_JS_PATH}, {@link #RUN_VIEW_JS_PATH}, {@link #CONFIG_JS_PATH}, {@link #CONFIG_CSS_PATH},
 	 * 	{@link #CALENDAR_JS_PATH}, {@link #CALENDAR_CSS_PATH}, {@link #DATATABLES_JS_PATH}).
 	 * @return The absolute asset URL with the version+content-hash cache-buster appended.
@@ -852,6 +887,7 @@ public class ViewsMixin {
 		if (eq(path, SEARCH_JS_PATH)) return SEARCH_JS_RESOURCE;
 		if (eq(path, PAGESTATE_JS_PATH)) return PAGESTATE_JS_RESOURCE;
 		if (eq(path, URLSTATE_JS_PATH)) return URLSTATE_JS_RESOURCE;
+		if (eq(path, BUS_JS_PATH)) return BUS_JS_RESOURCE;
 		if (eq(path, SYMBOLS_SVG_PATH)) return SYMBOLS_SVG_RESOURCE;
 		if (eq(path, SYMBOLS_MATERIAL_SVG_PATH)) return SYMBOLS_MATERIAL_SVG_RESOURCE;
 		if (eq(path, REGIONS_JS_PATH)) return REGIONS_JS_RESOURCE;

@@ -12,6 +12,7 @@
 # ***************************************************************************************************************************
 # Golden transcripts for the additive extensions to run protocol v1.  One scenario per "# scenario:" line; every
 # scenario is driven by the matching test in src/test/python/test_markers.py and compared with ms normalized to 0.
+# A "| " line is raw, non-marker output, written without the "| "; a literal \r in it stands for a carriage return.
 # scenario: nested-steps-and-tests
 ##run {"ev":"run","v":1,"mode":"test","project":"demo","branch":"main","head":"abc1234"}
 ##run {"ev":"step","id":"mvn","n":1,"title":"Maven"}
@@ -39,3 +40,11 @@
 # scenario: unknown-field-on-known-event
 ##run {"ev":"step","id":"x","n":1,"title":"X","future":true}
 ##run {"ev":"end","id":"x","status":"ok","ms":0,"extra":[1,2]}
+# scenario: dots-then-marker
+##run {"ev":"step","id":"load","n":1,"title":"Load"}
+| ORDERS: filling UID...
+##run {"ev":"end","id":"load","status":"ok","ms":0}
+# scenario: set-tail-counter-then-marker
+##run {"ev":"step","id":"task","n":1,"title":"Task x"}
+| Performing task x: \rPerforming task x: 1 of 2 complete\rPerforming task x: 2 of 2 complete
+##run {"ev":"end","id":"task","status":"ok","ms":0}

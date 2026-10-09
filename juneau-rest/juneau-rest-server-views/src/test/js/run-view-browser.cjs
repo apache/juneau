@@ -209,6 +209,28 @@ kase('a08', async page => {
 	return { counts: (await page.textContent('.juneau-rv-counts')).trim(), blocks: blocks };
 });
 
+kase('a09', async page => {
+	await open(page, 'a05');
+	await page.evaluate(() => {
+		const host = document.createElement('div');
+		host.id = 'hooked';
+		document.body.appendChild(host);
+		window.__clicks = [];
+		const rv = window.JuneauViews.runView.create(host, { id: 'hooked', rawHref: '#raw-L{line}', onBlockClick: i => window.__clicks.push(i) });
+		rv.append([
+			{ ev: 'step', id: 'build', title: 'Build' },
+			{ ev: 'test', step: 'build', fw: 'surefire', suite: 'FooTest', name: 'a', status: 'pass' },
+			{ ev: 'test', step: 'build', fw: 'surefire', suite: 'FooTest', name: 'b', status: 'fail', rawLine: 12 },
+			{ ev: 'end', id: 'build', status: 'fail' },
+			{ ev: 'done', status: 'fail' }]);
+	});
+	await page.waitForSelector('#hooked .juneau-co-block');
+	const stepIds = await page.$$eval('#hooked .juneau-co-block', bs => bs.map(b => b.getAttribute('data-step-id')));
+	await page.locator('#hooked span.juneau-co-block').first().click();
+	await page.locator('#hooked a.juneau-co-block').first().click();
+	return { stepIds: stepIds, clicks: await page.evaluate(() => window.__clicks) };
+});
+
 function attachDiagnostics(page, log) {
 	page.on('console', m => log.push('console.' + m.type() + ': ' + m.text()));
 	page.on('pageerror', e => log.push('pageerror: ' + String(e)));

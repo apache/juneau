@@ -18,6 +18,7 @@ package org.apache.juneau.rest.server.sse;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.time.*;
 import java.util.*;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.*;
@@ -126,5 +127,44 @@ class SseSubscription_Test {
 			remaining.add(e);
 		assertEquals(capacity, remaining.size(),
 			"final queue size must equal the bounded capacity after " + producerCount + " concurrent producers");
+	}
+
+	@Test void b01_pollTimesOutWhenEmpty() throws Exception {
+		try (var sub = new SseSubscription("s1", 4, id -> {})) {
+			var start = System.nanoTime();
+			assertNull(sub.poll(Duration.ofMillis(30)));
+			assertTrue(System.nanoTime() - start >= 25_000_000L, "waits about the timeout");
+		}
+	}
+
+	@Test void b02_pollReturnsEventsInOrder() throws Exception {
+		try (var sub = new SseSubscription("s1", 4, id -> {})) {
+			var e1 = new SseEvent("a", "1");
+			var e2 = new SseEvent("b", "2");
+			assertFalse(sub.offer(e1));
+			assertFalse(sub.offer(e2));
+			assertSame(e1, sub.poll(Duration.ofSeconds(10)));
+			assertSame(e2, sub.poll(Duration.ofSeconds(10)));
+		}
+	}
+
+	@Test void b03_pollReturnsPromptlyOnceClosed() throws Exception {
+		var sub = new SseSubscription("s1", 4, id -> {});
+		var closer = new Thread(() -> {
+			try {
+				Thread.sleep(50);
+			} catch (InterruptedException e) {
+				Thread.currentThread().interrupt();
+			}
+			sub.close();
+		});
+		closer.start();
+		var start = System.nanoTime();
+		assertNull(sub.poll(Duration.ofSeconds(10)), "a close wakes the waiter");
+		assertTrue(System.nanoTime() - start < 5_000_000_000L, "woke on the close, not on the timeout");
+		closer.join();
+		start = System.nanoTime();
+		assertNull(sub.poll(Duration.ofSeconds(10)));
+		assertTrue(System.nanoTime() - start < 1_000_000_000L, "a closed subscription returns at once");
 	}
 }

@@ -43,6 +43,7 @@ class SseResponseSupport_Test {
 		var a = MockRestClient.buildLax(A.class);
 		var b = a.get("/stream").header("Accept", "text/event-stream").run();
 		b.assertHeader("Content-Type").isContains("text/event-stream");
+		b.assertHeader("X-Accel-Buffering").is("no");
 		var c = b.getContent().asString();
 		assertTrue(c.contains("event: tick"));
 		assertTrue(c.contains("data: one"));

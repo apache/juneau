@@ -207,6 +207,15 @@
       ],
       "persisted": {"dropped-only": "false", "phase": "done"}, "userSearch": {},
       "expect": {"state": {"dropped-only": false, "phase": "done"}, "columnSearches": {"3": "$in(\"Ready to push\",Completed)"}, "queryParams": {}, "search": "phase=$in(\"Ready to push\",Completed)", "rowIds": [3, 4]}
+    },
+    {
+      "name": "bus-target-and-publish",
+      "ribbon": [
+        {"type": "refresh", "title": "Refresh tasks", "target": "tasks"},
+        {"type": "publish", "title": "Focus east", "topic": "app.region-picked", "payload": {"region": "east"}}
+      ],
+      "state": {}, "userSearch": {},
+      "expect": {"columnSearches": {}, "queryParams": {}, "search": null, "rowIds": [1, 2, 3, 4, 5, 6]}
     }
   ]
 }

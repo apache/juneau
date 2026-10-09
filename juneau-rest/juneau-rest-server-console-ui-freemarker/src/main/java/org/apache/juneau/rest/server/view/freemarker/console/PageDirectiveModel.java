@@ -75,9 +75,10 @@ public final class PageDirectiveModel implements TemplateDirectiveModel {
 		} catch (IllegalArgumentException e) {
 			throw FtlAttrLists.reject(e.getMessage());
 		}
-		cap.tab(FtlAttrLists.scalar(p, "tab")).toolkit(toolkit);
-		cap.init(FtlAttrLists.list(p, NAME, "init"));
-		cap.css(FtlAttrLists.list(p, NAME, "css"));
+		cap.mergeTab(FtlAttrLists.scalar(p, "tab"));
+		cap.mergeToolkit(toolkit);
+		cap.mergeCss(FtlAttrLists.list(p, NAME, "css"));
+		cap.mergeInit(FtlAttrLists.list(p, NAME, "init"));
 
 		cap.pageOpen = true;
 		try {
@@ -87,8 +88,9 @@ public final class PageDirectiveModel implements TemplateDirectiveModel {
 		}
 		cap.flushSegment();
 
-		// Resolved after the body so the card requirements are known.
-		var roots = new java.util.ArrayList<>(toolkit);
+		// Resolved after the body so the card requirements are known, against the merged toolkit list so a pack named
+		// only by a PageSpec still has its assets emitted.
+		var roots = new java.util.ArrayList<>(cap.toolkits());
 		roots.addAll(cap.requiredPacks());
 		try {
 			var pageUrls = new java.util.ArrayList<String>(cap.initScripts());

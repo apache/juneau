@@ -42,10 +42,10 @@ import org.apache.juneau.marshall.collections.*;
 public final class CardTypeRegistry {
 
 	/**
-	 * Reserved type names: {@code html} (built in), {@code datatables} and {@code console-output}
-	 * and {@code run-view} (console-ui-freemarker), {@code chart} (reserved for the planned chart card; no handler yet).
+	 * Reserved type names: {@code html} (built in), {@code datatables}, {@code console-output}, {@code run-view}
+	 * and {@code terminal} (console-ui-freemarker), {@code chart} (reserved for the planned chart card; no handler yet).
 	 */
-	public static final Set<String> RESERVED = Set.of("html", "datatables", "console-output", "run-view", "chart");
+	public static final Set<String> RESERVED = Set.of("html", "datatables", "console-output", "run-view", "terminal", "chart");
 
 	/** The one simple class name allowed to bind each reserved type (E-22's identity check). */
 	private static final Map<String,String> RESERVED_OWNER_SIMPLE_NAMES = Map.of(
@@ -53,6 +53,7 @@ public final class CardTypeRegistry {
 		"datatables", "DatatablesCardType",
 		"console-output", "ConsoleOutputCardType",
 		"run-view", "RunViewCardType",
+		"terminal", "TerminalCardType",
 		"chart", "ChartCardType"
 	);
 

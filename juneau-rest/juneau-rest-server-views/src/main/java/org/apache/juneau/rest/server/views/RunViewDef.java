@@ -71,7 +71,7 @@ public class RunViewDef {
 	public boolean compact;
 	/** Accessible name and heading. */
 	public String title;
-	/** Raw-console link template with one {@code {line}} placeholder. */
+	/** Raw-console link template with one {@code {line}} or one {@code {offset}} placeholder. */
 	public String rawHref;
 
 	private RunViewDef(String id) {
@@ -162,7 +162,7 @@ public class RunViewDef {
 	public RunViewDef compact(boolean value) { compact = value; return this; }
 	/** @param value The accessible name and heading. @return This object. */
 	public RunViewDef title(String value) { title = value; return this; }
-	/** @param value The raw-console link template, with one {@code {line}}. @return This object. */
+	/** @param value The raw-console link template, with one {@code {line}} or one {@code {offset}}. @return This object. */
 	public RunViewDef rawHref(String value) { rawHref = value; return this; }
 
 	/**
@@ -189,7 +189,7 @@ public class RunViewDef {
 		if (refreshMs <= 0)
 			throw iaex("RunViewDef '%s' refreshMs must be > 0; got %s.", id, refreshMs);
 		if (rawHref != null && ! RunViewChecks.isRawHrefTemplate(rawHref))
-			throw iaex("RunViewDef '%s' rawHref must contain exactly one {line} and be a same-origin path or fragment; got '%s'.", id, clip(rawHref));
+			throw iaex("RunViewDef '%s' rawHref must contain exactly one {line} or one {offset} and be a same-origin path or fragment; got '%s'.", id, clip(rawHref));
 		return this;
 	}
 

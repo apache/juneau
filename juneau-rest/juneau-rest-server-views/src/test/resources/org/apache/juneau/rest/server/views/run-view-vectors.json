@@ -12,7 +12,9 @@
   ],
   "rawHref": [
     ["#raw-L{line}", true], ["/runs/42/raw#L{line}", true], ["#raw-L", false], ["#a{line}{line}", false],
-    ["https://evil.example/{line}", false], ["javascript:{line}", false], ["", false]
+    ["https://evil.example/{line}", false], ["javascript:{line}", false], ["", false],
+    ["#t-O{offset}", true], ["/raw?o={offset}", true], ["#a{line}{offset}", false], ["#a{offset}{offset}", false],
+    ["https://evil.example/{offset}", false]
   ],
   "duration": [[0, "0 ms"], [850, "850 ms"], [1200, "1.2 s"], [2000, "2.0 s"], [9999, "9.9 s"], [42000, "42 s"],
                [245000, "4 m 05 s"], [3720000, "1 h 02 m"], [-1, ""]],

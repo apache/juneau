@@ -102,6 +102,11 @@ class CardTypeRegistry_Test {
 		assertThrows(IllegalArgumentException.class, () -> b.add(new TestCardType("chart")));
 	}
 
+	@Test void add_terminalIsReserved_throwE22() {
+		var b = CardTypeRegistry.standard().copy();
+		assertThrows(IllegalArgumentException.class, () -> b.add(new TestCardType("terminal")));
+	}
+
 	@Test void copy_isIsolatedFromStandard() {
 		var custom = CardTypeRegistry.standard().copy().add(new TestCardType("kpi")).build();
 		assertTrue(custom.isRegistered("kpi"));

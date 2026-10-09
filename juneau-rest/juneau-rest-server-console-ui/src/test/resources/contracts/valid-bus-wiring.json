@@ -1,0 +1,21 @@
+{"contractVersion":"1","title":"T","nav":[],"activeNav":[],
+  "topics":[
+    {"topic":"app.region-picked","retain":true,"publisher":"script"},
+    {"topic":"ssc.alert:*","retain":false,"publisher":"server"},
+    {"topic":"job:*","retain":true,"publisher":"server"}],
+  "bridges":[
+    {"id":"live","transport":"websocket","session":"/bus/session","downstream":["ssc.alert:*","job:*","cmd:tasks"],
+     "upstream":["app.region-picked"],"maxAttempts":5}],
+  "cards":[
+    {"id":"changes","type":"datatables","table":{"dataUrl":"/api/changes","columns":[{"key":"id"}],
+      "selection":{"rowIdField":"id"},
+      "ribbon":[{"type":"refresh","title":"Refresh tasks","target":"tasks"},
+                {"type":"publish","title":"Focus east","topic":"app.region-picked","payload":{"region":"east"}}]},
+     "publishes":[{"topic":"app.changes-focus","retain":false}],
+     "subscribes":[{"topic":"app.region-picked","as":"filter","map":{"columns.region":"region"}}]},
+    {"id":"tasks","type":"datatables","table":{"dataUrl":"/api/changes/{changeId}/tasks","columns":[{"key":"id"}]},
+     "subscribes":[{"topic":"selection:changes","as":"params","map":{"changeId":"ids.0"},"whenEmpty":"clear",
+                    "emptyText":"Select a change to see its tasks."}]},
+    {"id":"notes","type":"html","template":"notes","subscribes":[{"topic":"ssc.alert:disk","as":"refresh"}]},
+    {"id":"kpi","type":"kpi","src":"/api/kpi","subscribes":[{"topic":"filter:changes","as":"highlight","whenEmpty":"keep"}]}
+  ]}

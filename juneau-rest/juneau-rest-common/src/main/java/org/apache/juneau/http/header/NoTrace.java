@@ -23,6 +23,11 @@ import java.util.function.*;
  * Represents an HTTP <c>No-Trace</c> header.
  *
  * <p>
+ * When a request carries <c>No-Trace: true</c>, the server keeps the stack trace of a failed call out of its access-log
+ * record; the one-line record (status, method, path) is still logged.
+ * The <js>"NoTrace"</js> request attribute has the same effect and, when both are present, wins over the header.
+ *
+ * <p>
  * <b>Beta — API subject to change:</b> This type is part of the next-generation REST client and HTTP stack.
  *
  * @since 9.2.1

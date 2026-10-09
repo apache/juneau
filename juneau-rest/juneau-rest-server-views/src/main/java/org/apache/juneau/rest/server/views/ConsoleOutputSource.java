@@ -28,7 +28,10 @@ import java.util.stream.*;
  * 		is the position just after the last line returned; {@code before} is the position of {@code lines[0]}.
  * 	<li>Every forward or tail page carries {@code next}, even when it has no lines.
  * 	<li>An unknown or stale token throws {@link UnknownTokenException} (mapped to {@code 410 Gone}).
- * 	<li>A partial trailing line is never emitted until it is complete or the log is terminal.
+ * 	<li>A partial trailing line may be emitted only as the open line ({@link ConsoleOutputLine#open open}
+ * 		<jk>true</jk>), which is always the last line of the log, and {@code next} must then point before it, so the
+ * 		next poll re-sends it under the same {@code n}. A terminal page never ends on an open line. A source that never
+ * 		emits open lines conforms unchanged.
  * 	<li>{@link #stream()} returns lines in ascending {@code n}; the caller closes it.
  * 	<li>Methods may be called concurrently from different requests.
  * </ul>

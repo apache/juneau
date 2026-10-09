@@ -28,7 +28,11 @@ _spec.loader.exec_module(jr)
 
 
 def reset_run_state():
-    """Forget run ownership between tests (the module keeps it in a global and in os.environ)."""
+    """Forget run ownership and the stdout line state between tests (the module keeps them in globals and in os.environ)."""
     import os
     jr._owns_run = False
+    jr._at_line_start = True
+    jr._head = None
+    jr._events = None
+    jr._line_offset = 0
     os.environ.pop(jr.ACTIVE_ENV, None)

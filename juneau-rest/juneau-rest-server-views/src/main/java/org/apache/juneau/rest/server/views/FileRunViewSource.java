@@ -24,7 +24,9 @@ import java.nio.*;
 import java.nio.channels.*;
 import java.nio.file.*;
 import java.util.*;
+import java.util.concurrent.atomic.*;
 import java.util.function.*;
+import java.util.logging.*;
 import java.util.regex.*;
 
 import org.apache.juneau.marshall.json.JsonSerializer;
@@ -43,7 +45,9 @@ import org.apache.juneau.rest.server.runreport.*;
  * <p>
  * <b>Numbering.</b> {@code seq} is the 1-based line number.  A {@code seq} member in the file is ignored and
  * overwritten, so the producer writes events without one.  A line that is not valid JSON, is not a known event, or is
- * too long is skipped silently: it consumes its line number, so a gap appears in {@code seq}.
+ * too long is skipped: it consumes its line number, so a gap appears in {@code seq}.  The first such line a source
+ * meets is logged once as a {@code WARNING}, with its line number; later ones are skipped without a log record, so a
+ * corrupt file polled every second does not flood the log.  Blank lines are not counted as malformed.
  *
  * <p>
  * <b>Tokens</b> are {@code <epoch>.<n>}: the epoch of the file generation and the last line number consumed.  A stale
@@ -66,6 +70,7 @@ public final class FileRunViewSource implements RunViewSource {
 
 	/** Lines longer than this many bytes are skipped without being decoded. */
 	private static final int MAX_LINE_BYTES = RunEvent.MAX_EVENT_CHARS * 4;
+	private static final Logger LOG = Logger.getLogger(FileRunViewSource.class.getName());
 
 	private static final Pattern TOKEN = Pattern.compile("^([0-9a-z]{6})\\.(0|[1-9][0-9]{0,17})$");
 
@@ -119,6 +124,7 @@ public final class FileRunViewSource implements RunViewSource {
 	private final Path file;
 	private final BooleanSupplier terminal;
 	private final FileLineIndex index;
+	private final AtomicBoolean warned = new AtomicBoolean();
 
 	private FileRunViewSource(Builder b) {
 		file = b.file;
@@ -176,14 +182,24 @@ public final class FileRunViewSource implements RunViewSource {
 		return RunViewPage.of(events, token(s, last), more, done && ! more);
 	}
 
-	private static RunEvent parse(String text, long lineNo) {
-		if (text.isEmpty() || text.length() > RunEvent.MAX_EVENT_CHARS)
+	private RunEvent parse(String text, long lineNo) {
+		if (text.isEmpty())
 			return null;
+		if (text.length() > RunEvent.MAX_EVENT_CHARS)
+			return skipped(lineNo, "longer than " + RunEvent.MAX_EVENT_CHARS + " characters");
 		try {
 			return RunEvent.fromMap(Json.to(text, Map.class)).withSeq(lineNo);
 		} catch (Exception e) {
-			return null;
+			return skipped(lineNo, e.getMessage());
 		}
+	}
+
+	/** Logs the first skipped line of this source, and returns <jk>null</jk>. */
+	private RunEvent skipped(long lineNo, String why) {
+		if (warned.compareAndSet(false, true))
+			LOG.warning(() -> "FileRunViewSource '" + file + "' skipped malformed line " + lineNo + " (" + why
+				+ "); later malformed lines in this source are skipped without a warning.");
+		return null;
 	}
 
 	private static int serializedLength(RunEvent e) {

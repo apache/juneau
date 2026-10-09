@@ -95,6 +95,19 @@ class ConsoleTemplateValidator_Test extends TestBase {
 			"<@node> unknown attribute 'lable'.");
 	}
 
+	@Test void b03_underInsideNavigation_isUnknownAttribute() {
+		assertOne("<@navigation><@node id=\"a\" label=\"A\" href=\"/a\" under=\"fleet\"/></@navigation>", 1, 14, "unknown-attribute",
+			"<@node> unknown attribute 'under'.");
+	}
+
+	@Test void b04_underOutsideNavigation_isKnown() {
+		assertClean("<@page><@node id=\"a\" label=\"A\" href=\"/a\" under=\"fleet\"/></@page>");
+	}
+
+	@Test void b05_underAfterClosedNavigation_isKnown() {
+		assertClean("<@console><@navigation><@node id=\"a\" label=\"A\" href=\"/a\"/></@navigation><@node id=\"b\" label=\"B\" href=\"/b\" under=\"a\"/><@main/></@console>");
+	}
+
 	@Test void b02_slotAttributes() {
 		assertClean("<@console><@head phase=\"before-page-css\"></@head><@footer text=\"x\"/><@main/></@console>");
 		assertOne("<@console><@brand phase=\"x\">B</@brand><@main/></@console>", 1, 11, "unknown-attribute",
