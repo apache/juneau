@@ -54,6 +54,23 @@ Do **not** `pip install --user pytest` / `pip install pytest` on a Homebrew-mana
   still returns the full output and exit code. The second test proves a line is echoed while the
   command is still running. Uses trivial shell commands, never mvn.
 
+- `test_run_adoption.py` -- `push.py` and `test.py` on juneau-run: marker streams from a fake `mvn` on `PATH`,
+  `push.py --test-only`, console routing, the skipped second install, the commit summary, the Timing row, the
+  nested `test.py` handoff and `--detail`. It also pins the default (markers off) behaviour.
+
+- `test_test_py_console.py` -- `test.py`'s console session: `--detail`, the PERF-GUARD notes and their levels under
+  `--enforce-perf`, and `-f` on the JS-test command.
+
+- `test_push_timings.py` -- `push-timings.py`'s thresholds: a module is flagged only when it is slower by both the
+  relative and the absolute margin, faster modules get the `↓` mark, the env overrides, and the `--report` table
+  file. Synthetic JSONL in a temp dir.
+
+- `test_release_run.py` -- `release.py` on juneau-run, with a fake juneau_run module: every prompt is `ask`, Maven
+  gets `-B` and a PTY, the full log is always written, each step is a labelled row (dim when skipped or done
+  earlier), the PGP prompt is a `passthrough`, `run_git_diff` follows `run_release_prepare` and pages through
+  `show`, and the revert is four rows. `HOME` is a temp dir, so the state file and logs never touch yours. Never
+  runs mvn, svn or gpg.
+
 - `test_reset_side_clones.py` -- `reset-side-clones.py` is not a per-project script. It reads
   the one global `~/Project Work/repos.md` and drives clones by absolute path, so a single copy
   resets the juneau, console, and IRS pools and there is nothing for a second copy to

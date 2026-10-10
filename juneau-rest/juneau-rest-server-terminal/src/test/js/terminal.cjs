@@ -73,7 +73,7 @@ function load() {
 /** The real xterm Terminal constructor, from the UMD bundle in its own context. */
 function realTerminal() {
 	const g = { console: console, setTimeout: setTimeout, clearTimeout: clearTimeout, queueMicrotask: queueMicrotask,
-		navigator: { userAgent: 'node', platform: 'MacIntel' } };
+		navigator: { userAgent: 'node', platform: 'MacIntel', language: 'en-US' }, document: {}, performance: performance };
 	g.window = g;
 	g.self = g;
 	vm.createContext(g);

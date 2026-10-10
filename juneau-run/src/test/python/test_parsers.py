@@ -273,6 +273,247 @@ class MavenParserTest(unittest.TestCase):
         events = parser.on_line("[\x1b[1;34mINFO\x1b[m] Building \x1b[36mDemo\x1b[m 1.0        [1/2]")
         self.assertEqual(events[-1][:2], ("sub_start", "mvn/demo"))
 
+    def test_interleaved_classes_are_credited_to_the_module_that_contains_them(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            write_t1c_tree(Path(tmp))
+            _, events = maven("maven-juneau-T1C.log", args=("test", "-T1C"), cwd=tmp)
+        per = {e[1]: e[2:] for e in kinds(events, "tests") if e[1] != "mvn"}
+        self.assertEqual(per["mvn/juneau-commons"], (231, 0, 0, 0))
+        self.assertEqual(per["mvn/juneau-secret-macos-keychain"], (16, 0, 0, 1))
+        self.assertEqual(per["mvn/juneau-rest-server-views-markdown"], (19, 0, 0, 0))
+        done = kinds(events, "class_done")
+        self.assertEqual(len(done), 15)
+        self.assertEqual([e[2] for e in done if e[1] == "mvn/juneau-secret-macos-keychain"], ["pass", "pass"])
+
+    def test_a_class_found_in_several_modules_falls_back_to_the_surefire_header(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            write_demo_tree(root)
+            for m in "abc":
+                class_file(root / f"mod-{m}", "x.CalcTest")    # x.CalcTest runs in all three modules
+            _, events = maven("maven-serial-success.log", cwd=tmp)
+        per = {e[1]: e[2:] for e in kinds(events, "tests") if e[1] != "mvn"}
+        self.assertEqual(per, {"mvn/mod-a": (2, 0, 0, 0), "mvn/mod-b": (3, 0, 0, 1), "mvn/mod-c": (1, 0, 0, 0)})
+
+    def test_class_done_outcomes(self):
+        parser = jr.MavenParser()
+        parser.step_id = "mvn"
+        parser.on_line("[INFO] --- surefire:3.5.4:test (default-test) @ mod-a ---")
+        outcomes = []
+        for line in ("Tests run: 3, Failures: 1, Errors: 0, Skipped: 0, Time elapsed: 1 s <<< FAILURE! -- in x.A",
+                     "Tests run: 3, Failures: 0, Errors: 1, Skipped: 0, Time elapsed: 1 s <<< ERROR! -- in x.B",
+                     "Tests run: 2, Failures: 0, Errors: 0, Skipped: 2, Time elapsed: 0 s -- in x.C",
+                     "Tests run: 2, Failures: 0, Errors: 0, Skipped: 1, Time elapsed: 0 s -- in x.D",
+                     "Tests run: 0, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0 s -- in x.E"):
+            outcomes += [e[2] for e in parser.on_line(line) if e[0] == "class_done"]
+        self.assertEqual(outcomes, ["fail", "fail", "skip", "pass", "pass"])
+
+    def demo_tree_with_tests(self, root, with_tests=("a",)):
+        write_demo_tree(root)
+        (root / "pom.xml").write_text(
+            '<project><artifactId>demo-parent</artifactId><name>Demo Parent</name><packaging>pom</packaging>'
+            '<modules><module>mod-a</module><module>mod-b</module><module>mod-c</module></modules></project>',
+            encoding="utf-8")
+        for m in with_tests:
+            (root / f"mod-{m}" / "src" / "test" / "java").mkdir(parents=True)
+
+    def test_compile_and_test_completion_per_artifact(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            self.demo_tree_with_tests(Path(tmp))
+            _, events = maven("maven-serial-success.log", cwd=tmp)
+        self.assertEqual([e for e in events if e[0] in ("compiled", "tested")], [
+            ("compiled", "mvn/mod-a", True), ("tested", "mvn/mod-a"),       # after testCompile; tested at its end
+            ("compiled", "mvn/mod-b", True), ("tested", "mvn/mod-b"),       # no src/test/java: right after compile
+            ("compiled", "mvn/mod-c", True), ("tested", "mvn/mod-c"),
+        ])
+        a = events.index(("compiled", "mvn/mod-a", True))
+        self.assertLess(a, events.index(next(e for e in events if e[:2] == ("sub_end", "mvn/mod-a"))))
+
+    def test_compile_mode_sends_no_tested_events(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            self.demo_tree_with_tests(Path(tmp), with_tests="abc")
+            _, events = maven("maven-serial-success.log", args=("clean", "install", "-DskipTests"), cwd=tmp)
+        self.assertEqual(kinds(events, "tested"), [])
+        self.assertEqual([e[1] for e in kinds(events, "compiled")], ["mvn/mod-a", "mvn/mod-b", "mvn/mod-c"])
+
+    def test_tests_mode_comes_from_the_command(self):
+        for cmd, expected in ((["mvn", "test"], True), (["mvn", "install", "-DskipTests"], False),
+                              (["mvn", "install", "-Dmaven.test.skip=true"], False),
+                              (["/bin/sh", "-c", "lock.sh mvn clean install -T1C -DskipTests"], False)):
+            with self.subTest(cmd=cmd):
+                parser = jr.MavenParser()
+                parser.prepare(cmd, None, "/nonexistent")
+                self.assertEqual(parser.tests_mode, expected)
+
+    def test_the_reactor_event_comes_from_the_tree_then_from_the_first_building_line(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            self.demo_tree_with_tests(Path(tmp))
+            _, events = maven("maven-serial-success.log", cwd=tmp)
+        self.assertEqual(events[0], ("reactor", 4, ["mvn/demo-parent"], True))
+        self.assertEqual(kinds(events, "reactor"), [("reactor", 4, ["mvn/demo-parent"], True)] * 2)
+        _, no_tree = maven("maven-serial-success.log")
+        self.assertEqual(kinds(no_tree, "reactor"), [("reactor", 4, [], True)])
+
+    def test_packaging_from_the_pom_tree(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            self.demo_tree_with_tests(Path(tmp))
+            packaging = {}
+            jr.read_pom_tree(Path(tmp), packaging)
+        self.assertEqual(packaging, {"demo-parent": "pom", "mod-a": "jar", "mod-b": "jar", "mod-c": "jar"})
+
+    def test_prepare_honours_the_file_option(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            write_demo_tree(Path(tmp))
+            for cmd in (["mvn", "-Pjs-tests", "-f", "mod-b/pom.xml", "test"],
+                        ["/bin/sh", "-c", "lock.sh mvn -Pjs-tests --file=mod-b/pom.xml test"]):
+                with self.subTest(cmd=cmd):
+                    parser = jr.MavenParser()
+                    parser.prepare(cmd, None, tmp)
+                    self.assertEqual(sorted(parser.dirs), ["mod-b"])
+
+    def test_a_compile_error_turns_its_module_red_once_and_is_a_failure(self):
+        _, events = maven("maven-compile-failure.log", args=("clean", "install", "-DskipTests"), exit_code=1)
+        self.assertIn(("compiled", "mvn/mod-a", True), events)
+        self.assertEqual([e for e in kinds(events, "compiled") if e[1] == "mvn/mod-b"], [("compiled", "mvn/mod-b", False)])
+        self.assertEqual(kinds(events, "failure")[0], (
+            "failure", "[ERROR] /work/demo/mod-b/src/main/java/x/Bad.java:[1,21] incompatible types: "
+                       "java.lang.String cannot be converted to int", "mvn"))
+
+    def test_a_compile_error_is_matched_to_its_module_by_path(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            write_demo_tree(Path(tmp))
+            text = (FIXTURES / "maven-compile-failure.log").read_text(encoding="utf-8").replace(
+                "[ERROR] /work/demo/mod-b/", f"[ERROR] {tmp}/mod-c/")
+            parser = jr.MavenParser()
+            parser.step_id = "mvn"
+            parser.prepare(["mvn", "install", "-DskipTests"], None, tmp)
+            events = feed(parser, text, 1)
+        self.assertIn(("compiled", "mvn/mod-c", False), events)
+
+    def parser_for_demo_tree(self, tmp, cwd=None):
+        write_demo_tree(Path(tmp))
+        parser = jr.MavenParser()
+        parser.step_id = "mvn"
+        parser.prepare(["mvn", "install", "-DskipTests"], None, cwd or tmp)
+        return parser
+
+    def test_a_failed_compiler_goal_reddens_its_module_even_without_a_path_line(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            parser = self.parser_for_demo_tree(tmp)
+            events = feed(parser, "\n".join([
+                "[INFO] --- maven-compiler-plugin:3.14.0:compile (default-compile) @ mod-a ---",
+                "[INFO] --- maven-compiler-plugin:3.14.0:compile (default-compile) @ mod-b ---",
+                "[ERROR] error: release version 99 not supported",
+                "[ERROR] Failed to execute goal org.apache.maven.plugins:maven-compiler-plugin:3.14.0:compile "
+                "(default-compile) on project mod-a: Fatal error compiling: error: release version 99 not supported",
+            ]), 0)
+        self.assertEqual(kinds(events, "compiled"), [("compiled", "mvn/mod-a", False)])
+        self.assertEqual(len(kinds(events, "failure")), 1)
+
+    def test_a_failed_compiler_goal_after_a_path_error_does_not_publish_twice(self):
+        _, events = maven("maven-compile-failure.log", args=("clean", "install", "-DskipTests"), exit_code=1)
+        self.assertEqual([e for e in kinds(events, "compiled") if e[1] == "mvn/mod-b"], [("compiled", "mvn/mod-b", False)])
+        self.assertEqual(len(kinds(events, "failure")), 1)
+
+    def test_a_compile_error_within_another_modules_failure_trace_is_not_swallowed(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            parser = self.parser_for_demo_tree(tmp)
+            events = feed(parser, "\n".join([
+                "[ERROR] x.CalcTest.brokenSum -- Time elapsed: 0.007 s <<< FAILURE!",
+                "org.opentest4j.AssertionFailedError: expected: <5> but was: <3>",
+                f"[ERROR] {tmp}/mod-c/src/main/java/x/Bad.java:[1,2] cannot find symbol",
+            ]), 1)
+        self.assertIn(("compiled", "mvn/mod-c", False), events)
+        self.assertIn(("cond", f"[ERROR] {tmp}/mod-c/src/main/java/x/Bad.java:[1,2] cannot find symbol"), events)
+
+    def test_an_ambiguous_class_ignores_a_surefire_header_that_is_not_among_the_hits(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            write_demo_tree(root)
+            for m in "ab":
+                class_file(root / f"mod-{m}", "x.CalcTest")
+            parser = jr.MavenParser()
+            parser.step_id = "mvn"
+            parser.prepare(["mvn", "test"], None, tmp)
+            parser.on_line("[INFO] --- surefire:3.5.4:test (default-test) @ mod-c ---")
+            events = parser.on_line("Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 1 s -- in x.CalcTest")
+        self.assertEqual([e[1] for e in kinds(events, "class_done")], ["mvn/mod-a"])
+
+    def test_compile_error_paths_match_through_symlinks_and_dotdot(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            real = Path(os.path.realpath(tmp))
+            link = real.parent / (real.name + "-link")
+            link.symlink_to(real)
+            self.addCleanup(link.unlink)
+            for path in (real, f"{link}/mod-a/../mod-c/.."):
+                with self.subTest(path=str(path)):
+                    parser = self.parser_for_demo_tree(str(real), cwd=str(link))
+                    events = feed(parser, f"[ERROR] {path}/mod-c/src/main/java/x/Bad.java:[1,2] boom", 1)
+                    self.assertIn(("compiled", "mvn/mod-c", False), events)
+
+    def test_stale_only_report_directory_sends_no_report_event(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            write_demo_tree(root)
+            reports = root / "mod-a" / "target" / "surefire-reports"
+            reports.mkdir(parents=True)
+            path = reports / "TEST-x.Old.xml"
+            path.write_text('<testsuite tests="1" failures="0" errors="0" skipped="0"/>', encoding="utf-8")
+            os.utime(path, (1.0, 1.0))
+            parser = jr.MavenParser()
+            parser.step_id = "mvn"
+            parser.prepare(["mvn", "test"], None, tmp)
+            events = feed(parser, "[INFO] Building Demo Module A 1.0 [1/2]\n[INFO] Building Demo Module B 1.0 [2/2]", 0)
+        self.assertEqual(kinds(events, "report"), [])
+
+    def test_a_failed_test_trace_is_a_failure(self):
+        parser, events = maven("maven-test-failure.log", exit_code=1)
+        self.assertEqual(kinds(events, "failure"), [("failure", "\n".join(parser.failure_trace), "mvn")])
+
+    def test_a_quiet_failure_sends_the_generic_tail_as_a_failure(self):
+        fixture = (FIXTURES / "maven-quiet-failure.log").read_text(encoding="utf-8").splitlines()
+        lead = [f"[ERROR] earlier line {i}" for i in range(jr.GenericParser.TAIL)]    # so the tail is cut
+        parser = jr.MavenParser()
+        parser.step_id = "mvn"
+        parser.prepare(["mvn", "-q", "test"], None, "/nonexistent")
+        events = feed(parser, "\n".join(lead + fixture), 1)
+        failure = kinds(events, "failure")
+        self.assertEqual(len(failure), 1)
+        self.assertEqual(failure[0][2], "mvn")
+        tail = failure[0][1].splitlines()
+        self.assertEqual(tail, (lead + fixture)[-jr.GenericParser.TAIL:])
+        self.assertEqual(tail, [e[1] for e in kinds(events, "cond")][-len(tail):])   # the tail follows any live cond lines
+
+    def test_report_xml_older_than_the_step_is_ignored_with_two_seconds_of_slack(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            write_demo_tree(root)
+            reports = root / "mod-a" / "target" / "surefire-reports"
+            reports.mkdir(parents=True)
+            for name, tests, failures, mtime in (("Old", 100, 9, 999_997.0), ("Slack", 3, 1, 999_999.0),
+                                                 ("New", 4, 0, 1_000_005.0)):
+                path = reports / f"TEST-x.{name}.xml"
+                path.write_text(f'<testsuite tests="{tests}" failures="{failures}" errors="0" skipped="0"/>',
+                                encoding="utf-8")
+                os.utime(path, (mtime, mtime))
+            with mock.patch.object(jr.time, "time", return_value=1_000_000.0):
+                _, events = maven("maven-serial-success.log", cwd=str(root))
+        mod_a = [e for e in kinds(events, "tests") if e[1] == "mvn/mod-a"][-1]
+        self.assertEqual(mod_a, ("tests", "mvn/mod-a", 7, 1, 0, 0))
+
+    def test_failsafe_reports_count_with_surefire_reports(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            write_demo_tree(root)
+            for dirname, tests in (("surefire-reports", 7), ("failsafe-reports", 2)):
+                d = root / "mod-a" / "target" / dirname
+                d.mkdir(parents=True)
+                (d / "TEST-x.T.xml").write_text(f'<testsuite tests="{tests}" failures="0" errors="0" skipped="0"/>',
+                                               encoding="utf-8")
+            _, events = maven("maven-serial-success.log", cwd=str(root))
+        mod_a = [e for e in kinds(events, "tests") if e[1] == "mvn/mod-a"][-1]
+        self.assertEqual(mod_a, ("tests", "mvn/mod-a", 9, 0, 0, 0))
+
 
 def write_demo_tree(root):
     (root / "pom.xml").write_text(
@@ -282,6 +523,38 @@ def write_demo_tree(root):
         (root / f"mod-{m}").mkdir(exist_ok=True)
         (root / f"mod-{m}" / "pom.xml").write_text(
             f'<project><artifactId>mod-{m}</artifactId><name>Demo Module {m.upper()}</name></project>', encoding="utf-8")
+
+
+T1C_MODULES = {
+    "juneau-commons": ("Apache Juneau Commons", ("org.apache.juneau.commons.", "org.apache.juneau.utils.")),
+    "juneau-secret-macos-keychain": ("Apache Juneau Secret Store - macOS Keychain", ("org.apache.juneau.secret.",)),
+    "juneau-rest-server-views-markdown": ("Apache Juneau REST Server Views Markdown",
+                                          ("org.apache.juneau.rest.server.views.markdown.",)),
+}
+
+
+def class_file(module_dir, fqn):
+    path = module_dir / "target" / "test-classes" / Path(*fqn.split(".")[:-1]) / (fqn.rsplit(".", 1)[1] + ".class")
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_bytes(b"")
+
+
+def write_t1c_tree(root):
+    """The three modules that ran tests in the T1C fixture, each holding the classes the fixture says it ran."""
+    text = (FIXTURES / "maven-juneau-T1C.log").read_text(encoding="utf-8")
+    fqns = set(re.findall(r"-- in (\S+)\s*$", text, re.M))
+    modules = "".join(f"<module>{a}</module>" for a in T1C_MODULES)
+    (root / "pom.xml").write_text(
+        f"<project><artifactId>juneau</artifactId><name>Apache Juneau</name><packaging>pom</packaging>"
+        f"<modules>{modules}</modules></project>", encoding="utf-8")
+    for artifact, (name, prefixes) in T1C_MODULES.items():
+        d = root / artifact
+        d.mkdir()
+        (d / "pom.xml").write_text(f"<project><artifactId>{artifact}</artifactId><name>{name}</name></project>",
+                                   encoding="utf-8")
+        for fqn in fqns:
+            if fqn.startswith(prefixes):
+                class_file(d, fqn)
 
 
 PYTEST_FAIL = """\
@@ -424,8 +697,10 @@ class GenericParserTest(unittest.TestCase):
     def test_tail_is_emitted_only_on_failure_and_is_limited_to_forty_lines(self):
         text = "\n".join(f"line {i}" for i in range(100))
         p = jr.GenericParser()
+        p.step_id = "g"
         failed = feed(p, text, 1)
-        self.assertEqual([e[1] for e in failed], [f"line {i}" for i in range(60, 100)])
+        self.assertEqual([e[1] for e in kinds(failed, "cond")], [f"line {i}" for i in range(60, 100)])
+        self.assertEqual(kinds(failed, "failure"), [("failure", "\n".join(f"line {i}" for i in range(60, 100)), "g")])
         self.assertEqual(feed(jr.GenericParser(), text, 0), [])
 
     def test_registry_names(self):

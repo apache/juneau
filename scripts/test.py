@@ -29,6 +29,7 @@ Options:
                              juneau-rest-server-views).  Fails if Node/npm are missing.
     --no-js-tests            Never run the JS harness (overrides auto-detect)
     --console <mode>         Maven output on the console: full (default), condensed or none
+    --detail <level>         Console detail: summary, actionable (default), modules or all (JUNEAU_RUN_DETAIL)
     --full-log <path>        Also write every byte Maven prints to this file (appended)
     --condensed-log <path>   Also write the condensed one-line-per-event stream to this file (appended)
     --profile <module>       Run one-shot JFR profile for module tests
@@ -103,7 +104,16 @@ def next_step_number():
 	return int(os.environ.get("JUNEAU_RUN_N_BASE", "0")) + _step_n
 
 
-def run_command(cmd, step_id=None, title=None):
+def say(text, level="info"):
+	"""Script status text: through juneau_run (a filtered note once a console view owns the screen), else print."""
+	run = run_module()
+	if run is None:
+		print(text, flush=True)
+	else:
+		run.say(text, level)
+
+
+def run_command(cmd, step_id=None, title=None, label=None):
 	"""Run a command, streaming its output live, and return exit code and full output.
 
 	With run markers on, or console/log routing requested (see juneau_run), the command runs as the protocol step
@@ -115,13 +125,13 @@ def run_command(cmd, step_id=None, title=None):
 	wrapper = os.environ.get("JUNEAU_MVN_WRAPPER", "").strip()
 	if wrapper and cmd.startswith("mvn "):
 		cmd = f"{wrapper} {cmd}"
-	print(f"Running: {cmd}")
-	print("-" * 80, flush=True)
+	say(f"Running: {cmd}")
+	say("-" * 80)  # NOSONAR python:S1192 - the same banner rule as the separator in _main; a constant hides it
 	run = run_module()
 	if run is not None and step_id and (run.enabled() or not run.Sinks().is_default):
 		# Through a shell, like the default path, so a JUNEAU_MVN_WRAPPER prefix (which may use && or quoting) keeps its meaning.
 		result = run.run_tool(["/bin/sh", "-c", cmd], "maven", step_id, title or step_id, n=next_step_number(),
-			cwd=str(project_root), capture=True)
+			cwd=str(project_root), capture=True, label=label)
 		return result.exit, result.output
 	# Echo each line as it arrives so a long or hung build is visible, and keep it for parse_test_results().
 	lines = []
@@ -344,19 +354,65 @@ def _actuals_from_surefire(repo_root: Path) -> dict:
 	return actuals
 
 
-def run_perf_guard(test_elapsed: float, baseline_file: Path, timing_log_path, enforce: bool) -> int:
+PERF_REPORT = Path(__file__).resolve().parent.parent / "target" / "perf-guard.txt"
+
+
+class _PerfOutput:
+	"""Where PERF-GUARD lines go: notes on the Perf row when a console view owns the screen, else print.  Every line
+	also goes to the report file."""
+
+	def __init__(self, report_file):
+		run = run_module()
+		self.run = run if run is not None and run.console_owns_screen() else None
+		self.report_file = Path(report_file)
+		self.lines = []
+
+	def line(self, text, level="info"):
+		self.lines.append(text)
+		if self.run is not None:
+			self.run.note(level, text, step="perf")
+		else:
+			print(text)
+
+	def report_only(self, text):
+		self.lines.append(text)
+
+	def write(self):
+		self.report_file.parent.mkdir(parents=True, exist_ok=True)
+		self.report_file.write_text("\n".join(self.lines) + "\n", encoding="utf-8")
+
+
+def run_perf_guard(test_elapsed: float, baseline_file: Path, timing_log_path, enforce: bool, report_file=None) -> int:
 	"""Per-module perf guard: suite wall-clock + per-(module, bucket) Surefire test-time.
 
+	A breach is a warn note, or an error with enforce=True.  Modules with no baseline collapse into one info note.
+	The full report goes to report_file (target/perf-guard.txt); the Perf row shows the counts and its path.
 	Returns exit code: 0 = pass or warn-only mode, 1 = threshold breached with enforce=True.
 	"""
+	run = run_module()
+	if run is None:
+		return _perf_guard(test_elapsed, baseline_file, timing_log_path, enforce, _PerfOutput(report_file or PERF_REPORT))[0]
+	with run.row("perf", "Perf", label="Perf") as row:
+		out = _PerfOutput(report_file or PERF_REPORT)
+		code, summary = _perf_guard(test_elapsed, baseline_file, timing_log_path, enforce, out)
+		row.summary = summary
+		if code != 0:
+			row.status = "fail"
+	return code
+
+
+def _perf_guard(test_elapsed, baseline_file, timing_log_path, enforce, out):
+	"""The check itself.  Returns (exit code, Perf row summary)."""
 	tolerance = float(os.environ.get("JUNEAU_CI_PERF_THRESHOLD", "0.20"))
+	breach = "error" if enforce else "warn"
 	baselines = read_baselines(baseline_file)
 	if not baselines:
-		print(f"PERF-GUARD: baseline file not found or empty ({baseline_file}); skipping check.")
-		return 0
+		out.line(f"PERF-GUARD: baseline file not found or empty ({baseline_file}); skipping check.", "warn")
+		out.write()
+		return 0, f"no baseline file → {out.report_file}"
 
 	pct = f"±{tolerance * 100:.0f}%"
-	perf_failed = False
+	over = 0
 
 	# Source of per-module actuals: prefer the latest timing-log run, else discover from surefire.
 	actuals: dict = {}
@@ -374,16 +430,15 @@ def run_perf_guard(test_elapsed: float, baseline_file: Path, timing_log_path, en
 	if suite_baseline is not None:
 		threshold = suite_baseline * (1 + tolerance)
 		if test_elapsed > threshold:
-			print(
+			out.line(
 				f"PERF-GUARD FAIL [suite]: tests took {test_elapsed:.1f}s "
 				f"(baseline {suite_baseline}s, tolerance {pct}, threshold {threshold:.1f}s).\n"
-				f"  If intentional, bump the 'suite' entry in perf-baseline.txt (project root)."
-			)
-			perf_failed = True
+				f"  If intentional, bump the 'suite' entry in perf-baseline.txt (project root).", breach)
+			over += 1
 		else:
-			print(f"PERF-GUARD OK [suite]: tests took {test_elapsed:.1f}s (baseline {suite_baseline}s, tolerance {pct}).")
+			out.line(f"PERF-GUARD OK [suite]: tests took {test_elapsed:.1f}s (baseline {suite_baseline}s, tolerance {pct}).")
 	else:
-		print("PERF-GUARD WARN [suite]: no 'suite' baseline configured; skipping wall-clock check.")
+		out.line("PERF-GUARD WARN [suite]: no 'suite' baseline configured; skipping wall-clock check.")
 
 	# 2) Per-module guards.
 	module_keys = sorted(k for k in actuals if k != "suite")
@@ -399,27 +454,39 @@ def run_perf_guard(test_elapsed: float, baseline_file: Path, timing_log_path, en
 		checked += 1
 		threshold = baseline * (1 + tolerance)
 		if actual > threshold:
-			print(
+			out.line(
 				f"PERF-GUARD FAIL [{key}]: {actual:.1f}s "
 				f"(baseline {baseline}s, tolerance {pct}, threshold {threshold:.1f}s).\n"
-				f"  If intentional, bump '{key}' in perf-baseline.txt (project root)."
-			)
-			perf_failed = True
+				f"  If intentional, bump '{key}' in perf-baseline.txt (project root).", breach)
 			regressions += 1
+			over += 1
 
-	for key in new_modules:
-		print(f"PERF-GUARD WARN [{key}]: {actuals[key]:.1f}s — no baseline entry yet (new/unknown module; not failing).")
+	lines = [f"PERF-GUARD WARN [{key}]: {actuals[key]:.1f}s — no baseline entry yet (new/unknown module; not failing)."
+			 for key in new_modules]
+	if out.run is None:
+		for text in lines:
+			out.line(text)
+	else:
+		for text in lines:
+			out.report_only(text)
+		if new_modules:
+			out.line(f"PERF-GUARD: {len(new_modules)} module-bucket(s) have no baseline entry yet: "
+					 + ", ".join(new_modules))
 
-	print(
+	out.line(
 		f"PERF-GUARD SUMMARY: {checked} module-bucket(s) checked, {regressions} regression(s), "
 		f"{len(new_modules)} new/unknown."
 	)
+	if over and not enforce:
+		out.line("PERF-GUARD: warn-only mode (pass --enforce-perf to hard-fail on breach).")
+	out.write()
 
-	if perf_failed:
-		if not enforce:
-			print("PERF-GUARD: warn-only mode (pass --enforce-perf to hard-fail on breach).")
-		return 1 if enforce else 0
-	return 0
+	if over:
+		summary = f"⚠ {over} over baseline" + (f" · {len(new_modules)} without one" if new_modules else "")
+	else:
+		summary = f"✓ {checked} checked" + (f" · {len(new_modules)} without a baseline" if new_modules else "")
+	summary += f" → {out.report_file}"
+	return (1 if over and enforce else 0), summary
 
 
 # Reactor-level parallel *module* builds.  -T1C runs one build thread per CPU core, so independent
@@ -430,14 +497,14 @@ PARALLELISM = "-T1C"
 
 
 def build():
-	return run_command(f"mvn clean install {PARALLELISM} -DskipTests", "build", "Build")
+	return run_command(f"mvn clean install {PARALLELISM} -DskipTests", "build", "Build", label="Compile")
 
 
 def test(no_container=False):
 	cmd = f"mvn test {PARALLELISM} -Drat.skip=true"
 	if no_container:
 		cmd += " -DexcludedGroups=container"
-	return run_command(cmd, "tests", "Tests")
+	return run_command(cmd, "tests", "Tests", label="Tests")
 
 
 JS_TEST_MODULE = "juneau-rest/juneau-rest-server-views"
@@ -481,13 +548,16 @@ def js_prereq_problem():
 	return None
 
 
-def js_tests():
-	cmd = (f"mvn -Pjs-tests -pl {JS_TEST_MODULE} -am test -Drat.skip=true "
+def js_tests(installed=False):
+	"""The JS harness.  After this run's install, -f builds only the module (upstream comes from ~/.m2); otherwise
+	-pl -am rebuilds what it needs, since .mvn/maven.config's --also-make applies either way."""
+	scope = f"-f {JS_TEST_MODULE}/pom.xml" if installed else f"-pl {JS_TEST_MODULE} -am"
+	cmd = (f"mvn -Pjs-tests {scope} test -Drat.skip=true "
 		"-Dtest='*_BrowserTest' -Dsurefire.failIfNoSpecifiedTests=false")
-	return run_command(cmd, "js-tests", "JS browser tests")
+	return run_command(cmd, "js-tests", "JS browser tests", label="JS tests")
 
 
-def maybe_run_js_tests(js_flag, no_js_flag, changed_files, runner=None):
+def maybe_run_js_tests(js_flag, no_js_flag, changed_files, runner=None, installed=False):
 	"""Run the JS harness if enabled.  Returns 0 on pass/skip, non-zero on failure."""
 	enabled, explicit = should_run_js_tests(js_flag, no_js_flag, changed_files)
 	if not enabled:
@@ -495,13 +565,13 @@ def maybe_run_js_tests(js_flag, no_js_flag, changed_files, runner=None):
 	problem = js_prereq_problem()
 	if problem:
 		if explicit:
-			print(f"\n❌ --js-tests requested but cannot run: {problem}.")
+			say(f"\n❌ --js-tests requested but cannot run: {problem}.", "error")
 			return 1
-		print(f"\n⚠️  JS files changed, but skipping JS tests: {problem}. (CI will still run them.)")
+		say(f"\n⚠️  JS files changed, but skipping JS tests: {problem}. (CI will still run them.)", "warn")
 		return 0
-	print("\n🌐 Running JS browser tests (-Pjs-tests)..." + ("" if explicit else " (auto: JS/CSS/FTL files changed)"))
-	code, _ = (runner or js_tests)()
-	print("\n✅ JS tests passed!" if code == 0 else "\n❌ JS tests failed!")
+	say("\n🌐 Running JS browser tests (-Pjs-tests)..." + ("" if explicit else " (auto: JS/CSS/FTL files changed)"))
+	code, _ = (runner or (lambda: js_tests(installed)))()
+	say("\n✅ JS tests passed!" if code == 0 else "\n❌ JS tests failed!", "info" if code == 0 else "error")
 	return code
 
 
@@ -514,9 +584,9 @@ def profile(module):
 	# Overriding argLine deliberately drops the JaCoCo agent so instrumentation doesn't skew the profile.
 	argline = f"-XX:StartFlightRecording=filename={output_file},settings=profile,dumponexit=true"
 	cmd = f"mvn test -pl {module} -Drat.skip=true -DargLine='{argline}'"
-	code, out = run_command(cmd, "profile", "Profile")
+	code, out = run_command(cmd, "profile", "Profile", label="Profile")
 	if code == 0:
-		print(f"\n✅ JFR profile captured at {output_file}")
+		say(f"\n✅ JFR profile captured at {output_file}", "warn")
 	return code, out
 
 
@@ -533,6 +603,7 @@ def _main():  # NOSONAR python:S3776 -- Cognitive complexity is acceptable for t
 	parser.add_argument("--no-js-tests", action="store_true", dest="no_js_tests")
 	parser.add_argument("--profile")
 	parser.add_argument("--console", choices=("full", "condensed", "none"))
+	parser.add_argument("--detail")
 	parser.add_argument("--full-log")
 	parser.add_argument("--condensed-log")
 	parser.add_argument("--help", "-h", action="store_true")
@@ -549,6 +620,15 @@ def _main():  # NOSONAR python:S3776 -- Cognitive complexity is acceptable for t
 			(args.condensed_log, "JUNEAU_RUN_CONDENSED_LOG")):
 		if flag:
 			os.environ[variable] = flag
+	run = run_module()
+	if run is not None:
+		try:
+			run.export_detail(args.detail)
+		except ValueError as e:
+			print(e)
+			return 2
+		if not run.Sinks().is_default:
+			run.session(f"🧪 Juneau test · {git_value(['rev-parse', '--abbrev-ref', 'HEAD'])}")
 
 	build_only = args.build_only
 	test_only = args.test_only
@@ -570,26 +650,24 @@ def _main():  # NOSONAR python:S3776 -- Cognitive complexity is acceptable for t
 	if build_only or full:
 		exit_code, _ = build()
 		if exit_code != 0:
-			print("\n❌ Build failed!")
+			say("\n❌ Build failed!", "error")
 			return exit_code
-		print("\n✅ Build succeeded!")
+		say("\n✅ Build succeeded!")
 
 	if test_only or full:
 		if full:
-			print("\n" + "=" * 80)
-		if not args.enforce_perf:
-			print("PERF-GUARD: warn-only mode (pass --enforce-perf to hard-fail on breach).")
+			say("\n" + "=" * 80)
 		test_start = time.time()
 		exit_code, last_test_output = test(no_container=args.no_container)
 		test_elapsed = time.time() - test_start
 		if exit_code != 0:
 			_, failures, errors = parse_test_results(last_test_output)
 			if failures is not None and errors is not None:
-				print(f"\n❌ Tests failed! ({failures + errors} failed: {failures} failures, {errors} errors)")
+				say(f"\n❌ Tests failed! ({failures + errors} failed: {failures} failures, {errors} errors)", "error")
 			else:
-				print("\n❌ Tests failed!")
+				say("\n❌ Tests failed!", "error")
 		else:
-			print("\n✅ Tests passed!")
+			say("\n✅ Tests passed!")
 		if args.timing_log:
 			write_timing_log(Path(args.timing_log), passed=(exit_code == 0), test_elapsed=test_elapsed)
 		if exit_code != 0:
@@ -599,7 +677,7 @@ def _main():  # NOSONAR python:S3776 -- Cognitive complexity is acceptable for t
 		if perf_exit != 0:
 			return perf_exit
 		js_changed = [] if (args.js_tests or args.no_js_tests) else changed_files_vs_origin()
-		js_exit = maybe_run_js_tests(args.js_tests, args.no_js_tests, js_changed)
+		js_exit = maybe_run_js_tests(args.js_tests, args.no_js_tests, js_changed, installed=full)
 		if js_exit != 0:
 			return js_exit
 	return exit_code
@@ -621,7 +699,7 @@ def main():
 		try:
 			code = _main()
 		except KeyboardInterrupt:
-			if run is None or not run.enabled():
+			if run is None or not (run.enabled() or run.console_active()):
 				raise
 			run.done("cancelled")
 			print("Cancelled.", file=sys.stderr)

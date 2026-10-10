@@ -28,12 +28,12 @@ import org.junit.jupiter.api.*;
 class XtermWebJar_Test extends TestBase {
 
 	@Test void a01_pinnedVersionResolves() {
-		assertEquals("5.5.0", WebJarResolver.version("org.webjars.npm", "xterm__xterm"));
+		assertEquals("6.0.0", WebJarResolver.version("org.webjars.npm", "xterm__xterm"));
 	}
 
 	@Test void a02_umdBundleAndStylesheetArePresent() {
 		var cl = getClass().getClassLoader();
-		for (var p : new String[] {"xterm__xterm/5.5.0/lib/xterm.js", "xterm__xterm/5.5.0/css/xterm.css"})
+		for (var p : new String[] {"xterm__xterm/6.0.0/lib/xterm.js", "xterm__xterm/6.0.0/css/xterm.css"})
 			assertNotNull(cl.getResource(WebJarResolver.WEBJARS_ROOT + p), p);
 	}
 }
