@@ -419,7 +419,7 @@ public class AppConfiguration {
 	/**
 	 * The SSE servlet — a plain HttpServlet, registered alongside RootRest. Serves the run-state channel keyed
 	 * by {@code version} (trailing segment {@code state}) that pushes rail-status snapshots to every connected
-	 * New-Release tab. Step console output is not streamed; the console-output region polls it from
+	 * New-Release tab. Step output is not streamed; the terminal region polls it from
 	 * {@link ReleaseRunRest}.
 	 */
 	@Bean

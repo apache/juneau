@@ -158,7 +158,7 @@ class CredentialWriteVectorTest {
 		try (var c = client();
 			var res = c.post("/apache?content=" + java.net.URLEncoder.encode(
 				"(account=" + KEYCHAIN_FREE_ACCOUNT + ",secret=hijacked-via-url)",
-				java.nio.charset.StandardCharsets.UTF_8)).run()) {
+				java.nio.charset.StandardCharsets.UTF_8)).noTrace().run()) {
 			assertNotEquals(200, res.getStatusCode(), "content= parameter was still honoured");
 		}
 		assertEquals("the-real-password", storedSecret(), "content= parameter still reached the store");
@@ -180,7 +180,7 @@ class CredentialWriteVectorTest {
 		try (var c = hardenedConfigClient();
 			var res = c.post("/apache?content=" + java.net.URLEncoder.encode(
 				"(account=" + KEYCHAIN_FREE_ACCOUNT + ",secret=hijacked-via-url)",
-				java.nio.charset.StandardCharsets.UTF_8)).run()) {
+				java.nio.charset.StandardCharsets.UTF_8)).noTrace().run()) {
 			assertNotEquals(200, res.getStatusCode(), "content= parameter was still honoured with disableContentParam=true");
 		}
 		assertEquals("the-real-password", storedSecret(), "content= parameter still reached the store on the hardened twin");

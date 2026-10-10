@@ -84,7 +84,7 @@ public class RunEventStore {
 	}
 
 	/**
-	 * Starts a new attempt of a step. The event points at line 1 of the step's own log, which a step's run truncates and
+	 * Starts a new attempt of a step. The event points at offset 0 of the step's own log, which a step's run truncates and
 	 * rewrites, so the run view can link the step to the start of its console output.
 	 *
 	 * @param version The run version.
@@ -104,7 +104,7 @@ public class RunEventStore {
 					append(file, RunEvent.end(previous, EndStatus.SKIP)); // superseded by this attempt
 			var attempt = attempts.isEmpty() ? 1 : attempts.size() + 1;
 			var id = attempt == 1 ? stepId : stepId + "." + attempt;
-			append(file, RunEvent.step(id, attempt == 1 ? title : title + " (attempt " + attempt + ")").withN(ordinal).withRawLine(1));
+			append(file, RunEvent.step(id, attempt == 1 ? title : title + " (attempt " + attempt + ")").withN(ordinal).withRawOffset(0));
 			return id;
 		}
 	}

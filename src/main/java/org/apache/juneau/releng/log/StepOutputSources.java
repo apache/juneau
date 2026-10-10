@@ -18,32 +18,27 @@
 package org.apache.juneau.releng.log;
 
 import java.nio.file.Path;
-import java.time.Duration;
-import java.time.Instant;
-import java.time.format.DateTimeParseException;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import org.apache.juneau.releng.engine.RunStateStore;
-import org.apache.juneau.releng.engine.StepState;
-import org.apache.juneau.rest.server.views.ConsoleOutputLine.Style;
-import org.apache.juneau.rest.server.views.ConsoleOutputSource;
-import org.apache.juneau.rest.server.views.FileConsoleOutputSource;
-import org.apache.juneau.rest.server.views.FileConsoleOutputSource.Status;
+import org.apache.juneau.rest.server.terminal.FileTerminalSource;
+import org.apache.juneau.rest.server.terminal.TerminalSource;
 
 /**
- * Serves each release step's own log file as a console-output source.
+ * Serves each release step's own log file as a terminal source.
  *
  * <p>
- * The file path always comes from the persisted {@link StepState#logRef}, never from the request, so a request can
- * only choose among the logs of runs and steps that exist. One {@link FileConsoleOutputSource} is kept per log file
- * because its line index lives in the instance; the status header is recomputed from the stored step state on every
- * request, so it follows the step as it runs and settles.
+ * The file path always comes from the persisted {@link org.apache.juneau.releng.engine.StepState#logRef}, never from
+ * the request, so a request can only choose among the logs of runs and steps that exist. One
+ * {@link FileTerminalSource} is kept per log file because it remembers whether the file has been seen; whether the step
+ * has settled is recomputed from the stored step state on every read, so the terminal follows the step as it runs and
+ * stops once it settles.
  */
 public class StepOutputSources {
 
 	private final RunStateStore store;
-	private final Map<Path, FileConsoleOutputSource> sources = new ConcurrentHashMap<>();
+	private final Map<Path, FileTerminalSource> sources = new ConcurrentHashMap<>();
 
 	/**
 	 * Creates the registry over the store the engine persists runs to.
@@ -55,13 +50,13 @@ public class StepOutputSources {
 	}
 
 	/**
-	 * Finds the console-output source for one step's log.
+	 * Finds the terminal source for one step's log.
 	 *
 	 * @param version The run version.
 	 * @param stepId The step id.
 	 * @return The source, or empty when there is no such run or step, or the step has not written a log yet.
 	 */
-	public Optional<ConsoleOutputSource> find(String version, String stepId) {
+	public Optional<TerminalSource> find(String version, String stepId) {
 		var step = store.load(version).map(rs -> rs.step(stepId)).orElse(null);
 		if (step == null || step.logRef == null)
 			return Optional.empty();
@@ -69,49 +64,28 @@ public class StepOutputSources {
 		var file = root.resolve(step.logRef).normalize();
 		if (! file.startsWith(root))
 			return Optional.empty();
-		return Optional.of(sources.computeIfAbsent(file, f -> FileConsoleOutputSource.create(f).status(() -> status(version, stepId)).build()));
+		return Optional.of(sources.computeIfAbsent(file, f -> FileTerminalSource.create(f).terminal(() -> settled(version, stepId)).build()));
 	}
 
 	/**
-	 * Maps a step's persisted state onto the console header.
+	 * Whether a step's output is complete.
 	 *
 	 * <p>
-	 * Only a step that has settled (succeeded, failed or skipped) or is parked waiting for a person is terminal, so the
-	 * console stops polling then. A step that has not started yet stays non-terminal so its output appears when it runs.
+	 * Only a step that has settled (succeeded, failed or skipped) or is parked waiting for a person is complete, so the
+	 * terminal stops polling then. A step that has not started yet stays incomplete so its output appears when it runs.
+	 * A step that no longer exists is complete.
 	 *
 	 * @param version The run version.
 	 * @param stepId The step id.
-	 * @return The status.
+	 * @return {@code true} if no more output will be written.
 	 */
-	Status status(String version, String stepId) {
+	boolean settled(String version, String stepId) {
 		var step = store.load(version).map(rs -> rs.step(stepId)).orElse(null);
 		if (step == null)
-			return new Status("MISSING", Style.MUTED, true, null, null);
-		var started = parse(step.startedAt);
+			return true;
 		return switch (step.status) {
-			case PENDING -> new Status("PENDING", Style.MUTED, false, null, null);
-			case RUNNING -> new Status("RUNNING", Style.ACCENT, false, started, null);
-			case SUCCEEDED -> settled("SUCCEEDED", Style.SUCCESS, step, started);
-			case FAILED -> settled("FAILED", Style.ERROR, step, started);
-			case SKIPPED -> settled("SKIPPED", Style.MUTED, step, started);
-			case AWAITING_VOTE -> settled("AWAITING VOTE", Style.WARN, step, started);
-			case AWAITING_REVIEW -> settled("AWAITING REVIEW", Style.WARN, step, started);
+			case PENDING, RUNNING -> false;
+			case SUCCEEDED, FAILED, SKIPPED, AWAITING_VOTE, AWAITING_REVIEW -> true;
 		};
-	}
-
-	private static Status settled(String state, Style style, StepState step, Instant started) {
-		var completed = parse(step.completedAt);
-		var duration = started != null && completed != null ? Duration.between(started, completed).toMillis() : null;
-		return new Status(state, style, true, started, duration);
-	}
-
-	private static Instant parse(String iso) {
-		if (iso == null)
-			return null;
-		try {
-			return Instant.parse(iso);
-		} catch (DateTimeParseException e) {
-			return null;
-		}
 	}
 }

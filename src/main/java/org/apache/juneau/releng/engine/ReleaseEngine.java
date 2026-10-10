@@ -37,7 +37,7 @@ import org.apache.juneau.releng.log.StepOutputSources;
 import org.apache.juneau.releng.milestone.MilestoneService;
 import org.apache.juneau.releng.nexus.NexusStagingClient;
 import org.apache.juneau.releng.util.ProcessRunner;
-import org.apache.juneau.rest.server.views.ConsoleOutputSource;
+import org.apache.juneau.rest.server.terminal.TerminalSource;
 import org.apache.juneau.rest.server.runreport.RunEvent.DoneStatus;
 import org.apache.juneau.rest.server.runreport.RunEvent.EndStatus;
 import org.apache.juneau.rest.server.views.RunViewSource;
@@ -64,7 +64,7 @@ public class ReleaseEngine {
 	private final SecretResolver secrets;
 	private final TargetProfile target;
 
-	// Serves each step's log file to the console-output region; the log files themselves are the source of truth.
+	// Serves each step's log file to the terminal region; the log files themselves are the source of truth.
 	private final StepOutputSources stepOutputs;
 
 	// Each run's run-view events, persisted beside the step logs; the file is the source of truth.
@@ -175,14 +175,14 @@ public class ReleaseEngine {
 	}
 
 	/**
-	 * The console-output source for one step's log.
+	 * The terminal source for one step's log.
 	 *
-	 * @param version The run version.
+	 * @param runId The run id: the version with its dots written as underscores.
 	 * @param stepId The step id.
 	 * @return The source, or empty when there is no such run or step, or the step has not written a log yet.
 	 */
-	public Optional<ConsoleOutputSource> stepOutput(String version, String stepId) {
-		return stepOutputs.find(version, stepId);
+	public Optional<TerminalSource> stepOutput(String runId, String stepId) {
+		return findRun(runId).flatMap(rs -> stepOutputs.find(rs.version, stepId));
 	}
 
 	/**
@@ -192,10 +192,14 @@ public class ReleaseEngine {
 	 * @return The source, or empty when there is no such run.
 	 */
 	public Optional<RunViewSource> runViewSource(String runId) {
+		return findRun(runId).map(rs -> events.source(rs.version, () -> isReleased(rs.version)));
+	}
+
+	private Optional<RunState> findRun(String runId) {
 		var run = store.load(runId.replace('_', '.')).filter(rs -> RunEventStore.runId(rs.version).equals(runId));
 		if (run.isEmpty())
 			run = store.loadAll().stream().filter(rs -> RunEventStore.runId(rs.version).equals(runId)).findFirst();
-		return run.map(rs -> events.source(rs.version, () -> isReleased(rs.version)));
+		return run;
 	}
 
 	/**

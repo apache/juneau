@@ -30,8 +30,8 @@ import jakarta.servlet.http.HttpServletResponse;
 
 /**
  * Streams the run/step-status snapshots as {@code text/event-stream}: on connect the run's current snapshot, then
- * every later snapshot from that version's {@link RunStateBroadcaster}. Step console output is not streamed here; the
- * console-output region polls it from {@code ReleaseRunRest}.
+ * every later snapshot from that version's {@link RunStateBroadcaster}. Step output is not streamed here; the
+ * terminal region polls it from {@code ReleaseRunRest}.
  *
  * <p>Mapped at {@code /events/*}; the two trailing path segments are {@code {version}/state}.
  */

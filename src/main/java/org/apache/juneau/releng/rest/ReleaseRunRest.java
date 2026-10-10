@@ -37,7 +37,9 @@ import org.apache.juneau.rest.server.RestPost;
 import org.apache.juneau.rest.server.RestRequest;
 import org.apache.juneau.rest.server.RestResponse;
 import org.apache.juneau.rest.server.servlet.BasicRestResource;
-import org.apache.juneau.rest.server.views.ConsoleOutputEndpoints;
+import org.apache.juneau.rest.server.staticfile.WebJarsMixin;
+import org.apache.juneau.rest.server.terminal.TerminalMixin;
+import org.apache.juneau.rest.server.terminal.TerminalSource;
 import org.apache.juneau.rest.server.views.RunViewMixin;
 import org.apache.juneau.rest.server.views.RunViewSource;
 import org.apache.juneau.rest.server.views.ViewsMixin;
@@ -61,8 +63,8 @@ import jakarta.servlet.http.HttpServletRequest;
  * history and access logs. The boundary refuses that shape from a hostile page; this closes the accidental use of it.
  */
 @Rest(path = "/runs", title = "New Release", responseProcessors = FreemarkerViewRenderer.class,
-	disableContentParam = "true", mixins = ViewsMixin.class)
-public class ReleaseRunRest extends BasicRestResource implements RunViewMixin {
+	disableContentParam = "true", mixins = { ViewsMixin.class, WebJarsMixin.class })
+public class ReleaseRunRest extends BasicRestResource implements RunViewMixin, TerminalMixin {
 
 	private final ReleaseEngine engine;
 	private final DropRcService dropRc;
@@ -137,16 +139,6 @@ public class ReleaseRunRest extends BasicRestResource implements RunViewMixin {
 	}
 
 	/**
-	 * One page of a step's console output, in the console-output lines contract. The step's own log file is the
-	 * source, so the page reads the same lines after a restart as during the run.
-	 */
-	@RestGet(path = "/{version}/steps/{stepId}/output/lines", summary = "Step console output lines", swagger = @OpSwagger(ignore = true))
-	public void outputLines(@Path("version") String version, @Path("stepId") String stepId, RestRequest req, RestResponse res)
-			throws IOException {
-		ConsoleOutputEndpoints.lines(engine.stepOutput(version, stepId), req, res);
-	}
-
-	/**
 	 * The run-view events of a run, served by {@link RunViewMixin}. The run id is the version with its dots written as
 	 * underscores, since a run id has no dots.
 	 */
@@ -156,13 +148,16 @@ public class ReleaseRunRest extends BasicRestResource implements RunViewMixin {
 	}
 
 	/**
-	 * A step's whole console output as JSONL, one line record per JSONL line, named {@code <version>-<stepId>.jsonl}
-	 * with the version's dots written as underscores (the download name is a log id, which has no dots).
+	 * A step's terminal output. The terminal id is the run id and the step id joined by {@code --}, for example
+	 * {@code 9_2_1--preflight}, and the step's own log file is the source, so the terminal reads the same bytes after a
+	 * restart as during the run.
 	 */
-	@RestGet(path = "/{version}/steps/{stepId}/output/download", summary = "Step console output download", swagger = @OpSwagger(ignore = true))
-	public void outputDownload(@Path("version") String version, @Path("stepId") String stepId, RestResponse res)
-			throws IOException {
-		ConsoleOutputEndpoints.download(engine.stepOutput(version, stepId), version.replace('.', '_') + "-" + stepId, res);
+	@Override /* TerminalMixin */
+	public Optional<TerminalSource> terminalSource(String id, RestRequest req) {
+		var i = id.indexOf("--");
+		if (i < 0)
+			return Optional.empty();
+		return engine.stepOutput(id.substring(0, i), id.substring(i + 2));
 	}
 
 	/**

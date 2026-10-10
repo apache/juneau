@@ -35,21 +35,29 @@ class RunLogTest {
 		log.append("line one");
 		log.append("line two");
 
-		assertEquals("line one\nline two\n", Files.readString(dir.resolve("9.2.1-RC1-preflight.log")));
+		assertEquals("line one\r\nline two\r\n", Files.readString(dir.resolve("9.2.1-RC1-preflight.log")));
+	}
+
+	@Test
+	void a01b_embeddedLineBreaksBecomeCrlf(@TempDir Path dir) throws Exception {
+		var log = new RunLog(dir.resolve("9.2.1-RC1-preflight.log"));
+		log.append("one\ntwo\r\nthree");
+
+		assertEquals("one\r\ntwo\r\nthree\r\n", Files.readString(dir.resolve("9.2.1-RC1-preflight.log")));
 	}
 
 	@Test
 	void a02_sizeReportsCurrentByteOffset(@TempDir Path dir) {
 		var log = new RunLog(dir.resolve("9.2.1-RC1-preflight.log"));
 		log.append("abc");
-		assertEquals(4, log.size()); // "abc\n"
+		assertEquals(5, log.size()); // "abc\r\n"
 	}
 
 	@Test
 	void a03_lineSinkAppendsToDisk(@TempDir Path dir) throws Exception {
 		var log = new RunLog(dir.resolve("9.2.1-RC1-preflight.log"));
 		log.lineSink().accept("x");
-		assertEquals("x\n", Files.readString(dir.resolve("9.2.1-RC1-preflight.log")));
+		assertEquals("x\r\n", Files.readString(dir.resolve("9.2.1-RC1-preflight.log")));
 	}
 
 	@Test
@@ -62,7 +70,7 @@ class RunLogTest {
 		log.reset();
 		log.append("second invocation, line 1");
 
-		assertEquals("second invocation, line 1\n", Files.readString(dir.resolve("9.2.1-RC1-release-prepare.log")));
+		assertEquals("second invocation, line 1\r\n", Files.readString(dir.resolve("9.2.1-RC1-release-prepare.log")));
 	}
 
 	@Test
@@ -72,7 +80,7 @@ class RunLogTest {
 		var log = new RunLog(dir.resolve("9.2.1-RC1-build-verify.log"));
 		assertDoesNotThrow(log::reset);
 		log.append("first line ever");
-		assertEquals("first line ever\n", contentsOrEmpty(dir.resolve("9.2.1-RC1-build-verify.log")));
+		assertEquals("first line ever\r\n", contentsOrEmpty(dir.resolve("9.2.1-RC1-build-verify.log")));
 	}
 
 	private static String contentsOrEmpty(Path p) {

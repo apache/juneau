@@ -18,16 +18,16 @@
 import { test, expect } from '@playwright/test';
 
 test.describe('step console output', () => {
-  test('execution page loads the console-output region and none of the old renderer', async ({ page }) => {
+  test('execution page loads the terminal region and none of the old renderer', async ({ page }) => {
     await page.goto('/rest/runs?tab=exec');
     await expect(page.locator('#nr-panel-exec')).toBeAttached();
     const html = await page.content();
-    expect(html).toContain('juneau-console-output.js');
+    expect(html).toContain('juneau-terminal.js');
     expect(html).not.toContain('rm-console');
   });
 
-  test('lines endpoint answers 404 for an unknown run and step', async ({ request }) => {
-    const res = await request.get('/rest/runs/0.0.0-none/steps/no-such-step/output/lines');
+  test('bytes endpoint answers 404 for an unknown run and step', async ({ request }) => {
+    const res = await request.get('/rest/runs/juneau-terminal/0_0_0-none--no-such-step/bytes');
     expect(res.status()).toBe(404);
   });
 });

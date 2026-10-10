@@ -93,29 +93,29 @@
       eventsUrl: '/rest/runs/juneau-run-view/' + encodeURIComponent(runViewEl.dataset.runId) + '/events',
       refreshMs: 3000,
       title: 'Run progress',
-      rawHref: '#raw-L{line}'
+      rawHref: '#nr-term-O{offset}'
     }, {});
 
-    // A step's title links to line 1 of its console log (#raw-L1). The console-output region scrolls to and
-    // highlights a line named by the hash, but it shows one step's log at a time, so first select the clicked
-    // step (the run view numbers its steps as the rail does), then let the hash do the scrolling.
+    // A step's title links to offset 0 of its terminal log (#nr-term-O0). The terminal shows one step's log at a time,
+    // so first select the clicked step (the run view stamps the event model's step id on each step; a retry's id is the
+    // step id plus ".N"), then let the hash scroll the terminal that is mounted for it.
     runViewEl.addEventListener('click', (ev) => {
       const a = ev.target.closest && ev.target.closest('a.juneau-rv-title');
       const href = a && a.getAttribute('href');
-      const m = href && /^#raw-L\d+$/.test(href) && /^(\d+)\. /.exec(a.textContent);
-      const item = m && layout.querySelectorAll('.rm-rail-item')[Number(m[1]) - 1];
-      if (!item) return;
+      const li = a && a.closest('[data-step]');
+      const stepId = li && li.dataset.step.replace(/\.\d+$/, '');
+      if (!href || !/^#nr-term-O\d+$/.test(href) || !stepId || !layout.querySelector('.rm-rail-item[data-step="' + stepId + '"]')) return;
       ev.preventDefault();
       if (location.hash === href) history.replaceState(null, '', location.pathname + location.search);
-      location.hash = href;  // an open console scrolls on hashchange; a console mounted below reads it at creation
-      if (!item.classList.contains('selected')) nrSelect(item.dataset.step);
+      location.hash = href;  // an open terminal scrolls on hashchange; one mounted below reads it at creation
+      if (!layout.querySelector('.rm-rail-item.selected[data-step="' + stepId + '"]')) nrSelect(stepId);
       document.getElementById('nr-console')?.scrollIntoView({ block: 'nearest' });
     });
   }
 
-  // Exactly one console-output region at a time — one console visible at a time. Switching the selected
-  // step aborts the old region's controller (which destroys it) and mounts a new one over that step's own log.
-  let consoleAbort = null;
+  // Exactly one terminal region at a time — one console visible at a time. Switching the selected
+  // step cleans up the old region and mounts a new one over that step's own log.
+  let consoleCleanup = null;
 
   function statusOf(stepId) {
     const el = layout.querySelector('.rm-rail-item[data-step="' + stepId + '"]');
@@ -173,21 +173,17 @@
   }
 
   function connectConsole(stepId) {
-    if (consoleAbort) consoleAbort.abort();
+    if (consoleCleanup) consoleCleanup();
+    consoleCleanup = null;
     const consoleEl = document.getElementById('nr-console');
     if (!consoleEl) return;
-    const base = '/rest/runs/' + encodeURIComponent(version) + '/steps/' + encodeURIComponent(stepId) + '/output/';
     const meta = STEP_META[stepId] || { title: stepId };
-    consoleAbort = new AbortController();
-    // The region polls the lines endpoint, tails while the step runs, and stops once the step settles.
-    JuneauViews.consoleOutput.mount(consoleEl, {
-      linesUrl: base + 'lines',
-      downloadUrl: base + 'download',
-      tail: 2000,
-      rows: 20,
-      anchorPrefix: 'raw-L',
+    // The region polls the bytes endpoint and stops once the step settles. The terminal id is the run id and step id.
+    consoleCleanup = JuneauTerminal.mount(consoleEl, {
+      id: 'nr-term',
+      bytesUrl: '/rest/runs/juneau-terminal/' + encodeURIComponent(version.replace(/\./g, '_') + '--' + stepId) + '/bytes',
       title: meta.title + ' output'
-    }, { signal: consoleAbort.signal });
+    });
   }
 
   globalThis.nrSelect = function (stepId) {

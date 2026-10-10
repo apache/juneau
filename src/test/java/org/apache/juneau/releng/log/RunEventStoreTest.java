@@ -55,7 +55,8 @@ class RunEventStoreTest {
 		store.end("9.2.1", "build", EndStatus.OK, 1200);
 		var events = read(store, false);
 		assertEquals("step:build end:build:ok", ids(events));
-		assertEquals(1, events.get(0).toContractMap().get("rawLine"), "a step links to the first line of its console log");
+		assertEquals(0L, ((Number)events.get(0).toContractMap().get("rawOffset")).longValue(), "a step links to the start of its terminal log");
+		assertFalse(events.get(0).toContractMap().containsKey("rawLine"));
 	}
 
 	@Test

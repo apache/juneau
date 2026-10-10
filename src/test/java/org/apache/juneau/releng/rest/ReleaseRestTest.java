@@ -284,7 +284,7 @@ class ReleaseRestTest {
 	@Test
 	void d02_viewEndpointIsGone() throws Exception {
 		try (var client = client(rest(List.of(release("9.2.1", "RELEASED"))))) {
-			try (var resp = client.request("GET", "/view").header("Accept", "application/json").run()) {
+			try (var resp = client.request("GET", "/view").header("Accept", "application/json").noTrace().run()) {
 				assertEquals(404, resp.getStatusCode(), "The Java /view slot envelope must be retired (catalog is now FTL).");
 			}
 		}

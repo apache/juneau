@@ -26,9 +26,14 @@ import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 import java.util.function.Consumer;
 import org.apache.juneau.releng.engine.StepState;
+import org.apache.juneau.rest.server.terminal.FileTerminalSource;
 
 /**
- * Appends output lines to the current RC's log file; the console-output region reads that file back (see {@link StepOutputSources}).
+ * Appends output lines to the current RC's log file; the terminal region reads that file back (see {@link StepOutputSources}).
+ *
+ * <p>
+ * Lines end in CRLF because a terminal treats a bare line feed as "down one row" and not "back to column one", so a
+ * plain-LF log would render as a staircase. A line that carries embedded line breaks gets CRLF for each of them.
  */
 public class RunLog {
 
@@ -41,17 +46,20 @@ public class RunLog {
 		this.file = file;
 		try {
 			Files.createDirectories(file.getParent());
+			var size = file.resolveSibling(file.getFileName() + ".size");
+			if (! Files.exists(size))
+				Files.writeString(size, "{\"cols\":" + FileTerminalSource.DEFAULT_COLS + ",\"rows\":" + FileTerminalSource.DEFAULT_ROWS + "}", StandardCharsets.UTF_8);
 		} catch (IOException e) {
 			throw isex(e, "Cannot create log dir for %s", file);
 		}
 	}
 
 	/**
-	 * Append one line (newline-terminated) to disk, flushed.
+	 * Append one line (CRLF-terminated) to disk, flushed.
 	 */
 	public synchronized void append(String line) {
 		try {
-			Files.writeString(file, line + "\n", StandardCharsets.UTF_8, StandardOpenOption.CREATE,
+			Files.writeString(file, line.replaceAll("\\r?\\n", "\r\n") + "\r\n", StandardCharsets.UTF_8, StandardOpenOption.CREATE,
 					StandardOpenOption.APPEND);
 		} catch (IOException e) {
 			throw isex(e, "Cannot append to log %s", file);

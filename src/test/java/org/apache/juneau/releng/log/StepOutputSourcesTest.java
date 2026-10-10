@@ -17,15 +17,14 @@
 package org.apache.juneau.releng.log;
 
 import static org.junit.jupiter.api.Assertions.*;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.time.Instant;
 import java.util.List;
 import java.util.Map;
 import org.apache.juneau.releng.engine.RunState;
 import org.apache.juneau.releng.engine.RunStateStore;
 import org.apache.juneau.releng.engine.StepStatus;
-import org.apache.juneau.rest.server.views.ConsoleOutputLine.Style;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
@@ -64,61 +63,39 @@ class StepOutputSourcesTest {
 	}
 
 	@Test
-	void a03_servesTheStepLogAsLinesAndKeepsOneSourcePerLog(@TempDir Path dir) throws Exception {
+	void a03_servesTheStepLogAsBytesAndKeepsOneSourcePerLog(@TempDir Path dir) throws Exception {
 		Files.createDirectories(dir.resolve("logs"));
-		Files.writeString(dir.resolve("logs/step.log"), "first\nsecond\n");
+		Files.writeString(dir.resolve("logs/step.log"), "first\r\nsecond\r\n");
 		var sources = new StepOutputSources(storeWithRun(dir, StepStatus.SUCCEEDED, "logs/step.log"));
 
 		var src = sources.find("9.2.1", "preflight").orElseThrow();
-		var page = src.page(null, 100);
+		var chunk = src.read(0, 1000);
 
-		var contract = page.toContractMap();
-		assertEquals(2, ((List<?>)contract.get("lines")).size());
-		assertEquals(Boolean.TRUE, contract.get("terminal"));
+		assertEquals("first\r\nsecond\r\n", new String(chunk.bytes(), StandardCharsets.UTF_8));
+		assertTrue(chunk.done());
 		assertSame(src, sources.find("9.2.1", "preflight").orElseThrow());
 	}
 
 	@Test
-	void b01_statusFollowsTheStoredStepState(@TempDir Path dir) {
+	void b01_settledFollowsTheStoredStepState(@TempDir Path dir) {
 		var expect = Map.of(
-			StepStatus.PENDING, List.of("PENDING", false),
-			StepStatus.RUNNING, List.of("RUNNING", false),
-			StepStatus.SUCCEEDED, List.of("SUCCEEDED", true),
-			StepStatus.FAILED, List.of("FAILED", true),
-			StepStatus.SKIPPED, List.of("SKIPPED", true),
-			StepStatus.AWAITING_VOTE, List.of("AWAITING VOTE", true),
-			StepStatus.AWAITING_REVIEW, List.of("AWAITING REVIEW", true));
+			StepStatus.PENDING, false,
+			StepStatus.RUNNING, false,
+			StepStatus.SUCCEEDED, true,
+			StepStatus.FAILED, true,
+			StepStatus.SKIPPED, true,
+			StepStatus.AWAITING_VOTE, true,
+			StepStatus.AWAITING_REVIEW, true);
 		for (var e : expect.entrySet()) {
 			var sources = new StepOutputSources(storeWithRun(dir, e.getKey(), "logs/step.log"));
-			var st = sources.status("9.2.1", "preflight");
-			assertEquals(e.getValue().get(0), st.state(), e.getKey().name());
-			assertEquals(e.getValue().get(1), st.terminal(), e.getKey().name());
+			assertEquals(e.getValue(), sources.settled("9.2.1", "preflight"), e.getKey().name());
 		}
 	}
 
 	@Test
-	void b02_settledStepReportsStyleAndServerDuration(@TempDir Path dir) {
-		var st = new StepOutputSources(storeWithRun(dir, StepStatus.FAILED, "logs/step.log")).status("9.2.1", "preflight");
-		assertEquals(Style.ERROR, st.stateStyle());
-		assertEquals(Instant.parse("2026-10-08T10:00:00Z"), st.startedAt());
-		assertEquals(83_000L, st.durationMs());
-	}
-
-	@Test
-	void b03_runningStepHasNoDurationYet(@TempDir Path dir) {
-		var st = new StepOutputSources(storeWithRun(dir, StepStatus.RUNNING, "logs/step.log")).status("9.2.1", "preflight");
-		assertEquals(Style.ACCENT, st.stateStyle());
-		assertNull(st.durationMs());
-	}
-
-	@Test
-	void b04_unparseableTimestampsDegradeToNoDuration(@TempDir Path dir) {
-		var store = storeWithRun(dir, StepStatus.SUCCEEDED, "logs/step.log");
-		var rs = store.load("9.2.1").orElseThrow();
-		rs.step("preflight").startedAt = "not-a-time";
-		store.save(rs);
-		var st = new StepOutputSources(store).status("9.2.1", "preflight");
-		assertNull(st.startedAt());
-		assertNull(st.durationMs());
+	void b02_aStepThatNoLongerExistsIsSettled(@TempDir Path dir) {
+		var sources = new StepOutputSources(storeWithRun(dir, StepStatus.RUNNING, "logs/step.log"));
+		assertTrue(sources.settled("9.2.1", "not-a-step"));
+		assertTrue(sources.settled("nope", "preflight"));
 	}
 }

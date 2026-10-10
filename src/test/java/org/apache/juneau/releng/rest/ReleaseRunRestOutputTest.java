@@ -34,8 +34,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
 /**
- * Serves a step's console output through the console-output lines and download endpoints, and checks the New Release
- * page wires the console-output region instead of its own log renderer.
+ * Serves a step's output through the terminal bytes and raw endpoints, and checks the New Release page wires the
+ * terminal region instead of its own log renderer.
  */
 class ReleaseRunRestOutputTest {
 
@@ -82,17 +82,18 @@ class ReleaseRunRestOutputTest {
 	}
 
 	@Test
-	void a01_linesEndpointServesTheStepLogInTheConsoleOutputContract(@TempDir Path dir) throws Exception {
+	void a01_bytesEndpointServesTheStepLogAsRawBytes(@TempDir Path dir) throws Exception {
 		try (var client = client(dir)) {
 			engine.start("9.2.1", null);
 			engine.apply("9.2.1", "preflight", Map.of());
-			try (var resp = client.request("GET", "/9.2.1/steps/preflight/output/lines").run()) {
+			try (var resp = client.request("GET", "/juneau-terminal/9_2_1--preflight/bytes").run()) {
 				assertEquals(200, resp.getStatusCode());
 				var body = resp.getBodyAsString();
-				assertTrue(body.contains("\"contractVersion\":\"1\""), body);
 				assertTrue(body.contains("Resolved target branch"), body);
-				assertTrue(body.contains("\"terminal\":true"), body);
-				assertTrue(body.contains("SUCCEEDED"), body);
+				assertTrue(body.contains("\r\n"), "lines are CRLF-terminated so a terminal returns to column one: " + body);
+				assertEquals("true", resp.header("Term-Done").orElse(""), "the step has settled");
+				assertEquals("120", resp.header("Term-Cols").orElse(""));
+				assertEquals("40", resp.header("Term-Rows").orElse(""));
 			}
 		}
 	}
@@ -101,27 +102,29 @@ class ReleaseRunRestOutputTest {
 	void a02_unknownRunOrStepIs404(@TempDir Path dir) throws Exception {
 		try (var client = client(dir)) {
 			engine.start("9.2.1", null);
-			try (var resp = client.request("GET", "/9.9.9/steps/preflight/output/lines").run()) {
+			try (var resp = client.request("GET", "/juneau-terminal/9_9_9--preflight/bytes").run()) {
 				assertEquals(404, resp.getStatusCode());
 			}
-			try (var resp = client.request("GET", "/9.2.1/steps/not-a-step/output/lines").run()) {
+			try (var resp = client.request("GET", "/juneau-terminal/9_2_1--not-a-step/bytes").run()) {
 				assertEquals(404, resp.getStatusCode());
 			}
-			try (var resp = client.request("GET", "/9.2.1/steps/preflight/output/lines").run()) {
+			try (var resp = client.request("GET", "/juneau-terminal/9_2_1--preflight/bytes").run()) {
 				assertEquals(404, resp.getStatusCode(), "a step that has not run has no log yet");
+			}
+			try (var resp = client.request("GET", "/juneau-terminal/9_2_1/bytes").run()) {
+				assertEquals(404, resp.getStatusCode(), "an id with no step part names nothing");
 			}
 		}
 	}
 
 	@Test
-	void a03_downloadIsTheWholeLogAsJsonl(@TempDir Path dir) throws Exception {
+	void a03_rawIsTheWholeLogAsAnAttachment(@TempDir Path dir) throws Exception {
 		try (var client = client(dir)) {
 			engine.start("9.2.1", null);
 			engine.apply("9.2.1", "preflight", Map.of());
-			try (var resp = client.request("GET", "/9.2.1/steps/preflight/output/download").run()) {
+			try (var resp = client.request("GET", "/juneau-terminal/9_2_1--preflight/raw").run()) {
 				assertEquals(200, resp.getStatusCode());
-				assertEquals("application/jsonl", resp.header("Content-Type").orElse(""));
-				assertTrue(resp.header("Content-Disposition").orElse("").contains(".jsonl"));
+				assertTrue(resp.header("Content-Disposition").orElse("").contains("attachment"));
 				assertTrue(resp.getBodyAsString().contains("Resolved target branch"));
 			}
 		}
@@ -152,13 +155,13 @@ class ReleaseRunRestOutputTest {
 	}
 
 	@Test
-	void b01_pageLoadsTheViewsToolkitAndNoLongerOwnsALogRenderer(@TempDir Path dir) throws Exception {
+	void b01_pageLoadsTheTerminalToolkitAndNoLongerOwnsALogRenderer(@TempDir Path dir) throws Exception {
 		try (var client = client(dir)) {
 			engine.start("9.2.1", null);
 			try (var resp = client.request("GET", "/?tab=exec").run()) {
 				assertEquals(200, resp.getStatusCode());
 				var body = resp.getBodyAsString();
-				assertTrue(body.contains("juneau-console-output.js"), "the views toolkit must be loaded: " + body);
+				assertTrue(body.contains("juneau-terminal.js") && body.contains("juneau-run-view.js"), "the terminal toolkit must be loaded: " + body);
 			}
 		}
 		for (var path : List.of("/static/js/new-release.js", "/static/css/new-release.css", "/templates/new-release.ftlh")) {
@@ -167,9 +170,9 @@ class ReleaseRunRestOutputTest {
 				assertFalse(text.contains("rm-console"), path);
 				assertFalse(text.contains("/events/' + encodeURIComponent(version) + '/' + encodeURIComponent(stepId)"), path);
 				if (path.endsWith(".js"))
-					assertTrue(text.contains("JuneauViews.consoleOutput.mount(") && text.contains("JuneauViews.runView.mount("), path);
+					assertTrue(text.contains("JuneauTerminal.mount(") && text.contains("JuneauViews.runView.mount("), path);
 				if (path.endsWith(".js"))
-					assertTrue(text.contains("rawHref: '#raw-L{line}'") && text.contains("anchorPrefix: 'raw-L'"), path);
+					assertTrue(text.contains("rawHref: '#nr-term-O{offset}'") && ! text.contains("{line}") && ! text.contains("ConsoleOutput") && ! text.contains("raw-L"), path);
 				if (path.endsWith(".ftlh"))
 					assertTrue(text.contains("nr-runview"), path);
 			}
