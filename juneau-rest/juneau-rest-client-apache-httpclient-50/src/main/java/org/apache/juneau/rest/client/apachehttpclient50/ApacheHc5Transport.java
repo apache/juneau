@@ -26,6 +26,7 @@ import org.apache.hc.core5.http.*;
 import org.apache.hc.core5.http.io.entity.*;
 import org.apache.hc.core5.http.io.support.*;
 import org.apache.hc.core5.http.message.*;
+import org.apache.hc.core5.io.*;
 import org.apache.hc.core5.util.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.rest.client.*;
@@ -150,7 +151,10 @@ public final class ApacheHc5Transport implements HttpTransport {
 
 	private static void closeQuietly(ClassicHttpResponse hcResponse) {
 		try {
-			hcResponse.close();
+			if (hcResponse instanceof ModalCloseable mc)
+				mc.close(CloseMode.IMMEDIATE);
+			else
+				hcResponse.close();
 		} catch (IOException e) {
 			// Best-effort cleanup on an already-failing path; nothing more can be done.
 		}
@@ -201,7 +205,12 @@ public final class ApacheHc5Transport implements HttpTransport {
 		var builder = TransportResponse.builder()
 			.statusCode(hcResponse.getCode())
 			.reasonPhrase(hcResponse.getReasonPhrase());
-		builder.closeCallback(hcResponse);
+		// A graceful close drains the entity before releasing the connection, which never finishes on an open-ended SSE
+		// stream; close those immediately (discarding the connection) so close() and any blocked reader return promptly.
+		if (isEventStream(hcResponse) && hcResponse instanceof ModalCloseable mc)
+			builder.closeCallback(() -> mc.close(CloseMode.IMMEDIATE));
+		else
+			builder.closeCallback(hcResponse);
 		for (var h : hcResponse.getHeaders())
 			builder.header(h.getName(), h.getValue());
 		var entity = hcResponse.getEntity();
@@ -213,5 +222,10 @@ public final class ApacheHc5Transport implements HttpTransport {
 			}
 		}
 		return builder.build();
+	}
+
+	private static boolean isEventStream(ClassicHttpResponse hcResponse) {
+		var ct = hcResponse.getFirstHeader("Content-Type");
+		return ct != null && "text/event-stream".equalsIgnoreCase(ct.getValue().split(";", 2)[0].trim());
 	}
 }

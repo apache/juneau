@@ -21,6 +21,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.io.*;
 import java.net.*;
 import java.nio.charset.*;
+import java.util.concurrent.*;
 
 import org.apache.juneau.http.entity.*;
 import org.apache.juneau.rest.client.apachehttpclient50.*;
@@ -40,6 +41,7 @@ class ApacheHc5Transport_Test {
 
 	private static HttpServer server;
 	private static int port;
+	private static final CountDownLatch sseRelease = new CountDownLatch(1);
 
 	@BeforeAll
 	static void startServer() throws IOException {
@@ -91,6 +93,21 @@ class ApacheHc5Transport_Test {
 			exchange.close();
 		});
 
+		// Open-ended SSE stream: sends one event, then holds the connection open until the test releases it.
+		server.createContext("/sse", exchange -> {
+			exchange.getResponseHeaders().add("Content-Type", "text/event-stream; charset=UTF-8");
+			exchange.sendResponseHeaders(200, 0);
+			exchange.getResponseBody().write("data: foo\n\n".getBytes(StandardCharsets.UTF_8));
+			exchange.getResponseBody().flush();
+			try {
+				sseRelease.await(30, TimeUnit.SECONDS);
+			} catch (InterruptedException e) {
+				Thread.currentThread().interrupt();
+			} finally {
+				exchange.close();
+			}
+		});
+
 		server.start();
 	}
 
@@ -138,6 +155,24 @@ class ApacheHc5Transport_Test {
 				assertNotNull(ct);
 				assertTrue(ct.value().startsWith("text/plain"), "Expected text/plain but got: " + ct.value());
 			}
+		}
+	}
+
+	@Test
+	void a04_sse_closeDoesNotWaitForStreamEnd() throws Exception {
+		var executor = Executors.newSingleThreadExecutor();
+		try (var client = RestClient.builder().transport(ApacheHc5Transport.create()).rootUrl(rootUrl()).build()) {
+			var response = client.get("/sse").run();
+			try {
+				assertEquals("data: foo\n\n", new String(response.getBodyStream().readNBytes(11), StandardCharsets.UTF_8));
+				// A graceful close would drain the still-open stream and block until the server ends it.
+				executor.submit(() -> { response.close(); return null; }).get(2, TimeUnit.SECONDS);
+			} finally {
+				sseRelease.countDown();
+				response.close();
+			}
+		} finally {
+			executor.shutdownNow();
 		}
 	}
 
