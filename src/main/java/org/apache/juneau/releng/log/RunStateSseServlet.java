@@ -136,7 +136,7 @@ public class RunStateSseServlet extends HttpServlet {
 					running = false;
 				}
 				if (running) {
-					out.print(line == null ? HEARTBEAT : sse(line));
+					out.print(line == null ? HEARTBEAT : sse(line)); // HTT: the heartbeat branch only runs after a 25 s idle poll (a seam for the interval would make this testable)
 					out.flush();
 					running = !out.checkError(); // client disconnected
 				}

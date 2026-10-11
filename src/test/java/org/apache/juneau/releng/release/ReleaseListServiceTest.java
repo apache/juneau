@@ -59,4 +59,44 @@ class ReleaseListServiceTest {
 		assertBean(result.get(0), "version,status", "9.2.1,VOTING");
 		assertEquals("9.2.0", result.get(1).version);
 	}
+
+	@Test
+	void a03_githubOnlyReleaseIsAdded() {
+		var gh = rel("9.3.0", "RELEASED", "github");
+		var result = new ReleaseListService(List::of, () -> List.of(gh), List::of).list();
+		assertSize(1, result);
+		assertEquals("9.3.0|—|RELEASED", result.get(0).id);
+	}
+
+	@Test
+	void a04_githubMergeKeepsExistingDateWhenGithubHasNone_andCopiesMilestoneUrl() {
+		var tag = rel("9.2.0", "RELEASED", "tag");
+		tag.released = "2025-01-01";
+		var gh = rel("9.2.0", "RELEASED", "github");
+		gh.released = "—";
+		gh.milestoneUrl = "https://m/1";
+		var result = new ReleaseListService(() -> List.of(tag), () -> List.of(gh), List::of).list();
+		assertBean(result.get(0), "released,milestoneUrl", "2025-01-01,https://m/1");
+
+		var tag2 = rel("9.2.0", "RELEASED", "tag");
+		tag2.milestoneUrl = "https://keep";
+		var gh2 = rel("9.2.0", "RELEASED", "github");
+		gh2.released = null;
+		gh2.milestoneUrl = "https://other";
+		var result2 = new ReleaseListService(() -> List.of(tag2), () -> List.of(gh2), List::of).list();
+		assertBean(result2.get(0), "released,milestoneUrl", "—,https://keep");
+	}
+
+	@Test
+	void a05_sameVersionReleasedSortsAfterAttempt() {
+		var released = rel("9.2.0", "RELEASED", "tag");
+		var dropped = rel("9.2.0", "DROPPED", "state");
+		dropped.rc = "RC1";
+		var result = new ReleaseListService(() -> List.of(released), List::of, () -> List.of(dropped)).list();
+		assertEquals("DROPPED", result.get(0).status);
+		assertEquals("RELEASED", result.get(1).status);
+		// and with the inputs the other way round, the comparator still orders RELEASED last
+		var result2 = new ReleaseListService(List::of, List::of, () -> List.of(released, dropped)).list();
+		assertEquals("DROPPED", result2.get(0).status);
+	}
 }

@@ -142,8 +142,7 @@ public class NexusMockRest extends BasicRestServlet {
 	}
 
 	private static String lastSegment(String path) {
-		var i = path.lastIndexOf('/');
-		return i < 0 ? path : path.substring(i + 1);
+		return path.substring(path.lastIndexOf('/') + 1); // Only called for paths containing "/repository/", so a slash always exists.
 	}
 
 	/**

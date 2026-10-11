@@ -92,8 +92,8 @@ public class DevDistVerifyStep implements ReleaseStep {
 	private static long fileSize(Path file) {
 		try {
 			return Files.size(file);
-		} catch (IOException e) {
-			return 0;
+		} catch (IOException e) { // HTT: Files.size fails on a file Files.isRegularFile just confirmed only if it is deleted in that instant
+			return 0; // HTT: same race
 		}
 	}
 }

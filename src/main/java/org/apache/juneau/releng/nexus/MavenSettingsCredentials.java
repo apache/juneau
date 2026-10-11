@@ -86,7 +86,6 @@ public final class MavenSettingsCredentials {
 		NodeList nodes = parent.getElementsByTagName(tag);
 		if (nodes.getLength() == 0)
 			return null;
-		var text = nodes.item(0).getTextContent();
-		return text == null ? null : text.trim();
+		return nodes.item(0).getTextContent().trim(); // Element.getTextContent() is never null.
 	}
 }

@@ -65,4 +65,24 @@ class LocalStateReleaseSourceTest {
 		var rows = new LocalStateReleaseSource(new RunStateStore(dir)).list();
 		assertTrue(rows.isEmpty());
 	}
+
+	@Test
+	void a04_mapsEveryStatusToItsRowStatusAndStage(@TempDir Path dir) {
+		var expected = java.util.Map.of(
+			RunStatus.RUNNING, "DRAFT,Building",
+			RunStatus.FAILED, "DRAFT,Failed",
+			RunStatus.RELEASED, "RELEASED,Distributed",
+			RunStatus.DROPPED, "DROPPED,Cancelled");
+		var n = 0;
+		for (var e : expected.entrySet()) {
+			var sub = dir.resolve("s" + n++);
+			var store = new RunStateStore(sub);
+			var rs = RunState.create("9.2." + n, "b", List.of("preflight"));
+			rs.status = e.getKey();
+			store.save(rs);
+			var rows = new LocalStateReleaseSource(store).list();
+			assertSize(1, rows);
+			assertBean(rows.get(0), "status,stage,voteCloses", e.getValue() + ",—");
+		}
+	}
 }

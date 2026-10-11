@@ -33,6 +33,6 @@ public class App {
 		"resource" // The application context lives for the JVM/app lifetime; Spring registers a shutdown hook to close it.
 	})
 	public static void main(String[] args) {
-		SpringApplication.run(App.class, args);
+		SpringApplication.run(App.class, args); // HTT: boots the real embedded server on the fixed loopback port 8790 and the real Keychain; covered only by manual/e2e runs
 	}
 }

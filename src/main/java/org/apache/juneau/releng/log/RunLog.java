@@ -91,8 +91,8 @@ public class RunLog {
 	public long size() {
 		try {
 			return Files.isRegularFile(file) ? Files.size(file) : 0L;
-		} catch (IOException e) {
-			return 0L;
+		} catch (IOException e) { // HTT: Files.size fails on a file Files.isRegularFile just confirmed only if it is deleted in that instant
+			return 0L; // HTT: same race
 		}
 	}
 

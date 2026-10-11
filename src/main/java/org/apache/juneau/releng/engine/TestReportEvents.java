@@ -70,7 +70,7 @@ final class TestReportEvents {
 			Files.walkFileTree(root, Set.of(), MAX_DEPTH, new SimpleFileVisitor<>() {
 				@Override /* FileVisitor */
 				public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) throws IOException {
-					var name = dir.getFileName() == null ? "" : dir.getFileName().toString();
+					var name = String.valueOf(dir.getFileName()); // null only for a filesystem root, which is never in SKIPPED_DIRS/REPORT_DIRS
 					if (! dir.equals(root) && SKIPPED_DIRS.contains(name))
 						return FileVisitResult.SKIP_SUBTREE;
 					if (! REPORT_DIRS.contains(name))

@@ -433,9 +433,9 @@ public class ReleaseEngine {
 	private void recordOutcome(RunState rs, ReleaseStep step, StepState ss, String attempt) {
 		var id = step.id();
 		if (step.runsTests()) {
-			var since = parseInstant(ss.startedAt);
-			if (since != null)
-				events.appendAll(rs.version, TestReportEvents.collect(stagingRoot.resolve("git/juneau"), since, attempt));
+			// startedAt is stamped by apply() immediately before the step runs, so it always parses.
+			var since = Instant.parse(ss.startedAt);
+			events.appendAll(rs.version, TestReportEvents.collect(stagingRoot.resolve("git/juneau"), since, attempt));
 		}
 		switch (ss.status) {
 			case AWAITING_VOTE, AWAITING_REVIEW -> events.waiting(rs.version, id, step.title());
@@ -455,12 +455,11 @@ public class ReleaseEngine {
 	}
 
 	/**
-	 * Milliseconds between two ISO-8601 instants, or -1 when either is missing or unparseable.
+	 * Milliseconds between two ISO-8601 instants, or -1 when {@code from} is missing or unparseable.
 	 */
 	private static long elapsedMs(String from, String to) {
 		var a = parseInstant(from);
-		var b = parseInstant(to);
-		return a == null || b == null ? -1 : Math.max(0, Duration.between(a, b).toMillis());
+		return a == null ? -1 : Math.max(0, Duration.between(a, Instant.parse(to)).toMillis()); // every caller stamps 'to' itself
 	}
 
 	/**

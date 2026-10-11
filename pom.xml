@@ -32,6 +32,9 @@
         <juneau.version>10.0.0-SNAPSHOT</juneau.version>
         <spring.boot.version>4.1.0</spring.boot.version>
         <freemarker.version>2.3.34</freemarker.version>
+        <jacoco.plugin.version>0.8.15</jacoco.plugin.version>
+        <!-- Default so surefire's @{argLine} late binding resolves when jacoco is skipped. -->
+        <argLine></argLine>
         <sonar.issue.ignore.multicriteria>e1</sonar.issue.ignore.multicriteria>
         <sonar.issue.ignore.multicriteria.e1.ruleKey>css:S7924</sonar.issue.ignore.multicriteria.e1.ruleKey>
         <sonar.issue.ignore.multicriteria.e1.resourceKey>**/*.css</sonar.issue.ignore.multicriteria.e1.resourceKey>
@@ -145,6 +148,35 @@
 
     <build>
         <plugins>
+            <!-- Test coverage: the agent writes target/jacoco.exec; scripts/coverage.py builds the report. -->
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <version>${jacoco.plugin.version}</version>
+                <executions>
+                    <execution>
+                        <id>prepare-agent</id>
+                        <goals>
+                            <goal>prepare-agent</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>report</id>
+                        <phase>test</phase>
+                        <goals>
+                            <goal>report</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <!-- Surefire otherwise runs with defaults; this only adds jacoco's agent via @{argLine}. -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <configuration>
+                    <argLine>@{argLine}</argLine>
+                </configuration>
+            </plugin>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>

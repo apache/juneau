@@ -139,8 +139,6 @@ public class SetupProbeService {
 	}
 
 	private static boolean looksLikeNeedsRoot(String output) {
-		if (output == null)
-			return false;
 		var lower = output.toLowerCase();
 		return lower.contains("permission denied") || lower.contains("are you root") || lower.contains("superuser")
 				|| lower.contains("sudo");
@@ -163,8 +161,7 @@ public class SetupProbeService {
 			case ID_CHECKOUT -> checkout();
 			case ID_MVN, ID_GIT, ID_GH, ID_GPG -> pathTool(spec, packageManager);
 			case ID_SETTINGS -> settings();
-			case ID_APACHE, ID_GPG_KEY, ID_GITHUB -> credential(spec);
-			default -> spec.pending();
+			default -> credential(spec); // ID_APACHE, ID_GPG_KEY, ID_GITHUB: the only other specs
 		};
 	}
 
@@ -214,7 +211,7 @@ public class SetupProbeService {
 			MavenSettingsCredentials.resolve(SERVER_ID, settingsXml);
 			pass(p, "Found <server id=\"" + SERVER_ID + "\"> in " + settingsXml);
 		} catch (Exception e) {
-			fail(p, e.getMessage() == null ? "Missing " + SERVER_ID + " in " + settingsXml : e.getMessage());
+			fail(p, e.getMessage());
 		}
 		return p;
 	}
@@ -223,25 +220,17 @@ public class SetupProbeService {
 		var p = spec.pending();
 		p.credentialName = spec.credentialName;
 		p.nextStep = "Save the secret in Details, then Validate.";
-		for (var st : credentials.status()) {
-			if (!st.name.equals(spec.credentialName))
-				continue;
-			p.message = st.lastMessage == null ? "" : st.lastMessage;
-			if (!st.present) {
-				fail(p, spec.label + " is not set");
-				return p;
-			}
-			if (st.lastValid == null) {
-				warn(p, "Stored — not tested");
-				return p;
-			}
-			if (b(st.lastValid))
-				pass(p, spec.label + " is valid");
-			else
-				fail(p, spec.label + " failed validation");
-			return p;
-		}
-		fail(p, spec.label + " is not set");
+		// CredentialService.status() lists every CredentialSpec, so a credential probe always has a matching entry.
+		var st = credentials.status().stream().filter(x -> x.name.equals(spec.credentialName)).findFirst().orElseThrow();
+		p.message = st.lastMessage == null ? "" : st.lastMessage;
+		if (!st.present)
+			fail(p, spec.label + " is not set");
+		else if (st.lastValid == null)
+			warn(p, "Stored — not tested");
+		else if (b(st.lastValid))
+			pass(p, spec.label + " is valid");
+		else
+			fail(p, spec.label + " failed validation");
 		return p;
 	}
 
@@ -271,7 +260,7 @@ public class SetupProbeService {
 	}
 
 	private static Spec spec(String id) {
-		return specs().stream().filter(s -> s.id.equals(id)).findFirst().orElseThrow(() -> new NotFound("Unknown probe: %s", id));
+		return specs().stream().filter(s -> s.id.equals(id)).findFirst().orElseThrow();
 	}
 
 	private static List<Spec> specs() {
