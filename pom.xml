@@ -108,6 +108,8 @@
 		<logback.version>1.5.18</logback.version>
 		<log4j.version>2.26.1</log4j.version>
 		<h2.version>2.3.232</h2.version>
+		<httpclient5.version>5.6.4</httpclient5.version>
+		<httpcore5.version>5.4.3</httpcore5.version>
 		<webjars-jquery.version>3.7.1</webjars-jquery.version>
 		<webjars-datatables.version>2.3.8</webjars-datatables.version>
 		<webjars-datatables-buttons.version>3.2.6</webjars-datatables-buttons.version>
@@ -137,6 +139,30 @@
 			<url>file:///tmp/site</url>
 		</site>
 	</distributionManagement>
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>org.apache.httpcomponents.core5</groupId>
+				<artifactId>httpcore5</artifactId>
+				<version>${httpcore5.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.httpcomponents.core5</groupId>
+				<artifactId>httpcore5-h2</artifactId>
+				<version>${httpcore5.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.httpcomponents.client5</groupId>
+				<artifactId>httpclient5</artifactId>
+				<version>${httpclient5.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.apache.httpcomponents.client5</groupId>
+				<artifactId>httpclient5-cache</artifactId>
+				<version>${httpclient5.version}</version>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
 	<dependencies>
 		<dependency>
 			<groupId>org.apache.commons</groupId>
