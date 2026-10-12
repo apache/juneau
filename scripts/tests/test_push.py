@@ -13,10 +13,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 """
-Tests for the root push.py's refuse-on-unreviewed-changes gate, ported from the
+Tests for the root push.py: the end-of-run terminal bell (TestEndOfRunBell) and the
+refuse-on-unreviewed-changes gate, ported from the
 already-reviewed gate in apache/juneau's scripts/push.py and sandbox-support-console's
 scripts/push.py. This repo's push.py is a bare add/commit/push helper with no other gates, so
-this file covers only: check_unreviewed_changes(), get_staged_paths(), and commit_and_push()'s
+the gate tests cover: check_unreviewed_changes(), get_staged_paths(), and commit_and_push()'s
 refuse / no-op / proceed decision (the three refusal shapes plus the allowed staged-only case).
 
 Real temp git repos, real git -- no mocked subprocess. A bare repo stands in for the remote and
@@ -429,3 +430,112 @@ class TestGitIdentityConfigured:
     def test_unset_identity_is_false(self, push_module, repo):
         _run(repo, "git", "config", "--unset", "user.email")
         assert push_module.git_identity_configured(repo) is False
+
+
+class _FakeStdout:
+    """Captures writes; reports whatever isatty() the test asks for."""
+
+    def __init__(self, tty):
+        self._tty = tty
+        self.written = ""
+        self.flushed = False
+
+    def isatty(self):
+        return self._tty
+
+    def write(self, text):
+        self.written += text
+
+    def flush(self):
+        self.flushed = True
+
+
+def _run_main(push_module, monkeypatch, *, tty, identity=True, commit_result=0, commit_raises=None):
+    """Run main() with every git-touching call stubbed; return (exit_code, fake_stdout)."""
+    fake = _FakeStdout(tty)
+    monkeypatch.setattr(push_module.sys, "stdout", fake)
+    monkeypatch.setattr(push_module.sys, "argv", ["push.py", "msg"])
+    monkeypatch.setattr(push_module, "git_identity_configured", lambda _repo: identity)
+
+    def fake_commit_and_push(*_args, **_kwargs):
+        if commit_raises is not None:
+            raise commit_raises
+        return commit_result
+
+    monkeypatch.setattr(push_module, "commit_and_push", fake_commit_and_push)
+    with pytest.raises(SystemExit) as exc:
+        push_module.main()
+    return exc.value.code, fake
+
+
+class TestEndOfRunBell:
+    @pytest.fixture(autouse=True)
+    def clean_env(self, monkeypatch):
+        monkeypatch.delenv("JRM_PUSH_NO_BELL", raising=False)
+        monkeypatch.delenv("SANDBOX_RUNTIME", raising=False)
+
+    def test_rings_on_tty_after_success(self, push_module, monkeypatch):
+        code, fake = _run_main(push_module, monkeypatch, tty=True)
+        assert code == 0
+        assert fake.written.endswith("\a")
+        assert fake.flushed
+
+    def test_rings_on_tty_after_refusal(self, push_module, monkeypatch):
+        code, fake = _run_main(push_module, monkeypatch, tty=True, commit_result=1)
+        assert code == 1
+        assert fake.written.endswith("\a")
+
+    def test_rings_on_tty_when_identity_gate_exits(self, push_module, monkeypatch):
+        code, fake = _run_main(push_module, monkeypatch, tty=True, identity=False)
+        assert code == 1
+        assert fake.written.endswith("\a")
+
+    def test_rings_on_tty_when_commit_message_aborts_with_system_exit(self, push_module, monkeypatch):
+        code, fake = _run_main(push_module, monkeypatch, tty=True, commit_raises=SystemExit(1))
+        assert code == 1
+        assert fake.written.endswith("\a")
+
+    def test_silent_when_not_a_tty(self, push_module, monkeypatch):
+        _, fake = _run_main(push_module, monkeypatch, tty=False)
+        assert "\a" not in fake.written
+
+    def test_still_rings_when_opt_out_is_zero(self, push_module, monkeypatch):
+        monkeypatch.setenv("JRM_PUSH_NO_BELL", "0")
+        monkeypatch.setenv("SANDBOX_RUNTIME", "0")
+        _, fake = _run_main(push_module, monkeypatch, tty=True)
+        assert fake.written.endswith("\a")
+
+    def test_rings_and_propagates_when_push_step_raises(self, push_module, monkeypatch):
+        fake = _FakeStdout(True)
+        monkeypatch.setattr(push_module.sys, "stdout", fake)
+        monkeypatch.setattr(push_module.sys, "argv", ["push.py", "msg"])
+        monkeypatch.setattr(push_module, "git_identity_configured", lambda _repo: True)
+
+        def boom(*_args, **_kwargs):
+            raise subprocess.CalledProcessError(1, ["git", "push"])
+
+        monkeypatch.setattr(push_module, "commit_and_push", boom)
+        with pytest.raises(subprocess.CalledProcessError):
+            push_module.main()
+        assert fake.written.endswith("\a")
+
+    def test_silent_when_opted_out(self, push_module, monkeypatch):
+        monkeypatch.setenv("JRM_PUSH_NO_BELL", "1")
+        _, fake = _run_main(push_module, monkeypatch, tty=True)
+        assert "\a" not in fake.written
+
+    def test_silent_in_sandbox(self, push_module, monkeypatch):
+        monkeypatch.setenv("SANDBOX_RUNTIME", "1")
+        _, fake = _run_main(push_module, monkeypatch, tty=True)
+        assert "\a" not in fake.written
+
+    def test_never_raises_when_stdout_misbehaves(self, push_module, monkeypatch):
+        class Broken(_FakeStdout):
+            def write(self, text):
+                if text == "\a":
+                    raise OSError("closed")
+                super().write(text)
+
+        fake = Broken(True)
+        monkeypatch.setattr(push_module.sys, "stdout", fake)
+        push_module.ring_bell()  # must not raise

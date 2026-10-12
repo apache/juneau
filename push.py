@@ -26,6 +26,9 @@ Usage:
     ./push.py                     # prompts for a commit message
     ./push.py --dry-run "message" # show what would happen, change nothing
 
+    When a run ends (success or failure) on a terminal, push.py rings the terminal bell.
+    Set JRM_PUSH_NO_BELL=1 to silence it (it is also skipped when SANDBOX_RUNTIME=1).
+
 Safety:
     - Never uses --force or --no-verify.
     - Never runs `git config` (it only reads config; you fix a missing
@@ -41,6 +44,7 @@ Safety:
 """
 
 import argparse
+import os
 import shlex
 import subprocess
 import sys
@@ -270,7 +274,30 @@ def commit_and_push(repo_dir, cli_message, *, dry_run=False):
     return 0
 
 
+def ring_bell():
+    """
+    Ring the terminal bell (BEL) so a finished run gets noticed; macOS Terminal also badges the
+    Dock icon when the window is unfocused. Best-effort: only on a TTY (checked at write time),
+    never in sandbox mode (SANDBOX_RUNTIME=1), and not when JRM_PUSH_NO_BELL=1. Never raises.
+    """
+    if os.environ.get("JRM_PUSH_NO_BELL") == "1" or os.environ.get("SANDBOX_RUNTIME") == "1":
+        return
+    try:
+        if sys.stdout.isatty():
+            sys.stdout.write("\a")
+            sys.stdout.flush()
+    except Exception:  # NOSONAR - best-effort notification must never affect the exit status
+        pass
+
+
 def main():
+    try:
+        _main()
+    finally:
+        ring_bell()
+
+
+def _main():
     parser = argparse.ArgumentParser(
         description="Commit and push juneau-release-manager to origin.",
         formatter_class=argparse.RawDescriptionHelpFormatter,
