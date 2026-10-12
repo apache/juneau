@@ -202,7 +202,7 @@ class SymbolSprite_Provenance_Test extends TestBase {
 	// b: the assertions above can actually fail
 	//
 	// A provenance guard that silently stopped seeing artwork reads as a passing test, which is strictly worse than
-	// no guard - the same discipline RawContentSink_SecurityScan_Test applies to its scanner.
+	// no guard - the same discipline ShippedJs_SinkScan_Test applies to its scanner.
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Test void b01_aOneCharacterArtworkChangeMovesTheFingerprint() throws Exception {

@@ -1,3 +1,5 @@
 org.apache.juneau.rest.server.view.freemarker.console.ConsoleOutputCardType
 org.apache.juneau.rest.server.view.freemarker.console.DatatablesCardType
 org.apache.juneau.rest.server.view.freemarker.console.TerminalCardType
+org.apache.juneau.rest.server.view.freemarker.console.ChartCardType
+org.apache.juneau.rest.server.view.freemarker.console.JobLogCardType

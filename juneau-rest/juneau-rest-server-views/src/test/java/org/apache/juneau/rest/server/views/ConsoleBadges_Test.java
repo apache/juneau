@@ -102,6 +102,12 @@ class ConsoleBadges_Test extends TestBase {
 		assertEquals(List.of("rules-table"), r.get("reloadedOnDrain"));
 	}
 
+	@Test void a13_drainOfCardNotOnPage_isANoOp() {
+		var r = report();
+		assertEquals(List.of(), r.get("missingCard_errors"), "a refresh target that is not mounted is silently skipped");
+		assertEquals(2, ((Number)r.get("missingCard_polledAgain")).intValue(), "the badge keeps polling");
+	}
+
 	@Test void a10_tooltipHonorsCapAndCloses() {
 		var r = report();
 		assertEquals(true, r.get("tooltipOpen"));
@@ -117,6 +123,16 @@ class ConsoleBadges_Test extends TestBase {
 		var r = report();
 		assertEquals("/ui/changes", r.get("plainNav"));
 		assertEquals("/ui/changes?state=filter(beanType%3D%24eq(Suspension))", r.get("filteredNav"));
+	}
+
+	@Test void a12_sameOriginGuard() {
+		var r = report();
+		assertEquals(List.of("/p"), r.get("guard_urls"), "only the badge with a same-origin src fetches");
+		assertEquals(2, ((List<?>)r.get("guard_errors")).size(), "the bad src and the bad href are each logged as E-JS-82");
+		assertEquals(List.of(), r.get("guard_assigned"), "a cross-host href is never navigated to");
+		assertEquals(List.of(List.of("evil", ""), List.of("tab", ""), List.of("ok", "/ok/3")), r.get("guard_rows"),
+			"a poll-body href that is not a same-origin path is not copied onto the row");
+		assertEquals(2, ((Number)r.get("guard_itemErrors")).intValue());
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -159,6 +175,14 @@ class ConsoleBadges_Test extends TestBase {
 		assertEquals(0, ((Number)r.get("bus_claimed_published")).intValue());
 		assertEquals(0, ((Number)r.get("bus_claimed_cmds")).intValue());
 		assertEquals(List.of("tasks"), r.get("bus_claimed_reloaded"));
+	}
+
+	@Test void bus06_cmdToCardOnAnotherPage_isANoOp() {
+		var r = busReport();
+		assertEquals(1, ((Number)r.get("bus_missing_cmd")).intValue(), "the cmd:<card> refresh is published");
+		assertEquals(List.of(), r.get("bus_missing_errors"), "nobody listening is not an error");
+		assertEquals(0, ((Number)r.get("bus_missing_reloaded")).intValue());
+		assertNotNull(r.get("bus_missing_badge"), "the badge itself keeps publishing");
 	}
 
 	@Test void bus05_sourceShape() throws java.io.IOException {

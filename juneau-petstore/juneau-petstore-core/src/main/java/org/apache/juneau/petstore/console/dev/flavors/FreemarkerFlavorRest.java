@@ -38,10 +38,15 @@ public class FreemarkerFlavorRest extends PetstoreConsolePage {
 
 	private static final long serialVersionUID = 1L;
 
-	/** @return The console page. */
+	/**
+	 * The console page, from its builder twin on {@code ?builder}.
+	 *
+	 * @param req The request.
+	 * @return The console page.
+	 */
 	@RestGet(path="/")
-	public View page() {
-		return Flavor.FREEMARKER.page();
+	public View page(RestRequest req) {
+		return Flavor.FREEMARKER.page(req);
 	}
 
 	/** @return The pet list fragment. */

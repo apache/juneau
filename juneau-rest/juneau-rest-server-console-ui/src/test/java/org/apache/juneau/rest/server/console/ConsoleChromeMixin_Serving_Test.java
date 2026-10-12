@@ -70,6 +70,33 @@ class ConsoleChromeMixin_Serving_Test extends TestBase {
 		assertTrue(body.contains("window.JuneauConsoleBadges"), "badges body");
 	}
 
+	@ParameterizedTest
+	@ValueSource(strings = {"/juneau-console/juneau-charts.js", "/juneau-charts.js"})
+	void a05_chartsJs(String path) throws Exception {
+		var body = C.get(path).run()
+			.assertStatus(200)
+			.assertHeader("Content-Type").isContains("javascript")
+			.assertHeader("Cache-Control").isContains("max-age")
+			.getContent().asString();
+		assertTrue(body.contains("window.JuneauCharts"), "charts body");
+	}
+
+	@ParameterizedTest
+	@ValueSource(strings = {"/juneau-console/juneau-joblog.js", "/juneau-joblog.js"})
+	void a06_jobLogJs(String path) throws Exception {
+		var body = C.get(path).run()
+			.assertStatus(200)
+			.assertHeader("Content-Type").isContains("javascript")
+			.assertHeader("Cache-Control").isContains("max-age")
+			.getContent().asString();
+		assertTrue(body.contains("window.JuneauJobLog"), "job-log body");
+	}
+
+	@Test void a07_consoleAssetUrl_unknownPath_rejected() {
+		var ex = assertThrows(IllegalArgumentException.class, () -> ConsoleChromeMixin.consoleAssetUrl(null, "/nope.js"));
+		assertEquals("Unknown console asset '/nope.js'.", ex.getMessage());
+	}
+
 	@Test void a03_constants() {
 		assertEquals("/juneau-console/juneau-console.js", ConsoleChromeMixin.CONSOLE_JS_PATH);
 		assertEquals("/juneau-console/juneau-page.schema.json", ConsoleChromeMixin.SCHEMA_PATH);

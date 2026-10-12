@@ -79,6 +79,21 @@ class ViewsJs_RowActionsRun_Test extends TestBase {
 		assertEquals("danger", first.get("tone"));
 	}
 
+	@Test void b03b_confirmRequestCarriesTheRowLabelFieldAndRowIdField() {
+		var first = (Map<?,?>)((List<?>)report().get("requests")).get(0);
+		assertEquals(List.of(Map.of("id", 7, "name", "Widget")), first.get("rows"));
+		assertEquals("name", first.get("labelField"));
+		assertEquals("id", first.get("rowIdField"));
+	}
+
+	@Test void b03c_selectionStateSuppliesTheFieldNames_andRibbonDialogHasNoRows() {
+		var sel = (Map<?,?>)report().get("selectionRequest");
+		assertEquals("title", sel.get("labelField"));
+		assertEquals("pid", sel.get("rowIdField"));
+		var ribbon = (Map<?,?>)report().get("ribbonRequest");
+		assertEquals(List.of(), ribbon.get("rows"));
+	}
+
 	@Test void b04_emptyConfirmTokenRefusesBeforeAnythingShows() {
 		var e = (Map<?,?>)report().get("emptyToken");
 		assertEquals(0, ((Number)e.get("asked")).intValue());

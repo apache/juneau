@@ -21,6 +21,7 @@ import static java.nio.charset.StandardCharsets.*;
 import java.io.*;
 
 import org.apache.juneau.petstore.console.*;
+import org.apache.juneau.petstore.console.pages.*;
 import org.apache.juneau.rest.server.*;
 import org.apache.juneau.rest.server.view.*;
 import org.apache.juneau.rest.server.view.freemarker.*;
@@ -52,10 +53,15 @@ public class SecureRest extends PetstoreConsolePage {
 
 	private static final long serialVersionUID = 1L;
 
-	/** @return The page. */
+	/**
+	 * The Secure page.
+	 *
+	 * @param req The request; {@code ?builder} renders the builder twin.
+	 * @return The page.
+	 */
 	@RestGet(path="/")
-	public View page() {
-		return FreemarkerView.of("secure.ftlh");
+	public View page(RestRequest req) {
+		return builder(req) ? twin(req, DevPageBuilders.secure()) : FreemarkerView.of("secure.ftlh");
 	}
 
 	/**

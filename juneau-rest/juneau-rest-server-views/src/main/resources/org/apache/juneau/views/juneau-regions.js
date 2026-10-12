@@ -958,8 +958,9 @@
 	}
 
 	/**
-	 * Substitutes `{id}` then appends {@link #serializeParams}'s fragment of `region.params` to
-	 * `region.declared.dataUrl`.
+	 * The `{id}`-substituted `region.declared.dataUrl`, BEFORE `region.params` are appended ({@link #appendRegionParams}):
+	 * the form the shared-envelope join compares against the panel's own endpoint.  `null` when the substitution is
+	 * impossible or unsafe.
 	 *
 	 * <p>SUBSTITUTION FIRST, and it is not optional for a row-detail region.  `RowDetailDef` projects its
 	 * `endpoint` onto the panel's one region as that region's `dataUrl` (design &sect;12.3.3 rule 1), and an endpoint
@@ -974,7 +975,7 @@
 	 * <p>A URL with no `{id}`, or a region with no row id, passes through untouched: an ordinary card/tab region's
 	 * `dataUrl` is a plain path and has nothing to substitute.
 	 */
-	function resolveDeclaredUrl(region) {
+	function substituteDeclaredUrl(region) {
 		let dataUrl = region.declared.dataUrl;
 		if (blank(dataUrl)) return dataUrl;
 		const rowId = region.ids ? region.ids.rowId : null;
@@ -984,6 +985,11 @@
 			dataUrl = init.substituteDetailUrl(dataUrl, rowId);
 			if (blank(dataUrl)) return null;
 		}
+		return dataUrl;
+	}
+
+	/** Appends {@link #serializeParams}'s fragment of `region.params` to an already-substituted `dataUrl`. */
+	function appendRegionParams(dataUrl, region) {
 		const q = serializeParams(region.params);
 		if (q === "") return dataUrl;
 		return dataUrl + (dataUrl.includes("?") ? "&" : "?") + q;
@@ -1033,15 +1039,6 @@
 	}
 
 	/**
-	 * Performs the region's declared fetch: `region.declared.dataUrl` with `region.params` appended (design
-	 * &sect;8.2.1), under the CURRENT invocation's signal, plus the `{contractVersion, ...}` handshake.
-	 *
-	 * <p>A region that declared no `dataUrl` has nothing to fetch, so this resolves `null` - a legal state, not a
-	 * throw.  Calling it twice fetches twice: there is no caching here, by design (&sect;8.5) - a consumer that
-	 * wants the pre-fetched value reads `ctx.data`.  It does not touch the region's loading/ok/error state: a
-	 * fetch is not a paint.
-	 */
-	/**
 	 * The shared-envelope join (design &sect;12.3.3 rule 2): a row-detail region whose declared URL is the panel's own
 	 * substituted endpoint reads the panel's already-in-flight expand envelope instead of issuing a second request.
 	 *
@@ -1051,6 +1048,11 @@
 	 * `expandDetailRow` BEFORE enrolment, so a region can never race the map's creation and there is no
 	 * "entry not there yet, fetch it myself" branch to get wrong.
 	 *
+	 * <p>The comparison is made BEFORE `region.params` are appended (the substituted `dataUrl` against the panel's
+	 * endpoint), so a region carrying params still joins - and when it joins its params are NEVER sent to the server:
+	 * the region reads the panel's one response.  A region that needs server-side params must declare a `dataUrl`
+	 * different from the panel's endpoint (including a differing query such as `?v=2`), which then fetches on its own.
+	 *
 	 * <p>One GET per panel, and chrome and content read the SAME body: a `{field}` title the chrome projects and a
 	 * value this region paints cannot disagree, which they could if the region issued its own request and the two
 	 * responses differed.
@@ -1058,18 +1060,52 @@
 	function joinDetailEnvelope(region, url) {
 		const host = region.el?.closest ? region.el.closest(".juneau-view-detail-panel") : null;
 		const join = host?._juneauDetailJoin;
-		if (!join || join.url !== url) return null;
+		if (!join || joinKey(join.url) !== joinKey(url)) return null;
 		return join.payload();
 	}
 
+	/**
+	 * The comparison key of a join: the URL resolved against the page, so a relative and an absolute spelling of the
+	 * same resource agree and a different origin does not, with the fragment dropped (it never reaches the server).
+	 * A literal `dataUrl` without `{id}` is never run through the same-origin check, so an absolute or cross-origin
+	 * spelling can legitimately reach this function.
+	 * The QUERY stays in the key: an author who wrote `?v=2` into the `dataUrl` asked for a different request and gets
+	 * one.  Falls back to the string minus its fragment where `URL` cannot resolve the value (a host with no page
+	 * location, such as the node test shims, or a malformed value).
+	 */
+	function joinKey(u) {
+		const s = String(u);
+		try {
+			const r = new URL(s, window.location.href);
+			return r.origin + r.pathname + r.search;
+		} catch (e) { // NOSONAR javascript:S2486 -- an unresolvable value falls back to the plain string below
+			return s.split("#")[0];
+		}
+	}
+
+	/**
+	 * Performs the region's declared fetch: `region.declared.dataUrl` with `region.params` appended (design
+	 * &sect;8.2.1), under the CURRENT invocation's signal, plus the `{contractVersion, ...}` handshake.
+	 *
+	 * <p>A region that declared no `dataUrl` has nothing to fetch, so this resolves `null` - a legal state, not a
+	 * throw.  Calling it twice fetches twice: there is no caching here, by design (&sect;8.5) - a consumer that
+	 * wants the pre-fetched value reads `ctx.data`.  EXCEPTION: a row-detail region whose substituted `dataUrl` is the
+	 * panel's own endpoint joins the panel's in-flight expand GET (see joinDetailEnvelope) and does not fetch at all,
+	 * so its `params` are not sent.  That join is for the region's FIRST populate only: once it has populated, a
+	 * re-populate (poll, message, refresh) issues a real GET with its params.  It does not touch the region's loading/ok/error state: a
+	 * fetch is not a paint.
+	 */
 	function fetchDeclared(region) {
 		if (blank(region.declared.dataUrl)) return Promise.resolve(null);
-		const url = resolveDeclaredUrl(region);
-		if (blank(url))
+		const base = substituteDeclaredUrl(region);
+		if (blank(base))
 			return Promise.reject(new Error("region '" + region.key + "': the declared dataUrl '"
 				+ region.declared.dataUrl + "' could not be resolved to a safe same-origin path for this row."));
-		const joined = joinDetailEnvelope(region, url);
+		// Only the INITIAL populate of an expand joins: the panel's envelope is memoized per expand, so a re-populate
+		// (poll, bus message, manual refresh) that joined would repaint the stale expand-time body.
+		const joined = region.firstPopulateDone ? null : joinDetailEnvelope(region, base);
 		if (joined) return joined;
+		const url = appendRegionParams(base, region);
 		return fetch(url, {
 			method: "GET",
 			credentials: "same-origin",

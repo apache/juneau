@@ -188,6 +188,24 @@ public class ConsoleChromeMixin {
 	/** Classpath location of the count-badge script. */
 	public static final String BADGES_JS_RESOURCE = "/org/apache/juneau/console/juneau-badges.js";
 
+	/** Context-root-absolute path of the chart-card runtime. */
+	public static final String CHARTS_JS_PATH = "/juneau-console/juneau-charts.js";
+
+	/** {@link #CHARTS_JS_PATH} minus the {@code /juneau-console} prefix. */
+	public static final String CHARTS_JS_PATH_UNPREFIXED = "/juneau-charts.js";
+
+	/** Classpath location of the chart-card runtime. */
+	public static final String CHARTS_JS_RESOURCE = "/org/apache/juneau/console/juneau-charts.js";
+
+	/** Context-root-absolute path of the job-log card runtime. */
+	public static final String JOBLOG_JS_PATH = "/juneau-console/juneau-joblog.js";
+
+	/** {@link #JOBLOG_JS_PATH} minus the {@code /juneau-console} prefix. */
+	public static final String JOBLOG_JS_PATH_UNPREFIXED = "/juneau-joblog.js";
+
+	/** Classpath location of the job-log card runtime. */
+	public static final String JOBLOG_JS_RESOURCE = "/org/apache/juneau/console/juneau-joblog.js";
+
 	/** Context-root-absolute path of the page-contract schema. */
 	public static final String SCHEMA_PATH = "/juneau-console/juneau-page.schema.json";
 
@@ -379,6 +397,36 @@ public class ConsoleChromeMixin {
 	}
 
 	/**
+	 * [GET /juneau-console/juneau-charts.js] &mdash; serve the chart-card runtime.
+	 *
+	 * @return The script.
+	 */
+	@RestGet(
+		path={CHARTS_JS_PATH, CHARTS_JS_PATH_UNPREFIXED},
+		summary="Console chart-card runtime",
+		description="Renders type='chart' cards of the #juneau-page contract as inline SVG.",
+		swagger=@OpSwagger(ignore=true)
+	)
+	public HttpResource getChartsJs() {
+		return ASSET_CACHE.serve(CHARTS_JS_RESOURCE, JS_CONTENT_TYPE, CACHE_CONTROL);
+	}
+
+	/**
+	 * [GET /juneau-console/juneau-joblog.js] &mdash; serve the job-log card runtime.
+	 *
+	 * @return The script.
+	 */
+	@RestGet(
+		path={JOBLOG_JS_PATH, JOBLOG_JS_PATH_UNPREFIXED},
+		summary="Console job-log card runtime",
+		description="Submits, streams and cancels AsyncJobsMixin jobs for type='job-log' cards.",
+		swagger=@OpSwagger(ignore=true)
+	)
+	public HttpResource getJobLogJs() {
+		return ASSET_CACHE.serve(JOBLOG_JS_RESOURCE, JS_CONTENT_TYPE, CACHE_CONTROL);
+	}
+
+	/**
 	 * [GET /juneau-console/juneau-page.schema.json] &mdash; serve the page-contract schema.
 	 *
 	 * @return The schema.
@@ -450,6 +498,23 @@ public class ConsoleChromeMixin {
 	 */
 	public static String badgesJsUrl(RestRequest req) {
 		return consoleMountUrl(req, BADGES_JS_PATH, BADGES_JS_RESOURCE);
+	}
+
+	/**
+	 * Context-root-absolute, cache-busted URL of a console card runtime; the resolver of the {@code charts} and
+	 * {@code joblog} toolkit packs.
+	 *
+	 * @param req The current request.
+	 * @param path {@link #CHARTS_JS_PATH} or {@link #JOBLOG_JS_PATH}.
+	 * @return The URL.
+	 * @throws IllegalArgumentException If {@code path} is neither.
+	 */
+	public static String consoleAssetUrl(RestRequest req, String path) {
+		if (CHARTS_JS_PATH.equals(path))
+			return consoleMountUrl(req, CHARTS_JS_PATH, CHARTS_JS_RESOURCE);
+		if (JOBLOG_JS_PATH.equals(path))
+			return consoleMountUrl(req, JOBLOG_JS_PATH, JOBLOG_JS_RESOURCE);
+		throw iaex("Unknown console asset '%s'.", path);
 	}
 
 	/**

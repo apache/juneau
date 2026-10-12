@@ -25,7 +25,7 @@ import org.apache.juneau.marshall.*;
 import org.apache.juneau.marshall.parser.*;
 
 /**
- * Parses {@code image/png}/{@code image/jpg} byte streams into {@link BufferedImage} pet photos.
+ * Parses {@code image/png}/{@code image/jpeg}/{@code image/jpg} byte streams into {@link BufferedImage} pet photos.
  *
  * <p>
  * Petstore-local port of the deleted {@code juneau-examples-rest} image demo, relocated here (rather than
@@ -39,10 +39,10 @@ import org.apache.juneau.marshall.parser.*;
 public class PetPhotoParser extends InputStreamParser {
 
 	/**
-	 * Constructor with default settings (consumes image/png and image/jpg).
+	 * Constructor with default settings (consumes image/png, image/jpeg and image/jpg).
 	 */
 	public PetPhotoParser() {
-		super(create().consumes("image/png,image/jpg"));
+		super(create().consumes("image/png,image/jpeg,image/jpg"));
 	}
 
 	/**
@@ -54,7 +54,16 @@ public class PetPhotoParser extends InputStreamParser {
 	})
 	public <T> T doRead(ParserSession session, ParserPipe pipe, ClassMeta<T> type) throws IOException, ParseException {
 		try (var is = pipe.getInputStream()) {
-			var image = ImageIO.read(is);
+			BufferedImage image;
+			try {
+				image = ImageIO.read(is);
+			} catch (IIOException e) {
+				// Corrupt data that looks like a supported image.  Unchecked decoder failures are already wrapped
+				// as ParseException by ParserSession.readInner, so only IIOException needs handling here.
+				throw new ParseException(session, e, "Unsupported or unreadable image data");
+			}
+			if (image == null)
+				throw new ParseException(session, "Unsupported or unreadable image data");
 			return (T)image;
 		}
 	}

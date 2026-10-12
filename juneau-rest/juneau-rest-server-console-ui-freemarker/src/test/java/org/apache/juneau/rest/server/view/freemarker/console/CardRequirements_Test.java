@@ -32,6 +32,8 @@ class CardRequirements_Test extends TestBase {
 		var r = CardRequirements.create().build(PACKS);
 		assertList(r.forType("datatables"), "datatables-glue");
 		assertList(r.forType("terminal"), "terminal");
+		assertList(r.forType("chart"), "charts");
+		assertList(r.forType("job-log"), "joblog");
 		assertEmpty(r.forType("console-output"));
 		assertEmpty(r.forType("html"));
 	}

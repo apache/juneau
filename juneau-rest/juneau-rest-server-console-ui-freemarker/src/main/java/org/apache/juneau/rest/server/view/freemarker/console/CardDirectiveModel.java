@@ -252,7 +252,7 @@ public final class CardDirectiveModel implements TemplateDirectiveModel {
 
 	/**
 	 * Every type other than {@code html} and {@code run-view}: validated and lifted by the host's
-	 * {@link CardTypeRegistry} (a registered handler such as {@code datatables}, {@code console-output} or {@code terminal}, or the
+	 * {@link CardTypeRegistry} (a registered handler such as {@code datatables}, {@code console-output}, {@code terminal} or {@code job-log}, or the
 	 * generic passthrough for an unregistered type).
 	 */
 	private void registryCard(PageCapture cap, String type, String id, String title, String src, String template,
@@ -260,10 +260,14 @@ public final class CardDirectiveModel implements TemplateDirectiveModel {
 		if (id.isEmpty())
 			throw FtlAttrLists.reject(f("<@card type=\"%s\"> requires id=.", type));
 		var hasBody = ! markup.isBlank();
-		if (eq(type, "console-output") || eq(type, "terminal")) {
+		if (eq(type, "console-output") || eq(type, "terminal") || eq(type, "job-log")) {
 			if (! (src.isEmpty() && template.isEmpty()))
+				throw FtlAttrLists.reject(f("<@card id='%s'> type='%s' takes its options as the body; %s.", id, type,
+					src.isEmpty() ? "template= is not allowed" : template.isEmpty() ? "src= is not allowed" : "src= and template= are not allowed"));
+		} else if (eq(type, "chart")) {
+			if (! template.isEmpty())
 				throw FtlAttrLists.reject(f(
-					"<@card id='%s'> type='%s' takes its options as the body; src= and template= are not allowed.", id, type));
+					"<@card id='%s'> type='chart' takes a JSON5 body (plus src= for remote data); template= is not allowed.", id));
 		} else if (eq(type, "datatables")) {
 			if (! template.isEmpty())
 				throw FtlAttrLists.reject(f(

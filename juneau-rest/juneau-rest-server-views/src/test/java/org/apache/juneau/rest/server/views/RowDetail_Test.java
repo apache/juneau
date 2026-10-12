@@ -103,9 +103,19 @@ class RowDetail_Test extends TestBase {
 		assertFalse(m.containsKey("icon"));
 	}
 
-	@Test void a10_toMap_withoutRegion_rejected() {
-		var d = RowDetail.create("/rest/work/data/{id}");
-		var ex = assertThrows(IllegalArgumentException.class, d::toMap);
-		assertEquals("RowDetail '/rest/work/data/{id}' requires a region.", ex.getMessage());
+	@Test void a10_toMap_withoutRegion_accepted() {
+		var m = RowDetail.create("/rest/work/data/{id}").title("Work {id}").toMap();
+		assertEquals(Map.of("endpoint", "/rest/work/data/{id}", "title", "Work {id}"), m);
+		assertFalse(m.containsKey("region"));
+	}
+
+	@Test void a11_toMap_withoutRegion_endpointOnly() {
+		assertEquals(Map.of("endpoint", "/rest/work/data/{id}"), RowDetail.create("/rest/work/data/{id}").toMap());
+	}
+
+	@Test void a12_region_null_clearsRegion() {
+		var m = RowDetail.create("/rest/work/data/{id}")
+			.region(RegionDef.create("work-detail").populate("work-detail")).region(null).toMap();
+		assertFalse(m.containsKey("region"));
 	}
 }

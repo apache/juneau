@@ -94,4 +94,9 @@ class ServerValuesRegistry_Test extends TestBase {
 		reg.resolve(s, "c");
 		assertEquals(2, calls.get());
 	}
+
+	@Test void a08_undeclaredValues_resolveNull() {
+		var reg = ServerValuesRegistry.of(ServerValues.create().values(null));
+		assertNull(reg.resolve(session(), "anything"));
+	}
 }

@@ -14,7 +14,11 @@
   See the License for the specific language governing permissions and
   limitations under the License.
 --><@page>
-<@card type="terminal" id="build" title="Build">
+<@topic name="term.input-status" retain=false publisher="server"/>
+<@bridge id="term" transport="websocket" session="servlet:/juneau-bus/session"
+  downstream=["term.input-status"] upstream=["term.input"]/>
+<@card type="terminal" id="build" title="Build" publishes=[{"topic":"term.input","retain":false}]
+  subscribes=[{"topic":"term.input-status","as":"input-status"}]>
 {
     contractVersion: '1',
     terminal: {
@@ -22,7 +26,9 @@
         eventsUrl: '/runs/juneau-run-view/r-7/events',
         refreshMs: 500,
         title: 'mvn test',
-        tailBytes: 1048576
+        tailBytes: 1048576,
+        input: true,
+        inputId: 'r-7'
     }
 }
 </@card>

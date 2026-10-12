@@ -20,6 +20,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.*;
 import java.net.*;
+import java.util.*;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.*;
 
@@ -35,7 +36,7 @@ import org.junit.jupiter.api.*;
  * a request-body writer failure, and an {@link HttpClient} that fails to stop.
  */
 @SuppressWarnings({
-	"java:S2925", // The 200ms sleep lets the request get in flight and block on the never-responding server before the thread is interrupted.
+	"java:S2925", // d01 only: the 200ms sleep lets Jetty be mid-exchange before the body writer fails; the other tests synchronize on the server receiving the request.
 	"resource" // Transport/client instances are short-lived test fixtures.
 })
 // SEPARATE_THREAD: a socket read blocked on a non-responding peer ignores interrupts, so SAME_THREAD would still hang.
@@ -50,6 +51,8 @@ class JettyHttpTransport_TransportFailure_Test {
 	private static final class NeverRespondingServer implements AutoCloseable {
 
 		private final ServerSocket serverSocket;
+		private final CountDownLatch requestReceived = new CountDownLatch(1);
+		private final List<Socket> accepted = new CopyOnWriteArrayList<>();
 
 		NeverRespondingServer() throws IOException {
 			this.serverSocket = new ServerSocket(0, 50, InetAddress.getByName("127.0.0.1"));
@@ -62,12 +65,20 @@ class JettyHttpTransport_TransportFailure_Test {
 			return "http://127.0.0.1:" + serverSocket.getLocalPort();
 		}
 
+		// Blocks until the first request bytes have arrived, i.e. the exchange is genuinely in flight.
+		void awaitRequest() throws InterruptedException {
+			assertTrue(requestReceived.await(10, TimeUnit.SECONDS), "request never reached the server");
+		}
+
 		private void acceptLoop() {
 			while (! serverSocket.isClosed()) {
 				try {
 					// Accept and hold the connection open indefinitely without ever responding; do not close it
 					// in this loop, since closing would surface as a stale-connection failure instead.
-					serverSocket.accept();
+					var socket = serverSocket.accept();
+					accepted.add(socket);
+					socket.getInputStream().read();
+					requestReceived.countDown();
 				} catch (IOException e) {
 					return; // Server socket closed during shutdown.
 				}
@@ -77,6 +88,8 @@ class JettyHttpTransport_TransportFailure_Test {
 		@Override
 		public void close() throws IOException {
 			serverSocket.close();
+			for (var socket : accepted)
+				socket.close();
 		}
 	}
 
@@ -98,8 +111,7 @@ class JettyHttpTransport_TransportFailure_Test {
 				}
 			}, "interrupt-target");
 			thread.start();
-			// Give the request time to be sent and the thread to start blocking on the response listener.
-			Thread.sleep(200);
+			server.awaitRequest();
 			thread.interrupt();
 			thread.join(5000);
 			assertFalse(thread.isAlive(), "target thread did not terminate after interrupt");
@@ -179,7 +191,7 @@ class JettyHttpTransport_TransportFailure_Test {
 					} catch (InterruptedException e) {
 						Thread.currentThread().interrupt();
 					}
-					// Mirrors the 200ms sleep in sibling a01: gives Jetty's async state machine a moment to be
+					// Gives Jetty's async state machine a moment to be
 					// actively mid-exchange (rather than just barely past accept()) before this thread fails, so
 					// the abort is reliably observed as a failure rather than racing the 500ms responseTimeoutMs.
 					try {
@@ -219,5 +231,36 @@ class JettyHttpTransport_TransportFailure_Test {
 		var transport = JettyHttpTransport.builder().httpClient(new ExplodingOnStopHttpClient()).build();
 		var ex = assertThrows(IOException.class, transport::close);
 		assertTrue(ex.getMessage().contains("Failed to stop Jetty HttpClient"), ex.getMessage());
+	}
+
+	// =================================================================================================================
+	// F: the transport is closed while a request is awaiting response headers; Jetty fails the exchange with an
+	//    AsynchronousCloseException (a ClosedChannelException), which isStaleConnectionFailure treats as stale
+	// =================================================================================================================
+
+	@Test
+	void f01_transportClosedWhileAwaitingResponse_throwsTransportException() throws Exception {
+		try (var server = new NeverRespondingServer()) {
+			var transport = JettyHttpTransport.builder().responseTimeoutMs(0).build();
+			var request = TransportRequest.builder().method("GET").uri(URI.create(server.rootUrl() + "/x")).build();
+			var caught = new AtomicReference<Throwable>();
+			var thread = new Thread(() -> {
+				try {
+					transport.execute(request);
+				} catch (Throwable t) {
+					caught.set(t);
+				}
+			}, "close-target");
+			thread.start();
+			server.awaitRequest();
+			transport.close();
+			thread.join(5000);
+			assertFalse(thread.isAlive(), "target thread did not terminate after the transport was closed");
+			assertInstanceOf(TransportException.class, caught.get());
+			assertTrue(caught.get().getMessage().contains("HTTP transport error"), caught.get().getMessage());
+			// The AsynchronousCloseException is treated as a stale-connection failure, so the GET is replayed once on the
+			// (now stopped) client, which rejects it; that rejection, not the original close, is the surfaced cause.
+			assertInstanceOf(RejectedExecutionException.class, caught.get().getCause());
+		}
 	}
 }

@@ -19,9 +19,11 @@ package org.apache.juneau.rest.client.classic;
 import static java.time.format.DateTimeFormatter.*;
 import static java.time.temporal.ChronoUnit.*;
 import static org.apache.juneau.BasicTestUtils.*;
+import static org.apache.juneau.http.classic.HttpEntities.serializedEntity;
 import static org.apache.juneau.http.classic.HttpHeaders.*;
 import static org.apache.juneau.marshall.httppart.HttpPartSchema.*;
 import static org.apache.juneau.rest.RestSharedConstants.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.time.*;
 import java.util.*;
@@ -29,6 +31,8 @@ import java.util.*;
 import org.apache.juneau.*;
 import org.apache.juneau.http.classic.header.*;
 import org.apache.juneau.marshall.httppart.*;
+import org.apache.juneau.marshall.json.*;
+import org.apache.juneau.marshall.json5.*;
 import org.apache.juneau.marshall.marshaller.*;
 import org.apache.juneau.marshall.serializer.*;
 import org.apache.juneau.marshall.uon.*;
@@ -63,6 +67,10 @@ class RestClient_Headers_Test extends TestBase {
 	public static class A extends BasicRestResource {
 		@RestGet(allowedSerializerOptions="simple", allowedParserOptions="addBeanTypes")
 		public String[] headers(org.apache.juneau.rest.server.RestRequest req) {
+			return req.getHeaders().getAll(req.getHeaderParam("Check").orElse(null)).stream().map(RequestHeader::getValue).toArray(String[]::new);
+		}
+		@RestPost(path="/headers")
+		public String[] postHeaders(org.apache.juneau.rest.server.RestRequest req) {
 			return req.getHeaders().getAll(req.getHeaderParam("Check").orElse(null)).stream().map(RequestHeader::getValue).toArray(String[]::new);
 		}
 	}
@@ -208,6 +216,36 @@ class RestClient_Headers_Test extends TestBase {
 	@Test void b05_dontOverrideContentType() throws Exception {
 		checkClient("Content-Type").header("Content-Type","text/plain").build().get("/headers").run().assertContent("[\"text/plain\"]");
 		checkClient("Content-Type").header("Content-Type","text/foo").build().get("/headers").header("Content-Type","text/plain").run().assertContent("[\"text/foo\",\"text/plain\"]");
+	}
+
+	@Test void b06_json5_sendsJson5AcceptAndContentType() throws Exception {
+		var x = MockRestClient.create(A.class).json5().noTrace().build();
+		x.post("/headers", "foo").header("Check","Accept").run().assertContent("['application/json5']");
+		x.post("/headers", "foo").header("Check","Content-Type").run().assertContent("['application/json5']");
+		// Per-request json5() sends the same headers.
+		var y = MockRestClient.create(A.class).json().noTrace().build();
+		y.post("/headers", "foo").json5().header("Check","Accept").run().assertContent("['application/json5']");
+		y.post("/headers", "foo").json5().header("Check","Content-Type").run().assertContent("['application/json5']");
+		// An explicit request header replaces the default rather than being sent alongside it.
+		x.post("/headers", "foo").contentType("application/json").header("Check","Content-Type").run().assertContent("['application/json']");
+	}
+
+	@Test void b07_parserWithNoMediaType_sendsNoAccept() throws Exception {
+		var p = JsonParser.create().consumes("").build();
+		MockRestClient.create(A.class).parser(p).noTrace().build().get("/headers").header("Check","Accept").run().assertContent().asString().isContains("no results");
+		MockRestClient.create(A.class).json().noTrace().build().get("/headers").parser(p).header("Check","Accept").run().assertContent().asString().isContains("no results");
+	}
+
+	@Test void b08_json5_entityWithoutSerializer_sendsRequestContentType() throws Exception {
+		var x = MockRestClient.create(A.class).json5().noTrace().build();
+		var e = serializedEntity(bean, null);
+		x.post("/headers", e).header("Check","Content-Type").run().assertContent("['application/json5']");
+		x.post("/headers", serializedEntity(bean, null)).contentType("application/json").header("Check","Content-Type").run().assertContent("['application/json']");
+		// The caller's entity isn't modified.
+		assertNull(e.getContentType());
+		// An entity's own Content-Type or serializer still decides.
+		x.post("/headers", serializedEntity(bean, null).setContentType("text/foo")).header("Check","Content-Type").run().assertContent("['text/foo']");
+		x.post("/headers", serializedEntity(bean, Json5Serializer.DEFAULT)).header("Check","Content-Type").run().assertContent("['application/json5']");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

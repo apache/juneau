@@ -28,6 +28,7 @@ import org.apache.juneau.http.response.*;
 import org.apache.juneau.marshall.collections.*;
 import org.apache.juneau.marshall.marshaller.*;
 import org.apache.juneau.petstore.console.*;
+import org.apache.juneau.petstore.console.pages.*;
 import org.apache.juneau.petstore.dto.*;
 import org.apache.juneau.rest.server.*;
 import org.apache.juneau.rest.server.view.*;
@@ -156,24 +157,29 @@ public class JobsRest extends PetstoreConsolePage implements AsyncJobsMixin, Con
 	/**
 	 * Renders the Jobs page.
 	 *
+	 * @param req The request; {@code ?builder} renders the builder twin.
 	 * @param run The groom run to show, or <jk>null</jk> for the newest.
 	 * @return The page view.
 	 * @throws NotFound If there is no groom run to show.
 	 */
 	@RestGet(path="/")
-	public View page(@Query("run") String run) {
+	public View page(RestRequest req, @Query("run") String run) {
 		var r = groom.get(run).orElseGet(groom::latest);
 		if (r == null)
 			throw new NotFound("No groom run to show");
-		var main = ConsoleOutputDef.forMixin("groom-output", MOUNT, r.id()).toMap();
-		var file = ConsoleOutputDef.forMixin("groom-file", MOUNT, r.id() + GroomRuns.FILE_SUFFIX).toMap();
-		var detail = ConsoleOutputDef.forMixin("output", MOUNT, "{id}").type(RegionDef.TYPE_ROW_DETAIL).compact(true).rows(12).validate().toMap();
+		var main = ConsoleOutputDef.forMixin("groom-output", MOUNT, r.id()).tail(5000).rows(24).anchorPrefix("groom-L").markers("dim").title("Groom log");
+		var file = ConsoleOutputDef.forMixin("groom-file", MOUNT, r.id() + GroomRuns.FILE_SUFFIX).rows(12).title("Transcript file");
+		var detail = ConsoleOutputDef.forMixin("output", MOUNT, "{id}").type(RegionDef.TYPE_ROW_DETAIL).compact(true).rows(12).validate();
+		if (builder(req))
+			return twin(req, OpsPageBuilders.jobs(main, file, detail));
+		var mainMap = main.toMap();
+		var fileMap = file.toMap();
 		return FreemarkerView.of("jobs.ftlh")
-			.attr("groomLinesUrl", main.get("linesUrl"))
-			.attr("groomDownloadUrl", main.get("downloadUrl"))
-			.attr("groomFileLinesUrl", file.get("linesUrl"))
-			.attr("groomFileDownloadUrl", file.get("downloadUrl"))
-			.attr("groomDetailParams", scriptSafe(Json.of(detail)));
+			.attr("groomLinesUrl", mainMap.get("linesUrl"))
+			.attr("groomDownloadUrl", mainMap.get("downloadUrl"))
+			.attr("groomFileLinesUrl", fileMap.get("linesUrl"))
+			.attr("groomFileDownloadUrl", fileMap.get("downloadUrl"))
+			.attr("groomDetailParams", scriptSafe(Json.of(detail.toMap())));
 	}
 
 	/**

@@ -28,7 +28,7 @@
 
 	<artifactId>juneau-run</artifactId>
 	<name>Apache Juneau Run Wrapper</name>
-	<description>Build tooling: the stdlib-only juneau_run.py wrapper that adds run-protocol markers and condensed output to Maven, pytest and Playwright runs. Attached as a .py artifact; not a library dependency.</description>
+	<description>Build tooling: the stdlib-only juneau_run.py wrapper that adds run-protocol markers and condensed output to Maven, pytest, Playwright, Gradle and npm runs, and the juneau_scripts toolkit (.zip) for push and release scripts. Attached as .py and .zip artifacts; not a library dependency.</description>
 	<packaging>pom</packaging>
 
 	<properties>
@@ -82,7 +82,32 @@
 				</executions>
 			</plugin>
 
-			<!-- Attaches the script as org.apache.juneau:juneau-run:&lt;version&gt;:py (no classifier). -->
+			<!--
+				Builds target/juneau-run.zip (the juneau_scripts toolkit; see src/assembly/juneau-scripts.xml).  Not attached
+				here: build-helper below attaches it beside the .py, so it must run first in the package phase.
+			-->
+			<plugin>
+				<artifactId>maven-assembly-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>juneau-scripts-zip</id>
+						<phase>package</phase>
+						<goals>
+							<goal>single</goal>
+						</goals>
+						<configuration>
+							<descriptors>
+								<descriptor>src/assembly/juneau-scripts.xml</descriptor>
+							</descriptors>
+							<finalName>juneau-run</finalName>
+							<appendAssemblyId>false</appendAssemblyId>
+							<attach>false</attach>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+
+			<!-- Attaches the script and the toolkit as org.apache.juneau:juneau-run:&lt;version&gt;:py and :zip (no classifier). -->
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>build-helper-maven-plugin</artifactId>
@@ -99,6 +124,10 @@
 								<artifact>
 									<file>${project.basedir}/src/main/python/juneau_run.py</file>
 									<type>py</type>
+								</artifact>
+								<artifact>
+									<file>${project.build.directory}/juneau-run.zip</file>
+									<type>zip</type>
 								</artifact>
 							</artifacts>
 						</configuration>

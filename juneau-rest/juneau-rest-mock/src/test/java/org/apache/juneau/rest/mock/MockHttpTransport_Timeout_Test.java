@@ -35,10 +35,10 @@ import org.junit.jupiter.api.*;
 })
 class MockHttpTransport_Timeout_Test {
 
-	private static MockHttpTransport slowTransport() {
+	private static MockHttpTransport slowTransport(long sleepMillis) {
 		return MockHttpTransport.builder().fallback((MockHttpTransport.RequestHandler)req -> {
 			try {
-				Thread.sleep(2000);
+				Thread.sleep(sleepMillis);
 			} catch (InterruptedException e) {
 				Thread.currentThread().interrupt();
 			}
@@ -52,19 +52,19 @@ class MockHttpTransport_Timeout_Test {
 
 	@Test void a01_shortTimeout_throwsTransportException() {
 		var start = System.nanoTime();
-		var e = assertThrows(TransportException.class, () -> slowTransport().execute(request(Duration.ofMillis(200))));
+		var e = assertThrows(TransportException.class, () -> slowTransport(2000).execute(request(Duration.ofMillis(200))));
 		assertInstanceOf(TimeoutException.class, e.getCause());
 		assertTrue(Duration.ofNanos(System.nanoTime() - start).toMillis() < 1800);
 	}
 
 	@Test void a02_noTimeout_runsInline() throws Exception {
-		try (var response = slowTransport().execute(request(null))) {
+		try (var response = slowTransport(50).execute(request(null))) {
 			assertEquals(200, response.getStatusCode());
 		}
 	}
 
 	@Test void a03_longTimeout_succeeds() throws Exception {
-		try (var response = slowTransport().execute(request(Duration.ofSeconds(10)))) {
+		try (var response = slowTransport(50).execute(request(Duration.ofSeconds(10)))) {
 			assertEquals(200, response.getStatusCode());
 		}
 	}

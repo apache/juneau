@@ -21,7 +21,10 @@ import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.net.*;
+import java.nio.charset.*;
+import java.time.*;
 import java.util.*;
+import java.util.concurrent.atomic.*;
 
 import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
@@ -188,5 +191,131 @@ class McpDynamicClientRegistrar_Test extends TestBase {
 		var s = base().initialAccessToken("init-tok").build().toString();
 		assertFalse(s.contains("init-tok"));
 		assertTrue(s.contains("<redacted>"));
+	}
+
+	// Builder options + request contents
+
+	@Test void e01_requiresIssuer() {
+		assertThrowsWithMessage(IllegalStateException.class, "issuer", () ->
+			McpDynamicClientRegistrar.create().registrationEndpoint(REG).applicationType(McpApplicationType.NATIVE)
+				.addRedirectUri(URI.create("http://127.0.0.1/callback")).build());
+	}
+
+	@Test void e02_optionalBuilderFieldsReachTheRequest() {
+		var req = base()
+			.scope("mcp:read", "mcp:write")
+			.clientName("Demo Client")
+			.addGrantType("authorization_code")
+			.addResponseType("code")
+			.addRedirectUri(URI.create("http://127.0.0.1:3001/other"))
+			.httpTimeout(Duration.ofSeconds(5))
+			.build().buildRegistrationRequest();
+		var md = req.getOIDCClientMetadata();
+		assertEquals("Demo Client", md.getName());
+		assertEquals("mcp:read mcp:write", md.getScope().toString());
+		assertEquals(1, md.getGrantTypes().size());
+		assertEquals(1, md.getResponseTypes().size());
+		assertTrue(md.getRedirectionURIs().contains(URI.create("http://127.0.0.1:3001/other")));
+	}
+
+	@Test void e03_defaultGrantAndResponseTypes() {
+		var md = base().build().buildRegistrationRequest().getOIDCClientMetadata();
+		assertEquals(2, md.getGrantTypes().size(), "authorization_code + refresh_token");
+		assertEquals(1, md.getResponseTypes().size(), "code");
+	}
+
+	@Test void e04_builderArgumentValidation() {
+		var b = McpDynamicClientRegistrar.create();
+		assertThrows(IllegalArgumentException.class, () -> b.scope(" "));
+		assertThrows(IllegalArgumentException.class, () -> b.addGrantType(" "));
+		assertThrows(IllegalArgumentException.class, () -> b.addResponseType(" "));
+		assertThrows(IllegalArgumentException.class, () -> b.clientName(" "));
+		assertThrows(IllegalArgumentException.class, () -> b.initialAccessToken(" "));
+		assertThrows(IllegalArgumentException.class, () -> b.httpTimeout(Duration.ZERO));
+		assertThrows(IllegalArgumentException.class, () -> b.httpTimeout(Duration.ofSeconds(-1)));
+	}
+
+	@Test void e05_toStringWithoutInitialAccessToken() {
+		var s = base().build().toString();
+		assertTrue(s.contains("initialAccessToken=<none>"), s);
+	}
+
+	// Response mapping edge cases
+
+	@Test void f01_secretExpiryAndEmptyExtrasMapped() {
+		var body = "{\"client_id\":\"abc\",\"client_secret\":\"sec\",\"client_secret_expires_at\":1893456000,"
+			+ "\"redirect_uris\":[\"http://127.0.0.1:3000/callback\"],\"application_type\":\"native\"}";
+		var reg = base().build().parseRegistrationResponse(jsonResponse(201, body));
+		assertEquals(Instant.ofEpochSecond(1893456000L), reg.clientSecretExpiresAt().orElseThrow());
+		assertTrue(reg.registrationAccessToken().isEmpty());
+		assertTrue(reg.registrationClientUri().isEmpty());
+	}
+
+	@Test void f02_unparseableSuccessBodyThrowsMcpAuthException() {
+		assertThrowsWithMessage(McpAuthException.class, "could not be parsed", () ->
+			base().build().parseRegistrationResponse(jsonResponse(201, "not json")));
+	}
+
+	@Test void f03_errorWithoutCodeReportedAsUnknown() {
+		var r = new HTTPResponse(500);
+		assertThrowsWithMessage(McpAuthException.class, "unknown_error", () ->
+			base().build().parseRegistrationResponse(r));
+	}
+
+	@Test void f04_errorDescriptionIncludedWhenPresent() {
+		var body = "{\"error\":\"invalid_redirect_uri\",\"error_description\":\"redirect not allowed\"}";
+		assertThrowsWithMessage(McpAuthException.class, "(redirect not allowed)", () ->
+			base().build().parseRegistrationResponse(jsonResponse(400, body)));
+	}
+
+	@Test void f05_errorWithoutDescriptionOmitsParenthetical() {
+		var body = "{\"error\":\"invalid_client_metadata\"}";
+		var e = assertThrows(McpAuthException.class, () -> base().build().parseRegistrationResponse(jsonResponse(400, body)));
+		assertFalse(e.getMessage().contains("("), e::getMessage);
+	}
+
+	// Live round-trip against an in-JVM loopback stub
+
+	@Test void g01_registerRoundTripAppliesConfiguratorAndAuthorization() throws Exception {
+		var server = com.sun.net.httpserver.HttpServer.create(new InetSocketAddress(InetAddress.getLoopbackAddress(), 0), 0);
+		var auth = new AtomicReference<String>();
+		server.createContext("/register", ex -> {
+			auth.set(ex.getRequestHeaders().getFirst("Authorization"));
+			ex.getRequestBody().readAllBytes();
+			var b = ("{\"client_id\":\"live\",\"redirect_uris\":[\"http://127.0.0.1:3000/callback\"],"
+				+ "\"application_type\":\"native\"}").getBytes(StandardCharsets.UTF_8);
+			ex.getResponseHeaders().add("Content-Type", "application/json");
+			ex.sendResponseHeaders(201, b.length);
+			try (var os = ex.getResponseBody()) { os.write(b); }
+		});
+		server.start();
+		try {
+			var configured = new AtomicInteger();
+			var reg = McpDynamicClientRegistrar.create()
+				.registrationEndpoint(URI.create("http://127.0.0.1:" + server.getAddress().getPort() + "/register"))
+				.issuer(ISSUER).applicationType(McpApplicationType.NATIVE)
+				.addRedirectUris(List.of(URI.create("http://127.0.0.1:3000/callback")))
+				.initialAccessToken("init-tok")
+				.httpTimeout(Duration.ofSeconds(5))
+				.httpRequestConfigurator(r -> configured.incrementAndGet())
+				.build().register();
+			assertEquals("live", reg.clientId());
+			assertEquals(1, configured.get());
+			assertEquals("Bearer init-tok", auth.get());
+		} finally {
+			server.stop(0);
+		}
+	}
+
+	@Test void g02_registerHttpFailureThrowsMcpAuthException() throws Exception {
+		int port;
+		try (var s = new ServerSocket(0, 0, InetAddress.getLoopbackAddress())) {
+			port = s.getLocalPort();
+		}
+		var registrar = McpDynamicClientRegistrar.create()
+			.registrationEndpoint(URI.create("http://127.0.0.1:" + port + "/register"))
+			.issuer(ISSUER).applicationType(McpApplicationType.NATIVE)
+			.addRedirectUri(URI.create("http://127.0.0.1:3000/callback")).build();
+		assertThrowsWithMessage(McpAuthException.class, "HTTP call failed", registrar::register);
 	}
 }

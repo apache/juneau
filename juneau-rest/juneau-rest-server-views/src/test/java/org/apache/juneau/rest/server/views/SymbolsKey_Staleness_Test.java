@@ -168,7 +168,7 @@ class SymbolsKey_Staleness_Test extends TestBase {
 	// b: the comparisons above can actually fail
 	//
 	// A staleness test that silently stopped seeing artwork reads as a passing test, which is worse than no test
-	// at all - the same discipline RawContentSink_SecurityScan_Test applies to its scanner.
+	// at all - the same discipline ShippedJs_SinkScan_Test applies to its scanner.
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Test void b01_aOneCharacterArtworkChangeIsDetected() throws Exception {

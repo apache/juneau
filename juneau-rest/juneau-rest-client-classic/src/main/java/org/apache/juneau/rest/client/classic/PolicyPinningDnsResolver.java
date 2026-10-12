@@ -19,18 +19,19 @@ package org.apache.juneau.rest.client.classic;
 import java.net.*;
 
 import org.apache.http.conn.*;
-import org.apache.http.impl.conn.*;
 import org.apache.juneau.http.remote.*;
-import org.apache.juneau.rest.client.classic.remote.*;
 
 /**
- * {@link DnsResolver} that pin-on-connects SSRF-guard-active {@code @Remote} connections: while
- * {@link RemoteUrlPolicyState#isActive()} is set on the calling thread, resolution is restricted to a single
- * address selected by {@link RemoteUrlPolicy#selectAllowedAddress} &mdash; the exact address Apache HttpClient's
- * connection operator then connects the socket to, while still using the original hostname for the {@code Host}
- * header and TLS SNI/hostname verification (Apache HttpClient's connect step keeps the {@code HttpRoute}'s target
- * host for those purposes; only the socket address comes from this resolver).  Ordinary (non-{@code @Remote})
- * connections on the same shared connection manager delegate to {@link SystemDefaultDnsResolver} unchanged.
+ * {@link DnsResolver} that pin-on-connects SSRF-guard-active {@code @Remote} connections: resolution is restricted to
+ * a single address selected by {@link RemoteUrlPolicy#selectAllowedAddress} &mdash; the exact address Apache
+ * HttpClient's connection operator then connects the socket to, while still using the original hostname for the
+ * {@code Host} header and TLS SNI/hostname verification (Apache HttpClient's connect step keeps the {@code HttpRoute}'s
+ * target host for those purposes; only the socket address comes from this resolver).
+ *
+ * <p>
+ * It is installed only on the dedicated pinned pool of {@link SsrfGuardConnectionManager}, so every connection in that
+ * pool is opened through the pin.  Ordinary (non-{@code @Remote}) requests lease from the other pool, which uses the
+ * system resolver, and are completely unaffected.
  *
  * @since 10.0.0
  */
@@ -42,9 +43,8 @@ final class PolicyPinningDnsResolver implements DnsResolver {
 
 	@Override /* DnsResolver */
 	public InetAddress[] resolve(String host) throws UnknownHostException {
-		if (! RemoteUrlPolicyState.isActive())
-			return SystemDefaultDnsResolver.INSTANCE.resolve(host);
-		var pinned = RemoteUrlPolicy.selectAllowedAddress(host, false, RemoteUrlPolicy.AddressResolver.DEFAULT);
-		return new InetAddress[]{pinned};
+		// Guarded calls are SSRF-guard-active only when the allowPrivateUrls opt-in is off, so the deny-private checks
+		// always apply here.
+		return new InetAddress[]{RemoteUrlPolicy.selectAllowedAddress(host, false, RemoteUrlPolicy.AddressResolver.DEFAULT)};
 	}
 }

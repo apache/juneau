@@ -79,20 +79,28 @@ def discover_test_roots(repo_root: Path) -> list[Path]:
 
 
 def scan(repo_root: Path) -> list[Path]:
+    return scan_counted(repo_root)[0]
+
+
+def scan_counted(repo_root: Path) -> tuple[list[Path], int]:
+    """The untagged container tests, and how many tests need a tag."""
     offenders: list[Path] = []
+    required = 0
     for test_root in discover_test_roots(repo_root):
         for path in sorted(test_root.rglob("*Test.java")):
             content = path.read_text(encoding="utf-8")
-            if should_require_tag(content) and not has_container_tag(content):
-                offenders.append(path)
-    return sorted(offenders)
+            if should_require_tag(content):
+                required += 1
+                if not has_container_tag(content):
+                    offenders.append(path)
+    return sorted(offenders), required
 
 
 def main() -> int:
     repo_root = Path(__file__).resolve().parent.parent
-    offenders = scan(repo_root)
+    offenders, required = scan_counted(repo_root)
     if not offenders:
-        print("✅ Container tag guard passed.")
+        print(f"✅ Container tag guard passed ({required} container tests tagged).")
         return 0
 
     print("❌ Container tag guard failed. The following tests appear to boot containers but are missing a tag:")

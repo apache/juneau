@@ -89,6 +89,7 @@ function fakeClock() {
 		setTimeout: function (fn, ms) { const id = ++seq; timers.push({ id: id, at: now + (ms || 0), fn: fn }); return id; },
 		clearTimeout: function (id) { const i = timers.findIndex(function (t) { return t.id === id; }); if (i >= 0) timers.splice(i, 1); },
 		pending: function () { return timers.map(function (t) { return t.at - now; }); },
+		now: function () { return now; },
 		advance: function (ms) {
 			const until = now + ms;
 			for (;;) {
@@ -659,6 +660,324 @@ test('x01_realXtermLinesAndCells', async function (t) {
 	c.term.reset();
 	await settleReal();
 	expect(c.term.buffer.active.getLine(0).translateToString(true) === '', 'reset() clears the buffer');
+});
+
+// @cases:input
+
+/** createInput('t1') over a fake clock; records publishes, views and armed() calls. */
+function input(t) {
+	const clock = fakeClock();
+	const e = { sent: [], views: [], armed: [], clock: clock };
+	e.input = t.JT.createInput({ inputId: 't1' }, {
+		publish: function (p) { e.sent.push(p); },
+		setTimeout: clock.setTimeout, clearTimeout: clock.clearTimeout, now: clock.now,
+		onChange: function (v) { e.views.push(v); },
+		armed: function (on) { e.armed.push(on); }
+	});
+	e.view = function () { return e.input.view(); };
+	e.data = function () { return e.sent.filter(function (p) { return p.data !== ''; }).map(function (p) { return p.data; }); };
+	e.arm = function () { e.input.press(); e.input.onStatus({ id: 't1', state: 'live' }); };
+	return e;
+}
+
+const ESC_KEY = { type: 'keydown', key: 'Escape' };
+
+test('i01_pressProbes', function (t) {
+	const e = input(t);
+	expectSame(e.view().toggle, { label: 'Enable input', pressed: false, disabled: false }, 'idle toggle');
+	e.input.press();
+	expectSame(e.sent, [{ id: 't1', data: '' }], 'a probe with the inputId, not the card id');
+	expect(e.view().state === 'probing', 'probing: ' + e.view().state);
+	expect(e.armed.length === 0, 'not armed by the press alone');
+});
+
+test('i02_liveArms', function (t) {
+	const e = input(t);
+	e.arm();
+	expectSame(e.armed, [true], 'armed(true)');
+	const v = e.view();
+	expect(v.state === 'armed' && v.chip === 'Input live' && v.chipState === 'live', 'chip: ' + JSON.stringify(v));
+	expect(v.toggle.pressed === true && v.toggle.disabled === false, 'pressed: ' + JSON.stringify(v.toggle));
+	expect(e.views.length > 0 && e.views[e.views.length - 1].state === 'armed', 'onChange saw the arm');
+});
+
+test('i03_deniedDisablesTheToggle', function (t) {
+	const e = input(t);
+	e.input.press();
+	e.input.onStatus({ id: 't1', state: 'denied' });
+	expectSame(e.view().toggle, { label: 'Input not permitted', pressed: false, disabled: true }, 'denied while probing');
+	expect(e.view().chip === 'Input not permitted' && e.view().chipState === 'warn', 'the chip announces it: ' + JSON.stringify(e.view()));
+	e.input.onStatus({ id: 't1', state: 'live' });
+	e.input.press();
+	expect(e.view().state === 'denied' && e.armed.length === 0 && e.sent.length === 1, 'and it stays that way');
+	const a = input(t);
+	a.arm();
+	a.input.onStatus({ id: 't1', state: 'denied' });
+	expectSame(a.armed, [true, false], 'denied while armed disarms');
+	expectSame(a.view().toggle, { label: 'Input not permitted', pressed: false, disabled: true }, 'denied while armed');
+	expect(a.view().chip === 'Input not permitted' && a.view().chipState === 'warn', 'chip while armed: ' + JSON.stringify(a.view()));
+});
+
+test('i04_probeTimeout', function (t) {
+	const e = input(t);
+	e.input.press();
+	e.clock.advance(1999);
+	expect(e.view().state === 'probing', 'still probing at 1999 ms');
+	e.clock.advance(1);
+	expect(e.view().state === 'idle' && e.view().chip === 'Input unavailable', 'unavailable: ' + JSON.stringify(e.view()));
+	e.input.onStatus({ id: 't1', state: 'live' });
+	expect(e.view().state === 'idle' && e.armed.length === 0, 'a late live for the expired probe is ignored');
+	e.input.press();
+	expect(e.sent.length === 2 && e.view().state === 'probing' && e.view().chip === null, 'pressing again sends a new probe');
+});
+
+test('i05_batching', function (t) {
+	const e = input(t);
+	e.arm();
+	e.input.onData('a');
+	e.clock.advance(50);
+	e.input.onData('b');
+	e.clock.advance(49);
+	expectSame(e.data(), [], 'nothing before 100 ms');
+	e.clock.advance(1);
+	expectSame(e.sent.slice(1), [{ id: 't1', data: 'ab' }], 'one frame');
+	e.clock.advance(1000);
+	expect(e.sent.length === 2, 'and nothing more');
+});
+
+test('i06_largePasteSplitsAt4096', function (t) {
+	const e = input(t);
+	e.arm();
+	e.input.onData('x'.repeat(5000));
+	expectSame(e.data().map(function (d) { return d.length; }), [4096], 'one 4096-byte frame now');
+	e.clock.advance(99);
+	expect(e.data().length === 1, 'at most one frame per tick');
+	e.clock.advance(1);
+	expectSame(e.data().map(function (d) { return d.length; }), [4096, 904], 'the rest on the next tick');
+});
+
+test('i07_splitIsCodePointSafe', function (t) {
+	const e = input(t);
+	e.arm();
+	e.input.onData('a'.repeat(4094) + '\u{1F600}b');
+	e.clock.advance(100);
+	const d = e.data();
+	expect(d.length === 2, 'two frames: ' + d.length);
+	expect(d[0] === 'a'.repeat(4094), 'the emoji is not split: first frame ends ' + JSON.stringify(d[0].slice(-3)));
+	expect(d[1] === '\u{1F600}b', 'second frame: ' + JSON.stringify(d[1]));
+	for (const f of d)
+		expect(enc.encode(f).length <= 4096 && f.indexOf('\uFFFD') < 0, 'every frame is whole UTF-8 within 4096 bytes');
+});
+
+test('i08_escEscDisarms', function (t) {
+	const e = input(t);
+	e.arm();
+	expect(e.input.onKeyDown(ESC_KEY) === true, 'the first Esc goes through');
+	e.input.onData('\u001b');
+	e.clock.advance(200);
+	expect(e.input.onKeyDown(ESC_KEY) === false, 'the second Esc is swallowed');
+	expectSame(e.armed, [true, false], 'disarmed');
+	e.clock.advance(1000);
+	expectSame(e.data(), ['\u001b'], 'only the first Esc was sent');
+	const s = input(t);
+	s.arm();
+	s.input.onKeyDown(ESC_KEY);
+	s.clock.advance(501);
+	expect(s.input.onKeyDown(ESC_KEY) === true && s.view().state === 'armed', 'Esc, then Esc after 500 ms, stays armed');
+	expect(s.input.onKeyDown({ type: 'keyup', key: 'Escape' }) === true && s.view().state === 'armed', 'keyup does not count');
+});
+
+test('i09_busyShowsTheThrottledChip', function (t) {
+	const e = input(t);
+	e.arm();
+	e.clock.advance(5000);
+	expect(e.view().state === 'armed' && e.view().chip === 'Input live', 'silence after data frames changes nothing');
+	e.input.onStatus({ id: 't1', state: 'busy' });
+	expect(e.view().state === 'armed' && e.view().chip === 'Input throttled: some keys not sent' && e.view().chipState === 'warn',
+		'throttled: ' + JSON.stringify(e.view()));
+	expectSame(e.armed, [true], 'still armed');
+	e.input.onData('z');
+	e.clock.advance(100);
+	expect(e.view().chip === 'Input live', 'until the next flush: ' + e.view().chip);
+});
+
+test('i10_disconnectDropsKeys', function (t) {
+	const e = input(t);
+	e.arm();
+	e.input.onData('q');
+	e.input.connected(false);
+	expectSame(e.armed, [true, false], 'disarmed');
+	expect(e.view().chip === 'Disconnected: input not sent' && e.view().state === 'idle', 'chip: ' + JSON.stringify(e.view()));
+	e.clock.advance(1000);
+	e.input.onData('r');
+	e.clock.advance(1000);
+	expectSame(e.data(), [], 'queued and later keys are dropped, not replayed');
+	e.input.connected(true);
+	expect(e.view().state === 'idle' && e.armed.length === 2, 'reconnecting does not re-arm');
+});
+
+test('i11_runEndedDisablesTheToggle', function (t) {
+	const e = input(t);
+	e.arm();
+	e.input.runEnded();
+	expectSame(e.armed, [true, false], 'disarmed');
+	expectSame(e.view().toggle, { label: 'Job ended', pressed: false, disabled: true }, 'toggle');
+	expect(e.view().chip === 'Job ended' && e.view().chipState === 'warn', 'the chip announces it: ' + JSON.stringify(e.view()));
+	e.input.press();
+	expect(e.sent.length === 1, 'no probe after the job ended');
+});
+
+test('i12_otherIdIgnored', function (t) {
+	const e = input(t);
+	e.input.press();
+	e.input.onStatus({ id: 't2', state: 'live' });
+	e.input.onStatus({ state: 'bad' });
+	e.input.onStatus({ id: 't2', state: 'denied' });
+	e.input.onStatus(null);
+	expect(e.view().state === 'probing' && e.armed.length === 0, 'unchanged: ' + JSON.stringify(e.view()));
+});
+
+test('i13_closedWhileArmed', function (t) {
+	const e = input(t);
+	e.arm();
+	e.input.onStatus({ id: 't1', state: 'closed' });
+	expectSame(e.armed, [true, false], 'disarmed');
+	expectSame(e.view().toggle, { label: 'Job ended', pressed: false, disabled: true }, 'toggle');
+	expect(e.view().chip === 'Job ended' && e.view().chipState === 'warn', 'the chip announces it: ' + JSON.stringify(e.view()));
+});
+
+test('i14_disarmFlushesAtMostOneFrame', function (t) {
+	const e = input(t);
+	e.arm();
+	e.input.onData('abc');
+	e.input.press();
+	expectSame(e.armed, [true, false], 'the toggle disarms');
+	e.clock.advance(1000);
+	expectSame(e.data(), ['abc'], 'the queued keys go in one frame');
+	const b = input(t);
+	b.arm();
+	b.input.onData('x'.repeat(3000));
+	b.clock.advance(100);
+	b.input.onData('y'.repeat(5000));
+	b.input.press();
+	b.clock.advance(1000);
+	expectSame(b.data().map(function (d) { return d.length; }), [3000, 4096], 'one frame on disarm, the rest dropped');
+});
+
+test('i15_reconnectClearsTheDisconnectedChip', function (t) {
+	const e = input(t);
+	e.arm();
+	e.input.connected(false);
+	expect(e.view().chip === 'Disconnected: input not sent', 'disconnected chip');
+	const n = e.views.length;
+	e.input.connected(true);
+	expect(e.view().chip === null && e.view().chipState === null, 'cleared on reconnect: ' + JSON.stringify(e.view()));
+	expect(e.views.length === n + 1, 'and announced through onChange');
+	const u = input(t);
+	u.input.press();
+	u.clock.advance(2000);
+	u.input.connected(true);
+	expect(u.view().chip === 'Input unavailable', 'a reconnect leaves other chips alone: ' + u.view().chip);
+});
+
+test('i16_pressWhileDisconnected', function (t) {
+	const e = input(t);
+	e.input.connected(false);
+	expect(e.view().chip === null, 'an idle disconnect shows nothing');
+	e.input.press();
+	expect(e.sent.length === 0, 'no probe while disconnected');
+	expect(e.view().state === 'idle' && e.view().chip === 'Disconnected: input not sent', 'chip: ' + JSON.stringify(e.view()));
+});
+
+test('i17_pressWhileProbing', function (t) {
+	const e = input(t);
+	e.input.press();
+	e.input.press();
+	expect(e.sent.length === 1 && e.view().state === 'probing', 'no second probe: ' + e.sent.length);
+});
+
+test('i18_disposeDuringProbing', function (t) {
+	const e = input(t);
+	e.input.press();
+	e.input.dispose();
+	const n = e.views.length;
+	e.clock.advance(2000);
+	expect(e.views.length === n, 'no onChange after dispose');
+	expect(e.view().chip === null, 'no Input unavailable chip: ' + e.view().chip);
+	expectSame(e.clock.pending(), [], 'the probe timer was cleared');
+});
+
+test('i19_queueAtTheCapIsAccepted', function (t) {
+	const e = input(t);
+	e.arm();
+	e.input.onData('x'.repeat(262144));
+	e.clock.advance(10000);
+	expect(e.data().join('').length === 262144, 'every byte was sent: ' + e.data().join('').length);
+	expect(e.view().chip === 'Input live', 'no refusal chip: ' + e.view().chip);
+});
+
+test('i20_oneByteOverTheCapIsRefused', function (t) {
+	const e = input(t);
+	e.arm();
+	e.input.onData('x'.repeat(262145));
+	e.clock.advance(10000);
+	expectSame(e.data(), [], 'nothing from the refused chunk is sent');
+	expect(e.view().chip === 'Paste too large: not sent' && e.view().chipState === 'warn', 'chip: ' + JSON.stringify(e.view()));
+	e.input.onData('k');
+	e.clock.advance(100);
+	expectSame(e.data(), ['k'], 'typing works afterwards');
+	expect(e.view().chip === 'Input live', 'the next sent frame clears the chip: ' + e.view().chip);
+});
+
+test('i21_capCountsUtf8BytesNotChars', function (t) {
+	const e = input(t);
+	e.arm();
+	e.input.onData('\u20ac'.repeat(87382));    // 87382 chars (< 262144) but 262146 UTF-8 bytes
+	e.clock.advance(10000);
+	expectSame(e.data(), [], 'over the cap in bytes: refused');
+	expect(e.view().chip === 'Paste too large: not sent', 'chip: ' + e.view().chip);
+	const ok = input(t);
+	ok.arm();
+	ok.input.onData('\u20ac'.repeat(87381) + 'x');    // exactly 262144 bytes
+	ok.clock.advance(10000);
+	expect(ok.data().join('') === '\u20ac'.repeat(87381) + 'x', 'exactly at the cap in bytes: accepted whole');
+});
+
+test('i22_queuedKeysStillDrainAfterARefusal', function (t) {
+	const e = input(t);
+	e.arm();
+	e.input.onData('a'.repeat(200000));
+	e.input.onData('b'.repeat(100000));    // queued 195904 + 100000 > 262144
+	expect(e.view().chip === 'Paste too large: not sent', 'chip: ' + e.view().chip);
+	e.clock.advance(10000);
+	expect(e.data().join('') === 'a'.repeat(200000), 'the queued keys all drain and none of the refused chunk');
+});
+
+test('i23_refusalChipSurvivesTheDrain', function (t) {
+	const e = input(t);
+	e.arm();
+	e.input.onData('a'.repeat(200000));
+	e.input.onData('b'.repeat(100000));    // refused while the queue is draining
+	e.clock.advance(100);
+	expect(e.view().chip === 'Paste too large: not sent' && e.view().chipState === 'warn', 'chip after a tick: ' + JSON.stringify(e.view()));
+	e.clock.advance(1000);
+	expect(e.view().chip === 'Paste too large: not sent', 'and while it keeps draining: ' + e.view().chip);
+	e.input.onData('k');
+	e.clock.advance(100);
+	expect(e.view().chip === 'Input live' && e.view().chipState === 'live', 'an accepted chunk restores Input live: ' + JSON.stringify(e.view()));
+});
+
+test('l01_linkForPicksTheBridge', function (t) {
+	const both = { downstream: ['term.input-status'], upstream: ['term.input'] };
+	const c = { bridges: [
+		Object.assign({ id: 'sse', transport: 'sse' }, both),
+		{ id: 'half', transport: 'websocket', downstream: ['other'], upstream: ['term.input'] },
+		Object.assign({ id: 'term', transport: 'websocket' }, both),
+		Object.assign({ id: 'later', transport: 'websocket' }, both)
+	] };
+	expect(t.JT.linkFor(c) === 'term', 'the first websocket bridge carrying both topics: ' + t.JT.linkFor(c));
+	expect(t.JT.linkFor({ bridges: [c.bridges[0], c.bridges[1]] }) === null, 'none carries both');
+	expect(t.JT.linkFor(null) === null && t.JT.linkFor({}) === null && t.JT.linkFor({ bridges: 'x' }) === null, 'no bridges');
 });
 
 // @cases:end

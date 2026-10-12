@@ -80,7 +80,7 @@ async function page(contract, opts) {
 	const sandbox = {
 		window: env.window, document: doc,
 		console: { error: m => errors.push(String(m)), log: () => {}, warn: m => warns.push(String(m)), debug: () => {} },
-		URLSearchParams: env.window.URLSearchParams, CustomEvent: env.window.CustomEvent,
+		URLSearchParams: env.window.URLSearchParams, URL: URL, CustomEvent: env.window.CustomEvent,
 		WeakSet, Map, Set, Promise, JSON, Object, Array, Error, TypeError, String, Number, AbortController,
 		encodeURIComponent, Date,
 		localStorage: { getItem: () => null, setItem: () => {}, removeItem: () => {} },
@@ -425,6 +425,33 @@ async function main() {
 		let threw = null;
 		try { await r.JC.refreshCard('tasks'); } catch (e) { threw = e.code; }
 		out.s17 = { phaseAwaiting: phaseAwaiting, staleEvents: staleEvents, phaseAfter: phaseAfter, refreshLog: log.slice(mark), threw: threw };
+	}
+	// s18. A {token} that fills to "//" (empty value) is refused after the fill, an encoded "//evil.test" is one
+	// harmless path segment, and ctx.fetchJson refuses a cross-host URL on its own.
+	{
+		const log = [];
+		let fetchErr = null;
+		const r = await page({
+			cards: [{ id: 'src', type: 'grid' },
+				{ id: 'tasks', type: 'grid', src: '/{x}/y', subscribes: [{ topic: 'selection:src', as: 'params', map: { x: 'ids.0' } }] },
+				{ id: 'src2', type: 'grid' },
+				{ id: 'abs', type: 'grid', src: 'http://juneau.test/api/{x}', subscribes: [{ topic: 'selection:src2', as: 'params', map: { x: 'ids.0' } }] },
+				{ id: 'far', type: 'grid', src: 'http://evil.test/{x}', subscribes: [{ topic: 'selection:src2', as: 'params', map: { x: 'ids.0' } }] },
+				{ id: 'probe', type: 'prober' }]
+		}, { queue: [['grid', recorder(log, { implicit: card => ['selection:' + card.id] })],
+			['prober', { render(card, el, ctx) { ctx.fetchJson('//evil.test/x').catch(e => { fetchErr = e.message; }); } }]] });
+		const src = r.bus.owner('src');
+		const mark = log.length;
+		src.publish('selection:src', { schemaVersion: 1, ids: [''], count: 1 });
+		await tick();
+		const empty = { log: log.slice(mark), codes: codes(r, 'tasks'), text: r.doc.getElementById('tasks').querySelectorAll('.jc-card-bus-error').map(n => n.textContent) };
+		const mark2 = log.length;
+		src.publish('selection:src', { schemaVersion: 1, ids: ['//evil.test'], count: 1 });
+		await tick();
+		const mark3 = log.length;
+		r.bus.owner('src2').publish('selection:src2', { schemaVersion: 1, ids: ['a'], count: 1 });
+		await tick();
+		out.s18 = { empty: empty, encoded: log.slice(mark2, mark3), fetchErr: fetchErr, absolute: log.slice(mark3), farCodes: codes(r, 'far') };
 	}
 }
 

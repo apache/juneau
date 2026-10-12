@@ -57,9 +57,14 @@ public class FlavorsRest extends PetstoreConsolePage {
 		return new SeeOther().setLocation(req.getUriResolver().resolve("servlet:/html"));
 	}
 
-	/** @return The React flavor page. */
+	/**
+	 * The React flavor page, from its builder twin on {@code ?builder}.
+	 *
+	 * @param req The request.
+	 * @return The React flavor page.
+	 */
 	@RestGet(path="/react")
-	public View react() {
-		return Flavor.REACT.page();
+	public View react(RestRequest req) {
+		return Flavor.REACT.page(req);
 	}
 }

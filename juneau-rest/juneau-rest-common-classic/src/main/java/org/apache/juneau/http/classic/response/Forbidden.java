@@ -76,11 +76,10 @@ public class Forbidden extends BasicHttpException {
 	 * This is the constructor used when parsing an HTTP response.
 	 *
 	 * @param response The HTTP response to copy from.  Must not be <jk>null</jk>.
-	 * @throws AssertionError If HTTP response status code does not match what was expected.
+	 * @throws IllegalArgumentException If HTTP response status code does not match what was expected.
 	 */
 	public Forbidden(HttpResponse response) {
-		super(response);
-		assertStatusCode(response);
+		super(requireStatus(response, STATUS_CODE));
 	}
 
 	/**

@@ -22,6 +22,7 @@ import java.util.*;
 
 import org.apache.juneau.commons.beanquery.*;
 import org.apache.juneau.petstore.console.*;
+import org.apache.juneau.petstore.console.pages.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.petstore.service.*;
 import org.apache.juneau.rest.server.*;
@@ -63,10 +64,13 @@ public class AuditRest extends PetstoreConsolePage {
 	/**
 	 * Renders the Audit page.
 	 *
+	 * @param req The request; {@code ?builder} renders the builder twin.
 	 * @return The page view.
 	 */
 	@RestGet(path="/")
-	public View page() { return FreemarkerView.of("audit.ftlh"); }
+	public View page(RestRequest req) {
+		return builder(req) ? twin(req, OpsPageBuilders.audit()) : FreemarkerView.of("audit.ftlh");
+	}
 
 	/**
 	 * Server-mode DataTables query over the audit trail.

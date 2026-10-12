@@ -21,7 +21,9 @@ import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.rest.server.*;
 import org.apache.juneau.rest.server.convention.*;
+import org.apache.juneau.rest.server.servlet.*;
 import org.junit.jupiter.api.*;
 import org.springframework.boot.autoconfigure.*;
 import org.springframework.boot.test.context.runner.*;
@@ -107,6 +109,105 @@ class JuneauRestAutoConfiguration_Test extends TestBase {
 			new JuneauRestAutoConfiguration().juneauRestAutoRegistrar(appContext).onStartup(servletContext);
 
 			verify(servletContext, never()).addServlet(anyString(), any(Servlet.class));
+		}
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Registrar edge cases.
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Configuration
+	static class NoServletConfig {
+		// No RestServlet beans.
+	}
+
+	@Test void c01_noRestServlets_doesNothing() throws Exception {
+		try (var appContext = new AnnotationConfigApplicationContext(NoServletConfig.class)) {
+			var servletContext = mock(ServletContext.class);
+
+			new JuneauRestAutoConfiguration().juneauRestAutoRegistrar(appContext).onStartup(servletContext);
+
+			verify(servletContext, never()).addServlet(anyString(), any(Servlet.class));
+		}
+	}
+
+	@Rest // no paths -> resolves to no top-level paths
+	public static class NoPathsServlet extends RestServlet {
+		private static final long serialVersionUID = 1L;
+	}
+
+	@Configuration
+	static class NoPathsConfig {
+		@org.springframework.context.annotation.Bean
+		Servlet noPathsServlet() { return new NoPathsServlet(); }
+	}
+
+	@Test void c02_servletWithoutTopLevelPaths_isSkipped() throws Exception {
+		try (var appContext = new AnnotationConfigApplicationContext(NoPathsConfig.class)) {
+			var servletContext = mock(ServletContext.class);
+
+			new JuneauRestAutoConfiguration().juneauRestAutoRegistrar(appContext).onStartup(servletContext);
+
+			verify(servletContext, never()).addServlet(anyString(), any(Servlet.class));
+		}
+	}
+
+	@Test void c03_containerDedup_nullRegistration_doesNotFail() throws Exception {
+		try (var appContext = new AnnotationConfigApplicationContext(ServletOnlyConfig.class)) {
+			var servletContext = mock(ServletContext.class);
+			when(servletContext.addServlet(anyString(), any(Servlet.class))).thenReturn(null);
+
+			new JuneauRestAutoConfiguration().juneauRestAutoRegistrar(appContext).onStartup(servletContext);
+
+			verify(servletContext).addServlet(anyString(), any(VersionServlet.class));
+		}
+	}
+
+	@Rest(paths={"foo", "/bar//", "/", "/baz/*"})
+	public static class MixedPathsServlet extends RestServlet {
+		private static final long serialVersionUID = 1L;
+	}
+
+	@Configuration
+	static class MixedPathsConfig {
+		@org.springframework.context.annotation.Bean
+		Servlet mixedPathsServlet() { return new MixedPathsServlet(); }
+	}
+
+	@Test void c04_normalizesMappings() throws Exception {
+		try (var appContext = new AnnotationConfigApplicationContext(MixedPathsConfig.class)) {
+			var dyn = mock(ServletRegistration.Dynamic.class);
+			var servletContext = mock(ServletContext.class);
+			when(servletContext.addServlet(anyString(), any(Servlet.class))).thenReturn(dyn);
+
+			new JuneauRestAutoConfiguration().juneauRestAutoRegistrar(appContext).onStartup(servletContext);
+
+			verify(dyn).addMapping("/foo");
+			verify(dyn).addMapping("/bar");
+			verify(dyn).addMapping("/");
+			verify(dyn).addMapping("/baz/*");
+		}
+	}
+
+	@Configuration
+	static class NullServletRegistrationConfig {
+		@org.springframework.context.annotation.Bean
+		Servlet versionServlet() { return new VersionServlet(); }
+		@org.springframework.context.annotation.Bean
+		ServletRegistrationBean<VersionServlet> emptyRegistration() {
+			return new ServletRegistrationBean<>();  // getServlet() == null
+		}
+	}
+
+	@Test void c05_registrationBeanWithoutServlet_isIgnored() throws Exception {
+		try (var appContext = new AnnotationConfigApplicationContext(NullServletRegistrationConfig.class)) {
+			var dyn = mock(ServletRegistration.Dynamic.class);
+			var servletContext = mock(ServletContext.class);
+			when(servletContext.addServlet(anyString(), any(Servlet.class))).thenReturn(dyn);
+
+			new JuneauRestAutoConfiguration().juneauRestAutoRegistrar(appContext).onStartup(servletContext);
+
+			verify(dyn).addMapping("/version/*");
 		}
 	}
 }

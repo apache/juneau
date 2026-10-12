@@ -129,7 +129,9 @@ public class ViewsMixin {
 	 * {@link DataTablesMixin#GLUE_PATH}).
 	 *
 	 * <p>
-	 * Named here only so {@link #viewAssetUrl(RestRequest, String)} can build its cache-busted URL.  This mixin does
+	 * Named here so {@link #viewAssetUrl(RestRequest, String)} can build its cache-busted URL, and so the console's
+	 * {@code "datatables-glue"} toolkit pack can name the path without importing the datatables package
+	 * ({@code juneau-rest-server-console-ui-freemarker} forbids that import; see its {@code ModuleGraph_ImportScan_Test}).  This mixin does
 	 * <b>not</b> serve it (see {@link #VIEWS_JS_PATH} for why); {@link DataTablesMixin} does.  On a console page the
 	 * {@code "datatables-glue"} toolkit pack emits it for every {@code type="datatables"} card, client or server mode,
 	 * after jQuery and DataTables and before {@code juneau-views.js}.  A host with datatables cards composes

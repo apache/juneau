@@ -64,35 +64,45 @@ import org.apache.juneau.rest.client.*;
 })
 public final class ApacheHc45Transport implements HttpTransport {
 
-	private static final ThreadLocal<Boolean> POLICY_ACTIVE = new ThreadLocal<>();
-
 	private final CloseableHttpClient httpClient;
-	private final boolean policySupported;
+	private final CloseableHttpClient pinnedHttpClient;
 
 	ApacheHc45Transport(ApacheHc45TransportBuilder builder) {
-		this.policySupported = builder.httpClient == null;
-		this.httpClient = builder.httpClient != null ? builder.httpClient : createDefaultHttpClient();
+		if (builder.httpClient != null) {
+			// A caller-supplied client cannot be given pin-on-connect, so supportsUrlPolicy() reports false for it.
+			this.httpClient = builder.httpClient;
+			this.pinnedHttpClient = null;
+		} else {
+			// Two clients, one per connection pool, sharing a cookie store so that cookies behave as on one client.
+			var cookieStore = new BasicCookieStore();
+			this.httpClient = createDefaultHttpClient(cookieStore);
+			this.pinnedHttpClient = createPinnedHttpClient(cookieStore);
+		}
 	}
 
-	private static CloseableHttpClient createDefaultHttpClient() {
-		// A DnsResolver that pin-on-connects SSRF-guard-active @Remote connections (see PolicyPinningDnsResolver),
-		// and a RedirectStrategy that defers 3xx handling to PolicyEnforcedRedirects for the same requests -- both
-		// leave ordinary (non-@Remote) requests on this same client completely unaffected.
+	// The client for ordinary (non-@Remote) requests: system DNS and HttpClient's own redirect handling.
+	private static CloseableHttpClient createDefaultHttpClient(BasicCookieStore cookieStore) {
+		return HttpClients.custom()
+			.setDefaultCookieStore(cookieStore)
+			.addInterceptorLast(new Hc45RedirectCredentialGuard())
+			.build();
+	}
+
+	// The client for SSRF-guard-active @Remote requests.  Its connection manager is its own and resolves every host
+	// through PolicyPinningDnsResolver, so every connection in its pool was opened through the pin; a guarded request
+	// can never be handed an idle connection that an unguarded request opened.  Redirect handling is disabled so that
+	// PolicyEnforcedRedirects can revalidate every hop.
+	private static CloseableHttpClient createPinnedHttpClient(BasicCookieStore cookieStore) {
 		var registry = RegistryBuilder.<ConnectionSocketFactory>create()
 			.register("http", PlainConnectionSocketFactory.getSocketFactory())
 			.register("https", SSLConnectionSocketFactory.getSocketFactory())
 			.build();
-		var connectionManager = new PoolingHttpClientConnectionManager(registry, PolicyPinningDnsResolver.INSTANCE);
 		return HttpClients.custom()
-			.setConnectionManager(connectionManager)
+			.setConnectionManager(new PoolingHttpClientConnectionManager(registry, PolicyPinningDnsResolver.INSTANCE))
+			.setDefaultCookieStore(cookieStore)
 			.addInterceptorLast(new Hc45RedirectCredentialGuard())
-			.setRedirectStrategy(new PolicyAwareRedirectStrategy())
+			.disableRedirectHandling()
 			.build();
-	}
-
-	// Package-visible for PolicyPinningDnsResolver / PolicyAwareRedirectStrategy.
-	static boolean isPolicyActive() {
-		return POLICY_ACTIVE.get() == Boolean.TRUE;
 	}
 
 	/**
@@ -118,14 +128,14 @@ public final class ApacheHc45Transport implements HttpTransport {
 		if (request.isSsrfGuardActive())
 			return executeWithPolicy(request);
 		try {
-			return sendOnce(request);
+			return sendOnce(request, httpClient);
 		} catch (StaleConnectionException e) {
 			// A pooled keep-alive connection was torn down by the server before any response was received.
 			// Replay once on a fresh connection, but only when it is provably safe (idempotent + repeatable body).
 			if (! request.isSafeToReplay())
 				throw e.asTransportException();
 			try {
-				return sendOnce(request);
+				return sendOnce(request, httpClient);
 			} catch (StaleConnectionException e2) {
 				throw e2.asTransportException();
 			}
@@ -134,35 +144,35 @@ public final class ApacheHc45Transport implements HttpTransport {
 
 	@Override /* HttpTransport */
 	public boolean supportsUrlPolicy() {
-		return policySupported;
+		return pinnedHttpClient != null;
 	}
 
-	// Activates pin-on-connect + Juneau-controlled redirect revalidation for the duration of the redirect chain.
+	// Juneau-controlled redirect revalidation for a guarded request; every hop goes through sendOncePinned.
 	private TransportResponse executeWithPolicy(TransportRequest request) throws TransportException {
-		POLICY_ACTIVE.set(Boolean.TRUE);
-		try {
-			return PolicyEnforcedRedirects.execute(request, this::sendOncePinned);
-		} finally {
-			POLICY_ACTIVE.remove();
-		}
+		return PolicyEnforcedRedirects.execute(request, this::sendOncePinned);
 	}
 
-	// Performs one pin-on-connect hop (PolicyPinningDnsResolver is active for the whole redirect chain).
+	// Performs one pin-on-connect hop on the pinned client.  A caller-supplied client has no pinned client, so its hops
+	// are sent unpinned on that client; RestRequest never routes a guarded request there (supportsUrlPolicy() is false).
+	// PolicyPinningDnsResolver refuses a host whose every address is denied with an IllegalArgumentException, which
+	// HttpClient propagates unchanged; it is reported as the documented TransportException.
 	private TransportResponse sendOncePinned(TransportRequest request) throws TransportException {
 		try {
-			return sendOnce(request);
+			return sendOnce(request, pinnedHttpClient != null ? pinnedHttpClient : httpClient);
 		} catch (StaleConnectionException e) {
 			throw e.asTransportException();
+		} catch (IllegalArgumentException e) {
+			throw new TransportException("HTTP transport error: " + e.getMessage(), e);
 		}
 	}
 
 	// Performs a single HTTP exchange.  Throws StaleConnectionException (a retryable signal) when the failure is a
 	// pre-response stale-connection failure; throws TransportException for every other failure.
-	private TransportResponse sendOnce(TransportRequest request) throws TransportException, StaleConnectionException {
-		var hcRequest = buildHcRequest(request);
+	private static TransportResponse sendOnce(TransportRequest request, CloseableHttpClient client) throws TransportException, StaleConnectionException {
+		var hcRequest = buildHcRequest(request, client);
 		CloseableHttpResponse hcResponse;
 		try {
-			hcResponse = httpClient.execute(hcRequest);
+			hcResponse = client.execute(hcRequest);
 		} catch (IOException e) {
 			// httpClient.execute() only returns once response headers have been read, so any IOException here
 			// occurred before any response bytes were received.
@@ -199,24 +209,27 @@ public final class ApacheHc45Transport implements HttpTransport {
 
 	@Override /* Closeable */
 	public void close() throws IOException {
-		httpClient.close();
+		try {
+			httpClient.close();
+		} finally {
+			if (pinnedHttpClient != null)
+				pinnedHttpClient.close();
+		}
 	}
 
 	// -----------------------------------------------------------------------------------------------------------------
 	// Internal helpers
 	// -----------------------------------------------------------------------------------------------------------------
 
-	// The effective default config to layer the per-request timeouts on: the request's own config if any, else the
-	// client's default, else the HttpClient defaults -- so client-level settings (redirects, cookie spec, ...) survive.
-	private RequestConfig baseConfig(RequestBuilder builder) {
-		if (builder.getConfig() != null)
-			return builder.getConfig();
-		if (httpClient instanceof Configurable c && c.getConfig() != null)
+	// The effective default config to layer the per-request timeouts on: the client's default if any, else the
+	// HttpClient defaults -- so client-level settings (redirects, cookie spec, ...) survive.
+	private static RequestConfig baseConfig(CloseableHttpClient client) {
+		if (client instanceof Configurable c && c.getConfig() != null)
 			return c.getConfig();
 		return RequestConfig.DEFAULT;
 	}
 
-	private HttpUriRequest buildHcRequest(TransportRequest request) throws TransportException {
+	private static HttpUriRequest buildHcRequest(TransportRequest request, CloseableHttpClient client) {
 		var builder = RequestBuilder.create(request.getMethod()).setUri(request.getUri());
 		for (var h : request.getHeaders())
 			builder.addHeader(h.name(), h.value());
@@ -224,16 +237,12 @@ public final class ApacheHc45Transport implements HttpTransport {
 		if (timeout != null) {
 			// Per-request socket (read) and connect timeouts; overrides the client's default RequestConfig for this call only.
 			var ms = (int)Math.min(Integer.MAX_VALUE, Math.max(1, timeout.toMillis()));
-			builder.setConfig(RequestConfig.copy(baseConfig(builder)).setSocketTimeout(ms).setConnectTimeout(ms).build());
+			builder.setConfig(RequestConfig.copy(baseConfig(client)).setSocketTimeout(ms).setConnectTimeout(ms).build());
 		}
 		var body = request.getBody();
 		if (body != null)
 			builder.setEntity(new TransportBodyEntity(body));
-		try {
-			return builder.build();
-		} catch (Exception e) {
-			throw new TransportException("Failed to build HTTP request: " + e.getMessage(), e);
-		}
+		return builder.build();
 	}
 
 	private static TransportResponse buildTransportResponse(CloseableHttpResponse hcResponse) throws TransportException {
@@ -313,7 +322,7 @@ public final class ApacheHc45Transport implements HttpTransport {
 
 		@Override /* HttpEntity */
 		public boolean isStreaming() {
-			return !body.isRepeatable(); // HTT — only called by HC4.5 retry/redirect machinery, not in normal single-request flow
+			return !body.isRepeatable();
 		}
 	}
 }

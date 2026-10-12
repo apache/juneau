@@ -83,7 +83,7 @@ class FlavorsRest_Test extends TestBase {
 		var html = fragment(engine);
 		assertContainsAll(html, "<table", "data-flavor=\"" + engine + "\"", "Mr. Frisky");
 		for (var chrome : List.of("<html", "<body", "juneau-page", "<script"))
-			assertFalse(html.contains(chrome), () -> "fragment carries page chrome '" + chrome + "': " + html);
+			assertNotContains(() -> "fragment carries page chrome '" + chrome + "': " + html, chrome, html);
 	}
 
 	@Test void b02_allThreeFlavorsAgree() throws Exception {

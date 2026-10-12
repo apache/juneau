@@ -68,38 +68,40 @@ def bus(test_mod):
 
 def write_baseline(tmp_path):
     path = tmp_path / "perf-baseline.txt"
-    path.write_text("suite = 100\nmod-a/unit = 10\nmod-b/unit = 10\n", encoding="utf-8")
+    path.write_text("suite = 100\n[modules]\nmod-a = 10\nmod-b = 10\n", encoding="utf-8")
     return path
 
 
-ACTUALS = {"mod-a/unit": 20.0, "mod-b/unit": 9.0, "mod-c/unit": 1.0, "mod-d/unit": 2.0}
+ACTUALS = {"mod-a": 20.0, "mod-b": 9.0, "mod-c": 1.0, "mod-d": 2.0}
 
 
 def perf(test_mod, monkeypatch, tmp_path, *, enforce, active, elapsed=130.0):
-    monkeypatch.setattr(test_mod, "_actuals_from_surefire", lambda root: dict(ACTUALS))
     monkeypatch.setattr(test_mod.run_module(), "console_owns_screen", lambda: active)
     report = tmp_path / "perf-guard.txt"
-    code = test_mod.run_perf_guard(elapsed, write_baseline(tmp_path), None, enforce=enforce, report_file=report)
+    code = test_mod.run_perf_guard(elapsed, write_baseline(tmp_path), dict(ACTUALS), enforce=enforce,
+                                   report_file=report)
     return code, report
 
 
 # ---- PERF-GUARD --------------------------------------------------------------------------------------------------------
 def test_perf_breaches_are_warn_notes_and_new_modules_one_info_note(test_mod, bus, monkeypatch, tmp_path):
+    monkeypatch.delenv("JUNEAU_CI_PERF_MIN_SECONDS", raising=False)
     code, report = perf(test_mod, monkeypatch, tmp_path, enforce=False, active=True)
     assert code == 0
     notes = [(f["level"], f["text"].splitlines()[0]) for f in bus.of("note")]
     assert ("warn", "PERF-GUARD FAIL [suite]: tests took 130.0s (baseline 100.0s, tolerance ±20%, threshold 120.0s).") \
         in notes
-    assert ("warn", "PERF-GUARD FAIL [mod-a/unit]: 20.0s (baseline 10.0s, tolerance ±20%, threshold 12.0s).") in notes
+    assert ("warn", "PERF-GUARD FAIL [mod-a]: 20.0s (baseline 10.0s, tolerance ±20% and 3s, threshold 13.0s).") \
+        in notes
     assert [n for n in notes if "no baseline" in n[1]] == [
-        ("info", "PERF-GUARD: 2 module-bucket(s) have no baseline entry yet: mod-c/unit, mod-d/unit")]
+        ("info", "PERF-GUARD: 2 module(s) have no baseline entry yet: mod-c, mod-d")]
     assert all(f["step"] == "perf" for f in bus.of("note"))
     end = [f for f in bus.of("step_end") if f["id"] == "perf"][-1]
     assert end["summary"] == f"⚠ 2 over baseline · 2 without one → {report}"
     assert end["status"] == "ok"
     text = report.read_text(encoding="utf-8")
-    assert "PERF-GUARD FAIL [mod-a/unit]" in text and "PERF-GUARD WARN [mod-c/unit]" in text
-    assert "PERF-GUARD SUMMARY: 2 module-bucket(s) checked, 1 regression(s), 2 new/unknown." in text
+    assert "PERF-GUARD FAIL [mod-a]" in text and "PERF-GUARD WARN [mod-c]" in text
+    assert "PERF-GUARD SUMMARY: 2 module(s) checked, 1 regression(s), 2 new/unknown." in text
 
 
 def test_enforced_breaches_are_errors_and_fail_the_row(test_mod, bus, monkeypatch, tmp_path):
@@ -110,10 +112,10 @@ def test_enforced_breaches_are_errors_and_fail_the_row(test_mod, bus, monkeypatc
 
 
 def test_a_clean_perf_run_says_how_many_were_checked(test_mod, bus, monkeypatch, tmp_path):
-    monkeypatch.setattr(test_mod, "_actuals_from_surefire", lambda root: {"mod-a/unit": 9.0})
     monkeypatch.setattr(test_mod.run_module(), "console_owns_screen", lambda: True)
     report = tmp_path / "perf-guard.txt"
-    assert test_mod.run_perf_guard(90.0, write_baseline(tmp_path), None, enforce=False, report_file=report) == 0
+    assert test_mod.run_perf_guard(90.0, write_baseline(tmp_path), {"mod-a": 9.0}, enforce=False,
+                                    report_file=report) == 0
     assert [f for f in bus.of("step_end") if f["id"] == "perf"][-1]["summary"] == f"✓ 1 checked → {report}"
 
 
@@ -121,7 +123,7 @@ def test_without_a_console_perf_prints_as_before(test_mod, bus, monkeypatch, tmp
     perf(test_mod, monkeypatch, tmp_path, enforce=False, active=False)
     out = capsys.readouterr().out
     assert "PERF-GUARD FAIL [suite]: tests took 130.0s" in out
-    assert "PERF-GUARD WARN [mod-c/unit]: 1.0s — no baseline entry yet" in out
+    assert "PERF-GUARD WARN [mod-c]: 1.0s — no baseline entry yet" in out
     assert "PERF-GUARD: warn-only mode (pass --enforce-perf to hard-fail on breach)." in out
     assert bus.of("note") == []
 
@@ -138,7 +140,7 @@ def test_perf_without_a_baseline_still_writes_the_report(test_mod, bus, monkeypa
     monkeypatch.setattr(test_mod.run_module(), "console_owns_screen", lambda: True)
     report = tmp_path / "perf-guard.txt"
     report.write_text("stale\n", encoding="utf-8")
-    code = test_mod.run_perf_guard(5.0, tmp_path / "missing.txt", None, enforce=False, report_file=report)
+    code = test_mod.run_perf_guard(5.0, tmp_path / "missing.txt", {}, enforce=False, report_file=report)
     assert code == 0
     assert "baseline file not found" in report.read_text(encoding="utf-8")
     assert [f for f in bus.of("step_end") if f["id"] == "perf"][-1]["summary"] == f"no baseline file → {report}"

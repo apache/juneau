@@ -1,0 +1,3 @@
+{"contractVersion":"1","title":"T","nav":[],"activeNav":[],"cards":[
+  {"id":"mix","type":"chart","kind":"donut","label":"status","value":"count","data":[{"status":"placed","count":3},{"status":"delivered","count":5}],"center":"total","visibleWhen":[{"field":"role","op":"eq","value":"admin"}]}
+]}

@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.petstore.console;
 
+import org.apache.juneau.petstore.console.pages.*;
 import org.apache.juneau.petstore.dto.*;
 import org.apache.juneau.rest.server.*;
 import org.apache.juneau.rest.server.beans.*;
@@ -55,10 +56,15 @@ public class AboutRest extends PetstoreConsolePage {
 
 	private static final long serialVersionUID = 1L;
 
-	/** @return The page. */
+	/**
+	 * The About page.
+	 *
+	 * @param req The request; {@code ?builder} renders the builder twin.
+	 * @return The page.
+	 */
 	@RestGet(path="/")
-	public View page() {
-		return FreemarkerView.of("about.ftlh");
+	public View page(RestRequest req) {
+		return builder(req) ? twin(req, AboutPageBuilders.about()) : FreemarkerView.of("about.ftlh");
 	}
 
 	/**

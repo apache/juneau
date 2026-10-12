@@ -20,14 +20,12 @@ import org.apache.juneau.http.response.*;
 import org.apache.juneau.petstore.console.*;
 import org.apache.juneau.petstore.console.dev.flavors.*;
 import org.apache.juneau.rest.server.*;
-import org.apache.juneau.rest.server.view.*;
 
 /**
  * The petstore console's Developer section: custom cards, themes, rendering flavors and the secure API demo.
  *
  * <p>
- * Mounted under {@link PetstoreConsoleResource} at {@code /console/dev}.  Each page is its own child resource; routes
- * whose page has not landed yet answer with a {@link ConsoleStubs} "Coming soon" page so every nav link resolves.
+ * Mounted under {@link PetstoreConsoleResource} at {@code /console/dev}.  Each page is its own child resource.
  *
  * <h5 class='section'>Example:</h5>
  * <p class='bjava'>
@@ -38,7 +36,7 @@ import org.apache.juneau.rest.server.view.*;
  * 	<jc>// GET /console/dev  -&gt;  303 to /console/dev/cards</jc>
  * </p>
  */
-@Rest(path="/dev", title="Developer", children={FlavorsRest.class, SecureRest.class, ThemesRest.class})
+@Rest(path="/dev", title="Developer", children={CustomCardsRest.class, FlavorsRest.class, SecureRest.class, ThemesRest.class})
 @SuppressWarnings({
 	"java:S110" // Inheritance depth comes from the BasicRestServlet hierarchy, not this page.
 })
@@ -56,8 +54,4 @@ public class DevRest extends PetstoreConsolePage {
 	public SeeOther index(RestRequest req) {
 		return new SeeOther().setLocation(req.getUriResolver().resolve("servlet:/cards"));
 	}
-
-	/** @return The Custom cards placeholder (see {@link ConsoleStubs}). */
-	@RestGet(path="/cards")
-	public View customCards() { return ConsoleStubs.view("dev/cards"); }
 }

@@ -811,7 +811,9 @@ public abstract class Context {
 	 * builder objects. The methods are discovered by:
 	 * <ol>
 	 * 	<li>Finding public constructors that take a single parameter (the builder type)
-	 * 	<li>Looking for a matching static <c>create</c> method that returns the builder type
+	 * 	<li>Looking for no-arg static <c>create</c> methods whose return type is assignable to one of those builder types
+	 * 	<li>Choosing the one declared closest to the context class (so a subclass's own <c>create</c> wins over an
+	 * 		inherited parent <c>create</c>)
 	 * 	<li>Caching the result for future lookups
 	 * </ol>
 	 *
@@ -824,16 +826,21 @@ public abstract class Context {
 		.supplier(type -> {
 			var c = info(type);
 			// @formatter:off
-			return c.getPublicConstructors().stream()
+			var builderTypes = c.getPublicConstructors().stream()
 				.filter(ci -> ci.hasNumParameters(1) && ! ci.getParameter(0).getParameterType().is(type))
-				.map(ci -> c.getPublicMethod(
-					x -> x.isStatic()
+				.map(ci -> ci.getParameter(0).getParameterType())
+				.toList();
+			// A subclass's constructor can take a parent builder type (for example Json5Parser(JsonParser.Builder)
+			// or HtmlSchemaDocSerializer(HtmlDocSerializer.Builder)), so both the subclass's own create() (whose
+			// builder is assignable to that type) and the inherited parent create() match.  Prefer the create()
+			// declared closest to the type itself so the subclass's own builder defaults win.
+			return c.getPublicMethods().stream()
+				.filter(x -> x.isStatic()
 					&& x.isNotDeprecated()
 					&& x.hasName("create")
-					&& x.hasReturnType(ci.getParameter(0).getParameterType())
-					).orElse(null))
-				.filter(Objects::nonNull)
-				.findFirst()
+					&& x.hasNumParameters(0)
+					&& builderTypes.stream().anyMatch(bt -> x.getReturnType().isAssignableTo(bt)))
+				.reduce((a, b) -> b.getDeclaringClass().isChildOf(a.getDeclaringClass()) ? b : a)
 				.orElseThrow(() -> rex("Could not find builder create method on class %s", cn(type)));
 			// @formatter:on
 		})

@@ -221,4 +221,24 @@ class McpStepUpAuthorizer_Test extends TestBase {
 		assertNotNull(restored.challenge(), "challenge must survive serialization (non-transient)");
 		assertEquals(original.challenge().scopes(), restored.challenge().scopes());
 	}
+
+	@Test void e01_maxAttemptsMustBePositive() {
+		var b = McpStepUpAuthorizer.create();
+		assertThrows(IllegalArgumentException.class, () -> b.maxAttempts(0));
+	}
+
+	@Test void e02_sharedAccumulatorIsUsedAndUpdated() {
+		var acc = new McpScopeAccumulator();
+		var authorizer = McpStepUpAuthorizer.create()
+			.resource(RES).issuer(ISS).accumulator(acc)
+			.reauthorizer(scopes -> { /* accept */ })
+			.build();
+		var calls = new AtomicInteger();
+		authorizer.execute("op", () -> {
+			if (calls.incrementAndGet() == 1)
+				throw challenge("write");
+			return "ok";
+		});
+		assertEquals(Set.of("write"), acc.current(RES, ISS));
+	}
 }

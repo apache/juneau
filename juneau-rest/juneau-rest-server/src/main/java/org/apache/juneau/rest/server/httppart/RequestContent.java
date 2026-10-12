@@ -602,18 +602,37 @@ public class RequestContent {
 		}
 
 		if (cm.hasReaderMutater())
-			return BasicConverter.INSTANCE.to(getReader(), cm.inner());
+			return convertUnparsed(getReader(), cm);
 
 		if (cm.hasInputStreamMutater())
-			return BasicConverter.INSTANCE.to(getInputStream(), cm.inner());
+			return convertUnparsed(getInputStream(), cm);
 
 		var mt = getMediaType();
 
 		if ((isEmpty(s(mt)) || mt.toString().startsWith("text/plain")) && cm.hasStringMutater())
 			return BasicConverter.INSTANCE.to(asString(), cm.inner());
 
+		throw unsupportedMediaType(null);
+	}
+
+	// Converts the unparsed content using the type's own Reader/InputStream constructor or factory method.
+	//
+	// When the request named a Content-Type that matched no parser, a conversion failure means the content was in a
+	// media type nobody here understands (for example JSON5 into the strict-JSON JsonMap(Reader) constructor), so it is
+	// reported as 415 rather than as a 500.  Without a Content-Type the failure propagates as before.
+	private <T> T convertUnparsed(Object in, ClassMeta<T> cm) throws UnsupportedMediaType {
+		try {
+			return BasicConverter.INSTANCE.to(in, cm.inner());
+		} catch (RuntimeException e) {
+			if (isEmpty(s(req.getHeader(ContentType.class).flatMap(ContentType::asMediaType).orElse(null))))
+				throw e;
+			throw unsupportedMediaType(e);
+		}
+	}
+
+	private UnsupportedMediaType unsupportedMediaType(Throwable cause) {
 		var ct = req.getHeader(ContentType.class);
-		throw new UnsupportedMediaType("Unsupported media-type in request header 'Content-Type': '%s'\n\tSupported media-types: %s",
+		return new UnsupportedMediaType(cause, "Unsupported media-type in request header 'Content-Type': '%s'\n\tSupported media-types: %s",
 			ct.isPresent() ? ct.get().asMediaType().orElse(null) : "not-specified", Json5.of(req.getOpContext().getParsers().getSupportedMediaTypes()));
 	}
 

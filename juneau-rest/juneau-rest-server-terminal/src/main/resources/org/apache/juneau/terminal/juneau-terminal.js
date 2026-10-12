@@ -18,8 +18,8 @@
 /*
  * juneau-terminal.js - the terminal region: a command's raw output rendered by xterm.js.
  *
- * Publishes window.JuneauTerminal = { mount, createEngine, fitFont, findNext, parseHash, formatSize, linkHandlerFor, handle }
- * and queues the "terminal" console card handler on window.JuneauConsoleCards.
+ * Publishes window.JuneauTerminal = { mount, createEngine, createInput, linkFor, fitFont, findNext, parseHash, formatSize,
+ * linkHandlerFor, handle } and queues the "terminal" console card handler on window.JuneauConsoleCards.
  *
  * LOAD ORDER: after xterm.js (window.Terminal).  The console shell may load before or after this file: the card
  * queue covers both orders.
@@ -34,7 +34,8 @@
  *   - Bytes reach xterm only through term.write(bytes, callback).  The next write and the next fetch wait for the
  *     callback.
  *   - term.resize is never called.  The terminal keeps the producer's cols x rows; only the font scales.
- *   - No input and no clipboard provider: disableStdin is set, and OSC 52 writes do nothing.
+ *   - Input is off unless the card sets input: true and the page wires a bus bridge for term.input; until the user arms
+ *     it and the server answers live, disableStdin stays set.  No clipboard provider: OSC 52 writes do nothing.
  *   - Links open only for http: and https:, on click, with noopener,noreferrer.
  *   - Server text reaches the DOM only through textContent.
  */
@@ -58,6 +59,15 @@
 	const OFFSET = /^\d{1,16}$/;
 	const SIGNAL_NOTE = /killed by (SIG[A-Z0-9]+)/;
 	const ENC = new TextEncoder();
+	const INPUT_TOPIC = "term.input";
+	const INPUT_STATUS_TOPIC = "term.input-status";
+	const PROBE_TIMEOUT_MS = 2000;
+	const FLUSH_MS = 100;
+	const MAX_FRAME_BYTES = 4096;
+	/** Cap on queued-but-unsent input (about 6.4 s of drain at one 4 KB frame per 100 ms); an over-cap chunk is refused whole. */
+	const MAX_QUEUE_BYTES = 256 * 1024;
+	const ESC_ESC_MS = 500;
+	const DISCONNECTED = "Disconnected: input not sent";
 	/** Written before the bytes after a ring-buffer gap: reset SGR, then leave the alternate screen. */
 	const GAP_RESET = ENC.encode("\u001b[0m\u001b[?1049l");
 
@@ -598,6 +608,251 @@
 		};
 	}
 
+	/** The UTF-8 length of one code point. */
+	function utf8Len(cp) {
+		return cp < 0x80 ? 1 : cp < 0x800 ? 2 : cp < 0x10000 ? 3 : 4;
+	}
+
+	/** The longest prefix of {@code s} that is whole code points and at most {@code max} UTF-8 bytes. */
+	function headOf(s, max) {
+		let bytes = 0, i = 0;
+		for (const ch of s) {
+			const n = utf8Len(ch.codePointAt(0));
+			if (bytes + n > max)
+				break;
+			bytes += n;
+			i += ch.length;
+		}
+		return s.slice(0, i);
+	}
+
+	/**
+	 * The id of the bridge that carries terminal input: the first websocket bridge in {@code contract} whose upstream
+	 * includes term.input and whose downstream includes term.input-status.  Null when there is none.
+	 */
+	function linkFor(contract) {
+		const bridges = contract && Array.isArray(contract.bridges) ? contract.bridges : [];
+		for (const b of bridges) {
+			if (b && b.transport === "websocket" && isStr(b.id) && Array.isArray(b.upstream) && b.upstream.includes(INPUT_TOPIC)
+					&& Array.isArray(b.downstream) && b.downstream.includes(INPUT_STATUS_TOPIC))
+				return b.id;
+		}
+		return null;
+	}
+
+	/**
+	 * The input state machine for one terminal card, with every side effect behind {@code env}:
+	 *   publish(payload), setTimeout(fn, ms), clearTimeout(h), now(), onChange(view), armed(on).
+	 * {@code opts.inputId} is the id sent in every payload and the only id whose answers are read.
+	 *
+	 * States: idle, probing, armed, denied and closed.  Pressing the toggle sends a probe ({id, data: ""}); only a live
+	 * answer to a pending probe arms.  denied and closed apply whenever they come; busy marks the last frame dropped.
+	 * While armed, keys are batched every 100 ms or at 4096 UTF-8 bytes, one frame per tick, split on code points.
+	 * A chunk that would take the unsent queue past 256 KiB is refused whole (never truncated) and the chip says so until
+	 * the next accepted chunk.
+	 */
+	function createInput(opts, env) {
+		const id = opts.inputId;
+		const s = { state: "idle", chip: null, chipState: null, queue: "", refused: false, timer: null, probeTimer: null, probeSeq: 0,
+			pending: null, lastEsc: null, connected: true, disposed: false };
+
+		function view() {
+			const label = s.state === "denied" ? "Input not permitted" : s.state === "closed" ? "Job ended" : "Enable input";
+			return {
+				state: s.state, chip: s.chip, chipState: s.chipState,
+				toggle: { label: label, pressed: s.state === "armed", disabled: s.state === "denied" || s.state === "closed" }
+			};
+		}
+
+		function changed() {
+			if (!s.disposed && env.onChange)
+				env.onChange(view());
+		}
+
+		function setChip(text, tone) {
+			s.chip = text;
+			s.chipState = text === null ? null : tone;
+		}
+
+		function clearProbe() {
+			if (s.probeTimer !== null)
+				env.clearTimeout(s.probeTimer);
+			s.probeTimer = null;
+			s.pending = null;
+		}
+
+		function clearFlush() {
+			if (s.timer !== null)
+				env.clearTimeout(s.timer);
+			s.timer = null;
+		}
+
+		/** Sends one frame of at most 4096 bytes from the queue, then waits a tick before the next. */
+		function sendOne() {
+			const head = headOf(s.queue, MAX_FRAME_BYTES);
+			s.queue = s.queue.slice(head.length);
+			env.publish({ id: id, data: head });
+			if (s.state === "armed" && !s.refused && s.chip !== "Input live")
+				setChip("Input live", "live");
+			s.timer = env.setTimeout(tick, FLUSH_MS);
+		}
+
+		function tick() {
+			s.timer = null;
+			if (s.state === "armed" && s.queue) {
+				sendOne();
+				changed();
+			}
+		}
+
+		/** Leaves armed (or probing) for {@code next}; {@code flush} sends at most one frame of what is queued. */
+		function disarm(next, flush) {
+			const was = s.state === "armed";
+			clearProbe();
+			clearFlush();
+			if (flush && was && s.queue)
+				env.publish({ id: id, data: headOf(s.queue, MAX_FRAME_BYTES) });
+			s.queue = "";    // no s.refused reset: the queue is empty, and an accepted chunk clears the flag before any frame
+			s.lastEsc = null;
+			s.state = next;
+			if (was)
+				env.armed(false);
+		}
+
+		function press() {
+			if (s.disposed)
+				return;
+			if (s.state === "armed") {
+				disarm("idle", true);
+				setChip(null);
+				changed();
+				return;
+			}
+			if (s.state !== "idle")
+				return;
+			if (!s.connected) {
+				setChip(DISCONNECTED, "warn");
+				changed();
+				return;
+			}
+			const seq = ++s.probeSeq;
+			s.pending = seq;
+			s.state = "probing";
+			setChip(null);
+			s.probeTimer = env.setTimeout(function () {
+				if (s.pending !== seq)
+					return;
+				s.probeTimer = null;
+				s.pending = null;
+				s.state = "idle";
+				setChip("Input unavailable", "warn");
+				changed();
+			}, PROBE_TIMEOUT_MS);
+			env.publish({ id: id, data: "" });
+			changed();
+		}
+
+		function onStatus(p) {
+			if (s.disposed || !p || typeof p !== "object" || !isStr(p.id) || p.id !== id)
+				return;
+			if (p.state === "live") {
+				if (s.pending !== s.probeSeq)    // no pending probe: an answer to an older or expired one
+					return;
+				clearProbe();
+				s.state = "armed";
+				setChip("Input live", "live");
+				env.armed(true);
+			} else if (p.state === "denied" || p.state === "closed") {
+				if (s.state === "closed")
+					return;
+				disarm(p.state, false);
+				setChip(p.state === "denied" ? "Input not permitted" : "Job ended", "warn");
+			} else if (p.state === "busy") {
+				if (s.state !== "armed")
+					return;
+				setChip("Input throttled: some keys not sent", "warn");
+			} else {
+				return;
+			}
+			changed();
+		}
+
+		function onData(d) {
+			if (s.disposed || s.state !== "armed" || !isStr(d) || !d)
+				return;
+			// A UTF-16 unit is at most 3 UTF-8 bytes, so only a possibly over-cap total needs the exact count.
+			if ((s.queue.length + d.length) * 3 > MAX_QUEUE_BYTES
+					&& ENC.encode(s.queue).length + ENC.encode(d).length > MAX_QUEUE_BYTES) {
+				s.refused = true;
+				setChip("Paste too large: not sent", "warn");
+				changed();
+				return;
+			}
+			s.refused = false;
+			s.queue += d;
+			if (s.timer !== null)
+				return;
+			if (ENC.encode(s.queue).length >= MAX_FRAME_BYTES) {
+				sendOne();
+				changed();
+			} else {
+				s.timer = env.setTimeout(tick, FLUSH_MS);
+			}
+		}
+
+		/** xterm's custom key event handler: Esc twice within 500 ms disarms, and the second Esc is swallowed. */
+		function onKeyDown(ev) {
+			if (s.state !== "armed" || !ev || ev.type !== "keydown")
+				return true;
+			if (ev.key !== "Escape") {
+				s.lastEsc = null;
+				return true;
+			}
+			const now = env.now();
+			if (s.lastEsc !== null && now - s.lastEsc <= ESC_ESC_MS) {
+				disarm("idle", true);
+				setChip(null);
+				changed();
+				return false;
+			}
+			s.lastEsc = now;
+			return true;
+		}
+
+		function connected(on) {
+			s.connected = !!on;
+			if (s.connected) {
+				if (s.chip === DISCONNECTED) {
+					setChip(null);
+					changed();
+				}
+				return;
+			}
+			if (s.state !== "armed" && s.state !== "probing")
+				return;
+			disarm("idle", false);
+			setChip(DISCONNECTED, "warn");
+			changed();
+		}
+
+		function runEnded() {
+			if (s.state === "closed")
+				return;
+			disarm("closed", false);
+			setChip("Job ended", "warn");
+			changed();
+		}
+
+		return {
+			press: press, onStatus: onStatus, onData: onData, onKeyDown: onKeyDown, connected: connected,
+			runEnded: runEnded, view: view,
+			dispose: function () {
+				disarm(s.state === "armed" || s.state === "probing" ? "idle" : s.state, false);
+				s.disposed = true;
+			}
+		};
+	}
+
 	function el(doc, tag, cls, text) {
 		const e = doc.createElement(tag);
 		if (cls)
@@ -629,10 +884,11 @@
 
 	/**
 	 * Mounts a terminal region in {@code host}.  {@code opts} is the card's terminal object plus its {@code id}:
-	 * {bytesUrl, eventsUrl?, refreshMs?, title?, tailBytes?, id?}.  Returns a cleanup that stops polling and removes
-	 * the region.
+	 * {bytesUrl, eventsUrl?, refreshMs?, title?, tailBytes?, id?, input?, inputId?}.  {@code link}, optional, is the
+	 * input path: {publish(payload), onConnected(fn) -> off?}.  The input toggle appears only with input, inputId and a
+	 * link.  Returns a cleanup that stops polling and removes the region.
 	 */
-	function mount(host, opts) {
+	function mount(host, opts, link) {
 		const doc = host.ownerDocument;
 		const win = doc.defaultView;
 		if (typeof win.Terminal !== "function")
@@ -660,7 +916,18 @@
 		reconnecting.hidden = true;
 		const badge = el(doc, "span", "juneau-term-badge");
 		badge.setAttribute("role", "status");
-		bar.append(search, copy, followLabel, reconnecting, badge);
+		const hasInput = opts.input === true && isStr(opts.inputId) && !!opts.inputId && !!link && typeof link.publish === "function";
+		let toggle = null, inputChip = null;
+		if (hasInput) {
+			toggle = el(doc, "button", "juneau-term-input");
+			toggle.type = "button";
+			inputChip = el(doc, "span", "juneau-term-chip juneau-term-chip--input");
+			inputChip.setAttribute("role", "status");
+			inputChip.hidden = true;
+			bar.append(search, copy, followLabel, reconnecting, toggle, inputChip, badge);
+		} else {
+			bar.append(search, copy, followLabel, reconnecting, badge);
+		}
 		if (/\/bytes$/.test(opts.bytesUrl)) {
 			const raw = el(doc, "a", "juneau-term-raw", "Raw");
 			try {
@@ -687,6 +954,9 @@
 		let term = null;
 		let match = null;
 		let ro = null;
+		let armed = false;
+		let input = null;
+		let offConnected = null;
 
 		function fit() {
 			const xs = screen.querySelector(".xterm-screen");
@@ -707,6 +977,45 @@
 			banner.hidden = !st.banner;
 			bannerText.textContent = st.banner ? st.banner.text : "";
 			bannerSlow.textContent = st.banner && st.banner.slow ? " " + st.banner.slow : "";
+			if (input && (st.kind === "ok" || st.kind === "fail"))
+				input.runEnded();
+		}
+
+		function renderInput(v) {
+			toggle.textContent = v.toggle.label;
+			toggle.setAttribute("aria-pressed", v.toggle.pressed ? "true" : "false");
+			toggle.disabled = v.toggle.disabled;
+			if (inputChip.textContent !== (v.chip || ""))
+				inputChip.textContent = v.chip || "";
+			inputChip.hidden = v.chip === null;
+			if (v.chipState)
+				inputChip.setAttribute("data-state", v.chipState);
+			else
+				inputChip.removeAttribute("data-state");
+		}
+
+		if (hasInput) {
+			input = createInput({ inputId: opts.inputId }, {
+				publish: function (p) { link.publish(p); },
+				setTimeout: win.setTimeout.bind(win),
+				clearTimeout: win.clearTimeout.bind(win),
+				now: function () { return Date.now(); },
+				onChange: renderInput,
+				armed: function (on) {
+					armed = on;
+					if (!term)
+						return;
+					term.options.disableStdin = !on;
+					if (on)
+						term.focus();
+				}
+			});
+			renderInput(input.view());
+			toggle.addEventListener("click", function () { input.press(); });
+			if (typeof link.onConnected === "function") {
+				const off = link.onConnected(function (on) { input.connected(on); });
+				offConnected = typeof off === "function" ? off : null;
+			}
 		}
 
 		const engine = createEngine(opts, {
@@ -721,10 +1030,17 @@
 			},
 			open: function (cols, rows) {
 				term = new win.Terminal({
-					cols: cols, rows: rows, scrollback: SCROLLBACK, disableStdin: true, allowProposedApi: false,
+					cols: cols, rows: rows, scrollback: SCROLLBACK, disableStdin: !armed, allowProposedApi: false,
 					fontSize: BASE_FONT, cursorBlink: false, linkHandler: linkHandler
 				});
+				if (input) {
+					term.onData(function (d) { input.onData(d); });
+					term.attachCustomKeyEventHandler(function (e) { return input.onKeyDown(e); });
+				}
 				term.open(screen);
+				// HTT: arming before the Terminal exists needs a live answer ahead of the first bytes fetch; no harness orders them that way.
+				if (armed)
+					term.focus();
 				fit();
 				if (typeof win.ResizeObserver === "function") {
 					ro = new win.ResizeObserver(fit);
@@ -768,12 +1084,22 @@
 		onHash();
 
 		const handle = Object.freeze({ scrollToOffset: engine.scrollToOffset });
-		if (isStr(opts.id) && opts.id)
+		if (isStr(opts.id) && opts.id) {
 			HANDLES.set(opts.id, handle);
+			if (input)
+				INPUTS.set(opts.id, input);
+		}
 
 		return function cleanup() {
 			if (HANDLES.get(opts.id) === handle)
 				HANDLES.delete(opts.id);
+			if (input) {
+				if (INPUTS.get(opts.id) === input)
+					INPUTS.delete(opts.id);
+				input.dispose();
+			}
+			if (offConnected)
+				offConnected();
 			engine.stop();
 			win.removeEventListener("hashchange", onHash);
 			if (ro)
@@ -788,6 +1114,9 @@
 	/** Card id -> the {scrollToOffset} handle of the terminal currently mounted for it. */
 	const HANDLES = new Map();
 
+	/** Card id -> the input state machine of the terminal currently mounted for it, when that card takes input. */
+	const INPUTS = new Map();
+
 	/** The handle of the terminal mounted for the card, or null when the card is not mounted (yet). */
 	function handle(id) {
 		return HANDLES.get(id) || null;
@@ -796,12 +1125,27 @@
 	/** Host element -> cleanup of the region mounted in it. */
 	const MOUNTED = new WeakMap();
 
+	/** The input link for a card: publishes on term.input and watches the input bridge's state.  Null without one. */
+	function cardLink(ctx) {
+		if (!ctx || typeof ctx.publish !== "function" || typeof ctx.subscribe !== "function")
+			return null;
+		const jc = window.JuneauConsole;
+		const id = linkFor(jc && typeof jc.contract === "function" ? jc.contract() : null);
+		if (id === null)
+			return null;
+		return {
+			publish: function (p) { ctx.publish(INPUT_TOPIC, p); },
+			onConnected: function (fn) { return ctx.subscribe("bridge:" + id, function (st) { fn(!!st && st.state === "open"); }); }
+		};
+	}
+
 	const cardHandler = {
-		render: function (card, host) {
+		render: function (card, host, ctx) {
 			const prev = MOUNTED.get(host);
 			if (prev)
 				prev();
-			MOUNTED.set(host, mount(host, Object.assign({ id: card.id }, card.terminal)));
+			const terminal = card.terminal || {};
+			MOUNTED.set(host, mount(host, Object.assign({ id: card.id }, terminal), terminal.input === true ? cardLink(ctx) : null));
 		},
 		destroy: function (card, host) {
 			const cleanup = MOUNTED.get(host);
@@ -809,11 +1153,20 @@
 				MOUNTED.delete(host);
 				cleanup();
 			}
+		},
+		// This role set must match TerminalCardType.acceptedRoles: the console only routes the roles that a card type accepts.
+		roles: {
+			"input-status": function (payload, meta, card) {
+				const i = card ? INPUTS.get(card.id) : null;
+				if (i)
+					i.onStatus(payload);
+			}
 		}
 	};
 
 	window.JuneauTerminal = Object.freeze({
-		mount: mount, createEngine: createEngine, fitFont: fitFont, findNext: findNext, parseHash: parseHash,
+		mount: mount, createEngine: createEngine, createInput: createInput, linkFor: linkFor, fitFont: fitFont,
+		findNext: findNext, parseHash: parseHash,
 		formatSize: formatSize, linkHandlerFor: linkHandlerFor, handle: handle
 	});
 	(window.JuneauConsoleCards = window.JuneauConsoleCards || []).push(["terminal", cardHandler]);

@@ -16,12 +16,17 @@
  */
 package org.apache.juneau.petstore.console;
 
+import static java.nio.charset.StandardCharsets.*;
+
+import java.io.*;
+
 import org.apache.juneau.http.response.*;
 import org.apache.juneau.petstore.console.dev.*;
 import org.apache.juneau.petstore.console.ops.*;
+import org.apache.juneau.petstore.console.orders.*;
 import org.apache.juneau.petstore.console.pets.*;
+import org.apache.juneau.petstore.console.users.*;
 import org.apache.juneau.rest.server.*;
-import org.apache.juneau.rest.server.view.*;
 
 /**
  * Root of the petstore admin console, mounted at {@code /console} beside the {@code /petstore} API and sharing its
@@ -52,13 +57,16 @@ import org.apache.juneau.rest.server.view.*;
 	children={
 		StoreRest.class,
 		PetsRest.class,
+		OrdersRest.class,
+		UsersRest.class,
 		OpsRest.class,
 		DevRest.class,
 		AboutRest.class
 	}
 )
 @SuppressWarnings({
-	"java:S110" // Inheritance depth comes from the BasicRestServlet hierarchy, not this page.
+	"java:S110", // Inheritance depth comes from the BasicRestServlet hierarchy, not this page.
+	"resource" // The response writer is owned by the servlet container; Eclipse JDT @Owning warning is by design.
 })
 public class PetstoreConsoleResource extends PetstoreConsolePage {
 
@@ -75,11 +83,19 @@ public class PetstoreConsoleResource extends PetstoreConsolePage {
 		return new SeeOther().setLocation(req.getUriResolver().resolve("servlet:/store"));
 	}
 
-	/** @return The Orders placeholder (see {@link ConsoleStubs}). */
-	@RestGet(path="/orders")
-	public View orders() { return ConsoleStubs.view("orders"); }
-
-	/** @return The Users placeholder (see {@link ConsoleStubs}). */
-	@RestGet(path="/users")
-	public View users() { return ConsoleStubs.view("users"); }
+	/**
+	 * Serves {@code petstore.js}, the shared page script {@code base.ftlh} loads after the toolkit on every page.
+	 *
+	 * @param res The response.
+	 * @throws IOException If the bundled script can't be read.
+	 */
+	@RestGet(path="/petstore.js")
+	public void script(RestResponse res) throws IOException {
+		try (var in = PetstoreConsoleResource.class.getResourceAsStream("petstore.js")) {
+			if (in == null)
+				throw new IllegalStateException("Missing classpath resource 'petstore.js' beside " + PetstoreConsoleResource.class.getName());
+			res.setContentType("text/javascript;charset=utf-8");
+			res.getWriter().write(new String(in.readAllBytes(), UTF_8));
+		}
+	}
 }

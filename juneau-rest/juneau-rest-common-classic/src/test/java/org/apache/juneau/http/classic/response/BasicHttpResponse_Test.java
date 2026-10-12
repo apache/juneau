@@ -20,6 +20,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.lang.reflect.*;
 
+import org.apache.http.*;
 import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
 
@@ -99,5 +100,133 @@ class BasicHttpResponse_Test extends TestBase {
 	@Test void b07_instanceConstant_isUnmodifiableLeaf() {
 		assertTrue(Ok.INSTANCE.isUnmodifiable());
 		assertInstanceOf(Ok.class, Ok.INSTANCE);
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Header, entity, status-line and equality behavior on the root type
+	//-----------------------------------------------------------------------------------------------------------------
+
+	private static final Header H1 = new org.apache.http.message.BasicHeader("X-A", "1");
+	private static final Header H2 = new org.apache.http.message.BasicHeader("X-A", "2");
+
+	@Test void c01_headerAccessors() {
+		var x = new Ok();
+		x.addHeader(H1);
+		x.addHeader("X-A", "2");
+		x.addHeader("X-B", "b");
+		assertTrue(x.containsHeader("x-a"));
+		assertFalse(x.containsHeader("X-Z"));
+		assertEquals(3, x.getAllHeaders().length);
+		assertEquals(2, x.getHeaders("X-A").length);
+		assertEquals("1", x.getFirstHeader("X-A").getValue());
+		assertEquals("2", x.getLastHeader("X-A").getValue());
+		assertNull(x.getFirstHeader("X-Z"));
+		assertNull(x.getLastHeader("X-Z"));
+		assertSame(x.getHeaders(), x.getHeaders());
+		assertTrue(x.headerIterator().hasNext());
+		assertTrue(x.headerIterator("X-B").hasNext());
+		x.removeHeader(H1);
+		assertEquals(1, x.getHeaders("X-A").length);
+		x.removeHeaders("X-A");
+		assertFalse(x.containsHeader("X-A"));
+		x.setHeader(H1);
+		assertEquals("1", x.getFirstHeader("X-A").getValue());
+		x.setHeader("X-A", "3");
+		assertEquals("3", x.getFirstHeader("X-A").getValue());
+		x.setHeaders(new Header[]{H1, H2});
+		assertEquals(2, x.getAllHeaders().length);
+		x.setHeaders(org.apache.juneau.http.classic.header.HeaderList.of(H2));
+		assertEquals(1, x.getAllHeaders().length);
+		x.setHeaders(java.util.List.of(H1));
+		assertEquals("1", x.getFirstHeader("X-A").getValue());
+		x.setHeaders2(H2);
+		assertEquals("2", x.getFirstHeader("X-A").getValue());
+		x.setHeader2(H1);
+		assertEquals("1", x.getFirstHeader("X-A").getValue());
+	}
+
+	@Test void c02_statusLineMutators() throws Exception {
+		var x = new Ok();
+		x.setStatusCode(201);
+		assertEquals(201, x.getStatusLine().getStatusCode());
+		x.setReasonPhrase("Made");
+		assertEquals("Made", x.getStatusLine().getReasonPhrase());
+		x.setStatusLine(HttpVersion.HTTP_1_0, 202);
+		assertEquals(HttpVersion.HTTP_1_0, x.getProtocolVersion());
+		assertEquals(202, x.getStatusLine().getStatusCode());
+		x.setStatusLine(HttpVersion.HTTP_1_1, 203, "Other");
+		assertEquals("Other", x.getStatusLine().getReasonPhrase());
+		x.setStatusLine(new org.apache.http.message.BasicStatusLine(HttpVersion.HTTP_1_1, 204, "None"));
+		assertEquals(204, x.getStatusLine().getStatusCode());
+		assertEquals("None", x.getStatusLine().getReasonPhrase());
+		x.setLocale(java.util.Locale.FRANCE);
+		assertEquals(java.util.Locale.FRANCE, x.getLocale());
+		x.setParams(null);
+		assertNull(x.getParams());
+		x.setEntity(new org.apache.http.entity.StringEntity("e", java.nio.charset.StandardCharsets.UTF_8));
+		assertNotNull(x.getEntity());
+		x.setEntity(null);
+		// Clearing the entity reverts to the lazily-built default entity, whose text is the reason phrase.
+		assertEquals(x.getStatusLine().getReasonPhrase(), org.apache.http.util.EntityUtils.toString(x.getEntity()));
+	}
+
+	@Test void c03_fluentSetters() {
+		var x = new Ok();
+		assertSame(x, x.setContent(new org.apache.http.entity.StringEntity("e", java.nio.charset.StandardCharsets.UTF_8)));
+		assertSame(x, x.setContent("s"));
+		assertSame(x, x.setLocale2(java.util.Locale.US));
+		assertSame(x, x.setProtocolVersion(HttpVersion.HTTP_1_0));
+		assertSame(x, x.setReasonPhrase2("R"));
+		assertSame(x, x.setReasonPhraseCatalog(org.apache.http.impl.EnglishReasonPhraseCatalog.INSTANCE));
+		assertSame(x, x.setStatusCode2(201));
+		assertSame(x, x.setStatusLine(org.apache.juneau.http.classic.BasicStatusLine.create(202, "Acc")));
+		assertEquals(202, x.getStatusLine().getStatusCode());
+		assertSame(x, x.setLocation("http://localhost/a"));
+		assertEquals("http://localhost/a", x.getFirstHeader("Location").getValue());
+		assertSame(x, x.setLocation(java.net.URI.create("http://localhost/b")));
+		assertEquals("http://localhost/b", x.getFirstHeader("Location").getValue());
+	}
+
+	@Test void c04_getEntity_defaultsToReasonPhrase_andToString() throws Exception {
+		var x = new Ok();
+		assertEquals("OK", org.apache.http.util.EntityUtils.toString(x.getEntity()));
+		assertSame(x.getEntity(), x.getEntity());
+		assertTrue(x.toString().contains("200"), x::toString);
+		var withoutContent = new Ok().setHeader2("X-A", "1");
+		assertFalse(withoutContent.toString().contains("StringEntity"), withoutContent::toString);
+		var withContent = new Ok().setContent("body");
+		assertNotEquals(withoutContent.toString(), withContent.toString());
+	}
+
+	@Test void c05_responseConstructor_copiesHeadersContentAndStatus() throws Exception {
+		var source = new Created().setHeader2("X-Test", "v").setContent("body");
+		var x = new Created((HttpResponse)source);
+		assertEquals(201, x.getStatusLine().getStatusCode());
+		assertEquals("v", x.getFirstHeader("X-Test").getValue());
+		assertEquals("body", org.apache.http.util.EntityUtils.toString(x.getEntity()));
+		assertThrows(IllegalArgumentException.class, () -> new Created((HttpResponse)null));
+	}
+
+	@Test void c06_equalsAndHashCode_distinguishContent() {
+		var x = new Ok().setHeader2("X-A", "1").setContent("body");
+		assertEquals(x, x);
+		assertNotEquals(x, "not a response");
+		assertNotEquals(x, new Ok().setHeader2("X-A", "2").setContent("body"));
+		assertNotEquals(x, new Ok().setHeader2("X-A", "1").setContent("other"));
+		assertNotEquals(x, new Created().setHeader2("X-A", "1").setContent("body"));
+		var shared = new Ok().setHeader2("X-A", "1").setContent("body");
+		var y = new Ok(shared);
+		assertEquals(shared, y);
+		assertEquals(shared.hashCode(), y.hashCode());
+	}
+
+	@Test void c07_unmodifiableRoot_rejectsHeaderAndStatusLineMutators() {
+		var u = new Ok().unmodifiable();
+		assertThrows(UnsupportedOperationException.class, () -> u.addHeader(H1));
+		assertThrows(UnsupportedOperationException.class, () -> u.setParams(null));
+		assertThrows(UnsupportedOperationException.class, () -> u.setLocation("http://localhost/x"));
+		assertThrows(UnsupportedOperationException.class, () -> u.setStatusLine(HttpVersion.HTTP_1_1, 200));
+		assertThrows(UnsupportedOperationException.class, () -> u.setStatusLine(HttpVersion.HTTP_1_1, 200, "OK"));
+		assertThrows(UnsupportedOperationException.class, () -> u.setStatusLine(new org.apache.http.message.BasicStatusLine(HttpVersion.HTTP_1_1, 200, "OK")));
 	}
 }

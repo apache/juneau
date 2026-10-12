@@ -95,6 +95,7 @@ final class ConsoleOutputChecks {
 	}
 
 	private static boolean isSafePath(String t) {
-		return RunViewChecks.isSameOriginPath(t.replace('\\', '/'));
+		// No backslash fold: the shared rule refuses any backslash, as juneau-console-output.js does.
+		return RunViewChecks.isSameOriginPath(t);
 	}
 }

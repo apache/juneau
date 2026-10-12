@@ -67,6 +67,7 @@ import org.apache.http.impl.client.*;
 import org.apache.http.impl.conn.*;
 import org.apache.http.params.*;
 import org.apache.http.protocol.*;
+import org.apache.http.ssl.SSLContexts;
 import org.apache.juneau.commons.*;
 import org.apache.juneau.commons.collections.*;
 import org.apache.juneau.commons.function.*;
@@ -1110,6 +1111,30 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		private HeaderList headerData;
 		private HttpClientBuilder httpClientBuilder;
 		private HttpClientConnectionManager connectionManager;
+		// The instance the default createConnectionManager() last returned; only that one can be given a pinned twin.
+		private HttpClientConnectionManager defaultConnectionManager;
+		// The socket-factory registry and pool settings of defaultConnectionManager, which its pinned twin shares.
+		private Registry<ConnectionSocketFactory> defaultRegistry;
+		private PoolSettings defaultPoolSettings;
+		// TLS and pool settings, applied to both pools of the connection manager the default createConnectionManager()
+		// builds (HttpClientBuilder ignores its own copies once a connection manager is set).
+		private HostnameVerifier sslHostnameVerifier;
+		private LayeredConnectionSocketFactory sslSocketFactory;
+		private SSLContext sslContext;
+		private int maxConnPerRoute;
+		private int maxConnTotal;
+		private ConnectionConfig defaultConnectionConfig;
+		private SocketConfig defaultSocketConfig;
+		private PublicSuffixMatcher publicSuffixMatcher;
+		private long connTimeToLive;
+		private TimeUnit connTimeToLiveTimeUnit;
+		private boolean systemProperties;
+		// Set by the default createHttpClient() to the two-pool router it installed for SSRF-guard-active @Remote calls.
+		private SsrfGuardConnectionManager ssrfGuard;
+		// Set by the default createHttpClient(): whether the default createConnectionManager() (not an override, which may
+		// hand the same instance to several clients) created both of ssrfGuard's pools, which no caller can then reach,
+		// so the client shuts them down on close() even when the connection manager is shared.
+		private boolean ownsConnectionManager;
 		private HttpPartParser.Creator partParser;
 		private HttpPartSerializer.Creator partSerializer;
 		private Level logRequestsLevel;
@@ -1407,8 +1432,15 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * </p>
 		 *
 		 * <h5 class='section'>Notes:</h5><ul>
+		 * 	<li class='warn'>The SSRF guard of {@code @Remote} calls depends on the request running on the calling thread,
+		 * 		which this client cannot guarantee for a custom handler.  So a client with any handler other than
+		 * 		{@link BasicRestCallHandler} itself, or with a {@code BasicRestCallHandler} bound to a different client
+		 * 		(through {@code impl(...)}), refuses every SSRF-guard-active {@code @Remote} call (one without the
+		 * 		{@link #allowPrivateUrls(boolean) allowPrivateUrls} opt-in).  Ordinary requests are unaffected.
 		 * 	<li class='note'>
 		 * 		The {@link RestClient#run(HttpHost, HttpRequest, HttpContext)} method can also be overridden to produce the same results.
+		 * 		The same SSRF restriction applies: a client whose class overrides that method or either
+		 * 		{@code execute(...)} overload it dispatches to refuses SSRF-guard-active {@code @Remote} calls too.
 		 * 	<li class='note'>
 		 * 		Use {@link org.apache.juneau.commons.inject.BeanInstantiator.Builder} <c>impl(Object)</c> to specify an already instantiated instance.
 		 * 	<li class='note'>
@@ -1480,6 +1512,12 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		/**
 		 * Assigns {@link HttpClientConnectionManager} instance.
 		 *
+		 * <h5 class='section'>Notes:</h5><ul>
+		 * 	<li class='warn'>This client cannot pin the connections of a connection manager it did not create, so a
+		 * 		client built with one refuses every SSRF-guard-active {@code @Remote} call (one without the
+		 * 		{@link #allowPrivateUrls(boolean) allowPrivateUrls} opt-in).  Ordinary requests are unaffected.
+		 * </ul>
+		 *
 		 * @param value New property value.
 		 * 	<br>Can be <jk>null</jk> (value will not be set, a default connection manager will be created).
 		 * @return This object.
@@ -1496,6 +1534,15 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 *
 		 * <h5 class='section'>Notes:</h5><ul>
 		 * 	<li class='note'>If the connection manager is shared its life-cycle is expected to be managed by the caller and it will not be shut down if the client is closed.
+		 * 		This applies to a connection manager supplied through {@link #connectionManager(HttpClientConnectionManager)}
+		 * 		or returned by an overridden {@link #createConnectionManager()} (even one that calls {@code super}, since the
+		 * 		override may hand the same instance to several clients).  The connection manager the default
+		 * 		{@link #createConnectionManager()} builds for a client cannot be reached by the caller, so it is never
+		 * 		shared: {@link RestClient#close()} shuts it down.
+		 * 	<li class='note'>The client's internal pool for SSRF-guard-active {@code @Remote} calls (see {@link #createConnectionManager()})
+		 * 		is never shared, and {@link RestClient#close()} still shuts it down.  Combined with {@link #keepHttpClientOpen()},
+		 * 		though, nothing shuts that internal pool (or the default connection manager) down; their connections stay
+		 * 		open until they are closed as idle or the JVM exits.
 		 * </ul>
 		 *
 		 * @param shared New property value.
@@ -1524,7 +1571,11 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * Sets maximum time to live for persistent connections.
 		 *
 		 * <h5 class='section'>Notes:</h5><ul>
-		 * 	<li class='note'>This value can be overridden by the {@link #connectionManager(HttpClientConnectionManager)} method.
+		 * 	<li class='note'>It is applied to both pools of the connection manager the default {@link #createConnectionManager()}
+		 * 		builds.  It has no effect on a connection manager supplied through
+		 * 		{@link #connectionManager(HttpClientConnectionManager)} or an overridden {@link #createConnectionManager()}.
+		 * 	<li class='note'>A positive value makes that connection manager a {@link PoolingHttpClientConnectionManager}, as
+		 * 		{@link #pooled()} does: {@link BasicHttpClientConnectionManager} has no time-to-live.
 		 * </ul>
 		 *
 		 * @param connTimeToLive New property value.
@@ -1534,6 +1585,8 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * @see HttpClientBuilder#setConnectionTimeToLive(long,TimeUnit)
 		 */
 		public SELF connectionTimeToLive(long connTimeToLive, TimeUnit connTimeToLiveTimeUnit) {
+			this.connTimeToLive = connTimeToLive;
+			this.connTimeToLiveTimeUnit = connTimeToLiveTimeUnit;
 			httpClientBuilder().setConnectionTimeToLive(connTimeToLive, connTimeToLiveTimeUnit);
 			return self();
 		}
@@ -1665,7 +1718,9 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * Assigns default {@link ConnectionConfig}.
 		 *
 		 * <h5 class='section'>Notes:</h5><ul>
-		 * 	<li class='note'>This value can be overridden by the {@link #connectionManager(HttpClientConnectionManager)} method.
+		 * 	<li class='note'>It is applied to both pools of the connection manager the default {@link #createConnectionManager()}
+		 * 		builds.  It has no effect on a connection manager supplied through
+		 * 		{@link #connectionManager(HttpClientConnectionManager)} or an overridden {@link #createConnectionManager()}.
 		 * </ul>
 		 *
 		 * @param config New property value.
@@ -1674,6 +1729,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * @see HttpClientBuilder#setDefaultConnectionConfig(ConnectionConfig)
 		 */
 		public SELF defaultConnectionConfig(ConnectionConfig config) {
+			this.defaultConnectionConfig = config;
 			httpClientBuilder().setDefaultConnectionConfig(config);
 			return self();
 		}
@@ -1734,7 +1790,9 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * Assigns default {@link SocketConfig}.
 		 *
 		 * <h5 class='section'>Notes:</h5><ul>
-		 * 	<li class='note'>This value can be overridden by the {@link #connectionManager(HttpClientConnectionManager)} method.
+		 * 	<li class='note'>It is applied to both pools of the connection manager the default {@link #createConnectionManager()}
+		 * 		builds.  It has no effect on a connection manager supplied through
+		 * 		{@link #connectionManager(HttpClientConnectionManager)} or an overridden {@link #createConnectionManager()}.
 		 * </ul>
 		 *
 		 * @param config New property value.
@@ -1743,6 +1801,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * @see HttpClientBuilder#setDefaultSocketConfig(SocketConfig)
 		 */
 		public SELF defaultSocketConfig(SocketConfig config) {
+			this.defaultSocketConfig = config;
 			httpClientBuilder().setDefaultSocketConfig(config);
 			return self();
 		}
@@ -2608,6 +2667,47 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * 		.build();
 		 * </p>
 		 *
+		 * <h5 class='section'>Notes:</h5><ul>
+		 * 	<li class='note'>The TLS and connection-pool settings Apache {@link HttpClientBuilder} applies only to a
+		 * 		connection manager it builds itself
+		 * 		({@link HttpClientBuilder#setSSLContext(SSLContext) setSSLContext},
+		 * 		{@link HttpClientBuilder#setSSLSocketFactory(LayeredConnectionSocketFactory) setSSLSocketFactory},
+		 * 		{@link HttpClientBuilder#setSSLHostnameVerifier(HostnameVerifier) setSSLHostnameVerifier},
+		 * 		{@link HttpClientBuilder#setPublicSuffixMatcher(PublicSuffixMatcher) setPublicSuffixMatcher},
+		 * 		{@link HttpClientBuilder#setMaxConnTotal(int) setMaxConnTotal},
+		 * 		{@link HttpClientBuilder#setMaxConnPerRoute(int) setMaxConnPerRoute},
+		 * 		{@link HttpClientBuilder#setConnectionTimeToLive(long, TimeUnit) setConnectionTimeToLive},
+		 * 		{@link HttpClientBuilder#setDefaultSocketConfig(SocketConfig) setDefaultSocketConfig},
+		 * 		{@link HttpClientBuilder#setDefaultConnectionConfig(ConnectionConfig) setDefaultConnectionConfig},
+		 * 		{@link HttpClientBuilder#setDnsResolver(DnsResolver) setDnsResolver} and
+		 * 		{@link HttpClientBuilder#useSystemProperties() useSystemProperties}) are read from the given builder and
+		 * 		applied to the connection manager the default {@link #createConnectionManager()} builds (see there).
+		 * 	<li class='note'>These connection-manager settings, made through a method of this builder before this method is
+		 * 		called, are applied too, and win over the same setting on the given builder:
+		 * 		{@link #sslContext(SSLContext) sslContext},
+		 * 		{@link #sslSocketFactory(LayeredConnectionSocketFactory) sslSocketFactory},
+		 * 		{@link #sslHostnameVerifier(HostnameVerifier) sslHostnameVerifier},
+		 * 		{@link #publicSuffixMatcher(PublicSuffixMatcher) publicSuffixMatcher} (for the default hostname verifier only:
+		 * 		its use for cookies is lost with the replaced builder),
+		 * 		{@link #maxConnTotal(int) maxConnTotal}, {@link #maxConnPerRoute(int) maxConnPerRoute}, {@link #pooled() pooled},
+		 * 		{@link #connectionTimeToLive(long, TimeUnit) connectionTimeToLive},
+		 * 		{@link #defaultSocketConfig(SocketConfig) defaultSocketConfig},
+		 * 		{@link #defaultConnectionConfig(ConnectionConfig) defaultConnectionConfig} and the TLS and
+		 * 		{@code http.maxConnections} system properties of {@link #useSystemProperties()}.  Every other setting made
+		 * 		through this builder before this method is called (interceptors, proxy, the rest of
+		 * 		{@code useSystemProperties()}, and so on) was made on the replaced builder and is lost.
+		 * 	<li class='note'>For these connection-manager settings, a value set through a method of this builder always wins
+		 * 		over the same setting on the {@code HttpClientBuilder}, whichever was set last: unlike Apache's own
+		 * 		last-write-wins, a later {@code httpClientBuilder().setDefaultSocketConfig(...)} (and so on) does not
+		 * 		override an earlier {@link #defaultSocketConfig(SocketConfig) defaultSocketConfig(...)}.
+		 * 	<li class='note'>As in Apache {@code HttpClientBuilder}, an SSL socket factory wins over an SSL context wherever
+		 * 		each was set: a {@link HttpClientBuilder#setSSLSocketFactory(LayeredConnectionSocketFactory) setSSLSocketFactory}
+		 * 		on the given builder wins over an earlier {@link #sslContext(SSLContext) sslContext}.
+		 * 	<li class='warn'>A socket factory set with {@code setSSLSocketFactory} on the given builder is used for
+		 * 		SSRF-guard-active {@code @Remote} calls too, and must connect to exactly the address it is given (see
+		 * 		{@link #sslSocketFactory(LayeredConnectionSocketFactory)}).
+		 * </ul>
+		 *
 		 * @param value The {@link HttpClientBuilder} that will be used to create the {@link HttpClient} used by {@link RestClient}.
 		 * 	<br>Can be <jk>null</jk> (a default builder will be created).
 		 * @return This object.
@@ -2956,11 +3056,14 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * 			bean context property setters (e.g. {@link #swaps(Class...)}) defined on this builder class.
 		 * 	</ul>
 		 * <p>
-		 * 	<c>Accept</c> request header will be set to <js>"application/json"</js> unless overridden
+		 * 	<c>Accept</c> request header will be set to <js>"application/json5"</js> unless overridden
 		 * 		via {@link #headers()}, or per-request via {@link RestRequest#header(Header)}.
 		 * <p>
 		 * 	<c>Content-Type</c> request header will be set to <js>"application/json5"</js> unless overridden
 		 * 		via {@link #headers()}, or per-request via {@link RestRequest#header(Header)}.
+		 * <p>
+		 * 	A server that only handles JSON may reply <c>406 Not Acceptable</c> or <c>415 Unsupported Media Type</c> to these
+		 * 	JSON5 media types.
 		 * <p>
 		 * 	Can be combined with other marshaller setters such as {@link #xml()} to provide support for multiple languages.
 		 * 	<ul>
@@ -3029,6 +3132,13 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 *
 		 * 	<jv>client</jv>.closeQuietly();  <jc>// Customized HttpClient won't be closed.</jc>
 		 * </p>
+		 *
+		 * <h5 class='section'>Notes:</h5><ul>
+		 * 	<li class='note'>When combined with {@link #connectionManagerShared(boolean) connectionManagerShared(true)}, the
+		 * 		client's internal pool for SSRF-guard-active {@code @Remote} calls (see {@link #createConnectionManager()}) and
+		 * 		the connection manager the default {@code createConnectionManager()} built are not shut down either, and
+		 * 		nothing else shuts them down; their connections stay open until they are closed as idle or the JVM exits.
+		 * </ul>
 		 *
 		 * @return This object.
 		 */
@@ -3254,7 +3364,11 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * Assigns maximum connection per route value.
 		 *
 		 * <h5 class='section'>Notes:</h5><ul>
-		 * 	<li class='note'>This value can be overridden by the {@link #connectionManager(HttpClientConnectionManager)} method.
+		 * 	<li class='note'>A positive value is applied to the connection manager the default
+		 * 		{@link #createConnectionManager()} builds, which is then always a {@link PoolingHttpClientConnectionManager}
+		 * 		(as if {@link #pooled()} had been called), and to its internal pool for SSRF-guard-active {@code @Remote} calls.
+		 * 	<li class='note'>It has no effect on a connection manager supplied through
+		 * 		{@link #connectionManager(HttpClientConnectionManager)} or an overridden {@link #createConnectionManager()}.
 		 * </ul>
 		 *
 		 * @param maxConnPerRoute New property value.
@@ -3262,6 +3376,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * @see HttpClientBuilder#setMaxConnPerRoute(int)
 		 */
 		public SELF maxConnPerRoute(int maxConnPerRoute) {
+			this.maxConnPerRoute = maxConnPerRoute;
 			httpClientBuilder().setMaxConnPerRoute(maxConnPerRoute);
 			return self();
 		}
@@ -3270,7 +3385,12 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * Assigns maximum total connection value.
 		 *
 		 * <h5 class='section'>Notes:</h5><ul>
-		 * 	<li class='note'>This value can be overridden by the {@link #connectionManager(HttpClientConnectionManager)} method.
+		 * 	<li class='note'>A positive value is applied to the connection manager the default
+		 * 		{@link #createConnectionManager()} builds, which is then always a {@link PoolingHttpClientConnectionManager}
+		 * 		(as if {@link #pooled()} had been called), and to its internal pool for SSRF-guard-active {@code @Remote} calls.
+		 * 		Each pool applies the limit on its own (see {@link #createConnectionManager()}).
+		 * 	<li class='note'>It has no effect on a connection manager supplied through
+		 * 		{@link #connectionManager(HttpClientConnectionManager)} or an overridden {@link #createConnectionManager()}.
 		 * </ul>
 		 *
 		 * @param maxConnTotal New property value.
@@ -3278,6 +3398,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * @see HttpClientBuilder#setMaxConnTotal(int)
 		 */
 		public SELF maxConnTotal(int maxConnTotal) {
+			this.maxConnTotal = maxConnTotal;
 			httpClientBuilder().setMaxConnTotal(maxConnTotal);
 			return self();
 		}
@@ -4231,6 +4352,11 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 *
 		 * <h5 class='section'>Notes:</h5><ul>
 		 * 	<li class='note'>This value can be overridden by the {@link #routePlanner(HttpRoutePlanner)} method.
+		 * 	<li class='warn'>Through a proxy, the SSRF guard's pin-on-connect would check the proxy's address rather than
+		 * 		the target's, so an SSRF-guard-active {@code @Remote} call (one without the
+		 * 		{@link #allowPrivateUrls(boolean) allowPrivateUrls} opt-in) on a proxy route is refused.  This applies to any
+		 * 		proxy route, including one chosen by a {@link #routePlanner(HttpRoutePlanner) route planner} or the proxy
+		 * 		system properties ({@link #useSystemProperties()}).  Ordinary requests are unaffected.
 		 * </ul>
 		 *
 		 * @param proxy New property value.
@@ -4261,6 +4387,10 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 *
 		 * <h5 class='section'>Notes:</h5><ul>
 		 * 	<li class='note'>Instances of this class can be created with {@link PublicSuffixMatcherLoader}.
+		 * 	<li class='note'>It is used for cookies and, in both pools of the connection manager the default
+		 * 		{@link #createConnectionManager()} builds, by the default hostname verifier (one is used unless
+		 * 		{@link #sslHostnameVerifier(HostnameVerifier)} or {@link #sslSocketFactory(LayeredConnectionSocketFactory)}
+		 * 		is set).
 		 * </ul>
 		 *
 		 * @param publicSuffixMatcher New property value.
@@ -4269,6 +4399,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * @see HttpClientBuilder#setPublicSuffixMatcher(PublicSuffixMatcher)
 		 */
 		public SELF publicSuffixMatcher(PublicSuffixMatcher publicSuffixMatcher) {
+			this.publicSuffixMatcher = publicSuffixMatcher;
 			httpClientBuilder().setPublicSuffixMatcher(publicSuffixMatcher);
 			return self();
 		}
@@ -5086,9 +5217,20 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		/**
 		 * Assigns {@link SSLContext} instance.
 		 *
+		 * <p>
+		 * The context (for example one initialized with a custom trust store) is used for {@code https} connections, with
+		 * the {@link #sslHostnameVerifier(HostnameVerifier) hostname verifier} if one is set, or the default one.
+		 *
 		 * <h5 class='section'>Notes:</h5><ul>
-		 * 	<li class='note'>This value can be overridden by the {@link #connectionManager(HttpClientConnectionManager)}
-		 *  	and the {@link #sslSocketFactory(LayeredConnectionSocketFactory)} methods.
+		 * 	<li class='note'>It is applied to the connection manager the default {@link #createConnectionManager()} builds, for
+		 * 		both ordinary requests and the internal pool for SSRF-guard-active {@code @Remote} calls.  It has no effect on
+		 * 		a connection manager supplied through {@link #connectionManager(HttpClientConnectionManager)} or an overridden
+		 * 		{@link #createConnectionManager()}, which carries its own socket factories.
+		 * 	<li class='note'>An {@link #sslSocketFactory(LayeredConnectionSocketFactory) SSL socket factory} takes precedence
+		 * 		over this value, including one set with
+		 * 		{@link HttpClientBuilder#setSSLSocketFactory(LayeredConnectionSocketFactory) setSSLSocketFactory} on a builder
+		 * 		passed to {@link #httpClientBuilder(HttpClientBuilder)} after this value was set (as in Apache
+		 * 		{@code HttpClientBuilder}).
 		 * </ul>
 		 *
 		 * @param sslContext New property value.
@@ -5097,6 +5239,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * @see HttpClientBuilder#setSSLContext(SSLContext)
 		 */
 		public SELF sslContext(SSLContext sslContext) {
+			this.sslContext = sslContext;
 			httpClientBuilder().setSSLContext(sslContext);
 			return self();
 		}
@@ -5105,8 +5248,15 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * Assigns {@link HostnameVerifier} instance.
 		 *
 		 * <h5 class='section'>Notes:</h5><ul>
-		 * 	<li class='note'>This value can be overridden by the {@link #connectionManager(HttpClientConnectionManager)}
-		 * 		and the {@link #sslSocketFactory(LayeredConnectionSocketFactory)} methods.
+		 * 	<li class='note'>It is applied to the connection manager the default {@link #createConnectionManager()} builds, for
+		 * 		both ordinary requests and the internal pool for SSRF-guard-active {@code @Remote} calls.  It has no effect on
+		 * 		a connection manager supplied through {@link #connectionManager(HttpClientConnectionManager)} or an overridden
+		 * 		{@link #createConnectionManager()}, which carries its own socket factories.
+		 * 	<li class='note'>An {@link #sslSocketFactory(LayeredConnectionSocketFactory) SSL socket factory} takes precedence
+		 * 		over this value, including one set with
+		 * 		{@link HttpClientBuilder#setSSLSocketFactory(LayeredConnectionSocketFactory) setSSLSocketFactory} on a builder
+		 * 		passed to {@link #httpClientBuilder(HttpClientBuilder)} after this value was set (as in Apache
+		 * 		{@code HttpClientBuilder}).
 		 * </ul>
 		 *
 		 * @param hostnameVerifier New property value.
@@ -5115,6 +5265,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * @see HttpClientBuilder#setSSLHostnameVerifier(HostnameVerifier)
 		 */
 		public SELF sslHostnameVerifier(HostnameVerifier hostnameVerifier) {
+			this.sslHostnameVerifier = hostnameVerifier;
 			httpClientBuilder().setSSLHostnameVerifier(hostnameVerifier);
 			return self();
 		}
@@ -5122,8 +5273,22 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		/**
 		 * Assigns {@link LayeredConnectionSocketFactory} instance.
 		 *
+		 * <p>
+		 * The factory is used for {@code https} connections, in place of one built from the
+		 * {@link #sslContext(SSLContext) SSL context} and {@link #sslHostnameVerifier(HostnameVerifier) hostname verifier}.
+		 *
 		 * <h5 class='section'>Notes:</h5><ul>
-		 * 	<li class='note'>This value can be overridden by the {@link #connectionManager(HttpClientConnectionManager)} method.
+		 * 	<li class='note'>It is applied to the connection manager the default {@link #createConnectionManager()} builds, for
+		 * 		both ordinary requests and the internal pool for SSRF-guard-active {@code @Remote} calls.  It has no effect on
+		 * 		a connection manager supplied through {@link #connectionManager(HttpClientConnectionManager)} or an overridden
+		 * 		{@link #createConnectionManager()}, which carries its own socket factories.
+		 * 	<li class='warn'>For SSRF-guard-active {@code @Remote} calls, the factory is given the address the SSRF pin has
+		 * 		already checked (the {@code remoteAddress} of
+		 * 		{@link ConnectionSocketFactory#connectSocket(int, Socket, HttpHost, InetSocketAddress, InetSocketAddress, HttpContext) connectSocket}).
+		 * 		It must connect to exactly that address: a factory that ignores it and connects by host name (resolving
+		 * 		the name again) bypasses the pin.  The same holds for a factory set with
+		 * 		{@link HttpClientBuilder#setSSLSocketFactory(LayeredConnectionSocketFactory) setSSLSocketFactory} on a
+		 * 		builder passed to {@link #httpClientBuilder(HttpClientBuilder)}.
 		 * </ul>
 		 *
 		 * @param sslSocketFactory New property value.
@@ -5132,6 +5297,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * @see HttpClientBuilder#setSSLSocketFactory(LayeredConnectionSocketFactory)
 		 */
 		public SELF sslSocketFactory(LayeredConnectionSocketFactory sslSocketFactory) {
+			this.sslSocketFactory = sslSocketFactory;
 			httpClientBuilder().setSSLSocketFactory(sslSocketFactory);
 			return self();
 		}
@@ -5640,10 +5806,24 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		/**
 		 * Use system properties when creating and configuring default implementations.
 		 *
+		 * <h5 class='section'>Notes:</h5><ul>
+		 * 	<li class='note'>The system properties Apache {@link HttpClientBuilder} reads for its own connection manager
+		 * 		apply to both pools of the connection manager the default {@link #createConnectionManager()} builds, as
+		 * 		Apache applies them: with no {@link #sslContext(SSLContext) sslContext} or
+		 * 		{@link #sslSocketFactory(LayeredConnectionSocketFactory) sslSocketFactory}, {@code https} uses the JVM's
+		 * 		default SSL socket factory (the {@code javax.net.ssl.*} trust and key stores); {@code https.protocols} and
+		 * 		{@code https.cipherSuites} restrict the TLS versions and cipher suites (unless an {@code sslSocketFactory}
+		 * 		is set); and unless {@code http.keepAlive} is {@code false}, {@code http.maxConnections} (default 5) limits
+		 * 		the connections per route, and twice that in total, which makes the connection manager a pooling one.
+		 * 		{@link #maxConnTotal(int)} and {@link #maxConnPerRoute(int)} win over that limit.
+		 * 	<li class='note'>The proxy system properties apply too (see {@link #proxy(HttpHost)}).
+		 * </ul>
+		 *
 		 * @return This object.
 		 * @see HttpClientBuilder#useSystemProperties()
 		 */
 		public SELF useSystemProperties() {
+			this.systemProperties = true;
 			httpClientBuilder().useSystemProperties();
 			return self();
 		}
@@ -5786,8 +5966,47 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * Subclasses can override this method to provide their own connection manager.
 		 *
 		 * <p>
-		 * The default implementation returns an instance of a {@link PoolingHttpClientConnectionManager} if {@link #pooled()}
-		 * was called or {@link BasicHttpClientConnectionManager} if not..
+		 * The default implementation returns a new {@link PoolingHttpClientConnectionManager} if {@link #pooled()},
+		 * {@link #maxConnTotal(int)}, {@link #maxConnPerRoute(int)} or a positive
+		 * {@link #connectionTimeToLive(long, TimeUnit) connectionTimeToLive} was set, or the {@code http.maxConnections}
+		 * limit of {@link #useSystemProperties()} applies (unless {@code http.keepAlive} is {@code false}), or a new
+		 * {@link BasicHttpClientConnectionManager} if not.  It applies the {@link #sslContext(SSLContext) sslContext},
+		 * {@link #sslSocketFactory(LayeredConnectionSocketFactory) sslSocketFactory},
+		 * {@link #sslHostnameVerifier(HostnameVerifier) sslHostnameVerifier}, {@code maxConnTotal} and {@code maxConnPerRoute}
+		 * settings, which Apache {@link HttpClientBuilder} ignores once a connection manager is set.  It also applies, to
+		 * both pools, the other settings Apache {@code HttpClientBuilder} applies only to a connection manager it builds
+		 * itself, whether made through this builder or directly on the {@link #httpClientBuilder() HttpClientBuilder}:
+		 * {@link #publicSuffixMatcher(PublicSuffixMatcher) publicSuffixMatcher} (for the default hostname verifier),
+		 * {@link #defaultSocketConfig(SocketConfig) defaultSocketConfig},
+		 * {@link #defaultConnectionConfig(ConnectionConfig) defaultConnectionConfig},
+		 * {@link #connectionTimeToLive(long, TimeUnit) connectionTimeToLive} (which, like {@code maxConnTotal} and
+		 * {@code maxConnPerRoute}, makes it a {@code PoolingHttpClientConnectionManager}) and the TLS and
+		 * {@code http.maxConnections} system properties of {@link #useSystemProperties()}.  A
+		 * {@link HttpClientBuilder#setDnsResolver(DnsResolver) DNS resolver} set on the {@code HttpClientBuilder} is used
+		 * for ordinary requests only: SSRF-guard-active {@code @Remote} calls always resolve through the SSRF pin.
+		 * Each of these settings made through this builder also survives {@link #httpClientBuilder(HttpClientBuilder)}
+		 * replacing the {@code HttpClientBuilder}, and always wins over the same setting on the {@code HttpClientBuilder},
+		 * whichever was set last (unlike Apache's own last-write-wins).  An SSL socket factory wins over any SSL context,
+		 * wherever each was set.  The {@code HttpClientBuilder}'s settings are read from its fields (it has no getters);
+		 * if they cannot be read, this method throws an {@link IllegalStateException} rather than ignore them.
+		 *
+		 * <p>
+		 * Each {@link #build()} calls this method again, so a builder reused after {@code build()} gives every client its
+		 * own connection manager (closing one client does not shut down another's).  A connection manager supplied through
+		 * {@link #connectionManager(HttpClientConnectionManager)} is used as is by every client built.
+		 *
+		 * <p>
+		 * SSRF-guard-active {@code @Remote} calls do not use this connection manager: the default
+		 * {@link #createHttpClient()} pairs it with a second, dedicated one whose connections are all opened through the
+		 * SSRF pin, so that a guarded call never reuses a connection an ordinary request opened.  It can only do that
+		 * for the instance this default implementation returns.  If an override returns any other connection manager,
+		 * the client refuses every SSRF-guard-active {@code @Remote} call (one without the
+		 * {@link #allowPrivateUrls(boolean) allowPrivateUrls} opt-in).
+		 *
+		 * <p>
+		 * The dedicated connection manager copies this one's settings before each guarded call, but it is a separate pool:
+		 * limits such as {@link PoolingHttpClientConnectionManager#setMaxTotal(int) maxTotal} apply to each pool on its
+		 * own, so a client that mixes ordinary and guarded calls can hold up to twice as many open connections.
 		 *
 		 * <h5 class='section'>Example:</h5>
 		 * <p class='bjava'>
@@ -5806,17 +6025,100 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * @return The connection manager to use.
 		 */
 		protected HttpClientConnectionManager createConnectionManager() {
-			// A DnsResolver that pin-on-connects SSRF-guard-active @Remote connections (see PolicyPinningDnsResolver)
-			// while leaving ordinary connections on the default registry (matching Apache HttpClientBuilder's own
-			// unconfigured default) completely unaffected.
-			var registry = RegistryBuilder.<ConnectionSocketFactory>create()
-				.register("http", PlainConnectionSocketFactory.getSocketFactory())
-				.register("https", SSLConnectionSocketFactory.getSocketFactory())
-				.build();
-			return pooled
-				? new PoolingHttpClientConnectionManager(registry, PolicyPinningDnsResolver.INSTANCE)
-				: new BasicHttpClientConnectionManager(registry, null, null, PolicyPinningDnsResolver.INSTANCE);
+			var s = HttpClientBuilderSettings.of(httpClientBuilder());
+			defaultRegistry = socketFactoryRegistry(s);
+			defaultPoolSettings = poolSettings(s);
+			defaultConnectionManager = newConnectionManager(defaultRegistry, or(s.dnsResolver(), SystemDefaultDnsResolver.INSTANCE), defaultPoolSettings);
+			return defaultConnectionManager;
 		}
+
+		// The socket factories for the TLS settings, chosen as Apache HttpClientBuilder chooses them when it builds its own
+		// connection manager: the SSL socket factory, else one on the SSL context (else the JVM's default socket factory
+		// under useSystemProperties(), else a default context) with the hostname verifier (else the default verifier on
+		// the public suffix matcher) and, under useSystemProperties(), the https.protocols and https.cipherSuites.
+		// A setting made through this builder always wins over the same setting read from the HttpClientBuilder, whichever
+		// was set last.  The two differ when httpClientBuilder(...) replaced the builder after the setting was made, or when
+		// the setting was later made again directly on httpClientBuilder().  As in Apache, a socket factory wins over any
+		// SSL context, wherever each was set.
+		private Registry<ConnectionSocketFactory> socketFactoryRegistry(HttpClientBuilderSettings s) {
+			var https = or(sslSocketFactory, s.sslSocketFactory());
+			if (https == null) {
+				var sysProps = systemProperties || s.systemProperties();
+				var protocols = sysProps ? splitSystemProperty("https.protocols") : null;
+				var cipherSuites = sysProps ? splitSystemProperty("https.cipherSuites") : null;
+				var verifier = or(sslHostnameVerifier, s.hostnameVerifier());
+				if (verifier == null)
+					verifier = new DefaultHostnameVerifier(or(publicSuffixMatcher, s.publicSuffixMatcher(), PublicSuffixMatcherLoader.getDefault()));
+				var context = or(sslContext, s.sslContext());
+				if (nn(context))
+					https = new SSLConnectionSocketFactory(context, protocols, cipherSuites, verifier);
+				else if (sysProps)
+					https = new SSLConnectionSocketFactory((javax.net.ssl.SSLSocketFactory)javax.net.ssl.SSLSocketFactory.getDefault(), protocols, cipherSuites, verifier);
+				else
+					https = new SSLConnectionSocketFactory(SSLContexts.createDefault(), verifier);
+			}
+			return RegistryBuilder.<ConnectionSocketFactory>create()
+				.register("http", PlainConnectionSocketFactory.getSocketFactory())
+				.register("https", https)
+				.build();
+		}
+
+		private static String[] splitSystemProperty(String name) {
+			var v = System.getProperty(name);
+			return ib(v) ? null : v.split(" *, *");
+		}
+
+		// The pool settings, applied as Apache HttpClientBuilder applies them to its own connection manager.  The
+		// http.maxConnections limit (default 5) of useSystemProperties() applies per route, and twice that in total,
+		// unless http.keepAlive is off; maxConnTotal and maxConnPerRoute win over it.  Any limit or a time-to-live
+		// makes the manager a pooling one: BasicHttpClientConnectionManager has neither.
+		private PoolSettings poolSettings(HttpClientBuilderSettings s) {
+			var systemMax = (systemProperties || s.systemProperties()) && "true".equalsIgnoreCase(System.getProperty("http.keepAlive", "true"))
+				? Integer.parseInt(System.getProperty("http.maxConnections", "5")) : 0;
+			var maxTotal = maxConnTotal > 0 ? maxConnTotal : s.maxConnTotal() > 0 ? s.maxConnTotal() : 2 * systemMax;
+			var maxPerRoute = maxConnPerRoute > 0 ? maxConnPerRoute : s.maxConnPerRoute() > 0 ? s.maxConnPerRoute() : systemMax;
+			var ownTtl = connTimeToLive > 0;
+			var ttl = ownTtl ? connTimeToLive : s.connTimeToLive();
+			var ttlUnit = ownTtl ? connTimeToLiveTimeUnit : s.connTimeToLiveTimeUnit();
+			var pooling = pooled || maxTotal > 0 || maxPerRoute > 0 || ttl > 0;
+			return new PoolSettings(pooling, maxTotal, maxPerRoute, ttl, or(ttlUnit, TimeUnit.MILLISECONDS),
+				or(defaultSocketConfig, s.socketConfig()), or(defaultConnectionConfig, s.connectionConfig()));
+		}
+
+		private static boolean overridesCreateConnectionManager(Class<?> c) {
+			for (var x = c; x != Builder.class; x = x.getSuperclass()) {
+				try {
+					x.getDeclaredMethod("createConnectionManager");
+					return true;
+				} catch (@SuppressWarnings("unused") NoSuchMethodException e) { /* Not declared here. */ }
+			}
+			return false;
+		}
+
+		private static HttpClientConnectionManager newConnectionManager(Registry<ConnectionSocketFactory> registry, DnsResolver dnsResolver, PoolSettings p) {
+			if (! p.pooling()) {
+				var cm = new BasicHttpClientConnectionManager(registry, null, null, dnsResolver);
+				if (nn(p.socketConfig()))
+					cm.setSocketConfig(p.socketConfig());
+				if (nn(p.connectionConfig()))
+					cm.setConnectionConfig(p.connectionConfig());
+				return cm;
+			}
+			var cm = new PoolingHttpClientConnectionManager(registry, null, null, dnsResolver, p.timeToLive(), p.timeToLiveUnit());
+			if (nn(p.socketConfig()))
+				cm.setDefaultSocketConfig(p.socketConfig());
+			if (nn(p.connectionConfig()))
+				cm.setDefaultConnectionConfig(p.connectionConfig());
+			if (p.maxTotal() > 0)
+				cm.setMaxTotal(p.maxTotal());
+			if (p.maxPerRoute() > 0)
+				cm.setDefaultMaxPerRoute(p.maxPerRoute());
+			return cm;
+		}
+
+		// The settings both pools of the default connection manager are built with.
+		private record PoolSettings(boolean pooling, int maxTotal, int maxPerRoute, long timeToLive, TimeUnit timeToLiveUnit,
+			SocketConfig socketConfig, ConnectionConfig connectionConfig) {}
 
 		/**
 		 * Creates the builder for the form data list.
@@ -5882,10 +6184,21 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * @return The HTTP client to use.
 		 */
 		protected CloseableHttpClient createHttpClient() {
-			if (connectionManager == null)
-				connectionManager = createConnectionManager();
-			httpClientBuilder().setConnectionManager(connectionManager);
-			httpClientBuilder().addInterceptorLast(new ClassicRedirectCredentialGuard());
+			// A new connection manager for each client unless the caller supplied one: closing a client shuts its
+			// connection manager down, so a reused builder must not hand an earlier client's to the next one.
+			var cm = nn(connectionManager) ? connectionManager : createConnectionManager();
+			// Only a connection manager this builder created can be given a pinned twin; for any other one, the client
+			// reports the SSRF guard as unsupported and refuses guarded @Remote calls.  The twin is built from the same
+			// socket factories and pool settings as cm (defaultRegistry and defaultPoolSettings), so it is the same kind;
+			// settings an override applied to the cm instance afterwards reach it before each guarded lease.
+			ssrfGuard = nn(cm) && cm == defaultConnectionManager ? new SsrfGuardConnectionManager(cm, newConnectionManager(defaultRegistry, PolicyPinningDnsResolver.INSTANCE, defaultPoolSettings)) : null;
+			ownsConnectionManager = nn(ssrfGuard) && connectionManager == null && ! overridesCreateConnectionManager(getClass());
+			if (nn(ssrfGuard))
+				cm = ssrfGuard;
+			httpClientBuilder().setConnectionManager(cm);
+			// Once per HttpClientBuilder: a builder reused after build() keeps the interceptors earlier builds added.
+			if (! HttpClientBuilderSettings.hasLastRequestInterceptor(httpClientBuilder(), ClassicRedirectCredentialGuard.class))
+				httpClientBuilder().addInterceptorLast(new ClassicRedirectCredentialGuard());
 			httpClientBuilder().setRedirectStrategy(new PolicyAwareRedirectStrategy());
 			return httpClientBuilder().build();
 		}
@@ -6054,6 +6367,13 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 	private final boolean executorServiceShutdownOnClose;
 	private final boolean logToConsole;
 	private final boolean ssrfPolicySupported;
+
+	// Why SSRF-guard-active @Remote calls are refused, or null if they are supported.
+	private final String ssrfRefusal;
+	// The two-pool router this client's HttpClient uses, or null when the SSRF guard is unsupported.
+	private final SsrfGuardConnectionManager ssrfGuard;
+
+	private final boolean ownsConnectionManager;
 	private final AtomicBoolean isClosed = new AtomicBoolean(false);
 	private final AtomicReference<ExecutorService> executorService = new AtomicReference<>();
 
@@ -6077,7 +6397,11 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		formData = builder.formData().copy();
 		headerData = builder.headers().copy();
 		httpClient = builder.getHttpClient();
-		ssrfPolicySupported = builder.httpClient == null;
+		// Read after getHttpClient(): the default createHttpClient() sets ssrfGuard.
+		ssrfGuard = builder.httpClient == null ? builder.ssrfGuard : null;
+		ownsConnectionManager = nn(ssrfGuard) && builder.ownsConnectionManager;
+		ssrfRefusal = ssrfRefusal();
+		ssrfPolicySupported = ssrfRefusal == null;
 		ignoreErrors = builder.ignoreErrors;
 		interceptors = nn(builder.interceptors) ? builder.interceptors.toArray(EMPTY_REST_CALL_INTERCEPTORS) : EMPTY_REST_CALL_INTERCEPTORS;
 		keepHttpClientOpen = builder.keepHttpClientOpen;
@@ -6241,13 +6565,28 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 	public void close() throws IOException {
 		isClosed.set(true);
 		ExecutorService es = executorService.get();
-		if (! keepHttpClientOpen)
-			httpClient.close();
+		if (! keepHttpClientOpen) {
+			try {
+				httpClient.close();
+			} finally {
+				shutdownPinnedPool();
+			}
+		}
 		if (nn(es) && executorServiceShutdownOnClose)
 			es.shutdown();
 		// If executorServiceShutdownOnClose is false, executor service remains open for reuse
 		if (nn(creationStack))
 			closedStack = Thread.currentThread().getStackTrace();
+	}
+
+	// The pinned pool is always this client's own (nothing else can reach it), and so is the ordinary pool when this
+	// client's build() created it, so they are shut down with the client even when the connection manager is shared
+	// and the HttpClient therefore leaves it open.
+	private void shutdownPinnedPool() {
+		if (ownsConnectionManager)
+			ssrfGuard.shutdown();
+		else if (nn(ssrfGuard))
+			ssrfGuard.shutdownPinned();
 	}
 
 	/**
@@ -6256,8 +6595,13 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 	public void closeQuietly() {
 		isClosed.set(true);
 		try {
-			if (! keepHttpClientOpen)
-				httpClient.close();
+			if (! keepHttpClientOpen) {
+				try {
+					httpClient.close();
+				} finally {
+					shutdownPinnedPool();
+				}
+			}
 			ExecutorService es = executorService.get();
 			if (nn(es) && executorServiceShutdownOnClose)
 				es.shutdown();
@@ -7492,6 +7836,15 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 	 * <p>
 	 * Subclasses can override this method to provide their own specialized {@link RestRequest} objects.
 	 *
+	 * <h5 class='section'>Notes:</h5><ul>
+	 * 	<li class='warn'>The SSRF guard of {@code @Remote} calls depends on the request running on the calling thread,
+	 * 		which this client cannot guarantee if the returned request's class overrides {@link RestRequest#run()}, and on
+	 * 		its connection manager, which a request bound to a different client does not use.  So an SSRF-guard-active
+	 * 		{@code @Remote} call (one without the {@link Builder#allowPrivateUrls(boolean) allowPrivateUrls} opt-in) is
+	 * 		refused through such a request, whether this method or {@link #request(String, Object, boolean)} returns it.
+	 * 		Ordinary requests are unaffected.
+	 * </ul>
+	 *
 	 * @param uri The target.
 	 * @param method The HTTP method (uppercase).
 	 * @param hasBody Whether this method has a request entity.
@@ -7795,6 +8148,14 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 	 * <p>
 	 * The behavior of this method can also be modified by specifying a different {@link RestCallHandler}.
 	 *
+	 * <h5 class='section'>Notes:</h5><ul>
+	 * 	<li class='warn'>The SSRF guard of {@code @Remote} calls depends on the request running on the calling thread,
+	 * 		which this client cannot guarantee for an override.  So a client whose class overrides this method,
+	 * 		{@link #execute(HttpHost, HttpRequest, HttpContext)} or {@link #execute(HttpUriRequest, HttpContext)} refuses every
+	 * 		SSRF-guard-active {@code @Remote} call (one without the {@link Builder#allowPrivateUrls(boolean) allowPrivateUrls}
+	 * 		opt-in).  Ordinary requests are unaffected.
+	 * </ul>
+	 *
 	 * <h5 class='section'>See Also:</h5><ul>
 	 * 	<li class='jm'>{@link Builder#callHandler()}
 	 * </ul>
@@ -7814,6 +8175,86 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 	 */
 	protected HttpResponse run(HttpHost target, HttpRequest request, HttpContext context) throws IOException {
 		return callHandler.run(target, request, context);
+	}
+
+	// The methods a request is dispatched through on its way from RestRequest to the HttpClient (run(...), then the two
+	// execute(...) overloads BasicRestCallHandler calls).
+	private static final List<Method> DISPATCH_METHODS = dispatchMethods();
+
+	private static List<Method> dispatchMethods() {
+		try {
+			return List.of(
+				RestClient.class.getDeclaredMethod("run", HttpHost.class, HttpRequest.class, HttpContext.class),
+				RestClient.class.getDeclaredMethod("execute", HttpHost.class, HttpRequest.class, HttpContext.class),
+				RestClient.class.getDeclaredMethod("execute", HttpUriRequest.class, HttpContext.class));
+		} catch (NoSuchMethodException e) {
+			throw new ExceptionInInitializerError(e);
+		}
+	}
+
+	// Why this client cannot guarantee the SSRF guard of @Remote calls, or null if it can.  The guard state is a
+	// thread-local, so anything that may run the request on another thread (a custom call handler, a handler bound to
+	// another client, a subclass that overrides the request dispatch) defeats it, as does a connection manager this
+	// client did not build (it has no pinned pool).
+	private String ssrfRefusal() {
+		var tail = "the SSRF guardrail's connect-time contract (pin-on-connect + redirect revalidation) is not in force.  ";
+		var optOut = "or set allowPrivateUrls(true) if this is an intentional local-dev/intranet target.";
+		if (ssrfGuard == null)
+			return "Refusing to send a policy-covered @Remote request through a caller-supplied HttpClient or connection "
+				+ "manager that cannot be guaranteed to honor the SSRF guardrail's connect-time contract (pin-on-connect + "
+				+ "redirect revalidation): the client was supplied via httpClient(...) or an overridden createHttpClient(), "
+				+ "or the connection manager via connectionManager(...) or an overridden createConnectionManager(), instead "
+				+ "of being built by this RestClient.  Let this RestClient build its own HttpClient and connection manager, "
+				+ optOut;
+		if (callHandler.getClass() != BasicRestCallHandler.class)
+			return "Refusing to send a policy-covered @Remote request through a custom RestCallHandler (" + cn(callHandler)
+				+ "): it may run the request on another thread, where " + tail + "Remove the callHandler(...) setting, " + optOut;
+		if (((BasicRestCallHandler)callHandler).client() != this)
+			return "Refusing to send a policy-covered @Remote request through a BasicRestCallHandler bound to a different "
+				+ "RestClient: it sends the request through that client's connection manager, where " + tail
+				+ "Remove the callHandler(...) setting, " + optOut;
+		var dispatch = overriddenDispatch(getClass());
+		if (nn(dispatch))
+			return "Refusing to send a policy-covered @Remote request through a RestClient subclass (" + dispatch
+				+ "): the override may run the request on another thread, where " + tail + "Remove the override, " + optOut;
+		return null;
+	}
+
+	// Why a guarded call cannot be sent through rc (the request createRequest(...) returned), or null if it can: a request
+	// bound to another client goes out through that client's HttpClient, and an override of RestRequest.run() may run
+	// the request on another thread.
+	private String requestRefusal(RestRequest rc) {
+		if (rc.client != this)
+			return "Refusing to send a policy-covered @Remote request through a RestRequest bound to a different "
+				+ "RestClient: it sends the request through that client's HttpClient, where the SSRF guardrail's "
+				+ "connect-time contract (pin-on-connect + redirect revalidation) is not in force.  Remove the "
+				+ "createRequest(...) or request(...) override that returns it, or set allowPrivateUrls(true) if this is "
+				+ "an intentional local-dev/intranet target.";
+		for (Class<?> x = rc.getClass(); x != RestRequest.class; x = x.getSuperclass()) {
+			try {
+				x.getDeclaredMethod("run");
+				return "Refusing to send a policy-covered @Remote request through a RestRequest subclass (" + cn(x)
+					+ " overrides run()): the override may run the request on another thread, where the SSRF guardrail's "
+					+ "connect-time contract (pin-on-connect + redirect revalidation) is not in force.  Remove the override "
+					+ "(or the createRequest(...) override that returns it), or set allowPrivateUrls(true) if this is an "
+					+ "intentional local-dev/intranet target.";
+			} catch (@SuppressWarnings("unused") NoSuchMethodException e) { /* Not declared here. */ }
+		}
+		return null;
+	}
+
+	// Returns "<class>.<method>(<params>)" for the first dispatch method a subclass between c and RestClient declares,
+	// or null if there is none.
+	private static String overriddenDispatch(Class<?> c) {
+		for (var x = c; x != RestClient.class; x = x.getSuperclass()) {
+			for (var m : DISPATCH_METHODS) {
+				try {
+					x.getDeclaredMethod(m.getName(), m.getParameterTypes());
+					return cn(x) + " overrides " + m.getName() + "(" + String.join(",", Arrays.stream(m.getParameterTypes()).map(Class::getSimpleName).toList()) + ")";
+				} catch (@SuppressWarnings("unused") NoSuchMethodException e) { /* Not declared here. */ }
+			}
+		}
+		return null;
 	}
 
 	/**
@@ -8057,11 +8498,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		var allowPrivate = isAllowPrivateUrls() || rm.isAllowPrivateUrls();
 		var guardActive = ! allowPrivate;
 		if (guardActive && ! ssrfPolicySupported)
-			throw new RestCallException(null, null, "Refusing to send a policy-covered @Remote request through a "
-				+ "caller-supplied HttpClient that cannot be guaranteed to honor the SSRF guardrail's connect-time "
-				+ "contract (pin-on-connect + redirect revalidation): the client was supplied via httpClient(...) "
-				+ "instead of being built by this RestClient.  Let this RestClient build its own HttpClient, or set "
-				+ "allowPrivateUrls(true) if this is an intentional local-dev/intranet target.");
+			throw new RestCallException(null, null, "%s", ssrfRefusal);
 
 		var attempt = 0;
 		while (true) {
@@ -8071,6 +8508,11 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 			// The classic run() throws by default on >=400; the proxy replicates NG's throwIfError() instead, so it
 			// always suppresses that generic throw and applies the typed/conditional mapping itself.
 			rc.ignoreErrors();
+			if (guardActive) {
+				var refusal = requestRefusal(rc);
+				if (nn(refusal))
+					throw new RestCallException(null, null, "%s", refusal);
+			}
 
 			// Non-repeatable body: never retry (resending a consumed stream would corrupt the call).
 			var canRetry = maxRetries > 0 && (attempt > 0 || rc.isBodyRepeatable());
@@ -8080,6 +8522,9 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 				RemoteUrlPolicyState.activate();
 			try {
 				res = rc.run();
+			} catch (SsrfGuardConnectionManager.ProxyRouteRefusedException e) {
+				// Reported like the other guard refusals (and other transport failures), not as a raw runtime exception.
+				throw new RestCallException(null, e, "%s", e.getMessage());
 			} catch (RestCallException e) {
 				// A transport failure (IOException cause) is retryable; a reconstructed server exception is not
 				// caught here (it is not a RestCallException).

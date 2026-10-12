@@ -48,12 +48,12 @@ final class OpenSamlBootstrap {
 			return;
 		synchronized (LOCK) {
 			if (initialized) // HTT: inner DCL check; unreachable in single-threaded tests (concurrent first-load race)
-				return;
+				return; // HTT: inner DCL check; unreachable in single-threaded tests (concurrent first-load race)
 			try {
 				InitializationService.initialize();
 				initialized = true;
-			} catch (Exception e) {
-				throw isex(e, "OpenSAML initialization failed");
+			} catch (Exception e) { // HTT: InitializationService.initialize() cannot be made to fail with the bundled configuration; a seam would make this testable
+				throw isex(e, "OpenSAML initialization failed"); // HTT: InitializationService.initialize() cannot be made to fail with the bundled configuration; a seam would make this testable
 			}
 		}
 	}

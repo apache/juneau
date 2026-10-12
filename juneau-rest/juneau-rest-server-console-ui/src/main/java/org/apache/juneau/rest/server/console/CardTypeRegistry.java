@@ -20,6 +20,7 @@ import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.util.*;
 
+import org.apache.juneau.commons.http.*;
 import org.apache.juneau.marshall.collections.*;
 
 /**
@@ -42,10 +43,10 @@ import org.apache.juneau.marshall.collections.*;
 public final class CardTypeRegistry {
 
 	/**
-	 * Reserved type names: {@code html} (built in), {@code datatables}, {@code console-output}, {@code run-view}
-	 * and {@code terminal} (console-ui-freemarker), {@code chart} (reserved for the planned chart card; no handler yet).
+	 * Reserved type names: {@code html} (built in), {@code datatables}, {@code console-output}, {@code run-view},
+	 * {@code terminal}, {@code chart} and {@code job-log} (console-ui-freemarker).
 	 */
-	public static final Set<String> RESERVED = Set.of("html", "datatables", "console-output", "run-view", "terminal", "chart");
+	public static final Set<String> RESERVED = Set.of("html", "datatables", "console-output", "run-view", "terminal", "chart", "job-log");
 
 	/** The one simple class name allowed to bind each reserved type (E-22's identity check). */
 	private static final Map<String,String> RESERVED_OWNER_SIMPLE_NAMES = Map.of(
@@ -54,7 +55,8 @@ public final class CardTypeRegistry {
 		"console-output", "ConsoleOutputCardType",
 		"run-view", "RunViewCardType",
 		"terminal", "TerminalCardType",
-		"chart", "ChartCardType"
+		"chart", "ChartCardType",
+		"job-log", "JobLogCardType"
 	);
 
 	/** Reserved body keys (E-23); {@code visibleWhen}, {@code subscribes} and {@code publishes} are deliberately excluded — admitted in any card's body. */
@@ -118,9 +120,14 @@ public final class CardTypeRegistry {
 	 *
 	 * @param source The authored card.
 	 * @return The card object: base keys plus the handler's fragment, flat.
-	 * @throws IllegalArgumentException E-23 if the body sets a reserved key; or from the handler itself.
+	 * @throws IllegalArgumentException E-23 if the body sets a reserved key; if {@code src} is not a same-origin path
+	 * 	(see {@link SafePathTemplate#isSameOriginPath(String)}; a {@code {token}} placeholder is allowed); or from the handler itself.
 	 */
 	public JsonMap toCard(CardSource source) {
+		var src = source.src();
+		if (src != null && ! SafePathTemplate.isSameOriginPath(src))
+			throw source.error("type='%s' src must be a same-origin path (no absolute URL, '//', scheme, '..', backslash, control character, or leading/trailing space); got '%s'.",
+				source.type(), src);
 		Object visibleWhen = null, subscribes = null, publishes = null;
 		if (source.hasJsonBody()) {
 			var body = source.json();

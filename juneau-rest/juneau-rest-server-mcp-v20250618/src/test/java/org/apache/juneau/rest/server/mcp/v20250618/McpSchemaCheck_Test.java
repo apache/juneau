@@ -267,4 +267,32 @@ class McpSchemaCheck_Test {
 		var config = new McpServerConfig().addTool(tool("ok", input, output));
 		assertNotNull(new McpRevision(null).dispatch(ping(), config, ctx));
 	}
+
+	@Test
+	void e01_validateSchemas_toolWithoutDescriptorSpec_skipped() {
+		var handler = new McpToolHandler() {
+			@Override public McpToolSpec descriptor() { return null; }
+			@Override public McpToolOutcome call(Map<String,Object> arguments, BeanStore ctx2) { return new McpToolOutcome(); }
+		};
+		assertDoesNotThrow(() -> McpRevision.validateSchemas(new McpServerConfig().addTool(handler)));
+	}
+
+	@Test
+	void e02_validateSchemas_arraysNullsAndSharedReferences_walked() {
+		var shared = new String[] {"id"};
+		var schema = new JsonMap();
+		schema.put("type", "object");
+		schema.put("required", shared);
+		schema.put("items", null);
+		schema.put("properties", "not-a-map");
+		schema.put("$defs", JsonMap.of("a", JsonMap.of("type", "object", "required", shared)));
+		assertDoesNotThrow(() -> McpRevision.validateSchemas(new McpServerConfig().addTool(tool("t", schema, null))));
+	}
+
+	@Test
+	void e03_validateSchemas_unsupportedKeywordInsideArray_rejected() {
+		var schema = JsonMap.of("type", "object", "items", new Object[] {JsonMap.of("enum", List.of("a"))});
+		var config = new McpServerConfig().addTool(tool("t", schema, null));
+		assertThrows(IllegalArgumentException.class, () -> McpRevision.validateSchemas(config));
+	}
 }

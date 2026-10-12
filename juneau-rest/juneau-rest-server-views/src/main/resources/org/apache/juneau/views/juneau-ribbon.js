@@ -772,6 +772,11 @@
 		const target = rb.target(group);
 		const wrap = document.createElement("span");
 		wrap.className = "juneau-view-ribbon-group";
+		if (group.title) {
+			// The title names the group for assistive tech only; no visible caption is drawn.
+			wrap.setAttribute("role", "group");
+			wrap.setAttribute("aria-label", group.title);
+		}
 		(group.options || []).forEach(function (o) {
 			const b = button(o.title || o.id, resolveButtonIcon(o, null), function () {
 				const cur = rb.optionsOf(target)[group.id];

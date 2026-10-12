@@ -74,4 +74,34 @@ class MenuItem_Test extends TestBase {
 		m.label = "X";
 		assertThrows(IllegalArgumentException.class, m::validate);
 	}
+
+	@Test void a09_nullIdAndLabel_rejected() {
+		var noId = MenuItem.link("x", "X", "/x");
+		noId.id = null;
+		assertThrows(IllegalArgumentException.class, noId::validate);
+		var noLabel = MenuItem.link("x", "X", "/x");
+		noLabel.label = null;
+		assertThrows(IllegalArgumentException.class, noLabel::validate);
+		noLabel.label = "  ";
+		assertThrows(IllegalArgumentException.class, noLabel::validate);
+	}
+
+	@Test void a10_bothHrefAndSafe_rejected() {
+		var m = MenuItem.link("x", "X", "/x");
+		m.safe = "do-x";
+		assertThrows(IllegalArgumentException.class, m::validate);
+	}
+
+	@Test void a11_explicitFalseDivider_isNotADivider() {
+		var m = MenuItem.link("x", "X", "/x");
+		m.divider = false;
+		assertFalse(m.isDivider());
+		m.validate();
+	}
+
+	@Test void a12_blankHref_withSafe_isSafeItem() {
+		var m = MenuItem.safe("x", "X", "do-x");
+		m.href = "  ";
+		m.validate();
+	}
 }

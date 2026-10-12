@@ -55,4 +55,16 @@ class KeychainSecretStoreProvider_Test {
 	@Test void a04_order() {
 		assertEquals(10, new KeychainSecretStoreProvider().order());
 	}
+
+	@Test void b01_createGatedByOsName() {
+		var os = System.getProperty("os.name");
+		try {
+			System.setProperty("os.name", "Linux");
+			assertNull(new KeychainSecretStoreProvider().create());
+			System.setProperty("os.name", "Mac OS X");
+			assertInstanceOf(KeychainSecretStore.class, new KeychainSecretStoreProvider().create());
+		} finally {
+			System.setProperty("os.name", os);
+		}
+	}
 }

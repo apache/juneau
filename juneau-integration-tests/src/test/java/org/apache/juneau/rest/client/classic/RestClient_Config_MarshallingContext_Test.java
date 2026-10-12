@@ -78,8 +78,8 @@ class RestClient_Config_MarshallingContext_Test extends TestBase {
 		x2.get("/checkQuery").queryData("foo",new A1()).run().assertContent("foo=f%3D1").assertContent().asString().asUrlDecode().is("foo=f=1");
 		x1.formPost("/checkFormData").formData("foo",new A1()).run().assertContent("foo=O1");
 		x2.formPost("/checkFormData").formData("foo",new A1()).run().assertContent("foo=f%3D1").assertContent().asString().asUrlDecode().is("foo=f=1");
-		x1.get("/checkHeader").header("foo",new A1()).header("Check","foo").run().assertContent("[\"O1\"]");
-		x2.get("/checkHeader").header("foo",new A1()).header("Check","foo").run().assertContent("[\"f=1\"]");
+		x1.get("/checkHeader").header("foo",new A1()).header("Check","foo").run().assertContent("['O1']");
+		x2.get("/checkHeader").header("foo",new A1()).header("Check","foo").run().assertContent("['f=1']");
 	}
 
 	public static class A2a {

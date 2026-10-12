@@ -18,13 +18,15 @@ package org.apache.juneau.rest.client.apachehttpclient45;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.io.*;
+
 import org.apache.http.entity.*;
 import org.apache.juneau.http.entity.*;
 import org.apache.juneau.rest.client.*;
 import org.junit.jupiter.api.*;
 
 /**
- * Direct unit test for {@link ApacheHc45Transport.TransportBodyEntity#getContent()} &mdash; a defensive
+ * Direct unit tests for {@link ApacheHc45Transport.TransportBodyEntity}: {@code getContent()} is a defensive
  * guard against the entity being read the "pull" way, which Apache HttpClient's wire-level serializer
  * never does (it always calls {@link AbstractHttpEntity#writeTo} instead), so this can only be exercised
  * by calling it directly. In the same package as {@link ApacheHc45Transport} since the nested class is
@@ -37,5 +39,16 @@ class ApacheHc45Transport_TransportBodyEntity_Test {
 		var entity = new ApacheHc45Transport.TransportBodyEntity(TransportBody.of(StringBody.of("x", "text/plain")));
 		var ex = assertThrows(UnsupportedOperationException.class, entity::getContent);
 		assertTrue(ex.getMessage().contains("writeTo"), ex.getMessage());
+	}
+
+	@Test
+	void a02_isStreaming_trueOnlyForNonRepeatableBody() {
+		var repeatable = new ApacheHc45Transport.TransportBodyEntity(TransportBody.of(StringBody.of("x", "text/plain")));
+		assertTrue(repeatable.isRepeatable());
+		assertFalse(repeatable.isStreaming());
+		var oneShot = new ApacheHc45Transport.TransportBodyEntity(TransportBody.of(
+			StreamBody.of(new ByteArrayInputStream(new byte[]{1}), "application/octet-stream")));
+		assertFalse(oneShot.isRepeatable());
+		assertTrue(oneShot.isStreaming());
 	}
 }

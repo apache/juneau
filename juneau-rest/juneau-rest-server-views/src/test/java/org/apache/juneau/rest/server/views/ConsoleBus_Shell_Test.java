@@ -224,4 +224,15 @@ class ConsoleBus_Shell_Test extends TestBase {
 		assertEquals(List.of(), s.get("refreshLog"), "refresh while awaiting params is a no-op");
 		assertNull(s.get("threw"));
 	}
+
+	@Test void a19_filledUrlIsRecheckedAndFetchJsonRefusesCrossHost() {
+		var s = scenario("s18");
+		var empty = (Map<?,?>)s.get("empty");
+		assertEquals(List.of(), empty.get("log"), "an empty token fills '/{x}/y' to '//y': no render");
+		assertEquals(List.of("E-JS-83"), empty.get("codes"));
+		assertEquals(List.of("render:/%2F%2Fevil.test/y"), s.get("encoded"), "an encoded '//' is one path segment");
+		assertEquals(List.of("render:http://juneau.test/api/a"), s.get("absolute"), "a filled absolute URL on this origin is rechecked with the fetchJson rule and passes");
+		assertEquals(List.of("E-JS-83"), s.get("farCodes"), "a filled absolute URL on another origin is refused");
+		assertTrue(String.valueOf(s.get("fetchErr")).contains("E-JS-84"), String.valueOf(s.get("fetchErr")));
+	}
 }

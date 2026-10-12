@@ -383,7 +383,7 @@ public class CalendarEvent {
 
 	/** Whether an ISO value is date-only ({@code yyyy-MM-dd}) rather than a date-time. */
 	private static boolean isDateOnly(String value) {
-		return value != null && value.length() <= 10;
+		return value.length() <= 10;   // only reached with a non-blank end (see hasEnd())
 	}
 
 	/** Parses the civil ({@code yyyy-MM-dd}) portion of an ISO date/date-time; never {@code Date.parse}-style zone shifting. */
@@ -396,7 +396,7 @@ public class CalendarEvent {
 
 	/** The civil ({@code yyyy-MM-dd}) portion of an ISO date/date-time, or {@code null} when it is not parseable. */
 	private static LocalDate civilOrNull(String value) {
-		if (value == null || value.isBlank() || value.length() < 10)
+		if (value == null || value.length() < 10)
 			return null;
 		if (value.length() > 10 && value.charAt(10) != 'T')
 			return null;

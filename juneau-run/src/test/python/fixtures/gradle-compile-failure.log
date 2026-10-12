@@ -1,0 +1,27 @@
+To honour the JVM settings for this build a single-use Daemon process will be forked. For more on this, please refer to https://docs.gradle.org/9.8.1/userguide/gradle_daemon.html#sec:disabling_the_daemon in the Gradle documentation.
+Daemon will be stopped at the end of the build 
+
+> Task :lib:compileJava FAILED
+/scratch/gradle/lib/src/main/java/x/Lib.java:2: error: incompatible types: String cannot be converted to int
+public class Lib { public static int one() { return "x"; } }
+                                                    ^
+1 error
+
+[Incubating] Problems report is available at: file:///scratch/gradle/build/reports/problems/problems-report.html
+
+FAILURE: Build failed with an exception.
+
+* What went wrong:
+Execution failed for task ':lib:compileJava' (registered by plugin class 'org.gradle.api.plugins.JavaBasePlugin').
+> Compilation failed; see the compiler output below.
+  /scratch/gradle/lib/src/main/java/x/Lib.java:2: error: incompatible types: String cannot be converted to int
+  public class Lib { public static int one() { return "x"; } }
+                                                      ^
+  1 error
+
+* Try:
+> Check your code and dependencies to fix the compilation error(s)
+> Run with --scan to get full insights from a Build Scan (powered by Develocity).
+
+BUILD FAILED in 2s
+1 actionable task: 1 executed

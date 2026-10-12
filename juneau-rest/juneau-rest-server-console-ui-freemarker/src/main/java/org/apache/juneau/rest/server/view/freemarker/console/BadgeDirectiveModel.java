@@ -56,7 +56,7 @@ public final class BadgeDirectiveModel implements TemplateDirectiveModel {
 	public static final String NAME = "badge";
 
 	static final Set<String> ATTRS = Set.of("id", "src", "refreshMs", "labelOne", "labelOther", "labelMine", "tooltipMax",
-		"href", "refreshes", "placement", "table", "tone", "scopeParam", "scopeBy", "stateFilterColumn");
+		"href", "refreshes", "refreshesAllowMissing", "placement", "table", "tone", "scopeParam", "scopeBy", "stateFilterColumn");
 
 	private static final Set<String> BODY_KEYS = Set.of("visibleWhen", "scopeValues", "params");
 
@@ -109,6 +109,9 @@ public final class BadgeDirectiveModel implements TemplateDirectiveModel {
 		var refreshes = FtlAttrLists.list(p, NAME, "refreshes");
 		if (! refreshes.isEmpty())
 			def.refreshes(refreshes.toArray(new String[0]));
+		var refreshesAllowMissing = FtlAttrLists.list(p, NAME, "refreshesAllowMissing");
+		if (! refreshesAllowMissing.isEmpty())
+			def.refreshesAllowMissing(refreshesAllowMissing.toArray(new String[0]));
 		var table = FtlAttrLists.scalar(p, "table");
 		if (! table.isEmpty())
 			def.table(table);

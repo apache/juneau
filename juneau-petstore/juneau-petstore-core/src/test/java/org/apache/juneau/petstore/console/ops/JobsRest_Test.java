@@ -94,7 +94,7 @@ class JobsRest_Test extends TestBase {
 	@Test void a05_formLabelsCoverEverySpecies() throws Exception {
 		var body = client().get("/console/ops/jobs/restock-form").run().assertStatus(200).getContent().asString();
 		assertContainsAll(body, "Dog (0-50)", "Fish (0-50)", "Snake (0-50)");
-		assertFalse(body.contains("Fishs"), "no 'Fishs' typo");
+		assertNotContains(() -> "no 'Fishs' typo", "Fishs", body);
 	}
 
 	@Test void a06_restockNamesAreUniqueAndAuditNamesActor() throws Exception {

@@ -51,8 +51,8 @@ public final class OkHttpTransportProvider implements HttpTransportProvider {
 		try {
 			Class.forName("okhttp3.OkHttpClient");
 			return true;
-		} catch (ClassNotFoundException e) {
-			return false;
+		} catch (ClassNotFoundException e) { // HTT: okhttp3.OkHttpClient is a compile-time dependency of this module, so it is always on the test classpath; a seam would make this testable
+			return false; // HTT: reachable only via the catch above
 		}
 	}
 

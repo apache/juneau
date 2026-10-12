@@ -65,6 +65,12 @@ class WidgetsMixin_Serving_Test extends TestBase {
 		@RestGet(path="/echo-asset-url") public String echoAssetUrl(RestRequest req) {
 			return WidgetsMixin.assetUrl(req, WidgetsMixin.CALENDAR_JS_PATH, PROBE_RESOURCE);
 		}
+		@RestGet(path="/echo-widget-js-url") public String echoWidgetJsUrl(RestRequest req) {
+			return WidgetsMixin.widgetAssetUrl(req, WidgetsMixin.CALENDAR_JS_PATH);
+		}
+		@RestGet(path="/echo-widget-css-url") public String echoWidgetCssUrl(RestRequest req) {
+			return WidgetsMixin.widgetAssetUrl(req, WidgetsMixin.CALENDAR_CSS_PATH);
+		}
 	}
 
 	/**
@@ -229,4 +235,13 @@ class WidgetsMixin_Serving_Test extends TestBase {
 		assertEquals(a.buildVersion(), b.buildVersion());
 		assertEquals(a.hash(PROBE_RESOURCE), b.hash(PROBE_RESOURCE), "independent caches must agree on content hashes");
 	}
+
+	@Test void d07_widgetAssetUrl_requestAware_resolvesUnderTheHostMount() throws Exception {
+		var c = MockRestClient.createLax(AssetUrlHost.class).servletPath("/rest/admin").build();
+		var js = c.get("/echo-widget-js-url").accept("text/plain").run().assertStatus(200).getContent().asString();
+		assertTrue(js.startsWith("/rest/admin" + WidgetsMixin.CALENDAR_JS_PATH + "?v="), js);
+		var css = c.get("/echo-widget-css-url").accept("text/plain").run().assertStatus(200).getContent().asString();
+		assertTrue(css.startsWith("/rest/admin" + WidgetsMixin.CALENDAR_CSS_PATH + "?v="), css);
+	}
+
 }

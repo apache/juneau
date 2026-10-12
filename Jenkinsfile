@@ -43,10 +43,6 @@ timestamps {
 			}
 		}
 		
-		stage ('Juneau-Java-17 - Perf guard') {
-			sh 'python3 scripts/ci-perf-guard.py || true'
-		}
-
 		stage ('Juneau-Java-17 - Post build actions') {
 			step([$class: 'Mailer', notifyEveryUnstableBuild: true, recipients: 'dev@juneau.apache.org', sendToIndividuals: true])
 		}

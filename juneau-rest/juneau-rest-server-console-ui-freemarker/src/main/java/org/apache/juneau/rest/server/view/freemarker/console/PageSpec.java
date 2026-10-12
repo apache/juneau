@@ -58,8 +58,9 @@ import freemarker.template.*;
  * 		.table(ChangesView.<jsm>def</jsm>(), <jv>c</jv> -&gt; <jv>c</jv>.title(<js>"Changes"</js>))
  * 		.table(TasksView.<jsm>def</jsm>(), <jv>c</jv> -&gt; <jv>c</jv>.title(<js>"Tasks for the selected change"</js>)
  * 			.subscribes(Subscription.<jsm>to</jsm>(Topics.<jsm>selection</jsm>(<js>"changes"</js>)).as(<js>"params"</js>).map(<js>"changeId"</js>, <js>"ids.0"</js>)))
- * 		.card(CardSpec.<jsm>of</jsm>(<js>"chart"</js>, <js>"byOwner"</js>).title(<js>"Open changes by owner"</js>).src(<js>"/rest/changes/by-owner"</js>)
- * 			.subscribes(Subscription.<jsm>to</jsm>(Topics.<jsm>filter</jsm>(<js>"changes"</js>)).as(<js>"filter"</js>)))
+ * 		.card(ChartDef.<jsm>bar</jsm>(<js>"byOwner"</js>).title(<js>"Open changes by owner"</js>).src(<js>"/rest/changes/by-owner?q={q}"</js>)
+ * 			.x(<js>"owner"</js>).series(<js>"open"</js>, <js>"Open"</js>).toCardSpec()
+ * 			.subscribes(Subscription.<jsm>to</jsm>(Topics.<jsm>filter</jsm>(<js>"changes"</js>)).as(<js>"params"</js>).map(<js>"q"</js>, <js>"search"</js>)))
  * 		.view(<jv>req</jv>);
  * </p>
  *
@@ -71,6 +72,8 @@ public final class PageSpec {
 	public static final String ATTR = "jcPageSpec";
 
 	private static final Set<String> USER_MENU_KEYS = Set.of("label", "initials", "avatar", "items");
+	/** Card types {@link #applyTo} lifts through their registered handler, so a Java-built card gets the {@code <@card>} checks. */
+	private static final Set<String> LIFTED_TYPES = Set.of("chart", "job-log");
 	private static final Pattern ATTR_NAME_RE = Pattern.compile("[A-Za-z_:][-A-Za-z0-9_:.]*");
 
 	/** One {@code header(String,String)} passthrough entry. */
@@ -764,7 +767,9 @@ public final class PageSpec {
 		if (! cards.isEmpty() && n(cardModel))
 			throw FtlAttrLists.reject("PageSpec cards need the console card directive; the render has no ConsoleFreemarkerMixin.");
 		for (var card : cards) {
-			var seeded = tableBodies.containsKey(card.id()) ? liftTable(card, cardModel) : card.copy();
+			var seeded = tableBodies.containsKey(card.id()) ? liftTable(card, cardModel)
+				: LIFTED_TYPES.contains(card.type()) ? liftChecked(card, cardModel)
+				: card.copy();
 			cap.addBuiltCard(seeded, cardMarkup.get(card.id()));
 			cardModel.recordRequirements(cap, seeded.type(), seeded.id(), List.of());
 		}
@@ -793,12 +798,30 @@ public final class PageSpec {
 	}
 
 	private CardSpec liftTable(CardSpec card, CardDirectiveModel cardModel) throws TemplateModelException {
-		var source = CardSource.create(card.type(), card.id()).bodyMap(tableBodies.get(card.id()));
+		return liftVia(card, CardSource.create(card.type(), card.id()).bodyMap(tableBodies.get(card.id())), cardModel);
+	}
+
+	private static CardSpec liftChecked(CardSpec card, CardDirectiveModel cardModel) throws TemplateModelException {
+		if (nn(card.template()))
+			throw FtlAttrLists.reject(eq(card.type(), "chart")
+				? f("<@card id='%s'> type='chart' takes a JSON5 body (plus src= for remote data); template= is not allowed.", card.id())
+				: f("<@card id='%s'> type='%s' takes its options as the body; template= is not allowed.", card.id(), card.type()));
+		if (nn(card.src()) && eq(card.type(), "job-log"))
+			throw FtlAttrLists.reject(f("<@card id='%s'> type='job-log' takes its options as the body; src= is not allowed.", card.id()));
+		var source = CardSource.create(card.type(), card.id()).bodyMap(card.bodyMap());
+		if (nn(card.src()))
+			source.src(card.src());
+		return liftVia(card, source, cardModel);
+	}
+
+	private static CardSpec liftVia(CardSpec card, CardSource.Builder source, CardDirectiveModel cardModel) throws TemplateModelException {
 		if (nn(card.title()))
 			source.title(card.title());
 		var lifted = cardModel.lift(source.build());
 		if (nn(card.cssClass()))
 			lifted.cssClass(card.cssClass());
+		if (Boolean.TRUE.equals(card.toMap().get("bare")))
+			lifted.bare(true);
 		return lifted.wiringFrom(card);
 	}
 

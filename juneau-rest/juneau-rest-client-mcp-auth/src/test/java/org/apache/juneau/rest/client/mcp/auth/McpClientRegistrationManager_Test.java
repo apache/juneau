@@ -20,6 +20,8 @@ import static org.apache.juneau.BasicTestUtils.assertThrowsWithMessage;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.net.*;
+import java.nio.charset.*;
+import java.time.*;
 import java.util.*;
 import java.util.concurrent.atomic.*;
 import java.util.function.*;
@@ -149,5 +151,108 @@ class McpClientRegistrationManager_Test extends TestBase {
 		};
 		var m = McpClientRegistrationManager.create().store(buggy).registrarFunction(stubDcr()).build();
 		assertThrowsWithMessage(McpAuthException.class, "refusing to reuse credentials", () -> m.resolve(as(A, true)));
+	}
+
+	@Test void e01_preRegisteredCredentialsStoredWhenStorePresent() {
+		var store = new InMemoryMcpClientRegistrationStore();
+		var pre = reg(A, "pre-a");
+		var m = McpClientRegistrationManager.create().preRegistered(pre).store(store).build();
+		assertEquals("pre-a", m.resolve(as(A, false)).clientId());
+		assertEquals("pre-a", store.find(A).orElseThrow().clientId());
+	}
+
+	@Test void e02_builderArgumentValidation() {
+		var b = McpClientRegistrationManager.create();
+		assertThrows(IllegalArgumentException.class, () -> b.redirectUris(List.of()));
+		assertThrows(IllegalArgumentException.class, () -> b.scope(" "));
+		assertThrows(IllegalArgumentException.class, () -> b.clientName(" "));
+		assertThrows(IllegalArgumentException.class, () -> b.initialAccessToken(" "));
+		assertThrows(IllegalArgumentException.class, () -> b.httpTimeout(Duration.ZERO));
+		assertThrows(IllegalArgumentException.class, () -> b.httpTimeout(Duration.ofSeconds(-1)));
+	}
+
+	/** Runs the real DCR path (no override) against a loopback stub, capturing the registration request. */
+	@Test void e03_realDcrAppliesEveryBuilderOption() throws Exception {
+		var server = com.sun.net.httpserver.HttpServer.create(new InetSocketAddress(InetAddress.getLoopbackAddress(), 0), 0);
+		var body = new AtomicReference<String>();
+		var auth = new AtomicReference<String>();
+		server.createContext("/register", ex -> {
+			auth.set(ex.getRequestHeaders().getFirst("Authorization"));
+			try (var is = ex.getRequestBody()) { body.set(new String(is.readAllBytes(), StandardCharsets.UTF_8)); }
+			var b = ("{\"client_id\":\"live\",\"redirect_uris\":[\"http://127.0.0.1:3000/callback\"],"
+				+ "\"application_type\":\"web\"}").getBytes(StandardCharsets.UTF_8);
+			ex.getResponseHeaders().add("Content-Type", "application/json");
+			ex.sendResponseHeaders(201, b.length);
+			try (var os = ex.getResponseBody()) { os.write(b); }
+		});
+		server.start();
+		try {
+			var endpoint = "http://127.0.0.1:" + server.getAddress().getPort() + "/register";
+			var md = new OidcMetadata(A, URI.create(A + "/token"), URI.create(A + "/auth"),
+				null, null, null, null, Set.of(), Map.of("registration_endpoint", endpoint));
+			var configured = new AtomicInteger();
+			var store = new InMemoryMcpClientRegistrationStore();
+			var m = McpClientRegistrationManager.create()
+				.store(store)
+				.applicationType(McpApplicationType.WEB)
+				.redirectUris(List.of(URI.create("http://127.0.0.1:3000/callback")))
+				.scope("mcp:read", "mcp:write")
+				.confidential(true)
+				.clientName("Demo Client")
+				.initialAccessToken("init-tok")
+				.httpTimeout(Duration.ofSeconds(5))
+				.httpRequestConfigurator(r -> configured.incrementAndGet())
+				.build();
+			var result = m.resolve(md);
+			assertEquals("live", result.clientId());
+			assertEquals(A, result.issuer());
+			assertEquals("live", store.find(A).orElseThrow().clientId(), "freshly registered credentials are stored");
+			assertEquals(1, configured.get());
+			assertEquals("Bearer init-tok", auth.get());
+			var sent = body.get();
+			assertTrue(sent.contains("\"application_type\":\"web\""), sent);
+			assertTrue(sent.contains("Demo Client"), sent);
+			assertTrue(sent.contains("mcp:read mcp:write"), sent);
+			assertTrue(sent.contains("client_secret_basic"), sent);
+		} finally {
+			server.stop(0);
+		}
+	}
+
+	@Test void e04_missingRegistrationEndpointFailsBeforeRedirectUrisSupplierConsulted() {
+		var supplied = new AtomicInteger();
+		var m = McpClientRegistrationManager.create()
+			.redirectUrisSupplier(() -> { supplied.incrementAndGet(); return List.of(URI.create("http://127.0.0.1:3000/callback")); })
+			.build();
+		// No registration_endpoint, so DCR fails before the supplier is consulted.
+		assertThrowsWithMessage(McpAuthException.class, "no registration_endpoint", () -> m.resolve(as(A, false)));
+		assertEquals(0, supplied.get());
+	}
+
+	@Test void e05_realDcrWithDefaultsOmitsOptionalSettings() throws Exception {
+		var server = com.sun.net.httpserver.HttpServer.create(new InetSocketAddress(InetAddress.getLoopbackAddress(), 0), 0);
+		var auth = new AtomicReference<String>();
+		server.createContext("/register", ex -> {
+			auth.set(ex.getRequestHeaders().getFirst("Authorization"));
+			ex.getRequestBody().readAllBytes();
+			var b = "{\"client_id\":\"plain\",\"redirect_uris\":[\"http://127.0.0.1:3000/callback\"]}"
+				.getBytes(StandardCharsets.UTF_8);
+			ex.getResponseHeaders().add("Content-Type", "application/json");
+			ex.sendResponseHeaders(201, b.length);
+			try (var os = ex.getResponseBody()) { os.write(b); }
+		});
+		server.start();
+		try {
+			var endpoint = "http://127.0.0.1:" + server.getAddress().getPort() + "/register";
+			var md = new OidcMetadata(A, URI.create(A + "/token"), URI.create(A + "/auth"),
+				null, null, null, null, Set.of(), Map.of("registration_endpoint", endpoint));
+			var m = McpClientRegistrationManager.create()
+				.redirectUris(List.of(URI.create("http://127.0.0.1:3000/callback")))
+				.build();
+			assertEquals("plain", m.resolve(md).clientId());
+			assertNull(auth.get(), "no initial access token configured");
+		} finally {
+			server.stop(0);
+		}
 	}
 }

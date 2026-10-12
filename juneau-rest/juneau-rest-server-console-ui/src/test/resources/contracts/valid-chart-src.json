@@ -1,0 +1,3 @@
+{"contractVersion":"1","title":"T","nav":[],"activeNav":[],"cards":[
+  {"id":"trend","type":"chart","title":"Orders","src":"/console/store/stats/daily","kind":"line","x":{"field":"day","type":"category"},"series":[{"field":"placed","label":"Placed"},{"field":"delivered","label":"Delivered"}],"refreshMs":60000,"legend":"bottom"}
+]}

@@ -607,7 +607,7 @@ public class BasicSwaggerProviderSession {
 
 		if (nn(js.getBeanDefs()))
 			for (var e : js.getBeanDefs().entrySet())
-				definitions.put(e.getKey(), fixSwaggerExtensions(e.getValue()));
+				definitions.put(e.getKey(), fixSwaggerExtensions(renameWriteOnly(e.getValue())));
 
 		if (definitions.isEmpty())
 			omSwagger.remove("definitions");
@@ -813,7 +813,37 @@ public class BasicSwaggerProviderSession {
 		if (schema.containsKey("type") || schema.containsKey("$ref"))
 			return schema;
 
-		return fixSwaggerExtensions(schema.append(js.getSchema(cm)));
+		return fixSwaggerExtensions(schema.append(renameWriteOnly(js.getSchema(cm))));
+	}
+
+	/**
+	 * Swagger 2.0 has no <js>"writeOnly"</js> schema keyword, so rename the generator's flag to the <js>"x-writeOnly"</js> extension.
+	 *
+	 * <p>
+	 * Only walks schema-keyword positions (so example/default values are untouched).  The OpenAPI 3.x provider maps the
+	 * extension back to the native keyword.
+	 */
+	// HTT: package-private only so a unit test can check that example/default values are not walked.
+	static <T> T renameWriteOnly(T schema) {
+		if (schema instanceof Map<?,?> m) {
+			@SuppressWarnings("unchecked")
+			var m2 = (Map<String,Object>)m;
+			if (Boolean.TRUE.equals(m2.get("writeOnly"))) {
+				m2.remove("writeOnly");
+				m2.put("x-writeOnly", true);
+			}
+			for (var k : new String[]{"properties", "patternProperties", "definitions", "$defs"}) {
+				if (m2.get(k) instanceof Map<?,?> children)
+					children.values().forEach(BasicSwaggerProviderSession::renameWriteOnly);
+			}
+			for (var k : new String[]{"items", "additionalProperties", "not"})
+				renameWriteOnly(m2.get(k));
+			for (var k : new String[]{"allOf", "anyOf", "oneOf", "items"}) {
+				if (m2.get(k) instanceof List<?> l)
+					l.forEach(BasicSwaggerProviderSession::renameWriteOnly);
+			}
+		}
+		return schema;
 	}
 
 	private static boolean isMulti(Header h) {

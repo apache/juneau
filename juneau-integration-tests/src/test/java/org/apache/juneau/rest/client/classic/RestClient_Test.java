@@ -279,8 +279,16 @@ class RestClient_Test extends TestBase {
 		var x1 = RestClient.create().json5().pooled().build();
 		var x2 = RestClient.create().json5().build();
 		var x3 = client().pooled().build();
-		assertEquals("PoolingHttpClientConnectionManager",cns(ClassInfo.of(x1.httpClient).getDeclaredField(x -> x.hasName("connManager")).get().accessible().get(x1.httpClient)));
-		assertEquals("BasicHttpClientConnectionManager",cns(ClassInfo.of(x2.httpClient).getDeclaredField(x -> x.hasName("connManager")).get().accessible().get(x2.httpClient)));
+		// A connection manager the client builds itself is wrapped in the SSRF guard's two-pool router; both pools share its kind.
+		var cm1 = ClassInfo.of(x1.httpClient).getDeclaredField(x -> x.hasName("connManager")).get().accessible().get(x1.httpClient);
+		var cm2 = ClassInfo.of(x2.httpClient).getDeclaredField(x -> x.hasName("connManager")).get().accessible().get(x2.httpClient);
+		assertEquals("SsrfGuardConnectionManager",cns(cm1));
+		assertEquals("SsrfGuardConnectionManager",cns(cm2));
+		for (var pool : new String[]{"ordinary","pinned"}) {
+			assertEquals("PoolingHttpClientConnectionManager",cns(ClassInfo.of(cm1).getDeclaredField(x -> x.hasName(pool)).get().accessible().get(cm1)));
+			assertEquals("BasicHttpClientConnectionManager",cns(ClassInfo.of(cm2).getDeclaredField(x -> x.hasName(pool)).get().accessible().get(cm2)));
+		}
+		// A caller-supplied connection manager is installed as-is.
 		assertEquals("MockHttpClientConnectionManager",cns(ClassInfo.of(x3.httpClient).getDeclaredField(x -> x.hasName("connManager")).get().accessible().get(x3.httpClient)));
 	}
 

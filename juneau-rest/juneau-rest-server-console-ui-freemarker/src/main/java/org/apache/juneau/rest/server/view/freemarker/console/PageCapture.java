@@ -23,6 +23,7 @@ import java.util.*;
 import java.util.function.*;
 import java.util.regex.*;
 
+import org.apache.juneau.commons.http.*;
 import org.apache.juneau.marshall.collections.*;
 import org.apache.juneau.marshall.marshaller.*;
 import org.apache.juneau.rest.server.console.*;
@@ -328,6 +329,7 @@ public final class PageCapture {
 	 * @throws TemplateModelException On a duplicate card id (E-9).
 	 */
 	public PageCapture addCard(CardSpec card, String markupOrNull) throws TemplateModelException {
+		checkSrc(card);
 		for (var c : cards)
 			if (c.id().equals(card.id()))
 				throw FtlAttrLists.reject(f("<@card id='%s'> duplicates an existing card id.", card.id()));
@@ -341,6 +343,15 @@ public final class PageCapture {
 		return this;
 	}
 
+	// A card's src is fetched by the browser, so every card reaching the page passes through here: <@card> html cards,
+	// PageSpec.html / PageSpec.card, and direct addCard callers.  {token} placeholders are allowed.
+	private static void checkSrc(CardSpec card) throws TemplateModelException {
+		var src = card.src();
+		if (nn(src) && ! SafePathTemplate.isSameOriginPath(src))
+			throw FtlAttrLists.reject(f("<@card id='%s'> type='%s' src must be a same-origin path (no scheme, '//', backslash, control character, edge space or '..' segment); got '%s'.",
+				card.id(), card.type(), src));
+	}
+
 	/**
 	 * Registers a card built by a {@code PageSpec}.  It is held apart from the authored cards until placed or the
 	 * page closes, so a spec's cards follow the template's cards in declaration order.
@@ -350,6 +361,7 @@ public final class PageCapture {
 	 * @throws TemplateModelException On a duplicate card id, checked against placed and unplaced cards.
 	 */
 	void addBuiltCard(CardSpec card, String markupOrNull) throws TemplateModelException {
+		checkSrc(card);
 		for (var c : cards)
 			if (c.id().equals(card.id()))
 				throw FtlAttrLists.reject(f("<@card id='%s'> duplicates an existing card id.", card.id()));
@@ -532,8 +544,8 @@ public final class PageCapture {
 
 	/**
 	 * {@code </@console>}: checks each badge against the finished page.  {@code table} and every {@code refreshes}
-	 * entry must name a card on the page; when {@code scope.by} is {@code nav}, each {@code scope.values} key must
-	 * name a node in the resolved nav tree.
+	 * entry (except those also in {@code refreshesAllowMissing}) must name a card on the page; when {@code scope.by} is
+	 * {@code nav}, each {@code scope.values} key must name a node in the resolved nav tree.
 	 *
 	 * @throws TemplateModelException On an unknown card id or nav node.
 	 */
@@ -560,14 +572,20 @@ public final class PageCapture {
 	static final String BADGE_CARD_MSG = "<@badge id='%s'> references card '%s', which is not on the page.";
 	static final String BADGE_NAV_MSG = "<@badge id='%s'> scope names nav node '%s', which is not in the nav tree.";
 
-	/** @param badge A badge's contract map. @return Its {@code table} followed by its {@code refreshes} entries. */
+	/**
+	 * @param badge A badge's contract map.
+	 * @return Its {@code table} followed by its {@code refreshes} entries, minus those listed in
+	 * 	{@code refreshesAllowMissing}.
+	 */
 	static List<String> badgeCardRefs(Map<String,Object> badge) {
 		var out = new ArrayList<String>();
 		if (badge.get("table") instanceof String t)
 			out.add(t);
+		var optional = badge.get("refreshesAllowMissing") instanceof List<?> a ? a : List.of();
 		if (badge.get("refreshes") instanceof List<?> r)
 			for (var e : r)
-				out.add(String.valueOf(e));
+				if (! optional.contains(e))
+					out.add(String.valueOf(e));
 		return out;
 	}
 
@@ -860,35 +878,6 @@ public final class PageCapture {
 
 	/** @return The resolved active path (empty until {@code <@console>} closes, or when there is no selection). */
 	public List<String> activeNav() { return activeNav; }
-
-	/**
-	 * Whether the page has a {@code datatables} card that may run in server mode, i.e. one that needs
-	 * {@code window.JuneauDataTables} (the DataTables glue).
-	 *
-	 * <p>
-	 * A card qualifies when its {@code table} is a bare URL string (the view envelope is fetched client-side, so its
-	 * {@code dataMode} cannot be known here; assumed server-capable) or an envelope whose {@code view.dataMode} is
-	 * {@code "server"}.  A catalog or envelope with any other {@code dataMode} is client-mode and does not qualify.
-	 *
-	 * <p>
-	 * No longer used by the renderer: every {@code type="datatables"} card now requires the {@code "datatables-glue"}
-	 * pack.  Kept because it is public.
-	 *
-	 * @return <jk>true</jk> if the glue should be emitted.
-	 */
-	public boolean hasServerModeTable() {
-		for (var c : cards) {
-			var m = c.toMap();
-			if (neq(m.get("type"), "datatables"))
-				continue;
-			var table = m.get("table");
-			if (table instanceof CharSequence)
-				return true;
-			if (table instanceof Map<?,?> t && t.get("view") instanceof Map<?,?> v && eq(v.get("dataMode"), "server"))
-				return true;
-		}
-		return false;
-	}
 
 	/** @return The cards, in page order. */
 	public List<CardSpec> cards() { return u(cards); }

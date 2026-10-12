@@ -30,7 +30,7 @@ package org.apache.juneau.rest.server.widgets;
  * visibility rules only.
  *
  * <p>
- * {@link #EQ}/{@link #NE} <b>require</b> a comparison value; {@link #PRESENT}/{@link #ABSENT} test only whether the
+ * {@link #EQ}/{@link #NE}/{@link #IN}/{@link #CONTAINS} <b>require</b> a comparison value; {@link #PRESENT}/{@link #ABSENT} test only whether the
  * field is non-null/non-empty and therefore <b>omit</b> one.  {@link #requiresValue()} is the discriminator, and
  * every host is expected to reject the mismatched form rather than ignore the surplus value.
  *
@@ -75,9 +75,9 @@ public enum Op {
 	}
 
 	/**
-	 * Whether this operator requires a comparison value ({@link #EQ}/{@link #NE}).
+	 * Whether this operator requires a comparison value ({@link #EQ}/{@link #NE}/{@link #IN}/{@link #CONTAINS}).
 	 *
-	 * @return <jk>true</jk> for {@link #EQ} and {@link #NE}, <jk>false</jk> for {@link #PRESENT} and
+	 * @return <jk>true</jk> for {@link #EQ}, {@link #NE}, {@link #IN} and {@link #CONTAINS}, <jk>false</jk> for {@link #PRESENT} and
 	 * 	{@link #ABSENT}.
 	 */
 	public boolean requiresValue() {

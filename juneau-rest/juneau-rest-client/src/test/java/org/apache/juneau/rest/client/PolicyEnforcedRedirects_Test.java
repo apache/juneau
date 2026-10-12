@@ -17,6 +17,7 @@
 package org.apache.juneau.rest.client;
 
 import static org.apache.juneau.test.bct.BctAssertions.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.*;
 import java.util.*;
@@ -149,5 +150,22 @@ class PolicyEnforcedRedirects_Test {
 		// An upgrade still changes scheme and default port, so it is a different origin.
 		var hops = run(request("http://a.example.com/start"), "https://a.example.com/echo");
 		assertList(headerNames(hops.last()), "Accept", "X-Trace");
+	}
+
+	//====================================================================================================
+	// c - A redirect that cannot be followed fails with TransportException
+	//====================================================================================================
+
+	@Test void c01_invalidLocation_failsWithTransportException() {
+		var ex = assertThrows(TransportException.class, () -> run(request("http://a.example.com/start"), "http://a b/echo"));
+		assertInstanceOf(IllegalArgumentException.class, ex.getCause());
+		assertTrue(ex.getMessage().contains("invalid Location header"), ex.getMessage());
+	}
+
+	@Test void c02_locationHostNotParsableByUri_failsWithTransportException() {
+		// java.net.URI parses an underscore host name with a null host, so the origins cannot be compared.
+		var ex = assertThrows(TransportException.class, () -> run(request("http://a.example.com/start"), "http://my_service/echo"));
+		assertInstanceOf(IllegalArgumentException.class, ex.getCause());
+		assertTrue(ex.getMessage().contains("my_service"), ex.getMessage());
 	}
 }

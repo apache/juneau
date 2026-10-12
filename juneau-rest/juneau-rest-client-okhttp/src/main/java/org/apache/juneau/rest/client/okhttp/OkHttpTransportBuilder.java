@@ -17,6 +17,8 @@
 package org.apache.juneau.rest.client.okhttp;
 
 
+import java.net.*;
+
 import okhttp3.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 
@@ -51,6 +53,18 @@ public final class OkHttpTransportBuilder {
 	 *
 	 * <p>
 	 * If not set, a default client is created via {@code new OkHttpClient()}.
+	 *
+	 * <p>
+	 * A client with an explicit {@linkplain OkHttpClient#proxy() proxy} makes {@link OkHttpTransport#supportsUrlPolicy()}
+	 * report <jk>false</jk> (the proxy resolves the target host itself, bypassing the SSRF guard's address pinning), so
+	 * {@code RestRequest} refuses to send an SSRF-guard-active request through it.  A client whose
+	 * {@link ProxySelector} routes a guarded request through a proxy is refused at send time.
+	 *
+	 * <p>
+	 * The transport sends through a client derived from this one with {@link OkHttpClient#newBuilder()} (it shares the
+	 * connection pool, dispatcher and settings), adding a network interceptor that strips caller-set credential headers
+	 * ({@code Authorization}, {@code Cookie} and the rest of {@link org.apache.juneau.rest.client.RedirectSecurity#stripOnCrossOrigin()})
+	 * when OkHttp follows a redirect to a different origin.  The client passed in is not modified.
 	 *
 	 * <p>
 	 * OkHttp recommends sharing a single {@link OkHttpClient} instance across the application.

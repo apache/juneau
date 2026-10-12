@@ -16,16 +16,22 @@
  */
 package org.apache.juneau.bean.jsonpatch;
 
+import static org.apache.juneau.BasicTestUtils.*;
+import static org.apache.juneau.test.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.*;
+import java.lang.reflect.Type;
 
+import org.apache.juneau.*;
+import org.apache.juneau.marshall.parser.*;
+import org.apache.juneau.marshall.serializer.*;
 import org.junit.jupiter.api.*;
 
 /**
  * Tests {@link JsonPatchMarshaller}, the DEFAULT serializer/parser convenience pair for {@code juneau-bean-jsonpatch}.
  */
-class JsonPatchMarshaller_Test {
+class JsonPatchMarshaller_Test extends TestBase {
 
 	@Test
 	void a01_of_singleOperation() {
@@ -98,5 +104,71 @@ class JsonPatchMarshaller_Test {
 		var j = m.write(op);
 		var back = m.read(j, JsonPatchOperation.class);
 		assertInstanceOf(TestOp.class, back);
+	}
+
+	private static final class FailingReader extends Reader {
+		@Override
+		public int read(char[] cbuf, int off, int len) throws IOException {
+			throw new IOException("read-boom");
+		}
+
+		@Override
+		public void close() {}
+	}
+
+	private static final class FailingWriter extends Writer {
+		@Override
+		public void write(char[] cbuf, int off, int len) throws IOException {
+			throw new IOException("write-boom");
+		}
+
+		@Override
+		public void flush() {}
+
+		@Override
+		public void close() {}
+	}
+
+	@Test
+	void a08_stringShortcut_typeArgs() {
+		var j = JsonPatchMarshaller.of(new JsonPatch(new AddOp("/x", 1), new RemoveOp("/y")));
+		var back = JsonPatchMarshaller.<JsonPatch>to(j, (Type)JsonPatch.class);
+		assertEquals(2, back.size());
+		assertInstanceOf(AddOp.class, back.get(0));
+		assertBean(back.get(0), "path,value", "/x,1");
+		assertInstanceOf(RemoveOp.class, back.get(1));
+		assertBean(back.get(1), "path", "/y");
+	}
+
+	@Test
+	void a09_readerShortcut_typeArgs() {
+		var j = JsonPatchMarshaller.of(new JsonPatch(new MoveOp("/a", "/b")));
+		var back = JsonPatchMarshaller.<JsonPatch>to(new StringReader(j), (Type)JsonPatch.class);
+		assertEquals(1, back.size());
+		assertInstanceOf(MoveOp.class, back.get(0));
+		assertBean(back.get(0), "path,from", "/a,/b");
+	}
+
+	@Test
+	void a10_readerShortcut_ioErrorRethrownAsParseException() {
+		var ex = assertThrowsWithMessage(ParseException.class, "read-boom", () -> JsonPatchMarshaller.to(new FailingReader(), JsonPatchOperation.class));
+		assertInstanceOf(IOException.class, ex.getCause());
+	}
+
+	@Test
+	void a11_readerShortcut_typeArgs_ioErrorRethrownAsParseException() {
+		var ex = assertThrowsWithMessage(ParseException.class, "read-boom", () -> JsonPatchMarshaller.to(new FailingReader(), (Type)JsonPatch.class));
+		assertInstanceOf(IOException.class, ex.getCause());
+	}
+
+	@Test
+	void a12_writerShortcut_ioErrorRethrownAsSerializeException() {
+		var ex = assertThrowsWithMessage(SerializeException.class, "write-boom", () -> JsonPatchMarshaller.of(new AddOp("/x", 1), new FailingWriter()));
+		assertInstanceOf(IOException.class, ex.getCause());
+	}
+
+	@Test
+	void a13_writerShortcut_nullOutputRethrownAsSerializeException() {
+		assertThrowsWithMessage(SerializeException.class, "Output cannot be null.", () -> JsonPatchMarshaller.of(new AddOp("/x", 1), (Writer)null));
 	}
 }

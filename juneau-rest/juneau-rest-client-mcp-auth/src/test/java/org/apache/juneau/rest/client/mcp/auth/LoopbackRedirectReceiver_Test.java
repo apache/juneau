@@ -96,4 +96,33 @@ class LoopbackRedirectReceiver_Test extends TestBase {
 			throw new RuntimeException(e);
 		}
 	}
+
+	// -----------------------------------------------------------------------------------------------------------------
+	// D: argument validation + failure modes
+	// -----------------------------------------------------------------------------------------------------------------
+
+	@Test void d01_negativePortRejected() {
+		assertThrows(IllegalArgumentException.class, () -> new LoopbackRedirectReceiver("/callback", -1, "<html></html>"));
+	}
+
+	@Test void d02_fixedPortAlreadyInUseThrowsIOException() throws IOException {
+		try (var occupied = new ServerSocket(0, 0, InetAddress.getLoopbackAddress())) {
+			var port = occupied.getLocalPort();
+			assertThrows(IOException.class, () -> new LoopbackRedirectReceiver("/callback", port, "<html></html>"));
+		}
+	}
+
+	@Test void d03_interruptedWaitThrowsAndRestoresInterruptFlag() throws IOException {
+		try (var r = LoopbackRedirectReceiver.open()) {
+			var timeout = Duration.ofSeconds(5);
+			Thread.currentThread().interrupt();
+			try {
+				var e = assertThrows(McpAuthException.class, () -> r.awaitCallback(timeout));
+				assertTrue(e.getMessage().contains("Interrupted"), e::getMessage);
+				assertTrue(Thread.currentThread().isInterrupted(), "interrupt flag must be restored");
+			} finally {
+				Thread.interrupted();  // clear the flag so it cannot leak into other tests
+			}
+		}
+	}
 }

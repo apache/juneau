@@ -196,7 +196,7 @@ class RowDetailsExpander_Wiring_Test extends TestBase {
 	@Test void b07_actionSubmitUsesParentTr_notJson() throws Exception {
 		var body = cWithMixin.get(ViewsMixin.VIEWS_JS_PATH).run().assertStatus(200).getContent().asString();
 		var fnBody = functionBody(body, "function handleDetailActionRefClick(");
-		assertTrue(fnBody.contains("submitRowAction(action, table, parentTr, ctx)"), fnBody);
+		assertTrue(fnBody.contains("dispatchRowAction(action, table, parentTr, ctx)"), fnBody);
 		assertTrue(fnBody.contains("panel?._juneauParentTr"), fnBody);
 	}
 

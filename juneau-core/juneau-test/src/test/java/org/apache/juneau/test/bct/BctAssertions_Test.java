@@ -240,6 +240,34 @@ class BctAssertions_Test extends TestBase {
 			var e = assertThrows(IllegalArgumentException.class, () -> assertContains("test", null));
 			assertContains("cannot be null", e.getMessage());
 		}
+
+		@Test
+		void e05_notContains_passes() {
+			assertDoesNotThrow(() -> assertNotContains("Missing", "Hello World"));
+		}
+
+		@Test
+		void e06_notContains_withCustomMessage() {
+			assertDoesNotThrow(() -> assertNotContains(() -> "Custom message", "Missing", "Hello World"));
+		}
+
+		@Test
+		void e07_notContains_fails() {
+			var e = assertThrows(AssertionFailedError.class, () -> assertNotContains("Hello", "Hello World"));
+			assertContains("String contained unexpected substring", e.getMessage());
+		}
+
+		@Test
+		void e08_notContains_failsWithCustomMessage() {
+			var e = assertThrows(AssertionFailedError.class, () -> assertNotContains(() -> "Custom marker", "Hello", "Hello World"));
+			assertContains("Custom marker", e.getMessage());
+		}
+
+		@Test
+		void e09_notContains_nullValue() {
+			var e = assertThrows(IllegalArgumentException.class, () -> assertNotContains("test", null));
+			assertContains("cannot be null", e.getMessage());
+		}
 	}
 
 	// ====================================================================================================

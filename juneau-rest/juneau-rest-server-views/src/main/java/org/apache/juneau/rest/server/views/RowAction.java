@@ -54,7 +54,7 @@ import org.apache.juneau.rest.server.widgets.Op;
  * 		may carry a {@code {property}} token substituted from the current row before the confirmation GET
  * 		(see {@link #form(String) form}).  Blank/absent {@code form} is the confirm-only local path.</td></tr>
  * 	<tr><td>{@code present}</td><td>{@code page}|{@code dialog}|{@code inline}</td>
- * 		<td>How the action's form/confirmation is presented (see {@link Present}).</td></tr>
+ * 		<td>How the action's form/confirmation is presented (see {@link Present}); {@code inline} keeps it out of the row menu.</td></tr>
  * 	<tr><td>{@code onSuccess}</td><td>{@code redraw}|{@code mergeRow}|{@code navigate}</td>
  * 		<td>What the runtime does with a successful result (see {@link OnSuccess}).</td></tr>
  * 	<tr><td>{@code enabledWhen}</td><td>{@code [{field,op,value?,reason}, ...]}</td>
@@ -188,8 +188,8 @@ public class RowAction {
 	 * How a row action's form/confirmation is presented.
 	 *
 	 * <p>
-	 * Each constant carries the lowercase wire token emitted for the {@code present} field.  The behavior behind
-	 * each token is implemented by a later wave; this type freezes the vocabulary.
+	 * Each constant carries the lowercase wire token emitted for the {@code present} field.  {@link #INLINE} also
+	 * keeps the action out of the row menu.
 	 */
 	public enum Present {
 
@@ -199,7 +199,12 @@ public class RowAction {
 		/** Render the action's form/confirmation in a modal dialog. */
 		DIALOG("dialog"),
 
-		/** Render the action inline within the row. */
+		/**
+		 * The action is fired from its cell pill or edit cell, never from the row menu.
+		 *
+		 * <p>
+		 * The row-action menu omits it; every other activation surface still runs it.
+		 */
 		INLINE("inline");
 
 		private final String wire;
@@ -445,6 +450,11 @@ public class RowAction {
 
 	/**
 	 * Sets the confirmation prompt shown before the submit.
+	 *
+	 * <p>
+	 * The prompt is shown whatever {@link #present(Present) present} says: without {@link Present#DIALOG} the action
+	 * opens a confirm-only dialog (or its {@link #confirmRenderer(String) confirmRenderer}) and submits only on
+	 * Confirm.  Use {@link #noConfirm()} for an action that never prompts.
 	 *
 	 * @param value The new value.
 	 * @return This object.

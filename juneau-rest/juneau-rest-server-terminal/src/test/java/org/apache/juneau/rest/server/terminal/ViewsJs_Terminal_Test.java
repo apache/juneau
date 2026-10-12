@@ -26,8 +26,8 @@ import org.junit.jupiter.api.*;
 
 /**
  * Drives {@code terminal.cjs}: the terminal engine (poll loop, write queue, step-line map, truncation, retries) against
- * fakes, plus one case against the real xterm.js bundle.  One method per case, plus a catch-all that fails on any
- * case without a method of its own.
+ * fakes, plus one case against the real xterm.js bundle, and the DOM-free input state machine.  One method per case,
+ * plus a catch-all that fails on any case without a method of its own.
  */
 class ViewsJs_Terminal_Test extends TestBase {
 
@@ -74,10 +74,34 @@ class ViewsJs_Terminal_Test extends TestBase {
 	@Test void e05_followScrollsToTheBottom() { ok("s05_followScrollsToTheBottom"); }
 	@Test void e06_deepLinkBeforeTheFirstPollLoadsAll() { ok("s06_deepLinkBeforeTheFirstPollLoadsAll"); }
 	@Test void f01_realXtermLinesAndCells() { ok("x01_realXtermLinesAndCells"); }
+	@Test void g01_pressProbes() { ok("i01_pressProbes"); }
+	@Test void g02_liveArms() { ok("i02_liveArms"); }
+	@Test void g03_deniedDisablesTheToggle() { ok("i03_deniedDisablesTheToggle"); }
+	@Test void g04_probeTimeout() { ok("i04_probeTimeout"); }
+	@Test void g05_batching() { ok("i05_batching"); }
+	@Test void g06_largePasteSplitsAt4096() { ok("i06_largePasteSplitsAt4096"); }
+	@Test void g07_splitIsCodePointSafe() { ok("i07_splitIsCodePointSafe"); }
+	@Test void g08_escEscDisarms() { ok("i08_escEscDisarms"); }
+	@Test void g09_busyShowsTheThrottledChip() { ok("i09_busyShowsTheThrottledChip"); }
+	@Test void g10_disconnectDropsKeys() { ok("i10_disconnectDropsKeys"); }
+	@Test void g11_runEndedDisablesTheToggle() { ok("i11_runEndedDisablesTheToggle"); }
+	@Test void g12_otherIdIgnored() { ok("i12_otherIdIgnored"); }
+	@Test void g13_closedWhileArmed() { ok("i13_closedWhileArmed"); }
+	@Test void g14_disarmFlushesAtMostOneFrame() { ok("i14_disarmFlushesAtMostOneFrame"); }
+	@Test void g15_linkForPicksTheBridge() { ok("l01_linkForPicksTheBridge"); }
+	@Test void g16_reconnectClearsTheDisconnectedChip() { ok("i15_reconnectClearsTheDisconnectedChip"); }
+	@Test void g17_pressWhileDisconnected() { ok("i16_pressWhileDisconnected"); }
+	@Test void g18_pressWhileProbing() { ok("i17_pressWhileProbing"); }
+	@Test void g19_disposeDuringProbing() { ok("i18_disposeDuringProbing"); }
+	@Test void g20_queueAtTheCapIsAccepted() { ok("i19_queueAtTheCapIsAccepted"); }
+	@Test void g21_oneByteOverTheCapIsRefused() { ok("i20_oneByteOverTheCapIsRefused"); }
+	@Test void g22_capCountsUtf8BytesNotChars() { ok("i21_capCountsUtf8BytesNotChars"); }
+	@Test void g23_queuedKeysStillDrainAfterARefusal() { ok("i22_queuedKeysStillDrainAfterARefusal"); }
+	@Test void g24_refusalChipSurvivesTheDrain() { ok("i23_refusalChipSurvivesTheDrain"); }
 
 	@Test void z01_everyCasePasses() {
 		var r = r();
-		assertEquals(32, r.size(), () -> "case count changed; add a method per new case: " + r.keySet());
+		assertEquals(56, r.size(), () -> "case count changed; add a method per new case: " + r.keySet());
 		for (var e : r.entrySet())
 			assertEquals(true, e.getValue(), () -> e.getKey() + " -> " + e.getValue());
 	}

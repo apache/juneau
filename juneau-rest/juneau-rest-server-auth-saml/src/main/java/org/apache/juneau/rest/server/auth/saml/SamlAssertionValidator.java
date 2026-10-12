@@ -24,13 +24,11 @@ import java.time.*;
 import java.util.*;
 import java.util.logging.*;
 
-import javax.xml.namespace.*;
 import javax.xml.parsers.*;
 import org.apache.juneau.commons.concurrent.*;
 import org.apache.juneau.rest.server.auth.*;
 import org.opensaml.core.criterion.*;
 import org.opensaml.core.xml.io.*;
-import org.opensaml.saml.common.assertion.*;
 import org.opensaml.saml.common.xml.*;
 import org.opensaml.saml.criterion.*;
 import org.opensaml.saml.metadata.resolver.*;
@@ -612,7 +610,7 @@ public class SamlAssertionValidator {
 				.wwwAuthenticate("SAML error=\"signature_required\"");
 
 		var alg = signature.getSignatureAlgorithm();
-		if (alg == null || !algorithms.contains(alg)) // HTT: alg==null unreachable; OpenSAML always populates SignatureAlgorithm after signing
+		if (alg == null || !algorithms.contains(alg)) // HTT: alg==null unreachable; a signature with no SignatureMethod is rejected while parsing the response
 			throw new AuthenticationException("SAML signature algorithm not allowlisted: " + alg)
 				.wwwAuthenticate("SAML error=\"signature_algorithm_rejected\"");
 
@@ -670,7 +668,7 @@ public class SamlAssertionValidator {
 	private Credential extractSigningCredential(IDPSSODescriptor idp) {
 		for (KeyDescriptor kd : idp.getKeyDescriptors()) {
 			var credential = credentialFromKeyDescriptor(kd);
-			if (credential != null) // HTT: true branch (successful credential extraction) requires real X.509 metadata; covered by integration tests
+			if (credential != null)
 				return credential;
 		}
 		return null;
@@ -696,7 +694,7 @@ public class SamlAssertionValidator {
 			if (base64 == null)
 				continue;
 			var credential = parseX509Credential(base64);
-			if (credential != null) // HTT: true branch requires valid, in-window X.509 DER bytes; covered by integration tests
+			if (credential != null)
 				return credential;
 		}
 		return null;
@@ -784,11 +782,11 @@ public class SamlAssertionValidator {
 	private void validateDigestAlgorithms(org.opensaml.xmlsec.signature.Signature signature) throws AuthenticationException {
 		var dom = signature.getDOM();
 		if (dom == null) // HTT: null DOM unreachable; a verifiable signature is always marshalled to DOM
-			return;
+			return; // HTT: null DOM unreachable; a verifiable signature is always marshalled to DOM
 		var digestNodes = dom.getElementsByTagNameNS(XMLSIG_NS, "DigestMethod");
 		for (var i = 0; i < digestNodes.getLength(); i++) {
 			var alg = ((Element) digestNodes.item(i)).getAttribute("Algorithm");
-			if (alg == null || alg.isEmpty() || alg.toLowerCase(Locale.ROOT).contains("sha1") || !digestAlgorithms.contains(alg))
+			if (alg == null || alg.isEmpty() || alg.toLowerCase(Locale.ROOT).contains("sha1") || !digestAlgorithms.contains(alg)) // HTT: the alg==null clause is unreachable because Element.getAttribute never returns null; kept as a fail-closed guard
 				throw new AuthenticationException("SAML signature digest algorithm not allowlisted: " + alg)
 					.wwwAuthenticate("SAML error=\"signature_algorithm_rejected\"");
 		}
@@ -835,7 +833,7 @@ public class SamlAssertionValidator {
 		if (expectedInResponseTo != null) {
 			if (neq(expectedInResponseTo, inResponseTo))
 				return "bearer confirmation <InResponseTo> does not match the expected request ID";
-		} else if (inResponseTo != null && ! inResponseTo.isEmpty()) {
+		} else if (inResponseTo != null && ! inResponseTo.isEmpty()) { // HTT: OpenSAML trims an empty InResponseTo to null, so the isEmpty() branch cannot run; kept as a fail-closed guard
 			return "unsolicited bearer confirmation must not carry <InResponseTo>";
 		}
 		if (expectedAddress != null && neq(expectedAddress, data.getAddress()))
@@ -845,7 +843,7 @@ public class SamlAssertionValidator {
 
 	private void recordSingleUse(Assertion assertion) throws AuthenticationException {
 		var id = assertion.getID();
-		if (id == null || id.isEmpty())
+		if (id == null || id.isEmpty()) // HTT: OpenSAML trims an empty ID to null, so the isEmpty() branch cannot run; kept as a fail-closed guard
 			throw rejectAssertion("assertion has no ID for single-use enforcement");
 		var notOnOrAfter = resolveNotOnOrAfter(assertion);
 		if (notOnOrAfter == null)
@@ -901,11 +899,11 @@ public class SamlAssertionValidator {
 
 	private static String extractStringValue(org.opensaml.core.xml.XMLObject av) {
 		if (av == null) // HTT: null av unreachable; OpenSAML attribute value lists never contain null entries
-			return null;
+			return null; // HTT: null av unreachable; OpenSAML attribute value lists never contain null entries
 		var dom = av.getDOM();
-		if (dom != null) // HTT: DOM is non-null only after marshalling; XSString values always have DOM after Response.marshall()
+		if (dom != null) // HTT: the response is always parsed from XML, so every unmarshalled value carries its DOM
 			return dom.getTextContent();
-		return av.toString();
+		return av.toString(); // HTT: the response is always parsed from XML, so every unmarshalled value carries its DOM
 	}
 
 	private static String nameId(Assertion assertion) {
@@ -921,17 +919,5 @@ public class SamlAssertionValidator {
 	private static AuthenticationException rejectAssertion(String reason) {
 		return new AuthenticationException("SAML assertion rejected: " + reason)
 			.wwwAuthenticate("SAML error=\"invalid_assertion\"");
-	}
-
-	/**
-	 * Suppress unused-import warnings for symbols referenced indirectly (kept for API-clarity).
-	 */
-	@SuppressWarnings({
-		"unused" // Symbols are referenced indirectly; method exists to keep imports from being flagged.
-	})
-	private static void apiReferences() {
-		var ignore = new Object[] {
-			SignableXMLObject.class, ValidationContext.class, QName.class, UsageType.class, SignatureConstants.class
-		};
 	}
 }

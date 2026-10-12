@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.server.springboot;
 
+import static org.apache.juneau.test.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.*;
@@ -56,5 +57,15 @@ class JuneauServletRegistrations_Test extends TestBase {
 
 	@Test void a03_rejectsNullServlet() {
 		assertThrows(IllegalArgumentException.class, () -> JuneauServletRegistrations.forServlet(null, null));
+	}
+
+	@Rest(paths={"foo", "/bar//", "/", "/baz/*", "/qux/"})
+	public static class MixedPaths extends RestServlet {
+		private static final long serialVersionUID = 1L;
+	}
+
+	@Test void b01_normalizesMappings() {
+		var bean = JuneauServletRegistrations.forServlet(new MixedPaths(), null);
+		assertList(bean.getUrlMappings(), "/foo", "/bar", "/", "/baz/*", "/qux");
 	}
 }

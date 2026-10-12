@@ -32,7 +32,7 @@ import org.junit.jupiter.api.*;
  * fill-once bookkeeping), living in a closure captured by that node's own event listeners - never in a
  * module-level {@code Map}/{@code Set}/{@code WeakMap}/counter.
  * <li>No HTML-string sink, ever (R16), except {@code icon()}, which paints TRUSTED icon-registry sprite markup
- * only (checked structurally in {@link RawContentSink_SecurityScan_Test}, not re-checked here).
+ * only (checked structurally in {@link ShippedJs_SinkScan_Test}, not re-checked here).
  * <li>Themable by class, not by inline style - the one exception being {@code fieldGrid}'s {@code columns} option,
  * which is a CSS custom property, not a {@code grid-template-columns} inline style.
  * <li>{@code toast()} is the only helper allowed to write under {@code document.body} (one ephemeral
@@ -40,7 +40,7 @@ import org.junit.jupiter.api.*;
  * </ul>
  *
  * <p>
- * This is a static source-text scan (like {@code RawContentSink_SecurityScan_Test}'s HTML-sink checks), not a
+ * This is a static source-text scan (like {@code ShippedJs_SinkScan_Test}'s HTML-sink checks), not a
  * behavioral one - it is what lets an accidental module-level counter or a stray {@code WeakMap} fail this suite
  * even on a code path the behavioral harness in {@link Helpers_Test} happens not to reach.
  */

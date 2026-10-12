@@ -47,6 +47,11 @@ public class BasicRestCallHandler implements RestCallHandler {
 		this.client = client;
 	}
 
+	// The client this handler sends requests through.
+	RestClient client() {
+		return client;
+	}
+
 	@Override /* Overridden from RestCallHandler */
 	public HttpResponse run(HttpHost target, HttpRequest request, HttpContext context) throws IOException {
 		return target == null ? client.execute((HttpUriRequest)request, context) : client.execute(target, request, context);

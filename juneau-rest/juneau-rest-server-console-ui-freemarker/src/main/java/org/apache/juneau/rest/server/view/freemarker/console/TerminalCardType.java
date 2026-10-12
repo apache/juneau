@@ -48,6 +48,20 @@ public final class TerminalCardType implements CardTypeHandler {
 		return "terminal";
 	}
 
+	/**
+	 * The one role a terminal card may subscribe with: {@code input-status}, the answer to a {@code term.input} frame.
+	 *
+	 * <p>
+	 * This set must match the {@code roles} on the terminal card handler in {@code juneau-terminal.js}, so the build-time
+	 * and browser role checks agree.
+	 *
+	 * @return {@code Set.of("input-status")}.
+	 */
+	@Override
+	public Set<String> acceptedRoles() {
+		return Set.of("input-status");
+	}
+
 	@Override
 	@SuppressWarnings({
 		"unchecked" // JSON5 object keys are always strings.

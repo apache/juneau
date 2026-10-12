@@ -242,4 +242,93 @@ class CalendarEvent_Test extends TestBase {
 		var e = ev("2026-06-01", "2026-06-05").id("e1").title("t");
 		assertThrows(IllegalArgumentException.class, () -> e.validate(Set.of(), 2026, 8));
 	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// Accessors, fail-soft time handling and the remaining validate() branches.
+	//------------------------------------------------------------------------------------------------------------------
+
+	@Test void e01_tooltip_setter() {
+		assertEquals("hint", good().tooltip("hint").tooltip);
+	}
+
+	@Test void e02_effectiveAllDay_nullStart_isFalse() {
+		assertFalse(CalendarEvent.create().id("e").title("t").effectiveAllDay());
+	}
+
+	@Test void e03_civilEnd_presentAndBlank() {
+		assertEquals(LocalDate.of(2026, 3, 4), ev("2026-03-02", "2026-03-04").civilEnd());
+		assertNull(ev("2026-03-02", "  ").civilEnd());
+		assertNull(ev("2026-03-02", "  ").malformedReason());
+	}
+
+	@Test void e04_civilStart_andLastDay_unparseable_throw() {
+		assertThrows(IllegalArgumentException.class, () -> ev("nope", null).civilStart());
+		assertThrows(IllegalArgumentException.class, () -> ev("2026-03-02", "nope").civilEnd());
+		assertThrows(IllegalArgumentException.class, () -> ev("2026-03-02", "nope").lastDay());
+		assertThrows(IllegalArgumentException.class, () -> ev(null, null).civilStart());
+	}
+
+	@Test void e05_lastDay_neverEarlierThanStart() {
+		// malformedReason() rejects an inverted range, but lastDay() is public and clamps rather than answering a day before start.
+		assertEquals(LocalDate.of(2026, 3, 4), ev("2026-03-04", "2026-03-02").lastDay());
+		assertEquals(LocalDate.of(2026, 3, 4), ev("2026-03-04T09:00", "2026-03-02T09:00").lastDay());
+	}
+
+	@Test void e06_unparseableTime_degradesToMidnight() {
+		// Start time cannot be parsed: treated as midnight, so a later end is well-formed and spans onto its own day.
+		var e = ev("2026-03-02T99:99", "2026-03-03T10:00");
+		assertNull(e.malformedReason());
+		assertEquals(LocalDate.of(2026, 3, 3), e.lastDay());
+		assertNull(e.startTimeLabel());
+		// An end with an unparseable time is midnight, which is exclusive, so the last occupied day is the day before.
+		assertEquals(LocalDate.of(2026, 3, 2), ev("2026-03-02T09:00", "2026-03-03Tbad").lastDay());
+	}
+
+	@Test void e07_startTimeLabel_handlesOffsetsAndOddShapes() {
+		assertEquals("09:00", ev("2026-03-02T09:00-05:00", null).startTimeLabel());
+		assertEquals("09:00", ev("2026-03-02T09:00+02:00", null).startTimeLabel());
+		assertEquals("09:00", ev("2026-03-02T09:00Z", null).startTimeLabel());
+		assertNull(ev("2026-03-02T", null).allDay(false).startTimeLabel());
+		assertNull(ev("2026-03-02 09:00:00", null).allDay(false).startTimeLabel());
+		assertNull(ev("2026-03-02T25:00", null).startTimeLabel());
+	}
+
+	@Test void e08_malformed_oddStartShapes() {
+		for (var bad : new String[]{"2026-03-0", "2026-03-02 09:00", "2026-13-45", "          "}) {
+			var e = ev(bad, null);
+			assertNotNull(e.malformedReason(), bad);
+		}
+	}
+
+	@Test void e09_validate_malformed_rejectedWithReason() {
+		var e = good().title(null);
+		var ex = assertThrows(IllegalArgumentException.class, () -> e.validate(CATS, 2026, 8));
+		assertTrue(ex.getMessage().contains("malformed"), ex::getMessage);
+	}
+
+	@Test void e10_validate_categoryId_blankIsIgnored_nullKnownSetRejectsAny() {
+		assertDoesNotThrow(() -> good().categoryId(" ").validate(CATS, 2026, 8));
+		assertDoesNotThrow(() -> good().categoryId(null).validate(null, 2026, 8));
+		assertThrows(IllegalArgumentException.class, () -> good().validate(null, 2026, 8));
+	}
+
+	@Test void e11_validate_blankHref_isIgnored() {
+		assertDoesNotThrow(() -> good().href("  ").validate(CATS, 2026, 8));
+	}
+
+	@Test void e12_validate_startAfterMonthEnd_rejected_halfSetWindowSkipsCheck() {
+		var e = good().start("2026-09-01");
+		assertThrows(IllegalArgumentException.class, () -> e.validate(CATS, 2026, 8));
+		assertDoesNotThrow(() -> e.validate(CATS, 2026, null));
+		assertDoesNotThrow(() -> e.validate(CATS, null, 8));
+	}
+
+	@Test void e13_retainWellFormed_nullCollection_isEmpty() {
+		assertTrue(CalendarEvent.retainWellFormed(null).isEmpty());
+	}
+
+	@Test void e14_startTimeLabel_noStart_isNull() {
+		assertNull(CalendarEvent.create().id("e").title("t").startTimeLabel());
+		assertNull(ev("2026-03-02T-9:00", null).startTimeLabel());
+	}
 }

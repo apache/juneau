@@ -23,8 +23,12 @@ Options:
     --full, -f               Clean build + run tests (default)
     --verbose, -v            Accepted for compatibility; Maven output always streams live
     --no-container           Exclude @Tag("container") tests
-    --timing-log <path>      Append per-(module, bucket) timing JSONL records
-    --enforce-perf           Hard-fail if wall-clock exceeds perf-baseline.txt ±20% tolerance
+    --timing-log <path>      Append timing JSONL records (per module bucket, per module wall clock, suite)
+    --enforce-perf           Hard-fail on a perf-guard breach (see "Perf guard" below)
+    --rebaseline             Rewrite perf-baseline.txt's suite line and [modules] from push history, then exit
+                             (no build).  Reads --timing-log, else ~/.cache/juneau-push-timings/<branch>.jsonl
+    --window <n>             --rebaseline: runs per key to take the median of (default 20)
+    --min-runs <n>           --rebaseline: skip keys with fewer runs than this (default 5)
     --js-tests               Also run the headless-browser JS harness (mvn -Pjs-tests, *_BrowserTest in
                              juneau-rest-server-views).  Fails if Node/npm are missing.
     --no-js-tests            Never run the JS harness (overrides auto-detect)
@@ -46,29 +50,29 @@ JS tests:
     are not on the PATH, an auto-enabled run prints a notice and skips; an explicit --js-tests fails instead.
     The first run downloads Playwright + Chromium (needs network); later runs reuse target/js.
 
-Perf guard (per-module, TODO-160):
-    Timing/perf statistics are collected PER MODULE.  write_timing_log() discovers every
-    target/surefire-reports/ directory under the reactor (not just juneau-integration-tests's), attributes
-    each Surefire XML to its OWNING module (the parent of target/surefire-reports), and buckets
-    each test class as core / container.springboot / container.jetty / container.tomcat.
+Perf guard:
+    After the tests pass, the guard compares the measured wall clock of `mvn test` against 'suite' in the
+    project-root perf-baseline.txt, and each module's reactor wall clock (from Maven's Reactor Summary, mapped to
+    module paths by each pom's own <name>) against its [modules] entry.
 
-    --enforce-perf compares the measured tests-only wall-clock against the 'suite' baseline and
-    each module's Surefire test-time against its '<module>/<bucket>' baseline in the project-root
-    perf-baseline.txt.  Uses env-var JUNEAU_CI_PERF_THRESHOLD (default 0.20, i.e. ±20%) — separate
-    from JUNEAU_PUSH_TIMING_THRESHOLD.  Modules with no baseline entry are treated as new (warn,
-    not fail) so the guard degrades gracefully as TODO-160 migrates modules.
+    The suite breaches above baseline × (1 + JUNEAU_CI_PERF_THRESHOLD, default 0.20).  A module breaches only when
+    it is over that AND more than JUNEAU_CI_PERF_MIN_SECONDS (default 3) over its baseline.  A module with no entry
+    warns and never fails.  The report goes to target/perf-guard.txt.
 
-    Without --enforce-perf the check runs in warn-only mode (prints results, never exits non-zero
-    for a perf breach).
+    Without --enforce-perf the check runs in warn-only mode (prints results, never exits non-zero for a perf
+    breach).  --timing-log also records each module's reactor time as an "execution": "module" row, which
+    --rebaseline turns into new baselines.
 """
 
 import argparse
 import importlib.util
 import json
+import math
 import os
 import re
 import shutil
 import signal
+import statistics
 import subprocess
 import sys
 import time
@@ -239,8 +243,86 @@ def discover_module_stats(repo_root: Path) -> dict:
 	return modules
 
 
-def write_timing_log(path: Path, passed: bool, test_elapsed: float):
-	"""Append one JSONL row per (module, bucket) plus a reactor/suite roll-up row."""
+# A Reactor Summary row, read the way juneau_run's Maven parser reads it (MavenParser.SUMMARY_ROW in juneau_run.py).
+SECTION = re.compile(r"^\[([\w.-]+)\]$")
+REACTOR_SUMMARY = re.compile(r"^\[INFO\] Reactor Summary")
+SUMMARY_ROW = re.compile(r"^\[INFO\] (.+?)(?: \.+)? (SUCCESS|FAILURE|SKIPPED)(?: \[\s*([^\]]+?)\s*\])?\s*$")
+ANSI = re.compile(r"\x1b\[[0-9;]*m")
+POM_SKIP_DIRS = {"target", "node_modules", "src", "build-overlay"}
+
+
+def _summary_seconds(text):
+	"""'7.513 s' -> 7.513, '02:45 min' -> 165.0, '01:28 h' -> 5280.0 (as juneau_run's _seconds)."""
+	text = text.strip()
+	m = re.match(r"^(\d+):(\d+)\s*(min|h)?$", text)
+	if m:
+		a, b, unit = int(m.group(1)), int(m.group(2)), m.group(3)
+		return float(a * 3600 + b * 60 if unit == "h" else a * 60 + b)
+	m = re.match(r"^([\d.]+)\s*s?$", text)
+	return float(m.group(1)) if m else 0.0
+
+
+def reactor_times(output: str) -> dict:
+	"""{module name: seconds} from the Reactor Summary of one Maven run's output.  Only SUCCESS rows count."""
+	times: dict = {}
+	in_summary = False
+	for raw in output.splitlines():
+		line = ANSI.sub("", raw)
+		if REACTOR_SUMMARY.match(line):
+			in_summary = True
+			continue
+		row = SUMMARY_ROW.match(line) if in_summary else None
+		if row and row.group(2) == "SUCCESS" and row.group(3):
+			times[row.group(1).strip()] = _summary_seconds(row.group(3))
+	return times
+
+
+def module_names(repo_root: Path) -> tuple:
+	"""({project name: module path}, [ambiguous names]) for every pom.xml outside target/, node_modules/, src/,
+	build-overlay/ (helper poms packaged into a zip, not reactor modules) and dot-directories.
+
+	The name is the project's own <name> (its <artifactId> when it has none), never its parent's; it is what the
+	Reactor Summary prints.  A name two poms share is left out and listed as ambiguous.  The root pom is skipped.
+	"""
+	paths: dict = {}
+	ambiguous: set = set()
+	for dirpath, dirnames, filenames in os.walk(repo_root):
+		dirnames[:] = sorted(d for d in dirnames if d not in POM_SKIP_DIRS and not d.startswith("."))
+		directory = Path(dirpath)
+		if "pom.xml" not in filenames or directory == repo_root:
+			continue
+		try:
+			root = ET.parse(directory / "pom.xml").getroot()
+		except (ET.ParseError, OSError):
+			continue
+		ns = root.tag[:root.tag.index("}") + 1] if root.tag.startswith("{") else ""
+		node = root.find(f"{ns}name")
+		if node is None or not (node.text or "").strip():
+			node = root.find(f"{ns}artifactId")
+		if node is None or not (node.text or "").strip():
+			continue
+		name = node.text.strip()
+		if name in paths or name in ambiguous:
+			paths.pop(name, None)
+			ambiguous.add(name)
+		else:
+			paths[name] = directory.relative_to(repo_root).as_posix()
+	return paths, sorted(ambiguous)
+
+
+def module_times(output: str, repo_root: Path) -> tuple:
+	"""({module path: reactor seconds}, [names with no single pom]) for one `mvn test` run's output."""
+	reactor = reactor_times(output)
+	if not reactor:
+		return {}, []
+	names, _ = module_names(repo_root)
+	times = {names[name]: seconds for name, seconds in reactor.items() if name in names}
+	return times, sorted(name for name in reactor if name not in names)
+
+
+def write_timing_log(path: Path, passed: bool, test_elapsed: float, module_times=None):
+	"""Append one JSONL row per (module, bucket) (summed Surefire class time), one "module" row per measured module
+	(its reactor wall clock, the perf guard's metric) and a reactor/suite roll-up row."""
 	path = path.expanduser()
 	path.parent.mkdir(parents=True, exist_ok=True)
 	repo_root = Path(__file__).parent.parent
@@ -270,6 +352,14 @@ def write_timing_log(path: Path, passed: bool, test_elapsed: float):
 				"wallclock_s": round(stats["seconds"], 3),
 				"test_count": stats["tests"],
 			})
+	# Reactor wall clock per module: what the perf guard checks and --rebaseline reads back.
+	for module_key in sorted(module_times or {}):
+		row = {**base, "module": module_key, "execution": "module",
+			   "wallclock_s": round(module_times[module_key], 3)}
+		buckets = module_stats.get(module_key)
+		if buckets:
+			row["test_count"] = sum(stats["tests"] for stats in buckets.values())
+		rows.append(row)
 	# Roll-up: reactor wall-clock + total counts across all modules.
 	rows.append({
 		**base,
@@ -285,30 +375,31 @@ def write_timing_log(path: Path, passed: bool, test_elapsed: float):
 			f.write(json.dumps(row) + "\n")
 	print(
 		f"🕒 Timing metrics appended to {path} "
-		f"({len(module_stats)} modules, {total_tests} tests, reactor {test_elapsed:.1f}s)"
+		f"({len(module_stats)} modules, {len(module_times or {})} reactor times, {total_tests} tests, reactor {test_elapsed:.1f}s)"
 	)
 
 
 def read_baselines(baseline_file: Path) -> dict:
-	"""Parse the per-module perf baseline file.
+	"""Parse perf-baseline.txt: 'suite' from anywhere, and every '<module path> = <seconds>' under [modules].
 
-	Format (one entry per line):  <key> = <seconds>   # optional trailing comment
-	  'suite'             -> overall reactor wall-clock baseline.
-	  '<module>/<bucket>' -> per-module Surefire test-time baseline.
-
-	Blank lines, '#' comments, the [observability] section, and any non-'suite' key
-	without a '/' (e.g. the observability metric) are ignored.
+	Entries are '<key> = <seconds>', optionally followed by a '#' comment.  A '[name]' line starts a section.  Blank
+	lines, comments and every other section (e.g. [observability], which scripts/microbench.py reads) are ignored.
 	"""
 	result: dict = {}
 	if not baseline_file.exists():
 		return result
+	section = None
 	for line in baseline_file.read_text(encoding="utf-8").splitlines():
 		stripped = line.split("#", 1)[0].strip()
-		if not stripped or "=" not in stripped:
+		heading = SECTION.match(stripped)
+		if heading:
+			section = heading.group(1)
+			continue
+		if "=" not in stripped:
 			continue
 		key, _, value = stripped.partition("=")
 		key = key.strip()
-		if key != "suite" and "/" not in key:
+		if key != "suite" and section != "modules":
 			continue
 		try:
 			result[key] = float(value.strip().split()[0])
@@ -317,44 +408,8 @@ def read_baselines(baseline_file: Path) -> dict:
 	return result
 
 
-def _latest_run_actuals(log_path: Path) -> dict:
-	"""Return {'<module>/<bucket>': wallclock_s, ..., 'suite': wallclock_s} for the latest run_id."""
-	rows = []
-	for line in log_path.read_text(encoding="utf-8").splitlines():
-		stripped = line.strip()
-		if not stripped:
-			continue
-		try:
-			rows.append(json.loads(stripped))
-		except json.JSONDecodeError:
-			continue
-	if not rows:
-		return {}
-	latest_run_id = rows[-1].get("run_id")
-	result: dict = {}
-	for row in rows:
-		if row.get("run_id") != latest_run_id:
-			continue
-		module = row.get("module", "?")
-		execution = row.get("execution", "?")
-		wallclock = float(row.get("wallclock_s", 0.0))
-		if module == "reactor" and execution == "suite":
-			result["suite"] = wallclock
-		else:
-			result[f"{module}/{execution}"] = wallclock
-	return result
-
-
-def _actuals_from_surefire(repo_root: Path) -> dict:
-	"""Fallback per-module actuals straight from surefire reports: {'<module>/<bucket>': seconds}."""
-	actuals: dict = {}
-	for module_key, buckets in discover_module_stats(repo_root).items():
-		for bucket, stats in buckets.items():
-			actuals[f"{module_key}/{bucket}"] = stats["seconds"]
-	return actuals
-
-
 PERF_REPORT = Path(__file__).resolve().parent.parent / "target" / "perf-guard.txt"
+PERF_BASELINE = Path(__file__).resolve().parent.parent / "perf-baseline.txt"
 
 
 class _PerfOutput:
@@ -382,8 +437,9 @@ class _PerfOutput:
 		self.report_file.write_text("\n".join(self.lines) + "\n", encoding="utf-8")
 
 
-def run_perf_guard(test_elapsed: float, baseline_file: Path, timing_log_path, enforce: bool, report_file=None) -> int:
-	"""Per-module perf guard: suite wall-clock + per-(module, bucket) Surefire test-time.
+def run_perf_guard(test_elapsed: float, baseline_file: Path, module_times: dict, enforce: bool, report_file=None,
+		unmapped=()) -> int:
+	"""Perf guard: the suite's wall clock, and each module's reactor wall clock (module_times, from module_times()).
 
 	A breach is a warn note, or an error with enforce=True.  Modules with no baseline collapse into one info note.
 	The full report goes to report_file (target/perf-guard.txt); the Perf row shows the counts and its path.
@@ -391,19 +447,21 @@ def run_perf_guard(test_elapsed: float, baseline_file: Path, timing_log_path, en
 	"""
 	run = run_module()
 	if run is None:
-		return _perf_guard(test_elapsed, baseline_file, timing_log_path, enforce, _PerfOutput(report_file or PERF_REPORT))[0]
+		out = _PerfOutput(report_file or PERF_REPORT)
+		return _perf_guard(test_elapsed, baseline_file, module_times, unmapped, enforce, out)[0]
 	with run.row("perf", "Perf", label="Perf") as row:
 		out = _PerfOutput(report_file or PERF_REPORT)
-		code, summary = _perf_guard(test_elapsed, baseline_file, timing_log_path, enforce, out)
+		code, summary = _perf_guard(test_elapsed, baseline_file, module_times, unmapped, enforce, out)
 		row.summary = summary
 		if code != 0:
 			row.status = "fail"
 	return code
 
 
-def _perf_guard(test_elapsed, baseline_file, timing_log_path, enforce, out):
+def _perf_guard(test_elapsed, baseline_file, module_times, unmapped, enforce, out):
 	"""The check itself.  Returns (exit code, Perf row summary)."""
 	tolerance = float(os.environ.get("JUNEAU_CI_PERF_THRESHOLD", "0.20"))
+	min_seconds = float(os.environ.get("JUNEAU_CI_PERF_MIN_SECONDS", "3"))
 	breach = "error" if enforce else "warn"
 	baselines = read_baselines(baseline_file)
 	if not baselines:
@@ -413,17 +471,6 @@ def _perf_guard(test_elapsed, baseline_file, timing_log_path, enforce, out):
 
 	pct = f"±{tolerance * 100:.0f}%"
 	over = 0
-
-	# Source of per-module actuals: prefer the latest timing-log run, else discover from surefire.
-	actuals: dict = {}
-	if timing_log_path is not None:
-		log_path = Path(timing_log_path).expanduser()
-		if log_path.exists():
-			actuals = _latest_run_actuals(log_path)
-	if not any(k != "suite" for k in actuals):
-		actuals.update(_actuals_from_surefire(Path(__file__).parent.parent))
-	# Suite wall-clock always comes from the measured subprocess time.
-	actuals["suite"] = test_elapsed
 
 	# 1) Suite-level guard.
 	suite_baseline = baselines.get("suite")
@@ -440,28 +487,29 @@ def _perf_guard(test_elapsed, baseline_file, timing_log_path, enforce, out):
 	else:
 		out.line("PERF-GUARD WARN [suite]: no 'suite' baseline configured; skipping wall-clock check.")
 
-	# 2) Per-module guards.
-	module_keys = sorted(k for k in actuals if k != "suite")
+	# 2) Modules: over by the tolerance AND by min_seconds, so a short module's jitter never trips it.
+	margins = f"{pct} and {min_seconds:g}s"
 	checked = 0
 	regressions = 0
 	new_modules = []
-	for key in module_keys:
-		actual = actuals[key]
+	for key in sorted(module_times):
+		actual = module_times[key]
 		baseline = baselines.get(key)
 		if baseline is None:
 			new_modules.append(key)
 			continue
 		checked += 1
-		threshold = baseline * (1 + tolerance)
+		threshold = max(baseline * (1 + tolerance), baseline + min_seconds)
 		if actual > threshold:
 			out.line(
 				f"PERF-GUARD FAIL [{key}]: {actual:.1f}s "
-				f"(baseline {baseline}s, tolerance {pct}, threshold {threshold:.1f}s).\n"
-				f"  If intentional, bump '{key}' in perf-baseline.txt (project root).", breach)
+				f"(baseline {baseline}s, tolerance {margins}, threshold {threshold:.1f}s).\n"
+				f"  If intentional, run `python3 scripts/test.py --rebaseline` or bump '{key}' in perf-baseline.txt "
+				f"(project root).", breach)
 			regressions += 1
 			over += 1
 
-	lines = [f"PERF-GUARD WARN [{key}]: {actuals[key]:.1f}s — no baseline entry yet (new/unknown module; not failing)."
+	lines = [f"PERF-GUARD WARN [{key}]: {module_times[key]:.1f}s — no baseline entry yet (new/unknown module; not failing)."
 			 for key in new_modules]
 	if out.run is None:
 		for text in lines:
@@ -470,11 +518,14 @@ def _perf_guard(test_elapsed, baseline_file, timing_log_path, enforce, out):
 		for text in lines:
 			out.report_only(text)
 		if new_modules:
-			out.line(f"PERF-GUARD: {len(new_modules)} module-bucket(s) have no baseline entry yet: "
+			out.line(f"PERF-GUARD: {len(new_modules)} module(s) have no baseline entry yet: "
 					 + ", ".join(new_modules))
 
+	if unmapped:
+		out.report_only(f"PERF-GUARD: {len(unmapped)} reactor module(s) not mapped to a pom (name shared or missing): "
+						+ ", ".join(unmapped))
 	out.line(
-		f"PERF-GUARD SUMMARY: {checked} module-bucket(s) checked, {regressions} regression(s), "
+		f"PERF-GUARD SUMMARY: {checked} module(s) checked, {regressions} regression(s), "
 		f"{len(new_modules)} new/unknown."
 	)
 	if over and not enforce:
@@ -487,6 +538,115 @@ def _perf_guard(test_elapsed, baseline_file, timing_log_path, enforce, out):
 		summary = f"✓ {checked} checked" + (f" · {len(new_modules)} without a baseline" if new_modules else "")
 	summary += f" → {out.report_file}"
 	return (1 if over and enforce else 0), summary
+
+
+SUITE_LINE = re.compile(r"^suite\s*=")
+OUTLIER_FACTOR = 3
+
+
+def default_timing_log() -> Path:
+	"""The history push.py writes: ~/.cache/juneau-push-timings/<branch>.jsonl."""
+	branch = git_value(["rev-parse", "--abbrev-ref", "HEAD"])
+	return Path.home() / ".cache" / "juneau-push-timings" / f"{branch}.jsonl"
+
+
+def history_series(log_path: Path) -> dict:
+	"""{key: [seconds...]} in run order over passing runs: 'suite' from each reactor/suite row, and a module path
+	from each "module" row."""
+	series: dict = {}
+	if not log_path.exists():
+		return series
+	for line in log_path.read_text(encoding="utf-8").splitlines():
+		try:
+			row = json.loads(line)
+		except json.JSONDecodeError:
+			continue
+		if not isinstance(row, dict) or not row.get("passed", True):
+			continue
+		if row.get("module") == "reactor" and row.get("execution") == "suite":
+			key = "suite"
+		elif row.get("execution") == "module" and row.get("module"):
+			key = row["module"]
+		else:
+			continue
+		try:
+			series.setdefault(key, []).append(float(row["wallclock_s"]))
+		except (KeyError, TypeError, ValueError):
+			continue
+	return series
+
+
+def rebaseline_value(values: list, window: int) -> float:
+	"""The median of the last `window` values, after dropping any over 3× their median, rounded up to 0.1s (a
+	baseline is a ceiling)."""
+	recent = values[-window:]
+	median = statistics.median(recent)
+	kept = [v for v in recent if v <= OUTLIER_FACTOR * median]
+	return math.ceil(round(statistics.median(kept) * 10, 6)) / 10
+
+
+def rebaseline(baseline_file: Path, log_path: Path, window: int = 20, min_runs: int = 5) -> int:
+	"""Rewrite perf-baseline.txt's suite line and [modules] section from the history medians; print what changed.
+
+	A key with fewer than min_runs passing runs in the window is skipped and keeps its value; a [modules] entry with
+	no history at all is removed.  Everything outside the suite line and the [modules] body is kept byte-for-byte.
+	Runs no build.  Returns 0, or 1 when there is no history or no [modules] line (nothing is written then).
+	"""
+	text = baseline_file.read_text(encoding="utf-8") if baseline_file.exists() else ""
+	lines = text.splitlines(keepends=True)
+	start = next((i for i, line in enumerate(lines) if line.strip() == "[modules]"), None)
+	if start is None:
+		print(f"❌ {baseline_file} has no [modules] section line; nothing rewritten.")
+		return 1
+	series = history_series(log_path)
+	if not series:
+		print(f"❌ no passing runs in {log_path}; nothing rewritten.")
+		return 1
+	end = next((i for i in range(start + 1, len(lines)) if SECTION.match(lines[i].strip())), len(lines))
+	# Comments and blank lines just above the next section (its banner) belong to it, not to [modules].
+	while end > start + 1 and (not lines[end - 1].strip() or lines[end - 1].lstrip().startswith("#")):
+		end -= 1
+	before = read_baselines(baseline_file)
+	fresh, skipped = {}, {}
+	for key, values in series.items():
+		if len(values[-window:]) < min_runs:
+			skipped[key] = len(values[-window:])
+		else:
+			fresh[key] = rebaseline_value(values, window)
+	modules = {k: v for k, v in before.items() if k != "suite" and k in skipped}
+	modules.update({k: v for k, v in fresh.items() if k != "suite"})
+
+	if not lines[start].endswith("\n"):
+		lines[start] += "\n"
+	body = [f"{key} = {modules[key]:g}\n" for key in sorted(modules)]
+	if end < len(lines) and lines[end].strip():
+		body.append("\n")
+	out = lines[:start + 1] + body + lines[end:]
+	if "suite" in fresh:
+		suite_line = f"suite = {fresh['suite']:g}\n"
+		at = next((i for i, line in enumerate(out) if SUITE_LINE.match(line)), None)
+		if at is None:
+			out.insert(start, suite_line)
+		else:
+			out[at] = suite_line
+	baseline_file.write_text("".join(out), encoding="utf-8")
+
+	after = read_baselines(baseline_file)
+	keys = sorted(set(before) | set(after), key=lambda k: (k != "suite", k))
+	changed = [k for k in keys if k in before and k in after and before[k] != after[k]]
+	added = [k for k in keys if k not in before]
+	removed = [k for k in keys if k not in after]
+	print(f"📏 Rebaselined {baseline_file} from {log_path} (last {window} passing runs): {len(changed)} changed, "
+		  f"{len(added)} added, {len(removed)} removed, {len(skipped)} skipped (fewer than {min_runs} runs).")
+	for k in changed:
+		print(f"   ~ {k}: {before[k]:g} → {after[k]:g}")
+	for k in added:
+		print(f"   + {k}: {after[k]:g}")
+	for k in removed:
+		print(f"   - {k}: {before[k]:g}")
+	for k in sorted(skipped):
+		print(f"   ? {k}: {skipped[k]} run(s)")
+	return 0
 
 
 # Reactor-level parallel *module* builds.  -T1C runs one build thread per CPU core, so independent
@@ -599,6 +759,9 @@ def _main():  # NOSONAR python:S3776 -- Cognitive complexity is acceptable for t
 	parser.add_argument("--no-container", action="store_true")
 	parser.add_argument("--timing-log")
 	parser.add_argument("--enforce-perf", action="store_true")
+	parser.add_argument("--rebaseline", action="store_true")
+	parser.add_argument("--window", type=int, default=20)
+	parser.add_argument("--min-runs", type=int, default=5, dest="min_runs")
 	parser.add_argument("--js-tests", action="store_true", dest="js_tests")
 	parser.add_argument("--no-js-tests", action="store_true", dest="no_js_tests")
 	parser.add_argument("--profile")
@@ -615,6 +778,9 @@ def _main():  # NOSONAR python:S3776 -- Cognitive complexity is acceptable for t
 		print(f"Unknown option(s): {' '.join(unknown)}")
 		print(__doc__)
 		return 1
+	if args.rebaseline:
+		log = Path(args.timing_log).expanduser() if args.timing_log else default_timing_log()
+		return rebaseline(PERF_BASELINE, log, window=args.window, min_runs=args.min_runs)
 	# juneau_run reads its output routing from the environment; an argument beats a value already set there.
 	for flag, variable in ((args.console, "JUNEAU_RUN_CONSOLE"), (args.full_log, "JUNEAU_RUN_FULL_LOG"),
 			(args.condensed_log, "JUNEAU_RUN_CONDENSED_LOG")):
@@ -660,6 +826,7 @@ def _main():  # NOSONAR python:S3776 -- Cognitive complexity is acceptable for t
 		test_start = time.time()
 		exit_code, last_test_output = test(no_container=args.no_container)
 		test_elapsed = time.time() - test_start
+		module_times_, unmapped = module_times(last_test_output, Path(__file__).resolve().parent.parent)
 		if exit_code != 0:
 			_, failures, errors = parse_test_results(last_test_output)
 			if failures is not None and errors is not None:
@@ -669,11 +836,11 @@ def _main():  # NOSONAR python:S3776 -- Cognitive complexity is acceptable for t
 		else:
 			say("\n✅ Tests passed!")
 		if args.timing_log:
-			write_timing_log(Path(args.timing_log), passed=(exit_code == 0), test_elapsed=test_elapsed)
+			write_timing_log(Path(args.timing_log), passed=(exit_code == 0), test_elapsed=test_elapsed,
+					 module_times=module_times_)
 		if exit_code != 0:
 			return exit_code
-		baseline_file = Path(__file__).parent.parent / "perf-baseline.txt"
-		perf_exit = run_perf_guard(test_elapsed, baseline_file, args.timing_log, enforce=args.enforce_perf)
+		perf_exit = run_perf_guard(test_elapsed, PERF_BASELINE, module_times_, enforce=args.enforce_perf, unmapped=unmapped)
 		if perf_exit != 0:
 			return perf_exit
 		js_changed = [] if (args.js_tests or args.no_js_tests) else changed_files_vs_origin()
@@ -683,9 +850,31 @@ def _main():  # NOSONAR python:S3776 -- Cognitive complexity is acceptable for t
 	return exit_code
 
 
+def owned_by_enclosing_run():
+	"""True when push.py or an enclosing run spawned us; it rings once at its own end.  Read before this process's own
+	run() marks the environment active."""
+	return bool(os.environ.get("JUNEAU_PUSH_ACTIVE") or os.environ.get("JUNEAU_RUN_N_BASE")
+		or os.environ.get("JUNEAU_RUN_ACTIVE"))
+
+
+def ring_bell():
+	"""Writes a terminal bell so the terminal can badge its Dock icon when a standalone run ends (best-effort).
+	Silent off a TTY, in the Claude Code sandbox, and with JUNEAU_PUSH_NO_SOUND=1 (shared with push.py).
+	Keep in sync with ring_bell() in push.py."""
+	if os.environ.get("SANDBOX_RUNTIME") == "1" or os.environ.get("JUNEAU_PUSH_NO_SOUND") == "1":
+		return
+	try:
+		if sys.stdout.isatty():
+			sys.stdout.write("\a")
+			sys.stdout.flush()
+	except Exception:
+		pass
+
+
 def main():
 	"""Owns the run-protocol `run`/`done` markers (both are no-ops unless RUN_MARKERS=1 and no enclosing run exists)."""
 	run = run_module()
+	nested = owned_by_enclosing_run()
 	previous_sigterm = None
 	if run is not None and run.enabled():
 		# Unwind to the KeyboardInterrupt handler below; run_tool tears the Maven process group down on the way.
@@ -710,6 +899,8 @@ def main():
 	finally:
 		if previous_sigterm is not None:
 			signal.signal(signal.SIGTERM, previous_sigterm)
+		if not nested:
+			ring_bell()
 
 
 if __name__ == '__main__':

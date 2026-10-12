@@ -294,7 +294,7 @@ public final class ConsoleTemplateValidator {
 						if (nn(type) && type.literal && eq(type.value, "datatables") && ! selfClosing)
 							checkViewVersion(out, name, lines, text, m.end(), n(id) ? "" : id.value);
 						if (! selfClosing)
-							checkCardBody(out, name, lines, at, text, m.end(), id, attrs.get("src"));
+							checkCardBody(out, name, lines, at, text, m.end(), id, attrs.get("src"), attrs.get("type"));
 					}
 					case ConsoleDirectiveModel.NAME -> {
 						if (consoleAt < 0)
@@ -372,12 +372,14 @@ public final class ConsoleTemplateValidator {
 	 * The C2 card-body rules: {@code card-src-and-body} and {@code card-reserved-key}.
 	 * Reads the body the same way {@link #checkViewVersion} does, up to the next {@code </@card}.
 	 */
-	private static void checkCardBody(List<Finding> out, String name, int[] lines, int at, String text, int bodyStart, Value id, Value src) {
+	private static void checkCardBody(List<Finding> out, String name, int[] lines, int at, String text, int bodyStart, Value id, Value src, Value type) {
 		var end = text.indexOf("</@card", bodyStart);
 		var body = text.substring(bodyStart, end < 0 ? text.length() : end);
 		var cardId = n(id) ? "" : id.value;
 		var trimmed = body.trim();
-		if (! trimmed.isEmpty() && nn(src) && src.literal)
+		// A chart card legitimately takes src= (remote rows) plus a body (kind and options).
+		var chart = nn(type) && type.literal && "chart".equals(type.value);
+		if (! trimmed.isEmpty() && nn(src) && src.literal && ! chart)
 			add(out, name, lines, at, "card-src-and-body", f(
 				"<@card id='%s'> has both src='%s' and a body; use exactly one.", cardId, src.value));
 		if (trimmed.isEmpty() || body.contains("${"))

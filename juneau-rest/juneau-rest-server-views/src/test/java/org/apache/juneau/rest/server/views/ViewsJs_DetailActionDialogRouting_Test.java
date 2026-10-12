@@ -69,12 +69,15 @@ class ViewsJs_DetailActionDialogRouting_Test extends TestBase {
 	}
 
 	@Test void a01_sourceShape_detailPathRoutesDialogDeclaredActionsThroughOpenActionDialog() throws Exception {
-		var fnBody = functionBody(viewsJs(), "function handleDetailActionRefClick(");
-		assertTrue(fnBody.contains("isDialogAction(action)"), fnBody);
-		assertTrue(fnBody.contains("openActionDialog(action, table, parentTr, ctx)"), fnBody);
-		// The non-dialog branch keeps going through the pre-existing direct submit, unchanged.
-		assertTrue(fnBody.contains("submitRowAction(action, table, parentTr, ctx)"), fnBody);
+		var js = viewsJs();
+		var fnBody = functionBody(js, "function handleDetailActionRefClick(");
+		// The detail path takes the shared row-action dispatch the menu and pill paths take.
+		assertTrue(fnBody.contains("dispatchRowAction(action, table, parentTr, ctx)"), fnBody);
 		assertTrue(fnBody.contains("panel?._juneauParentTr"), fnBody);
+		var dispatch = functionBody(js, "function dispatchRowAction(");
+		assertTrue(dispatch.contains("if (isDialogAction(action)) return openActionDialog(action, table, tr, ctx);"), dispatch);
+		// The non-dialog, no-confirm branch keeps going through the pre-existing direct submit, unchanged.
+		assertTrue(dispatch.contains("return submitRowAction(action, table, tr, ctx, extra);"), dispatch);
 	}
 
 	/**

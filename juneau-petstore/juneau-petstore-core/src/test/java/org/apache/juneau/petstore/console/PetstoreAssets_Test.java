@@ -64,6 +64,12 @@ class PetstoreAssets_Test extends TestBase {
 		assertContainsAll(String.join("\n", AssetResolutionAssert.assetUrls(html("/console/store"))), "/juneau-console/chrome.css", "/juneau-console/juneau-console.js");
 	}
 
+	@Test void a03_everyPageLoadsTheVersionedPetstoreScript() throws Exception {
+		var urls = String.join("\n", AssetResolutionAssert.assetUrls(html("/console/store")));
+		assertContains("/console/petstore.js?v=", urls);
+		C.get("/console/petstore.js").run().assertStatus(200).assertHeader("Content-Type").asString().isContains("javascript");
+	}
+
 	//-----------------------------------------------------------------------------------------------------------------
 	// b - the pages' own links and the DataTables dependencies
 	//-----------------------------------------------------------------------------------------------------------------
@@ -88,10 +94,10 @@ class PetstoreAssets_Test extends TestBase {
 				() -> path + ": jquery=" + jquery + ", dataTables=" + dataTables + ", glue=" + glue + ", views=" + toolkit);
 			assertContains("dataTables.dataTables.min.css", html);
 			org.junit.jupiter.api.Assertions.assertEquals(html.indexOf(JQUERY), html.lastIndexOf(JQUERY), () -> path + ": jQuery loads once");
-			org.junit.jupiter.api.Assertions.assertFalse(html.contains("cdn."), () -> path + " must not load a library from a CDN");
-			org.junit.jupiter.api.Assertions.assertFalse(html.contains("/console/vendor/"), () -> path + " still loads the old vendor copies");
+			assertNotContains(() -> path + " must not load a library from a CDN", "cdn.", html);
+			assertNotContains(() -> path + " still loads the old vendor copies", "/console/vendor/", html);
 		}
-		org.junit.jupiter.api.Assertions.assertFalse(html("/console/about").contains("jquery"), "a page without a table loads no jQuery");
+		assertNotContains(() -> "a page without a table loads no jQuery", "jquery", html("/console/about"));
 	}
 
 	@Test void b03_theWebJarsAreServed() throws Exception {

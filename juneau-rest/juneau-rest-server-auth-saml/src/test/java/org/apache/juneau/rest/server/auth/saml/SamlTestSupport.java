@@ -195,6 +195,42 @@ final class SamlTestSupport {
 	}
 
 	/**
+	 * Signs the assertion, encrypts the signed assertion to {@code encryptionCred}'s public key (AES-128-GCM data
+	 * encryption, RSA-OAEP key transport, key inline), places it in a Response as an {@code <EncryptedAssertion>},
+	 * and serializes.
+	 */
+	static String signEncryptAndBuildResponse(BasicCredential signingCred, Credential encryptionCred, String responseIssuer, Assertion assertion) throws Exception {
+		var sig = new SignatureBuilder().buildObject();
+		sig.setSigningCredential(signingCred);
+		sig.setSignatureAlgorithm(SignatureConstants.ALGO_ID_SIGNATURE_RSA_SHA256);
+		sig.setCanonicalizationAlgorithm(SignatureConstants.ALGO_ID_C14N_EXCL_OMIT_COMMENTS);
+		assertion.setSignature(sig);
+		MarshallerFactory mf = XMLObjectProviderRegistrySupport.getMarshallerFactory();
+		mf.getMarshaller(assertion).marshall(assertion);
+		Signer.signObject(sig);
+
+		var dataParams = new org.opensaml.xmlsec.encryption.support.DataEncryptionParameters();
+		dataParams.setAlgorithm(org.opensaml.xmlsec.encryption.support.EncryptionConstants.ALGO_ID_BLOCKCIPHER_AES128_GCM);
+		var keyParams = new org.opensaml.xmlsec.encryption.support.KeyEncryptionParameters();
+		keyParams.setEncryptionCredential(encryptionCred);
+		keyParams.setAlgorithm(org.opensaml.xmlsec.encryption.support.EncryptionConstants.ALGO_ID_KEYTRANSPORT_RSAOAEP);
+		var encrypter = new org.opensaml.saml.saml2.encryption.Encrypter(dataParams, keyParams);
+		encrypter.setKeyPlacement(org.opensaml.saml.saml2.encryption.Encrypter.KeyPlacement.INLINE);
+		var encrypted = encrypter.encrypt(assertion);
+
+		var bf = bf();
+		var responseBuilder = (SAMLObjectBuilder<Response>) bf.getBuilder(Response.DEFAULT_ELEMENT_NAME);
+		var response = responseBuilder.buildObject();
+		response.setID("_resp-" + System.nanoTime());
+		response.setIssueInstant(ISSUE_INSTANT);
+		response.setVersion(org.opensaml.saml.common.SAMLVersion.VERSION_20);
+		response.setIssuer(buildIssuer(bf, responseIssuer));
+		response.setStatus(buildStatus(bf));
+		response.getEncryptedAssertions().add(encrypted);
+		return serialize(mf.getMarshaller(response).marshall(response));
+	}
+
+	/**
 	 * Builds a Response with a bare assertion (no Signature) and serializes.
 	 * Used to test the unsigned-assertion branch in verifySignature.
 	 */

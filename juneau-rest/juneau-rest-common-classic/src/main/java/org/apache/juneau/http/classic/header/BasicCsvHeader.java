@@ -193,7 +193,7 @@ public class BasicCsvHeader extends BasicHeader {
 		if (nn(supplier)) {
 			String[] value2 = supplier.get();
 			if (nn(value2))
-				for (var v : supplier.get())
+				for (var v : value2)
 					if (eq(v, val))
 						return true;
 
@@ -215,7 +215,7 @@ public class BasicCsvHeader extends BasicHeader {
 		if (nn(supplier)) {
 			String[] value2 = supplier.get();
 			if (nn(value2))
-				for (var v : supplier.get())
+				for (var v : value2)
 					if (eqic(v, val))
 						return true;
 		}

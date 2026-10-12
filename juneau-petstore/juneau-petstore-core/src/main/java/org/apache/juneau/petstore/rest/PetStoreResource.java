@@ -323,6 +323,10 @@ public class PetStoreResource extends BasicRestServlet {
 	/**
 	 * Updates an existing user.
 	 *
+	 * <p>
+	 * The body replaces the user, except that the write-only password is kept when the body has none (or a blank one),
+	 * so a GET followed by a PUT of the same body does not erase it.
+	 *
 	 * @param username The username.
 	 * @param user The replacement user body.
 	 * @return The updated user.

@@ -33,8 +33,8 @@ class TerminalDef_Test extends TestBase {
 	}
 
 	@Test void a02_toMapOrderClampAndOmitsUnset() {
-		var d = TerminalDef.create("t").tailBytes(10).title("T").refreshMs(5).eventsUrl("/e").bytesUrl("/b").validate();
-		assertEquals(List.of("bytesUrl", "eventsUrl", "refreshMs", "title", "tailBytes"), new ArrayList<>(d.toMap().keySet()));
+		var d = TerminalDef.create("t").inputId("t1").input(true).tailBytes(10).title("T").refreshMs(5).eventsUrl("/e").bytesUrl("/b").validate();
+		assertEquals(List.of("bytesUrl", "eventsUrl", "refreshMs", "title", "tailBytes", "input", "inputId"), new ArrayList<>(d.toMap().keySet()));
 		assertEquals(1000L, d.toMap().get("refreshMs"));
 		assertEquals(Map.of("bytesUrl", "/b"), TerminalDef.create("t").bytesUrl("/b").validate().toMap());
 	}
@@ -43,7 +43,7 @@ class TerminalDef_Test extends TestBase {
 		var d = TerminalDef.fromMap("t", Map.of("bytesUrl", "/b", "tailBytes", 4096.0, "refreshMs", 2000));
 		assertEquals(4096L, d.tailBytes);
 		assertEquals(2000L, d.refreshMs);
-		assertThrowsWithMessage(IllegalArgumentException.class, "TerminalDef 't' unknown key 'rows'; allowed: [bytesUrl, eventsUrl, refreshMs, title, tailBytes].",
+		assertThrowsWithMessage(IllegalArgumentException.class, "TerminalDef 't' unknown key 'rows'; allowed: [bytesUrl, eventsUrl, refreshMs, title, tailBytes, input, inputId].",
 			() -> TerminalDef.fromMap("t", Map.of("rows", 1)));
 		assertThrowsWithMessage(IllegalArgumentException.class, "TerminalDef 't' bytesUrl must be a string.", () -> TerminalDef.fromMap("t", Map.of("bytesUrl", 1)));
 		assertThrowsWithMessage(IllegalArgumentException.class, "TerminalDef 't' tailBytes must be an integer.", () -> TerminalDef.fromMap("t", Map.of("tailBytes", 1.5)));
@@ -59,5 +59,30 @@ class TerminalDef_Test extends TestBase {
 		assertThrowsWithMessage(IllegalArgumentException.class, "tailBytes must be 1..1073741824", () -> TerminalDef.create("t").bytesUrl("/b").tailBytes(TerminalDef.MAX_TAIL_BYTES + 1).validate());
 		assertThrowsWithMessage(IllegalArgumentException.class, "TerminalDef id must not be blank.", () -> TerminalDef.create(" ").bytesUrl("/b").validate());
 		assertNotNull(TerminalDef.create("t").bytesUrl("/b").tailBytes(TerminalDef.MAX_TAIL_BYTES).validate());
+	}
+
+	@Test void a05_inputNeedsInputId() {
+		assertThrowsWithMessage(IllegalArgumentException.class, "TerminalDef 't' input needs inputId.",
+			() -> TerminalDef.create("t").bytesUrl("/b").input(true).validate());
+		assertNotNull(TerminalDef.create("t").bytesUrl("/b").input(false).validate());
+		assertNotNull(TerminalDef.create("t").bytesUrl("/b").input(true).inputId("t1").validate());
+	}
+
+	@Test void a06_inputIdChecked() {
+		assertThrowsWithMessage(IllegalArgumentException.class, "TerminalDef 't' inputId must match [A-Za-z0-9_-]{1,128}; got '../x'.",
+			() -> TerminalDef.create("t").bytesUrl("/b").inputId("../x").validate());
+	}
+
+	@Test void a07_forMixinSetsInputId() {
+		var d = TerminalDef.forMixin("card", "/runs", "t1");
+		assertEquals("t1", d.inputId);
+		assertNull(d.input);
+		assertFalse(d.toMap().containsKey("input"));
+	}
+
+	@Test void a08_inputMustBeBoolean() {
+		assertThrowsWithMessage(IllegalArgumentException.class, "TerminalDef 't' input must be a boolean.",
+			() -> TerminalDef.fromMap("t", Map.of("input", "yes")));
+		assertEquals(Boolean.TRUE, TerminalDef.fromMap("t", Map.of("input", true, "inputId", "t1")).input);
 	}
 }

@@ -192,8 +192,8 @@ public class JsonPatchMarshaller extends CharMarshaller {
 	public static void of(Object object, Writer output) throws SerializeException {
 		try {
 			DEFAULT.write(object, output);
-		} catch (IOException e) {
-			throw new SerializeException(e);
+		} catch (IOException e) { // HTT: required by the checked IOException on Marshaller.write(); DEFAULT's serializer wraps every writer and pipe I/O failure in SerializeException or a runtime exception first, and a seam would make this testable
+			throw new SerializeException(e); // HTT: only reachable from the catch above
 		}
 	}
 

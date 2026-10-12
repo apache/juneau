@@ -178,6 +178,9 @@ public final class CardSpec {
 	/** @return The wrapper CSS classes, or <jk>null</jk>. */
 	String cssClass() { return cssClass; }
 
+	/** @return An unmodifiable copy of the type-specific body fields, in insertion order. */
+	public Map<String,Object> bodyMap() { return Collections.unmodifiableMap(new LinkedHashMap<>(body)); }
+
 	/** @return The contract entry, common fields first. */
 	public Map<String,Object> toMap() {
 		var m = new LinkedHashMap<String,Object>();

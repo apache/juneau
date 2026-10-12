@@ -380,8 +380,8 @@ public class McpDynamicClientRegistrar {
 		}
 		if (! resp.indicatesSuccess()) {
 			var err = resp.toErrorResponse().getErrorObject();
-			var code = (err == null || err.getCode() == null) ? "unknown_error" : err.getCode();
-			String desc = err == null ? null : err.getDescription();
+			var code = err.getCode() == null ? "unknown_error" : err.getCode();
+			String desc = err.getDescription();
 			throw new McpAuthException("Dynamic client registration failed: " + code + (desc == null ? "" : " (" + desc + ")"));
 		}
 		return toRegistration(resp.toSuccessResponse().getClientInformation());
@@ -412,10 +412,10 @@ public class McpDynamicClientRegistrar {
 
 	private McpClientRegistration toRegistration(ClientInformation info) {
 		var secret = info.getSecret();
-		Optional<String> clientSecret = (secret == null || secret.getValue() == null) ? oe() : o(secret.getValue());
+		Optional<String> clientSecret = secret == null ? oe() : o(secret.getValue());
 		Optional<Instant> secretExpires = (secret == null || secret.getExpirationDate() == null) ? oe() : o(secret.getExpirationDate().toInstant());
 		var rat = info.getRegistrationAccessToken();
-		Optional<String> regAccessToken = (rat == null || rat.getValue() == null) ? oe() : o(rat.getValue());
+		Optional<String> regAccessToken = rat == null ? oe() : o(rat.getValue());
 		Optional<URI> regClientUri = info.getRegistrationURI() == null ? oe() : o(info.getRegistrationURI());
 		return new McpClientRegistration(
 			info.getID().getValue(),
@@ -431,9 +431,8 @@ public class McpDynamicClientRegistrar {
 
 	/** Surfaces any non-registered custom fields the AS returned in the registration response as the registration's extras. */
 	private static Map<String,Object> extrasFrom(ClientInformation info) {
-		var md = info.getMetadata();
-		var custom = md == null ? null : md.getCustomFields();
-		return (custom == null || custom.isEmpty()) ? Map.of() : new LinkedHashMap<>(custom);
+		var custom = info.getMetadata().getCustomFields();
+		return custom.isEmpty() ? Map.of() : new LinkedHashMap<>(custom);
 	}
 
 	private static Set<GrantType> mapGrantTypes(Set<String> v) {
@@ -441,8 +440,8 @@ public class McpDynamicClientRegistrar {
 		for (var g : v) {
 			try {
 				out.add(GrantType.parse(g));
-			} catch (ParseException e) {
-				throw iaex(e, "Invalid grant_type '%s'", g);
+			} catch (ParseException e) { // HTT: GrantType.parse only throws ParseException for null/empty input, which the builder's reqnb rejects up front
+				throw iaex(e, "Invalid grant_type '%s'", g);  // HTT: see above
 			}
 		}
 		return out;
@@ -453,8 +452,8 @@ public class McpDynamicClientRegistrar {
 		for (var r : v) {
 			try {
 				out.add(ResponseType.parse(r));
-			} catch (ParseException e) {
-				throw iaex(e, "Invalid response_type '%s'", r);
+			} catch (ParseException e) { // HTT: ResponseType.parse only throws ParseException for null/empty input, which the builder's reqnb rejects up front
+				throw iaex(e, "Invalid response_type '%s'", r);  // HTT: see above
 			}
 		}
 		return out;

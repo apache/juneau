@@ -55,10 +55,15 @@ public class MustacheFlavorRest extends PetstoreConsolePage {
 		return MustacheMixin.create().basePath(FRAGMENTS).templateSuffix(".mustache").build();
 	}
 
-	/** @return The console page. */
+	/**
+	 * The console page, from its builder twin on {@code ?builder}.
+	 *
+	 * @param req The request.
+	 * @return The console page.
+	 */
 	@RestGet(path="/")
-	public View page() {
-		return Flavor.MUSTACHE.page();
+	public View page(RestRequest req) {
+		return Flavor.MUSTACHE.page(req);
 	}
 
 	/** @return The pet list fragment. */

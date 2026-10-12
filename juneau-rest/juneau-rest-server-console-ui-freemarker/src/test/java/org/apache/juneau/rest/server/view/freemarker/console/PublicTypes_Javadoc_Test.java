@@ -55,7 +55,8 @@ class PublicTypes_Javadoc_Test {
 
 	private static final List<String> NEW_PUBLIC_TYPE_FILES = List.of(
 		VIEWS + "RibbonItem.java", VIEWS + "RowDetail.java", VIEWS + "QuickStat.java", VIEWS + "TableSpec.java",
-		CUIF + "PageSpec.java", CUIF + "BadgeDirectiveModel.java", CUIF + "FactsDirectiveModel.java");
+		CUIF + "PageSpec.java", CUIF + "BadgeDirectiveModel.java", CUIF + "FactsDirectiveModel.java",
+		CUIF + "ChartCardType.java", CUIF + "ChartDef.java", CUIF + "JobLogCardType.java");
 
 	private static void assertHasExampleBlock(Path file) throws IOException {
 		assertTrue(Files.exists(file), () -> "Missing file, update NEW_PUBLIC_TYPE_FILES: '" + file + "'.");

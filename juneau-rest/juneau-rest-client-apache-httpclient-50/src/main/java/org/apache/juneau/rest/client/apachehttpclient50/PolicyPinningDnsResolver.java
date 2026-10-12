@@ -22,12 +22,15 @@ import org.apache.hc.client5.http.*;
 import org.apache.juneau.http.remote.*;
 
 /**
- * {@link DnsResolver} that pin-on-connects SSRF-guard-active {@code @Remote} connections: while
- * {@link ApacheHc5Transport#isPolicyActive()} is set on the calling thread, resolution is restricted to a single
- * address selected by {@link RemoteUrlPolicy#selectAllowedAddress} &mdash; the exact address Apache HttpClient's
- * connection operator then connects the socket to, while still using the original hostname for the {@code Host}
- * header and TLS SNI/hostname verification. Ordinary (non-{@code @Remote}) connections on the same transport
- * delegate to {@link SystemDefaultDnsResolver} unchanged.
+ * {@link DnsResolver} that pin-on-connects SSRF-guard-active {@code @Remote} connections: resolution is restricted to
+ * a single address selected by {@link RemoteUrlPolicy#selectAllowedAddress} &mdash; the exact address Apache
+ * HttpClient's connection operator then connects the socket to, while still using the original hostname for the
+ * {@code Host} header and TLS SNI/hostname verification.
+ *
+ * <p>
+ * It is installed only on the connection manager of {@link ApacheHc5Transport}'s dedicated client for guarded
+ * requests, so every connection in that pool is opened through the pin.  Ordinary (non-{@code @Remote}) requests use
+ * the transport's other client, with its own pool and the system resolver, and are completely unaffected.
  *
  * @since 10.0.0
  */
@@ -39,10 +42,9 @@ final class PolicyPinningDnsResolver implements DnsResolver {
 
 	@Override /* DnsResolver */
 	public InetAddress[] resolve(String host) throws UnknownHostException {
-		if (! ApacheHc5Transport.isPolicyActive())
-			return SystemDefaultDnsResolver.INSTANCE.resolve(host);
-		var pinned = RemoteUrlPolicy.selectAllowedAddress(host, false, RemoteUrlPolicy.AddressResolver.DEFAULT);
-		return new InetAddress[]{pinned};
+		// Guarded requests are SSRF-guard-active only when the allowPrivateUrls opt-in is off
+		// (TransportRequest.isSsrfGuardActive()), so the deny-private checks always apply here.
+		return new InetAddress[]{RemoteUrlPolicy.selectAllowedAddress(host, false, RemoteUrlPolicy.AddressResolver.DEFAULT)};
 	}
 
 	@Override /* DnsResolver */

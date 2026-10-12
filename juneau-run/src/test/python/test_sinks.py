@@ -15,6 +15,7 @@
 import contextlib
 import io
 import os
+import re
 import tempfile
 import unittest
 from pathlib import Path
@@ -32,6 +33,33 @@ class SinksTest(unittest.TestCase):
         for key in ("JUNEAU_RUN_CONSOLE", "JUNEAU_RUN_FULL_LOG", "JUNEAU_RUN_CONDENSED_LOG", "RUN_ARTIFACTS"):
             os.environ.pop(key, None)
 
+    def test_condensed_defaults_a_full_log_and_shares_it_through_the_env(self):
+        os.environ["JUNEAU_RUN_LOG_DIR"] = str(self.tmp)
+        with mock.patch.object(jr.sys, "argv", ["/x/scripts/push.py"]):
+            first = jr.Sinks(console="condensed")
+        self.assertRegex(str(first.full_path), rf"^{re.escape(str(self.tmp))}/push-\d{{8}}-\d{{6}}\.log$")
+        self.assertEqual(os.environ["JUNEAU_RUN_FULL_LOG"], str(first.full_path))
+        self.assertEqual(jr.Sinks(console="condensed").full_path, first.full_path)   # a nested run's Sinks
+
+    def test_only_condensed_gets_a_default_and_a_given_log_wins(self):
+        os.environ["JUNEAU_RUN_LOG_DIR"] = str(self.tmp)
+        self.assertIsNone(jr.Sinks(console="full").full_path)
+        self.assertIsNone(jr.Sinks(console="none").full_path)
+        self.assertEqual(jr.Sinks(console="condensed", full_log=str(self.tmp / "mine.log")).full_path,
+                         self.tmp / "mine.log")
+        self.assertNotIn("JUNEAU_RUN_FULL_LOG", os.environ)
+
+    def test_prune_keeps_the_newest_twenty_logs(self):
+        os.environ["JUNEAU_RUN_LOG_DIR"] = str(self.tmp)
+        for i in range(25):
+            path = self.tmp / f"push-{i:02d}.log"
+            path.write_text("")
+            os.utime(path, (1000 + i, 1000 + i))
+        (self.tmp / "keep.txt").write_text("")
+        jr.prune_full_logs()
+        self.assertEqual(sorted(p.name for p in self.tmp.glob("*.log")), [f"push-{i:02d}.log" for i in range(5, 25)])
+        self.assertTrue((self.tmp / "keep.txt").exists())
+
     def drive(self, sinks):
         """Writes one full chunk and one condensed line; returns the console text."""
         buf = io.StringIO()
@@ -41,6 +69,26 @@ class SinksTest(unittest.TestCase):
             sinks.write_condensed("condensed-line")
             sinks.close()
         return buf.getvalue()
+
+    def test_condensed_lines_colour_their_marks_on_a_terminal_only(self):
+        class Tty(io.StringIO):
+            def isatty(self):
+                return True
+        for stream, no_color, want in ((Tty(), None, "\x1b[32m✓\x1b[0m Mod  1s\n"), (Tty(), "1", "✓ Mod  1s\n"),
+                                       (io.StringIO(), None, "✓ Mod  1s\n")):
+            with self.subTest(tty=isinstance(stream, Tty), no_color=no_color):
+                cond = self.tmp / "marks-c.log"
+                cond.unlink(missing_ok=True)
+                sinks = jr.Sinks("condensed", None, cond)
+                with mock.patch.dict(os.environ, {"NO_COLOR": no_color} if no_color else {}), \
+                        contextlib.redirect_stdout(stream):
+                    if not no_color:
+                        os.environ.pop("NO_COLOR", None)
+                    sinks.open()
+                    sinks.write_condensed("✓ Mod  1s")
+                    sinks.close()
+                self.assertEqual(stream.getvalue(), want)
+                self.assertEqual(cond.read_text(encoding="utf-8"), "✓ Mod  1s\n")
 
     def test_routing_matrix(self):
         for console, want in (("full", "full-line\n"), ("condensed", "condensed-line\n"), ("none", "")):

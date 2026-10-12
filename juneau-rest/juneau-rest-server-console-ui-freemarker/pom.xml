@@ -27,7 +27,7 @@
 
 	<artifactId>juneau-rest-server-console-ui-freemarker</artifactId>
 	<name>Apache Juneau REST Server Console UI — FreeMarker</name>
-	<description>Apache Juneau REST Server - FreeMarker delivery for the themeable admin-console chrome (base.ftlh + &lt;@tag&gt; macro + ConsoleFreemarkerMixin + &lt;@page&gt; / &lt;@card&gt; shared directives, opt-in). Depends on console-ui + view-freemarker + views only — never -datatables.</description>
+	<description>Apache Juneau REST Server - FreeMarker delivery for the themeable admin-console chrome (base.ftlh + &lt;@tag&gt; macro + ConsoleFreemarkerMixin + &lt;@page&gt; / &lt;@card&gt; shared directives, opt-in). Depends on console-ui, view-freemarker, views, terminal and widgets; no Maven dependency on juneau-rest-server-datatables (the datatables card type is emitted by contract only).</description>
 	<packaging>bundle</packaging>
 
 	<properties>

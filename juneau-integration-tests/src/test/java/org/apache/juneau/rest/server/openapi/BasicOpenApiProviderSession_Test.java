@@ -732,4 +732,65 @@ class BasicOpenApiProviderSession_Test extends TestBase {
 		op.put("responses", responses);
 		return op;
 	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// Write-only properties: Swagger 2 carries x-writeOnly, OpenAPI 3.1 uses the native keyword.
+	//------------------------------------------------------------------------------------------------------------------
+
+	public static class WoBean {
+		public String name;
+
+		@org.apache.juneau.commons.bean.BeanProp(wo="true")
+		public String secretword;
+	}
+
+	@Rest
+	public static class WoOff {
+		@RestPost(path="/wo")
+		public WoBean a(@Content WoBean body) { return body; }
+	}
+
+	@Rest
+	public static class WoOn extends org.apache.juneau.rest.server.servlet.BasicRestResource {
+		@RestPost(path="/wo")
+		public WoBean a(@Content WoBean body) { return body; }
+	}
+
+	@Test void wo01_transform_mapsExtensionBack() {
+		var swagger = Json5Parser.DEFAULT.read("{swagger:'2.0',definitions:{A:{type:'object',properties:{p:{type:'string','x-writeOnly':true},example:{type:'string','x-writeOnly':true},nest:{type:'object',properties:{default:{type:'string','x-writeOnly':true}}}},example:{'x-writeOnly':true}}}}", Json5Map.class);
+		var a = (Map<?,?>)((Map<?,?>)BasicOpenApiProviderSession.transform(swagger).getMap("components").getMap("schemas")).get("A");
+		var props = (Map<?,?>)a.get("properties");
+		assertEquals(Boolean.TRUE, ((Map<?,?>)props.get("p")).get("writeOnly"));
+		assertFalse(((Map<?,?>)props.get("p")).containsKey("x-writeOnly"));
+		// A property literally named "example" is still a schema position.
+		assertEquals(Boolean.TRUE, ((Map<?,?>)props.get("example")).get("writeOnly"));
+		assertFalse(((Map<?,?>)props.get("example")).containsKey("x-writeOnly"));
+		var nest = (Map<?,?>)((Map<?,?>)((Map<?,?>)props.get("nest")).get("properties")).get("default");
+		assertEquals(Boolean.TRUE, nest.get("writeOnly"));
+		// The schema-level example value is not a schema position and is left untouched.
+		assertEquals(Boolean.TRUE, ((Map<?,?>)a.get("example")).get("x-writeOnly"));
+	}
+
+	@Test void wo01b_transform_operationExtensionUntouched() {
+		var swagger = Json5Parser.DEFAULT.read("{swagger:'2.0',paths:{'/a':{get:{'x-writeOnly':true,parameters:[{'in':'query',name:'q',type:'string','x-writeOnly':true}],responses:{'200':{description:'ok'}}}}}}", Json5Map.class);
+		var op = (Map<?,?>)((Map<?,?>)BasicOpenApiProviderSession.transform(swagger).getMap("paths").getMap("/a")).get("get");
+		assertEquals(Boolean.TRUE, op.get("x-writeOnly"));
+		assertFalse(op.containsKey("writeOnly"));
+		var param = (Map<?,?>)((List<?>)op.get("parameters")).get(0);
+		assertFalse(param.containsKey("writeOnly"));
+	}
+
+	@Test void wo02_endToEnd_beanDefsOff() throws Exception {
+		var json = Json5Serializer.DEFAULT.toString(getOpenApi(new WoOff()));
+		assertTrue(json.contains("secretword"), json);
+		assertTrue(json.contains("writeOnly:true"), json);
+		assertFalse(json.contains("x-writeOnly"), json);
+	}
+
+	@Test void wo03_endToEnd_beanDefsOn() throws Exception {
+		var json = Json5Serializer.DEFAULT.toString(getOpenApi(new WoOn()));
+		assertTrue(json.contains("secretword"), json);
+		assertTrue(json.contains("writeOnly:true"), json);
+		assertFalse(json.contains("x-writeOnly"), json);
+	}
 }

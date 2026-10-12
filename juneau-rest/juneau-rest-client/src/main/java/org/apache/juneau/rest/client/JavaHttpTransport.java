@@ -172,9 +172,12 @@ public final class JavaHttpTransport implements HttpTransport {
 				+ "allowPrivateUrls(true) if this is an intentional local-dev/intranet target.");
 		InetAddress pinned;
 		try {
-			pinned = RemoteUrlPolicy.selectAllowedAddress(uri.getHost(), false, RemoteUrlPolicy.AddressResolver.DEFAULT);
+			pinned = RemoteUrlPolicy.selectAllowedAddress(requireHost(uri), false, RemoteUrlPolicy.AddressResolver.DEFAULT);
 		} catch (UnknownHostException e) {
 			throw new TransportException("Could not resolve @Remote request host: " + uri.getHost(), e);
+		} catch (IllegalArgumentException e) {
+			// A refused pin (every resolved address is denied) is reported as the documented TransportException.
+			throw new TransportException("HTTP transport error: " + e.getMessage(), e);
 		}
 		URI pinnedUri;
 		try {
@@ -188,6 +191,15 @@ public final class JavaHttpTransport implements HttpTransport {
 		} catch (StaleConnectionException e) {
 			throw e.asTransportException();
 		}
+	}
+
+	// java.net.URI parses some host names (an underscore name such as my_service) with a null host, which
+	// InetAddress would resolve as the loopback address; refuse such a URI by name instead.
+	private static String requireHost(URI uri) {
+		var host = uri.getHost();
+		if (host == null)
+			throw iaex("Request URI has no host that java.net.URI can parse, so it cannot be pinned: %s", uri);
+		return host;
 	}
 
 	// Performs a single HTTP exchange.  Throws StaleConnectionException (a retryable signal) when the failure is a
@@ -204,9 +216,13 @@ public final class JavaHttpTransport implements HttpTransport {
 		try {
 			jdkRequest = buildJdkRequest(request, overrideUri, hostHeader);
 		} catch (IllegalArgumentException e) {
-			// Only reachable when hostHeader != null and the JDK rejected the "Host" header override -- i.e. the
-			// static allowRestrictedHeaders attempt above lost the first-touch race to some other HttpClient
-			// usage in this JVM. Fail closed rather than silently pinning without preserving the original Host.
+			// The JDK refuses a URI it cannot use (for example an underscore host name, which java.net.URI parses
+			// with a null host) or an invalid header.
+			if (hostHeader == null)
+				throw new TransportException("Could not build the HTTP request for " + request.getUri() + ": " + e.getMessage(), e);
+			// With hostHeader set, the JDK rejected the "Host" header override -- i.e. the static
+			// allowRestrictedHeaders attempt above lost the first-touch race to some other HttpClient usage in this
+			// JVM. Fail closed rather than silently pinning without preserving the original Host.
 			throw new TransportException("Could not preserve the original Host header while pin-on-connecting a "
 				+ "policy-covered HTTP request (the JDK HttpClient's restricted-header allowlist was already "
 				+ "initialized elsewhere in this JVM); refusing (fail closed): " + request.getUri()

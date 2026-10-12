@@ -62,16 +62,18 @@ class PetstoreConsoleShell_Test extends TestBase {
 		links.put("ops/audit", "/console/ops/audit");
 		for (var f : new String[]{"html", "freemarker", "mustache", "react"})
 			links.put("dev/flavors/" + f, "/console/dev/flavors/" + f);
-		for (var stub : ConsoleStubs.ALL)
-			links.put(stub.tab(), stub.href());
+		links.put("pets", "/console/pets");
+		links.put("pets/sold", "/console/pets/sold");
+		links.put("orders", "/console/orders");
+		links.put("users", "/console/users");
+		links.put("dev/cards", "/console/dev/cards");
 		links.forEach(nav::hasNavHref);
 		for (var href : links.values())
 			c.get(href).accept("text/html").run().assertStatus(200);
 	}
 
-	@Test void a06_stubPagesSayComingSoon() throws Exception {
-		for (var s : ConsoleStubs.ALL)
-			assertContainsAll(page(client(), s.href()), "Coming soon", s.pending());
+	@Test void a06_customCardsPageIsNotAComingSoonStub() throws Exception {
+		assertNotContains("Coming soon", page(client(), "/console/dev/cards"));
 	}
 
 	@Test void a07_missingStoreBeanFailsLoudly() {

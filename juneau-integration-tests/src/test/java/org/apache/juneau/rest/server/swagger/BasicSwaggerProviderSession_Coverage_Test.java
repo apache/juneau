@@ -23,6 +23,8 @@ import org.apache.juneau.commons.*;
 import org.apache.juneau.commons.lang.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.marshall.*;
+import org.apache.juneau.marshall.json5.*;
+import org.apache.juneau.commons.bean.*;
 import org.apache.juneau.rest.mock.*;
 import org.apache.juneau.rest.server.*;
 import org.junit.jupiter.api.*;
@@ -569,5 +571,59 @@ class BasicSwaggerProviderSession_Coverage_Test extends TestBase {
 		assertNotNull(s.getExternalDocs());
 		var op = s.getPaths().get("/cc").get("get");
 		assertNotNull(op.getExternalDocs());
+	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// Swagger 2.0 has no writeOnly keyword: write-only properties are flagged with the x-writeOnly extension.
+	//------------------------------------------------------------------------------------------------------------------
+
+	public static class WoBean {
+		public String name;
+
+		@BeanProp(wo="true")
+		public String secretword;
+	}
+
+	@Rest
+	public static class WO1 {
+		@RestPost(path="/wo")
+		public WoBean a(@Content WoBean body) {
+			return body;
+		}
+	}
+
+	@Test void wo01_writeOnly_renamedToExtension() throws Exception {
+		var json = Json5Serializer.DEFAULT.toString(getSwagger(new WO1()));
+		assertTrue(json.contains("secretword"), json);
+		assertTrue(json.contains("'x-writeOnly':true"), json);
+		assertFalse(json.contains("writeOnly:true"), json);
+	}
+
+	@Rest
+	public static class WO2 extends org.apache.juneau.rest.server.servlet.BasicRestResource {
+		@RestPost(path="/wo")
+		public WoBean a(@Content WoBean body) {
+			return body;
+		}
+	}
+
+	@Test void wo02_writeOnly_renamedInBeanDefs() throws Exception {
+		var sw = getSwagger(new WO2());
+		var json = Json5Serializer.DEFAULT.toString(sw);
+		assertNotNull(sw.getDefinitions(), json);
+		assertTrue(json.contains("secretword"), json);
+		assertTrue(json.contains("'x-writeOnly':true"), json);
+		assertFalse(json.contains("writeOnly:true"), json);
+	}
+
+	@Test void wo03_renameOnlyWalksSchemaPositions() {
+		var m = org.apache.juneau.marshall.json5.Json5Map.of(
+			"properties", org.apache.juneau.marshall.json5.Json5Map.of("a", org.apache.juneau.marshall.json5.Json5Map.of("writeOnly", true)),
+			"example", org.apache.juneau.marshall.json5.Json5Map.of("writeOnly", true)
+		);
+		BasicSwaggerProviderSession.renameWriteOnly(m);
+		var s = m.toString();
+		assertTrue(s.contains("a:{'x-writeOnly':true}") || s.contains("\"a\":{\"x-writeOnly\":true}"), s);
+		assertTrue(s.contains("example:{writeOnly:true}") || s.contains("\"example\":{\"writeOnly\":true}"), s);
 	}
 }

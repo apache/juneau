@@ -22,15 +22,16 @@ package org.apache.juneau.rest.client.classic.remote;
  * thread).
  *
  * <p>
- * The classic engine shares a single {@code CloseableHttpClient} (and its connection manager) across every
- * request the client issues, whether {@code @Remote}-originated or an ordinary {@code client.get(url)} call. Since
- * neither Apache HttpClient's {@code DnsResolver} SPI nor its {@code RedirectStrategy} SPI receives enough
- * information to distinguish which caller triggered a given connection/redirect decision by request alone, this
- * thread-local flag is set for the duration of exactly one {@code @Remote} invocation (which runs synchronously,
- * blocking the calling thread, per Juneau's classic-engine execution model) and consulted by the shared
- * {@code DnsResolver}/{@code RedirectStrategy} installed on the client's connection manager to decide whether to
- * enforce {@code org.apache.juneau.http.remote.RemoteUrlPolicy} for that connection/redirect &mdash; leaving
- * ordinary (non-{@code @Remote}) requests on the same client completely unaffected.
+ * The classic engine shares a single {@code CloseableHttpClient} across every request the client issues, whether
+ * {@code @Remote}-originated or an ordinary {@code client.get(url)} call. Since neither Apache HttpClient's
+ * {@code HttpClientConnectionManager.requestConnection} SPI nor its {@code RedirectStrategy} SPI receives enough
+ * information to distinguish which caller triggered a given connection lease or redirect decision, this thread-local
+ * flag is set for the duration of exactly one {@code @Remote} invocation (which runs synchronously, blocking the
+ * calling thread, per Juneau's classic-engine execution model).  While it is set, the client's connection manager
+ * leases connections from a dedicated pool whose connections are all opened through the
+ * {@code org.apache.juneau.http.remote.RemoteUrlPolicy} pin, and its redirect strategy defers {@code 3xx} handling
+ * to Juneau's revalidating redirect loop &mdash; leaving ordinary (non-{@code @Remote}) requests on the same client,
+ * and their separate pool, completely unaffected.
  *
  * @since 10.0.0
  */
@@ -38,22 +39,31 @@ public final class RemoteUrlPolicyState {
 
 	private RemoteUrlPolicyState() {}
 
-	private static final ThreadLocal<Boolean> ACTIVE = new ThreadLocal<>();
+	// Nesting depth of the guarded calls on this thread (a guarded call can make another one, for example from a
+	// request interceptor); absent when none is running.
+	private static final ThreadLocal<int[]> DEPTH = new ThreadLocal<>();
 
 	/**
 	 * Marks the calling thread as executing an SSRF-guard-active {@code @Remote} call.
 	 *
 	 * <p>
 	 * Callers must invoke {@link #deactivate()} in a {@code finally} block once the call (including any retries)
-	 * has completed.
+	 * has completed.  Calls nest: the thread stays marked until every {@code activate()} has been matched by a
+	 * {@code deactivate()}, so a guarded call made while another one is running does not end the outer call's guard.
 	 */
 	public static void activate() {
-		ACTIVE.set(Boolean.TRUE);
+		var depth = DEPTH.get();
+		if (depth == null)
+			DEPTH.set(new int[] { 1 });
+		else
+			depth[0]++;
 	}
 
-	/** Clears the calling thread's SSRF-guard-active marker. */
+	/** Ends one {@link #activate()}; the calling thread's marker is cleared when the outermost guarded call ends. */
 	public static void deactivate() {
-		ACTIVE.remove();
+		var depth = DEPTH.get();
+		if (depth != null && --depth[0] <= 0)
+			DEPTH.remove();
 	}
 
 	/**
@@ -62,6 +72,6 @@ public final class RemoteUrlPolicyState {
 	 * @return {@code true} if the guard is active on this thread.
 	 */
 	public static boolean isActive() {
-		return ACTIVE.get() == Boolean.TRUE;
+		return DEPTH.get() != null;
 	}
 }

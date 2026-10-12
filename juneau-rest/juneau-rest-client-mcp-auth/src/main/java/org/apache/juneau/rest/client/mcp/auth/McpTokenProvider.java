@@ -358,8 +358,7 @@ public class McpTokenProvider implements Supplier<String> {
 				.clientSecretSupplier(clientSecretSupplier);
 			f.httpTimeout(httpTimeout);
 			scopes.forEach(f::scope);
-			if (resource != null)
-				f.resource(resource);
+			f.resource(resource);
 			if (httpRequestConfigurator != null)
 				f.httpRequestConfigurator(httpRequestConfigurator);
 			return f.build().acquire();
@@ -373,8 +372,7 @@ public class McpTokenProvider implements Supplier<String> {
 			f.clientSecretSupplier(clientSecretSupplier);
 		f.httpTimeout(httpTimeout);
 		scopes.forEach(f::scope);
-		if (resource != null)
-			f.resource(resource);
+		f.resource(resource);
 		if (httpRequestConfigurator != null)
 			f.httpRequestConfigurator(httpRequestConfigurator);
 		return f.build().acquire();

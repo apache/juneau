@@ -165,8 +165,8 @@ public final class Column {
 	 * Sets the row-data interpolation template this column's rendered cell links to.
 	 *
 	 * <p>
-	 * Requires a {@link #render(String) render} to already be set; that is checked by {@link #toCatalogMap()}, since a
-	 * column built in pieces may set {@code href} before {@code render}.
+	 * An {@code href} with no {@link #render(String) render} implies {@code render("linked")}; the catalog entry
+	 * ({@link #toCatalogMap()}) carries that render.  An explicit render always wins, whichever order the two are set in.
 	 *
 	 * @param template The href template, e.g. {@code "{incidentUrl}"}.  Can be <jk>null</jk> to unset.
 	 * @return This object.
@@ -219,10 +219,10 @@ public final class Column {
 	 * {@link #toCatalogMap(SearchOperatorSet)} to resolve the table-level set into the entry.
 	 *
 	 * <p>
-	 * {@code label} falls back to {@link #name()} when unset.
+	 * {@code label} falls back to {@link #name()} when unset.  A column with an {@code href} and no {@code render}
+	 * emits {@code render} as the {@code linked} renderer.
 	 *
 	 * @return The catalog entry.
-	 * @throws IllegalArgumentException If {@code href} is set without a {@code render}.
 	 */
 	public JsonMap toCatalogMap() {
 		return toCatalogMap(null);
@@ -239,16 +239,15 @@ public final class Column {
 	 * @param tableDefault The table-level operator set inherited by a column with none of its own.  Can be
 	 * 	<jk>null</jk>.
 	 * @return The catalog entry.
-	 * @throws IllegalArgumentException If {@code href} is set without a {@code render}.
 	 */
 	public JsonMap toCatalogMap(SearchOperatorSet tableDefault) {
-		if (href != null && render == null)
-			throw iaex("Column '%s' sets href '%s' without a render; use render(\"linked\").", name, href);
 		var m = new JsonMap();
 		m.put("key", name);
 		m.put("label", label != null ? label : name);
 		if (render != null)
 			m.put("render", render);
+		else if (href != null)
+			m.put("render", Render.of("linked"));
 		if (href != null)
 			m.put("href", href);
 		if (className != null)

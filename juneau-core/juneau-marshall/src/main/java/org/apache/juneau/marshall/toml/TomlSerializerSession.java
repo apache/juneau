@@ -488,7 +488,7 @@ public class TomlSerializerSession extends WriterSerializerSession implements Re
 			return false;
 		int count = 0;
 		for (BeanPropertyMeta p : bm.getMeta().getProperties().values()) {
-			if (!p.isReadOnly()) {
+			if (!p.isWriteOnly()) {
 				ClassMeta<?> cm = (ClassMeta<?>) p.getBeanInfo();
 				if (cm.isBean() || cm.isMap() || (cm.isCollectionOrArray() && cm.getElementType().isBean()))
 					return false;

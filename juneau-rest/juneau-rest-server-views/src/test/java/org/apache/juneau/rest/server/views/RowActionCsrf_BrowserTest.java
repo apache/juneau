@@ -176,4 +176,24 @@ class RowActionCsrf_BrowserTest extends TestBase {
 			"validTokenFetchIssued,validTokenMethod,validTokenContentType,validTokenCsrfHeader,validTokenRefusalVisible",
 			"true,POST,application/json,tok-123,false");
 	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// d) present=inline: not in the row menu, still fires from its pill
+	//------------------------------------------------------------------------------------------------------------------
+
+	@Test void d01_inlineActionIsAbsentFromTheRowMenu() {
+		assertBean(report, "inlineMenuActionIds", "[ack]");
+	}
+
+	@Test void d02_inlineActionStillFiresFromItsPill() {
+		assertBean(report, "inlinePillFetchIssued,inlinePillUrl", "true,/x/rename");
+	}
+
+	@Test void d03_triggerIsHiddenWhenOnlyInlineActionsAreVisible() {
+		assertBean(report, "inlineOnlyTriggerHidden,menuActionVisibleTriggerHidden", "true,false");
+	}
+
+	@Test void d04_allInlineViewHasNoActionsColumn() {
+		assertBean(report, "allInlineActionsColumn,mixedActionsColumn,allInlineActionsHeaders,mixedActionsHeaders", "false,true,0,1");
+	}
 }

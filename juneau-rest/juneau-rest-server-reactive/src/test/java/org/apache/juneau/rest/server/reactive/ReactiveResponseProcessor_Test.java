@@ -29,6 +29,7 @@ import org.apache.juneau.marshall.sse.*;
 import org.apache.juneau.rest.mock.classic.*;
 import org.apache.juneau.rest.server.*;
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.parallel.*;
 
 /**
  * Tests {@link ReactiveResponseProcessor} using only the JDK-native
@@ -622,5 +623,214 @@ class ReactiveResponseProcessor_Test extends TestBase {
 		assertEquals(2, rows.length, body);
 		assertEquals("{\"n\":1,\"text\":\"two\\nlines\",\"ui\":{\"style\":\"error\"}}", rows[0]);
 		assertEquals("{\"n\":2,\"text\":\"plain\"}", rows[1]);
+	}
+
+	// -----------------------------------------------------------------------------------------------------------------
+	// L: Accept ranges that select the NDJSON shape but offer no usable NDJSON-family type.
+	// -----------------------------------------------------------------------------------------------------------------
+
+	@Rest(serializers = JsonSerializer.class)
+	public static class L {
+		@RestGet("/plain")
+		public Flow.Publisher<Pojo> plain() {
+			return ListPublisher.of(new Pojo("l", 1));
+		}
+	}
+
+	private static final MockRestClient CL = MockRestClient.buildLax(L.class);
+
+	@Test void l01_onlyQZeroNdjsonRange_fallsBackToXNdjson() throws Exception {
+		// The only NDJSON-family range is refused (q=0), so its type must not be echoed.
+		assertNull(ReactiveResponseProcessor.negotiatedNdjsonType("application/jsonl;q=0"));
+		var r = CL.get("/plain").header("Accept", "application/jsonl;q=0").run().assertStatus(200);
+		assertEquals("application/x-ndjson", r.getStringHeader("Content-Type").orElse("").split(";")[0].trim());
+		assertEquals("{\"name\":\"l\",\"value\":1}", r.getContent().asString().strip());
+	}
+
+	@Test void l02_unaliasedNdjsonKeyword_fallsBackToXNdjson() throws Exception {
+		// "application/ndjson" selects the NDJSON shape via the keyword probe but is not an aliased type.
+		assertNull(ReactiveResponseProcessor.negotiatedNdjsonType("application/ndjson"));
+		var r = CL.get("/plain").header("Accept", "application/ndjson").run().assertStatus(200);
+		assertEquals("application/x-ndjson", r.getStringHeader("Content-Type").orElse("").split(";")[0].trim());
+		assertEquals("{\"name\":\"l\",\"value\":1}", r.getContent().asString().strip());
+	}
+
+	// -----------------------------------------------------------------------------------------------------------------
+	// M: MDC async propagation disabled.
+	// -----------------------------------------------------------------------------------------------------------------
+
+	@Rest(serializers = JsonSerializer.class)
+	public static class M {
+		@RestGet("/ndjson")
+		public Flow.Publisher<Pojo> ndjson(RestResponse res) {
+			res.setContentType("application/x-ndjson");
+			return ListPublisher.of(new Pojo("m", 1), new Pojo("n", 2));
+		}
+	}
+
+	// The builder knob (RestContext.Builder#mdcAsyncPropagation) is not reachable from MockRestClient (Builder injection was removed), so the
+	// env-driven system property is the only way to reach the same branch; it is restored to its prior value in finally.
+	@Test @ResourceLock(Resources.SYSTEM_PROPERTIES)
+	void m01_mdcPropagationDisabled_streamStillWritten() throws Exception {
+		var key = "RestContext.mdcAsyncPropagation";
+		var prior = System.getProperty(key);
+		System.setProperty(key, "false");
+		try {
+			var ctx = new RestContext(new RestContext.Args(M.class, null, null, M::new, "", null, null, null, RestContext.ContextKind.ROOT)).postInit().postInitChildFirst();
+			assertFalse(ctx.isMdcAsyncPropagation(), "the setting must reach the branch condition in the processor");
+
+			var client = MockRestClient.buildLax(M.class);
+			var body = client.get("/ndjson").run().assertStatus(200).getContent().asString();
+			assertEquals("{\"name\":\"m\",\"value\":1}\n{\"name\":\"n\",\"value\":2}\n", body);
+		} finally {
+			if (prior == null)
+				System.clearProperty(key);
+			else
+				System.setProperty(key, prior);
+		}
+		var enabled = new RestContext(new RestContext.Args(M.class, null, null, M::new, "", null, null, null, RestContext.ContextKind.ROOT)).postInit().postInitChildFirst();
+		assertTrue(enabled.isMdcAsyncPropagation(), "default is enabled once the property is restored");
+	}
+
+	// -----------------------------------------------------------------------------------------------------------------
+	// N: Synchronous fallback gives up on a publisher that never terminates, and cancels it.
+	// -----------------------------------------------------------------------------------------------------------------
+
+	/** Publisher that never emits or terminates, recording whether its subscription was cancelled. */
+	static final class SilentPublisher<T> implements Flow.Publisher<T> {
+		final AtomicBoolean cancelled = new AtomicBoolean();
+		final boolean interruptOnSubscribe;
+		SilentPublisher(boolean interruptOnSubscribe) { this.interruptOnSubscribe = interruptOnSubscribe; }
+
+		@Override public void subscribe(Flow.Subscriber<? super T> sub) {
+			sub.onSubscribe(new Flow.Subscription() {
+				@Override public void request(long n) { /* never emits */ }
+				@Override public void cancel() { cancelled.set(true); }
+			});
+			if (interruptOnSubscribe)
+				Thread.currentThread().interrupt();
+		}
+	}
+
+	@Rest(serializers = SseSerializer.class)
+	public static class N {
+		static final SilentPublisher<SseEvent> TIMEOUT = new SilentPublisher<>(false);
+		static final SilentPublisher<SseEvent> INTERRUPT = new SilentPublisher<>(true);
+
+		@RestOp(method="GET", path="/timeout", asyncTimeoutMillis="50")
+		public Flow.Publisher<SseEvent> timeout(RestResponse res) {
+			res.setContentType("text/event-stream");
+			return TIMEOUT;
+		}
+
+		@RestGet("/interrupt")
+		public Flow.Publisher<SseEvent> interrupt(RestResponse res) {
+			res.setContentType("text/event-stream");
+			return INTERRUPT;
+		}
+	}
+
+	private static final MockRestClient CN = MockRestClient.buildLax(N.class);
+
+	@Test void n01_publisherNeverTerminates_timesOutAndCancels() throws Exception {
+		assertFalse(N.TIMEOUT.cancelled.get());
+		var r = CN.get("/timeout").run().assertStatus(200);
+		assertEquals("", r.getContent().asString());
+		assertTrue(N.TIMEOUT.cancelled.get());
+	}
+
+	@Test void n02_interruptedWhileWaiting_cancelsAndRestoresInterruptFlag() throws Exception {
+		assertFalse(N.INTERRUPT.cancelled.get());
+		try {
+			CN.get("/interrupt").run().assertStatus(200);
+			assertTrue(Thread.currentThread().isInterrupted(), "interrupt flag must be restored");
+		} finally {
+			Thread.interrupted();
+		}
+		assertTrue(N.INTERRUPT.cancelled.get());
+	}
+
+	// -----------------------------------------------------------------------------------------------------------------
+	// O: Buffer shape — a publisher error fails the response.
+	// -----------------------------------------------------------------------------------------------------------------
+
+	@Rest(serializers = JsonSerializer.class)
+	public static class O {
+		@RestGet("/fail")
+		public Flow.Publisher<Pojo> fail() {
+			return new ErrorPublisher<>(new Pojo("never", 0), false);
+		}
+	}
+
+	private static final MockRestClient CO = MockRestClient.buildLax(O.class);
+
+	@Test void o01_bufferShape_publisherError_returns500() throws Exception {
+		CO.get("/fail").accept("application/json").run().assertStatus(500);
+	}
+
+	// -----------------------------------------------------------------------------------------------------------------
+	// P: Streaming — a frame that cannot be written cancels the subscription and fails the response.
+	// -----------------------------------------------------------------------------------------------------------------
+
+	public static final class Unserializable {
+		public String getValue() { throw new IllegalArgumentException("cannot serialize"); }
+	}
+
+	/** Emits the supplied first element, then one more only if the subscriber keeps requesting. */
+	static final class TrackingPublisher<T> implements Flow.Publisher<T> {
+		final AtomicBoolean cancelled = new AtomicBoolean();
+		final AtomicInteger emitted = new AtomicInteger();
+		private final T first;
+		private final boolean failSecondRequest;
+		TrackingPublisher(T first, boolean failSecondRequest) { this.first = first; this.failSecondRequest = failSecondRequest; }
+
+		@Override public void subscribe(Flow.Subscriber<? super T> sub) {
+			sub.onSubscribe(new Flow.Subscription() {
+				private int requests;
+				@Override public void request(long n) {
+					requests++;
+					if (failSecondRequest && requests == 2)
+						throw new IllegalArgumentException("bad request");
+					if (requests == 1) {
+						emitted.incrementAndGet();
+						sub.onNext(first);
+					}
+				}
+				@Override public void cancel() { cancelled.set(true); }
+			});
+		}
+	}
+
+	@Rest(serializers = JsonSerializer.class)
+	public static class P {
+		static final TrackingPublisher<Object> BAD_FRAME = new TrackingPublisher<>(new Unserializable(), false);
+		static final TrackingPublisher<Object> BAD_REQUEST = new TrackingPublisher<>(new Pojo("p", 1), true);
+
+		@RestGet("/badFrame")
+		public Flow.Publisher<Object> badFrame(RestResponse res) {
+			res.setContentType("application/x-ndjson");
+			return BAD_FRAME;
+		}
+
+		@RestGet("/badRequest")
+		public Flow.Publisher<Object> badRequest(RestResponse res) {
+			res.setContentType("application/x-ndjson");
+			return BAD_REQUEST;
+		}
+	}
+
+	private static final MockRestClient CP = MockRestClient.buildLax(P.class);
+
+	@Test void p01_unserializableFrame_cancelsAndReturns500() throws Exception {
+		CP.get("/badFrame").run().assertStatus(500);
+		assertTrue(P.BAD_FRAME.cancelled.get());
+		assertEquals(1, P.BAD_FRAME.emitted.get());
+	}
+
+	@Test void p02_subscriptionRequestThrows_cancelsAfterFirstFrame() throws Exception {
+		// The first frame is already committed when the second request() throws, so the status stays 200.
+		var body = CP.get("/badRequest").run().assertStatus(200).getContent().asString();
+		assertEquals("{\"name\":\"p\",\"value\":1}\n", body);
+		assertTrue(P.BAD_REQUEST.cancelled.get());
 	}
 }

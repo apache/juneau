@@ -66,6 +66,13 @@ class RestRequest_Rethrow_Coverage_Test {
 		public ExcWithNoArgCtor() { super("no-arg"); }
 	}
 
+	/** Has an {@code (HttpResponse)} constructor that fails for a reason other than a status mismatch, plus a {@code (String)} fallback. */
+	public static class ExcWithFailingResponseCtor extends RuntimeException {
+		private static final long serialVersionUID = 1L;
+		public ExcWithFailingResponseCtor(org.apache.http.HttpResponse r) { throw new IllegalStateException("boom"); }
+		public ExcWithFailingResponseCtor(String msg) { super(msg); }
+	}
+
 	/** Has no constructor matching any of the resolution attempts (only a non-matching (int) constructor). */
 	public static class ExcWithNoUsableCtor extends RuntimeException {
 		private static final long serialVersionUID = 1L;
@@ -302,6 +309,46 @@ class RestRequest_Rethrow_Coverage_Test {
 			try (var req = c.get(url("/thrown?" + enc("some.pkg.Boom"))).errorCodes(sc -> true)) {
 				var e = assertThrows(RestCallException.class, req::run);
 				assertFalse(e.getMessage().contains("Thrown:"), "Unexpected message: " + e.getMessage());
+			}
+		}
+	}
+
+	@Test void e01_rethrow_responseCtorRejectsMismatchedStatus_fallsThroughToDeclaredType() throws Exception {
+		try (var c = client()) {
+			// The server answers 200 but names NotFound (404) in the Thrown header.  NotFound(HttpResponse) rejects the
+			// mismatched status, so the client must fall through to the remaining constructors and still throw NotFound.
+			try (var req = c.get(url("/thrown?" + enc(org.apache.juneau.http.classic.response.NotFound.class.getName())))
+					.rethrow(org.apache.juneau.http.classic.response.NotFound.class)) {
+				var e = assertThrows(org.apache.juneau.http.classic.response.NotFound.class, req::run);
+				assertEquals(404, e.getStatusLine().getStatusCode());
+			}
+		}
+	}
+
+	@Test void e03_rethrow_responseCtorFailsForOtherReason_propagatesUnchanged() throws Exception {
+		try (var c = client()) {
+			try (var req = c.get(url("/thrown?" + enc(ExcWithFailingResponseCtor.class.getName())))
+					.rethrow(ExcWithFailingResponseCtor.class)) {
+				var e = assertThrows(org.apache.juneau.commons.reflect.ExecutableException.class, req::run);
+				assertInstanceOf(IllegalStateException.class, e.getCause());
+			}
+		}
+	}
+
+	@Test void e02_asType_responseCtorRejectsMismatchedStatus_throwsRestCallException() throws Exception {
+		try (var c = client()) {
+			try (var res = c.get(url("/thrown?" + enc("some.pkg.Boom"))).run()) {
+				var in = res.getEntity().getContent();
+				var e = assertThrows(RestCallException.class, () -> res.getContent().as(org.apache.juneau.http.classic.response.NotFound.class));
+				assertInstanceOf(IllegalArgumentException.class, e.getCause());
+				// close() drains the entity, so the stream is at EOF (or already closed) -- the unread "body" is gone.
+				int b;
+				try {
+					b = in.read();
+				} catch (IOException ex) {
+					b = -1;
+				}
+				assertEquals(-1, b, "Response should be closed (entity consumed) after the failure");
 			}
 		}
 	}

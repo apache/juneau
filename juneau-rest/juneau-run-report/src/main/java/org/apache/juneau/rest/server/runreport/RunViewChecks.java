@@ -19,6 +19,8 @@ package org.apache.juneau.rest.server.runreport;
 import java.net.*;
 import java.util.regex.*;
 
+import org.apache.juneau.commons.http.*;
+
 /**
  * Shared validation grammar; not intended for application use.
  *
@@ -142,7 +144,7 @@ public final class RunViewChecks {
 	 * {@link #isSameOriginPath(String)}.
 	 *
 	 * <p>
-	 * TAB, CR and LF are stripped first and backslashes are treated as slashes.
+	 * TAB, CR and LF are stripped first.  A backslash anywhere refuses the href.
 	 *
 	 * @param s The candidate href.  May be <jk>null</jk>.
 	 * @return <jk>true</jk> if the href is safe.
@@ -153,31 +155,19 @@ public final class RunViewChecks {
 		var t = TAB_CR_LF.matcher(s).replaceAll("");
 		if (t.startsWith("#"))
 			return FRAGMENT_HREF.matcher(t).matches();
-		return isSameOriginPath(t.replace('\\', '/'));
+		return isSameOriginPath(t);
 	}
 
 	/**
-	 * Whether the string is a same-origin path template: no <c>://</c>, no <c>//</c> prefix, no scheme
-	 * colon-before-slash, and no <c>..</c> path segments.
+	 * Whether the string is a same-origin path template, by the one shared rule in
+	 * {@link SafePathTemplate#isSameOriginPath(String)}: no <c>://</c>, no <c>//</c> prefix, no scheme
+	 * colon-before-slash, no <c>..</c> path segment, and no backslash, control character, or leading or trailing space.
 	 *
 	 * @param path The candidate template.  May be <jk>null</jk>.
 	 * @return <jk>true</jk> if the string is a same-origin path template.
 	 */
 	public static boolean isSameOriginPath(String path) {
-		if (path == null || path.isBlank())
-			return false;
-		if (path.contains("://"))
-			return false;
-		if (path.startsWith("//"))
-			return false;
-		var colon = path.indexOf(':');
-		var slash = path.indexOf('/');
-		if (colon >= 0 && (slash < 0 || colon < slash))
-			return false;
-		for (var seg : path.split("/", -1))
-			if ("..".equals(seg))
-				return false;
-		return true;
+		return SafePathTemplate.isSameOriginPath(path);
 	}
 
 	/**

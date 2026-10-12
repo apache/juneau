@@ -32,6 +32,7 @@ import org.apache.http.*;
 import org.apache.http.conn.*;
 import org.apache.juneau.commons.conversion.*;
 import org.apache.juneau.commons.http.*;
+import org.apache.juneau.commons.reflect.ExecutableException;
 import org.apache.juneau.commons.utils.*;
 import org.apache.juneau.http.classic.entity.*;
 import org.apache.juneau.http.classic.resource.*;
@@ -260,9 +261,16 @@ public class ResponseContent implements HttpEntity {
 			if (type.is(HttpResource.class) || type.is(BasicResource.class))
 				type = (ClassMeta<T>)getClassMeta(StreamResource.class);
 
-			var result = type.getPublicConstructor(x -> x.hasParameterTypes(HttpResponse.class)).map(ci -> safe(() -> (T)ci.newInstance(response)));
-			if (result.isPresent())
-				return result.get();
+			var responseCtor = type.getPublicConstructor(x -> x.hasParameterTypes(HttpResponse.class));
+			if (responseCtor.isPresent()) {
+				try {
+					return responseCtor.get().newInstance(response);
+				} catch (ExecutableException e) {
+					// The (HttpResponse) constructor rejected the response (e.g. the status code does not match the class).
+					response.close();
+					throw new RestCallException(response, e.getCause() == null ? e : e.getCause(), "Could not construct %s from response.", type.inner().getName());
+				}
+			}
 
 			var ct = firstNonEmpty(response.getHeader(HEADER_ContentType).orElse(CONTENT_TYPE_TEXT_PLAIN));
 

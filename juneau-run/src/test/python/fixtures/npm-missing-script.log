@@ -1,0 +1,5 @@
+npm error Missing script: "no-such-script"
+npm error
+npm error To see a list of scripts, run:
+npm error   npm run
+npm error A complete log of this run can be found in: ~/.npm/_logs/2026-10-11T19_41_54_706Z-debug-0.log

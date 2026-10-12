@@ -100,4 +100,30 @@ class ServerValues_Test extends TestBase {
 		var sv = ServerValues.create().values(m);
 		assertSame(m, sv.values);
 	}
+
+	@Test void a12_validate_noValuesDeclared_isNoOp() {
+		var sv = ServerValues.create().values(null);
+		assertNull(sv.values);
+		sv.validate();
+		ServerValues.create().validate();
+	}
+
+	@Test void a13_validate_rejectsNullNameInMap() {
+		var sv = ServerValues.create();
+		var m = new HashMap<String,ServerValuesValue>();
+		m.put(null, ServerValuesValue.of("a", P));
+		sv.values(m);
+		var e = assertThrows(IllegalArgumentException.class, sv::validate);
+		assertTrue(e.getMessage().contains("name must not be null or blank"), e::getMessage);
+	}
+
+	@Test void a14_validate_rejectsNullProviderInMap() {
+		var sv = ServerValues.create();
+		var v = ServerValuesValue.of("a", null);
+		var m = new LinkedHashMap<String,ServerValuesValue>();
+		m.put("a", v);
+		sv.values(m);
+		var e = assertThrows(IllegalArgumentException.class, sv::validate);
+		assertTrue(e.getMessage().contains("provider"), e::getMessage);
+	}
 }

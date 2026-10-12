@@ -43,10 +43,15 @@ public class HtmlFlavorRest extends PetstoreConsolePage {
 
 	private static final long serialVersionUID = 1L;
 
-	/** @return The console page. */
+	/**
+	 * The console page, from its builder twin on {@code ?builder}.
+	 *
+	 * @param req The request.
+	 * @return The console page.
+	 */
 	@RestGet(path="/")
-	public View page() {
-		return Flavor.HTML.page();
+	public View page(RestRequest req) {
+		return Flavor.HTML.page(req);
 	}
 
 	/** @return The pet list as a bare HTML table. */

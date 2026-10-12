@@ -66,11 +66,11 @@ final class SamlXml {
 			@Override /* ErrorHandler */
 			public void warning(SAXParseException e) {
 				// Non-fatal; ignored as with the JDK default handler (which only prints).
-			}
+			} // HTT: the secure, non-validating parser never reports warnings for a document without a DOCTYPE; a seam would make this testable
 
 			@Override /* ErrorHandler */
 			public void error(SAXParseException e) throws SAXException {
-				throw e;
+				throw e; // HTT: the non-validating parser reports only fatal errors, never recoverable ones; a seam would make this testable
 			}
 
 			@Override /* ErrorHandler */

@@ -75,6 +75,22 @@ class JettyHttpTransport_StaleConnectionRetry_Test {
 		}
 	}
 
+	// =================================================================================================================
+	// C — Idempotent request whose single retry also hits a stale connection is surfaced as a TransportException
+	// =================================================================================================================
+
+	@Test
+	void c01_get_retryAlsoStale_throwsTransportException() throws Exception {
+		try (var server = new A01_StaleServer(2)) {
+			var transport = JettyHttpTransport.create();
+			try (var client = RestClient.builder().transport(transport).rootUrl(server.rootUrl()).build()) {
+				assertThrows(TransportException.class, () -> client.get("/x").run());
+			}
+			// The original attempt plus exactly one replay; no further retries.
+			assertEquals(2, server.connectionCount());
+		}
+	}
+
 	// -----------------------------------------------------------------------------------------------------------------
 	// Test double: a server that tears down the first N connections after reading the request (no response), then
 	// responds 200 on subsequent connections — reproducing a stale pooled-connection reuse failure.

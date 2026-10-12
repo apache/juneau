@@ -200,7 +200,7 @@ public class WwwAuthenticateChallenge implements Serializable {
 			return oe();
 		try {
 			return o(URI.create(v));
-		} catch (IllegalArgumentException e) { // HTT: Nimbus/servers emit valid absolute URIs; malformed value guarded defensively
+		} catch (IllegalArgumentException e) {
 			return oe();
 		}
 	}
@@ -224,7 +224,6 @@ public class WwwAuthenticateChallenge implements Serializable {
 		if (v == null || v.isBlank())
 			return Set.of();
 		var out = Arrays.stream(v.strip().split("\\s+"))
-			.filter(tok -> !tok.isEmpty())
 			.collect(Collectors.toCollection(LinkedHashSet<String>::new));
 		return u(out);
 	}

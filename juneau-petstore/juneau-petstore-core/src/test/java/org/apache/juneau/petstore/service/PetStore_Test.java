@@ -189,6 +189,12 @@ class PetStore_Test extends TestBase {
 		assertBeans(s.getAudit(), "entity,entityId,action", "Order,101,DELETE");
 	}
 
+	@Test void e04b_cancelOrder_reasonIsTheDetail() {
+		var s = fixedStore();
+		s.deleteOrder(101, "console", "Out of stock");
+		assertBeans(s.getAudit(), "entity,entityId,action,detail", "Order,101,DELETE,cancelled: Out of stock");
+	}
+
 	@Test void e05_createUser_keyedByUsername() {
 		var s = fixedStore();
 		s.createUser(new User().setUsername("zed").setFirstName("Zed"), "console:admin");

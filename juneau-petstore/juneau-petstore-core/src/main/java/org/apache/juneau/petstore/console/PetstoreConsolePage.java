@@ -17,11 +17,13 @@
 package org.apache.juneau.petstore.console;
 
 import org.apache.juneau.commons.inject.*;
+import org.apache.juneau.petstore.console.dev.*;
 import org.apache.juneau.petstore.service.*;
 import org.apache.juneau.rest.server.*;
 import org.apache.juneau.rest.server.datatables.*;
 import org.apache.juneau.rest.server.servlet.*;
 import org.apache.juneau.rest.server.staticfile.*;
+import org.apache.juneau.rest.server.view.*;
 import org.apache.juneau.rest.server.view.freemarker.*;
 import org.apache.juneau.rest.server.view.freemarker.console.*;
 import org.apache.juneau.rest.server.views.*;
@@ -55,6 +57,30 @@ public abstract class PetstoreConsolePage extends BasicRestServlet {
 	/** Classpath folder holding the console templates. */
 	public static final String TEMPLATES = "/org/apache/juneau/petstore/console/templates/";
 
+	/** Response header naming the render path of a builder-twin page, so a twin test can tell the two paths apart. */
+	public static final String PAGE_HEADER = "X-Petstore-Page";
+
+	/**
+	 * Whether this request asks for the builder twin of a page ({@code ?builder}, with or without a value).
+	 *
+	 * @param req The request.
+	 * @return <jk>true</jk> if the page should render from its {@link PageSpec}.
+	 */
+	public static boolean builder(RestRequest req) {
+		return req.containsQueryParam("builder");
+	}
+
+	/**
+	 * Renders a builder-twin page, marked with {@link #PAGE_HEADER}.
+	 *
+	 * @param req The request.
+	 * @param spec The page spec.
+	 * @return The view.
+	 */
+	public static View twin(RestRequest req, PageSpec spec) {
+		return spec.header(PAGE_HEADER, "builder").view(req);
+	}
+
 	@SuppressWarnings({
 		"java:S2226" // the field is set by the framework's @Bean injection after construction, so it cannot be final.
 	})
@@ -62,13 +88,17 @@ public abstract class PetstoreConsolePage extends BasicRestServlet {
 	private transient PetStore store;
 
 	/**
-	 * The console FreeMarker mixin: petstore templates, {@code base.ftlh} chrome.
+	 * The console FreeMarker mixin: petstore templates, {@code base.ftlh} chrome, {@code assetUrl(..)} over this
+	 * package's bundled scripts, and the {@link InventoryGaugeCardType} custom card type.
 	 *
 	 * @return The mixin.
 	 */
 	@Bean
 	public FreemarkerMixin freemarker() {
-		return ConsoleFreemarkerMixin.create().basePath(TEMPLATES).chromeTemplate("base.ftlh").build();
+		// assetUrl('/console/petstore.js') versions the shared page script served by PetstoreConsoleResource.
+		return ConsoleFreemarkerMixin.create().basePath(TEMPLATES).chromeTemplate("base.ftlh")
+			.adopterAssets(PetstoreConsolePage.class.getClassLoader(), "org/apache/juneau/petstore")
+			.cardType(new InventoryGaugeCardType()).build();
 	}
 
 	/**

@@ -57,6 +57,13 @@ public final class SafePathTemplate {
 	 * (colon before the first slash), and no {@code ..} path segments.
 	 *
 	 * <p>
+	 * The check rejects, and never normalises and then accepts, the characters a browser's URL parser rewrites: a
+	 * backslash (read as a slash, so {@code \\host} is protocol-relative), any C0 control character or DEL, and a
+	 * first or last character at or below U+0020 (stripped, so {@code " //host"} resolves cross-host).  Internal
+	 * spaces and non-ASCII characters are still accepted.  The JS guards in the console runtimes apply the same
+	 * rule, and {@code same-origin-path-corpus.json} pins them to it.
+	 *
+	 * <p>
 	 * This is the shared same-origin core.  It deliberately says nothing about {@code {…}} template placeholders:
 	 * a per-row/per-parameter caller (which needs {@code {id}}) uses this as-is, and a caller that forbids
 	 * templating layers {@link #isNonTemplatedPath(String)} on top.
@@ -67,6 +74,13 @@ public final class SafePathTemplate {
 	public static boolean isSameOriginPath(String path) {
 		if (path == null || path.isBlank())
 			return false;
+		if (path.charAt(0) <= ' ' || path.charAt(path.length() - 1) <= ' ')
+			return false;
+		for (var i = 0; i < path.length(); i++) {
+			var c = path.charAt(i);
+			if (c == '\\' || c < ' ' || c == 0x7f)
+				return false;
+		}
 		if (path.contains("://"))
 			return false;
 		if (path.startsWith("//"))

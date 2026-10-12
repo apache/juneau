@@ -19,7 +19,11 @@ package org.apache.juneau.rest.client.okhttp;
 import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.io.*;
+import java.net.*;
+import java.util.*;
+import java.util.regex.*;
 
+import org.apache.juneau.http.remote.*;
 import org.apache.juneau.rest.client.*;
 
 import okhttp3.*;
@@ -62,17 +66,23 @@ import okio.*;
 })
 public final class OkHttpTransport implements HttpTransport {
 
+	// OkHttp's own IP-literal test (okhttp3.internal HostnamesCommon): such hosts are connected to without a Dns lookup.
+	private static final Pattern OKHTTP_IP_LITERAL = Pattern.compile("([0-9a-fA-F]*:[0-9a-fA-F:.]*)|([\\d.]+)");
+
 	private final OkHttpClient httpClient;
 	private final OkHttpClient policyHttpClient;
 
 	OkHttpTransport(OkHttpTransportBuilder builder) {
-		this.httpClient = builder.httpClient != null ? builder.httpClient : createDefaultHttpClient();
+		// A caller-supplied client gets the redirect credential guard on a derived client: newBuilder() shares its
+		// connection pool, dispatcher and every other setting, and the caller's own client is left unchanged.
+		this.httpClient = builder.httpClient != null ? withCredentialGuard(builder.httpClient) : createDefaultHttpClient();
 		// A dedicated client -- sharing this client's connection pool/dispatcher via newBuilder(), but with its own
 		// pin-on-connect Dns and with auto-redirect-following disabled -- used only for SSRF-guard-active @Remote
 		// calls (see executeWithPolicy); ordinary (non-@Remote) calls on httpClient are completely unaffected.
 		// Unlike the shared-connection-manager engines (Apache HttpClient, Jetty), OkHttp's Dns/followRedirects are
 		// per-client (not tied to the shared connection pool), so this derivation works even for a caller-supplied
-		// httpClient -- the policy guard is supported unconditionally.
+		// httpClient.  The exception is a proxy: OkHttp asks Dns for the proxy's address, not the target's (the proxy
+		// resolves the target), so the pin cannot apply -- see supportsUrlPolicy() and requireNoProxy().
 		this.policyHttpClient = this.httpClient.newBuilder()
 			.followRedirects(false)
 			.dns(PolicyPinningDns.INSTANCE)
@@ -80,7 +90,15 @@ public final class OkHttpTransport implements HttpTransport {
 	}
 
 	private static OkHttpClient createDefaultHttpClient() {
-		return new OkHttpClient.Builder()
+		return withCredentialGuard(new OkHttpClient());
+	}
+
+	// OkHttp's own redirect follower keeps a caller-set Cookie, so every client this transport sends through has the
+	// guard as a network interceptor, which runs for each hop.  The first-hop recorder is the last application
+	// interceptor, so the origin is the URL after any caller application interceptor has rewritten it.
+	private static OkHttpClient withCredentialGuard(OkHttpClient client) {
+		return client.newBuilder()
+			.addInterceptor(OkHttpRedirectCredentialGuard.FIRST_HOP_RECORDER)
 			.addNetworkInterceptor(new OkHttpRedirectCredentialGuard())
 			.build();
 	}
@@ -110,14 +128,89 @@ public final class OkHttpTransport implements HttpTransport {
 		return sendOnce(request, httpClient);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>
+	 * Reports <jk>false</jk> when the {@link OkHttpClient} has an explicit {@linkplain OkHttpClient#proxy() proxy}: a
+	 * proxy resolves the target host itself, so the pin-on-connect {@link okhttp3.Dns} is never consulted for the target.
+	 * A client that selects a proxy per URL through a {@link ProxySelector} is accepted here, but a guarded request
+	 * whose URL is routed through a proxy is refused when sent (fail closed).
+	 */
 	@Override /* HttpTransport */
 	public boolean supportsUrlPolicy() {
-		return true;
+		var proxy = httpClient.proxy();
+		return proxy == null || proxy.type() == Proxy.Type.DIRECT;
 	}
 
 	// Performs one pin-on-connect hop via the dedicated, redirect-disabled policyHttpClient.
 	private TransportResponse sendOncePinned(TransportRequest request) throws TransportException {
+		try {
+			var url = HttpUrl.get(request.getUri().toString());
+			requireNoProxy(url);
+			requireAllowedIpLiteral(url.host());
+		} catch (IllegalArgumentException e) {
+			throw new TransportException("HTTP transport error: " + e.getMessage(), e);
+		}
 		return sendOnce(request, policyHttpClient);
+	}
+
+	// A proxy (SOCKS, or HTTP/CONNECT) resolves the target host itself, so OkHttp never asks Dns about the target and the
+	// pin cannot apply.  Fail closed rather than send a guarded request through one.
+	private void requireNoProxy(HttpUrl url) {
+		var explicit = httpClient.proxy();
+		var uri = url.uri();
+		// Like OkHttp, skip the ProxySelector when java.net.URI cannot parse a host (e.g. an underscore host name).
+		var proxies = explicit != null ? List.of(explicit) : uri.getHost() == null ? List.of(Proxy.NO_PROXY) : selectedProxies(uri);
+		for (var p : proxies)
+			if (p.type() != Proxy.Type.DIRECT)
+				throw iaex("Request to '%s' would be routed through a proxy, which resolves the target host itself and bypasses the SSRF guard's address pinning; use a client without a proxy (or set allowPrivateUrls)", url.host());
+	}
+
+	// Like OkHttp, a ProxySelector answer of null or empty means no proxy.
+	private List<Proxy> selectedProxies(URI uri) {
+		var selected = httpClient.proxySelector().select(uri);
+		return selected == null || selected.isEmpty() ? List.of(Proxy.NO_PROXY) : selected;
+	}
+
+	// OkHttp connects to any host it considers an IP literal without consulting Dns, so the pin never sees one; apply the
+	// same address check here.  Its literal test is deliberately broader than dotted-quad: an all-digit/dot host such as
+	// 2130706433 or 127.1 is parsed by InetAddress to 127.0.0.1.  (Host names are checked by PolicyPinningDns.)
+	// The literal is parsed locally and never resolved: a host that matches the pattern but is not a valid literal
+	// (1.2.3.4.5, 127.0.0.1.) would otherwise fall through to a DNS lookup here and a second one in OkHttp, so it is refused.
+	private static void requireAllowedIpLiteral(String host) {
+		if (! OKHTTP_IP_LITERAL.matcher(host).matches())
+			return;
+		var address = parseIpLiteral(host);
+		if (address == null)
+			throw iaex("Host '%s' matches the IP-literal form but is not a valid IP literal; refusing to resolve it", host);
+		if (RemoteUrlPolicy.isDeniedAddress(address))
+			throw iaex("No allowed address for host '%s': the IP literal is private/loopback/link-local (set allowPrivateUrls to allow local-dev targets)", host);
+	}
+
+	// Returns the address for an IP-literal host without any name lookup, or null if it is not a valid literal.
+	private static InetAddress parseIpLiteral(String host) {
+		try {
+			if (host.indexOf(':') != -1)
+				return InetAddress.getByName("[" + host + "]"); // brackets make the JDK treat it as IPv6 only, never DNS
+			var parts = host.split("\\.", -1);
+			if (parts.length > 4)
+				return null;
+			var value = 0L;
+			for (var i = 0; i < parts.length; i++) {
+				var part = parts[i];
+				if (part.isEmpty() || part.length() > 10 || (part.length() > 1 && part.charAt(0) == '0'))
+					return null;
+				var n = Long.parseLong(part);
+				var last = i == parts.length - 1;
+				if (n > (last ? (1L << (8 * (5 - parts.length))) - 1 : 255))
+					return null;
+				value |= last ? n : n << (8 * (3 - i));
+			}
+			return InetAddress.getByAddress(new byte[]{(byte)(value >> 24), (byte)(value >> 16), (byte)(value >> 8), (byte)value});
+		} catch (UnknownHostException e) {
+			return null;
+		}
 	}
 
 	private static TransportResponse sendOnce(TransportRequest request, OkHttpClient client) throws TransportException {
@@ -128,7 +221,10 @@ public final class OkHttpTransport implements HttpTransport {
 		Response okResponse;
 		try {
 			okResponse = effective.newCall(okRequest).execute();
-		} catch (IOException e) {
+		} catch (IOException | IllegalArgumentException e) {
+			// IllegalArgumentException: any IAE raised while executing the call, on both the guarded and the ordinary
+			// path, is surfaced as a TransportException.  The expected source is a Dns.lookup failure, which OkHttp
+			// propagates unchanged -- notably PolicyPinningDns refusing a host whose every resolved address is denied.
 			throw new TransportException("HTTP transport error: " + e.getMessage(), e);
 		}
 		try {

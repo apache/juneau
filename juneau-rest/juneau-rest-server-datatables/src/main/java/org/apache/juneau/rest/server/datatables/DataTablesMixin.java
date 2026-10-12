@@ -81,10 +81,6 @@ import org.apache.juneau.rest.server.*;
  * 	}
  * </p>
  *
- * <p>
- * The constants {@link #JQUERY_CDN_URL}, {@link #DATATABLES_JS_CDN_URL}, and {@link #DATATABLES_CSS_CDN_URL} give CDN
- * coordinates for a page that loads the library from a CDN instead of the WebJars.
- *
  * <h5 class='section'>Server-side processing ({@code JuneauDataTables.ajax}):</h5>
  *
  * <p>
@@ -152,15 +148,6 @@ public class DataTablesMixin {
 		"java:S3077" // Double-checked-locking safe publication of one whole immutable array reference, not per-element mutation; AtomicReferenceArray solves a different problem.
 	})
 	private static volatile byte[] glueScript;
-
-	/** A known-good CDN URL for jQuery (CDN alternative to the WebJar).  Documentation aid. */
-	public static final String JQUERY_CDN_URL = "https://code.jquery.com/jquery-3.7.1.min.js";
-
-	/** A known-good CDN URL for the DataTables JavaScript (CDN alternative to the WebJar).  Documentation aid. */
-	public static final String DATATABLES_JS_CDN_URL = "https://cdn.datatables.net/2.1.8/js/dataTables.min.js";
-
-	/** A known-good CDN URL for the DataTables stylesheet (CDN alternative to the WebJar).  Documentation aid. */
-	public static final String DATATABLES_CSS_CDN_URL = "https://cdn.datatables.net/2.1.8/css/dataTables.dataTables.min.css";
 
 	/**
 	 * [GET /juneau-datatables.js] &mdash; serve the first-party DataTables glue script.

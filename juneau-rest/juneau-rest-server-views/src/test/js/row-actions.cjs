@@ -123,6 +123,58 @@ const PROBE = function () {
 	}
 	out.validTokenRefusalVisible = rendered(dom2.td.querySelector('.juneau-view-action-refusal'));
 
+	// Case 3: a present=inline action is NOT in the row menu (a normal action still is), yet still fires from its pill.
+	const inlineAction = { id: 'rename', label: 'Rename', endpoint: '/x/rename', method: 'POST', present: 'inline' };
+	const viewDef3 = { rowActions: [inlineAction, action] };
+	const dom3 = makeTable('tok-123');
+	const menu3 = init.buildRowActionMenu(viewDef3, dom3.table, dom3.tr, {});
+	out.inlineMenuActionIds = Array.prototype.map.call(menu3.querySelectorAll('.juneau-view-action-item'), function (b) { return b.dataset.actionId; });
+	const pill3 = document.createElement('span');
+	pill3.dataset.juneauPill = '';
+	pill3.dataset.juneauAction = 'rename';
+	dom3.td.appendChild(pill3);
+	const before3 = fetchCalls.length;
+	init.activatePillAction(pill3, dom3.table, viewDef3, {});
+	out.inlinePillFetchIssued = fetchCalls.length > before3;
+	if (out.inlinePillFetchIssued) out.inlinePillUrl = fetchCalls.at(-1).url;
+
+	// Case 4: the menu trigger is hidden when only inline actions are visible on a row (it would open an empty menu).
+	const soldRule = [{ field: 'status', op: 'ne', value: 'SOLD' }];
+	const gateView = { rowActions: [inlineAction, { id: 'sell', label: 'Sell', endpoint: '/x/sell', method: 'POST', visibleWhen: soldRule }] };
+	// NOSONAR javascript:S7721 -- must stay nested: page.evaluate(PROBE) ships only PROBE's own source into the browser.
+	function triggerRow() { // NOSONAR javascript:S7721 -- must stay nested: page.evaluate(PROBE) serializes only PROBE's own source into the browser
+		const tr = document.createElement('tr');
+		const btn = document.createElement('button');
+		btn.className = 'juneau-view-action-trigger';
+		tr.appendChild(btn);
+		return { tr: tr, btn: btn };
+	}
+	const soldRow = triggerRow();
+	init.applyRowActionPillGates(soldRow.tr, { status: 'SOLD' }, gateView);
+	out.inlineOnlyTriggerHidden = soldRow.btn.hidden;
+	const liveRow = triggerRow();
+	init.applyRowActionPillGates(liveRow.tr, { status: 'AVAILABLE' }, gateView);
+	out.menuActionVisibleTriggerHidden = liveRow.btn.hidden;
+
+	// Case 5: a view whose actions are all inline gets no actions column and no actions header cell.
+	const allInline = { rowActions: [inlineAction], columns: [] };
+	const allInlineOpts = {};
+	init.assembleFullColumnArray(allInlineOpts, allInline, {});
+	out.allInlineActionsColumn = (allInlineOpts.columns || []).some(function (c) { return c._juneau === 'actions'; });
+	const mixedOpts = {};
+	init.assembleFullColumnArray(mixedOpts, { rowActions: [inlineAction, action], columns: [] }, {});
+	out.mixedActionsColumn = (mixedOpts.columns || []).some(function (c) { return c._juneau === 'actions'; });
+	// NOSONAR javascript:S7721 -- must stay nested: page.evaluate(PROBE) ships only PROBE's own source into the browser.
+	function headerCells(viewDef) { // NOSONAR javascript:S7721 -- must stay nested: page.evaluate(PROBE) serializes only PROBE's own source into the browser
+		const t = document.createElement('table');
+		t.innerHTML = '<thead><tr><th>A</th></tr></thead><tbody></tbody>';
+		document.body.appendChild(t);
+		init.restoreHeaderShell(t, { viewDef: viewDef });
+		return t.querySelectorAll('thead th.juneau-view-actions-th').length;
+	}
+	out.allInlineActionsHeaders = headerCells(allInline);
+	out.mixedActionsHeaders = headerCells({ rowActions: [inlineAction, action], columns: [] });
+
 	window.fetch = realFetch;
 	return out;
 };

@@ -153,18 +153,13 @@ class KeychainSecretStore_Test {
 		assumeTrue(posixShellAvailable(), "POSIX shell not available");
 		var argvDump = File.createTempFile("juneau-keychain-argv", ".txt");
 		var stdinDump = File.createTempFile("juneau-keychain-stdin", ".txt");
-		var script = File.createTempFile("juneau-keychain-fake-security", ".sh");
 		argvDump.deleteOnExit();
 		stdinDump.deleteOnExit();
-		script.deleteOnExit();
+		var script = fakeSecurity(""
+			+ "printf '%s\\n' \"$@\" > '" + argvDump.getAbsolutePath() + "'\n"
+			+ "cat > '" + stdinDump.getAbsolutePath() + "'\n"
+			+ "exit 0");
 		try {
-			Files.writeString(script.toPath(), ""
-				+ "#!/bin/sh\n"
-				+ "printf '%s\\n' \"$@\" > '" + argvDump.getAbsolutePath() + "'\n"
-				+ "cat > '" + stdinDump.getAbsolutePath() + "'\n"
-				+ "exit 0\n");
-			assertTrue(script.setExecutable(true));
-
 			var secret = "arg\u00eev-h0stile s3cr3t \t \u00fc";
 			var store = new KeychainSecretStore("svc", FailMode.FAIL_CLOSED, 5L, script.getAbsolutePath());
 			store.store("acct", secret.toCharArray());
@@ -250,5 +245,123 @@ class KeychainSecretStore_Test {
 		var withCarriageReturn = "line1\rline2".toCharArray();
 		assertThrows(IllegalArgumentException.class, () -> store.store("acct", withNewline));
 		assertThrows(IllegalArgumentException.class, () -> store.store("acct", withCarriageReturn));
+	}
+
+	// -----------------------------------------------------------------------------------------------------------------
+	// Backend failures (non-zero, non-"not found" exit) via a scripted runner.
+	// -----------------------------------------------------------------------------------------------------------------
+
+	private static KeychainSecretStore failing(FailMode failMode) {
+		return new KeychainSecretStore("svc", failMode, (stdin, args) -> new KeychainSecretStore.Result(1, new byte[0], " boom \n"));
+	}
+
+	@Test void d01_failClosedNonZeroExitThrowsWithStderr() {
+		var store = failing(FailMode.FAIL_CLOSED);
+		var secret = "v".toCharArray();
+		assertContains("exit code 1: boom", assertThrows(IllegalStateException.class, () -> store.find("k")).getMessage());
+		assertContains("find-generic-password", assertThrows(IllegalStateException.class, () -> store.exists("k")).getMessage());
+		assertContains("delete-generic-password", assertThrows(IllegalStateException.class, () -> store.delete("k")).getMessage());
+		assertContains("add-generic-password", assertThrows(IllegalStateException.class, () -> store.store("k", secret)).getMessage());
+		assertContains("exit code 1: boom", assertThrows(IllegalStateException.class, () -> store.store("k", secret)).getMessage());
+	}
+
+	@Test void d02_failOpenNonZeroExitDegrades() {
+		var store = failing(FailMode.FAIL_OPEN);
+		var secret = "v".toCharArray();
+		assertTrue(store.find("k").isEmpty());
+		assertFalse(store.exists("k"));
+		assertFalse(store.delete("k"));
+		assertDoesNotThrow(() -> store.store("k", secret));
+	}
+
+	@Test void d03_findDropsSingleTrailingNewline() {
+		var store = new KeychainSecretStore("svc", FailMode.FAIL_CLOSED, (stdin, args) -> new KeychainSecretStore.Result(0, "pw\r\n".getBytes(UTF_8), ""));
+		assertArrayEquals("pw".toCharArray(), store.find("k").orElseThrow());
+		var doubled = new KeychainSecretStore("svc", FailMode.FAIL_CLOSED, (stdin, args) -> new KeychainSecretStore.Result(0, "pw\n\n".getBytes(UTF_8), ""));
+		assertArrayEquals("pw\n".toCharArray(), doubled.find("k").orElseThrow());
+		var bare = new KeychainSecretStore("svc", FailMode.FAIL_CLOSED, (stdin, args) -> new KeychainSecretStore.Result(0, "pw".getBytes(UTF_8), ""));
+		assertArrayEquals("pw".toCharArray(), bare.find("k").orElseThrow());
+		var empty = new KeychainSecretStore("svc", FailMode.FAIL_CLOSED, (stdin, args) -> new KeychainSecretStore.Result(0, new byte[0], ""));
+		assertEquals(0, empty.find("k").orElseThrow().length);
+	}
+
+	@Test void d04_nullRunnerRejected() {
+		assertThrows(IllegalArgumentException.class, () -> new KeychainSecretStore("svc", FailMode.FAIL_CLOSED, (KeychainSecretStore.CommandRunner)null));
+	}
+
+	// -----------------------------------------------------------------------------------------------------------------
+	// Real ProcessCommandRunner against a fake "security" script (never the real binary).
+	// -----------------------------------------------------------------------------------------------------------------
+
+	private static File fakeSecurity(String body) throws IOException {
+		var script = File.createTempFile("juneau-keychain-fake-security", ".sh");
+		script.deleteOnExit();
+		Files.writeString(script.toPath(), "#!/bin/sh\n" + body + "\n");
+		assertTrue(script.setExecutable(true));
+		return script;
+	}
+
+	@Test void e01_processRunnerForwardsArgsAndClosesNullStdin() throws IOException {
+		assumeTrue(posixShellAvailable(), "POSIX shell not available");
+		// "cat >/dev/null" only returns if the runner closes the child's stdin; otherwise the call would time out.
+		var script = fakeSecurity("printf '%s\\n' \"$@\"; cat >/dev/null; exit 0");
+		try {
+			var store = new KeychainSecretStore("svc", FailMode.FAIL_CLOSED, 5L, script.getAbsolutePath());
+			assertArrayEquals("find-generic-password\n-a\nk\n-s\nsvc\n-w".toCharArray(), store.find("k").orElseThrow());
+			assertTrue(store.exists("k"));
+		} finally {
+			script.delete();
+		}
+	}
+
+	@Test void e02_processRunnerMapsNotFoundAndFailure() throws IOException {
+		assumeTrue(posixShellAvailable(), "POSIX shell not available");
+		var notFound = fakeSecurity("echo nope >&2; exit 44");
+		var broken = fakeSecurity("echo kaboom >&2; exit 2");
+		try {
+			var nf = new KeychainSecretStore("svc", FailMode.FAIL_CLOSED, 5L, notFound.getAbsolutePath());
+			assertTrue(nf.find("k").isEmpty());
+			assertFalse(nf.exists("k"));
+			assertFalse(nf.delete("k"));
+			var bad = new KeychainSecretStore("svc", FailMode.FAIL_CLOSED, 5L, broken.getAbsolutePath());
+			assertContains("exit code 2: kaboom", assertThrows(IllegalStateException.class, () -> bad.find("k")).getMessage());
+		} finally {
+			notFound.delete();
+			broken.delete();
+		}
+	}
+
+	@Test void e03_processRunnerTimeout() throws IOException {
+		assumeTrue(posixShellAvailable(), "POSIX shell not available");
+		var script = fakeSecurity("exec sleep 30");
+		try {
+			var store = new KeychainSecretStore("svc", FailMode.FAIL_CLOSED, 1L, script.getAbsolutePath());
+			assertContains("Timed out", assertThrows(IllegalStateException.class, () -> store.find("k")).getMessage());
+			var open = new KeychainSecretStore("svc", FailMode.FAIL_OPEN, 1L, script.getAbsolutePath());
+			assertTrue(open.find("k").isEmpty());
+		} finally {
+			script.delete();
+		}
+	}
+
+	@Test void e04_processRunnerInterrupted() throws IOException {
+		assumeTrue(posixShellAvailable(), "POSIX shell not available");
+		var script = fakeSecurity("exit 0");
+		try {
+			var store = new KeychainSecretStore("svc", FailMode.FAIL_CLOSED, 5L, script.getAbsolutePath());
+			Thread.currentThread().interrupt();
+			try {
+				assertContains("Interrupted", assertThrows(RuntimeException.class, () -> store.exists("k")).getMessage());
+				assertTrue(Thread.currentThread().isInterrupted(), "interrupt flag must be restored");
+			} finally {
+				Thread.interrupted();
+			}
+		} finally {
+			script.delete();
+		}
+	}
+
+	private static void assertContains(String expected, String actual) {
+		assertTrue(actual != null && actual.contains(expected), () -> "Expected '" + actual + "' to contain '" + expected + "'");
 	}
 }

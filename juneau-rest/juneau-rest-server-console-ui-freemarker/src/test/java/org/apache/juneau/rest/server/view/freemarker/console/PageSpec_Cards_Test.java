@@ -139,7 +139,7 @@ class PageSpec_Cards_Test extends TestBase {
 	}
 
 	@Test void a18_card_reservedWithoutHandler_rejected() {
-		for (var type : List.of("chart", "run-view")) {
+		for (var type : List.of("run-view")) {
 			var ex = assertThrows(IllegalArgumentException.class, () -> PageSpec.create().card(CardSpec.of(type, "x")));
 			assertEquals("PageSpec.card type '" + type + "' is reserved and has no card-type handler; it cannot be built with PageSpec.", ex.getMessage());
 		}
@@ -248,6 +248,14 @@ class PageSpec_Cards_Test extends TestBase {
 		assertTrue(Json.of(card).contains("/rest/slo/data"), card.toString());
 	}
 
+	@Test void a32b_applyTo_tableCard_liftKeepsBare() throws Exception {
+		var cap = new PageCapture();
+		PageSpec.create().table(table("slo"), c -> c.bare(true)).applyTo(cap, MODEL);
+		var card = cap.unplacedCards().get(0).toMap();
+		assertEquals("datatables", card.get("type"));
+		assertEquals(true, card.get("bare"));
+	}
+
 	@Test void a33_applyTo_recordsRequiredPacks() throws Exception {
 		var cap = new PageCapture();
 		PageSpec.create().table(table("slo")).html("intro", "<p/>").applyTo(cap, MODEL);
@@ -268,5 +276,97 @@ class PageSpec_Cards_Test extends TestBase {
 		var ex = assertThrows(freemarker.template.TemplateModelException.class,
 			() -> PageSpec.create().html("intro", "<p/>").applyTo(new PageCapture(), null));
 		assertTrue(ex.getMessage().contains("PageSpec cards need the console card directive"), ex.getMessage());
+	}
+
+	@Test void a36_applyTo_chartCard_liftKeepsBareAndWiring() throws Exception {
+		var cap = new PageCapture();
+		PageSpec.create().card(ChartDef.line("trend").title("Orders").src("/s").x("day").series("placed", "Placed").toCardSpec()
+			.cssClass("wide").bare(true)
+			.visibleWhen(org.apache.juneau.rest.server.views.VisibilityRule.when("a").present())
+			.subscribes(org.apache.juneau.rest.server.console.Subscription.to("ops.jobs").as("params").map("q", "search"))).applyTo(cap, MODEL);
+		var card = cap.unplacedCards().get(0).toMap();
+		assertEquals("chart", card.get("type"));
+		assertEquals("Orders", card.get("title"));
+		assertEquals("/s", card.get("src"));
+		assertEquals("wide", card.get("class"));
+		assertEquals("line", card.get("kind"));
+		assertEquals(true, card.get("bare"));
+		assertNotNull(card.get("visibleWhen"));
+		assertNotNull(card.get("subscribes"));
+	}
+
+	@Test void a37_applyTo_invalidChartCard_rejectedByHandler() {
+		var spec = PageSpec.create().card(CardSpec.of("chart", "trend").src("/s").body("kind", "line"));
+		var ex = assertThrows(freemarker.template.TemplateModelException.class, () -> spec.applyTo(new PageCapture(), MODEL));
+		assertTrue(ex.getMessage().contains("type='chart' kind='line' requires x and at least one series."), ex.getMessage());
+	}
+
+	@Test void a38_applyTo_chartCardReservedBodyKey_rejected() {
+		var spec = PageSpec.create().card(CardSpec.of("chart", "trend").src("/s").body("kind", "line").body("title", "x"));
+		var ex = assertThrows(freemarker.template.TemplateModelException.class, () -> spec.applyTo(new PageCapture(), MODEL));
+		assertTrue(ex.getMessage().contains("reserved"), ex.getMessage());
+	}
+
+	@Test void a39_applyTo_chartCard_pullsChartsPack() throws Exception {
+		var cap = new PageCapture();
+		PageSpec.create().card(ChartDef.line("trend").src("/s").x("day").series("placed", "Placed").toCardSpec()).applyTo(cap, MODEL);
+		assertTrue(cap.requiredPacks().contains(ToolkitPackRegistry.PACK_CHARTS), cap.requiredPacks().toString());
+	}
+
+	@Test void a40_applyTo_chartCardWithTemplate_rejected() {
+		var spec = PageSpec.create().card(ChartDef.line("trend").src("/s").x("day").series("placed", "Placed").toCardSpec().template("tpl"));
+		var ex = assertThrows(freemarker.template.TemplateModelException.class, () -> spec.applyTo(new PageCapture(), MODEL));
+		assertTrue(ex.getMessage().contains("<@card id='trend'> type='chart' takes a JSON5 body (plus src= for remote data); template= is not allowed."), ex.getMessage());
+	}
+
+	@Test void a41_applyTo_jobLogCard_isLiftedThroughHandler_andPullsJobLogPack() throws Exception {
+		var cap = new PageCapture();
+		PageSpec.create().card(CardSpec.of("job-log", "rebuild").title("Rebuild")
+			.body("submit", Map.of("endpoint", "/jobs/rebuild"))).applyTo(cap, MODEL);
+		var card = cap.unplacedCards().get(0).toMap();
+		assertEquals("job-log", card.get("type"));
+		assertEquals("Rebuild", card.get("title"));
+		assertEquals(Map.of("endpoint", "/jobs/rebuild"), card.get("submit"));
+		assertTrue(cap.requiredPacks().contains(ToolkitPackRegistry.PACK_JOBLOG), cap.requiredPacks().toString());
+	}
+
+	@Test void a41b_applyTo_jobLogCard_liftKeepsBare() throws Exception {
+		var cap = new PageCapture();
+		PageSpec.create().card(CardSpec.of("job-log", "rebuild")
+			.body("submit", Map.of("endpoint", "/jobs/rebuild")).bare(true)).applyTo(cap, MODEL);
+		var card = cap.unplacedCards().get(0).toMap();
+		assertEquals("job-log", card.get("type"));
+		assertEquals(true, card.get("bare"));
+	}
+
+	@Test void a42_applyTo_jobLogCard_crossOriginEndpoint_rejected() {
+		var spec = PageSpec.create().card(CardSpec.of("job-log", "rebuild").body("submit", Map.of("endpoint", "//evil.test/x")));
+		var ex = assertThrows(freemarker.template.TemplateModelException.class, () -> spec.applyTo(new PageCapture(), MODEL));
+		assertTrue(ex.getMessage().contains("type='job-log' submit.endpoint must be a same-origin path; got '//evil.test/x'."), ex.getMessage());
+	}
+
+	@Test void a43_applyTo_jobLogCardWithTemplate_rejected() {
+		var spec = PageSpec.create().card(CardSpec.of("job-log", "rebuild").body("submit", Map.of("endpoint", "/a")).template("tpl"));
+		var ex = assertThrows(freemarker.template.TemplateModelException.class, () -> spec.applyTo(new PageCapture(), MODEL));
+		assertTrue(ex.getMessage().contains("<@card id='rebuild'> type='job-log' takes its options as the body; template= is not allowed."), ex.getMessage());
+	}
+
+	@Test void a44_applyTo_jobLogCardWithSrc_rejected() {
+		var spec = PageSpec.create().card(CardSpec.of("job-log", "rebuild").src("/a").body("submit", Map.of("endpoint", "/a")));
+		var ex = assertThrows(freemarker.template.TemplateModelException.class, () -> spec.applyTo(new PageCapture(), MODEL));
+		assertTrue(ex.getMessage().contains("<@card id='rebuild'> type='job-log' takes its options as the body; src= is not allowed."), ex.getMessage());
+	}
+
+	@Test void a45_applyTo_unsafeCardSrc_rejectedForNonLiftedType() {
+		var spec = PageSpec.create().card(CardSpec.of("my-widget", "w").src("\\\\evil.test/x"));
+		var ex = assertThrows(freemarker.template.TemplateModelException.class, () -> spec.applyTo(new PageCapture(), MODEL));
+		assertTrue(ex.getMessage().contains("<@card id='w'> type='my-widget' src must be a same-origin path"), ex::getMessage);
+	}
+
+	@Test void a46_addCard_unsafeSrc_rejected() {
+		var ex = assertThrows(freemarker.template.TemplateModelException.class,
+			() -> new PageCapture().addCard(CardSpec.html("h").src("//evil.test/x"), null));
+		assertTrue(ex.getMessage().contains("<@card id='h'> type='html' src must be a same-origin path"), ex::getMessage);
+		assertDoesNotThrow(() -> new PageCapture().addCard(CardSpec.html("h").src("/ok/{id}"), null));
 	}
 }

@@ -19,6 +19,9 @@ package org.apache.juneau.petstore.console.dev.flavors;
 import java.util.*;
 
 import org.apache.juneau.http.response.*;
+import org.apache.juneau.petstore.console.*;
+import org.apache.juneau.petstore.console.pages.*;
+import org.apache.juneau.rest.server.*;
 import org.apache.juneau.rest.server.view.*;
 import org.apache.juneau.rest.server.view.freemarker.*;
 
@@ -75,11 +78,24 @@ public enum Flavor {
 	/** @return The URL id. */
 	public String id() { return id; }
 
+	/** @return The nav label, also the caption card's title. */
+	public String label() { return label; }
+
 	/** @return The caption shown above the rendered output. */
 	public String caption() { return caption; }
 
 	/** @return The GitHub URL of the class that renders this flavor. */
 	public String sourceUrl() { return SOURCE_ROOT + sourceFile; }
+
+	/**
+	 * The console page for this flavor, from its builder twin on {@code ?builder}.
+	 *
+	 * @param req The request.
+	 * @return The page.
+	 */
+	public View page(RestRequest req) {
+		return PetstoreConsolePage.builder(req) ? PetstoreConsolePage.twin(req, DevPageBuilders.flavor(this)) : page();
+	}
 
 	/** @return The console page for this flavor. */
 	public View page() {

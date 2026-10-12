@@ -87,7 +87,7 @@ public final class SamlMetadataResolvers {
 	public static MetadataResolver file(File file) throws IOException {
 		if (file == null)
 			throw new IllegalArgumentException("file must not be null");
-		if (!file.isFile()) // HTT: false branch (file present) requires valid SAML metadata XML; covered by integration tests
+		if (!file.isFile())
 			throw new FileNotFoundException("SAML metadata file not found: " + file);
 
 		OpenSamlBootstrap.ensureInitialized();
@@ -191,7 +191,7 @@ public final class SamlMetadataResolvers {
 				.GET()
 				.build();
 			var resp = client.send(req, boundedByteArrayBodyHandler(maxMetadataBytes));
-			if (resp.statusCode() < 200 || resp.statusCode() >= 300) // HTT: false branch (2xx success) requires live SAML metadata endpoint; covered by integration tests
+			if (resp.statusCode() < 200 || resp.statusCode() >= 300) // HTT: the < 200 branch is unreachable because the JDK HttpClient consumes 1xx responses itself
 				throw ioex("Failed to fetch SAML metadata from %s (HTTP %s)", url, resp.statusCode());
 
 			var doc = SamlXml.newDocumentBuilder().parse(new ByteArrayInputStream(resp.body()));
@@ -235,7 +235,7 @@ public final class SamlMetadataResolvers {
 	 * @throws IOException If the file cannot be parsed or initialized.
 	 */
 	public static MetadataResolver file(Path path) throws IOException {
-		if (path == null) // HTT: false branch (valid path) delegates to file(File); covered wherever file(File) is tested
+		if (path == null)
 			throw new IllegalArgumentException("path must not be null");
 		return file(path.toFile());
 	}
@@ -284,23 +284,28 @@ public final class SamlMetadataResolvers {
 
 		@Override /* Flow.Subscriber */
 		public void onSubscribe(Flow.Subscription subscription) {
+			if (this.subscription != null) { // Reactive Streams rule 2.5: cancel any subscription after the first.
+				subscription.cancel();
+				return;
+			}
 			if (future.isDone()) { // Already rejected via a declared Content-Length over the cap.
 				subscription.cancel();
 				return;
 			}
+			this.subscription = subscription; // Store before request(): a publisher may deliver onNext synchronously from inside it.
 			subscription.request(Long.MAX_VALUE);
-			this.subscription = subscription;
 		}
 
 		@Override /* Flow.Subscriber */
 		public void onNext(List<ByteBuffer> item) {
-			if (future.isDone())
+			if (future.isDone()) // Data arriving after cancel() is dropped.
 				return;
 			for (var buf : item) {
 				total += buf.remaining();
 				if (total > maxBytes) {
-					subscription.cancel();
+					// Fail the body before cancelling, so a publisher that completes from inside cancel() cannot surface the truncated bytes.
 					future.completeExceptionally(ioex("SAML metadata response exceeds the %s-byte cap", maxBytes));
+					subscription.cancel();
 					return;
 				}
 				var bytes = new byte[buf.remaining()];
@@ -316,8 +321,7 @@ public final class SamlMetadataResolvers {
 
 		@Override /* Flow.Subscriber */
 		public void onComplete() {
-			if (!future.isDone())
-				future.complete(out.toByteArray());
+			future.complete(out.toByteArray()); // No-op when a cap rejection already completed the future.
 		}
 	}
 }

@@ -84,7 +84,8 @@ public final class PolicyEnforcedRedirects {
 	 * @param executor Performs one pinned hop; see {@link HopExecutor}.
 	 * @return The final (non-redirect) response.
 	 * @throws TransportException If a hop fails, the redirect chain exceeds {@link RemoteUrlPolicy#MAX_REDIRECT_HOPS},
-	 * 	a hop targets a denied host, or a non-repeatable body would need to be replayed.
+	 * 	a hop targets a denied host, a {@code Location} is invalid or its origin cannot be compared, or a non-repeatable
+	 * 	body would need to be replayed.
 	 */
 	@SuppressWarnings({
 		"resource" // Returns the final hop's response for the caller to close; Eclipse JDT @Owning warning is by design.
@@ -103,11 +104,20 @@ public final class PolicyEnforcedRedirects {
 				return response;
 			var location = requireLocation(response);
 			closeQuietly(response);
-			var target = RemoteUrlPolicy.resolveRedirectLocation(current.getUri(), location);
-			current = forRedirect(current, target, response.getStatusCode());
+			current = nextHop(current, location, response.getStatusCode());
 		}
 		throw new TransportException("Redirect limit exceeded (" + RemoteUrlPolicy.MAX_REDIRECT_HOPS
 			+ " hops) while following a policy-covered @Remote redirect chain, starting at: " + initial.getUri());
+	}
+
+	// An invalid Location, or a target whose origin cannot be compared (java.net.URI parses some host names, such as an
+	// underscore name, with a null host), is a failed hop like any other, so it is reported as TransportException.
+	private static TransportRequest nextHop(TransportRequest current, String location, int statusCode) throws TransportException {
+		try {
+			return forRedirect(current, RemoteUrlPolicy.resolveRedirectLocation(current.getUri(), location), statusCode);
+		} catch (IllegalArgumentException e) {
+			throw new TransportException(e.getMessage(), e);
+		}
 	}
 
 	private static void requireAllowed(URI uri, boolean allowPrivateUrls) throws TransportException {

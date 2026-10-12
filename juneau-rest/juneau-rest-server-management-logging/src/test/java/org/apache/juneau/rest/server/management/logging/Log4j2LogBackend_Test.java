@@ -18,9 +18,12 @@ package org.apache.juneau.rest.server.management.logging;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.util.*;
+
 import org.apache.juneau.rest.server.management.*;
 import org.apache.logging.log4j.*;
 import org.apache.logging.log4j.core.*;
+import org.apache.logging.log4j.core.config.*;
 import org.junit.jupiter.api.*;
 
 /**
@@ -81,5 +84,105 @@ class Log4j2LogBackend_Test extends org.apache.juneau.TestBase {
 	})
 	void a08_defaultCtorResolvesContext() {
 		assertDoesNotThrow(() -> new Log4j2LogBackend());
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Blank / null level and name handling.
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Test void b01_nullNameAddressesRoot() {
+		var original = backend.getLevel("ROOT");
+		try {
+			backend.setLevel(null, "WARN");
+			assertEquals("WARN", backend.getLevel(null));
+			assertEquals("WARN", backend.getLevel("ROOT"));
+			assertEquals("WARN", backend.getLevels().get("ROOT"));
+		} finally {
+			backend.setLevel("ROOT", original);
+		}
+	}
+
+	@Test void b02_blankLevelDoesNotThrow() {
+		backend.setLevel(LNAME, "DEBUG");
+		assertDoesNotThrow(() -> backend.setLevel(LNAME, "  "));
+		assertDoesNotThrow(() -> backend.setLevel(LNAME, null));
+	}
+
+	@Test void b03_levelNameIsTrimmed() {
+		backend.setLevel(LNAME, "  warn ");
+		assertEquals("WARN", backend.getLevel(LNAME));
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Custom Configuration: shapes the stock Log4j2 configuration never produces.
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/** LoggerConfig whose configured level is reported as <jk>null</jk>. */
+	private static class NullLevelConfig extends LoggerConfig {
+		NullLevelConfig(String name) {
+			super(name, Level.INFO, true);
+		}
+
+		@Override
+		public Level getLevel() {
+			return null;
+		}
+	}
+
+	/** Configuration exposing a caller-supplied root and logger map. */
+	private static class StubConfiguration extends DefaultConfiguration {
+		private final LoggerConfig root;
+		private final Map<String,LoggerConfig> loggers;
+		private final boolean ready;  // The superclass constructor calls the overridden accessors before our fields are assigned.
+
+		StubConfiguration(LoggerConfig root, Map<String,LoggerConfig> loggers) {
+			this.root = root;
+			this.loggers = loggers;
+			this.ready = true;
+		}
+
+		@Override
+		public LoggerConfig getRootLogger() {
+			return ready ? root : super.getRootLogger();
+		}
+
+		@Override
+		public Map<String,LoggerConfig> getLoggers() {
+			return ready ? loggers : super.getLoggers();
+		}
+	}
+
+	private static Log4j2LogBackend backendFor(Configuration config) {
+		return new Log4j2LogBackend(new LoggerContext("stub") {
+			@Override
+			public Configuration getConfiguration() {
+				return config;
+			}
+		});
+	}
+
+	@Test void c01_noRootLogger() {
+		var named = new LoggerConfig("a.b", Level.WARN, true);
+		var b = backendFor(new StubConfiguration(null, Map.of("a.b", named)));
+		assertEquals(Map.of("a.b", "WARN"), b.getLevels());
+		assertNull(b.getLevel("ROOT"));
+		assertNull(b.getLevel(null));
+	}
+
+	@Test void c02_nullLevelsReportEmptyString() {
+		var root = new NullLevelConfig("");
+		var named = new NullLevelConfig("a.b");
+		var b = backendFor(new StubConfiguration(root, Map.of("a.b", named)));
+		assertEquals(Map.of("ROOT", "", "a.b", ""), b.getLevels());
+		assertEquals("", b.getLevel("ROOT"));
+		assertEquals("", b.getLevel("a.b"));
+	}
+
+	@Test void c03_emptyNamedLoggerSkipped() {
+		var root = new LoggerConfig("", Level.ERROR, true);
+		var dup = new LoggerConfig("", Level.TRACE, true);
+		var named = new LoggerConfig("a.b", Level.WARN, true);
+		var b = backendFor(new StubConfiguration(root, Map.of("", dup, "a.b", named)));
+		assertEquals(Map.of("ROOT", "ERROR", "a.b", "WARN"), b.getLevels());
 	}
 }

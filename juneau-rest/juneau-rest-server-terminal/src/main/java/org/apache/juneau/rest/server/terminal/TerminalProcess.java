@@ -60,6 +60,14 @@ import org.apache.juneau.rest.server.views.*;
  * shut down once the hook has run, and {@link #close()} waits for that.
  *
  * <p>
+ * Started with input on, the runner also gets {@code --input stdin} (right after the events pair) and the process is a
+ * {@link TerminalSink}: {@link #write(byte[])} queues the bytes in a {@value #INPUT_LIMIT}-byte pending buffer and never
+ * blocks, and one daemon thread per process, named {@code juneau-terminal-input-<pid>}, copies them to the runner's
+ * stdin, flushing after each chunk.  A closed or broken pipe turns {@link #acceptsInput()} false and discards the
+ * buffer.  With input off the command line and the streams are exactly as above, no writer thread starts, and
+ * {@link #acceptsInput()} is always false.
+ *
+ * <p>
  * POSIX only: there is no Windows pseudo-terminal support.
  *
  * <h5 class='section'>Example:</h5>
@@ -69,7 +77,7 @@ import org.apache.juneau.rest.server.views.*;
  * 	<jv>runViews</jv>.put(<jv>id</jv>, <jv>p</jv>.events());
  * </p>
  */
-public final class TerminalProcess implements AutoCloseable {
+public final class TerminalProcess implements AutoCloseable, TerminalSink {
 
 	/** The system property naming {@code juneau_run.py}. */
 	public static final String SCRIPT_PROPERTY = "juneau.run.script";
@@ -88,6 +96,12 @@ public final class TerminalProcess implements AutoCloseable {
 
 	/** How long {@link #close()} waits for the exit hook. */
 	static final int CLOSE_WAIT_SECONDS = 5;
+
+	/** The most input bytes waiting for the writer thread: queued bytes only, not the chunk being written. */
+	static final int INPUT_LIMIT = 64 * 1024;
+
+	/** How long {@link #close()} waits for the input writer thread, in milliseconds. */
+	static final int WRITER_JOIN_MILLIS = 1000;
 
 	private static final Set<String> TOOLS = Set.of("maven", "pytest", "playwright", "generic");
 	private static final Logger LOG = Logger.getLogger(TerminalProcess.class.getName());
@@ -108,14 +122,23 @@ public final class TerminalProcess implements AutoCloseable {
 	private final CompletableFuture<Integer> exit;
 	private volatile Thread exitThread;
 
+	// Input mode.  pending, pendingBytes, writing, inputFailed and closed are guarded by inLock.
+	private final boolean input;
+	private final Object inLock = new Object();
+	private final ArrayDeque<byte[]> pending = new ArrayDeque<>();
+	private int pendingBytes;  // Queued bytes only; a chunk leaves the count when the writer takes it, before it is written.
+	private boolean writing, inputFailed, closed;
+	private final Thread writer;
+
 	/** Appends the missing done event; replaced in tests. */
 	@FunctionalInterface
 	interface DoneWriter {
 		void ensureDone(Path events, int exitCode) throws IOException;
 	}
 
-	private TerminalProcess(Process process, Path log, Path events, DoneWriter doneWriter) {
+	private TerminalProcess(Process process, Path log, Path events, DoneWriter doneWriter, boolean input) {
 		this.process = process;
+		this.input = input;
 		this.log = log;
 		this.events = events;
 		terminal = FileTerminalSource.create(log).terminal(done::get).build();
@@ -137,6 +160,66 @@ public final class TerminalProcess implements AutoCloseable {
 			}
 			return p.exitValue();
 		}, executor);
+		if (input) {
+			// Every field the writer thread and the onExit callback read is assigned above; keep that order.
+			writer = new Thread(this::pump, "juneau-terminal-input-" + process.pid());
+			writer.setDaemon(true);
+			process.onExit().thenRun(() -> {
+				synchronized (inLock) {
+					inLock.notifyAll();
+				}
+			});
+			writer.start();
+		} else {
+			writer = null;
+		}
+	}
+
+	/** The writer thread: copies pending chunks to stdin, never holding {@link #inLock} while writing. */
+	private void pump() {
+		var out = process.getOutputStream();
+		try {
+			while (true) {
+				byte[] chunk;
+				synchronized (inLock) {
+					while (pending.isEmpty() && ! closed && process.isAlive())
+						inLock.wait();
+					if (closed || pending.isEmpty())
+						return;
+					chunk = pending.poll();
+					pendingBytes -= chunk.length;
+					writing = true;
+				}
+				try {
+					out.write(chunk);
+					out.flush();
+				} catch (IOException e) {
+					synchronized (inLock) {
+						inputFailed = true;
+						pending.clear();
+						pendingBytes = 0;
+					}
+					LOG.log(Level.FINE, e, () -> "TerminalProcess input pipe failed for '" + events + "'.");
+					return;
+				} finally {
+					synchronized (inLock) {
+						writing = false;
+					}
+				}
+			}
+		} catch (InterruptedException e) {
+			Thread.currentThread().interrupt();
+		} finally {
+			closeQuietly(out);
+		}
+	}
+
+	private static void closeQuietly(OutputStream out) {
+		try {
+			out.close();
+		} catch (IOException e) {
+			// A broken pipe has nothing left to close.
+		}
 	}
 
 	/**
@@ -159,14 +242,46 @@ public final class TerminalProcess implements AutoCloseable {
 	 * @throws UnsupportedOperationException On Windows.
 	 */
 	public static TerminalProcess start(String tool, List<String> cmd, int cols, int rows, Path dir) throws IOException {
-		return start(tool, cmd, cols, rows, dir, Host.system());
+		return start(tool, cmd, cols, rows, dir, false);
+	}
+
+	/**
+	 * Starts a tool under a pseudo-terminal, optionally with input.
+	 *
+	 * <p>
+	 * Same as {@link #start(String, List, int, int, Path)}, except that with {@code input} on the runner gets
+	 * {@code --input stdin} and the returned process accepts {@link #write(byte[])}.
+	 *
+	 * @param tool The juneau_run tool parser.
+	 * @param cmd The command and its arguments; at least one element.
+	 * @param cols The terminal width, 1-9999.
+	 * @param rows The terminal height, 1-9999.
+	 * @param dir The run directory; see {@link #start(String, List, int, int, Path)}.
+	 * @param input Whether the job takes input through {@link #write(byte[])}.
+	 * @return The running process.
+	 * @throws IOException If the directory could not be prepared or the process could not start.
+	 * @throws IllegalArgumentException If an argument is out of range.
+	 * @throws IllegalStateException If the script is not configured, {@code python3} is not on the {@code PATH}, or
+	 * 	the run directory already holds a run.
+	 * @throws UnsupportedOperationException On Windows.
+	 */
+	public static TerminalProcess start(String tool, List<String> cmd, int cols, int rows, Path dir, boolean input) throws IOException {
+		return start(tool, cmd, cols, rows, dir, Host.system(), input);
 	}
 
 	static TerminalProcess start(String tool, List<String> cmd, int cols, int rows, Path dir, Host host) throws IOException {
-		return start(tool, cmd, cols, rows, dir, host, TerminalProcess::ensureDone);
+		return start(tool, cmd, cols, rows, dir, host, false);
+	}
+
+	static TerminalProcess start(String tool, List<String> cmd, int cols, int rows, Path dir, Host host, boolean input) throws IOException {
+		return start(tool, cmd, cols, rows, dir, host, TerminalProcess::ensureDone, input);
 	}
 
 	static TerminalProcess start(String tool, List<String> cmd, int cols, int rows, Path dir, Host host, DoneWriter doneWriter) throws IOException {
+		return start(tool, cmd, cols, rows, dir, host, doneWriter, false);
+	}
+
+	static TerminalProcess start(String tool, List<String> cmd, int cols, int rows, Path dir, Host host, DoneWriter doneWriter, boolean input) throws IOException {
 		if (host.osName().toLowerCase(Locale.ROOT).startsWith("windows"))
 			throw new UnsupportedOperationException("TerminalProcess needs a POSIX pseudo-terminal; Windows is not supported.");
 		if (! TOOLS.contains(tool))
@@ -191,11 +306,14 @@ public final class TerminalProcess implements AutoCloseable {
 		Files.writeString(log.resolveSibling(LOG_NAME + ".size"), "{\"cols\":" + cols + ",\"rows\":" + rows + "}");
 		var argv = new ArrayList<String>();
 		argv.addAll(List.of(python.toString(), script, "--console", "none", "--pty", "--size", cols + "x" + rows,
-			"--full-log", log.toString(), "--events", events.toString(), tool, "--"));
+			"--full-log", log.toString(), "--events", events.toString()));
+		if (input)
+			argv.addAll(List.of("--input", "stdin"));
+		argv.addAll(List.of(tool, "--"));
 		argv.addAll(cmd);
 		var pb = new ProcessBuilder(argv).directory(dir.toFile()).redirectErrorStream(true)
 			.redirectOutput(ProcessBuilder.Redirect.appendTo(dir.resolve("runner.out").toFile()));
-		return new TerminalProcess(pb.start(), log, events, doneWriter);
+		return new TerminalProcess(pb.start(), log, events, doneWriter, input);
 	}
 
 	/** Returns the first executable {@code name} in the {@code PATH} directories, or <jk>null</jk>. */
@@ -308,6 +426,44 @@ public final class TerminalProcess implements AutoCloseable {
 		}
 	}
 
+	/**
+	 * Whether input is accepted right now.
+	 *
+	 * @return <jk>true</jk> only when input is on, the process is alive, no write has failed and the process has not been
+	 * 	closed.
+	 */
+	@Override /* TerminalSink */
+	public boolean acceptsInput() {
+		synchronized (inLock) {
+			// HTT: close() waits for the process to exit, so isAlive() is already false afterwards.  The closed term
+			// guards the window inside close(); it is not observable without a test seam.
+			return input && ! closed && ! inputFailed && process.isAlive();
+		}
+	}
+
+	/**
+	 * Queues the bytes for the runner's stdin; never blocks.
+	 *
+	 * @param bytes The bytes to send; copied.
+	 * @return <jk>false</jk> when input is not accepted, or when the bytes do not fit in the {@value #INPUT_LIMIT}-byte
+	 * 	pending buffer.  An empty array returns {@link #acceptsInput()}.
+	 */
+	@Override /* TerminalSink */
+	public boolean write(byte[] bytes) {
+		synchronized (inLock) {
+			if (! acceptsInput())
+				return false;
+			if (bytes.length == 0)
+				return true;
+			if (pendingBytes + bytes.length > INPUT_LIMIT)
+				return false;
+			pending.add(bytes.clone());
+			pendingBytes += bytes.length;
+			inLock.notifyAll();
+			return true;
+		}
+	}
+
 	/** The exit hook's executor; for tests. */
 	ExecutorService executor() {
 		return executor;
@@ -325,9 +481,26 @@ public final class TerminalProcess implements AutoCloseable {
 	 * <p>
 	 * The hook writes the done event and shuts its executor down, so once this returns normally both have happened.  The
 	 * executor is not shut down here: a hook submitted after that would be refused, and the done flag would never be set.
+	 *
+	 * <p>
+	 * With input on, it first stops input: pending bytes are dropped, stdin is closed and the writer thread is told to
+	 * stop.  If the writer thread is blocked writing to a full pipe, it closes stdin itself once the kill breaks the pipe.
+	 * Afterwards this waits up to {@value #WRITER_JOIN_MILLIS} ms for the writer thread.  With input off, it only kills.
 	 */
 	@Override /* AutoCloseable */
 	public void close() {
+		if (input) {
+			synchronized (inLock) {
+				closed = true;
+				pending.clear();
+				pendingBytes = 0;
+				inLock.notifyAll();
+				// Closing flushes the stream, which waits for a write in progress; the writer flushes after every chunk, so
+				// with no write in progress there is nothing to flush and this cannot block.
+				if (! writing)
+					closeQuietly(process.getOutputStream());
+			}
+		}
 		process.descendants().forEach(ProcessHandle::destroyForcibly);
 		process.destroyForcibly();
 		try {
@@ -336,6 +509,15 @@ public final class TerminalProcess implements AutoCloseable {
 			Thread.currentThread().interrupt();
 		} catch (ExecutionException | TimeoutException e) {
 			LOG.log(Level.WARNING, e, () -> "TerminalProcess exit hook did not finish for '" + events + "'.");
+		}
+		if (writer != null) {
+			try {
+				writer.join(WRITER_JOIN_MILLIS);
+			} catch (InterruptedException e) {
+				Thread.currentThread().interrupt();
+			}
+			if (writer.isAlive())
+				LOG.log(Level.WARNING, () -> "TerminalProcess input writer thread did not stop for '" + events + "'.");
 		}
 	}
 }

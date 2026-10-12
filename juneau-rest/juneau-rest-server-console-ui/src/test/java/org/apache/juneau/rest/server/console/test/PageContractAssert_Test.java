@@ -140,4 +140,42 @@ class PageContractAssert_Test extends TestBase {
 		assertEquals(List.of("header.banner", "jc-seg-1"), List.copyOf(t.keySet()));
 		assertThrows(UnsupportedOperationException.class, () -> t.put("x", "y"));
 	}
+
+	@Test void a11_isTwinOf_sameContractAndStrippedTemplates() {
+		var a = PageContractAssert.assertPage(HTML);
+		assertSame(a, a.isTwinOf(PageContractAssert.assertPage(HTML)));
+		// Whitespace around a template body is not part of the contract.
+		var padded = HTML.replace("<template data-slot=\"header.banner\">", "<template data-slot=\"header.banner\">\n  ")
+			.replace("demo</div></template>", "demo</div>\n</template>");
+		a.isTwinOf(PageContractAssert.assertPage(padded));
+	}
+
+	@Test void a12_isTwinOf_reportsFirstContractDiff() {
+		var a = PageContractAssert.assertPage(HTML);
+		assertMessage(() -> a.isTwinOf(PageContractAssert.assertPage(HTML.replace("\"label\":\"SLO\"", "\"label\":\"Slo\""))),
+			"page contracts differ at $.nav[1].label: this=SLO other=Slo");
+		assertMessage(() -> a.isTwinOf(PageContractAssert.assertPage(HTML.replace("\"bare\":true", "\"bare\":false"))),
+			"page contracts differ at $.cards[0].bare: this=true other=false");
+	}
+
+	@Test void a13_isTwinOf_reportsTemplateDiff() {
+		var a = PageContractAssert.assertPage(HTML);
+		assertMessage(() -> a.isTwinOf(PageContractAssert.assertPage(HTML.replace("<b>after</b>", "<b>other</b>"))),
+			"page template 'jc-seg-1' differs: this=<p id=\"ssc-table-slot\">x</p><template id=\"inner\"><i>i</i></template><b>after</b> other=<p id=\"ssc-table-slot\">x</p><template id=\"inner\"><i>i</i></template><b>other</b>");
+	}
+
+	@Test void a14_isTwinOf_templateOnOneSideOnly() {
+		var a = PageContractAssert.assertPage(HTML);
+		var without = HTML.replace("<template data-slot=\"header.banner\"><div class=\"demo\">\\u003cdemo</div></template>", "");
+		assertMessage(() -> a.isTwinOf(PageContractAssert.assertPage(without)),
+			"page template 'header.banner' differs: this=<div class=\"demo\">\\u003cdemo</div> other=null");
+		assertMessage(() -> PageContractAssert.assertPage(without).isTwinOf(a),
+			"page template 'header.banner' differs: this=null other=<div class=\"demo\">\\u003cdemo</div>");
+	}
+
+	@Test void a15_isTwinOf_listsOfDifferentLengthFailAtTheListPath() {
+		var a = PageContractAssert.assertPage(HTML);
+		assertMessage(() -> a.isTwinOf(PageContractAssert.assertPage(HTML.replace("\"activeNav\":[\"home\",\"setup\"]", "\"activeNav\":[\"home\"]"))),
+			"page contracts differ at $.activeNav: this=[home, setup] other=[home]");
+	}
 }

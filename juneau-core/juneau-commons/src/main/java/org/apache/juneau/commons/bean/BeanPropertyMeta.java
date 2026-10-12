@@ -789,10 +789,14 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 	/**
 	 * Returns <jk>true</jk> if this property can be read.
 	 *
+	 * <p>
+	 * Write-only properties (see {@link #isWriteOnly()}) are never readable, so serializers, tabular column sets and
+	 * schemas skip them.  They remain settable through {@link #canWrite()} and parsing.
+	 *
 	 * @return <jk>true</jk> if this property can be read.
 	 */
 	public boolean canRead() {
-		return canRead;
+		return canRead && ! writeOnly;
 	}
 
 	/**

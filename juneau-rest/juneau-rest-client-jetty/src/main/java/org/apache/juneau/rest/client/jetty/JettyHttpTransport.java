@@ -65,8 +65,6 @@ import org.eclipse.jetty.util.*;
 })
 public final class JettyHttpTransport implements HttpTransport {
 
-	private static final ThreadLocal<Boolean> POLICY_ACTIVE = new ThreadLocal<>();
-
 	private final HttpClient httpClient;
 	private final long responseTimeoutMs;
 	private final boolean policySupported;
@@ -75,21 +73,18 @@ public final class JettyHttpTransport implements HttpTransport {
 		this.policySupported = builder.httpClient == null;
 		this.httpClient = builder.httpClient != null ? builder.httpClient : new CredentialGuardingHttpClient();
 		this.responseTimeoutMs = builder.responseTimeoutMs;
-		if (this.policySupported && !this.httpClient.isStarted())
-			// Installs a SocketAddressResolver that pin-on-connects SSRF-guard-active @Remote connections (see
-			// PolicyPinningSocketAddressResolver); ordinary (non-@Remote) connections on this same client are
-			// completely unaffected. It must be installed before the client starts, because Jetty rejects a resolver
-			// change once started. The default async resolver is built from the client's executor and scheduler, which
-			// are not safely readable until after start, so the fallback here is Jetty's synchronous
-			// SocketAddressResolver.Sync, a supported, dependency-free implementation, rather than a hand-built copy.
+		if (this.policySupported)
+			// Only a client this transport created (never yet started) reaches here.  Installs a SocketAddressResolver
+			// that pin-on-connects the connections of SSRF-guard-active @Remote requests, which are tagged into a
+			// connection pool of their own (see PolicyPinningSocketAddressResolver); ordinary (non-@Remote)
+			// connections on this same client are completely unaffected. It must be installed
+			// before the client starts, because Jetty rejects a resolver change once started. The default async
+			// resolver is built from the client's executor and scheduler, which are not safely readable until after
+			// start, so the fallback here is Jetty's synchronous SocketAddressResolver.Sync, a supported,
+			// dependency-free implementation, rather than a hand-built copy.
 			this.httpClient.setSocketAddressResolver(new PolicyPinningSocketAddressResolver(new SocketAddressResolver.Sync()));
 		if (!this.httpClient.isStarted())
 			this.httpClient.start();
-	}
-
-	// Package-visible for PolicyPinningSocketAddressResolver.
-	static boolean isPolicyActive() {
-		return POLICY_ACTIVE.get() == Boolean.TRUE;
 	}
 
 	/**
@@ -114,7 +109,7 @@ public final class JettyHttpTransport implements HttpTransport {
 	@Override /* HttpTransport */
 	public TransportResponse execute(TransportRequest request) throws TransportException {
 		if (request.isSsrfGuardActive())
-			return executeWithPolicy(request);
+			return executeWithPolicy(request); // HTT: returns normally only after a pinned connect to a genuinely public address (guarded requests have their own connection pool, so they never reuse an unpinned connection), which a hermetic loopback test cannot make
 		try {
 			return sendOnce(request);
 		} catch (StaleConnectionException e) {
@@ -135,23 +130,18 @@ public final class JettyHttpTransport implements HttpTransport {
 		return policySupported;
 	}
 
-	// Activates pin-on-connect + Juneau-controlled redirect revalidation for the duration of the redirect chain.
+	// Juneau-controlled redirect revalidation for a guarded request; every hop is pinned (see buildJettyRequest).
 	private TransportResponse executeWithPolicy(TransportRequest request) throws TransportException {
-		POLICY_ACTIVE.set(Boolean.TRUE);
-		try {
-			return PolicyEnforcedRedirects.execute(request, this::sendOncePinned);
-		} finally {
-			POLICY_ACTIVE.remove();
-		}
+		return PolicyEnforcedRedirects.execute(request, this::sendOncePinned); // HTT: same as above; returns normally only after a pinned connect to a public address
 	}
 
-	// Performs one pin-on-connect hop (PolicyPinningSocketAddressResolver is active for the whole redirect chain);
-	// Jetty's own redirect-following is disabled so PolicyEnforcedRedirects owns the loop.
+	// Performs one pin-on-connect hop: the hop request is still SSRF-guard-active, so it is tagged into the pinned
+	// connection pool.  Jetty's own redirect-following is disabled so PolicyEnforcedRedirects owns the loop.
 	private TransportResponse sendOncePinned(TransportRequest request) throws TransportException {
 		try {
-			return sendOnce(request, false);
-		} catch (StaleConnectionException e) {
-			throw e.asTransportException();
+			return sendOnce(request, false); // HTT: same as above; completes only after a pinned connect to a public address
+		} catch (StaleConnectionException e) { // HTT: needs a pooled connection in the pinned pool that the server then drops, and every connection in that pool was pinned to a public address, which a hermetic loopback test cannot reach
+			throw e.asTransportException(); // HTT: see the catch above
 		}
 	}
 
@@ -207,7 +197,7 @@ public final class JettyHttpTransport implements HttpTransport {
 	private static void abortQuietly(InputStreamResponseListener listener) {
 		try {
 			listener.getInputStream().close();
-		} catch (IOException e) {
+		} catch (IOException e) { // HTT: InputStreamResponseListener's input stream close() never throws IOException in practice; the catch only satisfies the declared signature
 			// Best-effort cleanup on an already-failing path; nothing more can be done.
 		}
 	}
@@ -225,8 +215,18 @@ public final class JettyHttpTransport implements HttpTransport {
 	// Internal helpers
 	// -----------------------------------------------------------------------------------------------------------------
 
-	private Request buildJettyRequest(TransportRequest request) {
-		var jettyRequest = httpClient.newRequest(request.getUri()).method(request.getMethod());
+	private Request buildJettyRequest(TransportRequest request) throws TransportException {
+		Request jettyRequest;
+		try {
+			jettyRequest = httpClient.newRequest(request.getUri()).method(request.getMethod());
+		} catch (IllegalArgumentException e) {
+			// Jetty refuses a URI that java.net.URI parsed with a null host (for example an underscore host name).
+			throw new TransportException("HTTP transport error: " + e.getMessage(), e);
+		}
+		// The tag is part of Jetty's destination key, so a guarded request gets a connection pool of its own whose
+		// connections are all opened through the pin; it can never reuse a connection an unguarded request opened.
+		if (request.isSsrfGuardActive())
+			jettyRequest.tag(PolicyPinningSocketAddressResolver.PINNED_TAG);
 		for (var h : request.getHeaders())
 			jettyRequest.headers(fields -> fields.add(h.name(), h.value()));
 		var body = request.getBody();

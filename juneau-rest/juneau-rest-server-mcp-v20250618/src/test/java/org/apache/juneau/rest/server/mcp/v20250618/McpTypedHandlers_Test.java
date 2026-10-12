@@ -147,4 +147,42 @@ class McpTypedHandlers_Test {
 		var pr = (GetPromptResult) resp.getResult();
 		assertString("hello", pr.getDescription());
 	}
+
+	@Test
+	void b04_typedPrompt_unbindableArguments_invalidParams() {
+		var typed = new McpTypedPromptHandler<EchoArgs>() {
+			@Override
+			public Prompt descriptor() { return new Prompt().setName("p"); }
+			@Override
+			public Class<EchoArgs> argumentType() { return EchoArgs.class; }
+			@Override
+			public GetPromptResult get(EchoArgs args, BeanStore ctx) { return new GetPromptResult(); }
+		};
+		var config = new McpServerConfig().addPrompt(McpTypedHandlers.adaptPrompt(typed));
+		var resp = dispatch(new JsonRpcRequest()
+			.setJsonrpc(McpProtocol.JSON_RPC_2_0).setId(1)
+			.setMethod(McpMethods.PROMPTS_GET)
+			.setParams(JsonMap.of("name", "p", "arguments", JsonMap.of("repeat", "not-a-number"))), config);
+		assertBean(resp.getError(), "code", "-32602");
+		assertContains("Failed to bind arguments to ", resp.getError().getMessage());
+	}
+
+	@Test
+	void b05_typedPrompt_customContent_internalError() {
+		var typed = new McpTypedPromptHandler<EchoArgs>() {
+			@Override
+			public Prompt descriptor() { return new Prompt().setName("p"); }
+			@Override
+			public Class<EchoArgs> argumentType() { return EchoArgs.class; }
+			@Override
+			public GetPromptResult get(EchoArgs args, BeanStore ctx) {
+				return new GetPromptResult().setMessages(List.of(new PromptMessage().setRole(Role.USER).setContent(new Content() {})));
+			}
+		};
+		var config = new McpServerConfig().addPrompt(McpTypedHandlers.adaptPrompt(typed));
+		var resp = dispatch(new JsonRpcRequest()
+			.setJsonrpc(McpProtocol.JSON_RPC_2_0).setId(1)
+			.setMethod(McpMethods.PROMPTS_GET).setParams(JsonMap.of("name", "p")), config);
+		assertBean(resp.getError(), "code", "-32603");
+	}
 }

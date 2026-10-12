@@ -156,6 +156,15 @@ class DispatcherBusTest(unittest.TestCase):
                          {"step": "tests", "module": "tests/a", "status": "ok", "ms": 1200, "totals": (5, 0, 0, 1)})
         self.assertEqual(self.rec.of("failure")[0], {"text": "boom", "step": "tests"})
 
+    def test_progress_publishes_step_progress_and_emits_no_marker(self):
+        os.environ["RUN_MARKERS"] = "1"
+        out = io.StringIO()
+        with contextlib.redirect_stdout(out):
+            self.d.apply([("progress", "tests", "52% \u00b7 test_foo.py")])
+        self.assertEqual(self.rec.kinds(), ["step_progress"])
+        self.assertEqual(self.rec.of("step_progress")[0], {"step": "tests", "text": "52% \u00b7 test_foo.py"})
+        self.assertEqual(out.getvalue(), "")
+
     def test_close_children_publishes_module_end_for_each_open_module(self):
         self.d.apply([("sub_start", "tests/a", 1, "Mod A"), ("sub_start", "tests/b", 2, "Mod B"),
                       ("tests", "tests/b", 3, 1, 0, 0)])

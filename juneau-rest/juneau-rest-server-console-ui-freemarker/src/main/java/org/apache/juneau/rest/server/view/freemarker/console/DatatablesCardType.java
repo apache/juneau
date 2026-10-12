@@ -160,10 +160,14 @@ public final class DatatablesCardType implements CardTypeHandler {
 				if (parsed.meta != null)
 					rm.put("meta", parsed.meta);
 				col.put("render", rm);
+			} else if (n(col.get("render")) && nn(col.get("href"))) {
+				// An href with no render implies the 'linked' renderer, as Column.toCatalogMap does.
+				col.put("render", new LinkedHashMap<>(Map.of("id", "linked")));
 			}
 			resolveSearch(source, col, ident);
 		}
 		catalog.put("columns", normalized);
+		projectDetailRegion(catalog);
 
 		if (catalog.get("ribbon") instanceof List<?> ribbon)
 			for (var item : ribbon) {
@@ -188,6 +192,25 @@ public final class DatatablesCardType implements CardTypeHandler {
 		catalog.remove("visibleWhen");
 		frag.put("table", catalog);
 		return frag;
+	}
+
+	/**
+	 * Projects the detail endpoint onto the detail region, as the builder path's {@code RowDetail.toMap()} does:
+	 * {@code type} defaults to {@code row-detail} and {@code dataUrl} to the detail endpoint, so a region that
+	 * declares neither joins the panel's own expand GET instead of fetching again.  Explicit values are kept, and the
+	 * authored (possibly immutable) maps are copied rather than written to.
+	 */
+	@SuppressWarnings("unchecked")
+	private static void projectDetailRegion(JsonMap catalog) {
+		if (! (catalog.get("detail") instanceof Map<?,?> detail) || ! (detail.get("region") instanceof Map<?,?> region)
+				|| ! (detail.get("endpoint") instanceof String endpoint))
+			return;
+		var regionCopy = new LinkedHashMap<>((Map<String,Object>)region);
+		regionCopy.putIfAbsent("type", RegionDef.TYPE_ROW_DETAIL);
+		regionCopy.putIfAbsent("dataUrl", endpoint);
+		var detailCopy = new LinkedHashMap<>((Map<String,Object>)detail);
+		detailCopy.put("region", regionCopy);
+		catalog.put("detail", detailCopy);
 	}
 
 	private static void validateRows(CardSource source, JsonMap catalog) {

@@ -56,6 +56,7 @@
 		<module>juneau-rest-server-console-ui-freemarker</module>
 		<module>juneau-rest-server-bus</module>
 		<module>juneau-rest-server-bus-websocket</module>
+		<module>juneau-rest-server-terminal-bus</module>
 		<module>juneau-rest-server-reactive</module>
 		<module>juneau-rest-server-reactive-reactor</module>
 		<module>juneau-rest-server-view-jsp</module>

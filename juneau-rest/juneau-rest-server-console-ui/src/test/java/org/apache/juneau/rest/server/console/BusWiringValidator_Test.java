@@ -17,10 +17,12 @@
 package org.apache.juneau.rest.server.console;
 
 import static java.nio.charset.StandardCharsets.*;
+import static java.util.stream.Collectors.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.*;
 import java.util.*;
+import java.util.stream.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.marshall.collections.*;
@@ -171,5 +173,57 @@ class BusWiringValidator_Test extends TestBase {
 		assertEquals(List.of(
 			"E-52 topic 'job:*' is declared publisher=server but no bridge carries it downstream"
 		), problems(page("\"topics\":[{\"topic\":\"job:*\",\"retain\":true,\"publisher\":\"server\"}],\"cards\":[]")));
+	}
+
+	private static final String TERM_TOPICS = "\"topics\":[{\"topic\":\"term.input-status\",\"retain\":false,\"publisher\":\"server\"}]";
+	private static final String TERM_BRIDGES = "\"bridges\":[{\"id\":\"term\",\"transport\":\"websocket\",\"session\":\"/c/juneau-bus/session\","
+		+ "\"downstream\":[\"term.input-status\"],\"upstream\":[\"term.input\"]}]";
+	private static final String TERM_PUBLISHES = "\"publishes\":[{\"topic\":\"term.input\",\"retain\":false}]";
+	private static final String TERM_SUBSCRIBES = "\"subscribes\":[{\"topic\":\"term.input-status\",\"as\":\"input-status\"}]";
+
+	/** A page with one terminal card with input on; each argument is the wiring fragment to include (null to omit). */
+	private static String terminalPage(String topics, String bridges, String publishes, String subscribes) {
+		var card = Stream.of("\"id\":\"term\",\"type\":\"terminal\",\"terminal\":{\"bytesUrl\":\"/t/juneau-terminal/t1/bytes\",\"input\":true,\"inputId\":\"t1\"}", publishes, subscribes)
+			.filter(Objects::nonNull).collect(joining(","));
+		return page(Stream.of(topics, bridges, "\"cards\":[{" + card + "}]").filter(Objects::nonNull).collect(joining(",")));
+	}
+
+	private static List<String> e58(List<String> problems) {
+		return problems.stream().filter(x -> x.startsWith("E-58")).toList();
+	}
+
+	@Test void a13_terminalInputFullyWiredHasNoProblems() throws Exception {
+		assertEquals(List.of(), problems(terminalPage(TERM_TOPICS, TERM_BRIDGES, TERM_PUBLISHES, TERM_SUBSCRIBES)));
+	}
+
+	@Test void a14_terminalInputMissingPublish() throws Exception {
+		assertEquals(List.of("E-58 terminal card 'term' has input: true but its publishes lacks 'term.input'"),
+			e58(problems(terminalPage(TERM_TOPICS, TERM_BRIDGES, null, TERM_SUBSCRIBES))));
+	}
+
+	@Test void a15_terminalInputMissingSubscribe() throws Exception {
+		assertEquals(List.of("E-58 terminal card 'term' has input: true but its subscribes lacks 'term.input-status' as 'input-status'"),
+			e58(problems(terminalPage(TERM_TOPICS, TERM_BRIDGES, TERM_PUBLISHES, null))));
+	}
+
+	@Test void a16_terminalInputMissingServerTopic() throws Exception {
+		assertEquals(List.of("E-58 terminal card 'term' has input: true but no topics entry declares 'term.input-status' with publisher=server"),
+			e58(problems(terminalPage(null, TERM_BRIDGES, TERM_PUBLISHES, TERM_SUBSCRIBES))));
+	}
+
+	@Test void a17_terminalInputMissingBridge() throws Exception {
+		assertEquals(List.of("E-58 terminal card 'term' has input: true but no websocket bridge carries 'term.input' upstream and 'term.input-status' downstream"),
+			e58(problems(terminalPage(TERM_TOPICS, null, TERM_PUBLISHES, TERM_SUBSCRIBES))));
+	}
+
+	@Test void a18_terminalInputOffIsNotChecked() throws Exception {
+		assertEquals(List.of(), problems(page("\"cards\":["
+			+ "{\"id\":\"a\",\"type\":\"terminal\",\"terminal\":{\"bytesUrl\":\"/b\"}},"
+			+ "{\"id\":\"b\",\"type\":\"terminal\",\"terminal\":{\"bytesUrl\":\"/b\",\"input\":false}}]")));
+	}
+
+	@Test void a19_nonTerminalCardWithTerminalMapIsNotChecked() throws Exception {
+		assertEquals(List.of(), problems(page("\"cards\":["
+			+ "{\"id\":\"h\",\"type\":\"html\",\"template\":\"h\",\"terminal\":{\"input\":true}}]")));
 	}
 }

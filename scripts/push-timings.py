@@ -24,6 +24,9 @@ rolling median, and faster when it beats the median by both margins.  The full t
 (~/.cache/juneau-push-timings/<branch>.txt); the console gets one summary line and the slower entries.  push.py's
 Timing row loads this file as a module and uses load_records(), latest_run(), analyse(), write_report() and
 counts().
+
+Rows with execution "module" (scripts/test.py's per-module reactor wall clock, read by its perf guard and
+--rebaseline) are left out, so the report keeps comparing the summed Surefire rows.
 """
 
 from __future__ import annotations
@@ -40,6 +43,7 @@ MIN_SECONDS_ENV = "JUNEAU_PUSH_TIMING_MIN_SECONDS"
 DEFAULT_THRESHOLD = 0.20
 DEFAULT_MIN_SECONDS = 5.0
 MARKS = {"slower": "⚠", "faster": "↓", None: " "}
+MODULE_ROWS = "module"
 
 
 def load_records(path: Path) -> list[dict]:
@@ -92,7 +96,8 @@ def latest_run(records: list[dict]) -> tuple[list[dict], str | None]:
     run_id = records[-1].get("run_id")
     if not run_id:
         return [], "missing run metadata in latest record"
-    rows = [r for r in records if r.get("run_id") == run_id and r.get("passed", True)]
+    rows = [r for r in records if r.get("run_id") == run_id and r.get("passed", True)
+            and r.get("execution") != MODULE_ROWS]
     if not rows:
         return [], "latest run did not produce successful timing rows"
     return rows, None

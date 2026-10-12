@@ -332,11 +332,23 @@
 	}
 
 	/**
+	 * The one prefix rule every same-origin / allowlist URL guard applies to the ORIGINAL string, before anything else
+	 * (never normalise and accept): true when the first or last character is a space or control character, or any
+	 * character is a backslash, a C0 control character or DEL.  A browser strips leading/trailing C0 and space,
+	 * deletes tab/CR/LF anywhere and reads a backslash as a slash, so each of those can turn a value that looks like a
+	 * same-origin path into "//host".  The text of this function is identical in every file that carries it
+	 * (checked by ViewsJs_SameOriginPath_Test) and mirrors SafePathTemplate.isSameOriginPath.  Callers handle the empty string.
+	 */
+	function hasUnsafeUrlChars(s) {
+		return s.charCodeAt(0) <= 32 || s.charCodeAt(s.length - 1) <= 32 || /[\\\u0000-\u001f\u007f]/.test(s);
+	}
+
+	/**
 	 * Same-origin DOCUMENT-URL safety (isSafeDetailUrl semantics): no scheme, no protocol-relative "//", no scheme
 	 * colon-before-slash, no ".." segments.  Query/hash are allowed.
 	 */
 	function isSafeDocumentUrl(url) {
-		if (typeof url !== "string" || url.length === 0)
+		if (typeof url !== "string" || url.length === 0 || hasUnsafeUrlChars(url))
 			return false;
 		if (url.indexOf("://") >= 0)
 			return false;

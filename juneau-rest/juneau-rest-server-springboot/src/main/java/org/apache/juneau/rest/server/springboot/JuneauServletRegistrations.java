@@ -99,11 +99,9 @@ public class JuneauServletRegistrations {
 	 * {@code /healthz} stays exact) &mdash; cross-runtime parity with the Jetty mount path.
 	 */
 	private static String toUrlMapping(String rawPath) {
-		var p = rawPath == null ? "" : rawPath;
+		var p = rawPath;
 		while (p.endsWith("/") && p.length() > 1)
 			p = p.substring(0, p.length() - 1);
-		if (p.isEmpty())
-			return "/";
 		if (! p.startsWith("/"))
 			p = "/" + p;
 		return p;

@@ -71,7 +71,7 @@ class ThemesRest_Test extends TestBase {
 
 	@Test void b02_stockThemeHasNoOverrideBlock() throws Exception {
 		var html = page(client(), "/console/dev/themes?theme=light-brown");
-		assertFalse(html.contains("--jc-pill-red-bg:#fdeceb"), () -> "stock theme should not carry the custom overrides");
+		assertNotContains(() -> "stock theme should not carry the custom overrides", "--jc-pill-red-bg:#fdeceb", html);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

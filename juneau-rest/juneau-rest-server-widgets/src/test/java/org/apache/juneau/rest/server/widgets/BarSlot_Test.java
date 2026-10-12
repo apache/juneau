@@ -92,4 +92,45 @@ class BarSlot_Test extends TestBase {
 	@Test void a11_isAWidget() {
 		assertTrue(Widget.class.isAssignableFrom(BarSlot.class));
 	}
+
+	@Test void a12_nullWidget_rejected() {
+		var b = BarSlot.create("b").widgets(BarText.of("t", "x"), null);
+		var e = assertThrows(IllegalArgumentException.class, b::validate);
+		assertTrue(e.getMessage().contains("must not be null"), e::getMessage);
+	}
+
+	@Test void a13_barBadge_blankId_rejected() {
+		for (var id : new String[]{null, "  "}) {
+			var b = BarSlot.create("b").widgets(BarBadge.of(id));
+			var e = assertThrows(IllegalArgumentException.class, b::validate);
+			assertTrue(e.getMessage().contains("BarBadge id"), e::getMessage);
+		}
+	}
+
+	@Test void a14_barText_blankId_rejected() {
+		for (var id : new String[]{null, "  "}) {
+			var b = BarSlot.create("b").widgets(BarText.of(id, "x"));
+			var e = assertThrows(IllegalArgumentException.class, b::validate);
+			assertTrue(e.getMessage().contains("BarText id"), e::getMessage);
+		}
+	}
+
+	@Test void a15_barText_nullText_rejected() {
+		var b = BarSlot.create("b").widgets(BarText.of("t", null));
+		var e = assertThrows(IllegalArgumentException.class, b::validate);
+		assertTrue(e.getMessage().contains("text must not be"), e::getMessage);
+	}
+
+	@Test void a16_barBadge_withoutBadge_valid() {
+		BarSlot.create("b").widgets(BarBadge.of("x").label("pending")).validate();
+	}
+
+	@Test void a17_sameOriginRefreshUrl_valid() {
+		BarSlot.create("b").widgets(BarText.of("t", "x")).refreshUrl("/bar/counts").validate();
+	}
+
+	@Test void a18_nullId_rejected() {
+		var b = BarSlot.create(null).widgets(BarText.of("t", "x"));
+		assertThrows(IllegalArgumentException.class, b::validate);
+	}
 }

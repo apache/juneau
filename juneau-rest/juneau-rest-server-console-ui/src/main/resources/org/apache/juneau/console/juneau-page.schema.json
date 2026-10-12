@@ -131,13 +131,16 @@
         { "$ref": "#/$defs/consoleOutputCard" },
         { "$ref": "#/$defs/runViewCard" },
         { "$ref": "#/$defs/terminalCard" },
-        { "properties": { "type": { "not": { "enum": ["html", "datatables", "console-output", "run-view", "terminal", "chart"] } } } }
+        { "$ref": "#/$defs/chartCard" },
+        { "$ref": "#/$defs/jobLogCard" },
+        { "properties": { "type": { "not": { "enum": ["html", "datatables", "console-output", "run-view", "terminal", "chart", "job-log"] } } } }
       ]
     },
     "htmlCard": {
       "properties": {
         "type": { "const": "html" },
-        "id": true, "src": true, "title": true, "template": true, "class": true, "publishes": true, "subscribes": true,
+        "id": true, "title": true, "template": true, "class": true, "publishes": true, "subscribes": true,
+        "src": { "description": "Trusted same-origin endpoint returning an HTML fragment. The shell inserts the response as-is (not sanitized), so the endpoint must be first-party and must escape any data it embeds. Must never be derived from request data." },
         "bare": { "type": "boolean", "default": false }
       },
       "additionalProperties": false,
@@ -228,7 +231,8 @@
         "confirm":         { "oneOf": [ { "type": "string" }, { "const": false } ] }
       }
     },
-    "rowAction":   { "type": "object", "required": ["id", "endpoint"], "description": "RowAction wire shape; later work adds tone/confirmLabel/confirmRenderer/visibleWhen." },
+    "rowAction":   { "type": "object", "required": ["id", "endpoint"], "description": "RowAction wire shape (id, endpoint, method, present, and the other optional RowAction fields).",
+      "properties": { "present": { "enum": ["page", "dialog", "inline"], "description": "How the action's form/confirmation is presented. inline = fired from its cell pill or edit cell only; it is never listed in the row menu." } } },
     "enabledRule": { "type": "object", "required": ["field", "op"], "properties": { "field": { "type": "string" }, "op": { "type": "string" }, "value": true, "reason": { "type": "string" } } },
     "rowDetail":   { "type": "object", "required": ["endpoint"], "properties": { "contractVersion": false } },
     "visibleRule": {
@@ -260,6 +264,7 @@
         "href":        { "$ref": "#/$defs/url" },
         "stateFilter": { "type": "object", "additionalProperties": false, "required": ["column"], "properties": { "column": { "type": "string" } } },
         "refreshes":   { "type": "array", "items": { "$ref": "#/$defs/id" } },
+        "refreshesAllowMissing": { "description": "Ids from refreshes (or added to it by the builder) that may name a card not on this page; the build-time card-exists check skips them.", "type": "array", "items": { "$ref": "#/$defs/id" } },
         "placement":   { "enum": ["header", "toolbar"], "default": "header" },
         "table":       { "$ref": "#/$defs/id" },
         "tone":        { "enum": ["info", "warning", "danger"], "default": "warning" },
@@ -429,7 +434,9 @@
             "eventsUrl": { "type": "string", "minLength": 1 },
             "refreshMs": { "type": "integer" },
             "title":     { "type": "string" },
-            "tailBytes": { "type": "integer" }
+            "tailBytes": { "type": "integer" },
+            "input":     { "type": "boolean" },
+            "inputId":   { "type": "string", "pattern": "^[A-Za-z0-9_-]{1,128}$" }
           },
           "additionalProperties": false,
           "required": ["bytesUrl"]
@@ -437,6 +444,59 @@
       },
       "additionalProperties": false,
       "required": ["terminal"]
+    },
+    "chartCard": {
+      "description": "Chart card; juneau-charts.js renders it as inline SVG. Kind-specific keys stay open so registered kinds can add their own; ChartCardType checks the built-in ones.",
+      "properties": {
+        "type":  { "const": "chart" },
+        "id": true, "title": true, "class": true, "visibleWhen": true, "publishes": true, "subscribes": true,
+        "bare":  { "type": "boolean" },
+        "src":   { "$ref": "#/$defs/url" },
+        "kind":  { "type": "string", "pattern": "^[a-z][a-z0-9-]{0,31}$" },
+        "data":  { "type": "array" },
+        "refreshMs": { "type": "integer" }
+      },
+      "required": ["kind"],
+      "oneOf": [
+        { "required": ["src"], "not": { "required": ["data"] } },
+        { "required": ["data"], "not": { "required": ["src"] } }
+      ]
+    },
+    "jobLogCard": {
+      "description": "Job-log card; juneau-joblog.js submits to an AsyncJobsMixin endpoint and streams the job. Floors are checked by JobLogCardType.",
+      "properties": {
+        "type":   { "const": "job-log" },
+        "id": true, "title": true, "class": true, "visibleWhen": true, "publishes": true, "subscribes": true,
+        "bare":   { "type": "boolean" },
+        "submit": {
+          "type": "object",
+          "properties": {
+            "endpoint":    { "type": "string", "minLength": 1 },
+            "method":      { "enum": ["POST", "PUT"] },
+            "fields":      { "type": "array", "items": {
+              "type": "object",
+              "properties": {
+                "name":        { "type": "string", "minLength": 1 },
+                "label":       { "type": "string" },
+                "type":        { "enum": ["text", "textarea", "number"] },
+                "placeholder": { "type": "string" },
+                "required":    { "type": "boolean" },
+                "default":     true
+              },
+              "additionalProperties": false,
+              "required": ["name"]
+            } },
+            "submitLabel": { "type": "string" }
+          },
+          "additionalProperties": false,
+          "required": ["endpoint"]
+        },
+        "height":        { "type": "integer", "default": 240 },
+        "urlParam":      { "type": "string", "pattern": "^[A-Za-z][A-Za-z0-9_-]*$" },
+        "clearOnSubmit": { "type": "boolean", "default": true }
+      },
+      "additionalProperties": false,
+      "required": ["submit"]
     }
   }
 }

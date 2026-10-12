@@ -1,0 +1,3 @@
+{"contractVersion":"1","title":"T","nav":[],"activeNav":[],"cards":[
+  {"id":"rebuild","type":"job-log","title":"Rebuild index","submit":{"endpoint":"/console/jobs/rebuild","method":"POST","fields":[{"name":"reason","label":"Reason","type":"text","required":true}],"submitLabel":"Rebuild"},"height":320,"urlParam":"job","clearOnSubmit":false}
+]}

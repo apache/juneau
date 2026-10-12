@@ -118,4 +118,10 @@ class Render_Pill_Test extends TestBase {
 			() -> "pill block of juneau-renders.js must contain no hardcoded hex colour; found '"
 				+ hex.group() + "' - colour must come from the --jc-pill-* palette classes only.");
 	}
+
+	@Test void a20_meta_numericValue_serializesAsNumber() {
+		var r = Render.of("decimal").meta("places", 2).meta("field", "price");
+		assertEquals("{\"id\":\"decimal\",\"meta\":{\"places\":2,\"field\":\"price\"}}", Json.of(r));
+		assertEquals(2, ((Map<?,?>)wire(r).get("meta")).get("places"));
+	}
 }

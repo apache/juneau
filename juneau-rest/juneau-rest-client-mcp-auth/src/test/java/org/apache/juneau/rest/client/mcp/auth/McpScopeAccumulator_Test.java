@@ -112,4 +112,9 @@ class McpScopeAccumulator_Test extends TestBase {
 		acc.seed(RES, ISS, List.of("admin"));  // a re-seed (e.g. a second authorizer build) must not drop "write".
 		assertEquals(List.of("read", "write", "admin"), List.copyOf(acc.current(RES, ISS)));
 	}
+
+	@Test void d01_nullAndBlankScopesIgnored() {
+		var u = McpScopeAccumulator.union(List.of("a"), Arrays.asList("b", null, " ", ""));
+		assertEquals(List.of("a", "b"), List.copyOf(u));
+	}
 }

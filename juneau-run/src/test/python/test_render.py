@@ -15,6 +15,8 @@
 import contextlib
 import io
 import os
+import re
+import shlex
 import signal
 import subprocess
 import sys
@@ -128,6 +130,37 @@ class BoardTest(unittest.TestCase):
 
     def board(self, detail="actionable", nested=False, full_log=None):
         return jr.Board(detail, nested=nested, full_log=full_log, clock=self.clock)
+
+    def test_progress_is_kept_on_the_row_but_never_printed_by_the_plain_renderer(self):
+        b = self.board()
+        feed(b, ("step_start", {"id": "py", "n": 1, "title": "Python", "parent": None}))
+        self.assertEqual(feed(b, ("step_progress", {"step": "py", "text": "52% \u00b7 test_foo.py"})), [])
+        self.assertEqual(b.rows["py"].progress, "52% \u00b7 test_foo.py")
+        blocks = feed(b, ("step_end", {"id": "py", "status": "ok", "ms": 2000, "exit": None, "summary": "3 passed",
+                                       "totals": None}))
+        self.assertEqual(plain(b, blocks, self.clock), "Python".ljust(10) + "  3 passed  0:02\n")
+        self.assertIsNone(b.rows["py"].progress)
+
+    def test_a_sub_rows_step_end_clears_the_progress_it_put_on_its_parent_row(self):
+        b = self.board()
+        feed(b, ("step_start", {"id": "verify", "n": 1, "title": "Verify", "parent": None}),
+             ("step_start", {"id": "verify.1", "n": 2, "title": "Compile", "parent": "verify"}),
+             ("step_progress", {"step": "verify.1", "text": "52%"}))
+        self.assertEqual(b.rows["verify"].progress, "52%")
+        feed(b, ("step_end", {"id": "verify.1", "status": "ok", "ms": 10, "exit": 0, "summary": None, "totals": None}))
+        self.assertIsNone(b.rows["verify"].progress)
+
+    def test_an_alias_only_sub_rows_step_end_clears_the_parents_progress(self):
+        b = self.board()
+        feed(b, ("step_start", {"id": "verify", "n": 1, "title": "Verify", "parent": None}))
+        b.aliases["verify.1"] = "verify"
+        feed(b, ("step_progress", {"step": "verify.1", "text": "52%"}))
+        self.assertEqual(b.rows["verify"].progress, "52%")
+        feed(b, ("step_end", {"id": "verify.1", "status": "ok", "ms": 10, "exit": 0, "summary": None, "totals": None}))
+        self.assertIsNone(b.rows["verify"].progress)
+
+    def test_progress_for_an_unknown_step_is_ignored(self):
+        self.assertEqual(feed(self.board(), ("step_progress", {"step": "nope", "text": "1%"})), [])
 
     def test_a_summary_row_uses_its_label_and_elapsed_time(self):
         b = self.board()
@@ -373,11 +406,11 @@ class SessionTest(unittest.TestCase):
 
     def test_session_prints_the_header_and_marks_the_env(self):
         out = io.StringIO()
-        with contextlib.redirect_stdout(out):
+        with contextlib.redirect_stdout(out), mock.patch.object(jr.sys, "argv", ["/x/scripts/test.py"]):
             c = jr.session("🧪 Juneau test", ["master"])
         self.assertIs(jr._console, c)
         self.assertEqual(os.environ["JUNEAU_RUN_SESSION"], "1")
-        self.assertEqual(out.getvalue(), "🧪 Juneau test · master\n")
+        self.assertRegex(out.getvalue(), r"^🧪 Juneau test · master · tail -f \S+/test-\d{8}-\d{6}\.log\n$")
 
     def test_a_console_that_fails_to_start_leaves_the_env_unset(self):
         with tempfile.TemporaryDirectory() as tmp:
@@ -396,13 +429,29 @@ class SessionTest(unittest.TestCase):
             jr.done("ok")
         self.assertEqual(out.getvalue(), "")
 
-    def test_the_header_names_the_full_log(self):
-        import tempfile
+    def test_the_header_prints_a_tail_command_for_the_full_log(self):
         with tempfile.TemporaryDirectory() as tmp:
             out = io.StringIO()
             with contextlib.redirect_stdout(out):
                 jr.session("🚀 Juneau push", ["master"], sinks=jr.Sinks(full_log=f"{tmp}/push-full.log"))
-            self.assertEqual(out.getvalue(), f"🚀 Juneau push · master · full log: {tmp}/push-full.log\n")
+            self.assertEqual(out.getvalue(), f"🚀 Juneau push · master · tail -f {shlex.quote(tmp + '/push-full.log')}\n")
+
+    def test_the_tail_command_quotes_a_path_with_spaces(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            out = io.StringIO()
+            with contextlib.redirect_stdout(out):
+                jr.session("t", sinks=jr.Sinks(full_log=f"{tmp}/a b/push.log"))
+            self.assertEqual(out.getvalue(), f"t · tail -f '{tmp}/a b/push.log'\n")
+
+    def test_a_top_level_session_prunes_the_default_log_dir(self):
+        directory = Path(os.environ["JUNEAU_RUN_LOG_DIR"])
+        directory.mkdir(parents=True, exist_ok=True)
+        for i in range(25):
+            (directory / f"old-{i:02d}.log").write_text("")
+            os.utime(directory / f"old-{i:02d}.log", (1000 + i, 1000 + i))
+        with contextlib.redirect_stdout(io.StringIO()):
+            jr.session("t")
+        self.assertEqual(len(list(directory.glob("*.log"))), 20)
 
     def test_say_goes_through_the_console_once_a_session_owns_the_screen(self):
         out = io.StringIO()
@@ -410,7 +459,7 @@ class SessionTest(unittest.TestCase):
             jr.session("t")
             jr.say("Running: mvn")          # info: hidden at actionable
             jr.say("⚠ dirty tree", level="warn")
-        self.assertEqual(out.getvalue(), "t\n⚠ dirty tree\n")
+        self.assertRegex(out.getvalue(), r"^t · tail -f \S+\.log\n⚠ dirty tree\n$")
 
     def test_with_markers_on_stdout_stays_the_marker_stream(self):
         os.environ["RUN_MARKERS"] = "1"
@@ -460,7 +509,7 @@ class LiveTest(unittest.TestCase):
         self.push(cls("a"), cls("a", "fail"))
         self.assertEqual(self.screen.text(), "\n".join([
             ("Tests".ljust(10) + "  ░░░  0/3").ljust(59 - 4) + "0:01",
-            "  Mod A  █F",
+            "  Mod A  •F",
         ]))
         self.push(("module_end", {"step": "tests", "module": "tests/a", "status": "fail", "ms": 1000,
                                   "totals": (2, 1, 0, 0)}))
@@ -471,6 +520,25 @@ class LiveTest(unittest.TestCase):
             ("Tests".ljust(10) + "  F  1/3  no tests run").ljust(59 - 4) + "0:04",
         ]))
         self.assertFalse(self.screen.clamped)
+
+    def test_a_running_row_shows_its_progress_and_step_end_clears_it(self):
+        self.push(*start(size=0))
+        self.push(("step_progress", {"step": "tests", "text": "52% \u00b7 test_foo.py"}))
+        self.assertEqual(self.screen.text(), ("Tests".ljust(10) + "  52% \u00b7 test_foo.py").ljust(59 - 4) + "0:01")
+        self.push(("step_progress", {"step": "tests", "text": "60% \u00b7 test_foo.py"}))
+        self.assertIn("60% \u00b7 test_foo.py", self.screen.text())
+        self.assertNotIn("52%", self.screen.text())
+        self.push(("step_end", {"id": "tests", "status": "ok", "ms": 4000, "exit": None, "summary": "3 tests",
+                                "totals": None}))
+        self.assertNotIn("60%", self.screen.text())
+        self.assertIsNone(self.board.rows["tests"].progress)
+
+    def test_progress_follows_the_row_totals_and_never_shows_on_a_finished_row(self):
+        self.push(*start(), ("step_progress", {"step": "tests", "text": "7/9"}))
+        row = self.live._row(self.board, self.board.rows["tests"], 59, pending=True)
+        self.assertIn("0/3 \u00b7 7/9", row)
+        self.board.rows["tests"].status, self.board.rows["tests"].ms = "ok", 1000
+        self.assertNotIn("7/9", self.live._row(self.board, self.board.rows["tests"], 59))
 
     def test_redraws_at_most_every_tenth_of_a_second(self):
         writes = []
@@ -501,15 +569,15 @@ class LiveTest(unittest.TestCase):
         self.push(*start(), mod_start("a"), *[cls("a") for _ in range(200)])
         lines = self.live.region(self.board, 39, 8)[1:]
         self.assertEqual(lines, [
-            "  Mod A  … +117 " + "█" * 23,
-            " " * 9 + "█" * 30,
-            " " * 9 + "█" * 30,
+            "  Mod A  … +117 " + "•" * 23,
+            " " * 9 + "•" * 30,
+            " " * 9 + "•" * 30,
         ])
 
     def test_a_short_module_wraps_without_the_cap(self):
         self.dims = (40, 10)
         self.push(*start(), mod_start("a"), *[cls("a") for _ in range(35)])
-        self.assertEqual(self.live.region(self.board, 39, 8)[1:], ["  Mod A  " + "█" * 30, " " * 9 + "█" * 5])
+        self.assertEqual(self.live.region(self.board, 39, 8)[1:], ["  Mod A  " + "•" * 30, " " * 9 + "•" * 5])
 
     def test_shrinking_the_region_clears_the_old_lines(self):
         self.push(*start(), mod_start("a"), mod_start("b"))
@@ -527,10 +595,31 @@ class LiveTest(unittest.TestCase):
                 live.render(board, feed(board, *start(), mod_start("a"), cls("a")))
                 text = "".join(writes)
                 if color:
-                    self.assertIn("\x1b[32m█", text)
+                    self.assertIn("\x1b[32m•", text)
                 else:
-                    self.assertIn("  Mod A  █", text)
+                    self.assertIn("  Mod A  •", text)
                     self.assertNotIn("\x1b[32m", text)
+
+    def test_a_failed_class_is_a_red_cross_among_the_dots(self):
+        writes = []
+        live = jr.LiveRenderer(writes.append, size=lambda: os.terminal_size(self.dims), clock=self.clock)
+        live.render(self.board, feed(self.board, *start(), mod_start("a"), cls("a"), cls("a", "fail")))
+        self.assertIn("\x1b[32m•\x1b[0m\x1b[31m✗\x1b[0m", "".join(writes))
+
+    def test_check_marks_are_green_and_crosses_red_in_colour_only(self):
+        for color in (True, False):
+            with self.subTest(color=color):
+                writes = []
+                board = jr.Board(clock=self.clock)
+                live = jr.LiveRenderer(writes.append, size=lambda: os.terminal_size(self.dims), clock=self.clock,
+                                       color=color)
+                live.render(board, [("header", "📤 Juneau push · a@b ✓ · PGP ✗")])
+                text = "".join(writes)
+                if color:
+                    self.assertIn("a@b \x1b[32m✓\x1b[0m · PGP \x1b[31m✗\x1b[0m", text)
+                else:
+                    self.assertIn("a@b ✓ · PGP ✗", text)
+                    self.assertNotIn("\x1b[3", text)
 
     def test_hides_the_cursor_while_drawing_and_shows_it_on_close(self):
         writes = []

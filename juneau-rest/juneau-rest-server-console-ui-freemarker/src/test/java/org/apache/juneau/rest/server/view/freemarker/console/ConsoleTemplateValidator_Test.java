@@ -189,6 +189,10 @@ class ConsoleTemplateValidator_Test extends TestBase {
 		assertClean("<@page><@card id=\"t\" type=\"datatables\" src=\"/rest/t\"/></@page>");
 	}
 
+	@Test void cb02b_cardSrcAndBody_chartAllowsSrcWithBody() {
+		assertClean("<@page><@card id=\"t\" type=\"chart\" src=\"/rest/t\">{kind:'line'}</@card></@page>");
+	}
+
 	@Test void cb03_prebuiltSlotMeta_reportsOnlyViewContractVersionAfterGc1() {
 		// inline-slot-meta is gone at GC-1 (E-28 at render); C1's view-contract-version rule stays (Auto-decision 4).
 		var f = lint("<@page><@card id=\"t\" type=\"datatables\">{view:{contractVersion:'0',id:'t'}}</@card></@page>");

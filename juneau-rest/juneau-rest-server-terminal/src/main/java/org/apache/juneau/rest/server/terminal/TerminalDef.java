@@ -39,7 +39,7 @@ import org.apache.juneau.rest.server.views.*;
 public class TerminalDef {
 
 	/** The keys {@link #fromMap(String, Map)} accepts, in {@link #toMap()} order. */
-	public static final List<String> KEYS = List.of("bytesUrl", "eventsUrl", "refreshMs", "title", "tailBytes");
+	public static final List<String> KEYS = List.of("bytesUrl", "eventsUrl", "refreshMs", "title", "tailBytes", "input", "inputId");
 
 	/** The tail the card replays on its first load when {@link #tailBytes} is not set: 2 MiB. */
 	public static final long DEFAULT_TAIL_BYTES = 2L * 1024 * 1024;
@@ -59,6 +59,10 @@ public class TerminalDef {
 	public String title;
 	/** The most bytes replayed on the first load. */
 	public Long tailBytes;
+	/** Whether the card lets the user type into the job; needs {@link #inputId}. */
+	public Boolean input;
+	/** The terminal id sent as the payload {@code id} of a {@code term.input} frame. */
+	public String inputId;
 
 	private TerminalDef(String id) {
 		this.id = id;
@@ -88,7 +92,7 @@ public class TerminalDef {
 		var mount = mountPath == null ? "" : mountPath;
 		while (mount.endsWith("/"))
 			mount = mount.substring(0, mount.length() - 1);
-		return create(id).bytesUrl(mount + TerminalMixin.TERMINAL_PREFIX + "/" + terminalId + "/bytes");
+		return create(id).bytesUrl(mount + TerminalMixin.TERMINAL_PREFIX + "/" + terminalId + "/bytes").inputId(terminalId);
 	}
 
 	/**
@@ -109,6 +113,8 @@ public class TerminalDef {
 				case "refreshMs" -> d.refreshMs = integer(id, k, v);
 				case "title" -> d.title = string(id, k, v);
 				case "tailBytes" -> d.tailBytes = integer(id, k, v);
+				case "input" -> d.input = bool(id, k, v);
+				case "inputId" -> d.inputId = string(id, k, v);
 				default -> throw iaex("TerminalDef '%s' unknown key '%s'; allowed: %s.", id, clip(k), KEYS);
 			}
 		}
@@ -119,6 +125,12 @@ public class TerminalDef {
 		if (! (v instanceof String))
 			throw iaex("TerminalDef '%s' %s must be a string.", id, k);
 		return (String)v;
+	}
+
+	private static Boolean bool(String id, String k, Object v) {
+		if (! (v instanceof Boolean))
+			throw iaex("TerminalDef '%s' %s must be a boolean.", id, k);
+		return (Boolean)v;
 	}
 
 	private static Long integer(String id, String k, Object v) {
@@ -140,6 +152,11 @@ public class TerminalDef {
 	/** @param value The most bytes replayed on the first load, 1..{@value #MAX_TAIL_BYTES}. @return This object. */
 	public TerminalDef tailBytes(long value) { tailBytes = value; return this; }
 
+	/** @param value Whether the card lets the user type into the job. @return This object. */
+	public TerminalDef input(boolean value) { input = value; return this; }
+	/** @param value The terminal id sent as the {@code term.input} payload {@code id}. @return This object. */
+	public TerminalDef inputId(String value) { inputId = value; return this; }
+
 	/**
 	 * Validates this declaration (fail-closed).
 	 *
@@ -158,6 +175,10 @@ public class TerminalDef {
 			throw iaex("TerminalDef '%s' refreshMs must be > 0; got %s.", id, refreshMs);
 		if (tailBytes != null && (tailBytes < 1 || tailBytes > MAX_TAIL_BYTES))
 			throw iaex("TerminalDef '%s' tailBytes must be 1..%s; got %s.", id, MAX_TAIL_BYTES, tailBytes);
+		if (inputId != null && ! isRunId(inputId))
+			throw iaex("TerminalDef '%s' inputId must match [A-Za-z0-9_-]{1,128}; got '%s'.", id, clip(inputId));
+		if (Boolean.TRUE.equals(input) && inputId == null)
+			throw iaex("TerminalDef '%s' input needs inputId.", id);
 		return this;
 	}
 
@@ -181,6 +202,8 @@ public class TerminalDef {
 		put(m, "refreshMs", refreshMs == null ? null : Math.max(ConsoleOutputDef.MIN_REFRESH_MS, refreshMs));
 		put(m, "title", title);
 		put(m, "tailBytes", tailBytes);
+		put(m, "input", input);
+		put(m, "inputId", inputId);
 		return m;
 	}
 

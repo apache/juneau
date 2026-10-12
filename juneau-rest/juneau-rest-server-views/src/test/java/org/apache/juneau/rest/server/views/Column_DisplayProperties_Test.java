@@ -53,10 +53,17 @@ class Column_DisplayProperties_Test extends TestBase {
 		assertEquals("age-duration", ((Render)m.get("render")).id);
 	}
 
-	@Test void a05_href_requiresRender() {
-		var c = Column.create("incidentKey").href("{incidentUrl}");
-		var ex = assertThrows(IllegalArgumentException.class, c::toCatalogMap);
-		assertEquals("Column 'incidentKey' sets href '{incidentUrl}' without a render; use render(\"linked\").", ex.getMessage());
+	@Test void a05_href_withoutRender_impliesLinked() {
+		var m = Column.create("incidentKey").href("{incidentUrl}").toCatalogMap();
+		assertEquals("linked", ((Render)m.get("render")).id);
+		assertEquals("{incidentUrl}", m.get("href"));
+	}
+
+	@Test void a05b_href_withoutRender_doesNotMutateColumn() {
+		var c = Column.create("k").href("{u}");
+		c.toCatalogMap();
+		c.render("tag:status");
+		assertEquals("tag", ((Render)c.toCatalogMap().get("render")).id);
 	}
 
 	@Test void a06_href_withRender_emitted() {
@@ -138,9 +145,9 @@ class Column_DisplayProperties_Test extends TestBase {
 		assertEquals(c.searchMeta(), round);
 	}
 
-	@Test void a10f_render_null_clearsRender_hrefThenThrows() {
-		var c = Column.create("k").render("linked").render((Render)null).href("{u}");
-		assertThrows(IllegalArgumentException.class, c::toCatalogMap);
+	@Test void a10f_render_null_clearsRender_hrefThenImpliesLinked() {
+		var c = Column.create("k").render("tag:status").render((Render)null).href("{u}");
+		assertEquals("linked", ((Render)c.toCatalogMap().get("render")).id);
 	}
 
 	@Test void a10g_render_blank_rejected() {

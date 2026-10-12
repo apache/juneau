@@ -233,4 +233,53 @@ class CalendarDef_Test extends TestBase {
 		assertDoesNotThrow((Executable) d::validate);
 		assertEquals(2, d.wellFormedEvents().size());
 	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// Setters, explicit overrides and the remaining null / optional branches.
+	//------------------------------------------------------------------------------------------------------------------
+
+	@Test void i01_viewAndWeekStart_setters_overrideDefaults() {
+		var d = CalendarDef.create().id("c").view(CalendarView.MONTH).weekStart(WeekStart.MONDAY);
+		assertEquals(CalendarView.MONTH, d.effectiveView());
+		assertEquals(WeekStart.MONDAY, d.effectiveWeekStart());
+		assertEquals("monday", WeekStart.MONDAY.token());
+		assertEquals("sunday", WeekStart.SUNDAY.token());
+	}
+
+	@Test void i02_initial_andMaxPerDay_setters() {
+		var d = CalendarDef.create().id("c").initial(2027, 2).maxPerDay(5);
+		assertEquals(2027, d.initialYear);
+		assertEquals(2, d.initialMonth);
+		assertEquals(5, d.effectiveMaxPerDay());
+		assertDoesNotThrow((Executable) d::validate);
+	}
+
+	@Test void i03_noCategoriesNoEvents_validates() {
+		var d = CalendarDef.create().id("c");
+		d.endpoint = null;
+		assertDoesNotThrow((Executable) d::validate);
+	}
+
+	@Test void i04_categoryNullId_rejected() {
+		var d = good().categories(EventCategory.create().label("x"));
+		assertThrows(IllegalArgumentException.class, (Executable) d::validate);
+	}
+
+	@Test void i05_categoryNullLabel_rejected() {
+		var d = good().categories(EventCategory.create().id("team"));
+		assertThrows(IllegalArgumentException.class, (Executable) d::validate);
+	}
+
+	@Test void i06_seedEvent_withoutDeclaredCategories_validates() {
+		var d = CalendarDef.create().id("c").initial(2026, 8)
+			.events(CalendarEvent.create().id("e1").title("x").start("2026-08-14"));
+		d.endpoint = null;
+		assertDoesNotThrow((Executable) d::validate);
+	}
+
+	@Test void i07_nullSeedEvent_isSkipped() {
+		var d = good().events((CalendarEvent) null, CalendarEvent.create().id("e2").title("Kept").start("2026-08-15").categoryId("team"));
+		assertDoesNotThrow((Executable) d::validate);
+		assertEquals(List.of("e2"), d.wellFormedEvents().stream().map(e -> e.id).toList());
+	}
 }

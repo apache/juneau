@@ -150,3 +150,12 @@ def test_main_without_history_says_so_and_writes_nothing(timings, tmp_path, caps
     assert timings.main(["--log", str(tmp_path / "none.jsonl")]) == 0
     assert capsys.readouterr().out == "📊 Push-timing report: no timing history yet.\n"
     assert not (tmp_path / "none.txt").exists()
+
+
+def test_module_rows_are_not_part_of_the_timing_report(timings):
+    records = history({"mod": ([10.0], 10.0)})
+    records.insert(-1, {"run_id": "latest", "module": "juneau-rest/juneau-rest-mock", "execution": "module",
+                        "wallclock_s": 9.0})
+    rows, _ = timings.latest_run(records)
+    assert [r["execution"] for r in rows] == ["surefire"]
+    assert [e["module"] for e in timings.analyse(records)] == ["mod"]

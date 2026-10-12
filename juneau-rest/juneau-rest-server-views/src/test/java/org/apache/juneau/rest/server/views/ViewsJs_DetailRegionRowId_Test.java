@@ -34,7 +34,7 @@ import org.junit.jupiter.api.*;
  * it. The detail panel &mdash; and every region container cloned into it &mdash; therefore sits <i>outside</i> the
  * {@code <tr>} carrying {@code data-juneau-row-id}. Since {@code juneau-regions.js}'s {@code readIds} resolves every
  * enclosing identity with {@code el.closest("[data-juneau-row-id]")}, a panel region would read a null row id, and
- * {@code resolveDeclaredUrl} would then refuse the {@code {id}} substitution outright &mdash; or, for an author's own
+ * {@code substituteDeclaredUrl} would then refuse the {@code {id}} substitution outright &mdash; or, for an author's own
  * populate doing its own interpolation, build a literal {@code /.../null/...} path and collect a 400 from the
  * server's path-param resolver. Both surface to a user as an empty or broken region body.
  *
@@ -42,7 +42,7 @@ import org.junit.jupiter.api.*;
  * <p>
  * The claim is not "a {@code setAttribute} call exists" &mdash; it is that a region inside the panel resolves the
  * <b>right</b> id and fetches the <b>right</b> url. That spans two runtimes ({@code expandDetailRow} in
- * {@code juneau-views.js} writes the stamp; {@code readIds}/{@code resolveDeclaredUrl} in {@code juneau-regions.js}
+ * {@code juneau-views.js} writes the stamp; {@code readIds}/{@code substituteDeclaredUrl} in {@code juneau-regions.js}
  * read it), so only running both against one DOM proves they agree. The harness drives the real production path:
  * {@code initDetailsExpander}'s delegated click &rarr; {@code toggleDetailRow} &rarr; {@code expandDetailRow} &rarr;
  * {@code NS.regions.enrolIn(panel)}.

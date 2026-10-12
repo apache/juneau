@@ -137,6 +137,13 @@ class CardTypeRegistry_Test {
 		assertThrows(IllegalArgumentException.class, () -> b.add(new TestCardType("terminal")));
 	}
 
+	@Test void add_jobLogIsReserved_throwE22() {
+		var b = CardTypeRegistry.standard().copy();
+		var ex = assertThrows(IllegalArgumentException.class, () -> b.add(new TestCardType("job-log")));
+		assertEquals("Card type 'job-log' is reserved and cannot be replaced; reserved: "
+			+ "'chart, console-output, datatables, html, job-log, run-view, terminal'.", ex.getMessage());
+	}
+
 	@Test void copy_isIsolatedFromStandard() {
 		var custom = CardTypeRegistry.standard().copy().add(new TestCardType("kpi")).build();
 		assertTrue(custom.isRegistered("kpi"));

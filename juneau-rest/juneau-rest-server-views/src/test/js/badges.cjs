@@ -211,6 +211,21 @@ async function tick(h) {
 		report.reloadedOnDrain = h.reloaded.slice();
 	}
 
+	// a drain naming a card that is not on this page (a header badge refreshing another page's card) is a no-op
+	{
+		const contract = { activeNav: [], facts: {} };
+		const h = setup([
+			{ body: { total: 2, items: [{ id: '1' }, { id: '2' }] } },
+			{ body: { total: 1, items: [{ id: '2' }] } }
+		], { contract });
+		h.win.JuneauConsole.refreshCard = () => { throw new Error('card not on page'); };
+		h.NS.mount([{ id: 'missing', src: '/p', refreshes: ['other-page-card'] }]);
+		await flush();
+		await tick(h);
+		report.missingCard_errors = h.errors.slice();
+		report.missingCard_polledAgain = h.urls.length;
+	}
+
 	// tooltip: opens on focus with the item cap, Escape and blur close it
 	{
 		const items = [];
@@ -252,6 +267,27 @@ async function tick(h) {
 		report.encodeArg = encoded[0] && encoded[0].filters[0];
 	}
 
+	// same-origin guard: a cross-host src is never fetched, a cross-host href is never navigated to, and a poll-body
+	// item href that is not a same-origin path is not copied onto the popover row
+	{
+		const h = setup([{ body: { total: 1 } }]);
+		h.NS.mount([{ id: 'badsrc', src: '//evil.test/p' }, { id: 'badhref', src: '/p', href: '\\\\evil.test/x' }]);
+		await flush();
+		report.guard_urls = h.urls.slice();
+		badge(h.doc, 'badhref').dispatch('click');
+		report.guard_assigned = h.assigned.slice();
+		report.guard_errors = h.errors.filter(e => e.includes('E-JS-82'));
+
+		const h2 = setup([{ body: { total: 2, items: [
+			{ id: '1', label: 'evil', href: '//evil.test/x' }, { id: '2', label: 'tab', href: '/a\tb' }, { id: '3', label: 'ok', href: '/ok/3' }] } }]);
+		h2.NS.mount([{ id: 'items', src: '/p' }]);
+		await flush();
+		badge(h2.doc, 'items').dispatch('focus');
+		const rows = h2.doc.querySelectorAll('.jc-count-badge-popover-item');
+		report.guard_rows = rows.map(r => [r.textContent, r.getAttribute('href') || '']);
+		report.guard_itemErrors = h2.errors.filter(e => e.includes('E-JS-82')).length;
+	}
+
 	if (busSrc) {
 		// badge:<id> on every successful poll (zero included); a drain publishes cmd:<card> refresh INSTEAD of reloading.
 		{
@@ -279,6 +315,23 @@ async function tick(h) {
 			await tick(h);   // 403 removes the badge and disposes its owner
 			report.bus_removed = badge(h.doc, 'pending') === null;
 			report.bus_retained_afterRemove = bus.get('badge:pending') === undefined ? null : bus.get('badge:pending');
+		}
+
+		// A drain naming a card nobody listens for (it is on another page): the cmd publish is a harmless no-op.
+		{
+			const contract = { activeNav: [], facts: {} };
+			const h = setup([
+				{ body: { total: 2, items: [{ id: '1' }, { id: '2' }] } },
+				{ body: { total: 1, items: [{ id: '2' }] } }
+			], { contract, bus: true });
+			const bus = h.win.JuneauViews.bus;
+			h.NS.mount([{ id: 'far', src: '/p', refreshes: ['card-on-another-page'] }]);
+			await flush();
+			await tick(h);
+			report.bus_missing_cmd = bus.history().filter(e => e.topic === 'cmd:card-on-another-page').length;
+			report.bus_missing_errors = h.errors.slice();
+			report.bus_missing_reloaded = h.reloaded.length;
+			report.bus_missing_badge = bus.get('badge:far') || null;
 		}
 
 		// A zero total still publishes (the badge is hidden, the topic is not silent).

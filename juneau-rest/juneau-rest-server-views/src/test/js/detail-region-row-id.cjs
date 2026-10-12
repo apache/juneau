@@ -24,13 +24,13 @@
  * descendant of it.  So a detail panel - and every region container cloned into it - sits OUTSIDE the `<tr>` that
  * carries `data-juneau-row-id`.  `juneau-regions.js`'s `readIds` resolves every enclosing identity with
  * `el.closest("[data-juneau-row-id]")`, which means a panel region would read `rowId: null` and
- * `resolveDeclaredUrl` would then refuse the `{id}` substitution outright (or, for an author's own populate doing
+ * `substituteDeclaredUrl` would then refuse the `{id}` substitution outright (or, for an author's own populate doing
  * its own interpolation, build a literal `/.../null/...` path and take a 400 from the server's path-param
  * resolver).  `expandDetailRow` closes that by re-stamping the row's id onto the panel itself.
  *
  * WHY THIS IS A BEHAVIORAL HARNESS AND NOT A SOURCE-SHAPE PIN.  The claim is not "a setAttribute call exists" - it
  * is "a region inside the panel resolves the RIGHT id and fetches the RIGHT url".  That spans two runtimes
- * (`expandDetailRow` in juneau-views.js stamps; `readIds`/`resolveDeclaredUrl` in juneau-regions.js reads), so only
+ * (`expandDetailRow` in juneau-views.js stamps; `readIds`/`substituteDeclaredUrl` in juneau-regions.js reads), so only
  * running both against one DOM proves they agree.
  *
  * CONTROLS.  Two, because the positive assertion alone would pass for the wrong reasons:
@@ -211,7 +211,7 @@ async function run(opts) {
 	const bad = await run({ stripStamp: true });
 	const region2 = bad.fx.panel.querySelector('[data-juneau-region="source2"]');
 	out.unstamped_resolvesNoRowId = region2.closest('[data-juneau-row-id]') === null;
-	// `resolveDeclaredUrl` refuses a `{id}` url it cannot substitute, so the un-stamped region issues NO second
+	// `substituteDeclaredUrl` refuses a `{id}` url it cannot substitute, so the un-stamped region issues NO second
 	// fetch for the substituted path - the observable difference the stamp makes.
 	out.unstamped_neverFetchedSubstitutedUrlTwice =
 		bad.fetches.filter(function (u) { return u === '/scripts/' + ROW_ID + '/source'; }).length === 1;

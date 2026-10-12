@@ -250,4 +250,97 @@ class McpTokenProvider_Test extends TestBase {
 		var p = McpTokenProvider.ofStaticToken("t");
 		assertNotNull(p.interceptor());
 	}
+
+	// -----------------------------------------------------------------------------------------------------------------
+	// E: builder options, non-terminal refresh errors, redaction of non-static modes
+	// -----------------------------------------------------------------------------------------------------------------
+
+	@Test void e01_clientCredentialsAppliesSupplierScopeTimeoutAndConfigurator() {
+		responses.add(tokenJson("cc-at", 3600));
+		var secretCalls = new AtomicInteger();
+		var configured = new AtomicInteger();
+		var p = McpTokenProvider.clientCredentials()
+			.tokenEndpoint(tokenEndpoint()).clientId("id").resource(RES)
+			.clientSecretSupplier(() -> { secretCalls.incrementAndGet(); return "supplied-secret"; })
+			.scope("mcp:read", "mcp:write")
+			.httpTimeout(Duration.ofSeconds(5))
+			.httpRequestConfigurator(r -> configured.incrementAndGet())
+			.build();
+		assertEquals("cc-at", p.get());
+		assertTrue(secretCalls.get() >= 1, "secret supplier must be consulted");
+		assertEquals(1, configured.get());
+		var body = requestBodies.get(0);
+		assertTrue(body.contains("scope=mcp%3Aread+mcp%3Awrite") || body.contains("scope=mcp:read+mcp:write"), () -> "scope missing: " + body);
+	}
+
+	@Test void e02_refreshAppliesSecretScopeTimeoutAndConfigurator() {
+		responses.add(tokenJson("refreshed-at", 3600));
+		var secretCalls = new AtomicInteger();
+		var configured = new AtomicInteger();
+		var p = McpTokenProvider.refreshToken("rt-initial")
+			.tokenEndpoint(tokenEndpoint()).clientId("id").resource(RES)
+			.clientSecretSupplier(() -> { secretCalls.incrementAndGet(); return "supplied-secret"; })
+			.scope("mcp:read")
+			.httpTimeout(Duration.ofSeconds(5))
+			.httpRequestConfigurator(r -> configured.incrementAndGet())
+			.build();
+		assertEquals("refreshed-at", p.get());
+		assertTrue(secretCalls.get() >= 1, "secret supplier must be consulted");
+		assertEquals(1, configured.get());
+		var body = requestBodies.get(0);
+		assertTrue(body.contains("mcp"), () -> "scope missing: " + body);
+	}
+
+	@Test void e03_refreshErrorOtherThanInvalidGrantDoesNotLatch() {
+		server.removeContext("/token");
+		var hits = new AtomicInteger();
+		server.createContext("/token", ex -> {
+			hits.incrementAndGet();
+			var b = "{\"error\":\"invalid_request\"}".getBytes(StandardCharsets.UTF_8);
+			ex.getResponseHeaders().add("Content-Type", "application/json");
+			ex.sendResponseHeaders(400, b.length);
+			try (var os = ex.getResponseBody()) { os.write(b); }
+		});
+		var p = McpTokenProvider.refreshToken("rt-1")
+			.tokenEndpoint(tokenEndpoint()).clientId("id").resource(RES).build();
+		assertThrows(OAuthFlowException.class, p::get);
+		assertThrows(OAuthFlowException.class, p::get);
+		assertEquals(2, hits.get(), "a non-invalid_grant error must not latch the provider");
+	}
+
+	@Test void e04_httpTimeoutMustBePositive() {
+		var b = McpTokenProvider.clientCredentials();
+		assertThrows(IllegalArgumentException.class, () -> b.httpTimeout(Duration.ZERO));
+		assertThrows(IllegalArgumentException.class, () -> b.httpTimeout(Duration.ofSeconds(-1)));
+	}
+
+	@Test void e05_injectedClockDrivesExpiry() {
+		responses.add(tokenJson("at-1", 100));
+		responses.add(tokenJson("at-2", 100));
+		var now = new AtomicReference<>(Instant.now());  // token expiry is stamped from the wall clock at parse time
+		var clock = new Clock() {
+			@Override public ZoneId getZone() { return ZoneOffset.UTC; }
+			@Override public Clock withZone(ZoneId zone) { return this; }
+			@Override public Instant instant() { return now.get(); }
+		};
+		var p = McpTokenProvider.clientCredentials()
+			.tokenEndpoint(tokenEndpoint()).clientId("id").clientSecret("s").resource(RES)
+			.expirySkew(Duration.ZERO).clock(clock).build();
+		assertEquals("at-1", p.get());
+		now.set(now.get().plusSeconds(50));
+		assertEquals("at-1", p.get(), "still within the 100s lifetime");
+		now.set(now.get().plusSeconds(100));
+		assertEquals("at-2", p.get(), "past expiry under the injected clock");
+	}
+
+	@Test void e06_toStringReflectsMode() {
+		var cc = McpTokenProvider.clientCredentials()
+			.tokenEndpoint(tokenEndpoint()).clientId("id").clientSecret("s").resource(RES).build().toString();
+		assertTrue(cc.contains("staticToken=<none>"), cc);
+		assertTrue(cc.contains("refreshToken=<none>"), cc);
+		var rt = McpTokenProvider.refreshToken("rt-secret")
+			.tokenEndpoint(tokenEndpoint()).clientId("id").resource(RES).build().toString();
+		assertTrue(rt.contains("refreshToken=<redacted>"), rt);
+		assertFalse(rt.contains("rt-secret"), rt);
+	}
 }

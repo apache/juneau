@@ -23,6 +23,7 @@ import java.util.*;
 import java.util.logging.*;
 
 import org.apache.juneau.rest.server.*;
+import org.apache.juneau.rest.server.console.*;
 import org.apache.juneau.rest.server.staticfile.*;
 import org.apache.juneau.rest.server.terminal.*;
 import org.apache.juneau.rest.server.views.*;
@@ -51,6 +52,11 @@ import org.apache.juneau.rest.server.widgets.*;
  * 		{@code juneau-rest-server-terminal}, resolved through {@link TerminalMixin#terminalAssetUrl(RestRequest, String)};
  * 		depends on {@code "views"} and {@code "xterm"}.  Every {@code <@card type="terminal">} requires it, so a page
  * 		with a terminal card needs no {@code toolkit=}.
+ * 	<li>{@code "charts"} ({@link ToolkitPack.Kind#RUNTIME}) &mdash; {@code juneau-charts.js} from
+ * 		{@code juneau-rest-server-console-ui}, resolved through {@link ConsoleChromeMixin#consoleAssetUrl(RestRequest, String)};
+ * 		no dependencies.  Every {@code <@card type="chart">} requires it.
+ * 	<li>{@code "joblog"} ({@link ToolkitPack.Kind#RUNTIME}) &mdash; {@code juneau-joblog.js} from
+ * 		{@code juneau-rest-server-console-ui}; no dependencies.  Every {@code <@card type="job-log">} requires it.
  * </ul>
  *
  * <p>
@@ -94,6 +100,12 @@ public final class ToolkitPackRegistry {
 
 	/** The built-in terminal runtime pack; depends on {@code "views"} and {@code "xterm"}. */
 	public static final String PACK_TERMINAL = "terminal";
+
+	/** The built-in chart-card runtime pack ({@code juneau-charts.js}); no dependencies. */
+	public static final String PACK_CHARTS = "charts";
+
+	/** The built-in job-log card runtime pack ({@code juneau-joblog.js}); no dependencies. */
+	public static final String PACK_JOBLOG = "joblog";
 
 	private static final String NPM = "org.webjars.npm";
 
@@ -175,10 +187,10 @@ public final class ToolkitPackRegistry {
 		// The "calendar" pack ships from juneau-rest-server-widgets and resolves through that mixin's own
 		// cache-busting helper, not VIEWS_RESOLVER.  A page that wants it lists toolkit="views,calendar" so
 		// juneau-views.js still loads before juneau-calendar.js (shared layer stack).
-		register(PACK_CALENDAR,
-			List.of(WidgetsMixin.CALENDAR_CSS_PATH),
-			List.of(WidgetsMixin.CALENDAR_JS_PATH),
-			WIDGETS_RESOLVER);
+		register(ToolkitPack.create(PACK_CALENDAR).kind(RUNTIME).resolver(WIDGETS_RESOLVER)
+			.css(WidgetsMixin.CALENDAR_CSS_PATH)
+			.js(WidgetsMixin.CALENDAR_JS_PATH)
+			.build());
 		register(ToolkitPack.create(PACK_XTERM).kind(VENDOR).resolver(WEBJAR_RESOLVER)
 			.css(TerminalMixin.XTERM_CSS_ASSET)
 			.js(TerminalMixin.XTERM_JS_ASSET)
@@ -187,6 +199,12 @@ public final class ToolkitPackRegistry {
 			.css(TerminalMixin.CSS_PATH)
 			.js(TerminalMixin.JS_PATH)
 			.dependsOn(PACK_VIEWS, PACK_XTERM)
+			.build());
+		register(ToolkitPack.create(PACK_CHARTS).kind(RUNTIME).resolver(ConsoleChromeMixin::consoleAssetUrl)
+			.js(ConsoleChromeMixin.CHARTS_JS_PATH)
+			.build());
+		register(ToolkitPack.create(PACK_JOBLOG).kind(RUNTIME).resolver(ConsoleChromeMixin::consoleAssetUrl)
+			.js(ConsoleChromeMixin.JOBLOG_JS_PATH)
 			.build());
 	}
 
@@ -197,29 +215,6 @@ public final class ToolkitPackRegistry {
 	 */
 	public synchronized void register(ToolkitPack pack) {
 		packs.put(pack.name(), pack);
-	}
-
-	/**
-	 * Registers a {@link ToolkitPack.Kind#RUNTIME} pack with no dependencies, resolved through {@link #VIEWS_RESOLVER}.
-	 *
-	 * @param name The pack name.
-	 * @param cssPaths Ordered CSS asset paths.
-	 * @param jsPaths Ordered JS asset paths.
-	 */
-	public void register(String name, List<String> cssPaths, List<String> jsPaths) {
-		register(name, cssPaths, jsPaths, VIEWS_RESOLVER);
-	}
-
-	/**
-	 * Registers a {@link ToolkitPack.Kind#RUNTIME} pack with no dependencies and its own asset-URL resolver.
-	 *
-	 * @param name The pack name.
-	 * @param cssPaths Ordered CSS asset paths.
-	 * @param jsPaths Ordered JS asset paths.
-	 * @param resolver The per-pack asset-URL resolver.
-	 */
-	public void register(String name, List<String> cssPaths, List<String> jsPaths, AssetUrlResolver resolver) {
-		register(ToolkitPack.create(name).css(cssPaths).js(jsPaths).kind(RUNTIME).resolver(resolver).build());
 	}
 
 	/**
@@ -276,18 +271,6 @@ public final class ToolkitPackRegistry {
 		for (var name : names)
 			if (! packs.containsKey(name))
 				throw iaex("Unknown toolkit pack '%s' (%s).", name, source);
-	}
-
-	/**
-	 * Resolves packs for a page that loads nothing through {@code init=} or {@code css=}.
-	 *
-	 * @param names The root pack names, in order.  Empty or <jk>null</jk> = nothing.
-	 * @param req The in-flight request.
-	 * @return The resolved URLs.
-	 * @see #resolve(List, RestRequest, List, String)
-	 */
-	public Resolved resolve(List<String> names, RestRequest req) {
-		return resolve(names, req, List.of(), "");
 	}
 
 	/**

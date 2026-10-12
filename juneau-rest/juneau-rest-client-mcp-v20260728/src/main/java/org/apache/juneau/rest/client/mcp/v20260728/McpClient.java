@@ -25,7 +25,6 @@ import java.util.function.*;
 import org.apache.juneau.bean.jsonrpc.*;
 import org.apache.juneau.bean.mcp.v20260728.*;
 import org.apache.juneau.commons.inject.*;
-import org.apache.juneau.http.tracing.*;
 import org.apache.juneau.marshall.collections.*;
 import org.apache.juneau.marshall.json.*;
 import org.apache.juneau.marshall.marshaller.Json;
@@ -592,7 +591,7 @@ public final class McpClient extends AbstractMcpClient {
 		reqnn("filter", filter);
 		reqnn("listener", listener);
 		var params = new SubscriptionsListenRequest().setNotifications(filter);
-		stampMeta(params.getMeta() == null ? params.setMeta(new RequestMeta()).getMeta() : params.getMeta());
+		stampMeta(params.setMeta(new RequestMeta()).getMeta());
 		var wireParams = toWireParams(params);
 		var req = new JsonRpcRequest()
 			.setJsonrpc(McpProtocol.JSON_RPC_2_0)
@@ -605,13 +604,13 @@ public final class McpClient extends AbstractMcpClient {
 		var headers = Map.of(HEADER_MCP_METHOD, McpMethods.SUBSCRIPTIONS_LISTEN, HEADER_MCP_NAME, McpRoutingNames.routingName(McpMethods.SUBSCRIPTIONS_LISTEN, wireParams));
 		var reader = openEventStream(req, headers);
 		var pump = new SubscriptionPump(req.getId().toString(), reader, listener);
+		var started = false;
 		try {
 			pump.start();
-		} catch (RuntimeException e) {
-			// Thread.start() failing (e.g. IllegalThreadStateException, or a resource-exhaustion error from
-			// the JVM/OS) must not leak the already-opened stream: nothing else owns it yet.
-			pump.closeReaderQuietly();
-			throw e;
+			started = true;
+		} finally {
+			// Thread.start() failing must not leak the already-opened stream: nothing else owns it yet.
+			if (! started) pump.closeReaderQuietly(); // HTT: only reachable if the JVM cannot create the native thread (OutOfMemoryError); not reproducible in a unit test
 		}
 		return pump;
 	}
@@ -670,7 +669,6 @@ public final class McpClient extends AbstractMcpClient {
 			"java:S135" // Multiple break/continue are the clearest expression of this SSE-frame decode loop; splitting them out would obscure the pump's state machine.
 		})
 		public void run() {
-			var reachedTerminal = false;
 			try {
 				while (open && reader.hasNext()) {
 					var event = reader.next();
@@ -678,13 +676,12 @@ public final class McpClient extends AbstractMcpClient {
 						continue;
 					if (event.getData() == null || event.getData().isEmpty())
 						continue;
-					if (! dispatch(event.getData())) {
-						reachedTerminal = true;
+					if (! dispatch(event.getData()))
 						break;
-					}
 				}
-				// The stream ended (clean EOF, reader.hasNext() == false) without ever reaching a terminal
-				// frame, and the caller did not initiate this close (open is still true): an abrupt drop the
+				// A terminal frame (see dispatch) has already flipped open to false, so open is still true here only if
+				// the stream ended (clean EOF, reader.hasNext() == false) without ever reaching a terminal
+				// frame, and the caller did not initiate this close: an abrupt drop the
 				// listener must be told about, not silent - it is otherwise indistinguishable from a hang.
 				//
 				// open is flipped to false BEFORE invoking the listener (guarded on the pre-read value so a
@@ -695,7 +692,7 @@ public final class McpClient extends AbstractMcpClient {
 				// signal before the waiter's wakeup, never the reverse) - so this volatile write must
 				// happen-before that signal, not after it, or a woken caller can transiently observe open
 				// still true.
-				if (open && ! reachedTerminal) {
+				if (open) {
 					open = false;
 					invokeListener(() -> listener.onError(new EOFException(
 						"Subscription stream closed before a terminal frame was received.")));
@@ -853,7 +850,7 @@ public final class McpClient extends AbstractMcpClient {
 			} catch (McpException e) {
 				postClientResult(req.getId(), JsonRpcResponse.errorResponse(req.getId(), e.getCode(), e.getMessage()));
 			}
-		}
+		} // HTT: javac try-with-resources null-guard on each early-return path; openEventStream() never returns null (McpClient is final)
 	}
 
 	// C5/C6 duplex return-channel Mcp-Name contract (resolved): Mcp-Name is empty by design on this
@@ -927,17 +924,17 @@ public final class McpClient extends AbstractMcpClient {
 		if (traceFieldsSupplier != null) {
 			var fields = traceFieldsSupplier.get();
 			if (fields != null) {
-				var carrier = new RequestMetaCarrier(meta);
-				putIfPresent(carrier, RequestMeta.KEY_TRACEPARENT, fields.get(RequestMeta.KEY_TRACEPARENT));
-				putIfPresent(carrier, RequestMeta.KEY_TRACESTATE, fields.get(RequestMeta.KEY_TRACESTATE));
-				putIfPresent(carrier, RequestMeta.KEY_BAGGAGE, fields.get(RequestMeta.KEY_BAGGAGE));
+				var traceparent = fields.get(RequestMeta.KEY_TRACEPARENT);
+				if (traceparent != null)
+					meta.setTraceparent(traceparent);
+				var tracestate = fields.get(RequestMeta.KEY_TRACESTATE);
+				if (tracestate != null)
+					meta.setTracestate(tracestate);
+				var baggage = fields.get(RequestMeta.KEY_BAGGAGE);
+				if (baggage != null)
+					meta.setBaggage(baggage);
 			}
 		}
-	}
-
-	private void putIfPresent(TraceContextCarrier carrier, String key, String value) {
-		if (value != null)
-			carrier.set(key, value);
 	}
 
 	/**
@@ -968,28 +965,6 @@ public final class McpClient extends AbstractMcpClient {
 				? privateScopePartitionPrefix + McpCacheScope.PRIVATE.toWire()
 				: McpCacheScope.PUBLIC.toWire();
 			responseCache.put(scope, key, result, c.getTtlMs());
-		}
-	}
-
-	private static final class RequestMetaCarrier implements TraceContextCarrier {
-		private final RequestMeta meta;
-		RequestMetaCarrier(RequestMeta meta) { this.meta = meta; }
-		@Override public String get(String key) {
-			return switch (key) {
-				case RequestMeta.KEY_TRACEPARENT -> meta.getTraceparent();
-				case RequestMeta.KEY_TRACESTATE -> meta.getTracestate();
-				case RequestMeta.KEY_BAGGAGE -> meta.getBaggage();
-				default -> null;
-			};
-		}
-		@Override public Iterable<String> keys() { return List.of(RequestMeta.KEY_TRACEPARENT, RequestMeta.KEY_TRACESTATE, RequestMeta.KEY_BAGGAGE); }
-		@Override public void set(String key, String value) {
-			switch (key) {
-				case RequestMeta.KEY_TRACEPARENT -> meta.setTraceparent(value);
-				case RequestMeta.KEY_TRACESTATE -> meta.setTracestate(value);
-				case RequestMeta.KEY_BAGGAGE -> meta.setBaggage(value);
-				default -> { /* Unknown trace-context key: no corresponding RequestMeta field to set. */ }
-			}
 		}
 	}
 

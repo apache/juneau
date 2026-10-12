@@ -44,10 +44,12 @@ env.setFetch(function (url, opts) { calls.push({ url: url, method: opts.method, 
 const DELETE = { id: 'delete', label: 'Delete', endpoint: '/x/{id}', method: 'DELETE', present: 'dialog',
 	confirm: 'Delete {name}?', confirmLabel: 'Delete it', tone: 'danger', confirmRenderer: 'verdict' };
 
-function fixture(rowData) {
+function fixture(rowData, selectionState) {
 	const table = env.el('table');
 	table.dataset.juneauView = 'v';
 	table.dataset.juneauCsrf = 'tok-1';
+	table.setAttribute('data-juneau-row-id-field', 'id');
+	table.setAttribute('data-juneau-select-label-field', 'name');
 	const tbody = env.el('tbody');
 	const tr = env.el('tr');
 	tr.dataset.juneauRowId = String(rowData.id);
@@ -56,7 +58,7 @@ function fixture(rowData) {
 	tbody.appendChild(tr);
 	table.appendChild(tbody);
 	env.body.appendChild(table);
-	table.__juneauCtx = { viewDef: { id: 'v', rowActions: [DELETE] }, dataTable: { row: function () { return { data: function () { return rowData; } }; } } };
+	table.__juneauCtx = { viewDef: { id: 'v', rowActions: [DELETE] }, selectionState: selectionState, dataTable: { row: function () { return { data: function () { return rowData; } }; } } };
 	const closest = btn.closest;
 	btn.closest = function (sel) { return sel === 'tbody tr' ? tr : closest.call(this, sel); };
 	return btn;
@@ -65,7 +67,8 @@ function fixture(rowData) {
 const tick = function () { return new Promise(function (r) { setTimeout(r, 5); }); };
 let verdict = true;
 const asked = [];
-NS.rowActions.registerConfirmRenderer('verdict', function (modal) { asked.push({ title: modal.title, confirmLabel: modal.confirmLabel, tone: modal.tone }); return Promise.resolve(verdict); });
+const requests = [];
+NS.rowActions.registerConfirmRenderer('verdict', function (modal, request) { requests.push({ rows: request.rows, labelField: request.labelField, rowIdField: request.rowIdField }); asked.push({ title: modal.title, confirmLabel: modal.confirmLabel, tone: modal.tone }); return Promise.resolve(verdict); });
 
 (async function () {
 	const btn = fixture({ id: 7, name: 'Widget' });
@@ -80,6 +83,19 @@ NS.rowActions.registerConfirmRenderer('verdict', function (modal) { asked.push({
 	await tick();
 	out.cancelled = { fetches: calls.length };
 	out.asked = asked;
+	out.requests = requests;
+
+	// The request's field names come from ctx.selectionState when it has them (over the table attributes), and a
+	// ribbon-hosted dialog (no tr) carries no rows.
+	verdict = false;
+	const sel = fixture({ id: 9, name: 'Gadget' }, { labelField: 'title', rowIdField: 'pid' });
+	await NS.rowActions.run(sel, 'delete');
+	await tick();
+	out.selectionRequest = requests[requests.length - 1];
+	const ribbonTable = sel.parentNode.parentNode.parentNode;
+	await NS.rowActions.open({ id: 'rb', label: 'Go', endpoint: '/x', method: 'POST', present: 'dialog', confirm: 'Proceed?', confirmRenderer: 'verdict' }, { table: ribbonTable, tr: null });
+	await tick();
+	out.ribbonRequest = requests[requests.length - 1];
 
 	const blank = fixture({ id: 8, name: '' });
 	const before = asked.length;

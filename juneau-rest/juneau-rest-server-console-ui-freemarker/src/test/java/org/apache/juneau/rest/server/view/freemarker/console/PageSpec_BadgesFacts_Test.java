@@ -91,6 +91,29 @@ class PageSpec_BadgesFacts_Test extends TestBase {
 			return PageSpec.create().html("c1", "<p/>")
 				.badge(BadgeDef.create("rb").src("/rest/r").table("c1").refreshes("ghost")).view(req);
 		}
+		@RestGet(path="/java-allow-missing")
+		public View javaAllowMissing(RestRequest req) {
+			return PageSpec.create().html("c1", "<p/>")
+				.badge(BadgeDef.create("rb").src("/rest/r").refreshes("c1").refreshesAllowMissing("other-page-card")).view(req);
+		}
+		@RestGet(path="/java-allow-missing-typo")
+		public View javaAllowMissingTypo(RestRequest req) {
+			return PageSpec.create().html("c1", "<p/>")
+				.badge(BadgeDef.create("rb").src("/rest/r").refreshes("ghost").refreshesAllowMissing("other-page-card")).view(req);
+		}
+		@RestGet(path="/java-allow-missing-table")
+		public View javaAllowMissingTable(RestRequest req) {
+			return PageSpec.create().html("c1", "<p/>")
+				.badge(BadgeDef.create("rb").src("/rest/r").table("ghost").refreshesAllowMissing("ghost")).view(req);
+		}
+		@RestGet(path="/ftl-allow-missing")
+		public View ftlAllowMissing(RestRequest req) {
+			return PageSpec.create().html("c1", "<p/>").template("admin/page-badges-refreshes-allow.ftlh").view(req);
+		}
+		@RestGet(path="/ftl-allow-missing-typo")
+		public View ftlAllowMissingTypo(RestRequest req) {
+			return PageSpec.create().template("admin/page-badges-refreshes-allow-typo.ftlh").view(req);
+		}
 		@RestGet(path="/nested-conflict")
 		public View nestedConflict(RestRequest req) {
 			return PageSpec.create().facts(Map.of("viewer", Map.of("roles", List.of("b"))))
@@ -212,6 +235,35 @@ class PageSpec_BadgesFacts_Test extends TestBase {
 	@Test void d04_javaPath_refreshesUnknownCard_isE67() throws Exception {
 		var body = get("/java-refreshes", 500);
 		assertTrue(body.contains("&lt;@badge id='rb'&gt; references card 'ghost', which is not on the page."), body);
+	}
+
+	@Test void d05_javaPath_allowMissing_buildsAndEmitsContract() throws Exception {
+		var contract = assertPage(get("/java-allow-missing", 200)).isValid().contract();
+		var badge = (Map<?,?>)contract.getMap("header").getList("badges").get(0);
+		assertEquals(List.of("c1", "other-page-card"), badge.get("refreshes"));
+		assertEquals(List.of("other-page-card"), badge.get("refreshesAllowMissing"));
+	}
+
+	@Test void d06_javaPath_allowMissing_doesNotExcuseAPageLocalTypo() throws Exception {
+		var body = get("/java-allow-missing-typo", 500);
+		assertTrue(body.contains("&lt;@badge id='rb'&gt; references card 'ghost', which is not on the page."), body);
+	}
+
+	@Test void d06b_javaPath_allowMissing_doesNotExcuseTheTableId() throws Exception {
+		var body = get("/java-allow-missing-table", 500);
+		assertTrue(body.contains("&lt;@badge id='rb'&gt; references card 'ghost', which is not on the page."), body);
+	}
+
+	@Test void d07_ftl_allowMissing_buildsAndEmitsContract() throws Exception {
+		var contract = assertPage(get("/ftl-allow-missing", 200)).isValid().contract();
+		var badge = (Map<?,?>)contract.getMap("header").getList("badges").get(0);
+		assertEquals(List.of("c1", "elsewhere"), badge.get("refreshes"));
+		assertEquals(List.of("elsewhere"), badge.get("refreshesAllowMissing"));
+	}
+
+	@Test void d08_ftl_allowMissing_doesNotExcuseAPageLocalTypo() throws Exception {
+		var body = get("/ftl-allow-missing-typo", 500);
+		assertTrue(body.contains("<@badge id='r1'> references card 'ghost', which is not on the page."), body);
 	}
 
 	@Test void e01_ftlFacts_badLeafType_isRejected() throws Exception {

@@ -39,11 +39,14 @@ class PageContractSchema_Test extends TestBase {
 		}
 	}
 
+	// These fixtures are schema-only: they are not wiring-checked (e.g. valid-terminal.json has input:true with no wiring).
 	@ParameterizedTest
 	@ValueSource(strings = {"valid-example.json", "valid-minimal.json", "valid-deep.json", "valid-console-output.json",
 		"valid-run-view.json", "valid-run-view-nopoll.json", "valid-terminal.json",
 		"valid-datatables-table.json", "valid-datatables-table-full.json", "valid-datatables-rows.json",
-		"valid-datatables-src.json", "valid-badge.json"})
+		"valid-datatables-src.json", "valid-badge.json", "valid-badge-refreshes-allow-missing.json",
+		"valid-chart-src.json", "valid-chart-data.json", "valid-job-log.json",
+		"valid-chart-bare.json", "valid-job-log-bare.json", "valid-rowaction-inline.json"})
 	void a01_validCorpusPasses(String name) throws Exception {
 		var errors = PageContractSchema.get().validate(fixture(name));
 		assertTrue(errors.isEmpty(), () -> name + ": " + errors);
@@ -79,6 +82,13 @@ class PageContractSchema_Test extends TestBase {
 		"invalid-terminal-src.json|oneOf",
 		"invalid-terminal-nourl.json|oneOf",
 		"invalid-terminal-extra.json|oneOf",
+		"invalid-chart-nokind.json|oneOf",
+		"invalid-chart-both.json|oneOf",
+		"invalid-job-log-extra.json|oneOf",
+		"invalid-job-log-noendpoint.json|oneOf",
+		"invalid-chart-kind.json|oneOf",
+		"invalid-job-log-bare.json|oneOf",
+		"invalid-chart-bare.json|oneOf",
 		"invalid-card-type.json|does not match",
 		"invalid-r1.json|R-1: duplicate nav id 'a'",
 		"invalid-r2.json|R-2: duplicate card id 'c'",
@@ -91,6 +101,7 @@ class PageContractSchema_Test extends TestBase {
 		"invalid-selection-norowid.json|oneOf",
 		"invalid-bulk-noactions.json|oneOf",
 		"invalid-rowaction-noendpoint.json|oneOf",
+		"invalid-rowaction-badpresent.json|oneOf",
 	})
 	void a02_invalidCorpusFails(String name, String expected) throws Exception {
 		var errors = PageContractSchema.get().validate(fixture(name));

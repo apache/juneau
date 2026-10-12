@@ -21,6 +21,7 @@ import java.util.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.http.response.*;
 import org.apache.juneau.petstore.console.*;
+import org.apache.juneau.petstore.console.pages.*;
 import org.apache.juneau.rest.server.*;
 import org.apache.juneau.rest.server.console.*;
 import org.apache.juneau.rest.server.view.*;
@@ -73,16 +74,21 @@ public class ThemesRest extends PetstoreConsolePage {
 	}
 
 	/**
+	 * Renders the Themes page.
+	 *
+	 * @param req The request; {@code ?builder} renders the builder twin.
 	 * @param theme The theme to render in, or <jk>null</jk> for the default.
 	 * @return The page.
 	 * @throws BadRequest If the name is not one of {@link #CHOICES}.
 	 */
 	@RestGet(path="/")
-	public View page(@Query("theme") String theme) {
+	public View page(RestRequest req, @Query("theme") String theme) {
 		var name = theme == null || theme.isEmpty() ? ConsoleChromeMixin.BUILTIN_THEME_NAMES.get(0) : theme;
 		if (! CHOICES.contains(name))
 			throw new BadRequest("Unknown theme '%s'; choose one of: '%s'", name, String.join(", ", CHOICES));
 		var custom = CUSTOM.equals(name);
+		if (builder(req))
+			return twin(req, DevPageBuilders.themes(custom ? CUSTOM_SEED : name, custom, CHOICES));
 		return FreemarkerView.of("themes.ftlh")
 			.attr("petstoreTheme", custom ? CUSTOM_SEED : name)
 			.attr("petstoreCustomTheme", custom)

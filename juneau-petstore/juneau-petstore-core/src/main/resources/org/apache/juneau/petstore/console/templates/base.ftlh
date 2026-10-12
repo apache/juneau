@@ -13,7 +13,10 @@
   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
   See the License for the specific language governing permissions and
   limitations under the License.
---><@console brand="Juneau Petstore" theme=(petstoreTheme!"open")>
+--><@console brand="Juneau Petstore" title=(pageTitle!"") theme=(petstoreTheme!"open")>
+<#-- P4 pages pass the viewer's roles for the row-action visibleWhen rules; other pages have no roles. -->
+<#if roles??><@facts>{ viewer: { roles: [ <#list roles as r>'${r}'<#sep>, </#list> ] } }</@facts></#if>
+<@scripts phase="after-toolkit"><script src="${assetUrl('/console/petstore.js')}"></script></@scripts>
 <#if petstoreCustomTheme!false>
 <@theme name="light-brown">
 <@token name="--jc-pill-red-bg" value="#fdeceb"/>
@@ -45,6 +48,9 @@
 </@node>
 <@node id="about" label="About" href="/console/about"/>
 </@navigation>
+<#-- Unscoped on purpose: a nav scope would hide the badge on every page but /console/pets. -->
+<#-- The pets table lives on another page; the client skips a card that is not mounted. -->
+<@badge id="pending" src="/console/pets/changes/pending" href="/console/pets/changes" refreshMs=60000 placement="header" refreshesAllowMissing="pets"/>
 <@main/>
 <@footer text="Apache Juneau petstore sample"/>
 </@console>

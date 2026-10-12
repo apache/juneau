@@ -47,7 +47,11 @@ class PetstoreCoverage_Test extends TestBase {
 		PetstoreThemes_BrowserTest.class,
 		PetstoreAsyncJob_BrowserTest.class,
 		PetstoreDatatable_BrowserTest.class,
-		PetstoreConsoleOutput_BrowserTest.class);
+		PetstoreConsoleOutput_BrowserTest.class,
+		PetstorePetDetail_BrowserTest.class,
+		PetstoreTypedConfirm_BrowserTest.class,
+		PetstoreCustomCard_BrowserTest.class,
+		PetstoreDeleteConfirm_BrowserTest.class);
 
 	/** Parity ids not yet covered, each with what it waits on.  Remove a row when its browser test lands. */
 	static final Map<String,String> PENDING = Map.ofEntries(
@@ -56,12 +60,11 @@ class PetstoreCoverage_Test extends TestBase {
 		Map.entry("visibility-rules", "P4 visibility rules: needs the console hook namespaces and the P4 pet page"),
 		Map.entry("pending-changes-badge", "pending-changes badge: needs the console hook namespaces and P4 change staging"),
 		Map.entry("bulk-select", "P2 bulk select: needs console custom card types"),
-		Map.entry("per-view-tab-restriction", "per-view tab restriction: needs BeanQuery view restriction and the orders/users query endpoints"),
+		Map.entry("per-view-tab-restriction", "per-view tab restriction: the orders/users query endpoints exist, but no browser test yet covers a per-view restriction"),
 		Map.entry("url-state", "URL state: needs the console hook namespaces"),
 		Map.entry("confirm-dialogs", "confirm renderers and dialogs: needs the console hook namespaces"),
-		Map.entry("inline-edit", "inline edit: needs the console hook namespaces and the P4 pet page"),
-		Map.entry("related-list", "related list: needs the console hook namespaces and the P4 pet page"),
-		Map.entry("depth-4-nav", "depth-4 nav: needs the P4 pet page"));
+		Map.entry("inline-edit", "inline edit: needs a CSRF token on petstore pages (the toolkit refuses row-action writes without one)"),
+		Map.entry("related-list", "related list: needs the console hook namespaces and the P4 pet page"));
 
 	private static Map<String,List<Class<?>>> covered() {
 		var m = new TreeMap<String,List<Class<?>>>();

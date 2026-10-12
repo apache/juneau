@@ -51,8 +51,8 @@ public final class ApacheHc45TransportProvider implements HttpTransportProvider 
 		try {
 			Class.forName("org.apache.http.impl.client.CloseableHttpClient");
 			return true;
-		} catch (ClassNotFoundException e) {
-			return false;
+		} catch (ClassNotFoundException e) {  // HTT: HttpClient 4.5 is a compile-time dependency of this module, so it is always on the test classpath
+			return false;  // HTT: unreachable while this module's own dependency is present
 		}
 	}
 

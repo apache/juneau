@@ -18,10 +18,18 @@ package org.apache.juneau.http.classic.response;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.lang.reflect.*;
+import java.net.*;
+import java.util.*;
+import java.util.function.*;
 import java.util.stream.*;
 
 import org.apache.http.*;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.EnglishReasonPhraseCatalog;
 import org.apache.juneau.*;
+import org.apache.juneau.http.classic.BasicStatusLine;
+import org.apache.juneau.http.classic.header.HeaderList;
 import org.junit.jupiter.params.*;
 import org.junit.jupiter.params.provider.*;
 
@@ -204,5 +212,173 @@ class ClassicResponse_Test extends TestBase {
 		var header = ((HttpResponse)instance).getFirstHeader("X-Test");
 		assertNotNull(header);
 		assertEquals("value1", header.getValue());
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Fluent surface and constructors shared by every generated subclass
+	//-----------------------------------------------------------------------------------------------------------------
+
+	private static Object sampleArg(Class<?> t) {
+		if (t == String.class || t == Object.class)
+			return "x";
+		if (t == int.class)
+			return 201;
+		if (t == Locale.class)
+			return Locale.FRANCE;
+		if (t == HttpEntity.class)
+			return new StringEntity("body", java.nio.charset.StandardCharsets.UTF_8);
+		if (t == HeaderList.class)
+			return HeaderList.create();
+		if (t == List.class)
+			return new ArrayList<Header>(List.of(new org.apache.http.message.BasicHeader("A", "b")));
+		if (t == Header.class)
+			return new org.apache.http.message.BasicHeader("A", "b");
+		if (t == Header[].class)
+			return new Header[]{new org.apache.http.message.BasicHeader("A", "b")};
+		if (t == Object[].class)
+			return new Object[0];
+		if (t == ProtocolVersion.class)
+			return HttpVersion.HTTP_1_0;
+		if (t == ReasonPhraseCatalog.class)
+			return EnglishReasonPhraseCatalog.INSTANCE;
+		if (t == BasicStatusLine.class)
+			return BasicStatusLine.create(201, "Made");
+		if (t == URI.class)
+			return URI.create("http://localhost/x");
+		throw new IllegalArgumentException("No sample for " + t);
+	}
+
+	/** Fluent (covariant-returning) public methods declared directly on the leaf type. */
+	private static List<Method> fluentMethods(Class<?> type) {
+		var l = new ArrayList<Method>();
+		for (var m : type.getDeclaredMethods())
+			if (Modifier.isPublic(m.getModifiers()) && !Modifier.isStatic(m.getModifiers()) && !m.isBridge() && m.getReturnType() == type && m.getParameterCount() > 0)
+				l.add(m);
+		return l;
+	}
+
+	private static Object[] sampleArgs(Method m) {
+		return Arrays.stream(m.getParameterTypes()).map(ClassicResponse_Test::sampleArg).toArray();
+	}
+
+	@ParameterizedTest
+	@MethodSource("a06_exceptionClasses")
+	void b01_exceptionFluentSetters(Class<? extends BasicHttpException> type, int expectedCode, String expectedPhrase) throws Exception {
+		var methods = fluentMethods(type);
+		assertTrue(methods.size() >= 10, type::getName);
+		for (var m : methods) {
+			var instance = type.getDeclaredConstructor().newInstance().setHeader2("Pre", "1").setReasonPhrase2("Custom");
+			var args = sampleArgs(m);
+			assertSame(instance, m.invoke(instance, args), m::getName);
+			assertSetterState(instance, m, args, expectedCode, expectedPhrase);
+		}
+	}
+
+	/** Asserts the observable state change each fluent setter promises (sample args come from {@link #sampleArg}). */
+	private static void assertSetterState(BasicHttpException x, Method m, Object[] a, int expectedCode, String expectedPhrase) throws Exception {
+		Supplier<String> what = m::toString;
+		switch (m.getName()) {
+			case "setContent" -> {
+				assertNotNull(x.getEntity(), what);
+				if (a[0] instanceof HttpEntity e)
+					assertSame(e, x.getEntity(), what);
+				else
+					assertEquals(a[0], org.apache.http.util.EntityUtils.toString(x.getEntity()), what);
+			}
+			case "setHeader2" -> assertEquals(a[1], x.getFirstHeader((String)a[0]).getValue(), what);
+			case "setHeaders" -> {
+				if (m.getParameterTypes()[0] == List.class)
+					assertEquals("b", x.getFirstHeader("A").getValue(), what);
+				else
+					assertNull(x.getFirstHeader("Pre"), what);  // The empty HeaderList replaced the pre-existing header.
+			}
+			case "setHeaders2" -> assertEquals("b", x.getFirstHeader("A").getValue(), what);
+			case "setLocale2" -> assertEquals(Locale.FRANCE, x.getLocale(), what);
+			case "setMessage" -> assertEquals("x", x.getMessage(), what);
+			case "setProtocolVersion" -> assertEquals(HttpVersion.HTTP_1_0, x.getProtocolVersion(), what);
+			case "setReasonPhrase2" -> assertEquals("x", x.getStatusLine().getReasonPhrase(), what);
+			case "setReasonPhraseCatalog" -> assertEquals("Custom", x.getStatusLine().getReasonPhrase(), what);
+			case "setStatusCode2" -> assertEquals(201, x.getStatusLine().getStatusCode(), what);
+			case "setStatusLine" -> {
+				assertEquals(201, x.getStatusLine().getStatusCode(), what);
+				assertEquals("Made", x.getStatusLine().getReasonPhrase(), what);
+			}
+			default -> fail("No state assertion for fluent setter " + what.get());
+		}
+	}
+
+	@ParameterizedTest
+	@MethodSource("a06_exceptionClasses")
+	void b02_exceptionUnmodifiableRejectsFluentSetters(Class<? extends BasicHttpException> type, int expectedCode, String expectedPhrase) throws Exception {
+		var u = type.getDeclaredConstructor().newInstance().unmodifiable();
+		assertSame(u, u.unmodifiable());
+		for (var m : fluentMethods(type)) {
+			var ex = assertThrows(InvocationTargetException.class, () -> m.invoke(u, sampleArgs(m)), m::getName);
+			assertInstanceOf(UnsupportedOperationException.class, ex.getCause(), m::getName);
+		}
+	}
+
+	@ParameterizedTest
+	@MethodSource("a01_responseClasses")
+	void b03_responseUnmodifiableIsIdempotent(Class<? extends BasicHttpResponse<?>> type, int expectedCode, String expectedPhrase) throws Exception {
+		var u = type.getDeclaredConstructor().newInstance().unmodifiable();
+		assertSame(u, u.unmodifiable());
+	}
+
+	@ParameterizedTest
+	@MethodSource("a06_exceptionClasses")
+	void b04_exceptionResponseConstructor(Class<? extends BasicHttpException> type, int expectedCode, String expectedPhrase) throws Exception {
+		var source = type.getDeclaredConstructor().newInstance().setHeader2("X-Test", "v");
+		var x = type.getConstructor(HttpResponse.class).newInstance(source);
+		assertEquals(expectedCode, x.getStatusLine().getStatusCode());
+		assertEquals("v", x.getFirstHeader("X-Test").getValue());
+	}
+
+	@ParameterizedTest
+	@MethodSource("a01_responseClasses")
+	void b05_responseResponseConstructor(Class<? extends BasicHttpResponse<?>> type, int expectedCode, String expectedPhrase) throws Exception {
+		var source = type.getDeclaredConstructor().newInstance().setHeader2("X-Test", "v");
+		var x = type.getConstructor(HttpResponse.class).newInstance(source);
+		assertEquals(expectedCode, x.getStatusLine().getStatusCode());
+		assertEquals("v", x.getFirstHeader("X-Test").getValue());
+	}
+
+	@ParameterizedTest
+	@MethodSource("a06_exceptionClasses")
+	void b04b_exceptionResponseConstructorRejectsMismatchedStatus(Class<? extends BasicHttpException> type, int expectedCode, String expectedPhrase) throws Exception {
+		var ex = assertThrows(InvocationTargetException.class, () -> type.getConstructor(HttpResponse.class).newInstance(new BasicHttpException(599)));
+		assertInstanceOf(IllegalArgumentException.class, ex.getCause());
+		assertTrue(ex.getCause().getMessage().contains("Expected:[" + expectedCode + "], Actual:[599]"), ex.getCause().getMessage());
+	}
+
+	@ParameterizedTest
+	@MethodSource("a01_responseClasses")
+	void b05b_responseResponseConstructorRejectsMismatchedStatus(Class<? extends BasicHttpResponse<?>> type, int expectedCode, String expectedPhrase) throws Exception {
+		var ex = assertThrows(InvocationTargetException.class, () -> type.getConstructor(HttpResponse.class).newInstance(new BasicHttpException(599)));
+		assertInstanceOf(IllegalArgumentException.class, ex.getCause());
+		assertTrue(ex.getCause().getMessage().contains("Expected:[" + expectedCode + "], Actual:[599]"), ex.getCause().getMessage());
+	}
+
+	@ParameterizedTest
+	@MethodSource("a06_exceptionClasses")
+	void b06_exceptionNullCauseAndMessageDefaults(Class<? extends BasicHttpException> type, int expectedCode, String expectedPhrase) throws Exception {
+		var nullCause = type.getConstructor(Throwable.class).newInstance((Throwable)null);
+		assertNull(nullCause.getCause());
+		assertEquals(expectedPhrase, nullCause.getMessage());
+
+		var nullMessage = type.getConstructor(Throwable.class, String.class, Object[].class).newInstance(new IllegalStateException("inner"), null, new Object[0]);
+		assertEquals("inner", nullMessage.getMessage());
+		assertEquals(expectedCode, nullMessage.getStatusLine().getStatusCode());
+	}
+
+	@ParameterizedTest
+	@MethodSource("a06_exceptionClasses")
+	void b07_exceptionCopyIsIndependent(Class<? extends BasicHttpException> type, int expectedCode, String expectedPhrase) throws Exception {
+		var x = type.getDeclaredConstructor().newInstance().setHeader2("X-Test", "v");
+		var copy = (BasicHttpException)type.getMethod("copy").invoke(x);
+		assertNotSame(x, copy);
+		assertEquals(x, copy);
+		copy.setHeader2("X-Test", "changed");
+		assertEquals("v", x.getFirstHeader("X-Test").getValue());
 	}
 }

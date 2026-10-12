@@ -65,8 +65,8 @@ public final class JettyHttpTransportProvider implements HttpTransportProvider {
 	public HttpTransport create() {
 		try {
 			return JettyHttpTransport.create();
-		} catch (Exception e) {
-			throw rex(e, "Failed to create JettyHttpTransport: %s", e.getMessage());
+		} catch (Exception e) { // HTT: JettyHttpTransport.create() only fails if Jetty's HttpClient cannot start (thread/selector exhaustion); a seam (injectable factory) would make this testable
+			throw rex(e, "Failed to create JettyHttpTransport: %s", e.getMessage()); // HTT: see the catch above
 		}
 	}
 }

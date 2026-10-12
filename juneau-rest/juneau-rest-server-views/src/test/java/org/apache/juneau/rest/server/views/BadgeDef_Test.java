@@ -56,6 +56,15 @@ class BadgeDef_Test {
 		assertEquals("beanType", stateFilter.get("column"));
 	}
 
+	@Test void a02b_refreshesAllowMissing_mergesIntoRefreshesAndMarksThem() {
+		var b = BadgeDef.create("pending").src("/rest/p").refreshes("here", "gone").refreshesAllowMissing("gone", "far");
+		b.validate();
+		var m = b.toContractMap();
+		assertEquals(List.of("here", "gone", "far"), m.get("refreshes"));
+		assertEquals(List.of("gone", "far"), m.get("refreshesAllowMissing"));
+		assertFalse(BadgeDef.create("x").src("/p").refreshes("a").toContractMap().containsKey("refreshesAllowMissing"));
+	}
+
 	@Test void a03_idRequired() {
 		var e = assertThrows(IllegalArgumentException.class, () -> BadgeDef.create(null));
 		assertTrue(e.getMessage().contains("id must not be null or blank"), e.getMessage());

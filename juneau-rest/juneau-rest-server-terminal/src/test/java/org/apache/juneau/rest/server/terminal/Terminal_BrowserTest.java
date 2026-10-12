@@ -88,9 +88,13 @@ class Terminal_BrowserTest extends TestBase {
 	@Test void a10_rawLinkOnlyForHttpUrls() { ok("b10_rawLinkOnlyForHttpUrls"); }
 
 	@Test void a11_handleScrollsWithoutAHashChange() { ok("b11_handleScrollsWithoutAHashChange"); }
+	@Test void a12_mountWithoutInputHasNoToggle() { ok("b12_mountWithoutInputHasNoToggle"); }
+	@Test void a13_inputCardArmsTheTerminal() { ok("b13_inputCardArmsTheTerminal"); }
+	@Test void a14_inputStatusRoleReachesItsCard() { ok("b14_inputStatusRoleReachesItsCard"); }
+	@Test void a15_toneBackgroundsStayLegibleWithViewsCss() { ok("b15_toneBackgroundsStayLegibleWithViewsCss"); }
 
 	@Test void z01_everyCaseHasAMethod() {
 		var cases = (Map<?,?>)report.get("cases");
-		assertEquals(11, cases.size(), () -> "case count changed; add a method per new case: " + cases.keySet());
+		assertEquals(15, cases.size(), () -> "case count changed; add a method per new case: " + cases.keySet());
 	}
 }

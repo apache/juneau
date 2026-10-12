@@ -84,4 +84,13 @@ class Badge_Test extends TestBase {
 		assertNull(b.tone);
 		b.validate();
 	}
+
+	@Test void a10_explicitFalseDot_withCount_validates() {
+		var b = Badge.count(2);
+		b.dot = false;
+		b.validate();
+		var d = new Badge();
+		d.dot = false;
+		assertThrows(IllegalArgumentException.class, d::validate);
+	}
 }

@@ -109,13 +109,13 @@ public class SpringEnvironmentPropertySource implements org.apache.juneau.common
 		var e = env;
 		if (! resolved) {
 			synchronized (this) {
-				if (! resolved) {
+				if (! resolved) {  // HTT: double-checked locking second check; false only when another thread resolves between the outer check and lock acquisition, which a single-threaded test cannot force
 					// safeOpt swallows exceptions thrown by the supplier — e.g. a mocked
 					// ApplicationContext that returns null or throws during getEnvironment().
 					env = e = safeOpt(envSupplier::get).orElse(null);
 					resolved = true;
 				} else {
-					e = env;
+					e = env;  // HTT: double-checked locking else branch; reachable only under a concurrent resolve race
 				}
 			}
 		}

@@ -205,9 +205,11 @@ import jakarta.servlet.http.*;
  *
  * 	<ja>@Test</ja>
  * 	<jk>public void</jk> testProxy() {
+ * 		<jc>// A mock client cannot apply the SSRF guard of @Remote calls, so it needs the allowPrivateUrls opt-in.</jc>
  * 		MyRemoteInterface <jv>client</jv> = MockRestClient
  * 			.create(MyRest.<jk>class</jk>)
  * 			.json()
+ * 			.allowPrivateUrls(<jk>true</jk>)
  * 			.build()
  * 			.getRemote(MyRemoteInterface.<jk>class</jk>);
  *

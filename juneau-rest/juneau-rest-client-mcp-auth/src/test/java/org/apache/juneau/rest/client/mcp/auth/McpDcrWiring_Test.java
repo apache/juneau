@@ -121,4 +121,29 @@ class McpDcrWiring_Test extends TestBase {
 		var acquirer = McpClientRegistrations.configure(b, reg).build();
 		assertEquals(0, acquirer.redirectPort());
 	}
+
+	// Registrations with no usable redirect path/port leave the acquirer's defaults untouched.
+	@Test void e01_emptyRedirectUrisLeavesDefaults() {
+		var reg = new McpClientRegistration("c", Optional.empty(), Optional.empty(), Optional.empty(),
+			Optional.empty(), ISSUER, List.of(), McpApplicationType.NATIVE, Map.of());
+		var b = McpAuthorizationCodeAcquirer.create()
+			.authorizationEndpoint(AUTH).tokenEndpoint(TOKEN).resource(RESOURCE).expectedIssuer(ISSUER);
+		assertEquals(0, McpClientRegistrations.configure(b, reg).build().redirectPort());
+	}
+
+	@Test void e02_opaqueRedirectUriHasNoPathSoPathNotApplied() {
+		var reg = new McpClientRegistration("c", Optional.empty(), Optional.empty(), Optional.empty(),
+			Optional.empty(), ISSUER, List.of(URI.create("com.example.app:callback")), McpApplicationType.NATIVE, Map.of());
+		var b = McpAuthorizationCodeAcquirer.create()
+			.authorizationEndpoint(AUTH).tokenEndpoint(TOKEN).resource(RESOURCE).expectedIssuer(ISSUER);
+		assertEquals(0, McpClientRegistrations.configure(b, reg).build().redirectPort());
+	}
+
+	@Test void e03_emptyPathRedirectUriDoesNotOverrideDefaultPath() {
+		var reg = new McpClientRegistration("c", Optional.empty(), Optional.empty(), Optional.empty(),
+			Optional.empty(), ISSUER, List.of(URI.create("http://127.0.0.1:4000")), McpApplicationType.NATIVE, Map.of());
+		var b = McpAuthorizationCodeAcquirer.create()
+			.authorizationEndpoint(AUTH).tokenEndpoint(TOKEN).resource(RESOURCE).expectedIssuer(ISSUER);
+		assertEquals(4000, McpClientRegistrations.configure(b, reg).build().redirectPort());
+	}
 }

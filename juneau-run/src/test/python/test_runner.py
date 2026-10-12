@@ -395,6 +395,29 @@ class RunnerTest(unittest.TestCase):
         result, out, _ = self.go(child("pass"), Recording())
         self.assertEqual(markers(out)[-1], {"ev": "end", "id": "t", "status": "ok"})
 
+    def test_statuses_map_exit_codes_to_the_rows_status(self):
+        statuses = {0: "ok", 3: "skip", 2: "fail"}
+        result, out, _ = self.go(child("import sys; sys.exit(3)"), Recording(), statuses=statuses)
+        self.assertEqual(result.exit, 3)
+        self.assertEqual(markers(out)[-1], {"ev": "end", "id": "t", "status": "skip"})
+        _, out, _ = self.go(child("import sys; sys.exit(2)"), Recording(), statuses=statuses)
+        self.assertEqual(markers(out)[-1], {"ev": "end", "id": "t", "status": "fail", "exit": 2})
+        _, out, _ = self.go(child("import sys; sys.exit(9)"), Recording(), statuses=statuses)
+        self.assertEqual(markers(out)[-1], {"ev": "end", "id": "t", "status": "fail", "exit": 9})
+
+    def test_exit_127_and_130_end_fail_whatever_statuses_says(self):
+        for rc in (127, 130):
+            _, out, _ = self.go(child(f"import sys; sys.exit({rc})"), Recording(), statuses={rc: "skip"})
+            self.assertEqual(markers(out)[-1], {"ev": "end", "id": "t", "status": "fail", "exit": rc})
+
+    def test_statuses_reach_the_bus_in_pass_through_mode(self):
+        os.environ.pop("RUN_MARKERS")
+        bus = jr.subscribe(Events())
+        with mock.patch.object(jr.subprocess, "run", return_value=mock.Mock(returncode=3)):
+            result = jr.run_tool(["gate"], "generic", "t", "T", statuses={3: "skip"})
+        self.assertEqual(result.exit, 3)
+        self.assertEqual([(f["status"], f["exit"]) for f in bus.of("step_end")], [("skip", None)])
+
     def test_step_carries_n_and_parent(self):
         _, out, _ = self.go(child("pass"), Recording(), n=4, parent="outer")
         self.assertEqual(markers(out)[0], {"ev": "step", "id": "t", "n": 4, "title": "Tool", "parent": "outer"})

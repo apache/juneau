@@ -105,7 +105,7 @@ for each run.
 ## Adopting it
 
 See `../README.md`: the bootstrap snippet that loads `juneau_run.py` from the pinned `org.apache.juneau:juneau-run` artifact, the output routing
-options (`JUNEAU_RUN_CONSOLE`, `JUNEAU_RUN_FULL_LOG`, `JUNEAU_RUN_CONDENSED_LOG`) and the parsers (`maven`, `pytest`, `playwright`, `generic`).
+options (`JUNEAU_RUN_CONSOLE`, `JUNEAU_RUN_FULL_LOG`, `JUNEAU_RUN_CONDENSED_LOG`) and the parsers (`maven`, `pytest`, `playwright`, `gradle`, `npm`, `generic`; `gradle` adds `--console=plain` unless the command sets `--console`).
 Reporter flags a parser adds, only when markers are on and `RUN_ARTIFACTS` is set:
 - pytest: `--junitxml=$RUN_ARTIFACTS/<step>-pytest.xml`
 - Playwright: `--reporter=line,json` with `PLAYWRIGHT_JSON_OUTPUT_NAME=$RUN_ARTIFACTS/<step>-playwright.json`

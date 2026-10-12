@@ -92,4 +92,22 @@ class LogbackLogBackend_Test extends org.apache.juneau.TestBase {
 		// The test classpath binds SLF4J to Logback, so the no-arg ctor resolves the bound context.
 		assertDoesNotThrow(() -> new LogbackLogBackend());
 	}
+
+	@Test void b01_nullNameAddressesRoot() {
+		backend.setLevel(null, "WARN");
+		assertEquals("WARN", backend.getLevel(null));
+		assertEquals("WARN", backend.getLevel("ROOT"));
+		assertEquals("WARN", backend.getLevels().get("ROOT"));
+	}
+
+	@Test void b02_inheritedLoggerListedAsEmpty() {
+		backend.setLevel(LNAME, "DEBUG");
+		backend.setLevel(LNAME, null);
+		assertEquals("", backend.getLevels().get(LNAME));
+	}
+
+	@Test void b03_levelNameIsTrimmed() {
+		backend.setLevel(LNAME, "  error ");
+		assertEquals("ERROR", backend.getLevel(LNAME));
+	}
 }

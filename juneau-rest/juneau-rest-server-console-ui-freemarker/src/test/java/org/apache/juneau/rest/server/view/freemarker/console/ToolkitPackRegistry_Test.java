@@ -83,7 +83,7 @@ class ToolkitPackRegistry_Test extends TestBase {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Test void a01_views_runtimeOrder_helpersLast_noGlue() throws Exception {
-		var r = new ToolkitPackRegistry().resolve(List.of(ToolkitPackRegistry.PACK_VIEWS), dummyRequest());
+		var r = new ToolkitPackRegistry().resolve(List.of(ToolkitPackRegistry.PACK_VIEWS), dummyRequest(), List.of(), "");
 		assertList(files(r.runtimeCss()), "juneau-views.css", "juneau-config.css");
 		// JS load order is a contract: bus FIRST (dependency-free; views, regions and the console shell all read
 		// JuneauViews.bus), then renders, icons, search, pagestate, urlstate (Copy link), ribbon, views, config,
@@ -99,37 +99,37 @@ class ToolkitPackRegistry_Test extends TestBase {
 	}
 
 	@Test void a02_calendar_isBuiltIn_resolvesThroughWidgetsMixin() throws Exception {
-		var r = new ToolkitPackRegistry().resolve(List.of(ToolkitPackRegistry.PACK_CALENDAR), dummyRequest());
+		var r = new ToolkitPackRegistry().resolve(List.of(ToolkitPackRegistry.PACK_CALENDAR), dummyRequest(), List.of(), "");
 		assertList(files(r.runtimeCss()), "juneau-calendar.css");
 		assertList(files(r.runtimeJs()), "juneau-calendar.js");
 	}
 
 	@Test void a03_viewsThenCalendar_authorOrder() throws Exception {
-		var r = new ToolkitPackRegistry().resolve(List.of(ToolkitPackRegistry.PACK_VIEWS, ToolkitPackRegistry.PACK_CALENDAR), dummyRequest());
+		var r = new ToolkitPackRegistry().resolve(List.of(ToolkitPackRegistry.PACK_VIEWS, ToolkitPackRegistry.PACK_CALENDAR), dummyRequest(), List.of(), "");
 		assertTrue(indexOfContaining(r.runtimeJs(), "juneau-views.js") < indexOfContaining(r.runtimeJs(), "juneau-calendar.js"), r.runtimeJs()::toString);
 	}
 
 	@Test void a04_omit_isEmpty_needsNoRequest() {
 		var reg = new ToolkitPackRegistry();
 		for (var names : Arrays.<List<String>>asList(List.of(), null))
-			assertBean(reg.resolve(names, null), "vendorCss,vendorJs,runtimeCss,runtimeJs", "[],[],[],[]");
+			assertBean(reg.resolve(names, null, List.of(), ""), "vendorCss,vendorJs,runtimeCss,runtimeJs", "[],[],[],[]");
 	}
 
 	@Test void a05_unknownRequested_namesSource() throws Exception {
 		var reg = new ToolkitPackRegistry();
 		var req = dummyRequest();
-		var e = assertThrows(IllegalArgumentException.class, () -> reg.resolve(List.of("nope"), req));
+		var e = assertThrows(IllegalArgumentException.class, () -> reg.resolve(List.of("nope"), req, List.of(), ""));
 		assertString("Unknown toolkit pack 'nope' (requested).", e.getMessage());
 	}
 
-	@Test void a06_threeArgRegister_isRuntime_ownResolver() throws Exception {
+	@Test void a06_runtimePack_ownResolver() throws Exception {
 		var reg = new ToolkitPackRegistry();
-		reg.register("probe", List.of("/a.css"), List.of("/x.js", "/y.js"), ECHO);
-		assertBean(reg.resolve(List.of("probe"), dummyRequest()), "vendorCss,vendorJs,runtimeCss,runtimeJs", "[],[],[ECHO/a.css],[ECHO/x.js,ECHO/y.js]");
+		reg.register(ToolkitPack.create("probe").kind(RUNTIME).resolver(ECHO).css("/a.css").js("/x.js", "/y.js").build());
+		assertBean(reg.resolve(List.of("probe"), dummyRequest(), List.of(), ""), "vendorCss,vendorJs,runtimeCss,runtimeJs", "[],[],[ECHO/a.css],[ECHO/x.js,ECHO/y.js]");
 	}
 
 	@Test void a07_glue_pullsDataTablesAndJquery_fromWebJars() throws Exception {
-		var r = new ToolkitPackRegistry().resolve(List.of(ToolkitPackRegistry.PACK_DATATABLES_GLUE), dummyRequest());
+		var r = new ToolkitPackRegistry().resolve(List.of(ToolkitPackRegistry.PACK_DATATABLES_GLUE), dummyRequest(), List.of(), "");
 		assertList(files(r.vendorCss()), "datatables.datatables.min.css");
 		assertList(files(r.vendorJs()), "jquery.min.js", "datatables.min.js", "juneau-datatables.js");
 		var jq = WebJarResolver.version("org.webjars", "jquery");
@@ -141,7 +141,7 @@ class ToolkitPackRegistry_Test extends TestBase {
 	}
 
 	@Test void a08_terminal_pullsViewsAndXterm_runtimeLast() throws Exception {
-		var r = new ToolkitPackRegistry().resolve(List.of(ToolkitPackRegistry.PACK_TERMINAL), dummyRequest());
+		var r = new ToolkitPackRegistry().resolve(List.of(ToolkitPackRegistry.PACK_TERMINAL), dummyRequest(), List.of(), "");
 		assertList(files(r.vendorCss()), "xterm.css");
 		assertList(files(r.vendorJs()), "xterm.js");
 		var css = files(r.runtimeCss());
@@ -156,12 +156,28 @@ class ToolkitPackRegistry_Test extends TestBase {
 		assertContains("/juneau-terminal.js?v=", r.runtimeJs().get(r.runtimeJs().size() - 1));
 	}
 
+	@Test void a09_charts_isOneRuntimeScript_noDependencies() throws Exception {
+		var r = new ToolkitPackRegistry().resolve(List.of(ToolkitPackRegistry.PACK_CHARTS), dummyRequest(), List.of(), "");
+		assertList(files(r.runtimeJs()), "juneau-charts.js");
+		assertEmpty(r.runtimeCss());
+		assertEmpty(r.vendorJs());
+		assertContains("/juneau-console/juneau-charts.js?v=", r.runtimeJs().get(0));
+	}
+
+	@Test void a10_joblog_isOneRuntimeScript_noDependencies() throws Exception {
+		var r = new ToolkitPackRegistry().resolve(List.of(ToolkitPackRegistry.PACK_JOBLOG), dummyRequest(), List.of(), "");
+		assertList(files(r.runtimeJs()), "juneau-joblog.js");
+		assertEmpty(r.runtimeCss());
+		assertEmpty(r.vendorJs());
+		assertContains("/juneau-console/juneau-joblog.js?v=", r.runtimeJs().get(0));
+	}
+
 	//-----------------------------------------------------------------------------------------------------------------
 	// b - graph, provided, kinds
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Test void b01_buttons_expandsDependencies() throws Exception {
-		var r = new ToolkitPackRegistry().resolve(List.of(ToolkitPackRegistry.PACK_DATATABLES_BUTTONS), dummyRequest());
+		var r = new ToolkitPackRegistry().resolve(List.of(ToolkitPackRegistry.PACK_DATATABLES_BUTTONS), dummyRequest(), List.of(), "");
 		assertList(files(r.vendorJs()), "jquery.min.js", "datatables.min.js", "datatables.buttons.min.js", "buttons.html5.min.js");
 		assertList(files(r.vendorCss()), "datatables.datatables.min.css", "buttons.datatables.min.css");
 	}
@@ -172,12 +188,12 @@ class ToolkitPackRegistry_Test extends TestBase {
 		reg.register(pack("b", VENDOR, "/b.js", "c"));
 		reg.register(pack("c", VENDOR, "/c.js"));
 		var req = dummyRequest();
-		assertList(reg.resolve(List.of("b", "a"), req).vendorJs(), "ECHO/c.js", "ECHO/b.js", "ECHO/a.js");
-		assertList(reg.resolve(List.of("a", "b"), req).vendorJs(), "ECHO/a.js", "ECHO/c.js", "ECHO/b.js");
+		assertList(reg.resolve(List.of("b", "a"), req, List.of(), "").vendorJs(), "ECHO/c.js", "ECHO/b.js", "ECHO/a.js");
+		assertList(reg.resolve(List.of("a", "b"), req, List.of(), "").vendorJs(), "ECHO/a.js", "ECHO/c.js", "ECHO/b.js");
 	}
 
 	@Test void b03_packNamedTwice_emittedOnce() throws Exception {
-		var r = new ToolkitPackRegistry().resolve(List.of(ToolkitPackRegistry.PACK_DATATABLES_GLUE, ToolkitPackRegistry.PACK_DATATABLES, ToolkitPackRegistry.PACK_DATATABLES_GLUE), dummyRequest());
+		var r = new ToolkitPackRegistry().resolve(List.of(ToolkitPackRegistry.PACK_DATATABLES_GLUE, ToolkitPackRegistry.PACK_DATATABLES, ToolkitPackRegistry.PACK_DATATABLES_GLUE), dummyRequest(), List.of(), "");
 		assertList(files(r.vendorJs()), "jquery.min.js", "datatables.min.js", "juneau-datatables.js");
 	}
 
@@ -192,7 +208,7 @@ class ToolkitPackRegistry_Test extends TestBase {
 		var reg = new ToolkitPackRegistry();
 		reg.register(pack("x", VENDOR, "/x.js", "ghost"));
 		var req = dummyRequest();
-		var e = assertThrows(IllegalArgumentException.class, () -> reg.resolve(List.of("x"), req));
+		var e = assertThrows(IllegalArgumentException.class, () -> reg.resolve(List.of("x"), req, List.of(), ""));
 		assertString("Unknown toolkit pack 'ghost' (dependsOn of pack 'x').", e.getMessage());
 	}
 
@@ -209,20 +225,20 @@ class ToolkitPackRegistry_Test extends TestBase {
 		reg.register(pack("a", VENDOR, "/a.js", "b"));
 		reg.register(pack("b", VENDOR, "/b.js", "a"));
 		var req = dummyRequest();
-		var e = assertThrows(IllegalArgumentException.class, () -> reg.resolve(List.of("b"), req));
+		var e = assertThrows(IllegalArgumentException.class, () -> reg.resolve(List.of("b"), req, List.of(), ""));
 		assertString("Toolkit pack cycle: b → a → b.", e.getMessage());
 	}
 
 	@Test void b08_provided_contributesNothing_dependenciesStillLoad() throws Exception {
 		var reg = new ToolkitPackRegistry().provide(List.of(ToolkitPackRegistry.PACK_DATATABLES)).validate();
-		var r = reg.resolve(List.of(ToolkitPackRegistry.PACK_DATATABLES_GLUE), dummyRequest());
+		var r = reg.resolve(List.of(ToolkitPackRegistry.PACK_DATATABLES_GLUE), dummyRequest(), List.of(), "");
 		assertList(files(r.vendorJs()), "jquery.min.js", "juneau-datatables.js");
 		assertEmpty(r.vendorCss());
 	}
 
 	@Test void b09_providedJquery_unprovidedDataTables_emitsDataTablesOnly() throws Exception {
 		var reg = new ToolkitPackRegistry().provide(List.of(ToolkitPackRegistry.PACK_JQUERY)).validate();
-		var r = reg.resolve(List.of(ToolkitPackRegistry.PACK_DATATABLES), dummyRequest());
+		var r = reg.resolve(List.of(ToolkitPackRegistry.PACK_DATATABLES), dummyRequest(), List.of(), "");
 		assertList(files(r.vendorJs()), "datatables.min.js");
 	}
 
@@ -236,7 +252,7 @@ class ToolkitPackRegistry_Test extends TestBase {
 		var reg = new ToolkitPackRegistry();
 		reg.register(pack("v", VENDOR, "/v.js"));
 		reg.register(pack("r", RUNTIME, "/r.js", "v"));
-		var r = reg.validate().resolve(List.of("r"), dummyRequest());
+		var r = reg.validate().resolve(List.of("r"), dummyRequest(), List.of(), "");
 		assertBean(r, "vendorJs,runtimeJs", "[ECHO/v.js],[ECHO/r.js]");
 	}
 
@@ -250,7 +266,7 @@ class ToolkitPackRegistry_Test extends TestBase {
 	@Test void b13_replacement_wins_andDropsOldDependsOn() throws Exception {
 		var reg = new ToolkitPackRegistry();
 		reg.register(pack(ToolkitPackRegistry.PACK_DATATABLES, VENDOR, "/app/dt.js"));
-		var r = reg.validate().resolve(List.of(ToolkitPackRegistry.PACK_DATATABLES_GLUE), dummyRequest());
+		var r = reg.validate().resolve(List.of(ToolkitPackRegistry.PACK_DATATABLES_GLUE), dummyRequest(), List.of(), "");
 		assertList(files(r.vendorJs()), "dt.js", "juneau-datatables.js");
 		assertEmpty(r.vendorCss());
 	}
@@ -266,7 +282,7 @@ class ToolkitPackRegistry_Test extends TestBase {
 		var reg = new ToolkitPackRegistry();
 		reg.register(ToolkitPack.create("p").kind(VENDOR).js("x").resolver((req, path) -> { throw new IllegalStateException("needs org.example:p on the classpath."); }).build());
 		var req = dummyRequest();
-		var e = assertThrows(IllegalStateException.class, () -> reg.resolve(List.of("p"), req));
+		var e = assertThrows(IllegalStateException.class, () -> reg.resolve(List.of("p"), req, List.of(), ""));
 		assertString("Pack 'p' needs org.example:p on the classpath.", e.getMessage());
 	}
 

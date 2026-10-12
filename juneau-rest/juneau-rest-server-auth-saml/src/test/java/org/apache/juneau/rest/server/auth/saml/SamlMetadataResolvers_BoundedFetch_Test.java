@@ -20,8 +20,11 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.*;
 import java.net.*;
+import java.net.http.*;
+import java.nio.*;
 import java.nio.charset.*;
 import java.util.*;
+import java.util.concurrent.*;
 
 import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
@@ -31,7 +34,8 @@ import com.sun.net.httpserver.*;
 /**
  * Tests that {@link SamlMetadataResolvers#url(String)} bounds the remote metadata fetch to a byte cap, both
  * when the server declares an over-cap {@code Content-Length} up front and when it streams past the cap with
- * no declared length at all.
+ * no declared length at all.  Section D drives the body subscriber directly with scripted subscriptions to pin
+ * the signal orderings a live server cannot produce deterministically.
  *
  * @since 10.0.0
  */
@@ -120,5 +124,114 @@ class SamlMetadataResolvers_BoundedFetch_Test extends TestBase {
 				os.write(bytes);
 			}
 		}, url -> assertNotNull(SamlMetadataResolvers.url(url))));
+	}
+
+	// -----------------------------------------------------------------------------------------------------------------
+	// D: body subscriber under scripted signal orderings.
+	// -----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * A scripted {@link Flow.Subscription}: {@link #request(long)} and {@link #cancel()} run the supplied actions
+	 * synchronously on the calling thread, so reentrant deliveries happen deterministically.
+	 */
+	private static final class ScriptedSubscription implements Flow.Subscription {
+		private final Runnable onRequest;
+		private final Runnable onCancel;
+		private int cancels;
+
+		ScriptedSubscription(Runnable onRequest, Runnable onCancel) {
+			this.onRequest = onRequest;
+			this.onCancel = onCancel;
+		}
+
+		@Override /* Flow.Subscription */
+		public void request(long n) {
+			onRequest.run();
+		}
+
+		@Override /* Flow.Subscription */
+		public void cancel() {
+			cancels++;
+			onCancel.run();
+		}
+	}
+
+	/** Instantiates the private bounded body subscriber, so no production seam is needed to drive it. */
+	@SuppressWarnings({
+		"unchecked",
+		"java:S3011" // Reflective access to the private nested subscriber is test-only; it avoids a production seam.
+	})
+	private static HttpResponse.BodySubscriber<byte[]> boundedSubscriber(long maxBytes) throws Exception {
+		var c = Class.forName(SamlMetadataResolvers.class.getName() + "$BoundedByteArraySubscriber").getDeclaredConstructor(long.class);
+		c.setAccessible(true);
+		return (HttpResponse.BodySubscriber<byte[]>) c.newInstance(maxBytes);
+	}
+
+	private static List<ByteBuffer> chunk(int size) {
+		return List.of(ByteBuffer.wrap(new byte[size]));
+	}
+
+	private static void assertCapRejected(HttpResponse.BodySubscriber<byte[]> subscriber) {
+		var ex = assertThrows(ExecutionException.class, () -> subscriber.getBody().toCompletableFuture().get());
+		assertInstanceOf(IOException.class, ex.getCause());
+		assertTrue(ex.getCause().getMessage().contains("exceeds the 10-byte cap"), ex.getCause().getMessage());
+	}
+
+	@Test void d01_overCapChunkDeliveredInsideRequest_rejectedCleanly() throws Exception {
+		// The publisher delivers an over-cap chunk synchronously from within request(), before onSubscribe returns.
+		var subscriber = boundedSubscriber(10);
+		var subscription = new ScriptedSubscription(() -> subscriber.onNext(chunk(11)), () -> {});
+		assertDoesNotThrow(() -> subscriber.onSubscribe(subscription));
+		assertEquals(1, subscription.cancels);
+		assertCapRejected(subscriber);
+	}
+
+	@Test void d02_cancelCompletingSynchronously_stillRejected() throws Exception {
+		// A publisher that signals onComplete from inside cancel() must not let the truncated body through.
+		var subscriber = boundedSubscriber(10);
+		var subscription = new ScriptedSubscription(() -> {}, subscriber::onComplete);
+		subscriber.onSubscribe(subscription);
+		subscriber.onNext(chunk(5));
+		subscriber.onNext(chunk(6));
+		assertEquals(1, subscription.cancels);
+		assertCapRejected(subscriber);
+	}
+
+	@Test void d03_signalsAfterRejection_ignored() throws Exception {
+		var subscriber = boundedSubscriber(10);
+		var subscription = new ScriptedSubscription(() -> {}, () -> {});
+		subscriber.onSubscribe(subscription);
+		subscriber.onNext(chunk(11));
+		subscriber.onNext(chunk(11)); // late data after cancel()
+		subscriber.onComplete();      // late completion after cancel()
+		assertEquals(1, subscription.cancels);
+		assertCapRejected(subscriber);
+	}
+
+	@Test void d04_underCapChunks_accumulated() throws Exception {
+		var subscriber = boundedSubscriber(10);
+		var subscription = new ScriptedSubscription(() -> {}, () -> {});
+		subscriber.onSubscribe(subscription);
+		subscriber.onNext(List.of(ByteBuffer.wrap(new byte[] {1, 2}), ByteBuffer.wrap(new byte[] {3})));
+		subscriber.onNext(List.of(ByteBuffer.wrap(new byte[] {4, 5, 6, 7, 8, 9, 10})));
+		subscriber.onComplete();
+		assertEquals(0, subscription.cancels);
+		assertArrayEquals(new byte[] {1, 2, 3, 4, 5, 6, 7, 8, 9, 10}, subscriber.getBody().toCompletableFuture().get());
+	}
+
+	@Test void d05_secondOnSubscribe_cancelledAndIgnored() throws Exception {
+		var subscriber = boundedSubscriber(10);
+		var requests = new int[2];
+		var first = new ScriptedSubscription(() -> requests[0]++, () -> {});
+		var second = new ScriptedSubscription(() -> requests[1]++, () -> {});
+		subscriber.onSubscribe(first);
+		subscriber.onSubscribe(second);
+		assertEquals(1, second.cancels);
+		assertEquals(0, requests[1]);
+		// The first subscription stays in charge: an over-cap chunk cancels it, not the second.
+		subscriber.onNext(chunk(11));
+		assertEquals(1, first.cancels);
+		assertEquals(1, second.cancels);
+		assertCapRejected(subscriber);
 	}
 }

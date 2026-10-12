@@ -47,4 +47,8 @@ class TerminalCardType_Test extends TestBase {
 		assertEquals("<@card id='build'> type='terminal' requires a terminal object.", fail("{contractVersion:'1'}").getMessage());
 		assertEquals("TerminalDef 'build' bytesUrl is required.", fail("{contractVersion:'1', terminal:{}}").getMessage());
 	}
+
+	@Test void a03_acceptedRoles() {
+		assertEquals(Set.of("input-status"), new TerminalCardType().acceptedRoles());
+	}
 }

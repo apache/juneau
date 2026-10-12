@@ -17,7 +17,7 @@
 package org.apache.juneau.rest.client.okhttp;
 
 import java.io.*;
-import java.net.*;
+import java.util.*;
 
 import org.apache.juneau.rest.client.*;
 
@@ -28,17 +28,43 @@ import okhttp3.*;
  * origin as the result of a {@code 3xx} redirect.
  *
  * <p>
- * OkHttp's built-in redirect follower drops the {@code Authorization} header only when the target host
- * changes, but it keeps other credential headers (notably a caller-set {@code Cookie}) and does not account
- * for a differing port or an {@code https}&rarr;{@code http} downgrade.  Registered as a network interceptor,
- * this class runs for every hop of an exchange: it compares the hop's target against the origin of the
- * original call and strips the credential headers whenever they differ.
+ * OkHttp's built-in redirect follower drops the {@code Authorization} header only when the target origin
+ * changes, but it keeps other credential headers (notably a caller-set {@code Cookie}).  Registered as a network
+ * interceptor, this class runs for every hop of an exchange: it compares the hop's target against the origin of the
+ * first hop and, when they differ, strips the caller's credential header values.
  *
  * <p>
- * The forward/strip decision and the header set are delegated to {@link RedirectSecurity} so that all
- * transports share one policy.
+ * The first hop is the request as it leaves the client's application interceptors, recorded by
+ * {@link #FIRST_HOP_RECORDER} (registered as the last application interceptor).  It is not {@link Call#request()}:
+ * an application interceptor can rewrite the URL, and the rewritten URL is the origin the caller's credentials were
+ * sent to.  Without a recorded first hop, {@link Call#request()} is used.
+ *
+ * <p>
+ * Only values the caller sent on the first hop are stripped.  A header value OkHttp itself supplies for the new origin
+ * is kept: the target's own cookies loaded from the client's {@link CookieJar}, and credentials returned by the
+ * client's {@link Authenticator} or proxy {@link Authenticator}.
+ *
+ * <p>
+ * The origin is compared on OkHttp's own {@link HttpUrl} (scheme, host and effective port), with the same semantics
+ * as {@link RedirectSecurity#shouldStripCredentials(java.net.URI, java.net.URI)}.  {@link java.net.URI} cannot be used
+ * here: it parses a host name that OkHttp accepts but RFC 2396 does not (for example {@code my_service}, a typical
+ * Docker Compose service name) with a {@code null} host, which would strip credentials from every request to that host.
+ * The credential header set is delegated to {@link RedirectSecurity#stripOnCrossOrigin()} so that all transports share it.
  */
 final class OkHttpRedirectCredentialGuard implements Interceptor {
+
+	/**
+	 * Application interceptor that tags the request leaving the application interceptors as the first hop.
+	 *
+	 * <p>
+	 * OkHttp builds every retry and redirect hop with {@link Request#newBuilder()}, which carries the tag along.
+	 */
+	static final Interceptor FIRST_HOP_RECORDER = chain -> {
+		var request = chain.request();
+		return chain.proceed(request.newBuilder().tag(FirstHop.class, new FirstHop(request)).build());
+	};
+
+	private record FirstHop(Request request) {}
 
 	@Override /* Interceptor */
 	@SuppressWarnings({
@@ -46,23 +72,35 @@ final class OkHttpRedirectCredentialGuard implements Interceptor {
 	})
 	public Response intercept(Chain chain) throws IOException {
 		var request = chain.request();
-		var from = chain.call().request().url().uri();
-		var to = request.url().uri();
-		if (shouldStrip(from, to)) {
-			var b = request.newBuilder();
-			for (var name : RedirectSecurity.stripOnCrossOrigin())
+		var tag = request.tag(FirstHop.class);
+		var first = tag != null ? tag.request() : chain.call().request();
+		if (! sameOrigin(first.url(), request.url())) {
+			Request.Builder b = null;
+			for (var name : RedirectSecurity.stripOnCrossOrigin()) {
+				var values = request.headers(name);
+				var callerValues = first.headers(name);
+				if (values.isEmpty() || callerValues.isEmpty())
+					continue;
+				var kept = new ArrayList<>(values);
+				kept.removeAll(callerValues);
+				if (kept.size() == values.size())
+					continue;
+				if (b == null)
+					b = request.newBuilder();
 				b.removeHeader(name);
-			request = b.build();
+				for (var v : kept)
+					b.addHeader(name, v);
+			}
+			if (b != null)
+				request = b.build();
 		}
 		return chain.proceed(request);
 	}
 
-	private static boolean shouldStrip(URI from, URI to) {
-		try {
-			return RedirectSecurity.shouldStripCredentials(from, to);
-		} catch (RuntimeException e) {
-			// If the origins cannot be compared, err on the side of not forwarding credentials.
-			return true;
-		}
+	// HttpUrl always has a lower-case scheme (http/https), a non-null canonical (lower-case) host and an effective port
+	// (the scheme default when none is given), so the comparison is total.  An https->http downgrade changes the scheme,
+	// so it is never same-origin.
+	private static boolean sameOrigin(HttpUrl from, HttpUrl to) {
+		return from.scheme().equals(to.scheme()) && from.host().equals(to.host()) && from.port() == to.port();
 	}
 }

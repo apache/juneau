@@ -414,6 +414,18 @@
 	}
 
 	/**
+	 * The one prefix rule every same-origin / allowlist URL guard applies to the ORIGINAL string, before anything else
+	 * (never normalise and accept): true when the first or last character is a space or control character, or any
+	 * character is a backslash, a C0 control character or DEL.  A browser strips leading/trailing C0 and space,
+	 * deletes tab/CR/LF anywhere and reads a backslash as a slash, so each of those can turn a value that looks like a
+	 * same-origin path into "//host".  The text of this function is identical in every file that carries it
+	 * (checked by ViewsJs_SameOriginPath_Test) and mirrors SafePathTemplate.isSameOriginPath.  Callers handle the empty string.
+	 */
+	function hasUnsafeUrlChars(s) {
+		return s.charCodeAt(0) <= 32 || s.charCodeAt(s.length - 1) <= 32 || /[\\\u0000-\u001f\u007f]/.test(s);
+	}
+
+	/**
 	 * True when `url` contains a `..` path segment.  The ONE dot-dot predicate in this file - the
 	 * read path ({@link #isSafeDetailUrl}) and the row-action write path ({@link #buildActionRequest}) MUST agree,
 	 * so neither carries its own copy of the regex and the two can never drift apart.
@@ -429,6 +441,7 @@
 	function isSafeDetailUrl(url) {
 		if (url == null || String(url).trim() === "") return false;
 		const s = String(url);
+		if (hasUnsafeUrlChars(s)) return false;
 		if (s.indexOf("://") >= 0) return false;
 		if (s.startsWith("//")) return false;
 		const colon = s.indexOf(":");
@@ -828,6 +841,28 @@
 	/** Whether an action is presented as a modal dialog (`present=dialog`) - the declarative modal/form path. */
 	function isDialogAction(action) {
 		return action?.present === "dialog";
+	}
+
+	/**
+	 * Whether an action owes the user a prompt before it submits: it declares a `confirm` text or a `confirmRenderer`.
+	 * RowAction#confirm promises that prompt whatever `present` says; a literal `false` (RowAction#noConfirm) never
+	 * prompts.
+	 */
+	function needsConfirmPrompt(action) {
+		if (!action || action.confirm === false) return false;
+		return !isBlankToken(action.confirm) || !isBlankToken(action.confirmRenderer);
+	}
+
+	/**
+	 * The one row-action dispatch every activation surface shares (row-action menu, cell pill, detail ActionBar
+	 * button, rowActions.run): a present=dialog action opens its dialog; any other action that declares `confirm` or
+	 * `confirmRenderer` prompts first through the confirm-only dialog and submits only on Confirm; everything else is
+	 * the direct fail-closed submit.  `extra` reaches only the direct submit, as it always has for a dialog.
+	 */
+	function dispatchRowAction(action, table, tr, ctx, extra) {
+		if (isDialogAction(action)) return openActionDialog(action, table, tr, ctx);
+		if (needsConfirmPrompt(action)) return openConfirmOnlyDialog(action, table, tr, ctx);
+		return submitRowAction(action, table, tr, ctx, extra);
 	}
 
 	/**
@@ -2326,16 +2361,13 @@
 	};
 
 	/**
-	 * Whether `t` (already known to start with "/" or "\") is a protocol-relative URL once the obfuscation a
-	 * browser's WHATWG URL/HTML parser normalizes away is stripped: ASCII tab/CR/LF removed wherever they occur
-	 * (URL spec "remove all ASCII tab or newline from input"), and backslash treated as forward slash (a
-	 * special-scheme URL parser folds "\" into "/" before resolving).  A resulting SECOND slash right after the
-	 * first -- a literal "//host", a triple-slash "///host", a two-backslash "\\host", or an interior-obfuscated
-	 * "/\t/host" -- resolves to a THIRD-PARTY origin, not the same-site relative/absolute path a bare single
-	 * leading "/" is.  Used by both {@link #isSafeMarkdownHref} and {@link #isSafeImageSrc}.
+	 * Whether `t` (already known to start with "/") is a protocol-relative URL: a literal "//host" or a triple-slash
+	 * "///host" resolves to a THIRD-PARTY origin, not the same-site absolute path a bare single leading "/" is.  Every
+	 * caller has already refused a backslash, tab/CR/LF and every other control character through hasUnsafeUrlChars,
+	 * so there is nothing left to normalize here.
 	 */
 	function isProtocolRelativeUrl(t) {
-		return t.replaceAll(/[\t\r\n]/g, "").replaceAll("\\", "/").charAt(1) === "/";
+		return t.charAt(1) === "/";
 	}
 
 	/**
@@ -2355,7 +2387,7 @@
 	 * a phishing/open-redirect defense, not an XSS one: a protocol-relative URL cannot run JS.
 	 */
 	function isSafeMarkdownHref(href) {
-		if (href == null) return false;
+		if (href == null || hasUnsafeUrlChars(String(href))) return false;
 		const t = String(href).trim();
 		if (!t) return false;
 		const lower = t.toLowerCase();
@@ -2365,7 +2397,7 @@
 			return true;
 		if (t.startsWith("#"))
 			return true;
-		if (t.startsWith("/") || t.startsWith("\\"))
+		if (t.startsWith("/"))
 			return !isProtocolRelativeUrl(t);
 		return lower.indexOf(":") < 0;
 	}
@@ -2552,7 +2584,7 @@
 	 * to a THIRD-PARTY origin, which for an {@code <img>} is a silent tracking-pixel/pixel-leak fetch.
 	 */
 	function isSafeImageSrc(src) {
-		if (src == null) return false;
+		if (src == null || hasUnsafeUrlChars(String(src))) return false;
 		const t = String(src).trim();
 		if (!t) return false;
 		const lower = t.toLowerCase();
@@ -2560,7 +2592,7 @@
 			return false;
 		if (lower.startsWith("http://") || lower.startsWith("https://"))
 			return true;
-		if (t.startsWith("/") || t.startsWith("\\"))
+		if (t.startsWith("/"))
 			return !isProtocolRelativeUrl(t);
 		return !t.startsWith("#") && lower.indexOf(":") < 0;
 	}
@@ -3636,6 +3668,16 @@
 			n.setAttribute("id", ACTION_DESC_ID_PREFIX + suffix + ":" + n.getAttribute(ACTION_DESC_ATTR));
 	}
 
+	/** Whether `action` is listed in the row menu (a `present="inline"` action is fired from its pill / edit cell only). */
+	function isMenuRowAction(action) {
+		return action?.present !== "inline";
+	}
+
+	/** Whether the view has any action the row menu can list; when none, the actions column and its trigger are omitted. */
+	function hasMenuRowActions(viewDef) {
+		return !!viewDef?.rowActions?.some(isMenuRowAction);
+	}
+
 	function findRowActionById(viewDef, id) {
 		const actions = viewDef?.rowActions || [];
 		for (const a of actions)
@@ -3799,8 +3841,8 @@
 			const failing = firstFailingRowActionRule(action, rowData);
 			if (failing) disableRowActionPill(pill, failing.reason);
 		}
-		// The menu trigger has nothing to open when every action is hidden for this row.
-		const anyVisible = viewDef.rowActions.some(function (a) { return isRowActionVisible(a, rowData); });
+		// The menu trigger has nothing to open when every menu-listed action is hidden for this row (inline actions never count).
+		const anyVisible = viewDef.rowActions.some(function (a) { return isMenuRowAction(a) && isRowActionVisible(a, rowData); });
 		const trigger = rowEl.querySelector(".juneau-view-action-trigger");
 		if (trigger && !anyVisible) trigger.hidden = true;
 	}
@@ -3885,12 +3927,11 @@
 		if (actionBtn.disabled || actionBtn.hidden) return true;
 		const action = findRowActionById(viewDef, actionBtn.dataset.juneauAction);
 		if (!action) return true;
-		// A present=dialog action must open the SAME dialog seam the row-action menu / cell-pill paths use
-		// (isDialogAction -> openActionDialog -> ... -> submitActionDialog), not submit directly - otherwise the
-		// confirmation/form never shows and submitActionDialog's targetId/idempotencyKey attachment (:4609-4618)
-		// is skipped entirely.  Everything else keeps the pre-existing direct fail-closed submit.
-		if (isDialogAction(action)) openActionDialog(action, table, parentTr, ctx);
-		else submitRowAction(action, table, parentTr, ctx);
+		// The SAME dispatch the row-action menu / cell-pill paths use: a present=dialog action opens the dialog seam
+		// (openActionDialog -> ... -> submitActionDialog), an action with a confirm prompts first, and only the rest
+		// submit directly - otherwise the confirmation/form never shows and submitActionDialog's
+		// targetId/idempotencyKey attachment is skipped entirely.
+		dispatchRowAction(action, table, parentTr, ctx);
 		return true;
 	}
 
@@ -4588,7 +4629,7 @@
 		// The panel's OWN row-id stamp, and the reason it cannot be inherited: DataTables inserts a child row as a
 		// SIBLING `<tr>` of `tr`, not as a descendant of it, so nothing inside this panel is beneath the row element
 		// that carries `ROW_ID_ATTR`.  Every consumer that resolves a row id by `closest("[data-juneau-row-id]")` -
-		// `juneau-regions.js`'s own `readIds`, which feeds `region.ids.rowId` and therefore `resolveDeclaredUrl`'s
+		// `juneau-regions.js`'s own `readIds`, which feeds `region.ids.rowId` and therefore `substituteDeclaredUrl`'s
 		// `{id}` substitution - would otherwise read `null` here and either refuse the fetch or build a `/.../null/...`
 		// path.  Stamping the panel re-establishes the containment the child-row insertion breaks.
 		//
@@ -6204,7 +6245,8 @@
 	 * on a true answer; every other action keeps the built-in dialog, carrying `confirmLabel` and `tone`.
 	 */
 	function openConfirmOnlyDialog(action, table, tr, ctx) {
-		const resolved = resolveConfirmText(action.confirm, rowDataForTr(ctx, tr));
+		const rowData = rowDataForTr(ctx, tr);
+		const resolved = resolveConfirmText(action.confirm, rowData);
 		if (resolved.refuse) {
 			renderActionRefusalFor(tr, action, resolved.reason, ctx);
 			return;
@@ -6214,10 +6256,15 @@
 			showActionDialog(modal, action, table, tr, ctx);
 			return;
 		}
+		// The row, its label field and its id field reach the renderer the same way the bulk path passes them, so a
+		// per-row typed confirm can name the row it guards.  A ribbon-hosted dialog has no row: rows is empty.
 		confirmPipeline({
 			title: modal.title,
 			confirmLabel: action.confirmLabel || action.label || "Confirm",
 			tone: action.tone,
+			rows: rowData ? [rowData] : [],
+			labelField: ctx?.selectionState?.labelField ?? (table?.getAttribute?.(SELECT_LABEL_FIELD_ATTR) || null),
+			rowIdField: ctx?.selectionState?.rowIdField ?? table?.getAttribute?.(ROW_ID_FIELD_ATTR),
 			action: action
 		}).then(function (ok) {
 			if (ok) submitActionDialog(modal, action, table, tr, ctx, null);
@@ -7719,6 +7766,8 @@
 	 * routes to submitRowAction(...); a safe-method or token-less action still renders (so the menu is honest
 	 * about what is declared) but visibly refuses on activation rather than silently doing nothing.
 	 *
+	 * <p>A `present="inline"` action is never listed: it fires from its cell pill or edit cell only.
+	 *
 	 * <p>Each item is also gated on `action.enabledWhen` against this row's already-fetched data (rowDataForTr):
 	 * a failing item renders present but disabled with both reason channels, never removed from the menu, and its
 	 * click handler re-checks the SAME rule fresh before firing so a stale disabled state can never let a gated
@@ -7732,6 +7781,7 @@
 		const rowData = rowDataForTr(ctx, tr);
 		(viewDef.rowActions || []).forEach(function (action) {
 			if (!isRowActionVisible(action, rowData)) return;   // hidden for this row by visibleWhen
+			if (action.present === "inline") return;   // present=inline: fired from its pill / edit cell, never listed in the menu
 			const li = document.createElement("li");
 			li.setAttribute("role", "none");
 			const item = document.createElement("button");
@@ -7749,10 +7799,9 @@
 				const freshRow = rowDataForTr(ctx, tr);
 				if (!isRowActionVisible(action, freshRow) || firstFailingRowActionRule(action, freshRow)) return;
 				closeRowActionMenus(table);
-				// A present=dialog action opens the modal (confirmation + optional form) before its submit;
-				// everything else is the direct fail-closed submit.
-				if (isDialogAction(action)) openActionDialog(action, table, tr, ctx);
-				else submitRowAction(action, table, tr, ctx);
+				// A present=dialog action opens the modal (confirmation + optional form) before its submit, an
+				// action with a confirm prompts first, and everything else is the direct fail-closed submit.
+				dispatchRowAction(action, table, tr, ctx);
 			});
 			menu.appendChild(li);
 		});
@@ -7787,7 +7836,7 @@
 	 * Activates an action-bound cell pill ({@code <span data-juneau-pill role="button" data-juneau-action="<id>">}).
 	 * Resolves the row from the pill's {@code <tr>} (as the row-action menu resolves it from the trigger's row), looks
 	 * the action up via {@link #findRowActionById}, then takes the SAME confirm / {@code present=dialog} branch the
-	 * menu takes ({@link #isDialogAction} → {@link #openActionDialog}, else {@link #submitRowAction}) - so a pill can
+	 * menu takes ({@link #dispatchRowAction}) - so a pill can
 	 * never skip a confirmation or a form dialog.  A disabled pill (capability-gated or already in-flight) is ignored;
 	 * a `enabledWhen`-gated-and-failing pill is re-checked fresh here too (defense in depth alongside the visual gate
 	 * applyRowActionPillGates already applied at draw time), so a stale disabled state can never let it fire.
@@ -7804,8 +7853,7 @@
 		const rowData = rowDataForTr(ctx, tr);
 		if (!isRowActionVisible(action, rowData)) return;   // a hidden action never fires, even if the pill was un-hidden
 		if (firstFailingRowActionRule(action, rowData)) return;
-		if (isDialogAction(action)) openActionDialog(action, table, tr, ctx);
-		else submitRowAction(action, table, tr, ctx);
+		dispatchRowAction(action, table, tr, ctx);
 	}
 
 	function initRowActions(table, viewDef, ctx) {
@@ -7913,7 +7961,7 @@
 				row.insertBefore(selTh, after ? after.nextSibling : row.firstChild);
 			}
 		}
-		if (ctx.viewDef.rowActions?.length) {
+		if (hasMenuRowActions(ctx.viewDef)) {
 			appendActionsHeaderCell(table);
 		}
 	}
@@ -7998,7 +8046,7 @@
 			cols.push(sel);
 		}
 		catalogCols.forEach(function (c) { cols.push(c); });
-		if (viewDef.rowActions?.length) {
+		if (hasMenuRowActions(viewDef)) {
 			cols.push({
 				data: null,
 				_juneau: "actions",
@@ -10769,8 +10817,7 @@
 				return Promise.reject(new Error("E-JS-70"));
 			}
 			const ctx = rc.table.__juneauCtx;
-			if (isDialogAction(action)) return Promise.resolve(openActionDialog(action, rc.table, rc.tr, ctx));
-			return Promise.resolve(submitRowAction(action, rc.table, rc.tr, ctx, opts?.extra || {}));
+			return Promise.resolve(dispatchRowAction(action, rc.table, rc.tr, ctx, opts?.extra || {}));
 		},
 		open: function (action, rc) { return openActionDialog(action, rc.table, rc.tr, rc.table.__juneauCtx); },
 		submit: function (action, rc, extra) { return submitRowAction(action, rc.table, rc.tr, rc.table.__juneauCtx, extra || {}); },

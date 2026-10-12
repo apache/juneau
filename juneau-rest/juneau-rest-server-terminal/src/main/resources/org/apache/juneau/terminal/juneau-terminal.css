@@ -16,7 +16,8 @@
  */
 
 /*
- * juneau-terminal.css - chrome around the xterm.js screen: the control bar, the trimmed-start banner and the badge.
+ * juneau-terminal.css - chrome around the xterm.js screen: the control bar, the input toggle and chip, the trimmed-start
+ * banner and the badge.
  * xterm.css (the "xterm" toolkit pack) styles the screen itself.
  */
 
@@ -48,11 +49,13 @@
 	padding: 0 var(--jc-space-2, 8px);
 	border-radius: var(--jc-chrome-control-radius, 4px);
 	font-weight: 600;
-	background: var(--jc-tone-info, #e8f0fe);
+	background: var(--jc-tag-blue-bg, #e8f0fe);
+	color: var(--jc-tag-blue-text, #1a4971);
 }
 
 .juneau-term-ok {
-	background: var(--jc-tone-success, #e6f4ea);
+	background: var(--jc-tag-green-bg, #e6f4ea);
+	color: var(--jc-tag-green-text, #1f5b34);
 }
 
 .juneau-term-fail,
@@ -64,12 +67,31 @@
 .juneau-term-chip {
 	padding: 0 var(--jc-space-2, 8px);
 	border-radius: var(--jc-chrome-control-radius, 4px);
-	background: var(--jc-tone-warning, #fef7e0);
+	background: var(--jc-tag-amber-bg, #fef7e0);
+	color: var(--jc-tag-amber-text, #7a531a);
+}
+
+/* The input toggle: a plain button like Copy, with aria-pressed; pressed while input is live. */
+.juneau-term-input {
+	white-space: nowrap;
+}
+
+.juneau-term-input[aria-pressed="true"] {
+	font-weight: 600;
+	outline: 1px solid currentColor;
+}
+
+/* The input chip keeps the warning tone for refusals; "Input live" is neutral. */
+.juneau-term-chip--input[data-state="live"] {
+	background: transparent;
+	color: inherit;
+	box-shadow: inset 0 0 0 1px currentColor;
 }
 
 .juneau-term-banner {
 	padding: var(--jc-space-1, 4px) var(--jc-space-2, 8px);
-	background: var(--jc-tone-warning, #fef7e0);
+	background: var(--jc-tag-amber-bg, #fef7e0);
+	color: var(--jc-tag-amber-text, #7a531a);
 	font-size: var(--jc-chrome-font-size-1, 12px);
 }
 

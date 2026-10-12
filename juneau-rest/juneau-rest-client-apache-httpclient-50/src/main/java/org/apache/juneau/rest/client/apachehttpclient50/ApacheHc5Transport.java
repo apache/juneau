@@ -19,6 +19,7 @@ package org.apache.juneau.rest.client.apachehttpclient50;
 import java.io.*;
 
 import org.apache.hc.client5.http.config.*;
+import org.apache.hc.client5.http.cookie.*;
 import org.apache.hc.client5.http.impl.classic.*;
 import org.apache.hc.client5.http.protocol.*;
 import org.apache.hc.client5.http.impl.io.*;
@@ -63,32 +64,37 @@ import org.apache.juneau.rest.client.*;
 })
 public final class ApacheHc5Transport implements HttpTransport {
 
-	private static final ThreadLocal<Boolean> POLICY_ACTIVE = new ThreadLocal<>();
-
 	private final CloseableHttpClient httpClient;
-	private final boolean policySupported;
+	private final CloseableHttpClient pinnedHttpClient;
 
 	ApacheHc5Transport(ApacheHc5TransportBuilder builder) {
-		this.policySupported = builder.httpClient == null;
-		this.httpClient = builder.httpClient != null ? builder.httpClient : createDefaultHttpClient();
+		if (builder.httpClient != null) {
+			// A caller-supplied client cannot be given pin-on-connect, so supportsUrlPolicy() reports false for it.
+			this.httpClient = builder.httpClient;
+			this.pinnedHttpClient = null;
+		} else {
+			// Two clients, one per connection pool, sharing a cookie store so that cookies behave as on one client.
+			var cookieStore = new BasicCookieStore();
+			this.httpClient = HttpClients.custom()
+				.setDefaultCookieStore(cookieStore)
+				.build();
+			this.pinnedHttpClient = createPinnedHttpClient(cookieStore);
+		}
 	}
 
-	private static CloseableHttpClient createDefaultHttpClient() {
-		// A DnsResolver that pin-on-connects SSRF-guard-active @Remote connections (see PolicyPinningDnsResolver),
-		// and a RedirectStrategy that defers 3xx handling to PolicyEnforcedRedirects for the same requests -- both
-		// leave ordinary (non-@Remote) requests on this same client completely unaffected.
+	// The client for SSRF-guard-active @Remote requests.  Its connection manager is its own and resolves every host
+	// through PolicyPinningDnsResolver, so every connection in its pool was opened through the pin; a guarded request
+	// can never be handed an idle connection that an unguarded request opened.  Redirect handling is disabled so that
+	// PolicyEnforcedRedirects can revalidate every hop.
+	private static CloseableHttpClient createPinnedHttpClient(BasicCookieStore cookieStore) {
 		var connectionManager = PoolingHttpClientConnectionManagerBuilder.create()
 			.setDnsResolver(PolicyPinningDnsResolver.INSTANCE)
 			.build();
 		return HttpClients.custom()
 			.setConnectionManager(connectionManager)
-			.setRedirectStrategy(new PolicyAwareRedirectStrategy())
+			.setDefaultCookieStore(cookieStore)
+			.disableRedirectHandling()
 			.build();
-	}
-
-	// Package-visible for PolicyPinningDnsResolver / PolicyAwareRedirectStrategy.
-	static boolean isPolicyActive() {
-		return POLICY_ACTIVE.get() == Boolean.TRUE;
 	}
 
 	/**
@@ -113,29 +119,36 @@ public final class ApacheHc5Transport implements HttpTransport {
 	public TransportResponse execute(TransportRequest request) throws TransportException {
 		if (request.isSsrfGuardActive())
 			return executeWithPolicy(request);
-		return sendOnce(request);
+		return sendOnce(request, httpClient);
 	}
 
 	@Override /* HttpTransport */
 	public boolean supportsUrlPolicy() {
-		return policySupported;
+		return pinnedHttpClient != null;
 	}
 
-	// Activates pin-on-connect + Juneau-controlled redirect revalidation for the duration of the redirect chain.
+	// Juneau-controlled redirect revalidation for a guarded request; every hop goes through sendOncePinned.
 	private TransportResponse executeWithPolicy(TransportRequest request) throws TransportException {
-		POLICY_ACTIVE.set(Boolean.TRUE);
+		return PolicyEnforcedRedirects.execute(request, this::sendOncePinned);
+	}
+
+	// Performs one pin-on-connect hop on the pinned client.  A caller-supplied client has no pinned client, so its hops
+	// are sent unpinned on that client; RestRequest never routes a guarded request there (supportsUrlPolicy() is false).
+	// PolicyPinningDnsResolver refuses a host whose every address is denied with an IllegalArgumentException, which
+	// HttpClient propagates unchanged; it is reported as the documented TransportException.
+	private TransportResponse sendOncePinned(TransportRequest request) throws TransportException {
 		try {
-			return PolicyEnforcedRedirects.execute(request, this::sendOnce);
-		} finally {
-			POLICY_ACTIVE.remove();
+			return sendOnce(request, pinnedHttpClient != null ? pinnedHttpClient : httpClient);
+		} catch (IllegalArgumentException e) {
+			throw new TransportException("HTTP transport error: " + e.getMessage(), e);
 		}
 	}
 
-	private TransportResponse sendOnce(TransportRequest request) throws TransportException {
+	private static TransportResponse sendOnce(TransportRequest request, CloseableHttpClient client) throws TransportException {
 		var hcRequest = buildHcRequest(request);
 		ClassicHttpResponse hcResponse;
 		try {
-			hcResponse = httpClient.executeOpen(null, hcRequest, buildContext(request));
+			hcResponse = client.executeOpen(null, hcRequest, buildContext(request, client));
 		} catch (IOException e) {
 			throw new TransportException("HTTP transport error: " + e.getMessage(), e);
 		}
@@ -158,7 +171,12 @@ public final class ApacheHc5Transport implements HttpTransport {
 
 	@Override /* Closeable */
 	public void close() throws IOException {
-		httpClient.close();
+		try {
+			httpClient.close();
+		} finally {
+			if (pinnedHttpClient != null)
+				pinnedHttpClient.close();
+		}
 	}
 
 	// -----------------------------------------------------------------------------------------------------------------
@@ -166,13 +184,13 @@ public final class ApacheHc5Transport implements HttpTransport {
 	// -----------------------------------------------------------------------------------------------------------------
 
 	// Per-request response (socket read) timeout via a request-scoped RequestConfig; null context when no timeout is set.
-	private HttpClientContext buildContext(TransportRequest request) {
+	private static HttpClientContext buildContext(TransportRequest request, CloseableHttpClient client) {
 		var timeout = request.getTimeout();
 		if (timeout == null)
 			return null;
 		var context = HttpClientContext.create();
 		// A context-level RequestConfig replaces (not merges with) the client default, so copy the client's default first.
-		var base = httpClient instanceof Configurable c && c.getConfig() != null ? c.getConfig() : RequestConfig.DEFAULT;
+		var base = client instanceof Configurable c && c.getConfig() != null ? c.getConfig() : RequestConfig.DEFAULT;
 		context.setRequestConfig(RequestConfig.copy(base).setResponseTimeout(Timeout.ofMilliseconds(Math.max(1, timeout.toMillis()))).build());
 		return context;
 	}

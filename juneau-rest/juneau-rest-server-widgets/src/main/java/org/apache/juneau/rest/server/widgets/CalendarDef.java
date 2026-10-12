@@ -266,8 +266,7 @@ public class CalendarDef implements Widget {
 		var ids = new HashSet<String>();
 		if (categories != null)
 			for (var c : categories)
-				if (c != null && c.id != null)
-					ids.add(c.id);
+				ids.add(c.id);   // validateCategories() has already rejected null entries and null ids
 		return ids;
 	}
 

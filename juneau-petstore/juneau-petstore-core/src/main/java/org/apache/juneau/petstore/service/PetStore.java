@@ -74,8 +74,8 @@ public class PetStore {
 	/** Query context over orders. */
 	public static final InMemoryBeanQueryContext<Order> ORDER_QUERY = InMemoryBeanQueryContext.create(Order.class).build();
 
-	/** Query context over users; {@code password} is never searchable or returned as a column. */
-	public static final InMemoryBeanQueryContext<User> USER_QUERY = InMemoryBeanQueryContext.create(User.class).exclude("password").build();
+	/** Query context over users; {@code password} is write-only on {@link User}, so it is neither searchable nor a column. */
+	public static final InMemoryBeanQueryContext<User> USER_QUERY = InMemoryBeanQueryContext.create(User.class).build();
 
 	/** Query context over the audit trail. */
 	public static final InMemoryBeanQueryContext<AuditEntry> AUDIT_QUERY = InMemoryBeanQueryContext.create(AuditEntry.class).build();
@@ -401,10 +401,23 @@ public class PetStore {
 	 * @throws PetstoreNotFoundException If no order with the given ID exists.
 	 */
 	public void deleteOrder(long id, String actor) {
+		deleteOrder(id, actor, null);
+	}
+
+	/**
+	 * Cancels an order, recording the reason as the {@code DELETE} audit detail.
+	 *
+	 * @param id The order ID.
+	 * @param actor Who is cancelling it.
+	 * @param reason Why, or <jk>null</jk> or blank for none (the audit detail is then the order status).
+	 * @throws PetstoreNotFoundException If no order with the given ID exists.
+	 */
+	public void deleteOrder(long id, String actor, String reason) {
 		var removed = orders.remove(id);
 		if (removed == null)
 			throw new PetstoreNotFoundException("Order not found: id=" + id);
-		recordAudit(actor, ENTITY_ORDER, String.valueOf(id), ACTION_DELETE, String.valueOf(removed.getStatus()));
+		var detail = reason == null || reason.isBlank() ? String.valueOf(removed.getStatus()) : "cancelled: " + reason;
+		recordAudit(actor, ENTITY_ORDER, String.valueOf(id), ACTION_DELETE, detail);
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -474,6 +487,10 @@ public class PetStore {
 	/**
 	 * Replaces a user and records an {@code UPDATE} audit entry.
 	 *
+	 * <p>
+	 * The password is write-only and never read back, so a <jk>null</jk> or blank password on the replacement keeps the
+	 * stored one.
+	 *
 	 * @param user The user.  Must carry a username matching an existing user.
 	 * @param actor Who is updating it.
 	 * @return The stored user.
@@ -486,6 +503,9 @@ public class PetStore {
 			throw iaex("User username must not be null");
 		if (! users.containsKey(user.getUsername()))
 			throw new PetstoreNotFoundException("User not found: username=" + user.getUsername());
+		var pw = user.getPassword();
+		if (pw == null || pw.isBlank())
+			user.setPassword(users.get(user.getUsername()).getPassword());
 		users.put(user.getUsername(), user);
 		recordAudit(actor, "User", user.getUsername(), ACTION_UPDATE, user.getUsername());
 		return user;

@@ -372,4 +372,16 @@ class McpRevision_Test {
 		assertEquals(-32700, a.errorCode(McpErrorKind.PARSE_ERROR));
 		assertEquals("2025-06-18", a.protocolVersion());
 	}
+
+	@Test
+	void i01_toolsCall_handlerReturnsNullOutcome_nullResult() {
+		var handler = new McpToolHandler() {
+			@Override public McpToolSpec descriptor() { return new McpToolSpec().setName("n"); }
+			@Override public McpToolOutcome call(Map<String,Object> arguments, BeanStore ctx2) { return null; }
+		};
+		var req = new JsonRpcRequest().setId(1).setMethod("tools/call").setParams(JsonMap.of("name", "n"));
+		var result = new McpRevision(null).dispatch(new McpExchange(req, n -> null), new McpServerConfig().addTool(handler), ctx);
+		var response = ((McpResponseResult) result).response();
+		assertBean(response, "error,result", "<null>,<null>");
+	}
 }

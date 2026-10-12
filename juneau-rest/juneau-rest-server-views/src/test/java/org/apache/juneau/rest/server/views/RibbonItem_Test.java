@@ -244,11 +244,17 @@ class RibbonItem_Test extends TestBase {
 	}
 
 	@Test void a33_optionGroup_ownIgnoredKeys_rejected() {
-		for (var k : List.of("title", "symbol", "group")) {
+		for (var k : List.of("symbol", "group")) {
 			var g = RibbonItem.optionGroup("phase", RibbonItem.option("a"));
-			g = "title".equals(k) ? g.title("t") : "symbol".equals(k) ? g.symbol("s") : g.group("x");
+			g = "symbol".equals(k) ? g.symbol("s") : g.group("x");
 			assertIgnored("optionGroup", g, k);
 		}
+	}
+
+	@Test void a33b_optionGroup_title_emitted() {
+		var m = RibbonItem.optionGroup("phase", RibbonItem.option("a")).title("Phase").toMap();
+		assertEquals("Phase", m.get("title"));
+		RibbonItem.validate(Map.of("type", "optionGroup", "id", "g", "title", "Phase", "options", List.of(Map.of("id", "a"))));
 	}
 
 	@Test void a34_groupMember_ignoredKeys_rejected() {
@@ -308,5 +314,21 @@ class RibbonItem_Test extends TestBase {
 		assertTrue(none.getMessage().startsWith("RibbonItem requires a 'type'"), none.getMessage());
 		var num = assertThrows(IllegalArgumentException.class, () -> RibbonItem.validate(Map.of("type", 5)));
 		assertTrue(num.getMessage().startsWith("RibbonItem 'type' must be a string, not '5'"), num.getMessage());
+	}
+
+	@Test void a39_refresh_id_emitted() {
+		var m = RibbonItem.refresh().id("r").toMap();
+		assertEquals("r", m.get("id"));
+		assertEquals("pets-refresh", RibbonItem.collapseAll().id("pets-refresh").toMap().get("id"));
+	}
+
+	@Test void a40_id_rejectedWhereTheRuntimeIgnoresIt() {
+		assertIgnored("divider", RibbonItem.divider().id("x"), "id");
+		assertThrows(IllegalArgumentException.class, () -> RibbonItem.export("copy").id("x").toMap());
+	}
+
+	@Test void a41_id_blank_rejected() {
+		assertThrows(IllegalArgumentException.class, () -> RibbonItem.refresh().id(null));
+		assertThrows(IllegalArgumentException.class, () -> RibbonItem.refresh().id(" "));
 	}
 }

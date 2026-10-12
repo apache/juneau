@@ -523,7 +523,8 @@ public class MarkdownSerializerSession extends WriterSerializerSession implement
 
 		if (cm.isBean()) {
 			var bm = toBeanMap(first);
-			return bm.keySet().toArray(new String[0]);
+			// Skip write-only properties: they are never serialized, so they get no column.
+			return bm.keySet().stream().filter(k -> bm.getProperty(k).getMeta().canRead()).toArray(String[]::new);
 		}
 
 		// Non-bean map: collect keys from first entry

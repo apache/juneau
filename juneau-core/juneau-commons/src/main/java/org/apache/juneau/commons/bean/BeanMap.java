@@ -353,7 +353,7 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 		} else {
 			Map<String,BeanPropertyValue> actions = (meta.isUnsortedProperties() ? map() : sortedMap());
 
-			forEachProperty(x -> ! x.isDyna(), bpm -> {
+			forEachProperty(x -> ! x.isDyna() && x.canRead(), bpm -> {
 				try {
 					actions.put(bpm.getName(), new BeanPropertyValue(bpm, bpm.getName(), bpm.get(this, null), null));
 				} catch (Exception t) {
@@ -361,7 +361,7 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 				}
 			});
 
-			forEachProperty(BeanPropertyMeta::isDyna, bpm -> {
+			forEachProperty(x -> x.isDyna() && x.canRead(), bpm -> {
 				Map<String,Object> dynaMap;
 				try {
 					dynaMap = bpm.getDynaMap(bean);

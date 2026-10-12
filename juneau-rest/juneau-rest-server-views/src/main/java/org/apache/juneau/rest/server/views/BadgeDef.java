@@ -20,6 +20,8 @@ import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.util.*;
 
+import org.apache.juneau.commons.http.*;
+
 /**
  * A count badge in the page contract, fed by a JSON endpoint and polled by {@code juneau-badges.js}.
  *
@@ -106,6 +108,7 @@ public final class BadgeDef {
 	private String href;
 	private String stateFilterColumn;
 	private List<String> refreshes;
+	private List<String> refreshesAllowMissing;
 	private Placement placement;
 	private String table;
 	private Tone tone;
@@ -132,7 +135,8 @@ public final class BadgeDef {
 	/**
 	 * Sets the same-origin endpoint this badge polls.
 	 *
-	 * @param value The endpoint path.  Checked for presence, not shape, by {@link #validate()} (E-61).
+	 * @param value The endpoint path.  Checked by {@link #validate()}: present (E-61) and a same-origin path per
+	 * 	{@link SafePathTemplate#isSameOriginPath(String)}.
 	 * @return This object.
 	 */
 	public BadgeDef src(String value) {
@@ -208,8 +212,9 @@ public final class BadgeDef {
 	/**
 	 * Sets the click-target URL (§4.6).
 	 *
-	 * @param value The destination.  A same-origin path is strongly recommended; the C1 URL safety check applies
-	 * 	client-side regardless (an unsafe {@code href} is dropped with E-JS-9).
+	 * @param value The destination.  Must be a same-origin path per {@link SafePathTemplate#isSameOriginPath(String)};
+	 * 	{@link #validate()} rejects anything else, and {@code juneau-badges.js} refuses an unsafe {@code href} again at
+	 * 	run time (E-JS-82).
 	 * @return This object.
 	 */
 	public BadgeDef href(String value) {
@@ -233,11 +238,32 @@ public final class BadgeDef {
 	 * Sets the card ids to {@code JuneauViews.tables.reload(el, {resetPaging: false})} when a previously-seen
 	 * item id drains from the badge's response (§4.1 step 6).
 	 *
+	 * <p>
+	 * Every id here must name a card on the page being rendered, unless it is also listed in
+	 * {@link #refreshesAllowMissing(String...)}.
+	 *
 	 * @param value The card ids, in reload order.
 	 * @return This object.
 	 */
 	public BadgeDef refreshes(String...value) {
 		refreshes = l(value);
+		return this;
+	}
+
+	/**
+	 * Sets card ids, added to {@link #refreshes}, that are allowed to be absent from the page being rendered.
+	 *
+	 * <p>
+	 * A page normally rejects a {@code refreshes} id that names no card on it, which catches typos at build time.  Use this
+	 * for a header badge that refreshes a card living on another page: the client skips a card that is not mounted.  The
+	 * ids named here are exempt from that check; every id passed to {@link #refreshes} stays strict.  The name follows the
+	 * {@code refreshes} / {@code stateFilter} noun style of this builder: the opt-in is per id, not a page-wide switch.
+	 *
+	 * @param value The card ids that may live on another page.
+	 * @return This object.
+	 */
+	public BadgeDef refreshesAllowMissing(String...value) {
+		refreshesAllowMissing = l(value);
 		return this;
 	}
 
@@ -290,7 +316,7 @@ public final class BadgeDef {
 	 * Validates this definition.
 	 *
 	 * <p>
-	 * Enforces E-61 (no {@link #src}), E-62 ({@link #refreshMs} below {@link #MIN_REFRESH_MS}), E-66
+	 * Enforces E-61 (no {@link #src}), a same-origin {@link #src} and {@link #href}, E-62 ({@link #refreshMs} below {@link #MIN_REFRESH_MS}), E-66
 	 * ({@link Placement#TOOLBAR} without {@link #table}), and R-7 (uncoded: {@link ScopeBy#VIEW} without
 	 * {@link #table}).  R-6's "table/refreshes name a real card id" and R-8's "scope.values key is a real nav
 	 * node id" need the rest of the page and run in {@code PageCapture} at {@code </@console>} instead (§4.10).
@@ -300,6 +326,10 @@ public final class BadgeDef {
 	public void validate() {
 		if (src == null || src.isBlank())
 			throw iaex("<@badge id='%s'> requires src=.", id);
+		if (! SafePathTemplate.isSameOriginPath(src))
+			throw iaex("<@badge id='%s'> src must be a same-origin path; got '%s'.", id, src);
+		if (href != null && ! SafePathTemplate.isSameOriginPath(href))
+			throw iaex("<@badge id='%s'> href must be a same-origin path; got '%s'.", id, href);
 		if (refreshMs != null && refreshMs < MIN_REFRESH_MS)
 			throw iaex("'%s' refreshMs='%s' is below the minimum '%s'.", id, refreshMs, MIN_REFRESH_MS);
 		if (placement == Placement.TOOLBAR && (table == null || table.isBlank()))
@@ -339,8 +369,16 @@ public final class BadgeDef {
 			m.put("href", href);
 		if (stateFilterColumn != null)
 			m.put("stateFilter", Map.of("column", stateFilterColumn));
-		if (refreshes != null && !refreshes.isEmpty())
-			m.put("refreshes", refreshes);
+		if (refreshes != null && !refreshes.isEmpty() || refreshesAllowMissing != null && !refreshesAllowMissing.isEmpty()) {
+			var all = new LinkedHashSet<String>();
+			if (refreshes != null)
+				all.addAll(refreshes);
+			if (refreshesAllowMissing != null)
+				all.addAll(refreshesAllowMissing);
+			m.put("refreshes", new ArrayList<>(all));
+		}
+		if (refreshesAllowMissing != null && !refreshesAllowMissing.isEmpty())
+			m.put("refreshesAllowMissing", refreshesAllowMissing);
 		if (placement != null)
 			m.put("placement", placement.wire());
 		if (table != null)

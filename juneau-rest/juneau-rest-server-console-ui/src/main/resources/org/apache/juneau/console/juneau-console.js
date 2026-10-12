@@ -61,7 +61,9 @@
 		"E-JS-41": "card '%s' subscribes to '%s', which is declared publisher=script, but no page script declared it by DOMContentLoaded",
 		"E-JS-46": "page wires topics but juneau-bus.js is not loaded",
 		"E-JS-48": "card '%s' (type '%s') has no op '%s'",
-		"E-JS-51": "map path '%s' in card '%s' resolved to a non-scalar"
+		"E-JS-51": "map path '%s' in card '%s' resolved to a non-scalar",
+		"E-JS-83": "card '%s' %s resolved to a URL that is not a same-origin path: '%s'",
+		"E-JS-84": "fetchJson refused a URL that is not a same-origin URL or path: '%s'"
 	};
 
 	class JuneauConsoleError extends Error {
@@ -157,38 +159,43 @@
 	}
 
 	/**
-	 * Whether `t` (already known to start with "/" or "\") is a protocol-relative URL once the obfuscation a
-	 * browser's WHATWG URL/HTML parser normalizes away is stripped: ASCII tab/CR/LF removed wherever they occur
-	 * (URL spec "remove all ASCII tab or newline from input"), and backslash treated as forward slash (a
-	 * special-scheme URL parser folds "\" into "/" before resolving). A resulting SECOND slash right after the
-	 * first - a literal "//host", a triple-slash "///host", a two-backslash "\\host", or an interior-obfuscated
-	 * "/\t/host" - resolves to a THIRD-PARTY origin, not the same-site relative/absolute path a bare single
-	 * leading "/" is. Local duplicate of juneau-views.js's identically-named helper: console-ui
-	 * must not depend on views (the module graph runs the other way), so the algorithm is copied verbatim here
-	 * rather than imported.
+	 * The one prefix rule every same-origin / allowlist URL guard applies to the ORIGINAL string, before anything else
+	 * (never normalise and accept): true when the first or last character is a space or control character, or any
+	 * character is a backslash, a C0 control character or DEL.  A browser strips leading/trailing C0 and space,
+	 * deletes tab/CR/LF anywhere and reads a backslash as a slash, so each of those can turn a value that looks like a
+	 * same-origin path into "//host".  The text of this function is identical in every file that carries it
+	 * (checked by ViewsJs_SameOriginPath_Test) and mirrors SafePathTemplate.isSameOriginPath.  Callers handle the empty string.
+	 */
+	function hasUnsafeUrlChars(s) {
+		return s.charCodeAt(0) <= 32 || s.charCodeAt(s.length - 1) <= 32 || /[\\\u0000-\u001f\u007f]/.test(s);
+	}
+
+	/**
+	 * Whether `t` (already known to start with "/") is a protocol-relative URL: a literal "//host" or a triple-slash
+	 * "///host" resolves to a THIRD-PARTY origin, not the same-site absolute path a bare single leading "/" is.  Every
+	 * caller has already refused a backslash, tab/CR/LF and every other control character through hasUnsafeUrlChars,
+	 * so there is nothing left to normalize here.
 	 */
 	function isProtocolRelativeUrl(t) {
-		return t.replace(/[\t\r\n]/g, "").replace(/\\/g, "/").charAt(1) === "/";
+		return t.charAt(1) === "/";
 	}
 
 	/**
 	 * Whether `href` is safe to copy onto an href/src attribute: http(s), mailto, a fragment, or a path
-	 * (relative or absolute, but NOT protocol-relative - see {@link isProtocolRelativeUrl}). javascript:/data:/
-	 * vbscript: are rejected by the explicit prefix check below, but that check is NOT the load-bearing defense
-	 * against an obfuscated spelling of one of those schemes (e.g. "java\tscript:", "da\nta:") - a browser's URL
-	 * parser strips ASCII tab/newline/CR before resolving, so a literal prefix match on the un-stripped string
-	 * can miss it. What actually catches that case is the final fallback below: `indexOf(":") < 0` on the
-	 * embedded-control-stripped, lowercased string - an obfuscated scheme still contains a colon and matches
-	 * none of the three allowed absolute prefixes, so it still fails closed. A leading "/" or "\" is accepted
-	 * ONLY when {@link isProtocolRelativeUrl} says it is not protocol-relative - a bare "//evil.example/x"
+	 * (relative or absolute, but NOT protocol-relative - see {@link isProtocolRelativeUrl}). A value with a backslash,
+	 * a control character, or a leading/trailing space is refused outright by {@link hasUnsafeUrlChars} before
+	 * anything else, so an obfuscated spelling such as "java\tscript:" never gets this far. javascript:/data:/
+	 * vbscript: are then rejected by the explicit prefix check below, and the final `indexOf(":") < 0` fallback
+	 * fails closed for any other scheme - it matches none of the three allowed absolute prefixes. A leading "/" is
+	 * accepted ONLY when {@link isProtocolRelativeUrl} says it is not protocol-relative - a bare "//evil.example/x"
 	 * resolves to a THIRD-PARTY origin, not the "relative path" a naive check would accept it as (a
 	 * phishing/open-redirect defense, not an XSS one - a protocol-relative URL cannot run JS). Mirrors
 	 * juneau-views.js's isSafeMarkdownHref; duplicated rather than imported for the same
 	 * module-graph reason as {@link isProtocolRelativeUrl} above.
 	 */
 	function isSafeHref(href) {
-		if (typeof href !== "string") return false;
-		const t = href.replace(/[\t\r\n]/g, "").trim();
+		if (typeof href !== "string" || hasUnsafeUrlChars(href)) return false;
+		const t = href.trim();
 		if (!t) return false;
 		const lower = t.toLowerCase();
 		if (lower.startsWith("javascript:") || lower.startsWith("data:") || lower.startsWith("vbscript:"))
@@ -197,7 +204,7 @@
 			return true;
 		if (t.charAt(0) === "#")
 			return true;
-		if (t.charAt(0) === "/" || t.charAt(0) === "\\")
+		if (t.charAt(0) === "/")
 			return !isProtocolRelativeUrl(t);
 		return lower.indexOf(":") < 0;
 	}
@@ -627,8 +634,26 @@
 		return !!err && (err.name === "AbortError" || err.code === 20);
 	}
 
+	// A same-origin path, or an absolute http(s) URL on this page's origin (the job-log card hands its cancel URL over
+	// in that form).  Anything with a backslash, control character or edge space is refused before the origin compare.
+	function isSafeFetchUrl(url) {
+		if (isSafeChromeEndpoint(url)) return true;
+		if (typeof url !== "string" || !url || hasUnsafeUrlChars(url)) return false;
+		try {
+			const u = new URL(url);
+			return (u.protocol === "http:" || u.protocol === "https:") && u.origin === window.location.origin;
+		} catch (e) {
+			return false;
+		}
+	}
+
 	function makeFetchJson(doc, state) {
 		return function fetchJson(url, init) {
+			if (!isSafeFetchUrl(url)) {
+				const msg = fmt(MSG["E-JS-84"], url);
+				console.error("[juneau-console] E-JS-84 " + msg);
+				return Promise.reject(new Error("E-JS-84 " + msg));
+			}
 			if (state.inflight) state.inflight.abort();
 			const controller = new AbortController();
 			state.inflight = controller;
@@ -844,6 +869,15 @@
 		clearBody(state.el);
 	}
 
+	// The first resolved src / dataUrl / table.dataUrl that is not a same-origin path, as {what, url}; null when all are fine.
+	// A {token} that fills to "" turns "/{id}/x" into "//x", a protocol-relative URL to another host.
+	function unsafeResolved(card) {
+		const urls = [["src", card.src], ["dataUrl", card.dataUrl], ["table.dataUrl", tableView(card).dataUrl]];
+		for (const [what, u] of urls)
+			if (typeof u === "string" && !isSafeFetchUrl(u)) return { what: what, url: u };
+		return null;
+	}
+
 	function applyParams(doc, state) {
 		const next = resolveCard(state.origCard, state.params);
 		const key = urlKey(next);
@@ -851,6 +885,11 @@
 		state.paramsKey = key;
 		unrender(doc, state);
 		setPhase(state, "pending");
+		const bad = hasTokens(next) ? null : unsafeResolved(next);
+		if (bad) {
+			state.card = state.origCard;
+			return paintCardError(doc, state, "E-JS-83", fmt(MSG["E-JS-83"], state.origCard.id, bad.what, bad.url));
+		}
 		if (hasTokens(next)) {
 			state.card = state.origCard;
 			paintAwaiting(doc, state);
@@ -1456,7 +1495,7 @@
 	 * region is never row-scoped, so a "{id}" template is meaningless here and is rejected.
 	 */
 	function isSafeChromeEndpoint(path) {
-		if (typeof path !== "string" || path.length === 0) return false;
+		if (typeof path !== "string" || path.length === 0 || hasUnsafeUrlChars(path)) return false;
 		if (path.indexOf("{") >= 0) return false;                 // no template placeholder
 		if (path.indexOf("://") >= 0) return false;               // absolute URL
 		if (path.startsWith("//")) return false;                  // protocol-relative

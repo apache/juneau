@@ -1421,3 +1421,51 @@ body::after {
 .juneau-view-toggle::after {
   background-color: var(--jc-white);
 }
+
+/* ==========================================================================
+   Chart card (juneau-charts.js)
+   ========================================================================== */
+
+.jc-chart { margin: 0; }
+.jc-chart-caption { font-size: 0.75rem; color: var(--jc-text-muted); margin-bottom: var(--jc-space-2); }
+.jc-chart-plot { width: 100%; }
+.jc-chart-svg { display: block; width: 100%; height: auto; overflow: visible; }
+.jc-chart-gridline { stroke: var(--jc-border); stroke-width: 1; }
+.jc-chart-tick,
+.jc-chart-xlabel,
+.jc-chart-center { fill: var(--jc-text-muted); font-size: 11px; }
+.jc-chart-center { fill: var(--jc-text); font-size: 20px; font-weight: 700; }
+.jc-chart-line { stroke-width: 2; }
+.jc-chart-hit { fill: transparent; cursor: pointer; }
+.jc-chart-bar,
+.jc-chart-slice { cursor: pointer; }
+.jc-chart-hit:focus-visible,
+.jc-chart-slice:focus-visible { outline-offset: 2px; }
+.jc-chart-legend-list { display: flex; flex-wrap: wrap; gap: var(--jc-space-3); list-style: none; margin: var(--jc-space-2) 0 0; padding: 0; }
+.jc-chart--legend-right { display: grid; grid-template-columns: 1fr auto; gap: var(--jc-space-3); }
+.jc-chart--legend-right .jc-chart-legend-list { flex-direction: column; margin-top: 0; }
+.jc-chart-legend-item { display: inline-flex; align-items: center; gap: var(--jc-space-2); font-size: 0.8125rem; color: var(--jc-text); }
+.jc-chart-swatch { display: inline-block; width: 10px; height: 10px; border-radius: 2px; }
+.jc-chart-toggle { margin-top: var(--jc-space-2); font-size: 0.75rem; }
+.jc-chart-table { border-collapse: collapse; margin-top: var(--jc-space-2); font-size: 0.8125rem; }
+.jc-chart-table th,
+.jc-chart-table td { padding: 2px 8px; text-align: left; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: var(--jc-border); }
+.jc-chart-empty { color: var(--jc-text-muted); margin: 0; }
+.jc-chart--stale { opacity: 0.6; }
+
+/* ==========================================================================
+   Job-log card (juneau-joblog.js)
+   ========================================================================== */
+
+.jc-joblog-form { display: flex; flex-wrap: wrap; align-items: flex-end; gap: var(--jc-space-3); margin-bottom: var(--jc-space-3); }
+.jc-joblog-field { display: flex; flex-direction: column; gap: 2px; font-size: 0.8125rem; color: var(--jc-text); }
+.jc-joblog-input { background-color: var(--jc-control-bg); border-width: 1px; border-style: solid; border-color: var(--jc-control-border); border-radius: var(--jc-radius); padding: 4px 8px; font: inherit; }
+textarea.jc-joblog-input { min-width: 16rem; min-height: 3rem; }
+.jc-joblog-actions { display: flex; gap: var(--jc-space-2); }
+.jc-joblog-banner { margin-bottom: var(--jc-space-2); padding: 6px 10px; border-width: 1px; border-style: solid; border-radius: var(--jc-radius); font-size: 0.875rem; }
+.jc-joblog-banner.jc-joblog-ok      { background-color: var(--jc-tag-green-bg); color: var(--jc-tag-green-text); border-color: var(--jc-tag-green-border); }
+.jc-joblog-banner.jc-joblog-error   { background-color: var(--jc-tag-red-bg);   color: var(--jc-tag-red-text);   border-color: var(--jc-tag-red-border); }
+.jc-joblog-banner.jc-joblog-warning { background-color: var(--jc-tag-amber-bg); color: var(--jc-tag-amber-text); border-color: var(--jc-tag-amber-border); }
+.jc-joblog-output { margin: 0; padding: var(--jc-space-2); overflow: auto; box-sizing: border-box; background-color: var(--jc-control-bg); border-width: 1px; border-style: solid; border-color: var(--jc-border); border-radius: var(--jc-radius); font-family: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, monospace; font-size: 0.8125rem; white-space: pre-wrap; }
+.jc-joblog-line { display: block; }
+.jc-joblog-notice { color: var(--jc-text-muted); font-style: italic; }

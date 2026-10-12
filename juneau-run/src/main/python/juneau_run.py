@@ -12,7 +12,7 @@
 # * specific language governing permissions and limitations under the License.
 # ***************************************************************************************************************************
 """
-Run wrapper: run-protocol v1 markers, output routing and tool-output parsers for Maven, pytest and Playwright.
+Run wrapper: run-protocol v1 markers, output routing and tool-output parsers for Maven, pytest, Playwright, Gradle and npm.
 
 Stdlib-only and standalone, so it can be copied or loaded from anywhere.  Every marker function is a no-op
 unless the environment has RUN_MARKERS=1; the open-line helpers (open_line, append, dot, set_tail, close_line)
@@ -20,7 +20,7 @@ always write.  A marker always starts on a fresh line.  Sections, in order: mark
 
 CLI:  python3 juneau_run.py [--console full|condensed|none] [--full-log PATH] [--condensed-log PATH]
                             [--step ID] [--title T] [--pty --events PATH [--size CxR]]
-                            <maven|pytest|playwright|generic> -- <cmd...>
+                            <maven|pytest|playwright|gradle|npm|generic> -- <cmd...>
 
 With --pty the tool runs under a pseudo-terminal of the given size (default 120x40); its raw bytes go to --full-log,
 the size to <full-log>.size, and run-view events (not ##run markers) to the --events JSONL file.  POSIX only.
@@ -102,6 +102,11 @@ def _out(text):
     sys.stdout.write(text)
     sys.stdout.flush()
     _at_line_start = text.endswith("\n")
+
+
+def _colour_stdout():
+    """True when stdout is a terminal and NO_COLOR is unset."""
+    return not os.environ.get("NO_COLOR") and getattr(sys.stdout, "isatty", lambda: False)()
 
 
 def _seen(ends_line):
@@ -354,7 +359,16 @@ PLAIN_GLYPHS = {"pass": "#", "fail": "F", "skip": "."}
 NO_COLOR_GLYPHS = {"pass": "█", "fail": "F", "skip": "·"}
 COLOR_GLYPHS = {"pass": "\x1b[32m█\x1b[0m", "fail": "\x1b[31m█\x1b[0m", "skip": "\x1b[2m█\x1b[0m"}
 PENDING = "░"
+DOT_GLYPHS = {"pass": "•", "fail": "F", "skip": "·"}
+COLOR_DOT_GLYPHS = {"pass": "\x1b[32m•\x1b[0m", "fail": "\x1b[31m✗\x1b[0m", "skip": "\x1b[2m•\x1b[0m"}
+_MARK_COLORS = {"✓": "\x1b[32m✓\x1b[0m", "✗": "\x1b[31m✗\x1b[0m"}
+_MARK_RE = re.compile("(?<!m)[✓✗]")   # not one already coloured (right after an SGR escape)
 _NOTE_PREFIX = {"info": "ℹ", "warn": "⚠", "error": "✗"}
+
+
+def tint(text):
+    """text with its ✓ marks green and its ✗ marks red."""
+    return _MARK_RE.sub(lambda m: _MARK_COLORS[m.group()], text)
 
 
 def fmt_elapsed(ms):
@@ -427,6 +441,7 @@ class _Row:
         self.poms = set()
         self.tests_mode = False
         self.quiet = 0          # seconds the tool has been silent, from the watchdog
+        self.progress = None    # live progress text from the tool's own output; shown on the running row only
 
     @property
     def running(self):
@@ -582,16 +597,24 @@ class Board:
         has_tests = bool(m.totals and m.totals[0])
         return [("module", r, m)] if shows_module(self.detail, failed, has_tests) else []
 
+    def _on_step_progress(self, f):
+        r = self._target(f["step"])
+        if r is not None:
+            r.progress = f["text"]
+        return []
+
     def _on_step_end(self, f):
         if f["id"] not in self.rows and f["id"] in self.module_rows:
             if f["id"] in self.aliases:
                 self.module_rows[f["id"]].quiet = 0     # a sub-row's tool exited: its parent row is not silent
+                self.module_rows[f["id"]].progress = None
             return self._on_module_end({"step": self.module_rows[f["id"]].id, "module": f["id"],
                                         "status": f["status"], "ms": f["ms"], "totals": f.get("totals")})
         if f["id"] not in self.rows and f["id"] in self.aliases:
             r = self._target(f["id"])   # a sub-row whose tool took over the parent's bar; the parent ends later
             if r is not None:
                 r.quiet = 0     # the tool exited: nothing is silent any more
+                r.progress = None
                 if f.get("totals"):
                     r.totals = _totals(f["totals"])
             return []
@@ -600,6 +623,7 @@ class Board:
             return []
         r.status, r.ms = f["status"], f["ms"]
         r.quiet = 0     # the tool exited while silent: no quiet(0) follows
+        r.progress = None
         if f.get("summary") is not None:
             r.summary = f["summary"]
         if f.get("totals"):
@@ -813,6 +837,7 @@ class LiveRenderer:
         self.clock = clock
         self.color = color
         self.glyphs = COLOR_GLYPHS if color else NO_COLOR_GLYPHS
+        self.dots = COLOR_DOT_GLYPHS if color else DOT_GLYPHS     # one per test class on a module's sub-lines
         self.height = 0             # lines of the region now on screen
         self.last_draw = None
         self.paused = False
@@ -854,6 +879,8 @@ class LiveRenderer:
         cells, rest, elapsed = row_cells(r, self.glyphs, self.clock(), pending)
         if pending and r.quiet:
             rest += f" · quiet {r.quiet}s"
+        if r.running and r.progress:
+            rest = f"{rest} · {r.progress}" if rest else r.progress
         return _fit_row(r.label.ljust(board.width()), cells, rest, elapsed, cols)
 
     def _flush(self, lines):
@@ -862,7 +889,7 @@ class LiveRenderer:
             if self.prompting:
                 self.write("\n")           # end the prompt's partial line first; the prompt is no longer on it
                 self.prompting = False
-            self.write("".join(line + "\n" for line in lines))
+            self.write("".join(self._tint(line) + "\n" for line in lines))
 
     def tick(self, board):
         self.board = board
@@ -888,7 +915,7 @@ class LiveRenderer:
     def _sub_lines(self, m, cols):
         prefix = f"  {_vcut(m.title, max(1, cols // 2))}  "
         per = max(1, cols - _vlen(prefix))
-        cells = [self.glyphs[o] for o in m.outcomes]
+        cells = [self.dots[o] for o in m.outcomes]
         cap = per * self.MAX_SUB_LINES
         if len(cells) > cap:
             width = len(f"… +{len(cells)} ")
@@ -911,11 +938,14 @@ class LiveRenderer:
             self.cursor_hidden = True
         if self.height:
             out.append(f"\x1b[{self.height}A")
-        out += [line + "\x1b[K\n" for line in lines]
+        out += [self._tint(line) + "\x1b[K\n" for line in lines]
         out.append("\x1b[J")
         self.write("".join(out))
         self.height = len(lines)
         self.last_draw = now
+
+    def _tint(self, line):
+        return tint(line) if self.color else line
 
     def _clear(self):
         if self.height:
@@ -1165,12 +1195,14 @@ def session(title, header=(), *, detail=None, sinks=None):
     _console = subscribe(Console(sinks, detail, nested=nested))
     os.environ[SESSION_ENV] = "1"   # only once the console is up, so a failed start leaves children un-nested
     atexit.register(_end_session)
+    if not nested and sinks.full_path is not None and sinks.full_path.parent == full_log_dir():
+        prune_full_logs()
     try:
         if signal.getsignal(signal.SIGTERM) == signal.SIG_DFL:
             signal.signal(signal.SIGTERM, _sigterm)
     except ValueError:  # not the main thread
         pass
-    lines = list(header) + ([f"full log: {sinks.full_path}"] if sinks.full_path is not None else [])
+    lines = list(header) + ([f"tail -f {shlex.quote(str(sinks.full_path))}"] if sinks.full_path is not None else [])
     publish("session", title=title, header=lines, nested=nested)
     return _console
 
@@ -1213,6 +1245,12 @@ def _paused():
         _pause_depth -= 1
         if _console is not None and _pause_depth == 0:
             _console.resume()
+
+
+def paused():
+    """Pause the console view for the block, so a prompt or an interactive child isn't drawn over.  Nests; a no-op
+    with no session."""
+    return _paused()
 
 
 def ask(prompt):
@@ -1309,14 +1347,47 @@ def warn(text):
     print(f"juneau-run: {text}", file=sys.stderr, flush=True)
 
 
+FULL_LOG_KEEP = 20
+
+
+def full_log_dir():
+    """Where condensed mode's default full logs go: $JUNEAU_RUN_LOG_DIR, else ~/.cache/juneau-run."""
+    return Path(os.environ.get("JUNEAU_RUN_LOG_DIR") or Path.home() / ".cache" / "juneau-run")
+
+
+def default_full_log():
+    """<full_log_dir>/<tool>-<YYYYMMDD-HHMMSS>.log, <tool> being the running script's name (push, test, release)."""
+    tool = Path(sys.argv[0]).stem if sys.argv and sys.argv[0] else "run"
+    return full_log_dir() / f"{tool}-{time.strftime('%Y%m%d-%H%M%S')}.log"
+
+
+def prune_full_logs(keep=FULL_LOG_KEEP):
+    """Delete all but the newest `keep` *.log files in full_log_dir(), best-effort."""
+    try:
+        logs = sorted(full_log_dir().glob("*.log"), key=lambda p: p.stat().st_mtime, reverse=True)
+    except OSError:
+        return
+    for old in logs[keep:]:
+        try:
+            old.unlink()
+        except OSError:
+            pass
+
+
 class Sinks:
-    """Where the full and condensed streams go.  Arguments beat JUNEAU_RUN_* environment variables."""
+    """Where the full and condensed streams go.  Arguments beat JUNEAU_RUN_* environment variables.
+    A condensed console with no full log gets default_full_log()."""
 
     def __init__(self, console=None, full_log=None, condensed_log=None):
         self.console = console or os.environ.get("JUNEAU_RUN_CONSOLE") or "full"
         if self.console not in CONSOLE_MODES:
             raise ValueError(f"console must be one of {CONSOLE_MODES}, not {self.console!r}")
-        self.full_path = self._resolve(full_log or os.environ.get("JUNEAU_RUN_FULL_LOG"))
+        full = full_log or os.environ.get("JUNEAU_RUN_FULL_LOG")
+        if not full and self.console == "condensed":
+            # Condensed mode always has a log to tail.  Exported, so later Sinks() and child scripts write the same one.
+            full = str(default_full_log())
+            os.environ["JUNEAU_RUN_FULL_LOG"] = full
+        self.full_path = self._resolve(full)
         self.condensed_path = self._resolve(condensed_log or os.environ.get("JUNEAU_RUN_CONDENSED_LOG"))
         self._full = None
         self._condensed = None
@@ -1376,7 +1447,7 @@ class Sinks:
             self._condensed.write((text + "\n").encode("utf-8"))
             self._condensed.flush()
         if self.console == "condensed":
-            _out(text + "\n")
+            _out((tint(text) if _colour_stdout() else text) + "\n")
 
 
 # ---------------------------------------------------------------------------------------------------------------------
@@ -1388,6 +1459,7 @@ class Sinks:
 #   ("note", level, text, id)            ("cond", text)
 #   ("class_done", id, outcome)          ("compiled", id, ok)          ("tested", id)
 #   ("reactor", size, [pom sub ids], tests_mode)                    ("failure", text, id)
+#   ("progress", id, text)               bus only (step_progress), never a marker
 # ---------------------------------------------------------------------------------------------------------------------
 
 ANSI_RE = re.compile(r"\x1b\[[0-9;?]*[A-Za-z]|\x1b\][^\x07\x1b]*(?:\x07|\x1b\\)")
@@ -1875,12 +1947,16 @@ class PytestParser(Parser):
     SUMMARY = re.compile(r"^(?:=+ )?((?:\d+ [a-z]+(?:, )?)+) in [\d.]+s(?: \(\d+:\d+:\d+\))?(?: =+)?\s*$")
     ITEM = re.compile(r"(\d+) (passed|failed|skipped|errors?|xfailed|xpassed|deselected|warnings?)")
     SHORT = re.compile(r"^=+ short test summary info =+\s*$")
+    # "test_f.py ..F.s  [ 43%]" or "[60/70]"; a wrapped line has no file name, and xdist never has one.
+    PROGRESS = re.compile(r"^(?:((?![.FEsxX]+ )\S+) +)?[.FEsxX]+ +\[ *(?:(\d+%)|(\d+/\d+))\] *$")
 
     def __init__(self):
         super().__init__()
         self.report_path = None
         self.in_short = False
         self.counts = None
+        self.last_file = None
+        self.last_progress = None
 
     def prepare(self, cmd, env, cwd):
         existing = next((a for a in cmd if a.startswith("--junitxml")), None)
@@ -1896,6 +1972,16 @@ class PytestParser(Parser):
 
     def handle(self, line):
         events = []
+        progress = self.PROGRESS.match(line) if line.endswith("]") else None
+        if progress:
+            self.last_file = progress.group(1) or self.last_file
+            text = progress.group(2) or progress.group(3)
+            if self.last_file:
+                text += f" · {self.last_file}"
+            if text != self.last_progress:
+                self.last_progress = text
+                events.append(("progress", self.step_id, text))
+            return events
         if self.SHORT.match(line):
             self.in_short = True
             events.append(("cond", line))
@@ -1980,10 +2066,116 @@ class PlaywrightParser(Parser):
         return []
 
 
+class GradleParser(Parser):
+    """Gradle with --console=plain: a sub-step per task, counts from the test summary, and the "What went wrong"
+    block as the failure."""
+
+    name = "gradle"
+    TASK = re.compile(r"^> Task (:\S+)(?:\s+(UP-TO-DATE|NO-SOURCE|SKIPPED|FROM-CACHE|FAILED))?\s*$")
+    COUNTS = re.compile(r"^(\d+) tests? completed(?:, (\d+) failed)?(?:, (\d+) skipped)?\s*$")
+    WRONG = "* What went wrong:"
+    OUTCOMES = {"UP-TO-DATE": "ok", "FROM-CACHE": "ok", "NO-SOURCE": "skip", "SKIPPED": "skip", "FAILED": "fail"}
+    TAIL = 40
+
+    def __init__(self):
+        super().__init__()
+        self.tasks = 0
+        self.open = None        # (sub id, monotonic start) of the running task
+        self.block = None       # lines of the "What went wrong" block while it's being read
+        self.blocks = []
+        self.tail = collections.deque(maxlen=self.TAIL)
+
+    def prepare(self, cmd, env, cwd):
+        if not any(a.startswith("--console") for a in cmd):
+            cmd = [cmd[0], "--console=plain", *cmd[1:]]
+        return cmd, env
+
+    def _close(self, status):
+        sub, t0 = self.open
+        self.open = None
+        return [("sub_end", sub, status, int((time.monotonic() - t0) * 1000))]
+
+    def handle(self, line):
+        self.tail.append(line)
+        if self.block is not None:
+            if line.startswith("* ") or line.startswith("BUILD "):
+                self.blocks.append("\n".join(self.block).rstrip())
+                self.block = None
+            else:
+                self.block.append(line)
+                return [("cond", line)] if line.strip() else []
+        if line.strip() == self.WRONG:
+            self.block = [line]
+            return [("cond", line)]
+        m = self.TASK.match(line)
+        if m:
+            path, outcome = m.group(1), m.group(2)
+            sub = f"{self.step_id}/{_slug(path)}"
+            events = []
+            if self.open is not None and self.open[0] == sub:
+                return self._close(self.OUTCOMES.get(outcome, "ok"))
+            if self.open is not None:
+                events += self._close("ok")
+            self.tasks += 1
+            events.append(("sub_start", sub, self.tasks, path))
+            self.open = (sub, time.monotonic())
+            if outcome is not None:
+                events += self._close(self.OUTCOMES[outcome])
+            return events
+        m = self.COUNTS.match(line)
+        if m:
+            total, failed, skipped = int(m.group(1)), int(m.group(2) or 0), int(m.group(3) or 0)
+            return [("tests", self.step_id, total, failed, 0, skipped), ("cond", line)]
+        if line.startswith("BUILD FAILED"):
+            return [("cond", line)]
+        return []
+
+    def finish(self, exit_code):
+        events = self._close("ok" if exit_code == 0 else "fail") if self.open is not None else []
+        if self.block is not None:
+            self.blocks.append("\n".join(self.block).rstrip())
+        if exit_code == 0:
+            return events
+        if self.blocks:
+            return events + [("failure", "\n\n".join(self.blocks), self.step_id)]
+        if self.tail:
+            return events + [("failure", "\n".join(self.tail), self.step_id)]
+        return events
+
+
+class NpmParser(GenericParser):
+    """npm: no sub-steps.  "npm error"/"npm ERR!" lines are the failure (else the last 40 lines, as GenericParser),
+    and "added N packages" is the summary line."""
+
+    name = "npm"
+    ERROR = re.compile(r"^npm (?:error|ERR!)")
+    ADDED = re.compile(r"^added \d+ packages?\b")
+
+    def __init__(self):
+        super().__init__()
+        self.errors = []
+
+    def handle(self, line):
+        super().handle(line)
+        if self.ERROR.match(line):
+            self.errors.append(line)
+            return [("cond", line)]
+        if self.ADDED.match(line):
+            return [("cond", line)]
+        return []
+
+    def finish(self, exit_code):
+        if exit_code != 0 and self.errors:
+            return [("failure", "\n".join(self.errors), self.step_id)]
+        return super().finish(exit_code)
+
+
 PARSERS = {
     "maven": MavenParser,
     "pytest": PytestParser,
     "playwright": PlaywrightParser,
+    "gradle": GradleParser,
+    "npm": NpmParser,
     "generic": GenericParser,
 }
 
@@ -2101,6 +2293,8 @@ class _Dispatcher:
                 publish("reactor", step=self.step_id, size=ev[1], poms=list(ev[2]), tests=ev[3])
             elif kind == "failure":
                 publish("failure", text=ev[1], step=ev[2])
+            elif kind == "progress":
+                publish("step_progress", step=ev[1], text=ev[2])   # bus only: never a marker, so protocol v1 is unchanged
             elif kind == "cond":
                 self.sinks.write_condensed(ev[1])
 
@@ -2192,8 +2386,17 @@ class _Watch:
             publish("quiet", step=self.step_id, seconds=self.quiet)
 
 
+def _tool_status(rc, statuses):
+    """The status and exit field for a tool's row: statuses[rc] when given, else ok for 0 and fail otherwise.
+    Exit 127 (cannot start) and 130 (interrupted) always fail, whatever statuses says."""
+    if rc in (127, 130):
+        return "fail", rc
+    status = (statuses or {}).get(rc) or ("ok" if rc == 0 else "fail")
+    return status, (rc if status == "fail" else None)
+
+
 def run_tool(cmd, parser, step_id, title, *, n=None, parent=None, cwd=None, env=None, sinks=None, capture=False,
-             tty=False, watchdog=None, summarize=None, label=None):
+             tty=False, watchdog=None, summarize=None, label=None, statuses=None):
     """Run one tool as one step and return Result(exit, ms, summary).
 
     Pass-through mode (markers off, default sinks, no capture or summarize) hands the child the real terminal and no
@@ -2201,6 +2404,8 @@ def run_tool(cmd, parser, step_id, title, *, n=None, parent=None, cwd=None, env=
     child runs under a PTY and our keystrokes are forwarded to it.  GPG_TTY then names the PTY, so a terminal
     pinentry prompts through it (with echo off) instead of racing us for the real terminal.  watchdog=<s> publishes a
     silent partial line as a prompt, or the silence as quiet.  summarize(text) becomes the step_end summary.
+    statuses maps an exit code to this row's status ("ok", "fail" or "skip"); a code not in it is "ok" for 0 and
+    "fail" otherwise; 127 (cannot start) and 130 (interrupted) always fail.  exit is reported only for a failed row.
     SIGINT/SIGTERM unwind as a KeyboardInterrupt; the except block then takes down the child's whole process group,
     `end` is emitted with exit 130 and the KeyboardInterrupt is raised again.  A tool that cannot be started ends its
     step with exit 127 and the OSError is raised again.  Any other error ends the step as failed and is raised again.
@@ -2218,8 +2423,8 @@ def run_tool(cmd, parser, step_id, title, *, n=None, parent=None, cwd=None, env=
             raise
         finally:
             ms = int((time.monotonic() - t0) * 1000)
-            publish("step_end", id=step_id, status="ok" if rc == 0 else "fail", ms=ms,
-                    exit=None if rc == 0 else rc, summary=None, totals=None)
+            status, exit_code = _tool_status(rc, statuses)
+            publish("step_end", id=step_id, status=status, ms=ms, exit=exit_code, summary=None, totals=None)
         return Result(rc, ms)
 
     parser = _resolve_parser(parser)
@@ -2390,10 +2595,10 @@ def run_tool(cmd, parser, step_id, title, *, n=None, parent=None, cwd=None, env=
         emit("end", id=step_id, status="fail", ms=ms, exit=130)
         publish("step_end", id=step_id, status="fail", ms=ms, exit=130, summary=None, totals=None)
         raise KeyboardInterrupt
-    status = "ok" if proc.returncode == 0 else "fail"
+    status, exit_code = _tool_status(proc.returncode, statuses)
     dispatch.close_children(status)
     dispatch.flush_tests(step_id)
-    emit("end", id=step_id, status=status, ms=ms, exit=None if proc.returncode == 0 else proc.returncode)
+    emit("end", id=step_id, status=status, ms=ms, exit=exit_code)
     text = "".join(captured) if captured is not None else None
     if text is not None and tty:
         text = text.replace("\r\n", "\n")    # joined first: a CRLF split across two reads still collapses
@@ -2403,7 +2608,7 @@ def run_tool(cmd, parser, step_id, title, *, n=None, parent=None, cwd=None, env=
             summary = summarize(text)
         except Exception as e:  # a summary is display only; it never fails the step
             warn(f"summary for {step_id} failed: {e!r}")
-    publish("step_end", id=step_id, status=status, ms=ms, exit=None if proc.returncode == 0 else proc.returncode,
+    publish("step_end", id=step_id, status=status, ms=ms, exit=exit_code,
             summary=summary, totals=dispatch.summary or None)
     return Result(proc.returncode, ms, dispatch.summary, text if capture else None)
 

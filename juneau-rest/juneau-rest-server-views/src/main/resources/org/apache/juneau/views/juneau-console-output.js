@@ -70,19 +70,31 @@
 	function stripTabCrLf(s) { return s.replace(/[\t\r\n]/g, ""); }
 
 	/**
-	 * A pure-string port of RegionDef.isSafeDetailEndpoint, after folding "\\" to "/": non-blank, no "://", no "//"
-	 * prefix, no scheme colon before the first slash, and no ".." segment.  Relative paths are allowed.  It never
-	 * consults location, so the shared vectors run unchanged on both sides.
+	 * The one prefix rule every same-origin / allowlist URL guard applies to the ORIGINAL string, before anything else
+	 * (never normalise and accept): true when the first or last character is a space or control character, or any
+	 * character is a backslash, a C0 control character or DEL.  A browser strips leading/trailing C0 and space,
+	 * deletes tab/CR/LF anywhere and reads a backslash as a slash, so each of those can turn a value that looks like a
+	 * same-origin path into "//host".  The text of this function is identical in every file that carries it
+	 * (checked by ViewsJs_SameOriginPath_Test) and mirrors SafePathTemplate.isSameOriginPath.  Callers handle the empty string.
+	 */
+	function hasUnsafeUrlChars(s) {
+		return s.charCodeAt(0) <= 32 || s.charCodeAt(s.length - 1) <= 32 || /[\\\u0000-\u001f\u007f]/.test(s);
+	}
+
+	/**
+	 * A pure-string port of RegionDef.isSafeDetailEndpoint: non-blank, none of the characters hasUnsafeUrlChars refuses
+	 * (backslash, control characters, leading/trailing space), no "://", no "//" prefix, no scheme colon before the
+	 * first slash, and no ".." segment.  Relative paths are allowed.  It never consults location, so the shared
+	 * vectors run unchanged on both sides.
 	 */
 	function isSafePath(t) {
-		const f = t.replace(/\\/g, "/");
-		if (/^[ \t\n\x0B\f\r\x1C-\x1F]*$/.test(f) || f.includes("://") || f.startsWith("//"))
+		if (t.length === 0 || hasUnsafeUrlChars(t) || t.includes("://") || t.startsWith("//"))
 			return false;
-		const colon = f.indexOf(":");
-		const slash = f.indexOf("/");
+		const colon = t.indexOf(":");
+		const slash = t.indexOf("/");
 		if (colon >= 0 && (slash < 0 || colon < slash))
 			return false;
-		return f.split("/").indexOf("..") < 0;
+		return t.split("/").indexOf("..") < 0;
 	}
 
 	function isSafeColor(s) {
@@ -110,8 +122,7 @@
 
 	/** The stored form of a value that passed isSafeLineHref / isSafeLineImageSrc. */
 	function normalizeUrl(s) {
-		const t = stripTabCrLf(s);
-		return t.startsWith("#") ? t : t.replace(/\\/g, "/");
+		return stripTabCrLf(s);
 	}
 
 	function isToken(s) { return isStr(s) && TOKEN.test(s); }

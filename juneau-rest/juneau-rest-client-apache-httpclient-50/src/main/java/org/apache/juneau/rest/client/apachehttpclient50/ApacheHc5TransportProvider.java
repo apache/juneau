@@ -51,8 +51,8 @@ public final class ApacheHc5TransportProvider implements HttpTransportProvider {
 		try {
 			Class.forName("org.apache.hc.client5.http.impl.classic.CloseableHttpClient");
 			return true;
-		} catch (ClassNotFoundException e) {
-			return false;
+		} catch (ClassNotFoundException e) { // HTT: httpclient5 is a compile dependency of this module so it is always on the test classpath; a seam (injectable class loader) would make this testable
+			return false; // HTT: see catch above
 		}
 	}
 

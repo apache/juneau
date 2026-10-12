@@ -30,7 +30,7 @@ GOLDEN = (b"\x1b[1;31mred\x1b[0m plain\r\n\rcount 0\rcount 1\rcount 2\r\n\x1b[2A
 
 def pty(tmp, *args, tool="generic", env=None, cwd=None):
     """Run the CLI in PTY mode with its log and events under tmp; returns (proc, log bytes, events)."""
-    full_env = {k: v for k, v in os.environ.items() if not k.startswith(("RUN_", "JUNEAU_RUN_"))}
+    full_env = {k: v for k, v in os.environ.items() if not k.startswith(("RUN_", "JUNEAU_RUN_")) or k == "JUNEAU_RUN_LOG_DIR"}
     full_env.update(env or {})
     log, events = Path(tmp) / "out.log", Path(tmp) / "out.events.jsonl"
     r = subprocess.run([sys.executable, str(SCRIPT), "--pty", "--full-log", str(log), "--events", str(events),
@@ -187,7 +187,7 @@ class EventsFileTest(unittest.TestCase):
 
 class NonPtyUnchangedTest(unittest.TestCase):
     def test_piped_mode_still_writes_markers_to_stdout(self):
-        env = {k: v for k, v in os.environ.items() if not k.startswith(("RUN_", "JUNEAU_RUN_"))}
+        env = {k: v for k, v in os.environ.items() if not k.startswith(("RUN_", "JUNEAU_RUN_")) or k == "JUNEAU_RUN_LOG_DIR"}
         env["RUN_MARKERS"] = "1"
         r = subprocess.run([sys.executable, str(SCRIPT), "--step", "t", "generic", "--", "true"],
                            capture_output=True, text=True, env=env)

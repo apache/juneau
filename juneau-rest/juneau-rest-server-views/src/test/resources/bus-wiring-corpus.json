@@ -12,7 +12,7 @@
 		},
 		{
 			"name": "c02-spec-5.1-master-detail",
-			"contract": {"contractVersion":"1","title":"T","nav":[],"activeNav":[],"topics":[{"topic":"app.region-picked","retain":true,"publisher":"script"}],"cards":[{"id":"changes","type":"datatables","table":{"dataUrl":"/api/changes","columns":[{"key":"id"}],"selection":{"rowIdField":"id"},"ribbon":[{"type":"refresh"},{"type":"option","id":"mine","title":"Mine only"},{"type":"refresh","title":"Refresh tasks","target":"tasks"},{"type":"publish","title":"Focus east","topic":"app.region-picked","payload":{"region":"east"}}]},"subscribes":[{"topic":"app.region-picked","as":"filter","map":{"columns.region":"region"}}]},{"id":"tasks","type":"datatables","table":{"dataUrl":"/api/changes/{changeId}/tasks","columns":[{"key":"id"}]},"subscribes":[{"topic":"selection:changes","as":"params","map":{"changeId":"ids.0"},"whenEmpty":"clear","emptyText":"Select a change to see its tasks."}]},{"id":"byOwner","type":"chart","title":"Open changes by owner","src":"/api/changes/by-owner","subscribes":[{"topic":"filter:changes","as":"filter"}]}]},
+			"contract": {"contractVersion":"1","title":"T","nav":[],"activeNav":[],"topics":[{"topic":"app.region-picked","retain":true,"publisher":"script"}],"cards":[{"id":"changes","type":"datatables","table":{"dataUrl":"/api/changes","columns":[{"key":"id"}],"selection":{"rowIdField":"id"},"ribbon":[{"type":"refresh"},{"type":"option","id":"mine","title":"Mine only"},{"type":"refresh","title":"Refresh tasks","target":"tasks"},{"type":"publish","title":"Focus east","topic":"app.region-picked","payload":{"region":"east"}}]},"subscribes":[{"topic":"app.region-picked","as":"filter","map":{"columns.region":"region"}}]},{"id":"tasks","type":"datatables","table":{"dataUrl":"/api/changes/{changeId}/tasks","columns":[{"key":"id"}]},"subscribes":[{"topic":"selection:changes","as":"params","map":{"changeId":"ids.0"},"whenEmpty":"clear","emptyText":"Select a change to see its tasks."}]},{"id":"byOwner","type":"chart","title":"Open changes by owner","src":"/api/changes/by-owner?q={q}","subscribes":[{"topic":"filter:changes","as":"params","map":{"q":"search"}}]}]},
 			"expect": [],
 			"expectJs": []
 		},
@@ -274,6 +274,76 @@
 			],
 			"expectJs": [
 				{"code":"E-JS-41","message":"card 'h' subscribes to 'selection' but nothing publishes it"}
+			]
+		},
+		{
+			"name": "c28-chart-roles",
+			"contract": {"contractVersion":"1","title":"T","nav":[],"activeNav":[],"cards":[{"id":"t","type":"datatables","table":{"dataUrl":"/api/t","columns":[{"key":"id"}],"selection":{"rowIdField":"id"}}},{"id":"g","type":"chart","kind":"bar","src":"/api/g?ids={ids}","subscribes":[{"topic":"selection:t","as":"params","map":{"ids":"ids.0"}},{"topic":"filter:t","as":"refresh"},{"topic":"filter:t","as":"filter"}]}]},
+			"expect": [
+				{"code":"E-44","message":"card 'g' (type 'chart') has no role 'filter'; accepted: params, refresh"}
+			],
+			"expectJs": [
+				{"code":"E-JS-47","message":"card 'g' (type 'chart') does not accept role 'filter'"}
+			]
+		},
+		{
+			"name": "c29-terminal-input-wired",
+			"contract": {"contractVersion":"1","title":"T","nav":[],"activeNav":[],"topics":[{"topic":"term.input-status","retain":false,"publisher":"server"}],"bridges":[{"id":"term","transport":"websocket","session":"/c/juneau-bus/session","downstream":["term.input-status"],"upstream":["term.input"]}],"cards":[{"id":"term","type":"terminal","terminal":{"bytesUrl":"/t/juneau-terminal/t1/bytes","input":true,"inputId":"t1"},"publishes":[{"topic":"term.input","retain":false}],"subscribes":[{"topic":"term.input-status","as":"input-status"}]}]},
+			"expect": [],
+			"expectJs": []
+		},
+		{
+			"name": "c30-terminal-input-unwired",
+			"contract": {"contractVersion":"1","title":"T","nav":[],"activeNav":[],"cards":[{"id":"term","type":"terminal","terminal":{"bytesUrl":"/t/juneau-terminal/t1/bytes","input":true,"inputId":"t1"}}]},
+			"expect": [
+				{"code":"E-58","message":"terminal card 'term' has input: true but its publishes lacks 'term.input'"},
+				{"code":"E-58","message":"terminal card 'term' has input: true but its subscribes lacks 'term.input-status' as 'input-status'"},
+				{"code":"E-58","message":"terminal card 'term' has input: true but no topics entry declares 'term.input-status' with publisher=server"},
+				{"code":"E-58","message":"terminal card 'term' has input: true but no websocket bridge carries 'term.input' upstream and 'term.input-status' downstream"}
+			],
+			"expectJs": [
+				{"code":"E-JS-52","message":"terminal card 'term' has input: true but its publishes lacks 'term.input'"},
+				{"code":"E-JS-52","message":"terminal card 'term' has input: true but its subscribes lacks 'term.input-status' as 'input-status'"},
+				{"code":"E-JS-52","message":"terminal card 'term' has input: true but no topics entry declares 'term.input-status' with publisher=server"},
+				{"code":"E-JS-52","message":"terminal card 'term' has input: true but no websocket bridge carries 'term.input' upstream and 'term.input-status' downstream"}
+			]
+		},
+		{
+			"name": "c31-terminal-input-no-card-wiring",
+			"contract": {"contractVersion":"1","title":"T","nav":[],"activeNav":[],"topics":[{"topic":"term.input-status","retain":false,"publisher":"server"}],"bridges":[{"id":"term","transport":"websocket","session":"/c/juneau-bus/session","downstream":["term.input-status"],"upstream":["term.input"]}],"cards":[{"id":"term","type":"terminal","terminal":{"bytesUrl":"/t/juneau-terminal/t1/bytes","input":true,"inputId":"t1"}}]},
+			"expect": [
+				{"code":"E-53","message":"bridge 'term' sends 'term.input' upstream, but no topics entry or card publishes declares it"},
+				{"code":"E-58","message":"terminal card 'term' has input: true but its publishes lacks 'term.input'"},
+				{"code":"E-58","message":"terminal card 'term' has input: true but its subscribes lacks 'term.input-status' as 'input-status'"}
+			],
+			"expectJs": [
+				{"code":"E-JS-52","message":"bridge 'term' sends 'term.input' upstream, but no topics entry or card publishes declares it"},
+				{"code":"E-JS-52","message":"terminal card 'term' has input: true but its publishes lacks 'term.input'"},
+				{"code":"E-JS-52","message":"terminal card 'term' has input: true but its subscribes lacks 'term.input-status' as 'input-status'"}
+			]
+		},
+		{
+			"name": "c32-terminal-input-off",
+			"contract": {"contractVersion":"1","title":"T","nav":[],"activeNav":[],"cards":[{"id":"a","type":"terminal","terminal":{"bytesUrl":"/t/juneau-terminal/t1/bytes","input":false}},{"id":"b","type":"html","terminal":{"input":true}},{"id":"c","type":"terminal","terminal":{"bytesUrl":"/t/juneau-terminal/t1/bytes","input":"true"}}]},
+			"expect": [],
+			"expectJs": []
+		},
+		{
+			"name": "c33-terminal-non-map",
+			"contract": {"contractVersion":"1","title":"T","nav":[],"activeNav":[],"cards":[{"id":"term","type":"terminal","terminal":"x"}]},
+			"expect": [],
+			"expectJs": []
+		},
+		{
+			"name": "c34-terminal-input-sse-bridge",
+			"contract": {"contractVersion":"1","title":"T","nav":[],"activeNav":[],"topics":[{"topic":"term.input-status","retain":false,"publisher":"server"}],"bridges":[{"id":"term","transport":"sse","session":"/c/juneau-bus/session","downstream":["term.input-status"],"upstream":["term.input"]}],"cards":[{"id":"term","type":"terminal","terminal":{"bytesUrl":"/t/juneau-terminal/t1/bytes","input":true,"inputId":"t1"},"publishes":[{"topic":"term.input","retain":false}],"subscribes":[{"topic":"term.input-status","as":"input-status"}]}]},
+			"expect": [
+				{"code":"E-51","message":"bridge 'term': upstream is only allowed on a websocket bridge"},
+				{"code":"E-58","message":"terminal card 'term' has input: true but no websocket bridge carries 'term.input' upstream and 'term.input-status' downstream"}
+			],
+			"expectJs": [
+				{"code":"E-JS-52","message":"bridge 'term': upstream is only allowed on a websocket bridge"},
+				{"code":"E-JS-52","message":"terminal card 'term' has input: true but no websocket bridge carries 'term.input' upstream and 'term.input-status' downstream"}
 			]
 		}
 	]

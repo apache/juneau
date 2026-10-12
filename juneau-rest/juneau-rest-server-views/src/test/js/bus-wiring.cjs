@@ -46,6 +46,7 @@ const validate = bus.wiring && bus.wiring.validate;
 // html accepts no roles beyond the shell's; datatables accepts 'filter' and handles the seven table ops.
 // datatablesImplicit is NS.tableBus.implicitTopics (Task 6) and DatatablesCardType.implicitTopics (Task 4):
 // the view is card.table when it is an object, else the card; no dataUrl means src-only, so all five topics.
+// chart mirrors juneau-charts.js: its handler has no roles or ops and publishes nothing.
 const TABLE_OPS = ['reload', 'clear-selection', 'select', 'set-filter', 'pause-polling', 'resume-polling', 'collapse-all'];
 function datatablesImplicit(card) {
 	const v = card.table && typeof card.table === 'object' ? card.table : card;
@@ -59,7 +60,8 @@ function datatablesImplicit(card) {
 }
 const types = {
 	html: { roles: [], ops: [], implicit: function () { return []; } },
-	datatables: { roles: ['filter'], ops: TABLE_OPS, implicit: datatablesImplicit }
+	datatables: { roles: ['filter'], ops: TABLE_OPS, implicit: datatablesImplicit },
+	chart: { roles: [], ops: [], implicit: function () { return []; } }
 };
 Object.keys(corpus.cardTypes).forEach(function (name) {
 	const s = corpus.cardTypes[name];

@@ -49,6 +49,7 @@ def clean_env(monkeypatch, tmp_path):
         monkeypatch.delenv(variable, raising=False)
     (tmp_path / "home").mkdir()
     monkeypatch.setenv("HOME", str(tmp_path / "home"))
+    monkeypatch.setenv("JUNEAU_RUN_LOG_DIR", str(tmp_path / "run-logs"))
     sys.modules.pop("juneau_run", None)
     yield
     sys.modules.pop("juneau_run", None)

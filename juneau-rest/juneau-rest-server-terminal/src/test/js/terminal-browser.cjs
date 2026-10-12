@@ -19,7 +19,7 @@
 /*
  * The terminal region in a real Chromium, through Playwright.
  *
- *   node terminal-browser.cjs <xterm.js> <xterm.css> <juneau-terminal.js> <juneau-terminal.css>
+ *   node terminal-browser.cjs <xterm.js> <xterm.css> <juneau-terminal.js> <juneau-terminal.css> <juneau-views.css>
  *
  * Every request goes to the made-up origin http://term.test and is answered by page.route, so nothing listens on a
  * port.  The bytes and events endpoints are scripted here; their real headers are covered by TerminalMixin_Test and
@@ -31,10 +31,10 @@ const fs = require('fs');
 const { chromium } = require('playwright');
 
 const ORIGIN = 'http://term.test';
-const [XTERM_JS, XTERM_CSS, TERM_JS, TERM_CSS] = process.argv.slice(2).map(function (f) { return fs.readFileSync(f); });
+const [XTERM_JS, XTERM_CSS, TERM_JS, TERM_CSS, VIEWS_CSS] = process.argv.slice(2).map(function (f) { return fs.readFileSync(f); });
 
 const PAGE = '<!DOCTYPE html><html><head><meta charset="utf-8">'
-	+ '<link rel="stylesheet" href="/a/xterm.css"><link rel="stylesheet" href="/a/juneau-terminal.css">'
+	+ '<link rel="stylesheet" href="/a/xterm.css"><link rel="stylesheet" href="/a/juneau-views.css"><link rel="stylesheet" href="/a/juneau-terminal.css">'
 	+ '<script src="/a/xterm.js"></script><script src="/a/juneau-terminal.js"></script>'
 	+ '</head><body><div id="host" style="width:1000px"></div></body></html>';
 
@@ -43,7 +43,8 @@ const ASSETS = {
 	'/a/xterm.js': ['text/javascript', XTERM_JS],
 	'/a/xterm.css': ['text/css', XTERM_CSS],
 	'/a/juneau-terminal.js': ['text/javascript', TERM_JS],
-	'/a/juneau-terminal.css': ['text/css', TERM_CSS]
+	'/a/juneau-terminal.css': ['text/css', TERM_CSS],
+	'/a/juneau-views.css': ['text/css', VIEWS_CSS]
 };
 
 /** {log, done, cols, rows, events} -> a page.route handler for the page, its assets and the two endpoints. */
@@ -114,6 +115,30 @@ async function waitRow0(page, text) {
 		const r = document.querySelector('.xterm-rows > div');
 		return r && r.textContent.replace(/\u00a0/g, ' ').trim() === t;
 	}, text, { timeout: 5000 });
+}
+
+/** Wraps window.Terminal so the case can read each xterm's options; returns once the page and its scripts are up. */
+async function openRunning(page, fx) {
+	await page.route(ORIGIN + '/**', server(Object.assign({ done: false }, fx)));
+	await page.goto(ORIGIN + '/page');
+	await page.waitForFunction(function () { return typeof window.Terminal === 'function' && !!window.JuneauTerminal; });
+	await page.evaluate(function () {
+		const T = window.Terminal;
+		window.__terms = [];
+		window.Terminal = function (o) { const x = new T(o); window.__terms.push(x); return x; };
+		const h2 = document.createElement('div');
+		h2.id = 'host2';
+		h2.style.width = '1000px';
+		document.body.appendChild(h2);
+	});
+}
+
+/** Waits until the region in host {@code id} has its xterm and is polling. */
+function waitRunning(page, id) {
+	return page.waitForFunction(function (i) {
+		const b = document.querySelector('#' + i + ' .juneau-term-badge');
+		return b && b.textContent === 'Running' && document.querySelector('#' + i + ' .xterm');
+	}, id, { timeout: 5000 });
 }
 
 const CASES = [
@@ -269,6 +294,154 @@ const CASES = [
 		});
 		expect(r.count === 1 && r.href === ORIGIN + '/t/raw', 'an http(s) bytes URL gets a Raw link: ' + JSON.stringify(r));
 		expect(r.dataRegion === 1 && r.dataRaw === 0, 'a non-http(s) bytes URL gets no Raw link: ' + JSON.stringify(r));
+	}],
+	['b12_mountWithoutInputHasNoToggle', async function (page) {
+		await openRunning(page, { log: Buffer.from('hello\r\n') });
+		await page.evaluate(function () {
+			window.JuneauTerminal.mount(document.getElementById('host'), { id: 'a', bytesUrl: '/t/bytes' }, { publish: function () {}, onConnected: function () {} });
+			window.JuneauTerminal.mount(document.getElementById('host2'), { id: 'b', bytesUrl: '/t/bytes', input: true, inputId: 't1' });
+		});
+		await waitRunning(page, 'host');
+		await waitRunning(page, 'host2');
+		const r = await page.evaluate(function () {
+			return {
+				toggles: document.querySelectorAll('.juneau-term-input').length,
+				chips: document.querySelectorAll('.juneau-term-chip--input').length,
+				stdin: window.__terms.map(function (t) { return t.options.disableStdin; })
+			};
+		});
+		expect(r.toggles === 0 && r.chips === 0, 'no input chrome without input: true and a link: ' + JSON.stringify(r));
+		expect(JSON.stringify(r.stdin) === '[true,true]', 'disableStdin stays set: ' + JSON.stringify(r.stdin));
+	}],
+	['b13_inputCardArmsTheTerminal', async function (page) {
+		await openRunning(page, { log: Buffer.from('Continue? [y/N] ') });
+		await page.evaluate(function () {
+			window.__sent = [];
+			const link = { publish: function (p) { window.__sent.push(p); }, onConnected: function (fn) { fn(true); } };
+			window.__cleanup = window.JuneauTerminal.mount(document.getElementById('host'), { id: 'card1', bytesUrl: '/t/bytes', input: true, inputId: 't1' }, link);
+		});
+		await waitRunning(page, 'host');
+		const before = await page.evaluate(function () {
+			const bar = document.querySelector('#host .juneau-term-bar');
+			const kids = Array.from(bar.children);
+			const at = function (sel) { return kids.indexOf(bar.querySelector(sel)); };
+			const toggle = bar.querySelector('.juneau-term-input');
+			const chip = bar.querySelector('.juneau-term-chip--input');
+			return {
+				order: [at('.juneau-term-input'), at('.juneau-term-chip--input'), at('.juneau-term-badge')],
+				tag: toggle && toggle.tagName, type: toggle && toggle.type, label: toggle && toggle.textContent,
+				pressed: toggle && toggle.getAttribute('aria-pressed'), chipRole: chip && chip.getAttribute('role'), chipHidden: chip && chip.hidden,
+				stdin: window.__terms[0].options.disableStdin
+			};
+		});
+		expect(before.order[0] >= 0 && before.order[0] < before.order[1] && before.order[1] < before.order[2], 'toggle, chip, then badge: ' + JSON.stringify(before.order));
+		expect(before.tag === 'BUTTON' && before.type === 'button' && before.label === 'Enable input' && before.pressed === 'false', 'a real toggle button: ' + JSON.stringify(before));
+		expect(before.chipRole === 'status' && before.chipHidden === true, 'its own status chip, hidden while idle: ' + JSON.stringify(before));
+		expect(before.stdin === true, 'stdin disabled before arming');
+		await page.click('#host .juneau-term-input');
+		expect(JSON.stringify(await page.evaluate(function () { return window.__sent; })) === JSON.stringify([{ id: 't1', data: '' }]), 'the press probes');
+		expect(await page.evaluate(function () { return window.__terms[0].options.disableStdin; }) === true, 'a probe alone does not arm');
+		await page.evaluate(function () {
+			const h = window.JuneauConsoleCards.find(function (e) { return e[0] === 'terminal'; })[1];
+			h.roles['input-status']({ id: 't1', state: 'live' }, {}, { id: 'card1' });
+		});
+		const armed = await page.evaluate(function () {
+			const chip = document.querySelector('#host .juneau-term-chip--input');
+			return {
+				stdin: window.__terms[0].options.disableStdin, pressed: document.querySelector('#host .juneau-term-input').getAttribute('aria-pressed'),
+				chip: chip.textContent, chipState: chip.getAttribute('data-state'), chipHidden: chip.hidden,
+				badge: document.querySelector('#host .juneau-term-badge').textContent
+			};
+		});
+		expect(armed.stdin === false && armed.pressed === 'true', 'live arms: ' + JSON.stringify(armed));
+		expect(armed.chip === 'Input live' && armed.chipState === 'live' && armed.chipHidden === false, 'chip: ' + JSON.stringify(armed));
+		expect(armed.badge === 'Running', 'the run-status badge is not written by input state: ' + armed.badge);
+		await page.keyboard.type('y');
+		await page.waitForFunction(function () { return window.__sent.some(function (p) { return p.id === 't1' && p.data === 'y'; }); }, null, { timeout: 5000 });
+		await page.click('#host .juneau-term-input');
+		const off = await page.evaluate(function () {
+			return { stdin: window.__terms[0].options.disableStdin, pressed: document.querySelector('#host .juneau-term-input').getAttribute('aria-pressed') };
+		});
+		expect(off.stdin === true && off.pressed === 'false', 'the toggle disarms: ' + JSON.stringify(off));
+		await page.evaluate(function () { window.__cleanup(); });
+	}],
+	['b14_inputStatusRoleReachesItsCard', async function (page) {
+		await openRunning(page, { log: Buffer.from('hello\r\n') });
+		await page.evaluate(function () {
+			window.__pub = [];
+			window.__subs = [];
+			window.JuneauConsole = { contract: function () {
+				return { bridges: [{ id: 'term', transport: 'websocket', session: '/s', downstream: ['term.input-status'], upstream: ['term.input'] }] };
+			} };
+			const ctx = {
+				publish: function (topic, p) { window.__pub.push([topic, p]); },
+				subscribe: function (topic, fn) { window.__subs.push(topic); fn({ state: 'open' }); return function () {}; }
+			};
+			const h = window.JuneauConsoleCards.find(function (e) { return e[0] === 'terminal'; })[1];
+			window.__h = h;
+			h.render({ id: 'card1', type: 'terminal', terminal: { bytesUrl: '/t/bytes', input: true, inputId: 't1' } }, document.getElementById('host'), ctx);
+			h.render({ id: 'card2', type: 'terminal', terminal: { bytesUrl: '/t/bytes', input: true, inputId: 't1' } }, document.getElementById('host2'), ctx);
+		});
+		await waitRunning(page, 'host');
+		await waitRunning(page, 'host2');
+		await page.click('#host .juneau-term-input');
+		await page.click('#host2 .juneau-term-input');
+		await page.evaluate(function () {
+			window.__h.roles['input-status']({ id: 't1', state: 'live' }, {}, { id: 'card1' });
+			window.__h.roles['input-status']({ id: 't1', state: 'live' }, {}, { id: 'nope' });
+		});
+		const r = await page.evaluate(function () {
+			const p = function (h) { return document.querySelector('#' + h + ' .juneau-term-input').getAttribute('aria-pressed'); };
+			return { one: p('host'), two: p('host2'), pub: window.__pub, subs: window.__subs };
+		});
+		expect(r.one === 'true' && r.two === 'false', 'only card1 armed: ' + JSON.stringify(r));
+		expect(JSON.stringify(r.pub) === JSON.stringify([['term.input', { id: 't1', data: '' }], ['term.input', { id: 't1', data: '' }]]), 'probes go out on term.input: ' + JSON.stringify(r.pub));
+		expect(JSON.stringify(r.subs) === JSON.stringify(['bridge:term', 'bridge:term']), 'each card watches the bridge state: ' + JSON.stringify(r.subs));
+		await page.evaluate(function () {
+			window.__h.destroy({ id: 'card1' }, document.getElementById('host'));
+			window.__h.roles['input-status']({ id: 't1', state: 'closed' }, {}, { id: 'card1' });
+		});
+		expect(await page.evaluate(function () { return document.querySelectorAll('#host .juneau-term').length; }) === 0, 'card1 is gone, and a late answer for it is a no-op');
+	}],
+	// HTT: the badge, ok badge, chip and banner must stay legible once the views CSS defines --jc-tone-* (dark inks).
+	['b15_toneBackgroundsStayLegibleWithViewsCss', async function (page) {
+		await page.route(ORIGIN + '/**', server({ log: Buffer.from('x') }));
+		await page.goto(ORIGIN + '/page');
+		const probe = function () {
+			const lum = function (c) {
+				const m = c.match(/[\d.]+/g).map(Number).slice(0, 3).map(function (v) { v /= 255; return v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4); });
+				return 0.2126 * m[0] + 0.7152 * m[1] + 0.0722 * m[2];
+			};
+			return ['juneau-term-badge', 'juneau-term-ok', 'juneau-term-chip', 'juneau-term-banner'].map(function (cls) {
+				let el = document.querySelector('.' + cls + '.probe');
+				if (!el) {
+					el = document.createElement('span');
+					el.className = cls + ' probe';
+					el.textContent = 'x';
+					document.body.appendChild(el);
+				}
+				const cs = getComputedStyle(el);
+				const a = lum(cs.backgroundColor), b = lum(cs.color);
+				return { cls: cls, bg: cs.backgroundColor, color: cs.color, ratio: (Math.max(a, b) + 0.05) / (Math.min(a, b) + 0.05) };
+			});
+		};
+		const light = await page.evaluate(probe);
+		light.forEach(function (r) { expect(r.ratio >= 4.5, 'legible with views CSS only: ' + JSON.stringify(r)); });
+		// A theme (e.g. dark) that overrides the tag palette must reach all four.
+		await page.addStyleTag({ content: ':root{--jc-tag-blue-bg:rgb(1,2,3);--jc-tag-blue-text:rgb(250,250,250);--jc-tag-green-bg:rgb(2,3,4);--jc-tag-green-text:rgb(250,250,250);'
+			+ '--jc-tag-amber-bg:rgb(3,4,5);--jc-tag-amber-text:rgb(250,250,250)}' });
+		const dark = await page.evaluate(probe);
+		const want = ['rgb(1, 2, 3)', 'rgb(2, 3, 4)', 'rgb(3, 4, 5)', 'rgb(3, 4, 5)'];
+		dark.forEach(function (r, i) { expect(r.bg === want[i] && r.color === 'rgb(250, 250, 250)', 'follows the tag palette: ' + JSON.stringify(r)); });
+		// The neutral "Input live" chip must not pick up the chip's amber text.
+		const live = await page.evaluate(function () {
+			const par = document.createElement('div');
+			par.style.color = 'rgb(10, 20, 30)';
+			par.innerHTML = '<span class="juneau-term-chip juneau-term-chip--input" data-state="live">Input live</span>';
+			document.body.appendChild(par);
+			return { chip: getComputedStyle(par.firstChild).color, parent: getComputedStyle(par).color };
+		});
+		expect(live.chip === live.parent, 'live chip inherits its parent colour: ' + JSON.stringify(live));
 	}]
 ];
 

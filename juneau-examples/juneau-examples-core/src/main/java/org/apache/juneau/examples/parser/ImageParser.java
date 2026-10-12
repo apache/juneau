@@ -34,10 +34,10 @@ import org.apache.juneau.marshall.parser.*;
 public class ImageParser extends InputStreamParser {
 
 	/**
-	 * Constructor with default settings (consumes image/png and image/jpg).
+	 * Constructor with default settings (consumes image/png, image/jpeg and image/jpg).
 	 */
 	public ImageParser() {
-		super(create().consumes("image/png,image/jpg"));
+		super(create().consumes("image/png,image/jpeg,image/jpg"));
 	}
 
 	/**
@@ -49,7 +49,16 @@ public class ImageParser extends InputStreamParser {
 	})
 	public <T> T doRead(ParserSession session, ParserPipe pipe, ClassMeta<T> type) throws IOException, ParseException {
 		try (var is = pipe.getInputStream()) {
-			var image = ImageIO.read(is);
+			BufferedImage image;
+			try {
+				image = ImageIO.read(is);
+			} catch (IIOException e) {
+				// Corrupt data that looks like a supported image.  Unchecked decoder failures are already wrapped
+				// as ParseException by ParserSession.readInner, so only IIOException needs handling here.
+				throw new ParseException(session, e, "Unsupported or unreadable image data");
+			}
+			if (image == null)
+				throw new ParseException(session, "Unsupported or unreadable image data");
 			return (T)image;
 		}
 	}

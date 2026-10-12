@@ -48,8 +48,9 @@ class CardDirective_Terminal_Test extends TestBase {
 		var body = render("tm-card");
 		assertPage(body).isValid().hasCard("build", "terminal");
 		assertEquals(
-			Json5.to("{id:'build',type:'terminal',title:'Build',terminal:{bytesUrl:'/runs/juneau-terminal/r-7/bytes',"
-				+ "eventsUrl:'/runs/juneau-run-view/r-7/events',refreshMs:1000,title:'mvn test',tailBytes:1048576}}", Map.class),
+			Json5.to("{id:'build',type:'terminal',title:'Build',publishes:[{topic:'term.input',retain:false}],"
+				+ "subscribes:[{topic:'term.input-status',as:'input-status'}],terminal:{bytesUrl:'/runs/juneau-terminal/r-7/bytes',"
+				+ "eventsUrl:'/runs/juneau-run-view/r-7/events',refreshMs:1000,title:'mvn test',tailBytes:1048576,input:true,inputId:'r-7'}}", Map.class),
 			Json5.to(Json.of(card(body, "build")), Map.class));
 		assertFalse(body.contains("<template data-card=\"build\">"), () -> body);
 	}
@@ -72,10 +73,21 @@ class CardDirective_Terminal_Test extends TestBase {
 		assertTrue(body.indexOf("/css/xterm.css?v=") >= 0, () -> body);
 	}
 
+	/** Renders exactly the FreeMarker snippet published in the TerminalRegion docs page (topic 10.68.12). */
+	@Test void a05_docsSnippetWiresInput() {
+		var body = render("tm-input-doc");
+		assertPage(body).isValid().hasCard("term", "terminal");
+		assertEquals(
+			Json5.to("{id:'term',type:'terminal',title:'Release',publishes:[{topic:'term.input',retain:false}],"
+				+ "subscribes:[{topic:'term.input-status',as:'input-status'}],"
+				+ "terminal:{bytesUrl:'/t/juneau-terminal/t1/bytes',input:true,inputId:'t1'}}", Map.class),
+			Json5.to(Json.of(card(body, "term")), Map.class));
+	}
+
 	@ParameterizedTest
 	@CsvSource(delimiter='|', value={
 		"tm-card-noid|<@card type=\"terminal\"> requires id=.",
-		"tm-card-src|<@card id='log'> type='terminal' takes its options as the body; src= and template= are not allowed.",
+		"tm-card-src|<@card id='log'> type='terminal' takes its options as the body; src= is not allowed.",
 		"tm-card-empty|<@card id='log'> type='terminal' requires a JSON5 body { contractVersion: '1', terminal: {...} }.",
 		"tm-card-badkey|TerminalDef 'log' unknown key 'colour'",
 		"tm-card-unsafe|bytesUrl must be a same-origin path",

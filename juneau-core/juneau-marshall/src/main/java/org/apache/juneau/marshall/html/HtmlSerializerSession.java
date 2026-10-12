@@ -347,6 +347,13 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 		return render == null ? null : render.getStyle(session, value);
 	}
 
+	/**
+	 * Returns the property names of a bean map that can be read, skipping write-only properties.
+	 */
+	private static Object[] readableKeys(BeanMap<?> bm) {
+		return bm.keySet().stream().filter(k -> bm.getProperty(k).getMeta().canRead()).toArray(String[]::new);
+	}
+
 	/*
 	 * Returns the table column headers for the specified collection of objects.
 	 * Returns null if collection should not be serialized as a 2-dimensional table.
@@ -415,8 +422,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 				return null;
 		}
 
-		BeanMap<?> bm = toBeanMap(o1);
-		return bm.keySet().toArray(new String[bm.size()]);
+		return readableKeys(toBeanMap(o1));
 	}
 
 	private void writeBeanMap(XmlWriter<?> out, BeanMap<?> m, ClassMeta<?> eType, BeanPropertyMeta ppMeta) throws SerializeException {
@@ -578,7 +584,7 @@ public class HtmlSerializerSession extends XmlSerializerSession {
 					BeanMap m2 = toBeanMap(o);
 
 					if (th == null)
-						th = m2.keySet().toArray(new Object[m2.size()]);
+						th = readableKeys(m2);
 
 					for (var k : th) {
 						BeanMapEntry p = m2.getProperty(toString(k));

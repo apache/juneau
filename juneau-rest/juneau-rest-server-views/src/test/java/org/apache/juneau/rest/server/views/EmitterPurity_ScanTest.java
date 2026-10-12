@@ -32,9 +32,8 @@ import org.junit.jupiter.api.*;
  *
  * <p>
  * This is the test the design nominates as proving the headline claim of the emitter surgery: emitters stopped being
- * markup authors and became descriptor authors. Its counterpart {@link RawContentSink_SecurityScan_Test} guards the
- * other half &mdash; what an <i>author</i> may pour into a declarative content bean. Both share
- * {@link RawContentSinkScanner}'s stripper and argument extractor rather than keeping two divergent copies.
+ * markup authors and became descriptor authors. It shares {@link RawContentSinkScanner}'s stripper and argument extractor with
+ * {@link ShippedJs_SinkScan_Test}, which guards the shipped JavaScript against HTML sinks.
  *
  * <h5 class='section'>The design's universal is now the pin</h5>
  * <p>

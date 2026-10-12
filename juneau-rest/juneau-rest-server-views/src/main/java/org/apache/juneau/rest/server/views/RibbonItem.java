@@ -31,7 +31,7 @@ import org.apache.juneau.marshall.collections.*;
  *
  * <p>
  * Setters are not gated per item type, but {@link #toMap()} fails loudly rather than emit a key the runtime ignores
- * for that type (for example {@code form} on a {@code refresh}, or {@code title} on an {@code optionGroup}), and
+ * for that type (for example {@code form} on a {@code refresh}, or {@code symbol} on an {@code optionGroup}), and
  * checks the invariants the runtime cannot: a top-level {@code option} needs {@code column} or {@code param} (exactly
  * one) plus a {@code value}, and a group's {@code default} must name a member.  Group members take only
  * {@code id}, {@code title}, {@code symbol}, {@code column}, {@code param} and {@code value}.
@@ -72,7 +72,7 @@ public final class RibbonItem {
 		"dialog", union(COMMON, "form", "endpoint", "method", "onSuccess"),
 		"export", Set.of("type", "group", "appearance", "buttons", "optional", "visibleWhen"),
 		"option", union(COMMON, "column", "param", "value", "persist", "default", "target"),
-		"optionGroup", Set.of("type", "id", "appearance", "persist", "default", "deselectable", "options", "target", "visibleWhen"),
+		"optionGroup", Set.of("type", "id", "title", "appearance", "persist", "default", "deselectable", "options", "target", "visibleWhen"),
 		"publish", union(COMMON, "topic", "payload"),
 		"divider", Set.of("type", "visibleWhen")
 	);
@@ -280,7 +280,30 @@ public final class RibbonItem {
 	}
 
 	/**
+	 * Sets this item's stable id.
+	 *
+	 * <p>
+	 * The id is emitted on the item's ribbon entry, where it is scoped to its card (it is not stamped as a DOM id).
+	 * {@link #toMap()} rejects an id on the types the runtime ignores it for
+	 * ({@code divider} and {@code export}).
+	 *
+	 * @param v The id.  Must not be <jk>null</jk> or blank.
+	 * @return This object.
+	 * @throws IllegalArgumentException If {@code v} is <jk>null</jk> or blank.
+	 */
+	public RibbonItem id(String v) {
+		if (v == null || v.isBlank())
+			throw iaex("RibbonItem %s id must not be null or blank.", type);
+		id = v;
+		return this;
+	}
+
+	/**
 	 * Sets this item's title/label text.
+	 *
+	 * <p>
+	 * On an {@code optionGroup} the title is not drawn; it becomes the group's accessible name
+	 * ({@code role="group"} with {@code aria-label}).
 	 *
 	 * @param v The title.  Can be <jk>null</jk> to unset.
 	 * @return This object.

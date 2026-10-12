@@ -20,7 +20,6 @@ import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.*;
 import static org.apache.juneau.http.classic.HttpEntities.*;
 import static org.apache.juneau.http.classic.HttpHeaders.*;
-import static org.apache.juneau.test.assertions.Assertions.*;
 
 import java.lang.reflect.*;
 import java.util.*;
@@ -560,16 +559,33 @@ public class BasicHttpException extends BasicRuntimeException implements HttpRes
 	}
 
 	/**
+	 * Verifies that the specified HTTP response has the expected status code and returns it.
+	 *
+	 * <p>
+	 * Used by the <c>Xxx(HttpResponse)</c> constructors of the concrete response classes to validate the incoming
+	 * response <i>before</i> its status line is copied.
+	 *
+	 * @param response The HTTP response to check.  Must not be <jk>null</jk>.
+	 * @param expected The status code the response is required to have.
+	 * @return The same response.
+	 * @throws IllegalArgumentException If the response status code is not what was expected.
+	 */
+	static HttpResponse requireStatus(HttpResponse response, int expected) throws IllegalArgumentException {
+		reqnn("response", response);
+		int actual = response.getStatusLine().getStatusCode();
+		if (actual != expected)
+			throw iaex("Unexpected status code.  Expected:[%s], Actual:[%s]", expected, actual);
+		return response;
+	}
+
+	/**
 	 * Asserts that the specified HTTP response has the same status code as the one on the status line of this bean.
 	 *
 	 * @param response The HTTP response to check.  Must not be <jk>null</jk>.
-	 * @throws AssertionError If status code is not what was expected.
+	 * @throws IllegalArgumentException If status code is not what was expected.
 	 */
-	protected void assertStatusCode(HttpResponse response) throws AssertionError {
-		reqnn("response", response);
-		int expected = getStatusLine().getStatusCode();
-		int actual = response.getStatusLine().getStatusCode();
-		assertInteger(actual).setMsg("Unexpected status code.  Expected:[%s], Actual:[%s]", expected, actual).is(expected);
+	protected void assertStatusCode(HttpResponse response) throws IllegalArgumentException {
+		requireStatus(response, getStatusLine().getStatusCode());
 	}
 
 	/**

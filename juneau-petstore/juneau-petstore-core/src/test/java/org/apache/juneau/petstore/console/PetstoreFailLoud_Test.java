@@ -25,6 +25,7 @@ import org.apache.juneau.marshall.collections.*;
 import org.apache.juneau.rest.server.console.*;
 import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.http.Path;
+import org.apache.juneau.petstore.console.dev.*;
 import org.apache.juneau.rest.mock.classic.*;
 import org.apache.juneau.rest.server.*;
 import org.apache.juneau.rest.server.servlet.*;
@@ -49,7 +50,9 @@ class PetstoreFailLoud_Test extends TestBase {
 		private static final long serialVersionUID = 1L;
 
 		@Bean public FreemarkerMixin freemarker() {
-			return ConsoleFreemarkerMixin.create().basePath("/org/apache/juneau/petstore/console/").chromeTemplate("templates/base.ftlh").build();
+			return ConsoleFreemarkerMixin.create().basePath("/org/apache/juneau/petstore/console/").chromeTemplate("templates/base.ftlh")
+				.adopterAssets(PetstoreConsolePage.class.getClassLoader(), "org/apache/juneau/petstore")
+				.cardType(new InventoryGaugeCardType()).build();
 		}
 
 		@RestGet(path="/t/{name}")
@@ -84,7 +87,7 @@ class PetstoreFailLoud_Test extends TestBase {
 	@Test void a15_adopterHandlerForAReservedType_failsAtMixinBuild() {
 		var ex = assertThrows(IllegalArgumentException.class,
 			() -> ConsoleFreemarkerMixin.create().cardType(new ImpostorDatatables()).build());
-		assertEquals("Card type 'datatables' is reserved and cannot be replaced; reserved: 'chart, console-output, datatables, html, run-view, terminal'.",
+		assertEquals("Card type 'datatables' is reserved and cannot be replaced; reserved: 'chart, console-output, datatables, html, job-log, run-view, terminal'.",
 			ex.getMessage());
 	}
 
@@ -108,6 +111,10 @@ class PetstoreFailLoud_Test extends TestBase {
 
 	@Test void a19_consoleOutputUnsafeLinesUrl() throws Exception {
 		assert500("console-output-unsafe", "ConsoleOutputDef 'log' linesUrl must be a same-origin path");
+	}
+
+	@Test void a20_inventoryGaugeBodyRejected() throws Exception {
+		assert500("gauge-unknown-species", "<@card id='g'> unknown species 'DRAGON'; choose one of: 'BIRD, CAT, DOG, FISH, MOUSE, RABBIT, SNAKE'.");
 	}
 
 	@Disabled("Not implemented yet: an error code for a page that leaves a required slot empty")

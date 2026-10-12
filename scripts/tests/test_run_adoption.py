@@ -28,6 +28,7 @@ import subprocess
 import sys
 import time
 from pathlib import Path
+from types import SimpleNamespace
 
 import pytest
 
@@ -44,11 +45,12 @@ def load(name, filename):
 
 RUN_VARIABLES = ("RUN_MARKERS", "RUN_ARTIFACTS", "JUNEAU_RUN_ACTIVE", "JUNEAU_RUN_N_BASE", "JUNEAU_RUN_CONSOLE",
                  "JUNEAU_RUN_FULL_LOG", "JUNEAU_RUN_CONDENSED_LOG", "JUNEAU_MVN_WRAPPER", "JUNEAU_RUN_SESSION",
-                 "JUNEAU_RUN_DETAIL", "JUNEAU_RUN_LABEL_WIDTH", "JUNEAU_RUN_LIVE")
+                 "JUNEAU_RUN_DETAIL", "JUNEAU_RUN_LABEL_WIDTH", "JUNEAU_RUN_LIVE", "JUNEAU_PUSH_ACTIVE")
 
 
 @pytest.fixture(autouse=True)
-def clean_env(monkeypatch):
+def clean_env(monkeypatch, tmp_path):
+    monkeypatch.setenv("JUNEAU_RUN_LOG_DIR", str(tmp_path / "run-logs"))
     for variable in RUN_VARIABLES:
         monkeypatch.delenv(variable, raising=False)
     sigterm = signal.getsignal(signal.SIGTERM)
@@ -837,6 +839,24 @@ def test_the_upstream_is_only_looked_up_under_a_console(push_mod, monkeypatch):
     monkeypatch.setattr(push_mod, "upstream_name", lambda repo: pytest.fail("no console, no upstream lookup"))
     monkeypatch.setattr(push_mod, "run_command", lambda *a, **k: True)
     assert push_mod.commit_and_push(Path("."), "msg", 5) == ("ok", 7)
+
+
+def test_the_tags_and_bom_rows_summarise_their_checks(push_mod):
+    assert push_mod.tags_summary("✅ Container tag guard passed (39 container tests tagged).\n") == \
+        "39 container tests tagged"
+    assert push_mod.bom_summary("OK: juneau-bom enumerates all 73 consumer-facing modules.\n") == \
+        "73 modules in juneau-bom"
+    assert push_mod.tags_summary("something else") is None
+    assert push_mod.bom_summary(None) is None
+
+
+def test_run_marked_passes_the_summarizer_under_a_console(push_mod, monkeypatch):
+    seen = []
+    monkeypatch.setattr(push_mod, "run_module", lambda: SimpleNamespace(enabled=lambda: False,
+                                                                        console_active=lambda: True))
+    monkeypatch.setattr(push_mod, "run_command", lambda *a, **k: seen.append(k) or True)
+    assert push_mod.run_marked("bom", "BOM", ["x"], "Checking", label="BOM", summarize=push_mod.bom_summary)
+    assert seen[0]["summarize"] is push_mod.bom_summary
 
 
 def test_run_marked_passes_the_label_to_its_fallback(push_mod, monkeypatch):

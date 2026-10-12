@@ -101,33 +101,25 @@ public class LoopbackRedirectReceiver implements AutoCloseable {
 		reqnn("successHtml", successHtml);
 		var html = successHtml.getBytes(StandardCharsets.UTF_8);
 		var svr = HttpServer.create(new InetSocketAddress(InetAddress.getLoopbackAddress(), bindPort), 0);
-		try {
-			port = svr.getAddress().getPort();
-			host = hostLiteral(svr.getAddress().getAddress());
-			svr.createContext(path, ex -> {
-				var full = URI.create("http://" + host + ":" + port + ex.getRequestURI().toString());
-				callback.complete(full);
-				ex.getResponseHeaders().add("Content-Type", "text/html; charset=utf-8");
-				ex.sendResponseHeaders(200, html.length);
-				try (var os = ex.getResponseBody()) {
-					os.write(html);
-				}
-			});
-			svr.start();
-		} catch (RuntimeException e) {
-			svr.stop(0);  // don't leak the bound socket if wiring fails after create()
-			throw e;
-		}
+		port = svr.getAddress().getPort();
+		host = hostLiteral(svr.getAddress().getAddress());
+		svr.createContext(path, ex -> {
+			var full = URI.create("http://" + host + ":" + port + ex.getRequestURI().toString());
+			callback.complete(full);
+			ex.getResponseHeaders().add("Content-Type", "text/html; charset=utf-8");
+			ex.sendResponseHeaders(200, html.length);
+			try (var os = ex.getResponseBody()) {
+				os.write(html);
+			}
+		});
+		svr.start();
 		server = svr;
 	}
 
 	/** Formats the bound loopback address as a URI host literal, bracketing IPv6 (e.g. {@code [::1]}). */
 	private static String hostLiteral(InetAddress addr) {
 		var ip = addr.getHostAddress();
-		var pct = ip.indexOf('%');  // strip any IPv6 zone/scope id
-		if (pct >= 0)
-			ip = ip.substring(0, pct);
-		return addr instanceof Inet6Address ? "[" + ip + "]" : ip;
+		return addr instanceof Inet6Address ? "[" + ip + "]" : ip;  // HTT: IPv6 bracketing; reachable only when the JVM is started with -Djava.net.preferIPv6Addresses=true
 	}
 
 	/**
@@ -165,7 +157,7 @@ public class LoopbackRedirectReceiver implements AutoCloseable {
 			Thread.currentThread().interrupt();
 			throw new McpAuthException("Interrupted waiting for the loopback authorization redirect", e);
 		} catch (ExecutionException e) { // HTT: callback future is only ever completed normally by the handler
-			throw new McpAuthException("Loopback authorization redirect failed", e);
+			throw new McpAuthException("Loopback authorization redirect failed", e);  // HTT: see catch above
 		}
 	}
 

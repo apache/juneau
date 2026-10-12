@@ -1,105 +1,45 @@
 # ============================================================================
-# Apache Juneau — per-module test performance baselines.
+# Apache Juneau — test performance baselines.
 #
-# Relocated from juneau-utest/perf-baseline.txt to the project root by TODO-160
-# so the perf subsystem can track every reactor module, not just juneau-utest.
+# Read by the perf guard in scripts/test.py (run_perf_guard), which runs after `mvn test` in
+# `scripts/test.py --full` and in scripts/push.py.  Warn-only unless --enforce-perf.
 #
-# FORMAT — one entry per line:
-#     <key> = <seconds>            # optional trailing comment
+# FORMAT — one entry per line:   <key> = <seconds>     # optional trailing comment
 #
-#   key = "suite"
-#       Overall reactor wall-clock baseline (subprocess time of `mvn test`).
-#       Compared against the measured wall-clock by scripts/test.py --enforce-perf.
+#   suite            The real wall clock of the whole `mvn test -T1C` phase.  Breaches above
+#                    suite × (1 + tolerance).
 #
-#   key = "<module>/<bucket>"
-#       Per-module Surefire XML aggregate test-time baseline.
-#       <module> = module path relative to the repo root (e.g. "juneau-integration-tests",
-#                  "juneau-core/juneau-junit5"); MAY contain '/'.
-#       <bucket> ∈ { core, container.springboot, container.jetty, container.tomcat }.
-#       The owning module is the parent of <module>/target/surefire-reports.
-#       Parsed by splitting the key on its LAST '/'.
+#   [modules]        <module path> = <seconds>: a reactor module's wall clock, from the Reactor
+#                    Summary Maven prints (path relative to the repo root, e.g.
+#                    "juneau-rest/juneau-rest-mock").  A module breaches only when it is over
+#                    baseline × (1 + tolerance) AND more than min-seconds over its baseline.  A
+#                    module with no entry warns and never fails.
 #
-# Tolerance: ±20% by default (env JUNEAU_CI_PERF_THRESHOLD, a decimal fraction),
-# applied per module AND to the suite total.
+#   [observability]  Read by scripts/microbench.py, not by the perf guard.
 #
-# New/unknown module handling: a module with NO entry here is treated as new —
-# the guard WARNS but does NOT hard-fail, so the baseline degrades gracefully as
-# TODO-160 migrates tests into co-located modules.
+# Tolerance: JUNEAU_CI_PERF_THRESHOLD (default 0.20).  Min seconds: JUNEAU_CI_PERF_MIN_SECONDS (default 3).
 #
-# Consumers: scripts/test.py (run_perf_guard / write_timing_log) and
-#            scripts/ci-perf-guard.py.
+# To re-baseline once a few pushes have recorded module rows:
+#     python3 scripts/test.py --rebaseline [--window 20] [--min-runs 5] [--timing-log <path>]
+# It reads the push history (default ~/.cache/juneau-push-timings/<branch>.jsonl), takes each key's
+# median over its last 20 passing runs (dropping runs over 3× that median), rounds up to 0.1s,
+# rewrites the suite line and the [modules] section, and prints what changed.  A key with fewer
+# than 5 runs keeps its value.  Review the diff; nothing is committed.
 #
-# To re-baseline: run `python3 scripts/test.py --full --timing-log /tmp/juneau-timing.jsonl`,
-# read the per-module wallclock values from the JSONL (or the run's surefire reports),
-# and update the entries below.
+# --rebaseline rewrites the [modules] section wholesale: keep comments above the [modules] line,
+# and keep the suite line above it too.
 #
-# Parsing note: blank lines, lines beginning with '#', the [observability] section
-# below, and any non-"suite" key without a '/' (e.g. the observability metric) are
-# ignored by the per-module perf-guard parser.
+# Consumers: scripts/test.py (read_baselines, run_perf_guard, rebaseline) and
+#            scripts/microbench.py ([observability]).
 # ============================================================================
 
-# 2026-07-17 parallel-model re-baseline (set by TODO-252, superseding the FINISHED-232 serial
-# baseline): warm-machine full-suite runs via `python3 scripts/test.py --full`, PARALLEL execution
-# model — reactor `mvn -T1C` parallel *module* builds (enabled in scripts/test.py) + Surefire
-# `forkCount=8` on the juneau-integration-tests core bucket.  135,210 tests.
-#
-# IMPORTANT — reading these numbers under the parallel model:
-#   * The 'suite' value is the AUTHORITATIVE metric: it is the real subprocess wall-clock of the
-#     parallel `mvn test` phase.  Measured 122-130s across 3 green runs (was 281s serial ≈ -55%).
-#   * The per-'<module>/<bucket>' values are NOT real wall-clock under -T.  scripts/test.py derives
-#     them by SUMMING each test class's Surefire <time> for the module; under -T1C those per-class
-#     wall-times are inflated by CPU contention (up to 16 module builds run concurrently) and, for
-#     forked buckets, further multiplied by forkCount (e.g. integration-tests/core sums ~230s across
-#     its 8 forks while its real module wall-clock is a fraction of that).  They are therefore
-#     ADVISORY only — self-consistent within this fixed -T1C+forkCount=8 model, useful for catching a
-#     large per-module regression, but not comparable to the old serial per-module seconds.
-#   * Values below are the MAX observed across the 3 re-baseline runs (rounded up) so normal
-#     warm-cache/JIT variance does not trip the ±20% guard; only a real >20%-over-worst jump fires.
-suite = 130                                          # parallel wall-clock; measured 122-130s across 3 runs.
-juneau-integration-tests/core = 252                  # -T+forkCount=8 summed/inflated (real module wall-clock far lower); time-dominant.
-juneau-integration-tests/container.springboot = 5.5
-juneau-integration-tests/container.jetty = 9         # startup/shutdown-variable.
-juneau-microservice/juneau-microservice-examples/core = 22.5
-juneau-core/juneau-marshall/core = 17.5              # 76,973 tests (count-dominant, fast in-memory).
-juneau-core/juneau-marshall-rdf/core = 15.5          # 21,921 tests.
-juneau-rest/juneau-rest-server-auth-saml/core = 13.5
-juneau-rest/juneau-rest-server-springboot/container.springboot = 11.5
-juneau-rest/juneau-rest-server-view-jsp/core = 10
-juneau-petstore/juneau-petstore-jetty/container.jetty = 9.5
-juneau-petstore/juneau-petstore-springboot/container.springboot = 9.5
-juneau-rest/juneau-rest-server-view-thymeleaf/core = 8.5
-juneau-rest/juneau-rest-server-auth-jwt/core = 7.5
-juneau-rest/juneau-rest-server-metrics-micrometer/core = 7.5
-juneau-rest/juneau-rest-server-view-freemarker/core = 7.5
-juneau-microservice/juneau-microservice/core = 7.5   # embedded-server startup heavy; time-variable.
-juneau-rest/juneau-rest-server-mcp-v20250618/core = 11      # bumped from 7.5 for TODO-312c4 resource-template + completion tests (measured 9.1s).
-juneau-rest/juneau-rest-server-view-mustache/core = 7
-juneau-rest/juneau-rest-server-auth-oidc-rp/core = 6.6
-juneau-rest/juneau-rest-server-mcp/core = 6                # re-measured post-relayering (TODO-312a Task 16); most tests moved to the adapter module below.
-juneau-rest/juneau-rest-server-tracing-otel/core = 6
-juneau-bean/juneau-bean-html5/core = 5.5             # 12,427 tests.
-juneau-rest/juneau-rest-server-mcp-v20260728/core = 9.5    # bumped from 6.5 for TODO-312c4 resource-template + completion tests (measured 7.9s).
-juneau-core/juneau-config/core = 4
-juneau-petstore/juneau-petstore-core/core = 4.5
-juneau-rest/juneau-rest-server-reactive/core = 4
-juneau-bean/juneau-bean-common/core = 2.8
-juneau-microservice/juneau-microservice-jetty/core = 3
-juneau-bean/juneau-bean-jsonschema/core = 2.5
-juneau-rest/juneau-rest-server/core = 2.6
-juneau-rest/juneau-rest-mock/core = 2.3
-juneau-rest/juneau-rest-server-auth-oauth/core = 2.5
-juneau-core/juneau-commons/core = 2.2                # 5,311 tests.
-juneau-bean/juneau-bean-jsonrpc/core = 2                    # re-measured post-relayering (TODO-312a Task 16); new module, JSON-RPC 2.0 envelope beans.
-juneau-bean/juneau-bean-atom/core = 2
-juneau-bean/juneau-bean-jsonapi/core = 2
-juneau-bean/juneau-bean-hal/core = 2
-juneau-bean/juneau-bean-jsonpatch/core = 2
-juneau-bean/juneau-bean-openapi-v3/core = 1.5
-juneau-bean/juneau-bean-swagger-v2/core = 1.3
-juneau-bean/juneau-bean-mcp-v20250618/core = 1.8           # bumped from 1.2 for TODO-312c4 resource-template + completion tests (measured 1.5s).
-juneau-bean/juneau-bean-mcp-v20260728/core = 1.5           # bumped from 1.0 for TODO-312c4 resource-template + completion tests (measured 1.2s).
+# 2026-10-10 (WORK-J0654): the median of the last 20 pushes was 178s; 185 leaves headroom.
+suite = 185
+
+[modules]
 
 # ─── [observability] ──────────────────────────────────────────────────────────
+[observability]
 #
 # Consumed by scripts/microbench.py — NOT by the per-module perf guard.
 #

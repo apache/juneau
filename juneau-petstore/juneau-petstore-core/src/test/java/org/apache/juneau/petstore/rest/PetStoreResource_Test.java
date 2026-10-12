@@ -21,6 +21,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.awt.image.*;
 import java.io.*;
+import java.nio.charset.*;
 
 import javax.imageio.*;
 
@@ -184,5 +185,22 @@ class PetStoreResource_Test extends TestBase {
 
 		var pet = c.get("/pets/1").run().assertStatus(200).getContent().as(Pet.class);
 		assertEquals("/petstore/pets/1/photo", pet.getPhoto());
+	}
+
+	@Test void d05_putPetPhoto_jpegContentType_accepted() throws Exception {
+		// Browsers send image/jpeg (never the non-standard image/jpg) for a JPEG upload.
+		var image = new BufferedImage(2, 2, BufferedImage.TYPE_INT_RGB);
+		byte[] jpeg;
+		try (var baos = new ByteArrayOutputStream()) {
+			ImageIO.write(image, "jpg", baos);
+			jpeg = baos.toByteArray();
+		}
+		client().put("/pets/1/photo", new ByteArrayInputStream(jpeg)).contentType("image/jpeg")
+			.run().assertStatus(200);
+	}
+
+	@Test void d06_putPetPhoto_undecodableBytes_400() throws Exception {
+		client().put("/pets/1/photo", new ByteArrayInputStream("not an image".getBytes(StandardCharsets.UTF_8))).contentType("image/png")
+			.run().assertStatus(400);
 	}
 }

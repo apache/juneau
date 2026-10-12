@@ -593,6 +593,48 @@ public class BctAssertions {
 	}
 
 	/**
+	 * Asserts that the string representation of an object does not contain the specified substring.
+	 *
+	 * <p>Same as {@link #assertNotContains(Supplier, String, Object)} but without a custom message.</p>
+	 *
+	 * @param unexpected The substring that must not be present in the actual object's string representation
+	 * @param actual The object to test. Must not be null.
+	 * @throws AssertionError if the actual object is null or its string representation contains the substring
+	 * @see #assertNotContains(Supplier, String, Object)
+	 */
+	public static void assertNotContains(String unexpected, Object actual) {
+		assertNotContains(null, unexpected, actual);
+	}
+
+	/**
+	 * Asserts that the string representation of an object does not contain the specified substring.
+	 *
+	 * <p>This is the negation of {@link #assertContains(Supplier, String, Object)}: the actual object is
+	 * converted to its string representation using the current {@link BeanConverter} and must not contain
+	 * the substring.</p>
+	 *
+	 * <h5 class='section'>Usage Examples:</h5>
+	 * <p class='bjava'>
+	 *    <jc>// Test that a rendered page does not leak a value</jc>
+	 *    <jsm>assertNotContains</jsm>(<js>"password"</js>, <jv>html</jv>);
+	 * </p>
+	 *
+	 * @param message Optional custom error message supplier. If provided, will be composed with the default assertion message.
+	 * @param unexpected The substring that must not be present in the actual object's string representation
+	 * @param actual The object to test. Must not be null.
+	 * @throws AssertionError if the actual object is null or its string representation contains the substring
+	 * @see #assertContains(Supplier, String, Object)
+	 */
+	public static void assertNotContains(Supplier<String> message, String unexpected, Object actual) {
+		reqnn("unexpected", unexpected);
+		reqnn("actual", actual);
+		assertNotNull(actual, "Value was null.");
+
+		var a = BctConfiguration.getConverter().stringify(actual);
+		assertFalse(a.contains(unexpected), composeMessage(message, "String contained unexpected substring.  ==> unexpected: <%s> but was: <%s>", unexpected, a));
+	}
+
+	/**
 	 * Asserts that the string representation of an object contains all specified substrings.
 	 *
 	 * <p>Same as {@link #assertContainsAll(Supplier, Object, String...)} but without a custom message.</p>

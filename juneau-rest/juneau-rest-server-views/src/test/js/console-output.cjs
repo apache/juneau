@@ -131,13 +131,14 @@ test('chk05_unknownMembersIgnored', function (t) {
 
 test('chk06_normalisationAndCopy', function (t) {
 	const input = { n: 1, level: 'WARNING', instant: '2026-10-07T13:04:05.123Z',
-		frags: [{ block: true, href: '#a\nb', tooltip: 'x'.repeat(3000), label: 'y'.repeat(300) }, { block: true, href: '/a\\b' }, { text: 'z', bold: true }],
+		frags: [{ block: true, href: '#a\nb', tooltip: 'x'.repeat(3000), label: 'y'.repeat(300) }, { block: true, href: '/a\n/b' }, { text: 'z', bold: true }],
 		ui: { marker: true, image: { src: '/r\n/c.png', alt: 'c', width: 480 } } };
 	const r = t.CO.validateLine(input);
 	expect(r.line !== input && r.line.frags !== input.frags && r.line.ui !== input.ui, 'returns a fresh object');
 	expect(r.line.frags[0].href === '#ab', 'fragment href stripped');
 	expect(r.line.frags[0].tooltip.length === 2048 && r.line.frags[0].label.length === 256, 'tooltip/label truncated');
-	expect(r.line.frags[1].href === '/a/b', 'path href folded');
+	expect(r.line.frags[1].href === '/a/b', 'path href stripped');
+	expect(t.CO.validateLine({ frags: [{ block: true, href: '/a\\b' }] }).line.frags[0].href === undefined, 'backslash href dropped');
 	expect(r.line.frags[2].bold === true, 'bold kept');
 	expectSame(r.line.ui, { image: { src: '/r/c.png', alt: 'c', width: 480 }, marker: true }, 'ui (allowlist order)');
 	expect(r.line.instant === input.instant && r.line.level === 'WARNING', 'instant and level kept');

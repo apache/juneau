@@ -97,7 +97,8 @@ public final class RowDetail {
 	/**
 	 * Sets the detail panel's region.
 	 *
-	 * @param value The region.  Its {@link RegionDef#type} defaults to {@link RegionDef#TYPE_ROW_DETAIL} and its
+	 * @param value The region.  Can be <jk>null</jk> to clear it (a header-only panel).
+	 * 	Its {@link RegionDef#type} defaults to {@link RegionDef#TYPE_ROW_DETAIL} and its
 	 * 	{@link RegionDef#dataUrl} defaults to this detail's own endpoint, applied at {@link #toMap()} time onto a
 	 * 	copy; this method never mutates {@code value} itself.
 	 * @return This object.
@@ -121,31 +122,34 @@ public final class RowDetail {
 	}
 
 	/**
-	 * Builds this detail's card-body entry: {@code {endpoint, title?, icon?, region}}.
+	 * Builds this detail's card-body entry: {@code {endpoint, title?, icon?, region?}}.
 	 *
 	 * <p>
-	 * Builds from a copy: reads {@link RegionDef#toContractMap()} off the caller's {@link #region(RegionDef) region}
+	 * The region is optional: a detail with none is a header-only panel (the client fills the {@code title}/{@code icon}
+	 * header from the endpoint's {@code fields}) and the entry carries no {@code region} key.
+	 *
+	 * <p>
+	 * When a region is set, builds from a copy: reads {@link RegionDef#toContractMap()} off the caller's {@link #region(RegionDef) region}
 	 * into a fresh map, applies the {@code type}/{@code dataUrl} defaults onto that copy, and strips the copy's
 	 * {@code contractVersion} key (a card fragment never nests a {@code contractVersion}, since the client stamps it
 	 * on mount).  The caller's {@link RegionDef} instance is never written to.
 	 *
 	 * @return The detail entry.
-	 * @throws IllegalArgumentException If no region was set.
 	 */
 	public JsonMap toMap() {
-		if (region == null)
-			throw iaex("RowDetail '%s' requires a region.", endpoint);
 		var m = new JsonMap();
 		m.put("endpoint", endpoint);
 		if (title != null)
 			m.put("title", title);
 		if (icon != null)
 			m.put("icon", icon);
-		var regionMap = new LinkedHashMap<>(region.toContractMap());
-		regionMap.remove("contractVersion");
-		regionMap.putIfAbsent("type", RegionDef.TYPE_ROW_DETAIL);
-		regionMap.putIfAbsent("dataUrl", endpoint);
-		m.put("region", regionMap);
+		if (region != null) {
+			var regionMap = new LinkedHashMap<>(region.toContractMap());
+			regionMap.remove("contractVersion");
+			regionMap.putIfAbsent("type", RegionDef.TYPE_ROW_DETAIL);
+			regionMap.putIfAbsent("dataUrl", endpoint);
+			m.put("region", regionMap);
+		}
 		return m;
 	}
 }

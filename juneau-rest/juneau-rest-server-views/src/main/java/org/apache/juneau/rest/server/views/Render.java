@@ -58,7 +58,7 @@ public class Render {
 	public String id;
 
 	/** Optional per-column renderer metadata.  Omitted from the wire when absent. */
-	public Map<String,String> meta;
+	public Map<String,Object> meta;
 
 	/**
 	 * Creates a renderer reference with the specified id and no metadata.
@@ -95,10 +95,11 @@ public class Render {
 	 * Adds a metadata key/value pair to this renderer reference.
 	 *
 	 * @param key The metadata key.  Must not be <jk>null</jk>.
-	 * @param value The metadata value.
+	 * @param value The metadata value.  Serialized as given, so a {@link Number} or {@link Boolean} stays a JSON
+	 * 	number or boolean (for example {@code meta("places", 2)}).
 	 * @return This object.
 	 */
-	public Render meta(String key, String value) {
+	public Render meta(String key, Object value) {
 		if (meta == null)
 			meta = m();
 		meta.put(key, value);
@@ -130,7 +131,7 @@ public class Render {
 	 *
 	 * <p>
 	 * Equivalent to {@code Render.of("progress").meta("max", String.valueOf(max))}.  Chain
-	 * {@link #meta(String,String)} for {@code label} / {@code field}.
+	 * {@link #meta(String,Object)} for {@code label} / {@code field}.
 	 *
 	 * @param max The ratio denominator.  Serialized as the string {@code meta.max}.
 	 * @return A new {@link Render}.
@@ -165,7 +166,7 @@ public class Render {
 	 *
 	 * <p>
 	 * Equivalent to {@code Render.of("pill")}.  The dot color follows the {@code .tag.<field>.<value>} theme
-	 * ({@code currentColor}) until an explicit {@code tone} is chosen.  Chain {@link #meta(String,String)} for
+	 * ({@code currentColor}) until an explicit {@code tone} is chosen.  Chain {@link #meta(String,Object)} for
 	 * {@code field}, {@code dot} ({@code on}|{@code off}) and {@code action} (a {@code rowActions} id).
 	 *
 	 * <p>

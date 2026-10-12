@@ -341,6 +341,93 @@ public final class PageContractAssert {
 	}
 
 	/**
+	 * Asserts this page and another render the same contract and the same template markup.
+	 *
+	 * <p>
+	 * Use it to prove two ways of producing a page (for example a hand-written template and its builder twin) agree.
+	 * The contracts are compared as key-sorted JSON; list order is kept, because card, nav and option order is part of
+	 * the page.  Templates are compared by id on their {@linkplain String#strip() stripped} markup, so the whitespace a
+	 * template author's layout puts around a card body does not count.
+	 *
+	 * <p>
+	 * The failure message names the first difference, for example
+	 * {@code page contracts differ at $.cards[0].bare: this=true other=false}.
+	 *
+	 * @param other The page this one must equal.
+	 * @return This object.
+	 */
+	public PageContractAssert isTwinOf(PageContractAssert other) {
+		assertTwins(contract, templates, other.contract, other.templates);
+		return this;
+	}
+
+	/**
+	 * Asserts two contract and template pairs are twins, as {@link #isTwinOf(PageContractAssert)} does.
+	 *
+	 * <p>
+	 * Exposed so a test that must first adjust either side (for example remove a card known to differ) can still use the
+	 * shared comparison.
+	 *
+	 * @param contract The first contract.
+	 * @param templates The first page's templates, by id.
+	 * @param otherContract The second contract.
+	 * @param otherTemplates The second page's templates, by id.
+	 * @throws AssertionError If the contracts or templates differ.
+	 */
+	public static void assertTwins(Map<?,?> contract, Map<String,String> templates, Map<?,?> otherContract, Map<String,String> otherTemplates) {
+		var diff = firstDiff("$", canonical(contract), canonical(otherContract));
+		if (diff != null)
+			throw new AssertionError("page contracts differ at " + diff);
+		var a = stripped(templates);
+		var b = stripped(otherTemplates);
+		var ids = new TreeSet<>(a.keySet());
+		ids.addAll(b.keySet());
+		for (var id : ids)
+			if (neq(a.get(id), b.get(id)))
+				throw new AssertionError("page template '" + id + "' differs: this=" + a.get(id) + " other=" + b.get(id));
+	}
+
+	private static Map<String,String> stripped(Map<String,String> templates) {
+		var out = new TreeMap<String,String>();
+		templates.forEach((k, v) -> out.put(k, v.strip()));
+		return out;
+	}
+
+	// Recursively key-sorts every Map; List order is kept.
+	private static Object canonical(Object v) {
+		if (v instanceof Map<?,?> m) {
+			var out = new TreeMap<String,Object>();
+			m.forEach((k, x) -> out.put(String.valueOf(k), canonical(x)));
+			return out;
+		}
+		if (v instanceof List<?> l)
+			return l.stream().map(PageContractAssert::canonical).toList();
+		return v;
+	}
+
+	// The first place two canonical trees differ, or null.
+	private static String firstDiff(String path, Object a, Object b) {
+		if (! neq(a, b))
+			return null;
+		if (a instanceof Map<?,?> x && b instanceof Map<?,?> y) {
+			var keys = new TreeSet<Object>(x.keySet());
+			keys.addAll(y.keySet());
+			for (var k : keys) {
+				var d = firstDiff(path + "." + k, x.get(k), y.get(k));
+				if (d != null)
+					return d;
+			}
+		}
+		if (a instanceof List<?> x && b instanceof List<?> y && x.size() == y.size())
+			for (var i = 0; i < x.size(); i++) {
+				var d = firstDiff(path + "[" + i + "]", x.get(i), y.get(i));
+				if (d != null)
+					return d;
+			}
+		return path + ": this=" + a + " other=" + b;
+	}
+
+	/**
 	 * Escape hatch for asserts this class does not offer.
 	 *
 	 * @return The parsed contract.

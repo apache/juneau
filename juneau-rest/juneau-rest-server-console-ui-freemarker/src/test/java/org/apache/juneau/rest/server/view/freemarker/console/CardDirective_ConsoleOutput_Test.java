@@ -64,7 +64,7 @@ class CardDirective_ConsoleOutput_Test extends TestBase {
 	@ParameterizedTest
 	@CsvSource(delimiter='|', value={
 		"co-card-noid|<@card type=\"console-output\"> requires id=.",
-		"co-card-src|<@card id='log'> type='console-output' takes its options as the body; src= and template= are not allowed.",
+		"co-card-src|<@card id='log'> type='console-output' takes its options as the body; src= is not allowed.",
 		"co-card-empty|<@card id='log'> type='console-output' requires a JSON5 body { contractVersion: '1', output: {...} }.",
 		"co-card-noversion|<@card id='log'> type='console-output' requires contractVersion: '1'; got 'null'.",
 		"co-card-extra|<@card id='log'> type='console-output' unknown key 'poll'; allowed: contractVersion, output.",

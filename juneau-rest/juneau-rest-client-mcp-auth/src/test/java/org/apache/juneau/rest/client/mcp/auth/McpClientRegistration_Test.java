@@ -141,4 +141,11 @@ class McpClientRegistration_Test extends TestBase {
 		assertThrows(IllegalArgumentException.class, () -> LoopbackRedirectUris.forPort(0, "/callback"));
 		assertThrows(IllegalArgumentException.class, () -> LoopbackRedirectUris.forPort(70000, "/callback"));
 	}
+
+	@Test void e01_nullRedirectUrisAndExtrasDefaultToEmpty() {
+		var reg = new McpClientRegistration("c", Optional.empty(), Optional.empty(), Optional.empty(),
+			Optional.empty(), ISSUER, null, McpApplicationType.NATIVE, null);
+		assertTrue(reg.redirectUris().isEmpty());
+		assertTrue(reg.extras().isEmpty());
+	}
 }

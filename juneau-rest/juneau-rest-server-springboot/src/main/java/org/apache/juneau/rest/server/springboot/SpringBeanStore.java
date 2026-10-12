@@ -204,7 +204,7 @@ public class SpringBeanStore extends BasicBeanStore {
 		}
 
 		// Return a supplier that delegates to Spring context
-		if (nn(appContext) && nn(name) && safeOpt(() -> appContext.containsBean(name) && appContext.isTypeMatch(name, beanType)).orElse(false)) {
+		if (nn(appContext) && safeOpt(() -> appContext.containsBean(name) && appContext.isTypeMatch(name, beanType)).orElse(false)) {
 			return o(() -> safeOpt(() -> appContext.getBean(name, beanType)).orElse(null));
 		}
 

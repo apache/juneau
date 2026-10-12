@@ -166,4 +166,50 @@ class JuneauRestLoggingAutoConfiguration_Test extends TestBase {
 			context.stop();
 		}
 	}
+
+	/** A {@link LoggerContext} whose listener-list accessor reports a propagator that is not in the real listener list. */
+	static class ReportsPropagatorContext extends LoggerContext {
+		int added;
+
+		@Override public void addListener(ch.qos.logback.classic.spi.LoggerContextListener listener) {
+			added++;
+			super.addListener(listener);
+		}
+
+		@Override public java.util.List<ch.qos.logback.classic.spi.LoggerContextListener> getCopyOfListenerList() {
+			return java.util.List.of(new JuneauResetResistantLevelChangePropagator());
+		}
+	}
+
+	private static long propagatorCount(LoggerContext context) {
+		return context.getCopyOfListenerList().stream().filter(LevelChangePropagator.class::isInstance).count();
+	}
+
+	@Test void e01_otherListenerPresent_stillInstallsSinglePropagator() {
+		var cfg = new JuneauRestLoggingAutoConfiguration();
+		var context = new LoggerContext();
+		try {
+			context.addListener(org.mockito.Mockito.mock(ch.qos.logback.classic.spi.LoggerContextListener.class));
+
+			cfg.install(context, false);
+			cfg.install(context, false);
+
+			assertEquals(1, propagatorCount(context));
+			assertEquals(2, context.getCopyOfListenerList().size());
+		} finally {
+			context.stop();
+		}
+	}
+
+	@Test void e02_propagatorReportedByListenerList_isNotInstalledAgain() {
+		var cfg = new JuneauRestLoggingAutoConfiguration();
+		var context = new ReportsPropagatorContext();
+		try {
+			cfg.install(context, false);
+
+			assertEquals(0, context.added, "install must consult getCopyOfListenerList() and add nothing");
+		} finally {
+			context.stop();
+		}
+	}
 }

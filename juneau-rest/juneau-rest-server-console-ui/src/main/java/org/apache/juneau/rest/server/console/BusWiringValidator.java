@@ -24,7 +24,7 @@ import org.apache.juneau.marshall.collections.*;
 /**
  * Static check of a page contract's message-bus wiring (spec §6.1, §11.2): rule R-10 (every
  * subscription has a publisher), rule R-11 (every {@code publisher:"server"} topic rides a bridge downstream), and the
- * E-40..E-54 shape rules on {@code topics}, {@code bridges}, card {@code publishes} / {@code subscribes} and ribbon
+ * E-40..E-54 and E-58 shape rules on {@code topics}, {@code bridges}, card {@code publishes} / {@code subscribes} and ribbon
  * {@code target} / {@code publish} items.
  *
  * <p>
@@ -58,7 +58,7 @@ public final class BusWiringValidator {
 	 *   <jv>p</jv>.toString();   <jc>// "E-52 topic 'ops.jobs' is declared ..."</jc>
 	 * </p>
 	 *
-	 * @param code The Java code, {@code E-40}..{@code E-54}.
+	 * @param code The Java code, {@code E-40}..{@code E-54} or {@code E-58}.
 	 * @param message The spec §6.2 message, without the code.
 	 */
 	public record Problem(String code, String message) {
@@ -87,6 +87,7 @@ public final class BusWiringValidator {
 	static final String E52 = "topic '%s' is declared publisher=server but no bridge carries it downstream";
 	static final String E53 = "bridge '%s' sends '%s' upstream, but no topics entry or card publishes declares it";
 	static final String E54 = "bridge '%s' may not carry framework state topic '%s' (only job:*, and cmd:<cardId> downstream)";
+	static final String E58 = "terminal card '%s' has input: true but %s";
 
 	// Topic grammar (schema §5.7): one copy, owned by Topics.
 	static final Set<String> FRAMEWORK_FAMILIES = Topics.FRAMEWORK_FAMILIES;
@@ -117,7 +118,7 @@ public final class BusWiringValidator {
 	 *
 	 * @param contract The page contract (the {@code #juneau-page} JSON).
 	 * @param registry Card types, for implicit topics, accepted roles and ops.  Unregistered types are skipped.
-	 * @return Every problem, in contract order: {@code topics}, then each card, then {@code bridges}, then R-11.
+	 * @return Every problem, in contract order: {@code topics}, then each card, then {@code bridges}, then R-11, then the terminal-input rule (E-58).
 	 */
 	public static List<Problem> validate(JsonMap contract, CardTypeRegistry registry) {
 		return new Run(contract, registry).run();
@@ -180,6 +181,7 @@ public final class BusWiringValidator {
 				checkCard(c);
 			checkBridges();
 			checkServerTopics();
+			checkTerminalInput();
 			return List.copyOf(problems);
 		}
 
@@ -529,6 +531,38 @@ public final class BusWiringValidator {
 							return true;
 					}
 			return false;
+		}
+
+		/** E-58: a terminal card with {@code input: true} must carry the whole input wiring (publish, subscribe, server topic, bridge). */
+		void checkTerminalInput() {
+			for (var c : cards.values()) {
+				if (! "terminal".equals(str(c.get("type"))))
+					continue;
+				if (! (c.get("terminal") instanceof Map<?,?> term) || ! Boolean.TRUE.equals(term.get("input")))
+					continue;
+				var id = str(c.get("id"));
+				var publishes = false;
+				for (var p : maps(c.get("publishes")))
+					publishes |= "term.input".equals(str(p.get("topic")));
+				if (! publishes)
+					add("E-58", E58, id, "its publishes lacks 'term.input'");
+				var subscribes = false;
+				for (var s : maps(c.get("subscribes")))
+					subscribes |= "term.input-status".equals(str(s.get("topic"))) && "input-status".equals(str(s.get("as")));
+				if (! subscribes)
+					add("E-58", E58, id, "its subscribes lacks 'term.input-status' as 'input-status'");
+				var declared = false;
+				for (var t : topics)
+					declared |= "term.input-status".equals(str(t.get("topic"))) && "server".equals(str(t.get("publisher")));
+				if (! declared)
+					add("E-58", E58, id, "no topics entry declares 'term.input-status' with publisher=server");
+				var bridged = false;
+				for (var b : bridges)
+					bridged |= "websocket".equals(str(b.get("transport"))) && strings(b.get("upstream")).contains("term.input")
+						&& strings(b.get("downstream")).contains("term.input-status");
+				if (! bridged)
+					add("E-58", E58, id, "no websocket bridge carries 'term.input' upstream and 'term.input-status' downstream");
+			}
 		}
 
 		void checkServerTopics() {

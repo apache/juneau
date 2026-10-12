@@ -885,6 +885,20 @@
 				if (!covered)
 					out.push({ code: 'E-JS-52', message: fmt("topic '%s' is declared publisher=server but no bridge carries it downstream", t.topic) });
 			});
+
+			// E-58 twin: a terminal card with input: true must carry the whole input wiring.
+			cards.forEach(function (c, id) {
+				if (c.type !== 'terminal' || !(c.terminal && c.terminal.input === true)) return;
+				function why(reason) { out.push({ code: 'E-JS-52', message: fmt("terminal card '%s' has input: true but %s", id, reason) }); }
+				if (!objs(c.publishes).some(function (p) { return p.topic === 'term.input'; })) why("its publishes lacks 'term.input'");
+				if (!objs(c.subscribes).some(function (x) { return x.topic === 'term.input-status' && x.as === 'input-status'; }))
+					why("its subscribes lacks 'term.input-status' as 'input-status'");
+				if (!topics.some(function (t) { return t.topic === 'term.input-status' && t.publisher === 'server'; }))
+					why("no topics entry declares 'term.input-status' with publisher=server");
+				if (!bridges.some(function (b) {
+					return b.transport === 'websocket' && strs(b.upstream).indexOf('term.input') >= 0 && strs(b.downstream).indexOf('term.input-status') >= 0;
+				})) why("no websocket bridge carries 'term.input' upstream and 'term.input-status' downstream");
+			});
 			return out;
 		};
 	})();

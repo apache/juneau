@@ -98,4 +98,32 @@ class SafePathTemplate_Test extends TestBase {
 		assertFalse(SafePathTemplate.isSafeDocumentUrl("/x/../../etc/passwd"));
 		assertFalse(SafePathTemplate.isSafeDocumentUrl(null));
 	}
+
+	@Test void a09_sameOrigin_rejectsBackslashAndEdgeCharacters() {
+		// A browser reads "\\" as "/", and strips a leading or trailing C0 control or space, so each of these resolves cross-host.
+		assertFalse(SafePathTemplate.isSameOriginPath("\\\\evil.test/x"));
+		assertFalse(SafePathTemplate.isSameOriginPath("/\\evil.test"));
+		assertFalse(SafePathTemplate.isSameOriginPath("\\/evil.test"));
+		assertFalse(SafePathTemplate.isSameOriginPath(" //evil.test"));
+		assertFalse(SafePathTemplate.isSameOriginPath("\t//evil.test"));
+		assertFalse(SafePathTemplate.isSameOriginPath("\n//evil.test"));
+		assertFalse(SafePathTemplate.isSameOriginPath("\r//evil.test"));
+		assertFalse(SafePathTemplate.isSameOriginPath("\u0000//evil.test"));
+		assertFalse(SafePathTemplate.isSameOriginPath("\u001f//evil.test"));
+		assertFalse(SafePathTemplate.isSameOriginPath("/\t/evil.test"));
+		assertFalse(SafePathTemplate.isSameOriginPath("/\n/evil.test"));
+		assertFalse(SafePathTemplate.isSameOriginPath("//evil.test "));
+		assertFalse(SafePathTemplate.isSameOriginPath("/foo "));
+		assertFalse(SafePathTemplate.isSameOriginPath("/foo?q=C:\\x"));
+		assertFalse(SafePathTemplate.isSameOriginPath("/a\u007fb"));
+	}
+
+	@Test void a10_sameOrigin_keepsInternalSpaceEncodedAndNonAscii() {
+		assertTrue(SafePathTemplate.isSameOriginPath("/a b"));
+		assertTrue(SafePathTemplate.isSameOriginPath("/%5Cevil.test"));
+		assertTrue(SafePathTemplate.isSameOriginPath("%2F%2Fevil.test"));
+		assertTrue(SafePathTemplate.isSameOriginPath("/.//evil.test"));
+		assertTrue(SafePathTemplate.isSameOriginPath("\u00a0//evil.test"));
+		assertTrue(SafePathTemplate.isSameOriginPath("/caf\u00e9"));
+	}
 }

@@ -26,7 +26,8 @@
  * @example
  * JuneauConsoleBadges.mount([{ id: 'pending', src: '/rest/changes/pending', href: '/ui/changes', refreshMs: 60000 }]);
  *
- * Error codes: E-JS-65 (fetch failed, or 401/403), E-JS-66 (response has no numeric `total`).
+ * Error codes: E-JS-65 (fetch failed, or 401/403), E-JS-66 (response has no numeric `total`), E-JS-82 (a badge `src` or
+ * `href`, or a poll-body item `href`, is not a same-origin path; the badge is removed, the click ignored, or the row left unlinked).
  */
 (function () {
 	"use strict";
@@ -48,6 +49,26 @@
 
 	function logError(code, msg, ...args) {
 		console.error("[juneau-badges] " + code + ": " + fmt(msg, ...args));
+	}
+
+	/**
+	 * The one prefix rule every same-origin / allowlist URL guard applies to the ORIGINAL string, before anything else
+	 * (never normalise and accept): true when the first or last character is a space or control character, or any
+	 * character is a backslash, a C0 control character or DEL.  A browser strips leading/trailing C0 and space,
+	 * deletes tab/CR/LF anywhere and reads a backslash as a slash, so each of those can turn a value that looks like a
+	 * same-origin path into "//host".  The text of this function is identical in every file that carries it
+	 * (checked by ViewsJs_SameOriginPath_Test) and mirrors SafePathTemplate.isSameOriginPath.  Callers handle the empty string.
+	 */
+	function hasUnsafeUrlChars(s) {
+		return s.charCodeAt(0) <= 32 || s.charCodeAt(s.length - 1) <= 32 || /[\\\u0000-\u001f\u007f]/.test(s);
+	}
+
+	// Exact parity with SafePathTemplate.isSameOriginPath (juneau-commons), the rule BadgeDef.validate applies to src and href.
+	function isSafeBadgePath(u) {
+		if (typeof u !== "string" || !u || hasUnsafeUrlChars(u) || u.includes("://") || u.startsWith("//")) return false;
+		const colon = u.indexOf(":"), slash = u.indexOf("/");
+		if (colon >= 0 && (slash < 0 || colon < slash)) return false;
+		return u.split("/").indexOf("..") < 0;
 	}
 
 	let mounted = {}; // badge id -> state
@@ -196,6 +217,11 @@
 	function poll(st) {
 		if (mounted[st.def.id] !== st) return;
 		const def = st.def;
+		if (!isSafeBadgePath(def.src)) {
+			logError("E-JS-82", "badge '%s' src is not a same-origin path: '%s'", def.id, def.src);
+			removeBadge(st);
+			return;
+		}
 		const scope = resolveScope(def);
 		if (scope === null) {
 			if (st.el) st.el.hidden = true;
@@ -364,9 +390,10 @@
 		pop.setAttribute("role", "tooltip");
 		const shown = body.items.slice(0, max);
 		for (const it of shown) {
-			const row = doc.createElement(it.href ? "a" : "div");
+			const row = doc.createElement(it.href && isSafeBadgePath(it.href) ? "a" : "div");
 			row.className = "jc-count-badge-popover-item" + (it.mine ? " jc-count-badge-popover-item--mine" : "");
-			if (it.href) row.setAttribute("href", it.href);
+			if (it.href && isSafeBadgePath(it.href)) row.setAttribute("href", it.href);
+			else if (it.href) logError("E-JS-82", "badge '%s' item href is not a same-origin path: '%s'", def.id, it.href);
 			row.textContent = it.label || it.id;
 			pop.appendChild(row);
 		}
@@ -397,6 +424,10 @@
 	function onClick(st) {
 		const def = st.def;
 		if (!def.href) return;
+		if (!isSafeBadgePath(def.href)) {
+			logError("E-JS-82", "badge '%s' href is not a same-origin path: '%s'", def.id, def.href);
+			return;
+		}
 		const scope = resolveScope(def);
 		let dest = def.href;
 		const urlState = window.JuneauViews && window.JuneauViews.urlState;

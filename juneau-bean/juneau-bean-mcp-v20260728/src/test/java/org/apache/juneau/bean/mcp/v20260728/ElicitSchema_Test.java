@@ -371,4 +371,9 @@ class ElicitSchema_Test {
 		assertEquals(Map.of("type", "string", "minLength", 1, "maxLength", 10),
 			schema.getMap("properties").getMap("name"));
 	}
+
+	@Test void f02_minLengthOnly_buildsWithoutMax() {
+		var schema = ElicitSchema.create().stringField("name").minLength(2).build();
+		assertEquals(Map.of("type", "string", "minLength", 2), schema.getMap("properties").getMap("name"));
+	}
 }

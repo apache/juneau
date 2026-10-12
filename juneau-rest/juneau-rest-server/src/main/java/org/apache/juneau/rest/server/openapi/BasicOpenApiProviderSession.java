@@ -170,9 +170,76 @@ public class BasicOpenApiProviderSession {
 		// Rewrite all $refs anywhere in the document so subsequent passes work uniformly.
 		var rewritten = (Json5Map) rewriteRefs(out);
 
+		// Swagger 2.0 carries write-only flags as the x-writeOnly extension; OpenAPI 3.x has the native keyword.
+		restoreWriteOnly(rewritten);
+
 		// Lift inline schemas that occur in two or more operation slots into components.schemas
 		// and replace each occurrence with a $ref. Schemas already carrying a $ref are left alone.
 		return deduplicateInlineSchemas(rewritten);
+	}
+
+	/**
+	 * Maps the Swagger 2.0 <js>"x-writeOnly"</js> extension back to the native OpenAPI 3.x <js>"writeOnly"</js> keyword.
+	 *
+	 * <p>
+	 * Only walks schema positions (components.schemas, and parameter/request/response/header schemas), so user-supplied
+	 * extensions elsewhere (e.g. on an operation) and example values are left untouched.
+	 */
+	private static void restoreWriteOnly(Json5Map doc) {
+		if (doc.get("components") instanceof Map<?,?> components && components.get("schemas") instanceof Map<?,?> schemas)
+			schemas.values().forEach(BasicOpenApiProviderSession::restoreWriteOnlySchema);
+		if (! (doc.get("paths") instanceof Map<?,?> paths))
+			return;
+		for (var pathItem : paths.values()) {
+			if (! (pathItem instanceof Map<?,?> pi))
+				continue;
+			for (var op : pi.values()) {
+				if (! (op instanceof Map<?,?> op2))
+					continue;
+				if (op2.get("parameters") instanceof List<?> params)
+					params.forEach(BasicOpenApiProviderSession::restoreWriteOnlyHolder);
+				restoreWriteOnlyContent(op2.get("requestBody"));
+				if (op2.get("responses") instanceof Map<?,?> responses) {
+					for (var r : responses.values()) {
+						restoreWriteOnlyContent(r);
+						if (r instanceof Map<?,?> r2 && r2.get("headers") instanceof Map<?,?> headers)
+							headers.values().forEach(BasicOpenApiProviderSession::restoreWriteOnlyHolder);
+					}
+				}
+			}
+		}
+	}
+
+	/** A parameter/header/media-type object whose <js>"schema"</js> member is a schema. */
+	private static void restoreWriteOnlyHolder(Object holder) {
+		if (holder instanceof Map<?,?> h)
+			restoreWriteOnlySchema(h.get("schema"));
+	}
+
+	private static void restoreWriteOnlyContent(Object holder) {
+		if (holder instanceof Map<?,?> h && h.get("content") instanceof Map<?,?> content)
+			content.values().forEach(BasicOpenApiProviderSession::restoreWriteOnlyHolder);
+	}
+
+	private static void restoreWriteOnlySchema(Object schema) {
+		if (! (schema instanceof Map<?,?> m))
+			return;
+		@SuppressWarnings("unchecked")
+		var m2 = (Map<String,Object>)m;
+		if (Boolean.TRUE.equals(m2.get("x-writeOnly"))) {
+			m2.remove("x-writeOnly");
+			m2.put("writeOnly", true);
+		}
+		for (var k : new String[]{"properties", "patternProperties", "definitions", "$defs"}) {
+			if (m2.get(k) instanceof Map<?,?> children)
+				children.values().forEach(BasicOpenApiProviderSession::restoreWriteOnlySchema);
+		}
+		for (var k : new String[]{"items", "additionalProperties", "not"})
+			restoreWriteOnlySchema(m2.get(k));
+		for (var k : new String[]{"allOf", "anyOf", "oneOf", "items"}) {
+			if (m2.get(k) instanceof List<?> l)
+				l.forEach(BasicOpenApiProviderSession::restoreWriteOnlySchema);
+		}
 	}
 
 	/**

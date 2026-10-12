@@ -111,7 +111,7 @@ public class BarSlot implements Widget {
 	}
 
 	/**
-	 * Fail-closed per-widget validation via total {@code instanceof} dispatch over the sealed {@link BarWidget}.
+	 * Fail-closed per-widget validation, dispatching over the sealed {@link BarWidget}'s two permitted types.
 	 *
 	 * @param w The widget.
 	 * @return The widget's id (for uniqueness checking).
@@ -124,13 +124,11 @@ public class BarSlot implements Widget {
 				b.badge.validate();
 			return b.id;
 		}
-		if (w instanceof BarText t) {
-			if (t.id == null || t.id.isBlank())
-				throw iaex("BarSlot '%s' BarText id must not be null or blank.", id);
-			if (t.text == null || t.text.isBlank())
-				throw iaex("BarSlot '%s' BarText '%s' text must not be null or blank.", id, t.id);
-			return t.id;
-		}
-		throw iaex("BarSlot '%s' unknown widget type: %s", id, w.getClass().getName());
+		var t = (BarText)w;   // BarWidget is sealed to BarBadge and BarText, so this is the only remaining permit
+		if (t.id == null || t.id.isBlank())
+			throw iaex("BarSlot '%s' BarText id must not be null or blank.", id);
+		if (t.text == null || t.text.isBlank())
+			throw iaex("BarSlot '%s' BarText '%s' text must not be null or blank.", id, t.id);
+		return t.id;
 	}
 }

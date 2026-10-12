@@ -1,7 +1,7 @@
 # juneau-run
 
 Build tooling, not a library dependency. It ships `juneau_run.py`, a stdlib-only Python script that wraps
-Maven, pytest and Playwright runs: it prints run-protocol v1 markers (`##run`) when `RUN_MARKERS=1`, routes the
+Maven, pytest, Playwright, Gradle and npm runs: it prints run-protocol v1 markers (`##run`) when `RUN_MARKERS=1`, routes the
 full and condensed output to the console and log files, and parses tool output into sub-steps and test counts.
 The wire format is in [docs/run-protocol-v1.md](docs/run-protocol-v1.md).
 
@@ -74,7 +74,8 @@ screen. `full` (the default) prints raw output as before; `none` draws nothing. 
 |---|---|
 | `JUNEAU_RUN_CONSOLE=full\|condensed\|none` | Where tool output goes. `condensed` turns the view on. |
 | `JUNEAU_RUN_DETAIL=summary\|actionable\|modules\|all` | How much the view shows (default `actionable`). `--detail` on `push.py`, `test.py` and `release.py` wins. |
-| `JUNEAU_RUN_FULL_LOG`, `JUNEAU_RUN_CONDENSED_LOG` | The raw log, and the view's rows as plain text. The header names the full log. |
+| `JUNEAU_RUN_FULL_LOG`, `JUNEAU_RUN_CONDENSED_LOG` | The raw log, and the view's rows as plain text. The header prints `tail -f <full log>` to paste into another terminal. With `condensed` and no full log, the full log defaults to `~/.cache/juneau-run/<script>-<YYYYMMDD-HHMMSS>.log` (the newest 20 are kept); nested scripts share it. |
+| `JUNEAU_RUN_LOG_DIR` | Where that default full log goes (default `~/.cache/juneau-run`). The tests point it at a temp dir. |
 | `JUNEAU_RUN_LIVE=0` | Plain view: each row printed once, when it ends. Also used when stdout isn't a terminal or `TERM=dumb`. |
 | `NO_COLOR` | The live view without colour. |
 | `JUNEAU_RUN_LABEL_WIDTH` | Minimum width of the row labels (default 10). A parent sets it for a nested script so the rows line up. |
@@ -95,7 +96,7 @@ appears only in the full log, and a `run_tool` call with no session still echoes
 interactive runs such as `release.py`.
 
 Script API (all of it works with no session too, printing as before):
-- `session(title, header=())`: the header row (`title · header… · full log: <path>`) and the view. Ends with
+- `session(title, header=())`: the header row (`title · header… · tail -f <full log>`) and the view. Ends with
   `done(status)`. A process that inherited a session (`JUNEAU_RUN_SESSION`) draws its rows into the parent's view
   and prints no header or final line.
 - `step(id, n, title, *, parent=None, label=None)` and `row(id, title, *, label=None)` yield a `Step`. Set
@@ -107,12 +108,14 @@ Script API (all of it works with no session too, printing as before):
   full, or pipes it to `$PAGER` (`less -R`) on a terminal. Ctrl-C in the pager is the pager's; quitting it returns.
 - `passthrough(cmd, step_id, title, …)`: runs an interactive command on the real terminal as a row. No capture,
   nothing in the full log.
-- `run_tool(…, tty=False, watchdog=None, capture=False, summarize=None, label=None)`: `tty=True` runs the tool
-  under a PTY so gpg, git or svn can prompt, and forwards your keystrokes. It points `GPG_TTY` at the PTY, so a
-  terminal pinentry prompts through the row's watchdog prompt, with echo off; a GUI pinentry (pinentry-mac) is
-  unaffected. `watchdog=<s>` shows a partial line
-  that has sat silent for `<s>` seconds as a prompt, or `quiet <n>s` on the row when there is no partial line.
-  `capture=True` returns the text in `Result.output`. `summarize(text)` sets the row's summary.
+- `run_tool(…, tty=False, watchdog=None, capture=False, summarize=None, label=None, statuses=None)`: `tty=True`
+  runs the tool under a PTY so gpg, git or svn can prompt, and forwards your keystrokes. It points `GPG_TTY` at the
+  PTY, so a terminal pinentry prompts through the row's watchdog prompt, with echo off; a GUI pinentry (pinentry-mac)
+  is unaffected. `watchdog=<s>` shows a partial line that has sat silent for `<s>` seconds as a prompt, or
+  `quiet <n>s` on the row when there is no partial line. `capture=True` returns the text in `Result.output`.
+  `summarize(text)` sets the row's summary. `statuses` maps an exit code to the row's status (`ok`, `fail` or
+  `skip`); other codes are `ok` for 0 and `fail` otherwise, so a gate script's skip exit can show as a skip. 127
+  (cannot start) and 130 (interrupted) always end as `fail`, whatever `statuses` says.
 - `handoff()`: gives the terminal to a child script for a block and yields the env it needs (label width, detail).
   `console_active()`: True when a view owns the terminal.
 - `export_detail(flag)`: resolves `--detail` over `JUNEAU_RUN_DETAIL`, exports it for children, and raises
@@ -125,6 +128,64 @@ then on; a failure in the view's Board also stops the condensed log. A display b
 
 Known limitation: narrowing a reflowing terminal while the live view runs can leave stale fragments above the
 region.
+
+## Writing push and release scripts
+
+`juneau-run` also ships `juneau_scripts`, a stdlib-only toolkit for push and release scripts, as
+`org.apache.juneau:juneau-run:<version>:zip`. It holds the helpers every push.py and release.py rewrites: git
+readers and writers, a session with exit codes, the bell and the done marker, tool runners, a step registry with
+resume, locks and prompts. Policy stays in the script. The toolkit never runs `git add`, and it never decides what
+counts as unreviewed.
+
+Vendor the loader once, from the installed zip:
+
+```bash
+unzip -p ~/.m2/repository/org/apache/juneau/juneau-run/<v>/juneau-run-<v>.zip bootstrap.py > scripts/bootstrap.py
+```
+
+Then:
+
+```python
+from bootstrap import load
+jr, js = load(pom="pom.xml")
+from juneau_scripts import git, run, tools, notify
+
+def main(args):
+    with run.session("push", bell=True) as s:
+        dirty = git.unstaged_paths() + git.untracked_paths()
+        if dirty:                                    # this project's policy
+            s.fail("Unreviewed changes", hint=git.stash_hint(dirty))
+        if not args.skip_tests:
+            s.require(tools.maven(["verify"], title="Build and test"))
+        if args.test_only:
+            return
+        s.require(git.commit_index(args.message))
+        s.require(git.push(set_upstream=True))
+```
+
+- The exit codes are 0 for success, 1 for failure and 130 for a cancel. Every path prints the summary and writes exactly
+  one `done` marker, and the bell rings unless the run is nested or silenced (`SANDBOX_RUNTIME=1`,
+  `JUNEAU_SCRIPTS_QUIET=1`, or the script's own `silence_env`).
+- With markers off and no TTY, the same code prints plain lines, so it works in CI.
+- `load()` runs at import here, which suits a script nothing imports. A script whose tests `import push` calls `load()`
+  inside `main()` instead. The `pom` path is relative to the current directory, so pass an absolute one if the script
+  can run from elsewhere.
+
+`load()` finds the toolkit in this order, and loads `juneau_run` only for `run=True` or when `RUN_MARKERS=1` or
+`JUNEAU_RUN_CONSOLE=condensed` asks for it:
+1. `JUNEAU_SCRIPTS_ZIP` (a zip, or a directory holding `juneau_scripts/`) and `JUNEAU_RUN_PY`. With only
+   `JUNEAU_RUN_PY`, the toolkit is `<stem>.zip` or a `juneau_scripts/` directory beside it.
+2. In-tree: `juneau-run/src/main/python/` under the pom's directory (this repository). No `.pyc` is written.
+3. `~/.m2/repository/org/apache/juneau/juneau-run/<v>/`, in place, when both the `.py` and the `.zip` are there.
+4. Otherwise `mvn dependency:copy` of both into `target/juneau-run/`. A `-SNAPSHOT` is copied once per process, and a
+   release only when it is missing.
+
+The modules: `git`, `run` (`session`, `cmd`, `gate`, `step`, `say`, `handoff`, `child_env`), `tools` (`maven`,
+`pytest`, `playwright`, `npm`, `gradle`), `notify`, `prompt`, `java`, `lock`, `proc`, `state`, `steps` and
+`testing` (`hermetic_git`, `bare_remote`, `clean_run_env`, `fake_tool`, and pytest fixtures through
+`pytest_plugins = ["juneau_scripts.testing.pytest_plugin"]`). Each module's docstring is its reference.
+
+The `load_juneau_run` snippet above still works for a single-file adopter that needs only `juneau_run`.
 
 ## In this repository
 
@@ -165,5 +226,7 @@ The Maven fixtures in `src/test/python/fixtures/` are recorded output, not hand-
   `maven-*-failure/success.log` files. Local paths are replaced with `/work/demo` and `/home/user`.
 - `maven-juneau-T1C.log` is a trimmed slice of a real `mvn test -T1C` build of this repository (start of the run, a few Surefire
   class lines, the skipped-test summary and the Reactor Summary), with `/Users/<name>` replaced by `/home/user`.
+- `src/test/python/record-gradle-npm-fixtures.sh <scratch-dir> <fixtures-dir>` records the `gradle-*.log` and `npm-*.log`
+  files from a throwaway two-project Gradle build and an offline npm project, with the same path scrubbing.
 
 They are plain `.log` files, which RAT excludes. If a Maven upgrade changes its output, re-record, then fix the parser tests that fail.

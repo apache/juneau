@@ -27,6 +27,11 @@ jr = importlib.util.module_from_spec(_spec)
 sys.modules["juneau_run"] = jr
 _spec.loader.exec_module(jr)
 
+# Condensed sinks default their full log into JUNEAU_RUN_LOG_DIR; keep every test out of ~/.cache/juneau-run.
+import os as _os
+import tempfile as _tempfile
+_os.environ["JUNEAU_RUN_LOG_DIR"] = _tempfile.mkdtemp(prefix="juneau-run-test-logs-")
+
 
 def reset_run_state():
     """Forget run ownership, the stdout line state, the console and the bus between tests (globals and os.environ)."""
@@ -41,9 +46,21 @@ def reset_run_state():
     if getattr(jr, "_console", None) is not None:
         jr._console.close()
         jr._console = None
-    for key in (jr.ACTIVE_ENV, "JUNEAU_RUN_SESSION", "JUNEAU_RUN_DETAIL", "JUNEAU_RUN_LABEL_WIDTH",
-                "JUNEAU_RUN_LIVE"):
+    for key in (jr.ACTIVE_ENV, "JUNEAU_RUN_FULL_LOG", "JUNEAU_RUN_SESSION", "JUNEAU_RUN_DETAIL", "JUNEAU_RUN_LABEL_WIDTH",
+                "JUNEAU_RUN_LIVE", "JUNEAU_RUN_CONSOLE", "RUN_MARKERS", "JUNEAU_RUN_CONDENSED_LOG"):
         os.environ.pop(key, None)
+
+
+def isolate_run_env(case):
+    """Strip the run-protocol and push variables (JUNEAU_PUSH_*, RUN_MARKERS, RUN_ARTIFACTS, JUNEAU_RUN_* except
+    JUNEAU_RUN_PY) from os.environ for the test, so a push.py or Maven environment cannot leak in.  Restored on cleanup."""
+    import os
+    saved = dict(os.environ)  # not mock.patch.dict(...).start(): tests that call mock.patch.stopall() would undo it
+    case.addCleanup(lambda: (os.environ.clear(), os.environ.update(saved)))
+    for key in list(os.environ):
+        if (key in ("RUN_MARKERS", "RUN_ARTIFACTS") or key.startswith("JUNEAU_PUSH_")
+                or (key.startswith("JUNEAU_RUN_") and key != "JUNEAU_RUN_PY")):
+            del os.environ[key]
 
 
 class Screen:

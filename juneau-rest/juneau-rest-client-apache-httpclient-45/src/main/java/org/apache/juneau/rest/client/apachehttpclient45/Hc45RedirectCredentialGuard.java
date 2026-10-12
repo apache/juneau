@@ -16,7 +16,9 @@
  */
 package org.apache.juneau.rest.client.apachehttpclient45;
 
-import java.net.*;
+import static org.apache.juneau.commons.utils.Shorts.*;
+
+import java.util.*;
 
 import org.apache.http.*;
 import org.apache.http.protocol.*;
@@ -36,8 +38,12 @@ import org.apache.juneau.rest.client.*;
  * leaves the client.
  *
  * <p>
- * The forward/strip decision and the header set are delegated to {@link RedirectSecurity} so that all
- * transports share one policy.
+ * The origin is compared on HttpClient's own {@link HttpHost} (scheme, host and effective port), with the same
+ * semantics as {@link RedirectSecurity#shouldStripCredentials(java.net.URI, java.net.URI)}.  {@link java.net.URI}
+ * cannot be used here: it parses a host name that HttpClient accepts but RFC 2396 does not (for example
+ * {@code my_service}, a typical Docker Compose service name) with a {@code null} host, which would make every
+ * redirect from such a host fail.  The credential header set is delegated to {@link RedirectSecurity#stripOnCrossOrigin()}
+ * so that all transports share it.
  */
 final class Hc45RedirectCredentialGuard implements HttpRequestInterceptor {
 
@@ -48,24 +54,32 @@ final class Hc45RedirectCredentialGuard implements HttpRequestInterceptor {
 		var target = HttpCoreContext.adapt(context).getTargetHost();
 		if (target == null)
 			return;
-		var current = originOf(target);
-		if (current == null)
-			return;
-		var origin = (URI)context.getAttribute(ATTR_ORIGIN);
+		var origin = (HttpHost)context.getAttribute(ATTR_ORIGIN);
 		if (origin == null) {
-			context.setAttribute(ATTR_ORIGIN, current);
+			context.setAttribute(ATTR_ORIGIN, target);
 			return;
 		}
-		if (RedirectSecurity.shouldStripCredentials(origin, current))
+		if (! sameOrigin(origin, target))
 			for (var name : RedirectSecurity.stripOnCrossOrigin())
 				request.removeHeaders(name);
 	}
 
-	private static URI originOf(HttpHost host) {
-		try {
-			return URI.create(host.toURI());
-		} catch (IllegalArgumentException e) {
-			return null;
-		}
+	// HttpHost always has a scheme name and a host name; the port is -1 when none was given, so it is normalized to the
+	// scheme default.  An https->http downgrade changes the scheme, so it is never same-origin.
+	private static boolean sameOrigin(HttpHost from, HttpHost to) {
+		return eqic(from.getSchemeName(), to.getSchemeName())
+			&& eqic(from.getHostName(), to.getHostName())
+			&& effectivePort(from) == effectivePort(to);
+	}
+
+	private static int effectivePort(HttpHost host) {
+		var port = host.getPort();
+		if (port != -1)
+			return port;
+		return switch (host.getSchemeName().toLowerCase(Locale.ROOT)) {
+			case "https" -> 443;
+			case "http" -> 80;
+			default -> -1;
+		};
 	}
 }

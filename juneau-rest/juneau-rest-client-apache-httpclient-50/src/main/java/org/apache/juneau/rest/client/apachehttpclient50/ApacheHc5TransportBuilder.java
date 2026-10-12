@@ -50,7 +50,14 @@ public final class ApacheHc5TransportBuilder {
 	 * Sets the underlying {@link CloseableHttpClient} to use.
 	 *
 	 * <p>
-	 * If not set, a default client is created via {@link HttpClients#createDefault()}.
+	 * If not set, the transport creates its own default clients: one for ordinary requests, and one with a separate
+	 * connection pool whose connections are all pinned to a policy-allowed address, for SSRF-guard-active
+	 * {@code @Remote} requests.
+	 *
+	 * <p>
+	 * A caller-supplied client cannot be given that pin-on-connect pool, so a transport built with one reports
+	 * {@link ApacheHc5Transport#supportsUrlPolicy()} as <jk>false</jk>, and {@code RestRequest} refuses to send an
+	 * SSRF-guard-active request through it.
 	 *
 	 * <p>
 	 * The transport takes ownership of the client and will close it when {@link ApacheHc5Transport#close()} is called.

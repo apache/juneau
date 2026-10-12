@@ -538,8 +538,7 @@ public class McpAuthorizationCodeAcquirer {
 			}
 		}
 		if (! resp.indicatesSuccess()) {
-			var err = resp.toErrorResponse().getErrorObject();
-			throw new McpAuthException("Authorization request was denied: " + (err == null ? "unknown_error" : err.getCode()));
+			throw new McpAuthException("Authorization request was denied: " + resp.toErrorResponse().getErrorObject().getCode());
 		}
 		return resp.toSuccessResponse().getAuthorizationCode().getValue();
 	}
@@ -554,8 +553,7 @@ public class McpAuthorizationCodeAcquirer {
 		if (clientSecretSupplier != null)
 			b.clientSecretSupplier(clientSecretSupplier);
 		scopes.forEach(b::scope);
-		if (resource != null)
-			b.resource(resource);
+		b.resource(resource);
 		if (httpRequestConfigurator != null)
 			b.httpRequestConfigurator(httpRequestConfigurator);
 		return b.build();

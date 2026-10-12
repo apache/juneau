@@ -31,8 +31,8 @@ import org.apache.juneau.rest.server.view.freemarker.*;
  *
  * <h5 class='section'>Example:</h5>
  * <p class='bjava'>
- * 	<ja>@RestGet</ja>(path=<js>"/orders"</js>)
- * 	<jk>public</jk> View orders() { <jk>return</jk> ConsoleStubs.<jsm>view</jsm>(<js>"orders"</js>); }
+ * 	<ja>@RestGet</ja>(path=<js>"/dev/cards"</js>)
+ * 	<jk>public</jk> View cards() { <jk>return</jk> ConsoleStubs.<jsm>view</jsm>(<js>"dev/cards"</js>); }
  * </p>
  */
 public final class ConsoleStubs {
@@ -48,14 +48,7 @@ public final class ConsoleStubs {
 	public record Stub(String tab, String href, String title, String pending) {}
 
 	/** Every stub, in nav order. */
-	public static final List<Stub> ALL = List.of(
-		new Stub("pets", "/console/pets", "Pets", "The pets table with search, add, edit and bulk actions."),
-		new Stub("pets/sold", "/console/pets/sold", "Sold pets", "The list of pets that have been sold."),
-		new Stub("pets/changes", "/console/pets/changes", "Pending changes", "Review and apply staged pet edits."),
-		new Stub("orders", "/console/orders", "Orders", "The orders table and order details."),
-		new Stub("users", "/console/users", "Users", "The users table and user details."),
-		new Stub("dev/cards", "/console/dev/cards", "Custom cards", "Adopter-defined card types: a JSON-only kpi card and a server-validated inventory gauge.")
-	);
+	public static final List<Stub> ALL = List.of();
 
 	private ConsoleStubs() {}
 

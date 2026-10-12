@@ -126,7 +126,7 @@ public final class RemoteUrlPolicy {
 			throw iaex("@Remote URL override has no host (non-canonical or opaque form is not allowed): %s", url);
 
 		if (! allowPrivateUrls && isDeniedHost(host))
-			throw iaex("@Remote URL override targets a private/loopback/link-local/metadata host, which is denied by default (set allowPrivateUrls to allow local-dev targets): %s", url);
+			throw iaex("@Remote URL override targets a private/loopback/link-local/metadata/reserved host (including CGNAT, this-network, Teredo and local-use NAT64 ranges), which is denied by default (set allowPrivateUrls to allow local-dev targets): %s", url);
 
 		return url;
 	}
@@ -141,7 +141,8 @@ public final class RemoteUrlPolicy {
 
 	/**
 	 * Returns <jk>true</jk> if the literal {@code host} string is denied by the default policy: a dotted-decimal
-	 * IPv4/bracketed-IPv6 literal classified as loopback/private/link-local by {@link #isDeniedAddress(InetAddress)},
+	 * IPv4/bracketed-IPv6 literal classified as denied by {@link #isDeniedAddress(InetAddress)} (an IPv6 zone id is
+	 * ignored, and an unparseable literal containing a {@code :} is denied),
 	 * or a case-insensitive match on {@code localhost}/{@code localhost.localdomain}/{@code metadata.google.internal}
 	 * (and its subdomains).
 	 *
@@ -158,14 +159,25 @@ public final class RemoteUrlPolicy {
 		if (DENIED_HOST_NAMES.contains(h) || h.equals(METADATA_HOST) || h.endsWith(METADATA_HOST_SUFFIX))
 			return true;
 		if (looksLikeIpLiteral(host)) {
+			var literal = stripZoneId(host);
 			try {
-				return isDeniedAddress(InetAddress.getByName(host));
+				return isDeniedAddress(InetAddress.getByName(literal));
 			} catch (UnknownHostException e) {
-				// Not a valid literal after all (e.g. an octet > 255) -- treat as an ordinary (non-denied) name.
-				return false;
+				// A colon-containing literal that cannot be parsed fails closed; a dotted-decimal form that is not valid
+				// (e.g. an octet > 255) is treated as an ordinary (non-denied) name and left to pin-on-connect.
+				return literal.indexOf(':') != -1;
 			}
 		}
 		return false;
+	}
+
+	// Removes an IPv6 zone/scope id (the '%...' suffix, or '%25...' as percent-encoded in a URL) from a possibly
+	// bracketed literal: "[fe80::1%25en0]" -> "[fe80::1]".  The zone does not affect the address classification.
+	private static String stripZoneId(String host) {
+		var i = host.indexOf('%');
+		if (i == -1)
+			return host;
+		return host.endsWith("]") ? host.substring(0, i) + "]" : host.substring(0, i);
 	}
 
 	/**
@@ -178,43 +190,102 @@ public final class RemoteUrlPolicy {
 	}
 
 	/**
-	 * Returns <jk>true</jk> if {@code addr} is a loopback, unspecified, RFC1918-private, link-local, or IPv6
-	 * unique-local address -- the deny-list applied both to literal-IP hosts (pre-check) and to resolved addresses
-	 * (pin-on-connect).  IPv4-mapped/IPv4-compatible IPv6 addresses are unwrapped and classified by their embedded
-	 * IPv4 address.
+	 * Returns <jk>true</jk> if {@code addr} is denied by the default policy -- the deny-list applied both to
+	 * literal-IP hosts (pre-check) and to resolved addresses (pin-on-connect).
+	 *
+	 * <p>
+	 * Denied addresses:
+	 * <ul>
+	 * 	<li>Loopback, unspecified, link-local (including the <c>169.254.169.254</c> metadata address) and RFC1918
+	 * 		site-local addresses.
+	 * 	<li>IPv4 <c>0.0.0.0/8</c> ("this network") and <c>100.64.0.0/10</c> (carrier-grade NAT shared space).
+	 * 	<li>IPv6 unique-local <c>fc00::/7</c>.
+	 * 	<li>IPv6 Teredo <c>2001::/32</c>, denied outright because the embedded client IPv4 address is obfuscated.
+	 * 	<li>IPv6 local-use NAT64 <c>64:ff9b:1::/48</c> (RFC 8215), denied outright because the embedding length
+	 * 		(/48, /56, /64 or /96) is operator-defined and cannot be determined from the address.
+	 * </ul>
+	 *
+	 * <p>
+	 * IPv6 forms that embed an IPv4 address are unwrapped and classified by the embedded IPv4 address:
+	 * IPv4-mapped (<c>::ffff:a.b.c.d</c>), IPv4-compatible (<c>::a.b.c.d</c>), IPv4-translated
+	 * (<c>::ffff:0:a.b.c.d</c>), NAT64 (<c>64:ff9b::/96</c>) and 6to4 (<c>2002::/16</c>, IPv4 in bytes 2-5).
+	 * A public embedded address (e.g. <c>64:ff9b::808:808</c>) remains allowed.
 	 *
 	 * @param addr The address to classify. Must not be <jk>null</jk>.
 	 * @return <jk>true</jk> if the address is denied by the default policy.
 	 */
 	public static boolean isDeniedAddress(InetAddress addr) {
-		var a = unwrapIpv4Mapped(addr);
+		if (isTeredo(addr) || isNat64LocalUse(addr))
+			return true;
+		var a = unwrapEmbeddedIpv4(addr);
 		if (a.isLoopbackAddress() || a.isAnyLocalAddress() || a.isLinkLocalAddress() || a.isSiteLocalAddress())
 			return true;
+		var bytes = a.getAddress();
 		if (a instanceof Inet6Address) {
-			var bytes = a.getAddress();
 			// Unique-local fc00::/7 -- top 7 bits are 1111 110.
 			return (bytes[0] & 0xFE) == 0xFC;
 		}
-		return false;
+		// 0.0.0.0/8 ("this network") and 100.64.0.0/10 (CGNAT shared space).
+		return bytes[0] == 0 || ((bytes[0] & 0xFF) == 100 && (bytes[1] & 0xC0) == 0x40);
 	}
 
-	/** Unwraps an IPv4-mapped (<c>::ffff:a.b.c.d</c>) or IPv4-compatible IPv6 address to its embedded {@link Inet4Address}. */
-	private static InetAddress unwrapIpv4Mapped(InetAddress addr) {
-		if (! (addr instanceof Inet6Address addr2))
+	/** Returns <jk>true</jk> for a Teredo (<c>2001:0000::/32</c>) address. */
+	private static boolean isTeredo(InetAddress addr) {
+		if (! (addr instanceof Inet6Address))
+			return false;
+		var b = addr.getAddress();
+		return b[0] == 0x20 && b[1] == 0x01 && b[2] == 0 && b[3] == 0;
+	}
+
+	/** Returns <jk>true</jk> for a local-use NAT64 (<c>64:ff9b:1::/48</c>, RFC 8215) address. */
+	private static boolean isNat64LocalUse(InetAddress addr) {
+		if (! (addr instanceof Inet6Address))
+			return false;
+		var b = addr.getAddress();
+		return b[0] == 0 && b[1] == 0x64 && (b[2] & 0xFF) == 0xFF && (b[3] & 0xFF) == 0x9B && b[4] == 0 && b[5] == 1;
+	}
+
+	/**
+	 * Unwraps an IPv6 address that embeds an IPv4 address (IPv4-mapped, IPv4-compatible, IPv4-translated, NAT64
+	 * or 6to4) to the embedded {@link Inet4Address}; any other address is returned unchanged.
+	 */
+	private static InetAddress unwrapEmbeddedIpv4(InetAddress addr) {
+		if (! (addr instanceof Inet6Address))
 			return addr;
-		var bytes = addr2.getAddress();
-		// IPv4-mapped: first 10 bytes 0x00, next 2 bytes 0xFF; IPv4-compatible: first 12 bytes 0x00 (and not ::/::1).
-		var ipv4Mapped = true;
-		for (var i = 0; i < 10 && ipv4Mapped; i++)
-			ipv4Mapped = bytes[i] == 0;
-		if (ipv4Mapped && (bytes[10] & 0xFF) == 0xFF && (bytes[11] & 0xFF) == 0xFF) {
-			try {
-				return InetAddress.getByAddress(new byte[]{bytes[12], bytes[13], bytes[14], bytes[15]});
-			} catch (UnknownHostException e) {
-				return addr; // HTT: getByAddress with a 4-byte array never throws
-			}
+		var b = addr.getAddress();
+		byte[] v4 = null;
+		if (isZero(b, 0, 10)) {
+			// IPv4-mapped ::ffff:a.b.c.d, or IPv4-compatible ::a.b.c.d (but '::' and '::1' keep their IPv6 classification).
+			var mapped = (b[10] & 0xFF) == 0xFF && (b[11] & 0xFF) == 0xFF;
+			var compatible = b[10] == 0 && b[11] == 0 && (b[12] != 0 || b[13] != 0 || b[14] != 0 || (b[15] & 0xFF) > 1);
+			if (mapped || compatible)
+				v4 = new byte[]{b[12], b[13], b[14], b[15]};
+		} else if (isZero(b, 0, 8) && (b[8] & 0xFF) == 0xFF && (b[9] & 0xFF) == 0xFF && b[10] == 0 && b[11] == 0) {
+			// IPv4-translated (RFC 2765) ::ffff:0:a.b.c.d
+			v4 = new byte[]{b[12], b[13], b[14], b[15]};
+		} else if (b[0] == 0 && b[1] == 0x64 && (b[2] & 0xFF) == 0xFF && (b[3] & 0xFF) == 0x9B) {
+			// NAT64 well-known prefix 64:ff9b::/96 (RFC 6052). The local-use 64:ff9b:1::/48 is denied before unwrapping.
+			if (isZero(b, 4, 12))
+				v4 = new byte[]{b[12], b[13], b[14], b[15]};
+		} else if (b[0] == 0x20 && b[1] == 0x02) {
+			// 6to4 2002::/16: the IPv4 address is in bytes 2-5.
+			v4 = new byte[]{b[2], b[3], b[4], b[5]};
 		}
-		return addr;
+		if (v4 == null)
+			return addr;
+		try {
+			return InetAddress.getByAddress(v4);
+		} catch (UnknownHostException e) {
+			return addr; // HTT: getByAddress with a 4-byte array never throws
+		}
+	}
+
+	// Returns true if bytes [from, to) are all zero.
+	private static boolean isZero(byte[] b, int from, int to) {
+		for (var i = from; i < to; i++)
+			if (b[i] != 0)
+				return false;
+		return true;
 	}
 
 	/**
@@ -240,7 +311,7 @@ public final class RemoteUrlPolicy {
 		for (var c : candidates)
 			if (! isDeniedAddress(c))
 				return c;
-		throw iaex("No allowed address for host '%s': every resolved candidate is private/loopback/link-local (set allowPrivateUrls to allow local-dev targets)", host);
+		throw iaex("No allowed address for host '%s': every resolved candidate is private/loopback/link-local/reserved (set allowPrivateUrls to allow local-dev targets)", host);
 	}
 
 	/**

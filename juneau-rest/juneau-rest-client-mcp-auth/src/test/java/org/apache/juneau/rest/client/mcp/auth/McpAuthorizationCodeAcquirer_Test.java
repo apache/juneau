@@ -218,7 +218,7 @@ class McpAuthorizationCodeAcquirer_Test extends TestBase {
 			c.getResponseCode();
 			c.getInputStream().readAllBytes();
 			c.disconnect();
-		} catch (ParseException | IOException e) { // HTT: simulated IdP round-trip failure not expected in test
+		} catch (ParseException | IOException e) {
 			throw new RuntimeException(e);
 		}
 	}
@@ -327,5 +327,232 @@ class McpAuthorizationCodeAcquirer_Test extends TestBase {
 
 	private static String enc(String s) {
 		return URLEncoder.encode(s, UTF_8);
+	}
+
+	// -----------------------------------------------------------------------------------------------------------------
+	// E: builder options, callback edge cases, and failure modes
+	// -----------------------------------------------------------------------------------------------------------------
+
+	private static McpAuthorizationCodeAcquirer.Builder minimal() {
+		return McpAuthorizationCodeAcquirer.create()
+			.authorizationEndpoint(URI.create("https://idp.example.com/authorize"))
+			.tokenEndpoint(URI.create("https://idp.example.com/token"))
+			.clientId("cli-app")
+			.resource(RESOURCE)
+			.expectedIssuer(ISSUER);
+	}
+
+	private static OAuthAuthorizationCodeFlow flowFor(URI tokenEndpoint) {
+		return OAuthAuthorizationCodeFlow.create()
+			.authorizationEndpoint(URI.create("https://idp.example.com/authorize"))
+			.tokenEndpoint(tokenEndpoint)
+			.clientId("cli-app")
+			.redirectUri(URI.create("http://127.0.0.1:1/callback"))
+			.resource(RESOURCE)
+			.build();
+	}
+
+	@Test void e01_interactiveAcquireWithSecretScopesTimeoutAndConfigurator() throws IOException {
+		var server = HttpServer.create(new InetSocketAddress(InetAddress.getLoopbackAddress(), 0), 0);
+		var tokenReqBody = new AtomicReference<String>();
+		var tokenReqAuth = new AtomicReference<String>();
+		server.createContext("/token", ex -> {
+			tokenReqAuth.set(ex.getRequestHeaders().getFirst("Authorization"));
+			try (var is = ex.getRequestBody()) { tokenReqBody.set(new String(is.readAllBytes(), UTF_8)); }
+			var body = "{\"access_token\":\"acq-at\",\"token_type\":\"Bearer\",\"expires_in\":3600}".getBytes(UTF_8);
+			ex.getResponseHeaders().add("Content-Type", "application/json");
+			ex.sendResponseHeaders(200, body.length);
+			try (var os = ex.getResponseBody()) { os.write(body); }
+		});
+		server.start();
+		try {
+			var port = server.getAddress().getPort();
+			var seen = new AtomicReference<AuthorizationRequest>();
+			var configured = new AtomicInteger();
+
+			var acquirer = McpAuthorizationCodeAcquirer.create()
+				.authorizationEndpoint(URI.create("http://127.0.0.1:" + port + "/authorize"))
+				.tokenEndpoint(URI.create("http://127.0.0.1:" + port + "/token"))
+				.clientId("cli-app")
+				.clientSecret("s3cret")
+				.scope("mcp:read", "mcp:write")
+				.resource(RESOURCE)
+				.expectedIssuer(ISSUER)
+				.requireIssuerResponseParameter(true)
+				.redirectPath("/cb")
+				.httpTimeout(Duration.ofSeconds(5))
+				.httpRequestConfigurator(r -> configured.incrementAndGet())
+				.store(EphemeralStore.create())
+				.browserLauncher(authUrl -> simulateIdp(authUrl, seen))
+				.build();
+
+			assertEquals("acq-at", acquirer.acquire(Duration.ofSeconds(5)).accessToken());
+
+			var ar = seen.get();
+			assertTrue(ar.getScope().contains("mcp:read"), () -> "scope missing: " + ar.getScope());
+			assertTrue(ar.getScope().contains("mcp:write"), () -> "scope missing: " + ar.getScope());
+			assertEquals("/cb", ar.getRedirectionURI().getPath());
+			assertEquals(1, configured.get(), "httpRequestConfigurator must be applied to the token exchange");
+			assertNotNull(tokenReqAuth.get(), "confidential client must authenticate the token exchange");
+			assertTrue(tokenReqAuth.get().startsWith("Basic "), tokenReqAuth::get);
+		} finally {
+			server.stop(0);
+		}
+	}
+
+	@Test void e02_requireIssuerParameterRejectsCallbackWithoutIss() throws IOException {
+		// With requireIssuerResponseParameter(true) the end-to-end flow must reject a callback that omits iss.
+		var acquirer = minimal()
+			.requireIssuerResponseParameter(true)
+			.browserLauncher(authUrl -> {
+				try {
+					var ar = AuthorizationRequest.parse(authUrl);
+					var cb = URI.create(ar.getRedirectionURI() + "?code=the-code&state=" + enc(ar.getState().getValue()));
+					var c = (HttpURLConnection) cb.toURL().openConnection();
+					c.getResponseCode();
+					c.disconnect();
+				} catch (ParseException | IOException e) {
+					throw new RuntimeException(e);
+				}
+			})
+			.build();
+		var e = assertThrows(McpAuthException.class, () -> acquirer.acquire(Duration.ofSeconds(5)));
+		assertTrue(e.getMessage().contains("missing the required iss"), e::getMessage);
+	}
+
+	@Test void e03_acquireFailsWhenFixedPortInUse() throws IOException {
+		try (var occupied = new ServerSocket(0, 0, InetAddress.getLoopbackAddress())) {
+			var acquirer = minimal().redirectPort(occupied.getLocalPort()).build();
+			var e = assertThrows(McpAuthException.class, () -> acquirer.acquire(Duration.ofMillis(100)));
+			assertTrue(e.getMessage().contains("loopback redirect listener"), e::getMessage);
+		}
+	}
+
+	@Test void e04_defaultBrowserLauncherPrintsAuthorizationUrl() {
+		var captured = new ByteArrayOutputStream();
+		var original = System.out;
+		try (var ps = new PrintStream(captured, true, UTF_8)) {
+			System.setOut(ps);
+			var acquirer = McpAuthorizationCodeAcquirer.create()
+				.authorizationEndpoint(URI.create("https://idp.example.com/authorize"))
+				.tokenEndpoint(URI.create("https://idp.example.com/token"))
+				.clientId("cli-app").resource(RESOURCE).expectedIssuer(ISSUER).build();
+			assertThrows(McpAuthException.class, () -> acquirer.acquire(Duration.ofMillis(100)));
+		} finally {
+			System.setOut(original);
+		}
+		var out = captured.toString(UTF_8);
+		assertTrue(out.contains("Open the following URL in a browser to authorize"), out);
+		assertTrue(out.contains("https://idp.example.com/authorize"), out);
+	}
+
+	@Test void e05_handleCallbackMissingStateRejected() {
+		var acquirer = minimal().build();
+		var flow = flowFor(URI.create("https://idp.example.com/token"));
+		var cb = URI.create("http://127.0.0.1:1/callback?code=the-code");
+		var e = assertThrows(McpAuthException.class, () -> acquirer.handleCallback(flow, cb));
+		assertTrue(e.getMessage().contains("missing the state"), e::getMessage);
+	}
+
+	@Test void e06_handleCallbackUnknownStateRejected() {
+		var acquirer = minimal().build();
+		var flow = flowFor(URI.create("https://idp.example.com/token"));
+		var cb = URI.create("http://127.0.0.1:1/callback?code=the-code&state=never-issued");
+		var e = assertThrows(McpAuthException.class, () -> acquirer.handleCallback(flow, cb));
+		assertTrue(e.getMessage().contains("unknown, expired, or replayed"), e::getMessage);
+	}
+
+	@Test void e07_handleCallbackUnparseableRejected() {
+		var acquirer = minimal().build();
+		var flow = flowFor(URI.create("https://idp.example.com/token"));
+		var cb = URI.create("http://127.0.0.1:1/callback");  // no parameters at all
+		var e = assertThrows(McpAuthException.class, () -> acquirer.handleCallback(flow, cb));
+		assertTrue(e.getMessage().contains("could not be parsed"), e::getMessage);
+	}
+
+	@Test void e08_validateMissingStateParamIsCsrfMismatch() {
+		var cb = URI.create("http://127.0.0.1:1/callback?code=the-code");
+		var e = assertThrows(McpAuthException.class,
+			() -> McpAuthorizationCodeAcquirer.validateAuthorizationResponse(cb, "st1", ISSUER));
+		assertTrue(e.getMessage().contains("state mismatch"), e::getMessage);
+	}
+
+	@Test void e15_validateErrorWithIllegalCodeRejectedAsUnparseable() {
+		var cb = URI.create("http://127.0.0.1:1/callback?error=%22bad&state=st1&iss=" + enc(ISSUER.toString()));
+		var e = assertThrows(McpAuthException.class,
+			() -> McpAuthorizationCodeAcquirer.validateAuthorizationResponse(cb, "st1", ISSUER));
+		// Nimbus nulls an illegal error code and then rejects the response ("Missing error code"), so a null code never reaches the denial path.
+		assertTrue(e.getMessage().contains("could not be parsed"), e::getMessage);
+	}
+
+	@Test void e09_validateErrorResponseReportsDenialCode() {
+		var cb = URI.create("http://127.0.0.1:1/callback?error=access_denied&state=st1&iss=" + enc(ISSUER.toString()));
+		var e = assertThrows(McpAuthException.class,
+			() -> McpAuthorizationCodeAcquirer.validateAuthorizationResponse(cb, "st1", ISSUER));
+		assertTrue(e.getMessage().contains("denied: access_denied"), e::getMessage);
+	}
+
+	@Test void e10_issuerRecordedAsNullRejectsAnyIss() {
+		// A pending entry recorded with no issuer cannot vouch for any iss, so a callback carrying iss is a mismatch.
+		var store = EphemeralStore.create();
+		var acquirer = minimal().store(store).build();
+		var flow = flowFor(URI.create("https://idp.example.com/token"));
+		store.store("st-1", new CodeVerifier().getValue(), null);
+		var cb = URI.create("http://127.0.0.1:1/callback?code=the-code&state=st-1&iss=" + enc(ISSUER.toString()));
+		var e = assertThrows(McpAuthException.class, () -> acquirer.handleCallback(flow, cb));
+		assertTrue(e.getMessage().contains("SEP-2468"), e::getMessage);
+	}
+
+	@Test void e11_skipIssuerValidationAcceptsAnyIss() throws IOException {
+		var server = HttpServer.create(new InetSocketAddress(InetAddress.getLoopbackAddress(), 0), 0);
+		server.createContext("/token", ex -> {
+			var body = "{\"access_token\":\"acq-at\",\"token_type\":\"Bearer\",\"expires_in\":3600}".getBytes(UTF_8);
+			ex.getResponseHeaders().add("Content-Type", "application/json");
+			ex.sendResponseHeaders(200, body.length);
+			try (var os = ex.getResponseBody()) { os.write(body); }
+		});
+		server.start();
+		try {
+			var tokenEndpoint = URI.create("http://127.0.0.1:" + server.getAddress().getPort() + "/token");
+			var store = EphemeralStore.create();
+			var acquirer = McpAuthorizationCodeAcquirer.create()
+				.authorizationEndpoint(URI.create("https://idp.example.com/authorize"))
+				.tokenEndpoint(tokenEndpoint)
+				.clientId("cli-app").resource(RESOURCE)
+				.skipIssuerValidation(true).store(store).build();
+			store.store("st-1", new CodeVerifier().getValue(), null);
+			var cb = URI.create("http://127.0.0.1:1/callback?code=the-code&state=st-1&iss=" + enc("https://anything.example.com"));
+			assertEquals("acq-at", acquirer.handleCallback(flowFor(tokenEndpoint), cb).accessToken());
+		} finally {
+			server.stop(0);
+		}
+	}
+
+	@Test void e12_builderRequiresEndpointsAndClientId() {
+		var noAuthz = McpAuthorizationCodeAcquirer.create()
+			.tokenEndpoint(URI.create("https://idp.example.com/token")).clientId("c").resource(RESOURCE).expectedIssuer(ISSUER);
+		assertTrue(assertThrows(IllegalStateException.class, noAuthz::build).getMessage().contains("authorizationEndpoint"));
+		var noToken = McpAuthorizationCodeAcquirer.create()
+			.authorizationEndpoint(URI.create("https://idp.example.com/authorize")).clientId("c").resource(RESOURCE).expectedIssuer(ISSUER);
+		assertTrue(assertThrows(IllegalStateException.class, noToken::build).getMessage().contains("tokenEndpoint"));
+		var noClient = McpAuthorizationCodeAcquirer.create()
+			.authorizationEndpoint(URI.create("https://idp.example.com/authorize"))
+			.tokenEndpoint(URI.create("https://idp.example.com/token")).resource(RESOURCE).expectedIssuer(ISSUER);
+		assertTrue(assertThrows(IllegalStateException.class, noClient::build).getMessage().contains("clientId"));
+	}
+
+	@Test void e13_builderArgumentValidation() {
+		var b = McpAuthorizationCodeAcquirer.create();
+		assertThrows(IllegalArgumentException.class, () -> b.clientSecret(" "));
+		assertThrows(IllegalArgumentException.class, () -> b.scope(" "));
+		assertThrows(IllegalArgumentException.class, () -> b.httpTimeout(Duration.ZERO));
+		assertThrows(IllegalArgumentException.class, () -> b.httpTimeout(Duration.ofSeconds(-1)));
+	}
+
+	@Test void e14_validFixedRedirectPortAccepted() {
+		assertEquals(8080, minimal().redirectPort(8080).build().redirectPort());
+		assertEquals(1, minimal().redirectPort(1).build().redirectPort());
+		assertEquals(0, minimal().redirectPort(0).build().redirectPort());
+		assertEquals(65535, minimal().redirectPort(65535).build().redirectPort());
 	}
 }

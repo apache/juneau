@@ -61,8 +61,8 @@ public class LogbackLogBackend implements LogBackend {
 	 */
 	public LogbackLogBackend() {
 		var factory = LoggerFactory.getILoggerFactory();
-		if (! (factory instanceof LoggerContext factory2))
-			throw isex("The bound SLF4J backend is not Logback (ILoggerFactory=%s).  /loggers drives the concrete backend, not the SLF4J facade.", factory.getClass().getName());
+		if (! (factory instanceof LoggerContext factory2))  // HTT: SLF4J binds Logback statically on this module's classpath; a seam (injectable ILoggerFactory) would make this testable
+			throw isex("The bound SLF4J backend is not Logback (ILoggerFactory=%s).  /loggers drives the concrete backend, not the SLF4J facade.", factory.getClass().getName());  // HTT: only reachable when the bound SLF4J backend is not Logback; a seam would make this testable
 		this.context = factory2;
 	}
 

@@ -53,7 +53,7 @@ import org.junit.jupiter.api.*;
  *
  * <p>
  * The absence of any HTML sink anywhere in {@code juneau-regions.js} is enforced separately and more broadly by
- * {@link RawContentSink_SecurityScan_Test}'s shipped-JS scan, which this item added the region runtime to; that
+ * {@link ShippedJs_SinkScan_Test}, which this item added the region runtime to; that
  * scan is the universal, and this class pins the specific flow.
  */
 class Regions_PopulatorNameSafety_Test extends TestBase {
@@ -182,7 +182,7 @@ class Regions_PopulatorNameSafety_Test extends TestBase {
 
 	@Test void c03_theRegionRuntimeHasNoHtmlSinkAtAll() throws Exception {
 		// The broad universal, asserted here too because it is the property that makes the name-to-markup question
-		// unanswerable-by-construction rather than merely audited.  RawContentSink_SecurityScan_Test's shipped-JS
+		// unanswerable-by-construction rather than merely audited.  ShippedJs_SinkScan_Test's shipped-JS
 		// scan enforces the same thing across every shipped asset now that this item added the region runtime to it.
 		var r = RawContentSinkScanner.scanJsHtmlSinks("juneau-regions.js", regionsJs());
 		assertTrue(r.violations().isEmpty(),

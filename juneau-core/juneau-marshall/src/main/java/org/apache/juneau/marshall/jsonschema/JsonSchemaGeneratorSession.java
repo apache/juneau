@@ -368,8 +368,14 @@ public class JsonSchemaGeneratorSession extends MarshallingTraverseSession {
 				BeanMeta bm = getBeanMeta(sType.inner());
 				for (Iterator<BeanPropertyMeta> i = bm.getProperties().values().iterator(); i.hasNext();) {
 					BeanPropertyMeta p = i.next();
-					if (p.canRead())
-						properties.put(p.getName(), getSchema((ClassMeta<?>) p.getBeanInfo(), p.getName(), exampleAdded, descriptionAdded, getJsonSchemaBeanPropertyMeta(p)));
+					if (p.canRead() || p.isWriteOnly()) {
+						var ps = getSchema((ClassMeta<?>) p.getBeanInfo(), p.getName(), exampleAdded, descriptionAdded, getJsonSchemaBeanPropertyMeta(p));
+						// Write-only properties are advertised so clients know they can be sent, but never read back.
+						// Copy first: the returned map may be shared (e.g. a cached or referenced definition).
+						if (p.isWriteOnly())
+							ps = new JsonMap().append(ps).append("writeOnly", true);
+						properties.put(p.getName(), ps);
+					}
 				}
 				out.put("properties", properties);
 

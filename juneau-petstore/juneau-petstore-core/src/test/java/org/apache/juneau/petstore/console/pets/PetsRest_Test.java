@@ -124,6 +124,32 @@ class PetsRest_Test extends TestBase {
 		c.post("/console/pets/" + id + "/sell", "").run().assertStatus(409).assertContent().isContains("Pet '" + id + "' is already 'SOLD'");
 	}
 
+	@Test void b06b_dialogEnvelopeCreateAndUpdate() throws Exception {
+		var c = client();
+		var r = json(c.post("/console/pets", "{\"action\":\"add-pet\",\"fields\":{\"name\":\"Envpet\",\"species\":\"CAT\",\"price\":\"7.5\"}}")
+			.contentType("application/json").run().assertStatus(200).getContent().asString());
+		assertBean(r, "outcome,row{name,species,price}", "success,{Envpet,CAT,7.5}");
+		var id = r.getMap("row").getLong("id");
+		var u = json(c.put("/console/pets/" + id, "{\"fields\":{\"name\":\"Envpet2\",\"species\":\"DOG\",\"price\":\"8\"}}")
+			.contentType("application/json").run().assertStatus(200).getContent().asString());
+		assertBean(u, "outcome,row{name,species,price}", "success,{Envpet2,DOG,8.0}");
+	}
+
+	@Test void b06c_formEndpoint() throws Exception {
+		var add = client().get("/console/pets/form").run().assertStatus(200).getContent().asString();
+		assertContainsAll(add, "Add pet", "Price (USD)");
+		var edit = client().get("/console/pets/form?id=1").run().assertStatus(200).getContent().asString();
+		assertContainsAll(edit, "Edit 'Mr. Frisky'", "Mr. Frisky", "DOG", "CAT", "BIRD");
+		client().get("/console/pets/form?id=99999").run().assertStatus(404);
+	}
+
+	@Test void b06d_soldRows() throws Exception {
+		var rows = client().get("/console/pets/sold/rows").run().assertStatus(200).getContent().as(JsonList.class);
+		assertNotEmpty(rows);
+		for (var row : rows.elements(JsonMap.class))
+			assertBean(row, "status", "SOLD");
+	}
+
 	@Test void b07_sellUnknown404() throws Exception {
 		client().post("/console/pets/99999/sell", "").run().assertStatus(404).assertContent().isContains("Unknown pet '99999'");
 	}

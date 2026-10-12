@@ -170,16 +170,16 @@ def marked_step(step_id, title, label=None):
         yield step
 
 
-def run_marked(step_id, title, cmd, description, cwd=None, tool=None, label=None):
+def run_marked(step_id, title, cmd, description, cwd=None, tool=None, label=None, summarize=None):
     """
     run_command() as the protocol step `step_id`.  With `tool` ("maven", "generic", ...) and markers on, or with a
     console view active, juneau_run runs the command and reports its progress; otherwise the call is just wrapped
-    in a step.
+    in a step.  summarize(output) becomes the row's text under a console view.
     """
     run = run_module()
     if run is not None and ((tool is not None and run.enabled()) or run.console_active()):
         return run_command(cmd, description, cwd, tool=tool, step_id=step_id, title=title, n=next_step_number(),
-                           label=label)
+                           label=label, summarize=summarize)
     with marked_step(step_id, title) as step:
         ok = run_command(cmd, description, cwd, label=label)
         if not ok:
@@ -242,13 +242,42 @@ def run_command(cmd, description, cwd=None, tool=None, step_id=None, title=None,
         return False
 
 
+#: Set to exactly "1" by the Claude Code sandbox in every command it runs.
+SANDBOX_RUNTIME_ENV = "SANDBOX_RUNTIME"
+
+#: Set to exactly "1" to silence play_sound() and the terminal bell (also honored by test.py).
+PUSH_NO_SOUND_ENV = "JUNEAU_PUSH_NO_SOUND"
+
+
+def ring_bell():
+    """
+    Write a terminal bell to stdout so the terminal can badge its Dock icon when a run ends.
+
+    Best-effort and never raises.  Silent when stdout is not a TTY.  stdout is the real terminal even under the
+    condensed console (juneau-run never redirects sys.stdout; its screen writes go to the same stream).
+    Keep in sync with ring_bell() in test.py.
+    """
+    if os.environ.get(SANDBOX_RUNTIME_ENV) == "1" or os.environ.get(PUSH_NO_SOUND_ENV) == "1":
+        return
+    try:
+        if sys.stdout.isatty():
+            sys.stdout.write("\a")
+            sys.stdout.flush()
+    except Exception:
+        pass
+
+
 def play_sound(success=True):  # NOSONAR python:S3776 -- Cognitive complexity is acceptable for this utility function
     """
-    Play a system sound to indicate success or failure.
+    Play a system sound and ring the terminal bell to indicate success or failure.
+    Silent in the Claude Code sandbox or when JUNEAU_PUSH_NO_SOUND=1.
     
     Args:
         success: True for success sound, False for failure sound
     """
+    if os.environ.get(SANDBOX_RUNTIME_ENV) == "1" or os.environ.get(PUSH_NO_SOUND_ENV) == "1":
+        return
+    ring_bell()
     try:
         system = platform.system()
         if system == "Darwin":  # macOS
@@ -858,6 +887,22 @@ def build_test_command(test_script, timing_file, args):
     return cmd
 
 
+TAGGED_LINE = re.compile(r"\((\d+) container tests tagged\)")
+BOM_LINE = re.compile(r"enumerates all (\d+) consumer-facing modules")
+
+
+def tags_summary(text):
+    """The Tags row, `<n> container tests tagged`, from check-container-tags.py's output; None if not recognised."""
+    found = TAGGED_LINE.search(text or "")
+    return f"{found.group(1)} container tests tagged" if found else None
+
+
+def bom_summary(text):
+    """The BOM row, `<n> modules in juneau-bom`, from check-bom-completeness.py's output; None if not recognised."""
+    found = BOM_LINE.search(text or "")
+    return f"{found.group(1)} modules in juneau-bom" if found else None
+
+
 COMMIT_LINE = re.compile(r"^\[.+? ([0-9a-f]{7,40})\] (.*)$", re.MULTILINE)
 FILES_CHANGED = re.compile(r"^ (\d+) files? changed", re.MULTILINE)
 COMMIT_SUBJECT_WIDTH = 60
@@ -1276,6 +1321,7 @@ def main():
                 raise
             _finish(run, "cancelled")
             print("Cancelled.", file=sys.stderr)
+            ring_bell()
             return 130
         if run is not None:
             _finish(run, "ok" if code == 0 else "fail")
@@ -1567,7 +1613,8 @@ Examples:
                 [sys.executable, str(check_container_tags)],
                 f"🔎 Step {step_num}: Checking container test tags...",
                 juneau_root,
-                label="Tags"
+                label="Tags",
+                summarize=tags_summary
             ):
                 say("\n❌ Build process aborted due to missing container test tags.", "error")
                 play_sound(success=False)
@@ -1581,7 +1628,8 @@ Examples:
                 [sys.executable, str(check_bom)],
                 f"🔎 Step {step_num}: Checking BOM completeness...",
                 juneau_root,
-                label="BOM"
+                label="BOM",
+                summarize=bom_summary
             ):
                 say("\n❌ Build process aborted: juneau-bom is out of sync with the reactor.", "error")
                 play_sound(success=False)
@@ -1603,6 +1651,7 @@ Examples:
                 # The child draws its own Compile/Tests/JS tests/Perf rows; ours closes until it exits.
                 with (run.handoff() if run is not None else contextlib.nullcontext({})) as child_env:
                     os.environ.update(child_env)
+                    os.environ["JUNEAU_PUSH_ACTIVE"] = "1"    # test.py then leaves the end-of-run bell to us
                     result = run_test_script(test_cmd, juneau_root, run)
                 _test_wall_sec = int(time.time() - _test_start)
                 if result.returncode != 0:

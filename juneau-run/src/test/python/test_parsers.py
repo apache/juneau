@@ -647,6 +647,41 @@ class PytestParserTest(unittest.TestCase):
         cmd, _ = p.prepare(["pytest", "--junitxml=out.xml"], None, None)
         self.assertEqual((cmd, p.report_path), (["pytest", "--junitxml=out.xml"], "out.xml"))
 
+    def progress(self, text):
+        return [e[2] for e in kinds(feed(self.parser(), text), "progress")]
+
+    def test_default_output_reports_percent_and_the_file(self):
+        self.assertEqual(self.progress("test_f1.py ......... [ 43%]\ntest_f2.py ..F.s    [100%]\n"),
+                         ["43% \u00b7 test_f1.py", "100% \u00b7 test_f2.py"])
+
+    def test_progress_events_carry_the_step_id(self):
+        events = feed(self.parser(), "test_f1.py ...... [ 43%]\n")
+        self.assertEqual(kinds(events, "progress"), [("progress", "py", "43% \u00b7 test_f1.py")])
+
+    def test_a_wrapped_line_has_no_file_so_the_last_one_is_remembered(self):
+        text = "tests/test_f1.py ................................ [ 40%]\n.........  [ 49%]\n"
+        self.assertEqual(self.progress(text), ["40% \u00b7 tests/test_f1.py", "49% \u00b7 tests/test_f1.py"])
+
+    def test_quiet_output_has_no_file(self):
+        self.assertEqual(self.progress("..........F....sxX [ 51%]\n"), ["51%"])
+
+    def test_count_style(self):
+        self.assertEqual(self.progress("test_f1.py ......  [ 60/70]\n.....  [65/70]\n"),
+                         ["60/70 \u00b7 test_f1.py", "65/70 \u00b7 test_f1.py"])
+
+    def test_xdist_style_has_no_file(self):
+        self.assertEqual(self.progress("..................................                                       [ 52%]\n"),
+                         ["52%"])
+
+    def test_output_without_percentages_reports_nothing(self):
+        text = "collected 3 items\n\ntest_f1.py ...\n\n3 passed in 0.01s\n"
+        self.assertEqual(self.progress(text), [])
+
+    def test_lines_that_merely_resemble_progress_are_ignored_without_raising(self):
+        for line in ("[ 43%]", "see [ 43%]", "q" * 5000 + " [ 1%]", ". " * 3000, "test.py ...... [ 4x%]", "",
+                     "FAILED test_x.py::t - assert 1 == 2 [ 50%]"):
+            self.assertEqual(self.progress(line + "\n"), [], line[:40])
+
 
 class PlaywrightParserTest(unittest.TestCase):
     def parser(self):
@@ -704,7 +739,156 @@ class GenericParserTest(unittest.TestCase):
         self.assertEqual(feed(jr.GenericParser(), text, 0), [])
 
     def test_registry_names(self):
-        self.assertEqual(sorted(jr.PARSERS), ["generic", "maven", "playwright", "pytest"])
+        self.assertEqual(sorted(jr.PARSERS), ["generic", "gradle", "maven", "npm", "playwright", "pytest"])
+
+
+def gradle(text, exit_code=0, args=("build",)):
+    parser = jr.GradleParser()
+    parser.step_id = "g"
+    cmd, _ = parser.prepare(["gradle", *args], None, "/nonexistent")
+    return parser, cmd, feed(parser, text, exit_code)
+
+
+class GradleStructureTest(unittest.TestCase):
+    """GradleParser on inline lines, so the test run never needs Gradle."""
+
+    LINES = "\n".join([
+        "> Task :lib:compileJava",
+        "> Task :lib:processResources NO-SOURCE",
+        "> Task :lib:test",
+        "> Task :app:compileJava UP-TO-DATE",
+        "> Task :app:test",
+        "AppTest > two() FAILED",
+        "    org.opentest4j.AssertionFailedError at AppTest.java:5",
+        "2 tests completed, 1 failed",
+        "> Task :app:test FAILED",
+        "",
+        "FAILURE: Build failed with an exception.",
+        "",
+        "* What went wrong:",
+        "Execution failed for task ':app:test'.",
+        "> There were failing tests. See the report at: file:///scratch/app/build/reports/tests/test/index.html",
+        "",
+        "* Try:",
+        "> Run with --scan to get full insights.",
+        "",
+        "BUILD FAILED in 3s",
+    ])
+
+    def test_prepare_adds_plain_console_once(self):
+        _, cmd, _ = gradle("", args=("build",))
+        self.assertEqual(cmd, ["gradle", "--console=plain", "build"])
+        _, cmd, _ = gradle("", args=("--console=rich", "build"))
+        self.assertEqual(cmd, ["gradle", "--console=rich", "build"])
+
+    def test_sub_steps_one_per_task(self):
+        _, _, events = gradle(self.LINES, 1)
+        self.assertEqual([e[1:] for e in kinds(events, "sub_start")],
+                         [("g/lib-compilejava", 1, ":lib:compileJava"),
+                          ("g/lib-processresources", 2, ":lib:processResources"),
+                          ("g/lib-test", 3, ":lib:test"),
+                          ("g/app-compilejava", 4, ":app:compileJava"),
+                          ("g/app-test", 5, ":app:test")])
+        self.assertEqual([(e[1], e[2]) for e in kinds(events, "sub_end")],
+                         [("g/lib-compilejava", "ok"), ("g/lib-processresources", "skip"), ("g/lib-test", "ok"),
+                          ("g/app-compilejava", "ok"), ("g/app-test", "fail")])
+
+    def test_counts(self):
+        _, _, events = gradle(self.LINES, 1)
+        self.assertEqual(kinds(events, "tests"), [("tests", "g", 2, 1, 0, 0)])
+        _, _, events = gradle("3 tests completed, 1 failed, 1 skipped\n", 1)
+        self.assertEqual(kinds(events, "tests"), [("tests", "g", 3, 1, 0, 1)])
+        _, _, events = gradle("1 test completed, 1 failed\n", 1)
+        self.assertEqual(kinds(events, "tests"), [("tests", "g", 1, 1, 0, 0)])
+
+    def test_what_went_wrong_block_is_the_failure(self):
+        _, _, events = gradle(self.LINES, 1)
+        failure = kinds(events, "failure")
+        self.assertEqual(len(failure), 1)
+        self.assertEqual(failure[0][2], "g")
+        self.assertTrue(failure[0][1].startswith("* What went wrong:\nExecution failed for task ':app:test'."))
+        self.assertNotIn("* Try:", failure[0][1])
+        cond = [e[1] for e in kinds(events, "cond")]
+        self.assertIn("Execution failed for task ':app:test'.", cond)
+        self.assertIn("BUILD FAILED in 3s", cond)
+
+    def test_success_has_no_failure_and_closes_open_tasks(self):
+        _, _, events = gradle("> Task :a\n> Task :b\nBUILD SUCCESSFUL in 1s\n", 0)
+        self.assertEqual(kinds(events, "failure"), [])
+        self.assertEqual([(e[1], e[2]) for e in kinds(events, "sub_end")], [("g/a", "ok"), ("g/b", "ok")])
+
+    def test_failed_exit_with_no_block_falls_back_to_the_tail(self):
+        _, _, events = gradle("> Task :a\nsomething broke\n", 1)
+        self.assertEqual([(e[1], e[2]) for e in kinds(events, "sub_end")], [("g/a", "fail")])
+        self.assertEqual(kinds(events, "failure"), [("failure", "> Task :a\nsomething broke", "g")])
+
+
+class NpmParserTest(unittest.TestCase):
+    def npm(self, text, exit_code=0):
+        parser = jr.NpmParser()
+        parser.step_id = "n"
+        return feed(parser, text, exit_code)
+
+    def test_no_sub_steps(self):
+        events = self.npm("added 3 packages in 1s\n")
+        self.assertEqual(kinds(events, "sub_start"), [])
+
+    def test_summary_line_from_added(self):
+        events = self.npm("\nadded 3 packages, and audited 4 packages in 1s\nfound 0 vulnerabilities\n")
+        self.assertEqual(kinds(events, "cond"), [("cond", "added 3 packages, and audited 4 packages in 1s")])
+        self.assertEqual(kinds(events, "failure"), [])
+
+    def test_error_lines_are_the_failure(self):
+        text = "> demo@1.0.0 build\nnoise\nnpm error code 1\nnpm ERR! old style\nmore noise\n"
+        events = self.npm(text, 1)
+        self.assertEqual(kinds(events, "cond"), [("cond", "npm error code 1"), ("cond", "npm ERR! old style")])
+        self.assertEqual(kinds(events, "failure"), [("failure", "npm error code 1\nnpm ERR! old style", "n")])
+
+    def test_failure_with_no_error_lines_is_the_tail(self):
+        text = "\n".join(f"line {i}" for i in range(100))
+        events = self.npm(text, 1)
+        self.assertEqual(kinds(events, "failure"), [("failure", "\n".join(f"line {i}" for i in range(60, 100)), "n")])
+
+    def test_success_ignores_stray_error_lines(self):
+        self.assertEqual(kinds(self.npm("npm error not really\n", 0), "failure"), [])
+
+
+class NpmFixtureTest(unittest.TestCase):
+    def npm(self, fixture, exit_code):
+        parser = jr.NpmParser()
+        parser.step_id = "n"
+        return feed(parser, (FIXTURES / fixture).read_text(encoding="utf-8"), exit_code)
+
+    def test_install_success(self):
+        events = self.npm("npm-install-success.log", 0)
+        self.assertRegex(kinds(events, "cond")[0][1], r"^added 1 package\b")
+        self.assertEqual(kinds(events, "failure"), [])
+
+    def test_missing_script(self):
+        events = self.npm("npm-missing-script.log", 1)
+        self.assertTrue(kinds(events, "failure")[0][1].startswith('npm error Missing script: "no-such-script"'))
+
+
+class GradleFixtureTest(unittest.TestCase):
+    def fixture(self, name, exit_code):
+        return gradle((FIXTURES / name).read_text(encoding="utf-8"), exit_code)[2]
+
+    def test_success(self):
+        events = self.fixture("gradle-success.log", 0)
+        self.assertIn(("sub_start", "g/lib-compilejava", 1, ":lib:compileJava"), events)
+        self.assertEqual({e[2] for e in kinds(events, "sub_end")} - {"ok", "skip"}, set())
+        self.assertEqual(kinds(events, "failure"), [])
+
+    def test_test_failure(self):
+        events = self.fixture("gradle-test-failure.log", 1)
+        self.assertIn(("tests", "g", 2, 1, 0, 0), events)
+        self.assertIn(("g/app-test", "fail"), [(e[1], e[2]) for e in kinds(events, "sub_end")])
+        self.assertTrue(kinds(events, "failure")[0][1].startswith("* What went wrong:"))
+
+    def test_compile_failure(self):
+        events = self.fixture("gradle-compile-failure.log", 1)
+        self.assertIn(("g/lib-compilejava", "fail"), [(e[1], e[2]) for e in kinds(events, "sub_end")])
+        self.assertIn("Compilation failed", kinds(events, "failure")[0][1])
 
 
 if __name__ == "__main__":

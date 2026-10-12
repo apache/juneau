@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.petstore.dto;
 
+import org.apache.juneau.commons.bean.*;
+
 /**
  * User domain bean.
  *
@@ -122,8 +124,12 @@ public class User {
 	 * <p>
 	 * Stored in plaintext for sample purposes only.  Do not use this pattern in production.
 	 *
+	 * <p>
+	 * Write-only: the password is accepted on create and update but is never serialized, so no response carries it.
+	 *
 	 * @return The password.  Can be <jk>null</jk> if not set.
 	 */
+	@BeanProp(wo="true")
 	public String getPassword() {
 		return password;
 	}

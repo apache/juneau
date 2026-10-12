@@ -42,14 +42,15 @@ import org.junit.jupiter.api.*;
  *
  * <p>
  * Each case is one FTL fixture under {@code templates/parity/c3} and one {@link Cases} factory; both render through
- * the shared {@code parity-chrome.ftlh}.  The comparison is on key-sorted JSON (list order is kept, because card, nav
- * and template order is part of what parity must prove), then on template ids and exact template markup.
+ * the shared {@code parity-chrome.ftlh}.  The comparison is {@link PageContractAssert#isTwinOf}: key-sorted JSON (list
+ * order is kept, because card, nav and template order is part of what parity must prove), then template ids and
+ * stripped template markup.
  *
  * <h5 class='section'>Example:</h5>
  * <p class='bjava'>
  * 	var <jv>ftl</jv> = <jsm>assertPage</jsm>(<jsm>renderFtl</jsm>(<js>"03-table-every-feature"</js>)).isValid();
  * 	var <jv>java</jv> = <jsm>assertPage</jsm>(<jsm>renderSpec</jsm>(<js>"03-table-every-feature"</js>)).isValid();
- * 	<jsm>assertEquals</jsm>(<jsm>canonical</jsm>(<jv>ftl</jv>.contract()), <jsm>canonical</jsm>(<jv>java</jv>.contract()));
+ * 	<jv>ftl</jv>.isTwinOf(<jv>java</jv>);
  * </p>
  *
  * @since 10.0.0
@@ -109,55 +110,15 @@ class PageSpec_Parity_Test extends TestBase {
 		}
 	}
 
-	/** Recursively key-sorts every {@link Map}; {@link List} order is kept. */
-	private static Object canonical(Object v) {
-		if (v instanceof Map<?,?> m) {
-			var out = new TreeMap<String,Object>();
-			for (var e : m.entrySet())
-				out.put(String.valueOf(e.getKey()), canonical(e.getValue()));
-			return out;
-		}
-		if (v instanceof List<?> l)
-			return l.stream().map(PageSpec_Parity_Test::canonical).toList();
-		return v;
-	}
-
 	private static void assertParity(String ftlFixture, String specCase, Consumer<PageContractAssert> javaGuard) throws Exception {
 		var ftl = assertPage(get("/ftl/" + ftlFixture)).isValid();
 		var java = assertPage(get("/spec/" + specCase)).isValid();
 		javaGuard.accept(java);  // Non-vacuity: the Java side really produced the thing being compared.
-		var diff = firstDiff("$", canonical(ftl.contract()), canonical(java.contract()));
-		assertNull(diff, () -> "case '" + specCase + "' contract mismatch (ftl vs java) at " + diff);
-		assertEquals(trimmed(ftl.templates()), trimmed(java.templates()), () -> "case '" + specCase + "' template mismatch");
-	}
-
-	/** @return A description of the first place the two canonical trees differ (FTL first), or {@code null}. */
-	private static String firstDiff(String path, Object ftl, Object java) {
-		if (Objects.equals(ftl, java))
-			return null;
-		if (ftl instanceof Map<?,?> a && java instanceof Map<?,?> b) {
-			var keys = new TreeSet<Object>(a.keySet());
-			keys.addAll(b.keySet());
-			for (var k : keys) {
-				var d = firstDiff(path + "." + k, a.get(k), b.get(k));
-				if (d != null)
-					return d;
-			}
+		try {
+			ftl.isTwinOf(java);
+		} catch (AssertionError e) {
+			throw new AssertionError("case '" + specCase + "' (ftl vs java): " + e.getMessage(), e);
 		}
-		if (ftl instanceof List<?> a && java instanceof List<?> b && a.size() == b.size())
-			for (var i = 0; i < a.size(); i++) {
-				var d = firstDiff(path + "[" + i + "]", a.get(i), b.get(i));
-				if (d != null)
-					return d;
-			}
-		return path + ": ftl=" + ftl + " java=" + java;
-	}
-
-	/** Template markup keyed by id, with the whitespace an FTL author's layout puts around a card stripped. */
-	private static Map<String,String> trimmed(Map<String,String> templates) {
-		var out = new TreeMap<String,String>();
-		templates.forEach((k, v) -> out.put(k, v.strip()));
-		return out;
 	}
 
 	private static void assertParity(String caseName, Consumer<PageContractAssert> javaGuard) throws Exception {

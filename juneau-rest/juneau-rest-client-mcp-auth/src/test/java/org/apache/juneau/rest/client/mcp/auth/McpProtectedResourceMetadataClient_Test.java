@@ -21,6 +21,8 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.io.*;
 import java.net.*;
 import java.nio.charset.*;
+import java.time.*;
+import java.util.concurrent.atomic.*;
 
 import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
@@ -191,5 +193,64 @@ class McpProtectedResourceMetadataClient_Test extends TestBase {
 		var prm = McpProtectedResourceMetadataClient.create().allowInsecureHttp(true).build()
 			.fetch(URI.create(base() + "/.well-known/oauth-protected-resource"));
 		assertEquals(URI.create(base()), prm.resource());
+	}
+
+	// -----------------------------------------------------------------------------------------------------------------
+	// E: builder options, unreachable endpoints, extras, and loopback detection
+	// -----------------------------------------------------------------------------------------------------------------
+
+	private static int closedLoopbackPort() throws IOException {
+		try (var s = new ServerSocket(0, 0, InetAddress.getLoopbackAddress())) {
+			return s.getLocalPort();
+		}
+	}
+
+	@Test void e01_httpTimeoutMustBePositive() {
+		var b = McpProtectedResourceMetadataClient.create();
+		assertThrows(IllegalArgumentException.class, () -> b.httpTimeout(Duration.ZERO));
+		assertThrows(IllegalArgumentException.class, () -> b.httpTimeout(Duration.ofSeconds(-1)));
+		assertDoesNotThrow(() -> b.httpTimeout(Duration.ofSeconds(3)));
+	}
+
+	@Test void e02_requestConfiguratorAppliedToFetchAndDiscovery() {
+		var calls = new AtomicInteger();
+		var client = McpProtectedResourceMetadataClient.create()
+			.httpTimeout(Duration.ofSeconds(5))
+			.httpRequestConfigurator(r -> calls.incrementAndGet())
+			.build();
+		var prm = client.fetch(URI.create(base() + "/.well-known/oauth-protected-resource"));
+		assertEquals(1, calls.get(), "configurator must run for the PRM fetch");
+		client.discoverAuthorizationServer(prm);
+		assertTrue(calls.get() > 1, "configurator must also run for authorization-server discovery");
+	}
+
+	@Test void e03_unreachableHostSurfacesAsMcpAuthException() throws IOException {
+		// https to a closed loopback port: passes the scheme check (https branch) and then fails at connect time.
+		var url = URI.create("https://127.0.0.1:" + closedLoopbackPort() + "/.well-known/oauth-protected-resource");
+		var client = McpProtectedResourceMetadataClient.create().build();
+		var e = assertThrows(McpAuthException.class, () -> client.fetch(url));
+		assertTrue(e.getMessage().contains("fetch failed"), e::getMessage);
+	}
+
+	@Test void e04_localhostHostnameTreatedAsLoopback() throws IOException {
+		var url = URI.create("http://localhost:" + closedLoopbackPort() + "/prm");
+		var client = McpProtectedResourceMetadataClient.create().build();
+		var e = assertThrows(McpAuthException.class, () -> client.fetch(url));
+		assertTrue(e.getMessage().contains("fetch failed"), e::getMessage);  // got past the scheme check
+	}
+
+	@Test void e05_hostlessUriIsNotLoopback() {
+		var url = URI.create("urn:example:prm");
+		var client = McpProtectedResourceMetadataClient.create().build();
+		var e = assertThrows(McpAuthException.class, () -> client.fetch(url));
+		assertTrue(e.getMessage().contains("must use https"), e::getMessage);
+	}
+
+	@Test void e06_nonStandardFieldsSurfacedAsExtras() {
+		var json = "{\"resource\":\"" + base() + "\",\"bearer_methods_supported\":[\"header\"],\"resource_name\":\"Demo\"}";
+		var prm = McpProtectedResourceMetadataClient.create().build().parse(json, null);
+		assertEquals("Demo", prm.extras().get("resource_name"));
+		assertTrue(prm.extras().containsKey("bearer_methods_supported"));
+		assertFalse(prm.extras().containsKey("resource"));
 	}
 }

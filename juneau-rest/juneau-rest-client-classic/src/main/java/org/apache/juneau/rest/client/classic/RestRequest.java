@@ -1320,11 +1320,14 @@ public class RestRequest extends MarshallingSession implements HttpUriRequest, C
 	 * 			bean context property setters (e.g. {@link RestClient.Builder#swaps(Class...)}) defined on this builder class.
 	 * 	</ul>
 	 * <p>
-	 * 	<c>Accept</c> request header will be set to <js>"application/json"</js> unless overridden
+	 * 	<c>Accept</c> request header will be set to <js>"application/json5"</js> unless overridden
 	 * 		by {@link #header(String,Object)} or {@link #accept(String)}, or per-request via {@link RestRequest#header(String,Object)} or {@link RestRequest#accept(String)}.
 	 * <p>
-	 * 	<c>Content-Type</c> request header will be set to <js>"application/json+simple"</js> unless overridden
+	 * 	<c>Content-Type</c> request header will be set to <js>"application/json5"</js> unless overridden
 	 * 		by {@link #header(String,Object)} or {@link #contentType(String)}, or per-request via {@link RestRequest#header(String,Object)} or {@link RestRequest#contentType(String)}.
+	 * <p>
+	 * 	A server that only handles JSON may reply <c>406 Not Acceptable</c> or <c>415 Unsupported Media Type</c> to these
+	 * 	JSON5 media types.
 	 * <p>
 	 * 	Can be combined with other marshaller setters such as {@link #xml()} to provide support for multiple languages.
 	 * 	<ul>
@@ -2164,8 +2167,16 @@ public class RestRequest extends MarshallingSession implements HttpUriRequest, C
 						Throwable thrownInstance = null;
 						c = ci.getPublicConstructor(x -> x.hasParameterTypes(HttpResponse.class)).orElse(null);
 						if (nn(c)) {
-							thrownInstance = c.<Throwable>newInstance(response);
-						} else {
+							try {
+								thrownInstance = c.<Throwable>newInstance(response);
+							} catch (ExecutableException e) {
+								// Only a status-code rejection (IllegalArgumentException from the Xxx(HttpResponse) status check) falls through to the remaining constructors; anything else propagates unchanged.
+								if (! (e.getCause() instanceof IllegalArgumentException))
+									throw e;
+								thrownInstance = null;
+							}
+						}
+						if (thrownInstance == null) {
 							c = ci.getPublicConstructor(x -> x.hasParameterTypes(String.class)).orElse(null);
 							if (nn(c)) {
 								thrownInstance = c.<Throwable>newInstance(nn(message) ? message : response.getContent().asString());
@@ -2216,9 +2227,10 @@ public class RestRequest extends MarshallingSession implements HttpUriRequest, C
 	/**
 	 * Runs this request with Apache HttpClient's own automatic redirect-following disabled (see
 	 * {@code PolicyAwareRedirectStrategy}) and instead follows {@code 3xx} hops in a Juneau-controlled loop that
-	 * re-validates the {@code Location} of every hop against {@link RemoteUrlPolicy} &mdash; and, via
-	 * {@code PolicyPinningDnsResolver} (active for the whole duration of this loop, since {@link RemoteUrlPolicyState}
-	 * remains set on the calling thread), pin-on-connects each hop's resolved address.  Only called while
+	 * re-validates the {@code Location} of every hop against {@link RemoteUrlPolicy} &mdash; and, since
+	 * {@link RemoteUrlPolicyState} remains set on the calling thread for the whole loop, every hop leases its connection
+	 * from the client's dedicated pinned pool ({@code SsrfGuardConnectionManager}), which pin-on-connects each hop's
+	 * resolved address and never hands out a connection an ordinary request opened.  Only called while
 	 * {@link RemoteUrlPolicyState#isActive()}, i.e. for a {@code @Remote} call with the SSRF guard in effect.
 	 */
 	private HttpResponse runWithPolicyRedirects() throws IOException {

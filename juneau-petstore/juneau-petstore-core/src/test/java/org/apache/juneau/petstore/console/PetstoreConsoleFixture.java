@@ -44,8 +44,22 @@ public final class PetstoreConsoleFixture {
 
 		/** @return The seeded store shared by every child. */
 		@Bean public PetStore petStore() {
-			return PetstoreSeed.create().populate(new PetStore(PetstoreSeed.DEFAULT_CLOCK));
+			return store();
 		}
+	}
+
+	private static PetStore store;
+
+	/**
+	 * Rule: one store per test JVM, shared by every {@link Host} (and so every client), so state a test writes is visible
+	 * to later tests; mutating tests must use ids they create.
+	 *
+	 * @return The one seeded store every {@link Host} shares, so tests can assert on stored state the API does not echo.
+	 */
+	public static synchronized PetStore store() {
+		if (store == null)
+			store = PetstoreSeed.create().populate(new PetStore(PetstoreSeed.DEFAULT_CLOCK));
+		return store;
 	}
 
 	private PetstoreConsoleFixture() {}

@@ -69,7 +69,7 @@ Submitting twice from the same dialog runs one job.</p></div>
   ],
   detail: {
     endpoint: '/console/ops/jobs/groom-runs/{id}',
-    region: { id: 'output', type: 'row-detail', populate: 'console-output', params: ${groomDetailParams?no_esc} }
+    region: { id: 'output', type: 'row-detail', populate: 'console-output', lazy: false, params: ${groomDetailParams?no_esc} }
   },
   ribbon: [
     { type: 'dialog', id: 'groom', title: 'Groom', endpoint: '/console/ops/jobs/groom', method: 'POST', form: '/console/ops/jobs/groom-form' },

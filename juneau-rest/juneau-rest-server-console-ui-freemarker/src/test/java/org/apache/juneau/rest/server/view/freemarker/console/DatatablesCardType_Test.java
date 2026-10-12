@@ -248,6 +248,13 @@ class DatatablesCardType_Test extends TestBase {
 			org.apache.juneau.marshall.marshaller.Json5.DEFAULT.write(cols));
 	}
 
+	@Test void hrefWithoutRender_impliesLinked() {
+		var frag = h.toFragment(src("t", "{dataUrl:'/x', columns:[{key:'a', href:'/p/{id}'}, {key:'b', href:'/q', render:'tag:status'}, {key:'c', href:'/r', render:{id:'pill'}}, {key:'d'}]}"));
+		var cols = ((Map<?,?>)frag.get("table")).get("columns");
+		assertEquals("[{key:'a',href:'/p/{id}',render:{id:'linked'}},{key:'b',href:'/q',render:{id:'tag',meta:{field:'status'}}},{key:'c',href:'/r',render:{id:'pill'}},{key:'d'}]",
+			org.apache.juneau.marshall.marshaller.Json5.DEFAULT.write(cols));
+	}
+
 	@Test void validCatalog_returnsTableFragmentInAuthorShape() {
 		var card = h.toFragment(src("t", "{dataUrl:'/x', columns:[{key:'a', label:'A'}]}"));
 		var table = (JsonMap) card.get("table");
@@ -323,6 +330,26 @@ class DatatablesCardType_Test extends TestBase {
 		assertFalse(s.contains("Json5l"), () -> s);
 		assertFalse(s.contains("com.sfdc"), () -> s);
 		assertFalse(s.contains("slds-"), () -> s);
+	}
+
+	@Test void a01_detailRegionWithoutDataUrlGetsTheEndpoint() {
+		var f = h.toFragment(src("t", "{dataUrl:'/x', columns:[{key:'a'}], detail:{endpoint:'/x/{id}', region:{id:'out', populate:'p'}}}"));
+		var region = (Map<?,?>)((Map<?,?>)((Map<?,?>)f.get("table")).get("detail")).get("region");
+		assertEquals("/x/{id}", region.get("dataUrl"));
+		assertEquals("row-detail", region.get("type"));
+		assertEquals("p", region.get("populate"));
+	}
+
+	@Test void a02_explicitDetailRegionDataUrlAndTypeAreKept() {
+		var f = h.toFragment(src("t", "{dataUrl:'/x', columns:[{key:'a'}], detail:{endpoint:'/x/{id}', region:{id:'out', type:'custom', dataUrl:'/y/{id}'}}}"));
+		var region = (Map<?,?>)((Map<?,?>)((Map<?,?>)f.get("table")).get("detail")).get("region");
+		assertEquals("/y/{id}", region.get("dataUrl"));
+		assertEquals("custom", region.get("type"));
+	}
+
+	@Test void a03_detailWithoutRegionStaysWithoutOne() {
+		var f = h.toFragment(src("t", "{dataUrl:'/x', columns:[{key:'a'}], detail:{endpoint:'/x/{id}'}}"));
+		assertFalse(((Map<?,?>)((Map<?,?>)f.get("table")).get("detail")).containsKey("region"));
 	}
 
 	@Test void dualHat_newMainSources_haveNoSalesforceMarkers() throws Exception {
