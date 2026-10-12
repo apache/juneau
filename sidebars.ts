@@ -1849,6 +1849,8 @@ const sidebars: SidebarsConfig = {
 							items: [
 								{ type: 'doc', id: 'topics/10.64.01.BuildingAConsolePage', label: '10.64.1. Building a Console Page' },
 								{ type: 'doc', id: 'topics/10.64.02.CardAssetDependencies', label: '10.64.2. Card Asset Dependencies' },
+								{ type: 'doc', id: 'topics/10.64.03.ChartCards', label: '10.64.3. Chart Cards' },
+								{ type: 'doc', id: 'topics/10.64.04.JobLogCard', label: '10.64.4. Job-Log Card' },
 							],
 						},
 						{
