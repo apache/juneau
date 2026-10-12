@@ -103,7 +103,9 @@ class EngineSupportBranchesTest {
 	@Test
 	void a05_storeIoFailures(@TempDir Path dir) throws Exception {
 		var file = Files.writeString(dir.resolve("afile"), "x");
-		assertThrows(RuntimeException.class, () -> new RunStateStore(file).save(RunState.create("1.0.0", "b", List.of())));
+		var badStore = new RunStateStore(file);
+		var state = RunState.create("1.0.0", "b", List.of());
+		assertThrows(RuntimeException.class, () -> badStore.save(state));
 
 		var store = new RunStateStore(dir);
 		store.save(RunState.create("1.0.0", "b", List.of()));
@@ -131,6 +133,9 @@ class EngineSupportBranchesTest {
 	}
 
 	@Test
+	@SuppressWarnings({
+		"java:S2925" // The sleep guarantees distinct updatedAt timestamps; displayRun() picks the newest by that time.
+	})
 	void a06_storeFiltersAndPicksRuns(@TempDir Path dir) throws Exception {
 		var store = new RunStateStore(dir);
 		assertTrue(new RunStateStore(dir.resolve("missing")).loadAll().isEmpty());

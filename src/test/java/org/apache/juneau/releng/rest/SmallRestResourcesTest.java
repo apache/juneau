@@ -100,6 +100,7 @@ class SmallRestResourcesTest {
 		var rest = new MilestoneRest(new MilestoneService(), new GithubPrSource(r, "apache/juneau"), r, "/repo");
 
 		var prs = rest.prs("9.3.0");
+		assertEquals(List.of("gh", "pr", "list"), calls.get(0).subList(0, 3));
 		assertEquals(2, prs.size());
 		assertEquals(7, prs.get(0).number);
 		assertEquals("jb", prs.get(0).authorLogin);

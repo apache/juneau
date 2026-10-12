@@ -312,60 +312,74 @@ def by_module_report(xml_path: Path):
     print()
 
 
-def detail_report(xml_path: Path, target: str, branches_only: bool):
-    """Print per-file coverage and uncovered lines for a top-level package name or a source path."""
-    pkg_filter, file_filter = None, None
+def parse_detail_target(target: str) -> tuple[str, str | None, str | None]:
+    """Split a detail-report target into (normalized target, package filter, file filter)."""
     t = target.replace("\\", "/")
     marker = "src/main/java/"
-    if marker in t:
-        rest = t.split(marker, 1)[1].rstrip("/")
-        if rest.endswith(".java"):
-            pkg_filter, file_filter = rest.rsplit("/", 1)[0], rest.rsplit("/", 1)[1]
-        else:
-            pkg_filter = rest
+    if marker not in t:
+        return t, None, None
+    rest = t.split(marker, 1)[1].rstrip("/")
+    if rest.endswith(".java"):
+        pkg_filter, file_filter = rest.rsplit("/", 1)
+        return t, pkg_filter, file_filter
+    return t, rest, None
+
+
+def package_matches(pkg_name: str, t: str, pkg_filter: str | None) -> bool:
+    """True if a JaCoCo package belongs in the detail report for the given filters."""
+    if pkg_filter is not None:
+        return pkg_name == pkg_filter or pkg_name.startswith(pkg_filter + "/")
+    return top_package(pkg_name) == t
+
+
+def print_file_detail(pkg_name: str, fname: str, stats) -> None:
+    """Print the coverage block for one source file."""
+    mb, cb, mi, ci, uncovered, excluded = stats
+    note = "  (HTT-adjusted)" if excluded else ""
+    print(f"\n{'=' * 70}\n  {pkg_name.replace('/', '.')}.{fname.removesuffix('.java')}\n{'=' * 70}")
+    print(f"  Branches:     {bar(cb, mb + cb)}  {pct(cb, mb + cb):>4}  ({cb}/{mb + cb} covered, {mb} missed){note}")
+    print(f"  Instructions: {bar(ci, mi + ci)}  {pct(ci, mi + ci):>4}  ({ci}/{mi + ci} covered, {mi} missed){note}")
+    if excluded:
+        print(f"  Excluded {len(excluded)} hard-to-test line(s) (HTT):")
+        for ln, reason in sorted(excluded):
+            print(f"    L{ln}: {reason}")
+    if not uncovered:
+        print("\n  All lines covered!")
+        return
+    print("\n  Uncovered lines:")
+    for ln, lmb, total, lmi in sorted(uncovered):
+        parts = []
+        if lmb > 0:
+            parts.append(f"{lmb}/{total} branches missed")
+        if lmi > 0:
+            parts.append(f"{lmi} instructions missed")
+        print(f"    line {ln:4d}:  {', '.join(parts)}")
+
+
+def detail_report(xml_path: Path, target: str, branches_only: bool):
+    """Print per-file coverage and uncovered lines for a top-level package name or a source path."""
+    t, pkg_filter, file_filter = parse_detail_target(target)
     root = ET.parse(xml_path).getroot()
     shown = 0
     for pkg in sorted(root.findall("package"), key=lambda p: p.get("name", "")):
         pkg_name = pkg.get("name", "")
-        if pkg_filter is not None:
-            if not (pkg_name == pkg_filter or pkg_name.startswith(pkg_filter + "/")):
-                continue
-        elif top_package(pkg_name) != t:
+        if not package_matches(pkg_name, t, pkg_filter):
             continue
         for sf in sorted(pkg.findall("sourcefile"), key=lambda s: s.get("name", "")):
             fname = sf.get("name", "")
             if file_filter and fname != file_filter:
                 continue
-            mb, cb, mi, ci, uncovered, excluded = file_stats(sf, pkg_name, fname, branches_only)
+            print_file_detail(pkg_name, fname, file_stats(sf, pkg_name, fname, branches_only))
             shown += 1
-            note = "  (HTT-adjusted)" if excluded else ""
-            print(f"\n{'=' * 70}\n  {pkg_name.replace('/', '.')}.{fname.removesuffix('.java')}\n{'=' * 70}")
-            print(f"  Branches:     {bar(cb, mb + cb)}  {pct(cb, mb + cb):>4}  ({cb}/{mb + cb} covered, {mb} missed){note}")
-            print(f"  Instructions: {bar(ci, mi + ci)}  {pct(ci, mi + ci):>4}  ({ci}/{mi + ci} covered, {mi} missed){note}")
-            if excluded:
-                print(f"  Excluded {len(excluded)} hard-to-test line(s) (HTT):")
-                for ln, reason in sorted(excluded):
-                    print(f"    L{ln}: {reason}")
-            if uncovered:
-                print("\n  Uncovered lines:")
-                for ln, lmb, total, lmi in sorted(uncovered):
-                    parts = []
-                    if lmb > 0:
-                        parts.append(f"{lmb}/{total} branches missed")
-                    if lmi > 0:
-                        parts.append(f"{lmi} instructions missed")
-                    print(f"    line {ln:4d}:  {', '.join(parts)}")
-            else:
-                print("\n  All lines covered!")
     if shown == 0:
         die(f"No JaCoCo data found for '{target}'.")
 
 
-def main():  # NOSONAR: always returns 0 by design
+def main():
     args = sys.argv[1:]
     if not args or "--help" in args or "-h" in args:
         print(__doc__)
-        return 0
+        return
     target, do_run, branches_only, by_module = None, False, False, False
     for arg in args:
         if arg in ("--run", "-r"):
@@ -387,8 +401,7 @@ def main():  # NOSONAR: always returns 0 by design
         detail_report(xml_path, target, branches_only)
     else:
         die("No package or path specified (or use --by-module).")
-    return 0
 
 
 if __name__ == "__main__":
-    sys.exit(main())
+    main()

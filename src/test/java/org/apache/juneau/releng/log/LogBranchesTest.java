@@ -66,6 +66,9 @@ class LogBranchesTest {
 	}
 
 	@Test
+	@SuppressWarnings({
+		"java:S2925" // Asserts that nothing fires; the sleep is the observation window for the (absent) timer callback.
+	})
 	void a01_timerSkipsWithoutWebhookOrWithPastDeadline() throws Exception {
 		var seen = new java.util.concurrent.CopyOnWriteArrayList<List<String>>();
 		new VoteDeadlineTimer(capturing(seen, new CountDownLatch(1)), "").arm("9.2.1", Instant.now().plusMillis(50));
@@ -92,7 +95,8 @@ class LogBranchesTest {
 	@Test
 	void a03_runLogErrorsAndSize(@TempDir Path dir) throws Exception {
 		var blocker = Files.writeString(dir.resolve("blocker"), "x");
-		assertThrows(RuntimeException.class, () -> new RunLog(blocker.resolve("sub/x.log")));
+		var blockedLog = blocker.resolve("sub/x.log");
+		assertThrows(RuntimeException.class, () -> new RunLog(blockedLog));
 
 		var log = new RunLog(dir.resolve("a.log"));
 		assertEquals(dir.resolve("a.log"), log.file());
@@ -145,7 +149,10 @@ class LogBranchesTest {
 		var t = new Thread(() -> servlet.doGet(req("9.2.1/state"), resp));
 		t.setDaemon(true);
 		t.start();
-		Thread.sleep(200);
+		var deadline = System.nanoTime() + TimeUnit.SECONDS.toNanos(5);
+		while (t.getState() != Thread.State.TIMED_WAITING && System.nanoTime() < deadline)
+			Thread.onSpinWait();
+		assertEquals(Thread.State.TIMED_WAITING, t.getState(), "servlet is tailing the broadcaster queue");
 		t.interrupt();
 		t.join(2000);
 		assertFalse(t.isAlive());

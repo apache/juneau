@@ -23,7 +23,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.EnumMap;
 import java.util.List;
-import java.util.Map;
 import org.apache.juneau.commons.secret.InMemorySecretStore;
 import org.apache.juneau.commons.secret.SecretStore;
 import org.apache.juneau.releng.credential.Validator.ValidationResult;
@@ -94,7 +93,7 @@ class CredentialBranchesTest {
 	// ---- AccountStore ----
 
 	@Test
-	void a04_accountStoreEdgeCases(@TempDir Path dir) throws Exception {
+	void a04_accountStoreEdgeCases(@TempDir Path dir) {
 		var store = new AccountStore(dir);
 		store.remove(CredentialSpec.GPG); // nothing stored: no save
 		assertFalse(Files.exists(dir.resolve("accounts.properties")));
@@ -119,8 +118,9 @@ class CredentialBranchesTest {
 		Files.createDirectories(d2);
 		var f = Files.writeString(d2.resolve("accounts.properties"), "gpg=K\n");
 		Files.setPosixFilePermissions(f, java.nio.file.attribute.PosixFilePermissions.fromString("---------"));
+		var unreadable = new AccountStore(d2);
 		try {
-			assertThrows(RuntimeException.class, () -> new AccountStore(d2).get(CredentialSpec.GPG));
+			assertThrows(RuntimeException.class, () -> unreadable.get(CredentialSpec.GPG));
 		} finally {
 			Files.setPosixFilePermissions(f, java.nio.file.attribute.PosixFilePermissions.fromString("rw-------"));
 		}
@@ -133,20 +133,32 @@ class CredentialBranchesTest {
 	}
 
 	@Test
-	void a06_githubReasons() {
+	void a06a_githubNotInstalled() {
 		assertTrue(gh(127, "").contains("not installed"));
 		assertTrue(gh(1, "bash: gh: No such file or directory").contains("not installed"));
-		assertTrue(gh(1, "HTTP 401: Bad credentials").contains("401"));
 		assertTrue(gh(1, "gh: command not found").contains("not installed"));
+	}
+
+	@Test
+	void a06b_githubHttpStatusReasons() {
+		assertTrue(gh(1, "HTTP 401: Bad credentials").contains("401"));
 		assertTrue(gh(1, "HTTP 403").contains("403"));
 		assertTrue(gh(1, "insufficient permissions").contains("403"));
 		assertTrue(gh(1, "missing scope").contains("403"));
 		assertTrue(gh(1, "HTTP 404").contains("404"));
+	}
+
+	@Test
+	void a06c_githubUnreachable() {
 		assertTrue(gh(1, "dial tcp: lookup").contains("unreachable"));
 		assertTrue(gh(1, "could not resolve host").contains("unreachable"));
 		assertTrue(gh(1, "connection refused").contains("unreachable"));
 		assertTrue(gh(1, "i/o timeout").contains("unreachable"));
 		assertTrue(gh(1, "network is unreachable").contains("unreachable"));
+	}
+
+	@Test
+	void a06d_githubExitCodeAndSuccess() {
 		assertTrue(gh(7, "weird").contains("exit code 7"));
 		assertTrue(gh(7, null).contains("exit code 7"));
 		assertEquals("GitHub token OK.", gh(0, null));

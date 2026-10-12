@@ -101,7 +101,8 @@ class ReleaseRunRestBranchesTest {
 	void a03_startWhileAnotherRunIsActiveIsConflict(@TempDir Path dir) {
 		var rest = rest(dir);
 		rest.start(start("9.2.1"));
-		assertThrows(Conflict.class, () -> rest.start(start("9.2.2")));
+		var second = start("9.2.2");
+		assertThrows(Conflict.class, () -> rest.start(second));
 	}
 
 	@Test

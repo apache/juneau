@@ -339,7 +339,7 @@ class StepApplyBranchesTest {
 	}
 
 	@Test
-	void a16_previewsAndEdgeBranches(@TempDir Path dir) throws Exception {
+	void a16_previewsAndEdgeBranches(@TempDir Path dir) {
 		var r = new Runner();
 		var c = ctx(r, dir, "9.2.1");
 		// Preflight preview with every tool missing.
@@ -400,7 +400,8 @@ class StepApplyBranchesTest {
 		var rcDir = dir.resolve("dist/source/juneau-9.2.1-RC1");
 		Files.createDirectories(rcDir.getParent());
 		Files.writeString(rcDir, "blocker");
-		assertThrows(IllegalStateException.class, () -> new BinaryArtifactsStageStep().apply(c));
+		var step = new BinaryArtifactsStageStep();
+		assertThrows(IllegalStateException.class, () -> step.apply(c));
 	}
 
 	@Test

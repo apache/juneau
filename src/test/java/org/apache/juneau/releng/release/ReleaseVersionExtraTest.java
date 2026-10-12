@@ -58,8 +58,11 @@ class ReleaseVersionExtraTest {
 		assertEquals(a.hashCode(), b.hashCode());
 		assertEquals(a, a);
 		assertNotEquals(a, ReleaseVersion.of("9.2.1"));
-		assertNotEquals(a, "9.2");
-		assertNotEquals(a, null);
+		// Typed as Object (not literal) so the call keeps exercising ReleaseVersion.equals rather than String.equals.
+		Object notAVersion = "9.2";
+		Object nothing = null;
+		assertNotEquals(a, notAVersion);
+		assertNotEquals(a, nothing);
 		assertTrue(ReleaseVersion.of("9.3").compareTo(a) > 0);
 		assertTrue(ReleaseVersion.of("9.2.0.1").compareTo(a) > 0);
 		assertTrue(a.compareTo(ReleaseVersion.of("9.2.0.1")) < 0);

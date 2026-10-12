@@ -44,8 +44,9 @@ class MavenSettingsCredentialsTest {
 
 	@Test
 	void a02_missingFileFails(@TempDir Path dir) {
+		var missing = dir.resolve("nope.xml");
 		var e = assertThrows(IllegalStateException.class,
-			() -> MavenSettingsCredentials.resolve("s", dir.resolve("nope.xml")));
+			() -> MavenSettingsCredentials.resolve("s", missing));
 		assertTrue(e.getMessage().contains("not found"), e.getMessage());
 	}
 

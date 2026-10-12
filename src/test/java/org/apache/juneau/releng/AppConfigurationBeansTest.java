@@ -30,7 +30,6 @@ import org.apache.juneau.releng.config.TargetProfile;
 import org.apache.juneau.releng.credential.CredentialSpec;
 import org.apache.juneau.releng.engine.ReleaseEngine;
 import org.apache.juneau.releng.util.DefaultProcessRunner;
-import org.apache.juneau.releng.util.ProcessRunner;
 import org.apache.juneau.rest.server.filter.SynchronizerToken;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;

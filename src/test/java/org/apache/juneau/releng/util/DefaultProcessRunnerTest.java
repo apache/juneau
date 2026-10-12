@@ -38,7 +38,8 @@ class DefaultProcessRunnerTest {
 
 	@Test
 	void a02_runTextThrowsOnNonZeroExit() {
-		var e = assertThrows(IllegalStateException.class, () -> runner.runText(List.of("sh", "-c", "echo boom; exit 3")));
+		var cmd = List.of("sh", "-c", "echo boom; exit 3");
+		var e = assertThrows(IllegalStateException.class, () -> runner.runText(cmd));
 		assertTrue(e.getMessage().contains("exit 3"), e.getMessage());
 		assertTrue(e.getMessage().contains("boom"), e.getMessage());
 	}
@@ -76,8 +77,8 @@ class DefaultProcessRunnerTest {
 
 	@Test
 	void c01_missingExecutableIsReportedAsError() {
-		var e = assertThrows(IllegalStateException.class,
-			() -> runner.run(List.of("/nonexistent/rm-no-such-binary"), null, null));
+		var cmd = List.of("/nonexistent/rm-no-such-binary");
+		var e = assertThrows(IllegalStateException.class, () -> runner.run(cmd, null, null));
 		assertTrue(e.getMessage().contains("Error running"), e.getMessage());
 	}
 
@@ -85,7 +86,8 @@ class DefaultProcessRunnerTest {
 	void c02_interruptIsPropagatedAndFlagRestored() {
 		Thread.currentThread().interrupt();
 		try {
-			var e = assertThrows(IllegalStateException.class, () -> runner.run(List.of("sleep", "5"), null, null));
+			var cmd = List.of("sleep", "5");
+			var e = assertThrows(IllegalStateException.class, () -> runner.run(cmd, null, null));
 			assertTrue(e.getMessage().contains("Interrupted"), e.getMessage());
 			assertTrue(Thread.currentThread().isInterrupted());
 		} finally {
