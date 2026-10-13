@@ -1,0 +1,181 @@
+# ***************************************************************************************************************************
+# * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+# * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+# * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+# * with the License.  You may obtain a copy of the License at
+# *
+# *  http://www.apache.org/licenses/LICENSE-2.0
+# *
+# * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+# * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+# * specific language governing permissions and limitations under the License.
+# ***************************************************************************************************************************
+"""
+Load the juneau_scripts toolkit (and, when asked, juneau_run).  The one file a consumer vendors: copy it from the
+installed zip with
+
+    unzip -p ~/.m2/repository/org/apache/juneau/juneau-run/<v>/juneau-run-<v>.zip bootstrap.py > scripts/bootstrap.py
+
+    from bootstrap import load
+    jr, js = load(pom="pom.xml")
+
+Where the toolkit comes from, in order:
+  1. JUNEAU_SCRIPTS_ZIP (a zip, or a directory holding juneau_scripts/), and JUNEAU_RUN_PY.  With only JUNEAU_RUN_PY,
+     the toolkit is <stem>.zip beside it, or a juneau_scripts/ directory beside it.
+  2. In-tree: juneau-run/src/main/python/ under the pom's directory (Juneau itself).
+  3. ~/.m2/repository/org/apache/juneau/juneau-run/<v>/juneau-run-<v>.{py,zip}, in place when both are there;
+     otherwise `mvn dependency:copy` of both into cache_dir (a SNAPSHOT once per process, a release when missing).
+
+juneau_run is loaded only when run=True, or when run is None and RUN_MARKERS=1 or JUNEAU_RUN_CONSOLE=condensed.
+"""
+
+import importlib
+import importlib.util
+import os
+import re
+import subprocess
+import sys
+import zipfile
+from pathlib import Path
+
+BOOTSTRAP_API = 1
+_REMEDY = "run `mvn install` in apache/juneau's juneau-run, or set JUNEAU_SCRIPTS_ZIP"
+_located = None     # (toolkit source, juneau_run.py path or None), once per process
+_copied = set()
+
+
+class BootstrapError(Exception):
+    """The toolkit can't be found or imported.  The message names what was expected and the remedy."""
+
+
+def run_requested():
+    """True when the environment asks for juneau_run: RUN_MARKERS=1 or JUNEAU_RUN_CONSOLE=condensed."""
+    return os.environ.get("RUN_MARKERS") == "1" or os.environ.get("JUNEAU_RUN_CONSOLE") == "condensed"
+
+
+def _pom_version(pom):
+    try:
+        text = Path(pom).read_text(encoding="utf-8")
+    except OSError as e:
+        raise BootstrapError(f"cannot read {pom}: {e}") from e
+    m = re.search(r"<juneau\.version>\s*([^<\s]+)\s*</juneau\.version>", text)
+    if not m:
+        raise BootstrapError(f"no <juneau.version> in {pom}; pass version= or set JUNEAU_SCRIPTS_ZIP")
+    return m.group(1)
+
+
+def _beside(py):
+    py = Path(py)
+    zip_path = py.with_suffix(".zip")
+    if zip_path.exists():
+        return zip_path
+    if (py.parent / "juneau_scripts").is_dir():
+        return py.parent
+    raise BootstrapError(f"juneau_scripts not found beside JUNEAU_RUN_PY: expected {zip_path}; {_REMEDY}")
+
+
+def _copy(version, kind, cache):
+    target = cache / f"juneau-run.{kind}"
+    if (version, kind, str(cache)) in _copied or (not version.endswith("-SNAPSHOT") and target.exists()):
+        return target
+    coordinate = f"org.apache.juneau:juneau-run:{version}:{kind}"
+    try:
+        done = subprocess.run(["mvn", "-q", "-nsu", "dependency:copy", f"-Dartifact={coordinate}",
+                               f"-DoutputDirectory={cache}", "-Dmdep.stripVersion=true"],
+                              stdout=subprocess.DEVNULL, check=False)
+    except OSError as e:
+        raise BootstrapError(f"cannot run mvn to fetch {coordinate}: {e}; {_REMEDY}") from e
+    if done.returncode != 0 or not target.exists():
+        raise BootstrapError(f"could not fetch {coordinate} (mvn exit code {done.returncode}); {_REMEDY}")
+    _copied.add((version, kind, str(cache)))
+    return target
+
+
+def _locate(pom, version, cache_dir):
+    zip_env, py_env = os.environ.get("JUNEAU_SCRIPTS_ZIP"), os.environ.get("JUNEAU_RUN_PY")
+    # Absolute, so a script's later os.chdir cannot break lazy imports from the zip on sys.path.
+    zip_env = str(Path(zip_env).expanduser().resolve()) if zip_env else zip_env
+    py_env = str(Path(py_env).expanduser().resolve()) if py_env else py_env
+    tree = Path(pom).resolve().parent / "juneau-run" / "src" / "main" / "python"
+    if zip_env:
+        if not Path(zip_env).exists():
+            raise BootstrapError(f"JUNEAU_SCRIPTS_ZIP={zip_env} does not exist")
+        in_tree = tree / "juneau_run.py"
+        return Path(zip_env), py_env or (str(in_tree) if in_tree.exists() else None)
+    if py_env:
+        return _beside(py_env), py_env
+    if (tree / "juneau_scripts").is_dir():
+        return tree, str(tree / "juneau_run.py")
+    version = version or _pom_version(pom)
+    m2 = Path.home() / ".m2" / "repository" / "org" / "apache" / "juneau" / "juneau-run" / version
+    py, zip_path = m2 / f"juneau-run-{version}.py", m2 / f"juneau-run-{version}.zip"
+    if py.exists() and zip_path.exists():
+        return zip_path, str(py)
+    cache = Path(cache_dir).resolve()
+    _copy(version, "py", cache)
+    return _copy(version, "zip", cache), str(cache / "juneau-run.py")
+
+
+def _import(source):
+    if Path(source).is_file():
+        # Checked here, not left to zipimport, whose behaviour differs by version.  Before 3.14, a zip with no
+        # __init__.py fails with a bare "No module named" unless it has directory entries, and then imports as a
+        # namespace package.  From 3.14 it always imports as a namespace package.
+        try:
+            with zipfile.ZipFile(source) as z:
+                has_init = "juneau_scripts/__init__.py" in z.namelist()
+        except (OSError, zipfile.BadZipFile) as e:
+            raise BootstrapError(f"cannot read {source}: {e}; {_REMEDY}") from e
+        if not has_init:
+            raise BootstrapError(f"{source} has no juneau_scripts/__init__.py, so it isn't the toolkit; {_REMEDY}")
+    entry = str(source)
+    if entry not in sys.path:
+        sys.path.insert(0, entry)
+    if Path(source).is_dir():
+        # Left set, not restored: the toolkit imports some modules lazily, and none may write .pyc into a source
+        # tree (RAT).  A zip never gets bytecode written into it.
+        sys.dont_write_bytecode = True
+    try:
+        js = importlib.import_module("juneau_scripts")
+    except ImportError as e:
+        raise BootstrapError(f"cannot import juneau_scripts from {source}: {e}; {_REMEDY}") from e
+    if getattr(js, "__file__", None) is None:
+        # A directory source without __init__.py imports as a namespace package rather than failing.
+        sys.modules.pop("juneau_scripts", None)
+        raise BootstrapError(f"{source} has no juneau_scripts/__init__.py, so it isn't the toolkit; {_REMEDY}")
+    js.BOOTSTRAP_API = BOOTSTRAP_API
+    js.check_bootstrap()
+    return js
+
+
+def _load_run(path, forced):
+    existing = sys.modules.get("juneau_run")
+    if existing is not None:
+        return existing
+    if path is None or not Path(path).exists():
+        problem = f"juneau_run.py not found{f' at {path}' if path else ''}"
+        if forced:
+            raise BootstrapError(f"{problem}; {_REMEDY}")
+        print(f"warning: juneau-run unavailable ({problem}); running commands without it", file=sys.stderr)
+        return None
+    spec = importlib.util.spec_from_file_location("juneau_run", path)
+    module = importlib.util.module_from_spec(spec)
+    sys.modules["juneau_run"] = module
+    try:
+        spec.loader.exec_module(module)
+    except BaseException:
+        sys.modules.pop("juneau_run", None)
+        raise
+    return module
+
+
+def load(pom="pom.xml", version=None, *, run=None, cache_dir="target/juneau-run"):
+    """(juneau_run module or None, juneau_scripts package).  Idempotent within a process: the toolkit is located,
+    copied and imported once; only the juneau_run decision is made again on each call."""
+    global _located
+    if _located is None:
+        _located = _locate(pom, version, cache_dir)
+    source, run_py = _located
+    js = _import(source)
+    wanted = run if run is not None else run_requested()
+    return (_load_run(run_py, forced=run is True) if wanted else None), js
