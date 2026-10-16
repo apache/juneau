@@ -417,6 +417,16 @@ def test_detail_is_exported_and_an_unknown_level_is_a_usage_error(release, monke
     assert "detail must be one of summary, actionable, modules, all" in capsys.readouterr().err
 
 
+def test_console_flag_sets_the_env_var_and_beats_it(release, monkeypatch, capsys):
+    install(monkeypatch, FakeRun())
+    monkeypatch.setenv("JUNEAU_RUN_CONSOLE", "condensed")
+    release.main(["--list-steps", "--console", "none"])
+    assert os.environ["JUNEAU_RUN_CONSOLE"] == "none"
+    with pytest.raises(SystemExit) as exit_info:
+        release.main(["--list-steps", "--console", "loud"])
+    assert exit_info.value.code == 2
+
+
 def test_run_markers_is_ignored_with_a_warning(release, monkeypatch):
     monkeypatch.setenv("RUN_MARKERS", "1")
     fake = FakeRun()

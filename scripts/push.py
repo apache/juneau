@@ -1057,12 +1057,23 @@ def _docs_only_steps(args, console, docs_root):
     return 0
 
 
+def _export_console(argv):
+    """Export --console as JUNEAU_RUN_CONSOLE before juneau_run is loaded, so the flag and the variable behave alike
+    (an argument beats a value already in the environment).  main()'s parser validates the value again."""
+    parser = argparse.ArgumentParser(add_help=False, allow_abbrev=False)
+    parser.add_argument("--console")
+    args, _ = parser.parse_known_args(argv)
+    if args.console in ("full", "condensed", "none"):
+        os.environ["JUNEAU_RUN_CONSOLE"] = args.console
+
+
 def main():
     """
     The push.  _main() does the work up to the identity and PGP checks, then opens the run session, which owns the run
     and done markers, the console, the summary line, the bell and the sound.  A Ctrl-C (or, with markers on, a
     SIGTERM) before the session opens exits 130 with "Cancelled." too.
     """
+    _export_console(sys.argv[1:])
     run = _juneau.load()[0]
     previous_sigterm = None
     if run.enabled():
@@ -1130,6 +1141,7 @@ Examples:
   python3 push.py "Tweaked console JS" --js-tests
   python3 push.py "Tweaked console JS" --no-js-tests
   python3 push.py "Fixed bug in RestClient" --detail modules
+  python3 push.py "Fixed bug in RestClient" --console condensed
         """
     )
     
@@ -1216,6 +1228,12 @@ Examples:
         action="store_true",
         dest="no_js_tests",
         help="Never run the JS harness, even when JS/CSS/FTL files changed."
+    )
+
+    parser.add_argument(
+        "--console",
+        choices=("full", "condensed", "none"),
+        help="Maven output on the console: full (default), condensed or none (also JUNEAU_RUN_CONSOLE)."
     )
 
     parser.add_argument(

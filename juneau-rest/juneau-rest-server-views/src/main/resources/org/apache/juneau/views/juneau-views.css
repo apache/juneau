@@ -2414,7 +2414,8 @@ input[type="checkbox"].jc-editable-field-input {
 .juneau-view-dialog {
 	/* Capped at the backdrop width less 3em: a nested dialog is shifted 1.5em right and down, and this keeps that shift on-screen. */
 	min-width: min(28em, calc(100% - 3em));
-	max-width: 90vw;
+	/* The same 3em slack bounds the width from above: wide content (a long unbreakable value) may grow the dialog to 90vw, but never past the room a nested dialog's 1.5em shift needs. */
+	max-width: min(90vw, calc(100% - 3em));
 	max-height: 90vh;
 	overflow: hidden;
 	display: flex;

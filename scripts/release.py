@@ -29,7 +29,7 @@ in the release process.
 
 Usage:
     python3 scripts/release.py [--start-step STEP_NAME | --resume] [--list-steps] [--skip-step STEP_NAME]
-                               [--revert] [--detail LEVEL]
+                               [--revert] [--console MODE] [--detail LEVEL]
 
 Options:
     --start-step STEP_NAME    Start execution from the specified step (skips all previous steps)
@@ -37,6 +37,7 @@ Options:
     --skip-step STEP_NAME     Skip a specific step (can be used multiple times)
     --resume                  Resume from the last checkpoint (if available)
     --revert                  Delete the git tag, revert the Maven versions and remove the RC from SVN
+    --console MODE            Maven output on the console: full (default), condensed or none (JUNEAU_RUN_CONSOLE)
     --detail LEVEL            Console detail: summary, actionable (default), modules or all (JUNEAU_RUN_DETAIL)
 """
 
@@ -1239,12 +1240,19 @@ def main(argv=None):
         help='Revert a release by deleting the git tag, reverting Maven versions, and cleaning up SVN files'
     )
     parser.add_argument(
+        '--console',
+        choices=('full', 'condensed', 'none'),
+        help='Maven output on the console: full (default), condensed or none (also JUNEAU_RUN_CONSOLE)'
+    )
+    parser.add_argument(
         '--detail',
         help='Console detail: summary, actionable (default), modules or all (also JUNEAU_RUN_DETAIL)'
     )
     
     args = parser.parse_args(argv)
     
+    if args.console:
+        os.environ['JUNEAU_RUN_CONSOLE'] = args.console   # an argument beats a value already in the environment
     run = _juneau.load()[0]
     if os.environ.pop('RUN_MARKERS', None):
         run.warn("release.py does not emit run markers; RUN_MARKERS is ignored")

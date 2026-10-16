@@ -257,21 +257,43 @@ function fresh(opts) {
 	Object.assign(bus.config.timers, clock.timers);
 	Object.assign(D.config.timers, { setTimeout: clock.timers.setTimeout, clearTimeout: clock.timers.clearTimeout, now: clock.timers.now });
 	const fetches = [], routes = opts.routes || {}, errors = [], warns = [];
+	// webcrypto.subtle.digest completes on libuv's thread pool, in real time, so no number of setImmediate turns
+	// is guaranteed to cover it on a slow or loaded CI runner.  Track the in-flight digests so idle() can await them.
+	const digests = new Set();
+	const subtle = opts.noSubtle ? null : {
+		digest(...a) {
+			const p = webcrypto.subtle.digest(...a);
+			digests.add(p);
+			const done = () => digests.delete(p);
+			p.then(done, done);
+			return p;
+		}
+	};
 	Object.assign(D.config.platform, {
 		fetch: makeFetch(routes, fetches), TextDecoder, TextEncoder, AbortController, URLSearchParams, IDBKeyRange: FakeKeyRange,
-		indexedDB: opts.idb || null, subtle: opts.noSubtle ? null : webcrypto.subtle
+		indexedDB: opts.idb || null, subtle
 	});
 	D.config.log.error = m => errors.push(m);
 	D.config.log.warn = m => warns.push(m);
-	return { env, NS, D, U: D.util, bus, clock, fetches, routes, errors, warns };
+	return { env, NS, D, U: D.util, bus, clock, fetches, routes, errors, warns, digests };
 }
 
-/** Runs the clock forward by ms, then drains promise and setImmediate work (fake IDB, fake fetch) to quiet. */
+/**
+ * Runs the clock forward by ms, then drains promise and setImmediate work (fake IDB, fake fetch) to quiet.  Digests still
+ * running on the thread pool are awaited, and the drain repeats until none is pending, since each can start more work.
+ */
 async function idle(h, ms) {
 	h.clock.advance(ms || 0);
 	for (let i = 0; i < 8; i++) {
 		await settle();
 		h.clock.advance(0);
+	}
+	for (let i = 0; i < 100 && h.digests && h.digests.size; i++) {
+		await Promise.allSettled(Array.from(h.digests));
+		for (let j = 0; j < 4; j++) {
+			await settle();
+			h.clock.advance(0);
+		}
 	}
 }
 

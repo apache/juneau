@@ -638,6 +638,21 @@ def test_push_exports_detail_to_test_py(push_mod, gates, monkeypatch):
     assert seen == ["modules"]
 
 
+def test_push_console_flag_sets_the_env_var_and_beats_it(push_mod, gates, monkeypatch):
+    monkeypatch.setenv("JUNEAU_RUN_CONSOLE", "condensed")
+    monkeypatch.setattr(sys, "argv", ["push.py", "--test-only", "--console", "none"])
+    assert push_mod.main() == 0
+    assert os.environ["JUNEAU_RUN_CONSOLE"] == "none"
+
+
+def test_push_rejects_an_unknown_console_mode(push_mod, gates, monkeypatch, capsys):
+    monkeypatch.setattr(sys, "argv", ["push.py", "--test-only", "--console", "loud"])
+    with pytest.raises(SystemExit) as exc:
+        push_mod.main()
+    assert exc.value.code == 2
+    assert "condensed" in capsys.readouterr().err
+
+
 def test_push_rejects_an_unknown_detail_level(push_mod, gates, monkeypatch, capsys):
     monkeypatch.setattr(sys, "argv", ["push.py", "--test-only", "--detail", "loud"])
     with pytest.raises(SystemExit) as exc:
