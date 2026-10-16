@@ -98,9 +98,8 @@ class McpResourceServerSupport_Test {
 	}
 
 	// ---------------------------------------------------------------------------------------------
-	// isEffectivePost() - method-override channel handling.  Mirrors RestSession.getMethod(): the gate must
-	// treat any override to POST as a POST, and must read the FIRST value of a duplicated method parameter (as the
-	// router does).
+	// isEffectivePost() - method-override channel handling.  The gate cannot see the host's allow-lists, so it must
+	// treat a POST claim on any override channel (?method= or any override header, any value) as a POST.
 	// ---------------------------------------------------------------------------------------------
 
 	@Test void c01_isEffectivePost_explicitPost() {
@@ -120,14 +119,36 @@ class McpResourceServerSupport_Test {
 		assertTrue(McpResourceServerSupport.isEffectivePost(MockServletRequest.create().method("GET").queryString("method=post")));
 	}
 
-	@Test void c05_isEffectivePost_duplicateMethodParam_firstWins() {
-		// Duplicated method params: the FIRST value is authoritative (exactly as RestSession.getMethod() reads it).
+	@Test void c05_isEffectivePost_duplicateMethodParam_anyValueCounts() {
+		// Duplicated method params: any value claiming POST makes the request an effective POST, whichever one dispatch honours.
 		assertTrue(McpResourceServerSupport.isEffectivePost(MockServletRequest.create().method("GET").queryString("method=POST&method=GET")));
-		assertFalse(McpResourceServerSupport.isEffectivePost(MockServletRequest.create().method("GET").queryString("method=GET&method=POST")));
+		assertTrue(McpResourceServerSupport.isEffectivePost(MockServletRequest.create().method("GET").queryString("method=GET&method=POST")));
 	}
 
 	@Test void c06_isEffectivePost_methodHeaderOverride() {
 		assertTrue(McpResourceServerSupport.isEffectivePost(MockServletRequest.create().method("GET").header("X-Method", "POST")));
+	}
+
+	@Test void c07_isEffectivePost_everyOverrideHeader() {
+		for (var h : org.apache.juneau.rest.server.MethodSafety.overrideHeaders())
+			assertTrue(McpResourceServerSupport.isEffectivePost(MockServletRequest.create().method("GET").header(h, "POST")), h);
+	}
+
+	@Test void c08_isEffectivePost_repeatedHeader_secondValueCounts() {
+		assertTrue(McpResourceServerSupport.isEffectivePost(MockServletRequest.create().method("GET").header("X-HTTP-Method-Override", "GET").header("X-HTTP-Method-Override", "POST")));
+	}
+
+	@Test void c09_isEffectivePost_trimAndCase() {
+		assertTrue(McpResourceServerSupport.isEffectivePost(MockServletRequest.create().method("GET").queryString("method=%20POST")));
+		assertTrue(McpResourceServerSupport.isEffectivePost(MockServletRequest.create().method("GET").header("X-HTTP-Method-Override", "post ")));
+	}
+
+	@Test void c10_isEffectivePost_upperCaseParamName() {
+		assertTrue(McpResourceServerSupport.isEffectivePost(MockServletRequest.create().method("GET").queryString("METHOD=POST")));
+	}
+
+	@Test void c11_isEffectivePost_safeClaims_false() {
+		assertFalse(McpResourceServerSupport.isEffectivePost(MockServletRequest.create().method("GET").header("X-Method-Override", "DELETE").queryString("method=PUT")));
 	}
 
 	// ---------------------------------------------------------------------------------------------

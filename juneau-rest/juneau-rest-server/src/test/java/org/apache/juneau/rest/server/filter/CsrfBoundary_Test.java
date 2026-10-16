@@ -72,6 +72,8 @@ class CsrfBoundary_Test extends TestBase {
 	static final class R {
 		String method = "POST", scheme = "http", query, sessionId = SESSION, uri = "/api/pets", remote = "203.0.113.7";
 		String serverName = "server.internal";
+		// Left null (Mockito's default) so every existing HOST_MISSING row stays on the HTTP/1 path.
+		String protocol;
 		int serverPort = 8080;
 		final Map<String,List<String>> headers = new LinkedHashMap<>();
 		final Map<String,String> params = new LinkedHashMap<>();
@@ -83,6 +85,7 @@ class CsrfBoundary_Test extends TestBase {
 		R noSession() { sessionId = null; return this; }
 		R uri(String v) { uri = v; return this; }
 		R container(String name, int port) { serverName = name; serverPort = port; return this; }
+		R protocol(String v) { protocol = v; return this; }
 		R param(String n, String v) { params.put(n, v); return this; }
 
 		R h(String name, String value) {
@@ -105,6 +108,7 @@ class CsrfBoundary_Test extends TestBase {
 			when(r.getMethod()).thenReturn(method);
 			when(r.getScheme()).thenReturn(scheme);
 			when(r.getServerName()).thenReturn(serverName);
+			when(r.getProtocol()).thenReturn(protocol);
 			when(r.getServerPort()).thenReturn(serverPort);
 			when(r.getQueryString()).thenReturn(query);
 			when(r.getRequestURI()).thenReturn(uri);
@@ -1007,5 +1011,87 @@ class CsrfBoundary_Test extends TestBase {
 		var b = CsrfBoundary.create().tokens(TOKENS).csrfHeader("X-My-Token").build();
 		assertAllowed(b, write().remove(B.csrfHeader()).h("X-My-Token", token(SESSION)));
 		assertRefused(b, write(), CSRF_TOKEN_MISSING, 403);
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// k) HTTP/2: no Host header, so :authority (the container's server name and port) stands in
+	//-----------------------------------------------------------------------------------------------------------------
+
+	private static final String H2 = "HTTP/2.0";
+
+	/** An HTTP/2 write with no {@code Host}, addressed to {@code app.example:80} as the container reports it. */
+	private static R h2(String origin) {
+		return r("POST", "http", null, origin, "Content-Type", JSON).protocol(H2).container("app.example", 80).token();
+	}
+
+	@Test void k01_http2WithoutHostUsesAuthority() {
+		assertAllowed(h2("http://app.example"));
+		assertAllowed(CONTAINER, h2("http://app.example"));
+		assertRefused(h2("http://evil.example"), ORIGIN_MISMATCH);
+		assertRefused(CONTAINER, h2("http://evil.example"), ORIGIN_MISMATCH, 403);
+	}
+
+	@Test void k02_http11WithoutHostIsStill400() {
+		// The mutation row: removing the exact-protocol guard in hostValues must fail this, with a matching server name.
+		assertRefused(h2("http://app.example").protocol("HTTP/1.1"), HOST_MISSING, 400);
+		assertRefused(CONTAINER, h2("http://app.example").protocol("HTTP/1.1"), HOST_MISSING, 400);
+		assertRefused(h2("http://app.example").protocol("HTTP/1.0"), HOST_MISSING, 400);
+	}
+
+	@Test void k03_http2WithHostUsesHost() {
+		// A real Host wins under HOST_HEADER; CONTAINER still judges the server name, exactly as on HTTP/1.
+		assertAllowed(h2("http://other.example").h("Host", "other.example"));
+		assertRefused(h2("http://app.example").h("Host", "other.example"), ORIGIN_MISMATCH);
+		assertAllowed(CONTAINER, h2("http://app.example").h("Host", "other.example"));
+		assertRefused(CONTAINER, h2("http://other.example").h("Host", "other.example"), ORIGIN_MISMATCH, 403);
+	}
+
+	@Test void k04_http2AllowedHostsAppliesToAuthority() {
+		assertRefused(LISTED, r("GET", "http", null, null).protocol(H2).container("evil.example", 80), HOST_NOT_ALLOWED, 421);
+		assertRefused(LISTED, h2("http://evil.example").container("evil.example", 80), HOST_NOT_ALLOWED, 421);
+		assertAllowed(LISTED, r("GET", "http", null, null).protocol(H2).container("app.example", 80));
+		assertAllowed(LISTED, h2("http://app.example"));
+	}
+
+	@Test void k05_http2BracketsBareIpv6ServerName() {
+		// Tomcat reports an IPv6 server name without brackets.
+		assertAllowed(h2("http://[::1]:8080").container("::1", 8080));
+		assertAllowed(h2("http://[::1]:8080").container("[::1]", 8080));
+		assertRefused(h2("http://[::2]:8080").container("::1", 8080), ORIGIN_MISMATCH);
+	}
+
+	@Test void k06_http2WithoutAnyAuthorityIsHostMissing() {
+		for (var name : new String[]{null, "", "  "}) {
+			var x = B.check(h2("http://app.example").container(name, 80).build());
+			assertEquals(HOST_MISSING, x.reason(), String.valueOf(name));
+			assertEquals(400, x.status());
+			assertTrue(x.message().contains(":authority"), x.message());
+		}
+	}
+
+	@Test void k07_http2WithTwoHostsIsMalformed() {
+		assertRefused(h2("http://app.example").h("Host", "a.example").h("Host", "b.example"), HOST_MALFORMED, 400);
+	}
+
+	@Test void k08_onlyTheExactProtocolStringFallsBack() {
+		for (var protocol : new String[]{"HTTP/2", "http/2.0", "HTTP/2.0 ", "HTTP/3.0", null})
+			assertRefused(h2("http://app.example").protocol(protocol), HOST_MISSING, 400);
+	}
+
+	@Test void k09_http2PortFollowsTheContainer() {
+		assertAllowed(h2("http://app.example:8080").container("app.example", 8080));
+		assertRefused(h2("http://app.example:8080").container("app.example", 9090), ORIGIN_MISMATCH);
+		assertAllowed(h2("https://app.example").scheme("https").container("app.example", 443));
+		// A port the container does not report: the name alone is judged, and the scheme default applies.
+		assertAllowed(h2("http://app.example").container("app.example", 0));
+	}
+
+	@Test void k10_refusalLogMarksASynthesisedHost() {
+		var log = captureLog(() -> B.check(h2("http://evil.example").build()));
+		var finest = log.stream().filter(x -> x.getLevel() == Level.FINEST).map(CsrfBoundary_Test::text).toList();
+		assertEquals(1, finest.size(), finest::toString);
+		assertTrue(finest.get(0).contains("Host=(h2 :authority) app.example:80"), finest.get(0));
+		var real = captureLog(() -> B.check(h2("http://evil.example").h("Host", "app.example:80").build()));
+		assertFalse(real.stream().map(CsrfBoundary_Test::text).anyMatch(t -> t.contains("(h2 :authority)")));
 	}
 }

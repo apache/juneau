@@ -533,31 +533,64 @@ public class RestSession extends ContextSession {
 	/**
 	 * Returns the HTTP method name.
 	 *
+	 * <p>
+	 * The request-line method, unless it is overridden by a {@code method} query parameter admitted by
+	 * {@code allowedMethodParams}, or by one of the {@link MethodSafety#overrideHeaders() override headers} admitted by
+	 * {@code allowedMethodHeaders} (the query parameter wins, then the headers in that order).
+	 *
+	 * <p>
+	 * Override claims on an enabled channel (an allow-list that admits at least one method) must agree: more than one
+	 * distinct claim, whether on one channel or across channels, is refused.
+	 *
 	 * @return The HTTP method name, always uppercased.
 	 * @throws MethodNotAllowed If the method parameter contains invalid/malformed characters.
+	 * @throws BadRequest If the request carries conflicting method overrides.
 	 */
 	@SuppressWarnings({
 		"java:S3776" // Cognitive complexity acceptable for REST method resolution/mapping
 	})
-	public String getMethod() throws NotFound {
+	public String getMethod() throws MethodNotAllowed, BadRequest {
 		if (method == null) {
 
 			Set<String> s1 = context.getAllowedMethodParams();
 			Set<String> s2 = context.getAllowedMethodHeaders();
 
-			if (! s1.isEmpty()) {
-				String[] x = getQueryParams().get("method");
-				if (nn(x) && (s1.contains("*") || s1.contains(x[0])))
-					method = x[0];
+			var paramClaims = s1.isEmpty() ? List.<String>of() : MethodSafety.queryClaims(req.getQueryString());
+			var headerClaims = new LinkedHashMap<String,List<String>>();
+			if (! s2.isEmpty()) {
+				for (var h : MethodSafety.overrideHeaders()) {
+					var e = req.getHeaders(h);
+					if (nn(e) && e.hasMoreElements())
+						headerClaims.put(h, java.util.Collections.list(e));
+				}
+			}
+
+			// Claims on an enabled channel must agree, whether or not the allow-list admits them.
+			var distinct = new HashSet<String>();
+			if (isEnabled(s1))
+				addClaims(distinct, paramClaims);
+			if (isEnabled(s2))
+				headerClaims.values().forEach(v -> addClaims(distinct, v));
+			if (distinct.size() > 1)
+				throw new BadRequest("Conflicting HTTP method overrides.");
+
+			if (! paramClaims.isEmpty()) {
+				var x = paramClaims.get(0);
+				if (s1.contains("*") || s1.contains(x))
+					method = x;
 				if (method != null && ! VALID_METHOD_CHARS.containsOnly(method)) {
 					throw new MethodNotAllowed();
 				}
 			}
 
-			if (method == null && ! s2.isEmpty()) {
-				var x = req.getHeader("X-Method");
-				if (nn(x) && (s2.contains("*") || s2.contains(x)))
-					method = x;
+			if (method == null) {
+				for (var e : headerClaims.entrySet()) {
+					var x = e.getValue().get(0);
+					if (s2.contains("*") || s2.contains(x)) {
+						method = x;
+						break;
+					}
+				}
 				if (method != null && ! VALID_METHOD_CHARS.containsOnly(method)) {
 					throw new MethodNotAllowed();
 				}
@@ -570,6 +603,18 @@ public class RestSession extends ContextSession {
 		}
 
 		return method;
+	}
+
+	/** An allow-list is enabled when it admits at least one method: non-empty, and not just the {@code NONE} placeholder. */
+	private static boolean isEnabled(Set<String> allowed) {
+		return allowed.stream().anyMatch(x -> ! "NONE".equalsIgnoreCase(x));
+	}
+
+	/** Adds the claims, trimmed and upper-cased as {@link MethodSafety} judges them, skipping blanks. */
+	private static void addClaims(Set<String> into, List<String> claims) {
+		for (var c : claims)
+			if (c != null && ! c.isBlank())
+				into.add(c.trim().toUpperCase(Locale.ROOT));
 	}
 
 	/**

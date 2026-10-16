@@ -251,11 +251,8 @@ class MicroserviceResources_Test extends TestBase {
 		return shutdownClient(new ShutdownResource(exits::add));
 	}
 
-	// The mock client caches a resource's context by class and would reuse another test's instance; an overriding
-	// bean store, even an empty one, makes it build this instance.
 	private static MockRestClient shutdownClient(ShutdownResource r) {
 		return MockRestClient.create(r)
-			.overridingBeanStore(new BasicBeanStore())
 			.ignoreErrors()
 			.noTrace()
 			.build();

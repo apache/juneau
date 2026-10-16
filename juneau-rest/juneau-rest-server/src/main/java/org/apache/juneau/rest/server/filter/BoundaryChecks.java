@@ -175,6 +175,23 @@ final class BoundaryChecks {
 	}
 
 	/**
+	 * The web scheme of a WebSocket handshake URI scheme.
+	 *
+	 * @param scheme The URI scheme.  Can be <jk>null</jk>.
+	 * @return {@code http} for {@code ws} or {@code http}, {@code https} for {@code wss} or {@code https} (ignoring
+	 * 	case), else <jk>null</jk>.
+	 */
+	static String handshakeScheme(String scheme) {
+		if (scheme == null)
+			return null;
+		return switch (scheme.toLowerCase(Locale.ROOT)) {
+			case "ws", "http" -> HTTP;
+			case "wss", "https" -> HTTPS;
+			default -> null;
+		};
+	}
+
+	/**
 	 * Every value of a request header, in order, so that a duplicate can be counted.
 	 *
 	 * <p>
@@ -195,6 +212,58 @@ final class BoundaryChecks {
 		while (e.hasMoreElements())
 			l.add(e.nextElement());
 		return l;
+	}
+
+	/**
+	 * The {@code Host} values of a request; on HTTP/2 with no {@code Host} header, one value synthesised from the
+	 * container's {@code :authority} view.
+	 *
+	 * <p>
+	 * A container that speaks HTTP/2 may carry the authority only as a pseudo-header, which the servlet API surfaces as
+	 * {@link HttpServletRequest#getServerName()} and {@link HttpServletRequest#getServerPort()} and not as a
+	 * {@code Host} header.  The rules, in order:
+	 * <ol>
+	 * 	<li>Any real {@code Host} header is returned unchanged, repeated values included, so they fail as they do today.
+	 * 	<li>Otherwise, unless {@link HttpServletRequest#getProtocol()} is exactly {@code HTTP/2.0}, the list is empty.
+	 * 		Anything else ({@code HTTP/1.x}, <jk>null</jk>, {@code HTTP/2}, a different case) stays on the HTTP/1 path.
+	 * 	<li>Otherwise one value is built from the server name (a bare IPv6 address is bracketed, as Tomcat reports it)
+	 * 		and, when positive, <c>":"</c> plus the server port.  A <jk>null</jk> or blank server name gives the empty list.
+	 * </ol>
+	 *
+	 * @param req The request.
+	 * @return The values; empty when there is no {@code Host} and no authority to stand in for it.  Never <jk>null</jk>.
+	 */
+	static List<String> hostValues(HttpServletRequest req) {
+		var hosts = headerValues(req, "Host");
+		if (! hosts.isEmpty())
+			return hosts;
+		var synthesised = synthesisedHost(req);
+		return synthesised == null ? List.of() : List.of(synthesised);
+	}
+
+	/**
+	 * Whether {@link #hostValues(HttpServletRequest)} would return a value synthesised from the container's
+	 * {@code :authority} view rather than a real {@code Host} header.
+	 *
+	 * @param req The request.
+	 * @return <jk>true</jk> if the request has no {@code Host} header and is HTTP/2 with a usable server name.
+	 */
+	static boolean isSynthesisedHost(HttpServletRequest req) {
+		return headerValues(req, "Host").isEmpty() && synthesisedHost(req) != null;
+	}
+
+	/** The {@code :authority} view of an HTTP/2 request, or <jk>null</jk> when the request is not HTTP/2 or names no server. */
+	private static String synthesisedHost(HttpServletRequest req) {
+		if (! "HTTP/2.0".equals(req.getProtocol()))
+			return null;
+		var name = req.getServerName();
+		if (name == null || name.isBlank())
+			return null;
+		// Tomcat reports an IPv6 server name without the brackets a Host header would carry.
+		if (name.indexOf(':') >= 0 && ! name.startsWith("["))
+			name = "[" + name + "]";
+		var port = req.getServerPort();
+		return port > 0 ? name + ":" + port : name;
 	}
 
 	/**

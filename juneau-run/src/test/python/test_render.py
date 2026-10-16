@@ -678,7 +678,7 @@ class LiveTest(unittest.TestCase):
         self.push(*start(), mod_start("a"))
         self.push(cls("a"), cls("a", "fail"))
         self.assertEqual(self.screen.text(), "\n".join([
-            ("Tests".ljust(10) + "  ░░░  0/3").ljust(59 - 4) + "0:01",
+            ("Tests".ljust(10) + "  ▒░░  0/3").ljust(59 - 4) + "0:01",     # Mod A is in flight
             "  Mod A  •F",
         ]))
         self.push(("module_end", {"step": "tests", "module": "tests/a", "status": "fail", "ms": 1000,
@@ -885,7 +885,7 @@ class LiveTest(unittest.TestCase):
         for i in range(80):
             name = f"m{i}"
             self.push(mod_start(name), ("module_end", {"step": "tests", "module": f"tests/{name}", "status": "ok",
-                                                       "ms": 1, "totals": None}))
+                                                       "ms": 1, "totals": (1, 0, 0, 0)}))
         self.push(("tests", {"step": "tests", "total": 7139, "fail": 2, "err": 0, "skip": 0}))
         live = self.screen.text().splitlines()[-1]
         self.assertLessEqual(len(live), 59, live)

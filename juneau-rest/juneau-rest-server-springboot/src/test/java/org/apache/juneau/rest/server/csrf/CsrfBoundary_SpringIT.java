@@ -22,6 +22,7 @@ import java.io.*;
 import java.net.*;
 import java.net.http.*;
 import java.net.http.HttpResponse.*;
+import java.nio.charset.*;
 import java.time.*;
 import java.util.*;
 import java.util.concurrent.atomic.*;
@@ -129,6 +130,18 @@ class CsrfBoundary_SpringIT {
 					res.getWriter().write(String.valueOf(req.getAttribute(RequestBoundaryFilter.TOKEN_ATTRIBUTE)));
 				}
 			}, "/token");
+		}
+
+		/** Reports what the container says about the request: protocol, server name and port, and any Host header. */
+		@Bean public ServletRegistrationBean<HttpServlet> echoServlet() {
+			return new ServletRegistrationBean<>(new HttpServlet() {
+				private static final long serialVersionUID = 1L;
+				@Override protected void doGet(HttpServletRequest req, HttpServletResponse res) throws IOException {
+					res.setContentType("text/plain");
+					res.getWriter().write(req.getProtocol() + "|" + req.getServerName() + ":" + req.getServerPort() + "|"
+						+ Collections.list(req.getHeaders("Host")));
+				}
+			}, "/echo");
 		}
 
 		@Bean public ServletRegistrationBean<HttpServlet> writeServlet(Writes writes) {
@@ -374,6 +387,134 @@ class CsrfBoundary_SpringIT {
 			assertEquals(403, noSession.statusCode(), noSession::body);
 			assertEquals("CSRF_TOKEN_MISMATCH", rejection(noSession));
 			assertEquals(before + 1, writes.count.get());
+		}
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// c) HTTP/2 (h2c) :authority
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Sends a hand-encoded {@code GET /echo} over prior-knowledge h2c with the given {@code :authority} (<jk>null</jk>
+	 * omits it) and extra fields, and returns the response body: the echo of {@code protocol|serverName:port|Host values}
+	 * when the request got through the boundary, empty when it did not.
+	 */
+	static String h2cEcho(int port, String authority, String...extra) throws Exception {
+		var out = new ByteArrayOutputStream();
+		out.write("PRI * HTTP/2.0\r\n\r\nSM\r\n\r\n".getBytes(StandardCharsets.US_ASCII));
+		out.write(frame(0x4, 0, 0, new byte[0]));
+		var h = new ByteArrayOutputStream();
+		h.write(0x82);                                 // :method GET
+		h.write(0x86);                                 // :scheme http
+		h.write(4);                                    // :path /echo
+		str(h, "/echo");
+		if (authority != null) {
+			h.write(1);                                // :authority
+			str(h, authority);
+		}
+		for (var i = 0; i < extra.length; i += 2) {
+			h.write(0);
+			str(h, extra[i]);
+			str(h, extra[i + 1]);
+		}
+		out.write(frame(0x1, 0x5, 1, h.toByteArray())); // HEADERS: END_STREAM | END_HEADERS
+
+		var body = new StringBuilder();
+		try (var socket = new Socket("127.0.0.1", port)) {
+			socket.setSoTimeout(10_000);
+			socket.getOutputStream().write(out.toByteArray());
+			socket.getOutputStream().flush();
+			var in = new DataInputStream(socket.getInputStream());
+			for (;;) {
+				var head = new byte[9];
+				in.readFully(head);
+				var len = ((head[0] & 0xFF) << 16) | ((head[1] & 0xFF) << 8) | (head[2] & 0xFF);
+				var payload = new byte[len];
+				in.readFully(payload);
+				if (head[3] == 0x4 && (head[4] & 0x1) == 0) {
+					socket.getOutputStream().write(frame(0x4, 0x1, 0, new byte[0]));
+					socket.getOutputStream().flush();
+				} else if (head[3] == 0x1) {
+					if ((head[4] & 0x1) != 0)
+						break;
+				} else if (head[3] == 0x0) {
+					body.append(new String(payload, StandardCharsets.ISO_8859_1));
+					if ((head[4] & 0x1) != 0)
+						break;
+				} else if (head[3] == 0x3 || head[3] == 0x7) {
+					break;
+				}
+			}
+		}
+		return body.toString();
+	}
+
+	private static void str(ByteArrayOutputStream h, String value) throws IOException {
+		h.write(value.length());
+		h.write(value.getBytes(StandardCharsets.US_ASCII));
+	}
+
+	private static byte[] frame(int type, int flags, int stream, byte[] payload) {
+		var b = java.nio.ByteBuffer.allocate(9 + payload.length);
+		b.put((byte)(payload.length >> 16)).put((byte)(payload.length >> 8)).put((byte)payload.length);
+		b.put((byte)type).put((byte)flags).putInt(stream).put(payload);
+		return b.array();
+	}
+
+	@Nested
+	@NestedTestConfiguration(EnclosingConfiguration.OVERRIDE)
+	@SpringBootTest(classes=App.class, webEnvironment=WebEnvironment.RANDOM_PORT, properties={
+		"server.address=127.0.0.1",
+		"server.http2.enabled=true",
+		"csrf.boundary-order=" + Ordered.HIGHEST_PRECEDENCE
+	})
+	@DirtiesContext(classMode=DirtiesContext.ClassMode.AFTER_CLASS)
+	class C01 extends Context {
+		@Test void c01_tomcatHttp2AuthorityIsServerNameWithNoHostHeader() throws Exception {
+			// The container surfaces :authority only as the server name (port 80 when it names none) and no Host header, so
+			// the boundary takes :authority in Host's place and the request gets through.
+			assertEquals("HTTP/2.0|app.example:80|[]", h2cEcho(port, "app.example"));
+			assertEquals("HTTP/2.0|app.example:8443|[]", h2cEcho(port, "app.example:8443"));
+			// With no :authority at all Tomcat names "localhost" and port 80, whatever it is bound to.
+			assertEquals("HTTP/2.0|localhost:80|[]", h2cEcho(port, null));
+			// X-Forwarded-* are inert without a forwarded-header strategy.
+			assertEquals("HTTP/2.0|app.example:80|[]", h2cEcho(port, "app.example", "x-forwarded-host", "evil.example", "x-forwarded-proto", "https"));
+			// A Host field on HTTP/2 is refused by the container itself: the stream is reset and no response comes back.
+			assertEquals("", h2cEcho(port, "app.example", "host", "other.example"));
+		}
+	}
+
+	@Nested
+	@NestedTestConfiguration(EnclosingConfiguration.OVERRIDE)
+	@SpringBootTest(classes=App.class, webEnvironment=WebEnvironment.RANDOM_PORT, properties={
+		"server.address=127.0.0.1",
+		"server.http2.enabled=true",
+		"server.forward-headers-strategy=framework",
+		"csrf.boundary-order=" + (Ordered.HIGHEST_PRECEDENCE + 10)
+	})
+	@DirtiesContext(classMode=DirtiesContext.ClassMode.AFTER_CLASS)
+	class C02 extends Context {
+		@Test void c02_forwardedHeaderFilterOverHttp2() throws Exception {
+			// ForwardedHeaderFilter rewrites the server name and port from the forwarded headers, as on HTTP/1.1.  Under
+			// HOST_HEADER the boundary therefore judges the forwarded host (an accepted consequence; use CONTAINER or
+			// allowedHosts where the proxy does not overwrite X-Forwarded-*).
+			assertEquals("HTTP/2.0|evil.example:443|[]", h2cEcho(port, "app.example", "x-forwarded-host", "evil.example", "x-forwarded-proto", "https"));
+		}
+	}
+
+	@Nested
+	@NestedTestConfiguration(EnclosingConfiguration.OVERRIDE)
+	@SpringBootTest(classes=App.class, webEnvironment=WebEnvironment.RANDOM_PORT, properties={
+		"server.address=127.0.0.1",
+		"server.http2.enabled=true",
+		"server.forward-headers-strategy=native",
+		"csrf.boundary-order=" + Ordered.HIGHEST_PRECEDENCE
+	})
+	@DirtiesContext(classMode=DirtiesContext.ClassMode.AFTER_CLASS)
+	class C03 extends Context {
+		@Test void c03_remoteIpValveOverHttp2() throws Exception {
+			// The native strategy's RemoteIpValve reads X-Forwarded-Host by default, with the same effect.
+			assertEquals("HTTP/2.0|evil.example:443|[]", h2cEcho(port, "app.example", "x-forwarded-host", "evil.example", "x-forwarded-proto", "https"));
 		}
 	}
 }

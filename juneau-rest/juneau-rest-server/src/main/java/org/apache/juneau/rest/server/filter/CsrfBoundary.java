@@ -55,13 +55,14 @@ import jakarta.servlet.http.*;
  * <table class='styled w800'>
  * 	<tr><th>Step</th><th>Applies to</th><th>Refused when</th><th>Reason</th><th>Status</th></tr>
  * 	<tr><td>Allowed hosts</td><td>Every request, when {@link Builder#allowedHosts(String...)} is set</td>
- * 		<td>The request's own host is not listed; or its {@code Host} is missing or malformed</td>
+ * 		<td>The request's own host is not listed; or its {@code Host} (on HTTP/2, its {@code :authority}) is missing or
+ * 		malformed</td>
  * 		<td>{@code HOST_NOT_ALLOWED}; {@code HOST_MISSING}, {@code HOST_MALFORMED}</td>
  * 		<td>Not listed: 421; missing or malformed {@code Host}: 400</td></tr>
  * 	<tr><td>Safe method</td><td>{@code GET}, {@code HEAD}, {@code OPTIONS}, {@code TRACE}</td>
  * 		<td>Never: allowed</td><td></td><td></td></tr>
  * 	<tr><td>Own origin</td><td>Unsafe requests</td>
- * 		<td>{@code Host} is absent, repeated, or not a host with an optional port</td>
+ * 		<td>{@code Host} (on HTTP/2, {@code :authority}) is absent, repeated, or not a host with an optional port</td>
  * 		<td>{@code HOST_MISSING}, {@code HOST_MALFORMED}</td><td>400</td></tr>
  * 	<tr><td>{@code Origin} present</td><td>Unsafe requests</td>
  * 		<td>The literal {@code null}; or repeated, unparseable or not this server's own origin; or
@@ -103,7 +104,8 @@ import jakarta.servlet.http.*;
  * <h5 class='section'>The request's own origin, and proxies</h5>
  * <p>
  * By default ({@link OriginSource#HOST_HEADER}) the request's own origin is {@link HttpServletRequest#getScheme()} plus
- * the {@code Host} header.  {@code X-Forwarded-*} and {@code Forwarded} are never read.  Behind a proxy that terminates
+ * the {@code Host} header (on HTTP/2, the {@code :authority}; see below).  {@code X-Forwarded-*} and {@code Forwarded}
+ * are never read by this class.  Behind a proxy that terminates
  * TLS, use {@link OriginSource#CONTAINER} and configure the container's own forwarded-header support; the boundary
  * then takes the origin from {@code getScheme()}, {@code getServerName()} and {@code getServerPort()}.
  * <p>
@@ -114,6 +116,29 @@ import jakarta.servlet.http.*;
  * {@code Ordered.HIGHEST_PRECEDENCE}, so this boundary's filter must be registered strictly later, never at
  * {@code HIGHEST_PRECEDENCE} itself.  The boundary cannot see its own order; a misordered deployment shows up as
  * scheme-mismatch refusals and the warning described below.
+ *
+ * <h5 class='section'>HTTP/2 and {@code :authority}</h5>
+ * <p>
+ * An HTTP/2 request has no {@code Host} header; its {@code :authority} pseudo-header plays that part, and servlet
+ * containers surface it only through {@link HttpServletRequest#getServerName()} and
+ * {@link HttpServletRequest#getServerPort()}.  So that a deployment that speaks HTTP/2 keeps working, a request with
+ * no {@code Host} header whose {@link HttpServletRequest#getProtocol()} is exactly {@code HTTP/2.0} is judged on its
+ * server name and port in {@code Host}'s place, for both {@link OriginSource}s and for
+ * {@link Builder#allowedHosts(String...)}.  Any other request without a {@code Host} is still refused
+ * ({@code HOST_MISSING}).  A request that does carry a {@code Host} header is judged on it as before.
+ * <p>
+ * The same holds for a WebSocket handshake carried over HTTP/2 (RFC 8441, extended {@code CONNECT}): with no
+ * {@code Host}, and no {@code Sec-WebSocket-Key} or {@code Upgrade} header to mark it an RFC 6455 request, the
+ * authority of the handshake's request URI stands in for {@code Host}.  Jetty advertises RFC 8441 by default once
+ * HTTP/2 is enabled; Tomcat does not support it.
+ * <p>
+ * Because the server name is what the container's forwarded-header support rewrites, <b>under
+ * {@link OriginSource#HOST_HEADER} an HTTP/2 request is judged on the forwarded host</b> when such support is
+ * enabled (Tomcat's {@code RemoteIpValve} with a host header, Spring's {@code ForwardedHeaderFilter}, Jetty's
+ * {@code ForwardedRequestCustomizer}).  {@code HOST_HEADER} is therefore protocol-dependent: it reads the raw
+ * {@code Host} on HTTP/1.1 and the container's server name on HTTP/2.  Enable forwarded-header support only behind a
+ * proxy that overwrites {@code X-Forwarded-*}, or list the expected hosts with
+ * {@link Builder#allowedHosts(String...)}.
  *
  * <h5 class='section'>Non-goals</h5>
  * <ul>
@@ -199,7 +224,8 @@ public class CsrfBoundary implements RequestBoundary {
 		/**
 		 * {@link HttpServletRequest#getScheme()}, {@link HttpServletRequest#getServerName()} and
 		 * {@link HttpServletRequest#getServerPort()}, as rewritten by the container's own forwarded-header support.
-		 * A {@code Host} header is still required.  See the class Javadoc for the filter-ordering rule.
+		 * A {@code Host} header is still required (on HTTP/2, the {@code :authority} stands in for it).  See the class
+		 * Javadoc for the filter-ordering rule.
 		 */
 		CONTAINER
 	}
@@ -264,7 +290,7 @@ public class CsrfBoundary implements RequestBoundary {
 		// Judged on the method the request claims, so an override cannot carry a write past the checks below.
 		var method = MethodSafety.effectiveMethod(req.getMethod(), req.getQueryString(), req::getHeader);
 
-		var hosts = BoundaryChecks.headerValues(req, "Host");
+		var hosts = BoundaryChecks.hostValues(req);
 		var self = hosts.size() == 1 ? selfOrigin(req, BoundaryChecks.parseHost(hosts.get(0))) : null;
 
 		// The rebinding control runs on every request: a read is as exfiltratable as a write.
@@ -349,7 +375,8 @@ public class CsrfBoundary implements RequestBoundary {
 	 * method is the boundary for the upgrade instead.  No token can be sent on a handshake, so the control is
 	 * {@code Origin} and {@code Sec-Fetch-Site}:
 	 * <ol>
-	 * 	<li>{@code Host} must be a single well-formed value ({@code HOST_MISSING}, {@code HOST_MALFORMED}).
+	 * 	<li>{@code Host} must be a single well-formed value ({@code HOST_MISSING}, {@code HOST_MALFORMED}).  A handshake
+	 * 		carried over HTTP/2 (RFC 8441) has none, and its request URI's authority stands in; see {@link HandshakeHosts}.
 	 * 	<li>The handshake's own scheme comes from its request URI: {@code ws} is {@code http}, {@code wss} is
 	 * 		{@code https}, and {@code http} or {@code https} are used as they are.  Any other scheme, or none, means the
 	 * 		handshake's own origin is unknown, and it is refused ({@code ORIGIN_MISMATCH}).
@@ -362,8 +389,8 @@ public class CsrfBoundary implements RequestBoundary {
 	 * </ol>
 	 *
 	 * <p>
-	 * The {@code Host} header is the handshake's own host under either {@link OriginSource}.  {@code X-Forwarded-*}
-	 * and {@code Forwarded} are never read.  Behind a proxy that terminates TLS, the scheme is right only if the
+	 * The {@code Host} header (or, over HTTP/2, the request URI's authority) is the handshake's own host under either
+	 * {@link OriginSource}.  {@code X-Forwarded-*} and {@code Forwarded} are never read.  Behind a proxy that terminates TLS, the scheme is right only if the
 	 * container's own forwarded-header support rewrites the request URI it hands the WebSocket layer; where it does
 	 * not, a {@code wss} page's handshake is refused rather than admitted on a guess.
 	 *
@@ -376,19 +403,41 @@ public class CsrfBoundary implements RequestBoundary {
 	 */
 	public BoundaryResult checkHandshake(String scheme, List<String> hosts, List<String> origins, List<String> fetchSites) {
 		reqnn("hosts", hosts);
+		return checkHandshake(scheme, new HandshakeHosts(hosts, false), origins, fetchSites);
+	}
+
+	/**
+	 * Applies this boundary to a WebSocket handshake whose {@code Host} values may have been synthesised.
+	 *
+	 * <p>
+	 * As {@link #checkHandshake(String, List, List, List)}, except that {@code hosts} may carry the value built from the
+	 * request URI's authority when a handshake over HTTP/2 (RFC 8441) has no {@code Host} header.  The synthesised value
+	 * is judged exactly as a real one would be.
+	 *
+	 * @param scheme The scheme of the handshake's request URI.  Can be <jk>null</jk>, which is refused.
+	 * @param hosts The handshake's {@code Host} values.  Must not be <jk>null</jk>.
+	 * @param origins Every {@code Origin} value of the handshake.  Must not be <jk>null</jk>.
+	 * @param fetchSites Every {@code Sec-Fetch-Site} value of the handshake.  Must not be <jk>null</jk>.
+	 * @return {@link BoundaryResult#ALLOWED}, or the first rejection.  A rejection message never echoes a value the
+	 * 	handshake presented.
+	 */
+	public BoundaryResult checkHandshake(String scheme, HandshakeHosts hosts, List<String> origins, List<String> fetchSites) {
+		reqnn("hosts", hosts);
 		reqnn("origins", origins);
 		reqnn("fetchSites", fetchSites);
 
-		var host = hosts.size() == 1 ? BoundaryChecks.parseHost(hosts.get(0)) : null;
+		var values = hosts.values();
+		var host = values.size() == 1 ? BoundaryChecks.parseHost(values.get(0)) : null;
 		if (host == null) {
-			if (hosts.isEmpty())
-				return refuseHandshake(BoundaryReason.HOST_MISSING, 400, "A WebSocket handshake must carry a 'Host' header.", hosts, origins);
+			if (values.isEmpty())
+				return refuseHandshake(BoundaryReason.HOST_MISSING, 400,
+					"A WebSocket handshake must carry a 'Host' header (or, over HTTP/2, ':authority').", hosts, origins);
 			return refuseHandshake(BoundaryReason.HOST_MALFORMED, 400,
 				"Handshake 'Host' must be a single header holding a host name, IPv4 address or bracketed IPv6 address, "
 				+ "with an optional port.", hosts, origins);
 		}
 
-		var ownScheme = handshakeScheme(scheme);
+		var ownScheme = BoundaryChecks.handshakeScheme(scheme);
 		if (ownScheme == null)
 			return refuseHandshake(BoundaryReason.ORIGIN_MISMATCH, 403,
 				"The WebSocket handshake's own scheme could not be determined, so its 'Origin' cannot be checked.", hosts, origins);
@@ -418,24 +467,13 @@ public class CsrfBoundary implements RequestBoundary {
 		return BoundaryResult.ALLOWED;
 	}
 
-	/** The web scheme of a handshake URI scheme, or <jk>null</jk> when it is not one of the four known ones. */
-	private static String handshakeScheme(String scheme) {
-		if (scheme == null)
-			return null;
-		return switch (scheme.toLowerCase(Locale.ROOT)) {
-			case "ws", "http" -> "http";
-			case "wss", "https" -> "https";
-			default -> null;
-		};
-	}
-
 	/** Logs a refused handshake and builds its result.  {@code message} must be a fixed text, as for {@code refuse}. */
-	private static BoundaryResult refuseHandshake(BoundaryReason reason, int status, String message, List<String> hosts, List<String> origins) {
+	private static BoundaryResult refuseHandshake(BoundaryReason reason, int status, String message, HandshakeHosts hosts, List<String> origins) {
 		LOG.fine(() -> "CSRF boundary refused a WebSocket handshake: reason=" + reason);
 		if (LOG.isLoggable(Level.FINEST))
 			LOG.finest("CSRF boundary refused a WebSocket handshake: reason=" + reason
 				+ ", Origin=" + sanitize(String.join(", ", origins))
-				+ ", Host=" + sanitize(String.join(", ", hosts)));
+				+ ", Host=" + (hosts.synthesised() ? "(h2 :authority) " : "") + sanitize(String.join(", ", hosts.values())));
 		return new BoundaryResult(reason, status, message);
 	}
 
@@ -465,7 +503,8 @@ public class CsrfBoundary implements RequestBoundary {
 	 * The request's own origin, or <jk>null</jk> if it cannot be derived.
 	 *
 	 * @param host The parsed {@code Host} header, or <jk>null</jk> if it is malformed.  Required in both modes, because
-	 * 	{@code getServerName()} falls back to the server's own name when the request has no {@code Host}.
+	 * 	{@code getServerName()} falls back to the server's own name when the request has no {@code Host}.  On HTTP/2, which
+	 * 	has none, it is the server name and port the container derived from {@code :authority}.
 	 */
 	private Origin selfOrigin(HttpServletRequest req, Authority host) {
 		if (host == null)
@@ -507,7 +546,7 @@ public class CsrfBoundary implements RequestBoundary {
 
 	private static BoundaryResult hostFailure(HttpServletRequest req, String method, List<String> hosts) {
 		if (hosts.isEmpty())
-			return refuse(req, method, BoundaryReason.HOST_MISSING, 400, "A request must carry a 'Host' header.");
+			return refuse(req, method, BoundaryReason.HOST_MISSING, 400, "A request must carry a 'Host' header (or, on HTTP/2, ':authority').");
 		return refuse(req, method, BoundaryReason.HOST_MALFORMED, 400,
 			"Request 'Host' must be a single header holding a host name, IPv4 address or bracketed IPv6 address, "
 			+ "with an optional port.");
@@ -539,7 +578,8 @@ public class CsrfBoundary implements RequestBoundary {
 		if (LOG.isLoggable(Level.FINEST))
 			LOG.finest("CSRF boundary refused a request: reason=" + reason
 				+ ", Origin=" + sanitize(String.join(", ", BoundaryChecks.headerValues(req, "Origin")))
-				+ ", Host=" + sanitize(String.join(", ", BoundaryChecks.headerValues(req, "Host"))));
+				+ ", Host=" + (BoundaryChecks.isSynthesisedHost(req) ? "(h2 :authority) " : "")
+				+ sanitize(String.join(", ", BoundaryChecks.hostValues(req))));
 		return new BoundaryResult(reason, status, message);
 	}
 

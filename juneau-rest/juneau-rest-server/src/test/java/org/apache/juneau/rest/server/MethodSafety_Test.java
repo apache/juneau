@@ -323,6 +323,29 @@ class MethodSafety_Test extends org.apache.juneau.TestBase {
 		assertThrows(IllegalArgumentException.class, () -> MethodSafety.effectiveMethod("GET", null, null));
 	}
 
+	@Test void f01_overrideHeadersOrderIsFrozen() {
+		assertEquals(List.of("X-Method", "X-HTTP-Method-Override", "X-HTTP-Method", "X-Method-Override"), MethodSafety.overrideHeaders());
+		assertThrows(UnsupportedOperationException.class, () -> MethodSafety.overrideHeaders().add("X-Other"));
+	}
+
+	@Test void f02_queryClaims_noClaims() {
+		assertEquals(List.of(), MethodSafety.queryClaims(null));
+		assertEquals(List.of(), MethodSafety.queryClaims(""));
+		assertEquals(List.of(), MethodSafety.queryClaims("page=2&methods=PUT&method"));
+	}
+
+	@Test void f03_queryClaims_everyValueInOrderUntrimmed() {
+		assertEquals(List.of("GET", "DELETE", " put "), MethodSafety.queryClaims("method=GET&page=1&method=DELETE&METHOD=%20put%20"));
+	}
+
+	@Test void f04_queryClaims_decodesNameAndValue() {
+		assertEquals(List.of("PUT", "A B"), MethodSafety.queryClaims("%6Dethod=PUT&method=A+B"));
+	}
+
+	@Test void f05_queryClaims_malformedEscapeKeepsRawText() {
+		assertEquals(List.of("%ZZ", ""), MethodSafety.queryClaims("method=%ZZ&method="));
+	}
+
 	/** The framework wraps init failures, so assertions match against the whole cause chain. */
 	static String messageChain(Throwable t) {
 		var sb = new StringBuilder();

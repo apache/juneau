@@ -102,8 +102,9 @@ public @interface Rest {
 	 * Allowed method headers.
 	 *
 	 * <p>
-	 * A comma-delimited list of HTTP method names that are allowed to be passed as values in an <c>X-Method</c> HTTP header
-	 * to override the real HTTP method name.
+	 * A comma-delimited list of HTTP method names that are allowed to be passed as values in an <c>X-Method</c>,
+	 * <c>X-HTTP-Method-Override</c>, <c>X-HTTP-Method</c> or <c>X-Method-Override</c> HTTP header to override the real HTTP
+	 * method name.  All four headers share this list; when more than one is sent they are tried in that order.
 	 * <p>
 	 * Allows you to override the actual HTTP method with a simulated method.
 	 * <br>For example, if an HTTP Client API doesn't support <c>PATCH</c> but does support <c>POST</c> (because
@@ -120,6 +121,10 @@ public @interface Rest {
 	 * 		Use <js>"*"</js> to represent all methods.
 	 * 	<li class='note'>
 	 * 		Use <js>"NONE"</js> (case insensitive) to suppress inheriting a value from a parent class.
+	 * 	<li class='note'>
+	 * 		Once the list admits at least one method, override claims must agree: a request whose override headers (or
+	 * 		<c>method</c> query parameter) name more than one distinct method is refused with <c>400</c>, whether or not the
+	 * 		list admits them.
 	 * </ul>
 	 *
 	 * @return The annotation value.

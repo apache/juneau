@@ -219,4 +219,52 @@ class BoundaryChecks_Test extends TestBase {
 		assertFalse(BoundaryChecks.isSameOriginFetch(" same-origin"));
 		assertFalse(BoundaryChecks.isSameOriginFetch(null));
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// p06) hostValues / isSynthesisedHost: HTTP/2 :authority stands in for a missing Host
+	//-----------------------------------------------------------------------------------------------------------------
+
+	private static HttpServletRequest h(String protocol, String name, int port, String...hosts) {
+		var r = mock(HttpServletRequest.class);
+		when(r.getProtocol()).thenReturn(protocol);
+		when(r.getServerName()).thenReturn(name);
+		when(r.getServerPort()).thenReturn(port);
+		when(r.getHeaders("Host")).thenAnswer(i -> Collections.enumeration(List.of(hosts)));
+		when(r.getHeader("Host")).thenReturn(hosts.length == 0 ? null : hosts[0]);
+		return r;
+	}
+
+	@Test void p06_http2WithoutHostSynthesises() {
+		var r = h("HTTP/2.0", "app.example", 8080);
+		assertEquals(List.of("app.example:8080"), BoundaryChecks.hostValues(r));
+		assertTrue(BoundaryChecks.isSynthesisedHost(r));
+	}
+
+	@Test void p07_otherProtocolsDoNotSynthesise() {
+		for (var protocol : new String[]{"HTTP/1.1", "HTTP/1.0", "HTTP/2", "http/2.0", "HTTP/3.0", "", null}) {
+			var r = h(protocol, "app.example", 8080);
+			assertEquals(List.of(), BoundaryChecks.hostValues(r), String.valueOf(protocol));
+			assertFalse(BoundaryChecks.isSynthesisedHost(r), String.valueOf(protocol));
+		}
+	}
+
+	@Test void p08_realHostWinsAndStaysRepeated() {
+		var r = h("HTTP/2.0", "app.example", 8080, "other.example");
+		assertEquals(List.of("other.example"), BoundaryChecks.hostValues(r));
+		assertFalse(BoundaryChecks.isSynthesisedHost(r));
+		var two = h("HTTP/2.0", "app.example", 8080, "a", "b");
+		assertEquals(List.of("a", "b"), BoundaryChecks.hostValues(two));
+		assertFalse(BoundaryChecks.isSynthesisedHost(two));
+	}
+
+	@Test void p09_portsAndNames() {
+		assertEquals(List.of("app.example"), BoundaryChecks.hostValues(h("HTTP/2.0", "app.example", 0)));
+		assertEquals(List.of("app.example"), BoundaryChecks.hostValues(h("HTTP/2.0", "app.example", -1)));
+		assertEquals(List.of("[::1]:80"), BoundaryChecks.hostValues(h("HTTP/2.0", "::1", 80)));
+		assertEquals(List.of("[::1]:80"), BoundaryChecks.hostValues(h("HTTP/2.0", "[::1]", 80)));
+		assertEquals(List.of(), BoundaryChecks.hostValues(h("HTTP/2.0", null, 80)));
+		assertEquals(List.of(), BoundaryChecks.hostValues(h("HTTP/2.0", "", 80)));
+		assertEquals(List.of(), BoundaryChecks.hostValues(h("HTTP/2.0", "  ", 80)));
+		assertFalse(BoundaryChecks.isSynthesisedHost(h("HTTP/2.0", null, 80)));
+	}
 }

@@ -346,19 +346,13 @@ class RestServlet_Test extends TestBase {
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Test void h01_serviceCatchesAndSendsError() throws Exception {
-		// Build a real context via MockRestClient, then call service() with a mock request that triggers an exception
-		// inside execute() (no path -> 404, but we want a hard exception). The simplest way: use MockServletRequest
-		// against a non-existent method, then invoke service() directly against the servlet instance.
+		// A servlet that was never initialized has no context, so service() fails before dispatching and must catch
+		// the exception and call resp.sendError(500, ...).
 		var s = new A();
-		try (var ignored = MockRestClient.buildLax(s)) {
-			// Now s has a context wired via setContext(...).  Send a malformed/unmocked request directly.
-			var req = mock(HttpServletRequest.class);
-			var resp = mock(HttpServletResponse.class);
-			// We don't stub req thoroughly; execute() will likely NPE or fail in matching, which is the path we want
-			// — service() must catch any Exception and call resp.sendError(500, ...).
-			s.service(req, resp);
-			verify(resp).sendError(eq(HttpServletResponse.SC_INTERNAL_SERVER_ERROR), anyString());
-		}
+		var req = mock(HttpServletRequest.class);
+		var resp = mock(HttpServletResponse.class);
+		s.service(req, resp);
+		verify(resp).sendError(eq(HttpServletResponse.SC_INTERNAL_SERVER_ERROR), anyString());
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

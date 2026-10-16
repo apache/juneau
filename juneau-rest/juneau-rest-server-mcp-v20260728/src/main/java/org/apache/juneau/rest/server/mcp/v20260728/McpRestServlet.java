@@ -179,12 +179,13 @@ public abstract class McpRestServlet extends org.apache.juneau.rest.server.mcp.A
 	 * OAuth 2.1 resource-server bearer gate for the MCP {@code POST /} endpoint.
 	 *
 	 * <p>
-	 * A no-op unless {@link McpResourceServerConfig#isEnabled() RS auth is enabled}; when enabled, every request the
-	 * router resolves to a {@code POST} (the dedicated MCP servlet's only writable surface) must present a valid bearer
+	 * A no-op unless {@link McpResourceServerConfig#isEnabled() RS auth is enabled}; when enabled, every request that is
+	 * a {@code POST}, or that claims one (the dedicated MCP servlet's only writable surface) must present a valid bearer
 	 * token or it is rejected with {@code 401} / {@code 403} and a {@code WWW-Authenticate: Bearer ...} challenge (see
 	 * {@link McpResourceServerSupport#gateMcpServlet(McpResourceServerConfig, HttpServletRequest, HttpServletResponse)}).
-	 * The gate reads the router-<i>resolved</i> method (honoring {@code ?method=}/{@code X-Method} overrides) rather than
-	 * the raw servlet method, so a method-override cannot slip past it.  The well-known {@code GET} routes below are
+	 * The gate treats a {@code POST} claim on any override channel ({@code ?method=} or any of the four override
+	 * headers, any value) as a {@code POST}, rather than reading only the raw servlet method, so a method-override cannot
+	 * slip past it.  The well-known {@code GET} routes below are
 	 * intentionally left unauthenticated so a client can discover the PRM document.
 	 *
 	 * @param req The raw HTTP request.

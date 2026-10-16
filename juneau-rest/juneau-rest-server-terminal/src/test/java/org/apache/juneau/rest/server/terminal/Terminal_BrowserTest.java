@@ -104,6 +104,6 @@ class Terminal_BrowserTest extends TestBase {
 
 	@Test void z01_everyCaseHasAMethod() {
 		var cases = (Map<?,?>)report.get("cases");
-		assertEquals(23, cases.size(), () -> "case count changed; add a method per new case: " + cases.keySet());
+		assertEquals(24, cases.size(), () -> "case count changed; add a method per new case: " + cases.keySet());
 	}
 }

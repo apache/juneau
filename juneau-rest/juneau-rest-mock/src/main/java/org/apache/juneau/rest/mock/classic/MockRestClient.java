@@ -606,18 +606,17 @@ public class MockRestClient extends RestClient implements HttpClientConnection {
 			var servletPath = builder.servletPath;
 			var overlay = builder.overridingBeanStore;
 
-			var c = restBean instanceof Class restBean2 ? (Class<?>)restBean2 : restBean.getClass();
-			RestContext restBeanCtx;
-			if (overlay == null && restContexts.containsKey(c)) {
-				restBeanCtx = restContexts.get(c);
-			} else {
-				var isClass = restBean instanceof Class;
+			var isClass = restBean instanceof Class;
+			// Only class-based contexts are cached; a caller-supplied instance always gets its own context.
+			var cacheable = isClass && overlay == null;
+			var restBeanCtx = cacheable ? restContexts.get((Class<?>)restBean) : null;
+			if (restBeanCtx == null) {
 				var o = isClass ? ((Class<?>)restBean).getDeclaredConstructor().newInstance() : restBean;
 				restBeanCtx = new RestContext(new RestContext.Args(o.getClass(), null, null, () -> o, "", bs -> {
 					bs.addBeanType(RestDebugFormatter.class, BasicTestRestDebugFormatter.class);
 				}, overlay, null, RestContext.ContextKind.ROOT)).postInit().postInitChildFirst();
-				if (overlay == null)
-					restContexts.put(c, restBeanCtx);
+				if (cacheable)
+					restContexts.put((Class<?>)restBean, restBeanCtx);
 			}
 			builder.restContext(restBeanCtx);
 

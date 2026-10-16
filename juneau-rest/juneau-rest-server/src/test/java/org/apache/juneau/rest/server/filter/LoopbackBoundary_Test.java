@@ -532,4 +532,112 @@ class LoopbackBoundary_Test extends TestBase {
 		assertEquals(0, r.status());
 		assertNull(r.message());
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// j) HTTP/2: no Host header, so :authority (the container's server name and port) stands in
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/** The legitimate write with no {@code Host}, as the container reports an HTTP/2 request to the given authority. */
+	private static HttpServletRequest h2(String protocol, String name, int port) {
+		var h = goodWriteHeaders();
+		h.remove("Host");
+		var r = req("POST", h);
+		when(r.getProtocol()).thenReturn(protocol);
+		when(r.getServerName()).thenReturn(name);
+		when(r.getServerPort()).thenReturn(port);
+		return r;
+	}
+
+	@Test void j01_http2WithoutHostMatchesTheAuthority() {
+		assertTrue(BOUNDARY.check(h2("HTTP/2.0", "127.0.0.1", 8790)).isAllowed());
+	}
+
+	@Test void j02_http2WithAnotherNameOrPortIs421() {
+		assertRejected(BOUNDARY.check(h2("HTTP/2.0", "localhost", 8790)), HOST_MISMATCH, 421);
+		assertRejected(BOUNDARY.check(h2("HTTP/2.0", "127.0.0.1", 8791)), HOST_MISMATCH, 421);
+		assertRejected(BOUNDARY.check(h2("HTTP/2.0", "evil.example", 80)), HOST_MISMATCH, 421);
+		assertRejected(BOUNDARY.check(h2("HTTP/2.0", null, 8790)), HOST_MISMATCH, 421);
+	}
+
+	@Test void j03_http11WithoutHostIsStill421() {
+		// The mutation row: the server name and port equal the authority, so only the protocol guard refuses it.
+		assertRejected(BOUNDARY.check(h2("HTTP/1.1", "127.0.0.1", 8790)), HOST_MISMATCH, 421);
+		assertRejected(BOUNDARY.check(h2("HTTP/1.0", "127.0.0.1", 8790)), HOST_MISMATCH, 421);
+		assertRejected(BOUNDARY.check(h2(null, "127.0.0.1", 8790)), HOST_MISMATCH, 421);
+		assertRejected(BOUNDARY.check(h2("HTTP/2", "127.0.0.1", 8790)), HOST_MISMATCH, 421);
+	}
+
+	@Test void j04_http2WithARealHostUsesIt() {
+		var h = goodWriteHeaders();
+		h.put("Host", "evil.example");
+		var r = req("POST", h);
+		when(r.getProtocol()).thenReturn("HTTP/2.0");
+		when(r.getServerName()).thenReturn("127.0.0.1");
+		when(r.getServerPort()).thenReturn(8790);
+		assertRejected(BOUNDARY.check(r), HOST_MISMATCH, 421);
+	}
+
+	@Test void j05_defaultPortIsFilledForTheSynthesisedValue() {
+		var noPort = LoopbackBoundary.create().authority("127.0.0.1").token(TOKEN).build();
+		var port80 = LoopbackBoundary.create().authority("127.0.0.1", 80).token(TOKEN).build();
+		for (var b : List.of(noPort, port80)) {
+			var h = new LinkedHashMap<String,String>(b.selfCallHeaders());
+			var r = req("POST", h);
+			when(r.getProtocol()).thenReturn("HTTP/2.0");
+			when(r.getServerName()).thenReturn("127.0.0.1");
+			when(r.getServerPort()).thenReturn(80);
+			assertTrue(b.check(r).isAllowed(), b.authority());
+			var other = req("POST", h);
+			when(other.getProtocol()).thenReturn("HTTP/2.0");
+			when(other.getServerName()).thenReturn("127.0.0.1");
+			when(other.getServerPort()).thenReturn(81);
+			assertRejected(b.check(other), HOST_MISMATCH, 421);
+		}
+	}
+
+	@Test void j06_aRealHostKeepsTheStringCompare() {
+		// Deliberate asymmetry: a real "127.0.0.1:80" is not widened to match authority "127.0.0.1".
+		var noPort = LoopbackBoundary.create().authority("127.0.0.1").token(TOKEN).build();
+		var h = new LinkedHashMap<String,String>(noPort.selfCallHeaders());
+		h.put("Host", "127.0.0.1:80");
+		assertRejected(noPort.check(req("POST", h)), HOST_MISMATCH, 421);
+	}
+
+	@Test void j07_aUnparseableAuthorityFailsClosedOnHttp2() {
+		var odd = LoopbackBoundary.create().authority("not a host").token(TOKEN).build();
+		var r = req("POST", new LinkedHashMap<String,String>(odd.selfCallHeaders()));
+		when(r.getProtocol()).thenReturn("HTTP/2.0");
+		when(r.getServerName()).thenReturn("not a host");
+		when(r.getServerPort()).thenReturn(80);
+		assertRejected(odd.check(r), HOST_MISMATCH, 421);
+	}
+
+	@Test void j08_ipv6ServerNameIsBracketed() {
+		var v6 = LoopbackBoundary.create().authority("[::1]:8790").token(TOKEN).build();
+		var r = req("POST", new LinkedHashMap<String,String>(v6.selfCallHeaders()));
+		when(r.getProtocol()).thenReturn("HTTP/2.0");
+		when(r.getServerName()).thenReturn("::1");
+		when(r.getServerPort()).thenReturn(8790);
+		assertTrue(v6.check(r).isAllowed());
+	}
+
+	@Test void j09_handshakeHost() {
+		var uri = "ws";
+		// A real Host: compared as written, first value, ignoring case.
+		assertTrue(BOUNDARY.acceptsHandshakeHost(new HandshakeHosts(List.of(AUTHORITY.toUpperCase()), false), uri));
+		assertFalse(BOUNDARY.acceptsHandshakeHost(new HandshakeHosts(List.of("127.0.0.1"), false), uri));
+		assertFalse(BOUNDARY.acceptsHandshakeHost(new HandshakeHosts(List.of(), false), uri));
+		var noPort = LoopbackBoundary.create().authority("127.0.0.1").token(TOKEN).build();
+		assertFalse(noPort.acceptsHandshakeHost(new HandshakeHosts(List.of("127.0.0.1:80"), false), uri));
+		// A synthesised value: parsed host and port, defaults filled from the handshake scheme and from http.
+		assertTrue(BOUNDARY.acceptsHandshakeHost(new HandshakeHosts(List.of("127.0.0.1:8790"), true), "http"));
+		assertFalse(BOUNDARY.acceptsHandshakeHost(new HandshakeHosts(List.of("127.0.0.1:8791"), true), "http"));
+		assertTrue(noPort.acceptsHandshakeHost(new HandshakeHosts(List.of("127.0.0.1"), true), "ws"));
+		assertTrue(noPort.acceptsHandshakeHost(new HandshakeHosts(List.of("127.0.0.1:80"), true), "ws"));
+		assertFalse(noPort.acceptsHandshakeHost(new HandshakeHosts(List.of("127.0.0.1"), true), "wss"));
+		assertFalse(noPort.acceptsHandshakeHost(new HandshakeHosts(List.of("127.0.0.1"), true), null));
+		assertFalse(noPort.acceptsHandshakeHost(new HandshakeHosts(List.of("127.0.0.1"), true), "ftp"));
+		assertTrue(noPort.acceptsHandshakeHost(new HandshakeHosts(List.of("127.0.0.1:80"), true), null));
+		assertThrows(IllegalArgumentException.class, () -> BOUNDARY.acceptsHandshakeHost(null, uri));
+	}
 }

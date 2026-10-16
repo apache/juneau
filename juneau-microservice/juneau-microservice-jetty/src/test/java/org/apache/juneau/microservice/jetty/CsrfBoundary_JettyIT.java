@@ -76,6 +76,15 @@ class CsrfBoundary_JettyIT extends TestBase {
 		final AtomicInteger writes = new AtomicInteger();
 		final List<DispatcherType> checked = new CopyOnWriteArrayList<>();
 		final List<String> servers = new CopyOnWriteArrayList<>();
+		final List<List<String>> hosts = new CopyOnWriteArrayList<>();
+		final List<String> protocols = new CopyOnWriteArrayList<>();
+
+		void judged(HttpServletRequest req) {
+			checked.add(req.getDispatcherType());
+			servers.add(req.getServerName() + ":" + req.getServerPort());
+			hosts.add(Collections.list(req.getHeaders("Host")));
+			protocols.add(req.getProtocol());
+		}
 	}
 
 	/** A {@link CsrfBoundary} that also records the dispatcher type of every request it judges. */
@@ -89,8 +98,23 @@ class CsrfBoundary_JettyIT extends TestBase {
 
 		@Override /* CsrfBoundary */
 		public BoundaryResult check(HttpServletRequest req) {
-			record.checked.add(req.getDispatcherType());
-			record.servers.add(req.getServerName() + ":" + req.getServerPort());
+			record.judged(req);
+			return super.check(req);
+		}
+	}
+
+	/** A {@link LoopbackBoundary} that records what the container reports about every request it judges. */
+	static final class RecordingLoopback extends LoopbackBoundary {
+		private final Record record;
+
+		RecordingLoopback(LoopbackBoundary.Builder b, Record record) {
+			super(b);
+			this.record = record;
+		}
+
+		@Override /* LoopbackBoundary */
+		public BoundaryResult check(HttpServletRequest req) {
+			record.judged(req);
 			return super.check(req);
 		}
 	}
@@ -180,6 +204,15 @@ class CsrfBoundary_JettyIT extends TestBase {
 	}
 
 	private App start(boolean forwarded, boolean h2c, CsrfBoundary.Builder boundary, String filterPath, EnumSet<DispatcherType> types) throws Exception {
+		return start(forwarded, h2c, (port, record) -> new RecordingBoundary(boundary, record), filterPath, types);
+	}
+
+	/** Builds the boundary once the connector has its port, so a pinned authority can name it. */
+	private interface BoundaryFactory {
+		RequestBoundary create(int port, Record record);
+	}
+
+	private App start(boolean forwarded, boolean h2c, BoundaryFactory boundary, String filterPath, EnumSet<DispatcherType> types) throws Exception {
 		var record = new Record();
 		var server = new Server();
 		var config = new HttpConfiguration();
@@ -190,10 +223,11 @@ class CsrfBoundary_JettyIT extends TestBase {
 		connector.setHost("127.0.0.1");
 		connector.setPort(0);
 		server.addConnector(connector);
+		connector.open();
 
 		var ctx = new ServletContextHandler(ServletContextHandler.SESSIONS);
 		ctx.setContextPath("/");
-		ctx.addFilter(new FilterHolder(new RequestBoundaryFilter(new RecordingBoundary(boundary, record))), filterPath, types);
+		ctx.addFilter(new FilterHolder(new RequestBoundaryFilter(boundary.create(connector.getLocalPort(), record))), filterPath, types);
 		ctx.addServlet(new ServletHolder(new TokenServlet()), "/token");
 		ctx.addServlet(new ServletHolder(new WriteServlet(record)), "/write");
 		ctx.addServlet(new ServletHolder(new ForwardServlet()), "/fwd");
@@ -291,18 +325,114 @@ class CsrfBoundary_JettyIT extends TestBase {
 		assertEquals(1, a.record().writes.get());
 	}
 
-	@Test void a03_http2AuthorityIsServerNameButNotHostHeader() throws Exception {
+	@Test void a03_http2AuthorityStandsInForHost() throws Exception {
 		var a = start(false, true, perProcess(), "/*", REQUEST);
 		var tok = token(a);
 		a.record().servers.clear();
+		a.record().hosts.clear();
+		a.record().protocols.clear();
 
-		// The container reports :authority as the server name, but surfaces no Host header, so a boundary that judges
-		// Host refuses the request rather than guessing: even a write whose Origin matches :authority.
+		// Characterization: the container reports :authority only as the server name and port.  It surfaces no Host
+		// header and reports the protocol as HTTP/2.0.  The boundary judges :authority in Host's place.
 		var res = h2cPost(a, "app.example", "http://app.example", tok);
-		assertEquals(400, res.status(), res::headers);
-		assertEquals("HOST_MISSING", res.rejection());
+		assertEquals(200, res.status(), res::headers);
 		assertEquals(List.of("app.example:80"), a.record().servers);
+		assertEquals(List.of(List.of()), a.record().hosts);
+		assertEquals(List.of("HTTP/2.0"), a.record().protocols);
+		assertEquals(1, a.record().writes.get());
+
+		// A page of another site is still refused: Origin must be the :authority's own origin.
+		var foreign = h2cPost(a, "app.example", "http://evil.example", tok);
+		assertEquals(403, foreign.status(), foreign::headers);
+		assertEquals("ORIGIN_MISMATCH", foreign.rejection());
+		assertEquals(1, a.record().writes.get());
+	}
+
+	@Test void a04_http2AuthorityJudgedAgainstAllowedHosts() throws Exception {
+		var a = start(false, true, perProcess().allowedHosts("app.example", "127.0.0.1"), "/*", REQUEST);
+		var tok = token(a);
+
+		var ok = h2cPost(a, "app.example", "http://app.example", tok);
+		assertEquals(200, ok.status(), ok::headers);
+		assertEquals(1, a.record().writes.get());
+
+		var rebound = h2cPost(a, "evil.example", "http://evil.example", tok);
+		assertEquals(421, rebound.status(), rebound::headers);
+		assertEquals("HOST_NOT_ALLOWED", rebound.rejection());
+		assertEquals(1, a.record().writes.get());
+	}
+
+	@Test void a05_http2WithNoAuthorityTakesTheSocketsOwnAddress() throws Exception {
+		var a = start(false, true, perProcess(), "/*", REQUEST);
+		var tok = token(a);
+		a.record().servers.clear();
+		a.record().hosts.clear();
+		a.record().protocols.clear();
+
+		// Characterization: with no :authority the container reports its own bound address as the server name, still
+		// with no Host header.  The boundary therefore judges the server against itself, which no browser can provoke
+		// (a browser always sends :authority), and a page of another site is refused all the same.
+		var foreign = h2cPost(a, null, null, "http://app.example", tok);
+		assertEquals(403, foreign.status(), foreign::headers);
+		assertEquals("ORIGIN_MISMATCH", foreign.rejection());
+		assertEquals(List.of("127.0.0.1:" + a.port()), a.record().servers);
+		assertEquals(List.of(List.of()), a.record().hosts);
+		assertEquals(List.of("HTTP/2.0"), a.record().protocols);
 		assertEquals(0, a.record().writes.get());
+
+		var own = h2cPost(a, null, null, a.origin(), tok);
+		assertEquals(200, own.status(), own::headers);
+		assertEquals(1, a.record().writes.get());
+	}
+
+	@Test void a06_http11RequestClaimingHttp2IsNotTrusted() throws Exception {
+		var a = start(false, true, perProcess(), "/*", REQUEST);
+		var tok = token(a);
+		a.record().servers.clear();
+		a.record().hosts.clear();
+		a.record().protocols.clear();
+
+		// Spoof lock: the synthesis is guarded on getProtocol() being exactly HTTP/2.0, so it matters that an HTTP/1.1
+		// socket cannot claim that.  Jetty refuses the request line itself (426), before any filter runs, so the
+		// boundary never sees a Host-less request reporting HTTP/2.0.
+		var head = rawHttp(a, "POST /write HTTP/2.0\r\nOrigin: " + a.origin() + "\r\nContent-Type: " + JSON
+			+ "\r\n" + LoopbackBoundary.DEFAULT_CSRF_HEADER + ": " + tok + "\r\nContent-Length: 0\r\nConnection: close\r\n\r\n");
+		assertTrue(head.startsWith("HTTP/1.1 426 "), head);
+		assertEquals(List.of(), a.record().servers);
+		assertEquals(0, a.record().writes.get());
+
+		// An ordinary HTTP/1.1 request with no Host is refused by the container too (400), so the boundary's own
+		// HOST_MISSING never needs the protocol guard for it.
+		var noHost = rawHttp(a, "POST /write HTTP/1.1\r\nOrigin: " + a.origin() + "\r\nContent-Type: " + JSON
+			+ "\r\n" + LoopbackBoundary.DEFAULT_CSRF_HEADER + ": " + tok + "\r\nContent-Length: 0\r\nConnection: close\r\n\r\n");
+		assertTrue(noHost.startsWith("HTTP/1.1 400 "), noHost);
+		assertEquals(0, a.record().writes.get());
+	}
+
+	@Test void a07_loopbackBoundaryOverHttp2() throws Exception {
+		var csrf = SynchronizerToken.generate();
+		var a = start(false, true, (port, record) -> new RecordingLoopback(
+			LoopbackBoundary.create().authority("127.0.0.1", port).token(csrf), record), "/*", REQUEST);
+		a.record().servers.clear();
+
+		var ok = h2cPost(a, "127.0.0.1:" + a.port(), null, "http://127.0.0.1:" + a.port(), csrf.value());
+		assertEquals(200, ok.status(), ok::headers);
+		assertEquals(1, a.record().writes.get());
+
+		var foreign = h2cPost(a, "evil.example:" + a.port(), null, "http://evil.example:" + a.port(), csrf.value());
+		assertEquals(421, foreign.status(), foreign::headers);
+		assertEquals("HOST_MISMATCH", foreign.rejection());
+		assertEquals(1, a.record().writes.get());
+
+		// With no :authority the container names its own bound address, which is this boundary's authority.  A browser
+		// never sends such a request; the residual is a non-browser client that already holds the token.
+		var none = h2cPost(a, null, null, "http://127.0.0.1:" + a.port(), csrf.value());
+		assertEquals(200, none.status(), none::headers);
+		assertEquals(2, a.record().writes.get());
+
+		var wrongPort = h2cPost(a, "127.0.0.1:" + (a.port() == 65535 ? 1 : a.port() + 1), null, "http://127.0.0.1:" + a.port(), csrf.value());
+		assertEquals(421, wrongPort.status(), wrongPort::headers);
+		assertEquals(2, a.record().writes.get());
 	}
 
 	/** The status and headers of an HTTP/2 response. */
@@ -313,6 +443,11 @@ class CsrfBoundary_JettyIT extends TestBase {
 	 * {@code :authority}, and returns the response head.  The request is encoded by hand: literal HPACK fields, no Huffman.
 	 */
 	private static H2Response h2cPost(App a, String authority, String origin, String token) throws Exception {
+		return h2cPost(a, authority, null, origin, token);
+	}
+
+	/** As above, with an optional {@code :authority} (<jk>null</jk> omits it) and an optional literal {@code host} field. */
+	private static H2Response h2cPost(App a, String authority, String host, String origin, String token) throws Exception {
 		var out = new ByteArrayOutputStream();
 		out.write("PRI * HTTP/2.0\r\n\r\nSM\r\n\r\n".getBytes(StandardCharsets.US_ASCII));
 		out.write(frame(0x4, 0, 0, new byte[0]));
@@ -320,7 +455,10 @@ class CsrfBoundary_JettyIT extends TestBase {
 		h.write(0x83);                                 // :method POST
 		h.write(0x86);                                 // :scheme http
 		indexedName(h, 4, "/write");                   // :path
-		indexedName(h, 1, authority);                  // :authority
+		if (authority != null)
+			indexedName(h, 1, authority);              // :authority
+		if (host != null)
+			literal(h, "host", host);
 		literal(h, "origin", origin);
 		literal(h, "content-type", JSON);
 		literal(h, LoopbackBoundary.DEFAULT_CSRF_HEADER.toLowerCase(), token);
@@ -347,7 +485,17 @@ class CsrfBoundary_JettyIT extends TestBase {
 		}
 	}
 
-	private static byte[] frame(int type, int flags, int stream, byte[] payload) {
+	/** Writes raw bytes to the server's socket and returns everything it sends back until it closes. */
+	private static String rawHttp(App a, String request) throws Exception {
+		try (var socket = new Socket("127.0.0.1", a.port())) {
+			socket.setSoTimeout(10_000);
+			socket.getOutputStream().write(request.getBytes(StandardCharsets.US_ASCII));
+			socket.getOutputStream().flush();
+			return new String(socket.getInputStream().readAllBytes(), StandardCharsets.ISO_8859_1);
+		}
+	}
+
+	static byte[] frame(int type, int flags, int stream, byte[] payload) {
 		var b = ByteBuffer.allocate(9 + payload.length);
 		b.put((byte)(payload.length >> 16)).put((byte)(payload.length >> 8)).put((byte)payload.length);
 		b.put((byte)type).put((byte)flags).putInt(stream).put(payload);
@@ -355,20 +503,20 @@ class CsrfBoundary_JettyIT extends TestBase {
 	}
 
 	/** A literal field without indexing whose name is a static-table entry. */
-	private static void indexedName(ByteArrayOutputStream h, int index, String value) throws IOException {
+	static void indexedName(ByteArrayOutputStream h, int index, String value) throws IOException {
 		h.write(index);
 		string(h, value);
 	}
 
 	/** A literal field without indexing and with a new name. */
-	private static void literal(ByteArrayOutputStream h, String name, String value) throws IOException {
+	static void literal(ByteArrayOutputStream h, String name, String value) throws IOException {
 		h.write(0);
 		string(h, name);
 		string(h, value);
 	}
 
 	/** A string literal without Huffman coding: a 7-bit-prefix length, then the octets. */
-	private static void string(ByteArrayOutputStream h, String value) throws IOException {
+	static void string(ByteArrayOutputStream h, String value) throws IOException {
 		var v = value.getBytes(StandardCharsets.US_ASCII);
 		if (v.length < 127) {
 			h.write(v.length);

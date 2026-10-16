@@ -1005,6 +1005,11 @@
 	 * input path: {publish(payload), onConnected(fn) -> off?}.  The input toggle appears only with input, inputId and a
 	 * link.  {@code nudgeLink}, optional, is {onConnected(fn) -> off?}: the state of the bus link that carries nudges, which
 	 * the card routes to the engine through {@code roles.nudge}.  Returns a cleanup that stops polling and removes the region.
+	 *
+	 * A page that mounts directly, without a card, delivers its own nudges through {@code nudge(payload)}: it is on the
+	 * handle {@code JuneauTerminal.handle(opts.id)} returns, and on the returned cleanup function for a mount without an id.
+	 * It takes the payload of a {@code term.nudge:<id>} bus message, {end, done?}, and behaves as the card's nudge role does:
+	 * a nudge at or behind the bytes already read is ignored, and one after cleanup does nothing.
 	 */
 	function mount(host, opts, link, nudgeLink) {
 		const doc = host.ownerDocument;
@@ -1216,14 +1221,14 @@
 		engine.start();
 		onHash();
 
-		const handle = Object.freeze({ scrollToOffset: engine.scrollToOffset });
+		const handle = Object.freeze({ scrollToOffset: engine.scrollToOffset, nudge: engine.nudge });
 		if (isStr(opts.id) && opts.id) {
 			HANDLES.set(opts.id, handle);
 			if (input)
 				INPUTS.set(opts.id, input);
 		}
 
-		return function cleanup() {
+		function cleanup() {
 			if (HANDLES.get(opts.id) === handle)
 				HANDLES.delete(opts.id);
 			if (input) {
@@ -1246,10 +1251,12 @@
 				term.dispose();
 			if (root.parentNode)
 				root.parentNode.removeChild(root);
-		};
+		}
+		cleanup.nudge = engine.nudge;
+		return cleanup;
 	}
 
-	/** Card id -> the {scrollToOffset} handle of the terminal currently mounted for it. */
+	/** Card id -> the {scrollToOffset, nudge} handle of the terminal currently mounted for it. */
 	const HANDLES = new Map();
 
 	/** Card id -> the input state machine of the terminal currently mounted for it, when that card takes input. */

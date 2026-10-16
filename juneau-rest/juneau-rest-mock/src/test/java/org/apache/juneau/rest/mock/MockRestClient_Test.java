@@ -83,6 +83,20 @@ class MockRestClient_Test {
 		}
 	}
 
+	@Rest(path="/stateful")
+	public static class StatefulResource {
+		private final String name;
+
+		public StatefulResource(String name) {
+			this.name = name;
+		}
+
+		@RestGet
+		public String get() {
+			return name;
+		}
+	}
+
 	// Used only with instances (not by class) to cover the isClass=false branch in MockRestClient.Builder.build()
 	@Rest
 	public static class InstanceOnlyResource {
@@ -303,6 +317,20 @@ class MockRestClient_Test {
 				assertEquals(204, response.getStatusCode());
 				// Body is null for 204 No Content
 				assertNull(response.getBodyAsString());
+			}
+		}
+	}
+
+	@Test
+	void e05_createWithInstance_eachInstanceKeepsOwnState() throws Exception {
+		var a = new StatefulResource("alpha");
+		var b = new StatefulResource("beta");
+		try (var clientA = MockRestClient.create(a); var clientB = MockRestClient.create(b)) {
+			try (var response = clientA.get("/").run()) {
+				assertEquals("alpha", response.getBodyAsString());
+			}
+			try (var response = clientB.get("/").run()) {
+				assertEquals("beta", response.getBodyAsString());
 			}
 		}
 	}

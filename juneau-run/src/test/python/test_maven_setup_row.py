@@ -175,7 +175,91 @@ class SetupRowTest(unittest.TestCase):
         b.apply("module_tested", dict(step="mvn", module="mvn/a"))
         b.apply("module_tested", dict(step="mvn", module="mvn/b"))
         r = b.rows["mvn"]
-        self.assertEqual((r.units_done, r.unit_cells[0], r.unit_cells[1]), (2, jr.UNIT_FAIL, jr.UNIT_SKIP))
+        # mvn/b ran no tests: it leaves the bar and the total instead of drawing a skip cell
+        self.assertEqual((r.units_done, r.units_total, r.unit_cells[0]), (1, 2, jr.UNIT_FAIL))
+        self.assertEqual(r.units_dropped, 1)
+
+    def mk_tests_board(self, total=4):
+        b, _ = self.board(poms=0, total=total)
+        b.apply("reactor", dict(step="mvn", size=total, poms=[], tests=True))
+        return b, b.rows["mvn"]
+
+    def bar(self, r, glyphs=None):
+        return "".join(jr.unit_bar(r.unit_view(), r.units_total, jr.BAR_CELLS, glyphs or jr.PLAIN_GLYPHS))
+
+    def test_a_module_that_ran_no_tests_is_dropped_from_the_bar_and_the_total(self):
+        b, r = self.mk_tests_board(4)
+        self.assertEqual(self.bar(r), jr.PENDING * 4)
+        for m in ("a", "b"):                    # upstream modules from --also-make: compile only, no tests
+            b.apply("module_start", dict(step="mvn", module=f"mvn/{m}", title=m))
+            b.apply("module_tested", dict(step="mvn", module=f"mvn/{m}"))
+            b.apply("module_end", dict(step="mvn", module=f"mvn/{m}", status="ok", ms=1, totals=None))
+        self.assertEqual((r.units_done, r.units_total, r.units_dropped), (0, 2, 2))    # N shrinks as they drop out
+        self.assertEqual(self.bar(r), jr.PENDING * 2)
+        b.apply("module_start", dict(step="mvn", module="mvn/c", title="c"))
+        b.apply("class_done", dict(step="mvn", module="mvn/c", outcome="pass"))
+        b.apply("module_tested", dict(step="mvn", module="mvn/c"))
+        b.apply("module_end", dict(step="mvn", module="mvn/c", status="ok", ms=1, totals=(1, 0, 0, 0)))
+        self.assertEqual((r.units_done, r.units_total), (1, 2))
+        self.assertEqual(self.bar(r), "#" + jr.PENDING)
+        _, rest, _ = jr.row_cells(r, jr.PLAIN_GLYPHS, 100.0, False)
+        self.assertIn("1/2", rest)
+
+    def test_a_dropped_module_survives_a_reactor_resend(self):
+        b, r = self.mk_tests_board(4)
+        b.apply("module_start", dict(step="mvn", module="mvn/a", title="a"))
+        b.apply("module_tested", dict(step="mvn", module="mvn/a"))
+        b.apply("reactor", dict(step="mvn", size=4, poms=[], tests=True))
+        self.assertEqual(r.units_total, 3)
+
+    def test_a_module_whose_tests_were_all_skipped_still_shows_skip(self):
+        b, r = self.mk_tests_board(2)
+        b.apply("module_start", dict(step="mvn", module="mvn/a", title="a"))
+        b.apply("class_done", dict(step="mvn", module="mvn/a", outcome="skip"))
+        b.apply("module_tested", dict(step="mvn", module="mvn/a"))
+        b.apply("module_end", dict(step="mvn", module="mvn/a", status="ok", ms=1, totals=(2, 0, 0, 2)))
+        self.assertEqual((r.units_done, r.units_total), (1, 2))
+        self.assertEqual(self.bar(r), "." + jr.PENDING)         # skip, not dropped
+
+    def test_a_dropped_module_that_fails_counts_after_all(self):
+        b, r = self.mk_tests_board(2)
+        b.apply("module_start", dict(step="mvn", module="mvn/a", title="a"))
+        b.apply("module_tested", dict(step="mvn", module="mvn/a"))
+        b.apply("module_end", dict(step="mvn", module="mvn/a", status="fail", ms=1, totals=None))
+        self.assertEqual((r.units_done, r.units_total, r.units_dropped), (1, 2, 0))
+        self.assertEqual(self.bar(r), "F" + jr.PENDING)
+
+    def test_compile_rows_still_count_every_module(self):
+        b, _ = self.board(poms=0, total=3)
+        r = b.rows["mvn"]
+        b.apply("module_start", dict(step="mvn", module="mvn/a", title="a"))
+        b.apply("module_end", dict(step="mvn", module="mvn/a", status="ok", ms=1, totals=None))
+        self.assertEqual((r.units_done, r.units_total, r.units_dropped), (1, 3, 0))
+
+    def test_started_modules_are_in_flight_until_they_end(self):
+        b, r = self.mk_tests_board(5)
+        for m in ("a", "b"):
+            b.apply("module_start", dict(step="mvn", module=f"mvn/{m}", title=m))
+        self.assertEqual(self.bar(r), "~~" + jr.PENDING * 3)
+        self.assertEqual(self.bar(r, jr.NO_COLOR_GLYPHS), "▒▒" + jr.PENDING * 3)
+        self.assertEqual(self.bar(r, jr.COLOR_GLYPHS), "\x1b[33m█\x1b[0m" * 2 + jr.PENDING * 3)
+        b.apply("class_done", dict(step="mvn", module="mvn/a", outcome="pass"))
+        b.apply("module_tested", dict(step="mvn", module="mvn/a"))
+        self.assertEqual(self.bar(r), "#~" + jr.PENDING * 3)        # a finished (counted), b still running
+        b.apply("module_end", dict(step="mvn", module="mvn/a", status="ok", ms=1, totals=(1, 0, 0, 0)))
+        b.apply("step_end", dict(id="mvn", status="ok", ms=2000, exit=0, summary=None, totals=None))
+        self.assertNotIn("~", self.bar(r))                           # a finished row shows no in-flight cells
+
+    def test_a_modules_bar_without_module_start_never_shows_in_flight(self):
+        b, r = self.mk_tests_board(3)
+        b.apply("class_done", dict(step="mvn", module="mvn/a", outcome="pass"))    # no module_start: no signal
+        self.assertEqual(self.bar(r), jr.PENDING * 3)
+
+    def test_in_flight_loses_to_a_failure_in_a_bucket(self):
+        cells = bytearray([jr.UNIT_FAIL, jr.UNIT_RUN])
+        self.assertEqual("".join(jr.unit_bar(cells, 2, 1, jr.PLAIN_GLYPHS)), "F")
+        cells = bytearray([jr.UNIT_PASS, jr.UNIT_RUN])
+        self.assertEqual("".join(jr.unit_bar(cells, 2, 1, jr.PLAIN_GLYPHS)), "~")
 
     def test_a_pom_box_turns_green_when_it_starts(self):
         b, ids = self.board(poms=3, total=5)
@@ -284,8 +368,7 @@ class MavenBoardGoldenTest(unittest.TestCase):
 
     def test_parallel_build_progresses_before_the_reactor_summary(self):
         board, r, seen = self.run_fixture("maven-parallel-success.log", ("test", "-T", "2"), True)
-        self.assertEqual(r.units_total, 3)
-        self.assertEqual(r.units_done, 3)                     # the bar ends full
+        self.assertEqual((r.units_total, r.units_done), (2, 2))    # the bar ends full; one module ran no tests
         summary_at = next(i for i, e in enumerate(seen) if e[0] == "sub_end" and e[3] != "mvn/demo-parent")
         before = max(e[1] for e in seen[:summary_at])
         self.assertGreater(before, 0)                         # intermediate progress, ahead of the first module_end
@@ -315,8 +398,9 @@ class MavenBoardGoldenTest(unittest.TestCase):
         r = board.rows["mvn"]
         self.assertEqual(len(members), 96)
         self.assertEqual(len(pom_titles), 16)
-        self.assertEqual((r.units_total, r.unit_kind), (80, "modules"))      # 96 modules less 16 poms
-        self.assertEqual(r.units_done, 80)
+        # 96 modules less 16 poms is 80, but only juneau-commons ran tests: the other 79 dropped out of the bar
+        self.assertEqual((r.units_total, r.unit_kind, r.units_dropped), (1, "modules", 79))
+        self.assertEqual(r.units_done, 1)
         self.assertEqual((board.setup.total, board.setup.done, jr.setup_text(board.setup)), (16, 16, "16 pom modules"))
         first_end = next(i for i, e in enumerate(seen) if e[0] == "sub_end")
         self.assertGreater(max(e[1] for e in seen[:first_end]), 0)

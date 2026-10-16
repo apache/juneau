@@ -19,7 +19,7 @@ from test_parsers import feed
 
 
 class BucketTest(unittest.TestCase):
-    GL = {"pass": "P", "fail": "F", "skip": "S"}
+    GL = {"pass": "P", "fail": "F", "skip": "S", "run": "R"}
 
     def cells(self, outcomes, total, width=jr.BAR_CELLS):
         return "".join(jr.unit_bar(bytearray(outcomes), total, width, self.GL))
@@ -30,6 +30,13 @@ class BucketTest(unittest.TestCase):
     def test_bucket_worst_wins_fail_over_pass_over_skip(self):
         out = [1] * 4 + [1, 2, 1, 1] + [3, 3, 1, 3] + [3, 3, 3, 3]   # 16 units, width 4 -> 4 per bucket
         self.assertEqual(self.cells(out, 16, 4), "PFPS")
+
+    def test_bucket_precedence_is_fail_then_in_flight_then_pass_then_skip_then_pending(self):
+        run = jr.UNIT_RUN
+        # 4 per bucket: fail beats in-flight, in-flight beats pass, pass beats skip, skip beats pending
+        out = [1, 2, run, 0] + [1, run, 1, 1] + [3, 1, 3, 3] + [3, 3, 0, 0]
+        self.assertEqual(self.cells(out, 16, 4), "FRPS")
+        self.assertEqual(self.cells([run, 0, 0, 0], 4, 4), "R" + jr.PENDING * 3)   # one cell per unit: in-flight alone
 
     def test_unfinished_bucket_is_pending(self):
         self.assertEqual(self.cells([1] * 4, 16, 4), "P" + jr.PENDING * 3)
@@ -61,7 +68,7 @@ class BucketTest(unittest.TestCase):
 
 
 class BoardUnitsTest(unittest.TestCase):
-    GL = {"pass": "P", "fail": "F", "skip": "S"}
+    GL = {"pass": "P", "fail": "F", "skip": "S", "run": "R"}
 
     def setUp(self):
         reset_run_state()

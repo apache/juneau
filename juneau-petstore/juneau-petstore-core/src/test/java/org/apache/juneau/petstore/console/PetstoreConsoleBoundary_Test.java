@@ -302,13 +302,14 @@ class PetstoreConsoleBoundary_Test extends TestBase {
 	}
 
 	@Test void g08_effectiveMethod() {
-		assertString("POST", PetstoreConsoleBoundary.effectiveMethod("POST", "method=GET", h -> null));
-		assertString("GET", PetstoreConsoleBoundary.effectiveMethod("GET", null, h -> null));
-		assertString("GET", PetstoreConsoleBoundary.effectiveMethod("GET", "method=&methods=DELETE", h -> " "));
-		assertString("DELETE", PetstoreConsoleBoundary.effectiveMethod("GET", "method=options&method=delete", h -> null));
-		assertString("PUT", PetstoreConsoleBoundary.effectiveMethod("GET", "method=get", h -> h.equals("X-HTTP-Method") ? "put" : null));
-		assertString("%ZZ", PetstoreConsoleBoundary.effectiveMethod("GET", "method=%ZZ", h -> null));  // undecodable, so unknown, so unsafe
-		assertString("PATCH", PetstoreConsoleBoundary.effectiveMethod("HEAD", null, h -> h.equals("X-Method-Override") ? "patch" : null));
+		assertString("POST", org.apache.juneau.rest.server.MethodSafety.effectiveMethod("POST", "method=GET", h -> null));
+		assertString("GET", org.apache.juneau.rest.server.MethodSafety.effectiveMethod("GET", null, h -> null));
+		assertString("GET", org.apache.juneau.rest.server.MethodSafety.effectiveMethod("GET", "method=&methods=DELETE", h -> " "));
+		assertString("DELETE", org.apache.juneau.rest.server.MethodSafety.effectiveMethod("GET", "method=options&method=delete", h -> null));
+		assertString("PUT", org.apache.juneau.rest.server.MethodSafety.effectiveMethod("GET", "method=get", h -> h.equals("X-HTTP-Method") ? "put" : null));
+		assertString("%ZZ", org.apache.juneau.rest.server.MethodSafety.effectiveMethod("GET", "method=%ZZ", h -> null));  // undecodable, so unknown, so unsafe
+		assertString("PATCH", org.apache.juneau.rest.server.MethodSafety.effectiveMethod("HEAD", null, h -> h.equals("X-Method-Override") ? "patch" : null));
+		assertString("POST", org.apache.juneau.rest.server.MethodSafety.effectiveMethod("post", null, h -> null));  // the shared helper upper-cases the request line too
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

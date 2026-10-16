@@ -88,7 +88,8 @@ public final class MockRestClient implements Closeable {
 	 * Creates an {@link MockRestClient} backed by the given REST bean or bean class.
 	 *
 	 * <p>
-	 * {@link RestContext} instances are cached per class for performance.
+	 * {@link RestContext} instances are cached per class for performance when a {@link Class} is passed;
+	 * a supplied bean instance always gets its own context.
 	 *
 	 * @param impl
 	 * 	The REST bean or bean class annotated with {@link Rest @Rest}.
@@ -300,19 +301,18 @@ public final class MockRestClient implements Closeable {
 		})
 		public MockRestClient build() {
 			try {
-				var c = impl instanceof Class<?> c2 ? c2 : impl.getClass();
+				var isClass = impl instanceof Class<?>;
 				var overlay = overridingBeanStore;
-				RestContext restContext;
-				if (overlay == null && restContextCache.containsKey(c)) {
-					restContext = restContextCache.get(c);
-				} else {
-					var isClass = impl instanceof Class<?>;
+				// Only class-based contexts are cached; a caller-supplied instance always gets its own context.
+				var cacheable = isClass && overlay == null;
+				RestContext restContext = cacheable ? restContextCache.get((Class<?>)impl) : null;
+				if (restContext == null) {
 					var o = isClass ? ((Class<?>)impl).getDeclaredConstructor().newInstance() : impl;
 					restContext = new RestContext(new RestContext.Args(o.getClass(), null, null, () -> o, "", bs -> {
 						bs.addBeanType(RestDebugFormatter.class, BasicTestRestDebugFormatter.class);
 					}, overlay, null, RestContext.ContextKind.ROOT)).postInit().postInitChildFirst();
-					if (overlay == null)
-						restContextCache.put(c, restContext);
+					if (cacheable)
+						restContextCache.put((Class<?>)impl, restContext);
 				}
 
 				var servletPath = toValidContextPath(restContext.getFullPath());

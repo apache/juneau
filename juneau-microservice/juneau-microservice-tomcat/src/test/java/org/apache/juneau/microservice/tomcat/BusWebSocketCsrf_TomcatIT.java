@@ -127,6 +127,7 @@ class BusWebSocketCsrf_TomcatIT extends TestBase {
 		var c = tomcat.getConnector();
 		c.setPort(0);
 		c.setProperty("address", "127.0.0.1");
+		c.addUpgradeProtocol(new org.apache.coyote.http2.Http2Protocol());
 		tomcat.getHost().setAppBase(base.toString());
 		if (valve) {
 			var v = new RemoteIpValve();
@@ -394,5 +395,97 @@ class BusWebSocketCsrf_TomcatIT extends TestBase {
 		assertEquals("ws://127.0.0.1:" + valvedPort + "/probe Host=[127.0.0.1:" + valvedPort + "]", probe(valvedPort), "(c)");
 		assertEquals("ws://127.0.0.1:" + plainPort + "/probe Host=[127.0.0.1:" + plainPort + "]", probe(plainPort, "X-Forwarded-Proto", "https"), "(d)");
 		assertEquals("ws://evil.example:" + hostValvedPort + "/probe Host=[127.0.0.1:" + hostValvedPort + "]", probe(hostValvedPort, "X-Forwarded-Host", "evil.example"), "(e)");
+	}
+
+	/** What an h2c connection did with an RFC 8441 extended CONNECT: the SETTINGS it sent and how the stream ended. */
+	record Ext(boolean settingsSeen, boolean connectProtocolAdvertised, String frames) {}
+
+	private static void field(ByteArrayOutputStream h, String name, String value) throws IOException {
+		h.write(0);
+		str(h, name);
+		str(h, value);
+	}
+
+	private static void str(ByteArrayOutputStream h, String value) throws IOException {
+		var v = value.getBytes(StandardCharsets.US_ASCII);
+		h.write(v.length);
+		h.write(v);
+	}
+
+	private static byte[] frame(int type, int flags, int stream, byte[] payload) {
+		var b = java.nio.ByteBuffer.allocate(9 + payload.length);
+		b.put((byte)(payload.length >> 16)).put((byte)(payload.length >> 8)).put((byte)payload.length);
+		b.put((byte)type).put((byte)flags).putInt(stream).put(payload);
+		return b.array();
+	}
+
+	/**
+	 * Sends a hand-encoded extended CONNECT over prior-knowledge h2c and reads until the stream is reset or the
+	 * connection ends or goes quiet.  The frame types seen are returned for the record.
+	 */
+	private static Ext extendedConnect(int port, String path) throws Exception {
+		var out = new ByteArrayOutputStream();
+		out.write("PRI * HTTP/2.0\r\n\r\nSM\r\n\r\n".getBytes(StandardCharsets.US_ASCII));
+		out.write(frame(0x4, 0, 0, new byte[0]));
+		var h = new ByteArrayOutputStream();
+		h.write(2);                                    // :method, name from the static table
+		str(h, "CONNECT");
+		field(h, ":protocol", "websocket");
+		h.write(0x86);                                 // :scheme http
+		h.write(4);                                    // :path
+		str(h, path);
+		h.write(1);                                    // :authority
+		str(h, "127.0.0.1:" + port);
+		field(h, "origin", origin(port));
+		field(h, "sec-websocket-version", "13");
+		out.write(frame(0x1, 0x4, 1, h.toByteArray()));
+
+		var seen = new StringBuilder();
+		var settings = false;
+		var advertised = false;
+		try (var socket = new Socket("127.0.0.1", port)) {
+			socket.setSoTimeout(3_000);
+			socket.getOutputStream().write(out.toByteArray());
+			socket.getOutputStream().flush();
+			var in = new DataInputStream(socket.getInputStream());
+			try {
+				for (;;) {
+					var head = new byte[9];
+					in.readFully(head);
+					var len = ((head[0] & 0xFF) << 16) | ((head[1] & 0xFF) << 8) | (head[2] & 0xFF);
+					var payload = new byte[len];
+					in.readFully(payload);
+					seen.append(String.format("%02x ", head[3]));
+					if (head[3] == 0x4 && (head[4] & 0x1) == 0) {
+						settings = true;
+						for (var i = 0; i + 6 <= len; i += 6)
+							if ((((payload[i] & 0xFF) << 8) | (payload[i + 1] & 0xFF)) == 0x8 && payload[i + 5] == 1)
+								advertised = true;
+						socket.getOutputStream().write(frame(0x4, 0x1, 0, new byte[0]));
+						socket.getOutputStream().flush();
+					}
+					if (head[3] == 0x3 || head[3] == 0x7)
+						break;
+				}
+			} catch (EOFException | SocketTimeoutException e) {
+				seen.append(e instanceof EOFException ? "eof" : "quiet");
+			}
+		}
+		return new Ext(settings, advertised, seen.toString().trim());
+	}
+
+	/**
+	 * Tomcat 11 has no RFC 8441 support: it does not advertise {@code SETTINGS_ENABLE_CONNECT_PROTOCOL}, and an extended
+	 * CONNECT never reaches a WebSocket endpoint, so there is no HTTP/2 handshake for the boundary to judge.
+	 */
+	@Test void h01_tomcatHasNoExtendedConnect() throws Exception {
+		var path = openSession(HttpClient.newHttpClient());
+		PROBED.clear();
+		var res = extendedConnect(plainPort, "/probe");
+		var real = extendedConnect(plainPort, path);
+		assertTrue(res.settingsSeen(), res::toString);
+		assertFalse(res.connectProtocolAdvertised(), res::toString);
+		assertFalse(real.connectProtocolAdvertised(), real::toString);
+		assertNull(PROBED.poll(1, TimeUnit.SECONDS), "an extended CONNECT reached the configurator");
 	}
 }

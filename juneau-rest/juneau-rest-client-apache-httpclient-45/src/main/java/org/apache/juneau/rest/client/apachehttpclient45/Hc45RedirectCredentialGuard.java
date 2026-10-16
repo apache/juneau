@@ -88,24 +88,40 @@ final class Hc45RedirectCredentialGuard implements HttpRequestInterceptor {
 	 * Per-request context that applies the guard to a caller-supplied client without changing that client.
 	 *
 	 * <p>
-	 * HttpClient's protocol stage records each new hop in the context (its target host, then the request) before it
+	 * HttpClient's protocol stage records each pass over a hop in the context (its target host, then the request) before it
 	 * runs the client's own request interceptors, so this context strips the credential headers at that point.  The
 	 * headers on a redirect hop at that point are the ones the redirect executor copied from the original request, which
 	 * are the caller's.  The client's interceptors and authenticator run afterwards, so a {@code Cookie} from the client's
 	 * {@code CookieStore} and an {@code Authorization} from its {@code CredentialsProvider} are still sent to the new
-	 * origin.  Each request object is inspected only the first time it is recorded, because HttpClient records it again
-	 * just before sending it, after those headers were added; a {@code CONNECT} tunnel request carries no caller headers.
+	 * origin.
+	 *
+	 * <p>
+	 * A hop can be passed more than once: HttpClient's retry executors ({@code RetryExec} after an I/O failure,
+	 * {@code ServiceUnavailableRetryExec} after a 503) restore the headers they captured <em>before</em> the protocol stage
+	 * ran -- the caller's -- and run the protocol stage again on the same request object.  So the guard must run on every
+	 * pass, not once per request object.  A pass is recognised by the protocol stage setting the target host immediately
+	 * before the request; the {@code MainClientExec} sets the request again just before sending (and for each auth
+	 * challenge round), after the client's interceptors added their headers, and that one must not be stripped.  A
+	 * {@code CONNECT} tunnel request carries no caller headers.
+	 *
+	 * <p>
+	 * Headers the caller's client adds itself, such as {@code setDefaultHeaders(...)}, are client configuration rather than
+	 * caller-set request headers and are deliberately left alone, like the cookie store and credentials provider.
 	 */
 	private static final class GuardingContext extends HttpClientContext {
 
 		private final Hc45RedirectCredentialGuard guard = new Hc45RedirectCredentialGuard();
-		private final Set<HttpRequest> seen = Collections.newSetFromMap(new IdentityHashMap<>());
+		private boolean protocolPass;
 
 		@Override /* HttpCoreContext */
 		public void setAttribute(String id, Object obj) {
 			super.setAttribute(id, obj);
-			if (HttpCoreContext.HTTP_REQUEST.equals(id) && obj instanceof HttpRequest request && seen.add(request))
+			if (HttpCoreContext.HTTP_TARGET_HOST.equals(id))
+				protocolPass = true;
+			else if (HttpCoreContext.HTTP_REQUEST.equals(id) && protocolPass && obj instanceof HttpRequest request) {
+				protocolPass = false;
 				guard.process(request, this);
+			}
 		}
 	}
 

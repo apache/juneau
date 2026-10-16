@@ -3990,7 +3990,7 @@ public class RestContext extends Context {
 	 * </ul>
 	 *
 	 * @return
-	 * 	The method names allowed to be passed as <c>X-Method</c> headers.
+	 * 	The method names allowed to be passed as <c>X-Method</c>, <c>X-HTTP-Method-Override</c>, <c>X-HTTP-Method</c> or <c>X-Method-Override</c> headers.
 	 * 	<br>The set is case-insensitive ordered and unmodifiable.
 	 */
 	public Set<String> getAllowedMethodHeaders() { return allowedMethodHeaders.get(); }

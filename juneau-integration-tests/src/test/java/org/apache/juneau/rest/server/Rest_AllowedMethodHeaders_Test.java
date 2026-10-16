@@ -128,4 +128,38 @@ class Rest_AllowedMethodHeaders_Test extends TestBase {
 		a8.put("/", "").header("X-Method", "GET").run().assertContent("PUT");
 		a8.request("get","/").header("X-Method","FOO").run().assertContent("GET");
 	}
+
+	@Test void c02_otherOverrideHeaders() throws Exception {
+		// The same rows as c01, for each header dispatch honours besides X-Method; they share one allow-list.
+		for (var h : MethodSafety.overrideHeaders()) {
+			var a1 = MockRestClient.build(A1.class);
+			a1.get("/").header(h, "PUT").run().assertContent("GET");
+
+			var a2 = MockRestClient.build(A2.class);
+			a2.get("/").header(h, "PUT").run().assertContent("GET");
+			a2.put("/", "").header(h, "GET").run().assertContent("GET");
+
+			var a4 = MockRestClient.build(A4.class);
+			a4.put("/", "").header(h, "GET").run().assertContent("PUT");
+			a4.request("get","/").header(h, "FOO").run().assertContent("FOO");
+
+			var a5 = MockRestClient.build(A5.class);
+			a5.get("/").header(h, "PUT").run().assertContent("PUT");
+			a5.put("/", "").header(h, "GET").run().assertContent("GET");
+			a5.get("/").header(h.toLowerCase(), "foo").run().assertContent("FOO");
+
+			var a6 = MockRestClient.build(A6.class);
+			a6.get("/").header(h, "PUT").run().assertContent("GET");
+			a6.request("get","/").header(h, "FOO").run().assertContent("GET");
+
+			var a8 = MockRestClient.build(A8.class);
+			a8.get("/").header(h, "PUT").run().assertContent("GET");
+		}
+	}
+
+	@Test void c03_conflictingOverrideHeaders_400() throws Exception {
+		var a5 = MockRestClient.create(A5.class).ignoreErrors().build();
+		a5.get("/").header("X-Method", "PUT").header("X-HTTP-Method-Override", "FOO").run().assertStatus(400);
+		a5.get("/").header("X-Method", "PUT").header("X-Method-Override", "put").run().assertContent("PUT");
+	}
 }

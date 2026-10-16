@@ -80,6 +80,27 @@ class MockRestClient_Coverage_Test extends TestBase {
 			.assertContent("ok-b");
 	}
 
+	@Rest
+	public static class Named {
+		private final String name;
+
+		public Named(String name) {
+			this.name = name;
+		}
+
+		@RestGet
+		public String get() {
+			return name;
+		}
+	}
+
+	@Test void a00b_createWithInstance_eachInstanceKeepsOwnState() throws Exception {
+		var a = MockRestClient.create(new Named("alpha")).build();
+		var b = MockRestClient.create(new Named("beta")).build();
+		a.get("/").run().assertStatus(200).assertContent("alpha");
+		b.get("/").run().assertStatus(200).assertContent("beta");
+	}
+
 	//------------------------------------------------------------------------------------------------------------------
 	// getCurrentXxx() methods - returns values during request execution
 	//------------------------------------------------------------------------------------------------------------------

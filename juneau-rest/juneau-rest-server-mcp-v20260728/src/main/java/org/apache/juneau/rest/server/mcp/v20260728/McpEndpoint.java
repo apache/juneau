@@ -141,7 +141,7 @@ public interface McpEndpoint extends org.apache.juneau.rest.server.mcp.McpEndpoi
 	 * the MCP dispatch <i>operation</i> (identified by resolved-operation identity, or by that operation's own router
 	 * matchers &mdash; see {@link McpResourceServerSupport#resolvesToMcpDispatch}) so other {@code POST} operations on the
 	 * host resource are unaffected, and it cannot drift from the router: a trailing slash, percent-encoding, a
-	 * {@code ?method=}/{@code X-Method} override, or a host-chosen {@code @Mixin(path/paths)} re-mount cannot slip past it
+	 * {@code POST} claim on any override channel ({@code ?method=} or an override header), or a host-chosen {@code @Mixin(path/paths)} re-mount cannot slip past it
 	 *.  The well-known {@code GET} routes are left unauthenticated for PRM discovery.
 	 *
 	 * @param ctx The host {@link org.apache.juneau.rest.server.RestContext} handling this request.

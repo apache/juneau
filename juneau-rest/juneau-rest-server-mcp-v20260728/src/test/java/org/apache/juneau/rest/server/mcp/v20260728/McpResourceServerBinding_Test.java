@@ -605,11 +605,21 @@ class McpResourceServerBinding_Test extends TestBase {
 	}
 
 	@Test void f02_methodHeaderOverride_gated() throws Exception {
+		for (var h : org.apache.juneau.rest.server.MethodSafety.overrideHeaders())
+			clientF().get("/")
+				.header(h, "POST")
+				.run()
+				.assertStatus(401)
+				.assertHeader("WWW-Authenticate").is("Bearer realm=\"mcp\", scope=\"mcp.read\", resource_metadata=\"" + PRM_URL + "\"");
+	}
+
+	@Test void f03_conflictingOverrides_challengedNotRefused() throws Exception {
+		// The gate runs before dispatch, so a conflicting request where any claim is POST gets the 401 challenge, not the 400.
 		clientF().get("/")
 			.header("X-Method", "POST")
+			.header("X-HTTP-Method-Override", "DELETE")
 			.run()
-			.assertStatus(401)
-			.assertHeader("WWW-Authenticate").is("Bearer realm=\"mcp\", scope=\"mcp.read\", resource_metadata=\"" + PRM_URL + "\"");
+			.assertStatus(401);
 	}
 
 	// ---------------------------------------------------------------------------------------------

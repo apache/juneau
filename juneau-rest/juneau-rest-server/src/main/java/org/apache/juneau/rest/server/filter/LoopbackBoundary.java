@@ -51,7 +51,7 @@ import jakarta.servlet.http.*;
  * 	<tr><th>Check</th><th>Applies to</th><th>Rule</th><th>Rejection</th></tr>
  * 	<tr>
  * 		<td>{@code Host}</td><td><b>every</b> request</td>
- * 		<td>equals the configured authority exactly</td>
+ * 		<td>equals the configured authority exactly (over HTTP/2, the {@code :authority}; see below)</td>
  * 		<td>421 Misdirected Request</td>
  * 	</tr>
  * 	<tr>
@@ -81,6 +81,21 @@ import jakarta.servlet.http.*;
  * ({@link MethodSafety#effectiveMethod(String, String, java.util.function.UnaryOperator)}): a {@code GET} carrying
  * {@code ?method=DELETE} or an {@code X-HTTP-Method-Override: PUT} header takes the write checks, whether or not the
  * resource it reaches would honour the override.
+ *
+ * <h5 class='section'>HTTP/2</h5>
+ * <p>
+ * An HTTP/2 request has no {@code Host} header; the container surfaces its {@code :authority} only as
+ * {@link HttpServletRequest#getServerName()} and {@link HttpServletRequest#getServerPort()}.  A request with no
+ * {@code Host} whose {@link HttpServletRequest#getProtocol()} is exactly {@code HTTP/2.0} is therefore judged on
+ * that server name and port, compared as a parsed host and port (an absent port is {@code 80}) rather than as text.
+ * A request that carries a {@code Host} header is compared as written, as always.  A WebSocket handshake carried over
+ * HTTP/2 (RFC 8441) is judged the same way, on the authority of its request URI, through
+ * {@link #acceptsHandshakeHost(HandshakeHosts, String)}.
+ * <p>
+ * <b>Residual risk.</b>  When an HTTP/2 request names no {@code :authority} at all, containers fill the server name
+ * with their own bound address, which is this boundary's authority when it is bound to loopback.  A browser always
+ * sends {@code :authority}, so only a non-browser client can provoke this, and such a client must still present the
+ * {@code Origin} and token.
  *
  * <h5 class='section'>Why each check is present</h5>
  * <p>
@@ -222,8 +237,12 @@ public class LoopbackBoundary implements RequestBoundary {
 		reqnn("req", req);
 
 		// Host applies to every request; it is the DNS-rebinding check and a read is just as exfiltratable as a write.
+		// A real Host is compared as written.  Only an HTTP/2 request with none (its :authority is the container's server
+		// name and port) takes the parsed comparison.
 		var host = req.getHeader("Host");
-		if (host == null || neqic(host, authority))
+		var hostMatches = host != null ? ! neqic(host, authority)
+			: BoundaryChecks.isSynthesisedHost(req) && matchesAuthority(BoundaryChecks.hostValues(req).get(0), "http");
+		if (! hostMatches)
 			return reject(BoundaryReason.HOST_MISMATCH, 421,
 				"Request 'Host' does not match this server's expected authority '%s'.", authority);
 
@@ -260,6 +279,41 @@ public class LoopbackBoundary implements RequestBoundary {
 				"The CSRF token in the '%s' header is not this server's token.", csrfHeader);
 
 		return BoundaryResult.ALLOWED;
+	}
+
+	/**
+	 * Whether a WebSocket handshake's {@code Host} values match this boundary's authority.
+	 *
+	 * <p>
+	 * A real {@code Host} header is compared as written, ignoring case, first value only: the same rule as
+	 * {@link #check(HttpServletRequest)}.  A value synthesised from an HTTP/2 (RFC 8441) handshake's request URI is
+	 * compared by parsed host and port instead, filling a missing port from the handshake's scheme and the
+	 * authority's from {@code http}, which is this boundary's own scheme.  An authority that does not parse never
+	 * matches.
+	 *
+	 * @param hosts The handshake's {@code Host} values.  Must not be <jk>null</jk>.
+	 * @param scheme The scheme of the handshake's request URI.  Can be <jk>null</jk>, which matches only a value that
+	 * 	carries its own port.
+	 * @return <jk>true</jk> if the handshake is addressed to this boundary's authority.
+	 */
+	public boolean acceptsHandshakeHost(HandshakeHosts hosts, String scheme) {
+		reqnn("hosts", hosts);
+		if (hosts.values().isEmpty())
+			return false;
+		var value = hosts.values().get(0);
+		return hosts.synthesised() ? matchesAuthority(value, BoundaryChecks.handshakeScheme(scheme)) : authority.equalsIgnoreCase(value);
+	}
+
+	/** Whether a synthesised {@code host[:port]} names the configured authority, after filling default ports. */
+	private boolean matchesAuthority(String value, String scheme) {
+		var actual = BoundaryChecks.parseHost(value);
+		var expected = BoundaryChecks.parseHost(authority);
+		if (actual == null || expected == null)
+			return false;
+		// This boundary is plain HTTP: its own origin is "http://" + authority.
+		var actualPort = actual.port() >= 0 ? actual.port() : BoundaryChecks.defaultPort(scheme);
+		var expectedPort = expected.port() >= 0 ? expected.port() : BoundaryChecks.defaultPort("http");
+		return actualPort > 0 && actual.host().equals(expected.host()) && actualPort == expectedPort;
 	}
 
 	/**

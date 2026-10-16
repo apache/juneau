@@ -27,6 +27,7 @@ import java.util.*;
 import org.apache.juneau.http.response.Forbidden;
 import org.apache.juneau.http.response.InternalServerError;
 import org.apache.juneau.http.response.NotFound;
+import org.apache.juneau.rest.server.MethodSafety;
 import org.apache.juneau.rest.server.RestContext;
 import org.apache.juneau.rest.server.RestOpContext;
 import org.apache.juneau.rest.server.RestRequest;
@@ -214,19 +215,34 @@ public final class McpResourceServerSupport {
 	 * Returns whether this request resolves to a {@code POST} once method-override channels are honored.
 	 *
 	 * <p>
-	 * Mirrors {@code RestSession.getMethod()}: an explicit {@code POST}, or a {@code ?method=POST} query parameter, or an
-	 * {@code X-Method: POST} header.  Because a {@code @RestStartCall} hook cannot see the host's
-	 * {@code allowedMethodParams}/{@code allowedMethodHeaders} allow-lists, any override to {@code POST} is treated as a
-	 * {@code POST} &mdash; this is fail-closed: the only cost is that a {@code ?method=POST} aimed at the MCP path on a
+	 * Treats a {@code POST} claim on any override channel as a {@code POST}: the request-line method, any
+	 * {@code ?method=} value, or any value of any of the {@link MethodSafety#overrideHeaders() override headers}, each
+	 * compared after trimming and ignoring case.  Because a {@code @RestStartCall} hook cannot see the host's
+	 * {@code allowedMethodParams}/{@code allowedMethodHeaders} allow-lists, and must not depend on which of several
+	 * conflicting claims dispatch ends up honoring, this is an over-approximation of what {@code RestSession.getMethod()}
+	 * can resolve to &mdash; fail-closed: the only cost is that a {@code POST} claim aimed at the MCP path on a
 	 * host that does <i>not</i> allow overrides is challenged rather than 404'd, which never weakens the gate.
 	 */
 	static boolean isEffectivePost(HttpServletRequest req) {
 		if (eqic("POST", req.getMethod()))
 			return true;
-		var mp = RestUtils.parseQuery(req.getQueryString()).get("method");
-		if (mp != null && !mp.isEmpty() && eqic("POST", mp.get(0)))
+		var q = req.getQueryString();
+		if (MethodSafety.queryClaims(q).stream().anyMatch(McpResourceServerSupport::isPostClaim))
 			return true;
-		return eqic("POST", req.getHeader("X-Method"));
+		var mp = RestUtils.parseQuery(q).get("method");
+		if (mp != null && mp.stream().anyMatch(McpResourceServerSupport::isPostClaim))
+			return true;
+		for (var h : MethodSafety.overrideHeaders()) {
+			var e = req.getHeaders(h);
+			while (e != null && e.hasMoreElements())
+				if (isPostClaim(e.nextElement()))
+					return true;
+		}
+		return false;
+	}
+
+	private static boolean isPostClaim(String claim) {
+		return claim != null && eqic("POST", claim.trim());
 	}
 
 	/**

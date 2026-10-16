@@ -564,6 +564,39 @@ const CASES = [
 		expect(await page.evaluate(function () { return window.__subs.length; }) === 0, 'no bridge subscription');
 		await page.evaluate(function () { window.__h.destroy({ id: 'card1' }, document.getElementById('host')); });
 	}],
+	['b23_directMountNudgeFetchesAtOnce', async function (page) {
+		const n = { f: { log: Buffer.from('hello\r\n'), done: false }, urls: [] };
+		await page.route(ORIGIN + '/**', function (route) {
+			const u = new URL(route.request().url());
+			if (u.pathname === '/t/bytes' && !u.searchParams.has('max'))
+				n.urls.push(u.search);
+			return server(n.f)(route);
+		});
+		await page.goto(ORIGIN + '/page');
+		await page.waitForFunction(function () { return typeof window.Terminal === 'function' && !!window.JuneauTerminal; });
+		// No card, no nudge link: the page mounts directly and nudges through what mount gives back.
+		await page.evaluate(function () {
+			window.__cleanup = window.JuneauTerminal.mount(document.getElementById('host'), { id: 'lane_x', bytesUrl: '/t/bytes', refreshMs: 3000 });
+		});
+		await waitRunning(page, 'host');
+		expect(await page.evaluate(function () { return typeof window.JuneauTerminal.handle('lane_x').nudge; }) === 'function', 'the handle has nudge');
+		expect(await page.evaluate(function () { return window.JuneauTerminal.handle('lane_x').nudge === window.__cleanup.nudge; }), 'the cleanup carries the same nudge, for a mount without an id');
+		const first = n.urls.length;
+		await page.evaluate(function () { window.JuneauTerminal.handle('lane_x').nudge({ end: 7 }); });
+		await sleep(300);
+		expect(n.urls.length === first, 'a nudge at the current offset is ignored: ' + n.urls.slice(first).join(' '));
+		n.f.log = Buffer.concat([n.f.log, Buffer.from('more\r\n')]);
+		await page.evaluate(function () { window.JuneauTerminal.handle('lane_x').nudge({ end: 13 }); });
+		expect(await waitRequest(n, first, 1200) >= 0, 'only the nudge can explain a fetch inside the 3000 ms poll: ' + n.urls.slice(first).join(' '));
+		expect(n.urls[first] === '?from=7', 'resumes from the previous next: ' + n.urls[first]);
+		const after = n.urls.length;
+		await page.evaluate(function () { window.__cleanup.nudge({ end: 999 }); });
+		expect(await waitRequest(n, after, 1200) >= 0, 'the nudge on the returned cleanup works too');
+		await page.evaluate(function () { window.__cleanup(); window.__cleanup.nudge({ end: 9999 }); window.__cleanup.nudge(null); });
+		const done = n.urls.length;
+		await sleep(300);
+		expect(n.urls.length === done, 'a nudge after cleanup is a no-op: ' + n.urls.slice(done).join(' '));
+	}],
 	// HTT: the badge, ok badge, chip and banner must stay legible once the views CSS defines --jc-tone-* (dark inks).
 	['b15_toneBackgroundsStayLegibleWithViewsCss', async function (page) {
 		await page.route(ORIGIN + '/**', server({ log: Buffer.from('x') }));

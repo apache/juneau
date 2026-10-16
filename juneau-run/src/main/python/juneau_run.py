@@ -360,9 +360,11 @@ SESSION_ENV = "JUNEAU_RUN_SESSION"
 LABEL_WIDTH_ENV = "JUNEAU_RUN_LABEL_WIDTH"
 LIVE_ENV = "JUNEAU_RUN_LIVE"
 HEARTBEAT_SECONDS = 15.0
-PLAIN_GLYPHS = {"pass": "#", "fail": "F", "skip": "."}
-NO_COLOR_GLYPHS = {"pass": "█", "fail": "F", "skip": "·"}
-COLOR_GLYPHS = {"pass": "\x1b[32m█\x1b[0m", "fail": "\x1b[31m█\x1b[0m", "skip": "\x1b[2m█\x1b[0m"}
+# "run" is a unit that has started but not ended (distinct from PENDING, which has not started)
+PLAIN_GLYPHS = {"pass": "#", "fail": "F", "skip": ".", "run": "~"}
+NO_COLOR_GLYPHS = {"pass": "█", "fail": "F", "skip": "·", "run": "▒"}
+COLOR_GLYPHS = {"pass": "\x1b[32m█\x1b[0m", "fail": "\x1b[31m█\x1b[0m", "skip": "\x1b[2m█\x1b[0m",
+                "run": "\x1b[33m█\x1b[0m"}
 PENDING = "░"
 DOT_GLYPHS = {"pass": "•", "fail": "F", "skip": "·"}
 COLOR_DOT_GLYPHS = {"pass": "\x1b[32m•\x1b[0m", "fail": "\x1b[31m✗\x1b[0m", "skip": "\x1b[2m•\x1b[0m"}
@@ -482,12 +484,14 @@ def overall_text(o):
 BAR_CELLS = 60      # a unit bar wider than this is bucketed (spec 2)
 
 UNIT_PASS, UNIT_FAIL, UNIT_SKIP = 1, 2, 3     # bytes in a row's unit_cells; 0 is "not finished"
+UNIT_RUN = 4        # only in a view built by _Row.unit_view(), never stored in unit_cells: started, not ended
 
 
 def unit_bar(cells, total, width, glyphs):
     """The cells of a unit bar: one per unit up to `width`, else exactly `width` buckets splitting the units evenly,
-    each the worst outcome in the bucket (fail, then pass, then skip) and PENDING when nothing in it has finished.
-    Computed on demand from `cells` (a bytearray, 0 unfinished / 1 pass / 2 fail / 3 skip), never stored."""
+    each the worst outcome in the bucket (fail, then in-flight, then pass, then skip) and PENDING when nothing in it
+    has started.  Computed on demand from `cells` (a bytearray, 0 unfinished / 1 pass / 2 fail / 3 skip / 4 in-flight),
+    never stored."""
     if total <= 0:
         return []
     width = max(1, width)
@@ -497,6 +501,8 @@ def unit_bar(cells, total, width, glyphs):
         chunk = bytes(cells[i * total // n:(i + 1) * total // n])
         if UNIT_FAIL in chunk:
             out.append(glyphs["fail"])
+        elif UNIT_RUN in chunk:
+            out.append(glyphs["run"])
         elif UNIT_PASS in chunk:
             out.append(glyphs["pass"])
         elif UNIT_SKIP in chunk:
@@ -543,6 +549,8 @@ class _Mod:
         self.totals = None
         self.box = None         # pass, fail or skip once granted
         self.unit_index = None  # its cell in the row's module bar once counted
+        self.started = False    # a module_start arrived for it (the in-flight signal for the module bar)
+        self.dropped = False    # a tests-mode module that ran no tests: left out of the bar and of its total
 
     @property
     def in_progress(self):
@@ -607,6 +615,7 @@ class _Row:
         self.units_done = 0
         self.unit_kind = None
         self.unit_cells = bytearray()   # one byte per unit: 0 pending, 1 pass, 2 fail, 3 skip
+        self.units_dropped = 0  # tests-mode modules that ran no tests, taken out of units_total (see _drop_unit)
         self.progress = None    # live progress text from the tool's own output; shown on the running row only
         self.estimate = None    # the Estimate from history, when there is one (spec 5.1)
 
@@ -616,6 +625,20 @@ class _Row:
 
     def boxes(self):
         return [self.modules[m].box for m in self.order]
+
+    def unit_view(self):
+        """unit_cells for drawing: the modules that have started but not ended fill the cells right after the finished
+        ones as UNIT_RUN.  A module bar fills in finish order, so an in-flight module has no cell of its own yet; this
+        shows how many are running, not which.  Only a Maven module bar has the signal (module_start); other unit
+        kinds (tests, tasks, files) never show in-flight and keep PENDING for what has not finished."""
+        if self.unit_kind != "modules" or not self.running:
+            return self.unit_cells
+        running = sum(1 for m in self.modules.values()
+                      if m.started and m.status is None and m.unit_index is None and not m.dropped and m.id not in self.poms)
+        view = bytearray(self.unit_cells)
+        for i in range(self.units_done, min(self.units_total, self.units_done + running)):
+            view[i] = UNIT_RUN
+        return view
 
 
 class Board:
@@ -754,6 +777,7 @@ class Board:
                 r.modules[f["module"]] = _Mod(f["module"], f["title"], self.clock())
             else:
                 m.title, m.t0 = f["title"], self.clock()     # a pom module, created by the reactor event
+            r.modules[f["module"]].started = True
             self.module_rows[f["module"]] = r
             if f["module"] in r.poms:     # a pom has no work to wait for; under -T its end only comes with the summary
                 self._setup_box(r, r.modules[f["module"]], "pass")
@@ -769,7 +793,7 @@ class Board:
             r.tests_mode = f["tests"]
             if r.size > 0:        # a reactor of no size says nothing: the row keeps the box bar
                 r.unit_kind = "modules"
-                r.units_total = max(0, r.size - len(r.poms), r.units_done)    # set, not grown: the block shrinks the tree's size
+                r.units_total = max(0, r.size - len(r.poms) - r.units_dropped, r.units_done)    # set, not grown: the block shrinks the tree's size
                 del r.unit_cells[r.units_total:]
                 r.unit_cells.extend(bytes(r.units_total - len(r.unit_cells)))
             for pom in f["poms"]:
@@ -789,11 +813,38 @@ class Board:
         """A real module of a Maven row counts once toward its module bar; a later failure turns its cell red."""
         if r.unit_kind != "modules" or m.id in r.poms:
             return
+        if m.dropped:
+            if outcome != "fail":
+                return
+            self._undrop_unit(r, m)         # it failed after all (the build broke in it): it counts, red
         if m.unit_index is None:
             m.unit_index = r.units_done
             self._on_unit({"step": r.id, "done": r.units_done + 1, "outcome": outcome})
         elif outcome == "fail":
             self._on_unit_fix({"step": r.id, "index": m.unit_index, "outcome": "fail"})
+
+    @staticmethod
+    def _resize_cells(r):
+        del r.unit_cells[r.units_total:]
+        r.unit_cells.extend(bytes(r.units_total - len(r.unit_cells)))
+
+    def _drop_unit(self, r, m):
+        """A tests-mode module ended having run no tests: it leaves the bar and the total instead of drawing a skip cell.
+        The count of modules that will run tests is only known as modules end (--also-make pulls in many upstream
+        modules with none), so the live bar starts at the reactor's size and N shrinks as those drop out.  The n/N
+        and the bar therefore only ever lose cells that were never going to say anything."""
+        if r.unit_kind != "modules" or m.id in r.poms or m.dropped or m.unit_index is not None:
+            return
+        m.dropped = True
+        r.units_dropped += 1
+        r.units_total = max(r.units_done, r.units_total - 1)
+        self._resize_cells(r)
+
+    def _undrop_unit(self, r, m):
+        m.dropped = False
+        r.units_dropped -= 1
+        r.units_total += 1
+        self._resize_cells(r)
 
     OUTCOME_BYTE = {"pass": UNIT_PASS, "fail": UNIT_FAIL, "skip": UNIT_SKIP}     # anything else counts as a pass
 
@@ -802,7 +853,7 @@ class Board:
         if r is not None:
             # an explicit count replaces the total (a later, authoritative count beats an earlier estimate), but never
             # below the units already done, so no finished cell is lost
-            r.units_total, r.unit_kind = max(r.units_done, f["total"]), f["kind"]
+            r.units_total, r.unit_kind = max(r.units_done, f["total"] - r.units_dropped), f["kind"]
             del r.unit_cells[r.units_total:]
             r.unit_cells.extend(bytes(r.units_total - len(r.unit_cells)))
         return []
@@ -829,7 +880,23 @@ class Board:
         _, m = self._mod(f, create=True)
         if m is not None:
             m.outcomes.append(f["outcome"])
+            r = self._target(f["step"])
+            if m.dropped and r is not None:
+                self._undrop_unit(r, m)     # tests ran after all (module_tested only means "past its test phase")
+                self._count_unit(r, m, self._tests_outcome(m))
         return []
+
+    @staticmethod
+    def _tests_outcome(m):
+        """A tests-mode module's outcome so far: fail if any class failed, skip if it had tests and all were skipped
+        (or it had none), else pass."""
+        if "fail" in m.outcomes:
+            return "fail"
+        if m.outcomes:
+            return "skip" if all(o == "skip" for o in m.outcomes) else "pass"
+        if m.totals and m.totals[0]:
+            return "skip" if m.totals[3] == m.totals[0] else "pass"
+        return "skip"
 
     def _on_module_compiled(self, f):
         r, m = self._mod(f, create=True)
@@ -849,10 +916,13 @@ class Board:
     def _on_module_tested(self, f):
         r, m = self._mod(f, create=True)
         if m is not None and m.id not in r.poms and m.box != "fail":
-            outcome = "fail" if "fail" in m.outcomes else "pass" if m.outcomes else "skip"
+            outcome = self._tests_outcome(m)
             self._grant(r, m, outcome)
             if r.tests_mode:      # under -T module_end waits for the Reactor Summary: count the unit when its tests end
-                self._count_unit(r, m, outcome)
+                if m.outcomes or (m.totals and m.totals[0]):
+                    self._count_unit(r, m, outcome)     # all-skipped tests still count, as skip
+                else:
+                    self._drop_unit(r, m)
         return []
 
     def _on_tests(self, f):
@@ -871,6 +941,8 @@ class Board:
         if f.get("totals"):
             m.totals = _totals(f["totals"])
         failed = m.status == "fail" or bool(m.totals and m.totals[1] + m.totals[2])
+        if m.dropped and (m.outcomes or (m.totals and m.totals[0])):
+            self._undrop_unit(r, m)         # its totals arrived late: it did run tests
         if m.id in r.poms:      # a pom lives on the Setup row only, never in a bar's order
             m.box = "fail" if failed else "pass"
             self._setup_box(r, m, m.box)
@@ -881,7 +953,12 @@ class Board:
                 self._grant(r, m, "skip" if m.status == "skip" else "pass")
             # a module already boxed red (compile or test failure) stays a failed unit when finish() closes it as skip
             failed = failed or m.box == "fail"
-            self._count_unit(r, m, "fail" if failed else "skip" if m.status == "skip" else "pass")
+            if r.tests_mode and not failed and m.unit_index is None and not (m.outcomes or (m.totals and m.totals[0])):
+                self._drop_unit(r, m)       # ended without ever running a test (no module_tested, or a skipped module)
+            else:
+                tested = r.tests_mode and (m.outcomes or (m.totals and m.totals[0]))
+                self._count_unit(r, m, "fail" if failed else "skip" if m.status == "skip" else
+                                 self._tests_outcome(m) if tested else "pass")
         has_tests = bool(m.totals and m.totals[0])
         return [("module", r, m)] if shows_module(self.detail, failed, has_tests) else []
 
@@ -982,7 +1059,7 @@ def row_cells(row, glyphs, now, pending=False):
     # A finished module bar that never counted a unit (a -q build sends no module events) shows no bar at all.
     if not unreported and (row.modules or row.size or row.units_total or row.unit_kind == "modules"):
         if row.unit_kind:
-            cells = unit_bar(row.unit_cells, row.units_total, BAR_CELLS, glyphs)
+            cells = unit_bar(row.unit_view(), row.units_total, BAR_CELLS, glyphs)
             parts.append(f"{row.units_done}/{row.units_total}")
         else:
             cells = [glyphs[b] for b in row.boxes()]
@@ -1254,7 +1331,7 @@ class LiveRenderer:
             rest = f"{rest} · {r.progress}" if rest else r.progress
         rebucket = None
         if r.unit_kind:
-            rebucket = lambda width: unit_bar(r.unit_cells, r.units_total, width, self.glyphs)
+            rebucket = lambda width: unit_bar(r.unit_view(), r.units_total, width, self.glyphs)
         return _fit_row(r.label.ljust(board.width()), cells, rest, elapsed, cols, rebucket)
 
     def _flush(self, lines):

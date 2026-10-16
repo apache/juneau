@@ -134,15 +134,10 @@ public class MethodSafety {
 		var m = method == null ? null : method.toUpperCase(Locale.ROOT);
 		if (! isSafe(m))
 			return m;
-		if (rawQuery != null) {
-			for (var pair : rawQuery.split("&")) {
-				var i = pair.indexOf('=');
-				if (i > 0 && OVERRIDE_PARAM.equalsIgnoreCase(decode(pair.substring(0, i)))) {
-					var c = unsafeClaim(decode(pair.substring(i + 1)));
-					if (c != null)
-						return c;
-				}
-			}
+		for (var claim : queryClaims(rawQuery)) {
+			var c = unsafeClaim(claim);
+			if (c != null)
+				return c;
 		}
 		for (var h : OVERRIDE_HEADERS) {
 			var c = unsafeClaim(headers.apply(h));
@@ -150,6 +145,41 @@ public class MethodSafety {
 				return c;
 		}
 		return m;
+	}
+
+	/**
+	 * The names of the request headers that can claim a request's method, in precedence order.
+	 *
+	 * <p>
+	 * The order is part of the contract: dispatch honours the first admitted header in this order.
+	 *
+	 * @return An immutable list of header names.  Never <jk>null</jk>.
+	 */
+	public static List<String> overrideHeaders() {
+		return OVERRIDE_HEADERS;
+	}
+
+	/**
+	 * Every value of the {@code method} query parameter, in order.
+	 *
+	 * <p>
+	 * The one parser shared by the write-protection filters and by dispatch, so they cannot disagree about what a query
+	 * string claims.  The raw query is split on {@code &}, each name and value is percent-decoded, and the name is matched
+	 * case-insensitively.  Values are returned untrimmed.  A malformed percent-escape leaves the raw text.
+	 *
+	 * @param rawQuery The raw, undecoded query string.  Can be <jk>null</jk>.
+	 * @return The decoded values, in order.  Never <jk>null</jk>; empty when there is no claim.
+	 */
+	public static List<String> queryClaims(String rawQuery) {
+		if (rawQuery == null)
+			return List.of();
+		var l = new ArrayList<String>();
+		for (var pair : rawQuery.split("&")) {
+			var i = pair.indexOf('=');
+			if (i > 0 && OVERRIDE_PARAM.equalsIgnoreCase(decode(pair.substring(0, i))))
+				l.add(decode(pair.substring(i + 1)));
+		}
+		return List.copyOf(l);
 	}
 
 	/** The claimed method upper-cased when it is unsafe, else <jk>null</jk> (absent, blank or safe). */

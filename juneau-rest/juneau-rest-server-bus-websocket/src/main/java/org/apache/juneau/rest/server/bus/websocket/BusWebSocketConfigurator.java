@@ -36,7 +36,9 @@ import jakarta.websocket.server.*;
  * 		well-formed http(s) origin; a well-formed cross-site value passes it and is refused by the next step.
  * 	<li>{@link #modifyHandshake}: under a {@link LoopbackBoundary}, Host against the boundary's authority; under a
  * 		{@link CsrfBoundary}, {@link CsrfBoundary#checkHandshake} with the scheme of the handshake's request URI and
- * 		every {@code Host}, {@code Origin} and {@code Sec-Fetch-Site} value.  Otherwise {@code Sec-Fetch-Site} (when
+ * 		every {@code Host}, {@code Origin} and {@code Sec-Fetch-Site} value.  Over HTTP/2 (RFC 8441), where the handshake has
+ * 		no {@code Host}, {@code Sec-WebSocket-Key} or {@code Upgrade}, the request URI's authority stands in for
+ * 		{@code Host} ({@link HandshakeHosts}).  Otherwise {@code Sec-Fetch-Site} (when
  * 		present) must be {@code same-origin}.  Last, the capability and principal.  A failure is recorded in the per-connection
  * 		user properties, and {@link BusWebSocketEndpoint#onOpen} closes at once with {@code 4403} ({@code bus:refused})
  * 		or {@code 4401} ({@code bus:unknown-session}).
@@ -77,14 +79,14 @@ public final class BusWebSocketConfigurator extends ServerEndpointConfig.Configu
 
 	private final ServerBus bus;
 	private final Set<String> origins;
-	private final String authority;
+	private final LoopbackBoundary loopback;
 	private final CsrfBoundary csrf;
 
 	BusWebSocketConfigurator(ServerBus bus, Set<String> origins) {
 		this.bus = bus;
 		this.origins = Set.copyOf(origins);
 		var boundary = bus.policy().boundary();
-		this.authority = boundary instanceof LoopbackBoundary lb ? lb.authority() : null;
+		this.loopback = boundary instanceof LoopbackBoundary lb ? lb : null;
 		this.csrf = boundary instanceof CsrfBoundary cb ? cb : null;
 	}
 
@@ -120,20 +122,21 @@ public final class BusWebSocketConfigurator extends ServerEndpointConfig.Configu
 	}
 
 	private Refusal check(HandshakeRequest request, Map<String,Object> props) {
+		var uri = request.getRequestURI();
 		if (csrf != null) {
-			var uri = request.getRequestURI();
-			var result = csrf.checkHandshake(uri == null ? null : uri.getScheme(), headers(request, "Host"), headers(request, "Origin"),
+			var hosts = HandshakeHosts.of(request.getHeaders(), uri);
+			var result = csrf.checkHandshake(uri == null ? null : uri.getScheme(), hosts, headers(request, "Origin"),
 				headers(request, "Sec-Fetch-Site"));
 			if (! result.isAllowed())
 				return REFUSED;
 		} else {
-			if (authority != null && ! authority.equalsIgnoreCase(header(request, "Host")))
+			if (loopback != null && ! loopback.acceptsHandshakeHost(HandshakeHosts.of(request.getHeaders(), uri), uri == null ? null : uri.getScheme()))
 				return REFUSED;
 			var site = header(request, "Sec-Fetch-Site");
 			if (site != null && ! "same-origin".equals(site))
 				return REFUSED;
 		}
-		var id = sessionId(request.getRequestURI());
+		var id = sessionId(uri);
 		if (id == null)
 			return UNKNOWN_SESSION;
 		var session = bus.session(id, request.getUserPrincipal()).filter(s -> "websocket".equals(s.transport()));

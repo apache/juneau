@@ -197,7 +197,8 @@ class BusWebSocketConfigurator_Test extends TestBase {
 	@Test void b04_missingHostWithBoundaryIs4403() throws Exception {
 		var c = withBoundary();
 		var id = open(JB, "websocket", true);
-		assertEquals(4403, refusalCode(handshake(c, request(path(id), JB))));
+		// A Sec-WebSocket-Key marks an RFC 6455 handshake, which must carry a Host; without the key it would be RFC 8441 (section g).
+		assertEquals(4403, refusalCode(handshake(c, request(path(id), JB, "Sec-WebSocket-Key", "k"))));
 	}
 
 	@Test void b05_hostHeaderNameIsCaseInsensitive() throws Exception {
@@ -477,8 +478,8 @@ class BusWebSocketConfigurator_Test extends TestBase {
 		var r = requestAt("ws://internal:8080" + path(id), JB, "Host", "internal:8080", "Origin", "https://" + APP,
 			"X-Forwarded-Host", APP, "X-Forwarded-Proto", "https", "Forwarded", "host=" + APP + ";proto=https");
 		assertEquals(4403, refusalCode(handshake(c, r)));
-		assertEquals(4403, refusalCode(handshake(c, requestAt("ws://" + APP + path(id), JB, "X-Forwarded-Host", APP, "Origin", APP_ORIGIN))),
-			"no Host at all");
+		assertEquals(4403, refusalCode(handshake(c, requestAt("ws://" + APP + path(id), JB, "X-Forwarded-Host", APP, "Origin", APP_ORIGIN,
+			"Sec-WebSocket-Key", "k"))), "no Host at all");
 	}
 
 	@Test void e14_untrustworthyRequestUriFailsClosed() throws Exception {
@@ -495,6 +496,96 @@ class BusWebSocketConfigurator_Test extends TestBase {
 		assertSame(BusWebSocketConfigurator.REFUSED, props.get(BusWebSocketConfigurator.REFUSAL_PROPERTY));
 		assertEquals(Set.of(BusWebSocketConfigurator.REFUSAL_PROPERTY), props.keySet());
 		assertFalse(props.toString().contains("evil-marker"), props::toString);
+	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// g) Handshakes over HTTP/2 (RFC 8441): no Host, no Sec-WebSocket-Key, no Upgrade; the request URI's authority stands in
+	//------------------------------------------------------------------------------------------------------------------
+
+	@Test void g01_csrfNoHostNoKeyIsJudgedOnTheUri() throws Exception {
+		var c = withCsrf();
+		var id = openCsrf(JB);
+		assertTrue(allowed(handshake(c, requestAt("http://" + APP + path(id), JB, "Origin", APP_ORIGIN))));
+		assertTrue(allowed(handshake(c, requestAt("http://" + APP + path(id), JB, "origin", APP_ORIGIN, "sec-fetch-site", "same-origin"))));
+	}
+
+	@Test void g02_aSecWebSocketKeyMeansRfc6455AndNeedsAHost() throws Exception {
+		// The mutation row: deleting the key/Upgrade evidence in HandshakeHosts must fail these.
+		var c = withCsrf();
+		var id = openCsrf(JB);
+		var uri = "http://" + APP + path(id);
+		assertEquals(4403, refusalCode(handshake(c, requestAt(uri, JB, "Origin", APP_ORIGIN, "Sec-WebSocket-Key", "k"))));
+		assertEquals(4403, refusalCode(handshake(c, requestAt(uri, JB, "Origin", APP_ORIGIN, "sec-websocket-key", "k"))));
+		assertEquals(4403, refusalCode(handshake(c, requestAt(uri, JB, "Origin", APP_ORIGIN, "Sec-WebSocket-Key", ""))));
+	}
+
+	@Test void g03_upgradeMeansRfc6455AndNeedsAHost() throws Exception {
+		var c = withCsrf();
+		var id = openCsrf(JB);
+		var uri = "http://" + APP + path(id);
+		assertEquals(4403, refusalCode(handshake(c, requestAt(uri, JB, "Origin", APP_ORIGIN, "Upgrade", "websocket"))));
+		assertEquals(4403, refusalCode(handshake(c, requestAt(uri, JB, "Origin", APP_ORIGIN, "upgrade", "websocket"))));
+	}
+
+	@Test void g04_foreignOriginOrHostIsRefused() throws Exception {
+		var c = withCsrf();
+		var id = openCsrf(JB);
+		assertEquals(4403, refusalCode(handshake(c, requestAt("http://" + APP + path(id), JB, "Origin", "http://evil.example"))));
+		assertEquals(4403, refusalCode(handshake(c, requestAt("http://" + APP + path(id), JB))), "no Origin");
+	}
+
+	@Test void g04b_allowedHostsAppliesToTheUriHost() throws Exception {
+		var listed = withCsrf(CsrfBoundary.create().tokens(CsrfTokens.perProcess()).allowedHosts(APP));
+		var id = openCsrf(JB);
+		assertEquals(4403, refusalCode(handshake(listed, requestAt("http://rebind.example" + path(id), JB, "Origin", "http://rebind.example"))));
+		assertTrue(allowed(handshake(listed, requestAt("http://" + APP + path(id), JB, "Origin", APP_ORIGIN))));
+	}
+
+	@Test void g05_aRealHostIsJudgedInsteadOfTheUri() throws Exception {
+		var c = withCsrf();
+		var id = openCsrf(JB);
+		var uri = "http://" + APP + path(id);
+		assertTrue(allowed(handshake(c, requestAt(uri, JB, "Host", "other.example", "Origin", "http://other.example"))));
+		assertEquals(4403, refusalCode(handshake(c, requestAt(uri, JB, "Host", "other.example", "Origin", APP_ORIGIN))));
+	}
+
+	@Test void g06_theUriPortAndSchemeAreKept() throws Exception {
+		var c = withCsrf();
+		var id = openCsrf(JB);
+		var uri = "https://" + APP + ":8443" + path(id);
+		assertTrue(allowed(handshake(c, requestAt(uri, JB, "Origin", "https://" + APP + ":8443"))));
+		assertEquals(4403, refusalCode(handshake(c, requestAt(uri, JB, "Origin", "https://" + APP))));
+		assertEquals(4403, refusalCode(handshake(c, requestAt("https://" + APP + path(id), JB, "Origin", "https://" + APP + ":8443"))));
+		assertTrue(allowed(handshake(c, requestAt("https://" + APP + path(id), JB, "Origin", "https://" + APP))));
+	}
+
+	@Test void g07_aMissingUriIsRefused() throws Exception {
+		var c = withCsrf();
+		openCsrf(JB);
+		assertEquals(4403, refusalCode(handshake(c, requestAt(null, JB, "Origin", APP_ORIGIN))));
+	}
+
+	@Test void g08_loopbackNoHostNoKeyIsJudgedOnTheUri() throws Exception {
+		var c = withBoundary();
+		var id = open(JB, "websocket", true);
+		assertTrue(allowed(handshake(c, request(path(id), JB, "Origin", ORIGIN))));
+		assertEquals(4403, refusalCode(handshake(c, requestAt("ws://127.0.0.1:8081" + path(id), JB, "Origin", ORIGIN))), "another port");
+		assertEquals(4403, refusalCode(handshake(c, requestAt("ws://localhost:8080" + path(id), JB, "Origin", ORIGIN))), "another host");
+		assertEquals(4403, refusalCode(handshake(c, request(path(id), JB, "Origin", ORIGIN, "Sec-WebSocket-Key", "k"))), "RFC 6455 needs a Host");
+		assertEquals(4403, refusalCode(handshake(c, request(path(id), JB, "Origin", ORIGIN, "upgrade", "websocket"))), "RFC 6455 needs a Host");
+	}
+
+	@Test void g09_loopbackDefaultPortsAreFilled() throws Exception {
+		use(policy().boundary(LoopbackBoundary.create().authority("127.0.0.1").token(TOKEN).build()).build());
+		var c = new BusWebSocketConfigurator(bus, BusWebSocketConfigurator.allowedOrigins(bus.policy()));
+		var id = BusFixture.open(C, JB, "websocket", DOWN, UP, "Host", "127.0.0.1", "Origin", "http://127.0.0.1", "Sec-Fetch-Site", "same-origin",
+			"X-Csrf-Token", TOKEN.value());
+		assertTrue(allowed(handshake(c, requestAt("ws://127.0.0.1" + path(id), JB, "Origin", "http://127.0.0.1"))));
+		assertTrue(allowed(handshake(c, requestAt("http://127.0.0.1:80" + path(id), JB, "Origin", "http://127.0.0.1"))));
+		assertEquals(4403, refusalCode(handshake(c, requestAt("https://127.0.0.1" + path(id), JB, "Origin", "http://127.0.0.1"))), "wss defaults to 443");
+		// A real Host keeps the string compare: "127.0.0.1:80" is not "127.0.0.1".
+		assertEquals(4403, refusalCode(handshake(c, requestAt("ws://127.0.0.1" + path(id), JB, "Host", "127.0.0.1:80", "Origin", "http://127.0.0.1"))));
+		assertTrue(allowed(handshake(c, requestAt("ws://127.0.0.1" + path(id), JB, "Host", "127.0.0.1", "Origin", "http://127.0.0.1"))));
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

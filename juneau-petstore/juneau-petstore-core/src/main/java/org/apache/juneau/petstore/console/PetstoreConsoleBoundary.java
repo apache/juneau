@@ -17,13 +17,11 @@
 package org.apache.juneau.petstore.console;
 
 import java.io.*;
-import java.net.*;
-import java.nio.charset.*;
 import java.util.*;
 import java.util.concurrent.atomic.*;
-import java.util.function.*;
 
 import org.apache.juneau.commons.settings.*;
+import org.apache.juneau.rest.server.MethodSafety;
 import org.apache.juneau.rest.server.filter.*;
 
 import jakarta.servlet.*;
@@ -120,12 +118,6 @@ public class PetstoreConsoleBoundary implements Filter {
 	/** Setting (system property, environment, or any registered source) naming the one accepted console host and port. */
 	public static final String AUTHORITY_PROPERTY = "petstore.console.authority";
 
-	/** The query parameter that can override a request's method. */
-	static final String OVERRIDE_PARAM = "method";
-
-	/** The headers that can override a request's method. */
-	static final List<String> OVERRIDE_HEADERS = List.of("X-Method", "X-HTTP-Method-Override", "X-HTTP-Method", "X-Method-Override");
-
 	private final SynchronizerToken token = SynchronizerToken.generate();
 	private final AtomicReference<LoopbackBoundaryFilter> filter = new AtomicReference<>();
 	private final PetstoreApiBoundary api;
@@ -167,7 +159,7 @@ public class PetstoreConsoleBoundary implements Filter {
 			return;
 		}
 		// The boundary sees the effective method; the resource still gets the original request.
-		var method = effectiveMethod(req2.getMethod(), req2.getQueryString(), req2::getHeader);
+		var method = MethodSafety.effectiveMethod(req2.getMethod(), req2.getQueryString(), req2::getHeader);
 		var checked = method.equals(req2.getMethod()) ? req2 : new HttpServletRequestWrapper(req2) {
 			@Override /* HttpServletRequest */
 			public String getMethod() {
@@ -201,46 +193,6 @@ public class PetstoreConsoleBoundary implements Filter {
 	 */
 	static String authority(String setting, int localPort) {
 		return setting == null || setting.isBlank() ? "localhost:" + localPort : setting.trim();
-	}
-
-	/**
-	 * The method a request is judged on.
-	 *
-	 * @param method The request line's method.
-	 * @param queryString The raw query string.  Can be <jk>null</jk>.
-	 * @param headers Looks up a request header by name; returns <jk>null</jk> when absent.
-	 * @return The request line's method when it is not safe, else the first non-safe override (upper-cased) from the
-	 * 	{@code method} query parameter or an override header, else the request line's method.  A blank override is
-	 * 	ignored.
-	 */
-	static String effectiveMethod(String method, String queryString, UnaryOperator<String> headers) {
-		if (LoopbackBoundary.isStateChanging(method))
-			return method;
-		var claims = new ArrayList<String>();
-		if (queryString != null)
-			for (var pair : queryString.split("&")) {
-				var i = pair.indexOf('=');
-				if (i > 0 && OVERRIDE_PARAM.equalsIgnoreCase(decode(pair.substring(0, i))))
-					claims.add(decode(pair.substring(i + 1)));
-			}
-		for (var h : OVERRIDE_HEADERS)
-			claims.add(headers.apply(h));
-		for (var c : claims) {
-			if (c == null || c.isBlank())
-				continue;
-			var m = c.trim().toUpperCase(Locale.ROOT);
-			if (LoopbackBoundary.isStateChanging(m))
-				return m;
-		}
-		return method;
-	}
-
-	private static String decode(String s) {
-		try {
-			return URLDecoder.decode(s, StandardCharsets.UTF_8);
-		} catch (IllegalArgumentException e) {  // malformed %-escape: judge the raw text
-			return s;
-		}
 	}
 
 	/**
