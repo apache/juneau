@@ -42,7 +42,7 @@ Apache Juneau™ is a single cohesive Java ecosystem consisting of a comprehensi
 * **[Homepage](https://juneau.apache.org/)** - Official Apache Juneau website
 * **[Staged Website](https://juneau.staged.apache.org/)** - Preview of pending website changes
 * **[Wiki](https://github.com/apache/juneau/wiki)** - Community documentation and guides
-* **[Pet Store App](/docs/topics/JuneauPetstoreOverview)** - Complete example application
+* **[Pet Store App](/docs/topics/JuneauPetstore)** - Complete example application
 
 ### Documentation
 * **[Javadocs](https://juneau.apache.org/site/apidocs/)** - Complete API documentation
@@ -51,7 +51,7 @@ Apache Juneau™ is a single cohesive Java ecosystem consisting of a comprehensi
 * **[Framework Comparisons](https://juneau.apache.org/docs/topics/FrameworkComparisons)** - Compare Juneau with Jackson, Spring Boot, and JAX-RS
 * **[Examples](https://juneau.apache.org/docs/topics/JuneauExamplesCore)** - Code examples and tutorials
   * [juneau-examples-core](https://juneau.apache.org/docs/topics/JuneauExamplesCore) - Core serialization examples
-  * [juneau-petstore](https://juneau.apache.org/docs/topics/JuneauPetstoreOverview) - Canonical petstore showcase application (deployed under both Jetty/Microservice and Spring Boot)
+  * [juneau-petstore](https://juneau.apache.org/docs/topics/JuneauPetstore) - Canonical petstore showcase application (deployed under both Jetty/Microservice and Spring Boot)
 * **[Test Reports](https://juneau.apache.org/site/surefire.html)** - JUnit test execution results
 * **[Dependencies](https://juneau.apache.org/site/dependency-info.html)** - Project dependency analysis
 * **[Project Reports](https://juneau.apache.org/site/project-reports.html)** - Complete Maven site reports
