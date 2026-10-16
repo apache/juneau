@@ -16,12 +16,9 @@
  */
 package org.apache.juneau.microservice.examples;
 
-import static org.apache.juneau.bean.html5.HtmlBuilder.*;
-
 import java.io.*;
 import java.util.Map;
 
-import org.apache.juneau.bean.html5.*;
 import org.apache.juneau.commons.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.http.classic.response.*;
@@ -31,9 +28,24 @@ import org.apache.juneau.rest.server.*;
 import org.apache.juneau.rest.server.servlet.*;
 
 /**
- * Shows contents of the microservice configuration file.
+ * Shows contents of the microservice configuration file, and updates it.
+ *
+ * <p>
+ * Reads are {@code GET}s.  Writes are {@code PUT}s only, sent by a REST client or from the command line; there is no
+ * HTML edit form, because a browser form cannot carry the header-borne token a CSRF boundary requires.  A {@code PUT}
+ * cannot be sent cross-site without a CORS preflight, so a boundary in front of this resource (see
+ * {@link AdminBoundary}) admits it without a token:
+ * <p class='bcode'>
+ * 	curl -X PUT -H 'Content-Type: text/plain' --data-binary @my.cfg http://localhost:10000/config
+ * 	curl -X PUT -H 'Content-Type: text/plain' -d 'newValue' http://localhost:10000/config/MySection/myKey
+ * </p>
+ *
+ * <p>
+ * A {@code GET} returns the whole configuration, including any secrets in it, and this resource has no
+ * authentication of its own.  Do not expose it on an untrusted network.
  *
  * <h5 class='section'>See Also:</h5><ul>
+ * 	<li class='jc'>{@link AdminBoundary}
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauMicroservice">juneau-microservice Basics</a>
  * </ul>
  *
@@ -48,8 +60,7 @@ import org.apache.juneau.rest.server.servlet.*;
 	navlinks={
 		"up: request:/..",
 		"api: servlet:/api",
-		"stats: servlet:/stats",
-		"edit: servlet:/edit"
+		"stats: servlet:/stats"
 	},
 	resolveBodyVars="true"
 )
@@ -90,31 +101,6 @@ public class ConfigResource extends BasicRestServlet {
 	 */
 	public JsonMap getConfig() {
 		return getContext().getConfig().toMap();
-	}
-
-	@RestGet(
-		path="/edit",
-		summary="Render form entry page for editing config file",
-		description="Renders a form entry page for editing the raw text of a config file."
-	)
-	/**
-	 * Returns an HTML form for editing the config file contents.
-	 *
-	 * @return The edit form.
-	 */
-	public Form getConfigEditForm() {
-		return form().id("form").action("servlet:/").method("POST").enctype("application/x-www-form-urlencoded").children(
-			div().class_("data").children(
-				table(
-					tr(td().style("text-align:right").children(button("submit","Submit"),button("reset","Reset"))),
-					tr(th().child("Contents")),
-					tr(th().child(
-						textarea().name("contents").rows(40).cols(120).style("white-space:pre;word-wrap:normal;overflow-x:scroll;font-family:monospace;")
-							.text(getContext().getConfig().toString()))
-					)
-				)
-			)
-		);
 	}
 
 	@RestGet(
@@ -167,6 +153,7 @@ public class ConfigResource extends BasicRestServlet {
 		return getSection(section);
 	}
 
+	@Mutating("Changes the configuration")
 	@RestPut(
 		path="/",
 		summary="Update config file contents",
@@ -191,30 +178,7 @@ public class ConfigResource extends BasicRestServlet {
 		return getContext().getConfig().load(contents, true).toMap();
 	}
 
-	@RestPost(
-		path="/",
-		summary="Update config file contents",
-		description="Update the contents of the config file from a FORM post.",
-		swagger=@OpSwagger(
-			responses={
-				"200:{ description:'Config file section as a map of objects.', example:{key1:'val1',key2:123}}"
-			}
-		)
-	)
-	/**
-	 * Updates the config file from form POST data.
-	 *
-	 * @param contents New contents in INI file format.
-	 * @return The config as a map.
-	 * @throws Exception If parsing or loading fails.
-	 */
-	public JsonMap setConfigContentsFormPost(
-			@FormData("contents") @Schema(d="New contents in INI file format.") String contents
-		) throws Exception {
-
-		return setConfigContents(new StringReader(contents));
-	}
-
+	@Mutating("Changes the configuration")
 	@RestPut(
 		path="/{section}",
 		summary="Update config section contents",
@@ -242,6 +206,8 @@ public class ConfigResource extends BasicRestServlet {
 		getContext().getConfig().setSection(section, null, contents);
 		return getSection(section);
 	}
+
+	@Mutating("Changes the configuration")
 	@RestPut(
 		path="/{section}/{key}",
 		summary="Update config entry value",

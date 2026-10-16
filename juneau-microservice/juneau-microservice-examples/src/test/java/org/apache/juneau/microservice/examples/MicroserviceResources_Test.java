@@ -19,10 +19,12 @@ package org.apache.juneau.microservice.examples;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.nio.file.*;
+import java.util.concurrent.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.config.*;
+import org.apache.juneau.microservice.examples.ShutdownResource.*;
 import org.apache.juneau.rest.mock.classic.*;
 import org.apache.juneau.rest.server.*;
 import org.junit.jupiter.api.*;
@@ -46,6 +48,9 @@ class MicroserviceResources_Test extends TestBase {
 	static Path dirTempDir;
 
 	static Path dirRoot;
+
+	/** Every exit the shutdown resource under test asks for; nothing here may stop the test JVM. */
+	final BlockingQueue<Integer> exits = new LinkedBlockingQueue<>();
 
 	@BeforeAll
 	static void setup() throws Exception {
@@ -159,7 +164,7 @@ class MicroserviceResources_Test extends TestBase {
 		Files.writeString(logsRoot.resolve("error.log"), "2024.01.01 11:00:00 SEVERE Error occurred\n");
 	}
 
-	@Rest(allowedMethodParams="*")
+	@Rest
 	public static class TestLogsResource extends LogsResource {
 		private static final long serialVersionUID = 1L;
 	}
@@ -189,21 +194,21 @@ class MicroserviceResources_Test extends TestBase {
 
 	@Test void b02_logsResource_viewFile() throws Exception {
 		try (var c = buildLogsClient()) {
-			c.request("VIEW", "/app.log").run()
+			c.get("/view/app.log").run()
 				.assertStatus(200);
 		}
 	}
 
 	@Test void b03_logsResource_downloadFile() throws Exception {
 		try (var c = buildLogsClient()) {
-			c.request("DOWNLOAD", "/app.log").run()
+			c.get("/download/app.log").run()
 				.assertStatus(200);
 		}
 	}
 
 	@Test void b04_logsResource_viewNotFound() throws Exception {
 		try (var c = buildLogsClient()) {
-			c.request("VIEW", "/nonexistent.log").run()
+			c.get("/view/nonexistent.log").run()
 				.assertStatus(404);
 		}
 	}
@@ -219,24 +224,105 @@ class MicroserviceResources_Test extends TestBase {
 		}
 	}
 
+	@Test void b06_logsResource_methodParamDoesNotDelete() throws Exception {
+		// The resource no longer honours ?method=, so a GET claiming DELETE is a plain listing read.
+		var keep = logsRoot.resolve("keep.log");
+		Files.writeString(keep, "keep me");
+		try (var c = buildLogsClient()) {
+			c.get("/keep.log?method=DELETE").run()
+				.assertStatus(200);
+			assertTrue(Files.exists(keep), "GET ?method=DELETE must not delete the file");
+		}
+	}
+
+	@Test void b07_logsResource_oldCustomMethodsRemoved() throws Exception {
+		try (var c = buildLogsClient()) {
+			c.request("VIEW", "/app.log").run().assertStatus(404);
+			c.request("DOWNLOAD", "/app.log").run().assertStatus(404);
+			c.request("PARSE", "/app.log").run().assertStatus(404);
+		}
+	}
+
 	//-----------------------------------------------------------------------------------------------------------------
 	// ShutdownResource tests
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@Test void c01_shutdownResource_instantiation() {
-		// ShutdownResource can be instantiated
-		var r = new ShutdownResource();
-		assertNotNull(r);
+	private MockRestClient buildShutdownClient() {
+		return shutdownClient(new ShutdownResource(exits::add));
 	}
 
-	@Test void c02_shutdownResource_shutdownReturnsOK() throws Exception {
-		// We cannot actually call shutdown() because it calls System.exit(),
-		// but we can verify the resource is wirable via MockRestClient.
-		// The shutdown() method starts a thread that calls System.exit after 1s,
-		// so we test using MockRestClient but avoid actually running it since it exits the JVM.
-		// Instead we verify instantiation and method signature via reflection.
+	// The mock client caches a resource's context by class and would reuse another test's instance; an overriding
+	// bean store, even an empty one, makes it build this instance.
+	private static MockRestClient shutdownClient(ShutdownResource r) {
+		return MockRestClient.create(r)
+			.overridingBeanStore(new BasicBeanStore())
+			.ignoreErrors()
+			.noTrace()
+			.build();
+	}
+
+	@Test void c01_shutdownResource_instantiation() {
+		assertNotNull(new ShutdownResource());
+	}
+
+	@Test void c02_shutdownResource_shutdownIsMutatingPost() throws Exception {
 		var method = ShutdownResource.class.getMethod("shutdown");
-		assertNotNull(method);
 		assertEquals(String.class, method.getReturnType());
+		assertNotNull(method.getAnnotation(Mutating.class), "shutdown() must be declared @Mutating");
+		assertNotNull(method.getAnnotation(RestPost.class), "shutdown() must be bound to POST");
+	}
+
+	@Test void c03_shutdownResource_getNotAllowed() throws Exception {
+		try (var c = buildShutdownClient()) {
+			c.get("/").run().assertStatus(405);
+			assertNull(exits.poll(1500, TimeUnit.MILLISECONDS), "GET must not schedule an exit");
+		}
+	}
+
+	@Test void c04_shutdownResource_postExits() throws Exception {
+		try (var c = buildShutdownClient()) {
+			c.post("/", null).run()
+				.assertStatus(200)
+				.assertContent().isContains("OK");
+			assertEquals(0, exits.poll(10, TimeUnit.SECONDS));
+		}
+	}
+
+	@Test void c05_shutdownResource_nullExitIsRejected() {
+		assertThrows(IllegalArgumentException.class, () -> new ShutdownResource(null));
+	}
+
+	@Test void c06_shutdownResource_mutatingRefusesSafeBinding() throws Exception {
+		// The startup check refuses shutdown() on any safe method, so a later rebinding to GET cannot boot.
+		var m = ShutdownResource.class.getMethod("shutdown");
+		assertThrows(RuntimeException.class, () -> MethodSafety.checkOperation("GET", m));
+		assertDoesNotThrow(() -> MethodSafety.checkOperation("POST", m));
+	}
+
+	@Test void c07_shutdownResource_exitFromBeanStore() throws Exception {
+		// A child resource is built by the bean instantiator, which takes the Exit the bean store holds.  Read back
+		// rather than shut down, so a regression cannot stop the test JVM.
+		Exit e = exits::add;
+		var r = BeanInstantiator.of(ShutdownResource.class, new BasicBeanStore().addBean(Exit.class, e)).run();
+		assertSame(e, exitOf(r));
+		assertNotSame(e, exitOf(BeanInstantiator.of(ShutdownResource.class, new BasicBeanStore()).run()));
+	}
+
+	@SuppressWarnings({
+		"java:S3011" // Reads the private exit back so the test can check which constructor ran without shutting down.
+	})
+	private static Object exitOf(ShutdownResource r) throws Exception {
+		var f = ShutdownResource.class.getDeclaredField("exit");
+		f.setAccessible(true);
+		return f.get(r);
+	}
+
+	@Test void c08_shutdownResource_instancesDoNotShareAnExit() throws Exception {
+		var other = new LinkedBlockingQueue<Integer>();
+		try (var c = shutdownClient(new ShutdownResource(other::add))) {
+			c.post("/", null).run().assertStatus(200);
+			assertEquals(0, other.poll(10, TimeUnit.SECONDS));
+			assertNull(exits.poll(1500, TimeUnit.MILLISECONDS), "Another instance's shutdown must not use this one's exit");
+		}
 	}
 }

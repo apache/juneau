@@ -25,7 +25,7 @@
 'use strict';
 
 const path = require('node:path');
-const { webcrypto } = require('node:crypto');
+const { webcrypto, createHash } = require('node:crypto');
 const { makeEnv, loadScripts } = require(path.join(__dirname, 'views-dom-shim.cjs'));
 const { fakeClock, settle } = require(path.join(__dirname, 'bus-fake-clock.cjs'));
 
@@ -244,6 +244,21 @@ function fakeIdb(o) {
 }
 
 /**
+ * crypto.subtle with a digest that hashes synchronously and resolves on the microtask queue.  webcrypto.subtle.digest
+ * completes on libuv's thread pool, in real time, so how many of idle()'s setImmediate turns it took varied from run to
+ * run; one that landed late in the drain left too few turns for the IDB, fetch and parse work it unblocked, and the
+ * section read a half-run generation.  The bytes are the same SHA-256 (g_cache checks it against webcrypto).
+ */
+const syncSubtle = {
+	digest(algorithm, data) {
+		const name = String(typeof algorithm === 'string' ? algorithm : algorithm.name).toLowerCase().replace('-', '');
+		const view = ArrayBuffer.isView(data) ? data : new Uint8Array(data);
+		const out = createHash(name).update(new Uint8Array(view.buffer, view.byteOffset, view.byteLength)).digest();
+		return Promise.resolve(out.buffer.slice(out.byteOffset, out.byteOffset + out.byteLength));
+	}
+};
+
+/**
  * A fresh page: the bus and juneau-data.js in one sandbox, every timer on one fake clock, the platform faked.
  * opts: {before(window), routes, idb, noSubtle, clock}.
  */
@@ -257,43 +272,21 @@ function fresh(opts) {
 	Object.assign(bus.config.timers, clock.timers);
 	Object.assign(D.config.timers, { setTimeout: clock.timers.setTimeout, clearTimeout: clock.timers.clearTimeout, now: clock.timers.now });
 	const fetches = [], routes = opts.routes || {}, errors = [], warns = [];
-	// webcrypto.subtle.digest completes on libuv's thread pool, in real time, so no number of setImmediate turns
-	// is guaranteed to cover it on a slow or loaded CI runner.  Track the in-flight digests so idle() can await them.
-	const digests = new Set();
-	const subtle = opts.noSubtle ? null : {
-		digest(...a) {
-			const p = webcrypto.subtle.digest(...a);
-			digests.add(p);
-			const done = () => digests.delete(p);
-			p.then(done, done);
-			return p;
-		}
-	};
 	Object.assign(D.config.platform, {
 		fetch: makeFetch(routes, fetches), TextDecoder, TextEncoder, AbortController, URLSearchParams, IDBKeyRange: FakeKeyRange,
-		indexedDB: opts.idb || null, subtle
+		indexedDB: opts.idb || null, subtle: opts.noSubtle ? null : syncSubtle
 	});
 	D.config.log.error = m => errors.push(m);
 	D.config.log.warn = m => warns.push(m);
-	return { env, NS, D, U: D.util, bus, clock, fetches, routes, errors, warns, digests };
+	return { env, NS, D, U: D.util, bus, clock, fetches, routes, errors, warns };
 }
 
-/**
- * Runs the clock forward by ms, then drains promise and setImmediate work (fake IDB, fake fetch) to quiet.  Digests still
- * running on the thread pool are awaited, and the drain repeats until none is pending, since each can start more work.
- */
+/** Runs the clock forward by ms, then drains promise and setImmediate work (fake IDB, fake fetch) to quiet. */
 async function idle(h, ms) {
 	h.clock.advance(ms || 0);
 	for (let i = 0; i < 8; i++) {
 		await settle();
 		h.clock.advance(0);
-	}
-	for (let i = 0; i < 100 && h.digests && h.digests.size; i++) {
-		await Promise.allSettled(Array.from(h.digests));
-		for (let j = 0; j < 4; j++) {
-			await settle();
-			h.clock.advance(0);
-		}
 	}
 }
 
@@ -799,6 +792,9 @@ section('g_cache', async () => {
 	await c.open();
 	const ns = await c.namespace(DEF, { org: 'a', start: 1, end: 2, q: ['x'] });
 	out.nsHex = eq(/^[0-9a-f]{32}$/.test(ns), true);
+	const probe = enc.encode('{"url":"/rest/x"}');
+	out.syncDigestIsSha256 = eq(Buffer.from(await syncSubtle.digest('SHA-256', probe)).toString('hex'),
+		Buffer.from(await webcrypto.subtle.digest('SHA-256', probe)).toString('hex'));
 	out.nsIgnoresWindowNullsAndOrder = eq(await c.namespace(DEF, { q: ['x'], end: 9, org: 'a', z: null }), ns);
 	out.nsSeesParamsUrlAndColumns = eq([await c.namespace(DEF, { org: 'b', q: ['x'] }) !== ns,
 		await c.namespace(Object.assign({}, DEF, { url: '/rest/y/{org}' }), { org: 'a', q: ['x'] }) !== ns,

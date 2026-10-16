@@ -19,6 +19,7 @@ package org.apache.juneau.microservice.examples;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.nio.file.*;
+import java.util.stream.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.bean.*;
@@ -37,8 +38,8 @@ import org.junit.jupiter.api.io.*;
  *
  * <p>
  * Targets the {@link FileResource} bean (size, name, type, last-modified, file-filter behavior, action
- * link generation, child enumeration), the {@code VIEW} highlight branch (HTML severity-coloring path),
- * the {@code PARSE} operation (filtered log parser output), and the {@code DELETE} disabled branch.
+ * link generation, child enumeration), the {@code GET /view/*} highlight branch (HTML severity-coloring path),
+ * the {@code GET /parse/*} operation (filtered log parser output), and the {@code DELETE} disabled branch.
  */
 @SuppressWarnings({
 	"resource" // Closeable resources in tests are intentionally unassigned; closing is handled by test infrastructure.
@@ -69,10 +70,14 @@ class LogsResource_Coverage_Test extends TestBase {
 		var sub = logRoot.resolve("sub");
 		Files.createDirectories(sub);
 		Files.writeString(sub.resolve("nested.log"), "[2024.01.01 12:00:00 INFO] nested\n");
+		// A directory whose name is one of the reserved action prefixes.
+		var view = logRoot.resolve("view");
+		Files.createDirectories(view);
+		Files.writeString(view.resolve("inner.log"), "[2024.01.01 12:30:00 INFO] inner\n");
 	}
 
 	/** Mounted at root so the test URLs don't need a /logs prefix. */
-	@Rest(allowedMethodParams="*")
+	@Rest
 	public static class TestLogsResource extends LogsResource {
 		private static final long serialVersionUID = 1L;
 	}
@@ -101,71 +106,71 @@ class LogsResource_Coverage_Test extends TestBase {
 
 	@Test void a01_fileResource_size_forRegularFile() {
 		var f = logRoot.resolve("plain.log").toFile();
-		var fr = new FileResource(f, "plain.log", false, false);
+		var fr = new FileResource(f, "plain.log", false);
 		assertEquals(f.length(), fr.getSize());
 	}
 
 	@Test void a02_fileResource_size_forDirectory_returnsCount() {
-		var fr = new FileResource(logRoot.toFile(), "", false, false);
+		var fr = new FileResource(logRoot.toFile(), "", false);
 		// Directory size is the number of entries in listFiles() — not the byte size.
 		assertEquals(logRoot.toFile().listFiles().length, fr.getSize());
 	}
 
 	@Test void a03_fileResource_type_file() {
-		var fr = new FileResource(logRoot.resolve("plain.log").toFile(), "plain.log", false, false);
+		var fr = new FileResource(logRoot.resolve("plain.log").toFile(), "plain.log", false);
 		assertEquals("file", fr.getType());
 	}
 
 	@Test void a04_fileResource_type_directory() {
-		var fr = new FileResource(logRoot.toFile(), "", false, false);
+		var fr = new FileResource(logRoot.toFile(), "", false);
 		assertEquals("dir", fr.getType());
 	}
 
 	@Test void a05_fileResource_name_isLinkString() {
-		var fr = new FileResource(logRoot.resolve("plain.log").toFile(), "plain.log", false, false);
+		var fr = new FileResource(logRoot.resolve("plain.log").toFile(), "plain.log", false);
 		var name = fr.getName();
 		assertNotNull(name);
 		assertEquals("plain.log", name.getName());
 	}
 
 	@Test void a06_fileResource_lastModified_returnsDate() {
-		var fr = new FileResource(logRoot.resolve("plain.log").toFile(), "plain.log", false, false);
+		var fr = new FileResource(logRoot.resolve("plain.log").toFile(), "plain.log", false);
 		assertNotNull(fr.getLastModified());
 	}
 
-	@Test void a07_fileResource_actions_includeViewDownloadParseHighlighted_butNotDeleteWhenDisabled() {
-		var fr = new FileResource(logRoot.resolve("plain.log").toFile(), "plain.log", /*allowDeletes*/false, false);
-		var names = fr.getActions().stream().map(LinkString::getName).toList();
-		assertTrue(names.contains("view"));
-		assertTrue(names.contains("highlighted"));
-		assertTrue(names.contains("parsed"));
-		assertTrue(names.contains("download"));
-		assertFalse(names.contains("delete"), "delete must NOT appear when allowDeletes=false");
+	@Test void a07_fileResource_actions_areGetRoutes_withNoDelete() {
+		var fr = new FileResource(logRoot.resolve("plain.log").toFile(), "plain.log", false);
+		var actions = fr.getActions().stream().collect(Collectors.toMap(LinkString::getName, a -> a.getUri().toString()));
+		assertEquals("servlet:/view/plain.log", actions.get("view"));
+		assertEquals("servlet:/view/plain.log?highlight=true", actions.get("highlighted"));
+		assertEquals("servlet:/parse/plain.log", actions.get("parsed"));
+		assertEquals("servlet:/download/plain.log", actions.get("download"));
+		assertEquals(4, actions.size(), "No delete action, and nothing else");
 	}
 
-	@Test void a08_fileResource_actions_includeDelete_whenAllowed() {
-		var fr = new FileResource(logRoot.resolve("plain.log").toFile(), "plain.log", /*allowDeletes*/true, false);
-		var names = fr.getActions().stream().map(LinkString::getName).toList();
-		assertTrue(names.contains("delete"), "delete must appear when allowDeletes=true");
+	@Test void a08_fileResource_actions_neverCarryMethodParam() {
+		var fr = new FileResource(logRoot.resolve("plain.log").toFile(), "plain.log", false);
+		for (var a : fr.getActions())
+			assertFalse(a.getUri().toString().contains("method="), () -> "Action link must not use ?method=: " + a.getUri());
 	}
 
 	@Test void a09_fileResource_actions_emptyForDirectory() {
-		var fr = new FileResource(logRoot.toFile(), "", true, true);
+		var fr = new FileResource(logRoot.toFile(), "", true);
 		assertTrue(fr.getActions().isEmpty(), "Directories must not advertise file-only actions");
 	}
 
 	@Test void a10_fileResource_files_returnsNullForFile() {
-		var fr = new FileResource(logRoot.resolve("plain.log").toFile(), "plain.log", false, true);
+		var fr = new FileResource(logRoot.resolve("plain.log").toFile(), "plain.log", true);
 		assertNull(fr.getFiles());
 	}
 
 	@Test void a11_fileResource_files_returnsNullWhenNotIncludingChildren() {
-		var fr = new FileResource(logRoot.toFile(), "", false, /*includeChildren*/false);
+		var fr = new FileResource(logRoot.toFile(), "", /*includeChildren*/false);
 		assertNull(fr.getFiles());
 	}
 
 	@Test void a12_fileResource_files_filtersToLogFilesAndDirs() {
-		var fr = new FileResource(logRoot.toFile(), "", false, true);
+		var fr = new FileResource(logRoot.toFile(), "", true);
 		var children = fr.getFiles();
 		assertNotNull(children);
 		var childNames = children.stream().map(c -> c.getName().getName()).toList();
@@ -178,17 +183,17 @@ class LogsResource_Coverage_Test extends TestBase {
 
 	@Test void a13_fileResource_files_nullPath_doesNotPrefix() {
 		// path=null branch in getFiles(): the constructed child path uses bare urlEncoded name.
-		var fr = new FileResource(logRoot.toFile(), null, false, true);
+		var fr = new FileResource(logRoot.toFile(), null, true);
 		assertNotNull(fr.getFiles());
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
-	// B. End-to-end REST: VIEW with highlight, PARSE, DELETE-disabled, GET listing for nested directory.
+	// B. End-to-end REST: view with highlight, parse, DELETE-disabled, GET listing for nested directory.
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Test void b01_view_highlight_writesHtmlWithSeverityColors() throws Exception {
 		try (var c = buildClient(true)) {
-			var resp = c.request("VIEW", "/multi.log?highlight=true").run();
+			var resp = c.get("/view/multi.log?highlight=true").run();
 			resp.assertStatus(200);
 			var body = resp.getContent().asString();
 			// Highlighting wraps each entry in a <span style='color:...'> with one of the documented colors.
@@ -200,7 +205,7 @@ class LogsResource_Coverage_Test extends TestBase {
 	@Test void b02_view_highlight_emptyFile_writesEmptyMarker() throws Exception {
 		// Filter out everything via a severity that doesn't match any line.
 		try (var c = buildClient(true)) {
-			var resp = c.request("VIEW", "/plain.log?highlight=true&severity=NOPE").run();
+			var resp = c.get("/view/plain.log?highlight=true&severity=NOPE").run();
 			resp.assertStatus(200);
 			var body = resp.getContent().asString();
 			assertTrue(body.contains("[EMPTY]") || body.contains("EMPTY"),
@@ -209,7 +214,7 @@ class LogsResource_Coverage_Test extends TestBase {
 	}
 	@Test void b03_view_plain_noFilters_streamsRawReader() throws Exception {
 		try (var c = buildClient(true)) {
-			var resp = c.request("VIEW", "/plain.log").run();
+			var resp = c.get("/view/plain.log").run();
 			resp.assertStatus(200);
 			assertTrue(resp.getContent().asString().contains("hello"));
 		}
@@ -217,13 +222,13 @@ class LogsResource_Coverage_Test extends TestBase {
 	@Test void b04_view_plain_withFilters_usesParser() throws Exception {
 		// Passing thread/start/end/loggers params triggers the filter branch in getReader(...)
 		try (var c = buildClient(true)) {
-			var resp = c.request("VIEW", "/multi.log?thread=NoSuchThread").run();
+			var resp = c.get("/view/multi.log?thread=NoSuchThread").run();
 			resp.assertStatus(200);
 		}
 	}
 	@Test void b05_parse_returnsParsedEntries() throws Exception {
 		try (var c = buildClient(true)) {
-			var resp = c.request("PARSE", "/plain.log").run();
+			var resp = c.get("/parse/plain.log").run();
 			resp.assertStatus(200);
 		}
 	}
@@ -255,30 +260,30 @@ class LogsResource_Coverage_Test extends TestBase {
 	@Test void b09_view_dateFilter_startEnd() throws Exception {
 		// Exercise the start/end branches of the date-filter parsing in viewFile().
 		try (var c = buildClient(true)) {
-			c.request("VIEW", "/multi.log?start=2024-01-01&end=2024-12-31").run().assertStatus(200);
+			c.get("/view/multi.log?start=2024-01-01&end=2024-12-31").run().assertStatus(200);
 		}
 	}
 	@Test void b10_parse_dateFilter_startEnd() throws Exception {
 		// Same date-filter branches in viewParsedEntries().
 		try (var c = buildClient(true)) {
-			c.request("PARSE", "/multi.log?start=2024-01-01&end=2024-12-31").run().assertStatus(200);
+			c.get("/parse/multi.log?start=2024-01-01&end=2024-12-31").run().assertStatus(200);
 		}
 	}
 	@Test void b11_view_loggers_severity_filters() throws Exception {
 		try (var c = buildClient(true)) {
-			c.request("VIEW", "/multi.log?loggers=Foo&severity=INFO&severity=WARNING").run().assertStatus(200);
+			c.get("/view/multi.log?loggers=Foo&severity=INFO&severity=WARNING").run().assertStatus(200);
 		}
 	}
 	@Test void b12_download_returnsFileContents() throws Exception {
 		try (var c = buildClient(true)) {
-			var resp = c.request("DOWNLOAD", "/plain.log").run();
+			var resp = c.get("/download/plain.log").run();
 			resp.assertStatus(200);
 			assertTrue(resp.getContent().asString().contains("hello"));
 		}
 	}
 	@Test void b13_download_notFound_returns404() throws Exception {
 		try (var c = buildClient(true)) {
-			c.request("DOWNLOAD", "/nope.log").run().assertStatus(404);
+			c.get("/download/nope.log").run().assertStatus(404);
 		}
 	}
 	@Test void b14_delete_existing_log_returnsRedirect() throws Exception {
@@ -288,6 +293,37 @@ class LogsResource_Coverage_Test extends TestBase {
 		try (var c = buildClient(true)) {
 			c.delete("/delete-me.log").run().assertStatus(303);
 			assertFalse(Files.exists(toDelete));
+		}
+	}
+	@Test void b15_actionOnDirectory_returns404() throws Exception {
+		try (var c = buildClient(true)) {
+			c.get("/view/sub").run().assertStatus(404);
+			c.get("/parse/sub").run().assertStatus(404);
+			c.get("/download/sub").run().assertStatus(404);
+		}
+	}
+	@Test void b16_view_nestedFile() throws Exception {
+		try (var c = buildClient(true)) {
+			var resp = c.get("/view/sub/nested.log").run();
+			resp.assertStatus(200);
+			assertTrue(resp.getContent().asString().contains("nested"));
+		}
+	}
+	@Test void b17_reservedPrefixDirectory_isNotListableButItsFilesAreReachable() throws Exception {
+		try (var c = buildClient(true)) {
+			c.get("/view/view").run().assertStatus(404);
+			var resp = c.get("/view/view/inner.log").run();
+			resp.assertStatus(200);
+			assertTrue(resp.getContent().asString().contains("inner"));
+		}
+	}
+	@Test void b18_delete_reservesNoPrefix() throws Exception {
+		var doomed = logRoot.resolve("view").resolve("doomed.log");
+		Files.writeString(doomed, "[2024.01.01 13:30:00 INFO] doomed\n");
+		try (var c = buildClient(true)) {
+			c.delete("/view/doomed.log").run().assertStatus(303);
+			assertFalse(Files.exists(doomed), "DELETE /view/doomed.log deletes the file in the view directory");
+			assertTrue(Files.exists(logRoot.resolve("view").resolve("inner.log")));
 		}
 	}
 }

@@ -63,6 +63,11 @@ import org.apache.juneau.rest.server.servlet.*;
  * 		<l>DirectoryResource.allowDeletes</l> - If <jk>true</jk>, allows files to be deleted.
  * </ul>
  *
+ * <p>
+ * <b>Warning:</b> this resource accepts the {@code method} query parameter for every method, so a plain {@code GET}
+ * link such as {@code ?method=DELETE} can change files; put it behind a CSRF boundary, or remove
+ * {@code allowedMethodParams}, before mounting it anywhere a browser can reach.
+ *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauMicroservice">juneau-microservice Basics</a>
  * </ul>

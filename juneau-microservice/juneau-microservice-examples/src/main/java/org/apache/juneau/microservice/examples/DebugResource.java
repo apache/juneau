@@ -29,6 +29,11 @@ import org.apache.juneau.rest.server.servlet.*;
 /**
  * Microservice debug utilities.
  *
+ * <p>
+ * <b>Warning:</b> this resource accepts {@code ?method=POST}, so a plain {@code GET} link (such as its own
+ * {@code jetty-thread-dump} navlink) reaches its {@code POST} operations; put it behind a CSRF boundary before
+ * mounting it anywhere a browser can reach.
+ *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauMicroserviceJetty">juneau-microservice-jetty Basics</a>
 

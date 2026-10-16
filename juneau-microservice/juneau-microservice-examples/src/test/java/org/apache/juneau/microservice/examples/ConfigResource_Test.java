@@ -22,10 +22,11 @@ import org.apache.juneau.*;
 import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.config.*;
 import org.apache.juneau.rest.mock.classic.*;
+import org.apache.juneau.rest.server.*;
 import org.junit.jupiter.api.*;
 
 /**
- * Tests for {@link ConfigResource} covering the GET/PUT/POST endpoints via {@link MockRestClient}.
+ * Tests for {@link ConfigResource} covering the GET and PUT endpoints via {@link MockRestClient}.
  */
 @SuppressWarnings({
 	"resource" // Closeable resources in tests are intentionally unassigned; closing is handled by test infrastructure.
@@ -86,12 +87,19 @@ class ConfigResource_Test extends TestBase {
 		}
 	}
 
-	@Test void a06_getConfigEditForm_returnsForm() throws Exception {
+	@Test void a06_editForm_isGone() throws Exception {
+		// "/edit" is now just a section name, and no such section exists.
 		try (var c = buildClient()) {
-			var resp = c.get("/edit").run().assertStatus(200);
-			var body = resp.getContent().asString();
-			assertTrue(body.contains("form"), "Edit form should contain a form element");
-			assertTrue(body.contains("textarea"), "Edit form should contain a textarea");
+			var resp = c.get("/edit").run().assertStatus(404);
+			assertFalse(resp.getContent().asString().contains("<form"), "No edit form may be served");
+		}
+	}
+
+	@Test void a07_listing_hasNoEditLink() throws Exception {
+		try (var c = buildClient()) {
+			var body = c.get("/").accept("text/html").run().assertStatus(200).getContent().asString();
+			assertFalse(body.contains("servlet:/edit") || body.contains("/edit\""), () -> "Page must not link to an edit form: " + body);
+			assertFalse(body.contains("<form"), () -> "Page must not carry a form: " + body);
 		}
 	}
 
@@ -126,15 +134,20 @@ class ConfigResource_Test extends TestBase {
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
-	// POST endpoint
+	// Writes are PUT only
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@Test void c01_setConfigContentsFormPost_postFormData() throws Exception {
+	@Test void c01_formPost_isNotAllowed() throws Exception {
 		try (var c = buildClient()) {
 			var ini = "[FormSection]\nbaz = qux\n";
-			var resp = c.formPostPairs("/", "contents", ini).run().assertStatus(200);
-			var body = resp.getContent().asString();
-			assertTrue(body.contains("FormSection"), "Body should contain FormSection after FORM POST");
+			c.formPostPairs("/", "contents", ini).run().assertStatus(405);
+			assertFalse(c.get("/").run().getContent().asString().contains("FormSection"), "A form POST must not change the configuration");
 		}
+	}
+
+	@Test void c02_putOperations_areMutating() {
+		for (var m : ConfigResource.class.getMethods())
+			if (m.getAnnotation(RestPut.class) != null)
+				assertNotNull(m.getAnnotation(Mutating.class), () -> m.getName() + " must be declared @Mutating");
 	}
 }

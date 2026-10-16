@@ -36,7 +36,8 @@ import org.apache.juneau.rest.server.widget.*;
  * Mounts the deployment-agnostic {@link PetStoreResource} and {@link PetstoreConsoleResource} (the admin console at
  * {@code /console}) from {@code juneau-petstore-core}, and the Jetty/Microservice-specific admin resources ({@link ConfigResource}, {@link LogsResource},
  * {@link ShutdownResource}).  The admin trio is a documented Jetty-only non-parity feature — the Spring Boot
- * deployment in {@code juneau-petstore-springboot} does not mount it.
+ * deployment in {@code juneau-petstore-springboot} does not mount it.  {@link App.AppConfig#adminBoundary()} puts the
+ * trio behind its own CSRF boundary.
  *
  * <p>
  * Also showcases the Config API + SVL variable resolver: the root page's header is driven by

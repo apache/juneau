@@ -44,12 +44,46 @@ import org.apache.juneau.rest.server.servlet.*;
 
 /**
  * REST resource for viewing and accessing log files.
+ *
+ * <h5 class='section'>Routes</h5>
+ * <table class='styled'>
+ * 	<tr><th>Request</th><th>Does</th></tr>
+ * 	<tr><td>{@code GET /logs/{path}}</td><td>Information on a file, or a directory listing</td></tr>
+ * 	<tr><td>{@code GET /logs/view/{path}}</td><td>The file's contents as text, or as HTML with {@code ?highlight=true}</td></tr>
+ * 	<tr><td>{@code GET /logs/parse/{path}}</td><td>The file's parsed log entries</td></tr>
+ * 	<tr><td>{@code GET /logs/download/{path}}</td><td>The file's contents as {@code application/octet-stream}</td></tr>
+ * 	<tr><td>{@code DELETE /logs/{path}}</td><td>Deletes the file or directory, when {@code Logging/allowDeletes} is on</td></tr>
+ * </table>
+ *
+ * <p>
+ * The {@code view}, {@code parse} and {@code download} prefixes are reserved: they always name an action, never a
+ * directory.  A log directory with one of those names cannot be listed through {@code GET /logs/view} and so on, but
+ * its files are still reachable through the action routes, for example {@code GET /logs/view/view/app.log}.  The
+ * listing's link to such a directory routes to the action and is answered with {@code 404}, as is any action on a
+ * directory.  {@code DELETE} reserves no prefix: {@code DELETE /logs/view/app.log} deletes {@code app.log} in the
+ * {@code view} directory.
+ *
+ * <p>
+ * Every read is a plain {@code GET}, and the {@code method} query parameter is not accepted, so no {@code GET} link
+ * can delete anything.  A delete must be a real {@code DELETE}, sent by a REST client or from the command line; the
+ * HTML listing has no delete link, because a browser link or form cannot carry the header-borne token a CSRF
+ * boundary requires.  A {@code DELETE} cannot be sent cross-site without a CORS preflight, so a boundary in front of
+ * this resource (see {@link AdminBoundary}) admits it without a token:
+ * <p class='bcode'>
+ * 	curl -X DELETE http://localhost:10000/logs/old.log
+ * </p>
+ *
+ * <p>
+ * This resource has no authentication of its own.  Do not expose it on an untrusted network.
+ *
+ * <h5 class='section'>See Also:</h5><ul>
+ * 	<li class='jc'>{@link AdminBoundary}
+ * </ul>
  */
 @Rest(
 	path="/logs",
 	title="Log files",
-	description="Log files from this service",
-	allowedMethodParams="*"
+	description="Log files from this service"
 )
 @HtmlConfig(uriAnchorText="PROPERTY_NAME")
 @SuppressWarnings({
@@ -116,26 +150,27 @@ public class LogsResource extends BasicRestServlet {
 		private final String uri;
 
 		private final boolean includeChildren;
-		private final boolean allowDeletes;
 
 		/**
 		 * Constructor.
 		 *
 		 * @param f The file or directory.
 		 * @param path The path.
-		 * @param allowDeletes Whether deletes are allowed.
 		 * @param includeChildren Whether to include child files.
 		 */
-		public FileResource(File f, String path, boolean allowDeletes, boolean includeChildren) {
+		public FileResource(File f, String path, boolean includeChildren) {
 			this.f = f;
 			this.path = path;
 			this.uri = "servlet:/" + or(path, "");
 			this.includeChildren = includeChildren;
-			this.allowDeletes = allowDeletes;
 		}
 
 		/**
-		 * Returns available actions for this file (view, download, delete, etc.).
+		 * Returns the read actions for this file: view, highlighted, parsed and download.
+		 *
+		 * <p>
+		 * Every action is a plain {@code GET} link.  There is no delete action: a delete is a {@code DELETE} request,
+		 * which a link cannot send.
 		 *
 		 * @return The list of actions.
 		 */
@@ -143,12 +178,11 @@ public class LogsResource extends BasicRestServlet {
 		public List<Action> getActions() {
 			var l = new ArrayList<Action>();
 			if (f.canRead() && ! f.isDirectory()) {
-				l.add(new Action("view", uri + "?method=VIEW"));
-				l.add(new Action("highlighted", uri + "?method=VIEW&highlight=true"));
-				l.add(new Action("parsed", uri + "?method=PARSE"));
-				l.add(new Action("download", uri + "?method=DOWNLOAD"));
-				if (allowDeletes)
-					l.add(new Action("delete", uri + "?method=DELETE"));
+				var p = or(path, "");
+				l.add(new Action("view", "servlet:/view/" + p));
+				l.add(new Action("highlighted", "servlet:/view/" + p + "?highlight=true"));
+				l.add(new Action("parsed", "servlet:/parse/" + p));
+				l.add(new Action("download", "servlet:/download/" + p));
 			}
 			return l;
 		}
@@ -165,7 +199,7 @@ public class LogsResource extends BasicRestServlet {
 			if (f.isFile() || ! includeChildren)
 				return null;
 			return Arrays.stream(f.listFiles(FILE_FILTER))
-				.map(fc -> new FileResource(fc, (nn(path) ? (path + '/') : "") + urlEncode(fc.getName()), allowDeletes, false))
+				.map(fc -> new FileResource(fc, (nn(path) ? (path + '/') : "") + urlEncode(fc.getName()), false))
 				.collect(Collectors.toCollection(() -> new TreeSet<>(FILE_COMPARATOR)));
 		}
 
@@ -237,6 +271,7 @@ public class LogsResource extends BasicRestServlet {
 	 * @return Redirect to root on success.
 	 * @throws MethodNotAllowed If deletes are not enabled.
 	 */
+	@Mutating("Deletes log files")
 	@RestDelete(
 		path="/*",
 		summary="Delete log file",
@@ -252,19 +287,18 @@ public class LogsResource extends BasicRestServlet {
 	 * @param res The response.
 	 * @param path The file path.
 	 * @return The file contents stream.
-	 * @throws NotFound If the file is not found.
-	 * @throws MethodNotAllowed If method not allowed.
+	 * @throws NotFound If the file is not found, or is a directory.
 	 */
-	@RestOp(
-		method="DOWNLOAD",
-		path="/*",
+	@RestGet(
+		path="/download/*",
 		summary="Download file",
 		description="Download the contents of a file.\nContent-Type is set to 'application/octet-stream'."
 	)
-	public FileContents downloadFile(RestResponse res, @Path("/*") String path) throws NotFound, MethodNotAllowed {
+	public FileContents downloadFile(RestResponse res, @Path("/*") String path) throws NotFound {
+		var f = getRegularFile(path);
 		res.setContentType("application/octet-stream");
 		try {
-			return new FileContents(getFile(path));
+			return new FileContents(f);
 		} catch (@SuppressWarnings("unused") FileNotFoundException e) {
 			throw new NotFound("File not found");
 		}
@@ -295,7 +329,7 @@ public class LogsResource extends BasicRestServlet {
 		var dir = getFile(path);
 		req.setAttribute("fullPath", dir.getAbsolutePath());
 
-		return new FileResource(dir, path, allowDeletes, true);
+		return new FileResource(dir, path, true);
 	}
 
 	/**
@@ -328,13 +362,11 @@ public class LogsResource extends BasicRestServlet {
 	 * @param thread Thread name filter.
 	 * @param loggers Logger filter.
 	 * @param severity Severity filter.
-	 * @throws NotFound If the file is not found.
-	 * @throws MethodNotAllowed If method not allowed.
+	 * @throws NotFound If the file is not found, or is a directory.
 	 * @throws IOException If an I/O error occurs.
 	 */
-	@RestOp(
-		method="VIEW",
-		path="/*",
+	@RestGet(
+		path="/view/*",
 		summary="View contents of log file",
 		description="View the contents of a log file."
 	)
@@ -351,9 +383,9 @@ public class LogsResource extends BasicRestServlet {
 			@Query(name="thread", schema=@Schema(d="Thread name filter.\nOnly show log entries with the specified thread name.")) String thread,
 			@Query(name="loggers", schema=@Schema(d="Logger filter (simple class name).\nOnly show log entries if they were produced by one of the specified loggers.")) String[] loggers,
 			@Query(name="severity",schema=@Schema( d="Severity filter.\nOnly show log entries with the specified severity.")) String[] severity
-		) throws NotFound, MethodNotAllowed, IOException {
+		) throws NotFound, IOException {
 
-		var f = getFile(path);
+		var f = getRegularFile(path);
 
 		var startDate = o(start).filter(x1 -> ! isBlank(x1)).map(x2 -> GranularZonedDateTime.of(start).getZonedDateTime()).map(GregorianCalendar::from).map(Calendar::getTime).orElse(null);
 		var endDate = o(end).filter(x11 -> ! isBlank(x11)).map(x4 -> GranularZonedDateTime.of(end).getZonedDateTime()).map(GregorianCalendar::from).map(Calendar::getTime).orElse(null);
@@ -411,9 +443,8 @@ public class LogsResource extends BasicRestServlet {
 	 * @throws NotFound If the file is not found.
 	 * @throws IOException If an I/O error occurs.
 	 */
-	@RestOp(
-		method="PARSE",
-		path="/*",
+	@RestGet(
+		path="/parse/*",
 		converters=Queryable.class,
 		summary="View parsed contents of file",
 		description="View the parsed contents of a file.",
@@ -436,7 +467,7 @@ public class LogsResource extends BasicRestServlet {
 			@Query(name="severity", schema=@Schema(d="Severity filter.\nOnly show log entries with the specified severity.")) String[] severity
 		) throws NotFound, IOException {
 
-		var f = getFile(path);
+		var f = getRegularFile(path);
 		req.setAttribute("fullPath", f.getAbsolutePath());
 
 		var startDate = o(start).filter(x1 -> ! isBlank(x1)).map(x2 -> GranularZonedDateTime.of(start).getZonedDateTime()).map(GregorianCalendar::from).map(Calendar::getTime).orElse(null);
@@ -480,6 +511,17 @@ public class LogsResource extends BasicRestServlet {
 		} catch (IllegalArgumentException e) {
 			throw new Forbidden(e.getMessage());
 		}
+	}
+
+	/**
+	 * Resolves a request path as {@link #getFile(String)} does, and requires a file: the read actions have nothing to
+	 * show for a directory.
+	 */
+	private static File getRegularFile(String path) throws NotFound {
+		var f = getFile(path);
+		if (f.isDirectory())
+			throw new NotFound("File not found.");
+		return f;
 	}
 
 	private static LogParser getLogParser(File f, Date start, Date end, String thread, String[] loggers, String[] severity) throws IOException {

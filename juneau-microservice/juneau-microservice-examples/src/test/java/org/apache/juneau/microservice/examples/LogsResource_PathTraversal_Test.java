@@ -103,9 +103,7 @@ class LogsResource_PathTraversal_Test extends TestBase {
 	 * Mounted at the root (no {@code path} attribute) so test request URIs don't need a
 	 * {@code /logs/} prefix.
 	 */
-	@Rest(
-		allowedMethodParams="*"
-	)
+	@Rest
 	public static class TestLogsResource extends LogsResource {
 		private static final long serialVersionUID = 1L;
 	}
@@ -129,7 +127,7 @@ class LogsResource_PathTraversal_Test extends TestBase {
 
 	@Test void t01_normalAccess_view() throws Exception {
 		try (var c = buildClient()) {
-			c.request("VIEW", "/inside.log").run()
+			c.get("/view/inside.log").run()
 				.assertStatus(200)
 				.assertContent().is("INSIDE_LOG_ROOT");
 		}
@@ -146,35 +144,41 @@ class LogsResource_PathTraversal_Test extends TestBase {
 		}
 	}
 
-	@Test void t03_methodVIEW_traversal_returns403() throws Exception {
+	@Test void t03_view_traversal_returns403() throws Exception {
 		try (var c = buildClient()) {
-			var resp = c.get("/../outside-secret.log?method=VIEW").run();
-			assertEquals(403, resp.getStatusCode(), "GET /../outside-secret.log?method=VIEW must be rejected");
+			var resp = c.get("/view/../outside-secret.log").run();
+			assertEquals(403, resp.getStatusCode(), "GET /view/../outside-secret.log must be rejected");
 			assertFalse(resp.getContent().asString().contains("AUDIT_OUTSIDE_LOG_SECRET"),
 				"Response body must not leak the outside-root secret");
 		}
 	}
 
-	@Test void t04_methodDOWNLOAD_traversal_returns403() throws Exception {
+	@Test void t04_download_traversal_returns403() throws Exception {
 		try (var c = buildClient()) {
-			var resp = c.get("/../outside-secret.log?method=DOWNLOAD").run();
-			assertEquals(403, resp.getStatusCode(), "GET /../outside-secret.log?method=DOWNLOAD must be rejected");
+			var resp = c.get("/download/../outside-secret.log").run();
+			assertEquals(403, resp.getStatusCode(), "GET /download/../outside-secret.log must be rejected");
 			assertFalse(resp.getContent().asString().contains("AUDIT_OUTSIDE_LOG_SECRET"),
 				"Response body must not leak the outside-root secret");
 		}
 	}
 
-	@Test void t05_verbVIEW_traversal_returns403() throws Exception {
+	@Test void t05_verbVIEW_traversal_doesNotLeak() throws Exception {
+		// The custom VIEW method is no longer an operation; the request must not reach a file either way.
 		try (var c = buildClient()) {
-			var status = c.request("VIEW", "/../outside-secret.log").run().getStatusCode();
-			assertEquals(403, status, "VIEW /../outside-secret.log must be rejected");
+			var resp = c.request("VIEW", "/../outside-secret.log").run();
+			assertEquals(404, resp.getStatusCode(), "VIEW /../outside-secret.log must not be served");
+			assertFalse(resp.getContent().asString().contains("AUDIT_OUTSIDE_LOG_SECRET"),
+				"Response body must not leak the outside-root secret");
 		}
 	}
 
-	@Test void t06_verbDOWNLOAD_traversal_returns403() throws Exception {
+	@Test void t06_verbDOWNLOAD_traversal_doesNotLeak() throws Exception {
+		// The custom DOWNLOAD method is no longer an operation; the request must not reach a file either way.
 		try (var c = buildClient()) {
-			var status = c.request("DOWNLOAD", "/../outside-secret.log").run().getStatusCode();
-			assertEquals(403, status, "DOWNLOAD /../outside-secret.log must be rejected");
+			var resp = c.request("DOWNLOAD", "/../outside-secret.log").run();
+			assertEquals(404, resp.getStatusCode(), "DOWNLOAD /../outside-secret.log must not be served");
+			assertFalse(resp.getContent().asString().contains("AUDIT_OUTSIDE_LOG_SECRET"),
+				"Response body must not leak the outside-root secret");
 		}
 	}
 
@@ -238,7 +242,7 @@ class LogsResource_PathTraversal_Test extends TestBase {
 		assumeTrue(symlinkInside != null, "Filesystem does not support symbolic links");
 
 		try (var c = buildClient()) {
-			c.request("VIEW", "/link-to-inside.log").run()
+			c.get("/view/link-to-inside.log").run()
 				.assertStatus(200)
 				.assertContent().is("INSIDE_LOG_ROOT");
 		}
@@ -248,7 +252,7 @@ class LogsResource_PathTraversal_Test extends TestBase {
 		assumeTrue(symlinkEscape != null, "Filesystem does not support symbolic links");
 
 		try (var c = buildClient()) {
-			var resp = c.request("VIEW", "/link-to-outside.log").run();
+			var resp = c.get("/view/link-to-outside.log").run();
 			assertEquals(403, resp.getStatusCode(),
 				"Symlink to outside-root must be rejected with 403 (post-existence boundary check)");
 			assertFalse(resp.getContent().asString().contains("AUDIT_OUTSIDE_LOG_SECRET"),
@@ -260,10 +264,10 @@ class LogsResource_PathTraversal_Test extends TestBase {
 	// PARSE traversal — the remaining operation surface (view/download/delete covered above)
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@Test void t13_methodPARSE_traversal_returns403() throws Exception {
+	@Test void t13_parse_traversal_returns403() throws Exception {
 		try (var c = buildClient()) {
-			var resp = c.get("/../outside-secret.log?method=PARSE").run();
-			assertEquals(403, resp.getStatusCode(), "GET /../outside-secret.log?method=PARSE must be rejected");
+			var resp = c.get("/parse/../outside-secret.log").run();
+			assertEquals(403, resp.getStatusCode(), "GET /parse/../outside-secret.log must be rejected");
 			assertFalse(resp.getContent().asString().contains("AUDIT_OUTSIDE_LOG_SECRET"),
 				"Response body must not leak the outside-root secret");
 		}

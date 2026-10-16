@@ -67,8 +67,8 @@ import jakarta.servlet.http.*;
  *
  * <h5 class='section'>What is outside</h5>
  * <p>
- * The {@code /petstore-ui} app (which only reads) and the microservice admin resources are covered by neither
- * boundary.  The Jetty deployment's admin logs resource allows every {@code method} override parameter.
+ * The {@code /petstore-ui} app (which only reads) is covered by neither boundary.  The Jetty deployment puts the
+ * microservice admin resources behind a third boundary of their own.
  *
  * <h5 class='section'>The authority</h5>
  * <p>

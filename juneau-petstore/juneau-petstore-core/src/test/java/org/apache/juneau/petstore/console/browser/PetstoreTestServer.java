@@ -78,7 +78,7 @@ public final class PetstoreTestServer {
 		}
 	}
 
-	/** Contributes {@link BrowserHost} and the same two CSRF boundaries the runners install to the fixture's Jetty. */
+	/** Contributes {@link BrowserHost} and the console and API CSRF boundaries the runners install to the fixture's Jetty. */
 	@Configuration
 	public static class BrowserConfig {
 		// Shared by both boundary beans, as in the runners.

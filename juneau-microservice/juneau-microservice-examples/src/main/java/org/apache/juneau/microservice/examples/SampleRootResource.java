@@ -22,6 +22,11 @@ import org.apache.juneau.rest.server.servlet.*;
 /**
  * Sample root REST resource.
  *
+ * <p>
+ * It mounts {@link ConfigResource} with no CSRF boundary in front of it.  {@code ConfigResource} has no HTML form, and
+ * its writes are {@code PUT}s, which a browser cannot send cross-site without a CORS preflight.  An application that
+ * mounts the admin resources where a browser can reach them should still register {@link AdminBoundary}.
+ *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauMicroservice">juneau-microservice Basics</a>
  * </ul>

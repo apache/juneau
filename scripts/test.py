@@ -30,7 +30,7 @@ Options:
     --window <n>             --rebaseline: runs per key to take the median of (default 20)
     --min-runs <n>           --rebaseline: skip keys with fewer runs than this (default 5)
     --js-tests               Also run the headless-browser JS harness (mvn -Pjs-tests, *_BrowserTest in
-                             juneau-rest-server-views).  Fails if Node/npm are missing.
+                             juneau-rest-server-views, juneau-petstore-core and juneau-rest-server-terminal).  Fails if Node/npm are missing.
     --no-js-tests            Never run the JS harness (overrides auto-detect)
     --console <mode>         Maven output on the console: full (default), condensed or none
     --detail <level>         Console detail: summary, actionable (default), modules or all (JUNEAU_RUN_DETAIL)
@@ -44,8 +44,10 @@ Environment:
                              concurrent runs on one checkout).
 
 Browser tests:
-    CI's js-tests job is the only thing that normally runs the browser tests (-Pjs-tests).  When neither
-    --js-tests nor --no-js-tests is given, this script enables them automatically if any .js, .css or .ftl
+    The *_BrowserTest classes (juneau-rest-server-views, juneau-petstore-core, juneau-rest-server-terminal) are excluded from the main test
+    pass, so it reports no skips for them; this step runs them with -Pjs-tests, as CI's js-tests and
+    js-tests-petstore and js-tests-terminal jobs do.  When neither
+    --js-tests nor --no-js-tests is given, this script enables them automatically if any .js, .cjs, .css or .ftl
     file under a src/ tree differs from origin/master (committed, uncommitted or untracked).  If Node/npm
     are not on the PATH, an auto-enabled run prints a notice and skips; an explicit --js-tests fails instead.
     The first run downloads Playwright + Chromium (needs network); later runs reuse target/js.
@@ -603,8 +605,16 @@ def test(no_container=False):
 	return run_command(cmd, "tests", "Tests", label="Tests", summarize=_record_buckets)
 
 
-JS_TEST_MODULE = "juneau-rest/juneau-rest-server-views"
-JS_SOURCE_SUFFIXES = (".js", ".css", ".ftl")
+# The modules whose *_BrowserTest classes the browser step runs, with the package-qualified -Dtest pattern that
+# selects each module's own suite (the same patterns as CI's js-tests, js-tests-petstore and js-tests-terminal jobs; a bare
+# '*_BrowserTest' would also match a sibling module's suite in the reactor).  Those classes are excluded from the
+# default surefire pass by each module's pom and enabled by its js-tests profile.
+JS_TEST_MODULES = (
+	("juneau-rest/juneau-rest-server-views", "org.apache.juneau.rest.server.views.*_BrowserTest"),
+	("juneau-petstore/juneau-petstore-core", "org.apache.juneau.petstore.**.*_BrowserTest"),
+	("juneau-rest/juneau-rest-server-terminal", "org.apache.juneau.rest.server.terminal.*_BrowserTest"),
+)
+JS_SOURCE_SUFFIXES = (".js", ".cjs", ".css", ".ftl")
 
 
 def is_js_source(path):
@@ -644,13 +654,18 @@ def js_prereq_problem():
 	return None
 
 
-def js_tests(installed=False):
-	"""The JS harness.  After this run's install, -f builds only the module (upstream comes from ~/.m2); otherwise
-	-pl -am rebuilds what it needs, since .mvn/maven.config's --also-make applies either way."""
-	scope = f"-f {JS_TEST_MODULE}/pom.xml" if installed else f"-pl {JS_TEST_MODULE} -am"
-	cmd = (f"mvn -Pjs-tests {scope} test -Drat.skip=true "
-		"-Dtest='*_BrowserTest' -Dsurefire.failIfNoSpecifiedTests=false")
-	return run_command(cmd, "js-tests", "Browser tests", label="Browser tests")
+def js_tests_command():
+	"""One reactor run over every JS test module.  .mvn/maven.config's --also-make builds the upstream modules from
+	the working tree, so the same command serves a run after this script's install and a --test-only run."""
+	modules = ",".join(module for module, _ in JS_TEST_MODULES)
+	patterns = ",".join(pattern for _, pattern in JS_TEST_MODULES)
+	return (f"mvn -Pjs-tests -pl {modules} test -Drat.skip=true "
+		f"-Dtest='{patterns}' -Dsurefire.failIfNoSpecifiedTests=false")
+
+
+def js_tests(installed=False):  # NOSONAR python:S1172 -- kept so callers need not change; the scope no longer depends on it
+	"""The JS harness: the views and petstore browser suites in one run."""
+	return run_command(js_tests_command(), "js-tests", "Browser tests", label="Browser tests")
 
 
 def maybe_run_js_tests(js_flag, no_js_flag, changed_files, runner=None, installed=False):

@@ -17,7 +17,6 @@
 package org.apache.juneau.petstore.console;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.junit.jupiter.api.Assumptions.*;
 
 import java.io.*;
 import java.nio.charset.*;
@@ -25,6 +24,7 @@ import java.nio.file.*;
 import java.util.*;
 
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.condition.*;
 
 /**
  * Fails when something the petstore docs tour (pages 19.01-19.18) documents disappears from the code, or when a
@@ -142,9 +142,11 @@ class PetstoreDocsCatalogue_Test {
 	// c - docs checkout (optional)
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@Test void c01_docsCheckoutMentionsEveryRow() throws IOException {
+	// disabledReason (unlike a failed assumption) lands in the skipped test's message in the Surefire report.
+	@Test
+	@EnabledIfSystemProperty(named="juneau.docs.dir", matches=".+", disabledReason="juneau.docs.dir is not set; skipping the docs-checkout check")
+	void c01_docsCheckoutMentionsEveryRow() throws IOException {
 		var dir = System.getProperty("juneau.docs.dir");
-		assumeTrue(dir != null && ! dir.isBlank(), "juneau.docs.dir is not set; skipping the docs-checkout check");
 		var topics = Path.of(dir, "pages", "topics");
 		var problems = new ArrayList<String>();
 		for (var r : PAGE_ROWS)

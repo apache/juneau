@@ -146,14 +146,27 @@ def test_perf_without_a_baseline_still_writes_the_report(test_mod, bus, monkeypa
     assert [f for f in bus.of("step_end") if f["id"] == "perf"][-1]["summary"] == f"no baseline file → {report}"
 
 
-# ---- JS -f -------------------------------------------------------------------------------------------------------------
-def test_js_tests_use_the_module_pom_after_an_install(test_mod, monkeypatch):
+# ---- browser step scope ------------------------------------------------------------------------------------------------
+def test_js_tests_cover_the_views_and_petstore_modules(test_mod, monkeypatch):
+    modules = dict(test_mod.JS_TEST_MODULES)
+    assert set(modules) == {"juneau-rest/juneau-rest-server-views", "juneau-petstore/juneau-petstore-core",
+                       "juneau-rest/juneau-rest-server-terminal"}
+    # Package-qualified, so one module's pattern cannot select the other's suite.
+    assert modules["juneau-rest/juneau-rest-server-views"] == "org.apache.juneau.rest.server.views.*_BrowserTest"
+    assert modules["juneau-petstore/juneau-petstore-core"] == "org.apache.juneau.petstore.**.*_BrowserTest"
+    assert modules["juneau-rest/juneau-rest-server-terminal"] == "org.apache.juneau.rest.server.terminal.*_BrowserTest"
     calls = []
     monkeypatch.setattr(test_mod, "run_command", lambda cmd, *a, **k: calls.append(cmd) or (0, ""))
     test_mod.js_tests(installed=True)
     test_mod.js_tests(installed=False)
-    assert calls[0].startswith(f"mvn -Pjs-tests -f {test_mod.JS_TEST_MODULE}/pom.xml test ")
-    assert calls[1].startswith(f"mvn -Pjs-tests -pl {test_mod.JS_TEST_MODULE} -am test ")
+    cmd = calls[0]
+    assert calls[0] == calls[1]
+    assert cmd.startswith("mvn -Pjs-tests -pl juneau-rest/juneau-rest-server-views,juneau-petstore/juneau-petstore-core,"
+                              "juneau-rest/juneau-rest-server-terminal test ")
+    assert "-f " not in cmd
+    assert ("-Dtest='org.apache.juneau.rest.server.views.*_BrowserTest,"
+            "org.apache.juneau.petstore.**.*_BrowserTest,org.apache.juneau.rest.server.terminal.*_BrowserTest'") in cmd
+    assert "-Dsurefire.failIfNoSpecifiedTests=false" in cmd
 
 
 @pytest.mark.parametrize("argv,installed", [([], True), (["--test-only"], False)])

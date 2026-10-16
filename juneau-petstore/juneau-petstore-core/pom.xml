@@ -236,6 +236,8 @@
 						<groupId>org.apache.maven.plugins</groupId>
 						<artifactId>maven-surefire-plugin</artifactId>
 						<configuration>
+							<!-- Run the *_BrowserTest classes the default build excludes. -->
+							<excludes combine.self="override"/>
 							<systemPropertyVariables>
 								<juneau.jsTests>true</juneau.jsTests>
 								<juneau.jsTests.dir>${js.tests.dir}</juneau.jsTests.dir>
@@ -252,6 +254,18 @@
 
 	<build>
 		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<configuration>
+					<!-- The *_BrowserTest classes are opt-in (they skip themselves unless the js-tests profile sets
+					     juneau.jsTests), so the default pass leaves them out rather than reporting hundreds of skips.
+					     The js-tests profile clears this list; scripts/test.py's browser step and CI run them there. -->
+					<excludes>
+						<exclude>**/*_BrowserTest.java</exclude>
+					</excludes>
+				</configuration>
+			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-source-plugin</artifactId>
