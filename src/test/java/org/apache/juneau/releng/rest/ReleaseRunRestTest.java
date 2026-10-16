@@ -19,6 +19,7 @@ package org.apache.juneau.releng.rest;
 
 import static org.apache.juneau.test.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.mock;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -40,8 +41,11 @@ import org.apache.juneau.releng.nexus.NexusMockModel;
 import org.apache.juneau.releng.nexus.NexusMockRest;
 import org.apache.juneau.releng.nexus.NexusStagingClient;
 import org.apache.juneau.releng.util.ProcessRunner;
+import org.apache.juneau.rest.server.view.freemarker.FreemarkerView;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
+
+import jakarta.servlet.http.HttpServletRequest;
 
 /**
  * Direct unit tests of {@link ReleaseRunRest}'s no-such-run/single-active-run status mapping.
@@ -344,6 +348,63 @@ class ReleaseRunRestTest {
 		var ex = assertThrows(Conflict.class, () -> rest.start(second));
 		assertEquals(409, ex.getStatusCode());
 		assertTrue(ex.getMessage().contains("9.2.1"));
+	}
+
+	@Test
+	void b07a_sameStartKeyTwiceReturnsTheSameRun(@TempDir Path dir) {
+		var rest = rest(dir);
+		var first = startRequest("9.2.1");
+		first.idempotencyKey = "k1";
+		var a = rest.start(first);
+
+		var again = startRequest("9.2.1");
+		again.idempotencyKey = "k1";
+		var b = rest.start(again);
+
+		assertEquals(a.version, b.version);
+		assertEquals(a.createdAt, b.createdAt);
+	}
+
+	@Test
+	void b07b_differentStartKeyWhileARunIsActiveIs409(@TempDir Path dir) {
+		var rest = rest(dir);
+		var first = startRequest("9.2.1");
+		first.idempotencyKey = "k1";
+		rest.start(first);
+
+		var other = startRequest("9.2.2");
+		other.idempotencyKey = "k2";
+		assertEquals(409, assertThrows(Conflict.class, () -> rest.start(other)).getStatusCode());
+	}
+
+	@Test
+	void b07c_aReplayedKeyIsNotCountedAsASecondRunEvenForADifferentBody(@TempDir Path dir) {
+		var rest = rest(dir);
+		var first = startRequest("9.2.1");
+		first.idempotencyKey = "k1";
+		rest.start(first);
+
+		var replay = startRequest("9.9.9");
+		replay.idempotencyKey = "k1";
+		assertEquals("9.2.1", rest.start(replay).version);
+	}
+
+	@Test
+	void b07d_startsWithoutAKeyAreNeverReplays(@TempDir Path dir) {
+		var rest = rest(dir);
+		rest.start(startRequest("9.2.1"));
+		assertEquals(409, assertThrows(Conflict.class, () -> rest.start(startRequest("9.2.1"))).getStatusCode());
+	}
+
+	@Test
+	void b07e_theFormIsRenderedWithAFreshStartKeyPerPage(@TempDir Path dir) {
+		var rest = rest(dir);
+		var req = mock(HttpServletRequest.class);
+		assertNotEquals(startKeyOf(rest, req), startKeyOf(rest, req));
+	}
+
+	private static Object startKeyOf(ReleaseRunRest rest, HttpServletRequest req) {
+		return ((FreemarkerView)rest.page(req)).getAttributes().get("startKey");
 	}
 
 	/**

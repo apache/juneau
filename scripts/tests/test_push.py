@@ -539,3 +539,42 @@ class TestEndOfRunBell:
         fake = Broken(True)
         monkeypatch.setattr(push_module.sys, "stdout", fake)
         push_module.ring_bell()  # must not raise
+
+
+class TestConsoleFlag:
+    """--console full|condensed|none is accepted for parity with the Juneau scripts and sets JUNEAU_RUN_CONSOLE."""
+
+    @pytest.fixture(autouse=True)
+    def clean_env(self, monkeypatch):
+        monkeypatch.delenv("JRM_PUSH_NO_BELL", raising=False)
+        monkeypatch.delenv("JUNEAU_RUN_CONSOLE", raising=False)
+
+    def _main(self, push_module, monkeypatch, *flags):
+        monkeypatch.setattr(push_module.sys, "stdout", _FakeStdout(False))
+        monkeypatch.setattr(push_module.sys, "argv", ["push.py", *flags, "msg"])
+        monkeypatch.setattr(push_module, "git_identity_configured", lambda _repo: True)
+        monkeypatch.setattr(push_module, "commit_and_push", lambda *_a, **_k: 0)
+        with pytest.raises(SystemExit) as exc:
+            push_module.main()
+        return exc.value.code
+
+    @pytest.mark.parametrize("mode", ["full", "condensed", "none"])
+    def test_flag_sets_the_env_var(self, push_module, monkeypatch, mode):
+        assert self._main(push_module, monkeypatch, "--console", mode) == 0
+        assert os.environ["JUNEAU_RUN_CONSOLE"] == mode
+
+    def test_flag_beats_the_env_var(self, push_module, monkeypatch):
+        monkeypatch.setenv("JUNEAU_RUN_CONSOLE", "condensed")
+        assert self._main(push_module, monkeypatch, "--console", "none") == 0
+        assert os.environ["JUNEAU_RUN_CONSOLE"] == "none"
+
+    def test_env_var_is_left_alone_without_the_flag(self, push_module, monkeypatch):
+        monkeypatch.setenv("JUNEAU_RUN_CONSOLE", "condensed")
+        assert self._main(push_module, monkeypatch) == 0
+        assert os.environ["JUNEAU_RUN_CONSOLE"] == "condensed"
+
+    def test_unknown_mode_is_a_usage_error(self, push_module, monkeypatch):
+        monkeypatch.setattr(push_module.sys, "argv", ["push.py", "--console", "loud", "msg"])
+        with pytest.raises(SystemExit) as exc:
+            push_module.main()
+        assert exc.value.code == 2

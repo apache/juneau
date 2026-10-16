@@ -29,7 +29,9 @@
   // Defined unconditionally so the start form (rendered when `run` is null, before `.rm-rail-layout`
   // exists) always has it available. Captures the release metadata plus the four optional narrative fields.
   globalThis.nrStart = async function () {
+    const card = document.querySelector('.rm-form-card[data-start-key]');
     const body = {
+      idempotencyKey: card ? card.dataset.startKey : null,
       version: val('nr-version'), developmentVersion: val('nr-devversion'),
       releaseSummary: val('nr-releaseSummary'), highlights: val('nr-highlights'),
       knownIssues: val('nr-knownIssues'), acknowledgements: val('nr-acknowledgements')

@@ -220,6 +220,61 @@ public class RunEventStore {
 		return sources.computeIfAbsent(file, f -> FileRunViewSource.create(f).terminal(terminal).build());
 	}
 
+	/**
+	 * The versions that have an event file, oldest name first. Read-only: it lists the {@code logs} folder and creates nothing.
+	 *
+	 * @return The run versions, or an empty list when no event has been written.
+	 */
+	public List<String> versions() {
+		if (! Files.isDirectory(logsDir))
+			return List.of();
+		try (var files = Files.list(logsDir)) {
+			var suffix = "-events.jsonl";
+			return files.map(p -> p.getFileName().toString())
+				.filter(n -> n.endsWith(suffix))
+				.map(n -> n.substring(0, n.length() - suffix.length()))
+				.sorted()
+				.toList();
+		} catch (IOException | RuntimeException e) {
+			LOG.log(Level.WARNING, "Cannot list " + logsDir + ": " + e.getMessage());
+			return List.of();
+		}
+	}
+
+	/**
+	 * The persisted events of a run, in file order, exactly as written. Read-only: nothing is cached or rewritten.
+	 *
+	 * @param version The run version.
+	 * @return One wire map per line, or an empty list when the run has no event file. A line that cannot be parsed is
+	 * logged and skipped.
+	 */
+	public List<Map<String,Object>> readEvents(String version) {
+		var file = file(version);
+		List<Map<String,Object>> out = new ArrayList<>();
+		synchronized (lock(file)) {
+			if (! Files.isRegularFile(file))
+				return out;
+			try {
+				for (var line : Files.readAllLines(file, StandardCharsets.UTF_8)) {
+					if (line.isBlank())
+						continue;
+					try {
+						@SuppressWarnings({
+							"unchecked" // Json parses an object line to a Map<String,Object>.
+						})
+						Map<String,Object> m = Json.DEFAULT.read(line, Map.class);
+						out.add(m);
+					} catch (RuntimeException e) {
+						LOG.log(Level.WARNING, "Skipped an unreadable event in " + file.getFileName() + ": " + e.getMessage());
+					}
+				}
+			} catch (IOException e) {
+				LOG.log(Level.WARNING, "Cannot read " + file.getFileName() + ": " + e.getMessage());
+			}
+		}
+		return out;
+	}
+
 	private Path file(String version) {
 		return logsDir.resolve(version + "-events.jsonl");
 	}

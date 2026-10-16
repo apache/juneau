@@ -60,6 +60,7 @@ class AdminRestTest {
 		assertTrue(base.contains("<@main/>"), "Chrome must emit the captured page body via <@main/>: " + base);
 		assertTrue(base.contains("href=\"/rest/setup\""), "Missing Setup nav link: " + base);
 		assertTrue(base.contains("href=\"/rest/releases\""), "Missing Releases nav link: " + base);
+		assertTrue(base.contains("href=\"/rest/audit\""), "Missing Audit nav link: " + base);
 		assertTrue(base.contains("href=\"/rest/runs\""), "Missing New Release nav link: " + base);
 	}
 
@@ -68,7 +69,7 @@ class AdminRestTest {
 		var base = readClasspathResource("/templates/base.ftlh");
 		assertTrue(base.contains("<@navigation>"), "Chrome must author the nav tree once as <@navigation>: " + base);
 		var count = base.split("<@node ", -1).length - 1;
-		assertEquals(5, count, "Expected 5 <@node> entries (Setup, Releases, New Release + Input/Execution subtabs): " + base);
+		assertEquals(6, count, "Expected 6 <@node> entries (Setup, Releases, Audit, New Release + Input/Execution subtabs): " + base);
 		assertTrue(base.contains("href=\"/rest/runs?tab=input\""), "Missing Input subtab href: " + base);
 		assertTrue(base.contains("href=\"/rest/runs?tab=exec\""), "Missing Execution subtab href: " + base);
 	}

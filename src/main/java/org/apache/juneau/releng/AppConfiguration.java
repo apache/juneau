@@ -34,6 +34,7 @@ import org.apache.juneau.releng.credential.Validator;
 import org.apache.juneau.releng.email.EmailService;
 import org.apache.juneau.releng.config.TargetProfile;
 import org.apache.juneau.releng.engine.BranchResolver;
+import org.apache.juneau.releng.engine.AuditService;
 import org.apache.juneau.releng.engine.DropRcService;
 import org.apache.juneau.releng.engine.ReleaseEngine;
 import org.apache.juneau.releng.engine.RunStateStore;
@@ -50,6 +51,7 @@ import org.apache.juneau.releng.release.ReleaseListService;
 import org.apache.juneau.releng.rest.CredentialRest;
 import org.apache.juneau.releng.rest.HomeRest;
 import org.apache.juneau.releng.rest.MilestoneRest;
+import org.apache.juneau.releng.rest.AuditRest;
 import org.apache.juneau.releng.rest.SetupRest;
 import org.apache.juneau.releng.setup.SetupProbeService;
 import org.apache.juneau.releng.rest.ReleaseRest;
@@ -414,6 +416,22 @@ public class AppConfiguration {
 	@Bean
 	public ReleaseRunRest releaseRunRest(ReleaseEngine engine, DropRcService dropRc) {
 		return new ReleaseRunRest(engine, dropRc);
+	}
+
+	/**
+	 * The {@link AuditService} that reads the run events and dropped-RC history the engine already persists.
+	 */
+	@Bean
+	public AuditService auditService(RunStateStore store, ReleaseEngine engine) {
+		return new AuditService(store, engine.runEvents());
+	}
+
+	/**
+	 * The {@link AuditRest} resource.
+	 */
+	@Bean
+	public AuditRest auditRest(AuditService audit) {
+		return new AuditRest(audit);
 	}
 
 	/**

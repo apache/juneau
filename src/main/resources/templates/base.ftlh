@@ -45,6 +45,7 @@
 <@navigation>
     <@node id="setup" label="Setup" href="/rest/setup"/>
     <@node id="releases" label="Releases" href="/rest/releases"/>
+    <@node id="audit" label="Audit" href="/rest/audit"/>
     <@node id="new" label="New Release" href="/rest/runs">
         <@node id="input" label="Input" href="/rest/runs?tab=input"/>
         <@node id="exec" label="Execution" href="/rest/runs?tab=exec"/>

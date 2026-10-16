@@ -25,6 +25,11 @@ Usage:
     ./push.py "commit message"
     ./push.py                     # prompts for a commit message
     ./push.py --dry-run "message" # show what would happen, change nothing
+    ./push.py --console condensed "message"   # accepted for parity with the Juneau scripts; no effect here
+
+    --console full|condensed|none sets JUNEAU_RUN_CONSOLE (the flag wins over a value already in the
+    environment), exactly as scripts/test.py does in apache/juneau.  This script has no Maven step and loads
+    no juneau_run console view, so every choice behaves the same here (git output is always printed in full).
 
     When a run ends (success or failure) on a terminal, push.py rings the terminal bell.
     Set JRM_PUSH_NO_BELL=1 to silence it (it is also skipped when SANDBOX_RUNTIME=1).
@@ -306,6 +311,7 @@ Examples:
   ./push.py "Fix credential validator NPE"
   ./push.py
   ./push.py --dry-run "Would-be commit message"
+  ./push.py --console none "Quiet-console run (no effect here: this script has no console view)"
         """,
     )
     parser.add_argument(
@@ -319,7 +325,18 @@ Examples:
         action="store_true",
         help="Show what would be done without making any changes.",
     )
+    parser.add_argument(
+        "--console",
+        choices=("full", "condensed", "none"),
+        help=(
+            "Maven output on the console: full (default), condensed or none (also JUNEAU_RUN_CONSOLE). "
+            "Accepted for parity with the Juneau scripts; this script runs no Maven and has no console view, "
+            "so it has no effect here."
+        ),
+    )
     args = parser.parse_args()
+    if args.console:
+        os.environ["JUNEAU_RUN_CONSOLE"] = args.console  # an argument beats a value already in the environment
 
     print("=" * 70)
     print("📦 juneau-release-manager push")

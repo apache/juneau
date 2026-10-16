@@ -21,6 +21,7 @@ import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.escapeForScript;
 
 import java.io.IOException;
+import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Optional;
 import org.apache.juneau.commons.inject.Bean;
@@ -42,6 +43,7 @@ import org.apache.juneau.rest.server.terminal.TerminalMixin;
 import org.apache.juneau.rest.server.terminal.TerminalSource;
 import org.apache.juneau.rest.server.views.RunViewMixin;
 import org.apache.juneau.rest.server.views.RunViewSource;
+import org.apache.juneau.rest.server.views.IdempotencyKey;
 import org.apache.juneau.rest.server.views.ViewsMixin;
 import org.apache.juneau.rest.server.view.View;
 import org.apache.juneau.rest.server.view.freemarker.FreemarkerMixin;
@@ -66,8 +68,32 @@ import jakarta.servlet.http.HttpServletRequest;
 	disableContentParam = "true", mixins = { ViewsMixin.class, WebJarsMixin.class })
 public class ReleaseRunRest extends BasicRestResource implements RunViewMixin, TerminalMixin {
 
+	/**
+	 * The action id every start-run key is minted for.
+	 */
+	static final String START_ACTION = "start-run";
+
+	/**
+	 * How many start keys are remembered; the oldest is forgotten first.
+	 */
+	private static final int MAX_START_KEYS = 100;
+
 	private final ReleaseEngine engine;
 	private final DropRcService dropRc;
+
+	/**
+	 * Start key to the version of the run it started, in submission order. Kept in memory only: it exists to collapse a
+	 * double-submit of one form, not to survive a restart, so the persisted run format is unchanged.
+	 */
+	@SuppressWarnings({
+		"serial" // Anonymous LinkedHashMap subclass is never serialized.
+	})
+	private final Map<String, String> startedByKey = new LinkedHashMap<>() {
+		@Override
+		protected boolean removeEldestEntry(Map.Entry<String, String> eldest) {
+			return size() > MAX_START_KEYS;
+		}
+	};
 
 	/**
 	 * Wires the release engine and Drop-RC service this resource's endpoints delegate to.
@@ -98,7 +124,7 @@ public class ReleaseRunRest extends BasicRestResource implements RunViewMixin, T
 		var active = engine.displayRun().orElse(null);
 		var subtab = resolveSubtab(req.getParameter("tab"));
 		var view = ConsolePage.of("new-release", req).attr("stepMeta", stepMetaJson(engine.registry().steps()))
-				.attr("subtab", subtab).attr("navTab", "new/" + subtab);
+				.attr("startKey", IdempotencyKey.mintSelfTargeted(START_ACTION).value()).attr("subtab", subtab).attr("navTab", "new/" + subtab);
 		// FreemarkerView.attr() rejects null values by design; the template only checks run??
 		// (attribute presence), so omit the attribute entirely when there's no displayable run.
 		return active == null ? view : view.attr("run", active);
@@ -169,19 +195,37 @@ public class ReleaseRunRest extends BasicRestResource implements RunViewMixin, T
 	}
 
 	/**
-	 * Start a new run. Body: {version, developmentVersion?, rc?}. {@code rc} is the release-candidate
+	 * Start a new run. Body: {version, developmentVersion?, rc?, idempotencyKey?}. {@code rc} is the release-candidate
 	 * integer from the Input form (tags {@code juneau-{version}-RC{rc}}); omitted or non-positive leaves
 	 * the default {@code 1}. Rejects a second concurrent run with 409.
+	 *
+	 * <p>The {@code idempotencyKey} is the self-targeted key the New Release form was rendered with. A repeat of a key
+	 * that already started a run returns that run instead of the 409 a second start would get, so a double-submitted
+	 * form is a replay. A different key while a run is active is still a 409. A call with no key is never a replay.
 	 */
 	@Mutating("creates a run and writes its state to disk")
 	@RestPost("/")
 	public RunState start(@Content StartRequest body) {
-		try {
-			var rs = engine.start(body.version, body.developmentVersion, body.rc);
-			return engine.updateDetails(rs.version, body.releaseSummary, body.highlights, body.knownIssues,
-					body.acknowledgements);
-		} catch (IllegalStateException e) {
-			throw new Conflict(e.getMessage());
+		var key = ine(body.idempotencyKey) ? IdempotencyKey.of(body.idempotencyKey, START_ACTION, body.idempotencyKey).value() : null;
+		synchronized (startedByKey) {
+			if (key != null) {
+				var prior = startedByKey.get(key);
+				var replay = prior == null ? null : engine.state(prior);
+				if (replay != null)
+					return replay;
+				// No such run any more (dropped, or its version was edited): the key starts a fresh run.
+				startedByKey.remove(key);
+			}
+			try {
+				var rs = engine.start(body.version, body.developmentVersion, body.rc);
+				var started = engine.updateDetails(rs.version, body.releaseSummary, body.highlights, body.knownIssues,
+						body.acknowledgements);
+				if (key != null)
+					startedByKey.put(key, started.version);
+				return started;
+			} catch (IllegalStateException e) {
+				throw new Conflict(e.getMessage());
+			}
 		}
 	}
 
@@ -305,6 +349,7 @@ public class ReleaseRunRest extends BasicRestResource implements RunViewMixin, T
 	 * Body for {@link #start(StartRequest)}.
 	 */
 	public static class StartRequest {
+		public String idempotencyKey;
 		public String version;
 		public String developmentVersion;
 		public Integer rc;

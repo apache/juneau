@@ -71,7 +71,7 @@
     </section>
     <#else>
     <section class="rm-subtab-panel" id="nr-panel-input" data-subtab="input">
-        <div class="jc-card rm-form-card"<#if hasRun> data-run-version="${run.version}"</#if>>
+        <div class="jc-card rm-form-card"<#if hasRun> data-run-version="${run.version}"<#else> data-start-key="${startKey}"</#if>>
             <#if !hasRun>
             <h2>Start a new release</h2>
             <#else>

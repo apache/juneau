@@ -85,11 +85,12 @@ class SetupRestTest {
 					.hasActiveNav("setup")
 					.hasNavHref("setup", "/rest/setup")
 					.hasNavHref("releases", "/rest/releases")
+					.hasNavHref("audit", "/rest/audit")
 					.hasNavHref("new", "/rest/runs")
 					.hasNavChildren("new", "input", "exec")
 					.hasFooterText("Apache Juneau Release Manager — loopback tool for cutting Apache Juneau releases.");
-				assertEquals(3, page.contract().getList("nav").size(),
-					() -> "Setup, Releases, and New Release must be the three sections: " + body);
+				assertEquals(4, page.contract().getList("nav").size(),
+					() -> "Setup, Releases, Audit, and New Release must be the four sections: " + body);
 				assertTrue(body.contains("juneau-views.css"),
 					"Setup now pulls the views toolkit so the probes can adopt the Juneau probe helper: " + body);
 				assertTrue(body.contains("/juneau-console/chrome.css"), body);
