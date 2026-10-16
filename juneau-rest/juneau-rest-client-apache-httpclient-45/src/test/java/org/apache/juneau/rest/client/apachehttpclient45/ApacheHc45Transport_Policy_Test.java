@@ -119,6 +119,92 @@ class ApacheHc45Transport_Policy_Test {
 	}
 
 	@Test
+	void a03b_guardedRequest_allHopsShareOneGuardingContext() throws Exception {
+		// J0824: Juneau follows these redirects itself, one execute per hop.  The credential guard remembers the first origin in
+		// the context, so every hop must be sent with the same one or a cookie-store Cookie would follow the redirect.
+		var contexts = new ArrayList<HttpContext>();
+		var httpClient = new FakeHttpClient(req -> null) {
+			@Override protected CloseableHttpResponse doExecute(HttpHost target, HttpRequest request, HttpContext context) {
+				contexts.add(context);
+				if (contexts.size() == 1) {
+					var redirect = new FakeResponse(302);
+					redirect.addHeader("Location", "http://192.0.2.2/next");
+					return redirect;
+				}
+				return new FakeResponse(200);
+			}
+		};
+		try (var transport = ApacheHc45Transport.builder().httpClient(httpClient).build()) {
+			try (var resp = transport.execute(guarded("http://192.0.2.1/x"))) {
+				assertEquals(200, resp.getStatusCode());
+			}
+		}
+		assertEquals(2, contexts.size());
+		assertSame(contexts.get(0), contexts.get(1));
+	}
+
+	// J0824: the guarded path must not forward a cookie-store Cookie across origins.  Loopback cannot be re-permitted for a guarded
+	// request, so the wire is simulated: for each hop the fake drives the context exactly as HttpClient does (protocol stage,
+	// the client's own interceptors adding a store Cookie, then the wire-send stage) and records the Cookie that would be sent.
+	private static List<String> guardedCookies(String firstUri, String... locations) throws Exception {
+		var sent = new ArrayList<String>();
+		var hops = new int[1];
+		var httpClient = new FakeHttpClient(req -> null) {
+			@Override protected CloseableHttpResponse doExecute(HttpHost target, HttpRequest request, HttpContext context) {
+				context.setAttribute(HttpCoreContext.HTTP_TARGET_HOST, target);
+				context.setAttribute(HttpCoreContext.HTTP_REQUEST, request);
+				request.setHeader("Cookie", "store=s-1");
+				context.setAttribute(HttpCoreContext.HTTP_REQUEST, request);
+				var cookie = request.getFirstHeader("Cookie");
+				sent.add(cookie == null ? "none" : cookie.getValue());
+				if (hops[0] < locations.length) {
+					var redirect = new FakeResponse(302);
+					redirect.addHeader("Location", locations[hops[0]++]);
+					return redirect;
+				}
+				return new FakeResponse(200);
+			}
+		};
+		try (var transport = ApacheHc45Transport.builder().httpClient(httpClient).build()) {
+			try (var resp = transport.execute(guarded(firstUri))) {
+				assertEquals(200, resp.getStatusCode());
+			}
+		}
+		return sent;
+	}
+
+	@Test
+	void a03c_guardedRequest_crossOriginHop_storeCookieNotSent() throws Exception {
+		assertEquals(List.of("store=s-1", "none"), guardedCookies("http://192.0.2.1:8080/x", "http://192.0.2.1:9090/next"));
+	}
+
+	@Test
+	void a03d_guardedRequest_sameOriginHop_storeCookieSent() throws Exception {
+		assertEquals(List.of("store=s-1", "store=s-1"), guardedCookies("http://192.0.2.1/x", "/next"));
+	}
+
+	@Test
+	void a03e_guardedRequest_httpsToHttpSameHost_storeCookieNotSent() throws Exception {
+		assertEquals(List.of("store=s-1", "none"), guardedCookies("https://192.0.2.1/x", "http://192.0.2.1/next"));
+	}
+
+	@Test
+	void a03f_guardedRequest_aToBToA_storeCookieRestoredOnReturn() throws Exception {
+		assertEquals(List.of("store=s-1", "none", "store=s-1"), guardedCookies("http://192.0.2.1/x", "http://192.0.2.2/b", "http://192.0.2.1/back"));
+	}
+
+	@Test
+	void a03g_guardedRequest_aToBToAToB_secondBStripped() throws Exception {
+		assertEquals(List.of("store=s-1", "none", "store=s-1", "none"), guardedCookies("http://192.0.2.1/x", "http://192.0.2.2/b", "http://192.0.2.1/back", "http://192.0.2.2/again"));
+	}
+
+	@Test
+	void a03h_guardedRequest_returnToSameHostOtherPortOrScheme_staysStripped() throws Exception {
+		assertEquals(List.of("store=s-1", "none", "none"), guardedCookies("http://192.0.2.1/x", "http://192.0.2.2/b", "http://192.0.2.1:8080/back"));
+		assertEquals(List.of("store=s-1", "none", "none"), guardedCookies("https://192.0.2.1/x", "https://192.0.2.2/b", "http://192.0.2.1/back"));
+	}
+
+	@Test
 	void a04_guardedRequest_redirectToLoopbackIsRejected() throws Exception {
 		var httpClient = new FakeHttpClient(req -> {
 			var redirect = new FakeResponse(302);

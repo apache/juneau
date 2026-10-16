@@ -482,6 +482,61 @@ class BusWebSocketConfigurator_Test extends TestBase {
 			"Sec-WebSocket-Key", "k"))), "no Host at all");
 	}
 
+	/** Opens a websocket session through a POST that carries the forwarded headers the trusting boundary needs. */
+	private String openForwarded(Principal principal) throws Exception {
+		var token = csrf.tokenFor(mock(jakarta.servlet.http.HttpServletRequest.class));
+		return BusFixture.open(C, principal, "websocket", DOWN, UP, "Host", "internal:8080", "Origin", "https://" + APP,
+			"X-Forwarded-Host", APP, "X-Forwarded-Proto", "https", "X-Csrf-Token", token);
+	}
+
+	private BusWebSocketConfigurator withForwarding() {
+		return withCsrf(CsrfBoundary.create().tokens(CsrfTokens.perProcess()).trustedForwarding(CsrfBoundary.ForwardedSource.X_FORWARDED));
+	}
+
+	@Test void h01_offIgnoresForwarded() throws Exception {
+		// e13 again, named for the opt-in: the default boundary never reads the forwarded headers.
+		var c = withCsrf();
+		var id = openCsrf(JB);
+		var r = requestAt("ws://internal:8080" + path(id), JB, "Host", "internal:8080", "Origin", "https://" + APP,
+			"X-Forwarded-Host", APP, "X-Forwarded-Proto", "https");
+		assertEquals(4403, refusalCode(handshake(c, r)));
+	}
+
+	@Test void h02_onAdmitsRewrittenHostSameOrigin() throws Exception {
+		var c = withForwarding();
+		var id = openForwarded(JB);
+		var r = requestAt("ws://internal:8080" + path(id), JB, "Host", "internal:8080", "Origin", "https://" + APP,
+			"X-Forwarded-Host", APP, "X-Forwarded-Proto", "https");
+		assertTrue(allowed(handshake(c, r)));
+	}
+
+	@Test void h03_forwardedHostNotMatchingOriginRefused() throws Exception {
+		var c = withForwarding();
+		var id = openForwarded(JB);
+		var r = requestAt("ws://internal:8080" + path(id), JB, "Host", "internal:8080", "Origin", "https://evil.example",
+			"X-Forwarded-Host", APP, "X-Forwarded-Proto", "https");
+		assertEquals(4403, refusalCode(handshake(c, r)));
+		var noHeaders = requestAt("ws://internal:8080" + path(id), JB, "Host", "internal:8080", "Origin", "https://" + APP);
+		assertEquals(4403, refusalCode(handshake(c, noHeaders)));
+	}
+
+	@Test void h04_twoSpellingsRefused() throws Exception {
+		var c = withForwarding();
+		var id = openForwarded(JB);
+		var r = requestAt("ws://internal:8080" + path(id), JB, "Host", "internal:8080", "Origin", "https://" + APP,
+			"X-Forwarded-Host", APP, "x-forwarded-host", APP, "X-Forwarded-Proto", "https");
+		assertEquals(4403, refusalCode(handshake(c, r)));
+	}
+
+	@Test void h05_usesTheHeaderMapOverload() throws Exception {
+		// The list-based checkHandshake forms always refuse a trusting boundary; the configurator must use the map form.
+		var c = withForwarding();
+		var id = openForwarded(JB);
+		var r = requestAt("ws://internal:8080" + path(id), JB, "Host", "internal:8080", "Origin", "https://" + APP,
+			"X-Forwarded-Host", APP, "X-Forwarded-Proto", "https", "Sec-Fetch-Site", "same-origin");
+		assertTrue(allowed(handshake(c, r)));
+	}
+
 	@Test void e14_untrustworthyRequestUriFailsClosed() throws Exception {
 		var c = withCsrf();
 		var id = openCsrf(JB);

@@ -45,9 +45,10 @@ import org.apache.juneau.http.remote.*;
  *
  * <p>
  * Caller-set credential headers ({@link RedirectSecurity#stripOnCrossOrigin()}, matched case-insensitively) are
- * carried to the next hop only when it is the same origin as the current hop and not an {@code https} &rarr;
- * {@code http} downgrade (see {@link RedirectSecurity#shouldStripCredentials(URI, URI)}); otherwise they are dropped
- * and stay dropped for the rest of the chain.
+ * carried to a hop only when it is the same origin as the <em>first</em> request in the chain and not an {@code https}
+ * &rarr; {@code http} downgrade (see {@link RedirectSecurity#shouldStripCredentials(URI, URI)}); otherwise they are
+ * dropped for that hop.  A hop that returns to the first origin gets them back, but only when its method is {@code GET} or {@code HEAD}
+ * (a {@code 307}/{@code 308} replay of a {@code POST} after leaving the first origin stays stripped).
  *
  * @since 10.0.0
  */
@@ -94,6 +95,7 @@ public final class PolicyEnforcedRedirects {
 		var allowPrivateUrls = initial.isAllowPrivateUrls();
 		var allowedRanges = initial.getAllowedAddressRanges();
 		var current = initial;
+		var left = new boolean[1];
 		for (var hop = 0; hop < RemoteUrlPolicy.MAX_REDIRECT_HOPS; hop++) {
 			// Hop 0's URI was already validated (or is the operator-configured client root, which the calling engine
 			// intentionally does not re-check -- see RemoteUrlPolicy.requireAllowedUrl) before this TransportRequest
@@ -105,7 +107,7 @@ public final class PolicyEnforcedRedirects {
 				return response;
 			var location = requireLocation(response);
 			closeQuietly(response);
-			current = nextHop(current, location, response.getStatusCode());
+			current = nextHop(initial, current, location, response.getStatusCode(), left);
 		}
 		throw new TransportException("Redirect limit exceeded (" + RemoteUrlPolicy.MAX_REDIRECT_HOPS
 			+ " hops) while following a policy-covered @Remote redirect chain, starting at: " + initial.getUri());
@@ -113,9 +115,15 @@ public final class PolicyEnforcedRedirects {
 
 	// An invalid Location, or a target whose origin cannot be compared (java.net.URI parses some host names, such as an
 	// underscore name, with a null host), is a failed hop like any other, so it is reported as TransportException.
-	private static TransportRequest nextHop(TransportRequest current, String location, int statusCode) throws TransportException {
+	private static TransportRequest nextHop(TransportRequest initial, TransportRequest current, String location, int statusCode, boolean[] left) throws TransportException {
 		try {
-			return forRedirect(current, RemoteUrlPolicy.resolveRedirectLocation(current.getUri(), location), statusCode);
+			var target = RemoteUrlPolicy.resolveRedirectLocation(current.getUri(), location);
+			if (target.getRawUserInfo() != null)
+				throw new TransportException("Redirect Location carries user info, which is refused (it could replace the client's stored credentials): " + location);
+			// Remember that the chain has left the first origin; a later return to it restores credentials only for GET/HEAD.
+			var wasLeft = left[0];
+			left[0] |= RedirectSecurity.shouldStripCredentials(initial.getUri(), current.getUri());
+			return forRedirect(initial, current, target, statusCode, wasLeft || left[0]);
 		} catch (IllegalArgumentException e) {
 			throw new TransportException(e.getMessage(), e);
 		}
@@ -148,7 +156,11 @@ public final class PolicyEnforcedRedirects {
 		}
 	}
 
-	private static TransportRequest forRedirect(TransportRequest current, URI target, int statusCode) throws TransportException {
+	private static boolean safeMethod(String method) {
+		return eqic(method, "GET") || eqic(method, "HEAD");
+	}
+
+	private static TransportRequest forRedirect(TransportRequest initial, TransportRequest current, URI target, int statusCode, boolean left) throws TransportException {
 		var preserveMethod = eqic(current.getMethod(), "GET") || eqic(current.getMethod(), "HEAD");
 		var rewriteToGet = ! preserveMethod && (statusCode == 301 || statusCode == 302 || statusCode == 303);
 
@@ -160,9 +172,11 @@ public final class PolicyEnforcedRedirects {
 				.remoteUrlPolicy(true, false)
 				.allowedAddressRanges(current.getAllowedAddressRanges())
 				.timeout(current.getTimeout());
-			// Credential headers are forwarded only to the same origin (and never across an https -> http downgrade).
-			var stripCredentials = RedirectSecurity.shouldStripCredentials(current.getUri(), target);
-			for (var h : current.getHeaders())
+			// Credential headers are forwarded only to the first origin (and never across an https -> http downgrade), so a hop
+			// that returns to it gets the caller's headers back.  They are taken from the initial request, not the previous hop's.
+			var stripCredentials = RedirectSecurity.shouldStripCredentials(initial.getUri(), target)
+				|| (left && ! safeMethod(rewriteToGet ? "GET" : current.getMethod()));
+			for (var h : initial.getHeaders())
 				if (! (stripCredentials && RedactedHeaders.isSensitive(h.name(), RedirectSecurity.stripOnCrossOrigin())))
 					builder.header(h.name(), h.value());
 			if (! rewriteToGet) {

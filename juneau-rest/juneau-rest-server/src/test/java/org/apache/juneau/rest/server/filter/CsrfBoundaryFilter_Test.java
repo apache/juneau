@@ -282,15 +282,35 @@ class CsrfBoundaryFilter_Test extends TestBase {
 			case CSRF_TOKEN_MISSING -> new Refusal(b, r("POST", "http", HOST, ORIGIN, "Content-Type", JSON), 403);
 			case CSRF_TOKEN_MISMATCH -> new Refusal(b, r("POST", "http", HOST, ORIGIN, "Content-Type", JSON)
 				.h(b.csrfHeader(), "0".repeat(128)), 403);
+			case FORWARDED_HOST_MISSING -> forwarded(x -> x, r("POST", "http", HOST, ORIGIN, "Content-Type", JSON));
+			case FORWARDED_PROTO_MISSING -> forwarded(x -> x,
+				r("POST", "http", HOST, ORIGIN, "Content-Type", JSON).h("X-Forwarded-Host", "app.example"));
+			case FORWARDED_HOST_MALFORMED -> forwarded(x -> x,
+				r("POST", "http", HOST, ORIGIN, "Content-Type", JSON).h("X-Forwarded-Host", "a@b").h("X-Forwarded-Proto", "http"));
+			case FORWARDED_PROTO_MALFORMED -> forwarded(x -> x,
+				r("POST", "http", HOST, ORIGIN, "Content-Type", JSON).h("X-Forwarded-Host", "app.example").h("X-Forwarded-Proto", "ws"));
+			case FORWARDED_HOPS_INSUFFICIENT -> forwarded(x -> x.trustedHops(2),
+				r("POST", "http", HOST, ORIGIN, "Content-Type", JSON).h("X-Forwarded-Host", "app.example").h("X-Forwarded-Proto", "http"));
+			case FORWARDED_HOPS_MISMATCH -> forwarded(x -> x,
+				r("POST", "http", HOST, ORIGIN, "Content-Type", JSON).h("X-Forwarded-Host", "a, b").h("X-Forwarded-Proto", "http"));
+			case FORWARDED_CONTAINER_MISMATCH -> forwarded(x -> x.originSource(OriginSource.CONTAINER),
+				r("POST", "http", HOST, ORIGIN, "Content-Type", JSON).h("X-Forwarded-Host", "app.example").h("X-Forwarded-Proto", "https"));
 			default -> throw new IllegalArgumentException("CsrfBoundary does not emit " + reason);
 		};
+	}
+
+	/** A trusting boundary (after {@code tweak}) and the request it refuses; every forwarded refusal is a 403. */
+	private static Refusal forwarded(java.util.function.UnaryOperator<CsrfBoundary.Builder> tweak, R request) {
+		var builder = boundary().trustedForwarding(CsrfBoundary.ForwardedSource.X_FORWARDED);
+		return new Refusal(tweak.apply(builder).build(), request, 403);
 	}
 
 	@ParameterizedTest
 	@EnumSource(value=BoundaryReason.class, names={
 		"HOST_MISSING", "HOST_MALFORMED", "HOST_NOT_ALLOWED", "ORIGIN_MISSING", "ORIGIN_NULL", "ORIGIN_MISMATCH",
 		"FETCH_SITE_NOT_SAME_ORIGIN", "SIMPLE_REQUEST_WITHOUT_ORIGIN", "CONTENT_TYPE_NOT_JSON", "CSRF_TOKEN_MISSING",
-		"CSRF_TOKEN_MISMATCH"
+		"CSRF_TOKEN_MISMATCH", "FORWARDED_HOST_MISSING", "FORWARDED_PROTO_MISSING", "FORWARDED_HOST_MALFORMED",
+		"FORWARDED_PROTO_MALFORMED", "FORWARDED_HOPS_INSUFFICIENT", "FORWARDED_HOPS_MISMATCH", "FORWARDED_CONTAINER_MISMATCH"
 	})
 	void a10_rejectionNoStoreAndNoCacheOnAllReasons(BoundaryReason reason) throws Exception {
 		var x = refusedFor(reason);

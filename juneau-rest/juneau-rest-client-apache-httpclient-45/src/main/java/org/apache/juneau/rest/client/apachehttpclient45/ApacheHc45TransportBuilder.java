@@ -62,11 +62,19 @@ public final class ApacheHc45TransportBuilder {
 	 * <p>
 	 * The transport takes ownership of the client and will close it when {@link ApacheHc45Transport#close()} is called.
 	 *
+	 * <p>
+	 * A legacy {@link AbstractHttpClient} subclass (such as {@code DefaultHttpClient}) is refused: it never sets the request
+	 * again just before it is written, so the redirect credential guard cannot strip the credentials HttpClient adds itself
+	 * (for example the cookie-store {@code Cookie}) on a cross-origin redirect.  Build the client with {@code HttpClients}.
+	 *
 	 * @param value The client to use. Must not be <jk>null</jk>.
 	 * @return This object.
+	 * @throws IllegalArgumentException If the client is an {@link AbstractHttpClient}.
 	 */
 	public ApacheHc45TransportBuilder httpClient(CloseableHttpClient value) {
-		httpClient = reqnn("value", value);
+		if (reqnn("value", value) instanceof AbstractHttpClient)
+			throw iaex("A legacy AbstractHttpClient (%s) is not supported: it cannot apply the redirect credential guard.  Build the client with HttpClients instead.", value.getClass().getName());
+		httpClient = value;
 		return this;
 	}
 

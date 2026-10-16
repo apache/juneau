@@ -88,5 +88,32 @@ public enum BoundaryReason {
 	CSRF_TOKEN_MISSING,
 
 	/** A state-changing request's CSRF token was not the expected token.  Answered with 403 Forbidden. */
-	CSRF_TOKEN_MISMATCH
+	CSRF_TOKEN_MISMATCH,
+
+	/**
+	 * {@link CsrfBoundary.Builder#trustedForwarding(CsrfBoundary.ForwardedSource) Trusted forwarding} is on and the
+	 * request carried no forwarded host (or, for {@code Forwarded}, no usable element).  Answered with 403 Forbidden.
+	 */
+	FORWARDED_HOST_MISSING,
+
+	/** Trusted forwarding is on and the request carried a forwarded host but no forwarded proto.  Answered with 403 Forbidden. */
+	FORWARDED_PROTO_MISSING,
+
+	/** Trusted forwarding is on and the forwarded host, or the {@code Forwarded} header, was malformed.  Answered with 403 Forbidden. */
+	FORWARDED_HOST_MALFORMED,
+
+	/** Trusted forwarding is on and the forwarded proto was not {@code http} or {@code https}.  Answered with 403 Forbidden. */
+	FORWARDED_PROTO_MALFORMED,
+
+	/** Trusted forwarding is on and the forwarded header held fewer entries than the trusted hop count.  Answered with 403 Forbidden. */
+	FORWARDED_HOPS_INSUFFICIENT,
+
+	/** Trusted forwarding is on and the forwarded host and proto held different numbers of entries.  Answered with 403 Forbidden. */
+	FORWARDED_HOPS_MISMATCH,
+
+	/**
+	 * Trusted forwarding is on and the container's own view of the request disagrees with the forwarded origin.
+	 * Answered with 403 Forbidden.
+	 */
+	FORWARDED_CONTAINER_MISMATCH
 }

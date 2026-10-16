@@ -135,7 +135,7 @@ class ApacheHc45Transport_CallerClientRetryCredentials_Test {
 	}
 
 	@Test
-	void a02_originBackToFirstOrigin_retriedAfterDroppedConnection_credentialsStayStripped() throws Exception {
+	void a02_originBackToFirstOrigin_retriedAfterDroppedConnection_credentialsRestoredOnEveryAttempt() throws Exception {
 		var drops = new ConcurrentLinkedQueue<>(List.of("drop"));
 		var portA = new int[1];
 		var portB = new int[1];
@@ -144,9 +144,10 @@ class ApacheHc45Transport_CallerClientRetryCredentials_Test {
 			portB[0] = b.port();
 			portA[0] = a.port();
 			run(a.port(), "/start");
-			// A saw: /start (caller's credentials), then /echo twice (dropped, then retried) -- both stripped.
+			// A saw: /start, then /echo twice (dropped, then retried).  The hop back at the first origin gets the caller's credentials
+			// back, and the retry must restore them again rather than lose them.
 			assertEquals(List.of("/start", "/echo", "/echo"), a.log);
-			assertEquals(List.of(ALL, STRIPPED, STRIPPED), a.headersSeen);
+			assertEquals(List.of(ALL, ALL, ALL), a.headersSeen);
 			assertEquals(List.of(STRIPPED), b.headersSeen);
 		}
 	}

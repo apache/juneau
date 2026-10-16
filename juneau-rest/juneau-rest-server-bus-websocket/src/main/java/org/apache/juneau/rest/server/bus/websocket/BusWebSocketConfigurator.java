@@ -35,8 +35,8 @@ import jakarta.websocket.server.*;
  * 		can only see the {@code Origin} value, so it refuses a missing value, {@code null}, and anything that is not a
  * 		well-formed http(s) origin; a well-formed cross-site value passes it and is refused by the next step.
  * 	<li>{@link #modifyHandshake}: under a {@link LoopbackBoundary}, Host against the boundary's authority; under a
- * 		{@link CsrfBoundary}, {@link CsrfBoundary#checkHandshake} with the scheme of the handshake's request URI and
- * 		every {@code Host}, {@code Origin} and {@code Sec-Fetch-Site} value.  Over HTTP/2 (RFC 8441), where the handshake has
+ * 		{@link CsrfBoundary}, {@link CsrfBoundary#checkHandshake(String, HandshakeHosts, Map)} with the scheme of the handshake's request URI and
+ * 		its headers (so {@link CsrfBoundary.Builder#trustedForwarding trusted forwarding}, when set, sees the forwarded headers).  Over HTTP/2 (RFC 8441), where the handshake has
  * 		no {@code Host}, {@code Sec-WebSocket-Key} or {@code Upgrade}, the request URI's authority stands in for
  * 		{@code Host} ({@link HandshakeHosts}).  Otherwise {@code Sec-Fetch-Site} (when
  * 		present) must be {@code same-origin}.  Last, the capability and principal.  A failure is recorded in the per-connection
@@ -125,8 +125,7 @@ public final class BusWebSocketConfigurator extends ServerEndpointConfig.Configu
 		var uri = request.getRequestURI();
 		if (csrf != null) {
 			var hosts = HandshakeHosts.of(request.getHeaders(), uri);
-			var result = csrf.checkHandshake(uri == null ? null : uri.getScheme(), hosts, headers(request, "Origin"),
-				headers(request, "Sec-Fetch-Site"));
+			var result = csrf.checkHandshake(uri == null ? null : uri.getScheme(), hosts, request.getHeaders());
 			if (! result.isAllowed())
 				return REFUSED;
 		} else {
@@ -164,19 +163,6 @@ public final class BusWebSocketConfigurator extends ServerEndpointConfig.Configu
 				if (name.equalsIgnoreCase(e.getKey()) && e.getValue() != null && ! e.getValue().isEmpty())
 					return e.getValue().get(0);
 		return null;
-	}
-
-	/** Every value of a handshake header, across all spellings of its name, so that a duplicate can be counted. */
-	private static List<String> headers(HandshakeRequest request, String name) {
-		var l = new ArrayList<String>();
-		var headers = request.getHeaders();
-		if (headers != null)
-			for (var e : headers.entrySet())
-				if (name.equalsIgnoreCase(e.getKey()) && e.getValue() != null)
-					for (var v : e.getValue())
-						if (v != null)
-							l.add(v);
-		return l;
 	}
 
 	@Override /* Configurator */

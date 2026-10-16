@@ -127,7 +127,7 @@ class ApacheHc45Transport_RedirectCredentials_Test {
 	}
 
 	@Test
-	void a03_originBackToFirstOrigin_credentialsStayStripped() throws Exception {
+	void a03_originBackToFirstOrigin_credentialsRestored() throws Exception {
 		firstHopAuth.set(null);
 		firstHopCookie.set(null);
 		firstHopKey.set(null);
@@ -143,8 +143,8 @@ class ApacheHc45Transport_RedirectCredentials_Test {
 				assertEquals("Bearer secret-token", firstHopAuth.get());
 				assertEquals("session=abc123", firstHopCookie.get());
 				assertEquals("k-1", firstHopKey.get());
-				assertEquals("auth=none|cookie=none", response.getBodyAsString());
-				assertEquals("null", lastKey.get());
+				assertEquals("auth=Bearer secret-token|cookie=session=abc123", response.getBodyAsString());
+				assertEquals("k-1", lastKey.get());
 			}
 		}
 	}

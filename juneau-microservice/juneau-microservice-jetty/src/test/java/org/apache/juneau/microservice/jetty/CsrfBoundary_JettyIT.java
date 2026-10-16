@@ -325,6 +325,23 @@ class CsrfBoundary_JettyIT extends TestBase {
 		assertEquals(1, a.record().writes.get());
 	}
 
+	/**
+	 * Lock for J0802: with the container's {@link ForwardedRequestCustomizer} and the default {@code HOST_HEADER}, the
+	 * customizer, not the boundary, decides.  A forwarded host makes the request's own origin, and the boundary reads no
+	 * forwarded header itself.
+	 */
+	@Test void a08_forwardedHostTrustedByCustomizerUnderHostHeader() throws Exception {
+		var a = start(true, perProcess(), "/*", REQUEST);
+		var tok = token(a);
+		var ok = send(a, "POST", "/write", "X-Forwarded-Host", "evil.example", "X-Forwarded-Proto", "http",
+			"Origin", "http://evil.example", "Content-Type", JSON, LoopbackBoundary.DEFAULT_CSRF_HEADER, tok);
+		assertEquals(200, ok.statusCode(), ok::body);
+		var plain = send(a, "POST", "/write", "Origin", "http://evil.example", "Content-Type", JSON,
+			LoopbackBoundary.DEFAULT_CSRF_HEADER, tok);
+		assertEquals(403, plain.statusCode(), plain::body);
+		assertEquals("ORIGIN_MISMATCH", rejection(plain));
+	}
+
 	@Test void a03_http2AuthorityStandsInForHost() throws Exception {
 		var a = start(false, true, perProcess(), "/*", REQUEST);
 		var tok = token(a);
