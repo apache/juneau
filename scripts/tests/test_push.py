@@ -17,8 +17,9 @@ Tests for the root push.py: the end-of-run terminal bell (TestEndOfRunBell) and 
 refuse-on-unreviewed-changes gate, ported from the
 already-reviewed gate in apache/juneau's scripts/push.py and sandbox-support-console's
 scripts/push.py. This repo's push.py is a bare add/commit/push helper with no other gates, so
-the gate tests cover: check_unreviewed_changes(), get_staged_paths(), and commit_and_push()'s
-refuse / no-op / proceed decision (the three refusal shapes plus the allowed staged-only case).
+the gate tests cover: the toolkit's path readers as push.py uses them, and the refuse / no-op /
+proceed decision (the three refusal shapes plus the allowed staged-only case). push.py is built on
+the juneau_scripts toolkit; the tests drive it through main(argv, repo_dir) and read the exit code.
 
 Real temp git repos, real git -- no mocked subprocess. A bare repo stands in for the remote and
 a real clone is the working tree; every test asserts REAL effects (did the remote ref actually
@@ -37,6 +38,7 @@ from __future__ import annotations
 import importlib.util
 import os
 import subprocess
+import sys
 from pathlib import Path
 
 import pytest
@@ -53,10 +55,37 @@ def _load_push_module():
     return module
 
 
+@pytest.fixture(autouse=True)
+def clean_run_env(monkeypatch):
+    """Keep the developer's shell (e.g. JUNEAU_RUN_CONSOLE=condensed) out of every push test, and forget any
+    juneau_run a previous test loaded.  JUNEAU_RUN_PY / JUNEAU_SCRIPTS_ZIP stay: they locate the toolkit."""
+    keep = {"JUNEAU_RUN_PY"}
+    for key in [k for k in os.environ if k.startswith("JUNEAU_RUN_") and k not in keep]:
+        monkeypatch.delenv(key)
+    monkeypatch.delenv("RUN_MARKERS", raising=False)
+    monkeypatch.delenv("RUN_ARTIFACTS", raising=False)
+    monkeypatch.delitem(sys.modules, "juneau_run", raising=False)
+    monkeypatch.setenv("JRM_PUSH_NO_BELL", "1")  # keep the main()-calling tests quiet under `pytest -s`
+
+
+class _Push:
+    """The loaded push.py, plus commit_and_push(repo, message, dry_run=) as an exit code, via main()."""
+
+    def __init__(self, module):
+        self.module = module
+        module.toolkit()
+
+    def __getattr__(self, name):
+        return getattr(self.module, name)
+
+    def commit_and_push(self, repo, message, *, dry_run=False):
+        return self.module.main([*(["--dry-run"] if dry_run else []), message], repo_dir=repo)
+
+
 @pytest.fixture
 def push_module():
-    """A fresh root push.py module object, loaded once per test."""
-    return _load_push_module()
+    """A fresh root push.py module object (toolkit bound), loaded once per test."""
+    return _Push(_load_push_module())
 
 
 # ---------------------------------------------------------------------------------------
@@ -119,7 +148,7 @@ def repo(tmp_path: Path, remote_repo: Path) -> Path:
 
 @pytest.fixture
 def git_spy(push_module, monkeypatch):
-    """Record every argv passed to push_module.subprocess.run while still running real git."""
+    """Record every argv passed to subprocess.run (the toolkit's git helpers use it) while still running real git."""
     calls: list[list[str]] = []
     real_run = subprocess.run
 
@@ -127,7 +156,7 @@ def git_spy(push_module, monkeypatch):
         calls.append(list(cmd) if isinstance(cmd, (list, tuple)) else [cmd])
         return real_run(cmd, *args, **kwargs)
 
-    monkeypatch.setattr(push_module.subprocess, "run", _spy)
+    monkeypatch.setattr(subprocess, "run", _spy)
     return calls
 
 
@@ -139,17 +168,17 @@ class TestGetStagedPaths:
     """
 
     def test_a_clean_index_reports_nothing(self, push_module, repo):
-        assert push_module.get_staged_paths(repo) == []
+        assert push_module.git.staged_paths(repo) == []
 
     def test_a_staged_file_is_reported(self, push_module, repo):
         (repo / "reviewed.txt").write_text("staged by the operator\n", encoding="utf-8")
         _run(repo, "git", "add", "reviewed.txt")
 
-        assert push_module.get_staged_paths(repo) == ["reviewed.txt"]
+        assert push_module.git.staged_paths(repo) == ["reviewed.txt"]
 
     def test_an_unstaged_modification_alone_is_not_reported(self, push_module, repo):
         (repo / "README.md").write_text("unstaged edit\n", encoding="utf-8")
-        assert push_module.get_staged_paths(repo) == []
+        assert push_module.git.staged_paths(repo) == []
 
 
 class TestCheckUnreviewedChanges:
@@ -160,29 +189,29 @@ class TestCheckUnreviewedChanges:
     """
 
     def test_a_clean_tree_reports_nothing(self, push_module, repo):
-        assert push_module.check_unreviewed_changes(repo) == []
+        assert (push_module.git.unstaged_paths(repo) + push_module.git.untracked_paths(repo)) == []
 
     def test_an_unstaged_modification_to_a_tracked_file_is_reported(self, push_module, repo):
         (repo / "README.md").write_text("unstaged edit\n", encoding="utf-8")
-        assert push_module.check_unreviewed_changes(repo) == ["README.md"]
+        assert (push_module.git.unstaged_paths(repo) + push_module.git.untracked_paths(repo)) == ["README.md"]
 
     def test_an_untracked_non_ignored_file_is_reported(self, push_module, repo):
         (repo / "scratch.txt").write_text("brand new, not staged\n", encoding="utf-8")
-        assert push_module.check_unreviewed_changes(repo) == ["scratch.txt"]
+        assert (push_module.git.unstaged_paths(repo) + push_module.git.untracked_paths(repo)) == ["scratch.txt"]
 
     def test_a_gitignored_untracked_file_is_not_reported(self, push_module, repo):
         (repo / ".gitignore").write_text("ignored.log\n", encoding="utf-8")
         _commit(repo, "add gitignore")
         (repo / "ignored.log").write_text("noise\n", encoding="utf-8")
 
-        assert push_module.check_unreviewed_changes(repo) == []
+        assert (push_module.git.unstaged_paths(repo) + push_module.git.untracked_paths(repo)) == []
 
     def test_a_staged_file_alone_is_not_reported(self, push_module, repo):
         """Staged content is reviewed content -- it's the other function's (get_staged_paths()) job."""
         (repo / "reviewed.txt").write_text("staged and reviewed\n", encoding="utf-8")
         _run(repo, "git", "add", "reviewed.txt")
 
-        assert push_module.check_unreviewed_changes(repo) == []
+        assert (push_module.git.unstaged_paths(repo) + push_module.git.untracked_paths(repo)) == []
 
 
 class TestCommitAndPushGenuineNoOp:
@@ -425,11 +454,11 @@ class TestCommitAndPushDryRun:
 
 class TestGitIdentityConfigured:
     def test_configured_identity_is_true(self, push_module, repo):
-        assert push_module.git_identity_configured(repo) is True
+        assert bool(push_module.git.user_email(repo)) is True
 
     def test_unset_identity_is_false(self, push_module, repo):
         _run(repo, "git", "config", "--unset", "user.email")
-        assert push_module.git_identity_configured(repo) is False
+        assert bool(push_module.git.user_email(repo)) is False
 
 
 class _FakeStdout:
@@ -451,21 +480,23 @@ class _FakeStdout:
 
 
 def _run_main(push_module, monkeypatch, *, tty, identity=True, commit_result=0, commit_raises=None):
-    """Run main() with every git-touching call stubbed; return (exit_code, fake_stdout)."""
+    """Run main() with the identity and commit steps stubbed; return (exit_code, fake_stdout)."""
     fake = _FakeStdout(tty)
-    monkeypatch.setattr(push_module.sys, "stdout", fake)
-    monkeypatch.setattr(push_module.sys, "argv", ["push.py", "msg"])
-    monkeypatch.setattr(push_module, "git_identity_configured", lambda _repo: identity)
+    monkeypatch.setattr(sys, "stdout", fake)
 
-    def fake_commit_and_push(*_args, **_kwargs):
+    def fake_identity(s, _repo):
+        if not identity:
+            s.fail("❌ ERROR: no git identity configured")
+
+    def fake_commit_and_push(s, *_args, **_kwargs):
         if commit_raises is not None:
             raise commit_raises
-        return commit_result
+        if commit_result:
+            s.fail("❌ refused")
 
-    monkeypatch.setattr(push_module, "commit_and_push", fake_commit_and_push)
-    with pytest.raises(SystemExit) as exc:
-        push_module.main()
-    return exc.value.code, fake
+    monkeypatch.setattr(push_module.module, "_identity", fake_identity)
+    monkeypatch.setattr(push_module.module, "commit_and_push", fake_commit_and_push)
+    return push_module.main(["msg"]), fake
 
 
 class TestEndOfRunBell:
@@ -473,10 +504,12 @@ class TestEndOfRunBell:
     def clean_env(self, monkeypatch):
         monkeypatch.delenv("JRM_PUSH_NO_BELL", raising=False)
         monkeypatch.delenv("SANDBOX_RUNTIME", raising=False)
+        monkeypatch.delenv("JUNEAU_SCRIPTS_QUIET", raising=False)
 
     def test_rings_on_tty_after_success(self, push_module, monkeypatch):
         code, fake = _run_main(push_module, monkeypatch, tty=True)
         assert code == 0
+        assert fake.written.count("\a") == 1
         assert fake.written.endswith("\a")
         assert fake.flushed
 
@@ -490,9 +523,9 @@ class TestEndOfRunBell:
         assert code == 1
         assert fake.written.endswith("\a")
 
-    def test_rings_on_tty_when_commit_message_aborts_with_system_exit(self, push_module, monkeypatch):
-        code, fake = _run_main(push_module, monkeypatch, tty=True, commit_raises=SystemExit(1))
-        assert code == 1
+    def test_rings_on_tty_when_cancelled(self, push_module, monkeypatch):
+        code, fake = _run_main(push_module, monkeypatch, tty=True, commit_raises=KeyboardInterrupt())
+        assert code == 130
         assert fake.written.endswith("\a")
 
     def test_silent_when_not_a_tty(self, push_module, monkeypatch):
@@ -505,18 +538,11 @@ class TestEndOfRunBell:
         _, fake = _run_main(push_module, monkeypatch, tty=True)
         assert fake.written.endswith("\a")
 
-    def test_rings_and_propagates_when_push_step_raises(self, push_module, monkeypatch):
-        fake = _FakeStdout(True)
-        monkeypatch.setattr(push_module.sys, "stdout", fake)
-        monkeypatch.setattr(push_module.sys, "argv", ["push.py", "msg"])
-        monkeypatch.setattr(push_module, "git_identity_configured", lambda _repo: True)
-
-        def boom(*_args, **_kwargs):
-            raise subprocess.CalledProcessError(1, ["git", "push"])
-
-        monkeypatch.setattr(push_module, "commit_and_push", boom)
-        with pytest.raises(subprocess.CalledProcessError):
-            push_module.main()
+    def test_rings_and_reports_when_the_push_step_raises(self, push_module, monkeypatch):
+        code, fake = _run_main(push_module, monkeypatch, tty=True,
+                               commit_raises=subprocess.CalledProcessError(1, ["git", "push"]))
+        assert code == 1
+        assert "CalledProcessError" in fake.written
         assert fake.written.endswith("\a")
 
     def test_silent_when_opted_out(self, push_module, monkeypatch):
@@ -529,20 +555,19 @@ class TestEndOfRunBell:
         _, fake = _run_main(push_module, monkeypatch, tty=True)
         assert "\a" not in fake.written
 
-    def test_never_raises_when_stdout_misbehaves(self, push_module, monkeypatch):
+    def test_ring_bell_never_raises_when_stdout_misbehaves(self, push_module, monkeypatch):
         class Broken(_FakeStdout):
             def write(self, text):
                 if text == "\a":
                     raise OSError("closed")
                 super().write(text)
 
-        fake = Broken(True)
-        monkeypatch.setattr(push_module.sys, "stdout", fake)
+        monkeypatch.setattr(sys, "stdout", Broken(True))
         push_module.ring_bell()  # must not raise
 
 
 class TestConsoleFlag:
-    """--console full|condensed|none is accepted for parity with the Juneau scripts and sets JUNEAU_RUN_CONSOLE."""
+    """--console full|condensed|none sets JUNEAU_RUN_CONSOLE before the toolkit is loaded."""
 
     @pytest.fixture(autouse=True)
     def clean_env(self, monkeypatch):
@@ -550,15 +575,12 @@ class TestConsoleFlag:
         monkeypatch.delenv("JUNEAU_RUN_CONSOLE", raising=False)
 
     def _main(self, push_module, monkeypatch, *flags):
-        monkeypatch.setattr(push_module.sys, "stdout", _FakeStdout(False))
-        monkeypatch.setattr(push_module.sys, "argv", ["push.py", *flags, "msg"])
-        monkeypatch.setattr(push_module, "git_identity_configured", lambda _repo: True)
-        monkeypatch.setattr(push_module, "commit_and_push", lambda *_a, **_k: 0)
-        with pytest.raises(SystemExit) as exc:
-            push_module.main()
-        return exc.value.code
+        monkeypatch.setattr(sys, "stdout", _FakeStdout(False))
+        monkeypatch.setattr(push_module.module, "_identity", lambda *_a: None)
+        monkeypatch.setattr(push_module.module, "commit_and_push", lambda *_a, **_k: None)
+        return push_module.main([*flags, "msg"])
 
-    @pytest.mark.parametrize("mode", ["full", "condensed", "none"])
+    @pytest.mark.parametrize("mode", ["full", "none"])
     def test_flag_sets_the_env_var(self, push_module, monkeypatch, mode):
         assert self._main(push_module, monkeypatch, "--console", mode) == 0
         assert os.environ["JUNEAU_RUN_CONSOLE"] == mode
@@ -569,12 +591,24 @@ class TestConsoleFlag:
         assert os.environ["JUNEAU_RUN_CONSOLE"] == "none"
 
     def test_env_var_is_left_alone_without_the_flag(self, push_module, monkeypatch):
-        monkeypatch.setenv("JUNEAU_RUN_CONSOLE", "condensed")
+        monkeypatch.setenv("JUNEAU_RUN_CONSOLE", "full")
         assert self._main(push_module, monkeypatch) == 0
-        assert os.environ["JUNEAU_RUN_CONSOLE"] == "condensed"
+        assert os.environ["JUNEAU_RUN_CONSOLE"] == "full"
 
-    def test_unknown_mode_is_a_usage_error(self, push_module, monkeypatch):
-        monkeypatch.setattr(push_module.sys, "argv", ["push.py", "--console", "loud", "msg"])
+    def test_unknown_mode_is_a_usage_error(self, push_module):
         with pytest.raises(SystemExit) as exc:
-            push_module.main()
+            push_module.main(["--console", "loud", "msg"])
         assert exc.value.code == 2
+
+
+class TestCondensedConsole:
+    def test_a_push_under_condensed_succeeds_and_the_remote_moves(self, push_module, repo, remote_repo, capfd):
+        (repo / "README.md").write_text("new content\n", encoding="utf-8")
+        _run(repo, "git", "add", "README.md")
+
+        assert push_module.main(["--console", "condensed", "msg"], repo_dir=repo) == 0
+        assert _run(remote_repo, "git", "rev-parse", "master") == _run(repo, "git", "rev-parse", "HEAD")
+
+    def test_a_plain_run_loads_no_juneau_run(self, push_module, repo):
+        assert push_module.main(["--dry-run", "msg"], repo_dir=repo) == 0
+        assert "juneau_run" not in sys.modules

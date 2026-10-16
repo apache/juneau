@@ -25,11 +25,12 @@ Usage:
     ./push.py "commit message"
     ./push.py                     # prompts for a commit message
     ./push.py --dry-run "message" # show what would happen, change nothing
-    ./push.py --console condensed "message"   # accepted for parity with the Juneau scripts; no effect here
+    ./push.py --console condensed "message"   # the steps as console rows; git output goes to the full log
 
-    --console full|condensed|none sets JUNEAU_RUN_CONSOLE (the flag wins over a value already in the
-    environment), exactly as scripts/test.py does in apache/juneau.  This script has no Maven step and loads
-    no juneau_run console view, so every choice behaves the same here (git output is always printed in full).
+    --console full|condensed|none sets JUNEAU_RUN_CONSOLE before juneau_run is loaded (the flag wins over a value
+    already in the environment), exactly as scripts/test.py does in apache/juneau.  Only condensed (or RUN_MARKERS=1)
+    makes this script load juneau_run; full and none leave it unloaded, so both give the plain output.  This script
+    has no Maven step, so the console view shows the identity, review, commit and push steps only.
 
     When a run ends (success or failure) on a terminal, push.py rings the terminal bell.
     Set JRM_PUSH_NO_BELL=1 to silence it (it is also skipped when SANDBOX_RUNTIME=1).
@@ -38,271 +39,238 @@ Safety:
     - Never uses --force or --no-verify.
     - Never runs `git config` (it only reads config; you fix a missing
       identity yourself).
-    - Never runs `git add` (see check_unreviewed_changes()'s docstring): a
-      staged path is the operator's record that they've reviewed it and it's
-      good, so this script commits the index exactly as it finds it and
-      refuses outright -- commits and pushes nothing -- if the working tree
-      has any unstaged modification or any untracked, non-gitignored file.
+    - Never runs `git add`: a staged path is the operator's record that
+      they've reviewed it and it's good, so this script commits the index
+      exactly as it finds it and refuses outright -- commits and pushes
+      nothing -- if the working tree has any unstaged modification or any
+      untracked, non-gitignored file.
     - Exits non-zero with a clear message on any precondition failure
       (no git identity configured, unreviewed changes present, push
       rejected, etc).
+
+Built on Apache Juneau's juneau_scripts toolkit, loaded by the vendored scripts/bootstrap.py from the juneau-run
+artifact at the pom's juneau.version.  The policy above is this file's code; the toolkit supplies the git, run and
+bell helpers.
 """
 
 import argparse
 import os
-import shlex
-import subprocess
 import sys
 from pathlib import Path
 
 REPO_DIR = Path(__file__).resolve().parent
 
+sys.path.insert(0, str(REPO_DIR / "scripts"))  # push.py lives at the repo root; bootstrap.py is vendored under scripts/
 
-def run(cmd, cwd=REPO_DIR, check=True, capture=False, input_text=None):
-    """Run a command (list form, no shell) and return the CompletedProcess."""
-    return subprocess.run(
-        cmd,
-        cwd=cwd,
-        check=check,
-        capture_output=capture,
-        text=True,
-        input=input_text,
-    )
+import bootstrap  # noqa: E402
+from bootstrap import run_requested  # noqa: E402,F401  (push.run_requested is the environment rule tests check)
+
+# The toolkit modules, bound by toolkit() on first use so that importing this file has no side effects.
+git = run = notify = None
 
 
-def git_identity_configured(repo_dir):
-    """True if `git config user.email` resolves to a non-empty value."""
-    result = run(["git", "config", "--get", "user.email"], cwd=repo_dir, check=False, capture=True)
-    return bool(result.stdout.strip())
+class _NoMarkers:
+    """Stands in for juneau_run when it isn't loaded: the calls this script makes directly are no-ops or False."""
 
+    def console_active(self):
+        return False
 
-def get_staged_paths(repo_dir):
-    """
-    List paths currently staged in the index.
-
-    This is the sole definition of "what push.py is about to commit": a staged path is the
-    operator's record that they reviewed it and it's good (see check_unreviewed_changes()'s
-    docstring), so this script commits the index exactly as it finds it rather than deciding
-    what belongs in the commit itself.
-
-    Returns:
-        list[str]: staged paths (possibly empty).
-
-    Raises:
-        subprocess.CalledProcessError, OSError: if the check itself can't run. Deliberately not
-        caught here -- an error running `git diff --cached` almost always means something is
-        fundamentally wrong with the repo, and this check exists specifically to protect an
-        invariant, so the caller should fail closed (abort) rather than silently proceed.
-    """
-    result = subprocess.run(
-        ["git", "diff", "--cached", "--name-only"],
-        cwd=repo_dir,
-        capture_output=True,
-        text=True,
-        check=True,
-    )
-    return [line for line in result.stdout.splitlines() if line.strip()]
-
-
-def check_unreviewed_changes(repo_dir):
-    """
-    List paths that have NOT been staged: tracked files with unstaged modifications/deletions,
-    plus untracked files that are not gitignored.
-
-    Staging is how this script knows something has been reviewed (see get_staged_paths()'s
-    docstring); this is the other half of that invariant. Its presence alongside staged content
-    means the operator's review pass isn't finished, so nothing should be committed or pushed
-    yet -- not even the already-staged part -- until the tree is fully resolved one way or
-    another (staged, committed separately, stashed, or discarded).
-
-    Gitignored untracked files are deliberately excluded (via `git ls-files --exclude-standard`):
-    build output and similar noise was never going to be staged or reviewed, and flagging it
-    would make this refusal fire on essentially every real run.
-
-    Returns:
-        list[str]: unreviewed paths (possibly empty).
-
-    Raises:
-        subprocess.CalledProcessError, OSError: see get_staged_paths() -- same fail-closed
-        reasoning applies here.
-    """
-    unstaged = subprocess.run(
-        ["git", "diff", "--name-only"],
-        cwd=repo_dir,
-        capture_output=True,
-        text=True,
-        check=True,
-    ).stdout.splitlines()
-    untracked = subprocess.run(
-        ["git", "ls-files", "--others", "--exclude-standard"],
-        cwd=repo_dir,
-        capture_output=True,
-        text=True,
-        check=True,
-    ).stdout.splitlines()
-    return [line for line in (*unstaged, *untracked) if line.strip()]
-
-
-def current_branch(repo_dir):
-    result = run(["git", "rev-parse", "--abbrev-ref", "HEAD"], cwd=repo_dir, capture=True)
-    return result.stdout.strip()
-
-
-def short_sha(repo_dir):
-    result = run(["git", "rev-parse", "--short", "HEAD"], cwd=repo_dir, capture=True)
-    return result.stdout.strip()
-
-
-def remote_url(repo_dir, remote="origin"):
-    result = run(["git", "remote", "get-url", remote], cwd=repo_dir, check=False, capture=True)
-    return result.stdout.strip() if result.returncode == 0 else "(no remote)"
-
-
-def resolve_commit_message(cli_message):
-    """Use the CLI-supplied message, or prompt for one; abort if still empty."""
-    if cli_message:
-        return cli_message
-
-    try:
-        message = input("Commit message: ").strip()
-    except (EOFError, KeyboardInterrupt):
-        print("\n❌ Aborted: no commit message provided.")
-        sys.exit(1)
-
-    if not message:
-        print("❌ Aborted: commit message cannot be empty.")
-        sys.exit(1)
-
-    return message
-
-
-def commit_and_push(repo_dir, cli_message, *, dry_run=False):
-    """
-    Commit whatever is already staged in repo_dir and push, refusing to commit or push
-    ANYTHING if the working tree has unreviewed content.
-
-    Extracted out of main() (as a repo_dir-parameterized function, mirroring juneau's/ssc's
-    own commit_and_push()) so it's testable against a real temporary git repository without
-    needing to fake this module's REPO_DIR constant.
-
-    A staged path is the operator's record that they've reviewed it and it's good -- staging
-    as they review, not as a mechanical step right before committing. So this commits the
-    index exactly as it finds it (no `git add`, anywhere, ever): it does not decide what
-    belongs in the commit, because the index already says. It refuses outright -- commits and
-    pushes NOTHING -- if the working tree has any unstaged modification to a tracked file, or
-    any untracked, non-gitignored file (see check_unreviewed_changes()), since their presence
-    means the review pass isn't finished. This is deliberately strict with no override flag --
-    even a flag that names the exact paths being overridden is still a way to push something
-    nobody reviewed, which is the one thing this refusal exists to prevent. For genuinely
-    partial work (some files reviewed and staged, others still mid-edit), the sanctioned way
-    out is `git stash push -- <paths>` before running push.py and `git stash pop` after; the
-    refusal message itself prints that command with the actual offending paths already filled
-    in.
-
-    A fully CLEAN tree (nothing staged, nothing unreviewed) is a benign no-op, not a refusal:
-    there is genuinely nothing to commit, and this repo has no push-only path (unlike juneau's
-    ahead-of-upstream case), so there is nothing else to do. The dirty-but-unstaged case is
-    still refused (dirty content is, by definition, unreviewed) -- that is the case this
-    invariant exists to catch.
-
-    Both gate queries (check_unreviewed_changes(), get_staged_paths()) are read-only, so they
-    always run -- including under --dry-run -- rather than being skipped. That is what makes
-    --dry-run report the REAL outcome instead of a guess: it can never claim it "would commit"
-    a tree the real run would refuse.
-
-    Args:
-        repo_dir: Repository root to operate against.
-        cli_message: Commit message supplied on the CLI, or None to prompt for one (the prompt
-            is only reached once it's established that there is something to actually commit).
-        dry_run: If True, report what would happen and change nothing (a refusal is reported
-            as "would REFUSE" and exits 0, since --dry-run itself did not fail).
-
-    Returns:
-        int: 0 on success (committed+pushed, a genuine no-op on a clean tree, or a --dry-run
-             report of either outcome). 1 if refused (unreviewed content present) or the gate
-             checks themselves failed to run (fails closed -- see check_unreviewed_changes()'s
-             docstring).
-    """
-    try:
-        unreviewed = check_unreviewed_changes(repo_dir)
-        staged = get_staged_paths(repo_dir)
-    except (subprocess.CalledProcessError, OSError) as e:
-        print(f"\n❌ ERROR: Could not check the working tree/index: {e}")
-        return 1
-
-    if unreviewed:
-        header = "🔍 DRY RUN — would REFUSE" if dry_run else "❌ ERROR"
-        print(f"\n{header}: the working tree has unreviewed changes — staging is how this "
-              "script knows something has been reviewed, and these paths are not staged:")
-        for path in unreviewed:
-            print(f"   {path}")
-        print("   Why: everything this pushes should be something you've read, not just")
-        print("   something that happened to be in the tree.")
-        print("\n   Nothing was committed or pushed. Stage each path above if you've reviewed")
-        print("   it, or set it aside for this run and restore it after:")
-        quoted_paths = " ".join(shlex.quote(path) for path in unreviewed)
-        print(f"     git stash push -- {quoted_paths}")
-        print("     git stash pop")
-        return 0 if dry_run else 1
-
-    if not staged:
-        print("⚠ Nothing to commit — working tree is clean. Nothing to do.")
-        return 0
-
-    message = resolve_commit_message(cli_message)
-    branch = current_branch(repo_dir)
-
-    if dry_run:
-        plural = "" if len(staged) == 1 else "s"
-        print(f"\n🔍 DRY RUN — no changes will be made. Would commit the staged index "
-              f"({len(staged)} path{plural}) and push to origin/{branch}:")
-        print(f"   git commit -F- <<< {message!r}")
-        print(f"   git push origin {branch}")
-        return 0
-
-    print("\n📝 Committing...")
-    # Commit the index exactly as it was found -- see check_unreviewed_changes()'s docstring
-    # for why there is no `git add` anywhere in this script. Pipe the message via stdin
-    # (git commit -F -) instead of -m, so multi-line messages and odd characters round-trip
-    # safely with no shell quoting at all.
-    run(["git", "commit", "-F", "-"], cwd=repo_dir, input_text=message)
-
-    print(f"🚀 Pushing to origin/{branch}...")
-    run(["git", "push", "origin", branch], cwd=repo_dir)
-
-    print("\n" + "=" * 70)
-    print("✅ Push complete.")
-    print(f"   Branch: {branch}")
-    print(f"   Commit: {short_sha(repo_dir)}")
-    print(f"   Remote: {remote_url(repo_dir)}")
-    print("=" * 70)
-    return 0
-
-
-def ring_bell():
-    """
-    Ring the terminal bell (BEL) so a finished run gets noticed; macOS Terminal also badges the
-    Dock icon when the window is unfocused. Best-effort: only on a TTY (checked at write time),
-    never in sandbox mode (SANDBOX_RUNTIME=1), and not when JRM_PUSH_NO_BELL=1. Never raises.
-    """
-    if os.environ.get("JRM_PUSH_NO_BELL") == "1" or os.environ.get("SANDBOX_RUNTIME") == "1":
-        return
-    try:
-        if sys.stdout.isatty():
-            sys.stdout.write("\a")
-            sys.stdout.flush()
-    except Exception:  # NOSONAR - best-effort notification must never affect the exit status
+    def note(self, *args, **kwargs):
+        # Intentionally empty: markers are off, so there is nothing to record.
         pass
 
 
-def main():
+# The run-protocol module in use: juneau_run when the environment asks for it and it loads, otherwise the stand-in.
+run_markers = _NoMarkers()
+
+
+def toolkit():
+    """Load juneau_scripts (once per process) and bind git, run and notify.  Returns the package."""
+    global git, run, notify
+    # cache_dir: the first load fixes it for the process, so a fetched copy lands in <repo>/target as before.
+    _, js = bootstrap.load(REPO_DIR / "pom.xml", run=False, cache_dir=REPO_DIR / "target" / "juneau-run")
+    from juneau_scripts import git, notify, run  # noqa: F811
+    return js
+
+
+def say(text="", level=None):
+    """
+    run.say(), with the level (error/warn/info) read from the leading mark when not given.  Identical to print() with
+    a plain run; a filtered note under a console view.
+    """
+    if level is None:
+        level = "info"
+        if "❌" in text:
+            level = "error"
+        elif "⚠" in text:
+            level = "warn"
+    run.say(text, level)
+
+
+def resolve_commit_message(s, cli_message):
+    """Use the CLI-supplied message, or prompt for one; an aborted prompt ends the session (s.fail says why)."""
+    if cli_message:
+        return cli_message
     try:
-        _main()
-    finally:
-        ring_bell()
+        message = input("Commit message: ").strip()
+    except (EOFError, KeyboardInterrupt):
+        s.fail("\n❌ Aborted: no commit message provided.")
+    if not message:
+        s.fail("❌ Aborted: commit message cannot be empty.")
+    return message
 
 
-def _main():
+def _review(s, repo_dir, dry_run):
+    """
+    The review gate (step 2).  Returns the staged paths, or None when a dry run would refuse.
+
+    A staged path is the operator's record that they've reviewed it and it's good -- staging as they review, not as
+    a mechanical step right before committing.  So this commits the index exactly as it finds it (no `git add`,
+    anywhere, ever) and refuses outright -- commits and pushes NOTHING -- if the working tree has any unstaged
+    modification to a tracked file, or any untracked, non-gitignored file, since their presence means the review pass
+    isn't finished.  Gitignored untracked files are not flagged: build output was never going to be staged or
+    reviewed.  This is deliberately strict with no override flag -- even a flag that names the exact paths being
+    overridden is still a way to push something nobody reviewed, which is the one thing this refusal exists to
+    prevent.  For genuinely partial work, the sanctioned way out is `git stash push -- <paths>` before running
+    push.py and `git stash pop` after; the refusal message prints that command with the offending paths filled in.
+
+    Both queries are read-only, so they run under --dry-run too: it reports the REAL outcome instead of a guess.  They
+    also fail closed: if git can't run, the run is refused rather than proceeding unchecked.
+    """
+    with run.step("review", "Review gate (staged index)", n=2):
+        try:
+            unreviewed = git.unstaged_paths(repo_dir) + git.untracked_paths(repo_dir)
+            staged = git.staged_paths(repo_dir)
+        except git.GitError as e:
+            s.fail(f"\n❌ ERROR: Could not check the working tree/index: {e}")
+        if not unreviewed:
+            return staged
+        header = "🔍 DRY RUN — would REFUSE" if dry_run else "❌ ERROR"
+        first = (f"\n{header}: the working tree has unreviewed changes — staging is how this "
+                 "script knows something has been reviewed, and these paths are not staged:")
+        rest = [f"   {path}" for path in unreviewed]
+        rest += ["   Why: everything this pushes should be something you've read, not just",
+                 "   something that happened to be in the tree.",
+                 "\n   Nothing was committed or pushed. Stage each path above if you've reviewed",
+                 "   it, or set it aside for this run and restore it after:"]
+        rest += [f"     {line}" for line in git.stash_hint(unreviewed).splitlines()]
+        if not dry_run:
+            s.fail(first, hint=rest)
+        for line in (first, *rest):
+            say(line)
+        run_markers.note("warn", "Dry run — would refuse: unreviewed changes", step="review")
+        return None
+
+
+def _dry_run_report(staged, message, branch):
+    """The --dry-run report: what the commit and push would do."""
+    plural = "" if len(staged) == 1 else "s"
+    say(f"\n🔍 DRY RUN — no changes will be made. Would commit the staged index "
+        f"({len(staged)} path{plural}) and push to origin/{branch}:")
+    say(f"   git commit -F- <<< {message!r}")
+    say(f"   git push origin {branch}")
+    run_markers.note("info", "Dry run — no changes made.")
+
+
+def _commit(s, repo_dir, message):
+    """Commit the index exactly as found (step 3).  Returns the short sha; s.commit is set as soon as it exists."""
+    with run.step("commit", "Commit", n=3):
+        say("\n📝 Committing...")
+        # Message via stdin (git commit -F -) so multi-line messages and odd characters need no quoting.
+        r = git.commit_index(message, repo_dir, stdin=True)
+        if not r.ok:
+            s.fail(f"\n❌ ERROR: git commit failed (exit code {r.code}).")
+        sha = git.short_head(repo_dir)
+        s.commit = sha
+        run_markers.note("info", f"Committed {sha}", step="commit")
+    return sha
+
+
+def _push_incomplete(sha):
+    text = f"Committed {sha} locally; push did not complete"
+    say(f"\n⚠ {text}.")
+    run_markers.note("warn", text, step="push")
+
+
+def _push(s, repo_dir, branch, sha):
+    """Push the new commit to origin (step 4).  A failed or interrupted push still reports the local commit."""
+    try:
+        with run.step("push", "Push", n=4) as p:
+            say(f"🚀 Pushing to origin/{branch}...")
+            r = git.push(repo_dir, branch=branch)
+            if r.ok:
+                run_markers.note("info", f"Pushed origin/{branch}", step="push")
+            else:
+                p.fail()
+    except KeyboardInterrupt:
+        _push_incomplete(sha)
+        raise
+    if not r.ok:
+        _push_incomplete(sha)
+        s.fail(f"\n❌ ERROR: git push failed (exit code {r.code}).")
+
+
+def commit_and_push(s, repo_dir, cli_message, *, dry_run=False):
+    """
+    Commit whatever is already staged in repo_dir and push, refusing to commit or push ANYTHING if the working tree
+    has unreviewed content (see _review()).
+
+    A fully CLEAN tree (nothing staged, nothing unreviewed) is a benign no-op, not a refusal: there is genuinely
+    nothing to commit, and this repo has no push-only path.  --dry-run reports the real outcome and changes nothing;
+    a refusal under it is reported as "would REFUSE" and does not fail the run.
+
+    Returns normally on success (committed and pushed, a no-op on a clean tree, or a --dry-run report); every failure
+    ends the session through s.fail().  s.commit is set as soon as the commit exists, so the done marker reports it
+    even when the push then fails or is cancelled.
+    """
+    staged = _review(s, repo_dir, dry_run)
+    if staged is None:
+        return
+    if not staged:
+        say("⚠ Nothing to commit — working tree is clean. Nothing to do.")
+        run_markers.note("warn", "Nothing to commit — working tree is clean.")
+        return
+
+    message = resolve_commit_message(s, cli_message)
+    branch = git.current_branch(repo_dir) or "HEAD"
+
+    if dry_run:
+        _dry_run_report(staged, message, branch)
+        return
+
+    sha = _commit(s, repo_dir, message)
+    _push(s, repo_dir, branch, sha)
+
+    say("\n" + "=" * 70)
+    say("✅ Push complete.")
+    say(f"   Branch: {branch}")
+    say(f"   Commit: {sha}")
+    say(f"   Remote: {git.remote_url(repo_dir) or '(no remote)'}")
+    say("=" * 70)
+
+
+def _identity(s, repo_dir):
+    """The identity gate (step 1) -- must hold before anything else."""
+    with run.step("identity", "Git identity", n=1):
+        say("🔐 Checking git identity...")
+        if git.user_email(repo_dir):
+            say("✅ Git identity configured.")
+            return
+        s.fail("❌ ERROR: no git identity configured (git config user.email is unset).",
+               hint=["   This has caused a failed push before on this repo. Fix it with:",
+                     '     git config user.email "you@example.com"',
+                     '     git config user.name "Your Name"',
+                     "   (this script will never set it for you)"])
+
+
+def ring_bell():
+    """Ring the terminal bell once (the session calls the same helper at the end of a run).  Best-effort once the
+    toolkit loads.  Skipped in a sandbox (SANDBOX_RUNTIME=1), when JRM_PUSH_NO_BELL=1, or when stdout is not a TTY."""
+    toolkit().notify.bell(silence_env="JRM_PUSH_NO_BELL")
+
+
+def main(argv=None, repo_dir=REPO_DIR):
+    global run_markers
     parser = argparse.ArgumentParser(
         description="Commit and push juneau-release-manager to origin.",
         formatter_class=argparse.RawDescriptionHelpFormatter,
@@ -311,7 +279,7 @@ Examples:
   ./push.py "Fix credential validator NPE"
   ./push.py
   ./push.py --dry-run "Would-be commit message"
-  ./push.py --console none "Quiet-console run (no effect here: this script has no console view)"
+  ./push.py --console condensed "Fix credential validator NPE"
         """,
     )
     parser.add_argument(
@@ -328,33 +296,33 @@ Examples:
     parser.add_argument(
         "--console",
         choices=("full", "condensed", "none"),
-        help=(
-            "Maven output on the console: full (default), condensed or none (also JUNEAU_RUN_CONSOLE). "
-            "Accepted for parity with the Juneau scripts; this script runs no Maven and has no console view, "
-            "so it has no effect here."
-        ),
+        help="Console view of the steps: full (default), condensed or none (also JUNEAU_RUN_CONSOLE).",
     )
-    args = parser.parse_args()
+    args = parser.parse_args(argv)
     if args.console:
-        os.environ["JUNEAU_RUN_CONSOLE"] = args.console  # an argument beats a value already in the environment
+        # Before toolkit()/bootstrap.load() read the environment; an argument beats a value already set there.
+        os.environ["JUNEAU_RUN_CONSOLE"] = args.console
 
-    print("=" * 70)
-    print("📦 juneau-release-manager push")
-    print("=" * 70)
+    try:
+        toolkit()
+        jr, _ = bootstrap.load(REPO_DIR / "pom.xml")
+    except bootstrap.BootstrapError as e:
+        print(f"❌ ERROR: {e}", file=sys.stderr)
+        print("   (juneau-run 10.0.0-SNAPSHOT must be in ~/.m2: build Juneau first.)", file=sys.stderr)
+        return 1
+    run_markers = jr if jr is not None else _NoMarkers()
 
-    # Identity gate — must hold before anything else.
-    print("🔐 Checking git identity...")
-    if not git_identity_configured(REPO_DIR):
-        print("❌ ERROR: no git identity configured (git config user.email is unset).")
-        print("   This has caused a failed push before on this repo. Fix it with:")
-        print('     git config user.email "you@example.com"')
-        print('     git config user.name "Your Name"')
-        print("   (this script will never set it for you)")
-        sys.exit(1)
-    print("✅ Git identity configured.")
-
-    sys.exit(commit_and_push(REPO_DIR, args.message, dry_run=args.dry_run))
+    with run.session("🚀 juneau-release-manager push", header=(git.current_branch(repo_dir) or "HEAD",), bell=True,
+                     silence_env="JRM_PUSH_NO_BELL", mode="push", project="juneau-release-manager",
+                     repo=repo_dir, exit=False) as s:
+        if not run_markers.console_active():
+            say("=" * 70)
+            say("📦 juneau-release-manager push")
+            say("=" * 70)
+        _identity(s, repo_dir)
+        commit_and_push(s, repo_dir, args.message, dry_run=args.dry_run)
+    return s.code
 
 
 if __name__ == "__main__":
-    main()
+    sys.exit(main())

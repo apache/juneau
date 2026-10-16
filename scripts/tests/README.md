@@ -9,7 +9,7 @@ release-manager`), with tests alongside at `~/Project Work/scripts/tests/`. See
 This repo's own `push.py` (at the repo root, not under `scripts/`) is a bare commit/push
 helper with one gate worth testing (WORK-R0006): it refuses to commit or push **anything**
 when the working tree has any unstaged modification to a tracked file, or any untracked file
-that isn't gitignored (`check_unreviewed_changes()`/`get_staged_paths()`/`commit_and_push()`).
+that isn't gitignored (`_review()` / `commit_and_push()`, built on the `juneau_scripts` toolkit's `git` and `run` modules, loaded through the vendored `scripts/bootstrap.py`, which needs juneau-run 10.0.0-SNAPSHOT in `~/.m2` -- build Juneau first; the tests drive `push.main(argv, repo_dir)` and read its exit code).
 A staged path is the operator's record of having reviewed it, so `push.py` commits the index
 exactly as it finds it and never runs `git add`. `test_push.py` covers the three refusal
 shapes (nothing-staged-while-dirty, staged+unstaged-tracked, staged+untracked-non-ignored)
