@@ -138,10 +138,10 @@ public class StoreRest extends PetstoreConsolePage {
 		return JsonMap.of("label", "Revenue today", "value", Math.round(total * 100) / 100d, "unit", "USD");
 	}
 
-	/** @return One row {@code {species, count}} per species, in enum order, zero counts included. */
+	/** @return One row {@code {species, count}} per species, in enum order, zero counts included; pets with no species are not counted. */
 	@RestGet(path="/stats/species")
 	public JsonList species() {
-		var counts = store().getPets().stream().collect(Collectors.groupingBy(Pet::getSpecies, Collectors.counting()));
+		var counts = store().getPets().stream().filter(p -> p.getSpecies() != null).collect(Collectors.groupingBy(Pet::getSpecies, Collectors.counting()));
 		var rows = new JsonList();
 		for (var s : Species.values())
 			rows.add(JsonMap.of("species", s.name(), "count", counts.getOrDefault(s, 0L)));
@@ -151,7 +151,7 @@ public class StoreRest extends PetstoreConsolePage {
 	/** @return One row {@code {status, count}} per pet status, in enum order. */
 	@RestGet(path="/stats/status")
 	public JsonList status() {
-		var counts = store().getPets().stream().collect(Collectors.groupingBy(Pet::getStatus, Collectors.counting()));
+		var counts = store().getPets().stream().filter(p -> p.getStatus() != null).collect(Collectors.groupingBy(Pet::getStatus, Collectors.counting()));
 		var rows = new JsonList();
 		for (var s : PetStatus.values())
 			rows.add(JsonMap.of("status", s.name(), "count", counts.getOrDefault(s, 0L)));

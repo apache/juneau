@@ -56,7 +56,8 @@ class StoreRest_Test extends TestBase {
 	private static Map<String,Integer> live(MockRestClient c, String key) throws Exception {
 		var m = new TreeMap<String,Integer>();
 		for (var p : list(c, "/petstore/pets").elements(JsonMap.class))
-			m.merge(p.getString(key), 1, Integer::sum);
+			if (p.getString(key) != null) // other tests create pets without a species; the stats rows cannot count them
+				m.merge(p.getString(key), 1, Integer::sum);
 		return m;
 	}
 
@@ -186,6 +187,11 @@ class StoreRest_Test extends TestBase {
 		return checked;
 	}
 
+	/** {@code assertBean} renders a null property as {@code <null>}; other tests create pets without a species. */
+	private static String nullToMarker(String s) {
+		return s == null ? "<null>" : s;
+	}
+
 	@Test void c01_statsPets_returnsIdNameSpeciesStatus_forEveryPet() throws Exception {
 		var c = json();
 		var rows = list(c, "/console/store/stats/pets");
@@ -200,7 +206,7 @@ class StoreRest_Test extends TestBase {
 			var r = byId.get(p.getLong("id"));
 			assertNotNull(r, () -> "no row for pet " + p.getLong("id"));
 			assertEquals(new TreeSet<>(List.of("id", "name", "species", "status")), new TreeSet<>(r.keySet()));
-			assertBean(r, "name,species,status", p.getString("name") + "," + p.getString("species") + "," + p.getString("status"));
+			assertBean(r, "name,species,status", p.getString("name") + "," + nullToMarker(p.getString("species")) + "," + nullToMarker(p.getString("status")));
 		}
 	}
 
@@ -250,7 +256,7 @@ class StoreRest_Test extends TestBase {
 		var rows = list(c, "/console/store/stats/species");
 		assertEquals(Species.values().length, rows.size());
 		assertBean(rows.getMap(0), "species", Species.values()[0].name());
-		assertEquals(list(c, "/petstore/pets").size(), sum(rows));
+		assertEquals(live(c, "species").values().stream().mapToInt(Integer::intValue).sum(), sum(rows));
 		assertEquals(live(c, "species"), counts(rows, "species"));
 	}
 
