@@ -77,6 +77,14 @@ class Rest_AllowedMethodParams_Test extends TestBase {
 	@Rest(allowedMethodParams="None")
 	public static class A8 extends A5 {}
 
+	@Rest(allowedMethodParams="*")
+	public static class A9 extends A {
+		@RestOp(method="view", path="/", read=true)
+		public String view() {
+			return "VIEW";
+		}
+	}
+
 	@Test void a01_basic() throws Exception {
 		var a1 = MockRestClient.build(A1.class);
 		a1.get("/").run().assertContent("GET");
@@ -120,20 +128,25 @@ class Rest_AllowedMethodParams_Test extends TestBase {
 		a4.put("/?method=GET", "").run().assertContent("PUT");
 		a4.get("/?method=HEAD").run().assertContent("GET");
 		a4.get("/?method=OPTIONS").run().assertContent("GET");
-		a4.request("get","/?method=FOO").run().assertContent("FOO");
+		a4.request("get","/?method=FOO").ignoreErrors().run().assertStatus(405);  // FOO is not a read, so a GET can't reach it.
+		a4.request("post","/?method=FOO").run().assertContent("FOO");
 
 		var a5 = MockRestClient.build(A5.class);
 		a5.get("/").run().assertContent("GET");
 		a5.put("/", "").run().assertContent("PUT");
 		a5.head("/").run().assertContent("");
 		a5.options("/").run().assertContent("OPTIONS");
-		a5.get("/?method=PUT").run().assertContent("PUT");
+		a5.get("/?method=PUT").ignoreErrors().run().assertStatus(405);
+		a5.post("/?method=PUT", "").run().assertContent("PUT");
 		a5.put("/?method=GET", "").run().assertContent("GET");
 		a5.get("/?method=HEAD").run().assertContent("HEAD");
 		a5.get("/?method=OPTIONS").run().assertContent("OPTIONS");
-		a5.request("get","/?method=FOO").run().assertContent("FOO");
-		a5.get("/?method=Put").run().assertContent("PUT");
-		a5.get("/?method=Foo").run().assertContent("FOO");
+		a5.request("get","/?method=FOO").ignoreErrors().run().assertStatus(405);
+		a5.get("/?method=Put").ignoreErrors().run().assertStatus(405);
+		a5.get("/?method=Foo").ignoreErrors().run().assertStatus(405);
+		a5.request("post","/?method=FOO").run().assertContent("FOO");
+		a5.post("/?method=Put", "").run().assertContent("PUT");
+		a5.post("/?method=Foo", "").run().assertContent("FOO");
 
 		var a6 = MockRestClient.build(A6.class);
 		a6.get("/").run().assertContent("GET");
@@ -169,6 +182,13 @@ class Rest_AllowedMethodParams_Test extends TestBase {
 		a8.request("get","/?method=FOO").run().assertContent("GET");
 	}
 
+	@Test void a02_readVerb() throws Exception {
+		var a9 = MockRestClient.build(A9.class);
+		a9.get("/?method=VIEW").run().assertContent("VIEW");
+		a9.get("/?method=view").run().assertContent("VIEW");
+		a9.request("get","/?method=FOO").ignoreErrors().run().assertStatus(405);
+	}
+
 	//------------------------------------------------------------------------------------------------------------------
 	// Security: Malformed method parameters should return 405, not 500
 	//------------------------------------------------------------------------------------------------------------------
@@ -189,6 +209,7 @@ class Rest_AllowedMethodParams_Test extends TestBase {
 		a5.get("/?method=VIEW+test&noTrace=true").ignoreErrors().run().assertStatus(405);
 		// Valid method parameters should still work
 		a5.get("/?method=VIEW").ignoreErrors().run().assertStatus(405); // 405 because VIEW method doesn't exist, but not 500
-		a5.get("/?method=FOO").run().assertContent("FOO"); // Valid method works
+		a5.get("/?method=FOO").ignoreErrors().run().assertStatus(405); // Valid, but FOO is not a read, so a GET can't reach it
+		a5.post("/?method=FOO", "").run().assertContent("FOO"); // Valid method works
 	}
 }

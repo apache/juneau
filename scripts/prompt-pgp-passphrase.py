@@ -32,6 +32,10 @@ import sys
 import tempfile
 
 
+# gpg probes for a smartcard on every signing run and prints this when none is present; it is not a signing failure.
+_CARD_NOISE = "error retrieving key fingerprint from card"
+
+
 def _resolve_gpg():
     """
     Resolve a usable path to the gpg binary.
@@ -85,12 +89,17 @@ def prompt_pgp_passphrase():
             # Attempt to sign the dummy file (this will prompt for passphrase)
             # Don't use --batch so it will prompt interactively for passphrase
             # Use --yes to auto-confirm overwrite prompts, but allow passphrase prompt
-            subprocess.run(
+            # stderr is piped only to drop gpg's smartcard-probe noise (see _CARD_NOISE); the pinentry prompt
+            # goes through the tty, not stderr, and every other stderr line is passed on unchanged.
+            result = subprocess.run(
                 [gpg_path, "--yes", "--clearsign", tmp_path],
-                capture_output=False,  # Don't capture output so user can see the prompt
+                stderr=subprocess.PIPE,
                 text=True,
                 timeout=60  # 60 second timeout for passphrase entry
             )
+            for line in (result.stderr or "").splitlines():
+                if _CARD_NOISE not in line:
+                    print(line, file=sys.stderr)
             # Clean up the dummy file and signature
             try:
                 os.unlink(tmp_path)

@@ -67,6 +67,14 @@ class Rest_AllowedMethodHeaders_Test extends TestBase {
 	@Rest(allowedMethodHeaders="None")
 	public static class A8 extends A5 {}
 
+	@Rest(allowedMethodHeaders="*")
+	public static class A9 extends A {
+		@RestOp(method="view", path="/", read=true)
+		public String view() {
+			return "VIEW";
+		}
+	}
+
 	@Test void c01_basic() throws Exception {
 		var a1 = MockRestClient.build(A1.class);
 		a1.get("/").run().assertContent("GET");
@@ -94,18 +102,23 @@ class Rest_AllowedMethodHeaders_Test extends TestBase {
 		a4.put("/", "").run().assertContent("PUT");
 		a4.get("/").header("X-Method", "PUT").run().assertContent("GET");
 		a4.put("/", "").header("X-Method", "GET").run().assertContent("PUT");
-		a4.request("get","/").header("X-Method","FOO").run().assertContent("FOO");
+		a4.request("get","/").header("X-Method","FOO").ignoreErrors().run().assertStatus(405);  // FOO is not a read, so a GET can't reach it.
+		a4.request("post","/").header("X-Method","FOO").run().assertContent("FOO");
 
 		var a5 = MockRestClient.build(A5.class);
 		a5.get("/").run().assertContent("GET");
 		a5.put("/", "").run().assertContent("PUT");
-		a5.get("/").header("X-Method", "PUT").run().assertContent("PUT");
+		a5.get("/").header("X-Method", "PUT").ignoreErrors().run().assertStatus(405);
 		a5.put("/", "").header("X-Method", "GET").run().assertContent("GET");
-		a5.get("/").header("x-method", "PUT").run().assertContent("PUT");
-		a5.get("/").header("x-method", "FOO").run().assertContent("FOO");
-		a5.get("/").header("X-Method", "put").run().assertContent("PUT");
-		a5.get("/").header("X-Method", "foo").run().assertContent("FOO");
-		a5.request("get","/").header("X-Method","FOO").run().assertContent("FOO");
+		a5.get("/").header("x-method", "PUT").ignoreErrors().run().assertStatus(405);
+		a5.get("/").header("x-method", "FOO").ignoreErrors().run().assertStatus(405);
+		a5.get("/").header("X-Method", "put").ignoreErrors().run().assertStatus(405);
+		a5.get("/").header("X-Method", "foo").ignoreErrors().run().assertStatus(405);
+		a5.request("get","/").header("X-Method","FOO").ignoreErrors().run().assertStatus(405);
+		a5.post("/", "").header("X-Method", "PUT").run().assertContent("PUT");
+		a5.post("/", "").header("x-method", "FOO").run().assertContent("FOO");
+		a5.post("/", "").header("X-Method", "put").run().assertContent("PUT");
+		a5.post("/", "").header("X-Method", "foo").run().assertContent("FOO");
 
 		var a6 = MockRestClient.build(A6.class);
 		a6.get("/").run().assertContent("GET");
@@ -127,6 +140,11 @@ class Rest_AllowedMethodHeaders_Test extends TestBase {
 		a8.get("/").header("X-Method", "PUT").run().assertContent("GET");
 		a8.put("/", "").header("X-Method", "GET").run().assertContent("PUT");
 		a8.request("get","/").header("X-Method","FOO").run().assertContent("GET");
+
+		var a9 = MockRestClient.build(A9.class);
+		a9.get("/").header("X-Method", "VIEW").run().assertContent("VIEW");
+		a9.get("/").header("X-Method", "view").run().assertContent("VIEW");
+		a9.request("get","/").header("X-Method","FOO").ignoreErrors().run().assertStatus(405);
 	}
 
 	@Test void c02_otherOverrideHeaders() throws Exception {
@@ -141,12 +159,18 @@ class Rest_AllowedMethodHeaders_Test extends TestBase {
 
 			var a4 = MockRestClient.build(A4.class);
 			a4.put("/", "").header(h, "GET").run().assertContent("PUT");
-			a4.request("get","/").header(h, "FOO").run().assertContent("FOO");
+			a4.request("get","/").header(h, "FOO").ignoreErrors().run().assertStatus(405);
+			a4.request("post","/").header(h, "FOO").run().assertContent("FOO");
 
 			var a5 = MockRestClient.build(A5.class);
-			a5.get("/").header(h, "PUT").run().assertContent("PUT");
+			a5.get("/").header(h, "PUT").ignoreErrors().run().assertStatus(405);
+			a5.post("/", "").header(h, "PUT").run().assertContent("PUT");
 			a5.put("/", "").header(h, "GET").run().assertContent("GET");
-			a5.get("/").header(h.toLowerCase(), "foo").run().assertContent("FOO");
+			a5.get("/").header(h.toLowerCase(), "foo").ignoreErrors().run().assertStatus(405);
+			a5.post("/", "").header(h.toLowerCase(), "foo").run().assertContent("FOO");
+
+			var a9 = MockRestClient.build(A9.class);
+			a9.get("/").header(h, "VIEW").run().assertContent("VIEW");
 
 			var a6 = MockRestClient.build(A6.class);
 			a6.get("/").header(h, "PUT").run().assertContent("GET");
@@ -160,6 +184,7 @@ class Rest_AllowedMethodHeaders_Test extends TestBase {
 	@Test void c03_conflictingOverrideHeaders_400() throws Exception {
 		var a5 = MockRestClient.create(A5.class).ignoreErrors().build();
 		a5.get("/").header("X-Method", "PUT").header("X-HTTP-Method-Override", "FOO").run().assertStatus(400);
-		a5.get("/").header("X-Method", "PUT").header("X-Method-Override", "put").run().assertContent("PUT");
+		a5.get("/").header("X-Method", "PUT").header("X-Method-Override", "put").run().assertStatus(405);
+		a5.post("/", "").header("X-Method", "PUT").header("X-Method-Override", "put").run().assertContent("PUT");
 	}
 }

@@ -30,9 +30,10 @@ import org.apache.juneau.rest.server.servlet.*;
  * Microservice debug utilities.
  *
  * <p>
- * <b>Warning:</b> this resource accepts {@code ?method=POST}, so a plain {@code GET} link (such as its own
- * {@code jetty-thread-dump} navlink) reaches its {@code POST} operations; put it behind a CSRF boundary before
- * mounting it anywhere a browser can reach.
+ * The {@code jetty-thread-dump} navlink is a plain {@code GET /jetty/dump}, which shows the dump.  Writing the dump to
+ * <l>jetty-thread-dump.log</l> needs a real {@code POST /jetty/dump}; a link can't reach it, because the router refuses
+ * any override of a {@code GET} to {@code POST}.  Put the resource behind a CSRF boundary before mounting it anywhere a
+ * browser can reach.
  *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauMicroserviceJetty">juneau-microservice-jetty Basics</a>
@@ -46,12 +47,12 @@ import org.apache.juneau.rest.server.servlet.*;
 	path="/debug",
 	title="Debug",
 	description="Debug Utilities.",
-	allowedMethodParams="OPTIONS,POST"
+	allowedMethodParams="OPTIONS"
 )
 @HtmlDocConfig(
 	navlinks={
 		"up: request:/..",
-		"jetty-thread-dump: servlet:/jetty/dump?method=POST",
+		"jetty-thread-dump: servlet:/jetty/dump",
 		"api: servlet:/api",
 		"stats: servlet:/stats"
 	}

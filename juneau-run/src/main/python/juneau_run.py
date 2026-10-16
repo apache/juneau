@@ -481,34 +481,20 @@ def overall_text(o):
     return f"Overall  {o.percent}%{left}  · {o.done} of {o.total} steps"
 
 
-BAR_CELLS = 60      # a unit bar wider than this is bucketed (spec 2)
-
 UNIT_PASS, UNIT_FAIL, UNIT_SKIP = 1, 2, 3     # bytes in a row's unit_cells; 0 is "not finished"
 UNIT_RUN = 4        # only in a view built by _Row.unit_view(), never stored in unit_cells: started, not ended
 
 
-def unit_bar(cells, total, width, glyphs):
-    """The cells of a unit bar: one per unit up to `width`, else exactly `width` buckets splitting the units evenly,
-    each the worst outcome in the bucket (fail, then in-flight, then pass, then skip) and PENDING when nothing in it
-    has started.  Computed on demand from `cells` (a bytearray, 0 unfinished / 1 pass / 2 fail / 3 skip / 4 in-flight),
-    never stored."""
-    if total <= 0:
-        return []
-    width = max(1, width)
-    n = min(total, width)
+def unit_bar(cells, total, glyphs):
+    """The cells of a unit bar: exactly one per unit, each its unit's outcome (fail, in-flight, pass or skip) and
+    PENDING while the unit has not started.  Never bucketed: a bar wider than the terminal wraps (see _fit_row).
+    Computed on demand from `cells` (a bytearray, 0 unfinished / 1 pass / 2 fail / 3 skip / 4 in-flight), never
+    stored."""
     out = []
-    for i in range(n):
-        chunk = bytes(cells[i * total // n:(i + 1) * total // n])
-        if UNIT_FAIL in chunk:
-            out.append(glyphs["fail"])
-        elif UNIT_RUN in chunk:
-            out.append(glyphs["run"])
-        elif UNIT_PASS in chunk:
-            out.append(glyphs["pass"])
-        elif UNIT_SKIP in chunk:
-            out.append(glyphs["skip"])
-        else:
-            out.append(PENDING)
+    for i in range(max(0, total)):
+        v = cells[i] if i < len(cells) else 0
+        out.append(glyphs["fail"] if v == UNIT_FAIL else glyphs["run"] if v == UNIT_RUN
+                   else glyphs["pass"] if v == UNIT_PASS else glyphs["skip"] if v == UNIT_SKIP else PENDING)
     return out
 
 
@@ -1059,7 +1045,7 @@ def row_cells(row, glyphs, now, pending=False):
     # A finished module bar that never counted a unit (a -q build sends no module events) shows no bar at all.
     if not unreported and (row.modules or row.size or row.units_total or row.unit_kind == "modules"):
         if row.unit_kind:
-            cells = unit_bar(row.unit_view(), row.units_total, BAR_CELLS, glyphs)
+            cells = unit_bar(row.unit_view(), row.units_total, glyphs)
             parts.append(f"{row.units_done}/{row.units_total}")
         else:
             cells = [glyphs[b] for b in row.boxes()]
@@ -1249,10 +1235,11 @@ def _fit(left, right, cols):
     return left + " " * max(2, cols - _vlen(left) - len(right)) + right if right else left
 
 
-def _fit_row(label, cells, rest, elapsed, cols, rebucket=None):
+def _fit_row(label, cells, rest, elapsed, cols, wrap=False):
     """A step row fitted to cols.  When it is too wide the bar gives way first, keeping its newest cells behind an
-    ellipsis (or, for a bucketed unit bar, re-bucketed to the room left via rebucket(width)), so the label, count,
-    totals and elapsed survive; only a row too wide even then is cut from the right."""
+    ellipsis, so the label, count, totals and elapsed survive; only a row too wide even then is cut from the right.
+    With wrap (a unit bar, one cell per unit) the bar never gives way: the cells that don't fit beside the label and
+    count continue on extra lines indented to the bar's column, and the result holds several lines joined by "\n"."""
     if " / ~" in elapsed:       # the "M:SS / ~M:SS" timer gives way to plain elapsed when even the bare row won't fit
         bare = _vlen(label + ("  " + rest if rest else "")) + len(elapsed) + 2
         if bare > cols:
@@ -1261,8 +1248,13 @@ def _fit_row(label, cells, rest, elapsed, cols, rebucket=None):
     if cells is None or _vlen(line) <= cols - (len(elapsed) + 2 if elapsed else 0):
         return _fit(line, elapsed, cols)
     room = cols - (len(elapsed) + 2 if elapsed else 0) - _vlen(label + "    " + rest)
-    if rebucket is not None and room >= 1:
-        return _fit(label + "  " + "".join(rebucket(room)) + "  " + rest, elapsed, cols)
+    if wrap and room >= 1:
+        indent = _vlen(label) + 2
+        per = max(1, cols - indent)
+        first, more = cells[:room], cells[room:]
+        lines = [_fit(label + "  " + "".join(first) + "  " + rest, elapsed, cols)]
+        lines += [" " * indent + "".join(more[i:i + per]) for i in range(0, len(more), per)]
+        return "\n".join(lines)
     if room < 2:
         return _fit(line, elapsed, cols)
     return _fit(label + "  …" + "".join(cells[len(cells) - (room - 1):]) + "  " + rest, elapsed, cols)
@@ -1329,10 +1321,7 @@ class LiveRenderer:
             rest += f" · quiet {r.quiet}s"
         if r.running and r.progress and not r.unit_kind:
             rest = f"{rest} · {r.progress}" if rest else r.progress
-        rebucket = None
-        if r.unit_kind:
-            rebucket = lambda width: unit_bar(r.unit_view(), r.units_total, width, self.glyphs)
-        return _fit_row(r.label.ljust(board.width()), cells, rest, elapsed, cols, rebucket)
+        return _fit_row(r.label.ljust(board.width()), cells, rest, elapsed, cols, wrap=bool(r.unit_kind))
 
     def _flush(self, lines):
         if lines:
@@ -1359,7 +1348,9 @@ class LiveRenderer:
         blocks = {id(m): self._sub_lines(m, cols) for _, m in subs}
         owner_running = board.setup is not None and any(r.id == board.setup.row for r in running)
         overall = board.overall()
-        budget = max_lines - len(running) - len(collapsed) - (1 if owner_running else 0) - (1 if overall else 0)
+        row_text = {r.id: self._row(board, r, cols, pending=True) for r in running}
+        row_lines = sum(t.count("\n") + 1 for t in row_text.values())     # a wrapped unit bar spans several lines
+        budget = max_lines - row_lines - len(collapsed) - (1 if owner_running else 0) - (1 if overall else 0)
         folded = {}
         while subs and sum(len(blocks[id(m)]) for _, m in subs) + len(folded) > budget:
             r, _ = subs.pop(0)
@@ -1368,13 +1359,13 @@ class LiveRenderer:
         for r in running:
             if board.setup is not None and board.setup.row == r.id:
                 lines.append(setup_line(board, self.glyphs, cols))
-            lines.append(self._row(board, r, cols, pending=True))
+            lines.append(row_text[r.id])
             if r.id in collapsed:
                 lines.append(collapsed[r.id])
             if r.id in folded:
                 lines.append(f"  +{folded[r.id]} more running")
             lines += [line for owner, m in subs if owner is r for line in blocks[id(m)]]
-        return lines[:max(1, max_lines)]
+        return [part for line in lines for part in line.split("\n")][:max(1, max_lines)]
 
     def _sub_lines(self, m, cols):
         prefix = f"  {_vcut(m.title, max(1, cols // 2))}  "

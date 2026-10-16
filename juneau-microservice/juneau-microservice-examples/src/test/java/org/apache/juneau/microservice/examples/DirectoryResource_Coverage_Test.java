@@ -209,14 +209,15 @@ class DirectoryResource_Coverage_Test extends TestBase {
 				"DELETE action must not appear when allowDeletes=false");
 		}
 	}
-	@Test void e03_actionListing_fullyEnabled_includesAllActions() throws Exception {
+	@Test void e03_actionListing_fullyEnabled_includesViewDownload_butNotDelete() throws Exception {
+		// A DELETE link would be a GET override to a write, which the router refuses, so it is never listed.
 		try (var c = buildClient(TestDirResource.class)) {
 			var resp = c.get("/").run();
 			resp.assertStatus(200);
 			var body = resp.getContent().asString();
 			assertTrue(body.contains("?method=VIEW"));
 			assertTrue(body.contains("?method=DOWNLOAD"));
-			assertTrue(body.contains("?method=DELETE"));
+			assertFalse(body.contains("?method=DELETE"));
 		}
 	}
 

@@ -10,7 +10,7 @@
 # * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
 # * specific language governing permissions and limitations under the License.
 # ***************************************************************************************************************************
-"""Units: bucketed unit bar."""
+"""Units: the one-cell-per-unit bar."""
 
 import unittest
 
@@ -18,53 +18,31 @@ from support import jr, reset_run_state
 from test_parsers import feed
 
 
-class BucketTest(unittest.TestCase):
+class UnitBarTest(unittest.TestCase):
     GL = {"pass": "P", "fail": "F", "skip": "S", "run": "R"}
 
-    def cells(self, outcomes, total, width=jr.BAR_CELLS):
-        return "".join(jr.unit_bar(bytearray(outcomes), total, width, self.GL))
+    def cells(self, outcomes, total):
+        return "".join(jr.unit_bar(bytearray(outcomes), total, self.GL))
 
-    def test_one_cell_per_unit_at_or_under_width(self):
-        self.assertEqual(self.cells([1, 2, 3, 0], 5, 60), "PFS" + jr.PENDING + jr.PENDING)
+    def test_one_cell_per_unit(self):
+        self.assertEqual(self.cells([1, 2, 3, 0], 5), "PFS" + jr.PENDING + jr.PENDING)
 
-    def test_bucket_worst_wins_fail_over_pass_over_skip(self):
-        out = [1] * 4 + [1, 2, 1, 1] + [3, 3, 1, 3] + [3, 3, 3, 3]   # 16 units, width 4 -> 4 per bucket
-        self.assertEqual(self.cells(out, 16, 4), "PFPS")
+    def test_one_cell_per_unit_however_many(self):
+        for total in (1, 60, 61, 84, 300, 3000):
+            self.assertEqual(len(self.cells([1] * total, total)), total, total)
 
-    def test_bucket_precedence_is_fail_then_in_flight_then_pass_then_skip_then_pending(self):
-        run = jr.UNIT_RUN
-        # 4 per bucket: fail beats in-flight, in-flight beats pass, pass beats skip, skip beats pending
-        out = [1, 2, run, 0] + [1, run, 1, 1] + [3, 1, 3, 3] + [3, 3, 0, 0]
-        self.assertEqual(self.cells(out, 16, 4), "FRPS")
-        self.assertEqual(self.cells([run, 0, 0, 0], 4, 4), "R" + jr.PENDING * 3)   # one cell per unit: in-flight alone
-
-    def test_unfinished_bucket_is_pending(self):
-        self.assertEqual(self.cells([1] * 4, 16, 4), "P" + jr.PENDING * 3)
-
-    def test_rebucket_to_narrow_width(self):
-        self.assertEqual(len(self.cells([1] * 300, 300, 20)), 20)
-
-    def test_cell_count_is_exactly_width_when_over(self):
-        for total in (61, 121, 300):
-            self.assertEqual(len(self.cells([1] * total, total, 60)), 60, total)
-
-    def test_even_split_keeps_a_fail_in_its_bucket(self):
+    def test_a_fail_keeps_its_own_cell(self):
         out = [1] * 61
         out[60] = 2
-        bar = self.cells(out, 61, 60)
-        self.assertEqual((len(bar), bar[-1], bar.count("F")), (60, "F", 1))
+        bar = self.cells(out, 61)
+        self.assertEqual((len(bar), bar[-1], bar.count("F")), (61, "F", 1))
 
-    def test_width_one(self):
-        self.assertEqual(self.cells([1, 2, 1], 3, 1), "F")
-
-    def test_late_fix_changes_bucket(self):
-        out = bytearray([1] * 120)
-        self.assertEqual(self.cells(out, 120, 60).count("F"), 0)
-        out[7] = 2
-        self.assertEqual(self.cells(out, 120, 60)[3], "F")
+    def test_in_flight_and_unstarted_cells(self):
+        run = jr.UNIT_RUN
+        self.assertEqual(self.cells([run, 0, 0, 0], 4), "R" + jr.PENDING * 3)
 
     def test_zero_total(self):
-        self.assertEqual(self.cells([], 0, 60), "")
+        self.assertEqual(self.cells([], 0), "")
 
 
 class BoardUnitsTest(unittest.TestCase):

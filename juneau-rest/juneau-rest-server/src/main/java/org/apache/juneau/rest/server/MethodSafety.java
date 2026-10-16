@@ -55,6 +55,10 @@ import static org.apache.juneau.commons.utils.Shorts.*;
  * <p>
  * A wildcard operation ({@code @RestOp(method="*")}) matches {@code GET} among everything else, so it is a
  * contradiction too and is reported as one.
+ * <p>
+ * The same check fails an operation declared {@link RestOp#read() read=true} that is bound to a method defined as
+ * unsafe, to {@code "*"} or to {@code "RRPC"}, or that is also {@link Mutating @Mutating}.  A read can be reached by
+ * overriding a safe request, so a misdeclared read would be a write behind a plain link.
  *
  * <h5 class='section'>Why the rule is a declared contradiction rather than a detected one</h5>
  * <p>
@@ -80,6 +84,9 @@ public class MethodSafety {
 	 * state-changing, so an unusual or future method fails closed rather than skipping write checks.
 	 */
 	private static final Set<String> SAFE_METHODS = Set.of("GET", "HEAD", "OPTIONS", "TRACE");
+
+	/** The standard methods defined as unsafe, which an operation can never declare a read. */
+	private static final Set<String> UNSAFE_METHODS = Set.of("POST", "PUT", "PATCH", "DELETE", "CONNECT");
 
 	/** The query parameter that can claim a request's method. */
 	private static final String OVERRIDE_PARAM = "method";
@@ -200,15 +207,17 @@ public class MethodSafety {
 	}
 
 	/**
-	 * Fails when any operation declared {@link Mutating @Mutating} is bound to a safe method.
+	 * Fails when any operation declared {@link Mutating @Mutating} is bound to a safe method, or any operation
+	 * declared {@link RestOp#read() read=true} is bound to a method that cannot be a read.
 	 *
 	 * @param ops The operations of one resource.  Must not be <jk>null</jk>.
-	 * @throws InternalServerError If a mutating operation is bound to a safe method.
+	 * @throws InternalServerError If a mutating operation is bound to a safe method, or a read declaration is
+	 * 	misplaced or contradicts the operation's method or a {@link Mutating @Mutating} declaration.
 	 */
 	public static void check(List<RestOpContext> ops) {
 		reqnn("ops", ops);
 		for (var op : ops)
-			checkOperation(op.getHttpMethod(), op.getJavaMethod());
+			checkOperation(op.getHttpMethod(), op.getJavaMethod(), op.isRead());
 	}
 
 	/**
@@ -224,6 +233,27 @@ public class MethodSafety {
 	 * @throws InternalServerError If {@code javaMethod} is declared mutating and {@code httpMethod} is safe.
 	 */
 	public static void checkOperation(String httpMethod, Method javaMethod) {
+		checkOperation(httpMethod, javaMethod, false);
+	}
+
+	/**
+	 * Fails when {@code javaMethod} is declared {@link Mutating @Mutating} and {@code httpMethod} is safe, or when the
+	 * operation is declared {@link RestOp#read() read=true} and {@code httpMethod} cannot be a read.
+	 *
+	 * <p>
+	 * A read declaration is refused on the methods defined as unsafe ({@code POST}, {@code PUT}, {@code PATCH},
+	 * {@code DELETE}, {@code CONNECT}), on {@code "*"} (which answers {@code DELETE} too), on {@code "RRPC"} (which
+	 * dispatches arbitrary interface methods), and together with {@link Mutating @Mutating}.  It is accepted on a
+	 * custom method, and is redundant on a safe one.
+	 *
+	 * @param httpMethod The resolved HTTP method, as dispatch sees it.  Can be <jk>null</jk>, which is not safe.
+	 * 	{@code "*"} matches every method and is therefore treated as including a safe one.
+	 * @param javaMethod The Java method implementing the operation.  Must not be <jk>null</jk>.
+	 * @param read Whether the operation is declared {@link RestOp#read() read=true}.
+	 * @throws InternalServerError If the declarations contradict each other or the method.
+	 * @since 10.0.0
+	 */
+	public static void checkOperation(String httpMethod, Method javaMethod, boolean read) {
 		reqnn("javaMethod", javaMethod);
 
 		// Resolved through MethodInfo rather than Method.getAnnotation, so that an operation inheriting its
@@ -232,6 +262,8 @@ public class MethodSafety {
 		// the same way the framework resolves every other method annotation.
 		var mutating = MethodInfo.of(javaMethod.getDeclaringClass(), javaMethod).getAnnotations(Mutating.class)
 			.findFirst().map(AnnotationInfo::inner).orElse(null);
+		if (read)
+			checkRead(httpMethod, javaMethod, nn(mutating));
 		if (mutating == null)
 			return;
 
@@ -250,5 +282,30 @@ public class MethodSafety {
 			+ " that are not safe, so this operation would be reachable without them."
 			+ " Bind it to POST/PUT/PATCH/DELETE, or remove @Mutating if it does not actually change state."
 			+ " Note that @RestOp with no method= infers the method from the Java method name and defaults to GET.");
+	}
+
+	/** Fails when a read declaration contradicts the operation's method or a {@link Mutating @Mutating} declaration. */
+	private static void checkRead(String httpMethod, Method javaMethod, boolean mutating) {
+		// Normalized as the operation table does, so a direct caller passing "rrpc" or "METHOD" gets the same verdict.
+		var m = httpMethod == null ? null : ucr(httpMethod);
+		if (eq(m, "METHOD"))
+			m = "*";
+		String why;
+		if (mutating)
+			why = "is also annotated @Mutating, which declares the opposite";
+		else if (eq(m, "*"))
+			why = "is bound to every method, including unsafe ones such as DELETE";
+		else if (eq(m, "RRPC"))
+			why = "is a remote-proxy (RRPC) operation, which dispatches arbitrary interface methods";
+		else if (nn(m) && UNSAFE_METHODS.contains(m))
+			why = "is bound to '" + m + "', which is defined as unsafe";
+		else
+			return;
+		throw new InternalServerError(
+			"Operation '" + javaMethod.getDeclaringClass().getSimpleName() + "." + javaMethod.getName()
+			+ "' is declared @RestOp(read=true) but " + why + "."
+			+ " A read can be reached by overriding a GET, so declaring a write a read would let a plain link change state."
+			+ " Remove read=true, or bind the operation to a custom method that does not change state."
+			+ " Note that @RestOp with no method= infers the method from the Java method name.");
 	}
 }

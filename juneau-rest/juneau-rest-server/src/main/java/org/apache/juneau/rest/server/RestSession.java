@@ -758,7 +758,8 @@ public class RestSession extends ContextSession {
 	 * <p>
 	 * Does the following:
 	 * <ol>
-	 * 	<li>Finds the Java method to invoke and creates a {@link RestOpSession} for it.
+	 * 	<li>Finds the Java method to invoke, refuses a safe request overridden to a method that is not a read (see
+	 * 		{@link RestOp#read()}), and creates a {@link RestOpSession} for it.
 	 * 	<li>Invokes {@link RestPreCall} methods by calling {@link RestContext#preCall(RestOpSession)}.
 	 * 	<li>Invokes Java method by calling {@link RestOpSession#run()}.
 	 * 	<li>Invokes {@link RestPostCall} methods by calling {@link RestContext#postCall(RestOpSession)}.
@@ -770,7 +771,9 @@ public class RestSession extends ContextSession {
 	 */
 	public void run() throws Exception {
 		try {
-			opSession = context.getRestOperations().findOperation(this).createSession(this).build();
+			var op = context.getRestOperations().findOperation(this);
+			checkOverride(op);
+			opSession = op.createSession(this).build();
 			// For mixin endpoints, fire the mixin's @RestStartCall hooks now that the operation is resolved.
 			// The host's @RestStartCall hooks already fired in RestContext#execute() before s.run().
 			// Order: host first, mixin second.
@@ -794,6 +797,31 @@ public class RestSession extends ContextSession {
 				status(404);
 			exception(e);
 			context.handleNotFound(this);
+		}
+	}
+
+	/**
+	 * Refuses a safe request (<c>GET</c>, <c>HEAD</c>, <c>OPTIONS</c>, <c>TRACE</c>) whose method was overridden to one
+	 * that is neither safe nor the method of an operation declared {@link RestOp#read() read=true}.
+	 *
+	 * <p>
+	 * Checked here rather than in {@link RestOperations#findOperation(RestSession)}, because a resource can replace
+	 * its operations bean, and before the operation session is created, so nothing runs for a request that cannot
+	 * succeed.  It sees only the request line, the dispatched method and the operation, so every override channel is
+	 * covered.
+	 *
+	 * @param op The operation that matched.
+	 * @throws MethodNotAllowed If the override is refused.
+	 * @throws BadRequest If the request carries conflicting method overrides.
+	 */
+	private void checkOverride(RestOpContext op) throws MethodNotAllowed, BadRequest {
+		var line = ucr(req.getMethod());
+		var m = getMethod();
+		if (MethodSafety.isSafe(line) && neq(m, line) && ! MethodSafety.isSafe(m) && ! op.isRead()) {
+			// The message doesn't echo the claimed method.
+			var e = new MethodNotAllowed("Method override not allowed on a safe request method.");
+			e.setHeader("Allow", context.getRestOperations().allowedMethods(this));
+			throw e;
 		}
 	}
 

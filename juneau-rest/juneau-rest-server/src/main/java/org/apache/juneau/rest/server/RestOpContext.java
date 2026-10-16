@@ -577,21 +577,58 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 	});
 
 	/**
-	 * The HTTP method string for this operation (e.g. {@code "GET"}, {@code "*"}).
+	 * The {@code @RestOp}-group annotation that supplies this operation's HTTP method.
 	 *
 	 * <p>
 	 * Walks {@code @RestOp}-group annotations child-to-parent; verb-specific annotations
-	 * ({@link RestGet}, etc.) imply their fixed verb. Falls back to
-	 * {@link HttpUtils#detectHttpMethod} when no annotation declares a verb.
+	 * ({@link RestGet}, etc.) imply their fixed verb. Empty when no annotation declares a verb, in which case the
+	 * verb is inferred from the Java method name.
 	 */
-	private final Memoizer<String> httpMethod = memoizer(() -> {
+	private final Memoizer<Optional<AnnotationInfo<?>>> httpMethodSource = memoizer(() -> {
 		var vr = varResolver();
-		for (var ai : getRestOpAnnotations()) {
-			var v = httpMethodFromAnnotation(ai.inner(), vr);
-			if (ine(v))
-				return normalizeHttpMethod(v);
+		for (var ai : getRestOpAnnotations())
+			if (ine(httpMethodFromAnnotation(ai.inner(), vr)))
+				return o(ai);
+		return oe();
+	});
+
+	/**
+	 * The HTTP method string for this operation (e.g. {@code "GET"}, {@code "*"}).
+	 *
+	 * <p>
+	 * Taken from {@link #httpMethodSource}. Falls back to {@link HttpUtils#detectHttpMethod} when no annotation
+	 * declares a verb.
+	 */
+	private final Memoizer<String> httpMethod = memoizer(() ->
+		normalizeHttpMethod(httpMethodSource.get()
+			.map(ai -> httpMethodFromAnnotation(ai.inner(), varResolver()))
+			.orElseGet(() -> HttpUtils.detectHttpMethod(method(), true, "GET"))));
+
+	/**
+	 * Whether this operation is declared {@link RestOp#read() read=true}.
+	 *
+	 * <p>
+	 * Read from the annotation that supplies the HTTP method, so the verb and its read declaration travel together.
+	 * When the verb is inferred, it comes from the nearest {@link RestOp @RestOp}. A {@code read=true} on an
+	 * overridden annotation that names its own verb is replaced along with that verb. One on another
+	 * {@link RestOp @RestOp} that names no verb would be silently ignored, so it fails the operation.
+	 */
+	private final Memoizer<Boolean> read = memoizer(() -> {
+		var vr = varResolver();
+		var annotations = getRestOpAnnotations();
+		var source = httpMethodSource.get()
+			.orElseGet(() -> annotations.stream().filter(x -> x.inner() instanceof RestOp).findFirst().orElse(null));
+		for (var ai : annotations) {
+			// An annotation that names its own verb but was overridden by a nearer one is replaced along with its read.
+			// One that names no verb would have its read silently ignored, so that is refused.
+			if (ai != source && ai.inner() instanceof RestOp a2 && a2.read() && ! ine(httpMethodFromAnnotation(a2, vr)))
+				throw new InternalServerError(
+					"Operation '" + method().getDeclaringClass().getSimpleName() + "." + method().getName()
+					+ "' declares @RestOp(read=true) on an annotation that does not supply its method '" + getHttpMethod() + "'."
+					+ " The read declaration is taken only from the annotation that names the method."
+					+ " Move read=true to that annotation, or remove it.");
 		}
-		return normalizeHttpMethod(HttpUtils.detectHttpMethod(method(), true, "GET"));
+		return nn(source) && source.inner() instanceof RestOp a2 && a2.read();
 	});
 
 	/** The JSON-Schema generator for this operation (op-level annotations applied on top of the parent). */
@@ -1604,6 +1641,20 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 	public String getHttpMethod() { return httpMethod.get(); }
 
 	/**
+	 * Returns whether this operation is declared {@link RestOp#read() read=true}.
+	 *
+	 * <p>
+	 * A read operation may be reached by overriding a safe request (<c>GET</c>, <c>HEAD</c>, <c>OPTIONS</c>,
+	 * <c>TRACE</c>) to its custom method.
+	 *
+	 * @return <jk>true</jk> if this operation is declared a read.
+	 * @throws InternalServerError If <c>read=<jk>true</jk></c> is declared on an inherited <ja>@RestOp</ja> that names
+	 * 	no method.
+	 * @since 10.0.0
+	 */
+	public boolean isRead() { return read.get(); }
+
+	/**
 	 * Returns the underlying Java method that this context belongs to.
 	 *
 	 * @return The underlying Java method that this context belongs to.
@@ -1887,6 +1938,20 @@ public class RestOpContext extends Context implements Comparable<RestOpContext> 
 				return pm;
 		}
 		return null;
+	}
+
+	/**
+	 * Whether this operation's path pattern matches the specified call.
+	 *
+	 * <p>
+	 * Unlike {@link #match(RestSession)}, this neither runs the matchers nor caches the path match on the session, so
+	 * it can be asked of any operation without disturbing the one about to run.
+	 *
+	 * @param session The call to check.
+	 * @return <jk>true</jk> if the path pattern matches.
+	 */
+	boolean matchesPath(RestSession session) {
+		return nn(matchPattern(session));
 	}
 
 	/**

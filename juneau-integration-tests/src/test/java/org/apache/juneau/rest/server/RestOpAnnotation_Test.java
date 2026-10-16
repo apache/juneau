@@ -63,6 +63,7 @@ class RestOpAnnotation_Test extends TestBase {
 		.parsers(Parser.class)
 		.path("p")
 		.produces("q")
+		.read(true)
 		.roleGuard("r")
 		.rolesDeclared("s")
 		.serializers(Serializer.class)
@@ -95,6 +96,7 @@ class RestOpAnnotation_Test extends TestBase {
 		.parsers(Parser.class)
 		.path("p")
 		.produces("q")
+		.read(true)
 		.roleGuard("r")
 		.rolesDeclared("s")
 		.serializers(Serializer.class)
@@ -105,8 +107,8 @@ class RestOpAnnotation_Test extends TestBase {
 
 	@Test void a01_basic() {
 		assertBean(a1,
-			"allowedParserOptions,allowedSerializerOptions,clientVersion,consumes,converters,defaultAccept,defaultCharset,defaultContentType,defaultRequestAttributes,defaultRequestFormData,defaultRequestHeaders,defaultRequestQueryData,defaultResponseHeaders,description,encoders,guards,matchers,maxInput,method,noInherit,parsers,path,produces,roleGuard,rolesDeclared,serializers,summary,swagger{consumes,deprecated,description,externalDocs{description,url},operationId,parameters,produces,responses,schemes,summary,tags,value},value",
-			"[v1],[v2],a,[b],[RestConverter],d,e,f,[i],[g],[j],[h],[k],[l],[Encoder],[RestGuard],[RestMatcher],m,n,[v3],[Parser],[p],[q],r,s,[Serializer],t,{[],,[],{[],},,[],[],[],[],[],[],[]},u");
+			"allowedParserOptions,allowedSerializerOptions,clientVersion,consumes,converters,defaultAccept,defaultCharset,defaultContentType,defaultRequestAttributes,defaultRequestFormData,defaultRequestHeaders,defaultRequestQueryData,defaultResponseHeaders,description,encoders,guards,matchers,maxInput,method,noInherit,parsers,path,produces,read,roleGuard,rolesDeclared,serializers,summary,swagger{consumes,deprecated,description,externalDocs{description,url},operationId,parameters,produces,responses,schemes,summary,tags,value},value",
+			"[v1],[v2],a,[b],[RestConverter],d,e,f,[i],[g],[j],[h],[k],[l],[Encoder],[RestGuard],[RestMatcher],m,n,[v3],[Parser],[p],[q],true,r,s,[Serializer],t,{[],,[],{[],},,[],[],[],[],[],[],[]},u");
 	}
 
 	@Test void a02_testEquivalency() {
@@ -155,6 +157,7 @@ class RestOpAnnotation_Test extends TestBase {
 			parsers=Parser.class,
 			path="p",
 			produces="q",
+			read=true,
 			roleGuard="r",
 			rolesDeclared="s",
 			serializers=Serializer.class,
@@ -188,6 +191,7 @@ class RestOpAnnotation_Test extends TestBase {
 			parsers=Parser.class,
 			path="p",
 			produces="q",
+			read=true,
 			roleGuard="r",
 			rolesDeclared="s",
 			serializers=Serializer.class,

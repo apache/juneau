@@ -53,6 +53,14 @@ import org.apache.juneau.rest.server.servlet.*;
  * </ul>
  *
  * <p>
+ * Files are listed with <l>view</l> and <l>download</l> links, which reach the {@code VIEW} and {@code DOWNLOAD}
+ * operations through {@code ?method=}.  Both are declared {@link RestOp#read() read=true}.  Deleting a file needs a real
+ * {@code DELETE}, for example:
+ * <p class='bcode'>
+ * 	curl -X DELETE http://localhost:10000/&lt;mount-path&gt;/foo.txt
+ * </p>
+ *
+ * <p>
  * Read/write access control is handled through the following properties:
  * <ul class='spaced-list'>
  * 	<li>
@@ -64,9 +72,13 @@ import org.apache.juneau.rest.server.servlet.*;
  * </ul>
  *
  * <p>
- * <b>Warning:</b> this resource accepts the {@code method} query parameter for every method, so a plain {@code GET}
- * link such as {@code ?method=DELETE} can change files; put it behind a CSRF boundary, or remove
- * {@code allowedMethodParams}, before mounting it anywhere a browser can reach.
+ * <b>Note:</b> the {@code method} query parameter is accepted only for {@code HEAD}, {@code OPTIONS} and the two read
+ * verbs {@code VIEW} and {@code DOWNLOAD}, so a link can view or download a file but never change one.  A subclass that
+ * widens {@code allowedMethodParams} still can't turn a {@code GET} into a write: the router refuses any override of a
+ * {@code GET} to a method that is not a read.  Uploads and deletes still change files, so put the resource behind a
+ * CSRF boundary before mounting it anywhere a browser can reach.  A boundary judges a {@code ?method=VIEW} or
+ * {@code ?method=DOWNLOAD} link as a write and refuses it, so behind one the listing's links stop working; send real
+ * {@code VIEW} or {@code DOWNLOAD} requests instead.
  *
  * <h5 class='section'>See Also:</h5><ul>
  * 	<li class='link'><a class="doclink" href="https://juneau.apache.org/docs/topics/JuneauMicroservice">juneau-microservice Basics</a>
@@ -77,7 +89,7 @@ import org.apache.juneau.rest.server.servlet.*;
 @Rest(
 	title="File System Explorer",
 	messages="nls/DirectoryResource",
-	allowedMethodParams="*"
+	allowedMethodParams="HEAD,OPTIONS,VIEW,DOWNLOAD"
 )
 @HtmlDocConfig(
 	navlinks={
@@ -162,7 +174,7 @@ public class DirectoryResource extends BasicRestServlet {
 		}
 
 		/**
-		 * Returns available actions for this file (view, download, delete).
+		 * Returns available actions for this file (view, download).
 		 *
 		 * @return The list of actions.
 		 */
@@ -173,8 +185,6 @@ public class DirectoryResource extends BasicRestServlet {
 				l.add(new Action("view", uri + "?method=VIEW"));
 				l.add(new Action("download", uri + "?method=DOWNLOAD"));
 			}
-			if (allowDeletes && f.canWrite() && ! f.isDirectory())
-				l.add(new Action("delete", uri + "?method=DELETE"));
 			return l;
 		}
 
@@ -302,6 +312,7 @@ public class DirectoryResource extends BasicRestServlet {
 	@RestOp(
 		method="DOWNLOAD",
 		path="/*",
+		read=true,
 		summary="Download file",
 		description="Download the contents of a file.\nContent-Type is set to 'application/octet-stream'."
 	)
@@ -389,6 +400,7 @@ public class DirectoryResource extends BasicRestServlet {
 	@RestOp(
 		method="VIEW",
 		path="/*",
+		read=true,
 		summary="View contents of file",
 		description="View the contents of a file.\nContent-Type is set to 'text/plain'."
 	)

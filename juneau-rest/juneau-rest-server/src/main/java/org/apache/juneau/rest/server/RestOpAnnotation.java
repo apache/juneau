@@ -94,6 +94,7 @@ public class RestOpAnnotation {
 		private String[] allowedSerializerOptions = {};
 		private String[] allowedParserOptions = {};
 		private String[] noInherit = {};
+		private boolean read;
 
 		/**
 		 * Constructor.
@@ -457,6 +458,18 @@ public class RestOpAnnotation {
 		}
 
 		/**
+		 * Sets the {@link RestOp#read()} property on this annotation.
+		 *
+		 * @param value The new value for this property.
+		 * @return This object.
+		 * @since 10.0.0
+		 */
+		public Builder read(boolean value) {
+			read = value;
+			return this;
+		}
+
+		/**
 		 * Sets the {@link RestOp#roleGuard()} property on this annotation.
 		 *
 		 * @param value The new value for this property.
@@ -566,6 +579,7 @@ public class RestOpAnnotation {
 		private final String[] allowedSerializerOptions;
 		private final String[] allowedParserOptions;
 		private final String[] noInherit;
+		private final boolean read;
 
 		Object(RestOpAnnotation.Builder b) {
 			super(b);
@@ -600,6 +614,7 @@ public class RestOpAnnotation {
 			allowedSerializerOptions = cp(b.allowedSerializerOptions);
 			allowedParserOptions = cp(b.allowedParserOptions);
 			noInherit = cp(b.noInherit);
+			read = b.read;
 			roleGuard = b.roleGuard;
 			rolesDeclared = b.rolesDeclared;
 			serializers = cp(b.serializers);
@@ -756,6 +771,11 @@ public class RestOpAnnotation {
 		@Override /* Overridden from RestOp */
 		public String[] noInherit() {
 			return noInherit;
+		}
+
+		@Override /* Overridden from RestOp */
+		public boolean read() {
+			return read;
 		}
 
 		@Override /* Overridden from RestOp */

@@ -185,7 +185,7 @@ class SetupRowTest(unittest.TestCase):
         return b, b.rows["mvn"]
 
     def bar(self, r, glyphs=None):
-        return "".join(jr.unit_bar(r.unit_view(), r.units_total, jr.BAR_CELLS, glyphs or jr.PLAIN_GLYPHS))
+        return "".join(jr.unit_bar(r.unit_view(), r.units_total, glyphs or jr.PLAIN_GLYPHS))
 
     def test_a_module_that_ran_no_tests_is_dropped_from_the_bar_and_the_total(self):
         b, r = self.mk_tests_board(4)
@@ -255,11 +255,11 @@ class SetupRowTest(unittest.TestCase):
         b.apply("class_done", dict(step="mvn", module="mvn/a", outcome="pass"))    # no module_start: no signal
         self.assertEqual(self.bar(r), jr.PENDING * 3)
 
-    def test_in_flight_loses_to_a_failure_in_a_bucket(self):
+    def test_each_unit_keeps_its_own_cell_failed_or_in_flight(self):
         cells = bytearray([jr.UNIT_FAIL, jr.UNIT_RUN])
-        self.assertEqual("".join(jr.unit_bar(cells, 2, 1, jr.PLAIN_GLYPHS)), "F")
+        self.assertEqual("".join(jr.unit_bar(cells, 2, jr.PLAIN_GLYPHS)), "F~")
         cells = bytearray([jr.UNIT_PASS, jr.UNIT_RUN])
-        self.assertEqual("".join(jr.unit_bar(cells, 2, 1, jr.PLAIN_GLYPHS)), "~")
+        self.assertEqual("".join(jr.unit_bar(cells, 2, jr.PLAIN_GLYPHS)), "#~")
 
     def test_a_pom_box_turns_green_when_it_starts(self):
         b, ids = self.board(poms=3, total=5)

@@ -346,6 +346,278 @@ class MethodSafety_Test extends org.apache.juneau.TestBase {
 		assertEquals(List.of("%ZZ", ""), MethodSafety.queryClaims("method=%ZZ&method="));
 	}
 
+	//-----------------------------------------------------------------------------------------------------------
+	// r - @RestOp(read=true), validated when the operation table is built
+	//-----------------------------------------------------------------------------------------------------------
+
+	@Rest(eagerInit = "true")
+	static class Fix_ReadView {
+		@RestOp(method = "VIEW", path = "/x", read = true)
+		public String view() { return "x"; }
+	}
+
+	@Rest(eagerInit = "true")
+	static class Fix_ReadGet {
+		@RestOp(method = "GET", path = "/x", read = true)
+		public String page() { return "x"; }
+	}
+
+	@Rest(eagerInit = "true")
+	static class Fix_ReadPost {
+		@RestOp(method = "POST", path = "/x", read = true)
+		public String write() { return "x"; }
+	}
+
+	@Rest(eagerInit = "true")
+	static class Fix_ReadPut {
+		@RestOp(method = "PUT", path = "/x", read = true)
+		public String write() { return "x"; }
+	}
+
+	@Rest(eagerInit = "true")
+	static class Fix_ReadPatch {
+		@RestOp(method = "PATCH", path = "/x", read = true)
+		public String write() { return "x"; }
+	}
+
+	@Rest(eagerInit = "true")
+	static class Fix_ReadDelete {
+		@RestOp(method = "DELETE", path = "/x", read = true)
+		public String write() { return "x"; }
+	}
+
+	@Rest(eagerInit = "true")
+	static class Fix_ReadConnect {
+		@RestOp(method = "CONNECT", path = "/x", read = true)
+		public String write() { return "x"; }
+	}
+
+	@Rest(eagerInit = "true")
+	static class Fix_ReadStar {
+		@RestOp(method = "*", path = "/x", read = true)
+		public String anything() { return "x"; }
+	}
+
+	@Rest(eagerInit = "true")
+	static class Fix_ReadMethodKeyword {
+		@RestOp(method = "METHOD", path = "/x", read = true)
+		public String anything() { return "x"; }
+	}
+
+	public interface Fix_RrpcInterface {
+		String echo(String x);
+	}
+
+	@Rest(eagerInit = "true")
+	static class Fix_ReadRrpc {
+		@RestOp(method = "RRPC", path = "/proxy/*", read = true)
+		public Fix_RrpcInterface proxy() { return x -> x; }
+	}
+
+	@Rest(eagerInit = "true")
+	static class Fix_ReadMutating {
+		@Mutating("the view counter")
+		@RestOp(method = "VIEW", path = "/x", read = true)
+		public String view() { return "x"; }
+	}
+
+	static class Fix_ReadParent {
+		@RestOp(method = "VIEW", path = "/x", read = true)
+		public String view() { return "x"; }
+	}
+
+	/** Names its own verb without {@code read}, so the parent's {@code read} is replaced along with its verb. */
+	@Rest(eagerInit = "true")
+	static class Fix_ReadChildRedeclaresVerb extends Fix_ReadParent {
+		@Override
+		@RestOp(method = "VIEW", path = "/x")
+		public String view() { return "x"; }
+	}
+
+	/** Names no verb, so the parent supplies both the verb and {@code read}. */
+	@Rest(eagerInit = "true")
+	static class Fix_ReadChildPathOnly extends Fix_ReadParent {
+		@Override
+		@RestOp(path = "/y")
+		public String view() { return "x"; }
+	}
+
+	@Rest(eagerInit = "true")
+	static class Fix_ReadSvl {
+		@RestOp(method = "$S{MethodSafety_Test.r08}", path = "/x", read = true)
+		public String op() { return "x"; }
+	}
+
+	@Rest(eagerInit = "true")
+	static class Fix_NoRead {
+		@RestOp(method = "VIEW", path = "/x")
+		public String view() { return "x"; }
+	}
+
+	static class Fix_ReadParentNoRead {
+		@RestOp(method = "VIEW", path = "/x")
+		public String view() { return "x"; }
+	}
+
+	/** A {@code read=true} that names no verb would be silently ignored, so it fails instead. */
+	@Rest(eagerInit = "true")
+	static class Fix_ReadMisplaced extends Fix_ReadParentNoRead {
+		@Override
+		@RestOp(path = "/y", read = true)
+		public String view() { return "x"; }
+	}
+
+	@Rest(eagerInit = "true")
+	static class Fix_ReadInferredDelete {
+		@RestOp(path = "/x", read = true)
+		public void deleteFoo() { /* fixture body; only the inferred verb matters to the check */ }
+	}
+
+	@Rest(eagerInit = "true")
+	static class Fix_ReadInferredGet {
+		@RestOp(path = "/x", read = true)
+		public String getFoo() { return "x"; }
+	}
+
+	@Rest(eagerInit = "true")
+	static class Fix_ReadLowercase {
+		@RestOp(method = "view", path = "/x", read = true)
+		public String view() { return "x"; }
+	}
+
+	@Rest(eagerInit = "true")
+	static class Fix_ReadTrace {
+		@RestOp(method = "TRACE", path = "/x", read = true)
+		public String trace() { return "x"; }
+	}
+
+	/** The child's verb resolves to empty, so the verb and {@code read} both fall through to the parent. */
+	@Rest(eagerInit = "true")
+	static class Fix_ReadSvlEmpty extends Fix_ReadParent {
+		@Override
+		@RestOp(method = "$S{MethodSafety_Test.r13.unset}", path = "/x")
+		public String view() { return "x"; }
+	}
+
+	static RestOpContext onlyOp(Class<?> c, Supplier<?> s) throws Exception {
+		var ops = new RestContext(argsOf(c, s)).getRestOperations().getOpContexts();
+		assertEquals(1, ops.size());
+		return ops.get(0);
+	}
+
+	@Test void r01_readOnCustomVerb_ok() throws Exception {
+		var op = onlyOp(Fix_ReadView.class, Fix_ReadView::new);
+		assertEquals("VIEW", op.getHttpMethod());
+		assertTrue(op.isRead());
+	}
+
+	@Test void r02_readOnSafeVerb_ok() throws Exception {
+		assertTrue(onlyOp(Fix_ReadGet.class, Fix_ReadGet::new).isRead());
+	}
+
+	@Test void r03_readOnUnsafeStandardVerb_fails() {
+		var fixtures = List.<Map.Entry<Class<?>,Supplier<?>>>of(
+			Map.entry(Fix_ReadPost.class, Fix_ReadPost::new),
+			Map.entry(Fix_ReadPut.class, Fix_ReadPut::new),
+			Map.entry(Fix_ReadPatch.class, Fix_ReadPatch::new),
+			Map.entry(Fix_ReadDelete.class, Fix_ReadDelete::new),
+			Map.entry(Fix_ReadConnect.class, Fix_ReadConnect::new));
+		for (var f : fixtures) {
+			var e = assertThrows(Exception.class, () -> new RestContext(argsOf(f.getKey(), f.getValue())), f.getKey().getSimpleName());
+			assertTrue(messageChain(e).contains(f.getKey().getSimpleName() + ".write"), messageChain(e));
+			assertTrue(messageChain(e).contains("read=true"), messageChain(e));
+		}
+	}
+
+	@Test void r04_readOnWildcard_fails() {
+		var e = assertThrows(Exception.class, () -> new RestContext(argsOf(Fix_ReadStar.class, Fix_ReadStar::new)));
+		assertTrue(messageChain(e).contains("Fix_ReadStar.anything"), messageChain(e));
+		e = assertThrows(Exception.class, () -> new RestContext(argsOf(Fix_ReadMethodKeyword.class, Fix_ReadMethodKeyword::new)));
+		assertTrue(messageChain(e).contains("Fix_ReadMethodKeyword.anything"), messageChain(e));
+	}
+
+	@Test void r05_readOnRrpc_fails() {
+		var e = assertThrows(Exception.class, () -> new RestContext(argsOf(Fix_ReadRrpc.class, Fix_ReadRrpc::new)));
+		assertTrue(messageChain(e).contains("Fix_ReadRrpc.proxy"), messageChain(e));
+	}
+
+	@Test void r06_readWithMutating_fails() {
+		var e = assertThrows(Exception.class, () -> new RestContext(argsOf(Fix_ReadMutating.class, Fix_ReadMutating::new)));
+		assertTrue(messageChain(e).contains("Fix_ReadMutating.view"), messageChain(e));
+		assertTrue(messageChain(e).contains("@Mutating"), messageChain(e));
+	}
+
+	@Test void r07_readFromVerbAnnotation() throws Exception {
+		assertFalse(onlyOp(Fix_ReadChildRedeclaresVerb.class, Fix_ReadChildRedeclaresVerb::new).isRead());
+		var op = onlyOp(Fix_ReadChildPathOnly.class, Fix_ReadChildPathOnly::new);
+		assertEquals("VIEW", op.getHttpMethod());
+		assertTrue(op.isRead());
+	}
+
+	@Test void r08_readWithSvlMethod() throws Exception {
+		var key = "MethodSafety_Test.r08";
+		try {
+			System.setProperty(key, "DELETE");
+			var e = assertThrows(Exception.class, () -> new RestContext(argsOf(Fix_ReadSvl.class, Fix_ReadSvl::new)));
+			assertTrue(messageChain(e).contains("Fix_ReadSvl.op"), messageChain(e));
+			System.setProperty(key, "VIEW");
+			assertTrue(onlyOp(Fix_ReadSvl.class, Fix_ReadSvl::new).isRead());
+		} finally {
+			System.clearProperty(key);
+		}
+	}
+
+	@Test void r09_readDefaultFalse() throws Exception {
+		assertFalse(onlyOp(Fix_NoRead.class, Fix_NoRead::new).isRead());
+		assertFalse(RestOpAnnotation.DEFAULT.read());
+	}
+
+	@Test void r10_readOnNonVerbAnnotation_fails() {
+		var e = assertThrows(Exception.class, () -> new RestContext(argsOf(Fix_ReadMisplaced.class, Fix_ReadMisplaced::new)));
+		assertTrue(messageChain(e).contains("Fix_ReadMisplaced.view"), messageChain(e));
+		assertTrue(messageChain(e).contains("does not supply its method"), messageChain(e));
+	}
+
+	@Test void r11_readOnInferredUnsafeVerb_fails() throws Exception {
+		var e = assertThrows(Exception.class, () -> new RestContext(argsOf(Fix_ReadInferredDelete.class, Fix_ReadInferredDelete::new)));
+		assertTrue(messageChain(e).contains("Fix_ReadInferredDelete.deleteFoo"), messageChain(e));
+		var op = onlyOp(Fix_ReadInferredGet.class, Fix_ReadInferredGet::new);
+		assertEquals("GET", op.getHttpMethod());
+		assertTrue(op.isRead());
+	}
+
+	@Test void r12_readLowercaseAndTrace() throws Exception {
+		var op = onlyOp(Fix_ReadLowercase.class, Fix_ReadLowercase::new);
+		assertEquals("VIEW", op.getHttpMethod());
+		assertTrue(op.isRead());
+		assertTrue(onlyOp(Fix_ReadTrace.class, Fix_ReadTrace::new).isRead());
+	}
+
+	@Test void r13_readSvlEmptyFallsThrough() throws Exception {
+		var op = onlyOp(Fix_ReadSvlEmpty.class, Fix_ReadSvlEmpty::new);
+		assertEquals("VIEW", op.getHttpMethod());
+		assertTrue(op.isRead());
+	}
+
+	@Test void r14_restOpAnnotationCarriesRead() {
+		var a = RestOpAnnotation.create().method("VIEW").read(true).build();
+		var b = RestOpAnnotation.create().method("VIEW").read(true).build();
+		var c = RestOpAnnotation.create().method("VIEW").build();
+		assertTrue(a.read());
+		assertEquals(a, b);
+		assertEquals(a.hashCode(), b.hashCode());
+		assertNotEquals(a, c);
+		assertTrue(a.toString().contains("read=true"), a.toString());
+	}
+
+	@Test void r15_directCall_normalizesMethod() throws Exception {
+		var m = Fix_ReadView.class.getMethod("view");
+		for (var httpMethod : List.of("rrpc", "Rrpc", "method", "METHOD", "delete", "Post"))
+			assertThrows(RuntimeException.class, () -> MethodSafety.checkOperation(httpMethod, m, true), httpMethod);
+		for (var httpMethod : List.of("view", "VIEW", "get"))
+			assertDoesNotThrow(() -> MethodSafety.checkOperation(httpMethod, m, true), httpMethod);
+	}
+
 	/** The framework wraps init failures, so assertions match against the whole cause chain. */
 	static String messageChain(Throwable t) {
 		var sb = new StringBuilder();

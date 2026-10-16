@@ -622,6 +622,36 @@ class McpResourceServerBinding_Test extends TestBase {
 			.assertStatus(401);
 	}
 
+	// Authenticated, the gate lets the request through and the router refuses the override on a safe request line.
+	@Test void f04_authenticatedGetOverrideToPost_405() throws Exception {
+		clientF().get("/?method=POST")
+			.header("Authorization", "Bearer good")
+			.run()
+			.assertStatus(405)
+			.assertHeader("Allow").isExists();
+	}
+
+	@Rest(mixins = McpMixinFixture.class, allowedMethodParams = "*", serializers = JsonSerializer.class, parsers = JsonParser.class, defaultAccept = "application/json")
+	public static class F2 extends BasicRestServlet {
+		private static final long serialVersionUID = 1L;
+	}
+
+	// A mixin-mounted endpoint is gated in the mixin's start-call hook, which runs after the override rule, so the
+	// request is refused with 405 before the gate can challenge it with 401.
+	@Test void f05_mixinMounted_unauthenticatedGetOverrideToPost_405() throws Exception {
+		var r = MockRestClient.create(F2.class).json().accept("application/json").ignoreErrors().build()
+			.get("/mcp?method=POST")
+			.run()
+			.assertStatus(405);
+		assertFalse(r.getStringHeader("WWW-Authenticate").isPresent());
+		// Not vacuous: the gate is live on this mount and challenges a real POST.
+		MockRestClient.create(F2.class).json().contentType("application/json").accept("application/json").ignoreErrors().build()
+			.post("/mcp").contentString(body(1, "server/discover", null))
+			.header("Mcp-Method", "server/discover").header("Mcp-Name", "")
+			.run()
+			.assertStatus(401);
+	}
+
 	// ---------------------------------------------------------------------------------------------
 	// On a non-origin-root mount the advertised origin-root PRM URL cannot be served, so RS auth must
 	// fail fast with a clear 500 rather than silently 404 the discovery document.

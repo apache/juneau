@@ -89,6 +89,8 @@ class ApacheHc5Transport_CallerClientRedirectCredentials_Test {
 			exchange.close();
 		});
 		// Answers 503 with Retry-After: 0 to the first request of each test, so the client's retry strategy resends it.
+		// The 503 also closes its connection so the resend always opens a fresh one: HttpClient spends its single retry on the 503,
+		// so a resend that found a stale pooled keep-alive connection would fail with NoHttpResponseException.
 		serverB.createContext("/flaky", exchange -> {
 			seenByB.add(creds(exchange));
 			if (hitsB.incrementAndGet() > 1) {
@@ -96,6 +98,7 @@ class ApacheHc5Transport_CallerClientRedirectCredentials_Test {
 				return;
 			}
 			exchange.getResponseHeaders().add("Retry-After", "0");
+			exchange.getResponseHeaders().add("Connection", "close");
 			exchange.sendResponseHeaders(503, -1);
 			exchange.close();
 		});

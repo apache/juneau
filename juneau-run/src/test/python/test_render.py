@@ -733,35 +733,64 @@ class LiveTest(unittest.TestCase):
         self.board.apply("units", dict(step="s", total=10, kind="tests"))
         self.assertNotIn("43% \u00b7 test_f.py", self.live._row(self.board, row, 120))
 
-    def test_bucketed_bar_is_60_cells_and_rebuckets_when_narrow(self):
-        row = self.unit_row(total=3000, kind="tests")
-        self.board.apply("unit", dict(step="s", done=1500, outcome="pass"))
-        cells, _, _ = jr.row_cells(row, jr.PLAIN_GLYPHS, self.clock())
-        self.assertEqual(len(cells), jr.BAR_CELLS)
-        self.live.glyphs = jr.PLAIN_GLYPHS
-        line = self.live._row(self.board, row, 40)
-        bar = [c for c in line if c in ("#", jr.PENDING)]
-        self.assertLessEqual(len(line), 40)
-        self.assertLess(len(bar), jr.BAR_CELLS)                                 # re-bucketed, not the oldest cells dropped
-        self.assertEqual(line.count("#"), (len(bar) + 1) // 2)                  # still half done, exactly
+    def wrapped(self, total, cols, fail_at=None, glyphs=jr.PLAIN_GLYPHS):
+        row = self.unit_row(total=total, kind="tests")
+        for i in range(total):
+            self.board.apply("unit", dict(step="s", done=i + 1, outcome="fail" if i == fail_at else "pass"))
+        self.live.glyphs = glyphs
+        return self.live._row(self.board, row, cols).split("\n")
 
-    def test_small_bar_rebuckets_on_a_narrow_terminal_so_an_early_failure_stays_visible(self):
-        row = self.unit_row(total=40, kind="tests")
-        self.board.apply("unit", dict(step="s", done=1, outcome="fail"))
-        self.board.apply("unit", dict(step="s", done=40, outcome="pass"))
-        self.live.glyphs = jr.PLAIN_GLYPHS
-        line = self.live._row(self.board, row, 30)
-        self.assertLessEqual(len(line), 30)
-        self.assertIn(jr.PLAIN_GLYPHS["fail"], line)                            # unit 1 failed: never dropped off the left
-        self.assertNotIn("\u2026", line)
+    def test_a_unit_bar_has_one_cell_per_unit_and_wraps_to_the_bar_column(self):
+        lines = self.wrapped(84, 79)
+        self.assertGreater(len(lines), 1)
+        self.assertTrue(all(len(line) <= 79 for line in lines), lines)
+        self.assertEqual(sum(line.count("#") for line in lines), 84)
+        indent = len("Tests".ljust(self.board.width())) + 2
+        self.assertTrue(all(line.startswith(" " * indent + "#") for line in lines[1:]), lines)
+        self.assertIn("84/84", lines[0])                                        # count stays on the first line
+        self.assertTrue(all("84/84" not in line for line in lines[1:]))
 
-    def test_rebucket_with_room_for_one_cell(self):
-        calls = []
-        jr._fit_row("L", ["x"] * 61, "r", "", 8, lambda w: calls.append(w) or ["#"] * w)
-        self.assertEqual(calls, [2])      # room = 8 - len("L    r")
-        calls.clear()
-        jr._fit_row("L", ["x"] * 61, "r", "", 7, lambda w: calls.append(w) or ["#"] * w)
-        self.assertEqual(calls, [1])
+    def test_a_bar_that_fits_exactly_does_not_wrap(self):
+        cells = ["#"] * 5
+        self.assertEqual(jr._fit_row("L", cells, "r", "", len("L  #####  r"), wrap=True), "L  #####  r")
+        self.assertEqual(jr._fit_row("L", cells, "r", "", len("L  #####  r") - 1, wrap=True), "L  ####  r\n   #")
+
+    def test_one_unit_is_one_cell(self):
+        lines = self.wrapped(1, 79)
+        self.assertEqual(len(lines), 1)
+        self.assertEqual(lines[0].count("#"), 1)
+
+    def test_a_failure_on_a_continuation_line_keeps_its_cell(self):
+        lines = self.wrapped(84, 79, fail_at=83)
+        self.assertEqual((len(lines) > 1, lines[-1].rstrip()[-1]), (True, jr.PLAIN_GLYPHS["fail"]))
+        self.assertEqual(sum(line.count("F") for line in lines), 1)
+
+    def test_a_non_wrapping_bar_still_gives_way_with_an_ellipsis(self):
+        line = jr._fit_row("L", ["x"] * 61, "r", "", 8)
+        self.assertNotIn("\n", line)
+        self.assertLessEqual(len(line), 8)
+
+    def test_a_wrapped_bar_redraws_in_place_counting_its_extra_lines(self):
+        self.dims = (80, 10)
+        self.push(("step_start", {"id": "s", "n": 1, "title": "Tests", "parent": None}),
+                  ("units", {"step": "s", "total": 84, "kind": "tests"}))
+        first = self.screen.text().splitlines()
+        self.assertEqual((len(first), self.live.height), (2, 2))
+        for i in range(84):
+            self.push(("unit", {"step": "s", "done": i + 1, "outcome": "pass"}))
+        self.assertEqual(len(self.screen.text().splitlines()), 2)             # no stale fragment from earlier draws
+        self.assertEqual(self.screen.text().count("\u2588"), 84)
+        self.assertFalse(self.screen.clamped)
+        self.push(("step_end", {"id": "s", "status": "ok", "ms": 5000, "exit": None, "summary": None,
+                                "totals": None}))
+        lines = self.screen.text().splitlines()                               # finished block prints wrapped too
+        self.assertEqual((len(lines), self.live.height), (2, 0))
+        self.assertEqual(self.screen.text().count("\u2588"), 84)
+
+    def test_the_height_cap_holds_with_a_wrapped_bar(self):
+        self.push(("step_start", {"id": "s", "n": 1, "title": "Tests", "parent": None}),
+                  ("units", {"step": "s", "total": 400, "kind": "tests"}))
+        self.assertLessEqual(len(self.live.region(self.board, 59, 4)), 4)
 
     def test_redraws_at_most_every_tenth_of_a_second(self):
         writes = []
@@ -880,20 +909,21 @@ class LiveTest(unittest.TestCase):
         self.push(("say", {"text": "⚠ dirty tree", "level": "warn", "step": None}))
         self.assertEqual(self.screen.text().splitlines()[:2], ["Passphrase:", "⚠ dirty tree"])
 
-    def test_a_large_reactor_keeps_its_count_and_totals_and_cuts_the_bar(self):
+    def test_a_large_reactor_keeps_its_count_and_totals_and_wraps_the_bar(self):
         self.push(*start(size=80))
         for i in range(80):
             name = f"m{i}"
             self.push(mod_start(name), ("module_end", {"step": "tests", "module": f"tests/{name}", "status": "ok",
                                                        "ms": 1, "totals": (1, 0, 0, 0)}))
         self.push(("tests", {"step": "tests", "total": 7139, "fail": 2, "err": 0, "skip": 0}))
-        live = self.screen.text().splitlines()[-1]
-        self.assertLessEqual(len(live), 59, live)
-        self.assertNotIn("…", live)     # the unit bar re-buckets to the room left instead of cutting cells
-        self.assertTrue(live.rstrip().endswith("80/80  7,139 tests, 2 failed  1:21"), live)
+        lines = self.screen.text().splitlines()
+        self.assertTrue(all(len(line) <= 59 for line in lines), lines)
+        self.assertNotIn("\u2026", "".join(lines))        # no cell is cut: the bar wraps instead
+        self.assertEqual("".join(lines).count("\u2588"), 80)
+        self.assertTrue(lines[0].rstrip().endswith("80/80  7,139 tests, 2 failed  1:21"), lines[0])
         self.push(("step_end", {"id": "tests", "status": "fail", "ms": 90000, "exit": 1, "summary": None,
                                 "totals": None}))
-        row = self.screen.text().splitlines()[-1]
+        row = self.screen.text().splitlines()[0]
         self.assertLessEqual(len(row), 59, row)
         self.assertTrue(row.endswith("80/80  7,139 tests, 2 failed  1:30"), row)
         self.assertTrue(row.startswith("Tests".ljust(10) + "  ██"), row)

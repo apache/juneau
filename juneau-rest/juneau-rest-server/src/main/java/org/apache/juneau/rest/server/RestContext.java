@@ -5338,6 +5338,12 @@ public class RestContext extends Context {
 			.findFirst()
 			.ifPresent(h -> res.setHeader(h.getName(), h.getValue()));
 
+		// RFC 9110 requires Allow on a 405; the framework's own 405s carry it on the exception.
+		e2.getHeaders().stream()
+			.filter(h -> eqic("Allow", h.getName()))
+			.findFirst()
+			.ifPresent(h -> res.setHeader("Allow", h.getValue()));
+
 		try {
 			var statusCode = e2.getStatusLine().getStatusCode();
 
@@ -5528,8 +5534,11 @@ public class RestContext extends Context {
 			throw new NotFound("Method '%s' not found on resource with matching pattern%s.", methodUC, onPath);
 		else if (rc == SC_PRECONDITION_FAILED)
 			throw new PreconditionFailed("Method '%s' not found on resource%s with matching matcher.", methodUC, onPath);
-		else if (rc == SC_METHOD_NOT_ALLOWED)
-			throw new MethodNotAllowed("Method '%s' not found on resource%s.", methodUC, onPath);
+		else if (rc == SC_METHOD_NOT_ALLOWED) {
+			var e = new MethodNotAllowed("Method '%s' not found on resource%s.", methodUC, onPath);
+			e.setHeader("Allow", getRestOperations().allowedMethods(session));
+			throw e;
+		}
 		else if (rc < SC_BAD_REQUEST)
 			// Reaching this method means no operation matched, so a still-successful or unset status must resolve to a
 			// 404 rather than a 500.  Under a real servlet container the response status defaults to 200 (never the

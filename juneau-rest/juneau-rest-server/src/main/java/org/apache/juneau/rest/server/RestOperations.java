@@ -189,7 +189,7 @@ public class RestOperations {
 				if (! oc.getPathPattern().endsWith("/*")) {
 					int orc = oc.match(session);
 					if (orc == 2)
-						throw new MethodNotAllowed();
+						throw methodNotAllowed(session);
 				}
 			}
 		}
@@ -198,6 +198,45 @@ public class RestOperations {
 			throw new PreconditionFailed("Method '%s' not found on resource on path '%s' with matching matcher.", m, session.getPathInfo());
 
 		throw new NotFound("Java method matching path '%s' not found on resource '%s'.", session.getPathInfo(), cn(session.getResource()));
+	}
+
+	/**
+	 * Returns the value of the <c>Allow</c> header for a <c>405 Method Not Allowed</c> response to the specified call.
+	 *
+	 * <p>
+	 * The methods this resource answers on the call's path: every key of the operation table, other than
+	 * <js>"*"</js>, with at least one operation whose path pattern matches, plus the request-line method when a
+	 * <js>"*"</js> operation's path matches (the un-overridden request is always accepted there).  The keys are what
+	 * dispatch looks up, so a remote-proxy operation contributes <c>GET</c> and <c>POST</c>, never <c>RRPC</c>.
+	 *
+	 * <p>
+	 * Only path patterns are tested.  Matchers are not run and the session's cached path match is not touched, so the
+	 * call can be made for any request without disturbing the operation that handles it.
+	 *
+	 * @param session The HTTP call. Must not be <jk>null</jk>.
+	 * @return The sorted, comma-separated method names.  Empty when nothing answers on the path.  Never <jk>null</jk>.
+	 * @since 10.0.0
+	 */
+	public String allowedMethods(RestSession session) {
+		var methods = new TreeSet<String>();
+		for (var e : map.entrySet()) {
+			if (e.getValue().stream().anyMatch(x -> x.matchesPath(session)))
+				methods.add(eq(e.getKey(), "*") ? ucr(session.getRequest().getMethod()) : e.getKey());
+		}
+		return String.join(", ", methods);
+	}
+
+	/**
+	 * Creates the <c>405 Method Not Allowed</c> thrown when the call's path matches only operations under other
+	 * methods, carrying the <c>Allow</c> header.
+	 *
+	 * @param session The HTTP call. Must not be <jk>null</jk>.
+	 * @return A new exception.  Never <jk>null</jk>.
+	 */
+	private MethodNotAllowed methodNotAllowed(RestSession session) {
+		var e = new MethodNotAllowed();
+		e.setHeader("Allow", allowedMethods(session));
+		return e;
 	}
 
 	/**

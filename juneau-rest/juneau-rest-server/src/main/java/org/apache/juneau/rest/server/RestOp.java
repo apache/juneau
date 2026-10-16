@@ -507,6 +507,8 @@ public @interface RestOp {
 	 * 		Anything else
 	 * 		- Overloaded non-HTTP-standard names that are passed in through a <c>&amp;method=methodName</c> URL
 	 * 		parameter.
+	 * 		<br>On a safe request (<c>GET</c>, <c>HEAD</c>, <c>OPTIONS</c>, <c>TRACE</c>), only when the operation is
+	 * 		declared {@link #read() read=true}.
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -902,6 +904,54 @@ public @interface RestOp {
 	 * @return The annotation value.
 	 */
 	String[] noInherit() default {};
+
+	/**
+	 * Declares that this operation's custom method is a read.
+	 *
+	 * <p>
+	 * A request whose request line is safe (<c>GET</c>, <c>HEAD</c>, <c>OPTIONS</c> or <c>TRACE</c>) may be overridden
+	 * (through the {@code method} query parameter or an override header, see {@link Rest#allowedMethodParams()} and
+	 * {@link Rest#allowedMethodHeaders()}) only to another safe method, or to the method of an operation declared
+	 * <c>read=<jk>true</jk></c>.  Any other override of a safe request is refused with <c>405 Method Not Allowed</c>,
+	 * so a link, a crawler or a prefetcher following a plain <c>GET</c> can never reach an operation that changes state.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<jc>// Reachable as GET /files/foo.txt?method=VIEW, as well as VIEW /files/foo.txt.</jc>
+	 * 	<ja>@RestOp</ja>(method=<js>"VIEW"</js>, path=<js>"/files/*"</js>, read=<jk>true</jk>)
+	 * 	<jk>public</jk> Reader view(...) {...}
+	 * </p>
+	 *
+	 * <p>
+	 * The declaration is the developer's promise that the operation does not change state, exactly as <c>GET</c>
+	 * promises.  Nothing can verify it.  {@link Mutating @Mutating} is the opposite promise.
+	 *
+	 * <h5 class='section'>Notes:</h5><ul>
+	 * 	<li class='note'>
+	 * 		The attribute is read from the annotation that supplies the operation's method (or, when the method is
+	 * 		inferred from the Java method name, from the nearest <ja>@RestOp</ja>).  A subclass that re-declares the method
+	 * 		therefore also re-declares whether it is a read: <c>read=<jk>true</jk></c> on an overridden annotation that
+	 * 		names its own method is replaced along with that method.  <c>read=<jk>true</jk></c> on another
+	 * 		<ja>@RestOp</ja> in the chain that names no method would be silently ignored, so it fails the resource when
+	 * 		its operations are assembled.
+	 * 	<li class='note'>
+	 * 		<c>read=<jk>true</jk></c> fails the resource when the method is <c>POST</c>, <c>PUT</c>, <c>PATCH</c>,
+	 * 		<c>DELETE</c>, <c>CONNECT</c>, <js>"*"</js> or <js>"RRPC"</js>, or when the Java method is also
+	 * 		{@link Mutating @Mutating}.  On a safe method it is redundant and has no effect.
+	 * 	<li class='note'>
+	 * 		A CSRF or loopback boundary filter still judges a request on the method it claims, so behind a boundary a
+	 * 		<c>GET ?method=VIEW</c> is treated as a write.  Prefer path-based links (<c>/view/{file}</c>) for reads.
+	 * </ul>
+	 *
+	 * <h5 class='section'>See Also:</h5><ul>
+	 * 	<li class='ja'>{@link Mutating}
+	 * 	<li class='jm'>{@link MethodSafety#check(java.util.List)}
+	 * </ul>
+	 *
+	 * @return The annotation value.
+	 * @since 10.0.0
+	 */
+	boolean read() default false;
 
 	/**
 	 * Role guard.

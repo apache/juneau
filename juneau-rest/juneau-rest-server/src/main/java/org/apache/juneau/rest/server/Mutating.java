@@ -94,8 +94,9 @@ import java.lang.annotation.*;
  * can be wrong, and at a gate that stops the application from booting, wrong is worse.
  * <p>
  * What makes the limit acceptable is that the annotation is <b>strictly additive</b>.  It can only ever cause a
- * boot failure; it never relaxes a runtime check, and there is deliberately no inverse annotation declaring a
- * {@code POST} to be safe.  An operation that omits it is therefore treated exactly as it would be if this
+ * boot failure; it never relaxes a runtime check.  Its opposite, {@link RestOp#read() @RestOp(read=true)}, is
+ * accepted only on custom methods and cannot declare a {@code POST}, {@code PUT}, {@code PATCH} or {@code DELETE}
+ * safe.  An operation that omits it is therefore treated exactly as it would be if this
  * annotation did not exist &mdash; the boundary still classifies by HTTP method, still treats an unknown method as
  * state-changing, and still applies every write check to every non-safe method.  Adopting the annotation can move
  * an application from "wrong and silent" to "refuses to start"; it cannot move one from "protected" to

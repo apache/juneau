@@ -125,6 +125,10 @@ public @interface Rest {
 	 * 		Once the list admits at least one method, override claims must agree: a request whose override headers (or
 	 * 		<c>method</c> query parameter) name more than one distinct method is refused with <c>400</c>, whether or not the
 	 * 		list admits them.
+	 * 	<li class='note'>
+	 * 		On a safe request (<c>GET</c>, <c>HEAD</c>, <c>OPTIONS</c>, <c>TRACE</c>), an override is honored only when it names
+	 * 		another safe method or an operation declared {@link RestOp#read() read=true}; anything else is refused with
+	 * 		<c>405</c>.  Overrides on a <c>POST</c> are unaffected.
 	 * </ul>
 	 *
 	 * @return The annotation value.
@@ -135,13 +139,18 @@ public @interface Rest {
 	 * Allowed method parameters.
 	 *
 	 * <p>
-	 * When specified, the HTTP method can be overridden by passing in a <js>"method"</js> URL parameter on a regular
-	 * GET request.
+	 * When specified, the HTTP method can be overridden by passing in a <js>"method"</js> URL parameter.
 	 * <br>
 	 * For example:
 	 * <p class='burlenc'>
 	 *  ?method=OPTIONS
 	 * </p>
+	 * <p>
+	 * On a safe request (<c>GET</c>, <c>HEAD</c>, <c>OPTIONS</c>, <c>TRACE</c>), which is what a link or a typed URL sends,
+	 * the parameter may only name another safe method or a custom method whose operation is declared
+	 * {@link RestOp#read() read=true}.  Anything else, for example <c>GET /foo?method=DELETE</c>, is refused with
+	 * <c>405 Method Not Allowed</c>, so a link can never trigger a write.  On a <c>POST</c>, the parameter may name any
+	 * method in this list.
 	 *
 	 * <h5 class='section'>Notes:</h5><ul>
 	 * 	<li class='note'>
