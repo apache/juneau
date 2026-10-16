@@ -49,7 +49,7 @@
 		<argLine></argLine>
 		<!-- Extra surefire JVM args; Mockito modules set a -javaagent here. -->
 		<surefire.extraArgs></surefire.extraArgs>
-		<jetty.version>12.1.13</jetty.version>
+		<jetty.version>12.1.14</jetty.version>
 		<jetty.ee.version>11</jetty.ee.version>
 		<tomcat.version>11.0.25</tomcat.version>
 		<spring.version>4.1.1</spring.version>
