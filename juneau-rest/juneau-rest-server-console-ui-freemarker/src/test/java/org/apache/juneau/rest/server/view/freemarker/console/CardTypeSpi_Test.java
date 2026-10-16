@@ -32,7 +32,7 @@ class CardTypeSpi_Test extends TestBase {
 	@Test void a01_mainServicesFileListsBothBuiltIns() throws Exception {
 		var lines = Files.readAllLines(Path.of(System.getProperty("basedir", "."), "target/classes", SPI));
 		assertTrue(lines.contains(DatatablesCardType.class.getName()), lines::toString);
-		assertTrue(lines.contains(ConsoleOutputCardType.class.getName()), lines::toString);
+		assertTrue(lines.contains(TerminalCardType.class.getName()), lines::toString);
 		assertTrue(lines.contains(ChartCardType.class.getName()), lines::toString);
 		assertTrue(lines.contains(JobLogCardType.class.getName()), lines::toString);
 	}
@@ -44,11 +44,11 @@ class CardTypeSpi_Test extends TestBase {
 
 	@Test void a03_standardRegistryResolvesBuiltIns() {
 		assertTrue(CardTypeRegistry.standard().handler("datatables") instanceof DatatablesCardType);
-		assertTrue(CardTypeRegistry.standard().handler("console-output") instanceof ConsoleOutputCardType);
+		assertTrue(CardTypeRegistry.standard().handler("terminal") instanceof TerminalCardType);
 		assertTrue(CardTypeRegistry.standard().handler("chart") instanceof ChartCardType);
 		assertTrue(CardTypeRegistry.standard().handler("job-log") instanceof JobLogCardType);
 		var found = new ArrayList<String>();
 		ServiceLoader.load(CardTypeHandler.class).forEach(h -> found.add(h.type()));
-		assertTrue(found.containsAll(List.of("datatables", "console-output", "chart", "job-log")), found::toString);
+		assertTrue(found.containsAll(List.of("datatables", "terminal", "chart", "job-log")), found::toString);
 	}
 }

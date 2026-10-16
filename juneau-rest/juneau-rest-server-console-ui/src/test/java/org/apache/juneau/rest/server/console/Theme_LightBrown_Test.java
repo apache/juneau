@@ -37,8 +37,8 @@ class Theme_LightBrown_Test extends TestBase {
 		assertEquals(Theme.OPEN.getTokens().keySet(), Theme.LIGHT_BROWN.getTokens().keySet());
 	}
 
-	@Test void a02_tokenCount_is82_mirroringOpensPin() {
-		assertEquals(82, Theme.LIGHT_BROWN.getTokens().size());
+	@Test void a02_tokenCount_is100_mirroringOpensPin() {
+		assertEquals(100, Theme.LIGHT_BROWN.getTokens().size());
 	}
 
 	@Test void a03_name_isLightBrown() {
@@ -47,7 +47,7 @@ class Theme_LightBrown_Test extends TestBase {
 
 	@Test void b01_brownedSignatureValues() {
 		var tokens = Theme.LIGHT_BROWN.getTokens();
-		assertBean(tokens, "--jc-accent,--jc-link,--jc-btn-primary", "#a9772f,#8a5a1a,#8a6d3b");
+		assertBean(tokens, "--jc-accent,--jc-link,--jc-btn-primary", "#a9772f,#754d16,#8a6d3b");
 		assertContains("#dccaa6", tokens.get("--jc-page-bg"));
 	}
 

@@ -103,7 +103,7 @@ out.isEmptyOfDecodedEmpty = U.isEmptyState(U.decode(''));
 out.isEmptyOfDecodedFull = U.isEmptyState(decoded);
 
 // -------------------------------------------------------------------------------------------------------------
-// c) unknown directives (e.g. an IRS `subview`, or anything View-Settings-shaped) are dropped on decode
+// c) unknown directives (e.g. a host-app `subview`, or anything View-Settings-shaped) are dropped on decode
 // -------------------------------------------------------------------------------------------------------------
 const hostile = U.decode('tab(main);subview(nested=xyz);visible(a,b);filter(status=$eq(OK));options(pageSize=50)');
 out.hostileTab = hostile.tab;

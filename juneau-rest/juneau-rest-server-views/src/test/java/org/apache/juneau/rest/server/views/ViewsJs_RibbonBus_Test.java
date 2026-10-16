@@ -27,7 +27,7 @@ import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
 
 /**
- * The ribbon as messages (message bus addendum, spec §5.5): every bus-routed item sends {@code cmd:<target>}, toggle
+ * The ribbon as messages: every bus-routed item sends {@code cmd:<target>}, toggle
  * state renders from {@code filter:<target>}, the {@code publish} item publishes its topic, a plain page runs
  * own-table ops directly and refuses cross-card targets loudly, and a SERVER-mode column-scoped option still reaches
  * the request through the new path.  Runs {@code ribbon-bus.cjs} through {@link BusHarness}.

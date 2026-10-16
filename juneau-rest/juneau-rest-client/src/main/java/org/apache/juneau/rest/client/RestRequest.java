@@ -726,7 +726,8 @@ public final class RestRequest {
 			.method(method)
 			.uri(resolvedUri)
 			.timeout(timeout)
-			.remoteUrlPolicy(policyEnforced, allowPrivateUrls);
+			.remoteUrlPolicy(policyEnforced, allowPrivateUrls)
+			.allowedAddressRanges(client.allowedAddressRanges);
 
 		// Headers
 		for (var h : headers) {
@@ -810,7 +811,8 @@ public final class RestRequest {
 			.headers(request.getHeaders())
 			.body(TransportBody.of(wrappedBody))
 			.timeout(request.getTimeout())
-			.remoteUrlPolicy(request.isPolicyEnforced(), request.isAllowPrivateUrls());
+			.remoteUrlPolicy(request.isPolicyEnforced(), request.isAllowPrivateUrls())
+			.allowedAddressRanges(request.getAllowedAddressRanges());
 		return builder.build();
 	}
 

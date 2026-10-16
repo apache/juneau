@@ -49,6 +49,10 @@ class ConsoleBadges_Test extends TestBase {
 		assertEquals("jc-header-badges", r.get("inHeaderBadges"));
 	}
 
+	@Test void a01b_pollAsksForJson() {
+		assertEquals(List.of("application/json", "application/json", "application/json"), report().get("pollAccept"));
+	}
+
 	@Test void a02_toneDefaultsToWarningAndDangerPaintsAsError() {
 		var r = report();
 		assertEquals("warning", r.get("defaultTone"));
@@ -60,6 +64,19 @@ class ConsoleBadges_Test extends TestBase {
 		assertEquals(true, r.get("zeroHidden"));
 		assertEquals(true, r.get("reshown"));
 		assertEquals(true, r.get("pulsed"));
+	}
+
+	@Test void a03u_unloadAbortedFetchIsSilent() {
+		var r = report();
+		assertEquals(0, ((Number)r.get("unload_e65")).intValue());
+		assertEquals(true, r.get("unload_noRetry"));
+		assertEquals(0, ((Number)r.get("abort_e65")).intValue());
+	}
+
+	@Test void a03v_failureOnLivePageStillLogs() {
+		var r = report();
+		assertEquals(1, ((Number)r.get("live_e65")).intValue());
+		assertEquals(1, ((Number)r.get("pageshow_e65")).intValue());
 	}
 
 	@Test void a04_forbiddenRemovesBadgeAndStopsPolling() {

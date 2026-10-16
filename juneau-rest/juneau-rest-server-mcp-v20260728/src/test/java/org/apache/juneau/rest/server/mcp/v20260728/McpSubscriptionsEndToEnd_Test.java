@@ -40,7 +40,7 @@ import org.apache.juneau.rest.server.mcp.McpToolSpec;
 import org.junit.jupiter.api.*;
 
 /**
- * Proves Phase 1 (neutral broker) and Phase 3 (BeanStore wiring) compose correctly through a REAL v2
+ * Proves the neutral broker and the BeanStore wiring compose correctly through a REAL v2
  * {@link McpRevision} dispatch (not a fake): a tool handler registered on an ordinary
  * {@link McpServerConfig} can fetch the injected {@link McpSubscriptionBroker}/{@link McpSubscriptions}
  * beans from its {@link BeanStore} argument, and a change published by one handler invocation reaches a

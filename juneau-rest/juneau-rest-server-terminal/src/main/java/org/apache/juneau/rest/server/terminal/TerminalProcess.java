@@ -19,6 +19,7 @@ package org.apache.juneau.rest.server.terminal;
 import static java.nio.charset.StandardCharsets.*;
 import static java.nio.file.StandardOpenOption.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
+import static org.apache.juneau.rest.server.runreport.RunViewChecks.*;
 
 import java.io.*;
 import java.nio.*;
@@ -100,6 +101,12 @@ public final class TerminalProcess implements AutoCloseable, TerminalSink {
 	/** The most input bytes waiting for the writer thread: queued bytes only, not the chunk being written. */
 	static final int INPUT_LIMIT = 64 * 1024;
 
+	/** How often the nudge thread checks the log size, in milliseconds. */
+	static final int NUDGE_POLL_MILLIS = 100;
+
+	/** How long {@link #close()} waits for the nudge thread, in milliseconds. */
+	static final int NUDGE_JOIN_MILLIS = 1000;
+
 	/** How long {@link #close()} waits for the input writer thread, in milliseconds. */
 	static final int WRITER_JOIN_MILLIS = 1000;
 
@@ -129,6 +136,12 @@ public final class TerminalProcess implements AutoCloseable, TerminalSink {
 	private int pendingBytes;  // Queued bytes only; a chunk leaves the count when the writer takes it, before it is written.
 	private boolean writing, inputFailed, closed;
 	private final Thread writer;
+
+	// Nudges.  nudgeThread, nudgeSet and nudgeClosed are guarded by nudgeLock.
+	private final Object nudgeLock = new Object();
+	private Thread nudgeThread;
+	private boolean nudgeSet, nudgeClosed;
+	private volatile boolean nudgeStop;
 
 	/** Appends the missing done event; replaced in tests. */
 	@FunctionalInterface
@@ -464,6 +477,72 @@ public final class TerminalProcess implements AutoCloseable, TerminalSink {
 		}
 	}
 
+	/**
+	 * Polls the log's size every 100 ms and reports growth, then a final done, to a publisher.
+	 *
+	 * <p>
+	 * The runner writes the log in another process, so there is no in-process append hook to use.  The publisher runs on
+	 * a daemon thread named {@code juneau-terminal-nudge-<pid>}; a {@link RuntimeException} it throws is logged at
+	 * {@code FINE} and otherwise ignored.  The thread ends after the done report, or when {@link #close()} is called.
+	 *
+	 * @param terminalId The terminal id passed to the publisher; must be a valid run id.
+	 * @param publisher The publisher.
+	 * @return This object.
+	 * @throws NullPointerException If an argument is <jk>null</jk>.
+	 * @throws IllegalArgumentException If the id is not a valid run id.
+	 * @throws IllegalStateException If a publisher is already set, or this process has been closed.
+	 */
+	public TerminalProcess nudges(String terminalId, TerminalNudgePublisher publisher) {
+		Objects.requireNonNull(terminalId, "terminalId");
+		Objects.requireNonNull(publisher, "publisher");
+		if (! isRunId(terminalId))
+			throw iaex("TerminalProcess nudge id is not a valid run id: '%s'.", terminalId);
+		synchronized (nudgeLock) {
+			if (nudgeClosed)
+				throw new IllegalStateException("TerminalProcess is closed.");
+			if (nudgeSet)
+				throw new IllegalStateException("TerminalProcess nudges are already set.");
+			nudgeSet = true;
+			nudgeThread = new Thread(() -> watch(terminalId, publisher), "juneau-terminal-nudge-" + process.pid());
+			nudgeThread.setDaemon(true);
+			nudgeThread.start();
+		}
+		return this;
+	}
+
+	/** The nudge thread: reports log growth until the process is done or the thread is stopped. */
+	private void watch(String id, TerminalNudgePublisher publisher) {
+		var last = -1L;
+		while (! nudgeStop) {
+			var fin = isDone();
+			var size = sizeOrZero(log);
+			if (size > last || fin) {
+				try {
+					publisher.nudge(id, size, fin);
+				} catch (RuntimeException e) {
+					LOG.log(Level.FINE, e, () -> "Terminal nudge publisher failed for '" + id + "'.");
+				}
+				last = size;
+			}
+			if (fin)
+				return;
+			try {
+				Thread.sleep(NUDGE_POLL_MILLIS);
+			} catch (InterruptedException e) {
+				Thread.currentThread().interrupt();
+				return;
+			}
+		}
+	}
+
+	private static long sizeOrZero(Path p) {
+		try {
+			return Files.size(p);
+		} catch (IOException e) {
+			return 0;
+		}
+	}
+
 	/** The exit hook's executor; for tests. */
 	ExecutorService executor() {
 		return executor;
@@ -485,10 +564,19 @@ public final class TerminalProcess implements AutoCloseable, TerminalSink {
 	 * <p>
 	 * With input on, it first stops input: pending bytes are dropped, stdin is closed and the writer thread is told to
 	 * stop.  If the writer thread is blocked writing to a full pipe, it closes stdin itself once the kill breaks the pipe.
-	 * Afterwards this waits up to {@value #WRITER_JOIN_MILLIS} ms for the writer thread.  With input off, it only kills.
+	 * Afterwards this waits up to {@value #WRITER_JOIN_MILLIS} ms for the writer thread.  The nudge thread, if any, is
+	 * stopped first of all and joined for up to {@value #NUDGE_JOIN_MILLIS} ms.  With input off, it only kills.
 	 */
 	@Override /* AutoCloseable */
 	public void close() {
+		Thread nudger;
+		synchronized (nudgeLock) {
+			nudgeClosed = true;
+			nudgeStop = true;
+			nudger = nudgeThread;
+		}
+		if (nudger != null)
+			nudger.interrupt();
 		if (input) {
 			synchronized (inLock) {
 				closed = true;
@@ -509,6 +597,15 @@ public final class TerminalProcess implements AutoCloseable, TerminalSink {
 			Thread.currentThread().interrupt();
 		} catch (ExecutionException | TimeoutException e) {
 			LOG.log(Level.WARNING, e, () -> "TerminalProcess exit hook did not finish for '" + events + "'.");
+		}
+		if (nudger != null) {
+			try {
+				nudger.join(NUDGE_JOIN_MILLIS);
+			} catch (InterruptedException e) {
+				Thread.currentThread().interrupt();
+			}
+			if (nudger.isAlive())
+				LOG.log(Level.WARNING, () -> "TerminalProcess nudge thread did not stop for '" + events + "'.");
 		}
 		if (writer != null) {
 			try {

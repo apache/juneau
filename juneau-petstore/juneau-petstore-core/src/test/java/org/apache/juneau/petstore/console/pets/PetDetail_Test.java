@@ -26,6 +26,7 @@ import java.util.*;
 import org.apache.juneau.*;
 import org.apache.juneau.marshall.collections.*;
 import org.apache.juneau.marshall.marshaller.*;
+import org.apache.juneau.petstore.console.*;
 import org.apache.juneau.rest.mock.classic.*;
 import org.junit.jupiter.api.*;
 
@@ -229,6 +230,33 @@ class PetDetail_Test extends TestBase {
 			.templateContains("photo", "/petstore/pets/1/photo")
 			.templateContains("photo-upload", "data-petstore-upload=\"/petstore/pets/1/photo\"");
 		assertContains("\"viewer\":{\"roles\":[\"admin\"]}", html);
+	}
+
+	private static final String API_TOKEN = "0123456789abcdef".repeat(8);
+
+	private static String adminPhotoPage(String suffix, boolean withToken) throws Exception {
+		var r = client().get("/console/pets/1/photo" + suffix).accept("text/html").header("Authorization", "Bearer petstore-admin");
+		if (withToken)
+			r = r.attribute(PetstoreApiBoundary.TOKEN_ATTRIBUTE, API_TOKEN);
+		return r.run().assertStatus(200).getContent().asString();
+	}
+
+	// Premise pin, not CSRF evidence: without the boundary's attributes the form renders no token (fails closed).
+	@Test void d07_photoUploadFormOmitsTheTokenWithoutTheBoundary() throws Exception {
+		for (var suffix : List.of("", "?builder")) {
+			var html = adminPhotoPage(suffix, false);
+			assertPage(html).isValid().templateContains("photo-upload", "data-petstore-upload=");
+			assertNotContains(() -> "api token attribute without the boundary" + suffix, "data-petstore-csrf", html);
+		}
+	}
+
+	@Test void d08_photoUploadFormCarriesTheApiToken() throws Exception {
+		for (var suffix : List.of("", "?builder")) {
+			var html = adminPhotoPage(suffix, true);
+			assertPage(html).isValid().templateContains("photo-upload", "data-petstore-csrf=\"" + API_TOKEN + "\"");
+			// The header name is fixed in petstore.js, not stamped on the page.
+			assertNotContains(() -> "header name stamped on the page" + suffix, "data-petstore-csrf-header", html);
+		}
 	}
 
 	@Test void d03_summaryRowIsThisPet() throws Exception {

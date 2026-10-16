@@ -31,6 +31,8 @@ import java.util.concurrent.*;
 import javax.net.ssl.*;
 
 import org.apache.http.*;
+import org.apache.http.client.*;
+import org.apache.http.client.protocol.*;
 import org.apache.http.config.*;
 import org.apache.http.client.methods.*;
 import org.apache.http.conn.*;
@@ -38,10 +40,14 @@ import org.apache.http.conn.routing.*;
 import org.apache.http.conn.socket.*;
 import org.apache.http.conn.ssl.*;
 import org.apache.http.conn.util.*;
+import org.apache.http.entity.*;
 import org.apache.http.impl.client.*;
 import org.apache.http.impl.conn.*;
+import org.apache.http.impl.execchain.*;
+import org.apache.http.message.*;
 import org.apache.http.protocol.*;
 import org.apache.http.ssl.SSLContexts;
+import org.apache.http.util.*;
 import org.apache.juneau.http.remote.*;
 import org.apache.juneau.rest.client.classic.remote.*;
 import org.junit.jupiter.api.*;
@@ -152,6 +158,11 @@ class RestClient_ConnectionManager_Test {
 	public interface HelloRemote {
 		@RemoteOp(method = "GET", path = "/hello")
 		String call();
+	}
+
+	public interface StartRemote {
+		@RemoteOp(method = "GET", path = "/start")
+		String start();
 	}
 
 	public interface HelloRemoteDeclaringRestCallException {
@@ -299,7 +310,7 @@ class RestClient_ConnectionManager_Test {
 	}
 
 	// =================================================================================================================
-	// C: a custom RestCallHandler may leave the calling thread, so guarded calls through one are refused
+	// C: a custom RestCallHandler may copy the request or send it with another context, so guarded calls through one are refused
 	// =================================================================================================================
 
 	@Test void c01_customCallHandler_guardedCall_refused() throws Exception {
@@ -461,7 +472,8 @@ class RestClient_ConnectionManager_Test {
 	}
 
 	// =================================================================================================================
-	// E: a RestClient subclass that overrides the request dispatch may leave the calling thread, so guarded calls are refused
+	// E: a RestClient subclass that overrides the request dispatch may copy the request or send it with another context, so
+	// guarded calls are refused
 	// =================================================================================================================
 
 	@Test void e01_subclassOverridesRun_guardedCall_refused() throws Exception {
@@ -918,6 +930,607 @@ class RestClient_ConnectionManager_Test {
 		try (var c1 = b.build(); var c2 = b.build()) {
 			var interceptors = (List<?>)field(b.httpClientBuilder(), "requestLast");
 			assertEquals(1, interceptors.stream().filter(ClassicRedirectCredentialGuard.class::isInstance).count());
+		}
+	}
+
+	// =================================================================================================================
+	// K: guarded calls need the HttpClient wired to the pinned pool, and the guard travels with the request's context
+	// =================================================================================================================
+
+	@Test void k01_createHttpClientOverride_returnsOtherClient_guardedCall_refused() throws Exception {
+		try (var c = new OtherHttpClientBuilder().rootUrl(url).build()) {
+			var ex = assertThrows(Exception.class, () -> c.getRemote(HelloRemote.class).call());
+			assertContains("not the one this RestClient wired", messages(ex));
+			assertPlainOk(c);
+		}
+		try (var c = new OtherHttpClientBuilder().rootUrl(url).allowPrivateUrls(true).build()) {
+			assertEquals("hi", c.getRemote(HelloRemote.class).call());
+		}
+	}
+
+	@Test void k02_createHttpClientOverride_wrapsOtherClient_guardedCall_refused() throws Exception {
+		try (var c = new WrappingHttpClientBuilder().rootUrl(url).build()) {
+			var ex = assertThrows(Exception.class, () -> c.getRemote(HelloRemote.class).call());
+			assertContains("not the one this RestClient wired", messages(ex));
+			assertPlainOk(c);
+		}
+	}
+
+	@Test void k03_httpClientBuilderBuildOverride_returnsOtherClient_guardedCall_refused() throws Exception {
+		try (var c = RestClient.create().rootUrl(url).httpClientBuilder(new OtherClientHttpClientBuilder()).build()) {
+			var ex = assertThrows(Exception.class, () -> c.getRemote(HelloRemote.class).call());
+			assertContains("not the one this RestClient wired", messages(ex));
+			assertPlainOk(c);
+		}
+	}
+
+	@Test void k04_httpClientBuilderBuildOverride_swapsConnectionManager_guardedCall_refused() throws Exception {
+		try (var c = RestClient.create().rootUrl(url).httpClientBuilder(new SwappingHttpClientBuilder()).build()) {
+			var ex = assertThrows(Exception.class, () -> c.getRemote(HelloRemote.class).call());
+			assertContains("not the one this RestClient wired", messages(ex));
+			assertPlainOk(c);
+		}
+	}
+
+	@Test void k05_createHttpClientOverride_returnsSuperClient_guardStillApplies() throws Exception {
+		try (var c = new SuperHttpClientBuilder().rootUrl(url).build()) {
+			assertGuardedRejected(c);
+		}
+	}
+
+	@Test void k06_guardedContext_otherThread_pinned() throws Exception {
+		try (var c = RestClient.create().rootUrl(url).build()) {
+			var ex = assertThrows(ExecutionException.class, () -> onOtherThread(() -> status(c, guardedContext())));
+			assertContains("No allowed address for host '2130706433'", messages(ex));
+			// The same request without the marker is an ordinary one.
+			assertEquals(200, onOtherThread(() -> status(c, null)));
+		}
+	}
+
+	@Test void k07_guardedRequest_otherThreadWithoutContext_refused() throws Exception {
+		try (var c = RestClient.create().rootUrl(url).callHandler(OtherThreadCallHandler.class).build()) {
+			OtherThreadCallHandler.dropContext = true;
+			var rc = c.get(url + "/hello");
+			rc.ssrfGuard();
+			var ex = assertThrows(Exception.class, rc::run);
+			assertContains("lacks the SSRF-guard marker", messages(ex));
+			// An ordinary request through the same handler is unaffected.
+			assertPlainOk(c);
+		} finally {
+			OtherThreadCallHandler.dropContext = false;
+		}
+	}
+
+	@Test void k11_guardedRequest_otherThreadWithContext_pinned() throws Exception {
+		try (var c = RestClient.create().rootUrl(url).callHandler(OtherThreadCallHandler.class).build()) {
+			var rc = c.get(url + "/hello");
+			rc.ssrfGuard();
+			var ex = assertThrows(Exception.class, rc::run);
+			assertContains("No allowed address for host '2130706433'", messages(ex));
+			assertPlainOk(c);
+		}
+	}
+
+	@Test void k12_guardedRequest_callerContext_markedForTheCallOnly() throws Exception {
+		try (var c = RestClient.create().rootUrl(url).build()) {
+			var context = new BasicHttpContext();
+			var rc = c.get(url + "/hello").context(context);
+			rc.ssrfGuard();
+			var ex = assertThrows(Exception.class, rc::run);
+			assertContains("No allowed address for host '2130706433'", messages(ex));
+			assertNull(context.getAttribute(SsrfGuardMarker.ATTRIBUTE));
+		}
+	}
+
+	// Sends each request from another thread, where the guard thread-local of the calling thread is not set.
+	public static class OtherThreadCallHandler extends BasicRestCallHandler {
+		static volatile boolean dropContext;
+		public OtherThreadCallHandler(RestClient client) {
+			super(client);
+		}
+		@Override
+		public HttpResponse run(HttpHost target, HttpRequest request, HttpContext context) throws IOException {
+			try {
+				return onOtherThread(() -> super.run(target, request, dropContext ? null : context));
+			} catch (ExecutionException e) {
+				if (e.getCause() instanceof IOException e2)
+					throw e2;
+				throw (RuntimeException)e.getCause();
+			} catch (InterruptedException e) {
+				Thread.currentThread().interrupt();
+				throw new InterruptedIOException(e.getMessage());
+			} catch (Exception e) {
+				throw new IOException(e);
+			}
+		}
+	}
+
+	@Test void k08_httpProcessorReplaced_guardedContext_otherThread_newConnection_refused() throws Exception {
+		try (var c = RestClient.create().rootUrl(url).httpProcessor(HttpProcessorBuilder.create().build()).build()) {
+			var ex = assertThrows(ExecutionException.class, () -> onOtherThread(() -> status(c, guardedContext())));
+			assertContains("request to open a connection of the ordinary pool", messages(ex));
+		}
+	}
+
+	@Test void k09_httpProcessorReplaced_guardedContext_otherThread_reusedConnection_refused() throws Exception {
+		try (var c = RestClient.create().rootUrl(url).pooled().httpProcessor(HttpProcessorBuilder.create().build()).build()) {
+			// Leaves an open connection to the route in the ordinary pool.
+			assertEquals(200, status(c, null));
+			var ex = assertThrows(ExecutionException.class, () -> onOtherThread(() -> status(c, guardedContext())));
+			assertContains("request over an open connection of the ordinary pool", messages(ex));
+		}
+	}
+
+	@Test void k10_redirectStrategy_guardedContext_notFollowed() throws Exception {
+		var response = new BasicHttpResponse(HttpVersion.HTTP_1_1, 302, "Found");
+		response.addHeader("Location", "http://example.com/");
+		var request = new HttpGet("http://example.com/start");
+		assertFalse(new PolicyAwareRedirectStrategy().isRedirected(request, response, guardedContext()));
+		assertTrue(new PolicyAwareRedirectStrategy().isRedirected(request, response, new BasicHttpContext()));
+	}
+
+	@Test void k13_httpClientBuilderBuildOverride_returnsSuperClient_guardedCall_refused() throws Exception {
+		assertBuilderOverrideRefused(new SuperBuildHttpClientBuilder(), "SuperBuildHttpClientBuilder overrides build()");
+	}
+
+	@Test void k14_httpClientBuilderCreateMainExecOverride_guardedCall_refused() throws Exception {
+		assertBuilderOverrideRefused(new MainExecSwapHttpClientBuilder(), "MainExecSwapHttpClientBuilder overrides createMainExec(");
+	}
+
+	@Test void k15_httpClientBuilderDecorateMainExecOverride_guardedCall_refused() throws Exception {
+		assertBuilderOverrideRefused(new DecorateMainExecHttpClientBuilder(), "DecorateMainExecHttpClientBuilder overrides decorateMainExec(");
+	}
+
+	@Test void k16_httpClientBuilderDecorateProtocolExecOverride_guardedCall_refused() throws Exception {
+		assertBuilderOverrideRefused(new DecorateProtocolExecHttpClientBuilder(), "DecorateProtocolExecHttpClientBuilder overrides decorateProtocolExec(");
+	}
+
+	@Test void k17_httpClientBuilderOverride_inheritedFromSuperclass_guardedCall_refused() throws Exception {
+		assertBuilderOverrideRefused(new InheritingHttpClientBuilder(), "DecorateMainExecHttpClientBuilder overrides decorateMainExec(");
+	}
+
+	private static void assertBuilderOverrideRefused(HttpClientBuilder b, String expected) throws Exception {
+		try (var c = RestClient.create().rootUrl(url).httpClientBuilder(b).build()) {
+			var ex = assertThrows(Exception.class, () -> c.getRemote(HelloRemote.class).call());
+			assertContains(expected, messages(ex));
+			assertPlainOk(c);
+		}
+		try (var c = RestClient.create().rootUrl(url).allowPrivateUrls(true).httpClientBuilder(b).build()) {
+			assertEquals("hi", c.getRemote(HelloRemote.class).call());
+		}
+	}
+
+	@Test void k18_httpProcessor_guardedCallOnCallingThread_refused() throws Exception {
+		try (var c = RestClient.create().rootUrl(url).httpProcessor(HttpProcessorBuilder.create().build()).build()) {
+			var ex = assertThrows(Exception.class, () -> c.getRemote(HelloRemote.class).call());
+			assertContains("httpProcessor(...) replaces the client's request interceptors", messages(ex));
+			assertPlainOk(c);
+		}
+	}
+
+	@Test void k19_guardedRedirect_crossOrigin_credentialsStripped() throws Exception {
+		var hops = guardedRedirect("http://93.184.216.35/end");
+		assertEquals(2, hops.size());
+		assertEquals("Bearer secret|session=abc|key|Basic proxy", hops.get(0).credentials);
+		assertEquals("null|null|null|null", hops.get(1).credentials);
+	}
+
+	@Test void k20_guardedRedirect_sameOrigin_credentialsKept() throws Exception {
+		var hops = guardedRedirect("http://93.184.216.34/end");
+		assertEquals(2, hops.size());
+		assertEquals("Bearer secret|session=abc|key|Basic proxy", hops.get(1).credentials);
+	}
+
+	@Test void k21_guardedRedirect_crossOriginThenBack_credentialsStayStripped() throws Exception {
+		var hops = guardedRedirect("http://93.184.216.35/back");
+		assertEquals(3, hops.size());
+		assertEquals("null|null|null|null", hops.get(1).credentials);
+		assertEquals("null|null|null|null", hops.get(2).credentials);
+	}
+
+	@Test void k22_guardedRedirect_everyHopMarked() throws Exception {
+		var hops = guardedRedirect("http://93.184.216.35/back");
+		assertEquals(3, hops.size());
+		for (var h : hops)
+			assertEquals(Boolean.TRUE, h.marker);
+		// Each hop has its own context, so no authentication state is carried from one host to the next.
+		assertNotSame(hops.get(0).context, hops.get(1).context);
+	}
+
+	@Test void k23_guardRefused_nextOrdinaryCallOnSameThread_notGuarded() throws Exception {
+		try (var c = RestClient.create().rootUrl(url).pooled().build()) {
+			var ex = assertThrows(Exception.class, () -> status(c, guardedContext()));
+			assertContains("No allowed address for host '2130706433'", messages(ex));
+			assertEquals(200, status(c, null));
+			assertEquals(200, status(c, null));
+		}
+		try (var c = RestClient.create().rootUrl("http://93.184.216.34").proxy(new HttpHost("127.0.0.1", port)).build()) {
+			assertThrows(Exception.class, () -> status(c, guardedContext(), "http://93.184.216.34/hello"));
+			// The refused lease left no guard decision behind: the proxied ordinary call goes through.
+			assertEquals(200, status(c, null, "http://93.184.216.34/hello"));
+		}
+	}
+
+	@Test void k24_guardedRedirect_noContext_crossOrigin_interceptorAndDefaultHeadersStripped() throws Exception {
+		try (var server = new RoutedServer("https://93.184.216.35/end")) {
+			var b = HttpClientBuilder.create().setDefaultHeaders(List.of(new BasicHeader("X-API-Key", "dflt")))
+				.addInterceptorLast((HttpRequestInterceptor)(r, x) -> r.setHeader("Authorization", "Bearer itcp"));
+			try (var c = server.client(RestClient.create().httpClientBuilder(b))) {
+				assertEquals(200, server.guarded(c, null));
+			}
+			assertEquals("93.184.216.34:Bearer itcp|dflt,93.184.216.35:null|null", server.hops());
+			// Real Apache execution: each hop was pinned to its own (public) address.
+			assertEquals("[/93.184.216.34:443, /93.184.216.35:443]", server.connects.toString());
+		}
+	}
+
+	@Test void k25_guardedRedirect_noContext_sameOrigin_interceptorAndDefaultHeadersKept() throws Exception {
+		try (var server = new RoutedServer("https://93.184.216.34/end")) {
+			var b = HttpClientBuilder.create().setDefaultHeaders(List.of(new BasicHeader("X-API-Key", "dflt")))
+				.addInterceptorLast((HttpRequestInterceptor)(r, x) -> r.setHeader("Authorization", "Bearer itcp"));
+			try (var c = server.client(RestClient.create().httpClientBuilder(b))) {
+				assertEquals(200, server.guarded(c, null));
+			}
+			assertEquals("93.184.216.34:Bearer itcp|dflt,93.184.216.34:Bearer itcp|dflt", server.hops());
+		}
+	}
+
+	@Test void k26_guardedRedirect_callerContext_crossOrigin_targetAuthStateReset() throws Exception {
+		try (var server = new RoutedServer("https://93.184.216.35/end")) {
+			server.challenge = true;
+			try (var c = server.client(RestClient.create().basicAuth("93.184.216.34", 443, "user", "pw"))) {
+				assertEquals(200, server.guarded(c, HttpClientContext.create()));
+			}
+			// Challenged, answered for the first host only; the answer is not carried to the second.
+			assertEquals("93.184.216.34:null|null,93.184.216.34:Basic dXNlcjpwdw==|null,93.184.216.35:null|null", server.hops());
+		}
+	}
+
+	@Test void k27_guardedRedirect_callerContext_sameOrigin_targetAuthStateKept() throws Exception {
+		try (var server = new RoutedServer("https://93.184.216.34/end")) {
+			server.challenge = true;
+			try (var c = server.client(RestClient.create().basicAuth("93.184.216.34", 443, "user", "pw"))) {
+				assertEquals(200, server.guarded(c, HttpClientContext.create()));
+			}
+			assertEquals("93.184.216.34:null|null,93.184.216.34:Basic dXNlcjpwdw==|null,93.184.216.34:Basic dXNlcjpwdw==|null", server.hops());
+		}
+	}
+
+	@Test void k28_guardedRedirect_reusedCallerContext_originIsTheCallsFirstHop() throws Exception {
+		try (var server = new RoutedServer("https://93.184.216.35/end")) {
+			var b = HttpClientBuilder.create().addInterceptorLast((HttpRequestInterceptor)(r, x) -> r.setHeader("Authorization", "Bearer itcp"));
+			try (var c = server.client(RestClient.create().httpClientBuilder(b))) {
+				var context = HttpClientContext.create();
+				// An earlier ordinary call with the same context, to the host the guarded call is later redirected to.
+				assertEquals(200, status(c, context, "https://93.184.216.35/end"));
+				assertEquals(200, server.guarded(c, context));
+			}
+			assertEquals("93.184.216.35:Bearer itcp|null,93.184.216.34:Bearer itcp|null,93.184.216.35:null|null", server.hops());
+		}
+	}
+
+	@Test void k29_createHttpClientOverride_changesBuilderAfterSuper_guardedCall_refused() throws Exception {
+		try (var c = new RebuildingHttpClientBuilder().rootUrl(url).build()) {
+			var ex = assertThrows(Exception.class, () -> c.getRemote(HelloRemote.class).call());
+			assertContains("httpProcessor(...) replaces the client's request interceptors", messages(ex));
+		}
+	}
+
+	@Test void k30_createHttpClientOverride_lateRequestInterceptor_guardedCall_refused() throws Exception {
+		assertLateChangeRefused(b -> b.addInterceptorLast((HttpRequestInterceptor)(r, x) -> r.setHeader("Authorization", "Bearer late")),
+			"a request interceptor was added after the SSRF guard's own");
+	}
+
+	@Test void k31_createHttpClientOverride_redirectStrategyReplaced_guardedCall_refused() throws Exception {
+		assertLateChangeRefused(b -> b.setRedirectStrategy(DefaultRedirectStrategy.INSTANCE), "the redirect strategy was replaced");
+	}
+
+	@Test void k32_createHttpClientOverride_requestExecutorReplaced_guardedCall_refused() throws Exception {
+		assertLateChangeRefused(b -> b.setRequestExecutor(new HttpRequestExecutor()), "the request executor was replaced");
+	}
+
+	// A createHttpClient() override that calls super, makes the change to the HttpClientBuilder and builds again: the
+	// guarded @Remote call (whose /start redirects to another origin) is refused before anything is sent, and an ordinary
+	// call still goes through.
+	private static void assertLateChangeRefused(java.util.function.Consumer<HttpClientBuilder> change, String expected) throws Exception {
+		try (var server = new RoutedServer("https://93.184.216.35/end")) {
+			try (var c = server.client(new LateChangeHttpClientBuilder(change).rootUrl("https://93.184.216.34"))) {
+				var ex = assertThrows(Exception.class, () -> c.getRemote(StartRemote.class).start());
+				assertContains(expected, messages(ex));
+				assertEquals("", server.hops());
+				assertEquals(200, status(c, null, "https://93.184.216.35/end"));
+			}
+		}
+	}
+
+	// Calls super.createHttpClient(), then changes the HttpClientBuilder and builds again.
+	static final class LateChangeHttpClientBuilder extends RestClient.Builder<LateChangeHttpClientBuilder> {
+		private final java.util.function.Consumer<HttpClientBuilder> change;
+		LateChangeHttpClientBuilder(java.util.function.Consumer<HttpClientBuilder> change) {
+			this.change = change;
+		}
+		@Override
+		protected CloseableHttpClient createHttpClient() {
+			super.createHttpClient();
+			change.accept(httpClientBuilder());
+			return httpClientBuilder().build();
+		}
+	}
+
+	// A local HTTP server reached through a routing https socket factory: the client resolves and pins the public address
+	// of each hop as usual (recorded in connects), and the factory then connects the socket to this server instead.
+	// /start answers with a 302 to the given location (after a Basic challenge, if challenge is set), /end with 200.
+	private static final class RoutedServer implements AutoCloseable {
+		final HttpServer httpServer;
+		final List<String> hops = Collections.synchronizedList(new ArrayList<>());
+		final List<InetSocketAddress> connects = Collections.synchronizedList(new ArrayList<>());
+		volatile boolean challenge;
+
+		RoutedServer(String location) throws IOException {
+			httpServer = HttpServer.create(new InetSocketAddress("127.0.0.1", 0), 0);
+			httpServer.createContext("/", x -> {
+				var h = x.getRequestHeaders();
+				var authorization = h.getFirst("Authorization");
+				hops.add(h.getFirst("Host") + ":" + authorization + "|" + h.getFirst("X-API-Key"));
+				var path = x.getRequestURI().getPath();
+				if (path.equals("/start") && challenge && authorization == null) {
+					x.getResponseHeaders().add("WWW-Authenticate", "Basic realm=\"r\"");
+					x.sendResponseHeaders(401, -1);
+				} else if (path.equals("/start")) {
+					x.getResponseHeaders().add("Location", location);
+					x.sendResponseHeaders(302, -1);
+				} else {
+					x.sendResponseHeaders(200, -1);
+				}
+				x.close();
+			});
+			httpServer.start();
+		}
+
+		RestClient client(RestClient.Builder<?> b) {
+			var port2 = httpServer.getAddress().getPort();
+			return b.sslSocketFactory(new LayeredConnectionSocketFactory() {
+				@Override
+				public Socket createSocket(HttpContext context) {
+					return new Socket();
+				}
+				@Override
+				public Socket connectSocket(int connectTimeout, Socket sock, HttpHost host, InetSocketAddress remoteAddress,
+						InetSocketAddress localAddress, HttpContext context) throws IOException {
+					connects.add(remoteAddress);
+					sock.connect(new InetSocketAddress("127.0.0.1", port2), connectTimeout);
+					return sock;
+				}
+				@Override
+				public Socket createLayeredSocket(Socket socket, String target, int port3, HttpContext context) {
+					return socket;
+				}
+			}).build();
+		}
+
+		// Sends a guarded GET for https://93.184.216.34/start with the given context (null for none).
+		int guarded(RestClient c, HttpContext context) throws Exception {
+			var rc = c.get("https://93.184.216.34/start");
+			if (context != null)
+				rc.context(context);
+			rc.ssrfGuard();
+			try (var r = rc.run()) {
+				return r.getStatusCode();
+			}
+		}
+
+		String hops() {
+			return String.join(",", hops);
+		}
+
+		@Override
+		public void close() {
+			httpServer.stop(0);
+		}
+	}
+
+	// Calls super.createHttpClient(), then sets an HttpProcessor on the builder and builds again.
+	static final class RebuildingHttpClientBuilder extends RestClient.Builder<RebuildingHttpClientBuilder> {
+		@Override
+		protected CloseableHttpClient createHttpClient() {
+			super.createHttpClient();
+			httpClientBuilder().setHttpProcessor(HttpProcessorBuilder.create().build());
+			return httpClientBuilder().build();
+		}
+	}
+
+	// Sends a guarded GET for http://93.184.216.34/start with credential headers (one in lower case: header names are
+	// case-insensitive) through RedirectingCallHandler, which
+	// answers /start with a 302 to the given location, /back with a 302 to /end on the first host, and /end with 200.
+	private static List<RedirectingCallHandler.Hop> guardedRedirect(String location) throws Exception {
+		RedirectingCallHandler.HOPS.clear();
+		RedirectingCallHandler.location = location;
+		try (var c = RestClient.create().callHandler(RedirectingCallHandler.class).build()) {
+			var rc = c.get("http://93.184.216.34/start").header("Authorization", "Bearer secret").header("Cookie", "session=abc").header("x-api-key", "key")
+				.header("Proxy-Authorization", "Basic proxy");
+			rc.ssrfGuard();
+			try (var r = rc.run()) {
+				assertEquals(200, r.getStatusCode());
+			}
+		}
+		return new ArrayList<>(RedirectingCallHandler.HOPS);
+	}
+
+	// Answers without a network: /start redirects to the configured location, /back to /end on the first host, /end is 200.
+	public static class RedirectingCallHandler extends BasicRestCallHandler {
+		record Hop(String uri, String credentials, Object marker, HttpContext context) {}
+		static final List<Hop> HOPS = Collections.synchronizedList(new ArrayList<>());
+		static volatile String location;
+		public RedirectingCallHandler(RestClient client) {
+			super(client);
+		}
+		@Override
+		public HttpResponse run(HttpHost target, HttpRequest request, HttpContext context) {
+			var uri = request.getRequestLine().getUri();
+			HOPS.add(new Hop(uri, value(request, "Authorization") + "|" + value(request, "Cookie") + "|" + value(request, "X-API-Key")
+				+ "|" + value(request, "Proxy-Authorization"),
+				context == null ? null : context.getAttribute(SsrfGuardMarker.ATTRIBUTE), context));
+			var path = URI.create(uri).getPath();
+			var response = new BasicHttpResponse(HttpVersion.HTTP_1_1, path.equals("/end") ? 200 : 302, "x");
+			if (path.equals("/start"))
+				response.addHeader("Location", location);
+			else if (path.equals("/back"))
+				response.addHeader("Location", "http://93.184.216.34/end");
+			response.setEntity(new StringEntity("", ContentType.TEXT_PLAIN));
+			return response;
+		}
+		private static String value(HttpRequest request, String name) {
+			var h = request.getFirstHeader(name);
+			return h == null ? null : h.getValue();
+		}
+	}
+
+	// Overrides build(), returning the client super.build() built.
+	static final class SuperBuildHttpClientBuilder extends HttpClientBuilder {
+		@Override
+		public CloseableHttpClient build() {
+			return super.build();
+		}
+	}
+
+	// Swaps the connection manager and request executor at the exec-chain layer; build() itself is not overridden.
+	static final class MainExecSwapHttpClientBuilder extends HttpClientBuilder {
+		@Override
+		protected ClientExecChain createMainExec(HttpRequestExecutor requestExec, HttpClientConnectionManager connManager,
+				ConnectionReuseStrategy reuseStrategy, ConnectionKeepAliveStrategy keepAliveStrategy, HttpProcessor proxyHttpProcessor,
+				AuthenticationStrategy targetAuthStrategy, AuthenticationStrategy proxyAuthStrategy, UserTokenHandler userTokenHandler) {
+			return super.createMainExec(new HttpRequestExecutor(), new PoolingHttpClientConnectionManager(), reuseStrategy,
+				keepAliveStrategy, proxyHttpProcessor, targetAuthStrategy, proxyAuthStrategy, userTokenHandler);
+		}
+	}
+
+	// Decorates the main exec (here a pass-through: what a decorator does with the request is not knowable).
+	static class DecorateMainExecHttpClientBuilder extends HttpClientBuilder {
+		@Override
+		protected ClientExecChain decorateMainExec(ClientExecChain mainExec) {
+			return mainExec;
+		}
+	}
+
+	// Inherits the decorateMainExec override.
+	static final class InheritingHttpClientBuilder extends DecorateMainExecHttpClientBuilder {}
+
+	// Decorates the protocol exec (a pass-through).
+	static final class DecorateProtocolExecHttpClientBuilder extends HttpClientBuilder {
+		@Override
+		protected ClientExecChain decorateProtocolExec(ClientExecChain protocolExec) {
+			return protocolExec;
+		}
+	}
+
+	// Calls super.createHttpClient(), then returns a client of its own.
+	static final class OtherHttpClientBuilder extends RestClient.Builder<OtherHttpClientBuilder> {
+		@Override
+		protected CloseableHttpClient createHttpClient() {
+			try {
+				super.createHttpClient().close();
+			} catch (IOException e) {
+				throw new UncheckedIOException(e);
+			}
+			return HttpClientBuilder.create().build();
+		}
+	}
+
+	// Calls super.createHttpClient(), then returns a wrapper around a client of its own.
+	static final class WrappingHttpClientBuilder extends RestClient.Builder<WrappingHttpClientBuilder> {
+		@Override
+		protected CloseableHttpClient createHttpClient() {
+			try {
+				super.createHttpClient().close();
+			} catch (IOException e) {
+				throw new UncheckedIOException(e);
+			}
+			return new WrappingHttpClient(HttpClientBuilder.create().build());
+		}
+	}
+
+	// Returns the client super.createHttpClient() built.
+	static final class SuperHttpClientBuilder extends RestClient.Builder<SuperHttpClientBuilder> {
+		@Override
+		protected CloseableHttpClient createHttpClient() {
+			return super.createHttpClient();
+		}
+	}
+
+	// Builds the client it was configured for, then returns another one.
+	static final class OtherClientHttpClientBuilder extends HttpClientBuilder {
+		@Override
+		public CloseableHttpClient build() {
+			try {
+				super.build().close();
+			} catch (IOException e) {
+				throw new UncheckedIOException(e);
+			}
+			return HttpClientBuilder.create().build();
+		}
+	}
+
+	// Replaces the connection manager it was given before building.
+	static final class SwappingHttpClientBuilder extends HttpClientBuilder {
+		@Override
+		public CloseableHttpClient build() {
+			setConnectionManager(new PoolingHttpClientConnectionManager());
+			return super.build();
+		}
+	}
+
+	@SuppressWarnings({
+		"deprecation" // getParams() and getConnectionManager() are abstract in CloseableHttpClient.
+	})
+	static final class WrappingHttpClient extends CloseableHttpClient {
+		private final CloseableHttpClient inner;
+		WrappingHttpClient(CloseableHttpClient inner) {
+			this.inner = inner;
+		}
+		@Override
+		protected CloseableHttpResponse doExecute(HttpHost target, HttpRequest request, HttpContext context) throws IOException {
+			return inner.execute(target, request, context);
+		}
+		@Override
+		public void close() throws IOException {
+			inner.close();
+		}
+		@Override
+		public org.apache.http.params.HttpParams getParams() {
+			return inner.getParams();
+		}
+		@Override
+		public org.apache.http.conn.ClientConnectionManager getConnectionManager() {
+			return inner.getConnectionManager();
+		}
+	}
+
+	// A context carrying the SSRF-guard marker of a guarded call.
+	private static HttpContext guardedContext() {
+		var context = new BasicHttpContext();
+		context.setAttribute(SsrfGuardMarker.ATTRIBUTE, Boolean.TRUE);
+		return context;
+	}
+
+	// Sends a plain GET for /hello through the client's HttpClient with the given context, and returns the status.
+	private static int status(RestClient c, HttpContext context) throws IOException {
+		return status(c, context, url + "/hello");
+	}
+
+	private static int status(RestClient c, HttpContext context, String uri) throws IOException {
+		try (var r = (CloseableHttpResponse)c.execute(new HttpGet(uri), context)) {
+			EntityUtils.consume(r.getEntity());
+			return r.getStatusLine().getStatusCode();
+		}
+	}
+
+	// Runs the call on a new thread, where no guard thread-local is set.
+	private static <T> T onOtherThread(Callable<T> call) throws Exception {
+		var es = Executors.newSingleThreadExecutor();
+		try {
+			return es.submit(call).get();
+		} finally {
+			es.shutdown();
 		}
 	}
 

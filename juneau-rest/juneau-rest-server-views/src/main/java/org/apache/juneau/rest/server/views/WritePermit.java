@@ -20,8 +20,8 @@ import static org.apache.juneau.commons.utils.Shorts.*;
 
 /**
  * The views-toolkit's own structural gate token for {@link BulkMutateDef}: proof that the caller's own write-gate
- * was consulted before a bulk-mutating affordance is configured (design doc §9.3; the opt-in separability
- * guarantee, HIGH-5).
+ * was consulted before a bulk-mutating affordance is configured (the opt-in separability
+ * guarantee).
  *
  * <h5 class='section'>Why this exists, and why it is NOT the console's own {@code WritePermit}</h5>
  * <p>
@@ -42,7 +42,7 @@ import static org.apache.juneau.commons.utils.Shorts.*;
  * caller's gate logic is correct &mdash; that is out of scope for a UI-rendering toolkit &mdash; but it does
  * guarantee, by construction, that {@link BulkMutateDef} cannot be reached at all without a permit in hand: there
  * is no zero-argument overload, so omitting one is a <b>compile</b> failure, not a missed javadoc sentence
- * (mirroring the discipline of the console's own {@code WriteGuard}, source design §5.4).
+ * (mirroring the discipline of the console's own {@code WriteGuard}).
  *
  * <h5 class='section'>Example:</h5>
  * <p class='bjava'>

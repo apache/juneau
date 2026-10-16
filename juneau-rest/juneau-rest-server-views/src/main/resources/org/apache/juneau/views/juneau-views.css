@@ -33,8 +33,8 @@
 
 /* Base chip - tight status-chip shape (not a capsule). Longhand border so a colourless
    `border: N solid` shorthand cannot reset chrome.css border-color to currentColor.
-   3px radius / 10px / normal weight / 1px 6px padding match the IRS status-chip look
-   (no dot, regular weight) without copying IRS CSS or a hue palette. */
+   3px radius / 10px / normal weight / 1px 6px padding match the reference status-chip look
+   (no dot, regular weight) without copying any third-party CSS or a hue palette. */
 .tag {
 	display: inline-block;
 	padding: 1px 6px;
@@ -63,14 +63,29 @@
 	--jc-progress-error: #333333;
 	/*
 	 * The four painted status tones (the fifth, `neutral`, is deliberately the ABSENCE of a modifier and inherits
-	 * currentColor).  Each aliases the matching badge tag-palette ink (--jc-tag-<hue>-text), so a stat tone aliases the
-	 * badge --jc-tag-*-text ink of that tone and follows any theme (including dark mode) that overrides the tag
-	 * palette; the hex fallbacks apply when no theme defines the palette.
+	 * currentColor).  Each aliases the matching badge tag-palette ink (--jc-tag-<hue>-text), so any theme that overrides
+	 * the tag palette carries the tones with it; the hex fallbacks apply when no theme defines the palette.
+	 *
+	 * Dark ships as juneau-theme-dark.css in the console UI module, scoped to html:root[data-jc-scheme="dark"].  The
+	 * tokens declared here are the light defaults, and the dark file redeclares the colour ones.  A new colour token
+	 * added here must also be added to the dark file or to its allowlist; the dark-layer completeness guard enforces
+	 * that.
 	 */
 	--jc-tone-info: var(--jc-tag-blue-text, #1a4971);
 	--jc-tone-success: var(--jc-tag-green-text, #1f5b34);
 	--jc-tone-warning: var(--jc-tag-amber-text, #7a531a);
 	--jc-tone-error: var(--jc-tag-red-text, #7a1f1f);
+	/* Ink on a filled status-tone background (terminal failure line); dark inverts it because the tone fills go light. */
+	--jc-on-tone: #ffffff;
+	/* Terminal screen surface, ink, caret and selection wash. */
+	--jc-term-bg: #000000;
+	--jc-term-fg: #e5e5e5;
+	--jc-term-cursor: #e5e5e5;
+	--jc-term-selection: rgba(255, 255, 255, 0.3);
+	/* Secondary label ink (cell-popover label, card status and field names). */
+	--jc-label-text: #555555;
+	/* Search-box placeholder ink. */
+	--jc-placeholder: #b4b5b6;
 	--jc-popover-bg: #f7f7f7;
 	--jc-popover-border: #ccc;
 	--jc-popover-shadow: 0 2px 10px rgba(0, 0, 0, 0.18);
@@ -81,8 +96,8 @@
 	 */
 	--jc-tip-z: 1400;
 	/*
-	 * Cursor-tooltip face (IRS compact bubble): white / #222222 / #cccccc /
-	 * 0 2px 8px, not the grey popover surface.  Padding 6px 9px and type 0.78em are IRS literals
+	 * Cursor-tooltip face (compact bubble): white / #222222 / #cccccc /
+	 * 0 2px 8px, not the grey popover surface.  Padding 6px 9px and type 0.78em are fixed literals
 	 * (not chrome-scale steps) so the bubble stays compact next to paging/ribbon chrome.
 	 */
 	--jc-tip-bg: #ffffff;
@@ -122,9 +137,9 @@
 	--jc-table-row-bg: #ffffff;
 	--jc-table-stripe-bg: #fafaf9;
 	/*
-	 * Summary-view cell grid: IRS Instances tables use Bootstrap's bordered-table stroke
+	 * Summary-view cell grid: the reference tables use Bootstrap's bordered-table stroke
 	 * (`--bs-border-color` / DataTables last-child right edge `#dee2e6`).  Token so a
-	 * host theme can retint; no Salesforce class names.  Vertical column edges only —
+	 * host theme can retint; no host-framework class names.  Vertical column edges only —
 	 * the header/body seam and table floor use --jc-table-rule.
 	 */
 	--jc-table-border: #dee2e6;
@@ -167,11 +182,9 @@
 	 * density word, so a compact toolbar control and a full-height detail control are each expressible without
 	 * a new token.
 	 *
-	 * --jc-chrome-control-height is 31px (IRS visual-parity follow-up), not 32px: IRS's own paging-pill nav
-	 * buttons and center range segment are explicitly pinned to `height: 31px` (pages/style.css's
-	 * `.dataTables_wrapper .dataTables_paginate .page-item`/`.page-link` rules and `.ribbon-paging-info` /
-	 * `.ribbon-paging-container .ribbon-button`), and a sibling comment on IRS's own search-bar "Go" button
-	 * states outright that 31px is "the same ... height as ribbon buttons" - i.e. IRS's one canonical control
+	 * --jc-chrome-control-height is 31px, not 32px: the reference paging-pill nav
+	 * buttons and center range segment are explicitly pinned to `height: 31px`, and the reference search-bar
+	 * "Go" button is documented as "the same ... height as ribbon buttons" - i.e. one canonical control
 	 * height, not a paging-only one-off.  This single step drives every full-height control this toolkit
 	 * ships (ribbon buttons, the paging pill, the toolbar search input, the async-status loading region), so
 	 * re-valuing it here is the whole of the fix - no per-consumer override.
@@ -211,7 +224,7 @@
 	--jc-chrome-glyph-size-small: 12px;
 	/*
 	 * Paging-pill chevron role (first/prev/next/last arrows + the page-size caret).  Its own step, larger than
-	 * --jc-chrome-glyph-size-small, so the pager glyphs render at the visible size the IRS pager shows.  The two
+	 * --jc-chrome-glyph-size-small, so the pager glyphs render at the visible size the reference pager shows.  The two
 	 * pagers use the SAME 12px SVG box, but Juneau's own chevron artwork sits smaller inside its 24-unit viewBox
 	 * (path spans ~65% of height / ~42% of width) than the reference glyph does (~83% / ~50%), so at an identical
 	 * box the Juneau chevron reads noticeably smaller.  This is a reimplemented SIZE (a larger box for Juneau's own
@@ -220,15 +233,14 @@
 	 */
 	--jc-chrome-glyph-size-pager: 16px;
 	/*
-	 * Idle paging/ribbon glyph (IRS `.ribbon-button { color: #666 }` / `.ribbon-paging-container
-	 * .ribbon-button { color: #666 }`, pages/style.css).  Not --jc-text-soft: chrome.css themes that
-	 * token for prose, which is darker than IRS chevrons on SSC.
+	 * Idle paging/ribbon glyph (the reference ribbon buttons use `color: #666`).  Not --jc-text-soft: chrome.css
+	 * themes that token for prose, which is darker than the reference chevrons on SSC.
 	 */
 	--jc-chrome-icon: #666666;
 	/*
-	 * Idle (unsorted) datatable header sort-glyph fill (IRS visual-parity follow-up).  IRS renders its idle
-	 * sort chevrons as DataTables' muted default - header ink `#3e3e3c` (its own `table.dataTable thead th`,
-	 * pages/style.css) shown through `span.dt-column-order`'s idle `opacity: 0.125` (datatables.css).  Over
+	 * Idle (unsorted) datatable header sort-glyph fill (reference-look follow-up).  The reference renders its idle
+	 * sort chevrons as DataTables' muted default - header ink `#3e3e3c` (its own `table.dataTable thead th`
+	 * rule) shown through `span.dt-column-order`'s idle `opacity: 0.125` (datatables.css).  Over
 	 * this file's white header (`background-color: #fff`, below) that composites to #e7e7e7, pinned here as a
 	 * SOLID fill rather than an opacity - the same "opacity on a tiny 12px glyph reads muddy, spend a solid"
 	 * rule the disabled-glyph token below states, and what fixes the previous currentColor@0.45 idle carets
@@ -237,10 +249,10 @@
 	 */
 	--jc-sort-icon-idle: #e7e7e7;
 	/*
-	 * Disabled paging solids.  IRS source (pages/style.css) is NOT these hexes: `.ribbon-button` is
+	 * Disabled paging solids.  The reference look is NOT these hexes: the ribbon button is
 	 * `color: #666`, `background-color: #fff`, segment borders `#ced4da`, and
-	 * `.ribbon-button:disabled` / `.ribbon-button.disabled` is `opacity: 0.6` with no fill override.
-	 * That opacity composites against the grey toolbar canvas (#f6f6f9 / IRS Runtime dashboard,
+	 * its disabled state is `opacity: 0.6` with no fill override.
+	 * That opacity composites against the grey toolbar canvas (#f6f6f9 / a runtime dashboard,
 	 * SSC `.ssc-table-shell`) into the solids below — NOT the white-canvas composite (#a3a3a3 glyph
 	 * on #ffffff) the previous pin used.  Kept as solids so a 12px SVG stays crisply anti-aliased
 	 * (opacity on a tiny glyph reads muddy) and so a consumer that cannot use opacity spends the
@@ -260,12 +272,15 @@
 	 * not a single-widget colour.
 	 */
 	--jc-chrome-control-border: var(--jc-control-border, #ced4da);
+	/* Toolbar Search focus border: the accent in light; the dark layer repoints it at --jc-focus. */
+	--jc-chrome-control-focus-border: var(--jc-accent);
+	/* Ink of a primary-coloured text button on a surface (dialog Cancel/Close): the primary fill in light; the dark layer repoints it at --jc-link. */
+	--jc-btn-primary-ink: var(--jc-btn-primary-bg);
 	--jc-chrome-button-border: var(--jc-chrome-control-border);
 	--jc-chrome-disabled-border: var(--jc-chrome-control-border);
 	--jc-chrome-control-text: #4f4f4f;
-	--jc-chrome-control-text: #4f4f4f;
 	/*
-	 * Detail action button palette (D8, option (c)): DEFAULT tokens declared here, not console-ui chrome.css
+	 * Detail action button palette: DEFAULT tokens declared here, not console-ui chrome.css
 	 * aliases, so the button reads correctly wherever this file is the only stylesheet served.  A theme MAY
 	 * override every one of these; it does not have to supply them - same precedent as --jc-card-bg /
 	 * --jc-card-shadow above.  Named --jc-detail-action-* rather than reused --jc-btn-* names because the
@@ -344,7 +359,7 @@
 
 /*
  * Status pill.  Inherits the shared ".tag.<domain>.<value>" chip shape (theming/palette lives on ".tag");
- * this file adds only the inline-flex layout.  The leading dot is intentionally hidden (IRS status chips
+ * this file adds only the inline-flex layout.  The leading dot is intentionally hidden (the reference status chips
  * carry no dot); the renderer still emits the `.jc-pill-dot` span for markup/tone compatibility, so it is
  * collapsed with `display: none` rather than removed from the DOM contract.
  */
@@ -493,6 +508,54 @@
 .jc-stat-segment.is-warning .jc-stat-segment-count { color: var(--jc-tone-warning); }
 .jc-stat-segment.is-error .jc-stat-segment-count { color: var(--jc-tone-error); }
 
+/* Segmented tile: a proportional bar plus a legend; the legend text carries the meaning. */
+.jc-stat-segbar {
+	display: inline-flex;
+	gap: 1px;
+	width: 6em;
+	height: 0.5em;
+	background: var(--jc-progress-track);
+	border-radius: 0.25em;
+	overflow: hidden;
+	vertical-align: middle;
+}
+.jc-stat-segfill { min-width: 2px; }
+.jc-stat-swatch {
+	display: inline-block;
+	width: 0.6em;
+	height: 0.6em;
+	margin-right: 0.25em;
+	vertical-align: middle;
+}
+.jc-stat-segfill.is-info, .jc-stat-segment.is-info .jc-stat-swatch { background-color: var(--jc-tone-info); }
+.jc-stat-segfill.is-success, .jc-stat-segment.is-success .jc-stat-swatch { background-color: var(--jc-tone-success); }
+.jc-stat-segfill.is-warning, .jc-stat-segment.is-warning .jc-stat-swatch { background-color: var(--jc-tone-warning); }
+.jc-stat-segfill.is-error, .jc-stat-segment.is-error .jc-stat-swatch { background-color: var(--jc-tone-error); }
+.jc-stat-segfill.is-c1, .jc-stat-segment.is-c1 .jc-stat-swatch { background-color: var(--jc-chart-1, #1b6ac9); }
+.jc-stat-segfill.is-c2, .jc-stat-segment.is-c2 .jc-stat-swatch { background-color: var(--jc-chart-2, #e07a1f); }
+.jc-stat-segfill.is-c3, .jc-stat-segment.is-c3 .jc-stat-swatch { background-color: var(--jc-chart-3, #2e8540); }
+.jc-stat-segfill.is-c4, .jc-stat-segment.is-c4 .jc-stat-swatch { background-color: var(--jc-chart-4, #9b3fb5); }
+.jc-stat-segfill.is-c5, .jc-stat-segment.is-c5 .jc-stat-swatch { background-color: var(--jc-chart-5, #c23934); }
+.jc-stat-segfill.is-c6, .jc-stat-segment.is-c6 .jc-stat-swatch { background-color: var(--jc-chart-6, #0e8a8a); }
+.jc-stat-segfill.is-c7, .jc-stat-segment.is-c7 .jc-stat-swatch { background-color: var(--jc-chart-7, #7a6a00); }
+.jc-stat-segfill.is-c8, .jc-stat-segment.is-c8 .jc-stat-swatch { background-color: var(--jc-chart-8, #5a5a5a); }
+/* Warning and error are striped so they read without colour; one dark stripe works in both schemes. */
+.jc-stat-fill.is-warning, .jc-stat-fill.is-error, .jc-stat-segfill.is-warning, .jc-stat-segfill.is-error {
+	background-image: repeating-linear-gradient(45deg, rgba(0, 0, 0, .28) 0 2px, transparent 2px 5px);
+}
+/* Over limit: the cue sits inside the full-width fill because the track clips overflow. */
+.jc-stat-bar.is-over .jc-stat-fill { box-shadow: inset -3px 0 0 var(--jc-tone-error); }
+.jc-stat-track.is-error { outline: 1px solid var(--jc-tone-error); }
+@media (forced-colors: active) {
+	/* Repeated classes outrank the tone and palette rules above, so every fill reads as one system colour. */
+	.jc-stat-fill.jc-stat-fill, .jc-stat-segfill.jc-stat-segfill, .jc-stat-segment .jc-stat-swatch.jc-stat-swatch { forced-color-adjust: none; background-color: CanvasText; }
+	/* Warning and error keep their stripe, drawn in system colours so it shows on any contrast theme. */
+	.jc-stat-fill.jc-stat-fill.is-warning, .jc-stat-fill.jc-stat-fill.is-error, .jc-stat-segfill.jc-stat-segfill.is-warning, .jc-stat-segfill.jc-stat-segfill.is-error {
+		background-image: repeating-linear-gradient(45deg, Canvas 0 2px, transparent 2px 5px);
+	}
+	.jc-stat-track, .jc-stat-segbar { forced-color-adjust: none; background: Canvas; border: 1px solid CanvasText; }
+}
+
 /* Fail-loud contract-version-mismatch banner - neutral, no palette color. */
 .juneau-view-error {
 	display: block;
@@ -539,7 +602,7 @@
 }
 
 /*
- * DataTables table density/shape (compact 4px 5px cells, 0.8333rem/13.333px IRS body type,
+ * DataTables table density/shape (compact 4px 5px cells, 0.8333rem/13.333px reference body type,
  * outer frame + cell grid).  NEUTRAL - shape only (font-size,
  * padding, border WIDTH/style); no color/background-color/border-color palette here (console-ui's
  * chrome.css themes the SAME selectors with --jc-* colors).  Selectors list BOTH
@@ -550,7 +613,7 @@
  */
 table[data-juneau-view],
 table.dataTable {
-	font-size: 0.8333rem;         /* IRS body-type parity (13.333px/10pt); see the cell-level pin below */
+	font-size: 0.8333rem;         /* reference body type (13.333px/10pt); see the cell-level pin below */
 	border-collapse: collapse;
 	border-spacing: 0;
 	/* Longhand width/style only — a colourless `border: N solid` shorthand resets the
@@ -575,8 +638,8 @@ table[data-juneau-view] > thead > tr > td,
 table.dataTable > thead > tr > th,
 table.dataTable > thead > tr > td {
 	/*
-	 * Header type is its OWN, smaller step than the body cell's 0.8333rem (IRS visual-parity pass):
-	 * IRS's own `table.dataTable thead th` sets 0.75rem/12px, one notch below
+	 * Header type is its OWN, smaller step than the body cell's 0.8333rem (reference-look pass):
+	 * the reference `table.dataTable thead th` sets 0.75rem/12px, one notch below
 	 * its 0.8333rem/13.333px body row - a header/body size split this toolkit's shared cell rule below did
 	 * not have.  Declared here, not folded into the shared rule, precisely BECAUSE it must NOT match the
 	 * body pin: this file's own em-spacing warning on that rule is about the tbody cell only (the child-row/
@@ -584,7 +647,7 @@ table.dataTable > thead > tr > td {
 	 * equals the already-declared --jc-chrome-font-size-1 step, so it spends that token rather than writing a
 	 * second literal of the same value (this file's own "if a value equals a step, spend the step" rule).
 	 */
-	font-size: var(--jc-chrome-font-size-1);   /* IRS header-type parity (12px) - see comment above */
+	font-size: var(--jc-chrome-font-size-1);   /* reference header type (12px) - see comment above */
 	padding: 4px 5px;
 	font-weight: normal;
 	text-align: left;
@@ -592,24 +655,24 @@ table.dataTable > thead > tr > td {
 	min-width: 20px;
 	border: 1px solid var(--jc-table-border, #dee2e6);
 	/*
-	 * Header row HEIGHT (IRS visual-parity follow-up): this rule's own `padding: 4px 5px` above is already
-	 * IDENTICAL to IRS's own thead-th padding declaration (pages/style.css), so the padding was never the gap
-	 * between the two.  The extra height IRS renders comes from its VENDORED DataTables theme's sort-icon
+	 * Header row HEIGHT (reference-look follow-up): this rule's own `padding: 4px 5px` above is already
+	 * IDENTICAL to the reference thead-th padding, so the padding was never the gap
+	 * between the two.  The extra height the reference renders comes from its VENDORED DataTables theme's sort-icon
 	 * spacer - `span.dt-column-order`, a fixed 12px-wide by 24px-tall box (datatables/datatables.css) holding
 	 * the stacked up/down-chevron pair inside `div.dt-column-header` - sitting in a `display:flex;
 	 * align-items:center` header row, that 24px content-box sets the header ROW's cross-size regardless of
-	 * the label text's own shorter line-height, so IRS's rendered header cell totals 4+4 padding + 24 content
+	 * the label text's own shorter line-height, so the reference header cell totals 4+4 padding + 24 content
 	 * = 32px.  A host with an older/absent DataTables build has no such spacer to reserve that height, so
 	 * this toolkit reserves the SAME 24px directly on the cell's own text line-box instead - a plain, generic
-	 * `line-height`, not a copy of IRS's markup/selectors - so the header renders the same 32px total whether
+	 * `line-height`, not a copy of the reference markup/selectors - so the header renders the same 32px total whether
 	 * or not the host's DataTables build happens to ship that spacer.  24px equals the already-declared,
 	 * previously-unspent --jc-space-5 step, so it spends that token rather than writing a second literal of
 	 * the same value (this file's own "if a value equals a step, spend the step" rule).
 	 */
 	line-height: var(--jc-space-5);
 	/*
-	 * Header background: EXPLICIT opaque white (IRS visual-parity follow-up), not merely "no color set" the
-	 * way the rest of this NEUTRAL file's shape rules stay silent on colour.  IRS's own `table.dataTable
+	 * Header background: EXPLICIT opaque white (reference-look follow-up), not merely "no color set" the
+	 * way the rest of this NEUTRAL file's shape rules stay silent on colour.  The reference `table.dataTable
 	 * thead th` never needs an explicit background either, but only because nothing ambient ever tints it
 	 * there; this toolkit cannot assume the same is true of every host, so the header is pinned white here
 	 * rather than left to inherit whatever a host theme (or this file's own new row-stripe rule two blocks
@@ -618,12 +681,12 @@ table.dataTable > thead > tr > td {
 	 * `.juneau-view-dialog` / `.juneau-view-detail-panel` / the DataTables-native child row (below) - not a
 	 * new precedent.
 	 */
-	background-color: #fff;
+	background-color: var(--jc-table-header-bg, #fff);
 	border-bottom-color: var(--jc-table-rule, #bbbbbb);
 }
 
 /*
- * Cell grid (IRS Instances look): Bootstrap bordered tables paint 1px `#dee2e6`
+ * Cell grid (reference table look): Bootstrap bordered tables paint 1px `#dee2e6`
  * vertical and horizontal cell edges (DataTables last-child restores the right edge the
  * DT theme otherwise zeroes).  Apply the hex here so every views table gets the same
  * columns without a Bootstrap class.  Expander `tr.child` cells drop the grid
@@ -633,15 +696,14 @@ table[data-juneau-view] > tbody > tr > th,
 table[data-juneau-view] > tbody > tr > td,
 table.dataTable > tbody > tr > th,
 table.dataTable > tbody > tr > td {
-	font-size: 0.8333rem;         /* IRS body-type parity; not tokenized, see comment above */
-	padding: 4px 5px;             /* IRS pages/style.css: table.dataTable thead th, tbody td */
+	font-size: 0.8333rem;         /* reference body type; not tokenized, see comment above */
+	padding: 4px 5px;             /* matches the reference thead th / tbody td padding */
 	/*
-	 * Body row HEIGHT (IRS visual-parity follow-up): IRS does not set an explicit min-height on tbody td.
-	 * Its taller body rows come from Bootstrap reboot's body line-height:1.5 (documented in IRS
-	 * style_tags.css as "10pt from .main-section-inner, line-height:1.5 => a 20px line box") plus the same
+	 * Body row HEIGHT (reference-look follow-up): the reference sets no explicit min-height on tbody td.
+	 * Its taller body rows come from Bootstrap reboot's body line-height:1.5 (a 20px line box at 10pt) plus the same
 	 * 4px vertical padding this rule already shares.  Hosts without Bootstrap inherit a tighter UA
-	 * `normal` (~1.2), so pin 1.5 here — a generic ratio, not an SLDS token — so every views table matches
-	 * IRS's ~28px text-only row (4+4 padding + 20 content) without depending on a host Bootstrap load.
+	 * `normal` (~1.2), so pin 1.5 here — a generic ratio, not a design-system token — so every views table matches
+	 * the reference ~28px text-only row (4+4 padding + 20 content) without depending on a host Bootstrap load.
 	 */
 	line-height: 1.5;
 	vertical-align: middle;
@@ -652,7 +714,7 @@ table.dataTable > tbody > tr > td {
 }
 
 /*
- * Gap 1 (section 3.4 Options restore): opt-in text wrap. The baseline cell behavior is whatever each renderer's own
+ * Options restore: opt-in text wrap. The baseline cell behavior is whatever each renderer's own
  * default is (most clip/ellipsis) - no rule needed for that. Checking "Text wrap" in the Options tab adds this
  * class to the <table> itself, reversing the clip for every cell at once.
  */
@@ -664,8 +726,8 @@ table.juneau-view-wrap > tbody > tr > th {
 }
 
 /*
- * Gap 1 (section 3.4 Options restore): opt-in "comfortable" row density. "Compact" - this file's existing 4px
- * vertical padding above, matching IRS - stays the class-less baseline; checking "Row density: Comfortable" in the
+ * Options restore: opt-in "comfortable" row density. "Compact" - this file's existing 4px
+ * vertical padding above, matching the reference - stays the class-less baseline; checking "Row density: Comfortable" in the
  * Options tab adds this class to the <table> itself and doubles the vertical padding only.
  */
 table.juneau-view-density-comfortable > tbody > tr > td,
@@ -675,11 +737,11 @@ table.juneau-view-density-comfortable > tbody > tr > th {
 }
 
 /*
- * Linked key column (IRS visual-parity follow-up): IRS stamps `className: 'table-key'` on ID columns with
- * `.table-key { font-weight: bold }` (pages/style.css) — typically 700.  This toolkit has no author-facing
+ * Linked key column (reference-look follow-up): the reference stamps `className: 'table-key'` on ID columns with
+ * `.table-key { font-weight: bold }` — typically 700.  This toolkit has no author-facing
  * key-class stamp required of every consumer, but the common pattern is a linked first data column
  * immediately after the dedicated expander cell (and optional selection cell).  Use 600 (semibold) — one
- * step lighter than IRS bold — and leave link color alone so blue PD/GUS hyperlinks stay blue.
+ * step lighter than the reference bold — and leave link color alone so blue PD/GUS hyperlinks stay blue.
  */
 table[data-juneau-view] > tbody > tr > td.juneau-view-detail-control + td > a,
 table[data-juneau-view] > tbody > tr > td.juneau-view-detail-control + td.juneau-view-select-cell + td > a,
@@ -689,9 +751,9 @@ table.dataTable > tbody > tr > td.juneau-view-detail-control + td.juneau-view-se
 }
 
 /*
- * The header/body boundary - the ONE row-to-row line IRS's borderless table keeps (see the tbody rule's
+ * The header/body boundary - the ONE row-to-row line the reference borderless table keeps (see the tbody rule's
  * comment above), painted on the first body row's own top edge rather than the header row's bottom edge
- * (mirrors IRS's own `table.dataTable>tbody>tr:first-child>td` exactly).  Needed now more than when the
+ * (mirrors the reference `table.dataTable>tbody>tr:first-child>td` exactly).  Needed now more than when the
  * header carried its own background tint: a white-on-white header/body pair has nothing else marking where
  * one ends and the other begins.  Longhand, not a colourless `border-top` shorthand - see the segmented-
  * group note earlier in this file for why a colourless shorthand would fight a themed border-color.
@@ -827,7 +889,7 @@ table.dataTable thead > tr > td.dt-ordering-desc .juneau-view-col-sort-glyph {
 /*
  * DataTables 2 paints stacked ▲/▼ via span.dt-column-order::before/::after
  * (`content:"▲";content:"▲"/""`). That rule's specificity
- * (`th.dt-orderable-asc span.dt-column-order:before` = 0,3,5) beats J0548's
+ * (`th.dt-orderable-asc span.dt-column-order:before` = 0,3,5) beats the
  * `:has(svg){content:none}` (0,3,3), so unicode triangles stack on the Juneau
  * SVG and read as a mashed tick. `dataTables.dataTables.css` does not use
  * `!important` on `content`; this does, so it cannot lose. The visible control
@@ -860,7 +922,7 @@ table.dataTable thead .sorting_desc_disabled:after {
 }
 
 /*
- * DataTables ribbon visual-parity pass (design doc §4.A) - neutral 32px icon-only ribbon-button shape.  NEW rule
+ * DataTables ribbon - neutral 32px icon-only ribbon-button shape.  NEW rule
  * (not a rewrite - the module shipped no ".juneau-view-ribbon*" CSS before this pass; buttons rendered with bare
  * browser-default styling).  NEUTRAL - no palette color (border/color fall back to currentColor); console-ui's
  * chrome.css layers the themed hover/active accent over these same classes.
@@ -898,7 +960,7 @@ table.dataTable thead .sorting_desc_disabled:after {
  * / helpers.button({appearance:"icon"})): chrome.css hover recolors the glyph only — no wash, no border
  * shift. Default (no modifier) keeps the bordered chrome hover. */
 
-/* IRS `.ribbon-button:disabled` / `.ribbon-button.disabled` uses opacity: 0.6 (pages/style.css). */
+/* The reference disabled ribbon button uses opacity: 0.6. */
 .juneau-view-ribbon-btn:disabled { opacity: 0.6; cursor: not-allowed; }
 
 /* Neutral shape for an ACTIVE toggle (`option`/`optionGroup` member button's aria-pressed="true") - a thicker
@@ -909,7 +971,7 @@ table.dataTable thead .sorting_desc_disabled:after {
 .juneau-view-ribbon-btn[aria-pressed="true"] { border-width: 2px; }
 
 /*
- * Segmented ribbon group (design doc §4.A, item 2/5): one OUTER chrome around the group,
+ * Segmented ribbon group: one OUTER chrome around the group,
  * no inner vertical borders between glyphs.  Ends keep left/right; middles keep only top/bottom.  Rounding
  * only on the group's outer ends.  NEUTRAL - shape only; console-ui's chrome.css themes the member buttons'
  * colors exactly like a standalone button (same ".juneau-view-ribbon-btn" class).
@@ -1074,8 +1136,7 @@ table.dataTable thead .sorting_desc_disabled:after {
  * Skip glyph correction: each "chevronright" host's visible filled
  * chevron sits in the middle of its 24x24 viewBox (path spans x=7.2..17.4), so two hosts
  * placed edge-to-edge with no overlap read as two separated arrows ("&gt;  &gt;") rather than one merged
- * double-chevron ("&gt;&gt;") the way IRS's own skip glyph does. Rather than ship a second IRS-sourced path (the
- * dual-hat rule this item is under), the SAME sprite glyph is reused twice and the second host is pulled left
+ * double-chevron ("&gt;&gt;") the way the reference skip glyph does. Rather than ship a second copied path, the SAME sprite glyph is reused twice and the second host is pulled left
  * to cancel most of that built-in padding - no new artwork, just correct spacing for the artwork already here.
  * The overlap is -0.5 of the glyph box (the padding-cancelling ratio the artwork needs): it was -6px at the old
  * 12px box and is -8px now that the pager glyph spends --jc-chrome-glyph-size-pager (16px), so the two chevrons
@@ -1086,7 +1147,7 @@ table.dataTable thead .sorting_desc_disabled:after {
 }
 
 /*
- * Unified paging ribbon (visual-parity follow-up) - hides BOTH DataTables major-version's native length-select/
+ * Unified paging ribbon - hides BOTH DataTables major-version's native length-select/
  * pagination class-name generations (DT1.x ".dataTables_length"/".dataTables_paginate", DT2.x ".dt-length"/
  * ".dt-paging") and ships the first-party ribbon's neutral shape: `[First] [Prev] [<range> + page-size menu]
  * [Next] [Last]` - a SINGLE segmented control (no separate page-size <select>, no second paging control
@@ -1112,13 +1173,13 @@ table.dataTable thead .sorting_desc_disabled:after {
  * scrollbar and the surrounding chrome (toolbar, header, nav, card padding) stays put.  Two mechanisms, no palette
  * colour and no new token (neutral shape only — the file's colours-in-chrome split):
  *
- *   - Approach D (DT2 dogfood, flex layout): the scroll box IS the table's own flex `.dt-layout-cell` — a sibling
- *     lineage away from the toolbar's layout row, so the paging-pill menu is never inside it (INV-1/INV-2).  The
+ *   - DT2 flex layout: the scroll box IS the table's own flex `.dt-layout-cell` — a sibling
+ *     lineage away from the toolbar's layout row, so the paging-pill menu is never inside it.  The
  *     selector is SCOPED to the table's layout row (`.dt-layout-row.dt-layout-table > .dt-layout-cell`); an
  *     unscoped `.dt-layout-cell { overflow }` would also scroll toolbar cells in other layout rows.
- *   - Approach B (DT1 fallback): juneau-views.js wraps the <table> in `.juneau-view-table-scroll`.
+ *   - DT1 fallback: juneau-views.js wraps the <table> in `.juneau-view-table-scroll`.
  *
- * The `min-width:0` chain (INV-3) is mandatory: flex items default to `min-width:auto` (min-content of the table),
+ * The `min-width:0` chain is mandatory: flex items default to `min-width:auto` (min-content of the table),
  * so without it any link refusing to shrink lets the table contribute to viewport overflow and Goal 2 fails.  It
  * is stamped along the actual DT2 constraint path plus the DataTables wrapper and the DT1 wrap.
  */
@@ -1197,13 +1258,13 @@ table.dataTable thead .sorting_desc_disabled:after {
 /*
  * No inner divider between the four nav buttons (First/Prev/Next/Last). The segmented-group
  * treatment above (".juneau-view-ribbon-group") already dropped this same inner-border pattern for the ribbon;
- * J0449 was ribbon-format only and never reached the paging pill's own nav buttons, so they kept the old
+ * that change was ribbon-format only and never reached the paging pill's own nav buttons, so they kept the old
  * per-button "border-right: 1px solid" divider this rule used to carry. The menu-button segment
  * (".juneau-view-pagingpill-menuwrap") is a DIFFERENT widget riding the same pill, not one of the four nav
  * buttons - it USED to keep its own divider on the theory that a different widget warranted a visible seam,
- * but IRS's own center range segment (".ribbon-paging-info"/".ribbon-button-center") has NO side border at
- * all: `.ribbon-button-center { border-left: none; border-right: none; }`, seamless against its neighbours
- * exactly like the four nav buttons.  This was the real root cause of the visual-parity item that "never
+ * but the reference center range segment has NO side border at
+ * all (`border-left: none; border-right: none`), seamless against its neighbours
+ * exactly like the four nav buttons.  This was the real root cause of the styling defect that "never
  * stuck": every console-side attempt targeted the WRONG layer (a color/override in console.css cannot zero
  * out a width+style pair the framework's own shipped rule below re-asserts) - the divider was never a console
  * bug to band-aid, it was this framework rule.  Removed below; the pill is now one fully seamless five-
@@ -1236,7 +1297,7 @@ table.dataTable thead .sorting_desc_disabled:after {
  * (0,2,1) restated only `color` + `background-color` on the BUTTON, so (a) segment-edge
  * `border-*-color` stayed `--jc-control-border` (#ced4da), (b) SVG `fill` could lose to a
  * more specific `svg`/`use` rule, (c) white-canvas composites (#a3a3a3 / #ffffff) never
- * matched IRS's grey-canvas opacity look.  These selectors are (0,4,1)/(0,4,2) on the
+ * matched the reference grey-canvas opacity look.  These selectors are (0,4,1)/(0,4,2) on the
  * pill's own classes (not `.dt-paging-button`) and restate button, svg, and border.
  */
 div.dt-container .juneau-view-ribbon-btn,
@@ -1280,7 +1341,7 @@ div.dt-container .juneau-view-pagingpill .juneau-view-pagingpill-btn[disabled] s
 .juneau-view-pagingpill-btn svg { width: var(--jc-chrome-glyph-size-pager); height: var(--jc-chrome-glyph-size-pager); fill: currentColor; }
 
 /*
- * The pill's central segment (visual-parity follow-up): BOTH the compact "n-n of n" range summary AND the
+ * The pill's central segment: BOTH the compact "n-n of n" range summary AND the
  * page-size menu button that replaced the old standalone <select> - a WAI-ARIA menu-button (`.juneau-view-
  * pagingpill-menubtn`, `aria-haspopup="listbox"`) whose popup (`.juneau-view-pagingpill-menu`, `role="listbox"`)
  * lists the page-size options.  NEUTRAL - shape only; console-ui's chrome.css themes text/accent/background.
@@ -1422,7 +1483,7 @@ div.dataTables_wrapper div.dataTables_filter input {
 	padding: 0 0.5em;
 	appearance: none;
 	-webkit-appearance: none;
-	background: #ffffff;
+	background: var(--jc-control-bg, #ffffff);
 	box-shadow: none;
 	border: 1px solid var(--jc-chrome-control-border);
 	border-radius: var(--jc-chrome-control-radius);
@@ -1433,57 +1494,57 @@ div.dataTables_wrapper div.dataTables_filter input {
 
 /* Scoped to the toolkit's own toolbar search input only - never a bare `::placeholder`, which would be a
    stronger claim on a consumer's page than a framework should make.  Two separate rules (DT1 / DT2 markup),
-   never a comma list, per this file's own comma-joined-selector caution.  IRS paints placeholders with
-   italic + opacity 0.5 over input text; the Chrome UA default is #757575.  The visible IRS/SLDS grey is
+   never a comma list, per this file's own comma-joined-selector caution.  The reference paints placeholders with
+   italic + opacity 0.5 over input text; the Chrome UA default is #757575.  The visible reference grey is
    #B4B5B6 at full opacity (opacity:1 so Firefox's 0.54 UA fade cannot lighten it). */
 .juneau-view-toolbar-right .dataTables_filter input::placeholder {
 	font-style: italic;
-	color: #b4b5b6;
+	color: var(--jc-placeholder, #b4b5b6);
 	opacity: 1;
 }
 .juneau-view-toolbar-right .dataTables_filter input::-webkit-input-placeholder {
 	font-style: italic;
-	color: #b4b5b6;
+	color: var(--jc-placeholder, #b4b5b6);
 	opacity: 1;
 }
 
 .juneau-view-toolbar-right .dt-search input::placeholder {
 	font-style: italic;
-	color: #b4b5b6;
+	color: var(--jc-placeholder, #b4b5b6);
 	opacity: 1;
 }
 .juneau-view-toolbar-right .dt-search input::-webkit-input-placeholder {
 	font-style: italic;
-	color: #b4b5b6;
+	color: var(--jc-placeholder, #b4b5b6);
 	opacity: 1;
 }
 
 div.dt-container div.dt-search input::placeholder {
 	font-style: italic;
-	color: #b4b5b6;
+	color: var(--jc-placeholder, #b4b5b6);
 	opacity: 1;
 }
 div.dt-container div.dt-search input::-webkit-input-placeholder {
 	font-style: italic;
-	color: #b4b5b6;
+	color: var(--jc-placeholder, #b4b5b6);
 	opacity: 1;
 }
 div.dataTables_wrapper div.dataTables_filter input::placeholder {
 	font-style: italic;
-	color: #b4b5b6;
+	color: var(--jc-placeholder, #b4b5b6);
 	opacity: 1;
 }
 div.dataTables_wrapper div.dataTables_filter input::-webkit-input-placeholder {
 	font-style: italic;
-	color: #b4b5b6;
+	color: var(--jc-placeholder, #b4b5b6);
 	opacity: 1;
 }
 
 /*
  * Toolbar Search focus: recolor the field's own 1px border.  Do not add an outset outline/box-shadow
  * ring (chrome.css's generic :focus-visible is 2px / offset 2px).  Specificity (0,3,3) beats
- * DataTables (0,2,2) and the generic ring (0,1,0).  --jc-accent is the themed
- * focus blue from chrome.css; no hex fallback here (this file's no-palette contract).
+ * DataTables (0,2,2) and the generic ring (0,1,0).  --jc-chrome-control-focus-border is the themed
+ * accent in light and --jc-focus in dark; no hex fallback here (this file's no-palette contract).
  */
 div.dt-container div.dt-search input:focus,
 div.dt-container div.dt-search input:focus-visible,
@@ -1491,7 +1552,7 @@ div.dataTables_wrapper div.dataTables_filter input:focus,
 div.dataTables_wrapper div.dataTables_filter input:focus-visible {
 	outline: none;
 	box-shadow: none;
-	border-color: var(--jc-accent);
+	border-color: var(--jc-chrome-control-focus-border);
 }
 
 .juneau-view-ribbon-divider {
@@ -1591,13 +1652,13 @@ div.dataTables_wrapper div.dataTables_filter input:focus-visible {
 	border: 1px solid;
 	border-radius: var(--jc-chrome-control-radius);
 }
-/* Per-type bare-value help (Gap 8 / spec 4a D9) - one line, between the heading and the input. */
+/* Per-type bare-value help - one line, between the heading and the input. */
 .juneau-view-col-search-popover-barehelp {
 	margin: 2px 0 6px;
 	font-size: var(--jc-chrome-font-size-1);
 	opacity: 0.85;
 }
-/* Reject / still-typing feedback (design §4.3 / §5): an out-of-set operator or unparseable expression is rejected,
+/* Reject / still-typing feedback: an out-of-set operator or unparseable expression is rejected,
  * not silently applied.  NEUTRAL shape; chrome.css tints the invalid ring/text. */
 .juneau-view-col-search-popover.is-invalid .juneau-view-col-search-popover-input {
 	border-color: var(--jc-chrome-danger, currentColor);
@@ -1610,7 +1671,7 @@ div.dataTables_wrapper div.dataTables_filter input:focus-visible {
 .juneau-view-col-search-popover.is-invalid .juneau-view-col-search-popover-status {
 	color: var(--jc-chrome-danger, currentColor);
 }
-/* Operator help (design §4.5): one row per effective operator, its "$name" then the operator API's help text. */
+/* Operator help: one row per effective operator, its "$name" then the operator API's help text. */
 .juneau-view-col-search-popover-help {
 	margin-top: 6px;
 	display: flex;
@@ -1629,7 +1690,7 @@ div.dataTables_wrapper div.dataTables_filter input:focus-visible {
 	opacity: 0.85;
 }
 
-/* Live-announcer region (design §4): visually hidden, never removed by a popover's own teardown. */
+/* Live-announcer region: visually hidden, never removed by a popover's own teardown. */
 .juneau-view-announcer {
 	position: absolute;
 	width: 1px;
@@ -1956,7 +2017,7 @@ table.dataTable > tbody > tr.child .jc-card {
 	display: none;
 }
 
-/* Primary: solid accent fill, white label, a slightly darker border of its own fill colour (D6/D7). */
+/* Primary: solid accent fill, white label, a slightly darker border of its own fill colour. */
 .juneau-view-detail-action-primary {
 	background: var(--jc-detail-action-primary-bg);
 	border-color: var(--jc-detail-action-primary-border);
@@ -2351,7 +2412,8 @@ input[type="checkbox"].jc-editable-field-input {
 }
 
 .juneau-view-dialog {
-	min-width: 28em;
+	/* Capped at the backdrop width less 3em: a nested dialog is shifted 1.5em right and down, and this keeps that shift on-screen. */
+	min-width: min(28em, calc(100% - 3em));
 	max-width: 90vw;
 	max-height: 90vh;
 	overflow: hidden;
@@ -2360,7 +2422,7 @@ input[type="checkbox"].jc-editable-field-input {
 	padding: 0;
 	border: 1px solid;
 	border-radius: 8px;
-	background: #fff;
+	background: var(--jc-surface, #fff);
 	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
 }
 
@@ -2646,7 +2708,7 @@ input[type="checkbox"].jc-editable-field-input {
 }
 
 /*
- * Instant cursor tooltip for icon-only ribbon/paging controls.  IRS compact bubble (white / #222 /
+ * Instant cursor tooltip for icon-only ribbon/paging controls.  Compact bubble (white / #222 /
  * 6px 9px / 0.78em), not a native `title` and not the grey popover surface.  No delay (display
  * toggles, no transition).  pointer-events:none so the bubble never steals the hover that keeps
  * it visible.
@@ -2704,7 +2766,7 @@ input[type="checkbox"].jc-editable-field-input {
  * The LIVE async-job progress banner (TODO-425) - shown while a long job streams over SSE.  Deliberately a
  * DISTINCT class from .juneau-view-action-outcome: a running job and a settled outcome are never the same visual
  * state.  The row it sits in carries `data-juneau-job` (never `data-juneau-inflight`), so table polling keeps
- * running for the whole job (HIGH-9).
+ * running for the whole job.
  */
 .juneau-view-job-progress {
 	margin-top: 0.35em;
@@ -2833,10 +2895,10 @@ input[type="checkbox"].jc-editable-field-input {
 	display: none;
 	pointer-events: none;
 	padding: 0.4em 0.65em;
-	border: 1px solid #ccc;
+	border: 1px solid var(--jc-popover-border, #ccc);
 	border-radius: 4px;
-	background: #fff;
-	color: #222;
+	background: var(--jc-tip-bg, #fff);
+	color: var(--jc-tip-text, #222);
 	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
 	font-size: var(--jc-chrome-font-size-2);
 	line-height: 1.4;
@@ -2929,7 +2991,7 @@ input[type="checkbox"].jc-editable-field-input {
 	border: 1px solid var(--jc-popover-border);
 	border-radius: 4px;
 	background: var(--jc-popover-bg);
-	color: #222;
+	color: var(--jc-tip-text, #222);
 	box-shadow: var(--jc-popover-shadow);
 	font-size: var(--jc-chrome-font-size-2);
 	line-height: 1.4;
@@ -2948,7 +3010,7 @@ input[type="checkbox"].jc-editable-field-input {
 
 .jc-cell-popover-label {
 	flex: 0 0 7em;
-	color: #555;
+	color: var(--jc-label-text, #555);
 }
 
 .jc-cell-popover-value {
@@ -3008,7 +3070,7 @@ input[type="checkbox"].jc-editable-field-input {
 
 .juneau-view-card-status {
 	font-size: var(--jc-chrome-font-size-1);
-	color: #555;
+	color: var(--jc-label-text, #555);
 	padding: 0.05em 0.4em;
 	border-radius: 3px;
 }
@@ -3070,7 +3132,7 @@ input[type="checkbox"].jc-editable-field-input {
 
 .juneau-view-card-field dt {
 	font-size: var(--jc-chrome-font-size-1);
-	color: #555;
+	color: var(--jc-label-text, #555);
 	margin: 0;
 }
 
@@ -3081,197 +3143,9 @@ input[type="checkbox"].jc-editable-field-input {
 }
 
 /*
- * Console output (juneau-console-output.js).
- *
- * A live-tailing log pane.  The surface reuses the .juneau-code font stack and the popover tokens; every colour is a
- * --jc-tone-* or --jc-text-muted reference, so a host that loads only this file still gets coloured styles.
- * Marker modes are root classes (juneau-co-markers-dim|hide|show).  The [hidden] override is the last rule on
- * purpose: several controls below set an explicit display and are toggled with the hidden attribute.
+ * Run view shared fragments (juneau-run-view.js, and hosts that draw status blocks): the .juneau-co-block swatch and
+ * fills, the tooltip and the screen-reader-only text.  Every colour is a --jc-tone-* or --jc-text-muted reference.
  */
-.juneau-co {
-	/* Muted text that keeps 4.5:1 on the popover background (--jc-text-muted alone is a little lighter). */
-	--juneau-co-muted: #5f5f5f;
-	font-family: ui-monospace, SFMono-Regular, Consolas, "Liberation Mono", Menlo, monospace;
-	font-size: var(--jc-chrome-font-size-2);
-	line-height: 1.4;
-	background: var(--jc-popover-bg);
-	border: 1px solid var(--jc-popover-border);
-	border-radius: 4px;
-	position: relative;
-	min-width: 0;
-}
-
-.juneau-co-header {
-	display: flex;
-	flex-wrap: wrap;
-	align-items: center;
-	gap: var(--jc-space-2);
-	padding: var(--jc-space-1) var(--jc-space-2);
-	border-bottom: 1px solid var(--jc-popover-border);
-	font-family: inherit;
-}
-
-.juneau-co-title {
-	font-weight: 600;
-	margin-right: auto;
-}
-
-.juneau-co-state-label,
-.juneau-co-elapsed {
-	color: var(--jc-text-muted, #6b6b6b);
-}
-
-.juneau-co-state {
-	color: inherit;
-	font-weight: 600;
-}
-
-.juneau-co-markers,
-.juneau-co-more {
-	font: inherit;
-	color: var(--jc-chrome-control-text);
-	background: transparent;
-	border: var(--jc-chrome-button-border);
-	border-radius: var(--jc-chrome-control-radius);
-	padding: 0 var(--jc-space-2);
-	cursor: pointer;
-}
-
-.juneau-co-markers[aria-pressed="true"] {
-	font-weight: 600;
-}
-
-.juneau-co-download {
-	color: var(--jc-tone-info);
-}
-
-.juneau-co-menu {
-	position: absolute;
-	right: var(--jc-space-2);
-	z-index: var(--jc-popover-z);
-	display: flex;
-	flex-direction: column;
-	gap: var(--jc-space-1);
-	padding: var(--jc-space-2);
-	background: var(--jc-popover-bg);
-	border: 1px solid var(--jc-popover-border);
-	border-radius: var(--jc-chrome-control-radius);
-}
-
-/* Height is rows x line-height plus the vertical padding; 1.4em is the fallback where lh is unsupported. */
-.juneau-co-pane {
-	height: calc(var(--juneau-co-rows, 20) * 1.4em + 2 * var(--jc-space-1));
-	height: calc(var(--juneau-co-rows, 20) * 1lh + 2 * var(--jc-space-1));
-	overflow-y: auto;
-	resize: vertical;
-	padding: var(--jc-space-1) 0;
-	box-sizing: border-box;
-}
-
-.juneau-co-pane:focus-visible {
-	outline: 2px solid var(--jc-tone-info);
-	outline-offset: -2px;
-}
-
-/* The top-of-pane "Load earlier lines" control or the "Earlier lines not shown" notice. */
-.juneau-co-control {
-	position: sticky;
-	top: 0;
-	z-index: 1;
-	color: var(--jc-text-muted, #6b6b6b);
-	background: var(--jc-popover-bg);
-	border-bottom: 1px solid var(--jc-popover-border);
-	padding: 0 var(--jc-space-2);
-}
-
-.juneau-co-earlier {
-	font: inherit;
-	color: inherit;
-	background: transparent;
-	border: 0;
-	padding: 0;
-	cursor: pointer;
-	text-decoration: underline;
-}
-
-.juneau-co-earlier:disabled {
-	cursor: default;
-	text-decoration: none;
-}
-
-.juneau-co-earlier-download {
-	color: var(--jc-tone-info);
-}
-
-/* One row.  The transparent left border is reserved so the target highlight does not shift the text. */
-.juneau-co-line {
-	display: flex;
-	align-items: flex-start;
-	gap: var(--jc-space-2);
-	padding: 0 var(--jc-space-2);
-	border-left: 3px solid transparent;
-}
-
-.juneau-co-gutter {
-	flex: 0 0 auto;
-	min-width: 3em;
-	text-align: right;
-	color: var(--jc-text-muted, #6b6b6b);
-	text-decoration: none;
-	user-select: none;
-}
-
-.juneau-co-gutter:hover,
-.juneau-co-gutter:focus-visible {
-	text-decoration: underline;
-}
-
-.juneau-co-time {
-	flex: 0 0 auto;
-	color: var(--jc-text-muted, #6b6b6b);
-	user-select: none;
-}
-
-.juneau-co-icon {
-	flex: 0 0 auto;
-	width: var(--jc-chrome-glyph-size-small);
-	height: var(--jc-chrome-glyph-size-small);
-	margin-top: 0.2em;
-	fill: currentColor;
-}
-
-.juneau-co-text {
-	flex: 1 1 auto;
-	min-width: 0;
-	white-space: pre-wrap;
-	overflow-wrap: anywhere;
-}
-
-.juneau-co-b {
-	font-weight: 600;
-}
-
-/* Style -> token map (spec 6.2).  A validated author colour is set inline through the CSSOM and wins. */
-.juneau-co-s-success {
-	color: var(--jc-tone-success);
-}
-
-.juneau-co-s-warn {
-	color: var(--jc-tone-warning);
-}
-
-.juneau-co-s-error {
-	color: var(--jc-tone-error);
-}
-
-.juneau-co-s-muted {
-	color: var(--juneau-co-muted);
-}
-
-.juneau-co-s-accent {
-	color: var(--jc-tone-info);
-}
-
 /* Block fragments: a small swatch, optionally a link or a tooltip target. */
 .juneau-co-block {
 	display: inline-block;
@@ -3306,54 +3180,11 @@ input[type="checkbox"].jc-editable-field-input {
 }
 
 .juneau-co-fill-muted {
-	background-color: var(--juneau-co-muted);
+	background-color: var(--jc-text-muted);
 }
 
 .juneau-co-fill-accent {
 	background-color: var(--jc-tone-info);
-}
-
-/* Images reserve space before they load, so following stays pinned (the load handler re-pins as well). */
-.juneau-co-image {
-	display: block;
-	max-width: 100%;
-	min-height: 4em;
-	object-fit: contain;
-	margin: var(--jc-space-1) 0;
-}
-
-/* Hash target / scrollToLine highlight: a border as well as a tint, so it does not rely on colour alone. */
-.juneau-co-target {
-	border-left-color: var(--jc-tone-info);
-	background: var(--jc-tip-bg);
-}
-
-/* Marker modes.  dim uses the muted colour with no opacity, so it keeps the 4.5:1 contrast floor. */
-.juneau-co-markers-dim .juneau-co-marker {
-	color: var(--juneau-co-muted);
-}
-
-.juneau-co-markers-hide .juneau-co-marker {
-	display: none;
-}
-
-.juneau-co-markers-hide .juneau-co-marker.juneau-co-reveal {
-	display: flex;
-}
-
-.juneau-co-jump {
-	position: absolute;
-	right: var(--jc-space-4);
-	bottom: var(--jc-space-2);
-	z-index: 2;
-	font: inherit;
-	color: var(--jc-chrome-control-text);
-	background: var(--jc-tip-bg);
-	border: var(--jc-chrome-button-border);
-	border-radius: var(--jc-chrome-control-radius);
-	box-shadow: var(--jc-tip-shadow);
-	padding: var(--jc-space-1) var(--jc-space-2);
-	cursor: pointer;
 }
 
 .juneau-co-tooltip {
@@ -3378,33 +3209,6 @@ input[type="checkbox"].jc-editable-field-input {
 	overflow: hidden;
 	clip-path: inset(50%);
 	white-space: nowrap;
-}
-
-/* Compact (inside a Detail View): one inline header line, no title, one font step down. */
-.juneau-co-compact {
-	font-size: var(--jc-chrome-font-size-1);
-}
-
-.juneau-co-compact .juneau-co-title {
-	display: none;
-}
-
-.juneau-co-compact .juneau-co-header {
-	flex-wrap: nowrap;
-	padding: 0 var(--jc-space-2);
-}
-
-.juneau-co-compact .juneau-co-more {
-	margin-left: auto;
-}
-
-.juneau-co-open .juneau-co-text::after {
-	content: "\00258D";
-	color: var(--juneau-co-muted);
-}
-
-.juneau-co [hidden] {
-	display: none !important;
 }
 
 /*

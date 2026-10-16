@@ -553,7 +553,7 @@ public class ReactiveResponseProcessor implements ResponseProcessor {
 				// PrintWriter (which writer extends) never lets an IOException from the underlying stream escape —
 				// it swallows it and only records it via checkError(). Without this check, a broken/closed client
 				// connection is silently absorbed here and the pump keeps "succeeding" forever instead of detecting
-				// the write failure and cleaning up (see SEP-2243 P4/P5 dead-client-cleanup path).
+				// the write failure and cleaning up (the dead-client cleanup path, see SEP-2243).
 				if (writer.checkError())
 					throw new IOException("Write failed: the client connection is no longer writable.");
 				res.flushBuffer();

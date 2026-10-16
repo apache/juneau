@@ -79,6 +79,9 @@ screen. `full` (the default) prints raw output as before; `none` draws nothing. 
 | `JUNEAU_RUN_LIVE=0` | Plain view: each row printed once, when it ends. Also used when stdout isn't a terminal or `TERM=dumb`. |
 | `NO_COLOR` | The live view without colour. |
 | `JUNEAU_RUN_LABEL_WIDTH` | Minimum width of the row labels (default 10). A parent sets it for a nested script so the rows line up. |
+| `JUNEAU_RUN_HISTORY=0` | Turns off recording and estimating run history (default on). Without history the view shows no percent, time estimates or Overall line. |
+| `JUNEAU_RUN_HISTORY_DIR` | Replaces `~/.cache/juneau-run/history`, where per-repository run history is kept. The tests point it at a temp dir. |
+| `JUNEAU_RUN_PYTEST_PLUGIN=0` | Skips injecting `-p juneau_run_pytest` into pytest runs (the plugin that reports test progress). The suite under test gets only the plugin-only `pytest_plugin/` directory (in the zip, `<zip>/pytest_plugin`) on `PYTHONPATH`, never the engine or toolkit. |
 
 With `RUN_MARKERS=1` stdout carries the run-protocol markers, so no view is drawn there; the condensed log still gets
 the rows.
@@ -203,10 +206,13 @@ The `load_juneau_run` snippet above still works for a single-file adopter that n
 - `push.py --test-only` runs the build and test gates only (no identity check, commit, push or docs follow-up). It
   is not the same flag as `test.py --test-only`, which means "tests without the build".
 - Under a console view, `push.py` runs `git commit` and `git push` with `tty=True`, so ssh and gpg can prompt.
-- `push.py`'s timing report flags a module only when it is both `JUNEAU_PUSH_TIMING_THRESHOLD` (default `0.20`)
-  and `JUNEAU_PUSH_TIMING_MIN_SECONDS` (default `5`) slower than its median. The full table goes to
-  `~/.cache/juneau-push-timings/<branch>.txt`. On a first run the Timing row says "no timing history yet" and no
-  table is written.
+- `push.py`'s timing report reads the repo's run history: the `tests` records `test.py` writes to
+  `~/.cache/juneau-run/history/<repo>-<sha8>/test.jsonl`, where `<repo>-<sha8>` is the repo key (the basename and
+  the first 8 hex digits of the SHA-1 of its git common dir), so every branch and linked worktree of the repo shares
+  it. It flags a module only when it is both `JUNEAU_PUSH_TIMING_THRESHOLD` (default `0.20`) and
+  `JUNEAU_PUSH_TIMING_MIN_SECONDS` (default `5`) slower than its median. The full table goes to `test-timings.txt`
+  beside `test.jsonl`. With no records yet the Timing row says "no timing history yet" and no table is written; with
+  `JUNEAU_RUN_HISTORY=0` it says the run history is off.
 - `release.py` always writes its full log to `~/.juneau-release-logs/<release>-<YYYYMMDD-HHMMSS>.log`, whatever the
   console mode. Its Maven commands run with `-B` under a PTY (for gpg), and `run_git_diff` pages the
   `release:prepare` diff through `$PAGER` before `release:perform`. Quit the pager with `q`; `release:perform`

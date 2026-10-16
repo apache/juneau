@@ -105,7 +105,7 @@ class McpProtectedResourceMetadataClient_Test extends TestBase {
 	}
 
 	// -----------------------------------------------------------------------------------------------------------------
-	// B: fetch
+	// Fetch
 	// -----------------------------------------------------------------------------------------------------------------
 
 	@Test void b01_fetchHappy() {
@@ -147,7 +147,7 @@ class McpProtectedResourceMetadataClient_Test extends TestBase {
 	}
 
 	@Test void c04_resourceMismatchRejected() {
-		// B1 (RFC 9728 3.3): the PRM document's resource field must match the resource the client was talking to.
+		// The PRM document's resource field must match the resource the client was talking to.
 		var client = McpProtectedResourceMetadataClient.create()
 			.expectedResource(URI.create("https://different.example.com")).build();
 		var json = prmJson();
@@ -156,7 +156,7 @@ class McpProtectedResourceMetadataClient_Test extends TestBase {
 	}
 
 	@Test void c05_resourceMatchAccepted() {
-		// B1 positive: a matching resource identity passes.
+		// A matching resource identity passes.
 		var client = McpProtectedResourceMetadataClient.create()
 			.expectedResource(URI.create(base())).build();
 		var prm = client.parse(prmJson(), null);
@@ -164,7 +164,7 @@ class McpProtectedResourceMetadataClient_Test extends TestBase {
 	}
 
 	@Test void c06_discoverViaRfc8414Only() {
-		// H4: with only the RFC 8414 oauth-authorization-server endpoint available (no OIDC openid-configuration),
+		// With only the RFC 8414 oauth-authorization-server endpoint available (no OIDC openid-configuration),
 		// discovery must still succeed via the AuthorizationServerMetadata path.
 		server.removeContext("/.well-known/openid-configuration");
 		server.createContext("/.well-known/oauth-authorization-server", ex -> respond(ex, oidcMetadataJson()));
@@ -176,11 +176,11 @@ class McpProtectedResourceMetadataClient_Test extends TestBase {
 	}
 
 	// -----------------------------------------------------------------------------------------------------------------
-	// D: https scheme enforcement (M8)
+	// Https scheme enforcement
 	// -----------------------------------------------------------------------------------------------------------------
 
 	@Test void d01_insecureNonLoopbackPrmUrlRejected() {
-		// M8: a non-loopback plain-http PRM URL is rejected before any network I/O.
+		// A non-loopback plain-http PRM URL is rejected before any network I/O.
 		var client = McpProtectedResourceMetadataClient.create().build();
 		var url = URI.create("http://example.com/.well-known/oauth-protected-resource");
 		var e = assertThrows(McpAuthException.class, () -> client.fetch(url));
@@ -188,7 +188,7 @@ class McpProtectedResourceMetadataClient_Test extends TestBase {
 	}
 
 	@Test void d02_allowInsecureHttpOptOut() {
-		// M8: the opt-out disables the scheme check (loopback http already works; this asserts the flag path builds
+		// The opt-out disables the scheme check (loopback http already works; this asserts the flag path builds
 		// and fetches over the loopback stub).
 		var prm = McpProtectedResourceMetadataClient.create().allowInsecureHttp(true).build()
 			.fetch(URI.create(base() + "/.well-known/oauth-protected-resource"));
@@ -196,7 +196,7 @@ class McpProtectedResourceMetadataClient_Test extends TestBase {
 	}
 
 	// -----------------------------------------------------------------------------------------------------------------
-	// E: builder options, unreachable endpoints, extras, and loopback detection
+	// Builder options, unreachable endpoints, extras, and loopback detection
 	// -----------------------------------------------------------------------------------------------------------------
 
 	private static int closedLoopbackPort() throws IOException {

@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 /**
- * Server half of the console message bus (spec §11).
+ * Server half of the console message bus.
  *
  * <p>
  * A {@link ServerBus} holds retained topic values and the sessions that bridge them

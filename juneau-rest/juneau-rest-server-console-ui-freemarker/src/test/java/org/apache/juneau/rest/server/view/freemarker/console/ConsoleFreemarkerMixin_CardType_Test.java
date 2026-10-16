@@ -40,8 +40,8 @@ class ConsoleFreemarkerMixin_CardType_Test extends TestBase {
 		assertThrows(IllegalArgumentException.class, () -> b.cardType(new Named("kpi")));
 	}
 
-	@Test void a04_consoleOutputIsRegisteredInStandard() {
-		assertTrue(CardTypeRegistry.standard().handler("console-output") instanceof ConsoleOutputCardType);
+	@Test void a04_terminalIsRegisteredInStandard() {
+		assertTrue(CardTypeRegistry.standard().handler("terminal") instanceof TerminalCardType);
 	}
 
 	private static final class Named implements CardTypeHandler {

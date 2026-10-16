@@ -30,7 +30,7 @@ import org.junit.jupiter.api.*;
 
 /**
  * Free markup in a {@code <@page>} body becomes ordered {@code jc-seg-N} bare html cards between the authored cards
- * (spec §4.2), and {@code <@card>} without {@code id=} gets {@code jc-card-N} (P17).
+ *, and {@code <@card>} without {@code id=} gets {@code jc-card-N}.
  *
  * @since 10.0.0
  */

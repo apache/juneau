@@ -254,7 +254,7 @@ class HttpPartList_Test extends TestBase {
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
-	// Unmodifiable (D4 collection-mutator-override variant)
+	// Unmodifiable (collection-mutator-override variant)
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Test void f01_unmodifiable_isUnmodifiable() {
@@ -265,7 +265,7 @@ class HttpPartList_Test extends TestBase {
 
 	@Test void f02_unmodifiable_idempotent() {
 		var u = HttpPartList.create().append("a", "1").unmodifiable();
-		assertSame(u, u.unmodifiable()); // D1: already unmodifiable -> returned as-is.
+		assertSame(u, u.unmodifiable()); // Already unmodifiable -> returned as-is.
 	}
 
 	@Test void f03_unmodifiable_readsStillWork() {
@@ -343,7 +343,7 @@ class HttpPartList_Test extends TestBase {
 	@Test void f07_unmodifiable_contentEquality() {
 		var x = HttpPartList.create().append("a", "1").append("b", "2");
 		var u = x.unmodifiable();
-		// D3 content-only equality: a modifiable list equals its frozen snapshot (and vice versa).
+		// Content-only equality: a modifiable list equals its frozen snapshot (and vice versa).
 		assertEquals(x, u);
 		assertEquals(u, x);
 		assertEquals(x.hashCode(), u.hashCode());

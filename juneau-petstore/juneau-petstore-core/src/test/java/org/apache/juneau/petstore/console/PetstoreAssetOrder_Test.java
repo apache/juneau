@@ -72,7 +72,7 @@ class PetstoreAssetOrder_Test extends TestBase {
 			return VENDOR;
 		if (href.contains("/juneau-views.css"))
 			return VIEWS_BASE;
-		if (href.contains("/juneau-datatables.css") || href.contains("/juneau-widgets") || href.contains("/juneau-calendar.css") || href.contains("/juneau-config.css"))
+		if (href.contains("/juneau-datatables.css") || href.contains("/juneau-widgets") || href.contains("/juneau-calendar.css") || href.contains("/juneau-config.css") || href.contains("/juneau-terminal.css"))
 			return WIDGET;
 		throw new AssertionError("Unclassified stylesheet - the band doesn't name this asset: " + href);
 	}
@@ -131,6 +131,20 @@ class PetstoreAssetOrder_Test extends TestBase {
 			Map.of("/juneau-console.js", 1, "/juneau-views.js", 2, "/juneau-regions.js", 3, "/juneau-helpers.js", 4));
 		assertSize(4, hits);
 		assertBandOrder(hits, "P1 script order (console, views, regions, helpers)");
+	}
+
+	/** The head carries the scheme script first, then the chrome, the dark layer, the palette and the page-local style. */
+	@Test void a04_headOrderSchemeFirst() throws Exception {
+		var html = page(client(), "/console/dev/themes?theme=custom");
+		var script = html.indexOf("juneau-console:scheme");
+		var chrome = html.indexOf("/juneau-console/chrome.css");
+		var dark = html.indexOf("/juneau-console/themes/juneau-theme-dark.css");
+		var palette = html.indexOf("/juneau-console/themes/juneau-theme-light-brown.css");
+		var style = html.indexOf("<style");
+		assertTrue(script >= 0 && chrome >= 0 && dark >= 0 && palette >= 0 && style >= 0,
+			() -> "missing head piece: script=" + script + " chrome=" + chrome + " dark=" + dark + " palette=" + palette + " style=" + style);
+		assertTrue(script < chrome && chrome < dark && dark < palette && palette < style,
+			() -> "head order must be script, chrome, dark, palette, style: " + script + "," + chrome + "," + dark + "," + palette + "," + style);
 	}
 
 	@Test void b01_syntheticCssBandViolation_isCaught() {

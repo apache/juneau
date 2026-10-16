@@ -41,7 +41,7 @@ import org.junit.jupiter.api.condition.*;
  * <h5 class='section'>Why this exists (beyond the always-on source-shape test):</h5>
  * <p>
  * {@link ViewsJs_AsyncJobs_Test} proves the shipped script <i>contains</i> the async/streaming logic; it cannot
- * prove that at runtime a running job leaves table polling live (the load-bearing HIGH-9 fact), that progress and the
+ * prove that at runtime a running job leaves table polling live (the load-bearing polling fact), that progress and the
  * terminal outcome actually paint, or that a stream error degrades to a visible unknown.  This canary drives the real
  * runtime in Chromium against a controllable fake {@code EventSource}, so those user-visible facts are measured
  * rather than inferred.
@@ -136,15 +136,16 @@ class AsyncJob_BrowserTest extends TestBase {
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
-	// b) HIGH-9: a running job uses the DISTINCT marker and does NOT freeze the table's polling
+	// b) a running job uses the DISTINCT marker and does NOT freeze the table's polling
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Test void b01_runningJobUsesDistinctMarker_andDoesNotFreezePolling() {
 		var r = sub("running");
 		assertEquals(Boolean.TRUE, r.get("hasJobMarker"), () -> "row did not pick up data-juneau-job: " + report);
-		// The whole point of HIGH-9: a job must NOT set the synchronous in-flight marker that freezes polling.
+		// The whole point of the distinct marker: a job must NOT set the synchronous in-flight marker that freezes
+		// polling.
 		assertEquals(Boolean.FALSE, r.get("hasInflightMarker"), () -> "job wrongly set data-juneau-inflight: " + report);
-		assertEquals(Boolean.FALSE, r.get("pollingFrozen"), () -> "polling was frozen during the job (HIGH-9 violation): " + report);
+		assertEquals(Boolean.FALSE, r.get("pollingFrozen"), () -> "polling was frozen during the job: " + report);
 		assertEquals(Boolean.TRUE, r.get("progressVisible"), () -> "job progress banner not visible: " + report);
 		assertEquals("Working\u2026", r.get("progressText"), () -> report.toString());
 		assertEquals(Boolean.TRUE, r.get("triggerDisabled"), () -> "trigger not disabled while job runs: " + report);
@@ -178,7 +179,7 @@ class AsyncJob_BrowserTest extends TestBase {
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
-	// d) Cancel issues a fail-closed CSRF POST; the SERVER-authoritative terminal outcome arrives over SSE (Q4)
+	// d) Cancel issues a fail-closed CSRF POST; the SERVER-authoritative terminal outcome arrives over SSE
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Test void d01_cancelIssuesFailClosedCsrfPost() {
@@ -200,7 +201,7 @@ class AsyncJob_BrowserTest extends TestBase {
 	}
 
 	@Test void d03_cancelledAfterEffectIsADistinctOutcome() {
-		// Q4: cancelled-after-effect must NOT be collapsed into plain cancelled - it is its own rendered outcome.
+		// cancelled-after-effect must NOT be collapsed into plain cancelled - it is its own rendered outcome.
 		var o = sub("cancelledAfterEffect");
 		assertEquals("cancelled-after-effect", o.get("state"), () -> report.toString());
 		assertEquals(Boolean.TRUE, o.get("visible"), () -> "cancelled-after-effect banner not visible: " + report);

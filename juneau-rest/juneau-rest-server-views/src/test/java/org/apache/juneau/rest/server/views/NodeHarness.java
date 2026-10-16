@@ -47,7 +47,15 @@ final class NodeHarness {
 	 * returns its parsed report, or {@code null} when it cannot run on this machine.
 	 */
 	static Map<?,?> report(String harnessName, String...resources) {
-		var key = harnessName + Arrays.toString(resources);
+		return report(Map.of(), harnessName, resources);
+	}
+
+	/**
+	 * As {@link #report(String, String...)}, with extra environment variables for the node process (for example
+	 * {@code LC_ALL} and {@code TZ}, which the chart fn outputs depend on).
+	 */
+	static Map<?,?> report(Map<String,String> env, String harnessName, String...resources) {
+		var key = harnessName + Arrays.toString(resources) + new TreeMap<>(env);
 		if (UNAVAILABLE.contains(key))
 			return null;
 		var cached = CACHE.get(key);
@@ -59,7 +67,7 @@ final class NodeHarness {
 				UNAVAILABLE.add(key);
 				return null;
 			}
-			var report = Json.to(run(harness, harnessName, resources), Map.class);
+			var report = Json.to(run(harness, harnessName, env, resources), Map.class);
 			CACHE.put(key, report);
 			return report;
 		} catch (Exception e) {
@@ -67,7 +75,7 @@ final class NodeHarness {
 		}
 	}
 
-	private static String run(Path harness, String harnessName, String[] resources) throws Exception {
+	private static String run(Path harness, String harnessName, Map<String,String> env, String[] resources) throws Exception {
 		var temps = new ArrayList<Path>();
 		var stdout = Files.createTempFile("node-harness-stdout-", ".json");
 		var stderr = Files.createTempFile("node-harness-stderr-", ".txt");
@@ -82,7 +90,9 @@ final class NodeHarness {
 				}
 				args.add(f.toString());
 			}
-			var p = new ProcessBuilder(args).redirectOutput(stdout.toFile()).redirectError(stderr.toFile()).start();
+			var pb = new ProcessBuilder(args).redirectOutput(stdout.toFile()).redirectError(stderr.toFile());
+			pb.environment().putAll(env);
+			var p = pb.start();
 			if (!p.waitFor(60, TimeUnit.SECONDS)) {
 				p.destroyForcibly();
 				fail(harnessName + " did not finish within 60s; stderr:\n" + quietRead(stderr));

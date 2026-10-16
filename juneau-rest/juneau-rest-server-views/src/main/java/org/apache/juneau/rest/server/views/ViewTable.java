@@ -202,7 +202,7 @@ public class ViewTable {
 	 * Marker attribute on the nested-table wrapper {@code <div>} (value {@code "1"}).
 	 *
 	 * <p>
-	 * Nested-table seeding inside a row-detail panel is deferred (F24); this marker remains so a later host can
+	 * Nested-table seeding inside a row-detail panel is deferred; this marker remains so a later host can
 	 * skip auto-init of a nested {@code data-juneau-view} table until its pane is visible.
 	 */
 	public static final String NESTED_ATTR = "data-juneau-nested";

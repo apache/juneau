@@ -53,10 +53,16 @@ class PublicTypes_Javadoc_Test {
 	private static final String VIEWS = "juneau-rest/juneau-rest-server-views/src/main/java/org/apache/juneau/rest/server/views/";
 	private static final String CUIF = "juneau-rest/juneau-rest-server-console-ui-freemarker/src/main/java/org/apache/juneau/rest/server/view/freemarker/console/";
 
+	private static final String CD = "juneau-rest/juneau-rest-server-console-ui/src/main/java/org/apache/juneau/rest/server/console/data/";
+
 	private static final List<String> NEW_PUBLIC_TYPE_FILES = List.of(
 		VIEWS + "RibbonItem.java", VIEWS + "RowDetail.java", VIEWS + "QuickStat.java", VIEWS + "TableSpec.java",
 		CUIF + "PageSpec.java", CUIF + "BadgeDirectiveModel.java", CUIF + "FactsDirectiveModel.java",
-		CUIF + "ChartCardType.java", CUIF + "ChartDef.java", CUIF + "JobLogCardType.java");
+		CUIF + "ChartCardType.java", CUIF + "ChartDef.java", CUIF + "JobLogCardType.java",
+		CUIF + "Decorator.java", CUIF + "Fn.java", CUIF + "Markers.java", CUIF + "Bands.java", CUIF + "Thresholds.java", CUIF + "Annotations.java",
+		CUIF + "DataSourceDef.java", CUIF + "Derived.java", CD + "SeriesSource.java", CD + "SeriesAggregator.java",
+		CUIF + "Section.java", CUIF + "RangeSection.java", CUIF + "SearchSection.java", CUIF + "ChoiceSection.java",
+		CUIF + "CardSection.java", CUIF + "Rail.java", CUIF + "PersistSpec.java", CUIF + "DashboardSpec.java");
 
 	private static void assertHasExampleBlock(Path file) throws IOException {
 		assertTrue(Files.exists(file), () -> "Missing file, update NEW_PUBLIC_TYPE_FILES: '" + file + "'.");
@@ -64,6 +70,10 @@ class PublicTypes_Javadoc_Test {
 		var typeIdx = text.indexOf("public final class");
 		if (typeIdx < 0)
 			typeIdx = text.indexOf("public class");
+		if (typeIdx < 0)
+			typeIdx = text.indexOf("public interface");
+		if (typeIdx < 0)
+			typeIdx = text.indexOf("public abstract class");
 		assertTrue(typeIdx >= 0, () -> "No public type declaration found in '" + file + "'.");
 		var javadoc = text.substring(0, typeIdx);
 		assertTrue(javadoc.contains("<h5 class='section'>Example:</h5>"),

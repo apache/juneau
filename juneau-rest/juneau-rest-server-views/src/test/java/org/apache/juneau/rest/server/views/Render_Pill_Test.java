@@ -95,7 +95,7 @@ class Render_Pill_Test extends TestBase {
 	}
 
 	/**
-	 * Task 15 companion pin: the {@code pill} block of the shipped {@code juneau-renders.js} must carry NO hardcoded
+	 * Companion pin: the {@code pill} block of the shipped {@code juneau-renders.js} must carry NO hardcoded
 	 * hex colour.  A pill chip's colour comes exclusively from the console-ui {@code --jc-pill-*} palette classes
 	 * (via {@code chrome.css}); the renderer only stamps the palette classes, never a literal colour.  This is the
 	 * source-scan pin; the shipped renderer must never stamp a literal colour.

@@ -26,9 +26,9 @@ import org.apache.juneau.rest.server.*;
 import org.junit.jupiter.api.*;
 
 /**
- * Phase 4 (legacy item 364): {@code RestRequest} convenience logging methods ride the resolved per-operation
+ * {@code RestRequest} convenience logging methods ride the resolved per-operation
  * {@link RichLogger} and therefore auto-carry the active {@link LogContext} onto their emitted records, observable at
- * an <b>ancestor</b> (resource-class-level) capture via the {@code [legacy item 365]} parent-chain propagation.
+ * an <b>ancestor</b> (resource-class-level) capture via the parent-chain propagation.
  *
  * @since 10.0.0
  */
@@ -51,7 +51,7 @@ class RestRequestLogContext_Test {
 	/**
 	 * A convenience call inside a handler, wrapped in a {@code LogContext} scope, emits a per-operation record whose
 	 * attached structured context carries the scope's entry &mdash; observed at the resource-class-level (ancestor)
-	 * capture, proving §6.2's "no new plumbing; rides the existing parent-chain propagation" claim.
+	 * capture, proving no new plumbing is needed: the records ride the existing parent-chain propagation.
 	 */
 	@Test void a01_convenienceMethodRecordCarriesActiveContext_atAncestorCapture() throws Exception {
 		var opName = A_Resource.class.getName() + ".go";

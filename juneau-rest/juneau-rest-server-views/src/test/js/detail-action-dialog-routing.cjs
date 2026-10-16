@@ -154,7 +154,7 @@ function clickAction(fx) {
 	})();
 
 	// --- A form-bearing dialog action: the read-only confirmation GET runs BEFORE any write, and the server- -----
-	// --- minted idempotencyKey it returns rides the eventual submit alongside targetId (HIGH-8) ------------------
+	// --- minted idempotencyKey it returns rides the eventual submit alongside targetId ------------------
 	await (async function () {
 		const action = {
 			id: 'esc2', present: 'dialog', label: 'Escalate', method: 'POST', endpoint: '/rows/42/esc2',   // literal, see note above

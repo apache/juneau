@@ -31,8 +31,8 @@ import org.junit.jupiter.api.*;
 
 /**
  * Unit tests for {@link BasicRestClientDebugFormatter} — the widened, formatter-local header redaction set
- * (with separator folding), status-line/header sanitization against log forging (Phase 2), and the
- * secure-by-default body-dump master gate / renderability / scrubber pipeline (Phase 3).
+ * (with separator folding), status-line/header sanitization against log forging, and the
+ * secure-by-default body-dump master gate / renderability / scrubber pipeline.
  *
  * <p>
  * Exercised end-to-end through a real {@link RestClient} with a stub {@link HttpTransport} (rather than
@@ -101,7 +101,7 @@ class BasicRestClientDebugFormatter_Test extends TestBase {
 	}
 
 	// -----------------------------------------------------------------------------------------
-	// b — widened redaction set + separator folding + CR/LF sanitization (Phase 2)
+	// b — widened redaction set + separator folding + CR/LF sanitization
 	// -----------------------------------------------------------------------------------------
 
 	@Test
@@ -133,7 +133,7 @@ class BasicRestClientDebugFormatter_Test extends TestBase {
 	}
 
 	// -----------------------------------------------------------------------------------------
-	// c — secure-by-default body-dump master gate, renderability, scrubber (Phase 3)
+	// c — secure-by-default body-dump master gate, renderability, scrubber
 	// -----------------------------------------------------------------------------------------
 
 	/**
@@ -180,7 +180,7 @@ class BasicRestClientDebugFormatter_Test extends TestBase {
 	}
 
 	/**
-	 * The direct "{@code d02}-equivalent inversion test" (closes B2). Locks all four RED-proof preconditions:
+	 * The direct "{@code d02}-equivalent inversion test". Locks all four RED-proof preconditions:
 	 * {@code FINEST} capture, a non-empty captured body, the placeholder actually present (not just raw-text
 	 * absent), and every encoded form of the secret absent (catches a broken fix that removes the plaintext dump
 	 * but leaves the pre-existing {@code toSpacedHex} block intact).
@@ -239,9 +239,9 @@ class BasicRestClientDebugFormatter_Test extends TestBase {
 	}
 
 	/**
-	 * Proves the identity-{@code Content-Encoding} check is wired in (S3 in the plan review): gate on + a
+	 * Proves the identity-{@code Content-Encoding} check is wired in: gate on + a
 	 * renderable {@code Content-Type} + a non-identity {@code Content-Encoding} must still suppress. Forgetting
-	 * this check would pass every other Phase 3 test.
+	 * this check would pass every other body-dump test.
 	 */
 	@Test
 	void c04_bodyGateOn_nonIdentityEncoding_placeholder() throws Exception {

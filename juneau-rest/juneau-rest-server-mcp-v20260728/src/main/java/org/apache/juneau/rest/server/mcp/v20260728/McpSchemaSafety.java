@@ -30,8 +30,7 @@ import org.apache.juneau.marshall.marshaller.*;
 import org.apache.juneau.rest.server.mcp.McpSchema;
 
 /**
- * Bounded, no-fetch validation of {@code tools/call} arguments against a tool's declared input schema
- * (Resolution B2).
+ * Bounded, no-fetch validation of {@code tools/call} arguments against a tool's declared input schema.
  *
  * <p>
  * The neutral {@link McpSchema} is an unconstrained JSON object carrier, and a client can send an
@@ -162,7 +161,7 @@ final class McpSchemaSafety {
 
 	/**
 	 * Validates a {@code tools/call} argument object against a tool's declared input schema, subject to the
-	 * B2 bounds.
+	 * configured bounds.
 	 *
 	 * @param schema The tool's neutral input schema, or <jk>null</jk> to skip validation entirely.
 	 * @param args The argument object to validate. Never <jk>null</jk> (an absent argument object is an empty map).

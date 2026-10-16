@@ -17,10 +17,12 @@
 /*
  * Shipped "light-brown" stock theme for the admin-console chrome.
  *
- * GENERATED, drift-guarded: this html:root{} token block is provably identical to Theme.LIGHT_BROWN in
+ * Hand-maintained and drift-guarded: this html:root{} token block must stay identical to Theme.LIGHT_BROWN in
  * juneau-rest-server-console-ui (see StockThemeCss_Test).  It is linked by the FTL <@theme name="light-brown"/>
  * directive AFTER chrome.css, so its tokens win the cascade over chrome.css's baked-in Theme.OPEN block.
- * Do not hand-edit; regenerate from the Theme constant instead.
+ * The @media not print block after it holds the dark accents, and must stay identical to the same
+ * Theme constant's dark tokens; it wins over the shared dark neutral layer when the dark scheme is active.
+ * Edit it together with the Theme constant; StockThemeCss_Test fails the build if the two diverge.
  */
 
 html:root {
@@ -29,12 +31,12 @@ html:root {
 	--jc-header-icon-color: #747474;
 	--jc-accent: #a9772f;
 	--jc-accent-wash: rgba(169,119,47,0.1);
-	--jc-link: #8a5a1a;
+	--jc-link: #754d16;
 	--jc-text: #2e2415;
 	--jc-text-soft: #2e2415cc;
 	--jc-text-muted: #7a6a4f;
 	--jc-border: #d8cbb0;
-	--jc-border-2: #c9b896;
+	--jc-border-2: #977f4e;
 	--jc-card-bg: #ffffff;
 	--jc-chrome-bg: #efe6d4;
 	--jc-white: #ffffff;
@@ -100,10 +102,36 @@ html:root {
 	--jc-space-4: 16px;
 	--jc-space-5: 24px;
 	--jc-space-6: 32px;
-	--jc-focus: #a9772f;
+	--jc-focus: #926729;
 	--jc-accent-selected: #a9772f;
 	--jc-table-stripe-bg: #fafaf9;
 	--jc-main-bg: #f5f6f9;
 	--jc-card-padding: 16px 16px 8px;
 	--jc-chrome-icon: #666666;
+	--jc-chart-1: #1b6ac9;
+	--jc-chart-2: #e07a1f;
+	--jc-chart-3: #2e8540;
+	--jc-chart-4: #9b3fb5;
+	--jc-chart-5: #c23934;
+	--jc-chart-6: #0e8a8a;
+	--jc-chart-7: #7a6a00;
+	--jc-chart-8: #5a5a5a;
+	--jc-chart-bg: transparent;
+	--jc-chart-text: #080707;
+	--jc-chart-axis: #dddbda;
+	--jc-chart-grid: #ececec;
+	--jc-chart-tooltip-bg: #ffffff;
+	--jc-chart-tooltip-text: #080707;
+	--jc-chart-mark: #5a5a5a;
+	--jc-chart-band: rgba(0, 0, 0, 0.06);
+	--jc-chart-heat-low: #e8f1fb;
+	--jc-chart-heat-high: #1b6ac9;
+}
+
+@media not print {
+	html:root[data-jc-scheme="dark"] {
+		--jc-link: #d9a65c;
+		--jc-focus: #a9772f;
+		--jc-accent-wash: rgba(169,119,47,0.25);
+	}
 }

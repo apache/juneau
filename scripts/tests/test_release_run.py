@@ -21,6 +21,7 @@ from __future__ import annotations
 
 import ast
 import importlib.util
+import json
 import os
 import runpy
 import subprocess
@@ -88,6 +89,7 @@ class FakeRun:
         self.tool = lambda cmd: (0, "")
         self.calls = []
         self.rows = []   # (kind, id, label, status, summary) as each row ends
+        self.numbers = []   # (id, n) as each step opens
 
     def of(self, kind):
         return [(args, kwargs) for name, args, kwargs in self.calls if name == kind]
@@ -112,8 +114,28 @@ class FakeRun:
     def warn(self, text):
         self._record("warn", text)
 
-    def session(self, title, header=(), *, detail=None, sinks=None):
+    def session(self, title, header=(), *, detail=None, sinks=None, repo="."):
         self._record("session", title, list(header))
+        self.console = True
+
+    # What juneau_scripts' session, step and prompt ask of juneau_run besides the above.
+    console = False
+
+    def enabled(self):
+        return False
+
+    def console_active(self):
+        return self.console
+
+    def history_start(self, repo=".", history=None):
+        pass
+
+    def Sinks(self):  # noqa: N802 - mirrors juneau_run.Sinks
+        default = not os.environ.get("JUNEAU_RUN_FULL_LOG") and os.environ.get("JUNEAU_RUN_CONSOLE", "full") == "full"
+        return SimpleNamespace(is_default=default)
+
+    def plan(self, ids):
+        self._record("plan", list(ids))
 
     def done(self, status, commit=None):
         self._record("done", status)
@@ -145,14 +167,21 @@ class FakeRun:
             self.rows.append((kind, id, label, s.status, s.summary))
 
     def step(self, id, n, title, *, parent=None, label=None):
+        self.numbers.append((id, n))
         return self._row("step", id, label)
 
     def row(self, id, title, *, label=None):
         return self._row("row", id, label)
 
 
+def install(monkeypatch, fake):
+    """fake as the loaded juneau_run: release.py and juneau_scripts both look it up in sys.modules."""
+    monkeypatch.setitem(sys.modules, "juneau_run", fake)
+    return fake
+
+
 def make(release, monkeypatch, fake, **kwargs):
-    monkeypatch.setattr(release, "run_module", lambda: fake)
+    install(monkeypatch, fake)
     script = release.ReleaseScript(load_env=False, **kwargs)
     script._versions = (JAVA_TEXT, MAVEN_TEXT)   # never probe the real java/mvn
     return script
@@ -251,11 +280,27 @@ def test_yprompt_goes_through_ask_and_defaults_to_yes(release, monkeypatch):
     assert {args[0] for args, _ in fake.of("ask")} == {"Go? (Y/n): "}
 
 
-def test_ask_rc_retries_until_it_gets_a_number(release):
-    fake = FakeRun(answers=["", "two", "3"])
-    assert release.ask_rc(fake, "Release candidate number: ") == 3
+def test_ask_rc_retries_until_it_gets_a_number(release, monkeypatch):
+    fake = install(monkeypatch, FakeRun(answers=["", "two", "3"]))
+    assert release.ask_rc("Release candidate number: ") == 3
     assert [kwargs["level"] for _, kwargs in fake.of("say")] == ["warn", "warn"]
-    assert release.ask_rc(FakeRun(answers=[""]), "Release candidate number [2]: ", "2") == 2
+    install(monkeypatch, FakeRun(answers=[""]))
+    assert release.ask_rc("Release candidate number [2]: ", "2") == 2
+
+
+@pytest.mark.parametrize("ask", [
+    lambda release, script: script.yprompt("Go?"),
+    lambda release, script: script._prompt_with_default("Git branch", "master"),
+    lambda release, script: release.ask_rc("Release candidate number: ", "2"),
+])
+def test_ctrl_d_at_any_prompt_is_a_cancel_never_the_default(release, monkeypatch, ask):
+    class EofRun(FakeRun):
+        def ask(self, prompt):
+            raise EOFError
+
+    script = make(release, monkeypatch, EofRun())
+    with pytest.raises(KeyboardInterrupt):
+        ask(release, script)
 
 
 def test_the_staging_repo_prompt_goes_through_ask(release, monkeypatch, tmp_path):
@@ -274,8 +319,10 @@ def test_the_staging_repo_prompt_goes_through_ask(release, monkeypatch, tmp_path
 def test_the_revert_rc_prompt_goes_through_ask(release, monkeypatch):
     monkeypatch.setenv("X_VERSION", "9.9.9")   # skips the `mvn help:evaluate` probe (:1408)
     fake = FakeRun(answers=["x", "4", "n"])
-    monkeypatch.setattr(release, "run_module", lambda: fake)
-    release.main(["--revert"])
+    install(monkeypatch, fake)
+    with pytest.raises(SystemExit) as exit_info:   # declining the revert is a cancel
+        release.main(["--revert"])
+    assert exit_info.value.code == 130
     assert [args[0] for args, _ in fake.of("ask")] == [
         "Release candidate number: ", "Release candidate number: ",
         "Are you sure you want to revert release juneau-9.9.9-RC4? This will delete the git tag and clean up SVN "
@@ -287,10 +334,9 @@ def test_the_revert_rc_prompt_goes_through_ask(release, monkeypatch):
 # ---- session, full log, --detail -----------------------------------------------------------------------------------
 @pytest.mark.parametrize("body, status, code", [
     (lambda: None, "ok", None),
-    (lambda: "cancelled", "cancelled", None),
     (lambda: sys.exit(1), "fail", 1),
     (lambda: (_ for _ in ()).throw(KeyboardInterrupt()), "cancelled", 130),
-    (lambda: (_ for _ in ()).throw(RuntimeError("boom")), "fail", "raises"),
+    (lambda: (_ for _ in ()).throw(RuntimeError("boom")), "fail", 1),
 ])
 def test_the_session_ends_with_done(release, monkeypatch, body, status, code):
     monkeypatch.setenv("X_RELEASE", RELEASE)
@@ -298,9 +344,6 @@ def test_the_session_ends_with_done(release, monkeypatch, body, status, code):
     script = make(release, monkeypatch, fake)
     if code is None:
         script._in_session("Juneau release", body, [RELEASE])
-    elif code == "raises":
-        with pytest.raises(RuntimeError):
-            script._in_session("Juneau release", body, [RELEASE])
     else:
         with pytest.raises(SystemExit) as exit_info:
             script._in_session("Juneau release", body, [RELEASE])
@@ -312,7 +355,8 @@ def test_the_session_ends_with_done(release, monkeypatch, body, status, code):
     assert log.exists()
     # ok and cancelled final lines carry no log path (juneau_run's format_final), so it is said just before done, at
     # warn: info would hide it at the default detail
-    assert fake.of("say") == ([] if status == "fail" else [((f"full log: {log}",), {"level": "warn"})])
+    said = [call for call in fake.of("say") if call[0][0].startswith("full log")]
+    assert said == ([] if status == "fail" else [((f"full log: {log}",), {"level": "warn"})])
 
 
 def test_ctrl_d_at_a_prompt_is_cancelled_like_ctrl_c(release, monkeypatch):
@@ -364,7 +408,7 @@ def test_the_full_log_is_written_in_every_console_mode(release, monkeypatch, tmp
 
 def test_detail_is_exported_and_an_unknown_level_is_a_usage_error(release, monkeypatch, capsys):
     fake = FakeRun()
-    monkeypatch.setattr(release, "run_module", lambda: fake)
+    install(monkeypatch, fake)
     release.main(["--list-steps", "--detail", "summary"])
     assert fake.of("export_detail") == [(("summary",), {})]
     with pytest.raises(SystemExit) as exit_info:
@@ -376,7 +420,7 @@ def test_detail_is_exported_and_an_unknown_level_is_a_usage_error(release, monke
 def test_run_markers_is_ignored_with_a_warning(release, monkeypatch):
     monkeypatch.setenv("RUN_MARKERS", "1")
     fake = FakeRun()
-    monkeypatch.setattr(release, "run_module", lambda: fake)
+    install(monkeypatch, fake)
     release.main(["--list-steps"])
     assert fake.of("warn") == [(("release.py does not emit run markers; RUN_MARKERS is ignored",), {})]
     assert "RUN_MARKERS" not in os.environ
@@ -401,12 +445,11 @@ def stub_steps(script, monkeypatch, behaviour=None):
     return ran
 
 
-def test_the_steps_are_in_order_with_run_git_diff_after_prepare(release, monkeypatch, capsys):
-    monkeypatch.setattr(release, "run_module", lambda: FakeRun())
+def test_the_steps_are_in_order_with_run_git_diff_after_prepare(release, monkeypatch):
+    fake = install(monkeypatch, FakeRun())
     release.main(["--list-steps"])
-    assert capsys.readouterr().out == ("\nAvailable steps:\n"
-                                       + "".join(f"  {i:2d}. {name}\n" for i, name in enumerate(RELEASE_STEPS, 1))
-                                       + "\n")
+    assert [args[0] for args, _ in fake.of("say")] == [f"{n:>2}. {name:<24} {release.STEP_TITLES[name][1]}"
+                                                       for n, name in enumerate(RELEASE_STEPS, 1)]
 
 
 def test_every_step_runs_in_a_labelled_row(release, monkeypatch):
@@ -425,11 +468,11 @@ def test_every_step_runs_in_a_labelled_row(release, monkeypatch):
 def test_resume_shows_the_finished_steps_as_done_earlier(release, monkeypatch):
     fake = FakeRun()
     script = make(release, monkeypatch, fake, resume=True)
-    script.state.set_last_step("configure_git")
+    script.state.set("last", "configure_git")
     ran = stub_steps(script, monkeypatch)
     script.run()
     assert ran == RELEASE_STEPS[7:]
-    assert fake.rows[:7] == [("row", name, release.STEP_TITLES[name][0], "skip", "(done earlier)")
+    assert fake.rows[:7] == [("step", name, release.STEP_TITLES[name][0], "skip", "(done earlier)")
                              for name in RELEASE_STEPS[:7]]
     assert [row[3] for row in fake.rows[7:]] == ["ok"] * 7
 
@@ -440,7 +483,14 @@ def test_a_skipped_step_is_a_dim_row(release, monkeypatch):
     ran = stub_steps(script, monkeypatch)
     script.run()
     assert "run_deploy" not in ran
-    assert ("row", "run_deploy", "Deploy", "skip", "(skipped)") in fake.rows
+    assert ("step", "run_deploy", "Deploy", "skip", "(skipped)") in fake.rows
+
+
+def hint_lines(fake, name):
+    """Every say or failure line carrying the resume hint for step name, with its kind and level."""
+    hint = f"To resume: python3 scripts/release.py --start-step {name}"
+    return [(kind, kwargs.get("level")) for kind, args, kwargs in fake.calls
+            if kind in ("say", "failure") and hint in args[0]]
 
 
 def test_a_failed_step_shows_the_resume_hint(release, monkeypatch):
@@ -451,10 +501,10 @@ def test_a_failed_step_shows_the_resume_hint(release, monkeypatch):
         script.run()
     assert exit_info.value.code == 1
     assert fake.rows[-1][:4] == ("step", "run_clean_verify", "Verify", "fail")
-    assert [args[0] for args, _ in fake.of("failure")] == [
-        "❌ Command failed (exit 1): mvn",
-        "To resume: python3 scripts/release.py --start-step run_clean_verify"]
+    assert [args[0] for args, _ in fake.of("failure")] == ["❌ Command failed (exit 1): mvn"]
     assert fake.of("done") == [(("fail",), {})]
+    # one hint, at error level, so every detail level (summary included) shows it exactly once
+    assert hint_lines(fake, "run_clean_verify") == [("say", "error")]
 
 
 def test_ctrl_c_in_a_step_is_cancelled_with_the_resume_hint(release, monkeypatch):
@@ -468,8 +518,8 @@ def test_ctrl_c_in_a_step_is_cancelled_with_the_resume_hint(release, monkeypatch
     with pytest.raises(SystemExit) as exit_info:
         script.run()
     assert exit_info.value.code == 130
-    assert fake.of("failure") == [(("Interrupted in run_deploy. To resume: python3 scripts/release.py --start-step "
-                                    "run_deploy",), {"step": "run_deploy"})]
+    assert fake.of("failure") == [(("Interrupted in run_deploy.",), {"step": "run_deploy"})]
+    assert hint_lines(fake, "run_deploy") == [("say", "error")]
     assert fake.of("done") == [(("cancelled",), {})]
 
 
@@ -604,7 +654,7 @@ def test_create_test_workspace_is_gone(release):
 
 
 def test_status_text_goes_through_say_and_show():
-    assert calls_to("print", allowed={"say", "list_steps"}) == []
+    assert calls_to("print") == []
 
 
 def test_revert_is_four_rows_and_skips_what_is_not_there(release, monkeypatch, tmp_path):
@@ -647,10 +697,12 @@ def test_an_unexpected_exception_in_a_step_is_reported_with_the_resume_hint(rele
         raise RuntimeError("boom")
 
     stub_steps(script, monkeypatch, {"run_deploy": boom})
-    with pytest.raises(RuntimeError):
+    with pytest.raises(SystemExit) as exit_info:
         script.run()
-    assert fake.of("failure") == [(("\u274c Error in step run_deploy: boom\nTo resume: python3 scripts/release.py "
-                                    "--start-step run_deploy",), {"step": "run_deploy"})]
+    assert exit_info.value.code == 1
+    assert not [args for args, _ in fake.of("say") if "ERROR" in args[0]]   # reported once, as the failure below
+    assert fake.of("failure") == [(("\u274c Error in step run_deploy: boom",), {"step": "run_deploy"})]
+    assert hint_lines(fake, "run_deploy") == [("say", "error")]
     assert fake.of("done") == [(("fail",), {})]
 
 
@@ -660,7 +712,7 @@ def test_start_step_shows_the_earlier_steps_as_done_earlier(release, monkeypatch
     ran = stub_steps(script, monkeypatch)
     script.run()
     assert ran == RELEASE_STEPS[8:]
-    assert fake.rows[:8] == [("row", name, release.STEP_TITLES[name][0], "skip", "(done earlier)")
+    assert fake.rows[:8] == [("step", name, release.STEP_TITLES[name][0], "skip", "(done earlier)")
                              for name in RELEASE_STEPS[:8]]
 
 
@@ -677,3 +729,187 @@ def test_a_missing_java_or_maven_probes_as_empty(release, monkeypatch, missing):
     java, maven = script._probe_versions()
     assert (java == "") == (missing == "java") and (maven == "") == (missing == "mvn")
     assert script._probe_versions() is script._versions
+
+
+# ---- the toolkit CLI (Registry), checkpoint and session plan --------------------------------------------------------
+def test_resume_after_a_step_starts_at_the_next_and_shows_done_earlier_rows(release, monkeypatch):
+    fake = FakeRun()
+    script = make(release, monkeypatch, fake, resume=True)
+    script.state.set("last", "configure_git")
+    stub_steps(script, monkeypatch)
+    script.run()
+    assert (("Resuming after configure_git: starting at run_clean_verify.",), {"level": "info"}) in fake.of("say")
+    assert [row[4] for row in fake.rows[:7]] == ["(done earlier)"] * 7
+
+
+def test_an_unknown_start_step_is_a_usage_error(release, monkeypatch, capsys):
+    install(monkeypatch, FakeRun())
+    monkeypatch.setattr(release, "ReleaseScript", lambda *a, **k: pytest.fail("no release for a usage error"))
+    with pytest.raises(SystemExit) as exit_info:
+        release.main(["--start-step", "no_such_step"])
+    assert exit_info.value.code == 2
+    assert "invalid choice: 'no_such_step'" in capsys.readouterr().err
+
+
+def test_start_step_and_resume_are_mutually_exclusive(release, monkeypatch, capsys):
+    install(monkeypatch, FakeRun())
+    with pytest.raises(SystemExit) as exit_info:
+        release.main(["--start-step", "run_deploy", "--resume"])
+    assert exit_info.value.code == 2
+    assert "not allowed with argument" in capsys.readouterr().err
+
+
+def test_list_steps_uses_the_registry_format(release, monkeypatch):
+    fake = install(monkeypatch, FakeRun())
+    release.main(["--list-steps"])
+    lines = [args[0] for args, _ in fake.of("say")]
+    assert lines[0] == " 1. check_prerequisites      Checking prerequisites"
+    assert lines[9] == "10. run_release_prepare      Running release:prepare"
+
+
+def test_state_file_keys(release, monkeypatch):
+    assert release.STATE_FILE == Path.home() / ".juneau-release-state.json"
+    script = make(release, monkeypatch, FakeRun())
+    stub_steps(script, monkeypatch, {"check_java_version": lambda: script.fail("old java")})
+    with pytest.raises(SystemExit):
+        script.run()
+    import json
+    assert json.loads(release.STATE_FILE.read_text(encoding="utf-8")) == {"last": "check_prerequisites"}
+
+
+def test_registry_calls_the_method_looked_up_at_run_time(release, monkeypatch):
+    fake = FakeRun()
+    script = make(release, monkeypatch, fake)
+    registry = script.registry()
+    ran = stub_steps(script, monkeypatch)   # after the registry is built
+    assert registry.run(script.selection(), None, show_unselected=True).ok
+    assert ran == RELEASE_STEPS
+
+
+def test_a_step_summary_is_its_row_text(release, monkeypatch):
+    fake = FakeRun()
+    script = make(release, monkeypatch, fake)
+
+    def deploy():
+        script.summary = "deployed"
+
+    stub_steps(script, monkeypatch, {"run_deploy": deploy})
+    script.run()
+    assert ("step", "run_deploy", "Deploy", "ok", "deployed") in fake.rows
+
+
+def test_checkpoint_records_each_finished_step_as_last(release, monkeypatch):
+    script = make(release, monkeypatch, FakeRun())
+    seen = []
+    behaviour = {name: (lambda: seen.append(script.state.last())) for name in RELEASE_STEPS[1:4]}
+    behaviour["run_deploy"] = lambda: script.fail("deploy failed")
+    stub_steps(script, monkeypatch, behaviour)
+    with pytest.raises(SystemExit):
+        script.run()
+    assert seen == RELEASE_STEPS[0:3]
+    assert script.state.last() == "run_clean_verify"
+
+
+def test_a_legacy_last_step_state_file_still_resumes(release, monkeypatch):
+    import json
+    release.STATE_FILE.write_text(json.dumps({"last_step": "configure_git", "X_RELEASE": RELEASE}), encoding="utf-8")
+    fake = FakeRun()
+    script = make(release, monkeypatch, fake, resume=True)
+    ran = stub_steps(script, monkeypatch)
+    script.run()
+    assert ran == RELEASE_STEPS[7:]
+    assert (("Resuming after configure_git: starting at run_clean_verify.",), {"level": "info"}) in fake.of("say")
+
+
+def test_success_clears_the_checkpoint(release, monkeypatch):
+    script = make(release, monkeypatch, FakeRun())
+    script.state.set("X_RELEASE", RELEASE)
+    stub_steps(script, monkeypatch)
+    script.run()
+    assert not release.STATE_FILE.exists()
+
+
+def test_a_corrupt_checkpoint_warns_and_fails(release, monkeypatch):
+    release.STATE_FILE.write_text("{not json", encoding="utf-8")
+    fake = install(monkeypatch, FakeRun())
+    with pytest.raises(SystemExit) as exit_info:
+        release.ReleaseScript(load_env=False)
+    assert exit_info.value.code == 1
+    [(args, kwargs)] = fake.of("say")
+    assert args[0].startswith("Warning: Could not load state file:") and kwargs == {"level": "warn"}
+    assert release.STATE_FILE.read_text(encoding="utf-8") == "{not json"   # never cleared on a guess
+
+
+def test_an_unwritable_checkpoint_during_migration_warns_and_fails(release, monkeypatch):
+    """Migrating a legacy last_step file writes it back; if that write fails it is the corrupt-file path: a warning and
+    exit 1 before the session, with the file left as it was."""
+    release.STATE_FILE.write_text(json.dumps({"last_step": "clone_juneau"}), encoding="utf-8")
+    directory = release.STATE_FILE.parent
+    mode = directory.stat().st_mode
+    directory.chmod(0o500)
+    try:
+        fake = install(monkeypatch, FakeRun())
+        with pytest.raises(SystemExit) as exit_info:
+            release.ReleaseScript(load_env=False)
+    finally:
+        directory.chmod(mode)
+    assert exit_info.value.code == 1
+    [(args, kwargs)] = fake.of("say")
+    assert args[0].startswith("Warning: Could not load state file:") and kwargs == {"level": "warn"}
+    assert json.loads(release.STATE_FILE.read_text(encoding="utf-8")) == {"last_step": "clone_juneau"}
+    assert fake.of("session") == []
+
+
+def test_release_steps_are_numbered_from_one_in_order_even_when_started_later(release, monkeypatch):
+    fake = FakeRun()
+    script = make(release, monkeypatch, fake, start_step="clone_juneau")
+    stub_steps(script, monkeypatch)
+    script.run()
+    assert fake.numbers == [(name, n) for n, name in enumerate(RELEASE_STEPS, 1)]
+
+
+def test_release_session_plan_is_the_selected_steps(release, monkeypatch):
+    fake = FakeRun()
+    script = make(release, monkeypatch, fake, start_step="clone_juneau", skip_steps=["run_deploy"])
+    stub_steps(script, monkeypatch)
+    script.run()
+    assert fake.of("plan") == [(([n for n in RELEASE_STEPS[5:] if n != "run_deploy"],), {})]
+
+
+def test_revert_session_plan_is_its_four_rows(release, monkeypatch, tmp_path):
+    monkeypatch.setenv("X_STAGING", str(tmp_path / "staging"))
+    monkeypatch.setenv("X_VERSION", "9.9.9")
+    monkeypatch.setenv("X_RELEASE", RELEASE)
+    fake = FakeRun(answers=["y"])
+    script = make(release, monkeypatch, fake)
+    script.run_revert()
+    assert fake.of("plan") == [((["revert_pull", "revert_tag", "revert_versions", "revert_svn"],), {})]
+
+
+def test_yprompt_ctrl_d_is_a_cancel_today(release, monkeypatch):
+    monkeypatch.setenv("X_VERSION", "9.9.9")
+
+    class EofRun(FakeRun):
+        def ask(self, prompt):
+            if not self.answers:
+                self._record("ask", prompt)
+                raise EOFError
+            return super().ask(prompt)
+
+    fake = EofRun(answers=["4"])
+    install(monkeypatch, fake)
+    with pytest.raises(SystemExit) as exit_info:
+        release.main(["--revert"])
+    assert exit_info.value.code == 130
+    assert fake.of("ask")[-1][0][0].startswith("Are you sure you want to revert release juneau-9.9.9-RC4?")
+    assert fake.of("run_tool") == []
+    assert fake.of("done") == [(("cancelled",), {})]
+
+
+def test_the_release_session_never_rings_the_bell_or_plays_a_sound(release, monkeypatch):
+    script = make(release, monkeypatch, FakeRun())
+    stub_steps(script, monkeypatch)
+    notify = release.toolkit("notify")
+    monkeypatch.setattr(notify, "bell", lambda **k: pytest.fail("bell"))
+    monkeypatch.setattr(notify, "sound", lambda *a, **k: pytest.fail("sound"))
+    script.run()

@@ -168,7 +168,7 @@ final class OidcTestSupport {
 		/** Extra claims served by {@code /userinfo}. */
 		volatile Map<String,Object> userInfo = new LinkedHashMap<>();
 		/**
-		 * Number of times {@code /token} was invoked.  An order proof for gate 7: a rejected {@code completeLogin}
+		 * Number of times {@code /token} was invoked.  An ordering proof for the expiry ceiling: a rejected {@code completeLogin}
 		 * that never reaches {@code codeFlow().exchange} leaves this at {@code 0}.
 		 */
 		final java.util.concurrent.atomic.AtomicInteger tokenHits = new java.util.concurrent.atomic.AtomicInteger();

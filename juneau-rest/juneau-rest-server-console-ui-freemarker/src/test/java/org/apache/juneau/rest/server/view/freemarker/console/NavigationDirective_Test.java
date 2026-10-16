@@ -106,7 +106,7 @@ class NavigationDirective_Test extends TestBase {
 		// visible=isAdmin with isAdmin=false: Setup and its subtree are not in the contract at all.
 		assertEquals(1, a.contract().getList("nav").size(), () -> body);
 		assertFalse(a.contract().toString().contains("users"), () -> body);
-		// No server-rendered nav and no aria-current: the shell sets it (D2).
+		// No server-rendered nav and no aria-current: the shell sets it.
 		assertFalse(body.contains("juneau-page-nav"), () -> body);
 		assertFalse(body.contains("aria-current"), () -> body);
 	}

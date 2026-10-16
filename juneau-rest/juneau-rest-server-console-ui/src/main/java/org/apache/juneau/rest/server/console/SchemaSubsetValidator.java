@@ -36,7 +36,7 @@ final class SchemaSubsetValidator {
 
 	static final Set<String> KEYWORDS = Set.of("$schema", "$id", "$defs", "$ref", "title", "description", "default",
 		"type", "const", "enum", "required", "properties", "additionalProperties", "propertyNames", "items", "pattern",
-		"minLength", "maxLength", "minItems", "allOf", "anyOf", "oneOf", "not");
+		"minLength", "maxLength", "minItems", "minimum", "allOf", "anyOf", "oneOf", "not");
 
 	private final Map<String,Object> root;
 	private final Map<String,Pattern> patterns = new HashMap<>();
@@ -78,6 +78,12 @@ final class SchemaSubsetValidator {
 				errors.add(path + ": longer than " + num(s, "maxLength"));
 			if (s.containsKey("pattern") && ! pattern((String)s.get("pattern")).matcher(str).find())
 				errors.add(path + ": does not match " + s.get("pattern"));
+		}
+		if (s.containsKey("minimum")) {
+			if (! (s.get("minimum") instanceof Number min))
+				throw new IllegalStateException(path + ": schema 'minimum' must be a number but was " + s.get("minimum"));
+			if (v instanceof Number n && n.doubleValue() < min.doubleValue())
+				errors.add(path + ": less than " + min);
 		}
 		if (v instanceof List<?> list) {
 			if (s.containsKey("minItems") && list.size() < num(s, "minItems"))

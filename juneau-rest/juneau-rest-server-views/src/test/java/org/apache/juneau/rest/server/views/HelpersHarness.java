@@ -32,7 +32,7 @@ import org.apache.juneau.marshall.marshaller.*;
  *
  * <p>
  * Deliberately loads only {@code juneau-renders.js} + {@code juneau-views.js} + {@code juneau-helpers.js} - NO
- * {@code juneau-regions.js}.  Design §9.2 requires every helper to be testable with no region at all, so this
+ * {@code juneau-regions.js}.  Every helper must be testable with no region at all, so this
  * harness is a stronger check of that invariant than one that pulled the region runtime in as well would be.
  */
 final class HelpersHarness {

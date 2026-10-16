@@ -33,7 +33,7 @@ import com.nimbusds.oauth2.sdk.id.*;
 import com.nimbusds.oauth2.sdk.pkce.*;
 
 /**
- * Interactive authorization-code + PKCE (S256) token acquisition for headless / CLI use (F1 Phase B).
+ * Interactive authorization-code + PKCE (S256) token acquisition for headless / CLI use.
  *
  * <p>
  * Builds on the relocated {@link OAuthAuthorizationCodeFlow}: opens a {@link LoopbackRedirectReceiver}, generates the

@@ -208,7 +208,7 @@ public class FreemarkerViewRenderer implements ViewRenderer {
 		return FreemarkerDispatcher.stripBasePath(basePath, resolved);
 	}
 
-	// P8: the exact FreemarkerMixin bean, else a bean of any registered subtype; two different beans fail loud.
+	// The exact FreemarkerMixin bean, else a bean of any registered subtype; two different beans fail loud.
 	private FreemarkerMixin findMixin(WritableBeanStore store) {
 		FreemarkerMixin found = store.getBean(FreemarkerMixin.class).orElse(null);
 		for (var t : FreemarkerMixin.registeredSubtypes()) {

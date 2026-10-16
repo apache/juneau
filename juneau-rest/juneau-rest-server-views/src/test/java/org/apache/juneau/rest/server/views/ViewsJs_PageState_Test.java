@@ -31,7 +31,7 @@ import org.apache.juneau.marshall.marshaller.*;
 import org.junit.jupiter.api.*;
 
 /**
- * Behavioral coverage for the general page-state store (design §6.2).  A Node harness ({@code page-state.cjs}) loads
+ * Behavioral coverage for the general page-state store.  A Node harness ({@code page-state.cjs}) loads
  * {@code juneau-pagestate.js} standalone into the DOM shim and reports: two tables on one page keep separate per-table
  * keys, a page-level namespace is independent, a JSON value round-trips through the default store, a replaced store
  * implementation is actually used (and the default store is bypassed), and a blocked store degrades to a silent no-op
@@ -132,7 +132,7 @@ class ViewsJs_PageState_Test extends TestBase {
 
 	@Test void a02_twoTablesKeepSeparateKeys() {
 		var r = report();
-		// Same value NAME under two distinct table keys must not clobber (design §6.2 per-table keying).  Each
+		// Same value NAME under two distinct table keys must not clobber.  Each
 		// scope lands under its own fully-qualified key; a page-level namespace is independent again.
 		assertBean(r, "table1Cols,table2Cols,storeKeys,pageTab",
 			"[name,status],[id],[juneau.pagestate.page.nav.tab,juneau.pagestate.table.releases.visibleCols,juneau.pagestate.table.users.visibleCols],setup");

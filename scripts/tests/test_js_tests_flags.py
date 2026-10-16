@@ -86,7 +86,14 @@ def test_auto_enabled_skips_with_notice_when_prereqs_missing(test_mod, monkeypat
     calls = []
     rc = test_mod.maybe_run_js_tests(False, False, ["a/src/x.js"], runner=lambda: calls.append(1) or (0, ""))
     assert rc == 0 and calls == []
-    assert "skipping JS tests" in capsys.readouterr().out
+    assert "skipping Browser tests" in capsys.readouterr().out
+
+
+def test_console_label_says_browser_tests():
+    src = (SCRIPTS_DIR / "test.py").read_text()
+    assert 'label="Browser tests"' in src
+    assert 'label="JS tests"' not in src
+    assert '"js-tests"' in src   # the step id is unchanged
 
 
 def test_explicit_fails_when_prereqs_missing(test_mod, monkeypatch, capsys):
@@ -138,10 +145,10 @@ def test_push_py_doc_documents_flags(push_mod):
 
 
 def test_push_build_test_command_forwards_flags(push_mod):
-    base = push_mod.build_test_command("t.py", "log", argparse.Namespace(js_tests=False, no_js_tests=False))
+    base = push_mod.build_test_command("t.py", argparse.Namespace(js_tests=False, no_js_tests=False))
     assert "--js-tests" not in base and "--no-js-tests" not in base and base[2] == "--full"
-    assert "--js-tests" in push_mod.build_test_command("t.py", "log", argparse.Namespace(js_tests=True, no_js_tests=False))
-    assert "--no-js-tests" in push_mod.build_test_command("t.py", "log", argparse.Namespace(js_tests=False, no_js_tests=True))
+    assert "--js-tests" in push_mod.build_test_command("t.py", argparse.Namespace(js_tests=True, no_js_tests=False))
+    assert "--no-js-tests" in push_mod.build_test_command("t.py", argparse.Namespace(js_tests=False, no_js_tests=True))
 
 
 def test_push_py_rejects_conflicting_flags(push_mod, monkeypatch, capsys):

@@ -29,7 +29,7 @@ import org.apache.juneau.marshall.collections.*;
 import org.junit.jupiter.api.*;
 
 /**
- * Operator gating on {@link Column} (design §4.3): a column's offerable operators are modeled by a single
+ * Operator gating on {@link Column}: a column's offerable operators are modeled by a single
  * {@link SearchOperatorSet} &mdash; absent means the full type-applicable {@link SearchOperatorSet#standard()
  * standard} universe (or the inherited table-level set), present entirely <b>replaces</b> the table-level set for
  * that column; plus the {@link ViewDef} column container and its own table-level set.

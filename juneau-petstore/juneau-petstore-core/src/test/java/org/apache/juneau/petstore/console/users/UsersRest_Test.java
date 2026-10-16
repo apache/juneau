@@ -97,4 +97,16 @@ class UsersRest_Test extends TestBase {
 		c.get("/console/users/form?username=mwatson").run().assertStatus(200).assertContent().isNotContains("123456");
 		c.get("/console/users/form?username=nobody").run().assertStatus(404);
 	}
+
+	@Test void c02_formPasswordFieldIsMaskedAndHasNoValue() throws Exception {
+		var c = client();
+		for (var path : new String[]{"/console/users/form", "/console/users/form?username=mwatson"}) {
+			var body = c.get(path).run().assertStatus(200).getContent().asString();
+			assertContains("\"name\":\"password\"", body);
+			var field = body.substring(body.indexOf("\"name\":\"password\""));
+			field = field.substring(0, field.indexOf('}'));
+			assertContains("\"type\":\"password\"", field);
+			assertNotContains("\"value\"", field);
+		}
+	}
 }

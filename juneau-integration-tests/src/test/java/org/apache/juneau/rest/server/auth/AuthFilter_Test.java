@@ -117,8 +117,8 @@ class AuthFilter_Test extends TestBase {
 		assertTrue(wrapper.isUserInRole("user"));
 		// Response object is forwarded unchanged.
 		assertSame(resp, chain.resp);
-		// No 401 written.
-		assertEquals(0, resp.getStatus());
+		// No 401 written: the status is still the default 200.
+		assertEquals(200, resp.getStatus());
 	}
 
 	// ========================================================================
@@ -137,7 +137,7 @@ class AuthFilter_Test extends TestBase {
 		// Passes through unchanged — NOT wrapped.
 		assertSame(req, chain.req);
 		assertSame(resp, chain.resp);
-		assertEquals(0, resp.getStatus());
+		assertEquals(200, resp.getStatus());
 	}
 
 	// ========================================================================

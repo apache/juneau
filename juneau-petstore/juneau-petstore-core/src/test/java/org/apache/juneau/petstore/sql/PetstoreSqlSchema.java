@@ -49,7 +49,7 @@ public final class PetstoreSqlSchema {
 	}
 
 	/**
-	 * Creates the tables and copies every pet and audit row from the store.
+	 * Creates the tables and copies every pet, order, user and audit row from the store.
 	 *
 	 * @param url The H2 URL; must keep the database open between connections ({@code DB_CLOSE_DELAY=-1}).
 	 * @param store The seeded store.
@@ -59,6 +59,9 @@ public final class PetstoreSqlSchema {
 	public static PetstoreSqlSchema load(String url, PetStore store) throws SQLException {
 		try (var c = DriverManager.getConnection(url); var s = c.createStatement()) {
 			s.execute("CREATE TABLE \"pet\" (\"id\" BIGINT PRIMARY KEY, \"name\" VARCHAR(200), \"species\" VARCHAR(20), \"price\" REAL, \"status\" VARCHAR(20))");
+			s.execute("CREATE TABLE \"order\" (\"id\" BIGINT PRIMARY KEY, \"petId\" BIGINT, \"shipDate\" VARCHAR(30), \"status\" VARCHAR(20))");
+			// USER is reserved in H2 and Postgres.
+			s.execute("CREATE TABLE \"app_user\" (\"username\" VARCHAR(200) PRIMARY KEY, \"firstName\" VARCHAR(200), \"lastName\" VARCHAR(200), \"email\" VARCHAR(200), \"phone\" VARCHAR(50), \"userStatus\" VARCHAR(20))");
 			s.execute("CREATE TABLE \"audit\" (\"id\" BIGINT PRIMARY KEY, \"at\" TIMESTAMP WITH TIME ZONE, \"actor\" VARCHAR(200), \"action\" VARCHAR(50), \"entity\" VARCHAR(50), \"entityId\" VARCHAR(50), \"detail\" VARCHAR(2000))");
 			try (var p = c.prepareStatement("INSERT INTO \"pet\" VALUES (?, ?, ?, ?, ?)")) {
 				for (var x : store.getPets()) {
@@ -67,6 +70,28 @@ public final class PetstoreSqlSchema {
 					p.setString(3, x.getSpecies() == null ? null : x.getSpecies().name());
 					p.setFloat(4, x.getPrice());
 					p.setString(5, x.getStatus() == null ? null : x.getStatus().name());
+					p.addBatch();
+				}
+				p.executeBatch();
+			}
+			try (var p = c.prepareStatement("INSERT INTO \"order\" VALUES (?, ?, ?, ?)")) {
+				for (var x : store.getOrders()) {
+					p.setLong(1, x.getId());
+					p.setLong(2, x.getPetId());
+					p.setString(3, x.getShipDate());
+					p.setString(4, x.getStatus() == null ? null : x.getStatus().name());
+					p.addBatch();
+				}
+				p.executeBatch();
+			}
+			try (var p = c.prepareStatement("INSERT INTO \"app_user\" VALUES (?, ?, ?, ?, ?, ?)")) {
+				for (var x : store.getUsers()) {
+					p.setString(1, x.getUsername());
+					p.setString(2, x.getFirstName());
+					p.setString(3, x.getLastName());
+					p.setString(4, x.getEmail());
+					p.setString(5, x.getPhone());
+					p.setString(6, x.getUserStatus() == null ? null : x.getUserStatus().name());
 					p.addBatch();
 				}
 				p.executeBatch();
@@ -112,6 +137,49 @@ public final class PetstoreSqlSchema {
 				.setSpecies(rs.getString("species") == null ? null : Species.valueOf(rs.getString("species")))
 				.setPrice(rs.getFloat("price"))
 				.setStatus(rs.getString("status") == null ? null : PetStatus.valueOf(rs.getString("status"))))
+			.connectionSupplier(this::connect)
+			.build();
+	}
+
+	/** @return A query context over the {@code order} table, with the same columns as {@code PetStore.ORDER_QUERY}. */
+	public SqlBeanQueryContext<Order> orders() {
+		return SqlBeanQueryContext.create(Order.class)
+			.dialect(PostgresDialect.INSTANCE)
+			.table("order")
+			.column("id", NUMERIC)
+			.column("petId", NUMERIC)
+			.column("shipDate", TEXT)
+			.column("status", ENUM)
+			.rowMapper((rs, cols) -> new Order()
+				.setId(rs.getLong("id"))
+				.setPetId(rs.getLong("petId"))
+				.setShipDate(rs.getString("shipDate"))
+				.setStatus(rs.getString("status") == null ? null : OrderStatus.valueOf(rs.getString("status"))))
+			.connectionSupplier(this::connect)
+			.build();
+	}
+
+	/**
+	 * @return A query context over the {@code app_user} table, with the same columns as {@code PetStore.USER_QUERY}
+	 * 	(no {@code password}: it is write-only on {@link User}).
+	 */
+	public SqlBeanQueryContext<User> users() {
+		return SqlBeanQueryContext.create(User.class)
+			.dialect(PostgresDialect.INSTANCE)
+			.table("app_user")
+			.column("username", TEXT)
+			.column("firstName", TEXT)
+			.column("lastName", TEXT)
+			.column("email", TEXT)
+			.column("phone", TEXT)
+			.column("userStatus", ENUM)
+			.rowMapper((rs, cols) -> new User()
+				.setUsername(rs.getString("username"))
+				.setFirstName(rs.getString("firstName"))
+				.setLastName(rs.getString("lastName"))
+				.setEmail(rs.getString("email"))
+				.setPhone(rs.getString("phone"))
+				.setUserStatus(rs.getString("userStatus") == null ? null : UserStatus.valueOf(rs.getString("userStatus"))))
 			.connectionSupplier(this::connect)
 			.build();
 	}

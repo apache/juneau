@@ -58,7 +58,7 @@
 <#-- Server-side omission for non-admins; the client-side card visibleWhen rule is builder-only (CardSpec.visibleWhen). -->
 <#if roles?seq_contains("admin")>
 <@card type="html" id="photo-upload" title="Upload photo">
-<form class="jc-form" data-petstore-upload="/petstore/pets/${pet.id?c}/photo">
+<form class="jc-form" data-petstore-upload="/petstore/pets/${pet.id?c}/photo"<#if apiCsrf??> data-petstore-csrf="${apiCsrf}"</#if>>
 <input type="file" name="photo" accept="image/png,image/jpeg" aria-label="Photo file">
 <button type="submit" class="jc-button">Upload</button>
 </form>

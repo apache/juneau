@@ -24,7 +24,7 @@
  *     (blank -> empty+complete+valid; mid-typing draft -> none; malformed -> complete but not valid;
  *     well-formed -> complete+valid).
  *   - SearchType / SearchOperator / SearchOperatorSet             -> SearchType/operators: the wire tokens,
- *     per-type operator applicability (design section 6), arity, and the popup help text (design section 4.5).
+ *     per-type operator applicability, arity, and the popup help text.
  *   - InMemoryMatch                                               -> createEngine(): rows/accessor/custom/search,
  *     with byte-identical leaf semantics per type so a client-mode grid filters exactly as the server would.
  *
@@ -125,11 +125,11 @@
 		builtins: function () {
 			return BUILTIN_LIST.slice();
 		},
-		/** Looks up a built-in operator by "$"-name, case-insensitively (D6), or null if not a built-in. */
+		/** Looks up a built-in operator by "$"-name, case-insensitively, or null if not a built-in. */
 		get: function (name) {
 			return name == null ? null : (BUILTINS[String(name).toLowerCase()] || null);
 		},
-		/** Whether the name is a built-in operator (case-insensitive, D6). */
+		/** Whether the name is a built-in operator (case-insensitive). */
 		isBuiltin: function (name) {
 			return name != null && Object.hasOwn(BUILTINS, String(name).toLowerCase());
 		},
@@ -147,7 +147,7 @@
 			const builtin = this.get(name);
 			return builtin ? builtin.help : null;
 		},
-		/** Built-in operators offered for `type` (design section 6), combinators included, in canonical order. */
+		/** Built-in operators offered for `type`, combinators included, in canonical order. */
 		forType: function (type) {
 			const out = [];
 			if (type != null)
@@ -233,7 +233,7 @@
 	/**
 	 * Decodes one literal token: strips a matching outer quote pair (un-doubling a doubled quote character inside
 	 * to one literal quote, mirroring the Java parser's `"…""…"` rule), then decodes `$$` to a literal `$`
-	 * anywhere in the result (bare or quoted) per D1.
+	 * anywhere in the result (bare or quoted).
 	 */
 	function decodeLiteral(s) {
 		let body;
@@ -258,7 +258,7 @@
 
 	/** Parses one (already trimmed, non-empty) token into a node. */
 	function parseExpr(s) {
-		// D1: "$" starts an operator call only when followed by a letter; "$100", "$-x", "$$", and a lone "$"
+		// "$" starts an operator call only when followed by a letter; "$100", "$-x", "$$", and a lone "$"
 		// are literal text (after $$-decoding). A "$" + letter with no "(" still falls through to parseFunc's
 		// own INCOMPLETE_SIGNAL (live-typing path) rather than being reclassified as a literal here.
 		if (s.length > 1 && s.charAt(0) === '$' && IS_LETTER.test(s.charAt(1)))
@@ -274,7 +274,7 @@
 	 *
 	 * <p>
 	 * S1: Outside quotes, tracking paren depth (looking for top-level ',' or matching ')').
-	 * S2: Inside a double-quoted argument fragment (a doubled `""` stays inside the span - D1 doubled-quote rule).
+	 * S2: Inside a double-quoted argument fragment (a doubled `""` stays inside the span - the doubled-quote rule).
 	 * S3: Inside a single-quoted argument fragment (same doubling rule for `''`).
 	 *
 	 * @return {close, rawArgs, state, blankArg} where `close` is the matching ')' index (-1 if the string ran out
@@ -363,7 +363,7 @@
 	/**
 	 * Parses a raw column-search expression into a descriptor.  The descriptor exposes the empty/complete/
 	 * incomplete/invalid/valid flags the header popup and grid use to decide whether to filter, keep the grid
-	 * unchanged, or show a reject indicator (design section 5).  The parse tree itself (`root`) is present for the
+	 * unchanged, or show a reject indicator.  The parse tree itself (`root`) is present for the
 	 * evaluator; it is intentionally not part of the cross-boundary contract.
 	 */
 	function parse(raw) {
@@ -653,7 +653,7 @@
 		return typedEquals(cell, arg, type);
 	}
 
-	/** Exact (case-sensitive) equals for TEXT/ID/ENUM; typed equals otherwise. Used for $eq/$ne/$in (D2). */
+	/** Exact (case-sensitive) equals for TEXT/ID/ENUM; typed equals otherwise. Used for $eq/$ne/$in. */
 	function eqExact(cell, arg, type) {
 		if (type === T_TEXT || type === T_ID || type === T_ENUM) {
 			const v = strVal(cell);
@@ -672,13 +672,13 @@
 		return c != null && c === 0;
 	}
 
-	/** True if `token` contains an unescaped wildcard character ("*" or "?"), per D1. */
+	/** True if `token` contains an unescaped wildcard character ("*" or "?"). */
 	function hasWildcard(token) {
 		return token.includes('*') || token.includes('?');
 	}
 
 	/**
-	 * Whole-string glob match (D1): "*" matches any sequence of characters (including none); "?" matches exactly
+	 * Whole-string glob match: "*" matches any sequence of characters (including none); "?" matches exactly
 	 * one character; every other character must match literally once both sides are case-folded.
 	 *
 	 * <p>
@@ -728,7 +728,7 @@
 		return v?.toLowerCase().startsWith(String(arg).toLowerCase()) === true;
 	}
 
-	/** Translates the portable i/m/s flag chars into a JS RegExp flag string (design section 4.1). */
+	/** Translates the portable i/m/s flag chars into a JS RegExp flag string. */
 	function jsFlags(chars) {
 		let f = "";
 		for (const c of chars) {
@@ -818,7 +818,7 @@
 	function matchNode(node, cell, type, customs) {
 		if (isLiteral(node))
 			return matchBare(node.value, node.quoted, cell, type);
-		// D6: lookup is case-insensitive; this parser is operator-agnostic (parse() takes no operator set, unlike
+		// lookup is case-insensitive; this parser is operator-agnostic (parse() takes no operator set, unlike
 		// Java's parser), so canonicalization happens here, at evaluation time, not at parse time.
 		const o = SearchOperators.get(node.name);
 		if (o != null) {
@@ -948,7 +948,7 @@
 
 	/**
 	 * Walks an already-parsed tree checking operator existence and arity (both of which `parse()`/`parseFunc`
-	 * deliberately skip, since this parser is operator-agnostic - see the D6 comment on `matchNode`). `parse()`'s
+	 * deliberately skip, since this parser is operator-agnostic - see the comment on `matchNode`). `parse()`'s
 	 * `valid` flag only means "syntactically complete", so a syntactically well-formed call to an unknown
 	 * operator (`$nope(1)`) or a known operator with the wrong arg count (`$eq(1,2)`) is still `valid` and would
 	 * otherwise slip past `parseExprStrict` unchecked; this closes that gap for the strict, throwing entry point.
@@ -979,7 +979,7 @@
 		// Java's SearchExpression.func() always stores the operator's canonical registered name (SearchOperatorSet:
 		// "get(name) always exposes the operator's own canonical name, never the casing a caller looked it up
 		// with"); parse()'s live-typing path preserves the raw-cased name since op resolution is deliberately
-		// deferred there (D6), so parseExprStrict - the Java-parity, throwing entry point - canonicalizes it here.
+		// deferred there, so parseExprStrict - the Java-parity, throwing entry point - canonicalizes it here.
 		node.name = o.name;
 		for (const arg of node.args)
 			validateStrict(arg, customs);
@@ -1240,7 +1240,7 @@
 	// Mirrors QuerySettings.MAX_REGEX_LENGTH: a longer $regex pattern is REGEX_TOO_LONG, exactly as the server rejects it.
 	const MAX_REGEX_LENGTH = 256;
 
-	// Page-level custom operators: lowercase "$name" -> {name, fn}.  Lookup is case-insensitive (D6), like builtins.
+	// Page-level custom operators: lowercase "$name" -> {name, fn}.  Lookup is case-insensitive, like builtins.
 	const CUSTOM_REGISTRY = {};
 
 	/**
@@ -1303,7 +1303,7 @@
 			checkRegexStrict(arg, allowRegex);
 	}
 
-	/** Builds each `$regex` node's RegExp once (S8/N3), so a draw never constructs one per row. */
+	/** Builds each `$regex` node's RegExp once, so a draw never constructs one per row. */
 	function precompileRegex(node) {
 		if (isLiteral(node))
 			return;

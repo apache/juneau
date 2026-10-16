@@ -26,7 +26,7 @@ import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.condition.*;
 
 /**
- * An SSE bridge in real Chromium (spec 7): the CSRF-stamped session POST, a retained resync as the first state, live frames repainting a card,
+ * An SSE bridge in real Chromium: the CSRF-stamped session POST, a retained resync as the first state, live frames repainting a card,
  * a dropped stream reconnecting on the virtual clock with a resync that repairs state ({@code gap:true}), and a denied session as the page
  * banner E-JS-53.  The session and stream are faked in-page by {@code console-bus/prelude.js}; the clock is injected, so nothing sleeps.
  */

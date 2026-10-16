@@ -87,10 +87,10 @@ class ToolkitPackRegistry_Test extends TestBase {
 		assertList(files(r.runtimeCss()), "juneau-views.css", "juneau-config.css");
 		// JS load order is a contract: bus FIRST (dependency-free; views, regions and the console shell all read
 		// JuneauViews.bus), then renders, icons, search, pagestate, urlstate (Copy link), ribbon, views, config,
-		// regions, console-output, run-view, helpers LAST.  The DataTables glue is its own pack now.
+		// regions, run-view, helpers LAST.  The DataTables glue is its own pack now.
 		assertList(files(r.runtimeJs()),
 			"juneau-bus.js", "juneau-renders.js", "juneau-icons.js", "juneau-search.js", "juneau-pagestate.js", "juneau-urlstate.js",
-			"juneau-ribbon.js", "juneau-views.js", "juneau-config.js", "juneau-regions.js", "juneau-console-output.js",
+			"juneau-ribbon.js", "juneau-views.js", "juneau-config.js", "juneau-regions.js",
 			"juneau-run-view.js", "juneau-helpers.js");
 		// The bus is the very first runtime JS entry.
 		assertTrue(r.runtimeJs().get(0).toString().contains("juneau-bus.js"), () -> r.runtimeJs().toString());
@@ -156,12 +156,13 @@ class ToolkitPackRegistry_Test extends TestBase {
 		assertContains("/juneau-terminal.js?v=", r.runtimeJs().get(r.runtimeJs().size() - 1));
 	}
 
-	@Test void a09_charts_isOneRuntimeScript_noDependencies() throws Exception {
+	@Test void a09_charts_pullsViewsDataAndEcharts_vendorFirst() throws Exception {
 		var r = new ToolkitPackRegistry().resolve(List.of(ToolkitPackRegistry.PACK_CHARTS), dummyRequest(), List.of(), "");
-		assertList(files(r.runtimeJs()), "juneau-charts.js");
-		assertEmpty(r.runtimeCss());
-		assertEmpty(r.vendorJs());
-		assertContains("/juneau-console/juneau-charts.js?v=", r.runtimeJs().get(0));
+		assertList(files(r.vendorJs()), "echarts.min.js");
+		assertContains("/webjars/echarts/6.1.0/dist/echarts.min.js", r.vendorJs().get(0));
+		var rt = files(r.runtimeJs());
+		assertEquals("juneau-bus.js", rt.get(0));
+		assertEquals(List.of("juneau-helpers.js", "juneau-data.js", "juneau-charts.js"), rt.subList(rt.size() - 3, rt.size()));
 	}
 
 	@Test void a10_joblog_isOneRuntimeScript_noDependencies() throws Exception {
@@ -170,6 +171,80 @@ class ToolkitPackRegistry_Test extends TestBase {
 		assertEmpty(r.runtimeCss());
 		assertEmpty(r.vendorJs());
 		assertContains("/juneau-console/juneau-joblog.js?v=", r.runtimeJs().get(0));
+	}
+
+	@Test void a11_echartsGl_isVendor_dependsOnEcharts() {
+		var reg = new ToolkitPackRegistry();
+		assertTrue(reg.contains(ToolkitPackRegistry.PACK_ECHARTS_GL));
+		assertTrue(reg.reaches(ToolkitPackRegistry.PACK_ECHARTS_GL, ToolkitPackRegistry.PACK_ECHARTS));
+		assertFalse(reg.reaches(ToolkitPackRegistry.PACK_VIEWS, ToolkitPackRegistry.PACK_ECHARTS));
+	}
+
+	@Test void a12_checkWebJars_present_passes() {
+		assertNotNull(new ToolkitPackRegistry().checkWebJars(List.of("charts")));
+	}
+
+	@Test void a13_checkWebJars_absentEcharts_isE70() {
+		var e = assertThrows(IllegalStateException.class, () -> new ToolkitPackRegistry().checkWebJars(List.of("charts"),
+			a -> { throw new IllegalStateException("needs org.webjars.npm:echarts on the classpath (no META-INF/maven/org.webjars.npm/echarts/pom.properties)."); }));
+		assertContains("E-70: chart cards need the ECharts WebJar org.webjars.npm:echarts, which is not on the classpath; add it to the application's pom (version property 'webjars-echarts.version')", e.getMessage());
+	}
+
+	@Test void a14_checkWebJars_noRoots_probesNothing() {
+		assertNotNull(new ToolkitPackRegistry().checkWebJars(List.of(), a -> { throw new IllegalStateException("x"); }));
+	}
+
+	@Test void a15_checkWebJars_providedEcharts_skipped() {
+		var reg = new ToolkitPackRegistry().provide(List.of("echarts"));
+		assertNotNull(reg.checkWebJars(List.of("charts"), a -> { if (a.contains(":echarts:")) throw new IllegalStateException("x"); return a; }));
+	}
+
+	@Test void a16_firstRender_absentWebJar_isE70() throws Exception {
+		var reg = new ToolkitPackRegistry();
+		reg.register(ToolkitPack.create(ToolkitPackRegistry.PACK_ECHARTS).kind(VENDOR)
+			.resolver((req, path) -> { throw new IllegalStateException("needs WebJar file 'echarts/6.1.0/dist/echarts.min.js' (org.webjars.npm:echarts:6.1.0), which is not on the classpath."); })
+			.js(ToolkitPackRegistry.ECHARTS_JS_ASSET).build());
+		var req = dummyRequest();
+		var e = assertThrows(IllegalStateException.class, () -> reg.resolve(List.of("charts"), req, List.of(), "t.ftlh"));
+		assertContains("E-70: chart cards need the ECharts WebJar org.webjars.npm:echarts, which is not on the classpath; add it to the application's pom (version property 'webjars-echarts.version')", e.getMessage());
+	}
+
+	@Test void a17_e70_appendsCauseMessage_soJarAbsentAndFileMissingDiffer() {
+		var absent = assertThrows(IllegalStateException.class, () -> new ToolkitPackRegistry().checkWebJars(List.of("charts"),
+			a -> { throw new IllegalStateException("needs org.webjars.npm:echarts on the classpath (no META-INF/maven/org.webjars.npm/echarts/pom.properties)."); }));
+		var missingFile = assertThrows(IllegalStateException.class, () -> new ToolkitPackRegistry().checkWebJars(List.of("charts"),
+			a -> { throw new IllegalStateException("needs WebJar file 'echarts/6.1.0/dist/echarts.min.js' (org.webjars.npm:echarts:6.1.0), which is not on the classpath."); }));
+		assertContains("[needs org.webjars.npm:echarts on the classpath (no META-INF/maven/org.webjars.npm/echarts/pom.properties).]", absent.getMessage());
+		assertContains("[needs WebJar file 'echarts/6.1.0/dist/echarts.min.js' (org.webjars.npm:echarts:6.1.0), which is not on the classpath.]", missingFile.getMessage());
+		assertFalse(absent.getMessage().equals(missingFile.getMessage()));
+	}
+
+	@Test void a19_e70Pack_appendsCauseMessage() {
+		var e = assertThrows(IllegalStateException.class, () -> new ToolkitPackRegistry().checkWebJars(List.of("echarts-gl"),
+			a -> { if (a.contains(":echarts-gl:")) throw new IllegalStateException("needs org.webjars.npm:echarts-gl on the classpath (no pom)."); return a; }));
+		assertTrue(e.getMessage().endsWith(" [needs org.webjars.npm:echarts-gl on the classpath (no pom).]"), e.getMessage());
+	}
+
+	@Test void a20_e70_nullCauseMessage_hasNoSuffix() {
+		var e = assertThrows(IllegalStateException.class, () -> new ToolkitPackRegistry().checkWebJars(List.of("charts"),
+			a -> { throw new IllegalStateException((String)null); }));
+		assertEquals("E-70: " + ToolkitPackRegistry.E70, e.getMessage());
+	}
+
+	@Test void a18_e70Pack_echartsGl_namesVersionProperty() {
+		var e = assertThrows(IllegalStateException.class, () -> new ToolkitPackRegistry().checkWebJars(List.of("echarts-gl"),
+			a -> { if (a.contains(":echarts-gl:")) throw new IllegalStateException("x"); return a; }));
+		assertContains("E-70: toolkit pack 'echarts-gl' needs the WebJar org.webjars.npm:echarts-gl, which is not on the classpath; add it to the application's pom (version property 'webjars-echarts-gl.version')", e.getMessage());
+	}
+
+	@Test void a21_dashboardPack_dependsOnViewsAndData() throws Exception {
+		var r = new ToolkitPackRegistry().resolve(List.of(ToolkitPackRegistry.PACK_DASHBOARD), dummyRequest(), List.of(), "");
+		var js = files(r.runtimeJs());
+		assertEquals("juneau-dashboard.js", js.get(js.size() - 1));
+		assertTrue(js.indexOf("juneau-data.js") >= 0 && js.indexOf("juneau-data.js") < js.size() - 1, () -> "data before dashboard: " + js);
+		assertTrue(js.indexOf("juneau-bus.js") >= 0, () -> "views pack present: " + js);
+		assertEmpty(r.vendorJs());
+		assertContains("/juneau-console/juneau-dashboard.js?v=", r.runtimeJs().get(js.size() - 1));
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

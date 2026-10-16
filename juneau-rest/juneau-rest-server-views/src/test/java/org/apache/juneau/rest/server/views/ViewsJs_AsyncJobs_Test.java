@@ -31,7 +31,7 @@ import org.junit.jupiter.api.*;
  * {@code AsyncJob_BrowserTest} canary).
  *
  * <p>
- * The single most important invariant asserted here is HIGH-9: the job-running affordance is a DISTINCT marker
+ * The single most important invariant asserted here is that the job-running affordance is a DISTINCT marker
  * ({@code data-juneau-job}) that {@code hasInFlightRow} does NOT read, so a long job never freezes the table's
  * polling the way the synchronous {@code data-juneau-inflight} marker does.
  */
@@ -60,14 +60,15 @@ class ViewsJs_AsyncJobs_Test extends TestBase {
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
-	// a) HIGH-9: the job-running affordance is a DISTINCT marker that never freezes polling
+	// a) the job-running affordance is a DISTINCT marker that never freezes polling
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Test void a01_setRowJobRunning_setsDistinctJobMarker_neverTheInflightMarker() throws Exception {
 		var s = fn(viewsJs(), "function setRowJobRunning(");
 		assertTrue(s.contains("dataset.juneauJob"), s);
 		assertTrue(s.contains("delete tr.dataset.juneauJob"), s);
-		// The whole point of HIGH-9: a job must NEVER set the synchronous in-flight marker that freezes polling.
+		// The whole point of the distinct marker: a job must NEVER set the synchronous in-flight marker that freezes
+		// polling.
 		assertFalse(s.contains("data-juneau-inflight"), () -> "job affordance must NOT touch data-juneau-inflight:\n" + s);
 		// A second job can't be launched on the same row while one runs.
 		assertTrue(s.contains("trigger.disabled"), s);
@@ -76,7 +77,7 @@ class ViewsJs_AsyncJobs_Test extends TestBase {
 	@Test void a02_hasInFlightRow_ignoresTheJobMarker_soPollingKeepsRunningDuringAJob() throws Exception {
 		// hasInFlightRow reads ONLY data-juneau-inflight; it must NOT read data-juneau-job, or a job would freeze
 		// the whole table's polling for up to the 120s hard timeout (hiding a resurrected incident) - exactly the
-		// failure HIGH-9 forbids.
+		// failure the distinct marker exists to prevent.
 		var h = fn(viewsJs(), "function hasInFlightRow(");
 		assertTrue(h.contains("data-juneau-inflight"), h);
 		assertFalse(h.contains("data-juneau-job"), () -> "hasInFlightRow must ignore the job marker:\n" + h);
@@ -84,8 +85,8 @@ class ViewsJs_AsyncJobs_Test extends TestBase {
 
 	@Test void a03_startJobStream_usesTheJobAffordance_neverTheInflightMarker() throws Exception {
 		var s = fn(viewsJs(), "function startJobStream(");
-		assertTrue(s.contains("setRowJobRunning(tr, true)"), s);
-		assertTrue(s.contains("setRowJobRunning(tr, false)"), s);
+		assertTrue(s.contains("host.setRunning(true)"), s);
+		assertTrue(s.contains("host.setRunning(false)"), s);
 		// It must not co-opt the synchronous in-flight lifecycle.
 		assertFalse(s.contains("setRowInFlight("), () -> "startJobStream must not use the sync in-flight marker:\n" + s);
 		assertFalse(s.contains("data-juneau-inflight"), s);
@@ -117,7 +118,7 @@ class ViewsJs_AsyncJobs_Test extends TestBase {
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
-	// c) The stream URL IS the capability (HIGH-4): an EventSource GET, no CSRF header on the stream
+	// c) The stream URL IS the capability: an EventSource GET, no CSRF header on the stream
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Test void c01_startJobStream_opensAnEventSourceOnTheCapabilityStreamUrl() throws Exception {
@@ -152,7 +153,7 @@ class ViewsJs_AsyncJobs_Test extends TestBase {
 		assertFalse(r.contains("insertAdjacentHTML"), r);
 		assertTrue(r.contains("juneau-view-job-progress"), r);
 		assertTrue(r.contains("juneau-view-job-cancel"), r);
-		assertTrue(r.contains("cancelJob(started, table, tr)"), r);
+		assertTrue(r.contains("cancelJob(started, table, host, action)"), r);
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -164,12 +165,12 @@ class ViewsJs_AsyncJobs_Test extends TestBase {
 		assertTrue(f.contains("result.contractVersion !== JUNEAU_ACTION_RESULT_CONTRACT_VERSION"), f);
 		assertTrue(f.contains("normalizeOutcome(result)"), f);
 		assertTrue(f.contains("applySuccessBehavior("), f);
-		assertTrue(f.contains("renderActionOutcome("), f);
+		assertTrue(f.contains("host.outcome("), f);
 	}
 
 	@Test void e02_actionOutcomeMessage_rendersBothReservedAsyncOutcomes() throws Exception {
 		// The frozen ActionResult contract reserved cancelled / cancelled-after-effect; the runtime renders both
-		// without any new UI (Q4: the two are DIFFERENT outcomes and must not be collapsed).
+		// without any new UI (the two are DIFFERENT outcomes and must not be collapsed).
 		var body = viewsJs();
 		var m = fn(body, "function actionOutcomeMessage(");
 		assertTrue(m.contains("case \"cancelled\":"), m);

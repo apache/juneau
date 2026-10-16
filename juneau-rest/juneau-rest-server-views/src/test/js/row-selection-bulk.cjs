@@ -114,7 +114,7 @@ const PROBE = async function () {
 		el.dispatchEvent(new Event('change', { bubbles: true }));
 	}
 
-	// ---- a) per-row selection + select-all (MED-11: identity is the stable id, never a DOM index) ----
+	// ---- a) per-row selection + select-all (identity is the stable id, never a DOM index) ----
 	{
 		const dom = makeTable(['1', '2', '3'], { select: true, rowIdField: 'id' });
 		const selectionState = { selected: new Set(), rowIdField: 'id' };
@@ -193,7 +193,7 @@ const PROBE = async function () {
 		out.disabledCheckboxHasAriaDescribedBy = !!disabledCb.getAttribute('aria-describedby');
 	}
 
-	// ---- c) two INDEPENDENT opt-ins (HIGH-5): a selection-only (export) table never carries the bulk marker ----
+	// ---- c) two INDEPENDENT opt-ins: a selection-only (export) table never carries the bulk marker ----
 	{
 		const selectOnly = makeTable(['1'], { select: true, rowIdField: 'id', bulk: false });
 		const withBulk = makeTable(['1'], { select: true, rowIdField: 'id', bulk: true });

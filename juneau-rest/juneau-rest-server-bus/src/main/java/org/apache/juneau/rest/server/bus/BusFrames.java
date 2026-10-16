@@ -24,7 +24,7 @@ import org.apache.juneau.marshall.json.JsonParser;
 import org.apache.juneau.marshall.marshaller.*;
 
 /**
- * The bus wire format, version 1 (spec §11.4): one JSON object per frame, in a canonical field order shared with the
+ * The bus wire format, version 1: one JSON object per frame, in a canonical field order shared with the
  * browser codec and pinned by {@code bus-frames-corpus.json}.
  *
  * <p>

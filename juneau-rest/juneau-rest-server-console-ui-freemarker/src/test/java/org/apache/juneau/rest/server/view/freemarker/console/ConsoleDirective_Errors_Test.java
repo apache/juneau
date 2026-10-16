@@ -23,7 +23,7 @@ import org.junit.jupiter.params.*;
 import org.junit.jupiter.params.provider.*;
 
 /**
- * Every server-side console/nav error, asserted verbatim (spec §6). The footer {@code text=} versus body cases that
+ * Every server-side console/nav error, asserted verbatim. The footer {@code text=} versus body cases that
  * succeed are in {@link PageCapture_Contract_Test} (a13-a15).
  *
  * @since 10.0.0

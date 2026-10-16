@@ -466,7 +466,7 @@ public class BasicHttpException extends RuntimeException implements HttpResponse
 
 	@Override /* Object */
 	public boolean equals(Object o) {
-		// D3 content equality.  The 'body' HttpBody is deliberately excluded: it is a wrapper without value semantics
+		// Content equality.  The 'body' HttpBody is deliberately excluded: it is a wrapper without value semantics
 		// and is derived from the message (getMessage()), which is already compared here.
 		return o instanceof BasicHttpException other && eq(this, other, (x, y) ->
 			eq(x.statusLine, y.statusLine) && eq(x.headers, y.headers) && eq(x.getMessage(), y.getMessage()));

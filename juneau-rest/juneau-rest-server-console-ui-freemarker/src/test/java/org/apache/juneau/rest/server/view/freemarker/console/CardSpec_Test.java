@@ -36,9 +36,36 @@ class CardSpec_Test extends TestBase {
 		assertFalse(CardSpec.html("s").template("s").toMap().containsKey("bare"));
 	}
 
+	@Test void a02b_bareRefusedWhereSchemaHasNoBare() {
+		for (var type : List.of("run-view", "terminal")) {
+			var ex = assertThrows(IllegalArgumentException.class, () -> CardSpec.of(type, "x").bare(true));
+			assertTrue(ex.getMessage().contains("card 'x': a " + type + " card does not support bare."), ex.getMessage());
+			assertFalse(CardSpec.of(type, "x").bare(false).toMap().containsKey("bare"));
+		}
+		for (var type : List.of("html", "datatables", "chart", "job-log", "meter"))
+			assertEquals(true, CardSpec.of(type, "x").bare(true).toMap().get("bare"));
+	}
+
 	@Test void a03_bodyFieldsAfterCommonFields() {
 		var c = CardSpec.of("datatables", "releases").body("table", Map.of("dataUrl", "/x")).title("Releases");
 		assertEquals("{id=releases, type=datatables, title=Releases, table={dataUrl=/x}}", c.toMap().toString());
 		assertBean(c, "type,id", "datatables,releases");
+	}
+
+	@Test void a04_sanitizeOnlyWhenTrue() {
+		var c = CardSpec.html("frag").src("/rest/frag").sanitize(true);
+		assertEquals("{id=frag, type=html, src=/rest/frag, sanitize=true}", c.toMap().toString());
+		assertEquals("{id=frag, type=html, src=/rest/frag, sanitize=true}", c.copy().toMap().toString());
+		assertFalse(CardSpec.html("frag").src("/rest/frag").toMap().containsKey("sanitize"));
+		assertFalse(CardSpec.html("frag").src("/rest/frag").sanitize(true).sanitize(false).toMap().containsKey("sanitize"));
+	}
+
+	@Test void a05_sanitizeNeedsAnHtmlCardWithSrc() {
+		var noSrc = CardSpec.html("frag").template("intro").sanitize(true);
+		assertThrows(IllegalArgumentException.class, noSrc::toMap);
+		var notHtml = CardSpec.of("datatables", "t").src("/rest/data").sanitize(true);
+		assertThrows(IllegalArgumentException.class, notHtml::toMap);
+		assertEquals("{id=frag, type=html, src=/rest/frag, sanitize=true}", CardSpec.html("frag").sanitize(true).src("/rest/frag").toMap().toString());
+		assertEquals("{id=frag, type=html, template=intro}", CardSpec.html("frag").template("intro").toMap().toString());
 	}
 }

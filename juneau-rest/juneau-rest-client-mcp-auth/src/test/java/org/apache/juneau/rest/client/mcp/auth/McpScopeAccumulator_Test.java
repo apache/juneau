@@ -96,7 +96,7 @@ class McpScopeAccumulator_Test extends TestBase {
 		assertTrue(new McpScopeAccumulator().current(RES, ISS).isEmpty());
 	}
 
-	// M3: seeding twice on a shared accumulator (or re-seeding after accumulation) must UNION, never replace, so no
+	// Seeding twice on a shared accumulator (or re-seeding after accumulation) must UNION, never replace, so no
 	// previously-tracked scope is lost when Builder.build() re-seeds a shared accumulator.
 	@Test void c05_seedTwiceUnionsRatherThanReplaces() {
 		var acc = new McpScopeAccumulator();

@@ -24,7 +24,7 @@ import org.apache.juneau.rest.server.auth.*;
 import org.junit.jupiter.api.*;
 
 /**
- * Encrypted-assertion handling tests for {@link SamlAssertionValidator} (per OQA Q5).
+ * Encrypted-assertion handling tests for {@link SamlAssertionValidator}.
  *
  * <p>
  * The full encrypt-decrypt-validate round-trip needs an explicit OpenSAML encrypter pipeline (which is

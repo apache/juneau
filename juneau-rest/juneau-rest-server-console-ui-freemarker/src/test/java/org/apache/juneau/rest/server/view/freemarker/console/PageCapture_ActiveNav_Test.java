@@ -23,7 +23,7 @@ import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
 
 /**
- * activeNav resolution (spec §4.3): tab paths at depths 1-4, the {@code selected=} override, E-6, E-7, and the empty
+ * activeNav resolution: tab paths at depths 1-4, the {@code selected=} override, E-6, E-7, and the empty
  * fallback.
  *
  * @since 10.0.0

@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.petstore.console.pages;
 
+import java.util.*;
+
 import org.apache.juneau.rest.server.view.freemarker.console.*;
 import org.apache.juneau.rest.server.views.*;
 import org.apache.juneau.rest.server.views.RowAction.*;
@@ -40,7 +42,8 @@ public final class OrdersPageBuilders {
 	 */
 	public static PageSpec orders() {
 		return PageSpec.create().tab("orders").toolkit("views")
-			.table(TableSpec.create("orders").rowType("Order").dataMode(DataMode.SERVER).dataUrl("/console/orders/query")
+			.table(TableSpec.create("orders").rowType("Order").dataMode(DataMode.SERVER).dataUrl("/console/orders/query").urlState("day", "window")
+				.columnConfig(Map.of("tabs", List.of("columns", "sort")))
 				.defaultOrder("id", Sort.ASC)
 				.columns(
 					Column.create("id").label("Id"),
@@ -53,6 +56,8 @@ public final class OrdersPageBuilders {
 						RibbonItem.option("approved").title("Approved").column("status").value("$eq(APPROVED)"),
 						RibbonItem.option("delivered").title("Delivered").column("status").value("$eq(DELIVERED)"))
 						.title("Order status").deselectable(true),
+					RibbonItem.dialog("new-order").title("+ New order").symbol("plus")
+						.form("/console/orders/new-form").endpoint("/console/orders").method(Method.POST).onSuccess(OnSuccess.REDRAW),
 					RibbonItem.export("copy", "csv").optional("excel", "pdf"),
 					RibbonItem.refresh())
 				.rowActions(

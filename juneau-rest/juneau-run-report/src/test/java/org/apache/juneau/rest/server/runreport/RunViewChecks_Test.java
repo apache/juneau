@@ -35,7 +35,19 @@ class RunViewChecks_Test extends TestBase {
 
 	@Test void a03_noteHrefAndRawHrefTemplateRefuseAnyBackslash() {
 		assertFalse(RunViewChecks.isNoteHref("/a\\b"));
-		assertFalse(RunViewChecks.isRawHrefTemplate("/a\\b?l={line}"));
-		assertTrue(RunViewChecks.isRawHrefTemplate("/a/b?l={line}"));
+		assertFalse(RunViewChecks.isRawHrefTemplate("/a\\b?o={offset}"));
+		assertTrue(RunViewChecks.isRawHrefTemplate("/a/b?o={offset}"));
+		assertFalse(RunViewChecks.isRawHrefTemplate("/a/b?l={line}"));
+	}
+
+	@Test void a04_clipKeepsSixtyFourCharactersAndAnEllipsis() {
+		assertEquals("null", RunViewChecks.clip(null));
+		assertEquals("short", RunViewChecks.clip("short"));
+		assertEquals("a".repeat(64), RunViewChecks.clip("a".repeat(64)));
+		assertEquals("a".repeat(64) + "\u2026", RunViewChecks.clip("a".repeat(65)));
+	}
+
+	@Test void a05_minRefreshIsOneSecond() {
+		assertEquals(1000L, RunViewChecks.MIN_REFRESH_MS);
 	}
 }

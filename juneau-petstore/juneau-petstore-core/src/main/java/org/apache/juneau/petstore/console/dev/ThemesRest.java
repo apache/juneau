@@ -33,12 +33,13 @@ import org.apache.juneau.rest.server.view.freemarker.*;
  * <p>
  * The chosen name reaches {@code base.ftlh} as the {@code petstoreTheme} view attribute, which feeds
  * {@code <@console theme=...>}.  {@code ?theme=custom} also sets {@code petstoreCustomTheme}, which turns on a
- * {@code <@theme name="light-brown">} block with two {@code <@token>} overrides: a leaf and an alias.
+ * nameless {@code <@theme>} block (it inherits the page theme, {@code light-brown} here) with {@code <@token>}
+ * overrides: a leaf and an alias.
  *
  * <h5 class='section'>Example:</h5>
  * <p class='bftl'>
  * 	&lt;@console brand="My app" theme="light-brown"&gt;
- * 	&lt;@theme name="light-brown"&gt;
+ * 	&lt;@theme&gt;
  * 	&lt;@token name="--jc-pill-red-bg" value="#fdeceb"/&gt;
  * 	&lt;@token name="--jc-tab-bar-bg" alias="var(--jc-card-bg)"/&gt;
  * 	&lt;/@theme&gt;

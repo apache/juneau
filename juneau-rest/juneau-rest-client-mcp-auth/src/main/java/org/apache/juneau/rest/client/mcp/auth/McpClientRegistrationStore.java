@@ -24,7 +24,7 @@ import java.util.*;
  * authorization server's {@code issuer} identifier.
  *
  * <p>
- * Persistence is <b>SHOULD-level</b> (READY-312f Q8): an MCP client that performs on-demand DCR on every connection
+ * Persistence is <b>SHOULD-level</b>: an MCP client that performs on-demand DCR on every connection
  * with <i>no</i> store is fully compliant.  When a store <i>is</i> used, the SEP-2352 keying MUST bites &mdash;
  * credentials MUST be associated with the specific AS that issued them, and separate registration state MUST be kept per
  * AS ({@link InMemoryMcpClientRegistrationStore} keys by {@code issuer.toString()}).  {@link McpClientRegistrationManager}

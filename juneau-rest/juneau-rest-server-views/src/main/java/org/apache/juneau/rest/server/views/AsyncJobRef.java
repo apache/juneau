@@ -23,7 +23,7 @@ import static org.apache.juneau.commons.utils.Shorts.*;
 
 /**
  * The "job accepted" envelope a row action's submit returns <b>instead of</b> a terminal {@link ActionResult} when
- * the write is asynchronous (design doc §6.3).
+ * the write is asynchronous.
  *
  * <h5 class='section'>Why this is not a new {@code RowAction} wire field</h5>
  * <p>
@@ -37,7 +37,7 @@ import static org.apache.juneau.commons.utils.Shorts.*;
  * <p>
  * {@link #streamUrl} points at the SSE progress stream and {@link #cancelUrl} at the cancel endpoint; both embed the
  * job's unguessable {@value AsyncJobRegistry#CAPABILITY_BITS}-bit id (see {@link AsyncJob}), which is the whole of the
- * access control (HIGH-4).  The browser {@code EventSource} that consumes {@link #streamUrl} cannot set a CSRF header,
+ * access control.  The browser {@code EventSource} that consumes {@link #streamUrl} cannot set a CSRF header,
  * which is precisely why the id must be unguessable rather than CSRF-gated.
  *
  * <h5 class='section'>See Also:</h5>

@@ -28,7 +28,7 @@ import org.junit.jupiter.api.Test;
 
 /**
  * Unit coverage for {@link McpAudienceValidator} &mdash; RFC 8707 audience matching against the resource identifier,
- * including the H2 {@code requireAudienceClaim} fail-closed default.
+ * including the {@code requireAudienceClaim} fail-closed default.
  */
 class McpAudienceValidator_Test extends TestBase {
 
@@ -62,14 +62,14 @@ class McpAudienceValidator_Test extends TestBase {
 		assertFalse(McpAudienceValidator.matches(null, RES, true));
 	}
 
-	// H2: a bare (claims-less) Principal is rejected by default (fail-closed) so the confused-deputy defense is not a
+	// A bare (claims-less) Principal is rejected by default (fail-closed) so the confused-deputy defense is not a
 	// silent no-op.
 	@Test void c01_nonClaimsPrincipalRejectedByDefault() {
 		Principal bare = () -> "alice";
 		assertFalse(McpAudienceValidator.matches(bare, RES, true));
 	}
 
-	// H2: the lenient behavior remains available only as an explicit opt-out (validator owns audience enforcement).
+	// The lenient behavior remains available only as an explicit opt-out (validator owns audience enforcement).
 	@Test void c02_nonClaimsPrincipalPassesWhenClaimNotRequired() {
 		Principal bare = () -> "alice";
 		assertTrue(McpAudienceValidator.matches(bare, RES, false));

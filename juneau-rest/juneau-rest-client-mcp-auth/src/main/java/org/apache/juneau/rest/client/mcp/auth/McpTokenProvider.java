@@ -32,7 +32,7 @@ import com.nimbusds.oauth2.sdk.http.*;
  * A headless bearer-token provider that feeds the {@link McpAuthInterceptor} token seam ({@code Supplier<String>}).
  *
  * <p>
- * This is the F1 client-side token-manager: it acquires, caches, and refreshes an access token and returns the current
+ * This is the client-side token-manager: it acquires, caches, and refreshes an access token and returns the current
  * valid bearer credential from {@link #get()}.  Three modes are supported:
  * <ul>
  * 	<li><b>Pre-provisioned / static</b> ({@link #ofStaticToken(String)}) &mdash; always returns a fixed token.

@@ -18,6 +18,7 @@ package org.apache.juneau.rest.server.terminal;
 
 import static java.nio.charset.StandardCharsets.*;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assumptions.*;
 
 import java.nio.file.*;
 import java.nio.file.attribute.*;
@@ -32,7 +33,8 @@ import org.junit.jupiter.api.condition.*;
 import org.junit.jupiter.api.io.*;
 
 /**
- * {@link TerminalProcess} input mode, over a fake {@code python3} runner.
+ * {@link TerminalProcess} input mode, over a fake {@code python3} runner, and over the real {@code juneau_run.py} for
+ * the bytes reaching the job.
  */
 @DisabledOnOs(OS.WINDOWS)
 class TerminalProcessInput_Test extends TestBase {
@@ -133,7 +135,77 @@ class TerminalProcessInput_Test extends TestBase {
 		}
 	}
 
-	// a04 (write reaches the job) and a05 (^C) need the real runner's --input stdin flag; added with it.
+	/** Starts the real {@code juneau_run.py} in input mode, or skips the test when {@code python3} is not on the PATH. */
+	private TerminalProcess startReal(List<String> cmd) throws Exception {
+		var path = System.getenv("PATH");
+		assumeTrue(TerminalProcess.findOnPath("python3", path) != null, "python3 not on the PATH - skipped");
+		var host = new Host(System.getProperty("os.name"), TerminalProcessPty_Test.script().toString(), null, path);
+		return TerminalProcess.start("generic", cmd, 80, 24, run, host, true);
+	}
+
+	/** The job's log so far, as text. */
+	private static String log(TerminalProcess p) throws Exception {
+		return new String(p.terminal().read(0, 1 << 20).bytes(), UTF_8);
+	}
+
+	/**
+	 * Waits up to 60 s for the job to print its ready marker, so input is not sent before it has its terminal.
+	 *
+	 * <p>
+	 * Starting the runner and the job can take several seconds on a loaded machine (a parallel build); the wait ends as
+	 * soon as the marker shows, so the limit only matters when something is really wrong.
+	 */
+	private static void awaitLog(TerminalProcess p, String marker) throws Exception {
+		for (var i = 0; i < 2400 && ! log(p).contains(marker); i++)
+			Thread.sleep(25);
+		assertTrue(log(p).contains(marker), () -> "never printed " + marker + ": " + uncheckedLog(p));
+	}
+
+	private static String uncheckedLog(TerminalProcess p) {
+		try {
+			return log(p);
+		} catch (Exception e) {
+			return e.toString();
+		}
+	}
+
+	@Test void a04_writeReachesJob() throws Exception {
+		try (var p = startReal(List.of("sh", "-c", "echo READY; read a; echo \"got $a\""))) {
+			awaitLog(p, "READY");
+			assertTrue(p.write("y\n".getBytes(UTF_8)));
+			assertEquals(0, p.waitFor(30, TimeUnit.SECONDS));
+			assertTrue(log(p).contains("got y"), () -> uncheckedLog(p));
+		}
+	}
+
+	@Test void a05_ctrlC() throws Exception {
+		try (var p = startReal(List.of("sh", "-c", "echo READY; exec sleep 30"))) {
+			awaitLog(p, "READY");
+			assertTrue(p.write(new byte[]{3}));
+			assertEquals(130, p.waitFor(5, TimeUnit.SECONDS), "^C through the terminal's line discipline is SIGINT");
+		}
+	}
+
+	/** The runner started with the given signal ignored, as a background job of a non-interactive shell has it: the key must still reach the job. */
+	private void keyWithSignalIgnoredForRunner(String signal, int key, int expectedExit) throws Exception {
+		var real = TerminalProcess.findOnPath("python3", System.getenv("PATH"));
+		assumeTrue(real != null, "python3 not on the PATH - skipped");
+		fakePython("trap '' " + signal + "\nexec '" + real + "' \"$@\"");
+		var host = new Host(System.getProperty("os.name"), TerminalProcessPty_Test.script().toString(), null, bin.toString());
+		try (var p = TerminalProcess.start("generic", List.of("sh", "-c", "echo READY; exec sleep 30"), 80, 24, run, host, true)) {
+			awaitLog(p, "READY");
+			assertTrue(p.write(new byte[]{(byte)key}));
+			assertEquals(expectedExit, p.waitFor(5, TimeUnit.SECONDS), "the key reaches the job although the runner inherited an ignored " + signal);
+		}
+	}
+
+	@Test void a05b_ctrlCWithSigintIgnoredForRunner() throws Exception {
+		keyWithSignalIgnoredForRunner("INT", 3, 130);
+	}
+
+	@Test void a05c_ctrlBackslashWithSigquitIgnoredForRunner() throws Exception {
+		keyWithSignalIgnoredForRunner("QUIT", 0x1c, 131);
+	}
 
 	@Test void a06_bufferBound() throws Exception {
 		sleepingRunner("");

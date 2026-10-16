@@ -186,6 +186,11 @@ class GateMarkersTest(MarkerCase):
         self.assertEqual(got[-2:], [{"ev": "end", "id": "sonar-run", "status": "ok"},
                                     {"ev": "end", "id": "sonar", "status": "ok"}])
 
+    def test_the_label_names_the_gates_row(self):
+        with mock.patch.object(jr, "step", wraps=jr.step) as step:
+            self.capture(run.gate, [PY, "-c", "pass"], title="SonarQube gate", id="sonar", label="Sonar")
+        self.assertEqual(step.call_args.kwargs["label"], "Sonar")
+
 
 class HandoffTest(MarkerCase):
     def test_plain_handoff(self):
@@ -217,6 +222,116 @@ class ChildEnvTest(unittest.TestCase):
             self.assertIn("JUNEAU_RUN_SESSION", run.child_env(keep=("JUNEAU_RUN_SESSION",)))
             self.assertEqual(run.child_env(strip_protocol=False)["RUN_MARKERS"], "1")
             self.assertEqual(os.environ["RUN_MARKERS"], "1")
+
+
+class SessionHistoryAndPlanTest(MarkerCase):
+    class Recorder:
+        def __init__(self):
+            self.events = []
+
+        def __call__(self, kind, fields):
+            self.events.append((kind, dict(fields)))
+
+        def of(self, kind):
+            return [f for k, f in self.events if k == kind]
+
+    def test_session_plan_kwarg_and_method(self):
+        rec = jr.subscribe(self.Recorder())
+        with redirect_stdout(io.StringIO()), run.session("t", plan=["a", "b"], exit=False) as s:
+            self.assertEqual(rec.of("plan")[-1]["ids"], ["a", "b"])
+            s.plan(["b"])
+            self.assertEqual(rec.of("plan")[-1]["ids"], ["b"])
+
+    def test_session_starts_history_once_for_the_repo(self):
+        with redirect_stdout(io.StringIO()), mock.patch.object(jr, "history_start") as hs, \
+                run.session("t", repo="/some/repo", exit=False):
+            pass
+        hs.assert_called_once_with("/some/repo")
+
+    def test_session_records_history_in_the_given_dir(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            os.environ["JUNEAU_RUN_HISTORY"] = "1"
+            os.environ["JUNEAU_RUN_HISTORY_DIR"] = tmp
+            with redirect_stdout(io.StringIO()), run.session("t", repo=tmp, exit=False):
+                with run.step("a", "A"):
+                    pass
+            files = list(Path(tmp).rglob("*.jsonl"))
+            self.assertEqual(len(files), 1)
+            self.assertIn('"step":"a"', files[0].read_text(encoding="utf-8"))
+
+    def test_history_off_writes_nothing(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            os.environ["JUNEAU_RUN_HISTORY_DIR"] = tmp
+            with redirect_stdout(io.StringIO()), run.session("t", repo=tmp, exit=False):
+                with run.step("a", "A"):
+                    pass
+            self.assertEqual(list(Path(tmp).rglob("*.jsonl")), [])
+
+
+class _Recorder:
+    def __init__(self):
+        self.events = []
+
+    def __call__(self, kind, fields):
+        self.events.append((kind, dict(fields)))
+
+    def of(self, kind):
+        return [f for k, f in self.events if k == kind]
+
+
+class CmdSummarizeTest(unittest.TestCase):
+    """juneau_run loaded, markers off, default sinks: a summarize callback routes the command through run_tool."""
+
+    def setUp(self):
+        isolate_run_env(self)
+        reset_run_state()
+        self.addCleanup(reset_run_state)
+        saved = sys.modules.get("juneau_run")
+        self.addCleanup(lambda: sys.modules.__setitem__("juneau_run", saved) if saved is not None
+                        else sys.modules.pop("juneau_run", None))
+        sys.modules["juneau_run"] = jr
+        run._n = 0
+
+    def test_cmd_with_summarize_routes_through_run_tool_without_markers(self):
+        rec = jr.subscribe(_Recorder())
+        with redirect_stdout(io.StringIO()):
+            r = run.cmd([PY, "-c", "print('x')"], title="T", summarize=lambda text: "saw " + text.strip())
+        self.assertTrue(r.ok)
+        self.assertEqual([e["summary"] for e in rec.of("step_end")], ["saw x"])
+
+    def test_cmd_summarize_runs_while_the_row_is_open(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            os.environ.pop("JUNEAU_RUN_HISTORY", None)
+            os.environ["JUNEAU_RUN_HISTORY_DIR"] = tmp
+            jr.history_start(tmp)
+
+            def summarize(text):
+                jr.history_series("x", {"a": 1})
+                return None
+            with redirect_stdout(io.StringIO()):
+                run.cmd([PY, "-c", "pass"], title="T", id="t", summarize=summarize)
+            [record] = jr.HistoryStore(tmp, "test").read()
+        self.assertEqual(record["series"]["x"], {"a": 1.0})
+
+    def test_cmd_without_summarize_keeps_the_plain_path(self):
+        with mock.patch.object(jr, "run_tool", side_effect=AssertionError("routed")):
+            r = run.cmd([PY, "-c", "pass"], title="T")
+        self.assertTrue(r.ok)
+
+
+class CmdSummarizeWithoutEngineTest(PlainCase):
+    def test_cmd_with_summarize_and_no_jr_runs_plain_and_never_calls_it(self):
+        f = mock.Mock(return_value="never")
+        r = run.cmd([PY, "-c", "import sys; sys.exit(4)"], title="T", summarize=f)
+        self.assertEqual((r.ok, r.code), (False, 4))
+        f.assert_not_called()
+
+
+class SessionWithoutEngineTest(PlainCase):
+    def test_session_without_the_engine_loaded_does_not_start_history(self):
+        with redirect_stdout(io.StringIO()), run.session("t", plan=["a"], exit=False) as s:
+            s.plan(["b"])
+        self.assertEqual(s.code, 0)
 
 
 if __name__ == "__main__":

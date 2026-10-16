@@ -279,7 +279,7 @@ public class JspMixin {
 	 *
 	 * <p>
 	 * Mirrors {@link JspDispatcher.Builder}'s configuration methods on its own surface and forwards
-	 * each call into a held {@link JspDispatcher.Builder} (§2.3.1 worker-bean composition).
+	 * each call into a held {@link JspDispatcher.Builder} (worker-bean composition).
 	 * Implements {@link ViewMixinBuilder} so {@link #basePath(String)} is guaranteed to transfer
 	 * to the sibling Thymeleaf / Mustache / FreeMarker bridge builders; see
 	 * {@link #cacheTemplates(boolean)} for this bridge's no-op conformance caveat.

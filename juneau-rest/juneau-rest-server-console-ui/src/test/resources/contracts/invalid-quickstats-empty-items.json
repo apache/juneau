@@ -1,0 +1,26 @@
+{
+ "contractVersion": "1",
+ "title": "T",
+ "nav": [],
+ "activeNav": [],
+ "cards": [
+  {
+   "id": "releases",
+   "type": "datatables",
+   "bare": true,
+   "table": {
+    "dataUrl": "/rest/releases/data",
+    "columns": [
+     {
+      "key": "name",
+      "label": "Name"
+     }
+    ],
+    "quickStats": {
+     "id": "s",
+     "items": []
+    }
+   }
+  }
+ ]
+}

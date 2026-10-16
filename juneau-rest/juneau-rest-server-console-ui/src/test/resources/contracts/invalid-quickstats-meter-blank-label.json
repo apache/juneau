@@ -1,0 +1,91 @@
+{
+ "contractVersion": "1",
+ "title": "T",
+ "nav": [],
+ "activeNav": [],
+ "cards": [
+  {
+   "id": "releases",
+   "type": "datatables",
+   "bare": true,
+   "table": {
+    "dataUrl": "/rest/releases/data",
+    "columns": [
+     {
+      "key": "name",
+      "label": "Name"
+     }
+    ],
+    "quickStats": {
+     "id": "s",
+     "items": [
+      {
+       "id": "t1",
+       "label": "Open",
+       "value": 3,
+       "tone": "warning"
+      },
+      {
+       "id": "t2",
+       "label": "Text",
+       "value": "n/a"
+      },
+      {
+       "id": "t3",
+       "type": "tile",
+       "label": "Typed",
+       "value": 1
+      },
+      {
+       "id": "t4",
+       "label": null,
+       "value": true
+      },
+      {
+       "id": "m1",
+       "type": "meter",
+       "label": "",
+       "value": 12,
+       "max": 40,
+       "text": "12 of 40",
+       "tone": "success"
+      },
+      {
+       "id": "m2",
+       "label": "Used",
+       "value": 2,
+       "max": 10
+      },
+      {
+       "id": "g1",
+       "type": "segmented",
+       "label": "Orders",
+       "segments": [
+        {
+         "label": "Placed",
+         "count": 3
+        },
+        {
+         "label": "Approved",
+         "count": 5,
+         "tone": "info"
+        }
+       ]
+      },
+      {
+       "id": "g2",
+       "label": "Solo",
+       "segments": [
+        {
+         "label": "Only",
+         "count": 0,
+         "tone": "neutral"
+        }
+       ]
+      }
+     ]
+    }
+   }
+  }
+ ]
+}

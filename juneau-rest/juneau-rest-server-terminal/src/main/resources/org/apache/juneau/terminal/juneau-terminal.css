@@ -60,7 +60,7 @@
 
 .juneau-term-fail,
 .juneau-term-error {
-	color: #fff;
+	color: var(--jc-on-tone, #fff);
 	background: var(--jc-tone-error, #b3261e);
 }
 
@@ -104,5 +104,5 @@
 .juneau-term-screen {
 	overflow: hidden;
 	min-width: 0;
-	background: #000;
+	background: var(--jc-term-bg, #000);
 }

@@ -26,7 +26,7 @@ import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.condition.*;
 
 /**
- * Fail loud (spec 6.3): a {@code publisher=script} topic that no page script declares paints E-JS-41 on the subscribing card (naming the topic)
+ * Fail loud: a {@code publisher=script} topic that no page script declares paints E-JS-41 on the subscribing card (naming the topic)
  * and logs it; a page that wires topics without {@code juneau-bus.js} fails at mount with the page-level E-JS-46 banner.
  */
 @EnabledIfSystemProperty(named=ConsoleBusBrowserSupport.GATE, matches="true", disabledReason=ConsoleBusBrowserSupport.DISABLED)

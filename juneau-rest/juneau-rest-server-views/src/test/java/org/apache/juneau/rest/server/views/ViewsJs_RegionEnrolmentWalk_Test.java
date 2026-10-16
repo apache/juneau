@@ -26,8 +26,8 @@ import org.junit.jupiter.api.*;
 
 /**
  * Source-shape pins for {@code juneau-views.js}'s ONE real enrolment call site (caller #3 of 3,
- * {@code expandDetailRow}) and all FIVE region removal paths (design §9.3's teardown table, including the B3
- * {@code teardownTable} reinit row) - the {@code juneau-views.js} slice of the design's round-4 region-enrolment
+ * {@code expandDetailRow}) and all FIVE region removal paths (the teardown table, including the
+ * {@code teardownTable} reinit row) - the {@code juneau-views.js} part of the region-enrolment
  * fix.
  *
  * <p>Mirrors {@link ViewsJs_Reinit_Test}'s own balanced-brace {@code functionBody} extractor and its
@@ -172,7 +172,7 @@ class ViewsJs_RegionEnrolmentWalk_Test extends TestBase {
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
-	// g) Removal path 5/5 (B3): teardownTable's reinit/destroy path - first AND unguarded.
+	// g) Removal path 5/5: teardownTable's reinit/destroy path - first AND unguarded.
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Test void g01_teardownTable_tearsDownRegionsFirstAndUnguarded() throws Exception {

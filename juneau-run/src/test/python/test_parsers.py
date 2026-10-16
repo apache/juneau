@@ -345,14 +345,16 @@ class MavenParserTest(unittest.TestCase):
                 parser.prepare(cmd, None, "/nonexistent")
                 self.assertEqual(parser.tests_mode, expected)
 
-    def test_the_reactor_event_comes_from_the_tree_then_from_the_first_building_line(self):
+    def test_the_reactor_event_comes_from_the_tree_size_then_the_build_order_block(self):
         with tempfile.TemporaryDirectory() as tmp:
             self.demo_tree_with_tests(Path(tmp))
             _, events = maven("maven-serial-success.log", cwd=tmp)
-        self.assertEqual(events[0], ("reactor", 4, ["mvn/demo-parent"], True))
-        self.assertEqual(kinds(events, "reactor"), [("reactor", 4, ["mvn/demo-parent"], True)] * 2)
+        self.assertEqual(events[0], ("reactor", 4, [], True))     # poms only come from a Build Order block
+        # first line (no poms yet), the fixture's Reactor Build Order block, then the first Building line
+        self.assertEqual(kinds(events, "reactor"), [("reactor", 4, [], True), ("reactor", 4, ["mvn/demo-parent"], True),
+                                                    ("reactor", 4, ["mvn/demo-parent"], True)])
         _, no_tree = maven("maven-serial-success.log")
-        self.assertEqual(kinds(no_tree, "reactor"), [("reactor", 4, [], True)])
+        self.assertEqual(kinds(no_tree, "reactor"), [("reactor", 4, [], True)] * 2)    # no tree: block, then Building
 
     def test_packaging_from_the_pom_tree(self):
         with tempfile.TemporaryDirectory() as tmp:
@@ -515,9 +517,10 @@ class MavenParserTest(unittest.TestCase):
         self.assertEqual(mod_a, ("tests", "mvn/mod-a", 9, 0, 0, 0))
 
 
-def write_demo_tree(root):
+def write_demo_tree(root, packaging="jar"):
     (root / "pom.xml").write_text(
         '<project xmlns="http://maven.apache.org/POM/4.0.0"><artifactId>demo-parent</artifactId><name>Demo Parent</name>'
+        f'<packaging>{packaging}</packaging>'
         '<modules><module>mod-a</module><module>mod-b</module><module>mod-c</module></modules></project>', encoding="utf-8")
     for m in "abc":
         (root / f"mod-{m}").mkdir(exist_ok=True)
@@ -620,11 +623,12 @@ class PytestParserTest(unittest.TestCase):
         events = feed(self.parser(), "1 failed, 2 passed, 1 skipped, 1 error in 0.03s\n", 1)
         self.assertEqual(kinds(events, "tests")[-1], ("tests", "py", 5, 1, 1, 1))
 
-    def test_prepare_adds_junitxml_only_when_markers_are_on_and_artifacts_exist(self):
+    @mock.patch.object(jr, "find_pytest_plugin", return_value=None)
+    def test_prepare_adds_junitxml_only_when_markers_are_on_and_artifacts_exist(self, _):
         with mock.patch.dict(os.environ, {"RUN_MARKERS": "1", "RUN_ARTIFACTS": "/art"}):
             p = self.parser()
             cmd, _ = p.prepare(["pytest", "-q"], None, None)
-            self.assertEqual(cmd, ["pytest", "-q", "--junitxml=/art/py-pytest.xml"])
+            self.assertEqual(cmd, ["pytest", "--junitxml=/art/py-pytest.xml", "-q"])
         with mock.patch.dict(os.environ, {"RUN_ARTIFACTS": "/art"}):
             os.environ.pop("RUN_MARKERS", None)
             self.assertEqual(self.parser().prepare(["pytest"], None, None)[0], ["pytest"])
@@ -642,7 +646,8 @@ class PytestParserTest(unittest.TestCase):
             Path(p.report_path).write_text("<testsuites/>", encoding="utf-8")
             self.assertEqual(p.finish(0), [("report", "py", "junitxml", p.report_path)])
 
-    def test_existing_junitxml_is_kept_and_reported(self):
+    @mock.patch.object(jr, "find_pytest_plugin", return_value=None)
+    def test_existing_junitxml_is_kept_and_reported(self, _):
         p = self.parser()
         cmd, _ = p.prepare(["pytest", "--junitxml=out.xml"], None, None)
         self.assertEqual((cmd, p.report_path), (["pytest", "--junitxml=out.xml"], "out.xml"))
@@ -889,6 +894,57 @@ class GradleFixtureTest(unittest.TestCase):
         events = self.fixture("gradle-compile-failure.log", 1)
         self.assertIn(("g/lib-compilejava", "fail"), [(e[1], e[2]) for e in kinds(events, "sub_end")])
         self.assertIn("Compilation failed", kinds(events, "failure")[0][1])
+
+
+class ReactorBuildOrderTest(unittest.TestCase):
+    # titles as read_pom_tree sees them from write_demo_tree(): "Demo Parent" (pom) and "Demo Module A".."C"
+    ORDER = ["[INFO] Reactor Build Order:", "[INFO] ",
+             "[INFO] Demo Parent                                                   [pom]",
+             "[INFO] Demo Module A                                                 [jar]",
+             "[INFO] Demo Module B                                                 [jar]",
+             "[INFO] Demo Module C                                                 [jar]",
+             "[INFO] ", "[INFO] -----< org.demo:mod-a >-----",
+             "[INFO] Building Demo Module A 1.0 [2/4]"]
+
+    def reactor(self, lines, **tree):
+        with tempfile.TemporaryDirectory() as tmp:
+            write_demo_tree(Path(tmp), **tree)
+            parser = jr.MavenParser()
+            parser.step_id = "mvn"
+            parser.prepare(["mvn", "test"], None, tmp)
+            return [e for e in feed(parser, "\n".join(lines)) if e[0] == "reactor"]
+
+    def test_size_and_poms_come_from_the_build_order(self):
+        last = self.reactor(self.ORDER, packaging="pom")[-1]
+        self.assertEqual(last[1], 4)
+        self.assertEqual(last[2], ["mvn/demo-parent"])          # the one pom-packaged member, as a sub id
+
+    def test_poms_are_empty_until_the_block_is_seen(self):
+        first = self.reactor(self.ORDER, packaging="pom")[0]    # the first-line event precedes the block
+        self.assertEqual(first[2], [])
+
+    def test_pl_build_does_not_use_the_whole_tree(self):
+        order = ["[INFO] Reactor Build Order:", "[INFO] ", "[INFO] Demo Module A  [jar]", "[INFO] ",
+                 "[INFO] Building Demo Module A 1.0 [1/1]"]
+        last = self.reactor(order, packaging="pom")[-1]          # the tree still has a pom parent
+        self.assertEqual((last[1], last[2]), (1, []))
+
+    def test_no_build_order_means_no_poms(self):
+        last = self.reactor(["[INFO] Building Demo Module A 1.0 [1/9]"], packaging="pom")[-1]
+        self.assertEqual(last[2], [])
+
+    def test_unmappable_pom_title_stays_in_the_bars(self):
+        order = ["[INFO] Reactor Build Order:", "[INFO] ", "[INFO] Unknown Aggregator  [pom]",
+                 "[INFO] Demo Module A  [jar]", "[INFO] ", "[INFO] Building Demo Module A 1.0 [2/2]"]
+        last = self.reactor(order, packaging="pom")[-1]
+        self.assertEqual((last[1], last[2]), (2, []))
+
+
+    def test_duplicate_pom_titles_give_one_id(self):
+        order = ["[INFO] Reactor Build Order:", "[INFO] ", "[INFO] Demo Parent  [pom]", "[INFO] Demo Parent  [pom]",
+                 "[INFO] Demo Module A  [jar]", "[INFO] ", "[INFO] Building Demo Module A 1.0 [3/3]"]
+        last = self.reactor(order, packaging="pom")[-1]
+        self.assertEqual(last[2], ["mvn/demo-parent"])
 
 
 if __name__ == "__main__":

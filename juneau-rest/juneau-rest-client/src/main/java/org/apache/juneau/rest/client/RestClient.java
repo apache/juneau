@@ -99,6 +99,7 @@ public final class RestClient implements Closeable {
 	final Serializer defaultSerializer;
 	final Parser defaultParser;
 	final boolean allowPrivateUrls;
+	final RemoteUrlPolicy.AllowedRanges allowedAddressRanges;
 
 	private RestClient(Builder builder) {
 		this.transport = reqnn("transport",
@@ -115,6 +116,7 @@ public final class RestClient implements Closeable {
 		this.defaultSerializer = builder.defaultSerializer;
 		this.defaultParser = builder.defaultParser;
 		this.allowPrivateUrls = builder.allowPrivateUrls || Boolean.getBoolean(RemoteUrlPolicy.ALLOW_PRIVATE_URLS_PROPERTY);
+		this.allowedAddressRanges = RemoteUrlPolicy.AllowedRanges.of(builder.allowedAddressRanges.toArray(new String[0]));
 	}
 
 	/**
@@ -147,6 +149,17 @@ public final class RestClient implements Closeable {
 	 */
 	public boolean isAllowPrivateUrls() {
 		return allowPrivateUrls;
+	}
+
+	/**
+	 * Returns the per-client special-purpose address ranges this client re-permits in the SSRF guardrail (see
+	 * {@link Builder#allowAddressRanges(String...)}).  They are unioned with the
+	 * {@value RemoteUrlPolicy#ALLOW_ADDRESS_RANGES_PROPERTY} system property at each check.
+	 *
+	 * @return The allowed ranges. Never <jk>null</jk>.
+	 */
+	public RemoteUrlPolicy.AllowedRanges getAllowedAddressRanges() {
+		return allowedAddressRanges;
 	}
 
 	private static HttpTransport discoverTransport() {
@@ -422,6 +435,7 @@ public final class RestClient implements Closeable {
 		final List<Serializer> serializerList = l();
 		final List<Parser> parserList = l();
 		boolean allowPrivateUrls;
+		final List<String> allowedAddressRanges = l();
 		boolean sendRequestId = true;
 
 		private Builder() {}
@@ -469,6 +483,34 @@ public final class RestClient implements Closeable {
 		 */
 		public Builder allowPrivateUrls(boolean value) {
 			allowPrivateUrls = value;
+			return this;
+		}
+
+		/**
+		 * Re-permits, for this client only, addresses that the default SSRF guardrail denies solely because they fall in
+		 * one of the special-purpose ranges <c>192.0.0.0/24</c>, <c>198.18.0.0/15</c>, <c>224.0.0.0/4</c>,
+		 * <c>240.0.0.0/4</c> or <c>ff00::/8</c> (for example a lab or appliance network on <c>198.18.0.0/15</c>).
+		 *
+		 * <p>
+		 * This is the per-client counterpart of the {@value RemoteUrlPolicy#ALLOW_ADDRESS_RANGES_PROPERTY} system
+		 * property and has exactly its narrow semantics: every entry (a CIDR range or a single address, parsed as a
+		 * literal with no DNS lookup) must lie entirely inside one of those five ranges, and it never re-permits
+		 * loopback, link-local/metadata (<c>169.254.169.254</c>), private, CGNAT or any other denied address.  It applies
+		 * to the literal-host check, the connect-time (DNS-pinned) address selection and every redirect hop of this
+		 * client's {@code @Remote} calls, on every first-party transport.
+		 *
+		 * <p>
+		 * The effective allow-list is the <b>union</b> of these ranges and the system property's ranges (both are
+		 * narrow, so the union is too).  Calls accumulate.  An invalid entry is reported by {@link #build()} as an
+		 * {@link IllegalArgumentException}.
+		 *
+		 * @param value The CIDR ranges or single addresses to allow; each element may also hold several comma- or
+		 * 	whitespace-separated entries.  <jk>null</jk> or empty adds nothing.
+		 * @return This object.
+		 */
+		public Builder allowAddressRanges(String...value) {
+			if (value != null)
+				allowedAddressRanges.addAll(Arrays.asList(value));
 			return this;
 		}
 

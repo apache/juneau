@@ -128,17 +128,17 @@ final class RawContentSinkScanner {
 		VIEWS_JS_DIR + "/juneau-config.js",
 		VIEWS_JS_DIR + "/juneau-icons.js",
 		VIEWS_JS_DIR + "/juneau-renders.js",
+		// The DataRegistry runtime moves row data between cards, so it must stay sink-free.
+		VIEWS_JS_DIR + "/juneau-data.js",
 		VIEWS_JS_DIR + "/juneau-views.js",
 		VIEWS_JS_DIR + "/juneau-ribbon.js",
 		VIEWS_JS_DIR + "/juneau-helpers.js",
 		// The REGION RUNTIME.  Omitted until the region emitter landed, which is backwards: this is the one shipped asset that
 		// takes an author-supplied populator NAME off a DOM attribute and hands a container to author-registered
-		// populate functions, so it is the file where an HTML sink would matter most (R11/R36, design §13.5).  It
+		// populate functions, so it is the file where an HTML sink would matter most.  It
 		// has zero sinks today - every state message goes out through renderAsyncStatus's textContent - and listing
 		// it here is what keeps that true rather than merely currently-so.
 		VIEWS_JS_DIR + "/juneau-regions.js",
-		// The console-output module renders untrusted log lines, so it must stay sink-free.
-		VIEWS_JS_DIR + "/juneau-console-output.js",
 		// The run-view module renders untrusted report text (test names, messages, traces), so it must stay sink-free.
 		VIEWS_JS_DIR + "/juneau-run-view.js",
 		WIDGETS_JS_DIR + "/juneau-calendar.js",
@@ -149,6 +149,8 @@ final class RawContentSinkScanner {
 		CONSOLE_JS_DIR + "/juneau-joblog.js",
 		// The badge runtime renders row/status text into badge nodes, so it must stay sink-free.
 		CONSOLE_JS_DIR + "/juneau-badges.js",
+		// The dashboard runtime renders share-link and saved-state values and data-source dict values, so it must stay sink-free.
+		CONSOLE_JS_DIR + "/juneau-dashboard.js",
 		VIEWS_JS_DIR + "/juneau-bus.js",
 		VIEWS_JS_DIR + "/juneau-pagestate.js",
 		VIEWS_JS_DIR + "/juneau-search.js",
@@ -298,7 +300,7 @@ final class RawContentSinkScanner {
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
-	// rawText(...) emitter-purity scanning (design test 33): what an emitter may hand to the verbatim writer.
+	// rawText(...) emitter-purity scanning: what an emitter may hand to the verbatim writer.
 	//
 	//------------------------------------------------------------------------------------------------------------------
 

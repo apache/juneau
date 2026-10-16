@@ -119,7 +119,7 @@ class Regions_Primitive_Test extends TestBase {
 
 	/**
 	 * THE {@code ctx} GOLDEN.  The full key set, the full {@code declared} key set and the full {@code ids} key set,
-	 * asserted as literals - including SD-3's rule that a member absent for one region type is present and null
+	 * asserted as literals - including the rule that a member absent for one region type is present and null
 	 * rather than missing, so a populator can read {@code ctx.ids.sectionId} without a type check.
 	 */
 	@Test void b02_ctxFieldSetIsAnExactGolden() {

@@ -153,6 +153,46 @@ class JettyHttpTransport_SsrfGuard_Test {
 	}
 
 	// =================================================================================================================
+	// D: per-client allowed address ranges (RestClient.Builder.allowAddressRanges)
+	// =================================================================================================================
+
+	private static final String LAB_URL = "http://224.0.0.1:1/x";
+	private static final org.apache.juneau.http.remote.RemoteUrlPolicy.AllowedRanges LAB = org.apache.juneau.http.remote.RemoteUrlPolicy.AllowedRanges.of("224.0.0.0/4");
+
+	private static TransportRequest ranged(String uri, org.apache.juneau.http.remote.RemoteUrlPolicy.AllowedRanges ranges) {
+		return TransportRequest.builder().method("GET").uri(uri).remoteUrlPolicy(true, false).allowedAddressRanges(ranges)
+			.timeout(Duration.ofSeconds(2)).build();
+	}
+
+	private static void assertPinRefused(JettyHttpTransport transport, TransportRequest req, String host) {
+		var ex = assertThrows(TransportException.class, () -> transport.execute(req).close());
+		assertTrue(ex.getMessage().contains("No allowed address for host '" + host + "'"), ex.getMessage());
+	}
+
+	@Test
+	void d01_withRanges_specialPurposeTarget_notRefusedByPin_whileWithoutRangesIsRefused_sameTransport() throws Exception {
+		try (var transport = JettyHttpTransport.create()) {
+			var none = ranged(LAB_URL, org.apache.juneau.http.remote.RemoteUrlPolicy.AllowedRanges.NONE);
+			assertPinRefused(transport, none, "224.0.0.1");
+			try {
+				transport.execute(ranged(LAB_URL, LAB)).close();
+			} catch (TransportException e) {
+				// The connect itself may fail (a multicast address cannot be connected to over TCP); it must not be the policy refusal.
+				assertFalse(e.getMessage().contains("No allowed address"), e.getMessage());
+			}
+			assertPinRefused(transport, none, "224.0.0.1");
+		}
+	}
+
+	@Test
+	void d02_withRanges_loopbackAndMetadata_stillRefused() throws Exception {
+		try (var transport = JettyHttpTransport.create()) {
+			assertPinRefused(transport, ranged("http://127.0.0.1:1/x", LAB), "127.0.0.1");
+			assertPinRefused(transport, ranged("http://169.254.169.254:1/x", LAB), "169.254.169.254");
+		}
+	}
+
+	// =================================================================================================================
 	// Helpers
 	// =================================================================================================================
 

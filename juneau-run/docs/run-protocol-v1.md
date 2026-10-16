@@ -78,7 +78,7 @@ emits `step`, `end`, `report`, `note` and `tests` markers, but its `run()` and `
 
 ## PTY mode
 
-`juneau_run.py --pty --full-log LOG --events EVENTS [--size COLSxROWS] <tool> -- <cmd...>` runs the tool under a pseudo-terminal
+`juneau_run.py --pty --full-log LOG --events EVENTS [--size COLSxROWS] [--input stdin] <tool> -- <cmd...>` runs the tool under a pseudo-terminal
 of the given size (default `120x40`), so tools that colour, redraw or draw progress bars behave as they do in a terminal.
 Every option comes before `<tool>`. POSIX only; anywhere else it exits 2. `--events` appends to its file, so pass a fresh path
 for each run.
@@ -101,6 +101,15 @@ for each run.
 - **Exit codes.** The tool's exit code passes through. A tool killed by signal *n* exits `128+n` and adds a `warn` note
   `<step> killed by SIG…`. A command that can't start exits 127.
 - **Stdout.** `--console` defaults to `none`; `--console full` also copies the raw bytes to stdout.
+
+**PTY input.** `--input stdin` (with `--pty`, before `<tool>`; without `--pty` it exits 2) copies the wrapper's stdin to the PTY
+master unchanged. EOF on stdin stops the copying but not the tool. The bytes reach `LOG` only if the terminal echoes them, so a
+tool that turns echo off (a password prompt) keeps them out of the log. Control bytes act through the terminal's line discipline:
+`^C` sends SIGINT to the tool's foreground process group (so an unhandled one exits 130 with a `killed by SIGINT` note), and
+`^D` ends a read, or signals end of input at the start of a line. `^Z` sends SIGTSTP, but it does not stop a plain tool: the
+tool leads its own session, so nothing could resume it, and the stop is discarded. A shell with job control of its own (`bash -i`)
+does stop its foreground job. A tool that puts its terminal in raw mode gets the bytes as they are. Without `--input`, the
+tool's terminal gets no input at all.
 
 ## Adopting it
 

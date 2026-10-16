@@ -30,11 +30,16 @@ import jakarta.websocket.server.*;
  * because the container calls it.  {@link BusWebSockets#register} installs it.
  *
  * <ul>
- * 	<li>{@link #checkOrigin(String)}: an exact match, so the container answers {@code 403} before any upgrade.
- * 	<li>{@link #modifyHandshake}: Host against the boundary's authority, {@code Sec-Fetch-Site} (when present) must be
- * 		{@code same-origin}, then the capability and principal.  A failure is recorded in the per-connection user
- * 		properties, and {@link BusWebSocketEndpoint#onOpen} closes at once with {@code 4403} ({@code bus:refused}) or
- * 		{@code 4401} ({@code bus:unknown-session}).
+ * 	<li>{@link #checkOrigin(String)}: runs before any upgrade, and a refusal is the container's {@code 403}.  Under a
+ * 		{@link LoopbackBoundary} or {@code allowedOrigins} it is an exact match.  Under a {@link CsrfBoundary} it
+ * 		can only see the {@code Origin} value, so it refuses a missing value, {@code null}, and anything that is not a
+ * 		well-formed http(s) origin; a well-formed cross-site value passes it and is refused by the next step.
+ * 	<li>{@link #modifyHandshake}: under a {@link LoopbackBoundary}, Host against the boundary's authority; under a
+ * 		{@link CsrfBoundary}, {@link CsrfBoundary#checkHandshake} with the scheme of the handshake's request URI and
+ * 		every {@code Host}, {@code Origin} and {@code Sec-Fetch-Site} value.  Otherwise {@code Sec-Fetch-Site} (when
+ * 		present) must be {@code same-origin}.  Last, the capability and principal.  A failure is recorded in the per-connection
+ * 		user properties, and {@link BusWebSocketEndpoint#onOpen} closes at once with {@code 4403} ({@code bus:refused})
+ * 		or {@code 4401} ({@code bus:unknown-session}).
  * </ul>
  *
  * <p>
@@ -67,28 +72,39 @@ public final class BusWebSocketConfigurator extends ServerEndpointConfig.Configu
 	/** Bad capability, principal mismatch or wrong transport: the browser re-POSTs the session. */
 	static final Refusal UNKNOWN_SESSION = new Refusal(4401, "bus:unknown-session");
 
-	/** Bad Host or {@code Sec-Fetch-Site}: the browser fails the bridge. */
+	/** Bad Host, {@code Origin} or {@code Sec-Fetch-Site}: the browser fails the bridge. */
 	static final Refusal REFUSED = new Refusal(4403, "bus:refused");
 
 	private final ServerBus bus;
 	private final Set<String> origins;
 	private final String authority;
+	private final CsrfBoundary csrf;
 
 	BusWebSocketConfigurator(ServerBus bus, Set<String> origins) {
 		this.bus = bus;
 		this.origins = Set.copyOf(origins);
-		this.authority = Optional.ofNullable(bus.policy().boundary()).map(LoopbackBoundary::authority).orElse(null);
+		var boundary = bus.policy().boundary();
+		this.authority = boundary instanceof LoopbackBoundary lb ? lb.authority() : null;
+		this.csrf = boundary instanceof CsrfBoundary cb ? cb : null;
 	}
 
-	/** The exact Origin values the policy allows: the boundary's origin when set, else {@code allowedOrigins}. */
+	/**
+	 * The exact Origin values the policy allows: a {@link LoopbackBoundary}'s origin, nothing for a
+	 * {@link CsrfBoundary} (which matches each handshake against its own Host instead), else {@code allowedOrigins}.
+	 */
 	static Set<String> allowedOrigins(BusPolicy policy) {
-		return Optional.ofNullable(policy.boundary())
-			.map(b -> Set.of(b.origin()))
-			.orElseGet(() -> Set.copyOf(policy.allowedOrigins()));
+		var boundary = policy.boundary();
+		if (boundary instanceof LoopbackBoundary lb)
+			return Set.of(lb.origin());
+		if (boundary instanceof CsrfBoundary)
+			return Set.of();
+		return Set.copyOf(policy.allowedOrigins());
 	}
 
 	@Override /* Configurator */
 	public boolean checkOrigin(String originHeaderValue) {
+		if (csrf != null)
+			return csrf.acceptsHandshakeOrigin(originHeaderValue);
 		return originHeaderValue != null && origins.contains(originHeaderValue);
 	}
 
@@ -104,11 +120,19 @@ public final class BusWebSocketConfigurator extends ServerEndpointConfig.Configu
 	}
 
 	private Refusal check(HandshakeRequest request, Map<String,Object> props) {
-		if (authority != null && ! authority.equalsIgnoreCase(header(request, "Host")))
-			return REFUSED;
-		var site = header(request, "Sec-Fetch-Site");
-		if (site != null && ! "same-origin".equals(site))
-			return REFUSED;
+		if (csrf != null) {
+			var uri = request.getRequestURI();
+			var result = csrf.checkHandshake(uri == null ? null : uri.getScheme(), headers(request, "Host"), headers(request, "Origin"),
+				headers(request, "Sec-Fetch-Site"));
+			if (! result.isAllowed())
+				return REFUSED;
+		} else {
+			if (authority != null && ! authority.equalsIgnoreCase(header(request, "Host")))
+				return REFUSED;
+			var site = header(request, "Sec-Fetch-Site");
+			if (site != null && ! "same-origin".equals(site))
+				return REFUSED;
+		}
 		var id = sessionId(request.getRequestURI());
 		if (id == null)
 			return UNKNOWN_SESSION;
@@ -137,6 +161,19 @@ public final class BusWebSocketConfigurator extends ServerEndpointConfig.Configu
 				if (name.equalsIgnoreCase(e.getKey()) && e.getValue() != null && ! e.getValue().isEmpty())
 					return e.getValue().get(0);
 		return null;
+	}
+
+	/** Every value of a handshake header, across all spellings of its name, so that a duplicate can be counted. */
+	private static List<String> headers(HandshakeRequest request, String name) {
+		var l = new ArrayList<String>();
+		var headers = request.getHeaders();
+		if (headers != null)
+			for (var e : headers.entrySet())
+				if (name.equalsIgnoreCase(e.getKey()) && e.getValue() != null)
+					for (var v : e.getValue())
+						if (v != null)
+							l.add(v);
+		return l;
 	}
 
 	@Override /* Configurator */

@@ -27,7 +27,7 @@ import org.junit.jupiter.api.*;
 
 /**
  * Contract test for the declarative modal ({@link ModalDef}) + form ({@link FormDef}) payload the modal-open
- * confirmation fetch returns (design doc §6.2). This pins the bean half of that contract; the runtime half is
+ * confirmation fetch returns. This pins the bean half of that contract; the runtime half is
  * pinned separately in the views module.
  *
  * <p>
@@ -200,7 +200,7 @@ class ModalDef_FormDef_Test extends TestBase {
 	}
 
 	@Test void c07_formDef_unknownTypeThrows() {
-		var e = assertThrows(IllegalArgumentException.class, () -> FormDef.Input.of("n", "L", "password"));
+		var e = assertThrows(IllegalArgumentException.class, () -> FormDef.Input.of("n", "L", "radio"));
 		assertTrue(e.getMessage().contains("text"), e::getMessage);
 		assertThrows(IllegalArgumentException.class, () -> FormDef.Input.of("n", "L", "<img>"));
 	}
@@ -362,7 +362,7 @@ class ModalDef_FormDef_Test extends TestBase {
 	@Test void e04_validateDoesNotRequireVersionSet() {
 		// the initializer now stamps at construction, so the null case must be re-created deliberately --
 		// validate() must still not false-refuse a modal whose version was explicitly cleared (or that arrived from a
-		// producer that never stamped one).  This is the pin on fork F3 -- validate() gains no version check.
+		// producer that never stamped one).  This pins that validate() gains no version check.
 		var modal = ModalDef.create("t").form(FormDef.create().field(FormDef.Input.of("r", "R", "textarea")));
 		modal.contractVersion = null;
 		modal.form.contractVersion = null;
@@ -446,7 +446,7 @@ class ModalDef_FormDef_Test extends TestBase {
 	}
 
 	/**
-	 * The accepted cost of construction-time stamping (fork F5): version-presence is guaranteed,
+	 * The accepted cost of construction-time stamping: version-presence is guaranteed,
 	 * structural validity is NOT.  A malformed form that never reached checked() now serializes as contract-VALID
 	 * and the client will render it, where before the missing version refused it.  This test exists so that
 	 * behavior is a recorded decision rather than a discovery.  See the serving-path

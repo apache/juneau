@@ -276,7 +276,7 @@ public class BasicRestDebugFormatter implements RestDebugFormatter {
 		var method = DebugTextSanitizer.sanitize(req.getMethod(), maxUriLength);
 		var uri = DebugTextSanitizer.sanitize(req.getRequestURI(), maxUriLength);
 		var sb = new StringBuilder();
-		// Prepend the resolved correlation id (Should-fix 1): read the session-cached getRequestId() through the
+		// Prepend the resolved correlation id: read the session-cached getRequestId() through the
 		// session-handle seam — never a live public/custom-key attribute read.  Missing session/id → no prefix (today's
 		// unprefixed line), never a throw.  Both formatBasic and the 404 render path route through here.
 		var session = RestSession.fromRequest(req);

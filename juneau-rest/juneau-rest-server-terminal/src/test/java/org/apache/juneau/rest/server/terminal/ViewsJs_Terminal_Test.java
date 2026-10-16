@@ -98,10 +98,44 @@ class ViewsJs_Terminal_Test extends TestBase {
 	@Test void g22_capCountsUtf8BytesNotChars() { ok("i21_capCountsUtf8BytesNotChars"); }
 	@Test void g23_queuedKeysStillDrainAfterARefusal() { ok("i22_queuedKeysStillDrainAfterARefusal"); }
 	@Test void g24_refusalChipSurvivesTheDrain() { ok("i23_refusalChipSurvivesTheDrain"); }
+	@Test void g25_throttledChipSurvivesTheDrain() { ok("i24_throttledChipSurvivesTheDrain"); }
+	@Test void h01_nudgeAheadFetchesNow() { ok("n01_nudgeAheadFetchesNow"); }
+	@Test void h02_nudgeBehindIgnored() { ok("n02_nudgeBehindIgnored"); }
+	@Test void h03_inFlightOneFollowUp() { ok("n03_inFlightOneFollowUp"); }
+	@Test void h04_inFlightFailureOneRetry() { ok("n03b_inFlightFailureOneRetry"); }
+	@Test void h05_nudgeModeSlowsPoll() { ok("n04_nudgeModeSlowsPoll"); }
+	@Test void h06_disconnectRestores() { ok("n05_disconnectRestores"); }
+	@Test void h07_disconnectWhileIdleKeepsIdle() { ok("n05b_disconnectWhileIdleKeepsIdle"); }
+	@Test void h08_connectAloneNoSlowdown() { ok("n06_connectAloneNoSlowdown"); }
+	@Test void h09_doneNudge() { ok("n07_doneNudge"); }
+	@Test void h10_badPayloadIgnored() { ok("n08_badPayloadIgnored"); }
+	@Test void h11_stoppedIgnores() { ok("n09_stoppedIgnores"); }
+	@Test void h12_unprobedIgnored() { ok("n10_unprobedIgnored"); }
+	@Test void h13_refreshAboveFiveKept() { ok("n11_refreshAboveFiveKept"); }
+	@Test void h14_hiddenTabDefersNudge() { ok("n12_hiddenTabDefersNudge"); }
+	@Test void h15_nudgeLinkFor() { ok("n13_nudgeLinkFor"); }
+	@Test void h16_followUpOnlyWhenStillBehind() { ok("n03c_followUpOnlyWhenStillBehind"); }
+	@Test void h17_replayInFlightNoDoubleTick() { ok("n14_replayInFlightNoDoubleTick"); }
+	@Test void h17b_replayDropsLeftoverNudgeEnd() { ok("n14b_replayDropsLeftoverNudgeEnd"); }
+	@Test void h18_nudgeDuringRetryKeepsBackoff() { ok("n15_nudgeDuringRetryKeepsBackoff"); }
+	@Test void h19_disconnectDuringRetryKeepsBackoff() { ok("n16_disconnectDuringRetryKeepsBackoff"); }
+
+	@Test void i01_convertEolReachesTheTerminal() { ok("o01_convertEolReachesTheTerminal"); }
+	@Test void i02_unknownKeyIsIgnored() { ok("o02_unknownKeyIsIgnored"); }
+	@Test void i03_juneauOwnedKeysCannotBeOverridden() { ok("o03_juneauOwnedKeysCannotBeOverridden"); }
+	@Test void i04_wrongTypesAreIgnored() { ok("o04_wrongTypesAreIgnored"); }
+	@Test void i05_validScrollbackAndFontFamilyMerge() { ok("o05_validScrollbackAndFontFamilyMerge"); }
+	@Test void i06_absentTerminalCopiesBase() { ok("o06_absentTerminalCopiesBase"); }
+
+	@Test void j01_termThemeFromTokens() { ok("t01_termThemeFromTokens"); }
+	@Test void j02_fallbacks() { ok("t02_fallbacks"); }
+	@Test void j03_cardCannotOverrideTheme() { ok("t03_cardCannotOverrideTheme"); }
+	@Test void j04_themeChangedUpdates() { ok("t04_themeChangedUpdates"); }
+	@Test void j05_listenerRemovedOnCleanup() { ok("t05_listenerRemovedOnCleanup"); }
 
 	@Test void z01_everyCasePasses() {
 		var r = r();
-		assertEquals(56, r.size(), () -> "case count changed; add a method per new case: " + r.keySet());
+		assertEquals(88, r.size(), () -> "case count changed; add a method per new case: " + r.keySet());
 		for (var e : r.entrySet())
 			assertEquals(true, e.getValue(), () -> e.getKey() + " -> " + e.getValue());
 	}

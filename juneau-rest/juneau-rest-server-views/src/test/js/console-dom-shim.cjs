@@ -17,12 +17,12 @@
 
 /*
  * console-dom-shim.cjs - extends views-dom-shim.cjs's makeEnv() with the handful of DOM primitives
- * juneau-console.js needs that no other harness exercises: a settable window.location (prefix-fallback matching),
+ * juneau-console.js needs that no other harness exercises: a settable window.location (longest-prefix matching),
  * window.CustomEvent + document.dispatchEvent (the "juneau:console-mounted" handshake), document.importNode +
  * document.createDocumentFragment (<template> cloning, including a BARE html card host), a listener-count
  * tracker for the keydown-listener-leak regression, and a real `<template>.innerHTML`
- * setter (entity decode + nested-element parse) so renderFooter's trusted-HTML footer.text (P24
- * revised) actually parses under this harness instead of just storing a string.
+ * setter (entity decode + nested-element parse) so renderFooter's trusted-HTML footer.text
+ * actually parses under this harness instead of just storing a string.
  *
  * This file never modifies views-dom-shim.cjs - it only wraps the env that shim returns.
  *
@@ -133,6 +133,7 @@ function makeFragment() {
 			return c;
 		},
 		appendChild: function (c) {
+			if (c === frag) throw new Error('HierarchyRequestError: a node cannot be appended to itself');
 			if (c?.nodeType === 11) {
 				const kids = c.childNodes.slice();
 				c.childNodes.length = 0;
@@ -149,6 +150,22 @@ function makeFragment() {
 		}
 	};
 	return frag;
+}
+
+/** A (nodeType 8) comment node: just enough to be appended, located by identity and removed. */
+function makeComment(value) {
+	return {
+		nodeType: 8,
+		parentNode: null,
+		data: value == null ? '' : String(value),
+		get nextSibling() {
+			const sibs = this.parentNode?.childNodes;
+			return sibs ? sibs[sibs.indexOf(this) + 1] || null : null;
+		},
+		remove: function () {
+			if (this.parentNode) this.parentNode.removeChild(this);
+		}
+	};
 }
 
 /** Wraps `node`'s own appendChild/insertBefore so passing a (nodeType 11) fragment flattens its children in. */
@@ -201,6 +218,7 @@ function makeConsoleEnv(opts) {
 	};
 
 	doc.createDocumentFragment = function () { return makeFragment(); };
+	doc.createComment = function (v) { return makeComment(v); };
 	doc.importNode = function (node, deep) { return cloneDeep(doc, node, deep); };
 
 	patchFragmentAwareness(doc.body);

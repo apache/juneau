@@ -62,15 +62,15 @@ import org.apache.juneau.commons.concurrent.*;
  * any custom codec) agree on exactly what is authenticated.
  *
  * <p>
- * <b>Authenticated principal (READY-312f F4).</b> Both {@link #seal(McpRequestState, String, Principal)} and
+ * <b>Authenticated principal.</b> Both {@link #seal(McpRequestState, String, Principal)} and
  * {@link #unseal(String, String, Principal)} receive the caller's authenticated {@link Principal} &mdash; the same
- * identity the F2 resource-server layer establishes (see {@code McpResourceServerSupport#principal}). This is the
+ * identity the resource-server layer establishes (see {@code McpResourceServerSupport#principal}). This is the
  * <i>seam</i> a hardened codec uses to fold the caller identity into its authenticated data, so a
  * {@code requestState} minted for principal A cannot be resumed by principal B. The built-in
  * {@link AeadRequestStateCodec} binds exactly that: it folds a canonical, deterministic {@code iss|sub} identity
  * (see {@link AeadRequestStateCodec#principalIdentity(Principal)}) into its AEAD authenticated data, so a
- * mismatched principal fails the GCM tag check and {@link #unseal} returns {@link Optional#empty()}. F4 is what
- * guarantees the principal is delivered to the codec at both seal and unseal in the first place; a custom codec
+ * mismatched principal fails the GCM tag check and {@link #unseal} returns {@link Optional#empty()}. The
+ * dispatcher guarantees the principal is delivered to the codec at both seal and unseal; a custom codec
  * remains free to bind a different identity attribute (subject claim, issuer+subject, full claim set) or none at
  * all. The principal is <b>nullable</b>: when RS auth is disabled or the caller is anonymous it is <jk>null</jk>,
  * and every codec must seal/unseal cleanly (no NPE) in that case. The two-argument

@@ -194,7 +194,7 @@ class ViewsJs_DialogForm_Test extends TestBase {
 
 	/**
 	 * The trailing {@code childCatalog} parameter is additive at the CALL SITE, not just in the
-	 * signature: the six-argument calls above are byte-identical to their pre-J0513 form and still paint today's
+	 * signature: the six-argument calls above are byte-identical to their earlier form and still paint today's
 	 * fail-closed control, while the same field resolves once a catalog is supplied.
 	 */
 	@Test void b04a_theTrailingChildCatalogParameterIsOptional() {
@@ -213,5 +213,15 @@ class ViewsJs_DialogForm_Test extends TestBase {
 		assertEquals(true, r.get("collect_title"));
 		assertEquals(true, r.get("collect_esc_skipped"));
 		assertEquals(true, r.get("collect_weird_absent"));
+	}
+
+	@Test void b06_passwordPaintedMaskedAndNeverPrefilled() {
+		var r = report();
+		assertEquals(true, r.get("pw_isInput"));
+		assertEquals(true, r.get("pw_typePassword"));
+		assertEquals(true, r.get("pw_autocomplete"));
+		assertEquals(true, r.get("pw_notPrefilled"));
+		assertEquals(true, r.get("pw_required"));
+		assertEquals(true, r.get("pw_collectsTyped"));
 	}
 }

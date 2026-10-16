@@ -76,6 +76,12 @@ import jakarta.servlet.http.*;
  * 	</tr>
  * </table>
  *
+ * <p>
+ * A request is state-changing when its <b>effective</b> method is not safe
+ * ({@link MethodSafety#effectiveMethod(String, String, java.util.function.UnaryOperator)}): a {@code GET} carrying
+ * {@code ?method=DELETE} or an {@code X-HTTP-Method-Override: PUT} header takes the write checks, whether or not the
+ * resource it reaches would honour the override.
+ *
  * <h5 class='section'>Why each check is present</h5>
  * <p>
  * <b>{@code Host} on every request, not only writes.</b>  This is the check that defeats DNS rebinding, and it is
@@ -150,12 +156,13 @@ import jakarta.servlet.http.*;
  * 		.token(SynchronizerToken.<jsm>generate</jsm>())
  * 		.build();
  *
- * 	LoopbackBoundary.Result <jv>result</jv> = <jv>boundary</jv>.check(<jv>request</jv>);
+ * 	BoundaryResult <jv>result</jv> = <jv>boundary</jv>.check(<jv>request</jv>);
  * 	<jk>if</jk> (! <jv>result</jv>.isAllowed())
  * 		<jv>response</jv>.sendError(<jv>result</jv>.status(), <jv>result</jv>.message());
  * </p>
  *
  * <h5 class='section'>See Also:</h5><ul>
+ * 	<li class='jic'>{@link RequestBoundary}
  * 	<li class='jc'>{@link LoopbackBoundaryFilter}
  * 	<li class='jc'>{@link SynchronizerToken}
  * </ul>
@@ -165,7 +172,7 @@ import jakarta.servlet.http.*;
 @SuppressWarnings({
 	"java:S1192" // Duplicate string literals are HTTP header names (e.g. Origin); a constant per header would obscure the wire contract.
 })
-public class LoopbackBoundary {
+public class LoopbackBoundary implements RequestBoundary {
 
 	/** Default name of the request header carrying the CSRF token. */
 	public static final String DEFAULT_CSRF_HEADER = "X-Csrf-Token";
@@ -208,48 +215,51 @@ public class LoopbackBoundary {
 	 * Applies the boundary to a request.
 	 *
 	 * @param req The request to check.  Must not be <jk>null</jk>.
-	 * @return {@link Result#ALLOWED} when every applicable check passed, else the first rejection encountered.
+	 * @return {@link BoundaryResult#ALLOWED} when every applicable check passed, else the first rejection encountered.
 	 */
-	public Result check(HttpServletRequest req) {
+	@Override /* RequestBoundary */
+	public BoundaryResult check(HttpServletRequest req) {
 		reqnn("req", req);
 
 		// Host applies to every request; it is the DNS-rebinding check and a read is just as exfiltratable as a write.
 		var host = req.getHeader("Host");
 		if (host == null || neqic(host, authority))
-			return reject(Reason.HOST_MISMATCH, 421,
+			return reject(BoundaryReason.HOST_MISMATCH, 421,
 				"Request 'Host' does not match this server's expected authority '%s'.", authority);
 
-		if (! isStateChanging(req.getMethod()))
-			return Result.ALLOWED;
+		// Judged on the method the request claims, so an override cannot carry a write past the checks below.
+		var method = MethodSafety.effectiveMethod(req.getMethod(), req.getQueryString(), req::getHeader);
+		if (! isStateChanging(method))
+			return BoundaryResult.ALLOWED;
 
 		var origin2 = req.getHeader("Origin");
 		if (origin2 == null || origin2.isBlank())
-			return reject(Reason.ORIGIN_MISSING, 403,
+			return reject(BoundaryReason.ORIGIN_MISSING, 403,
 				"A state-changing request must carry an 'Origin' header of '%s'.", origin);
 		if (! origin2.equals(origin))
-			return reject(Reason.ORIGIN_MISMATCH, 403,
+			return reject(BoundaryReason.ORIGIN_MISMATCH, 403,
 				"Request 'Origin' is not this server's origin '%s'.", origin);
 
 		// The presented value is deliberately not echoed back: it is caller-controlled, and a rejection message is
 		// rendered into a response body and a log line, neither of which should carry attacker-chosen text.
 		var fetchSite = req.getHeader("Sec-Fetch-Site");
 		if (fetchSite != null && neq(fetchSite, "same-origin"))
-			return reject(Reason.FETCH_SITE_NOT_SAME_ORIGIN, 403,
+			return reject(BoundaryReason.FETCH_SITE_NOT_SAME_ORIGIN, 403,
 				"Request 'Sec-Fetch-Site' must be absent or 'same-origin' on a state-changing request.");
 
-		if (! isJson(req.getContentType()))
-			return reject(Reason.CONTENT_TYPE_NOT_JSON, 415,
+		if (! BoundaryChecks.isJson(req.getContentType()))
+			return reject(BoundaryReason.CONTENT_TYPE_NOT_JSON, 415,
 				"A state-changing request must use content type '%s'.", JSON_CONTENT_TYPE);
 
 		var presented = req.getHeader(csrfHeader);
 		if (presented == null || presented.isBlank())
-			return reject(Reason.CSRF_TOKEN_MISSING, 403,
+			return reject(BoundaryReason.CSRF_TOKEN_MISSING, 403,
 				"A state-changing request must carry this server's CSRF token in the '%s' header.", csrfHeader);
 		if (! token.matches(presented))
-			return reject(Reason.CSRF_TOKEN_MISMATCH, 403,
+			return reject(BoundaryReason.CSRF_TOKEN_MISMATCH, 403,
 				"The CSRF token in the '%s' header is not this server's token.", csrfHeader);
 
-		return Result.ALLOWED;
+		return BoundaryResult.ALLOWED;
 	}
 
 	/**
@@ -291,7 +301,19 @@ public class LoopbackBoundary {
 	 *
 	 * @return The CSRF header name.
 	 */
+	@Override /* RequestBoundary */
 	public String csrfHeader() { return csrfHeader; }
+
+	/**
+	 * The token a page must embed: this boundary's single per-process token, the same for every request.
+	 *
+	 * @param req The request being answered.  Not consulted.
+	 * @return {@link SynchronizerToken#value()} of {@link #token()}.
+	 */
+	@Override /* RequestBoundary */
+	public String tokenFor(HttpServletRequest req) {
+		return token.value();
+	}
 
 	/**
 	 * The headers an in-process client must add when calling this application's own loopback port.
@@ -327,111 +349,8 @@ public class LoopbackBoundary {
 	 */
 	public SynchronizerToken token() { return token; }
 
-	/**
-	 * Whether a {@code Content-Type} header value's base type is exactly {@code application/json}.
-	 *
-	 * <p>
-	 * Parameters are ignored, so {@code application/json;charset=utf-8} passes.  A suffixed type such as
-	 * {@code application/problem+json} does not: the check exists to exclude the form-encodable types, and
-	 * widening it to "anything ending in json" would be a per-type judgement call at a security boundary.
-	 */
-	private static boolean isJson(String contentType) {
-		if (contentType == null)
-			return false;
-		var semi = contentType.indexOf(';');
-		var base = (semi < 0 ? contentType : contentType.substring(0, semi)).trim();
-		return eqic(base, JSON_CONTENT_TYPE);
-	}
-
-	private static Result reject(Reason reason, int status, String message, Object... args) {
-		return new Result(reason, status, f(message, args));
-	}
-
-	/**
-	 * Why a request was rejected.
-	 *
-	 * <p>
-	 * Enumerated rather than collapsed into a single "forbidden" so the application can render an accurate
-	 * reason and log an actionable one.  Distinguishing missing from mismatched leaks nothing a cross-origin
-	 * caller does not already know about its own request.
-	 */
-	public enum Reason {
-
-		/** The {@code Host} header was absent or was not this server's authority.  Rejected on every request. */
-		HOST_MISMATCH,
-
-		/** A state-changing request carried no {@code Origin} header. */
-		ORIGIN_MISSING,
-
-		/** A state-changing request's {@code Origin} was not this server's origin. */
-		ORIGIN_MISMATCH,
-
-		/** A state-changing request's {@code Sec-Fetch-Site} was present and was not {@code same-origin}. */
-		FETCH_SITE_NOT_SAME_ORIGIN,
-
-		/** A state-changing request's content type was not {@code application/json}. */
-		CONTENT_TYPE_NOT_JSON,
-
-		/** A state-changing request carried no CSRF token header. */
-		CSRF_TOKEN_MISSING,
-
-		/** A state-changing request's CSRF token was not this server's token. */
-		CSRF_TOKEN_MISMATCH
-	}
-
-	/**
-	 * The outcome of {@link LoopbackBoundary#check(HttpServletRequest)}: either allowed, or a rejection carrying
-	 * the reason, the HTTP status to answer with, and a message safe to return to the caller.
-	 */
-	public static final class Result {
-
-		/** The outcome of a request that passed every applicable check. */
-		public static final Result ALLOWED = new Result(null, 0, null);
-
-		private final Reason reason;
-		private final int status;
-		private final String message;
-
-		Result(Reason reason, int status, String message) {
-			this.reason = reason;
-			this.status = status;
-			this.message = message;
-		}
-
-		/**
-		 * Whether the request passed.
-		 *
-		 * @return <jk>true</jk> if the request may proceed.
-		 */
-		public boolean isAllowed() { return reason == null; }
-
-		/**
-		 * Why the request was rejected.
-		 *
-		 * @return The rejection reason, or <jk>null</jk> when {@link #isAllowed()} is <jk>true</jk>.
-		 */
-		public Reason reason() { return reason; }
-
-		/**
-		 * The HTTP status to answer a rejected request with.
-		 *
-		 * @return The status code, or {@code 0} when {@link #isAllowed()} is <jk>true</jk>.
-		 */
-		public int status() { return status; }
-
-		/**
-		 * A message describing the rejection.
-		 *
-		 * <p>
-		 * Names the header at fault and what was expected of it, and never echoes the value the request
-		 * presented for the CSRF token or reveals this server's token.
-		 *
-		 * @return The message, or <jk>null</jk> when {@link #isAllowed()} is <jk>true</jk>.
-		 */
-		public String message() { return message; }
-
-		@Override /* Object */
-		public String toString() { return isAllowed() ? "ALLOWED" : reason + "(" + status + "): " + message; }
+	private static BoundaryResult reject(BoundaryReason reason, int status, String message, Object... args) {
+		return new BoundaryResult(reason, status, f(message, args));
 	}
 
 	/**

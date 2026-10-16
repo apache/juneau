@@ -19,11 +19,12 @@ unless the environment has RUN_MARKERS=1; the open-line helpers (open_line, appe
 always write.  A marker always starts on a fresh line.  Sections, in order: markers, sinks, parsers, runner, CLI.
 
 CLI:  python3 juneau_run.py [--console full|condensed|none] [--full-log PATH] [--condensed-log PATH]
-                            [--step ID] [--title T] [--pty --events PATH [--size CxR]]
+                            [--step ID] [--title T] [--pty --events PATH [--size CxR] [--input stdin]]
                             <maven|pytest|playwright|gradle|npm|generic> -- <cmd...>
 
 With --pty the tool runs under a pseudo-terminal of the given size (default 120x40); its raw bytes go to --full-log,
 the size to <full-log>.size, and run-view events (not ##run markers) to the --events JSONL file.  POSIX only.
+--input stdin   with --pty: copy stdin to the job's terminal
 """
 
 import argparse
@@ -32,6 +33,7 @@ import codecs
 import collections
 import errno
 import fcntl
+import hashlib
 import json
 import os
 import re
@@ -70,6 +72,7 @@ _line_offset = 0        # in PTY mode, the log offset of the start of the line b
 _subscribers = []       # bus subscribers, called as fn(kind, fields)
 _console = None         # the session's Console, when run.session() has been called
 _pause_depth = 0        # nested _paused() blocks (an ask inside a handoff); only the outermost one resumes
+_history = None         # the run's History subscriber, once history_start() has installed it
 
 
 def enabled():
@@ -181,7 +184,8 @@ class Step:
 def step(id, n, title, *, parent=None, label=None):  # NOSONAR python:S5806 - parameter names mirror protocol field names
     """Emit `step`, run the block, then emit `end` with its status and duration.  An exception ends it as fail and propagates."""
     emit("step", id=id, n=n, title=title, parent=parent)
-    publish("step_start", id=id, n=n, title=title, parent=parent, **({"label": label} if label else {}))
+    publish("step_start", id=id, n=n, title=title, parent=parent, tool=None, sig="",
+            **({"label": label} if label else {}))
     s = Step()
     t0 = time.monotonic()
     try:
@@ -249,7 +253,7 @@ def unsubscribe(fn):
         _subscribers.remove(fn)
 
 
-def publish(kind, **fields):
+def publish(kind, /, **fields):
     """Call every subscriber with (kind, fields).  Subscribers must not raise; an exception propagates to the
     publisher."""
     for fn in list(_subscribers):
@@ -286,7 +290,8 @@ def failure(text, step=None):
 @contextmanager
 def row(id, title, *, label=None):  # NOSONAR python:S5806 - parameter names mirror protocol field names
     """A console row around a block, with no marker.  For script work that is not a protocol step (Perf, Timing)."""
-    publish("step_start", id=id, n=None, title=title, parent=None, **({"label": label} if label else {}))
+    publish("step_start", id=id, n=None, title=title, parent=None, tool=None, sig="",
+            **({"label": label} if label else {}))
     s = Step()
     t0 = time.monotonic()
     try:
@@ -378,6 +383,129 @@ def fmt_elapsed(ms):
     return f"{h}:{m:02d}:{s:02d}" if h else f"{m}:{s:02d}"
 
 
+Estimate = collections.namedtuple("Estimate", "wall_s units rate runs")
+
+
+def _median(xs):
+    xs = sorted(xs)
+    mid = len(xs) // 2
+    return xs[mid] if len(xs) % 2 else (xs[mid - 1] + xs[mid]) / 2
+
+
+def estimate_from(records, sig):
+    """Estimate from `records` (oldest first, already filtered to one (step, tool) key): the newest 10 with ok and
+    complete, preferring like-for-like `sig` when 3 or more match (spec 5.1)."""
+    good = [r for r in records if r.get("ok") and r.get("complete") and r.get("wall_s") is not None][-10:]
+    like = [r for r in good if sig and r.get("sig") == sig]
+    use = like if len(like) >= 3 else good
+    if not use:
+        return None
+    withunits = [r for r in use if (r.get("units") or {}).get("total")]
+    return Estimate(_median([r["wall_s"] for r in use]),
+                    _median([r["units"]["total"] for r in withunits]) if withunits else None,
+                    _median([r["wall_s"] / r["units"]["total"] for r in withunits]) if withunits else None,
+                    len(use))
+
+
+def eta_figures(e, k, n, est):
+    """(percent, estimated total seconds, approx) for a running row (spec 5.2); None where nothing can be said.
+    The total is None once the row has overrun it, so only elapsed shows."""
+    hist_units = est.units if est else None
+    if n:
+        units, approx = n, False
+    elif k and hist_units and k < hist_units:
+        units, approx = hist_units, True
+    else:
+        units, approx = None, True
+    if units:
+        pct = min(99, int(100 * k / units))
+        if k == 0:
+            total = est.wall_s if est else None
+            approx = True
+        elif k >= units:
+            return pct, None, approx
+        else:
+            live = e / k
+            w = k / units
+            rate = w * live + (1 - w) * est.rate if est and est.rate else live
+            total = e + (units - k) * rate
+        return pct, (total if total is not None and total > e else None), approx
+    if est and est.wall_s:
+        return min(99, int(100 * e / est.wall_s)), (est.wall_s if est.wall_s > e else None), True
+    return None, None, False
+
+
+def timer_text(e, total):
+    """Elapsed seconds `e` as M:SS, followed by ` / ~M:SS` when an estimated total is known."""
+    return fmt_elapsed(e * 1000) + (" / ~" + fmt_elapsed(total * 1000) if total else "")
+
+
+Overall = collections.namedtuple("Overall", "percent remaining lower_bound done total")
+
+
+def overall_figures(elapsed, steps):
+    """The whole-run figure (spec 6.2).  `elapsed` is the seconds since the session started; `steps` is a list of
+    `(id, state, hist_wall_s, running)`, state one of done / running / pending (anything else is ignored) and `running`
+    the `(T, e)` of 5.2 for a running step or None.  None when no step still to run has a known figure."""
+    remaining, known, lower_bound, done, total = 0.0, False, False, 0, 0
+    for _, state, hist, running in steps:
+        if state == "done":
+            done += 1
+        elif state == "running":
+            if running is not None:
+                remaining += max(running[0] - running[1], 0)
+                known = True
+            else:
+                lower_bound = True
+        elif state == "pending":
+            if hist is not None:
+                remaining += hist
+                known = True
+            else:
+                lower_bound = True
+        else:
+            continue
+        total += 1
+    if not known:
+        return None
+    span = elapsed + remaining
+    percent = min(99, int(100 * elapsed / span)) if span > 0 else 0
+    return Overall(percent, remaining, lower_bound, done, total)
+
+
+def overall_text(o):
+    """The live region's first line: `Overall  42%  ~2:10 left  · 3 of 7 steps`."""
+    left = f"  ~{fmt_elapsed(o.remaining * 1000)}{'+' if o.lower_bound else ''} left" if o.remaining > 0 or o.lower_bound else ""
+    return f"Overall  {o.percent}%{left}  · {o.done} of {o.total} steps"
+
+
+BAR_CELLS = 60      # a unit bar wider than this is bucketed (spec 2)
+
+UNIT_PASS, UNIT_FAIL, UNIT_SKIP = 1, 2, 3     # bytes in a row's unit_cells; 0 is "not finished"
+
+
+def unit_bar(cells, total, width, glyphs):
+    """The cells of a unit bar: one per unit up to `width`, else exactly `width` buckets splitting the units evenly,
+    each the worst outcome in the bucket (fail, then pass, then skip) and PENDING when nothing in it has finished.
+    Computed on demand from `cells` (a bytearray, 0 unfinished / 1 pass / 2 fail / 3 skip), never stored."""
+    if total <= 0:
+        return []
+    width = max(1, width)
+    n = min(total, width)
+    out = []
+    for i in range(n):
+        chunk = bytes(cells[i * total // n:(i + 1) * total // n])
+        if UNIT_FAIL in chunk:
+            out.append(glyphs["fail"])
+        elif UNIT_PASS in chunk:
+            out.append(glyphs["pass"])
+        elif UNIT_SKIP in chunk:
+            out.append(glyphs["skip"])
+        else:
+            out.append(PENDING)
+    return out
+
+
 def _totals(t):
     """A tests event's fields or a run_tool summary dict, as a (total, fail, err, skip) tuple."""
     if t is None or isinstance(t, tuple):
@@ -414,11 +542,45 @@ class _Mod:
         self.ms = None
         self.totals = None
         self.box = None         # pass, fail or skip once granted
+        self.unit_index = None  # its cell in the row's module bar once counted
 
     @property
     def in_progress(self):
         """Still running and not yet boxed.  Pom modules are boxed by the reactor event, so they never show here."""
         return self.status is None and self.box is None
+
+
+class _Setup:
+    """The run's one Setup row: a box per pom module of the first Maven reactor that has any (spec 2.1)."""
+
+    def __init__(self, row, ids, t0):
+        self.row = row              # id of the step row that owns it
+        self.ids = list(dict.fromkeys(ids))     # pom module ids, in reactor order, once each
+        self.boxes = {i: None for i in self.ids}    # None while pending, else pass or fail
+        self.t0 = t0
+
+    @property
+    def total(self):
+        return len(self.ids)
+
+    @property
+    def done(self):
+        return sum(1 for b in self.boxes.values() if b is not None)
+
+    def add(self, ids):
+        for i in dict.fromkeys(ids):
+            if i not in self.boxes:
+                self.ids.append(i)
+                self.boxes[i] = None
+
+
+def setup_text(setup):
+    """The Setup row's totals text."""
+    return f"{setup.total} pom module{'' if setup.total == 1 else 's'}"
+
+
+def setup_cells(setup, glyphs):
+    return [PENDING if setup.boxes[i] is None else glyphs[setup.boxes[i]] for i in setup.ids]
 
 
 class _Row:
@@ -441,7 +603,12 @@ class _Row:
         self.poms = set()
         self.tests_mode = False
         self.quiet = 0          # seconds the tool has been silent, from the watchdog
+        self.units_total = 0    # announced unit count (tests, files...) for the unit bar
+        self.units_done = 0
+        self.unit_kind = None
+        self.unit_cells = bytearray()   # one byte per unit: 0 pending, 1 pass, 2 fail, 3 skip
         self.progress = None    # live progress text from the tool's own output; shown on the running row only
+        self.estimate = None    # the Estimate from history, when there is one (spec 5.1)
 
     @property
     def running(self):
@@ -454,8 +621,9 @@ class _Row:
 class Board:
     """The run's state for the console view.  apply(kind, fields) returns the blocks that event produces."""
 
-    def __init__(self, detail="actionable", nested=False, full_log=None, clock=time.monotonic):
+    def __init__(self, detail="actionable", nested=False, full_log=None, clock=time.monotonic, estimator=None):
         self.detail = detail
+        self.estimator = estimator  # fn(step_id, tool, sig) -> Estimate or None, asked once when a row starts
         self.nested = nested
         self.full_log = full_log
         self.clock = clock
@@ -465,6 +633,10 @@ class Board:
         self.failure_lines = set()  # stripped lines already shown by a failure event, so notes don't repeat them
         self.failed_title = None
         self.aliases = {}           # a run_tool sub-row's step id -> its parent row's id (parent=, release.py)
+        self.setup = None           # the run's one Setup row (pom modules), owned by the first Maven row that has poms
+        self.plan = None            # the planned top-level step ids, in order (spec 6), or None
+        self.plan_estimates = {}    # planned step id -> history wall_s or None, asked of the estimator once per plan
+        self.session_t0 = self.t0   # when the session event arrived (the Overall figure's E)
 
     def width(self):
         env = os.environ.get(LABEL_WIDTH_ENV, "")
@@ -514,16 +686,64 @@ class Board:
         m.box = box
 
     def _on_session(self, f):
+        self.session_t0 = self.clock()
         if self.nested:
             return []
         return [("header", " · ".join([f["title"]] + list(f["header"])))]   # the title carries its own emoji
+
+    def _on_plan(self, f):
+        self.plan = list(f["ids"])
+        self.plan_estimates = {}
+        return []
+
+    def _hist_wall(self, step_id):
+        """History's median wall seconds for a planned step (tool left open), or None."""
+        if step_id not in self.plan_estimates:
+            est = None
+            if self.estimator is not None:
+                try:
+                    est = self.estimator(step_id, None, None)
+                except Exception:
+                    est = None
+            self.plan_estimates[step_id] = est.wall_s if est else None
+        return self.plan_estimates[step_id]
+
+    def overall(self):
+        """The whole-run Overall figure, or None: no plan, a nested session, or nothing known (spec 6.2, 6.3)."""
+        if not self.plan or self.nested:
+            return None
+        # Parallel planned steps each add their remaining time, so a plan that runs steps concurrently is an overestimate.
+        now = self.clock()
+        last_started = max((i for i, sid in enumerate(self.plan) if sid in self.rows), default=-1)
+        steps = []
+        for i, sid in enumerate(self.plan):
+            r = self.rows.get(sid)
+            if r is None:
+                if i < last_started:
+                    continue                    # passed over by a later planned step
+                steps.append((sid, "pending", self._hist_wall(sid), None))
+            elif r.running:
+                e = now - r.t0
+                _, total, _ = eta_figures(e, r.units_done, r.units_total, r.estimate)
+                if total is None and r.estimate is not None:
+                    total = max(r.estimate.wall_s, e)      # overran its history: nothing left to add
+                steps.append((sid, "running", r.estimate.wall_s if r.estimate else None,
+                              (total, e) if total is not None else None))
+            elif r.status != "skip":
+                steps.append((sid, "done", None, None))
+        return overall_figures(now - self.session_t0, steps)
 
     def _on_step_start(self, f):
         parent = self.rows.get(f.get("parent"))
         if parent is not None:      # a sub-row: a box on its parent's row until its tool sends modules (_adopt)
             self.aliases[f["id"]] = parent.id
             return self._on_module_start({"step": parent.id, "module": f["id"], "title": f["title"]})
-        self.rows[f["id"]] = _Row(f["id"], f["n"], f["title"], f.get("label"), self.clock())
+        row = self.rows[f["id"]] = _Row(f["id"], f["n"], f["title"], f.get("label"), self.clock())
+        if self.estimator is not None:
+            try:
+                row.estimate = self.estimator(f["id"], f.get("tool"), f.get("sig") or None)
+            except Exception:
+                row.estimate = None
         return []
 
     def _on_module_start(self, f):
@@ -535,19 +755,74 @@ class Board:
             else:
                 m.title, m.t0 = f["title"], self.clock()     # a pom module, created by the reactor event
             self.module_rows[f["module"]] = r
+            if f["module"] in r.poms:     # a pom has no work to wait for; under -T its end only comes with the summary
+                self._setup_box(r, r.modules[f["module"]], "pass")
         return []
 
     def _on_reactor(self, f):
-        """Sent at the first line (pom-tree size) and again at the first Building line (its N).  Pom modules get their
-        dim box at once."""
+        """Sent at the first line (pom-tree size), again at the Reactor Build Order block and at the first Building
+        line.  The module bar counts the non-pom modules; the pom modules go to the run's Setup row (spec 2.1)."""
         r = self._adopt(f["step"])
         if r is not None:
             r.size = f["size"]
             r.poms = set(f["poms"])
             r.tests_mode = f["tests"]
+            if r.size > 0:        # a reactor of no size says nothing: the row keeps the box bar
+                r.unit_kind = "modules"
+                r.units_total = max(0, r.size - len(r.poms), r.units_done)    # set, not grown: the block shrinks the tree's size
+                del r.unit_cells[r.units_total:]
+                r.unit_cells.extend(bytes(r.units_total - len(r.unit_cells)))
             for pom in f["poms"]:
-                _, m = self._mod({"step": r.id, "module": pom}, create=True)
-                self._grant(r, m, "skip")
+                self._mod({"step": r.id, "module": pom}, create=True)
+            if r.poms and self.setup is None:
+                self.setup = _Setup(r.id, f["poms"], self.clock())
+            elif self.setup is not None and self.setup.row == r.id:
+                self.setup.add(f["poms"])
+        return []
+
+    def _setup_box(self, r, m, box):
+        """A pom module finished: its Setup box turns green (or red)."""
+        if self.setup is not None and m.id in self.setup.boxes and self.setup.boxes[m.id] != "fail":
+            self.setup.boxes[m.id] = box
+
+    def _count_unit(self, r, m, outcome):
+        """A real module of a Maven row counts once toward its module bar; a later failure turns its cell red."""
+        if r.unit_kind != "modules" or m.id in r.poms:
+            return
+        if m.unit_index is None:
+            m.unit_index = r.units_done
+            self._on_unit({"step": r.id, "done": r.units_done + 1, "outcome": outcome})
+        elif outcome == "fail":
+            self._on_unit_fix({"step": r.id, "index": m.unit_index, "outcome": "fail"})
+
+    OUTCOME_BYTE = {"pass": UNIT_PASS, "fail": UNIT_FAIL, "skip": UNIT_SKIP}     # anything else counts as a pass
+
+    def _on_units(self, f):
+        r = self._adopt(f["step"])
+        if r is not None:
+            # an explicit count replaces the total (a later, authoritative count beats an earlier estimate), but never
+            # below the units already done, so no finished cell is lost
+            r.units_total, r.unit_kind = max(r.units_done, f["total"]), f["kind"]
+            del r.unit_cells[r.units_total:]
+            r.unit_cells.extend(bytes(r.units_total - len(r.unit_cells)))
+        return []
+
+    def _on_unit(self, f):
+        r = self._adopt(f["step"])
+        if r is not None:
+            done = f["done"]
+            if done > r.units_total:                      # more units than announced (a resend lagging, -x absent)
+                self._on_units({"step": f["step"], "total": done, "kind": r.unit_kind})
+            byte = self.OUTCOME_BYTE.get(f["outcome"], UNIT_PASS)
+            if done > r.units_done:                       # cumulative: a jump fills every skipped unit
+                r.unit_cells[r.units_done:done] = bytes([byte]) * (done - r.units_done)
+            r.units_done = max(r.units_done, done)
+        return []
+
+    def _on_unit_fix(self, f):
+        r = self._adopt(f["step"])
+        if r is not None and 0 <= f["index"] < r.units_done:       # only a unit that has finished can be corrected
+            r.unit_cells[f["index"]] = self.OUTCOME_BYTE.get(f["outcome"], UNIT_PASS)
         return []
 
     def _on_class_done(self, f):
@@ -560,18 +835,24 @@ class Board:
         r, m = self._mod(f, create=True)
         if m is None:
             return []
+        if m.id in r.poms:
+            return []                 # pom modules live on the Setup row, never in a bar
         if not f["ok"]:
             self._grant(r, m, "fail")
-        elif m.id in r.poms:
-            self._grant(r, m, "skip")
+            if not r.tests_mode:
+                self._count_unit(r, m, "fail")
         elif not r.tests_mode and m.box is None:
             self._grant(r, m, "pass")
+            self._count_unit(r, m, "pass")
         return []
 
     def _on_module_tested(self, f):
         r, m = self._mod(f, create=True)
-        if m is not None and m.box != "fail":
-            self._grant(r, m, "fail" if "fail" in m.outcomes else "pass" if m.outcomes else "skip")
+        if m is not None and m.id not in r.poms and m.box != "fail":
+            outcome = "fail" if "fail" in m.outcomes else "pass" if m.outcomes else "skip"
+            self._grant(r, m, outcome)
+            if r.tests_mode:      # under -T module_end waits for the Reactor Summary: count the unit when its tests end
+                self._count_unit(r, m, outcome)
         return []
 
     def _on_tests(self, f):
@@ -590,10 +871,17 @@ class Board:
         if f.get("totals"):
             m.totals = _totals(f["totals"])
         failed = m.status == "fail" or bool(m.totals and m.totals[1] + m.totals[2])
-        if failed:
-            self._grant(r, m, "fail")
-        elif m.box is None:
-            self._grant(r, m, "skip" if m.id in r.poms or m.status == "skip" else "pass")
+        if m.id in r.poms:      # a pom lives on the Setup row only, never in a bar's order
+            m.box = "fail" if failed else "pass"
+            self._setup_box(r, m, m.box)
+        else:
+            if failed:
+                self._grant(r, m, "fail")
+            elif m.box is None:
+                self._grant(r, m, "skip" if m.status == "skip" else "pass")
+            # a module already boxed red (compile or test failure) stays a failed unit when finish() closes it as skip
+            failed = failed or m.box == "fail"
+            self._count_unit(r, m, "fail" if failed else "skip" if m.status == "skip" else "pass")
         has_tests = bool(m.totals and m.totals[0])
         return [("module", r, m)] if shows_module(self.detail, failed, has_tests) else []
 
@@ -629,7 +917,7 @@ class Board:
         if f.get("totals"):
             r.totals = _totals(f["totals"])
         for m in r.modules.values():   # never ended: it ran nothing we saw (close_children ends the open ones)
-            if m.box is None:
+            if m.box is None and m.id not in r.poms:
                 self._grant(r, m, "fail" if "fail" in m.outcomes else "pass" if m.outcomes else "skip")
         if r.status == "fail" and self.failed_title is None:
             self.failed_title = r.label
@@ -688,28 +976,52 @@ def row_cells(row, glyphs, now, pending=False):
     """A step row as (cells, rest, elapsed): its bar's cells (None when it has no bar), the count and totals text
     after the bar, and the elapsed time.  Elapsed is empty under a second, so instant rows (Install) show none."""
     cells, parts = None, []
-    if row.modules or row.size:
-        cells = [glyphs[b] for b in row.boxes()]
-        if pending and row.size:
-            cells += [PENDING] * max(0, row.size - len(row.order))
-        parts.append(f"{len(row.order)}/{row.size}" if row.size else str(len(row.order)))
+    # A module row can carry a unit bar too, hence the `row.modules` test below.  A unit bar's PENDING cells also
+    # show on a finished row whose units did not all report.
+    unreported = not row.running and row.unit_kind == "modules" and not row.units_done
+    # A finished module bar that never counted a unit (a -q build sends no module events) shows no bar at all.
+    if not unreported and (row.modules or row.size or row.units_total or row.unit_kind == "modules"):
+        if row.unit_kind:
+            cells = unit_bar(row.unit_cells, row.units_total, BAR_CELLS, glyphs)
+            parts.append(f"{row.units_done}/{row.units_total}")
+        else:
+            cells = [glyphs[b] for b in row.boxes()]
+            if pending and row.size:
+                cells += [PENDING] * max(0, row.size - len(row.order))
+            parts.append(f"{len(row.order)}/{row.size}" if row.size else str(len(row.order)))
+    ms = row.ms if row.ms is not None else int((now - row.t0) * 1000)
+    elapsed = fmt_elapsed(ms) if ms >= 1000 else ""
+    if row.running and row.estimate is not None:
+        pct, total, approx = eta_figures(ms / 1000, row.units_done, row.units_total, row.estimate)
+        if pct is not None and ms >= 1000:
+            parts.append(("~" if approx else "") + f"{pct}%")
+        if elapsed:
+            elapsed = timer_text(ms / 1000, total)
     text = row.summary if row.summary is not None else fmt_totals(row.totals, row.tests_mode and not row.running)
     if text:
         parts.append(text)
-    ms = row.ms if row.ms is not None else int((now - row.t0) * 1000)
-    return cells, "  ".join(parts), fmt_elapsed(ms) if ms >= 1000 else ""
+    return cells, "  ".join(parts), elapsed
 
 
 def row_parts(row, glyphs, now, pending=False):
     """A step row as (text, elapsed)."""
     cells, rest, elapsed = row_cells(row, glyphs, now, pending)
-    return ("".join(cells) + "  " + rest if cells is not None else rest), elapsed
+    return ("  ".join(p for p in ("".join(cells), rest) if p) if cells is not None else rest), elapsed
 
 
 def module_line(mod, glyphs, now):
     ms = mod.ms if mod.ms is not None else int((now - mod.t0) * 1000)
     tests = fmt_totals(mod.totals)
     return f"  {glyphs[mod.box or 'pass']} {mod.title}  {fmt_elapsed(ms)}" + (f"  {tests}" if tests else "")
+
+
+def setup_line(board, glyphs, cols=None):
+    """The Setup row as a line: the label column, one box per pom module and the totals text."""
+    setup = board.setup
+    label = "Setup".ljust(board.width())
+    if cols is None:
+        return label + "  " + "".join(setup_cells(setup, glyphs)) + "  " + setup_text(setup)
+    return _fit_row(label, setup_cells(setup, glyphs), setup_text(setup), "", cols)
 
 
 class PlainRenderer:
@@ -723,6 +1035,7 @@ class PlainRenderer:
         self.clock = clock
         self.last_beat = clock()
         self.prompting = False      # the last write left a watchdog prompt's partial line (Console._close_screen)
+        self.setup_printed = False  # the Setup line goes out once, with its owning row
 
     def _write(self, text):
         self.write(text)
@@ -734,6 +1047,9 @@ class PlainRenderer:
             if kind in ("header", "text"):
                 self._write(block[1] + "\n")
             elif kind == "row":
+                if board.setup is not None and board.setup.row == block[1].id and not self.setup_printed:
+                    self.setup_printed = True
+                    self._write(setup_line(board, self.glyphs) + "\n")
                 text, elapsed = row_parts(block[1], self.glyphs, self.clock())
                 self._write("  ".join(p for p in (block[1].label.ljust(board.width()), text, elapsed) if p) + "\n")
             elif kind == "module":
@@ -756,9 +1072,12 @@ class PlainRenderer:
         totals = [r.totals for r in running if r.totals]
         total = sum(t[0] for t in totals)
         failed = sum(t[1] + t[2] for t in totals)
-        k = sum(1 for r in running for m in r.modules.values() if m.in_progress)
+        k = sum(1 for r in running for m in r.modules.values() if m.in_progress and m.id not in r.poms)
+        overall = board.overall()
+        figure = (f" · {overall.percent}% · ~{fmt_elapsed(overall.remaining * 1000)}"
+                  f"{'+' if overall.lower_bound else ''} left") if overall else ""
         self._write(f"… {total:,} tests, {failed} failed · {k} modules running  "
-                    f"{fmt_elapsed((now - board.t0) * 1000)}\n")
+                    f"{fmt_elapsed((now - board.t0) * 1000)}{figure}\n")
 
     def pause(self):
         """Nothing is drawn in place, so there is nothing to clear."""
@@ -802,6 +1121,49 @@ def _vcut(text, n):
     return "".join(out) + ("\x1b[0m" if "\x1b[" in text else "")
 
 
+def common_prefix(titles):
+    """Longest run of whole leading words shared by every title and proper for all of them (spec 3, step 2).  A word
+    ends at whitespace, or after a ':' or '/'.  Fewer than two distinct titles: no prefix."""
+    titles = sorted(set(titles))
+    if len(titles) < 2:
+        return ""
+    split = [re.findall(r"[^\s:/]+[:/]?\s*|[:/]\s*", t) for t in titles]
+    shared = []
+    for group in zip(*split):
+        if all(g.strip() == group[0].strip() for g in group):     # a final word has no trailing space: compare stripped
+            shared.append(group[0])
+        else:
+            break
+    prefix = "".join(shared)
+    while prefix and any(t.strip() == prefix.strip() for t in titles):
+        shared.pop()
+        prefix = "".join(shared)
+    return prefix
+
+
+def collapse_names(names, cols):
+    """Comma-join `names` into at most `cols - 2` display columns: `cols` is the line width the caller already
+    reduced to leave the last terminal column free (spec 3), less the caller's two-column indent.  When some names do
+    not fit end with `, … and N others`, counted in the fit; a first name too wide is cut with an ellipsis (spec 3,
+    step 3).  The result never exceeds the budget, however narrow."""
+    budget = cols - 2
+    if not names or budget < 1:
+        return ""
+    joined = ", ".join(names)
+    if _vlen(joined) <= budget:
+        return joined
+    for keep in range(len(names) - 1, 0, -1):
+        line = ", ".join(names[:keep]) + f", … and {len(names) - keep} others"
+        if _vlen(line) <= budget:
+            return line
+    suffix = f", … and {len(names) - 1} others" if len(names) > 1 else ""
+    room = budget - _vlen(suffix) - 1
+    if room < 1:        # the suffix alone leaves no room for a name: keep the name, drop the suffix
+        suffix, room = "", budget - 1
+    line = (_vcut(names[0], room) + "…" if room >= 1 else "…") + suffix       # _vcut adds no ellipsis
+    return line if _vlen(line) <= budget else _vcut(line, budget)
+
+
 def _fit(left, right, cols):
     """left, then right flush with column cols; left is cut with an ellipsis when both don't fit."""
     room = cols - (len(right) + 2 if right else 0)
@@ -810,13 +1172,20 @@ def _fit(left, right, cols):
     return left + " " * max(2, cols - _vlen(left) - len(right)) + right if right else left
 
 
-def _fit_row(label, cells, rest, elapsed, cols):
+def _fit_row(label, cells, rest, elapsed, cols, rebucket=None):
     """A step row fitted to cols.  When it is too wide the bar gives way first, keeping its newest cells behind an
-    ellipsis, so the label, count, totals and elapsed survive; only a row too wide even then is cut from the right."""
+    ellipsis (or, for a bucketed unit bar, re-bucketed to the room left via rebucket(width)), so the label, count,
+    totals and elapsed survive; only a row too wide even then is cut from the right."""
+    if " / ~" in elapsed:       # the "M:SS / ~M:SS" timer gives way to plain elapsed when even the bare row won't fit
+        bare = _vlen(label + ("  " + rest if rest else "")) + len(elapsed) + 2
+        if bare > cols:
+            elapsed = elapsed.split(" / ~")[0]
     line = label + ("  " + "".join(cells) + "  " + rest if cells is not None else "  " + rest if rest else "")
     if cells is None or _vlen(line) <= cols - (len(elapsed) + 2 if elapsed else 0):
         return _fit(line, elapsed, cols)
     room = cols - (len(elapsed) + 2 if elapsed else 0) - _vlen(label + "    " + rest)
+    if rebucket is not None and room >= 1:
+        return _fit(label + "  " + "".join(rebucket(room)) + "  " + rest, elapsed, cols)
     if room < 2:
         return _fit(line, elapsed, cols)
     return _fit(label + "  …" + "".join(cells[len(cells) - (room - 1):]) + "  " + rest, elapsed, cols)
@@ -866,6 +1235,8 @@ class LiveRenderer:
             elif kind in ("header", "text"):
                 lines.append(block[1])
             elif kind == "row":
+                if board.setup is not None and board.setup.row == block[1].id:
+                    lines.append(setup_line(board, self.glyphs, self.size().columns - 1))
                 lines.append(self._row(board, block[1], self.size().columns - 1))
             elif kind == "module":
                 lines.append(module_line(block[2], self.glyphs, self.clock()))
@@ -879,9 +1250,12 @@ class LiveRenderer:
         cells, rest, elapsed = row_cells(r, self.glyphs, self.clock(), pending)
         if pending and r.quiet:
             rest += f" · quiet {r.quiet}s"
-        if r.running and r.progress:
+        if r.running and r.progress and not r.unit_kind:
             rest = f"{rest} · {r.progress}" if rest else r.progress
-        return _fit_row(r.label.ljust(board.width()), cells, rest, elapsed, cols)
+        rebucket = None
+        if r.unit_kind:
+            rebucket = lambda width: unit_bar(r.unit_cells, r.units_total, width, self.glyphs)
+        return _fit_row(r.label.ljust(board.width()), cells, rest, elapsed, cols, rebucket)
 
     def _flush(self, lines):
         if lines:
@@ -897,16 +1271,29 @@ class LiveRenderer:
 
     def region(self, board, cols, max_lines):
         running = board.running()
-        subs = [(r, m) for r in running for m in r.modules.values() if m.in_progress]
+        inflight = [(r, m) for r in running for m in r.modules.values() if m.in_progress and m.id not in r.poms]
+        subs = [(r, m) for r, m in inflight if m.outcomes or m.totals]
+        collapsed = {}
+        for r in running:
+            names = [m.title for owner, m in inflight if owner is r and not (m.outcomes or m.totals)]
+            if names:
+                prefix = common_prefix([m.title for m in r.modules.values() if m.id not in r.poms])
+                collapsed[r.id] = "  " + collapse_names([t[len(prefix):] or t for t in names], cols)
         blocks = {id(m): self._sub_lines(m, cols) for _, m in subs}
-        budget = max_lines - len(running)
+        owner_running = board.setup is not None and any(r.id == board.setup.row for r in running)
+        overall = board.overall()
+        budget = max_lines - len(running) - len(collapsed) - (1 if owner_running else 0) - (1 if overall else 0)
         folded = {}
         while subs and sum(len(blocks[id(m)]) for _, m in subs) + len(folded) > budget:
             r, _ = subs.pop(0)
             folded[r.id] = folded.get(r.id, 0) + 1
-        lines = []
+        lines = [_vcut(overall_text(overall), cols)] if overall else []
         for r in running:
+            if board.setup is not None and board.setup.row == r.id:
+                lines.append(setup_line(board, self.glyphs, cols))
             lines.append(self._row(board, r, cols, pending=True))
+            if r.id in collapsed:
+                lines.append(collapsed[r.id])
             if r.id in folded:
                 lines.append(f"  +{folded[r.id]} more running")
             lines += [line for owner, m in subs if owner is r for line in blocks[id(m)]]
@@ -979,12 +1366,13 @@ class Console:
     """The bus subscriber for a session: one Board, a screen renderer (live, plain or none) and the condensed log."""
 
     def __init__(self, sinks=None, detail=None, stream=None, clock=time.monotonic, size=shutil.get_terminal_size,
-                 nested=False):
+                 nested=False, repo="."):
         self.sinks = sinks or Sinks()
         self._stream = stream
         self.clock = clock
         self.size = size
-        self.board = Board(resolve_detail(detail), nested=nested, full_log=self.sinks.full_path, clock=clock)
+        self.board = Board(resolve_detail(detail), nested=nested, full_log=self.sinks.full_path, clock=clock,
+                           estimator=make_estimator(repo, script_name()))
         self.mode = self.screen_mode()
         self.screen = self._make_screen()
         self._log = None
@@ -1184,15 +1572,16 @@ def _sigterm(signum, frame):
     raise KeyboardInterrupt
 
 
-def session(title, header=(), *, detail=None, sinks=None):
+def session(title, header=(), *, detail=None, sinks=None, repo="."):
     """Start this process's console view and return its Console.  Inside another session (JUNEAU_RUN_SESSION set)
     it is nested: no header and no final line, so a child script's rows join its parent's view."""
     global _console
     if _console is not None:
         return _console
+    history_start(repo)
     nested = os.environ.get(SESSION_ENV) == "1"
     sinks = sinks or Sinks()
-    _console = subscribe(Console(sinks, detail, nested=nested))
+    _console = subscribe(Console(sinks, detail, nested=nested, repo=repo))
     os.environ[SESSION_ENV] = "1"   # only once the console is up, so a failed start leaves children un-nested
     atexit.register(_end_session)
     if not nested and sinks.full_path is not None and sinks.full_path.parent == full_log_dir():
@@ -1205,6 +1594,15 @@ def session(title, header=(), *, detail=None, sinks=None):
     lines = list(header) + ([f"tail -f {shlex.quote(str(sinks.full_path))}"] if sinks.full_path is not None else [])
     publish("session", title=title, header=lines, nested=nested)
     return _console
+
+
+def plan(ids):
+    """Declare the planned top-level step ids, in order, for the Overall figure (spec 6.1).  Replaces any earlier
+    plan; a duplicate id raises ValueError."""
+    ids = list(ids)    # validated here as well as in Session.plan so a bad plan fails in a plain run, not only under a view
+    if len(set(ids)) != len(ids):
+        raise ValueError("duplicate step id in plan: " + ", ".join(sorted({i for i in ids if ids.count(i) > 1})))
+    publish("plan", ids=ids)
 
 
 def _end_session():
@@ -1305,7 +1703,7 @@ def passthrough(cmd, step_id, title, *, n=None, parent=None, cwd=None, env=None,
     """Run an interactive command on the real terminal, as a step whose row shows its outcome: no capture, no new
     session, nothing copied to the full log.  Returns Result(exit, ms)."""
     emit("step", id=step_id, n=n if n is not None else 1, title=title, parent=parent)
-    publish("step_start", id=step_id, n=n if n is not None else 1, title=title, parent=parent,
+    publish("step_start", id=step_id, n=n if n is not None else 1, title=title, parent=parent, tool=None, sig="",
             **({"label": label} if label else {}))
     t0 = time.monotonic()
     rc = 130
@@ -1355,10 +1753,355 @@ def full_log_dir():
     return Path(os.environ.get("JUNEAU_RUN_LOG_DIR") or Path.home() / ".cache" / "juneau-run")
 
 
+def safe_name(text, fallback="run"):
+    """A file-name-safe form of `text`: every run of whitespace or punctuation (anything but a word character or a dot)
+    becomes one `-`, leading and trailing `-` and `.` are trimmed, and an empty result is `fallback`."""
+    return re.sub(r"[^\w.]+", "-", text or "").strip("-.") or fallback
+
+
 def default_full_log():
     """<full_log_dir>/<tool>-<YYYYMMDD-HHMMSS>.log, <tool> being the running script's name (push, test, release)."""
-    tool = Path(sys.argv[0]).stem if sys.argv and sys.argv[0] else "run"
+    tool = safe_name(Path(sys.argv[0]).stem) if sys.argv and sys.argv[0] else "run"
     return full_log_dir() / f"{tool}-{time.strftime('%Y%m%d-%H%M%S')}.log"
+
+
+# --- History store (spec 4.1, 4.4) ---
+
+HISTORY_KEEP = 50
+
+
+def history_enabled():
+    return os.environ.get("JUNEAU_RUN_HISTORY") != "0"
+
+
+def history_root():
+    return Path(os.environ.get("JUNEAU_RUN_HISTORY_DIR") or Path.home() / ".cache" / "juneau-run" / "history")
+
+
+def script_name():
+    """The running script's sanitized name (push, test, release), or `run`."""
+    return safe_name(Path(sys.argv[0]).stem) if sys.argv and sys.argv[0] else "run"
+
+
+def repo_key(repo="."):
+    """<basename>-<sha1[:8]> of the git common dir, so linked worktrees share one history (spec 4.1)."""
+    base = Path(repo).resolve()
+    anchor = base
+    try:
+        out = subprocess.run(["git", "-C", str(base), "rev-parse", "--git-common-dir"],
+                             capture_output=True, text=True, timeout=10)
+        if out.returncode == 0 and out.stdout.strip():
+            anchor = Path(os.path.realpath(base / out.stdout.strip()))
+    except (OSError, subprocess.SubprocessError):
+        pass
+    name = anchor.parent.name if anchor.name == ".git" else anchor.name
+    return f"{safe_name(name)}-{hashlib.sha1(str(anchor).encode()).hexdigest()[:8]}"
+
+
+class HistoryStore:
+    """One script's append-only JSONL history for one repo (spec 4.4).  Every failure is swallowed.  The path (and the
+    git call behind it) is resolved on first use, so a disabled store does no work."""
+    COMPACT_BYTES = 256 * 1024
+    MAX_RECORD = 64 * 1024   # a full Juneau reactor tests record (subs plus three series) is about 20 KB
+    KEEP_SLACK = 25             # a key may exceed HISTORY_KEEP by this many records before it forces a compaction
+    LOCK_WAIT = 2.0             # seconds to wait for the write lock before skipping the write
+
+    def __init__(self, repo, script):
+        self._repo, self._script = repo, script
+        self._path = None
+        self._floor = 0         # the file size after the last compaction
+
+    @property
+    def path(self):
+        if self._path is None:
+            self._path = history_root() / repo_key(self._repo) / f"{self._script}.jsonl"
+        return self._path
+
+    def _lock(self, lock):
+        deadline = time.monotonic() + self.LOCK_WAIT
+        while True:
+            try:
+                fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
+                return True
+            except OSError:
+                if time.monotonic() >= deadline:
+                    return False
+                time.sleep(0.02)
+
+    def append(self, record):
+        if not history_enabled():
+            return
+        try:
+            line = json.dumps(record, separators=(",", ":")).encode()
+            if len(line) > self.MAX_RECORD:
+                line = json.dumps({k: v for k, v in record.items() if k not in ("subs", "series")},
+                                  separators=(",", ":")).encode()
+                if len(line) > self.MAX_RECORD:
+                    return
+            self.path.parent.mkdir(parents=True, exist_ok=True)
+            with open(str(self.path) + ".lock", "a") as lock:
+                if not self._lock(lock):
+                    return
+                fd = os.open(self.path, os.O_WRONLY | os.O_APPEND | os.O_CREAT, 0o644)
+                try:
+                    if os.fstat(fd).st_size and not self._ends_with_newline():
+                        line = b"\n" + line
+                    os.write(fd, line + b"\n")
+                finally:
+                    os.close(fd)
+                size = self.path.stat().st_size
+                if size > self.COMPACT_BYTES and (self._floor == 0 or size > 2 * self._floor or self._crowded()):
+                    self._compact()
+        except Exception:
+            pass
+
+    def _crowded(self):
+        counts = collections.Counter((r["step"], r["tool"]) for r in self.read())
+        return any(n > HISTORY_KEEP + self.KEEP_SLACK for n in counts.values())
+
+    def _ends_with_newline(self):
+        with open(self.path, "rb") as f:
+            f.seek(-1, os.SEEK_END)
+            return f.read(1) == b"\n"
+
+    @staticmethod
+    def _valid(r):
+        """A well-typed v1 record: every field the estimate or compaction reads has the type they expect."""
+        def num(x):
+            return isinstance(x, (int, float)) and not isinstance(x, bool)
+        if not isinstance(r, dict) or type(r.get("v")) is not int or r["v"] != 1:
+            return False
+        if not isinstance(r.get("step"), str) or not isinstance(r.get("tool"), str):
+            return False
+        if not all(isinstance(r.get(k, ""), str) for k in ("sig", "ts", "commit")):
+            return False
+        if not all(isinstance(r.get(k, False), bool) for k in ("ok", "complete")):
+            return False
+        if r.get("wall_s") is not None and not num(r["wall_s"]):
+            return False
+        if r.get("tests") is not None and not num(r["tests"]):
+            return False
+        if r.get("title") is not None and not isinstance(r["title"], str):
+            return False
+        u = r.get("units")
+        if u is not None and not (isinstance(u, dict) and all(num(u.get(k, 0)) for k in ("total", "done"))):
+            return False
+        return all(r.get(k) is None or isinstance(r[k], dict) for k in ("subs", "series"))
+
+    def read(self):
+        """The valid v1 records, oldest first; unreadable or malformed lines are skipped."""
+        if not history_enabled():
+            return []
+        out = []
+        try:
+            with open(self.path, "rb") as f:
+                for raw in f:
+                    try:
+                        r = json.loads(raw)
+                    except ValueError:
+                        continue
+                    if self._valid(r):
+                        out.append(r)
+        except OSError:
+            return []
+        return out
+
+    def _compact(self):
+        seen, keep = {}, []
+        for r in reversed(self.read()):
+            n = seen.get((r["step"], r["tool"]), 0)
+            if n < HISTORY_KEEP:
+                seen[(r["step"], r["tool"])] = n + 1
+                keep.append(r)
+        keep.reverse()
+        tmp = str(self.path) + ".tmp"
+        with open(tmp, "wb") as f:
+            for r in keep:
+                f.write(json.dumps(r, separators=(",", ":")).encode() + b"\n")
+        os.replace(tmp, self.path)
+        self._floor = self.path.stat().st_size
+
+
+class History:
+    """The bus subscriber that writes one history record per finished top-level row (spec 4.2, 4.3).  A child row
+    (started with parent=) folds into its parent's record.  Never raises."""
+    SUBS_CAP = 400
+
+    def __init__(self, store, clock=time.monotonic, commit=None):
+        self.store = store
+        self.clock = clock
+        self.commit = commit
+        self.rows = {}          # top-level row id -> state
+        self.aliases = {}       # a child row's id -> its top-level row's id
+        self.open = []          # ids of the top-level rows that have started and not ended, oldest first
+
+    def current(self):
+        """The id of the most recently started top-level row that has not ended, else None."""
+        return self.open[-1] if self.open else None
+
+    def __call__(self, kind, fields):
+        self.on_event(kind, fields)
+
+    def on_event(self, kind, f):
+        try:
+            handler = getattr(self, "_on_" + kind, None)
+            if handler is not None:
+                handler(f)
+        except Exception:
+            pass
+
+    @staticmethod
+    def _key(step_id, name):
+        """A sub/series key without its "<step>/" prefix: the module id or task path (spec 4.2)."""
+        name = str(name)
+        prefix = f"{step_id}/"
+        return name[len(prefix):] if name.startswith(prefix) and len(name) > len(prefix) else name
+
+    def _row(self, step_id):
+        return self.rows.get(self.aliases.get(step_id, step_id))
+
+    def _on_step_start(self, f):
+        parent = f.get("parent")
+        if parent is not None and self._row(parent) is not None:
+            row = self._row(parent)
+            self.aliases[f["id"]] = parent if parent in self.rows else self.aliases[parent]
+            if f.get("tool") and not row["tool"]:
+                row["tool"], row["sig"] = f["tool"], f.get("sig") or ""
+            return
+        if self.commit is None:
+            self.commit = _git("rev-parse", "--short", "HEAD", cwd=getattr(self.store, "_repo", None)) or ""
+        self.rows[f["id"]] = {"title": f.get("title"), "tool": f.get("tool"), "sig": f.get("sig") or "",
+                              "commit": self.commit, "units": None, "tests": None,
+                              "subs": {}, "series": {}, "poms": set(), "counted": set()}
+        if f["id"] in self.open:
+            self.open.remove(f["id"])
+        self.open.append(f["id"])
+
+    def _on_units(self, f):
+        row = self._row(f["step"])
+        if row is not None:
+            u = row["units"] or {"kind": f["kind"], "total": 0, "done": 0}
+            u["kind"], u["total"] = f["kind"], max(u["done"], f["total"])    # replaces; clamped to the units done
+            row["units"] = u
+
+    def _on_unit(self, f):
+        row = self._row(f["step"])
+        if row is not None:
+            u = row["units"] or {"kind": None, "total": 0, "done": 0}
+            u["done"] = max(u["done"], f["done"])
+            u["total"] = max(u["total"], u["done"])
+            row["units"] = u
+
+    def _on_reactor(self, f):
+        row = self._row(f["step"])
+        if row is not None and f["size"] > 0:
+            row["poms"] = set(f["poms"])
+            u = row["units"] or {"kind": "modules", "total": 0, "done": 0}
+            u["kind"], u["total"] = "modules", max(0, f["size"] - len(row["poms"]), u["done"])
+            row["units"] = u
+
+    def _on_series(self, f):
+        row = self._row(f["step"])
+        if row is not None:
+            row["series"].setdefault(f["name"], {})[self._key(f["step"], f["sub"])] = f["value"]
+
+    def _on_tests(self, f):
+        row = self._row(f["step"])
+        if row is not None:
+            row["tests"] = f["total"]
+
+    def _on_module_end(self, f):
+        row = self._row(f["step"])
+        if row is None:
+            return
+        module = f["module"]
+        key = self._key(f["step"], module)
+        if key in row["subs"] or len(row["subs"]) < self.SUBS_CAP:
+            row["subs"][key] = round(f["ms"] / 1000, 3)
+        if module in row["poms"] or module in row["counted"]:
+            return
+        if row["units"] is None and row["tool"] == "gradle":
+            row["units"] = {"kind": "tasks", "total": 0, "done": 0}
+            row["gradle"] = True
+        u = row["units"]
+        if u is not None and u["kind"] == "modules":
+            row["counted"].add(module)
+            u["done"] += 1
+            u["total"] = max(u["total"], u["done"])
+        elif u is not None and row.get("gradle"):
+            row["counted"].add(module)
+            u["done"] += 1
+            u["total"] = u["done"]
+
+    def _on_step_end(self, f):
+        if f["id"] in self.aliases:
+            return
+        row = self.rows.pop(f["id"], None)
+        if f["id"] in self.open:
+            self.open.remove(f["id"])
+        self.aliases = {k: v for k, v in self.aliases.items() if v != f["id"]}
+        if row is None or f["status"] == "skip":
+            return
+        ok = f["status"] == "ok"
+        u = row["units"]
+        record = {"v": 1, "ts": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()), "step": f["id"],
+                  "tool": row["tool"] or "step", "title": row["title"], "sig": row["sig"], "commit": row["commit"],
+                  "ok": ok, "complete": ok and (not u or u["done"] == u["total"]), "wall_s": f["ms"] / 1000}
+        if u:
+            record["units"] = {"kind": u["kind"], "total": u["total"], "done": u["done"]}
+        if row["tests"] is not None:
+            record["tests"] = row["tests"]
+        if row["subs"]:
+            record["subs"] = row["subs"]
+        if row["series"]:
+            record["series"] = row["series"]
+        self.store.append(record)
+
+
+def history_start(repo=".", history=None):
+    """Subscribe this process's History to the bus (once).  Does nothing when history is disabled.  `history` is a
+    prebuilt History, for tests."""
+    global _history
+    if _history is not None or not history_enabled():
+        return
+    _history = subscribe(history or History(HistoryStore(repo, script_name())))
+
+
+def history_series(name, values):
+    """Record a named series of per-sub numbers, `{sub: number}`, on the innermost running top-level row (spec 4.3).
+    Does nothing without a running row or when history is off; never raises."""
+    try:
+        if _history is None or not isinstance(name, str) or not re.fullmatch(r"[a-z0-9_.]{1,64}", name):
+            return
+        step_id = _history.current()
+        if step_id is None:
+            return
+        for sub, value in values.items():
+            if isinstance(value, (int, float)) and not isinstance(value, bool) and value == value \
+                    and abs(value) != float("inf"):
+                publish("series", step=step_id, name=name, sub=str(sub), value=float(value))
+    except Exception:
+        pass
+
+
+def make_estimator(repo, script, store=None):
+    """The Board's estimator: fn(step, tool, sig) -> Estimate or None, from this script's history in `repo` (spec 5.3).
+    The store is read afresh for each lookup.  A `tool` of None takes the tool of the newest record for the step that
+    matches `sig` (else the newest record's).  Like-for-like records are those with the same `sig` (spec 5.1).  Off
+    when history is disabled."""
+    if not history_enabled():
+        return lambda step, tool, sig=None: None
+    store = store or HistoryStore(repo, script)
+
+    def estimator(step, tool, sig=None):
+        records = [r for r in store.read() if r["step"] == step]
+        if tool is None and records:
+            same = [r for r in records if sig and r.get("sig") == sig]
+            tool = (same or records)[-1]["tool"]
+        records = [r for r in records if r["tool"] == tool]
+        return estimate_from(records, sig)
+
+    return estimator
 
 
 def prune_full_logs(keep=FULL_LOG_KEEP):
@@ -1460,6 +2203,8 @@ class Sinks:
 #   ("class_done", id, outcome)          ("compiled", id, ok)          ("tested", id)
 #   ("reactor", size, [pom sub ids], tests_mode)                    ("failure", text, id)
 #   ("progress", id, text)               bus only (step_progress), never a marker
+#   ("units", id, total, kind)           ("unit", id, done, outcome)   bus only (units / unit), never a marker
+#   ("unit_fix", id, index, outcome)     ("series", id, name, sub, value)   bus only (unit_fix / series)
 # ---------------------------------------------------------------------------------------------------------------------
 
 ANSI_RE = re.compile(r"\x1b\[[0-9;?]*[A-Za-z]|\x1b\][^\x07\x1b]*(?:\x07|\x1b\\)")
@@ -1584,6 +2329,8 @@ class MavenParser(Parser):
     # Maven drops the dot leader when the name fills the column, so the dots are optional.
     SUMMARY_ROW = re.compile(r"^\[INFO\] (.+?)(?: \.+)? (SUCCESS|FAILURE|SKIPPED)(?: \[\s*([^\]]+?)\s*\])?\s*$")
     HEADER = re.compile(r"^\[INFO\] -+< (\S+):(\S+) >-+\s*$")
+    ORDER_HEAD = re.compile(r"^\[INFO\] Reactor Build Order:\s*$")
+    ORDER_ROW = re.compile(r"^\[INFO\] (.+?)\s+\[(\w[\w-]*)\]\s*$")
     ANY_PLUGIN = re.compile(r"^\[INFO\] --- (\S+?):(\S+):(\S+) \(.*\) @ (\S+) ---")
     COMPILE_PATH = re.compile(r"^\[ERROR\] (\S+\.java):\[")
     SKIP_TESTS = re.compile(r"(?:^|\s)-D(?:skipTests|maven\.test\.skip)(?:=true)?(?=\s|$)")
@@ -1591,6 +2338,7 @@ class MavenParser(Parser):
     CLASS_LINE = re.compile(
         r"^(?:\[(?:INFO|WARNING|ERROR)\] )?Tests run: (\d+), Failures: (\d+), Errors: (\d+), Skipped: (\d+), "
         r"Time elapsed: [\d.,]+ s(?: <<< (?:FAILURE|ERROR)!)? -- in (\S+)\s*$")
+    CLASS_TIME = re.compile(r"Time elapsed: ([\d.,]+) s")      # kept apart from CLASS_LINE so its group numbers stay put
     FAILED_TEST = re.compile(r"^(?:\[(?:ERROR|WARNING)\] )?\S.+ <<< (?:FAILURE|ERROR)!\s*$")
     COMPILE_ERROR = re.compile(r"^\[ERROR\] \S+\.java:\[\d+,\d+\] .+")
     COMPILE_GOAL_FAILED = re.compile(r"^\[ERROR\] Failed to execute goal \S+:maven-compiler-plugin:\S+ \(.*\) on project ([^\s:]+)")
@@ -1612,8 +2360,12 @@ class MavenParser(Parser):
         self.sub_of = {}                 # display name -> sub id, so the Reactor Summary finds what Building opened
         self.header_artifact = None      # artifactId of the nearest preceding `< g:a >` header
         self.surefire_sub = None
+        self.surefire_s = {}             # sub id -> summed class seconds, for the history `series` entry
         self.class_cache = {}            # test class FQN -> artifactIds of the modules containing it
         self.packaging = {}              # artifactId -> packaging
+        self.order_poms = []             # sub ids of the pom-packaged members of the Reactor Build Order block
+        self.in_order = False            # inside the Reactor Build Order block
+        self.order_members = []          # (title, packaging) rows read so far
         self.phase = {}                  # artifactId -> compile, testCompile, compiled, surefire, tested or done
         self.compile_failed = set()      # sub ids already painted red by a compile error
         self.last_compiler = None        # artifactId of the last compiler:* header
@@ -1647,8 +2399,7 @@ class MavenParser(Parser):
         return cmd, env
 
     def _reactor(self, size):
-        poms = [f"{self.step_id}/{a}" for a, p in self.packaging.items() if p == "pom"]
-        return ("reactor", size, poms, self.tests_mode)
+        return ("reactor", size, list(self.order_poms), self.tests_mode)
 
     def _has_tests(self, artifact):
         d = self.dirs.get(artifact)
@@ -1817,6 +2568,24 @@ class MavenParser(Parser):
             self.reactor_sent = True
             if self.dirs:
                 events.append(self._reactor(len(self.dirs)))
+        if self.ORDER_HEAD.match(line):
+            self.in_order, self.order_members = True, []
+            return events
+        if self.in_order:
+            m = self.ORDER_ROW.match(line)
+            if m:
+                self.order_members.append((m.group(1), m.group(2)))
+                return events
+            if self.order_members and line.rstrip() == "[INFO]":
+                self.in_order = False
+                # a pom title absent from the pom tree stays in the module count but cannot be mapped to a sub id
+                self.order_poms = list(dict.fromkeys(f"{self.step_id}/{self.names[t]}" for t, pkg in self.order_members
+                                                     if pkg == "pom" and t in self.names))
+                events.append(self._reactor(len(self.order_members)))
+                return events
+            if not self.order_members and line.rstrip() == "[INFO]":
+                return events
+            self.in_order = False
         m = self.HEADER.match(line)
         if m:
             self.header_artifact = m.group(2)
@@ -1879,6 +2648,9 @@ class MavenParser(Parser):
             events.append(("tests", self.step_id, self.total, self.fail, self.err, self.skip))
             sub = self._attribute(m.group(5))
             if sub is not None:
+                secs = float(self.CLASS_TIME.search(line).group(1).replace(",", ""))
+                self.surefire_s[sub] = self.surefire_s.get(sub, 0.0) + secs
+                events.append(("series", self.step_id, "surefire_s", sub, round(self.surefire_s[sub], 3)))
                 c = self._counts(sub)
                 c[0] += t
                 c[1] += f
@@ -1940,6 +2712,64 @@ class MavenParser(Parser):
         return events
 
 
+def _engine_dir():
+    return Path(__file__).resolve().parent
+
+
+def find_pytest_plugin():
+    """The plugin-only directory to put on the child's PYTHONPATH so `-p juneau_run_pytest` imports, or None (spec 1.4).
+    It holds nothing but the plugin module, so the suite under test never sees bootstrap, juneau_run or juneau_scripts.
+    In a zip it is the `pytest_plugin` subdirectory of the archive (zipimport accepts `x.zip/pytest_plugin`)."""
+    if (_engine_dir() / "pytest_plugin" / "juneau_run_pytest.py").is_file():
+        return str(_engine_dir() / "pytest_plugin")
+    scripts = sys.modules.get("juneau_scripts")
+    path = getattr(scripts, "__file__", None) or ""
+    marker = ".zip" + os.sep
+    if marker in path:
+        return path[:path.index(marker) + len(".zip")] + os.sep + "pytest_plugin"
+    return None
+
+
+_RUNNERS = ("uv", "poetry", "pipenv", "pdm", "hatch", "rye")
+# Launcher flags that take a separate value; their value (e.g. `--with pytest`) is not the program being run.
+_RUNNER_VALUE_FLAGS = {"--with", "--with-requirements", "--with-editable", "--python", "-p", "--project", "--directory",
+                       "--package", "--extra", "--group", "--env-file", "--from", "--index", "--index-url", "-w", "-e"}
+
+
+def _is_pytest_name(arg):
+    return os.path.basename(arg) in ("pytest", "py.test")
+
+
+def _pytest_index(cmd):
+    """Index of the token that launches pytest (pytest, py.test, or the `pytest` after `-m`), or -1.  Only the program
+    position counts: cmd[0], the program after a launcher's `run` (past its flags and their values, or after `--`), or
+    the module after `-m` -- so `tox -e pytest`, `make pytest` and `uv run --with pytest python -m foo` do not match."""
+    if not cmd:
+        return -1
+    if _is_pytest_name(cmd[0]):
+        return 0
+    for i in range(len(cmd) - 1):
+        if cmd[i] == "-m":
+            return i + 1 if cmd[i + 1] == "pytest" else -1
+    if os.path.basename(cmd[0]) in _RUNNERS and "run" in cmd[1:]:
+        i = cmd.index("run", 1) + 1
+        while i < len(cmd):
+            a = cmd[i]
+            if a == "--":
+                i += 1
+                break
+            if not a.startswith("-"):
+                break
+            i += 2 if a in _RUNNER_VALUE_FLAGS else 1
+        if i < len(cmd) and _is_pytest_name(cmd[i]):
+            return i
+    return -1
+
+
+def _is_pytest_command(cmd):
+    return _pytest_index(cmd) >= 0
+
+
 class PytestParser(Parser):
     """pytest: junitxml report plus counts from the final summary line."""
 
@@ -1948,7 +2778,17 @@ class PytestParser(Parser):
     ITEM = re.compile(r"(\d+) (passed|failed|skipped|errors?|xfailed|xpassed|deselected|warnings?)")
     SHORT = re.compile(r"^=+ short test summary info =+\s*$")
     # "test_f.py ..F.s  [ 43%]" or "[60/70]"; a wrapped line has no file name, and xdist never has one.
-    PROGRESS = re.compile(r"^(?:((?![.FEsxX]+ )\S+) +)?[.FEsxX]+ +\[ *(?:(\d+%)|(\d+/\d+))\] *$")
+    PROGRESS = re.compile(r"^(?:((?![.FEsxX]+ )\S+) +)?([.FEsxX]+) +\[ *(?:(\d+%)|(\d+/\d+))\] *$")
+    # Fallback (plugin never said hello): collected count, xdist worker line, verbose result lines, [k/N] counts.
+    COLLECTED = re.compile(r"^collected (\d+) items?")
+    WORKERS = re.compile(r"workers \[(\d+) items?\]")
+    VERBOSE = re.compile(r"^(?:\[gw\d+\] \[\s*\d+%\] (PASSED|FAILED|ERROR|SKIPPED|XFAIL|XPASS) (\S+::\S+)"
+                         r"|(\S+::\S+) (PASSED|FAILED|ERROR|SKIPPED|XFAIL|XPASS))")
+    COUNT = re.compile(r"\[ *(\d+)/(\d+)\]\s*$")
+    BARE_PERCENT = re.compile(r"^\s*\[ *(\d+)%\]\s*$")
+    OUTCOME = {"passed": "pass", "xpassed": "pass", "failed": "fail", "error": "fail", "skipped": "skip", "xfailed": "skip",
+               "PASSED": "pass", "XPASS": "pass", "FAILED": "fail", "ERROR": "fail", "SKIPPED": "skip", "XFAIL": "skip"}
+    INDEX_LIMIT = 2000
 
     def __init__(self):
         super().__init__()
@@ -1957,31 +2797,142 @@ class PytestParser(Parser):
         self.counts = None
         self.last_file = None
         self.last_progress = None
+        self.plugin = False
+        self.done = 0
+        self.n = 0
+        self.failed = self.errors = self.skipped = 0
+        self.index = OrderedDict()   # node id -> unit index, bounded: a late marker follows its test at once
 
     def prepare(self, cmd, env, cwd):
-        existing = next((a for a in cmd if a.startswith("--junitxml")), None)
-        if existing is not None:
-            if "=" in existing:
-                self.report_path = existing.split("=", 1)[1]
-            return cmd, env
-        if enabled():
+        existing = None
+        for i, a in enumerate(cmd):
+            for flag in ("--junitxml", "--junit-xml"):
+                if a == flag and i + 1 < len(cmd):
+                    existing = cmd[i + 1]
+                elif a.startswith(flag + "="):
+                    existing = a.split("=", 1)[1]
+        self.report_path = existing
+        extra = []
+        at = _pytest_index(cmd) + 1
+        if (os.environ.get("JUNEAU_RUN_PYTEST_PLUGIN") != "0" and at > 0
+                and "no:juneau_run_pytest" not in cmd and "-pno:juneau_run_pytest" not in cmd):
+            where = find_pytest_plugin()
+            if where:
+                extra += ["-p", "juneau_run_pytest"]
+                env = dict(os.environ if env is None else env)
+                old = env.get("PYTHONPATH")
+                env["PYTHONPATH"] = where + (os.pathsep + old if old else "")
+        if existing is None and enabled():
+            if at == 0:         # not recognisably pytest (a wrapper): keep appending, before any `--`
+                at = cmd.index("--") if "--" in cmd else len(cmd)
             directory = artifacts_dir() or Path(tempfile.mkdtemp(prefix="juneau-run-"))
             self.report_path = str(directory / f"{self.step_id.replace('/', '-')}-pytest.xml")
-            cmd = list(cmd) + [f"--junitxml={self.report_path}"]
+            extra.append(f"--junitxml={self.report_path}")
+        if extra:
+            cmd = list(cmd)
+            cmd[at:at] = extra
         return cmd, env
 
+    def _tests_event(self):
+        return ("tests", self.step_id, self.done, self.failed, self.errors, self.skipped)
+
+    def _plugin_event(self, line):
+        try:
+            m = json.loads(line[len("##pytest "):])
+        except ValueError:
+            return []
+        if not isinstance(m, dict):
+            return []
+        kind = m.get("ev")
+        if kind == "hello":
+            self.plugin = True
+            return []
+        if kind == "total":
+            n = m.get("n")
+            if isinstance(n, int) and n >= 0:
+                self.n = n
+                return [("units", self.step_id, n, "tests")]
+            return []
+        if kind != "test":
+            return []
+        outcome = m.get("o")
+        unit = self.OUTCOME.get(outcome)
+        if unit is None:
+            return []
+        if m.get("late"):
+            self.errors += 1
+            events = []
+            idx = self.index.get(m.get("id"))
+            if idx is not None:
+                events.append(("unit_fix", self.step_id, idx, "fail"))
+            events.append(self._tests_event())
+            return events
+        self.done += 1
+        self.index[m.get("id")] = self.done - 1
+        self.index.move_to_end(m.get("id"))
+        if len(self.index) > self.INDEX_LIMIT:
+            self.index.popitem(last=False)
+        if outcome == "failed":
+            self.failed += 1
+        elif outcome == "error":
+            self.errors += 1
+        elif unit == "skip":
+            self.skipped += 1
+        return [("unit", self.step_id, self.done, unit), self._tests_event()]
+
+    def _set_n(self, n):
+        if n == self.n:
+            return []
+        self.n = n
+        return [("units", self.step_id, n, "tests")]
+
+    def _advance(self, done, outcome):
+        if done <= self.done:
+            return []
+        self.done = done
+        return [("unit", self.step_id, done, outcome)]
+
     def handle(self, line):
+        if line.startswith("##pytest "):
+            return self._plugin_event(line)
         events = []
+        if self.plugin:
+            return self._summary_only(line)       # scraped progress ignored once the plugin said hello
+        m = self.COLLECTED.match(line)
+        if m:
+            return self._set_n(int(m.group(1)))
+        m = self.WORKERS.search(line)
+        if m:
+            return self._set_n(int(m.group(1)))
+        m = None if self.in_short else self.VERBOSE.match(line)
+        if m:
+            word = m.group(1) or m.group(4)
+            return self._advance(self.done + 1, self.OUTCOME[word])
+        m = self.BARE_PERCENT.match(line)
+        if m:
+            if self.n:
+                return self._advance(round(int(m.group(1)) * self.n / 100), None)
+            return events
         progress = self.PROGRESS.match(line) if line.endswith("]") else None
         if progress:
             self.last_file = progress.group(1) or self.last_file
-            text = progress.group(2) or progress.group(3)
+            text = progress.group(3) or progress.group(4)
             if self.last_file:
                 text += f" · {self.last_file}"
             if text != self.last_progress:
                 self.last_progress = text
                 events.append(("progress", self.step_id, text))
+            count = self.COUNT.search(line)
+            if count:
+                events += self._set_n(int(count.group(2)))
+                events += self._advance(int(count.group(1)), None)
+            else:
+                events += self._advance(self.done + len(progress.group(2)), None)
             return events
+        return self._summary_only(line)
+
+    def _summary_only(self, line):
+        events = []
         if self.SHORT.match(line):
             self.in_short = True
             events.append(("cond", line))
@@ -2020,6 +2971,7 @@ class PlaywrightParser(Parser):
         super().__init__()
         self.report_path = None
         self.run_count = 0
+        self.total = 0
         self.failures = 0
         self.block_left = 0
         self.final = {}
@@ -2040,6 +2992,11 @@ class PlaywrightParser(Parser):
         m = self.PROGRESS.match(line)
         if m:
             self.run_count = int(m.group(1))
+            total = int(m.group(2))
+            if total != self.total:
+                self.total = total
+                events.append(("units", self.step_id, total, "tests"))
+            events.append(("unit", self.step_id, self.run_count, None))
             events.append(("tests", self.step_id, self.run_count, self.failures, 0, 0))
             return events
         m = self.SUMMARY.match(line)
@@ -2295,6 +3252,14 @@ class _Dispatcher:
                 publish("failure", text=ev[1], step=ev[2])
             elif kind == "progress":
                 publish("step_progress", step=ev[1], text=ev[2])   # bus only: never a marker, so protocol v1 is unchanged
+            elif kind == "units":
+                publish("units", step=ev[1], total=ev[2], kind=ev[3])
+            elif kind == "unit":
+                publish("unit", step=ev[1], done=ev[2], outcome=ev[3])
+            elif kind == "unit_fix":
+                publish("unit_fix", step=ev[1], index=ev[2], outcome=ev[3])
+            elif kind == "series":
+                publish("series", step=ev[1], name=ev[2], sub=ev[3], value=ev[4])
             elif kind == "cond":
                 self.sinks.write_condensed(ev[1])
 
@@ -2322,6 +3287,11 @@ def _resolve_parser(parser):
     if isinstance(parser, str):
         return PARSERS[parser]()
     return parser() if isinstance(parser, type) else parser
+
+
+def _parser_name(parser):
+    """The parser's `name` (maven, pytest, ...), whether given as a name, a class or an instance."""
+    return parser if isinstance(parser, str) else getattr(parser, "name", None)
 
 
 def _input_fd():
@@ -2413,6 +3383,7 @@ def run_tool(cmd, parser, step_id, title, *, n=None, parent=None, cwd=None, env=
     sinks = sinks or Sinks()
     t0 = time.monotonic()
     labelled = {"label": label} if label else {}
+    labelled.update(tool=_parser_name(parser), sig=hashlib.sha1(" ".join(map(str, cmd)).encode()).hexdigest()[:8])
     if not enabled() and sinks.is_default and not capture and summarize is None:
         publish("step_start", id=step_id, n=n if n is not None else 1, title=title, parent=parent, **labelled)
         rc = 130
@@ -2716,19 +3687,32 @@ class _EventsFile:
 
 
 def _set_ctty():
-    """In the child, after setsid: make the PTY slave (stdin) the controlling terminal."""
+    """In the child, after setsid: make the PTY slave (stdin) the controlling terminal and let ^C and ^\\ reach the job.
+
+    SIGINT and SIGQUIT are reset to their defaults because a backgrounded launcher passes on ignored signals, and an
+    ignored signal survives exec.  The signal mask is cleared too, because a JVM blocks SIGQUIT in its threads and a
+    child started from one inherits that.  SIGTSTP, SIGTTIN and SIGTTOU are left alone: only an interactive shell
+    ignores them, and it resets them for its children; the job leads an orphaned process group, which never stops on
+    them anyway."""
+    signal.signal(signal.SIGINT, signal.SIG_DFL)
+    signal.signal(signal.SIGQUIT, signal.SIG_DFL)
+    signal.pthread_sigmask(signal.SIG_SETMASK, ())
     try:
         fcntl.ioctl(0, termios.TIOCSCTTY, 0)
     except OSError:
         pass
 
 
-def run_pty(cmd, parser, step_id, title, *, cols, rows, sinks, cwd=None, env=None):
+def run_pty(cmd, parser, step_id, title, *, cols, rows, sinks, cwd=None, env=None, stdin_fd=None):
     """Run one tool under a cols x rows PTY as one step and return Result(exit, ms, summary).
 
     The tool's bytes go to the full log exactly as written (the PTY turns \\n into \\r\\n).  Each line is cleaned with
     pty_clean() before the parser sees it, and _line_offset holds the log offset of its start while its events are
     written.  A signal death exits 128+n with a warn note.  SIGINT/SIGTERM cancel as in run_tool().
+
+    With stdin_fd, bytes read from it are copied to the PTY master unchanged, so they reach the job through the
+    terminal's line discipline (^C interrupts, ^D ends a read); they reach the log only if the terminal echoes them.
+    EOF on stdin_fd stops the copying but not the job.
     """
     global _line_offset
     t0 = time.monotonic()
@@ -2764,6 +3748,10 @@ def run_pty(cmd, parser, step_id, title, *, cols, rows, sinks, cwd=None, env=Non
         return Result(127, ms)
     os.close(slave)
     cancelled = []
+    pending = bytearray()   # input read from stdin_fd but not yet written to the master
+    in_fd = stdin_fd
+    if stdin_fd is not None:
+        os.set_blocking(master, False)
 
     def on_signal(signum, frame):
         cancelled.append(signum)
@@ -2799,11 +3787,41 @@ def run_pty(cmd, parser, step_id, title, *, cols, rows, sinks, cwd=None, env=Non
             line_start += len(line)
             line.clear()
 
+    def pump(rlist, wlist):
+        """One select() turn with input on: copies stdin to the master; returns True if the master is readable."""
+        nonlocal in_fd
+        r, w, _ = select.select(rlist, wlist, [], 0.1)
+        if in_fd is not None and in_fd in r:
+            try:
+                chunk = os.read(in_fd, 4096)
+            except BlockingIOError:
+                chunk = None   # nothing readable after all; try again next turn
+            except OSError:
+                chunk = b""
+            if chunk:
+                pending.extend(chunk)
+            elif chunk is not None:
+                in_fd = None   # EOF: stop copying; the job keeps running
+        if w:
+            try:
+                n = os.write(master, bytes(pending[:4096]))
+                del pending[:n]
+            except BlockingIOError:
+                pass
+            except OSError as e:
+                if e.errno != errno.EIO:
+                    raise
+                pending.clear()
+                in_fd = None
+        return master in r
+
     def drain(fd):
         """Reads whatever is still buffered on the PTY master without blocking, until it is empty or reports EIO."""
         while select.select([fd], [], [], 0)[0]:
             try:
                 chunk = os.read(fd, 65536)
+            except BlockingIOError:
+                return
             except OSError as e:
                 if e.errno != errno.EIO:
                     raise
@@ -2817,14 +3835,18 @@ def run_pty(cmd, parser, step_id, title, *, cols, rows, sinks, cwd=None, env=Non
         try:
             while True:
                 try:
-                    ready, _, _ = select.select([master], [], [], 0.1)
+                    if stdin_fd is None:
+                        ready, _, _ = select.select([master], [], [], 0.1)
+                    else:
+                        ready = pump([master] + ([in_fd] if in_fd is not None and not pending else []),
+                                     [master] if pending else [])
                     if not ready:
                         if proc.poll() is not None:
                             drain(master)   # the child may have written its last bytes after select() timed out
                             break
                         continue
                     chunk = os.read(master, 65536)
-                except InterruptedError:
+                except (InterruptedError, BlockingIOError):
                     continue
                 except OSError as e:
                     if e.errno != errno.EIO:   # EIO is how a PTY master reports that the slave side has closed
@@ -2881,6 +3903,8 @@ def run_pty(cmd, parser, step_id, title, *, cols, rows, sinks, cwd=None, env=Non
 def _main_pty(ap, ns, cmd):
     """The --pty CLI: check the options, write the .size sidecar, run the tool and always end with a done event."""
     global _events
+    if ns.input and not ns.pty:
+        ap.error("--input needs --pty")
     if not ns.pty:
         ap.error("--events and --size need --pty")
     if not ns.events:
@@ -2902,7 +3926,7 @@ def _main_pty(ap, ns, cmd):
     try:
         try:
             result = run_pty(cmd, ns.tool, ns.step or ns.tool, ns.title or " ".join(cmd[:2]),
-                             cols=cols, rows=rows, sinks=sinks)
+                             cols=cols, rows=rows, sinks=sinks, stdin_fd=0 if ns.input == "stdin" else None)
         except KeyboardInterrupt:
             _events.write("done", {"status": "cancelled"})
             return 130
@@ -2918,9 +3942,10 @@ def _main_pty(ap, ns, cmd):
 # ---------------------------------------------------------------------------------------------------------------------
 
 
-def _git(*args):
+def _git(*args, cwd=None):
     try:
-        out = subprocess.run(["git", *args], capture_output=True, text=True, check=True).stdout.strip()
+        out = subprocess.run(["git", *args], capture_output=True, text=True, check=True, cwd=cwd,
+                             timeout=5).stdout.strip()
         return out or None
     except Exception:
         return None
@@ -2936,14 +3961,16 @@ def main(argv=None):
     ap.add_argument("--pty", action="store_true")
     ap.add_argument("--size")
     ap.add_argument("--events")
+    ap.add_argument("--input", choices=["stdin"], help="copy this process's stdin to the PTY (needs --pty)")
     ap.add_argument("tool", choices=sorted(PARSERS))
     ap.add_argument("cmd", nargs=argparse.REMAINDER)
     ns = ap.parse_args(argv)
     cmd = ns.cmd[1:] if ns.cmd[:1] == ["--"] else ns.cmd
     if not cmd:
         ap.error("no command given after --")
-    if ns.pty or ns.events or ns.size:
+    if ns.pty or ns.events or ns.size or ns.input:
         return _main_pty(ap, ns, cmd)
+    history_start()
     sinks = Sinks(ns.console, ns.full_log, ns.condensed_log)
     owner = enabled() and not _nested()
     if owner:

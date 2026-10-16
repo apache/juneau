@@ -60,7 +60,7 @@ class LoopbackRedirectReceiver_Test extends TestBase {
 		}
 	}
 
-	// H2: the fixed-port (bind-first) constructor binds exactly the requested port so it matches a forPort registration.
+	// The fixed-port (bind-first) constructor binds exactly the requested port so it matches a forPort registration.
 	@Test void c01_fixedPortBindsRequestedPort() throws IOException {
 		var port = freePort();
 		try (var r = new LoopbackRedirectReceiver("/callback", port, "<html></html>")) {
@@ -70,7 +70,7 @@ class LoopbackRedirectReceiver_Test extends TestBase {
 		}
 	}
 
-	// H2: port 0 keeps the ephemeral (port-agnostic) default behavior on the fixed-port constructor.
+	// Port 0 keeps the ephemeral (port-agnostic) default behavior on the fixed-port constructor.
 	@Test void c02_fixedPortZeroIsEphemeral() throws IOException {
 		try (var r = new LoopbackRedirectReceiver("/callback", 0, "<html></html>")) {
 			assertTrue(r.port() > 0);
@@ -98,7 +98,7 @@ class LoopbackRedirectReceiver_Test extends TestBase {
 	}
 
 	// -----------------------------------------------------------------------------------------------------------------
-	// D: argument validation + failure modes
+	// Argument validation + failure modes
 	// -----------------------------------------------------------------------------------------------------------------
 
 	@Test void d01_negativePortRejected() {

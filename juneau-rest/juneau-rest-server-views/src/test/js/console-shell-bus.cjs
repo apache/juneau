@@ -16,8 +16,8 @@
  */
 
 /*
- * console-shell-bus.cjs - Node harness for juneau-console.js's page-bus integration (message bus addendum,
- * spec 4.1, 4.5, 5.2-5.4, 6.3): card:<id> lifecycle, implicit claims, cmd:<id> ops, declared roles, params,
+ * console-shell-bus.cjs - Node harness for juneau-console.js's page-bus integration:
+ * card:<id> lifecycle, implicit claims, cmd:<id> ops, declared roles, params,
  * ctx.publish / ctx.subscribe, the error painter and E-JS-46.  Loads the real juneau-bus.js and juneau-console.js
  * into one fresh vm sandbox PER CASE and prints ONE JSON report; every assertion lives in ConsoleBus_Shell_Test.
  *
@@ -452,6 +452,200 @@ async function main() {
 		r.bus.owner('src2').publish('selection:src2', { schemaVersion: 1, ids: ['a'], count: 1 });
 		await tick();
 		out.s18 = { empty: empty, encoded: log.slice(mark2, mark3), fetchErr: fetchErr, absolute: log.slice(mark3), farCodes: codes(r, 'far') };
+	}
+	// s19. No bus on a page whose only wiring is a data source: E-JS-46 (a declared source counts as wiring).
+	{
+		const r = await page({ dataSources: [{ id: 's' }], cards: [] }, { noBus: true });
+		out.s19 = { threw: r.threw, readyThrew: r.readyThrew, banner: banner(r) };
+	}
+	// s20. A data source subscribing to a publisher=script topic no script declared: E-JS-41 on the page banner;
+	// declaring the topic first clears it.
+	{
+		const contract = {
+			topics: [{ topic: 'app.range', retain: true, publisher: 'script' }],
+			dataSources: [{ id: 'orders', subscribes: [{ topic: 'app.range', as: 'params' }] }], cards: []
+		};
+		const stub = r => { r.env.window.JuneauViews.data = { boot() {} }; };
+		const bad = await page(contract, { beforeReady: stub });
+		const good = await page(contract, {
+			beforeReady: r => { stub(r); r.bus.declare('app.range', { retain: true }); }
+		});
+		out.s20 = {
+			banner: banner(bad),
+			text: bad.doc.querySelectorAll('.jc-console-error-item').map(n => n.textContent),
+			logged: bad.errors.filter(e => e.indexOf('[juneau-console] data source') === 0),
+			declaredBanner: banner(good)
+		};
+	}
+	// s21. A bare html card has no element of its own, so its params re-render and unrender work on the nodes it put
+	// on the page: the new content shows, the old content goes, and a refused URL leaves none of the old behind.
+	{
+		const seg = (doc, frag) => { const e = doc.createElement('p'); e.textContent = 'segment'; frag.appendChild(e); };
+		const withTpl = (r) => {
+			const t = r.doc.createElement('template');
+			t.setAttribute('data-card', 'b');
+			seg(r.doc, t.content);
+			r.doc.body.appendChild(t);
+		};
+		const r = await page({
+			cards: [{ id: 'src', type: 'grid' },
+				{ id: 'b', type: 'html', bare: true, template: 'b', src: '/{x}/y',
+					subscribes: [{ topic: 'selection:src', as: 'params', map: { x: 'ids.0' } }] }]
+		}, { queue: [['grid', recorder([], { implicit: card => ['selection:' + card.id] })]], beforeShell: (sb, r0) => withTpl(r0) });
+		const main = r.doc.querySelector('.jc-main');
+		const segs = () => main.childNodes.filter(n => n.tagName === 'P');   // the bare card's nodes sit directly in main
+		const initial = segs();
+		for (const n of initial) n.stale = true;
+		const src = r.bus.owner('src');
+		const pub = ids => src.publish('selection:src', { schemaVersion: 1, ids: ids, count: ids.length });
+		const snap = () => { const s = segs(); return { count: s.length, stale: s.filter(n => n.stale).length }; };
+		pub(['a']);
+		await tick();
+		const first = snap();
+		for (const n of segs()) n.stale = true;
+		pub(['b']);
+		await tick();
+		const second = snap();
+		for (const n of segs()) n.stale = true;
+		pub(['']);
+		await tick();
+		const refused = snap();
+		out.s21 = { initialCount: initial.length, first: first, second: second, refused: refused, banner: banner(r),
+			inlineErrors: main.querySelectorAll('.jc-card-bus-error').length };
+	}
+	// s21b. A non-html card with bare keeps its own host element (no card chrome), so it needs no anchor.
+	{
+		const log = [];
+		const r = await page({
+			cards: [{ id: 'src', type: 'grid' },
+				{ id: 'c', type: 'rec', bare: true, src: '/api/{x}/y',
+					subscribes: [{ topic: 'selection:src', as: 'params', map: { x: 'ids.0' } }] }]
+		}, { queue: [['grid', recorder([], { implicit: card => ['selection:' + card.id] })], ['rec', recorder(log)]] });
+		const src = r.bus.owner('src');
+		src.publish('selection:src', { schemaVersion: 1, ids: ['a'], count: 1 });
+		await tick();
+		src.publish('selection:src', { schemaVersion: 1, ids: ['b'], count: 1 });
+		await tick();
+		out.s21b = { log: log, bodies: r.doc.getElementById('c').querySelectorAll('.body').length };
+	}
+	// s22. A bare html card with a src fetches asynchronously: the content lands at the anchor on the first render and
+	// after every params change, and a fetch that settles after the card moved on is dropped.
+	{
+		const gates = [];
+		const fakeFetch = url => new Promise(res => gates.push(() => res({ ok: true, text: () => Promise.resolve('<p>' + url + '</p>') })));
+		const r = await page({
+			cards: [{ id: 'src', type: 'grid' },
+				{ id: 'b', type: 'html', bare: true, src: '/f/{x}', subscribes: [{ topic: 'selection:src', as: 'params', map: { x: 'ids.0' } }] },
+				{ id: 'tail', type: 'rec' }]
+		}, { queue: [['grid', recorder([], { implicit: card => ['selection:' + card.id] })], ['rec', recorder([])]],
+			beforeShell: sb => { sb.fetch = fakeFetch; } });
+		const main = r.doc.querySelector('.jc-main');
+		const texts = () => main.childNodes.filter(n => n.tagName === 'P').map(n => n.textContent);
+		const flush = async () => { while (gates.length) gates.shift()(); await tick(); };
+		await flush();
+		const first = texts();
+		const src = r.bus.owner('src');
+		src.publish('selection:src', { schemaVersion: 1, ids: ['a'], count: 1 });
+		await tick();
+		const stale = gates.splice(0);                                  // the fetch for '/f/a' is still in flight
+		src.publish('selection:src', { schemaVersion: 1, ids: ['b'], count: 1 });
+		await tick();
+		for (const g of stale) g();
+		await flush();
+		const beforeRefresh = texts();
+		r.bus.publish('cmd:b', { schemaVersion: 1, op: 'refresh' });
+		await tick();
+		await flush();
+		const kinds = main.childNodes.filter(n => n.nodeType === 1 && n.id !== 'src').map(n => n.tagName === 'P' ? 'P' : n.id);
+		out.s22 = { first: first, afterChange: beforeRefresh, errors: r.errors, banner: banner(r), kindsAfterRefresh: kinds };
+	}
+	// s22b. Refreshing a bare html card with a src replaces its content at the anchor; it does not add a second copy.
+	{
+		const gates = [];
+		const fakeFetch = url => new Promise(res => gates.push(() => res({ ok: true, text: () => Promise.resolve('<p>' + url + '</p>') })));
+		const r = await page({
+			cards: [{ id: 'b', type: 'html', bare: true, src: '/f/static' }, { id: 'tail', type: 'rec' }]
+		}, { queue: [['rec', recorder([])]], beforeShell: sb => { sb.fetch = fakeFetch; } });
+		const main = r.doc.querySelector('.jc-main');
+		const texts = () => main.childNodes.filter(n => n.tagName === 'P').map(n => n.textContent);
+		const flush = async () => { while (gates.length) gates.shift()(); await tick(); };
+		await flush();
+		const first = texts();
+		r.bus.publish('cmd:b', { schemaVersion: 1, op: 'refresh' });
+		await tick();
+		await flush();
+		const afterRefresh = texts();
+		r.bus.publish('cmd:b', { schemaVersion: 1, op: 'refresh' });
+		await tick();
+		await flush();
+		out.s22b = { first: first, afterRefresh: afterRefresh, afterSecond: texts(), errors: r.errors, banner: banner(r) };
+	}
+	// s22c. A bare html card whose src still has {tokens} does not fetch the unresolved path at mount; it fetches the
+	// resolved path once the params arrive.
+	{
+		const fetched = [];
+		const fakeFetch = url => { fetched.push(url); return Promise.resolve({ ok: true, text: () => Promise.resolve('<p>' + url + '</p>') }); };
+		const r = await page({
+			cards: [{ id: 'src', type: 'grid' },
+				{ id: 'b', type: 'html', bare: true, src: '/f/{x}', subscribes: [{ topic: 'selection:src', as: 'params', map: { x: 'ids.0' } }] }]
+		}, { queue: [['grid', recorder([], { implicit: card => ['selection:' + card.id] })]], beforeShell: sb => { sb.fetch = fakeFetch; } });
+		await tick();
+		const atMount = fetched.slice();
+		r.bus.owner('src').publish('selection:src', { schemaVersion: 1, ids: ['a'], count: 1 });
+		await tick();
+		out.s22c = { atMount: atMount, afterParams: fetched.slice(), errors: r.errors, banner: banner(r) };
+	}
+	// s23. The end anchor is gone from the page (the host was cleared): a params change is quiet, no crash, no error.
+	{
+		const r = await page({
+			cards: [{ id: 'src', type: 'grid' },
+				{ id: 'b', type: 'html', bare: true, template: 'b', src: '/{x}/y', subscribes: [{ topic: 'selection:src', as: 'params', map: { x: 'ids.0' } }] }]
+		}, { queue: [['grid', recorder([], { implicit: card => ['selection:' + card.id] })]],
+			beforeShell: (sb, r0) => {
+				const t = r0.doc.createElement('template');
+				t.setAttribute('data-card', 'b');
+				const e = r0.doc.createElement('p'); e.textContent = 'one'; t.content.appendChild(e);
+				r0.doc.body.appendChild(t);
+			} });
+		const main = r.doc.querySelector('.jc-main');
+		for (const n of main.childNodes.filter(n => n.nodeType === 8 && n.data.charAt(0) === '/')) n.remove();
+		const src = r.bus.owner('src');
+		let threw = null;
+		try {
+			src.publish('selection:src', { schemaVersion: 1, ids: ['a'], count: 1 });
+			src.clear('selection:src');
+		} catch (e) { threw = e.message; }
+		await tick();
+		out.s23 = { threw: threw, errors: r.errors, banner: banner(r) };
+	}
+	// s24. Two bare cards: the first's re-render goes in at its own anchor, not at the end of main; and a params clear
+	// paints the awaiting text there, which the next value replaces.
+	{
+		const tpl = (r0, id, text) => {
+			const t = r0.doc.createElement('template');
+			t.setAttribute('data-card', id);
+			const e = r0.doc.createElement('p'); e.textContent = text; t.content.appendChild(e);
+			r0.doc.body.appendChild(t);
+		};
+		const r = await page({
+			cards: [{ id: 'src', type: 'grid' },
+				{ id: 'one', type: 'html', bare: true, template: 'one', src: '/{x}/y', subscribes: [{ topic: 'selection:src', as: 'params', map: { x: 'ids.0' }, emptyText: 'Pick one.' }] },
+				{ id: 'two', type: 'html', bare: true, template: 'two' }]
+		}, { queue: [['grid', recorder([], { implicit: card => ['selection:' + card.id] })]],
+			beforeShell: (sb, r0) => { tpl(r0, 'one', 'one'); tpl(r0, 'two', 'two'); } });
+		const main = r.doc.querySelector('.jc-main');
+		const order = () => main.childNodes.filter(n => n.nodeType === 1 && n.id !== 'src').map(n => n.textContent);
+		const src = r.bus.owner('src');
+		const pub = ids => src.publish('selection:src', { schemaVersion: 1, ids: ids, count: ids.length });
+		pub(['a']);
+		await tick();
+		const afterChange = order();
+		src.clear('selection:src');
+		await tick();
+		const awaiting = order();
+		pub(['b']);
+		await tick();
+		out.s24 = { afterChange: afterChange, awaiting: awaiting, resolved: order() };
 	}
 }
 

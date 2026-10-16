@@ -27,9 +27,9 @@ import static org.apache.juneau.commons.utils.Shorts.*;
  *
  * <p>
  * On {@link #onInit(RestRequest)}, sets the {@code Authorization} request header to {@code "Bearer " + token},
- * where {@code token} comes from a caller-supplied {@link Supplier}. Sub-project F's OAuth/OIDC flows plug into
- * this seam by supplying their own token-supplier implementation (e.g. one that refreshes an expired access
- * token); this class implements no OAuth/OIDC flow itself.
+ * where {@code token} comes from a caller-supplied {@link Supplier}.
+ * The OAuth/OIDC flows in juneau-rest-client-mcp-auth plug into this seam by supplying their own token-supplier
+ * implementation (e.g. one that refreshes an expired access token); this class implements no OAuth/OIDC flow itself.
  *
  * <p>
  * If the supplied token is <jk>null</jk> <b>or blank</b> (empty or all-whitespace), no {@code Authorization}

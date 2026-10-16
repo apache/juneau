@@ -66,12 +66,12 @@ class LoginStateStore_Test extends TestBase {
 	private static final Instant NOW = Instant.parse("2026-06-01T12:00:00Z");
 	private static final Clock CLOCK = Clock.fixed(NOW, ZoneOffset.UTC);
 
-	// Distinctive hardcoded values the hidden default store could NOT have produced (S8 / gate 1).
+	// Distinctive hardcoded values the hidden default store could NOT have produced.
 	private static final String FAKE_NONCE = "fake-nonce-distinctive-8f3a";
 	private static final String FAKE_VERIFIER = "fakeVERIFIERfakeVERIFIERfakeVERIFIERfakeVER1"; // 44 chars, PKCE-valid [A-Za-z0-9]
 	private static final String FAKE_REDIRECT = "/from-fake-store";
 
-	// A distinctive secret marker embedded in a backend exception message (gate 4 / gate 5), so "the error
+	// A distinctive secret marker embedded in a backend exception message, so "the error
 	// surface does not echo the secret" is an observable assertion, not vacuously true.
 	private static final String LEAK_SENTINEL = "code_verifier=SUPERSECRET-LEAK-SENTINEL-9x7q";
 
@@ -160,7 +160,7 @@ class LoginStateStore_Test extends TestBase {
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
-	// Gate 1 — injected store honored on both legs, with observable distinctive outputs + mandatory call-counts.
+	// Injected store honored on both legs, with observable distinctive outputs + mandatory call-counts.
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Test void g01_injectedStore_honoredOnBothLegs() throws Exception {
@@ -185,7 +185,7 @@ class LoginStateStore_Test extends TestBase {
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
-	// Gate 3 — consume miss on the INJECTED store is the CSRF/replay decision (fails against a no-op setter).
+	// Consume miss on the INJECTED store is the CSRF/replay decision (fails against a no-op setter).
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Test void g03_consumeMiss_onInjectedStore_rejected() throws Exception {
@@ -210,7 +210,7 @@ class LoginStateStore_Test extends TestBase {
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
-	// Gate 4 — store outage on startLogin → fail closed (no redirect) + no secret leak in the error surface.
+	// Store outage on startLogin → fail closed (no redirect) + no secret leak in the error surface.
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Test void g04_storeOutage_onStartLogin_failsClosed_noLeak() {
@@ -229,7 +229,7 @@ class LoginStateStore_Test extends TestBase {
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
-	// Gate 5 — consume outage → rejected with the DISTINCT "unavailable" message (vs the CSRF-miss message).
+	// Consume outage → rejected with the DISTINCT "unavailable" message (vs the CSRF-miss message).
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Test void g05_consumeOutage_rejectedAsUnavailable() throws Exception {
@@ -250,7 +250,7 @@ class LoginStateStore_Test extends TestBase {
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
-	// Gate 6 — consume-time redirect re-validation: an evil redirectTarget from the store is discarded → "/".
+	// Consume-time redirect re-validation: an evil redirectTarget from the store is discarded → "/".
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Test void g06_evilRedirectTarget_fromStore_isDiscarded() throws Exception {
@@ -267,7 +267,7 @@ class LoginStateStore_Test extends TestBase {
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
-	// Gate 7 — framework expiry ceiling beats an over-age store record, BEFORE the token exchange.
+	// Framework expiry ceiling beats an over-age store record, BEFORE the token exchange.
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Test void g07_overTtlRecord_rejected_beforeExchange() throws Exception {
@@ -296,7 +296,7 @@ class LoginStateStore_Test extends TestBase {
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
-	// Gate 7b — null timestamps fail closed (rejected as expired, NOT an NPE→500).
+	// Null timestamps fail closed (rejected as expired, NOT an NPE→500).
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Test void g07b_nullExpiresAt_failsClosed() throws Exception {
@@ -328,7 +328,7 @@ class LoginStateStore_Test extends TestBase {
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
-	// Gate 8 — PendingLogin.toString() redacts both secrets.
+	// PendingLogin.toString() redacts both secrets.
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Test void g08_pendingLogin_toString_redactsSecrets() {
@@ -341,7 +341,7 @@ class LoginStateStore_Test extends TestBase {
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
-	// Gate 9 — default impl atomic single-use survives a concurrent-consume race (in-process only).
+	// Default impl atomic single-use survives a concurrent-consume race (in-process only).
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Test void g09_defaultStore_concurrentConsume_isSingleUse() throws Exception {

@@ -262,4 +262,15 @@ class ViewsJs_RibbonDialog_Test extends TestBase {
 	@Test void b07_aRowlessMergeRowRedrawsInsteadOfMerging() {
 		assertAllTrue("mergeRowless_redrawCalledOnce", "mergeRowless_outcomeStillRendered");
 	}
+
+	/** The original row-less job bug: a ribbon dialog whose submit returns a job pointer streams into the ribbon host. */
+	@Test void b08_aRibbonDialogJobPointerStreamsIntoTheRibbonHost() {
+		assertAllTrue("job_streamOpened", "job_progressInRibbonHost", "job_cancelInRibbonHost", "job_dialogClosed",
+			"job_noRowBanner");
+	}
+
+	@Test void b09_twoConcurrentRibbonJobsKeepSeparateProgressAndTeardownClosesTheStream() {
+		assertAllTrue("job_twoStreams", "job_twoProgress", "job_oneProgressLeft", "job_outcomeInRibbon",
+			"job_teardownClosedStream");
+	}
 }

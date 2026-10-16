@@ -1,0 +1,53 @@
+{
+  "tooltip": {
+    "trigger": "item",
+    "renderMode": "richText"
+  },
+  "legend": {
+    "bottom": 0
+  },
+  "xAxis": {
+    "type": "time"
+  },
+  "yAxis": {
+    "type": "value"
+  },
+  "series": [
+    {
+      "id": "ms",
+      "name": "Latency",
+      "type": "scatter",
+      "encode": {
+        "x": "t",
+        "y": "ms"
+      }
+    }
+  ],
+  "aria": {
+    "enabled": true
+  },
+  "dataset": [
+    {
+      "id": "juneau",
+      "dimensions": [
+        {
+          "name": "t",
+          "type": "time"
+        },
+        {
+          "name": "ms",
+          "type": "number"
+        },
+        {
+          "name": "size",
+          "type": "number"
+        }
+      ],
+      "source": {
+        "t": "[Float64Array 2: 1790812800000,1790899200000]",
+        "ms": "[Float64Array 2: 120,80]",
+        "size": "[Float64Array 2: 1,9]"
+      }
+    }
+  ]
+}

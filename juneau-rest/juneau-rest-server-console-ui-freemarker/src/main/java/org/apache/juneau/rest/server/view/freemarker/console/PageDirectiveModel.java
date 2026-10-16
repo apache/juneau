@@ -88,8 +88,27 @@ public final class PageDirectiveModel implements TemplateDirectiveModel {
 		}
 		cap.flushSegment();
 
-		// Resolved after the body so the card requirements are known, against the merged toolkit list so a pack named
-		// only by a PageSpec still has its assets emitted.
+		resolveAssets(env, cap, packs);
+
+		env.include(env.getConfiguration().getTemplate(chromeTemplate));
+
+		if (! cap.consoleDone)
+			throw FtlAttrLists.reject(f(
+				"<@page> chrome template '%s' rendered no <@console>; the legacy chrome was removed in 10.0.0.", chromeTemplate));
+	}
+
+	/**
+	 * Resolves the page's toolkit and card-required packs into the capture's script and link tags.
+	 *
+	 * <p>
+	 * Called after the page body (so the card requirements are known) against the merged toolkit list, so a pack named
+	 * only by a {@link PageSpec} still has its assets emitted.  Shared with {@code <@console>}, which runs it for a
+	 * page that never reached {@code <@page>} (a built page rendered straight through the chrome).
+	 *
+	 * <p>
+	 * On the built-page path the template name used in diagnostics is the chrome template, not the page template.
+	 */
+	static void resolveAssets(Environment env, PageCapture cap, ToolkitPackRegistry packs) throws TemplateException {
 		var roots = new java.util.ArrayList<>(cap.toolkits());
 		roots.addAll(cap.requiredPacks());
 		try {
@@ -99,11 +118,5 @@ public final class PageDirectiveModel implements TemplateDirectiveModel {
 		} catch (IllegalArgumentException | IllegalStateException e) {
 			throw FtlAttrLists.reject(e.getMessage());
 		}
-
-		env.include(env.getConfiguration().getTemplate(chromeTemplate));
-
-		if (! cap.consoleDone)
-			throw FtlAttrLists.reject(f(
-				"<@page> chrome template '%s' rendered no <@console>; the legacy chrome was removed in 10.0.0.", chromeTemplate));
 	}
 }

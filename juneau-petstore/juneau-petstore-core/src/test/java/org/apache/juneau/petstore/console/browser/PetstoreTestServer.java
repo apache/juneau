@@ -21,17 +21,21 @@ import java.net.*;
 import java.net.http.*;
 import java.net.http.HttpResponse.*;
 import java.time.*;
+import java.util.regex.*;
 
 import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.microservice.*;
 import org.apache.juneau.petstore.console.*;
 import org.apache.juneau.petstore.console.data.*;
+import org.apache.juneau.petstore.console.ops.*;
 import org.apache.juneau.petstore.rest.*;
 import org.apache.juneau.petstore.service.*;
 import org.apache.juneau.rest.server.*;
+import org.apache.juneau.rest.server.filter.*;
 import org.apache.juneau.rest.server.servlet.*;
 
 import jakarta.servlet.*;
+import jakarta.servlet.http.*;
 
 /**
  * The browser tests' server: the {@code /console} tree, the {@code /petstore} API and the {@code /petstore-ui}
@@ -63,11 +67,41 @@ public final class PetstoreTestServer {
 		@Bean public PetStore petStore() {
 			return PetstoreSeed.create().populate(new PetStore(PetstoreSeed.DEFAULT_CLOCK));
 		}
+
+		/**
+		 * @return A 12 s jobs hard timeout, so a browser test can watch a slow restock time out.  It leaves room on both
+		 * 	sides of the async-job cases: a 6 s hold after the effect ends well before it, and a 10 s wait plus a 10 s
+		 * 	hold runs well past it.
+		 */
+		@Bean public JobsRest.HardTimeout jobsHardTimeout() {
+			return new JobsRest.HardTimeout(Duration.ofSeconds(12));
+		}
 	}
 
-	/** Contributes {@link BrowserHost} to the fixture's Jetty. */
+	/** Contributes {@link BrowserHost} and the same two CSRF boundaries the runners install to the fixture's Jetty. */
 	@Configuration
 	public static class BrowserConfig {
+		// Shared by both boundary beans, as in the runners.
+		private final PetstoreApiBoundary apiBoundary = new PetstoreApiBoundary();
+
+		/** @return The console's CSRF boundary, over {@code /console/*}. */
+		@Bean(name="consoleBoundary") public ServletFilterRegistration consoleBoundary() {
+			return ServletFilterRegistration.create(new PetstoreConsoleBoundary(apiBoundary))
+				.urlPatterns(PetstoreConsoleBoundary.URL_PATTERN)
+				.dispatcherTypes(DispatcherType.REQUEST, DispatcherType.FORWARD, DispatcherType.ASYNC, DispatcherType.ERROR)
+				.order(ServletFilterRegistration.HIGHEST_PRECEDENCE)
+				.build();
+		}
+
+		/** @return The API's CSRF boundary, over {@code /petstore/*}. */
+		@Bean(name="apiBoundary") public ServletFilterRegistration apiBoundary() {
+			return ServletFilterRegistration.create(apiBoundary)
+				.urlPatterns(PetstoreApiBoundary.URL_PATTERN)
+				.dispatcherTypes(DispatcherType.REQUEST)
+				.order(ServletFilterRegistration.HIGHEST_PRECEDENCE + 10)
+				.build();
+		}
+
 		/** @return The root servlet. */
 		@Bean public Servlet root() {
 			return new BrowserHost();
@@ -104,5 +138,45 @@ public final class PetstoreTestServer {
 			Thread.sleep(250);
 		}
 		throw new IllegalStateException("Petstore test server did not become ready within 30s at '" + base + "'", last);
+	}
+
+	private static final Pattern API_TOKEN = Pattern.compile("data-petstore-csrf=\"([0-9a-f]{128})\"");
+
+	/**
+	 * Reads the API's CSRF token the way a page script does: from the admin Photo tab's upload form.
+	 *
+	 * @param base The base URL from {@link #awaitReady}.
+	 * @return The token to send in the API's CSRF header.
+	 * @throws Exception If the page cannot be read or carries no token.
+	 */
+	public static String apiToken(String base) throws Exception {
+		var page = HttpClient.newHttpClient().send(HttpRequest.newBuilder(URI.create(base + "/console/pets/1/photo"))
+			.header("Accept", "text/html").header("Authorization", "Bearer petstore-admin").GET().build(), BodyHandlers.ofString());
+		var m = API_TOKEN.matcher(page.body());
+		if (! m.find())
+			throw new IllegalStateException("Admin photo page carries no data-petstore-csrf token");
+		return m.group(1);
+	}
+
+	private static final Pattern TOKEN = Pattern.compile("<body[^>]*\\sdata-juneau-csrf=\"([^\"]+)\"");
+
+	/**
+	 * Builds a console write the way the page sends one: same-origin, JSON, carrying the token from a console page.
+	 *
+	 * @param base The base URL from {@link #awaitReady}.
+	 * @param path The console path, e.g. {@code /console/ops/jobs/groom}.
+	 * @param json The JSON body.
+	 * @return The POST request.
+	 * @throws Exception If the console page cannot be read or carries no token.
+	 */
+	public static HttpRequest consolePost(String base, String path, String json) throws Exception {
+		var page = HttpClient.newHttpClient().send(HttpRequest.newBuilder(URI.create(base + "/console/store")).header("Accept", "text/html").GET().build(), BodyHandlers.ofString());
+		var m = TOKEN.matcher(page.body());
+		if (! m.find())
+			throw new IllegalStateException("Console page carries no data-juneau-csrf token");
+		return HttpRequest.newBuilder(URI.create(base + path))
+			.header("Origin", base).header(LoopbackBoundary.DEFAULT_CSRF_HEADER, m.group(1))
+			.header("Content-Type", "application/json").header("Accept", "application/json")
+			.POST(HttpRequest.BodyPublishers.ofString(json)).build();
 	}
 }

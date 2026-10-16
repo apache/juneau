@@ -29,7 +29,7 @@ import org.junit.jupiter.api.*;
  *
  * <p>
  * The paint library is exercised under a DOM shim with NO {@code juneau-regions.js} loaded (see {@code
- * src/test/js/helpers-harness.cjs}), matching design §9.2's own claim that every helper is testable with no region
+ * src/test/js/helpers-harness.cjs}), matching the contract that every helper is testable with no region
  * at all.  The harness script computes facts only; every assertion against those facts lives here so a failure
  * names the exact behavior that broke.
  *
@@ -55,7 +55,7 @@ class Helpers_Test extends TestBase {
 	}
 
 	// =================================================================================================================
-	// fieldGrid - test 28a/28b: the catalog+values join, and its five behaviors.
+	// fieldGrid - the catalog+values join, and its five behaviors.
 	// =================================================================================================================
 
 	@Test void b01_fieldGrid_catalogValuesJoin_labelsAndValues() {
@@ -85,9 +85,9 @@ class Helpers_Test extends TestBase {
 	}
 
 	@Test void b06_fieldGrid_scopedRendererOverride_restoresGlobalRegistryByIdentity() {
-		// The purity-relevant half of F13's opts.renderers mechanism: the temporary NS.registerRenderer swap
+		// The purity-relevant half of the opts.renderers mechanism: the temporary NS.registerRenderer swap
 		// inside fieldGrid must leave the GLOBAL registry holding the EXACT SAME renderer object it held
-		// before the call - no page-global state survives past a single fill (test 29's amended purity scan).
+		// before the call - no page-global state survives past a single fill (the purity scan).
 		assertAllTrue(report(), "fieldGrid_scopedRendererOverrideRestoredByIdentity");
 	}
 
@@ -186,7 +186,7 @@ class Helpers_Test extends TestBase {
 	}
 
 	// =================================================================================================================
-	// dataPane - §8.3's algorithm, all seven rows of the shape table (test 31).
+	// dataPane - the fetch -> status -> paint algorithm, all seven rows of the shape table.
 	// =================================================================================================================
 
 	@Test void f01_dataPane_paintsLoadingBeforeLoadSettles() {
@@ -230,7 +230,7 @@ class Helpers_Test extends TestBase {
 	}
 
 	// =================================================================================================================
-	// tabStrip - the widened contract (test 30, i-xiii): lazy, fill-once, contained throws, abort, keyboard.
+	// tabStrip - the widened contract (i-xiii): lazy, fill-once, contained throws, abort, keyboard.
 	// =================================================================================================================
 
 	@Test void g01_tabStrip_eagerOneArgumentForm_stillWorksUnchanged() {

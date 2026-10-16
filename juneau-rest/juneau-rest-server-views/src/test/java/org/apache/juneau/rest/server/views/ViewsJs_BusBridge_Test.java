@@ -26,7 +26,7 @@ import org.apache.juneau.marshall.marshaller.*;
 import org.junit.jupiter.api.*;
 
 /**
- * Behavioral coverage for the bridge runtime (spec §11.5, §11.6).  {@code bus-bridge.cjs} drives
+ * Behavioral coverage for the bridge runtime.  {@code bus-bridge.cjs} drives
  * {@code JuneauViews.bus.attachSource} with hand-driven test-double sources and a fake clock, and reports source
  * validation (E-JS-52), grant enforcement (E-JS-54), the {@code bridge:<id>} state machine, backoff and its reset,
  * Retry-After, resync clearing, upstream forwarding (E-JS-55), detach, and the two give-up paths (E-JS-57).

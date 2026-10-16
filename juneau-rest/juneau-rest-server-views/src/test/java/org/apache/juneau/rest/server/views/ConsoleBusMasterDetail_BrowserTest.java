@@ -26,7 +26,7 @@ import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.condition.*;
 
 /**
- * Master/detail over the bus in real Chromium (spec 5.2): the {@code tasks} card follows {@code selection:changes} as a {@code params} subscription,
+ * Master/detail over the bus in real Chromium: the {@code tasks} card follows {@code selection:changes} as a {@code params} subscription,
  * shows its {@code emptyText} while nothing is selected, refetches with the encoded id on each pick, and clears again on deselect.
  */
 @EnabledIfSystemProperty(named=ConsoleBusBrowserSupport.GATE, matches="true", disabledReason=ConsoleBusBrowserSupport.DISABLED)

@@ -24,7 +24,7 @@ import org.junit.jupiter.params.*;
 import org.junit.jupiter.params.provider.*;
 
 /**
- * Phase 2 gate: {@code CssValueEscaper} unit tests.
+ * Tests for {@code CssValueEscaper} unit tests.
  *
  * <p>
  * Tested standalone (not through {@link Theme.Builder#token(String, String)}, since those payloads would be

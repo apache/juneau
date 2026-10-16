@@ -18,13 +18,20 @@ package org.apache.juneau.petstore.console.orders;
 
 import static org.apache.juneau.commons.utils.Shorts.*;
 
+import java.time.*;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
+
+import org.apache.juneau.commons.bean.*;
 import org.apache.juneau.commons.beanquery.*;
+import org.apache.juneau.commons.Schema;
 import org.apache.juneau.http.*;
 import org.apache.juneau.http.response.*;
 import org.apache.juneau.marshall.collections.*;
 import org.apache.juneau.petstore.console.*;
 import org.apache.juneau.petstore.console.pages.*;
 import org.apache.juneau.petstore.dto.*;
+import org.apache.juneau.petstore.service.*;
 import org.apache.juneau.rest.server.*;
 import org.apache.juneau.rest.server.datatables.*;
 import org.apache.juneau.rest.server.datatables.adapter.*;
@@ -73,15 +80,177 @@ public class OrdersRest extends PetstoreConsolePage {
 	/**
 	 * Server-mode DataTables query over all orders.
 	 *
+	 * <p>
+	 * The optional {@code day} query parameter ({@code yyyy-mm-dd}) narrows the orders to those whose ship date falls in
+	 * that day's window, before the request's own column filters apply, so the two combine.  A missing, blank or
+	 * malformed value is ignored.
+	 *
+	 * <p>
+	 * The optional {@code start} and {@code end} query parameters (the {@code window} URL-state directive's defaults;
+	 * each a {@code yyyy-mm-dd} date or an ISO date-time, whose calendar date is used) keep the orders whose ship date
+	 * falls between them, both days included, and either may be given alone.  A bound that is blank or malformed is
+	 * ignored.  An order with no readable ship date is outside any window that has a usable bound.  The window and
+	 * {@code day} combine with each other and with the request's own column filters.
+	 *
 	 * @param req The DataTables request.
+	 * @param day The day to keep, or {@code null}.
+	 * @param start The first ship day to keep, or {@code null}.
+	 * @param end The last ship day to keep, or {@code null}.
 	 * @return One page of orders, or a 200 {@code error} envelope for a malformed search expression.
 	 */
 	@RestPost(path="/query")
-	public DataTablesResults<Order> query(@Content DataTablesRequest req) {
-		try (var s = store().queryOrders()) {
+	public DataTablesResults<Order> query(@Content DataTablesRequest req, @Query("day") @Schema(aev=true) String day,
+			@Query("start") @Schema(aev=true) String start, @Query("end") @Schema(aev=true) String end) {
+		var wanted = parseDay(day);
+		var from = shipDay(start);
+		var to = shipDay(end);
+		var orders = store().getOrders();
+		if (wanted != null)
+			orders = orders.stream().filter(o -> wanted.equals(shipDay(o.getShipDate()))).toList();
+		if (from != null || to != null)
+			orders = orders.stream().filter(o -> inWindow(shipDay(o.getShipDate()), from, to)).toList();
+		try (var s = PetStore.ORDER_QUERY.getSession(orders)) {
 			return DataTablesQuery.run(req, s);
 		} catch (BeanQuerySyntaxException e) {
 			return DataTablesResults.error(req.getDraw(), e.getMessage());
+		}
+	}
+
+	/** Whether a ship day is inside the window; either bound may be {@code null} (open), and no ship day is never inside. */
+	private static boolean inWindow(LocalDate shipped, LocalDate from, LocalDate to) {
+		return shipped != null && (from == null || ! shipped.isBefore(from)) && (to == null || ! shipped.isAfter(to));
+	}
+
+	private static LocalDate parseDay(String value) {
+		if (value == null)
+			return null;
+		try {
+			return LocalDate.parse(value.trim());
+		} catch (@SuppressWarnings("unused") DateTimeException e) {
+			return null;
+		}
+	}
+
+	/** The calendar date of an order's ship date, which is an ISO date or an ISO date-time; {@code null} if it is neither. */
+	private static LocalDate shipDay(String value) {
+		var day = parseDay(value);
+		if (day != null || value == null)
+			return day;
+		try {
+			return DateTimeFormatter.ISO_DATE_TIME.parse(value.trim(), LocalDate::from);
+		} catch (@SuppressWarnings("unused") DateTimeException e) {
+			return null;
+		}
+	}
+
+	/**
+	 * The new-order wizard, step one: pick a pet that is for sale and an optional ship date.
+	 *
+	 * <p>
+	 * The {@code review} button opens the stacked second step and carries these inputs to it as drafts.  That step's
+	 * Confirm posts to {@code /console/orders}, as declared on the child action.
+	 *
+	 * @return The modal, on the compact chrome.
+	 */
+	@RestGet(path="/new-form")
+	public ModalDef newForm() {
+		var pet = FormDef.Input.of("petId", "Pet", "select").required();
+		store().getPets().stream().filter(p -> p.getStatus() == PetStatus.AVAILABLE)
+			.sorted(Comparator.comparingLong(Pet::getId))
+			.forEach(p -> pet.option(String.valueOf(p.getId()), p.getName()));
+		var form = FormDef.create()
+			.field(pet)
+			.field(FormDef.Input.of("shipDate", "Ship date (yyyy-mm-dd)", "text"))
+			.field(FormDef.Input.of("review", "Review order", "action").actionId("review"));
+		return ModalDef.create("New order: choose a pet").chrome("compact")
+			.form(form)
+			.childAction(ModalDef.ChildAction.of("review", "Review order").form("/console/orders/review-form").carryDrafts(true)
+				// The stacked step's Confirm submits with the child's own endpoint and method; without them it sends nothing.
+				.endpoint("/console/orders").method("POST").onSuccess("redraw"));
+	}
+
+	/**
+	 * The new-order wizard, step two: the order about to be placed, read back from the first step's drafts.
+	 *
+	 * @param drafts The first step's inputs as JSON, carried by the dialog as {@code juneauDrafts}.
+	 * @return The modal, on the compact chrome, whose form re-posts the validated values.
+	 * @throws BadRequest If the drafts are missing, not JSON, or carry a bad ship date.
+	 * @throws NotFound If the pet does not exist.
+	 * @throws Conflict If the pet is not available.
+	 */
+	@RestGet(path="/review-form")
+	public ModalDef reviewForm(@Query("juneauDrafts") String drafts) {
+		if (drafts == null || drafts.isBlank())
+			throw new BadRequest("Missing order draft");
+		JsonMap m;
+		try {
+			m = new JsonMap(drafts);
+		} catch (Exception e) {
+			throw new BadRequest("Invalid order draft: '%s'", e.getMessage());
+		}
+		var pet = pet(m.getString("petId"));
+		var shipDate = shipDate(m.getString("shipDate"));
+		return ModalDef.create("Review order").chrome("compact")
+			.field("Pet", pet.getName())
+			.field("Ship date", shipDate == null ? "(none)" : shipDate)
+			.form(FormDef.create()
+				.field(FormDef.Input.of("petId", "Pet", "text").value(String.valueOf(pet.getId())))
+				.field(FormDef.Input.of("shipDate", "Ship date", "text").value(shipDate == null ? "" : shipDate)));
+	}
+
+	/**
+	 * Places a new order.
+	 *
+	 * @param req The request (audit actor).
+	 * @param body The order, as the plain {@code {petId, shipDate}} or the dialog envelope {@code {fields:{...}}}.
+	 * @return The result toast, carrying the stored order.
+	 * @throws BadRequest On a missing body, non-object {@code fields}, missing pet or a bad ship date.
+	 * @throws NotFound If the pet does not exist.
+	 * @throws Conflict If the pet is not available.
+	 */
+	@RestPost(path="/")
+	public ActionResult create(RestRequest req, @Content JsonMap body) {
+		var actor = ConsoleWrites.actor(req);
+		if (body == null)
+			throw new BadRequest("Missing order body");
+		JsonMap fields;
+		try {
+			fields = body.getMap("fields");
+		} catch (Exception e) {
+			throw new BadRequest("Invalid order fields: '%s'", e.getMessage());
+		}
+		if (fields == null && body.get("fields") != null)
+			throw new BadRequest("Invalid order fields: '%s'", body.get("fields"));
+		var f = fields != null ? fields : body;
+		var pet = pet(f.getString("petId"));
+		var order = new Order().setPetId(pet.getId()).setShipDate(shipDate(f.getString("shipDate"))).setStatus(OrderStatus.PLACED);
+		var stored = store().createOrder(order, actor);
+		return ActionResult.success(stored).message(f("Placed order '%s' for '%s'", stored.getId(), pet.getName()));
+	}
+
+	private Pet pet(String id) {
+		if (id == null || id.isBlank())
+			throw new BadRequest("Missing pet");
+		Pet p = null;
+		try {
+			p = store().getPet(Long.parseLong(id.trim()));
+		} catch (NumberFormatException e) {
+			throw new BadRequest("Invalid pet '%s'", id);
+		}
+		if (p == null)
+			throw new NotFound("Unknown pet '%s'", id);
+		if (p.getStatus() != PetStatus.AVAILABLE)
+			throw new Conflict("Pet '%s' is '%s'; only an available pet can be ordered", id, p.getStatus());
+		return p;
+	}
+
+	private static String shipDate(String value) {
+		if (value == null || value.isBlank())
+			return null;
+		try {
+			return LocalDate.parse(value.trim()).toString();
+		} catch (DateTimeException e) {
+			throw new BadRequest("Invalid ship date '%s'", value);
 		}
 	}
 

@@ -21,6 +21,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.io.*;
 import java.net.*;
 import java.nio.charset.*;
+import java.util.concurrent.atomic.*;
 
 import org.apache.juneau.rest.client.apachehttpclient45.*;
 import org.junit.jupiter.api.*;
@@ -43,6 +44,10 @@ class ApacheHc45Transport_RedirectCredentials_Test {
 	private static HttpServer serverB;
 	private static int portA;
 	private static int portB;
+	private static final AtomicReference<String> firstHopAuth = new AtomicReference<>();
+	private static final AtomicReference<String> firstHopCookie = new AtomicReference<>();
+	private static final AtomicReference<String> firstHopKey = new AtomicReference<>();
+	private static final AtomicReference<String> lastKey = new AtomicReference<>();
 
 	@BeforeAll
 	static void startServers() throws IOException {
@@ -51,6 +56,7 @@ class ApacheHc45Transport_RedirectCredentials_Test {
 		serverB = HttpServer.create(new InetSocketAddress("127.0.0.1", 0), 0);
 		portB = serverB.getAddress().getPort();
 		serverB.createContext("/echo-creds", ApacheHc45Transport_RedirectCredentials_Test::echoCreds);
+		serverB.createContext("/bounce-to-a", exchange -> redirect(exchange, "http://127.0.0.1:" + portA + "/echo-creds"));
 		serverB.start();
 
 		serverA = HttpServer.create(new InetSocketAddress("127.0.0.1", 0), 0);
@@ -58,6 +64,12 @@ class ApacheHc45Transport_RedirectCredentials_Test {
 		serverA.createContext("/echo-creds", ApacheHc45Transport_RedirectCredentials_Test::echoCreds);
 		serverA.createContext("/redirect-cross", exchange -> redirect(exchange, "http://127.0.0.1:" + portB + "/echo-creds"));
 		serverA.createContext("/redirect-same", exchange -> redirect(exchange, "http://127.0.0.1:" + portA + "/echo-creds"));
+		serverA.createContext("/redirect-a-b-a", exchange -> {
+			firstHopAuth.set(String.valueOf(exchange.getRequestHeaders().getFirst("Authorization")));
+			firstHopCookie.set(String.valueOf(exchange.getRequestHeaders().getFirst("Cookie")));
+			firstHopKey.set(String.valueOf(exchange.getRequestHeaders().getFirst("X-API-Key")));
+			redirect(exchange, "http://127.0.0.1:" + portB + "/bounce-to-a");
+		});
 		serverA.start();
 	}
 
@@ -72,6 +84,7 @@ class ApacheHc45Transport_RedirectCredentials_Test {
 	private static void echoCreds(HttpExchange exchange) throws IOException {
 		var auth = exchange.getRequestHeaders().getFirst("Authorization");
 		var cookie = exchange.getRequestHeaders().getFirst("Cookie");
+		lastKey.set(String.valueOf(exchange.getRequestHeaders().getFirst("X-API-Key")));
 		var body = ("auth=" + (auth != null ? auth : "none") + "|cookie=" + (cookie != null ? cookie : "none"))
 			.getBytes(StandardCharsets.UTF_8);
 		exchange.getResponseHeaders().add("Content-Type", "text/plain");
@@ -109,6 +122,29 @@ class ApacheHc45Transport_RedirectCredentials_Test {
 					.run()) {
 				assertEquals(200, response.getStatusCode());
 				assertEquals("auth=Bearer secret-token|cookie=none", response.getBodyAsString());
+			}
+		}
+	}
+
+	@Test
+	void a03_originBackToFirstOrigin_credentialsStayStripped() throws Exception {
+		firstHopAuth.set(null);
+		firstHopCookie.set(null);
+		firstHopKey.set(null);
+		lastKey.set(null);
+		var transport = ApacheHc45Transport.create();
+		try (var client = RestClient.builder().transport(transport).rootUrl("http://127.0.0.1:" + portA).build()) {
+			try (var response = client.get("/redirect-a-b-a")
+					.header("Authorization", "Bearer secret-token")
+					.header("Cookie", "session=abc123")
+					.header("X-API-Key", "k-1")
+					.run()) {
+				assertEquals(200, response.getStatusCode());
+				assertEquals("Bearer secret-token", firstHopAuth.get());
+				assertEquals("session=abc123", firstHopCookie.get());
+				assertEquals("k-1", firstHopKey.get());
+				assertEquals("auth=none|cookie=none", response.getBodyAsString());
+				assertEquals("null", lastKey.get());
 			}
 		}
 	}

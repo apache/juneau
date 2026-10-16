@@ -34,7 +34,7 @@ import org.junit.jupiter.api.*;
 import jakarta.servlet.http.*;
 
 /**
- * Tests for {@link ServerBus} (spec §11.3, §11.4, §11.6, §12).
+ * Tests for {@link ServerBus}.
  *
  * <p>
  * Uses a fake clock and a recording {@link FrameSink}.  No timer thread is started: {@code tick()} runs only when a
@@ -597,7 +597,7 @@ class ServerBus_Test extends TestBase {
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
-	// g) the SSE subscription behind BusEventsMixin's stream (P1: SseBroadcaster)
+	// g) the SSE subscription behind BusEventsMixin's stream (via SseBroadcaster)
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Test void g01_oneSseSubscriptionPerSession() throws Exception {

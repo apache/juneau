@@ -32,7 +32,7 @@ import org.junit.jupiter.api.*;
 
 /**
  * Node behavioral harness (skipped when {@code node} is absent) for the View Settings dialog's tab ARIA wiring and
- * roving-tabindex keyboard nav (design §3 / F3): {@code config-chooser-a11y.cjs} drives the real
+ * roving-tabindex keyboard nav: {@code config-chooser-a11y.cjs} drives the real
  * {@code juneau-config.js} {@code openChooser} against {@code views-dom-shim.cjs}'s real DOM.
  */
 class ViewsJs_ConfigChooserA11y_Test extends TestBase {

@@ -28,10 +28,11 @@ import org.junit.jupiter.api.*;
  * representative leaf.
  *
  * <p>
- * Mirrors the Phase 2 response tests ({@code BasicHttpResponse_Test} b01–b07): reflective mutator guard, idempotency,
+ * Mirrors the response tests ({@code BasicHttpResponse_Test} b01–b07): reflective mutator guard, idempotency,
  * content equality, snapshot independence, and snapshot-construction regression.  Because entities hold no list-backed
- * sub-bean whose {@code unmodifiable} flag folds into equality, the full D3 assertion {@code bean.equals(bean.unmodifiable())}
- * holds here and is asserted directly (unlike the response side, which defers it to Phase 5).
+ * sub-bean whose {@code unmodifiable} flag folds into equality, the full content-equality assertion
+ * {@code bean.equals(bean.unmodifiable())} holds here and is asserted directly
+ * (unlike the response side, which defers it until list equality is content-only).
  */
 class BasicHttpEntity_Test extends TestBase {
 
@@ -79,8 +80,8 @@ class BasicHttpEntity_Test extends TestBase {
 	}
 
 	@Test void b04_contentEquality_beanEqualsSnapshot() {
-		// D3 content equality — entities have no list-backed sub-bean whose 'unmodifiable' flag folds into equality,
-		// so the full bean.equals(bean.unmodifiable()) assertion holds (design spec D3 / Phase 4).
+		// Content equality — entities have no list-backed sub-bean whose 'unmodifiable' flag folds into equality,
+		// so the full bean.equals(bean.unmodifiable()) assertion holds.
 		var x = new ByteArrayEntity().setContent(BYTES).setContentType("text/plain");
 		var u = x.unmodifiable();
 		assertEquals(x, u);
@@ -128,7 +129,7 @@ class BasicHttpEntity_Test extends TestBase {
 	}
 
 	@Test void b10_d3_holdsBothDirections_representativeLeaves() {
-		// D3: bean.equals(bean.unmodifiable()) AND the reverse, for a representative sampling of leaves.
+		// Content equality: bean.equals(bean.unmodifiable()) AND the reverse, for a representative sampling of leaves.
 		var se = new StringEntity().setContent("x").setContentType("text/plain");
 		assertEquals(se, se.unmodifiable());
 		assertEquals(se.unmodifiable(), se);

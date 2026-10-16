@@ -35,20 +35,25 @@ public final class Topics {
 
 	/** The framework families, in the order {@code JuneauViews.bus.FRAMEWORK_FAMILIES} lists them (pinned by a test). */
 	public static final Set<String> FRAMEWORK_FAMILIES = Collections.unmodifiableSet(new LinkedHashSet<>(List.of(
-		"card", "selection", "filter", "redraw", "detail", "bulk", "cmd", "probe", "job", "badge", "bridge")));
+		"card", "selection", "filter", "redraw", "detail", "bulk", "cmd", "probe", "job", "badge", "bridge", "data", "zoom", "legend")));
 
-	// The schema §5.7 grammar.  One copy: Subscription, TopicDecl, BridgeDecl and BusWiringValidator read these, and
+	// The grammar.  One copy: Subscription, TopicDecl, BridgeDecl and BusWiringValidator read these, and
 	// Topics_Test pins them against juneau-page.schema.json.
 	private static final String CUSTOM = "[a-z][a-z0-9-]{0,31}\\.[a-z][a-z0-9-]{0,31}";
 	private static final String KEY = "[A-Za-z0-9_.-]{1,128}";
 	static final Pattern TOPIC = Pattern.compile("^(" + String.join("|", FRAMEWORK_FAMILIES) + "|" + CUSTOM + ")(:" + KEY + ")?$");
-	static final Pattern TOPIC_DECL = Pattern.compile("^(" + CUSTOM + "(:(" + KEY + "|\\*))?|job:\\*)$");
-	static final Pattern PUBLICATION = Pattern.compile("^" + CUSTOM + "(:(" + KEY + "|\\*))?$");
+	static final Pattern TOPIC_DECL = Pattern.compile("^(" + CUSTOM + "(:(" + KEY + "|\\*))?|job:\\*|data:" + KEY + ")$");
+	static final Pattern PUBLICATION = Pattern.compile("^(" + CUSTOM + "(:(" + KEY + "|\\*))?|(zoom|legend):" + KEY + ")$");
+	/** {@link #PUBLICATION} without the chart state families: what BusWiringValidator treats as a custom declaration. */
+	static final Pattern CUSTOM_PUBLICATION = Pattern.compile("^" + CUSTOM + "(:(" + KEY + "|\\*))?$");
+	/** Framework families a declaration may name (with a concrete key): {@code data} page-level, {@code zoom}/{@code legend} on a card. */
+	static final Set<String> DECLARABLE_FRAMEWORK = Set.of("data", "zoom", "legend");
 	static final Pattern ROLE = Pattern.compile("^[a-z][a-z0-9-]{0,31}$");
 	static final Pattern MAP_PATH = Pattern.compile("^[A-Za-z0-9_-]+(\\.[A-Za-z0-9_-]+)*$");
 	/** Builder-time bridge session: same-origin path (no {@code //} or {@code /\}) or a {@code servlet:} / {@code context:} URI resolved at render. */
 	static final Pattern SESSION = Pattern.compile("^(/(?![/\\\\])|servlet:/|context:/)\\S*$");
-	static final Pattern ID = Pattern.compile("^[A-Za-z][A-Za-z0-9_-]{0,63}$");
+	/** The card and dashboard-section id grammar ({@code $defs/id} in the page schema). */
+	public static final Pattern ID = Pattern.compile("^[A-Za-z][A-Za-z0-9_-]{0,63}$");
 	private static final Pattern KEY_ONLY = Pattern.compile("^" + KEY + "$");
 
 	static final String E40 = "invalid topic '%s': expected family[:key] (see the topic syntax)";
@@ -79,6 +84,12 @@ public final class Topics {
 	public static String badge(String badgeId) { return framework("badge", badgeId); }
 	/** @param bridgeId The bridge id. @return {@code bridge:<bridgeId>}. */
 	public static String bridge(String bridgeId) { return framework("bridge", bridgeId); }
+	/** @param source The data source name. @return {@code data:<source>}. */
+	public static String data(String source) { return framework("data", source); }
+	/** @param cardId The chart card id. @return {@code zoom:<cardId>}. */
+	public static String zoom(String cardId) { return framework("zoom", cardId); }
+	/** @param cardId The chart card id. @return {@code legend:<cardId>}. */
+	public static String legend(String cardId) { return framework("legend", cardId); }
 
 	/**
 	 * @param ns The namespace, for example {@code ssc}.
@@ -107,6 +118,16 @@ public final class Topics {
 		if (! TOPIC_DECL.matcher(t).matches())
 			throw iae(E40, t);
 		return t;
+	}
+
+	/**
+	 * Tests the topic-key grammar (the part after {@code family:}).
+	 *
+	 * @param key The key, or <jk>null</jk>.
+	 * @return <jk>true</jk> if {@code key} is a valid topic key.
+	 */
+	public static boolean isKey(String key) {
+		return key != null && KEY_ONLY.matcher(key).matches();
 	}
 
 	private static String framework(String family, String key) {

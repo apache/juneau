@@ -22,7 +22,7 @@ import java.util.*;
 
 /**
  * The row-selection opt-in for a {@link ViewTable} &mdash; the first of the view table's two INDEPENDENT
- * opt-ins (design doc §9.3/§6.2; HIGH-5).
+ * opt-ins.
  *
  * <h5 class='section'>Independent from bulk mutation, by construction</h5>
  * <p>
@@ -48,7 +48,7 @@ import java.util.*;
  * {@link BulkMutateDef}, whose actual bulk-action list <i>is</i> wire data and therefore carries its own,
  * separate {@link BulkMutateDef#CONTRACT_VERSION}).
  *
- * <h5 class='section'>Selection identity is a stable row id, never a DOM/table index (MED-11)</h5>
+ * <h5 class='section'>Selection identity is a stable row id, never a DOM/table index</h5>
  * <p>
  * {@link #rowIdField()} names the row-data key {@code juneau-views.js} reads to stamp a stable
  * {@code data-juneau-row-id} attribute on each rendered {@code <tr>} (see {@code createdRow} in that runtime).

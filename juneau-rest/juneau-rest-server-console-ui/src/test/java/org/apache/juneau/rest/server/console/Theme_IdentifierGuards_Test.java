@@ -25,7 +25,7 @@ import org.junit.jupiter.params.*;
 import org.junit.jupiter.params.provider.*;
 
 /**
- * Phase 1 gate: {@link Theme#create(String)} / {@link Theme.Builder#token(String, String)} identifier REJECT
+ * Tests for {@link Theme#create(String)} / {@link Theme.Builder#token(String, String)} identifier REJECT
  * guards.
  *
  * <p>

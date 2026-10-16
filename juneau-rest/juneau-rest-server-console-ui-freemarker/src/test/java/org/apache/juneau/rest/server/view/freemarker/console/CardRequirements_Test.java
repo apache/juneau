@@ -34,8 +34,8 @@ class CardRequirements_Test extends TestBase {
 		assertList(r.forType("terminal"), "terminal");
 		assertList(r.forType("chart"), "charts");
 		assertList(r.forType("job-log"), "joblog");
-		assertEmpty(r.forType("console-output"));
 		assertEmpty(r.forType("html"));
+		assertEmpty(r.forType("run-view"));
 	}
 
 	@Test void a02_add_appendsToType() {
@@ -60,5 +60,11 @@ class CardRequirements_Test extends TestBase {
 		var r = CardRequirements.create().build(PACKS);
 		var e = assertThrows(IllegalArgumentException.class, () -> r.forCard("html", "box", List.of("ghost")));
 		assertString("Unknown toolkit pack 'ghost' (<@card id='box'> requires=).", e.getMessage());
+	}
+
+	@Test void a06_chart_charts_reachesEchartsAndData() {
+		assertList(CardRequirements.create().build(PACKS).forType("chart"), "charts");
+		assertTrue(PACKS.reaches("charts", "echarts"));
+		assertTrue(PACKS.reaches("charts", "data"));
 	}
 }

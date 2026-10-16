@@ -81,10 +81,11 @@ def _run_variables():
 @contextlib.contextmanager
 def clean_run_env():
     """Strip RUN_MARKERS, RUN_ARTIFACTS and every JUNEAU_RUN_* variable except JUNEAU_RUN_PY, and forget
-    sys.modules["juneau_run"], for the block.  Both are restored afterwards."""
+    sys.modules["juneau_run"], for the block (then set JUNEAU_RUN_HISTORY=0 so no run writes history).  All are restored
+    afterwards."""
     saved = sys.modules.pop("juneau_run", None)
     try:
-        with _environ(_run_variables()):
+        with _environ(_run_variables(), {"JUNEAU_RUN_HISTORY": "0"}):
             yield
     finally:
         if saved is not None:

@@ -17,7 +17,7 @@
 
 /*
  * regions-harness.cjs - the shared loader for the always-on Node behavioral harnesses that exercise
- * juneau-regions.js: the populate primitive, the message bus, SD-2's emit-ownership invariant, and the
+ * juneau-regions.js: the populate primitive, the message bus, the emit-ownership invariant, and the
  * initial-broadcast barrier.
  *
  * It layers three things on top of views-dom-shim.cjs, each of which a region test cannot do without:
@@ -100,7 +100,7 @@ function makeConsole() {
 /**
  * Loads juneau-renders.js, juneau-views.js and juneau-regions.js into one fresh environment.
  *
- * `opts.decorate` / `opts.extraJsPaths`: see the comment at the call site; used by console-output-env.cjs.
+ * `opts.decorate` / `opts.extraJsPaths`: see the comment at the call site; used by run-view-env.cjs.
  * `opts.noAbortController` withholds the platform baseline for the fail-loud test.
  * `opts.busJsPath` ALSO loads juneau-bus.js, FIRST, the order the "views" toolkit pack emits it - only the
  * page-bus harness (regions-bus-topics.cjs) needs this, since ctx.publish / ctx.subscribe delegate to JuneauViews.bus.
@@ -166,7 +166,7 @@ function mkRegion(env, opts) {
 	if (opts.host) el.dataset.juneauRegionHost = opts.host;
 	if (opts.populate) el.dataset.juneauRegionPopulate = opts.populate;
 	// `opts.declared` is the placeholder per-region descriptor JSON (see REGION_DECLARED_ATTR's own doc in
-	// juneau-regions.js for why this is a placeholder and not §12.2's real per-host sidecar wire shape).
+	// juneau-regions.js for why this is a placeholder and not the real per-host sidecar wire shape).
 	if (opts.declared) el.dataset.juneauRegionDeclared = JSON.stringify(opts.declared);
 	let parent = opts.parent || env.body;
 	if (opts.hiddenPanel) {

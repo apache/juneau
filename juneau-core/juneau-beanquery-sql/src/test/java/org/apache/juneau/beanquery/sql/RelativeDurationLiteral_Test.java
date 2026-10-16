@@ -29,7 +29,7 @@ import org.apache.juneau.commons.beanquery.*;
 import org.junit.jupiter.api.*;
 
 /**
- * End-to-end proof of relative-duration literals (design #4 D4, IRS parity gap 2): {@code -24h}/{@code +7d} binds
+ * End-to-end proof of relative-duration literals (design #4 D4): {@code -24h}/{@code +7d} binds
  * one request-time instant computed once per query - a {@link BigDecimal} signed-millisecond number on a NUMERIC
  * column, an {@link OffsetDateTime} on a TIMESTAMP column - and never emits SQL text such as {@code now() +/- interval}.
  *

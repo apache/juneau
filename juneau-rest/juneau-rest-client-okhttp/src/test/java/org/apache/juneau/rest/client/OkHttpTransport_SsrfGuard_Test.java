@@ -310,6 +310,45 @@ class OkHttpTransport_SsrfGuard_Test {
 	}
 
 	// =================================================================================================================
+	// E: per-client allowed address ranges (RestClient.Builder.allowAddressRanges)
+	// =================================================================================================================
+
+	private static final String LAB_URL = "http://224.0.0.1:1/x";
+	private static final org.apache.juneau.http.remote.RemoteUrlPolicy.AllowedRanges LAB = org.apache.juneau.http.remote.RemoteUrlPolicy.AllowedRanges.of("224.0.0.0/4");
+
+	private static TransportRequest ranged(String uri, org.apache.juneau.http.remote.RemoteUrlPolicy.AllowedRanges ranges) {
+		return TransportRequest.builder().method("GET").uri(uri).remoteUrlPolicy(true, false).allowedAddressRanges(ranges).build();
+	}
+
+	@Test
+	void e01_withRanges_specialPurposeLiteral_notRefused_whileWithoutRangesIsRefused_sameTransport() throws Exception {
+		try (var transport = OkHttpTransport.create()) {
+			var none = ranged(LAB_URL, org.apache.juneau.http.remote.RemoteUrlPolicy.AllowedRanges.NONE);
+			var ex = assertThrows(TransportException.class, () -> transport.execute(none).close());
+			assertTrue(ex.getMessage().contains("No allowed address for host '224.0.0.1'"), ex.getMessage());
+			try {
+				transport.execute(ranged(LAB_URL, LAB)).close();
+			} catch (TransportException e) {
+				// The connect itself may fail (a multicast address cannot be connected to over TCP); it must not be the policy refusal.
+				assertFalse(e.getMessage().contains("No allowed address"), e.getMessage());
+			}
+			var ex2 = assertThrows(TransportException.class, () -> transport.execute(none).close());
+			assertTrue(ex2.getMessage().contains("No allowed address for host '224.0.0.1'"), ex2.getMessage());
+		}
+	}
+
+	@Test
+	void e02_withRanges_loopbackAndMetadataLiterals_stillRefused() throws Exception {
+		try (var transport = OkHttpTransport.create()) {
+			for (var host : new String[]{"127.0.0.1", "169.254.169.254", "10.1.2.3"}) {
+				var req = ranged("http://" + host + ":1/x", LAB);
+				var ex = assertThrows(TransportException.class, () -> transport.execute(req).close());
+				assertTrue(ex.getMessage().contains("No allowed address for host '" + host + "'"), ex.getMessage());
+			}
+		}
+	}
+
+	// =================================================================================================================
 	// Helpers
 	// =================================================================================================================
 

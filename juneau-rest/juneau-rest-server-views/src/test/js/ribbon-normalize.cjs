@@ -310,7 +310,7 @@ function buildBar(NS, ribbon) {
 
 // ------------------------------------------------------------------------------------------------------------------
 // Pure functions: ribbonQueryParams + ribbonColumnSearches - the browser JOINS multiple active toggles that target
-// the SAME single-string parameter (`search`) into ONE comma-separated clause string (design §5.3: the wire
+// the SAME single-string parameter (`search`) into ONE comma-separated clause string (the wire
 // carries ONE `search`, never repeated params).  A column-scoped option stays a native
 // columns[N][search][value] param; any other custom param stays single-valued (last contribution wins).
 // ------------------------------------------------------------------------------------------------------------------

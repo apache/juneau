@@ -28,7 +28,7 @@ import java.util.*;
  * redirect arrives.
  *
  * <p>
- * Relocation of the {@code EphemeralStore} pattern from {@code juneau-rest-server-auth-oidc-rp} (Q3) for headless
+ * Relocation of the {@code EphemeralStore} pattern from {@code juneau-rest-server-auth-oidc-rp} for headless
  * (CLI/desktop) use.  The browser-session {@code redirectTarget}/{@code nonce} shape is dropped; this headless variant
  * stores the PKCE {@code code_verifier} and the discovered {@code expectedIssuer} used for the SEP-2468 {@code iss}
  * check on the callback.

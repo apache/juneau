@@ -29,6 +29,10 @@
 	const MIN_HEIGHT = 80, DEFAULT_HEIGHT = 240;
 	const CLOSED = 2;   // EventSource.CLOSED
 	const NOT_FOUND = "Job not found; it may have finished or the server restarted.";
+	const ATTACH_FAILED = "Could not attach to the job's progress stream; the server may be busy. Reload the page to try again.";
+	const REPLAY_QUIET_MS = 250;   // a reattach replay ends after this long with no new line
+	const REPLAY_MAX_MS = 1000;   // ... or this long after the stream opened, whichever comes first
+	const PROBE_TIMEOUT_MS = 5000;   // the attach probe gives up after this long and reads as a failed attach
 	const INTERRUPTED = "The progress stream was interrupted; the job may still be running. Reload the page to reattach.";
 	const NO_SSE = "Live progress is unavailable in this browser.";
 	const OUTCOME_TEXT = {
@@ -89,11 +93,23 @@
 		}
 	}
 
-	// The submit POST carries the CSRF token too.  Java already holds submit.endpoint to a same-origin path; here a
-	// backslash (a browser reads it as a slash, so "\\host" is protocol-relative) or a leading control character or
-	// space (stripped by the URL parser) is refused outright, before the origin is compared.
+	/**
+	 * The one prefix rule every same-origin / allowlist URL guard applies to the ORIGINAL string, before anything else
+	 * (never normalise and accept): true when the first or last character is a space or control character, or any
+	 * character is a backslash, a C0 control character or DEL.  A browser strips leading/trailing C0 and space,
+	 * deletes tab/CR/LF anywhere and reads a backslash as a slash, so each of those can turn a value that looks like a
+	 * same-origin path into "//host".  The text of this function is identical in every file that carries it
+	 * (checked by ViewsJs_SameOriginPath_Test) and mirrors SafePathTemplate.isSameOriginPath.  Callers handle the empty string.
+	 */
+	function hasUnsafeUrlChars(s) {
+		return s.charCodeAt(0) <= 32 || s.charCodeAt(s.length - 1) <= 32 || /[\\\u0000-\u001f\u007f]/.test(s);
+	}
+
+	// The submit POST carries the CSRF token too.  Java already holds submit.endpoint to a same-origin path; here the
+	// shared character rule (a backslash, or a leading or trailing control character or space) is applied before the
+	// origin is compared, so absolute same-origin URLs are still allowed.
 	function isSafeEndpoint(u) {
-		return typeof u === "string" && u !== "" && !/[\\\u0000-\u001f\u007f]/.test(u) && !/^\s/.test(u) && isSameOrigin(u);
+		return typeof u === "string" && u !== "" && !hasUnsafeUrlChars(u) && isSameOrigin(u);
 	}
 
 	function isRef(v) {
@@ -105,6 +121,16 @@
 
 	function toJob(v) {
 		return { jobId: v.jobId, streamUrl: v.streamUrl, cancelUrl: v.cancelUrl || null };
+	}
+
+	// A fresh attach to the stream is live-only, so the card asks for the whole history with lastEventId=0.  After a
+	// drop the browser's own reconnect adds Last-Event-ID, which the server prefers over the query.  isRef has already
+	// held streamUrl to this origin; a relative URL stays relative and an absolute one stays absolute.
+	function historyUrl(streamUrl) {
+		const loc = window.location;
+		const u = new URL(streamUrl, loc.href || (loc.origin + (loc.pathname || "/")));
+		u.searchParams.set("lastEventId", "0");
+		return /^[a-z][a-z0-9+.-]*:/i.test(streamUrl) ? u.href : u.pathname + u.search;
 	}
 
 	function mintKey() {
@@ -232,7 +258,7 @@
 			b.textContent = "";
 			return;
 		}
-		// One channel per message, as console-output does: an error banner is itself role=alert; any other banner is
+		// One channel per message: an error banner is itself role=alert; any other banner is
 		// plain text and the shell's polite announce region reads it.  The role is in place before the text, and the
 		// text is cleared first, so a repeat of the same error is still a change and is announced again.
 		if (tone === "error") b.setAttribute("role", "alert");
@@ -255,7 +281,31 @@
 		while (st.output.firstChild) st.output.removeChild(st.output.firstChild);
 	}
 
+	// A reattach replays the whole buffer at once (the card asks for the history from the start).  Announcing every line would
+	// flood the polite live region, so the pane is silenced while the lines arrive in a burst and one summary is announced when
+	// the burst goes quiet.
+	function replayLine(st, counted) {
+		if (!st.replaying) return;
+		if (counted) st.replayCount++;
+		if (st.replayTimer) clearTimeout(st.replayTimer);
+		st.replayTimer = setTimeout(() => endReplay(st, true), REPLAY_QUIET_MS);
+	}
+
+	function endReplay(st, announce) {
+		if (!st.replaying) return;
+		st.replaying = false;
+		if (st.replayTimer) clearTimeout(st.replayTimer);
+		if (st.replayCap) clearTimeout(st.replayCap);
+		st.replayTimer = null;
+		st.replayCap = null;
+		st.output.setAttribute("aria-live", "polite");
+		if (announce && st.replayCount > 0)
+			st.ctx.announce("Reattached to the running job; " + st.replayCount + " earlier " + (st.replayCount === 1 ? "line" : "lines") + " shown.");
+	}
+
 	function closeStream(st) {
+		endReplay(st, false);
+		abortProbe(st);
 		if (!st.es) return;
 		try { st.es.close(); } catch (e) { /* already closed */ }
 		st.es = null;
@@ -322,11 +372,10 @@
 		});
 	}
 
-	function open(st, job) {
+	function open(st, job, reattach) {
 		st.job = job;
 		st.events = 0;
-		st.shown = 0;   // progress lines shown for this job
-		st.replay = 0;  // progress lines received on the current connection
+		st.replayCount = 0;
 		st.cancelling = false;
 		setPhase(st, "running");
 		const ES = window.EventSource;
@@ -335,16 +384,20 @@
 			setBanner(st, "warning", NO_SSE);
 			return;
 		}
-		const es = new ES(job.streamUrl);
+		const es = new ES(historyUrl(job.streamUrl));
 		st.es = es;
+		if (reattach) {
+			st.replaying = true;
+			st.output.setAttribute("aria-live", "off");
+			st.replayCap = setTimeout(() => endReplay(st, true), REPLAY_MAX_MS);
+			replayLine(st, false);
+		}
 		es.addEventListener("progress", ev => {
 			if (st.es !== es) return;
 			st.events++;
-			// AsyncJobsMixin replays the whole buffer on every connection (no event ids), so after the browser
-			// reconnects the first lines repeat what is already shown.
-			if (++st.replay <= st.shown) return;
-			st.shown++;
+			// No client-side dedupe: the server resumes after Last-Event-ID, so a repeated line is a server bug, shown.
 			addLine(st, ev && ev.data != null ? String(ev.data) : "");
+			replayLine(st, true);
 		});
 		es.addEventListener("result", ev => {
 			if (st.es !== es) return;
@@ -360,15 +413,12 @@
 			settle(st, r);
 		});
 		es.addEventListener("error", () => {
-			// CONNECTING: the browser is retrying by itself; the next connection replays from the start.
+			// CONNECTING: the browser is retrying by itself and resumes after the last event id it saw.
 			// CLOSED before any event: the server refused the stream.
 			if (st.es !== es) return;
-			if (es.readyState !== CLOSED) {
-				st.replay = 0;
-				return;
-			}
+			if (es.readyState !== CLOSED) return;
 			if (st.events === 0) {
-				notFound(st);
+				probeAttach(st);
 			} else {
 				closeStream(st);
 				setPhase(st, "done");
@@ -390,6 +440,47 @@
 		setBanner(st, tone, text);
 	}
 
+	function abortProbe(st) {
+		const pr = st.probe;
+		if (!pr) return;
+		st.probe = null;
+		if (pr.timer) clearTimeout(pr.timer);
+		try { pr.controller.abort(); } catch (x) { /* already settled */ }
+	}
+
+	// EventSource reports a refused stream with no status.  Ask once more (a plain GET, aborted as soon as the status is known) so a
+	// 404 still reads "not found" while a 429, a 5xx, a network failure or a silent server reads as a failed attach and keeps the
+	// stored job for a reload.  closeStream aborts a probe still in flight.
+	function probeAttach(st) {
+		const job = st.job;
+		closeStream(st);
+		const stillThisJob = () => states.get(st.el) === st && st.phase === "running" && st.job === job && !st.es;
+		const attachFailed = () => {
+			abortProbe(st);
+			if (!stillThisJob()) return;
+			setPhase(st, "done");
+			setBanner(st, "warning", ATTACH_FAILED);
+		};
+		if (typeof fetch !== "function" || typeof AbortController !== "function") {
+			attachFailed();
+			return;
+		}
+		const controller = new AbortController();
+		const pr = { controller: controller, timer: null };
+		st.probe = pr;
+		pr.timer = setTimeout(attachFailed, PROBE_TIMEOUT_MS);
+		fetch(historyUrl(job.streamUrl), { method: "GET", credentials: "same-origin", headers: { Accept: "text/event-stream" }, signal: controller.signal })
+			.then(r => {
+				if (st.probe !== pr) return;
+				abortProbe(st);
+				if (!stillThisJob()) return;
+				if (r && r.status === 404) notFound(st);
+				else attachFailed();
+			}, () => {
+				if (st.probe === pr) attachFailed();
+			});
+	}
+
 	function notFound(st) {
 		closeStream(st);
 		clearOutput(st);
@@ -403,11 +494,13 @@
 		const job = st.job;
 		if (st.phase !== "running" || st.cancelling || !job || !job.cancelUrl) return;
 		st.cancelling = true;
+		const hadFocus = st.ctx.document.activeElement === st.btn;
 		st.btn.textContent = "Cancelling\u2026";
 		st.btn.disabled = true;
 		keepFocusOffDisabled(st);
 		const stillThisJob = () => states.get(st.el) === st && st.phase === "running" && st.job === job;
-		st.ctx.fetchJson(job.cancelUrl, { method: "POST" }).then(r => {
+		// A write boundary rejects a POST that is not JSON (415), so send an empty JSON object, as the views runtime does.
+		st.ctx.fetchJson(job.cancelUrl, { method: "POST", headers: { "Content-Type": "application/json" }, body: "{}" }).then(r => {
 			if (!stillThisJob()) return;
 			settle(st, r && typeof r === "object" && typeof r.outcome === "string" ? r : { outcome: "cancelled" });
 		}, e => {
@@ -415,6 +508,7 @@
 			st.cancelling = false;
 			setPhase(st, "running");
 			setBanner(st, "error", (e && e.message) || String(e));
+			if (hadFocus && !st.btn.disabled && typeof st.btn.focus === "function") st.btn.focus();
 		});
 	}
 
@@ -438,7 +532,7 @@
 		teardown(el);
 		for (const c of Array.from(el.childNodes))
 			if (!(c.classList && c.classList.contains("jc-card-title"))) el.removeChild(c);
-		const st = { card: card, el: el, ctx: ctx, prefs: ctx.prefs(), phase: "idle", seq: 0, job: null, es: null, events: 0, shown: 0, replay: 0, cancelling: false };
+		const st = { card: card, el: el, ctx: ctx, prefs: ctx.prefs(), phase: "idle", seq: 0, job: null, es: null, events: 0, cancelling: false, replaying: false, replayTimer: null, replayCap: null, probe: null, replayCount: 0 };
 		states.set(el, st);
 		build(st);
 		setPhase(st, "idle");
@@ -448,7 +542,8 @@
 			cancel: () => cancel(st)
 		});
 		const stored = st.prefs.get("job", null);
-		if (isRef(stored) && urlMatches(card, stored)) open(st, toJob(stored));
+		if (stored != null && !isRef(stored)) forget(st);
+		else if (isRef(stored) && urlMatches(card, stored)) open(st, toJob(stored), true);
 		return undefined;
 	}
 

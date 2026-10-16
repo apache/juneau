@@ -81,6 +81,17 @@
 			<version>${freemarker.version}</version>
 			<scope>provided</scope>
 		</dependency>
+		<!--
+			Optional: the "echarts" toolkit pack (ToolkitPackRegistry.PACK_ECHARTS) serves this WebJar. Maven does not
+			pass an optional dependency on, so an application that draws chart cards adds org.webjars.npm:echarts to
+			its own pom. Without it the module works and only chart pages fail (E-70).
+		-->
+		<dependency>
+			<groupId>org.webjars.npm</groupId>
+			<artifactId>echarts</artifactId>
+			<version>${webjars-echarts.version}</version>
+			<optional>true</optional>
+		</dependency>
 
 		<!-- Test scope -->
 		<dependency>

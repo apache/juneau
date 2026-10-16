@@ -16,8 +16,8 @@
  */
 
 /*
- * helpers.cjs - always-on Node behavioral harness for juneau-helpers.js (design §16.4 tests
- * 28/28a/28b/29/30/31).  Every assertion lives in the paired Java test; this script only computes facts.
+ * helpers.cjs - always-on Node behavioral harness for juneau-helpers.js (the fieldGrid,
+ * dataPane and tabStrip cases).  Every assertion lives in the paired Java test; this script only computes facts.
  *
  *   Usage:  node helpers.cjs <juneau-renders.js> <juneau-views.js> <juneau-helpers.js>
  */
@@ -44,7 +44,7 @@ function throws(fn) { try { fn(); return null; } catch (error) { return error.me
 (async function () {
 
 // ================================================================================================
-// fieldGrid - test 28a / 28b
+// fieldGrid
 // ================================================================================================
 (function fieldGridTests() {
 	// (i) default + catalog joined against values-only payload -> labeled TEXT grid
@@ -76,7 +76,7 @@ function throws(fn) { try { fn(); return null; } catch (error) { return error.me
 	// documented fail-closed behavior (missing parser -> render the raw value, never the renderer's HTML)
 	// means the override's and the global renderer's PAINTED text are indistinguishable here - that half
 	// of the behavior is exercised for real by the "*-browser.cjs" harnesses that carry a real DOMParser.
-	// What THIS sandbox can assert directly, and what test 29's purity scan actually cares about, is the
+	// What THIS sandbox can assert directly, and what the purity scan actually cares about, is the
 	// swap-and-restore itself: the temporary `NS.registerRenderer` swap inside fieldGrid leaves the GLOBAL
 	// registry holding the EXACT SAME renderer object it held before the call - no page-global state
 	// survives past a single fill, checked by identity rather than by repainting.
@@ -211,7 +211,7 @@ function throws(fn) { try { fn(); return null; } catch (error) { return error.me
 })();
 
 // ================================================================================================
-// dataPane - §8.3's algorithm, all seven rows
+// dataPane - the fetch -> status -> paint algorithm, all seven rows
 // ================================================================================================
 await (async function dataPaneTests() {
 	// loading node painted first
@@ -283,7 +283,7 @@ await (async function dataPaneTests() {
 })();
 
 // ================================================================================================
-// tabStrip - the widened contract (test 30, i-xiii)
+// tabStrip - the widened contract (i-xiii)
 // ================================================================================================
 // tabStrip's click/keydown handling is DELEGATED on the strip (role=tablist) element, exactly like the
 // existing buildRibbonStrip it widens - a real browser click on a tab button BUBBLES to that listener
@@ -406,7 +406,7 @@ await (async function tabStripTests() {
 	keyOnTab(wrap10, btns.find(b => b.getAttribute('aria-selected') === 'true'), 'x');
 	out.tabStrip_unhandledKeyChangesNothing = selectedTabId(wrap10) === beforeKey;
 
-	// two independent instances: fill-once state does not leak between them (purity, positive half of test 29)
+	// two independent instances: fill-once state does not leak between them (purity, positive half)
 	let runsX = 0, runsY = 0;
 	const wrapX = H.tabStrip([{ id: 'a', label: 'A', pane: env.el('div') }, { id: 'b', label: 'B', populate: function () { runsX++; } }]);
 	H.tabStrip([{ id: 'a', label: 'A', pane: env.el('div') }, { id: 'b', label: 'B', populate: function () { runsY++; } }]);

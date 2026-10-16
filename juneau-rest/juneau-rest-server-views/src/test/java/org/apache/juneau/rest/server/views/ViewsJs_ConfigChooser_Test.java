@@ -31,7 +31,7 @@ import org.apache.juneau.marshall.marshaller.*;
 import org.junit.jupiter.api.*;
 
 /**
- * Always-on coverage for the View-tab chooser in {@code juneau-config.js} (slice 6): source-shape pins
+ * Always-on coverage for the View-tab chooser in {@code juneau-config.js} : source-shape pins
  * for the XSS {@code textContent} mandate, last-column refusal, pinned-disabled, and the
  * {@code mountChooser} seam, plus a Node behavioral harness when {@code node} is on PATH.
  */
@@ -167,7 +167,7 @@ class ViewsJs_ConfigChooser_Test extends TestBase {
 
 	@Test void a13_optionsTab_exposesExactlyPageSizeWrapDensity() throws Exception {
 		var fn = functionBody(configJs(), "function buildOptionsTabBody(");
-		// The three committed Options controls (design §3.4) and nothing else.
+		// The three committed Options controls and nothing else.
 		assertTrue(fn.contains("options.pageSize"), fn);
 		assertTrue(fn.contains("options.wrap"), fn);
 		assertTrue(fn.contains("options.density"), fn);

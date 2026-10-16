@@ -291,13 +291,13 @@ class ViewsJs_RibbonNormalize_Test extends TestBase {
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
-	// f) the flat query-param form joins multiple clauses into the ONE `search` string (design §5.3): the wire
+	// f) the flat query-param form joins multiple clauses into the ONE `search` string: the wire
 	//    carries a single search parameter, never repeated params.
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Test void f01_multipleActiveTogglesJoinIntoOneSearchString() {
 		var r = report();
-		// Left as 3 separate assertEquals, not collapsed into one assertBean: each checks a distinct §5.3 join
+		// Left as 3 separate assertEquals, not collapsed into one assertBean: each checks a distinct join
 		// rule (search-clause join, opt-clause join, column-scoped exemption) and keeps its own explanatory
 		// diagnostic message rather than sharing one generic BCT failure message.
 		// Two active `search`-param toggles fold into ONE comma-joined search string (declared order preserved)...

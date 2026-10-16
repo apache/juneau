@@ -31,7 +31,7 @@ import org.apache.juneau.marshall.marshaller.*;
 import org.junit.jupiter.api.*;
 
 /**
- * Behavioral coverage for the per-column search popover commit semantics (design §4.5 operator help + §5 evaluation
+ * Behavioral coverage for the per-column search popover commit semantics (operator help and the evaluation
  * model).  A Node harness ({@code column-search-popover.cjs}) loads {@code juneau-search.js} into the same sandbox
  * as views, drives {@code openColumnSearchPopover(...)} through each commit path, and reports what reached the grid:
  * help rendered from VIEW_META, an incomplete {@code $}-draft leaving the grid untouched, an out-of-set operator
@@ -144,7 +144,7 @@ class ViewsJs_ColumnSearchPopover_Test extends TestBase {
 
 	@Test void a01_operatorHelp_renderedFromViewMeta() {
 		var r = report();
-		// Every effective operator gets a help row: its "$name" then the operator API's help text (design §4.5).
+		// Every effective operator gets a help row: its "$name" then the operator API's help text.
 		assertBean(r, "hasOpenColumnSearchPopover,hasSearchEngine,helpOps,helpTexts",
 			"true,true,[$eq,$in,$contains],[Exact match.,Any of the listed values.,Case-insensitive substring.]");
 	}
@@ -159,13 +159,13 @@ class ViewsJs_ColumnSearchPopover_Test extends TestBase {
 
 	@Test void a02_incompleteDollarDraft_leavesGridUntouched() {
 		var r = report();
-		// A still-being-typed "$eq(" must not blank/refilter the grid (design §5): zero draws, incomplete flagged.
+		// A still-being-typed "$eq(" must not blank/refilter the grid: zero draws, incomplete flagged.
 		assertBean(r, "incompleteDrawCount,incompleteStatusIncomplete", "0,true");
 	}
 
 	@Test void a03_outOfSetOperator_isRejectedNotApplied() {
 		var r = report();
-		// An operator not on the column's effective set is a reject, not a silent filter (design §4.3).
+		// An operator not on the column's effective set is a reject, not a silent filter.
 		assertBean(r, "rejectDrawCount,rejectInvalidClass,rejectStatusText", "0,true,Not a valid search for this column.");
 	}
 
@@ -184,7 +184,7 @@ class ViewsJs_ColumnSearchPopover_Test extends TestBase {
 
 	@Test void a06_escape_revertsLivePreview() {
 		var r = report();
-		// Esc reverts the live preview back to the value the popover opened with (design §5).
+		// Esc reverts the live preview back to the value the popover opened with.
 		assertBean(r, "revertPreApplied,revertPostApplied", "abc,");
 	}
 

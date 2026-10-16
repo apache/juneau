@@ -122,7 +122,7 @@ public final class TerminalInput implements UpstreamHandler {
 		var b = bus.get();
 		if (b == null)
 			throw new IllegalStateException("TerminalInput: handle called before bind");
-		var caller = new Caller(session);
+		var caller = new SessionCaller(session);
 
 		var rawId = payload.get("id");
 		var id = rawId instanceof String s && RunViewChecks.isRunId(s) ? s : null;
@@ -220,17 +220,5 @@ public final class TerminalInput implements UpstreamHandler {
 			case 0x7F -> "BS";  // xterm's Backspace sends DEL (0x7F) by default.
 			default -> b < 0x20 ? "^" + (char)(b + 0x40) : null;
 		};
-	}
-
-	/** A transport-neutral view of a bus session, so no {@link BusSession} reaches app code. */
-	private static final class Caller implements TerminalCaller {
-		private final BusSession session;
-
-		Caller(BusSession session) {
-			this.session = session;
-		}
-
-		@Override public String principalName() { return session.principalName(); }
-		@Override public Object attribute(String name) { return session.attribute(name); }
 	}
 }

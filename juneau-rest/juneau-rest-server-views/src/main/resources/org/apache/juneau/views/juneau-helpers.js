@@ -33,10 +33,10 @@
  *   dateRange, dropdown, filterBuilder                               - net-new controls
  *   editableField, toast                                            - net-new (editable detail leaf + error toast)
  *
- * INVARIANTS (design §9.2), enforced by this file's own shape as much as by test 29's source scan:
+ * INVARIANTS, enforced by this file's own shape as much as by the source scan:
  *   - Pure data -> DOM.  No fetch (dataPane's `load` is an author-supplied thunk; this file never
  *     constructs a URL or calls `fetch` itself), no bus, no PAGE-GLOBAL state.
- *   - The one amendment (SD-3): a helper MAY hold per-instance state confined to the node it returned
+ *   - The one amendment: a helper MAY hold per-instance state confined to the node it returned
  *     (tabStrip's fill-once bookkeeping; editableField's view/edit/dirty/error; fieldGrid's coordinator).
  *     That state lives in a closure captured by the returned node's event listeners - never in a
  *     module-level Map/Set/WeakMap/counter.
@@ -120,7 +120,7 @@
 	}
 
 	/**
-	 * Whether a `load`/`fetchDeclared`-style resolution counts as EMPTY (§8.5's shape table): null,
+	 * Whether a `load`/`fetchDeclared`-style resolution counts as EMPTY: null,
 	 * undefined, an array of length 0, or an object with zero own enumerable keys.  A values map that
 	 * legitimately has no keys and an envelope are different things, but `dataPane`'s contract forbids the
 	 * latter outright (never a `{contractVersion,fields}` envelope), so this predicate is safe as written.
@@ -132,17 +132,17 @@
 		return false;
 	}
 
-	/** Abort reasons are DOMExceptions named "AbortError" (the J0522a finding this file builds against). */
+	/** Abort reasons are DOMExceptions named "AbortError" (the behaviour this file builds against). */
 	function isAbortError(err) {
 		return err?.name === "AbortError";
 	}
 
 	/**
-	 * Whether a rejection carries the framework's "empty" kind (§8.5/§12.3.3 rule 2b - a 404 is a
+	 * Whether a rejection carries the framework's "empty" kind (a 404 is a
 	 * REJECTION carrying this kind).  No declarative default has landed yet (that is the
 	 * `fetchDeclared`), so there is no existing runtime convention for this to match; `dataPane`'s own
 	 * contract is `err.kind === "empty"`, which an author's `load` thunk sets before rejecting (e.g. on a
-	 * 404 response).  Documented here rather than assumed - see this child's build report.
+	 * 404 response).  Documented here rather than assumed.
 	 */
 	function isEmptyKindError(err) {
 		return err?.kind === "empty";
@@ -693,8 +693,8 @@
 	}
 
 	// ================================================================================================
-	// fieldGrid(fields, opts) - the catalog+values join (§9.1.1).  `fields` is PROVENANCE-AGNOSTIC: a
-	// projected declarative catalog and an author-declared JS literal (SD-3 row-detail) are the same
+	// fieldGrid(fields, opts) - the catalog+values join.  `fields` is PROVENANCE-AGNOSTIC: a
+	// projected declarative catalog and an author-declared JS literal (row-detail) are the same
 	// shape and this function does not know or care which it was handed.
 	// ================================================================================================
 
@@ -704,7 +704,7 @@
 	 * the identical never-innerHTML sanitize-and-copy discipline as a globally-registered one, rather than
 	 * a second, helper-local implementation of it.
 	 *
-	 * IMPLEMENTATION NOTE (not specified by the design; a judgment call made building this child):
+	 * IMPLEMENTATION NOTE (a judgment call, not a specified rule):
 	 * `fillRenderSlot` always resolves against the GLOBAL renderer registry and takes no resolver
 	 * parameter, so a per-call override is applied by temporarily registering it under the same id via the
 	 * existing public `NS.registerRenderer`/`NS.resolveRenderer` pair, then restoring whatever was there
@@ -873,14 +873,14 @@
 	}
 
 	// ================================================================================================
-	// recordTable(catalog, rows, opts) - STATIC, READ-ONLY.  Not a DataTable - that boundary is F24.
+	// recordTable(catalog, rows, opts) - STATIC, READ-ONLY.  Not a DataTable.
 	//
-	// NOTE ON SCOPE: the design's own §9.1.2 text flags a per-row `actions` extension (F34, "routed to
+	// NOTE ON SCOPE: the design flags a per-row `actions` extension ("routed to
 	// opts.onAction") as an OPEN fork - "that fork is open and should be confirmed before build."  This
 	// build does NOT implement it: doing so would mean presuming an answer to a question the design
 	// itself says is still open, rather than a documented, test-normative call.  v1 ships catalog+rows
 	// rendering, the empty state, and `opts.caption`; `actions`/`onAction` are left for whichever child
-	// picks F34 up once it is confirmed.  Flagged in this child's build report.
+	// picks it up once it is confirmed.
 	// ================================================================================================
 
 	function recordTable(catalog, rows, opts) { // NOSONAR javascript:S3776 -- encodes a views/widgets state machine; complexity is inherent
@@ -938,8 +938,8 @@
 	}
 
 	// ================================================================================================
-	// dataPane(spec) - §8.3's fetch -> status -> paint algorithm, factored out of the descriptor
-	// (§9.1.2).  Returns a `populate` function: fn(paneEl, tabCtx) -> Promise<void>.
+	// dataPane(spec) - the fetch -> status -> paint algorithm, factored out of the descriptor
+	// Returns a `populate` function: fn(paneEl, tabCtx) -> Promise<void>.
 	// ================================================================================================
 
 	function dataPane(spec) {
@@ -969,13 +969,13 @@
 						else I.renderAsyncStatus(paneEl, "error", err?.message ? String(err.message) : "Something went wrong.");
 					}
 				);
-			// Never touches the REGION's own status (§8.5's rule for fetchDeclared, carried here): a pane is
+			// Never touches the REGION's own status: a pane is
 			// not a region, and this function's whole DOM footprint is `paneEl` and nothing above it.
 		};
 	}
 
 	// ================================================================================================
-	// tabStrip(tabs, opts) - PROMOTED AND WIDENED (§9.1.2).  ONE node returned: the strip plus its pane
+	// tabStrip(tabs, opts) - PROMOTED AND WIDENED.  ONE node returned: the strip plus its pane
 	// container.  Backward-compatible: `tabStrip([{id,label,pane}])` with no opts is unchanged.
 	// ================================================================================================
 
@@ -1012,7 +1012,7 @@
 		const mode = opts.mode === "ribbon" ? "ribbon" : "tab";
 		const signal = opts.signal || null;
 		// A per-CALL random id, not a module-level counter: unique across co-existing strips without any
-		// state that outlives this call (test 29's amended purity scan rejects a module-level counter
+		// state that outlives this call (the purity scan rejects a module-level counter
 		// exactly like `detailStripSeq`).
 		const instanceId = "juneau-helper-tabstrip-" + Math.random().toString(36).slice(2, 10); // NOSONAR javascript:S2245 -- non-crypto instance id, not a security token.
 

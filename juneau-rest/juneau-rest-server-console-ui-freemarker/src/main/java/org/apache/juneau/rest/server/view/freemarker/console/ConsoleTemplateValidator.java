@@ -22,9 +22,11 @@ import static org.apache.juneau.commons.utils.Shorts.*;
 import java.io.*;
 import java.nio.file.*;
 import java.util.*;
+import java.util.function.Function;
 import java.util.regex.*;
 import java.util.stream.*;
 
+import org.apache.juneau.rest.server.staticfile.WebJarResolver;
 import org.apache.juneau.rest.server.views.*;
 
 import freemarker.core.*;
@@ -33,7 +35,7 @@ import freemarker.template.*;
 /**
  * Static lint for console FreeMarker templates. Scans each template for console directive calls and reports unknown
  * directives, unknown attributes, dangling template references, duplicate nav and card ids, non-strict booleans,
- * removed card types and globals, and a wrong {@code <@main/>} count, without rendering any page.
+ * removed card types and globals, a chart card whose ECharts WebJar is missing (E-70), and a wrong {@code <@main/>} count, without rendering any page.
  *
  * <p>
  * The attribute sets are the same ones the directives enforce at render time. Interpolated values
@@ -94,7 +96,7 @@ public final class ConsoleTemplateValidator {
 	private static final Pattern ASSET_REF = Pattern.compile("\\b(?:src|href)\\s*=\\s*(?:\"([^\"]*)\"|'([^']*)')");
 	private static final Pattern JUNEAU_ASSET = Pattern.compile("(?:^|/)(?:juneau-[\\w-]+\\.(?:js|css|svg)|juneau-console/chrome\\.css)(?:[?#].*)?$");
 	private static final Set<String> REMOVED_TYPES = Set.of("js", "json", "calendar");
-	private static final Map<String,Set<String>> STRICT = Map.of(NodeDirectiveModel.NAME, Set.of("visible", "selected"), ConsoleDirectiveModel.NAME, Set.of("chrome"));
+	private static final Map<String,Set<String>> STRICT = Map.of(NodeDirectiveModel.NAME, Set.of("visible", "selected"), ConsoleDirectiveModel.NAME, Set.of("chrome", "schemeToggle"));
 	private static final Map<String,Set<String>> DIRECTIVES = directives();
 
 	private static Map<String,Set<String>> directives() {
@@ -128,6 +130,11 @@ public final class ConsoleTemplateValidator {
 	private String classpathRoot;
 	private String chromeTemplate;
 	private final Set<String> allowed = new TreeSet<>();
+	private Function<String,String> webJarProbe = WebJarResolver::resolvePath;
+	private final ToolkitPackRegistry packs = new ToolkitPackRegistry();
+	private String echartsProblem;         // cached E-70 (or invalid-pack-graph) message; null when the probe passed
+	private String echartsRule;            // the rule id the cached problem is reported under
+	private boolean echartsProbed;
 
 	private ConsoleTemplateValidator() {}
 
@@ -171,6 +178,55 @@ public final class ConsoleTemplateValidator {
 	public ConsoleTemplateValidator allowDirective(String name) {
 		allowed.add(name);
 		return this;
+	}
+
+	// Package-private (no production caller; the mixin owns its own registry).  Names packs the app's chrome already
+	// loads; a provided "echarts" pack suppresses the missing-webjar rule.
+	// @throws IllegalArgumentException If a name is not a registered pack.
+	ConsoleTemplateValidator providedPacks(String...names) {
+		var list = Arrays.asList(names);
+		packs.requireKnown(list, "providedPacks");
+		packs.provide(list);
+		echartsProbed = false;
+		return this;
+	}
+
+	// Package-private: registers an app-supplied toolkit pack; a replacement "echarts" pack (for example one served
+	// from a CDN) suppresses the missing-webjar rule.
+	// The mixin's registerToolkitPack(String, List, List) overload is deliberately absent: it builds a pack from asset
+	// lists, which cannot change whether the "charts" WebJars resolve, so no lint rule depends on it.
+	ConsoleTemplateValidator registerToolkitPack(ToolkitPack pack) {
+		packs.register(rnn(pack));
+		echartsProbed = false;
+		return this;
+	}
+
+	// Package-private: tests simulate an absent WebJar.
+	ConsoleTemplateValidator webJarProbe(Function<String,String> probe) {
+		webJarProbe = rnn(probe);
+		echartsProbed = false;
+		return this;
+	}
+
+	// The E-70 message when the WebJars the "charts" pack reaches are missing, or null.  Probes the pack the chart card
+	// resolves at runtime (so a replaced "charts" or "echarts" pack is honoured) through the registry's own provided and
+	// replaced-pack knowledge; probed at most once per configuration, not once per chart card.  A broken pack graph
+	// (unknown dependsOn, cycle) is reported as an invalid-pack-graph finding instead of crashing the lint.
+	private String echartsProblem() {
+		if (! echartsProbed) {
+			echartsProblem = null;
+			echartsRule = "missing-webjar";
+			try {
+				packs.checkWebJars(List.of(ToolkitPackRegistry.PACK_CHARTS), webJarProbe);
+			} catch (IllegalStateException e) {
+				echartsProblem = e.getMessage();
+			} catch (IllegalArgumentException e) {
+				echartsProblem = e.getMessage();
+				echartsRule = "invalid-pack-graph";
+			}
+			echartsProbed = true;
+		}
+		return echartsProblem;
 	}
 
 	/**
@@ -288,6 +344,11 @@ public final class ConsoleTemplateValidator {
 							add(out, name, lines, at, "removed-card-type", f(
 								"<@card id='%s'> type='%s' was removed in 10.0.0; use type='html' with a <template>, or a registered card type.",
 								n(id) ? "" : id.value, type.value));
+						if (nn(type) && type.literal && eq(type.value, "chart")) {
+							var problem = echartsProblem();
+							if (nn(problem))
+								add(out, name, lines, at, echartsRule, problem);
+						}
 						var tpl = attrs.get("template");
 						if (nn(tpl) && tpl.literal)
 							templateRefs.add(new Object[]{tpl.value, at});

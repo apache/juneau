@@ -28,7 +28,7 @@ import org.apache.juneau.rest.server.datatables.*;
 
 /**
  * Maps a DataTables {@link DataTablesRequest request bean} onto a {@link BeanQuery}, runs it against a
- * {@link BeanQuerySession}, and copies the result onto a {@link DataTablesResults} response bean (design §4).
+ * {@link BeanQuerySession}, and copies the result onto a {@link DataTablesResults} response bean.
  *
  * <p>
  * This adapter is the only place the two worlds meet: the DataTables JSON beans
@@ -44,14 +44,14 @@ import org.apache.juneau.rest.server.datatables.*;
  * 		({@link org.apache.juneau.commons.beanquery.BeanQuery.Builder#search(String, String)}); two DataTables columns resolving to the same key merge
  * 		into one {@code $and}.
  * 	<li>A non-blank global {@code search.value} becomes a top-level {@code $or} of one leaf per eligible column
- * 		(searchable, resolvable), the leaf chosen by that column's {@link SearchType} (#2 §9's
- * 		leaf table): {@code $contains} for {@link SearchType#TEXT}/{@link SearchType#ID}, {@code $prefix} for
+ * 		(searchable, resolvable), the leaf chosen by that column's {@link SearchType}:
+ * 		{@code $contains} for {@link SearchType#TEXT}/{@link SearchType#ID}, {@code $prefix} for
  * 		{@link SearchType#VERSION}, {@code $eqic} for {@link SearchType#ENUM}, and {@code $eq} for {@link
  * 		SearchType#NUMERIC}/{@link SearchType#TIMESTAMP}/{@link SearchType#BOOLEAN} when {@code search.value} parses
  * 		for that type &mdash; a parse failure excludes just that column from this request's {@code $or}, it never
  * 		fails the request. Resolved keys are de-duplicated in column order; one eligible column collapses to a
- * 		plain leaf (#2 unwraps a single-item group); an eligible key that also has a per-column search merges into
- * 		that column's {@code $and} (#2 D2).
+ * 		plain leaf (a single-item group is unwrapped); an eligible key that also has a per-column search merges into
+ * 		that column's {@code $and}.
  * 	<li>Each {@code order[i]} resolves through {@code columns[i]} to a {@link org.apache.juneau.commons.beanquery.BeanQuery.Builder#sort(String) sort} /
  * 		{@link org.apache.juneau.commons.beanquery.BeanQuery.Builder#sortDesc(String) sortDesc} entry; duplicate keys keep the first occurrence.
  * 	<li>{@code start}/{@code length} become the {@link org.apache.juneau.commons.beanquery.BeanQuery.Builder#page(int,int) page} window
@@ -67,14 +67,14 @@ import org.apache.juneau.rest.server.datatables.*;
  * BeanQuerySession) run} / {@link #runArrays(DataTablesRequest, BeanQuerySession) runArrays} do <b>not</b> catch:
  * it propagates to {@code RestContext.convertThrowable}, which maps it to HTTP&nbsp;<b>400</b> with the server's message
  * in the {@code X-BeanQuery-Error} response header ({@code BeanQueryRequest.ERROR_HEADER}) &mdash; the same contract as
- * every other queryable endpoint.  (This overrides the original 200-plus-{@code error}-field design; 2026-10-05.)
+ * every other queryable endpoint.  (It is not a 200 response carrying an {@code error} field.)
  * The bundled {@code juneau-datatables.js} reads that header and shows the message through DataTables' {@code errMode}
  * instead of a generic "Ajax error".  A
  * {@code BeanQueryExecutionException} (a genuine server fault) propagates unchanged to the REST layer's 500 mapping.
  *
  * <h5 class='section'>Example:</h5>
  * <p class='bjava'>
- * 	<jc>// The §4.1 endpoint shape.</jc>
+ * 	<jc>// The endpoint shape.</jc>
  * 	<ja>@Rest</ja>(mixins=DataTablesMixin.<jk>class</jk>)
  * 	<jk>public class</jk> ReleasesResource <jk>extends</jk> BasicRestServlet {
  *
@@ -160,14 +160,14 @@ public class DataTablesQuery {
 
 	/**
 	 * Translates a DataTables request into an engine {@link BeanQuery} (search, sort, page window, counts) against
-	 * the given context's declared columns (design §4.3&ndash;§4.4).
+	 * the given context's declared columns.
 	 *
 	 * @param request The DataTables request bean.  Must not be <jk>null</jk>.
 	 * @param context The context the query will run against.  Must not be <jk>null</jk>.  Its {@link
 	 * 	BeanQueryContext#columns() columns()} / {@link BeanQueryContext#getColumnType(String) getColumnType(String)}
 	 * 	/ {@link BeanQueryContext#getMaxSearchClauses() getMaxSearchClauses()} / {@link
 	 * 	BeanQueryContext#getMaxSortKeys() getMaxSortKeys()} drive every resolution and cap below.  A session that
-	 * 	narrows its columns ({@code restrictColumns}) is not visible here &mdash; the #1
+	 * 	narrows its columns ({@code restrictColumns}) is not visible here &mdash; the query
 	 * 	pipeline still rejects a restricted column, reported through the same {@link BeanQuerySyntaxException} path.
 	 * @return The equivalent query.
 	 * @throws BeanQuerySyntaxException If {@code columns}/{@code order} exceed the context's caps, or a search/sort
@@ -178,7 +178,7 @@ public class DataTablesQuery {
 		var order = request.getOrder();
 		var declared = context.columns();
 
-		// D5: caps checked before any column is resolved.
+		// Caps are checked before any column is resolved.
 		var columnCount = columns == null ? 0 : columns.size();
 		var orderCount = order == null ? 0 : order.size();
 		if (columnCount > context.getMaxSearchClauses())
@@ -200,14 +200,14 @@ public class DataTablesQuery {
 			}
 		}
 
-		// Global search (D4): one $or of a per-SearchType leaf over every eligible column, per
-		// #2's §9 leaf table ($contains for TEXT/ID, $prefix for VERSION, $eqic for ENUM, $eq for
+		// Global search: one $or of a per-SearchType leaf over every eligible column
+		// ($contains for TEXT/ID, $prefix for VERSION, $eqic for ENUM, $eq for
 		// NUMERIC/TIMESTAMP/BOOLEAN). TEXT/ID/ENUM/VERSION are always eligible; a NUMERIC/TIMESTAMP/BOOLEAN column
 		// is eligible only when globalValue parses for that type (checked once per request, not per row) -- a
 		// parse failure excludes just that column, it never fails the request. Resolved keys are de-duplicated in
 		// column order first, same as the per-column search above. One eligible column becomes a plain top-level
 		// leaf and none eligible adds nothing, so "none eligible" naturally means no search string. If an eligible key
-		// also has a per-column search, the leaf merges into that column's $and (#2 D2).
+		// also has a per-column search, the leaf merges into that column's $and.
 		var globalValue = request.getSearch() == null ? null : request.getSearch().getValue();
 		if (inb(globalValue)) {
 			var keys = new LinkedHashSet<String>();
@@ -260,7 +260,7 @@ public class DataTablesQuery {
 		// Paging: length=-1 means all rows (passed through); a negative start is clamped rather than rejected.
 		b.page(Math.max(request.getStart(), 0), request.getLength());
 
-		// Counts: always requested; the context's own CountPolicy (NONE/MATCHED) still wins (#1 D3).
+		// Counts: always requested; the context's own CountPolicy (NONE/MATCHED) still wins.
 		b.counts(CountRequest.BOTH);
 
 		return b.build();
@@ -276,7 +276,7 @@ public class DataTablesQuery {
 	}
 
 	/**
-	 * Resolves one {@code columns[i].data} string to a declared column key, per design §4.3.
+	 * Resolves one {@code columns[i].data} string to a declared column key.
 	 *
 	 * @param declared The context's declared column names, in order.
 	 * @param data The raw {@code data} string (may be <jk>null</jk>).
@@ -312,7 +312,7 @@ public class DataTablesQuery {
 		return ! s.isEmpty() && s.chars().allMatch(ch -> ch >= '0' && ch <= '9');
 	}
 
-	/** Whether a global-search term is eligible for the global-search {@code NUMERIC} leaf (D4): only parseability
+	/** Whether a global-search term is eligible for the global-search {@code NUMERIC} leaf: only parseability
 	 * gates eligibility &mdash; the leaf itself binds the raw, unparsed term.  Uses {@link BigDecimal}, the same
 	 * parse the engine applies to a {@code NUMERIC} value, so Java-only {@code Double} forms ({@code 1d},
 	 * {@code NaN}, {@code Infinity}, hex floats) are excluded instead of failing downstream. */
@@ -326,14 +326,14 @@ public class DataTablesQuery {
 		}
 	}
 
-	/** Whether a global-search term is eligible for the global-search {@code BOOLEAN} leaf (D4): {@code true}/
+	/** Whether a global-search term is eligible for the global-search {@code BOOLEAN} leaf: {@code true}/
 	 * {@code false}, case-insensitively, nothing else. */
 	private static boolean looksBoolean(String s) {
 		var t = s.strip();
 		return eqic(t, "true") || eqic(t, "false");
 	}
 
-	/** Whether a global-search term is eligible for the global-search {@code TIMESTAMP} leaf (D4): the same
+	/** Whether a global-search term is eligible for the global-search {@code TIMESTAMP} leaf: the same
 	 * ISO-8601 instant form the engine's own value formatting emits. */
 	private static boolean looksLikeInstant(String s) {
 		try {

@@ -19,6 +19,7 @@ package org.apache.juneau.petstore.console.dev;
 import static org.apache.juneau.petstore.console.PetstoreConsoleFixture.*;
 import static org.apache.juneau.rest.server.console.test.PageContractAssert.*;
 import static org.apache.juneau.test.bct.BctAssertions.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.marshall.collections.*;
@@ -50,7 +51,7 @@ class CustomCardsRest_Test extends TestBase {
 		assertPage(page(client(), "/console/dev/cards"))
 			.isValid()
 			.hasActiveNav("dev", "cards")
-			.hasCardOrder("available", "gauge", "toolbar", "how");
+			.hasCardOrder("available", "gauge", "bands", "prices", "toolbar", "how");
 	}
 
 	@Test void a02_kpiCardPassesItsBodyThrough() throws Exception {
@@ -77,7 +78,38 @@ class CustomCardsRest_Test extends TestBase {
 		client().get("/console/dev/cards/petstore-cards.js").run()
 			.assertStatus(200)
 			.assertHeader("Content-Type").isContains("javascript")
-			.assertContent().isContains("window.JuneauConsoleCards", "'kpi'", "'inventory-gauge'", "juneau:card-mounted");
+			.assertContent().isContains("window.JuneauConsoleCards", "'kpi'", "'inventory-gauge'", "juneau:card-mounted",
+				"window.JuneauConsoleCharts", "'petstore.stockTotals'", "registerDirective('species'");
+	}
+
+	@Test void a05b_toolbarHasTheShowCatsButton() throws Exception {
+		assertContains("data-cards-action=\"cat\"", page(client(), "/console/dev/cards"));
+	}
+
+	@Test void a06_bandsIsAStackedBarWithAnAppDecoratorAndClickTopic() throws Exception {
+		assertPage(page(client(), "/console/dev/cards"))
+			.hasCard("bands", "chart")
+			.hasCardSrc("bands", "/console/dev/cards/inventory/all")
+			.hasCardKey("bands", "/kind", "bar")
+			.hasCardKey("bands", "/x/field", "species")
+			.hasCardKey("bands", "/stacked", true)
+			.hasCardKey("bands", "/orientation", "horizontal")
+			.hasCardKey("bands", "/series/0/field", "available")
+			.hasCardKey("bands", "/series/2/field", "sold")
+			.hasCardKey("bands", "/decorators/0/use", "petstore.stockTotals")
+			.hasCardKey("bands", "/on/click", "app.band-picked")
+			.publishes("bands", "app.band-picked")
+			.hasNoWiringErrors();
+	}
+
+	@Test void a07_pricesIsAZoomableScatterThatPublishesItsWindow() throws Exception {
+		assertPage(page(client(), "/console/dev/cards"))
+			.hasCard("prices", "chart")
+			.hasCardSrc("prices", "/console/dev/cards/prices")
+			.hasCardKey("prices", "/helper/kind", "scatter")
+			.hasCardKey("prices", "/option/dataZoom/0/type", "inside")
+			.hasCardKey("prices", "/option/dataZoom/1/type", "slider")
+			.publishes("prices", "zoom:prices");
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -105,5 +137,23 @@ class CustomCardsRest_Test extends TestBase {
 	@Test void b05_missingSpeciesIs400() throws Exception {
 		client().get("/console/dev/cards/inventory").accept("application/json").run()
 			.assertStatus(400).assertContent().isContains("Missing 'species'");
+	}
+
+	@Test void b06_inventoryForEverySpecies() throws Exception {
+		var rows = new JsonList(client().get("/console/dev/cards/inventory/all").accept("application/json").run().assertStatus(200).getContent().asString());
+		assertSize(Species.values().length, rows);
+		for (var i = 0; i < rows.size(); i++) {
+			var s = Species.values()[i];
+			assertBean(rows.getMap(i), "species,available,pending,sold",
+				s.name() + "," + count(s, PetStatus.AVAILABLE) + "," + count(s, PetStatus.PENDING) + "," + count(s, PetStatus.SOLD));
+		}
+	}
+
+	@Test void b07_pricesOnePerPetById() throws Exception {
+		var rows = new JsonList(client().get("/console/dev/cards/prices").accept("application/json").run().assertStatus(200).getContent().asString());
+		assertSize(store().getPets().size(), rows);
+		var first = store().getPets().stream().mapToLong(Pet::getId).min().orElseThrow();
+		assertEquals(first, rows.getMap(0).getLong("id"));
+		assertEquals((double)store().getPet(first).getPrice(), rows.getMap(0).get("price", Double.class), 0.001);
 	}
 }

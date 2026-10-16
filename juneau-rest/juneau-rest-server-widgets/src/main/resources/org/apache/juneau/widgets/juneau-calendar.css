@@ -28,7 +28,7 @@
  * --jc-tag-{color}-{bg,border,text} token families - no author inline color, no per-instance concatenated class.
  */
 
-/* Token fallbacks (S9 / L7 A): only fill a slot the theme hasn't; a themed :root wins by cascade. */
+/* Token fallbacks: only fill a slot the theme hasn't; a themed :root wins by cascade. */
 .jc-cal {
 	--jc-cal-popover-bg: var(--jc-popover-bg, #f7f7f7);
 	--jc-cal-popover-border: var(--jc-popover-border, #ccc);
@@ -367,7 +367,7 @@ a.jc-cal-event:focus-visible {
 .jc-cal-cat--red .jc-cal-legend-swatch { background: var(--jc-cal-tag-red-bg); border-color: var(--jc-cal-tag-red-border); }
 .jc-cal-cat--neutral .jc-cal-legend-swatch { background: var(--jc-cal-tag-neutral-bg); border-color: var(--jc-cal-tag-neutral-border); }
 
-/* Reduced-motion: no month-change fade (§5.17). */
+/* Reduced-motion: no month-change fade. */
 @media (prefers-reduced-motion: reduce) {
 	.jc-cal-grid {
 		transition: none;

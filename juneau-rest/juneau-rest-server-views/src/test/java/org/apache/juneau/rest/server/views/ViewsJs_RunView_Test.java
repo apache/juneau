@@ -47,13 +47,13 @@ class ViewsJs_RunView_Test extends TestBase {
 		"red18_stepCapDropsOnlyNewIds", "red19_terminalWithoutDoneIsStopped", "core01_createAndRoot",
 		"core02_badOptionsThrowBeforeDom", "core03_oneRenderPerBatch", "core04_destroyIsIdempotent",
 		"sum01_headlineAndStatus", "sum02_countsUseBuiltInLabels", "sum03_failuresListCaps",
-		"sum04_busEmitsOnStatusChangeOnly", "step01_createdOnceUpdatedInPlace", "step02_rawLinkNeedsLineAndTemplate",
+		"sum04_busEmitsOnStatusChangeOnly", "step01_createdOnceUpdatedInPlace", "step02_rawLinkNeedsOffsetAndTemplate",
 		"step03_exitCodeTooltip", "step04_doneClosesOpenSteps", "step05_notes",
 		"esc01_hostileTextIsInert", "api01_resetStateStats", "suite01_cleanCollapsedFailingExpanded",
 		"suite02_toggleAndPersistence", "suite03_placeholderShowsCounts", "blk01_blockClassesAndAttributes",
-		"blk02_anchorOnlyWithRawLineAndTemplate", "blk03_eventCannotSupplyHref", "blk04_traceDisclosure",
+		"blk02_anchorOnlyWithRawOffsetAndTemplate", "blk03_eventCannotSupplyHref", "blk04_traceDisclosure",
 		"blk05_traceReachableFromFailuresList", "blk03b_blocksCarryStepId",
-		"blk03c_onBlockClickGetsStepLineKind", "blk03e_onBlockClickOnKeyboardNoDoubleFire", "blk03d_onBlockClickMustBeFunction", "tip01_showHide", "tip02_positionStaysInViewport",
+		"blk03c_onBlockClickGetsStepOffsetKind", "blk03e_onBlockClickOnKeyboardNoDoubleFire", "blk03d_onBlockClickMustBeFunction", "tip01_showHide", "tip02_positionStaysInViewport",
 		"tip03_stepExitTooltip", "cap01_domBounds", "cap02_collapsedBuildsNoBlocks",
 		"inc01_untouchedStepKeepsItsNode", "inc02_rowRebuiltOnlyWhenSuiteChanged", "cmp01_compactMode",
 		"gold01_fullGolden", "gold02_compactGolden", "gold03_replaceFlow",
@@ -111,7 +111,7 @@ class ViewsJs_RunView_Test extends TestBase {
 	@Test void d03_failuresListCaps() { assertAllTrue(r(), "sum03_failuresListCaps"); }
 	@Test void d04_busEmitsOnStatusChangeOnly() { assertAllTrue(r(), "sum04_busEmitsOnStatusChangeOnly"); }
 	@Test void e01_createdOnceUpdatedInPlace() { assertAllTrue(r(), "step01_createdOnceUpdatedInPlace"); }
-	@Test void e02_rawLinkNeedsLineAndTemplate() { assertAllTrue(r(), "step02_rawLinkNeedsLineAndTemplate"); }
+	@Test void e02_rawLinkNeedsOffsetAndTemplate() { assertAllTrue(r(), "step02_rawLinkNeedsOffsetAndTemplate"); }
 	@Test void e02b_rawOffsetLink() { assertAllTrue(r(), "step02b_rawOffsetLink"); }
 	@Test void e03_exitCodeTooltip() { assertAllTrue(r(), "step03_exitCodeTooltip"); }
 	@Test void e04_doneClosesOpenSteps() { assertAllTrue(r(), "step04_doneClosesOpenSteps"); }
@@ -122,12 +122,12 @@ class ViewsJs_RunView_Test extends TestBase {
 	@Test void h02_toggleAndPersistence() { assertAllTrue(r(), "suite02_toggleAndPersistence"); }
 	@Test void h03_placeholderShowsCounts() { assertAllTrue(r(), "suite03_placeholderShowsCounts"); }
 	@Test void i01_blockClassesAndAttributes() { assertAllTrue(r(), "blk01_blockClassesAndAttributes"); }
-	@Test void i02_anchorOnlyWithRawLineAndTemplate() { assertAllTrue(r(), "blk02_anchorOnlyWithRawLineAndTemplate"); }
+	@Test void i02_anchorOnlyWithRawOffsetAndTemplate() { assertAllTrue(r(), "blk02_anchorOnlyWithRawOffsetAndTemplate"); }
 	@Test void i03_eventCannotSupplyHref() { assertAllTrue(r(), "blk03_eventCannotSupplyHref"); }
 	@Test void i04_traceDisclosure() { assertAllTrue(r(), "blk04_traceDisclosure"); }
 	@Test void i05_traceReachableFromFailuresList() { assertAllTrue(r(), "blk05_traceReachableFromFailuresList"); }
 	@Test void i06_blocksCarryStepId() { assertAllTrue(r(), "blk03b_blocksCarryStepId"); }
-	@Test void i07_onBlockClickGetsStepLineKind() { assertAllTrue(r(), "blk03c_onBlockClickGetsStepLineKind"); }
+	@Test void i07_onBlockClickGetsStepOffsetKind() { assertAllTrue(r(), "blk03c_onBlockClickGetsStepOffsetKind"); }
 	@Test void i09_onBlockClickOnKeyboardNoDoubleFire() { assertAllTrue(r(), "blk03e_onBlockClickOnKeyboardNoDoubleFire"); }
 	@Test void i08_onBlockClickMustBeFunction() { assertAllTrue(r(), "blk03d_onBlockClickMustBeFunction"); }
 	@Test void i10_onBlockClickGetsOffset() { assertAllTrue(r(), "blk03f_onBlockClickGetsOffset"); }

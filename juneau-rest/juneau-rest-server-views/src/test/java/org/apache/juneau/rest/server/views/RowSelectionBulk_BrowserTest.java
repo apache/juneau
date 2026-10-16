@@ -39,7 +39,7 @@ import org.junit.jupiter.api.condition.*;
  * 		under the {@code page} scope; the select-all header is tri-state and skips {@code selectableWhen}-disabled rows;
  * 	<li>row-selection and bulk-mutation are two INDEPENDENT opt-ins - a selection-only (e.g. export) table never
  * 		carries the bulk marker, even though both are declared via the same {@code hasSelection}/{@code hasBulk}
- * 		DOM-attribute mechanism (HIGH-5);
+ * 		DOM-attribute mechanism;
  * 	<li>a bulk action goes through a mandatory confirm dialog and then runs either as N independent per-row writes
  * 		(at most four in flight) or, for {@code aggregate} mode, as one POST of {@code {ids, idempotencyKey}} answered
  * 		by a {@code BulkResult}; either way the run ends in one summary toast, succeeded and not-found ids leave the
@@ -207,7 +207,7 @@ class RowSelectionBulk_BrowserTest extends TestBase {
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
-	// e) Two INDEPENDENT opt-ins (HIGH-5) - verified against the ACTUAL DOM-attribute detection at runtime
+	// e) Two INDEPENDENT opt-ins - verified against the ACTUAL DOM-attribute detection at runtime
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Test void e01_selectionOnlyTableNeverCarriesTheBulkMarker() {

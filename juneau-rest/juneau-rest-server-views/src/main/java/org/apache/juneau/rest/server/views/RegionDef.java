@@ -28,19 +28,18 @@ import org.apache.juneau.rest.server.runreport.RunViewChecks;
  * {@link #populate} rather than declared inline.
  *
  * <p>
- * Beyond the identity/populator core, this bean also carries the <b>declarative descriptor</b> (design
- * &sect;8.2): a data source ({@link #dataUrl} / {@link #params}), an inline renderer ({@link #renderer}),
+ * Beyond the identity/populator core, this bean also carries the <b>declarative descriptor</b>: a data source ({@link
+ * #dataUrl} / {@link #params}), an inline renderer ({@link #renderer}),
  * lazy activation ({@link #lazy}), a refresh interval ({@link #refreshMs}), and a field/title projection
  * ({@link #fields} / {@link #titleFields}). A descriptor that omits {@link #populate} resolves to the
  * Juneau-shipped declarative default ({@code JuneauViews.regions.defaultPopulate}), which reads exactly
- * this descriptor (via {@code ctx.declared}) and nothing else &mdash; see the design's &sect;8.4 (L12)
- * non-privilege proof.
+ * this descriptor (via {@code ctx.declared}) and nothing else.
  *
  * <h5 class='section'>Mutability</h5>
  * <p>
  * Deliberately mutable, like {@link Column} and {@link ViewDef} (the same rule, stated here since this class
  * predates it): a {@link RegionDef} is a server-side authoring bean built up once via its public fields and
- * fluent setters while constructing a page (design &sect;8.2), not an immutable value object.  Callers must not
+ * fluent setters while constructing a page, not an immutable value object.  Callers must not
  * mutate one concurrently from more than one thread, and must not reuse one across requests unless every request
  * treats it as read-only after construction.
  *
@@ -71,7 +70,7 @@ public class RegionDef {
 	 */
 	public static final String CONTRACT_VERSION = "1";
 
-	/** Wire token for a row-detail region (design &sect;6.2's {@code ctx.type}). */
+	/** Wire token for a row-detail region. */
 	public static final String TYPE_ROW_DETAIL = "row-detail";
 
 	/** Wire token for a card-body region. */
@@ -82,7 +81,7 @@ public class RegionDef {
 
 	private static final Set<String> TYPES = st(TYPE_ROW_DETAIL, TYPE_CARD_BODY, TYPE_TAB_BODY);
 
-	/** The reserved renderer name that requires a non-empty {@link #fields} catalog (design &sect;6.2.2 property 4). */
+	/** The reserved renderer name that requires a non-empty {@link #fields} catalog. */
 	private static final String RENDERER_FIELD_GRID = "field-grid";
 
 	/**
@@ -115,7 +114,7 @@ public class RegionDef {
 	 * <p>
 	 * Set by the enclosing host (a detail panel, a card, or a tab body) rather than by the region's own author in
 	 * the common case; exposed here (rather than only in the sidecar) because {@link #validate()} needs it to
-	 * enforce the type-scoped field-catalog rules in &sect;6.2.2 &mdash; a {@link #TYPE_ROW_DETAIL} region must
+	 * enforce the type-scoped field-catalog rules &mdash; a {@link #TYPE_ROW_DETAIL} region must
 	 * carry no {@link #fields}, and a {@link #TYPE_CARD_BODY}/{@link #TYPE_TAB_BODY} region using the
 	 * {@code "field-grid"} {@link #renderer} under the reserved default must carry at least one.
 	 */
@@ -134,20 +133,20 @@ public class RegionDef {
 
 	/**
 	 * Author-declared request parameters, opaque to the framework as a <b>payload</b> (nothing routes or branches
-	 * on their contents) but not opaque to the query-string serializer that appends them to {@link #dataUrl}
-	 * (design &sect;8.2.1). Use a {@link LinkedHashMap} (or an equivalent ordered map) when key order matters to
+	 * on their contents) but not opaque to the query-string serializer that appends them to {@link #dataUrl}. Use a
+	 * {@link LinkedHashMap} (or an equivalent ordered map) when key order matters to
 	 * the endpoint: the serialization walks {@link Map#entrySet()} in the map's own iteration order.
 	 */
 	public Map<String,Object> params;
 
 	/**
-	 * The name of the {@code JuneauViews.helpers} function the declarative default paints with (design fork F8),
+	 * The name of the {@code JuneauViews.helpers} function the declarative default paints with,
 	 * e.g. <js>"field-grid"</js>. <jk>null</jk> when a custom {@link #populate} does its own painting.
 	 */
 	public String renderer;
 
 	/**
-	 * Whether this region's first populate is deferred until it becomes visible (design &sect;8.3, fork F9).
+	 * Whether this region's first populate is deferred until it becomes visible.
 	 *
 	 * <p>
 	 * <jk>null</jk> means "use the per-region-type default": <jk>false</jk> for {@link #TYPE_ROW_DETAIL} and
@@ -165,18 +164,18 @@ public class RegionDef {
 
 	/**
 	 * The field catalog: labels, renderers, hrefs, spans and per-field action-bar ids, declared once per region
-	 * rather than repeated per row/refresh (design &sect;6.2.2). Projects onto {@code ctx.declared.fields}.
+	 * rather than repeated per row/refresh. Projects onto {@code ctx.declared.fields}.
 	 *
 	 * <p>
 	 * <b>Card and tab regions only.</b> A {@link #TYPE_ROW_DETAIL} region's catalog is an author-declared JS
-	 * literal handed straight to {@code fieldGrid} client-side (design SD-3); declaring {@link #fields} on a
+	 * literal handed straight to {@code fieldGrid} client-side; declaring {@link #fields} on a
 	 * {@link #TYPE_ROW_DETAIL} region fails {@link #validate()}.
 	 */
 	public List<Field> fields;
 
 	/**
-	 * Chrome's declared title-key allowlist (design &sect;14.2a) &mdash; the one descriptor field whose only
-	 * reader is the framework's own title painter, never the populate (see design &sect;8.4 property 4's
+	 * Chrome's declared title-key allowlist &mdash; the one descriptor field whose only
+	 * reader is the framework's own title painter, never the populate (see the
 	 * three-way partition; the declarative default's source must not reference this field).
 	 */
 	public List<String> titleFields;
@@ -195,7 +194,7 @@ public class RegionDef {
 	 * Creates a region with the given id.
 	 *
 	 * <p>
-	 * SD-3 identity plus populator name.  Page slots do not go through this factory &mdash; author HTML plus
+	 * The identity plus populator name.  Page slots do not go through this factory &mdash; author HTML plus
 	 * {@code JuneauViews.regions.mount({ id: populatorName })}.  Not {@code @Deprecated}.
 	 * </p>
 	 *
@@ -359,10 +358,10 @@ public class RegionDef {
 	}
 
 	/**
-	 * The effective {@link #lazy} value once the per-region-type default (fork F9) is applied.
+	 * The effective {@link #lazy} value once the per-region-type default is applied.
 	 *
 	 * <p>
-	 * <jk>false</jk> for {@link #TYPE_ROW_DETAIL} (SD-3: the one region populates on expand, not lazily) and
+	 * <jk>false</jk> for {@link #TYPE_ROW_DETAIL} (the one region populates on expand, not lazily) and
 	 * {@link #TYPE_CARD_BODY} (a card is visible when its grid is); <jk>true</jk> for {@link #TYPE_TAB_BODY}
 	 * (preserving today's init-on-activate). An explicit {@link #lazy} value always wins over the per-type
 	 * default, for any {@link #type} including <jk>null</jk>.
@@ -381,8 +380,8 @@ public class RegionDef {
 	 * <p>
 	 * Beyond the original id/populator checks, this now also enforces: a same-origin {@link #dataUrl}; a
 	 * recognized {@link #type} (when set); no nested-map {@link #params} value and no {@link #params} key
-	 * colliding with a key already present in {@link #dataUrl}'s own query string (design &sect;8.2.1); the
-	 * card/tab-only field catalog and its two startup rejections (design &sect;6.2.2 property 4 / test 16d); and
+	 * colliding with a key already present in {@link #dataUrl}'s own query string; the
+	 * card/tab-only field catalog and its two startup rejections; and
 	 * no blank {@link #titleFields} entry.
 	 *
 	 * @throws IllegalArgumentException If this definition is not well-formed.
@@ -480,8 +479,8 @@ public class RegionDef {
 
 	/**
 	 * Serializes this descriptor to the compact JSON envelope the {@code data-juneau-region-contract} sidecar
-	 * attribute carries (design &sect;8.2), hand-built (rather than reflected) so the key set, order, and each
-	 * nested {@link Field}'s wire shape are exactly the ones &sect;8.2/&sect;6.2.2 specify.
+	 * attribute carries, hand-built (rather than reflected) so the key set, order, and each
+	 * nested {@link Field}'s wire shape are exactly the ones the contract specifies.
 	 *
 	 * @return An ordered {@link Map} ready for {@code Json.of(...)}.
 	 */
@@ -513,7 +512,7 @@ public class RegionDef {
 	}
 
 	/**
-	 * One entry in the field catalog (design &sect;6.2.2): a label, an optional named renderer and its meta, an
+	 * One entry in the field catalog: a label, an optional named renderer and its meta, an
 	 * optional href template, a paint format, a grid span, and per-field action-bar ids.
 	 *
 	 * <p>
@@ -670,7 +669,7 @@ public class RegionDef {
 		}
 
 		/**
-		 * Serializes this entry to the compact JSON shape design &sect;6.2.2 specifies.
+		 * Serializes this entry to the compact JSON shape of the sidecar contract.
 		 *
 		 * @return An ordered {@link Map} ready for {@code Json.of(...)}.
 		 */

@@ -69,7 +69,7 @@ class McpResourceServerSupport_Test {
 	}
 
 	@Test void b01_missingTokenChallengeHasNoErrorCodeButHintsScope() {
-		// M1/SEP-2350: the initial 401 carries no error code, but DOES hint the baseline required scope so the client
+		// The initial 401 carries no error code, but DOES hint the baseline required scope so the client
 		// can request it on its first authorization.
 		var s = McpResourceServerSupport.missingTokenChallenge(cfg());
 		assertEquals("Bearer realm=\"mcp\", scope=\"mcp.read\", resource_metadata=\"https://mcp.example.com/.well-known/oauth-protected-resource/mcp\"", s);
@@ -98,7 +98,7 @@ class McpResourceServerSupport_Test {
 	}
 
 	// ---------------------------------------------------------------------------------------------
-	// isEffectivePost() - method-override channel handling (H3).  Mirrors RestSession.getMethod(): the gate must
+	// isEffectivePost() - method-override channel handling.  Mirrors RestSession.getMethod(): the gate must
 	// treat any override to POST as a POST, and must read the FIRST value of a duplicated method parameter (as the
 	// router does).
 	// ---------------------------------------------------------------------------------------------
@@ -174,7 +174,7 @@ class McpResourceServerSupport_Test {
 	}
 
 	@Test void e02_matcher_trailingSlash_matches() {
-		// POST /mcp/ still routes to the MCP handler, so the reused matcher must match it too (B1).
+		// POST /mcp/ still routes to the MCP handler, so the reused matcher must match it too.
 		assertNotNull(MCP_MATCHER.match(UrlPath.of("/mcp/")));
 	}
 
@@ -284,7 +284,7 @@ class McpResourceServerSupport_Test {
 	}
 
 	// ---------------------------------------------------------------------------------------------
-	// F4: principal(req) exposes the F2-authenticated principal (stashed under PRINCIPAL_ATTR by
+	// principal(req) exposes the authenticated principal (stashed under PRINCIPAL_ATTR by
 	// authenticate(...)) so the dispatcher can thread it into the RequestStateCodec seal/unseal seam, enabling
 	// principal-bound AAD.  Mirrors grantedScopes(req): present -> the principal; absent/null/wrong-type
 	// -> null (the anonymous / RS-auth-disabled path).

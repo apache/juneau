@@ -24,8 +24,8 @@ import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
 
 /**
- * Test for the server-minted, {@code (action, targetId)}-bound {@link IdempotencyKey} (design doc §6.2; the
- * idempotency half of the row-action contract, HIGH-8).
+ * Test for the server-minted, {@code (action, targetId)}-bound {@link IdempotencyKey} (the
+ * idempotency half of the row-action contract).
  *
  * <p>
  * The security property is the <b>binding</b>, not the width: a key submitted against a different action or target
@@ -106,7 +106,7 @@ class IdempotencyKey_Test extends TestBase {
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
-	// Binding check (HIGH-8): mismatch is a refusal, never a replayed success
+	// Binding check: mismatch is a refusal, never a replayed success
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Test void b01_matches_onlyForSameActionAndTarget() {

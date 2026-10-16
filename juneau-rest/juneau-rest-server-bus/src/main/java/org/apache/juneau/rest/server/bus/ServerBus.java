@@ -65,7 +65,7 @@ public final class ServerBus implements AutoCloseable {
 	private static final SecureRandom RANDOM = new SecureRandom();
 	private static final AtomicLong STREAM_KEYS = new AtomicLong();
 
-	/** Session id strength: 256 bits, written as 64 hex characters (spec §11.3). */
+	/** Session id strength: 256 bits, written as 64 hex characters. */
 	static final int ID_BYTES = 32;
 
 	/** The transports a session POST may request. */
@@ -245,7 +245,7 @@ public final class ServerBus implements AutoCloseable {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Transport SPI: opens a session from a session POST body (spec §11.3).
+	 * Transport SPI: opens a session from a session POST body.
 	 *
 	 * <p>
 	 * Body: {@code {"v":1, "bridge":"ops", "transport":"sse"|"websocket", "downstream":[...], "upstream":[...]}}.
@@ -332,7 +332,7 @@ public final class ServerBus implements AutoCloseable {
 	}
 
 	/**
-	 * Transport SPI: attaches a connection to a session, then sends the resync (spec §11.6).
+	 * Transport SPI: attaches a connection to a session, then sends the resync.
 	 *
 	 * <p>
 	 * Any live sink is replaced and closed with {@code 4409} ({@code bus:replaced}).  The resync is
@@ -394,7 +394,7 @@ public final class ServerBus implements AutoCloseable {
 	}
 
 	/**
-	 * Transport SPI: one upstream frame from a WebSocket connection (spec §11.4, §11.6).
+	 * Transport SPI: one upstream frame from a WebSocket connection.
 	 *
 	 * <p>
 	 * Refusals are answered with an {@code error} frame and the frame is dropped; the connection stays open.
@@ -478,7 +478,7 @@ public final class ServerBus implements AutoCloseable {
 	}
 
 	/**
-	 * The SSE stream's subscription for a session (P1: built on {@link SseBroadcaster}).
+	 * The SSE stream's subscription for a session (built on {@link SseBroadcaster}).
 	 *
 	 * <p>
 	 * One per session, keyed by the session's non-secret stream key, never its capability id.  Subscribing again
@@ -494,7 +494,7 @@ public final class ServerBus implements AutoCloseable {
 	}
 
 	/**
-	 * The session POST's {@code 200} body (spec §11.3).
+	 * The session POST's {@code 200} body.
 	 *
 	 * @param session A session of this bus.
 	 * @param busBase The root-relative servlet path plus {@link BusEventsMixin#BUS_PREFIX}, e.g. {@code /rest/ops/juneau-bus}.

@@ -40,7 +40,7 @@ import jakarta.servlet.http.*;
  *     .downstream(<js>"ops.alert:*"</js>, <jk>false</jk>)                  <jc>// events, any key</jc>
  *     .upstream(<js>"ops.cancel-all"</js>, (<jv>session</jv>, <jv>topic</jv>, <jv>payload</jv>) -&gt; <jv>jobs</jv>.cancelAll())
  *     .authorizer((<jv>req</jv>, <jv>topic</jv>) -&gt; <jv>req</jv>.isUserInRole(<js>"ops"</js>))  <jc>// per-user, both directions</jc>
- *     .boundary(<jv>loopbackBoundary</jv>)                                   <jc>// loopback apps: WS Origin + Host</jc>
+ *     .boundary(<jv>boundary</jv>)                                           <jc>// LoopbackBoundary or CsrfBoundary</jc>
  *     .build();
  *
  *   <jc>// In a page test: every topic the page's bridges request is granted (E-55 otherwise).</jc>
@@ -68,7 +68,7 @@ public final class BusPolicy {
 	private final Map<String,Boolean> downstream;
 	private final Map<String,UpstreamHandler> upstream;
 	private final BiPredicate<HttpServletRequest,String> authorizer;
-	private final LoopbackBoundary boundary;
+	private final RequestBoundary boundary;
 	private final List<String> allowedOrigins;
 	private final Duration sessionGrace;
 	private final Duration maxSessionAge;
@@ -183,8 +183,8 @@ public final class BusPolicy {
 	/** @return The per-request, per-topic authorizer applied at session open.  Defaults to allow-all. */
 	public BiPredicate<HttpServletRequest,String> authorizer() { return authorizer; }
 
-	/** @return The loopback boundary, or <jk>null</jk> when the application has its own guard. */
-	public LoopbackBoundary boundary() { return boundary; }
+	/** @return The request boundary, or <jk>null</jk> when the application has its own guard. */
+	public RequestBoundary boundary() { return boundary; }
 
 	/** @return The exact origins allowed on a WebSocket handshake when no {@link #boundary()} is set. */
 	public List<String> allowedOrigins() { return allowedOrigins; }
@@ -230,7 +230,7 @@ public final class BusPolicy {
 		final Map<String,Boolean> downstream = new LinkedHashMap<>();
 		final Map<String,UpstreamHandler> upstream = new LinkedHashMap<>();
 		BiPredicate<HttpServletRequest,String> authorizer = (req, topic) -> true;
-		LoopbackBoundary boundary;
+		RequestBoundary boundary;
 		List<String> allowedOrigins = List.of();
 		Duration sessionGrace = Duration.ofSeconds(60);
 		Duration maxSessionAge = Duration.ofHours(12);
@@ -289,19 +289,24 @@ public final class BusPolicy {
 		}
 
 		/**
-		 * Sets the loopback boundary.  The session POST and SSE stream apply its {@code check}; the WebSocket handshake
-		 * uses its {@code origin()} and {@code authority()}.
+		 * Sets the request boundary.  The session POST and SSE stream apply its {@code check}.
+		 *
+		 * <p>
+		 * The WebSocket handshake cannot run {@code check}, so it applies the boundary's own handshake rules: a
+		 * {@link LoopbackBoundary}'s exact {@code origin()} and {@code authority()}, or a {@link CsrfBoundary}'s
+		 * {@code Origin} match against the handshake's own {@code Host} and scheme.  {@code BusWebSockets.register}
+		 * refuses any other boundary type.
 		 *
 		 * @param value The boundary.  Can be <jk>null</jk>.
 		 * @return This object.
 		 */
-		public Builder boundary(LoopbackBoundary value) {
+		public Builder boundary(RequestBoundary value) {
 			boundary = value;
 			return this;
 		}
 
 		/**
-		 * Sets the exact origins a WebSocket handshake may carry when no boundary is set.
+		 * Sets the exact origins a WebSocket handshake may carry when no boundary is set.  Ignored when a boundary is set.
 		 *
 		 * @param values Origins such as {@code https://console.example.org}.  None may be blank.
 		 * @return This object.

@@ -1,8 +1,8 @@
 # scripts/tests/
 
 Pytest harness for the juneau-only `scripts/` Python that has no other automated coverage:
-`push.py`'s tracker-audit gate, the `--js-tests` flags, `reset-side-clones.py`, `repin-consumers.py`, and
-`wave-survey.py`. Everything here is hermetic -- temp directories, synthetic fixture files, and
+`push.py`'s tracker-audit gate, the `--js-tests` flags, and `repin-consumers.py`. (The side-clone reset and
+wave-survey scripts and their tests live in the board repo's `scripts/`.) Everything here is hermetic -- temp directories, synthetic fixture files, and
 real temporary git repositories built in fixtures -- and never touches the real
 `~/Project Work` trackers, the real `repos.md`, or the real side clones.
 
@@ -63,29 +63,19 @@ Do **not** `pip install --user pytest` / `pip install pytest` on a Homebrew-mana
 
 - `test_push_timings.py` -- `push-timings.py`'s thresholds: a module is flagged only when it is slower by both the
   relative and the absolute margin, faster modules get the `↓` mark, the env overrides, and the `--report` table
-  file. Synthetic JSONL in a temp dir.
+  file. Synthetic run-history records in a temp dir.
 
-- `test_release_run.py` -- `release.py` on juneau-run, with a fake juneau_run module: every prompt is `ask`, Maven
-  gets `-B` and a PTY, the full log is always written, each step is a labelled row (dim when skipped or done
-  earlier), the PGP prompt is a `passthrough`, `run_git_diff` follows `run_release_prepare` and pages through
-  `show`, and the revert is four rows. `HOME` is a temp dir, so the state file and logs never touch yours. Never
-  runs mvn, svn or gpg.
+- `test_release_run.py` -- `release.py` on juneau-run and juneau_scripts, with a fake juneau_run module installed in
+  `sys.modules` (where release.py and the toolkit both look it up): every prompt goes through `prompt.text` (Ctrl-D
+  cancels, never takes the default), Maven gets `-B` and a PTY, the full log is always written, the steps are a
+  `steps.Registry` (its CLI, resume and checkpoint, with a legacy `last_step` file still resuming), each step is a
+  labelled row (dim when skipped or done earlier), the PGP prompt is a `passthrough`, `run_git_diff` follows
+  `run_release_prepare` and pages through `show`, and the revert is four rows. `HOME` is a temp dir, so the state
+  file and logs never touch yours. Never runs mvn, svn or gpg.
 
-- `test_reset_side_clones.py` -- `reset-side-clones.py` is not a per-project script. It reads
-  the one global `~/Project Work/repos.md` and drives clones by absolute path, so a single copy
-  resets the juneau, console, and IRS pools and there is nothing for a second copy to
-  specialize. The tests are about the guards, since that is where the script's value is:
-  canonical-tree refusal by resolved real path (including via a symlink and via a `..` path),
-  `in-flight` refusal, dirty/staged/untracked abort, fail-closed behavior on an unreadable or
-  unparseable board, and the unreachability of `git clean -x` and of `git config`. Those two
-  are asserted four ways -- the argv constant, a helper with no flag parameter at all, the
-  wrapper refusing every other spelling, and an audit of every argv from a real end-to-end
-  apply. Refusals are proven by monkeypatching `subprocess.run` to raise, so "it refused" means
-  "no git ran" rather than "the exit code was 1". Everything else builds real temporary git
-  repositories and lets real git run against them: a mocked test of a script whose entire risk
-  is real git behavior would prove almost nothing. Temp repos get their identity and config
-  isolation from environment variables, never `git config`, which is the same rule the script
-  enforces.
+Shared fixtures in `conftest.py`: `run_history` (F1) turns run history on for one test under `tmp_path/history`,
+with `argv[0]` set so the writer's script name is `test`; `fake_reports` (F2) builds a scratch Surefire tree; and
+`history_record` (F3) builds one run-history record.
 
 - `test_repin_consumers.py` -- `repin-consumers.py` re-pins the *other* two repos (Release
   Manager, Support Console) to a fresh local Juneau build, so it lives and is tested only here.
@@ -96,12 +86,7 @@ Do **not** `pip install --user pytest` / `pip install pytest` on a Homebrew-mana
   (pom `<version>` parsing, HEAD-vs-`origin/master` comparison) and `main()`'s exit-code
   contract. The refusal path is proven by monkeypatching `run_streaming` to raise if it is ever
   called, so "refused" means "mvn was never invoked", not just "the exit code was 1" -- the same
-  style `test_push.py` and `test_reset_side_clones.py` use. Built against real temporary git
-  repositories for the same reason those two are: the guard's entire risk is real `git status
+  style `test_push.py` uses. Built against real temporary git
+  repositories for the same reason that one is: the guard's entire risk is real `git status
   --porcelain` behavior, which a mocked subprocess would let pass while proving nothing. Never
   runs a real `mvn` command.
-
-- `test_wave_survey.py` -- covers `wave-survey.py`, the cross-project wave-candidate survey.
-  Deliberately self-contained: it loads its own module under test rather than sharing
-  `conftest.py` fixtures with the tracker tests, and does not depend on any of the (now-moved)
-  tracker scripts' behavior.

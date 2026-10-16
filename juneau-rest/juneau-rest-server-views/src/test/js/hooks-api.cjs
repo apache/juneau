@@ -17,8 +17,8 @@
 
 /*
  * hooks-api.cjs - always-on Node harness for the sanctioned hook namespaces
- * (JuneauViews.rowActions/dialogs/probeSelection/tables/status/csrf/details/html): proves each namespace exists,
- * is frozen, exposes the right member shapes, and that the pure helpers behave.  DOM/browser-free.
+ * (every name in JuneauViews.HOOK_NAMESPACES): proves each registered namespace exists and is frozen, that the
+ * original eight expose the right member shapes, and that the pure helpers behave.  DOM/browser-free.
  *
  *   Usage:  node hooks-api.cjs <path-to-juneau-views.js> [path-to-juneau-renders.js]
  *
@@ -67,6 +67,18 @@ function shape(ns, members) {
 }
 
 out.hasNamespace = !!NS;
+out.hookNamespaces = Array.isArray(NS?.HOOK_NAMESPACES) ? Array.from(NS.HOOK_NAMESPACES) : null;
+out.hookNamespacesFrozen = Array.isArray(NS?.HOOK_NAMESPACES) && Object.isFrozen(NS.HOOK_NAMESPACES);
+// Within the scripts this harness loads (juneau-views.js and juneau-renders.js), a hook namespace is a frozen,
+// non-array object member of JuneauViews; constants (strings/numbers) and the registry array itself are not.  Every
+// such member must be registered so a new one cannot be forgotten.  Frozen members that other scripts attach on a
+// real page are outside this harness and outside the registry.
+out.frozenNamespaces = Object.keys(NS || {}).filter(function (k) {
+	const v = NS[k];
+	return v !== null && typeof v === 'object' && !Array.isArray(v) && Object.isFrozen(v);
+});
+out.registered = {};
+for (const name of (out.hookNamespaces || [])) out.registered[name] = shape(NS[name], []);
 out.rowActions = shape(NS?.rowActions, ['contextOf', 'find', 'isDialog', 'run', 'open', 'submit']);
 out.dialogs = shape(NS?.dialogs, ['open']);
 out.probeSelection = shape(NS?.probeSelection, ['enhance', 'initAll']);

@@ -327,15 +327,15 @@ public final class RemoteClient {
 				var value = arg == null ? null : arg.toString();
 				req(! isBlank(value), "@Url parameter on %s.%s must not be null or blank",
 					method.getDeclaringClass().getName(), method.getName());
-				return RemoteUrlPolicy.requireAllowedUrl(value.trim(), allowPrivateUrls);
+				return RemoteUrlPolicy.requireAllowedUrl(value.trim(), allowPrivateUrls, client.getAllowedAddressRanges());
 			}
 			// Option B: a declarative base/host override (method-level wins over interface-level).
 			var baseUrl = firstNonEmpty(methodMeta.getBaseUrl(), meta.getBaseUrl());
 			if (isNotEmpty(baseUrl))
-				return RemoteUrlPolicy.requireAllowedUrl(combinePaths(baseUrl, fullPath), allowPrivateUrls);
+				return RemoteUrlPolicy.requireAllowedUrl(combinePaths(baseUrl, fullPath), allowPrivateUrls, client.getAllowedAddressRanges());
 			// Default: no override — but an already-absolute fullPath (absolute @RemoteOp(path)/templating) is
 			// still policy-covered (Review R4); a genuinely relative fullPath passes through unchanged.
-			return RemoteUrlPolicy.requireAllowedUrl(fullPath, allowPrivateUrls);
+			return RemoteUrlPolicy.requireAllowedUrl(fullPath, allowPrivateUrls, client.getAllowedAddressRanges());
 		}
 
 		/**

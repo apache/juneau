@@ -24,10 +24,10 @@ import org.apache.juneau.commons.beanquery.*;
 import org.apache.juneau.marshall.collections.*;
 
 /**
- * One datatable column's search configuration (design §4.3) &mdash; its value {@link SearchType} and the optional
+ * One datatable column's search configuration &mdash; its value {@link SearchType} and the optional
  * per-column {@link SearchOperatorSet}.
  *
- * <h5 class='section'>Operator gating (design §4.3)</h5>
+ * <h5 class='section'>Operator gating</h5>
  * <p>
  * A column's offerable operators are modeled by a single {@link SearchOperatorSet}, never a string allow-list or a
  * separate custom-operator map.  A custom operator is simply a {@link SearchOperator} placed inside a set via
@@ -37,7 +37,7 @@ import org.apache.juneau.marshall.collections.*;
  * 	<li><b>Set absent</b> (default): the column offers the entire type-applicable {@link SearchOperatorSet#standard()
  * 		standard} universe (or, when resolved against a table, the table-level set &mdash; see {@link ViewDef}).
  * 	<li><b>Set present</b> ({@link #operators(SearchOperatorSet)}): the column's set entirely <b>replaces</b> the
- * 		table-level set for this column (design §4.3); the effective operators are that set's
+ * 		table-level set for this column; the effective operators are that set's
  * 		{@link SearchOperatorSet#forType(SearchType) type-applicable} members.
  * </ul>
  * <p>
@@ -47,7 +47,7 @@ import org.apache.juneau.marshall.collections.*;
  * <h5 class='section'>Mutability</h5>
  * <p>
  * Deliberately mutable, like {@link ViewDef} and {@link RegionDef}: a {@link Column} is a server-side authoring
- * bean built up once via fluent setters while constructing a view definition (design §4.1&ndash;§4.3), not an
+ * bean built up once via fluent setters while constructing a view definition, not an
  * immutable value object.  Callers must not mutate one concurrently from more than one thread, and must not reuse
  * one across requests unless every request treats it as read-only after construction.
  *
@@ -127,7 +127,7 @@ public final class Column {
 	}
 
 	/**
-	 * Sets this column's own {@link SearchOperatorSet} (design §4.3) &mdash; it entirely replaces the table-level
+	 * Sets this column's own {@link SearchOperatorSet} &mdash; it entirely replaces the table-level
 	 * set for this column.
 	 *
 	 * @param value The operator set.  A <jk>null</jk> value clears it back to <i>absent</i> (inherit the table-level
@@ -307,7 +307,7 @@ public final class Column {
 	}
 
 	/**
-	 * Resolves the effective operator set the header popup offers for this column (design §4.3), against the
+	 * Resolves the effective operator set the header popup offers for this column, against the
 	 * built-in {@link SearchOperatorSet#standard() standard} set as the fallback default.
 	 *
 	 * @return The effective operators, in the resolved set's order; empty when the column is not searchable.
@@ -317,7 +317,7 @@ public final class Column {
 	}
 
 	/**
-	 * Resolves the effective operator set the header popup offers for this column (design §4.3), inheriting the
+	 * Resolves the effective operator set the header popup offers for this column, inheriting the
 	 * specified table-level set when this column has none of its own.
 	 *
 	 * @param tableDefault The table-level operator set to inherit when this column has none of its own.  Can be
@@ -349,23 +349,23 @@ public final class Column {
 	}
 
 	/**
-	 * Builds the per-column {@code search} block for the {@code VIEW_META} wire contract (design §4.3&ndash;§4.5)
+	 * Builds the per-column {@code search} block for the {@code VIEW_META} wire contract
 	 * directly from author-catalog inputs, without the caller having to touch the search-engine beans.
 	 *
 	 * <p>
 	 * This is the entry point the chrome/authoring layer uses: it takes only the wire token, the optional
 	 * allowed-operator names, and the custom operators as plain {@code {name,help}} maps &mdash; so a chrome-only
 	 * module that must not depend on the search engine can still emit a column's search block by calling here.
-	 * Internally this builds a single {@link SearchOperatorSet} (design §4.3): an allow-list becomes
+	 * Internally this builds a single {@link SearchOperatorSet}: an allow-list becomes
 	 * {@link SearchOperatorSet#of(SearchOperator...)} with exactly the named operators (customs preferred over
 	 * same-named built-ins), while an absent allow-list becomes {@link SearchOperatorSet#standard()} with each
 	 * custom appended via {@link SearchOperatorSet#with(SearchOperator)}.
 	 *
 	 * @param name The column name (row-data key).  Must not be <jk>null</jk> or blank.
 	 * @param searchTypeWire The wire {@link SearchType} token, or <jk>null</jk>.
-	 * @param operatorAllowList The explicit allowed-operator names (design §4.3), or <jk>null</jk> for the default
+	 * @param operatorAllowList The explicit allowed-operator names, or <jk>null</jk> for the default
 	 * 	(the full type-applicable universe).
-	 * @param customOperators Per-column custom operators (design §4.4) as {@code {name,help}} maps; may be
+	 * @param customOperators Per-column custom operators as {@code {name,help}} maps; may be
 	 * 	<jk>null</jk> or empty.
 	 * @return The {@code {type, operators:[...]}} block, or <jk>null</jk> when {@code searchTypeWire} names no known
 	 * 	type (a non-searchable column emits no search block).
@@ -401,8 +401,8 @@ public final class Column {
 	}
 
 	/**
-	 * Serializes this column's effective search configuration to the {@code VIEW_META} {@code search} block
-	 * (design §4.3&ndash;§4.5): the wire {@link SearchType} token plus one entry per
+	 * Serializes this column's effective search configuration to the {@code VIEW_META} {@code search} block: the wire
+	 * {@link SearchType} token plus one entry per
 	 * {@link #effectiveOperators() effective operator}, each carrying the metadata the header popup renders.
 	 *
 	 * <p>
@@ -416,8 +416,8 @@ public final class Column {
 	}
 
 	/**
-	 * Serializes this column's effective search configuration to the {@code VIEW_META} {@code search} block
-	 * (design §4.3&ndash;§4.5), inheriting the specified table-level operator set when this column has none of its
+	 * Serializes this column's effective search configuration to the {@code VIEW_META} {@code search} block, inheriting
+	 * the specified table-level operator set when this column has none of its
 	 * own.
 	 *
 	 * @param tableDefault The table-level operator set to inherit when this column has none of its own.  Can be

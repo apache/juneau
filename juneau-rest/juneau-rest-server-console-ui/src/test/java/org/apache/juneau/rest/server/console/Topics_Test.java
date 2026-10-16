@@ -17,6 +17,7 @@
 package org.apache.juneau.rest.server.console;
 
 import static java.nio.charset.StandardCharsets.*;
+import static org.apache.juneau.test.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.nio.file.*;
@@ -43,6 +44,9 @@ class Topics_Test extends TestBase {
 		assertEquals("job:j-91", Topics.job("j-91"));
 		assertEquals("badge:pending", Topics.badge("pending"));
 		assertEquals("bridge:ops", Topics.bridge("ops"));
+		assertString("data:orgRequests", Topics.data("orgRequests"));
+		assertString("zoom:t", Topics.zoom("t"));
+		assertString("legend:t", Topics.legend("t"));
 	}
 
 	@Test void a02_badKey_isE40() {
@@ -67,7 +71,7 @@ class Topics_Test extends TestBase {
 	}
 
 	@Test void a04_frameworkFamilies() {
-		assertEquals(List.of("card", "selection", "filter", "redraw", "detail", "bulk", "cmd", "probe", "job", "badge", "bridge"),
+		assertEquals(List.of("card", "selection", "filter", "redraw", "detail", "bulk", "cmd", "probe", "job", "badge", "bridge", "data", "zoom", "legend"),
 			List.copyOf(Topics.FRAMEWORK_FAMILIES));
 		assertThrows(UnsupportedOperationException.class, () -> Topics.FRAMEWORK_FAMILIES.add("x"));
 	}
@@ -92,5 +96,16 @@ class Topics_Test extends TestBase {
 			assertEquals(defs.getMap("publication").getMap("properties").getMap("topic").getString("pattern"), Topics.PUBLICATION.pattern());
 			assertEquals(defs.getMap("subscription").getMap("properties").getMap("as").getString("pattern"), Topics.ROLE.pattern());
 		}
+	}
+
+	@Test void a07_isKey_andPublicId() {
+		assertTrue(Topics.isKey("orders"));
+		assertTrue(Topics.isKey("org.requests-2"));
+		assertFalse(Topics.isKey(""));
+		assertFalse(Topics.isKey("a b"));
+		assertFalse(Topics.isKey(null));
+		assertTrue(Topics.ID.matcher("range").matches());
+		assertFalse(Topics.ID.matcher("1range").matches());
+		assertEquals("dashboard '%s': %s", BusWiringValidator.E77);
 	}
 }

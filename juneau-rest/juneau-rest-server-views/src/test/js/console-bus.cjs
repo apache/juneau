@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 /*
- * Playwright driver for the console-bus browser suite (message bus Task 18).
+ * Playwright driver for the console-bus browser suite (message bus).
  *
  *   node console-bus.cjs <scenario> <fixture.html> <assets.json> [query]
  *
@@ -220,6 +220,47 @@ const SCENARIOS = {
 		out.tasksError = P.cardError('tasks');
 		out.changesError = P.cardError('changes');
 		out.pageError = P.pageError();
+		return out;
+	},
+
+	// E-JS-83: a filled {token} that turns the card's URL into a protocol-relative one is refused where the card lives.
+	'resolved-url': async () => {
+		const P = window.__probe, bus = P.bus(), out = {};
+		const urls = [];
+		const open = XMLHttpRequest.prototype.open;
+		XMLHttpRequest.prototype.open = function (m, u) { urls.push(String(u)); return open.apply(this, arguments); };
+		const realFetch = window.fetch;
+		window.fetch = function (input) { urls.push(String(typeof input === 'string' ? input : input.url)); return realFetch.apply(this, arguments); };
+
+		await P.waitFor(() => P.empty('tasks') !== null);
+		bus.publish('app.target', { seg: 'api', leaf: 'changes' });
+		await P.waitFor(() => P.hasRow('tasks', 'c-17'));
+		await P.settle();
+		out.before = { hasRow: P.hasRow('tasks', 'c-17'), tables: P.host('tasks').querySelectorAll('table').length };
+		out.urlsBefore = urls.slice();
+		const mark = urls.length;
+
+		bus.publish('app.target', { seg: '', leaf: 'changes' });
+		await P.waitFor(() => P.pageError() !== null);
+		await P.settle();
+
+		const host = P.host('tasks');
+		const e = host.querySelector('.jc-card-bus-error[data-juneau-error="E-JS-83"]');
+		const r = e ? e.getBoundingClientRect() : null;
+		const cs = e ? getComputedStyle(e) : null;
+		out.card = {
+			found: !!e,
+			code: e ? e.getAttribute('data-juneau-error') : null,
+			text: e ? e.textContent.trim() : null,
+			inHost: !!e && host.contains(e),
+			inBanner: !!e && !!e.closest('.jc-console-error'),
+			visible: !!e && r.width > 0 && r.height > 0 && cs.visibility !== 'hidden' && cs.display !== 'none',
+			count: document.querySelectorAll('.jc-card-bus-error[data-juneau-error="E-JS-83"]').length
+		};
+		out.after = { hasRow: P.hasRow('tasks', 'c-17'), tables: host.querySelectorAll('table').length, hostText: host.textContent };
+		out.fetchedAfter = urls.slice(mark);
+		out.page = P.pageError();
+		out.bareCard = { inlineErrorsOnPage: document.querySelectorAll('.jc-card-bus-error').length };
 		return out;
 	},
 

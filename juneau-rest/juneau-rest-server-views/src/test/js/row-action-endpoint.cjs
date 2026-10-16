@@ -85,7 +85,7 @@ out.idTemplate_resolved = I.buildActionRequest(ackAction, TOKEN, null, null, { i
 // with or without a rowData argument at all.
 out.literal_withRowData = I.buildActionRequest(literalAction, TOKEN, null, null, { id: 'a1' }).url;
 out.literal_noRowData = I.buildActionRequest(literalAction, TOKEN, null, null).url;
-out.literal_preFeatureCallSignature = I.buildActionRequest(literalAction, TOKEN, null).url;   // pre-J0509 4-arg call
+out.literal_preFeatureCallSignature = I.buildActionRequest(literalAction, TOKEN, null).url;   // legacy 4-arg call
 
 // Case 3: a missing/null/absent-rowData row value for a `{property}` token now REFUSES
 // the write (empty-substitution would otherwise collapse the URL to a malformed "/x//y") rather than firing the
@@ -117,8 +117,8 @@ out.helper_direct = I.substituteRowActionEndpoint('/x/{id}', { id: 'a1' });
 out.helper_noToken = I.substituteRowActionEndpoint('/x/ack', { id: 'a1' });
 
 // -----------------------------------------------------------------------------------------------------------
-// write-path URL-safety hardening for RowAction.endpoint substitution - B1 (`..` path-walk +
-// empty-substitution refusal), S3 (row-less inheritance, closed for free), S5 (residual-token refusal).
+// write-path URL-safety hardening for RowAction.endpoint substitution - `..` path-walk and
+// empty-substitution refusal, row-less inheritance (closed for free), and residual-token refusal.
 // -----------------------------------------------------------------------------------------------------------
 
 // Case 9 (B1a, the headline): a row value of `..` rides encodeURIComponent unescaped (`.` is RFC 3986
@@ -126,7 +126,7 @@ out.helper_noToken = I.substituteRowActionEndpoint('/x/ack', { id: 'a1' });
 out.dotdot_rowValue = I.buildActionRequest(ackAction, TOKEN, null, null, { id: '..' });
 
 // Case 10: an author-declared `..` in the template itself, no row value involved - the deliberate consequence
-// noted in the design (§4.5): the resolved-URL check also catches a nonsensical declared endpoint.
+// noted in the design: the resolved-URL check also catches a nonsensical declared endpoint.
 out.dotdot_inTemplate = I.buildActionRequest(
 	{ id: 'ack', endpoint: 'servlet:/incidents/../ack', method: 'POST' }, TOKEN, null, null, { id: 'a1' });
 
@@ -141,14 +141,14 @@ out.blankEndpoint_null = I.buildActionRequest({ id: 'ack', endpoint: null, metho
 out.blankEndpoint_empty = I.buildActionRequest({ id: 'ack', endpoint: '', method: 'POST' }, TOKEN, null, null, { id: 'a1' });
 out.blankEndpoint_whitespace = I.buildActionRequest({ id: 'ack', endpoint: '   ', method: 'POST' }, TOKEN, null, null, { id: 'a1' });
 
-// Case 13 (Terra should-fix, query-context coverage): a row value cannot inject `&`/`=`/`#` into a query
-// string - encodeURIComponent already blocks this; pinning it as explicit coverage per the design's §8.1.
+// Case 13 (query-context coverage): a row value cannot inject `&`/`=`/`#` into a query
+// string - encodeURIComponent already blocks this; pinning it as explicit coverage.
 out.queryContext_resolved = I.buildActionRequest(
 	{ id: 'ack', endpoint: 'servlet:/incidents/ack?target={id}', method: 'POST' }, TOKEN, null, null, { id: 'a&b=c#d' });
 
-// Case 14 (S3, row-less ribbon-dialog inheritance): rowData === null, matching rowDataForTr(ctx, null) on the
+// Case 14 (row-less ribbon-dialog inheritance): rowData === null, matching rowDataForTr(ctx, null) on the
 // row-less ribbon-dialog seam - the SAME guard (empty-substitution) that b03/noId_absentRowData proves, named
-// separately so a reader tracing S3 finds a case for it.
+// separately so a reader tracing row-less inheritance finds a case for it.
 out.rowLess_idTemplate = I.buildActionRequest(ackAction, TOKEN, null, null, null);
 
 // Case 15: `..` INSIDE an encodeURIComponent-escaped value must NOT refuse - proves hasDotDotSegment is not

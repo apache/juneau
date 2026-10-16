@@ -27,13 +27,13 @@ import org.apache.juneau.marshall.serializer.*;
 import org.junit.jupiter.api.*;
 
 /**
- * Ticket 361 Phase 6: {@code DataTablesTable.of(ctx, id, rows, rowType)} additively honors a property's
+ * {@code DataTablesTable.of(ctx, id, rows, rowType)} additively honors a property's
  * {@code @Html(render=...)} the same way the ordinary {@code HtmlSerializer}/{@code HtmlDocSerializer} path already
- * does &mdash; closing r3 should-fixes S4 (Map-row branch preserved) and S5 ({@code DataTablesTable} does not
+ * does &mdash; the Map-row branch is preserved, and {@code DataTablesTable} does not
  * actually resolve {@code BeanMeta} today; it delegates to the raw-value {@code DataTablesColumns}-overload path).
  *
  * <p>
- * Per the plan's Phase-6 test-fixture-discipline note (S4), this local {@link LocalFixtureRender} is deliberately
+ * This local {@link LocalFixtureRender} is deliberately
  * NOT {@code TagHtmlRender}/{@code console-ui} &mdash; this module gains no test-scope dependency on {@code console-ui}.
  */
 class DataTablesTable_HtmlRenderHonoring_Test extends TestBase {
@@ -100,7 +100,7 @@ class DataTablesTable_HtmlRenderHonoring_Test extends TestBase {
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
-	// Map-row gate (S4): bean rowType (for columns) + Map rows (for values) is a supported path today via
+	// Map-row gate: bean rowType (for columns) + Map rows (for values) is a supported path today via
 	// value()'s "row instanceof Map" branch. It must keep rendering RAW values, with NO render resolution attempt,
 	// both before and after this change (a Map row has no BeanPropertyMeta / @Html(render)).
 	//------------------------------------------------------------------------------------------------------------------

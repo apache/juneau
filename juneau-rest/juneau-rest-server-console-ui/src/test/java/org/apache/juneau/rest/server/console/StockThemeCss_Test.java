@@ -28,22 +28,46 @@ import org.junit.jupiter.api.*;
 /**
  * Drift guard for the shipped {@code juneau-theme-<name>.css} stock theme stylesheets the FTL {@code <@theme>}
  * directive links: each stylesheet's {@code html:root{}} token block must be <b>provably identical</b> (same tokens,
- * same order, same values) to its {@link Theme} constant, so a change to a {@link Theme} that is not mirrored
+ * same order, same values) to its {@link Theme} constant, and the {@code @media not print} dark block that follows it must be
+ * identical to {@link Theme#getDarkTokens()}, so a change to a {@link Theme} that is not mirrored
  * into its stylesheet (or vice-versa) fails the build rather than silently serving a stale palette.
  *
  * @since 10.0.0
  */
 class StockThemeCss_Test extends TestBase {
 
-	/** Parses a stylesheet's {@code html:root{ … }} block into an insertion-ordered token map. */
-	private static LinkedHashMap<String,String> parse(String rawCss) {
+	/** The selector that opens a stylesheet's dark accent block. */
+	private static final String DARK_SELECTOR = "html:root[data-jc-scheme=\"dark\"]";
+
+	/**
+	 * Parses a stylesheet into its two token blocks: the {@code html:root{ ... }} light block, then the
+	 * {@code @media not print{ html:root[data-jc-scheme="dark"]{ ... } }} dark block that must follow it.
+	 *
+	 * @return A two-element list: the light tokens, then the dark tokens, each insertion-ordered.
+	 */
+	private static List<LinkedHashMap<String,String>> parse(String rawCss) {
 		// Strip block comments first - the drift-guard header mentions "html:root{}", whose braces would
 		// otherwise fool the brace-locating below.
 		var css = rawCss.replaceAll("(?s)/\\*.*?\\*/", "");
-		var open = css.indexOf('{');
-		var close = css.lastIndexOf('}');
-		assertTrue(open >= 0 && close > open, () -> "no html:root{} block:\n" + css);
-		var body = css.substring(open + 1, close);
+		var media = css.indexOf("@media not print");
+		assertTrue(media > 0, () -> "no '@media not print' dark block after the light block:\n" + css);
+		var light = css.substring(0, media);
+		var open = light.indexOf('{');
+		var close = light.lastIndexOf('}');
+		assertTrue(open >= 0 && close > open, () -> "no html:root{} block:\n" + light);
+		assertTrue(light.substring(0, open).trim().equals("html:root"), () -> "light block must come first:\n" + light);
+		var dark = css.substring(media);
+		var sel = dark.indexOf(DARK_SELECTOR);
+		assertTrue(sel > 0, () -> "no " + DARK_SELECTOR + " rule in the @media block:\n" + dark);
+		var dOpen = dark.indexOf('{', sel);
+		var dClose = dark.indexOf('}', dOpen);
+		assertTrue(dOpen > sel && dClose > dOpen, () -> "unterminated dark block:\n" + dark);
+		return List.of(
+			declarations(light.substring(open + 1, close)),
+			declarations(dark.substring(dOpen + 1, dClose)));
+	}
+
+	private static LinkedHashMap<String,String> declarations(String body) {
 		var out = new LinkedHashMap<String,String>();
 		for (var decl : body.split(";")) {
 			var d = decl.trim();
@@ -65,12 +89,18 @@ class StockThemeCss_Test extends TestBase {
 	}
 
 	private void assertStockCssMatchesTheme(String name, Theme theme) throws IOException {
-		var parsed = parse(read(name));
-		// Same key set, same iteration order, same values as the Theme constant.
-		assertEquals(new ArrayList<>(parsed.keySet()), new ArrayList<>(theme.getTokens().keySet()),
+		var blocks = parse(read(name));
+		var light = blocks.get(0);
+		var dark = blocks.get(1);
+		// Same key set, same iteration order, same values as the Theme constant, in each block.
+		assertEquals(new ArrayList<>(light.keySet()), new ArrayList<>(theme.getTokens().keySet()),
 			() -> "token order/keys drift in juneau-theme-" + name + ".css");
-		assertEquals(parsed, theme.getTokens(),
+		assertEquals(light, theme.getTokens(),
 			() -> "token value drift in juneau-theme-" + name + ".css");
+		assertEquals(new ArrayList<>(dark.keySet()), new ArrayList<>(theme.getDarkTokens().keySet()),
+			() -> "dark token order/keys drift in juneau-theme-" + name + ".css");
+		assertEquals(dark, theme.getDarkTokens(),
+			() -> "dark token value drift in juneau-theme-" + name + ".css");
 	}
 
 	@Test void a01_open() throws Exception { assertStockCssMatchesTheme("open", Theme.OPEN); }
@@ -87,11 +117,18 @@ class StockThemeCss_Test extends TestBase {
 
 	@Test void a07_stockThemes_doNotDeclareHeaderOrNavBg() throws Exception {
 		for (var name : ConsoleChromeMixin.BUILTIN_THEME_NAMES) {
-			var parsed = parse(read(name));
-			assertFalse(parsed.containsKey("--jc-header-bg"),
-				() -> "juneau-theme-" + name + ".css must not declare --jc-header-bg");
-			assertFalse(parsed.containsKey("--jc-nav-bg"),
-				() -> "juneau-theme-" + name + ".css must not declare --jc-nav-bg");
+			for (var parsed : parse(read(name))) {
+				assertFalse(parsed.containsKey("--jc-header-bg"),
+					() -> "juneau-theme-" + name + ".css must not declare --jc-header-bg");
+				assertFalse(parsed.containsKey("--jc-nav-bg"),
+					() -> "juneau-theme-" + name + ".css must not declare --jc-nav-bg");
+			}
 		}
+	}
+
+	@Test void a08_stockThemes_doNotClaimToBeGenerated() throws Exception {
+		for (var name : ConsoleChromeMixin.BUILTIN_THEME_NAMES)
+			assertFalse(read(name).toLowerCase().contains("generated"),
+				() -> "juneau-theme-" + name + ".css is hand-maintained and must not claim to be generated");
 	}
 }

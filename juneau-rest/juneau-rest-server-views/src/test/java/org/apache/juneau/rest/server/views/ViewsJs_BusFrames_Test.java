@@ -28,9 +28,9 @@ import org.apache.juneau.marshall.marshaller.*;
 import org.junit.jupiter.api.*;
 
 /**
- * The JS half of the shared frame corpus (spec §11.4, Q9).  {@code bus-frames.cjs} runs every case of
+ * The JS half of the shared frame corpus.  {@code bus-frames.cjs} runs every case of
  * {@code juneau-rest-server-bus/src/test/resources/bus-frames-corpus.json} through {@code JuneauViews.bus.frames}.
- * This test compares what JS produced with the corpus, which Java's {@code BusFrames_Corpus_Test} (Task 14) also
+ * This test compares what JS produced with the corpus, which Java's {@code BusFrames_Corpus_Test} also
  * reads, so both sides write the same bytes.  It also pins two JS-only groups: the {@code maxFrameBytes} boundary
  * and the {@code SseParser}.  Gated on {@code node} being on {@code PATH}.
  */

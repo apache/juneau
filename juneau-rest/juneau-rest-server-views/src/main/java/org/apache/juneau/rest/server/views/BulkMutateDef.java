@@ -24,15 +24,15 @@ import org.apache.juneau.commons.bean.*;
 
 /**
  * The bulk-mutate opt-in for a {@link ViewTable} &mdash; the second, INDEPENDENT half of the row-selection /
- * bulk-mutate separability guarantee (design doc §9.3/§6.2; HIGH-5).
+ * bulk-mutate separability guarantee.
  *
  * <h5 class='section'>Two required parameters make it structurally, not conventionally, safe</h5>
  * <p>
  * There is no zero-argument (or permit-less) way to obtain a {@link BulkMutateDef}: {@link #create(WritePermit,
  * SelectionDef)} takes both a {@link WritePermit} <b>and</b> the {@link SelectionDef} it operates against as
  * required positional parameters. Omitting either is a <b>compile</b> failure, not a missed javadoc sentence
- * &mdash; the same discipline the console's own {@code WriteGuard} uses for its {@code WritePermit} (source
- * design §5.4). This closes both halves of HIGH-5 by construction:
+ * &mdash; the same discipline the console's own {@code WriteGuard} uses for its {@code WritePermit}. This closes
+ * both halves of the opt-in separability guarantee by construction:
  * <ul class='spaced-list'>
  * 	<li>The {@link WritePermit} proves the caller's own write-gate was consulted before this affordance is even
  * 		configured &mdash; a bulk-mutate control cannot be reached by a caller who forgot to check.
@@ -53,7 +53,7 @@ import org.apache.juneau.commons.bean.*;
  * independently into that row's own outcome banner. There is deliberately <b>no</b> aggregate "bulk result": a
  * partial failure among N targets can never be hidden behind an aggregate success, and each target's
  * {@code data-juneau-inflight} marker clears on ITS OWN terminal outcome (success/failure/refusal/unknown) so a
- * stuck marker on one target can never halt the whole table's polling (MED-4).
+ * stuck marker on one target can never halt the whole table's polling.
  *
  * <h5 class='section'>Its own, independent contract version</h5>
  * <p>

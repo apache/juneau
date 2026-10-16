@@ -24,8 +24,8 @@ import org.apache.juneau.commons.bean.*;
 import org.apache.juneau.rest.server.widgets.Op;
 
 /**
- * A per-row action descriptor in the {@code VIEW_META} wire contract (design doc §6.10; the transport-agnostic
- * "row-action intent" model, Decision&nbsp;8).
+ * A per-row action descriptor in the {@code VIEW_META} wire contract (the transport-agnostic
+ * "row-action intent" model).
  *
  * <p>
  * An FTL {@code <@card type="datatables">} {@code VIEW_META} catalog declares zero or more of these via
@@ -66,7 +66,8 @@ import org.apache.juneau.rest.server.widgets.Op;
  * 	<tr><td>{@code confirmLabel}</td><td>string</td>
  * 		<td>Text of the confirm button; defaults to the action's {@code label}.</td></tr>
  * 	<tr><td>{@code confirmRenderer}</td><td>string</td>
- * 		<td>Name of a confirm renderer registered with the client runtime; absent means the built-in modal.</td></tr>
+ * 		<td>Name of a confirm renderer registered with the client runtime; absent means the built-in modal.
+ * 		Like {@code confirm}, it is not consulted when an inline cell edit commits (that never prompts).</td></tr>
  * </table>
  *
  * <p>
@@ -438,7 +439,7 @@ public class RowAction {
 	 *
 	 * <p>
 	 * Only a {@link Method} (POST/PUT/PATCH/DELETE) can be passed, so a safe method can never be declared &mdash;
-	 * the build-time half of the HIGH-7 safe-method refusal.
+	 * the build-time half of the safe-method refusal.
 	 *
 	 * @param value The method.  Must not be <jk>null</jk>.
 	 * @return This object.
@@ -455,6 +456,12 @@ public class RowAction {
 	 * The prompt is shown whatever {@link #present(Present) present} says: without {@link Present#DIALOG} the action
 	 * opens a confirm-only dialog (or its {@link #confirmRenderer(String) confirmRenderer}) and submits only on
 	 * Confirm.  Use {@link #noConfirm()} for an action that never prompts.
+	 *
+	 * <p>
+	 * One surface never prompts: committing an inline cell edit (the {@code edit} renderer's pencil) submits the action
+	 * directly on Enter or blur even when the action declares a confirm or a
+	 * {@link #confirmRenderer(String) confirmRenderer}, because a dialog opening on Enter or blur is awkward.  Do not
+	 * wire a confirm-guarded action to an inline editor.
 	 *
 	 * @param value The new value.
 	 * @return This object.
@@ -644,6 +651,10 @@ public class RowAction {
 	 * <p>
 	 * The name must be registered on the client with {@code JuneauViews.rowActions.registerConfirmRenderer}; an
 	 * unregistered name refuses the confirmation.
+	 *
+	 * <p>
+	 * A renderer on its own, with no {@link #confirm(String) confirm} text, is enough to prompt: the action asks the
+	 * renderer before it submits even without {@code present(DIALOG)}, and the prompt is titled with the action's name.
 	 *
 	 * @param value The renderer name.  Can be <jk>null</jk> for the built-in modal.
 	 * @return This object.

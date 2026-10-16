@@ -25,7 +25,7 @@ import org.junit.jupiter.api.*;
 
 class PageContractAssert_Test extends TestBase {
 
-	// The §3.1 contract as the server writes it ('<' escaped), plus its templates. One nested <template>
+	// The contract as the server writes it ('<' escaped), plus its templates. One nested <template>
 	// inside a segment proves the depth-aware template scan.
 	static final String HTML = "<!DOCTYPE html><html><head><title>t</title></head><body data-juneau-csrf=\"x\">"
 		+ "<script type=\"application/json\" id=\"juneau-page\">"

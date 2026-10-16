@@ -22,7 +22,7 @@ import java.util.*;
 import java.util.regex.*;
 
 /**
- * Test-only golden-file scanner for {@code chrome.css} (Phase 2 gate, S1/S3).
+ * Test-only golden-file scanner for {@code chrome.css}.
  *
  * <p>
  * Not shipped &mdash; this is a build-time regression check on the static classpath resource, not a runtime
@@ -47,7 +47,7 @@ final class ChromeCssScanner {
 
 	private ChromeCssScanner() {}
 
-	/** The url-capable CSS properties denylist (S1's extended list). */
+	/** The url-capable CSS properties denylist(extended list). */
 	private static final Set<String> URL_CAPABLE_PROPERTIES = Set.of(
 		"background", "background-image", "background-size", "border", "cursor", "list-style", "content",
 		"border-image", "border-image-source", "list-style-image", "mask-image", "filter", "clip-path");

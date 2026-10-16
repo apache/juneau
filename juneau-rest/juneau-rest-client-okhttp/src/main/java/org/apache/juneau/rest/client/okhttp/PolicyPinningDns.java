@@ -38,12 +38,16 @@ import okhttp3.*;
  */
 final class PolicyPinningDns implements Dns {
 
-	static final PolicyPinningDns INSTANCE = new PolicyPinningDns();
+	static final PolicyPinningDns INSTANCE = new PolicyPinningDns(RemoteUrlPolicy.AllowedRanges.NONE);
 
-	private PolicyPinningDns() {}
+	private final RemoteUrlPolicy.AllowedRanges allowedRanges;
+
+	PolicyPinningDns(RemoteUrlPolicy.AllowedRanges allowedRanges) {
+		this.allowedRanges = allowedRanges;
+	}
 
 	@Override /* Dns */
 	public List<InetAddress> lookup(String hostname) throws UnknownHostException {
-		return List.of(RemoteUrlPolicy.selectAllowedAddress(hostname, false, RemoteUrlPolicy.AddressResolver.DEFAULT));
+		return List.of(RemoteUrlPolicy.selectAllowedAddress(hostname, false, RemoteUrlPolicy.AddressResolver.DEFAULT, allowedRanges));
 	}
 }

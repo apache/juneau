@@ -61,6 +61,33 @@ final class ClassicRedirectCredentialGuard implements HttpRequestInterceptor {
 				request.removeHeaders(name);
 	}
 
+	/**
+	 * Returns the origin this guard recorded on a context: that of the first request sent with it.
+	 *
+	 * @param context The context.
+	 * @return The origin, or <jk>null</jk> if none was recorded.
+	 */
+	static URI origin(HttpContext context) {
+		return (URI)context.getAttribute(ATTR_ORIGIN);
+	}
+
+	/**
+	 * Sets the origin the requests sent with a context are compared with, as if the first of them had gone to it.
+	 *
+	 * <p>
+	 * Used by the redirect loop of SSRF-guard-active {@code @Remote} calls, which sends each hop with a context of its
+	 * own unless the caller set one: every hop is then compared with the first hop's origin.
+	 *
+	 * @param context The context.
+	 * @param origin The origin, or <jk>null</jk> to clear it (the next request sent with the context then sets it).
+	 */
+	static void origin(HttpContext context, URI origin) {
+		if (origin == null)
+			context.removeAttribute(ATTR_ORIGIN);
+		else
+			context.setAttribute(ATTR_ORIGIN, origin);
+	}
+
 	private static URI originOf(HttpHost host) {
 		try {
 			return URI.create(host.toURI());

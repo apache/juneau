@@ -19,7 +19,7 @@
  * regions-bus.cjs - always-on Node harness for the region message bus: broadcast-by-default, opt-in targeted
  * delivery, payload opacity, per-subscriber error isolation, subscription-ordered synchronous delivery with
  * emit-during-delivery queued under an independent depth cap, unsubscribe both returned and swept at teardown, and
- * the negative half of SD-2's emit-ownership invariant (content never auto-emits).  The chrome half - selection,
+ * the negative half of the emit-ownership invariant (content never auto-emits).  The chrome half - selection,
  * detail and redraw - is published on the page bus's selection:/detail:/redraw: topics (message bus addendum, 9.2).
  *
  *   Usage:  node regions-bus.cjs <juneau-renders.js> <juneau-views.js> <juneau-regions.js>
@@ -276,7 +276,7 @@ function kinds(list) {
 	}
 
 	// =================================================================================================================
-	// Test 27b - CONTENT DOES NOT AUTO-EMIT (SD-2 / R25b).  The negative test, and the one that keeps someone from
+	// Test 27b - CONTENT DOES NOT AUTO-EMIT (emit-ownership).  The negative test, and the one that keeps someone from
 	// later adding a "helpful" click delegate over author DOM and quietly breaking the ownership invariant.  A
 	// populate paints clickable elements, calls no emit, and clicking them produces ZERO bus traffic.
 	// =================================================================================================================

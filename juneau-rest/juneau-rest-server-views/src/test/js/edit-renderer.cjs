@@ -199,5 +199,66 @@ const key = function (input, k) { input.dispatch('keydown', { key: k, preventDef
 	f.table.dispatch('click', { target: f.pencil, preventDefault: function () {}, stopPropagation: function () {} });
 	out.nestedIgnored = editorOf(f) === null;
 
+	// an inline commit on a confirm action never prompts: Enter and blur submit straight away, no dialog opens
+	const guarded = Object.assign({}, ASSIGN, { confirm: 'Reassign {id}?', confirmRenderer: 'typed' });
+	f = fixture({ id: 15, owner: 'old' }, guarded);
+	click(f);
+	inputOf(f).value = 'enter-new';
+	calls.length = 0;
+	key(inputOf(f), 'Enter');
+	const enterDialogs = I.dialogLayerCount();
+	await tick();
+	f = fixture({ id: 16, owner: 'old' }, guarded);
+	click(f);
+	inputOf(f).value = 'blur-new';
+	inputOf(f).dispatch('blur', {});
+	const blurDialogs = I.dialogLayerCount();
+	await tick();
+	out.confirmActionNoPrompt = { fetches: calls.length, enterDialogs: enterDialogs, blurDialogs: blurDialogs, afterDialogs: I.dialogLayerCount(),
+		fields: calls.map(function (c) { return c.body.fields; }) };
+
+	// a saved edit's result message: with no detail panel it shows as a status toast; with one, only the panel shows it
+	const toasts = [];
+	const origAppend = env.body.appendChild;
+	env.body.appendChild = function (n) {
+		if (String(n.className || '').indexOf('juneau-view-bulk-toast') >= 0) toasts.push({ role: n.getAttribute('role'), text: n.textContent });
+		return origAppend.call(this, n);
+	};
+	respond = function () { return jsonResponse({ outcome: 'success', message: "Staged 'Rex'" }, { status: 200 }); };
+	f = fixture({ id: 17, owner: 'old' }, ASSIGN);
+	click(f);
+	inputOf(f).value = 'new';
+	key(inputOf(f), 'Enter');
+	await tick();
+	out.messageNoPanel = { toasts: toasts.slice(), closed: editorOf(f) === null };
+
+	toasts.length = 0;
+	f = fixture({ id: 18, owner: 'old' }, ASSIGN);
+	const panel = env.el('div');
+	const sec = env.el('section');
+	sec.dataset.juneauDetailSection = 'assign';
+	const slot = env.el('div');
+	slot.dataset.juneauField = 'note';
+	const abtn = env.el('button');
+	abtn.dataset.juneauAction = 'assign';
+	sec.appendChild(slot);
+	sec.appendChild(abtn);
+	panel.appendChild(sec);
+	f.tr._juneauDetailPanel = panel;
+	click(f);
+	inputOf(f).value = 'new';
+	key(inputOf(f), 'Enter');
+	await tick();
+	out.messageWithPanel = { toasts: toasts.slice(), panelText: slot.textContent };
+
+	toasts.length = 0;
+	respond = function () { return jsonResponse({ outcome: 'success' }, { status: 200 }); };
+	f = fixture({ id: 19, owner: 'old' }, ASSIGN);
+	click(f);
+	inputOf(f).value = 'new';
+	key(inputOf(f), 'Enter');
+	await tick();
+	out.noMessageNoToast = toasts.length;
+
 	process.stdout.write(JSON.stringify(out));
 })().catch(function (e) { console.error(e.stack || String(e)); process.exit(1); });

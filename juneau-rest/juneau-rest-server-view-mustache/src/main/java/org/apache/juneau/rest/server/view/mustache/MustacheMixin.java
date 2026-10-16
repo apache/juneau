@@ -285,7 +285,7 @@ public class MustacheMixin {
 	 *
 	 * <p>
 	 * Mirrors {@link MustacheDispatcher.Builder}'s configuration methods on its own surface and
-	 * forwards each call into a held {@link MustacheDispatcher.Builder} (§2.3.1 worker-bean
+	 * forwards each call into a held {@link MustacheDispatcher.Builder} (worker-bean
 	 * composition). Implements {@link ViewMixinBuilder} so {@link #basePath(String)} and
 	 * {@link #cacheTemplates(boolean)} are guaranteed to transfer to the sibling JSP / Thymeleaf /
 	 * FreeMarker bridge builders.

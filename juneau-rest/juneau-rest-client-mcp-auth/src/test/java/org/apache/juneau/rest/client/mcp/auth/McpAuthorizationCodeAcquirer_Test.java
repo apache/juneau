@@ -80,7 +80,7 @@ class McpAuthorizationCodeAcquirer_Test extends TestBase {
 	}
 
 	@Test void b05_issMismatchGatesErrorResponse() {
-		// H1: an error response with a mismatched iss must be reported as an issuer mismatch (SEP-2468), NOT a denial
+		// An error response with a mismatched iss must be reported as an issuer mismatch (SEP-2468), NOT a denial
 		// — the client MUST NOT act on the error/error_description of a response whose issuer doesn't match.
 		var cb = URI.create("http://127.0.0.1:1/callback?error=access_denied&state=st1&iss=" + enc("https://evil.example.com"));
 		var e = assertThrows(McpAuthException.class,
@@ -90,7 +90,7 @@ class McpAuthorizationCodeAcquirer_Test extends TestBase {
 	}
 
 	@Test void b06_issAbsentRejectedWhenRequired() {
-		// M2: when the AS advertises authorization_response_iss_parameter_supported, a missing iss must be rejected.
+		// When the AS advertises authorization_response_iss_parameter_supported, a missing iss must be rejected.
 		var cb = URI.create("http://127.0.0.1:1/callback?code=the-code&state=st1");
 		var e = assertThrows(McpAuthException.class,
 			() -> McpAuthorizationCodeAcquirer.validateAuthorizationResponse(cb, "st1", ISSUER, true));
@@ -138,7 +138,7 @@ class McpAuthorizationCodeAcquirer_Test extends TestBase {
 			assertTrue(ar.getScope().contains("offline_access"), () -> "offline_access missing: " + ar.getScope());
 			assertTrue(ar.getResources().contains(RESOURCE), () -> "resource indicator missing: " + ar.getResources());
 
-			// H6: the code-exchange token request must also carry the RFC 8707 resource indicator.
+			// The code-exchange token request must also carry the RFC 8707 resource indicator.
 			var body = tokenReqBody.get();
 			assertNotNull(body, "token endpoint was not called");
 			assertTrue(body.contains("resource="), () -> "resource indicator missing from token request: " + body);
@@ -161,7 +161,7 @@ class McpAuthorizationCodeAcquirer_Test extends TestBase {
 		assertThrows(McpAuthException.class, () -> acquirer.acquire(timeout));
 	}
 
-	/** H6: calling handleCallback twice with the same state must reject the second (state + PKCE verifier single-use). */
+	/** Calling handleCallback twice with the same state must reject the second (state + PKCE verifier single-use). */
 	@Test void b04_stateReplayRejected() throws IOException {
 		var server = HttpServer.create(new InetSocketAddress(InetAddress.getLoopbackAddress(), 0), 0);
 		server.createContext("/token", ex -> {
@@ -224,11 +224,11 @@ class McpAuthorizationCodeAcquirer_Test extends TestBase {
 	}
 
 	// -----------------------------------------------------------------------------------------------------------------
-	// D: builder validation
+	// Builder validation
 	// -----------------------------------------------------------------------------------------------------------------
 
 	@Test void d01_buildRequiresResource() {
-		// H3: resource() (RFC 8707) is mandatory on the MCP-facing entry point.
+		// Resource() (RFC 8707) is mandatory on the MCP-facing entry point.
 		var b = McpAuthorizationCodeAcquirer.create()
 			.authorizationEndpoint(URI.create("https://idp.example.com/authorize"))
 			.tokenEndpoint(URI.create("https://idp.example.com/token"))
@@ -239,7 +239,7 @@ class McpAuthorizationCodeAcquirer_Test extends TestBase {
 	}
 
 	@Test void d02_buildRequiresIssuerByDefault() {
-		// H2: expectedIssuer() is required unless explicitly opted out.
+		// ExpectedIssuer() is required unless explicitly opted out.
 		var b = McpAuthorizationCodeAcquirer.create()
 			.authorizationEndpoint(URI.create("https://idp.example.com/authorize"))
 			.tokenEndpoint(URI.create("https://idp.example.com/token"))
@@ -250,7 +250,7 @@ class McpAuthorizationCodeAcquirer_Test extends TestBase {
 	}
 
 	@Test void d03_skipIssuerValidationAllowsBuild() {
-		// H2: the explicit, greppable opt-out lets build() succeed without an issuer.
+		// The explicit, greppable opt-out lets build() succeed without an issuer.
 		var acquirer = McpAuthorizationCodeAcquirer.create()
 			.authorizationEndpoint(URI.create("https://idp.example.com/authorize"))
 			.tokenEndpoint(URI.create("https://idp.example.com/token"))
@@ -262,13 +262,13 @@ class McpAuthorizationCodeAcquirer_Test extends TestBase {
 	}
 
 	@Test void d04_redirectPathMustStartWithSlash() {
-		// L2: a redirect path that doesn't start with '/' is rejected at configuration time.
+		// A redirect path that doesn't start with '/' is rejected at configuration time.
 		var b = McpAuthorizationCodeAcquirer.create();
 		assertThrows(IllegalArgumentException.class, () -> b.redirectPath("callback"));
 	}
 
 	@Test void d05_redirectPortDefaultsToEphemeral() {
-		// H2: the default (unset) redirect port is 0 (ephemeral / port-agnostic).
+		// The default (unset) redirect port is 0 (ephemeral / port-agnostic).
 		var acquirer = McpAuthorizationCodeAcquirer.create()
 			.authorizationEndpoint(URI.create("https://idp.example.com/authorize"))
 			.tokenEndpoint(URI.create("https://idp.example.com/token"))
@@ -277,13 +277,13 @@ class McpAuthorizationCodeAcquirer_Test extends TestBase {
 	}
 
 	@Test void d06_redirectPortOutOfRangeRejected() {
-		// H2: a negative or >65535 fixed port is rejected at configuration time.
+		// A negative or >65535 fixed port is rejected at configuration time.
 		var b = McpAuthorizationCodeAcquirer.create();
 		assertThrows(IllegalArgumentException.class, () -> b.redirectPort(-1));
 		assertThrows(IllegalArgumentException.class, () -> b.redirectPort(70000));
 	}
 
-	// H2: end-to-end — with a fixed redirectPort, the receiver binds exactly that port and the authorization request's
+	// End-to-end — with a fixed redirectPort, the receiver binds exactly that port and the authorization request's
 	// redirect_uri carries it, so the whole interactive flow completes on the caller-chosen port (bind-first).
 	@Test void c03_interactiveAcquireHonorsRedirectPort() throws IOException {
 		var fixedPort = freePort();
@@ -330,7 +330,7 @@ class McpAuthorizationCodeAcquirer_Test extends TestBase {
 	}
 
 	// -----------------------------------------------------------------------------------------------------------------
-	// E: builder options, callback edge cases, and failure modes
+	// Builder options, callback edge cases, and failure modes
 	// -----------------------------------------------------------------------------------------------------------------
 
 	private static McpAuthorizationCodeAcquirer.Builder minimal() {

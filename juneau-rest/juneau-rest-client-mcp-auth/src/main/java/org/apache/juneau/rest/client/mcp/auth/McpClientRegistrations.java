@@ -20,7 +20,7 @@ import static org.apache.juneau.commons.utils.Shorts.*;
 
 
 /**
- * Bridges a Dynamic-Client-Registration result ({@link McpClientRegistration}) into F1's existing token flows &mdash;
+ * Bridges a Dynamic-Client-Registration result ({@link McpClientRegistration}) into the existing token flows &mdash;
  * the {@link McpAuthorizationCodeAcquirer} (interactive auth-code + PKCE) and {@link McpTokenProvider}
  * (client-credentials / refresh).
  *

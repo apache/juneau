@@ -28,7 +28,7 @@ import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.condition.*;
 
 /**
- * The nav looks the same after the C1 CSS merge (P5): the Task 0 probe page and a shell-rendered page with the same
+ * The nav looks the same after the C1 CSS merge: the baseline probe page and a shell-rendered page with the same
  * nav must both match the computed styles captured before C1 changed any CSS.
  */
 @EnabledIfSystemProperty(named=ConsoleBrowserFixture.GATE, matches="true",

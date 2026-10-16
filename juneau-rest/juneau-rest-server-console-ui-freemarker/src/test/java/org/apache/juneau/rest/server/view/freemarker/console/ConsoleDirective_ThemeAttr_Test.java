@@ -28,8 +28,8 @@ import org.apache.juneau.rest.server.view.freemarker.*;
 import org.junit.jupiter.api.*;
 
 /**
- * D12: {@code <@console theme=>} selects a built-in theme directly (Task 6 adds {@code theme=} to {@code <@console>}'s
- * attribute set); a nested {@code <@theme name=>} can still override it.
+ * D12: {@code <@console theme=>} selects a built-in theme directly ({@code theme=} is an attribute of
+ * {@code <@console>}); a nested {@code <@theme name=>} can still override it.
  */
 @SuppressWarnings({
 	"resource" // Fluent request/response chain returns the same Closeable already managed by the try-with-resources.

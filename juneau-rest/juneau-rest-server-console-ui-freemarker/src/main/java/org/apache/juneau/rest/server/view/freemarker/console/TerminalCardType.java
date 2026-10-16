@@ -49,17 +49,18 @@ public final class TerminalCardType implements CardTypeHandler {
 	}
 
 	/**
-	 * The one role a terminal card may subscribe with: {@code input-status}, the answer to a {@code term.input} frame.
+	 * The roles a terminal card may subscribe with: {@code input-status}, the answer to a {@code term.input} frame, and
+	 * {@code nudge}, the server's notice that a terminal's bytes have grown.
 	 *
 	 * <p>
 	 * This set must match the {@code roles} on the terminal card handler in {@code juneau-terminal.js}, so the build-time
 	 * and browser role checks agree.
 	 *
-	 * @return {@code Set.of("input-status")}.
+	 * @return {@code Set.of("input-status", "nudge")}.
 	 */
 	@Override
 	public Set<String> acceptedRoles() {
-		return Set.of("input-status");
+		return Set.of("input-status", "nudge");
 	}
 
 	@Override

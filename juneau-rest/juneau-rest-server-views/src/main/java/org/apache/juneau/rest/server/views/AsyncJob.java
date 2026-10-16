@@ -21,12 +21,13 @@ import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.time.*;
 import java.util.*;
+import java.util.regex.*;
 
 import org.apache.juneau.rest.server.views.ActionResult.*;
 
 /**
  * A single in-memory, one-shot async job &mdash; the streamed-progress + terminal-result unit of a future async write
- * variant (design doc §6.3).
+ * variant.
  *
  * <h5 class='section'>The stream URL IS the capability</h5>
  * <p>
@@ -35,10 +36,10 @@ import org.apache.juneau.rest.server.views.ActionResult.*;
  * {@link org.apache.juneau.rest.server.filter.SynchronizerToken}'s bar.  Because a browser {@code EventSource}
  * constructor cannot set an {@code X-Csrf-Token} header and cookies are unsound on a loopback port, the SSE GET that
  * streams a job's progress is Host-checked at the boundary and <b>capability-gated by the unguessability of the
- * id</b> &mdash; there is no session cookie and no CSRF-on-GET (HIGH-4).  Consequently the id is a secret:
+ * id</b> &mdash; there is no session cookie and no CSRF-on-GET.  Consequently the id is a secret:
  * {@link #toString()} never renders it.
  *
- * <h5 class='section'>Server-side hard limits (MED-6, a Task-11 disclosure bound)</h5>
+ * <h5 class='section'>Server-side hard limits (a data-egress disclosure bound)</h5>
  * <p>
  * A job caps its own streamed output at {@link #maxOutputBytes} bytes and terminates itself when that is exceeded,
  * and it terminates itself once past its {@link #deadline() hard-timeout deadline}.  Both are enforced <b>here</b>,
@@ -46,6 +47,13 @@ import org.apache.juneau.rest.server.views.ActionResult.*;
  * bounds: they cap how long, and how much, customer-adjacent triage content is streamed.  The number of concurrent
  * subscribers is capped at {@link #maxSubscribers} (a browser reload plus one straggler), enforced through
  * {@link #acquireSubscriber()} / {@link #releaseSubscriber()}.
+ *
+ * <h5 class='section'>Progress buffer and resume</h5>
+ * <p>
+ * Progress events are kept, in order, for the job's whole life (bounded by the output cap) and are never trimmed, so
+ * the position of an event never changes: {@code events[i]} is streamed with SSE id {@code i+1}.  A subscriber that
+ * reconnects with a {@code Last-Event-ID} resumes exactly after the last event it saw; a fresh subscriber is
+ * live-only (see {@link #resumeCursor(String)}).
  *
  * <h5 class='section'>Terminal outcomes reuse the frozen {@link ActionResult} contract</h5>
  * <p>
@@ -72,6 +80,16 @@ import org.apache.juneau.rest.server.views.ActionResult.*;
  */
 public final class AsyncJob {
 
+	/** A resume value after trimming: 1 to 10 ASCII digits (so {@link Long#parseLong(String)} cannot overflow). */
+	private static final Pattern RESUME_VALUE = Pattern.compile("[0-9]{1,10}");
+
+	/**
+	 * Bytes charged toward the output cap for every progress event, on top of its payload.  Without it an empty
+	 * event would cost nothing and a producer could grow the event buffer without bound; with it the event count is
+	 * bounded by {@link #maxOutputBytes} (roughly one event per byte at worst).
+	 */
+	static final long EVENT_OVERHEAD_BYTES = 1;
+
 	private final String id;
 	private final Instant createdAt;
 	private final Duration timeout;
@@ -81,6 +99,7 @@ public final class AsyncJob {
 	private final Object lock = new Object();
 	private final List<String> events = new ArrayList<>();
 	private long outputBytes;
+	private long chargedBytes;   // Payload plus per-event overhead; what the cap is enforced against.
 	private boolean effectStarted;
 	private int subscribers;
 	private ActionResult result;   // Non-null iff terminal; the single settled outcome.
@@ -133,6 +152,11 @@ public final class AsyncJob {
 	 * {@code app:output-limit-exceeded} message and the event is dropped &mdash; the cap is a data-egress bound, so
 	 * the excess content is never streamed.
 	 *
+	 * <p>
+	 * Each event is charged its UTF-8 payload size plus a fixed {@value #EVENT_OVERHEAD_BYTES}-byte overhead toward
+	 * the cap, so empty events cannot grow the buffer without bound.  {@link #outputBytes()} still reports payload
+	 * bytes only.
+	 *
 	 * @param text The progress text.  Must not be <jk>null</jk>.
 	 * @return <jk>true</jk> if the event was appended; <jk>false</jk> if the job was already terminal or the output
 	 * 	cap was hit (which itself terminates the job).
@@ -143,11 +167,13 @@ public final class AsyncJob {
 			if (result != null)
 				return false;
 			var add = (long) text.getBytes(UTF_8).length;
-			if (outputBytes + add > maxOutputBytes) {
+			var charge = add + EVENT_OVERHEAD_BYTES;
+			if (chargedBytes + charge > maxOutputBytes) {
 				settle(ActionResult.failure().message("app:output-limit-exceeded"));
 				return false;
 			}
 			outputBytes += add;
+			chargedBytes += charge;
 			events.add(text);
 			lock.notifyAll();
 			return true;
@@ -157,12 +183,22 @@ public final class AsyncJob {
 	/**
 	 * Marks that this job's outbound effect has begun, so a subsequent {@link #cancel()} settles to
 	 * {@link Outcome#CANCELLED_AFTER_EFFECT cancelled-after-effect} rather than {@link Outcome#CANCELLED cancelled}
-	 * (Q4: the two are different outcomes and must not be collapsed).  A no-op once terminal.
+	 * (the two are different outcomes and must not be collapsed).  A no-op once terminal.
+	 *
+	 * <p>
+	 * The mark and the terminal check share one lock acquisition with {@link #cancel()} and
+	 * {@link #enforceTimeout(Instant)}, so a producer that starts its effect only when this returns <jk>true</jk> can
+	 * never start it on a job that has already been cancelled or timed out.
+	 *
+	 * @return <jk>true</jk> if the job is still running and is now marked; <jk>false</jk> if it was already terminal, in
+	 * 	which case the producer must not start the effect.
 	 */
-	public void markEffectStarted() {
+	public boolean markEffectStarted() {
 		synchronized (lock) {
-			if (result == null)
-				effectStarted = true;
+			if (result != null)
+				return false;
+			effectStarted = true;
+			return true;
 		}
 	}
 
@@ -205,7 +241,7 @@ public final class AsyncJob {
 	/**
 	 * Terminates the job if it is past its {@link #deadline() hard-timeout deadline}, settling it to a non-optimistic
 	 * {@link Outcome#UNKNOWN unknown} &mdash; the effect may or may not have completed in the time cut off.  This is
-	 * the server-side timeout enforcement (HIGH-4/MED-6): it bounds both heap and, as a Task-11 disclosure bound, how
+	 * the server-side timeout enforcement: it bounds both heap and, as a data-egress disclosure bound, how
 	 * long triage keeps streaming customer-adjacent content.
 	 *
 	 * @param now The current instant.  Must not be <jk>null</jk>.
@@ -232,8 +268,11 @@ public final class AsyncJob {
 	public int eventCount() { synchronized (lock) { return events.size(); } }
 
 	/**
-	 * Snapshots the progress events at or after {@code fromIndex} (for a re-attaching subscriber that replays
-	 * buffered progress on page reload, per Q3).
+	 * Snapshots the progress events at or after {@code fromIndex}.
+	 *
+	 * <p>
+	 * Not the stream's resume path: this answers empty for an out-of-range index, whereas a past-the-end resume value
+	 * is refused (see {@link #resumeCursor(String)}).
 	 *
 	 * @param fromIndex The zero-based index to start from.
 	 * @return A copy of the events from {@code fromIndex} onward (empty if none/out of range).
@@ -244,6 +283,54 @@ public final class AsyncJob {
 				return List.of();
 			return List.copyOf(events.subList(fromIndex, events.size()));
 		}
+	}
+
+	/**
+	 * Resolves the zero-based stream start position from a raw resume value (an SSE {@code Last-Event-ID} or the
+	 * {@code lastEventId} query parameter, already chosen by the caller).
+	 *
+	 * <p>
+	 * Progress event {@code events[i]} is always streamed with SSE id {@code i+1}, so a resume value {@code k} means
+	 * "events {@code 0..k-1} were delivered" and the stream continues at {@code events[k]}.  The value is trimmed of
+	 * SP/HTAB, must then match {@code ^[0-9]{1,10}$} (so {@code +1}, {@code -1}, {@code 1e2}, {@code 0x2} and the
+	 * like are refused before any parsing) and must not be past the end of the buffer.  A <jk>null</jk> or empty value
+	 * is a fresh attach: the current event count, so only progress produced from now on is streamed.
+	 *
+	 * <p>
+	 * Runs under the job lock, so the bound cannot race {@link #progress(String)}.
+	 *
+	 * @param value The raw resume value, or <jk>null</jk> if none was supplied.
+	 * @return The cursor to pass to {@link #awaitUpdate(int, Duration)}.
+	 * @throws IllegalArgumentException If the value is malformed or past the end of the buffered events.
+	 */
+	int resumeCursor(String value) {
+		var v = value == null ? "" : trimOws(value);
+		synchronized (lock) {
+			var size = events.size();
+			if (v.isEmpty())
+				return size;
+			if (! RESUME_VALUE.matcher(v).matches())
+				throw iaex("Malformed resume value '%s'.", v);
+			var k = Long.parseLong(v);
+			if (k > size)
+				throw iaex("Resume value %s is past the end of the job's %s buffered events.", v, size);
+			return (int) k;
+		}
+	}
+
+	/** Trims HTTP optional whitespace (SP and HTAB only) from both ends. */
+	static String trimOws(String value) {
+		var b = 0;
+		var e = value.length();
+		while (b < e && isOws(value.charAt(b)))
+			b++;
+		while (e > b && isOws(value.charAt(e - 1)))
+			e--;
+		return value.substring(b, e);
+	}
+
+	private static boolean isOws(char c) {
+		return c == ' ' || c == '\t';
 	}
 
 	/**

@@ -21,6 +21,7 @@ import static org.apache.juneau.commons.utils.Shorts.*;
 import java.util.*;
 
 import org.apache.http.*;
+import org.apache.http.client.protocol.*;
 import org.apache.http.protocol.*;
 import org.apache.juneau.rest.client.*;
 
@@ -34,7 +35,8 @@ import org.apache.juneau.rest.client.*;
  * target.  When that target is a different scheme, host, or port (or an {@code https}&rarr;{@code http}
  * downgrade), forwarding those headers would disclose credentials to an unrelated origin.  This interceptor
  * runs on every outgoing request in an exchange: it records the origin of the first request and, on any
- * later request in the same exchange whose origin differs, strips the credential headers before the request
+ * later request in the same exchange whose origin differs (and on every request after one that did, even if it
+ * returns to the first origin), strips the credential headers before the request
  * leaves the client.
  *
  * <p>
@@ -44,10 +46,15 @@ import org.apache.juneau.rest.client.*;
  * {@code my_service}, a typical Docker Compose service name) with a {@code null} host, which would make every
  * redirect from such a host fail.  The credential header set is delegated to {@link RedirectSecurity#stripOnCrossOrigin()}
  * so that all transports share it.
+ *
+ * <p>
+ * A caller-supplied client is immutable once built, so this interceptor cannot be added to it.  For such a client the
+ * transport passes {@code newGuardingContext()} with each request instead; see {@code GuardingContext}.
  */
 final class Hc45RedirectCredentialGuard implements HttpRequestInterceptor {
 
 	private static final String ATTR_ORIGIN = Hc45RedirectCredentialGuard.class.getName() + ".origin";
+	private static final String ATTR_STRIPPED = Hc45RedirectCredentialGuard.class.getName() + ".stripped";
 
 	@Override /* HttpRequestInterceptor */
 	public void process(HttpRequest request, HttpContext context) {
@@ -59,9 +66,47 @@ final class Hc45RedirectCredentialGuard implements HttpRequestInterceptor {
 			context.setAttribute(ATTR_ORIGIN, target);
 			return;
 		}
-		if (! sameOrigin(origin, target))
-			for (var name : RedirectSecurity.stripOnCrossOrigin())
-				request.removeHeaders(name);
+		// Sticky: HttpClient copies each hop's headers from the caller's original request, so once any hop left the first origin,
+		// every later hop (including one that returns to it) must be stripped too.
+		if (context.getAttribute(ATTR_STRIPPED) == null && sameOrigin(origin, target))
+			return;
+		context.setAttribute(ATTR_STRIPPED, Boolean.TRUE);
+		for (var name : RedirectSecurity.stripOnCrossOrigin())
+			request.removeHeaders(name);
+	}
+
+	/**
+	 * Returns a new per-request context that applies this guard to every hop of the exchange it is used for.
+	 *
+	 * @return A new context. Never <jk>null</jk>.
+	 */
+	static HttpClientContext newGuardingContext() {
+		return new GuardingContext();
+	}
+
+	/**
+	 * Per-request context that applies the guard to a caller-supplied client without changing that client.
+	 *
+	 * <p>
+	 * HttpClient's protocol stage records each new hop in the context (its target host, then the request) before it
+	 * runs the client's own request interceptors, so this context strips the credential headers at that point.  The
+	 * headers on a redirect hop at that point are the ones the redirect executor copied from the original request, which
+	 * are the caller's.  The client's interceptors and authenticator run afterwards, so a {@code Cookie} from the client's
+	 * {@code CookieStore} and an {@code Authorization} from its {@code CredentialsProvider} are still sent to the new
+	 * origin.  Each request object is inspected only the first time it is recorded, because HttpClient records it again
+	 * just before sending it, after those headers were added; a {@code CONNECT} tunnel request carries no caller headers.
+	 */
+	private static final class GuardingContext extends HttpClientContext {
+
+		private final Hc45RedirectCredentialGuard guard = new Hc45RedirectCredentialGuard();
+		private final Set<HttpRequest> seen = Collections.newSetFromMap(new IdentityHashMap<>());
+
+		@Override /* HttpCoreContext */
+		public void setAttribute(String id, Object obj) {
+			super.setAttribute(id, obj);
+			if (HttpCoreContext.HTTP_REQUEST.equals(id) && obj instanceof HttpRequest request && seen.add(request))
+				guard.process(request, this);
+		}
 	}
 
 	// HttpHost always has a scheme name and a host name; the port is -1 when none was given, so it is normalized to the

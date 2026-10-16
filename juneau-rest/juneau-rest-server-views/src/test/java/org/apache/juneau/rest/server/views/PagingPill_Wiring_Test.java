@@ -26,7 +26,7 @@ import org.junit.jupiter.api.*;
 
 /**
  * Unified paging-pill construction/wiring function assertions for {@code juneau-views.js} (DataTables ribbon
- * visual-parity design doc §4.C, plan Tasks 8/9/10). Option-A (content-substring + function-body-extraction)
+ * paging pill). Option-A (content-substring + function-body-extraction)
  * coverage, mirroring {@code ViewsMixin_Serving_Test}'s established idiom - the pill's DataTables-API-surface
  * wiring (`page.len`, `page(...)`, `draw.dt`) and the cross-version native-control-hide CSS selector list.
  */
@@ -51,7 +51,7 @@ class PagingPill_Wiring_Test extends TestBase {
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
-	// Task 8 - pure pillState(pageInfo, pageLength)
+	// Pure pillState(pageInfo, pageLength)
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Test void a01_pillState_firstAndLastPageDisabledConditions() throws Exception {
@@ -62,7 +62,7 @@ class PagingPill_Wiring_Test extends TestBase {
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
-	// Task 9 - buildPagingPill(viewDef, ctx) DOM construction + wiring
+	// buildPagingPill(viewDef, ctx) DOM construction + wiring
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Test void b01_buildPagingPill_wiresDataTablesPagingApiSurface() throws Exception {
@@ -77,7 +77,7 @@ class PagingPill_Wiring_Test extends TestBase {
 		assertTrue(body.contains("juneau-view-pagingpill"), body);
 		assertTrue(body.contains("juneau-view-pagingpill-btn"), body);
 		// The unified paging ribbon's central segment is a page-size MENU BUTTON now - the old standalone
-		// <select> is gone (Task: consolidate page-size + nav into one control).
+		// <select> is gone.
 		assertFalse(body.contains("juneau-view-pagingpill-select"), body);
 		assertTrue(body.contains("juneau-view-pagingpill-menubtn"), body);
 		assertTrue(body.contains("juneau-view-pagingpill-menu"), body);
@@ -187,7 +187,7 @@ class PagingPill_Wiring_Test extends TestBase {
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
-	// Task 10 - paging-pill shape CSS + native-control-hide selectors (DT1+DT2)
+	// Paging-pill shape CSS + native-control-hide selectors (DT1+DT2)
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Test void c01_viewsCss_hidesNativeLengthAndPaginationControlsBothDtGenerations() throws Exception {
@@ -201,10 +201,10 @@ class PagingPill_Wiring_Test extends TestBase {
 	}
 
 	/**
-	 * Disabled First/Prev/Next/Last spend grey-canvas IRS solids, not the white-canvas composite
-	 * ({@code #a3a3a3}/{@code #ffffff}) and not {@code opacity: 0.6}. IRS source is
-	 * {@code .ribbon-button} {@code #666}/{@code #fff}/{@code #ced4da} plus {@code :disabled}
-	 * {@code opacity: 0.6} (pages/style.css); those values over the {@code #f6f6f9} toolbar canvas
+	 * Disabled First/Prev/Next/Last spend the grey-canvas solids, not the white-canvas composite
+	 * ({@code #a3a3a3}/{@code #ffffff}) and not {@code opacity: 0.6}. The reference look is
+	 * {@code #666}/{@code #fff}/{@code #ced4da} plus {@code :disabled}
+	 * {@code opacity: 0.6}; those values over the {@code #f6f6f9} toolbar canvas
 	 * are {@code #a0a0a1}/{@code #f6f6f9}; pager/ribbon/search share
 	 * {@code --jc-chrome-control-border} ({@code var(--jc-control-border, #ced4da)}) enabled
 	 * and disabled (not a second measured grey, not the faded {@code #dfe2e6} composite). Selectors include
@@ -250,14 +250,14 @@ class PagingPill_Wiring_Test extends TestBase {
 
 	/**
 	 * Regression: no inner vertical
-	 * border between the four nav buttons (First/Prev/Next/Last) - J0449 dropped this same inner-border pattern
-	 * for the ribbon group but never reached the paging pill's own nav buttons, which kept a per-button
+	 * border between the four nav buttons (First/Prev/Next/Last) - the ribbon group dropped this same inner-border pattern
+	 * but never reached the paging pill's own nav buttons, which kept a per-button
 	 * "border-right" segment divider.
 	 *
 	 * <p>The menu-button segment ({@code .juneau-view-pagingpill-menuwrap}) USED to keep its own divider on the
-	 * theory that a different widget riding the same pill warranted a visible seam - but IRS's own center range
-	 * segment ({@code .ribbon-button-center}) has no side border at all, seamless against its neighbours exactly
-	 * like the four nav buttons. That divider was the real root cause of a visual-parity item that repeated
+	 * theory that a different widget riding the same pill warranted a visible seam - but the reference center range
+	 * segment has no side border at all, seamless against its neighbours exactly
+	 * like the four nav buttons. That divider was the real root cause of a styling defect that repeated
 	 * console-side band-aids never fixed (a color/override in the CONSUMING app cannot zero out a width+style
 	 * pair the FRAMEWORK's own shipped rule re-asserts): it is now removed here too, so the whole pill - all five
 	 * segments - is one seamless control.
@@ -272,8 +272,8 @@ class PagingPill_Wiring_Test extends TestBase {
 		assertTrue(region.contains("border-top-width"), region);
 		assertTrue(region.contains("border-right-width: 0"), region);
 		assertFalse(body.contains(".juneau-view-pagingpill-btn:last-child"), body);
-		// The menu-button segment's own former divider is gone too (IRS visual-parity follow-up) - the whole
-		// pill is now seamless, matching IRS's borderless center range segment.
+		// The menu-button segment's own former divider is gone too - the whole
+		// pill is now seamless, matching the borderless center range segment.
 		assertTrue(body.contains(".juneau-view-pagingpill-menuwrap {"), body);
 		var wrapStart = body.indexOf(".juneau-view-pagingpill-menuwrap {");
 		var wrapEnd = body.indexOf("}", wrapStart);
@@ -303,7 +303,7 @@ class PagingPill_Wiring_Test extends TestBase {
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
-	// Item 2 - ribbon container must lay its buttons out horizontally (design doc §4.A regression)
+	// Item 2 - ribbon container must lay its buttons out horizontally
 	//------------------------------------------------------------------------------------------------------------------
 
 	/**
@@ -373,7 +373,7 @@ class PagingPill_Wiring_Test extends TestBase {
 		assertTrue(fnBody.contains("% 3 === 0"), fnBody);
 	}
 
-	@Test void e02_pagingSummaryText_matchesIrsOneBasedInclusiveRangeAndEmptyCase() throws Exception {
+	@Test void e02_pagingSummaryText_matchesOneBasedInclusiveRangeAndEmptyCase() throws Exception {
 		var body = cWithMixin.get(ViewsMixin.VIEWS_JS_PATH).run().assertStatus(200).getContent().asString();
 		var fnBody = functionBody(body, "function pagingSummaryText(");
 		assertTrue(fnBody.contains("pageInfo.start + 1"), fnBody);

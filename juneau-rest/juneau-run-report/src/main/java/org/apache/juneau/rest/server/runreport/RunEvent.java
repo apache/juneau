@@ -106,10 +106,10 @@ public final class RunEvent {
 	private static final int MAX_COUNT = 1_000_000_000;
 
 	private static final Map<Kind,List<String>> KEY_ORDER = Map.of(
-		Kind.STEP, List.of("id", "title", "n", "status", "rawLine", "rawOffset"),
+		Kind.STEP, List.of("id", "title", "n", "status", "rawOffset"),
 		Kind.END, List.of("id", "status", "ms", "exit"),
-		Kind.SUITE, List.of("step", "fw", "suite", "counts", "rawLine", "rawOffset"),
-		Kind.TEST, List.of("step", "fw", "suite", "name", "status", "ms", "msg", "trace", "rawLine", "rawOffset"),
+		Kind.SUITE, List.of("step", "fw", "suite", "counts", "rawOffset"),
+		Kind.TEST, List.of("step", "fw", "suite", "name", "status", "ms", "msg", "trace", "rawOffset"),
 		Kind.REPLACE, List.of("step"),
 		Kind.NOTE, List.of("level", "text", "href", "step"),
 		Kind.DONE, List.of("status")
@@ -271,19 +271,6 @@ public final class RunEvent {
 	public RunEvent withState(StepState state) {
 		requireKind("status", Kind.STEP);
 		return with("status", wire("step", "status", state));
-	}
-
-	/**
-	 * Sets the raw console line of a <c>step</c>, <c>suite</c> or <c>test</c> event.
-	 *
-	 * @param line The 1-based line, at least 1.
-	 * @return A copy with the member set.
-	 */
-	public RunEvent withRawLine(int line) {
-		requireKind("rawLine", Kind.STEP, Kind.SUITE, Kind.TEST);
-		if (line < 1)
-			throw iaex("RunEvent %s rawLine must be >= 1; got '%s'", wireName(kind), line);
-		return with("rawLine", line);
 	}
 
 	/**
@@ -470,8 +457,6 @@ public final class RunEvent {
 					e = e.withN(toInt(map, "step", "n"));
 				if (map.get("status") != null)
 					e = e.withState(parse(StepState.class, "step", "status", map.get("status")));
-				if (map.get("rawLine") != null)
-					e = e.withRawLine(toInt(map, "step", "rawLine"));
 				if (map.get("rawOffset") != null)
 					e = e.withRawOffset(toLong(map, "step", "rawOffset"));
 			}
@@ -487,8 +472,6 @@ public final class RunEvent {
 					throw iaex("RunEvent suite counts must be an object; got '%s'", map.get("counts"));
 				e = suite(str(map, "suite", "step"), str(map, "suite", "fw"), str(map, "suite", "suite"),
 					toInt(c, "suite", "counts.pass"), toInt(c, "suite", "counts.fail"), toInt(c, "suite", "counts.skip"));
-				if (map.get("rawLine") != null)
-					e = e.withRawLine(toInt(map, "suite", "rawLine"));
 				if (map.get("rawOffset") != null)
 					e = e.withRawOffset(toLong(map, "suite", "rawOffset"));
 			}
@@ -501,8 +484,6 @@ public final class RunEvent {
 					e = e.withMsg(str(map, "test", "msg"));
 				if (map.get("trace") != null)
 					e = e.withTrace(str(map, "test", "trace"));
-				if (map.get("rawLine") != null)
-					e = e.withRawLine(toInt(map, "test", "rawLine"));
 				if (map.get("rawOffset") != null)
 					e = e.withRawOffset(toLong(map, "test", "rawOffset"));
 			}

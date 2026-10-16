@@ -43,14 +43,14 @@ import org.junit.jupiter.api.*;
  *
  * <p>
  * Test groups: {@code a} routing (client / inline / server / no-metadata / DT1); {@code b} operator semantics
- * ({@code $in}, {@code $between}, {@code $eq} vs {@code $eqic}, {@code $not}, bare values - D1); {@code c} cell
- * shapes (missing property, array cell - D6); {@code d} strict validation and the popover (D3); {@code e} custom
- * operators (D4); {@code f} Copy-link collect and {@code ?state=} restore (incl. the {@code $regex} guard - S8);
- * {@code g} teardown (D7); {@code h} Java-serialized Date / Instant / LocalDate rows (S6).
+ * ({@code $in}, {@code $between}, {@code $eq} vs {@code $eqic}, {@code $not}, bare values); {@code c} cell
+ * shapes (missing property, array cell); {@code d} strict validation and the popover; {@code e} custom
+ * operators; {@code f} Copy-link collect and {@code ?state=} restore (incl. the {@code $regex} guard);
+ * {@code g} teardown; {@code h} Java-serialized Date / Instant / LocalDate rows.
  */
 class ViewsJs_ClientColumnSearch_Test extends TestBase {
 
-	/** S6 fixture bean: the three temporal shapes a client-mode dataUrl serializes. */
+	/** Fixture bean: the three temporal shapes a client-mode dataUrl serializes. */
 	public static class DatedRow {
 		/** A legacy {@link Date}. */
 		public Date date;
@@ -195,7 +195,7 @@ class ViewsJs_ClientColumnSearch_Test extends TestBase {
 	}
 
 	@Test void a05_serverMode_unchanged() {
-		// D2: server mode keeps sending the raw expression through native col.search(); no fixed predicate.
+		// server mode keeps sending the raw expression through native col.search(); no fixed predicate.
 		assertBean(report(), "serverOk,serverNative,serverFixedNames", "true,$in(Triaged,New),[]");
 	}
 
@@ -217,7 +217,7 @@ class ViewsJs_ClientColumnSearch_Test extends TestBase {
 	}
 
 	@Test void b02_bareValues_followServerSemantics() {
-		// D1: a bare enum value is a whole-value match ("Tri" matches nothing; "Tri*" is the prefix form); bare
+		// a bare enum value is a whole-value match ("Tri" matches nothing; "Tri*" is the prefix form); bare
 		// text stays a case-insensitive substring.
 		assertBean(report(), "enumBareTriRows,enumBareTriStarRows,textBareRows", "[],[0],[0,1]");
 	}
@@ -232,7 +232,7 @@ class ViewsJs_ClientColumnSearch_Test extends TestBase {
 	}
 
 	@Test void c02_arrayCell_isMatchedAsItsStringForm() {
-		// D6 pin: ['a','b'] is matched as String(value) == "a,b".
+		// Pin: ['a','b'] is matched as String(value) == "a,b".
 		assertBean(report(), "arrayCellEqJoinedRows,arrayCellContainsRows", "[0],[0,3]");
 	}
 
@@ -292,7 +292,7 @@ class ViewsJs_ClientColumnSearch_Test extends TestBase {
 
 	@Test void f02_restore_skipsInvalidExpressions() {
 		// Valid status filter installs; the BAD_VALUE priority keeps the prior $gt(1); a $regex the column does not
-		// offer and an over-length pattern are both skipped (S8); a short $regex on a column offering it restores.
+		// offer and an over-length pattern are both skipped; a short $regex on a column offering it restores.
 		assertBean(report(), "restoreStatusExpr,restorePriorityExpr,restoreNameExpr,restoreCodeExpr,restoreRows,restoreCodeShortExpr",
 			"$in(Triaged,New),$gt(1),,,[1],$regex(c.*)");
 	}
@@ -302,12 +302,12 @@ class ViewsJs_ClientColumnSearch_Test extends TestBase {
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Test void g01_teardown_clearsTheStore() {
-		// D7 pin: a View Settings rebuild drops column filters, exactly as the native path always has.
+		// Pin: a View Settings rebuild drops column filters, exactly as the native path always has.
 		assertBean(report(), "teardownBefore,teardownAfter", "$in(Triaged,New),");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
-	// h - S6 Java-serialized temporal cells
+	// h - Java-serialized temporal cells
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Test void h01_javaSerializedDates_matchBetween() {
@@ -320,7 +320,7 @@ class ViewsJs_ClientColumnSearch_Test extends TestBase {
 	@Test void h02_javaSerializedDates_wireShape() {
 		// Pins what the JSON serializer puts on the wire, so a serializer change that breaks client parsing shows up
 		// here.  Instant and LocalDate are UTC-faithful.  java.util.Date is emitted as JVM-LOCAL wall-clock time with
-		// NO offset, which both engines read as UTC (S6) - so on a non-UTC server a client-filtered Date column is
+		// NO offset, which both engines read as UTC - so on a non-UTC server a client-filtered Date column is
 		// shifted by the server's UTC offset (a known parity gap; the server's InMemoryMatch sees the real instant).
 		var sample = (List<?>) report().get("dateSample");
 		assertTrue(String.valueOf(sample.get(0)).matches("\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(Z|[+-]\\d{2}:\\d{2})?"), sample::toString);

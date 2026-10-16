@@ -59,7 +59,6 @@ def push_mod(monkeypatch):
 @pytest.fixture
 def test_mod(monkeypatch):
     module = load("_bell_test", "test.py")
-    monkeypatch.setattr(module, "run_module", lambda: None)
     return module
 
 
@@ -96,6 +95,18 @@ def test_push_is_silent_when_opted_out(push_mod, monkeypatch):
     assert out.getvalue() == ""
 
 
+@pytest.mark.parametrize("silenced", [True, False])
+def test_push_no_sound_silences_the_toolkit_sound(push_mod, monkeypatch, silenced):
+    notify = push_mod.toolkit("notify")
+    played = []
+    monkeypatch.setattr(notify, "_play", lambda ok: played.append(ok))
+    if silenced:
+        monkeypatch.setenv("JUNEAU_PUSH_NO_SOUND", "1")
+    terminal(monkeypatch, tty=False)
+    push_mod.play_sound(success=False)
+    assert played == ([] if silenced else [False])
+
+
 def test_push_never_raises_when_stdout_cannot_be_written(push_mod, monkeypatch):
     class Broken:
         def isatty(self):
@@ -113,7 +124,7 @@ def test_test_py_rings_when_a_standalone_run_ends(test_mod, monkeypatch, code):
     monkeypatch.setattr(test_mod, "_main", lambda: code)
     out = terminal(monkeypatch)
     assert test_mod.main() == code
-    assert out.getvalue() == "\a"
+    assert out.getvalue().count("\a") == 1
 
 
 def test_test_py_rings_when_a_standalone_run_is_cancelled(test_mod, monkeypatch):
@@ -122,9 +133,28 @@ def test_test_py_rings_when_a_standalone_run_is_cancelled(test_mod, monkeypatch)
 
     monkeypatch.setattr(test_mod, "_main", interrupted)
     out = terminal(monkeypatch)
-    with pytest.raises(KeyboardInterrupt):
-        test_mod.main()
-    assert out.getvalue() == "\a"
+    assert test_mod.main() == 130
+    assert out.getvalue().count("\a") == 1
+
+
+def test_test_py_rings_once_standalone_and_never_under_push(test_mod, monkeypatch):
+    monkeypatch.setattr(test_mod, "_main", lambda: 0)
+    out = terminal(monkeypatch)
+    test_mod.main()
+    assert out.getvalue().count("\a") == 1
+    monkeypatch.setenv("JUNEAU_PUSH_ACTIVE", "1")
+    out = terminal(monkeypatch)
+    test_mod.main()
+    assert "\a" not in out.getvalue()
+
+
+def test_test_py_sound_is_silenced_by_juneau_push_no_sound(test_mod, monkeypatch):
+    """test.py's end-of-run signal is the bell; JUNEAU_PUSH_NO_SOUND=1 (shared with push.py) silences it."""
+    monkeypatch.setenv("JUNEAU_PUSH_NO_SOUND", "1")
+    monkeypatch.setattr(test_mod, "_main", lambda: 1)
+    out = terminal(monkeypatch)
+    assert test_mod.main() == 1
+    assert "\a" not in out.getvalue()
 
 
 @pytest.mark.parametrize("owner", ["JUNEAU_RUN_ACTIVE", "JUNEAU_RUN_N_BASE", "JUNEAU_PUSH_ACTIVE"])
@@ -133,14 +163,14 @@ def test_test_py_stays_quiet_when_push_or_a_run_owns_the_run(test_mod, monkeypat
     monkeypatch.setattr(test_mod, "_main", lambda: 0)
     out = terminal(monkeypatch)
     test_mod.main()
-    assert out.getvalue() == ""
+    assert "\a" not in out.getvalue()
 
 
 def test_test_py_is_silent_off_a_tty(test_mod, monkeypatch):
     monkeypatch.setattr(test_mod, "_main", lambda: 0)
     out = terminal(monkeypatch, tty=False)
     test_mod.main()
-    assert out.getvalue() == ""
+    assert "\a" not in out.getvalue()
 
 
 def test_test_py_is_silent_in_the_sandbox(test_mod, monkeypatch):
@@ -148,7 +178,7 @@ def test_test_py_is_silent_in_the_sandbox(test_mod, monkeypatch):
     monkeypatch.setattr(test_mod, "_main", lambda: 0)
     out = terminal(monkeypatch)
     test_mod.main()
-    assert out.getvalue() == ""
+    assert "\a" not in out.getvalue()
 
 
 def test_test_py_is_silent_when_opted_out(test_mod, monkeypatch):
@@ -156,29 +186,31 @@ def test_test_py_is_silent_when_opted_out(test_mod, monkeypatch):
     monkeypatch.setattr(test_mod, "_main", lambda: 0)
     out = terminal(monkeypatch)
     test_mod.main()
-    assert out.getvalue() == ""
+    assert "\a" not in out.getvalue()
 
 
 @pytest.mark.parametrize("sandbox", [False, True])
 def test_push_rings_when_a_run_is_cancelled(push_mod, monkeypatch, sandbox):
-    class Run:
-        def enabled(self):
-            return True
-
-        def console_active(self):
-            return True
-
-        def done(self, status):
-            pass
-
     def interrupted():
         raise KeyboardInterrupt
 
     if sandbox:
         monkeypatch.setenv("SANDBOX_RUNTIME", "1")
-    monkeypatch.setattr(push_mod, "run_module", lambda: Run())
     monkeypatch.setattr(push_mod, "_main", interrupted)
-    monkeypatch.setattr(push_mod, "_finish", lambda run, status: None)
     out = terminal(monkeypatch)
     assert push_mod.main() == 130
-    assert out.getvalue() == ("" if sandbox else "\a")
+    assert out.getvalue().count("\a") == (0 if sandbox else 1)
+
+
+# ---- characterization: what makes test.py defer to an enclosing run ----------------------------------------------------
+@pytest.mark.parametrize("owner", ["JUNEAU_PUSH_ACTIVE", "JUNEAU_RUN_N_BASE", "JUNEAU_RUN_ACTIVE", None])
+def test_test_py_under_push_is_owned_by_the_enclosing_run(test_mod, monkeypatch, owner):
+    if owner is not None:
+        monkeypatch.setenv(owner, "1")
+    assert test_mod.owned_by_enclosing_run() is (owner is not None)
+
+
+def test_next_step_number_starts_after_n_base(monkeypatch):
+    monkeypatch.setenv("JUNEAU_RUN_N_BASE", "2")
+    fresh = load("_bell_test_fresh", "test.py")
+    assert fresh.next_step_number() == 3

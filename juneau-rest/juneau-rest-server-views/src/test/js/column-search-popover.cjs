@@ -16,8 +16,8 @@
  */
 
 /*
- * column-search-popover.cjs - always-on Node harness for the per-column search popover commit semantics
- * (design §4.5 help text + §5 evaluation model).  Loads juneau-search.js into the SAME sandbox as views so the
+ * column-search-popover.cjs - always-on Node harness for the per-column search popover commit semantics. Loads
+ * juneau-search.js into the SAME sandbox as views so the
  * popover reads the live parse/operator engine, then drives openColumnSearchPopover(...) through each commit path
  * and reports what reached the grid.  Every assertion lives in the Java test.
  *

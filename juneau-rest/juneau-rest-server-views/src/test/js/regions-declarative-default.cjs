@@ -18,8 +18,8 @@
 /*
  * regions-declarative-default.cjs - always-on Node harness for the declarative default: the `RegionDef` descriptor's client
  * twin (`ctx.declared`), `ctx.fetchDeclared()`'s handshake-checked fetch, the reserved `"default"` populator's
- * §8.5-normative algorithm, R14a's pre-fetch matrix, the poll lifecycle (§8.3.1), and - the acceptance gate for
- * this whole child - L12's non-privilege proof (tests 11 and 12).
+ * normative algorithm, the pre-fetch matrix, the poll lifecycle, and - the acceptance gate for
+ * this whole child - the non-privilege proof.
  *
  * Loads juneau-helpers.js IN ADDITION to the three assets regions-primitive/-bus/-barrier load: the reserved
  * default paints through `ctx.helpers[ctx.declared.renderer]`, so this harness alone needs the helper library.
@@ -88,7 +88,7 @@ function load(opts) {
 
 	// =================================================================================================================
 	// Test 2 (declarative) - `ctx.declared` is populated from the placeholder descriptor attribute, and an absent
-	// descriptor falls through to the identity-only shape with per-type `lazy` defaults (F9).
+	// descriptor falls through to the identity-only shape with per-type `lazy` defaults.
 	// =================================================================================================================
 	{
 		const { env, R } = load();
@@ -199,7 +199,7 @@ function load(opts) {
 	// =================================================================================================================
 	// Test 15a - R14a's pre-fetch matrix: `dataUrl` set -> the FIRST populate call pre-fetches and hands the
 	// values map to the populate as `ctx.data` BEFORE the populate is invoked, for BOTH the reserved default and an
-	// ordinary consumer-registered populator (this is test 11's non-privilege half: pre-fetch is keyed on the
+	// ordinary consumer-registered populator (this is the non-privilege half: pre-fetch is keyed on the
 	// descriptor, never on which populator resolved).  A SECOND populate call (a message-driven re-populate here)
 	// does NOT pre-fetch: `ctx.data` is null and a populate that wants the payload calls `ctx.fetchDeclared()`
 	// itself.
@@ -279,7 +279,7 @@ function load(opts) {
 	}
 
 	// =================================================================================================================
-	// Test 14a - poll lifecycle (§8.3.1): one timer per region ever; clear-then-set on every settle; skipped (not
+	// Test 14a - poll lifecycle: one timer per region ever; clear-then-set on every settle; skipped (not
 	// queued) while a populate is in flight; kept armed after an error settle.
 	// =================================================================================================================
 	{
@@ -333,7 +333,7 @@ function load(opts) {
 	}
 
 	// =================================================================================================================
-	// TEST 11 (L12 STOP GATE) - a consumer-registered populator that DELEGATES to `ctx.defaultPopulate` reproduces
+	// TEST 11 (STOP GATE) - a consumer-registered populator that DELEGATES to `ctx.defaultPopulate` reproduces
 	// the reserved default's own output byte-for-byte, proving there is no privileged path through the reserved
 	// name: the exact identical algorithm is reachable through an ordinary registry entry.  A SECOND consumer
 	// populator that re-implements the same algorithm by hand (reading ctx.data/declared/helpers itself, with NO
@@ -386,7 +386,7 @@ function load(opts) {
 	}
 
 	// =================================================================================================================
-	// TEST 12 (L12 STOP GATE) - the reserved default runs correctly against a HAND-BUILT `ctx` with NO region, NO
+	// TEST 12 (STOP GATE) - the reserved default runs correctly against a HAND-BUILT `ctx` with NO region, NO
 	// mintRegion/initRegion, and NO DOM ancestry for its container: it reads only the portable ctx contract
 	// (`declared`, `data`, `fetchDeclared`, `helpers`) and never reaches into framework internals (no `region`
 	// object, no `el`, no `_juneauRegion`, nothing keyed off liveRegions).
@@ -411,7 +411,7 @@ function load(opts) {
 	}
 
 	// =================================================================================================================
-	// Test 16a - serializeParams golden cases for the closed rule set (design §8.2.1).  juneau-regions.js is the only
+	// Test 16a - serializeParams golden cases for the closed rule set.  juneau-regions.js is the only
 	// implementation; Regions_DeclarativeDefault_Test pins each output as a literal.  A nested map is dropped
 	// client-side (never thrown) because RegionDef.validate() rejects one before it can reach the wire.
 	// =================================================================================================================

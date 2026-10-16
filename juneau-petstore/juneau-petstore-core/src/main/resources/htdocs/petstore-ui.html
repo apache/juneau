@@ -21,10 +21,10 @@
   Demonstrates the "Juneau as a headless JSON backend + decoupled client-side SPA frontend" pattern
   alongside the built-in server-rendered HTML-doc UI.
 
-  IMPORTANT: This v1 loads React from a CDN to keep the demo simple.  For ASF-release-quality, the React/
-  ReactDOM UMD bundles + Babel standalone should be vendored into a /static/vendor/ subdirectory and
-  served from the classpath, with appropriate NOTICE/LICENSE acknowledgements.  No Node/npm in the
-  Maven build either way.
+  React and ReactDOM 18.3.1 (MIT) are vendored under vendor/ and served from the classpath by the same
+  static-files mount as this page, so the demo works with no network access.  The app uses plain
+  React.createElement calls (no JSX), so no in-browser compiler or Node/npm build step is needed.
+  See vendor/README.txt for provenance.
 -->
 <html lang="en">
 <head>
@@ -43,33 +43,27 @@
 <body>
 	<div id="root"></div>
 
-	<script src="https://unpkg.com/react@18.3.1/umd/react.production.min.js" integrity="sha384-DGyLxAyjq0f9SPpVevD6IgztCFlnMF6oW/XQGmfe+IsZ8TqEiDrcHkMLKI6fiB/Z" crossorigin="anonymous"></script>
-	<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.production.min.js" integrity="sha384-gTGxhz21lVGYNMcdJOyq01Edg0jhn/c22nsx0kyqP0TxaV5WVdsSH1fSDUf5YJj1" crossorigin="anonymous"></script>
-	<script src="https://unpkg.com/@babel/standalone@8.0.3/babel.min.js" integrity="sha384-fsMuX1qrlL2OwY1g8apML4JcSv2aYFaMXKQIjzX+OOveqSCCdmIMjwNQRoralXGe" crossorigin="anonymous"></script>
+	<script src="/petstore-ui/static/vendor/react.production.min.js"></script>
+	<script src="/petstore-ui/static/vendor/react-dom.production.min.js"></script>
 
-	<script type="text/babel">
+	<script>
+		const h = React.createElement;
 		const { useState, useEffect } = React;
 
 		function PetTable({ pets }) {
-			if (!pets.length) return <p className="muted">No pets.</p>;
-			return (
-				<table>
-					<thead>
-						<tr><th>ID</th><th>Name</th><th>Species</th><th>Price</th><th>Status</th></tr>
-					</thead>
-					<tbody>
-						{pets.map(p => (
-							<tr key={p.id}>
-								<td>{p.id}</td>
-								<td>{p.name}</td>
-								<td>{p.species}</td>
-								<td>{p.price?.toFixed?.(2) ?? p.price}</td>
-								<td>{p.status}</td>
-							</tr>
-						))}
-					</tbody>
-				</table>
-			);
+			if (!pets.length) return h('p', { className: 'muted' }, 'No pets.');
+			return h('table', null,
+				h('thead', null,
+					h('tr', null,
+						h('th', null, 'ID'), h('th', null, 'Name'), h('th', null, 'Species'), h('th', null, 'Price'), h('th', null, 'Status'))),
+				h('tbody', null,
+					pets.map(p =>
+						h('tr', { key: p.id },
+							h('td', null, p.id),
+							h('td', null, p.name),
+							h('td', null, p.species),
+							h('td', null, p.price?.toFixed?.(2) ?? p.price),
+							h('td', null, p.status)))));
 		}
 
 		function App() {
@@ -87,18 +81,15 @@
 					.catch(e => { setErr(String(e)); setLoading(false); });
 			}, []);
 
-			return (
-				<div>
-					<h1>Juneau Petstore — React UI</h1>
-					<p className="muted">Headless Juneau backend at <code>/petstore/*</code>, rendered by a no-build React SPA.</p>
-					{loading && <p>Loading…</p>}
-					{err && <div className="error">Failed to load pets: {err}</div>}
-					{!loading && !err && <PetTable pets={pets} />}
-				</div>
-			);
+			return h('div', null,
+				h('h1', null, 'Juneau Petstore — React UI'),
+				h('p', { className: 'muted' }, 'Headless Juneau backend at ', h('code', null, '/petstore/*'), ', rendered by a no-build React SPA.'),
+				loading && h('p', null, 'Loading…'),
+				err && h('div', { className: 'error' }, 'Failed to load pets: ', err),
+				!loading && !err && h(PetTable, { pets }));
 		}
 
-		ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+		ReactDOM.createRoot(document.getElementById('root')).render(h(App));
 	</script>
 </body>
 </html>

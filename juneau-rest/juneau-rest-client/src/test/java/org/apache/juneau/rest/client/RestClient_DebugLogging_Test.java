@@ -95,7 +95,7 @@ class RestClient_DebugLogging_Test extends TestBase {
 		var prevLevel = logger.getLevel();
 		logger.setLevel(Level.FINEST);
 		// Gate forced on: the response body must actually render for this test's truncation-at-cap intent to be
-		// observable at all once the secure-by-default no-dump gate exists (Phase 3).
+		// observable at all once the secure-by-default no-dump gate exists.
 		BasicRestClientDebugFormatter.resetAllowDumpBodiesForTest(Boolean.TRUE);
 		try (var c = logger.captureEvents(Level.FINEST)) {
 			try (var client = RestClient.builder()

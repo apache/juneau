@@ -41,20 +41,60 @@ class PageContractSchema_Test extends TestBase {
 
 	// These fixtures are schema-only: they are not wiring-checked (e.g. valid-terminal.json has input:true with no wiring).
 	@ParameterizedTest
-	@ValueSource(strings = {"valid-example.json", "valid-minimal.json", "valid-deep.json", "valid-console-output.json",
+	@ValueSource(strings = {"valid-example.json", "valid-minimal.json", "valid-deep.json",
 		"valid-run-view.json", "valid-run-view-nopoll.json", "valid-terminal.json",
 		"valid-datatables-table.json", "valid-datatables-table-full.json", "valid-datatables-rows.json",
 		"valid-datatables-src.json", "valid-badge.json", "valid-badge-refreshes-allow-missing.json",
 		"valid-chart-src.json", "valid-chart-data.json", "valid-job-log.json",
-		"valid-chart-bare.json", "valid-job-log-bare.json", "valid-rowaction-inline.json"})
+		"valid-html-src-sanitize.json", "valid-chart-bare.json", "valid-chart-option.json", "valid-chart-helper.json", "valid-chart-action-visiblewhen.json",
+		"valid-job-log-bare.json", "valid-rowaction-inline.json", "valid-data-sources.json",
+		"valid-datatables-bare.json", "valid-dashboard.json", "valid-quickstats-kinds.json", "valid-urlstate-day-param.json", "valid-urlstate-config.json", "valid-urlstate-config-ids-max-one.json"})
 	void a01_validCorpusPasses(String name) throws Exception {
 		var errors = PageContractSchema.get().validate(fixture(name));
 		assertTrue(errors.isEmpty(), () -> name + ": " + errors);
 	}
 
+	/** The card-level oneOf message cannot name the field, so prove the param is the cause: only its value differs from a valid page. */
+	@ParameterizedTest
+	@ValueSource(strings = {"blank", "badchars", "whitespace", "toolong"})
+	void a01b_dayParamIsTheOnlyDifference(String kind) throws Exception {
+		var bad = fixture("invalid-urlstate-day-param-" + kind + ".json");
+		var fixed = bad.replaceAll("\"param\":\"[^\"]*\"", "\"param\":\"on\"");
+		assertNotEquals(bad, fixed);
+		assertFalse(PageContractSchema.get().validate(bad).isEmpty());
+		assertEquals(List.of(), PageContractSchema.get().validate(fixed));
+	}
+
+	/** The builder refuses these options (TableSpec.urlState(String, Map)); the wire contract must refuse them too, and only the bad fragment differs from a valid page. */
+	@ParameterizedTest
+	@CsvSource(delimiter = '|', value = {
+		"ids-max-zero|\"max\":0|\"max\":1",
+		"ids-max-negative|\"max\":-1|\"max\":1",
+		"ids-max-fraction|\"max\":1.5|\"max\":2",
+		"ids-max-string|\"max\":\"50\"|\"max\":50",
+		"ids-param-badchars|p&x=1|pid",
+		"window-param-badchars|a b|ab",
+		"window-key|\"middle\"|\"start\"",
+		"custom|\"bogus\"|\"ids\""})
+	void a01c_urlStateConfigOptionsAreRefused(String kind, String badFragment, String goodFragment) throws Exception {
+		var bad = fixture("invalid-urlstate-config-" + kind + ".json");
+		var fixed = bad.replace(badFragment, goodFragment);
+		assertNotEquals(bad, fixed, kind);
+		assertFalse(PageContractSchema.get().validate(bad).isEmpty(), kind);
+		assertEquals(List.of(), PageContractSchema.get().validate(fixed), kind);
+	}
+
 	@ParameterizedTest
 	@CsvSource(delimiter = '|', value = {
 		"invalid-version.json|$.contractVersion: must equal 1",
+		"invalid-urlstate-day-param-blank.json|matches 0 of oneOf",
+		"invalid-urlstate-day-param-badchars.json|matches 0 of oneOf",
+		"invalid-urlstate-day-param-whitespace.json|matches 0 of oneOf",
+		"invalid-urlstate-day-param-toolong.json|matches 0 of oneOf",
+		"invalid-dashboard-grid.json|$.dashboard.grid: must be one of",
+		"invalid-dashboard-span.json|must be one of",
+		"invalid-dashboard-section-kind.json|oneOf",
+		"invalid-dashboard-persist-ns.json|does not match",
 		"invalid-badge-unknown-key.json|bogus: not allowed",
 		"invalid-badge-refreshms.json|refreshMs",
 		"invalid-legacy-version.json|missing required 'contractVersion'",
@@ -72,23 +112,26 @@ class PageContractSchema_Test extends TestBase {
 		"invalid-initials.json|longer than 3",
 		"invalid-html-neither.json|oneOf",
 		"invalid-html-extra.json|oneOf",
+		"invalid-html-sanitize-type.json|oneOf",
+		"invalid-html-sanitize-template.json|oneOf",
+		"invalid-datatables-sanitize.json|oneOf",
 		"invalid-datatables-notable.json|oneOf",
-		"invalid-console-output-src.json|oneOf",
-		"invalid-console-output-nolines.json|oneOf",
-		"invalid-console-output-extra.json|oneOf",
 		"invalid-run-view-src.json|oneOf",
 		"invalid-run-view-extra.json|oneOf",
 		"invalid-run-view-nourl.json|oneOf",
 		"invalid-terminal-src.json|oneOf",
 		"invalid-terminal-nourl.json|oneOf",
 		"invalid-terminal-extra.json|oneOf",
+		"invalid-terminal-options.json|oneOf",
 		"invalid-chart-nokind.json|oneOf",
 		"invalid-chart-both.json|oneOf",
+		"invalid-chart-source.json|oneOf",
 		"invalid-job-log-extra.json|oneOf",
 		"invalid-job-log-noendpoint.json|oneOf",
 		"invalid-chart-kind.json|oneOf",
 		"invalid-job-log-bare.json|oneOf",
 		"invalid-chart-bare.json|oneOf",
+		"invalid-datatables-bare.json|oneOf",
 		"invalid-card-type.json|does not match",
 		"invalid-r1.json|R-1: duplicate nav id 'a'",
 		"invalid-r2.json|R-2: duplicate card id 'c'",
@@ -102,6 +145,21 @@ class PageContractSchema_Test extends TestBase {
 		"invalid-bulk-noactions.json|oneOf",
 		"invalid-rowaction-noendpoint.json|oneOf",
 		"invalid-rowaction-badpresent.json|oneOf",
+		"invalid-chart-action-visiblewhen-object.json|oneOf",
+		"invalid-chart-action-enabledwhen-object.json|oneOf",
+		"invalid-quickstats-unknown-item-key.json|$.cards[0]: matches 0 of oneOf",
+		"invalid-quickstats-tone.json|$.cards[0]: matches 0 of oneOf",
+		"invalid-quickstats-meter-no-max.json|$.cards[0]: matches 0 of oneOf",
+		"invalid-quickstats-tile-with-segments.json|$.cards[0]: matches 0 of oneOf",
+		"invalid-quickstats-shape-both.json|$.cards[0]: matches 0 of oneOf",
+		"invalid-quickstats-segment-no-label.json|$.cards[0]: matches 0 of oneOf",
+		"invalid-quickstats-segment-unknown-key.json|$.cards[0]: matches 0 of oneOf",
+		"invalid-quickstats-meter-string-value.json|$.cards[0]: matches 0 of oneOf",
+		"invalid-quickstats-empty-items.json|$.cards[0]: matches 0 of oneOf",
+		"invalid-quickstats-unknown-strip-key.json|$.cards[0]: matches 0 of oneOf",
+		"invalid-quickstats-meter-no-label.json|$.cards[0]: matches 0 of oneOf",
+		"invalid-quickstats-meter-blank-label.json|$.cards[0]: matches 0 of oneOf",
+		"invalid-quickstats-segmented-no-label.json|$.cards[0]: matches 0 of oneOf",
 	})
 	void a02_invalidCorpusFails(String name, String expected) throws Exception {
 		var errors = PageContractSchema.get().validate(fixture(name));

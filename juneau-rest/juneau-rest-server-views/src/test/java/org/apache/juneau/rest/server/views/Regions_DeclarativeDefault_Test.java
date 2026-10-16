@@ -28,8 +28,8 @@ import org.junit.jupiter.api.*;
 /**
  * Always-on coverage for the declarative default: the {@code RegionDef} descriptor's client twin ({@code ctx.declared}),
  * {@code ctx.fetchDeclared()}'s handshake-checked fetch, the reserved {@code "default"} populator's
- * &sect;8.5-normative algorithm, R14a's pre-fetch matrix, the poll lifecycle (&sect;8.3.1), and - the ACCEPTANCE
- * GATE for this child - L12's non-privilege proof.
+ * normative algorithm, R14a's pre-fetch matrix, the poll lifecycle, and - the ACCEPTANCE
+ * GATE for this child - the non-privilege proof.
  *
  * <p>
  * <b>TESTS 11 AND 12 ARE A STOP GATE.</b> If either fails, the declarative default has a privileged path that an
@@ -62,7 +62,7 @@ class Regions_DeclarativeDefault_Test extends TestBase {
 	// ctx.declared: the descriptor's client twin.
 	// =================================================================================================================
 
-	/** The exact {@code declared} key set - a golden, like the ctx key set itself (test 2 of the primitive suite). */
+	/** The exact {@code declared} key set - a golden, like the ctx key set itself. */
 	@Test void t02_declared_keySetIsGolden() {
 		var r = report();
 		assertEquals(List.of("dataUrl", "fields", "lazy", "refreshMs", "renderer", "titleFields"),
@@ -75,7 +75,7 @@ class Regions_DeclarativeDefault_Test extends TestBase {
 			"/api/widgets/42/status,fieldGrid,false,30000,[{data=status,label=Status}],[status],{verbose=true}");
 	}
 
-	/** F9: the per-type {@code lazy} default - row-detail/card-body false, tab-body true - for an identity-only region. */
+	/** the per-type {@code lazy} default - row-detail/card-body false, tab-body true - for an identity-only region. */
 	@Test void t02b_declared_perTypeLazyDefaultsForAnIdentityOnlyRegion() {
 		var r = report();
 		assertBean(r, "t2b_lazyDefaults{row-detail,card-body,tab-body}", "{false,false,true}");
@@ -159,7 +159,7 @@ class Regions_DeclarativeDefault_Test extends TestBase {
 	}
 
 	// =================================================================================================================
-	// Poll lifecycle (design §8.3.1).
+	// Poll lifecycle.
 	// =================================================================================================================
 
 	@Test void t14a_poll_oneTimerEverAcrossTenRepopulatesAndATick() {
@@ -188,7 +188,7 @@ class Regions_DeclarativeDefault_Test extends TestBase {
 	}
 
 	// =================================================================================================================
-	// L12 STOP GATE - test 11: no privileged path through the reserved name.
+	// STOP GATE: no privileged path through the reserved name.
 	// =================================================================================================================
 
 	/**
@@ -200,7 +200,7 @@ class Regions_DeclarativeDefault_Test extends TestBase {
 	 * would fail to reproduce the output and this test would catch it.
 	 *
 	 * <p>
-	 * STOP GATE: if this fails, do not proceed to d/e - the layering L12 exists to prove is wrong.
+	 * STOP GATE: if this fails, do not proceed - the layering this gate exists to prove is wrong.
 	 */
 	@Test void t11_STOP_GATE_consumerPopulatorsReproduceTheDefaultByteForByte() {
 		var r = report();
@@ -211,7 +211,7 @@ class Regions_DeclarativeDefault_Test extends TestBase {
 	}
 
 	// =================================================================================================================
-	// L12 STOP GATE - test 12: the default runs against a hand-built ctx with no DOM ancestry.
+	// STOP GATE: the default runs against a hand-built ctx with no DOM ancestry.
 	// =================================================================================================================
 
 	/**
@@ -223,7 +223,7 @@ class Regions_DeclarativeDefault_Test extends TestBase {
 	 * framework internals (no region object, no element, no live-region registry).
 	 *
 	 * <p>
-	 * STOP GATE: if this fails, do not proceed to d/e - the layering L12 exists to prove is wrong.
+	 * STOP GATE: if this fails, do not proceed - the layering this gate exists to prove is wrong.
 	 */
 	@Test void t12_STOP_GATE_theDefaultRunsAgainstAHandBuiltCtxWithNoDomAncestry() {
 		var r = report();

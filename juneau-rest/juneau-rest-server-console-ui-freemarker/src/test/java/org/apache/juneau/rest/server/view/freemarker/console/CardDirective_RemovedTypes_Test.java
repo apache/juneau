@@ -23,7 +23,7 @@ import org.junit.jupiter.params.*;
 import org.junit.jupiter.params.provider.*;
 
 /**
- * Card grammar errors (spec §6 E-4, E-8, E-9, E-10; P9; P17), each asserted verbatim.
+ * Card grammar errors (E-4, E-8, E-9, E-10), each asserted verbatim.
  *
  * @since 10.0.0
  */

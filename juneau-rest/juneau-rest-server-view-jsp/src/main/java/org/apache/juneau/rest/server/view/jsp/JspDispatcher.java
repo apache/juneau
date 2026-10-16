@@ -30,7 +30,7 @@ import org.apache.juneau.rest.server.view.*;
  * {@link JspMixin} mixin, the {@link JspServlet} servlet, and the {@link JspResource} child flavors.
  *
  * <p>
- * This is the §2.3.1 <i>flavor-neutral worker</i> for the JSP capability: it is <b>not</b> one of the
+ * This is the <i>flavor-neutral worker</i> for the JSP capability: it is <b>not</b> one of the
  * three {@code @Rest} flavor classes &mdash; it is a plain bean that implements
  * {@link RawTemplateDispatcher} and holds the capability state ({@code basePath}) plus the raw-serve
  * logic. Each flavor independently holds an instance of this worker and delegates to it, so no flavor

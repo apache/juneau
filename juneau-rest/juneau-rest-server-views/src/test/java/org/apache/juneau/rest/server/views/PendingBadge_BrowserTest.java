@@ -126,4 +126,13 @@ class PendingBadge_BrowserTest extends TestBase {
 	@Test void b04_forbiddenRemovesTheBadge() {
 		assertEquals(Boolean.TRUE, report.get("deniedRemoved"), () -> report.toString());
 	}
+
+	@Test void c01_navigatingAwayMidFetchLogsNoError() {
+		assertEquals(1, ((Number)report.get("unload_held")).intValue(), () -> report.toString());
+		assertEquals(List.of(), report.get("unload_e65"), () -> report.toString());
+	}
+
+	@Test void c02_failureOnLivePageStillLogsError() {
+		assertEquals(1, ((List<?>)report.get("live_e65")).size(), () -> report.toString());
+	}
 }

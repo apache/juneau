@@ -119,7 +119,7 @@ class ChromeCss_MainInner_Test extends TestBase {
 
 	@Test void a03_tableChrome_transparentUnpadded_outerOnly() throws Exception {
 		var c = flat();
-		var sel = ".jc-card:has([data-juneau-layout=\"wide\"]):not(.jc-card .jc-card)";
+		var sel = ".jc-card:has([data-juneau-layout=\"wide\"]):not(.jc-card .jc-card):not(.jc-card-bare .jc-card)";
 		assertTrue(c.contains(sel), "missing table-chrome selector");
 		var start = c.indexOf(sel);
 		var brace = c.indexOf('{', start);

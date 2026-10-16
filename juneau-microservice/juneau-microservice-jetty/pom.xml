@@ -95,6 +95,12 @@
 			<version>${jetty.version}</version>
 			<scope>test</scope>
 		</dependency>
+		<!-- Opt-in CsrfBoundary_JettyIT (-Djuneau.busIt=true) only: serves an h2c request so :authority can be judged as Host. -->
+		<dependency>
+			<groupId>org.eclipse.jetty.http2</groupId>
+			<artifactId>jetty-http2-server</artifactId>
+			<scope>test</scope>
+		</dependency>
 	</dependencies>
 
 	<build>

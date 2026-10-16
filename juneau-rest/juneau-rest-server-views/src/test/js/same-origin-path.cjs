@@ -22,7 +22,7 @@
  * report; every assertion lives in ViewsJs_SameOriginPath_Test.
  *
  *   Usage:  node same-origin-path.cjs <juneau-views.js> <juneau-console.js> <juneau-charts.js> <juneau-joblog.js>
- *                                     <juneau-console-output.js> <juneau-run-view.js> <juneau-calendar.js> <juneau-badges.js>
+ *                                     <juneau-run-view.js> <juneau-calendar.js> <juneau-badges.js> <juneau-data.js>
  */
 'use strict';
 
@@ -30,9 +30,9 @@ const fs = require('node:fs');
 const path = require('node:path');
 const vm = require('node:vm');
 
-const [viewsPath, consolePath, chartsPath, joblogPath, consoleOutputPath, runViewPath, calendarPath, badgesPath] = process.argv.slice(2);
-if (!badgesPath) {
-	console.error('usage: node same-origin-path.cjs <views> <console> <charts> <joblog> <console-output> <run-view> <calendar> <badges>');
+const [viewsPath, consolePath, chartsPath, joblogPath, runViewPath, calendarPath, badgesPath, dataPath] = process.argv.slice(2);
+if (!dataPath) {
+	console.error('usage: node same-origin-path.cjs <views> <console> <charts> <joblog> <run-view> <calendar> <badges> <data>');
 	process.exit(2);
 }
 const corpus = JSON.parse(fs.readFileSync(path.resolve(__dirname, '../resources/same-origin-path-corpus.json'), 'utf8'));
@@ -42,10 +42,10 @@ const src = {
 	console: fs.readFileSync(consolePath, 'utf8'),
 	charts: fs.readFileSync(chartsPath, 'utf8'),
 	joblog: fs.readFileSync(joblogPath, 'utf8'),
-	consoleOutput: fs.readFileSync(consoleOutputPath, 'utf8'),
 	runView: fs.readFileSync(runViewPath, 'utf8'),
 	calendar: fs.readFileSync(calendarPath, 'utf8'),
-	badges: fs.readFileSync(badgesPath, 'utf8')
+	badges: fs.readFileSync(badgesPath, 'utf8'),
+	data: fs.readFileSync(dataPath, 'utf8')
 };
 
 // A function declared at one tab of indent ends at the next line that is exactly one tab and "}" (or on its own line).
@@ -84,14 +84,12 @@ const GUARDS = {
 	viewsIsSafeDetailUrl: { kind: 'core', g: load('views', [HELPER, 'hasDotDotSegment', 'isSafeDetailUrl'], [], 'isSafeDetailUrl'), file: 'views' },
 	calendarIsSafeDocumentUrl: { kind: 'core', g: load('calendar', [HELPER, 'isSafeDocumentUrl'], [], 'isSafeDocumentUrl'), file: 'calendar' },
 	runViewIsSafePath: { kind: 'core', g: load('runView', [HELPER, 'isSafePath'], [], 'isSafePath'), file: 'runView' },
-	consoleOutputIsSafePath: { kind: 'core', g: load('consoleOutput', [HELPER, 'isSafePath'], [], 'isSafePath'), file: 'consoleOutput' },
 	badgesIsSafeBadgePath: { kind: 'core', g: load('badges', [HELPER, 'isSafeBadgePath'], [], 'isSafeBadgePath'), file: 'badges' },
+	dataIsSafeDataPath: { kind: 'core', g: load('data', [HELPER, 'isSafeDataPath'], [], 'isSafeDataPath'), file: 'data' },
 	// SafePathTemplate parity, plus "no placeholder"
 	consoleIsSafeChromeEndpoint: { kind: 'chrome', g: load('console', [HELPER, 'isSafeChromeEndpoint'], [], 'isSafeChromeEndpoint'), file: 'console' },
 	// strip tab/CR/LF, then the core
 	runViewIsSafeLineHref: { kind: 'line', g: load('runView', [HELPER, 'isStr', 'stripTabCrLf', 'isSafePath', 'isSafeLineHref'], ['FRAGMENT_HREF'], 'isSafeLineHref'), file: 'runView' },
-	consoleOutputIsSafeLineImageSrc: { kind: 'line', ovr: 'isSafeLineImageSrc', g: load('consoleOutput', [HELPER, 'isStr', 'stripTabCrLf', 'isSafePath', 'isSafeLineImageSrc'], [], 'isSafeLineImageSrc'), file: 'consoleOutput' },
-	consoleOutputIsSafeLineHref: { kind: 'line', g: load('consoleOutput', [HELPER, 'isStr', 'stripTabCrLf', 'isSafePath', 'isSafeLineHref'], ['FRAGMENT_HREF'], 'isSafeLineHref'), file: 'consoleOutput' },
 	// prefix-reject, then the guard's own allowlist
 	consoleIsSafeHref: { kind: 'allow', g: load('console', [HELPER, 'isProtocolRelativeUrl', 'isSafeHref'], [], 'isSafeHref'), file: 'console' },
 	markdownIsSafeHref: { kind: 'allow', g: load('views', [HELPER, 'isProtocolRelativeUrl', 'isSafeMarkdownHref'], [], 'isSafeMarkdownHref'), file: 'views' },
@@ -120,7 +118,7 @@ const FETCH_CASES = [
 ];
 const fetchUrl = FETCH_CASES.map(c => ({ name: c[0], input: c[1], expected: c[2], got: isSafeFetchUrl.fn(c[1]) }));
 
-const joblog = load('joblog', ['isSameOrigin', 'isSafeEndpoint'], [], 'isSafeEndpoint', { window: joblogWindow });
+const joblog = load('joblog', [HELPER, 'isSameOrigin', 'isSafeEndpoint'], [], 'isSafeEndpoint', { window: joblogWindow });
 
 function crossHostOf(input) {
 	try {
@@ -134,13 +132,14 @@ const mismatches = [];
 const crossHostOverrides = [];
 const labelMismatch = [];
 const joblogAccepted = [];
+const joblogTrailingAccepted = [];
 for (const row of corpus.cases) {
 	const computed = crossHostOf(row.input);
 	if (computed !== row.crossHost) labelMismatch.push({ row: row.name, label: row.crossHost, computed: computed });
 	for (const name of Object.keys(GUARDS)) {
 		const spec = GUARDS[name];
 		const overrides = row.guards || {};
-		const key = spec.ovr || OVERRIDE_KEY[spec.kind] || name;
+		const key = OVERRIDE_KEY[spec.kind] || name;
 		const expected = Object.prototype.hasOwnProperty.call(overrides, key) ? overrides[key] : row.accepted;
 		if (row.crossHost === true && expected === true) crossHostOverrides.push({ guard: name, row: row.name });
 		let got;
@@ -148,10 +147,12 @@ for (const row of corpus.cases) {
 		if (got !== expected) mismatches.push({ guard: name, row: row.name, expected: expected, got: got });
 	}
 	if (row.crossHost === true && joblog.fn(row.input) !== false) joblogAccepted.push(row.name);
+	// A trailing space or control character is refused by Java and by the shared helper, so joblog must refuse it too.
+	if (row.input.length > 0 && row.input.charCodeAt(row.input.length - 1) <= 32 && joblog.fn(row.input) !== false) joblogTrailingAccepted.push(row.name);
 }
 
 // The shared prefix rule must be one comment-identical helper in each file that applies it.
-const helperFiles = ['views', 'console', 'charts', 'consoleOutput', 'runView', 'calendar', 'badges'];
+const helperFiles = ['views', 'console', 'charts', 'runView', 'calendar', 'badges', 'joblog', 'data'];
 const helperTexts = helperFiles.map(f => fnText(f, HELPER));
 const helperIdentical = helperTexts.every(t => t === helperTexts[0]);
 // A guard that never calls the helper is a stub or a regression; the line guards reach it through isSafePath.
@@ -165,6 +166,7 @@ const out = {
 	crossHostOverrides: crossHostOverrides,
 	fetchUrl: fetchUrl,
 	joblogAccepted: joblogAccepted,
+	joblogTrailingAccepted: joblogTrailingAccepted,
 	helperIdentical: helperIdentical,
 	helperText: helperTexts[0],
 	notUsingHelper: notUsingHelper,

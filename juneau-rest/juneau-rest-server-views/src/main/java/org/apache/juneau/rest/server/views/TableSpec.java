@@ -104,6 +104,7 @@ public final class TableSpec {
 	}
 
 	/** Id grammar shared with cards and nav nodes. Mirrors {@code $defs/id} in {@code juneau-page.schema.json}. */
+	private static final Set<String> URL_STATE_BUILTINS = Set.of("day", "ids", "window");
 	private static final Pattern ID_PATTERN = Pattern.compile("^[A-Za-z][A-Za-z0-9_-]{0,63}$");
 
 	private final String id;
@@ -128,6 +129,7 @@ public final class TableSpec {
 	private Boolean cleanAddress;
 	private Boolean pausePollingWhileEditing;
 	private String cssClass;
+	private final Map<String,Map<String,Object>> urlState = new LinkedHashMap<>();
 
 	private TableSpec(String id) {
 		this.id = id;
@@ -406,6 +408,166 @@ public final class TableSpec {
 	}
 
 	/**
+	 * Declares URL-state directives this table's address bar carries, so their values reach the table's server requests.
+	 *
+	 * <p>
+	 * Each name selects one of the built-in directives ({@code day}, {@code ids} or {@code window}); any other name is
+	 * refused, because this method does not register codecs and the page contract only carries the built-ins.  A name
+	 * not yet declared is emitted as an empty configuration object, which means the directive's defaults; a name already
+	 * declared keeps its configuration (for example a {@code day} param set by {@link #urlStateDayParam(String)}).  This
+	 * method never clears configuration.  Directives are emitted in the order they were first declared.  The call is
+	 * atomic: every name is validated before any is declared, so if one is refused nothing is changed.
+	 *
+	 * @param names The directive names; each one of {@code day}, {@code ids} or {@code window}.
+	 * @return This object.
+	 * @throws IllegalArgumentException If a name is null, blank or not a built-in directive.
+	 */
+	public TableSpec urlState(String...names) {
+		for (var n : names)
+			checkUrlStateName(n);
+		for (var n : names)
+			urlState.putIfAbsent(n, new LinkedHashMap<>());
+		return this;
+	}
+
+	/**
+	 * Declares the {@code day} URL-state directive and names the request query parameter it sends the selected day under.
+	 *
+	 * <p>
+	 * {@code urlState("day")} sends the day as a {@code day} parameter; this form is for a server whose parameter has
+	 * another name.  The directive is emitted as {@code urlState.day.param}, in the position {@code day} was first
+	 * declared.  Calling this again replaces the parameter name (the last call wins).
+	 *
+	 * @param param The query-parameter name; must match {@code ^[A-Za-z][A-Za-z0-9_-]{0,63}$}.
+	 * @return This object.
+	 * @throws IllegalArgumentException If {@code param} is null, blank, or malformed.
+	 */
+	public TableSpec urlStateDayParam(String param) {
+		if (param == null || param.isBlank())
+			throw iaex("urlState day param must not be null or blank.");
+		checkUrlStateParam("day param", param);
+		urlState.computeIfAbsent("day", k -> new LinkedHashMap<>()).put("param", param);
+		return this;
+	}
+
+	/**
+	 * Declares a URL-state directive together with its options.
+	 *
+	 * <p>
+	 * This is the configurable form of {@link #urlState(String...)} for the three built-in directives; every option the
+	 * client's built-in codecs accept can be expressed, so a page needs no hand-written map to configure one:
+	 * <ul>
+	 * 	<li>{@code ids} &mdash; {@code param} (request parameter name, default {@code ids}) and {@code max} (an integer
+	 * 		&gt;= 1, default 200).
+	 * 	<li>{@code window} &mdash; {@code params}, a map that may hold {@code start} and/or {@code end} (the request
+	 * 		parameter names, defaults {@code start}/{@code end}).
+	 * 	<li>{@code day} &mdash; {@code param} (request parameter name, default {@code day}); same as
+	 * 		{@link #urlStateDayParam(String)}.
+	 * </ul>
+	 * Any other directive name is refused: this method does not register codecs, and the page contract only carries the
+	 * built-ins.
+	 *
+	 * <p>
+	 * Restrictions (deliberate, so the wire contract and the builder agree): every parameter name must match
+	 * {@code ^[A-Za-z][A-Za-z0-9_-]{0,63}$} (the same grammar as {@code day.param}), and {@code max} must be an integer
+	 * (Integer, Long, Short or Byte) of at least 1.  The client's own fallbacks for a falsy, string or fractional
+	 * {@code max}, or for an unusual parameter name, are refused here rather than reproduced.  The result is the same
+	 * value an FTL page writes as {@code urlState: {ids:{param:'pid',max:50}}}.
+	 *
+	 * <p>
+	 * <b>Merge, not replace.</b>  The options are merged into any entry already declared for {@code name}: each option
+	 * given here overwrites the same option declared earlier (the last call wins, as with {@link #urlStateDayParam(String)}),
+	 * options not named here are kept, and {@code window.params} is merged key by key.  Like {@link #urlState(String...)}
+	 * this never clears configuration, and an empty map just declares the directive.  The directive keeps the position it
+	 * was first declared in.  The call is atomic: if any option is refused, nothing is changed.
+	 *
+	 * @param name The directive name; one of {@code day}, {@code ids} or {@code window}.
+	 * @param config The directive options; deep-copied, so later changes to the map have no effect.  Must not be null.
+	 * @return This object.
+	 * @throws IllegalArgumentException If the name is null, blank or not a built-in directive, the config is null, or an option is unknown for a
+	 * 	built-in directive, mistyped, or out of range (a parameter name that is malformed, a {@code max} that is not a
+	 * 	positive integer, a {@code window.params} key other than {@code start}/{@code end}).
+	 */
+	@SuppressWarnings("unchecked") // the only nested values are the Map<String,Object> copies checkUrlStateOption builds for window.params
+	public TableSpec urlState(String name, Map<String,Object> config) {
+		checkUrlStateName(name);
+		if (config == null)
+			throw iaex("urlState '%s' config must not be null.", name);
+		var checked = new LinkedHashMap<String,Object>();
+		for (var e : config.entrySet()) {
+			var key = e.getKey();
+			if (key == null || key.isBlank())
+				throw iaex("urlState '%s' option name must not be blank.", name);
+			checked.put(key, checkUrlStateOption(name, key, e.getValue()));
+		}
+		var target = urlState.computeIfAbsent(name, k -> new LinkedHashMap<>());
+		checked.forEach((k, v) -> {
+			if ("window".equals(name) && "params".equals(k) && target.get(k) instanceof Map<?,?> old) {
+				var merged = new LinkedHashMap<String,Object>();
+				old.forEach((ok, ov) -> merged.put((String)ok, ov));
+				merged.putAll((Map<String,Object>)v);
+				target.put(k, merged);
+			} else {
+				target.put(k, v);
+			}
+		});
+		return this;
+	}
+
+	private static void checkUrlStateName(String name) {
+		if (name == null || name.isBlank())
+			throw iaex("urlState name must not be blank.");
+		if (! URL_STATE_BUILTINS.contains(name))
+			throw iaex("urlState '%s' is not a built-in directive; expected day, ids or window.", name);
+	}
+
+	@SuppressWarnings("unchecked") // nested values are the window.params maps built by checkUrlStateOption
+	private static JsonMap copyUrlStateConfig(Map<String,Object> cfg) {
+		var out = new JsonMap();
+		cfg.forEach((k, v) -> out.put(k, v instanceof Map<?,?> m ? new JsonMap((Map<String,Object>)m) : v));
+		return out;
+	}
+
+	private static Object checkUrlStateOption(String name, String key, Object value) {
+		switch (name) {
+			case "day":
+				if (! "param".equals(key))
+					throw iaex("urlState day: unknown option '%s'; expected param.", key);
+				return checkUrlStateParam("day param", value);
+			case "ids":
+				if ("param".equals(key))
+					return checkUrlStateParam("ids param", value);
+				if ("max".equals(key)) {
+					if (! (value instanceof Integer || value instanceof Long || value instanceof Short || value instanceof Byte) || ((Number)value).longValue() < 1)
+						throw iaex("urlState ids max must be a positive integer but was %s.", value);
+					return value;
+				}
+				throw iaex("urlState ids: unknown option '%s'; expected param or max.", key);
+			case "window":
+				if (! "params".equals(key))
+					throw iaex("urlState window: unknown option '%s'; expected params.", key);
+				if (! (value instanceof Map<?,?> m))
+					throw iaex("urlState window params must be a map of start/end parameter names but was %s.", value);
+				var out = new LinkedHashMap<String,Object>();
+				for (var e : m.entrySet()) {
+					var k = e.getKey();
+					if (! "start".equals(k) && ! "end".equals(k))
+						throw iaex("urlState window params: unknown key '%s'; expected start or end.", k);
+					out.put((String)k, checkUrlStateParam("window params." + k, e.getValue()));
+				}
+				return out;
+			default:
+				throw iaex("urlState '%s' is not a built-in directive; expected day, ids or window.", name);
+		}
+	}
+
+	private static String checkUrlStateParam(String what, Object param) {
+		if (! (param instanceof String s) || ! ID_PATTERN.matcher(s).matches())
+			throw iaex("urlState %s '%s' must match ^[A-Za-z][A-Za-z0-9_-]{0,63}$.", what, param);
+		return s;
+	}
+
+	/**
 	 * Sets whether this table is the page's primary table (affects layout only).
 	 *
 	 * @param v The new value.
@@ -591,6 +753,11 @@ public final class TableSpec {
 			t.put("cleanAddress", cleanAddress);
 		if (pausePollingWhileEditing != null)
 			t.put("pausePollingWhileEditing", pausePollingWhileEditing);
+		if (! urlState.isEmpty()) {
+			var u = new JsonMap();
+			urlState.forEach((n, cfg) -> u.put(n, copyUrlStateConfig(cfg)));
+			t.put("urlState", u);
+		}
 		if (! rowClassRules.isEmpty())
 			t.put("rowClassRules", List.copyOf(rowClassRules));
 		if (! rowActions.isEmpty())

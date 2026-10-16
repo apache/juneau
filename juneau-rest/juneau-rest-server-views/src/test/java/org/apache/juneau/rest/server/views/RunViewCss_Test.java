@@ -38,6 +38,7 @@ class RunViewCss_Test extends TestBase {
 	private static String section;
 	private static String before;
 	private static Map<String,Map<String,String>> rules;
+	private static Map<String,Map<String,String>> shared;
 
 	@BeforeAll static void load() throws IOException {
 		try (var in = ViewsMixin.class.getResourceAsStream(ViewsMixin.VIEWS_CSS_RESOURCE)) {
@@ -48,8 +49,14 @@ class RunViewCss_Test extends TestBase {
 		assertTrue(start > 0, "run-view section missing");
 		before = css.substring(0, start);
 		section = css.substring(start);
-		rules = new LinkedHashMap<>();
-		var m = Pattern.compile("([^{}]+)\\{([^{}]*)\\}").matcher(section);
+		rules = parse(section);
+		shared = parse(before);
+	}
+
+	/** Selector (each comma-separated selector, whitespace-normalised) to its declarations, later rules overriding. */
+	private static Map<String,Map<String,String>> parse(String text) {
+		var out = new LinkedHashMap<String,Map<String,String>>();
+		var m = Pattern.compile("([^{}]+)\\{([^{}]*)\\}").matcher(text);
 		while (m.find()) {
 			var decls = new LinkedHashMap<String,String>();
 			for (var d : m.group(2).split(";")) {
@@ -58,14 +65,21 @@ class RunViewCss_Test extends TestBase {
 					decls.put(d.substring(0, i).trim(), d.substring(i + 1).trim().replaceAll("\\s+", " "));
 			}
 			for (var s : m.group(1).split(","))
-				rules.computeIfAbsent(s.trim().replaceAll("\\s+", " "), k -> new LinkedHashMap<>()).putAll(decls);
+				out.computeIfAbsent(s.trim().replaceAll("\\s+", " "), k -> new LinkedHashMap<>()).putAll(decls);
 		}
+		return out;
 	}
 
 	private static Map<String,String> rule(String selector) {
 		var r = rules.get(selector);
 		assertNotNull(r, () -> "no rule for '" + selector + "'");
 		return r;
+	}
+
+	private static void assertShared(String selector, String property, String value) {
+		var r = shared.get(selector);
+		assertNotNull(r, () -> "no shared rule for '" + selector + "'");
+		assertEquals(value, r.get(property), () -> selector + " { " + property + " } in " + r);
 	}
 
 	private static void assertDecl(String selector, String property, String value) {
@@ -127,8 +141,40 @@ class RunViewCss_Test extends TestBase {
 			assertTrue(before.contains("var(" + t), () -> "token " + t + " is not used earlier in the stylesheet");
 	}
 
-	@Test void a09_placedAfterTheWholeConsoleOutputBlock() {
-		assertTrue(before.contains(".juneau-co [hidden]"), "run-view block must follow the console-output block");
-		assertTrue(before.contains(".juneau-co-compact"));
+	@Test void a09_placedAfterTheSharedFragments() {
+		assertTrue(before.contains(".juneau-co-sr"), "run-view block must follow the shared fragments");
+		assertTrue(before.contains(".juneau-co-block"));
+	}
+
+	@Test void a10_sharedBlockFragments() {
+		assertShared(".juneau-co-block", "display", "inline-block");
+		assertShared(".juneau-co-block", "width", "10px");
+		assertShared(".juneau-co-block", "height", "var(--jc-chrome-glyph-size-small)");
+		assertShared(".juneau-co-block", "vertical-align", "-1px");
+		assertShared(".juneau-co-block", "border-radius", "2px");
+		assertShared(".juneau-co-block", "background-color", "currentColor");
+		assertShared(".juneau-co-block-empty", "background-color", "transparent");
+		assertShared(".juneau-co-block:focus-visible", "outline", "2px solid var(--jc-tone-info)");
+		assertShared(".juneau-co-fill-success", "background-color", "var(--jc-tone-success)");
+		assertShared(".juneau-co-fill-warn", "background-color", "var(--jc-tone-warning)");
+		assertShared(".juneau-co-fill-error", "background-color", "var(--jc-tone-error)");
+		assertShared(".juneau-co-fill-muted", "background-color", "var(--jc-text-muted)");
+		assertShared(".juneau-co-fill-accent", "background-color", "var(--jc-tone-info)");
+	}
+
+	@Test void a11_sharedTooltip() {
+		assertShared(".juneau-co-tooltip", "position", "fixed");
+		assertShared(".juneau-co-tooltip", "white-space", "pre-line");
+		assertShared(".juneau-co-tooltip", "z-index", "var(--jc-tip-z)");
+		assertShared(".juneau-co-tooltip", "pointer-events", "none");
+	}
+
+	@Test void a12_screenReaderTextMatchesTheAnnouncer() {
+		var sr = shared.get(".juneau-co-sr");
+		var announcer = shared.get(".juneau-view-announcer");
+		assertNotNull(sr);
+		assertNotNull(announcer);
+		for (var k : List.of("position", "width", "height", "overflow", "clip-path", "white-space"))
+			assertEquals(announcer.get(k), sr.get(k), k);
 	}
 }

@@ -34,6 +34,14 @@ import org.apache.juneau.marshall.collections.*;
  * {@code footer.text}. The endpoint must therefore be a trusted first-party route, must never be derived from request
  * data, and must escape any data it embeds in the fragment.
  *
+ * <p>
+ * A card that cannot guarantee that can opt in with {@code "sanitize": true} (or {@code sanitize=true} on
+ * {@code <@card>}, or {@code CardSpec.sanitize(true)}). The shell then rebuilds the fetched fragment through the views
+ * attribute-allowlist sanitizer, the one behind the {@code SANITIZED_HTML} detail format, so script, {@code on*}
+ * handlers, unsafe URLs and unlisted attributes are dropped. The page must load the views toolkit; without it the
+ * card fails closed with E-JS-8 and paints nothing. The flag only affects {@code src} cards, and the default is
+ * unchanged (unsanitized).
+ *
  * <h5 class='section'>Example:</h5>
  * <p class='bjava'>
  *   CardSource <jv>s</jv> = CardSource.<jsm>create</jsm>(<js>"html"</js>, <js>"welcome"</js>)

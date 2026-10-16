@@ -16,7 +16,7 @@
  */
 
 /*
- * juneau-pagestate.js - the general browser page-state store (design section 6.2).
+ * juneau-pagestate.js - the general browser page-state store.
  *
  * A single, dependency-free key/value store for PAGE state - not View-Settings only.  Its first user is the
  * datatable View Settings dialog, but selected tab, selected probe, table page index, and any other page
@@ -24,7 +24,7 @@
  * (mirroring window.JuneauViews.icons / .search), so it is loaded as a plain <script> BEFORE juneau-views.js and
  * juneau-config.js, which consume it.
  *
- * Keying (design section 6.2):
+ * Keying:
  *   - PER-TABLE keys, so two tables on one page never clobber each other:  pageState.table(tableKey).set(name, v)
  *   - PAGE-LEVEL keys for non-table state, under their own namespace:      pageState.page(namespace).set(name, v)
  *
@@ -48,7 +48,7 @@
 	};
 
 	// The default backing store is window.localStorage when reachable AND writable; some privacy modes throw on the
-	// property access itself, others only on setItem - both fall back to the no-op store (design section 6.2).
+	// property access itself, others only on setItem - both fall back to the no-op store.
 	function defaultStore() {
 		try {
 			const ls = window.localStorage;
@@ -115,7 +115,7 @@
 		remove: remove,
 		table: tableScope,
 		page: pageScope,
-		// Install an alternate backing store (design section 6.2 "replaceable"): any {getItem,setItem,removeItem}.
+		// Install an alternate backing store: any {getItem,setItem,removeItem}.
 		useStore: function (impl) { store = impl || NOOP_STORE; },
 		// Re-resolve the default (localStorage-or-no-op) store; primarily for tests after a useStore() swap.
 		resetStore: function () { store = defaultStore(); },

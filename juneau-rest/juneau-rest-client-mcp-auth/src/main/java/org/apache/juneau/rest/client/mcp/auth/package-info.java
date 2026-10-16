@@ -22,9 +22,9 @@
  * {@code juneau-rest-client-mcp} (its {@code Supplier<String>}).  It deliberately does <b>not</b> depend on
  * {@code juneau-rest-server} &mdash; the client-side flow/discovery helpers are relocated (see the {@code flow} and
  * {@code oidc} sub-packages) rather than reused from {@code juneau-rest-server-auth-oauth}, which compile-depends on
- * the server.  Sub-project D (auth-module de-layering) is expected to later rationalize this relocation.
+ * the server.  A later auth-module de-layering is expected to rationalize this relocation.
  *
- * <h5 class='topic'>What's here (F1)</h5>
+ * <h5 class='topic'>What's here</h5>
  * <ul>
  * 	<li>{@link org.apache.juneau.rest.client.mcp.auth.McpTokenProvider} &mdash; a {@code Supplier<String>} token
  * 		manager for pre-provisioned (static) tokens, the client-credentials grant, and the refresh-token grant
@@ -40,7 +40,7 @@
  * </ul>
  *
  * <p>
- * Adoption-focused documentation for this module is intentionally tracked as a separate follow-up (not part of F1).
+ * Adoption-focused documentation for this module is intentionally tracked as a separate follow-up.
  *
  * @since 10.0.0
  */

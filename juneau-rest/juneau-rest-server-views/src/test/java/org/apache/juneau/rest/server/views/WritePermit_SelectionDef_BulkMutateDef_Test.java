@@ -29,7 +29,7 @@ import org.junit.jupiter.api.*;
 
 /**
  * The row-selection contract: {@link WritePermit}, {@link SelectionDef}, and {@link BulkMutateDef} &mdash; the API-shape half
- * of the separability guarantee (design-doc HIGH-5).
+ * of the separability guarantee.
  *
  * <p>
  * These are NOT prose assertions: {@link BulkMutateDef#create(WritePermit, SelectionDef)} is the ONLY way to obtain
@@ -121,7 +121,7 @@ class WritePermit_SelectionDef_BulkMutateDef_Test extends TestBase {
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
-	// BulkMutateDef - the separability/compile-shape guarantee (HIGH-5)
+	// BulkMutateDef - the separability/compile-shape guarantee
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Test void c01_create_requiresBothPermitAndSelection() {
@@ -154,7 +154,7 @@ class WritePermit_SelectionDef_BulkMutateDef_Test extends TestBase {
 	}
 
 	/**
-	 * The API-SHAPE proof (HIGH-5), not a prose claim: {@code create(...)} is the ONLY public factory on
+	 * The API-SHAPE proof, not a prose claim: {@code create(...)} is the ONLY public factory on
 	 * {@link BulkMutateDef} and its signature is EXACTLY {@code (WritePermit, SelectionDef)} - there is no
 	 * narrower overload a caller could reach for that skips the permit. Combined with c01 (a null permit throws)
 	 * and c05/c06 below (no public constructor, no setter for the permit/selection fields), this proves a

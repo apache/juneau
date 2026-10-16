@@ -17,6 +17,7 @@
 package org.apache.juneau.rest.server.view.freemarker.console;
 
 import static org.apache.juneau.commons.utils.Shorts.*;
+import static org.apache.juneau.test.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.regex.*;
@@ -37,7 +38,7 @@ import freemarker.template.TemplateModel;
 import freemarker.template.TemplateNotFoundException;
 
 /**
- * Phase 5 gate: {@link ConsoleFreemarkerMixin} (reserved-path template loader, {@code base.ftlh}, the
+ * Tests for {@link ConsoleFreemarkerMixin} (reserved-path template loader, {@code base.ftlh}, the
  * {@code <@tag>} macro), wrap-once loader splicing, and fill-missing stamping onto a consumer
  * {@code Configuration} bean.
  */
@@ -124,13 +125,13 @@ class ConsoleFreemarkerMixin_Test extends TestBase {
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
-	// c) Subtype bean return type (P8)
+	// c) Subtype bean return type
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Rest(mixins=FreemarkerMixin.class)
 	public static class SubtypeBeanHost extends BasicRestServlet {
 		private static final long serialVersionUID = 1L;
-		// declared return type is the subtype; P8 makes this work.
+		// declared return type is the subtype; the renderer's subtype lookup makes this work.
 		@Bean public ConsoleFreemarkerMixin freemarker() {
 			// Explicit cast is required here (not just illustrative): the inherited fluent setter basePath(...)
 			// returns the PARENT FreemarkerMixin.Builder static type, so build() resolves at compile time against
@@ -144,7 +145,7 @@ class ConsoleFreemarkerMixin_Test extends TestBase {
 	}
 
 	/**
-	 * P8: a bean declared as the {@code ConsoleFreemarkerMixin} subtype is found by the renderer, so the console
+	 * A bean declared as the {@code ConsoleFreemarkerMixin} subtype is found by the renderer, so the console
 	 * directives compose. (Before 10.0.0 the exact-type lookup missed it and silently used a plain mixin.)
 	 */
 	@Test void c01_subtypeBeanReturnType_isFound() throws Exception {
@@ -194,7 +195,7 @@ class ConsoleFreemarkerMixin_Test extends TestBase {
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
-	// e) Should-fix S2 gate 1: double-wrap prevention
+	// e) Double-wrap prevention
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Rest(mixins=FreemarkerMixin.class)
@@ -326,6 +327,32 @@ class ConsoleFreemarkerMixin_Test extends TestBase {
 		var body = c.get("/probe").accept("text/plain").run().getContent().asString();
 		assertEquals("true:true", body,
 			() -> "expected page-sentinel-kept=true, other-names-filled=true; got " + body);
+	}
+
+	@Test void g01_requirePacks_charts_presentWebJar_builds() {
+		assertNotNull(ConsoleFreemarkerMixin.create().requirePacks("charts").build());
+	}
+
+	@Test void g02_requirePacks_unknown_failsAtBuild() {
+		var e = assertThrows(IllegalArgumentException.class, () -> ConsoleFreemarkerMixin.create().requirePacks("nope").build());
+		assertEquals("Unknown toolkit pack 'nope' (requirePacks).", e.getMessage());
+	}
+
+	@Test void g03_noOptIn_probesNothing() {
+		assertNotNull(ConsoleFreemarkerMixin.create().webJarProbe(a -> { throw new IllegalStateException("x"); }).build());
+	}
+
+	@Test void g04_requirePacks_absentWebJar_isE70() {
+		var e = assertThrows(IllegalStateException.class, () -> ConsoleFreemarkerMixin.create().requirePacks("charts")
+			.webJarProbe(a -> { throw new IllegalStateException("x"); }).build());
+		assertContains("E-70: chart cards need the ECharts WebJar", e.getMessage());
+	}
+
+	@Test void g05_appPackDependsOnEcharts_isOptIn() {
+		var e = assertThrows(IllegalStateException.class, () -> ConsoleFreemarkerMixin.create()
+			.registerToolkitPack(ToolkitPack.create("app.charts").kind(ToolkitPack.Kind.RUNTIME).js("/a.js").dependsOn("charts").build())
+			.webJarProbe(a -> { throw new IllegalStateException("x"); }).build());
+		assertContains("E-70: ", e.getMessage());
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

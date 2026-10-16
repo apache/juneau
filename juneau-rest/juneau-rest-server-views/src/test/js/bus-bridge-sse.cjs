@@ -15,7 +15,7 @@
  * limitations under the License.
  */
 /*
- * bus-bridge-sse.cjs - Node harness for the stock SSE source (spec §11.3 step 2a, §11.6): session POST, fetch +
+ * bus-bridge-sse.cjs - Node harness for the stock SSE source: session POST, fetch +
  * ReadableStream reader, SSE parse, frame decode, watchdog, and every HTTP status the source maps. Uses a fake
  * fetch (requests recorded, responses scripted), hand-fed streams and a fake clock. Every assertion lives in
  * ViewsJs_BusBridgeSse_Test.
@@ -25,7 +25,9 @@
 'use strict';
 
 const path = require('node:path');
-const { loadScripts, jsonResponse } = require(path.join(__dirname, 'views-dom-shim.cjs'));
+const fs = require('node:fs');
+const vm = require('node:vm');
+const { loadScripts, makeEnv, jsonResponse } = require(path.join(__dirname, 'views-dom-shim.cjs'));
 const { fakeClock, settle } = require(path.join(__dirname, 'bus-fake-clock.cjs'));
 
 const busJs = process.argv[2];
@@ -392,6 +394,35 @@ async function main() {
 		await settle();
 		out.detach = { cancelled: s.cancelled, a: h.bus.get('app.a') === undefined ? null : h.bus.get('app.a'),
 			bridge: h.bus.get('bridge:s') === undefined ? null : 'present' };
+	}
+
+	// --- the DEFAULT fetch must survive being called as env.fetch(...): a browser's fetch throws "Illegal invocation"
+	// unless `this` is the window, so the stub throws unless it is; a caller-supplied fetch is used as given ---
+	{
+		function run(supplied) {
+			const env = makeEnv();
+			const calls = { stub: 0, supplied: 0, badThis: 0 };
+			const sandbox = {
+				window: env.window, document: env.document, console: console, Promise: Promise,
+				setTimeout: function () { return 0; }, clearTimeout: function () { /* no-op */ },
+				fetch: function () {
+					calls.stub++;
+					if (this !== env.window) { calls.badThis++; throw new TypeError('Illegal invocation'); }
+					return Promise.resolve(jsonResponse(sessionBody(), { status: 403 }));
+				}
+			};
+			vm.runInNewContext(fs.readFileSync(path.resolve(busJs), 'utf8'), sandbox, { filename: 'juneau-bus.js' }); // NOSONAR javascript:S1523 -- the harness evaluates the module's own script
+			const bus = env.window.JuneauViews.bus;
+			const errors = [];
+			bus.declare('app.a', { retain: true });
+			bus.onError(function (e) { errors.push(e.code); });
+			const over = supplied ? { fetch: function () { calls.supplied++; return Promise.resolve(jsonResponse({ code: 'bus:x' }, { status: 400 })); } } : {};
+			bus.attachSource(bus.sources.sse(Object.assign({ id: 's', session: '/rest/ops/juneau-bus/session', downstream: ['app.a'],
+				location: LOCATION, document: { body: { getAttribute: function () { return null; } } },
+				TextDecoder: TextDecoder, AbortController: AbortController }, over)));
+			return settle().then(function () { return { calls: calls, state: bus.get('bridge:s').state, errors: errors }; });
+		}
+		out.defaultFetch = { unsupplied: await run(false), supplied: await run(true) };
 	}
 
 	process.stdout.write(JSON.stringify(out));

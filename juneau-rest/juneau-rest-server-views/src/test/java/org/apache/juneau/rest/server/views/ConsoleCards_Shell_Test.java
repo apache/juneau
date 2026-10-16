@@ -142,7 +142,7 @@ class ConsoleCards_Shell_Test extends TestBase {
 		assertEquals(List.of(), c.get("errors"));
 		assertEquals("alpha:a1", c.get("a1"));
 		assertEquals("beta:b1", c.get("b1"));
-		assertEquals(List.of("alpha", "beta", "console-output", "html", "run-view"), c.get("types"));
+		assertEquals(List.of("alpha", "beta", "html", "run-view"), c.get("types"));
 	}
 
 	@Test void a02_queueDrainedAfterLoad() {
@@ -150,7 +150,7 @@ class ConsoleCards_Shell_Test extends TestBase {
 		assertNull(c.get("threw"));
 		assertEquals(List.of(), c.get("errors"));
 		assertEquals("gamma:g1", c.get("g1"));
-		assertEquals(List.of("console-output", "gamma", "html", "run-view"), c.get("types"));
+		assertEquals(List.of("gamma", "html", "run-view"), c.get("types"));
 	}
 
 	@Test void a03_pendingCardRendersOnRegister() {
@@ -169,7 +169,7 @@ class ConsoleCards_Shell_Test extends TestBase {
 		var c = cards("domContentLoadedPending");
 		assertEquals(List.of("E-JS-4", "E-JS-10", "E-JS-10"), c.get("codes"));
 		var errors = list(c.get("errors"));
-		assertEquals("[juneau-console] card 'z1' has unknown type 'zeta'; registered types: 'html, console-output, run-view'", errors.get(0));
+		assertEquals("[juneau-console] card 'z1' has unknown type 'zeta'; registered types: 'html, run-view'", errors.get(0));
 		assertEquals("[juneau-console] datatables card 't1' needs JuneauViews.regions; load the views toolkit", errors.get(1));
 		assertEquals("[juneau-console] datatables card 't2' needs JuneauViews.regions; load the views toolkit", errors.get(2));
 		assertEquals(List.of("z1", "t1", "t2"), c.get("failedEvents"));
@@ -207,7 +207,7 @@ class ConsoleCards_Shell_Test extends TestBase {
 
 	@Test void a08_cardTypesSortedAndEventsCarryDetail() {
 		var c = cards("typesAndEvents");
-		assertEquals(List.of("aah", "console-output", "html", "mid", "run-view", "zed"), c.get("types"));
+		assertEquals(List.of("aah", "html", "mid", "run-view", "zed"), c.get("types"));
 		var events = list(c.get("events"));
 		assertEquals(3, events.size());
 		assertEquals(Map.of("kind", "mounted", "id", "a", "type", "aah", "hasEl", true), events.get(0));
@@ -220,6 +220,53 @@ class ConsoleCards_Shell_Test extends TestBase {
 		assertEquals(List.of(), c.get("errors"));
 		assertNull(c.get("banner"));
 		assertEquals(List.of("failed"), c.get("events"));
+	}
+
+	// A bare html card keeps its wrapper-less insertion; ConsoleJs_Shell_Test.a01 pins that.
+	@Test void a10_bareNonHtmlCardIsChromeless() {
+		var c = cards("bareChromeless");
+		assertEquals(List.of(), c.get("errors"));
+		var bare = map(c.get("bare"));
+		assertEquals("DIV", bare.get("tag"));
+		assertEquals("bc", bare.get("id"));
+		assertEquals(true, bare.get("isBare"));
+		assertEquals(false, bare.get("isCard"));
+		assertEquals(true, bare.get("adopter"));
+		assertEquals(true, bare.get("other"));
+		assertEquals(false, bare.get("title"));
+		assertEquals("body:bc", bare.get("text"));
+		assertEquals(true, bare.get("inDoc"));
+		// the same card without bare keeps the chrome and the title
+		var normal = map(c.get("normal"));
+		assertEquals(true, normal.get("isCard"));
+		assertEquals(false, normal.get("isBare"));
+		assertEquals(true, normal.get("title"));
+		// only a boolean true counts: a string "true" keeps the chrome and the title
+		var strict = map(c.get("strict"));
+		assertEquals(true, strict.get("isCard"));
+		assertEquals(false, strict.get("isBare"));
+		assertEquals(true, strict.get("title"));
+		// a bare card awaiting params still waits: the empty text is painted and the handler has not run
+		var params = map(c.get("params"));
+		assertEquals("DIV", params.get("tag"));
+		assertEquals("bp", params.get("id"));
+		assertEquals(true, params.get("isBare"));
+		assertEquals(false, params.get("isCard"));
+		assertEquals(false, params.get("title"));
+		assertEquals("Pick one.", params.get("text"));
+		// a bare card of a type registered later is pending with the same host, then renders into it
+		var before = map(c.get("pendingBefore"));
+		assertEquals(true, before.get("pending"));
+		assertEquals(true, before.get("isBare"));
+		assertEquals(false, before.get("isCard"));
+		assertEquals(false, before.get("title"));
+		var after = map(c.get("pendingAfter"));
+		assertEquals("later:lt", after.get("text"));
+		assertEquals(true, after.get("isBare"));
+		assertEquals(false, after.get("isCard"));
+		assertEquals(true, after.get("adopter"));
+		assertEquals(false, after.get("title"));
+		assertEquals(false, c.get("pendingAfterAttr"));
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -254,6 +301,30 @@ class ConsoleCards_Shell_Test extends TestBase {
 	@Test void b05_everyPausesHiddenAndPauseWhenStopsOnDestroy() {
 		var c = context("every");
 		assertEquals(Map.of("afterOne", 1, "whileHidden", 1, "whilePaused", 1, "afterDestroy", 1), c);
+	}
+
+	@Test void b05b_everySetMsRearmsAtNewPeriodAndHonorsPauseHiddenDestroy() {
+		var c = context("everySetMs");
+		assertEquals(List.of(1000), c.get("before"));
+		assertEquals(List.of(250), c.get("afterSet"));
+		assertEquals(1, ((Number)c.get("ticksAfterRun")).intValue());
+		assertEquals(0, ((Number)c.get("whileHidden")).intValue());
+		assertEquals(0, ((Number)c.get("whilePaused")).intValue());
+		assertEquals(1, ((Number)c.get("afterResume")).intValue());
+		assertEquals(List.of(125), c.get("periodsB"));
+		assertEquals(0, ((Number)c.get("armedAfterDestroy")).intValue());
+		assertEquals(0, ((Number)c.get("ticksAfterDestroy")).intValue());
+		assertEquals(0, ((Number)c.get("armedAfterStop")).intValue());
+		assertEquals(List.of(), c.get("activeAfterStop"));
+		assertEquals(0, ((Number)c.get("ticksAfterStop")).intValue());
+		// invalid periods: setMs leaves the existing timer alone; every refuses to arm and returns an inert handle
+		assertEquals(Map.of("armed", 0, "active", List.of(1000), "before", List.of(1000)), c.get("badSetMs"));
+		assertEquals(1, ((Number)c.get("ticksAfterBadSetMs")).intValue());
+		var bad = map(c.get("everyBad"));
+		assertEquals(0, ((Number)bad.get("armed")).intValue());
+		assertEquals(0, ((Number)bad.get("ticks")).intValue());
+		assertEquals(5, ((Number)bad.get("warned")).intValue());
+		assertNull(bad.get("threw"));
 	}
 
 	@Test void b06_prefsNamespaceCorruptAndThrowingStorage() {

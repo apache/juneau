@@ -21,14 +21,20 @@ import static org.apache.juneau.commons.utils.StringUtils.*;
 import java.util.*;
 import java.util.stream.*;
 
+import org.apache.juneau.marshall.collections.*;
 import org.apache.juneau.petstore.console.dev.*;
 import org.apache.juneau.petstore.console.dev.flavors.*;
 import org.apache.juneau.rest.server.console.*;
+import org.apache.juneau.rest.server.console.TopicDecl.*;
 import org.apache.juneau.rest.server.view.freemarker.console.*;
+import org.apache.juneau.rest.server.view.freemarker.console.DataSourceDef.*;
+import org.apache.juneau.rest.server.views.*;
+import org.apache.juneau.rest.server.views.TableSpec.*;
 
 /**
  * Builder twins of the Developer pages: Custom cards ({@code cards.ftlh}), Rendering flavors ({@code flavors.ftlh},
- * {@code flavors-react.ftlh}), Secure ({@code secure.ftlh}) and Themes ({@code themes.ftlh}).
+ * {@code flavors-react.ftlh}), Secure ({@code secure.ftlh}), Themes ({@code themes.ftlh}), Charts (builder only),
+ * Data sources (builder only) and Dashboard (builder only).
  *
  * <h5 class='section'>Example:</h5>
  * <p class='bjava'>
@@ -43,25 +49,30 @@ public final class DevPageBuilders {
 	 * Custom cards.
 	 *
 	 * <p>
-	 * {@link PageSpec#card(CardSpec)} seeds a custom-type card as written, without running its {@link CardTypeHandler},
-	 * so the gauge card is shaped here by {@link InventoryGaugeCardType} itself: the FTL page and this twin then carry
-	 * the same validated fragment.
+	 * The gauge card's body is the same {@code {species, low, high}} the FTL page authors: {@link PageSpec} runs it
+	 * through the registered {@link InventoryGaugeCardType}, so both pages carry the same validated fragment.
 	 *
 	 * @return The page spec.
 	 */
 	public static PageSpec cards() {
-		var gauge = CardSpec.of(InventoryGaugeCardType.TYPE, "gauge").title("Dog inventory");
-		new InventoryGaugeCardType().toFragment(CardSource.create(InventoryGaugeCardType.TYPE, "gauge").body("{species:'DOG', low:20, high:120}").build())
-			.forEach(gauge::body);
+		var gauge = CardSpec.of(InventoryGaugeCardType.TYPE, "gauge").title("Dog inventory")
+			.body("species", "DOG").body("low", 20).body("high", 120);
 		return PageSpec.create().tab("dev/cards").init("/console/dev/cards/petstore-cards.js")
 			.card(CardSpec.of("kpi", "available").title("Pets available")
 				.body("label", "Pets available").body("dataUrl", "/console/dev/cards/stats/available"))
 			.card(gauge)
+			.card(ChartDef.bar("bands").title("Stock by species").src("/console/dev/cards/inventory/all")
+				.x("species").series("available", "Available").series("pending", "Pending").series("sold", "Sold")
+				.stacked(true).horizontal().decorate("petstore.stockTotals", null).on("click", "app.band-picked").toCardSpec())
+			.card(ChartDef.scatter("prices").title("Prices by pet").src("/console/dev/cards/prices")
+				.x("id", "number", "Pet").series("price", "Price")
+				.option("{dataZoom:[{type:'inside'},{type:'slider'}]}").publishZoom().toCardSpec())
 			.html("toolbar", "Card API", """
 				<div class="jc-prose">
 				<p>
 				<button type="button" class="jc-btn jc-btn-outline" data-cards-action="refresh">Refresh the gauge</button>
 				<button type="button" class="jc-btn jc-btn-outline" data-cards-action="api">Read the gauge API</button>
+				<button type="button" class="jc-btn jc-btn-outline" data-cards-action="cat">Show cats</button>
 				</p>
 				<output id="cards-api-result" aria-live="polite"></output>
 				</div>""")
@@ -91,9 +102,7 @@ public final class DevPageBuilders {
 		if (flavor == Flavor.REACT)
 			return p.html("flavor", "React app",
 				"<iframe src=\"/petstore-ui\" title=\"Petstore React app\" class=\"petstore-flavor-frame\" width=\"100%\" height=\"640\"></iframe>");
-		// Blocked: PageSpec cannot build an html card with src=, so the server flavors' "flavor" card
-		// (src=/console/dev/flavors/<engine>/fragment) has no twin yet.
-		return p;
+		return p.htmlSrc("flavor", "Pets", "/console/dev/flavors/" + flavor.id() + "/fragment");
 	}
 
 	/**
@@ -146,7 +155,7 @@ public final class DevPageBuilders {
 				<span class="tag stage pending">Pending</span>
 				<span class="tag stage failed">Sold</span>
 				</p>
-				</div>""".formatted(escapeHtml(theme), custom ? ", with two custom tokens" : ""))
+				</div>""".formatted(escapeHtml(theme), custom ? ", with custom tokens" : ""))
 			.html("picker", "Pick a theme", """
 				<div class="jc-prose">
 				<ul>
@@ -155,12 +164,89 @@ public final class DevPageBuilders {
 				</div>""".formatted(links))
 			.html("authoring", "Writing a custom theme", """
 				<div class="jc-prose">
-				<p>Seed from a stock theme and override tokens. A <code>value</code> sets a token; an <code>alias</code> makes it
-				follow another token.</p>
-				<pre><code>&lt;@theme name="light-brown"&gt;
+				<p>Seed from the page theme and override tokens. A <code>value</code> sets a token; an <code>alias</code> makes it
+				follow another token. Add <code>scheme="dark"</code> to set a token for the dark scheme only.</p>
+				<pre><code>&lt;@theme&gt;
 				&lt;@token name="--jc-pill-red-bg" value="#fdeceb"/&gt;
 				&lt;@token name="--jc-tab-bar-bg" alias="var(--jc-card-bg)"/&gt;
+				&lt;@token name="--jc-link" value="#d9a65c" scheme="dark"/&gt;
 				&lt;/@theme&gt;</code></pre>
 				</div>""");
+	}
+
+	/**
+	 * Charts (builder only): a line chart with markers, a threshold and a click topic, and a table whose ribbon highlights a point.
+	 *
+	 * @return The page spec.
+	 */
+	public static PageSpec charts() {
+		var rows = "/console/dev/charts/daily";
+		return PageSpec.create().tab("dev").toolkit("views")
+			.card(ChartDef.line("trend").title("Orders this week").src(rows).x("day")
+				.series("placed", "Placed").series("delivered", "Delivered")
+				.decorate(Markers.values(List.of(Map.of("at", "Wed", "label", "Restock"))))
+				.decorate(Thresholds.at(6).label("Target").tone("ok"))
+				.on("click", "app.day-picked")
+				.toCardSpec())
+			.table(TableSpec.create("days").dataMode(DataMode.CLIENT).dataUrl(rows)
+				.columns(Column.create("day").label("Day"), Column.create("placed").label("Placed"), Column.create("delivered").label("Delivered"))
+				.ribbon(RibbonItem.publish("Highlight Monday", "cmd:trend",
+					Map.of("schemaVersion", 1, "op", "highlight", "options", Map.of("seriesId", "placed", "dataIndex", 0)))),
+				"Days");
+	}
+
+	/**
+	 * Data sources (builder only): an hourly CSV source chunked by UTC day and cached in IndexedDB, over a range the
+	 * page script publishes, drawn by a line chart.
+	 *
+	 * @return The page spec.
+	 */
+	public static PageSpec data() {
+		var range = Topics.custom("petstore", "range");
+		return PageSpec.create().tab("dev").toolkit("views").init("/console/dev/data/data.js")
+			.topic(TopicDecl.of(range).retain(true).publisher(Publisher.SCRIPT))
+			.data(DataSourceDef.create("orders").url("/console/dev/data/orders").format(Format.CSV)
+				.columns("t:time", "placed:number")
+				.params(Subscription.to(range).as("params").map("start", "start").map("end", "end"))
+				.chunk(Chunking.byDay("start", "end")).cache(Cache.indexedDb()))
+			.card(ChartDef.line("ordersChart").title("Orders by hour").source(Topics.data("orders")).x("t")
+				.series("placed", "Placed").toCardSpec());
+	}
+
+	/**
+	 * Dashboard (builder only): a rail of every section kind over a 2-column grid of charts, bound to one CSV source.
+	 *
+	 * @param variant The source variant: {@code ok}, {@code slow}, {@code truncated}, {@code error} or {@code right} (the {@code ok} source with the rail on the right).
+	 * @param version The persist version; bumping it discards saved state.
+	 * @return The page spec.
+	 */
+	public static PageSpec dashboard(String variant, int version) {
+		var base = "/console/dev/dashboard";
+		var share = ChartDef.donut("share").title("Share by reason").src(base + "/reasons").label("reason").value("orders");
+		return PageSpec.create().tab("dev").toolkit("views").init(base + "/dashboard.js")
+			// An array param (reasons) repeats its key in the query, which the endpoint reads with getAll.
+			.data(DataSourceDef.create("orders").url(base + "/series/" + variant).format(Format.CSV)
+				.columns("day:time", "reason:string", "orders:number")
+				.params(
+					Subscription.to(Topics.filter("range")).as("params").map("start", "start").map("end", "end"),
+					Subscription.to(Topics.filter("q")).as("params").map("q", "search"),
+					Subscription.to(Topics.filter("reasons")).as("params").map("reasons", "columns.reason"),
+					Subscription.to(Topics.filter("late")).as("params").map("lateOnly", "options.lateOnly"))
+				.chunk(Chunking.none()).cache(Cache.none()))
+			.dashboard(DashboardSpec.create("overview").title("Order issues")
+				.rail(("right".equals(variant) ? Rail.right() : Rail.left()).sections(
+					RangeSection.quick("7d", "30d", "ytd").custom(true).defaultPreset("30d").publishes(Topics.filter("range")),
+					SearchSection.create().placeholder("Reason contains").publishes(Topics.filter("q")),
+					ChoiceSection.fromDim("orders", "reason").label("Reasons").publishes(Topics.filter("reasons")),
+					CardSection.of(share),
+					Section.custom("petstore.late", JsonMap.of("label", "Late only")).publishes(Topics.filter("late"))))
+				.grid(2)
+				.panel(ChartDef.line("daily").title("Orders per day").source(Topics.data("orders")).x("day", "time", "Day")
+					.series("orders", "Orders").publishZoom().patch("{dataZoom:[{type:'inside'},{type:'slider'}]}"), 2)
+				.panel(ChartDef.bar("by-reason").title("Orders by reason").src(base + "/reasons").x("reason").series("orders", "Orders"))
+				.panel(ChartDef.bar("by-weekday").title("Orders by weekday").src(base + "/weekdays").x("weekday").series("orders", "Orders"))
+				.status(Topics.data("orders"))
+				.persist(PersistSpec.page("petstore.dashboard").version(version)
+					.topics(Topics.filter("range"), Topics.filter("q"), Topics.filter("reasons"), Topics.zoom("daily")).shareLink()));
 	}
 }

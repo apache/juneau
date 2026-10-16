@@ -21,8 +21,7 @@ import static org.apache.juneau.commons.utils.Shorts.*;
 import org.apache.juneau.commons.bean.*;
 
 /**
- * The typed result a row action's submit returns &mdash; the load-bearing half of the write-path arc (design doc
- * §6.1/§6.2; the write-path half of the row-action submit contract).
+ * The typed result a row action's submit returns &mdash; the load-bearing half of the write path.
  *
  * <p>
  * A raw HTML fragment response cannot carry the distinction the consumer's non-optimistic UI rule requires: a row
@@ -47,8 +46,8 @@ import org.apache.juneau.commons.bean.*;
  * has never heard of:
  * <ul class='spaced-list'>
  * 	<li><b>Framework transport codes</b> come from
- * 		{@link org.apache.juneau.rest.server.filter.LoopbackBoundary.Reason#name() LoopbackBoundary.Reason.name()}
- * 		(e.g. {@code CSRF_TOKEN_MISSING}), already on the wire as the {@code X-Loopback-Boundary} header and the
+ * 		{@link org.apache.juneau.rest.server.filter.BoundaryReason#name() BoundaryReason.name()}
+ * 		(e.g. {@code CSRF_TOKEN_MISSING}), already on the wire as the {@code X-Request-Boundary} header and the
  * 		rejection envelope's {@code reason}.
  * 	<li><b>Consumer codes</b> are namespaced {@code app:} / {@code write-guard:} strings for concepts Juneau knows
  * 		nothing about ("not armed", "arming expired", "confirmation does not match this incident", "a previous
@@ -158,7 +157,7 @@ public class ActionResult {
 	/**
 	 * The opaque, namespaced refusal code for a {@link Outcome#REFUSAL refusal}; omitted from the wire for any other
 	 * outcome.  Framework codes come from
-	 * {@link org.apache.juneau.rest.server.filter.LoopbackBoundary.Reason#name()}; consumer codes are namespaced
+	 * {@link org.apache.juneau.rest.server.filter.BoundaryReason#name()}; consumer codes are namespaced
 	 * {@code app:} / {@code write-guard:} strings (see the class javadoc).
 	 */
 	public String refusalCode;

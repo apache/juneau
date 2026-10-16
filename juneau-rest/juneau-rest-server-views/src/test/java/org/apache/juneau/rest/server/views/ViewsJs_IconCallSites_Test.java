@@ -67,7 +67,7 @@ class ViewsJs_IconCallSites_Test extends TestBase {
 		var iconsJs = res("juneau-icons.js");
 		var registered = all(REG, iconsJs, 1);
 		var used = new TreeSet<String>();
-		for (var f : new String[]{"juneau-views.js", "juneau-ribbon.js", "juneau-config.js", "juneau-helpers.js", "juneau-regions.js", "juneau-console-output.js"}) {
+		for (var f : new String[]{"juneau-views.js", "juneau-ribbon.js", "juneau-config.js", "juneau-helpers.js", "juneau-regions.js"}) {
 			var src = res(f);
 			used.addAll(all(CALL, src, 1));
 			used.addAll(all(PILL, src, 1));

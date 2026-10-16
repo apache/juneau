@@ -26,7 +26,7 @@ import java.util.*;
  * Carries the JSON-RPC {@code method} (e.g. {@code tools/call}), the operation {@code name} (the tool / prompt name or
  * resource URI, as returned by the revision's routing-name derivation), and an opaque read-only view of the raw JSON-RPC
  * request {@code params}.  A static per-operation scope map keys on {@code (method, name)}; the {@code params} view is the
- * seam a future dynamic resolver could consult (READY-312f Q-c: not built for 10.0).
+ * seam a future dynamic resolver could consult (not built for 10.0).
  *
  * <p>
  * {@code params} is the <em>raw</em> JSON-RPC {@code params} object, not the unwrapped tool-call arguments: for a

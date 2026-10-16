@@ -142,7 +142,7 @@ class ViewsJs_TablePolling_Behavior_Test extends TestBase {
 
 	/**
 	 * A view declaring neither {@code pausePollingWhileEditing} nor a {@code pausePolling} toggle keeps polling
-	 * through an open detail panel AND an open dialog. If this fails, IRS and the support console silently stopped
+	 * through an open detail panel AND an open dialog. If this fails, every existing consumer silently stopped
 	 * refreshing tables on a row expansion.
 	 */
 	@Test void a01_aViewThatOptedIntoNothingStillPollsWithEditorsOpen() {
@@ -322,7 +322,7 @@ class ViewsJs_TablePolling_Behavior_Test extends TestBase {
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
-	// Gap 7: auto-refresh is its own timer, paused by the same editing-surface rule, independent of initPolling.
+	// auto-refresh is its own timer, paused by the same editing-surface rule, independent of initPolling.
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Test void g01_autoRefresh_pausesWhileTheViewSettingsDialogIsOpen_andResumesAfter() {

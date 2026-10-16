@@ -214,6 +214,13 @@
 		scheduleNext(st, st.backoffMs);
 	}
 
+	// Set while the page is being torn down: the browser aborts in-flight fetches then, which is not a failure.
+	let unloading = false;
+	if (typeof window.addEventListener === "function") {
+		window.addEventListener("pagehide", () => { unloading = true; });
+		window.addEventListener("pageshow", () => { unloading = false; });
+	}
+
 	function poll(st) {
 		if (mounted[st.def.id] !== st) return;
 		const def = st.def;
@@ -228,7 +235,8 @@
 			scheduleNext(st, interval(def));
 			return;
 		}
-		fetch(pollUrl(def, scope), { cache: "no-store", credentials: "same-origin" }).then(res => {
+		// Accept: a content-negotiating server (Juneau's own) answers an Accept-less GET with HTML.
+		fetch(pollUrl(def, scope), { cache: "no-store", credentials: "same-origin", headers: { Accept: "application/json" } }).then(res => {
 			if (res.status === 401 || res.status === 403) {
 				logError("E-JS-65", "badge '%s' fetch failed: '%s'", def.id, res.status);
 				removeBadge(st);
@@ -250,7 +258,7 @@
 				scheduleNext(st, interval(def));
 			});
 		}).catch(err => {
-			if (mounted[def.id] !== st) return;
+			if (mounted[def.id] !== st || unloading || (err && err.name === "AbortError")) return;
 			logError("E-JS-65", "badge '%s' fetch failed: '%s'", def.id, err && err.message);
 			markStale(st);
 			backoffAndRetry(st);

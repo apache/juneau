@@ -52,18 +52,19 @@
 		"E-JS-10": "datatables card '%s' needs JuneauViews.regions; load the views toolkit",
 		"E-JS-11": "JuneauConsole.mount called twice on the same root",
 		"E-JS-12": "card type '%s' is already registered",
-		"E-JS-13": "console-output card '%s' needs JuneauViews.consoleOutput; load the views toolkit",
 		"E-JS-14": "run-view card '%s' needs JuneauViews.runView; load the views toolkit",
 		"E-JS-20": "card type '%s' must match /^[a-z][a-z0-9-]{0,31}$/",
 		"E-JS-21": "card type '%s' handler must be a function or an object with render(); got '%s'",
 		"E-JS-22": "card '%s' is not mounted",
 		"E-JS-23": "JuneauConsoleCards entry '%s' is not a [type, handler] pair",
 		"E-JS-41": "card '%s' subscribes to '%s', which is declared publisher=script, but no page script declared it by DOMContentLoaded",
+		"E-JS-41-source": "data source '%s' subscribes to '%s', which is declared publisher=script, but no page script declared it by DOMContentLoaded",
 		"E-JS-46": "page wires topics but juneau-bus.js is not loaded",
 		"E-JS-48": "card '%s' (type '%s') has no op '%s'",
 		"E-JS-51": "map path '%s' in card '%s' resolved to a non-scalar",
 		"E-JS-83": "card '%s' %s resolved to a URL that is not a same-origin path: '%s'",
-		"E-JS-84": "fetchJson refused a URL that is not a same-origin URL or path: '%s'"
+		"E-JS-84": "fetchJson refused a URL that is not a same-origin URL or path: '%s'",
+		"E-JS-106": "page has data sources but juneau-data.js is not loaded"
 	};
 
 	class JuneauConsoleError extends Error {
@@ -287,7 +288,7 @@
 				fail(doc, "E-JS-3", "card '" + card.id + "'", card.template, "card", card.template);
 	}
 
-	// §5.3: segment-wise longest prefix; every query param in the href must match; ties go deeper, then first.
+	// Segment-wise longest prefix; every query param in the href must match; ties go deeper, then first.
 	function prefixMatch(nav, loc) {
 		const path = (loc && loc.pathname) || "/";
 		const params = new URLSearchParams((loc && loc.search) || "");
@@ -355,6 +356,133 @@
 		return nav;
 	}
 
+	// ---- Color scheme ----------------------------------------------------------------------------------------------
+	// The pre-paint script in the page head sets data-jc-scheme on the root element. This section keeps it current
+	// afterwards (OS changes, other tabs, the header control) and tells the page through juneau:theme-changed.
+	// The visitor's stored choice counts only on pages that opt in with data-jc-scheme-toggle, like the head script.
+
+	const SCHEME_KEY = "juneau-console:scheme";
+	const schemeWired = new WeakSet();
+
+	function schemeValue(v) {
+		return v === "light" || v === "dark" ? v : null;
+	}
+
+	function readStoredScheme() {
+		try {
+			return schemeValue(window.localStorage.getItem(SCHEME_KEY));
+		} catch (e) {
+			return null;
+		}
+	}
+
+	// stored is the visitor's choice (null for none); pass undefined to read it from storage.
+	function resolveScheme(doc, stored) {
+		const root = doc.documentElement;
+		let s = null;
+		if (root.hasAttribute("data-jc-scheme-toggle")) s = stored === undefined ? readStoredScheme() : stored;
+		if (!s) s = schemeValue(root.getAttribute("data-jc-scheme-pin"));
+		if (!s) {
+			try {
+				s = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+			} catch (e) {
+				s = "light";
+			}
+		}
+		return s;
+	}
+
+	function syncSchemeControls(doc) {
+		const chosen = doc.documentElement.hasAttribute("data-jc-scheme-toggle") ? readStoredScheme() || "auto" : "auto";
+		for (const group of doc.querySelectorAll(".jc-scheme-toggle"))
+			for (const b of group.querySelectorAll("button[role=radio]")) {
+				const on = b.getAttribute("data-scheme") === chosen;
+				b.setAttribute("aria-checked", on ? "true" : "false");
+				b.setAttribute("tabindex", on ? "0" : "-1");
+			}
+	}
+
+	// Sets the effective scheme and, only when it differs from the current one, announces the change.
+	function applyScheme(doc, stored) {
+		const next = resolveScheme(doc, stored);
+		const root = doc.documentElement;
+		const was = root.getAttribute("data-jc-scheme") || "light";
+		root.setAttribute("data-jc-scheme", next);
+		if (next !== was) doc.dispatchEvent(new CustomEvent("juneau:theme-changed", { detail: { scheme: next } }));
+	}
+
+	function wireScheme(doc) {
+		if (schemeWired.has(doc)) return;
+		schemeWired.add(doc);
+		try {
+			const mq = window.matchMedia("(prefers-color-scheme: dark)");
+			if (mq && typeof mq.addEventListener === "function")
+				mq.addEventListener("change", function () { applyScheme(doc); });
+		} catch (e) {
+			// no media-query support: the scheme stays as the head script left it
+		}
+		if (doc.documentElement.hasAttribute("data-jc-scheme-toggle") && typeof window.addEventListener === "function")
+			window.addEventListener("storage", function (ev) {
+				if (ev.key !== null && ev.key !== SCHEME_KEY) return;
+				applyScheme(doc, ev.key === null ? null : schemeValue(ev.newValue));
+				syncSchemeControls(doc);
+			});
+	}
+
+	function chooseScheme(doc, choice) {
+		try {
+			if (choice === "auto") window.localStorage.removeItem(SCHEME_KEY);
+			else window.localStorage.setItem(SCHEME_KEY, choice);
+		} catch (e) {
+			// storage is unavailable: the choice cannot persist, so the scheme stays as it was
+		}
+		applyScheme(doc);
+		syncSchemeControls(doc);
+	}
+
+	// The Auto / Light / Dark radio group, wired. Arrow keys move and select, Home and End jump.
+	function buildSchemeControl(doc) {
+		wireScheme(doc);
+		// Where the head script did not run, this brings the page in line with the control; otherwise it changes nothing.
+		applyScheme(doc);
+		const group = el(doc, "div", "jc-scheme-toggle");
+		group.setAttribute("role", "radiogroup");
+		group.setAttribute("aria-label", "Color scheme");
+		const pinned = !!schemeValue(doc.documentElement.getAttribute("data-jc-scheme-pin"));
+		const buttons = [];
+		for (const [value, label] of [["auto", "Auto"], ["light", "Light"], ["dark", "Dark"]]) {
+			const b = el(doc, "button");
+			b.setAttribute("type", "button");
+			b.setAttribute("role", "radio");
+			b.setAttribute("data-scheme", value);
+			if (value === "auto") b.setAttribute("title", pinned ? "Follow app default" : "Follow system");
+			b.textContent = label;
+			b.addEventListener("click", function () { chooseScheme(doc, value); });
+			buttons.push(b);
+			group.appendChild(b);
+		}
+		group.addEventListener("keydown", function (ev) {
+			const at = buttons.indexOf(doc.activeElement);
+			if (at < 0) return;
+			let to;
+			if (ev.key === "ArrowRight" || ev.key === "ArrowDown") to = (at + 1) % buttons.length;
+			else if (ev.key === "ArrowLeft" || ev.key === "ArrowUp") to = (at + buttons.length - 1) % buttons.length;
+			else if (ev.key === "Home") to = 0;
+			else if (ev.key === "End") to = buttons.length - 1;
+			else return;
+			ev.preventDefault();
+			buttons[to].focus();
+			chooseScheme(doc, buttons[to].getAttribute("data-scheme"));
+		});
+		const chosen = doc.documentElement.hasAttribute("data-jc-scheme-toggle") ? readStoredScheme() || "auto" : "auto";
+		for (const b of buttons) {
+			const on = b.getAttribute("data-scheme") === chosen;
+			b.setAttribute("aria-checked", on ? "true" : "false");
+			b.setAttribute("tabindex", on ? "0" : "-1");
+		}
+		return group;
+	}
+
 	function hasHeader(h) {
 		const s = h.slots || {};
 		return !!(h.title || h.subtitle || h.logo || (h.links && h.links.length) || h.userMenu || s.brand || s.actions || s.replace);
@@ -403,13 +531,15 @@
 			}
 			header.appendChild(brand);
 		}
-		if ((h.links && h.links.length) || s.actions || h.userMenu) {
+		const schemeToggle = doc.documentElement.hasAttribute("data-jc-scheme-toggle");
+		if ((h.links && h.links.length) || s.actions || h.userMenu || schemeToggle) {
 			const actions = el(doc, "div", "jc-header-actions");
 			for (const l of h.links || []) {
 				const a = link(doc, l, "jc-header-link", "header link");
 				if (a) actions.appendChild(a);
 			}
 			if (s.actions) actions.appendChild(clone(doc, tpl.bySlot.get(s.actions)));
+			if (schemeToggle) actions.appendChild(buildSchemeControl(doc));
 			if (h.userMenu) actions.appendChild(renderUserMenu(doc, h.userMenu));
 			header.appendChild(actions);
 		}
@@ -513,49 +643,69 @@
 	// Built-in card types
 	//-----------------------------------------------------------------------------------------------------------------
 
+	// The opt-in `sanitize: true` path of an html card's `src` fragment: the markup is rebuilt node by node through the
+	// views attribute-allowlist sanitizer (JuneauViews.init.fillSanitizedHtmlSlot, the one the SANITIZED_HTML detail
+	// format uses) instead of being inserted as served.  The sanitizer clears the element it fills, so it fills a scratch
+	// div whose children are then moved onto the card, which keeps the card title.  Without the views toolkit there is
+	// no sanitizer to run, so it fails closed (nothing is painted) rather than falling back to the raw insert.
+	function paintSanitizedFragment(doc, host, text) {
+		const fill = window.JuneauViews?.init?.fillSanitizedHtmlSlot;
+		if (typeof fill !== "function")
+			throw new Error("html card sanitize:true needs JuneauViews; load the views toolkit");
+		const scratch = doc.createElement("div");
+		fill(scratch, text);
+		while (scratch.firstChild) host.appendChild(scratch.firstChild);
+	}
+
+	// Puts an html card's content in place of what the card showed before, so a refresh replaces it rather than adding
+	// a second copy.  The card title stays; a bare card's content is swapped between its anchors.  A host the card has
+	// moved on from is painted as it was: the write goes nowhere.
+	function paintHtml(doc, card, el0, paint) {
+		const state = cardState.get(card.id);
+		if (!state || state.el !== el0) return paint(el0);
+		if (state.anchor) {
+			const end = state.anchor.end.parentNode;
+			// Still being built, off the page (the first render at mount): nothing is there to replace.
+			if (!end || end === el0) return paint(el0);
+			return paintOnCard(doc, state, null, paint);
+		}
+		clearBody(el0);
+		return paint(el0);
+	}
+
 	function htmlCard(card, el0, ctx) {
 		if (card.template != null) {
-			el0.appendChild(ctx.template(card.template));
+			const node = ctx.template(card.template);
+			paintHtml(ctx.document, card, el0, h => h.appendChild(node));
 			return;
 		}
+		// A src that still has {tokens} (a bare card renders before its params arrive) is not fetched; the params render is.
+		if (typeof card.src === "string" && HAS_TOKEN_RE.test(card.src)) return;
 		if (!isSafeHref(card.src) || /^https?:/i.test(card.src) && !card.src.startsWith(window.location.origin + "/"))
 			ctx.fail("src '" + card.src + "' is not same-origin");
 		fetch(card.src, { credentials: "same-origin" })
 			.then(r => r.ok ? r.text() : Promise.reject(new Error("HTTP " + r.status)))
 			.then(text => {
+				if (card.sanitize === true) {
+					// The fragment can arrive while the views scripts further down the page have not run yet; wait for the
+					// page to be ready before looking for the sanitizer.
+					ctx.onReady(function () {
+						try {
+							paintHtml(ctx.document, card, el0, h => paintSanitizedFragment(ctx.document, h, text));
+						} catch (e) {
+							fail(ctx.document, "E-JS-8", card.id, card.type, e && e.message);
+						}
+					});
+					return;
+				}
 				const tpl = ctx.document.createElement("template");
 				tpl.innerHTML = text;
-				el0.appendChild(ctx.document.importNode(tpl.content, true));
+				paintHtml(ctx.document, card, el0, h => h.appendChild(ctx.document.importNode(tpl.content, true)));
 			})
 			.catch(e => fail(ctx.document, "E-JS-8", card.id, card.type, e.message));
 	}
 
-	// Console-output bridge: one JuneauViews.consoleOutput.mount per card on DOMContentLoaded, by which time the views
-	// toolkit scripts (written after the shell) have run.  The returned cleanup is discarded: the shell has no card
-	// teardown, so polling ends with the page.
-	function consoleOutputCard(card, el0, ctx) {
-		const body = ctx.document.createElement("div");
-		body.id = card.id + "-body";
-		body.className = "jc-card-body";
-		el0.setAttribute("data-juneau-card", "console-output");
-		el0.appendChild(body);
-		const output = card.output && typeof card.output === "object" && !Array.isArray(card.output) ? card.output : {};
-		ctx.onReady(function () {
-			const co = window.JuneauViews && window.JuneauViews.consoleOutput;
-			if (!co || typeof co.mount !== "function") {
-				fail(ctx.document, "E-JS-13", card.id);
-				return;
-			}
-			try {
-				co.mount(body, Object.assign({}, output), {});
-			} catch (e) {
-				fail(ctx.document, "E-JS-8", card.id, card.type, e && e.message);
-			}
-		});
-	}
-
-	// Run-view bridge: one JuneauViews.runView.mount per card on DOMContentLoaded, as for console-output.  The returned
-	// cleanup is discarded: the shell has no card teardown, so polling ends with the page.
+	// Run-view bridge: mounts JuneauViews.runView once per card on DOMContentLoaded; the cleanup is discarded (no card teardown).
 	function runViewCard(card, el0, ctx) {
 		const body = ctx.document.createElement("div");
 		body.id = card.id + "-body";
@@ -680,7 +830,13 @@
 	}
 
 	function makeEvery(doc, state) {
+		const validMs = n => typeof n === "number" && isFinite(n) && n > 0;
 		return function every(ms, fn, opts) {
+			if (!validMs(ms)) {
+				// A non-positive or non-numeric period would make setInterval spin; refuse and hand back an inert handle.
+				console.warn("[juneau-console] ctx.every ignored: period must be a positive finite number of milliseconds");
+				return { stop: function () {}, setMs: function () {} };
+			}
 			const pauseWhen = opts && opts.pauseWhen;
 			let msRef = ms;
 			const tick = function () {
@@ -689,10 +845,19 @@
 				if (pauseWhen && pauseWhen()) return;
 				fn();
 			};
-			const id = setInterval(tick, msRef);
+			let id = setInterval(tick, msRef);
+			let stopped = false;
 			const handle = {
-				stop: function () { clearInterval(id); state.intervals.delete(handle); },
-				setMs: function (n) { msRef = n; }
+				stop: function () { stopped = true; clearInterval(id); state.intervals.delete(handle); },
+				// Re-arms at the new period; tick() keeps gating on destroyed / hidden / pauseWhen, so a paused or hidden
+				// card still skips until resumed.  A stopped or destroyed handle ignores the change.
+				setMs: function (n) {
+					if (stopped || state.destroyed) return;
+					if (!validMs(n)) return;
+					msRef = n;
+					clearInterval(id);
+					id = setInterval(tick, msRef);
+				}
 			};
 			state.intervals.add(handle);
 			return handle;
@@ -739,11 +904,11 @@
 			onReady: fn => onReady(doc, fn),
 			fetchJson: makeFetchJson(doc, state),
 			isAbort: isAbort,
-			paintLoading: target => paintLoading(doc, target || state.el),
+			paintLoading: target => paintOnCard(doc, state, target, t => paintLoading(doc, t)),
 			// paintError(err) or paintError(target, err).
 			paintError: (target, err) => {
-				if (err === undefined && target instanceof Error) { err = target; target = state.el; }
-				paintError(doc, target || state.el, err);
+				if (err === undefined && target instanceof Error) { err = target; target = null; }
+				paintOnCard(doc, state, target, t => paintError(doc, t, err));
 			},
 			every: makeEvery(doc, state),
 			prefs: namespace => makePrefs(state.card.id)(namespace),
@@ -758,7 +923,7 @@
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
-	// Page bus (spec 4.1, 4.5, 5.2-5.4, 6.3): card:<id>, cmd:<id>, declared roles, ctx.publish
+	// Page bus: card:<id>, cmd:<id>, declared roles, ctx.publish
 	//-----------------------------------------------------------------------------------------------------------------
 
 	const TOKEN_RE = /\{([A-Za-z0-9_.-]+)\}/g;
@@ -768,7 +933,7 @@
 	function tableView(card) { return card.table && typeof card.table === "object" ? card.table : card; }
 	function ribbonOf(card) { return arr(tableView(card).ribbon); }
 
-	// The card's bus owner, created on first use: every shell write for the card goes through it (spec 4.1).
+	// The card's bus owner, created on first use: every shell write for the card goes through it.
 	function ownerFor(state) {
 		if (!state.bus) state.bus = window.JuneauViews.bus.owner(state.card.id);
 		return state.bus;
@@ -813,7 +978,7 @@
 
 	function unwireCard(state) {
 		setPhase(state, "destroyed");
-		if (state.bus) state.bus.dispose();    // clears card:<id> and every implicit topic (spec 4.1)
+		if (state.bus) state.bus.dispose();    // clears card:<id> and every implicit topic
 	}
 
 	function paramsSubs(card) { return arr(card.subscribes).filter(s => s && s.as === "params"); }
@@ -846,13 +1011,58 @@
 			if (!(n.classList && n.classList.contains("jc-card-title"))) host.removeChild(n);
 	}
 
+	// A bare html card has no element of its own: its host is a DocumentFragment that is empty once appended to the
+	// page.  A pair of comment nodes brackets its content on the page instead; clearing removes what lies between
+	// them and new content goes in before the end one.
+	function clearCard(state) {
+		const a = state.anchor;
+		if (!a) return clearBody(state.el);
+		const parent = a.end.parentNode;
+		if (!parent || a.start.parentNode !== parent) return;
+		for (let n = a.start.nextSibling; n && n !== a.end && n.parentNode === parent; n = a.start.nextSibling) parent.removeChild(n);
+	}
+
+	// An anchored card whose end anchor has left the page has nowhere to put anything: the write is dropped.
+	function appendToCard(state, node) {
+		const a = state.anchor;
+		if (!a) return state.el.appendChild(node);
+		if (a.end.parentNode) a.end.parentNode.insertBefore(node, a.end);
+	}
+
+	// The host an anchored card's handler writes to.  It is a DocumentFragment, empty once the page has taken its
+	// content, so its appendChild is redirected to the anchor: a handler that writes later (a fetch settling, a
+	// refresh) still lands on the page.  A host the card has moved on from (re-rendered or unrendered) writes nowhere.
+	// Only appendChild is redirected: a handler writing to a bare host must use appendChild (insertBefore, innerHTML,
+	// reading childNodes and the like act on the empty fragment).
+	function bindBare(state, host) {
+		const own = host.appendChild;
+		host.appendChild = function (node) {
+			const end = state.anchor.end;
+			if (!end.parentNode || end.parentNode === host) return own.call(host, node);    // still being built, off the page
+			if (state.el !== host) return node;                                               // superseded: dropped
+			return end.parentNode.insertBefore(node, end);
+		};
+		state.el = host;
+		return host;
+	}
+
+	// Paints into `target`, or into the card itself when there is none.  An anchored card is painted off to the side and
+	// swapped in between its anchors, so the anchors themselves are never cleared.
+	function paintOnCard(doc, state, target, paint) {
+		if (target || !state.anchor) return paint(target || state.el);
+		const scratch = doc.createDocumentFragment();
+		paint(scratch);
+		clearCard(state);
+		appendToCard(state, scratch);
+	}
+
 	function paintAwaiting(doc, state) {
-		clearBody(state.el);
+		clearCard(state);
 		const sub = paramsSubs(state.origCard).find(s => typeof s.emptyText === "string");
 		const p = el(doc, "div", "jc-card-empty");
 		p.setAttribute("role", "status");
 		p.textContent = sub ? sub.emptyText : DEFAULT_EMPTY_TEXT;
-		state.el.appendChild(p);
+		appendToCard(state, p);
 	}
 
 	// Undoes one render: its ctx.subscribe calls, ctx.every timers, in-flight fetch and the handler's own state.
@@ -866,7 +1076,8 @@
 			state.rendered = false;
 			settle(doc, state, () => state.handler.destroy(state.card, state.el, state.ctx));
 		}
-		clearBody(state.el);
+		clearCard(state);
+		if (state.anchor) state.el = doc.createDocumentFragment();    // the old host is superseded: a late write to it is dropped
 	}
 
 	// The first resolved src / dataUrl / table.dataUrl that is not a same-origin path, as {what, url}; null when all are fine.
@@ -896,7 +1107,9 @@
 			return;
 		}
 		state.card = next;
-		renderCard(doc, next, state.el, state, state.handler, false);
+		if (!state.anchor) return renderCard(doc, next, state.el, state, state.handler, false);
+		// A bare card renders into a fresh host whose writes go to the anchor.
+		renderCard(doc, next, bindBare(state, doc.createDocumentFragment()), state, state.handler, true);
 	}
 
 	// {value} for a usable message, {empty: true} for a clear or a missing path, {bad: path} for E-JS-51.
@@ -949,9 +1162,23 @@
 		refreshCard(state.card.id);
 	}
 
+	// A cmd refresh on a card that reads a data: topic reloads that source first; the card then redraws from the handle
+	// the source publishes.  Only the cmd path forwards: a card-level refresh subscription, ctx.refresh and refreshCard
+	// just redraw from the current handle, so a timer that should reload a source subscribes the source itself.
+	function forwardRefresh(doc, state, cmd) {
+		const src = state.card.source;
+		if (typeof src !== "string" || src.indexOf("data:") !== 0) return;
+		const clearCache = !!(cmd.options && cmd.options.clearCache);
+		guarded(doc, state.card.id, () => ownerFor(state).publish("cmd:" + src.slice(5),
+			{ schemaVersion: 1, op: "refresh", options: { clearCache: clearCache } }));
+	}
+
 	function onCmd(doc, state, cmd) {
 		if (state.destroyed || !state.handler || !cmd || typeof cmd.op !== "string") return;
-		if (cmd.op === "refresh") return shellRefresh(state);
+		if (cmd.op === "refresh") {
+			forwardRefresh(doc, state, cmd);
+			return shellRefresh(state);
+		}
 		if (awaitingParams(state)) {
 			console.warn("[juneau-console] card '" + state.card.id + "' is waiting for its params; op '" + cmd.op + "' ignored");
 			return;
@@ -1021,8 +1248,17 @@
 		}
 	}
 
+	// One DataSource or Derived per contract.dataSources entry, created by juneau-data.js.  E-JS-106 (not fatal) when
+	// that script is missing or predates data sources.
+	function bootDataSources(doc, contract) {
+		const data = window.JuneauViews && window.JuneauViews.data;
+		if (!data || typeof data.boot !== "function") return fail(doc, "E-JS-106");
+		guarded(doc, null, () => data.boot(contract));
+	}
+
 	function wiresTopics(contract) {
-		if (arr(contract.topics).length || arr(contract.bridges).length) return true;
+		if (arr(contract.topics).length || arr(contract.bridges).length || arr(contract.dataSources).length)
+			return true;
 		return arr(contract.cards).some(c => arr(c.publishes).length || arr(c.subscribes).length
 			|| ribbonOf(c).some(i => i && (i.target != null || i.type === "publish")));
 	}
@@ -1083,7 +1319,8 @@
 			if (!q.state.destroyed) guarded(doc, q.state.card.id, () => q.fn(ownerFor(q.state)));
 	}
 
-	// E-JS-41 at runtime: a publisher=script topic no page script declared by DOMContentLoaded (spec 6.1).
+	// E-JS-41 at runtime: a publisher=script topic no page script declared by DOMContentLoaded, reported on each card or
+	// data source that subscribes to it.
 	function checkScriptTopics(doc, bus, contract) {
 		const declared = new Set(bus.topics().filter(t => t.declared).map(t => t.topic));
 		for (const t of arr(contract.topics)) {
@@ -1092,6 +1329,11 @@
 				for (const s of arr(c.subscribes))
 					if (s && bus.util.topicMatches(t.topic, s.topic))
 						paintCardError(doc, cardState.get(c.id), "E-JS-41", fmt(MSG["E-JS-41"], c.id, s.topic));
+			// A data source has no card, so paintCardError banners it (and logs it).
+			for (const d of arr(contract.dataSources))
+				for (const s of arr(d.subscribes))
+					if (s && bus.util.topicMatches(t.topic, s.topic))
+						paintCardError(doc, null, "E-JS-41", fmt(MSG["E-JS-41-source"], d.id, s.topic));
 		}
 	}
 
@@ -1162,17 +1404,19 @@
 			if (!cardVisible(card, facts)) continue;   // hidden by its visibleWhen rule: never mounted, never fetched
 			frozenCards.set(card.id, Object.freeze(Object.assign({}, card)));
 			const bare = card.type === "html" && card.bare === true;
+			// Any other type with bare keeps its host element but drops the card chrome and title.
+			const chromeless = card.type !== "html" && card.bare === true;
 			let host;
 			if (bare) {
 				host = doc.createDocumentFragment();
 			} else {
-				host = el(doc, "div", "jc-card");
+				host = el(doc, "div", chromeless ? "jc-card-bare" : "jc-card");
 				host.id = card.id;
 				// Adopter classes follow the built-in one; only well-formed tokens are applied.
 				if (typeof card.class === "string")
 					for (const t of card.class.split(/\s+/))
 						if (/^[A-Za-z_-][A-Za-z0-9_-]*$/.test(t)) host.classList.add(t);
-				if (card.title) {
+				if (card.title && !chromeless) {
 					const t = el(doc, "h2", "jc-card-title");
 					t.textContent = card.title;
 					host.appendChild(t);
@@ -1184,8 +1428,13 @@
 				intervals: new Set(), destroyCallbacks: [], api: null,
 				destroyed: false, refreshing: null, refreshQueued: false,
 				origCard: card, phase: "pending", error: null, bus: null, wired: false, rendered: false,
-				params: {}, paramsKey: null, renderOffs: []
+				params: {}, paramsKey: null, renderOffs: [], anchor: null
 			};
+			if (bare) {
+				state.anchor = { start: doc.createComment("juneau-card " + card.id), end: doc.createComment("/juneau-card " + card.id) };
+				host.appendChild(state.anchor.start);
+				bindBare(state, host);
+			}
 			state.ctx = buildCtx(doc, state, templateFn);
 			cardState.set(card.id, state);
 			const handler = handlers.get(card.type);
@@ -1198,6 +1447,7 @@
 				host.appendChild(loading);
 				const list = pendingByType.get(card.type) || [];
 				list.push({ card: card, host: host, state: state });
+				if (bare) host.appendChild(state.anchor.end);
 				pendingByType.set(card.type, list);
 				result.cards[card.id] = bare ? host.firstElementChild || null : host;
 				main.appendChild(host);
@@ -1205,6 +1455,7 @@
 			}
 			state.handler = handler;
 			renderCard(doc, card, host, state, handler, bare);
+			if (bare) host.appendChild(state.anchor.end);
 			result.cards[card.id] = bare ? host.firstElementChild || null : host;
 			main.appendChild(host);
 		}
@@ -1223,7 +1474,7 @@
 		});
 
 
-		// After the pending sweep, so card:<id> starts from each card's settled phase (spec 4.1).  The bus is read
+		// After the pending sweep, so card:<id> starts from each card's settled phase.  The bus is read
 		// here and nowhere earlier: on a <@console> page this script loads before juneau-bus.js and auto-mounts
 		// synchronously, so JuneauViews.bus does not exist yet while mount() runs.
 		onReady(doc, function () {
@@ -1235,10 +1486,12 @@
 			}
 			startBus(doc, bus, contract);
 			paintWiringProblems(doc, bus.wiring.validate(contract, cardTypeTable()));
-			// ---- bus: bridges attach here (Task 13) ----
-			// Server bridges (spec 11.5): one stock source per contract bridges[] entry.  attachBridges detaches them all on
+			// ---- bus: bridges attach here ----
+			// Server bridges: one stock source per contract bridges[] entry.  attachBridges detaches them all on
 			// pagehide; a bad entry is E-JS-52 on the page banner, through the error painter registered above.
 			if (Array.isArray(contract.bridges) && contract.bridges.length) bus.wiring.attachBridges(contract);
+			// Data sources boot after the bridges are attached and before the cards are wired.
+			if (arr(contract.dataSources).length) bootDataSources(doc, contract);
 			wireCards(doc, bus, contract);
 			flushBusQueue(doc);
 			checkScriptTopics(doc, bus, contract);
@@ -1288,6 +1541,7 @@
 			host.removeAttribute("data-juneau-card-pending");
 			for (const c of Array.from(host.childNodes)) if (c.className === "jc-card-loading") host.removeChild(c);
 		}
+		// A bare card never paints the awaiting state at mount: it renders at once, and the first params change replaces it.
 		if (!bare && awaitingParams(state)) {
 			state.paramsKey = urlKey(state.card);
 			paintAwaiting(doc, state);
@@ -1313,7 +1567,7 @@
 
 	/**
 	 * Normalizes a card-type handler.  Besides C2's render / refresh / destroy, a handler may declare its page-bus
-	 * surface (spec 5.2-5.5).  Every key is optional:
+	 * surface.  Every key is optional:
 	 *   roles      {as: fn(payload, meta, card, el, ctx)}  the custom `as` values its cards accept in `subscribes`
 	 *   ops        {op: fn(cmd, card, el, ctx)}           the cmd:<id> ops it handles; 'refresh' is always the shell's
 	 *   publishes  [topic]                                custom topics every card of the type may publish
@@ -1445,7 +1699,7 @@
 		return Array.from(handlers.keys()).sort();
 	}
 
-	// ---- chrome section: absorbed from the retired standalone chrome script (C1 P12) ----
+	// ---- chrome section: absorbed from the retired standalone chrome script ----
 
 	// Contract-version handshakes: each MUST equal its server constant (AppHeaderDef.CONTRACT_VERSION /
 	// BarSlot.CONTRACT_VERSION), surfaced as ViewsMixin.HEADER_CONTRACT_VERSION / ViewsMixin.BAR_CONTRACT_VERSION.
@@ -1592,8 +1846,8 @@
 	}
 
 	/**
-	 * Resolves the ONE shared layer stack (window.JuneauViews.init, 445h/juneau-views.js) or null when views is not
-	 * loaded.  This runtime NEVER defines pushLayer/popLayer of its own (Pass 5 M-P5-B1): it is strictly a client of
+	 * Resolves the ONE shared layer stack (window.JuneauViews.init, juneau-views.js) or null when views is not
+	 * loaded.  This runtime NEVER defines pushLayer/popLayer of its own: it is strictly a client of
 	 * the shared stack, so a chrome menu shares the same z-index / Escape / light-dismiss depth as views dialogs.
 	 */
 	function viewsLayerStack() {
@@ -1864,7 +2118,6 @@
 	});
 
 	handlers.set("html", normalizeHandler("html", htmlCard));
-	handlers.set("console-output", normalizeHandler("console-output", consoleOutputCard));
 	handlers.set("run-view", normalizeHandler("run-view", runViewCard));
 
 	window.JuneauConsole = {
@@ -1879,13 +2132,26 @@
 		BUS_BANNER_CODES: BUS_BANNER_CODES,
 		contract: () => mounted ? mounted.contract : null,
 		card: id => mounted ? mounted.cards.get(id) || null : null,
-		chrome: chrome
+		chrome: chrome,
+		// The Auto / Light / Dark color-scheme control, wired, for pages whose header the stock shell does not render
+		// (no header, or a replaced one). Append the returned element wherever it belongs.
+		schemeControl: buildSchemeControl
 	};
+
+	{
+		// Wire only where a real document element exists; other hosts (and minimal test stubs) leave the scheme as the head script set it.
+		const schemeDoc = window.document;
+		const schemeRoot = schemeDoc && schemeDoc.documentElement;
+		if (schemeRoot && typeof schemeRoot.hasAttribute === "function" && schemeRoot.hasAttribute("data-jc-scheme")) {
+			wireScheme(schemeDoc);
+			applyScheme(schemeDoc);
+		}
+	}
 
 	// Drain after the built-ins and the export: a queued built-in type hits E-JS-12, and queued handlers may use JuneauConsole.
 	drainCardQueue();
 
-	// Auto-mount, synchronously (§2 rule 4).
+	// Auto-mount, synchronously.
 	const doc = window.document;
 	const island = doc && doc.getElementById("juneau-page");
 	if (island) {

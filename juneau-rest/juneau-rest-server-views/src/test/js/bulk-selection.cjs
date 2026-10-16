@@ -337,7 +337,7 @@ t('wireToolbarRightClusterBulk_appendsToRightClusterOnly', () => {
 	NS.wireToolbarRightClusterBulk(row, {});
 });
 
-// ---- Task 10: bulk execution -------------------------------------------------------------------------------------
+// ---- bulk execution -------------------------------------------------------------------------------------
 
 const { jsonResponse } = require(path.join(__dirname, 'views-dom-shim.cjs'));
 

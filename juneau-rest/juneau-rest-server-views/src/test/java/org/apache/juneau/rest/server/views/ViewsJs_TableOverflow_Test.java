@@ -31,13 +31,13 @@ import org.junit.jupiter.api.*;
 
 /**
  * Always-on coverage for the table-overflow-discipline JS helpers ({@code ensureTableScroll} /
- * {@code unwrapTableScroll} - the DT1 "Approach B" wrap).  Source-shape always runs; the behavioral Node harness
+ * {@code unwrapTableScroll} - the DT1 wrap).  Source-shape always runs; the behavioral Node harness
  * runs when {@code node} is on {@code PATH} (skipped otherwise - no {@code -Pjs-tests} required).
  *
  * <p>
  * The jsdom-style harness has no DataTables and cannot measure {@code scrollWidth}, so it pins only the DOM
- * structure invariants (INV-1, INV-2, INV-5, N5) and the DT2 flex skip-guard (N-P5-B1).  The table-vs-page scroll
- * contract and the overflow-detected {@code tabindex} (L12 A) are pinned in {@code TableOverflow_BrowserTest}.
+ * structure invariants (toolbar outside the box, one box only) and the DT2 flex skip-guard.  The table-vs-page scroll
+ * contract and the overflow-detected {@code tabindex} are pinned in {@code TableOverflow_BrowserTest}.
  */
 class ViewsJs_TableOverflow_Test extends TestBase {
 
@@ -57,7 +57,7 @@ class ViewsJs_TableOverflow_Test extends TestBase {
 
 	//------------------------------------------------------------------------------------------------------------------
 	// Source-shape (always-on) - the DT2 skip-guard MUST precede the .juneau-view-table-scroll skip, and the helper
-	// must be wired from constructTable + paired with an unwrap on teardown (N-P5-B1 / B3).
+	// must be wired from constructTable + paired with an unwrap on teardown.
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Test void a01_helpersExportedAndWired() throws Exception {
@@ -66,7 +66,7 @@ class ViewsJs_TableOverflow_Test extends TestBase {
 		assertTrue(body.contains("unwrapTableScroll: unwrapTableScroll"), "missing NS export unwrapTableScroll");
 		// Wired from constructTable (the wrap is applied after DataTable boot + toolbar).
 		assertTrue(body.contains("ensureTableScroll(table"), "ensureTableScroll must be called from constructTable");
-		// Paired unwrap in teardownTable so a destroy()+reconstruct cannot nest the toolbar inside the box (INV-5).
+		// Paired unwrap in teardownTable so a destroy()+reconstruct cannot nest the toolbar inside the box.
 		assertTrue(body.contains("unwrapTableScroll(table"), "teardownTable must unwrap the DT1 scroll box");
 	}
 
@@ -78,7 +78,7 @@ class ViewsJs_TableOverflow_Test extends TestBase {
 		assertTrue(dt2Guard >= 0, "ensureTableScroll must no-op on DT2 via table.closest('.dt-layout-cell')");
 		assertTrue(wrapGuard >= 0, "ensureTableScroll must skip an already-wrapped table (closest('.'+TABLE_SCROLL_CLASS))");
 		assertTrue(dt2Guard < wrapGuard,
-			"the DT2 (.dt-layout-cell) skip-guard must fire BEFORE the .juneau-view-table-scroll skip (N-P5-B1)");
+			"the DT2 (.dt-layout-cell) skip-guard must fire BEFORE the .juneau-view-table-scroll skip");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -173,7 +173,7 @@ class ViewsJs_TableOverflow_Test extends TestBase {
 		assertEquals(true, r.get("hasUnwrapTableScroll"));
 	}
 
-	/** T-JS-1: after the wrap, the table is the sole element child of the scroll box, sibling-lineage of the toolbar. */
+	/** after the wrap, the table is the sole element child of the scroll box, sibling-lineage of the toolbar. */
 	@Test void b02_wrapStructure_inv1() {
 		var r = report();
 		assertEquals(true, r.get("t1_boxIsScrollClass"));
@@ -181,15 +181,15 @@ class ViewsJs_TableOverflow_Test extends TestBase {
 		assertEquals(true, r.get("t1_tableIsSoleElementChild"));
 		assertEquals(true, r.get("t1_toolbarNotAncestorOfTable"));
 		assertEquals(true, r.get("t1_boxDoesNotContainToolbar"));
-		assertEquals(true, r.get("t1_columnsAdjusted"));   // S5: columns.adjust() after the move
+		assertEquals(true, r.get("t1_columnsAdjusted"));   // columns.adjust() after the move
 	}
 
-	/** T-JS-3: the paging-pill menu is not a descendant of the scroll box (INV-2). */
+	/** the paging-pill menu is not a descendant of the scroll box. */
 	@Test void b03_pagingPillMenuOutsideBox_inv2() {
 		assertEquals(true, report().get("t3_pillMenuOutsideBox"));
 	}
 
-	/** T-JS-2: idempotency across teardown - exactly one box after wrap/unwrap/re-wrap, toolbar never inside (INV-5). */
+	/** idempotency across teardown - exactly one box after wrap/unwrap/re-wrap, toolbar never inside. */
 	@Test void b04_idempotencyAcrossTeardown_inv5() {
 		var r = report();
 		assertEquals(true, r.get("t2_unwrapRestoresTableToWrapper"));
@@ -199,12 +199,12 @@ class ViewsJs_TableOverflow_Test extends TestBase {
 		assertEquals(true, r.get("t2_tableNotDuplicated"));
 	}
 
-	/** T-JS-5: a table already inside a scroll box does not get a second box (nested tables, N5). */
+	/** a table already inside a scroll box does not get a second box (nested tables). */
 	@Test void b05_nestedTableNotDoubleWrapped_n5() {
 		assertEquals(true, report().get("t5_noSecondBox"));
 	}
 
-	/** N-P5-B1: a DT2 table (parent is a flex {@code .dt-layout-cell}) is not wrapped - Approach D CSS owns overflow. */
+	/** a DT2 table (parent is a flex {@code .dt-layout-cell}) is not wrapped - CSS owns overflow. */
 	@Test void b06_dt2SkipGuardFires() {
 		var r = report();
 		assertEquals(true, r.get("dt2_notWrapped"));
@@ -221,8 +221,8 @@ class ViewsJs_TableOverflow_Test extends TestBase {
 	}
 
 	/**
-	 * L12 A preserved verbatim: the overflow-detected {@code tabindex="0"} + generic label are applied ONLY while the
-	 * region actually overflows, and BOTH are removed once it does not.  OQ4/OQ5 stay out.
+	 * Preserved verbatim: the overflow-detected {@code tabindex="0"} + generic label are applied ONLY while the
+	 * region actually overflows, and BOTH are removed once it does not.
 	 */
 	@Test void b08_l12a_tabindexOnlyWhileOverflowing() {
 		var r = report();

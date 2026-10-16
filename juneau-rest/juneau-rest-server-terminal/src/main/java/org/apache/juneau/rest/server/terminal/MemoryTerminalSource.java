@@ -17,8 +17,10 @@
 package org.apache.juneau.rest.server.terminal;
 
 import static org.apache.juneau.commons.utils.Shorts.*;
+import static org.apache.juneau.rest.server.runreport.RunViewChecks.*;
 
 import java.util.*;
+import java.util.logging.*;
 
 /**
  * A {@link TerminalSource} over a fixed-capacity ring buffer, for producers that run in the same process.
@@ -37,10 +39,15 @@ import java.util.*;
  */
 public final class MemoryTerminalSource implements TerminalSource {
 
+	private static final Logger LOG = Logger.getLogger(MemoryTerminalSource.class.getName());
+
+	private record Nudge(String id, TerminalNudgePublisher publisher) {}
+
 	private final byte[] ring;
 	private final int cols, rows;
 	private long end;
 	private boolean finished;
+	private volatile Nudge nudge;
 
 	private MemoryTerminalSource(int capacity, int cols, int rows) {
 		ring = new byte[capacity];
@@ -66,6 +73,41 @@ public final class MemoryTerminalSource implements TerminalSource {
 	}
 
 	/**
+	 * Reports every append and the finish to a publisher, outside this source's lock.
+	 *
+	 * <p>
+	 * A {@link RuntimeException} thrown by the publisher is logged at {@code FINE} and otherwise ignored, so a write
+	 * never fails because of a nudge.
+	 *
+	 * @param terminalId The terminal id passed to the publisher; must be a valid run id.
+	 * @param publisher The publisher.
+	 * @return This object.
+	 * @throws NullPointerException If an argument is <jk>null</jk>.
+	 * @throws IllegalArgumentException If the id is not a valid run id.
+	 * @throws IllegalStateException If a publisher is already set.
+	 */
+	public MemoryTerminalSource nudges(String terminalId, TerminalNudgePublisher publisher) {
+		Objects.requireNonNull(terminalId, "terminalId");
+		Objects.requireNonNull(publisher, "publisher");
+		if (! isRunId(terminalId))
+			throw iaex("MemoryTerminalSource nudge id is not a valid run id: '%s'.", terminalId);
+		synchronized (this) {
+			if (nudge != null)
+				throw new IllegalStateException("MemoryTerminalSource nudges are already set.");
+			nudge = new Nudge(terminalId, publisher);
+		}
+		return this;
+	}
+
+	private void publish(Nudge n, long e, boolean done) {
+		try {
+			n.publisher().nudge(n.id(), e, done);
+		} catch (RuntimeException x) {
+			LOG.log(Level.FINE, x, () -> "Terminal nudge publisher failed for '" + n.id() + "'.");
+		}
+	}
+
+	/**
 	 * Appends bytes.
 	 *
 	 * @param b The bytes.
@@ -74,25 +116,41 @@ public final class MemoryTerminalSource implements TerminalSource {
 	 * @throws IllegalStateException If {@link #finish()} has been called.
 	 * @throws IndexOutOfBoundsException If {@code off} and {@code len} do not fit in {@code b}.
 	 */
-	public synchronized void write(byte[] b, int off, int len) {
+	public void write(byte[] b, int off, int len) {
 		Objects.checkFromIndexSize(off, len, b.length);
-		if (finished)
-			throw new IllegalStateException("MemoryTerminalSource is finished.");
-		if (len > ring.length) {
-			off += len - ring.length;
-			end += len - ring.length;
-			len = ring.length;
+		Nudge n;
+		long e;
+		synchronized (this) {
+			if (finished)
+				throw new IllegalStateException("MemoryTerminalSource is finished.");
+			if (len > ring.length) {
+				off += len - ring.length;
+				end += len - ring.length;
+				len = ring.length;
+			}
+			var p = (int)(end % ring.length);
+			var first = Math.min(len, ring.length - p);
+			System.arraycopy(b, off, ring, p, first);
+			System.arraycopy(b, off + first, ring, 0, len - first);
+			end += len;
+			e = end;
+			n = nudge;
 		}
-		var p = (int)(end % ring.length);
-		var first = Math.min(len, ring.length - p);
-		System.arraycopy(b, off, ring, p, first);
-		System.arraycopy(b, off + first, ring, 0, len - first);
-		end += len;
+		if (n != null)
+			publish(n, e, false);
 	}
 
 	/** Marks the stream finished: readers that reach the end see {@code done}. */
-	public synchronized void finish() {
-		finished = true;
+	public void finish() {
+		Nudge n;
+		long e;
+		synchronized (this) {
+			finished = true;
+			e = end;
+			n = nudge;
+		}
+		if (n != null)
+			publish(n, e, true);
 	}
 
 	@Override /* TerminalSource */

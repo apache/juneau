@@ -22,7 +22,7 @@ import java.util.regex.*;
 import org.apache.juneau.marshall.collections.*;
 
 /**
- * Static check of a page contract's message-bus wiring (spec §6.1, §11.2): rule R-10 (every
+ * Static check of a page contract's message-bus wiring: rule R-10 (every
  * subscription has a publisher), rule R-11 (every {@code publisher:"server"} topic rides a bridge downstream), and the
  * E-40..E-54 and E-58 shape rules on {@code topics}, {@code bridges}, card {@code publishes} / {@code subscribes} and ribbon
  * {@code target} / {@code publish} items.
@@ -33,7 +33,7 @@ import org.apache.juneau.marshall.collections.*;
  * E-JS-47, E-JS-52); this class reports everything.
  *
  * <p>
- * Every problem is collected; nothing is thrown.  Callers decide how loud to be (spec §6.1): the page render, the
+ * Every problem is collected; nothing is thrown.  Callers decide how loud to be: the page render, the
  * template validator and C3's {@code PageSpec.build()} each turn the list into their own failure.
  *
  * <h5 class='section'>Example:</h5>
@@ -58,8 +58,8 @@ public final class BusWiringValidator {
 	 *   <jv>p</jv>.toString();   <jc>// "E-52 topic 'ops.jobs' is declared ..."</jc>
 	 * </p>
 	 *
-	 * @param code The Java code, {@code E-40}..{@code E-54} or {@code E-58}.
-	 * @param message The spec §6.2 message, without the code.
+	 * @param code The Java code, {@code E-40}..{@code E-54}, {@code E-58} or {@code E-71}..{@code E-77}.
+	 * @param message The message, without the code.
 	 */
 	public record Problem(String code, String message) {
 		@Override
@@ -88,25 +88,42 @@ public final class BusWiringValidator {
 	static final String E53 = "bridge '%s' sends '%s' upstream, but no topics entry or card publishes declares it";
 	static final String E54 = "bridge '%s' may not carry framework state topic '%s' (only job:*, and cmd:<cardId> downstream)";
 	static final String E58 = "terminal card '%s' has input: true but %s";
+	static final String E72 = "chart card '%s' on.%s targets '%s', which the card does not publish";
+	static final String E73 = "'%s' sends cmd '%s' to group '%s', which no chart card declares";
+	/** E-74 text; {@code Fn}, {@code ChartDef} and {@code ChartCardType} (console-ui-freemarker) throw it too. */
+	public static final String E74 = "'%s' is not a valid %s name";
+	static final String E76 = "data source '%s': %s";
+	/** E-77 text; {@code DashboardSpec}, {@code Section} and {@code PersistSpec} (console-ui-freemarker) throw it too. */
+	public static final String E77 = "dashboard '%s': %s";
+	static final String E71 = "topic '%s' needs exactly one source publisher; found %s";
 
-	// Topic grammar (schema §5.7): one copy, owned by Topics.
+	/** Names for $fn, decorators, sections, parsers, builders and transforms (rule R-E5); juneau-charts.js has the same literal. */
+	public static final Pattern EXTENSION_NAME = Pattern.compile("^[a-z][a-zA-Z0-9]*(\\.[a-z][a-zA-Z0-9-]*)*$");
+	/** ECharts event names a chart card's {@code on} may use. */
+	public static final Pattern EVENT_NAME = Pattern.compile("^[a-z][a-z0-9_]{0,31}$");
+
+	// Topic grammar: one copy, owned by Topics.
 	static final Set<String> FRAMEWORK_FAMILIES = Topics.FRAMEWORK_FAMILIES;
 	static final Pattern TOPIC = Topics.TOPIC;
-	static final Pattern CUSTOM_DECL = Topics.PUBLICATION;
+	static final Pattern CUSTOM_DECL = Topics.CUSTOM_PUBLICATION;
 	static final Pattern UNNAMESPACED = Pattern.compile("^([a-z][a-z0-9-]{0,31})(:([A-Za-z0-9_.-]{1,128}|\\*))?$");
 	static final Pattern BRIDGE_ID = Topics.ID;
 	static final Pattern SAME_ORIGIN_PATH = Pattern.compile("^/(?![/\\\\])\\S*$");
 	static final Pattern URL_TOKEN = Pattern.compile("\\{([A-Za-z0-9_-]+)\\}");
 
-	/** Families whose key is a card id (spec §4). */
-	static final Set<String> CARD_FAMILIES = Set.of("card", "selection", "filter", "redraw", "detail", "bulk", "cmd");
-	/** Roles the shell implements for every card type (spec §5.3). */
+	/** Families whose key is a card id. */
+	static final Set<String> CARD_FAMILIES = Set.of("card", "selection", "filter", "redraw", "detail", "bulk", "cmd", "zoom", "legend");
+	/** Roles the shell implements for every card type. */
 	static final Set<String> SHELL_ROLES = Set.of("refresh", "params");
-	/** The {@code cmd:} op each targetable ribbon item sends (spec §5.5). */
+	/** The {@code cmd:} op each targetable ribbon item sends. */
 	static final Map<String,String> RIBBON_OPS = Map.of(
 		"refresh", "reload", "option", "set-filter", "optionGroup", "set-filter",
 		"pausePolling", "pause-polling", "collapseAll", "collapse-all");
-	/** Datatables families that need a catalog key to be published (spec §5.4). */
+	/** The card type a data source reports in E-43 (R-E3a). */
+	static final String SOURCE_TYPE = "dataSource";
+	/** The cmd ops a data source handles: refresh, and reload (what a targeted ribbon refresh item sends). */
+	static final Set<String> SOURCE_OPS = Set.of("refresh", "reload");
+	/** Datatables families that need a catalog key to be published. */
 	static final Set<String> DATATABLES_OPT_IN = Set.of("selection", "detail", "bulk");
 	/** Largest edit distance a "did you mean" suggestion may have. */
 	static final int SUGGEST_MAX_DISTANCE = 3;
@@ -118,7 +135,9 @@ public final class BusWiringValidator {
 	 *
 	 * @param contract The page contract (the {@code #juneau-page} JSON).
 	 * @param registry Card types, for implicit topics, accepted roles and ops.  Unregistered types are skipped.
-	 * @return Every problem, in contract order: {@code topics}, then each card, then {@code bridges}, then R-11, then the terminal-input rule (E-58).
+	 * @return Every problem, in contract order: {@code topics}, then each card, then {@code dataSources}
+	 * 	(E-74, then E-71 sorted by topic, then derived-source cycles as E-76 sorted by each cycle's smallest id),
+	 * 	then ids (E-76/E-77), then {@code bridges}, then R-11, then the terminal-input rule (E-58).
 	 */
 	public static List<Problem> validate(JsonMap contract, CardTypeRegistry registry) {
 		return new Run(contract, registry).run();
@@ -159,6 +178,21 @@ public final class BusWiringValidator {
 		final List<Map<?,?>> topics;
 		final List<Map<?,?>> bridges;
 		final Map<String,Map<?,?>> cards = new LinkedHashMap<>();
+		final List<Map<?,?>> dataSources;
+		final List<Map<?,?>> sections;
+		/** The contract's {@code dashboard} object, or an empty map. */
+		final Map<?,?> dashboard;
+		/** Ids of the data sources, and of the rail sections (the sole owner of {@code filter:<sectionId>}, R-E7). */
+		final Set<String> sourceIds = new HashSet<>();
+		final Set<String> sectionIds = new HashSet<>();
+		/** {@code contract.dashboard.id}, the E-77 name slot; {@code "<none>"} when absent. */
+		final String dashId;
+		/** Ids a card-keyed family key may name: cards, data sources (R-E3a) and dashboard rail sections (R-E7). */
+		final Set<String> targets = new HashSet<>();
+		/** data:<id> topic to its number of source publishers (R-E1). */
+		final Map<String,Integer> dataPublishers = new TreeMap<>();
+		/** data:<id> topics something on the page reads (R-E1). */
+		final Set<String> dataReads = new TreeSet<>();
 		/** Every topic or pattern something on the page publishes (R-10 rules 2-6), sorted for the suggestion. */
 		final TreeSet<String> published = new TreeSet<>();
 		/** topic -> [retain, where] of its first declaration (E-46). */
@@ -171,6 +205,17 @@ public final class BusWiringValidator {
 			for (var c : maps(contract.get("cards")))
 				if (str(c.get("id")) != null)
 					cards.putIfAbsent(str(c.get("id")), c);
+			dataSources = maps(contract.get("dataSources"));
+			var dash = contract.get("dashboard") instanceof Map<?,?> d ? d : Map.of();
+			dashboard = dash;
+			var rail = dash.get("rail") instanceof Map<?,?> r ? r : Map.of();
+			sections = maps(rail.get("sections"));
+			dashId = str(dash.get("id")) != null ? str(dash.get("id")) : "<none>";
+			targets.addAll(cards.keySet());
+			for (var s : dataSources) if (str(s.get("id")) != null) sourceIds.add(str(s.get("id")));
+			for (var s : sections) if (str(s.get("id")) != null) sectionIds.add(str(s.get("id")));
+			targets.addAll(sourceIds);
+			targets.addAll(sectionIds);
 		}
 
 		List<Problem> run() {
@@ -179,6 +224,11 @@ public final class BusWiringValidator {
 				checkTopicDecl(i, topics.get(i));
 			for (var c : cards.values())
 				checkCard(c);
+			checkDataSources();
+			checkDataTopics();
+			checkDerivedCycles();
+			checkIds();
+			checkDashboard();
 			checkBridges();
 			checkServerTopics();
 			checkTerminalInput();
@@ -208,9 +258,22 @@ public final class BusWiringValidator {
 				var topic = str(t.get("topic"));
 				if ("job:*".equals(topic))
 					published.add(topic);
+				else if (topic != null && topic.startsWith("data:") && "script".equals(str(t.get("publisher")))) {
+					published.add(topic);
+					dataPublishers.merge(topic, 1, Integer::sum);
+				}
 				else
 					addCustom(topic);
 			}
+			for (var id : sourceIds) {
+				published.add("data:" + id);
+				dataPublishers.merge("data:" + id, 1, Integer::sum);
+			}
+			// A section's filter:<id> is read through the sectionIds check in checkPublisher; it is added here only so that
+			// the "did you mean" suggestion can offer it (pinned by corpus c67).
+			for (var s : sections)
+				if (str(s.get("id")) != null)
+					published.add("filter:" + str(s.get("id")));
 			for (var b : bridges) {
 				var id = str(b.get("id"));
 				if (id != null)
@@ -255,10 +318,26 @@ public final class BusWiringValidator {
 					add("E-45", E45_FRAMEWORK, "job");
 				return;
 			}
-			checkDeclared(topic, decl.get("retain"), "topics[" + index + "]");
+			if (topic != null && topic.startsWith("data:") && TOPIC.matcher(topic).matches()) {
+				// A page-declared data: topic is published by a page script, and the bus keeps its last value (R-E4).
+				if (! "script".equals(str(decl.get("publisher"))) || ! Boolean.TRUE.equals(decl.get("retain")))
+					add("E-45", E45_FRAMEWORK, "data");
+				return;
+			}
+			checkDeclared(topic, decl.get("retain"), "topics[" + index + "]", null);
 		}
 
-		void checkDeclared(String topic, Object retain, String where) {
+		/** @param cardId The declaring card, or {@code null} for a page-level topics entry. */
+		void checkDeclared(String topic, Object retain, String where, String cardId) {
+			if (topic != null && cardId != null) {
+				var card = cards.get(cardId);
+				if (card != null && "chart".equals(str(card.get("type"))) && (topic.equals("zoom:" + cardId) || topic.equals("legend:" + cardId))) {
+					// Retained chart state: TopicDecl.toPublicationMap requires retain(true).
+					if (! Boolean.TRUE.equals(retain))
+						add("E-45", E45_FRAMEWORK, family(topic));
+					return;
+				}
+			}
 			if (topic != null && CUSTOM_DECL.matcher(topic).matches()) {
 				var first = retains.putIfAbsent(topic, new Object[] { retain, where });
 				if (first != null && ! Objects.equals(first[0], retain))
@@ -279,7 +358,7 @@ public final class BusWiringValidator {
 		void checkCard(Map<?,?> card) {
 			var id = str(card.get("id"));
 			for (var p : maps(card.get("publishes")))
-				checkDeclared(str(p.get("topic")), p.get("retain"), "card '" + id + "'");
+				checkDeclared(str(p.get("topic")), p.get("retain"), "card '" + id + "'", id);
 			var params = new LinkedHashSet<String>();
 			var hasParams = false;
 			for (var s : maps(card.get("subscribes"))) {
@@ -298,6 +377,206 @@ public final class BusWiringValidator {
 			if (hasParams) {
 				checkTokens(id, "src", str(card.get("src")), params);
 				checkTokens(id, "dataUrl", str(view(card).get("dataUrl")), params);
+			}
+			if ("chart".equals(str(card.get("type"))))
+				checkChart(card);
+		}
+
+		// Keys a legacy flat chart card reads as helper keys (mirrors ChartDef.HELPER_KEYS in the freemarker module).
+		private static final List<String> LEGACY_HELPER_KEYS = List.of("x", "y", "series", "stacked", "orientation", "legend", "label",
+			"value", "center", "scale", "symbolSize", "groupBy", "size", "color", "tileFields");
+
+		// R-E2 (E-72), R-E5 (E-74) for one chart card.
+		void checkChart(Map<?,?> card) {
+			var id = str(card.get("id"));
+			var pubs = new HashSet<String>();
+			for (var p : maps(card.get("publishes"))) if (str(p.get("topic")) != null) pubs.add(str(p.get("topic")));
+			if (card.get("on") instanceof Map<?,?> on)
+				for (var e : on.entrySet()) {
+					var ev = String.valueOf(e.getKey());
+					var t = e.getValue() instanceof String ts ? ts : null;
+					if (! EVENT_NAME.matcher(ev).matches())
+						add("E-74", E74, ev, "event");
+					if (t == null || ! pubs.contains(t))
+						add("E-72", E72, id, ev, t != null ? t : "<not a string: " + e.getValue() + ">");
+				}
+			for (var d : maps(card.get("decorators"))) {
+				var use = str(d.get("use"));
+				if (use == null || ! EXTENSION_NAME.matcher(use).matches())
+					add("E-74", E74, use, "decorator");
+				walkFns(d);
+			}
+			walkFns(card.get("option"));
+			walkFns(card.get("patch"));
+			// helper values can be $fn markers (ChartDef.symbolSizeBy); a legacy flat card carries the helper keys at top level.
+			walkFns(card.get("helper"));
+			// A legacy flat body (only when it names a kind, as ChartCardType does) is walked as one map of its helper keys, so
+			// the series key skips series[*].data exactly like ChartCardType.
+			if (card.containsKey("kind")) {
+				var legacy = new LinkedHashMap<String,Object>();
+				for (var k : LEGACY_HELPER_KEYS)
+					if (card.containsKey(k))
+						legacy.put(k, card.get(k));
+				walkFns(legacy);
+			}
+		}
+
+		// $fn markers: an object whose only keys are $fn and, optionally, args.  dataset[*].source and series[*].data are
+		// rows of data, never extension references, so they are not walked.
+		void walkFns(Object o) {
+			if (o instanceof Map<?,?> m) {
+				if (m.containsKey("$fn") && m.keySet().stream().allMatch(k -> "$fn".equals(k) || "args".equals(k))) {
+					var n = str(m.get("$fn"));
+					if (n == null || ! EXTENSION_NAME.matcher(n).matches())
+						add("E-74", E74, n, "$fn");
+				}
+				for (var e : m.entrySet()) {
+					if ("dataset".equals(e.getKey()))
+						walkSkipping(e.getValue(), "source");
+					else if ("series".equals(e.getKey()))
+						walkSkipping(e.getValue(), "data");
+					else
+						walkFns(e.getValue());
+				}
+			} else if (o instanceof List<?> l) {
+				l.forEach(this::walkFns);
+			}
+		}
+
+		/** Walks {@code o} (a map or a list of maps) without descending into the {@code skip} key of each map. */
+		void walkSkipping(Object o, String skip) {
+			if (o instanceof List<?> l) {
+				l.forEach(x -> walkSkipping(x, skip));
+			} else if (o instanceof Map<?,?> m) {
+				for (var e : m.entrySet())
+					if (! skip.equals(e.getKey()))
+						walkFns(e.getValue());
+			}
+		}
+
+		// R-E3b (E-73): a cmd with target "group" needs a group some chart card declares.
+		void checkGroupCmd(String from, String key, Map<?,?> item) {
+			if (! (item.get("payload") instanceof Map<?,?> p) || ! "group".equals(str(p.get("target"))))
+				return;
+			var target = cards.get(key);
+			// Only a chart card has a group; a data source or another card type is not a group member.
+			if (target == null || ! "chart".equals(str(target.get("type"))) || str(target.get("group")) != null)
+				return;
+			var groups = new TreeSet<String>();
+			for (var c : cards.values())
+				if ("chart".equals(str(c.get("type"))) && str(c.get("group")) != null)
+					groups.add(str(c.get("group")));
+			add("E-73", E73, from, str(p.get("op")), groups.isEmpty() ? "<none>" : "<none> (page groups: " + String.join(", ", groups) + ")");
+		}
+
+		// R-E6 (E-76 / E-77): ids are unique across cards, data sources and rail sections.
+		void checkIds() {
+			var seenSources = new HashSet<String>();
+			for (var s : dataSources) {
+				var sid = str(s.get("id"));
+				if (sid == null) continue;
+				if (cards.containsKey(sid))
+					add("E-76", E76, sid, "id duplicates card '" + sid + "'");
+				else if (! seenSources.add(sid))
+					add("E-76", E76, sid, "id duplicates data source '" + sid + "'");
+			}
+			var seenSections = new HashSet<String>();
+			for (var s : sections) {
+				var sid = str(s.get("id"));
+				if (sid == null) continue;
+				if (cards.containsKey(sid))
+					add("E-77", E77, dashId, "section id '" + sid + "' duplicates card '" + sid + "'");
+				else if (sourceIds.contains(sid))
+					add("E-77", E77, dashId, "section id '" + sid + "' duplicates data source '" + sid + "'");
+				else if (! seenSections.add(sid))
+					add("E-77", E77, dashId, "section id '" + sid + "' duplicates section '" + sid + "'");
+			}
+		}
+
+		// E-77 page-level dashboard rules; the rest of E-77 is checked when the dashboard is built.
+		void checkDashboard() {
+			if (dashboard.isEmpty())
+				return;
+			var declared = new HashSet<String>();
+			for (var t : topics) {
+				var name = str(t.get("topic"));
+				if (name != null && name.startsWith("data:"))
+					declared.add(name);
+			}
+			for (var id : sourceIds)
+				declared.add("data:" + id);
+			if (dashboard.get("status") instanceof List<?> status)
+				for (var o : status)
+					if (o instanceof String t && ! declared.contains(t))
+						add("E-77", E77, dashId, "status topic '" + t + "' is not a declared data source");
+			for (var s : sections)
+				if ("choice".equals(str(s.get("kind"))) && ! declared.contains("data:" + str(s.get("source"))))
+					add("E-77", E77, dashId, "choice section '" + str(s.get("id")) + "' names source '" + str(s.get("source"))
+						+ "', which is not a declared data source");
+		}
+
+		// R-E1 inputs from derived sources, and R-E5 (E-74) for parser, builder and transform names.
+		void checkDataSources() {
+			for (var s : dataSources) {
+				if ("derived".equals(str(s.get("kind"))) && str(s.get("from")) != null)
+					dataReads.add("data:" + str(s.get("from")));
+				checkExtensionName(s.get("parser"), "parser");
+				checkExtensionName(s.get("builder"), "builder");
+				for (var t : maps(s.get("transforms")))
+					checkExtensionName(t.get("use"), "transform");
+			}
+		}
+
+		void checkExtensionName(Object name, String what) {
+			if (name != null && ! EXTENSION_NAME.matcher(String.valueOf(name)).matches())
+				add("E-74", E74, name, what);
+		}
+
+		// R-E1 (E-71): every data topic read or published has exactly one source publisher.
+		void checkDataTopics() {
+			var all = new TreeSet<>(dataReads);
+			all.addAll(dataPublishers.keySet());
+			for (var t : all) {
+				var n = dataPublishers.getOrDefault(t, 0);
+				if (n != 1)
+					add("E-71", E71, t, n);
+			}
+		}
+
+		// E-76: a derived source's input chain must not loop back on itself.  Each cycle is reported once, named from its
+		// smallest id; an input that is not a derived source ends the walk (a missing one is E-71 above).
+		void checkDerivedCycles() {
+			var from = new TreeMap<String,String>();
+			// A duplicate id is already E-76 from the duplicate-id rule; only the first derived entry for an id is walked.
+			for (var s : dataSources)
+				if ("derived".equals(str(s.get("kind"))) && str(s.get("id")) != null && str(s.get("from")) != null)
+					from.putIfAbsent(str(s.get("id")), str(s.get("from")));
+			var done = new HashSet<String>();
+			var cycles = new TreeMap<String,List<String>>();
+			for (var start : from.keySet()) {
+				var path = new ArrayList<String>();
+				var id = start;
+				while (id != null && from.containsKey(id) && ! done.contains(id) && ! path.contains(id)) {
+					path.add(id);
+					id = from.get(id);
+				}
+				if (id != null && path.contains(id)) {
+					var cycle = path.subList(path.indexOf(id), path.size());
+					var min = Collections.min(cycle);
+					var offset = cycle.indexOf(min);
+					var rotated = new ArrayList<String>();
+					for (var i = 0; i < cycle.size(); i++)
+						rotated.add(cycle.get((offset + i) % cycle.size()));
+					cycles.put(min, rotated);
+				}
+				done.addAll(path);
+			}
+			for (var e : cycles.entrySet()) {
+				var c = e.getValue();
+				if (c.size() == 1)
+					add("E-76", E76, e.getKey(), "derived source '" + e.getKey() + "' references itself");
+				else
+					add("E-76", E76, e.getKey(), "derived source cycle: " + String.join(" -> ", c) + " -> " + e.getKey());
 			}
 		}
 
@@ -324,6 +603,10 @@ public final class BusWiringValidator {
 		void checkPublisher(String id, String topic) {
 			var family = family(topic);
 			var key = key(topic);
+			if ("data".equals(family) && key != null) {
+				dataReads.add(topic);   // R-E1 counts publishers in checkDataTopics (E-71), not E-41
+				return;
+			}
 			if (FRAMEWORK_FAMILIES.contains(family) && key != null) {
 				if (CARD_FAMILIES.contains(family)) {
 					if (key.equals(id)) {
@@ -332,7 +615,13 @@ public final class BusWiringValidator {
 					}
 					var target = cards.get(key);
 					if (target == null) {
-						add("E-42", E42, topic, key);
+						if (! targets.contains(key))
+							add("E-42", E42, topic, key);
+						// R-E3a: any cmd: may name a data source or section; R-E7: a section owns filter:<sectionId>.
+						// Every other family keyed to a source or section has no publisher (R-E3a), so it is E-41
+						// unless a declared topic matches it (isPublished covers script-declared topics, e.g. a wildcard).
+						else if (! family.equals("cmd") && ! (family.equals("filter") && sectionIds.contains(key)) && ! isPublished(topic))
+							add("E-41", E41, id, topic, suggest(topic));
 						return;
 					}
 					if (family.equals("card") || family.equals("cmd"))
@@ -387,11 +676,15 @@ public final class BusWiringValidator {
 			}
 			var tid = str(target);
 			var tc = tid == null ? null : cards.get(tid);
+			var op = RIBBON_OPS.get(type);
 			if (tc == null) {
-				add("E-42", E42, "cmd:" + tid, tid);
+				if (tid == null || ! targets.contains(tid))
+					add("E-42", E42, "cmd:" + tid, tid);
+				// The op the ribbon actually sends (a refresh item sends "reload") must be one a source handles (R-E3a).
+				else if (sourceIds.contains(tid) && ! SOURCE_OPS.contains(op))
+					add("E-43", E43_OP, tid, SOURCE_TYPE, op);
 				return;
 			}
-			var op = RIBBON_OPS.get(type);
 			var ttype = str(tc.get("type"));
 			if (ttype != null && registry.isRegistered(ttype)) {
 				var ops = registry.handler(ttype).acceptedOps();
@@ -419,8 +712,12 @@ public final class BusWiringValidator {
 			if (FRAMEWORK_FAMILIES.contains(family)) {
 				var key = key(topic);
 				if (family.equals("cmd") && key != null) {
-					if (! cards.containsKey(key))
+					if (! targets.contains(key))
 						add("E-42", E42, topic, key);
+					else {
+						checkSourceOp(key, item);
+						checkGroupCmd(id, key, item);
+					}
 					return;
 				}
 				add("E-48", E48, label, id, "'" + topic + "' is a framework topic; a publish item may only publish custom topics or cmd:<cardId>");
@@ -428,6 +725,15 @@ public final class BusWiringValidator {
 			}
 			if (! declaredCustom(topic, Set.of("script", "server", "ribbon"), true))
 				add("E-48", E48, label, id, "topic '" + topic + "' is not declared in topics or by any card's publishes");
+		}
+
+		// R-E3a (E-43): a data source handles only SOURCE_OPS; a payload without an op passes.
+		void checkSourceOp(String key, Map<?,?> item) {
+			if (! sourceIds.contains(key) || cards.containsKey(key) || ! (item.get("payload") instanceof Map<?,?> p))
+				return;
+			var op = str(p.get("op"));
+			if (op != null && ! SOURCE_OPS.contains(op))
+				add("E-43", E43_OP, key, SOURCE_TYPE, op);
 		}
 
 		/**
@@ -568,7 +874,8 @@ public final class BusWiringValidator {
 		void checkServerTopics() {
 			for (var t : topics) {
 				var topic = str(t.get("topic"));
-				if (topic == null || ! "server".equals(str(t.get("publisher"))))
+				// A data: topic published by the server is already E-45 (it must be script-published).
+				if (topic == null || topic.startsWith("data:") || ! "server".equals(str(t.get("publisher"))))
 					continue;
 				var covered = false;
 				for (var b : bridges)

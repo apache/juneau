@@ -134,6 +134,8 @@ public final class PageCapture {
 	private String title = "";
 	private String theme;
 	private boolean themeFromDirective;
+	private String scheme;
+	private boolean schemeToggle;
 	private String tab = "";
 	private String navLayout;
 	private String shellUrl;
@@ -146,6 +148,9 @@ public final class PageCapture {
 	private final Map<String,Map<String,Object>> topics = new LinkedHashMap<>();
 	private final Map<String,String> topicWhere = new HashMap<>();
 	private final Map<String,Map<String,Object>> bridges = new LinkedHashMap<>();
+	/** The {@code dashboard} contract object ({@code PageSpec.dashboard}), or <jk>null</jk>. */
+	private Map<String,Object> dashboard;
+	private final Map<String,Map<String,Object>> dataSources = new LinkedHashMap<>();
 	private final Map<String,BadgeDef> badges = new LinkedHashMap<>();
 	private Map<String,Object> javaFacts = Map.of(), chromeFacts = Map.of(), facts = Map.of();
 	// Cards from a PageSpec, held until placed or the page closes.  builtCards: not yet placed, in declaration order.
@@ -157,6 +162,7 @@ public final class PageCapture {
 	private List<String> toolkits = List.of();
 	private List<String> init = List.of();
 	private List<String> css = List.of();
+	private boolean assetsResolved;
 	private List<String> vendorCss = List.of();
 	private List<String> vendorJs = List.of();
 	private List<String> runtimeCss = List.of();
@@ -178,6 +184,8 @@ public final class PageCapture {
 	String bodyAttrs;
 	String ftlBodyAttrs;
 	String themeCssUrl;
+	/** The validated {@code <@console theme=>} value, or <jk>null</jk>; the seed for a nameless {@code <@theme>}. */
+	String consoleTheme;
 	String themeOverrideBlock;
 	ThemeBuildContext themeBuild;
 	final Deque<NavNode> navCursor = new ArrayDeque<>();
@@ -287,6 +295,12 @@ public final class PageCapture {
 	/** @param name A stock theme name. @return This object. */
 	public PageCapture theme(String name) { theme = name; return this; }
 
+	/** @param name A colour-scheme pin: {@code auto}, {@code light} or {@code dark}. @return This object. */
+	public PageCapture scheme(String name) { scheme = name; return this; }
+
+	/** @param value Whether the visitor's stored scheme choice is honoured. @return This object. */
+	public PageCapture schemeToggle(boolean value) { schemeToggle = value; return this; }
+
 	/** @param v The {@code <@page tab>} value. @return This object. */
 	public PageCapture tab(String v) { tab = n(v) ? "" : v; return this; }
 
@@ -343,13 +357,16 @@ public final class PageCapture {
 		return this;
 	}
 
-	// A card's src is fetched by the browser, so every card reaching the page passes through here: <@card> html cards,
-	// PageSpec.html / PageSpec.card, and direct addCard callers.  {token} placeholders are allowed.
+	// Every card reaching the page passes through here: <@card> html cards, PageSpec.html / PageSpec.card, and direct
+	// addCard callers.  Checks, in order: (1) a card's src is fetched by the browser, so it must be a same-origin path
+	// ({token} placeholders allowed); (2) sanitize= is valid only on an html card with a src.  The src check wins when both fail.
 	private static void checkSrc(CardSpec card) throws TemplateModelException {
 		var src = card.src();
 		if (nn(src) && ! SafePathTemplate.isSameOriginPath(src))
 			throw FtlAttrLists.reject(f("<@card id='%s'> type='%s' src must be a same-origin path (no scheme, '//', backslash, control character, edge space or '..' segment); got '%s'.",
 				card.id(), card.type(), src));
+		if (card.sanitize() && (! eq(card.type(), "html") || ! nn(src)))
+			throw FtlAttrLists.reject(f("<@card id='%s'> sanitize= applies only to an html card with src=.", card.id()));
 	}
 
 	/**
@@ -454,6 +471,21 @@ public final class PageCapture {
 	}
 
 	/**
+	 * Adds a top-level {@code dataSources} entry.
+	 *
+	 * @param source A {@code DataSourceDef.toMap()} or {@code Derived.toMap()} entry.
+	 * @return This object.
+	 * @throws IllegalArgumentException E-76 on a duplicate data source id.
+	 */
+	PageCapture addDataSource(Map<String,Object> source) {
+		var id = (String)source.get("id");
+		if (dataSources.containsKey(id))
+			throw iaex(DataSourceDef.E76, id, "duplicate id");
+		dataSources.put(id, source);
+		return this;
+	}
+
+	/**
 	 * Runs R-10 and R-11 over the captured page; called at {@code </@console>} and by {@code PageSpec.view}.
 	 *
 	 * @param registry The card types the page may use: the {@code ConsoleFreemarkerMixin}'s registry, so custom
@@ -497,6 +529,18 @@ public final class PageCapture {
 		var out = new LinkedHashMap<String,Object>(base);
 		out.putAll(overlay);
 		return out;
+	}
+
+	/**
+	 * Sets the page's dashboard.
+	 *
+	 * @param v The {@code dashboard} contract object built by {@code DashboardSpec.toJson}.
+	 * @throws IllegalArgumentException E-77 if the page already has one.
+	 */
+	void dashboard(Map<String,Object> v) {
+		if (dashboard != null)
+			throw new IllegalArgumentException("E-77: " + String.format(BusWiringValidator.E77, v.get("id"), "a page has at most one dashboard"));
+		dashboard = v;
 	}
 
 	/** @param v Facts seeded from a {@code PageSpec}; merged last-wins with earlier seeds. */
@@ -699,15 +743,58 @@ public final class PageCapture {
 		return this;
 	}
 
-	// Matches only double-quoted attributes and assumes <@body> markup is well-formed by construction, as the
-	// spec side always is, so a targeted name scan is enough here.
-	private static final Pattern BODY_ATTR_NAME = Pattern.compile("([A-Za-z_:][-A-Za-z0-9_:.]*)\\s*=\\s*\"");
+	private static final Pattern BODY_ATTR_NAME = Pattern.compile("[A-Za-z_:][-A-Za-z0-9_:.]*");
+
+	/** One attribute found by {@link #tokenizeBodyAttrs(String)}: its span in the text, its name, and whether it has a value. */
+	private record BodyAttr(int start, int end, String name, boolean hasValue) {}
+
+	// <@body> markup is raw, so a value can be double-quoted, single-quoted or unquoted.  Tokenizing (rather than
+	// regex-searching the whole text) means a name is only ever read where an attribute can start, never from inside
+	// another attribute's quoted value, e.g. title="data-juneau-csrf=x".
+	private static List<BodyAttr> tokenizeBodyAttrs(String text) {
+		var out = new ArrayList<BodyAttr>();
+		var n = text.length();
+		var i = 0;
+		while (i < n) {
+			if (Character.isWhitespace(text.charAt(i))) {
+				i++;
+				continue;
+			}
+			var start = i;
+			while (i < n && ! Character.isWhitespace(text.charAt(i)) && text.charAt(i) != '=')
+				i++;
+			var name = text.substring(start, i);
+			var j = i;
+			while (j < n && Character.isWhitespace(text.charAt(j)))
+				j++;
+			var hasValue = false;
+			if (j < n && text.charAt(j) == '=') {
+				j++;
+				while (j < n && Character.isWhitespace(text.charAt(j)))
+					j++;
+				if (j < n && (text.charAt(j) == '"' || text.charAt(j) == '\'')) {
+					var close = text.indexOf(text.charAt(j), j + 1);
+					j = close < 0 ? n : close + 1;
+				} else {
+					while (j < n && ! Character.isWhitespace(text.charAt(j)))
+						j++;
+				}
+				hasValue = true;
+				i = j;
+			} else if (i == start) {
+				i++;  // A stray '=': step over it so the scan always advances.
+			}
+			if (BODY_ATTR_NAME.matcher(name).matches())
+				out.add(new BodyAttr(start, i, name, hasValue));
+		}
+		return out;
+	}
 
 	private static Set<String> bodyAttrNames(String text) {
-		var names = new LinkedHashSet<String>();
-		var m = BODY_ATTR_NAME.matcher(text);
-		while (m.find())
-			names.add(m.group(1));
+		var names = new TreeSet<String>(String.CASE_INSENSITIVE_ORDER);
+		for (var a : tokenizeBodyAttrs(text))
+			if (a.hasValue())
+				names.add(a.name());
 		return names;
 	}
 
@@ -719,7 +806,30 @@ public final class PageCapture {
 	 * @return Whether the merged text sets it.
 	 */
 	boolean hasBodyAttr(String name) {
-		return bodyAttrs != null && bodyAttrNames(bodyAttrs).contains(name);
+		return bodyAttrs != null && tokenizeBodyAttrs(bodyAttrs).stream().anyMatch(a -> a.hasValue() && a.name().equalsIgnoreCase(name));
+	}
+
+	/**
+	 * The merged body-attribute text with the named attributes taken out, for a response that must not carry them.
+	 *
+	 * @param names The HTML attribute names to drop.
+	 * @return The remaining text, possibly blank, or <jk>null</jk> if no body attributes were set.
+	 */
+	String bodyAttrsWithout(String...names) {
+		if (bodyAttrs == null)
+			return null;
+		var s = new StringBuilder(bodyAttrs);
+		var attrs = tokenizeBodyAttrs(bodyAttrs);
+		for (var k = attrs.size() - 1; k >= 0; k--) {
+			var a = attrs.get(k);
+			if (! a.hasValue() || Arrays.stream(names).noneMatch(a.name()::equalsIgnoreCase))
+				continue;
+			var from = a.start();
+			while (from > 0 && Character.isWhitespace(s.charAt(from - 1)))
+				from--;
+			s.delete(from, a.end());
+		}
+		return s.toString().strip();
 	}
 
 	/**
@@ -767,16 +877,19 @@ public final class PageCapture {
 	void css(List<String> v) { css = List.copyOf(v); }
 	void init(List<String> v) { init = List.copyOf(v); }
 	void toolkitAssets(ToolkitPackRegistry.Resolved r) {
+		assetsResolved = true;
 		vendorCss = r.vendorCss();
 		vendorJs = r.vendorJs();
 		runtimeCss = r.runtimeCss();
 		runtimeJs = r.runtimeJs();
 	}
 	void shellUrl(String v) { shellUrl = v; }
+	boolean hasBadges() { return ! badges.isEmpty(); }
 	StringWriter pageBuffer() { return pageBuffer; }
 	StringWriter consoleBuffer() { return consoleBuffer; }
 	List<String> cssHrefs() { return css; }
 	List<String> initScripts() { return init; }
+	boolean assetsResolved() { return assetsResolved; }
 	List<String> vendorCss() { return vendorCss; }
 	List<String> vendorJs() { return vendorJs; }
 	List<String> runtimeCss() { return runtimeCss; }
@@ -802,6 +915,8 @@ public final class PageCapture {
 	String title() { return title; }
 	List<CardSpec> unplacedCards() { return List.copyOf(builtCards.values()); }
 	String theme() { return theme; }
+	String scheme() { return scheme; }
+	boolean schemeToggle() { return schemeToggle; }
 	String headerSubtitle() { return header.subtitle; }
 	Map<String,Object> headerUserMenu() { return header.userMenu; }
 	boolean hasHeaderTitle() { return nn(header.title); }
@@ -820,7 +935,7 @@ public final class PageCapture {
 		addCard(CardSpec.html(id).bare(true), s);
 	}
 
-	/** P17: the next {@code jc-card-N} id for a {@code <@card>} without {@code id=}. */
+	/** The next {@code jc-card-N} id for a {@code <@card>} without {@code id=}. */
 	String nextCardId() {
 		return "jc-card-" + (++autoCards);
 	}
@@ -849,7 +964,7 @@ public final class PageCapture {
 		checkBadges();
 	}
 
-	/** §4.3: explicit selection, else tab (E-7 when it does not resolve), else empty. */
+	/** Explicit selection, else tab (E-7 when it does not resolve), else empty. */
 	void resolveActiveNav() throws TemplateModelException {
 		if (nn(selected)) {
 			activeNav = selected;
@@ -911,8 +1026,12 @@ public final class PageCapture {
 			m.put("topics", List.copyOf(topics.values()));
 		if (! bridges.isEmpty())
 			m.put("bridges", List.copyOf(bridges.values()));
+		if (! dataSources.isEmpty())
+			m.put("dataSources", List.copyOf(dataSources.values()));
 		if (! facts.isEmpty())
 			m.put("facts", facts);
+		if (dashboard != null)
+			m.put("dashboard", dashboard);
 		return scriptSafeJson(Json.DEFAULT.write(m));
 	}
 

@@ -37,7 +37,7 @@ import org.junit.jupiter.api.*;
  */
 class ViewsJs_Renders_Test extends TestBase {
 
-	/** Fixed Instant matching the IRS screenshot: cell {@code 08/20/2026 20:11Z}. */
+	/** Fixed Instant matching a reference screenshot: cell {@code 08/20/2026 20:11Z}. */
 	static final Instant INSTANT = Instant.parse("2026-08-20T20:11:00Z");
 
 	/** Zone used for California popup lines. */
@@ -154,7 +154,7 @@ class ViewsJs_Renders_Test extends TestBase {
 		return report;
 	}
 
-	@Test void b01_utcCell_matchesIrsZuluFormat() {
+	@Test void b01_utcCell_matchesZuluFormat() {
 		assertEquals("08/20/2026\u00a020:11Z", report().get("utc"));
 	}
 
@@ -193,6 +193,32 @@ class ViewsJs_Renders_Test extends TestBase {
 	@Test void b08_unparseableValue_isHtmlEscaped() {
 		assertEquals("&lt;img src=x onerror=alert(1)&gt;", report().get("xss"));
 		assertEquals("", report().get("blank"));
+	}
+
+	private static Map<?,?> dateReport(String tz) {
+		var r = NodeHarness.report(Map.of("TZ", tz, "LC_ALL", "en_US.UTF-8"), "renders-date.cjs", ViewsMixin.RENDERS_JS_RESOURCE);
+		assumeTrue(r != null, "node not available or renders-date.cjs not found — behavioral layer skipped");
+		return r;
+	}
+
+	@Test void d01_dateOnly_rendersNamedCalendarDay_inEveryZone() {
+		for (var tz : new String[]{"America/Los_Angeles", "Pacific/Auckland", "UTC"}) {
+			var r = dateReport(tz);
+			assertEquals(tz, r.get("tz"), "TZ must take effect in the node process");
+			assertEquals("Mar 14, 2031", r.get("dateOnly"), tz);
+			assertEquals("Mar 14, 2031", r.get("dateOnlyPadded"), tz);
+		}
+	}
+
+	@Test void d02_dateTime_stillRendersAsInstantInLocalTime() {
+		// 2031-03-14T03:00:00Z is Mar 13 in Los Angeles and Mar 14 in Auckland and UTC; proves TZ is honored.
+		var expected = Map.of("America/Los_Angeles", "Mar 13, 2031", "Pacific/Auckland", "Mar 14, 2031", "UTC", "Mar 14, 2031");
+		expected.forEach((tz, day) -> {
+			var r = dateReport(tz);
+			assertEquals(day, r.get("dateTime"), tz);
+			assertEquals(day, r.get("dateObject"), tz);
+			assertEquals(day, r.get("epoch"), tz);
+		});
 	}
 
 	@Test void c01_progress_unknownIsEmptyTrack_notZero() {
@@ -358,7 +384,7 @@ class ViewsJs_Renders_Test extends TestBase {
 		assertEquals(true, r.get("pill_actionHasTabindex"));
 		assertEquals(true, r.get("pill_actionHasId"));
 		assertEquals(true, r.get("pill_noActionNoRole"));
-		assertEquals(true, r.get("pill_noSelect"));   // no aria-pressed / select toggle ever (B5/N1-fold)
+		assertEquals(true, r.get("pill_noSelect"));   // no aria-pressed / select toggle ever
 	}
 
 	@Test void d05_pill_blankValueIsEmpty() {

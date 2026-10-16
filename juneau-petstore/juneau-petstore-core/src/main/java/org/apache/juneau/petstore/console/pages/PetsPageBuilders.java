@@ -38,6 +38,17 @@ import org.apache.juneau.rest.server.widgets.*;
  */
 public final class PetsPageBuilders {
 
+	/**
+	 * The edit-pet dialog action, shared by the Pets table row menu and the Store page treemap so the two cannot drift.
+	 *
+	 * @param onSuccess What the page does after a saved edit; a table merges the row, a chart (which has no row) redraws.
+	 * @return The action.
+	 */
+	static RowAction editPetAction(OnSuccess onSuccess) {
+		return RowAction.create("edit").label("Edit").form("/console/pets/form?id={id}").present(Present.DIALOG)
+			.endpoint("/console/pets/{id}").method(Method.PUT).onSuccess(onSuccess);
+	}
+
 	private PetsPageBuilders() {}
 
 	/**
@@ -46,7 +57,7 @@ public final class PetsPageBuilders {
 	 * @return The page spec.
 	 */
 	public static PageSpec pets() {
-		return PageSpec.create().tab("pets").toolkit("views").table(petsTable(), "Pets");
+		return PageSpec.create().tab("pets").toolkit("views", "datatables-buttons").table(petsTable(), "Pets");
 	}
 
 	/**
@@ -68,6 +79,8 @@ public final class PetsPageBuilders {
 		var selection = SelectionDef.create("id").selectAll(true).scope(SelectionDef.Scope.PERSISTENT).labelField("name")
 			.selectableWhen(RowActionEnabledRule.of("status", Op.NE, "SOLD", "Already sold."));
 		return TableSpec.create("pets").rowType("Pet").dataMode(DataMode.SERVER).dataUrl("/console/pets/query")
+			.columnConfig(true)
+			.urlState("ids")
 			.defaultOrder("id", Sort.ASC)
 			.pollIntervalMs(30_000)
 			.pausePollingWhileEditing(true)
@@ -93,8 +106,7 @@ public final class PetsPageBuilders {
 				RibbonItem.export("copy", "csv").optional("excel", "pdf"),
 				RibbonItem.refresh())
 			.rowActions(
-				RowAction.create("edit").label("Edit").form("/console/pets/form?id={id}").present(Present.DIALOG)
-					.endpoint("/console/pets/{id}").method(Method.PUT).onSuccess(OnSuccess.MERGE_ROW),
+				editPetAction(OnSuccess.MERGE_ROW),
 				RowAction.create("delete").label("Delete").endpoint("/console/pets/{id}").method(Method.DELETE)
 					.confirm("Delete '{name}'?").confirmLabel("Delete").tone(Tone.DANGER).onSuccess(OnSuccess.REDRAW))
 			.selection(selection)
@@ -132,9 +144,10 @@ public final class PetsPageBuilders {
 	 * @param activeNav The active nav path, {@code pets/p<id>/<tab>} or {@code pets/p<id>/orders/o<orderId>}.
 	 * @param order The selected order on the orders tab, or <jk>null</jk>.
 	 * @param roles The viewer's roles.
+	 * @param apiCsrf The API's CSRF token for the photo upload form, or <jk>null</jk> to render the form without one.
 	 * @return The page spec.
 	 */
-	public static PageSpec pet(Pet pet, String tab, String activeNav, Order order, List<String> roles) {
+	public static PageSpec pet(Pet pet, String tab, String activeNav, Order order, List<String> roles, String apiCsrf) {
 		var id = pet.getId();
 		var href = "/console/pets/" + id;
 		var p = PageSpec.create().tab(activeNav).toolkit("views").title(pet.getName())
@@ -169,12 +182,14 @@ public final class PetsPageBuilders {
 					<object data="/petstore/pets/%1$s/photo" type="image/png" aria-label="Photo of %2$s"><p>No photo uploaded for %2$s yet.</p></object>
 					<figcaption>Served by <code>PetPhotoSerializer</code> from <code>GET /petstore/pets/%1$s/photo</code>.</figcaption>
 					</figure>""".formatted(id, name));
-				if (roles.contains("admin"))
+				if (roles.contains("admin")) {
+					var csrf = apiCsrf == null ? "" : " data-petstore-csrf=\"%s\"".formatted(escapeHtml(apiCsrf));
 					p.html("photo-upload", "Upload photo", """
-						<form class="jc-form" data-petstore-upload="/petstore/pets/%s/photo">
+						<form class="jc-form" data-petstore-upload="/petstore/pets/%s/photo"%s>
 						<input type="file" name="photo" accept="image/png,image/jpeg" aria-label="Photo file">
 						<button type="submit" class="jc-button">Upload</button>
-						</form>""".formatted(id));
+						</form>""".formatted(id, csrf));
+				}
 			}
 			case "orders" -> {
 				p.table(TableSpec.create("pet-orders").rowType("Order").dataMode(DataMode.CLIENT).dataUrl(href + "/orders/rows")

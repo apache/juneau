@@ -21,6 +21,7 @@ import static org.apache.juneau.commons.utils.Shorts.*;
 import java.io.*;
 import java.net.*;
 import java.util.*;
+import java.util.concurrent.*;
 import java.util.regex.*;
 
 import org.apache.juneau.http.remote.*;
@@ -71,6 +72,9 @@ public final class OkHttpTransport implements HttpTransport {
 
 	private final OkHttpClient httpClient;
 	private final OkHttpClient policyHttpClient;
+	// One further pin-on-connect client per distinct non-empty per-client allow-list, created on first use.  Each has its
+	// own connection pool, so a connection opened under one allow-list is never reused by a request with another.
+	private final Map<RemoteUrlPolicy.AllowedRanges,OkHttpClient> rangedPolicyHttpClients = new ConcurrentHashMap<>();
 
 	OkHttpTransport(OkHttpTransportBuilder builder) {
 		// A caller-supplied client gets the redirect credential guard on a derived client: newBuilder() shares its
@@ -148,11 +152,20 @@ public final class OkHttpTransport implements HttpTransport {
 		try {
 			var url = HttpUrl.get(request.getUri().toString());
 			requireNoProxy(url);
-			requireAllowedIpLiteral(url.host());
+			requireAllowedIpLiteral(url.host(), request.getAllowedAddressRanges());
 		} catch (IllegalArgumentException e) {
 			throw new TransportException("HTTP transport error: " + e.getMessage(), e);
 		}
-		return sendOnce(request, policyHttpClient);
+		return sendOnce(request, policyClientFor(request.getAllowedAddressRanges()));
+	}
+
+	private OkHttpClient policyClientFor(RemoteUrlPolicy.AllowedRanges ranges) {
+		if (ranges.isEmpty())
+			return policyHttpClient;
+		return rangedPolicyHttpClients.computeIfAbsent(ranges, r -> policyHttpClient.newBuilder()
+			.dns(new PolicyPinningDns(r))
+			.connectionPool(new ConnectionPool())
+			.build());
 	}
 
 	// A proxy (SOCKS, or HTTP/CONNECT) resolves the target host itself, so OkHttp never asks Dns about the target and the
@@ -178,14 +191,14 @@ public final class OkHttpTransport implements HttpTransport {
 	// 2130706433 or 127.1 is parsed by InetAddress to 127.0.0.1.  (Host names are checked by PolicyPinningDns.)
 	// The literal is parsed locally and never resolved: a host that matches the pattern but is not a valid literal
 	// (1.2.3.4.5, 127.0.0.1.) would otherwise fall through to a DNS lookup here and a second one in OkHttp, so it is refused.
-	private static void requireAllowedIpLiteral(String host) {
+	private static void requireAllowedIpLiteral(String host, RemoteUrlPolicy.AllowedRanges ranges) {
 		if (! OKHTTP_IP_LITERAL.matcher(host).matches())
 			return;
 		var address = parseIpLiteral(host);
 		if (address == null)
 			throw iaex("Host '%s' matches the IP-literal form but is not a valid IP literal; refusing to resolve it", host);
-		if (RemoteUrlPolicy.isDeniedAddress(address))
-			throw iaex("No allowed address for host '%s': the IP literal is private/loopback/link-local (set allowPrivateUrls to allow local-dev targets)", host);
+		if (RemoteUrlPolicy.isDeniedAddress(address, ranges))
+			throw iaex("No allowed address for host '%s': the IP literal is private/loopback/link-local/reserved (set allowPrivateUrls to allow local-dev targets)", host);
 	}
 
 	// Returns the address for an IP-literal host without any name lookup, or null if it is not a valid literal.
@@ -240,6 +253,8 @@ public final class OkHttpTransport implements HttpTransport {
 	public void close() {
 		httpClient.dispatcher().executorService().shutdown();
 		httpClient.connectionPool().evictAll();
+		for (var c : rangedPolicyHttpClients.values())
+			c.connectionPool().evictAll();
 	}
 
 	// -----------------------------------------------------------------------------------------------------------------

@@ -1,0 +1,167 @@
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+/*
+ * Dark neutral layer for the admin-console chrome.
+ *
+ * Hand-authored (not generated from a Theme constant): it must redeclare views-owned tokens and keep the
+ * --jc-tag-* palette as live references to --jc-pill-*.  It is linked on every console page before the palette
+ * file and is inert unless <html data-jc-scheme="dark">.  A theme's own dark block, later in source order at the
+ * same specificity, overrides it.  Accent colours (--jc-accent, --jc-link, --jc-focus, ...) are deliberately not
+ * redefined here; they belong to the theme or the app.
+ */
+@media not print {
+html:root[data-jc-scheme="dark"] {
+	color-scheme: dark;
+
+	/* Surfaces and roles. */
+	--jc-page-bg: linear-gradient(180deg, #1b2433 0%, #181d26 40%, #16181d 100%);
+	--jc-main-bg: #16181d;
+	--jc-chrome-bg: #1f2228;
+	--jc-card-bg: #24272e;
+	--jc-surface: #24272e;
+	--jc-table-bg: #24272e;
+	--jc-table-row-bg: #24272e;
+	--jc-table-header-bg: #24272e;
+	--jc-header-bg: #1c1f25;
+	--jc-control-bg: #2a2e36;
+	--jc-table-stripe-bg: #282b33;
+	--jc-hover-bg: #2e323a;
+	--jc-danger-wash: #3a1f21;
+	--jc-success-wash: #1c3325;
+
+	/* Text, icons and borders. */
+	--jc-text: #e6e8eb;
+	--jc-chart-text: #e6e8eb;
+	--jc-chart-tooltip-text: #e6e8eb;
+	--jc-tip-text: #e6e8eb;
+	--jc-text-soft: #e6e8ebcc;
+	--jc-text-muted: #a3a9b3;
+	--jc-label-text: #a3a9b3;
+	--jc-chrome-icon: #aab0b9;
+	--jc-header-icon-color: #aab0b9;
+	--jc-chrome-control-text: #c8ccd2;
+	--jc-detail-action-color: #c8ccd2;
+	--jc-chrome-disabled-color: #7d838d;
+	--jc-chrome-disabled-bg: #2a2d33;
+	--jc-placeholder: #7d838d;
+	--jc-danger-text: #f07a75;
+	--jc-success-text: #5cc275;
+	--jc-warn: #e8a33d;
+	--jc-border: #3a3f48;
+	--jc-card-border: #3a3f48;
+	--jc-table-border: #3a3f48;
+	--jc-detail-field-border: #3a3f48;
+	--jc-border-2: #4a505b;
+	--jc-table-rule: #4a505b;
+	--jc-popover-border: #4a505b;
+	--jc-tip-border: #4a505b;
+	--jc-sort-icon-idle: #4a505b;
+	--jc-detail-action-border: #4a505b;
+	--jc-control-border: #7a818c;
+	--jc-chrome-control-focus-border: var(--jc-focus);
+	--jc-btn-primary-ink: var(--jc-link);
+
+	/* Overlays and shadows. */
+	--jc-popover-bg: #2a2e36;
+	--jc-tip-bg: #2a2e36;
+	--jc-chart-tooltip-bg: #2a2e36;
+	--jc-detail-action-bg: #2a2e36;
+	--jc-detail-action-hover-bg: #343841;
+	--jc-detail-action-primary-bg: #c8ccd2;
+	--jc-detail-action-primary-bg-hover: #e6e8eb;
+	--jc-detail-action-primary-border: #e6e8eb;
+	--jc-detail-action-primary-color: #16181d;
+	--jc-detail-action-primary-bg-disabled: #5a616d;
+	--jc-card-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+	--jc-popover-shadow: 0 2px 10px rgba(0, 0, 0, 0.6);
+	--jc-tip-shadow: 0 2px 10px rgba(0, 0, 0, 0.6);
+	--jc-progress-track: #3a3f48;
+	--jc-progress-success: #9aa0a8;
+	--jc-progress-warning: #7d838d;
+	--jc-progress-error: #c8ccd2;
+
+	/* Status palettes: dark washes with light inks. */
+	--jc-pill-green-bg: #1e3d2a;
+	--jc-pill-green-text: #9fe0b2;
+	--jc-pill-green-border: #2f5c3f;
+	--jc-pill-blue-bg: #17324a;
+	--jc-pill-blue-text: #9fcff5;
+	--jc-pill-blue-border: #26506f;
+	--jc-pill-amber-bg: #3d3115;
+	--jc-pill-amber-text: #f2d27a;
+	--jc-pill-amber-border: #5c4a1f;
+	--jc-pill-neutral-bg: #33363c;
+	--jc-pill-neutral-text: #d4d7dc;
+	--jc-pill-neutral-border: #4a4e56;
+	--jc-pill-red-bg: #45201f;
+	--jc-pill-red-text: #f5a9a9;
+	--jc-pill-red-border: #6a3030;
+	/* The legacy tag palette stays a live reference to the pill palette. */
+	--jc-tag-green-bg: var(--jc-pill-green-bg);
+	--jc-tag-green-text: var(--jc-pill-green-text);
+	--jc-tag-green-border: var(--jc-pill-green-border);
+	--jc-tag-blue-bg: var(--jc-pill-blue-bg);
+	--jc-tag-blue-text: var(--jc-pill-blue-text);
+	--jc-tag-blue-border: var(--jc-pill-blue-border);
+	--jc-tag-amber-bg: var(--jc-pill-amber-bg);
+	--jc-tag-amber-text: var(--jc-pill-amber-text);
+	--jc-tag-amber-border: var(--jc-pill-amber-border);
+	--jc-tag-neutral-bg: var(--jc-pill-neutral-bg);
+	--jc-tag-neutral-text: var(--jc-pill-neutral-text);
+	--jc-tag-neutral-border: var(--jc-pill-neutral-border);
+	--jc-tag-red-bg: var(--jc-pill-red-bg);
+	--jc-tag-red-text: var(--jc-pill-red-text);
+	--jc-tag-red-border: var(--jc-pill-red-border);
+	--jc-probe-success-bg: #123d2e;
+	--jc-probe-success-text: #8ef0c4;
+	--jc-probe-success-dot: #34d399;
+	--jc-probe-error-bg: #451a1a;
+	--jc-probe-error-text: #fca5a5;
+	--jc-probe-error-dot: #f87171;
+	--jc-probe-warning-bg: #3f2e0e;
+	--jc-probe-warning-text: #fcd34d;
+	--jc-probe-warning-dot: #fbbf24;
+	--jc-probe-neutral-bg: #33363c;
+	--jc-probe-neutral-text: #d1d5db;
+	--jc-probe-neutral-dot: #9ca3af;
+	/* Ink on a solid tone fill. */
+	--jc-on-tone: #16181d;
+
+	/* Charts. */
+	--jc-chart-1: #5b9cf0;
+	--jc-chart-2: #f0a050;
+	--jc-chart-3: #5cc275;
+	--jc-chart-4: #c27de0;
+	--jc-chart-5: #f07a75;
+	--jc-chart-6: #3cc4c4;
+	--jc-chart-7: #d1bd3a;
+	--jc-chart-8: #a0a0a0;
+	--jc-chart-bg: transparent;
+	--jc-chart-axis: #4a505b;
+	--jc-chart-grid: #30343c;
+	--jc-chart-mark: #a0a0a0;
+	--jc-chart-band: rgba(255, 255, 255, 0.08);
+	--jc-chart-heat-low: #1c2a3d;
+	--jc-chart-heat-high: #5b9cf0;
+
+	/* Terminal. */
+	--jc-term-bg: #0d0f12;
+	--jc-term-fg: #e5e5e5;
+	--jc-term-cursor: #e5e5e5;
+	--jc-term-selection: rgba(255, 255, 255, 0.3);
+}
+}

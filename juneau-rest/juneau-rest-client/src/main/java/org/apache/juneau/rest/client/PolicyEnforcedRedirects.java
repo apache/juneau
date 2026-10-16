@@ -92,13 +92,14 @@ public final class PolicyEnforcedRedirects {
 	})
 	public static TransportResponse execute(TransportRequest initial, HopExecutor executor) throws TransportException {
 		var allowPrivateUrls = initial.isAllowPrivateUrls();
+		var allowedRanges = initial.getAllowedAddressRanges();
 		var current = initial;
 		for (var hop = 0; hop < RemoteUrlPolicy.MAX_REDIRECT_HOPS; hop++) {
 			// Hop 0's URI was already validated (or is the operator-configured client root, which the calling engine
 			// intentionally does not re-check -- see RemoteUrlPolicy.requireAllowedUrl) before this TransportRequest
 			// was built; only a redirect Location -- a URL discovered at runtime -- needs a fresh pre-check here.
 			if (hop > 0)
-				requireAllowed(current.getUri(), allowPrivateUrls);
+				requireAllowed(current.getUri(), allowPrivateUrls, allowedRanges);
 			var response = executor.execute(current);
 			if (! isRedirect(response.getStatusCode()))
 				return response;
@@ -120,9 +121,9 @@ public final class PolicyEnforcedRedirects {
 		}
 	}
 
-	private static void requireAllowed(URI uri, boolean allowPrivateUrls) throws TransportException {
+	private static void requireAllowed(URI uri, boolean allowPrivateUrls, RemoteUrlPolicy.AllowedRanges allowedRanges) throws TransportException {
 		try {
-			RemoteUrlPolicy.requireAllowedUrl(uri.toString(), allowPrivateUrls);
+			RemoteUrlPolicy.requireAllowedUrl(uri.toString(), allowPrivateUrls, allowedRanges);
 		} catch (IllegalArgumentException e) {
 			throw new TransportException(e.getMessage(), e);
 		}
@@ -157,6 +158,7 @@ public final class PolicyEnforcedRedirects {
 				.method(rewriteToGet ? "GET" : current.getMethod())
 				.uri(target2)
 				.remoteUrlPolicy(true, false)
+				.allowedAddressRanges(current.getAllowedAddressRanges())
 				.timeout(current.getTimeout());
 			// Credential headers are forwarded only to the same origin (and never across an https -> http downgrade).
 			var stripCredentials = RedirectSecurity.shouldStripCredentials(current.getUri(), target);

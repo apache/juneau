@@ -289,7 +289,7 @@ class AeadRequestStateCodec_Test {
 	 * under a completely different principal and under a <jk>null</jk> (anonymous) principal alike.
 	 *
 	 * <p>
-	 * This is the inversion of the READY-312f F4 tripwire (formerly {@code a15_principalIsNotYetBoundSo...}): before
+	 * This is the inverse of an earlier test that expected the principal to be ignored: before
 	 * the principal binding landed, all three unseals succeeded; binding the identity into the AAD is exactly the
 	 * change that flips the {@code bob} / <jk>null</jk> cases to failure.
 	 */

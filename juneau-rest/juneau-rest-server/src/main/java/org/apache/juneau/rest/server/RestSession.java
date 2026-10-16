@@ -242,7 +242,9 @@ public class RestSession extends ContextSession {
 	 * defaults to the servlet-spec {@code 200} (not the mock's coincidental {@code 0}).  A raw
 	 * {@code HttpServletResponse.setStatus(...)} (e.g. from a {@code @RestStartCall} hook) bypasses this flag, but
 	 * {@link RestContext#handleNotFound(RestSession)} independently normalizes any non-error status to a 404, so an
-	 * unmatched path can no longer surface as an HTTP 500 under a real container.
+	 * unmatched path can no longer surface as an HTTP 500 under a real container.  A 4xx (or higher) status left by a
+	 * start-call hook is preserved: the sentinel does not overwrite it, and {@code handleNotFound} keeps a client-error
+	 * status rather than converting it to a 500.
 	 */
 	private boolean statusExplicitlySet;
 
@@ -318,7 +320,7 @@ public class RestSession extends ContextSession {
 	}
 
 	/**
-	 * Installs bounded body-caching wrappers on this call's request/response for debug capture (Phase A).
+	 * Installs bounded body-caching wrappers on this call's request/response for debug capture.
 	 *
 	 * <p>
 	 * Called by the two-phase debug pipeline when the resolved logger is loggable at
@@ -735,15 +737,15 @@ public class RestSession extends ContextSession {
 			context.preCall(opSession);
 			opSession.run();
 			context.postCall(opSession);
-			if (res.getStatus() == 0)
-				res.setStatus(200);
 			if (opSession.getResponse().hasContent()) {
 				// Now serialize the output if there was any.
 				// Some subclasses may write to the OutputStream or Writer directly.
 				context.processResponse(opSession);
 			}
 		} catch (NotFound e) {
-			if (! statusExplicitlySet)
+			// A status of 400 or above can only have been left by a start-call hook; keep it so handleNotFound can honor it.
+			// (A 405/412 from findOperation is thrown as its own exception and bypasses this catch, so those always win.)
+			if (! statusExplicitlySet && res.getStatus() < 400)
 				status(404);
 			exception(e);
 			context.handleNotFound(this);

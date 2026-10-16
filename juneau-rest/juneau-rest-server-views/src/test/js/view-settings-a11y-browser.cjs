@@ -16,8 +16,8 @@
  */
 
 /*
- * view-settings-a11y-browser.cjs - real-browser prober for the five end-to-end View Settings scenarios (design
- * §9, F1+F2+F3+Q1 combined): (1) a malformed `?state=tab(a%5C)` tab id alongside a real `filter(status=$eq(OK))`
+ * view-settings-a11y-browser.cjs - real-browser prober for the five end-to-end View Settings scenarios: (1) a malformed
+ * `?state=tab(a%5C)` tab id alongside a real `filter(status=$eq(OK))`
  * clause: no console/page error, the real location.search decoder handles both, exactly one tab is clicked by
  * dataset string-equality, and the filter expression reaches the (fake) DataTables column; (2) the View Settings
  * dialog driven keyboard-only - focus the gear, Enter opens it, Tab lands on the roving-tabindex View tab, then
@@ -71,7 +71,7 @@ const DIALOG_STATE = () => {
 		page.on('pageerror', e => failures.push(String(e)));
 		page.on('console', m => { if (m.type() === 'error') failures.push(m.text()); });
 
-		// ---- Scenario 1 (F1): ?state=tab(a%5C);filter(status=$eq(OK)) decodes and applies with no throw ---------
+		// ---- Scenario 1: ?state=tab(a%5C);filter(status=$eq(OK)) decodes and applies with no throw ---------
 		await page.goto(url + '?state=tab(a%5C);filter(status=$eq(OK))');
 		await page.evaluate(() => new Promise(requestAnimationFrame));
 		const f1 = await page.evaluate(() => {
@@ -169,7 +169,7 @@ const DIALOG_STATE = () => {
 			};
 		});
 
-		// ---- Scenario 2 (F3): keyboard-only dialog nav - gear, Enter, Tab, Right x3, End, Home ------------------
+		// ---- Scenario 2: keyboard-only dialog nav - gear, Enter, Tab, Right x3, End, Home ------------------
 		await page.goto(url);
 		await page.evaluate(() => new Promise(requestAnimationFrame));
 		await page.evaluate(() => {
@@ -203,7 +203,7 @@ const DIALOG_STATE = () => {
 		const afterHome = await page.evaluate(DIALOG_STATE);
 		const f2 = { afterTab, afterRight1, afterRight2, afterRight3, afterEnd, afterHome };
 
-		// ---- Scenario 3 (F2): type into the column-search popover, Escape reverts and announces -----------------
+		// ---- Scenario 3: type into the column-search popover, Escape reverts and announces -----------------
 		await page.goto(url);
 		await page.evaluate(() => new Promise(requestAnimationFrame));
 		await page.evaluate(() => {
@@ -261,7 +261,7 @@ const DIALOG_STATE = () => {
 			};
 		});
 
-		// ---- Scenario 4 (Q1): a version-mismatched blob survives a reload, notices once, never twice ---------
+		// ---- Scenario 4: a version-mismatched blob survives a reload, notices once, never twice ---------
 		await page.goto(url);
 		await page.evaluate(() => new Promise(requestAnimationFrame));
 		await page.evaluate(() => {

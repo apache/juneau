@@ -29,7 +29,7 @@ import org.apache.juneau.rest.server.servlet.*;
 import org.junit.jupiter.api.*;
 
 /**
- * Coverage for the neutral opt-in subscription-broker hook (Phase 3, spec §"Neutral core" BeanStore-injection
+ * Coverage for the neutral opt-in subscription-broker hook (BeanStore-injection
  * requirement): default {@code null} means no broker beans are added; an override wires
  * {@link McpSubscriptionBroker} and {@link McpSubscriptions} into the request-scoped {@link BeanStore} as the
  * same instance, on both the servlet and mixin entrypoints.

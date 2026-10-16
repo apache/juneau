@@ -49,6 +49,23 @@ class SinksTest(unittest.TestCase):
                          self.tmp / "mine.log")
         self.assertNotIn("JUNEAU_RUN_FULL_LOG", os.environ)
 
+    def test_safe_name_replaces_whitespace_and_punctuation(self):
+        for raw, want in (("python3 -m unittest", "python3-m-unittest"),
+                          ("a/b c", "a-b-c"),
+                          ("push", "push"),
+                          ("  weird::name!! ", "weird-name"),
+                          ("juneau_run.v2", "juneau_run.v2"),
+                          ("", "run"),
+                          ("///", "run")):
+            with self.subTest(raw=raw):
+                self.assertEqual(jr.safe_name(raw), want)
+
+    def test_default_full_log_has_no_spaces_when_argv0_is_a_command(self):
+        with mock.patch.object(jr.sys, "argv", ["python3 -m unittest"]):
+            name = jr.default_full_log().name
+        self.assertNotRegex(name, r"\s")
+        self.assertTrue(name.startswith("python3-m-unittest-"), name)
+
     def test_prune_keeps_the_newest_twenty_logs(self):
         os.environ["JUNEAU_RUN_LOG_DIR"] = str(self.tmp)
         for i in range(25):

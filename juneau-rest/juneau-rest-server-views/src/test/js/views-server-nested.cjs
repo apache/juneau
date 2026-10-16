@@ -16,7 +16,8 @@
  */
 
 /*
- * views-server-nested.cjs - real-browser, real-server prober for design §3.1/D8: the REAL juneau-views.js runtime
+ * views-server-nested.cjs - real-browser, real-server prober for server-mode nested tables: the REAL juneau-views.js
+ * runtime
  * boots a server-mode root table (same VIEW_META/sidecar shape the <@card type="datatables"> macro's
  * CardEnvelope.liftTable emits) with a nested table in its row detail, against a real JDK HttpServer backed by
  * DataTablesQuery.run - proving beforeSend's URL mutation survives a real browser's jQuery/DataTables transport,

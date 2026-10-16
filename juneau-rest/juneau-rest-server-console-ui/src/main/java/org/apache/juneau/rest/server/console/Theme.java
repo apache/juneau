@@ -107,6 +107,14 @@ import java.util.regex.*;
  * warning is repeated at the emission site ({@code ConsoleChromeMixin.overrideBlock}), because that is the other
  * place the mistake is reachable from.
  *
+ * <h5 class='section'>The dark channel:</h5>
+ * <p>
+ * A theme may also declare <b>dark accents</b> with {@link Builder#dark(String, String)}, read back through
+ * {@link #getDarkTokens()}. They apply on top of the shared dark neutral layer, when the page is in the dark scheme.
+ * Only literals are accepted: a {@code var()} would resolve against the light palette, which would bake the wrong
+ * value into the dark scheme. The stock themes use the channel to keep their link, focus and accent colours
+ * legible on a dark surface.
+ *
  * <h5 class='section'>Security:</h5>
  * <p>
  * Identifiers (theme name, token name, alias name) are rejected fail-closed by anchored {@code String.matches(...)}
@@ -179,7 +187,7 @@ public final class Theme {
 	 *
 	 * <p>
 	 * Ships with the framework so out-of-the-box adoption needs zero theme configuration: an Inter/system-ui font
-	 * stack, a neutral blue-gray page gradient, and Lightning-blue accents.  Its token set is exactly the set
+	 * stack, a neutral blue-gray page gradient, and blue accents.  Its token set is exactly the set
 	 * {@code chrome.css} references &mdash; see {@code ConsoleChromeMixin_Test}'s bidirectional cross-check (every
 	 * token here is a {@code var(--jc-*)} in {@code chrome.css}, and vice versa).
 	 */
@@ -189,12 +197,12 @@ public final class Theme {
 		.token("--jc-header-icon-color", "#747474")
 		.token("--jc-accent", "#1589EE")
 		.token("--jc-accent-wash", "rgba(21,137,238,0.1)")
-		.token("--jc-link", "#0174d3")
+		.token("--jc-link", "#015194")
 		.token("--jc-text", "#080707")
 		.token("--jc-text-soft", "#080707cc")
 		.token("--jc-text-muted", "#706e6b")
 		.token("--jc-border", "#dddbda")
-		.token("--jc-border-2", "#ced4da")
+		.token("--jc-border-2", "#888c90")
 		.token("--jc-card-bg", "#ffffff")
 		.token("--jc-chrome-bg", "#f3f2f2")
 		.token("--jc-white", "#ffffff")
@@ -204,7 +212,7 @@ public final class Theme {
 		.token("--jc-success", "#2e844a")
 		.token("--jc-avatar-bg", "linear-gradient(135deg, #1589EE, #1a5297)")
 		.token("--jc-radius", "0.25rem")
-		// Pill palette (Q16 A / Task 15): the CANONICAL status-chip colour family the client `pill` catalog renderer
+		// Pill palette: the CANONICAL status-chip colour family the client `pill` catalog renderer
 		// paints from - the ".tag.<domain>.<value>" palette rules in chrome.css consume these directly.  Declared
 		// before the legacy --jc-tag-* triads so those can be authored as var(--jc-pill-*) references to this single
 		// source of truth.  Values are the exact literals --jc-tag-* shipped, so the served chrome is pixel-identical.
@@ -277,12 +285,13 @@ public final class Theme {
 		.token("--jc-space-5", "24px")
 		.token("--jc-space-6", "32px")
 		// Accessibility: a themeable focus-ring colour so the generic :focus-visible rule in chrome.css
-		// gives every interactive control a WCAG 2.4.7-compliant keyboard-focus indicator by default.  Defaults to
-		// the Lightning-blue accent so the ring reads as "the same brand colour" out of the box.
-		.token("--jc-focus", "#1589EE")
+		// gives every interactive control a WCAG 2.4.7-compliant keyboard-focus indicator by default.  A darker
+		// shade of the blue accent, so the ring still reads as the accent colour but clears 3:1 on the page
+		// gradient's lightest-blue top stop, not only on white.
+		.token("--jc-focus", "#116ab9")
 		// Accessibility: the ribbon-format selected-state face (WCAG 1.4.11 non-text 3:1 remedy).  A new, OPAQUE
 		// token rather than a re-valued --jc-accent-wash: the wash has 13 hover/table-wash consumers in chrome.css
-		// that must stay untouched (LD-4), so the selected face is confined to this independent token instead.
+		// that must stay untouched, so the selected face is confined to this independent token instead.
 		// Same literal as --jc-accent at this theme's baseline (the shipped colour choice does not change, only
 		// the mechanism, wash to opaque) - but tracked separately: a consumer overriding --jc-accent will NOT move
 		// this token; it must be overridden on its own.  A permanent widening of the theming surface.
@@ -291,6 +300,30 @@ public final class Theme {
 		.token("--jc-main-bg", "#f5f6f9")  // inner-main well; not a retarget of old card tints
 		.token("--jc-card-padding", "16px 16px 8px")  // content-card / title-card inset; --jc-space-4 / --jc-space-4 / --jc-space-2
 		.token("--jc-chrome-icon", "#666666")  // idle ribbon / paging glyph; not --jc-text-soft (body ink)
+		// Chart tokens, read by juneau-charts.js when it registers the ECharts theme (series palette, then roles).
+		.token("--jc-chart-1", "#1b6ac9")
+		.token("--jc-chart-2", "#e07a1f")
+		.token("--jc-chart-3", "#2e8540")
+		.token("--jc-chart-4", "#9b3fb5")
+		.token("--jc-chart-5", "#c23934")
+		.token("--jc-chart-6", "#0e8a8a")
+		.token("--jc-chart-7", "#7a6a00")
+		.token("--jc-chart-8", "#5a5a5a")
+		.token("--jc-chart-bg", "transparent")
+		.token("--jc-chart-text", "#080707")
+		.token("--jc-chart-axis", "#dddbda")
+		.token("--jc-chart-grid", "#ececec")
+		.token("--jc-chart-tooltip-bg", "#ffffff")
+		.token("--jc-chart-tooltip-text", "#080707")
+		.token("--jc-chart-mark", "#5a5a5a")
+		.token("--jc-chart-band", "rgba(0, 0, 0, 0.06)")
+		.token("--jc-chart-heat-low", "#e8f1fb")
+		.token("--jc-chart-heat-high", "#1b6ac9")
+		// Dark accents: lighter blues than the light palette, legible on the shared dark neutral layer.
+		.dark("--jc-link", "#6cb4ff")
+		.dark("--jc-focus", "#4aa3ff")
+		.dark("--jc-accent-selected", "#4aa3ff")
+		.dark("--jc-accent-wash", "rgba(21,137,238,0.22)")
 		.build();
 
 	/**
@@ -308,25 +341,29 @@ public final class Theme {
 	 * <p>
 	 * Caveat: like {@link #OPEN}'s own {@code --jc-accent}, this theme's {@code --jc-accent} (<c>#a9772f</c>) clears
 	 * WCAG AA only for non-text/large-surface use (its {@code --jc-focus}/{@code --jc-accent-selected} consumers); a
-	 * consumer repurposing it as small body text should use {@code --jc-link} (<c>#8a5a1a</c>) instead, which
+	 * consumer repurposing it as small body text should use {@code --jc-link} (<c>#754d16</c>) instead, which
 	 * passes AA normal-text contrast.
 	 */
-	public static final Theme LIGHT_BROWN = deriveFrom("light-brown", OPEN)
+	public static final Theme LIGHT_BROWN = deriveFrom("light-brown", OPEN).resetDark()
 		.token("--jc-page-bg", "linear-gradient(180deg, #dccaa6 0%, #e8dcc4 22%, #f2ebdc 55%, #faf6ee 100%)")
 		.token("--jc-accent", "#a9772f")
 		.token("--jc-accent-wash", "rgba(169,119,47,0.1)")
-		.token("--jc-link", "#8a5a1a")
+		.token("--jc-link", "#754d16")
 		.token("--jc-text", "#2e2415")
 		.token("--jc-text-soft", "#2e2415cc")
 		.token("--jc-text-muted", "#7a6a4f")
 		.token("--jc-border", "#d8cbb0")
-		.token("--jc-border-2", "#c9b896")
+		.token("--jc-border-2", "#977f4e")
 		.token("--jc-chrome-bg", "#efe6d4")
 		.token("--jc-btn-primary", "#8a6d3b")
 		.token("--jc-btn-primary-hover", "#74592f")
 		.token("--jc-avatar-bg", "linear-gradient(135deg, #a9772f, #8a6d3b)")
-		.token("--jc-focus", "#a9772f")
+		.token("--jc-focus", "#926729")
 		.token("--jc-accent-selected", "#a9772f")
+		// Dark accents: a lighter link and the lighter focus ring; the accent itself is already legible as a non-text colour on dark.
+		.dark("--jc-link", "#d9a65c")
+		.dark("--jc-focus", "#a9772f")
+		.dark("--jc-accent-wash", "rgba(169,119,47,0.25)")
 		.build();
 
 	/**
@@ -342,7 +379,7 @@ public final class Theme {
 	 * provably identical to {@link #OPEN}'s.
 	 *
 	 * <p>
-	 * Unlike {@link #RED}, this theme keeps a <b>light</b> {@code --jc-chrome-bg} (not {@code #BF2600}) for the
+	 * Like {@link #RED}, this theme keeps a <b>light</b> {@code --jc-chrome-bg} (a rose tint, not a saturated red) for the
 	 * page-chrome fallback, hover fill, and dialog chrome. Header and page-nav rows stay white via
 	 * {@code --jc-header-bg} &rarr; {@code --jc-white}; red is reserved for accent, links, focus, and the primary
 	 * button.
@@ -353,7 +390,7 @@ public final class Theme {
 	 * (<c>#6B1D2A</c>) rather than danger red or the mockup placeholder <c>#a31f34</c>; {@code --jc-danger} itself
 	 * is deliberately left untouched. A consumer still should not reuse {@code --jc-danger} as brand.
 	 */
-	public static final Theme LIGHT_RED = deriveFrom("light-red", OPEN)
+	public static final Theme LIGHT_RED = deriveFrom("light-red", OPEN).resetDark()
 		.token("--jc-page-bg", "linear-gradient(180deg, #e8cfd3 0%, #f0dfe3 22%, #f6eef0 55%, #faf7f8 100%)")
 		.token("--jc-accent", "#B42348")
 		.token("--jc-accent-wash", "rgba(180,35,72,0.1)")
@@ -362,13 +399,19 @@ public final class Theme {
 		.token("--jc-text-soft", "#2a181ccc")
 		.token("--jc-text-muted", "#6e585c")
 		.token("--jc-border", "#e4d4d7")
-		.token("--jc-border-2", "#d4c2c6")
+		.token("--jc-border-2", "#a37c85")
 		.token("--jc-chrome-bg", "#f3ecee")
 		.token("--jc-btn-primary", "#6B1D2A")
 		.token("--jc-btn-primary-hover", "#541620")
 		.token("--jc-avatar-bg", "linear-gradient(135deg, #B42348, #6B1D2A)")
 		.token("--jc-focus", "#B42348")
 		.token("--jc-accent-selected", "#B42348")
+		// Dark accents: lighter rose so the link and accent stay legible on a dark surface.
+		.dark("--jc-link", "#f27a9a")
+		.dark("--jc-accent", "#e0557a")
+		.dark("--jc-focus", "#e0557a")
+		.dark("--jc-accent-selected", "#e0557a")
+		.dark("--jc-accent-wash", "rgba(224,85,122,0.22)")
 		.build();
 
 	/**
@@ -391,7 +434,7 @@ public final class Theme {
 	 * shape/label conventions (solid brand vs. danger-wash hover), not color alone, to stay distinguishable &mdash;
 	 * {@code --jc-danger} itself is deliberately left untouched.
 	 */
-	public static final Theme RED = deriveFrom("red", OPEN)
+	public static final Theme RED = deriveFrom("red", OPEN).resetDark()
 		.token("--jc-page-bg", "linear-gradient(180deg, #f4f5f7 0%, #fafbfc 55%, #ffffff 100%)")
 		.token("--jc-accent", "#FF5630")
 		.token("--jc-accent-wash", "rgba(255,86,48,0.1)")
@@ -400,16 +443,20 @@ public final class Theme {
 		.token("--jc-text-soft", "#172B4Dcc")
 		.token("--jc-text-muted", "#5E6C84")
 		.token("--jc-border", "#DFE1E6")
-		.token("--jc-border-2", "#c1c7d0")
+		.token("--jc-border-2", "#727f94")
 		// Chrome-scale token consumed by --jc-hover-bg and dialog chrome. Header / page-nav rows stay white
 		// (--jc-header-bg → --jc-white); table headers stay white (--jc-table-header-bg → --jc-white).
-		.token("--jc-chrome-bg", "#BF2600")
+		.token("--jc-chrome-bg", "#ffd9cf")
 		.token("--jc-btn-primary", "#BF2600")
 		.token("--jc-btn-primary-hover", "#a01f00")
 		.token("--jc-avatar-bg", "linear-gradient(135deg, #FF5630, #BF2600)")
 		.token("--jc-radius", "0.1875rem")
-		.token("--jc-focus", "#FF5630")
+		.token("--jc-focus", "#ff481f")
 		.token("--jc-accent-selected", "#FF5630")
+		// Dark accents: a lighter link and a tint of the chrome red; the accent itself reads on dark unchanged.
+		.dark("--jc-link", "#ff8a70")
+		.dark("--jc-chrome-bg", "#7a1a05")
+		.dark("--jc-accent-wash", "rgba(255,86,48,0.22)")
 		.build();
 
 	/**
@@ -439,15 +486,16 @@ public final class Theme {
 		.token("--jc-text-soft", "#262626cc")
 		.token("--jc-text-muted", "#737373")
 		.token("--jc-border", "#e0e0e0")
-		.token("--jc-border-2", "#d0d0d0")
+		.token("--jc-border-2", "#8a8a8a")
 		.token("--jc-chrome-bg", "#f4f4f4")
 		.build();
 
 	private final String name;
 	private final Map<String,String> tokens;
 	private final Map<String,String> aliases;
+	private final Map<String,String> darkTokens;
 
-	private Theme(String name, Map<String,String> tokens, Map<String,String> aliases) {
+	private Theme(String name, Map<String,String> tokens, Map<String,String> aliases, Map<String,String> darkTokens) {
 		this.name = name;
 		// Insertion-ordered rather than Map.copyOf: ConsoleChromeMixin emits this map's iteration order directly as
 		// the served stylesheet's :root{} declarations, and Map.copyOf's order is perturbed by a per-JVM salt - which
@@ -455,6 +503,7 @@ public final class Theme {
 		// contractually a LinkedHashMap copy, so it preserves that order; do not swap it for an unordered copy.
 		this.tokens = u(cp(tokens));
 		this.aliases = u(cp(aliases));
+		this.darkTokens = u(cp(darkTokens));
 	}
 
 	/**
@@ -477,6 +526,10 @@ public final class Theme {
 	 * Seeds a builder with every token of {@code seed} under a new name. Used to author the stock palettes
 	 * ({@link #LIGHT_RED}, {@link #LIGHT_BROWN}, {@link #RED}, {@link #GRAY}) from {@link #OPEN} without restating
 	 * the whole map.
+	 *
+	 * <p>
+	 * The seed's dark tokens are copied too.  A derived theme that declares its own accents should call
+	 * {@code resetDark()} first, or it inherits the seed's dark accents.
 	 */
 	private static Builder deriveFrom(String name, Theme seed) {
 		if (seed == null)
@@ -484,6 +537,8 @@ public final class Theme {
 		var b = create(name);
 		for (var e : seed.getTokens().entrySet())
 			b.token(e.getKey(), e.getValue());
+		for (var e : seed.getDarkTokens().entrySet())
+			b.dark(e.getKey(), e.getValue());
 		return b;
 	}
 
@@ -502,6 +557,18 @@ public final class Theme {
 	 * 	were declared on the builder. Never <jk>null</jk>.
 	 */
 	public Map<String,String> getTokens() { return tokens; }
+
+	/**
+	 * Returns this theme's dark accent tokens: name to a literal CSS value, applied on top of the shared dark neutral
+	 * layer when the page is in the dark scheme.
+	 *
+	 * <p>
+	 * Every value is a literal. A {@code var()} is rejected at {@link Builder#dark(String, String)}, because it could
+	 * only resolve against the light palette.
+	 *
+	 * @return An immutable, insertion-ordered map of token name to CSS value.  Never <jk>null</jk>.
+	 */
+	public Map<String,String> getDarkTokens() { return darkTokens; }
 
 	/**
 	 * Returns this theme's alias tokens: name to a live {@code var(--jc-*)} reference.
@@ -591,6 +658,7 @@ public final class Theme {
 		private final String name;
 		private final Map<String,String> tokens = new LinkedHashMap<>();
 		private final Map<String,String> aliases = new LinkedHashMap<>();
+		private final Map<String,String> darkTokens = new LinkedHashMap<>();
 
 		private Builder(String name) { this.name = name; }
 
@@ -637,6 +705,37 @@ public final class Theme {
 				tokens.put(name, normalized);
 			else
 				tokens.put(name, CssValueGrammar.normalizeAndValidate(value));
+			return this;
+		}
+
+		/**
+		 * Adds (or overrides) a dark accent token: a literal applied on top of the shared dark neutral layer when the
+		 * page is in the dark scheme.
+		 *
+		 * <p>
+		 * The name and value go through the same guards as {@link #token(String, String)}, with one difference: the
+		 * value must be a <b>literal</b>. A {@code var()} reference is rejected, because the only thing it could
+		 * resolve against is the light palette, which would bake the wrong value into the dark scheme.
+		 *
+		 * @param name The token name.  Must match {@code ^--jc-[a-z0-9-]+$}.
+		 * @param value The CSS literal.
+		 * @return This object.
+		 * @throws IllegalArgumentException
+		 * 	If the name is malformed or in the reserved {@code --jc-chrome-*} namespace without being a {@link Theme#OPEN}
+		 * 	token, or if the value is a {@code var()} reference or is not one of the allowlisted CSS value shapes.
+		 */
+		public Builder dark(String name, String value) {
+			if (name == null || ! name.matches(TOKEN_NAME_PATTERN))
+				throw iaex("Invalid theme dark token name: '%s'.  Must match %s.", name, TOKEN_NAME_PATTERN);
+			rejectReservedChromeDeclaration(name, "theme '" + this.name + "' dark token");
+			// Literal only: CssValueGrammar has no var() shape, so a reference fails here rather than being resolved.
+			darkTokens.put(name, CssValueGrammar.normalizeAndValidate(value));
+			return this;
+		}
+
+		/** Drops every dark accent, for a derived theme that declares its own set instead of inheriting its seed's. */
+		private Builder resetDark() {
+			darkTokens.clear();
 			return this;
 		}
 
@@ -706,7 +805,7 @@ public final class Theme {
 			for (var n : aliases.keySet())
 				if (tokens.containsKey(n))
 					throw iaex("Theme '%s' declares '%s' as both a leaf token and an alias.  A name may be declared by only one channel.", name, n);
-			return new Theme(name, resolved, aliases);
+			return new Theme(name, resolved, aliases, darkTokens);
 		}
 
 		/** Resolves every reference in a copy of the token map, preserving declaration order; never mutates {@link #tokens}. */

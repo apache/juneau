@@ -16,7 +16,7 @@
  */
 
 /*
- * ribbon-bus.cjs - Node harness for the ribbon-as-messages half of the message bus addendum (spec 5.5).
+ * ribbon-bus.cjs - Node harness for the ribbon-as-messages half of the message bus addendum.
  *
  *   Usage:  node ribbon-bus.cjs <juneau-bus.js> <juneau-renders.js> <juneau-views.js> <juneau-ribbon.js>
  *

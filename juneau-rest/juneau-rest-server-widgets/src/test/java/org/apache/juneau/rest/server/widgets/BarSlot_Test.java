@@ -24,7 +24,7 @@ import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
 
 /**
- * {@link BarSlot} bean contract, the sealed {@link BarWidget} permit set (N2), and fail-closed
+ * {@link BarSlot} bean contract, the sealed {@link BarWidget} permit set, and fail-closed
  * {@link BarSlot#validate()} branches.
  */
 class BarSlot_Test extends TestBase {

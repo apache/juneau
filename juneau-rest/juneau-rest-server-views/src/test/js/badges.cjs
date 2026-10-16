@@ -49,7 +49,10 @@ function setup(responses, opts) {
 	const win = env.window;
 	win.window = win;
 	win.document = doc;
-	const errors = [], urls = [], assigned = [], timers = [], reloaded = [];
+	const errors = [], urls = [], inits = [], assigned = [], timers = [], reloaded = [];
+	const winListeners = {};
+	win.addEventListener = (type, fn) => { (winListeners[type] = winListeners[type] || []).push(fn); };
+	const fireWindow = type => (winListeners[type] || []).forEach(fn => fn({ type }));
 	const header = doc.createElement('div');
 	header.className = 'jc-header-actions';
 	doc.body.appendChild(header);
@@ -66,11 +69,13 @@ function setup(responses, opts) {
 		console: { error: m => errors.push(String(m)), log: () => {}, warn: () => {} },
 		URLSearchParams, Proxy, Promise, JSON, Object, Array, Error, String, Math, Set, Map,
 		encodeURIComponent,
-		fetch: u => {
+		fetch: (u, init) => {
 			urls.push(u);
+			inits.push(init);
 			const r = responses.shift();
 			if (!r) return Promise.reject(new Error('no scripted response'));
-			if (r.throws) return Promise.reject(new Error(r.throws));
+			if (r.hang) return new Promise((resolve, reject) => { h.pending.push(reject); });
+			if (r.throws) return Promise.reject(Object.assign(new Error(r.throws), r.errName ? { name: r.errName } : {}));
 			return Promise.resolve({ status: r.status || 200, json: () => Promise.resolve(r.body) });
 		},
 		setTimeout: (fn, ms) => { timers.push({ fn, ms }); return timers.length; },
@@ -78,7 +83,9 @@ function setup(responses, opts) {
 	};
 	if (opts.bus && busSrc) vm.runInNewContext(busSrc, sandbox, { filename: 'juneau-bus.js' });
 	vm.runInNewContext(src, sandbox, { filename: 'juneau-badges.js' });
-	return { env, doc, win, NS: win.JuneauConsoleBadges, errors, urls, assigned, timers, reloaded, header };
+	const h = { pending: [] };
+	Object.assign(h, { env, doc, win, NS: win.JuneauConsoleBadges, errors, urls, inits, assigned, timers, reloaded, header, fireWindow });
+	return h;
 }
 
 const flush = () => new Promise(r => setTimeout(r, 0));
@@ -110,6 +117,8 @@ async function tick(h) {
 		await tick(h);
 		report.mineLabel = b.textContent;
 		report.noPulseOnDecreaseOrFirst = true;
+		// A content-negotiating server (Juneau's own) would otherwise answer the poll with HTML.
+		report.pollAccept = h.inits.map(i => i && i.headers && i.headers.Accept);
 	}
 
 	// custom label templates, tone mapping
@@ -157,6 +166,37 @@ async function tick(h) {
 		const d2 = await tick(h);
 		report.backoff = [d1, d2];
 		report.e65OnNetworkError = h.errors.some(e => e.includes('E-JS-65') && e.includes('down'));
+	}
+
+	// fetch aborted by a page unload, or rejected with AbortError: silent (no E-JS-65, no stale, no retry)
+	{
+		const h = setup([{ hang: true }]);
+		h.NS.mount([{ id: 'u', src: '/p' }]);
+		await flush();
+		h.fireWindow('pagehide');
+		h.pending[0](new TypeError('Failed to fetch'));
+		await flush();
+		report.unload_e65 = h.errors.filter(e => e.includes('E-JS-65')).length;
+		report.unload_noRetry = h.timers.length === 0;
+		const a = setup([{ throws: 'aborted', errName: 'AbortError' }]);
+		a.NS.mount([{ id: 'a', src: '/p' }]);
+		await flush();
+		report.abort_e65 = a.errors.filter(e => e.includes('E-JS-65')).length;
+		// a failure on a live page (pagehide never fired, or bfcache pageshow reset) still logs
+		const l = setup([{ hang: true }]);
+		l.NS.mount([{ id: 'l', src: '/p' }]);
+		await flush();
+		l.pending[0](new TypeError('Failed to fetch'));
+		await flush();
+		report.live_e65 = l.errors.filter(e => e.includes('E-JS-65')).length;
+		const r = setup([{ hang: true }]);
+		r.NS.mount([{ id: 'r', src: '/p' }]);
+		await flush();
+		r.fireWindow('pagehide');
+		r.fireWindow('pageshow');
+		r.pending[0](new TypeError('Failed to fetch'));
+		await flush();
+		report.pageshow_e65 = r.errors.filter(e => e.includes('E-JS-65')).length;
 	}
 
 	// refreshMs below the floor is clamped when scheduling

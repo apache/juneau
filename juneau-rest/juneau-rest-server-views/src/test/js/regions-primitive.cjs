@@ -110,7 +110,7 @@ function stateOf(el) {
 		out.t2_idsGrid = ctx.ids.gridId;
 		out.t2_idsCard = ctx.ids.cardId;
 		out.t2_idsView = ctx.ids.viewId;
-		// SD-3: sectionId is on the shape and is null on a row-detail region.  A member whose value is null for one
+		// sectionId is on the shape and is null on a row-detail region.  A member whose value is null for one
 		// region type is not a member that left.
 		out.t2_idsSectionNullOnRowDetail = ctx.ids.sectionId === null;
 		// declared.fields is a member of the contract here even though nothing populates it yet.
@@ -312,8 +312,8 @@ function stateOf(el) {
 		const el = H.mkRegion(env, { id: 'rec', type: 'card-body', populate: 'recorder' });
 		R.initRegion(el);
 
-		// The declared poll timer is J0522c's to arm; the framework's own record of it is what step 0 clears, so the
-		// test arms it on the framework's handle to assert the ordering step 0 exists for.
+		// The declared poll timer is the region poller's to arm; the framework's own record of it is what step 0 clears, so
+		// the test arms it on the framework's handle to assert the ordering step 0 exists for.
 		el._juneauRegion.pollTimer = clock.set(function () { pollFired = true; }, 50);
 
 		R.teardownRegion(el._juneauRegion);

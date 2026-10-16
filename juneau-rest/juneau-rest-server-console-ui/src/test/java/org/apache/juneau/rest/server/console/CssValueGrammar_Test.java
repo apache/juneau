@@ -24,7 +24,7 @@ import org.junit.jupiter.params.*;
 import org.junit.jupiter.params.provider.*;
 
 /**
- * Phase 2 gate: {@code CssValueGrammar}'s allowlist-grammar accept/reject sweep, tested through
+ * Tests for {@code CssValueGrammar}'s allowlist-grammar accept/reject sweep, tested through
  * {@link Theme.Builder#token(String, String)}.
  *
  * <p>
@@ -37,13 +37,12 @@ import org.junit.jupiter.params.provider.*;
  * rejection at {@code token()} time.
  *
  * <p>
- * The GREEN bypass-vector sweep below is the B1 close-out: it must beat every named vector the plan-review
- * identified, not just a literal {@code url(}.
+ * The GREEN bypass-vector sweep below must beat every known bypass vector, not just a literal {@code url(}.
  */
 class CssValueGrammar_Test extends TestBase {
 
 	//-----------------------------------------------------------------------------------------------------------------
-	// GREEN: the B1 bypass-vector sweep - each MUST throw.
+	// GREEN: the bypass-vector sweep - each MUST throw.
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@ParameterizedTest
@@ -91,7 +90,7 @@ class CssValueGrammar_Test extends TestBase {
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
-	// S5: prove the C0/newline cases throw at NORMALIZATION (before the grammar), not merely because the belt
+	// Prove the C0/newline cases throw at NORMALIZATION (before the grammar), not merely because the belt
 	// regex (?i)url\s*\( also happens to match whitespace. A payload the grammar would ACCEPT if the C0 reject
 	// were removed, but that still must throw because of the control character alone.
 	//-----------------------------------------------------------------------------------------------------------------

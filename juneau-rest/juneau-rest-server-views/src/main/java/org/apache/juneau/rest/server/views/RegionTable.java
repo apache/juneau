@@ -86,7 +86,7 @@ public class RegionTable {
 
 	/**
 	 * Attribute carrying the enclosing response's CSRF token on a region host that is <b>not</b> a {@code <table>}
-	 * (fork F22) &mdash; deliberately {@link ViewTable#CSRF_ATTR}, the <b>same</b> attribute the view table already
+	 * &mdash; deliberately {@link ViewTable#CSRF_ATTR}, the <b>same</b> attribute the view table already
 	 * stamps, not a region-specific second name.
 	 *
 	 * <p>
@@ -145,7 +145,7 @@ public class RegionTable {
 	}
 
 	/**
-	 * Emits one empty region container, optionally carrying the non-table host's CSRF stamp (F22).
+	 * Emits one empty region container, optionally carrying the non-table host's CSRF stamp.
 	 *
 	 * <p>
 	 * In-table region HTML ({@link ViewTable}'s detail template).  Page slots: author HTML plus

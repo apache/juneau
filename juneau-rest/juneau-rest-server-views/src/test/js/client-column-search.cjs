@@ -25,7 +25,7 @@
  *
  *   Usage:  node client-column-search.cjs <juneau-renders.js> <juneau-views.js> <juneau-search.js> [<dates.json>]
  *
- * The optional dates.json is a Java-serialized row list (S6: a bean with Date / Instant / LocalDate properties
+ * The optional dates.json is a Java-serialized row list (a bean with Date / Instant / LocalDate properties
  * serialized by the same JSON serializer a client-mode dataUrl uses), filtered with $between on each column.
  */
 'use strict';
@@ -221,7 +221,7 @@ function popStatus(ctx) {
 // Scenarios
 // ---------------------------------------------------------------------------------------------------------------
 
-// --- S1: client-filtered detection (inline rows force client filtering whatever the dataMode) -----------------
+// --- client-filtered detection (inline rows force client filtering whatever the dataMode) -----------------
 out.clientFilteredClient = I.isClientFiltered({ viewDef: { dataMode: 'client' } });
 out.clientFilteredServer = I.isClientFiltered({ viewDef: { dataMode: 'server' } });
 out.clientFilteredInline = I.isClientFiltered({ viewDef: { dataMode: 'server' }, clientFiltered: true });
@@ -238,7 +238,7 @@ out.clientFilteredInline = I.isClientFiltered({ viewDef: { dataMode: 'server' },
 	out.enumInStoredExpr = I.getColumnExpr(t.ctx, col);  // the store, not col.search()
 })();
 
-// --- $between on a numeric column; $eqic vs $eq; $not; bare enum (D1) ---------------------------------------------
+// --- $between on a numeric column; $eqic vs $eq; $not; bare enum ---------------------------------------------
 (function operators() {
 	let t = makeTable('client');
 	setExpr(t, 'priority', '$between(2,4)');
@@ -254,7 +254,7 @@ out.clientFilteredInline = I.isClientFiltered({ viewDef: { dataMode: 'server' },
 	out.enumNotRows = visible(t);
 	t = makeTable('client');
 	setExpr(t, 'status', 'Tri');
-	out.enumBareTriRows = visible(t);                    // [] - D1: a bare enum value is whole-value, not substring
+	out.enumBareTriRows = visible(t);                    // [] - a bare enum value is whole-value, not substring
 	t = makeTable('client');
 	setExpr(t, 'status', 'Tri*');
 	out.enumBareTriStarRows = visible(t);
@@ -263,7 +263,7 @@ out.clientFilteredInline = I.isClientFiltered({ viewDef: { dataMode: 'server' },
 	out.textBareRows = visible(t);                       // bare text stays case-insensitive substring
 })();
 
-// --- Missing cell (property absent from the row object) and an array cell (D6: String(value)) --------------------
+// --- Missing cell (property absent from the row object) and an array cell (String(value)) --------------------
 (function cellShapes() {
 	let t = makeTable('client');
 	setExpr(t, 'status', '$ne(New)');
@@ -276,7 +276,7 @@ out.clientFilteredInline = I.isClientFiltered({ viewDef: { dataMode: 'server' },
 	out.arrayCellContainsRows = visible(t);
 })();
 
-// --- Strict validation: a bad expression installs nothing and keeps the previous filter (D3) ---------------------
+// --- Strict validation: a bad expression installs nothing and keeps the previous filter ---------------------
 (function strict() {
 	const t = makeTable('client');
 	setExpr(t, 'priority', '$gt(2)');
@@ -327,13 +327,13 @@ out.clientFilteredInline = I.isClientFiltered({ viewDef: { dataMode: 'server' },
 	const t3 = makeTable('client');
 	I.openColumnSearchPopover(makeIcon(), colByName(t3, 'name'), t3.ctx, t3.table);
 	out.popoverTextHasTzHelp = !!popEl(t3.ctx).querySelector('.juneau-view-col-search-popover-tzhelp');
-	// Unregistered custom operators are hidden from the help list on a client-filtered table (D4).
+	// Unregistered custom operators are hidden from the help list on a client-filtered table.
 	out.popoverHelpOpsBeforeRegister = popEl(t3.ctx).querySelectorAll('.juneau-view-col-search-popover-help-op')
 		.map(function (r) { const c = r.querySelector('code'); return c ? c.textContent : null; });
 	I.closeColumnSearchPopover(t3.ctx);
 })();
 
-// --- Custom operators: rejected (warned once) until registered, then evaluated (D4) ------------------------------
+// --- Custom operators: rejected (warned once) until registered, then evaluated ------------------------------
 (function customs() {
 	const t = makeTable('client');
 	const before = warnings.length;
@@ -368,7 +368,7 @@ out.clientFilteredInline = I.isClientFiltered({ viewDef: { dataMode: 'server' },
 	out.collectFilters = s.filters.map(function (f) { return f.column + '=' + f.expr; });
 })();
 
-// --- ?state= restore: valid filters install, bad ones are skipped (D3 / S8) ---------------------------------------
+// --- ?state= restore: valid filters install, bad ones are skipped ---------------------------------------
 (function restore() {
 	const t = makeTable('client');
 	setExpr(t, 'priority', '$gt(1)');                   // prior value a bad link must not clobber
@@ -393,7 +393,7 @@ out.clientFilteredInline = I.isClientFiltered({ viewDef: { dataMode: 'server' },
 	out.restoreCodeShortExpr = I.getColumnExpr(t.ctx, colByName(t, 'code'));
 })();
 
-// --- Teardown (View Settings rebuild) clears the store, matching today's native drop (D7) -------------------------
+// --- Teardown (View Settings rebuild) clears the store, matching today's native drop -------------------------
 (function teardown() {
 	const t = makeTable('client');
 	setExpr(t, 'status', '$in(Triaged,New)');
@@ -424,7 +424,7 @@ out.clientFilteredInline = I.isClientFiltered({ viewDef: { dataMode: 'server' },
 	out.dt1Native = colByName(t, 'status').appliedValue();
 })();
 
-// --- S6: Java-serialized Date / Instant / LocalDate rows, filtered with $between ---------------------------------
+// --- Java-serialized Date / Instant / LocalDate rows, filtered with $between ---------------------------------
 if (datesJsonPath) {
 	const rows = JSON.parse(fs.readFileSync(datesJsonPath, 'utf8'));
 	const DATE_COLS = ['date', 'instant', 'localDate'];

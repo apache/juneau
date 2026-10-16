@@ -16,7 +16,7 @@
  */
 
 /*
- * page-state.cjs - always-on Node harness for the general page-state store (design section 6.2).  Loads
+ * page-state.cjs - always-on Node harness for the general page-state store.  Loads
  * juneau-pagestate.js standalone (it attaches to window.JuneauViews without views/renders), then exercises: two
  * tables keeping separate per-table keys, a replaced store implementation actually being used, and a blocked store
  * degrading to a no-op without throwing.  Every assertion lives in the Java test.

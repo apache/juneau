@@ -26,7 +26,7 @@ import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.condition.*;
 
 /**
- * Ribbon controls over the bus in real Chromium (spec 5.5): a target-card refresh sends cmd:tasks, an option toggle sets the filter and
+ * Ribbon controls over the bus in real Chromium: a target-card refresh sends cmd:tasks, an option toggle sets the filter and
  * reaches a {@code filter} subscriber, a column-scoped option reaches the server request, and a {@code publish} item feeds another card's
  * {@code filter} role.
  */

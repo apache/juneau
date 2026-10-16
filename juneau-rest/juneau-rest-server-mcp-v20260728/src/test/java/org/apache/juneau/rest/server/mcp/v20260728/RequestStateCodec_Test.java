@@ -90,7 +90,7 @@ class RequestStateCodec_Test {
 		assertTrue(c.isEmpty());
 	}
 
-	// F4 (READY-312f): the principal-bearing 3-arg methods are the canonical SPI; the 2-arg convenience overloads
+	// The principal-bearing 3-arg methods are the canonical SPI; the 2-arg convenience overloads
 	// delegate to them with a null (no-principal) identity, and an explicit principal is passed through verbatim.
 	private static final class B_CapturingCodec implements RequestStateCodec {
 		Principal sealPrincipal = () -> "<unset>";

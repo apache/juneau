@@ -24,7 +24,7 @@ import java.util.*;
 
 /**
  * A server-minted idempotency key for a row-action submit, bound at mint time to the {@code (action, targetId)} pair
- * it was issued for (design doc §6.2; the idempotency half of the row-action result contract).
+ * it was issued for.
  *
  * <h5 class='section'>Why the key is server-minted and bound, not a client UUID</h5>
  * <p>

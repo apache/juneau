@@ -19,8 +19,7 @@
  * run-view.cjs - the run-view module's harness (no network): checks, the reducer, rendering, tooltip, notes,
  * incremental rendering and compact mode.  Polling and mount live in run-view-poll.cjs.
  *
- * Every case gets a FRESH environment (console-output-env.cjs; the run-view module takes the slot that file calls
- * "console-output") and passes by returning without throwing; the report maps the case name to true, or to the
+ * Every case gets a FRESH environment (run-view-env.cjs) and passes by returning without throwing; the report maps the case name to true, or to the
  * failure's stack.
  *
  *   Usage:  node run-view.cjs <renders> <views> <regions> <helpers> <run-view> <vectors.json>
@@ -28,7 +27,7 @@
 'use strict';
 
 const path = require('node:path');
-const E = require(path.join(__dirname, 'console-output-env.cjs'));
+const E = require(path.join(__dirname, 'run-view-env.cjs'));
 
 const argv = process.argv.slice(2);
 if (argv.length < 6) {
@@ -68,10 +67,10 @@ test('chk01_vectors', function (t) {
 });
 
 const VALID = [
-	{ ev: 'step', seq: 1, id: 'build', title: 'mvn package', n: 4, status: 'waiting', rawLine: 3 },
+	{ ev: 'step', seq: 1, id: 'build', title: 'mvn package', n: 4, status: 'waiting', rawOffset: 3 },
 	{ ev: 'end', seq: 2, id: 'build', status: 'fail', ms: 1200, exit: 1 },
-	{ ev: 'suite', seq: 3, step: 'build', fw: 'surefire', suite: 'com.example.A', counts: { pass: 1, fail: 2, skip: 3 }, rawLine: 9 },
-	{ ev: 'test', seq: 4, step: 'build', fw: 'jest', suite: 'a.test.js', name: 'adds', status: 'error', ms: 5, msg: 'boom', trace: 'at x', rawLine: 11 },
+	{ ev: 'suite', seq: 3, step: 'build', fw: 'surefire', suite: 'com.example.A', counts: { pass: 1, fail: 2, skip: 3 }, rawOffset: 9 },
+	{ ev: 'test', seq: 4, step: 'build', fw: 'jest', suite: 'a.test.js', name: 'adds', status: 'error', ms: 5, msg: 'boom', trace: 'at x', rawOffset: 11 },
 	{ ev: 'replace', seq: 5, step: 'build' },
 	{ ev: 'note', seq: 6, level: 'warn', text: 'heads up', href: 'https://example.org/x', step: 'build' },
 	{ ev: 'done', seq: 7, status: 'cancelled' }
@@ -93,14 +92,14 @@ test('chk03_validateEventDrops', function (t) {
 		Object.assign({}, s, { id: '-bad' }), Object.assign({}, s, { id: 'a b' }), Object.assign({}, s, { id: undefined }),
 		Object.assign({}, s, { title: '' }), Object.assign({}, s, { title: 3 }),
 		Object.assign({}, s, { n: 0 }), Object.assign({}, s, { n: 10000 }), Object.assign({}, s, { n: 1.5 }),
-		Object.assign({}, s, { status: 'ok' }), Object.assign({}, s, { rawLine: 0 }), Object.assign({}, s, { seq: 0 }),
+		Object.assign({}, s, { status: 'ok' }), Object.assign({}, s, { rawOffset: -1 }), Object.assign({}, s, { seq: 0 }),
 		Object.assign({}, s, { seq: 1.5 }), Object.assign({}, s, { seq: '1' }),
 		{ ev: 'end', id: 'a' }, { ev: 'end', id: 'a', status: 'running' }, { ev: 'end', id: 'a', status: 'ok', ms: -1 },
 		Object.assign({}, VALID[2], { counts: undefined }), Object.assign({}, VALID[2], { counts: { pass: 1, fail: 1 } }),
 		Object.assign({}, VALID[2], { counts: { pass: 1, fail: -1, skip: 0 } }),
 		Object.assign({}, VALID[2], { counts: { pass: 1000000001, fail: 0, skip: 0 } }),
 		Object.assign({}, VALID[2], { fw: 'Jest' }), Object.assign({}, VALID[2], { suite: '' }),
-		Object.assign({}, te, { status: 'bogus' }), Object.assign({}, te, { name: '' }), Object.assign({}, te, { rawLine: 0 }),
+		Object.assign({}, te, { status: 'bogus' }), Object.assign({}, te, { name: '' }), Object.assign({}, te, { rawOffset: -1 }),
 		Object.assign({}, te, { ms: -1 }), Object.assign({}, te, { msg: 5 }), Object.assign({}, te, { step: 'a b' }),
 		{ ev: 'replace' }, { ev: 'replace', step: '' },
 		{ ev: 'note', level: 'fatal', text: 'x' }, { ev: 'note', level: 'info', text: '' }, { ev: 'note', level: 'info', text: 'x', step: '!' },
@@ -160,13 +159,13 @@ function onlySuite(x, id) { return Array.from(stepOf(x, id).suites.values())[0];
 
 test('red01_stepUpsert', function (t) {
 	const x = mkModel(t);
-	feed(x, [stepEv('a', { n: 1, rawLine: 4 }), stepEv('b')]);
+	feed(x, [stepEv('a', { n: 1, rawOffset: 4 }), stepEv('b')]);
 	expectSame(x.m.steps.map(function (s) { return s.id; }), ['a', 'b'], 'order');
 	feed(x, stepEv('a', { title: 'New' }));
 	const a = stepOf(x, 'a');
-	expect(a.title === 'New' && a.n === 1 && a.rawLine === 4 && a.status === 'running', 'absent members keep stored values');
-	feed(x, stepEv('a', { n: 2, rawLine: 7, status: 'waiting' }));
-	expect(a.n === 2 && a.rawLine === 7 && a.status === 'waiting' && x.m.steps.length === 2, 'present members update');
+	expect(a.title === 'New' && a.n === 1 && a.rawOffset === 4 && a.status === 'running', 'absent members keep stored values');
+	feed(x, stepEv('a', { n: 2, rawOffset: 7, status: 'waiting' }));
+	expect(a.n === 2 && a.rawOffset === 7 && a.status === 'waiting' && x.m.steps.length === 2, 'present members update');
 });
 
 test('red02_waitingThenRunning', function (t) {
@@ -206,11 +205,11 @@ test('red05_endUnknownStepDropped', function (t) {
 
 test('red06_suitePlaceholderThenReplaceCounts', function (t) {
 	const x = mkModel(t);
-	const sv = function (c) { return { ev: 'suite', step: 'a', fw: 'jest', suite: 'a.test.js', counts: c, rawLine: 3 }; };
+	const sv = function (c) { return { ev: 'suite', step: 'a', fw: 'jest', suite: 'a.test.js', counts: c, rawOffset: 3 }; };
 	feed(x, [stepEv('a'), sv({ pass: 1, fail: 0, skip: 0 })]);
 	feed(x, sv({ pass: 4, fail: 1, skip: 2 }));
 	const s = onlySuite(x, 'a');
-	expect(stepOf(x, 'a').suites.size === 1 && s.pass === 4 && s.fail === 1 && s.skip === 2 && !s.detailed && s.rawLine === 3, JSON.stringify(s));
+	expect(stepOf(x, 'a').suites.size === 1 && s.pass === 4 && s.fail === 1 && s.skip === 2 && !s.detailed && s.rawOffset === 3, JSON.stringify(s));
 });
 
 test('red07_testsWinOverPlaceholders', function (t) {
@@ -401,7 +400,7 @@ test('core01_createAndRoot', function (t) {
 });
 
 test('core02_badOptionsThrowBeforeDom', function (t) {
-	const bad = [{ id: '' }, { id: 7 }, { compact: 'yes' }, { title: 5 }, { rawHref: 'javascript:x{line}' }, { rawHref: '/a' }, { emit: 3 }];
+	const bad = [{ id: '' }, { id: 7 }, { compact: 'yes' }, { title: 5 }, { rawHref: 'javascript:x{offset}' }, { rawHref: '#L{line}' }, { rawHref: '/a' }, { emit: 3 }];
 	for (const o of bad) {
 		const host = t.env.document.createElement('div');
 		let err = null;
@@ -523,29 +522,29 @@ test('step01_createdOnceUpdatedInPlace', function (t) {
 	expect(li.querySelector('.juneau-rv-glyph').getAttribute('aria-hidden') === 'true', 'glyph hidden from AT');
 });
 
-test('step02_rawLinkNeedsLineAndTemplate', function (t) {
-	const c = mkRun(t, { rawHref: '/raw?line={line}' });
-	c.send([stepOk('a', { rawLine: 12 }), stepOk('b')]);
+test('step02_rawLinkNeedsOffsetAndTemplate', function (t) {
+	const c = mkRun(t, { rawHref: '/raw?line={offset}' });
+	c.send([stepOk('a', { rawOffset: 12 }), stepOk('b')]);
 	const a = c.step('a').querySelector('.juneau-rv-title');
 	expect(a.tagName === 'A' && a.getAttribute('href') === '/raw?line=12' && a.getAttribute('rel') === 'nofollow noreferrer', 'link with rel');
-	expect(c.step('b').querySelector('.juneau-rv-title').tagName === 'SPAN', 'no rawLine, no link');
-	const f = mkRun(t, { rawHref: '#L{line}' });
-	f.send(stepOk('a', { rawLine: 3 }));
+	expect(c.step('b').querySelector('.juneau-rv-title').tagName === 'SPAN', 'no rawOffset, no link');
+	const f = mkRun(t, { rawHref: '#L{offset}' });
+	f.send(stepOk('a', { rawOffset: 3 }));
 	const fa = f.step('a').querySelector('.juneau-rv-title');
 	expect(fa.getAttribute('href') === '#L3' && fa.getAttribute('rel') === null, 'fragment link has no rel');
 	const g = mkRun(t, {});
-	g.send(stepOk('a', { rawLine: 3 }));
+	g.send(stepOk('a', { rawOffset: 3 }));
 	expect(g.step('a').querySelector('.juneau-rv-title').tagName === 'SPAN', 'no template, no link');
 });
 
 test('step02b_rawOffsetLink', function (t) {
 	const c = mkRun(t, { rawHref: '#term-O{offset}' });
-	c.send([stepOk('a', { rawLine: 12, rawOffset: 3400 }), stepOk('b', { rawLine: 13 })]);
+	c.send([stepOk('a', { rawOffset: 3400 }), stepOk('b')]);
 	const a = c.step('a').querySelector('.juneau-rv-title');
 	expect(a.tagName === 'A' && a.getAttribute('href') === '#term-O3400', 'offset link: ' + a.getAttribute('href'));
-	expect(c.step('b').querySelector('.juneau-rv-title').tagName === 'SPAN', 'no rawOffset, no link even with rawLine');
+	expect(c.step('b').querySelector('.juneau-rv-title').tagName === 'SPAN', 'no rawOffset, no link');
 	const s = mkRun(t, { rawHref: '#term-O{offset}' });
-	s.send([stepOk('a')].concat(testEvs('a', 'jest', 'sa', [['x', 'fail', { rawOffset: 77 }], ['y', 'fail', { rawLine: 4 }]])));
+	s.send([stepOk('a')].concat(testEvs('a', 'jest', 'sa', [['x', 'fail', { rawOffset: 77 }], ['y', 'fail']])));
 	const blocks = s.all('.juneau-co-block');
 	expect(blocks[0].tagName === 'A' && blocks[0].getAttribute('href') === '#term-O77', 'block offset link');
 	expect(blocks[1].tagName === 'SPAN', 'block without rawOffset has no link');
@@ -596,8 +595,8 @@ test('step05_notes', function (t) {
 
 test('esc01_hostileTextIsInert', function (t) {
 	const h = '<img src=x onerror=alert(1)>';
-	const c = mkRun(t, { title: h, rawHref: '/raw/{line}' });
-	c.send([{ ev: 'step', id: 'a', title: h, rawLine: 1 }, { ev: 'suite', step: 'a', fw: 'jest', suite: h, counts: { pass: 0, fail: 1, skip: 0 } },
+	const c = mkRun(t, { title: h, rawHref: '/raw/{offset}' });
+	c.send([{ ev: 'step', id: 'a', title: h, rawOffset: 1 }, { ev: 'suite', step: 'a', fw: 'jest', suite: h, counts: { pass: 0, fail: 1, skip: 0 } },
 		{ ev: 'note', level: 'warn', text: h }]);
 	expect(c.host.querySelector('img') === null && c.host.querySelector('script') === null, 'no injected elements');
 	expect(c.root().getAttribute('aria-label') === h, 'title is attribute text');
@@ -694,26 +693,26 @@ test('blk01_blockClassesAndAttributes', function (t) {
 		&& b[1].className === b[2].className, 'error and fail differ in tooltip only');
 });
 
-test('blk02_anchorOnlyWithRawLineAndTemplate', function (t) {
-	const c = mkRun(t, { rawHref: '#raw-L{line}' });
-	c.send([stepOk('a')].concat(testEvs('a', 'jest', 's', [['with', 'pass', { rawLine: 12 }], ['without', 'pass']])));
+test('blk02_anchorOnlyWithRawOffsetAndTemplate', function (t) {
+	const c = mkRun(t, { rawHref: '#raw-L{offset}' });
+	c.send([stepOk('a')].concat(testEvs('a', 'jest', 's', [['with', 'pass', { rawOffset: 12 }], ['without', 'pass']])));
 	click(c, toggleOf(c, 's'));
 	const b = c.all('.juneau-co-block');
 	expect(b[0].tagName === 'A' && b[0].getAttribute('href') === '#raw-L12' && b[0].getAttribute('rel') === null, 'fragment anchor');
-	expect(b[1].tagName === 'SPAN', 'no rawLine, no anchor');
-	const d = mkRun(t, { rawHref: '/raw?l={line}' });
-	d.send([stepOk('a')].concat(testEvs('a', 'jest', 's', [['with', 'pass', { rawLine: 12 }]])));
+	expect(b[1].tagName === 'SPAN', 'no rawOffset, no anchor');
+	const d = mkRun(t, { rawHref: '/raw?l={offset}' });
+	d.send([stepOk('a')].concat(testEvs('a', 'jest', 's', [['with', 'pass', { rawOffset: 12 }]])));
 	click(d, toggleOf(d, 's'));
 	expect(d.all('.juneau-co-block')[0].getAttribute('rel') === 'nofollow noreferrer', 'path anchor has rel');
 	const e = mkRun(t, {});
-	e.send([stepOk('a')].concat(testEvs('a', 'jest', 's', [['with', 'pass', { rawLine: 12 }]])));
+	e.send([stepOk('a')].concat(testEvs('a', 'jest', 's', [['with', 'pass', { rawOffset: 12 }]])));
 	click(e, toggleOf(e, 's'));
 	expect(e.all('.juneau-co-block')[0].tagName === 'SPAN', 'no template, no anchor');
 });
 
 test('blk03_eventCannotSupplyHref', function (t) {
-	const c = mkRun(t, { rawHref: '/raw#{line}' });
-	c.send([stepOk('a')].concat(testEvs('a', 'jest', 's', [['x', 'pass', { rawLine: 4, href: 'https://evil.example/', rawHref: 'https://evil.example/{line}' }]])));
+	const c = mkRun(t, { rawHref: '/raw#{offset}' });
+	c.send([stepOk('a')].concat(testEvs('a', 'jest', 's', [['x', 'pass', { rawOffset: 4, href: 'https://evil.example/', rawHref: 'https://evil.example/{offset}' }]])));
 	click(c, toggleOf(c, 's'));
 	const b = c.all('.juneau-co-block')[0];
 	expect(b.getAttribute('href') === '/raw#4', 'href comes from the instance template: ' + b.getAttribute('href'));
@@ -730,22 +729,22 @@ test('blk03b_blocksCarryStepId', function (t) {
 	}
 });
 
-test('blk03c_onBlockClickGetsStepLineKind', function (t) {
+test('blk03c_onBlockClickGetsStepOffsetKind', function (t) {
 	for (const compact of [false, true]) {
 		const got = [];
-		const c = mkRun(t, { compact: compact, rawHref: '#L{line}', onBlockClick: function (info) { got.push(info); } });
-		c.send([stepOk('a'), stepOk('b')].concat(testEvs('a', 'jest', 'sa', [['x', 'fail', { rawLine: 7 }]]), testEvs('b', 'jest', 'sb', [['y', 'error']])));
+		const c = mkRun(t, { compact: compact, rawHref: '#L{offset}', onBlockClick: function (info) { got.push(info); } });
+		c.send([stepOk('a'), stepOk('b')].concat(testEvs('a', 'jest', 'sa', [['x', 'fail', { rawOffset: 7 }]]), testEvs('b', 'jest', 'sb', [['y', 'error']])));
 		const b = c.all('.juneau-co-block');
 		click(c, b[0]);
 		click(c, b[1]);
-		expectSame(got, [{ stepId: 'a', line: 7, kind: 'fail' }, { stepId: 'b', kind: 'error' }], 'hook payloads, compact=' + compact);
+		expectSame(got, [{ stepId: 'a', offset: 7, kind: 'fail' }, { stepId: 'b', kind: 'error' }], 'hook payloads, compact=' + compact);
 	}
 });
 
 test('blk03e_onBlockClickOnKeyboardNoDoubleFire', function (t) {
 	const got = [];
-	const c = mkRun(t, { rawHref: '#L{line}', onBlockClick: function (info) { got.push(info); } });
-	c.send([stepOk('a')].concat(testEvs('a', 'jest', 'sa', [['x', 'fail', { msg: 'm' }]]), testEvs('a', 'jest', 'sb', [['y', 'fail', { msg: 'm', rawLine: 3 }]])));
+	const c = mkRun(t, { rawHref: '#L{offset}', onBlockClick: function (info) { got.push(info); } });
+	c.send([stepOk('a')].concat(testEvs('a', 'jest', 'sa', [['x', 'fail', { msg: 'm' }]]), testEvs('a', 'jest', 'sb', [['y', 'fail', { msg: 'm', rawOffset: 3 }]])));
 	const span = c.all('.juneau-co-block').find(function (b) { return b.tagName === 'SPAN'; });
 	const link = c.all('.juneau-co-block').find(function (b) { return b.tagName === 'A'; });
 	c.root().dispatch('keydown', { target: span, key: 'Enter', preventDefault: function () {} });
@@ -758,11 +757,11 @@ test('blk03e_onBlockClickOnKeyboardNoDoubleFire', function (t) {
 test('blk03f_onBlockClickGetsOffset', function (t) {
 	const got = [];
 	const c = mkRun(t, { rawHref: '#term-O{offset}', onBlockClick: function (info) { got.push(info); } });
-	c.send([stepOk('a')].concat(testEvs('a', 'jest', 'sa', [['x', 'fail', { rawLine: 7, rawOffset: 900 }], ['y', 'fail', { msg: 'm' }]])));
+	c.send([stepOk('a')].concat(testEvs('a', 'jest', 'sa', [['x', 'fail', { rawOffset: 900 }], ['y', 'fail', { msg: 'm' }]])));
 	const b = c.all('.juneau-co-block');
 	click(c, b[0]);
 	click(c, b[1]);
-	expectSame(got, [{ stepId: 'a', line: 7, offset: 900, kind: 'fail' }, { stepId: 'a', kind: 'fail' }], 'hook payloads');
+	expectSame(got, [{ stepId: 'a', offset: 900, kind: 'fail' }, { stepId: 'a', kind: 'fail' }], 'hook payloads');
 });
 
 test('blk03g_stepLinkScrollsAMountedTerminalWithoutNavigating', function (t) {
@@ -809,15 +808,15 @@ test('blk04_traceDisclosure', function (t) {
 	expect(c.all('.juneau-rv-trace').length === 1, 'click opens it');
 	click(c, blk(1));
 	expect(c.all('.juneau-rv-trace').length === 1, 'a passing block does not toggle');
-	const k = mkRun(t, { rawHref: '/r#{line}' });
-	k.send([stepOk('a')].concat(testEvs('a', 'jest', 's', [['bad', 'fail', { msg: 'boom', trace: 'tr', rawLine: 3 }]])));
+	const k = mkRun(t, { rawHref: '/r#{offset}' });
+	k.send([stepOk('a')].concat(testEvs('a', 'jest', 's', [['bad', 'fail', { msg: 'boom', trace: 'tr', rawOffset: 3 }]])));
 	click(k, k.all('.juneau-co-block')[0]);
 	expect(k.all('.juneau-rv-trace').length === 0, 'an anchor block navigates, it does not toggle');
 });
 
 test('blk05_traceReachableFromFailuresList', function (t) {
-	const c = mkRun(t, { rawHref: '/r#{line}' });
-	c.send([stepOk('a')].concat(testEvs('a', 'jest', 's', [['bad', 'fail', { msg: 'boom', trace: 'tr', rawLine: 3 }]])));
+	const c = mkRun(t, { rawHref: '/r#{offset}' });
+	c.send([stepOk('a')].concat(testEvs('a', 'jest', 's', [['bad', 'fail', { msg: 'boom', trace: 'tr', rawOffset: 3 }]])));
 	const tb = c.q('.juneau-rv-failure-trace');
 	expect(tb !== null && tb.tagName === 'BUTTON', 'a separate trace button exists even when the block is a link');
 	click(c, tb);
@@ -974,14 +973,14 @@ function goldRun() {
 	const e = [
 		{ ev: 'step', id: 'compile', title: 'Compile', n: 1 },
 		{ ev: 'end', id: 'compile', status: 'ok', ms: 1200 },
-		{ ev: 'step', id: 'test', title: 'Test', n: 2, rawLine: 5 },
+		{ ev: 'step', id: 'test', title: 'Test', n: 2, rawOffset: 5 },
 		{ ev: 'suite', step: 'test', fw: 'surefire', suite: 'com.acme.A', counts: { pass: 8, fail: 0, skip: 1 } },
 		{ ev: 'suite', step: 'test', fw: 'surefire', suite: 'com.acme.B', counts: { pass: 3, fail: 0, skip: 0 } },
 		{ ev: 'note', step: 'test', level: 'info', text: 'retried once', href: 'https://example.org/log' },
 		{ ev: 'end', id: 'test', status: 'fail', ms: 5300, exit: 1 }
 	];
 	for (let i = 0; i < 22; i++) e.push({ ev: 'test', step: 'test', fw: 'jest', suite: 'web.test.js', name: 'case ' + i, status: i === 7 ? 'fail' : i === 9 ? 'skip' : 'pass', ms: 10 + i,
-		msg: i === 7 ? 'expected 1\nreceived 2' : undefined, trace: i === 7 ? 'at web.test.js:7' : undefined, rawLine: i + 1 });
+		msg: i === 7 ? 'expected 1\nreceived 2' : undefined, trace: i === 7 ? 'at web.test.js:7' : undefined, rawOffset: i + 1 });
 	for (let i = 0; i < 6; i++) e.push({ ev: 'test', step: 'test', fw: 'jest', suite: 'api.test.js', name: 'api ' + i, status: 'pass' });
 	e.push({ ev: 'step', id: 'deploy', title: 'Deploy', n: 3, status: 'waiting' });
 	e.push({ ev: 'note', level: 'warn', text: 'run note' });
@@ -1001,11 +1000,11 @@ function golden(t, name, opts, evs) {
 }
 
 test('gold01_fullGolden', function (t) {
-	golden(t, 'full', { id: 'g', rawHref: '/raw#L{line}' }, goldRun());
+	golden(t, 'full', { id: 'g', rawHref: '/raw#L{offset}' }, goldRun());
 });
 
 test('gold02_compactGolden', function (t) {
-	golden(t, 'compact', { id: 'g', compact: true, rawHref: '/raw#L{line}' }, goldRun());
+	golden(t, 'compact', { id: 'g', compact: true, rawHref: '/raw#L{offset}' }, goldRun());
 });
 
 test('gold03_replaceFlow', function (t) {

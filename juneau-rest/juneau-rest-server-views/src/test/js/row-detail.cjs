@@ -367,7 +367,7 @@ if (out.hasPaintActionMessageIntoDetail) {
 	out.paint_text = paintSlot.textContent;
 	out.paint_xssNotInterpreted = paintSlot.textContent === paintMsg;
 
-	// LD-1: a field-hosted bar paints into its OWN field's slot, not the section's first field.
+	// A field-hosted bar paints into its OWN field's slot, not the section's first field.
 	// Two fields in the section, the SECOND one hosting the bar, so "first field happens to be the bar's own
 	// field" cannot make this pass by accident -- painting the first field's slot instead of the second's would
 	// be exactly the pre-fix defect this case exists to catch.
@@ -395,7 +395,7 @@ if (out.hasPaintActionMessageIntoDetail) {
 	out.paintFieldHosted_ownSlotPainted = fhSecondSlot.textContent;
 	out.paintFieldHosted_firstFieldUntouched = fhFirstSlot.textContent === '';
 
-	// LD-1 regression guard: a section-hosted bar (no enclosing `.juneau-view-detail-field`) keeps painting into
+	// Regression guard: a section-hosted bar (no enclosing `.juneau-view-detail-field`) keeps painting into
 	// the section's FIRST field slot, byte-identically to today -- with a SECOND field present so this could not
 	// pass merely because there was only one field to choose from.
 	const shSection = el('section');
@@ -1016,7 +1016,7 @@ if (out.hasApplyActionRefRules && out.hasMintActionDescIdentity) {
 	out.rule_matchNoDescribedby = okBar.btn.getAttribute('aria-describedby') == null;
 	out.rule_matchNoReasonText = okBar.desc.textContent === '';
 
-	// (2) A rule does not match -> disabled but STILL PRESENT (D2: gating never hides), with both reason channels
+	// (2) A rule does not match -> disabled but STILL PRESENT (gating never hides), with both reason channels
 	// set and aria-describedby pointing at this row's own reason node.
 	const failBar = gatedBar('ack', [OPEN_ONLY]);
 	I.mintActionDescIdentity(failBar.panel, 'alerts', 'a1');
@@ -1192,7 +1192,7 @@ out.dfa_barIsASiblingOfTheValueSlot = dfa.block.childNodes.length === 3
 	&& dfa.block.childNodes[2] === dfa.bar
 	&& dfa.value.childNodes.length === 0;
 
-// (2) LD-4: a NON-BLANK value and a bar at once.  The value paints, the bar is untouched and still in the block,
+// (2) A NON-BLANK value and a bar at once.  The value paints, the bar is untouched and still in the block,
 // and the lifecycle enable reaches it - which is the whole of "still clickable" for a delegated listener.
 I.fillDetailSlots(dfa.panel, { assignee: 'alice' });
 out.dfa_valuePainted = dfa.value.textContent;

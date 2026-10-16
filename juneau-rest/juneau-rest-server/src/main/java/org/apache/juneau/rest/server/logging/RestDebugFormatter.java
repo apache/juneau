@@ -175,7 +175,7 @@ public interface RestDebugFormatter {
 	 * Returns the maximum number of request/response body bytes to capture for the {@code FINEST}-tier body rendering.
 	 *
 	 * <p>
-	 * This cap is enforced at <i>capture</i> time by the two-phase pipeline (Phase A), so memory stays bounded even for
+	 * This cap is enforced at <i>capture</i> time by the two-phase pipeline, so memory stays bounded even for
 	 * large uploads/downloads. Defaults to 8&nbsp;KB.
 	 *
 	 * @return The body capture cap in bytes.

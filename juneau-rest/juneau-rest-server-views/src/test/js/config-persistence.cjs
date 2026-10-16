@@ -134,7 +134,7 @@ const PROBE = async function () {
 		await page.evaluate(() => new Promise(requestAnimationFrame));
 		const report = await page.evaluate(PROBE);
 
-		// ---- f) page-state View Settings survive a REAL page reload (design §6.1 last-applied restore) ----
+		// ---- f) page-state View Settings survive a REAL page reload ----
 		// The localStorage-backed page-state store is the ONLY facet that can be proven to outlive a reload, and a
 		// reload is the ONLY way to prove it (a same-page re-read cannot distinguish persistence from an in-memory
 		// cache).  Write two view ids' committed blobs, reload, then prove a fresh read restores exactly the first

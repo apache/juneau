@@ -50,8 +50,8 @@ import org.apache.juneau.rest.server.mcp.McpToolSpec;
 import org.junit.jupiter.api.*;
 
 /**
- * Consolidated dispatcher coverage for the {@code 2026-07-28} MRTR (Multi-Round-Trip Request) PAUSE/RESUME flow
- * (spec &sect;2/&sect;4; plan Phase 3, Tasks 9-11): sentinel&rarr;seal&rarr;emit across all three in-scope methods,
+ * Consolidated dispatcher coverage for the {@code 2026-07-28} MRTR (Multi-Round-Trip Request) PAUSE/RESUME flow:
+ * sentinel&rarr;seal&rarr;emit across all three in-scope methods,
  * RESUME&rarr;unseal&rarr;re-invoke happy path and loop, capability-gate, tamper/expiry/max-rounds/method-mismatch
  * rejection with exact codes, cache-hint suppression on PAUSE, exact-resource-only scoping, per-instance codec
  * injection, and a scoped-methods-only proof that no other method engages MRTR.
@@ -139,7 +139,7 @@ class McpMrtrDispatch_Test {
 		return Map.of("type", type);
 	}
 
-	// -------- PAUSE (Task 9) ---------
+	// -------- PAUSE ---------
 
 	@Test void a01_toolsCall_pauseEmitsInputRequired() {
 		var rev = revision(mrtr(new AeadRequestStateCodec()));
@@ -210,7 +210,7 @@ class McpMrtrDispatch_Test {
 		assertFalse(Json.of(result).contains("cacheScope"));
 	}
 
-	// -------- capability gate (Task 10) ---------
+	// -------- capability gate ---------
 
 	static final class B_CountingCodec implements RequestStateCodec {
 		final RequestStateCodec delegate = new AeadRequestStateCodec();
@@ -252,7 +252,7 @@ class McpMrtrDispatch_Test {
 		assertEquals("degraded", ((TextContent) result.getContent().get(0)).getText());
 	}
 
-	// -------- RESUME (Task 10) ---------
+	// -------- RESUME ---------
 
 	@Test void c01_resumeToComplete_reInvokesHandlerWithResumeContext() {
 		var codec = new AeadRequestStateCodec();
@@ -447,7 +447,7 @@ class McpMrtrDispatch_Test {
 		assertTrue(Json.of(result).contains("\"ttlMs\":99"));  // a COMPLETED resume gets its cache hint, unlike a PAUSE
 	}
 
-	// -------- Task 11: scoped-methods-only + per-instance codec injection ---------
+	// -------- scoped-methods-only + per-instance codec injection ---------
 
 	@Test void d01_nonScopedMethodsAreUnaffectedByMrtr() {
 		var rev = revision(mrtr(new AeadRequestStateCodec()));
@@ -499,7 +499,7 @@ class McpMrtrDispatch_Test {
 		assertEquals(0, calls.get());
 	}
 
-	// -------- F4 (READY-312f): principal exposure to the codec seam ---------
+	// -------- Principal exposure to the codec seam ---------
 
 	// Records the principal (and whether it was called at all) the dispatcher threads into seal/unseal.
 	static final class E_PrincipalCapturingCodec implements RequestStateCodec {
@@ -525,7 +525,7 @@ class McpMrtrDispatch_Test {
 	@Test void e01_noBoundRestRequest_principalIsNullAtSealAndUnsealAndStillRoundTrips() {
 		// The direct-dispatch harness binds no RestRequest, so the dispatcher resolves NO principal (anonymous /
 		// RS-auth-disabled path).  seal and unseal must both be invoked with a null principal and the token must
-		// still round-trip cleanly (no NPE) -- the contract the F4 seam must preserve.
+		// still round-trip cleanly (no NPE) -- the contract the principal seam must preserve.
 		var codec = new E_PrincipalCapturingCodec();
 		var rev = revision(mrtr(codec));
 		var config = new McpServerConfig().addTool(tool("ask", (args, c) -> {
@@ -548,7 +548,7 @@ class McpMrtrDispatch_Test {
 	@Test void d04_sharedStaticKeyProviderResumeSucceedsAcrossIndependentRevisions() {
 		// Direct contrast to d03: two independently-constructed McpRevision instances (via two independently-
 		// constructed McpMrtrConfig -> AeadRequestStateCodec instances) wired to the SAME StaticKeyProvider DO
-		// resume each other's tokens -- the horizontal-scaling proof design.md §2/§7 exists to enable.
+		// resume each other's tokens -- the horizontal-scaling guarantee this design exists to enable.
 		var sharedKeyProvider = StaticKeyProvider.of("2026-08-d04", StaticKeyProvider.aesKey(new byte[32]));
 		var revA = revision(new McpMrtrConfig().setKeyProvider(sharedKeyProvider));
 		var revB = revision(new McpMrtrConfig().setKeyProvider(sharedKeyProvider));
@@ -616,7 +616,7 @@ class McpMrtrDispatch_Test {
 	}
 
 	@Test void f03_defaultConfigWithoutReplayCache_doesNotRejectReplay() {
-		// Pins D1 (opt-in): with no ReplayCache wired (the default), a requestState token remains the documented
+		// Pins that with no ReplayCache wired (the default), a requestState token remains the documented
 		// multi-use bearer credential -- the exact same token may be resubmitted repeatedly within its TTL.
 		var codec = new AeadRequestStateCodec();
 		var rev = revision(mrtr(codec));  // no ReplayCache wired
@@ -806,7 +806,7 @@ class McpMrtrDispatch_Test {
 	}
 
 	@Test void f12_tokenPausedForToolAResumedAgainstToolBRejected() {
-		// H2: the operation target (tool name) is bound into the AAD, so a token paused for tool A cannot be
+		// The operation target (tool name) is bound into the AAD, so a token paused for tool A cannot be
 		// resumed against tool B -- the differing target fails the GCM tag check, surfacing as -32602. This also
 		// proves the no-argument sentinel no longer lets a token cross tools (both seal NO_ARGS_HASH).
 		var codec = new AeadRequestStateCodec();
@@ -823,7 +823,7 @@ class McpMrtrDispatch_Test {
 	}
 
 	@Test void f13_tokenPausedForResourceUriAResumedAgainstUriBRejected() {
-		// H2, resource variant: the resource uri is the bound target for resources/read, so a token paused for
+		// The resource uri is the bound target for resources/read, so a token paused for
 		// uri A cannot be resumed against uri B.
 		var codec = new AeadRequestStateCodec();
 		var rev = revision(mrtr(codec));
@@ -839,7 +839,7 @@ class McpMrtrDispatch_Test {
 	}
 
 	@Test void f14_mismatchedArgumentsLeavesTokenUsableForLaterFaithfulResume() {
-		// H3: the stateless argument-hash check runs BEFORE the stateful replay checkAndRecord, so a submission
+		// The stateless argument-hash check runs BEFORE the stateful replay checkAndRecord, so a submission
 		// with wrong arguments is rejected WITHOUT consuming the token's jti. A subsequent faithful resume of the
 		// same token therefore still succeeds -- an attacker with only a leaked token cannot burn a victim's
 		// in-flight resume, and an honest client's typo does not destroy its own token.
@@ -862,7 +862,7 @@ class McpMrtrDispatch_Test {
 	}
 
 	@Test void f15_nonFiniteNumberArgumentsRejectedAsInvalidParamsNotInternalError() {
-		// M3: a hostile-but-syntactically-legal value (a non-finite number, here 1e999 -> +Infinity) makes the
+		// A hostile-but-syntactically-legal value (a non-finite number, here 1e999 -> +Infinity) makes the
 		// JCS canonicalizer throw; that is mapped to -32602 (invalid params) rather than surfacing as a generic
 		// -32603 internal error. The hash is computed before the handler runs, so it is never invoked.
 		var rev = revision(mrtr(new AeadRequestStateCodec()));
@@ -875,7 +875,7 @@ class McpMrtrDispatch_Test {
 	}
 
 	@Test void f16_nullJtiFailsClosedWithWiredReplayCache() {
-		// M4: a null jti reaching a wired ReplayCache is a codec/contract violation, not a store outage -- it
+		// A null jti reaching a wired ReplayCache is a codec/contract violation, not a store outage -- it
 		// fails CLOSED with -32602 rather than inheriting checkReplay's fail-open policy (which a downstream NPE
 		// would otherwise trigger, silently disabling replay protection).
 		var codec = new AeadRequestStateCodec();

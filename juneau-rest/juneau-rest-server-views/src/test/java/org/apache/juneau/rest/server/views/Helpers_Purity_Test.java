@@ -25,10 +25,10 @@ import org.junit.jupiter.api.*;
  * Source-shape purity scan for {@code juneau-helpers.js}.
  *
  * <p>
- * Design §9.2's invariants for the helper library:
+ * The invariants for the helper library:
  * <ul>
  * <li>Pure data -&gt; DOM: no {@code fetch}, no message-bus reference, no page-global mutable state.
- * <li>The one amendment (SD-3): a helper MAY hold per-instance state confined to the node it returned (tabStrip's
+ * <li>The one amendment: a helper MAY hold per-instance state confined to the node it returned (tabStrip's
  * fill-once bookkeeping), living in a closure captured by that node's own event listeners - never in a
  * module-level {@code Map}/{@code Set}/{@code WeakMap}/counter.
  * <li>No HTML-string sink, ever (R16), except {@code icon()}, which paints TRUSTED icon-registry sprite markup

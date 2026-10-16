@@ -42,7 +42,7 @@ import org.apache.juneau.commons.bean.*;
  * The client paints {@link #fields} as native {@code <input>} / {@code <textarea>} / {@code <select>} /
  * {@code <button>} elements via {@code createElement}.  Labels and option text use {@code textContent}; prefills use
  * {@code .value} / {@code .checked}.  The runtime never assigns {@code innerHTML} from this payload.  Only the
- * types on the allowlist ({@code text}, {@code textarea}, {@code checkbox}, {@code toggle}, {@code select},
+ * types on the allowlist ({@code text}, {@code textarea}, {@code password}, {@code checkbox}, {@code toggle}, {@code select},
  * {@code action}) are legal &mdash; that is the XSS bound: hostile prefill cannot become an element.
  * </p>
  * <p>
@@ -92,7 +92,7 @@ public class FormDef implements Widget {
 	static final int PATTERN_MAX_LENGTH = 256;
 
 	/** The complete set of legal {@link Input#type} tokens. */
-	static final Set<String> INPUT_TYPES = Set.of("text", "textarea", "checkbox", "toggle", "select", "action");
+	static final Set<String> INPUT_TYPES = Set.of("text", "textarea", "password", "checkbox", "toggle", "select", "action");
 
 	/**
 	 * A single typed form input painted client-side with {@code createElement} (never {@code innerHTML}).
@@ -142,7 +142,7 @@ public class FormDef implements Widget {
 		/** The label shown next to the control. */
 		public String label;
 
-		/** One of {@code text}, {@code textarea}, {@code checkbox}, {@code toggle}, {@code select}, {@code action}. */
+		/** One of {@code text}, {@code textarea}, {@code password}, {@code checkbox}, {@code toggle}, {@code select}, {@code action}. */
 		public String type;
 
 		/** When {@link Boolean#TRUE}, the control is required.  Omitted from the wire otherwise. */
@@ -175,7 +175,7 @@ public class FormDef implements Widget {
 		 * @param name The submit-body key (also the DOM identity for an {@code action} field).  Must not be
 		 * 	<jk>null</jk> or blank.
 		 * @param label The visible label.  Must not be <jk>null</jk> or blank.
-		 * @param type One of {@code text}, {@code textarea}, {@code checkbox}, {@code toggle}, {@code select},
+		 * @param type One of {@code text}, {@code textarea}, {@code password}, {@code checkbox}, {@code toggle}, {@code select},
 		 * 	{@code action}.  <jk>null</jk> or blank defaults to {@code text}.
 		 * @return A new {@link Input}.
 		 * @throws IllegalArgumentException If {@code name} or {@code label} is blank, or {@code type} is not an
@@ -188,7 +188,7 @@ public class FormDef implements Widget {
 				throw iaex("FormDef.Input label must not be null or blank.");
 			var t = (type == null || type.isBlank()) ? "text" : type;
 			if (! INPUT_TYPES.contains(t))
-				throw iaex("FormDef.Input type must be one of text, textarea, checkbox, toggle, select, action, not '%s'.", t);
+				throw iaex("FormDef.Input type must be one of text, textarea, password, checkbox, toggle, select, action, not '%s'.", t);
 			var i = new Input();
 			i.name = name;
 			i.label = label;
@@ -336,6 +336,7 @@ public class FormDef implements Widget {
 			validateOptions(eq(t, "select"));
 			validateTextualOnlyFields(isTextual);
 			validatePattern();
+			validatePasswordValue();
 			validateActionField(isAction);
 		}
 
@@ -343,7 +344,7 @@ public class FormDef implements Widget {
 		private String resolveType() {
 			var t = (type == null || type.isBlank()) ? "text" : type;
 			if (! INPUT_TYPES.contains(t))
-				throw iaex("FormDef.Input '%s' type must be one of text, textarea, checkbox, toggle, select, action, not '%s'.", name, t);
+				throw iaex("FormDef.Input '%s' type must be one of text, textarea, password, checkbox, toggle, select, action, not '%s'.", name, t);
 			return t;
 		}
 
@@ -378,6 +379,12 @@ public class FormDef implements Widget {
 				throw iaex("FormDef.Input '%s' pattern is only allowed on a text/textarea field.", name);
 			if (maxLength != null)
 				throw iaex("FormDef.Input '%s' maxLength is only allowed on a text/textarea field.", name);
+		}
+
+		/** A {@code password} field is write-only: a {@link #value} would be sent to the client, so it is rejected. */
+		private void validatePasswordValue() {
+			if (eq(type, "password") && value != null)
+				throw iaex("FormDef.Input '%s' value is not allowed on a password field.", name);
 		}
 
 		/** Validates {@link #pattern} compiles and {@link #maxLength} is positive. */

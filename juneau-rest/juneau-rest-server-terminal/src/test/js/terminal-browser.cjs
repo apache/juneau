@@ -19,7 +19,7 @@
 /*
  * The terminal region in a real Chromium, through Playwright.
  *
- *   node terminal-browser.cjs <xterm.js> <xterm.css> <juneau-terminal.js> <juneau-terminal.css> <juneau-views.css>
+ *   node terminal-browser.cjs <xterm.js> <xterm.css> <juneau-terminal.js> <juneau-terminal.css> <juneau-views.css> <juneau-theme-dark.css>
  *
  * Every request goes to the made-up origin http://term.test and is answered by page.route, so nothing listens on a
  * port.  The bytes and events endpoints are scripted here; their real headers are covered by TerminalMixin_Test and
@@ -31,10 +31,10 @@ const fs = require('fs');
 const { chromium } = require('playwright');
 
 const ORIGIN = 'http://term.test';
-const [XTERM_JS, XTERM_CSS, TERM_JS, TERM_CSS, VIEWS_CSS] = process.argv.slice(2).map(function (f) { return fs.readFileSync(f); });
+const [XTERM_JS, XTERM_CSS, TERM_JS, TERM_CSS, VIEWS_CSS, DARK_CSS] = process.argv.slice(2).map(function (f) { return fs.readFileSync(f); });
 
 const PAGE = '<!DOCTYPE html><html><head><meta charset="utf-8">'
-	+ '<link rel="stylesheet" href="/a/xterm.css"><link rel="stylesheet" href="/a/juneau-views.css"><link rel="stylesheet" href="/a/juneau-terminal.css">'
+	+ '<link rel="stylesheet" href="/a/xterm.css"><link rel="stylesheet" href="/a/juneau-views.css"><link rel="stylesheet" href="/a/juneau-theme-dark.css"><link rel="stylesheet" href="/a/juneau-terminal.css">'
 	+ '<script src="/a/xterm.js"></script><script src="/a/juneau-terminal.js"></script>'
 	+ '</head><body><div id="host" style="width:1000px"></div></body></html>';
 
@@ -44,7 +44,8 @@ const ASSETS = {
 	'/a/xterm.css': ['text/css', XTERM_CSS],
 	'/a/juneau-terminal.js': ['text/javascript', TERM_JS],
 	'/a/juneau-terminal.css': ['text/css', TERM_CSS],
-	'/a/juneau-views.css': ['text/css', VIEWS_CSS]
+	'/a/juneau-views.css': ['text/css', VIEWS_CSS],
+	'/a/juneau-theme-dark.css': ['text/css', DARK_CSS]
 };
 
 /** {log, done, cols, rows, events} -> a page.route handler for the page, its assets and the two endpoints. */
@@ -141,6 +142,62 @@ function waitRunning(page, id) {
 	}, id, { timeout: 5000 });
 }
 
+/**
+ * A running card that subscribes to nudges, over a log the case can grow.  The bridge-state callback the card registers
+ * is kept in window.__bridge; every bytes request URL is recorded in n.urls.
+ */
+async function nudgeCard(page, o) {
+	const opts = Object.assign({ topic: 'term.nudge:t1' }, o);
+	const n = { f: { log: Buffer.from('hello\r\n'), done: false }, urls: [] };
+	await page.route(ORIGIN + '/**', function (route) {
+		const u = new URL(route.request().url());
+		if (u.pathname === '/t/bytes' && !u.searchParams.has('max'))
+			n.urls.push(u.search);
+		return server(n.f)(route);
+	});
+	await page.goto(ORIGIN + '/page');
+	await page.waitForFunction(function () { return typeof window.Terminal === 'function' && !!window.JuneauTerminal; });
+	await page.evaluate(function (o) {
+		window.__subs = [];
+		window.__off = 0;
+		window.__bridge = null;
+		window.__delays = [];
+		const realSetTimeout = window.setTimeout;
+		window.setTimeout = function (fn, ms) {
+			window.__delays.push(ms);
+			return realSetTimeout.apply(window, arguments);
+		};
+		window.JuneauConsole = { contract: function () {
+			return { bridges: [{ id: 'nb', transport: 'sse', session: '/s', downstream: [o.topic] }] };
+		} };
+		const ctx = {
+			publish: function () {},
+			subscribe: function (topic, fn) { window.__subs.push(topic); window.__bridge = fn; return function () { window.__off++; }; }
+		};
+		const h = window.JuneauConsoleCards.find(function (e) { return e[0] === 'terminal'; })[1];
+		window.__h = h;
+		const card = { id: 'card1', type: 'terminal', terminal: { bytesUrl: '/t/bytes', refreshMs: 3000 } };
+		if (o.subscribe)
+			card.subscribes = [{ topic: o.topic, as: 'nudge' }];
+		h.render(card, document.getElementById('host'), ctx);
+	}, opts);
+	await waitRunning(page, 'host');
+	return n;
+}
+
+/** Waits up to {@code ms} for a bytes request beyond the first {@code count}; returns the elapsed time, or -1. */
+async function waitRequest(n, count, ms) {
+	const t0 = Date.now();
+	while (Date.now() - t0 < ms) {
+		if (n.urls.length > count)
+			return Date.now() - t0;
+		await new Promise(function (r) { setTimeout(r, 25); });
+	}
+	return -1;
+}
+
+const sleep = function (ms) { return new Promise(function (r) { setTimeout(r, ms); }); };
+
 const CASES = [
 	['b01_umdBundleLoadsFromAClassicScript', async function (page) {
 		await open(page, { log: Buffer.from('hello\r\n') });
@@ -234,6 +291,47 @@ const CASES = [
 		expect(r.hash === '' && r.len === 0, 'no hash change and no history entry: ' + JSON.stringify(r));
 		await page.evaluate(function () { window.__cleanup(); });
 		expect(await page.evaluate(function () { return window.JuneauTerminal.handle('t'); }) === null, 'the handle goes away with the card');
+	}],
+	['b21_terminalOptionsReachTheXterm', async function (page) {
+		await page.route(ORIGIN + '/**', server({ log: Buffer.from('aa\nbb\n'), cols: 80, rows: 24 }));
+		await page.goto(ORIGIN + '/page');
+		await page.waitForFunction(function () { return typeof window.Terminal === 'function' && !!window.JuneauTerminal; });
+		await page.evaluate(function () {
+			const T = window.Terminal;
+			window.__terms = [];
+			window.Terminal = function (o) { const x = new T(o); window.__terms.push(x); return x; };
+			window.__cleanup = window.JuneauTerminal.mount(document.getElementById('host'), {
+				id: 't', bytesUrl: '/t/bytes', terminal: { convertEol: true, cols: 3, disableStdin: false }
+			});
+		});
+		await page.waitForFunction(function () {
+			const b = document.querySelector('.juneau-term-badge');
+			return b && b.textContent !== 'Connecting' && b.textContent !== 'Running';
+		});
+		const o = await page.evaluate(function () { const t = window.__terms[0]; return { eol: t.options.convertEol, cols: t.cols, stdin: t.options.disableStdin }; });
+		expect(o.eol === true && o.cols === 80 && o.stdin === true, 'options: ' + JSON.stringify(o));
+		const r = await rows(page);
+		expect(r[0] === 'aa' && r[1] === 'bb', 'bare LF lines start at column 0: ' + JSON.stringify(r.slice(0, 3)));
+	}],
+	['b22_absentTerminalKeepsTheDefaultXtermOptions', async function (page) {
+		await page.route(ORIGIN + '/**', server({ log: Buffer.from('aa\n'), cols: 80, rows: 24 }));
+		await page.goto(ORIGIN + '/page');
+		await page.waitForFunction(function () { return typeof window.Terminal === 'function' && !!window.JuneauTerminal; });
+		await page.evaluate(function () {
+			const T = window.Terminal;
+			window.__terms = [];
+			window.Terminal = function (o) { const x = new T(o); window.__terms.push(x); return x; };
+			window.__cleanup = window.JuneauTerminal.mount(document.getElementById('host'), { id: 't', bytesUrl: '/t/bytes' });
+		});
+		await page.waitForFunction(function () {
+			const b = document.querySelector('.juneau-term-badge');
+			return b && b.textContent !== 'Connecting' && b.textContent !== 'Running';
+		});
+		const o = await page.evaluate(function () {
+			const x = window.__terms[0].options;
+			return { sb: x.scrollback, eol: x.convertEol, blink: x.cursorBlink, stdin: x.disableStdin };
+		});
+		expect(o.sb === 100000 && o.eol === false && o.blink === false && o.stdin === true, 'options: ' + JSON.stringify(o));
 	}],
 	['b07_fontScalesWithThePanelWhileColsAndRowsStay', async function (page) {
 		await open(page, { log: Buffer.from('x'.repeat(80) + '\r\n'), cols: 80, rows: 24 });
@@ -403,6 +501,69 @@ const CASES = [
 		});
 		expect(await page.evaluate(function () { return document.querySelectorAll('#host .juneau-term').length; }) === 0, 'card1 is gone, and a late answer for it is a no-op');
 	}],
+	['b16_nudgeRoleFetchesAtOnce', async function (page) {
+		const n = await nudgeCard(page, { subscribe: true });
+		const before = n.urls.length;
+		await page.evaluate(function () {
+			window.__bridge({ state: 'open' });
+			window.__h.roles.nudge({ end: 999 }, {}, { id: 'nope' });
+		});
+		await sleep(300);
+		expect(n.urls.length === before, 'a card that is not mounted ignores the nudge: ' + n.urls.slice(before).join(' '));
+		await page.evaluate(function () { window.__h.roles.nudge({ end: 999 }, {}, { id: 'card1' }); });
+		const took = await waitRequest(n, before, 1000);
+		expect(took >= 0, 'a bytes request follows the nudge well before the 3000 ms poll: ' + n.urls.slice(before).join(' '));
+		expect(n.urls[before] === '?from=7', 'it resumes from next: ' + n.urls[before]);
+		expect(JSON.stringify(await page.evaluate(function () { return window.__subs; })) === JSON.stringify(['bridge:nb']), 'the card watches the bridge that carries the topic');
+		await page.evaluate(function () { window.__h.destroy({ id: 'card1' }, document.getElementById('host')); });
+	}],
+	['b17_cardWithoutNudgeSubscriptionPollsNormally', async function (page) {
+		const n = await nudgeCard(page, { subscribe: false });
+		const before = n.urls.length;
+		await page.evaluate(function () { window.__h.roles.nudge({ end: 999 }, {}, { id: 'card1' }); });
+		await sleep(300);
+		expect(n.urls.length === before, 'a nudge for a card that does not subscribe is a no-op: ' + n.urls.slice(before).join(' '));
+		const r = await page.evaluate(function () {
+			return { subs: window.__subs, badge: document.querySelector('#host .juneau-term-badge').textContent };
+		});
+		expect(r.subs.length === 0, 'no bridge subscription: ' + JSON.stringify(r.subs));
+		expect(r.badge === 'Running', 'still polling: ' + r.badge);
+		await page.evaluate(function () { window.__h.destroy({ id: 'card1' }, document.getElementById('host')); });
+	}],
+	['b18_destroyUnregistersTheNudgeLink', async function (page) {
+		const n = await nudgeCard(page, { subscribe: true });
+		await page.evaluate(function () { window.__bridge({ state: 'open' }); });
+		await page.evaluate(function () { window.__h.destroy({ id: 'card1' }, document.getElementById('host')); });
+		const before = n.urls.length;
+		await page.evaluate(function () { window.__h.roles.nudge({ end: 999 }, {}, { id: 'card1' }); });
+		await sleep(300);
+		expect(n.urls.length === before, 'a nudge after destroy is a no-op: ' + n.urls.slice(before).join(' '));
+		expect(await page.evaluate(function () { return window.__off; }) === 1, 'the bridge-state subscription was released');
+	}],
+	['b19_nudgeFetchesAndRestores', async function (page) {
+		const n = await nudgeCard(page, { subscribe: true });
+		const first = n.urls.length;
+		expect(first >= 1 && n.urls[0] === '?from=0', 'the first bytes request: ' + n.urls.join(' '));
+		expect(await page.evaluate(function () { return window.__delays[window.__delays.length - 1]; }) === 3000, 'the normal poll is scheduled');
+		await page.evaluate(function () { window.__bridge({ state: 'open' }); window.__mark = window.__delays.length; });
+		n.f.log = Buffer.concat([n.f.log, Buffer.from('more\r\n')]);
+		await page.evaluate(function () { window.__h.roles.nudge({ end: 13 }, {}, { id: 'card1' }); });
+		expect(await waitRequest(n, first, 1200) >= 0, 'only the nudge can explain a fetch inside the 3000 ms poll: ' + n.urls.slice(first).join(' '));
+		expect(n.urls[first] === '?from=7', 'resumes from the previous next: ' + n.urls[first]);
+		await page.waitForFunction(function () { return window.__delays.slice(window.__mark).indexOf(5000) >= 0; }, null, { timeout: 3000 });
+		await page.evaluate(function () { window.__mark = window.__delays.length; window.__bridge({ state: 'closed' }); });
+		await page.waitForFunction(function () { return window.__delays.slice(window.__mark).indexOf(3000) >= 0; }, null, { timeout: 3000 });
+		await page.evaluate(function () { window.__h.destroy({ id: 'card1' }, document.getElementById('host')); });
+	}],
+	['b20_wildcardNudgeTopicNeverLinks', async function (page) {
+		const n = await nudgeCard(page, { subscribe: true, topic: 'term.nudge:*' });
+		const before = n.urls.length;
+		await page.evaluate(function () { window.__h.roles.nudge({ end: 999 }, {}, { id: 'card1' }); });
+		await sleep(300);
+		expect(n.urls.length === before, 'no nudge routing for a wildcard topic: ' + n.urls.slice(before).join(' '));
+		expect(await page.evaluate(function () { return window.__subs.length; }) === 0, 'no bridge subscription');
+		await page.evaluate(function () { window.__h.destroy({ id: 'card1' }, document.getElementById('host')); });
+	}],
 	// HTT: the badge, ok badge, chip and banner must stay legible once the views CSS defines --jc-tone-* (dark inks).
 	['b15_toneBackgroundsStayLegibleWithViewsCss', async function (page) {
 		await page.route(ORIGIN + '/**', server({ log: Buffer.from('x') }));
@@ -442,6 +603,33 @@ const CASES = [
 			return { chip: getComputedStyle(par.firstChild).color, parent: getComputedStyle(par).color };
 		});
 		expect(live.chip === live.parent, 'live chip inherits its parent colour: ' + JSON.stringify(live));
+	}],
+	// The dark scheme re-themes the tone backgrounds and the screen; b15 above covers the light scheme.
+	['b15d_toneBackgroundsLegibleUnderDark', async function (page) {
+		await page.route(ORIGIN + '/**', server({ log: Buffer.from('x') }));
+		await page.goto(ORIGIN + '/page');
+		await page.evaluate(function () { document.documentElement.setAttribute('data-jc-scheme', 'dark'); });
+		const r = await page.evaluate(function () {
+			const lum = function (c) {
+				const m = c.match(/[\d.]+/g).map(Number).slice(0, 3).map(function (v) { v /= 255; return v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4); });
+				return 0.2126 * m[0] + 0.7152 * m[1] + 0.0722 * m[2];
+			};
+			const out = ['juneau-term-badge', 'juneau-term-ok', 'juneau-term-chip', 'juneau-term-banner', 'juneau-term-fail'].map(function (cls) {
+				const el = document.createElement('span');
+				el.className = cls;
+				el.textContent = 'x';
+				document.body.appendChild(el);
+				const cs = getComputedStyle(el);
+				const a = lum(cs.backgroundColor), b = lum(cs.color);
+				return { cls: cls, bg: cs.backgroundColor, color: cs.color, ratio: (Math.max(a, b) + 0.05) / (Math.min(a, b) + 0.05) };
+			});
+			const screen = document.createElement('div');
+			screen.className = 'juneau-term-screen';
+			document.body.appendChild(screen);
+			return { tones: out, screen: getComputedStyle(screen).backgroundColor };
+		});
+		r.tones.forEach(function (t) { expect(t.ratio >= 4.5, 'legible under dark: ' + JSON.stringify(t)); });
+		expect(r.screen === 'rgb(13, 15, 18)', 'screen follows --jc-term-bg: ' + r.screen);
 	}]
 ];
 

@@ -29,7 +29,7 @@ import org.apache.juneau.rest.server.datatables.DataTablesRequest.Search;
 import org.junit.jupiter.api.*;
 
 /**
- * Tests {@link DataTablesQuery}'s per-{@link SearchType} global-search leaf selection (design §9), on top of
+ * Tests {@link DataTablesQuery}'s per-{@link SearchType} global-search leaf selection, on top of
  * {@code DataTablesQuery_Test}'s per-column search / sort / page / counts coverage.
  */
 class DataTablesQuery_GlobalSearch_Test extends TestBase {
@@ -122,8 +122,7 @@ class DataTablesQuery_GlobalSearch_Test extends TestBase {
 	}
 
 	@Test void b08_enum_noParseGate_evenAnOddTermAddsEqic() {
-		// unlike NUMERIC/BOOLEAN/TIMESTAMP, ENUM has no parse gate (same bucket as TEXT/ID/VERSION in the spec's
-		// per-type table) -- any non-blank term is eligible, exactly like $contains/$prefix.
+		// unlike NUMERIC/BOOLEAN/TIMESTAMP, ENUM has no parse gate (same bucket as TEXT/ID/VERSION) -- any non-blank term is eligible, exactly like $contains/$prefix.
 		var req = new DataTablesRequest().setColumns(List.of(new Column().setData("status"))).setSearch(new Search().setValue("not open"));
 		var q = DataTablesQuery.toBeanQuery(req, ctx("status", SearchType.ENUM));
 		assertEquals("status=$eqic(\"not open\")", q.getSearch());

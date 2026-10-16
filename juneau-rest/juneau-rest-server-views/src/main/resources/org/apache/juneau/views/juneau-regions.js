@@ -90,19 +90,20 @@
 
 	/**
 	 * The declarative descriptor placeholder attribute: a per-region JSON envelope, exactly
-	 * {@code RegionDef.toContractMap()}'s shape (design &sect;8.2) carrying `dataUrl`, `params`, `renderer`,
+	 * {@code RegionDef.toContractMap()}'s shape carrying `dataUrl`, `params`, `renderer`,
 	 * `lazy`, `refreshMs`, `fields` and `titleFields` &mdash; everything {@code mintRegion} needs to populate
 	 * {@code region.declared}/{@code region.params} without a second server round trip.  Absent (an
 	 * identity-only region, today's shape) is legal and means every {@code declared.*} member stays at its
 	 * type-scoped default.
 	 *
 	 * <p>
-	 * <b>Deliberately NOT &sect;12.2's real wire shape.</b> &sect;12.2 stamps the container with a bare version
+	 * <b>Deliberately NOT the real wire shape.</b> The real shape stamps the container with a bare version
 	 * marker (`data-juneau-region-contract="1"`) and carries the actual descriptor in a SEPARATE per-HOST sidecar
 	 * (`&lt;script type="application/json" id="juneau-region:{host}"&gt;{contractVersion,regions:[...]}`), because
 	 * one sidecar per host beats one per region (the same reasoning `VIEW_META`/`PAGE_META` already follow). That
-	 * is emitter behavior, and &sect;19.2 assigns every emitter change to the "host enrolment walks" child.
-	 * This child owns the boundary L12 exists to prove is safe to change independently of everything on the other
+	 * is emitter behavior, which belongs to the host enrolment walks.
+	 * This child owns the boundary the non-privilege proof exists to show is safe to change independently of everything
+	 * on the other
 	 * side of it: whatever ATTACHES a descriptor to a region is free to change (`d`'s host-enrolment walk will
 	 * replace this attribute with a real per-host sidecar lookup) without touching `ctx.declared`,
 	 * {@code fetchDeclared()}, {@code defaultPopulate()} or the registry - the READ side this child builds.  A
@@ -926,8 +927,8 @@
 	}
 
 	/**
-	 * Serializes `params` to a query-string fragment (no leading `?`/`&`), under the closed rules of design
-	 * &sect;8.2.1. This is the only implementation of the region-params wire encoding.
+	 * Serializes `params` to a query-string fragment (no leading `?`/`&`), under the closed rules for
+	 * params encoding. This is the only implementation of the region-params wire encoding.
 	 * `null`/empty `params` serializes to an empty string.
 	 *
 	 * <p>Rules: a `null`/`undefined` value omits the key entirely; an empty string serializes as `k=`; a scalar
@@ -963,7 +964,7 @@
 	 * impossible or unsafe.
 	 *
 	 * <p>SUBSTITUTION FIRST, and it is not optional for a row-detail region.  `RowDetailDef` projects its
-	 * `endpoint` onto the panel's one region as that region's `dataUrl` (design &sect;12.3.3 rule 1), and an endpoint
+	 * `endpoint` onto the panel's one region as that region's `dataUrl`, and an endpoint
 	 * is a TEMPLATE - `RowDetailDef.validate` requires it to contain `{id}`.  The server has no row to substitute at
 	 * emit time (the container ships inside a `<template>` that is cloned per expanded row), so the substitution is
 	 * the client's, and without it the projected URL would be fetched with a literal `{id}` in the path.
@@ -1007,7 +1008,7 @@
 		return e;
 	}
 
-	/** The current invocation's signal (design &sect;6.6.1/&sect;8.5): `messageSignal` under reason "message". */
+	/** The current invocation's signal: `messageSignal` under reason "message". */
 	function declaredFetchSignal(region) {
 		return (region.ctx?.reason === "message" && region.messageCtl)
 			? region.messageCtl.signal : region.signalCtl.signal;
@@ -1018,7 +1019,7 @@
 	 * any other non-`ok` -> `kind:"error"`; a `contractVersion` mismatch (or an unparseable/non-object body) ->
 	 * `kind:"error"`, logged exactly like the existing detail/action-result handshakes; otherwise the envelope's
 	 * `fields` member, UNWRAPPED - the VALUES MAP, never the envelope and never the `{status,ok,text}` transport
-	 * triple (design &sect;8.5's normative pin).
+	 * triple.
 	 */
 	function resolveDeclaredEnvelope(region, env) {
 		if (env.status === 404)
@@ -1039,7 +1040,7 @@
 	}
 
 	/**
-	 * The shared-envelope join (design &sect;12.3.3 rule 2): a row-detail region whose declared URL is the panel's own
+	 * The shared-envelope join: a row-detail region whose declared URL is the panel's own
 	 * substituted endpoint reads the panel's already-in-flight expand envelope instead of issuing a second request.
 	 *
 	 * <p>Returns the joined promise, or `null` when there is nothing to join - which is every region that is not a
@@ -1084,11 +1085,11 @@
 	}
 
 	/**
-	 * Performs the region's declared fetch: `region.declared.dataUrl` with `region.params` appended (design
-	 * &sect;8.2.1), under the CURRENT invocation's signal, plus the `{contractVersion, ...}` handshake.
+	 * Performs the region's declared fetch: `region.declared.dataUrl` with `region.params` appended, under the CURRENT
+	 * invocation's signal, plus the `{contractVersion, ...}` handshake.
 	 *
 	 * <p>A region that declared no `dataUrl` has nothing to fetch, so this resolves `null` - a legal state, not a
-	 * throw.  Calling it twice fetches twice: there is no caching here, by design (&sect;8.5) - a consumer that
+	 * throw.  Calling it twice fetches twice: there is no caching here, by design - a consumer that
 	 * wants the pre-fetched value reads `ctx.data`.  EXCEPTION: a row-detail region whose substituted `dataUrl` is the
 	 * panel's own endpoint joins the panel's in-flight expand GET (see joinDetailEnvelope) and does not fetch at all,
 	 * so its `params` are not sent.  That join is for the region's FIRST populate only: once it has populated, a
@@ -1133,19 +1134,18 @@
 	}
 
 	/**
-	 * The reserved default's own implementation (design &sect;8.3, NORMATIVE per &sect;8.5).  Registered under
+	 * The reserved default's own implementation.  Registered under
 	 * {@link DEFAULT_POPULATOR_NAME} at load, and reachable identically through `ctx.defaultPopulate` and
 	 * `JuneauViews.regions.defaultPopulate` (both resolve here through {@link #defaultPopulate}) - ONE call path,
-	 * no branch on the reserved name (L12 property 1).
+	 * no branch on the reserved name.
 	 *
 	 * <p>THE ALGORITHM: `const payload = ctx.data ?? await ctx.fetchDeclared()` - exactly ONE `fetchDeclared()`
-	 * call site, guarded by the nullish check (test 16g).  Either operand resolves to the VALUES MAP (&sect;8.5's
+	 * call site, guarded by the nullish check.  Either operand resolves to the VALUES MAP (the
 	 * shape table), never the envelope. `container.appendChild(ctx.helpers[ctx.declared.renderer](
-	 * ctx.declared.fields, {values: payload}))` - catalog first, two arguments (&sect;9.1.1).  This function reads
+	 * ctx.declared.fields, {values: payload}))` - catalog first, two arguments.  This function reads
 	 * only `ctx.data`/`ctx.declared.dataUrl`/`.renderer`/`.fields`/`ctx.fetchDeclared()`/`ctx.helpers` - it is an
-	 * ORDINARY populate, callable against a hand-built `ctx` with no DOM ancestry (L12 property 3, test 12) - and
-	 * it never reads `ctx.declared.titleFields`, which is chrome's alone (&sect;8.4 property 4's partition, test
-	 * 16).
+	 * ORDINARY populate, callable against a hand-built `ctx` with no DOM ancestry - and
+	 * it never reads `ctx.declared.titleFields`, which is chrome's alone.
 	 */
 	function runDefaultPopulate(ctx, container) {
 		const prefetched = ctx.data != null ? Promise.resolve(ctx.data) : ctx.fetchDeclared();
@@ -1250,7 +1250,7 @@
 	// ==================================================================================================================
 
 	/**
-	 * The type-scoped default for {@code declared.lazy} (design fork F9) - `false` for
+	 * The type-scoped default for {@code declared.lazy} - `false` for
 	 * {@link REGION_TYPES row-detail and card-body}, `true` for tab-body.  The client TWIN of
 	 * {@code RegionDef.effectiveLazy()}; needed only for an identity-only region (no descriptor at all), because
 	 * a descriptor's own {@code lazy} member is always the SERVER's already-resolved {@code effectiveLazy()}
@@ -1519,11 +1519,11 @@
 		beginInvocation(region, reason);
 		setRegionState(region, "loading");
 
-		// R14a's pre-fetch (design §6.2.1's matrix, §8.5): keyed ONLY on the DESCRIPTOR - `dataUrl` set, and this
+		// R14a's pre-fetch: keyed ONLY on the DESCRIPTOR - `dataUrl` set, and this
 		// is the region's first-ever populate call - never on which populator resolved.  A consumer-registered
-		// populator gets the IDENTICAL pre-fetch the reserved default gets (test 15a's second half; test 11's
-		// non-privilege proof: conditioning this on `populate == null` instead would be exactly the privileged
-		// fast path L12 exists to rule out).  `region.data`/`ctx.data` were just reset to `null` by
+		// populator gets the IDENTICAL pre-fetch the reserved default gets (the non-privilege
+		// proof: conditioning this on `populate == null` instead would be exactly the privileged
+		// fast path the non-privilege proof exists to rule out).  `region.data`/`ctx.data` were just reset to `null` by
 		// `beginInvocation`, so every OTHER call (a poll tick, a message, a manual refresh, or any call once
 		// `firstPopulateDone`) reaches the populate with `ctx.data === null` and falls through to
 		// `ctx.fetchDeclared()` on its own - exactly R14a's "no pre-fetch on a re-populate" rule.
@@ -1549,7 +1549,7 @@
 		invokePopulator(region, fn);
 	}
 
-	/** Calls the resolved populate fn and wires its return value through the four accepted shapes (§6.5). */
+	/** Calls the resolved populate fn and wires its return value through the four accepted shapes. */
 	function invokePopulator(region, fn) {
 		let returned;
 		region.invoking = true;
@@ -1648,7 +1648,7 @@
 	}
 
 	/**
-	 * Poll lifecycle (design &sect;8.3.1): one timer per region, ever, keyed on `region.pollTimer` - the SAME
+	 * Poll lifecycle: one timer per region, ever, keyed on `region.pollTimer` - the SAME
 	 * field the framework's own teardown step 0 already clears (landed in `a`/`b`), so this function's whole job
 	 * is to ARM it, never to clear it on teardown's behalf.
 	 *

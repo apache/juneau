@@ -28,7 +28,7 @@ import org.apache.juneau.rest.server.widgets.*;
 import org.junit.jupiter.api.*;
 
 /**
- * Serving smoke + versioned-URL + contract-handshake tests for {@link ViewsMixin} (design doc §6.1, Task B.4).
+ * Serving smoke + versioned-URL + contract-handshake tests for {@link ViewsMixin}.
  *
  * <p>
  * Option-A coverage (mirrors {@code DataTablesMixin}/{@code ConsoleChromeMixin}'s serving tests): a host composing
@@ -90,7 +90,7 @@ class ViewsMixin_Serving_Test extends TestBase {
 		cNoMixin.get(ViewsMixin.CONFIG_CSS_PATH).run().assertStatus(404);
 		cNoMixin.get(ViewsMixin.REGIONS_JS_PATH).run().assertStatus(404);
 		cNoMixin.get(ViewsMixin.HELPERS_JS_PATH).run().assertStatus(404);
-		cNoMixin.get(ViewsMixin.CONSOLE_OUTPUT_JS_PATH).run().assertStatus(404);
+		cNoMixin.get(ViewsMixin.DATA_JS_PATH).run().assertStatus(404);
 		cNoMixin.get(ViewsMixin.RUN_VIEW_JS_PATH).run().assertStatus(404);
 	}
 
@@ -207,14 +207,6 @@ class ViewsMixin_Serving_Test extends TestBase {
 			.assertContent().asString().isContains("juneau-helpers.js");
 	}
 
-	@Test void b14_consoleOutputJs_served() throws Exception {
-		cWithMixin.get(ViewsMixin.CONSOLE_OUTPUT_JS_PATH).run()
-			.assertStatus(200)
-			.assertHeader("Content-Type").isContains("text/javascript")
-			.assertHeader("Cache-Control").isContains("max-age")
-			.assertContent().asString().isContains("juneau-console-output.js");
-	}
-
 	@Test void b15_runViewJs_served() throws Exception {
 		cWithMixin.get(ViewsMixin.RUN_VIEW_JS_PATH).run()
 			.assertStatus(200)
@@ -318,6 +310,14 @@ class ViewsMixin_Serving_Test extends TestBase {
 		cWithMixin.get("/juneau-page-cards.js").run().assertStatus(404);
 	}
 
+	@Test void b16_dataJs_served() throws Exception {
+		cWithMixin.get(ViewsMixin.DATA_JS_PATH).run()
+			.assertStatus(200)
+			.assertHeader("Content-Type").isContains("text/javascript")
+			.assertHeader("Cache-Control").isContains("max-age")
+			.assertContent().asString().isContains("JuneauViews.data");
+	}
+
 	private static byte[] widgetClasspathBytes(String resource) throws Exception {
 		try (var in = WidgetsMixin.class.getResourceAsStream(resource)) {
 			assertNotNull(in, () -> "missing classpath resource: " + resource);
@@ -338,12 +338,12 @@ class ViewsMixin_Serving_Test extends TestBase {
 	}
 
 	@Test void c02_viewAssetUrl_worksForEveryAssetPath() {
-		for (var path : new String[]{ViewsMixin.VIEWS_JS_PATH, ViewsMixin.RIBBON_JS_PATH, ViewsMixin.RENDERS_JS_PATH, ViewsMixin.VIEWS_CSS_PATH, ViewsMixin.ICONS_JS_PATH, ViewsMixin.SEARCH_JS_PATH, ViewsMixin.PAGESTATE_JS_PATH, ViewsMixin.URLSTATE_JS_PATH, ViewsMixin.BUS_JS_PATH, ViewsMixin.SYMBOLS_SVG_PATH, ViewsMixin.SYMBOLS_MATERIAL_SVG_PATH, ViewsMixin.REGIONS_JS_PATH, ViewsMixin.HELPERS_JS_PATH, ViewsMixin.CONSOLE_OUTPUT_JS_PATH, ViewsMixin.RUN_VIEW_JS_PATH, ViewsMixin.CONFIG_JS_PATH, ViewsMixin.CONFIG_CSS_PATH})
+		for (var path : new String[]{ViewsMixin.VIEWS_JS_PATH, ViewsMixin.RIBBON_JS_PATH, ViewsMixin.RENDERS_JS_PATH, ViewsMixin.VIEWS_CSS_PATH, ViewsMixin.ICONS_JS_PATH, ViewsMixin.SEARCH_JS_PATH, ViewsMixin.PAGESTATE_JS_PATH, ViewsMixin.URLSTATE_JS_PATH, ViewsMixin.BUS_JS_PATH, ViewsMixin.SYMBOLS_SVG_PATH, ViewsMixin.SYMBOLS_MATERIAL_SVG_PATH, ViewsMixin.REGIONS_JS_PATH, ViewsMixin.HELPERS_JS_PATH, ViewsMixin.RUN_VIEW_JS_PATH, ViewsMixin.CONFIG_JS_PATH, ViewsMixin.CONFIG_CSS_PATH, ViewsMixin.DATA_JS_PATH})
 			assertTrue(ViewsMixin.viewAssetUrl(path).contains("?v="), path);
 	}
 
 	@Test void c03_viewAssetUrl_contentHash_isStableAcrossCalls_andDiffersAcrossDistinctAssets() {
-		// The content-hash cache-buster (Task 1) is computed once from each asset's own bytes - it must be stable
+		// The content-hash cache-buster is computed once from each asset's own bytes - it must be stable
 		// across repeated calls (not recomputed per-call) and must differ between distinct assets.
 		var url1 = ViewsMixin.viewAssetUrl(ViewsMixin.VIEWS_JS_PATH);
 		var url2 = ViewsMixin.viewAssetUrl(ViewsMixin.VIEWS_JS_PATH);
@@ -364,8 +364,8 @@ class ViewsMixin_Serving_Test extends TestBase {
 				ViewsMixin.VIEWS_CSS_PATH, ViewsMixin.ICONS_JS_PATH, ViewsMixin.SEARCH_JS_PATH,
 				ViewsMixin.PAGESTATE_JS_PATH, ViewsMixin.URLSTATE_JS_PATH, ViewsMixin.BUS_JS_PATH, ViewsMixin.SYMBOLS_SVG_PATH,
 				ViewsMixin.SYMBOLS_MATERIAL_SVG_PATH,
-				ViewsMixin.REGIONS_JS_PATH, ViewsMixin.HELPERS_JS_PATH, ViewsMixin.CONSOLE_OUTPUT_JS_PATH, ViewsMixin.RUN_VIEW_JS_PATH,
-				ViewsMixin.CONFIG_JS_PATH, ViewsMixin.CONFIG_CSS_PATH}) {
+				ViewsMixin.REGIONS_JS_PATH, ViewsMixin.HELPERS_JS_PATH, ViewsMixin.RUN_VIEW_JS_PATH,
+				ViewsMixin.CONFIG_JS_PATH, ViewsMixin.CONFIG_CSS_PATH, ViewsMixin.DATA_JS_PATH}) {
 			var servedBytes = cWithMixin.get(path).run().assertStatus(200).getContent().asBytes();
 			var expectedHash = ChecksumUtils.hash8(servedBytes);
 			var url = ViewsMixin.viewAssetUrl(path);
@@ -466,8 +466,8 @@ class ViewsMixin_Serving_Test extends TestBase {
 		// shape is pinned by asserting BOTH halves - the reference here and the step's declared value - rather
 		// than dropping to the reference alone, which would pass even if the step were re-valued.
 		assertTrue(body.contains("height: var(--jc-chrome-control-height)"), body);
-		// IRS visual-parity follow-up: 31px, not 32px - IRS's own paging-pill nav buttons/range segment are
-		// pinned to `height: 31px` (pages/style.css), and that same step now drives every full-height control
+		// Reference-look follow-up: 31px, not 32px - the reference paging-pill nav buttons/range segment are
+		// pinned to `height: 31px`, and that same step now drives every full-height control
 		// this toolkit ships (ribbon buttons here, the paging pill, the toolbar search input).
 		assertTrue(body.contains("--jc-chrome-control-height: 31px"), body);
 		assertTrue(body.contains("display: flex"), body);
@@ -613,7 +613,7 @@ class ViewsMixin_Serving_Test extends TestBase {
 
 
 	//------------------------------------------------------------------------------------------------------------------
-	// h) Ribbon visual-parity Task 1 - juneau-icons.js icon registry
+	// h) Ribbon icons - juneau-icons.js icon registry
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Test void h02_iconsJs_served() throws Exception {
@@ -655,8 +655,7 @@ class ViewsMixin_Serving_Test extends TestBase {
 		assertTrue(body.contains("juneau-sym-copy"), body);
 		assertTrue(body.contains("viewBox=\"0 -960 960 960\""), body);
 		assertFalse(body.contains("slds-"), body);
-		assertFalse(body.contains("irs-icon-overrides"), body);
-		assertFalse(body.contains("irs-symbols.svg"), body);
+		assertFalse(body.contains("icon-overrides"), body);
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -707,7 +706,7 @@ class ViewsMixin_Serving_Test extends TestBase {
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
-	// n) Ribbon visual-parity Task 12/13 - responsive cleanup (tab/sub-tab scroll, control-row wrap, toolbar wrapper)
+	// n) Ribbon responsive cleanup (tab/sub-tab scroll, control-row wrap, toolbar wrapper)
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Test void n01_viewsCss_tabBarScrollsInsteadOfWraps() throws Exception {
@@ -805,7 +804,7 @@ class ViewsMixin_Serving_Test extends TestBase {
 	}
 
 	/**
-	 * Regression guard, mirroring {@code [FINISHED-J0449]}'s {@code A-B2}: the base group rule above must null
+	 * Regression guard, mirroring the ribbon-group guard: the base group rule above must null
 	 * the side borders with LONGHAND width/style only - never a colour-resetting shorthand
 	 * ({@code border-left}/{@code border-right}) or an explicit {@code border-*-color} - so this rule's
 	 * {@code (0,0,2,0)} specificity never re-wins the border-color fight console-ui's {@code chrome.css} themes
@@ -956,7 +955,7 @@ class ViewsMixin_Serving_Test extends TestBase {
 	@Test void o04_viewsCss_hasCompactDataTableDensityAndHairlineGrid() throws Exception {
 		var body = cWithMixin.get(ViewsMixin.VIEWS_CSS_PATH).run().assertStatus(200).getContent().asString();
 		assertTrue(body.contains("padding: 4px 5px"), body);
-		// IRS body-type parity: 0.75rem/12px -> 0.8333rem/13.333px. Toolbar stays 12px
+		// Reference body type: 0.75rem/12px -> 0.8333rem/13.333px. Toolbar stays 12px
 		// (unchanged, C0016b) via var(--jc-chrome-font-size-1) rather than this cell-level literal.
 		assertTrue(body.contains("font-size: 0.8333rem"), body);
 		assertTrue(body.contains("font-weight: normal"), body);
@@ -978,17 +977,17 @@ class ViewsMixin_Serving_Test extends TestBase {
 	}
 
 	/**
-	 * IRS visual-parity pass, issue 1+2 (header): its font-size is its OWN, smaller
+	 * Reference-look pass, issue 1+2 (header): its font-size is its OWN, smaller
 	 * step ({@code var(--jc-chrome-font-size-1)}, 0.75rem/12px) rather than the body row's 0.8333rem/13.333px
 	 * pin from {@code o04} above. Scoped to the thead cell rule specifically, not the shared table-level
 	 * font-size at the top of the file (which stays the body-row size - see {@code o04}'s comment).
 	 *
 	 * <p>
-	 * A LATER visual-parity follow-up (issues 1+2 revisited) makes the header cell's background EXPLICIT opaque
-	 * white, rather than merely unset: a host cannot be assumed never to tint it ambiently the way IRS's own
-	 * rendering happens to avoid. The same follow-up reserves a 24px content-box on the header cell's own
+	 * A later refinement makes the header cell's background EXPLICIT opaque
+	 * white, rather than merely unset: a host cannot be assumed never to tint it ambiently the way the reference
+	 * rendering happens to avoid. The same refinement reserves a 24px content-box on the header cell's own
 	 * {@code line-height} (spending the previously-unspent {@code --jc-space-5} step) so the header row totals
-	 * IRS's own rendered 32px (4+4 padding + 24 content) even on a host whose vendored DataTables build ships
+	 * the reference rendered 32px (4+4 padding + 24 content) even on a host whose vendored DataTables build ships
 	 * no sort-icon spacer of its own to imply that height.
 	 */
 	@Test void o04b_viewsCss_headerCellIsWhiteAndUsesSmallerTypeStep() throws Exception {
@@ -1001,19 +1000,19 @@ class ViewsMixin_Serving_Test extends TestBase {
 		assertTrue(at >= 0, body);
 		var rule = body.substring(at, body.indexOf("}", at));
 		assertTrue(rule.contains("font-size: var(--jc-chrome-font-size-1)"),
-			() -> "header type is its own smaller step (IRS: 0.75rem/12px), spent via the existing token rather "
+			() -> "header type is its own smaller step (reference: 0.75rem/12px), spent via the existing token rather "
 				+ "than a duplicate literal: " + rule);
-		assertTrue(rule.contains("background-color: #fff"),
-			() -> "the header cell must be EXPLICIT opaque white, matching IRS's rendered white header: " + rule);
+		assertTrue(rule.contains("background-color: var(--jc-table-header-bg, #fff)"),
+			() -> "the header cell must be EXPLICIT opaque white, matching the reference white header: " + rule);
 		assertTrue(rule.contains("line-height: var(--jc-space-5)"),
-			() -> "the header row must reserve IRS's own 24px sort-icon-spacer content height, spent via the "
-				+ "existing --jc-space-5 step (4+4 padding + 24 content = IRS's rendered 32px): " + rule);
+			() -> "the header row must reserve the reference 24px sort-icon-spacer content height, spent via the "
+				+ "existing --jc-space-5 step (4+4 padding + 24 content = the reference 32px): " + rule);
 		assertFalse(rule.contains("font-size: 0.8333rem"),
 			() -> "the header must NOT inherit the body row's larger type step: " + rule);
 	}
 
 	/**
-	 * IRS Instances tables are Bootstrap {@code table-bordered} at {@code #dee2e6}. Header and body
+	 * The reference tables are Bootstrap {@code table-bordered} at {@code #dee2e6}. Header and body
 	 * cells carry that 1px grid ({@code --jc-table-border}); expander {@code tr.child} cells do not.
 	 */
 	@Test void o04c_viewsCss_headerAndBodyCellsHaveDee2e6Grid() throws Exception {
@@ -1042,13 +1041,13 @@ class ViewsMixin_Serving_Test extends TestBase {
 		assertFalse(tbodyRule.contains("border: 1px solid var(--jc-table-border, #dee2e6)"),
 			() -> "tbody must not restore horizontal cell hairlines via border shorthand: " + tbodyRule);
 		assertTrue(tbodyRule.contains("line-height: 1.5"),
-			() -> "tbody cells must pin IRS Bootstrap body line-height 1.5 (no IRS min-height on td): " + tbodyRule);
+			() -> "tbody cells must pin the Bootstrap body line-height 1.5 (no min-height on td): " + tbodyRule);
 		assertFalse(body.contains(".table-bordered"),
 			() -> "do not copy the Bootstrap bordered-table class into Juneau CSS: " + body);
 	}
 
 	/**
-	 * Linked first-data-column key weight (IRS visual-parity): IRS {@code .table-key} is {@code font-weight: bold}
+	 * Linked first-data-column key weight (reference look): the reference {@code .table-key} is {@code font-weight: bold}
 	 * (~700). This toolkit uses 600 on the linked cell immediately after the expander (and optional selection)
 	 * column — one step lighter — without forcing black ink over hyperlink color.
 	 */
@@ -1062,12 +1061,12 @@ class ViewsMixin_Serving_Test extends TestBase {
 		assertTrue(at >= 0, body);
 		var rule = body.substring(at, body.indexOf("}", at));
 		assertTrue(rule.contains("font-weight: 600"),
-			() -> "linked key column must be semibold (600), one step under IRS .table-key bold/700: " + rule);
+			() -> "linked key column must be semibold (600), one step under the reference .table-key bold/700: " + rule);
 	}
 
 	/**
-	 * IRS visual-parity pass: the header/body boundary is painted on the first BODY
-	 * row's own top edge (mirroring IRS's {@code table.dataTable>tbody>tr:first-child>td} exactly), not repeated
+	 * Reference-look pass: the header/body boundary is painted on the first BODY
+	 * row's own top edge (mirroring the reference {@code table.dataTable>tbody>tr:first-child>td} exactly), not repeated
 	 * on every row.  Colour is {@code --jc-table-rule} / {@code #bbbbbb} — the same stroke as the table floor —
 	 * so a later chrome {@code border-color: --jc-table-border} cannot restore {@code #dee2e6} on the seam.
 	 */
@@ -1138,12 +1137,12 @@ class ViewsMixin_Serving_Test extends TestBase {
 	}
 
 	/**
-	 * Regression guard, superseded (replaced by an IRS
-	 * visual-parity follow-up): {@code o11} used to guard the paging-pill's central-segment divider's border
+	 * Regression guard, superseded (replaced by a
+	 * reference-look follow-up): {@code o11} used to guard the paging-pill's central-segment divider's border
 	 * color null-out. That divider is now removed outright rather than recoloured - it was the actual root
-	 * cause of a visual-parity item that repeated console-side band-aids never fixed, since a color/override in
-	 * the CONSUMING app cannot zero out a width+style pair the FRAMEWORK's own shipped rule re-asserts. IRS's
-	 * own center range segment ({@code .ribbon-button-center}) has no side border at all, so the menu-button
+	 * cause of a styling defect that repeated console-side band-aids never fixed, since a color/override in
+	 * the CONSUMING app cannot zero out a width+style pair the FRAMEWORK's own shipped rule re-asserts. The reference
+	 * center range segment has no side border at all, so the menu-button
 	 * segment now matches it exactly: no {@code border-right}/{@code border-left} declaration of any kind.
 	 */
 	@Test void o11_viewsCss_pagingpillMenuwrapHasNoDivider() throws Exception {
@@ -1158,7 +1157,7 @@ class ViewsMixin_Serving_Test extends TestBase {
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
-	// p) ViewTable/Detail chrome IRS leftovers (toolbar search colour, detail expander opacity)
+	// p) ViewTable/Detail chrome reference leftovers (toolbar search colour, detail expander opacity)
 	//------------------------------------------------------------------------------------------------------------------
 
 	/**
@@ -1188,7 +1187,7 @@ class ViewsMixin_Serving_Test extends TestBase {
 		assertTrue(region.contains("-webkit-appearance: none"), region);
 		assertTrue(region.contains("box-shadow: none"), region);
 		assertTrue(body.contains("--jc-chrome-control-radius: 3.2px"), body);
-		assertTrue(body.contains("color: #b4b5b6"), body);
+		assertTrue(body.contains("color: var(--jc-placeholder, #b4b5b6)"), body);
 		assertTrue(body.contains(".dt-search input::placeholder"), body);
 		assertTrue(body.contains(".dt-search input::-webkit-input-placeholder"), body);
 		assertTrue(body.contains("div.dt-container div.dt-search input:focus,"), body);
@@ -1198,7 +1197,8 @@ class ViewsMixin_Serving_Test extends TestBase {
 		var focusRegion = body.substring(focusStart, focusEnd);
 		assertTrue(focusRegion.contains("outline: none"), focusRegion);
 		assertTrue(focusRegion.contains("box-shadow: none"), focusRegion);
-		assertTrue(focusRegion.contains("border-color: var(--jc-accent)"), focusRegion);
+		assertTrue(body.contains("--jc-chrome-control-focus-border: var(--jc-accent);"), body);
+		assertTrue(focusRegion.contains("border-color: var(--jc-chrome-control-focus-border)"), focusRegion);
 		assertFalse(focusRegion.contains("#1589EE"), focusRegion);
 		assertFalse(focusRegion.contains("outline-offset"), focusRegion);
 		assertFalse(focusRegion.contains("2px"), focusRegion);
@@ -1243,7 +1243,7 @@ class ViewsMixin_Serving_Test extends TestBase {
 	//------------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * {@code views} takes a compile-scope dependency on {@code console-ui} (C1 Task 5) so that an application
+	 * {@code views} takes a compile-scope dependency on {@code console-ui} so that an application
 	 * composing only {@link ViewsMixin} can still serve the console shell at the same stable path
 	 * {@link org.apache.juneau.rest.server.console.ConsoleChromeMixin} uses, without separately composing that mixin.
 	 */

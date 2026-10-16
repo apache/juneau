@@ -1,0 +1,3 @@
+{
+  "error": "E-JS-98: 'c' fn 'app.tip' failed: 'a $fn may not format optionToContent (ECharts renders its result as html)'"
+}

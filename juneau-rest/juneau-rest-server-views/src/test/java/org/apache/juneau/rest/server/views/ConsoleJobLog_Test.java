@@ -33,6 +33,7 @@ class ConsoleJobLog_Test extends TestBase {
 
 	private static final Map<String,Object> REF = Map.of("jobId", "j1", "streamUrl", "/jobs/j1/stream", "cancelUrl", "/jobs/j1/cancel");
 	private static final String NOT_FOUND = "Job not found; it may have finished or the server restarted.";
+	private static final String ATTACH_FAILED = "Could not attach to the job's progress stream; the server may be busy. Reload the page to try again.";
 	private static final String INTERRUPTED = "The progress stream was interrupted; the job may still be running. Reload the page to reattach.";
 
 	private static Map<?,?> report() {
@@ -108,7 +109,7 @@ class ConsoleJobLog_Test extends TestBase {
 		assertEquals(4, ((Number)body.get("shards")).intValue());
 		assertEquals("", body.get("notes"));
 		assertEquals("uuid-1", body.get("idempotencyKey"));
-		assertEquals(List.of("/jobs/j1/stream"), r.get("streams"));
+		assertEquals(List.of("/jobs/j1/stream?lastEventId=0"), r.get("streams"));
 		assertEquals(List.of("/?job=j1"), r.get("replaced"));
 		assertEquals(REF, r.get("stored"));
 		assertEquals(List.of("step 1 <b>bold</b>", "step 2"), r.get("lines"));
@@ -177,8 +178,9 @@ class ConsoleJobLog_Test extends TestBase {
 		assertEquals("Cancelling\u2026", c.get("submitText"));
 		assertEquals(true, c.get("submitDisabled"));
 		assertEquals(List.of(
-			Map.of("url", "/jobs/rebuild", "method", "POST", "csrf", true),
-			Map.of("url", "/jobs/j1/cancel", "method", "POST", "csrf", true)), r.get("fetches"));
+			Map.of("url", "/jobs/rebuild", "method", "POST", "csrf", true, "contentType", "application/json"),
+			// A JSON content type and an empty object, so a boundary that requires JSON on every write lets it through.
+			Map.of("url", "/jobs/j1/cancel", "method", "POST", "csrf", true, "contentType", "application/json", "body", Map.of())), r.get("fetches"));
 		var s = (Map<?,?>)r.get("state");
 		assertEquals("Cancelled.", s.get("banner"));
 		assertEquals("done", s.get("phase"));
@@ -187,7 +189,7 @@ class ConsoleJobLog_Test extends TestBase {
 
 	@Test void a09_reattach() {
 		var r = part("reattach");
-		assertEquals(List.of("/jobs/j1/stream"), r.get("streams"));
+		assertEquals(List.of("/jobs/j1/stream?lastEventId=0"), r.get("streams"));
 		assertEquals(0, ((Number)r.get("fetches")).intValue());
 		var s = (Map<?,?>)r.get("state");
 		assertEquals("running", s.get("phase"));
@@ -195,7 +197,7 @@ class ConsoleJobLog_Test extends TestBase {
 		assertEquals(List.of(true, true, true), s.get("inputsDisabled"));
 		assertEquals(List.of("replayed"), r.get("lines"));
 		var n = part("reattachNoParam");
-		assertEquals(List.of("/jobs/j1/stream"), n.get("streams"));
+		assertEquals(List.of("/jobs/j1/stream?lastEventId=0"), n.get("streams"));
 		assertEquals("running", n.get("phase"));
 	}
 
@@ -216,6 +218,23 @@ class ConsoleJobLog_Test extends TestBase {
 		var s = (Map<?,?>)r.get("state");
 		assertEquals("idle", s.get("phase"));
 		assertEquals(List.of(false, false, false), s.get("inputsDisabled"));
+	}
+
+	@Test void a11b_attachRefusedWithoutA404_isAnAttachFailureNotNotFound() {
+		var r = part("attachFailed");
+		for (var k : List.of("busy", "server", "network")) {
+			var c = (Map<?,?>)r.get(k);
+			var s = (Map<?,?>)c.get("state");
+			assertEquals(List.of(), c.get("lines"), k);
+			assertEquals("done", s.get("phase"), k);
+			assertEquals("warning", s.get("tone"), k);
+			assertEquals(ATTACH_FAILED, s.get("banner"), k);
+			assertEquals(REF, c.get("stored"), k);
+			assertEquals(List.of(), c.get("replaced"), k);
+			assertEquals(List.of("/jobs/j1/stream?lastEventId=0"), c.get("probes"), k);
+			assertEquals("polite", c.get("live"), k);
+			assertEquals(ATTACH_FAILED, c.get("announced"), k);   // the warning banner only, never a replay summary
+		}
 	}
 
 	@Test void a12_interrupted_warnsAndKeepsTheJob() {
@@ -296,6 +315,7 @@ class ConsoleJobLog_Test extends TestBase {
 		var a = (Map<?,?>)r.get("afterFailedCancel");
 		assertEquals("running", a.get("phase"));
 		assertEquals("cancel failed", a.get("banner"));
+		assertEquals("submit", a.get("focus"));
 		assertEquals("error", a.get("tone"));
 		assertEquals("Cancel", a.get("submitText"));
 		assertEquals(false, a.get("submitDisabled"));
@@ -324,7 +344,7 @@ class ConsoleJobLog_Test extends TestBase {
 		assertEquals("running", r.get("phase"));
 	}
 
-	@Test void a20_reconnect_skipsReplayedLines() {
+	@Test void a20_reconnect_resumesById() {
 		var r = part("reconnect");
 		var d = (Map<?,?>)r.get("dropped");
 		assertEquals("running", d.get("phase"));
@@ -356,8 +376,10 @@ class ConsoleJobLog_Test extends TestBase {
 		assertEquals(0, ((Number)p.get("streams")).intValue());
 		assertEquals(0, ((Number)p.get("fetches")).intValue());
 		assertEquals(List.of(), p.get("errors"));
+		assertNull(p.get("stored"));
+		assertEquals("", p.get("search"));
 		var a = (Map<?,?>)r.get("absolute");
-		assertEquals(List.of("http://juneau.test/jobs/j1/stream"), a.get("streams"));
+		assertEquals(List.of("http://juneau.test/jobs/j1/stream?lastEventId=0"), a.get("streams"));
 		assertEquals(List.of(
 			Map.of("url", "/jobs/rebuild", "csrf", true),
 			Map.of("url", "http://juneau.test/jobs/j1/cancel", "csrf", true)), a.get("fetches"));
@@ -389,11 +411,50 @@ class ConsoleJobLog_Test extends TestBase {
 			assertEquals(List.of(false, false, false), s.get("inputsDisabled"), k);
 			assertEquals(List.of("[juneau-joblog] E-JS-81: job-log card 'rebuild' submit.endpoint is not a same-origin path: '" + e.getValue() + "'"), c.get("errors"), k);
 		}
-		var ok = (Map<?,?>)r.get("sameOrigin");
-		assertEquals(List.of("/jobs/rebuild"), ok.get("fetches"));
-		assertEquals(1, ((Number)ok.get("streams")).intValue());
-		assertEquals("running", ((Map<?,?>)ok.get("state")).get("phase"));
-		assertEquals(List.of(), ok.get("errors"));
+		for (var e : Map.of("sameOrigin", "/jobs/rebuild", "sameOriginQuery", "/jobs/x?a=b", "relative", "jobs/x").entrySet()) {
+			var k = e.getKey();
+			var ok = (Map<?,?>)r.get(k);
+			assertEquals(List.of(e.getValue()), ok.get("fetches"), k);
+			assertEquals(1, ((Number)ok.get("streams")).intValue(), k);
+			assertEquals("running", ((Map<?,?>)ok.get("state")).get("phase"), k);
+			assertEquals(List.of(), ok.get("errors"), k);
+		}
+	}
+
+	@Test void a27_reattachReplay_isSilencedThenSummarised() {
+		var r = part("replayQuiet");
+		assertEquals("off", r.get("before"));
+		var d = (Map<?,?>)r.get("during");
+		assertEquals("off", d.get("live"));
+		assertNull(d.get("announced"));
+		assertEquals(List.of("a", "b", "c"), d.get("lines"));
+		var a = (Map<?,?>)r.get("after");
+		assertEquals("polite", a.get("live"));
+		assertEquals("Reattached to the running job; 3 earlier lines shown.", a.get("announced"));
+		assertEquals(List.of("a", "b", "c", "d"), r.get("lines"));
+		assertEquals("polite", r.get("freshLive"));
+	}
+
+	@Test void a28_replayEnds_onResultCapRefusalAndProbeTimeout() {
+		var r = part("replayEnds");
+		var d = (Map<?,?>)r.get("resultDuring");
+		assertEquals("polite", d.get("live"));
+		assertEquals("Done.", d.get("announced"));   // the outcome banner only, never a replay summary
+		assertEquals("done", ((Map<?,?>)d.get("state")).get("phase"));
+		var c = (Map<?,?>)r.get("atCap");
+		assertEquals("off", c.get("before"));
+		assertEquals("polite", c.get("live"));
+		assertEquals("Reattached to the running job; 2 earlier lines shown.", c.get("announced"));
+		var p = (Map<?,?>)r.get("probing");
+		assertEquals("running", p.get("phase"));
+		assertEquals("polite", p.get("live"));
+		var t = (Map<?,?>)r.get("timedOut");
+		var s = (Map<?,?>)t.get("state");
+		assertEquals("done", s.get("phase"));
+		assertEquals(ATTACH_FAILED, s.get("banner"));
+		assertEquals(REF, t.get("stored"));
+		assertEquals(1, ((Number)t.get("aborted")).intValue());
+		assertEquals(1, ((Number)r.get("abortedOnTeardown")).intValue());
 	}
 
 	@Test void a24_banner_roleFirst_andTextClearedSoARepeatReannounces() {
@@ -404,5 +465,19 @@ class ConsoleJobLog_Test extends TestBase {
 		var s = (Map<?,?>)r.get("state");
 		assertEquals("Fill in the required fields: 'Reason'.", s.get("banner"));
 		assertEquals("alert", s.get("role"));
+	}
+
+	@Test void a25_idlessStream_allShown() {
+		var r = part("idless");
+		assertEquals(List.of("p1", "p2", "p3"), r.get("lines"));
+		assertEquals(1, ((Number)r.get("streams")).intValue());
+		assertEquals("done", ((Map<?,?>)r.get("state")).get("phase"));
+	}
+
+	@Test void a26_repeatedId_isShownAgain_failLoud() {
+		var r = part("repeatedId");
+		assertEquals(List.of("p1", "p2", "p2", "p3"), r.get("lines"));
+		assertEquals(1, ((Number)r.get("streams")).intValue());
+		assertEquals("done", ((Map<?,?>)r.get("state")).get("phase"));
 	}
 }

@@ -31,7 +31,7 @@ import org.junit.jupiter.params.*;
 import org.junit.jupiter.params.provider.*;
 
 /**
- * Java layer of the ribbon parity corpus (C5 §6.4): for every case in {@code ribbon-corpus.json}, the DataTables
+ * Java layer of the ribbon parity corpus: for every case in {@code ribbon-corpus.json}, the DataTables
  * request whose {@code columns[i].search.value} carries the merged searches yields {@code expect.search} and, run over
  * the corpus rows, {@code expect.rowIds}.  The JS layer is {@link RibbonCorpus_Parity_Test}.
  */

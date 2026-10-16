@@ -321,7 +321,7 @@ public class RestRequest extends HttpServletRequestWrapper {
 			.addDefault(context.getDefaultRequestAttributes());
 		// @formatter:on
 
-		// Body-caching wrappers are installed by the two-phase debug pipeline (Phase A) before this object is
+		// Body-caching wrappers are installed by the two-phase debug pipeline before this object is
 		// constructed, based on the resolved logger's level. Nothing to wrap here.
 	}
 
@@ -1945,7 +1945,7 @@ public class RestRequest extends HttpServletRequestWrapper {
 	 * Returns the captured (bounded) request body bytes for debug logging.
 	 *
 	 * <p>
-	 * Populated by the two-phase debug pipeline (Phase A) only when the resolved logger is loggable at
+	 * Populated by the two-phase debug pipeline only when the resolved logger is loggable at
 	 * {@link java.util.logging.Level#FINEST FINEST}; otherwise returns <jk>null</jk>. The captured copy is capped at the
 	 * formatter's body cap (default 8&nbsp;KB); use {@link #getCachedContentLength()} for the full byte count.
 	 *

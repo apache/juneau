@@ -32,7 +32,7 @@ import org.junit.jupiter.api.*;
 
 /**
  * Always-on coverage for the shareable "Copy link" URL-state codec in {@code juneau-urlstate.js} and the live
- * T17–T19 wire in {@code juneau-views.js} / {@code juneau-config.js}: source-shape pins for the tab/filter/sort-only
+ * URL-state wire in {@code juneau-views.js} / {@code juneau-config.js}: source-shape pins for the tab/filter/sort-only
  * grammar, the {@code NS.urlState} export surface, the views/config call sites, plus Node behavioral harnesses
  * (when {@code node} is on PATH) that prove encode/decode, nested/View-Settings drop, address-bar / clean-address /
  * open-precedence glue, and the live wire that actually syncs the primary table.
@@ -273,7 +273,7 @@ class ViewsJs_UrlState_Test extends TestBase {
 
 	@Test void b01b_dollarPrefixedColumnName_escapedOnEncode_restoredOnDecode() {
 		var r = report();
-		// Task 5 (ClauseParser.escape) escapes a LEADING '$' in a key; this is its JS-side mirror.
+		// ClauseParser.escape escapes a LEADING '$' in a key; this is its JS-side mirror.
 		assertBean(r, "dollarColEncoded,dollarColDecoded", "filter(\\$weird=$eq(1)),[$weird|$eq(1)]");
 	}
 
@@ -331,7 +331,7 @@ class ViewsJs_UrlState_Test extends TestBase {
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
-	// c) Live wire — Node harness proving T17–T19 are invoked from the views runtime
+	// c) Live wire — Node harness proving the URL-state calls are invoked from the views runtime
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Test void c01_liveWireExportsArePresent() {
@@ -373,7 +373,7 @@ class ViewsJs_UrlState_Test extends TestBase {
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
-	// f) F1 - ?state= tab lookup never builds a selector from input
+	// f) ?state= tab lookup never builds a selector from input
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Test void f01_f03_tabLookupNeverThrowsClicksOnlyExactMatchesAndNeverBuildsASelectorFromInput() {

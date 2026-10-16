@@ -25,7 +25,7 @@ import org.junit.jupiter.api.Test;
 
 /**
  * Unit coverage for {@link McpBearerChallenge} &mdash; RFC 6750 / RFC 9728 {@code WWW-Authenticate: Bearer} value
- * construction, ordering, sanitization, and the F3 extensibility seam.
+ * construction, ordering, sanitization, and the extensibility seam.
  */
 class McpBearerChallenge_Test {
 
@@ -68,13 +68,13 @@ class McpBearerChallenge_Test {
 		assertEquals("Bearer error=\"insufficient_scope\"", s);
 	}
 
-	// M4: quotes and backslashes are RFC 7235 backslash-escaped (not mangled to spaces) so the value round-trips.
+	// Quotes and backslashes are RFC 7235 backslash-escaped (not mangled to spaces) so the value round-trips.
 	@Test void b03_embeddedQuotesAndBackslashEscaped() {
 		var s = McpBearerChallenge.create().errorDescription("bad \"token\" a\\b").build();
 		assertEquals("Bearer error_description=\"bad \\\"token\\\" a\\\\b\"", s);
 	}
 
-	// M4: control characters (incl. CR/LF header-injection vectors and DEL) are stripped entirely.
+	// Control characters (incl. CR/LF header-injection vectors and DEL) are stripped entirely.
 	@Test void b04_controlCharsStripped() {
 		var s = McpBearerChallenge.create().errorDescription("a\r\nb\tc\u007fd").build();
 		assertEquals("Bearer error_description=\"abcd\"", s);

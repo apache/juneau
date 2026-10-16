@@ -23,6 +23,7 @@ from support import SCRIPT, jr
 
 def cli(*args, env=None):
     full_env = {k: v for k, v in os.environ.items() if not k.startswith(("RUN_", "JUNEAU_RUN_")) or k == "JUNEAU_RUN_LOG_DIR"}
+    full_env["JUNEAU_RUN_HISTORY"] = "0"
     full_env.update(env or {})
     return subprocess.run([sys.executable, str(SCRIPT), *args], capture_output=True, text=True, env=full_env)
 

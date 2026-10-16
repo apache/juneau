@@ -25,8 +25,8 @@ import org.apache.juneau.rest.server.auth.TokenValidator;
 import org.apache.juneau.rest.server.auth.oauth.OAuthFilter;
 
 /**
- * Binding-owned OAuth 2.1 resource-server (RS) configuration for a {@code 2026-07-28} MCP endpoint &mdash; the F2
- * authorization-hardening baseline (READY-312f).
+ * Binding-owned OAuth 2.1 resource-server (RS) configuration for a {@code 2026-07-28} MCP endpoint &mdash; the
+ * authorization-hardening baseline.
  *
  * <p>
  * <b>Off by default.</b> {@link #isEnabled()} is <jk>false</jk> unless {@link #setEnabled(boolean) enabled}, so an
@@ -176,7 +176,7 @@ public class McpResourceServerConfig {
 	}
 
 	/**
-	 * Whether a validated token must expose audience claims for RFC 8707 audience enforcement to apply (READY-312f F2, H2).
+	 * Whether a validated token must expose audience claims for RFC 8707 audience enforcement to apply.
 	 *
 	 * <p>
 	 * When <jk>true</jk> (the default), a validator that returns a bare {@link java.security.Principal} carrying no
@@ -192,7 +192,7 @@ public class McpResourceServerConfig {
 	}
 
 	/**
-	 * Sets whether a validated token must expose audience claims for audience enforcement to apply (H2).
+	 * Sets whether a validated token must expose audience claims for audience enforcement to apply.
 	 *
 	 * @param value The new value.  Defaults to <jk>true</jk> (fail-closed).
 	 * @return This object (for method chaining).
@@ -349,7 +349,7 @@ public class McpResourceServerConfig {
 	 * Installs a dynamic per-operation scope resolver, overriding the default static {@link #addOperationScope map}.
 	 *
 	 * <p>
-	 * The seam for a future dynamic resolver (READY-312f Q-c); not built for 10.0.  When set, it fully replaces the
+	 * The seam for a future dynamic resolver; not built for 10.0.  When set, it fully replaces the
 	 * static map for {@link #requiredScopesFor(McpOperationContext)}.
 	 *
 	 * @param value The resolver, or <jk>null</jk> to revert to the static map.
@@ -361,7 +361,7 @@ public class McpResourceServerConfig {
 	}
 
 	/**
-	 * Resolves the scopes required to invoke the given operation (SEP-2350).
+	 * Resolves the scopes required to invoke the given operation.
 	 *
 	 * <p>
 	 * Consults the {@link #setOperationScopeResolver(McpOperationScopeResolver) resolver} when installed; otherwise the
@@ -414,7 +414,7 @@ public class McpResourceServerConfig {
 	}
 
 	/**
-	 * Returns this config's memoized {@link OAuthFilter} (READY-312f F2, M3).
+	 * Returns this config's memoized {@link OAuthFilter}.
 	 *
 	 * <p>
 	 * The filter (RFC 6750 bearer extraction + delegated token validation) is built once from the

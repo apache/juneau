@@ -60,7 +60,7 @@ class JwksCache_Test extends TestBase {
 	}
 
 	// -----------------------------------------------------------------------------------------
-	// Reflective helpers — updated to the 5-arg JwksCache constructor (OQ-10).
+	// Reflective helpers — updated to the 5-arg JwksCache constructor.
 	// Default overloads pass eager=true / cooldown=10s matching the Builder defaults.
 	// -----------------------------------------------------------------------------------------
 

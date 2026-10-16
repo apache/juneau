@@ -23,7 +23,7 @@
  *
  *   Usage:  node dialog-form-browser.cjs <page.html>
  *
- * Loads <page.html> (the real served juneau-views.js) in headless Chromium, then inside the page paints a 6-type
+ * Loads <page.html> (the real served juneau-views.js) in headless Chromium, then inside the page paints a typed
  * dialog form, and measures - as a user would experience them - the real focus trap, keyboard-operable select/switch,
  * the confirm-blocked-on-invalid + focus-first-invalid path, the boolean-string submit body, and the nested
  * type=action button opening a SECOND stacked dialog.  Prints ONE JSON object to stdout; every assertion is in Java.
@@ -71,7 +71,7 @@ const PROBE = async function () {
 	// NOSONAR javascript:S7721 -- must stay nested: page.evaluate(PROBE) ships only PROBE's own source into the
 	// browser context, so a helper hoisted to this file's Node module scope would be undefined in the page and
 	// break every caller below.
-	function sixTypeForm() { // NOSONAR javascript:S7721 -- must stay nested: page.evaluate(PROBE) ships only the probe's own source into the browser context
+	function typedForm() { // NOSONAR javascript:S7721 -- must stay nested: page.evaluate(PROBE) ships only the probe's own source into the browser context
 		return {
 			title: 'Acknowledge?',
 			idempotencyKey: 'key-ack',
@@ -90,10 +90,10 @@ const PROBE = async function () {
 		};
 	}
 
-	// ---- Block A: paint the 6 types + real focus trap ----
+	// ---- Block A: paint the typed controls + real focus trap ----
 	async function blockPaint() {
 		const dom = makeRow('INC-1');
-		init.showActionDialog(sixTypeForm(), action, dom.table, dom.tr, ctx);
+		init.showActionDialog(typedForm(), action, dom.table, dom.tr, ctx);
 		await tick();
 		const backdrop = document.querySelector('.juneau-view-dialog-backdrop');
 		const formEl = backdrop ? backdrop.querySelector('.juneau-view-dialog-form') : null;
@@ -130,7 +130,7 @@ const PROBE = async function () {
 		const fetchCalls = [];
 		const realFetch = window.fetch;
 		window.fetch = function (u, o) { fetchCalls.push({ u: u, o: o }); return Promise.resolve({ ok: true, status: 200, headers: { get: () => null }, text: () => Promise.resolve('{}') }); };
-		const ui = init.showActionDialog(sixTypeForm(), action, dom.table, dom.tr, ctx);   // notes required + empty
+		const ui = init.showActionDialog(typedForm(), action, dom.table, dom.tr, ctx);   // notes required + empty
 		await tick();
 		dom.table.dataset.juneauCsrf = 'tok';
 		ui.confirmBtn.click();
@@ -149,7 +149,7 @@ const PROBE = async function () {
 	// ---- Block C: a valid form submits with boolean-string field values (toggle off -> "false", checkbox on -> "true") ----
 	async function blockSubmit() {
 		const dom = makeRow('INC-3');
-		const ui = init.showActionDialog(sixTypeForm(), action, dom.table, dom.tr, ctx);
+		const ui = init.showActionDialog(typedForm(), action, dom.table, dom.tr, ctx);
 		await tick();
 		const backdrop = document.querySelector('.juneau-view-dialog-backdrop');
 		backdrop.querySelector('textarea[data-juneau-form-field="notes"]').value = 'looks fine';
@@ -169,7 +169,7 @@ const PROBE = async function () {
 	// ---- Block D: the nested type=action button opens a SECOND stacked dialog without closing the first ----
 	async function blockNested() {
 		const dom = makeRow('INC-4');
-		init.showActionDialog(sixTypeForm(), action, dom.table, dom.tr, ctx);
+		init.showActionDialog(typedForm(), action, dom.table, dom.tr, ctx);
 		await tick();
 		const before = init.dialogLayerCount();
 		const escBtn = document.querySelector('button[data-juneau-form-field="esc"]');

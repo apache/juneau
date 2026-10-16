@@ -83,7 +83,7 @@ class McpMrtrConfig_Test {
 	@Test void a07_setKeyProviderWiresAeadCodecSharingTheProvider() {
 		// "behaves": prove the KeyProvider is actually threaded through, not just type-checked -- two
 		// independently-constructed McpMrtrConfig instances sharing one StaticKeyProvider unseal each other's
-		// tokens, the config-level analog of the dispatch-level d04 test added in Task 11.
+		// tokens, the config-level analog of the dispatch-level d04 test.
 		var provider = StaticKeyProvider.of("k1", StaticKeyProvider.aesKey(new byte[32]));
 		var a = new McpMrtrConfig().setKeyProvider(provider);
 		assertInstanceOf(AeadRequestStateCodec.class, a.getCodec());
@@ -113,7 +113,7 @@ class McpMrtrConfig_Test {
 	}
 
 	@Test void a10_defaultReplayCacheIsNull() {
-		// D1 (opt-in): replay rejection must be disabled by default -- no ReplayCache is auto-wired.
+		// Replay rejection must be disabled by default -- no ReplayCache is auto-wired.
 		assertNull(new McpMrtrConfig().getReplayCache());
 	}
 

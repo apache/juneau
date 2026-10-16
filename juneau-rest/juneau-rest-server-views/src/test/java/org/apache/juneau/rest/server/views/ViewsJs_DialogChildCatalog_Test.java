@@ -161,8 +161,8 @@ class ViewsJs_DialogChildCatalog_Test extends TestBase {
 		var resolve = body.indexOf("dialogActionIsOpenable(ctx, actionId)");
 		assertTrue(guard >= 0 && resolve >= 0 && guard < resolve, body);
 		// The SAME marker the hold paints, so there is no second piece of state to keep in sync.
-		assertTrue(functionBody(viewsJs(), "\tfunction beginDialogResultHold(")
-			.contains("ui.dialog.dataset.juneauDialogBusy = \"1\""), body);
+		assertTrue(functionBody(viewsJs(), "\tfunction lockDialogForWrite(")
+			.contains("dialog.dataset.juneauDialogBusy = \"1\""), body);
 	}
 
 	/**
@@ -342,7 +342,7 @@ class ViewsJs_DialogChildCatalog_Test extends TestBase {
 
 	/** carryDrafts: without it a Review step opens EMPTY and loses everything the operator typed. */
 	@Test void b07_carryDraftsCarriesTheParentsUnsubmittedValues() {
-		assertAllTrue("drafts_queryParamPresent", "drafts_carriedTheEditedValue", "drafts_childOpened");
+		assertAllTrue("drafts_queryParamPresent", "drafts_carriedTheEditedValue", "drafts_passwordAbsent", "drafts_childOpened");
 		assertEquals("/x/review-form?juneauDrafts=%7B%22note%22%3A%22edited-in-place%22%7D",
 			report().get("drafts_childGetUrl"), report()::toString);
 	}
@@ -374,5 +374,97 @@ class ViewsJs_DialogChildCatalog_Test extends TestBase {
 		assertAllTrue("helpers_childActionByIdFindsFirst", "helpers_childActionByIdMissIsNull",
 			"helpers_rowActionIdExistsSeesNonDialog", "helpers_dialogActionIsOpenableDoesNot",
 			"helpers_rowActionIdExistsMiss", "helpers_rowActionIdExistsNullSafe");
+	}
+
+	/**
+	 * A stacked child's committed write closes the WHOLE stack, not just its own layer, and its outcome lands where
+	 * the operator can read it: the ribbon-anchored host for a row-less wizard, the row's actions cell otherwise.
+	 * A bare 2xx (no typed body) is a commit too.  A failed child write commits nothing, so the parent stays open.
+	 * The write asks for JSON first, since that is the only rendering the typed-result parser can read, with a
+	 * low-weight wildcard fallback so an endpoint that cannot produce JSON keeps working instead of refusing with a
+	 * 406.  The recorded parent is cleared on every settle.
+	 */
+	@Test void b13_aCommittedChildWriteClosesTheWholeStack() {
+		var r = report();
+		for (var k : List.of("commit_ribbon_", "commit_row_", "bare_ribbon_")) {
+			assertAllTrue(k + "childStacked", k + "postedToChildEndpoint", k + "acceptsJson", k + "redrew",
+				k + "stackEmpty", k + "parentRecordCleared");
+			assertEquals(0, r.get(k + "layers"), r::toString);
+			assertEquals(0, r.get(k + "backdrops"), r::toString);
+		}
+		for (var k : List.of("commit_ribbon_", "commit_row_")) {
+			assertEquals("success", r.get(k + "outcomeState"), r::toString);
+			assertTrue(String.valueOf(r.get(k + "outcomeText")).contains("Placed order '7'"), r::toString);
+		}
+		assertAllTrue("failed_ribbon_childStacked", "failed_ribbon_postedToChildEndpoint", "failed_ribbon_acceptsJson",
+			"failed_ribbon_redrew", "failed_ribbon_parentRecordCleared");
+		assertEquals(1, r.get("failed_ribbon_layers"), r::toString);
+		assertEquals(1, r.get("failed_ribbon_backdrops"), r::toString);
+		assertNull(r.get("failed_ribbon_outcomeState"), r::toString);
+	}
+
+	/**
+	 * While an unheld stacked child's write is in flight the parent dialog is disabled, as a held dialog is, so the
+	 * child cannot be confirmed twice or stacked on again, and focus lands on the parent's Cancel (the child-action
+	 * button focus would otherwise be restored to is disabled).
+	 */
+	@Test void b15_theParentIsDisabledWhileTheChildWriteIsInFlight() {
+		assertAllTrue("pending_ribbon_childStacked", "pending_ribbon_inFlight_confirmDisabled",
+			"pending_ribbon_inFlight_childActionDisabled", "pending_ribbon_inFlight_busyMarked",
+			"pending_ribbon_inFlight_focusOnCancel", "double_ribbon_inFlight_focusOnCancel");
+	}
+
+	/**
+	 * A write that never went out (typed refusal, transport refusal, client refusal) restores the parent exactly to
+	 * its pre-lock state: a control that was already disabled stays disabled, and the notice is shown inside it.
+	 */
+	@Test void b16_aRefusedChildWriteRestoresTheParentAndShowsTheNoticeInsideIt() {
+		var r = report();
+		assertAllTrue("pending_ribbon_settled_notBusy", "pending_ribbon_settled_confirmStillDisabled",
+			"pending_ribbon_settled_childActionEnabled", "pending_ribbon_settled_extraChildStillDisabled",
+			"pending_ribbon_settled_focusOnCancel",
+			"transport_ribbon_settled_notBusy", "transport_ribbon_settled_confirmEnabled",
+			"transport_ribbon_settled_childActionEnabled", "transport_ribbon_settled_focusOnConfirm",
+			"noCsrf_ribbon_settled_notBusy", "noCsrf_ribbon_settled_confirmEnabled",
+			"noCsrf_ribbon_settled_childActionEnabled", "noCsrf_ribbon_settled_focusOnConfirm");
+		assertEquals("Refused (out-of-stock): Out of stock.", r.get("pending_ribbon_parentNotice"), r::toString);
+		assertTrue(String.valueOf(r.get("transport_ribbon_parentNotice")).startsWith("Request refused"), r::toString);
+		assertTrue(String.valueOf(r.get("noCsrf_ribbon_parentNotice")).contains("no CSRF token"), r::toString);
+		for (var k : List.of("pending_ribbon_", "transport_ribbon_", "noCsrf_ribbon_")) {
+			assertNull(r.get(k + "outcomeState"), r::toString);
+			assertEquals(1, r.get(k + "layers"), r::toString);
+			assertEquals(false, r.get(k + "settled_closeOnly"), r::toString);
+		}
+	}
+
+	/**
+	 * A write that may have landed (typed failure, network reject) leaves the parent Close-only and disabled, like a
+	 * held dialog, so a possibly-applied write cannot be re-triggered; the notice is shown inside the parent.
+	 */
+	@Test void b17_anAmbiguousChildWriteLeavesTheParentCloseOnly() {
+		var r = report();
+		for (var k : List.of("failed_ribbon_", "failed_row_", "netreject_ribbon_")) {
+			assertAllTrue(k + "settled_confirmGone", k + "settled_childActionDisabled", k + "settled_notBusy",
+				k + "settled_closeOnly", k + "settled_focusOnClose");
+			assertNull(r.get(k + "outcomeState"), r::toString);
+			assertEquals(1, r.get(k + "layers"), r::toString);
+		}
+		assertEquals("Failed: Out of stock.", r.get("failed_ribbon_parentNotice"), r::toString);
+		assertEquals("Failed: Out of stock.", r.get("failed_row_parentNotice"), r::toString);
+		assertTrue(String.valueOf(r.get("netreject_ribbon_parentNotice")).contains("may or may not"), r::toString);
+	}
+
+	/** Escape on the locked parent drops it; the late refusal then paints in the ribbon host and clears the record. */
+	@Test void b18_escapeOnALockedParentLeavesTheLateOutcomeToTheRibbon() {
+		var r = report();
+		assertAllTrue("escape_ribbon_recordedWhileInFlight", "escape_ribbon_parentEscaped",
+			"escape_ribbon_parentRecordCleared");
+		assertEquals(0, r.get("escape_ribbon_layers"), r::toString);
+		assertEquals("refusal", r.get("escape_ribbon_outcomeState"), r::toString);
+	}
+
+	/** A second submit over an already-locked parent keeps the first lock record and leaves the parent locked. */
+	@Test void b19_aSecondSubmitOverALockedParentKeepsTheFirstRecord() {
+		assertAllTrue("double_ribbon_secondSubmitted", "double_ribbon_recordKept", "double_ribbon_stillLocked");
 	}
 }

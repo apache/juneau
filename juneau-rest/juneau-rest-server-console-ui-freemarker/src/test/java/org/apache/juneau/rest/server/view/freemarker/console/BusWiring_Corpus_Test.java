@@ -29,9 +29,9 @@ import org.apache.juneau.rest.server.console.*;
 import org.junit.jupiter.api.*;
 
 /**
- * Runs the shared R-10 / R-11 corpus ({@code $VIEWS/src/test/resources/bus-wiring-corpus.json}, Q9) through
+ * Runs the shared R-10 / R-11 corpus ({@code $VIEWS/src/test/resources/bus-wiring-corpus.json}) through
  * {@link BusWiringValidator}, against the real registry: {@code html}, the ServiceLoader-registered
- * {@code DatatablesCardType}, and the corpus's own {@code cardTypes} stubs.  Task 5's {@code bus-wiring.cjs} runs
+ * {@code DatatablesCardType}, and the corpus's own {@code cardTypes} stubs.  The views module's {@code bus-wiring.cjs} runs
  * the same cases through {@code JuneauViews.bus.wiring.validate} and checks {@code expectJs}.
  */
 class BusWiring_Corpus_Test extends TestBase {
@@ -76,6 +76,6 @@ class BusWiring_Corpus_Test extends TestBase {
 			for (var p : ((JsonMap)c).getList("expect"))
 				codes.add(((Map<?,?>)p).get("code").toString());
 		assertEquals(new TreeSet<>(List.of("E-40", "E-41", "E-42", "E-43", "E-44", "E-45", "E-46", "E-47", "E-48", "E-49",
-			"E-51", "E-52", "E-53", "E-54", "E-58")), codes, "E-50 is FTL-only (Task 9)");
+			"E-51", "E-52", "E-53", "E-54", "E-58", "E-71", "E-72", "E-73", "E-74", "E-76", "E-77")), codes, "E-50 is FTL-only");
 	}
 }

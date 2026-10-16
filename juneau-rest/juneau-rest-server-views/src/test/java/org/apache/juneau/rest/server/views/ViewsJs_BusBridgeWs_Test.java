@@ -26,8 +26,8 @@ import org.apache.juneau.marshall.marshaller.*;
 import org.junit.jupiter.api.*;
 
 /**
- * Behavioral coverage for the stock WebSocket source (spec §11.3 step 2b, §11.6) and the shell hook
- * {@code JuneauViews.bus.wiring.attachBridges} (§11.5).  {@code bus-bridge-ws.cjs} drives
+ * Behavioral coverage for the stock WebSocket source and the shell hook
+ * {@code JuneauViews.bus.wiring.attachBridges}.  {@code bus-bridge-ws.cjs} drives
  * {@code JuneauViews.bus.sources.websocket} with a fake {@code WebSocket}, a scripted session {@code fetch} and a fake
  * clock, and reports the URL built from {@code location}, upstream text frames, the close-code table, per-message
  * errors, the watchdog, detach, and {@code attachBridges}.  Gated on {@code node} being on {@code PATH}.

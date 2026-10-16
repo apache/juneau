@@ -22,6 +22,7 @@ import java.util.*;
 import java.util.function.*;
 import java.util.regex.*;
 
+import org.apache.juneau.marshall.collections.*;
 import org.apache.juneau.rest.server.*;
 import org.apache.juneau.rest.server.console.*;
 import org.apache.juneau.rest.server.view.freemarker.*;
@@ -36,7 +37,7 @@ import freemarker.template.*;
  * <p>
  * A {@code PageSpec} renders nothing itself.  Its values are seeded into the request's {@link PageCapture} before any
  * directive runs, so a built page goes through the same {@code <@console>} chrome and emits the same
- * {@code #juneau-page} contract as an FTL page.  Chrome (brand, nav tree, footer, theme tokens) stays in the app's
+ * {@code #juneau-page} contract and the same toolkit asset tags as an FTL page.  Chrome (brand, nav tree, footer, theme tokens) stays in the app's
  * chrome template.
  *
  * <h5 class='section'>Example:</h5>
@@ -72,8 +73,12 @@ public final class PageSpec {
 	public static final String ATTR = "jcPageSpec";
 
 	private static final Set<String> USER_MENU_KEYS = Set.of("label", "initials", "avatar", "items");
-	/** Card types {@link #applyTo} lifts through their registered handler, so a Java-built card gets the {@code <@card>} checks. */
-	private static final Set<String> LIFTED_TYPES = Set.of("chart", "job-log");
+	/**
+	 * The three reserved types ({@code chart}, {@code job-log}, {@code terminal}) {@link #applyTo} lifts through their registered handler,
+	 * with their own {@code <@card>} checks.  The other reserved types are seeded as written; adopter types are lifted
+	 * through the registry too.
+	 */
+	private static final Set<String> LIFTED_TYPES = Set.of("chart", "job-log", "terminal");
 	private static final Pattern ATTR_NAME_RE = Pattern.compile("[A-Za-z_:][-A-Za-z0-9_:.]*");
 
 	/** One {@code header(String,String)} passthrough entry. */
@@ -83,6 +88,8 @@ public final class PageSpec {
 	private String title;
 	private String tab;
 	String theme;
+	private String scheme;
+	private boolean schemeToggle;
 	final List<String> toolkits = new ArrayList<>();
 	final List<String> css = new ArrayList<>();
 	final List<String> init = new ArrayList<>();
@@ -98,6 +105,9 @@ public final class PageSpec {
 	final List<TopicDecl> topics = new ArrayList<>();
 	private final Map<String,Boolean> topicRetain = new LinkedHashMap<>();
 	final Map<String,BridgeDecl> bridges = new LinkedHashMap<>();
+	final Map<String,JsonMap> dataSources = new LinkedHashMap<>();
+	/** The {@code dashboard} contract object, or <jk>null</jk> (see {@link #dashboard(DashboardSpec)}). */
+	private Map<String,Object> dashboard;
 	/** Body attribute name to its HTML-attribute-escaped value; the last call for a name wins. */
 	final Map<String,String> bodyAttrs = new LinkedHashMap<>();
 	final List<PageCapture.PendingNavAdd> navUnders = new ArrayList<>();
@@ -202,6 +212,38 @@ public final class PageSpec {
 	public PageSpec theme(String stockName) {
 		ConsoleChromeMixin.stockTheme(stockName);
 		theme = stockName;
+		return this;
+	}
+
+	/**
+	 * Pins the page's colour scheme.
+	 *
+	 * <p>
+	 * {@code auto} (the default) follows the browser's {@code prefers-color-scheme}; {@code light} and {@code dark}
+	 * pin the page. An explicit {@code <@console scheme="…">} on the page template wins over this value.
+	 *
+	 * @param name One of {@link ConsoleChromeMixin#SCHEMES}.
+	 * @return This object.
+	 * @throws IllegalArgumentException If {@code name} is not a known scheme.
+	 */
+	public PageSpec scheme(String name) {
+		if (name == null || ! ConsoleChromeMixin.SCHEMES.contains(name))
+			throw iaex("Unknown scheme '%s'.  Schemes: %s.", name, String.join(", ", ConsoleChromeMixin.SCHEMES));
+		scheme = name;
+		return this;
+	}
+
+	/**
+	 * Lets the visitor override the page's colour scheme with a stored choice.
+	 *
+	 * <p>
+	 * An explicit {@code <@console schemeToggle="…">} on the page template wins over this value.
+	 *
+	 * @param value Whether the stored choice is honoured.
+	 * @return This object.
+	 */
+	public PageSpec schemeToggle(boolean value) {
+		schemeToggle = value;
 		return this;
 	}
 
@@ -383,6 +425,59 @@ public final class PageSpec {
 		return html0(id, null, markup, card);
 	}
 
+	/**
+	 * Adds an {@code html} card whose body is fetched from {@code src}, with a title, unsanitized.  See
+	 * {@link #htmlSrc(String,String,String,boolean)} for the trust boundary.
+	 *
+	 * @param id The card id.
+	 * @param title The card title.  May be <jk>null</jk> for no title.
+	 * @param src The same-origin path of the HTML fragment endpoint.  Must not be blank.
+	 * @return This object.
+	 * @throws IllegalArgumentException If {@code src} is <jk>null</jk> or blank.
+	 */
+	public PageSpec htmlSrc(String id, String title, String src) {
+		return htmlSrc(id, title, src, false);
+	}
+
+	/**
+	 * Adds an {@code html} card whose body is fetched from {@code src}, with a title, optionally rebuilt through the
+	 * views attribute-allowlist sanitizer.  The equivalent of {@code <@card type="html" src="..." sanitize=true>}.
+	 *
+	 * <h5 class='section'>Trust boundary:</h5>
+	 * <p>
+	 * With {@code sanitize} <jk>false</jk> the shell fetches {@code src} and inserts the returned HTML as-is through a
+	 * raw HTML-sink assignment, <b>unsanitized</b>, the same trust level as {@code footer.text} (see
+	 * {@code HtmlCardType}).  The endpoint must therefore be a trusted first-party route, must never be derived from
+	 * request data, and must escape any data it embeds in the fragment.  {@code src} must be a same-origin path; an
+	 * absolute URL, a scheme, {@code //}, {@code ..} or a backslash is refused when the page is built, exactly as for
+	 * every other card.
+	 *
+	 * <p>
+	 * With {@code sanitize} <jk>true</jk> the fragment is rebuilt through the views attribute-allowlist sanitizer
+	 * instead: script, {@code on*} handlers, {@code javascript:} and {@code data:} URLs and every attribute off the
+	 * allowlist are dropped, and benign markup (text, tables, links, images) survives.  It needs the views toolkit on
+	 * the page; without the toolkit nothing is painted (the shell fails closed rather than inserting the fragment
+	 * unsanitized).  The sanitizer does not remove the need to escape any data you embed in the fragment.  Turn it on when the fragment's content is not fully under your control (it embeds user-supplied or
+	 * third-party markup, or comes from an endpoint you do not own); leave it off for a fragment that needs
+	 * {@code class}, {@code id}, {@code style}, forms, SVG or iframes, which the allowlist drops.  The default stays off.
+	 *
+	 * @param id The card id.
+	 * @param title The card title.  May be <jk>null</jk> for no title.
+	 * @param src The same-origin path of the HTML fragment endpoint.  Must not be blank.
+	 * @param sanitize Whether to rebuild the fetched fragment through the sanitizer.
+	 * @return This object.
+	 * @throws IllegalArgumentException If {@code src} is <jk>null</jk> or blank.
+	 */
+	public PageSpec htmlSrc(String id, String title, String src, boolean sanitize) {
+		if (ib(src))
+			throw iaex("PageSpec.htmlSrc id '%s' requires a non-blank src.", id);
+		var c = CardSpec.html(id).src(src).sanitize(sanitize);
+		if (nn(title))
+			c.title(title);
+		addCard(c);
+		return this;
+	}
+
 	private PageSpec html0(String id, String title, String markup, Consumer<CardSpec> card) {
 		if (markup == null)
 			throw iaex("PageSpec.html id '%s' requires a non-null markup.", id);
@@ -400,9 +495,15 @@ public final class PageSpec {
 	}
 
 	/**
-	 * Adds a registered custom-type card with no inline markup.
+	 * Adds a custom-type card with no inline markup.
 	 *
-	 * @param card The card.  Its type must be registered, and must not be a removed type or one with a dedicated method.
+	 * <p>
+	 * When the page renders, a card of an adopter type (any type that is not reserved) is built as
+	 * {@code <@card>} builds it: its body map is the authored body, the type's registered {@link CardTypeHandler}
+	 * validates it and returns the fragment the card carries, and an invalid body fails the render with the
+	 * {@code <@card>} message.  An unregistered type takes the generic passthrough, so its body map is carried as-is.
+	 *
+	 * @param card The card.  Its type must not be a removed type or one with a dedicated method.
 	 * @return This object.
 	 */
 	public PageSpec card(CardSpec card) {
@@ -410,10 +511,13 @@ public final class PageSpec {
 	}
 
 	/**
-	 * Adds a registered custom-type card that also takes inline markup.
+	 * Adds a custom-type card that also takes inline markup.
 	 *
 	 * @param card The card.  See {@link #card(CardSpec)}.
-	 * @param markupOrNull The markup, emitted as {@code <template data-card=card.id()>}, or <jk>null</jk>.
+	 * @param markupOrNull The markup, or <jk>null</jk>.  For an adopter type it is the card's body, as the content of
+	 * 	{@code <@card>} is: the handler parses it (JSON5) or captures it as {@code <template data-card=card.id()>}, and
+	 * 	{@code subscribes} / {@code publishes} keys in JSON5 markup are wired onto the card.  A card takes at most one of a
+	 * 	body map, non-blank markup, {@code template} or {@code src}.
 	 * @return This object.
 	 */
 	public PageSpec card(CardSpec card, String markupOrNull) {
@@ -421,6 +525,42 @@ public final class PageSpec {
 		addCard(card);
 		if (nn(markupOrNull))
 			cardMarkup.put(card.id(), markupOrNull);
+		return this;
+	}
+
+	/**
+	 * Adds the page's dashboard: a rail of filter sections beside a grid of card panels.
+	 *
+	 * <p>
+	 * The panel and card-section cards built by the dashboard are added to this page as ordinary cards, and the
+	 * {@code dashboard} toolkit pack is added (just before {@code charts} when that is listed).  A by-id panel
+	 * ({@code panel("notes")}) must name a card added <i>before</i> this call, for example with {@link #html(String, String)}.
+	 * </p>
+	 *
+	 * @param dashboard The dashboard.
+	 * @return This object.
+	 * @throws IllegalArgumentException E-77 on any dashboard problem, or if the page already has a dashboard.
+	 */
+	public PageSpec dashboard(DashboardSpec dashboard) {
+		if (dashboard == null)
+			throw iaex("PageSpec.dashboard requires a dashboard.");
+		if (this.dashboard != null)
+			throw Section.e77(dashboard.id(), "a page has at most one dashboard");
+		var byId = new LinkedHashMap<String,CardSpec>();
+		for (var c : cards)
+			byId.put(c.id(), c);
+		var json = dashboard.toJson(byId);
+		for (var c : dashboard.ownedCards())
+			card(c);
+		var pack = ToolkitPackRegistry.PACK_DASHBOARD;
+		if (! toolkits.contains(pack)) {
+			var charts = toolkits.indexOf(ToolkitPackRegistry.PACK_CHARTS);
+			if (charts >= 0)
+				toolkits.add(charts, pack);
+			else
+				toolkits.add(pack);
+		}
+		this.dashboard = json;
 		return this;
 	}
 
@@ -630,6 +770,40 @@ public final class PageSpec {
 		return this;
 	}
 
+	/**
+	 * Declares a data source, published on {@code data:<id>}; repeatable.
+	 *
+	 * @param def The source.
+	 * @return This object.
+	 * @throws IllegalArgumentException E-76 on a duplicate id or a bad declaration; also on a null definition.
+	 */
+	public PageSpec data(DataSourceDef def) {
+		if (def == null)
+			throw iaex("PageSpec.data requires a non-null definition.");
+		return addData(def.toMap());   // fail at the call site, not at render
+	}
+
+	/**
+	 * Declares a derived data source, published on {@code data:<as>}; repeatable.
+	 *
+	 * @param def The derived source.
+	 * @return This object.
+	 * @throws IllegalArgumentException E-76 on a duplicate id or a bad declaration; also on a null definition.
+	 * @throws IllegalStateException If {@link Derived#as(String)} was not called.
+	 */
+	public PageSpec data(Derived def) {
+		if (def == null)
+			throw iaex("PageSpec.data requires a non-null definition.");
+		return addData(def.toMap());
+	}
+
+	private PageSpec addData(JsonMap m) {
+		var id = (String)m.get("id");
+		if (dataSources.putIfAbsent(id, m) != null)
+			throw iaex(DataSourceDef.E76, id, "duplicate id");
+		return this;
+	}
+
 	/** @return The template name, or <jk>null</jk> if unset (the mixin's chrome template applies). */
 	public String template() {
 		return template;
@@ -737,8 +911,8 @@ public final class PageSpec {
 	 * <p>
 	 * Called once per render, on a freshly created capture before any directive has written to it, so these raw
 	 * writes can never conflict with anything.  This spec is not modified: each card is copied before it is seeded.
-	 * A table card is lifted through the card-type registry of {@code cardModel}, and every card's required
-	 * packs are recorded through it.
+	 * A table card, a chart, job-log or terminal card, and a card of any adopter (non-reserved) type are lifted through the
+	 * card-type registry of {@code cardModel}, with the {@code <@card>} checks and messages.  Every card's required packs are recorded through {@code cardModel}.
 	 *
 	 * @param cap The freshly created, still-empty capture.
 	 * @param cardModel The shared {@code <@card>} directive; may be <jk>null</jk> only when this spec has no cards.
@@ -751,6 +925,10 @@ public final class PageSpec {
 			cap.tab(tab);
 		if (theme != null)
 			cap.theme(theme);
+		if (scheme != null)
+			cap.scheme(scheme);
+		if (schemeToggle)
+			cap.schemeToggle(true);
 		if (! toolkits.isEmpty())
 			cap.toolkit(toolkits);
 		if (! css.isEmpty())
@@ -767,11 +945,13 @@ public final class PageSpec {
 		if (! cards.isEmpty() && n(cardModel))
 			throw FtlAttrLists.reject("PageSpec cards need the console card directive; the render has no ConsoleFreemarkerMixin.");
 		for (var card : cards) {
-			var seeded = tableBodies.containsKey(card.id()) ? liftTable(card, cardModel)
-				: LIFTED_TYPES.contains(card.type()) ? liftChecked(card, cardModel)
-				: card.copy();
-			cap.addBuiltCard(seeded, cardMarkup.get(card.id()));
-			cardModel.recordRequirements(cap, seeded.type(), seeded.id(), List.of());
+			var markup = cardMarkup.get(card.id());
+			var built = tableBodies.containsKey(card.id()) ? new Built(liftTable(card, cardModel), markup)
+				: LIFTED_TYPES.contains(card.type()) ? new Built(liftChecked(card, cardModel), markup)
+				: CardTypeRegistry.RESERVED.contains(card.type()) ? new Built(card.copy(), markup)
+				: liftCustom(card, markup, cardModel);
+			cap.addBuiltCard(built.card(), built.markupOrNull());
+			cardModel.recordRequirements(cap, built.card().type(), built.card().id(), List.of());
 		}
 		try {
 			for (var t : topics)
@@ -780,6 +960,10 @@ public final class PageSpec {
 			for (var b : bridges.values()) {
 				cap.addBridge(resolvedBridge(b, req));
 			}
+			for (var d : dataSources.values())
+				cap.addDataSource(new JsonMap(d));
+			if (! dataSources.isEmpty())
+				cap.require(List.of(ToolkitPackRegistry.PACK_DATA));
 		} catch (IllegalArgumentException e) {
 			throw FtlAttrLists.reject(e.getMessage());
 		}
@@ -793,36 +977,96 @@ public final class PageSpec {
 			cap.addPendingNavUnder(p.parentIdPath(), p.adder());
 		for (var b : badges)
 			cap.addBadge(b);
+		if (dashboard != null)
+			cap.dashboard(dashboard);
 		if (! facts.isEmpty())
 			cap.seedJavaFacts(facts);
 	}
 
+	/** A card ready for {@link PageCapture#addBuiltCard}, with the markup it emits as its template, or <jk>null</jk>. */
+	private record Built(CardSpec card, String markupOrNull) {}
+
+	// sanitize= is refused before any other check, as <@card> refuses it: only an html card with src= takes it.
+	private static void checkSanitize(CardSpec card) throws TemplateModelException {
+		if (card.sanitize())
+			throw FtlAttrLists.reject(f("<@card id='%s'> sanitize= applies only to an html card with src=.", card.id()));
+	}
+
 	private CardSpec liftTable(CardSpec card, CardDirectiveModel cardModel) throws TemplateModelException {
+		checkSanitize(card);
 		return liftVia(card, CardSource.create(card.type(), card.id()).bodyMap(tableBodies.get(card.id())), cardModel);
 	}
 
 	private static CardSpec liftChecked(CardSpec card, CardDirectiveModel cardModel) throws TemplateModelException {
-		if (nn(card.template()))
-			throw FtlAttrLists.reject(eq(card.type(), "chart")
-				? f("<@card id='%s'> type='chart' takes a JSON5 body (plus src= for remote data); template= is not allowed.", card.id())
-				: f("<@card id='%s'> type='%s' takes its options as the body; template= is not allowed.", card.id(), card.type()));
-		if (nn(card.src()) && eq(card.type(), "job-log"))
-			throw FtlAttrLists.reject(f("<@card id='%s'> type='job-log' takes its options as the body; src= is not allowed.", card.id()));
+		checkSanitize(card);
+		if (eq(card.type(), "terminal"))
+			return liftTerminal(card, cardModel);
+		if (eq(card.type(), "job-log"))
+			rejectSrcAndTemplate(card);
+		else if (nn(card.template()))
+			throw FtlAttrLists.reject(f("<@card id='%s'> type='chart' takes a JSON5 body (plus src= for remote data); template= is not allowed.", card.id()));
 		var source = CardSource.create(card.type(), card.id()).bodyMap(card.bodyMap());
 		if (nn(card.src()))
 			source.src(card.src());
 		return liftVia(card, source, cardModel);
 	}
 
+	/** Rejects {@code src=} and/or {@code template=} on a card whose options are its body, with the directive's message. */
+	private static void rejectSrcAndTemplate(CardSpec card) throws TemplateModelException {
+		var src = nn(card.src()) ? card.src() : "";
+		var template = nn(card.template()) ? card.template() : "";
+		if (! (src.isEmpty() && template.isEmpty()))
+			throw FtlAttrLists.reject(f("<@card id='%s'> type='%s' takes its options as the body; %s.", card.id(), card.type(),
+				CardDirectiveModel.notAllowed(src, template)));
+	}
+
+	/**
+	 * A terminal card: its body map is the {@code {contractVersion: '1', terminal: {...}}} envelope {@code <@card>} takes,
+	 * with {@code contractVersion} implied, so the registered handler validates it exactly as it does for the directive.
+	 */
+	private static CardSpec liftTerminal(CardSpec card, CardDirectiveModel cardModel) throws TemplateModelException {
+		rejectSrcAndTemplate(card);
+		var envelope = new LinkedHashMap<String,Object>();
+		envelope.put("contractVersion", "1");
+		envelope.putAll(card.bodyMap());
+		return liftVia(card, CardSource.create(card.type(), card.id()).bodyMap(envelope), cardModel);
+	}
+
+	/**
+	 * An adopter card type: the same checks {@code <@card>} runs, then its registered handler (or the generic
+	 * passthrough for an unregistered type) builds the fragment from the card's body map, or from its non-blank markup
+	 * when it has no body map.  The markup is emitted as the card's template only when the handler captures it, as
+	 * {@code <@card>} emits it; JSON5 markup a handler parses is the body, not a template.
+	 */
+	private static Built liftCustom(CardSpec card, String markupOrNull, CardDirectiveModel cardModel) throws TemplateModelException {
+		checkSanitize(card);
+		var body = card.bodyMap();
+		var hasMarkup = nn(markupOrNull) && ! markupOrNull.isBlank();
+		if ((body.isEmpty() ? 0 : 1) + (hasMarkup ? 1 : 0) + (nn(card.src()) ? 1 : 0) + (nn(card.template()) ? 1 : 0) > 1)
+			throw FtlAttrLists.reject(f("<@card id='%s'> type='%s' takes at most one of a body, template= or src=.", card.id(), card.type()));
+		var captured = new boolean[1];
+		var source = CardSource.create(card.type(), card.id()).templateSink((id, markup) -> captured[0] = true);
+		if (nn(card.src()))
+			source.src(card.src());
+		if (nn(card.template()))
+			source.template(card.template());
+		if (! body.isEmpty())
+			source.bodyMap(body);
+		else if (hasMarkup)
+			source.body(markupOrNull);
+		var lifted = liftVia(card, source, cardModel);
+		return new Built(lifted, captured[0] ? markupOrNull : null);
+	}
+
 	private static CardSpec liftVia(CardSpec card, CardSource.Builder source, CardDirectiveModel cardModel) throws TemplateModelException {
 		if (nn(card.title()))
 			source.title(card.title());
-		var lifted = cardModel.lift(source.build());
+		var lifted = cardModel.lift(source.build(), card);
 		if (nn(card.cssClass()))
 			lifted.cssClass(card.cssClass());
-		if (Boolean.TRUE.equals(card.toMap().get("bare")))
+		if (card.bare())
 			lifted.bare(true);
-		return lifted.wiringFrom(card);
+		return lifted;
 	}
 
 	static Map<String,Object> resolvedBridge(BridgeDecl b, RestRequest req) {
@@ -862,6 +1106,10 @@ public final class PageSpec {
 			early.addTopic(t.toMap(), "PageSpec.topic");
 		for (var b : bridges.values())
 			early.addBridge(resolvedBridge(b, req));
+		for (var d : dataSources.values())
+			early.addDataSource(new JsonMap(d));
+		if (dashboard != null)
+			early.dashboard(dashboard);
 		early.checkWiring(registry);
 	}
 }

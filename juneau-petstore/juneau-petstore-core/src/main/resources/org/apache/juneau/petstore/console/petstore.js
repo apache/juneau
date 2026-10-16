@@ -17,6 +17,7 @@
 // The petstore's shared page script, loaded by base.ftlh on every console page after the toolkit.
 (function() {
 	// P4 Photo tab: submit the upload form as a PUT to the API's own photo endpoint, then reload; a failure stays on the page.
+	// The upload carries the API's CSRF token (stamped on the form by the server) in the API's token header.
 	document.addEventListener('submit', function(e) {
 		var form = e.target.closest ? e.target.closest('form[data-petstore-upload]') : null;
 		if (!form)
@@ -25,7 +26,11 @@
 		var file = form.querySelector('input[type=file]').files[0];
 		if (!file)
 			return;
-		fetch(form.getAttribute('data-petstore-upload'), { method: 'PUT', headers: { 'Content-Type': file.type, 'Accept': 'text/plain' }, body: file })
+		var headers = { 'Content-Type': file.type, 'Accept': 'text/plain' };
+		var csrf = form.getAttribute('data-petstore-csrf');
+		if (csrf !== null)
+			headers['X-Csrf-Token'] = csrf;
+		fetch(form.getAttribute('data-petstore-upload'), { method: 'PUT', headers: headers, body: file })
 			.then(function(r) {
 				if (r.ok)
 					return window.location.reload();
@@ -84,12 +89,12 @@
 				input.setAttribute('aria-label', 'Type ' + expected + ' to confirm');
 				var ok = document.createElement('button');
 				ok.type = 'button';
-				ok.className = 'jc-button';
+				ok.className = 'jc-button petstore-typed-confirm-ok';
 				ok.textContent = modal.confirmLabel;
 				ok.disabled = true;
 				var cancel = document.createElement('button');
 				cancel.type = 'button';
-				cancel.className = 'jc-button';
+				cancel.className = 'jc-button petstore-typed-confirm-cancel';
 				cancel.textContent = modal.cancelLabel;
 				input.addEventListener('input', function() { ok.disabled = input.value !== expected; });
 				function done(v) { dlg.close(); dlg.remove(); resolve(v); }
@@ -105,7 +110,7 @@
 	}
 
 	// R10: a compact dialog chrome, selected by a modal's chrome:'compact'.  fn(parts, modal) restyles the dialog parts.
-	// Registered now; no petstore dialog opts in until ModalDef can emit 'chrome'.
+	// The new-order wizard (both steps) opts in with ModalDef.chrome("compact").
 	if (views && views.dialogs && views.dialogs.registerChrome) {
 		views.dialogs.registerChrome('compact', function(parts) {
 			parts.dialog.classList.add('petstore-dialog-compact');

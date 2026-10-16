@@ -16,7 +16,8 @@
  */
 
 /*
- * selftargeted-idempotency.cjs - always-on Node harness for the B2 tripwire: what `submitActionDialog`
+ * selftargeted-idempotency.cjs - always-on Node harness for the self-targeted idempotency tripwire: what
+ * `submitActionDialog`
  * ACTUALLY TRANSMITS as `extra.targetId`, for each branch of the opt-in-gated precedence rule
  *
  *     const targetId = (modal?.selfTargeted && modal?.idempotencyKey != null)
@@ -32,7 +33,7 @@
  *   (i)   selfTargeted + a key + a row whose id is DIFFERENT -> the KEY is transmitted (the opt-in works).
  *   (ii)  a key with NO selfTargeted + a row (the example app's ack-form shape) -> the ROW's id is transmitted
  *         (an artifact-bound key's real target is not silently discarded).
- *   (iii) selfTargeted + a key + NO ROW AT ALL -> the KEY is transmitted (the row-less case B2 exists for; a
+ *   (iii) selfTargeted + a key + NO ROW AT ALL -> the KEY is transmitted (the row-less case this exists for; a
  *         `tr == null` guard reintroduced around the opt-in branch would revive the original bug, and cases
  *         (i)/(ii) alone would both stay green while it did).
  *
@@ -107,7 +108,7 @@ function transmit(modal, withRow) {
 	out.noOptIn_withRow_idempotencyKey = body ? body.idempotencyKey : null;
 }
 
-// (iii) The opt-in with NO ROW: the key is transmitted with nothing to fall back to.  Before B2, a row-less
+// (iii) The opt-in with NO ROW: the key is transmitted with nothing to fall back to.  Before the fix, a row-less
 // submit omitted targetId entirely and failed closed on the server's binding check.
 {
 	const body = transmit({ selfTargeted: true, idempotencyKey: KEY }, false);

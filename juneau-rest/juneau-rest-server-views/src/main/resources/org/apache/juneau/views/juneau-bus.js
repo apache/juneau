@@ -31,16 +31,17 @@
 
 	/** Bus API contract version; bumps only on a breaking change to the public surface below. */
 	const CONTRACT_VERSION = '1';
-	/** The reserved families (spec 3.1); a bare family outside this list is E-JS-40. */
+	/** The reserved families; a bare family outside this list is E-JS-40. */
 	const FRAMEWORK_FAMILIES = Object.freeze(['card', 'selection', 'filter', 'redraw', 'detail', 'bulk', 'cmd', 'probe',
-		'job', 'badge', 'bridge']);
-	/** Kind of each framework family (spec 3.2): state is retained and single-owner, event is owner-only, command is open. */
+		'job', 'badge', 'bridge', 'data', 'zoom', 'legend']);
+	/** Kind of each framework family: state is retained and single-owner, event is owner-only, command is open. */
 	const FAMILY_KIND = Object.freeze({
 		card: 'state', selection: 'state', filter: 'state', probe: 'state', job: 'state', badge: 'state', bridge: 'state',
+		data: 'state', zoom: 'state', legend: 'state',
 		redraw: 'event', detail: 'event', bulk: 'event',
 		cmd: 'command'
 	});
-	/** The only framework payload schemaVersion this build understands (spec 3.4, E-JS-43). */
+	/** The only framework payload schemaVersion this build understands (E-JS-43). */
 	const FRAMEWORK_SCHEMA_VERSION = 1;
 	/** Publishes delivered in one drain before E-JS-44 (=== the region bus's BUS_QUEUE_DEPTH_CAP). */
 	const DRAIN_CAP = 64;
@@ -116,7 +117,7 @@
 		};
 	}
 
-	// ---- topic grammar (spec 3.1) ----------------------------------------------------------------------------------
+	// ---- topic grammar ----------------------------------------------------------------------------------
 
 	function badTopic(topic, why) {
 		return new BusError('E-JS-40', fmt("invalid topic '%s': %s", topic, why), { topic: topic });
@@ -164,7 +165,7 @@
 		return topic.length > prefix.length && topic.slice(0, prefix.length) === prefix;
 	}
 
-	// ---- payloads (spec 3.4) ---------------------------------------------------------------------------------------
+	// ---- payloads ---------------------------------------------------------------------------------------
 
 	/** Sorted-key JSON; only ever called on values that passed jsonProblem. */
 	function canonicalJson(v) {
@@ -213,7 +214,7 @@
 
 	/**
 	 * Dotted-path lookup (`'ids.0'`, `'a.b.2.c'`); array segments must be decimal indexes.  Undefined when any segment
-	 * is missing.  This is the `map` path language of declared subscriptions (spec 5.3).
+	 * is missing.  This is the `map` path language of declared subscriptions.
 	 *
 	 * @example
 	 * JuneauViews.bus.util.resolvePath({ids: ['c-17']}, 'ids.0');   // 'c-17'
@@ -313,7 +314,7 @@
 		return true;
 	}
 
-	// ---- delivery (spec 7.1) ---------------------------------------------------------------------------------------
+	// ---- delivery ---------------------------------------------------------------------------------------
 
 	const queue = [];
 	/** {from, topic} of every accepted publish in the current drain, for the E-JS-44 cycle text */
@@ -494,7 +495,7 @@
 	function deliverTo(sub, msg) {
 		if (!sub.live) return;
 		if (msg.meta.seq <= sub.after) return;    // already seen through the retained replay
-		if (sub.owner && sub.owner === msg.ownerId && !sub.echo) return;    // self-echo (spec 3.5)
+		if (sub.owner && sub.owner === msg.ownerId && !sub.echo) return;    // self-echo
 		try {
 			sub.fn(msg.payload, msg.meta);
 		} catch (e) {
@@ -531,7 +532,7 @@
 		};
 	}
 
-	// ---- history and the dev trace (spec 7.3) ----------------------------------------------------------------------
+	// ---- history and the dev trace ----------------------------------------------------------------------
 
 	function initialTrace() {
 		try {
@@ -659,7 +660,7 @@
 	}
 
 	/**
-	 * The page's in-memory publish/subscribe bus. Topics are "family" or "family:key" (spec 3.1); state topics keep
+	 * The page's in-memory publish/subscribe bus. Topics are "family" or "family:key"; state topics keep
 	 * their last value and replay it to new subscribers; delivery is synchronous, breadth-first, and loop-guarded.
 	 *
 	 * @example
@@ -710,12 +711,14 @@
 		CYCLE_TRACE_CAP: CYCLE_TRACE_CAP
 	};
 
-	// ---- declarative wiring check (Task 5; spec 6.1, 11.2) ---------------------------------------------------------
+	// ---- declarative wiring check ----------------------------------------------------------------
 
 	/**
-	 * The page-load half of R-10 / R-11 (the same rule as Java's BusWiringValidator, pinned by bus-wiring-corpus.json).
+	 * The page-load half of the bus-wiring rules (the same rules as Java's BusWiringValidator, pinned by
+	 * bus-wiring-corpus.json).
 	 * Returns only what the running page acts on: E-JS-41 (painted on the subscriber), E-JS-47 (painted on the card)
-	 * and E-JS-52 (bridge and R-11 problems, painted as a page banner).  Shape and declaration errors that Java owns
+	 * and E-JS-52 (bridge and bridge-coverage problems, painted as a page banner).  Shape and declaration errors that
+	 * Java owns
 	 * (E-40, E-42, E-43, E-45, E-46, E-48, E-49) silence the subscription they affect and are not repeated here.
 	 *
 	 * @example
@@ -727,11 +730,11 @@
 	 */
 	NS.bus.wiring = NS.bus.wiring || {};
 	NS.bus.wiring.validate = (function () {
-		const TOPIC_RE = /^(card|selection|filter|redraw|detail|bulk|cmd|probe|job|badge|bridge|[a-z][a-z0-9-]{0,31}\.[a-z][a-z0-9-]{0,31})(:[A-Za-z0-9_.-]{1,128})?$/;
+		const TOPIC_RE = /^(card|selection|filter|redraw|detail|bulk|cmd|probe|job|badge|bridge|data|zoom|legend|[a-z][a-z0-9-]{0,31}\.[a-z][a-z0-9-]{0,31})(:[A-Za-z0-9_.-]{1,128})?$/;
 		const CUSTOM_DECL_RE = /^[a-z][a-z0-9-]{0,31}\.[a-z][a-z0-9-]{0,31}(:([A-Za-z0-9_.-]{1,128}|\*))?$/;
 		const BRIDGE_ID_RE = /^[A-Za-z][A-Za-z0-9_-]{0,63}$/;
 		const SAME_ORIGIN_PATH_RE = /^\/(?![/\\])\S*$/;
-		const CARD_FAMILIES = ['card', 'selection', 'filter', 'redraw', 'detail', 'bulk', 'cmd'];
+		const CARD_FAMILIES = ['card', 'selection', 'filter', 'redraw', 'detail', 'bulk', 'cmd', 'zoom', 'legend'];
 		const SHELL_ROLES = ['params', 'refresh'];
 		const DATATABLES_OPT_IN = ['selection', 'detail', 'bulk'];
 		const SUGGEST_MAX_DISTANCE = 3;
@@ -769,9 +772,14 @@
 			objs(contract && contract.cards).forEach(function (c) {
 				if (typeof c.id === 'string' && !cards.has(c.id)) cards.set(c.id, c);
 			});
+			const dash = contract && contract.dashboard && typeof contract.dashboard === 'object' ? contract.dashboard : {};
+			const sections = objs(dash.rail && dash.rail.sections);
+			// Ids a card-keyed topic may name besides cards: data sources (R-E3a) and rail sections (R-E7).
+			const sourceIds = new Set(objs(contract && contract.dataSources).map(function (s) { return s.id; }).filter(function (i) { return typeof i === 'string'; }));
+			const sectionIds = new Set(sections.map(function (s) { return s.id; }).filter(function (i) { return typeof i === 'string'; }));
 			function typeOf(card) { return Object.prototype.hasOwnProperty.call(types, card.type) ? types[card.type] : null; }
 
-			// R-10 publishers (spec 6.1 rules 2-6), the candidate set for "did you mean".
+			// Publishers (rules 2-6), the candidate set for "did you mean".
 			const published = new Set();
 			function addCustom(t) { if (typeof t === 'string' && CUSTOM_DECL_RE.test(t)) published.add(t); }
 			cards.forEach(function (c, id) {
@@ -785,7 +793,16 @@
 				objs(c.publishes).forEach(function (p) { addCustom(p.topic); });
 				objs(view(c).ribbon).forEach(function (item) { if (item.type === 'publish') addCustom(item.topic); });
 			});
-			topics.forEach(function (t) { if (t.topic === 'job:*') published.add(t.topic); else addCustom(t.topic); });
+			topics.forEach(function (t) {
+				if (t.topic === 'job:*') published.add(t.topic);
+				else if (typeof t.topic === 'string' && t.topic.indexOf('data:') === 0 && t.publisher === 'script') published.add(t.topic);
+				else addCustom(t.topic);
+			});
+			// A section's filter:<id> is allowed by the sectionIds test in checkPublisher; it is listed here only so that the
+			// "did you mean" suggestion can offer it (pinned by corpus c67).
+			sections.forEach(function (s) { if (typeof s.id === 'string') published.add('filter:' + s.id); });
+			// R-E1 is Java-only (E-71); the mirror only needs a source to count as its topic's publisher.
+			sourceIds.forEach(function (id) { published.add('data:' + id); });
 			bridges.forEach(function (b) {
 				if (typeof b.id === 'string') published.add('bridge:' + b.id);
 				strs(b.downstream).forEach(function (d) { if (d.indexOf('job:') === 0) published.add(d); });
@@ -809,7 +826,13 @@
 					if (CARD_FAMILIES.indexOf(fam) >= 0) {
 						if (k === id) return;                              // E-49 (Java)
 						const target = cards.get(k);
-						if (!target) return;                               // E-42 (Java)
+						if (!target) {
+							// An id that is no card, data source or section is E-42 (Java).  A cmd: may name a source or section
+							// (R-E3a) and a section owns filter:<sectionId> (R-E7); any other family keyed to one has no publisher.
+							if ((sourceIds.has(k) || sectionIds.has(k)) && fam !== 'cmd' && !(fam === 'filter' && sectionIds.has(k)) && !isPublished(t))
+								out.push({ code: 'E-JS-41', card: id, message: fmt(E41, id, t, suggest(t)) });
+							return;
+						}
 						if (fam === 'card' || fam === 'cmd') return;
 						if (!typeOf(target) || published.has(t)) return;
 						if (target.type === 'datatables' && DATATABLES_OPT_IN.indexOf(fam) >= 0)
@@ -878,9 +901,9 @@
 				down.forEach(function (d) { if (up.indexOf(d) >= 0) bridgeProblem(name, fmt("topic '%s' is both downstream and upstream", d)); });
 			});
 
-			// R-11: every server topic rides some bridge downstream.
+			// Every server topic rides some bridge downstream.
 			topics.forEach(function (t) {
-				if (typeof t.topic !== 'string' || t.publisher !== 'server') return;
+				if (typeof t.topic !== 'string' || t.publisher !== 'server' || t.topic.indexOf('data:') === 0) return;   // data: is a framework family; Java reports E-45, not a missing bridge
 				const covered = bridges.some(function (b) { return strs(b.downstream).some(function (d) { return topicMatches(d, t.topic); }); });
 				if (!covered)
 					out.push({ code: 'E-JS-52', message: fmt("topic '%s' is declared publisher=server but no bridge carries it downstream", t.topic) });
@@ -903,15 +926,15 @@
 		};
 	})();
 
-	// ---- bridge runtime (spec §11.5, §11.6) ----------------------------------------------------------------------
+	// ---- bridge runtime ----------------------------------------------------------------------
 
-	/** An `open` connection that lasts this long resets the backoff attempt counter (§11.6). */
+	/** An `open` connection that lasts this long resets the backoff attempt counter. */
 	const BRIDGE_RESET_AFTER_MS = 30000;
-	/** SSE 404 / WS 4401 this many times in a row with no `open` between them is E-JS-57 (§11.6). */
+	/** SSE 404 / WS 4401 this many times in a row with no `open` between them is E-JS-57. */
 	const CAPABILITY_REFUSAL_LIMIT = 3;
-	/** Bridge codes that leave the bridge unusable; the shell paints these on the page banner (§6.3). */
+	/** Bridge codes that leave the bridge unusable; the shell paints these on the page banner. */
 	const BRIDGE_BANNER_CODES = Object.freeze({ 'E-JS-52': true, 'E-JS-53': true, 'E-JS-56': true, 'E-JS-57': true });
-	/** Framework families a bridge may carry downstream (§11.2): job state and card commands. */
+	/** Framework families a bridge may carry downstream: job state and card commands. */
 	const BRIDGEABLE_FAMILIES = Object.freeze({ job: true, cmd: true });
 
 	/** bridge id -> runtime record, for duplicate-id detection (E-JS-52). */
@@ -1229,7 +1252,7 @@
 	}
 
 	/**
-	 * Attaches a server source to the page bus (spec §11.5). The bus validates the source (E-JS-52), enforces its
+	 * Attaches a server source to the page bus. The bus validates the source (E-JS-52), enforces its
 	 * downstream grant (E-JS-54), owns reconnect/backoff/resync, publishes `bridge:<id>`, and forwards each
 	 * `upstream` topic to `connection.send` while the bridge is open (E-JS-55 otherwise). Never throws.
 	 *
@@ -1271,7 +1294,7 @@
 	NS.bus.attachSource = attachSource;
 	// ---- end bridge runtime ----
 
-	// ---- frame codec (spec §11.4; pinned by bus-frames-corpus.json, shared with Java BusFrames) ---------------------
+	// ---- frame codec ---------------------
 
 	const FRAME_VERSION = 1;
 	/** Default `BusPolicy.maxFrameBytes`; frames are UTF-8 JSON text. */
@@ -1349,7 +1372,7 @@
 	}
 
 	/**
-	 * Wire codec for bridge frames (spec §11.4). Field order is canonical (`v`, `type`, then the type's fields), so
+	 * Wire codec for bridge frames. Field order is canonical (`v`, `type`, then the type's fields), so
 	 * the browser and Java's `BusFrames` produce the same bytes; `bus-frames-corpus.json` pins both.
 	 *
 	 * @example
@@ -1387,7 +1410,7 @@
 	/**
 	 * Incremental parser for exactly the text/event-stream subset SseResponseSupport writes: `event:`, `id:`,
 	 * `data:` (multi-line joined with \n), `:` comments, blank-line dispatch; LF, CRLF or CR line ends. `retry:` and
-	 * unknown fields are ignored. `id` is per event (the bridge never reconnects by Last-Event-ID, OQ-B18).
+	 * unknown fields are ignored. `id` is per event (the bridge never reconnects by Last-Event-ID).
 	 */
 	function SseParser() {
 		this.buf = '';
@@ -1441,12 +1464,12 @@
 	NS.bus.frames = frames;
 	// ---- end frame codec ----
 
-	// ---- stock sources: session handshake (spec §11.3) and the SSE source -----------------------------------------
+	// ---- stock sources: session handshake and the SSE source -----------------------------------------
 
 	const SESSION_ID_RE = /^[0-9a-f]{64}$/;
 	const ABSOLUTE_URL_RE = /^(https?:)\/\/([^/?#]+)/i;
 	const DEFAULT_HEARTBEAT_MS = 15000;
-	/** A stream with no frame (and no comment) for this many heartbeats is dead (§11.6). */
+	/** A stream with no frame (and no comment) for this many heartbeats is dead. */
 	const WATCHDOG_HEARTBEATS = 3;
 	const DEFAULT_CSRF_HEADER = 'X-Csrf-Token';
 	const UPSTREAM_REFUSAL_CODES = Object.freeze({ 'bus:upstream-denied': true, 'bus:upstream-failed': true, 'bus:rate-limited': true });
@@ -1455,7 +1478,8 @@
 	function sourceEnv(opts) {
 		const w = typeof window !== 'undefined' ? window : {};
 		return {
-			fetch: opts.fetch || (typeof fetch === 'function' ? fetch : null),
+			// The default fetch is called as env.fetch(...); a browser's fetch throws "Illegal invocation" unless `this` is the window.
+			fetch: opts.fetch || (typeof fetch === 'function' ? fetch.bind(typeof window !== 'undefined' ? window : globalThis) : null),
 			location: opts.location || w.location || null,
 			document: opts.document || (typeof document !== 'undefined' ? document : null),
 			AbortController: opts.AbortController || w.AbortController || (typeof AbortController === 'function' ? AbortController : null),
@@ -1548,7 +1572,7 @@
 	}
 
 	/**
-	 * POST <session> (spec §11.3). Resolves {session} or a closed-info {retryable, retryAfterMs?, error} that the
+	 * POST <session>. Resolves {session} or a closed-info {retryable, retryAfterMs?, error} that the
 	 * source hands straight to ctx.state('closed', info). Never rejects.
 	 */
 	function openSession(env, opts, transport) {
@@ -1620,8 +1644,8 @@
 	}
 
 	/**
-	 * Stock SSE source (spec §11.3 step 2a): session POST, then a `fetch` + ReadableStream reader on paths.sse
-	 * (not EventSource, OQ-B23: the lifecycle needs the HTTP status, and its own retry would fight the backoff).
+	 * Stock SSE source: session POST, then a `fetch` + ReadableStream reader on paths.sse
+	 * (not EventSource, the lifecycle needs the HTTP status, and its own retry would fight the backoff).
 	 *
 	 * @param {{id: string, session: string, downstream: string[], upstream?: string[], maxAttempts?: number,
 	 *   fetch?: Function, location?: Location, document?: Document, TextDecoder?: Function,
@@ -1722,9 +1746,9 @@
 	NS.bus.sources.sse = sseSource;
 	// ---- end SSE source ----
 
-	// ---- stock WebSocket source (spec §11.3 step 2b) and the shell hook ------------------------------------------
+	// ---- stock WebSocket source and the shell hook ------------------------------------------
 
-	/** Close codes the browser retries with backoff (§11.6); anything not listed below is also retried. */
+	/** Close codes the browser retries with backoff; anything not listed below is also retried. */
 	const WS_CAPABILITY_CLOSE = 4401;
 	const WS_REPLACED_CLOSE = 4409;
 	/** Policy closes: the bridge fails (E-JS-53 for 4403 bus:refused, E-JS-56 for 1008 / 1009). */
@@ -1747,7 +1771,7 @@
 	}
 
 	/**
-	 * Stock WebSocket source (spec §11.3 step 2b): session POST, then `new WebSocket(ws[s]://<location.host><path>)`
+	 * Stock WebSocket source: session POST, then `new WebSocket(ws[s]://<location.host><path>)`
 	 * (the URL is built from `location`, never from a server-sent host). Upstream topics are sent as text frames.
 	 *
 	 * @param {{id: string, session: string, downstream: string[], upstream?: string[], maxAttempts?: number,
@@ -1841,7 +1865,7 @@
 	NS.bus.sources.websocket = wsSource;
 
 	/**
-	 * Shell hook (spec §11.5): attaches one stock source per contract `bridges[]` entry and detaches them all on
+	 * Shell hook: attaches one stock source per contract `bridges[]` entry and detaches them all on
 	 * `pagehide`. An unknown transport is E-JS-52 (page banner). Returns the links, in contract order.
 	 *
 	 * @param {Object} contract the page contract (`bridges[]`: {id, transport, session, downstream, upstream?, maxAttempts?}).
@@ -1875,6 +1899,4 @@
 	NS.bus.wiring = NS.bus.wiring || {};
 	NS.bus.wiring.attachBridges = attachBridges;
 	// ---- end WebSocket source ----
-
-	// ==== bridge runtime (Task 11) and frames/sources (Tasks 12-13) go here ====
 })();

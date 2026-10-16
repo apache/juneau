@@ -19,24 +19,35 @@ package org.apache.juneau.rest.client.classic;
 import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.io.*;
+import java.lang.reflect.*;
 import java.util.*;
 import java.util.concurrent.*;
 
 import org.apache.http.*;
+import org.apache.http.client.*;
 import org.apache.http.conn.*;
 import org.apache.http.conn.routing.*;
+import org.apache.http.impl.client.*;
 import org.apache.http.impl.conn.*;
 import org.apache.http.protocol.*;
-import org.apache.juneau.rest.client.classic.remote.*;
 
 /**
  * The connection manager a {@link RestClient} installs on the client it builds, holding two separate pools.
  *
  * <p>
- * Connections for SSRF-guard-active {@code @Remote} calls (while {@link RemoteUrlPolicyState#isActive()} is set on
- * the calling thread) are leased from the {@code pinned} delegate, whose connections are all opened through
- * {@link PolicyPinningDnsResolver}.  Every other connection is leased from the {@code ordinary} delegate.  So a guarded
- * call can never be handed an idle connection that an unguarded call opened without the pin, and the reverse.
+ * Connections for SSRF-guard-active {@code @Remote} calls (requests whose context carries the {@link SsrfGuardMarker},
+ * or made while the calling thread runs a guarded call) are leased from the {@code pinned} delegate, whose connections
+ * are all opened through {@link PolicyPinningDnsResolver}.  Every other connection is leased from the {@code ordinary}
+ * delegate.  So a guarded call can never be handed an idle connection that an unguarded call opened without the pin,
+ * and the reverse.
+ *
+ * <p>
+ * {@link HttpClientConnectionManager#requestConnection(HttpRoute, Object)} is not given the request's context, so the
+ * client's {@link GuardInterceptor}, which Apache HttpClient runs on the same thread just before the lease, reads the
+ * marker and hands the decision over.  The guard then fails closed: if the interceptor did not run (an
+ * {@link HttpClientBuilder#setHttpProcessor(HttpProcessor) HttpProcessor} replaced the client's interceptors) and a
+ * guarded request was nevertheless handed an ordinary connection, {@link #connect connect} refuses to open it and the
+ * client's {@link GuardedRequestExecutor} refuses to send the request over it.
  *
  * <p>
  * The pinned pool runs with the ordinary pool's settings: before each guarded lease, the pool limits, the socket and
@@ -59,6 +70,13 @@ final class SsrfGuardConnectionManager implements HttpClientConnectionManager {
 	private final HttpClientConnectionManager ordinary;
 	private final HttpClientConnectionManager pinned;
 
+	// The lease decision GuardInterceptor hands to the next requestConnection(...) on the same thread: set (to TRUE) for
+	// a guarded request, absent otherwise.  GuardInterceptor sets or clears it for every request and requestConnection
+	// clears it before anything else, so a decision can only be left over when a request interceptor after GuardInterceptor
+	// throws before the lease; the next lease on that thread is then pinned although its request is not guarded.  A
+	// leftover can only over-guard (pin an ordinary request), never let a guarded one through unpinned.
+	private static final ThreadLocal<Boolean> NEXT_LEASE_GUARDED = new ThreadLocal<>();
+
 	// Leased connections of the pinned pool.  Connection classes use identity equality, so this is an identity map;
 	// weak keys mean a leaked (never released) connection is not kept alive by this map.
 	private final Map<HttpClientConnection,Boolean> pinnedLeases = Collections.synchronizedMap(new WeakHashMap<>());
@@ -70,10 +88,12 @@ final class SsrfGuardConnectionManager implements HttpClientConnectionManager {
 
 	@Override /* HttpClientConnectionManager */
 	public ConnectionRequest requestConnection(HttpRoute route, Object state) {
-		if (! RemoteUrlPolicyState.isActive())
+		var handedOver = NEXT_LEASE_GUARDED.get() != null;
+		NEXT_LEASE_GUARDED.remove();
+		if (! handedOver && ! SsrfGuardMarker.isGuarded(null, null))
 			return ordinary.requestConnection(route, state);
 		if (nn(route.getProxyHost()))
-			throw new ProxyRouteRefusedException("Refusing to send a policy-covered @Remote request to '" + route.getTargetHost()
+			throw new GuardRefusedException("Refusing to send a policy-covered @Remote request to '" + route.getTargetHost()
 				+ "' through a proxy (" + route.getProxyHost() + "): the SSRF guardrail's pin-on-connect would check the "
 				+ "proxy's address, not the target's.  Remove the proxy (proxy(...), routePlanner(...) or the proxy system "
 				+ "properties used by useSystemProperties()), or set allowPrivateUrls(true) if this is an intentional "
@@ -102,7 +122,64 @@ final class SsrfGuardConnectionManager implements HttpClientConnectionManager {
 
 	@Override /* HttpClientConnectionManager */
 	public void connect(HttpClientConnection conn, HttpRoute route, int connectTimeout, HttpContext context) throws IOException {
+		requirePinnedIfGuarded(conn, null, context, "to open a connection of the ordinary pool");
 		owner(conn).connect(conn, route, connectTimeout, context);
+	}
+
+	/**
+	 * Returns whether {@link #isConnectionManagerOf(HttpClient)} can check a client at all: <jk>false</jk> when the
+	 * connection manager of Apache's {@code InternalHttpClient} cannot be read, in which case every client counts as not
+	 * wired.
+	 *
+	 * @return <jk>true</jk> if clients can be checked.
+	 */
+	static boolean canCheckWiring() {
+		return nn(CONN_MANAGER);
+	}
+
+	/**
+	 * Returns whether the given client is wired to this connection manager: it is an Apache {@code InternalHttpClient}
+	 * (what {@link HttpClientBuilder#build()} returns) whose connection manager is this one.
+	 *
+	 * @param client The client.
+	 * @return <jk>false</jk> for any other client, including one that wraps such a client (it may send the request
+	 * 	elsewhere), and if the client's connection manager cannot be read.
+	 */
+	boolean isConnectionManagerOf(HttpClient client) {
+		if (CONN_MANAGER == null || client == null || client.getClass() != CONN_MANAGER.getDeclaringClass())
+			return false;
+		try {
+			return CONN_MANAGER.get(client) == this;
+		} catch (@SuppressWarnings("unused") IllegalAccessException e) {
+			// HTT: unreachable, since the field was made accessible when it was looked up.
+			return false;
+		}
+	}
+
+	// InternalHttpClient.connManager, or null if this HttpClient release has no such field (every client then counts as
+	// not wired, so guarded calls are refused).
+	private static final Field CONN_MANAGER = connManagerField();
+
+	private static Field connManagerField() {
+		try {
+			var f = Class.forName("org.apache.http.impl.client.InternalHttpClient").getDeclaredField("connManager");
+			f.setAccessible(true);
+			return f;
+		} catch (@SuppressWarnings("unused") ReflectiveOperationException | RuntimeException e) {
+			// HTT: only an HttpClient release without this field, or a JVM that denies reflective access to it, gets here.
+			return null;
+		}
+	}
+
+	// Refuses a guarded request on a connection of the ordinary pool, which was or would be opened without the pin.
+	private void requirePinnedIfGuarded(HttpClientConnection conn, HttpRequest request, HttpContext context, String what) {
+		// isGuarded first: it also refuses a guarded request whose context lacks the marker, on any connection.
+		if (SsrfGuardMarker.isGuarded(request, context) && ! pinnedLeases.containsKey(conn))
+			throw new GuardRefusedException("Refusing to send a policy-covered @Remote request " + what + ", which is not "
+				+ "opened through the SSRF guardrail's pin-on-connect: the request was executed "
+				+ "on a thread where its guard was not known when the connection was leased (the client's request "
+				+ "interceptors were replaced, for example by httpProcessor(...)).  Remove the HttpProcessor setting, or set "
+				+ "allowPrivateUrls(true) if this is an intentional local-dev/intranet target.");
 	}
 
 	@Override /* HttpClientConnectionManager */
@@ -183,14 +260,51 @@ final class SsrfGuardConnectionManager implements HttpClientConnectionManager {
 	}
 
 	/**
-	 * Thrown when a guarded lease on a proxy route is refused.  It passes through Apache HttpClient unchanged, and the
-	 * {@code @Remote} call that leased the connection reports it as a {@link RestCallException} with this as the cause.
+	 * Thrown when the guard refuses a request.  It passes through Apache HttpClient unchanged, and the {@code @Remote}
+	 * call that sent the request reports it as a {@link RestCallException} with this as the cause.
 	 */
-	static final class ProxyRouteRefusedException extends IllegalStateException {
+	static final class GuardRefusedException extends IllegalStateException {
 		private static final long serialVersionUID = 1L;
 
-		ProxyRouteRefusedException(String message) {
+		GuardRefusedException(String message) {
 			super(message);
+		}
+	}
+
+	/**
+	 * The request interceptor that reads the {@link SsrfGuardMarker} of each request and hands the lease decision to
+	 * the connection manager (see the class description).  Apache HttpClient runs it on the thread that then leases the
+	 * connection, as part of the same call; it is set for every request, so a decision is never left over for another.
+	 */
+	static final class GuardInterceptor implements HttpRequestInterceptor {
+		@Override /* HttpRequestInterceptor */
+		public void process(HttpRequest request, HttpContext context) {
+			if (SsrfGuardMarker.isGuarded(request, context))
+				NEXT_LEASE_GUARDED.set(Boolean.TRUE);
+			else
+				NEXT_LEASE_GUARDED.remove();
+		}
+	}
+
+	/**
+	 * The request executor of a client wired to this connection manager: it refuses to send a guarded request over a
+	 * connection of the ordinary pool (an already-open one is reused without {@link #connect connect}), then hands every
+	 * request to the executor the client was configured with.
+	 */
+	static final class GuardedRequestExecutor extends HttpRequestExecutor {
+		private final HttpRequestExecutor delegate;
+		private final SsrfGuardConnectionManager manager;
+
+		GuardedRequestExecutor(HttpRequestExecutor delegate, SsrfGuardConnectionManager manager) {
+			// Another client's executor (a reused HttpClientBuilder keeps the one the previous build installed) is unwrapped.
+			this.delegate = delegate instanceof GuardedRequestExecutor g ? g.delegate : or(delegate, new HttpRequestExecutor());
+			this.manager = manager;
+		}
+
+		@Override /* HttpRequestExecutor */
+		public HttpResponse execute(HttpRequest request, HttpClientConnection conn, HttpContext context) throws IOException, HttpException {
+			manager.requirePinnedIfGuarded(conn, request, context, "over an open connection of the ordinary pool");
+			return delegate.execute(request, conn, context);
 		}
 	}
 }

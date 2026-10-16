@@ -147,6 +147,19 @@ public class RemoteProxyUtils {
 	}
 
 	/**
+	 * Same as {@link #requireHttpScheme(String, boolean)}, additionally honoring a client's per-client allowed address ranges.
+	 *
+	 * @param url The URL to validate.
+	 * @param allowPrivateUrls When <jk>true</jk>, the deny-private check is skipped.
+	 * @param allowedRanges The client's {@link RemoteUrlPolicy.AllowedRanges}, unioned with the {@code RestClient.allowAddressRanges} property.
+	 * @return The unchanged URL.
+	 * @throws IllegalArgumentException If {@code url} is absolute and violates the policy.
+	 */
+	public static String requireHttpScheme(String url, boolean allowPrivateUrls, RemoteUrlPolicy.AllowedRanges allowedRanges) {
+		return RemoteUrlPolicy.requireAllowedUrl(url, allowPrivateUrls, allowedRanges);
+	}
+
+	/**
 	 * Emits a one-time build-time warning that an {@link org.apache.juneau.http.remote.Remote @Remote}/{@link org.apache.juneau.http.remote.RemoteOp @RemoteOp}
 	 * member is set on the classic engine that the classic engine cannot honor.
 	 *

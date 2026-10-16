@@ -20,7 +20,9 @@ import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.test.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.nio.file.*;
 import java.util.*;
+import java.util.regex.*;
 
 import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
@@ -33,8 +35,8 @@ import org.junit.jupiter.api.*;
  * <h5 class='section'>Why this exists at all</h5>
  * <p>
  * Because origin and fingerprint are facts about today, and the failure they guard is silent. Some glyphs are
- * Juneau-original; others are console-sprite counterparts cleared for artwork copy (operator ruling 2026-09-24 /
- * design §3.4) and recorded as {@code irs-artwork}. The cheapest way for an unreviewed paste to land again is for
+ * Juneau-original; others are console-sprite counterparts cleared for artwork copy (operator ruling 2026-09-24) and
+ * recorded as {@code original-artwork}. The cheapest way for an unreviewed paste to land again is for
  * someone to overwrite a path during an unrelated polish pass. Nothing else in the build would notice: the artwork
  * renders, the ids are unchanged, and {@link SymbolSprite_StemIds_Test} pins <i>names</i> rather than paths. This
  * test makes such a paste fail until the manifest row is deliberately edited, which turns an invisible act into a
@@ -51,9 +53,9 @@ import org.junit.jupiter.api.*;
  * <ul>
  * 	<li>The manifest and the sprite describe the same glyph set, in the same order.
  * 	<li>Every glyph's fingerprint still matches its approved value.
- * 	<li>Every glyph's declared origin is either {@code juneau-original} or {@code irs-artwork} &mdash; the only
+ * 	<li>Every glyph's declared origin is either {@code juneau-original} or {@code original-artwork} &mdash; the only
  * 		origins the manifest authorises. (This test does not read {@code NOTICE}; keeping its attribution in step
- * 		with the {@code irs-artwork} rows is a manual, reviewed act.)
+ * 		with the {@code original-artwork} rows is a manual, reviewed act.)
  * 	<li>The three contracts the manifest states as rules: {@code viewBox="0 0 24 24"} on every glyph, paint only
  * 		ever {@code none}, {@code currentColor} or a themable {@code var(--x, currentColor)}, and an explicit
  * 		{@code stroke-width} wherever a stroke is painted.
@@ -78,7 +80,7 @@ class SymbolSprite_Provenance_Test extends TestBase {
 			+ " that this test exists to force.";
 
 	private static final String REQUIRED_VIEWBOX = "0 0 24 24";
-	private static final Set<String> ALLOWED_ORIGINS = Set.of("juneau-original", "irs-artwork");
+	private static final Set<String> ALLOWED_ORIGINS = Set.of("juneau-original", "original-artwork");
 
 	private static String sprite() throws Exception {
 		var s = SymbolProvenanceScanner.read(SymbolProvenanceScanner.SPRITE);
@@ -134,7 +136,7 @@ class SymbolSprite_Provenance_Test extends TestBase {
 	}
 
 	@Test void a03_everyGlyphDeclaresAnAllowedOrigin() throws Exception {
-		// Origins are either Juneau-original or IRS artwork cleared for copy (2026-09-24).  Any other token would
+		// Origins are either Juneau-original or artwork cleared for copy.  Any other token would
 		// leave LICENSE/NOTICE and the dual-hat rule out of sync with the sprite.
 		var origins = SymbolProvenanceScanner.manifestOrigins(manifest());
 		assertNotEmpty(() -> "no manifest rows parsed - this test would be vacuous", origins);
@@ -148,24 +150,24 @@ class SymbolSprite_Provenance_Test extends TestBase {
 
 	/**
 	 * The a04 check as a function of its inputs: every document-family stem must be shipped and declared
-	 * {@code irs-artwork}.  Returns one problem string per violation (empty when the family is intact).
+	 * {@code original-artwork}.  Returns one problem string per violation (empty when the family is intact).
 	 */
 	private static List<String> documentFamilyProblems(Map<String,String> shipped, Map<String,String> origins) {
 		var problems = new ArrayList<String>();
 		for (var stem : SymbolProvenanceScanner.FRAMED_FAMILY) {
 			if (shipped.get(stem) == null)
 				problems.add("the document family member " + stem + " is missing from the sprite");
-			if (neq(origins.get(stem), "irs-artwork"))
-				problems.add("document-family stem " + stem + " is expected to be irs-artwork after the §3.4 replacement"
+			if (neq(origins.get(stem), "original-artwork"))
+				problems.add("document-family stem " + stem + " is expected to be original-artwork after the artwork replacement"
 					+ " but is " + origins.get(stem));
 		}
 		return problems;
 	}
 
 	@Test void a04_documentFamilyMembersRemainShipped() throws Exception {
-		// csv / pdf / spreadsheet previously shared a Juneau-original byte-identical frame.  They now ship IRS
-		// artwork (design §3.4), so frame-identity is no longer asserted — only that the three stems still exist
-		// and keep their irs-artwork origin.
+		// csv / pdf / spreadsheet previously shared a Juneau-original byte-identical frame.  They now ship
+		// copied artwork, so frame-identity is no longer asserted — only that the three stems still exist
+		// and keep their original-artwork origin.
 		assertEmpty(() -> "document family drifted. " + MANIFEST_IS_THE_REVIEW,
 			documentFamilyProblems(SymbolProvenanceScanner.symbols(sprite()), SymbolProvenanceScanner.manifestOrigins(manifest())));
 	}
@@ -233,7 +235,7 @@ class SymbolSprite_Provenance_Test extends TestBase {
 	}
 
 	@Test void b03_documentFamilyOriginAssertCanFail() throws Exception {
-		// a04 pins irs-artwork on the framed-family stems.  Run the SAME check against a mutated origins map and a
+		// a04 pins original-artwork on the framed-family stems.  Run the SAME check against a mutated origins map and a
 		// mutated sprite and require it to report the breach; a vacuous check (or a vacuous origins map) would not.
 		var shipped = SymbolProvenanceScanner.symbols(sprite());
 		var origins = SymbolProvenanceScanner.manifestOrigins(manifest());
@@ -244,11 +246,35 @@ class SymbolSprite_Provenance_Test extends TestBase {
 		var drifted = new LinkedHashMap<>(origins);
 		drifted.put(first, "juneau-original");
 		assertList(documentFamilyProblems(shipped, drifted),
-			"document-family stem " + first + " is expected to be irs-artwork after the §3.4 replacement but is juneau-original");
+			"document-family stem " + first + " is expected to be original-artwork after the artwork replacement but is juneau-original");
 
 		var missing = new LinkedHashMap<>(shipped);
 		missing.remove(first);
 		assertList(documentFamilyProblems(missing, origins), "the document family member " + first + " is missing from the sprite");
+	}
+
+	@Test void a08_shippedResourcesNameNoReferenceConsole() throws Exception {
+		// The shipped sprites, manifests, scripts and stylesheets are Apache artifacts: provenance is recorded by origin
+		// token (juneau-original / original-artwork), never by naming the console the artwork was cleared from.  The
+		// bracketed letters keep this pattern from matching its own source text.
+		var leak = Pattern.compile("\\bI[R]S|\\bi[r]s[-_.]");
+		var root = RawContentSinkScanner.locateModuleRoot();
+		assertNotNull(root, "could not locate the module's own resources");
+		var dir = root.resolve(SymbolProvenanceScanner.RESOURCE_DIR);
+		var offenders = new ArrayList<String>();
+		try (var files = Files.list(dir)) {
+			for (var f : files.filter(Files::isRegularFile).sorted().toList()) {
+				var name = f.getFileName().toString();
+				if (name.matches(".*\\.(md|svg|css|js)")) {
+					var m = leak.matcher(Files.readString(f));
+					if (m.find())
+						offenders.add(name);
+				}
+			}
+		}
+		assertEmpty(() -> "these shipped resources name the source console; describe the reason instead", offenders);
+		// Non-vacuous: the scan really lists the provenance manifest it is supposed to be covering.
+		assertTrue(Files.isRegularFile(dir.resolve(SymbolProvenanceScanner.MANIFEST)), "scanned directory does not hold the manifest");
 	}
 
 	@Test void b04_theManifestRowPatternMatchesEveryRealRow() throws Exception {

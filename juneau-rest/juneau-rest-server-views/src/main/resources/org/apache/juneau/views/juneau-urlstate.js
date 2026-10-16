@@ -16,14 +16,14 @@
  */
 
 /*
- * juneau-urlstate.js - the shareable "Copy link" URL-state codec (design section 6.3).
+ * juneau-urlstate.js - the shareable "Copy link" URL-state codec.
  *
  * A single, dependency-free codec for the ONE opaque query parameter named `state`, whose value uses the Juneau
  * directives tab(...), filter(...), and sort(...) plus any directive a page registers via registerDirective.  It attaches to window.JuneauViews.urlState
  * (mirroring the other dependency-free pre-views globals: the icon registry, the column-search engine, and the
  * page-state store), so it loads as a plain <script> BEFORE juneau-views.js and juneau-config.js, which consume it.
  *
- * What the URL carries (design section 6.3):
+ * What the URL carries:
  *   - the live TAB, the primary table's live FILTERS, and that table's live SORT - primary table only.
  *   - Filter bodies are the RAW column-search language (the same $-DSL as the header search popup).
  * What the URL NEVER carries:
@@ -31,7 +31,7 @@
  *     density) - those live in the browser page-state store (juneau-pagestate.js) only.
  *   - Nested / child tables - only the primary table is encoded.
  *
- * Representation (design section 6.3): one readable `?state=` parameter, directly in the address bar (no IRS
+ * Representation: one readable `?state=` parameter, directly in the address bar (no
  * promote-`?h=`-into-a-hash round trip).  The parser tolerates a percent-encoded value too, so a link that some
  * intermediary encoded still restores.
  *
@@ -47,7 +47,7 @@
 	function isBlank(v) { return v == null || String(v) === ''; }
 
 	// -------------------------------------------------------------------------------------------------------------
-	// Directive registry: tab/filter/sort are built in; a page may add more (the built-ins `window` and `ids` below).
+	// Directive registry: tab/filter/sort are built in; a page may add more (the built-ins `window`, `ids` and `day` below).
 	// -------------------------------------------------------------------------------------------------------------
 
 	const RESERVED_DIRECTIVES = { tab: true, filter: true, sort: true };
@@ -160,6 +160,32 @@
 				return out;
 			},
 			statusMessage: function (v) { return v?.truncated ? ('Showing the first ' + max + ' ids') : null; }
+		};
+	}
+
+	/**
+	 * Built-in `day` directive: body `YYYY-MM-DD`, one calendar day sent as a single request param (`param`, default `day`).
+	 * A body that is not a real calendar date parses to nothing, so the directive is dropped from the address bar and no
+	 * param is sent.
+	 */
+	function dayDirectiveCodec(cfg) {
+		const param = cfg?.param || 'day';
+		function realDay(text) {
+			const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(text);
+			if (! m) return null;
+			const d = new Date(0);
+			d.setUTCFullYear(+m[1], +m[2] - 1, +m[3]); // not Date.UTC: it maps years 0-99 to 1900-1999
+			return d.getUTCFullYear() === +m[1] && d.getUTCMonth() === +m[2] - 1 && d.getUTCDate() === +m[3] ? text : null;
+		}
+		return {
+			parse: function (body) { return realDay(decodeArg(String(body || '')).trim()); },
+			serialize: function (v) { return encodeArg(v); },
+			isEmpty: function (v) { return v == null || v === ''; },
+			toParams: function (v) {
+				const out = {};
+				if (v) out[param] = v;
+				return out;
+			}
 		};
 	}
 
@@ -327,7 +353,7 @@
 	}
 
 	/**
-	 * Decodes a `state` value into a live-state object.  An unknown directive (e.g. an IRS `subview`) is dropped, so
+	 * Decodes a `state` value into a live-state object.  An unknown directive (e.g. a host-app `subview`) is dropped, so
 	 * nested-table or View-Settings state can never leak in.  Always returns an object (never null); read
 	 * emptiness via {@link isEmptyState}.
 	 *
@@ -378,7 +404,7 @@
 					console.error('[juneau-urlstate] E-JS-68: url-state directive \'' + n + '\' could not be parsed: ' + (e?.message || e));
 				}
 			}
-			// An unregistered directive name is dropped (design section 6.3, extended: tab/filter/sort plus whatever the page registered).
+			// An unregistered directive name is dropped.
 		}
 
 		function flushPending() {
@@ -505,7 +531,7 @@
 	// -------------------------------------------------------------------------------------------------------------
 
 	/**
-	 * Syncs the live address bar to the current state via history.replaceState (design section 6.3 default).  A
+	 * Syncs the live address bar to the current state via history.replaceState.  A
 	 * no-op (returning false) under the clean-address option, or when history/location are unusable - the
 	 * address bar then stays clean while the user works, and only Copy link carries the state.
 	 */
@@ -539,7 +565,7 @@
 	}
 
 	/**
-	 * Whether the primary datatable opted into the clean-address option (design section 6.3).  Read from the view's
+	 * Whether the primary datatable opted into the clean-address option.  Read from the view's
 	 * VIEW_META `cleanAddress` boolean, or the host table's `data-juneau-clean-address="true"` attribute.
 	 */
 	function cleanAddressEnabled(view, table) {
@@ -549,7 +575,7 @@
 	}
 
 	/**
-	 * Open precedence (design section 6.3): `?state=` WINS over the browser store for tab / filters / sort.  It does
+	 * Open precedence: `?state=` WINS over the browser store for tab / filters / sort.  It does
 	 * NOT replace the recipient's saved View Settings - those are a separate store facet this codec never touches, so
 	 * "wins" here means only "which tab/filter/sort object the caller applies to the live grid".
 	 */
@@ -575,7 +601,7 @@
 		directiveNames: directiveNames,
 		encodeArg: encodeArg,
 		decodeArg: decodeArg,
-		builtins: { window: windowDirectiveCodec, ids: idsDirectiveCodec },
+		builtins: { window: windowDirectiveCodec, ids: idsDirectiveCodec, day: dayDirectiveCodec },
 		// Needs a live table, which this DOM-free module never has: delegates to juneau-views.js at call time, so
 		// either script load order works.
 		setDirective: function (tableEl, name, value) {

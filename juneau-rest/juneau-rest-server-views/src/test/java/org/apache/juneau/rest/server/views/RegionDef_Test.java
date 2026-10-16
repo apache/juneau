@@ -145,7 +145,7 @@ class RegionDef_Test extends TestBase {
 	}
 
 	// -----------------------------------------------------------------------------------------------------------
-	// The field catalog: card/tab only (§6.2.2 property 4 / test 16d, both directions).
+	// The field catalog: card/tab only.
 	// -----------------------------------------------------------------------------------------------------------
 
 	@Test void h01_fields_onRowDetail_rejected() {
@@ -201,7 +201,7 @@ class RegionDef_Test extends TestBase {
 	}
 
 	// -----------------------------------------------------------------------------------------------------------
-	// lazy: per-region-type default (fork F9), explicit value always wins.
+	// lazy: per-region-type default, explicit value always wins.
 	// -----------------------------------------------------------------------------------------------------------
 
 	@Test void i01_lazy_default_rowDetail_isFalse() {
@@ -229,7 +229,7 @@ class RegionDef_Test extends TestBase {
 	}
 
 	// -----------------------------------------------------------------------------------------------------------
-	// toContractMap(): the sidecar shape design §8.2/§6.2.2 specify.
+	// toContractMap(): the sidecar shape the contract specifies.
 	// -----------------------------------------------------------------------------------------------------------
 
 	@Test void j01_toContractMap_minimal_shape() {

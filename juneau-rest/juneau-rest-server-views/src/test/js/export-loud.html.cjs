@@ -34,10 +34,19 @@ const PROBE = async function () {
 	const NS = window.JuneauViews;
 	const out = { hasBuild: typeof NS?.ribbon?.build === 'function' };
 	if (!out.hasBuild) return out;
-	// Stand in for the DataTables Buttons extension; JSZip is deliberately NOT defined.
-	window.jQuery = { fn: { dataTable: { Buttons: function () {} } } };
+	// Stand in for the DataTables Buttons extension; JSZip is deliberately NOT defined.  Like the real extension, a
+	// button is found only by the "name:name" selector of a name it was registered under; anything else finds nothing,
+	// and its trigger is recorded as unmatched.
+	const names = [];
+	window.jQuery = { fn: { dataTable: { Buttons: function (dt, cfg) {
+		(cfg.buttons || []).forEach(function (b) { if (b && b.name) names.push(b.name); });
+	} } } };
 	const calls = [];
-	const ctx = { dataTable: { button: function (id) { return { trigger: function () { calls.push(id); } }; } }, redraw: function () {} };
+	const ctx = { dataTable: { button: function (sel) {
+		const m = /^(.+):name$/.exec(String(sel));
+		const hit = m && names.indexOf(m[1]) >= 0 ? m[1] : 'unmatched:' + sel;
+		return { trigger: function () { calls.push(hit); } };
+	} }, redraw: function () {} };
 	const bar = NS.ribbon.build({ ribbon: [{ type: 'export', buttons: ['copy', 'excel'] }] }, ctx);
 	document.body.appendChild(bar);
 	const buttons = Array.from(bar.querySelectorAll('button')).map(function (b) {

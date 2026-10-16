@@ -64,8 +64,8 @@ import java.util.regex.*;
  * original implementation (a {@code gap} literal needs the same {@code rem} reach {@link #RECORDED_LITERALS}
  * already relies on it for), so a {@code rem}-valued {@code font-size} duplicate was never structurally invisible
  * to <i>this</i> class the way it was to the separate, one-time manual membership audit that named the
- * {@code em}-only {@code D9} rule when the shared chrome-scale contract now archived at {@code FINISHED-J0458}
- * was first designed. {@link #findDuplicatedStep} still gives {@code font-size} its own named, dedicated
+ * {@code em}-only rule when the shared chrome-scale contract was first designed.
+ * {@link #findDuplicatedStep} still gives {@code font-size} its own named, dedicated
  * {@link #FONT_SIZE_ABSOLUTE} matcher rather than leaning on the general {@link #ABSOLUTE} one, mirroring the
  * {@code line-height}-scoped {@link #BARE_NUMBER} carve-out below and making the reachability an explicit,
  * auditable, per-property fact rather than an incidental side effect - see
@@ -152,7 +152,7 @@ final class ChromeScaleScanner {
 	 *
 	 * <p>
 	 * The table/cell type-context pin (formerly recorded here as a duplicate of {@code --jc-chrome-font-size-1})
-	 * moved to {@code 0.8333rem} - IRS body-type parity - which does not equal any
+	 * moved to {@code 0.8333rem} - the reference body type step - which does not equal any
 	 * declared step, so it no longer triggers {@link #findDuplicatedStep} at all and needs no exception here.
 	 * The pin itself is still a deliberate literal in the stylesheet (still not a token, for the same {@code em}-
 	 * context reason that first recorded it); it simply no longer needs an ENTRY IN THIS TABLE, because that
@@ -338,7 +338,7 @@ final class ChromeScaleScanner {
 	 */
 	private static Step findDuplicatedStep(Decl d, Set<Family> families, List<Step> scale) {
 		// line-height's step value is unitless, so it needs bare-number matching instead of the general
-		// px/rem literal matcher - scoped to this one property so no other property's matching widens (LD-2).
+		// px/rem literal matcher - scoped to this one property so no other property's matching widens.
 		var lineHeight = eq(d.property(), "line-height");
 		// font-size's three steps are declared in rem, not px. The general ABSOLUTE matcher already admits
 		// rem (other properties, e.g. gap, rely on that too), but font-size gets its own named matcher here so

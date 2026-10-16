@@ -87,8 +87,11 @@ final class ConsoleBusBrowserSupport {
 				+ "(window.__busTestConfig.declare || []).forEach(function (d) { JuneauViews.bus.declare(d.topic, { retain: d.retain, by: 'page' }); });") : "")
 			+ script(ConsoleBrowserFixture.resource("/console-bus/cards.js"));
 		var contract = ConsoleBrowserFixture.resource("/console-bus/" + contractResource).replace("</", "<\\/");
-		return ConsoleBrowserFixture.contractPage(contract, "", before, "")
-			.replace("<body>", "<body data-juneau-csrf=\"" + CSRF_TOKEN + "\" data-juneau-csrf-header=\"" + CSRF_HEADER + "\">");
+		var html = ConsoleBrowserFixture.contractPage(contract, "", before, "");
+		var anchor = "</head><body>";
+		var marked = html.replace(anchor, anchor.substring(0, anchor.length() - 1) + " data-juneau-csrf=\"" + CSRF_TOKEN + "\" data-juneau-csrf-header=\"" + CSRF_HEADER + "\">");
+		assertNotEquals(html, marked, "the page head no longer ends in </head><body>; the CSRF attributes were not applied");
+		return marked;
 	}
 
 	private static String script(String body) {

@@ -22,7 +22,7 @@
         refreshMs: 500,
         compact: false,
         title: 'Build run',
-        rawHref: '/runs/42/raw#L{line}'
+        rawHref: '/runs/42/raw#O{offset}'
     }
 }
 </@card>

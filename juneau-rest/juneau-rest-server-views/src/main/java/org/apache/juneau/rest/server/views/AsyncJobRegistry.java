@@ -25,12 +25,12 @@ import java.util.concurrent.*;
 
 /**
  * An in-memory, per-process registry of {@link AsyncJob async jobs} &mdash; the single-process job store a future
- * async write variant runs on (design doc §6.3, Q2).
+ * async write variant runs on.
  *
  * <h5 class='section'>Single-process, by decision</h5>
  * <p>
  * Job state lives only in this object's heap, which is enough for a single-user loopback console and a documented
- * limitation for anything else (Q2): a process restart drops every in-flight job, exactly as a restart invalidates
+ * limitation for anything else: a process restart drops every in-flight job, exactly as a restart invalidates
  * every {@link org.apache.juneau.rest.server.filter.SynchronizerToken}.  There is deliberately no store abstraction.
  *
  * <h5 class='section'>The id is the capability; the caps are load-bearing</h5>
@@ -38,11 +38,11 @@ import java.util.concurrent.*;
  * Each job is keyed by an unguessable {@value #CAPABILITY_BITS}-bit {@link SecureRandom} id
  * ({@value #CAPABILITY_BYTES} bytes, hex-encoded), matching
  * {@link org.apache.juneau.rest.server.filter.SynchronizerToken}'s width &mdash; the id <b>is</b> the stream's
- * access control (HIGH-4).  {@link #get(String)} of an unknown id returns empty, so a miss is indistinguishable from
+ * access control.  {@link #get(String)} of an unknown id returns empty, so a miss is indistinguishable from
  * any other and the id space cannot be enumerated.
  * <p>
- * Because jobs keep running after the page navigates away (Q3) and stream customer-adjacent content, the following
- * caps are enforced server-side and are security controls, not tuning knobs (MED-6, a Task-11 disclosure bound):
+ * Because jobs keep running after the page navigates away and stream customer-adjacent content, the following
+ * caps are enforced server-side and are security controls, not tuning knobs (a data-egress disclosure bound):
  * <ul class='spaced-list'>
  * 	<li>{@link #MAX_CONCURRENT_JOBS} concurrent (non-terminal) jobs &mdash; {@link #tryCreate()} refuses beyond it, and the
  * 		check-and-insert is atomic, so concurrent callers cannot overshoot it;
@@ -94,16 +94,16 @@ public final class AsyncJobRegistry implements AutoCloseable {
 	/** Width of a capability id, in bits &mdash; well beyond the &ge;128-bit bar. */
 	public static final int CAPABILITY_BITS = CAPABILITY_BYTES * 8;
 
-	/** Maximum number of concurrent (non-terminal) jobs; {@link #tryCreate()} refuses beyond this (MED-6). */
+	/** Maximum number of concurrent (non-terminal) jobs; {@link #tryCreate()} refuses beyond this. */
 	public static final int MAX_CONCURRENT_JOBS = 8;
 
-	/** Maximum number of concurrent subscribers per job (a reload plus one straggler) (MED-6). */
+	/** Maximum number of concurrent subscribers per job (a reload plus one straggler). */
 	public static final int MAX_SUBSCRIBERS_PER_JOB = 2;
 
-	/** Maximum streamed output per job, in bytes (1 MiB); a data-egress bound, not only a heap bound (MED-6). */
+	/** Maximum streamed output per job, in bytes (1 MiB); a data-egress bound, not only a heap bound. */
 	public static final long MAX_OUTPUT_BYTES = 1024L * 1024L;
 
-	/** Hard per-job timeout; caps how long triage keeps streaming customer-adjacent content (HIGH-4/MED-6/Task-11). */
+	/** Hard per-job timeout; caps how long triage keeps streaming customer-adjacent content. */
 	public static final Duration HARD_TIMEOUT = Duration.ofSeconds(120);
 
 	/** How long a terminal job is retained (for a page-reload re-attach) before it is reaped from the heap. */
@@ -194,7 +194,7 @@ public final class AsyncJobRegistry implements AutoCloseable {
 	 * <p>
 	 * Sweeps timeouts first (so a slot held only by an expired job is freed), then refuses when the running-job cap
 	 * is already reached &mdash; an unbounded set of keep-running jobs would be unbounded egress of customer-adjacent
-	 * content (MED-6), so this refusal is load-bearing.
+	 * content, so this refusal is load-bearing.
 	 *
 	 * @return The new job, or empty if {@link #MAX_CONCURRENT_JOBS} concurrent jobs are already running.
 	 */
@@ -277,7 +277,7 @@ public final class AsyncJobRegistry implements AutoCloseable {
 	 *
 	 * <p>
 	 * An unknown id returns empty &mdash; a miss is indistinguishable from any other, so the unguessable id space
-	 * cannot be enumerated (HIGH-4).
+	 * cannot be enumerated.
 	 *
 	 * @param id The capability id.  Can be <jk>null</jk>/blank (returns empty).
 	 * @return The job, or empty if no such id is registered.
@@ -334,9 +334,16 @@ public final class AsyncJobRegistry implements AutoCloseable {
 	private void scheduleTimeout(AsyncJob job) {
 		if (scheduler == null)
 			return;
-		var delay = Duration.between(clock.instant(), job.deadline()).toMillis();
+		// Round up to the next millisecond past the deadline.  The scheduler may still fire on or a tick before it (timer
+		// and clock granularity), and enforceTimeout only settles a job strictly past its deadline, so a task that fires
+		// early re-arms itself rather than letting the job run past its hard timeout.
+		var nanos = Duration.between(clock.instant(), job.deadline()).toNanos();
+		var delay = Math.max(1L, nanos / 1_000_000L + 1L);
 		try {
-			scheduler.schedule(() -> job.enforceTimeout(clock.instant()), Math.max(0L, delay), TimeUnit.MILLISECONDS);
+			scheduler.schedule(() -> {
+				if (! job.enforceTimeout(clock.instant()) && ! job.isTerminal())
+					scheduleTimeout(job);
+			}, delay, TimeUnit.MILLISECONDS);
 		} catch (RejectedExecutionException e) {
 			// Scheduler shut down (registry closed); the sweep on the next tryCreate() still enforces the timeout.
 		}

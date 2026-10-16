@@ -44,4 +44,19 @@ class PolicyPinningDns_Test {
 		var ex = assertThrows(IllegalArgumentException.class, () -> PolicyPinningDns.INSTANCE.lookup("localhost"));
 		assertTrue(ex.getMessage().contains("No allowed address for host 'localhost'"), ex.getMessage());
 	}
+
+	@Test
+	void b01_withAllowedRanges_specialPurposeLiteral_pinned() throws Exception {
+		var dns = new PolicyPinningDns(org.apache.juneau.http.remote.RemoteUrlPolicy.AllowedRanges.of("198.18.0.0/15"));
+		assertEquals(List.of(InetAddress.getByName("198.18.0.1")), dns.lookup("198.18.0.1"));
+		assertThrows(IllegalArgumentException.class, () -> PolicyPinningDns.INSTANCE.lookup("198.18.0.1"));
+	}
+
+	@Test
+	void b02_withAllowedRanges_otherDeniesStayDenied() {
+		var dns = new PolicyPinningDns(org.apache.juneau.http.remote.RemoteUrlPolicy.AllowedRanges.of("198.18.0.0/15"));
+		assertThrows(IllegalArgumentException.class, () -> dns.lookup("127.0.0.1"));
+		assertThrows(IllegalArgumentException.class, () -> dns.lookup("169.254.169.254"));
+		assertThrows(IllegalArgumentException.class, () -> dns.lookup("localhost"));
+	}
 }

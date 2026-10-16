@@ -18,7 +18,7 @@
  * confirm-without-dialog.cjs - always-on Node harness: a row action that declares `confirm` (or `confirmRenderer`)
  * but no `present: "dialog"` must still prompt before it submits, from every surface that dispatches a row action -
  * the row-action menu, a cell pill, a detail-panel ActionBar button and JuneauViews.rowActions.run.  Cancel sends
- * nothing; Confirm sends exactly one request.  An action with no confirm, or with `confirm: false`, still submits
+ * nothing; Confirm sends exactly one request (and a rowActions.run caller's `extra` rides that request after Confirm).  An action with no confirm, or with `confirm: false`, still submits
  * directly.  Every assertion lives in the Java test (ViewsJs_ConfirmWithoutDialog_Test).
  *
  *   Usage: node confirm-without-dialog.cjs <juneau-renders.js> <juneau-views.js>
@@ -175,6 +175,59 @@ const SURFACES = {
 	await SURFACES.menu(fixture(deleteAction({ confirm: undefined, confirmRenderer: 'verdict' })));
 	await tick();
 	out.renderer = { no: rendererNo, yes: { asked: asked.length, fetches: calls.length }, titles: asked };
+	drain();
+
+	// rowActions.run(el, id, {extra}) on a confirm action: the caller's extra rides the request once Confirm is
+	// clicked, on the built-in dialog and on a confirmRenderer, and nothing is sent before Confirm.
+	function runWithExtra(action) {
+		const fx = fixture(action);
+		const btn = env.el('button');
+		fx.tr.appendChild(btn);
+		const closest = btn.closest;
+		btn.closest = function (sel) { return sel === 'tbody tr' ? fx.tr : closest.call(this, sel); };
+		return NS.rowActions.run(btn, action.id, { extra: { fields: { reason: 'dup' } } });
+	}
+	calls.length = 0;
+	await runWithExtra(deleteAction());
+	await tick();
+	const extraBefore = calls.length;
+	clickIn('.juneau-view-dialog-confirm');
+	await tick();
+	const builtin = { before: extraBefore, fetches: calls.length, fields: calls[0]?.body.fields, targetId: calls[0]?.body.targetId };
+	drain();
+	calls.length = 0;
+	NS.rowActions.registerConfirmRenderer('yes', function () { return Promise.resolve(true); });
+	await runWithExtra(deleteAction({ confirm: undefined, confirmRenderer: 'yes' }));
+	await tick();
+	out.extra = { builtin: builtin, renderer: { fetches: calls.length, fields: calls[0]?.body.fields, targetId: calls[0]?.body.targetId } };
+	drain();
+
+	// A caller's extra may add fields but never change which action is invoked: extra.action loses to the row
+	// action's own id on the direct path, the built-in confirm dialog and a confirmRenderer.
+	function runWithActionExtra(action) {
+		const fx = fixture(action);
+		const btn = env.el('button');
+		fx.tr.appendChild(btn);
+		const closest = btn.closest;
+		btn.closest = function (sel) { return sel === 'tbody tr' ? fx.tr : closest.call(this, sel); };
+		return NS.rowActions.run(btn, action.id, { extra: { action: 'other', note: 'n' } });
+	}
+	calls.length = 0;
+	await runWithActionExtra(deleteAction({ confirm: undefined }));
+	await tick();
+	const reservedDirect = { fetches: calls.length, action: calls[0]?.body.action, note: calls[0]?.body.note };
+	drain();
+	calls.length = 0;
+	await runWithActionExtra(deleteAction());
+	await tick();
+	clickIn('.juneau-view-dialog-confirm');
+	await tick();
+	const reservedBuiltin = { fetches: calls.length, action: calls[0]?.body.action, note: calls[0]?.body.note };
+	drain();
+	calls.length = 0;
+	await runWithActionExtra(deleteAction({ confirm: undefined, confirmRenderer: 'yes' }));
+	await tick();
+	out.reserved = { direct: reservedDirect, builtin: reservedBuiltin, renderer: { fetches: calls.length, action: calls[0]?.body.action, note: calls[0]?.body.note } };
 	drain();
 
 	process.stdout.write(JSON.stringify(out));

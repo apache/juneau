@@ -180,12 +180,17 @@ class ApacheHc5Transport_Edge_Test {
 	}
 
 	@Test
-	void a04_noTimeout_passesNullContext() throws Exception {
+	void a04_noTimeout_contextCarriesNoRequestConfig() throws Exception {
+		// The caller's client gets a per-request context (the redirect credential guard), but with no RequestConfig in it,
+		// so the client's own default config (proxy, authentication, cookie spec, timeouts) still applies.
 		var client = new StubClient(new BasicClassicHttpResponse(204));
 		try (var response = transport(client).execute(request("GET", null))) {
 			assertEquals(204, response.getStatusCode());
 		}
-		assertNull(client.context.get());
+		var context = client.context.get();
+		// The guard is package-private, so it is identified by name.
+		assertEquals("CredentialGuardingContext", context.getClass().getSimpleName());
+		assertNull(((HttpClientContext)context).getRequestConfig());
 	}
 
 	// =================================================================================================================

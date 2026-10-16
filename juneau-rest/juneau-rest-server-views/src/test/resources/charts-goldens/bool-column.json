@@ -1,0 +1,41 @@
+{
+  "series": [
+    {
+      "type": "bar",
+      "encode": {
+        "x": "day",
+        "y": "ok"
+      }
+    }
+  ],
+  "aria": {
+    "enabled": true
+  },
+  "dataset": [
+    {
+      "id": "juneau",
+      "dimensions": [
+        {
+          "name": "day",
+          "type": "ordinal"
+        },
+        {
+          "name": "ok",
+          "type": "number"
+        }
+      ],
+      "source": {
+        "day": [
+          "Mon",
+          "Tue",
+          null
+        ],
+        "ok": [
+          true,
+          false,
+          null
+        ]
+      }
+    }
+  ]
+}

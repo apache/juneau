@@ -22,6 +22,8 @@ import java.net.*;
 import java.time.*;
 import java.util.*;
 
+import org.apache.juneau.http.remote.*;
+
 /**
  * A fully-resolved, transport-layer HTTP request.
  *
@@ -52,6 +54,7 @@ public final class TransportRequest {
 	private final Duration timeout;
 	private final boolean policyEnforced;
 	private final boolean allowPrivateUrls;
+	private final RemoteUrlPolicy.AllowedRanges allowedAddressRanges;
 
 	private TransportRequest(Builder builder) {
 		this.method = reqnn("method", builder.method);
@@ -61,6 +64,7 @@ public final class TransportRequest {
 		this.timeout = builder.timeout;
 		this.policyEnforced = builder.policyEnforced;
 		this.allowPrivateUrls = builder.allowPrivateUrls;
+		this.allowedAddressRanges = builder.allowedAddressRanges;
 	}
 
 	/** Returns a new {@link Builder}. */
@@ -182,6 +186,17 @@ public final class TransportRequest {
 	}
 
 	/**
+	 * Returns the per-client special-purpose address ranges that the SSRF guardrail re-permits for this request (see
+	 * {@link RestClient.Builder#allowAddressRanges(String...)}); they are unioned with the
+	 * {@value RemoteUrlPolicy#ALLOW_ADDRESS_RANGES_PROPERTY} system property.
+	 *
+	 * @return The allowed ranges. Never <jk>null</jk>; {@link RemoteUrlPolicy.AllowedRanges#NONE} by default.
+	 */
+	public RemoteUrlPolicy.AllowedRanges getAllowedAddressRanges() {
+		return allowedAddressRanges;
+	}
+
+	/**
 	 * Returns {@code true} if the SSRF guardrail's connect-time machinery (pin-on-connect + Juneau-controlled
 	 * redirect revalidation) must be applied by the transport for this request: {@link #isPolicyEnforced()} is set
 	 * and {@link #isAllowPrivateUrls()} is not.
@@ -213,6 +228,7 @@ public final class TransportRequest {
 		Duration timeout;
 		boolean policyEnforced;
 		boolean allowPrivateUrls;
+		RemoteUrlPolicy.AllowedRanges allowedAddressRanges = RemoteUrlPolicy.AllowedRanges.NONE;
 
 		private Builder() {}
 
@@ -313,6 +329,17 @@ public final class TransportRequest {
 		public Builder remoteUrlPolicy(boolean policyEnforced, boolean allowPrivateUrls) {
 			this.policyEnforced = policyEnforced;
 			this.allowPrivateUrls = allowPrivateUrls;
+			return this;
+		}
+
+		/**
+		 * Sets the per-client special-purpose address ranges the SSRF guardrail re-permits for this request.
+		 *
+		 * @param value The allowed ranges. <jk>null</jk> means none.
+		 * @return This object.
+		 */
+		public Builder allowedAddressRanges(RemoteUrlPolicy.AllowedRanges value) {
+			this.allowedAddressRanges = value == null ? RemoteUrlPolicy.AllowedRanges.NONE : value;
 			return this;
 		}
 

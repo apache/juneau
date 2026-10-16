@@ -57,6 +57,22 @@ public final class RemoteUrlPolicy {
 	/** The {@code RestClient} builder/settings key for the {@code allowPrivateUrls} opt-in (system property fallback). */
 	public static final String ALLOW_PRIVATE_URLS_PROPERTY = "RestClient.allowPrivateUrls";
 
+	/**
+	 * The system property holding the narrow lab allow-list: a comma- or whitespace-separated list of CIDR ranges
+	 * (e.g. {@code 198.18.0.0/15,192.0.0.8}) that re-permit addresses denied only because they fall in one of the
+	 * special-purpose ranges <c>192.0.0.0/24</c>, <c>198.18.0.0/15</c>, <c>224.0.0.0/4</c>, <c>240.0.0.0/4</c> or
+	 * <c>ff00::/8</c>.  Unset or blank (the default) allows nothing.
+	 *
+	 * <p>
+	 * The allow is narrow by construction: every entry must lie entirely inside one of those five ranges (anything
+	 * else, including <c>0.0.0.0/0</c> and <c>::/0</c>, is rejected with an {@link IllegalArgumentException}), and it
+	 * never re-permits loopback, link-local/metadata, private, CGNAT, this-network, Teredo, local-use NAT64 or any
+	 * other denied address, unlike the all-or-nothing {@link #ALLOW_PRIVATE_URLS_PROPERTY} opt-in.  An IPv4 entry
+	 * matches an IPv4 address or the IPv4 address embedded in an IPv6 form; an IPv6 entry matches only a native
+	 * <c>ff00::/8</c> address.
+	 */
+	public static final String ALLOW_ADDRESS_RANGES_PROPERTY = "RestClient.allowAddressRanges";
+
 	// IPv4 literal: 4 dot-separated groups of 1-3 digits (over-permissive on range; InetAddress.getByName validates).
 	private static final Pattern IPV4_LITERAL = Pattern.compile("^\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}$");
 
@@ -105,6 +121,20 @@ public final class RemoteUrlPolicy {
 	 * @throws IllegalArgumentException If {@code url} is absolute and violates the policy.
 	 */
 	public static String requireAllowedUrl(String url, boolean allowPrivateUrls) {
+		return requireAllowedUrl(url, allowPrivateUrls, AllowedRanges.NONE);
+	}
+
+	/**
+	 * Same as {@link #requireAllowedUrl(String, boolean)}, additionally re-permitting literal hosts that fall inside
+	 * the per-client {@code allowedRanges} (unioned with the {@value #ALLOW_ADDRESS_RANGES_PROPERTY} system property).
+	 *
+	 * @param url The effective URL/path to validate.
+	 * @param allowPrivateUrls When <jk>true</jk>, the deny-list check is skipped.
+	 * @param allowedRanges The per-client narrow allow-list. Must not be <jk>null</jk>.
+	 * @return The unchanged {@code url}.
+	 * @throws IllegalArgumentException If {@code url} is absolute and violates the policy.
+	 */
+	public static String requireAllowedUrl(String url, boolean allowPrivateUrls, AllowedRanges allowedRanges) {
 		var scheme = schemeOf(url);
 		if (scheme == null)
 			return url; // Scheme-less relative value; resolved against the client root, not re-checked here.
@@ -125,8 +155,8 @@ public final class RemoteUrlPolicy {
 		if (host == null || host.isEmpty())
 			throw iaex("@Remote URL override has no host (non-canonical or opaque form is not allowed): %s", url);
 
-		if (! allowPrivateUrls && isDeniedHost(host))
-			throw iaex("@Remote URL override targets a private/loopback/link-local/metadata/reserved host (including CGNAT, this-network, Teredo and local-use NAT64 ranges), which is denied by default (set allowPrivateUrls to allow local-dev targets): %s", url);
+		if (! allowPrivateUrls && isDeniedHost(host, allowedRanges))
+			throw iaex("@Remote URL override targets a private/loopback/link-local/metadata/reserved host (including CGNAT, this-network, special-purpose/multicast/reserved, Teredo and local-use NAT64 ranges), which is denied by default (set allowPrivateUrls to allow local-dev targets, or list a special-purpose range such as 198.18.0.0/15 in the RestClient.allowAddressRanges system property or the client's allowAddressRanges setting): %s", url);
 
 		return url;
 	}
@@ -155,13 +185,24 @@ public final class RemoteUrlPolicy {
 	 * @return <jk>true</jk> if the host is denied by the default policy.
 	 */
 	public static boolean isDeniedHost(String host) {
+		return isDeniedHost(host, AllowedRanges.NONE);
+	}
+
+	/**
+	 * Same as {@link #isDeniedHost(String)}, taking the per-client {@code allowedRanges} into account.
+	 *
+	 * @param host The literal host string (from {@link URI#getHost()}).
+	 * @param allowedRanges The per-client narrow allow-list. Must not be <jk>null</jk>.
+	 * @return <jk>true</jk> if the host is denied.
+	 */
+	public static boolean isDeniedHost(String host, AllowedRanges allowedRanges) {
 		var h = host.toLowerCase(Locale.ROOT);
 		if (DENIED_HOST_NAMES.contains(h) || h.equals(METADATA_HOST) || h.endsWith(METADATA_HOST_SUFFIX))
 			return true;
 		if (looksLikeIpLiteral(host)) {
 			var literal = stripZoneId(host);
 			try {
-				return isDeniedAddress(InetAddress.getByName(literal));
+				return isDeniedAddress(InetAddress.getByName(literal), allowedRanges);
 			} catch (UnknownHostException e) {
 				// A colon-containing literal that cannot be parsed fails closed; a dotted-decimal form that is not valid
 				// (e.g. an octet > 255) is treated as an ordinary (non-denied) name and left to pin-on-connect.
@@ -199,7 +240,11 @@ public final class RemoteUrlPolicy {
 	 * 	<li>Loopback, unspecified, link-local (including the <c>169.254.169.254</c> metadata address) and RFC1918
 	 * 		site-local addresses.
 	 * 	<li>IPv4 <c>0.0.0.0/8</c> ("this network") and <c>100.64.0.0/10</c> (carrier-grade NAT shared space).
-	 * 	<li>IPv6 unique-local <c>fc00::/7</c>.
+	 * 	<li>IPv4 special-purpose ranges that are never legitimate remote targets: <c>192.0.0.0/24</c> (IETF protocol
+	 * 		assignments), <c>198.18.0.0/15</c> (benchmarking; often lab or appliance networks &mdash; see
+	 * 		{@link #ALLOW_ADDRESS_RANGES_PROPERTY}), <c>224.0.0.0/4</c> (multicast) and <c>240.0.0.0/4</c> (reserved,
+	 * 		including the limited broadcast address <c>255.255.255.255</c>).
+	 * 	<li>IPv6 unique-local <c>fc00::/7</c> and multicast <c>ff00::/8</c>.
 	 * 	<li>IPv6 Teredo <c>2001::/32</c>, denied outright because the embedded client IPv4 address is obfuscated.
 	 * 	<li>IPv6 local-use NAT64 <c>64:ff9b:1::/48</c> (RFC 8215), denied outright because the embedding length
 	 * 		(/48, /56, /64 or /96) is operator-defined and cannot be determined from the address.
@@ -211,20 +256,267 @@ public final class RemoteUrlPolicy {
 	 * (<c>::ffff:0:a.b.c.d</c>), NAT64 (<c>64:ff9b::/96</c>) and 6to4 (<c>2002::/16</c>, IPv4 in bytes 2-5).
 	 * A public embedded address (e.g. <c>64:ff9b::808:808</c>) remains allowed.
 	 *
+	 * <p>
+	 * Addresses inside a range listed in the {@value #ALLOW_ADDRESS_RANGES_PROPERTY} system property (empty by
+	 * default) are re-permitted if they are denied only as a special-purpose range; see
+	 * {@link #ALLOW_ADDRESS_RANGES_PROPERTY}.
+	 *
 	 * @param addr The address to classify. Must not be <jk>null</jk>.
-	 * @return <jk>true</jk> if the address is denied by the default policy.
+	 * @return <jk>true</jk> if the address is denied, taking the {@value #ALLOW_ADDRESS_RANGES_PROPERTY} allow-list
+	 * 	into account.
+	 * @throws IllegalArgumentException If the {@value #ALLOW_ADDRESS_RANGES_PROPERTY} property is malformed.
 	 */
 	public static boolean isDeniedAddress(InetAddress addr) {
+		return isDeniedAddress(addr, AllowedRanges.NONE);
+	}
+
+	/**
+	 * Same as {@link #isDeniedAddress(InetAddress)}, additionally re-permitting special-purpose addresses inside the
+	 * per-client {@code allowedRanges}.  The effective allow-list is the <b>union</b> of those ranges and the
+	 * {@value #ALLOW_ADDRESS_RANGES_PROPERTY} system property; both are bounded to the same five special-purpose
+	 * ranges, so the union can never re-open any other deny.
+	 *
+	 * @param addr The address to classify. Must not be <jk>null</jk>.
+	 * @param allowedRanges The per-client narrow allow-list. Must not be <jk>null</jk>.
+	 * @return <jk>true</jk> if the address is denied.
+	 * @throws IllegalArgumentException If the {@value #ALLOW_ADDRESS_RANGES_PROPERTY} property is malformed.
+	 */
+	public static boolean isDeniedAddress(InetAddress addr, AllowedRanges allowedRanges) {
+		var ranges = parseAllowedRanges(System.getProperty(ALLOW_ADDRESS_RANGES_PROPERTY));
+		if (! allowedRanges.isEmpty()) {
+			var union = new ArrayList<>(ranges);
+			union.addAll(allowedRanges.ranges);
+			ranges = union;
+		}
+		return isDenied(addr, ranges);
+	}
+
+	// Same as isDeniedAddress(InetAddress) but with an explicit allow-list spec instead of the system property.
+	static boolean isDeniedAddress(InetAddress addr, String allowedRanges) {
+		return isDenied(addr, parseAllowedRanges(allowedRanges));
+	}
+
+	private static boolean isDenied(InetAddress addr, List<Cidr> ranges) {
+		if (isDeniedOther(addr))
+			return true; // Never re-permitted: only special-purpose-range denials can be allowed.
+		if (! isSpecialPurpose(unwrapEmbeddedIpv4(addr)))
+			return false;
+		if (ranges.isEmpty())
+			return true;
+		var raw = addr.getAddress();
+		var embedded = unwrapEmbeddedIpv4(addr).getAddress();
+		for (var r : ranges)
+			if (r.contains(raw) || r.contains(embedded))
+				return false;
+		return true;
+	}
+
+	/** A parsed CIDR range. */
+	private record Cidr(byte[] prefix, int bits) {
+		boolean contains(byte[] b) {
+			if (b.length != prefix.length)
+				return false;
+			for (var i = 0; i < bits; i++)
+				if (((b[i >> 3] ^ prefix[i >> 3]) & (0x80 >> (i & 7))) != 0)
+					return false;
+			return true;
+		}
+	}
+
+	/**
+	 * A validated, parsed per-client allow-list of special-purpose address ranges, the per-client counterpart of the
+	 * {@value RemoteUrlPolicy#ALLOW_ADDRESS_RANGES_PROPERTY} system property.
+	 *
+	 * <p>
+	 * It has exactly the property's narrow semantics: every entry must lie entirely inside <c>192.0.0.0/24</c>,
+	 * <c>198.18.0.0/15</c>, <c>224.0.0.0/4</c>, <c>240.0.0.0/4</c> or <c>ff00::/8</c> (anything else is rejected with an
+	 * {@link IllegalArgumentException}), entries are parsed as literals without any DNS lookup, and the ranges never
+	 * re-permit loopback, link-local/metadata, private, CGNAT or any other denied address.  Instances are immutable;
+	 * two instances holding the same set of ranges are equal.
+	 *
+	 * @since 10.0.0
+	 */
+	public static final class AllowedRanges {
+
+		/** The empty allow-list, which re-permits nothing. */
+		public static final AllowedRanges NONE = new AllowedRanges(List.of());
+
+		private final List<Cidr> ranges;
+		private final Set<String> key;
+
+		private AllowedRanges(List<Cidr> ranges) {
+			this.ranges = ranges;
+			var k = new TreeSet<String>();
+			for (var r : ranges)
+				k.add(Arrays.toString(r.prefix()) + "/" + r.bits());
+			this.key = k;
+		}
+
+		/**
+		 * Parses and validates allow-list entries.
+		 *
+		 * @param specs The entries; each element may itself hold several comma- or whitespace-separated CIDR ranges or
+		 * 	single addresses.  <jk>null</jk> or empty yields {@link #NONE}.
+		 * @return The parsed allow-list. Never <jk>null</jk>.
+		 * @throws IllegalArgumentException If any entry is malformed or not entirely inside one of the five
+		 * 	special-purpose ranges.
+		 */
+		public static AllowedRanges of(String...specs) {
+			if (specs == null || specs.length == 0)
+				return NONE;
+			var list = new ArrayList<Cidr>();
+			for (var spec : specs) {
+				if (spec == null)
+					throw iaex("Invalid allowed address range: null entry");
+				list.addAll(parseAllowedRangesStrict(spec));
+			}
+			return list.isEmpty() ? NONE : new AllowedRanges(List.copyOf(list));
+		}
+
+		/**
+		 * Returns <jk>true</jk> if this allow-list re-permits nothing.
+		 *
+		 * @return <jk>true</jk> if empty.
+		 */
+		public boolean isEmpty() {
+			return ranges.isEmpty();
+		}
+
+		@Override /* Object */
+		public boolean equals(Object o) {
+			return o instanceof AllowedRanges other && key.equals(other.key);
+		}
+
+		@Override /* Object */
+		public int hashCode() {
+			return key.hashCode();
+		}
+
+		@Override /* Object */
+		public String toString() {
+			return "AllowedRanges" + key;
+		}
+	}
+
+	// Parses a spec without touching the single-entry property cache; an invalid entry throws.
+	private static List<Cidr> parseAllowedRangesStrict(String spec) {
+		var list = new ArrayList<Cidr>();
+		for (var token : spec.trim().split("[,\\s]+"))
+			if (! token.isEmpty())
+				list.add(parseAllowEntry(token));
+		return list;
+	}
+
+	// The only ranges the allow-list may re-permit (and that every allow entry must lie within).
+	private static final List<Cidr> SPECIAL_PURPOSE = List.of(
+		new Cidr(new byte[]{(byte)192, 0, 0, 0}, 24),
+		new Cidr(new byte[]{(byte)198, 18, 0, 0}, 15),
+		new Cidr(new byte[]{(byte)224, 0, 0, 0}, 4),
+		new Cidr(new byte[]{(byte)240, 0, 0, 0}, 4),
+		new Cidr(new byte[]{(byte)0xFF, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}, 8)
+	);
+
+	private static final Pattern ALLOW_ENTRY = Pattern.compile("^([0-9.]+|[0-9A-Fa-f:.]*:[0-9A-Fa-f:.]*)(?:/(0|[1-9][0-9]{0,2}))?$");
+
+	// Single-entry cache (successes and failures): the spec is normally a constant system property, so parse once per
+	// distinct value.  A failed parse is remembered by message so the same string throws again without re-parsing.
+	private record ParsedAllow(String spec, List<Cidr> ranges, String error) {}
+	private static volatile ParsedAllow parsedAllow = new ParsedAllow("", List.of(), null);
+
+	private static List<Cidr> parseAllowedRanges(String spec) {
+		if (spec == null || spec.isBlank())
+			return List.of();
+		var cached = parsedAllow;
+		if (! cached.spec().equals(spec))
+			cached = parsedAllow = parseAllowSpec(spec);
+		if (cached.error() != null)
+			throw iaex("%s", cached.error());
+		return cached.ranges();
+	}
+
+	private static ParsedAllow parseAllowSpec(String spec) {
+		try {
+			return new ParsedAllow(spec, List.copyOf(parseAllowedRangesStrict(spec)), null);
+		} catch (IllegalArgumentException e) {
+			return new ParsedAllow(spec, List.of(), e.getMessage());
+		}
+	}
+
+	// Parses a dotted-quad IPv4 literal purely syntactically (octets 0-255, no leading zeros); returns null if invalid.
+	private static byte[] parseIpv4(String s) {
+		var parts = s.split("\\.", -1);
+		if (parts.length != 4)
+			return null;
+		var out = new byte[4];
+		for (var i = 0; i < 4; i++) {
+			var p = parts[i];
+			if (! (p.equals("0") || p.matches("[1-9][0-9]{0,2}")))
+				return null;
+			var v = Integer.parseInt(p);
+			if (v > 255)
+				return null;
+			out[i] = (byte) v;
+		}
+		return out;
+	}
+
+	private static Cidr parseAllowEntry(String token) {
+		var m = ALLOW_ENTRY.matcher(token);
+		if (! m.matches())
+			throw iaex("Invalid allowed address range '%s': expected an IPv4 or IPv6 literal with an optional /prefix", token);
+		var literal = m.group(1);
+		var isIpv6 = literal.indexOf(':') != -1;
+		InetAddress a;
+		try {
+			if (isIpv6) {
+				a = InetAddress.getByName(literal); // Contains ':' and only hex/colon/dot characters, so it is parsed as a literal (never resolved via DNS).
+			} else {
+				var v4 = parseIpv4(literal);
+				if (v4 == null)
+					throw iaex("Invalid allowed address range '%s': IPv4 addresses must be dotted-quad with octets 0-255 and no leading zeros", token);
+				a = InetAddress.getByAddress(v4);
+			}
+		} catch (UnknownHostException e) {
+			throw iaex(e, "Invalid allowed address range '%s': unparseable address", token);
+		}
+		// An IPv6-syntax entry must be a native IPv6 address (not collapsed to IPv4, e.g. ::ffff:a.b.c.d).
+		if (isIpv6 != (a instanceof Inet6Address))
+			throw iaex("Invalid allowed address range '%s': IPv4-embedded IPv6 forms are not allowed here", token);
+		var prefix = a.getAddress();
+		var bits = prefix.length * 8;
+		if (m.group(2) != null) {
+			bits = Integer.parseInt(m.group(2));
+			if (bits > prefix.length * 8)
+				throw iaex("Invalid allowed address range '%s': prefix length must be 0-%s", token, prefix.length * 8);
+		}
+		for (var r : SPECIAL_PURPOSE)
+			if (r.prefix().length == prefix.length && bits >= r.bits() && r.contains(prefix))
+				return new Cidr(prefix, bits);
+		throw iaex("Invalid allowed address range '%s': must lie entirely within 192.0.0.0/24, 198.18.0.0/15, 224.0.0.0/4, 240.0.0.0/4 or ff00::/8", token);
+	}
+
+	// True if the (already unwrapped) address is in one of the special-purpose ranges.
+	private static boolean isSpecialPurpose(InetAddress a) {
+		var bytes = a.getAddress();
+		if (a instanceof Inet6Address)
+			return (bytes[0] & 0xFF) == 0xFF;
+		var b0 = bytes[0] & 0xFF;
+		var b1 = bytes[1] & 0xFF;
+		return (b0 == 192 && b1 == 0 && bytes[2] == 0)
+			|| (b0 == 198 && (b1 & 0xFE) == 18)
+			|| (b0 & 0xE0) == 0xE0; // 224.0.0.0/4 multicast + 240.0.0.0/4 reserved
+	}
+
+	// Every deny other than the special-purpose ranges (never subject to the allow-list).
+	private static boolean isDeniedOther(InetAddress addr) {
 		if (isTeredo(addr) || isNat64LocalUse(addr))
 			return true;
 		var a = unwrapEmbeddedIpv4(addr);
 		if (a.isLoopbackAddress() || a.isAnyLocalAddress() || a.isLinkLocalAddress() || a.isSiteLocalAddress())
 			return true;
 		var bytes = a.getAddress();
-		if (a instanceof Inet6Address) {
-			// Unique-local fc00::/7 -- top 7 bits are 1111 110.
-			return (bytes[0] & 0xFE) == 0xFC;
-		}
+		if (a instanceof Inet6Address)
+			return (bytes[0] & 0xFE) == 0xFC; // Unique-local fc00::/7 (top 7 bits are 1111 110).
 		// 0.0.0.0/8 ("this network") and 100.64.0.0/10 (CGNAT shared space).
 		return bytes[0] == 0 || ((bytes[0] & 0xFF) == 100 && (bytes[1] & 0xC0) == 0x40);
 	}
@@ -305,13 +597,29 @@ public final class RemoteUrlPolicy {
 	 * 	<jk>false</jk>).
 	 */
 	public static InetAddress selectAllowedAddress(String host, boolean allowPrivateUrls, AddressResolver resolver) throws UnknownHostException {
+		return selectAllowedAddress(host, allowPrivateUrls, resolver, AllowedRanges.NONE);
+	}
+
+	/**
+	 * Same as {@link #selectAllowedAddress(String, boolean, AddressResolver)}, additionally re-permitting candidates
+	 * inside the per-client {@code allowedRanges} (unioned with the {@value #ALLOW_ADDRESS_RANGES_PROPERTY} system property).
+	 *
+	 * @param host The hostname (or IP literal) to resolve and pin.
+	 * @param allowPrivateUrls When <jk>true</jk>, the deny-list check is skipped.
+	 * @param resolver The address resolver to use.
+	 * @param allowedRanges The per-client narrow allow-list. Must not be <jk>null</jk>.
+	 * @return The selected address to connect to. Never <jk>null</jk>.
+	 * @throws UnknownHostException If {@code host} cannot be resolved.
+	 * @throws IllegalArgumentException If every resolved candidate is denied.
+	 */
+	public static InetAddress selectAllowedAddress(String host, boolean allowPrivateUrls, AddressResolver resolver, AllowedRanges allowedRanges) throws UnknownHostException {
 		var candidates = resolver.resolve(host);
 		if (allowPrivateUrls)
 			return candidates[0];
 		for (var c : candidates)
-			if (! isDeniedAddress(c))
+			if (! isDeniedAddress(c, allowedRanges))
 				return c;
-		throw iaex("No allowed address for host '%s': every resolved candidate is private/loopback/link-local/reserved (set allowPrivateUrls to allow local-dev targets)", host);
+		throw iaex("No allowed address for host '%s': every resolved candidate is private/loopback/link-local/reserved (set allowPrivateUrls to allow local-dev targets, or list a special-purpose range such as 198.18.0.0/15 in the RestClient.allowAddressRanges system property or the client's allowAddressRanges setting)", host);
 	}
 
 	/**

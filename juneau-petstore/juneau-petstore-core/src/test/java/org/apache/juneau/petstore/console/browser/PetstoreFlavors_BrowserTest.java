@@ -19,6 +19,8 @@ package org.apache.juneau.petstore.console.browser;
 import static org.apache.juneau.petstore.console.browser.PetstoreBrowser.*;
 import static org.apache.juneau.test.bct.BctAssertions.*;
 
+import static org.junit.jupiter.api.Assertions.*;
+
 import java.util.*;
 
 import org.apache.juneau.*;
@@ -57,8 +59,13 @@ class PetstoreFlavors_BrowserTest extends TestBase {
 		report = run("flavors", base, List.of(
 			serverFlavor("html"), serverFlavor("freemarker"), serverFlavor("mustache"),
 			Map.of("name", "react", "path", "/console/dev/flavors/react",
-				"actions", List.of(Map.of("waitFor", "document.querySelector('#flavor iframe')")),
+				"actions", List.of(Map.of("waitFor", "document.querySelector('#flavor iframe')"),
+					// The embedded app has finished rendering once its pets table is in the iframe's document.
+					Map.of("waitFor", "document.querySelector('#flavor iframe').contentDocument?.querySelector('table td')")),
 				"queries", Map.of(
+					"frameRows", "document.querySelector('#flavor iframe').contentDocument.querySelectorAll('table tbody tr').length",
+					"frameForeign", "performance.getEntriesByType('resource').concat(document.querySelector('#flavor iframe').contentWindow.performance.getEntriesByType('resource'))"
+						+ ".map(e => e.name).filter(n => new URL(n).origin !== location.origin)",
 					"frame", "new URL(document.querySelector('#flavor iframe').src).pathname",
 					"title", "document.querySelector('#flavor iframe').title"))));
 	}
@@ -88,5 +95,13 @@ class PetstoreFlavors_BrowserTest extends TestBase {
 		var c = assertClean(report, "react");
 		assertString("/petstore-ui", query(c, "frame"));
 		assertString("Petstore React app", query(c, "title"));
+	}
+
+	@Test void a04_reactAppLoadsEverythingFromTheServer() {
+		// The embedded app must render with no network: React/ReactDOM are vendored, so every resource the
+		// console page and its iframe requested came from this server's origin.
+		var c = assertClean(report, "react");
+		assertTrue(((Number) query(c, "frameRows")).intValue() > 0, "React app rendered no pet rows");
+		assertEquals(List.of(), query(c, "frameForeign"), "Cross-origin requests made by the React flavor");
 	}
 }

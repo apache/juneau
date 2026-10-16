@@ -38,7 +38,7 @@ import org.junit.jupiter.api.condition.*;
 import com.sun.net.httpserver.*;
 
 /**
- * The real-browser, real-server canary for the DataTables wire contract (design §9): the DataTables library,
+ * The real-browser, real-server canary for the DataTables wire contract: the DataTables library,
  * {@code JuneauDataTables.ajax}, and {@link DataTablesQuery} agreeing on one JSON shape end to end.
  *
  * <p>

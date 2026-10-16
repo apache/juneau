@@ -23,10 +23,11 @@ import java.util.*;
 import java.util.stream.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.rest.server.console.*;
 import org.junit.jupiter.api.*;
 
 /**
- * The JS half of R-10 / R-11 (message bus addendum, spec §6.1, §6.3, §11.2): {@code JuneauViews.bus.wiring.validate}
+ * The JS half of the bus-wiring rules: {@code JuneauViews.bus.wiring.validate}
  * against the shared corpus {@code bus-wiring-corpus.json}, whose {@code expectJs} lists are the JS projection of
  * the Java expectations that console-ui-freemarker's {@code BusWiring_Corpus_Test} pins.  Gated on {@code node} being on
  * {@code PATH}.
@@ -37,7 +38,7 @@ class ViewsJs_BusWiring_Test extends TestBase {
 
 	@BeforeAll
 	static void runHarness() {
-		report = BusHarness.run("bus-wiring.cjs", ViewsMixin.BUS_JS_RESOURCE);
+		report = BusHarness.run("bus-wiring.cjs", ViewsMixin.BUS_JS_RESOURCE, ConsoleChromeMixin.CHARTS_JS_RESOURCE);
 	}
 
 	private static Map<String,Object> report() {
@@ -67,7 +68,7 @@ class ViewsJs_BusWiring_Test extends TestBase {
 	@Test void a00_surface() {
 		assertEquals(true, report().get("hasValidate"), "JuneauViews.bus.wiring.validate exists");
 		assertEquals(List.of(), report().get("emptyContract"));
-		assertEquals(34, cases().size(), "every corpus case ran");
+		assertEquals(86, cases().size(), "every corpus case ran");
 	}
 
 	@TestFactory Stream<DynamicTest> a01_corpus() {
@@ -97,6 +98,10 @@ class ViewsJs_BusWiring_Test extends TestBase {
 			for (var p : problems(c, "expectJs"))
 				codes.add((String) p.get("code"));
 		assertEquals(new TreeSet<>(List.of("E-JS-41", "E-JS-47", "E-JS-52")), codes);
+	}
+
+	@Test void a05_chartTypeIsTheRealHandler() {
+		assertEquals(Map.of("roles", List.of("data"), "ops", List.of("highlight", "downplay", "showTip", "hideTip", "zoomTo", "legendSelect", "export")), report().get("chartType"));
 	}
 
 	@Test void a04_validateLogsNothing() {

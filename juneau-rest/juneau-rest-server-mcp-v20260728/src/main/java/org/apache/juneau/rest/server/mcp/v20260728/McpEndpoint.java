@@ -132,7 +132,7 @@ public interface McpEndpoint extends org.apache.juneau.rest.server.mcp.McpEndpoi
 	}
 
 	/**
-	 * OAuth 2.1 resource-server bearer gate for the mixin's MCP {@code POST /mcp} endpoint (READY-312f F2).
+	 * OAuth 2.1 resource-server bearer gate for the mixin's MCP {@code POST /mcp} endpoint.
 	 *
 	 * <p>
 	 * A no-op unless {@link McpResourceServerConfig#isEnabled() RS auth is enabled}; when enabled, a request that
@@ -142,7 +142,7 @@ public interface McpEndpoint extends org.apache.juneau.rest.server.mcp.McpEndpoi
 	 * matchers &mdash; see {@link McpResourceServerSupport#resolvesToMcpDispatch}) so other {@code POST} operations on the
 	 * host resource are unaffected, and it cannot drift from the router: a trailing slash, percent-encoding, a
 	 * {@code ?method=}/{@code X-Method} override, or a host-chosen {@code @Mixin(path/paths)} re-mount cannot slip past it
-	 * (B1/H3).  The well-known {@code GET} routes are left unauthenticated for PRM discovery.
+	 *.  The well-known {@code GET} routes are left unauthenticated for PRM discovery.
 	 *
 	 * @param ctx The host {@link org.apache.juneau.rest.server.RestContext} handling this request.
 	 * @param req The raw HTTP request.
@@ -159,7 +159,7 @@ public interface McpEndpoint extends org.apache.juneau.rest.server.mcp.McpEndpoi
 	 * <p>
 	 * This route (and its path-inserted sibling) is registered unconditionally, but returns {@code 404} whenever RS auth
 	 * is {@link McpResourceServerConfig#isEnabled() disabled} &mdash; so a non-opted-in endpoint claims the well-known
-	 * namespace but exposes no observable metadata (READY-312f F2, M7).
+	 * namespace but exposes no observable metadata.
 	 *
 	 * @param req The REST request.
 	 * @return The PRM document.
@@ -171,7 +171,7 @@ public interface McpEndpoint extends org.apache.juneau.rest.server.mcp.McpEndpoi
 
 	/**
 	 * Serves the RFC 9728 Protected Resource Metadata document at the path-inserted well-known location (SEP-2351), but
-	 * only when the requested suffix matches this resource's expected well-known path; otherwise {@code 404} (M5).
+	 * only when the requested suffix matches this resource's expected well-known path; otherwise {@code 404}.
 	 *
 	 * @param req The REST request.
 	 * @return The PRM document.

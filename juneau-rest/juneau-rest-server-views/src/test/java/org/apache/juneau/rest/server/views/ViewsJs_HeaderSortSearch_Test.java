@@ -27,7 +27,7 @@ import org.junit.jupiter.api.*;
 /**
  * Header sort + per-column search icons. Option-A content-substring coverage: sort
  * only from {@code span.dt-column-order} / {@code .juneau-view-col-sort-icon}, searchable columns
- * get a Juneau {@code search} glyph, not an IRS/SLDS copy.
+ * get a Juneau {@code search} glyph, not a copy of a third-party icon.
  */
 @SuppressWarnings({
 	"resource" // Closeable test fixtures held in static fields; lifecycle managed by the test/framework, not a real leak.
@@ -73,7 +73,7 @@ class ViewsJs_HeaderSortSearch_Test extends TestBase {
 		assertTrue(fn.contains("}, true);"), fn);  // capture-phase click listener
 	}
 
-	@Test void a04_searchIcon_usesJuneauSearchGlyphNotIrsClass() throws Exception {
+	@Test void a04_searchIcon_usesJuneauSearchGlyphNotThirdPartyClass() throws Exception {
 		var body = cWithMixin.get(ViewsMixin.VIEWS_JS_PATH).run().assertStatus(200).getContent().asString();
 		var fn = functionBody(body, "function renderHeaderSearchIcon(");
 		assertTrue(fn.contains("resolveIcon?.(\"search\")"), fn);
@@ -115,7 +115,7 @@ class ViewsJs_HeaderSortSearch_Test extends TestBase {
 		assertFalse(fn.contains("btn-secondary"), fn);
 	}
 
-	// Design §4.5 / §5 commit semantics live in openColumnSearchPopover: help rendered from the VIEW_META operator
+	// Commit semantics live in openColumnSearchPopover: help rendered from the VIEW_META operator
 	// list, a `$`-expression deferred to Enter/Apply (never previewed), a bare quick-filter previewed live only off
 	// the server dataMode branch, an out-of-set operator rejected, and Esc/click-away reverting the live preview.
 	@Test void a05b_searchPopover_helpDeferralRejectAndRevert() throws Exception {
@@ -131,7 +131,7 @@ class ViewsJs_HeaderSortSearch_Test extends TestBase {
 	}
 
 	// The draft classifier gates commit timing: leading "$" => deferred; an unparseable expression OR one naming an
-	// operator not on the column's effective set => rejected (design §4.3 - a reject, not a silent rewrite).
+	// operator not on the column's effective set => rejected.
 	@Test void a05c_evaluateColumnSearchDraft_gatesDollarAndEffectiveSet() throws Exception {
 		var body = cWithMixin.get(ViewsMixin.VIEWS_JS_PATH).run().assertStatus(200).getContent().asString();
 		var fn = functionBody(body, "function evaluateColumnSearchDraft(");
@@ -191,7 +191,7 @@ class ViewsJs_HeaderSortSearch_Test extends TestBase {
 		assertTrue(body.contains("content: none !important"),
 			"DT ::before/::after content must be none !important so dataTables.dataTables.css cannot win:\n" + excerptSort(body));
 		assertFalse(body.contains(":not(:has(svg)):before"),
-			"J0548 :not(:has(svg)) chevrons lost to DT content:▲ when an SVG is present:\n" + excerptSort(body));
+			":not(:has(svg)) chevrons lost to DT content:▲ when an SVG is present:\n" + excerptSort(body));
 		assertFalse(hasContentValue(body, "▲"), "DT2 unicode up-triangle must not remain as content");
 		assertFalse(hasContentValue(body, "▼"), "DT2 unicode down-triangle must not remain as content");
 		assertFalse(hasContentValue(body, "✓"), body);

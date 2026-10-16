@@ -28,7 +28,7 @@ import org.junit.jupiter.params.*;
 import org.junit.jupiter.params.provider.*;
 
 /**
- * The bus keys of schema 1.1 (spec §5.7, §11.2): top-level {@code topics} / {@code bridges}, and
+ * The bus keys of schema 1.1: top-level {@code topics} / {@code bridges}, and
  * {@code publishes} / {@code subscribes} on every card branch.  Rule checks (R-10, R-11, E-40..E-54) belong to
  * {@link BusWiringValidator}, not the schema; this class pins only shape.
  */
@@ -61,7 +61,6 @@ class PageContractSchema_Bus_Test extends TestBase {
 		"invalid-bus-sub-map.json|$.cards[0].subscribes[0].map.x: does not match",
 		"invalid-bus-pub-framework.json|$.cards[0].publishes[0].topic: does not match",
 		"invalid-bus-pub-retain.json|$.cards[0].publishes[0]: missing required 'retain'",
-		"invalid-bus-sub-as-console-output.json|$.cards[0].subscribes[0].as: does not match",
 		"invalid-bus-pub-topic-run-view.json|$.cards[0].publishes[0].topic: does not match",
 	})
 	void a02_invalidBusShapesFail(String name, String expected) throws Exception {
@@ -75,7 +74,7 @@ class PageContractSchema_Bus_Test extends TestBase {
 			assertTrue(defs.containsKey(name), name);
 		for (var name : new String[] {"bridgeDecl", "topicDecl", "publication", "subscription", "ribbonPublish"})
 			assertEquals(false, defs.getMap(name).get("additionalProperties"), name + " is closed");
-		for (var branch : new String[] {"card", "htmlCard", "datatablesCard", "consoleOutputCard", "runViewCard", "terminalCard"}) {
+		for (var branch : new String[] {"card", "htmlCard", "datatablesCard", "runViewCard", "terminalCard"}) {
 			var props = defs.getMap(branch).getMap("properties");
 			assertTrue(props.containsKey("publishes") && props.containsKey("subscribes"), branch + " admits the wiring keys");
 		}

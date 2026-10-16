@@ -82,7 +82,7 @@ class FreemarkerViewRenderer_Test extends TestBase {
 	}
 
 	/* ---------------------------------------------------------------------------------------- *
-	 * Section C: FreemarkerRenderScope request handle (Task 1)
+	 * Section C: FreemarkerRenderScope request handle
 	 * ---------------------------------------------------------------------------------------- */
 
 	@Test void c01_openClose_setsAndClearsRequest() throws Exception {

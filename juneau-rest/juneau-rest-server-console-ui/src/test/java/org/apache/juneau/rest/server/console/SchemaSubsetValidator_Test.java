@@ -44,6 +44,35 @@ class SchemaSubsetValidator_Test extends TestBase {
 		assertEquals(List.of("$: expected integer"), validator("integer").validate("x"));
 	}
 
+	@Test void a02b_minimum_rejectsSmallerNumbers_andIgnoresNonNumbers() {
+		var v = new SchemaSubsetValidator(Map.of("type", "integer", "minimum", 1));
+		assertEquals(List.of(), v.validate(1));
+		assertEquals(List.of(), v.validate(2L));
+		assertEquals(List.of("$: less than 1"), v.validate(0));
+		assertEquals(List.of("$: less than 1"), v.validate(-5L));
+	}
+
+	@Test void a02c_minimum_withoutType_ignoresNonNumbers() {
+		var v = new SchemaSubsetValidator(Map.of("minimum", 1));
+		assertEquals(List.of(), v.validate("x"));
+		assertEquals(List.of(), v.validate((Object)null));
+		assertEquals(List.of("$: less than 1"), v.validate(0));
+	}
+
+	@Test void a02d_minimum_numberType_isInclusive_andAcceptsFractionsAboveIt() {
+		var v = new SchemaSubsetValidator(Map.of("type", "number", "minimum", 1));
+		assertEquals(List.of(), v.validate(1));
+		assertEquals(List.of(), v.validate(1.5));
+		assertEquals(List.of("$: less than 1"), v.validate(0));
+		assertEquals(List.of("$: less than 1"), v.validate(0.5));
+	}
+
+	@Test void a02e_minimum_nonNumberInSchema_failsClearly() {
+		var v = new SchemaSubsetValidator(Map.of("minimum", "1"));
+		var e = assertThrows(IllegalStateException.class, () -> v.validate(5));
+		assertTrue(e.getMessage().contains("'minimum' must be a number"), e.getMessage());
+	}
+
 	@Test void a03_null_matchesNull() {
 		assertEquals(List.of(), validator("null").validate(null));
 	}

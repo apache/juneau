@@ -39,7 +39,7 @@ import org.junit.jupiter.api.*;
 class RequestIdSettingsResolution_Test {
 
 	//------------------------------------------------------------------------------------------------------------------
-	// A strict (UUID-only) validator supplied via @Bean reject-and-remints a non-matching incoming id (the "B2" case).
+	// A strict (UUID-only) validator supplied via @Bean reject-and-remints a non-matching incoming id.
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Rest

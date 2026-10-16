@@ -56,7 +56,7 @@ class ViewsJs_ModalResult_Test extends TestBase {
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
-	// a) The typed action-result contract version is its OWN constant, not aliased to the view contract (MED-7)
+	// a) The typed action-result contract version is its OWN constant, not aliased to the view contract
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Test void a01_actionResultContractVersion_isItsOwnConstant() throws Exception {
@@ -76,7 +76,7 @@ class ViewsJs_ModalResult_Test extends TestBase {
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
-	// b) The modal-open confirmation renders TYPED FIELDS via textContent - never innerHTML / raw markup (BLK-1/MED-9)
+	// b) The modal-open confirmation renders TYPED FIELDS via textContent - never innerHTML / raw markup
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Test void b01_dialogOverlayUsesTextContentNeverInnerHtml() throws Exception {
@@ -114,14 +114,14 @@ class ViewsJs_ModalResult_Test extends TestBase {
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
-	// c) A non-2xx is a VISIBLE transport refusal read from the boundary envelope - not "HTTP 200 + schema" (HIGH-3)
+	// c) A non-2xx is a VISIBLE transport refusal read from the boundary envelope - not "HTTP 200 + schema"
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Test void c01_nonOkReadsLoopbackBoundaryEnvelope() throws Exception {
 		var body = viewsJs();
 		var settle = fn(body, "function settleActionResponse(");
 		assertTrue(settle.contains("! resp.ok"), settle);
-		assertTrue(settle.contains("X-Loopback-Boundary"), settle);
+		assertTrue(settle.contains("X-Request-Boundary"), settle);
 		assertTrue(settle.contains("transport: true"), settle);
 	}
 
@@ -131,7 +131,7 @@ class ViewsJs_ModalResult_Test extends TestBase {
 		assertTrue(t.contains("boundaryReason"), t);
 		assertTrue(t.contains("envelope"), t);
 		// The header name the boundary filter actually sets on a rejection.
-		assertEquals("X-Loopback-Boundary", LoopbackBoundaryFilter.REJECTION_HEADER);
+		assertEquals("X-Request-Boundary", LoopbackBoundaryFilter.REJECTION_HEADER);
 	}
 
 	@Test void c03_transportStatusMessagesCoverTheMappedCodes() throws Exception {
@@ -141,6 +141,16 @@ class ViewsJs_ModalResult_Test extends TestBase {
 		assertTrue(m.contains("403"), m);
 		assertTrue(m.contains("415"), m);
 		assertTrue(m.contains("421"), m);
+	}
+
+	@Test void d04_readsRequestBoundaryHeader() throws Exception {
+		var body = viewsJs();
+		// Each of the three places that read a refusal off a non-2xx response reads the request-boundary header.
+		for (var sig : new String[]{"function submitRowActionForOutcome(", "function settleActionResponse(", "function openActionDialog("}) {
+			var f = fn(body, sig);
+			assertTrue(f.contains("headers.get(\"X-Request-Boundary\")"), () -> sig + " must read X-Request-Boundary:\n" + f);
+		}
+		assertFalse(body.contains("X-Loopback-Boundary"), "the old header name must not appear anywhere in the shipped script");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -173,7 +183,7 @@ class ViewsJs_ModalResult_Test extends TestBase {
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
-	// e) 417: in-flight marker set on the SYNC write, cleared on EVERY terminal outcome (incl. UNKNOWN) (MED-4)
+	// e) 417: in-flight marker set on the SYNC write, cleared on EVERY terminal outcome (incl. UNKNOWN)
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Test void e01_setRowInFlightTogglesMarkerAndDisablesTrigger() throws Exception {
@@ -284,11 +294,11 @@ class ViewsJs_ModalResult_Test extends TestBase {
 		assertTrue(s.contains("targetId"), s);
 	}
 
-	@Test void h04_typedInputs_sixTypeAllowlistAndSkipUnknown() throws Exception {
+	@Test void h04_typedInputs_sevenTypeAllowlistAndSkipUnknown() throws Exception {
 		var body = viewsJs();
 		var typed = fn(body, "function isTypedFormInputType(");
-		// The frozen v1 vocabulary: text, textarea, checkbox, toggle, select, action - and nothing else.
-		for (var t : new String[]{"text", "textarea", "checkbox", "toggle", "select", "action"})
+		// The vocabulary: text, textarea, password, checkbox, toggle, select, action - and nothing else.
+		for (var t : new String[]{"text", "textarea", "password", "checkbox", "toggle", "select", "action"})
 			assertTrue(typed.contains("\"" + t + "\""), () -> t + " missing from the allowlist:\n" + typed);
 		// paintFormControl gates on the allowlist and returns null (skips) an unknown type: a hostile token never
 		// becomes an element.

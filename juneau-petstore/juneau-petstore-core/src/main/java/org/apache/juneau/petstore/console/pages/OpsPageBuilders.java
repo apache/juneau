@@ -16,7 +16,10 @@
  */
 package org.apache.juneau.petstore.console.pages;
 
+import java.util.*;
+
 import org.apache.juneau.commons.beanquery.*;
+import org.apache.juneau.rest.server.terminal.*;
 import org.apache.juneau.rest.server.view.freemarker.console.*;
 import org.apache.juneau.rest.server.views.*;
 import org.apache.juneau.rest.server.views.RowAction.*;
@@ -37,16 +40,21 @@ public final class OpsPageBuilders {
 	/**
 	 * P6 Jobs.
 	 *
-	 * @param groomOutput The latest groom run's log.
+	 * @param groomOutput The latest groom run's terminal.
 	 * @param groomFile The latest groom run's transcript file.
-	 * @param groomDetail The groom-runs row-detail log.
 	 * @return The page spec.
 	 */
-	public static PageSpec jobs(ConsoleOutputDef groomOutput, ConsoleOutputDef groomFile, ConsoleOutputDef groomDetail) {
+	public static PageSpec jobs(TerminalDef groomOutput, TerminalDef groomFile) {
 		return PageSpec.create().tab("ops/jobs").toolkit("views")
 			.html("restock-help", "Restocking", """
 				<div class="jc-prose"><p>Restock adds new available pets to the store as a background job; progress shows here until it finishes.
-				Submitting twice from the same dialog runs one job.</p></div>""")
+				Submitting twice from the same dialog runs one job.  Give the card below a wait to see a cancel before anything changes, or a longer hold to see one after.</p></div>""")
+			.card(CardSpec.of("job-log", "restock").title("Restock inventory")
+				.body("submit", Map.of("endpoint", "/console/ops/jobs/restock", "submitLabel", "Restock", "fields", List.of(
+					Map.of("name", "DOG", "label", "Dogs (0-50)", "type", "number", "default", 1),
+					Map.of("name", "slowMs", "label", "Wait before restocking (ms, 0-10000)", "type", "number", "default", 0),
+					Map.of("name", "holdMs", "label", "Hold after restocking (ms, 0-10000)", "type", "number", "default", 1000))))
+				.body("urlParam", "job"))
 			.table(TableSpec.create("jobs").dataMode(DataMode.CLIENT).dataUrl("/console/ops/jobs/rows")
 				.pollIntervalMs(2000)
 				.columns(
@@ -57,15 +65,14 @@ public final class OpsPageBuilders {
 				.ribbon(
 					RibbonItem.dialog("restock").title("Restock").endpoint("/console/ops/jobs/restock").method(Method.POST).form("/console/ops/jobs/restock-form"),
 					RibbonItem.refresh().id("refresh")))
-			.card(CardSpec.of("console-output", "groom-output").title("Groom run").body("output", groomOutput.toMap()))
-			.card(CardSpec.of("console-output", "groom-file").title("Groom transcript (file)").body("output", groomFile.toMap()))
+			.card(CardSpec.of("terminal", "groom-output").title("Groom run").body("terminal", groomOutput.toMap()))
+			.card(CardSpec.of("terminal", "groom-file").title("Groom transcript (file)").body("terminal", groomFile.toMap()))
 			.table(TableSpec.create("groom-runs").dataMode(DataMode.CLIENT).dataUrl("/console/ops/jobs/groom-rows")
 				.columns(
 					Column.create("pet").label("Pet"),
 					Column.create("submitted").label("Submitted").render("timestamp"),
 					Column.create("state").label("State").render("pill"),
 					Column.create("lines").label("Lines"))
-				.detail(RowDetail.create("/console/ops/jobs/groom-runs/{id}").region(groomDetail.toRegion()))
 				.ribbon(
 					RibbonItem.dialog("groom").title("Groom").endpoint("/console/ops/jobs/groom").method(Method.POST).form("/console/ops/jobs/groom-form"),
 					RibbonItem.refresh().id("groom-refresh")));

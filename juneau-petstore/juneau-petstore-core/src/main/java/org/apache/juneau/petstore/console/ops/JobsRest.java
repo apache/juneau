@@ -22,11 +22,12 @@ import java.io.*;
 import java.time.*;
 import java.util.*;
 import java.util.concurrent.*;
+import java.util.function.*;
 
+import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.http.*;
 import org.apache.juneau.http.response.*;
 import org.apache.juneau.marshall.collections.*;
-import org.apache.juneau.marshall.marshaller.*;
 import org.apache.juneau.petstore.console.*;
 import org.apache.juneau.petstore.console.pages.*;
 import org.apache.juneau.petstore.dto.*;
@@ -34,6 +35,7 @@ import org.apache.juneau.rest.server.*;
 import org.apache.juneau.rest.server.view.*;
 import org.apache.juneau.rest.server.view.freemarker.*;
 import org.apache.juneau.rest.server.views.*;
+import org.apache.juneau.rest.server.terminal.*;
 import org.apache.juneau.rest.server.widgets.*;
 
 /**
@@ -45,20 +47,26 @@ import org.apache.juneau.rest.server.widgets.*;
  * resubmit with the same key returns the same job and this resource keeps no key map of its own.
  *
  * <p>
- * The page also hosts the console-output demo: a "groom pet" job ({@link GroomRuns}) whose log is served by
- * {@link ConsoleOutputMixin} and shown three ways &mdash; a FreeMarker console card over the in-memory log, a second
- * card over the same run's file-backed transcript, and a compact console in the Groom runs table's row detail.
+ * The page's {@code job-log} card posts the same restock in its flat form and follows the job's stream.  A restock
+ * with {@code slowMs} waits that long before it touches the store (cancel it then and nothing changes), and every
+ * restock holds for {@code holdMs} (a second by default) after it has added its pets (cancel it then and the result
+ * says the change was made).
+ * The registry's hard timeout is 30 s, or whatever a {@link HardTimeout} bean on the host says.
+ *
+ * <p>
+ * The page also hosts the terminal demo: a "groom pet" job ({@link GroomRuns}) whose output is served by
+ * {@link TerminalMixin} and shown two ways &mdash; a FreeMarker terminal card over the in-memory output, and a second
+ * card over the same run's file-backed transcript.
  *
  * <h5 class='section'>Example:</h5>
  * <p class='bjava'>
- * 	<jk>var</jk> <jv>job</jv> = <jf>jobs</jf>.tryCreate(IdempotencyKey.<jsm>of</jsm>(<jv>key</jv>, <js>"restock"</js>, <js>"restock"</js>))
- * 		.orElseThrow(() -&gt; <jk>new</jk> TooManyRequests(<js>"Job limit reached"</js>));
- * 	<jv>pool</jv>.execute(() -&gt; {
- * 		<jv>job</jv>.markEffectStarted();
- * 		<jk>var</jk> <jv>pets</jv> = store().restock(<jv>body</jv>.perSpecies(), <js>"job:restock"</js>);
- * 		<jv>job</jv>.complete(ActionResult.<jsm>success</jsm>(<jk>null</jk>).message(<jsm>f</jsm>(<js>"Restocked %s pets"</js>, <jv>pets</jv>.size())));
- * 	});
- * 	<jk>return</jk> AsyncJobRef.<jsm>of</jsm>(<jv>job</jv>);
+ * 	<jc>// POST /console/ops/jobs/restock {DOG:2, slowMs:3000, holdMs:1000, idempotencyKey:'7f3c...'}</jc>
+ * 	<jk>var</jk> <jv>body</jv> = Restock.<jsm>of</jsm>(<jv>json</jv>);
+ * 	<jk>var</jk> <jv>job</jv> = asyncJobRegistry().tryCreate(IdempotencyKey.<jsm>of</jsm>(<jv>body</jv>.idempotencyKey(), <js>"restock"</js>, <js>"restock"</js>)).orElse(<jk>null</jk>);
+ * 	<jk>if</jk> (<jv>job</jv> == <jk>null</jk>)
+ * 		<jk>return</jk> ActionResult.<jsm>refusal</jsm>(<js>"app:job-limit"</js>);  <jc>// answered 429</jc>
+ * 	<jv>pool</jv>.execute(() -&gt; run(<jv>job</jv>, <jv>body</jv>, () -&gt; store().restock(<jv>body</jv>.perSpecies(), <js>"job:restock"</js>)));
+ * 	<jk>return</jk> AsyncJobRef.<jsm>of</jsm>(<jv>job</jv>);  <jc>// answered 202</jc>
  * </p>
  */
 @Rest(path="/jobs", title="Jobs")
@@ -68,7 +76,7 @@ import org.apache.juneau.rest.server.widgets.*;
 	"java:S2654", // The demo intentionally runs restocks on its own pool and serializes the idempotency check.
 	"resource" // The registry and pool are owned by this resource and closed in closeJobs(); Eclipse JDT @Owning warning is by design.
 })
-public class JobsRest extends PetstoreConsolePage implements AsyncJobsMixin, ConsoleOutputMixin {
+public class JobsRest extends PetstoreConsolePage implements AsyncJobsMixin, TerminalMixin {
 
 	private static final long serialVersionUID = 1L;
 
@@ -77,7 +85,7 @@ public class JobsRest extends PetstoreConsolePage implements AsyncJobsMixin, Con
 
 	private static final String ACTION = "restock";
 
-	/** Where this resource is mounted; the console-output URLs are built from it. */
+	/** Where this resource is mounted; the terminal URLs are built from it. */
 	public static final String MOUNT = "/console/ops/jobs";
 
 	private static final String GROOM = "groom";
@@ -85,7 +93,42 @@ public class JobsRest extends PetstoreConsolePage implements AsyncJobsMixin, Con
 	/** The groom-pet demo runs; one verbose run is seeded so the page always has a log. */
 	private final transient GroomRuns groom = GroomRuns.seeded(Long.getLong(GroomRuns.PERIOD_PROPERTY, GroomRuns.DEFAULT_PERIOD_MS));
 
-	private final transient AsyncJobRegistry jobs = new AsyncJobRegistry(Duration.ofSeconds(30));
+	/** The default hard timeout of a restock job. */
+	public static final Duration DEFAULT_HARD_TIMEOUT = Duration.ofSeconds(30);
+
+	/** The longest {@code slowMs} a restock accepts. */
+	public static final int MAX_SLOW_MS = 10_000;
+
+	/** The longest {@code holdMs} a restock accepts. */
+	public static final int MAX_HOLD_MS = 10_000;
+
+	/** How long a restock holds after its effect by default, so a late cancel lands as {@code cancelled-after-effect}. */
+	public static final int DEFAULT_HOLD_MS = 1000;
+
+	private static final long SLOW_STEP_MS = 100;
+
+	/**
+	 * A per-host override of the jobs hard timeout.  Declare it as a {@code @Bean} on the host that mounts the
+	 * console; it is per instance, so one test host's short timeout does not leak into another.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	<ja>@Bean</ja> <jk>public</jk> JobsRest.HardTimeout jobsHardTimeout() {
+	 * 		<jk>return new</jk> JobsRest.HardTimeout(Duration.<jsm>ofSeconds</jsm>(5));
+	 * 	}
+	 * </p>
+	 *
+	 * @param value The hard timeout of every restock job.  Must be positive.
+	 */
+	public record HardTimeout(Duration value) {}
+
+	@SuppressWarnings({
+		"java:S2226" // the field is set by the framework's @Bean injection after construction, so it cannot be final.
+	})
+	@Bean
+	private transient HardTimeout hardTimeout;
+
+	private transient volatile AsyncJobRegistry jobs;
 	private final transient ExecutorService pool = Executors.newCachedThreadPool(r -> {
 		var t = new Thread(r, "petstore-restock");
 		t.setDaemon(true);
@@ -103,22 +146,30 @@ public class JobsRest extends PetstoreConsolePage implements AsyncJobsMixin, Con
 	 * <h5 class='section'>Example:</h5>
 	 * <p class='bjava'>
 	 * 	<jc>// Wire form: {perSpecies:{DOG:2, CAT:1}, idempotencyKey:'7f3c...'}</jc>
-	 * 	<jk>var</jk> <jv>r</jv> = <jk>new</jk> Restock(Map.<jsm>of</jsm>(Species.<jsf>DOG</jsf>, 2), <js>"7f3c"</js>);
+	 * 	<jk>var</jk> <jv>r</jv> = <jk>new</jk> Restock(Map.<jsm>of</jsm>(Species.<jsf>DOG</jsf>, 2), <js>"7f3c"</js>, 0, 1000);
 	 * </p>
 	 *
 	 * @param perSpecies How many pets of each species to add (1-50 each).
 	 * @param idempotencyKey The client-minted key; resubmits with the same key return the same job.
+	 * @param slowMs How long to wait before restocking, in whole milliseconds (0-{@value JobsRest#MAX_SLOW_MS}), so a demo can
+	 * 	cancel before the effect.
+	 * @param holdMs How long to hold after restocking, in whole milliseconds (0-{@value JobsRest#MAX_HOLD_MS}, default
+	 * 	{@value JobsRest#DEFAULT_HOLD_MS}), so a demo can cancel after the effect.
 	 */
-	public record Restock(Map<Species,Integer> perSpecies, String idempotencyKey) {
+	public record Restock(Map<Species,Integer> perSpecies, String idempotencyKey, int slowMs, int holdMs) {
 
 		/**
-		 * Reads a restock from either wire shape: the API form {@code {perSpecies:{DOG:2}, idempotencyKey}}, or the
-		 * dialog form the views runtime posts, {@code {action, targetId, idempotencyKey, fields:{DOG:"2"}}} (blank
-		 * or {@code 0} counts mean "none of that species").
+		 * Reads a restock from any of its wire shapes: the API form {@code {perSpecies:{DOG:2}, idempotencyKey}}, the
+		 * dialog form the views runtime posts, {@code {action, targetId, idempotencyKey, fields:{DOG:"2"}}}, or the
+		 * job-log card's flat form {@code {DOG:2, slowMs:0, idempotencyKey}}.  In the dialog and flat forms a blank,
+		 * <jk>null</jk> or {@code 0} count means "none of that species".  Any form may carry {@code slowMs} and
+		 * {@code holdMs}; each must be a whole number of milliseconds, so a decimal such as {@code 1.5} is rejected
+		 * rather than truncated.
 		 *
 		 * @param body The request body.
 		 * @return The restock.
-		 * @throws BadRequest If a species is unknown or a count is not a whole number.
+		 * @throws BadRequest If a species is unknown, a count is not a whole number, {@code slowMs} is not a whole
+		 * 	number 0-{@value JobsRest#MAX_SLOW_MS}, or {@code holdMs} is not a whole number 0-{@value JobsRest#MAX_HOLD_MS}.
 		 */
 		public static Restock of(JsonMap body) {
 			var per = new LinkedHashMap<Species,Integer>();
@@ -128,21 +179,50 @@ public class JobsRest extends PetstoreConsolePage implements AsyncJobsMixin, Con
 				if (api != null) {
 					api.forEach((k, v) -> per.put(Species.valueOf(k), v == null ? null : Integer.valueOf(String.valueOf(v))));
 				} else if (form != null) {
-					form.forEach((k, v) -> {
-						var s = v == null ? "" : String.valueOf(v).trim();
-						if (! s.isEmpty() && ! "0".equals(s))
-							per.put(Species.valueOf(k), Integer.valueOf(s));
-					});
+					form.forEach((k, v) -> putCount(per, Species.valueOf(k), v));
+				} else {
+					for (var s : Species.values())
+						putCount(per, s, body.get(s.name()));
 				}
 			} catch (RuntimeException e) { // NumberFormat/IllegalArgument for bad counts or species; a conversion error when perSpecies/fields is not a map.
 				throw new BadRequest("Restock counts must be whole numbers for known species");
 			}
-			return new Restock(per, body.getString("idempotencyKey"));
+			return new Restock(per, body.getString("idempotencyKey"), millis(body, "slowMs", 0, MAX_SLOW_MS), millis(body, "holdMs", DEFAULT_HOLD_MS, MAX_HOLD_MS));
+		}
+
+		private static void putCount(Map<Species,Integer> per, Species s, Object v) {
+			var x = v == null ? "" : String.valueOf(v).trim();
+			if (! x.isEmpty() && ! "0".equals(x))
+				per.put(s, Integer.valueOf(x));
+		}
+
+		private static int millis(JsonMap body, String name, int dflt, int max) {
+			var v = body.get(name);
+			if (v == null || String.valueOf(v).isBlank())
+				return dflt;
+			try {
+				var n = Integer.parseInt(String.valueOf(v).trim());
+				if (n >= 0 && n <= max)
+					return n;
+			} catch (NumberFormatException e) {
+				// Not a whole number (a decimal included): falls through to the 400 below.
+			}
+			throw new BadRequest("Invalid %s '%s'; must be a whole number 0-%s", name, v, max);
 		}
 	}
 
 	@Override /* AsyncJobsMixin */
-	public AsyncJobRegistry asyncJobRegistry() { return jobs; }
+	public AsyncJobRegistry asyncJobRegistry() {
+		var j = jobs;
+		if (j == null) {
+			synchronized (this) {
+				j = jobs;
+				if (j == null)
+					jobs = j = new AsyncJobRegistry(hardTimeout == null ? DEFAULT_HARD_TIMEOUT : hardTimeout.value());
+			}
+		}
+		return j;
+	}
 
 	/**
 	 * Stops the restock pool, the registry's timeout scheduler and the groom runs when the resource is destroyed.
@@ -150,7 +230,8 @@ public class JobsRest extends PetstoreConsolePage implements AsyncJobsMixin, Con
 	@RestDestroy
 	public void closeJobs() {
 		pool.shutdownNow();
-		jobs.close();
+		if (jobs != null)
+			jobs.close();
 		groom.close();
 	}
 
@@ -167,34 +248,28 @@ public class JobsRest extends PetstoreConsolePage implements AsyncJobsMixin, Con
 		var r = groom.get(run).orElseGet(groom::latest);
 		if (r == null)
 			throw new NotFound("No groom run to show");
-		var main = ConsoleOutputDef.forMixin("groom-output", MOUNT, r.id()).tail(5000).rows(24).anchorPrefix("groom-L").markers("dim").title("Groom log");
-		var file = ConsoleOutputDef.forMixin("groom-file", MOUNT, r.id() + GroomRuns.FILE_SUFFIX).rows(12).title("Transcript file");
-		var detail = ConsoleOutputDef.forMixin("output", MOUNT, "{id}").type(RegionDef.TYPE_ROW_DETAIL).compact(true).rows(12).validate();
+		var main = terminal("groom-output", r.id(), "Groom log");
+		var file = terminal("groom-file", r.id() + GroomRuns.FILE_SUFFIX, "Transcript file");
 		if (builder(req))
-			return twin(req, OpsPageBuilders.jobs(main, file, detail));
-		var mainMap = main.toMap();
-		var fileMap = file.toMap();
+			return twin(req, OpsPageBuilders.jobs(main, file));
 		return FreemarkerView.of("jobs.ftlh")
-			.attr("groomLinesUrl", mainMap.get("linesUrl"))
-			.attr("groomDownloadUrl", mainMap.get("downloadUrl"))
-			.attr("groomFileLinesUrl", fileMap.get("linesUrl"))
-			.attr("groomFileDownloadUrl", fileMap.get("downloadUrl"))
-			.attr("groomDetailParams", scriptSafe(Json.of(detail.toMap())));
+			.attr("groomBytesUrl", main.bytesUrl)
+			.attr("groomFileBytesUrl", file.bytesUrl);
 	}
 
-	/**
-	 * Makes JSON safe to inline in a {@code <script>} block: {@code </} cannot end the block and the two line
-	 * separators cannot end a JavaScript string.
-	 *
-	 * @param json The JSON text.
-	 * @return The text with {@code </} as {@code <\/}, U+2028 as {@code \u2028} and U+2029 as {@code \u2029}.
-	 */
-	static String scriptSafe(String json) {
-		return json.replace("</", "<\\/").replace("\u2028", "\\u2028").replace("\u2029", "\\u2029");
+	private static TerminalDef terminal(String id, String terminalId, String title) {
+		var def = TerminalDef.forMixin(id, MOUNT, terminalId).title(title);
+		def.inputId = null; // Output only: the groom terminals take no keystrokes.
+		return def.validate();
 	}
 
 	/**
 	 * The restock dialog's form source: a read-only GET returning the modal with a freshly minted self-targeted key.
+	 *
+	 * <p>
+	 * The dialog is the plain restock, so it asks only for counts and always runs with no wait and the default
+	 * {@value #DEFAULT_HOLD_MS} ms hold.  The timing knobs ({@code slowMs}, {@code holdMs}) belong to the job-log card,
+	 * which exists to demonstrate cancelling before and after the effect.
 	 *
 	 * @return The modal.
 	 */
@@ -225,12 +300,13 @@ public class JobsRest extends PetstoreConsolePage implements AsyncJobsMixin, Con
 	 * @param req The request.
 	 * @param res The response (202).
 	 * @param json The restock body (see {@link Restock#of(JsonMap)}).
-	 * @return The job ref.
-	 * @throws BadRequest On a missing key or out-of-range count.
-	 * @throws TooManyRequests When the limit is reached.
+	 * @return The job ref (202), or a 429 {@code app:job-limit} refusal whose message names the running count, so a
+	 * 	JSON client such as the job-log card can show it.
+	 * @throws BadRequest On a missing key, an out-of-range count, or a bad {@code slowMs} or {@code holdMs} (see
+	 * 	{@link Restock#of(JsonMap)}).
 	 */
 	@RestPost(path="/restock")
-	public AsyncJobRef restock(RestRequest req, RestResponse res, @Content JsonMap json) {
+	public Object restock(RestRequest req, RestResponse res, @Content JsonMap json) {
 		var actor = ConsoleWrites.actor(req);
 		var body = Restock.of(json);
 		var k = body.idempotencyKey();
@@ -244,33 +320,73 @@ public class JobsRest extends PetstoreConsolePage implements AsyncJobsMixin, Con
 				throw new BadRequest("Count for '%s' must be between 1 and 50", s);
 		});
 		var limit = Integer.getInteger(LIMIT_PROPERTY, 2);
+		var registry = asyncJobRegistry();
 		AsyncJob job;
 		synchronized (submitted) {
 			// Resolve the idempotency key first: a replay returns its existing job and never counts against the limit.
 			var prior = submitted.stream().filter(x -> k.equals(x.getString("idempotencyKey"))).findFirst();
-			job = prior.flatMap(x -> jobs.get(x.getString("jobId"))).orElse(null);
+			job = prior.flatMap(x -> registry.get(x.getString("jobId"))).orElse(null);
 			if (job == null) {
 				prior.ifPresent(submitted::remove); // The job aged out of the registry; this is a fresh submission.
-				if (jobs.runningCount() >= limit)
-					throw new TooManyRequests("Job limit reached; '%s' running", jobs.runningCount());
-				var created = jobs.tryCreate(key).orElseThrow(() -> new TooManyRequests("Job limit reached; '%s' running", jobs.runningCount()));
+				var created = registry.runningCount() >= limit ? null : registry.tryCreate(key).orElse(null);
+				if (created == null)
+					return limitReached(res, registry.runningCount());
 				job = created;
 				submitted.addFirst(JsonMap.of("jobId", created.id(), "submitted", created.createdAt().toString(), "request", body.perSpecies(), "idempotencyKey", k));
 				while (submitted.size() > MAX_SUBMITTED)
 					submitted.removeLast();
-				pool.execute(() -> {
-					created.markEffectStarted();
-					try {
-						var pets = store().restock(body.perSpecies(), "job:restock:" + actor);
-						created.complete(ActionResult.success(null).message(f("Restocked %s pets", pets.size())));
-					} catch (RuntimeException e) {
-						created.complete(ActionResult.failure().message(e.getMessage()));
-					}
-				});
+				pool.execute(() -> run(created, body, () -> store().restock(body.perSpecies(), "job:restock:" + actor)));
 			}
 		}
 		res.setStatus(202);
 		return AsyncJobRef.of(job);
+	}
+
+	private static ActionResult limitReached(RestResponse res, int running) {
+		res.setStatus(429);
+		return ActionResult.refusal("app:job-limit").message(f("Job limit reached; '%s' running", running));
+	}
+
+	/**
+	 * Runs one restock: the optional slow wait (cancellable, nothing changed yet), the restock itself, then the
+	 * after-effect hold.  Every step stops as soon as the job has settled (a cancel or the hard timeout).
+	 *
+	 * @param job The job.
+	 * @param body The restock.
+	 * @param effect The restock itself; returns the added pets.
+	 */
+	static void run(AsyncJob job, Restock body, Supplier<List<Pet>> effect) {
+		try {
+			if (body.slowMs() > 0) {
+				job.progress(f("Waiting %s ms before restocking", body.slowMs()));
+				if (! hold(job, body.slowMs()))
+					return;
+			}
+			// One lock acquisition, shared with cancel and the timeout: a job settled after the wait is left as it was.
+			if (! job.markEffectStarted())
+				return;
+			var total = body.perSpecies().values().stream().mapToInt(Integer::intValue).sum();
+			job.progress(f("Restocking %s pets", total));
+			var pets = effect.get();
+			pets.forEach(p -> job.progress(f("Added %s", p.getName())));
+			if (hold(job, body.holdMs()))
+				job.complete(ActionResult.success(null).message(f("Restocked %s pets", pets.size())));
+		} catch (InterruptedException e) {
+			Thread.currentThread().interrupt();
+			job.complete(ActionResult.unknown().message("Interrupted"));
+		} catch (RuntimeException e) {
+			job.complete(ActionResult.failure().message(e.getMessage()));
+		}
+	}
+
+	/** Sleeps in short steps; returns <jk>false</jk> as soon as the job has settled. */
+	private static boolean hold(AsyncJob job, long ms) throws InterruptedException {
+		for (var left = ms; left > 0; left -= SLOW_STEP_MS) {
+			if (job.isTerminal())
+				return false;
+			Thread.sleep(Math.min(SLOW_STEP_MS, left));
+		}
+		return ! job.isTerminal();
 	}
 
 	/**
@@ -280,13 +396,13 @@ public class JobsRest extends PetstoreConsolePage implements AsyncJobsMixin, Con
 	 */
 	@RestGet(path="/{id}")
 	public JsonMap job(@Path("id") String id) {
-		if (jobs.get(id).isEmpty())
+		if (asyncJobRegistry().get(id).isEmpty())
 			throw new NotFound("Unknown job '%s'", id);
 		return state(id);
 	}
 
 	private JsonMap state(String id) {
-		var j = jobs.get(id);
+		var j = asyncJobRegistry().get(id);
 		if (j.isEmpty())
 			return JsonMap.of("state", "EXPIRED");
 		return j.get().isTerminal()
@@ -294,9 +410,9 @@ public class JobsRest extends PetstoreConsolePage implements AsyncJobsMixin, Con
 			: JsonMap.of("state", "RUNNING");
 	}
 
-	@Override /* ConsoleOutputMixin */
-	public Optional<ConsoleOutputSource> consoleOutputSource(String logId, RestRequest req) {
-		return groom.source(logId); // The run id is an unguessable 128-bit secret; knowing it is the access rule.
+	@Override /* TerminalMixin */
+	public Optional<TerminalSource> terminalSource(String id, RestRequest req) {
+		return groom.source(id); // The run id is an unguessable 128-bit secret; knowing it is the access rule.
 	}
 
 	/**
@@ -343,31 +459,5 @@ public class JobsRest extends PetstoreConsolePage implements AsyncJobsMixin, Con
 	@RestGet(path="/groom-rows")
 	public List<JsonMap> groomRows() {
 		return groom.list().stream().map(GroomRuns.Run::row).toList();
-	}
-
-	/**
-	 * The Groom runs table's row-detail envelope.
-	 *
-	 * @param id The run id.
-	 * @return {@code {contractVersion:'1', fields:{...}}}.
-	 * @throws NotFound If the run is unknown or has been dropped.
-	 */
-	@RestGet(path="/groom-runs/{id}")
-	public JsonMap groomRun(@Path("id") String id) {
-		var r = groom.get(id).orElseThrow(() -> new NotFound("Unknown groom run '%s'", id));
-		return JsonMap.of("contractVersion", "1", "fields", r.row());
-	}
-
-	/**
-	 * The same-origin image the groom log shows.
-	 *
-	 * @param res The response.
-	 * @throws IOException If the response cannot be written.
-	 */
-	@RestGet(path="/groom-photo.svg")
-	public void groomPhoto(RestResponse res) throws IOException {
-		var w = res.getDirectWriter("image/svg+xml");
-		w.write(GroomRuns.PHOTO_SVG);
-		w.flush();
 	}
 }

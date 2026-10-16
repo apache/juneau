@@ -102,12 +102,12 @@ const PROBE = async function () {
 	// (before any <tr>) is relocated ("foster-parented") by the HTML5 tree builder to become a PRECEDING
 	// SIBLING of the table, not a descendant - this happens during parsing, before the copier ever sees
 	// the tree.  First capture the real parser's own ground-truth shape (mirroring the module's own
-	// parseSanitizedHtmlWrap: `new DOMParser().parseFromString("<div>"+html+"</div>", "text/html")`),
+	// parseSanitizedHtmlWrap: `new DOMParser().parseFromString("<body>"+html, "text/html")`),
 	// then check the copier's output mirrors that already-fostered shape (not a naive nested read that
 	// would expect <b> nested inside <table>).
 	// -------------------------------------------------------------------------------------------------
 	const FOSTER = '<table><b>oops</b><tr><td>cell</td></tr></table><span>after</span>';
-	const fosterSrcWrap = new DOMParser().parseFromString('<div>' + FOSTER + '</div>', 'text/html').body.firstChild;
+	const fosterSrcWrap = new DOMParser().parseFromString('<body>' + FOSTER, 'text/html').body;
 	const fosterSrcTags = Array.from(fosterSrcWrap.children).map(e => e.tagName);
 	out.fosterSrcOrder = fosterSrcTags;
 	out.fosterSrcBBeforeTable = fosterSrcTags.indexOf('B') >= 0 && fosterSrcTags.indexOf('B') < fosterSrcTags.indexOf('TABLE');

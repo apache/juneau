@@ -16,23 +16,23 @@
  */
 
 /*
- * juneau-config.js - opt-in column-configurator persistence + pure config-application layer (design doc #444).
+ * juneau-config.js - opt-in column-configurator persistence + pure config-application layer.
  *
  * This file is loaded AFTER juneau-views.js (a template <script> include the consumer adds - NOT a dynamic
- * fetch; see design §4.1) and extends the SAME window.JuneauViews namespace.  A
+ * fetch) and extends the SAME window.JuneauViews namespace.  A
  * non-configurable table never loads it and pays nothing.
  *
- * LANDED SLICES:
- *   - Slice 2: async persistence SPI, strict localStorage key codec (enc/dec), localStorage provider.
- *   - Slice 4: pure DOM-free config-application layer - computeEffectiveColumns / validateView / saved-view
+ * Contents:
+ *   - async persistence SPI, strict localStorage key codec (enc/dec), localStorage provider.
+ *   - pure DOM-free config-application layer - computeEffectiveColumns / validateView / saved-view
  *     (de)serialization / dtIndex (the INDEX MODEL only).
- *   - Slice 5: resolveActiveView (awaited before first draw) + applyView (programmatic reinit entry point).
- *   - Slice 6: View-tab chooser UI, XSS textContent painting, mountChooser seam.
- *   - Slice 7: ribbon toggle persistence routes through this file's synchronous getItem/setItem
+ *   - resolveActiveView (awaited before first draw) + applyView (programmatic reinit entry point).
+ *   - View-tab chooser UI, XSS textContent painting, mountChooser seam.
+ *   - ribbon toggle persistence routes through this file's synchronous getItem/setItem
  *     (same exact keys as juneau-ribbon.js; never a Promise).
  *
- * Every provider implements the SAME seven-method async contract (Promise-based; design doc #444 §3.2/§3.3, refined by
- * the round-3 saveAndActivate addendum): list/load/save/saveAndActivate/setActive/delete/getActive.  Each method
+ * Every provider implements the SAME seven-method async contract (Promise-based):
+ * list/load/save/saveAndActivate/setActive/delete/getActive.  Each method
  * takes the LIVE table element as its first argument (never a raw pageId/viewId string).  The localStorage provider
  * is the built-in implementation; a host may install its own through setPersistenceProvider.
  */
@@ -46,29 +46,29 @@
 	// ==================================================================================================================
 
 	/**
-	 * Blob schema version every saved-view blob carries (§3.2) - lets both backends refuse an unknown/newer shape
+	 * Blob schema version every saved-view blob carries - lets both backends refuse an unknown/newer shape
 	 * deterministically rather than guess at it.
 	 */
 	const CURRENT_SCHEMA_VERSION = 2;
 
-	/** Decoded-name cap (§3.1) - named so JS and the slice-3 Java mixin reject at the exact same boundary. */
+	/** Decoded-name cap - named so JS and the Java mixin reject at the exact same boundary. */
 	const MAX_NAME_LEN = 128;
 
 	/**
-	 * Encoded key-SEGMENT cap (§3.1) - a DISTINCT number from {@link #MAX_NAME_LEN}: a 128-multibyte-char name can
+	 * Encoded key-SEGMENT cap - a DISTINCT number from {@link #MAX_NAME_LEN}: a 128-multibyte-char name can
 	 * enc() to far more than 128 bytes, so the encoded cap must be named and checked independently of the decoded
 	 * name cap.
 	 */
 	const MAX_ENCODED_SEGMENT_LEN = 512;
 
 	/**
-	 * The localStorage provider's per-(user,page,view)/per-blob/per-user bounds (§3.2).
+	 * The localStorage provider's per-(user,page,view)/per-blob/per-user bounds.
 	 */
 	const LOCALSTORAGE_MAX_VIEWS_PER_SCOPE = 50;      // localStorage provider cap
 	const LOCALSTORAGE_MAX_BLOB_BYTES = 64 * 1024;    // localStorage provider cap
 	const LOCALSTORAGE_MAX_VIEWS_PER_USER = 500;      // localStorage provider cap
 
-	/** The shell attribute a page host stamps the page id onto (§3.1) - read via closest(...). */
+	/** The shell attribute a page host stamps the page id onto - read via closest(...). */
 	const PAGE_ID_ATTR = "data-juneau-page";
 
 	/** The attribute juneau-views.js reads a table's own stable view id off (reused here - no new attribute). */
@@ -81,7 +81,7 @@
 		return v == null || String(v).trim() === "";
 	}
 
-	/** Builds a typed persistence-SPI error (§3.2: {code:'quota'|'unavailable'|'network'|'malformed', message}). */
+	/** Builds a typed persistence-SPI error. */
 	function typedError(code, message) {
 		const e = new Error(message);
 		e.code = code;
@@ -93,7 +93,7 @@
 	function unavailableError(message) { return typedError("unavailable", message); }
 
 	/**
-	 * Normalizes ANY thrown value into the typed {code,message} shape (§3.2 "typed failure, never silent
+	 * Normalizes ANY thrown value into the typed {code,message} shape ("typed failure, never silent
 	 * success") - a value already carrying one of the four frozen codes passes through; a native localStorage
 	 * quota/private-mode DOMException maps to 'quota'; anything else is 'unavailable' rather than swallowed.
 	 */
@@ -153,7 +153,7 @@
 		return out;
 	}
 
-	/** The exact allowed raw (never-escaped) segment alphabet (§3.1) - a single ASCII char test. */
+	/** The exact allowed raw (never-escaped) segment alphabet - a single ASCII char test. */
 	function isSafeSegmentChar(ch) {
 		return (ch >= "a" && ch <= "z") || (ch >= "A" && ch <= "Z") || (ch >= "0" && ch <= "9") || ch === "_" || ch === "-";
 	}
@@ -164,7 +164,7 @@
 	}
 
 	/**
-	 * Strict segment encoder (§3.1 finding - Blocker: key codec).  Percent-encodes every UTF-8 byte OUTSIDE the
+	 * Strict segment encoder.  Percent-encodes every UTF-8 byte OUTSIDE the
 	 * alphabet [A-Za-z0-9_-] as "%HH" with UPPERCASE hex - deliberately NOT encodeURIComponent (which leaves
 	 * ".", "!", "~", "*", "'", "(", ")" and space unescaped; an unescaped "." would climb this grammar's "."
 	 * path separator).  This is the STORAGE-KEY encoder only - never a wire/query-string encoder.
@@ -209,7 +209,7 @@
 	}
 
 	/**
-	 * Builds the scope segment (§3.1): {@code enc(pageId)~enc(viewId)} for a page-embedded view, or bare
+	 * Builds the scope segment: {@code enc(pageId)~enc(viewId)} for a page-embedded view, or bare
 	 * {@code enc(viewId)} for a standalone one.  The "~" join is outside the allowed segment alphabet, so it can
 	 * never appear INSIDE an encoded segment - two encoded segments joined by it can always be split back apart
 	 * unambiguously.  Page-qualification is load-bearing (not "view-only for simplicity"): two different pages
@@ -229,7 +229,8 @@
 	}
 
 	/**
-	 * The wire-side name check (§3.1/§3.2): blank/reserved/too-long - applied to the raw DECODED name.  Deliberately does NOT touch encSegment/MAX_ENCODED_SEGMENT_LEN - that check is
+	 * The wire-side name check: blank/reserved/too-long - applied to the raw DECODED name.  Deliberately does NOT touch
+	 * encSegment/MAX_ENCODED_SEGMENT_LEN - that check is
 	 * localStorage-key-specific (see validateNameForLocalStorage below).
 	 */
 	function validateNameBasic(name) {
@@ -244,7 +245,7 @@
 	}
 
 	/**
-	 * The localStorage-only name check: {@link #validateNameBasic} PLUS the encoded-segment length cap (§3.1) -
+	 * The localStorage-only name check: {@link #validateNameBasic} PLUS the encoded-segment length cap -
 	 * the localStorage provider is the one place a name is actually enc()'d into a storage key, so it is the one
 	 * place MAX_ENCODED_SEGMENT_LEN can be exceeded independently of MAX_NAME_LEN.
 	 */
@@ -259,7 +260,7 @@
 	}
 
 	/**
-	 * The dangling-active resolution rule (§3.2 should-fix), applied uniformly to EVERY provider's raw list()
+	 * The dangling-active resolution rule, applied uniformly to EVERY provider's raw list()
 	 * result by the public facade below (never duplicated per-provider): if `active` does not name any view
 	 * actually present in `views`, the runtime treats it as Default (never an error, never a crash) and flags
 	 * `dangling:true` so a caller can surface the required one-time notice.  Covers the concurrent hole "tab A
@@ -272,7 +273,7 @@
 		return found ? { name: active, dangling: false } : { name: null, dangling: true };
 	}
 
-	/** Rejects an unknown/newer blob schemaVersion as 'malformed' (§3.2 stale-load handling) - never crashes. */
+	/** Rejects an unknown/newer blob schemaVersion as 'malformed' - never crashes. */
 	function assertSupportedSchema(blob) {
 		if (blob?.schemaVersion !== CURRENT_SCHEMA_VERSION)
 			throw malformedError("saved-view blob has an unsupported schemaVersion (expected " + CURRENT_SCHEMA_VERSION + ")");
@@ -280,7 +281,7 @@
 	}
 
 	/**
-	 * Resolves the enclosing page id (§3.1): {@code table.closest('[data-juneau-page]')}'s OWN attribute value,
+	 * Resolves the enclosing page id: {@code table.closest('[data-juneau-page]')}'s OWN attribute value,
 	 * falling back to null (standalone) when there is no page shell.  This is the CONTRACT, not a convenience
 	 * read: a host that wants page-qualification must stamp this exact attribute rather than inventing a parallel
 	 * one.  HTML-slot nav stamps it on {@code .juneau-page-nav}.
@@ -298,7 +299,7 @@
 	}
 
 	// ==================================================================================================================
-	// PURE CONFIG-APPLICATION LAYER  (§4.3 — Option-B testable; no DOM / jQuery / DataTables)
+	// PURE CONFIG-APPLICATION LAYER
 	// ==================================================================================================================
 
 	/** True when `arr` contains the same value more than once (strict equality). */
@@ -384,7 +385,7 @@
 	}
 
 	/**
-	 * Format-swap helper (§4.3): replace ONLY the renderer id, keeping any existing `meta` (and leaving column
+	 * Format-swap helper: replace ONLY the renderer id, keeping any existing `meta` (and leaving column
 	 * `href` on the column itself — {@link #mergeMeta} in juneau-views.js still folds href into meta at display
 	 * time).  Accepts both the wire object form `{id,meta}` and the compact string sugar `"id:field"`.
 	 */
@@ -402,7 +403,7 @@
 	}
 
 	/**
-	 * Default visible set when a saved view omits `visible` (§4.3): each catalog column contributes iff
+	 * Default visible set when a saved view omits `visible`: each catalog column contributes iff
 	 * `defaultVisible !== false`, and pinned columns are always included regardless of defaultVisible.
 	 */
 	function defaultVisibleKeys(catalog) {
@@ -414,7 +415,7 @@
 		return out;
 	}
 
-	/** Resolves `view.order` (§4.3): explicit order with unknown ids dropped/catalog ids appended, or catalog order when absent. */
+	/** Resolves `view.order`: explicit order with unknown ids dropped/catalog ids appended, or catalog order when absent. */
 	function resolveOrder(view, byData, catalogOrder) {
 		if (view.order == null) return { ok: true, order: catalogOrder.slice() };
 		if (!Array.isArray(view.order))
@@ -432,7 +433,7 @@
 	}
 
 	/**
-	 * Resolves `view.visible` (§4.3) before the pinned-column / at-least-one-visible repairs: explicit visible ids
+	 * Resolves `view.visible` before the pinned-column / at-least-one-visible repairs: explicit visible ids
 	 * with unknowns dropped, or each column's {@code defaultVisible ?? true} when absent.
 	 */
 	function resolveVisible(view, byData, cols) {
@@ -476,7 +477,7 @@
 	}
 
 	/**
-	 * Validates / normalizes a saved-view blob against a column catalog (§4.3 hardening):
+	 * Validates / normalizes a saved-view blob against a column catalog:
 	 * <ul>
 	 *   <li>pinned columns are always visible</li>
 	 *   <li>≥1 visible column (repairs an all-hidden blob by forcing the first catalog column visible)</li>
@@ -528,7 +529,7 @@
 
 	/**
 	 * Layers a (possibly null = Default) saved view over the catalog to produce the ordered, visibility-tagged,
-	 * relabeled, reformatted effective column model (§4.1 / §4.3).  Runs {@link #validateView} first so unknown
+	 * relabeled, reformatted effective column model.  Runs {@link #validateView} first so unknown
 	 * ids are dropped and format overrides are constrained; a hard-reject (duplicate ids) throws a typed
 	 * {@code malformed} error for the load path to treat as Default.
 	 *
@@ -580,7 +581,7 @@
 
 	/**
 	 * Deserializes a saved-view blob (object or JSON string) into a plain
-	 * {@code {schemaVersion, visible, order, labels, formats}} (§3.1).  Unknown/newer {@code schemaVersion}
+	 * {@code {schemaVersion, visible, order, labels, formats}}.  Unknown/newer {@code schemaVersion}
 	 * rejects as typed {@code malformed} via {@link #assertSupportedSchema}.
 	 */
 	function deserializeSavedView(raw) {
@@ -600,7 +601,7 @@
 	}
 
 	/**
-	 * Serializes a draft / normalized view into the persisted blob shape (§3.1):
+	 * Serializes a draft / normalized view into the persisted blob shape:
 	 * {@code {schemaVersion, visible, order, labels, formats}}.  Blank label overrides are omitted (they mean
 	 * "use catalog title"); empty {@code labels}/{@code formats} objects are still emitted so the schema stays
 	 * stable for round-trips.
@@ -637,10 +638,10 @@
 	}
 
 	/**
-	 * Builds the ACTUAL DataTables {@code opts.columns} index space (§4.2):
+	 * Builds the ACTUAL DataTables {@code opts.columns} index space:
 	 * {@code [expander?] + [selection?] + effectiveColumns(including hidden, in order) + [actions?]}.
 	 * Synthetic expander/selection/actions cells use {@code data:null} and a {@code _juneau} marker so they are never
-	 * mistaken for a catalog column by {@link #dtIndex}.  Pure / DOM-free — slice 5 rewires consumers onto this.
+	 * mistaken for a catalog column by {@link #dtIndex}.  Pure / DOM-free.
 	 */
 	function buildOptsColumnSpace(effectiveColumns, options) {
 		const cols = [];
@@ -661,7 +662,7 @@
 	}
 
 	/**
-	 * The single DataTables index function (§4.2): index of {@code dataKey} in the ACTUAL {@code opts.columns}
+	 * The single DataTables index function: index of {@code dataKey} in the ACTUAL {@code opts.columns}
 	 * array ({@link #buildOptsColumnSpace}).  Hidden columns stay in the array ({@code visible:false}), so this
 	 * is NOT "Nth visible + selection offset".  Returns {@code -1} when the key is absent.
 	 *
@@ -677,9 +678,9 @@
 	// ==================================================================================================================
 
 	/**
-	 * Builds the zero-config {@code localStorage} persistence provider (§3.3).  Wraps every operation in a
+	 * Builds the zero-config {@code localStorage} persistence provider.  Wraps every operation in a
 	 * try/catch that maps a native quota/private-mode failure to the typed 'quota' error, resolves in a
-	 * microtask (so a configurable table's compute-before-first-draw handshake, §4.1, never has to show a
+	 * microtask (so a configurable table's compute-before-first-draw handshake, never has to show a
 	 * loading placeholder for this provider), and listens for the {@code storage} event so an external tab's
 	 * write can be reconciled (last-write-wins) - see {@code watchExternalChanges} below.
 	 */
@@ -727,7 +728,7 @@
 		return out;
 	}
 
-	/** The per-user AGGREGATE count across every (page,view) scope (§3.2 quota-bypass fix) - a substring scan,
+	/** The per-user AGGREGATE count across every (page,view) scope - a substring scan,
 	 *  never a regex, so an attacker-controlled scope/name segment cannot be mistaken for pattern syntax. */
 	// NOSONAR javascript:S7721 -- must stay inside this file's module IIFE: hoisting past the closing `})()`
 	// would leak it globally.
@@ -750,7 +751,7 @@
 	function localStorageAsAsync(fn) {
 		return new Promise(function (resolve, reject) {
 			// NOSONAR javascript:S6671 -- toTypedError() deliberately returns the plain {code,message}
-			// shape documented at its definition (§3.2 "typed failure" contract), not an Error subclass;
+			// shape documented at its definition ("typed failure" contract), not an Error subclass;
 			// every consumer (in this file and the chooser UI) reads only `.code`/`.message`, and widening
 			// this to an Error would risk changing enumerable-property/JSON-serialization behavior for
 			// callers outside this file that we cannot fully audit.
@@ -758,7 +759,7 @@
 		});
 	}
 
-	/** Enforces the per-blob/per-scope/per-user bounds (§3.2) INSIDE the write op, never as a racy pre-flight. */
+	/** Enforces the per-blob/per-scope/per-user bounds INSIDE the write op, never as a racy pre-flight. */
 	function enforceBounds(scope, name, blob) {
 		const json = JSON.stringify(blob);
 		if (byteLength(json) > LOCALSTORAGE_MAX_BLOB_BYTES)
@@ -811,7 +812,7 @@
 			},
 
 			/**
-			 * Writes the blob AND flips the active pointer as the single seam method (§3.2/round-3 R3-B3) - JS is
+			 * Writes the blob AND flips the active pointer as the single seam method - JS is
 			 * single-threaded, so within THIS tab no other script can interleave between the two localStorage
 			 * writes below; across tabs, each write is simply the last one to land (last-write-wins), which is
 			 * the documented localStorage consistency model.
@@ -844,10 +845,10 @@
 			},
 
 			/**
-			 * Multi-tab reconcile (§3.2, localStorage-only): listens for the native `storage` event and invokes
+			 * Multi-tab reconcile: listens for the native `storage` event and invokes
 			 * `onChange` whenever a key under THIS table's scope changed in another tab/window.  Returns an
 			 * unsubscribe function.  A later slice's chooser wires this to a "changed in another tab" notice and
-			 * a last-write-wins re-read; slice 2 lands only the wiring primitive itself.
+			 * a last-write-wins re-read; only the wiring primitive itself lives here.
 			 */
 			watchExternalChanges: function (table, onChange) {
 				const ctx = requireScope(table);
@@ -874,12 +875,12 @@
 		return lazyDefaultProvider;
 	}
 
-	/** Swaps the active persistence provider (§3.2/§5) - e.g. `JuneauViews.setPersistenceProvider(myProvider)`. */
+	/** Swaps the active persistence provider - e.g. `JuneauViews.setPersistenceProvider(myProvider)`. */
 	NS.setPersistenceProvider = function (provider) {
 		currentProvider = provider;
 	};
 
-	/** The provider-selection seam (§5): factory for the first-party provider this file ships. */
+	/** The provider-selection seam: factory for the first-party provider this file ships. */
 	NS.persistenceProviders = {
 		localStorage: createLocalStorageProvider
 	};
@@ -956,7 +957,7 @@
 	NS.config.resolvePageId = resolvePageId;
 	NS.config.resolveViewId = resolveViewId;
 	NS.config.createLocalStorageProvider = createLocalStorageProvider;
-	// Slice 4 — pure config-application layer (§4.3) + the dtIndex index model (§4.2 INDEX MODEL only).
+	// Pure config-application layer + the dtIndex index model.
 	NS.config.validateView = validateView;
 	NS.config.computeEffectiveColumns = computeEffectiveColumns;
 	NS.config.deserializeSavedView = deserializeSavedView;
@@ -986,10 +987,10 @@
 	/**
 	 * Programmatic Apply entry point (no chooser UI).  Computes effective columns from {@code savedView} and
 	 * runs the destroy/reinit transaction via {@code NS.init.buildTable}.  {@code overrides.defaultOrder}, when
-	 * present, replaces {@code viewDef.defaultOrder} for this one rebuild (Gap 1 Sort restore - a default ORDER,
+	 * present, replaces {@code viewDef.defaultOrder} for this one rebuild (Sort restore - a default ORDER,
 	 * not a sortability toggle, so this never touches any column's own {@code orderable} flag).
 	 * {@code overrides.searchMembership}, when present, downgrades {@code searchable} on every effective column
-	 * absent from it (Gap 1 Search restore), via {@link #applySearchMembershipToColumns}.
+	 * absent from it, via {@link #applySearchMembershipToColumns}.
 	 */
 	function applyView(table, savedView, overrides) {
 		const ctx = table?.__juneauCtx;
@@ -1013,7 +1014,7 @@
 	NS.config.applyView = applyView;
 
 	// ==================================================================================================================
-	// VIEW SETTINGS DIALOG  (four tabs — View / Search / Sort / Options, spec §3)
+	// VIEW SETTINGS DIALOG  (four tabs — View / Search / Sort / Options)
 	// ==================================================================================================================
 	//
 	// XSS HARD RULE: saved-view names and per-column label overrides are user-controlled and are painted into
@@ -1081,16 +1082,16 @@
 		return m;
 	}
 
-	// The Options controls (spec §3.4 + Gap 7): page size / text wrap / row density / auto-refresh interval.
+	// The Options controls: page size / text wrap / row density / auto-refresh interval.
 	const DEFAULT_PAGE_SIZE = 25;
 	const DEFAULT_DENSITY = "comfortable";
 	const ALLOWED_DENSITIES = ["compact", "comfortable"];
 	const ALLOWED_PAGE_SIZES = [10, 25, 50, 100];
 	// 0 means "Off" (falsy, same convention viewDef.pollIntervalMs already uses in wireTablePolling).
-	// IRS's exact interval set (decision, 2026-10-01): Off/30s/1m/5m/15m.
+	// The fixed auto-refresh interval set (decision, 2026-10-01): Off/30s/1m/5m/15m.
 	const ALLOWED_AUTO_REFRESH_MS = [0, 30000, 60000, 300000, 900000];
 
-	/** Human label for an {@code ALLOWED_AUTO_REFRESH_MS} value, for the Options tab's <select> (Gap 7). */
+	/** Human label for an {@code ALLOWED_AUTO_REFRESH_MS} value, for the Options tab's <select>. */
 	function autoRefreshLabel(ms) {
 		switch (ms) {
 			case 30000: return "30s";
@@ -1101,24 +1102,24 @@
 		}
 	}
 
-	/** The Search tab's universe (spec §3.2): columns that CAN be searched — they carry T6 search metadata. */
+	/** The Search tab's universe: columns that CAN be searched — they carry search metadata. */
 	function searchCapableColumns(catalog) {
 		return (catalog || []).filter(function (c) { return c?.data != null && c.search != null; });
 	}
 
-	/** The Sort tab's universe (spec §3.3): columns that CAN be sorted — {@code orderable !== false}. */
+	/** The Sort tab's universe: columns that CAN be sorted — {@code orderable !== false}. */
 	function sortCapableColumns(catalog) {
 		return (catalog || []).filter(function (c) { return c?.data != null && c.orderable !== false; });
 	}
 
-	/** Default search MEMBERSHIP (spec §3.2) — every search-capable column starts with its header popup on. */
+	/** Default search MEMBERSHIP — every search-capable column starts with its header popup on. */
 	function defaultSearchMembership(catalog) {
 		return searchCapableColumns(catalog).map(function (c) { return c.data; });
 	}
 
 	/**
 	 * Downgrades an effective column's {@code searchable} flag to {@code false} when it is absent from
-	 * {@code searchMembership} (Gap 1 restore / spec §3.2) - never UPGRADES a column the catalog itself marked
+	 * {@code searchMembership} - never UPGRADES a column the catalog itself marked
 	 * {@code searchable: false}, so this can only turn a capable column's header search icon off, never turn an
 	 * intrinsically incapable one on.  {@code searchMembership} is {@code null}/{@code undefined}-safe: a missing
 	 * list leaves every column's {@code searchable} flag exactly as the catalog declared it (today's unrestricted
@@ -1138,7 +1139,7 @@
 
 	/**
 	 * Intersects a persisted sort list with the given sort-capable key universe, preserving ORDER and each entry's
-	 * `dir` (Gap 6 — IRS parity: the Sort tab is an ordered priority list, not an unordered membership set).
+	 * `dir`.
 	 * Unknown columns and duplicate entries are dropped; a malformed `dir` (anything but `"desc"`) coerces to
 	 * `"asc"`. A non-array `sortList` returns every capable key in catalog order, ascending — the same "absent
 	 * means everything, in catalog order" default {@link #intersectMembership} uses for search.
@@ -1160,7 +1161,7 @@
 		return out;
 	}
 
-	/** Default sort ORDER (spec §3.3, Gap 6): every sort-capable column starts in catalog order, ascending. */
+	/** Default sort ORDER: every sort-capable column starts in catalog order, ascending. */
 	function defaultSortOrder(catalog, defaultOrder) {
 		const capable = sortCapableColumns(catalog).map(function (c) { return c.data; });
 		// When the caller supplies the view's declared {@code defaultOrder} ([{data,dir}]), seed from exactly that
@@ -1184,7 +1185,7 @@
 		return defaultDraftFromCatalog(currentCatalog(ctx), ctxDefaultOrder(ctx));
 	}
 
-	/** Framework default Options (spec §3.4 + Gap 7) — page size / wrap / density / auto-refresh, nothing else. */
+	/** Framework default Options — page size / wrap / density / auto-refresh, nothing else. */
 	function defaultOptions() {
 		return { pageSize: DEFAULT_PAGE_SIZE, wrap: false, density: DEFAULT_DENSITY, autoRefreshMs: 0 };
 	}
@@ -1250,7 +1251,7 @@
 	}
 
 	/**
-	 * Overlays a persisted View Settings blob (§6.1, page-state store) onto a fresh catalog-default draft: the View
+	 * Overlays a persisted View Settings blob onto a fresh catalog-default draft: the View
 	 * facet is validated through {@link #validateView}, and search/sort membership + Options are intersected /
 	 * normalized against the current catalog so a stale blob referencing dropped columns degrades gracefully.
 	 */
@@ -1273,9 +1274,9 @@
 	}
 
 	/**
-	 * Reads and validates this table's persisted View Settings exactly once per table lifetime (Gap 1 / §6.1),
+	 * Reads and validates this table's persisted View Settings exactly once per table lifetime,
 	 * memoizing the result on {@code ctx._lastAppliedViewSettings} so neither the dialog's seed block nor the
-	 * construction-time restore path (`juneau-views.js` `go()`) re-reads storage, and so the Q1 one-time reset
+	 * construction-time restore path (`juneau-views.js` `go()`) re-reads storage, and so the one-time reset
 	 * notice (readViewSettings deletes a version-mismatched blob the first time it is seen) cannot fire twice or
 	 * get silently skipped by a second, independent read finding nothing left.  Returns {@code {draft, reset}};
 	 * {@code draft} is {@code null} when no View Settings blob exists for this table, so the caller can fall back
@@ -1304,7 +1305,7 @@
 		});
 	}
 
-	/** The View Settings blob persisted on Apply (§6.1) — all seven page-state facets, none of the URL facets. */
+	/** The View Settings blob persisted on Apply — all seven page-state facets, none of the URL facets. */
 	function viewSettingsFromDraft(draft) {
 		return {
 			schemaVersion: CURRENT_SCHEMA_VERSION,
@@ -1319,7 +1320,7 @@
 	}
 
 	// ==================================================================================================================
-	// PAGE-STATE STORE BRIDGE  (§6.1/§6.2 — View Settings persist per-table through juneau-pagestate.js, NOT the URL)
+	// PAGE-STATE STORE BRIDGE
 	// ==================================================================================================================
 
 	/** The per-table page-state key View Settings live under (distinct from any page-level namespace). */
@@ -1328,7 +1329,7 @@
 	/**
 	 * The per-table page-state scope for this table, or {@code null} when the page-state store is absent or the
 	 * table has no stable view id.  Keyed on the SAME {@code data-juneau-view} id the saved-view scope uses, so two
-	 * tables on one page never clobber each other's View Settings (§6.2 per-table keying).
+	 * tables on one page never clobber each other's View Settings.
 	 */
 	function pageStateScopeForTable(table) {
 		if (!NS.pageState || typeof NS.pageState.table !== "function") return null;
@@ -1338,10 +1339,10 @@
 	}
 
 	/**
-	 * Reads this table's last-applied View Settings blob (§6.1). A missing blob reads as {@code {settings:null,
+	 * Reads this table's last-applied View Settings blob. A missing blob reads as {@code {settings:null,
 	 * reset:false}}. A present blob whose {@code schemaVersion} does not match {@link #CURRENT_SCHEMA_VERSION} (or
 	 * that is not itself a plain object) is discarded outright - deleted from the store, not merely ignored - and
-	 * reads as {@code {settings:null, reset:true}}, so the caller can show a one-time reset notice (design §5 / Q1)
+	 * reads as {@code {settings:null, reset:true}}, so the caller can show a one-time reset notice
 	 * instead of silently reverting to catalog defaults.
 	 */
 	function readViewSettings(table) {
@@ -1356,14 +1357,14 @@
 		return { settings: blob, reset: false };
 	}
 
-	/** Persists this table's committed View Settings blob on Apply (§6.1); a no-op when the store is unavailable. */
+	/** Persists this table's committed View Settings blob on Apply; a no-op when the store is unavailable. */
 	function writeViewSettings(table, settings) {
 		const scope = pageStateScopeForTable(table);
 		if (scope) scope.set(VIEW_SETTINGS_STATE_KEY, settings);
 	}
 
 	/**
-	 * Open precedence for the shareable URL facet (design §6.3 / T19): {@code ?state=} wins for tab / filters /
+	 * Open precedence for the shareable URL facet: {@code ?state=} wins for tab / filters /
 	 * sort over any store-held live snapshot.  View Settings never go through this path — they stay in the
 	 * page-state store ({@link readViewSettings}/{@link writeViewSettings}) and are never encoded in the URL.
 	 * Thin wrapper over {@code JuneauViews.urlState.resolveOpenState} so the views runtime and this config
@@ -1377,9 +1378,9 @@
 	}
 
 	/**
-	 * Copy-link helper for a host (T17): builds the current shareable URL (always with {@code ?state=}, even under
-	 * clean-address) and writes it to the clipboard.  The Copy link toolbar button itself is T20 / JRM — not this
-	 * pass — but the live URL this would copy is the same one the address bar sync maintains.
+	 * Copy-link helper for a host: builds the current shareable URL (always with {@code ?state=}, even under
+	 * clean-address) and writes it to the clipboard.  The Copy link toolbar button itself is not part of this
+	 * function — but the live URL this would copy is the same one the address bar sync maintains.
 	 */
 	function copyShareLink(table) {
 		if (typeof NS.init?.copyShareableUrl === "function")
@@ -1647,8 +1648,8 @@
 			searchMembership: tabOn("search") ? draft.search : undefined
 		});
 		if (result?.ok) {
-			// Apply COMMITS the View Settings to the page-state store (§6.1) so a reload restores them per-table,
-			// AND (Gap 1) applies search/sort/options to the live grid itself, the same way construction-time
+			// Apply COMMITS the View Settings to the page-state store so a reload restores them per-table,
+			// AND applies search/sort/options to the live grid itself, the same way construction-time
 			// restore does - no more "nothing visibly changes until the next reload."
 			if (tabOn("options") && typeof NS.init?.applyRestoredOptionsToLiveGrid === "function")
 				NS.init.applyRestoredOptionsToLiveGrid(table, ctx, draft.options);
@@ -1707,18 +1708,18 @@
 		});
 	}
 
-	/** The four View Settings tabs (spec §3), in header order. */
+	/** The four View Settings tabs, in header order. */
 	const CONFIG_TABS = ["view", "search", "sort", "options"];
 	const CONFIG_TAB_LABELS = { view: "View", search: "Search", sort: "Sort", options: "Options" };
 
-	/** Bumped once per {@code openChooser} call so each dialog's tab/panel ids are unique on the page (F3). */
+	/** Bumped once per {@code openChooser} call so each dialog's tab/panel ids are unique on the page. */
 	let configDialogSeq = 0;
 
-	/** Public JSON key per internal tab id (Gap-g): `columnConfig.tabs` lists these public names. */
+	/** Public JSON key per internal tab id: `columnConfig.tabs` lists these public names. */
 	const CONFIG_TAB_PUBLIC_KEYS = { view: "columns", search: "search", sort: "sort", options: "options" };
 
 	/**
-	 * Resolves which of the four tabs {@code viewDef.columnConfig} allows (Gap-g, IRS parity).
+	 * Resolves which of the four tabs {@code viewDef.columnConfig} allows.
 	 * {@code columnConfig: true} (or any other non-object truthy value - the pre-existing default) means "all four
 	 * tabs", in {@link #CONFIG_TABS}'s fixed order regardless of the order names are given in. {@code columnConfig:
 	 * {tabs: [...]}} restricts to the named public keys; unknown names are dropped, and an empty or all-unknown
@@ -1736,9 +1737,9 @@
 
 	/**
 	 * Shows one tab body and hides the rest, moves the active class onto its button, updates each tab button's
-	 * {@code aria-selected} and roving {@code tabindex} (F3 - only the active tab is {@code tabindex="0"}; the
+	 * {@code aria-selected} and roving {@code tabindex} (only the active tab is {@code tabindex="0"}; the
 	 * rest are {@code tabindex="-1"}, per the WAI-ARIA APG tabs pattern), and reveals the View-tab-only Reset
-	 * control (spec §3 footer: Apply / Cancel always; Reset to defaults on the View tab).
+	 * control.
 	 */
 	function selectConfigTab(ctx, name) {
 		ctx._configActiveTab = name;
@@ -1758,7 +1759,7 @@
 	}
 
 	/**
-	 * One membership checkbox row (spec §3.2/§3.3): a checkbox toggling {@code dataKey}'s presence in the draft's
+	 * One membership checkbox row: a checkbox toggling {@code dataKey}'s presence in the draft's
 	 * {@code facetKey} array, plus the (user-controlled) column label painted with {@code textContent} only.
 	 */
 	function buildMembershipRow(ctx, col, facetKey) {
@@ -1807,7 +1808,7 @@
 	}
 
 	/**
-	 * One ordered Sort-tab row (Gap 6): a checkbox toggling membership (unchecking removes it from `draft.sort`
+	 * One ordered Sort-tab row: a checkbox toggling membership (unchecking removes it from `draft.sort`
 	 * entirely - {@link #buildUnsortedRow} re-adds it at the tail when re-checked), an Up/Down reorder pair, and
 	 * an Asc/Desc select - all draft-mutating, mirroring {@link #buildChooserRow}'s reorder convention.
 	 */
@@ -1902,7 +1903,7 @@
 	}
 
 	/**
-	 * Fills the Sort tab (Gap 6 - IRS parity: an ORDERED priority list, not an unordered membership set) from the
+	 * Fills the Sort tab from the
 	 * current draft: `draft.sort` entries first, in their current order, each with reorder + Asc/Desc controls;
 	 * then any remaining sort-capable column not yet in the list, unchecked, appended to the tail of `draft.sort`
 	 * the moment its checkbox is ticked.
@@ -1933,7 +1934,7 @@
 		});
 	}
 
-	/** The Options tab body (spec §3.4): EXACTLY four controls — page size, text wrap, row density, auto-refresh. */
+	/** The Options tab body: EXACTLY four controls — page size, text wrap, row density, auto-refresh. */
 	function buildOptionsTabBody(ctx) {
 		const body = document.createElement("div");
 		body.className = "juneau-config-options";
@@ -2031,7 +2032,7 @@
 		}
 	}
 
-	/** Reset to defaults (spec §3.1) — drafts the catalog defaults; Apply still commits, Cancel abandons. */
+	/** Reset to defaults — drafts the catalog defaults; Apply still commits, Cancel abandons. */
 	function resetDraftToDefaults(ctx) {
 		ctx._configDraft = defaultDraftForCtx(ctx);
 		renderConfigTabBodies(ctx);
@@ -2044,11 +2045,11 @@
 			return;
 		}
 		if (!ctx._configDraft) {
-			// Seed the dialog from the last-applied View Settings (§6.1) when present, else catalog defaults.  A
+			// Seed the dialog from the last-applied View Settings when present, else catalog defaults.  A
 			// schemaVersion mismatch (or missing/non-object blob) discards the whole blob and shows a one-time
-			// notice (design §5 / Q1) rather than silently reverting; readViewSettings deleting the blob on
+			// notice rather than silently reverting; readViewSettings deleting the blob on
 			// detection is what makes the notice "once" - a later re-open finds nothing stored, not a mismatch.
-			// Routed through the shared helper (Gap 1) so this is the SAME read `go()`'s construction-time restore
+			// Routed through the shared helper so this is the SAME read `go()`'s construction-time restore
 			// already consumed - never a second independent read of the same blob.
 			const resolved = resolveLastAppliedViewSettings(table, ctx);
 			ctx._configDraft = resolved.draft != null
@@ -2101,8 +2102,8 @@
 			ctx._configTabButtons[t] = btn;
 			tabs.appendChild(btn);
 		});
-		// F3 - Left/Right/Home/End roving-tabindex keyboard nav (WAI-ARIA APG tabs pattern), reusing the same
-		// pure target-index function the detail-view ribbon strip's own tab keydown handler uses.  Gap-g - the
+		// Left/Right/Home/End roving-tabindex keyboard nav (WAI-ARIA APG tabs pattern), reusing the same
+		// pure target-index function the detail-view ribbon strip's own tab keydown handler uses.  The
 		// wraparound/indexing math runs over the VISIBLE tabs only, so a restricted dialog never lands on, or
 		// wraps through, a tab it never built.
 		tabs.addEventListener("keydown", function (e) {
@@ -2221,7 +2222,7 @@
 		}
 
 		if (visibleTabs.indexOf("search") >= 0) {
-			// Search tab (spec §3.2) — membership only; operator editing lives in the header popup (§4).
+			// Search tab — membership only; operator editing lives in the header popup.
 			const searchBody = document.createElement("div");
 			searchBody.className = "juneau-config-body juneau-config-body-search";
 			searchBody.id = tabIds.search.panel;
@@ -2237,7 +2238,7 @@
 		}
 
 		if (visibleTabs.indexOf("sort") >= 0) {
-			// Sort tab (spec §3.3) — an ordered, directional priority list (Gap 6).
+			// Sort tab — an ordered, directional priority list.
 			const sortBody = document.createElement("div");
 			sortBody.className = "juneau-config-body juneau-config-body-sort";
 			sortBody.id = tabIds.sort.panel;
@@ -2253,7 +2254,7 @@
 		}
 
 		if (visibleTabs.indexOf("options") >= 0) {
-			// Options tab (spec §3.4) — page size / wrap / density only.
+			// Options tab — page size / wrap / density only.
 			const optionsBody = document.createElement("div");
 			optionsBody.className = "juneau-config-body juneau-config-body-options";
 			optionsBody.id = tabIds.options.panel;
@@ -2407,7 +2408,7 @@
 	NS.config.closeChooserDialog = closeChooserDialog;
 	NS.config.applyDraft = applyDraft;
 	NS.config.CHOOSER_BACKDROP_CLASS = CHOOSER_BACKDROP_CLASS;
-	// T12 — four-tab View Settings pure layer + page-state bridge (§3/§6.1).
+	// Four-tab View Settings pure layer + page-state bridge.
 	NS.config.CONFIG_TABS = CONFIG_TABS;
 	NS.config.searchCapableColumns = searchCapableColumns;
 	NS.config.sortCapableColumns = sortCapableColumns;

@@ -20,6 +20,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assumptions.*;
 
 import java.util.*;
+import java.util.regex.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.rest.mock.classic.*;
@@ -28,9 +29,10 @@ import org.apache.juneau.rest.server.servlet.*;
 import org.junit.jupiter.api.*;
 
 /**
- * Always-on source-shape coverage for the sanctioned hook namespaces
- * ({@code JuneauViews.rowActions/dialogs/probeSelection/tables/status/csrf/details/html}), plus a Node behavioral
- * proof (via {@code hooks-api.cjs}) that every namespace is frozen and exposes the right member shapes.
+ * Always-on source-shape coverage that every name in {@code JuneauViews.HOOK_NAMESPACES} has a frozen assignment,
+ * plus a Node behavioral proof (via {@code hooks-api.cjs}) that every registered namespace exists and is frozen, that
+ * the registry lists exactly the frozen namespaces the loaded scripts define, and that the original eight namespaces
+ * expose the right member shapes.
  */
 @SuppressWarnings({
 	"resource" // Closeable test fixture held in a static field; lifecycle managed by the test/framework, not a real leak.
@@ -52,13 +54,20 @@ class ViewsJs_Hooks_Test extends TestBase {
 	// Source-shape (always-on, no node needed)
 	// -----------------------------------------------------------------------------------------------------------------
 
-	@Test void a01_everyNamespaceIsFrozenAndPlacedAfterNsInit() throws Exception {
+	@Test void a01_everyRegisteredNamespaceIsFrozenAndPlacedAfterNsInit() throws Exception {
 		var body = viewsJs();
 		var anchor = body.indexOf("renderAsyncStatus: renderAsyncStatus");
 		assertTrue(anchor >= 0, "NS.init closing anchor not found");
-		for (var ns : List.of("NS.rowActions = Object.freeze(", "NS.dialogs = Object.freeze(",
-				"NS.probeSelection = Object.freeze(", "NS.tables = Object.freeze(", "NS.status = Object.freeze(",
-				"NS.csrf = Object.freeze(", "NS.details = Object.freeze(", "NS.html = Object.freeze(")) {
+		var m = Pattern.compile("NS\\.HOOK_NAMESPACES = Object\\.freeze\\(\\[([^\\]]*)\\]\\)").matcher(body);
+		assertTrue(m.find(), "NS.HOOK_NAMESPACES = Object.freeze([...]) not found");
+		var names = new ArrayList<String>();
+		var q = Pattern.compile("\"(\\w+)\"").matcher(m.group(1));
+		while (q.find())
+			names.add(q.group(1));
+		assertTrue(names.containsAll(List.of("actions", "rowActions", "dialogs", "probeSelection", "tables", "status",
+			"csrf", "rules", "details", "html")), () -> "registry lost a known namespace: " + names);
+		for (var name : names) {
+			var ns = "NS." + name + " = Object.freeze(";
 			assertTrue(body.indexOf(ns) > anchor, () -> ns + " not found after the NS.init anchor");
 		}
 	}
@@ -89,10 +98,23 @@ class ViewsJs_Hooks_Test extends TestBase {
 	}
 
 	@Test void b01_everyNamespaceExistsAndIsFrozen() {
-		for (var name : List.of("rowActions", "dialogs", "probeSelection", "tables", "status", "csrf", "details", "html")) {
-			assertEquals(Boolean.TRUE, ns(name).get("exists"), name);
-			assertEquals(Boolean.TRUE, ns(name).get("frozen"), name);
+		var registered = (Map<?,?>)report().get("registered");
+		assertFalse(registered.isEmpty(), "JuneauViews.HOOK_NAMESPACES is missing or empty");
+		for (var name : registered.keySet()) {
+			var shape = (Map<?,?>)registered.get(name);
+			assertEquals(Boolean.TRUE, shape.get("exists"), name.toString());
+			assertEquals(Boolean.TRUE, shape.get("frozen"), name.toString());
 		}
+	}
+
+	@Test void b01a_registryIsFrozenAndListsEveryHookNamespace() {
+		var r = report();
+		assertEquals(Boolean.TRUE, r.get("hookNamespacesFrozen"), "HOOK_NAMESPACES must be a frozen array");
+		assertEquals(new TreeSet<>(List.of("actions", "rowActions", "dialogs", "probeSelection", "tables", "status",
+			"csrf", "rules", "details", "html")), new TreeSet<>((Collection<?>)r.get("hookNamespaces")));
+		assertEquals(new TreeSet<>((Collection<?>)r.get("hookNamespaces")),
+			new TreeSet<>((Collection<?>)r.get("frozenNamespaces")),
+			"every frozen top-level JuneauViews namespace must be listed in HOOK_NAMESPACES, and vice versa");
 	}
 
 	@Test void b02_rowActionsHasTheFullMemberSet() {

@@ -20,7 +20,7 @@
   Apache License 2.0. Recovered from git history of juneau-icons.js (the inline
   glyphs shipped before the from-scratch redraw). See NOTICE and
   juneau-symbols-material-provenance.md. Opt-in via JuneauViews.icons.pack("material");
-  default remains juneau-symbols.svg (juneau-original). Not IRS / SLDS art.
+  default remains juneau-symbols.svg (juneau-original). Not copied from any third-party sprite.
 -->
 <svg xmlns="http://www.w3.org/2000/svg" display="none">
 <symbol id="juneau-sym-copy" viewBox="0 -960 960 960" fill="currentColor">

@@ -27,22 +27,20 @@ import java.util.concurrent.*;
 import java.util.concurrent.atomic.*;
 
 import org.apache.juneau.marshall.collections.*;
-import org.apache.juneau.rest.server.views.*;
-import org.apache.juneau.rest.server.views.ConsoleOutputLine.*;
+import org.apache.juneau.rest.server.terminal.*;
 
 /**
- * The groom-pet demo runs behind the Jobs page's console-output cards.
+ * The groom-pet demo runs behind the Jobs page's terminal cards.
  *
  * <p>
- * A run writes about 60 styled lines to a {@link ConsoleOutputLog}, one step per tick: INFO and FINE lines, a
- * WARNING, {@code check}/{@code cancel} icon lines, a progress strip of block fragments with tooltips and fragment
- * links, a multi-line SEVERE entry, an inline image, marker lines, and a canned ANSI transcript piped through
- * {@link ConsoleOutputLog#appendRaw(Level, Reader)}.  Each tick also appends one ANSI line to a temp file, read
- * through one cached {@link FileConsoleOutputSource} per run.  A verbose run first writes {@value #VERBOSE_LINES}
- * FINE lines, so a 5000-line tail offers "Load earlier lines".
+ * A run writes about 60 ANSI-styled lines to a {@link MemoryTerminalSource}, one step per tick: INFO and FINE lines
+ * (FINE is dim), a WARNING, {@code check}/{@code cross} marks, a progress strip of coloured blocks, a multi-line
+ * SEVERE entry, bold marker lines, and a canned ANSI transcript written as-is.  Each tick also appends one ANSI line to
+ * a temp file, read through one {@link FileTerminalSource} per run.  A verbose run first writes {@value #VERBOSE_LINES}
+ * FINE lines.
  *
  * <p>
- * Run ids are random 128-bit hex strings, so a log can be read only by someone who was given its id.
+ * Run ids are random 128-bit hex strings, so a terminal can be read only by someone who was given its id.
  *
  * <h5 class='section'>Example:</h5>
  * <p class='bjava'>
@@ -66,18 +64,18 @@ public final class GroomRuns implements AutoCloseable {
 	/** Suffix of the log id that selects a run's file-backed source. */
 	public static final String FILE_SUFFIX = "-file";
 
-	/** The same-origin image the script shows. */
-	public static final String PHOTO = "/console/ops/jobs/groom-photo.svg";
+	/** The in-memory terminal's ring capacity in bytes; it holds a verbose run whole. */
+	static final int RING_BYTES = 1 << 20;
 
-	/** The anchor prefix the Jobs page's main console uses; the progress strip links to it. */
-	public static final String ANCHOR_PREFIX = "groom-L";
+	/** The terminal size, in columns and rows, of both of a run's terminals. */
+	static final int COLS = 100, ROWS = 24;
 
-	/** The image served at {@link #PHOTO}. */
-	public static final String PHOTO_SVG = "<svg xmlns='http://www.w3.org/2000/svg' width='160' height='72' viewBox='0 0 160 72' role='img'>"
-		+ "<title>Before and after</title>"
-		+ "<rect width='160' height='72' rx='8' fill='#eef2f6'/>"
-		+ "<circle cx='44' cy='36' r='22' fill='#9a7b5a'/><circle cx='116' cy='36' r='22' fill='#d9b38c'/>"
-		+ "<path d='M70 36h20m-6-6 6 6-6 6' stroke='#334' stroke-width='3' fill='none'/></svg>";
+	private static final String RESET = "\u001b[0m";
+	private static final String BOLD = "\u001b[1m";
+	private static final String DIM = "\u001b[2m";
+	private static final String RED = "\u001b[31m";
+	private static final String GREEN = "\u001b[32m";
+	private static final String YELLOW = "\u001b[33m";
 
 	/** How many runs are kept; the oldest is dropped, and its file deleted, beyond this. */
 	static final int MAX_RUNS = 20;
@@ -114,12 +112,14 @@ public final class GroomRuns implements AutoCloseable {
 		final String pet;
 		final boolean verbose;
 		final Instant submitted = Instant.now();
-		final ConsoleOutputLog log = new ConsoleOutputLog();
+		final MemoryTerminalSource terminal = MemoryTerminalSource.create(RING_BYTES, COLS, ROWS);
 		final Path file;
-		final AtomicReference<FileConsoleOutputSource.Status> fileStatus;
-		final FileConsoleOutputSource fileSource;
-		final List<Long> washLines = new CopyOnWriteArrayList<>();
+		final Path sizeFile;
+		final AtomicBoolean fileDone = new AtomicBoolean();
+		final FileTerminalSource fileSource;
+		final AtomicInteger lines = new AtomicInteger();
 		final AtomicInteger step = new AtomicInteger();
+		volatile boolean done;
 		volatile ScheduledFuture<?> task;
 		volatile String key;
 
@@ -128,28 +128,42 @@ public final class GroomRuns implements AutoCloseable {
 			this.pet = pet;
 			this.verbose = verbose;
 			this.file = file;
-			fileStatus = new AtomicReference<>(new FileConsoleOutputSource.Status("RUNNING", Style.ACCENT, false, submitted, null));
-			fileSource = FileConsoleOutputSource.create(file).ansi(true).status(fileStatus::get).build();
+			sizeFile = file.resolveSibling(file.getFileName() + ".size");
+			fileSource = FileTerminalSource.create(file).terminal(fileDone::get).build();
 		}
 
-		/** @return The run id, which is also its in-memory log id. */
+		/** @return The run id, which is also its in-memory terminal id. */
 		public String id() { return id; }
 
 		/** @return The pet name. */
 		public String pet() { return pet; }
 
-		/** @return The in-memory log. */
-		public ConsoleOutputLog log() { return log; }
+		/** @return The in-memory terminal. */
+		public MemoryTerminalSource terminal() { return terminal; }
 
 		/** @return The cached file-backed source over this run's transcript. */
-		public FileConsoleOutputSource fileSource() { return fileSource; }
+		public FileTerminalSource fileSource() { return fileSource; }
 
 		/** @return The temp file the run appends to. */
 		public Path file() { return file; }
 
+		/** @return Whether the run has written its last line. */
+		public boolean done() { return done; }
+
 		/** @return The Groom runs table row. */
 		public JsonMap row() {
-			return JsonMap.of("id", id, "pet", pet, "submitted", submitted.toString(), "state", log.tail(0).state, "lines", log.size(), "verbose", verbose);
+			return JsonMap.of("id", id, "pet", pet, "submitted", submitted.toString(), "state", done ? "DONE" : "RUNNING", "lines", lines.get(), "verbose", verbose);
+		}
+
+		void line(String text) {
+			var b = (text + "\r\n").getBytes(UTF_8);
+			terminal.write(b, 0, b.length);
+			lines.incrementAndGet();
+		}
+
+		void raw(String text) {
+			for (var l : text.split("\n"))
+				line(l);
 		}
 	}
 
@@ -213,9 +227,10 @@ public final class GroomRuns implements AutoCloseable {
 			var file = Files.createTempFile("petstore-groom-", ".log");
 			file.toFile().deleteOnExit();
 			var r = new Run(UUID.randomUUID().toString().replace("-", ""), name, verbose, file);
-			r.log.start();
+			Files.writeString(r.sizeFile, "{\"cols\":" + COLS + ",\"rows\":" + ROWS + "}", UTF_8);
+			r.sizeFile.toFile().deleteOnExit();
 			if (verbose)
-				r.log.appendRaw(Level.FINE, new StringReader(verboseText()));
+				verboseLines().forEach(r::line);
 			runs.put(r.id, r);
 			order.addFirst(r);
 			if (idempotencyKey != null) {
@@ -252,17 +267,17 @@ public final class GroomRuns implements AutoCloseable {
 	}
 
 	/**
-	 * Resolves a console-output log id: {@code <runId>} is the in-memory log, {@code <runId>-file} the file source.
+	 * Resolves a terminal id: {@code <runId>} is the in-memory terminal, {@code <runId>-file} the file source.
 	 *
-	 * @param logId The log id from the URL.
+	 * @param terminalId The terminal id from the URL.
 	 * @return The source, or empty for an unknown id.
 	 */
-	public Optional<ConsoleOutputSource> source(String logId) {
-		if (logId == null)
+	public Optional<TerminalSource> source(String terminalId) {
+		if (terminalId == null)
 			return Optional.empty();
-		if (logId.endsWith(FILE_SUFFIX))
-			return get(logId.substring(0, logId.length() - FILE_SUFFIX.length())).<ConsoleOutputSource>map(Run::fileSource);
-		return get(logId).<ConsoleOutputSource>map(Run::log);
+		if (terminalId.endsWith(FILE_SUFFIX))
+			return get(terminalId.substring(0, terminalId.length() - FILE_SUFFIX.length())).<TerminalSource>map(Run::fileSource);
+		return get(terminalId).<TerminalSource>map(Run::terminal);
 	}
 
 	/** Stops the ticker and deletes every run's file. */
@@ -281,17 +296,18 @@ public final class GroomRuns implements AutoCloseable {
 			return;
 		try {
 			SCRIPT.get(i).run(r);
-			Files.writeString(r.file, fileLine(i) + "\n", UTF_8, StandardOpenOption.APPEND);
+			Files.writeString(r.file, fileLine(i) + "\r\n", UTF_8, StandardOpenOption.APPEND);
 		} catch (IOException | RuntimeException e) { // A failed step must not cancel the schedule silently.
-			r.log.append(ConsoleOutputLine.severe(f("Step %s failed: %s", i + 1, e.getMessage())));
+			r.line(BOLD + RED + f("Step %s failed: %s", i + 1, e.getMessage()) + RESET);
 		}
 		if (i == SCRIPT.size() - 1)
 			finish(r);
 	}
 
 	private static void finish(Run r) {
-		r.log.complete("DONE", Style.SUCCESS);
-		r.fileStatus.set(new FileConsoleOutputSource.Status("DONE", Style.SUCCESS, true, r.submitted, Duration.between(r.submitted, Instant.now()).toMillis()));
+		r.done = true;
+		r.terminal.finish();
+		r.fileDone.set(true);
 		var t = r.task;
 		if (t != null)
 			t.cancel(false);
@@ -306,6 +322,7 @@ public final class GroomRuns implements AutoCloseable {
 			keys.remove(r.key);
 		try {
 			Files.deleteIfExists(r.file);
+			Files.deleteIfExists(r.sizeFile);
 		} catch (IOException e) {
 			// Best effort: the file is also marked deleteOnExit.
 		}
@@ -319,63 +336,57 @@ public final class GroomRuns implements AutoCloseable {
 		return f("\u001b[1m[%02d/%s]\u001b[0m step done", i + 1, SCRIPT.size());
 	}
 
-	private static String verboseText() {
-		var sb = new StringBuilder(VERBOSE_LINES * 40);
+	private static List<String> verboseLines() {
+		var out = new ArrayList<String>(VERBOSE_LINES);
 		for (var i = 1; i <= VERBOSE_LINES; i++)
-			sb.append("verbose: inspected coat patch ").append(i).append(" of ").append(VERBOSE_LINES).append('\n');
-		return sb.toString();
+			out.add(DIM + "verbose: inspected coat patch " + i + " of " + VERBOSE_LINES + RESET);
+		return out;
 	}
 
-	static ConsoleOutputLine progress(List<Long> washLines) {
-		var frags = new ArrayList<Frag>();
-		frags.add(Frag.text("Wash passes "));
-		var n = washLines.size();
-		for (var i = 0; i < n; i++) {
-			var clean = i < n - 2;
-			var b = Frag.block().style(clean ? Style.SUCCESS : Style.WARN)
-				.tooltip(f("Pass %s: %s", i + 1, clean ? "clean" : "rinse again"))
-				.label(f("Pass %s", i + 1));
-			var line = washLines.get(i);
-			if (line > 0)
-				b.href("#" + ANCHOR_PREFIX + line);
-			frags.add(b);
-		}
-		return ConsoleOutputLine.frags(frags.toArray(Frag[]::new));
+	static String progress() {
+		var sb = new StringBuilder("Wash passes ");
+		for (var i = 0; i < WASH_PASSES; i++)
+			sb.append(i < WASH_PASSES - 2 ? GREEN : YELLOW).append("\u25a0").append(RESET);
+		return sb.append(" (the last two need another rinse)").toString();
 	}
+
+	private static String info(String text) { return text; }
+	private static String fine(String text) { return DIM + text + RESET; }
+	private static String marker(String text) { return BOLD + text + RESET; }
+	private static String mark(boolean ok, String text) { return (ok ? GREEN + "\u2713 " : RED + "\u2717 ") + text + RESET; }
 
 	private static List<Step> script() {
 		var s = new ArrayList<Step>();
-		s.add(r -> r.log.append(ConsoleOutputLine.info("Grooming " + r.pet).marker(true)));
-		s.add(r -> r.log.append(ConsoleOutputLine.fine("Reading the grooming profile")));
+		s.add(r -> r.line(marker("Grooming " + r.pet)));
+		s.add(r -> r.line(fine("Reading the grooming profile")));
 		for (var tool : List.of("brush", "comb", "shampoo", "conditioner", "towel", "dryer", "clippers", "nail file"))
-			s.add(r -> r.log.append(ConsoleOutputLine.fine("Checked out the " + tool)));
-		s.add(r -> r.log.append(ConsoleOutputLine.info("All tools ready").icon("check").style(Style.SUCCESS)));
-		s.add(r -> r.log.append(ConsoleOutputLine.info("Wash").marker(true)));
+			s.add(r -> r.line(fine("Checked out the " + tool)));
+		s.add(r -> r.line(mark(true, "All tools ready")));
+		s.add(r -> r.line(marker("Wash")));
 		for (var i = 1; i <= WASH_PASSES; i++) {
 			var n = i;
-			s.add(r -> r.washLines.add(r.log.append(ConsoleOutputLine.info(f("Wash pass %s of %s", n, WASH_PASSES)))));
+			s.add(r -> r.line(info(f("Wash pass %s of %s", n, WASH_PASSES))));
 		}
-		s.add(r -> r.log.append(ConsoleOutputLine.warning("The water is 2 degrees cooler than the profile asks for")));
-		s.add(r -> r.log.append(progress(r.washLines)));
-		s.add(r -> r.log.append(ConsoleOutputLine.info("Dry").marker(true)));
-		s.add(r -> r.log.appendRaw(Level.INFO, new StringReader(String.join("\n", TRANSCRIPT))));
+		s.add(r -> r.line(YELLOW + "The water is 2 degrees cooler than the profile asks for" + RESET));
+		s.add(r -> r.line(progress()));
+		s.add(r -> r.line(marker("Dry")));
+		s.add(r -> r.raw(String.join("\n", TRANSCRIPT)));
 		for (var i = 1; i <= 10; i++) {
 			var n = i;
-			s.add(r -> r.log.append(ConsoleOutputLine.info(f("Brushed section %s of 10", n))));
+			s.add(r -> r.line(info(f("Brushed section %s of 10", n))));
 		}
-		s.add(r -> r.log.append(ConsoleOutputLine.severe(String.join("\n",
+		s.add(r -> r.raw(BOLD + RED + String.join("\n",
 			"Dryer overheated; switching to the spare",
 			"    at Dryer.heat(Dryer.java:42)",
 			"    at Groomer.dry(Groomer.java:17)",
-			"    at GroomRun.step(GroomRun.java:88)"))));
-		s.add(r -> r.log.append(ConsoleOutputLine.info("Bow tie: none in stock").icon("cancel").style(Style.ERROR)));
-		s.add(r -> r.log.append(ConsoleOutputLine.info("Before and after").image(PHOTO, "A freshly groomed pet")));
-		s.add(r -> r.log.append(ConsoleOutputLine.info("Trim").marker(true)));
+			"    at GroomRun.step(GroomRun.java:88)") + RESET));
+		s.add(r -> r.line(mark(false, "Bow tie: none in stock")));
+		s.add(r -> r.line(marker("Trim")));
 		for (var i = 1; i <= 12; i++) {
 			var n = i;
-			s.add(r -> r.log.append(ConsoleOutputLine.fine(f("Trimmed nail %s of 12", n))));
+			s.add(r -> r.line(fine(f("Trimmed nail %s of 12", n))));
 		}
-		s.add(r -> r.log.append(ConsoleOutputLine.info(r.pet + " is groomed").icon("check").style(Style.SUCCESS)));
+		s.add(r -> r.line(mark(true, r.pet + " is groomed")));
 		return List.copyOf(s);
 	}
 }

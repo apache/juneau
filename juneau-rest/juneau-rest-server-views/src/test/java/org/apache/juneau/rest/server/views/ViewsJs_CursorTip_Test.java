@@ -101,7 +101,7 @@ class ViewsJs_CursorTip_Test extends TestBase {
 		assertFalse(css.contains("data-sbx-tip"), css);
 	}
 
-	@Test void a04_js_hasNoCopiedIrsNames() throws Exception {
+	@Test void a04_js_hasNoCopiedThirdPartyNames() throws Exception {
 		var body = viewsJs();
 		assertFalse(body.contains("sbx-cursor-tip"), body);
 		assertFalse(body.contains("data-sbx-tip"), body);

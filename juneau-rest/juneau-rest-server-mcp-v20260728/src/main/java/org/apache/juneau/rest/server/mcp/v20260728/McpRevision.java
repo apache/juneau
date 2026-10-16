@@ -365,7 +365,7 @@ public final class McpRevision implements org.apache.juneau.rest.server.mcp.McpR
 	 * @param params The opaque request params. Must decode to a {@code SubscriptionsListenRequest}.
 	 * @param config The neutral handler registry, used to auto-derive capabilities when none were set explicitly.
 	 * @param ctx The per-request bean store, expected to carry a bound {@link McpSubscriptionBroker}
-	 * 	(Phase 1-3 wiring) and a bound {@link McpOptions}. In production the options bean is normally present —
+	 * 	and a bound {@link McpOptions}. In production the options bean is normally present —
 	 * 	{@code McpRestServlet#getMcpOptions()} / {@code McpEndpoint#mcpOptionsBean()} publish it into
 	 * 	the {@code RestContext} bean store that this request-scoped {@code ctx} wraps as its parent, since the
 	 * 	neutral core cannot add it directly ({@code McpOptions} is a v2 type). The
@@ -850,7 +850,7 @@ public final class McpRevision implements org.apache.juneau.rest.server.mcp.McpR
 	 *
 	 * <p>
 	 * Always wraps {@code ctx} with a {@link McpMrtrCapabilityContext} so a handler can pre-check the client's
-	 * advertised {@code elicitation} capability (spec &sect;4). When the request carries a {@code requestState}
+	 * advertised {@code elicitation} capability. When the request carries a {@code requestState}
 	 * (a RESUME), it is unsealed under the canonical AAD and validated for integrity, method agreement, expiry,
 	 * the max-rounds cap, argument-hash agreement (always; see {@link #argumentsHash(Map)}), and replay (only when
 	 * {@link McpMrtrConfig#getReplayCache()} is configured; see {@link #checkReplay(ReplayCache, String, long)})
@@ -951,7 +951,7 @@ public final class McpRevision implements org.apache.juneau.rest.server.mcp.McpR
 	 * 	so a handler that mutated the live {@code params} map cannot shift which tool/prompt/resource the next
 	 * 	token is bound to.
 	 * @param ctx The per-request bean store, used to resolve the authenticated {@link #principal(BeanStore)} threaded
-	 * 	into the codec's {@link RequestStateCodec#seal seal} (READY-312f F4). Must not be <jk>null</jk>.
+	 * 	into the codec's {@link RequestStateCodec#seal seal}. Must not be <jk>null</jk>.
 	 * @return The assembled, validated {@code input_required} result. Never <jk>null</jk>.
 	 */
 	private InputRequiredResult pause(McpInputRequiredSignal signal, String method, Map<String,Object> params, int currentRound, String argumentsHash, String target, BeanStore ctx) {
@@ -1158,10 +1158,10 @@ public final class McpRevision implements org.apache.juneau.rest.server.mcp.McpR
 	/**
 	 * Resolves the authenticated caller {@link Principal} for the current request, threaded into the
 	 * {@link RequestStateCodec} at seal and unseal so a hardened codec can bind the {@code requestState} to who
-	 * requested it (READY-312f F4; enables principal-bound AAD).
+	 * requested it (enables principal-bound AAD).
 	 *
 	 * <p>
-	 * Reads the F2 resource-server principal via {@link McpResourceServerSupport#principal} &mdash; the same
+	 * Reads the resource-server principal via {@link McpResourceServerSupport#principal} &mdash; the same
 	 * {@code RestRequest -> HttpServletRequest} lookup {@link #enforceStepUpScopes} uses for granted scopes, so the
 	 * two stay in lock-step. Returns <jk>null</jk> when there is no bound {@link RestRequest} (a direct-dispatch unit
 	 * test), when RS auth is disabled, or when the caller is anonymous &mdash; the codec must seal/unseal cleanly in

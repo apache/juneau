@@ -15,6 +15,6 @@
   limitations under the License.
 --><@page>
 <@card type="run-view" id="run">
-{ contractVersion: '1', runView: { eventsUrl: '/runs/1/events', rawHref: 'https://evil.example/{line}' } }
+{ contractVersion: '1', runView: { eventsUrl: '/runs/1/events', rawHref: 'https://evil.example/{offset}' } }
 </@card>
 </@page>

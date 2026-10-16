@@ -34,17 +34,29 @@ import org.eclipse.jetty.client.*;
  *
  * <p>
  * The forward/strip decision and the header set are delegated to {@link RedirectSecurity} so that all
- * transports share one policy.
+ * transports share one policy.  A client the caller supplies is not this subclass, so the transport sends its
+ * requests as {@link CredentialGuardingHttpRequest}, which applies the same rule when Jetty copies it.
  */
 final class CredentialGuardingHttpClient extends HttpClient {
 
 	@Override /* HttpClient */
 	protected Request copyRequest(Request oldRequest, URI newURI) {
-		var newRequest = super.copyRequest(oldRequest, newURI);
+		return stripIfCrossOrigin(oldRequest, newURI, super.copyRequest(oldRequest, newURI));
+	}
+
+	/**
+	 * Removes the credential headers from {@code copy} when {@code newURI} is a different origin from {@code oldRequest}.
+	 *
+	 * @param oldRequest The request that was copied.
+	 * @param newURI The URI the copy is aimed at.
+	 * @param copy The copy of {@code oldRequest}.
+	 * @return {@code copy}.
+	 */
+	static <R extends Request> R stripIfCrossOrigin(Request oldRequest, URI newURI, R copy) {
 		if (shouldStrip(originOf(oldRequest), newURI))
 			for (var name : RedirectSecurity.stripOnCrossOrigin())
-				newRequest.headers(fields -> fields.remove(name));
-		return newRequest;
+				copy.headers(fields -> fields.remove(name));
+		return copy;
 	}
 
 	private static URI originOf(Request request) {

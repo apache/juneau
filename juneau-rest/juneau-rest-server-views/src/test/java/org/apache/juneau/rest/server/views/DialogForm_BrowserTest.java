@@ -32,7 +32,7 @@ import org.junit.jupiter.api.condition.*;
 /**
  * The dialog-form half of the module's <b>JavaScript-execution harness</b>: runs the REAL served {@code juneau-views.js}
  * in a real headless browser and asserts the complex-dialog-form behavior as a user would experience it &mdash; the
- * six typed inputs paint (with a keyboard-operable {@code role=switch} toggle and a native {@code select}), the modal
+ * typed inputs paint (with a keyboard-operable {@code role=switch} toggle and a native {@code select}), the modal
  * traps focus and wraps Tab within itself, a confirm on an invalid form is blocked and focuses the first invalid
  * control, a valid confirm submits a body carrying the checkbox/toggle as explicit boolean strings, and the nested
  * {@code type=action} button opens a SECOND stacked dialog without closing the first.
@@ -123,7 +123,7 @@ class DialogForm_BrowserTest extends TestBase {
 		assertEquals(List.of(), report.get("jsFailures"), () -> "the runtime logged errors: " + report.get("jsFailures"));
 	}
 
-	@Test void b01_sixTypedInputsPaintWithKeyboardOperableToggleAndSelect() {
+	@Test void b01_typedInputsPaintWithKeyboardOperableToggleAndSelect() {
 		var p = sub("paint");
 		assertEquals(Boolean.TRUE, p.get("formVisible"), () -> report.toString());
 		assertEquals(Boolean.TRUE, p.get("hasTextarea"), () -> report.toString());

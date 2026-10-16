@@ -18,6 +18,7 @@ package org.apache.juneau.rest.server.console;
 
 import static java.nio.charset.StandardCharsets.*;
 import static java.util.stream.Collectors.*;
+import static org.apache.juneau.test.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.*;
@@ -30,7 +31,7 @@ import org.junit.jupiter.api.*;
 
 /**
  * Unit coverage for {@link BusWiringValidator} and the {@link CardTypeHandler} bus defaults
- * (spec §5.4, §5.5, §6.1, §6.2, §11.2).  The full rule matrix, with the real {@code datatables} handler, is the shared
+ *.  The full rule matrix, with the real {@code datatables} handler, is the shared
  * {@code bus-wiring-corpus.json}, run by {@code $CUIF}'s {@code BusWiring_Corpus_Test}.  This class pins what the
  * corpus cannot: the defaults, {@code Problem}, the helpers, and the registry hooks driven by stub types.
  */
@@ -225,5 +226,183 @@ class BusWiringValidator_Test extends TestBase {
 	@Test void a19_nonTerminalCardWithTerminalMapIsNotChecked() throws Exception {
 		assertEquals(List.of(), problems(page("\"cards\":["
 			+ "{\"id\":\"h\",\"type\":\"html\",\"template\":\"h\",\"terminal\":{\"input\":true}}]")));
+	}
+
+	// ---- chart wiring rules (E-72..E-77), target lookups ---------------------------------------------------------
+
+	// juneau-charts.js ships from this module, so the path below is relative to the console-ui module root.
+	@Test void e01_extensionNamePattern_matchesJs() throws Exception {
+		var js = java.nio.file.Files.readString(java.nio.file.Path.of(System.getProperty("basedir", "."),
+			"src/main/resources/org/apache/juneau/console/juneau-charts.js"), UTF_8);
+		assertContains("const EXTENSION_NAME_RE = /" + BusWiringValidator.EXTENSION_NAME.pattern() + "/;", js);
+	}
+
+	@Test void e02_filterSectionOwnsFilterTopic() throws Exception {
+		assertEquals(List.of(), problems(page("\"dashboard\":{\"rail\":{\"sections\":[{\"id\":\"range\"}]}},\"cards\":["
+			+ "{\"id\":\"h\",\"type\":\"html\",\"template\":\"h\",\"subscribes\":[{\"topic\":\"filter:range\",\"as\":\"refresh\"}]}]")));
+		assertEquals(List.of("E-42 topic 'filter:gone' names card 'gone', which is not on this page"),
+			problems(page("\"cards\":[{\"id\":\"h\",\"type\":\"html\",\"template\":\"h\",\"subscribes\":[{\"topic\":\"filter:gone\",\"as\":\"refresh\"}]}]")));
+	}
+
+	@Test void e03_cmdRibbonTargetsDataSource() throws Exception {
+		var ribbon = "\"ribbon\":[{\"type\":\"publish\",\"title\":\"R\",\"topic\":\"cmd:%s\"}]";
+		assertEquals(List.of(), problems(page("\"dataSources\":[{\"id\":\"orders\"}],\"cards\":["
+			+ "{\"id\":\"h\",\"type\":\"html\",\"template\":\"h\"," + ribbon.formatted("orders") + "}]")));
+		assertEquals(List.of("E-42 topic 'cmd:gone' names card 'gone', which is not on this page"),
+			problems(page("\"dataSources\":[{\"id\":\"orders\"}],\"cards\":["
+				+ "{\"id\":\"h\",\"type\":\"html\",\"template\":\"h\"," + ribbon.formatted("gone") + "}]")));
+		// the ribbon "target" path (R-E3a) consults the same set
+		assertEquals(List.of(), problems(page("\"dataSources\":[{\"id\":\"orders\"}],\"cards\":["
+			+ "{\"id\":\"h\",\"type\":\"html\",\"template\":\"h\",\"ribbon\":[{\"type\":\"refresh\",\"target\":\"orders\"}]}]")));
+	}
+
+	@Test void e04_fnNestedInOption_isCheckedForName() throws Exception {
+		assertEquals(List.of("E-74 'Bad' is not a valid $fn name"),
+			problems(page("\"cards\":[{\"id\":\"t\",\"type\":\"chart\",\"option\":{\"series\":[{\"label\":{\"formatter\":{\"$fn\":\"Bad\"}}}]}}]")));
+		assertEquals(List.of(), problems(page("\"cards\":[{\"id\":\"t\",\"type\":\"chart\","
+			+ "\"option\":{\"series\":[{\"label\":{\"formatter\":{\"$fn\":\"compact\"}}}]}}]")));
+	}
+
+	@Test void e05_fnInHelper_isCheckedForName() throws Exception {
+		assertEquals(List.of("E-74 'Bad' is not a valid $fn name"),
+			problems(page("\"cards\":[{\"id\":\"t\",\"type\":\"chart\",\"helper\":{\"kind\":\"scatter\",\"symbolSize\":{\"$fn\":\"Bad\"}}}]")));
+		assertEquals(List.of(), problems(page("\"cards\":[{\"id\":\"t\",\"type\":\"chart\","
+			+ "\"helper\":{\"kind\":\"scatter\",\"symbolSize\":{\"$fn\":\"symbolSizeBy\"}}}]")));
+		// a legacy flat card carries the helper keys at top level
+		assertEquals(List.of("E-74 'Bad' is not a valid $fn name"),
+			problems(page("\"cards\":[{\"id\":\"t\",\"type\":\"chart\",\"kind\":\"line\",\"symbolSize\":{\"$fn\":\"Bad\"}}]")));
+	}
+
+	// The legacy flat walk matches ChartCardType: the helper keys are walked as one map (so series[*].data is skipped), and only
+	// when the card names a kind (an option-only card's top-level keys are not helper keys).
+	@Test void e07_legacyFlatWalk_skipsSeriesData_andNeedsKind() throws Exception {
+		assertEquals(List.of(), problems(page("\"cards\":[{\"id\":\"t\",\"type\":\"chart\",\"kind\":\"line\","
+			+ "\"series\":[{\"field\":\"a\",\"data\":[{\"$fn\":\"Bad\"}]}]}]")));
+		assertEquals(List.of("E-74 'Bad' is not a valid $fn name"), problems(page("\"cards\":[{\"id\":\"t\",\"type\":\"chart\",\"kind\":\"line\","
+			+ "\"series\":[{\"field\":\"a\",\"label\":{\"$fn\":\"Bad\"}}]}]")));
+		assertEquals(List.of(), problems(page("\"cards\":[{\"id\":\"t\",\"type\":\"chart\",\"option\":{\"series\":[]},"
+			+ "\"x\":{\"$fn\":\"Bad\"}}]")));
+	}
+
+	// A chart's zoom publish is only legal when it is the retained implicit one (the chart handler lists it); with retain:false
+	// it is an ordinary declared publish of a framework family, so E-45, whatever subscribes to it.
+	@Test void e06_chartZoomPublishedWithoutRetain_withSubscriber() throws Exception {
+		assertEquals(List.of("E-45 'zoom' is a framework family; framework topics are implicit and may not be declared"), problems(page("\"cards\":[{\"id\":\"t\",\"type\":\"chart\",\"publishes\":[{\"topic\":\"zoom:t\",\"retain\":false}]},"
+			+ "{\"id\":\"u\",\"type\":\"html\",\"template\":\"h\",\"subscribes\":[{\"topic\":\"zoom:t\",\"as\":\"refresh\"}]}]")));
+	}
+
+	private static final String READER = "{\"id\":\"h\",\"type\":\"html\",\"template\":\"h\",\"subscribes\":[{\"topic\":\"data:orders\",\"as\":\"refresh\"}]}";
+
+	@Test void g01_dataSource_isTheOnePublisher() throws Exception {
+		assertEquals(List.of(), problems(page("\"dataSources\":[{\"id\":\"orders\",\"kind\":\"source\",\"url\":\"/x\"}],\"cards\":[" + READER + "]")));
+	}
+
+	@Test void g02_noPublisher_isE71NotE41() throws Exception {
+		assertEquals(List.of("E-71 topic 'data:orders' needs exactly one source publisher; found 0"), problems(page("\"cards\":[" + READER + "]")));
+	}
+
+	@Test void g03_sourceAndScriptTopic_isE71() throws Exception {
+		assertEquals(List.of("E-71 topic 'data:orders' needs exactly one source publisher; found 2"), problems(page(
+			"\"topics\":[{\"topic\":\"data:orders\",\"retain\":true,\"publisher\":\"script\"}],"
+			+ "\"dataSources\":[{\"id\":\"orders\",\"kind\":\"source\",\"url\":\"/x\"}],\"cards\":[]")));
+	}
+
+	@Test void g04_derivedFromMissingSource_isE71() throws Exception {
+		assertEquals(List.of("E-71 topic 'data:nope' needs exactly one source publisher; found 0"), problems(page(
+			"\"dataSources\":[{\"id\":\"orders\",\"kind\":\"derived\",\"from\":\"nope\",\"transforms\":[]}],\"cards\":[" + READER + "]")));
+	}
+
+	// Regression check: the source-op rules still hold once sources publish data: topics.
+	@Test void g05_sourceOps() throws Exception {
+		var src = "\"dataSources\":[{\"id\":\"orders\",\"kind\":\"source\",\"url\":\"/x\"}],";
+		assertEquals(List.of(), problems(page(src + "\"cards\":[{\"id\":\"h\",\"type\":\"html\",\"template\":\"h\",\"ribbon\":["
+			+ "{\"type\":\"refresh\",\"title\":\"R\",\"target\":\"orders\"},"
+			+ "{\"type\":\"publish\",\"title\":\"C\",\"topic\":\"cmd:orders\",\"payload\":{\"schemaVersion\":1,\"op\":\"refresh\",\"options\":{\"clearCache\":true}}}]}]")));
+		assertEquals(List.of("E-43 card 'orders' (type 'dataSource') does not handle op 'zoomTo'"), problems(page(src
+			+ "\"cards\":[{\"id\":\"h\",\"type\":\"html\",\"template\":\"h\",\"ribbon\":["
+			+ "{\"type\":\"publish\",\"title\":\"Z\",\"topic\":\"cmd:orders\",\"payload\":{\"schemaVersion\":1,\"op\":\"zoomTo\"}}]}]")));
+		assertEquals(List.of("E-43 card 'orders' (type 'dataSource') does not handle op 'pause-polling'"), problems(page(src
+			+ "\"cards\":[{\"id\":\"h\",\"type\":\"html\",\"template\":\"h\",\"ribbon\":[{\"type\":\"pausePolling\",\"target\":\"orders\"}]}]")));
+	}
+
+	@Test void g06_extensionNames() throws Exception {
+		assertEquals(List.of("E-74 'Bad' is not a valid parser name", "E-74 'x..y' is not a valid builder name", "E-74 'Top N' is not a valid transform name"),
+			problems(page("\"dataSources\":[{\"id\":\"a\",\"kind\":\"source\",\"url\":\"/x\",\"parser\":\"Bad\",\"builder\":\"x..y\"},"
+				+ "{\"id\":\"b\",\"kind\":\"derived\",\"from\":\"a\",\"transforms\":[{\"use\":\"Top N\"}]}],\"cards\":[]")));
+	}
+
+	@Test void g07_unreadSource_isFine() throws Exception {
+		assertEquals(List.of(), problems(page("\"dataSources\":[{\"id\":\"orders\",\"kind\":\"source\",\"url\":\"/x\"}],\"cards\":[]")));
+	}
+
+	@Test void g08_twoReaders_oneE71() throws Exception {
+		var other = READER.replace("\"id\":\"h\"", "\"id\":\"h2\"");
+		assertEquals(List.of("E-71 topic 'data:orders' needs exactly one source publisher; found 0"), problems(page("\"cards\":[" + READER + "," + other + "]")));
+	}
+
+	@Test void g09_duplicateSourceId_isE76Only() throws Exception {
+		assertEquals(List.of("E-76 data source 'orders': id duplicates data source 'orders'"), problems(page(
+			"\"dataSources\":[{\"id\":\"orders\",\"kind\":\"source\",\"url\":\"/x\"},{\"id\":\"orders\",\"kind\":\"source\",\"url\":\"/y\"}],\"cards\":[" + READER + "]")));
+	}
+
+	@Test void g10_derivedChain_isFine() throws Exception {
+		assertEquals(List.of(), problems(page("\"dataSources\":[{\"id\":\"raw\",\"kind\":\"source\",\"url\":\"/x\"},"
+			+ "{\"id\":\"mid\",\"kind\":\"derived\",\"from\":\"raw\",\"transforms\":[]},"
+			+ "{\"id\":\"orders\",\"kind\":\"derived\",\"from\":\"mid\",\"transforms\":[]}],\"cards\":[" + READER + "]")));
+	}
+
+	private static String derived(String... idFrom) {
+		var sb = new StringBuilder("\"dataSources\":[{\"id\":\"src\",\"kind\":\"source\",\"url\":\"/x\"}");
+		for (var i = 0; i < idFrom.length; i += 2)
+			sb.append(",{\"id\":\"").append(idFrom[i]).append("\",\"kind\":\"derived\",\"from\":\"").append(idFrom[i + 1]).append("\",\"transforms\":[]}");
+		return sb.append("],\"cards\":[]").toString();
+	}
+
+	@Test void g11_derivedSelfReference_isE76() throws Exception {
+		assertEquals(List.of("E-76 data source 'a': derived source 'a' references itself"), problems(page(derived("a", "a"))));
+	}
+
+	@Test void g12_derivedTwoCycle_isE76() throws Exception {
+		assertEquals(List.of("E-76 data source 'a': derived source cycle: a -> b -> a"), problems(page(derived("b", "a", "a", "b"))));
+	}
+
+	@Test void g13_derivedThreeCycle_isE76_fromSmallestId() throws Exception {
+		assertEquals(List.of("E-76 data source 'a': derived source cycle: a -> b -> c -> a"), problems(page(derived("c", "a", "b", "c", "a", "b"))));
+	}
+
+	@Test void g14_leadInToCycle_reportsTheCycleOnce() throws Exception {
+		assertEquals(List.of("E-76 data source 'b': derived source cycle: b -> c -> b"), problems(page(derived("a", "b", "b", "c", "c", "b", "z", "c"))));
+	}
+
+	@Test void g15_derivedOfDerivedChain_isFine() throws Exception {
+		assertEquals(List.of(), problems(page(derived("a", "src", "b", "a", "c", "b"))));
+	}
+
+	@Test void g16_twoDisjointCycles_eachReportedOnce_sortedBySmallestId() throws Exception {
+		assertEquals(List.of(
+			"E-76 data source 'a': derived source cycle: a -> b -> a",
+			"E-76 data source 'd': derived source cycle: d -> e -> d"
+		), problems(page(derived("d", "e", "e", "d", "a", "b", "b", "a"))));
+	}
+
+	@Test void g17_derivedFromMissingSource_isE71Only() throws Exception {
+		assertEquals(List.of("E-71 topic 'data:nope' needs exactly one source publisher; found 0"), problems(page(derived("a", "nope"))));
+	}
+
+	@Test void g18_cycleEnteredAtLargerId_isRotatedToSmallest() throws Exception {
+		assertEquals(List.of("E-76 data source 'b': derived source cycle: b -> c -> b"), problems(page(derived("a", "c", "c", "b", "b", "c"))));
+	}
+
+	@Test void g19_dashboardStatus_declaredByTopicOrSource() throws Exception {
+		assertEquals(List.of(), problems("{\"contractVersion\":\"1\",\"title\":\"T\",\"nav\":[],\"activeNav\":[],\"cards\":[],"
+			+ "\"topics\":[{\"topic\":\"data:orders\",\"retain\":true,\"publisher\":\"script\"}],"
+			+ "\"dashboard\":{\"id\":\"d\",\"grid\":1,\"panels\":[],\"status\":[\"data:orders\"]}}"));
+		assertEquals(List.of(), problems("{\"contractVersion\":\"1\",\"title\":\"T\",\"nav\":[],\"activeNav\":[],\"cards\":[],"
+			+ "\"dataSources\":[{\"id\":\"orders\",\"kind\":\"source\"}],"
+			+ "\"dashboard\":{\"id\":\"d\",\"grid\":1,\"panels\":[],\"status\":[\"data:orders\"]}}"));
+	}
+
+	@Test void g20_noDashboard_noE77() throws Exception {
+		assertEquals(List.of(), problems("{\"contractVersion\":\"1\",\"title\":\"T\",\"nav\":[],\"activeNav\":[],\"cards\":[]}"));
 	}
 }

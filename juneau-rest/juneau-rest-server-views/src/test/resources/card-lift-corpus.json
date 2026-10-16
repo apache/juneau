@@ -104,7 +104,7 @@
         "columns": [{"key": "version", "label": "Version"}],
         "rowType": "release", "dataMode": "server", "ribbon": {"field": "status"}, "pollIntervalMs": 5000,
         "pausePollingWhileEditing": true, "columnConfig": {"chooser": true}, "cleanAddress": true, "primary": false,
-        "copyLink": false, "rowActions": [{"id": "open", "label": "Open"}],
+        "copyLink": false, "urlState": {"day": {}}, "rowActions": [{"id": "open", "label": "Open"}],
         "rowClassRules": [{"field": "status", "equals": "failed", "className": "is-failed"}]
       },
       "expected": {
@@ -117,7 +117,7 @@
           "columns": [{"data": "version", "title": "Version"}],
           "rowType": "release", "dataMode": "server", "ribbon": {"field": "status"}, "pollIntervalMs": 5000,
           "pausePollingWhileEditing": true, "columnConfig": {"chooser": true}, "cleanAddress": true, "primary": false,
-          "copyLink": false, "rowActions": [{"id": "open", "label": "Open"}],
+          "copyLink": false, "urlState": {"day": {}}, "rowActions": [{"id": "open", "label": "Open"}],
           "rowClassRules": [{"field": "status", "equals": "failed", "className": "is-failed"}]
         }
       }
@@ -180,6 +180,33 @@
             {"name": "$eq", "minArgs": 1, "maxArgs": 1, "combinator": false, "custom": false},
             {"name": "$mine", "help": "Mine only", "minArgs": 1, "maxArgs": 1, "combinator": false, "custom": true}
           ]}}]
+        }
+      }
+    },
+    {
+      "name": "quickstats-kinds-pass-through",
+      "catalog": {
+        "dataUrl": "/rest/x",
+        "columns": [{"key": "a"}],
+        "quickStats": {"id": "qs", "items": [
+          {"id": "t", "label": "Open", "value": 3},
+          {"id": "m", "type": "meter", "label": "Used", "value": 2, "max": 10, "text": "2 of 10", "tone": "warning"},
+          {"id": "s", "type": "segmented", "label": "Mix", "segments": [{"count": 2, "label": "a"}, {"count": 1, "label": "b", "tone": "error"}]}
+        ]}
+      },
+      "expected": {
+        "contractVersion": "1",
+        "layout": "wide",
+        "quickStats": {"contractVersion": "1", "id": "qs", "items": [
+          {"id": "t", "label": "Open", "value": 3},
+          {"id": "m", "type": "meter", "label": "Used", "value": 2, "max": 10, "text": "2 of 10", "tone": "warning"},
+          {"id": "s", "type": "segmented", "label": "Mix", "segments": [{"count": 2, "label": "a"}, {"count": 1, "label": "b", "tone": "error"}]}
+        ]},
+        "view": {
+          "contractVersion": "5",
+          "id": "quickstats-kinds-pass-through",
+          "dataUrl": "/rest/x",
+          "columns": [{"data": "a"}]
         }
       }
     },

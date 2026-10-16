@@ -19,9 +19,11 @@ package org.apache.juneau.rest.server.view.freemarker.console;
 import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.util.*;
+import java.util.function.Function;
 
 import org.apache.juneau.rest.server.*;
 import org.apache.juneau.rest.server.console.*;
+import org.apache.juneau.rest.server.staticfile.WebJarResolver;
 import org.apache.juneau.rest.server.view.freemarker.*;
 
 import freemarker.cache.*;
@@ -36,7 +38,7 @@ import freemarker.template.*;
  * <p>
  * Register it typed as either {@link FreemarkerMixin} or {@code ConsoleFreemarkerMixin} &mdash; both declared
  * return types work. {@code FreemarkerViewRenderer} finds the exact-type {@code FreemarkerMixin} bean when one is
- * registered, and otherwise also looks for a bean declared under any registered subtype (P8), which this class
+ * registered, and otherwise also looks for a bean declared under any registered subtype, which this class
  * registers via a static initializer:
  *
  * <p class='bjava'>
@@ -107,7 +109,7 @@ public class ConsoleFreemarkerMixin extends FreemarkerMixin {
 
 	/**
 	 * No-arg constructor &mdash; mirrors {@link FreemarkerMixin#FreemarkerMixin()} so the mixin walk's
-	 * {@code BeanInstantiator} is not forced to depend on builder-detection alone (S3).
+	 * {@code BeanInstantiator} is not forced to depend on builder-detection alone.
 	 */
 	public ConsoleFreemarkerMixin() {
 		this(create());
@@ -118,6 +120,8 @@ public class ConsoleFreemarkerMixin extends FreemarkerMixin {
 	 *
 	 * @param builder The builder. Must not be {@code null}.
 	 * @throws IllegalArgumentException If the toolkit packs, provided packs or card requirements don't validate.
+	 * @throws IllegalStateException E-70 if a required pack reaches a WebJar that is not on the classpath
+	 * 	(see {@link Builder#requirePacks(String...)}).
 	 */
 	protected ConsoleFreemarkerMixin(Builder builder) {
 		super(builder);
@@ -125,6 +129,12 @@ public class ConsoleFreemarkerMixin extends FreemarkerMixin {
 		this.packs = new ToolkitPackRegistry();
 		builder.extraPacks.forEach(packs::register);
 		packs.provide(builder.providedPacks).validate();
+		packs.requireKnown(builder.requiredPacks, "requirePacks");
+		var roots = new LinkedHashSet<>(builder.requiredPacks);
+		for (var p : builder.extraPacks)
+			if (packs.reaches(p.name(), ToolkitPackRegistry.PACK_ECHARTS))
+				roots.add(p.name());
+		packs.checkWebJars(roots, builder.webJarProbe);
 		this.cardRequirements = builder.cardRequirements.build(packs);
 		this.cardTypes = builder.cardTypes.build();
 		this.devMode = builder.devMode;
@@ -254,7 +264,7 @@ public class ConsoleFreemarkerMixin extends FreemarkerMixin {
 		if (n(cfg.getSharedVariable(TokenDirectiveModel.NAME)))
 			cfg.setSharedVariable(TokenDirectiveModel.NAME, new TokenDirectiveModel());
 		if (n(cfg.getSharedVariable(ConsoleDirectiveModel.NAME)))
-			cfg.setSharedVariable(ConsoleDirectiveModel.NAME, new ConsoleDirectiveModel(devMode, cardTypes));
+			cfg.setSharedVariable(ConsoleDirectiveModel.NAME, new ConsoleDirectiveModel(devMode, cardTypes, packs));
 		if (n(cfg.getSharedVariable(MainDirectiveModel.NAME)))
 			cfg.setSharedVariable(MainDirectiveModel.NAME, new MainDirectiveModel());
 		if (n(cfg.getSharedVariable(HasToolkitMethodModel.NAME)))
@@ -283,6 +293,8 @@ public class ConsoleFreemarkerMixin extends FreemarkerMixin {
 		String chromeTemplate = DEFAULT_CHROME_TEMPLATE;
 		final List<ToolkitPack> extraPacks = new ArrayList<>();
 		final List<String> providedPacks = new ArrayList<>();
+		final List<String> requiredPacks = new ArrayList<>();
+		Function<String,String> webJarProbe = WebJarResolver::resolvePath;
 		final CardRequirements.Builder cardRequirements = CardRequirements.create();
 		final CardTypeRegistry.Builder cardTypes = CardTypeRegistry.standard().copy();
 		boolean devMode = Boolean.getBoolean("juneau.console.devMode");
@@ -360,6 +372,26 @@ public class ConsoleFreemarkerMixin extends FreemarkerMixin {
 		 */
 		public Builder providedPacks(String...names) {
 			providedPacks.addAll(Arrays.asList(names));
+			return this;
+		}
+
+		/**
+		 * Opts in to the startup WebJar check: the named packs (for example {@code "charts"}) are expanded through
+		 * {@code dependsOn} and every WebJar they reach is probed when the mixin is built, so a missing
+		 * {@code org.webjars.npm:echarts} fails at startup (E-70) instead of on the first chart page.  An app pack
+		 * registered with {@link #registerToolkitPack(ToolkitPack)} that depends on {@code "echarts"} opts in too.
+		 *
+		 * @param names Registered pack names.
+		 * @return This object.
+		 */
+		public Builder requirePacks(String...names) {
+			requiredPacks.addAll(Arrays.asList(names));
+			return this;
+		}
+
+		// Package-private: tests simulate an absent WebJar (the jar is on every test classpath).
+		Builder webJarProbe(Function<String,String> probe) {
+			webJarProbe = rnn(probe);
 			return this;
 		}
 

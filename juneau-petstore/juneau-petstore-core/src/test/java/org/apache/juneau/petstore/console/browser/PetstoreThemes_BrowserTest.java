@@ -45,6 +45,10 @@ class PetstoreThemes_BrowserTest extends TestBase {
 	private static final String CUSTOM_TOKENS = "(() => { const s = getComputedStyle(document.documentElement);"
 		+ " return ['--jc-pill-red-bg', '--jc-tab-bar-bg', '--jc-card-bg'].map(n => s.getPropertyValue(n).trim()); })()";
 
+	// The page's initial scheme, then its scheme and body background after the header toggle's Dark button is clicked.
+	private static final String SCHEME_STATE = "(() => ({ scheme: document.documentElement.getAttribute('data-jc-scheme'),"
+		+ " bg: getComputedStyle(document.body).backgroundColor }))()";
+
 	private static Map<String,Map<String,Object>> report;
 
 	@BeforeAll
@@ -55,6 +59,12 @@ class PetstoreThemes_BrowserTest extends TestBase {
 			cases.add(Map.of("name", t, "path", "/console/dev/themes?theme=" + t,
 				"actions", List.of(Map.of("screenshot", "theme-" + t + ".png")),
 				"queries", Map.of("tokens", "custom".equals(t) ? CUSTOM_TOKENS : TOKENS)));
+		cases.add(Map.of("name", "scheme-dark", "path", "/console/store",
+			"actions", List.of(
+				Map.of("waitFor", "!!document.querySelector('.jc-scheme-toggle button[data-scheme=dark]')"),
+				Map.of("click", ".jc-scheme-toggle button[data-scheme=dark]"),
+				Map.of("screenshot", "scheme-dark.png")),
+			"queries", Map.of("state", SCHEME_STATE)));
 		report = run("themes", base, cases);
 	}
 
@@ -86,5 +96,16 @@ class PetstoreThemes_BrowserTest extends TestBase {
 		var c = tokens("custom");
 		assertString("#fdeceb", c.get(0));  // --jc-pill-red-bg leaf override
 		assertString(c.get(2), c.get(1));   // --jc-tab-bar-bg follows --jc-card-bg
+	}
+
+	@SuppressWarnings("unchecked") // state is a JSON object of strings.
+	@Test void a04_headerToggleSwitchesToDark() {
+		var state = (Map<String,Object>) query(assertClean(report, "scheme-dark"), "state");
+		assertString("dark", state.get("scheme"));
+		// The dark body background is a dark colour, not the light page white.
+		var bg = String.valueOf(state.get("bg"));
+		var m = java.util.regex.Pattern.compile("rgba?\\((\\d+), (\\d+), (\\d+)").matcher(bg);
+		org.junit.jupiter.api.Assertions.assertTrue(m.find(), () -> "unparseable body background: " + bg);
+		org.junit.jupiter.api.Assertions.assertTrue(Integer.parseInt(m.group(1)) + Integer.parseInt(m.group(2)) + Integer.parseInt(m.group(3)) < 3 * 96, () -> "body background is not dark: " + bg);
 	}
 }

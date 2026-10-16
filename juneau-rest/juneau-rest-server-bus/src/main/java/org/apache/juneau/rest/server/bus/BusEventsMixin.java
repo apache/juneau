@@ -24,7 +24,7 @@ import org.apache.juneau.marshall.json.*;
 import org.apache.juneau.rest.server.*;
 
 /**
- * Exposes the bus's session POST and SSE stream on a REST resource (§11.3).
+ * Exposes the bus's session POST and SSE stream on a REST resource.
  *
  * <ul>
  * 	<li><b>{@code POST <servlet>/juneau-bus/session}</b> &mdash; opens a session and returns its grant.  This is the
@@ -35,8 +35,10 @@ import org.apache.juneau.rest.server.*;
  * </ul>
  *
  * <p>
- * When {@link BusPolicy#boundary()} is set, both endpoints run its {@code LoopbackBoundary} check: the full write check
- * on the POST, the Host check on the GET.
+ * When {@link BusPolicy#boundary()} is set, both endpoints run its {@code check}: the full write check on the POST,
+ * and on the GET whatever the boundary applies to a read (a {@code LoopbackBoundary}'s Host check, a
+ * {@code CsrfBoundary}'s allowed hosts).  The method judged is the one the request claims, so a GET carrying a
+ * {@code method} parameter or an override header that claims a write gets the write check.
  *
  * <h5 class='section'>Example:</h5>
  * <p class='bjava'>
@@ -81,7 +83,7 @@ public interface BusEventsMixin {
 	ServerBus serverBus();
 
 	/**
-	 * [POST /juneau-bus/session] &mdash; opens a bus session (spec §11.3).
+	 * [POST /juneau-bus/session] &mdash; opens a bus session.
 	 *
 	 * <p>
 	 * Body (at most 64 KB; a larger body is a 400): {@code {"v":1, "bridge":"ops", "transport":"sse"|"websocket", "downstream":[...], "upstream":[...]}}.
@@ -119,7 +121,7 @@ public interface BusEventsMixin {
 	}
 
 	/**
-	 * [GET /juneau-bus/stream/{sessionId}] &mdash; streams the session's frames as Server-Sent Events (spec §11.3).
+	 * [GET /juneau-bus/stream/{sessionId}] &mdash; streams the session's frames as Server-Sent Events.
 	 *
 	 * <p>
 	 * Sends the resync, then live frames, until the client goes away or the bus closes the connection (bus closed,

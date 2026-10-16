@@ -77,8 +77,8 @@ class ChromeCss_FullBleed_Test extends TestBase {
 	/** Outer table-chrome is descendant :has plus :not nested .jc-card (HTML-slot stamp is not a direct child). */
 	@Test void a02_tableChrome_isDescendantHas_notDirectChildOnly() throws Exception {
 		var c = flat();
-		assertTrue(c.contains(".jc-card:has([data-juneau-layout=\"wide\"]):not(.jc-card .jc-card)"),
-			"outer table-chrome must be descendant :has + :not nested .jc-card");
+		assertTrue(c.contains(".jc-card:has([data-juneau-layout=\"wide\"]):not(.jc-card .jc-card):not(.jc-card-bare .jc-card)"),
+			"outer table-chrome must be descendant :has + :not nested .jc-card and not a card inside a bare host");
 		assertFalse(c.contains(".jc-card:has(> [data-juneau-layout=\"wide\"])"),
 			"direct-child-only :has(>) misses HTML-slot and is not the detector");
 	}
@@ -94,7 +94,7 @@ class ChromeCss_FullBleed_Test extends TestBase {
 	@Test void a04_doesNotKeyOffCardOrMainCarryingTheAttr() throws Exception {
 		var c = flat();
 		assertFalse(c.contains(".jc-card[data-juneau-layout"),
-			"ViewTable never stamps .jc-card - do not match .jc-card[data-juneau-layout] (BLK-2)");
+			"ViewTable never stamps .jc-card - do not match .jc-card[data-juneau-layout]");
 		assertFalse(c.contains(".jc-main[data-juneau-layout"),
 			"ViewTable never stamps .jc-main - do not match .jc-main[data-juneau-layout]");
 	}

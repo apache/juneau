@@ -66,6 +66,39 @@ const PROBE = async function () {
 	return out;
 };
 
+/**
+ * Real fetch with no stubbing, routed so the request is observable: "unload" holds the poll open and navigates away
+ * (no waits), "live" refuses the connection while the page stays.  Reports the E-JS-65 console errors of each page.
+ */
+async function abortScenarios(browser, fixture) {
+	const html = fs.readFileSync(fixture, 'utf8');
+	const url = 'http://badge.test/page';
+	const out = {};
+	async function scenario(name, route, act) {
+		const page = await browser.newPage();
+		const e65 = [];
+		const held = [];
+		page.on('console', m => { if (m.type() === 'error' && m.text().includes('E-JS-65')) e65.push(m.text()); });
+		await page.route(url, r => r.fulfill({ status: 200, contentType: 'text/html', body: html }));
+		await page.route('**/badges/' + name + '*', r => route(r, held));
+		await page.goto(url);
+		await page.evaluate(n => { window.JuneauConsoleBadges.mount([{ id: 'x', src: '/badges/' + n, refreshMs: 60000 }]); }, name);
+		await act(page, held);
+		await page.close();
+		out[name + '_e65'] = e65.slice();
+		out[name + '_held'] = held.length;
+	}
+	await scenario('unload', (r, held) => { held.push(r); }, async (page, held) => {
+		while (held.length === 0) await new Promise(r => setTimeout(r, 5));
+		await page.goto('about:blank');
+	});
+	await scenario('live', r => r.abort('connectionrefused'), async page => {
+		await page.waitForSelector('[data-juneau-badge-id=x].jc-count-badge--stale, [data-juneau-badge-id=x]', { state: 'attached', timeout: 2000 }).catch(() => {});
+		await new Promise(r => setTimeout(r, 300));
+	});
+	return out;
+}
+
 (async () => {
 	const [fixture] = process.argv.slice(2);
 	if (!fixture) {
@@ -83,6 +116,7 @@ const PROBE = async function () {
 		await page.evaluate(() => new Promise(requestAnimationFrame));
 		const report = await page.evaluate(PROBE);
 		report.jsFailures = failures.slice();
+		Object.assign(report, await abortScenarios(browser, fixture));
 		process.stdout.write(JSON.stringify(report, null, 2) + '\n');
 	} finally {
 		await browser.close();

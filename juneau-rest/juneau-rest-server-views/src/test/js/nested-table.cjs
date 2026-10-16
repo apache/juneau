@@ -24,8 +24,8 @@
  *
  *   Usage:  node nested-table.cjs <path-to-juneau-views.js> <path-to-juneau-datatables.js> <path-to-juneau-ribbon.js>
  *
- * juneau-datatables.js and juneau-ribbon.js are loaded into the SAME sandbox window as juneau-views.js (design doc
- * §3.1/D8: server-mode buildOptions needs window.JuneauDataTables.ajax; BeanQuery DataTables design §3.1:
+ * juneau-datatables.js and juneau-ribbon.js are loaded into the SAME sandbox window as juneau-views.js (server-mode
+ * buildOptions needs window.JuneauDataTables.ajax;
  * buildOptions also needs window.JuneauViews.ribbon.{ribbonColumnSearches,ribbonQueryParams,mergeColumnSearches})
  * before juneau-views.js runs - exactly as a real page loading all three scripts would have them present.
  *
@@ -262,7 +262,7 @@ I.applyNestedScope(optsN, { param: 'alertId', parentId: 'a1' });
 out.scope_customName = optsN.ajax.data({}).alertId === 'a1';
 
 // ----------------------------------------------------------------------------------------------------------------
-// buildOptions integration (design doc §3.1/D8) - the scope param rides both real ajax branches: a re-derived URL
+// buildOptions integration - the scope param rides both real ajax branches: a re-derived URL
 // query parameter in server mode (via beforeSend), the GET data object in client mode.
 // ----------------------------------------------------------------------------------------------------------------
 

@@ -25,7 +25,7 @@ import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
 
 /**
- * Tests for {@link McpClientRegistrations} (B3: feeding DCR-issued credentials into F1's acquirer + token provider).
+ * Tests for {@link McpClientRegistrations} (feeding DCR-issued credentials into the acquirer + token provider).
  *
  * @since 10.0.0
  */
@@ -103,7 +103,7 @@ class McpDcrWiring_Test extends TestBase {
 		assertThrows(IllegalArgumentException.class, () -> McpClientRegistrations.configure(b, null));
 	}
 
-	// H2: a bind-first (forPort) registration carries its registered PORT through onto the acquirer so the receiver
+	// A bind-first (forPort) registration carries its registered PORT through onto the acquirer so the receiver
 	// binds exactly the port the AS was told (not a fresh ephemeral one).
 	@Test void d01_configureCarriesRegisteredPort() {
 		var b = McpAuthorizationCodeAcquirer.create()
@@ -112,7 +112,7 @@ class McpDcrWiring_Test extends TestBase {
 		assertEquals(3000, acquirer.redirectPort());
 	}
 
-	// H2: a port-agnostic registration (no port on the redirect URI) leaves the acquirer on its ephemeral default.
+	// A port-agnostic registration (no port on the redirect URI) leaves the acquirer on its ephemeral default.
 	@Test void d02_portAgnosticRegistrationLeavesEphemeralDefault() {
 		var reg = new McpClientRegistration("pa-client", Optional.empty(), Optional.empty(), Optional.empty(),
 			Optional.empty(), ISSUER, LoopbackRedirectUris.portAgnostic("/callback"), McpApplicationType.NATIVE, Map.of());

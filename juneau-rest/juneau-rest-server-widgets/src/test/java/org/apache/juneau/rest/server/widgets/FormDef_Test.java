@@ -103,6 +103,19 @@ class FormDef_Test extends TestBase {
 		assertRejected(i::validate, "type must be one of");
 	}
 
+	@Test void b03a_validate_passwordType_accepted() {
+		var i = Input.of("pw", "Password", "password");
+		i.validate();
+		assertEquals("password", i.type);
+	}
+
+	@Test void b03b_validate_passwordWithValue_rejected() {
+		var i = Input.of("pw", "Password", "password").value("hunter2");
+		assertRejected(i::validate, "value is not allowed on a password field");
+		i.value = null;
+		i.validate();
+	}
+
 	@Test void b04_validate_select_nullOrEmptyOptions_rejected() {
 		var i = Input.of("n", "N", "select");
 		assertRejected(i::validate, "at least one option");

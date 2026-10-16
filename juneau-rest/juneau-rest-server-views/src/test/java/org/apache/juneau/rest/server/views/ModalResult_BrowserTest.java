@@ -175,7 +175,7 @@ class ModalResult_BrowserTest extends TestBase {
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
-	// c) A non-2xx is a VISIBLE transport refusal read from the boundary envelope - not "HTTP 200 + schema" (HIGH-3)
+	// c) A non-2xx is a VISIBLE transport refusal read from the boundary envelope - not "HTTP 200 + schema"
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Test void c01_http403RendersTransportRefusalFromEnvelope() {
@@ -186,7 +186,7 @@ class ModalResult_BrowserTest extends TestBase {
 	}
 
 	@Test void c02_http421WithNoBodyStillRendersVisibleRefusal() {
-		// No X-Loopback-Boundary header, empty body -> still a visible, comprehensible non-optimistic refusal.
+		// No X-Request-Boundary header, empty body -> still a visible, comprehensible non-optimistic refusal.
 		assertTerminal("transport421", "refusal", "alert");
 		assertTrue(String.valueOf(sub("transport421").get("text")).contains("421"), () -> report.toString());
 	}
@@ -213,7 +213,7 @@ class ModalResult_BrowserTest extends TestBase {
 	}
 
 	@Test void e02_htmlShapedFieldValueStaysInertText() {
-		// BLK-1/MED-9: the field value is painted with textContent, so an <img onerror> becomes literal text and
+		// The field value is painted with textContent, so an <img onerror> becomes literal text and
 		// NO <img> element is created anywhere in the dialog.
 		var m = sub("modal");
 		assertEquals("<img src=x onerror=alert(1)>", m.get("evilFieldText"), () -> report.toString());

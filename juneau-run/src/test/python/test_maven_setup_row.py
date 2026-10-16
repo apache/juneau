@@ -1,0 +1,326 @@
+# ***************************************************************************************************************************
+# * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+# * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+# * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+# * with the License.  You may obtain a copy of the License at
+# *
+# *  http://www.apache.org/licenses/LICENSE-2.0
+# *
+# * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+# * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+# * specific language governing permissions and limitations under the License.
+# ***************************************************************************************************************************
+"""The Setup row: pom modules leave the Maven bars for one board-level row, and the bars count real modules only."""
+
+import os
+import unittest
+
+from support import jr, reset_run_state
+
+
+def live_region_lines(board, rows=24, cols=100):
+    live = jr.LiveRenderer(lambda text: None, size=lambda: os.terminal_size((cols, rows)), clock=lambda: 100.0,
+                           color=False)
+    return live.region(board, cols - 1, rows - 2)
+
+
+def setup_events(poms=3, total=5, step="mvn"):
+    ids = [f"pom{i}" for i in range(poms)]
+    events = [("step_start", dict(id=step, n=1, title="mvn", parent=None)),
+              ("reactor", dict(step=step, size=total, poms=ids, tests=False))]
+    for pid in ids:
+        events += [("module_start", dict(step=step, module=pid, title=pid)),
+                   ("module_end", dict(step=step, module=pid, status="ok", ms=1))]
+    events.append(("step_end", dict(id=step, status="ok", ms=2000, exit=0, summary=None, totals=None)))
+    return events
+
+
+def plain_run(events):
+    out = []
+    board = jr.Board("actionable", nested=False, full_log=None, clock=lambda: 100.0)
+    renderer = jr.PlainRenderer(out.append, clock=lambda: 100.0)
+    for kind, fields in events:
+        renderer.render(board, board.apply(kind, fields))
+    return "".join(out)
+
+
+class SetupRowTest(unittest.TestCase):
+    def board(self, poms=16, total=101, step="mvn"):
+        reset_run_state()
+        self.addCleanup(reset_run_state)
+        b = jr.Board("actionable", nested=False, full_log=None, clock=lambda: 100.0)
+        b.apply("step_start", dict(id=step, n=1, title="mvn", parent=None))
+        ids = [f"pom{i}" for i in range(poms)]
+        b.apply("reactor", dict(step=step, size=total, poms=ids, tests=False))
+        return b, ids
+
+    def test_units_exclude_poms(self):
+        b, _ = self.board()
+        r = b.rows["mvn"]
+        self.assertEqual((r.units_total, r.unit_kind), (85, "modules"))
+
+    def test_k_over_n_counts_real_modules_only(self):
+        b, ids = self.board(poms=2, total=5)
+        for i, pid in enumerate(ids):                       # poms end first
+            b.apply("module_start", dict(step="mvn", module=pid, title=pid))
+            b.apply("module_end", dict(step="mvn", module=pid, status="ok", ms=1))
+        self.assertEqual(b.rows["mvn"].units_done, 0)
+        b.apply("module_start", dict(step="mvn", module="core", title="Core"))
+        b.apply("module_end", dict(step="mvn", module="core", status="ok", ms=1))
+        self.assertEqual(b.rows["mvn"].units_done, 1)
+
+    def test_setup_row_boxes_turn_green(self):
+        b, ids = self.board(poms=3, total=5)
+        b.apply("module_start", dict(step="mvn", module=ids[0], title="p"))
+        b.apply("module_end", dict(step="mvn", module=ids[0], status="ok", ms=1))
+        s = b.setup
+        self.assertEqual((s.total, s.done), (3, 1))
+        self.assertEqual(jr.setup_text(s), "3 pom modules")
+
+    def test_setup_text_is_singular_for_one_pom(self):
+        b, _ = self.board(poms=1, total=3)
+        self.assertEqual(jr.setup_text(b.setup), "1 pom module")
+
+    def test_not_repeated_for_a_later_maven_step(self):
+        b, _ = self.board()
+        first = b.setup
+        b.apply("step_start", dict(id="mvn2", n=2, title="mvn2", parent=None))
+        b.apply("reactor", dict(step="mvn2", size=10, poms=["x1"], tests=False))
+        self.assertIs(b.setup, first)
+        self.assertEqual(b.rows["mvn2"].units_total, 9)       # its own poms still excluded
+
+    def test_a_resent_reactor_event_keeps_one_setup_row_and_follows_the_new_counts(self):
+        b, _ = self.board(poms=0, total=101)                  # the first-line event: tree size, no poms yet
+        self.assertIsNone(b.setup)
+        self.assertEqual(b.rows["mvn"].units_total, 101)
+        b.apply("reactor", dict(step="mvn", size=101, poms=[f"pom{i}" for i in range(16)], tests=False))
+        self.assertEqual(b.rows["mvn"].units_total, 85)       # the Build Order block shrinks it
+        self.assertEqual(b.setup.total, 16)
+        b.apply("reactor", dict(step="mvn", size=101, poms=[f"pom{i}" for i in range(16)], tests=False))
+        self.assertEqual((b.setup.total, b.rows["mvn"].units_total), (16, 85))
+
+    def test_no_poms_no_setup_row(self):
+        b, _ = self.board(poms=0, total=3)
+        self.assertIsNone(b.setup)
+
+    def test_total_never_negative(self):
+        b, _ = self.board(poms=5, total=2)
+        self.assertEqual(b.rows["mvn"].units_total, 0)
+
+    def test_gray_cell_for_real_module_without_tests_stays(self):
+        b, _ = self.board(poms=0, total=2)
+        b.apply("module_start", dict(step="mvn", module="jar1", title="J"))
+        b.apply("module_end", dict(step="mvn", module="jar1", status="skip", ms=1))
+        self.assertEqual(b.rows["mvn"].units_done, 1)
+        self.assertEqual(b.rows["mvn"].unit_cells[0], jr.UNIT_SKIP)
+
+    def test_all_pom_reactor_has_an_empty_bar_and_a_setup_row(self):
+        b, _ = self.board(poms=3, total=3)
+        self.assertEqual(b.rows["mvn"].units_total, 0)
+        self.assertEqual((b.setup.total, b.rows["mvn"].unit_kind), (3, "modules"))      # no fall back to the old bar
+
+    def test_compile_mode_unit_advances_on_module_compiled_tests_mode_on_module_end(self):
+        b, _ = self.board(poms=0, total=2)                    # the board() helper sends tests=False: compile mode
+        b.apply("module_start", dict(step="mvn", module="mvn/a", title="A"))
+        b.apply("module_compiled", dict(step="mvn", module="mvn/a", ok=True))
+        self.assertEqual(b.rows["mvn"].units_done, 1)         # today's bar fills on compile in compile mode
+        b.apply("module_end", dict(step="mvn", module="mvn/a", status="ok", ms=1, totals=None))
+        self.assertEqual(b.rows["mvn"].units_done, 1)         # and the end does not count it twice
+
+    def test_tests_mode_unit_advances_on_module_end_only(self):
+        b, _ = self.board(poms=0, total=2)
+        b.apply("reactor", dict(step="mvn", size=2, poms=[], tests=True))
+        b.apply("module_start", dict(step="mvn", module="mvn/a", title="A"))
+        b.apply("module_compiled", dict(step="mvn", module="mvn/a", ok=True))
+        self.assertEqual(b.rows["mvn"].units_done, 0)
+        b.apply("module_end", dict(step="mvn", module="mvn/a", status="fail", ms=1, totals=None))
+        self.assertEqual(b.rows["mvn"].units_done, 1)
+        self.assertEqual(b.rows["mvn"].unit_cells[0], jr.UNIT_FAIL)
+
+    def test_region_draws_setup_above_first_owning_row_and_counts_height(self):
+        b, _ = self.board()
+        lines = live_region_lines(b, rows=24, cols=100)         # no plan is set, so no Overall line (G2) precedes it
+        self.assertEqual(lines[0].split()[0], "Setup")
+        self.assertIn("16 pom modules", lines[0])
+        self.assertLessEqual(len(lines), 22)                   # max_lines = rows - 2 still honoured
+
+    def test_region_budget_takes_the_setup_line_off_the_sub_lines(self):
+        b, _ = self.board(poms=2, total=40)
+        for i in range(30):
+            b.apply("module_start", dict(step="mvn", module=f"m{i}", title=f"M{i}"))
+        lines = live_region_lines(b, rows=12, cols=100)
+        self.assertLessEqual(len(lines), 10)
+
+    def test_plain_renderer_prints_one_setup_line(self):
+        out = plain_run(setup_events())
+        self.assertEqual(len([l for l in out.splitlines() if l.startswith("Setup")]), 1)
+        self.assertIn("3 pom modules", out)
+
+
+    def test_tests_mode_counts_a_unit_when_its_tests_finish_not_only_at_the_summary(self):
+        b, _ = self.board(poms=0, total=2)                    # -T: module_end can wait for the Reactor Summary
+        b.apply("reactor", dict(step="mvn", size=2, poms=[], tests=True))
+        b.apply("module_start", dict(step="mvn", module="mvn/a", title="A"))
+        b.apply("class_done", dict(step="mvn", module="mvn/a", outcome="pass"))
+        b.apply("module_tested", dict(step="mvn", module="mvn/a"))
+        self.assertEqual(b.rows["mvn"].units_done, 1)
+        self.assertEqual(b.rows["mvn"].unit_cells[0], jr.UNIT_PASS)
+        b.apply("module_end", dict(step="mvn", module="mvn/a", status="ok", ms=1, totals=None))
+        self.assertEqual(b.rows["mvn"].units_done, 1)         # counted once
+
+    def test_tested_failure_and_a_module_without_tests(self):
+        b, _ = self.board(poms=0, total=3)
+        b.apply("reactor", dict(step="mvn", size=3, poms=[], tests=True))
+        b.apply("class_done", dict(step="mvn", module="mvn/a", outcome="fail"))
+        b.apply("module_tested", dict(step="mvn", module="mvn/a"))
+        b.apply("module_tested", dict(step="mvn", module="mvn/b"))
+        r = b.rows["mvn"]
+        self.assertEqual((r.units_done, r.unit_cells[0], r.unit_cells[1]), (2, jr.UNIT_FAIL, jr.UNIT_SKIP))
+
+    def test_a_pom_box_turns_green_when_it_starts(self):
+        b, ids = self.board(poms=3, total=5)
+        b.apply("module_start", dict(step="mvn", module=ids[1], title="p"))     # -T: its end waits for the summary
+        self.assertEqual((b.setup.done, b.setup.boxes[ids[1]]), (1, "pass"))
+        b.apply("module_end", dict(step="mvn", module=ids[1], status="fail", ms=1))
+        self.assertEqual(b.setup.boxes[ids[1]], "fail")
+
+    def test_pom_modules_never_enter_the_row_order(self):
+        b, ids = self.board(poms=1, total=3)
+        b.apply("module_start", dict(step="mvn", module=ids[0], title="p"))
+        b.apply("module_end", dict(step="mvn", module=ids[0], status="ok", ms=1))
+        b.apply("step_end", dict(id="mvn", status="ok", ms=2000, exit=0, summary=None, totals=None))
+        self.assertEqual(b.rows["mvn"].order, [])
+
+    def test_duplicate_pom_ids_let_done_reach_total(self):
+        b, _ = self.board(poms=0, total=4)
+        b.apply("reactor", dict(step="mvn", size=4, poms=["p", "p", "q"], tests=False))
+        for pid in ("p", "q"):
+            b.apply("module_end", dict(step="mvn", module=pid, status="ok", ms=1))
+        self.assertEqual((b.setup.total, b.setup.done), (2, 2))
+
+    def test_close_of_a_failed_module_by_finish_counts_a_fail_unit(self):
+        b, _ = self.board(poms=0, total=2)
+        b.apply("reactor", dict(step="mvn", size=2, poms=[], tests=False))
+        b.apply("module_start", dict(step="mvn", module="mvn/a", title="A"))
+        b.apply("module_compiled", dict(step="mvn", module="mvn/a", ok=False))      # box fail; compile mode counts it
+        b.apply("module_start", dict(step="mvn", module="mvn/b", title="B"))
+        b.apply("reactor", dict(step="mvn", size=2, poms=[], tests=True))
+        b.apply("module_compiled", dict(step="mvn", module="mvn/b", ok=False))      # fail box, not counted in tests mode
+        b.apply("module_end", dict(step="mvn", module="mvn/b", status="skip", ms=1, totals=None))   # finish() closes it
+        r = b.rows["mvn"]
+        self.assertEqual((r.units_done, r.unit_cells[1]), (2, jr.UNIT_FAIL))
+
+    def test_quiet_build_with_no_module_events_shows_no_bar_when_finished(self):
+        b, _ = self.board(poms=0, total=101)                  # a -q build: only the first-line reactor event arrived
+        r = b.rows["mvn"]
+        cells, rest, _ = jr.row_cells(r, jr.NO_COLOR_GLYPHS, 100.0, False)
+        self.assertIsNotNone(cells)                           # still running: the bar shows
+        b.apply("step_end", dict(id="mvn", status="ok", ms=5000, exit=0, summary=None, totals=None))
+        cells, rest, _ = jr.row_cells(r, jr.NO_COLOR_GLYPHS, 100.0, False)
+        self.assertIsNone(cells)
+        self.assertNotIn("0/101", rest)
+
+    def test_finished_row_with_some_units_keeps_its_bar(self):
+        b, _ = self.board(poms=0, total=3)
+        b.apply("module_start", dict(step="mvn", module="mvn/a", title="A"))
+        b.apply("module_end", dict(step="mvn", module="mvn/a", status="ok", ms=1))
+        b.apply("step_end", dict(id="mvn", status="fail", ms=5000, exit=1, summary=None, totals=None))
+        cells, rest, _ = jr.row_cells(b.rows["mvn"], jr.NO_COLOR_GLYPHS, 100.0, False)
+        self.assertIsNotNone(cells)
+        self.assertIn("1/3", rest)
+
+
+def pump(board, events, step="mvn"):
+    """Feed parser events to a board the way the dispatcher publishes them; returns the bar progress after each event."""
+    seen, totals = [], {}
+    for ev in events:
+        kind = ev[0]
+        if kind == "reactor":
+            board.apply("reactor", dict(step=step, size=ev[1], poms=list(ev[2]), tests=ev[3]))
+        elif kind == "sub_start":
+            board.apply("module_start", dict(step=step, module=ev[1], title=ev[3]))
+        elif kind == "tests":
+            totals[ev[1]] = ev[2:]
+        elif kind == "sub_end":
+            t = totals.get(ev[1])
+            board.apply("module_end", dict(step=step, module=ev[1], status=ev[2], ms=ev[3],
+                                           totals=dict(total=t[0], fail=t[1], err=t[2], skip=t[3]) if t else None))
+        elif kind == "compiled":
+            board.apply("module_compiled", dict(step=step, module=ev[1], ok=ev[2]))
+        elif kind == "tested":
+            board.apply("module_tested", dict(step=step, module=ev[1]))
+        elif kind == "class_done":
+            board.apply("class_done", dict(step=step, module=ev[1], outcome=ev[2]))
+        seen.append((kind, board.rows[step].units_done, board.setup.done if board.setup else 0, ev[1]))
+    return seen
+
+
+class MavenBoardGoldenTest(unittest.TestCase):
+    def run_fixture(self, fixture, args, poms_in_tree):
+        import tempfile
+        from pathlib import Path
+        from test_parsers import feed, write_demo_tree
+        from support import FIXTURES
+        reset_run_state()
+        self.addCleanup(reset_run_state)
+        with tempfile.TemporaryDirectory() as tmp:
+            write_demo_tree(Path(tmp), packaging="pom")
+            parser = jr.MavenParser()
+            parser.step_id = "mvn"
+            parser.prepare(["mvn", *args], None, tmp)
+            if not poms_in_tree:
+                parser.names = {}
+            events = feed(parser, (FIXTURES / fixture).read_text(encoding="utf-8"))
+        board = jr.Board("actionable", nested=False, full_log=None, clock=lambda: 100.0)
+        board.apply("step_start", dict(id="mvn", n=1, title="mvn", parent=None))
+        seen = pump(board, events)
+        return board, board.rows["mvn"], seen
+
+    def test_serial_build_excludes_the_pom_from_the_bar(self):
+        board, r, _ = self.run_fixture("maven-serial-success.log", ("test",), True)
+        board.apply("step_end", dict(id="mvn", status="ok", ms=3000, exit=0, summary=None, totals=None))
+        self.assertEqual((r.units_total, r.units_done), (3, 3))
+        self.assertEqual((board.setup.total, board.setup.done, jr.setup_text(board.setup)), (1, 1, "1 pom module"))
+
+    def test_parallel_build_progresses_before_the_reactor_summary(self):
+        board, r, seen = self.run_fixture("maven-parallel-success.log", ("test", "-T", "2"), True)
+        self.assertEqual(r.units_total, 3)
+        self.assertEqual(r.units_done, 3)                     # the bar ends full
+        summary_at = next(i for i, e in enumerate(seen) if e[0] == "sub_end" and e[3] != "mvn/demo-parent")
+        before = max(e[1] for e in seen[:summary_at])
+        self.assertGreater(before, 0)                         # intermediate progress, ahead of the first module_end
+        self.assertEqual(board.setup.done, 1)
+        first_pom_green = next(i for i, e in enumerate(seen) if e[2] == 1)
+        self.assertLess(first_pom_green, summary_at)          # the pom box does not wait for the summary
+
+    def test_juneau_t1c_log_counts_real_modules_and_fills_the_bar(self):
+        import re
+        from test_parsers import feed
+        from support import FIXTURES
+        reset_run_state()
+        self.addCleanup(reset_run_state)
+        text = (FIXTURES / "maven-juneau-T1C.log").read_text(encoding="utf-8")
+        block = text.split("Reactor Build Order:")[1].split("\n[INFO] \n")[1].split("\n[INFO] \n")[0]
+        members = re.findall(r"^\[INFO\] (.+?)\s+\[(\w[\w-]*)\]\s*$", block, re.M)
+        pom_titles = [t for t, pkg in members if pkg == "pom"]
+        parser = jr.MavenParser()
+        parser.step_id = "mvn"
+        parser.prepare(["mvn", "test", "-T", "1C"], None, "/nonexistent")
+        parser.names = {t: f"pom{i}" for i, t in enumerate(pom_titles)}
+        events = feed(parser, text)
+        board = jr.Board("actionable", nested=False, full_log=None, clock=lambda: 100.0)
+        board.apply("step_start", dict(id="mvn", n=1, title="mvn", parent=None))
+        seen = pump(board, events)
+        board.apply("step_end", dict(id="mvn", status="ok", ms=3000, exit=0, summary=None, totals=None))
+        r = board.rows["mvn"]
+        self.assertEqual(len(members), 96)
+        self.assertEqual(len(pom_titles), 16)
+        self.assertEqual((r.units_total, r.unit_kind), (80, "modules"))      # 96 modules less 16 poms
+        self.assertEqual(r.units_done, 80)
+        self.assertEqual((board.setup.total, board.setup.done, jr.setup_text(board.setup)), (16, 16, "16 pom modules"))
+        first_end = next(i for i, e in enumerate(seen) if e[0] == "sub_end")
+        self.assertGreater(max(e[1] for e in seen[:first_end]), 0)
+
+
+if __name__ == "__main__":
+    unittest.main()

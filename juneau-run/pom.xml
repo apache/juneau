@@ -107,7 +107,7 @@
 				</executions>
 			</plugin>
 
-			<!-- Attaches the script and the toolkit as org.apache.juneau:juneau-run:&lt;version&gt;:py and :zip (no classifier). -->
+			<!-- Attaches the script and the toolkit as org.apache.juneau:juneau-run:&lt;version&gt;:py and :zip (no classifier), and the pytest plugin as :py with classifier pytest. -->
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>build-helper-maven-plugin</artifactId>
@@ -124,6 +124,11 @@
 								<artifact>
 									<file>${project.basedir}/src/main/python/juneau_run.py</file>
 									<type>py</type>
+								</artifact>
+								<artifact>
+									<file>${project.basedir}/src/main/python/pytest_plugin/juneau_run_pytest.py</file>
+									<type>py</type>
+									<classifier>pytest</classifier>
 								</artifact>
 								<artifact>
 									<file>${project.build.directory}/juneau-run.zip</file>

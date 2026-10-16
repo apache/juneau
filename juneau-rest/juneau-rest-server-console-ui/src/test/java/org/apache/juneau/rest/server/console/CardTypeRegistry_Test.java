@@ -126,9 +126,8 @@ class CardTypeRegistry_Test {
 		assertNotNull(card.get("visibleWhen"));
 	}
 
-	@Test void add_consoleOutputAndChartAreReserved_throwE22() {
+	@Test void add_chartIsReserved_throwE22() {
 		var b = CardTypeRegistry.standard().copy();
-		assertThrows(IllegalArgumentException.class, () -> b.add(new TestCardType("console-output")));
 		assertThrows(IllegalArgumentException.class, () -> b.add(new TestCardType("chart")));
 	}
 
@@ -141,7 +140,7 @@ class CardTypeRegistry_Test {
 		var b = CardTypeRegistry.standard().copy();
 		var ex = assertThrows(IllegalArgumentException.class, () -> b.add(new TestCardType("job-log")));
 		assertEquals("Card type 'job-log' is reserved and cannot be replaced; reserved: "
-			+ "'chart, console-output, datatables, html, job-log, run-view, terminal'.", ex.getMessage());
+			+ "'chart, datatables, html, job-log, run-view, terminal'.", ex.getMessage());
 	}
 
 	@Test void copy_isIsolatedFromStandard() {

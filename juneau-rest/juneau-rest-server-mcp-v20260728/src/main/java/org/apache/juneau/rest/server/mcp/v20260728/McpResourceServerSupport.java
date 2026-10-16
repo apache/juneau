@@ -39,7 +39,7 @@ import org.apache.juneau.rest.server.util.UrlPath;
 import jakarta.servlet.http.*;
 
 /**
- * Request-time glue for the F2 OAuth 2.1 resource-server baseline &mdash; bearer validation, RFC 8707 audience
+ * Request-time glue for the OAuth 2.1 resource-server baseline &mdash; bearer validation, RFC 8707 audience
  * enforcement, {@code 401}/{@code 403} challenge emission, and RFC 9728 Protected Resource Metadata construction &mdash;
  * driven by an {@link McpResourceServerConfig}.
  *
@@ -67,7 +67,7 @@ public final class McpResourceServerSupport {
 	private McpResourceServerSupport() {}
 
 	/**
-	 * Router-identity bearer gate for the {@link McpEndpoint} mixin's MCP JSON-RPC endpoint (READY-312f F2, B1/H3).
+	 * Router-identity bearer gate for the {@link McpEndpoint} mixin's MCP JSON-RPC endpoint.
 	 *
 	 * <p>
 	 * A no-op unless RS auth is {@link McpResourceServerConfig#isEnabled() enabled} and this request resolves to the MCP
@@ -78,8 +78,8 @@ public final class McpResourceServerSupport {
 	 * <p>
 	 * Fails fast with the same origin-root {@code 500} diagnostic as the well-known route (see
 	 * {@link #assertWellKnownMountReachable(RestRequest)}) &mdash; rather than authenticating &mdash; whenever the
-	 * resolved MCP dispatch operation is itself mounted under a {@code @Mixin(path/paths)} re-mount prefix (H1
-	 * unification): a {@code 401} on such a mount would advertise a {@code resource_metadata} URL that the re-mount
+	 * resolved MCP dispatch operation is itself mounted under a {@code @Mixin(path/paths)} re-mount prefix:
+	 * a {@code 401} on such a mount would advertise a {@code resource_metadata} URL that the re-mount
 	 * has already made unreachable, so the two routes must agree rather than leaving a broken half-state.
 	 *
 	 * @param cfg The RS config.  Must not be <jk>null</jk>.
@@ -102,7 +102,7 @@ public final class McpResourceServerSupport {
 	}
 
 	/**
-	 * Router-aligned bearer gate for the {@link McpRestServlet}'s {@code POST /} endpoint (READY-312f F2, H3).
+	 * Router-aligned bearer gate for the {@link McpRestServlet}'s {@code POST /} endpoint.
 	 *
 	 * <p>
 	 * A no-op unless RS auth is {@link McpResourceServerConfig#isEnabled() enabled} and this request resolves to a
@@ -127,7 +127,7 @@ public final class McpResourceServerSupport {
 	 * Returns whether this request resolves to the MCP JSON-RPC dispatch operation ({@link McpEndpointMixin#handleMcpRequest}).
 	 *
 	 * <p>
-	 * <b>Why this cannot drift from the router (B1/H3):</b> instead of reconstructing the MCP endpoint's path from a
+	 * <b>Why this cannot drift from the router:</b> instead of reconstructing the MCP endpoint's path from a
 	 * hardcoded constant &mdash; which the previous gate did, so a {@code @Mixin(path="/api")} re-mount routed
 	 * {@code POST /api/mcp} to the handler while the gate compared {@code ["api","mcp"]} against {@code ["mcp"]} and
 	 * silently skipped authentication &mdash; this identifies the <i>operation</i> the router actually selected:
@@ -211,7 +211,7 @@ public final class McpResourceServerSupport {
 	}
 
 	/**
-	 * Returns whether this request resolves to a {@code POST} once method-override channels are honored (H3).
+	 * Returns whether this request resolves to a {@code POST} once method-override channels are honored.
 	 *
 	 * <p>
 	 * Mirrors {@code RestSession.getMethod()}: an explicit {@code POST}, or a {@code ?method=POST} query parameter, or an
@@ -230,7 +230,7 @@ public final class McpResourceServerSupport {
 	}
 
 	/**
-	 * Fails fast when this endpoint is not mounted at the origin root (READY-312f F2, H1).
+	 * Fails fast when this endpoint is not mounted at the origin root.
 	 *
 	 * <p>
 	 * RFC 9728 requires the Protected Resource Metadata document at an origin-root well-known location
@@ -242,7 +242,7 @@ public final class McpResourceServerSupport {
 	 *
 	 * <p>
 	 * A container that reports the root context / root servlet mapping as {@code "/"} (rather than the empty string) is
-	 * treated as origin-root &mdash; the tolerance is symmetric across {@code contextPath} and {@code servletPath} (H1 LOW).
+	 * treated as origin-root &mdash; the tolerance is symmetric across {@code contextPath} and {@code servletPath}.
 	 *
 	 * @param req The HTTP request.
 	 * @throws InternalServerError Always, when a non-root context path or non-root servlet path is present.
@@ -264,7 +264,7 @@ public final class McpResourceServerSupport {
 	}
 
 	/**
-	 * Fails fast when the well-known PRM route cannot be served from the origin root (READY-312f F2, H1 + secondary MEDIUM).
+	 * Fails fast when the well-known PRM route cannot be served from the origin root.
 	 *
 	 * <p>
 	 * Extends {@link #assertOriginRootMount(HttpServletRequest)} with the {@code @Mixin(path/paths)} re-mount case: when the
@@ -286,7 +286,7 @@ public final class McpResourceServerSupport {
 
 	/**
 	 * Fails fast when the resolved MCP operation is mounted under one or more host-chosen {@code @Mixin(path/paths)}
-	 * re-mount prefixes (READY-312f F2, H1 unification) &mdash; the SAME diagnostic used by
+	 * re-mount prefixes &mdash; the SAME diagnostic used by
 	 * {@link #assertWellKnownMountReachable(RestRequest)}, shared so the {@code POST} bearer gate
 	 * ({@link #gateMcpEndpoint}) and the well-known route never disagree on whether a given mount is supported.
 	 *
@@ -305,7 +305,7 @@ public final class McpResourceServerSupport {
 
 	/**
 	 * Serves this endpoint's PRM from the SEP-2351 root well-known location (fallback), failing fast on a non-root or
-	 * re-mounted mount (H1); a no-op-throwing {@code 404} when RS auth is disabled.
+	 * re-mounted mount; a no-op-throwing {@code 404} when RS auth is disabled.
 	 *
 	 * @param cfg The RS config.
 	 * @param req The REST request.
@@ -320,8 +320,8 @@ public final class McpResourceServerSupport {
 
 	/**
 	 * Serves this endpoint's PRM from the RFC 9728 path-inserted well-known location, but only when the requested suffix
-	 * matches this resource's expected well-known path (M5); otherwise {@code 404}.  Fails fast on a non-root or re-mounted
-	 * mount (H1); a {@code 404} when RS auth is disabled.
+	 * matches this resource's expected well-known path; otherwise {@code 404}.  Fails fast on a non-root or re-mounted
+	 * mount; a {@code 404} when RS auth is disabled.
 	 *
 	 * @param cfg The RS config.
 	 * @param req The REST request.
@@ -412,7 +412,7 @@ public final class McpResourceServerSupport {
 			res.setHeader(WWW_AUTHENTICATE, insufficientScopeChallenge(cfg));
 			throw new Forbidden("Insufficient scope");
 		}
-		// M1: write the framework-standard principal attribute so @Auth Principal resolves downstream.
+		// Write the framework-standard principal attribute so @Auth Principal resolves downstream.
 		req.setAttribute("juneau.principal", principal);
 		// SEP-2350: stash the granted scopes so the POST-parse dispatch point can enforce per-operation step-up scopes.
 		req.setAttribute(GRANTED_SCOPES_ATTR, Set.copyOf(auth.getRoles()));
@@ -420,7 +420,7 @@ public final class McpResourceServerSupport {
 	}
 
 	/**
-	 * Returns the granted scopes stashed by {@link #authenticate} for this request (SEP-2350).
+	 * Returns the granted scopes stashed by {@link #authenticate} for this request.
 	 *
 	 * @param req The HTTP request.  May be <jk>null</jk>.
 	 * @return The granted scopes, or an empty set when none were stashed (RS auth disabled / gate not run).
@@ -436,7 +436,7 @@ public final class McpResourceServerSupport {
 	}
 
 	/**
-	 * Returns the authenticated {@link Principal} {@link #authenticate} stashed for this request (READY-312f F4).
+	 * Returns the authenticated {@link Principal} {@link #authenticate} stashed for this request.
 	 *
 	 * <p>
 	 * Reads the same framework-standard {@code "juneau.principal"} attribute {@link #authenticate}
@@ -471,7 +471,7 @@ public final class McpResourceServerSupport {
 	 * step-up challenge that names exactly the scopes required for this operation.
 	 *
 	 * <p>
-	 * This is the enforcement point the F2 security review mandated: unlike the {@code @RestStartCall} bearer gate (which
+	 * This is the enforcement point the security review mandated: unlike the {@code @RestStartCall} bearer gate (which
 	 * fires before the JSON-RPC body is parsed), this runs once the MCP method &mdash; and thus the operation &mdash; is
 	 * known, so the challenge can be scoped to the specific operation.  It layers on top of, and never weakens, the
 	 * baseline gate (op-identity, origin-root fail-fast, audience, and baseline required-scope enforcement all still run
@@ -537,7 +537,7 @@ public final class McpResourceServerSupport {
 	 * &sect;3: no {@code error} code).
 	 *
 	 * <p>
-	 * Carries a {@code scope} hint listing the endpoint-wide baseline required scopes (SEP-2350) when any are
+	 * Carries a {@code scope} hint listing the endpoint-wide baseline required scopes when any are
 	 * configured, so a client can request them on its first authorization; the hint is omitted (no {@code scope=""})
 	 * when no baseline scope is required.
 	 *

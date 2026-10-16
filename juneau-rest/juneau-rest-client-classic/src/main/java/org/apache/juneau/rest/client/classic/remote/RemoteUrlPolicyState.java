@@ -33,6 +33,11 @@ package org.apache.juneau.rest.client.classic.remote;
  * to Juneau's revalidating redirect loop &mdash; leaving ordinary (non-{@code @Remote}) requests on the same client,
  * and their separate pool, completely unaffected.
  *
+ * <p>
+ * The guard of the {@code @Remote} request itself also travels on the request's {@code HttpContext}, so it holds even
+ * when the request is executed on another thread; this flag additionally guards any other request made on the calling
+ * thread while the call runs.
+ *
  * @since 10.0.0
  */
 public final class RemoteUrlPolicyState {

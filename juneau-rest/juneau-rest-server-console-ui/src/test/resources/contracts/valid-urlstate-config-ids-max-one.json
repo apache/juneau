@@ -1,0 +1,3 @@
+{"contractVersion":"1","title":"T","nav":[],"activeNav":[],"cards":[
+  {"id":"orders","type":"datatables","table":{"dataUrl":"/rest/orders/data","columns":[{"key":"name","label":"Name"}],"urlState":{"ids":{"max":1}}}}
+]}

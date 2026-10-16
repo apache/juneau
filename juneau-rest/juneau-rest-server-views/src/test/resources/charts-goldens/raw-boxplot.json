@@ -1,0 +1,66 @@
+{
+  "xAxis": {
+    "type": "category"
+  },
+  "yAxis": {},
+  "series": [
+    {
+      "type": "boxplot",
+      "encode": {
+        "x": "day",
+        "y": [
+          "lo",
+          "q1",
+          "med",
+          "q3",
+          "hi"
+        ]
+      }
+    }
+  ],
+  "aria": {
+    "enabled": true
+  },
+  "dataset": [
+    {
+      "id": "juneau",
+      "dimensions": [
+        {
+          "name": "day",
+          "type": "ordinal"
+        },
+        {
+          "name": "lo",
+          "type": "number"
+        },
+        {
+          "name": "q1",
+          "type": "number"
+        },
+        {
+          "name": "med",
+          "type": "number"
+        },
+        {
+          "name": "q3",
+          "type": "number"
+        },
+        {
+          "name": "hi",
+          "type": "number"
+        }
+      ],
+      "source": {
+        "day": [
+          "Mon",
+          "Tue"
+        ],
+        "lo": "[Float64Array 2: 10,12]",
+        "q1": "[Float64Array 2: 20,18]",
+        "med": "[Float64Array 2: 30,25]",
+        "q3": "[Float64Array 2: 40,33]",
+        "hi": "[Float64Array 2: 55,41]"
+      }
+    }
+  ]
+}

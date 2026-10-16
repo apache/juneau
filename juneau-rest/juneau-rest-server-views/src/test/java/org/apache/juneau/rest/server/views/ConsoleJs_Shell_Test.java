@@ -36,9 +36,9 @@ import org.junit.jupiter.params.provider.*;
 /**
  * Node-sandbox integration coverage for {@code juneau-console.js}: loads the real production
  * shell into a hand-rolled DOM shim (no jsdom) per case, exercising the full {@code #juneau-page} contract surface -
- * header/nav/cards/footer rendering, nav-depth and §5.3 prefix-fallback matching, every {@code E-JS-1}..{@code
- * E-JS-13}/{@code E-JS-14} loud-failure codes, custom card-type registration, the pending-card path, and the console-output and run-view bridges - plus a permanent regression
- * pin for the {@code isSafeHref}/{@code isProtocolRelativeUrl} security hardening reviewed during Task 4 (a
+ * header/nav/cards/footer rendering, nav-depth and longest-prefix matching, every {@code E-JS-1}..{@code
+ * E-JS-14} loud-failure codes, custom card-type registration, the pending-card path, and the run-view bridge - plus a permanent regression
+ * pin for the {@code isSafeHref}/{@code isProtocolRelativeUrl} security hardening reviewed earlier (a
  * scheme-bypass and a keydown-listener-leak bug, both already fixed in the shipped shell; this is the test that was
  * missing).
  *
@@ -162,7 +162,7 @@ class ConsoleJs_Shell_Test extends TestBase {
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
-	// a09/a10 - footer.text renders as trusted HTML (P24 revised 2026-10-02): an HTML entity decodes to its real
+	// a09/a10 - footer.text renders as trusted HTML: an HTML entity decodes to its real
 	// character, and inline markup becomes a real DOM element - not literal escaped text. (Numbered a09/a10, the
 	// next free aNN slot, even though they sit here right after a01 - see a02..a08e below for the rest.)
 	//------------------------------------------------------------------------------------------------------------------
@@ -212,7 +212,7 @@ class ConsoleJs_Shell_Test extends TestBase {
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
-	// a03 - §5.3 segment-wise longest-prefix fallback matching (no activeNav given; window.location drives it)
+	// a03 - segment-wise longest-prefix matching (no activeNav given; window.location drives it)
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Test void a03_prefixFallback() {
@@ -223,7 +223,7 @@ class ConsoleJs_Shell_Test extends TestBase {
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
-	// a04 - E-JS-1 .. E-JS-10, E-JS-13 and E-JS-14 fire with the exact user-facing wording the MSG templates in juneau-console.js produce
+	// a04 - E-JS-1 .. E-JS-10 and E-JS-14 fire with the exact user-facing wording the MSG templates in juneau-console.js produce
 	// (pinning the real message text, not just fatal/non-fatal shape) - both the console.error line and the DOM
 	// ".jc-console-error" banner fail() renders. E-JS-11/E-JS-12 are covered separately by a05/a5-adjacent fatal-shape
 	// assertions, since they record only a thrown JuneauConsoleError, not a console.error-backed `errors` list.
@@ -235,16 +235,14 @@ class ConsoleJs_Shell_Test extends TestBase {
 		"2|unsupported page contract version '9'; this shell supports '1'",
 		"2r|page contract key 'version' was renamed to 'contractVersion'; regenerate the page with a current Juneau",
 		"3|card 'c' references template 'missing', but no <template data-card=\"missing\"> exists",
-		"4|card 'k' has unknown type 'kpi'; registered types: 'html, console-output, run-view'",
+		"4|card 'k' has unknown type 'kpi'; registered types: 'html, run-view'",
 		"5|activeNav 'a/b' is not a path in the nav tree (failed at 'b')",
 		"6|duplicate nav id 'a'",
 		"7|duplicate <template data-card=\"c\">",
 		"8|card 'b' (type 'boom') handler threw: 'kaput'",
 		"9|unsafe href 'javascript:alert(1)' on nav 'X'",
 		"10|datatables card 't' needs JuneauViews.regions; load the views toolkit",
-		"13|console-output card 'co' needs JuneauViews.consoleOutput; load the views toolkit",
 		"14|run-view card 'rv' needs JuneauViews.runView; load the views toolkit",
-		"8co|card 'co' (type 'console-output') handler threw: 'console-output region 'co-body': linesUrl is required'",
 		"8rv|card 'rv' (type 'run-view') handler threw: 'run-view region 'rv-body': eventsUrl is required'",
 	})
 	void a04_loudFailure(String code, String message) {
@@ -281,7 +279,7 @@ class ConsoleJs_Shell_Test extends TestBase {
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
-	// a08 - ADDENDUM: isSafeHref/isProtocolRelativeUrl regression pins (Task 4's scheme-bypass + listener-leak fixes)
+	// a08 - ADDENDUM: isSafeHref/isProtocolRelativeUrl regression pins (the scheme-bypass + listener-leak fixes)
 	//------------------------------------------------------------------------------------------------------------------
 
 	/**
@@ -332,40 +330,16 @@ class ConsoleJs_Shell_Test extends TestBase {
 	}
 
 	/**
-	 * The keydown-listener-leak regression (Task 4 review finding): mounting on two DIFFERENT roots of the SAME
+	 * The keydown-listener-leak regression (a review finding): mounting on two DIFFERENT roots of the SAME
 	 * document, each with {@code header.userMenu} set (so {@code renderUserMenu} -&gt; {@code wireFallbackEscape(doc)}
 	 * runs once per mount), must wire the Escape-closes-menu keydown listener on {@code doc} exactly ONCE - the
-	 * {@code fallbackEscapeWired} {@code WeakSet} keyed by {@code doc} is what Task 4 added to fix this; this test
+	 * {@code fallbackEscapeWired} {@code WeakSet} keyed by {@code doc} is what fixes this; this test
 	 * pins it so a future change cannot silently reintroduce the per-mount listener accumulation.
 	 */
 	@Test void a08e_hrefSafety_keydownListenerWiredOnceAcrossTwoMountsOnSameDocument() {
 		var href = map(r().get("hrefSafety"));
 		assertEquals(1, intOf(href.get("keydownListenerCountAfterTwoMounts")),
 			() -> "two mounts on the same document must wire exactly one keydown listener, not one per mount: " + href);
-	}
-
-	//------------------------------------------------------------------------------------------------------------------
-	// a09 - the console-output card calls JuneauViews.consoleOutput.mount(body, copy of card.output, {}) once per card,
-	// on DOMContentLoaded; E-JS-13 and the deferred E-JS-8 are non-fatal and keep the card host.
-	//------------------------------------------------------------------------------------------------------------------
-
-	@Test void a09a_consoleOutputBridge() {
-		var c = map(r().get("consoleOutput"));
-		assertBean(c, "threw,errors,callsBeforeReady,cardTitle,resultCards,duplicateIds", "<null>,[],0,Output,[co1,co2],[]");
-		var calls = list(c.get("calls"));
-		assertEquals(2, calls.size(), c::toString);
-		assertBean(calls.get(0), "elId,elClass,hostId,ctx", "co1-body,jc-card-body,co1,{}");
-		assertBean(calls.get(1), "elId,elClass,hostId,ctx", "co2-body,jc-card-body,co2,{}");
-		assertEquals(Json5.to("{linesUrl:'/runs/1/lines',rows:20,title:'Build'}", Map.class),
-			Json.to(Json.of(map(calls.get(0)).get("options")), Map.class));
-		assertEquals(Json5.to("{linesUrl:'/runs/2/lines'}", Map.class),
-			Json.to(Json.of(map(calls.get(1)).get("options")), Map.class));
-	}
-
-	@Test void a09b_consoleOutputCardFailuresKeepTheHost() {
-		var byCode = map(r().get("errors"));
-		assertBean(map(byCode.get("13")), "threw,bodyRendered", "<null>,true");
-		assertBean(map(byCode.get("8co")), "threw,hostRendered", "<null>,true");
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

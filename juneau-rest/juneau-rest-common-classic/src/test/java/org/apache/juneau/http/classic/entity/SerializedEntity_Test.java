@@ -212,7 +212,7 @@ class SerializedEntity_Test extends TestBase {
 	}
 
 	@Test void a32_d3_holdsBothDirections() {
-		// D3: bean.equals(bean.unmodifiable()) AND the reverse, including serializer/schema state.
+		// Content equality: bean.equals(bean.unmodifiable()) AND the reverse, including serializer/schema state.
 		var x = new SerializedEntity().setContent("hello").setSerializer(JsonSerializer.DEFAULT).setSchema(HttpPartSchema.T_INTEGER);
 		assertEquals(x, x.unmodifiable());
 		assertEquals(x.unmodifiable(), x);

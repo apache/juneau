@@ -32,8 +32,11 @@ import org.apache.juneau.rest.server.view.*;
 import org.apache.juneau.rest.server.view.freemarker.*;
 
 /**
- * Custom cards: how an adopter writes a card type, JSON-only ({@code kpi}) and Java-validated
- * ({@code inventory-gauge}, see {@link InventoryGaugeCardType}).
+ * The Custom cards page, which shows how an adopter writes a card type, and the feeds its cards read.
+ *
+ * <p>
+ * The page has a JSON-only card type ({@code kpi}), a Java-validated one ({@code inventory-gauge}, see
+ * {@link InventoryGaugeCardType}) and two charts: the stock bands and the zoomable prices.
  *
  * <p>
  * Both JS handlers live in {@code petstore-cards.js}, served beside this class, which also shows the card API
@@ -49,6 +52,8 @@ import org.apache.juneau.rest.server.view.freemarker.*;
  * 	GET /console/dev/cards                       the page
  * 	GET /console/dev/cards/stats/available       {label, value} for the kpi card
  * 	GET /console/dev/cards/inventory?species=    {species, available, pending, sold} for the gauge
+ * 	GET /console/dev/cards/inventory/all         one gauge row per species, for the stock bands chart
+ * 	GET /console/dev/cards/prices                {id, price} per pet, for the prices chart
  * 	GET /console/dev/cards/petstore-cards.js     the page script
  * </p>
  */
@@ -104,6 +109,24 @@ public class CustomCardsRest extends PetstoreConsolePage {
 			.append("available", counts.get(PetStatus.AVAILABLE))
 			.append("pending", counts.get(PetStatus.PENDING))
 			.append("sold", counts.get(PetStatus.SOLD));
+	}
+
+	/** @return One {@link #inventory(String)} row per species, in enum order, for the stock bands chart. */
+	@RestGet(path="/inventory/all")
+	public JsonList inventoryAll() {
+		var rows = new JsonList();
+		for (var s : Species.values())
+			rows.add(inventory(s.name()));
+		return rows;
+	}
+
+	/** @return One row {@code {id, price}} per pet, by id, for the zoomable prices chart. */
+	@RestGet(path="/prices")
+	public JsonList prices() {
+		var rows = new JsonList();
+		store().getPets().stream().sorted(Comparator.comparingLong(Pet::getId))
+			.forEach(p -> rows.add(new JsonMap().append("id", p.getId()).append("price", p.getPrice())));
+		return rows;
 	}
 
 	/**

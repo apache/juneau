@@ -56,7 +56,7 @@ class RestClient_RequestId_Test extends TestBase {
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
-	// Phase 6 — auto-send + no-overwrite + opt-out + pre-call setter.
+	// Auto-send + no-overwrite + opt-out + pre-call setter.
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Test void a01_autoSendMintsAndCaptures() throws Exception {
@@ -144,7 +144,7 @@ class RestClient_RequestId_Test extends TestBase {
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
-	// Phase 7 — echo capture: effective id prefers the server-echoed value; no echo returns null (never the sent id).
+	// Echo capture: effective id prefers the server-echoed value; no echo returns null (never the sent id).
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Test void b01_echoDiffersFromSent() throws Exception {
@@ -176,7 +176,7 @@ class RestClient_RequestId_Test extends TestBase {
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
-	// Phase 8/9 — debug emit stamps the structured field and the rendered message carries the prefix.
+	// Debug emit stamps the structured field and the rendered message carries the prefix.
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Test void c01_emitStampsStructuredFieldAndPrefix() throws Exception {

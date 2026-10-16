@@ -35,10 +35,10 @@ import org.junit.jupiter.api.*;
  * {@code computeEffectiveColumns} / {@code validateView} / saved-view (de)serialization / {@code dtIndex}.
  *
  * <p>
- * Two layers, matching the slice-2 split between {@link ViewsJs_ConfigPersistence_Test} and its browser canary:
+ * Two layers, matching the split between {@link ViewsJs_ConfigPersistence_Test} and its browser canary:
  * <ul>
  * 	<li><b>Source-shape</b> (always runs, no Node) &mdash; pins that the shipped script defines and exports the
- * 		§4.3 / §4.2-index-model functions.</li>
+ * 		config-application and index-model functions.</li>
  * 	<li><b>Behavioral</b> (runs when {@code node} is on {@code PATH}) &mdash; drives
  * 		{@code config-application.cjs} against the real classpath {@code juneau-config.js} so the hardening rules
  * 		and the load-bearing {@code dtIndex} fixture ({@code [sel, A, B(hidden), C, actions] → C is 3}) are
@@ -319,7 +319,7 @@ class ViewsJs_ConfigApplication_Test extends TestBase {
 	}
 
 	/**
-	 * Load-bearing §4.2 / §6.10 fixture: {@code opts.columns = [sel, A, B(hidden), C, actions]} → C's
+	 * Load-bearing fixture: {@code opts.columns = [sel, A, B(hidden), C, actions]} → C's
 	 * {@code dtIndex} is <b>3</b>, not 2 (the "visible+offset" self-contradiction).
 	 */
 	@Test void b12_dtIndex_selectionPlusHiddenBetweenTarget_Cis3() {

@@ -20,7 +20,7 @@
  * juneau-helpers.js.
  *
  * Deliberately loads only juneau-renders.js + juneau-views.js + juneau-helpers.js - NO juneau-regions.js.
- * Design §9.2 requires every helper to be testable with no region at all, so a harness that pulled in the
+ * Every helper must be testable with no region at all, so a harness that pulled in the
  * region runtime would be testing a stronger environment than the invariant promises.
  *
  *   const { load, flush } = require('./helpers-harness.cjs');

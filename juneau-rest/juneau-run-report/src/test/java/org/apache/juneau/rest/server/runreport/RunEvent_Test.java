@@ -28,18 +28,18 @@ import org.junit.jupiter.api.*;
 
 class RunEvent_Test extends TestBase {
 
-	private static final RunEvent STEP_EVENT = RunEvent.step("tests", "mvn test").withN(4).withState(StepState.WAITING).withRawLine(12).withSeq(1);
+	private static final RunEvent STEP_EVENT = RunEvent.step("tests", "mvn test").withN(4).withState(StepState.WAITING).withRawOffset(120).withSeq(1);
 	private static final RunEvent END_EVENT = RunEvent.end("tests", EndStatus.FAIL).withMs(1200).withExit(1).withSeq(2);
-	private static final RunEvent SUITE_EVENT = RunEvent.suite("tests", "jest", "src/a.test.js", 3, 1, 0).withRawLine(5).withSeq(3);
+	private static final RunEvent SUITE_EVENT = RunEvent.suite("tests", "jest", "src/a.test.js", 3, 1, 0).withRawOffset(50).withSeq(3);
 	private static final RunEvent TEST_EVENT = RunEvent.test("tests", "jest", "src/a.test.js", "adds", TestStatus.FAIL)
-		.withMs(7).withMsg("expected 1").withTrace("at a.js:1").withRawLine(9).withSeq(4);
+		.withMs(7).withMsg("expected 1").withTrace("at a.js:1").withRawOffset(90).withSeq(4);
 	private static final RunEvent REPLACE_EVENT = RunEvent.replace("tests").withSeq(5);
 	private static final RunEvent NOTE_EVENT = RunEvent.note(Level.WARN, "slow").withHref("https://example.org/x").withStep("tests").withSeq(6);
 	private static final RunEvent DONE_EVENT = RunEvent.done(DoneStatus.CANCELLED).withSeq(7);
 
 	@Test void a01_stepFactory() {
-		var e = RunEvent.step("tests", "mvn test").withN(4).withRawLine(12);
-		assertEquals(Map.of("ev", "step", "id", "tests", "title", "mvn test", "n", 4, "rawLine", 12), e.toContractMap());
+		var e = RunEvent.step("tests", "mvn test").withN(4).withRawOffset(12);
+		assertEquals(Map.of("ev", "step", "id", "tests", "title", "mvn test", "n", 4, "rawOffset", 12L), e.toContractMap());
 	}
 
 	@Test void a02_numberedCopyIncludesSeq() {
@@ -75,7 +75,7 @@ class RunEvent_Test extends TestBase {
 		var s = RunEvent.step("a", "T");
 		assertThrowsWithMessage(IllegalArgumentException.class, "n must be", () -> s.withN(0));
 		assertThrowsWithMessage(IllegalArgumentException.class, "n must be", () -> s.withN(10000));
-		assertThrowsWithMessage(IllegalArgumentException.class, "rawLine", () -> s.withRawLine(0));
+		assertThrowsWithMessage(IllegalArgumentException.class, "rawOffset", () -> s.withRawOffset(-1));
 		var e = RunEvent.end("a", EndStatus.OK);
 		assertThrowsWithMessage(IllegalArgumentException.class, "ms must be", () -> e.withMs(-1));
 		assertThrowsWithMessage(IllegalArgumentException.class, "ms must be", () -> e.withMs(RunEvent.MAX_SAFE_INT + 1));
@@ -151,7 +151,7 @@ class RunEvent_Test extends TestBase {
 
 	@Test void c05_keyOrder() {
 		assertEquals(List.of("ev", "seq", "id", "title"), new ArrayList<>(RunEvent.step("a", "T").withSeq(3).toContractMap().keySet()));
-		assertEquals(List.of("ev", "seq", "step", "fw", "suite", "name", "status", "ms", "msg", "trace", "rawLine"),
+		assertEquals(List.of("ev", "seq", "step", "fw", "suite", "name", "status", "ms", "msg", "trace", "rawOffset"),
 			new ArrayList<>(TEST_EVENT.toContractMap().keySet()));
 	}
 
@@ -170,14 +170,14 @@ class RunEvent_Test extends TestBase {
 	}
 
 	@Test void c08_rawOffsetRoundTripsAndOrders() {
-		var step = RunEvent.step("a", "T").withRawLine(3).withRawOffset(120);
+		var step = RunEvent.step("a", "T").withRawOffset(120);
 		var suite = RunEvent.suite("a", "jest", "s", 1, 0, 0).withRawOffset(5);
-		var test = RunEvent.test("a", "jest", "s", "n", TestStatus.FAIL).withRawLine(2).withRawOffset(9);
+		var test = RunEvent.test("a", "jest", "s", "n", TestStatus.FAIL).withRawOffset(9);
 		for (var e : List.of(step, suite, test))
 			assertEquals(e, RunEvent.fromMap(e.toContractMap()));
-		assertEquals(List.of("ev", "id", "title", "rawLine", "rawOffset"), new ArrayList<>(step.toContractMap().keySet()));
+		assertEquals(List.of("ev", "id", "title", "rawOffset"), new ArrayList<>(step.toContractMap().keySet()));
 		assertEquals(List.of("ev", "step", "fw", "suite", "counts", "rawOffset"), new ArrayList<>(suite.toContractMap().keySet()));
-		assertEquals(List.of("ev", "step", "fw", "suite", "name", "status", "rawLine", "rawOffset"), new ArrayList<>(test.toContractMap().keySet()));
+		assertEquals(List.of("ev", "step", "fw", "suite", "name", "status", "rawOffset"), new ArrayList<>(test.toContractMap().keySet()));
 		assertEquals(120L, RunEvent.fromMap(Map.of("ev", "step", "id", "a", "title", "T", "rawOffset", 120.0)).toContractMap().get("rawOffset"));
 		assertThrowsWithMessage(IllegalArgumentException.class, "rawOffset", () -> RunEvent.fromMap(Map.of("ev", "step", "id", "a", "title", "T", "rawOffset", 1.5)));
 	}

@@ -48,7 +48,7 @@ class CardDirective_RunView_Test extends TestBase {
 		assertPage(body).isValid().hasCard("run-42", "run-view");
 		assertEquals(
 			Json5.to("{id:'run-42',type:'run-view',title:'Run',runView:{eventsUrl:'/juneau-run-view/42/events',"
-				+ "refreshMs:1000,poll:true,compact:false,title:'Build run',rawHref:'/runs/42/raw#L{line}'}}", Map.class),
+				+ "refreshMs:1000,poll:true,compact:false,title:'Build run',rawHref:'/runs/42/raw#O{offset}'}}", Map.class),
 			Json5.to(Json.of(card(body, "run-42")), Map.class));
 		assertFalse(body.contains("<template data-card=\"run-42\">"), () -> body);
 	}
@@ -73,8 +73,9 @@ class CardDirective_RunView_Test extends TestBase {
 	@ParameterizedTest
 	@CsvSource(delimiter='|', value={
 		"rv-card-noid|<@card type=\"run-view\"> requires id=.",
-		"rv-card-src|<@card id='run'> type='run-view' takes its options as the body; src= and template= are not allowed.",
-		"rv-card-template|<@card id='run'> type='run-view' takes its options as the body; src= and template= are not allowed.",
+		"rv-card-src|<@card id='run'> type='run-view' takes its options as the body; src= is not allowed.",
+		"rv-card-both|<@card id='run'> type='run-view' takes its options as the body; src= and template= are not allowed.",
+		"rv-card-template|<@card id='run'> type='run-view' takes its options as the body; template= is not allowed.",
 		"rv-card-empty|<@card id='run'> type='run-view' requires a JSON5 body { contractVersion: '1', runView: {...} }.",
 		"rv-card-notjson|<@card id='run'> type='run-view' requires a JSON5 body { contractVersion: '1', runView: {...} }.",
 		"rv-card-noversion|<@card id='run'> type='run-view' requires contractVersion: '1'; got 'null'.",
@@ -84,7 +85,7 @@ class CardDirective_RunView_Test extends TestBase {
 		"rv-card-badkey|RunViewDef 'run' unknown key 'colour'",
 		"rv-card-nourl|eventsUrl is required unless poll is false",
 		"rv-card-unsafe|eventsUrl must be a same-origin path",
-		"rv-card-badraw|rawHref must contain exactly one {line}",
+		"rv-card-badraw|rawHref must contain exactly one {offset}",
 		"rv-card-idurl|{id}",
 	})
 	void a05_errors(String fixture, String message) {

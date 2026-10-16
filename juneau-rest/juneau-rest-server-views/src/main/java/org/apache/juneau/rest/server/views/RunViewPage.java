@@ -38,7 +38,7 @@ public final class RunViewPage {
 	/** The maximum number of events in one page. */
 	public static final int MAX_PAGE_EVENTS = 10_000;
 
-	/** The maximum serialized size of the events in one page; the same budget as a console-output page. */
+	/** The maximum serialized size of the events in one page. */
 	public static final int MAX_PAGE_CHARS = 8_388_608;
 
 	private final List<RunEvent> events;
@@ -110,7 +110,7 @@ public final class RunViewPage {
 	 */
 	public RunViewPage validate() {
 		if (! RunViewChecks.isToken(next))
-			throw iaex("RunViewPage next must match ^[A-Za-z0-9._~-]{1,128}$; got '%s'", ConsoleOutputChecks.clip(next));
+			throw iaex("RunViewPage next must match ^[A-Za-z0-9._~-]{1,128}$; got '%s'", RunViewChecks.clip(next));
 		if (events.size() > MAX_PAGE_EVENTS)
 			throw iaex("RunViewPage events must hold at most %s events; got %s", MAX_PAGE_EVENTS, events.size());
 		if (more && events.isEmpty())

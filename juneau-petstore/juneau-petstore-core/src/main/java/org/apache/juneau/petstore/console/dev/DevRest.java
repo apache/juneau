@@ -36,7 +36,9 @@ import org.apache.juneau.rest.server.*;
  * 	<jc>// GET /console/dev  -&gt;  303 to /console/dev/cards</jc>
  * </p>
  */
-@Rest(path="/dev", title="Developer", children={CustomCardsRest.class, FlavorsRest.class, SecureRest.class, ThemesRest.class})
+@Rest(path="/dev", title="Developer", children={
+	ChartsRest.class, CustomCardsRest.class, DashboardRest.class, DataRest.class, FlavorsRest.class, SecureRest.class, ThemesRest.class
+})
 @SuppressWarnings({
 	"java:S110" // Inheritance depth comes from the BasicRestServlet hierarchy, not this page.
 })

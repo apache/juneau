@@ -44,7 +44,7 @@ class RunViewDef_Test extends TestBase {
 	}
 
 	@Test void a03_allKeysInOrder() {
-		var d = RunViewDef.create("r").eventsUrl("/x").title("T").rawHref("#raw-L{line}");
+		var d = RunViewDef.create("r").eventsUrl("/x").title("T").rawHref("#raw-O{offset}");
 		assertEquals(RunViewDef.KEYS, keysOf(d.toMap()));
 	}
 
@@ -65,10 +65,10 @@ class RunViewDef_Test extends TestBase {
 	}
 
 	@Test void b04_rawHrefTemplate() {
-		assertDoesNotThrow(() -> RunViewDef.create("r").eventsUrl("/x").rawHref("#raw-L{line}").validate());
+		assertDoesNotThrow(() -> RunViewDef.create("r").eventsUrl("/x").rawHref("#raw-O{offset}").validate());
 		assertDoesNotThrow(() -> RunViewDef.create("r").eventsUrl("/x").rawHref("#term-O{offset}").validate());
 		assertThrowsWithMessage(IllegalArgumentException.class, "rawHref", () -> RunViewDef.create("r").eventsUrl("/x").rawHref("#raw-L").validate());
-		assertThrowsWithMessage(IllegalArgumentException.class, "exactly one {line} or one {offset}", () -> RunViewDef.create("r").eventsUrl("/x").rawHref("#a{line}{offset}").validate());
+		assertThrowsWithMessage(IllegalArgumentException.class, "exactly one {offset}", () -> RunViewDef.create("r").eventsUrl("/x").rawHref("#a{line}{offset}").validate());
 	}
 
 	@Test void b05_typeAndIdAndRefresh() {
@@ -83,7 +83,7 @@ class RunViewDef_Test extends TestBase {
 	}
 
 	@Test void c02_roundTrip() {
-		var d = RunViewDef.create("r").eventsUrl("/x").refreshMs(5000).poll(true).compact(true).title("T").rawHref("#raw-L{line}");
+		var d = RunViewDef.create("r").eventsUrl("/x").refreshMs(5000).poll(true).compact(true).title("T").rawHref("#raw-O{offset}");
 		assertEquals(d.toMap(), RunViewDef.fromMap("r", d.toMap()).toMap());
 	}
 
@@ -106,7 +106,7 @@ class RunViewDef_Test extends TestBase {
 	}
 
 	@Test void d03_toRegionValidates() {
-		var r = RunViewDef.create("run").eventsUrl("/x").title("T").rawHref("#raw-L{line}").toRegion();
+		var r = RunViewDef.create("run").eventsUrl("/x").title("T").rawHref("#raw-O{offset}").toRegion();
 		assertBean(r, "id,populate", "run,run-view");
 		assertEquals(List.of(RunViewDef.POPULATOR), List.copyOf(r.allowedPopulators));
 	}

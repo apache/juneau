@@ -17,7 +17,7 @@
 
 /*
  * dialog-form.cjs - always-on Node harness for the dialog FormDef painter: appendDialogForm builds
- * label+control rows via createElement for the frozen 6-type allowlist (text/textarea/checkbox/toggle/select/action),
+ * label+control rows via createElement for the 7-type allowlist (text/textarea/password/checkbox/toggle/select/action),
  * unknown types are skipped, a type=action with a missing id is painted disabled, and collectDialogFormFields reads
  * text/textarea/select via .value and checkbox/toggle as explicit "true"/"false" while skipping action buttons.
  *
@@ -131,5 +131,18 @@ out.catalog_enabled = cbtn.disabled === false;
 out.catalog_notMarkedMissing = cbtn.dataset.juneauActionMissing === undefined;
 // ...and it still carries no submit value, so the collection path is untouched by any of this.
 out.catalog_stillSkippedByCollect = !Object.hasOwn(I.collectDialogFormFields(dialog3), 'x');
+
+// --- a type=password field paints a masked, never-pre-filled input ---------------------------------------------
+// The data carries a value for the field (as an edit/re-open would), and it must still come out empty.
+const dialog4 = env.el('div');
+I.appendDialogForm(dialog4, { fields: [{ name: 'pw', type: 'password', label: 'Password', value: 'hunter2', required: true }] },
+	table, tr, ctx, 4);
+const pw = dialog4.querySelector('[data-juneau-form-field="pw"]');
+out.pw_isInput = pw != null && pw.tagName === 'INPUT';
+out.pw_typePassword = pw != null && String(pw.type) === 'password';
+out.pw_autocomplete = pw != null && pw.getAttribute('autocomplete') === 'new-password';
+out.pw_notPrefilled = pw != null && (pw.value == null || pw.value === '');
+out.pw_required = pw != null && pw.required === true;
+out.pw_collectsTyped = (function () { pw.value = 'typed'; return I.collectDialogFormFields(dialog4).pw === 'typed'; })();
 
 process.stdout.write(JSON.stringify(out));

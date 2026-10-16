@@ -1344,7 +1344,7 @@ public class RestContext extends Context {
 	 * The locally-resolved {@link RestAuthenticator} for this resource, if any.
 	 *
 	 * <p>
-	 * Resolution precedence (highest first, per design spec &sect;5.3):
+	 * Resolution precedence (highest first):
 	 * <ol>
 	 * 	<li>Registered bean &mdash; {@code beanStore().getBean(RestAuthenticator.class)}.
 	 * 	<li>{@code @Rest(authenticator=X)} &mdash; instantiated via the bean store (constructor injection).
@@ -1423,7 +1423,7 @@ public class RestContext extends Context {
 		var req = session.getRequest();
 		var acc = new AuthResultAccumulator();
 		// Seed the fold with any pre-existing identity (container security or a servlet-layer AuthFilterChain) so
-		// roles-only ADD results from resource authenticators augment it instead of being dropped (spec §5.6/§5.7).
+		// roles-only ADD results from resource authenticators augment it instead of being dropped.
 		// A later REPLACE result still overrides this seed (the accumulator resets principal+roles on REPLACE).
 		var existing = req.getUserPrincipal();
 		if (existing != null)
@@ -2642,7 +2642,7 @@ public class RestContext extends Context {
 			// NOTE: for a proxied (e.g. CGLIB) resource, non-public methods run against the resource object as-is.
 			//
 			// Walk order is child class first, then superclasses, with interface default methods after all superclasses.
-			// The first method to claim a (type, name) key wins (D3); an unresolvable method (missing parameters)
+			// The first method to claim a (type, name) key wins; an unresolvable method (missing parameters)
 			// claims nothing, so a later candidate can still fill the key.  An overridden method runs once (the
 			// override); if the parent declares a covariant (wider) return type, the override's instance is also
 			// registered under the parent's type.  Methods with a non-empty methodScope() are op-scoped and skipped
@@ -2655,7 +2655,7 @@ public class RestContext extends Context {
 			// supplier (memoizer-backed, resolving to the @Bean value when one was supplied) is PROMOTED into a
 			// local-entry supplier.  A framework type has one per-context instance, so when the method is named but only
 			// an unnamed default exists (e.g. @Bean(name="encoders") EncoderSet), the name becomes an alias of that
-			// single instance.  Framework types are never exported to children (J0561 isolation).
+			// single instance.  Framework types are never exported to children (framework-type isolation).
 			// Promoting at level 2 means @Bean results win over a parent (Spring) at level 3.
 			//
 			// Net effect: @Bean method results uniformly take precedence over Spring/parent
@@ -2989,7 +2989,7 @@ public class RestContext extends Context {
 
 	/**
 	 * Translates a host-declared {@link Child @Child} into a synthetic {@link Rest @Rest} carrying only its
-	 * seed slots (the §3 scope subset — no {@code encoders}/{@code serializers}/{@code parsers}/
+	 * seed slots (a restricted subset — no {@code encoders}/{@code serializers}/{@code parsers}/
 	 * {@code responseProcessors}/{@code restOpArgs}/{@code messages}/default headers or attributes/
 	 * {@code produces}/{@code consumes}), so the standard {@code @Rest} resolution chain applies the seed uniformly.
 	 *
@@ -4989,7 +4989,7 @@ public class RestContext extends Context {
 	}
 
 	/**
-	 * Installs bounded body-caching wrappers on the call (Phase A) when this resource's logger is loggable at
+	 * Installs bounded body-caching wrappers on the call when this resource's logger is loggable at
 	 * {@link Level#FINEST FINEST}. Used on the resource-level (404/no-op) paths; per-operation capture is installed by
 	 * {@link RestOpContext#createSession(RestSession)}.
 	 *
@@ -5437,7 +5437,7 @@ public class RestContext extends Context {
 	}
 
 	/**
-	 * Writes a {@code BasicHttpException} as an {@code application/problem+json} body. Q5(A): the {@code Accept}
+	 * Writes a {@code BasicHttpException} as an {@code application/problem+json} body. The {@code Accept}
 	 * header is intentionally ignored on the error path so opted-in resources always emit Problem JSON for thrown
 	 * exceptions.
 	 *
@@ -5536,6 +5536,10 @@ public class RestContext extends Context {
 			// mock response's coincidental 0), so throwing "Invalid method response" for a non-error status would turn
 			// every unmatched path into an HTTP 500 in production while staying invisible to the mock-based tests.
 			throw new NotFound("Method '%s' not found on resource with matching pattern%s.", methodUC, onPath);
+		else if (rc < SC_INTERNAL_SERVER_ERROR)
+			// A start-call hook left another client-error status (e.g. 400, 401, 403, 409) and nothing matched:
+			// keep that status rather than converting it to a 500.
+			throw new BasicHttpException(rc, null, "Method '%s' not found on resource%s.", methodUC, onPath);
 		else
 			throw new ServletException("Invalid method response: " + rc, session.getException());
 	}

@@ -27,7 +27,7 @@ import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.condition.*;
 
 /**
- * Every shell failure E-JS-1 to E-JS-14, and the registration-time E-JS-20 to E-JS-23, shows in the {@code .jc-console-error} banner with the exact message, and is
+ * Every shell failure E-JS-1 to E-JS-12 and E-JS-14, and the registration-time E-JS-20 to E-JS-23, shows in the {@code .jc-console-error} banner with the exact message, and is
  * logged through console.error with the {@code [juneau-console] } prefix.
  */
 @EnabledIfSystemProperty(named=ConsoleBrowserFixture.GATE, matches="true",
@@ -58,7 +58,6 @@ class ConsoleLoudFailure_BrowserTest extends TestBase {
 			.page("e8", ORIGIN + "/e8", contractPage(c("\"cards\":[{\"id\":\"h\",\"type\":\"html\",\"src\":\"https://evil.test/x\"}]"), ""))
 			.page("e9", ORIGIN + "/e9", contractPage(c("\"nav\":[{\"id\":\"a\",\"label\":\"A\",\"href\":\"javascript:alert(1)\"}]"), ""))
 			.page("e10", ORIGIN + "/e10", contractPage(c("\"cards\":[{\"id\":\"t\",\"type\":\"datatables\",\"table\":\"/rest/t\"}]"), ""))
-			.page("e13", ORIGIN + "/e13", contractPage(c("\"cards\":[{\"id\":\"co\",\"type\":\"console-output\",\"output\":{\"linesUrl\":\"/runs/1/lines\"}}]"), ""))
 			.page("e14", ORIGIN + "/e14", contractPage(c("\"cards\":[{\"id\":\"rv\",\"type\":\"run-view\",\"runView\":{\"eventsUrl\":\"/runs/1/events\"}}]"), ""))
 			// E-JS-11/E-JS-12 (juneau-console.js lines 39, 51-52, 492, 601, 1023-1024, 1026-1034): the page's own
 			// afterShell script calls JuneauConsole.mount/registerCard a second time, after the shell's own
@@ -129,7 +128,7 @@ class ConsoleLoudFailure_BrowserTest extends TestBase {
 	}
 
 	@Test void a05_unknownCardType() {
-		assertFailure(report.get("e4"), "E-JS-4", "card 'k' has unknown type 'kpi'; registered types: 'html, console-output, run-view'");
+		assertFailure(report.get("e4"), "E-JS-4", "card 'k' has unknown type 'kpi'; registered types: 'html, run-view'");
 	}
 
 	@Test void a06_activeNavNotInTree() {
@@ -157,7 +156,7 @@ class ConsoleLoudFailure_BrowserTest extends TestBase {
 	}
 
 	@Test void a12_cardLevelFailures_doNotStopTheMount() {
-		for (var name : List.of("e8", "e9", "e10", "e13", "e14")) {
+		for (var name : List.of("e8", "e9", "e10", "e14")) {
 			var r = report.get(name);
 			assertNotNull(r.get("mounted"), () -> name + " must still finish the mount: " + r);
 			assertEmpty(() -> name + " must not throw: " + r, r.get("pageErrors"));
@@ -181,10 +180,6 @@ class ConsoleLoudFailure_BrowserTest extends TestBase {
 	 */
 	@Test void a14_cardTypeAlreadyRegistered() {
 		assertFailure(report.get("e12"), "E-JS-12", "card type 'html' is already registered");
-	}
-
-	@Test void a15_consoleOutputWithoutViews() {
-		assertFailure(report.get("e13"), "E-JS-13", "console-output card 'co' needs JuneauViews.consoleOutput; load the views toolkit");
 	}
 
 	@Test void a16_runViewWithoutViews() {

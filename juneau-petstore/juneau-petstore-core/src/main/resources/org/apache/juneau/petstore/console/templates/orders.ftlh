@@ -19,6 +19,8 @@
   rowType: 'Order',
   dataMode: 'server',
   dataUrl: '/console/orders/query',
+  columnConfig: { tabs: [ 'columns', 'sort' ] },
+  urlState: { day: {}, window: {} },
   defaultOrder: [ { key: 'id', dir: 'asc' } ],
   columns: [
     { key: 'id', label: 'Id' },
@@ -32,6 +34,8 @@
       { id: 'approved', title: 'Approved', column: 'status', value: '$eq(APPROVED)' },
       { id: 'delivered', title: 'Delivered', column: 'status', value: '$eq(DELIVERED)' }
     ] },
+    { type: 'dialog', id: 'new-order', title: '+ New order', symbol: 'plus',
+      form: '/console/orders/new-form', endpoint: '/console/orders', method: 'POST', onSuccess: 'redraw' },
     { type: 'export', buttons: [ 'copy', 'csv' ], optional: [ 'excel', 'pdf' ] },
     { type: 'refresh' }
   ],

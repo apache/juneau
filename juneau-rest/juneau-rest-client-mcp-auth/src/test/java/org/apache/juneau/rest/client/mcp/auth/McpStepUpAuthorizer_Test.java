@@ -116,7 +116,7 @@ class McpStepUpAuthorizer_Test extends TestBase {
 	}
 
 	@Test void b02_attemptTrackingPersistsAcrossFailingCalls() {
-		// M4: WITHOUT an intervening success, the per-(resource, operation) counter persists, so a second call for a
+		// WITHOUT an intervening success, the per-(resource, operation) counter persists, so a second call for a
 		// permanently-failing operation fails fast (cap already reached) with no further reauths.
 		var reauths = new AtomicInteger();
 		var authorizer = McpStepUpAuthorizer.create()
@@ -132,7 +132,7 @@ class McpStepUpAuthorizer_Test extends TestBase {
 	}
 
 	@Test void b04_successClearsCounterEnablingLaterStepUp() {
-		// M4: a successful execute clears the operation's counter, so a LATER legitimate step-up for the same operation
+		// A successful execute clears the operation's counter, so a LATER legitimate step-up for the same operation
 		// is not permanently refused by a long-lived authorizer.
 		var authorizer = McpStepUpAuthorizer.create()
 			.resource(RES).issuer(ISS)
@@ -149,7 +149,7 @@ class McpStepUpAuthorizer_Test extends TestBase {
 	}
 
 	@Test void b05_resetClearsOperationCounter() {
-		// M4: reset(operation) clears a permanently-failed operation's counter so a subsequent step-up may proceed.
+		// Reset(operation) clears a permanently-failed operation's counter so a subsequent step-up may proceed.
 		var authorizer = McpStepUpAuthorizer.create()
 			.resource(RES).issuer(ISS)
 			.maxAttempts(1)
@@ -164,7 +164,7 @@ class McpStepUpAuthorizer_Test extends TestBase {
 	}
 
 	@Test void b06_resetAllClearsEveryOperation() {
-		// M4: resetAll() clears all operations' counters.
+		// ResetAll() clears all operations' counters.
 		var authorizer = McpStepUpAuthorizer.create()
 			.resource(RES).issuer(ISS)
 			.maxAttempts(1)

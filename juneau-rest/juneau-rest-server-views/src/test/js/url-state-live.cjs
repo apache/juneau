@@ -16,7 +16,7 @@
  */
 
 /*
- * url-state-live.cjs - always-on Node harness for the live shareable-URL wire (T17–T19): address-bar sync,
+ * url-state-live.cjs - always-on Node harness for the live shareable-URL wire: address-bar sync,
  * clean-address, open precedence that does not clobber View Settings, and incomplete/bad filters that leave
  * the grid alone.  Loads juneau-urlstate.js + juneau-views.js against the shared DOM shim.
  *
@@ -219,13 +219,13 @@ nestWrap.appendChild(nestTable);
 env.document.body.appendChild(nestWrap);
 out.nestedNotPrimary = I.isShareablePrimaryTable(nestTable, { id: 'nested' }) === false;
 
-// config.js bridge surface (T17/T19 call sites from the config layer)
+// config.js bridge surface (call sites from the config layer)
 out.configResolveExported = typeof NS.config?.resolveShareableOpenState === 'function'
 	|| true; // config may not be loaded in this harness; source-shape covers it
 out.configResolveWorks = typeof NS.urlState.resolveOpenState === 'function'
 	&& NS.urlState.resolveOpenState(NS.urlState.decode('tab(fromUrl)'), { tab: 'store' }).tab === 'fromUrl';
 
-// F1: a malicious/unusual tab id must never throw, and must never match via string concatenation into a selector -
+// a malicious/unusual tab id must never throw, and must never match via string concatenation into a selector -
 // only via a real querySelectorAll() + dataset string-equality comparison.
 const strip = env.el('div');
 strip.setAttribute('role', 'tablist');

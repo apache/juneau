@@ -1,0 +1,20 @@
+{
+  "contractVersion": "1", "title": "T", "nav": [], "activeNav": [],
+  "cards": [
+    {"id": "daily", "type": "html", "template": "daily", "title": "Daily"},
+    {"id": "share", "type": "html", "template": "share", "title": "Share"}
+  ],
+  "dashboard": {
+    "id": "orders", "title": "Orders", "grid": 2,
+    "panels": [{"card": "daily", "span": 2}],
+    "rail": {"side": "left", "width": 280, "sections": [
+      {"id": "range", "kind": "range", "topic": "filter:range", "label": "Range", "presets": ["7d", "30d", "ytd"], "custom": true, "defaultPreset": "30d"},
+      {"id": "search", "kind": "search", "topic": "filter:search", "placeholder": "status:open"},
+      {"id": "reasons", "kind": "choice", "topic": "filter:reasons", "source": "orders", "dim": "reason", "max": 50},
+      {"kind": "card", "card": "share"},
+      {"id": "goto", "kind": "custom", "topic": "filter:goto", "name": "app.goto", "args": {}}
+    ]},
+    "status": ["data:orders"],
+    "persist": {"ns": "app.orders", "version": 1, "topics": ["filter:range", "zoom:daily"], "shareLink": true, "decoders": ["app.goto"]}
+  }
+}

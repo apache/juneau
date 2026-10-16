@@ -30,7 +30,7 @@ import org.apache.juneau.rest.server.widgets.*;
  * Mixin that serves the first-party rich-view runtime assets &mdash; {@code juneau-views.js},
  * {@code juneau-ribbon.js}, {@code juneau-renders.js}, {@code juneau-views.css}, the opt-in
  * {@code juneau-regions.js} region-populate runtime, the opt-in {@code juneau-config.js}/{@code juneau-config.css}
- * column-chooser runtime &mdash; each at its stable path (design doc §6.1), plus deprecated compatibility mounts
+ * column-chooser runtime &mdash; each at its stable path, plus deprecated compatibility mounts
  * for the two assets that have since moved to the widget module.
  *
  * <p>
@@ -274,18 +274,10 @@ public class ViewsMixin {
 	public static final String HELPERS_JS_PATH = "/juneau-helpers.js";
 
 	/**
-	 * The URL path at which the opt-in console-output module is served (relative to the host mount).
-	 *
-	 * <h5 class='section'>Load order is a contract, not a preference:</h5>
-	 * <p>
-	 * This {@code <script>} MUST come after {@code juneau-regions.js} (itself after {@code juneau-views.js}) and
-	 * before {@code juneau-helpers.js}.  It reads the URL helpers {@code juneau-views.js} exports and registers its
-	 * populator with {@code juneau-regions.js}; icons are built through {@code JuneauViews.helpers.icon}, which is
-	 * resolved at call time, so loading before {@code juneau-helpers.js} is safe.
-	 *
-	 * @since 10.0.0
+	 * [GET] path of the DataRegistry runtime ({@code JuneauViews.data}): the frames behind {@code data:} bus topics.
+	 * Loaded after {@link #BUS_JS_PATH}; the {@code "data"} toolkit pack serves it.
 	 */
-	public static final String CONSOLE_OUTPUT_JS_PATH = "/juneau-console-output.js";
+	public static final String DATA_JS_PATH = "/juneau-data.js";
 
 	/**
 	 * The URL path at which the opt-in run-view module is served (relative to the host mount).
@@ -437,8 +429,8 @@ public class ViewsMixin {
 	/** Classpath location of the shipped region-populate paint library. */
 	static final String HELPERS_JS_RESOURCE = "/org/apache/juneau/views/juneau-helpers.js";
 
-	/** Classpath location of the shipped console-output module. */
-	static final String CONSOLE_OUTPUT_JS_RESOURCE = "/org/apache/juneau/views/juneau-console-output.js";
+	/** Classpath location of the shipped DataRegistry runtime. */
+	static final String DATA_JS_RESOURCE = "/org/apache/juneau/views/juneau-data.js";
 
 	/** Classpath location of the shipped run-view module. */
 	static final String RUN_VIEW_JS_RESOURCE = "/org/apache/juneau/views/juneau-run-view.js";
@@ -707,19 +699,18 @@ public class ViewsMixin {
 	}
 
 	/**
-	 * [GET /juneau-console-output.js] &mdash; serve the opt-in console-output module.
+	 * [GET /juneau-data.js] &mdash; serve the DataRegistry runtime.
 	 *
-	 * @return The console-output module as a JavaScript {@link HttpResource}.
-	 * @since 10.0.0
+	 * @return The runtime as a JavaScript {@link HttpResource}.
 	 */
 	@RestGet(
-		path=CONSOLE_OUTPUT_JS_PATH,
-		summary="Juneau rich-view console-output module",
-		description="First-party, opt-in JavaScript for the console-output region: a live-tailing, append-only log pane.",
+		path=DATA_JS_PATH,
+		summary="Juneau DataRegistry runtime",
+		description="First-party JavaScript holding the columnar frames behind data: bus topics (JuneauViews.data).",
 		swagger=@OpSwagger(ignore=true)
 	)
-	public HttpResource getConsoleOutputScript() {
-		return serve(CONSOLE_OUTPUT_JS_RESOURCE, JS_CONTENT_TYPE);
+	public HttpResource getDataScript() {
+		return serve(DATA_JS_RESOURCE, JS_CONTENT_TYPE);
 	}
 
 	/**
@@ -775,7 +766,7 @@ public class ViewsMixin {
 	 *
 	 * @param path One of the asset path constants ({@link #VIEWS_JS_PATH}, {@link #RIBBON_JS_PATH},
 	 * 	{@link #BUS_JS_PATH}, {@link #RENDERS_JS_PATH}, {@link #VIEWS_CSS_PATH}, {@link #ICONS_JS_PATH}, {@link #SYMBOLS_SVG_PATH},
-	 * 	{@link #SYMBOLS_MATERIAL_SVG_PATH}, {@link #REGIONS_JS_PATH}, {@link #HELPERS_JS_PATH}, {@link #CONSOLE_OUTPUT_JS_PATH}, {@link #RUN_VIEW_JS_PATH}, {@link #CONFIG_JS_PATH}, {@link #CONFIG_CSS_PATH},
+	 * 	{@link #SYMBOLS_MATERIAL_SVG_PATH}, {@link #REGIONS_JS_PATH}, {@link #HELPERS_JS_PATH}, {@link #DATA_JS_PATH}, {@link #RUN_VIEW_JS_PATH}, {@link #CONFIG_JS_PATH}, {@link #CONFIG_CSS_PATH},
 	 * 	{@link #CALENDAR_JS_PATH}, {@link #CALENDAR_CSS_PATH}, {@link #DATATABLES_JS_PATH}).
 	 * @return The servlet-relative asset URL with the version+content-hash cache-buster appended.
 	 */
@@ -799,7 +790,7 @@ public class ViewsMixin {
 	 * @param req The current request, supplying the context path/mount to resolve against.
 	 * @param path One of the asset path constants ({@link #VIEWS_JS_PATH}, {@link #RIBBON_JS_PATH},
 	 * 	{@link #BUS_JS_PATH}, {@link #RENDERS_JS_PATH}, {@link #VIEWS_CSS_PATH}, {@link #ICONS_JS_PATH}, {@link #SYMBOLS_SVG_PATH},
-	 * 	{@link #SYMBOLS_MATERIAL_SVG_PATH}, {@link #REGIONS_JS_PATH}, {@link #HELPERS_JS_PATH}, {@link #CONSOLE_OUTPUT_JS_PATH}, {@link #RUN_VIEW_JS_PATH}, {@link #CONFIG_JS_PATH}, {@link #CONFIG_CSS_PATH},
+	 * 	{@link #SYMBOLS_MATERIAL_SVG_PATH}, {@link #REGIONS_JS_PATH}, {@link #HELPERS_JS_PATH}, {@link #DATA_JS_PATH}, {@link #RUN_VIEW_JS_PATH}, {@link #CONFIG_JS_PATH}, {@link #CONFIG_CSS_PATH},
 	 * 	{@link #CALENDAR_JS_PATH}, {@link #CALENDAR_CSS_PATH}, {@link #DATATABLES_JS_PATH}).
 	 * @return The absolute asset URL with the version+content-hash cache-buster appended.
 	 */
@@ -894,7 +885,7 @@ public class ViewsMixin {
 		if (eq(path, SYMBOLS_MATERIAL_SVG_PATH)) return SYMBOLS_MATERIAL_SVG_RESOURCE;
 		if (eq(path, REGIONS_JS_PATH)) return REGIONS_JS_RESOURCE;
 		if (eq(path, HELPERS_JS_PATH)) return HELPERS_JS_RESOURCE;
-		if (eq(path, CONSOLE_OUTPUT_JS_PATH)) return CONSOLE_OUTPUT_JS_RESOURCE;
+		if (eq(path, DATA_JS_PATH)) return DATA_JS_RESOURCE;
 		if (eq(path, RUN_VIEW_JS_PATH)) return RUN_VIEW_JS_RESOURCE;
 		if (eq(path, CONFIG_JS_PATH)) return CONFIG_JS_RESOURCE;
 		if (eq(path, CONFIG_CSS_PATH)) return CONFIG_CSS_RESOURCE;

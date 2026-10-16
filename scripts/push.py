@@ -37,12 +37,6 @@ JS harness (-Pjs-tests): with neither flag, test.py runs it automatically when a
 under a src/ tree differs from origin/master, and skips it with a notice if Node/npm are missing.
 """
 
-# Sound file paths
-MACOS_SUCCESS_SOUND = "/System/Library/Sounds/Glass.aiff"
-MACOS_FAILURE_SOUND = "/System/Library/Sounds/Basso.aiff"
-LINUX_SUCCESS_SOUND = "/usr/share/sounds/freedesktop/stereo/complete.oga"
-LINUX_FAILURE_SOUND = "/usr/share/sounds/freedesktop/stereo/dialog-error.oga"
-
 import argparse
 import contextlib
 import importlib.util
@@ -58,6 +52,11 @@ import time
 import xml.etree.ElementTree as ET
 from datetime import datetime, timezone
 from pathlib import Path
+
+# The shared loader (_juneau.py) sits beside this script; appended, so no script here shadows an installed module.
+if str(Path(__file__).resolve().parent) not in sys.path:
+    sys.path.append(str(Path(__file__).resolve().parent))
+import _juneau  # noqa: E402
 
 
 # ----------------------------------------------------------------------------------------------------------------------
@@ -77,40 +76,20 @@ STARTER_REPO_PATHS = [
 ]
 
 
-RUN_MODULE_PATH = Path(__file__).resolve().parent.parent / "juneau-run" / "src" / "main" / "python" / "juneau_run.py"
-_step_n = 0
-_run_started = False
-
-
-def run_module():
-    """The in-tree juneau_run module (shared if already loaded), or None if its source is not there."""
-    module = sys.modules.get("juneau_run")
-    if module is None and RUN_MODULE_PATH.exists():
-        spec = importlib.util.spec_from_file_location("juneau_run", RUN_MODULE_PATH)
-        module = importlib.util.module_from_spec(spec)
-        sys.modules["juneau_run"] = module
-        # Keep the module's source directory free of __pycache__ (the Maven build's RAT check scans it).
-        previous, sys.dont_write_bytecode = sys.dont_write_bytecode, True
-        try:
-            spec.loader.exec_module(module)
-        finally:
-            sys.dont_write_bytecode = previous
-    return module
+def toolkit(name):
+    """A juneau_scripts module (git, run, notify, prompt, proc) from the in-tree toolkit."""
+    _juneau.load()
+    return importlib.import_module(f"juneau_scripts.{name}")
 
 
 def say(text="", level="info"):
     """Status text: printed as before, or a filtered note when a console view owns the screen."""
-    run = run_module()
-    if run is None:
-        print(text)
-    else:
-        run.say(text, level=level)
+    _juneau.load()[0].say(text, level=level)
 
 
 def console_active():
     """True when a juneau_run console view draws the terminal."""
-    run = run_module()
-    return run is not None and run.console_active()
+    return _juneau.load()[0].console_active()
 
 
 def run_gate(cmd, cwd, step_id, title, label):
@@ -119,8 +98,8 @@ def run_gate(cmd, cwd, step_id, title, label):
     log; otherwise it runs on the terminal as before.  The caller interprets the code (each gate has its own
     exit-code contract).
     """
-    run = run_module()
-    if run is None or not run.console_active():
+    run = _juneau.load()[0]
+    if not run.console_active():
         return subprocess.run(cmd, cwd=cwd, check=False).returncode
     return run.run_tool(cmd, "generic", step_id, title, n=next_step_number(), cwd=cwd,  # NOSONAR python:S1192 - a parser name, as in run_command
                         label=label).exit
@@ -140,33 +119,15 @@ def prompt_pgp_passphrase(script_dir):
 
 
 def next_step_number(count=1):
-    """The next top-level step number; count > 1 reserves a block for the steps of a script we spawn."""
-    global _step_n
-    first = _step_n + 1
-    _step_n += count
-    return first
-
-
-class _NoStep:
-    """Stands in for juneau_run.Step when the module is not available."""
-
-    summary = None
-
-    def fail(self, exit=None):  # NOSONAR python:S5806 - mirrors juneau_run.Step.fail
-        pass
-
-    def skip(self):
-        pass
+    """The next top-level step number, from the toolkit's session counter (the one run.step, run.gate and
+    run.handoff use); count > 1 reserves a block."""
+    return toolkit("run")._next_n(count=count)
 
 
 @contextlib.contextmanager
 def marked_step(step_id, title, label=None):
-    """A run-protocol step around a block.  Silent unless RUN_MARKERS=1, and a no-op without juneau_run."""
-    run = run_module()
-    if run is None:
-        yield _NoStep()
-        return
-    with run.step(step_id, next_step_number(), title, label=label) as step:
+    """A run-protocol step around a block (run.step): silent unless RUN_MARKERS=1 or a console view is active."""
+    with toolkit("run").step(step_id, title, label=label) as step:
         yield step
 
 
@@ -176,8 +137,8 @@ def run_marked(step_id, title, cmd, description, cwd=None, tool=None, label=None
     console view active, juneau_run runs the command and reports its progress; otherwise the call is just wrapped
     in a step.  summarize(output) becomes the row's text under a console view.
     """
-    run = run_module()
-    if run is not None and ((tool is not None and run.enabled()) or run.console_active()):
+    run = _juneau.load()[0]
+    if (tool is not None and run.enabled()) or run.console_active():
         return run_command(cmd, description, cwd, tool=tool, step_id=step_id, title=title, n=next_step_number(),
                            label=label, summarize=summarize)
     with marked_step(step_id, title) as step:
@@ -208,15 +169,15 @@ def run_command(cmd, description, cwd=None, tool=None, step_id=None, title=None,
     if cwd is None:
         cwd = Path(__file__).parent.parent
 
-    run = run_module()
-    console = run is not None and run.console_active()
+    run = _juneau.load()[0]
+    console = run.console_active()
     say(description.strip() if console else f"\n{description}")
     say(f"Running: {' '.join(cmd) if isinstance(cmd, list) else cmd}")
 
     try:
         # Only with markers on (and a tool) or a console view does run_tool take over; otherwise the original call
         # below runs unchanged.
-        routed = run is not None and isinstance(cmd, list) and (
+        routed = isinstance(cmd, list) and (
             (tool is not None and run.enabled()) or (step_id is not None and console))
         if routed:
             result = run.run_tool(cmd, tool or "generic", step_id, title or description.strip(), n=n, parent=parent,
@@ -242,99 +203,19 @@ def run_command(cmd, description, cwd=None, tool=None, step_id=None, title=None,
         return False
 
 
-#: Set to exactly "1" by the Claude Code sandbox in every command it runs.
-SANDBOX_RUNTIME_ENV = "SANDBOX_RUNTIME"
-
-#: Set to exactly "1" to silence play_sound() and the terminal bell (also honored by test.py).
+#: Set to exactly "1" to silence the end-of-run sound and the terminal bell (also honored by test.py).
 PUSH_NO_SOUND_ENV = "JUNEAU_PUSH_NO_SOUND"
 
 
-def ring_bell():
+def play_sound(success=True):
     """
-    Write a terminal bell to stdout so the terminal can badge its Dock icon when a run ends.
-
-    Best-effort and never raises.  Silent when stdout is not a TTY.  stdout is the real terminal even under the
-    condensed console (juneau-run never redirects sys.stdout; its screen writes go to the same stream).
-    Keep in sync with ring_bell() in test.py.
+    The terminal bell and the success or failure sound (the toolkit's notify.bell and notify.sound), for a run that
+    ends before its session opens; inside the session, run.session plays them once at the end.  Silent in the Claude
+    Code sandbox or when JUNEAU_PUSH_NO_SOUND=1.
     """
-    if os.environ.get(SANDBOX_RUNTIME_ENV) == "1" or os.environ.get(PUSH_NO_SOUND_ENV) == "1":
-        return
-    try:
-        if sys.stdout.isatty():
-            sys.stdout.write("\a")
-            sys.stdout.flush()
-    except Exception:
-        pass
-
-
-def play_sound(success=True):  # NOSONAR python:S3776 -- Cognitive complexity is acceptable for this utility function
-    """
-    Play a system sound and ring the terminal bell to indicate success or failure.
-    Silent in the Claude Code sandbox or when JUNEAU_PUSH_NO_SOUND=1.
-    
-    Args:
-        success: True for success sound, False for failure sound
-    """
-    if os.environ.get(SANDBOX_RUNTIME_ENV) == "1" or os.environ.get(PUSH_NO_SOUND_ENV) == "1":
-        return
-    ring_bell()
-    try:
-        system = platform.system()
-        if system == "Darwin":  # macOS
-            if success:
-                # Success sound
-                sound_path = MACOS_SUCCESS_SOUND
-            else:
-                # Failure sound
-                sound_path = MACOS_FAILURE_SOUND
-            
-            if os.path.exists(sound_path):
-                subprocess.run(
-                    ["afplay", sound_path],
-                    capture_output=True,
-                    timeout=5
-                )
-        elif system == "Linux":
-            # Try to use paplay (PulseAudio) or aplay (ALSA)
-            if success:
-                # Try to play a beep or use speaker-test
-                try:
-                    subprocess.run(
-                        ["paplay", LINUX_SUCCESS_SOUND],
-                        capture_output=True,
-                        timeout=5
-                    )
-                except OSError:
-                    # Fallback to speaker-test
-                    subprocess.run(
-                        ["speaker-test", "-t", "sine", "-f", "1000", "-l", "1"],
-                        capture_output=True,
-                        timeout=2
-                    )
-            else:
-                try:
-                    subprocess.run(
-                        ["paplay", LINUX_FAILURE_SOUND],
-                        capture_output=True,
-                        timeout=5
-                    )
-                except OSError:
-                    # Fallback to speaker-test with lower frequency
-                    subprocess.run(
-                        ["speaker-test", "-t", "sine", "-f", "400", "-l", "1"],
-                        capture_output=True,
-                        timeout=2
-                    )
-        elif system == "Windows":
-            # Use winsound module
-            import winsound
-            if success:
-                winsound.MessageBeep(winsound.MB_OK)
-            else:
-                winsound.MessageBeep(winsound.MB_ICONHAND)
-    except Exception:
-        # Silently fail if sound can't be played
-        pass
+    notify = toolkit("notify")
+    notify.bell(silence_env=(PUSH_NO_SOUND_ENV,))
+    notify.sound(success, silence_env=(PUSH_NO_SOUND_ENV,))
 
 
 def _python310():
@@ -429,16 +310,9 @@ def run_sonarqube_gate(juneau_root, step_num):
     cmd = [py310, str(sonarqube_script), "--all", "--run", "--fail-on-issues"]
     if scoped_to_branch:
         cmd += ["--branch", branch]
-    returncode = run_gate(cmd, juneau_root, "sonar", "SonarQube gate", "Sonar")
-
-    # Exit-code contract (see sonarqube.py): 0 clean, 2 issues, 3 no-analysis, else error.
-    if returncode == 0:
-        return "pass"
-    if returncode == 2:
-        return "fail"
-    if returncode == 3:
-        return "skip"
-    return "error"
+    # Exit-code contract (see sonarqube.py): 0 clean, 2 issues, 3 no-analysis, else error -- the toolkit's default
+    # gate codes.
+    return toolkit("run").gate(cmd, title="SonarQube gate", id="sonar", label="Sonar", cwd=juneau_root).status
 
 
 def run_tracker_audit_gate(juneau_root, step_num):
@@ -474,18 +348,12 @@ def run_tracker_audit_gate(juneau_root, step_num):
 
     audit_script = Path.home() / "Project Work" / "scripts" / "todo-status-audit.py"
     todo_dir = Path.home() / "Project Work" / "todos" / "juneau"
-    returncode = run_gate(
-        [sys.executable, str(audit_script), "--project", "juneau", "--dir", str(todo_dir)],
-        juneau_root, "tracker", "Tracker audit", "Tracker",
-    )
-
     # Exit-code contract (see todo-status-audit.py): 0 clean, 1 flagged, 2 hard error
     # (e.g. missing tracker directory), anything else treated as an unexpected error.
-    if returncode == 0:
-        return "pass"
-    if returncode == 1:
-        return "fail"
-    return "error"
+    return toolkit("run").gate(
+        [sys.executable, str(audit_script), "--project", "juneau", "--dir", str(todo_dir)],
+        title="Tracker audit", id="tracker", label="Tracker", cwd=juneau_root, codes={0: "pass", 1: "fail"},
+    ).status
 
 
 def maybe_run_tracker_audit_gate(args, juneau_root, step_num):
@@ -522,8 +390,10 @@ def resolve_commit_message(cli_message):
         return cli_message
 
     try:
-        message = input("Commit message: ").strip()
-    except (EOFError, KeyboardInterrupt):
+        message = toolkit("prompt").text("Commit message: ", default="")
+    except KeyboardInterrupt:
+        message = None
+    if message is None:
         print("\n❌ Aborted: no commit message provided.")
         sys.exit(1)
 
@@ -544,14 +414,7 @@ def verify_apache_identity(repo_dir):
             print(text)
 
     try:
-        result = subprocess.run(
-            ["git", "config", "--get", "user.email"],
-            cwd=repo_dir,
-            capture_output=True,
-            text=True,
-            check=False,
-        )
-        email = result.stdout.strip()
+        email = toolkit("git").user_email(repo_dir) or ""
     except Exception as e:
         report(f"❌ ERROR: Could not read git user.email: {e}")
         return False
@@ -581,20 +444,13 @@ def get_staged_paths(repo_dir):
         list[str]: staged paths (possibly empty).
 
     Raises:
-        subprocess.CalledProcessError, OSError: if the check itself can't run. Deliberately not
+        GitError: if the check itself can't run (or the directory isn't a repository). Deliberately not
         caught here -- unlike the ahead/behind upstream check (a network operation that can
         legitimately fail), an error running `git diff --cached` almost always means something
         is fundamentally wrong with the repo, and this check exists specifically to protect an
         invariant, so the caller should fail closed (abort) rather than silently proceed.
     """
-    result = subprocess.run(
-        ["git", "diff", "--cached", "--name-only"],
-        cwd=repo_dir,
-        capture_output=True,
-        text=True,
-        check=True
-    )
-    return [line for line in result.stdout.splitlines() if line.strip()]
+    return toolkit("git").staged_paths(repo_dir)
 
 
 def check_unreviewed_changes(repo_dir):
@@ -616,24 +472,10 @@ def check_unreviewed_changes(repo_dir):
         list[str]: unreviewed paths (possibly empty).
 
     Raises:
-        subprocess.CalledProcessError, OSError: see get_staged_paths() -- same fail-closed
-        reasoning applies here.
+        GitError: see get_staged_paths() -- same fail-closed reasoning applies here.
     """
-    unstaged = subprocess.run(
-        ["git", "diff", "--name-only"],
-        cwd=repo_dir,
-        capture_output=True,
-        text=True,
-        check=True
-    ).stdout.splitlines()
-    untracked = subprocess.run(
-        ["git", "ls-files", "--others", "--exclude-standard"],
-        cwd=repo_dir,
-        capture_output=True,
-        text=True,
-        check=True
-    ).stdout.splitlines()
-    return [line for line in (*unstaged, *untracked) if line.strip()]
+    git = toolkit("git")
+    return [*git.unstaged_paths(repo_dir), *git.untracked_paths(repo_dir)]
 
 
 def check_upstream_changes(repo_dir):
@@ -652,114 +494,36 @@ def check_upstream_changes(repo_dir):
     tell "nothing to push because there's no remote to compare against" apart from "checked,
     and there's genuinely nothing ahead".
     """
+    git = toolkit("git")
     try:
-        # Get current branch name
-        result = subprocess.run(
-            ["git", "rev-parse", "--abbrev-ref", "HEAD"],
-            cwd=repo_dir,
-            capture_output=True,
-            text=True,
-            check=True
-        )
-        current_branch = result.stdout.strip()
-        
-        # Fetch latest from remote
-        subprocess.run(
-            ["git", "fetch"],
-            cwd=repo_dir,
-            capture_output=True,
-            text=True,
-            check=True
-        )
-        
-        # Check if there's a remote tracking branch
-        result = subprocess.run(
-            ["git", "rev-parse", "--abbrev-ref", f"{current_branch}@{{upstream}}"],
-            cwd=repo_dir,
-            capture_output=True,
-            text=True,
-            check=False
-        )
-        
-        if result.returncode != 0:
-            # No upstream branch configured, skip check
-            return (None, None, None)
-        
-        upstream_branch = result.stdout.strip()
-        
-        # Get commit counts
-        result = subprocess.run(
-            ["git", "rev-list", "--left-right", "--count", f"{current_branch}...{upstream_branch}"],
-            cwd=repo_dir,
-            capture_output=True,
-            text=True,
-            check=True
-        )
-        
-        # Output format: "X\tY" where X is commits ahead, Y is commits behind
-        counts = result.stdout.strip().split('\t')
-        if len(counts) != 2:
-            return (None, None, "Could not parse upstream comparison")
-        
-        commits_ahead = int(counts[0])
-        commits_behind = int(counts[1])
-        return (commits_ahead, commits_behind, None)
-        
-    except subprocess.CalledProcessError as e:
+        ahead, behind, error = git.ahead_behind(repo_dir, fetch=True)
+    except git.GitError as e:
         return (None, None, f"Git command failed: {e}")
-    except Exception as e:
-        return (None, None, f"Error checking upstream changes: {e}")
+    if error == "no upstream":
+        return (None, None, None)
+    if error:
+        return (None, None, f"Git command failed: {error}")
+    return (ahead, behind, None)
 
 
 def current_branch(repo_dir):
-    """Get current git branch name."""
-    try:
-        result = subprocess.run(
-            ["git", "rev-parse", "--abbrev-ref", "HEAD"],
-            cwd=repo_dir,
-            capture_output=True,
-            text=True,
-            check=True
-        )
-        return result.stdout.strip()
-    except Exception:
-        return "unknown"
+    """The current branch name; "HEAD" on a detached HEAD (as `git rev-parse --abbrev-ref HEAD` prints), else
+    "unknown"."""
+    git = toolkit("git")
+    return git.current_branch(repo_dir) or ("HEAD" if git.short_head(repo_dir) else "unknown")
 
 
-def run_test_script(cmd, cwd, run):
+def run_test_script(cmd, cwd, run, env=None):
     """
-    Run test.py.  With markers on it gets its own session, so a signal aimed at this script's group does not
-    reach it unannounced; on cancellation it is sent SIGTERM itself (its handler stops Maven and ends the step
-    cleanly) and, if it ignores that for 30 seconds, its whole group is killed.
+    Run test.py with env (None inherits ours).  With markers on it runs through proc.run_group in its own session,
+    so a signal aimed at this script's group does not reach it unannounced; on cancellation it is sent SIGTERM
+    itself (its handler stops Maven and ends the step cleanly) and, if it ignores that for 30 seconds, its whole
+    group is killed.  Either way the caller gets a CompletedProcess whose returncode is test.py's exit code.
     """
-    if run is None or not run.enabled():
-        return subprocess.run(cmd, cwd=cwd, check=False)
-    proc = subprocess.Popen(cmd, cwd=cwd, start_new_session=True)
-    try:
-        return subprocess.CompletedProcess(cmd, proc.wait())
-    except KeyboardInterrupt:
-        try:
-            proc.send_signal(signal.SIGTERM)
-            proc.wait(timeout=30)
-        except subprocess.TimeoutExpired:
-            os.killpg(proc.pid, signal.SIGKILL)
-            proc.wait()
-        raise
-
-
-def git_short_head(repo_dir):
-    """Abbreviated HEAD sha, or "unknown"."""
-    try:
-        return subprocess.run(["git", "rev-parse", "--short", "HEAD"], cwd=repo_dir, capture_output=True,
-                              text=True, check=True).stdout.strip()
-    except Exception:
-        return "unknown"
-
-
-def timing_log_path(repo_dir):
-    """Out-of-repo branch-specific timing history location."""
-    branch = current_branch(repo_dir).replace("/", "__")
-    return Path.home() / ".cache" / "juneau-push-timings" / f"{branch}.jsonl"
+    if not run.enabled():
+        return subprocess.run(cmd, cwd=cwd, check=False, env=env)
+    result = toolkit("proc").run_group(cmd, cwd=cwd, env=env)
+    return subprocess.CompletedProcess(cmd, result.code)
 
 
 def load_timings_module(script_dir):
@@ -770,17 +534,21 @@ def load_timings_module(script_dir):
     return module
 
 
-def run_timing_report(script_dir, timing_file):
+def run_timing_report(script_dir, juneau_root):
     """
-    The Timing row: slower entries as warn notes and faster ones as info, the full table in <branch>.txt beside the
-    log.  The report is advisory, so a failure shows on the row and never stops the push.
+    The Timing row, from test.py's run-history store for juneau_root: slower entries as warn notes and faster ones
+    as info, the full table in test-timings.txt beside the store.  The report is advisory, so a failure shows on
+    the row and never stops the push.
     """
-    run = run_module()
-    report = timing_file.with_suffix(".txt")
+    run = _juneau.load()[0]
     with run.row("timing", "Timing", label="Timing") as row:
         try:
             timings = load_timings_module(script_dir)
-            records = timings.load_records(timing_file)
+            if timings.history_off():
+                row.summary = "run history is off (JUNEAU_RUN_HISTORY=0)"
+                return
+            records = timings.load_history(repo=juneau_root)
+            report = timings.report_path(repo=juneau_root)
             _, reason = timings.latest_run(records)
             if reason:
                 row.summary = reason
@@ -877,9 +645,10 @@ def verify_starter_repos(step_num):
     return True
 
 
-def build_test_command(test_script, timing_file, args):
-    """The test.py invocation for the test step; forwards --js-tests/--no-js-tests (auto-detect lives in test.py)."""
-    cmd = [sys.executable, str(test_script), "--full", "--timing-log", str(timing_file)]
+def build_test_command(test_script, args):
+    """The test.py invocation for the test step; forwards --js-tests/--no-js-tests (auto-detect lives in test.py).
+    test.py records its own timings in the run-history store, which push-timings.py reads."""
+    cmd = [sys.executable, str(test_script), "--full"]
     if getattr(args, "js_tests", False):
         cmd.append("--js-tests")
     if getattr(args, "no_js_tests", False):
@@ -1020,14 +789,12 @@ def commit_and_push(
         say(f"\n❌ ERROR: Local branch{label} is behind upstream/remote branch.", "error")
         say("Please pull/merge upstream changes before pushing.", "error")
         say(f"Run: {pull_hint}", "error")
-        play_sound(success=False)
         return ("error", step_num)
 
     try:
         has_staged = bool(get_staged_paths(repo_dir))
-    except (subprocess.CalledProcessError, OSError) as e:
+    except (subprocess.CalledProcessError, OSError, toolkit("git").GitError) as e:
         say(f"\n❌ ERROR: Could not check the Git index{label}: {e}", "error")
-        play_sound(success=False)
         return ("error", step_num)
 
     # Nothing staged skips the commit, not the push -- see docstring above.
@@ -1038,7 +805,6 @@ def commit_and_push(
         else:
             say(f"\nℹ Nothing staged and no unpushed commits{label}.")
         say(f"🎉 Push{label} completed successfully (nothing to commit or push)!")
-        play_sound(success=True)
         return ("nothing_to_do", step_num)
 
     # There is something to commit and/or push -- refuse if any of it (or anything else in the
@@ -1046,9 +812,8 @@ def commit_and_push(
     # a push-only run.
     try:
         unreviewed_paths = check_unreviewed_changes(repo_dir)
-    except (subprocess.CalledProcessError, OSError) as e:
+    except (subprocess.CalledProcessError, OSError, toolkit("git").GitError) as e:
         say(f"\n❌ ERROR: Could not check for unreviewed changes{label}: {e}", "error")
-        play_sound(success=False)
         return ("error", step_num)
     if unreviewed_paths:
         say(f"\n❌ ERROR: The working tree{label} has unreviewed changes -- staging is how "
@@ -1062,7 +827,6 @@ def commit_and_push(
         quoted_paths = " ".join(shlex.quote(path) for path in unreviewed_paths)
         say(f"     git stash push -- {quoted_paths}", "error")
         say("     git stash pop", "error")
-        play_sound(success=False)
         return ("error", step_num)
 
     if pre_flight_hook is not None and not pre_flight_hook():
@@ -1082,7 +846,6 @@ def commit_and_push(
             capture=True, tty=True, summarize=commit_summary,
         ):
             say(f"\n❌ git commit failed{label} -- aborting.", "error")
-            play_sound(success=False)
             return ("error", step_num)
         say(f"✅ Step {step_num}: Git commit completed{label}.")
         step_num += 1
@@ -1101,7 +864,6 @@ def commit_and_push(
     ):
         say(f"\n❌ git push failed{label}.", "error")
         say(f"⚠ Local commits exist but were not pushed{label}.", "warn")
-        play_sound(success=False)
         return ("error", step_num)
     say(f"✅ Step {step_num}: Changes pushed to remote{label}.")
     step_num += 1
@@ -1147,7 +909,6 @@ def run_docs_followup(juneau_root, message, step_num):
     def _verify_docs_identity():
         say("\n🔐 Verifying git identity (apache.org email) on juneau-docs...")
         if not verify_apache_identity(docs_root):
-            play_sound(success=False)
             return False
         say("✅ Git identity verified")
         return True
@@ -1164,13 +925,11 @@ def run_docs_followup(juneau_root, message, step_num):
             docs_smoke_elapsed = time.time() - docs_smoke_start
             if returncode != 0:
                 say("\n❌ Docs smoke check failed — fix the Docusaurus build before pushing juneau-docs.", "error")
-                play_sound(success=False)
                 return False
             say(f"✅ Docs smoke check passed ({docs_smoke_elapsed:.1f}s)")
             return True
         except Exception as e:
             say(f"\n❌ Docs smoke check failed: {e}", "error")
-            play_sound(success=False)
             return False
 
     docs_status, step_num = commit_and_push(
@@ -1186,7 +945,7 @@ def run_docs_followup(juneau_root, message, step_num):
     return ("ok", step_num)
 
 
-def run_docs_only(args, juneau_root):  # NOSONAR python:S3776 -- Cognitive complexity is acceptable for this function
+def run_docs_only(args, juneau_root):
     """
     --docs-only mode: operate ONLY on the sibling juneau-docs repo.
 
@@ -1205,8 +964,8 @@ def run_docs_only(args, juneau_root):  # NOSONAR python:S3776 -- Cognitive compl
         Process exit code (0 success, 1 failure).
     """
     docs_root = juneau_root.parent / "juneau-docs"
-    run = run_module()
-    console = run is not None and not run.Sinks().is_default
+    run = _juneau.load()[0]
+    console = not run.Sinks().is_default
 
     if not console or args.dry_run:
         print("=" * 70)
@@ -1244,13 +1003,18 @@ def run_docs_only(args, juneau_root):  # NOSONAR python:S3776 -- Cognitive compl
     if not console:
         print("\n🔐 Step 1: Verifying git identity (apache.org email) on juneau-docs...")
     if not verify_apache_identity(docs_root):
-        play_sound(success=False)
+        play_sound(success=False)    # the session isn't open yet, so it can't sound the failure
         return 1
-    if console:
-        run.session(f"📚 Juneau docs push · {current_branch(docs_root)}", [f"{REQUIRED_GIT_EMAIL} ✓"])
-    else:
+    if not console:
         print("✅ Step 1: Git identity verified")
+    return _in_session(f"📚 Juneau docs push · {current_branch(docs_root)}",
+                       lambda: _docs_only_steps(args, console, docs_root),
+                       header=[f"{REQUIRED_GIT_EMAIL} ✓"] if console else [], mode="push", repo=docs_root,
+                       plan=["docs-smoke", "commit", "push"])
 
+
+def _docs_only_steps(args, console, docs_root):
+    """--docs-only's steps inside its session.  Returns the exit code."""
     # Steps 2-6: upstream check, no-op detection, unreviewed-changes guard, docs smoke check,
     # commit, and push -- all delegated to commit_and_push() (shared with main()'s Step 6
     # follow-up) so the nothing-staged-vs-nothing-to-push fix and the unreviewed-changes guard
@@ -1267,13 +1031,11 @@ def run_docs_only(args, juneau_root):  # NOSONAR python:S3776 -- Cognitive compl
             )
             if returncode != 0:
                 say("\n❌ Docs smoke check failed — fix the Docusaurus build before pushing juneau-docs.", "error")
-                play_sound(success=False)
                 return False
             say("✅ Docs smoke check passed")
             return True
         except Exception as e:
             say(f"\n❌ Docs smoke check failed: {e}", "error")
-            play_sound(success=False)
             return False
 
     status, _ = commit_and_push(
@@ -1292,43 +1054,65 @@ def run_docs_only(args, juneau_root):  # NOSONAR python:S3776 -- Cognitive compl
         print("🎉 Docs-only push completed successfully!")
         print(f"📦 Commit message: '{args.message}'")
         print("=" * 70)
-    play_sound(success=True)
     return 0
 
 
-def _finish(run, status):
-    """The run's end: the protocol `done` once `run` was emitted, else (--docs-only) just the console's final line."""
-    if _run_started:
-        run.done(status)
-    elif run.console_active():
-        run.publish("done", status=status, commit=None)
-
-
 def main():
-    """Owns the run-protocol `done` marker; `run` is emitted by _main() once the arguments say which mode this is."""
-    run = run_module()
+    """
+    The push.  _main() does the work up to the identity and PGP checks, then opens the run session, which owns the run
+    and done markers, the console, the summary line, the bell and the sound.  A Ctrl-C (or, with markers on, a
+    SIGTERM) before the session opens exits 130 with "Cancelled." too.
+    """
+    run = _juneau.load()[0]
     previous_sigterm = None
-    if run is not None and run.enabled():
+    if run.enabled():
         # Unwind to the KeyboardInterrupt handler below; nothing is torn down inside the signal handler.
         def on_sigterm(signum, frame):
             raise KeyboardInterrupt
         previous_sigterm = signal.signal(signal.SIGTERM, on_sigterm)
     try:
-        try:
-            code = _main()
-        except KeyboardInterrupt:
-            if run is None or not (run.enabled() or run.console_active()):
-                raise
-            _finish(run, "cancelled")
-            print("Cancelled.", file=sys.stderr)
-            ring_bell()
-            return 130
-        if run is not None:
-            _finish(run, "ok" if code == 0 else "fail")
-        return code
+        return _main()
+    except KeyboardInterrupt:
+        toolkit("run").say("\n❌ Cancelled.", "error")
+        toolkit("notify").bell(silence_env=(PUSH_NO_SOUND_ENV,))
+        return 130
     finally:
         if previous_sigterm is not None:
             signal.signal(signal.SIGTERM, previous_sigterm)
+
+
+def push_plan(args, script_dir, juneau_root, console):
+    """The top-level step ids this run will take, in order, for the console's Overall figure."""
+    ids = ["sonar"] if args.sonarqube else []
+    if args.tracker_audit:
+        ids.append("tracker")
+    if args.skip_tests:
+        ids.append("tests")
+    else:
+        ids += [step_id for step_id, name in (("container-tags", "check-container-tags.py"),
+                                             ("bom", "check-bom-completeness.py")) if (script_dir / name).exists()]
+        if (script_dir / "test.py").exists():
+            ids += ["build", "tests", *(["js-tests"] if args.js_tests else [])]
+        else:
+            ids.append("tests")
+        if console and (script_dir / "push-timings.py").exists():
+            ids.append("timing")
+    ids += ["install", "starters"]
+    if not args.test_only:
+        ids += ["commit", "push"]
+        if (juneau_root.parent / "juneau-docs").exists():
+            ids += ["docs-smoke", "docs-commit", "docs-push"]
+    return ids
+
+
+def _in_session(title, body, *, header, mode, repo, plan):
+    """Run body() -- which returns an exit code -- inside the run session; returns the session's exit code."""
+    with toolkit("run").session(title, header=header, bell=True, sound=True, silence_env=(PUSH_NO_SOUND_ENV,),
+                                mode=mode, project=repo.name, repo=repo, exit=False, plan=plan) as session:
+        code = body()
+        if code:
+            raise SystemExit(code)
+    return session.code
 
 
 def _main():  # NOSONAR python:S3776 -- Cognitive complexity is acceptable for this main function
@@ -1444,12 +1228,11 @@ Examples:
         parser.error("--js-tests and --no-js-tests are mutually exclusive")
     if args.test_only and (args.docs_only or args.sonarqube or args.tracker_audit or args.skip_tests):
         parser.error("--test-only cannot be combined with --docs-only, --sonarqube, --tracker-audit or --skip-tests")
-    run = run_module()
-    if run is not None:
-        try:
-            run.export_detail(args.detail)
-        except ValueError as e:
-            parser.error(str(e))
+    run = _juneau.load()[0]
+    try:
+        run.export_detail(args.detail)
+    except ValueError as e:
+        parser.error(str(e))
     if not args.test_only:
         args.message = resolve_commit_message(args.message)
     
@@ -1462,7 +1245,7 @@ Examples:
     if args.docs_only:
         return run_docs_only(args, juneau_root)
 
-    console = run is not None and not run.Sinks().is_default
+    console = not run.Sinks().is_default
 
     if not console or args.dry_run:
         print("=" * 70)
@@ -1480,9 +1263,9 @@ Examples:
         if args.tracker_audit:
             print("📋 Tracker audit gate ENABLED (--tracker-audit)")
         if args.js_tests:
-            print("🌐 JS tests FORCED (--js-tests)")
+            print("🌐 Browser tests FORCED (--js-tests)")
         if args.no_js_tests:
-            print("🌐 JS tests DISABLED (--no-js-tests)")
+            print("🌐 Browser tests DISABLED (--no-js-tests)")
         if args.dry_run:
             print("🔍 DRY RUN MODE - No actual changes will be made")
         print("=" * 70)
@@ -1505,9 +1288,9 @@ Examples:
             step_num += 1
             print(f"  {step_num}. Verify BOM completeness: python3 scripts/check-bom-completeness.py")
             step_num += 1
-            print(f"  {step_num}. Run tests with timing capture: python3 scripts/test.py --full --timing-log ~/.cache/juneau-push-timings/<branch>.jsonl")
+            print(f"  {step_num}. Run tests: python3 scripts/test.py --full (timings go to ~/.cache/juneau-run/history/<repo>-<sha8>/test.jsonl)")
             step_num += 1
-            print(f"  {step_num}. Print timing deltas: python3 scripts/push-timings.py --log ~/.cache/juneau-push-timings/<branch>.jsonl")
+            print(f"  {step_num}. Print timing deltas: python3 scripts/push-timings.py --repo . (reads that store)")
             step_num += 1
         if args.skip_tests:
             print(f"  {step_num}. Build and install: mvn clean package install -DskipTests")
@@ -1524,14 +1307,7 @@ Examples:
         print("\nDry run complete. Use without --dry-run to execute.")
         return 0
 
-    step_num = 1
-
-    global _run_started
     branch = current_branch(juneau_root)
-    if run is not None:
-        run.run(mode="test" if args.test_only else "push", project=juneau_root.name,
-                branch=branch, head=git_short_head(juneau_root))
-        _run_started = True
 
     # Identity gate — must hold before the expensive build/test gate and any commit/push.
     # Extended (maintainer-approved) from the --docs-only path to the default flow too;
@@ -1543,7 +1319,7 @@ Examples:
         if not console:
             print("\n🔐 Verifying git identity (apache.org email) on juneau...")
         if not verify_apache_identity(juneau_root):
-            play_sound(success=False)
+            play_sound(success=False)    # the session isn't open yet, so it can't sound the failure
             return 1
         if console:
             header.append(f"{REQUIRED_GIT_EMAIL} ✓")
@@ -1555,10 +1331,16 @@ Examples:
     pgp = prompt_pgp_passphrase(script_dir)
     if pgp is not None:
         header.append("PGP ✓" if pgp else "PGP ⚠")
-    if console:
-        run.session(f"🚀 Juneau push · {branch}", header)
-        if args.skip_tests:
-            say("⚠ Tests will be SKIPPED (--skip-tests)", "warn")
+    return _in_session(f"🚀 Juneau push · {branch}", lambda: _push_steps(args, run, console, script_dir, juneau_root),
+                       header=header, mode="test" if args.test_only else "push", repo=juneau_root,
+                       plan=push_plan(args, script_dir, juneau_root, console))
+
+
+def _push_steps(args, run, console, script_dir, juneau_root):  # NOSONAR python:S3776 -- Cognitive complexity is acceptable for this function
+    """The steps of the push inside its session.  Returns the exit code."""
+    step_num = 1
+    if console and args.skip_tests:
+        say("⚠ Tests will be SKIPPED (--skip-tests)", "warn")
 
     # Step 0 (opt-in, --sonarqube/--sonar): SonarQube report gate. Runs first so it
     # aborts cheaply, before the container-tags/BOM checks, tests, and build.
@@ -1568,13 +1350,11 @@ Examples:
             say("\n❌ Push aborted: SonarCloud currently reports open issues for this branch.", "error")
             say("   Note: this reflects SonarCloud's last CI-analyzed commit (a ratchet), not your local diff.", "error")
             say("   Resolve/triage the reported issues, or omit --sonarqube to push without this gate.", "error")
-            play_sound(success=False)
             return 1
         if gate_status == "error":
             say("\n❌ Push aborted: the SonarQube gate could not be run.", "error")
             say(f"   Fix the issue {'in the full log' if console else 'reported above'} "
                 "(e.g. install a Python >= 3.10 interpreter), or omit --sonarqube to push without this gate.", "error")
-            play_sound(success=False)
             return 1
         if gate_status == "skip":
             say(f"⚠ Step {step_num}: SonarQube gate skipped — SonarCloud has no analysis for this "
@@ -1592,13 +1372,11 @@ Examples:
                 "under ~/Project Work/todos/juneau/.", "error")
             say("   Run `python3 ~/Project\\ Work/scripts/todo-status-audit.py --project juneau` for "
                 "details, or omit --tracker-audit to push without this gate.", "error")
-            play_sound(success=False)
             return 1
         if tracker_gate_status == "error":
             say("\n❌ Push aborted: the tracker audit gate could not be run.", "error")
             say(f"   Fix the issue {'in the full log' if console else 'reported above'}, "
                 "or omit --tracker-audit to push without this gate.", "error")
-            play_sound(success=False)
             return 1
         say(f"✅ Step {step_num}: Tracker audit gate passed — no plan file flagged.")
         step_num += 1
@@ -1617,7 +1395,6 @@ Examples:
                 summarize=tags_summary
             ):
                 say("\n❌ Build process aborted due to missing container test tags.", "error")
-                play_sound(success=False)
                 return 1
             step_num += 1
 
@@ -1632,37 +1409,30 @@ Examples:
                 summarize=bom_summary
             ):
                 say("\n❌ Build process aborted: juneau-bom is out of sync with the reactor.", "error")
-                play_sound(success=False)
                 return 1
             step_num += 1
 
         test_script = script_dir / 'test.py'
-        timing_file = timing_log_path(juneau_root)
         if test_script.exists():
             say(f"\n🧪 Step {step_num}: Running tests via test.py...")
-            if run is not None and run.enabled():
-                # test.py contributes the build and tests steps (JUNEAU_RUN_ACTIVE is inherited); reserve
-                # their numbers so the whole run stays in order.
-                os.environ["JUNEAU_RUN_N_BASE"] = str(next_step_number(3) - 1)
             try:
                 _test_start = time.time()
-                test_cmd = build_test_command(test_script, timing_file, args)
+                test_cmd = build_test_command(test_script, args)
                 installed_by_tests = "--full" in test_cmd
-                # The child draws its own Compile/Tests/JS tests/Perf rows; ours closes until it exits.
-                with (run.handoff() if run is not None else contextlib.nullcontext({})) as child_env:
-                    os.environ.update(child_env)
-                    os.environ["JUNEAU_PUSH_ACTIVE"] = "1"    # test.py then leaves the end-of-run bell to us
-                    result = run_test_script(test_cmd, juneau_root, run)
+                # The child draws its own Compile/Tests/Browser tests/Perf rows; ours closes until it exits.  Its
+                # environment carries JUNEAU_PUSH_ACTIVE (test.py then leaves the end-of-run bell to us) and, with
+                # markers on, JUNEAU_RUN_N_BASE reserving the numbers of the steps it contributes so the whole run
+                # stays in order.  Neither is set in our own environment, so later children don't inherit them.
+                with toolkit("run").handoff(reserve=3) as extra:
+                    result = run_test_script(test_cmd, juneau_root, run, env={**os.environ, **extra})
                 _test_wall_sec = int(time.time() - _test_start)
                 if result.returncode != 0:
                     say("\n❌ Build process aborted due to test failures.", "error")
-                    play_sound(success=False)
                     return 1
                 say(f"✅ Step {step_num}: Tests passed")
                 _append_test_run_history(juneau_root, _test_wall_sec)
             except Exception as e:
                 say(f"\n❌ Error running tests: {e}", "error")
-                play_sound(success=False)
                 return 1
         else:
             # Fallback to direct mvn test if test.py doesn't exist
@@ -1677,26 +1447,24 @@ Examples:
             _test_wall_sec = int(time.time() - _test_start)
             if not _mvn_ok:
                 say("\n❌ Build process aborted due to test failures.", "error")
-                play_sound(success=False)
                 return 1
             _append_test_run_history(juneau_root, _test_wall_sec)
         timing_report = script_dir / "push-timings.py"
         if timing_report.exists():
-            if run is not None and run.console_active():
-                run_timing_report(script_dir, timing_file)
+            if run.console_active():
+                run_timing_report(script_dir, juneau_root)
             else:
                 run_command(
-                    [sys.executable, str(timing_report), "--log", str(timing_file)],
+                    [sys.executable, str(timing_report), "--repo", str(juneau_root)],
                     f"📊 Step {step_num}: Timing regression report...",
                     juneau_root
                 )
         step_num += 1
     else:
         say(f"\n⏭️  Step {step_num}: Skipping tests (--skip-tests flag)")
-        if run is not None:
-            with run.row("tests", "Tests", label="Tests") as tests_row:
-                tests_row.skip()
-                tests_row.summary = "(--skip-tests)"
+        with run.row("tests", "Tests", label="Tests") as tests_row:
+            tests_row.skip()
+            tests_row.summary = "(--skip-tests)"
         step_num += 1
     
     # Step 2: Build and install -- unless test.py --full has just done `mvn clean install {PARALLELISM} -DskipTests`
@@ -1717,7 +1485,6 @@ Examples:
         label="Install",
     ):
         say("\n❌ Build process aborted due to build failure.", "error")
-        play_sound(success=False)
         return 1
     step_num += 1
 
@@ -1728,18 +1495,15 @@ Examples:
             starters_step.fail()
     if not starters_ok:
         say("\n❌ Build process aborted due to external starter repo verification failure.", "error")
-        play_sound(success=False)
         return 1
     step_num += 1
     
     if args.test_only:
-        if run is not None:
-            run.note("info", "Test-only run: nothing was committed or pushed")
+        run.note("info", "Test-only run: nothing was committed or pushed")
         if not console:
             print("\n" + "=" * 70)
             print("🧪 Test-only run completed successfully; nothing was committed or pushed.")
             print("=" * 70)
-        play_sound(success=True)
         return 0
 
     # Step 4/5: Commit (whatever is staged) and push (if there's anything ahead) --
@@ -1766,7 +1530,6 @@ Examples:
         print("🎉 All operations completed successfully!")
         print(f"📦 Commit message: '{args.message}'")
         print("=" * 70)
-    play_sound(success=True)
     return 0
 
 

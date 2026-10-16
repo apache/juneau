@@ -27,7 +27,7 @@ import org.junit.jupiter.api.*;
 /**
  * Always-on coverage for the region MESSAGE BUS in {@code juneau-regions.js}: broadcast by default, opt-in targeted
  * delivery, opaque payloads, per-subscriber error isolation, subscription-ordered synchronous delivery with
- * emit-during-delivery queued rather than nested, unsubscribe on teardown, and the negative half of SD-2's
+ * emit-during-delivery queued rather than nested, unsubscribe on teardown, and the negative half of the
  * emit-ownership invariant.  The chrome half (selection, detail, redraw) moved to the page bus's topics and is
  * covered with the datatables publishers.
  *
@@ -52,7 +52,7 @@ class Regions_Bus_Test extends TestBase {
 	// =================================================================================================================
 
 	/**
-	 * SD-2, THE EMIT-OWNERSHIP INVARIANT, as a source scan: the region runtime installs NO delegated listener over
+	 * THE EMIT-OWNERSHIP INVARIANT, as a source scan: the region runtime installs NO delegated listener over
 	 * author-painted content.  Chrome auto-emits because the framework owns the chrome; content emits explicitly
 	 * because the author owns the content.  A "helpful" click delegate over a region container is exactly how this
 	 * invariant gets broken later, and it would break it silently - so the negative is pinned here as well as
@@ -61,7 +61,7 @@ class Regions_Bus_Test extends TestBase {
 	@Test void a01_sourceShape_theRuntimeBindsNoDelegateOverAuthorContent() throws Exception {
 		var body = RegionsHarness.regionsJs();
 		assertFalse(body.contains("addEventListener(\"click\""),
-			"the region runtime must not bind a click listener - content emits explicitly (SD-2)");
+			"the region runtime must not bind a click listener - content emits explicitly");
 		assertFalse(body.contains("addEventListener(\"change\""), body);
 		assertFalse(body.contains("addEventListener(\"input\""), body);
 		assertFalse(body.contains("addEventListener(\"submit\""), body);
@@ -210,7 +210,7 @@ class Regions_Bus_Test extends TestBase {
 	}
 
 	/**
-	 * SD-2's NEGATIVE HALF: CONTENT DOES NOT AUTO-EMIT.  A populate paints three clickable elements with its own
+	 * THE NEGATIVE HALF: CONTENT DOES NOT AUTO-EMIT.  A populate paints three clickable elements with its own
 	 * listeners, calls no emit, and clicking them produces ZERO bus traffic - and the framework has bound no listener
 	 * of its own beside the author's, on the buttons or on the region container.  This is the test that stops someone
 	 * later adding a convenience click delegate over author DOM, which would break the invariant in a way no positive

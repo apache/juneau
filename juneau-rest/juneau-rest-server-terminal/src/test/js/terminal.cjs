@@ -967,6 +967,20 @@ test('i23_refusalChipSurvivesTheDrain', function (t) {
 	expect(e.view().chip === 'Input live' && e.view().chipState === 'live', 'an accepted chunk restores Input live: ' + JSON.stringify(e.view()));
 });
 
+test('i24_throttledChipSurvivesTheDrain', function (t) {
+	const e = input(t);
+	e.arm();
+	e.input.onData('a'.repeat(20000));
+	e.input.onStatus({ id: 't1', state: 'busy' });    // the sink dropped a frame while the queue is draining
+	e.clock.advance(100);
+	expect(e.view().chip === 'Input throttled: some keys not sent' && e.view().chipState === 'warn', 'chip after a tick: ' + JSON.stringify(e.view()));
+	e.clock.advance(1000);
+	expect(e.view().chip === 'Input throttled: some keys not sent', 'and while it keeps draining: ' + e.view().chip);
+	e.input.onData('k');
+	e.clock.advance(100);
+	expect(e.view().chip === 'Input live' && e.view().chipState === 'live', 'an accepted chunk restores Input live: ' + JSON.stringify(e.view()));
+});
+
 test('l01_linkForPicksTheBridge', function (t) {
 	const both = { downstream: ['term.input-status'], upstream: ['term.input'] };
 	const c = { bridges: [
@@ -978,6 +992,465 @@ test('l01_linkForPicksTheBridge', function (t) {
 	expect(t.JT.linkFor(c) === 'term', 'the first websocket bridge carrying both topics: ' + t.JT.linkFor(c));
 	expect(t.JT.linkFor({ bridges: [c.bridges[0], c.bridges[1]] }) === null, 'none carries both');
 	expect(t.JT.linkFor(null) === null && t.JT.linkFor({}) === null && t.JT.linkFor({ bridges: 'x' }) === null, 'no bridges');
+});
+
+// @cases:nudge
+
+/** A started engine over a one-chunk log, after its probe and first tick.  The nudge link is not up yet. */
+async function nudgeable(t, opts, log) {
+	const srv = logServer(log || 'abc');
+	const hang = { p: null, skip: 0 };
+	const c = start(t, opts, function (url) {
+		if (hang.p && hang.skip-- <= 0) {
+			const p = hang.p;
+			hang.p = null;
+			return p;
+		}
+		return c.fail ? statusRes(503) : srv.route(url);
+	});
+	c.srv = srv;
+	c.hang = hang;
+	c.fail = false;
+	await settle();
+	return c;
+}
+
+/** Makes the next request wait (after {@code skip} others); the returned function answers it with the given response. */
+function holdNext(c, skip) {
+	let answer;
+	c.hang.skip = skip || 0;
+	c.hang.p = new Promise(function (r) { answer = r; });
+	return function (res) { answer(res); };
+}
+
+test('n01_nudgeAheadFetchesNow', async function (t) {
+	const c = await nudgeable(t);
+	c.engine.nudgeConnected(true);
+	await settle();
+	const n = c.urls.length;
+	const due = c.clock.pending();
+	c.engine.nudge({ end: c.status().next + 10 });
+	await settle();
+	expect(c.urls.length === n + 1 && c.urls[n] === '/t/bytes?from=3', 'one fetch from next without the clock: ' + c.urls.slice(n).join(' '));
+	expectSame(due, [1000], 'the poll had not been due');
+});
+
+test('n02_nudgeBehindIgnored', async function (t) {
+	const c = await nudgeable(t);
+	c.engine.nudgeConnected(true);
+	await settle();
+	const n = c.urls.length;
+	const due = c.clock.pending();
+	c.engine.nudge({ end: c.status().next });
+	await settle();
+	expect(c.urls.length === n, 'no request: ' + c.urls.slice(n).join(' '));
+	expectSame(c.clock.pending(), due, 'the pending timer is untouched');
+});
+
+test('n03_inFlightOneFollowUp', async function (t) {
+	const c = await nudgeable(t);
+	c.engine.nudgeConnected(true);
+	await settle();
+	const release = holdNext(c);
+	c.clock.advance(1000);
+	await settle();
+	const n = c.urls.length;
+	c.engine.nudge({ end: 100 });
+	await settle();
+	c.engine.nudge({ end: 200 });
+	await settle();
+	expect(c.urls.length === n, 'nothing new while a tick is in flight');
+	release(bytesRes('', { next: 3, end: 3 }));
+	await settle();
+	expect(c.urls.length === n + 1, 'exactly one follow-up tick: ' + c.urls.slice(n - 1).join(' '));
+});
+
+test('n03b_inFlightFailureOneRetry', async function (t) {
+	const c = await nudgeable(t);
+	c.engine.nudgeConnected(true);
+	await settle();
+	const release = holdNext(c);
+	c.clock.advance(1000);
+	await settle();
+	const n = c.urls.length;
+	c.engine.nudge({ end: 100 });
+	await settle();
+	release(statusRes(503));
+	await settle();
+	expect(c.urls.length === n, 'no immediate extra request after the failure: ' + c.urls.slice(n).join(' '));
+	expectSame(c.clock.pending(), [1000], 'only the retry timer is pending');
+});
+
+test('n03c_followUpOnlyWhenStillBehind', async function (t) {
+	const c = await nudgeable(t);
+	c.engine.nudgeConnected(true);
+	await settle();
+	const release = holdNext(c);
+	c.clock.advance(1000);
+	await settle();
+	const n = c.urls.length;
+	c.engine.nudge({ end: 100 });
+	await settle();
+	release(bytesRes('x'.repeat(97), { next: 100, end: 100 }));
+	await settle();
+	expect(c.urls.length === n, 'the tick already reached the nudged end: ' + c.urls.slice(n).join(' '));
+});
+
+test('n14_replayInFlightNoDoubleTick', async function (t) {
+	const c = await nudgeable(t);
+	c.engine.nudgeConnected(true);
+	await settle();
+	const releaseOld = holdNext(c);
+	c.clock.advance(1000);
+	await settle();
+	const releaseNew = holdNext(c, 1);
+	c.engine.loadAll();
+	await settle();
+	const n = c.urls.length;
+	releaseOld(bytesRes('', { next: 3, end: 3 }));
+	await settle();
+	c.engine.nudge({ end: 100 });
+	await settle();
+	expect(c.urls.length === n, 'the replay tick is still fetching, so the nudge waits: ' + c.urls.slice(n).join(' '));
+	releaseNew(bytesRes('abc', { next: 100, end: 100 }));
+	await settle();
+	expect(c.urls.length === n, 'no extra request once the replay tick finished: ' + c.urls.slice(n).join(' '));
+});
+
+test('n14b_replayDropsLeftoverNudgeEnd', async function (t) {
+	const c = await nudgeable(t);
+	c.engine.nudgeConnected(true);
+	await settle();
+	const releaseOld = holdNext(c);
+	c.clock.advance(1000);
+	await settle();
+	c.engine.nudge({ end: 100 });
+	const releaseNew = holdNext(c, 1);
+	c.engine.loadAll();
+	await settle();
+	releaseOld(bytesRes('', { next: 3, end: 3 }));
+	releaseNew(bytesRes('abc', { next: 3, end: 3 }));
+	await settle();
+	const release = holdNext(c);
+	c.clock.advance(c.clock.pending()[0]);
+	await settle();
+	const n = c.urls.length;
+	c.engine.nudge({ end: 5 });
+	await settle();
+	release(bytesRes('de', { next: 5, end: 5 }));
+	await settle();
+	expect(c.urls.length === n, 'the old nudged end is gone, so no follow-up tick: ' + c.urls.slice(n).join(' '));
+});
+
+test('n15_nudgeDuringRetryKeepsBackoff', async function (t) {
+	const c = await nudgeable(t);
+	c.engine.nudgeConnected(true);
+	await settle();
+	c.fail = true;
+	for (let i = 0; i < 2; i++) {
+		c.clock.advance(c.clock.pending()[0]);
+		await settle();
+	}
+	expectSame(c.clock.pending(), [2000], 'the second retry delay');
+	const n = c.urls.length;
+	c.engine.nudge({ end: 100 });
+	await settle();
+	expect(c.urls.length === n, 'no request while backing off: ' + c.urls.slice(n).join(' '));
+	expectSame(c.clock.pending(), [2000], 'the retry timer is untouched');
+});
+
+test('n16_disconnectDuringRetryKeepsBackoff', async function (t) {
+	const c = await nudgeable(t);
+	c.engine.nudgeConnected(true);
+	c.engine.nudge({ end: 13 });
+	await settle();
+	expect(c.status().nudged === true, 'nudge mode on');
+	c.fail = true;
+	for (let i = 0; i < 2; i++) {
+		c.clock.advance(c.clock.pending()[0]);
+		await settle();
+	}
+	expectSame(c.clock.pending(), [2000], 'the second retry delay');
+	c.engine.nudgeConnected(false);
+	await settle();
+	expectSame(c.clock.pending(), [2000], 'the retry keeps its delay');
+	expect(c.status().nudged === false, 'nudge mode off');
+});
+
+test('n04_nudgeModeSlowsPoll', async function (t) {
+	const c = await nudgeable(t);
+	c.engine.nudgeConnected(true);
+	c.engine.nudge({ end: 13 });
+	await settle();
+	expectSame(c.clock.pending(), [5000], 'the safety-net poll');
+	expect(c.status().nudged === true, 'nudged: ' + JSON.stringify(c.status()));
+});
+
+test('n05_disconnectRestores', async function (t) {
+	const c = await nudgeable(t);
+	c.engine.nudgeConnected(true);
+	c.engine.nudge({ end: 13 });
+	await settle();
+	c.engine.nudgeConnected(false);
+	await settle();
+	expectSame(c.clock.pending(), [1000], 'back to refreshMs');
+	expect(c.status().nudged === false, 'nudged cleared');
+});
+
+test('n05b_disconnectWhileIdleKeepsIdle', async function (t) {
+	const c = await nudgeable(t);
+	for (let i = 0; i < 3; i++) {
+		c.clock.advance(c.clock.pending()[0]);
+		await settle();
+	}
+	expectSame(c.clock.pending(), [5000], 'idle after three empty polls');
+	c.engine.nudgeConnected(true);
+	c.engine.nudge({ end: c.status().next });
+	await settle();
+	expect(c.status().nudged === true, 'nudge mode on');
+	c.engine.nudgeConnected(false);
+	await settle();
+	expectSame(c.clock.pending(), [5000], 'still idle, not refreshMs');
+	expect(c.status().nudged === false, 'nudged cleared');
+});
+
+test('n06_connectAloneNoSlowdown', async function (t) {
+	const c = await nudgeable(t);
+	c.engine.nudgeConnected(true);
+	await settle();
+	c.clock.advance(1000);
+	await settle();
+	expectSame(c.clock.pending(), [1000], 'a link without a nudge keeps the normal pace');
+	expect(c.status().nudged === false, 'not nudged');
+});
+
+test('n07_doneNudge', async function (t) {
+	const c = await nudgeable(t);
+	const n = c.urls.length;
+	c.engine.nudge({ end: c.status().next, done: true });
+	await settle();
+	expect(c.urls.length === n + 1, 'a done nudge fetches although nothing is ahead: ' + c.urls.slice(n).join(' '));
+});
+
+test('n08_badPayloadIgnored', async function (t) {
+	const c = await nudgeable(t);
+	c.engine.nudgeConnected(true);
+	await settle();
+	const n = c.urls.length;
+	[null, {}, { end: -1 }, { end: '5' }, { end: NaN }, { end: 10.5 }, { end: Infinity }, { end: Number.MAX_SAFE_INTEGER + 2 }].forEach(function (p) {
+		c.engine.nudge(p);
+	});
+	await settle();
+	expect(c.urls.length === n, 'no request: ' + c.urls.slice(n).join(' '));
+	expect(c.status().nudged === false, 'a bad payload does not switch to nudge mode');
+});
+
+test('n09_stoppedIgnores', async function (t) {
+	const c = await nudgeable(t);
+	c.engine.nudgeConnected(true);
+	c.engine.stop();
+	const n = c.urls.length;
+	c.engine.nudge({ end: 100 });
+	await settle();
+	expect(c.urls.length === n, 'no request after stop');
+	expect(c.status().nudged === false, 'a stopped engine does not switch to nudge mode');
+});
+
+test('n10_unprobedIgnored', async function (t) {
+	const c = start(t, {}, function () { return statusRes(503); });
+	await settle();
+	expect(c.status().reconnecting && c.clock.pending().length === 1, 'the probe failed and a retry is waiting');
+	c.engine.nudgeConnected(true);
+	const n = c.urls.length;
+	c.engine.nudge({ end: 100 });
+	await settle();
+	expect(c.urls.length === n, 'a nudge before the probe succeeds does nothing: ' + c.urls.slice(n).join(' '));
+	expect(c.status().nudged === false, 'and does not switch to nudge mode');
+});
+
+test('n11_refreshAboveFiveKept', async function (t) {
+	const c = await nudgeable(t, { refreshMs: 8000 });
+	c.engine.nudgeConnected(true);
+	c.engine.nudge({ end: 13 });
+	await settle();
+	expectSame(c.clock.pending(), [8000], 'the larger of refreshMs and the nudge interval');
+});
+
+test('n12_hiddenTabDefersNudge', async function (t) {
+	const c = await nudgeable(t);
+	c.engine.nudgeConnected(true);
+	await settle();
+	c.hidden = true;
+	const n = c.urls.length;
+	c.engine.nudge({ end: 100 });
+	await settle();
+	c.engine.nudge({ end: 200 });
+	await settle();
+	expect(c.urls.length === n, 'no request while hidden');
+	expect(c.visibleFns.length === 1, 'one visibility listener live: ' + c.visibleFns.length);
+	c.show();
+	await settle();
+	expect(c.urls.length === n + 1, 'exactly one request on show: ' + c.urls.slice(n).join(' '));
+});
+
+test('n13_nudgeLinkFor', function (t) {
+	const c = { bridges: [{ id: 'a', downstream: ['x.y'] }, { id: 'b', downstream: ['term.nudge:t1'] }] };
+	expect(t.JT.nudgeLinkFor(c, 'term.nudge:t1') === 'b', 'the bridge that carries the topic');
+	expect(t.JT.nudgeLinkFor(c, 'term.nudge:t2') === null, 'no match');
+	expect(t.JT.nudgeLinkFor(null, 'term.nudge:t1') === null && t.JT.nudgeLinkFor({}, 'term.nudge:t1') === null, 'no contract or bridges');
+	expect(t.JT.nudgeLinkFor({ bridges: [{ id: 'a', downstream: 'term.nudge:t1' }, { id: 'b' }, null] }, 'term.nudge:t1') === null, 'downstream not an array');
+	expect(t.JT.nudgeLinkFor({ bridges: [{ id: 'w', downstream: ['term.nudge:*'] }] }, 'term.nudge:t1') === null, 'a wildcard downstream does not match');
+});
+
+const LINK_HANDLER = { activate: function () {} };
+
+/** The fixed option set mount() builds today, with the given extra terminal options merged through the allowlist. */
+function xtermCtorOptions(t, extra) {
+	const base = { cols: 80, rows: 24, scrollback: 100000, disableStdin: true, allowProposedApi: false, fontSize: 14, cursorBlink: false, linkHandler: LINK_HANDLER };
+	return t.JT.xtermOptions(base, extra);
+}
+
+test('o01_convertEolReachesTheTerminal', function (t) {
+	expect(xtermCtorOptions(t, { convertEol: true }).convertEol === true, 'convertEol true passed');
+	expect(xtermCtorOptions(t, { convertEol: false }).convertEol === false, 'convertEol false passed');
+});
+
+test('o02_unknownKeyIsIgnored', function (t) {
+	const o = xtermCtorOptions(t, { convertEol: true, theme: { background: 'red' }, bogus: 1 });
+	expect(!('theme' in o) && !('bogus' in o), 'unknown keys dropped: ' + Object.keys(o));
+});
+
+test('o03_juneauOwnedKeysCannotBeOverridden', function (t) {
+	const base = xtermCtorOptions(t, undefined);
+	const o = xtermCtorOptions(t, { cols: 1, rows: 1, disableStdin: false, linkHandler: null, allowProposedApi: true, fontSize: 40, cursorBlink: true });
+	expectSame(Object.keys(o), Object.keys(base), 'same key set');
+	for (const k of Object.keys(base)) expect(o[k] === base[k], k + ' unchanged');
+});
+
+test('o04_wrongTypesAreIgnored', function (t) {
+	const base = xtermCtorOptions(t, undefined);
+	const o = xtermCtorOptions(t, { convertEol: 'true', scrollback: '500', fontFamily: 12 });
+	expectSame(o, base, 'nothing merged');
+	for (const bad of [-1, 1.5, NaN, Infinity, null, 1000001, 1e21, Number.MAX_SAFE_INTEGER + 1])
+		expect(xtermCtorOptions(t, { scrollback: bad }).scrollback === base.scrollback, 'scrollback ' + bad + ' ignored');
+	expect(xtermCtorOptions(t, { scrollback: 1000000 }).scrollback === 1000000, 'scrollback at the cap accepted');
+	expect(!('fontFamily' in xtermCtorOptions(t, { fontFamily: '' })), 'empty fontFamily ignored');
+	expectSame(xtermCtorOptions(t, 'x'), base, 'non-object terminal');
+	expectSame(xtermCtorOptions(t, [true]), base, 'array terminal');
+});
+
+test('o05_validScrollbackAndFontFamilyMerge', function (t) {
+	const o = xtermCtorOptions(t, { scrollback: 0, fontFamily: 'monospace' });
+	expect(o.scrollback === 0 && o.fontFamily === 'monospace', JSON.stringify(o));
+	expect(xtermCtorOptions(t, { scrollback: 2000 }).scrollback === 2000, 'scrollback 2000');
+});
+
+test('o06_absentTerminalCopiesBase', function (t) {
+	const o = xtermCtorOptions(t, undefined);
+	expectSame(Object.keys(o), ['cols', 'rows', 'scrollback', 'disableStdin', 'allowProposedApi', 'fontSize', 'cursorBlink', 'linkHandler'], 'keys');
+	expectSame(xtermCtorOptions(t, {}), o, 'empty object');
+});
+
+// @cases:theme
+
+/** A DOM element stub: just enough surface for mount() to build and tear down its region. */
+function fakeEl(tag) {
+	const e = {
+		tagName: tag, children: [], attrs: {}, className: '', textContent: '', hidden: false, parentNode: null, clientWidth: 0,
+		appendChild: function (c) { c.parentNode = e; e.children.push(c); return c; },
+		append: function () { Array.from(arguments).forEach(function (c) { e.appendChild(c); }); },
+		removeChild: function (c) { const i = e.children.indexOf(c); if (i >= 0) e.children.splice(i, 1); c.parentNode = null; },
+		setAttribute: function (k, v) { e.attrs[k] = v; },
+		getAttribute: function (k) { return Object.prototype.hasOwnProperty.call(e.attrs, k) ? e.attrs[k] : null; },
+		removeAttribute: function (k) { delete e.attrs[k]; },
+		addEventListener: function () {}, removeEventListener: function () {}, focus: function () {},
+		querySelector: function () { return null; },
+		getBoundingClientRect: function () { return { width: 0 }; }
+	};
+	return e;
+}
+
+/**
+ * Mounts a real terminal region over a fake document whose computed style serves the given tokens.  Returns the
+ * constructor options the terminal was created with, the live terminal, the mutable token map, a dispatcher for
+ * document events and the mount cleanup.
+ */
+async function mountThemed(t, tokens, terminalOpts) {
+	const clock = fakeClock();
+	const listeners = {};
+	const srv = logServer('hi\n');
+	const created = { ctorOptions: null, term: null };
+	const doc = {
+		hidden: false, documentElement: fakeEl('html'),
+		createElement: fakeEl,
+		createTextNode: function (x) { return { text: x }; },
+		addEventListener: function (n, f) { (listeners[n] = listeners[n] || []).push(f); },
+		removeEventListener: function (n, f) { const l = listeners[n] || []; const i = l.indexOf(f); if (i >= 0) l.splice(i, 1); }
+	};
+	const win = {
+		TextEncoder: TextEncoder, URL: URL, Promise: Promise, Date: Date, console: console,
+		location: { href: 'http://x/p', hash: '' },
+		setTimeout: clock.setTimeout, clearTimeout: clock.clearTimeout,
+		fetch: function (url) { return Promise.resolve().then(function () { return srv.route(url); }); },
+		addEventListener: function () {}, removeEventListener: function () {},
+		getComputedStyle: function () { return { getPropertyValue: function (n) { return Object.prototype.hasOwnProperty.call(tokens, n) ? tokens[n] : ''; } }; },
+		Terminal: function (o) {
+			const term = stubTerm(o.cols, o.rows, false);
+			term.options = Object.assign({}, o);
+			term.open = function () {}; term.dispose = function () { term.disposed = true; };
+			term.onData = function () {}; term.attachCustomKeyEventHandler = function () {};
+			created.ctorOptions = o; created.term = term;
+			return term;
+		}
+	};
+	doc.defaultView = win;
+	const host = fakeEl('div');
+	host.ownerDocument = doc;
+	const cleanup = t.JT.mount(host, { bytesUrl: '/t/bytes', terminal: terminalOpts }, null, null);
+	await settle();
+	return {
+		created: created, tokens: tokens, cleanup: cleanup,
+		fire: function (name) { (listeners[name] || []).slice().forEach(function (f) { f({ type: name }); }); },
+		count: function (name) { return (listeners[name] || []).length; }
+	};
+}
+
+test('t01_termThemeFromTokens', async function (t) {
+	const m = await mountThemed(t, { '--jc-term-bg': ' #0d0f12', '--jc-term-fg': '#e5e5e5', '--jc-term-cursor': '#e5e5e5', '--jc-term-selection': 'rgba(255,255,255,0.3)' });
+	expectSame(m.created.ctorOptions.theme, { background: '#0d0f12', foreground: '#e5e5e5', cursor: '#e5e5e5', cursorAccent: '#0d0f12', selectionBackground: 'rgba(255,255,255,0.3)' }, 'theme from tokens');
+	m.cleanup();
+});
+
+test('t02_fallbacks', async function (t) {
+	const m = await mountThemed(t, {});
+	expectSame(m.created.ctorOptions.theme, { background: '#000000', foreground: '#ffffff', cursor: '#ffffff', cursorAccent: '#000000', selectionBackground: 'rgba(255,255,255,0.3)' }, 'xterm default fallbacks');
+	m.cleanup();
+});
+
+test('t03_cardCannotOverrideTheme', async function (t) {
+	const m = await mountThemed(t, { '--jc-term-bg': '#0d0f12' }, { theme: { background: 'red' }, convertEol: true });
+	expect(m.created.ctorOptions.theme.background === '#0d0f12', 'card theme ignored: ' + m.created.ctorOptions.theme.background);
+	expect(m.created.ctorOptions.convertEol === true, 'allowlisted keys still merge');
+	m.cleanup();
+});
+
+test('t04_themeChangedUpdates', async function (t) {
+	const m = await mountThemed(t, { '--jc-term-bg': '#000000' });
+	m.tokens['--jc-term-bg'] = '#0d0f12';
+	m.fire('juneau:theme-changed');
+	expect(m.created.term.options.theme.background === '#0d0f12', 'background updated: ' + m.created.term.options.theme.background);
+	expect(m.created.term.options.theme.cursorAccent === '#0d0f12', 'cursorAccent follows the background');
+	m.cleanup();
+});
+
+test('t05_listenerRemovedOnCleanup', async function (t) {
+	const m = await mountThemed(t, { '--jc-term-bg': '#000000' });
+	expect(m.count('juneau:theme-changed') === 1, 'one listener while mounted');
+	m.cleanup();
+	expect(m.count('juneau:theme-changed') === 0, 'listener removed');
+	m.tokens['--jc-term-bg'] = '#123456';
+	m.fire('juneau:theme-changed');
+	expect(m.created.term.options.theme.background === '#000000', 'a disposed terminal is not touched');
 });
 
 // @cases:end

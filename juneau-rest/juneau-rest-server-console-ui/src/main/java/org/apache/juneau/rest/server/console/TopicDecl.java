@@ -66,11 +66,13 @@ public final class TopicDecl {
 		if (topic == null)
 			throw Topics.iae(Topics.E40, topic);
 		var family = Topics.family(topic);
-		if (Topics.FRAMEWORK_FAMILIES.contains(family) && ! JOB_ALL.equals(topic))
+		var declarable = Topics.DECLARABLE_FRAMEWORK.contains(family);
+		if (Topics.FRAMEWORK_FAMILIES.contains(family) && ! JOB_ALL.equals(topic) && ! declarable)
 			throw Topics.iae(Topics.E45_FRAMEWORK, family);
 		if (Topics.ROLE.matcher(family).matches() && ! Topics.FRAMEWORK_FAMILIES.contains(family))
 			throw Topics.iae(Topics.E45_NAMESPACE, family, family);
-		if (! Topics.TOPIC_DECL.matcher(topic).matches())
+		if (declarable ? ! Topics.TOPIC.matcher(topic).matches() || topic.indexOf(':') < 0
+				: ! Topics.TOPIC_DECL.matcher(topic).matches())
 			throw Topics.iae(Topics.E40, topic);
 		return new TopicDecl(topic);
 	}
@@ -96,6 +98,11 @@ public final class TopicDecl {
 	public JsonMap toMap() {
 		if (JOB_ALL.equals(topic) && publisher != Publisher.SERVER)
 			throw Topics.iae(Topics.E45_FRAMEWORK, "job");
+		var family = Topics.family(topic);
+		if ("zoom".equals(family) || "legend".equals(family))
+			throw Topics.iae("topic '%s': %s:<cardId> is published by its chart card; declare it with publishZoom()/publishLegend()", topic, family);
+		if ("data".equals(family) && (publisher != Publisher.SCRIPT || ! Boolean.TRUE.equals(retain)))
+			throw Topics.iae("topic '%s': a page-declared data: topic needs publisher(SCRIPT) and retain(true)", topic);
 		var m = base();
 		if (publisher == null)
 			throw Topics.iae("topic '%s': a page-level topic needs publisher(SCRIPT|SERVER|RIBBON)", topic);
@@ -107,6 +114,10 @@ public final class TopicDecl {
 	public JsonMap toPublicationMap() {
 		if (JOB_ALL.equals(topic))
 			throw Topics.iae(Topics.E45_FRAMEWORK, "job");
+		if ("data".equals(Topics.family(topic)))
+			throw Topics.iae("topic '%s': data: topics are declared page-level (publisher SCRIPT) or by a data source, not by a card", topic);
+		if (Topics.DECLARABLE_FRAMEWORK.contains(Topics.family(topic)) && ! Boolean.TRUE.equals(retain))
+			throw Topics.iae("topic '%s' is chart state; declare it with retain(true)", topic);
 		if (publisher != null)
 			throw Topics.iae("topic '%s': publisher is page-level only; a card's publishes may not set it", topic);
 		return base();

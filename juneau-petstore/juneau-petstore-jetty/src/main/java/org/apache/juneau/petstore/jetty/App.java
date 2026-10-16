@@ -19,6 +19,7 @@ package org.apache.juneau.petstore.jetty;
 import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.microservice.*;
 import org.apache.juneau.microservice.jetty.*;
+import org.apache.juneau.petstore.console.*;
 
 import jakarta.servlet.*;
 
@@ -55,10 +56,13 @@ public class App {
 	}
 
 	/**
-	 * Application-specific configuration class contributing the top-level REST servlet.
+	 * Application-specific configuration class contributing the top-level REST servlet and the console and API boundary filters.
 	 */
 	@Configuration
 	public static class AppConfig {
+
+		// Shared by both boundary beans: the console publishes tokens from the instance the API filter verifies them with.
+		private final PetstoreApiBoundary apiBoundary = new PetstoreApiBoundary();
 
 		/**
 		 * Provides the top-level REST servlet, auto-mounted by {@code JettyServerComponent} at
@@ -69,6 +73,46 @@ public class App {
 		@Bean
 		public Servlet rootResources() {
 			return new RootResources();
+		}
+
+		/**
+		 * Provides the console's CSRF boundary, covering {@code /console} only.
+		 *
+		 * <p>
+		 * The {@code /petstore} API is covered by {@link #apiBoundary()}; {@code /petstore-ui} and the admin
+		 * resources are outside both: see {@link PetstoreConsoleBoundary}.  It runs ahead of routing and ahead of
+		 * authentication, for the request, forward, async and error dispatches; the include dispatch is deliberately
+		 * not mapped.  It is built over the same {@link PetstoreApiBoundary} that {@link #apiBoundary()} mounts, so the
+		 * API token its pages carry is one the API filter accepts.
+		 *
+		 * @return The filter registration.
+		 */
+		@Bean(name="consoleBoundary")
+		public ServletFilterRegistration consoleBoundary() {
+			return ServletFilterRegistration.create(new PetstoreConsoleBoundary(apiBoundary))
+				.urlPatterns(PetstoreConsoleBoundary.URL_PATTERN)
+				.dispatcherTypes(DispatcherType.REQUEST, DispatcherType.FORWARD, DispatcherType.ASYNC, DispatcherType.ERROR)
+				.order(ServletFilterRegistration.HIGHEST_PRECEDENCE)
+				.build();
+		}
+
+		/**
+		 * Provides the API's CSRF boundary, covering {@code /petstore/*}.
+		 *
+		 * <p>
+		 * It runs only on the original request: an internal forward or error dispatch to the API is not a new
+		 * attacker-controlled request.  The order keeps it just behind {@link #consoleBoundary()}; the two patterns never
+		 * overlap.
+		 *
+		 * @return The filter registration.
+		 */
+		@Bean(name="apiBoundary")
+		public ServletFilterRegistration apiBoundary() {
+			return ServletFilterRegistration.create(apiBoundary)
+				.urlPatterns(PetstoreApiBoundary.URL_PATTERN)
+				.dispatcherTypes(DispatcherType.REQUEST)
+				.order(ServletFilterRegistration.HIGHEST_PRECEDENCE + 10)
+				.build();
 		}
 	}
 }

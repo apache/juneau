@@ -41,15 +41,16 @@ class ViewsJs_SameOriginPath_Test extends TestBase {
 		if (cached != null)
 			return cached;
 		var r = NodeHarness.report("same-origin-path.cjs", ViewsMixin.VIEWS_JS_RESOURCE, ConsoleChromeMixin.CONSOLE_JS_RESOURCE,
-			ConsoleChromeMixin.CHARTS_JS_RESOURCE, ConsoleChromeMixin.JOBLOG_JS_RESOURCE, ViewsMixin.CONSOLE_OUTPUT_JS_RESOURCE,
-			ViewsMixin.RUN_VIEW_JS_RESOURCE, ViewsMixin.CALENDAR_JS_RESOURCE, ConsoleChromeMixin.BADGES_JS_RESOURCE);
+			ConsoleChromeMixin.CHARTS_JS_RESOURCE, ConsoleChromeMixin.JOBLOG_JS_RESOURCE,
+			ViewsMixin.RUN_VIEW_JS_RESOURCE, ViewsMixin.CALENDAR_JS_RESOURCE, ConsoleChromeMixin.BADGES_JS_RESOURCE,
+			ViewsMixin.DATA_JS_RESOURCE);
 		assumeTrue(r != null, "node (or same-origin-path.cjs) not available - JS layer skipped");
 		return cached = r;
 	}
 
 	@Test void a01_everyRowRan() {
 		assertEquals(CASE_COUNT, ((Number)report().get("count")).intValue());
-		assertEquals(13, ((List<?>)report().get("guards")).size());
+		assertEquals(11, ((List<?>)report().get("guards")).size());
 	}
 
 	@Test void a02_everyGuardMatchesTheCorpus() {
@@ -65,6 +66,10 @@ class ViewsJs_SameOriginPath_Test extends TestBase {
 
 	@Test void a04_joblogRejectsEveryCrossHostRow() {
 		assertEquals(List.of(), report().get("joblogAccepted"));
+	}
+
+	@Test void a04b_joblogRejectsEveryRowWithATrailingSpaceOrControlCharacter() {
+		assertEquals(List.of(), report().get("joblogTrailingAccepted"));
 	}
 
 	@Test void a05_theSharedPrefixRuleIsOneIdenticalHelper() {

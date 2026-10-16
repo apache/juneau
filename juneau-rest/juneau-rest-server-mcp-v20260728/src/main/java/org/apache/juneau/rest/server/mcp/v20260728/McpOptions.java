@@ -213,7 +213,7 @@ public class McpOptions {
 	}
 
 	/**
-	 * This binding's OAuth 2.1 resource-server (RS) configuration (READY-312f F2).
+	 * This binding's OAuth 2.1 resource-server (RS) configuration.
 	 *
 	 * @return The framework-owned RS configuration. Never <jk>null</jk>.  Disabled by default.
 	 */

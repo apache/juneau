@@ -181,7 +181,7 @@ function startPolling(f, viewDef, ctx) {
 const out = {};
 
 // ----------------------------------------------------------------------------------------------------------------
-// A. The non-opted-in consumer (IRS, the support console, every existing Juneau views user).
+// A. The non-opted-in consumer (every existing Juneau views user).
 //
 // The whole multi-consumer safety claim in one section: with NEITHER affordance declared, nothing suspends -
 // not an open detail panel, not an open dialog, not both at once - and the pill keeps saying exactly what it
@@ -435,7 +435,7 @@ const out = {};
 }
 {
 	// A view that opted into NOTHING keeps every draw, panel open or not.  This is the multi-consumer half of the
-	// race fix: IRS and the console must not start silently losing redraws.
+	// race fix: existing consumers must not start silently losing redraws.
 	const f = makeTable();
 	const viewDef = { pollIntervalMs: 5000 };
 	const ctx = { dataTable: f.dt };
@@ -456,7 +456,7 @@ const out = {};
 }
 
 // ----------------------------------------------------------------------------------------------------------------
-// G. Gap 7 auto-refresh: its own timer, paused by the same editing-surface rule, independent of initPolling.
+// G. Auto-refresh: its own timer, paused by the same editing-surface rule, independent of initPolling.
 // ----------------------------------------------------------------------------------------------------------------
 {
 	const f = makeTable();

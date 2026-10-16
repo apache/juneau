@@ -20,7 +20,9 @@ import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.io.*;
 import java.util.*;
+import java.util.logging.*;
 
+import org.apache.juneau.rest.server.*;
 import org.apache.juneau.rest.server.console.*;
 import org.apache.juneau.rest.server.filter.*;
 import org.apache.juneau.rest.server.view.freemarker.*;
@@ -58,14 +60,18 @@ public final class ConsoleDirectiveModel implements TemplateDirectiveModel {
 	/** The shared-variable name this directive registers under. */
 	public static final String NAME = "console";
 
-	static final Set<String> ATTRS = Set.of("theme", "icon", "favicon", "brand", "title", "chrome", "facts");
+	private static final Logger LOG = Logger.getLogger(ConsoleDirectiveModel.class.getName());
+
+	static final Set<String> ATTRS = Set.of("theme", "icon", "favicon", "brand", "title", "chrome", "facts", "scheme", "schemeToggle");
 
 	private final boolean devMode;
 	private final CardTypeRegistry cardTypes;
+	private final ToolkitPackRegistry packs;
 
-	ConsoleDirectiveModel(boolean devMode, CardTypeRegistry cardTypes) {
+	ConsoleDirectiveModel(boolean devMode, CardTypeRegistry cardTypes, ToolkitPackRegistry packs) {
 		this.devMode = devMode;
 		this.cardTypes = cardTypes;
+		this.packs = packs;
 	}
 
 	@Override
@@ -96,6 +102,14 @@ public final class ConsoleDirectiveModel implements TemplateDirectiveModel {
 			throw FtlAttrLists.reject("<@console> unknown theme name '" + themeAttr + "'.  Built-in themes: "
 				+ String.join(", ", ConsoleChromeMixin.BUILTIN_THEME_NAMES) + ".");
 
+		// Colour scheme: an explicit attribute wins over a page-spec value, which wins over the default.
+		var schemeAttr = FtlAttrLists.scalar(p, "scheme");
+		if (! schemeAttr.isEmpty() && ! ConsoleChromeMixin.SCHEMES.contains(schemeAttr))
+			throw FtlAttrLists.reject("<@console> unknown scheme '" + schemeAttr + "'.  Schemes: "
+				+ String.join(", ", ConsoleChromeMixin.SCHEMES) + ".");
+		var scheme = ! schemeAttr.isEmpty() ? schemeAttr : nn(cap.scheme()) ? cap.scheme() : ConsoleChromeMixin.SCHEMES.get(0);
+		var schemeToggle = FtlAttrLists.strictBoolean(p, NAME, "schemeToggle", cap.schemeToggle());
+
 		var icon = FtlAttrLists.scalar(p, "icon");
 		var favicon = FtlAttrLists.scalar(p, "favicon");
 		var brand = FtlAttrLists.scalar(p, "brand");
@@ -118,6 +132,7 @@ public final class ConsoleDirectiveModel implements TemplateDirectiveModel {
 		if (! factsAttr.isEmpty())
 			cap.mergeChromeFacts(factsAttr);
 
+		cap.consoleTheme = themeAttr.isEmpty() ? null : themeAttr;
 		cap.consoleOpen = true;
 		try {
 			if (nn(body))
@@ -133,6 +148,13 @@ public final class ConsoleDirectiveModel implements TemplateDirectiveModel {
 		}
 		cap.resolveActiveNav();
 
+		// A page that never reached <@page> (a PageSpec rendered straight through the chrome) has not had its seeded
+		// toolkits and card-required packs resolved yet; <@page> does it itself, so never twice.
+		// The guard is a pure optimisation: toolkitAssets overwrites, and nothing after <@page> can change its inputs
+		// (<@card> is only legal inside <@page>), so a second resolve would be identical and no test can observe it.
+		if (! cap.assetsResolved())
+			PageDirectiveModel.resolveAssets(env, cap, packs);
+
 		if (n(cap.themeCssUrl)) {
 			// No <@theme> ran: an explicit theme= wins, else a theme seeded by a page spec is inherited, else the default.
 			var themeName = ! themeAttr.isEmpty() ? themeAttr : cap.themeOrNull();
@@ -142,9 +164,28 @@ public final class ConsoleDirectiveModel implements TemplateDirectiveModel {
 			cap.theme(themeName);
 		}
 
-		var token = req.getAttribute(LoopbackBoundaryFilter.TOKEN_ATTRIBUTE).asString().orElse(null);
-		var csrfHeader = req.getAttribute(LoopbackBoundaryFilter.HEADER_ATTRIBUTE).asString().orElse(null);
-		var hasCsrf = inb(token);
+		// Each embed asks for its own value, so a masking boundary never repeats the same masked token in one page.
+		var metaToken = csrfToken(req);
+		var bodyToken = csrfToken(req);
+		var csrfHeader = req.getAttribute(RequestBoundaryFilter.HEADER_ATTRIBUTE).asString().orElse(null);
+		var hasCsrf = inb(metaToken) && inb(bodyToken);
+
+		// A page that carries a token must not be cached, and the header has to be set before any of the body is
+		// written.  A response that is already committed can no longer be marked, so it never carries the token: both
+		// automatic embeds and any spec- or <@body>-authored csrf attributes are dropped, and the page's own writes then
+		// fail visibly instead of leaking the secret.
+		var bodyAttrs = cap.bodyAttrs;
+		if (req.getResponse().getHttpServletResponse().isCommitted()) {
+			var omitted = hasCsrf;
+			hasCsrf = false;
+			bodyAttrs = cap.bodyAttrsWithout("data-juneau-csrf", "data-juneau-csrf-header");
+			if (bodyAttrs != null && ! bodyAttrs.equals(cap.bodyAttrs.strip()))
+				omitted = true;
+			if (omitted)
+				LOG.fine("Response already committed; the CSRF token is not embedded in the page.");
+		} else if (hasCsrf || cap.hasBodyAttr("data-juneau-csrf")) {
+			RequestBoundaryFilter.markTokenBearing(req.getResponse().getHttpServletResponse());
+		}
 
 		if (devMode) {
 			var findings = PageContractSchema.get().validate(cap.toContractJson(), cap.templates().keySet());
@@ -153,7 +194,11 @@ public final class ConsoleDirectiveModel implements TemplateDirectiveModel {
 		}
 
 		var out = env.getOut();
-		out.write("<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n");
+		var nonce = req.getAttribute(RestRequest.CSP_NONCE_ATTR).as(String.class).orElse(null);
+		var htmlAttrs = ConsoleChromeMixin.schemeHtmlAttributes(scheme, schemeToggle);
+		out.write("<!DOCTYPE html>\n<html lang=\"en\"" + (htmlAttrs.isEmpty() ? "" : " " + htmlAttrs) + ">\n<head>\n");
+		// The pre-paint scheme script runs before any stylesheet so the first paint already has the right scheme.
+		out.write(ConsoleChromeMixin.schemeScriptElement(nonce) + "\n");
 		out.write("<meta charset=\"utf-8\">\n");
 		out.write("<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n");
 		if (! cap.title().isEmpty())
@@ -161,13 +206,14 @@ public final class ConsoleDirectiveModel implements TemplateDirectiveModel {
 		if (! cap.tab().isEmpty())
 			out.write("<meta name=\"page-tab\" content=\"" + attrEscape(cap.tab()) + "\">\n");
 		if (hasCsrf)
-			out.write("<meta name=\"csrf-token\" content=\"" + attrEscape(token) + "\">\n");
+			out.write("<meta name=\"csrf-token\" content=\"" + attrEscape(metaToken) + "\">\n");
 		if (! favicon.isEmpty())
 			out.write("<link rel=\"icon\" href=\"" + attrEscape(favicon) + "\">\n");
 		out.write("<link rel=\"stylesheet\" href=\"" + attrEscape(ConsoleChromeMixin.chromeCssUrl(req)) + "\">\n");
+		out.write("<link rel=\"stylesheet\" href=\"" + attrEscape(ConsoleChromeMixin.themeAssetUrl(req, "dark")) + "\">\n");
 		out.write("<link rel=\"stylesheet\" href=\"" + attrEscape(cap.themeCssUrl) + "\">\n");
 		if (nn(cap.themeOverrideBlock))
-			out.write("<style>" + cap.themeOverrideBlock + "</style>\n");
+			out.write("<style" + ConsoleChromeMixin.nonceAttr(nonce) + ">" + cap.themeOverrideBlock + "</style>\n");
 		// App CSS that must lose to page-local css=: emitted BEFORE the page css so a page rule still wins.
 		if (nn(cap.headBeforePageCss))
 			out.write(cap.headBeforePageCss);
@@ -185,12 +231,12 @@ public final class ConsoleDirectiveModel implements TemplateDirectiveModel {
 		// A spec- or <@body>-authored csrf attribute (merged by checkConsoleClose above) wins over the auto-detection.
 		// Either name suppresses both auto attributes, so a token and its header never come from different sources.
 		if (hasCsrf && ! cap.hasBodyAttr("data-juneau-csrf") && ! cap.hasBodyAttr("data-juneau-csrf-header")) {
-			out.write(" data-juneau-csrf=\"" + attrEscape(token) + "\"");
+			out.write(" data-juneau-csrf=\"" + attrEscape(bodyToken) + "\"");
 			if (inb(csrfHeader))
 				out.write(" data-juneau-csrf-header=\"" + attrEscape(csrfHeader) + "\"");
 		}
-		if (inb(cap.bodyAttrs))
-			out.write(" " + cap.bodyAttrs.trim());
+		if (inb(bodyAttrs))
+			out.write(" " + bodyAttrs.trim());
 		out.write(">\n");
 
 		cap.shellUrl(ConsoleChromeMixin.consoleJsUrl(req));
@@ -201,6 +247,10 @@ public final class ConsoleDirectiveModel implements TemplateDirectiveModel {
 			out.write("<script src=\"" + attrEscape(src) + "\" data-toolkit-js></script>\n");
 		for (var src : cap.runtimeJs())
 			out.write("<script src=\"" + attrEscape(src) + "\" data-toolkit-js></script>\n");
+		// The badge runtime mounts header.badges from the contract on load.  Not a toolkit pack: a chrome-template
+		// <@badge> is only known here, after the page's packs were resolved.
+		if (cap.hasBadges())
+			out.write("<script src=\"" + attrEscape(ConsoleChromeMixin.badgesJsUrl(req)) + "\" data-toolkit-js></script>\n");
 		// App scripts that must run after the toolkit pack but before the page-local init= scripts.
 		if (nn(cap.scriptsAfterToolkit))
 			out.write(cap.scriptsAfterToolkit);
@@ -210,6 +260,24 @@ public final class ConsoleDirectiveModel implements TemplateDirectiveModel {
 			out.write(cap.scripts);
 		out.write("\n</body>\n</html>\n");
 		cap.consoleDone = true;
+	}
+
+	/**
+	 * One CSRF token value for one embed, or <jk>null</jk> when the request carries none.
+	 *
+	 * <p>
+	 * Prefers the filter's token supplier, read straight from the servlet request: converting it through the REST
+	 * attribute view would stringify the supplier itself.  Only the filter's own {@link RequestBoundaryFilter.TokenSupplier}
+	 * is trusted; a value of any other type under that name was set by request code, so no token is embedded.  Falls
+	 * back to the single string value for a filter that publishes only that.
+	 */
+	private static String csrfToken(RestRequest req) {
+		var supplier = req.getHttpServletRequest().getAttribute(RequestBoundaryFilter.TOKEN_SUPPLIER_ATTRIBUTE);
+		if (supplier instanceof RequestBoundaryFilter.TokenSupplier s)
+			return s.get();
+		if (supplier != null)
+			return null;
+		return req.getAttribute(RequestBoundaryFilter.TOKEN_ATTRIBUTE).asString().orElse(null);
 	}
 
 	/** Minimal HTML-attribute escape for an author-/request-supplied value placed in a double-quoted attribute. */

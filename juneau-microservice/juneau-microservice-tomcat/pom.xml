@@ -40,6 +40,20 @@
 			<artifactId>tomcat-embed-core</artifactId>
 			<version>${tomcat.version}</version>
 		</dependency>
+		<!-- Opt-in BusWebSocketCsrf_TomcatIT (-Djuneau.busIt=true) only; Juneau ships no container WebSocket dependency. -->
+		<dependency>
+			<groupId>org.apache.juneau</groupId>
+			<artifactId>juneau-rest-server-bus-websocket</artifactId>
+			<version>${project.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<!-- Opt-in BusWebSocketCsrf_TomcatIT (-Djuneau.busIt=true) only; Juneau ships no container WebSocket dependency. -->
+		<dependency>
+			<groupId>org.apache.tomcat.embed</groupId>
+			<artifactId>tomcat-embed-websocket</artifactId>
+			<version>${tomcat.version}</version>
+			<scope>test</scope>
+		</dependency>
 		<dependency>
 			<groupId>org.junit.jupiter</groupId>
 			<artifactId>junit-jupiter</artifactId>

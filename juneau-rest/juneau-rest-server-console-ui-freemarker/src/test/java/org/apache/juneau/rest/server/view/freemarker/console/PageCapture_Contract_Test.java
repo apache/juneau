@@ -27,7 +27,7 @@ import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
 
 /**
- * One test per row of the spec §4.2 directive-to-contract table (cards are covered in Task 8's additions).
+ * One test per row of the directive-to-contract table (cards are covered separately).
  *
  * @since 10.0.0
  */

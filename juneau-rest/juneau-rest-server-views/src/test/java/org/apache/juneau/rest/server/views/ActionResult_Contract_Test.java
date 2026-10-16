@@ -25,7 +25,7 @@ import org.apache.juneau.marshall.marshaller.*;
 import org.junit.jupiter.api.*;
 
 /**
- * Golden-fixture contract test for the typed {@code ActionResult} wire format (design doc §6.1/§6.2; the write-path
+ * Golden-fixture contract test for the typed {@code ActionResult} wire format (the write-path
  * half of the row-action contract).
  *
  * <p>
@@ -52,7 +52,7 @@ class ActionResult_Contract_Test extends TestBase {
 	}
 
 	@Test void a02_contractVersion_isItsOwnValue_notAliasedToViewMeta() {
-		// MED-7: this is a SEPARATE contract from VIEW_META, so its version must not track ViewsMixin.CONTRACT_VERSION.
+		// this is a SEPARATE contract from VIEW_META, so its version must not track ViewsMixin.CONTRACT_VERSION.
 		assertEquals("1", ActionResult.CONTRACT_VERSION);
 		assertNotEquals(ViewsMixin.CONTRACT_VERSION, ActionResult.CONTRACT_VERSION,
 			"ActionResult.CONTRACT_VERSION must be its own value, never aliased to VIEW_META");
@@ -105,7 +105,7 @@ class ActionResult_Contract_Test extends TestBase {
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
-	// Outcome discriminator + reserved async terminal states (MED-8)
+	// Outcome discriminator + reserved async terminal states
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Test void b01_syncOutcomeWireTokens() {
@@ -125,7 +125,7 @@ class ActionResult_Contract_Test extends TestBase {
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
-	// Refusals are an opaque, namespaced code (HIGH-2)
+	// Refusals are an opaque, namespaced code
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Test void c01_refusal_carriesOpaqueCode_noRowNoReplay() {

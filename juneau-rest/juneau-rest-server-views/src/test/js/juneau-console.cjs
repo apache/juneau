@@ -166,7 +166,7 @@ const out = {};
 })();
 
 //----------------------------------------------------------------------------------------------------------------
-// footer.text renders as trusted HTML (P24 revised 2026-10-02): an entity decodes and inline markup becomes a
+// footer.text renders as trusted HTML: an entity decodes and inline markup becomes a
 // real element, not literal escaped text.
 //----------------------------------------------------------------------------------------------------------------
 (function footerHtml() {
@@ -371,17 +371,6 @@ out.errors = {};
 	out.errors['12'] = { threw: threw2 };
 })();
 
-// E-JS-13: console-output card with no JuneauViews.consoleOutput loaded (not fatal; deferred to DOMContentLoaded).
-(function () {
-	const r = run(C({ cards: [{ id: 'co', type: 'console-output', output: { linesUrl: '/runs/1/lines' } }] }), []);
-	out.errors['13'] = {
-		threw: r.threw,
-		errors: r.errors,
-		banner: bannerText(r.doc),
-		bodyRendered: !!r.doc.querySelector('#co-body.jc-card-body')
-	};
-})();
-
 // E-JS-14: run-view card with no JuneauViews.runView loaded (not fatal; deferred to DOMContentLoaded).
 (function () {
 	const r = run(C({ cards: [{ id: 'rv', type: 'run-view', runView: { eventsUrl: '/runs/1/events' } }] }), []);
@@ -390,26 +379,6 @@ out.errors = {};
 		errors: r.errors,
 		banner: bannerText(r.doc),
 		bodyRendered: !!r.doc.querySelector('#rv-body.jc-card-body')
-	};
-})();
-
-// E-JS-8 (console-output): JuneauViews.consoleOutput.mount throws synchronously inside onReady.  Not fatal; the card
-// host stays in the DOM because the throw happens after mount() returned.
-(function () {
-	const r = run(C({ cards: [{ id: 'co', type: 'console-output', output: {} }] }), [], {
-		before: sandbox => {
-			sandbox.window.JuneauViews = {
-				consoleOutput: {
-					mount: function () { throw new Error("console-output region 'co-body': linesUrl is required"); }
-				}
-			};
-		}
-	});
-	out.errors['8co'] = {
-		threw: r.threw,
-		errors: r.errors,
-		banner: bannerText(r.doc),
-		hostRendered: !!r.doc.querySelector('#co')
 	};
 })();
 
@@ -427,48 +396,6 @@ out.errors = {};
 	out.custom = {
 		cardText: txt(r.doc, '#k1'),
 		resultHasCard: !!result.cards.k1
-	};
-})();
-
-//----------------------------------------------------------------------------------------------------------------
-// Console-output bridge: with JuneauViews.consoleOutput stubbed, each console-output card calls mount() once on
-// DOMContentLoaded with (its own "<id>-body" element, a copy of card.output, {}).
-//----------------------------------------------------------------------------------------------------------------
-(function consoleOutputBridge() {
-	const calls = [];
-	let callsBeforeReady = -1;
-	const r = run(C({ cards: [
-		{ id: 'co1', type: 'console-output', title: 'Output', output: { linesUrl: '/runs/1/lines', rows: 20, title: 'Build' } },
-		{ id: 'co2', type: 'console-output', output: { linesUrl: '/runs/2/lines' } }
-	] }), [], {
-		before: sandbox => {
-			sandbox.window.JuneauViews = {
-				consoleOutput: {
-					mount: function (el, options, ctx) {
-						calls.push({
-							elId: el.id,
-							elClass: el.className,
-							hostId: el.parentNode ? el.parentNode.id : null,
-							options: options,
-							ctx: ctx
-						});
-						return function () { /* cleanup is discarded by the shell */ };
-					}
-				}
-			};
-		},
-		after: () => { callsBeforeReady = calls.length; }
-	});
-	const idCounts = {};
-	for (const e of r.doc.querySelectorAll('[id]')) idCounts[e.id] = (idCounts[e.id] || 0) + 1;
-	out.consoleOutput = {
-		threw: r.threw,
-		errors: r.errors,
-		callsBeforeReady: callsBeforeReady,
-		calls: calls,
-		cardTitle: txt(r.doc, '.jc-card-title'),
-		resultCards: r.result ? Object.keys(r.result.cards) : null,
-		duplicateIds: Object.keys(idCounts).filter(k => idCounts[k] > 1)
 	};
 })();
 
@@ -532,7 +459,7 @@ out.errors = {};
 
 //----------------------------------------------------------------------------------------------------------------
 // ADDENDUM 1: href safety, exercised indirectly via nav-link rendering (isSafeHref/isProtocolRelativeUrl are not
-// exported - see the Task 5 addendum).  A rejected href never gets a DOM element at all (see link()'s
+// exported - see the addendum).  A rejected href never gets a DOM element at all (see link()'s
 // `if (!a) continue;` in renderNav's row() closure); an accepted href keeps the exact original string.
 //----------------------------------------------------------------------------------------------------------------
 (function hrefSafetyNav() {

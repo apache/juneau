@@ -18,8 +18,8 @@
 /*
  * juneau-terminal.js - the terminal region: a command's raw output rendered by xterm.js.
  *
- * Publishes window.JuneauTerminal = { mount, createEngine, createInput, linkFor, fitFont, findNext, parseHash, formatSize,
- * linkHandlerFor, handle } and queues the "terminal" console card handler on window.JuneauConsoleCards.
+ * Publishes window.JuneauTerminal = { mount, createEngine, createInput, linkFor, nudgeLinkFor, fitFont, findNext, parseHash, xtermOptions,
+ * formatSize, linkHandlerFor, handle } and queues the "terminal" console card handler on window.JuneauConsoleCards.
  *
  * LOAD ORDER: after xterm.js (window.Terminal).  The console shell may load before or after this file: the card
  * queue covers both orders.
@@ -44,8 +44,11 @@
 
 	const LOG_TAG = "[juneau-terminal]";
 	const SCROLLBACK = 100000;
+	const MAX_SCROLLBACK = 1000000;
 	const DEFAULT_REFRESH_MS = 1000;
 	const IDLE_REFRESH_MS = 5000;
+	/** Poll interval while bus nudges arrive: the poll is then only a safety net. */
+	const NUDGE_REFRESH_MS = 5000;
 	const IDLE_AFTER_EMPTY = 3;
 	const EVENTS_GIVE_UP = 5;
 	const RETRY_MS = [1000, 2000, 5000, 10000];
@@ -169,13 +172,13 @@
 			emptyPolls: 0, eventsEmpty: 0, failures: 0, steps: [], lines: new Map(), checkpoints: [], pendingScroll: null,
 			follow: true, timer: null, ctl: null, offVisible: null, stopped: false, destroyed: false, started: false,
 			exit: null, signal: null, doneStatus: null, badge: "Connecting", kind: "running", reconnecting: false,
-			banner: null
+			banner: null, nudged: false, linked: false, ticking: false, nudgePending: false, nudgeEnd: 0, nudgeDone: false
 		};
 
 		function status() {
 			return {
 				badge: s.badge, kind: s.kind, reconnecting: s.reconnecting, banner: s.banner, follow: s.follow,
-				next: s.next, writtenTo: s.writtenTo, trimmedFrom: s.trimmedFrom, stopped: s.stopped
+				next: s.next, writtenTo: s.writtenTo, trimmedFrom: s.trimmedFrom, stopped: s.stopped, nudged: s.nudged
 			};
 		}
 
@@ -477,6 +480,10 @@
 		function halt() {
 			s.stopped = true;
 			s.gen++;
+			s.ticking = false;
+			s.nudgePending = false;
+			s.nudgeEnd = 0;
+			s.nudgeDone = false;
 			clearTimer();
 			if (s.ctl)
 				s.ctl.abort();
@@ -496,6 +503,7 @@
 				return;
 			}
 			const gen = s.gen;
+			s.ticking = true;
 			try {
 				if (!s.eventsDone)
 					await pollEvents(gen);
@@ -518,13 +526,67 @@
 					return;
 				}
 				setBadge("Running", "running");
-				const idle = (s.bytesDone ? s.eventsEmpty : s.emptyPolls) >= IDLE_AFTER_EMPTY;
-				schedule(idle ? IDLE_REFRESH_MS : refreshMs);
+				schedule(s.nudged ? Math.max(refreshMs, NUDGE_REFRESH_MS) : (isIdle() ? IDLE_REFRESH_MS : refreshMs));
 			} catch (e) {
 				if (gen !== s.gen || s.stopped)
 					return;
 				onFailure(e);
+			} finally {
+				// A superseded tick (replay, halt) leaves the flags to the tick that replaced it.
+				if (gen === s.gen) {
+					s.ticking = false;
+					// A failed tick has already scheduled its retry (failures > 0).
+					const follow = s.nudgePending && !s.stopped && s.failures === 0
+						&& (s.nudgeEnd > s.next || (s.nudgeDone && !s.bytesDone));
+					s.nudgePending = false;
+					s.nudgeEnd = 0;
+					s.nudgeDone = false;
+					if (follow) {
+						clearTimer();
+						tick();
+					}
+				}
 			}
+		}
+
+		/** True once enough polls came back empty that the card has settled into the slow idle interval. */
+		function isIdle() {
+			return (s.bytesDone ? s.eventsEmpty : s.emptyPolls) >= IDLE_AFTER_EMPTY;
+		}
+
+		/** A bus nudge reported that the terminal's bytes now end at {@code p.end}: fetch now if that is ahead of what is read. */
+		function nudge(p) {
+			if (s.stopped || s.destroyed || !s.probed)
+				return;
+			if (!p || !Number.isSafeInteger(p.end) || p.end < 0)
+				return;
+			if (s.linked)
+				s.nudged = true;
+			// A retry is waiting out its back-off: a nudge must not skip it.
+			if (s.failures > 0)
+				return;
+			if (!(p.end > s.next || (p.done === true && !s.bytesDone)))
+				return;
+			if (s.ticking) {
+				s.nudgePending = true;
+				s.nudgeEnd = Math.max(s.nudgeEnd, p.end);
+				s.nudgeDone = s.nudgeDone || p.done === true;
+				return;
+			}
+			// clearTimer first: it also drops a pending hidden-tab listener, so the re-entered tick registers exactly one.
+			clearTimer();
+			tick();
+		}
+
+		/** Reports whether the bus link that carries nudges is up; while it is down the poll runs at its normal pace. */
+		function nudgeConnected(on) {
+			s.linked = !!on;
+			if (!on && s.nudged) {
+				s.nudged = false;
+				if (s.timer !== null && s.failures === 0)
+					schedule(isIdle() ? IDLE_REFRESH_MS : refreshMs);
+			}
+			emit();
 		}
 
 		function onFailure(e) {
@@ -556,6 +618,10 @@
 				return;
 			s.stopped = false;
 			s.gen++;
+			s.ticking = false;
+			s.nudgePending = false;
+			s.nudgeEnd = 0;
+			s.nudgeDone = false;
 			clearTimer();
 			if (s.ctl)
 				s.ctl.abort();
@@ -604,6 +670,8 @@
 			},
 			lineFor: lineFor,
 			status: status,
+			nudge: nudge,
+			nudgeConnected: nudgeConnected,
 			terminal: function () { return s.term; }
 		};
 	}
@@ -649,11 +717,12 @@
 	 * answer to a pending probe arms.  denied and closed apply whenever they come; busy marks the last frame dropped.
 	 * While armed, keys are batched every 100 ms or at 4096 UTF-8 bytes, one frame per tick, split on code points.
 	 * A chunk that would take the unsent queue past 256 KiB is refused whole (never truncated) and the chip says so until
-	 * the next accepted chunk.
+	 * the next accepted chunk.  A busy report from the sink is shown the same way: the throttled chip stays through the drain
+	 * until the next accepted chunk, since the sink sends no all-clear.
 	 */
 	function createInput(opts, env) {
 		const id = opts.inputId;
-		const s = { state: "idle", chip: null, chipState: null, queue: "", refused: false, timer: null, probeTimer: null, probeSeq: 0,
+		const s = { state: "idle", chip: null, chipState: null, queue: "", refused: false, throttled: false, timer: null, probeTimer: null, probeSeq: 0,
 			pending: null, lastEsc: null, connected: true, disposed: false };
 
 		function view() {
@@ -692,7 +761,7 @@
 			const head = headOf(s.queue, MAX_FRAME_BYTES);
 			s.queue = s.queue.slice(head.length);
 			env.publish({ id: id, data: head });
-			if (s.state === "armed" && !s.refused && s.chip !== "Input live")
+			if (s.state === "armed" && !s.refused && !s.throttled && s.chip !== "Input live")
 				setChip("Input live", "live");
 			s.timer = env.setTimeout(tick, FLUSH_MS);
 		}
@@ -712,7 +781,7 @@
 			clearFlush();
 			if (flush && was && s.queue)
 				env.publish({ id: id, data: headOf(s.queue, MAX_FRAME_BYTES) });
-			s.queue = "";    // no s.refused reset: the queue is empty, and an accepted chunk clears the flag before any frame
+			s.queue = "";    // no s.refused/s.throttled reset: the queue is empty, and an accepted chunk clears the flag before any frame
 			s.lastEsc = null;
 			s.state = next;
 			if (was)
@@ -760,6 +829,7 @@
 					return;
 				clearProbe();
 				s.state = "armed";
+				s.throttled = false;
 				setChip("Input live", "live");
 				env.armed(true);
 			} else if (p.state === "denied" || p.state === "closed") {
@@ -770,6 +840,7 @@
 			} else if (p.state === "busy") {
 				if (s.state !== "armed")
 					return;
+				s.throttled = true;
 				setChip("Input throttled: some keys not sent", "warn");
 			} else {
 				return;
@@ -789,6 +860,7 @@
 				return;
 			}
 			s.refused = false;
+			s.throttled = false;
 			s.queue += d;
 			if (s.timer !== null)
 				return;
@@ -883,12 +955,58 @@
 	}
 
 	/**
-	 * Mounts a terminal region in {@code host}.  {@code opts} is the card's terminal object plus its {@code id}:
-	 * {bytesUrl, eventsUrl?, refreshMs?, title?, tailBytes?, id?, input?, inputId?}.  {@code link}, optional, is the
-	 * input path: {publish(payload), onConnected(fn) -> off?}.  The input toggle appears only with input, inputId and a
-	 * link.  Returns a cleanup that stops polling and removes the region.
+	 * The xterm constructor options: {@code base} (Juneau-owned) plus the allowlisted keys of {@code extra} with the right
+	 * type.  {@code convertEol} must be a boolean, {@code scrollback} an integer from 0 to 1,000,000, {@code fontFamily} a
+	 * non-empty string.  Every other key, including the Juneau-owned cols/rows/disableStdin/linkHandler/allowProposedApi/
+	 * fontSize/cursorBlink, is ignored ({@code scrollback} is in {@code base} but deliberately overridable).  Returns a
+	 * new object.
 	 */
-	function mount(host, opts, link) {
+	function xtermOptions(base, extra) {
+		const o = Object.assign({}, base);
+		if (!extra || typeof extra !== "object" || Array.isArray(extra))
+			return o;
+		const convertEol = extra.convertEol;
+		const scrollback = extra.scrollback;
+		const fontFamily = extra.fontFamily;
+		if (typeof convertEol === "boolean")
+			o.convertEol = convertEol;
+		if (typeof scrollback === "number" && Number.isSafeInteger(scrollback) && scrollback >= 0 && scrollback <= MAX_SCROLLBACK)
+			o.scrollback = scrollback;
+		if (isStr(fontFamily) && fontFamily)
+			o.fontFamily = fontFamily;
+		return o;
+	}
+
+	/**
+	 * The xterm colour theme for the page's current scheme, read from the {@code --jc-term-*} tokens on the root element.
+	 * A missing token falls back to xterm's own default theme (white on black), so a page without the tokens looks unchanged.
+	 */
+	function termTheme(doc) {
+		const cs = doc.defaultView.getComputedStyle(doc.documentElement);
+		function token(name, fallback) {
+			const v = cs.getPropertyValue(name);
+			return isStr(v) && v.trim() ? v.trim() : fallback;
+		}
+		const background = token("--jc-term-bg", "#000000");
+		return {
+			background: background,
+			foreground: token("--jc-term-fg", "#ffffff"),
+			cursor: token("--jc-term-cursor", "#ffffff"),
+			cursorAccent: background,
+			selectionBackground: token("--jc-term-selection", "rgba(255,255,255,0.3)")
+		};
+	}
+
+	/**
+	 * Mounts a terminal region in {@code host}.  {@code opts} is the card's terminal object plus its {@code id}:
+	 * {bytesUrl, eventsUrl?, refreshMs?, title?, tailBytes?, id?, input?, inputId?, terminal?}.  {@code terminal}, optional,
+	 * is an object of xterm options: {convertEol? (boolean), scrollback? (integer 0 to 1,000,000), fontFamily? (non-empty string)}.  Other keys
+	 * and wrong-typed values are ignored; the size, input, link and font-size options stay Juneau's.  {@code link}, optional, is the
+	 * input path: {publish(payload), onConnected(fn) -> off?}.  The input toggle appears only with input, inputId and a
+	 * link.  {@code nudgeLink}, optional, is {onConnected(fn) -> off?}: the state of the bus link that carries nudges, which
+	 * the card routes to the engine through {@code roles.nudge}.  Returns a cleanup that stops polling and removes the region.
+	 */
+	function mount(host, opts, link, nudgeLink) {
 		const doc = host.ownerDocument;
 		const win = doc.defaultView;
 		if (typeof win.Terminal !== "function")
@@ -1029,10 +1147,10 @@
 				return function () { doc.removeEventListener("visibilitychange", h); };
 			},
 			open: function (cols, rows) {
-				term = new win.Terminal({
+				term = new win.Terminal(xtermOptions({
 					cols: cols, rows: rows, scrollback: SCROLLBACK, disableStdin: !armed, allowProposedApi: false,
-					fontSize: BASE_FONT, cursorBlink: false, linkHandler: linkHandler
-				});
+					fontSize: BASE_FONT, cursorBlink: false, linkHandler: linkHandler, theme: termTheme(doc)
+				}, opts.terminal));
 				if (input) {
 					term.onData(function (d) { input.onData(d); });
 					term.attachCustomKeyEventHandler(function (e) { return input.onKeyDown(e); });
@@ -1050,6 +1168,15 @@
 			},
 			onStatus: render
 		});
+
+		let offNudge = null;
+		if (nudgeLink && isStr(opts.id) && opts.id) {
+			NUDGES.set(opts.id, engine);
+			if (typeof nudgeLink.onConnected === "function") {
+				const off = nudgeLink.onConnected(function (on) { engine.nudgeConnected(on); });
+				offNudge = typeof off === "function" ? off : null;
+			}
+		}
 
 		search.addEventListener("keydown", function (e) {
 			if (e.key !== "Enter" || !term)
@@ -1079,6 +1206,12 @@
 		}
 		win.addEventListener("hashchange", onHash);
 
+		function onTheme() {
+			if (term)
+				term.options.theme = termTheme(doc);
+		}
+		doc.addEventListener("juneau:theme-changed", onTheme);
+
 		render(engine.status());
 		engine.start();
 		onHash();
@@ -1100,8 +1233,13 @@
 			}
 			if (offConnected)
 				offConnected();
+			if (offNudge)
+				offNudge();
+			if (NUDGES.get(opts.id) === engine)
+				NUDGES.delete(opts.id);
 			engine.stop();
 			win.removeEventListener("hashchange", onHash);
+			doc.removeEventListener("juneau:theme-changed", onTheme);
 			if (ro)
 				ro.disconnect();
 			if (term)
@@ -1116,6 +1254,9 @@
 
 	/** Card id -> the input state machine of the terminal currently mounted for it, when that card takes input. */
 	const INPUTS = new Map();
+
+	/** Card id -> the engine of the terminal currently mounted for it, when the card subscribes to nudges. */
+	const NUDGES = new Map();
 
 	/** The handle of the terminal mounted for the card, or null when the card is not mounted (yet). */
 	function handle(id) {
@@ -1139,13 +1280,41 @@
 		};
 	}
 
+	/**
+	 * The bridge that carries a nudge topic: the id of the first bridge in {@code contract} whose downstream lists
+	 * {@code topic} exactly.  Null when there is none.
+	 */
+	function nudgeLinkFor(contract, topic) {
+		const bridges = contract && Array.isArray(contract.bridges) ? contract.bridges : [];
+		for (const b of bridges) {
+			if (b && isStr(b.id) && Array.isArray(b.downstream) && b.downstream.includes(topic))
+				return b.id;
+		}
+		return null;
+	}
+
+	/** The nudge link for a card that subscribes to a nudge topic and whose topic a bridge carries.  Null otherwise. */
+	function cardNudgeLink(card, ctx) {
+		const entry = (card.subscribes || []).find(function (e) { return e && e.as === "nudge" && isStr(e.topic) && !e.topic.endsWith(":*"); });
+		if (!entry || !ctx || typeof ctx.subscribe !== "function")
+			return null;
+		const jc = window.JuneauConsole;
+		const contract = jc && typeof jc.contract === "function" ? jc.contract() : null;
+		const id = nudgeLinkFor(contract, entry.topic);
+		if (id === null)
+			return null;
+		return {
+			onConnected: function (fn) { return ctx.subscribe("bridge:" + id, function (st) { fn(!!st && st.state === "open"); }); }
+		};
+	}
+
 	const cardHandler = {
 		render: function (card, host, ctx) {
 			const prev = MOUNTED.get(host);
 			if (prev)
 				prev();
 			const terminal = card.terminal || {};
-			MOUNTED.set(host, mount(host, Object.assign({ id: card.id }, terminal), terminal.input === true ? cardLink(ctx) : null));
+			MOUNTED.set(host, mount(host, Object.assign({ id: card.id }, terminal), terminal.input === true ? cardLink(ctx) : null, cardNudgeLink(card, ctx)));
 		},
 		destroy: function (card, host) {
 			const cleanup = MOUNTED.get(host);
@@ -1160,13 +1329,18 @@
 				const i = card ? INPUTS.get(card.id) : null;
 				if (i)
 					i.onStatus(payload);
+			},
+			nudge: function (payload, meta, card) {
+				const e = card ? NUDGES.get(card.id) : null;
+				if (e)
+					e.nudge(payload);
 			}
 		}
 	};
 
 	window.JuneauTerminal = Object.freeze({
-		mount: mount, createEngine: createEngine, createInput: createInput, linkFor: linkFor, fitFont: fitFont,
-		findNext: findNext, parseHash: parseHash,
+		mount: mount, createEngine: createEngine, createInput: createInput, linkFor: linkFor, nudgeLinkFor: nudgeLinkFor, fitFont: fitFont,
+		findNext: findNext, parseHash: parseHash, xtermOptions: xtermOptions,
 		formatSize: formatSize, linkHandlerFor: linkHandlerFor, handle: handle
 	});
 	(window.JuneauConsoleCards = window.JuneauConsoleCards || []).push(["terminal", cardHandler]);

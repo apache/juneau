@@ -64,9 +64,14 @@ class FakeEventSource {
 	}
 	addEventListener(type, fn) { (this.listeners[type] = this.listeners[type] || []).push(fn); }
 	close() { this.readyState = 2; }
-	emit(type, data) { if (this.readyState !== 2) (this.listeners[type] || []).slice().forEach(fn => fn({ type, data })); }
+	// id (optional) is the SSE id the server sent with the event; it is set as the event's lastEventId, as a browser does.
+	emit(type, data, id) { if (this.readyState !== 2) this.dispatch(type, data, id); }
 	// Delivers an event even after close(): simulates the browser race where a queued event fires after the runtime closed the stream.
-	forceEmit(type, data) { (this.listeners[type] || []).slice().forEach(fn => fn({ type, data })); }
+	forceEmit(type, data, id) { this.dispatch(type, data, id); }
+	dispatch(type, data, id) {
+		const ev = id === undefined ? { type, data } : { type, data, lastEventId: String(id) };
+		(this.listeners[type] || []).slice().forEach(fn => fn(ev));
+	}
 	fail(readyState) { this.readyState = readyState; (this.listeners.error || []).slice().forEach(fn => fn({ type: 'error' })); }
 }
 
@@ -113,7 +118,8 @@ function load(opts) {
 			});
 			return (opts.fetch || (() => ok(REF)))(String(url), init);
 		},
-		setTimeout: fn => { fn(); return 0; }, clearTimeout: () => {},
+		setTimeout: opts.timers ? (fn => { opts.timers.push(fn); return opts.timers.length; }) : (fn => { fn(); return 0; }),
+		clearTimeout: opts.timers ? (id => { opts.timers[id - 1] = null; }) : () => {},
 		setInterval: () => 0, clearInterval: () => {}
 	};
 	w.window = w;
@@ -294,7 +300,7 @@ const out = {};
 		const cancelling = state(r);
 		await flush();
 		r.es[0].forceEmit('result', result('success', 'too late'));
-		out.cancel = { cancelling, fetches: r.fetches.map(f => ({ url: f.url, method: f.method, csrf: f.csrf })), state: state(r), closed: r.es[0].readyState };
+		out.cancel = { cancelling, fetches: r.fetches.map(f => ({ url: f.url, method: f.method, csrf: f.csrf, contentType: f.contentType, body: f.url === REF.cancelUrl ? f.body : undefined })), state: state(r), closed: r.es[0].readyState };
 	} catch (e) { const c = { crash: String(e && e.stack || e) }; out.cancel = c; }
 
 	// 9. Reload re-attach: the URL param matches the stored job.
@@ -332,10 +338,11 @@ const out = {};
 
 	// 12. Not found: the stream closes before any event.
 	try {
-		const r = load({ search: '?job=j1&tab=a', storage: { [KEY]: JSON.stringify(REF) } });
+		const r = load({ search: '?job=j1&tab=a', storage: { [KEY]: JSON.stringify(REF) }, fetch: () => bad(404, {}), timers: [] });
 		r.mount([CARD]);
 		await flush();
 		r.es[0].fail(2);
+		await flush();
 		out.notFound = {
 			lines: lines(r),
 			notice: all(r, '.jc-joblog-notice').length,
@@ -344,6 +351,22 @@ const out = {};
 			state: state(r)
 		};
 	} catch (e) { const c = { crash: String(e && e.stack || e) }; out.notFound = c; }
+
+	// 12b. A refused attach that is not a 404 (429, 5xx, a network failure) is a failed attach, not "Job not found": the stored
+	// job and the URL param stay so a reload can try again.
+	try {
+		const attach = async fetchImpl => {
+			const r = load({ search: '?job=j1&tab=a', storage: { [KEY]: JSON.stringify(REF) }, fetch: fetchImpl, timers: [] });
+			r.mount([CARD]);
+			await flush();
+			r.es[0].fail(2);
+			await flush();
+			return { lines: lines(r), stored: stored(r), replaced: r.replaced, state: state(r), probes: r.fetches.map(f => f.url),
+				live: one(r, '.jc-joblog-output').getAttribute('aria-live'), announced: announced(r) };
+		};
+		out.attachFailed = { busy: await attach(() => bad(429, {})), server: await attach(() => bad(503, {})),
+			network: await attach(() => Promise.reject(new TypeError('down'))) };
+	} catch (e) { const c = { crash: String(e && e.stack || e) }; out.attachFailed = c; }
 
 	// 13. Interrupted: a reconnecting error is ignored; a close after events is a warning, prefs kept.
 	try {
@@ -418,9 +441,10 @@ const out = {};
 		r.mount([CARD]);
 		await flush();
 		await submit(r);
+		one(r, '.jc-joblog-submit').focus();
 		await clickSubmitButton(r);
 		await flush();
-		const afterFailedCancel = Object.assign(state(r), { open: r.es[0].readyState });
+		const afterFailedCancel = Object.assign(state(r), { open: r.es[0].readyState, focus: focused(r) });
 		r.es[0].emit('result', result('success'));
 		out.cancelFailed = { afterFailedCancel, fetches: r.fetches.map(f => f.url), state: state(r) };
 	} catch (e) { const c = { crash: String(e && e.stack || e) }; out.cancelFailed = c; }
@@ -439,29 +463,28 @@ const out = {};
 		out.required = { blocked, fetches: r.fetches.length, invalidAfter: reason.getAttribute('aria-invalid'), phase: state(r).phase };
 	} catch (e) { const c = { crash: String(e && e.stack || e) }; out.required = c; }
 
-	// 20. Reconnect: AsyncJobsMixin replays the buffer from the start (no event ids), so after a drop the runtime skips
-	// the lines it already shows; the stream stays open while the browser retries.
+	// 20. Reconnect: every progress event carries an SSE id and the browser's own reconnect sends Last-Event-ID, so the
+	// server resumes after the last event shown; the runtime just shows what arrives, and the stream stays open while
+	// the browser retries.
 	try {
 		const r = load();
 		r.mount([CARD]);
 		await flush();
 		await submit(r);
 		const es = r.es[0];
-		es.emit('progress', 'p1');
-		es.emit('progress', 'p2');
+		es.emit('progress', 'p1', 1);
+		es.emit('progress', 'p2', 2);
 		es.fail(0);
 		const dropped = { phase: state(r).phase, readyState: es.readyState, banner: state(r).banner };
 		es.readyState = 1;
 		es.emit('open');
-		es.emit('progress', 'p1');
-		es.emit('progress', 'p2');
-		es.emit('progress', 'p3');
+		es.emit('progress', 'p3', 3);
 		const afterFirst = lines(r);
-		// A second drop part-way through the replay.
+		// A second drop; the server resumes after id 3.
 		es.fail(0);
 		es.readyState = 1;
 		es.emit('open');
-		for (const l of ['p1', 'p2', 'p3', 'p4']) es.emit('progress', l);
+		es.emit('progress', 'p4', 4);
 		es.emit('result', result('success'));
 		out.reconnect = { dropped, afterFirst, lines: lines(r), streams: r.es.length, state: state(r) };
 	} catch (e) { const c = { crash: String(e && e.stack || e) }; out.reconnect = c; }
@@ -485,7 +508,8 @@ const out = {};
 		await flush();
 		await clickSubmitButton(p);
 		await flush();
-		const poisoned = { phase: state(p).phase, streams: p.es.length, fetches: p.fetches.length, errors: p.errors };
+		const poisoned = { phase: state(p).phase, streams: p.es.length, fetches: p.fetches.length, errors: p.errors,
+			stored: stored(p), search: p.w.location.search };
 		const abs = load({ fetch: url => url.endsWith('/cancel') ? ok(JSON.parse(result('cancelled'))) :
 			ok({ jobId: 'j1', streamUrl: 'http://juneau.test/jobs/j1/stream', cancelUrl: 'http://juneau.test/jobs/j1/cancel' }) }); // NOSONAR javascript:S5332 -- the shim's fake in-memory origin
 		abs.mount([CARD]);
@@ -534,7 +558,8 @@ const out = {};
 		};
 		out.crossEndpoint = {};
 		for (const [k, ep] of [['backslash', '\\evil.test/x'], ['protocolRelative', '//evil.test'], ['leadingSpace', ' //evil.test'],
-				['absolute', 'https://evil.test/jobs/rebuild'], ['sameOrigin', '/jobs/rebuild']])
+				['absolute', 'https://evil.test/jobs/rebuild'], ['sameOrigin', '/jobs/rebuild'],
+				['sameOriginQuery', '/jobs/x?a=b'], ['relative', 'jobs/x']])
 			out.crossEndpoint[k] = await tryEndpoint(ep);
 	} catch (e) { const c = { crash: String(e && e.stack || e) }; out.crossEndpoint = c; }
 
@@ -558,6 +583,99 @@ const out = {};
 		await submit(r, { reason: '' });
 		out.bannerOrder = { events, state: state(r) };
 	} catch (e) { const c = { crash: String(e && e.stack || e) }; out.bannerOrder = c; }
+
+	// 25. An id-less stream (an older server): every line is shown, across a drop too.
+	try {
+		const r = load();
+		r.mount([CARD]);
+		await flush();
+		await submit(r);
+		const es = r.es[0];
+		es.emit('progress', 'p1');
+		es.emit('progress', 'p2');
+		es.fail(0);
+		es.readyState = 1;
+		es.emit('progress', 'p3');
+		es.emit('result', result('success'));
+		out.idless = { lines: lines(r), streams: r.es.length, state: state(r) };
+	} catch (e) { const c = { crash: String(e && e.stack || e) }; out.idless = c; }
+
+	// 26. A server that re-sends an event after a drop: the repeat is shown, never hidden (fail-loud).
+	try {
+		const r = load();
+		r.mount([CARD]);
+		await flush();
+		await submit(r);
+		const es = r.es[0];
+		es.emit('progress', 'p1', 1);
+		es.emit('progress', 'p2', 2);
+		es.fail(0);
+		es.readyState = 1;
+		es.emit('progress', 'p2', 2);
+		es.emit('progress', 'p3', 3);
+		es.emit('result', result('success'));
+		out.repeatedId = { lines: lines(r), streams: r.es.length, state: state(r) };
+	} catch (e) { const c = { crash: String(e && e.stack || e) }; out.repeatedId = c; }
+
+	// 27. A reattach replays the buffer in a burst: the log pane is silenced (aria-live off) while the lines arrive and one summary
+	// is announced once the burst goes quiet, then the pane is polite again for live lines.  A fresh submit is not silenced.
+	try {
+		const timers = [];
+		const r = load({ search: '?job=j1', storage: { [KEY]: JSON.stringify(REF) }, timers });
+		r.mount([CARD]);
+		await flush();
+		const live = () => one(r, '.jc-joblog-output').getAttribute('aria-live');
+		const before = live();
+		for (const t of ['a', 'b', 'c']) r.es[0].emit('progress', t);
+		const during = { live: live(), announced: announced(r), lines: lines(r) };
+		for (const fn of timers.splice(0)) if (fn) fn();
+		const after = { live: live(), announced: announced(r) };
+		r.es[0].emit('progress', 'd');
+		const fresh = load({ timers: [] });
+		fresh.mount([CARD]);
+		await flush();
+		await submit(fresh);
+		out.replayQuiet = { before, during, after, lines: lines(r), freshLive: one(fresh, '.jc-joblog-output').getAttribute('aria-live') };
+	} catch (e) { const c = { crash: String(e && e.stack || e) }; out.replayQuiet = c; }
+
+	// 28. A replay also ends when the job finishes during it (polite again, no summary), when the stream is refused (polite again), and at
+	// the cap even if lines keep arriving; the attach probe is aborted when the card is torn down, and a probe that never answers reads
+	// as a failed attach.
+	try {
+		const live = r => one(r, '.jc-joblog-output').getAttribute('aria-live');
+		const reattach = async (extra) => {
+			const timers = [];
+			const r = load(Object.assign({ search: '?job=j1', storage: { [KEY]: JSON.stringify(REF) }, timers }, extra || {}));
+			r.mount([CARD]);
+			await flush();
+			return { r, timers };
+		};
+		const done = await reattach();
+		done.r.es[0].emit('progress', 'a');
+		done.r.es[0].emit('result', result('success'));
+		const resultDuring = { live: live(done.r), announced: announced(done.r), state: state(done.r) };
+		const cap = await reattach();
+		for (const t of ['a', 'b']) cap.r.es[0].emit('progress', t);
+		const beforeCap = live(cap.r);
+		cap.timers[0]();   // the cap timer is armed first; the quiet timer (still pending) is never fired
+		cap.r.es[0].emit('progress', 'c');
+		const atCap = { before: beforeCap, live: live(cap.r), announced: announced(cap.r) };
+		let aborted = 0;
+		const hang = await reattach({ fetch: (u, init) => new Promise((_, rej) => { if (init && init.signal) init.signal.addEventListener('abort', () => { aborted++; rej(new Error('aborted')); }); }) });
+		hang.r.es[0].fail(2);
+		await flush();
+		const probing = { phase: state(hang.r).phase, live: live(hang.r) };
+		for (const fn of hang.timers.splice(0)) if (fn) fn();   // the probe timeout
+		await flush();
+		const timedOut = { state: state(hang.r), aborted, stored: stored(hang.r) };
+		const torn = await reattach({ fetch: (u, init) => new Promise((_, rej) => { if (init && init.signal) init.signal.addEventListener('abort', () => { aborted++; rej(new Error('aborted')); }); }) });
+		torn.r.es[0].fail(2);
+		await flush();
+		const before = aborted;
+		torn.r.w.JuneauConsole.destroyCard('rebuild');
+		await flush();
+		out.replayEnds = { resultDuring, atCap, probing, timedOut, abortedOnTeardown: aborted - before };
+	} catch (e) { const c = { crash: String(e && e.stack || e) }; out.replayEnds = c; }
 
 	process.stdout.write(JSON.stringify(out));
 })().catch(e => {

@@ -43,7 +43,7 @@ import com.nimbusds.oauth2.sdk.http.*;
  * 		re-registers via DCR and stores under the new issuer &mdash; the old AS's entry is never reused (SEP-2352
  * 		"MUST NOT reuse client credentials from a different authorization server").
  * 	<li><b>On-demand mode</b> (no store) performs a fresh DCR on every {@link #resolve(OidcMetadata)} call &mdash; fully
- * 		compliant (READY-312f Q8).
+ * 		compliant (persisting a registration is optional).
  * 	<li>If the AS advertises no {@code registration_endpoint} and no matching pre-registered credentials exist, an
  * 		{@link McpAuthException} is thrown (no way to obtain a {@code client_id}; CIMD is a tracked fast-follow).
  * </ul>
@@ -85,7 +85,7 @@ public class McpClientRegistrationManager {
 
 		/**
 		 * Sets the optional issuer-keyed credential store.  When omitted, the manager runs in on-demand mode and
-		 * performs a fresh DCR on every {@code resolve(...)} call (compliant per Q8).
+		 * performs a fresh DCR on every {@code resolve(...)} call (compliant).
 		 *
 		 * @param value The store.  Must not be <jk>null</jk>.
 		 * @return This object.

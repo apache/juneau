@@ -176,7 +176,7 @@ public abstract class McpRestServlet extends org.apache.juneau.rest.server.mcp.A
 	}
 
 	/**
-	 * OAuth 2.1 resource-server bearer gate for the MCP {@code POST /} endpoint (READY-312f F2).
+	 * OAuth 2.1 resource-server bearer gate for the MCP {@code POST /} endpoint.
 	 *
 	 * <p>
 	 * A no-op unless {@link McpResourceServerConfig#isEnabled() RS auth is enabled}; when enabled, every request the
@@ -184,7 +184,7 @@ public abstract class McpRestServlet extends org.apache.juneau.rest.server.mcp.A
 	 * token or it is rejected with {@code 401} / {@code 403} and a {@code WWW-Authenticate: Bearer ...} challenge (see
 	 * {@link McpResourceServerSupport#gateMcpServlet(McpResourceServerConfig, HttpServletRequest, HttpServletResponse)}).
 	 * The gate reads the router-<i>resolved</i> method (honoring {@code ?method=}/{@code X-Method} overrides) rather than
-	 * the raw servlet method, so a method-override cannot slip past it (H3).  The well-known {@code GET} routes below are
+	 * the raw servlet method, so a method-override cannot slip past it.  The well-known {@code GET} routes below are
 	 * intentionally left unauthenticated so a client can discover the PRM document.
 	 *
 	 * @param req The raw HTTP request.
@@ -201,7 +201,7 @@ public abstract class McpRestServlet extends org.apache.juneau.rest.server.mcp.A
 	 * <p>
 	 * This route (and its path-inserted sibling) is registered unconditionally, but returns {@code 404} whenever RS auth
 	 * is {@link McpResourceServerConfig#isEnabled() disabled} &mdash; so a non-opted-in servlet claims the well-known
-	 * namespace but exposes no observable metadata (READY-312f F2, M7).
+	 * namespace but exposes no observable metadata.
 	 *
 	 * @param req The REST request.
 	 * @return The PRM document.
@@ -213,7 +213,7 @@ public abstract class McpRestServlet extends org.apache.juneau.rest.server.mcp.A
 
 	/**
 	 * Serves the RFC 9728 Protected Resource Metadata document at the path-inserted well-known location (SEP-2351), but
-	 * only when the requested suffix matches this resource's expected well-known path; otherwise {@code 404} (M5).
+	 * only when the requested suffix matches this resource's expected well-known path; otherwise {@code 404}.
 	 *
 	 * @param req The REST request.
 	 * @return The PRM document.

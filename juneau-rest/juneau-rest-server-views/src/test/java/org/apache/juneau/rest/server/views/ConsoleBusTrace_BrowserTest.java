@@ -26,7 +26,7 @@ import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.condition.*;
 
 /**
- * The bus trace flag in real Chromium (spec 6.4): {@code ?juneau-bus-trace} logs each publish as a {@code [bus]} console.debug line, and the
+ * The bus trace flag in real Chromium: {@code ?juneau-bus-trace} logs each publish as a {@code [bus]} console.debug line, and the
  * history ring records the master/detail traffic, including a suppressed unchanged publish, with or without the flag.
  */
 @EnabledIfSystemProperty(named=ConsoleBusBrowserSupport.GATE, matches="true", disabledReason=ConsoleBusBrowserSupport.DISABLED)

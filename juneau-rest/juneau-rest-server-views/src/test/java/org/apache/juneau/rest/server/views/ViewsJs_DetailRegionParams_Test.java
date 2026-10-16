@@ -26,7 +26,7 @@ import org.junit.jupiter.api.*;
 
 /**
  * A datatables catalog's {@code detail.region.params} are copied into the row-detail region's declared descriptor,
- * so a row-detail console-output region receives its params.  Drives {@code detail-region-params.cjs}.
+ * so a row-detail run-view region receives its params.  Drives {@code detail-region-params.cjs}.
  */
 class ViewsJs_DetailRegionParams_Test extends TestBase {
 

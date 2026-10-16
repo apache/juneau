@@ -46,7 +46,7 @@ import org.apache.juneau.commons.http.*;
  */
 public final class BadgeDef {
 
-	/** The minimum poll interval, in milliseconds (schema §4.8 {@code refreshMs.minimum}). */
+	/** The minimum poll interval, in milliseconds ({@code refreshMs.minimum}). */
 	public static final long MIN_REFRESH_MS = 5000L;
 
 	/** Default poll interval, in milliseconds, applied by {@code juneau-badges.js} when {@link #refreshMs} is unset. */
@@ -55,7 +55,7 @@ public final class BadgeDef {
 	/** Default tooltip item cap, applied by {@code juneau-badges.js} when {@link #tooltipMax} is unset. */
 	public static final int DEFAULT_TOOLTIP_MAX = 10;
 
-	/** {@code scope.by} wire tokens (schema §4.8). */
+	/** {@code scope.by} wire tokens. */
 	public enum ScopeBy {
 		/** Keys on the leaf of the page's {@code activeNav}. */
 		NAV("nav"),
@@ -68,7 +68,7 @@ public final class BadgeDef {
 		public String wire() { return wire; }
 	}
 
-	/** {@code placement} wire tokens (schema §4.8). */
+	/** {@code placement} wire tokens. */
 	public enum Placement {
 		/** Renders into {@code .jc-header-badges} at the end of the header actions area. */
 		HEADER("header"),
@@ -81,7 +81,7 @@ public final class BadgeDef {
 		public String wire() { return wire; }
 	}
 
-	/** {@code tone} wire tokens (schema §4.8). */
+	/** {@code tone} wire tokens. */
 	public enum Tone {
 		/** Informational tone. */
 		INFO("info"),
@@ -168,7 +168,7 @@ public final class BadgeDef {
 	}
 
 	/**
-	 * Sets this badge's scope (§4.3): the request param to key the poll on, how to resolve its value, and
+	 * Sets this badge's scope: the request param to key the poll on, how to resolve its value, and
 	 * (optionally) the authoritative value map.
 	 *
 	 * @param param The query parameter name sent with the poll.  Must not be <jk>null</jk> or blank.
@@ -185,10 +185,10 @@ public final class BadgeDef {
 	}
 
 	/**
-	 * Sets this badge's label templates (§4.4).
+	 * Sets this badge's label templates.
 	 *
 	 * @param value A map with any of the keys {@code one}, {@code other}, {@code mine}, each a {@code {total}}/
-	 * 	{@code {mine}} template.  Unset keys fall back to the stock IRS-equivalent defaults in {@code juneau-badges.js}.
+	 * 	{@code {mine}} template.  Unset keys fall back to the stock defaults in {@code juneau-badges.js}.
 	 * @return This object.
 	 */
 	public BadgeDef label(Map<String,String> value) {
@@ -197,7 +197,7 @@ public final class BadgeDef {
 	}
 
 	/**
-	 * Sets the tooltip popover's item cap (§4.5).
+	 * Sets the tooltip popover's item cap.
 	 *
 	 * @param value The cap, 0-50.  Not range-checked here; schema `$defs/badge.tooltipMax` enforces it for
 	 * 	FTL-declared badges, and an out-of-range Java value is simply clamped by {@code juneau-badges.js} at
@@ -210,7 +210,7 @@ public final class BadgeDef {
 	}
 
 	/**
-	 * Sets the click-target URL (§4.6).
+	 * Sets the click-target URL.
 	 *
 	 * @param value The destination.  Must be a same-origin path per {@link SafePathTemplate#isSameOriginPath(String)};
 	 * 	{@link #validate()} rejects anything else, and {@code juneau-badges.js} refuses an unsafe {@code href} again at
@@ -223,8 +223,8 @@ public final class BadgeDef {
 	}
 
 	/**
-	 * Sets the column {@code href}'s destination page filters on, via {@code JuneauViews.urlState.encode(...)}
-	 * (§4.6).  Requires a non-empty {@link #scope} to have any effect.
+	 * Sets the column {@code href}'s destination page filters on, via {@code JuneauViews.urlState.encode(...)}.
+	 * Requires a non-empty {@link #scope} to have any effect.
 	 *
 	 * @param column The destination table's filter column name.
 	 * @return This object.
@@ -236,7 +236,7 @@ public final class BadgeDef {
 
 	/**
 	 * Sets the card ids to {@code JuneauViews.tables.reload(el, {resetPaging: false})} when a previously-seen
-	 * item id drains from the badge's response (§4.1 step 6).
+	 * item id drains from the badge's response.
 	 *
 	 * <p>
 	 * Every id here must name a card on the page being rendered, unless it is also listed in
@@ -268,7 +268,7 @@ public final class BadgeDef {
 	}
 
 	/**
-	 * Sets where this badge renders (§4.7).
+	 * Sets where this badge renders.
 	 *
 	 * @param value {@link Placement#HEADER} (default) or {@link Placement#TOOLBAR}.
 	 * @return This object.
@@ -280,7 +280,7 @@ public final class BadgeDef {
 
 	/**
 	 * Sets the card id this badge is anchored to.  Required when {@link #placement} is {@link Placement#TOOLBAR}
-	 * (E-66) and when {@link #scope}'s {@code by} is {@link ScopeBy#VIEW} (R-7, uncoded).
+	 * (E-66) and when {@link #scope}'s {@code by} is {@link ScopeBy#VIEW} (uncoded).
 	 *
 	 * @param value The card id.
 	 * @return This object.
@@ -291,7 +291,7 @@ public final class BadgeDef {
 	}
 
 	/**
-	 * Sets this badge's tone (§4.11: Juneau's own tokens, not IRS's gold styling).
+	 * Sets this badge's tone.
 	 *
 	 * @param value {@link Tone#INFO}, {@link Tone#WARNING} (default) or {@link Tone#DANGER}.
 	 * @return This object.
@@ -302,7 +302,7 @@ public final class BadgeDef {
 	}
 
 	/**
-	 * Sets the dynamic-visibility rules gating this badge (§8.2); all must match (AND).
+	 * Sets the dynamic-visibility rules gating this badge; all must match (AND).
 	 *
 	 * @param value The rules, or none for an always-visible badge.
 	 * @return This object.
@@ -317,9 +317,10 @@ public final class BadgeDef {
 	 *
 	 * <p>
 	 * Enforces E-61 (no {@link #src}), a same-origin {@link #src} and {@link #href}, E-62 ({@link #refreshMs} below {@link #MIN_REFRESH_MS}), E-66
-	 * ({@link Placement#TOOLBAR} without {@link #table}), and R-7 (uncoded: {@link ScopeBy#VIEW} without
-	 * {@link #table}).  R-6's "table/refreshes name a real card id" and R-8's "scope.values key is a real nav
-	 * node id" need the rest of the page and run in {@code PageCapture} at {@code </@console>} instead (§4.10).
+	 * ({@link Placement#TOOLBAR} without {@link #table}), and the view-scope rule (uncoded: {@link ScopeBy#VIEW}
+	 * without
+	 * {@link #table}).  The "table/refreshes name a real card id" rule and the "scope.values key is a real nav
+	 * node id" need the rest of the page and run in {@code PageCapture} at {@code </@console>} instead.
 	 *
 	 * @throws IllegalArgumentException If this definition is not well-formed.
 	 */
@@ -339,7 +340,7 @@ public final class BadgeDef {
 	}
 
 	/**
-	 * Serializes this definition to the compact JSON the {@code header.badges[]} contract carries (§4.8), hand-built
+	 * Serializes this definition to the compact JSON the {@code header.badges[]} contract carries, hand-built
 	 * (rather than reflected) so the key set and order match the schema exactly.
 	 *
 	 * @return An ordered {@link Map} ready for {@code Json.of(...)}.

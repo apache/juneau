@@ -66,11 +66,11 @@ public class PendingChange {
 	 */
 	public PendingChange setPetId(long value) { petId = value; return this; }
 
-	/** @return The staged field, {@code "name"} or {@code "price"}. */
+	/** @return The staged field, one of {@code "name"}, {@code "price"}, {@code "species"}, {@code "status"} or {@code "tags"}. */
 	public String getField() { return field; }
 
 	/**
-	 * @param value The staged field, {@code "name"} or {@code "price"}.
+	 * @param value The staged field, one of {@code "name"}, {@code "price"}, {@code "species"}, {@code "status"} or {@code "tags"}.
 	 * @return This object.
 	 */
 	public PendingChange setField(String value) { field = value; return this; }

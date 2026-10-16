@@ -155,7 +155,7 @@ const PROBE = async function () {
 		drain();
 	}
 
-	// ---- Block F: the timestamp popup is a plain show/hide element - NOT a registered layer (SF-3) ----
+	// ---- Block F: the timestamp popup is a plain show/hide element - NOT a registered layer ----
 	{
 		const ts = document.createElement('div');
 		ts.id = 'juneau-ts-popup';

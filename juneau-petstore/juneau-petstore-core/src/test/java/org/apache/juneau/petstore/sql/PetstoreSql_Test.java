@@ -26,6 +26,7 @@ import org.apache.juneau.commons.beanquery.*;
 import org.apache.juneau.marshall.marshaller.*;
 import org.apache.juneau.petstore.console.data.*;
 import org.apache.juneau.petstore.dto.*;
+import org.apache.juneau.petstore.dto.Order;
 import org.apache.juneau.petstore.service.*;
 import org.apache.juneau.rest.server.datatables.*;
 import org.apache.juneau.rest.server.datatables.adapter.*;
@@ -42,6 +43,8 @@ import org.junit.jupiter.params.provider.*;
 class PetstoreSql_Test extends TestBase {
 
 	private static final String PET_COLUMNS = "[{\"data\":\"id\"},{\"data\":\"name\"},{\"data\":\"species\"},{\"data\":\"price\"},{\"data\":\"status\"}]";
+	private static final String ORDER_COLUMNS = "[{\"data\":\"id\"},{\"data\":\"petId\"},{\"data\":\"shipDate\"},{\"data\":\"status\"}]";
+	private static final String USER_COLUMNS = "[{\"data\":\"username\"},{\"data\":\"firstName\"},{\"data\":\"lastName\"},{\"data\":\"email\"},{\"data\":\"phone\"},{\"data\":\"userStatus\"}]";
 	private static final String AUDIT_COLUMNS = "[{\"data\":\"at\"},{\"data\":\"actor\"},{\"data\":\"action\"},{\"data\":\"entity\"},{\"data\":\"entityId\"},{\"data\":\"detail\"}]";
 
 	private static PetStore store;
@@ -125,5 +128,72 @@ class PetstoreSql_Test extends TestBase {
 			assertString(() -> "pet column '" + c + "'", String.valueOf(PetStore.PET_QUERY.getColumnType(c)), sql.pets().getColumnType(c));
 		for (var c : PetStore.AUDIT_QUERY.columns())
 			assertString(() -> "audit column '" + c + "'", String.valueOf(PetStore.AUDIT_QUERY.getColumnType(c)), sql.audit().getColumnType(c));
+		for (var c : PetStore.ORDER_QUERY.columns())
+			assertString(() -> "order column '" + c + "'", String.valueOf(PetStore.ORDER_QUERY.getColumnType(c)), sql.orders().getColumnType(c));
+		for (var c : PetStore.USER_QUERY.columns())
+			assertString(() -> "user column '" + c + "'", String.valueOf(PetStore.USER_QUERY.getColumnType(c)), sql.users().getColumnType(c));
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// d — orders
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@ParameterizedTest(name="{0}")
+	@CsvSource(delimiter='|', textBlock="""
+		d01 default order  | "start":0,"order":[{"column":0,"dir":"asc"}]
+		d02 status $eq     | "start":0,"order":[{"column":0,"dir":"asc"}],"columns":[{"data":"id"},{"data":"petId"},{"data":"shipDate"},{"data":"status","search":{"value":"$eq(PLACED)"}}]
+		d03 petId $eq      | "start":0,"order":[{"column":0,"dir":"asc"}],"columns":[{"data":"id"},{"data":"petId","search":{"value":"$eq(101)"}},{"data":"shipDate"},{"data":"status"}]
+		d04 global search  | "start":0,"search":{"value":"APPROVED"},"order":[{"column":0,"dir":"asc"}]
+		d05 no match       | "start":0,"search":{"value":"zzzz-no-such-order"},"order":[{"column":0,"dir":"asc"}]
+		""")
+	void d_ordersMatch(String name, String body) throws Exception {
+		var r = request(ORDER_COLUMNS, body);
+		assertList(() -> "Case '" + name + "'", page(r, sql.orders().getSession(), Order::getId), page(r, store.queryOrders(), Order::getId).toArray());
+	}
+
+	@Test void d06_ordersAreSeeded() throws Exception {
+		var p = page(request(ORDER_COLUMNS, "\"start\":0,\"order\":[{\"column\":0,\"dir\":\"asc\"}]"), sql.orders().getSession(), Order::getId);
+		assertList(p, 2000L, 2000L, 101L, 102L, 103L, 104L, 105L, 106L, 107L, 108L, 109L, 110L);  // total, filtered, ten ids
+	}
+
+	@ParameterizedTest(name="{0}")
+	@CsvSource(delimiter='|', textBlock="""
+		status | {"data":"id"},{"data":"petId"},{"data":"shipDate"},{"data":"status","search":{"value":"$eq(PLACED)"}}
+		petId  | {"data":"id"},{"data":"petId","search":{"value":"$eq(101)"}},{"data":"shipDate"},{"data":"status"}
+		""")
+	void d07_columnFiltersNarrowButMatch(String name, String columns) throws Exception {
+		// Guards d02/d03: an empty or unfiltered page would match on both sides and prove nothing.
+		var p = page(request(ORDER_COLUMNS, "\"start\":0,\"order\":[{\"column\":0,\"dir\":\"asc\"}],\"columns\":[" + columns + "]"), sql.orders().getSession(), Order::getId);
+		var total = ((Number) p.get(0)).longValue();
+		var filtered = ((Number) p.get(1)).longValue();
+		assertString(() -> "Case '" + name + "'", "true", String.valueOf(filtered > 0 && filtered < total));
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// e — users
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@ParameterizedTest(name="{0}")
+	@CsvSource(delimiter='|', textBlock="""
+		e01 default order    | "start":0,"order":[{"column":0,"dir":"asc"}]
+		e02 username search  | "start":0,"search":{"value":"user07"},"order":[{"column":0,"dir":"asc"}]
+		e03 no match         | "start":0,"search":{"value":"zzzz-no-such-user"},"order":[{"column":0,"dir":"asc"}]
+		e04 status $eq       | "start":0,"order":[{"column":0,"dir":"asc"}],"columns":[{"data":"username"},{"data":"firstName"},{"data":"lastName"},{"data":"email"},{"data":"phone"},{"data":"userStatus","search":{"value":"$eq(INACTIVE)"}}]
+		""")
+	void e_usersMatch(String name, String body) throws Exception {
+		var r = request(USER_COLUMNS, body);
+		assertList(() -> "Case '" + name + "'", page(r, sql.users().getSession(), User::getUsername), page(r, store.queryUsers(), User::getUsername).toArray());
+	}
+
+	@Test void e05_usersAreSeeded() throws Exception {
+		var p = page(request(USER_COLUMNS, "\"start\":0,\"search\":{\"value\":\"user07\"},\"order\":[{\"column\":0,\"dir\":\"asc\"}]"), sql.users().getSession(), User::getUsername);
+		assertList(p, 50L, 1L, "user07");  // total, filtered, the one match
+	}
+
+	@Test void e06_statusFilterNarrowsButMatches() throws Exception {
+		// Guards e04: an empty or unfiltered page would match on both sides and prove nothing.
+		var p = page(request(USER_COLUMNS, "\"start\":0,\"order\":[{\"column\":0,\"dir\":\"asc\"}],\"columns\":[{\"data\":\"username\"},{\"data\":\"firstName\"},{\"data\":\"lastName\"},{\"data\":\"email\"},{\"data\":\"phone\"},{\"data\":\"userStatus\",\"search\":{\"value\":\"$eq(INACTIVE)\"}}]"), sql.users().getSession(), User::getUsername);
+		var filtered = ((Number) p.get(1)).longValue();
+		assertString("true", String.valueOf(filtered > 0 && filtered < 50));
 	}
 }

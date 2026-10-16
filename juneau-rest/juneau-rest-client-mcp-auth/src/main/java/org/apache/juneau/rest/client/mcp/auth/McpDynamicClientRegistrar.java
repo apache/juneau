@@ -47,7 +47,7 @@ import com.nimbusds.openid.connect.sdk.rp.*;
  * RFC 7591 &sect;3 initial access token is attached when {@link Builder#initialAccessToken(String)} is set.
  *
  * <p>
- * The DCR-issued {@code client_id}/secret then feed F1's existing flows unchanged &mdash; DCR changes only how the
+ * The DCR-issued {@code client_id}/secret then feed the existing flows unchanged &mdash; DCR changes only how the
  * {@code client_id} was obtained, not the {@code resource=} (RFC 8707) or {@code iss} (RFC 9207 / SEP-2468)
  * enforcement; see {@link McpClientRegistrations} for the bridge to {@link McpAuthorizationCodeAcquirer} /
  * {@link McpTokenProvider}.

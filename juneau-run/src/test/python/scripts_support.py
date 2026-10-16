@@ -44,14 +44,15 @@ def package_files():
 
 
 def build_zip(path, *, init=True):
-    """The assembly's layout, built with zipfile: juneau_scripts/** plus bootstrap.py, LICENSE and NOTICE at the
-    root.  init=False leaves out juneau_scripts/__init__.py."""
+    """The assembly's layout, built with zipfile: juneau_scripts/** plus bootstrap.py, LICENSE and NOTICE at the root, and
+    pytest_plugin/juneau_run_pytest.py.  init=False leaves out juneau_scripts/__init__.py."""
     with zipfile.ZipFile(path, "w") as z:
         for rel in package_files():
             if not init and rel == "juneau_scripts/__init__.py":
                 continue
             z.write(PYTHON_SRC / rel, rel)
         z.write(BOOTSTRAP, "bootstrap.py")
+        z.write(PYTHON_SRC / "pytest_plugin" / "juneau_run_pytest.py", "pytest_plugin/juneau_run_pytest.py")
         for name in ("LICENSE", "NOTICE"):
             z.write(MODULE_ROOT.parent / name, name)
     return Path(path)
@@ -93,6 +94,7 @@ def base_env(**extra):
     env = {k: v for k, v in os.environ.items()
            if k not in ("RUN_MARKERS", "RUN_ARTIFACTS", "JUNEAU_PUSH_ACTIVE", "JUNEAU_SCRIPTS_ZIP")
            and not k.startswith("JUNEAU_RUN_")}
+    env["JUNEAU_RUN_HISTORY"] = "0"
     env.update(extra)
     return env
 

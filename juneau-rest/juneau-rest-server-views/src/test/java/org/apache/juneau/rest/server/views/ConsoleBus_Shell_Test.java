@@ -25,7 +25,7 @@ import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
 
 /**
- * The console shell on the page bus (message bus addendum, spec §4.1, §4.5, §5.2-§5.4, §6.3): {@code card:<id>}
+ * The console shell on the page bus: {@code card:<id>}
  * lifecycle and ownership, implicit claims, {@code cmd:<id>} ops, declared roles and {@code params}, buffered
  * {@code ctx.publish}/{@code ctx.subscribe}, the error painter, and E-JS-46.  Drives {@code console-shell-bus.cjs}
  * against the real {@code juneau-bus.js} and {@code juneau-console.js}; gated on {@code node} being on {@code PATH}.
@@ -62,10 +62,10 @@ class ConsoleBus_Shell_Test extends TestBase {
 	@Test void a00_sourceShape() throws Exception {
 		var src = BusHarness.source(CONSOLE_JS);
 		var validate = src.indexOf("paintWiringProblems(doc, bus.wiring.validate(contract, cardTypeTable()));");
-		var anchor = src.indexOf("// ---- bus: bridges attach here (Task 13) ----");
+		var anchor = src.indexOf("// ---- bus: bridges attach here ----");
 		var wire = src.indexOf("wireCards(doc, bus, contract);");
-		assertTrue(validate > 0 && validate < anchor && anchor < wire, "validate, then the Task 13 anchor, then wireCards");
-		assertEquals(anchor, src.lastIndexOf("// ---- bus: bridges attach here (Task 13) ----"), "exactly one anchor");
+		assertTrue(validate > 0 && validate < anchor && anchor < wire, "validate, then the bridge anchor, then wireCards");
+		assertEquals(anchor, src.lastIndexOf("// ---- bus: bridges attach here ----"), "exactly one anchor");
 		assertFalse(src.contains("extras.bus"), "handlers declare roles/ops/implicit directly");
 	}
 
@@ -234,5 +234,84 @@ class ConsoleBus_Shell_Test extends TestBase {
 		assertEquals(List.of("render:http://juneau.test/api/a"), s.get("absolute"), "a filled absolute URL on this origin is rechecked with the fetchJson rule and passes");
 		assertEquals(List.of("E-JS-83"), s.get("farCodes"), "a filled absolute URL on another origin is refused");
 		assertTrue(String.valueOf(s.get("fetchErr")).contains("E-JS-84"), String.valueOf(s.get("fetchErr")));
+	}
+
+	@Test void a20_noBusOnAPageWithOnlyDataSourcesIsE46() {
+		var s = scenario("s19");
+		assertNull(s.get("threw"));
+		assertEquals("E-JS-46", map(s, "readyThrew").get("code"));
+		assertEquals(List.of("E-JS-46"), s.get("banner"));
+	}
+
+	@Test void a21_undeclaredScriptTopicOnADataSourceIsE41() {
+		var s = scenario("s20");
+		assertEquals(List.of("E-JS-41"), s.get("banner"));
+		assertEquals(List.of("data source 'orders' subscribes to 'app.range', which is declared publisher=script, "
+			+ "but no page script declared it by DOMContentLoaded"), s.get("text"));
+		assertEquals(List.of("[juneau-console] data source 'orders' subscribes to 'app.range', which is declared "
+			+ "publisher=script, but no page script declared it by DOMContentLoaded"), s.get("logged"));
+		assertEquals(List.of(), s.get("declaredBanner"), "declaring the topic first clears it");
+	}
+
+	@Test void a22_bareHtmlCardRerendersOnParamChange() {
+		var s = scenario("s21");
+		assertEquals(1, s.get("initialCount"));
+		assertEquals(Map.of("count", 1, "stale", 0), s.get("first"), "the new content shows and the old content is gone");
+		assertEquals(Map.of("count", 1, "stale", 0), s.get("second"), "and again on the next change");
+	}
+
+	@Test void a23_bareHtmlCardUnrenderRemovesItsNodes() {
+		var s = scenario("s21");
+		assertEquals(Map.of("count", 0, "stale", 0), s.get("refused"), "a refused URL leaves none of the old nodes");
+		assertEquals(List.of("E-JS-83"), s.get("banner"));
+		assertEquals(0, s.get("inlineErrors"), "a bare card has no element for an inline error");
+	}
+
+	@Test void a24_chromelessNonHtmlBareCardRerendersInItsOwnHost() {
+		var s = scenario("s21b");
+		assertEquals(List.of("render:/api/a/y", "destroy:c", "render:/api/b/y"), s.get("log"));
+		assertEquals(1, s.get("bodies"));
+	}
+
+	@Test void a25_bareHtmlCardWithSrcShowsItsFetchedContent() {
+		var s = scenario("s22");
+		assertEquals(List.of(), s.get("first"), "first render: the unresolved src is not fetched at mount");
+		assertEquals(List.of("/f/b"), s.get("afterChange"), "after a change: the new fetch shows, the superseded one is dropped");
+		assertEquals(List.of(), s.get("errors"));
+		assertEquals(List.of(), s.get("banner"));
+		var kinds = (List<?>) s.get("kindsAfterRefresh");
+		assertEquals("tail", kinds.get(kinds.size() - 1), "a refresh writes at the anchor, ahead of the following card");
+		assertTrue(kinds.indexOf("P") >= 0 && kinds.lastIndexOf("P") < kinds.indexOf("tail"), String.valueOf(kinds));
+	}
+
+	@Test void a25b_refreshingBareHtmlCardReplacesItsContent() {
+		var s = scenario("s22b");
+		assertEquals(List.of("/f/static"), s.get("first"));
+		assertEquals(List.of("/f/static"), s.get("afterRefresh"), "a refresh replaces the content, it does not append a second copy");
+		assertEquals(List.of("/f/static"), s.get("afterSecond"));
+		assertEquals(List.of(), s.get("errors"));
+		assertEquals(List.of(), s.get("banner"));
+	}
+
+	@Test void a25c_bareHtmlCardWithTokensDoesNotFetchTheUnresolvedSrcAtMount() {
+		var s = scenario("s22c");
+		assertEquals(List.of(), s.get("atMount"), "no fetch of the unresolved src at mount");
+		assertEquals(List.of("/f/a"), s.get("afterParams"));
+		assertEquals(List.of(), s.get("errors"));
+		assertEquals(List.of(), s.get("banner"));
+	}
+
+	@Test void a26_bareCardWhoseEndAnchorIsGoneStaysQuiet() {
+		var s = scenario("s23");
+		assertNull(s.get("threw"));
+		assertEquals(List.of(), s.get("errors"));
+		assertEquals(List.of(), s.get("banner"));
+	}
+
+	@Test void a27_bareRerenderLandsAtItsAnchorAndAwaitingIsReplaced() {
+		var s = scenario("s24");
+		assertEquals(List.of("one", "two"), s.get("afterChange"), "the first card stays ahead of the second");
+		assertEquals(List.of("Pick one.", "two"), s.get("awaiting"));
+		assertEquals(List.of("one", "two"), s.get("resolved"));
 	}
 }

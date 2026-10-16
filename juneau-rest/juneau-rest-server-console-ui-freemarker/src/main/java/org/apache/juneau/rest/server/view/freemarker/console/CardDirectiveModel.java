@@ -36,7 +36,7 @@ import freemarker.template.utility.*;
  * The {@code <@card>} FreeMarker directive: adds one entry to the page contract's {@code cards[]}.
  *
  * <p>
- * {@code html} (the default) and {@code run-view} are built in. {@code datatables}, {@code console-output}, {@code terminal} and every other
+ * {@code html} (the default) and {@code run-view} are built in. {@code datatables}, {@code terminal} and every other
  * well-formed type name is dispatched through the host's {@link CardTypeRegistry}: a registered
  * {@link CardTypeHandler} validates it, and an unregistered type falls back to the generic passthrough. Every type other
  * than {@code html} requires {@code id=}.
@@ -45,8 +45,7 @@ import freemarker.template.utility.*;
  * {@code type="html"} (the default) takes exactly one content source: a body (emitted as
  * {@code <template data-card="{id}">}), {@code template=} (reuses another card's template), or {@code src=} (fetched
  * same-origin by the shell). {@code type="datatables"} takes {@code src=} or a JSON5 catalog body and becomes the C1
- * bridge card. {@code type="console-output"} takes a JSON5 {@code {contractVersion: '1', output: {...}}} body and
- * becomes the console-output bridge card (see {@link ConsoleOutputDef}). {@code type="run-view"} takes a JSON5
+ * bridge card. {@code type="run-view"} takes a JSON5
  * {@code {contractVersion: '1', runView: {...}}} body and becomes the run-view bridge card (see {@link RunViewDef}).
  * {@code type="terminal"} takes a JSON5 {@code {contractVersion: '1', terminal: {...}}} body and becomes the terminal
  * card (see {@code TerminalDef}). A card without {@code id=} gets {@code jc-card-N}. {@code <@card>} is only valid inside
@@ -72,7 +71,7 @@ public final class CardDirectiveModel implements TemplateDirectiveModel {
 	/** The shared-variable name this directive registers under. */
 	public static final String NAME = "card";
 
-	static final Set<String> ATTRS = Set.of("type", "id", "title", "src", "template", "requires", "class", "ref", "subscribes", "publishes");
+	static final Set<String> ATTRS = Set.of("type", "id", "title", "src", "template", "requires", "class", "ref", "subscribes", "publishes", "sanitize");
 
 	static final Set<String> REMOVED_TYPES = Set.of("js", "json", "calendar");
 
@@ -111,6 +110,7 @@ public final class CardDirectiveModel implements TemplateDirectiveModel {
 		var authoredId = FtlAttrLists.scalar(p, "id");
 		var requires = FtlAttrLists.list(p, NAME, "requires");
 		var cssClass = cssClass(p, authoredId);
+		var sanitize = FtlAttrLists.strictBoolean(p, NAME, "sanitize", false);
 		var subsAttr = p.containsKey("subscribes") ? DeepUnwrap.unwrap(p.get("subscribes")) : null;
 		var pubsAttr = p.containsKey("publishes") ? DeepUnwrap.unwrap(p.get("publishes")) : null;
 		if ((subsAttr != null || pubsAttr != null) && authoredId.isEmpty())
@@ -145,11 +145,13 @@ public final class CardDirectiveModel implements TemplateDirectiveModel {
 		var src = FtlAttrLists.scalar(p, "src");
 		var template = FtlAttrLists.scalar(p, "template");
 		var cardType = type.isEmpty() ? "html" : type;
+		if (sanitize && (! eq(cardType, "html") || src.isEmpty()))
+			throw FtlAttrLists.reject(f("<@card id='%s'> sanitize= applies only to an html card with src=.", authoredId));
 		var id = authoredId.isEmpty() && eq(cardType, "html") ? cap.nextCardId() : authoredId;
 		if (eq(cardType, "run-view"))
 			runViewCard(cap, id, title, src, template, markup, cssClass, pubsAttr, subsAttr);
 		else if (eq(cardType, "html"))
-			htmlCard(cap, id, title, src, template, markup, cssClass, pubsAttr, subsAttr);
+			htmlCard(cap, id, title, src, template, markup, cssClass, sanitize, pubsAttr, subsAttr);
 		else
 			registryCard(cap, cardType, id, title, src, template, markup, cssClass, pubsAttr, subsAttr);
 		recordRequirements(cap, cardType, id, requires);
@@ -184,7 +186,7 @@ public final class CardDirectiveModel implements TemplateDirectiveModel {
 	}
 
 	private static String firstOtherAttr(Map<String, TemplateModel> p) {
-		for (var a : List.of("type", "id", "title", "src", "template", "requires", "class", "subscribes", "publishes"))
+		for (var a : List.of("type", "id", "title", "src", "template", "requires", "class", "subscribes", "publishes", "sanitize"))
 			if (p.containsKey(a))
 				return a;
 		return null;
@@ -228,7 +230,7 @@ public final class CardDirectiveModel implements TemplateDirectiveModel {
 	}
 
 	private static void htmlCard(PageCapture cap, String id, String title, String src, String template, String markup,
-			String cssClass, Object pubs, Object subs)
+			String cssClass, boolean sanitize, Object pubs, Object subs)
 			throws TemplateModelException {
 		var hasBody = ! markup.isBlank();
 		var sources = (hasBody ? 1 : 0) + (src.isEmpty() ? 0 : 1) + (template.isEmpty() ? 0 : 1);
@@ -246,13 +248,24 @@ public final class CardDirectiveModel implements TemplateDirectiveModel {
 			card.template(template);
 		if (! cssClass.isEmpty())
 			card.cssClass(cssClass);
+		if (sanitize)
+			card.sanitize(true);
 		wire(card, pubs, subs);
 		cap.addCard(card, hasBody ? markup : null);
 	}
 
+	/** Names whichever of {@code src=} and {@code template=} is present. */
+	static String notAllowed(String src, String template) {
+		if (src.isEmpty())
+			return "template= is not allowed";
+		if (template.isEmpty())
+			return "src= is not allowed";
+		return "src= and template= are not allowed";
+	}
+
 	/**
 	 * Every type other than {@code html} and {@code run-view}: validated and lifted by the host's
-	 * {@link CardTypeRegistry} (a registered handler such as {@code datatables}, {@code console-output}, {@code terminal} or {@code job-log}, or the
+	 * {@link CardTypeRegistry} (a registered handler such as {@code datatables}, {@code terminal} or {@code job-log}, or the
 	 * generic passthrough for an unregistered type).
 	 */
 	private void registryCard(PageCapture cap, String type, String id, String title, String src, String template,
@@ -260,10 +273,10 @@ public final class CardDirectiveModel implements TemplateDirectiveModel {
 		if (id.isEmpty())
 			throw FtlAttrLists.reject(f("<@card type=\"%s\"> requires id=.", type));
 		var hasBody = ! markup.isBlank();
-		if (eq(type, "console-output") || eq(type, "terminal") || eq(type, "job-log")) {
+		if (eq(type, "terminal") || eq(type, "job-log")) {
 			if (! (src.isEmpty() && template.isEmpty()))
 				throw FtlAttrLists.reject(f("<@card id='%s'> type='%s' takes its options as the body; %s.", id, type,
-					src.isEmpty() ? "template= is not allowed" : template.isEmpty() ? "src= is not allowed" : "src= and template= are not allowed"));
+					notAllowed(src, template)));
 		} else if (eq(type, "chart")) {
 			if (! template.isEmpty())
 				throw FtlAttrLists.reject(f(
@@ -307,14 +320,32 @@ public final class CardDirectiveModel implements TemplateDirectiveModel {
 
 	/**
 	 * Lifts a card source through the registry into the {@link CardSpec} {@link PageCapture} wants; the same path
-	 * {@code <@card>} takes for a registered type.
+	 * {@code <@card>} takes for a registered type.  {@code subscribes} / {@code publishes} found in the handler's
+	 * result (a JSON5 body) are wired onto the card, and refused when the authored card already declares them, as
+	 * {@code <@card>} refuses them alongside the attribute.
+	 *
+	 * @param source The card source.
+	 * @param authored The authored card whose wiring the result takes.
+	 * @return The lifted card.
+	 * @throws TemplateModelException If the registry or its handler rejects the source, or its wiring conflicts.
 	 */
-	CardSpec lift(CardSource source) throws TemplateModelException {
+	CardSpec lift(CardSource source, CardSpec authored) throws TemplateModelException {
+		JsonMap card;
 		try {
-			return toCardSpec(cardTypes.toCard(source));
+			card = cardTypes.toCard(source);
 		} catch (IllegalArgumentException e) {
 			throw FtlAttrLists.reject(e.getMessage());
 		}
+		var id = source.id();
+		var bodySubs = card.remove("subscribes");
+		var bodyPubs = card.remove("publishes");
+		if (authored.hasSubscribes() && bodySubs != null)
+			throw FtlAttrLists.reject(f("<@card id='%s'> body key 'subscribes' is reserved; set it as an attribute.", id));
+		if (authored.hasPublishes() && bodyPubs != null)
+			throw FtlAttrLists.reject(f("<@card id='%s'> body key 'publishes' is reserved; set it as an attribute.", id));
+		var spec = toCardSpec(card);
+		wire(spec, bodyPubs, bodySubs);
+		return spec.wiringFrom(authored);
 	}
 
 	/** Converts the flat {@link CardTypeRegistry#toCard} result into the {@link CardSpec} {@link PageCapture} wants. */
@@ -347,8 +378,8 @@ public final class CardDirectiveModel implements TemplateDirectiveModel {
 		if (id.isEmpty())
 			throw FtlAttrLists.reject("<@card type=\"run-view\"> requires id=.");
 		if (! (src.isEmpty() && template.isEmpty()))
-			throw FtlAttrLists.reject(f(
-				"<@card id='%s'> type='run-view' takes its options as the body; src= and template= are not allowed.", id));
+			throw FtlAttrLists.reject(f("<@card id='%s'> type='run-view' takes its options as the body; %s.", id,
+				notAllowed(src, template)));
 		var trimmed = markup.trim();
 		if (! trimmed.startsWith("{"))
 			throw FtlAttrLists.reject(f(

@@ -1,0 +1,26 @@
+{
+  "contractVersion": "1",
+  "title": "Resolved URL",
+  "nav": [],
+  "activeNav": [],
+  "topics": [
+    { "topic": "app.target", "retain": true, "publisher": "script" }
+  ],
+  "cards": [
+    { "id": "tasks", "type": "datatables", "title": "Tasks",
+      "table": {
+        "dataUrl": "/{seg}/{leaf}", "dataMode": "server",
+        "columns": [ { "key": "id" }, { "key": "owner" } ]
+      },
+      "subscribes": [
+        { "topic": "app.target", "as": "params", "map": { "seg": "seg", "leaf": "leaf" }, "whenEmpty": "clear",
+          "emptyText": "Pick a target." }
+      ] },
+
+    { "id": "note", "type": "html", "bare": true, "src": "/api/note",
+      "dataUrl": "/{seg}/{leaf}",
+      "subscribes": [
+        { "topic": "app.target", "as": "params", "map": { "seg": "seg", "leaf": "leaf" }, "whenEmpty": "clear" }
+      ] }
+  ]
+}

@@ -20,6 +20,8 @@ import static org.apache.juneau.test.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import java.util.*;
+
 import org.apache.juneau.*;
 import org.apache.juneau.marshall.collections.*;
 import org.apache.juneau.rest.server.console.*;
@@ -32,11 +34,17 @@ import org.apache.juneau.rest.server.servlet.*;
 import org.apache.juneau.rest.server.view.*;
 import org.apache.juneau.rest.server.view.freemarker.*;
 import org.apache.juneau.rest.server.view.freemarker.console.*;
+import org.apache.juneau.rest.server.views.*;
 import org.junit.jupiter.api.*;
 
 /**
  * Broken templates fail loudly at render time, with the console's own message.  Rows whose upstream E-code has not
  * landed are {@code @Disabled} with the gate that blocks them; none is invented here.
+ *
+ * <p>
+ * The live rows assert the exact production message text, because these messages carry no E-code to assert on.
+ * One row stays disabled: a08 (the production chrome has a fixed nav, so no petstore fixture can duplicate a sibling;
+ * the console bridge tests cover it).
  */
 @SuppressWarnings({
 	"java:S1186", // Empty bodies are @Disabled placeholder rows; each names the gate that blocks it.
@@ -59,10 +67,67 @@ class PetstoreFailLoud_Test extends TestBase {
 		public View t(@Path("name") String name) {
 			return FreemarkerView.of("failloud/" + name + ".ftlh");
 		}
+
+		/** A page whose {@code PageSpec} declares a badge the production chrome already declares. */
+		@RestGet(path="/s/badge-duplicate")
+		public View badgeDuplicate(RestRequest req) {
+			return PageSpec.create().template("failloud/chrome-page.ftlh").badge(BadgeDef.create("pending").src("/console/pets/changes/pending")).view(req);
+		}
+
+		/** A page whose {@code PageSpec} seeds the viewer roles the production chrome also declares. */
+		@RestGet(path="/s/facts-duplicate")
+		public View factsDuplicate(RestRequest req) {
+			return PageSpec.create().template("failloud/chrome-page.ftlh").facts(Map.of("viewer", Map.of("roles", List.of("admin")))).view(req)
+				.attr("roles", List.of("admin"));
+		}
+	}
+
+	/** {@link FixtureHost}'s chrome with dev mode on, which validates each page contract before writing it. */
+	@Rest(mixins=FreemarkerMixin.class, responseProcessors=FreemarkerViewRenderer.class, renderResponseStackTraces="true")
+	public static class DevHost extends BasicRestServlet {
+		private static final long serialVersionUID = 1L;
+
+		@Bean public FreemarkerMixin freemarker() {
+			return ConsoleFreemarkerMixin.create().devMode(true).basePath("/org/apache/juneau/petstore/console/").chromeTemplate("templates/base.ftlh")
+				.adopterAssets(PetstoreConsolePage.class.getClassLoader(), "org/apache/juneau/petstore").build();
+		}
+
+		@RestGet(path="/t/{name}")
+		public View t(@Path("name") String name) {
+			return FreemarkerView.of("failloud/" + name + ".ftlh");
+		}
+	}
+
+	/**
+	 * Renders {@code failloud/chrome-page.ftlh} inside a small test chrome that includes one fixture: the directives
+	 * {@code <@navigation>}, {@code <@badge>} and {@code <@facts>} are legal only in a chrome, never in a page.
+	 */
+	@Rest(mixins=FreemarkerMixin.class, responseProcessors=FreemarkerViewRenderer.class, renderResponseStackTraces="true")
+	public static class ChromeHost extends BasicRestServlet {
+		private static final long serialVersionUID = 1L;
+
+		@Bean public FreemarkerMixin freemarker() {
+			return ConsoleFreemarkerMixin.create().basePath("/org/apache/juneau/petstore/console/").chromeTemplate("failloud/chrome.ftlh").build();
+		}
+
+		@RestGet(path="/c/{name}")
+		public View chrome(@Path("name") String name) {
+			return FreemarkerView.of("failloud/chrome-page.ftlh").attr("fragment", "/failloud/" + name + ".ftlh");
+		}
+
+		@RestGet(path="/n/{name}")
+		public View nav(@Path("name") String name) {
+			return FreemarkerView.of("failloud/chrome-page.ftlh").attr("navFragment", "/failloud/" + name + ".ftlh");
+		}
 	}
 
 	private static void assert500(String fixture, String message) throws Exception {
 		var body = MockRestClient.buildLax(FixtureHost.class).get("/t/" + fixture).run().assertStatus(500).getContent().asString();
+		assertContains(message, body);
+	}
+
+	private static void assert500(Class<?> host, String path, String message) throws Exception {
+		var body = MockRestClient.buildLax(host).get(path).run().assertStatus(500).getContent().asString();
 		assertContains(message, body);
 	}
 
@@ -87,7 +152,7 @@ class PetstoreFailLoud_Test extends TestBase {
 	@Test void a15_adopterHandlerForAReservedType_failsAtMixinBuild() {
 		var ex = assertThrows(IllegalArgumentException.class,
 			() -> ConsoleFreemarkerMixin.create().cardType(new ImpostorDatatables()).build());
-		assertEquals("Card type 'datatables' is reserved and cannot be replaced; reserved: 'chart, console-output, datatables, html, job-log, run-view, terminal'.",
+		assertEquals("Card type 'datatables' is reserved and cannot be replaced; reserved: 'chart, datatables, html, job-log, run-view, terminal'.",
 			ex.getMessage());
 	}
 
@@ -109,50 +174,68 @@ class PetstoreFailLoud_Test extends TestBase {
 		@Override public JsonMap toFragment(CardSource source) { return new JsonMap(); }
 	}
 
-	@Test void a19_consoleOutputUnsafeLinesUrl() throws Exception {
-		assert500("console-output-unsafe", "ConsoleOutputDef 'log' linesUrl must be a same-origin path");
+	@Test void a19_terminalUnsafeBytesUrl() throws Exception {
+		assert500("terminal-unsafe", "TerminalDef 'log' bytesUrl must be a same-origin path");
 	}
 
 	@Test void a20_inventoryGaugeBodyRejected() throws Exception {
 		assert500("gauge-unknown-species", "<@card id='g'> unknown species 'DRAGON'; choose one of: 'BIRD, CAT, DOG, FISH, MOUSE, RABBIT, SNAKE'.");
 	}
 
-	@Disabled("Not implemented yet: an error code for a page that leaves a required slot empty")
-	@Test void a03_missingSlot() {}
+	@Test void a05_nodeUnderOutsidePage() throws Exception {
+		assert500("node-under-outside-page", "<@node id='x' under='pets'> must be a direct child of <@page> or <@console>, outside <@navigation>.");
+	}
 
-	@Disabled("Not implemented yet: E-B14 for a <@node under=...> used outside a page or inside the navigation")
-	@Test void a05_nodeUnderOutsidePage() {}
+	@Test void a06_nodeUnderInNavigation() throws Exception {
+		assert500(ChromeHost.class, "/n/node-under-in-navigation", "<@node id='x' under='store'> must be a direct child of <@page> or <@console>, outside <@navigation>.");
+	}
 
-	@Disabled("Not implemented yet: E-B14 for a <@node under=...> used outside a page or inside the navigation")
-	@Test void a06_nodeUnderInNavigation() {}
+	@Test void a07_nodeUnderUnknownParent() throws Exception {
+		assert500("node-under-unknown-parent", "Nav addition under 'nope' does not match a <@node> path in the chrome; known paths: 'store, pets, ");
+	}
 
-	@Disabled("Not implemented yet: E-B8 for a <@node under=...> naming an unknown parent")
-	@Test void a07_nodeUnderUnknownParent() {}
+	@Test void a10_badgeDuplicate() throws Exception {
+		assert500(FixtureHost.class, "/s/badge-duplicate", "Badge id 'pending' is declared twice (PageSpec and/or <@badge>).");
+	}
+
+	@Test void a11_factsDuplicate() throws Exception {
+		assert500(FixtureHost.class, "/s/facts-duplicate", "Fact 'viewer.roles' is set by both PageSpec.facts and the chrome; set it in one place.");
+	}
+
+	@Test void a12_factsBadType() throws Exception {
+		assert500(ChromeHost.class, "/c/facts-bad-type", "Fact 'viewer.roles' has unsupported value type 'Integer'; use string, number, boolean, string list or map.");
+	}
+
+	@Test void a13_visibleWhenBadOp() throws Exception {
+		assert500(ChromeHost.class, "/c/visible-when-bad-op", "<@badge id='b'> visibleWhen op 'nope' is not one of 'eq, ne, present, absent, in, contains'.");
+	}
+
+	@Test void a14_badgeScopeUnknownNode() throws Exception {
+		assert500(ChromeHost.class, "/c/badge-scope-unknown-node", "<@badge id='b'> scope names nav node 'nope', which is not in the nav tree.");
+	}
+
+	@Test void b01_scriptInPetNameIsEscaped() throws Exception {
+		var c = PetstoreConsoleFixture.client();
+		var hostile = "</script><script>alert(1)</script>";
+		var created = c.post("/console/pets", JsonMap.of("name", hostile, "price", 1)).contentType("application/json").header("Accept", "application/json").run().assertStatus(200).getContent().asString();
+		var id = new JsonMap(created).getMap("row").getLong("id");
+		try {
+			var body = c.get("/console/pets/" + id + "/summary").accept("text/html").run().assertStatus(200).getContent().asString();
+			assertNotContains(hostile, body);
+			assertContains("alert(1)", body);
+		} finally {
+			// The store is shared across the fork; leave it as found so count-based tests are not skewed.
+			c.delete("/console/pets/" + id).header("Accept", "application/json").run();
+		}
+	}
 
 	@Disabled("Duplicate-sibling error E-3 is asserted by the console FreeMarker bridge tests (bad-dup-node); the production chrome has a fixed nav, so no petstore fixture can duplicate a sibling")
 	@Test void a08_nodeDuplicateSibling() {}
 
-	@Disabled("Not implemented yet: E-B12 for a page whose view has no registered renderer")
-	@Test void a09_missingViewRenderer() {}
-
-	@Disabled("Not implemented yet: E-B15 for a duplicate PageSpec.badge")
-	@Test void a10_badgeDuplicate() {}
-
-	@Disabled("Not implemented yet: E-B16 for a duplicate facts leaf")
-	@Test void a11_factsDuplicate() {}
-
-	@Disabled("Not implemented yet: E-B17 for a <@facts> with a bad type")
-	@Test void a12_factsBadType() {}
-
-	@Disabled("Not implemented yet: an error code for a visibleWhen expression with an unknown operator")
-	@Test void a13_visibleWhenBadOp() {}
-
-	@Disabled("Not implemented yet: E-68 for a <@badge> scoped to an unknown node")
-	@Test void a14_badgeScopeUnknownNode() {}
-
-	@Disabled("Blocked on the pet summary page, which needs <@node under=...> support")
-	@Test void b01_scriptInPetNameIsEscaped() {}
-
-	@Disabled("Dev mode only rejects an invalid page contract (there is no overlay marker and no juneau.console.devMode property yet)")
-	@Test void b02_devModeOverlay() {}
+	@Test void b02_devModeRejectsAnInvalidContract() throws Exception {
+		// Without dev mode the same page renders; the JS shell reports the missing template at runtime.
+		render200("dev-bad-template");
+		var body = MockRestClient.buildLax(DevHost.class).get("/t/dev-bad-template").run().assertStatus(500).getContent().asString();
+		assertContains("Page contract failed schema validation: 'R-4: template 'missing' is referenced but not present'.", body);
+	}
 }

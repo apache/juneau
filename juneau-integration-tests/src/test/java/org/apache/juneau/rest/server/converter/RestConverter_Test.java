@@ -202,7 +202,7 @@ class RestConverter_Test extends TestBase {
 	}
 
 	@Test void b12_queryableRegexAllowedByDefault() throws Exception {
-		// IRS parity: $regex works out of the box with no QueryableSettings bean registered.
+		// Default behavior:  works out of the box with no QueryableSettings bean registered.
 		var c = MockRestClient.buildJson(B10.class);
 		c.get("/?search=name=$regex(A.*)&view=name").run().assertContent("[{\"name\":\"Alice\"}]");
 	}

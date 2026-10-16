@@ -65,7 +65,7 @@ class PageSpec_Parity_Test extends TestBase {
 		private static final long serialVersionUID = 1L;
 		@Bean public FreemarkerMixin freemarker() {
 			return ConsoleFreemarkerMixin.create().basePath("/templates/")
-				.chromeTemplate("parity/c3/parity-chrome.ftlh").cardType(new KpiCardType()).build();
+				.chromeTemplate("parity/c3/parity-chrome.ftlh").cardType(new KpiCardType()).cardType(new MeterCardType()).build();
 		}
 		@RestGet(path="/ftl/{name}")
 		public FreemarkerView ftl(@Path String name) {
@@ -100,7 +100,12 @@ class PageSpec_Parity_Test extends TestBase {
 		Map.entry("17-badge-vs-directive", Cases::badgeVsDirective),
 		Map.entry("18-facts-deep-merge", Cases::factsDeepMerge),
 		Map.entry("19-visible-when-passthrough", Cases::visibleWhenPassthrough),
-		Map.entry("20-theme-inherit", Cases::themeInherit));
+		Map.entry("20-theme-inherit", Cases::themeInherit),
+		Map.entry("22-custom-card-shaped", Cases::customCardShaped),
+		Map.entry("23-custom-card-invalid", Cases::customCardInvalid),
+		Map.entry("24-custom-card-markup", Cases::customCardMarkup),
+		Map.entry("25-quick-stats-segmented-meter", Cases::quickStatsSegmentedMeter),
+		Map.entry("27-quick-stats-builder-edge", Cases::quickStatsBuilderEdge));
 
 	private static String get(String path) throws Exception {
 		try (var c = MockRestClient.buildLax(Host.class); var rsp = c.get(path).run()) {
@@ -162,6 +167,86 @@ class PageSpec_Parity_Test extends TestBase {
 	@Test void case18_factsDeepMerge() throws Exception { assertParity("18-facts-deep-merge", a -> assertNotNull(a.contract().get("facts"), "facts")); }
 	@Test void case20_themeInherit() throws Exception { assertParity("20-theme-inherit", a -> assertEquals("open", a.contract().getMap("theme").get("name"))); }
 	@Test void case19_visibleWhenPassthrough() throws Exception { assertParity("19-visible-when-passthrough", table("t", "rowActions", "detail")); }
+
+	@Test void case22_customCardShapedByHandler() throws Exception {
+		assertParity("22-custom-card-shaped", a -> {
+			a.hasCard("load", "meter");
+			assertEquals(Map.of("value", 3, "max", 4), a.card("load").getMap("meter"));
+			assertNull(a.card("load").get("value"), "the authored body is replaced by the handler's fragment");
+		});
+	}
+
+	@Test void case24_customCardJsonMarkup_isTheBodyNotATemplate() throws Exception {
+		assertParity("22-custom-card-shaped", "24-custom-card-markup", a -> {
+			assertEquals(Map.of("value", 3, "max", 4), a.card("load").getMap("meter"));
+			assertNull(a.card("load").get("template"), "JSON markup is the handler's body, not a template");
+		});
+	}
+
+	@Test void case23_invalidCustomCard_refusedWithTheTemplateMessage() throws Exception {
+		var msg = "<@card id='load'> type='meter' requires a numeric 'value'.";
+		var ftl = getFailing("/ftl/23-custom-card-invalid");
+		var java = getFailing("/spec/23-custom-card-invalid");
+		assertTrue(ftl.contains(msg), ftl);
+		assertTrue(java.contains(msg), java);
+	}
+
+	@Test void case25_quickStatsSegmentedMeter() throws Exception {
+		assertParity("25-quick-stats-segmented-meter", a -> {
+			table("t", "quickStats").accept(a);
+			var items = (List<?>)((Map<?,?>)a.card("t").getMap("table").get("quickStats")).get("items");
+			assertEquals("meter", ((Map<?,?>)items.get(0)).get("type"));
+			assertEquals("segmented", ((Map<?,?>)items.get(1)).get("type"));
+			assertEquals(4, ((List<?>)((Map<?,?>)items.get(1)).get("segments")).size());
+		});
+	}
+
+	/**
+	 * PageSpec has no raw-body route for a datatables card (the builders refuse an off-palette tone first), so the
+	 * Java-side half of this twin hands the same body map straight to the card-type handler.
+	 */
+	@Test void case26_invalidQuickStats_refusedWithTheSameMessage() throws Exception {
+		var msg = "<@card id='t'> quickStats item 'orders' segment 2: tone 'accent' is not one of neutral, info, success, warning, error.";
+		var ftl = getFailing("/ftl/26-quick-stats-invalid");
+		assertTrue(ftl.contains(msg), ftl);
+		var body = Map.of("dataUrl", "/rest/t/data", "columns", List.of(Map.of("key", "id", "label", "Id")),
+			"quickStats", Map.of("id", "store", "items", List.of(
+				Map.of("id", "orders", "type", "segmented", "label", "Orders", "segments", List.of(
+					Map.of("label", "Placed", "count", 3), Map.of("label", "Approved", "count", 5, "tone", "accent"))))));
+		var ex = assertThrows(IllegalArgumentException.class,
+			() -> new DatatablesCardType().toFragment(org.apache.juneau.rest.server.console.CardSource.create("datatables", "t").bodyMap(body).build()));
+		assertEquals(msg, ex.getMessage());
+	}
+
+	/** Java-only: what the builders emit for edge values (boolean value, null tile label, zero meter value, neutral segment) is schema-valid. */
+	@Test void case27_quickStatsBuilderEdge_passesSchema() throws Exception {
+		var a = assertPage(get("/spec/27-quick-stats-builder-edge")).isValid();
+		assertEquals(4, ((List<?>)((Map<?,?>)a.card("t").getMap("table").get("quickStats")).get("items")).size());
+	}
+
+	/** GETs {@code path}, expecting the render to fail, and returns the error body. */
+	private static String getFailing(String path) throws Exception {
+		try (var c = MockRestClient.buildLax(Host.class); var rsp = c.get(path).run()) {
+			var body = rsp.getContent().asString();
+			assertNotEquals(200, rsp.getStatusCode(), () -> path + " rendered: " + body);
+			return body;
+		}
+	}
+
+	/** The {@code data-toolkit-*} asset tags of a page, in document order. */
+	private static List<String> toolkitTags(String html) {
+		return html.lines().filter(l -> l.contains("data-toolkit-js") || l.contains("data-toolkit-css")).map(String::strip).toList();
+	}
+
+	@Test void case21_toolkitAssets_builtPageEmitsTheSameTagsAsPageDirective() throws Exception {
+		var ftl = toolkitTags(get("/ftl/03-table-every-feature"));
+		var java = toolkitTags(get("/spec/03-table-every-feature"));
+		assertFalse(ftl.isEmpty(), "the FTL page emits toolkit tags (non-vacuity)");
+		assertTrue(ftl.stream().anyMatch(t -> t.contains("juneau-views.js")), ftl::toString);
+		assertEquals(ftl, java);
+		assertEquals(ftl.size(), new HashSet<>(ftl).size(), () -> "<@page> assets emitted twice: " + ftl);
+		assertEquals(java.size(), new HashSet<>(java).size(), () -> "assets emitted twice: " + java);
+	}
 
 	/** The Java side of every case.  Every method leaves {@code template(...)} unset (the chrome runs
 	 * {@code <@console>} directly) except {@link #cardRefMiddle} and {@link #cardRefUnplacedAppend}, where a page
@@ -255,6 +340,22 @@ class PageSpec_Parity_Test extends TestBase {
 			return PageSpec.create().toolkit("views").table(t).view(req);
 		}
 
+		static View quickStatsSegmentedMeter(RestRequest req) {
+			var t = TableSpec.create("t").dataUrl("/rest/t/data").columns(Column.create("id").label("Id"))
+				.quickStats("store",
+					QuickStat.meter("inventory", "Inventory", 12, 40).text("12 of 40").statusTone(StatusTone.SUCCESS),
+					QuickStat.segmented("orders", "Orders").segment("Placed", 3).segment("Approved", 5, StatusTone.INFO)
+						.segment("Delivered", 9, StatusTone.SUCCESS).segment("Returned", 0, StatusTone.NEUTRAL));
+			return PageSpec.create().toolkit("views").table(t).view(req);
+		}
+
+		static View quickStatsBuilderEdge(RestRequest req) {
+			var t = TableSpec.create("t").dataUrl("/rest/t/data").columns(Column.create("id").label("Id"))
+				.quickStats("s", QuickStat.of("a", null, true), QuickStat.of("b", "B", null), QuickStat.meter("m", "M", 0, 2),
+					QuickStat.segmented("g", "G").segment("x", 1, StatusTone.NEUTRAL));
+			return PageSpec.create().toolkit("views").table(t).view(req);
+		}
+
 		static View cardRefMiddle(RestRequest req) {
 			return PageSpec.create().template("parity/c3/11-card-ref.ftlh")
 				.html("slo", "An inline card, placed exactly where the Java side places it with ref=.").view(req);
@@ -284,6 +385,18 @@ class PageSpec_Parity_Test extends TestBase {
 
 		static View customCardType(RestRequest req) {
 			return PageSpec.create().card(CardSpec.of("kpi", "slo-trend").title("Alerts per day").body("value", 42)).view(req);
+		}
+
+		static View customCardShaped(RestRequest req) {
+			return PageSpec.create().card(CardSpec.of("meter", "load").title("Load").cssClass("wide").body("value", 3).body("max", 4)).view(req);
+		}
+
+		static View customCardMarkup(RestRequest req) {
+			return PageSpec.create().card(CardSpec.of("meter", "load").title("Load").cssClass("wide"), "{value: 3, max: 4}").view(req);
+		}
+
+		static View customCardInvalid(RestRequest req) {
+			return PageSpec.create().card(CardSpec.of("meter", "load").title("Load").body("max", 4)).view(req);
 		}
 
 		static View csrfBodyAttrs(RestRequest req) {

@@ -211,7 +211,7 @@ class ViewsJs_DetailActionDialogRouting_Test extends TestBase {
 	}
 
 	/** A form-bearing dialog action: the read-only confirmation GET runs first; the submit carries BOTH targetId
-	 * AND the server-minted idempotencyKey the GET returned (HIGH-8) - exactly what Hank's report named missing. */
+	 * AND the server-minted idempotencyKey the GET returned - exactly what Hank's report named missing. */
 	@Test void b04_formBearingDialogAction_getsConfirmationFirst_thenCarriesIdempotencyKeyAndTargetId() {
 		var r = report();
 		assertEquals(true, r.get("formDialogAction_getFetchedForConfirmation"));

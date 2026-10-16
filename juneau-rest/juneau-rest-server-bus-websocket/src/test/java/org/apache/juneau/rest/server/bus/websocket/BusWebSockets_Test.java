@@ -123,6 +123,39 @@ class BusWebSockets_Test extends TestBase {
 		verify(container).addEndpoint(any(ServerEndpointConfig.class));
 	}
 
+	@Test void b05_buildsConfiguratorForEitherBoundary() throws Exception {
+		var boundaries = List.<org.apache.juneau.rest.server.filter.RequestBoundary>of(
+			org.apache.juneau.rest.server.filter.LoopbackBoundary.create().authority("127.0.0.1:8080")
+				.token(org.apache.juneau.rest.server.filter.SynchronizerToken.of("t")).build(),
+			org.apache.juneau.rest.server.filter.CsrfBoundary.create().build());
+		for (var b : boundaries) {
+			bus.close();
+			use(policy().boundary(b).build());
+			BusWebSockets.register(container, bus);
+			var c = ArgumentCaptor.forClass(ServerEndpointConfig.class);
+			verify(container).addEndpoint(c.capture());
+			var configurator = assertInstanceOf(BusWebSocketConfigurator.class, c.getValue().getConfigurator(), b::toString);
+			assertTrue(websocketEnabled(), b::toString);
+			assertEquals(b instanceof org.apache.juneau.rest.server.filter.CsrfBoundary, configurator.checkOrigin("https://other.example"), b::toString);
+		}
+	}
+
+	@Test void b06_aBoundaryTheHandshakeCannotApplyIsRefused() throws Exception {
+		bus.close();
+		var custom = new org.apache.juneau.rest.server.filter.RequestBoundary() {
+			@Override public org.apache.juneau.rest.server.filter.BoundaryResult check(HttpServletRequest req) {
+				return org.apache.juneau.rest.server.filter.BoundaryResult.ALLOWED;
+			}
+			@Override public String csrfHeader() { return "X-Csrf-Token"; }
+			@Override public String tokenFor(HttpServletRequest req) { return ""; }
+		};
+		use(policy().boundary(custom).allowedOrigins("https://ops.example.com").build());
+		var e = assertThrows(IllegalStateException.class, () -> BusWebSockets.register(container, bus));
+		assertEquals(BusWebSockets.UNSUPPORTED_BOUNDARY, e.getMessage());
+		verify(container, never()).addEndpoint(any(ServerEndpointConfig.class));
+		assertFalse(websocketEnabled());
+	}
+
 	@Test void c01_pathConstants() {
 		assertEquals(BusWebSockets.PREFIX + "/{sessionId}", BusWebSockets.PATH);
 		assertEquals(BusEventsMixin.BUS_PREFIX + "/ws", BusWebSockets.PREFIX);

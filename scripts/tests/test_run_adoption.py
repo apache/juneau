@@ -18,6 +18,7 @@ Hermetic: no real Maven, no git writes, no sounds; push.py's gates are replaced 
 
 from __future__ import annotations
 
+import argparse
 import importlib.util
 import json
 import os
@@ -100,13 +101,44 @@ def markers(text):
 # test.py
 # ----------------------------------------------------------------------------------------------------------------------
 
-def test_test_py_default_path_never_touches_run_tool(test_mod, fake_mvn, monkeypatch, capfd):
-    run = test_mod.run_module()
-    monkeypatch.setattr(run, "run_tool", lambda *a, **k: pytest.fail("run_tool must not be used by default"))
+def test_test_py_default_path_records_history_through_run_tool(test_mod, fake_mvn, run_history, tmp_path, capfd):
+    """Markers off and default sinks: a step-id command still goes through run_tool, so its row is recorded."""
+    run_history.start(tmp_path)
     code, out = test_mod.run_command("mvn test", "tests", "Tests")
-    assert code == 0
-    assert out == "fake mvn: test\n"
+    assert (code, out) == (0, "fake mvn: test\n")
     assert "##run" not in capfd.readouterr().out
+    records = run_history.store("test", repo=tmp_path).read()
+    assert [r["step"] for r in records] == ["tests"]
+
+
+def test_test_py_default_path_output_is_unchanged(test_mod, fake_mvn, capfd):
+    code, _ = test_mod.run_command("mvn test", "tests", "Tests")
+    assert code == 0
+    assert capfd.readouterr().out == "Running: mvn test\n" + "-" * 80 + "\nfake mvn: test\n"
+
+
+def test_mvn_wrapper_with_and_still_runs_through_the_shell(test_mod, monkeypatch):
+    monkeypatch.setenv("JUNEAU_MVN_WRAPPER", "echo first &&")
+    monkeypatch.setattr(test_mod._juneau.load()[0], "run_tool", _counting_run_tool(test_mod._juneau.load()[0].run_tool))
+    _, out = test_mod.run_command("mvn --version", "tests", "Tests")
+    assert out.startswith("first\n")  # the && part ran in the same shell as the rest of the command
+    assert test_mod._juneau.load()[0].run_tool.calls == 1
+
+
+def test_a_command_without_a_step_id_keeps_the_popen_path(test_mod, monkeypatch, capfd):
+    run = test_mod._juneau.load()[0]
+    monkeypatch.setattr(run, "run_tool", lambda *a, **k: pytest.fail("no step id: run_tool must not be used"))
+    code, out = test_mod.run_command("echo hi; exit 3")
+    assert (code, out) == (3, "hi\n")
+    assert "hi\n" in capfd.readouterr().out
+
+
+def _counting_run_tool(real):
+    def counted(*a, **k):
+        counted.calls += 1
+        return real(*a, **k)
+    counted.calls = 0
+    return counted
 
 
 def test_test_py_markers_on_runs_the_command_as_a_step(test_mod, fake_mvn, monkeypatch, capfd):
@@ -175,11 +207,12 @@ def test_test_py_standalone_with_markers_owns_run_and_done(test_mod, fake_mvn, m
 
 
 def test_test_py_console_flag_routes_the_output(test_mod, fake_mvn, monkeypatch, capfd):
+    # Registered before test.py exports the flag, so teardown removes it again (a delenv afterwards would restore it).
+    monkeypatch.delenv("JUNEAU_RUN_CONSOLE", raising=False)
     monkeypatch.setattr(sys, "argv", ["test.py", "--build-only", "--console", "none"])
     assert test_mod.main() == 0
     assert "fake mvn" not in capfd.readouterr().out
     assert os.environ["JUNEAU_RUN_CONSOLE"] == "none"
-    monkeypatch.delenv("JUNEAU_RUN_CONSOLE")
 
 
 # ----------------------------------------------------------------------------------------------------------------------
@@ -210,10 +243,10 @@ def gates(push_mod, monkeypatch):
     monkeypatch.setattr(push_mod, "run_docs_followup", lambda *a, **k: rec.calls.append("docs") or ("ok", 1))
     monkeypatch.setattr(push_mod, "_append_test_run_history", rec("history"))
     monkeypatch.setattr(push_mod, "current_branch", lambda root: "main")
-    monkeypatch.setattr(push_mod, "git_short_head", lambda root: "abc1234")
-    monkeypatch.setattr(push_mod, "run_test_script", lambda cmd, cwd, run: rec.calls.append("test.py") or
+    monkeypatch.setenv("JUNEAU_SCRIPTS_QUIET", "1")    # the session's bell and sound
+    monkeypatch.setattr(push_mod, "run_test_script", lambda cmd, cwd, run, **k: rec.calls.append("test.py") or
                         subprocess.CompletedProcess(cmd, 0))
-    monkeypatch.setattr(push_mod.subprocess, "run", lambda *a, **k: type("R", (), {"returncode": 0})())
+    monkeypatch.setattr(push_mod.subprocess, "run", lambda cmd, *a, **k: subprocess.CompletedProcess(cmd, 0, "", ""))
     return rec
 
 
@@ -289,7 +322,7 @@ def test_push_run_command_with_a_tool_emits_the_step_and_keeps_the_result_lines(
 
 
 def test_push_run_command_markers_off_keeps_the_exact_original_call(push_mod, fake_mvn, monkeypatch, capfd, tmp_path):
-    run = push_mod.run_module()
+    run = push_mod._juneau.load()[0]
     monkeypatch.setattr(run, "run_tool", lambda *a, **k: pytest.fail("run_tool must not be used with markers off"))
     seen = []
     real_run = subprocess.run
@@ -319,10 +352,10 @@ def test_push_starter_steps_are_children_of_the_starters_step(push_mod, fake_mvn
 
 def test_push_reserves_step_numbers_for_the_steps_test_py_contributes(push_mod, gates, monkeypatch):
     monkeypatch.setenv("RUN_MARKERS", "1")
+    env = _capture_child_env(push_mod, monkeypatch, gates)
     monkeypatch.setattr(sys, "argv", ["push.py", "--test-only"])
     assert push_mod.main() == 0
-    assert os.environ["JUNEAU_RUN_N_BASE"] == "2"
-    monkeypatch.delenv("JUNEAU_RUN_N_BASE")
+    assert env["JUNEAU_RUN_N_BASE"] == "2"
 
 
 def test_push_test_only_fallback_runs_mvn_test_as_a_maven_step(push_mod, gates, monkeypatch, capsys):
@@ -341,16 +374,29 @@ def test_run_test_script_markers_off_is_the_plain_subprocess_run(push_mod, monke
     seen = []
     monkeypatch.setattr(push_mod.subprocess, "run", lambda *a, **k: seen.append((a, k)) or
                         subprocess.CompletedProcess(a[0], 0))
-    run = push_mod.run_module()
-    assert push_mod.run_test_script(["x"], tmp_path, run).returncode == 0
-    assert seen == [((["x"],), {"cwd": tmp_path, "check": False})]
+    run = push_mod._juneau.load()[0]
+    assert push_mod.run_test_script(["x"], tmp_path, run, env={"A": "1"}).returncode == 0
+    assert seen == [((["x"],), {"cwd": tmp_path, "check": False, "env": {"A": "1"}})]
+
+
+@pytest.mark.parametrize("markers_on", [True, False])
+def test_run_test_script_keeps_returncode_for_its_call_site(push_mod, monkeypatch, tmp_path, markers_on):
+    if markers_on:
+        monkeypatch.setenv("RUN_MARKERS", "1")
+    proc = push_mod.toolkit("proc")
+    seen = []
+    monkeypatch.setattr(proc, "run_group", lambda cmd, **k: seen.append(k) or proc.Result(False, 3))
+    monkeypatch.setattr(push_mod.subprocess, "run", lambda cmd, **k: subprocess.CompletedProcess(cmd, 3))
+    result = push_mod.run_test_script(["x"], tmp_path, push_mod._juneau.load()[0], env={"A": "1"})
+    assert result.returncode == 3
+    assert seen == ([{"cwd": tmp_path, "env": {"A": "1"}}] if markers_on else [])
 
 
 def test_run_test_script_markers_on_gives_the_child_its_own_session(push_mod, monkeypatch, tmp_path):
     monkeypatch.setenv("RUN_MARKERS", "1")
     script = tmp_path / "child.py"
     script.write_text("import os\nraise SystemExit(0 if os.getsid(0) == os.getpid() else 7)\n", encoding="utf-8")
-    run = push_mod.run_module()
+    run = push_mod._juneau.load()[0]
     assert push_mod.run_test_script([sys.executable, str(script)], tmp_path, run).returncode == 0
 
 
@@ -396,7 +442,7 @@ def test_sigterm_ends_the_run_as_cancelled_and_leaves_no_orphan(script, tmp_path
     # (container tags, BOM, PGP prompt) have nothing to run and nothing real is built.
     root = tmp_path / "tree"
     (root / "scripts").mkdir(parents=True)
-    for name in ("push.py", "test.py"):
+    for name in ("push.py", "test.py", "_juneau.py"):
         shutil.copy(SCRIPTS_DIR / name, root / "scripts" / name)
     (root / "juneau-run").symlink_to(SCRIPTS_DIR.parent / "juneau-run")
     args = [sys.executable, "-B", str(root / "scripts" / script)] + (["--test-only", "--no-js-tests"] if script == "push.py"
@@ -438,11 +484,26 @@ class Events:
 def console(push_mod, monkeypatch):
     """A condensed session; stdout is captured, so it draws in plain mode.  Returns (juneau_run, Events)."""
     monkeypatch.setenv("JUNEAU_RUN_CONSOLE", "condensed")
-    run = push_mod.run_module()
+    run = push_mod._juneau.load()[0]
     run.session("🚀 Juneau push · test")
     assert run.console_active()
     events = run.subscribe(Events())
     return run, events
+
+
+@pytest.fixture
+def standalone(push_mod, monkeypatch):
+    """A condensed console that push.main() opens itself, as a push run from the shell does: no session is open
+    first, so the push session is not nested (its own run marker, summary and bell).  Yields (juneau_run, Events,
+    nested), nested being each _nested_env() value the session saw; teardown checks push opened exactly one, un-nested."""
+    monkeypatch.setenv("JUNEAU_RUN_CONSOLE", "condensed")
+    run = push_mod._juneau.load()[0]
+    toolkit_run = push_mod.toolkit("run")
+    real, nested = toolkit_run._nested_env, []
+    monkeypatch.setattr(toolkit_run, "_nested_env", lambda: nested.append(real()) or nested[-1])
+    events = run.subscribe(Events())
+    yield run, events, nested
+    assert nested == [False], "push.main() did not open one standalone session"
 
 
 INSTALL = ["mvn", "clean", "package", "install", "-DskipTests"]
@@ -509,8 +570,8 @@ def test_push_test_only_marks_the_install_step_skipped(push_mod, gates, monkeypa
     assert INSTALL not in commands
 
 
-def test_the_skipped_install_shows_done_by_tests(push_mod, gates, console, monkeypatch):
-    _, events = console
+def test_the_skipped_install_shows_done_by_tests(push_mod, gates, standalone, monkeypatch):
+    _, events, _ = standalone
     monkeypatch.setattr(sys, "argv", ["push.py", "--test-only"])
     assert push_mod.main() == 0
     [install] = [f for f in events.of("step_end") if f["id"] == "install"]
@@ -519,10 +580,20 @@ def test_the_skipped_install_shows_done_by_tests(push_mod, gates, console, monke
 
 class FakeTimings:
     written = []
+    asked = []
 
     @staticmethod
-    def load_records(path):
+    def history_off():
+        return False
+
+    @staticmethod
+    def load_history(repo=None, path=None):
+        FakeTimings.asked.append((repo, path))
         return [{"stub": True}]
+
+    @staticmethod
+    def report_path(repo=None, path=None):
+        return Path(repo) / "test-timings.txt"
 
     @staticmethod
     def latest_run(records):
@@ -547,8 +618,10 @@ def test_the_timing_row_counts_slower_entries_and_names_the_report(push_mod, con
     _, events = console
     monkeypatch.setattr(push_mod, "load_timings_module", lambda script_dir: FakeTimings)
     FakeTimings.written.clear()
-    push_mod.run_timing_report(tmp_path, tmp_path / "master.jsonl")
-    report = tmp_path / "master.txt"
+    FakeTimings.asked.clear()
+    push_mod.run_timing_report(tmp_path, tmp_path)
+    report = tmp_path / "test-timings.txt"
+    assert FakeTimings.asked == [(tmp_path, None)]
     assert FakeTimings.written == [(3, report)]
     assert [(f["level"], f["text"]) for f in events.of("note")] == [
         ("warn", "juneau-core  surefire  +31%  +9.0s"), ("info", "juneau-rest  surefire  -25%  -6.0s")]
@@ -558,8 +631,8 @@ def test_the_timing_row_counts_slower_entries_and_names_the_report(push_mod, con
 
 def test_push_exports_detail_to_test_py(push_mod, gates, monkeypatch):
     seen = []
-    monkeypatch.setattr(push_mod, "run_test_script", lambda cmd, cwd, run:
-                        seen.append(os.environ.get("JUNEAU_RUN_DETAIL")) or subprocess.CompletedProcess(cmd, 0))
+    monkeypatch.setattr(push_mod, "run_test_script", lambda cmd, cwd, run, env=None:
+                        seen.append(env.get("JUNEAU_RUN_DETAIL")) or subprocess.CompletedProcess(cmd, 0))
     monkeypatch.setattr(sys, "argv", ["push.py", "--test-only", "--detail", "modules"])
     assert push_mod.main() == 0
     assert seen == ["modules"]
@@ -575,7 +648,7 @@ def test_push_rejects_an_unknown_detail_level(push_mod, gates, monkeypatch, caps
 
 def test_push_session_header_shows_identity_and_pgp(push_mod, gates, monkeypatch, capsys):
     monkeypatch.setenv("JUNEAU_RUN_CONSOLE", "condensed")
-    events = push_mod.run_module().subscribe(Events())
+    events = push_mod._juneau.load()[0].subscribe(Events())
     monkeypatch.setattr(sys, "argv", ["push.py", "Quick fix", "--skip-tests"])
     assert push_mod.main() == 0
     [session] = events.of("session")
@@ -590,29 +663,29 @@ def test_push_prompts_for_pgp_before_the_gates(push_mod, gates, monkeypatch):
     order = []
     monkeypatch.setattr(push_mod.subprocess, "run", lambda cmd, *a, **k: order.append(
         "pgp" if "prompt-pgp-passphrase.py" in " ".join(map(str, cmd)) else "other") or
-        type("R", (), {"returncode": 0})())
+        subprocess.CompletedProcess(cmd, 0, "", ""))
     monkeypatch.setattr(push_mod, "run_sonarqube_gate", lambda root, n: order.append("sonar") or "pass")
     monkeypatch.setattr(sys, "argv", ["push.py", "Quick fix", "--skip-tests", "--sonarqube"])
     assert push_mod.main() == 0
     assert order.index("pgp") < order.index("sonar")
 
 
-def test_push_hands_the_console_to_test_py(push_mod, gates, console, monkeypatch):
-    run, _ = console
+def test_push_hands_the_console_to_test_py(push_mod, gates, standalone, monkeypatch):
+    run, _, _ = standalone
     calls = []
-    monkeypatch.setattr(run._console, "pause", lambda: calls.append("pause"))
-    monkeypatch.setattr(run._console, "resume", lambda: calls.append("resume"))
-    monkeypatch.setattr(push_mod, "run_test_script", lambda cmd, cwd, r: calls.append(
-        ("test.py", os.environ.get("JUNEAU_RUN_LABEL_WIDTH"))) or subprocess.CompletedProcess(cmd, 0))
+    monkeypatch.setattr(run.Console, "pause", lambda self: calls.append("pause"))
+    monkeypatch.setattr(run.Console, "resume", lambda self: calls.append("resume"))
+    monkeypatch.setattr(push_mod, "run_test_script", lambda cmd, cwd, r, env=None: calls.append(
+        ("test.py", env.get("JUNEAU_RUN_LABEL_WIDTH"))) or subprocess.CompletedProcess(cmd, 0))
     monkeypatch.setattr(sys, "argv", ["push.py", "--test-only"])
     assert push_mod.main() == 0
     assert calls[:3] == ["pause", ("test.py", "10"), "resume"]   # the final line may pause again
 
 
-def test_push_ctrl_c_with_a_console_is_a_clean_cancel(push_mod, gates, console, monkeypatch):
-    _, events = console
+def test_push_ctrl_c_with_a_console_is_a_clean_cancel(push_mod, gates, standalone, monkeypatch):
+    _, events, _ = standalone
 
-    def interrupted(cmd, cwd, run):
+    def interrupted(cmd, cwd, run, **k):
         raise KeyboardInterrupt
 
     monkeypatch.setattr(push_mod, "run_test_script", interrupted)
@@ -681,7 +754,7 @@ def test_a_test_history_failure_is_a_warning_through_say(push_mod, monkeypatch, 
 
 def test_the_identity_failure_is_an_error_note_under_a_console(push_mod, console, monkeypatch):
     _, events = console
-    monkeypatch.setattr(push_mod.subprocess, "run", lambda *a, **k: type("R", (), {"stdout": "x@y.org\n"})())
+    monkeypatch.setattr(push_mod.subprocess, "run", lambda cmd, *a, **k: subprocess.CompletedProcess(cmd, 0, "x@y.org\n", ""))
     assert push_mod.verify_apache_identity(Path(".")) is False
     texts = [text for level, text in say_events(events) if level == "error"]
     assert texts[0].startswith("❌ ERROR: Git identity is not the ASF committer identity.")
@@ -690,7 +763,7 @@ def test_the_identity_failure_is_an_error_note_under_a_console(push_mod, console
 
 
 def test_the_identity_failure_is_printed_without_a_console(push_mod, monkeypatch, capsys):
-    monkeypatch.setattr(push_mod.subprocess, "run", lambda *a, **k: type("R", (), {"stdout": "x@y.org\n"})())
+    monkeypatch.setattr(push_mod.subprocess, "run", lambda cmd, *a, **k: subprocess.CompletedProcess(cmd, 0, "x@y.org\n", ""))
     assert push_mod.verify_apache_identity(Path(".")) is False
     assert "❌ ERROR: Git identity is not the ASF committer identity." in capsys.readouterr().out
 
@@ -704,27 +777,31 @@ def docs_tree(push_mod, monkeypatch, tmp_path):
     monkeypatch.setattr(push_mod, "verify_apache_identity", lambda repo: True)
     monkeypatch.setattr(push_mod, "current_branch", lambda root: "main")
     monkeypatch.setattr(push_mod, "play_sound", lambda success=True: None)
+    monkeypatch.setenv("JUNEAU_SCRIPTS_QUIET", "1")
     return tmp_path
 
 
 def test_docs_only_under_a_console_has_one_session_and_one_done(push_mod, docs_tree, monkeypatch):
     monkeypatch.setenv("JUNEAU_RUN_CONSOLE", "condensed")
-    events = push_mod.run_module().subscribe(Events())
+    events = push_mod._juneau.load()[0].subscribe(Events())
     monkeypatch.setattr(push_mod, "commit_and_push", lambda *a, **k: ("ok", 6))
     monkeypatch.setattr(sys, "argv", ["push.py", "--docs-only", "Docs fix"])
     assert push_mod.main() == 0
     [session] = events.of("session")
     assert session["title"] == "📚 Juneau docs push · main"
     assert [f["status"] for f in events.of("done")] == ["ok"]
+    assert [p["ids"] for p in events.of("plan")] == [["docs-smoke", "commit", "push"]]
 
 
-def test_docs_only_with_markers_on_emits_no_done_marker(push_mod, docs_tree, monkeypatch, capsys):
+def test_docs_only_with_markers_on_emits_run_and_done_markers(push_mod, docs_tree, monkeypatch, capsys):
     monkeypatch.setenv("JUNEAU_RUN_CONSOLE", "condensed")
     monkeypatch.setenv("RUN_MARKERS", "1")
     monkeypatch.setattr(push_mod, "commit_and_push", lambda *a, **k: ("ok", 6))
     monkeypatch.setattr(sys, "argv", ["push.py", "--docs-only", "Docs fix"])
     assert push_mod.main() == 0
-    assert "done" not in [e["ev"] for e in markers(capsys.readouterr().out)]
+    events = markers(capsys.readouterr().out)
+    assert events[0]["ev"] == "run" and events[0]["mode"] == "push" and events[0]["project"] == "juneau-docs"
+    assert events[-1] == {"ev": "done", "status": "ok"}
 
 
 @pytest.mark.parametrize("flags", [[], ["--docs-only"]])
@@ -737,7 +814,7 @@ def test_a_dry_run_under_a_console_still_says_so(push_mod, docs_tree, monkeypatc
 
 class NoHistoryTimings(FakeTimings):
     @staticmethod
-    def load_records(path):
+    def load_history(repo=None, path=None):
         return []
 
     @staticmethod
@@ -749,7 +826,7 @@ def test_the_timing_row_on_a_first_run_says_there_is_no_history(push_mod, consol
     _, events = console
     monkeypatch.setattr(push_mod, "load_timings_module", lambda script_dir: NoHistoryTimings)
     NoHistoryTimings.written.clear()
-    push_mod.run_timing_report(tmp_path, tmp_path / "master.jsonl")
+    push_mod.run_timing_report(tmp_path, tmp_path)
     assert NoHistoryTimings.written == []
     assert events.of("note") == []
     [timing] = [f for f in events.of("step_end") if f["id"] == "timing"]
@@ -759,7 +836,7 @@ def test_the_timing_row_on_a_first_run_says_there_is_no_history(push_mod, consol
 def test_the_timing_row_with_history_still_writes_the_report(push_mod, console, monkeypatch, tmp_path):
     monkeypatch.setattr(push_mod, "load_timings_module", lambda script_dir: FakeTimings)
     FakeTimings.written.clear()
-    push_mod.run_timing_report(tmp_path, tmp_path / "master.jsonl")
+    push_mod.run_timing_report(tmp_path, tmp_path)
     assert len(FakeTimings.written) == 1
 
 
@@ -804,7 +881,7 @@ def test_a_failing_push_stops_commit_and_push_under_a_console(push_mod, console,
     monkeypatch.setattr(run, "run_tool", lambda cmd, tool, step_id, title, **k:
                         run.Result(0 if step_id == "commit" else 1, 1))
     assert push_mod.commit_and_push(Path("."), "msg", 5) == ("error", 6)
-    assert sounds == [False]
+    assert sounds == []    # the session sounds the run's end
 
 
 def test_the_docs_followup_keeps_its_rows_apart_from_juneaus(push_mod, console, monkeypatch, tmp_path):
@@ -818,7 +895,7 @@ def test_the_docs_followup_keeps_its_rows_apart_from_juneaus(push_mod, console, 
         ("docs-smoke", "Docs build"), ("docs-commit", "Docs"), ("docs-push", "Docs push")]
 
 
-def test_main_uses_the_timing_row_under_a_console_and_the_cli_otherwise(push_mod, gates, console, monkeypatch):
+def test_main_uses_the_timing_row_under_a_console_and_the_cli_otherwise(push_mod, gates, standalone, monkeypatch):
     commands = recorded_commands(push_mod, monkeypatch)
     monkeypatch.setattr(sys, "argv", ["push.py", "--test-only"])
     assert push_mod.main() == 0
@@ -831,7 +908,8 @@ def test_main_runs_the_timing_cli_without_a_console(push_mod, gates, monkeypatch
     monkeypatch.setattr(sys, "argv", ["push.py", "--test-only"])
     assert push_mod.main() == 0
     assert "timing" not in gates.calls
-    assert any("push-timings.py" in " ".join(map(str, cmd)) for cmd in commands)
+    [timing] = [cmd for cmd in commands if "push-timings.py" in " ".join(map(str, cmd))]
+    assert timing[2:] == ["--repo", str(Path(push_mod.__file__).resolve().parent.parent)]
 
 
 def test_the_upstream_is_only_looked_up_under_a_console(push_mod, monkeypatch):
@@ -852,8 +930,7 @@ def test_the_tags_and_bom_rows_summarise_their_checks(push_mod):
 
 def test_run_marked_passes_the_summarizer_under_a_console(push_mod, monkeypatch):
     seen = []
-    monkeypatch.setattr(push_mod, "run_module", lambda: SimpleNamespace(enabled=lambda: False,
-                                                                        console_active=lambda: True))
+    monkeypatch.setitem(sys.modules, "juneau_run", SimpleNamespace(enabled=lambda: False, console_active=lambda: True))
     monkeypatch.setattr(push_mod, "run_command", lambda *a, **k: seen.append(k) or True)
     assert push_mod.run_marked("bom", "BOM", ["x"], "Checking", label="BOM", summarize=push_mod.bom_summary)
     assert seen[0]["summarize"] is push_mod.bom_summary
@@ -866,16 +943,16 @@ def test_run_marked_passes_the_label_to_its_fallback(push_mod, monkeypatch):
     assert seen == [{"label": "BOM"}]
 
 
-def test_the_skipped_install_is_not_repeated_as_a_note_under_a_console(push_mod, gates, console, monkeypatch):
-    _, events = console
+def test_the_skipped_install_is_not_repeated_as_a_note_under_a_console(push_mod, gates, standalone, monkeypatch):
+    _, events, _ = standalone
     monkeypatch.setattr(sys, "argv", ["push.py", "--test-only"])
     assert push_mod.main() == 0
     assert not [text for _, text in say_events(events) if "already done by test.py" in text]
 
 
 @pytest.mark.parametrize("gate", ["sonar", "tracker"])
-def test_a_gate_that_could_not_run_points_at_the_full_log_under_a_console(push_mod, gates, console, monkeypatch, gate):
-    _, events = console
+def test_a_gate_that_could_not_run_points_at_the_full_log_under_a_console(push_mod, gates, standalone, monkeypatch, gate):
+    _, events, _ = standalone
     monkeypatch.setattr(push_mod, "run_sonarqube_gate", lambda root, n: "error")
     monkeypatch.setattr(push_mod, "run_tracker_audit_gate", lambda root, n: "error")
     monkeypatch.setattr(sys, "argv", ["push.py", "msg", "--sonarqube" if gate == "sonar" else "--tracker-audit"])
@@ -890,3 +967,220 @@ def test_a_gate_that_could_not_run_still_points_above_without_a_console(push_mod
     monkeypatch.setattr(sys, "argv", ["push.py", "msg", "--sonarqube"])
     assert push_mod.main() == 1
     assert "Fix the issue reported above" in capsys.readouterr().out
+
+
+# ----------------------------------------------------------------------------------------------------------------------
+# Characterization: push.py's handoff to test.py and its plain-mode Ctrl-C
+# ----------------------------------------------------------------------------------------------------------------------
+
+def _capture_child_env(push_mod, monkeypatch, gates):
+    seen = {}
+
+    def runner(cmd, cwd, run, *rest, **kw):
+        seen.update(kw.get("env") or os.environ)
+        gates.calls.append("test.py")
+        return subprocess.CompletedProcess(cmd, 0)
+    monkeypatch.setattr(push_mod, "run_test_script", runner)
+    return seen
+
+
+def test_push_child_env_carries_push_active_and_n_base_under_markers(push_mod, gates, monkeypatch):
+    monkeypatch.setenv("RUN_MARKERS", "1")
+    env = _capture_child_env(push_mod, monkeypatch, gates)
+    monkeypatch.setattr(sys, "argv", ["push.py", "--test-only"])
+    assert push_mod.main() == 0
+    assert env["JUNEAU_PUSH_ACTIVE"] == "1"
+    assert env["JUNEAU_RUN_N_BASE"] == "2"
+
+
+def test_push_child_env_has_push_active_but_no_n_base_without_markers(push_mod, gates, monkeypatch):
+    env = _capture_child_env(push_mod, monkeypatch, gates)
+    monkeypatch.setattr(sys, "argv", ["push.py", "--test-only"])
+    assert push_mod.main() == 0
+    assert env["JUNEAU_PUSH_ACTIVE"] == "1"
+    assert "JUNEAU_RUN_N_BASE" not in env
+
+
+@pytest.mark.parametrize("markers_on", [True, False])
+def test_push_does_not_mutate_os_environ_for_the_child(push_mod, gates, monkeypatch, markers_on):
+    if markers_on:
+        monkeypatch.setenv("RUN_MARKERS", "1")
+    env = _capture_child_env(push_mod, monkeypatch, gates)
+    later = []
+    monkeypatch.setattr(push_mod, "verify_starter_repos", lambda n: later.append(
+        (os.environ.get("JUNEAU_PUSH_ACTIVE"), os.environ.get("JUNEAU_RUN_N_BASE"))) or True)
+    monkeypatch.setattr(sys, "argv", ["push.py", "--test-only"])
+    assert push_mod.main() == 0
+    assert env["JUNEAU_PUSH_ACTIVE"] == "1"
+    assert later == [(None, None)]
+    assert "JUNEAU_PUSH_ACTIVE" not in os.environ and "JUNEAU_RUN_N_BASE" not in os.environ
+
+
+def test_push_reserves_exactly_three_numbers_for_test_py(push_mod, gates, monkeypatch, capsys):
+    monkeypatch.setenv("RUN_MARKERS", "1")
+    env = _capture_child_env(push_mod, monkeypatch, gates)
+    monkeypatch.setattr(sys, "argv", ["push.py", "--test-only"])
+    assert push_mod.main() == 0
+    n_base = int(env["JUNEAU_RUN_N_BASE"])
+    steps = [e for e in markers(capsys.readouterr().out) if e["ev"] == "step" and "parent" not in e]
+    ids = [e["id"] for e in steps]
+    after = steps[ids.index("bom") + 1]
+    assert after["id"] == "install"
+    assert after["n"] == n_base + 4
+    assert max(e["n"] for e in steps[:ids.index("bom") + 1]) == n_base
+
+
+def test_push_plain_ctrl_c_before_the_session_exits_130(push_mod, monkeypatch, capsys):
+    def interrupted():
+        raise KeyboardInterrupt
+    monkeypatch.setenv("JUNEAU_SCRIPTS_QUIET", "1")
+    monkeypatch.setattr(push_mod, "_main", interrupted)
+    assert push_mod.main() == 130
+    assert "❌ Cancelled." in capsys.readouterr().out
+
+
+def test_push_plain_ctrl_c_in_the_session_exits_130(push_mod, gates, monkeypatch, capsys):
+    def interrupted(cmd, cwd, run, **k):
+        raise KeyboardInterrupt
+    monkeypatch.setattr(push_mod, "run_test_script", interrupted)
+    monkeypatch.setattr(sys, "argv", ["push.py", "--test-only"])
+    assert push_mod.main() == 130
+    out = capsys.readouterr().out
+    assert "❌ Cancelled." in out and "Traceback" not in out
+
+
+@pytest.mark.parametrize("argv, expected", [
+    (["--test-only"], ["container-tags", "bom", "build", "tests", "timing", "install", "starters"]),
+    (["Quick fix", "--skip-tests", "--tracker-audit"], ["tracker", "tests", "install", "starters", "commit", "push"]),
+])
+def test_push_session_plan_lists_the_steps_this_run_will_take(push_mod, gates, standalone, monkeypatch, argv, expected):
+    _, events, _ = standalone
+    monkeypatch.setattr(push_mod, "maybe_run_tracker_audit_gate", lambda args, root, n: "pass")
+    monkeypatch.setattr(sys, "argv", ["push.py", *argv])
+    assert push_mod.main() == 0
+    root = Path(push_mod.__file__).resolve().parent.parent
+    docs = ["docs-smoke", "docs-commit", "docs-push"] if (root.parent / "juneau-docs").exists() else []
+    [plan] = events.of("plan")
+    assert plan["ids"] == expected + (docs if "commit" in expected else [])
+
+
+def test_push_session_rings_the_bell_and_plays_the_sound_once_when_it_ends(push_mod, gates, monkeypatch):
+    notify = push_mod.toolkit("notify")
+    calls = []
+    monkeypatch.setattr(notify, "bell", lambda **k: calls.append(("bell", k)))
+    monkeypatch.setattr(notify, "sound", lambda ok, **k: calls.append(("sound", ok, k)))
+    monkeypatch.setattr(sys, "argv", ["push.py", "--test-only"])
+    assert push_mod.main() == 0
+    silence = {"silence_env": (push_mod.PUSH_NO_SOUND_ENV,)}
+    assert calls == [("bell", silence), ("sound", True, silence)]
+
+
+def test_push_plan_puts_the_opt_in_gates_first_and_forced_browser_tests_after_tests(push_mod, tmp_path):
+    script_dir = tmp_path / "juneau" / "scripts"
+    script_dir.mkdir(parents=True)
+    for name in ("test.py", "check-bom-completeness.py", "push-timings.py"):
+        (script_dir / name).touch()
+    (tmp_path / "juneau-docs").mkdir()
+    args = argparse.Namespace(sonarqube=True, tracker_audit=True, skip_tests=False, js_tests=True, test_only=False)
+    assert push_mod.push_plan(args, script_dir, script_dir.parent, False) == [
+        "sonar", "tracker", "bom", "build", "tests", "js-tests", "install", "starters", "commit", "push",
+        "docs-smoke", "docs-commit", "docs-push"]
+
+
+# The one loader push.py, test.py and release.py share (scripts/_juneau.py).
+
+@pytest.fixture
+def juneau_loader():
+    """scripts/_juneau.py, freshly loaded.  bootstrap leaves sys.dont_write_bytecode set; restore it afterwards."""
+    saved = sys.dont_write_bytecode
+    try:
+        yield load("_juneau_under_test", "_juneau.py")
+    finally:
+        sys.dont_write_bytecode = saved
+
+
+def test_the_loader_imports_the_in_tree_toolkit_and_juneau_run(juneau_loader):
+    jr, js = juneau_loader.load()
+    python_src = (SCRIPTS_DIR.parent / "juneau-run" / "src" / "main" / "python").resolve()
+    assert Path(js.__file__).resolve() == python_src / "juneau_scripts" / "__init__.py"
+    assert Path(jr.__file__).resolve() == python_src / "juneau_run.py"
+    assert sys.modules["juneau_run"] is jr
+    assert juneau_loader.load() == (jr, js)
+
+
+def test_the_loader_reuses_an_already_loaded_juneau_run(juneau_loader, monkeypatch):
+    sentinel = SimpleNamespace(__file__="elsewhere/juneau_run.py")
+    monkeypatch.setitem(sys.modules, "juneau_run", sentinel)
+    assert juneau_loader.load()[0] is sentinel
+
+
+def test_the_loader_writes_no_bytecode_into_the_source_tree(tmp_path):
+    """A fresh process, without -B, on a scratch copy of the tree: loading and the toolkit's late imports write no
+    __pycache__ under juneau-run (the Maven build's RAT check scans it)."""
+    python_src = SCRIPTS_DIR.parent / "juneau-run" / "src" / "main" / "python"
+    tree = tmp_path / "tree"
+    shutil.copytree(python_src, tree / "juneau-run" / "src" / "main" / "python",
+                    ignore=shutil.ignore_patterns("__pycache__"))
+    (tree / "scripts").mkdir()
+    shutil.copy(SCRIPTS_DIR / "_juneau.py", tree / "scripts" / "_juneau.py")
+    code = ("import sys; sys.path.insert(0, sys.argv[1]); import _juneau; jr, js = _juneau.load(); "
+            "from juneau_scripts import git, run, tools, notify, steps, state, prompt; print(jr.__file__)")
+    env = {k: v for k, v in os.environ.items() if k != "PYTHONDONTWRITEBYTECODE"}
+    done = subprocess.run([sys.executable, "-c", code, str(tree / "scripts")], env=env, capture_output=True,
+                          text=True, check=False)
+    assert done.returncode == 0, done.stderr
+    assert Path(done.stdout.strip()).resolve().is_relative_to(tree.resolve())
+    assert list((tree / "juneau-run").rglob("__pycache__")) == []
+
+
+# ----------------------------------------------------------------------------------------------------------------------
+# push.py's steps take their numbers from the toolkit's session counter
+# ----------------------------------------------------------------------------------------------------------------------
+
+def test_push_steps_share_the_toolkit_counter(push_mod, monkeypatch, capsys):
+    monkeypatch.setenv("RUN_MARKERS", "1")
+    run = push_mod.toolkit("run")
+    monkeypatch.setattr(run, "_n", 0)
+    with push_mod.marked_step("a", "A"):
+        pass
+    with run.step("b", "B"):
+        pass
+    assert push_mod.next_step_number() == 3
+    assert [(e["id"], e["n"]) for e in markers(capsys.readouterr().out) if e["ev"] == "step"] == [("a", 1), ("b", 2)]
+
+
+class HistoryOffTimings(FakeTimings):
+    @staticmethod
+    def history_off():
+        return True
+
+
+def test_the_timing_row_says_when_history_is_off(push_mod, console, monkeypatch, tmp_path):
+    _, events = console
+    monkeypatch.setattr(push_mod, "load_timings_module", lambda script_dir: HistoryOffTimings)
+    HistoryOffTimings.written.clear()
+    push_mod.run_timing_report(tmp_path, tmp_path)
+    assert HistoryOffTimings.written == []
+    [timing] = [f for f in events.of("step_end") if f["id"] == "timing"]
+    assert timing["summary"] == "run history is off (JUNEAU_RUN_HISTORY=0)"
+
+
+def test_the_timing_row_reads_the_test_store_not_the_push_store(push_mod, console, run_history, history_record,
+                                                               monkeypatch, tmp_path):
+    """The real push-timings module on F1's store: the Timing row reads test.py's records for the repo, and the
+    report lands beside them as test-timings.txt."""
+    _, events = console
+    repo = tmp_path / "repo"
+    repo.mkdir()
+    run_history.start(repo)
+    store = run_history.store("test", repo=repo)
+    for wall in (100, 101, 160):
+        store.append(history_record(step="tests", wall_s=wall, series={"surefire_s": {"juneau-core.core": wall}}))
+    push_store = run_history.store("push", repo=repo)
+    push_store.append(history_record(step="tests", wall_s=999, series={"surefire_s": {"decoy.core": 1}}))
+    push_mod.run_timing_report(push_mod.Path(push_mod.__file__).parent, repo)
+    [timing] = [f for f in events.of("step_end") if f["id"] == "timing"]
+    report = store.path.with_name("test-timings.txt")
+    assert timing["summary"].endswith(f"→ {report}")
+    text = report.read_text(encoding="utf-8")
+    assert "160.0s" in text and "999" not in text

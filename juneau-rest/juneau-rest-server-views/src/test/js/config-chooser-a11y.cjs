@@ -17,7 +17,7 @@
 
 /*
  * config-chooser-a11y.cjs - always-on Node harness for the View Settings dialog's tab ARIA wiring and
- * roving-tabindex keyboard nav (F3). Unlike config-chooser.cjs's minimal no-op el() shim, this loads
+ * roving-tabindex keyboard nav. Unlike config-chooser.cjs's minimal no-op el() shim, this loads
  * juneau-views.js (for NS.init.detailTabTargetIndex) and juneau-config.js into views-dom-shim.cjs's real DOM —
  * real querySelector/dispatch/getAttribute/focus — so ARIA attributes and keydown-driven focus moves can be
  * asserted directly.
@@ -54,7 +54,7 @@ function openDialog() {
 	return { table: table, ctx: ctx };
 }
 
-// F3 — id-prefix uniqueness: a dialog's tab ids must never collide with a PREVIOUSLY opened dialog's tab ids (as
+// id-prefix uniqueness: a dialog's tab ids must never collide with a PREVIOUSLY opened dialog's tab ids (as
 // if two tables on one page each got their Columns button clicked in turn).
 const first = openDialog();
 const firstIds = env.document.querySelectorAll('[role="tab"]').map(function (b) { return b.id; });
@@ -69,7 +69,7 @@ out.secondIdsUnique = new Set(secondIds).size === secondIds.length;
 out.idsNonEmpty = firstIds.concat(secondIds).every(function (id) { return typeof id === 'string' && id.length > 0; });
 out.noOverlapAcrossDialogs = firstIds.every(function (id) { return secondIds.indexOf(id) < 0; });
 
-// F3 — ARIA wiring on a fresh dialog: role=tablist, one role=tab per CONFIG_TABS entry (in order), each
+// ARIA wiring on a fresh dialog: role=tablist, one role=tab per CONFIG_TABS entry (in order), each
 // aria-controls a role=tabpanel with a matching aria-labelledby, and the View tab (the initial selection) is the
 // only one selected/focusable.
 const opened = openDialog();
@@ -84,7 +84,7 @@ out.panelsMatchControls = tabs.every(function (b) {
 	return panel?.getAttribute('role') === 'tabpanel' && panel.getAttribute('aria-labelledby') === b.id;
 });
 
-// F3 — roving tabindex keyboard nav (WAI-ARIA APG tabs pattern): ArrowRight from View moves to Search; ArrowLeft
+// roving tabindex keyboard nav (WAI-ARIA APG tabs pattern): ArrowRight from View moves to Search; ArrowLeft
 // from Search goes back to View; ArrowLeft from View (the FIRST tab) wraps to Options (the LAST tab); Home/End
 // jump straight to the first/last tab.  The keydown listener lives on the tablist container (matching the
 // existing ribbon-strip/probe-group harnesses' own convention — see helpers.cjs's stripOf(wrapper).dispatch
@@ -118,10 +118,10 @@ const beforeTabKeyActiveTab = opened.ctx._configActiveTab;
 pressKey('Tab', opened.ctx._configTabButtons.view);
 out.plainTabKeyIgnored = opened.ctx._configActiveTab === beforeTabKeyActiveTab;
 
-// Close the F3 dialog above so the dialogs below are the only ones in the document.
+// Close the dialog above so the dialogs below are the only ones in the document.
 NS.config.closeChooserDialog(opened.ctx);
 
-// Gap-g - columnConfig.tabs restricts the dialog to a subset of tabs, in CONFIG_TABS' fixed order, and the first
+// columnConfig.tabs restricts the dialog to a subset of tabs, in CONFIG_TABS' fixed order, and the first
 // VISIBLE tab (not always "view") becomes the initial selection.
 function openRestrictedDialog(tabs) {
 	const table = env.document.createElement('table');
@@ -144,13 +144,13 @@ pressKeyOn(env.document.querySelector('[role="tablist"]'), 'ArrowRight', restric
 out.restrictedWrapArrowRightFromLastTab = restricted.ctx._configActiveTab;
 NS.config.closeChooserDialog(restricted.ctx);
 
-// columnConfig: true (unrestricted) still gets all four, defaulting to "view", exactly as before Gap-g.
+// columnConfig: true (unrestricted) still gets all four, defaulting to "view", exactly as before.
 const unrestricted = openDialog();
 out.unrestrictedTabOrder = env.document.querySelectorAll('[role="tab"]').map(function (b) { return b.dataset.tab; });
 out.unrestrictedInitialActiveTab = unrestricted.ctx._configActiveTab;
 NS.config.closeChooserDialog(unrestricted.ctx);
 
-// Gap 6 - the Sort tab is an ordered, directional priority list: reordering and direction controls work, and an
+// The Sort tab is an ordered, directional priority list: reordering and direction controls work, and an
 // unchecked row drops out of draft.sort while an unsorted row's checkbox appends it back at the tail.
 const sortDialog = openDialog();
 NS.config.selectConfigTab(sortDialog.ctx, 'sort');

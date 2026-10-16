@@ -26,7 +26,7 @@ import org.apache.juneau.marshall.collections.*;
 import org.junit.jupiter.api.*;
 
 /**
- * Tests for {@link BusPolicy}: default deny, topic patterns, E-57, {@code check(contract)} E-55, defaults (spec §11.7).
+ * Tests for {@link BusPolicy}: default deny, topic patterns, E-57, {@code check(contract)} E-55, defaults.
  */
 class BusPolicy_Test extends TestBase {
 

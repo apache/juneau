@@ -29,7 +29,7 @@ import org.apache.juneau.rest.server.staticfile.*;
  * <p>
  * Composes {@link StaticFilesMixin} to serve {@code /static/*} from the importer's classpath: the file
  * {@code static/petstore-ui.html} is reachable at {@code GET /petstore-ui/static/petstore-ui.html}.  The HTML
- * loads React + Babel and uses {@code fetch()} against {@code /petstore/pets} to demonstrate the headless-JSON +
+ * loads the vendored React + ReactDOM bundles ({@code static/vendor/}) and uses {@code fetch()} against {@code /petstore/pets} to demonstrate the headless-JSON +
  * decoupled-SPA pattern alongside the server-rendered HTML-doc UI.
  *
  * <p>

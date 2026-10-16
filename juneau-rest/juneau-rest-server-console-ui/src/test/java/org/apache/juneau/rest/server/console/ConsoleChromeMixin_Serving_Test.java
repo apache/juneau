@@ -97,6 +97,17 @@ class ConsoleChromeMixin_Serving_Test extends TestBase {
 		assertEquals("Unknown console asset '/nope.js'.", ex.getMessage());
 	}
 
+	@ParameterizedTest
+	@ValueSource(strings={ConsoleChromeMixin.DASHBOARD_JS_PATH, ConsoleChromeMixin.DASHBOARD_JS_PATH_UNPREFIXED})
+	void a08_dashboardJs_served(String path) throws Exception {
+		var body = C.get(path).run()
+			.assertStatus(200)
+			.assertHeader("Content-Type").isContains("javascript")
+			.assertHeader("Cache-Control").isContains("max-age")
+			.getContent().asString();
+		assertTrue(body.contains("window.JuneauDashboard"), () -> "Missing window.JuneauDashboard in " + path);
+	}
+
 	@Test void a03_constants() {
 		assertEquals("/juneau-console/juneau-console.js", ConsoleChromeMixin.CONSOLE_JS_PATH);
 		assertEquals("/juneau-console/juneau-page.schema.json", ConsoleChromeMixin.SCHEMA_PATH);

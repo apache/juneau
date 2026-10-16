@@ -178,7 +178,7 @@ out.pill_actionHasRole = out.pill_action.indexOf('role="button"') >= 0;
 out.pill_actionHasTabindex = out.pill_action.indexOf('tabindex="0"') >= 0;
 out.pill_actionHasId = out.pill_action.indexOf('data-juneau-action="ack"') >= 0;
 out.pill_noActionNoRole = out.pill_display.indexOf('role=') < 0 && out.pill_display.indexOf('data-juneau-action') < 0;
-// No selection/toggle protocol ever (B5/N1-fold).
+// No selection/toggle protocol ever.
 out.pill_noSelect = (out.pill_display + out.pill_action).indexOf('aria-pressed') < 0
 	&& (out.pill_display + out.pill_action).indexOf('data-juneau-pill-select') < 0;
 out.pill_blank = pillHtml(null, { field: 'state' });

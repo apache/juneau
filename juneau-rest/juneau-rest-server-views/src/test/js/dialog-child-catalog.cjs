@@ -97,6 +97,7 @@ function parentPayload(opts) {
 			contractVersion: '2',
 			fields: [
 				{ name: 'note', type: 'text', label: 'Note', value: 'typed-by-operator' },
+				{ name: 'secret', type: 'password', label: 'Secret' },
 				{ name: 'go', type: 'action', label: 'Review', actionId: o.actionId || 'review' }
 			]
 		},
@@ -157,8 +158,8 @@ async function openParent(opts) {
 		const env = r.env, I = r.I;
 		out.open_parentOpened = I.dialogLayerCount() === 1;
 		out.open_childButtonPainted = r.btn != null;
-		// The resolution that fails closed today: the id is in NEITHER row catalog, so pre-J0513 this button was
-		// painted disabled+marked with no way for its author to reach it.
+		// The resolution that fails closed today: the id is in NEITHER row catalog, so before the child-catalog lookup this
+		// button was painted disabled+marked with no way for its author to reach it.
 		out.open_childButtonEnabled = r.btn?.disabled === false;
 		out.open_childButtonNotMarkedMissing = r.btn?.dataset.juneauActionMissing === undefined;
 
@@ -260,6 +261,9 @@ async function openParent(opts) {
 		// Type something the operator has NOT submitted yet - the whole reason this channel exists.
 		const note = q(r.env, '[data-juneau-form-field="note"]');
 		if (note) note.value = 'edited-in-place';
+		// A typed password must never ride the child's GET URL (access logs, proxies, history).
+		const secret = q(r.env, '[data-juneau-form-field="secret"]');
+		if (secret) secret.value = 'hunter2-secret';
 		if (r.btn) r.btn.dispatch('click');
 		await flush();
 		const childGet = r.gets.find(function (u) { return u.startsWith(CHILD_FORM); });
@@ -271,6 +275,7 @@ async function openParent(opts) {
 			const parsed = JSON.parse(raw);
 			return parsed.note === 'edited-in-place';
 		})();
+		out.drafts_passwordAbsent = secret != null && childGet != null && childGet.indexOf('hunter2') < 0 && childGet.indexOf('secret') < 0;
 		out.drafts_childOpened = I.dialogLayerCount() === 2;
 	}
 
@@ -370,6 +375,178 @@ async function openParent(opts) {
 		out.helpers_rowActionIdExistsMiss = I.rowActionIdExists(ctx, 'nope') === false;
 		out.helpers_rowActionIdExistsNullSafe = I.rowActionIdExists(null, 'x') === false
 			&& I.rowActionIdExists({}, 'x') === false;
+	}
+
+	// --- 11) A stacked child's SUCCESSFUL submit closes the whole stack and paints the outcome --------------
+	// The wizard shape: a row-less (ribbon-hosted) step 1 whose child step submits with its own endpoint.  The
+	// child's write commits, so the operator must not be left on a now-stale parent, and the outcome must land
+	// in the ribbon-anchored host where it can be read.  Neither step opts in to keepOpenOnSubmit.  A FAILED child
+	// write commits nothing, so it leaves the parent where it was.  A bare 2xx (no typed body) is a commit too.  A
+	// parent the operator cancelled while the child's write was in flight is left alone: nothing else is closed.
+	// While the child's write is in flight the parent is disabled (it cannot be confirmed or stacked on again).  A
+	// refused write that never went out (client refusal, transport refusal, typed refusal) restores it to its
+	// pre-lock state; one that may have landed (typed failure, network reject) leaves it Close-only.  Either way the
+	// notice is shown inside the parent rather than in the ribbon banner behind it.
+	const DEFERRED = ['cancelled', 'pending', 'escape', 'double'];
+	const STACK_ONLY = ['failure', 'pending', 'transport', 'noCsrf', 'netreject'];
+	for (const [hosted, verdict] of [['ribbon', 'success'], ['row', 'success'], ['ribbon', 'failure'],
+			['ribbon', 'bare'], ['ribbon', 'cancelled'], ['ribbon', 'pending'], ['row', 'failure'],
+			['ribbon', 'transport'], ['ribbon', 'noCsrf'], ['ribbon', 'netreject'], ['ribbon', 'escape'],
+			['ribbon', 'double']]) {
+		const { env, I } = load();
+		const wrapper = env.el('div');
+		wrapper.className = 'dt-container';
+		env.body.appendChild(wrapper);
+		const toolbarRow = env.el('div');
+		toolbarRow.className = 'juneau-view-toolbar-row';
+		wrapper.appendChild(toolbarRow);
+		const table = env.el('table');
+		table.dataset.juneauCsrf = 'tok-1';
+		wrapper.appendChild(table);
+		let tr = null;
+		if (hosted === 'row') {
+			tr = env.el('tr');
+			tr.dataset.juneauRowId = 'INC-1';
+			const cell = env.el('td');
+			cell.className = 'juneau-view-actions-cell';
+			tr.appendChild(cell);
+			table.appendChild(tr);
+		}
+		const parent = { id: 'new', label: 'New', type: 'dialog', present: 'dialog', method: 'POST', endpoint: '/x/step1', form: PARENT_FORM };
+		let redraws = 0;
+		const ctx = { table: table, viewDef: { id: 'v1', rowActions: hosted === 'row' ? [parent] : [] },
+			dataTable: {}, activeState: {}, redraw: function () { redraws++; } };
+		const posts = [];
+		const accepts = [];
+		const releasers = [];
+		const REFUSAL = { outcome: 'refusal', refusalCode: 'out-of-stock', message: 'Out of stock' };
+		env.setFetch(function (url, init) {
+			const method = (init?.method) || 'GET';
+			if (method === 'GET' && url === PARENT_FORM) return Promise.resolve(jsonResponse(parentPayload({
+				childActions: [{ id: 'review', label: 'Review', form: CHILD_FORM, carryDrafts: true,
+					endpoint: '/x/orders', method: 'POST', onSuccess: 'redraw' }]
+			})));
+			if (method === 'GET' && String(url).startsWith(CHILD_FORM))
+				return Promise.resolve(jsonResponse({
+					contractVersion: '2', title: 'Review',
+					form: { contractVersion: '2', fields: [{ name: 'note', type: 'text', label: 'Note', value: 'n' }] }
+				}));
+			posts.push(String(url));
+			accepts.push(init?.headers?.Accept ?? null);
+			if (verdict === 'bare') return Promise.resolve({ ok: true, status: 200, headers: { get: function () { return null; } },
+				text: function () { return Promise.resolve(''); } });
+			if (DEFERRED.includes(verdict)) return new Promise(function (r) { releasers.push(r); });
+			if (verdict === 'netreject') return Promise.reject(new Error('down'));
+			if (verdict === 'transport') return Promise.resolve(jsonResponse({}, { status: 403 }));
+			return Promise.resolve(jsonResponse(verdict === 'failure'
+				? { outcome: 'failure', message: 'Out of stock' }
+				: { outcome: 'success', message: "Placed order '7'" }));
+		});
+		I.openActionDialog(parent, table, tr, ctx);
+		await flush();
+		const btn = q(env, '.juneau-view-dialog-form-action');
+		if (btn) btn.dispatch('click');
+		await flush();
+		const k = { success: 'commit_', failure: 'failed_', bare: 'bare_', cancelled: 'cancelled_', pending: 'pending_',
+			transport: 'transport_', noCsrf: 'noCsrf_', netreject: 'netreject_', escape: 'escape_', double: 'double_' }[verdict] + hosted + '_';
+		out[k + 'childStacked'] = I.dialogLayerCount() === 2;
+		const confirms = env.body.querySelectorAll('.juneau-view-dialog-confirm');
+		const top = confirms[confirms.length - 1];
+		const pb = env.body.querySelectorAll('.juneau-view-dialog-backdrop')[0];
+		let extraChild = null;
+		let firstRecord = null;
+		if (verdict === 'pending') {
+			// A parent Confirm and a second child button that were already disabled before the lock must stay so.
+			pb.querySelector('.juneau-view-dialog-confirm').disabled = true;
+			extraChild = env.el('button');
+			extraChild.className = 'juneau-view-dialog-form-action';
+			extraChild.disabled = true;
+			pb.querySelector('.juneau-view-dialog').appendChild(extraChild);
+		}
+		if (verdict === 'noCsrf') table.dataset.juneauCsrf = '';
+		if (top) top.dispatch('click');
+		await flush();
+		if (verdict === 'pending' || verdict === 'double') {
+			out[k + 'inFlight_confirmDisabled'] = pb.querySelector('.juneau-view-dialog-confirm').disabled === true;
+			out[k + 'inFlight_childActionDisabled'] = pb.querySelector('.juneau-view-dialog-form-action').disabled === true;
+			out[k + 'inFlight_busyMarked'] = pb.querySelector('.juneau-view-dialog').dataset.juneauDialogBusy === '1';
+			out[k + 'inFlight_focusOnCancel'] = env.getActive() === pb.querySelector('.juneau-view-dialog-cancel');
+			firstRecord = ctx._stackedSubmitParent;
+		}
+		if (verdict === 'double') {
+			// A second, programmatic child confirmed over the already-locked parent must not overwrite the first record.
+			I.openChildActionDialog({ id: 'review', label: 'Review', form: CHILD_FORM, carryDrafts: true,
+				endpoint: '/x/orders', method: 'POST', onSuccess: 'redraw' }, table, tr, ctx);
+			await flush();
+			const c2 = env.body.querySelectorAll('.juneau-view-dialog-confirm');
+			if (c2.length) c2[c2.length - 1].dispatch('click');
+			await flush();
+			out[k + 'secondSubmitted'] = posts.length === 2;
+			out[k + 'recordKept'] = firstRecord != null && ctx._stackedSubmitParent === firstRecord;
+			out[k + 'stillLocked'] = pb.querySelector('.juneau-view-dialog').dataset.juneauDialogBusy === '1';
+			for (const r of releasers) r(jsonResponse(REFUSAL));
+			await flush();
+		}
+		if (verdict === 'escape') {
+			out[k + 'recordedWhileInFlight'] = ctx._stackedSubmitParent != null;
+			env.dispatchDocument('keydown', { key: 'Escape', preventDefault: function () {} });
+			await flush();
+			out[k + 'parentEscaped'] = I.dialogLayerCount() === 0;
+			releasers[0](jsonResponse(REFUSAL));
+			await flush();
+		}
+		if (verdict === 'cancelled') {
+			// The child's write is in flight; the operator cancels the parent, then opens an unrelated dialog that
+			// must survive the late commit.
+			out[k + 'recordedWhileInFlight'] = ctx._stackedSubmitParent != null;
+			const cancels = env.body.querySelectorAll('.juneau-view-dialog-cancel');
+			if (cancels.length) cancels[cancels.length - 1].dispatch('click');
+			await flush();
+			out[k + 'parentCancelled'] = I.dialogLayerCount() === 0;
+			I.openActionDialog(parent, table, tr, ctx);
+			await flush();
+			out[k + 'otherOpened'] = I.dialogLayerCount() === 1;
+			releasers[0](jsonResponse({ outcome: 'success', message: "Placed order '7'" }));
+			await flush();
+		}
+		if (verdict === 'pending') {
+			releasers[0](jsonResponse(REFUSAL));
+			await flush();
+		}
+		if (STACK_ONLY.includes(verdict)) {
+			const dlg = pb.querySelector('.juneau-view-dialog');
+			const pConfirm = pb.querySelector('.juneau-view-dialog-confirm');
+			const children = pb.querySelectorAll('.juneau-view-dialog-form-action');
+			out[k + 'settled_confirmGone'] = pConfirm == null;
+			out[k + 'settled_confirmEnabled'] = pConfirm != null && pConfirm.disabled === false;
+			out[k + 'settled_confirmStillDisabled'] = pConfirm != null && pConfirm.disabled === true;
+			out[k + 'settled_childActionEnabled'] = children[0].disabled === false;
+			out[k + 'settled_childActionDisabled'] = children[0].disabled === true;
+			out[k + 'settled_extraChildStillDisabled'] = extraChild != null && extraChild.disabled === true;
+			out[k + 'settled_notBusy'] = dlg.dataset.juneauDialogBusy === undefined;
+			out[k + 'settled_closeOnly'] = pb.querySelector('.juneau-view-dialog-close') != null;
+			const active = env.getActive();
+			out[k + 'settled_focusOnClose'] = active != null && active === pb.querySelector('.juneau-view-dialog-close');
+			out[k + 'settled_focusOnCancel'] = active != null && active === pb.querySelector('.juneau-view-dialog-cancel');
+			out[k + 'settled_focusOnConfirm'] = active != null && active === pConfirm;
+		}
+		out[k + 'postedToChildEndpoint'] = posts.length >= 1 && posts[0] === '/x/orders';
+		// The typed result is JSON, so the write must ask for JSON first: a server whose default rendering is HTML
+		// would otherwise answer with a page the result parser reads as a bare success, and the outcome would vanish.
+		// The trailing low-weight wildcard is the fallback that keeps a JSON-less endpoint working instead of a 406.
+		out[k + 'acceptsJson'] = accepts.length >= 1 && accepts[0] === 'application/json, */*;q=0.1';
+		out[k + 'redrew'] = redraws === (['success', 'bare', 'cancelled'].includes(verdict) ? 1 : 0);
+		out[k + 'layers'] = I.dialogLayerCount();
+		out[k + 'backdrops'] = env.body.querySelectorAll('.juneau-view-dialog-backdrop').length;
+		out[k + 'stackEmpty'] = (ctx._dialogStack || []).length === 0;
+		out[k + 'parentRecordCleared'] = ctx._stackedSubmitParent == null;
+		const outcome = hosted === 'ribbon'
+			? q(env, '.juneau-view-ribbon-action-outcome')
+			: tr.querySelector('.juneau-view-action-outcome');
+		out[k + 'outcomeState'] = outcome ? (outcome.dataset.state || outcome.className) : null;
+		out[k + 'outcomeText'] = outcome ? outcome.textContent : null;
+		const notice = q(env, '.juneau-view-dialog-result-notice');
+		out[k + 'parentNotice'] = notice ? notice.textContent : null;
 	}
 
 	process.stdout.write(JSON.stringify(out));

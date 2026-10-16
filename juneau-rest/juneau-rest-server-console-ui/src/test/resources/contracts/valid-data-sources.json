@@ -1,0 +1,9 @@
+{"contractVersion":"1","title":"T","nav":[],"activeNav":[],"cards":[],
+ "dataSources":[
+  {"id":"orders","kind":"source","url":"/rest/orders/{org}","parser":"csv","builder":"columnar",
+   "columns":[{"name":"start","type":"time"},{"name":"ms","type":"number"}],
+   "subscribes":[{"topic":"filter:range","as":"params","map":{"start":"start","end":"end"}}],
+   "chunk":{"unit":"day","start":"start","end":"end"},"concurrency":2,"debounceMs":250,"cache":"indexedDb",
+   "epoch":{"url":"/rest/session","path":"dataEpoch"},"mode":"auto","maxRows":1000,
+   "aggregateUrl":"/rest/orders/agg","aggregate":{"bucket":"auto","groupBy":["status"],"measures":["count"]}},
+  {"id":"top","kind":"derived","from":"orders","transforms":[{"use":"topN","args":{"by":"count","n":5}}],"subscribes":[]}]}

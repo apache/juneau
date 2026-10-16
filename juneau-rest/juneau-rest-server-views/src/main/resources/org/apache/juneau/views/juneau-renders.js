@@ -18,7 +18,7 @@
 /*
  * juneau-renders.js - dependency-free cell-renderer registry for the Apache Juneau rich-view toolkit.
  *
- * A pure, library-free registry mapping render ids (per the VIEW_META §6.6 grammar) to cell-render functions.  Each
+ * A pure, library-free registry mapping render ids (per the VIEW_META render grammar) to cell-render functions.  Each
  * renderer is an object with up to five orthogonal facets DataTables asks a column for:
  *
  *     { display(cellData, rowData, meta), sort(...), filter(...), type(...), class(cellData, rowData, meta) }
@@ -62,7 +62,8 @@
 	}
 
 	/**
-	 * Parses a render reference into the canonical `{id, meta?}` form (VIEW_META §6.6).  Accepts either the already
+	 * Parses a render reference into the canonical `{id, meta?}` form (VIEW_META render grammar).  Accepts either the
+	 * already
 	 * canonical object, or the `"id:field"` string sugar where everything after the FIRST colon becomes meta.field.
 	 */
 	function parseRenderId(spec) {
@@ -205,9 +206,15 @@
 
 	registerRenderer("date", {
 		display: function (cellData) {
-			const d = toDate(cellData);
-			if (!d) return cellData == null ? "" : escHtml(cellData);
-			return escHtml(new Intl.DateTimeFormat(undefined, { year: "numeric", month: "short", day: "2-digit" }).format(d));
+			// A date-only string names a calendar day, not an instant: parse and format it in UTC so the day is the
+			// same in every zone.  Real instants (Date, epoch, date-times) stay in the browser's local zone.
+			const trimmed = typeof cellData === "string" ? cellData.trim() : "";
+			const dateOnly = /^\d{4}-\d{2}-\d{2}$/.test(trimmed);
+			const d = dateOnly ? new Date(trimmed) : toDate(cellData);
+			if (!d || Number.isNaN(d.getTime())) return cellData == null ? "" : escHtml(cellData);
+			const opts = { year: "numeric", month: "short", day: "2-digit" };
+			if (dateOnly) opts.timeZone = "UTC";
+			return escHtml(new Intl.DateTimeFormat(undefined, opts).format(d));
 		},
 		sort: function (cellData) { const d = toDate(cellData); return d ? d.getTime() : cellData; }
 	});

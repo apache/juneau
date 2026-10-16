@@ -37,7 +37,6 @@ import org.apache.juneau.config.event.*;
 import org.apache.juneau.marshall.cp.*;
 import org.apache.juneau.microservice.*;
 import org.apache.juneau.rest.server.*;
-import org.apache.juneau.rest.server.auth.*;
 import org.apache.juneau.rest.server.health.*;
 import org.apache.juneau.rest.server.servlet.*;
 import org.eclipse.jetty.ee11.servlet.*;
@@ -59,6 +58,8 @@ import jakarta.servlet.*;
  * 	<li>Mounts servlets from {@code Jetty/servlets}, {@code Jetty/servletMap}, {@code Jetty/servletAttributes}
  * 		config sections, plus auto-mounts every {@code @Bean Servlet} whose runtime class is annotated with
  * 		{@link Rest @Rest} (at {@link Rest#path()}, or <c>"/"</c> when no path is set).
+ * 	<li>Mounts every <c>@Bean</c> {@link ServletFilterRegistration} (and the <c>@Bean</c> <c>AuthFilterChain</c>, at
+ * 		<c>/*</c>, unless a registration already wraps it) in {@link ServletFilterRegistration#getOrder() order}.
  * 	<li>Starts the server and publishes the bound port via the {@code availablePort} / {@code juneau.serverPort}
  * 		system properties.
  * </ol>
@@ -307,9 +308,11 @@ public class JettyServerComponent implements MicroserviceListener {
 
 			cf.get("Jetty/servletAttributes").asMap().orElse(EMPTY_MAP).forEach(this::addServletAttribute);
 
-			// Auto-mount @Bean AuthFilterChain at /* before any servlet registration so the filter
-			// runs before routing for all requests.
-			store.getBean(AuthFilterChain.class).ifPresent(chain -> addFilter(chain, "/*"));
+			// Mount the @Bean ServletFilterRegistration filters, plus the @Bean AuthFilterChain at /* unless a
+			// registration already wraps it, outermost first.  Filter matching does not depend on whether the
+			// servlets or the filters were added first, so mounting after the config-sourced servlets is fine.
+			for (var registration : ServletFilterRegistration.collect(store))
+				addFilter(registration);
 
 			// Auto-discover @Rest servlets contributed via @Configuration/@Bean methods.
 			// Path source precedence: @Rest(path=...) on the resource class, else "/".
@@ -445,6 +448,62 @@ public class JettyServerComponent implements MicroserviceListener {
 		for (var urlPattern : urlPatterns)
 			getServletContextHandler().addFilter(fh, urlPattern, EnumSet.of(DispatcherType.REQUEST));
 		return this;
+	}
+
+	/**
+	 * Adds a servlet filter registration to this Jetty server.
+	 *
+	 * <p>
+	 * Maps the filter on every URL pattern and dispatcher type of the registration with one mapping, so the filter runs at
+	 * most once per dispatch even when the patterns overlap.  Mapping order is call order, so call this outermost first.
+	 *
+	 * <p>
+	 * Applications contribute a {@link ServletFilterRegistration} <c>@Bean</c> instead; {@link #onStart(Microservice)}
+	 * applies the beans through this method in {@link ServletFilterRegistration#getOrder() order}.  Calling it directly
+	 * is only possible once the server object exists (during startup) and before the server runs.
+	 *
+	 * @param registration The registration.  Cannot be <jk>null</jk>.
+	 * @return This object.
+	 * @throws IllegalArgumentException If the registration is <jk>null</jk>.
+	 * @throws IllegalStateException If the server has already started.
+	 */
+	public JettyServerComponent addFilter(ServletFilterRegistration registration) {
+		if (registration == null)
+			throw iaex("registration must not be null.");
+		var server = getServer();
+		if (server.isRunning() || server.isStopping())
+			throw isex("Filters must be added before the server starts.");
+		var filter = registration.getFilter();
+		var name = registration.getName().orElseGet(() -> cn(filter) + "#" + UUID.randomUUID());
+		var holder = new FilterHolder(filter);
+		holder.setName(name);
+		holder.setAsyncSupported(registration.isAsyncSupported());
+		var mapping = new FilterMapping();
+		mapping.setFilterName(name);
+		mapping.setPathSpecs(registration.getUrlPatterns().toArray(new String[0]));
+		mapping.setDispatcherTypes(EnumSet.copyOf(registration.getDispatcherTypes()));
+		getServletContextHandler().getServletHandler().addFilter(holder, mapping);
+		return this;
+	}
+
+	/**
+	 * Adds a servlet filter to this Jetty server on the given dispatcher types and URL patterns.
+	 *
+	 * <p>
+	 * Shorthand for {@link #addFilter(ServletFilterRegistration)} with the default order and async support, and the same
+	 * validation.  The overloads without dispatcher types keep their {@code REQUEST}-only behavior.
+	 *
+	 * @param filter The filter instance.  Cannot be <jk>null</jk>.
+	 * @param dispatcherTypes The dispatcher types.  Cannot be empty.
+	 * @param urlPatterns The URL patterns.  At least one is required; see {@link ServletFilterRegistration.Builder#urlPatterns(String...)}.
+	 * @return This object.
+	 * @throws IllegalArgumentException If an argument is invalid.
+	 * @throws IllegalStateException If the server has already started.
+	 */
+	public JettyServerComponent addFilter(jakarta.servlet.Filter filter, Set<DispatcherType> dispatcherTypes, String... urlPatterns) {
+		if (dispatcherTypes == null)
+			throw iaex("dispatcherTypes must not be null.");
+		return addFilter(ServletFilterRegistration.create(filter).urlPatterns(urlPatterns).dispatcherTypes(dispatcherTypes.toArray(DispatcherType[]::new)).build());
 	}
 
 	/**

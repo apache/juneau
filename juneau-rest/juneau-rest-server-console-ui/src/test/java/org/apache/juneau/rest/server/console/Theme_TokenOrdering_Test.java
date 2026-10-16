@@ -56,7 +56,7 @@ class Theme_TokenOrdering_Test extends TestBase {
 	@Test void a02_themeOpen_iteratesInDeclarationOrder_soThePillAndTagPalettesStayGrouped() {
 		var names = new ArrayList<>(Theme.OPEN.getTokens().keySet());
 		assertEquals("--jc-font", names.get(0), () -> "Theme.OPEN's first declared token is not first, order: " + names);
-		// The canonical pill palette (Task 15): green/blue/amber/neutral/red x bg/text/border, in that order.
+		// The canonical pill palette: green/blue/amber/neutral/red x bg/text/border, in that order.
 		var pills = names.stream().filter(x -> x.startsWith("--jc-pill-")).toList();
 		assertEquals(
 			List.of(

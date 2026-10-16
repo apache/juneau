@@ -266,7 +266,7 @@ class McpBindings_Test extends TestBase {
 	}
 
 	/**
-	 * H2 regression: {@link McpRestServlet#getMcpOptions()} must publish exactly one {@link McpOptions} (and
+	 * Regression: {@link McpRestServlet#getMcpOptions()} must publish exactly one {@link McpOptions} (and
 	 * thus one MRTR AES key) even under a concurrent cold-start race, even though (mirroring
 	 * {@code AbstractMcpRestServlet#getMcpConfig()}'s lock-free {@link java.util.concurrent.atomic.AtomicReference}
 	 * pattern) {@link McpRestServlet#createMcpOptions()} itself MAY run more than once under that race: a

@@ -43,14 +43,12 @@ import org.junit.jupiter.api.*;
  * <p>
  * Covered elsewhere / exempt:
  * <ul>
- * 	<li>{@code ConsoleOutputChecks.isSafeLineHref} and {@code isSafeLineImageSrc} are package-private; they are run through
- * 		the corpus, with its {@code guards} overrides, by {@code ConsoleOutputChecks_Corpus_Test} in the views module.
  * 	<li>{@code RunViewChecks.isNoteHref} deliberately accepts an absolute http(s) URL, so the corpus verdict does not apply;
  * 		its vectors live in {@code RunViewChecks_Test}.  Its non-absolute branch is {@code isSafeLineHref}, covered by a04.
- * 	<li>{@code RunViewChecks.isRawHrefTemplate} requires exactly one {@code {line}} or {@code {offset}} placeholder, so the
+ * 	<li>{@code RunViewChecks.isRawHrefTemplate} requires exactly one {@code {offset}} placeholder, so the
  * 		corpus verdict does not apply; its vectors live in {@code RunViewChecks_Test}.  It delegates to {@code isSafeLineHref}.
  * 	<li>Covered transitively through {@code RegionDef.isSafeDetailEndpoint}: {@code RowDetail} ({id} templates),
- * 		{@code ConsoleOutputDef}, {@code RunViewDef} eventsUrl and {@code RegionDef} dataUrl.
+ * 		{@code RunViewDef} eventsUrl and {@code RegionDef} dataUrl.
  * </ul>
  */
 class SameOriginPath_Corpus_Test extends TestBase {

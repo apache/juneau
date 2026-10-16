@@ -24,7 +24,7 @@ import org.apache.juneau.commons.bean.*;
 
 /**
  * The declarative modal (dialog) a {@code present=dialog} row action opens &mdash; the payload the
- * <b>modal-open confirmation fetch</b> returns (design doc §6.2).
+ * <b>modal-open confirmation fetch</b> returns.
  *
  * <h5 class='section'>A widget contract driven by a view-module runtime</h5>
  * <p>
@@ -35,7 +35,7 @@ import org.apache.juneau.commons.bean.*;
  * <h5 class='section'>Safe-by-construction confirmation body</h5>
  * <p>
  * The confirmation body is <b>typed structured fields</b> ({@link #fields}: incident #, title, service, current
- * status &mdash; the source design §6.2 field set), server-rendered against the current, authoritative record and
+ * status &mdash; the confirmation field set), server-rendered against the current, authoritative record and
  * bound to the target identifier.  The {@code juneau-views.js} runtime paints each field's value with
  * {@code textContent} &mdash; NEVER {@code innerHTML}, never raw markup, never the non-table panel-content sink.
  * Live/remote data is attacker-influenceable (anyone who can title an incident or post in a watched thread) and this
@@ -97,6 +97,15 @@ import org.apache.juneau.commons.bean.*;
  * rot.  Resolution precedence is likewise fail-safe: the existing row-action check runs <b>first</b> and unchanged,
  * so a served payload can never shadow &mdash; and thereby bypass the gating of &mdash; a declared row action.
  *
+ * <h5 class='section'>{@link #chrome} and {@link #steps} &mdash; dialog styling and a built-in wizard</h5>
+ * <p>
+ * {@link #chrome} names a dialog chrome the page script registered with the runtime; the runtime hands that chrome the
+ * freshly built dialog parts so it can restyle them.  An unregistered name is ignored and the default chrome is kept.
+ * <p>
+ * {@link #steps} turns the dialog into a wizard: the runtime shows one {@link Step} at a time with Back and Next
+ * buttons, and the last step's button is the dialog's own confirm.  Both are additive-only and omitted from the wire
+ * when unset, so neither bumps {@link #CONTRACT_VERSION}.
+ *
  * <h5 class='section'>Not a new row-action wire field</h5>
  * <p>
  * This is the response a row action's form-source URL returns, <b>not</b> a new field on the frozen row-action wire
@@ -137,7 +146,7 @@ import org.apache.juneau.commons.bean.*;
  *
  * @since 10.0.0
  */
-@BeanType(properties="contractVersion,title,fields,form,idempotencyKey,selfTargeted,barSlot,keepOpenOnSubmit,childActions")
+@BeanType(properties="contractVersion,title,fields,form,idempotencyKey,selfTargeted,barSlot,keepOpenOnSubmit,childActions,chrome,steps")
 @SuppressWarnings({
 	"java:S1845", // Fluent-builder setters intentionally mirror field names (Juneau DSL convention).
 	"java:S3776" // Branching is inherent to validate() and validateChildActions(), which check many field/child-action combinations.
@@ -225,6 +234,79 @@ public class ModalDef implements Widget {
 			var f = of(label, value);
 			f.kind = FIELD_KIND_CODE;
 			return f;
+		}
+	}
+
+	/**
+	 * One page of a {@link ModalDef#steps} wizard: an id, an optional title and confirm-button label, and the typed
+	 * display fields painted for that page.
+	 *
+	 * @since 10.0.0
+	 */
+	@BeanType(properties="id,title,confirmLabel,fields")
+	public static class Step {
+
+		/** The step id, unique within the modal; a script selects a step by it.  Must not be blank. */
+		public String id;
+
+		/** The dialog title shown while this step is current; omitted from the wire when unset (the modal title stays). */
+		public String title;
+
+		/** The confirm-button label for this step; omitted when unset (the runtime shows Next, or the final label on the last step). */
+		public String confirmLabel;
+
+		/** The typed display fields painted for this step, in display order; omitted from the wire when none are declared. */
+		public List<Field> fields;
+
+		/**
+		 * Creates a step.
+		 *
+		 * @param id The step id.  Must not be <jk>null</jk> or blank.
+		 * @return A new {@link Step}.
+		 * @throws IllegalArgumentException If {@code id} is <jk>null</jk> or blank.
+		 */
+		public static Step of(String id) {
+			if (id == null || id.isBlank())
+				throw iaex("ModalDef.Step id must not be null or blank.");
+			var s = new Step();
+			s.id = id;
+			return s;
+		}
+
+		/**
+		 * Sets the dialog title shown while this step is current.
+		 *
+		 * @param value The title.  Can be <jk>null</jk> to unset.
+		 * @return This object.
+		 */
+		public Step title(String value) {
+			title = value;
+			return this;
+		}
+
+		/**
+		 * Sets the confirm-button label for this step.
+		 *
+		 * @param value The label.  Can be <jk>null</jk> to unset.
+		 * @return This object.
+		 */
+		public Step confirmLabel(String value) {
+			confirmLabel = value;
+			return this;
+		}
+
+		/**
+		 * Adds one typed display field to this step.
+		 *
+		 * @param label The field label.  Must not be <jk>null</jk> or blank.
+		 * @param value The field value.  Can be <jk>null</jk>.
+		 * @return This object.
+		 */
+		public Step field(String label, String value) {
+			if (fields == null)
+				fields = l();
+			fields.add(Field.of(label, value));
+			return this;
 		}
 	}
 
@@ -439,6 +521,24 @@ public class ModalDef implements Widget {
 	public List<ChildAction> childActions;
 
 	/**
+	 * The name of a dialog chrome the page script registered with the runtime, which restyles this dialog's parts
+	 * (see the class Javadoc); omitted from the wire when unset (the default chrome).
+	 *
+	 * <p>
+	 * Additive-only: like {@link #barSlot}, its presence does not bump {@link #CONTRACT_VERSION}.
+	 */
+	public String chrome;
+
+	/**
+	 * The wizard steps the runtime shows one at a time with Back and Next (see the class Javadoc); omitted from the
+	 * wire when unset or empty.
+	 *
+	 * <p>
+	 * Additive-only: like {@link #barSlot}, its presence does not bump {@link #CONTRACT_VERSION}.
+	 */
+	public List<Step> steps;
+
+	/**
 	 * Starts a new {@link ModalDef} with the specified title / confirmation prompt.
 	 *
 	 * @param title The modal title / confirmation prompt.  Must not be <jk>null</jk> or blank.
@@ -494,6 +594,33 @@ public class ModalDef implements Widget {
 		if (childActions == null)
 			childActions = l();
 		childActions.add(value);
+		return this;
+	}
+
+	/**
+	 * Selects the dialog chrome the page script registered under the given name.
+	 *
+	 * @param value The chrome name.  Can be <jk>null</jk> to unset (the default chrome); a non-null value must not be blank.
+	 * @return This object.
+	 */
+	public ModalDef chrome(String value) {
+		chrome = value;
+		return this;
+	}
+
+	/**
+	 * Adds one wizard step.
+	 *
+	 * @param value The step.  Must not be <jk>null</jk>.
+	 * @return This object.
+	 * @throws IllegalArgumentException If {@code value} is <jk>null</jk>.
+	 */
+	public ModalDef step(Step value) {
+		if (value == null)
+			throw iaex("ModalDef.Step must not be null.");
+		if (steps == null)
+			steps = l();
+		steps.add(value);
 		return this;
 	}
 
@@ -605,10 +732,36 @@ public class ModalDef implements Widget {
 						+ "', not '" + f.kind + "'.");
 			}
 		validateChildActions();
+		validateSteps();
+		if (chrome != null && chrome.isBlank())
+			throw iaex("ModalDef chrome must not be blank.");
 		if (form != null)
 			form.validate();
 		if (barSlot != null)
 			barSlot.validate();
+	}
+
+	/** The {@link #steps} half of {@link #validate()}: non-blank unique ids and well-formed display fields. */
+	private void validateSteps() {
+		if (steps == null)
+			return;
+		var seen = new HashSet<String>();
+		for (var st : steps) {
+			if (st == null)
+				throw iaex("ModalDef.Step must not be null.");
+			if (st.id == null || st.id.isBlank())
+				throw iaex("ModalDef.Step id must not be null or blank.");
+			if (! seen.add(st.id))
+				throw iaex("ModalDef.Step id '" + st.id + "' is declared more than once on this modal.");
+			if (st.fields != null)
+				for (var f : st.fields) {
+					if (f == null || f.label == null || f.label.isBlank())
+						throw iaex("ModalDef.Step '" + st.id + "' field label must not be null or blank.");
+					if (f.kind != null && ! (eqa(f.kind, FIELD_KIND_TEXT, FIELD_KIND_CODE)))
+						throw iaex("ModalDef.Step '" + st.id + "' field kind must be '" + FIELD_KIND_TEXT + "' or '"
+							+ FIELD_KIND_CODE + "', not '" + f.kind + "'.");
+				}
+		}
 	}
 
 	/**

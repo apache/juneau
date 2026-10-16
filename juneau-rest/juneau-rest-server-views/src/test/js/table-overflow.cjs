@@ -17,9 +17,9 @@
 
 /*
  * table-overflow.cjs - always-on Node harness for the table-overflow-discipline JS helpers
- * (ensureTableScroll / unwrapTableScroll - the DT1 "Approach B" wrap).  The jsdom-style shim has NO DataTables
+ * (ensureTableScroll / unwrapTableScroll - the DT1 wrap).  The jsdom-style shim has NO DataTables
  * and cannot measure scrollWidth, so this harness pins ONLY the DOM-structure invariants of the wrap helper
- * (INV-1, INV-2, INV-5, N5) and the DT2 skip-guard (N-P5-B1).  Overflow-detected tabindex (L12 A) and the
+ * (toolbar outside the box, one box only) and the DT2 skip-guard.  Overflow-detected tabindex and the
  * table-vs-page scroll contract are pinned in the opt-in Chromium suite.
  *
  *   Usage:  node table-overflow.cjs <path-to-juneau-renders.js> <path-to-juneau-views.js>
@@ -49,7 +49,7 @@ report.hasUnwrapTableScroll = typeof NS?.init?.unwrapTableScroll === 'function';
 
 const SCROLL = 'juneau-view-table-scroll';
 
-/** Builds a fake ctx whose dataTable.columns.adjust() bumps a counter, so the harness can prove S5. */
+/** Builds a fake ctx whose dataTable.columns.adjust() bumps a counter, so the harness can prove the call. */
 function fakeCtx() {
 	const ctx = { _adjusts: 0 };
 	ctx.dataTable = { columns: function () { return ctx.dataTable._colsApi; } };
@@ -80,7 +80,7 @@ function dt1Fixture() {
 	return { wrapper: wrapper, toolbar: toolbar, menu: menu, table: table };
 }
 
-// T-JS-1 - wrap structure / INV-1 + S5 columns.adjust.
+// wrap structure + columns.adjust.
 (function tjs1() {
 	const f = dt1Fixture();
 	const ctx = fakeCtx();
@@ -96,7 +96,7 @@ function dt1Fixture() {
 	f.wrapper.remove();
 })();
 
-// T-JS-3 - paging-pill menu is NOT a descendant of the scroll box / INV-2.
+// paging-pill menu is NOT a descendant of the scroll box.
 (function tjs3() {
 	const f = dt1Fixture();
 	NS.init.ensureTableScroll(f.table, fakeCtx());
@@ -105,7 +105,7 @@ function dt1Fixture() {
 	f.wrapper.remove();
 })();
 
-// T-JS-2 - idempotency across teardown / INV-5: wrap -> unwrap -> re-wrap => exactly one box, toolbar not inside.
+// idempotency across teardown: wrap -> unwrap -> re-wrap => exactly one box, toolbar not inside.
 (function tjs2() {
 	const f = dt1Fixture();
 	NS.init.ensureTableScroll(f.table, fakeCtx());
@@ -121,7 +121,7 @@ function dt1Fixture() {
 	f.wrapper.remove();
 })();
 
-// T-JS-5 - nested tables / N5: a table already inside a .juneau-view-table-scroll must NOT get a second box.
+// nested tables: a table already inside a .juneau-view-table-scroll must NOT get a second box.
 (function tjs5() {
 	const outerBox = newEl('div', SCROLL);
 	const table = newEl('table');
@@ -134,7 +134,7 @@ function dt1Fixture() {
 	outerBox.remove();
 })();
 
-// N-P5-B1 - DT2 skip-guard: a DT2 table (parent is .dt-layout-cell) must NOT be wrapped (Approach D CSS owns it).
+// DT2 skip-guard: a DT2 table (parent is .dt-layout-cell) must NOT be wrapped (CSS owns it).
 (function dt2Skip() {
 	const container = newEl('div', 'dt-container');
 	const row = newEl('div', 'dt-layout-row dt-layout-table');
@@ -151,7 +151,7 @@ function dt1Fixture() {
 	container.remove();
 })();
 
-// L12 A - the scroll region is keyboard-reachable ONLY while it actually overflows.  The shim cannot lay out, but
+// The scroll region is keyboard-reachable ONLY while it actually overflows.  The shim cannot lay out, but
 // applyScrollRegionA11y reads scrollWidth/clientWidth off the region, so the harness can set them directly and drive
 // both sides of the fork.  Also proves a DT1-shaped DOM RESOLVES a scroll region at all (there is no DT1 refusal).
 (function l12a() {

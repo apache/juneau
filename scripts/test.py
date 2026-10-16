@@ -23,10 +23,10 @@ Options:
     --full, -f               Clean build + run tests (default)
     --verbose, -v            Accepted for compatibility; Maven output always streams live
     --no-container           Exclude @Tag("container") tests
-    --timing-log <path>      Append timing JSONL records (per module bucket, per module wall clock, suite)
+    --timing-log <path>      Ignored, with a warning (timings are in the run history now); removed in a later release
     --enforce-perf           Hard-fail on a perf-guard breach (see "Perf guard" below)
-    --rebaseline             Rewrite perf-baseline.txt's suite line and [modules] from push history, then exit
-                             (no build).  Reads --timing-log, else ~/.cache/juneau-push-timings/<branch>.jsonl
+    --rebaseline             Rewrite perf-baseline.txt's suite line and [modules] from this repo's test.py run
+                             history (~/.cache/juneau-run/history), then exit (no build)
     --window <n>             --rebaseline: runs per key to take the median of (default 20)
     --min-runs <n>           --rebaseline: skip keys with fewer runs than this (default 5)
     --js-tests               Also run the headless-browser JS harness (mvn -Pjs-tests, *_BrowserTest in
@@ -43,7 +43,7 @@ Environment:
     JUNEAU_MVN_WRAPPER       Optional prefix for every mvn command (e.g. a lock script that serializes
                              concurrent runs on one checkout).
 
-JS tests:
+Browser tests:
     CI's js-tests job is the only thing that normally runs the browser tests (-Pjs-tests).  When neither
     --js-tests nor --no-js-tests is given, this script enables them automatically if any .js, .css or .ftl
     file under a src/ tree differs from origin/master (committed, uncommitted or untracked).  If Node/npm
@@ -60,45 +60,31 @@ Perf guard:
     warns and never fails.  The report goes to target/perf-guard.txt.
 
     Without --enforce-perf the check runs in warn-only mode (prints results, never exits non-zero for a perf
-    breach).  --timing-log also records each module's reactor time as an "execution": "module" row, which
-    --rebaseline turns into new baselines.
+    breach).  Each run's history record keeps the suite time and every module's reactor time (the reactor_s
+    series), which --rebaseline turns into new baselines.
 """
 
 import argparse
-import importlib.util
-import json
 import math
 import os
 import re
 import shutil
-import signal
 import statistics
 import subprocess
 import sys
 import time
 import xml.etree.ElementTree as ET
-from datetime import datetime, timezone
+from datetime import datetime
 from pathlib import Path
 
+# The shared loader (_juneau.py) sits beside this script; appended, so no script here shadows an installed module.
+if str(Path(__file__).resolve().parent) not in sys.path:
+	sys.path.append(str(Path(__file__).resolve().parent))
+import _juneau  # noqa: E402
 
-RUN_MODULE_PATH = Path(__file__).resolve().parent.parent / "juneau-run" / "src" / "main" / "python" / "juneau_run.py"
+
+REPO_ROOT = Path(__file__).resolve().parent.parent
 _step_n = 0
-
-
-def run_module():
-	"""The in-tree juneau_run module (shared if already loaded), or None if its source is not there."""
-	module = sys.modules.get("juneau_run")
-	if module is None and RUN_MODULE_PATH.exists():
-		spec = importlib.util.spec_from_file_location("juneau_run", RUN_MODULE_PATH)
-		module = importlib.util.module_from_spec(spec)
-		sys.modules["juneau_run"] = module
-		# Keep the module's source directory free of __pycache__ (the Maven build's RAT check scans it).
-		previous, sys.dont_write_bytecode = sys.dont_write_bytecode, True
-		try:
-			spec.loader.exec_module(module)
-		finally:
-			sys.dont_write_bytecode = previous
-	return module
 
 
 def next_step_number():
@@ -109,33 +95,30 @@ def next_step_number():
 
 
 def say(text, level="info"):
-	"""Script status text: through juneau_run (a filtered note once a console view owns the screen), else print."""
-	run = run_module()
-	if run is None:
-		print(text, flush=True)
-	else:
-		run.say(text, level)
+	"""Script status text: through juneau_run (a filtered note once a console view owns the screen)."""
+	_juneau.load()[0].say(text, level)
 
 
-def run_command(cmd, step_id=None, title=None, label=None):
+def run_command(cmd, step_id=None, title=None, label=None, summarize=None):
 	"""Run a command, streaming its output live, and return exit code and full output.
 
-	With run markers on, or console/log routing requested (see juneau_run), the command runs as the protocol step
-	`step_id` through juneau_run.  Otherwise it behaves exactly as it always has.
+	A command with a step_id runs as that step through juneau_run's run_tool whatever the output routing, so its row
+	is recorded in the run history; with markers off and the default sinks its output is the same as a plain run's.
+	Without a step_id (or without juneau_run) it runs under Popen, as it always has.  summarize(text), when given,
+	runs after the command exits while its row is still open (see _record_buckets); never on the Popen path.
 	"""
-	script_dir = Path(__file__).parent
-	project_root = script_dir.parent
+	project_root = REPO_ROOT
 	# Optional command prefix (e.g. a lock script that serializes concurrent mvn runs on one checkout).
 	wrapper = os.environ.get("JUNEAU_MVN_WRAPPER", "").strip()
 	if wrapper and cmd.startswith("mvn "):
 		cmd = f"{wrapper} {cmd}"
 	say(f"Running: {cmd}")
 	say("-" * 80)  # NOSONAR python:S1192 - the same banner rule as the separator in _main; a constant hides it
-	run = run_module()
-	if run is not None and step_id and (run.enabled() or not run.Sinks().is_default):
+	run = _juneau.load()[0]
+	if step_id:
 		# Through a shell, like the default path, so a JUNEAU_MVN_WRAPPER prefix (which may use && or quoting) keeps its meaning.
 		result = run.run_tool(["/bin/sh", "-c", cmd], "maven", step_id, title or step_id, n=next_step_number(),
-			cwd=str(project_root), capture=True, label=label)
+			cwd=str(project_root), capture=True, label=label, summarize=summarize)
 		return result.exit, result.output
 	# Echo each line as it arrives so a long or hung build is visible, and keep it for parse_test_results().
 	lines = []
@@ -320,65 +303,6 @@ def module_times(output: str, repo_root: Path) -> tuple:
 	return times, sorted(name for name in reactor if name not in names)
 
 
-def write_timing_log(path: Path, passed: bool, test_elapsed: float, module_times=None):
-	"""Append one JSONL row per (module, bucket) (summed Surefire class time), one "module" row per measured module
-	(its reactor wall clock, the perf guard's metric) and a reactor/suite roll-up row."""
-	path = path.expanduser()
-	path.parent.mkdir(parents=True, exist_ok=True)
-	repo_root = Path(__file__).parent.parent
-	module_stats = discover_module_stats(repo_root)
-
-	run_id = f"{datetime.now(timezone.utc).strftime('%Y%m%dT%H%M%SZ')}-{git_value(['rev-parse', '--short', 'HEAD'])}"
-	base = {
-		"ts": datetime.now(timezone.utc).isoformat(),
-		"run_id": run_id,
-		"branch": git_value(["rev-parse", "--abbrev-ref", "HEAD"]),
-		"commit": git_value(["rev-parse", "--short", "HEAD"]),
-		"passed": passed,
-	}
-
-	rows = []
-	total_tests = 0
-	total_seconds = 0.0
-	for module_key in sorted(module_stats):
-		for bucket in sorted(module_stats[module_key]):
-			stats = module_stats[module_key][bucket]
-			total_tests += stats["tests"]
-			total_seconds += stats["seconds"]
-			rows.append({
-				**base,
-				"module": module_key,
-				"execution": bucket,
-				"wallclock_s": round(stats["seconds"], 3),
-				"test_count": stats["tests"],
-			})
-	# Reactor wall clock per module: what the perf guard checks and --rebaseline reads back.
-	for module_key in sorted(module_times or {}):
-		row = {**base, "module": module_key, "execution": "module",
-			   "wallclock_s": round(module_times[module_key], 3)}
-		buckets = module_stats.get(module_key)
-		if buckets:
-			row["test_count"] = sum(stats["tests"] for stats in buckets.values())
-		rows.append(row)
-	# Roll-up: reactor wall-clock + total counts across all modules.
-	rows.append({
-		**base,
-		"module": "reactor",
-		"execution": "suite",
-		"wallclock_s": round(test_elapsed, 3),
-		"test_count": total_tests,
-		"surefire_total_s": round(total_seconds, 3),
-	})
-
-	with path.open("a", encoding="utf-8") as f:
-		for row in rows:
-			f.write(json.dumps(row) + "\n")
-	print(
-		f"🕒 Timing metrics appended to {path} "
-		f"({len(module_stats)} modules, {len(module_times or {})} reactor times, {total_tests} tests, reactor {test_elapsed:.1f}s)"
-	)
-
-
 def read_baselines(baseline_file: Path) -> dict:
 	"""Parse perf-baseline.txt: 'suite' from anywhere, and every '<module path> = <seconds>' under [modules].
 
@@ -417,8 +341,8 @@ class _PerfOutput:
 	also goes to the report file."""
 
 	def __init__(self, report_file):
-		run = run_module()
-		self.run = run if run is not None and run.console_owns_screen() else None
+		run = _juneau.load()[0]
+		self.run = run if run.console_owns_screen() else None
 		self.report_file = Path(report_file)
 		self.lines = []
 
@@ -445,10 +369,7 @@ def run_perf_guard(test_elapsed: float, baseline_file: Path, module_times: dict,
 	The full report goes to report_file (target/perf-guard.txt); the Perf row shows the counts and its path.
 	Returns exit code: 0 = pass or warn-only mode, 1 = threshold breached with enforce=True.
 	"""
-	run = run_module()
-	if run is None:
-		out = _PerfOutput(report_file or PERF_REPORT)
-		return _perf_guard(test_elapsed, baseline_file, module_times, unmapped, enforce, out)[0]
+	run = _juneau.load()[0]
 	with run.row("perf", "Perf", label="Perf") as row:
 		out = _PerfOutput(report_file or PERF_REPORT)
 		code, summary = _perf_guard(test_elapsed, baseline_file, module_times, unmapped, enforce, out)
@@ -544,35 +465,19 @@ SUITE_LINE = re.compile(r"^suite\s*=")
 OUTLIER_FACTOR = 3
 
 
-def default_timing_log() -> Path:
-	"""The history push.py writes: ~/.cache/juneau-push-timings/<branch>.jsonl."""
-	branch = git_value(["rev-parse", "--abbrev-ref", "HEAD"])
-	return Path.home() / ".cache" / "juneau-push-timings" / f"{branch}.jsonl"
-
-
-def history_series(log_path: Path) -> dict:
-	"""{key: [seconds...]} in run order over passing runs: 'suite' from each reactor/suite row, and a module path
-	from each "module" row."""
+def baseline_series(records) -> dict:
+	"""{key: [seconds...]} in run order over the passing `tests` records with the newest record's sig (its command
+	shape): 'suite' from each record's wall_s, and a module path from each entry of its reactor_s series."""
 	series: dict = {}
-	if not log_path.exists():
-		return series
-	for line in log_path.read_text(encoding="utf-8").splitlines():
-		try:
-			row = json.loads(line)
-		except json.JSONDecodeError:
+	for record in _juneau.same_shape_runs(records):
+		if record.get("ok") is not True:
 			continue
-		if not isinstance(row, dict) or not row.get("passed", True):
-			continue
-		if row.get("module") == "reactor" and row.get("execution") == "suite":
-			key = "suite"
-		elif row.get("execution") == "module" and row.get("module"):
-			key = row["module"]
-		else:
-			continue
-		try:
-			series.setdefault(key, []).append(float(row["wallclock_s"]))
-		except (KeyError, TypeError, ValueError):
-			continue
+		if isinstance(record.get("wall_s"), (int, float)):
+			series.setdefault("suite", []).append(float(record["wall_s"]))
+		reactor = (record.get("series") or {}).get("reactor_s")
+		for key, seconds in (reactor.items() if isinstance(reactor, dict) else ()):
+			if isinstance(seconds, (int, float)) and not isinstance(seconds, bool):
+				series.setdefault(key, []).append(float(seconds))
 	return series
 
 
@@ -585,8 +490,12 @@ def rebaseline_value(values: list, window: int) -> float:
 	return math.ceil(round(statistics.median(kept) * 10, 6)) / 10
 
 
-def rebaseline(baseline_file: Path, log_path: Path, window: int = 20, min_runs: int = 5) -> int:
+def rebaseline(baseline_file: Path, records, window: int = 20, min_runs: int = 5) -> int:
 	"""Rewrite perf-baseline.txt's suite line and [modules] section from the history medians; print what changed.
+
+	records are test.py's run-history records (HistoryStore(repo, "test").read()); baseline_series keeps the passing
+	`tests` ones of the newest record's sig.  When that command shape has fewer than min_runs passing runs, prints a
+	"no baseline for this command shape" line and writes nothing.
 
 	A key with fewer than min_runs passing runs in the window is skipped and keeps its value; a [modules] entry with
 	no history at all is removed.  Everything outside the suite line and the [modules] body is kept byte-for-byte.
@@ -598,9 +507,13 @@ def rebaseline(baseline_file: Path, log_path: Path, window: int = 20, min_runs: 
 	if start is None:
 		print(f"❌ {baseline_file} has no [modules] section line; nothing rewritten.")
 		return 1
-	series = history_series(log_path)
+	series = baseline_series(records)
 	if not series:
-		print(f"❌ no passing runs in {log_path}; nothing rewritten.")
+		print("❌ no passing runs in test.py's run history; nothing rewritten.")
+		return 1
+	runs = sum(1 for r in _juneau.same_shape_runs(records) if r.get("ok") is True)
+	if runs < min_runs:
+		print(f"📏 {_juneau.no_baseline_line(runs)}; nothing rewritten.")
 		return 1
 	end = next((i for i in range(start + 1, len(lines)) if SECTION.match(lines[i].strip())), len(lines))
 	# Comments and blank lines just above the next section (its banner) belong to it, not to [modules].
@@ -636,7 +549,7 @@ def rebaseline(baseline_file: Path, log_path: Path, window: int = 20, min_runs: 
 	changed = [k for k in keys if k in before and k in after and before[k] != after[k]]
 	added = [k for k in keys if k not in before]
 	removed = [k for k in keys if k not in after]
-	print(f"📏 Rebaselined {baseline_file} from {log_path} (last {window} passing runs): {len(changed)} changed, "
+	print(f"📏 Rebaselined {baseline_file} from the run history (last {window} passing runs): {len(changed)} changed, "
 		  f"{len(added)} added, {len(removed)} removed, {len(skipped)} skipped (fewer than {min_runs} runs).")
 	for k in changed:
 		print(f"   ~ {k}: {before[k]:g} → {after[k]:g}")
@@ -660,11 +573,34 @@ def build():
 	return run_command(f"mvn clean install {PARALLELISM} -DskipTests", "build", "Build", label="Compile")
 
 
+_last_times = None     # (module times, unmapped names) of the last test() run, from _record_buckets
+
+
+def _record_buckets(text):
+	"""run_tool's summarize for the tests step, called while its row is open: one surefire_s.<bucket> series per bucket
+	with data ({module path: summed Surefire class seconds}), and reactor_s ({module path: reactor seconds}, the perf
+	guard's metric, also kept in _last_times for _main).  Returns None, so the row keeps the parser's summary."""
+	global _last_times
+	run = _juneau.load()[0]
+	per_bucket = {}
+	for module, buckets in discover_module_stats(REPO_ROOT).items():
+		for bucket, stats in buckets.items():
+			per_bucket.setdefault(bucket, {})[module] = round(stats["seconds"], 3)
+	for bucket, values in sorted(per_bucket.items()):
+		run.history_series(f"surefire_s.{bucket}", values)
+	_last_times = module_times(text or "", REPO_ROOT)
+	if _last_times[0]:
+		run.history_series("reactor_s", _last_times[0])
+	return None
+
+
 def test(no_container=False):
+	global _last_times
+	_last_times = None
 	cmd = f"mvn test {PARALLELISM} -Drat.skip=true"
 	if no_container:
 		cmd += " -DexcludedGroups=container"
-	return run_command(cmd, "tests", "Tests", label="Tests")
+	return run_command(cmd, "tests", "Tests", label="Tests", summarize=_record_buckets)
 
 
 JS_TEST_MODULE = "juneau-rest/juneau-rest-server-views"
@@ -714,7 +650,7 @@ def js_tests(installed=False):
 	scope = f"-f {JS_TEST_MODULE}/pom.xml" if installed else f"-pl {JS_TEST_MODULE} -am"
 	cmd = (f"mvn -Pjs-tests {scope} test -Drat.skip=true "
 		"-Dtest='*_BrowserTest' -Dsurefire.failIfNoSpecifiedTests=false")
-	return run_command(cmd, "js-tests", "JS browser tests", label="JS tests")
+	return run_command(cmd, "js-tests", "Browser tests", label="Browser tests")
 
 
 def maybe_run_js_tests(js_flag, no_js_flag, changed_files, runner=None, installed=False):
@@ -727,11 +663,11 @@ def maybe_run_js_tests(js_flag, no_js_flag, changed_files, runner=None, installe
 		if explicit:
 			say(f"\n❌ --js-tests requested but cannot run: {problem}.", "error")
 			return 1
-		say(f"\n⚠️  JS files changed, but skipping JS tests: {problem}. (CI will still run them.)", "warn")
+		say(f"\n⚠️  JS files changed, but skipping Browser tests: {problem}. (CI will still run them.)", "warn")
 		return 0
-	say("\n🌐 Running JS browser tests (-Pjs-tests)..." + ("" if explicit else " (auto: JS/CSS/FTL files changed)"))
+	say("\n🌐 Running Browser tests (-Pjs-tests)..." + ("" if explicit else " (auto: JS/CSS/FTL files changed)"))
 	code, _ = (runner or (lambda: js_tests(installed)))()
-	say("\n✅ JS tests passed!" if code == 0 else "\n❌ JS tests failed!", "info" if code == 0 else "error")
+	say("\n✅ Browser tests passed!" if code == 0 else "\n❌ Browser tests failed!", "info" if code == 0 else "error")
 	return code
 
 
@@ -778,23 +714,21 @@ def _main():  # NOSONAR python:S3776 -- Cognitive complexity is acceptable for t
 		print(f"Unknown option(s): {' '.join(unknown)}")
 		print(__doc__)
 		return 1
+	if args.timing_log:
+		say("⚠ --timing-log is ignored: timings are in the run history now (scripts/push-timings.py reads it). "
+			"The option goes away in a later release.", "warn")
 	if args.rebaseline:
-		log = Path(args.timing_log).expanduser() if args.timing_log else default_timing_log()
-		return rebaseline(PERF_BASELINE, log, window=args.window, min_runs=args.min_runs)
+		return _rebaseline_from_history(args.window, args.min_runs)
 	# juneau_run reads its output routing from the environment; an argument beats a value already set there.
 	for flag, variable in ((args.console, "JUNEAU_RUN_CONSOLE"), (args.full_log, "JUNEAU_RUN_FULL_LOG"),
 			(args.condensed_log, "JUNEAU_RUN_CONDENSED_LOG")):
 		if flag:
 			os.environ[variable] = flag
-	run = run_module()
-	if run is not None:
-		try:
-			run.export_detail(args.detail)
-		except ValueError as e:
-			print(e)
-			return 2
-		if not run.Sinks().is_default:
-			run.session(f"🧪 Juneau test · {git_value(['rev-parse', '--abbrev-ref', 'HEAD'])}")
+	try:
+		_juneau.load()[0].export_detail(args.detail)
+	except ValueError as e:
+		print(e)
+		return 2
 
 	build_only = args.build_only
 	test_only = args.test_only
@@ -826,7 +760,9 @@ def _main():  # NOSONAR python:S3776 -- Cognitive complexity is acceptable for t
 		test_start = time.time()
 		exit_code, last_test_output = test(no_container=args.no_container)
 		test_elapsed = time.time() - test_start
-		module_times_, unmapped = module_times(last_test_output, Path(__file__).resolve().parent.parent)
+		# The summarizer parsed the Reactor Summary already; parse it here only when it did not run (no juneau_run,
+		# or it failed).
+		module_times_, unmapped = _last_times or module_times(last_test_output, REPO_ROOT)
 		if exit_code != 0:
 			_, failures, errors = parse_test_results(last_test_output)
 			if failures is not None and errors is not None:
@@ -835,9 +771,6 @@ def _main():  # NOSONAR python:S3776 -- Cognitive complexity is acceptable for t
 				say("\n❌ Tests failed!", "error")
 		else:
 			say("\n✅ Tests passed!")
-		if args.timing_log:
-			write_timing_log(Path(args.timing_log), passed=(exit_code == 0), test_elapsed=test_elapsed,
-					 module_times=module_times_)
 		if exit_code != 0:
 			return exit_code
 		perf_exit = run_perf_guard(test_elapsed, PERF_BASELINE, module_times_, enforce=args.enforce_perf, unmapped=unmapped)
@@ -850,57 +783,58 @@ def _main():  # NOSONAR python:S3776 -- Cognitive complexity is acceptable for t
 	return exit_code
 
 
+def _rebaseline_from_history(window, min_runs):
+	"""--rebaseline: rewrite perf-baseline.txt from this repo's test.py run history.  Exit 1 with a message when the
+	history is off."""
+	run = _juneau.load()[0]
+	if not run.history_enabled():
+		print("❌ run history is off (JUNEAU_RUN_HISTORY=0), so there are no timings to rebaseline from; "
+			  "nothing rewritten.")
+		return 1
+	return rebaseline(PERF_BASELINE, run.HistoryStore(REPO_ROOT, "test").read(), window=window, min_runs=min_runs)
+
+
 def owned_by_enclosing_run():
-	"""True when push.py or an enclosing run spawned us; it rings once at its own end.  Read before this process's own
-	run() marks the environment active."""
+	"""True when push.py or an enclosing run spawned us; it rings once at its own end.  The toolkit session makes the
+	same decision (juneau_scripts.run._nested_env), so this is the documented predicate rather than a branch here."""
 	return bool(os.environ.get("JUNEAU_PUSH_ACTIVE") or os.environ.get("JUNEAU_RUN_N_BASE")
 		or os.environ.get("JUNEAU_RUN_ACTIVE"))
 
 
-def ring_bell():
-	"""Writes a terminal bell so the terminal can badge its Dock icon when a standalone run ends (best-effort).
-	Silent off a TTY, in the Claude Code sandbox, and with JUNEAU_PUSH_NO_SOUND=1 (shared with push.py).
-	Keep in sync with ring_bell() in push.py."""
-	if os.environ.get("SANDBOX_RUNTIME") == "1" or os.environ.get("JUNEAU_PUSH_NO_SOUND") == "1":
-		return
+def _prepare_output(argv):
+	"""Export --console, --full-log, --condensed-log and --detail before the session opens, so its console view sees
+	them (an argument beats a value already in the environment).  _main parses and validates them again; an invalid
+	value is left for it to report."""
+	parser = argparse.ArgumentParser(add_help=False, allow_abbrev=False)
+	for flag in ("--console", "--full-log", "--condensed-log", "--detail"):
+		parser.add_argument(flag)
+	args, _ = parser.parse_known_args(argv)
+	if args.console in ("full", "condensed", "none"):
+		os.environ["JUNEAU_RUN_CONSOLE"] = args.console
+	for flag, variable in ((args.full_log, "JUNEAU_RUN_FULL_LOG"), (args.condensed_log, "JUNEAU_RUN_CONDENSED_LOG")):
+		if flag:
+			os.environ[variable] = flag
 	try:
-		if sys.stdout.isatty():
-			sys.stdout.write("\a")
-			sys.stdout.flush()
-	except Exception:
+		_juneau.load()[0].export_detail(args.detail)
+	except ValueError:
 		pass
 
 
 def main():
-	"""Owns the run-protocol `run`/`done` markers (both are no-ops unless RUN_MARKERS=1 and no enclosing run exists)."""
-	run = run_module()
-	nested = owned_by_enclosing_run()
-	previous_sigterm = None
-	if run is not None and run.enabled():
-		# Unwind to the KeyboardInterrupt handler below; run_tool tears the Maven process group down on the way.
-		def on_sigterm(signum, frame):
-			raise KeyboardInterrupt
-		previous_sigterm = signal.signal(signal.SIGTERM, on_sigterm)
-	try:
-		if run is not None:
-			run.run(mode="test", project=Path(__file__).resolve().parent.parent.name,
-				branch=git_value(["rev-parse", "--abbrev-ref", "HEAD"]), head=git_value(["rev-parse", "--short", "HEAD"]))
-		try:
-			code = _main()
-		except KeyboardInterrupt:
-			if run is None or not (run.enabled() or run.console_active()):
-				raise
-			run.done("cancelled")
-			print("Cancelled.", file=sys.stderr)
-			return 130
-		if run is not None:
-			run.done("ok" if code == 0 else "fail")
-		return code
-	finally:
-		if previous_sigterm is not None:
-			signal.signal(signal.SIGTERM, previous_sigterm)
-		if not nested:
-			ring_bell()
+	"""One toolkit session around _main: the run/done markers, the console view when one is requested, SIGTERM and
+	Ctrl-C as a cancel (exit 130), and the bell when a standalone run ends (never under push.py or an enclosing run;
+	JUNEAU_PUSH_NO_SOUND=1 silences it)."""
+	root = Path(__file__).resolve().parent.parent
+	_prepare_output(sys.argv[1:])
+	_juneau.load()
+	from juneau_scripts import run as toolkit
+	title = f"🧪 Juneau test · {git_value(['rev-parse', '--abbrev-ref', 'HEAD'])}"
+	with toolkit.session(title, bell=True, silence_env=("JUNEAU_PUSH_NO_SOUND",), repo=root, mode="test",
+			project=root.name, exit=False) as s:
+		code = _main()
+		if code:
+			raise SystemExit(code)
+	return s.code
 
 
 if __name__ == '__main__':

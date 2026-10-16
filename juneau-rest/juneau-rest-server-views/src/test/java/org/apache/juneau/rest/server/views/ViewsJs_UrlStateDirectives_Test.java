@@ -24,7 +24,7 @@ import java.util.*;
 import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
 
-/** Node behavioral checks for the {@code ?state=} directive registry, the {@code window}/{@code ids} built-ins, and their live wire. */
+/** Node behavioral checks for the {@code ?state=} directive registry, the {@code window}/{@code ids}/{@code day} built-ins, and their live wire. */
 class ViewsJs_UrlStateDirectives_Test extends TestBase {
 
 	private static Map<?,?> report() {
@@ -98,6 +98,25 @@ class ViewsJs_UrlStateDirectives_Test extends TestBase {
 		var r = report();
 		assertEquals(true, r.get("idsIdempotent"));
 		assertEquals(true, r.get("idsSpecialCharsRoundTrip"));
+	}
+
+	@Test void d12_dayBuiltin_acceptsOnlyARealCalendarDate() {
+		var r = report();
+		assertEquals("2026-10-08", r.get("dayParsed"));
+		assertEquals("day(2026-10-08)", r.get("dayRoundTrip"));
+		assertEquals("{\"on\":\"2026-10-08\"}", r.get("dayParam"));
+		assertEquals("{\"day\":\"2026-10-08\"}", r.get("dayDefaultParam"));
+		assertEquals("null|null|null|null|null|null|null", r.get("dayMalformed"));
+		assertEquals("", r.get("dayMalformedLeavesNoState"));
+		// Years 0-99 are real dates (Date.UTC would shift them into the 1900s); 0100 is not a leap year.
+		assertEquals("0000-01-01|0099-12-31|null", r.get("dayEarlyYears"));
+	}
+
+	@Test void d13_dayBuiltin_requestCarriesTheParamNameFromTheViewConfig() {
+		var r = report();
+		assertEquals(true, r.get("setDayOk"));
+		assertEquals("{\"idList\":\"z\",\"on\":\"2026-10-08\"}", r.get("dayRequestParams"));
+		assertEquals(1, ((Number)r.get("dayReloaded")).intValue());
 	}
 
 	@Test void e01_liveWire_seedsRequestParamsFromTheAddressBar() {

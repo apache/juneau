@@ -28,7 +28,7 @@ import org.apache.juneau.rest.server.console.*;
 import org.junit.jupiter.api.*;
 
 /**
- * Spec §5.6 and C1-D6: {@code chrome.css} carries the {@code .juneau-page-nav*} selectors, so pages that load
+ * {@code chrome.css} carries the {@code .juneau-page-nav*} selectors, so pages that load
  * only the console chrome get the nav. The views copy was removed in the gated cleanup.
  * {@code ConsoleVisual_BrowserTest} proves the computed styles did not change.
  *

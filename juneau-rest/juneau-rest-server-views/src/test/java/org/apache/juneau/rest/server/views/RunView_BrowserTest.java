@@ -97,7 +97,7 @@ class RunView_BrowserTest extends TestBase {
 		log.append(RunEvent.step("build", "Build"));
 		log.append(RunEvent.suite("build", "surefire", "FooTest", 1, 1, 0));
 		log.append(RunEvent.test("build", "surefire", "FooTest", "a", TestStatus.PASS));
-		log.append(RunEvent.test("build", "surefire", "FooTest", "b", TestStatus.FAIL).withMsg("expected 1\nbut was 2").withRawLine(12));
+		log.append(RunEvent.test("build", "surefire", "FooTest", "b", TestStatus.FAIL).withMsg("expected 1\nbut was 2").withRawOffset(120));
 		log.append(RunEvent.end("build", EndStatus.FAIL));
 		log.append(RunEvent.done(DoneStatus.FAIL));
 	}
@@ -131,7 +131,7 @@ class RunView_BrowserTest extends TestBase {
 	}
 
 	private static RunViewDef def(String id, String runId) {
-		return RunViewDef.forMixin(id, "", runId).refreshMs(1000).rawHref("#raw-L{line}");
+		return RunViewDef.forMixin(id, "", runId).refreshMs(1000).rawHref("#raw-O{offset}");
 	}
 
 	private static String body(String c) {
@@ -158,7 +158,7 @@ class RunView_BrowserTest extends TestBase {
 		for (var r : List.of(ViewsMixin.RENDERS_JS_RESOURCE, ViewsMixin.ICONS_JS_RESOURCE, ViewsMixin.SEARCH_JS_RESOURCE,
 				ViewsMixin.PAGESTATE_JS_RESOURCE, ViewsMixin.URLSTATE_JS_RESOURCE, ViewsMixin.RIBBON_JS_RESOURCE,
 				ViewsMixin.DATATABLES_JS_RESOURCE, ViewsMixin.VIEWS_JS_RESOURCE, ViewsMixin.CONFIG_JS_RESOURCE,
-				ViewsMixin.REGIONS_JS_RESOURCE, ViewsMixin.CONSOLE_OUTPUT_JS_RESOURCE, ViewsMixin.RUN_VIEW_JS_RESOURCE,
+				ViewsMixin.REGIONS_JS_RESOURCE, ViewsMixin.RUN_VIEW_JS_RESOURCE,
 				ViewsMixin.HELPERS_JS_RESOURCE))
 			out.add(resource(ViewsMixin.class, r));
 		return out;
@@ -370,7 +370,7 @@ class RunView_BrowserTest extends TestBase {
 
 	@Test void a03_blockLinkSetsTheHash() {
 		clean("a03");
-		assertBean(c("a03"), "hash", "#raw-L12");
+		assertBean(c("a03"), "hash", "#raw-O120");
 	}
 
 	@Test void a04_compactAndFullShowTheSameRun() {
@@ -412,7 +412,7 @@ class RunView_BrowserTest extends TestBase {
 		clean("a09");
 		var m = c("a09");
 		assertEquals(List.of("build", "build"), m.get("stepIds"), () -> m.toString());
-		assertEquals(List.of(Map.of("stepId", "build", "kind", "pass"), Map.of("stepId", "build", "line", 12, "kind", "fail")),
+		assertEquals(List.of(Map.of("stepId", "build", "kind", "pass"), Map.of("stepId", "build", "offset", 120, "kind", "fail")),
 			m.get("clicks"), () -> m.toString());
 	}
 

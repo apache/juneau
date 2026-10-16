@@ -16,14 +16,13 @@
  */
 package org.apache.juneau.rest.server.filter;
 
-import static org.apache.juneau.rest.server.filter.LoopbackBoundary.Reason.*;
+import static org.apache.juneau.rest.server.filter.BoundaryReason.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 import java.util.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.rest.server.filter.LoopbackBoundary.*;
 import org.junit.jupiter.api.*;
 
 import jakarta.servlet.http.*;
@@ -88,7 +87,7 @@ class LoopbackBoundary_Test extends TestBase {
 		return req("POST", h);
 	}
 
-	private static void assertRejected(Result r, Reason expectedReason, int expectedStatus) {
+	private static void assertRejected(BoundaryResult r, BoundaryReason expectedReason, int expectedStatus) {
 		assertFalse(r.isAllowed(), () -> "expected a rejection, got: " + r);
 		assertEquals(expectedReason, r.reason());
 		assertEquals(expectedStatus, r.status());
@@ -393,6 +392,55 @@ class LoopbackBoundary_Test extends TestBase {
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
+	// g, continued) The effective method: a safe request line claiming a write through an override is judged as that write
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Test void g01_getWithMethodParamNeedsToken() {
+		var r = mock(HttpServletRequest.class);
+		when(r.getMethod()).thenReturn("GET");
+		when(r.getQueryString()).thenReturn("method=DELETE");
+		when(r.getHeader("Host")).thenReturn(AUTHORITY);
+		assertRejected(BOUNDARY.check(r), ORIGIN_MISSING, 403);
+	}
+
+	@Test void g02_getWithOverrideHeaderNeedsToken() {
+		var h = goodWriteHeaders();
+		h.remove("X-Csrf-Token");
+		h.put("X-HTTP-Method-Override", "PUT");
+		assertRejected(BOUNDARY.check(req("GET", h)), CSRF_TOKEN_MISSING, 403);
+	}
+
+	@Test void g03_plainGetStillAllowedAndPublishes() {
+		var r = mock(HttpServletRequest.class);
+		when(r.getMethod()).thenReturn("GET");
+		when(r.getQueryString()).thenReturn("page=2&sort=name");
+		when(r.getHeader("Host")).thenReturn(AUTHORITY);
+		assertTrue(BOUNDARY.check(r).isAllowed());
+		assertEquals(TOKEN.value(), BOUNDARY.tokenFor(r));
+		assertEquals(LoopbackBoundary.DEFAULT_CSRF_HEADER, BOUNDARY.csrfHeader());
+	}
+
+	@Test void g04_nullQueryStringStillJudged() {
+		var r = mock(HttpServletRequest.class);
+		when(r.getMethod()).thenReturn("GET");
+		when(r.getHeader("Host")).thenReturn(AUTHORITY);
+		when(r.getQueryString()).thenReturn(null);
+		assertTrue(assertDoesNotThrow(() -> BOUNDARY.check(r)).isAllowed());
+	}
+
+	@Test void g05_getWithMethodParamAndGoodWriteHeadersIsAllowed() {
+		var r = req("GET", goodWriteHeaders());
+		when(r.getQueryString()).thenReturn("method=DELETE");
+		assertTrue(BOUNDARY.check(r).isAllowed());
+	}
+
+	@Test void g06_getWithOverrideHeaderAndGoodWriteHeadersIsAllowed() {
+		var h = goodWriteHeaders();
+		h.put("X-HTTP-Method-Override", "PUT");
+		assertTrue(BOUNDARY.check(req("GET", h)).isAllowed());
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
 	// h) Method classification — fails closed on anything unrecognized
 	//-----------------------------------------------------------------------------------------------------------------
 
@@ -473,7 +521,7 @@ class LoopbackBoundary_Test extends TestBase {
 	}
 
 	@Test void i08_resultToString() {
-		assertEquals("ALLOWED", Result.ALLOWED.toString());
+		assertEquals("ALLOWED", BoundaryResult.ALLOWED.toString());
 		assertTrue(BOUNDARY.check(write("Host", "evil.example")).toString().startsWith("HOST_MISMATCH(421): "));
 	}
 

@@ -16,8 +16,8 @@
  */
 
 /*
- * config-application.cjs - always-on Node harness for the juneau-config.js pure config-application layer
- * (config-application-444, slice 4): computeEffectiveColumns / validateView / serializeSavedView / deserializeSavedView /
+ * config-application.cjs - always-on Node harness for the juneau-config.js pure config-application layer:
+ * computeEffectiveColumns / validateView / serializeSavedView / deserializeSavedView /
  * dtIndex (+ buildOptsColumnSpace).
  *
  * No Playwright / Chromium / DOM — loads the real juneau-config.js IIFE against a minimal fake `window`, then

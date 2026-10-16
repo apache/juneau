@@ -1,0 +1,62 @@
+##pytest {"ev":"hello","v":1}
+============================= test session starts ==============================
+platform darwin -- Python 3.13.11, pytest-9.1.1, pluggy-1.6.0
+rootdir: /tmp/pytest-fixture
+plugins: xdist-3.8.0
+collected 7 items
+##pytest {"ev":"total","n":7}
+
+test_s.py .
+##pytest {"ev":"test","o":"passed","id":"test_s.py::test_pass","s":0.0}
+
+test_s.py F
+##pytest {"ev":"test","o":"failed","id":"test_s.py::test_fail","s":0.0}
+
+test_s.py s
+##pytest {"ev":"test","o":"skipped","id":"test_s.py::test_skip","s":0.0}
+
+test_s.py x
+##pytest {"ev":"test","o":"xfailed","id":"test_s.py::test_xfail","s":0.0}
+
+test_s.py X
+##pytest {"ev":"test","o":"xpassed","id":"test_s.py::test_xpass","s":0.0}
+
+test_s.py E
+##pytest {"ev":"test","o":"error","id":"test_s.py::test_setup_error","s":0.0}
+
+test_s.py .
+##pytest {"ev":"test","o":"passed","id":"test_s.py::test_teardown_error","s":0.0}
+E
+##pytest {"ev":"test","o":"error","id":"test_s.py::test_teardown_error","s":0.0,"late":1}
+                                                                         [100%]
+==================================== ERRORS ====================================
+______________________ ERROR at setup of test_setup_error ______________________
+
+    @pytest.fixture
+>   def broken(): raise RuntimeError("setup")
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   RuntimeError: setup
+
+test_s.py:12: RuntimeError
+___________________ ERROR at teardown of test_teardown_error ___________________
+
+    @pytest.fixture
+    def bad_teardown():
+        yield
+>       raise RuntimeError("teardown")
+E       RuntimeError: teardown
+
+test_s.py:17: RuntimeError
+=================================== FAILURES ===================================
+__________________________________ test_fail ___________________________________
+
+>   def test_fail(): assert 0
+                     ^^^^^^^^
+E   assert 0
+
+test_s.py:4: AssertionError
+=========================== short test summary info ============================
+FAILED test_s.py::test_fail - assert 0
+ERROR test_s.py::test_setup_error - RuntimeError: setup
+ERROR test_s.py::test_teardown_error - RuntimeError: teardown
+==== 1 failed, 2 passed, 1 skipped, 1 xfailed, 1 xpassed, 2 errors in 0.02s ====

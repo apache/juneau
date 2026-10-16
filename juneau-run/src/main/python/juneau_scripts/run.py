@@ -105,13 +105,17 @@ def _slug(title):
     return re.sub(r"[^a-z0-9]+", "-", title.lower()).strip("-")[:60] or "step"
 
 
-def cmd(cmd, *, title, id=None, n=None, tool=None, cwd=None, env=None, capture=False, tty=False):  # NOSONAR python:S5806
+def cmd(cmd, *, title, id=None, n=None, tool=None, cwd=None, env=None, capture=False, tty=False,  # NOSONAR python:S5806
+        summarize=None):
     """Run cmd as one step.  Under markers or the console it goes through jr.run_tool with the named parser (or a
-    jr.Parser instance); otherwise a plain subprocess.run.  A tool that can't start gives Result(False, 127, err)."""
+    jr.Parser instance); otherwise a plain subprocess.run.  A tool that can't start gives Result(False, 127, err).
+    summarize(text) gives the step_end summary; it is called after the command exits, while its row is still open
+    (so jr.history_series attaches to it).  With summarize, the command goes through run_tool whenever juneau_run is
+    loaded, markers or not; without juneau_run, summarize is never called."""
     _base.remember(title)
-    if routed():
+    if routed() or (summarize is not None and _base.jr() is not None):
         return _routed(cmd, title=title, id=id or _slug(title), n=_next_n(n), parent=None, tool=tool, cwd=cwd,
-                       env=env, capture=capture, tty=tty)
+                       env=env, capture=capture, tty=tty, summarize=summarize)
     _next_n(n)
     return _plain(cmd, cwd=cwd, env=env, capture=capture)
 
@@ -130,14 +134,15 @@ def _plain(cmd, *, cwd, env, capture):
                   ms=int((time.monotonic() - t0) * 1000))
 
 
-def _routed(cmd, *, title, id, n, parent, tool, cwd, env, capture, tty, statuses=None):  # NOSONAR python:S5806
+def _routed(cmd, *, title, id, n, parent, tool, cwd, env, capture, tty, statuses=None,  # NOSONAR python:S5806
+            summarize=None):
     jr = _base.jr()
     parser = tool if tool is not None else "generic"
     if isinstance(parser, str) and parser not in jr.PARSERS:
         parser = "generic"
     try:
         r = jr.run_tool(cmd, parser, id, title, n=n, parent=parent, cwd=cwd, env=env, capture=capture, tty=tty,
-                        statuses=statuses)
+                        statuses=statuses, summarize=summarize)
     except OSError as e:
         # run_tool has already ended the step with exit 127.  Close it again with no exit field, as Foundry does
         # (scripts/push.py:254-262), whose tests pin that marker.
@@ -146,18 +151,18 @@ def _routed(cmd, *, title, id, n, parent, tool, cwd, env, capture, tty, statuses
     return Result(r.exit == 0, r.exit, out=(r.output or "") if capture else "", ms=r.ms, summary=r.summary or None)
 
 
-def gate(cmd, *, title, codes=GATE_CODES, **cmd_kwargs):
+def gate(cmd, *, title, codes=GATE_CODES, label=None, **cmd_kwargs):
     """Run a gate script and map its exit code through codes (unknown codes are "error").  ok is True for pass and
     skip; Result.status says which.  Under markers or the console the gate is a step with the command as its child
     row, and both rows show the gate's status: codes goes to run_tool as statuses, so a skip is "skip" on the child
-    row as well (Decision Q7)."""
+    row as well (Decision Q7).  label is the step's short console label."""
     if not routed():
         r = _cmd(cmd, title=title, **cmd_kwargs)
         status = codes.get(r.code, "error")
         return dataclasses.replace(r, ok=status in ("pass", "skip"), status=status)
     _base.remember(title)
     step_id = cmd_kwargs.get("id") or _slug(title)
-    with step(step_id, title, n=cmd_kwargs.get("n")) as st:
+    with step(step_id, title, n=cmd_kwargs.get("n"), label=label) as st:
         r = _routed(cmd, title=title, id=f"{step_id}-run", n=1, parent=step_id,
                     tool=cmd_kwargs.get("tool") or "generic", cwd=cmd_kwargs.get("cwd"), env=cmd_kwargs.get("env"),
                     capture=cmd_kwargs.get("capture", False), tty=cmd_kwargs.get("tty", False),
@@ -209,6 +214,17 @@ class Session:
     def __init__(self):
         self.commit = None
         self.code = None
+
+    def plan(self, ids):
+        """Declare (or replace) the planned top-level step ids, in order, for the Overall figure.  Does nothing in a
+        plain run."""
+        ids = list(ids)
+        # validated here even in a plain run (where jr is None) so a bad plan fails the same way everywhere
+        if len(set(ids)) != len(ids):
+            raise ValueError("duplicate step id in plan: " + ", ".join(sorted({i for i in ids if ids.count(i) > 1})))
+        jr = _base.jr()
+        if jr is not None:
+            jr.plan(ids)
 
     def fail(self, msg, *, hint=None):
         """Print msg verbatim (level error), then the hint lines, and end the session as failed.  msg is required
@@ -274,12 +290,13 @@ def _n_base():
 
 @contextlib.contextmanager
 def session(title, *, header=(), bell=False, sound=False, silence_env=(), mode=None, project=None, repo=".",
-            exit=True):
+            exit=True, plan=None):
     """
     One script run: the run marker, the console view when requested, a SIGTERM handler, and on every path the summary,
     exactly one done marker, the bell and the sound.  ok exits 0, s.fail(msg)/s.require() 1, Ctrl-C or SIGTERM 130, any
     other exception 1 (reported as "❌ ERROR: <Type>: <msg>").  With exit=True it raises SystemExit(code) at the end;
-    with exit=False the code is left in s.code.
+    with exit=False the code is left in s.code.  plan is the list of top-level step ids for the Overall figure; the run's
+    history is recorded for repo (JUNEAU_RUN_HISTORY=0 turns it off).
     """
     global _session, _n
     if _session is not None:
@@ -297,10 +314,14 @@ def session(title, *, header=(), bell=False, sound=False, silence_env=(), mode=N
         previous = _install_sigterm()
         try:
             jr = _base.jr()
+            if jr is not None:
+                jr.history_start(repo)
             if jr is not None and jr.enabled():
                 jr.run(mode, project, git.current_branch(repo) or "HEAD", git.short_head(repo))
             if console_requested():
-                jr.session(title, header)
+                jr.session(title, header, repo=repo)
+            if plan is not None:
+                s.plan(plan)
             yield s
         except _SessionFailed:
             status, code = "fail", 1

@@ -20,7 +20,10 @@ package org.apache.juneau.rest.server;
 // Single-type import, not the usual wildcard: this package declares its own Method type, which would otherwise
 // shadow java.lang.reflect.Method here.
 import java.lang.reflect.Method;
+import java.net.*;
+import java.nio.charset.*;
 import java.util.*;
+import java.util.function.*;
 
 import org.apache.juneau.commons.reflect.*;
 import org.apache.juneau.http.response.*;
@@ -78,6 +81,12 @@ public class MethodSafety {
 	 */
 	private static final Set<String> SAFE_METHODS = Set.of("GET", "HEAD", "OPTIONS", "TRACE");
 
+	/** The query parameter that can claim a request's method. */
+	private static final String OVERRIDE_PARAM = "method";
+
+	/** The headers that can claim a request's method. */
+	private static final List<String> OVERRIDE_HEADERS = List.of("X-Method", "X-HTTP-Method-Override", "X-HTTP-Method", "X-Method-Override");
+
 	/**
 	 * Constructor.
 	 */
@@ -91,6 +100,73 @@ public class MethodSafety {
 	 */
 	public static boolean isSafe(String method) {
 		return method != null && SAFE_METHODS.contains(method.toUpperCase(Locale.ROOT));
+	}
+
+	/**
+	 * The method a request is judged on by a write-protection check.
+	 *
+	 * <p>
+	 * A request is judged on the method it <b>claims</b>, not only on its request line.  A {@code method} query
+	 * parameter, or an {@code X-Method}, {@code X-HTTP-Method-Override}, {@code X-HTTP-Method} or
+	 * {@code X-Method-Override} header, naming anything other than a safe method makes the request a write, whether or
+	 * not the resource it reaches is configured to honour that override.  A check that followed dispatch's override
+	 * configuration instead would open a hole the day a resource's allowed overrides changed.
+	 *
+	 * <p>
+	 * The rules fail closed:
+	 * <ul>
+	 * 	<li>The request-line method is the floor.  An unsafe request line is returned (upper-cased); an override can raise a
+	 * 		request's severity but never lower it, so {@code POST ?method=GET} stays {@code POST}.
+	 * 	<li>Any unsafe claim wins, so {@code ?method=GET&method=DELETE} is {@code DELETE}.
+	 * 	<li>An unknown method is unsafe, so {@code ?method=FROB} is judged as a write.
+	 * 	<li>A claim with a malformed percent-escape is judged on its raw text, which is never a safe method name.
+	 * 	<li>A blank claim is ignored.
+	 * </ul>
+	 *
+	 * @param method The request line's method.  Can be <jk>null</jk>, which is returned as <jk>null</jk> (unsafe).
+	 * @param rawQuery The raw, undecoded query string.  Can be <jk>null</jk>.
+	 * @param headers Looks up a request header by name, returning <jk>null</jk> when absent.  Must not be <jk>null</jk>.
+	 * @return The upper-cased request-line method when it is not safe, else the first unsafe claim (upper-cased), else
+	 * 	the upper-cased request-line method.
+	 */
+	public static String effectiveMethod(String method, String rawQuery, UnaryOperator<String> headers) {
+		reqnn("headers", headers);
+		var m = method == null ? null : method.toUpperCase(Locale.ROOT);
+		if (! isSafe(m))
+			return m;
+		if (rawQuery != null) {
+			for (var pair : rawQuery.split("&")) {
+				var i = pair.indexOf('=');
+				if (i > 0 && OVERRIDE_PARAM.equalsIgnoreCase(decode(pair.substring(0, i)))) {
+					var c = unsafeClaim(decode(pair.substring(i + 1)));
+					if (c != null)
+						return c;
+				}
+			}
+		}
+		for (var h : OVERRIDE_HEADERS) {
+			var c = unsafeClaim(headers.apply(h));
+			if (c != null)
+				return c;
+		}
+		return m;
+	}
+
+	/** The claimed method upper-cased when it is unsafe, else <jk>null</jk> (absent, blank or safe). */
+	private static String unsafeClaim(String claim) {
+		if (claim == null || claim.isBlank())
+			return null;
+		var c = claim.trim().toUpperCase(Locale.ROOT);
+		return isSafe(c) ? null : c;
+	}
+
+	/** Decodes a query-string component; a malformed escape leaves the raw text, which is then judged as is. */
+	private static String decode(String s) {
+		try {
+			return URLDecoder.decode(s, StandardCharsets.UTF_8);
+		} catch (IllegalArgumentException e) {
+			return s;
+		}
 	}
 
 	/**

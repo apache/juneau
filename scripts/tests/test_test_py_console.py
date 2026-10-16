@@ -62,7 +62,7 @@ class Events:
 
 @pytest.fixture
 def bus(test_mod):
-    run = test_mod.run_module()
+    run = test_mod._juneau.load()[0]
     return run.subscribe(Events())
 
 
@@ -76,7 +76,7 @@ ACTUALS = {"mod-a": 20.0, "mod-b": 9.0, "mod-c": 1.0, "mod-d": 2.0}
 
 
 def perf(test_mod, monkeypatch, tmp_path, *, enforce, active, elapsed=130.0):
-    monkeypatch.setattr(test_mod.run_module(), "console_owns_screen", lambda: active)
+    monkeypatch.setattr(test_mod._juneau.load()[0], "console_owns_screen", lambda: active)
     report = tmp_path / "perf-guard.txt"
     code = test_mod.run_perf_guard(elapsed, write_baseline(tmp_path), dict(ACTUALS), enforce=enforce,
                                    report_file=report)
@@ -112,7 +112,7 @@ def test_enforced_breaches_are_errors_and_fail_the_row(test_mod, bus, monkeypatc
 
 
 def test_a_clean_perf_run_says_how_many_were_checked(test_mod, bus, monkeypatch, tmp_path):
-    monkeypatch.setattr(test_mod.run_module(), "console_owns_screen", lambda: True)
+    monkeypatch.setattr(test_mod._juneau.load()[0], "console_owns_screen", lambda: True)
     report = tmp_path / "perf-guard.txt"
     assert test_mod.run_perf_guard(90.0, write_baseline(tmp_path), {"mod-a": 9.0}, enforce=False,
                                     report_file=report) == 0
@@ -129,7 +129,7 @@ def test_without_a_console_perf_prints_as_before(test_mod, bus, monkeypatch, tmp
 
 
 def test_perf_follows_the_same_screen_ownership_say_uses(test_mod, bus, monkeypatch, tmp_path, capsys):
-    run = test_mod.run_module()
+    run = test_mod._juneau.load()[0]
     monkeypatch.setattr(run, "console_active", lambda: False)
     perf(test_mod, monkeypatch, tmp_path, enforce=False, active=True)
     assert capsys.readouterr().out == ""
@@ -137,7 +137,7 @@ def test_perf_follows_the_same_screen_ownership_say_uses(test_mod, bus, monkeypa
 
 
 def test_perf_without_a_baseline_still_writes_the_report(test_mod, bus, monkeypatch, tmp_path):
-    monkeypatch.setattr(test_mod.run_module(), "console_owns_screen", lambda: True)
+    monkeypatch.setattr(test_mod._juneau.load()[0], "console_owns_screen", lambda: True)
     report = tmp_path / "perf-guard.txt"
     report.write_text("stale\n", encoding="utf-8")
     code = test_mod.run_perf_guard(5.0, tmp_path / "missing.txt", {}, enforce=False, report_file=report)
@@ -183,18 +183,52 @@ def test_an_unknown_detail_level_lists_the_valid_ones(test_mod, monkeypatch, cap
     assert "summary, actionable, modules, all" in capsys.readouterr().out
 
 
-def test_a_session_starts_only_when_the_sinks_are_not_default(test_mod, monkeypatch):
+def test_a_console_session_opens_only_when_the_sinks_are_not_default(test_mod, monkeypatch):
+    """The toolkit session always runs; the console view (jr.session) opens only when the sinks aren't the default."""
     monkeypatch.setattr(test_mod, "profile", lambda module: (0, ""))
+    monkeypatch.setattr(test_mod, "git_value", lambda args: "b1")
+    opened = []
+    monkeypatch.setattr(test_mod._juneau.load()[0], "session", lambda title, header=(), **kw: opened.append(title))
     monkeypatch.setattr(sys, "argv", ["test.py", "--profile", "m"])
-    test_mod._main()
-    assert test_mod.run_module()._console is None
+    assert test_mod.main() == 0
+    assert opened == []
     monkeypatch.setattr(sys, "argv", ["test.py", "--console", "none", "--profile", "m"])
-    test_mod._main()
-    assert test_mod.run_module()._console is not None
+    assert test_mod.main() == 0
+    assert opened == ["🧪 Juneau test · b1"]
+
+
+def test_test_py_opens_one_toolkit_session_and_one_done(test_mod, monkeypatch, capsys):
+    import contextlib
+    monkeypatch.setenv("RUN_MARKERS", "1")
+    monkeypatch.setattr(test_mod, "git_value", lambda args: "b1")
+    test_mod._juneau.load()
+    from juneau_scripts import run as toolkit
+    real, entered = toolkit.session, []
+
+    @contextlib.contextmanager
+    def spy(title, **kw):
+        entered.append((title, kw))
+        with real(title, **kw) as s:
+            yield s
+
+    monkeypatch.setattr(toolkit, "session", spy)
+    monkeypatch.setattr(test_mod, "_main", lambda: 3)
+    assert test_mod.main() == 3
+    assert len(entered) == 1
+    title, kw = entered[0]
+    root = SCRIPTS_DIR.parent
+    assert (title, kw["mode"], kw["project"], Path(kw["repo"]), kw["bell"], kw["exit"]) == \
+        ("🧪 Juneau test · b1", "test", root.name, root, True, False)
+    assert tuple(kw["silence_env"]) == ("JUNEAU_PUSH_NO_SOUND",)
+    out = capsys.readouterr().out
+    events = [line for line in out.splitlines() if line.startswith("##run ")]
+    assert sum('"ev":"run"' in e.replace(" ", "") for e in events) == 1
+    dones = [e for e in events if '"ev":"done"' in e.replace(" ", "")]
+    assert len(dones) == 1 and '"fail"' in dones[0]
 
 
 def test_ctrl_c_with_a_console_ends_cancelled(test_mod, bus, monkeypatch):
-    run = test_mod.run_module()
+    run = test_mod._juneau.load()[0]
     monkeypatch.setattr(run, "console_active", lambda: True)
     monkeypatch.setattr(test_mod, "git_value", lambda args: "x")
 
@@ -204,3 +238,18 @@ def test_ctrl_c_with_a_console_ends_cancelled(test_mod, bus, monkeypatch):
     monkeypatch.setattr(test_mod, "_main", interrupted)
     assert test_mod.main() == 130
     assert bus.of("done")[-1]["status"] == "cancelled"
+
+
+def test_test_py_plain_ctrl_c_is_a_cancel(test_mod, monkeypatch, capsys):
+    """Markers off and no console: the toolkit session turns Ctrl-C into "❌ Cancelled." and exit 130 (it used to
+    propagate the KeyboardInterrupt silently)."""
+    monkeypatch.setattr(test_mod, "git_value", lambda args: "x")
+
+    def interrupted():
+        raise KeyboardInterrupt
+
+    monkeypatch.setattr(test_mod, "_main", interrupted)
+    assert test_mod.main() == 130
+    captured = capsys.readouterr()
+    assert "❌ Cancelled." in captured.out
+    assert "##run" not in captured.out

@@ -86,7 +86,7 @@ const out = {};
 	};
 }
 
-// --- t02: topic syntax (spec 3.1) -----------------------------------------------------------------------------------
+// --- t02: topic syntax -----------------------------------------------------------------------------------
 {
 	const { bus } = fresh();
 	const cases = ['selection:changes', 'cmd:tasks', 'bridge:live', 'job:j-1.2_3', 'ssc.focus', 'ssc.focus:triage',
@@ -601,6 +601,23 @@ const out = {};
 	bus.publish('app.b', {});
 	out.t32 = { aGet: aGet, aRepublish: aRepublish, bGet: bus.get('selection:t') === undefined,
 		bRepublish: o.publish('selection:t', { schemaVersion: 1, v: 1 }) };
+}
+
+// --- t33: zoom:, legend: and data: are retained, single-owner state ----------------------------------------------
+{
+	const { bus, errors } = fresh();
+	const owner = bus.owner('t');
+	const other = bus.owner('z');
+	const rows = ['zoom:t', 'legend:t', 'data:t'].map(function (topic) {
+		const kind = bus.util.parseTopic(topic).kind;
+		const ownerPublish = owner.publish(topic, { schemaVersion: 1, v: 1 });
+		const otherPublish = other.publish(topic, { schemaVersion: 1, v: 2 });
+		const late = [];
+		bus.subscribe(topic, function (p, m) { late.push(p.v + '|' + m.retained); });
+		const redeclare = thrown(function () { bus.declare(topic, { retain: false }); });
+		return [topic, kind, ownerPublish, otherPublish, bus.get(topic).v, late.join(','), redeclare.code].join('/');
+	});
+	out.t33 = { rows: rows, denied: errors.filter(function (e) { return e.code === 'E-JS-49'; }).length };
 }
 
 process.stdout.write(JSON.stringify(out));

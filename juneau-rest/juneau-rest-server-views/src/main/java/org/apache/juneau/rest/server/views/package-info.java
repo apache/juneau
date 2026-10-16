@@ -47,8 +47,8 @@
  * popup dialog described by {@link org.apache.juneau.rest.server.widgets.ModalDef}.  The dialog may carry a
  * {@link org.apache.juneau.rest.server.widgets.FormDef} whose
  * {@link org.apache.juneau.rest.server.widgets.FormDef.Input}
- * controls are the frozen six-type vocabulary &mdash; {@code text}, {@code textarea}, {@code checkbox},
- * {@code toggle} (a {@code role=switch}), {@code select} (single-select), and {@code action} (a button holding an
+ * controls are the seven-type vocabulary &mdash; {@code text}, {@code textarea}, {@code password} (masked, write-only, never
+ * pre-filled), {@code checkbox}, {@code toggle} (a {@code role=switch}), {@code select} (single-select), and {@code action} (a button holding an
  * {@link org.apache.juneau.rest.server.widgets.ActionRef} that opens a further dialog for a named row action, the
  * composition trigger).  Typed inputs are always painted from the model with {@code createElement} + {@code .value} /
  * {@code .checked} / {@code textContent} &mdash; never as markup &mdash; so a live-data or hostile field value can

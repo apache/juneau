@@ -31,9 +31,9 @@ import org.apache.juneau.rest.server.datatables.DataTablesRequest.Search;
 import org.junit.jupiter.api.*;
 
 /**
- * Tests the {@link DataTablesQuery} adapter: {@code toBeanQuery} mapping (D3&ndash;D6), {@code run}/{@code
+ * Tests the {@link DataTablesQuery} adapter: {@code toBeanQuery} mapping, {@code run}/{@code
  * runArrays} response population, and that a malformed query propagates {@link BeanQuerySyntaxException} uncaught
- * (central HTTP&nbsp;400 + {@code X-BeanQuery-Error} mapping; 2026-10-05 override of the original 200+{@code error} design D2).
+ * (central HTTP&nbsp;400 + {@code X-BeanQuery-Error} mapping, not a 200 response carrying an {@code error} field).
  */
 class DataTablesQuery_Test extends TestBase {
 
@@ -160,7 +160,7 @@ class DataTablesQuery_Test extends TestBase {
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
-	// Global search (D4, via toBeanQuery's built wire string)
+	// Global search (via toBeanQuery's built wire string)
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Nested class C_globalSearch {
@@ -569,7 +569,7 @@ class DataTablesQuery_Test extends TestBase {
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
-	// Counts (D6): BOTH / MATCHED / NONE policy interaction
+	// Counts: BOTH / MATCHED / NONE policy interaction
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Nested class H_counts {

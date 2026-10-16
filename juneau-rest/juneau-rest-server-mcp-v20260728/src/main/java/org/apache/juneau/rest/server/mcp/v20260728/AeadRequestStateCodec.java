@@ -210,7 +210,7 @@ public class AeadRequestStateCodec implements RequestStateCodec {
 	 *
 	 * <p>
 	 * <b>Bound identity (settled decision 1): {@code iss|sub}.</b> When {@code principal} is a {@link ClaimsPrincipal}
-	 * (the type the F2 resource-server layer produces &mdash; {@code JwtTokenValidator}, OAuth introspection, OIDC, and
+	 * (the type the resource-server layer produces &mdash; {@code JwtTokenValidator}, OAuth introspection, OIDC, and
 	 * SAML all return one), the {@code iss} and {@code sub} claims are read from its claim set; the issuer scopes the
 	 * subject so a bare {@code sub} cannot collide across IdPs. When {@code sub} is absent or empty (or the principal
 	 * is a bare {@link Principal} that exposes only {@link Principal#getName() getName()}), {@link Principal#getName()

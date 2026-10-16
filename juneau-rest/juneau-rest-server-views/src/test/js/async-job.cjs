@@ -27,7 +27,7 @@
  * headless Chromium, then, entirely inside the page, drives an async row action through its full lifecycle against
  * a controllable FAKE EventSource (there is no server; the fixture is a file://): the start POST returns a job
  * pointer (not a terminal result), the row picks up the DISTINCT data-juneau-job affordance (NOT
- * data-juneau-inflight, so the table KEEPS polling - the load-bearing HIGH-9 fact), progress events update a
+ * data-juneau-inflight, so the table KEEPS polling - the load-bearing polling fact), progress events update a
  * visible banner painted with textContent, and the single terminal `result` event settles the row to
  * success / cancelled / cancelled-after-effect, or a stream error settles it to a non-optimistic unknown.  Cancel
  * issues a fail-closed CSRF POST to the job's cancelUrl.  Prints ONE JSON object to stdout.
@@ -142,13 +142,13 @@ const PROBE = async function () {
 		return dom;
 	}
 
-	// ---- Scenario 1: a running job uses the DISTINCT marker and does NOT freeze polling (HIGH-9) ----
+	// ---- Scenario 1: a running job uses the DISTINCT marker and does NOT freeze polling ----
 	{
 		const dom = await startJob('INC-1');
 		out.running = {
 			hasJobMarker: 'juneauJob' in dom.tr.dataset,
 			hasInflightMarker: 'juneauInflight' in dom.tr.dataset,
-			// The load-bearing HIGH-9 fact: polling is NOT frozen while the job runs.
+			// The load-bearing polling fact: polling is NOT frozen while the job runs.
 			pollingFrozen: init.hasInFlightRow(dom.table),
 			progressVisible: rendered(jobBanner(dom)),
 			progressText: jobMsg(dom),
@@ -202,7 +202,7 @@ const PROBE = async function () {
 		out.cancel.jobMarkerCleared = !('juneauJob' in dom.tr.dataset);
 	}
 
-	// ---- Scenario 3: cancelled-after-effect is a DISTINCT terminal outcome (Q4), rendered on its own ----
+	// ---- Scenario 3: cancelled-after-effect is a DISTINCT terminal outcome, rendered on its own ----
 	{
 		const dom = await startJob('INC-3');
 		lastEs().emit('result', JSON.stringify({ contractVersion: V, outcome: 'cancelled-after-effect' }));

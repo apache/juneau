@@ -98,7 +98,7 @@ class McpTokenProvider_Test extends TestBase {
 	}
 
 	// -----------------------------------------------------------------------------------------------------------------
-	// B: client-credentials
+	// Client-credentials
 	// -----------------------------------------------------------------------------------------------------------------
 
 	@Test void b01_clientCredentialsAcquires() {
@@ -181,7 +181,7 @@ class McpTokenProvider_Test extends TestBase {
 	}
 
 	@Test void c03_resourceIndicatorSentOnRefreshRequest() {
-		// H6: the refresh-flow token request must carry the RFC 8707 resource indicator too.
+		// The refresh-flow token request must carry the RFC 8707 resource indicator too.
 		responses.add(tokenJson("refreshed-at", 3600));
 		var p = McpTokenProvider.refreshToken("rt-initial")
 			.tokenEndpoint(tokenEndpoint()).clientId("id").resource(RES).build();
@@ -192,7 +192,7 @@ class McpTokenProvider_Test extends TestBase {
 	}
 
 	@Test void c04_refreshInvalidGrantLatchesTerminal() {
-		// M7: an invalid_grant on refresh latches a terminal state; subsequent get() throws McpAuthException
+		// An invalid_grant on refresh latches a terminal state; subsequent get() throws McpAuthException
 		// without re-hitting the IdP with the dead refresh token.
 		server.removeContext("/token");
 		var hits = new AtomicInteger();
@@ -213,7 +213,7 @@ class McpTokenProvider_Test extends TestBase {
 	}
 
 	// -----------------------------------------------------------------------------------------------------------------
-	// D: builder validation + redaction
+	// Builder validation + redaction
 	// -----------------------------------------------------------------------------------------------------------------
 
 	@Test void d01_clientCredentialsRequiredFields() {
@@ -223,7 +223,7 @@ class McpTokenProvider_Test extends TestBase {
 		assertThrows(IllegalStateException.class, b2::build);
 		var b3 = McpTokenProvider.clientCredentials().tokenEndpoint(tokenEndpoint()).clientId("id");
 		assertThrows(IllegalStateException.class, b3::build);
-		// H3: resource() is mandatory on the MCP-facing entry point.
+		// Resource() is mandatory on the MCP-facing entry point.
 		var b4 = McpTokenProvider.clientCredentials().tokenEndpoint(tokenEndpoint()).clientId("id").clientSecret("s");
 		assertThrows(IllegalStateException.class, b4::build);
 	}
@@ -252,7 +252,7 @@ class McpTokenProvider_Test extends TestBase {
 	}
 
 	// -----------------------------------------------------------------------------------------------------------------
-	// E: builder options, non-terminal refresh errors, redaction of non-static modes
+	// Builder options, non-terminal refresh errors, redaction of non-static modes
 	// -----------------------------------------------------------------------------------------------------------------
 
 	@Test void e01_clientCredentialsAppliesSupplierScopeTimeoutAndConfigurator() {

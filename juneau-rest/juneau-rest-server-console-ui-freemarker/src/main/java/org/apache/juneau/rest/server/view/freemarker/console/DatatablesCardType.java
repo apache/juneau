@@ -25,6 +25,7 @@ import org.apache.juneau.commons.beanquery.*;
 import org.apache.juneau.marshall.collections.*;
 import org.apache.juneau.rest.server.console.*;
 import org.apache.juneau.rest.server.views.*;
+import org.apache.juneau.rest.server.widgets.*;
 
 /**
  * The built-in {@code datatables} card type, registered through {@code META-INF/services}: validates the author
@@ -61,7 +62,7 @@ public final class DatatablesCardType implements CardTypeHandler {
 	/** Public no-arg constructor, required by {@link java.util.ServiceLoader}. */
 	public DatatablesCardType() {}
 
-	/** The {@code cmd:<id>} ops the datatables JS handles (spec §4.5), beyond the shell's {@code refresh}. */
+	/** The {@code cmd:<id>} ops the datatables JS handles, beyond the shell's {@code refresh}. */
 	static final Set<String> TABLE_OPS = Set.of(
 		"reload", "clear-selection", "select", "set-filter", "pause-polling", "resume-polling", "collapse-all");
 
@@ -71,7 +72,7 @@ public final class DatatablesCardType implements CardTypeHandler {
 	}
 
 	/**
-	 * Spec §5.4: {@code filter:} and {@code redraw:} always; {@code selection:}, {@code detail:} and {@code bulk:}
+	 * {@code filter:} and {@code redraw:} always; {@code selection:}, {@code detail:} and {@code bulk:}
 	 * only when the catalog sets that key.  A {@code src}-only card's catalog arrives at runtime, so it is credited
 	 * with all five.  The JS side applies this same rule and does not re-check once the catalog is known: a topic the
 	 * catalog turns out not to need stays claimed and is simply never published.
@@ -93,7 +94,7 @@ public final class DatatablesCardType implements CardTypeHandler {
 		return out;
 	}
 
-	/** Spec §5.3: a table applies {@code filter:}-shaped (or mapped) payloads as a {@code set-filter} patch. */
+	/** A table applies {@code filter:}-shaped (or mapped) payloads as a {@code set-filter} patch. */
 	@Override
 	public Set<String> acceptedRoles() {
 		return Set.of("filter");
@@ -130,6 +131,7 @@ public final class DatatablesCardType implements CardTypeHandler {
 			validateRows(source, catalog);
 
 		checkNoContractVersion(source, catalog, "table");
+		checkQuickStats(source, catalog);
 
 		// The authored body (and its lists) may be immutable, so the normalized columns go into a fresh list of copies.
 		var normalized = new ArrayList<Object>(columns.size());
@@ -234,6 +236,88 @@ public final class DatatablesCardType implements CardTypeHandler {
 		return nn(data) ? data.toString() : (nn(key) ? key.toString() : null);
 	}
 
+	private static final Set<String> QUICK_STAT_KINDS = Set.of("tile", "meter", "segmented");
+
+	/** E-37: the quickStats strip is a non-empty list of uniquely-identified items, each well-formed for its kind. */
+	private static void checkQuickStats(CardSource source, Map<String,Object> catalog) {
+		if (! catalog.containsKey("quickStats"))
+			return;
+		if (! (catalog.get("quickStats") instanceof Map<?,?> qs) || ! (qs.get("items") instanceof List<?> items) || items.isEmpty())
+			throw source.error("quickStats items must be a non-empty array.");
+		var ids = new HashSet<String>();
+		for (var o : items) {
+			if (! (o instanceof Map<?,?> item))
+				throw source.error("quickStats items must be objects.");
+			if (! (item.get("id") instanceof String id) || id.isBlank())
+				throw source.error("quickStats item ids must be non-blank strings.");
+			if (! ids.add(id))
+				throw source.error("quickStats item '%s': duplicate id.", id);
+			checkQuickStatItem(source, id, item);
+		}
+	}
+
+	private static void checkQuickStatItem(CardSource source, String id, Map<?,?> item) {
+		var hasSegments = item.containsKey("segments");
+		var hasMax = item.containsKey("max");
+		var type = item.get("type");
+		String kind;
+		if (type == null) {
+			if (hasSegments && hasMax)
+				throw source.error("quickStats item '%s': has both segments and max; set type.", id);
+			kind = hasSegments ? "segmented" : hasMax ? "meter" : "tile";
+		} else {
+			if (! (type instanceof String t) || ! QUICK_STAT_KINDS.contains(t))
+				throw source.error("quickStats item '%s': unknown type '%s'.", id, type);
+			var fits = switch (t) {
+				case "tile" -> ! hasSegments && ! hasMax;
+				case "meter" -> hasMax && ! hasSegments;
+				default -> hasSegments && ! hasMax;
+			};
+			if (! fits)
+				throw source.error("quickStats item '%s': type '%s' does not match its shape.", id, t);
+			kind = t;
+		}
+		if (! kind.equals("tile") && (! (item.get("label") instanceof String lbl) || lbl.isBlank()))
+			throw source.error("quickStats item '%s': a %s item needs a non-blank label.", id, kind);
+		switch (kind) {
+			case "meter" -> {
+				if (! (item.get("value") instanceof Number v) || ! Double.isFinite(v.doubleValue()) || v.doubleValue() < 0)
+					throw source.error("quickStats item '%s': meter value must be a number >= 0.", id);
+				if (! (item.get("max") instanceof Number m) || ! Double.isFinite(m.doubleValue()) || m.doubleValue() <= 0)
+					throw source.error("quickStats item '%s': meter max must be a number > 0.", id);
+				if (item.containsKey("text") && ! (item.get("text") instanceof String))
+					throw source.error("quickStats item '%s': text must be a string.", id);
+				checkQuickStatTone(source, id, item.get("tone"));
+			}
+			case "segmented" -> {
+				if (item.containsKey("tone") || item.containsKey("text"))
+					throw source.error("quickStats item '%s': a segmented item takes no tone or text; tone each segment.", id);
+				if (! (item.get("segments") instanceof List<?> segs) || segs.isEmpty() || segs.size() > QuickStat.MAX_SEGMENTS)
+					throw source.error("quickStats item '%s': segments must be an array of 1 to %s objects.", id, QuickStat.MAX_SEGMENTS);
+				for (var i = 0; i < segs.size(); i++) {
+					if (! (segs.get(i) instanceof Map<?,?> s) || ! (s.get("label") instanceof String l) || l.isBlank()
+							|| ! (s.get("count") instanceof Number c) || ! isWholeNonNegative(c.doubleValue()))
+						throw source.error("quickStats item '%s': segment %s must be an object with a non-blank label and a whole count >= 0.", id, i + 1);
+					checkQuickStatTone(source, id, " segment " + (i + 1), s.get("tone"));
+				}
+			}
+			default -> checkQuickStatTone(source, id, item.get("tone"));
+		}
+	}
+
+	private static boolean isWholeNonNegative(double d) {
+		return Double.isFinite(d) && d >= 0 && d == Math.rint(d);
+	}
+
+	private static void checkQuickStatTone(CardSource source, String id, Object tone) {
+		checkQuickStatTone(source, id, "", tone);
+	}
+
+	private static void checkQuickStatTone(CardSource source, String id, String where, Object tone) {
+		if (tone != null && ! (tone instanceof String t && StatusTone.WIRE_TOKENS.contains(t)))
+			throw source.error("quickStats item '%s'%s: tone '%s' is not one of neutral, info, success, warning, error.", id, where, tone);
+	}
+
 	/** E-31: a {@code contractVersion} key anywhere in the catalog (table, detail, quickStats, bulk) — JS stamps versions. */
 	private static void checkNoContractVersion(CardSource source, Object node, String where) {
 		if (node instanceof Map<?,?> m) {
@@ -307,7 +391,7 @@ public final class DatatablesCardType implements CardTypeHandler {
 	/**
 	 * E-35: an {@code aggregate} bulk action's endpoint must not contain a {@code {field}} token (aggregate
 	 * endpoints receive {@code {ids}} in the body). No {@code <@card id='%s'>} prefix — {@code BulkMutateDef}
-	 * (Task 7) raises the identical message with no card in scope.
+	 * raises the identical message with no card in scope.
 	 */
 	@SuppressWarnings("unchecked")
 	private static void checkAggregateEndpoints(JsonMap catalog) {

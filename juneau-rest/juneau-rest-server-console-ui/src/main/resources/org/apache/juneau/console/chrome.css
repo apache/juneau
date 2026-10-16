@@ -202,8 +202,8 @@ a:hover { text-decoration: underline; }
 }
 
 /* ==========================================================================
-   App-header extras (TODO-445m): action/avatar count-dot badges, avatar
-   presence status + image fallback, and the 445h-pending menu surface.
+   App-header extras: action/avatar count-dot badges, avatar
+   presence status + image fallback, and the menu surface.
    Badge tones use the StatusTone wire tokens (info, success, warning, error,
    neutral) and presence states reuse the shared .tag palette tokens - the
    warning tone and AWAY status BOTH map to amber (no dedicated --jc-warn*
@@ -217,7 +217,7 @@ a:hover { text-decoration: underline; }
 .jc-icon-btn,
 .jc-avatar { position: relative; }
 
-/* A menu-bearing action/avatar is a DISABLED trigger until 445h wires the layer (M1 B). */
+/* A menu-bearing action/avatar is a DISABLED trigger until the shared layer stack is wired. */
 .jc-icon-btn[disabled],
 .jc-avatar[disabled] { cursor: default; opacity: 0.5; }
 
@@ -334,7 +334,7 @@ a:hover { text-decoration: underline; }
 .jc-avatar-status-busy::after    { background-color: var(--jc-tag-red-text); }
 .jc-avatar-status-offline::after { background-color: var(--jc-tag-neutral-text); }
 
-/* Menu surface - display:none until juneau-console.js portals it onto the shared views layer stack (445h), which
+/* Menu surface - display:none until juneau-console.js portals it onto the shared views layer stack, which
    sets position:fixed + the cell-anchored top/left and toggles display back on.  Inert with JS off. */
 .jc-menu {
   display: none;
@@ -649,7 +649,7 @@ a:hover { text-decoration: underline; }
   color: var(--jc-text);
 }
 
-/* Local fallback when the JuneauViews layer stack is absent (C1 P15): the shell toggles the list's
+/* Local fallback when the JuneauViews layer stack is absent: the shell toggles the list's
    display; with views loaded the list is portalled as a layer and these rules do not apply. */
 .jc-user-menu {
   position: relative;
@@ -663,7 +663,7 @@ a:hover { text-decoration: underline; }
   z-index: 30;
 }
 
-/* Loud-failure banner (spec §5.4). One banner per page, one item per failure. */
+/* Loud-failure banner. One banner per page, one item per failure. */
 .jc-console-error {
   position: relative;
   z-index: 40;
@@ -740,7 +740,7 @@ a:hover { text-decoration: underline; }
   width: 100%;
 }
 
-.jc-card:has([data-juneau-layout="wide"]):not(.jc-card .jc-card) {
+.jc-card:has([data-juneau-layout="wide"]):not(.jc-card .jc-card):not(.jc-card-bare .jc-card) {
   background-color: transparent;
   padding: 0;
   box-shadow: none;
@@ -783,14 +783,14 @@ a:hover { text-decoration: underline; }
 
 .jc-btn-danger {
   background-color: var(--jc-control-bg);
-  color: var(--jc-danger);
+  color: var(--jc-danger-text);
   border-color: var(--jc-control-border);
 }
 .jc-btn-danger:hover { background-color: var(--jc-danger-wash); }
 
 .jc-btn-success {
   background-color: var(--jc-control-bg);
-  color: var(--jc-success);
+  color: var(--jc-success-text);
   border-color: var(--jc-control-border);
 }
 .jc-btn-success:hover { background-color: var(--jc-success-wash); }
@@ -814,7 +814,7 @@ a:hover { text-decoration: underline; }
 
 /* Example domain/value vocabulary (lifted from the release-manager dogfood) - an extension point, not a closed
    contract. A consumer app is expected to add its own .tag.<domain>.<value> rules using the same palette tokens.
-   These pill/tag chips paint from the canonical --jc-pill-* family (Task 15): the client `pill` catalog renderer
+   These pill/tag chips paint from the canonical --jc-pill-* family: the client `pill` catalog renderer
    emits ".jc-pill.tag.<domain>.<value>", so this is the palette its colour comes from.  (The --jc-tag-* triads
    remain as aliases of --jc-pill-* for .jc-badge / .jc-avatar-status-* below.) */
 .tag.status.released,
@@ -1059,7 +1059,7 @@ table.dataTable.display > tbody > tr:hover {
 /* Detail-panel tabs are deliberately absent from this file.  They used to carry a second theme here - accent
    track wash, solid accent fill on the selected tab - which is what made them read as a row of pressed buttons
    instead of a tab strip, and it also doubled the accent band under the header's own wash.  That reasoning still
-   holds for THIS strip specifically ([FINISHED-J0454]'s territory, not reopened here) - it is not a project-wide
+   holds for THIS strip specifically (a settled decision, not reopened here) - it is not a project-wide
    "no solid fill" rule, though: the generic tab-mode rules directly above now use a solid fill too, deliberately,
    per the ruling noted there.  The fix for the detail strip was still to remove the override, not to re-theme it:
    the correct diff for the detail strip adds ZERO declarations to this file.  Note in particular that the deleted
@@ -1110,7 +1110,7 @@ table.dataTable.display > tbody > tr:hover {
   color: var(--jc-text);
 }
 .jc-editable-field.is-error .jc-editable-field-input { border-color: var(--jc-danger); }
-.jc-editable-field-error { color: var(--jc-danger); }
+.jc-editable-field-error { color: var(--jc-danger-text); }
 .jc-toast {
   background-color: var(--jc-card-bg);
   border-color: var(--jc-border);
@@ -1118,11 +1118,11 @@ table.dataTable.display > tbody > tr:hover {
   box-shadow: var(--jc-card-shadow);
 }
 .jc-toast.is-error {
-  color: var(--jc-danger);
+  color: var(--jc-danger-text);
   border-color: var(--jc-danger);
   background-color: var(--jc-danger-wash);
 }
-.jc-toast.is-success { color: var(--jc-success); }
+.jc-toast.is-success { color: var(--jc-success-text); }
 .jc-toast.is-info { color: var(--jc-text); }
 
 /* Dedicated expander column (.juneau-view-detail-control): muted glyph, accent on hover. */
@@ -1160,15 +1160,17 @@ div.dataTables_wrapper div.dataTables_filter input {
   border-color: var(--jc-control-border);
 }
 
-/* Toolbar Search focus: field border turns accent; kill the generic 2px :focus-visible ring.
-   outline/box-shadow are literals (none) — token only in border-color (sink-property discipline). */
+/* Toolbar Search focus: field border takes --jc-chrome-control-focus-border (the accent in light,
+   --jc-focus in dark; plain accent when the views stylesheet is absent); kill the generic 2px
+   :focus-visible ring.  outline/box-shadow are literals (none) — token only in border-color
+   (sink-property discipline). */
 div.dt-container div.dt-search input:focus,
 div.dt-container div.dt-search input:focus-visible,
 div.dataTables_wrapper div.dataTables_filter input:focus,
 div.dataTables_wrapper div.dataTables_filter input:focus-visible {
   outline: none;
   box-shadow: none;
-  border-color: var(--jc-accent);
+  border-color: var(--jc-chrome-control-focus-border, var(--jc-accent));
 }
 
 /* Header sort / column-search icons: idle is views.css opacity on each triangle; the
@@ -1197,7 +1199,7 @@ table.dataTable thead > tr > td.dt-ordering-desc .juneau-sort-desc {
 .juneau-view-col-search-popover-input:focus-visible {
   outline: none;
   box-shadow: none;
-  border-color: var(--jc-accent);
+  border-color: var(--jc-chrome-control-focus-border, var(--jc-accent));
 }
 
 /* ==========================================================================
@@ -1355,13 +1357,13 @@ body::after {
   color: var(--jc-text-muted);
 }
 .juneau-view-dialog-dismiss:hover {
-  color: var(--jc-danger);
+  color: var(--jc-danger-text);
 }
 
 .juneau-view-dialog-cancel,
 .juneau-view-dialog-close {
-  background-color: var(--jc-white);
-  color: var(--jc-btn-primary-bg);
+  background-color: var(--jc-surface);
+  color: var(--jc-btn-primary-ink, var(--jc-btn-primary-bg));
   border-width: 1px;
   border-style: solid;
   border-color: var(--jc-border);
@@ -1408,6 +1410,28 @@ body::after {
   border-color: var(--jc-danger);
 }
 
+/* View Settings dialog controls (juneau-config.css is shape-only): console control tokens, not UA defaults,
+   in both schemes.  Tabs keep their transparent face and open bottom edge from juneau-config.css. */
+.juneau-config-dialog button,
+.juneau-config-dialog select,
+.juneau-config-dialog input:not([type="checkbox"]):not([type="radio"]),
+.juneau-config-dialog textarea {
+  color: var(--jc-text);
+  border-color: var(--jc-control-border);
+}
+.juneau-config-dialog button:not(.juneau-config-tab),
+.juneau-config-dialog select,
+.juneau-config-dialog input:not([type="checkbox"]):not([type="radio"]),
+.juneau-config-dialog textarea {
+  background-color: var(--jc-control-bg);
+  border-style: solid;
+  border-width: 1px;
+  border-radius: var(--jc-radius);
+}
+.juneau-config-dialog button:disabled {
+  color: var(--jc-text-muted);
+}
+
 .juneau-view-toggle {
   background-color: var(--jc-border-2);
   border-color: var(--jc-border-2);
@@ -1422,34 +1446,54 @@ body::after {
   background-color: var(--jc-white);
 }
 
+/* Header color-scheme control (juneau-console.js): a three-way radio group. */
+.jc-scheme-toggle {
+  display: inline-flex;
+  border: 1px solid var(--jc-control-border);
+  border-radius: var(--jc-radius);
+  background-color: var(--jc-control-bg);
+  overflow: hidden;
+}
+.jc-scheme-toggle button {
+  margin: 0;
+  padding: var(--jc-space-1) var(--jc-space-2);
+  border: 0;
+  border-bottom: 2px solid transparent;
+  background-color: transparent;
+  color: var(--jc-text);
+  font: inherit;
+  font-size: 0.75rem;
+  cursor: pointer;
+}
+.jc-scheme-toggle button[aria-checked="true"] {
+  background-color: var(--jc-accent-wash);
+  color: var(--jc-text);
+  border-bottom-color: var(--jc-accent);
+}
+.jc-scheme-toggle button:focus-visible {
+  outline: 2px solid var(--jc-focus);
+  outline-offset: -2px;
+}
+
 /* ==========================================================================
    Chart card (juneau-charts.js)
    ========================================================================== */
 
 .jc-chart { margin: 0; }
 .jc-chart-caption { font-size: 0.75rem; color: var(--jc-text-muted); margin-bottom: var(--jc-space-2); }
-.jc-chart-plot { width: 100%; }
-.jc-chart-svg { display: block; width: 100%; height: auto; overflow: visible; }
-.jc-chart-gridline { stroke: var(--jc-border); stroke-width: 1; }
-.jc-chart-tick,
-.jc-chart-xlabel,
-.jc-chart-center { fill: var(--jc-text-muted); font-size: 11px; }
-.jc-chart-center { fill: var(--jc-text); font-size: 20px; font-weight: 700; }
-.jc-chart-line { stroke-width: 2; }
-.jc-chart-hit { fill: transparent; cursor: pointer; }
-.jc-chart-bar,
-.jc-chart-slice { cursor: pointer; }
-.jc-chart-hit:focus-visible,
-.jc-chart-slice:focus-visible { outline-offset: 2px; }
-.jc-chart-legend-list { display: flex; flex-wrap: wrap; gap: var(--jc-space-3); list-style: none; margin: var(--jc-space-2) 0 0; padding: 0; }
-.jc-chart--legend-right { display: grid; grid-template-columns: 1fr auto; gap: var(--jc-space-3); }
-.jc-chart--legend-right .jc-chart-legend-list { flex-direction: column; margin-top: 0; }
-.jc-chart-legend-item { display: inline-flex; align-items: center; gap: var(--jc-space-2); font-size: 0.8125rem; color: var(--jc-text); }
-.jc-chart-swatch { display: inline-block; width: 10px; height: 10px; border-radius: 2px; }
+.jc-chart-plot { position: relative; width: 100%; min-height: 120px; }
+.jc-chart-plot:focus-visible { outline: 2px solid var(--jc-focus); outline-offset: 2px; }
+.jc-chart-overlay { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; background-color: var(--jc-surface, #fff); font-size: 0.75rem; color: var(--jc-text-muted); }
+.jc-chart-overlay[hidden] { display: none; }
+.jc-chart-banner { margin: 0; padding: var(--jc-space-1) var(--jc-space-2); background-color: var(--jc-card-bg); border-width: 1px; border-style: solid; border-color: var(--jc-border); font-size: 0.75rem; color: var(--jc-text); }
+.jc-chart-banner[hidden] { display: none; }
+.jc-chart-live { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
 .jc-chart-toggle { margin-top: var(--jc-space-2); font-size: 0.75rem; }
+.jc-chart-table-box { overflow-x: auto; }
 .jc-chart-table { border-collapse: collapse; margin-top: var(--jc-space-2); font-size: 0.8125rem; }
 .jc-chart-table th,
 .jc-chart-table td { padding: 2px 8px; text-align: left; border-bottom-width: 1px; border-bottom-style: solid; border-bottom-color: var(--jc-border); }
+.jc-chart-table-note { margin: 0; font-size: 0.75rem; color: var(--jc-text-muted); }
 .jc-chart-empty { color: var(--jc-text-muted); margin: 0; }
 .jc-chart--stale { opacity: 0.6; }
 
@@ -1459,7 +1503,7 @@ body::after {
 
 .jc-joblog-form { display: flex; flex-wrap: wrap; align-items: flex-end; gap: var(--jc-space-3); margin-bottom: var(--jc-space-3); }
 .jc-joblog-field { display: flex; flex-direction: column; gap: 2px; font-size: 0.8125rem; color: var(--jc-text); }
-.jc-joblog-input { background-color: var(--jc-control-bg); border-width: 1px; border-style: solid; border-color: var(--jc-control-border); border-radius: var(--jc-radius); padding: 4px 8px; font: inherit; }
+.jc-joblog-input { background-color: var(--jc-control-bg); color: var(--jc-text); border-width: 1px; border-style: solid; border-color: var(--jc-control-border); border-radius: var(--jc-radius); padding: 4px 8px; font: inherit; }
 textarea.jc-joblog-input { min-width: 16rem; min-height: 3rem; }
 .jc-joblog-actions { display: flex; gap: var(--jc-space-2); }
 .jc-joblog-banner { margin-bottom: var(--jc-space-2); padding: 6px 10px; border-width: 1px; border-style: solid; border-radius: var(--jc-radius); font-size: 0.875rem; }
@@ -1469,3 +1513,231 @@ textarea.jc-joblog-input { min-width: 16rem; min-height: 3rem; }
 .jc-joblog-output { margin: 0; padding: var(--jc-space-2); overflow: auto; box-sizing: border-box; background-color: var(--jc-control-bg); border-width: 1px; border-style: solid; border-color: var(--jc-border); border-radius: var(--jc-radius); font-family: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, monospace; font-size: 0.8125rem; white-space: pre-wrap; }
 .jc-joblog-line { display: block; }
 .jc-joblog-notice { color: var(--jc-text-muted); font-style: italic; }
+
+/* ==========================================================================
+   Dashboard chrome (juneau-dashboard.js)
+   ========================================================================== */
+
+.jc-dash {
+  container-type: inline-size;
+  container-name: jc-dash;
+  display: block;
+  margin-bottom: var(--jc-space-4);
+}
+.jc-dash-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--jc-space-3);
+  margin-bottom: var(--jc-space-3);
+}
+.jc-dash-title {
+  margin: 0;
+  color: var(--jc-text);
+}
+.jc-dash-status {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--jc-space-2);
+  color: var(--jc-text-muted);
+}
+.jc-dash-status-line[data-tone="warning"] {
+  background-color: var(--jc-tag-amber-bg);
+  color: var(--jc-tag-amber-text);
+  border-width: 1px;
+  border-style: solid;
+  border-color: var(--jc-tag-amber-border);
+  border-radius: var(--jc-radius);
+  padding: 0 var(--jc-space-1);
+}
+.jc-dash-status-line[data-tone="error"] {
+  background-color: var(--jc-tag-red-bg);
+  color: var(--jc-tag-red-text);
+  border-width: 1px;
+  border-style: solid;
+  border-color: var(--jc-tag-red-border);
+  border-radius: var(--jc-radius);
+  padding: 0 var(--jc-space-1);
+}
+.jc-dash-refresh {
+  display: inline-flex;
+  position: relative;
+}
+.jc-dash-menu {
+  position: absolute;
+  right: 0;
+  top: 100%;
+  z-index: 10;
+  background-color: var(--jc-card-bg);
+  border-width: 1px;
+  border-style: solid;
+  border-color: var(--jc-border);
+  border-radius: var(--jc-radius);
+  box-shadow: var(--jc-card-shadow);
+  padding: var(--jc-space-1);
+}
+.jc-dash-menu[hidden] {
+  display: none;
+}
+.jc-dash-copy-field {
+  display: flex;
+  gap: var(--jc-space-2);
+  align-items: center;
+  margin-top: var(--jc-space-2);
+  color: var(--jc-text-muted);
+}
+.jc-dash-copy-field input {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+.jc-dash-live {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border-width: 0;
+}
+.jc-dash-body {
+  display: grid;
+  grid-template-columns: var(--jc-dash-rail, 280px) 8px minmax(0, 1fr);
+  align-items: start;
+}
+.jc-dash-body[data-rail="right"] {
+  grid-template-columns: minmax(0, 1fr) 8px var(--jc-dash-rail, 280px);
+}
+.jc-dash-body[data-rail="none"] {
+  grid-template-columns: minmax(0, 1fr);
+}
+.jc-dash-filters {
+  display: none;
+}
+.jc-dash-rail {
+  display: flex;
+  flex-direction: column;
+  gap: var(--jc-space-3);
+  min-width: 0;
+}
+.jc-dash-section {
+  margin: 0;
+  padding: var(--jc-space-2) var(--jc-space-3);
+  border-width: 1px;
+  border-style: solid;
+  border-color: var(--jc-border);
+  border-radius: var(--jc-radius);
+  background-color: var(--jc-card-bg);
+}
+.jc-dash-section > legend {
+  color: var(--jc-text-soft);
+  padding: 0 var(--jc-space-1);
+}
+.jc-dash-section .jc-card {
+  margin: 0;
+  max-width: none;
+  box-shadow: none;
+}
+.jc-dash-presets {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--jc-space-1);
+}
+.jc-dash-presets button[aria-pressed="true"] {
+  background-color: var(--jc-accent-wash);
+  border-color: var(--jc-accent-selected);
+  box-shadow: 0 0 0 1px var(--jc-accent-selected);
+}
+.jc-dash-choice {
+  display: flex;
+  flex-direction: column;
+  gap: var(--jc-space-1);
+}
+.jc-dash-choice label[data-missing] {
+  color: var(--jc-text-soft);
+}
+.jc-dash-count,
+.jc-dash-missing-note {
+  color: var(--jc-text-muted);
+  margin-left: var(--jc-space-1);
+}
+.jc-dash-error {
+  color: var(--jc-danger-text);
+  margin: var(--jc-space-1) 0 0;
+}
+.jc-dash-splitter {
+  align-self: stretch;
+  cursor: col-resize;
+  background-color: transparent;
+  border-radius: var(--jc-radius);
+  touch-action: none;
+}
+.jc-dash-splitter:hover,
+.jc-dash-splitter:focus-visible {
+  background-color: var(--jc-accent-wash);
+}
+.jc-dash-grid {
+  display: grid;
+  gap: var(--jc-space-3);
+  min-width: 0;
+}
+.jc-dash-grid[data-cols="1"] { grid-template-columns: minmax(0, 1fr); }
+.jc-dash-grid[data-cols="2"] { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.jc-dash-grid[data-cols="3"] { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.jc-dash-grid[data-cols="4"] { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+.jc-dash-panel { min-width: 0; }
+.jc-dash-panel[data-span="2"] { grid-column: span 2; }
+.jc-dash-panel[data-span="3"] { grid-column: span 3; }
+.jc-dash-panel[data-span="4"] { grid-column: span 4; }
+.jc-dash-panel > .jc-card {
+  margin: 0;
+  max-width: none;
+  min-width: 0;
+}
+.jc-dash-body[data-rail="right"] > .jc-dash-filters,
+.jc-dash-body[data-rail="right"] > .jc-dash-rail { order: 3; }
+.jc-dash-body[data-rail="right"] > .jc-dash-splitter { order: 2; }
+.jc-dash-body[data-rail="right"] > .jc-dash-grid { order: 1; }
+
+@container jc-dash (max-width: 899px) {
+  .jc-dash-body,
+  .jc-dash-body[data-rail="right"] {
+    display: flex;
+    flex-direction: column;
+    gap: var(--jc-space-3);
+  }
+  .jc-dash-filters { display: inline-flex; align-self: flex-start; }
+  .jc-dash-rail { display: none; width: 100%; }
+  .jc-dash-body[data-filters-open] .jc-dash-rail { display: flex; }
+  .jc-dash-splitter { display: none; }
+  .jc-dash-grid[data-cols] { grid-template-columns: minmax(0, 1fr); width: 100%; }
+  .jc-dash-panel[data-span] { grid-column: auto; }
+  .jc-dash-body[data-rail="right"] > .jc-dash-filters,
+  .jc-dash-body[data-rail="right"] > .jc-dash-rail,
+  .jc-dash-body[data-rail="right"] > .jc-dash-splitter,
+  .jc-dash-body[data-rail="right"] > .jc-dash-grid { order: 0; }
+}
+
+@supports not (container-type: inline-size) {
+  @media (max-width: 899px) {
+    .jc-dash-body,
+    .jc-dash-body[data-rail="right"] {
+      display: flex;
+      flex-direction: column;
+      gap: var(--jc-space-3);
+    }
+    .jc-dash-filters { display: inline-flex; align-self: flex-start; }
+    .jc-dash-rail { display: none; width: 100%; }
+    .jc-dash-body[data-filters-open] .jc-dash-rail { display: flex; }
+    .jc-dash-splitter { display: none; }
+    .jc-dash-grid[data-cols] { grid-template-columns: minmax(0, 1fr); width: 100%; }
+    .jc-dash-panel[data-span] { grid-column: auto; }
+    .jc-dash-body[data-rail="right"] > .jc-dash-filters,
+    .jc-dash-body[data-rail="right"] > .jc-dash-rail,
+    .jc-dash-body[data-rail="right"] > .jc-dash-splitter,
+    .jc-dash-body[data-rail="right"] > .jc-dash-grid { order: 0; }
+  }
+}

@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.rest.server.view.freemarker.console;
 
+import java.util.*;
+
 import org.apache.juneau.rest.server.console.*;
 
 /**
@@ -27,7 +29,8 @@ import org.apache.juneau.rest.server.console.*;
  * palette before rendering its body. Each nested {@code <@token>} eagerly folds its declaration into that builder:
  * a {@code value=} into {@link Theme.Builder#token(String, String)} (a leaf), an {@code alias=} into
  * {@link Theme.Builder#alias(String, String)} (a derived reference). After the body pass, {@code <@theme>} builds
- * the theme and renders its override block.
+ * the theme and renders its override block. A {@code <@token scheme="dark">} folds into the separate dark maps
+ * instead, which {@code <@theme>} renders as the dark-scheme rule after the light block.
  *
  * @since 10.0.0
  */
@@ -41,6 +44,15 @@ final class ThemeBuildContext {
 
 	/** Set true by the first {@code <@token>} that fires, so {@code <@theme>} emits an override block only when the body declared one. */
 	boolean anyDeclared;
+
+	/** Set true by the first light {@code <@token>} (one without {@code scheme=}), so a dark-only body emits no light block. */
+	boolean lightDeclared;
+
+	/** Dark-scheme leaf tokens from {@code <@token scheme="dark" value="…">}, in declaration order. */
+	final Map<String,String> darkTokens = new LinkedHashMap<>();
+
+	/** Dark-scheme aliases from {@code <@token scheme="dark" alias="var(--jc-…)">}, in declaration order. */
+	final Map<String,String> darkAliases = new LinkedHashMap<>();
 
 	ThemeBuildContext(String name, Theme.Builder themeBuilder) {
 		this.name = name;

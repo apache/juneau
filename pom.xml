@@ -114,6 +114,9 @@
 		<webjars-datatables.version>2.3.8</webjars-datatables.version>
 		<webjars-datatables-buttons.version>3.2.6</webjars-datatables-buttons.version>
 		<webjars-xterm.version>6.0.0</webjars-xterm.version>
+		<webjars-echarts.version>6.1.0</webjars-echarts.version>
+		<!-- echarts-gl is a pack definition only (ToolkitPackRegistry.PACK_ECHARTS_GL); no module depends on it. -->
+		<webjars-echarts-gl.version>2.1.0</webjars-echarts-gl.version>
 	</properties>
 
 	<modules>
@@ -284,6 +287,9 @@
 						<!-- JMH micro-benchmark output directory - generated result data + .gitkeep placeholder, no license header syntax -->
 					<exclude>**/jmh-results/**</exclude>
 					<exclude>**/src/test/resources/golden/**</exclude>
+
+						<!-- Vendored third-party MIT-licensed scripts (React / ReactDOM) - unmodified upstream bundles; covered by the root LICENSE -->
+					<exclude>**/htdocs/vendor/**</exclude>
 				</excludes>
 					<consoleOutput>true</consoleOutput>
 					<!-- Note:  useEclipseDefaultExcludes does not work for subprojects.  See RAT-107 -->
@@ -626,5 +632,42 @@
 			<roles><role>PMC</role></roles>
 		</developer>
 	</developers>
+
+	<profiles>
+		<!--
+			Opt-in integration tests (BusWebSocket_JettyIT, CsrfBoundary_JettyIT, CsrfBoundary_SpringIT) are
+			not matched by Surefire's default includes. -Djuneau.busIt=true selects **/*IT.java in addition to
+			the defaults (a configured <includes> list replaces them, so the defaults are repeated here).
+			Nested classes (e.g. CsrfBoundary_SpringIT$B01) run through their enclosing class.
+		-->
+		<profile>
+			<id>bus-it</id>
+			<activation>
+				<property>
+					<name>juneau.busIt</name>
+					<value>true</value>
+				</property>
+			</activation>
+			<build>
+				<pluginManagement>
+					<plugins>
+						<plugin>
+							<groupId>org.apache.maven.plugins</groupId>
+							<artifactId>maven-surefire-plugin</artifactId>
+							<configuration>
+								<includes>
+									<include>**/Test*.java</include>
+									<include>**/*Test.java</include>
+									<include>**/*Tests.java</include>
+									<include>**/*TestCase.java</include>
+									<include>**/*IT.java</include>
+								</includes>
+							</configuration>
+						</plugin>
+					</plugins>
+				</pluginManagement>
+			</build>
+		</profile>
+	</profiles>
 
 </project>

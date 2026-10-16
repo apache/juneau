@@ -29,7 +29,7 @@ import org.junit.jupiter.api.*;
  * leaf.
  *
  * <p>
- * Mirrors the Phase 2 pilot ({@code BasicHttpResponse_Test} b01–b07): reflective mutator guard, idempotency, content
+ * Mirrors the pilot ({@code BasicHttpResponse_Test} b01–b07): reflective mutator guard, idempotency, content
  * equality, snapshot independence, and snapshot-construction regression.  This is the {@link Throwable} branch — the
  * root is non-generic (JLS &sect;8.1.2), the funnel returns the base type, and each leaf retains its covariant setter
  * overrides.
@@ -71,7 +71,7 @@ class BasicHttpException_Test extends TestBase {
 	}
 
 	@Test void b04_contentEquality_equalContentComparesEqual() {
-		// D3 content equality — satisfiable slices for Phase 3.
+		// Content equality — the slices satisfiable on their own.
 		// Two independently-frozen snapshots of equal content compare equal.
 		var u1 = new NotFound().setHeader2("X-Test", "v").unmodifiable();
 		var u2 = new NotFound().setHeader2("X-Test", "v").unmodifiable();
@@ -82,7 +82,7 @@ class BasicHttpException_Test extends TestBase {
 		var m2 = new NotFound().setHeader2("X-Test", "v");
 		assertEquals(m1, m2);
 		assertEquals(m1.hashCode(), m2.hashCode());
-		// D3 cross-boundary equality (Phase 5): now that HeaderList equality is content-only, a modifiable bean
+		// Cross-boundary equality: now that HeaderList equality is content-only, a modifiable bean
 		// compares equal to its own frozen snapshot (over statusLine + headers + getMessage(), excluding the
 		// value-less content wrapper).
 		assertEquals(m1, m1.unmodifiable());

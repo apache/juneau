@@ -94,7 +94,7 @@ class RestDebugCapture_Test {
 	/**
 	 * A resource that IS its own {@link RestDebugFormatter} (highest-precedence resolution path, per
 	 * {@code RestContext#getRestDebugFormatter()}) with a capture cap far below the 8&nbsp;KB wrapper default.
-	 * Proves the cap is honored at <i>capture</i> time (Blocker #3 in the legacy item 329 retrospective), not just as a
+	 * Proves the cap is honored at <i>capture</i> time, not just as a
 	 * post-hoc truncation-marker computation over already-8KB-capped bytes.
 	 */
 	@Rest(path="/cap4")
@@ -125,7 +125,7 @@ class RestDebugCapture_Test {
 	/**
 	 * A mixin composed by two independent hosts, used to prove host-level cascade (raising the host's own logger
 	 * elevates the mixin op) <b>and</b> host isolation (raising one host does not leak into the other host's
-	 * identically-shaped, identically-named-suffix op logger). Legacy item 329 retrospective Should-fix #4.
+	 * identically-shaped, identically-named-suffix op logger).
 	 */
 	public static class B_Mixin {
 		@RestGet(path="/who")
@@ -259,7 +259,7 @@ class RestDebugCapture_Test {
 		var prevHandlers = logger.getHandlers();
 		var handler = new D00_CollectingHandler();
 		try {
-			// Body dumping is off by default (legacy item 370); force it on so the FINEST body-visibility proof still holds.
+			// Body dumping is off by default; force it on so the FINEST body-visibility proof still holds.
 			forceOn();
 			logger.setUseParentHandlers(false);
 			for (var h : prevHandlers)
@@ -325,7 +325,7 @@ class RestDebugCapture_Test {
 	}
 
 	@Test void d02_finestTier_captureWrapperInstalled_bodyRendered() throws Exception {
-		// Body dumping is off by default (legacy item 370); force it on + renderable Content-Type to prove the FINEST body path.
+		// Body dumping is off by default; force it on + renderable Content-Type to prove the FINEST body path.
 		forceOn();
 		try (var c = RichLogger.getLogger(D_Resource.class).captureEvents(Level.FINEST)) {
 			var client = org.apache.juneau.rest.mock.classic.MockRestClient.create(D_Resource.class).debug().build();
@@ -381,7 +381,7 @@ class RestDebugCapture_Test {
 	/**
 	 * A resource that replaces its resolved {@link RichLogger} via a {@code @Bean} factory, used to prove the
 	 * per-operation logger is a hierarchical child of the <i>resolved</i> (bean-overridden) logger name, not the
-	 * raw resource class name. Legacy item 329 retrospective Should-fix #10.
+	 * raw resource class name.
 	 */
 	@Rest(path="/beanlogger")
 	public static class F_Resource {
@@ -412,7 +412,7 @@ class RestDebugCapture_Test {
 
 	/**
 	 * Proves the 404/no-op path renders <b>only</b> the basic status line even at the {@code FINEST} tier --
-	 * headers and bodies are never rendered when no operation was resolved. Legacy item 329 retrospective Should-fix #12.
+	 * headers and bodies are never rendered when no operation was resolved.
 	 */
 	@Test void g01_noOpPath_atFinestTier_neverRendersHeadersOrBody() throws Exception {
 		try (var c = RichLogger.getLogger(A_Resource.class).captureEvents(Level.FINEST)) {
@@ -528,7 +528,7 @@ class RestDebugCapture_Test {
 	}
 
 	@Test void a06_bodyCapOverride_lowersCaptureAtCaptureTime() throws Exception {
-		// Body dumping is off by default (legacy item 370); force it on + renderable Content-Type to preserve the bodyCap proof.
+		// Body dumping is off by default; force it on + renderable Content-Type to preserve the bodyCap proof.
 		forceOn();
 		try (var c = RichLogger.getLogger(A06_Resource.class).captureEvents(Level.FINEST)) {
 			var client = org.apache.juneau.rest.mock.classic.MockRestClient

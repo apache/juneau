@@ -110,4 +110,31 @@ class PolicyPinningSocketAddressResolver_Test {
 			assertNull(c.failure.get());
 		}
 	}
+
+	@Test
+	void b01_pinTagWithRanges_specialPurposeLiteral_pinned_andOtherDeniesStayDenied() {
+		var resolver = new PolicyPinningSocketAddressResolver((host, port, context, promise) -> fail("must not delegate for a pinned destination"));
+		var tag = PolicyPinningSocketAddressResolver.tagFor(org.apache.juneau.http.remote.RemoteUrlPolicy.AllowedRanges.of("198.18.0.0/15"));
+		var ok = new Capture();
+		resolver.resolve("198.18.0.1", 80, contextFor(tag), ok);
+		assertNull(ok.failure.get());
+		assertEquals("198.18.0.1", ok.result.get().get(0).getAddress().getHostAddress());
+		var none = new Capture();
+		resolver.resolve("198.18.0.1", 80, contextFor(PolicyPinningSocketAddressResolver.PINNED_TAG), none);
+		assertInstanceOf(IllegalArgumentException.class, none.failure.get());
+		for (var denied : new String[]{"127.0.0.1", "169.254.169.254"}) {
+			var c = new Capture();
+			resolver.resolve(denied, 80, contextFor(tag), c);
+			assertInstanceOf(IllegalArgumentException.class, c.failure.get(), denied);
+		}
+	}
+
+	@Test
+	void b02_tagFor_isValueEqualPerRanges() {
+		var a = PolicyPinningSocketAddressResolver.tagFor(org.apache.juneau.http.remote.RemoteUrlPolicy.AllowedRanges.of("198.18.0.0/15"));
+		var b = PolicyPinningSocketAddressResolver.tagFor(org.apache.juneau.http.remote.RemoteUrlPolicy.AllowedRanges.of("198.18.0.0/15"));
+		assertEquals(a, b);
+		assertNotEquals(a, PolicyPinningSocketAddressResolver.PINNED_TAG);
+		assertSame(PolicyPinningSocketAddressResolver.PINNED_TAG, PolicyPinningSocketAddressResolver.tagFor(org.apache.juneau.http.remote.RemoteUrlPolicy.AllowedRanges.NONE));
+	}
 }

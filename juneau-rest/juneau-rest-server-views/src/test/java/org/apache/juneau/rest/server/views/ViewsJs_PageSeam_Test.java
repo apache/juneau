@@ -24,7 +24,7 @@ import org.apache.juneau.rest.server.*;
 import org.junit.jupiter.api.*;
 
 /**
- * Lazy-init seam test for {@code juneau-views.js} (design doc §"Client page runtime").
+ * Lazy-init seam test for {@code juneau-views.js}.
  *
  * <p>
  * Asserts on the served script text: {@code initTable} must be reachable off the public {@code NS.init} namespace

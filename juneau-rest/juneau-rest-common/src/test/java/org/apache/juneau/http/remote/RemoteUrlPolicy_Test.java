@@ -485,6 +485,252 @@ class RemoteUrlPolicy_Test extends TestBase {
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
+	// Special-purpose ranges: 192.0.0.0/24, 198.18.0.0/15, 224.0.0.0/4, 240.0.0.0/4, ff00::/8
+	//------------------------------------------------------------------------------------------------------------------
+
+	@Test void h01_isDeniedAddress_ietfProtocolAssignments_boundaries() throws UnknownHostException {
+		assertTrue(RemoteUrlPolicy.isDeniedAddress(addr(192, 0, 0, 0)));
+		assertTrue(RemoteUrlPolicy.isDeniedAddress(addr(192, 0, 0, 255)));
+		assertFalse(RemoteUrlPolicy.isDeniedAddress(addr(191, 255, 255, 255)));
+		assertFalse(RemoteUrlPolicy.isDeniedAddress(addr(192, 0, 1, 0)));
+	}
+
+	@Test void h02_isDeniedAddress_benchmarking_boundaries() throws UnknownHostException {
+		assertTrue(RemoteUrlPolicy.isDeniedAddress(addr(198, 18, 0, 0)));
+		assertTrue(RemoteUrlPolicy.isDeniedAddress(addr(198, 19, 255, 255)));
+		assertFalse(RemoteUrlPolicy.isDeniedAddress(addr(198, 17, 255, 255)));
+		assertFalse(RemoteUrlPolicy.isDeniedAddress(addr(198, 20, 0, 0)));
+	}
+
+	@Test void h03_isDeniedAddress_multicastAndReserved_boundaries() throws UnknownHostException {
+		assertTrue(RemoteUrlPolicy.isDeniedAddress(addr(224, 0, 0, 0)));
+		assertTrue(RemoteUrlPolicy.isDeniedAddress(addr(239, 255, 255, 255)));
+		assertTrue(RemoteUrlPolicy.isDeniedAddress(addr(240, 0, 0, 0)));
+		assertTrue(RemoteUrlPolicy.isDeniedAddress(addr(255, 255, 255, 254)));
+		assertTrue(RemoteUrlPolicy.isDeniedAddress(addr(255, 255, 255, 255)));
+		assertFalse(RemoteUrlPolicy.isDeniedAddress(addr(223, 255, 255, 255)));
+	}
+
+	@Test void h04_isDeniedAddress_ipv6Multicast_boundaries() throws UnknownHostException {
+		assertTrue(RemoteUrlPolicy.isDeniedAddress(InetAddress.getByName("ff00::")));
+		assertTrue(RemoteUrlPolicy.isDeniedAddress(InetAddress.getByName("ff02::1")));
+		assertTrue(RemoteUrlPolicy.isDeniedAddress(InetAddress.getByName("ffff:ffff:ffff:ffff:ffff:ffff:ffff:ffff")));
+		assertFalse(RemoteUrlPolicy.isDeniedAddress(InetAddress.getByName("fe7f:ffff:ffff:ffff:ffff:ffff:ffff:ffff")));
+		assertFalse(RemoteUrlPolicy.isDeniedAddress(InetAddress.getByName("2606:4700::1111")));
+	}
+
+	@Test void h05_isDeniedAddress_specialRanges_embeddedIpv6Forms_denied() throws UnknownHostException {
+		assertTrue(RemoteUrlPolicy.isDeniedAddress(compat(192, 0, 0, 8)));
+		assertTrue(RemoteUrlPolicy.isDeniedAddress(translated(192, 0, 0, 8)));
+		assertTrue(RemoteUrlPolicy.isDeniedAddress(nat64(192, 0, 0, 8)));
+		assertTrue(RemoteUrlPolicy.isDeniedAddress(sixToFour(192, 0, 0, 8)));
+		assertTrue(RemoteUrlPolicy.isDeniedAddress(compat(198, 18, 0, 1)));
+		assertTrue(RemoteUrlPolicy.isDeniedAddress(translated(198, 19, 255, 255)));
+		assertTrue(RemoteUrlPolicy.isDeniedAddress(nat64(198, 18, 0, 1)));
+		assertTrue(RemoteUrlPolicy.isDeniedAddress(sixToFour(198, 19, 0, 1)));
+		assertTrue(RemoteUrlPolicy.isDeniedAddress(compat(224, 0, 0, 1)));
+		assertTrue(RemoteUrlPolicy.isDeniedAddress(translated(239, 1, 2, 3)));
+		assertTrue(RemoteUrlPolicy.isDeniedAddress(nat64(240, 0, 0, 1)));
+		assertTrue(RemoteUrlPolicy.isDeniedAddress(sixToFour(255, 255, 255, 255)));
+		assertTrue(RemoteUrlPolicy.isDeniedAddress(InetAddress.getByName("::ffff:198.18.0.1")));
+		assertTrue(RemoteUrlPolicy.isDeniedAddress(InetAddress.getByName("::ffff:224.0.0.1")));
+		// Public neighbours stay allowed through the same embeddings.
+		assertFalse(RemoteUrlPolicy.isDeniedAddress(nat64(198, 20, 0, 1)));
+		assertFalse(RemoteUrlPolicy.isDeniedAddress(sixToFour(192, 0, 1, 1)));
+	}
+
+	@Test void h06_requireAllowedUrl_specialRanges_denied() {
+		for (var host : new String[]{"192.0.0.1", "198.18.0.1", "224.0.0.1", "240.0.0.1", "255.255.255.255", "[ff02::1]", "[::198.18.0.1]", "[64:ff9b::c612:1]"})
+			assertThrowsWithMessage(IllegalArgumentException.class, "private/loopback",
+				() -> RemoteUrlPolicy.requireAllowedUrl("http://" + host + "/", false));
+		assertEquals("http://198.20.0.1/", RemoteUrlPolicy.requireAllowedUrl("http://198.20.0.1/", false));
+	}
+
+	@Test void h07_selectAllowedAddress_specialRange_rejected() throws UnknownHostException {
+		var pub = addr(93, 184, 216, 34);
+		assertEquals(pub, RemoteUrlPolicy.selectAllowedAddress("x.example.com", false, host -> new InetAddress[]{addr(198, 18, 0, 1), pub}));
+		assertThrowsWithMessage(IllegalArgumentException.class, "No allowed address",
+			() -> RemoteUrlPolicy.selectAllowedAddress("x.example.com", false, host -> new InetAddress[]{addr(224, 0, 0, 1)}));
+	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// Narrow lab allow-list (allowed CIDR ranges)
+	//------------------------------------------------------------------------------------------------------------------
+
+	@Test void i01_isDeniedAddress_allowCidr_repermitsExactlyConfiguredRange() throws UnknownHostException {
+		var allow = "198.18.0.0/15";
+		assertFalse(RemoteUrlPolicy.isDeniedAddress(addr(198, 18, 0, 0), allow));
+		assertFalse(RemoteUrlPolicy.isDeniedAddress(addr(198, 19, 255, 255), allow));
+		assertFalse(RemoteUrlPolicy.isDeniedAddress(nat64(198, 18, 0, 1), allow));
+		assertFalse(RemoteUrlPolicy.isDeniedAddress(compat(198, 19, 0, 1), allow));
+		// Other special ranges and every other deny remain in force.
+		assertTrue(RemoteUrlPolicy.isDeniedAddress(addr(192, 0, 0, 1), allow));
+		assertTrue(RemoteUrlPolicy.isDeniedAddress(addr(224, 0, 0, 1), allow));
+		assertTrue(RemoteUrlPolicy.isDeniedAddress(addr(240, 0, 0, 1), allow));
+		assertTrue(RemoteUrlPolicy.isDeniedAddress(addr(127, 0, 0, 1), allow));
+		assertTrue(RemoteUrlPolicy.isDeniedAddress(addr(10, 0, 0, 1), allow));
+		assertTrue(RemoteUrlPolicy.isDeniedAddress(addr(169, 254, 169, 254), allow));
+		assertTrue(RemoteUrlPolicy.isDeniedAddress(addr(100, 64, 0, 1), allow));
+		assertTrue(RemoteUrlPolicy.isDeniedAddress(InetAddress.getByName("ff02::1"), allow));
+		assertTrue(RemoteUrlPolicy.isDeniedAddress(nat64(127, 0, 0, 1), allow));
+	}
+
+	@Test void i02_isDeniedAddress_allowCidr_multipleRangesAndSingleAddress() throws UnknownHostException {
+		var allow = "198.18.0.0/16, 192.0.0.8 ,ff02::/16";
+		assertFalse(RemoteUrlPolicy.isDeniedAddress(addr(198, 18, 5, 5), allow));
+		assertTrue(RemoteUrlPolicy.isDeniedAddress(addr(198, 19, 0, 1), allow));
+		assertFalse(RemoteUrlPolicy.isDeniedAddress(addr(192, 0, 0, 8), allow));
+		assertTrue(RemoteUrlPolicy.isDeniedAddress(addr(192, 0, 0, 9), allow));
+		assertFalse(RemoteUrlPolicy.isDeniedAddress(InetAddress.getByName("ff02::1"), allow));
+		assertTrue(RemoteUrlPolicy.isDeniedAddress(InetAddress.getByName("ff05::1"), allow));
+	}
+
+	@Test void i03_isDeniedAddress_allowCidr_emptyOrNull_allowsNothing() throws UnknownHostException {
+		assertTrue(RemoteUrlPolicy.isDeniedAddress(addr(198, 18, 0, 1), (String)null));
+		assertTrue(RemoteUrlPolicy.isDeniedAddress(addr(198, 18, 0, 1), ""));
+		assertTrue(RemoteUrlPolicy.isDeniedAddress(addr(198, 18, 0, 1), "  "));
+	}
+
+	@Test void i04_isDeniedAddress_allowCidr_invalidSpec_rejected() {
+		for (var bad : new String[]{"198.18.0.0/33", "198.18.0.0/x", "example.com/8", "198.18.0/15", "::1/129",
+			"0.0.0.0/0", "::/0", "10.0.0.0/8", "198.0.0.0/8", "198.18.0.0/14", "ff00::/7", "fe80::/10", "127.0.0.1", "100.64.0.0/10",
+			"198.18.0.0/15x", "x198.18.0.0", "198.18.0.0/", "198.18.0.0/-1", "198.18.0.0//15", "::ffff:198.18.0.1", "198.18.0.256", "198.18.0.0/15;10.0.0.0/8",
+			"198.18.0.256", "198.018.0.1", "198.18.0.0/015", "198.18.0.0.1", "198.18.0.1."})
+			assertThrowsWithMessage(IllegalArgumentException.class, "allowed address range",
+				() -> RemoteUrlPolicy.isDeniedAddress(addr(198, 18, 0, 1), bad));
+	}
+
+	@Test void i06_isDeniedAddress_allowCidr_neverReopensOtherDenies() throws UnknownHostException {
+		for (var allow : new String[]{"198.18.0.0/15", "192.0.0.0/24,198.18.0.0/15,224.0.0.0/4,240.0.0.0/4,ff00::/8"}) {
+			assertTrue(RemoteUrlPolicy.isDeniedAddress(addr(127, 0, 0, 1), allow));
+			assertTrue(RemoteUrlPolicy.isDeniedAddress(addr(10, 0, 0, 1), allow));
+			assertTrue(RemoteUrlPolicy.isDeniedAddress(addr(169, 254, 169, 254), allow));
+			assertTrue(RemoteUrlPolicy.isDeniedAddress(addr(100, 64, 0, 1), allow));
+			assertTrue(RemoteUrlPolicy.isDeniedAddress(addr(0, 0, 0, 1), allow));
+			assertTrue(RemoteUrlPolicy.isDeniedAddress(InetAddress.getByName("2002:a9fe:a9fe::"), allow));
+			assertTrue(RemoteUrlPolicy.isDeniedAddress(InetAddress.getByName("::1"), allow));
+			assertTrue(RemoteUrlPolicy.isDeniedAddress(InetAddress.getByName("fe80::1"), allow));
+			assertTrue(RemoteUrlPolicy.isDeniedAddress(InetAddress.getByName("fd00::1"), allow));
+			assertTrue(RemoteUrlPolicy.isDeniedAddress(InetAddress.getByName("2001:0:4136:e378:8000:63bf:3fff:fdd2"), allow));
+			assertTrue(RemoteUrlPolicy.isDeniedAddress(InetAddress.getByName("64:ff9b:1::c612:1"), allow));
+			assertTrue(RemoteUrlPolicy.isDeniedAddress(sixToFour(10, 0, 0, 1), allow));
+		}
+	}
+
+	@Test void i07_isDeniedAddress_allowCidr_ipv6EntriesMatchOnlyNativeIpv6() throws UnknownHostException {
+		// An ff00::/8 allow matches native IPv6 multicast only; an IPv4 allow matches IPv4 or its embedded form only.
+		assertFalse(RemoteUrlPolicy.isDeniedAddress(InetAddress.getByName("ff02::1"), "ff00::/8"));
+		assertTrue(RemoteUrlPolicy.isDeniedAddress(addr(224, 0, 0, 1), "ff00::/8"));
+		assertTrue(RemoteUrlPolicy.isDeniedAddress(InetAddress.getByName("ff02::1"), "224.0.0.0/4"));
+		assertFalse(RemoteUrlPolicy.isDeniedAddress(addr(224, 0, 0, 1), "224.0.0.0/4"));
+		assertFalse(RemoteUrlPolicy.isDeniedAddress(nat64(224, 0, 0, 1), "224.0.0.0/4"));
+		assertTrue(RemoteUrlPolicy.isDeniedAddress(nat64(224, 0, 0, 1), "ff00::/8"));
+	}
+
+	@Test void i08_isDeniedAddress_allowCidr_emptyTokensIgnored_andFailedSpecRepeatable() throws UnknownHostException {
+		assertFalse(RemoteUrlPolicy.isDeniedAddress(addr(198, 18, 0, 1), ",198.18.0.0/15,"));
+		assertFalse(RemoteUrlPolicy.isDeniedAddress(addr(198, 18, 0, 1), "198.18.0.0/15,,"));
+		assertTrue(RemoteUrlPolicy.isDeniedAddress(addr(198, 18, 0, 1), " , "));
+		// The same bad spec throws the same error every time (cached failure, no re-parse).
+		for (var i = 0; i < 3; i++)
+			assertThrowsWithMessage(IllegalArgumentException.class, "'198.18.0.256'",
+				() -> RemoteUrlPolicy.isDeniedAddress(addr(198, 18, 0, 1), "198.18.0.256"));
+	}
+
+	@Test void i05_isDeniedAddress_defaultAllowsNothing_systemPropertyUnset() throws UnknownHostException {
+		assertNull(System.getProperty(RemoteUrlPolicy.ALLOW_ADDRESS_RANGES_PROPERTY));
+		assertTrue(RemoteUrlPolicy.isDeniedAddress(addr(198, 18, 0, 1)));
+	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// Per-client allowed ranges (AllowedRanges): same narrow rules as the system property, unioned with it
+	//------------------------------------------------------------------------------------------------------------------
+
+	@Test void j01_allowedRanges_repermitsOnlyConfiguredRange_andNeverReopensOtherDenies() throws UnknownHostException {
+		var ranges = RemoteUrlPolicy.AllowedRanges.of("198.18.0.0/15");
+		assertFalse(RemoteUrlPolicy.isDeniedAddress(addr(198, 18, 0, 1), ranges));
+		assertFalse(RemoteUrlPolicy.isDeniedAddress(nat64(198, 19, 0, 1), ranges));
+		assertTrue(RemoteUrlPolicy.isDeniedAddress(addr(192, 0, 0, 1), ranges));
+		assertTrue(RemoteUrlPolicy.isDeniedAddress(addr(224, 0, 0, 1), ranges));
+		assertTrue(RemoteUrlPolicy.isDeniedAddress(addr(127, 0, 0, 1), ranges));
+		assertTrue(RemoteUrlPolicy.isDeniedAddress(addr(169, 254, 169, 254), ranges));
+		assertTrue(RemoteUrlPolicy.isDeniedAddress(addr(10, 0, 0, 1), ranges));
+		assertTrue(RemoteUrlPolicy.isDeniedAddress(addr(100, 64, 0, 1), ranges));
+	}
+
+	@Test void j02_allowedRanges_none_allowsNothing() throws UnknownHostException {
+		assertTrue(RemoteUrlPolicy.AllowedRanges.NONE.isEmpty());
+		assertTrue(RemoteUrlPolicy.AllowedRanges.of().isEmpty());
+		assertTrue(RemoteUrlPolicy.AllowedRanges.of((String[])null).isEmpty());
+		assertTrue(RemoteUrlPolicy.AllowedRanges.of(" , ").isEmpty());
+		assertTrue(RemoteUrlPolicy.isDeniedAddress(addr(198, 18, 0, 1), RemoteUrlPolicy.AllowedRanges.NONE));
+		assertEquals(RemoteUrlPolicy.AllowedRanges.NONE, RemoteUrlPolicy.AllowedRanges.of());
+	}
+
+	@Test void j03_allowedRanges_invalidEntry_rejectedAtConstruction() {
+		for (var bad : new String[]{"0.0.0.0/0", "::/0", "10.0.0.0/8", "127.0.0.1", "169.254.169.254", "198.18.0.0/14", "ff00::/7",
+			"example.com", "198.18.0.256", "198.18.0.0/33", "::ffff:198.18.0.1"})
+			assertThrowsWithMessage(IllegalArgumentException.class, "allowed address range", () -> RemoteUrlPolicy.AllowedRanges.of(bad));
+		assertThrowsWithMessage(IllegalArgumentException.class, "allowed address range", () -> RemoteUrlPolicy.AllowedRanges.of("198.18.0.0/15", "10.0.0.0/8"));
+		assertThrows(IllegalArgumentException.class, () -> RemoteUrlPolicy.AllowedRanges.of("198.18.0.0/15", null));
+	}
+
+	@Test void j04_allowedRanges_multipleEntriesAndSeparators() throws UnknownHostException {
+		var ranges = RemoteUrlPolicy.AllowedRanges.of("198.18.0.0/16", "192.0.0.8, ff02::/16");
+		assertFalse(RemoteUrlPolicy.isDeniedAddress(addr(198, 18, 5, 5), ranges));
+		assertTrue(RemoteUrlPolicy.isDeniedAddress(addr(198, 19, 0, 1), ranges));
+		assertFalse(RemoteUrlPolicy.isDeniedAddress(addr(192, 0, 0, 8), ranges));
+		assertFalse(RemoteUrlPolicy.isDeniedAddress(InetAddress.getByName("ff02::1"), ranges));
+	}
+
+	@Test void j05_allowedRanges_equalityIsByRanges() {
+		assertEquals(RemoteUrlPolicy.AllowedRanges.of("198.18.0.0/15", "192.0.0.8"), RemoteUrlPolicy.AllowedRanges.of("192.0.0.8,198.18.0.0/15"));
+		assertEquals(RemoteUrlPolicy.AllowedRanges.of("198.18.0.0/15").hashCode(), RemoteUrlPolicy.AllowedRanges.of("198.18.0.0/15").hashCode());
+		assertNotEquals(RemoteUrlPolicy.AllowedRanges.of("198.18.0.0/15"), RemoteUrlPolicy.AllowedRanges.of("198.18.0.0/16"));
+	}
+
+	@Test void j06_allowedRanges_unionedWithSystemProperty() throws UnknownHostException {
+		var previous = System.getProperty(RemoteUrlPolicy.ALLOW_ADDRESS_RANGES_PROPERTY);
+		System.setProperty(RemoteUrlPolicy.ALLOW_ADDRESS_RANGES_PROPERTY, "192.0.0.0/24");
+		try {
+			var ranges = RemoteUrlPolicy.AllowedRanges.of("198.18.0.0/15");
+			// Property range still allowed with a per-client range present; per-client range added on top; nothing else.
+			assertFalse(RemoteUrlPolicy.isDeniedAddress(addr(192, 0, 0, 1), ranges));
+			assertFalse(RemoteUrlPolicy.isDeniedAddress(addr(198, 18, 0, 1), ranges));
+			assertTrue(RemoteUrlPolicy.isDeniedAddress(addr(224, 0, 0, 1), ranges));
+			// Without per-client ranges the property alone applies (unchanged behavior).
+			assertTrue(RemoteUrlPolicy.isDeniedAddress(addr(198, 18, 0, 1)));
+			assertFalse(RemoteUrlPolicy.isDeniedAddress(addr(192, 0, 0, 1)));
+		} finally {
+			if (previous == null)
+				System.clearProperty(RemoteUrlPolicy.ALLOW_ADDRESS_RANGES_PROPERTY);
+			else
+				System.setProperty(RemoteUrlPolicy.ALLOW_ADDRESS_RANGES_PROPERTY, previous);
+		}
+	}
+
+	@Test void j07_requireAllowedUrl_andIsDeniedHost_honorAllowedRanges() {
+		var ranges = RemoteUrlPolicy.AllowedRanges.of("198.18.0.0/15");
+		assertThrowsWithMessage(IllegalArgumentException.class, "denied by default", () -> RemoteUrlPolicy.requireAllowedUrl("http://198.18.0.1/x", false));
+		assertEquals("http://198.18.0.1/x", RemoteUrlPolicy.requireAllowedUrl("http://198.18.0.1/x", false, ranges));
+		assertThrowsWithMessage(IllegalArgumentException.class, "denied by default", () -> RemoteUrlPolicy.requireAllowedUrl("http://127.0.0.1/x", false, ranges));
+		assertThrowsWithMessage(IllegalArgumentException.class, "denied by default", () -> RemoteUrlPolicy.requireAllowedUrl("http://169.254.169.254/x", false, ranges));
+		assertThrowsWithMessage(IllegalArgumentException.class, "denied by default", () -> RemoteUrlPolicy.requireAllowedUrl("http://192.0.0.1/x", false, ranges));
+		assertFalse(RemoteUrlPolicy.isDeniedHost("198.18.0.1", ranges));
+		assertTrue(RemoteUrlPolicy.isDeniedHost("localhost", ranges));
+	}
+
+	@Test void j08_selectAllowedAddress_honorsAllowedRanges() throws Exception {
+		var ranges = RemoteUrlPolicy.AllowedRanges.of("198.18.0.0/15");
+		assertThrowsWithMessage(IllegalArgumentException.class, "No allowed address", () -> RemoteUrlPolicy.selectAllowedAddress("198.18.0.1", false, RemoteUrlPolicy.AddressResolver.DEFAULT));
+		assertEquals("198.18.0.1", RemoteUrlPolicy.selectAllowedAddress("198.18.0.1", false, RemoteUrlPolicy.AddressResolver.DEFAULT, ranges).getHostAddress());
+		// A mixed-candidate resolution skips a denied loopback and picks the allowed special-purpose address.
+		var mixed = (RemoteUrlPolicy.AddressResolver)h -> new InetAddress[]{addr(127, 0, 0, 1), addr(198, 19, 0, 7)};
+		assertEquals("198.19.0.7", RemoteUrlPolicy.selectAllowedAddress("h", false, mixed, ranges).getHostAddress());
+		assertThrowsWithMessage(IllegalArgumentException.class, "No allowed address", () -> RemoteUrlPolicy.selectAllowedAddress("h", false, h -> new InetAddress[]{addr(127, 0, 0, 1)}, ranges));
+	}
+
+	//------------------------------------------------------------------------------------------------------------------
 	// AddressResolver.DEFAULT -- real DNS wiring sanity (does not require live rebinding DNS)
 	//------------------------------------------------------------------------------------------------------------------
 

@@ -258,7 +258,7 @@ class BasicResource_Test extends TestBase {
 
 	@Test void e03_unmodifiable_idempotent() {
 		var u = new StringResource(null, "foo").unmodifiable();
-		// D1 idempotency: unmodifiable() on an already-unmodifiable snapshot returns the same instance.
+		// Idempotency: unmodifiable() on an already-unmodifiable snapshot returns the same instance.
 		assertSame(u, u.unmodifiable());
 	}
 

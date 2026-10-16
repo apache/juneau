@@ -19,20 +19,24 @@ from ._base import Result
 class Registry:
     def __init__(self):
         self._steps = []    # (name, title, fn), in registration order
+        self._labels = {}   # name -> the console row's label, for the steps registered with one
         self._prog = None
 
     @property
     def names(self):
         return [name for name, _, _ in self._steps]
 
-    def step(self, name, title):
+    def step(self, name, title, *, label=None):
         """Decorator: register fn(ctx) as the next step.  It fails by raising or by returning a Result that isn't
-        ok."""
+        ok; a str it returns becomes its row's summary.  label, when set, is passed to run.step for the step's
+        console row."""
         if name in self.names:
             raise ValueError(f"step {name!r} is already registered")
 
         def register(fn):
             self._steps.append((name, title, fn))
+            if label:
+                self._labels[name] = label
             return fn
         return register
 
@@ -55,46 +59,67 @@ class Registry:
         return self.names.index(name)
 
     def _hint(self, name):
-        run.say(f"To resume: {self._prog or 'the script'} --start-step {name}")
+        """The resume hint, at error level so every detail level (summary included) shows it."""
+        run.say(f"To resume: {self._prog or 'the script'} --start-step {name}", "error")
 
     def _start(self, args, checkpoint):
-        """The index of the first step to run, or None when --resume finds every step done."""
+        """(index, message): the index of the first step to run (None when --resume finds every step done) and a line
+        for run() to print, or None.  Pure: plan() calls this too, and must print nothing."""
         if args.start_step:
-            return self._index(args.start_step)
+            return self._index(args.start_step), None
         if not args.resume:
-            return 0
+            return 0, None
         if checkpoint is None:
             raise ValueError("--resume needs a checkpoint")
         last = checkpoint.last()
         if last is None:
-            run.say("No checkpoint recorded; starting at the first step.")
-            return 0
+            return 0, "No checkpoint recorded; starting at the first step."
         start = self._index(last) + 1
         if start >= len(self._steps):
-            run.say(f"Every step has completed (the last was {last}); nothing to resume.")
-            return None
-        run.say(f"Resuming after {last}: starting at {self._steps[start][0]}.")
-        return start
+            return None, f"Every step has completed (the last was {last}); nothing to resume."
+        return start, f"Resuming after {last}: starting at {self._steps[start][0]}."
 
-    def run(self, args, ctx, checkpoint=None):
+    def _selected(self, args, checkpoint):
+        """(start, skip, message): the index of the first step to run (None when --resume finds every step done), the set
+        of step names to skip and the --resume line for run() to print.  plan() and run() both select through this, so they cannot disagree."""
+        skip = set(args.skip_step or ())
+        for name in skip:
+            self._index(name)
+        start, message = self._start(args, checkpoint)
+        return start, skip, message
+
+    def plan(self, args, checkpoint=None):
+        """The names of the steps run() would execute for these arguments, in order (for session(plan=...))."""
+        start, skip, _ = self._selected(args, checkpoint)
+        return [] if start is None else [name for name, _, _ in self._steps[start:] if name not in skip]
+
+    def run(self, args, ctx, checkpoint=None, *, show_unselected=False):
         """Run the selected steps in order, each inside run.step, recording each finished (or skipped) one as the
-        checkpoint's "last".  A failure prints the resume hint and returns a failed Result."""
+        checkpoint's "last".  A failure prints the resume hint and returns a failed Result.
+
+        show_unselected walks every step, numbered from 1: one before the start is a skip row saying "(done
+        earlier)" and a --skip-step one a skip row saying "(skipped)", with no "Skipping" line.  Neither is in
+        plan(); a "(done earlier)" row leaves the checkpoint alone."""
         if args.list_steps:
             for n, (name, title, _) in enumerate(self._steps, 1):
                 run.say(f"{n:>2}. {name:<24} {title}")
             return Result(True, 0)
-        skip = set(args.skip_step or ())
-        for name in skip:
-            self._index(name)
-        start = self._start(args, checkpoint)
+        start, skip, message = self._selected(args, checkpoint)
+        if message:
+            run.say(message)
         if start is None:
             return Result(True, 0)
-        for n, (name, title, fn) in enumerate(self._steps[start:], start + 1):
+        first = 0 if show_unselected else start
+        for n, (name, title, fn) in enumerate(self._steps[first:], first + 1):
             failed = None
-            with run.step(name, title, n=n) as st:
-                if name in skip:
+            earlier = n - 1 < start
+            with run.step(name, title, n=n, label=self._labels.get(name)) as st:
+                if earlier or name in skip:
                     st.skip()
-                    run.say(f"⏭  Skipping {n}. {title}")
+                    if show_unselected:
+                        st.summary = "(done earlier)" if earlier else "(skipped)"
+                    else:
+                        run.say(f"⏭  Skipping {n}. {title}")
                 else:
                     try:
                         out = fn(ctx)
@@ -110,9 +135,11 @@ class Registry:
                         if isinstance(out, Result) and not out.ok:
                             st.fail(exit=out.code)
                             failed = out
+                        elif isinstance(out, str):
+                            st.summary = out
             if failed is not None:
                 self._hint(name)
                 return Result(False, failed.code or 1, err=failed.err)
-            if checkpoint is not None:
+            if checkpoint is not None and not earlier:
                 checkpoint.set("last", name)
         return Result(True, 0)

@@ -86,14 +86,14 @@ class ViewsJs_Selection_Test extends TestBase {
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
-	// c) Selection identity is the STABLE ROW ID (MED-11) - rowIdOf/stampRowId never fall back to a DOM index.
+	// c) Selection identity is the STABLE ROW ID - rowIdOf/stampRowId never fall back to a DOM index.
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Test void c01_rowIdOf_resolvesFromRowDataOnly_neverAnIndex() throws Exception {
 		var body = viewsJs();
 		var fn = functionBody(body, "function rowIdOf(");
 		assertTrue(fn.contains("rowData[rowIdField]"), fn);
-		// No index-based fallback anywhere in this function - the whole point of MED-11.
+		// No index-based fallback anywhere in this function - the whole point of keying on the stable id.
 		assertFalse(fn.contains("index"), fn);
 	}
 
@@ -118,7 +118,7 @@ class ViewsJs_Selection_Test extends TestBase {
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
-	// d) The off-screen-id-drop persistence rule (Q2/MED-11) - pure, DOM-free.
+	// d) The off-screen-id-drop persistence rule - pure, DOM-free.
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Test void d02_initSelection_listenerLifetimeSplit_pruneIsPerInstance() throws Exception {
@@ -150,7 +150,7 @@ class ViewsJs_Selection_Test extends TestBase {
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
-	// f) Two INDEPENDENT opt-ins (HIGH-5): hasBulk(...) is only ever reachable from inside the hasSelection(...)
+	// f) Two INDEPENDENT opt-ins: hasBulk(...) is only ever reachable from inside the hasSelection(...)
 	//    branch of initTable - selection alone can never surface a bulk-mutate control.
 	//------------------------------------------------------------------------------------------------------------------
 
@@ -187,7 +187,7 @@ class ViewsJs_Selection_Test extends TestBase {
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
-	// g) Per-target bulk execution (HIGH-5) - N independent submitRowAction(...) calls, never one aggregate request.
+	// g) Per-target bulk execution - N independent submitRowAction(...) calls, never one aggregate request.
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Test void g01_runBulkAction_replacesExecuteBulkAction_perRowIsTheDefault() throws Exception {

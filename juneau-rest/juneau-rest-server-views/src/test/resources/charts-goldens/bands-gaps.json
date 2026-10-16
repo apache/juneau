@@ -1,0 +1,75 @@
+{
+  "tooltip": {
+    "trigger": "axis",
+    "renderMode": "richText"
+  },
+  "legend": {
+    "bottom": 0
+  },
+  "xAxis": {
+    "type": "time"
+  },
+  "yAxis": {
+    "type": "value"
+  },
+  "series": [
+    {
+      "id": "n",
+      "name": "N",
+      "type": "line",
+      "encode": {
+        "x": "t",
+        "y": "n"
+      }
+    },
+    {
+      "id": "juneau-bands-0",
+      "type": "line",
+      "data": [],
+      "silent": true,
+      "markArea": {
+        "silent": true,
+        "itemStyle": {
+          "color": "rgba(0, 0, 0, 0.06)"
+        },
+        "label": {
+          "formatter": "[fn template]"
+        },
+        "data": [
+          [
+            {
+              "xAxis": 1800000,
+              "name": "No data",
+              "meta": null
+            },
+            {
+              "xAxis": 9000000
+            }
+          ]
+        ]
+      }
+    }
+  ],
+  "aria": {
+    "enabled": true
+  },
+  "dataset": [
+    {
+      "id": "juneau",
+      "dimensions": [
+        {
+          "name": "t",
+          "type": "time"
+        },
+        {
+          "name": "n",
+          "type": "number"
+        }
+      ],
+      "source": {
+        "t": "[Float64Array 4: 0,3600000,7200000,10800000]",
+        "n": "[Float64Array 4: 1,0,0,4]"
+      }
+    }
+  ]
+}

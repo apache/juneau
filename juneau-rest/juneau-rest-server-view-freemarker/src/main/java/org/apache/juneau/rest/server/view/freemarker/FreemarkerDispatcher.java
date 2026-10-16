@@ -36,7 +36,7 @@ import freemarker.template.*;
  * {@link FreemarkerResource} child flavors.
  *
  * <p>
- * This is the §2.3.1 <i>flavor-neutral worker</i> for the FreeMarker capability: it is <b>not</b> one
+ * This is the <i>flavor-neutral worker</i> for the FreeMarker capability: it is <b>not</b> one
  * of the three {@code @Rest} flavor classes &mdash; it is a plain bean that implements
  * {@link RawTemplateDispatcher} and holds the capability state ({@code basePath} /
  * {@code templateSuffix} / {@code cacheTemplates} / lazy default configuration) plus the raw-serve

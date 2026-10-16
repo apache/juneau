@@ -141,6 +141,10 @@ class PageSpec_BadgesFacts_Test extends TestBase {
 			return PageSpec.create().badge(BadgeDef.create("queue").src("/a"))
 				.template("admin/page-badges-facts-happy.ftlh").view(req);
 		}
+		@RestGet(path="/no-badge")
+		public View noBadge(RestRequest req) {
+			return PageSpec.create().html("c1", "<p/>").view(req);
+		}
 		@RestGet(path="/java-mismatch")
 		public View javaMismatch(RestRequest req) {
 			return PageSpec.create().html("c1", "<p/>")
@@ -330,5 +334,29 @@ class PageSpec_BadgesFacts_Test extends TestBase {
 		assertEquals(Map.of("q", "1"), b.get("params"));
 		assertEquals(List.of("c1"), b.get("refreshes"));
 		assertEquals("state", ((Map<?,?>)b.get("stateFilter")).get("column"));
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// h - badge runtime script
+	//-----------------------------------------------------------------------------------------------------------------
+
+	private static int count(String body, String part) {
+		var n = 0;
+		for (var i = body.indexOf(part); i >= 0; i = body.indexOf(part, i + 1))
+			n++;
+		return n;
+	}
+
+	@Test void h01_pageWithBadges_loadsTheBadgeRuntimeOnceAfterTheShell() throws Exception {
+		for (var path : List.of("/happy", "/ops")) {
+			var body = get(path, 200);
+			assertEquals(1, count(body, "juneau-badges.js?v="), () -> path + ": " + body);
+			assertTrue(body.indexOf("juneau-badges.js?v=") > body.indexOf("juneau-console.js?v="), () -> path + ": " + body);
+		}
+	}
+
+	@Test void h02_pageWithoutBadges_doesNotLoadIt() throws Exception {
+		var body = get("/no-badge", 200);
+		assertEquals(0, count(body, "juneau-badges.js"), body);
 	}
 }

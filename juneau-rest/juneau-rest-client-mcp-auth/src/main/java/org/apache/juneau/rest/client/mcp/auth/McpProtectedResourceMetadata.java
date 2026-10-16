@@ -60,7 +60,7 @@ public record McpProtectedResourceMetadata(
 	 *
 	 * <p>
 	 * Per RFC 9728 &sect;7.6 the client selects the authorization server; selecting the first entry is compliant
-	 * (READY-312f Q8) and no mandatory alternate-AS fallback is required.
+	 * and no mandatory alternate-AS fallback is required.
 	 *
 	 * @return The first authorization-server issuer URI, or {@link Optional#empty()} if none are advertised.
 	 */

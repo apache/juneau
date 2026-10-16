@@ -25,7 +25,7 @@ import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
 
 /**
- * Phase 2 gate: the {@code chrome.css} golden-file security scan (S1/S3).
+ * The {@code chrome.css} golden-file security scan.
  */
 class ChromeCss_SecurityScan_Test extends TestBase {
 

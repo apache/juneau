@@ -44,7 +44,7 @@ import org.junit.jupiter.api.*;
 
 /**
  * Coverage for {@link McpSchemaSafety}: no-fetch handling of external {@code $ref}s and bounded
- * (depth / node / CPU-time) schema validation (Resolution B2).
+ * (depth / node / CPU-time) schema validation.
  */
 @SuppressWarnings({
 	"java:S2925" // Sleeps simulate scheduling delay and non-CPU wall-clock time, or set a fixed measurement/backtracking window; none wait for a condition

@@ -35,7 +35,7 @@ import org.thymeleaf.templateresolver.*;
  * {@link ThymeleafResource} child flavors.
  *
  * <p>
- * This is the §2.3.1 <i>flavor-neutral worker</i> for the Thymeleaf capability: it is <b>not</b> one
+ * This is the <i>flavor-neutral worker</i> for the Thymeleaf capability: it is <b>not</b> one
  * of the three {@code @Rest} flavor classes &mdash; it is a plain bean that implements
  * {@link RawTemplateDispatcher} and holds the capability state ({@code basePath} /
  * {@code cacheTemplates} / {@code templateMode} / lazy default engine) plus the raw-serve and

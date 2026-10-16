@@ -13,6 +13,7 @@
 """The in-process event bus: what each producer publishes, independently of markers."""
 
 import contextlib
+import hashlib
 import io
 import os
 import unittest
@@ -54,7 +55,8 @@ class BusTest(unittest.TestCase):
         with self.quiet(), jr.step("bom", 2, "BOM completeness") as s:
             s.summary = "73 modules"
         self.assertEqual(self.rec.events[0],
-                         ("step_start", {"id": "bom", "n": 2, "title": "BOM completeness", "parent": None}))
+                         ("step_start", {"id": "bom", "n": 2, "title": "BOM completeness", "parent": None, "tool": None,
+                                     "sig": ""}))
         end = self.rec.of("step_end")[0]
         self.assertEqual((end["id"], end["status"], end["summary"], end["exit"], end["totals"]),
                          ("bom", "ok", "73 modules", None, None))
@@ -115,7 +117,8 @@ class BusTest(unittest.TestCase):
         with mock.patch.object(jr.subprocess, "run", return_value=mock.Mock(returncode=4)):
             jr.run_tool(["mvn", "test"], "generic", "tests", "Tests", n=3, cwd="/x")
         self.assertEqual(self.rec.of("step_start"),
-                         [{"id": "tests", "n": 3, "title": "Tests", "parent": None}])
+                         [{"id": "tests", "n": 3, "title": "Tests", "parent": None, "tool": "generic",
+                           "sig": hashlib.sha1(b"mvn test").hexdigest()[:8]}])
         end = self.rec.of("step_end")[0]
         self.assertEqual((end["status"], end["exit"]), ("fail", 4))
 
@@ -164,6 +167,20 @@ class DispatcherBusTest(unittest.TestCase):
         self.assertEqual(self.rec.kinds(), ["step_progress"])
         self.assertEqual(self.rec.of("step_progress")[0], {"step": "tests", "text": "52% \u00b7 test_foo.py"})
         self.assertEqual(out.getvalue(), "")
+
+    def test_unit_events_are_bus_only(self):
+        os.environ["RUN_MARKERS"] = "1"
+        out = io.StringIO()
+        with contextlib.redirect_stdout(out):
+            self.d.apply([("units", "s1", 300, "tests"), ("unit", "s1", 5, "fail"),
+                          ("unit_fix", "s1", 2, "fail"), ("series", "s1", "surefire_s", "core", 4.5)])
+        self.assertEqual(self.rec.of("units"), [{"step": "s1", "total": 300, "kind": "tests"}])
+        self.assertEqual(self.rec.of("unit")[-1]["done"], 5)
+        self.assertEqual(self.rec.of("unit")[-1]["outcome"], "fail")
+        self.assertEqual(self.rec.of("unit_fix")[-1]["index"], 2)
+        self.assertEqual(self.rec.of("series")[-1],
+                         {"step": "s1", "name": "surefire_s", "sub": "core", "value": 4.5})
+        self.assertEqual(out.getvalue(), "")      # never a ##run marker
 
     def test_close_children_publishes_module_end_for_each_open_module(self):
         self.d.apply([("sub_start", "tests/a", 1, "Mod A"), ("sub_start", "tests/b", 2, "Mod B"),

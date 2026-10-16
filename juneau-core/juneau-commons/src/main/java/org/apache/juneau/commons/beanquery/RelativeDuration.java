@@ -19,8 +19,8 @@ package org.apache.juneau.commons.beanquery;
 import static org.apache.juneau.commons.utils.Shorts.*;
 
 /**
- * A signed, relative-to-request-time duration value: wire literal {@code [+-]<n>(ms|s|m|h|d)} (IRS parity, design
- * review §3 Gap 2).
+ * A signed, relative-to-request-time duration value: wire literal {@code [+-]<n>(ms|s|m|h|d)} (a request-time offset
+ * that stays a plain literal on the wire).
  *
  * <p>
  * Pass one to any {@link BeanQuery.Builder}/{@link BeanQuery.GroupBuilder} comparison method ({@code eq}, {@code ne},

@@ -154,8 +154,66 @@ class ViewsJs_SlotMount_Test extends TestBase {
 			"t18_warned");
 	}
 
+	@Test void b14b_headerOnlyDetailTitleAllowlistsNamedKeysOnly() {
+		var r = report();
+		assertAllTrue(r, "tf_headerOnlyRendersId", "tf_headerOnlyAllowlist", "tf_headerOnlyNamedKeysOnly",
+			"tf_unnamedFieldNotLeaked", "tf_unlistedPlaceholderInDataNotAllowlisted", "tf_regionTitleFieldsStillWork",
+			"tf_regionTitleRenders", "tf_noPlaceholders");
+	}
+
 	@Test void b15_documentScanLeavesASlotBuiltTableAlone() {
 		var r = report();
 		assertAllTrue(r, "t19_tableMounted", "t19_scanLogsNoMissingSidecar");
+	}
+
+	@Test void b16_cardApiResolvesSlotBuiltTable() {
+		var r = report();
+		assertAllTrue(r, "t20_noThrow", "t20_selection", "t20_reloadRedraws");
+	}
+
+	@Test void b17_quickStatPainters_useCssomNotStyleAttribute() throws Exception {
+		var body = viewsJs();
+		var start = body.indexOf("function paintStatBar(");
+		var end = body.indexOf("function buildDetailTemplate(", start);
+		assertTrue(start >= 0 && end > start, body);
+		var fn = body.substring(start, end);
+		assertTrue(fn.contains("fill.style.width = pct + \"%\""), fn);
+		assertTrue(fn.contains("fill.style.flexGrow = String(count)"), fn);
+		assertFalse(fn.contains("setAttribute(\"style\""), "painters must size through CSSOM, not a style attribute");
+		assertFalse(fn.contains("cssText"), fn);
+		assertFalse(fn.contains("inner" + "HTML"), "painters must not use a raw HTML-sink assignment");
+	}
+
+	@Test void b18_quickStatKindsPaintDistinctMarkup() {
+		var r = report();
+		assertAllTrue(r, "t21_tile", "t21_nullTile", "t21_meterRole", "t21_segRole", "t21_impliedMeter",
+			"t21_impliedSeg", "t21_noErrors");
+	}
+
+	@Test void b19_malformedQuickStatItemsFailClosed() {
+		var r = report();
+		assertAllTrue(r, "t22_tileWithMax", "t22_meterNoMax", "t22_segNoSegments", "t22_meterWithSegments",
+			"t22_segmentedWithMax", "t22_tileWithSegments", "t22_both", "t22_unknownType",
+			"t22_zeroMax", "t22_negMax", "t22_stringValue", "t22_negValue", "t22_emptySegments",
+			"t22_meterNoLabel", "t22_meterBlankLabel", "t22_meterNullLabel", "t22_segNoLabel", "t22_segBlankLabel", "t22_segNullLabel");
+	}
+
+	@Test void b20_meterGeometryAndAria() {
+		var r = report();
+		assertAllTrue(r, "t23_width", "t23_ariaNow", "t23_valuetextWarning", "t23_fillTone", "t23_zeroNoMin",
+			"t23_tinyMin", "t23_over", "t23_notOver", "t23_errTrack", "t23_text", "t23_blankText",
+			"t23_offPaletteTone", "t23_hiddenParts", "t23_valueHidden", "t23_overErrorOrder");
+		assertAllTrue(r, "t23b_noThrow", "t23b_painted", "t23b_textOnly", "t23b_segmentTextOnly");
+	}
+
+	@Test void b21_segmentedBarLegendAndPalette() {
+		var r = report();
+		assertAllTrue(r, "t24_fillsSkipZero", "t24_legendHasZero", "t24_flexGrow", "t24_colours", "t24_fillColours",
+			"t24_swatchHidden", "t24_barHidden", "t24_labelHidden", "t24_group", "t24_paletteCapsAtEight");
+	}
+
+	@Test void b22_srcEnvelopeQuickStatsAreCheckedOnTheClient() {
+		var r = report();
+		assertAllTrue(r, "t25_segmentedMounts", "t25_malformedFailsClosed");
 	}
 }

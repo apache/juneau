@@ -1,0 +1,57 @@
+{
+  "tooltip": {
+    "trigger": "item",
+    "renderMode": "richText"
+  },
+  "legend": {
+    "bottom": 0
+  },
+  "xAxis": {
+    "type": "time"
+  },
+  "yAxis": {
+    "type": "value"
+  },
+  "series": [
+    {
+      "id": "ms",
+      "name": "Latency",
+      "type": "scatter",
+      "encode": {
+        "x": "t",
+        "y": "ms"
+      },
+      "large": true,
+      "progressive": 5000,
+      "progressiveThreshold": 10000
+    }
+  ],
+  "aria": {
+    "enabled": true
+  },
+  "dataset": [
+    {
+      "id": "juneau",
+      "dimensions": [
+        {
+          "name": "t",
+          "type": "time"
+        },
+        {
+          "name": "ms",
+          "type": "number"
+        },
+        {
+          "name": "size",
+          "type": "number"
+        }
+      ],
+      "source": {
+        "t": "[Float64Array 6000: 1790812800000,1790812860000,1790812920000 ... 1791172620000,1791172680000,1791172740000]",
+        "ms": "[Float64Array 6000: 0,1,2 ... 57,58,59]",
+        "size": "[Float64Array 6000: 0,1,2 ... 2,3,4]"
+      }
+    }
+  ],
+  "animation": false
+}

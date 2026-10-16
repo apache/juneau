@@ -109,9 +109,7 @@ public class UsersRest extends PetstoreConsolePage {
 			form.field(FormDef.Input.of("username", "Username", "text").required());
 		form.field(FormDef.Input.of("firstName", "First name", "text").value(u.getFirstName()));
 		form.field(FormDef.Input.of("lastName", "Last name", "text").value(u.getLastName()));
-		// Upstream gap: FormDef.Input has no 'password' type (text, textarea, checkbox, toggle, select, action), so the
-		// write-only field is a plain text input that is never pre-filled.
-		var password = FormDef.Input.of("password", "Password", "text");
+		var password = FormDef.Input.of("password", "Password", "password");
 		form.field(username == null ? password.required().help("Write-only; it is never shown again") : password.help("Leave blank to keep the current password"));
 		return ModalDef.create(username == null ? "Add user" : f("Edit '%s'", username)).form(form);
 	}

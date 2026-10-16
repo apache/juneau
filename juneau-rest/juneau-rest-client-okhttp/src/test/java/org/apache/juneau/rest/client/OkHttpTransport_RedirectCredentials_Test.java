@@ -76,6 +76,9 @@ class OkHttpTransport_RedirectCredentials_Test {
 		serverA.createContext("/redirect-same", exchange -> redirect(exchange, "http://127.0.0.1:" + portA + "/echo-creds"));
 		serverA.createContext("/redirect-protected", exchange -> redirect(exchange, "http://127.0.0.1:" + portB + "/protected"));
 		serverA.start();
+		serverA.createContext("/chain-start", exchange -> { logHop("A1", exchange); redirect(exchange, "http://127.0.0.1:" + portB + "/chain-mid"); });
+		serverB.createContext("/chain-mid", exchange -> { logHop("B", exchange); redirect(exchange, "http://127.0.0.1:" + portA + "/chain-end"); });
+		serverA.createContext("/chain-end", exchange -> { logHop("A2", exchange); echoCreds(exchange); });
 		serverB.createContext("/redirect-to-a", exchange -> redirect(exchange, "http://127.0.0.1:" + portA + "/echo-creds"));
 	}
 
@@ -85,6 +88,14 @@ class OkHttpTransport_RedirectCredentials_Test {
 			serverA.stop(0);
 		if (serverB != null)
 			serverB.stop(0);
+	}
+
+	private static final List<String> HOPS = new java.util.concurrent.CopyOnWriteArrayList<>();
+
+	private static void logHop(String name, HttpExchange exchange) {
+		var h = exchange.getRequestHeaders();
+		HOPS.add(name + ":auth=" + h.getFirst("Authorization") + "|cookie=" + h.getFirst("Cookie") + "|key=" + h.getFirst("X-API-Key")
+			+ "|proxy=" + h.getFirst("Proxy-Authorization") + "|trace=" + h.getFirst("X-Trace"));
 	}
 
 	private static void echoCreds(HttpExchange exchange) throws IOException {
@@ -158,6 +169,39 @@ class OkHttpTransport_RedirectCredentials_Test {
 				assertEquals(200, response.getStatusCode());
 				assertEquals("auth=Bearer secret-token|cookie=session=abc123", response.getBodyAsString());
 			}
+		}
+	}
+
+	//====================================================================================================
+	// c - Once stripped on a cross-origin hop, credentials stay stripped for the rest of the chain (A -> B -> A).
+	//====================================================================================================
+
+	private static final String ALL = "auth=Bearer secret-token|cookie=session=abc123|key=k1|proxy=Basic cHJveHk6cHc=|trace=t1";
+	private static final String NONE = "auth=null|cookie=null|key=null|proxy=null|trace=t1";
+
+	private static void assertChain(OkHttpTransport transport) throws Exception {
+		HOPS.clear();
+		var request = TransportRequest.builder().method("GET").uri("http://127.0.0.1:" + portA + "/chain-start")
+			.header("Authorization", "Bearer secret-token").header("Cookie", "session=abc123").header("X-API-Key", "k1")
+			.header("Proxy-Authorization", "Basic cHJveHk6cHc=").header("X-Trace", "t1").build();
+		try (var response = transport.execute(request)) {
+			assertEquals(200, response.getStatusCode());
+			assertEquals("auth=none|cookie=none", new String(response.getBody().readAllBytes(), StandardCharsets.UTF_8));
+		}
+		assertEquals(List.of("A1:" + ALL, "B:" + NONE, "A2:" + NONE), HOPS);
+	}
+
+	@Test
+	void c01_crossOriginThenBackToFirstOrigin_credentialsStayStripped() throws Exception {
+		try (var transport = OkHttpTransport.create()) {
+			assertChain(transport);
+		}
+	}
+
+	@Test
+	void c02_callerSuppliedClient_crossOriginThenBackToFirstOrigin_credentialsStayStripped() throws Exception {
+		try (var transport = OkHttpTransport.builder().httpClient(new OkHttpClient()).build()) {
+			assertChain(transport);
 		}
 	}
 

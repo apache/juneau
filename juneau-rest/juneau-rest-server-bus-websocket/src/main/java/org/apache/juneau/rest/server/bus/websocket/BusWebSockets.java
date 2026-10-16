@@ -17,6 +17,7 @@
 package org.apache.juneau.rest.server.bus.websocket;
 
 import org.apache.juneau.rest.server.bus.*;
+import org.apache.juneau.rest.server.filter.*;
 
 import jakarta.servlet.*;
 import jakarta.websocket.*;
@@ -27,8 +28,10 @@ import jakarta.websocket.server.*;
  *
  * <p>
  * The endpoint is context-relative ({@value #PATH}) because WebSocket endpoints are not servlet-mapped.  Origin is
- * the CSRF control for the handshake, so registration refuses a policy with no exact Origin rule: the rule is
- * {@code LoopbackBoundary.origin()} when the policy has a boundary, otherwise {@code BusPolicy.allowedOrigins}.
+ * the CSRF control for the handshake, so registration refuses a policy with no Origin rule.  The rule is
+ * {@code LoopbackBoundary.origin()} for a {@code LoopbackBoundary}, the handshake's own scheme and Host for a
+ * {@code CsrfBoundary}, and {@code BusPolicy.allowedOrigins} when the policy has no boundary.  Any other boundary
+ * type is refused: the handshake cannot apply a boundary it does not know.
  *
  * <h5 class='section'>Example:</h5>
  * <p class='bjava'>
@@ -55,6 +58,8 @@ public final class BusWebSockets {
 	static final String NO_CONTAINER = "BusWebSockets.register: the container exposes no jakarta.websocket ServerContainer (add the container's WebSocket module)";
 	static final String NO_ORIGIN = "BusWebSockets.register: the policy has neither a boundary nor allowedOrigins; WebSocket bridges need an exact Origin rule";
 
+	static final String UNSUPPORTED_BOUNDARY = "BusWebSockets.register: the policy's boundary type cannot be applied to a WebSocket handshake; use LoopbackBoundary or CsrfBoundary";
+
 	private BusWebSockets() {}
 
 	/**
@@ -62,7 +67,8 @@ public final class BusWebSockets {
 	 *
 	 * @param ctx The servlet context.
 	 * @param bus The bus whose sessions the endpoint serves.
-	 * @throws IllegalStateException no {@link ServerContainer} attribute, or no Origin rule.
+	 * @throws IllegalStateException no {@link ServerContainer} attribute, no Origin rule, or a boundary type the
+	 * 	handshake cannot apply.
 	 */
 	public static void register(ServletContext ctx, ServerBus bus) {
 		if (! (ctx.getAttribute(ServerContainer.class.getName()) instanceof ServerContainer container))
@@ -79,11 +85,15 @@ public final class BusWebSockets {
 	 *
 	 * @param container The container.
 	 * @param bus The bus whose sessions the endpoint serves.
-	 * @throws IllegalStateException no Origin rule, or the container refused the endpoint.
+	 * @throws IllegalStateException no Origin rule, a boundary type the handshake cannot apply, or the container
+	 * 	refused the endpoint.
 	 */
 	public static void register(ServerContainer container, ServerBus bus) {
+		var boundary = bus.policy().boundary();
+		if (boundary != null && ! (boundary instanceof LoopbackBoundary) && ! (boundary instanceof CsrfBoundary))
+			throw new IllegalStateException(UNSUPPORTED_BOUNDARY);
 		var origins = BusWebSocketConfigurator.allowedOrigins(bus.policy());
-		if (origins.isEmpty())
+		if (origins.isEmpty() && ! (boundary instanceof CsrfBoundary))
 			throw new IllegalStateException(NO_ORIGIN);
 		var config = ServerEndpointConfig.Builder.create(BusWebSocketEndpoint.class, PATH)
 			.configurator(new BusWebSocketConfigurator(bus, origins))

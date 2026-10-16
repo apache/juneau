@@ -15,8 +15,8 @@
  * limitations under the License.
  */
 /*
- * urlstate-directives.cjs - always-on Node harness for the ?state= directive registry and its two built-ins
- * (window, ids), plus the live wire: registration from a view's urlState config, request params, setDirective,
+ * urlstate-directives.cjs - always-on Node harness for the ?state= directive registry and its three built-ins
+ * (window, ids, day), plus the live wire: registration from a view's urlState config, request params, setDirective,
  * and popstate re-apply.  Every assertion lives in the Java test.
  *
  *   Usage: node urlstate-directives.cjs <juneau-renders.js> <juneau-views.js> <juneau-urlstate.js>
@@ -104,8 +104,9 @@ window.location = { pathname: '/rest/x', search: '?state=ids(p,q)', hash: '', or
 const listeners = {};
 window.addEventListener = function (ev, fn) { (listeners[ev] = listeners[ev] || []).push(fn); };
 
-// A fresh registry per scenario is impossible (page-global), so the live view reuses the registrations above by
-// naming no builtins: prepareUrlStateDirectives only registers a name that is not yet registered.
+// A fresh registry per scenario is impossible (page-global): prepareUrlStateDirectives only registers a name that is
+// not yet registered, so window and ids reuse the hand registrations above, while day is registered here from the
+// view's own urlState config (the path the day.param assertions exercise).
 const table = env.el('table');
 table.dataset.juneauView = 'x';
 env.document.body.appendChild(table);
@@ -117,10 +118,21 @@ const dt = {
 	on: function () { return this; },
 	ajax: { reload: function () { reloads++; } }
 };
-const ctx = { table: table, viewDef: { id: 'x', urlState: { window: {}, ids: {} } }, dataTable: dt, optsColumns: [] };
+const ctx = { table: table, viewDef: { id: 'x', urlState: { window: {}, ids: {}, day: { param: 'on' } } }, dataTable: dt, optsColumns: [] };
 table.__juneauCtx = ctx;
 
 I.prepareUrlStateDirectives(table, ctx.viewDef, ctx);
+// ---- day -------------------------------------------------------------------------------------------------------
+// Registered by the view's own urlState config (day.param), not by hand, so the config pass-through is what is tested.
+out.dayParsed = U.decode('day(2026-10-08)').ext.day;
+out.dayRoundTrip = U.encode({ ext: { day: U.decode('day(2026-10-08)').ext.day } });
+out.dayParam = JSON.stringify(U.builtins.day({ param: 'on' }).toParams('2026-10-08'));
+out.dayDefaultParam = JSON.stringify(U.builtins.day({}).toParams('2026-10-08'));
+out.dayMalformed = ['garbage', '2026-02-30', '2026-5-8', '2026-10-08T00:00:00Z', '', '20261008', '2026-13-01']
+	.map(function (b) { return String(U.decode('day(' + b + ')').ext.day ?? null); }).join('|');
+out.dayEarlyYears = ['0000-01-01', '0099-12-31', '0100-02-29'].map(function (b) { return String(U.decode('day(' + b + ')').ext.day ?? null); }).join('|');
+out.dayMalformedLeavesNoState = U.encode({ ext: { day: U.decode('day(garbage)').ext.day } });
+
 out.seededFromUrl = JSON.stringify(ctx.urlExt.ids?.ids);
 out.requestParamsSeeded = JSON.stringify(I.urlStateRequestParams(ctx));
 
@@ -147,5 +159,11 @@ reloads = 0;
 (listeners.popstate || []).forEach(function (fn) { fn({}); });
 out.popstateIds = JSON.stringify(ctx.urlExt.ids?.ids);
 out.popstateReloaded = reloads;
+
+// The day directive was registered from the view's urlState config (day.param = 'on'): the live request carries 'on'.
+reloads = 0;
+out.setDayOk = NS.urlState.setDirective(table, 'day', '2026-10-08');
+out.dayRequestParams = JSON.stringify(I.urlStateRequestParams(ctx));
+out.dayReloaded = reloads;
 
 process.stdout.write(JSON.stringify(out));

@@ -81,7 +81,7 @@ class SubscriptionsListenPublisher_Test {
 	 * <p>
 	 * Guards the "check closed / register taker" step in {@link #take()} and the "flip closed / read taker +
 	 * interrupt" step in {@link #close()} with the same {@code lock}, exactly like {@code BasicMcpSubscription}
-	 * (Phase 1): without this, a {@code close()} that lands between two {@code take()} calls (i.e. while
+	 * without this, a {@code close()} that lands between two {@code take()} calls (i.e. while
 	 * {@code taker} is transiently {@code null}) would silently skip the interrupt and the pump thread would
 	 * block forever in the next {@code queue.take()} with no further events ever offered — a lost-interrupt
 	 * hang, not a rare flake, since nothing thereafter can wake it.
@@ -174,7 +174,7 @@ class SubscriptionsListenPublisher_Test {
 		subscriber.subscription.cancel();
 
 		assertEquals(0, broker.activeCount(),
-			"Pump.cancel() must close the upstream McpSubscription, which (Phase 1-3 contract) deregisters from the broker");
+			"Pump.cancel() must close the upstream McpSubscription, which deregisters from the broker");
 	}
 
 	@Test
@@ -436,7 +436,7 @@ class SubscriptionsListenPublisher_Test {
 			"cancel() must shut down the idle watchdog executor");
 	}
 
-	// M8: a second subscribe() must not spin a second Pump over the same McpSubscription; it must instead
+	// A second subscribe() must not spin a second Pump over the same McpSubscription; it must instead
 	// be rejected with onError(IllegalStateException), leaving the first subscriber's stream untouched.
 	@Test
 	void secondSubscribeIsRejectedWithIllegalStateExceptionInsteadOfASecondPump() throws Exception {

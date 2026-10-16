@@ -32,7 +32,7 @@ import org.apache.juneau.rest.server.servlet.*;
 import org.junit.jupiter.api.*;
 
 /**
- * Phase 3 gate: {@link ConsoleChromeMixin} + the dynamic {@code GET /juneau-console/chrome.css} endpoint.
+ * Tests for {@link ConsoleChromeMixin} + the dynamic {@code GET /juneau-console/chrome.css} endpoint.
  */
 @SuppressWarnings({
 	"java:S5961", // Contract test is intentionally dense; splitting would hide landing-page pins.
@@ -149,10 +149,51 @@ class ConsoleChromeMixin_Test extends TestBase {
 		// token declared by the alias block must in turn be consumed by chrome.css (or by a later alias link).
 		var referenced = new LinkedHashSet<>(referencedTokensInChromeCss());
 		referenced.addAll(aliasReferencedNames());
+		// The chart tokens are read by juneau-charts.js (THEME_TOKENS), not by chrome.css.
+		referenced.addAll(chartsJsTokens());
 		var defined = new LinkedHashSet<>(Theme.OPEN.getTokens().keySet());
 		defined.addAll(aliasDefinedNames());
 		for (var name : defined)
 			assertTrue(referenced.contains(name), () -> "orphan token '" + name + "' defined but never referenced by chrome.css or the alias block");
+	}
+
+	@Test void c04_chartRules_haveFrameAndOverlayRules_andNoSvgRules() throws IOException {
+		String css;
+		try (var in = ConsoleChromeMixin_Test.class.getResourceAsStream("/org/apache/juneau/console/chrome.css")) {
+			assertNotNull(in);
+			css = new String(in.readAllBytes(), StandardCharsets.UTF_8);
+		}
+		for (var sel : List.of(".jc-chart-overlay {", ".jc-chart-overlay[hidden]", ".jc-chart-banner {", ".jc-chart-banner[hidden]", ".jc-chart-table-note {", ".jc-chart-table-box {", ".jc-chart-plot:focus-visible"))
+			assertTrue(css.contains(sel), () -> "chrome.css is missing the chart rule '" + sel + "'");
+		// Contrast (red theme): the banner sits on the card surface in full-strength text; the overlay label is not faded by opacity.
+		var banner = Pattern.compile("\\.jc-chart-banner\\s*\\{([^}]*)\\}").matcher(css);
+		assertTrue(banner.find());
+		assertContains("background-color: var(--jc-card-bg)", banner.group(1));
+		assertContains("color: var(--jc-text);", banner.group(1));
+		var overlay = Pattern.compile("\\.jc-chart-overlay\\s*\\{([^}]*)\\}").matcher(css);
+		assertTrue(overlay.find());
+		assertFalse(overlay.group(1).contains("opacity"), "the overlay must not fade its label");
+		assertContains("var(--jc-surface, #fff)", overlay.group(1));
+		// The plot must be positioned: the overlay is position:absolute; inset:0 and would otherwise anchor to an ancestor.
+		assertTrue(Pattern.compile("\\.jc-chart-plot\\s*\\{[^}]*position:\\s*relative").matcher(css).find(), "the .jc-chart-plot rule must be position: relative");
+		// Selector-boundary match, so a future legitimate '.jc-chart-lines' does not trip the '.jc-chart-line' check.
+		for (var gone : List.of(".jc-chart-svg", ".jc-chart-gridline", ".jc-chart-hit", ".jc-chart-slice", ".jc-chart-bar", ".jc-chart-line", ".jc-chart-swatch",
+			".jc-chart-legend-list", ".jc-chart-legend-item", ".jc-chart-tick", ".jc-chart-xlabel", ".jc-chart-center", ".jc-chart--legend-right"))
+			assertFalse(Pattern.compile(Pattern.quote(gone) + "[\\s{,:.\\[>+~)]").matcher(css).find(), () -> "chrome.css still carries the SVG-era chart rule '" + gone + "'");
+	}
+
+	private static Set<String> chartsJsTokens() throws IOException {
+		try (var in = ConsoleChromeMixin_Test.class.getResourceAsStream("/org/apache/juneau/console/juneau-charts.js")) {
+			assertNotNull(in);
+			var js = new String(in.readAllBytes(), StandardCharsets.UTF_8);
+			var m = Pattern.compile("const THEME_TOKENS = \\[([^\\]]*)\\]").matcher(js);
+			assertTrue(m.find(), "juneau-charts.js has no THEME_TOKENS array");
+			var out = new LinkedHashSet<String>();
+			var t = Pattern.compile("\"(--jc-[a-z0-9-]+)\"").matcher(m.group(1));
+			while (t.find())
+				out.add(t.group(1));
+			return out;
+		}
 	}
 
 	private static Set<String> referencedTokensInChromeCss() throws IOException {
@@ -187,8 +228,53 @@ class ConsoleChromeMixin_Test extends TestBase {
 		return out;
 	}
 
+	@Test void d01_darkFileServed() throws Exception {
+		cWithMixin.get(ConsoleChromeMixin.THEME_CSS_DIR + "juneau-theme-dark.css").run()
+			.assertStatus(200)
+			.assertHeader("Cache-Control").is(ConsoleChromeMixin.CACHE_CONTROL);
+	}
+
+	@Rest(mixins=ConsoleChromeMixin.class)
+	public static class DarkUrlHost extends BasicRestServlet {
+		private static final long serialVersionUID = 1L;
+		@RestGet(path="/dark-url", produces="text/plain")
+		public String darkUrl(RestRequest req) { return ConsoleChromeMixin.themeAssetUrl(req, "dark"); }
+	}
+
+	@Test void d02_darkAssetUrlHashed() throws Exception {
+		var url = MockRestClient.buildLax(DarkUrlHost.class).get("/dark-url").run().assertStatus(200).getContent().asString();
+		assertTrue(url.matches(".*juneau-theme-dark\\.css\\?v=.+"), () -> "unexpected url: " + url);
+	}
+
+	@Test void d03_darkNotABuiltinTheme() {
+		assertFalse(ConsoleChromeMixin.BUILTIN_THEME_NAMES.contains("dark"));
+		assertThrows(IllegalArgumentException.class, () -> ConsoleChromeMixin.stockTheme("dark"));
+	}
+
+	@Test void d04_textRoleAliases() {
+		assertTrue(ConsoleChromeMixin.OPEN_ROLE_ALIASES.contains("--jc-danger-text:var(--jc-danger);"));
+		assertTrue(ConsoleChromeMixin.OPEN_ROLE_ALIASES.contains("--jc-success-text:var(--jc-success);"));
+	}
+
+	@Test void d05_roleAliasNames() throws Exception {
+		// The names the served stylesheet declares in its default block beyond the theme's own tokens are the role aliases.
+		var served = new LinkedHashSet<String>();
+		var m = Pattern.compile("(--jc-[a-z0-9-]++)\\s*:").matcher(firstRootBlock(bodyOf(MockRestClient.buildLax(DefaultHost.class))));
+		while (m.find())
+			served.add(m.group(1));
+		served.removeAll(Theme.OPEN.getTokens().keySet());
+		var names = ConsoleChromeMixin.roleAliasNames();
+		assertFalse(served.isEmpty());
+		assertEquals(served, names);
+		assertTrue(names.contains("--jc-danger-text"));
+		assertTrue(names.contains("--jc-surface"));
+		assertThrows(UnsupportedOperationException.class, () -> names.add("--jc-x"));
+		assertThrows(UnsupportedOperationException.class, () -> names.remove("--jc-surface"));
+	}
+
 	/**
-	 * Header and both page-nav rows stay white on every theme: {@code --jc-header-bg} keys off {@code --jc-white},
+	 * Header and both page-nav rows stay white on every theme in the light scheme (the dark layer sets the header
+	 * background directly): {@code --jc-header-bg} keys off {@code --jc-white},
 	 * not {@code --jc-chrome-bg}. Themed {@code --jc-chrome-bg} still tints the page fallback / hover / dialogs;
 	 * it must not wash {@code .jc-header} or {@code .juneau-page-nav}.
 	 */
@@ -224,6 +310,10 @@ class ConsoleChromeMixin_Test extends TestBase {
 				() -> theme.getName() + " must not declare --jc-header-bg");
 			assertFalse(theme.getTokens().containsKey("--jc-nav-bg"),
 				() -> theme.getName() + " must not declare --jc-nav-bg");
+			assertFalse(theme.getDarkTokens().containsKey("--jc-header-bg"),
+				() -> theme.getName() + " must not declare --jc-header-bg in its dark accents");
+			assertFalse(theme.getDarkTokens().containsKey("--jc-nav-bg"),
+				() -> theme.getName() + " must not declare --jc-nav-bg in its dark accents");
 		}
 	}
 
@@ -323,23 +413,48 @@ class ConsoleChromeMixin_Test extends TestBase {
 	}
 
 	@Test void j03_themeOpenTokenCount_pinned_unaffectedByAssetsFeature() {
-		// 82 = 70 (55 base + the 15 canonical --jc-pill-* status-chip tokens; the 15 legacy --jc-tag-* tokens are
+		// 100 = 70 (55 base + the 15 canonical --jc-pill-* status-chip tokens; the 15 legacy --jc-tag-* tokens are
 		// RETAINED as var(--jc-pill-*) aliases for badges/avatars/frozen calendar) plus the 12 --jc-probe-* status
 		// probe tokens (4 statuses x bg/text/dot); the selected-probe ring reuses the existing --jc-accent-selected
-		// token, so the probe family adds exactly 12, not a ring token.
+		// token, so the probe family adds exactly 12, not a ring token, plus the 18 --jc-chart-* tokens (8 series slots and 10 chart roles) read by juneau-charts.js.
 		assertBean(Theme.OPEN.getTokens(),
 			"size,--jc-main-bg,--jc-card-bg,--jc-card-padding,--jc-chrome-icon,--jc-text,--jc-text-soft,--jc-card-shadow,--jc-page-nav-hairline,--jc-page-nav-section-font-size,--jc-page-nav-child-font-size",
-			"82,#f5f6f9,#ffffff,16px 16px 8px,#666666,#080707,#080707cc,0 2px 2px rgba(0, 0, 0, 0.05),2px,13px,12px");
+			"100,#f5f6f9,#ffffff,16px 16px 8px,#666666,#080707,#080707cc,0 2px 2px rgba(0, 0, 0, 0.05),2px,13px,12px");
 		assertFalse(Theme.OPEN.getTokens().containsKey("--jc-logo"));
 		assertFalse(Theme.OPEN.getTokens().containsKey("--jc-page-bg-image"));
 		assertFalse(Theme.OPEN.getTokens().containsKey("--jc-card-surface"));
 	}
 
+	@Test void j03b_chartTokens_openValues() {
+		var expected = new java.util.LinkedHashMap<String,String>();
+		expected.put("--jc-chart-1", "#1b6ac9");
+		expected.put("--jc-chart-2", "#e07a1f");
+		expected.put("--jc-chart-3", "#2e8540");
+		expected.put("--jc-chart-4", "#9b3fb5");
+		expected.put("--jc-chart-5", "#c23934");
+		expected.put("--jc-chart-6", "#0e8a8a");
+		expected.put("--jc-chart-7", "#7a6a00");
+		expected.put("--jc-chart-8", "#5a5a5a");
+		expected.put("--jc-chart-bg", "transparent");
+		expected.put("--jc-chart-text", "#080707");
+		expected.put("--jc-chart-axis", "#dddbda");
+		expected.put("--jc-chart-grid", "#ececec");
+		expected.put("--jc-chart-tooltip-bg", "#ffffff");
+		expected.put("--jc-chart-tooltip-text", "#080707");
+		expected.put("--jc-chart-mark", "#5a5a5a");
+		expected.put("--jc-chart-band", "rgba(0, 0, 0, 0.06)");
+		expected.put("--jc-chart-heat-low", "#e8f1fb");
+		expected.put("--jc-chart-heat-high", "#1b6ac9");
+		assertEquals(18, expected.size());
+		var tokens = Theme.OPEN.getTokens();
+		expected.forEach((k, v) -> assertEquals(v, tokens.get(k), k));
+		assertEquals(18, tokens.keySet().stream().filter(k -> k.startsWith("--jc-chart-")).count());
+	}
+
 	@Test void j04_accentSelectedFace_meetsWcag1411NonTextContrast_andBothSelectorsConsumeToken() throws Exception {
-		// OQ-A3's pinning test (LD-5, exit (b)): the selected face is a NEW, OPAQUE Theme.OPEN token, so this is a
+		// Pinning test: the selected face is a NEW, OPAQUE Theme.OPEN token, so this is a
 		// plain two-literal comparison - no "assumed backdrop" caveat, unlike a translucent wash whose composited
-		// colour depends on what sits behind it (WAVE-0013 SS6.2's compositing objection, which does not apply
-		// to an opaque value).
+		// colour depends on what sits behind it.
 		var face = Theme.OPEN.getTokens().get("--jc-accent-selected");
 		assertEquals("#1589EE", face);
 		// Unselected face: --jc-control-bg -> --jc-surface -> --jc-white (Theme.OPEN's --jc-white), i.e. #ffffff.
@@ -618,7 +733,8 @@ class ConsoleChromeMixin_Test extends TestBase {
 	/**
 	 * Toolbar Search focus paints the field's 1px border, not a second outset ring. The generic
 	 * {@code :focus-visible} rule is 2px / offset 2px; these selectors (0,3,3) kill outline/box-shadow
-	 * with literals and sink {@code --jc-accent} only into {@code border-color}.
+	 * with literals and sink {@code --jc-chrome-control-focus-border} (falling back to {@code --jc-accent}) only into
+	 * {@code border-color}.
 	 */
 	@Test void k08_chromeCss_toolbarSearchFocusRecolorsBorderNotOutline() throws Exception {
 		var css = readChromeCss();
@@ -631,10 +747,21 @@ class ConsoleChromeMixin_Test extends TestBase {
 		var region = css.substring(start, end);
 		assertTrue(region.contains("outline: none"), () -> "search focus must drop the outer ring, region:\n" + region);
 		assertTrue(region.contains("box-shadow: none"), () -> "search focus must drop the outer shadow, region:\n" + region);
-		assertTrue(region.contains("border-color: var(--jc-accent)"),
-			() -> "search focus must recolor the field border, region:\n" + region);
+		assertTrue(region.contains("border-color: var(--jc-chrome-control-focus-border, var(--jc-accent))"),
+			() -> "search focus must recolor the field border with the focus-border token, region:\n" + region);
 		assertFalse(region.contains("outline: 2px"), () -> "must not restyle as a 2px ring, region:\n" + region);
 		assertFalse(region.contains("outline-offset"), () -> "must not add outline-offset, region:\n" + region);
+	}
+
+	/** The column-search popover input's focus border uses the same focus-border token as the toolbar search. */
+	@Test void k08b_chromeCss_colSearchPopoverFocusUsesFocusBorderToken() throws Exception {
+		var css = readChromeCss();
+		var start = css.indexOf(".juneau-view-col-search-popover-input:focus,");
+		assertTrue(start >= 0, () -> "missing popover input :focus selector, css:\n" + css);
+		var region = css.substring(start, css.indexOf("}", start));
+		assertTrue(region.contains(".juneau-view-col-search-popover-input:focus-visible"), () -> "region:\n" + region);
+		assertTrue(region.contains("border-color: var(--jc-chrome-control-focus-border, var(--jc-accent))"),
+			() -> "popover focus must recolor the border with the focus-border token, region:\n" + region);
 	}
 
 	@Test void k07_chromeCss_dialogHeaderToggleAndFooterUseThemeTokens() throws Exception {
@@ -813,7 +940,7 @@ class ConsoleChromeMixin_Test extends TestBase {
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
-	// n') Pill palette (Task 15): --jc-pill-* is the CANONICAL status-chip colour family the client `pill` catalog
+	// n') Pill palette: --jc-pill-* is the CANONICAL status-chip colour family the client `pill` catalog
 	//     renderer paints from; the legacy --jc-tag-* triads are retained as var(--jc-pill-*) aliases (badges/avatars/
 	//     frozen calendar), so no cross-module rename is needed and every value stays pixel-identical.
 	//-----------------------------------------------------------------------------------------------------------------
@@ -844,7 +971,7 @@ class ConsoleChromeMixin_Test extends TestBase {
 
 	@Test void n09_chromeCss_pillChips_paintFromThePillPalette_notTheTagPalette() throws IOException {
 		// The .tag.<domain>.<value> pill-chip rules (the palette the `pill` renderer's markup lands in) must consume
-		// var(--jc-pill-*): that is the migration.  (Dual-hat SLDS/lightning-naming freeze is covered separately.)
+		// var(--jc-pill-*): that is the migration.  (The host-framework naming freeze is covered separately.)
 		var css = readChromeCss();
 		assertTrue(css.contains(".tag.status.released"), () -> "no .tag.<domain>.<value> pill-chip palette rule, css:\n" + css);
 		for (var colour : TAG_PALETTE)

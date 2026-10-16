@@ -16,6 +16,7 @@
  */
 
 /**
- * Connects terminal input to the Juneau server bus: the {@code term.input} upstream handler.
+ * Connects terminals to the Juneau server bus: the {@code term.input} upstream handler, and the {@code term.nudge:<id>}
+ * downstream nudges that tell a terminal card when new bytes are ready.
  */
 package org.apache.juneau.rest.server.terminal.bus;

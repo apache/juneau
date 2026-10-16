@@ -16,6 +16,7 @@
  */
 package org.apache.juneau.rest.server.console;
 
+import static org.apache.juneau.test.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.*;
@@ -77,5 +78,28 @@ class TopicDecl_Test extends TestBase {
 	@Test void b05_pageLevelNeedsPublisher() {
 		var e = assertThrows(IllegalArgumentException.class, () -> TopicDecl.of("ssc.focus").retain(true).toMap());
 		assertEquals("topic 'ssc.focus': a page-level topic needs publisher(SCRIPT|SERVER|RIBBON)", e.getMessage());
+	}
+
+	@Test void d01_data_pageScriptRetained() {
+		assertBean(TopicDecl.of("data:x").retain(true).publisher(TopicDecl.Publisher.SCRIPT).toMap(), "topic,retain,publisher", "data:x,true,script");
+	}
+
+	@Test void d02_data_rejectsOtherShapes() {
+		assertThrows(IllegalArgumentException.class, () -> TopicDecl.of("data:x").retain(false).publisher(TopicDecl.Publisher.SCRIPT).toMap());
+		assertThrows(IllegalArgumentException.class, () -> TopicDecl.of("data:x").retain(true).publisher(TopicDecl.Publisher.SERVER).toMap());
+		assertThrows(IllegalArgumentException.class, () -> TopicDecl.of("data:x").retain(true).toPublicationMap());
+		assertThrows(IllegalArgumentException.class, () -> TopicDecl.of("data:*"));
+	}
+
+	@Test void d03_zoomLegend_cardPublicationRetained() {
+		assertBean(TopicDecl.of("zoom:t").retain(true).toPublicationMap(), "topic,retain", "zoom:t,true");
+		assertBean(TopicDecl.of("legend:t").retain(true).toPublicationMap(), "topic,retain", "legend:t,true");
+		assertThrows(IllegalArgumentException.class, () -> TopicDecl.of("zoom:t").retain(false).toPublicationMap());
+		assertThrows(IllegalArgumentException.class, () -> TopicDecl.of("zoom:t").retain(true).publisher(TopicDecl.Publisher.SCRIPT).toMap());
+	}
+
+	@Test void d04_otherFramework_stillE45() {
+		var e = assertThrows(IllegalArgumentException.class, () -> TopicDecl.of("filter:t"));
+		assertContains("'filter' is a framework family", e.getMessage());
 	}
 }

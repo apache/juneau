@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.rest.server.views;
 
+import org.apache.juneau.rest.server.runreport.*;
+
 /**
  * The read side of a run-view event stream.
  *
@@ -48,7 +50,7 @@ public interface RunViewSource {
 		 * @param token The offending token.
 		 */
 		public UnknownTokenException(String token) {
-			super("Unknown or stale run-view token: '" + ConsoleOutputChecks.clip(token) + "'.");
+			super("Unknown or stale run-view token: '" + RunViewChecks.clip(token) + "'.");
 		}
 	}
 }

@@ -1,0 +1,72 @@
+{
+  "tooltip": {
+    "trigger": "axis",
+    "renderMode": "richText"
+  },
+  "legend": {
+    "bottom": 0
+  },
+  "xAxis": {
+    "type": "category"
+  },
+  "yAxis": {
+    "type": "value"
+  },
+  "series": [
+    {
+      "id": "placed",
+      "name": "Placed",
+      "type": "bar",
+      "encode": {
+        "x": "day",
+        "y": "placed"
+      },
+      "large": false,
+      "progressive": 100,
+      "progressiveThreshold": 10000
+    },
+    {
+      "id": "delivered",
+      "name": "Delivered",
+      "type": "bar",
+      "encode": {
+        "x": "day",
+        "y": "delivered"
+      },
+      "itemStyle": {
+        "color": "#2e8540"
+      },
+      "large": true,
+      "progressive": 5000,
+      "progressiveThreshold": 10000
+    }
+  ],
+  "aria": {
+    "enabled": true
+  },
+  "dataset": [
+    {
+      "id": "juneau",
+      "dimensions": [
+        {
+          "name": "day",
+          "type": "ordinal"
+        },
+        {
+          "name": "placed",
+          "type": "number"
+        },
+        {
+          "name": "delivered",
+          "type": "number"
+        }
+      ],
+      "source": {
+        "day": "[Array 6000: d0,d1,d2 ... d5997,d5998,d5999]",
+        "placed": "[Float64Array 6000: 0,1,2 ... 5997,5998,5999]",
+        "delivered": "[Float64Array 6000: 0,1,2 ... 5,6,0]"
+      }
+    }
+  ],
+  "animation": true
+}

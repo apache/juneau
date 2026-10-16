@@ -20,6 +20,7 @@ import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.util.*;
 
+import org.apache.juneau.commons.Schema;
 import org.apache.juneau.commons.beanquery.*;
 import org.apache.juneau.marshall.collections.*;
 import org.apache.juneau.marshall.marshaller.*;
@@ -133,17 +134,42 @@ public class PetsRest extends PetstoreConsolePage {
 	/**
 	 * Server-mode DataTables query over all pets.
 	 *
+	 * <p>
+	 * The optional {@code ids} query parameter (comma-separated pet ids, as the {@code ids} URL-state directive sends it)
+	 * narrows the pets to those ids, before the request's own column filters apply, so the two combine.  Tokens that are
+	 * not numbers are dropped, and a blank value or one with no usable token is ignored.
+	 *
 	 * @param req The DataTables request.
+	 * @param ids The ids to keep, or {@code null}.
 	 * @return One page of pets, or a 200 {@code error} envelope for a malformed search expression.
 	 */
 	@RestPost(path="/query")
-	public DataTablesResults<Pet> query(@Content DataTablesRequest req) {
-		try (var s = store().queryPets()) {
+	public DataTablesResults<Pet> query(@Content DataTablesRequest req, @Query("ids") @Schema(aev=true) String ids) {
+		var wanted = parseIds(ids);
+		var pets = store().getPets();
+		if (wanted != null)
+			pets = pets.stream().filter(p -> wanted.contains(p.getId())).toList();
+		try (var s = PetStore.PET_QUERY.getSession(pets)) {
 			return DataTablesQuery.run(req, s);
 		} catch (BeanQuerySyntaxException e) {
 			// DataTablesQuery maps a bad expression to HTTP 400 by default; the table wants a 200 error envelope it can show.
 			return DataTablesResults.error(req.getDraw(), e.getMessage());
 		}
+	}
+
+	/** The usable ids in a comma-separated value, or {@code null} if there are none (no filter). */
+	private static Set<Long> parseIds(String value) {
+		if (value == null)
+			return null;
+		var out = new HashSet<Long>();
+		for (var token : value.split(",")) {
+			try {
+				out.add(Long.parseLong(token.trim()));
+			} catch (@SuppressWarnings("unused") NumberFormatException e) {
+				// Not a pet id; dropped.
+			}
+		}
+		return out.isEmpty() ? null : out;
 	}
 
 	/**
@@ -177,6 +203,8 @@ public class PetsRest extends PetstoreConsolePage {
 	 */
 	@RestPut(path="/{id}")
 	public ActionResult update(RestRequest req, @Path("id") long id, @Content JsonMap body) {
+		// The edit form offers name, species and price but no status, so for a saved edit (for example from the
+		// store treemap) species is the grouping field that can change; status moves only through the sell action.
 		var actor = ConsoleWrites.actor(req);
 		var old = require(id);
 		var pet = toPet(body);
@@ -365,10 +393,15 @@ public class PetsRest extends PetstoreConsolePage {
 		}
 		// Node ids must start with a letter, so the pet node is p<id> and the order node o<id>.
 		var nav = order == null ? f("pets/p%s/%s", id, tab) : f("pets/p%s/orders/o%s", id, order.getId());
+		// The API's CSRF token, published by the console boundary on allowed requests; absent means the upload form renders without one.
+		var servletReq = req.getHttpServletRequest();
+		var apiCsrf = servletReq.getAttribute(PetstoreApiBoundary.TOKEN_ATTRIBUTE) instanceof String s ? s : null;
 		if (builder(req))
-			return twin(req, PetsPageBuilders.pet(p, tab, nav, order, ConsoleWrites.roles(req)));
+			return twin(req, PetsPageBuilders.pet(p, tab, nav, order, ConsoleWrites.roles(req), apiCsrf));
 		var v = FreemarkerView.of("pet.ftlh").attr("pet", p).attr("tab", tab).attr("activeNav", nav)
 			.attr("pageTitle", p.getName()).attr("roles", ConsoleWrites.roles(req));
+		if (apiCsrf != null)
+			v = v.attr("apiCsrf", apiCsrf);
 		return order == null ? v : v.attr("order", order);
 	}
 

@@ -349,7 +349,7 @@ public class HttpPartList extends ArrayList<HttpPart> {
 	 * Returns an unmodifiable snapshot of this list.
 	 *
 	 * <p>
-	 * D1 idempotency: if this list is already an {@link Unmodifiable} snapshot, it is returned as-is.
+	 * Idempotency: if this list is already an {@link Unmodifiable} snapshot, it is returned as-is.
 	 *
 	 * @return An unmodifiable snapshot of this list, or this list if it is already unmodifiable.
 	 */
@@ -383,7 +383,7 @@ public class HttpPartList extends ArrayList<HttpPart> {
 	 * An unmodifiable snapshot of a {@link HttpPartList}.
 	 *
 	 * <p>
-	 * This is the D4 "collection-mutator-override" variant of the immutability paradigm.  Because {@link HttpPartList}
+	 * This is the "collection-mutator-override" variant of the immutability paradigm.  Because {@link HttpPartList}
 	 * extends {@link ArrayList}, a single funnel cannot intercept the inherited {@code ArrayList} mutators, so this
 	 * subclass snapshot-copies the elements in its constructor and overrides the entire collection-mutator surface — its
 	 * own fluent mutators plus the inherited {@code ArrayList} mutators (including the {@code iterator()} /

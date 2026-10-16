@@ -21,7 +21,7 @@ import java.util.*;
 import org.apache.juneau.marshall.collections.*;
 
 /**
- * Declares one server bridge in the page contract's {@code bridges} list (§11.2).
+ * Declares one server bridge in the page contract's {@code bridges} list.
  *
  * <h5 class='section'>Example:</h5>
  * <p class='bjava'>

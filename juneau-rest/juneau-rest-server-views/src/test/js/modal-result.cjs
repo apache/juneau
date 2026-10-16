@@ -139,9 +139,9 @@ const PROBE = async function () {
 	out.contractMismatch = await settle(resp({ ok: true, status: 200,
 		body: JSON.stringify({ contractVersion: '999', outcome: 'success', row: {} }) }));
 
-	// ---- Non-2xx transport refusal: read X-Loopback-Boundary + {reason,message} envelope ----
+	// ---- Non-2xx transport refusal: read X-Request-Boundary + {reason,message} envelope ----
 	out.transport403 = await settle(resp({ ok: false, status: 403,
-		headers: { 'X-Loopback-Boundary': 'CSRF_TOKEN_MISSING' },
+		headers: { 'X-Request-Boundary': 'CSRF_TOKEN_MISSING' },
 		body: JSON.stringify({ reason: 'CSRF_TOKEN_MISSING', message: 'missing token' }) }));
 
 	out.transport421 = await settle(resp({ ok: false, status: 421, body: '' }));
@@ -215,7 +215,7 @@ const PROBE = async function () {
 				fields: [
 					{ name: 'resolution', label: 'Resolution comment', type: 'textarea', required: true, value: evil },
 					{ name: 'note', label: 'Note', type: 'text', value: 'ok' },
-					{ name: 'skipme', label: 'Bad', type: 'password', value: 'secret' }
+					{ name: 'skipme', label: 'Bad', type: 'radio', value: 'secret' }
 				]
 			},
 			idempotencyKey: 'key-close'

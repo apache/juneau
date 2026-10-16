@@ -124,7 +124,7 @@ class ByteArrayEntity_Test extends TestBase {
 		assertTrue(u.isUnmodifiable());
 		assertInstanceOf(ByteArrayEntity.Unmodifiable.class, u);
 		assertThrows(UnsupportedOperationException.class, () -> u.setChunked(true));
-		// D1 idempotency — already-unmodifiable returns itself.
+		// Idempotency — already-unmodifiable returns itself.
 		assertSame(u, u.unmodifiable());
 	}
 

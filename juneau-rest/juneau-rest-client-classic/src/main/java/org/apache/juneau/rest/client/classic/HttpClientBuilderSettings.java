@@ -29,6 +29,7 @@ import org.apache.http.conn.*;
 import org.apache.http.conn.socket.*;
 import org.apache.http.conn.util.*;
 import org.apache.http.impl.client.*;
+import org.apache.http.protocol.*;
 
 /**
  * The settings of an Apache {@link HttpClientBuilder} that it applies only to the connection manager it builds itself.
@@ -68,7 +69,8 @@ record HttpClientBuilderSettings(
 
 	private static final String[] FIELD_NAMES = { "sslContext", "sslSocketFactory", "hostnameVerifier", "publicSuffixMatcher",
 		"dnsResolver", "defaultSocketConfig", "defaultConnectionConfig", "maxConnTotal", "maxConnPerRoute", "connTimeToLive",
-		"connTimeToLiveTimeUnit", "systemProperties", "requestLast" };
+		"connTimeToLiveTimeUnit", "systemProperties", "requestLast", "requestExec", "httpprocessor",
+		"redirectStrategy" };
 
 	// The fields of HttpClientBuilder, or null if they cannot be read (FIELD_ERROR then says why).
 	private static final Map<String,Field> FIELDS;
@@ -135,6 +137,73 @@ record HttpClientBuilderSettings(
 			return false;
 		List<?> interceptors = get(b, "requestLast");
 		return nn(interceptors) && interceptors.stream().anyMatch(type::isInstance);
+	}
+
+	/**
+	 * Returns whether the fields of {@link HttpClientBuilder} can be read.
+	 *
+	 * @return <jk>false</jk> for an HttpClient release without them, or a JVM that denies reflective access to them.
+	 */
+	static boolean isReadable() {
+		return FIELDS != null;
+	}
+
+	/**
+	 * Returns the request executor set on the builder with
+	 * {@link HttpClientBuilder#setRequestExecutor(HttpRequestExecutor) setRequestExecutor}.
+	 *
+	 * @param b The builder.
+	 * @return The request executor, or <jk>null</jk> if none is set.
+	 * @throws IllegalStateException If the builder's fields cannot be read (see {@link #isReadable()}): replacing an
+	 * 	executor that could not be read would silently drop the caller's.
+	 */
+	static HttpRequestExecutor requestExecutor(HttpClientBuilder b) {
+		return get(requireReadable(b), "requestExec");
+	}
+
+	/**
+	 * Returns whether an {@link HttpProcessor} was set on the builder with
+	 * {@link HttpClientBuilder#setHttpProcessor(HttpProcessor) setHttpProcessor}, which replaces all of the client's
+	 * request and response interceptors.
+	 *
+	 * @param b The builder.
+	 * @return <jk>true</jk> if one is set.
+	 * @throws IllegalStateException If the builder's fields cannot be read (see {@link #isReadable()}).
+	 */
+	static boolean hasHttpProcessor(HttpClientBuilder b) {
+		return nn(get(requireReadable(b), "httpprocessor"));
+	}
+
+	/**
+	 * Returns the request interceptors added to the builder with
+	 * {@link HttpClientBuilder#addInterceptorLast(org.apache.http.HttpRequestInterceptor) addInterceptorLast}, in order.
+	 *
+	 * @param b The builder.
+	 * @return The interceptors (empty if none were added).
+	 * @throws IllegalStateException If the builder's fields cannot be read (see {@link #isReadable()}).
+	 */
+	static List<?> lastRequestInterceptors(HttpClientBuilder b) {
+		List<?> interceptors = get(requireReadable(b), "requestLast");
+		return interceptors == null ? List.of() : interceptors;
+	}
+
+	/**
+	 * Returns the redirect strategy set on the builder with
+	 * {@link HttpClientBuilder#setRedirectStrategy(org.apache.http.client.RedirectStrategy) setRedirectStrategy}.
+	 *
+	 * @param b The builder.
+	 * @return The redirect strategy, or <jk>null</jk> if none is set.
+	 * @throws IllegalStateException If the builder's fields cannot be read (see {@link #isReadable()}).
+	 */
+	static Object redirectStrategy(HttpClientBuilder b) {
+		return get(requireReadable(b), "redirectStrategy");
+	}
+
+	private static HttpClientBuilder requireReadable(HttpClientBuilder b) {
+		if (FIELDS == null)
+			// HTT: see the static initializer.
+			throw isex(FIELD_ERROR, "Cannot read the fields of %s (%s).", HttpClientBuilder.class.getName(), FIELD_ERROR);
+		return b;
 	}
 
 	@SuppressWarnings({

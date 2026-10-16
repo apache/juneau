@@ -238,7 +238,7 @@ public class RestOpInvoker extends MethodInvoker {
 					status = deriveStatus(observed);
 				else {
 					status = res.getStatus();
-					if (status == 0)
+					if (status == 0) // Defensive: a non-container HttpServletResponse may report 0 when unset.
 						status = 200;
 				}
 				try {

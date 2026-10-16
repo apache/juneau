@@ -58,7 +58,7 @@ class OAuthEndpointScheme_Test extends TestBase {
 	}
 
 	// -----------------------------------------------------------------------------------------------------------------
-	// B: OAuthClientCredentialsFlow
+	// OAuthClientCredentialsFlow
 	// -----------------------------------------------------------------------------------------------------------------
 
 	@Test void b01_clientCredentialsFlow_tokenEndpoint_rejectsPlaintextRemote() {
@@ -86,7 +86,7 @@ class OAuthEndpointScheme_Test extends TestBase {
 	}
 
 	// -----------------------------------------------------------------------------------------------------------------
-	// D: McpAuthorizationCodeAcquirer
+	// McpAuthorizationCodeAcquirer
 	// -----------------------------------------------------------------------------------------------------------------
 
 	@Test void d01_acquirer_authorizationEndpoint_rejectsPlaintextRemote() {
@@ -106,7 +106,7 @@ class OAuthEndpointScheme_Test extends TestBase {
 	}
 
 	// -----------------------------------------------------------------------------------------------------------------
-	// E: McpDynamicClientRegistrar shares the same check
+	// McpDynamicClientRegistrar shares the same check
 	// -----------------------------------------------------------------------------------------------------------------
 
 	@Test void e01_registrar_isSecureOrLoopback() {

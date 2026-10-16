@@ -21,8 +21,11 @@ import static org.apache.juneau.BasicTestUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.*;
+import java.util.*;
+import java.util.concurrent.atomic.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.commons.logging.*;
 import org.junit.jupiter.api.*;
 
 class MemoryTerminalSource_Test extends TestBase {
@@ -137,5 +140,69 @@ class MemoryTerminalSource_Test extends TestBase {
 		assertEquals(total, got.length);
 		for (var i = 0; i < total; i++)
 			assertEquals((byte)(i % 251), got[i], "byte " + i);
+	}
+
+	private record Nudged(String id, long end, boolean done) {}
+
+	@Test void a08_nudgeWritePublishesEnd() {
+		var seen = new ArrayList<Nudged>();
+		var s = MemoryTerminalSource.create(1024, 80, 24).nudges("t1", (id, end, done) -> seen.add(new Nudged(id, end, done)));
+		write(s, "12345");
+		write(s, "678");
+		assertEquals(List.of(new Nudged("t1", 5, false), new Nudged("t1", 8, false)), seen);
+	}
+
+	@Test void a09_nudgeFinishPublishesDone() {
+		var seen = new ArrayList<Nudged>();
+		var s = MemoryTerminalSource.create(1024, 80, 24).nudges("t1", (id, end, done) -> seen.add(new Nudged(id, end, done)));
+		write(s, "abcd");
+		s.finish();
+		assertEquals(new Nudged("t1", 4, true), seen.get(seen.size() - 1));
+	}
+
+	@Test void a10_nudgePublisherOutsideLock() {
+		var failure = new AtomicReference<AssertionError>();
+		var self = new AtomicReference<MemoryTerminalSource>();
+		var calls = new AtomicInteger();
+		var s = MemoryTerminalSource.create(1024, 80, 24).nudges("t1", (id, end, done) -> {
+			calls.incrementAndGet();
+			try {
+				assertFalse(Thread.holdsLock(self.get()));
+			} catch (AssertionError e) {
+				failure.set(e);
+			}
+		});
+		self.set(s);
+		write(s, "x");
+		s.finish();
+		assertEquals(2, calls.get());
+		assertNull(failure.get());
+	}
+
+	@Test void a11_nudgeThrowingPublisherSwallowed() {
+		var s = MemoryTerminalSource.create(1024, 80, 24).nudges("t1", (id, end, done) -> { throw new RuntimeException("boom"); });
+		LogRecordCapture.quietly(MemoryTerminalSource.class, () -> {
+			write(s, "abc");
+			s.finish();
+		});
+		assertEquals("abc", text(s.read(0, 100)));
+	}
+
+	@Test void a12_nudgeValidation() {
+		var s = MemoryTerminalSource.create(1024, 80, 24);
+		TerminalNudgePublisher p = (id, end, done) -> {};
+		assertThrows(NullPointerException.class, () -> s.nudges(null, p));
+		assertThrows(NullPointerException.class, () -> s.nudges("t1", null));
+		assertThrows(IllegalArgumentException.class, () -> s.nudges("bad id", p));
+		assertThrows(IllegalArgumentException.class, () -> s.nudges("a".repeat(129), p));
+		assertSame(s, s.nudges("t1", p));
+		assertThrows(IllegalStateException.class, () -> s.nudges("t2", p));
+	}
+
+	@Test void a13_nudgeNoneByDefault() {
+		var s = MemoryTerminalSource.create(8, 80, 24);
+		write(s, "hello");
+		s.finish();
+		assertEquals("hello", text(s.read(0, 100)));
 	}
 }

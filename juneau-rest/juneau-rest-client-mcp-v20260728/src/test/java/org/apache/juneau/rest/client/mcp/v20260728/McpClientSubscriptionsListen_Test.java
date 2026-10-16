@@ -125,7 +125,7 @@ class McpClientSubscriptionsListen_Test extends TestBase {
 		assertEquals("", seenName.get());
 	}
 
-	// M2: McpSubscriptionHandle.id() must return the client-generated JSON-RPC request id sent on the
+	// McpSubscriptionHandle.id() must return the client-generated JSON-RPC request id sent on the
 	// opening subscriptions/listen POST, so callers can correlate the handle against server-side logs/traces.
 	@Test
 	void a01c_handleId_returnsTheClientGeneratedRequestIdSentOnTheOpeningPost() throws Exception {

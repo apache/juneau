@@ -16,8 +16,20 @@
 --><@page tab="ops/jobs" toolkit="views">
 <@card id="restock-help" title="Restocking">
 <div class="jc-prose"><p>Restock adds new available pets to the store as a background job; progress shows here until it finishes.
-Submitting twice from the same dialog runs one job.</p></div>
+Submitting twice from the same dialog runs one job.  Give the card below a wait to see a cancel before anything changes, or a longer hold to see one after.</p></div>
 </@card>
+<@card type="job-log" id="restock" title="Restock inventory">{
+  submit: {
+    endpoint: '/console/ops/jobs/restock',
+    submitLabel: 'Restock',
+    fields: [
+      { name: 'DOG', label: 'Dogs (0-50)', type: 'number', default: 1 },
+      { name: 'slowMs', label: 'Wait before restocking (ms, 0-10000)', type: 'number', default: 0 },
+      { name: 'holdMs', label: 'Hold after restocking (ms, 0-10000)', type: 'number', default: 1000 }
+    ]
+  },
+  urlParam: 'job'
+}</@card>
 <@card type="datatables" id="jobs">{
   dataMode: 'client',
   dataUrl: '/console/ops/jobs/rows',
@@ -33,27 +45,20 @@ Submitting twice from the same dialog runs one job.</p></div>
     { type: 'refresh', id: 'refresh' }
   ]
 }</@card>
-<@card type="console-output" id="groom-output" title="Groom run">
+<@card type="terminal" id="groom-output" title="Groom run">
 {
   contractVersion: '1',
-  output: {
-    linesUrl: '${groomLinesUrl?json_string?no_esc}',
-    downloadUrl: '${groomDownloadUrl?json_string?no_esc}',
-    tail: 5000,
-    rows: 24,
-    anchorPrefix: 'groom-L',
-    markers: 'dim',
+  terminal: {
+    bytesUrl: '${groomBytesUrl?json_string?no_esc}',
     title: 'Groom log'
   }
 }
 </@card>
-<@card type="console-output" id="groom-file" title="Groom transcript (file)">
+<@card type="terminal" id="groom-file" title="Groom transcript (file)">
 {
   contractVersion: '1',
-  output: {
-    linesUrl: '${groomFileLinesUrl?json_string?no_esc}',
-    downloadUrl: '${groomFileDownloadUrl?json_string?no_esc}',
-    rows: 12,
+  terminal: {
+    bytesUrl: '${groomFileBytesUrl?json_string?no_esc}',
     title: 'Transcript file'
   }
 }
@@ -67,10 +72,6 @@ Submitting twice from the same dialog runs one job.</p></div>
     { key: 'state', label: 'State', render: { id: 'pill' } },
     { key: 'lines', label: 'Lines' }
   ],
-  detail: {
-    endpoint: '/console/ops/jobs/groom-runs/{id}',
-    region: { id: 'output', type: 'row-detail', populate: 'console-output', lazy: false, params: ${groomDetailParams?no_esc} }
-  },
   ribbon: [
     { type: 'dialog', id: 'groom', title: 'Groom', endpoint: '/console/ops/jobs/groom', method: 'POST', form: '/console/ops/jobs/groom-form' },
     { type: 'refresh', id: 'groom-refresh' }

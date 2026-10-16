@@ -28,17 +28,17 @@
  * The submit graph has NINE mutually-exclusive terminals, so this harness walks them one case per terminal and
  * checks the DISPOSITION each one settles to, plus the two enforcement properties that hold across all of them:
  *
- *   1. T8-receipt   - success + resultForm on a held dialog: swap in place, same layer depth, no submit controls.
- *   2. T8-commit    - success with NO resultForm: whole-stack close, and the row banner still renders.
- *   3. F4           - success + resultForm on an UN-held dialog: success banner unchanged, plus one role=status
+ *   1. receipt       - success + resultForm on a held dialog: swap in place, same layer depth, no submit controls.
+ *   2. commit        - success with NO resultForm: whole-stack close, and the row banner still renders.
+ *   3. result form  - success + resultForm on an UN-held dialog: success banner unchanged, plus one role=status
  *                     diagnostic.  Never a new layer, never a refusal.
- *   4. F1c          - the receipt payload carries a `form`: refused VISIBLY with its own wording, terminal.
- *   5. F12          - the receipt GET fails (non-2xx / unparseable / REJECTED promise): terminal, Close-only, and
+ *   4. form payload  - the receipt payload carries a `form`: refused VISIBLY with its own wording, terminal.
+ *   5. receipt GET   - the receipt GET fails (non-2xx / unparseable / REJECTED promise): terminal, Close-only, and
  *                     the busy marker cleared - a committed write must never leave a permanently stuck modal.
- *   6. T1           - a pre-flight client refusal (nothing sent): retryable, Confirm re-enabled.
- *   7. T2           - a network reject (ambiguous): terminal, Confirm NOT re-enabled, no one-click duplicate.
- *   8. T4           - a transport refusal (a gate said no, nothing written): retryable.
- *   9. T5           - a job-started pointer: the dialog closes BEFORE the row-anchored progress affordance paints.
+ *   6. client refusal - a pre-flight client refusal (nothing sent): retryable, Confirm re-enabled.
+ *   7. network reject - a network reject (ambiguous): terminal, Confirm NOT re-enabled, no one-click duplicate.
+ *   8. transport refusal - a transport refusal (a gate said no, nothing written): retryable.
+ *   9. job pointer   - a job-started pointer: the dialog closes BEFORE the row-anchored progress affordance paints.
  *  10. Cancel       - the operator dismissed the dialog mid-flight: the outcome falls back to the row banner.
  *  11. Field kinds  - `code` paints a <pre> + copy button; an unrecognized kind falls back to text.
  *
@@ -171,7 +171,7 @@ const success = (extra) => () => Promise.resolve(jsonResponse({ outcome: 'succes
 
 (async function main() { // NOSONAR javascript:S3776 -- linear test scenario; complexity is inherent
 
-	// --- 1) T8-receipt: the swap.  Same layer, no submit controls, the submitted form torn down ---------------
+	// --- 1) receipt: the swap.  Same layer, no submit controls, the submitted form torn down ---------------
 	{
 		const r = await openAndConfirm({
 			keepOpen: true,
@@ -210,7 +210,7 @@ const success = (extra) => () => Promise.resolve(jsonResponse({ outcome: 'succes
 		out.receipt_closeTearsDownTheStack = r.I.dialogLayerCount() === 0;
 	}
 
-	// --- 2) T8-commit: a held success with NO resultForm closes, and the row banner STILL renders -------------
+	// --- 2) commit: a held success with NO resultForm closes, and the row banner STILL renders -------------
 	{
 		const r = await openAndConfirm({ keepOpen: true, submit: success({ message: 'done' }) });
 		const env = r.env;
@@ -222,7 +222,7 @@ const success = (extra) => () => Promise.resolve(jsonResponse({ outcome: 'succes
 		out.commit_noReceipt = env.body.querySelector('[data-juneau-receipt]') === null;
 	}
 
-	// --- 3) F4: an UN-held success carrying a resultForm - diagnose, never open a layer ----------------------
+	// --- 3) an UN-held success carrying a resultForm - diagnose, never open a layer ----------------------
 	{
 		let receiptGets = 0;
 		const r = await openAndConfirm({
@@ -259,7 +259,7 @@ const success = (extra) => () => Promise.resolve(jsonResponse({ outcome: 'succes
 		out.f1c_busyCleared = dialogEl(env).dataset.juneauDialogBusy === undefined;
 	}
 
-	// --- 5a) F12: the receipt GET returns a non-2xx --------------------------------------------------------
+	// --- 5a) the receipt GET returns a non-2xx --------------------------------------------------------
 	{
 		const r = await openAndConfirm({
 			keepOpen: true,
@@ -274,7 +274,7 @@ const success = (extra) => () => Promise.resolve(jsonResponse({ outcome: 'succes
 		out.f12_submittedFormTornDown = env.body.querySelector('.juneau-view-dialog-form') === null;
 	}
 
-	// --- 5b) F12: the receipt GET PROMISE REJECTS - the arm without which a committed write hangs forever ---
+	// --- 5b) the receipt GET PROMISE REJECTS - the arm without which a committed write hangs forever ---
 	{
 		const r = await openAndConfirm({
 			keepOpen: true,
@@ -289,7 +289,7 @@ const success = (extra) => () => Promise.resolve(jsonResponse({ outcome: 'succes
 		out.f12reject_noConfirmStuckDisabled = confirmBtn(env) === null;
 	}
 
-	// --- 5c) F12: the receipt GET returns 2xx that does not parse ------------------------------------------
+	// --- 5c) the receipt GET returns 2xx that does not parse ------------------------------------------
 	{
 		const r = await openAndConfirm({
 			keepOpen: true,
@@ -302,7 +302,8 @@ const success = (extra) => () => Promise.resolve(jsonResponse({ outcome: 'succes
 		out.f12parse_notPaintedAsReceipt = env.body.querySelector('[data-juneau-receipt]') === null;
 	}
 
-	// --- 6) T1: a pre-flight client refusal (no CSRF token) is RETRYABLE ----------------------------------
+	// --- 6) client refusal: a pre-flight client refusal (no CSRF token) is RETRYABLE
+	// ----------------------------------
 	{
 		let posts = 0;
 		const r = await openAndConfirm({
@@ -321,7 +322,8 @@ const success = (extra) => () => Promise.resolve(jsonResponse({ outcome: 'succes
 		out.t1_formStillStanding = env.body.querySelector('.juneau-view-dialog-form') != null;
 	}
 
-	// --- 7) T2: a network reject is AMBIGUOUS - terminal, and Confirm must NOT come back ------------------
+	// --- 7) network reject: a network reject is AMBIGUOUS - terminal, and Confirm must NOT come back
+	// ------------------
 	{
 		const r = await openAndConfirm({
 			keepOpen: true,
@@ -340,7 +342,8 @@ const success = (extra) => () => Promise.resolve(jsonResponse({ outcome: 'succes
 		out.t2_noRowBanner = !anyRowBanner(env);
 	}
 
-	// --- 8) T4: a transport refusal is a gate saying no - nothing written, so RETRYABLE -------------------
+	// --- 8) transport refusal: a transport refusal is a gate saying no - nothing written, so RETRYABLE
+	// -------------------
 	{
 		const r = await openAndConfirm({
 			keepOpen: true,
@@ -354,7 +357,7 @@ const success = (extra) => () => Promise.resolve(jsonResponse({ outcome: 'succes
 		out.t4_busyCleared = dialogEl(env).dataset.juneauDialogBusy === undefined;
 	}
 
-	// --- 9) T8-failure / T8-refusal: the two remaining dispositions of the typed-outcome terminal --------
+	// --- 9) failure / refusal: the two remaining dispositions of the typed-outcome terminal --------
 	{
 		const r = await openAndConfirm({
 			keepOpen: true,
@@ -367,7 +370,7 @@ const success = (extra) => () => Promise.resolve(jsonResponse({ outcome: 'succes
 		out.t8fail_noticePresent = heldNotice(env) != null;
 	}
 	{
-		// F11: a named refusal did not write, so Confirm comes back.
+		// a named refusal did not write, so Confirm comes back.
 		const r = await openAndConfirm({
 			keepOpen: true,
 			submit: () => Promise.resolve(jsonResponse({ outcome: 'refusal', refusalCode: 'write-guard:not-armed' }))
@@ -393,7 +396,7 @@ const success = (extra) => () => Promise.resolve(jsonResponse({ outcome: 'succes
 		out.failResultForm_noDiagnostic = q(env, '[data-testid="result-form-ignored"]') === null;
 	}
 
-	// --- 11) T5: a job pointer closes the dialog BEFORE the row-anchored progress affordance paints -------
+	// --- 11) job pointer: a job pointer closes the dialog BEFORE the row-anchored progress affordance paints -------
 	{
 		const r = await openAndConfirm({
 			keepOpen: true,

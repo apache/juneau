@@ -75,6 +75,44 @@ class ThemesRest_Test extends TestBase {
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
+	// d - nameless <@theme> inherits the page theme (J0795)
+	//-----------------------------------------------------------------------------------------------------------------
+
+	private static void assertCustomThemeInherited(String html) {
+		assertPage(html).isValid().hasTheme("light-brown");
+		assertEquals(1, count(html, "juneau-theme-light-brown.css"), () -> html);
+		assertNotContains(() -> "nameless <@theme> must not raise a theme error", "E-B4", html);
+		assertNotContains(() -> "nameless <@theme> must not conflict with the page theme", "conflicts", html);
+		assertContainsAll(html, "--jc-pill-red-bg:#fdeceb", "--jc-tab-bar-bg:var(--jc-card-bg)", "#d9a65c");
+	}
+
+	private static int count(String s, String t) {
+		var n = 0;
+		for (var i = s.indexOf(t); i >= 0; i = s.indexOf(t, i + t.length()))
+			n++;
+		return n;
+	}
+
+	@Test void d01_customThemeSeedsFromThePageThemeAndAppliesOverrides() throws Exception {
+		assertCustomThemeInherited(page(client(), "/console/dev/themes?theme=custom"));
+	}
+
+	@Test void d02_builderTwinRendersTheSameCustomTheme() throws Exception {
+		assertCustomThemeInherited(page(client(), "/console/dev/themes?theme=custom&builder"));
+	}
+
+	@Test void d03_stockThemeStaysStockWithNoCustomTokens() throws Exception {
+		for (var suffix : new String[]{"", "&builder"}) {
+			var html = page(client(), "/console/dev/themes?theme=gray" + suffix);
+			assertPage(html).isValid().hasTheme("gray");
+			assertContains("juneau-theme-gray.css", html);
+			assertNotContains(() -> "gray must not carry the light-brown seed", "juneau-theme-light-brown.css", html);
+			assertNotContains(() -> "gray must not carry the custom tokens", "--jc-pill-red-bg:#fdeceb", html);
+			assertNotContains(() -> "gray must not carry the custom tokens", "--jc-tab-bar-bg:var(--jc-card-bg)", html);
+		}
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
 	// c - validation and scope
 	//-----------------------------------------------------------------------------------------------------------------
 

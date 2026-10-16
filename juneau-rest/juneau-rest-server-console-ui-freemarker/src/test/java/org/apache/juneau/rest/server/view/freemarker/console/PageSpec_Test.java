@@ -204,4 +204,20 @@ class PageSpec_Test extends TestBase {
 			assertEquals("extra", fleet.children().get(0).id());
 		}
 	}
+
+	@Test void a27_scheme_unknown_rejected() {
+		var ex = assertThrows(IllegalArgumentException.class, () -> PageSpec.create().scheme("dim"));
+		assertEquals("Unknown scheme 'dim'.  Schemes: auto, light, dark.", ex.getMessage());
+	}
+
+	@Test void a28_scheme_andToggle_seedTheCapture() throws Exception {
+		var cap = new PageCapture();
+		PageSpec.create().scheme("dark").schemeToggle(true).applyTo(cap, null);
+		assertEquals("dark", cap.scheme());
+		assertTrue(cap.schemeToggle());
+		var none = new PageCapture();
+		PageSpec.create().applyTo(none, null);
+		assertNull(none.scheme());
+		assertFalse(none.schemeToggle());
+	}
 }

@@ -23,7 +23,7 @@ import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
 
 /**
- * {@code jcHasToolkit(name)} (spec §4.5): whether the current {@code <@page toolkit=…>} list contains {@code name}.
+ * {@code jcHasToolkit(name)}: whether the current {@code <@page toolkit=…>} list contains {@code name}.
  *
  * @since 10.0.0
  */

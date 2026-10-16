@@ -44,12 +44,32 @@ class Harness_BrowserTest extends TestBase {
 		var base = PetstoreTestServer.awaitReady(server);
 		report = run("harness", base, List.of(
 			Map.of("name", "store", "path", "/console/store",
-				"queries", Map.of("title", "document.title", "pages", "document.querySelectorAll('#juneau-page').length"))));
+				"queries", Map.of("title", "document.title", "pages", "document.querySelectorAll('#juneau-page').length")),
+			Map.of("name", "actions", "path", "/console/about", "viewport", List.of(800, 600), "waitUntil", "load",
+				"initScript", "window.__init = (window.__init || 0) + 1;",
+				"actions", List.of(
+					// The nav badge polls on every page; a reload that lands mid-fetch aborts it and logs E-JS-65 'Failed to fetch'.
+					// A 'load' case therefore waits for the badge's fetch to finish before it navigates away.
+					Map.of("waitFor", "performance.getEntriesByType('resource').some(r => r.name.includes('/changes/pending') && r.responseEnd > 0)"),
+					Map.of("evaluate", "sessionStorage.setItem('h', '1')"),
+					Map.of("reload", true),
+					Map.of("goto", "/console/about?x=1"),
+					Map.of("follow", "location.origin + '/console/about?y=2'")),
+				"queries", Map.of("width", "window.innerWidth", "init", "window.__init", "search", "location.search",
+					"kept", "sessionStorage.getItem('h')"))));
 	}
 
 	@Test void a01_storeLoadsCleanly() {
 		var c = assertClean(report, "store");
 		assertString("1", String.valueOf(query(c, "pages")));
 		assertContains("Juneau Petstore", query(c, "title"));
+	}
+
+	@Test void a02_caseKeysAndNavigationActions() {
+		var c = assertClean(report, "actions");
+		assertString("800", String.valueOf(query(c, "width")));
+		assertString("1", String.valueOf(query(c, "init")));   // the init script ran again in the new document
+		assertString("?y=2", query(c, "search"));
+		assertString("1", query(c, "kept"));   // reload, goto and follow stay in the case's one context
 	}
 }

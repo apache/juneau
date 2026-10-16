@@ -16,8 +16,8 @@
  */
 
 /*
- * view-settings-restore.cjs - always-on Node harness for Gap 1: persisted View Settings (page-state store) are
- * applied to the LIVE grid at construction time, in both client and server data modes.
+ * view-settings-restore.cjs - always-on Node harness for restoring persisted View Settings (page-state store):
+ * they are applied to the LIVE grid at construction time, in both client and server data modes.
  *
  * Regression for the JRM e2e "hidden column comes back after reload": initTableFromDef's go() consulted only the
  * named-saved-view path, never the View Settings blob written by every dialog Apply, so a reload re-rendered the
@@ -143,7 +143,7 @@ const STAGE_HIDDEN = {
 	out.stale_columns = colInfo(stale.captured.opts);
 	out.stale_reset = stale.table.__juneauCtx._lastAppliedViewSettings.reset;
 	out.stale_blobRemoved = stale.NS.pageState.table('rel').get('viewSettings') == null;
-	// Options facet drives auto-refresh wiring at construction (Gap 7).
+	// Options facet drives auto-refresh wiring at construction.
 	const auto = await reload('server', {
 		...STAGE_HIDDEN,
 		options: { pageSize: 25, wrap: false, density: 'comfortable', autoRefreshMs: 30000 }

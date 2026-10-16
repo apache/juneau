@@ -20,6 +20,7 @@ import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.rest.server.view.freemarker.console.ToolkitPack.Kind.*;
 
 import java.util.*;
+import java.util.function.Function;
 import java.util.logging.*;
 
 import org.apache.juneau.rest.server.*;
@@ -42,7 +43,7 @@ import org.apache.juneau.rest.server.widgets.*;
  * 		({@link ViewsMixin#DATATABLES_JS_PATH}, served by {@code DataTablesMixin}); depends on {@code "datatables"}.
  * 		Every {@code <@card type="datatables">} requires it.
  * 	<li>{@code "views"} ({@link ToolkitPack.Kind#RUNTIME}) &mdash; the views runtime.  JS order is a contract: bus (first), renders,
- * 		icons, search, pagestate, urlstate, ribbon, views, config, regions, console-output, run-view, helpers.
+ * 		icons, search, pagestate, urlstate, ribbon, views, config, regions, run-view, helpers.
  * 		{@code juneau-urlstate.js} must precede {@code juneau-views.js} / {@code juneau-config.js}.
  * 	<li>{@code "calendar"} ({@link ToolkitPack.Kind#RUNTIME}) &mdash; the {@code juneau-calendar.*} runtime from
  * 		{@code juneau-rest-server-widgets}, resolved through {@link #WIDGETS_RESOLVER}.
@@ -54,9 +55,16 @@ import org.apache.juneau.rest.server.widgets.*;
  * 		with a terminal card needs no {@code toolkit=}.
  * 	<li>{@code "charts"} ({@link ToolkitPack.Kind#RUNTIME}) &mdash; {@code juneau-charts.js} from
  * 		{@code juneau-rest-server-console-ui}, resolved through {@link ConsoleChromeMixin#consoleAssetUrl(RestRequest, String)};
- * 		no dependencies.  Every {@code <@card type="chart">} requires it.
+ * 		depends on {@code "echarts"} and {@code "data"}.  Every {@code <@card type="chart">} requires it.
  * 	<li>{@code "joblog"} ({@link ToolkitPack.Kind#RUNTIME}) &mdash; {@code juneau-joblog.js} from
  * 		{@code juneau-rest-server-console-ui}; no dependencies.  Every {@code <@card type="job-log">} requires it.
+ * 	<li>{@code "echarts"} ({@link ToolkitPack.Kind#VENDOR}) &mdash; the ECharts WebJar ({@link #ECHARTS_JS_ASSET}),
+ * 		optional on the classpath: a missing jar is E-70 at startup when the app opts in
+ * 		({@code ConsoleFreemarkerMixin.Builder.requirePacks}), else at the first chart page.
+ * 	<li>{@code "echarts-gl"} ({@link ToolkitPack.Kind#VENDOR}) &mdash; the echarts-gl WebJar; depends on {@code "echarts"};
+ * 		a page opts in with {@code toolkit("echarts-gl")}.
+ * 	<li>{@code "data"} ({@link ToolkitPack.Kind#RUNTIME}) &mdash; {@code juneau-data.js} ({@code JuneauViews.data}); depends on
+ * 		{@code "views"}.
  * </ul>
  *
  * <p>
@@ -101,13 +109,39 @@ public final class ToolkitPackRegistry {
 	/** The built-in terminal runtime pack; depends on {@code "views"} and {@code "xterm"}. */
 	public static final String PACK_TERMINAL = "terminal";
 
-	/** The built-in chart-card runtime pack ({@code juneau-charts.js}); no dependencies. */
+	/** The built-in chart-card runtime pack ({@code juneau-charts.js}); depends on {@code "echarts"} and {@code "data"}. */
 	public static final String PACK_CHARTS = "charts";
 
 	/** The built-in job-log card runtime pack ({@code juneau-joblog.js}); no dependencies. */
 	public static final String PACK_JOBLOG = "joblog";
 
+	/** Dashboard chrome ({@code PageSpec.dashboard}); added by the builder, never needed in {@code toolkit(...)}. */
+	public static final String PACK_DASHBOARD = "dashboard";
+
+	/** The built-in ECharts WebJar pack ({@code org.webjars.npm:echarts}, optional on the classpath). */
+	public static final String PACK_ECHARTS = "echarts";
+
+	/** The built-in echarts-gl WebJar pack; depends on {@code "echarts"}; never required by a card type. */
+	public static final String PACK_ECHARTS_GL = "echarts-gl";
+
+	/** The built-in DataRegistry runtime pack ({@code juneau-data.js}); depends on {@code "views"}. */
+	public static final String PACK_DATA = "data";
+
 	private static final String NPM = "org.webjars.npm";
+
+	/** The ECharts library asset id, for {@link #WEBJAR_RESOLVER}. */
+	public static final String ECHARTS_JS_ASSET = WebJarResolver.asset(NPM, "echarts", "echarts/{version}/dist/echarts.min.js");
+
+	/** The echarts-gl library asset id (path unverified against the WebJar; no module depends on it). */
+	public static final String ECHARTS_GL_JS_ASSET = WebJarResolver.asset(NPM, "echarts-gl", "echarts-gl/{version}/dist/echarts-gl.min.js");
+
+	static final String E70 = "chart cards need the ECharts WebJar org.webjars.npm:echarts, which is not on the classpath; add it to the application's pom (version property 'webjars-echarts.version')";
+	static final String E70_PACK = "toolkit pack '%s' needs the WebJar %s, which is not on the classpath; add it to the application's pom (version property '%s')";
+
+	// groupId:artifactId -> the version property the message names.
+	// echarts is not listed: it has its own message (E70) in webJarMissing.
+	private static final Map<String,String> WEBJAR_PROPERTIES = Map.of(
+		NPM + ":echarts-gl", "webjars-echarts-gl.version");
 
 	/** Resolves an asset path to an absolute, cache-busted URL against the in-flight request. */
 	@FunctionalInterface
@@ -180,7 +214,6 @@ public final class ToolkitPackRegistry {
 				ViewsMixin.VIEWS_JS_PATH,
 				ViewsMixin.CONFIG_JS_PATH,
 				ViewsMixin.REGIONS_JS_PATH,
-				ViewsMixin.CONSOLE_OUTPUT_JS_PATH,
 				ViewsMixin.RUN_VIEW_JS_PATH,
 				ViewsMixin.HELPERS_JS_PATH)
 			.build());
@@ -200,11 +233,27 @@ public final class ToolkitPackRegistry {
 			.js(TerminalMixin.JS_PATH)
 			.dependsOn(PACK_VIEWS, PACK_XTERM)
 			.build());
+		register(ToolkitPack.create(PACK_ECHARTS).kind(VENDOR).resolver(WEBJAR_RESOLVER)
+			.js(ECHARTS_JS_ASSET)
+			.build());
+		register(ToolkitPack.create(PACK_ECHARTS_GL).kind(VENDOR).resolver(WEBJAR_RESOLVER)
+			.js(ECHARTS_GL_JS_ASSET)
+			.dependsOn(PACK_ECHARTS)
+			.build());
+		register(ToolkitPack.create(PACK_DATA).kind(RUNTIME).resolver(VIEWS_RESOLVER)
+			.js(ViewsMixin.DATA_JS_PATH)
+			.dependsOn(PACK_VIEWS)
+			.build());
 		register(ToolkitPack.create(PACK_CHARTS).kind(RUNTIME).resolver(ConsoleChromeMixin::consoleAssetUrl)
 			.js(ConsoleChromeMixin.CHARTS_JS_PATH)
+			.dependsOn(PACK_ECHARTS, PACK_DATA)
 			.build());
 		register(ToolkitPack.create(PACK_JOBLOG).kind(RUNTIME).resolver(ConsoleChromeMixin::consoleAssetUrl)
 			.js(ConsoleChromeMixin.JOBLOG_JS_PATH)
+			.build());
+		register(ToolkitPack.create(PACK_DASHBOARD).kind(RUNTIME).resolver(ConsoleChromeMixin::consoleAssetUrl)
+			.js(ConsoleChromeMixin.DASHBOARD_JS_PATH)
+			.dependsOn(PACK_VIEWS, PACK_DATA)
 			.build());
 	}
 
@@ -274,6 +323,67 @@ public final class ToolkitPackRegistry {
 	}
 
 	/**
+	 * @param root A registered pack name.
+	 * @param target A pack name.
+	 * @return <jk>true</jk> if {@code target} is {@code root} or one of its transitive {@code dependsOn}.
+	 */
+	public synchronized boolean reaches(String root, String target) {
+		return expand(List.of(root), "reaches").stream().anyMatch(p -> p.name().equals(target));
+	}
+
+	/**
+	 * Probes, at startup, every WebJar the given packs reach: each non-provided VENDOR pack resolved through
+	 * {@link #WEBJAR_RESOLVER}.
+	 *
+	 * @param roots Root pack names; empty probes nothing.
+	 * @return This object.
+	 * @throws IllegalStateException E-70 when a WebJar or its file is not on the classpath.
+	 */
+	public ToolkitPackRegistry checkWebJars(Collection<String> roots) {
+		return checkWebJars(roots, WebJarResolver::resolvePath);
+	}
+
+	// Package-private: the probe is injectable because the echarts jar is on every test classpath.
+	synchronized ToolkitPackRegistry checkWebJars(Collection<String> roots, Function<String,String> probe) {
+		for (var pack : expand(new LinkedHashSet<>(roots), "requirePacks")) {
+			if (provided.contains(pack.name()) || pack.kind() != VENDOR || pack.resolver() != WEBJAR_RESOLVER)
+				continue;
+			for (var asset : concat(pack.cssPaths(), pack.jsPaths())) {
+				try {
+					probe.apply(asset);
+				} catch (IllegalStateException e) {
+					var x = webJarMissing(pack, asset, e);
+					throw x != null ? x : new IllegalStateException("Pack '" + pack.name() + "' " + e.getMessage(), e);
+				}
+			}
+		}
+		return this;
+	}
+
+	private static List<String> concat(List<String> a, List<String> b) {
+		var out = new ArrayList<String>(a);
+		out.addAll(b);
+		return out;
+	}
+
+	// Distinguishes "jar absent" from "jar present, file missing" (the resolver's own message says which).
+	private static String causeSuffix(RuntimeException cause) {
+		return nn(cause.getMessage()) ? " [" + cause.getMessage() + "]" : "";
+	}
+
+	// E-70 for a WebJar the message table knows; null when the asset is not a known WebJar.
+	private static IllegalStateException webJarMissing(ToolkitPack pack, String asset, RuntimeException cause) {
+		var parts = asset.split(":", 3);
+		var coords = parts.length == 3 ? parts[0] + ":" + parts[1] : asset;
+		if (eq(coords, NPM + ":echarts"))
+			return new IllegalStateException("E-70: " + E70 + causeSuffix(cause), cause);
+		var prop = WEBJAR_PROPERTIES.get(coords);
+		if (prop == null)
+			return null;
+		return new IllegalStateException("E-70: " + f(E70_PACK, pack.name(), coords, prop) + causeSuffix(cause), cause);
+	}
+
+	/**
 	 * Resolves the root packs and their dependencies to absolute URLs, split by kind.
 	 *
 	 * @param names The root pack names, in order.  Empty or <jk>null</jk> = nothing (no request needed).
@@ -336,7 +446,8 @@ public final class ToolkitPackRegistry {
 			try {
 				url = pack.resolver().resolve(req, path);
 			} catch (IllegalStateException | IllegalArgumentException e) {
-				throw new IllegalStateException("Pack '" + pack.name() + "' " + e.getMessage(), e);
+				var x = e instanceof IllegalStateException ? webJarMissing(pack, path, e) : null;
+				throw x != null ? x : new IllegalStateException("Pack '" + pack.name() + "' " + e.getMessage(), e);
 			}
 			var dup = pageFiles.get(fileName(url));
 			if (nn(dup)) {

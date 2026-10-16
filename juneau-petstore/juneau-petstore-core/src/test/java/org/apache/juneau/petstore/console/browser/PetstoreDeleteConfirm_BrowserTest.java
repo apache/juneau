@@ -45,6 +45,11 @@ class PetstoreDeleteConfirm_BrowserTest extends TestBase {
 
 	private static Map<String,Map<String,Object>> report;
 
+	/** JS: some row in {@code body} has a cell whose text is exactly the quoted name (so "Rex 10" never matches "Rex 100"). */
+	private static String rowWithName(String body) {
+		return "Array.from(document.querySelectorAll('" + body + " tbody tr')).some(tr => Array.from(tr.cells).some(td => td.textContent.trim() === window.__name))";
+	}
+
 	private static Map<String,Object> wait(String js) {
 		return Map.of("waitFor", js, "timeoutMs", 5000);
 	}
@@ -57,10 +62,6 @@ class PetstoreDeleteConfirm_BrowserTest extends TestBase {
 		var body = "#" + page + "-body";
 		var actions = new ArrayList<Map<String,Object>>();
 		actions.add(wait("document.querySelector('" + body + " .juneau-view-action-trigger')"));
-		// HTT: petstore pages carry no CSRF token (see PetstoreCoverage_Test), and the toolkit refuses a write without
-		// one before anything is sent.  Planting one on the table lets Confirm actually send, so Cancel's "nothing sent"
-		// is a real observation rather than a by-product of that refusal.
-		actions.add(Map.of("evaluate", "document.querySelectorAll('" + body + " table[data-juneau-view]').forEach(t => t.setAttribute('data-juneau-csrf', 'test-token'))"));
 		actions.add(Map.of("click", body + " .juneau-view-action-trigger"));
 		actions.add(Map.of("click", ".juneau-view-action-item[data-action-id=delete]"));
 		actions.add(wait("document.querySelector('" + TITLE + "')"));
@@ -69,10 +70,10 @@ class PetstoreDeleteConfirm_BrowserTest extends TestBase {
 		actions.add(Map.of("click", DLG + " .juneau-view-dialog-" + button));
 		actions.add(wait(NO_DLG));
 		if (button.equals("confirm"))
-			actions.add(wait("!Array.from(document.querySelectorAll('" + body + " tbody tr')).some(tr => tr.textContent.includes(window.__name))"));
+			actions.add(wait("!" + rowWithName(body)));
 		return Map.of("name", name, "path", "/console/" + page, "capture", "/console/" + page + "/", "actions", actions,
 			"queries", Map.of("title", "window.__title", "name", "window.__name",
-				"rowStill", "Array.from(document.querySelectorAll('" + body + " tbody tr')).some(tr => tr.textContent.includes(window.__name))"));
+				"rowStill", rowWithName(body)));
 	}
 
 	@BeforeAll

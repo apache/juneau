@@ -22,7 +22,7 @@ import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
 
 /**
- * {@link MenuItem} factory matrix: link / safe require a unique id; {@link MenuItem#divider()} is id-exempt (S3).
+ * {@link MenuItem} factory matrix: link / safe require a unique id; {@link MenuItem#divider()} is id-exempt.
  */
 class MenuItem_Test extends TestBase {
 

@@ -16,7 +16,7 @@
 --><@page tab="dev/themes">
 <@card id="swatches" title="This theme">
 <div class="jc-prose">
-<p>The page is drawn in <strong>${petstoreTheme!"open"}</strong><#if petstoreCustomTheme!false>, with two custom tokens</#if>.</p>
+<p>The page is drawn in <strong>${petstoreTheme!"open"}</strong><#if petstoreCustomTheme!false>, with custom tokens</#if>.</p>
 <p>
 <span class="tag stage released">Available</span>
 <span class="tag stage pending">Pending</span>
@@ -33,11 +33,12 @@
 </@card>
 <@card id="authoring" title="Writing a custom theme">
 <div class="jc-prose">
-<p>Seed from a stock theme and override tokens. A <code>value</code> sets a token; an <code>alias</code> makes it
-follow another token.</p>
-<pre><code>&lt;@theme name="light-brown"&gt;
+<p>Seed from the page theme and override tokens. A <code>value</code> sets a token; an <code>alias</code> makes it
+follow another token. Add <code>scheme="dark"</code> to set a token for the dark scheme only.</p>
+<pre><code>&lt;@theme&gt;
 &lt;@token name="--jc-pill-red-bg" value="#fdeceb"/&gt;
 &lt;@token name="--jc-tab-bar-bg" alias="var(--jc-card-bg)"/&gt;
+&lt;@token name="--jc-link" value="#d9a65c" scheme="dark"/&gt;
 &lt;/@theme&gt;</code></pre>
 </div>
 </@card>

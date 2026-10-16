@@ -28,13 +28,13 @@ import org.junit.jupiter.params.*;
 import org.junit.jupiter.params.provider.*;
 
 /**
- * Always-on source-shape coverage for {@code juneau-config.js} (slice 2): the client-side async
+ * Always-on source-shape coverage for {@code juneau-config.js}: the client-side async
  * persistence SPI, the strict localStorage key codec, and the first-party localStorage persistence provider.
  *
  * <p>
  * Mirrors {@link ViewsJs_RowActions_Test}'s served-script substring style, but reads the asset straight off the
  * classpath ({@link #CONFIG_JS_RESOURCE}) so the persistence SPI can be pinned without going through a mixin route.
- * {@link ViewsMixin} now serves the same bytes at {@link ViewsMixin#CONFIG_JS_PATH} (slice 6).  Behavioral
+ * {@link ViewsMixin} now serves the same bytes at {@link ViewsMixin#CONFIG_JS_PATH}.  Behavioral
  * (real-DOM/localStorage) proof of this contract lives in the opt-in {@code ConfigPersistence_BrowserTest}
  * canary.
  */
@@ -43,7 +43,7 @@ import org.junit.jupiter.params.provider.*;
 })
 class ViewsJs_ConfigPersistence_Test extends TestBase {
 
-	/** Classpath location of the shipped slice-2 persistence layer (mirrors {@code ViewsMixin}'s *_JS_RESOURCE constants). */
+	/** Classpath location of the shipped persistence layer (mirrors {@code ViewsMixin}'s *_JS_RESOURCE constants). */
 	static final String CONFIG_JS_RESOURCE = "/org/apache/juneau/views/juneau-config.js";
 
 	private static String configJs() throws IOException {
@@ -111,7 +111,7 @@ class ViewsJs_ConfigPersistence_Test extends TestBase {
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
-	// b) Key grammar + enc/dec codec (§3.1)
+	// b) Key grammar + enc/dec codec
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Test void b01_encSegment_usesUppercasePercentEncoding_notEncodeURIComponent() throws Exception {
@@ -162,7 +162,7 @@ class ViewsJs_ConfigPersistence_Test extends TestBase {
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
-	// c) pageId/viewId resolution (§3.1) - cross-checked against the server-side marker constants
+	// c) pageId/viewId resolution - cross-checked against the server-side marker constants
 	//------------------------------------------------------------------------------------------------------------------
 
 	/**
@@ -214,7 +214,7 @@ class ViewsJs_ConfigPersistence_Test extends TestBase {
 	// alongside four other structurally-identical single-function two-substring pins.
 
 	//------------------------------------------------------------------------------------------------------------------
-	// f) The seven-method async SPI + provider-selection seam (§3.2/§5)
+	// f) The seven-method async SPI + provider-selection seam
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Test void f01_persistenceFacadeExposesTheSevenMethodContract() throws Exception {
@@ -261,7 +261,7 @@ class ViewsJs_ConfigPersistence_Test extends TestBase {
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
-	// g) Typed error shapes (§3.2) - 'conflict' was dropped in round-2; must not resurface here
+	// g) Typed error shapes - 'conflict' was dropped in round-2; must not resurface here
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Test void g01_typedErrorCodes_areExactlyTheFourFrozenCodes_conflictNeverResurfaces() throws Exception {

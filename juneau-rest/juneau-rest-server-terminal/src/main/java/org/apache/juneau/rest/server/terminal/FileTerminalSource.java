@@ -17,6 +17,7 @@
 package org.apache.juneau.rest.server.terminal;
 
 import static org.apache.juneau.commons.utils.Shorts.*;
+import static org.apache.juneau.rest.server.runreport.RunViewChecks.*;
 
 import java.io.*;
 import java.nio.*;
@@ -42,6 +43,12 @@ import org.apache.juneau.marshall.marshaller.Json;
  * {@code done}, empty chunk whose {@code next} and {@code end} are the requested offset.
  *
  * <p>
+ * <b>Nudges.</b> {@link #nudges(String, TerminalNudgePublisher)} starts a daemon watcher that publishes when the file
+ * grows.  A source has no process exit, so it never publishes a {@code done} nudge: the page's polling already sees
+ * {@code done} through the {@link Builder#terminal(BooleanSupplier) terminal} supplier.  Call {@link #close()} to stop
+ * the watcher.
+ *
+ * <p>
  * <b>Path safety.</b> The application supplies the {@link Path}; nothing in a request ever becomes a path.
  *
  * <h5 class='section'>Example:</h5>
@@ -51,13 +58,19 @@ import org.apache.juneau.marshall.marshaller.Json;
  * 		.build();
  * </p>
  */
-public final class FileTerminalSource implements TerminalSource {
+public final class FileTerminalSource implements TerminalSource, AutoCloseable {
 
 	/** The width used while the size sidecar is missing or malformed. */
 	public static final int DEFAULT_COLS = 120;
 
 	/** The height used while the size sidecar is missing or malformed. */
 	public static final int DEFAULT_ROWS = 40;
+
+	/** How often the nudge thread checks the file size, in milliseconds. */
+	static final int NUDGE_POLL_MILLIS = 100;
+
+	/** How long {@link #close()} waits for the nudge thread, in milliseconds. */
+	static final int NUDGE_JOIN_MILLIS = 1000;
 
 	private static final Logger LOG = Logger.getLogger(FileTerminalSource.class.getName());
 
@@ -99,6 +112,12 @@ public final class FileTerminalSource implements TerminalSource {
 	private volatile int[] size;
 	private volatile boolean seen, warned;
 
+	// Nudges.  nudgeThread, nudgeSet and nudgeClosed are guarded by nudgeLock.
+	private final Object nudgeLock = new Object();
+	private Thread nudgeThread;
+	private boolean nudgeSet, nudgeClosed;
+	private volatile boolean nudgeStop;
+
 	private FileTerminalSource(Builder b) {
 		file = b.file;
 		sizeFile = file.resolveSibling(file.getFileName() + ".size");
@@ -122,6 +141,97 @@ public final class FileTerminalSource implements TerminalSource {
 	 */
 	public Path file() {
 		return file;
+	}
+
+	/**
+	 * Reports growth of the file to a publisher.
+	 *
+	 * <p>
+	 * Starts a daemon thread named {@code juneau-terminal-nudge-file-<name>} that checks the file size every 100 ms and
+	 * calls the publisher with the new end when it has grown.  A file that is missing or has shrunk publishes nothing
+	 * and the watcher keeps going.  A {@link RuntimeException} thrown by the publisher is logged at {@code FINE} and
+	 * otherwise ignored.  No {@code done} nudge is ever published, since the source does not know when the producer
+	 * finishes; polling covers it.  {@link #close()} stops the thread.
+	 *
+	 * @param terminalId The terminal id passed to the publisher; must be a valid run id.
+	 * @param publisher The publisher.
+	 * @return This object.
+	 * @throws NullPointerException If an argument is <jk>null</jk>.
+	 * @throws IllegalArgumentException If the id is not a valid run id.
+	 * @throws IllegalStateException If a publisher is already set, or this source has been closed.
+	 */
+	public FileTerminalSource nudges(String terminalId, TerminalNudgePublisher publisher) {
+		Objects.requireNonNull(terminalId, "terminalId");
+		Objects.requireNonNull(publisher, "publisher");
+		if (! isRunId(terminalId))
+			throw iaex("FileTerminalSource nudge id is not a valid run id: '%s'.", terminalId);
+		synchronized (nudgeLock) {
+			if (nudgeClosed)
+				throw new IllegalStateException("FileTerminalSource is closed.");
+			if (nudgeSet)
+				throw new IllegalStateException("FileTerminalSource nudges are already set.");
+			nudgeSet = true;
+			nudgeThread = new Thread(() -> watch(terminalId, publisher), "juneau-terminal-nudge-file-" + file.getFileName());
+			nudgeThread.setDaemon(true);
+			nudgeThread.start();
+		}
+		return this;
+	}
+
+	/** The nudge thread: reports file growth until the thread is stopped. */
+	private void watch(String id, TerminalNudgePublisher publisher) {
+		var last = -1L;
+		while (! nudgeStop) {
+			var size = sizeOrZero(file);
+			if (size > last) {
+				try {
+					publisher.nudge(id, size, false);
+				} catch (RuntimeException e) {
+					LOG.log(Level.FINE, e, () -> "Terminal nudge publisher failed for '" + id + "'.");
+				}
+				last = size;
+			}
+			try {
+				Thread.sleep(NUDGE_POLL_MILLIS);
+			} catch (InterruptedException e) {
+				Thread.currentThread().interrupt();
+				return;
+			}
+		}
+	}
+
+	private static long sizeOrZero(Path p) {
+		try {
+			return Files.size(p);
+		} catch (IOException e) {
+			return 0;
+		}
+	}
+
+	/**
+	 * Stops the nudge thread, if any, and waits up to {@value #NUDGE_JOIN_MILLIS} ms for it.
+	 *
+	 * <p>
+	 * Reads keep working after this; only {@link #nudges(String, TerminalNudgePublisher)} is refused.
+	 */
+	@Override /* AutoCloseable */
+	public void close() {
+		Thread t;
+		synchronized (nudgeLock) {
+			nudgeClosed = true;
+			nudgeStop = true;
+			t = nudgeThread;
+		}
+		if (t == null)
+			return;
+		t.interrupt();
+		try {
+			t.join(NUDGE_JOIN_MILLIS);
+		} catch (InterruptedException e) {
+			Thread.currentThread().interrupt();
+		}
+		if (t.isAlive())
+			LOG.log(Level.WARNING, () -> "FileTerminalSource nudge thread did not stop for '" + file + "'.");
 	}
 
 	@Override /* TerminalSource */

@@ -28,7 +28,7 @@ import org.apache.juneau.rest.server.view.freemarker.*;
 import org.junit.jupiter.api.*;
 
 /**
- * P8: {@code FreemarkerViewRenderer} finds a mixin bean declared as any registered subtype, and fails loud on two
+ * {@code FreemarkerViewRenderer} finds a mixin bean declared as any registered subtype, and fails loud on two
  * different mixin beans.
  *
  * @since 10.0.0

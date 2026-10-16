@@ -497,7 +497,7 @@ public class McpServerConfig {
 	/**
 	 * Resolves the concrete {@code resources/read} request URI {@code uri} against the registered
 	 * resource-template registry, selecting the single winning template handler using the deterministic
-	 * specificity ranking shared identically by both dated adapters (spec &sect;7).
+	 * specificity ranking shared identically by both dated adapters.
 	 *
 	 * <p>
 	 * A candidate is every reverse-matchable ({@link McpUriTemplateMatcher#isReverseMatchable()}) template

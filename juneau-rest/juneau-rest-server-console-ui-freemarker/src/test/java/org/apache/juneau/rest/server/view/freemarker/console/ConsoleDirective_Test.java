@@ -19,14 +19,21 @@ package org.apache.juneau.rest.server.view.freemarker.console;
 import static org.apache.juneau.rest.server.console.test.PageContractAssert.*;
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.io.*;
 import java.util.*;
+import java.util.function.*;
+import java.util.logging.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.commons.inject.*;
+import org.apache.juneau.rest.mock.MockServletRequest;
+import org.apache.juneau.rest.mock.MockServletResponse;
 import org.apache.juneau.rest.mock.classic.*;
 import org.apache.juneau.rest.server.*;
+import org.apache.juneau.rest.server.console.*;
 import org.apache.juneau.rest.server.filter.*;
 import org.apache.juneau.rest.server.servlet.*;
+import org.apache.juneau.rest.server.util.*;
 import org.apache.juneau.rest.server.view.*;
 import org.apache.juneau.rest.server.view.freemarker.*;
 import org.junit.jupiter.api.*;
@@ -70,6 +77,89 @@ class ConsoleDirective_Test extends TestBase {
 			req.setAttribute(LoopbackBoundaryFilter.HEADER_ATTRIBUTE, "X-Csrf-Token");
 			return FreemarkerView.of("admin/page-naked.ftlh");
 		}
+		@RestGet(path="/spec-csrf")
+		public View specCsrf(RestRequest req) {
+			return PageSpec.create().csrf("spec-tok", "X-Spec").bodyAttr("data-spec-keep", "kept").template("admin/page-naked.ftlh").view(req);
+		}
+		@RestGet(path="/body-csrf-single")
+		public View bodyCsrfSingle() {
+			return FreemarkerView.of("admin/page-csrf-body-single.ftlh");
+		}
+		@RestGet(path="/body-csrf-unquoted")
+		public View bodyCsrfUnquoted() {
+			return FreemarkerView.of("admin/page-csrf-body-unquoted.ftlh");
+		}
+		@RestGet(path="/body-csrf-upper")
+		public View bodyCsrfUpper() {
+			return FreemarkerView.of("admin/page-csrf-body-upper.ftlh");
+		}
+		@RestGet(path="/body-attrs-csrf-lookalike")
+		public View bodyAttrsCsrfLookalike() {
+			return FreemarkerView.of("admin/page-body-attrs-csrf-lookalike.ftlh");
+		}
+		@RestGet(path="/body-attrs-plain")
+		public View bodyAttrsPlain() {
+			return FreemarkerView.of("admin/page-body-attrs-plain.ftlh");
+		}
+		@RestGet(path="/csrf-masked")
+		public View csrfMasked(RestRequest req, RestResponse res) throws Exception {
+			// The real filter publishes the attributes; its chain is a no-op because this request is already inside it.
+			new RequestBoundaryFilter(MASKING).doFilter(req.getHttpServletRequest(), res.getHttpServletResponse(), (q, s) -> {});
+			return FreemarkerView.of("admin/page-naked.ftlh");
+		}
+		@RestGet(path="/csrf-supplier-only")
+		public View csrfSupplierOnly(RestRequest req, RestResponse res) throws Exception {
+			// The real filter publishes the supplier; the string attribute is removed so only the supplier remains.
+			new RequestBoundaryFilter(MASKING).doFilter(req.getHttpServletRequest(), res.getHttpServletResponse(), (q, s) -> {});
+			req.getHttpServletRequest().removeAttribute(RequestBoundaryFilter.TOKEN_ATTRIBUTE);
+			return FreemarkerView.of("admin/page-naked.ftlh");
+		}
+		@RestGet(path="/csrf-supplier-overwritten")
+		public View csrfSupplierOverwritten(RestRequest req, RestResponse res) throws Exception {
+			// A later filter or the servlet replaces the boundary's supplier with its own.
+			new RequestBoundaryFilter(MASKING).doFilter(req.getHttpServletRequest(), res.getHttpServletResponse(), (q, s) -> {});
+			Supplier<String> attacker = () -> "ATTACKER-TOKEN";
+			req.getHttpServletRequest().setAttribute(RequestBoundaryFilter.TOKEN_SUPPLIER_ATTRIBUTE, attacker);
+			return FreemarkerView.of("admin/page-naked.ftlh");
+		}
+		@RestGet(path="/csrf-loopback")
+		public View csrfLoopback(RestRequest req, RestResponse res) throws Exception {
+			new LoopbackBoundaryFilter(LOOPBACK).doFilter(req.getHttpServletRequest(), res.getHttpServletResponse(), (q, s) -> {});
+			return FreemarkerView.of("admin/page-naked.ftlh");
+		}
+	}
+
+	/** The per-process token behind {@link #MASKING}, so a test can unmask an embed by hand and compare. */
+	static final SynchronizerToken PROCESS_TOKEN = SynchronizerToken.generate();
+
+	static final CsrfBoundary MASKING = CsrfBoundary.create().tokens(CsrfTokens.perProcess(PROCESS_TOKEN)).build();
+
+	static final String LOOPBACK_AUTHORITY = "127.0.0.1:8790";
+
+	static final LoopbackBoundary LOOPBACK = LoopbackBoundary.create().authority(LOOPBACK_AUTHORITY).token(PROCESS_TOKEN).build();
+
+	/** Reverses the published mask by hand: the second 32 bytes XOR the first. */
+	static String unmask(String masked) {
+		var b = HexFormat.of().parseHex(masked);
+		var out = new byte[32];
+		for (var i = 0; i < 32; i++)
+			out[i] = (byte)(b[i] ^ b[32 + i]);
+		return HexFormat.of().formatHex(out);
+	}
+
+	static String metaToken(String body) {
+		return between(body, "<meta name=\"csrf-token\" content=\"", "\"");
+	}
+
+	static String bodyToken(String body) {
+		return between(body, " data-juneau-csrf=\"", "\"");
+	}
+
+	private static String between(String body, String start, String end) {
+		var i = body.indexOf(start);
+		assertTrue(i >= 0, () -> "missing " + start + " in: " + body);
+		var from = i + start.length();
+		return body.substring(from, body.indexOf(end, from));
 	}
 
 	@Rest(mixins=FreemarkerMixin.class, renderResponseStackTraces="true")
@@ -281,7 +371,7 @@ class ConsoleDirective_Test extends TestBase {
 			body = rsp.getContent().asString();
 		}
 
-		// Document skeleton and head cascade (server-rendered, D3).
+		// Document skeleton and head cascade (server-rendered).
 		assertTrue(body.contains("<!DOCTYPE html>"), () -> body);
 		assertTrue(body.contains("<meta charset=\"utf-8\">"), () -> body);
 		assertTrue(body.contains("name=\"viewport\""), () -> body);
@@ -295,7 +385,7 @@ class ConsoleDirective_Test extends TestBase {
 		assertTrue(body.contains("extra-head.css"), () -> body);
 		assertTrue(body.indexOf("</head>") < body.indexOf("<body"), () -> body);
 
-		// Header, nav, page body and footer are contract data now (D3), not server HTML.
+		// Header, nav, page body and footer are contract data now, not server HTML.
 		assertPage(body).isValid()
 			.hasTitle("My App").hasHeaderTitle("My App").hasTheme("light-red")
 			.hasNavHref("home", "/home").hasActiveNav("home")
@@ -341,6 +431,291 @@ class ConsoleDirective_Test extends TestBase {
 	}
 
 	// -----------------------------------------------------------------------------------------------------------------
+	// Token-bearing responses are not cacheable
+	// -----------------------------------------------------------------------------------------------------------------
+
+	/** Response that records whether any body byte had reached the stream when {@code Cache-Control} was set. */
+	static class RecordingResponse extends MockServletResponse {
+		boolean written;
+		Boolean writtenWhenCacheControlSet;
+		boolean committed;
+
+		@Override public boolean isCommitted() { return committed; }
+
+		@Override public void setHeader(String name, String value) {
+			if ("Cache-Control".equalsIgnoreCase(name))
+				writtenWhenCacheControlSet = written;
+			super.setHeader(name, value);
+		}
+
+		@Override public jakarta.servlet.ServletOutputStream getOutputStream() throws IOException {
+			return new FinishableServletOutputStream(new FilterOutputStream(super.getOutputStream()) {
+				@Override public void write(int b) throws IOException { written = true; out.write(b); }
+				@Override public void write(byte[] b, int o, int l) throws IOException { written = true; out.write(b, o, l); }
+			});
+		}
+	}
+
+	private static String dispatch(Class<? extends BasicRestServlet> host, String path, RecordingResponse res) throws Exception {
+		var resource = host.getDeclaredConstructor().newInstance();
+		var ctx = new RestContext(new RestContext.Args(host, null, null, () -> resource, "", null, null, null, RestContext.ContextKind.ROOT, null)).postInit().postInitChildFirst();
+		ctx.execute(resource, MockServletRequest.create("GET", path), res);
+		assertEquals(200, res.getStatus());
+		return new String(res.getContent(), "UTF-8");
+	}
+
+	@Test void t01_tokenEmbedMarksResponsePrivateNoStore() throws Exception {
+		try (var c = MockRestClient.buildLax(ConsoleHost.class);
+			var rsp = c.get("/csrf").run()) {
+			rsp.assertStatus(200).assertHeader("Cache-Control").is("private, no-store");
+		}
+	}
+
+	@Test void t02_noTokenNoCacheHeader() throws Exception {
+		try (var c = MockRestClient.buildLax(ConsoleHost.class);
+			var rsp = c.get("/naked").run()) {
+			rsp.assertStatus(200).assertHeader("Cache-Control").isNull();
+		}
+	}
+
+	@Test void t03_pageSpecCsrfBodyAttrMarksNoStore() throws Exception {
+		try (var c = MockRestClient.buildLax(ConsoleHost.class);
+			var rsp = c.get("/spec-csrf").run()) {
+			rsp.assertStatus(200).assertHeader("Cache-Control").is("private, no-store");
+			assertTrue(rsp.getContent().asString().contains("data-juneau-csrf=\"spec-tok\""));
+		}
+	}
+
+	@Test void t04_headerSetBeforeFirstWrite() throws Exception {
+		var res = new RecordingResponse();
+		dispatch(ConsoleHost.class, "/csrf", res);
+		assertEquals(Boolean.FALSE, res.writtenWhenCacheControlSet);
+	}
+
+	@Test void t05_committedResponseOmitsTokenEmbeds() throws Exception {
+		var logger = Logger.getLogger(ConsoleDirectiveModel.class.getName());
+		var records = new ArrayList<LogRecord>();
+		var handler = new Handler() {
+			@Override public void publish(LogRecord r) { records.add(r); }
+			@Override public void flush() { /* no buffering */ }
+			@Override public void close() { /* nothing to release */ }
+		};
+		var oldLevel = logger.getLevel();
+		logger.setLevel(Level.FINE);
+		handler.setLevel(Level.FINE);
+		logger.addHandler(handler);
+		try {
+			var res = new RecordingResponse();
+			res.committed = true;
+			var body = dispatch(ConsoleHost.class, "/csrf", res);
+			assertFalse(body.contains("tok-123"), () -> body);
+			assertFalse(body.contains("csrf-token"), () -> body);
+			assertFalse(body.contains("data-juneau-csrf"), () -> body);
+			assertFalse(body.contains("X-Csrf-Token"), () -> body);
+			assertNull(res.writtenWhenCacheControlSet);
+			assertEquals(1, records.stream().filter(r -> r.getLevel() == Level.FINE).count());
+		} finally {
+			logger.removeHandler(handler);
+			logger.setLevel(oldLevel);
+		}
+	}
+
+	@Test void t05b_committedResponseOmitsSpecAuthoredTokenAttrs() throws Exception {
+		var logger = Logger.getLogger(ConsoleDirectiveModel.class.getName());
+		var records = new ArrayList<LogRecord>();
+		var handler = new Handler() {
+			@Override public void publish(LogRecord r) { records.add(r); }
+			@Override public void flush() { /* no buffering */ }
+			@Override public void close() { /* nothing to release */ }
+		};
+		var oldLevel = logger.getLevel();
+		logger.setLevel(Level.FINE);
+		handler.setLevel(Level.FINE);
+		logger.addHandler(handler);
+		try {
+			var res = new RecordingResponse();
+			res.committed = true;
+			var body = dispatch(ConsoleHost.class, "/spec-csrf", res);
+			assertFalse(body.contains("spec-tok"), () -> body);
+			assertFalse(body.contains("data-juneau-csrf"), () -> body);
+			assertFalse(body.contains("X-Spec"), () -> body);
+			assertTrue(body.contains("data-spec-keep=\"kept\""), () -> body);
+			assertNull(res.writtenWhenCacheControlSet);
+			assertEquals(1, records.stream().filter(r -> r.getLevel() == Level.FINE).count());
+		} finally {
+			logger.removeHandler(handler);
+			logger.setLevel(oldLevel);
+		}
+	}
+
+	@Test void t05c_committedResponseOmitsSingleQuotedBodyToken() throws Exception {
+		var logger = Logger.getLogger(ConsoleDirectiveModel.class.getName());
+		var records = new ArrayList<LogRecord>();
+		var handler = new Handler() {
+			@Override public void publish(LogRecord r) { records.add(r); }
+			@Override public void flush() { /* no buffering */ }
+			@Override public void close() { /* nothing to release */ }
+		};
+		var oldLevel = logger.getLevel();
+		logger.setLevel(Level.FINE);
+		handler.setLevel(Level.FINE);
+		logger.addHandler(handler);
+		try {
+			var res = new RecordingResponse();
+			res.committed = true;
+			var body = dispatch(ConsoleHost.class, "/body-csrf-single", res);
+			assertFalse(body.contains("spec-tok"), () -> body);
+			assertFalse(body.contains("data-juneau-csrf"), () -> body);
+			assertTrue(body.contains("data-spec-keep=\"kept\""), () -> body);
+			assertNull(res.writtenWhenCacheControlSet);
+			assertEquals(1, records.stream().filter(r -> r.getLevel() == Level.FINE).count());
+		} finally {
+			logger.removeHandler(handler);
+			logger.setLevel(oldLevel);
+		}
+	}
+
+	@Test void t05e_committedResponseOmitsUnquotedBodyToken() throws Exception {
+		var logger = Logger.getLogger(ConsoleDirectiveModel.class.getName());
+		var records = new ArrayList<LogRecord>();
+		var handler = new Handler() {
+			@Override public void publish(LogRecord r) { records.add(r); }
+			@Override public void flush() { /* no buffering */ }
+			@Override public void close() { /* nothing to release */ }
+		};
+		var oldLevel = logger.getLevel();
+		logger.setLevel(Level.FINE);
+		handler.setLevel(Level.FINE);
+		logger.addHandler(handler);
+		try {
+			var res = new RecordingResponse();
+			res.committed = true;
+			var body = dispatch(ConsoleHost.class, "/body-csrf-unquoted", res);
+			assertFalse(body.contains("spec-tok"), () -> body);
+			assertFalse(body.contains("data-juneau-csrf"), () -> body);
+			assertTrue(body.contains("data-spec-keep=\"kept\""), () -> body);
+			assertNull(res.writtenWhenCacheControlSet);
+			assertEquals(1, records.stream().filter(r -> r.getLevel() == Level.FINE).count());
+		} finally {
+			logger.removeHandler(handler);
+			logger.setLevel(oldLevel);
+		}
+	}
+
+	@Test void t05f_committedResponseOmitsUpperCaseBodyToken() throws Exception {
+		var logger = Logger.getLogger(ConsoleDirectiveModel.class.getName());
+		var records = new ArrayList<LogRecord>();
+		var handler = new Handler() {
+			@Override public void publish(LogRecord r) { records.add(r); }
+			@Override public void flush() { /* no buffering */ }
+			@Override public void close() { /* nothing to release */ }
+		};
+		var oldLevel = logger.getLevel();
+		logger.setLevel(Level.FINE);
+		handler.setLevel(Level.FINE);
+		logger.addHandler(handler);
+		try {
+			var res = new RecordingResponse();
+			res.committed = true;
+			var body = dispatch(ConsoleHost.class, "/body-csrf-upper", res);
+			assertFalse(body.contains("spec-tok"), () -> body);
+			assertFalse(body.contains("data-juneau-csrf"), () -> body);
+			assertTrue(body.contains("data-spec-keep=\"kept\""), () -> body);
+			assertNull(res.writtenWhenCacheControlSet);
+			assertEquals(1, records.stream().filter(r -> r.getLevel() == Level.FINE).count());
+		} finally {
+			logger.removeHandler(handler);
+			logger.setLevel(oldLevel);
+		}
+	}
+
+	@Test void t05g_committedResponseKeepsAttributeWhoseValueMentionsCsrfAttr() throws Exception {
+		var res = new RecordingResponse();
+		res.committed = true;
+		var body = dispatch(ConsoleHost.class, "/body-attrs-csrf-lookalike", res);
+		assertTrue(body.contains("<body title=\"data-juneau-csrf=x\" data-spec-keep=\"kept\">"), () -> body);
+	}
+
+	@Test void t05d_committedPageWithoutCsrfContentLogsNothingAndKeepsBodyAttrs() throws Exception {
+		var logger = Logger.getLogger(ConsoleDirectiveModel.class.getName());
+		var records = new ArrayList<LogRecord>();
+		var handler = new Handler() {
+			@Override public void publish(LogRecord r) { records.add(r); }
+			@Override public void flush() { /* no buffering */ }
+			@Override public void close() { /* nothing to release */ }
+		};
+		var oldLevel = logger.getLevel();
+		logger.setLevel(Level.FINE);
+		handler.setLevel(Level.FINE);
+		logger.addHandler(handler);
+		try {
+			var res = new RecordingResponse();
+			res.committed = true;
+			var body = dispatch(ConsoleHost.class, "/body-attrs-plain", res);
+			assertTrue(body.contains("<body data-spec-keep=\"kept\" data-other=plain>"), () -> body);
+			assertEquals(0, records.stream().filter(r -> r.getLevel() == Level.FINE).count());
+		} finally {
+			logger.removeHandler(handler);
+			logger.setLevel(oldLevel);
+		}
+	}
+
+	// -----------------------------------------------------------------------------------------------------------------
+	// Each embed gets its own mask
+	// -----------------------------------------------------------------------------------------------------------------
+
+	private static String get(String path, String...headers) throws Exception {
+		try (var c = MockRestClient.buildLax(ConsoleHost.class)) {
+			var call = c.get(path);
+			for (var i = 0; i < headers.length; i += 2)
+				call.header(headers[i], headers[i + 1]);
+			try (var rsp = call.run()) {
+				rsp.assertStatus(200);
+				return rsp.getContent().asString();
+			}
+		}
+	}
+
+	@Test void t06_twoEmbedsCarryIndependentPads() throws Exception {
+		var body = get("/csrf-masked");
+		var meta = metaToken(body);
+		var attr = bodyToken(body);
+		assertTrue(meta.matches("[0-9a-f]{128}"), meta);
+		assertTrue(attr.matches("[0-9a-f]{128}"), attr);
+		assertNotEquals(meta, attr, () -> body);
+		assertEquals(PROCESS_TOKEN.value(), unmask(meta));
+		assertEquals(PROCESS_TOKEN.value(), unmask(attr));
+	}
+
+	@Test void t06b_supplierAttributeNeverStringified() throws Exception {
+		var body = get("/csrf-supplier-only");
+		assertEquals(PROCESS_TOKEN.value(), unmask(metaToken(body)));
+		assertEquals(PROCESS_TOKEN.value(), unmask(bodyToken(body)));
+		for (var s : List.of("Lambda", "Supplier", "java.util.function", "$$"))
+			assertFalse(body.contains(s), () -> "'" + s + "' reached the page: " + body);
+	}
+
+	@Test void t06c_overwrittenSupplierIsNotTrustedAndFailsClosed() throws Exception {
+		var body = get("/csrf-supplier-overwritten");
+		assertFalse(body.contains("ATTACKER-TOKEN"), () -> body);
+		assertFalse(body.contains("csrf-token"), () -> body);
+		assertFalse(body.contains("data-juneau-csrf"), () -> body);
+	}
+
+	@Test void t07_fallsBackToStringAttribute() throws Exception {
+		var body = get("/csrf");
+		assertEquals("tok-123", metaToken(body));
+		assertEquals("tok-123", bodyToken(body));
+	}
+
+	@Test void t08_loopbackPageStillEmbeds64Hex() throws Exception {
+		var body = get("/csrf-loopback", "Host", LOOPBACK_AUTHORITY);
+		assertEquals(PROCESS_TOKEN.value(), metaToken(body));
+		assertEquals(PROCESS_TOKEN.value(), bodyToken(body));
+		assertTrue(PROCESS_TOKEN.value().matches("[0-9a-f]{64}"));
+	}
+
+	// -----------------------------------------------------------------------------------------------------------------
 	// Header slots
 	// -----------------------------------------------------------------------------------------------------------------
 
@@ -355,7 +730,7 @@ class ConsoleDirective_Test extends TestBase {
 			.templateContains("header.replace", "<header class=\"my-custom-header\">WHOLE HEADER</header>");
 		assertTrue(body.contains("<title>Doc Title Here</title>"), () -> body);
 		assertPage(body).hasTitle("Doc Title Here").hasHeaderTitle("Ignored When Title Set");
-		// The shell ignores header.title when slots.replace is present; spec §5.2.
+		// The shell ignores header.title when slots.replace is present.
 	}
 
 	@Test void c05_brandAndActions_subSlots() throws Exception {
@@ -505,7 +880,7 @@ class ConsoleDirective_Test extends TestBase {
 	}
 
 	@Test void c14_pageWithoutConsoleChrome_isRejected() throws Exception {
-		// P16: a chrome template that never renders <@console> is the removed legacy path.
+		// A chrome template that never renders <@console> is the removed legacy path.
 		try (var c = MockRestClient.buildLax(NoConsoleHost.class);
 			var rsp = c.get("/naked").run()) {
 			rsp.assertStatus(500);
@@ -513,5 +888,119 @@ class ConsoleDirective_Test extends TestBase {
 			assertTrue(body.contains("<@page> chrome template 'admin/no-console-chrome.ftlh' rendered no <@console>; "
 				+ "the legacy chrome was removed in 10.0.0."), () -> body);
 		}
+	}
+
+	// -----------------------------------------------------------------------------------------------------------------
+	// Colour scheme: html attributes, the pre-paint script, the dark layer link, CSP nonces
+	// -----------------------------------------------------------------------------------------------------------------
+
+	@Rest(mixins=FreemarkerMixin.class, renderResponseStackTraces="true")
+	public static class SchemeHost extends BasicRestServlet {
+		private static final long serialVersionUID = 1L;
+		@Bean public FreemarkerMixin freemarker() {
+			return ConsoleFreemarkerMixin.create().basePath("/templates/").chromeTemplate("admin/console-chrome-bare.ftlh").build();
+		}
+		@RestGet(path="/t")
+		public View page(RestRequest req) {
+			var nonce = req.getQueryParam("nonce").asString().orElse(null);
+			if (nonce != null)
+				req.setAttribute(RestRequest.CSP_NONCE_ATTR, nonce);
+			return FreemarkerView.of("admin/scheme-" + req.getQueryParam("n").asString().orElseThrow() + ".ftlh");
+		}
+		@RestGet(path="/spec-light")
+		public View specLight(RestRequest req) {
+			return PageSpec.create().scheme("light").template("admin/page-naked.ftlh").view(req);
+		}
+		@RestGet(path="/spec-light-attr-dark")
+		public View specLightAttrDark(RestRequest req) {
+			return PageSpec.create().scheme("light").template("admin/scheme-dark.ftlh").view(req);
+		}
+		@RestGet(path="/spec-toggle")
+		public View specToggle(RestRequest req) {
+			return PageSpec.create().schemeToggle(true).template("admin/page-naked.ftlh").view(req);
+		}
+		@RestGet(path="/spec-toggle-attr-false")
+		public View specToggleAttrFalse(RestRequest req) {
+			return PageSpec.create().schemeToggle(true).template("admin/scheme-toggle-false.ftlh").view(req);
+		}
+	}
+
+	private static String scheme(String path, int status) throws Exception {
+		try (var c = MockRestClient.buildLax(SchemeHost.class); var rsp = c.get(path).run()) {
+			rsp.assertStatus(status);
+			return rsp.getContent().asString();
+		}
+	}
+
+	/** The {@code <html ...>} start tag of a rendered document. */
+	private static String htmlTag(String body) {
+		var i = body.indexOf("<html");
+		return body.substring(i, body.indexOf('>', i) + 1);
+	}
+
+	@Test void s01_unpinnedNoAttrs() throws Exception {
+		var tag = htmlTag(scheme("/t?n=none", 200));
+		assertEquals("<html lang=\"en\">", tag);
+		assertFalse(tag.contains("data-jc-scheme"), tag);
+	}
+
+	@Test void s02_pinnedAttrs() throws Exception {
+		assertEquals("<html lang=\"en\" data-jc-scheme=\"dark\" data-jc-scheme-pin=\"dark\">", htmlTag(scheme("/t?n=dark", 200)));
+		assertEquals("<html lang=\"en\" data-jc-scheme=\"light\" data-jc-scheme-pin=\"light\">", htmlTag(scheme("/t?n=light", 200)));
+		assertEquals("<html lang=\"en\">", htmlTag(scheme("/t?n=auto", 200)));
+	}
+
+	@Test void s03_toggleAttr() throws Exception {
+		assertEquals("<html lang=\"en\" data-jc-scheme-toggle>", htmlTag(scheme("/t?n=toggle-true", 200)));
+		assertEquals("<html lang=\"en\">", htmlTag(scheme("/t?n=toggle-false", 200)));
+		assertEquals("<html lang=\"en\">", htmlTag(scheme("/t?n=none", 200)));
+	}
+
+	@Test void s04_scriptFirstInHead() throws Exception {
+		var body = scheme("/t?n=dark", 200);
+		var afterHead = body.substring(body.indexOf("<head>") + "<head>".length()).stripLeading();
+		assertTrue(afterHead.startsWith("<script>" + ConsoleChromeMixin.SCHEME_SCRIPT + "</script>"), () -> body);
+		assertEquals(1, count(body, ConsoleChromeMixin.SCHEME_SCRIPT), () -> body);
+	}
+
+	@Test void s05_linkOrder() throws Exception {
+		var body = scheme("/t?n=tokens", 200);
+		var chrome = body.indexOf("/juneau-console/chrome.css");
+		var dark = body.indexOf("juneau-theme-dark.css?v=");
+		var palette = body.indexOf("juneau-theme-open.css?v=");
+		var style = body.indexOf("<style>");
+		assertTrue(chrome >= 0 && chrome < dark && dark < palette && palette < style, () -> body);
+		assertEquals(1, count(body, "juneau-theme-dark.css"), () -> body);
+		// Unpinned pages link the dark layer too: the pre-paint script may still pick dark.
+		assertTrue(scheme("/t?n=none", 200).contains("juneau-theme-dark.css?v="));
+	}
+
+	@Test void s06_nonce() throws Exception {
+		var body = scheme("/t?n=tokens&nonce=abc", 200);
+		assertTrue(body.contains("<script nonce=\"abc\">" + ConsoleChromeMixin.SCHEME_SCRIPT + "</script>"), () -> body);
+		assertTrue(body.contains("<style nonce=\"abc\">html:root{"), () -> body);
+		var plain = scheme("/t?n=tokens", 200);
+		assertFalse(plain.contains("nonce"), () -> plain);
+		assertTrue(plain.contains("<script>" + ConsoleChromeMixin.SCHEME_SCRIPT), () -> plain);
+		assertTrue(plain.contains("<style>html:root{"), () -> plain);
+		var escaped = scheme("/t?n=tokens&nonce=a%22b", 200);
+		assertTrue(escaped.contains("nonce=\"a&quot;b\""), () -> escaped);
+	}
+
+	@Test void s07_schemeValidation() throws Exception {
+		var body = scheme("/t?n=bogus", 500);
+		assertTrue(body.contains("<@console> unknown scheme 'dim'.  Schemes: auto, light, dark."), () -> body);
+		var theme = scheme("/t?n=theme-dark", 500);
+		assertTrue(theme.contains("<@console> unknown theme name 'dark'.  Built-in themes: "), () -> theme);
+	}
+
+	@Test void s08_explicitBeatsSpec() throws Exception {
+		assertEquals("<html lang=\"en\" data-jc-scheme=\"dark\" data-jc-scheme-pin=\"dark\">", htmlTag(scheme("/spec-light-attr-dark", 200)));
+		assertEquals("<html lang=\"en\" data-jc-scheme=\"light\" data-jc-scheme-pin=\"light\">", htmlTag(scheme("/spec-light", 200)));
+	}
+
+	@Test void s09_specToggle_explicitAttrWins() throws Exception {
+		assertEquals("<html lang=\"en\" data-jc-scheme-toggle>", htmlTag(scheme("/spec-toggle", 200)));
+		assertEquals("<html lang=\"en\">", htmlTag(scheme("/spec-toggle-attr-false", 200)));
 	}
 }

@@ -32,7 +32,7 @@ import org.apache.juneau.rest.server.datatables.*;
 import org.junit.jupiter.api.*;
 
 /**
- * Node-harness coverage for {@code nested-table.cjs} against the BeanQuery DataTables design doc §3.1/D8 rewrite of
+ * Node-harness coverage for {@code nested-table.cjs} against the server-mode rewrite of
  * {@code buildOptions}/{@code applyNestedScope} in {@code juneau-views.js}.
  *
  * <p>

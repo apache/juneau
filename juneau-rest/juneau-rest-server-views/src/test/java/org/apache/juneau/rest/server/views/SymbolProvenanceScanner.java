@@ -32,7 +32,7 @@ import java.util.regex.*;
  *
  * <h5 class='section'>What it is for</h5>
  * <p>
- * Each glyph in this sprite is either Juneau-original or artwork cleared for copy from the IRS console sprite (see
+ * Each glyph in this sprite is either Juneau-original or artwork cleared for copy from another sprite (see
  * the manifest's {@code origin} column); the manifest exists as a guard: it pins the <i>approved</i> artwork so that a future paste of foreign path data over a glyph fails the build
  * until someone deliberately edits the manifest row. This class does the reading and the hashing;
  * {@link SymbolSprite_Provenance_Test} does the asserting.

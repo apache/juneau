@@ -180,7 +180,7 @@ out.moved = C.moveColumn(draft, 'C', -1);
 out.orderAfterMove = draft.order.slice();
 
 // -----------------------------------------------------------------------------------------------------------------
-// T12 - four-tab View Settings pure layer + page-state persistence bridge.
+// Four-tab View Settings pure layer + page-state persistence bridge.
 // -----------------------------------------------------------------------------------------------------------------
 out.configTabs = C.CONFIG_TABS.slice();
 
@@ -205,7 +205,7 @@ out.intersectAbsentIsAll = C.intersectMembership(undefined, ['name', 'status']);
 const vs = C.viewSettingsFromDraft(t12Draft);
 out.viewSettingsKeys = Object.keys(vs).sort((a, b) => Number(a > b) - Number(a < b));
 
-// Page-state round-trip through a mock replaceable store (design section 6.2 keying: per-table).
+// Page-state round-trip through a mock replaceable store.
 const memStore = {};
 NS.pageState = {
 	table: function (key) {
@@ -224,7 +224,7 @@ const readback = C.readViewSettings(tbl);
 out.readbackSearch = readback.settings ? readback.settings.search : null;
 out.readbackResetFalseOnValidBlob = readback.reset === false;
 
-// Two tables on one page must NOT clobber each other (T13 invariant, exercised here too).
+// Two tables on one page must NOT clobber each other (an invariant, exercised here too).
 const tbl2 = el('table');
 tbl2.dataset = { juneauView: 'users' };
 C.writeViewSettings(tbl2, C.viewSettingsFromDraft(C.defaultDraftFromCatalog([{ data: 'id', title: 'ID', orderable: true }])));
@@ -236,26 +236,26 @@ tblNoId.dataset = {};
 C.writeViewSettings(tblNoId, vs);
 out.noIdReadback = C.readViewSettings(tblNoId).settings;
 
-// Q1: a schemaVersion mismatch discards the WHOLE blob, deletes it, and reports reset:true.
+// a schemaVersion mismatch discards the WHOLE blob, deletes it, and reports reset:true.
 memStore['releases.viewSettings'] = JSON.stringify({ schemaVersion: 3, visible: ['name'] });
 const mismatchRead = C.readViewSettings(tbl);
 out.mismatchSettingsNull = mismatchRead.settings === null;
 out.mismatchResetTrue = mismatchRead.reset === true;
 out.mismatchBlobDeleted = !Object.hasOwn(memStore, 'releases.viewSettings');
 
-// Q1: a non-object stored value is treated the same as a mismatch.
+// a non-object stored value is treated the same as a mismatch.
 memStore['releases.viewSettings'] = JSON.stringify('not-an-object');
 const nonObjectRead = C.readViewSettings(tbl);
 out.nonObjectSettingsNull = nonObjectRead.settings === null;
 out.nonObjectResetTrue = nonObjectRead.reset === true;
 
-// Q1: nothing stored at all is NOT a reset - just absent.
+// nothing stored at all is NOT a reset - just absent.
 delete memStore['releases.viewSettings'];
 const absentRead = C.readViewSettings(tbl);
 out.absentSettingsNull = absentRead.settings === null;
 out.absentResetFalse = absentRead.reset === false;
 
-// Q1: draftFromViewSettings itself also version-checks - called directly with an unsupported version, it returns
+// draftFromViewSettings itself also version-checks - called directly with an unsupported version, it returns
 // exactly the catalog defaults (defaultDraftFromCatalog), unchanged.
 const v2Draft = C.draftFromViewSettings(t12Catalog, { schemaVersion: 3, visible: ['name'] });
 const defaultsDraft = C.defaultDraftFromCatalog(t12Catalog);
@@ -271,7 +271,7 @@ out.overlaidSort = overlaid.sort;
 out.overlaidOptions = overlaid.options;
 
 // -----------------------------------------------------------------------------------------------------------------
-// Gap-g - per-view tab restriction. columnConfig.tabs restricts which of the four dialog tabs
+// Per-view tab restriction. columnConfig.tabs restricts which of the four dialog tabs
 // are offered, in CONFIG_TABS' fixed order regardless of the input array's order; an absent/boolean columnConfig,
 // or an empty/all-unknown tabs array, means "all four tabs".
 // -----------------------------------------------------------------------------------------------------------------
@@ -284,7 +284,7 @@ out.visibleTabsEmptyArrayIsAll = C.visibleConfigTabs({ columnConfig: { tabs: [] 
 out.visibleTabsAllUnknownIsAll = C.visibleConfigTabs({ columnConfig: { tabs: ['bogus', 'also-bogus'] } });
 
 // -----------------------------------------------------------------------------------------------------------------
-// Gap 6 - Sort tab is an ordered, directional priority list, not an unordered membership set.
+// Sort tab is an ordered, directional priority list, not an unordered membership set.
 // -----------------------------------------------------------------------------------------------------------------
 const t17Catalog = [
 	{ data: 'name', title: 'Name', orderable: true },

@@ -35,8 +35,8 @@ import org.apache.juneau.rest.server.sse.*;
  *
  * <p>
  * {@code 4429} (slow consumer), {@code 4409} (replaced) and {@link #release()} close the subscription, which drops
- * the backlog.  After {@code 4429} the stream writes one {@code error bus:slow-consumer} frame as its last event (spec
- * §11.6).  {@code 1001} (bus closed) and {@code 4401} (expired) let pending frames drain first.  When another stream
+ * the backlog.  After {@code 4429} the stream writes one {@code error bus:slow-consumer} frame as its last event.
+ * {@code 1001} (bus closed) and {@code 4401} (expired) let pending frames drain first.  When another stream
  * re-subscribes the session (one connection per session), this sink ends quietly, as if replaced.
  */
 final class SseFrameSink implements FrameSink {

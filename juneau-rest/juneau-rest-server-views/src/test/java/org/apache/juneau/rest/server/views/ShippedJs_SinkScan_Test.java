@@ -35,24 +35,27 @@ import org.junit.jupiter.params.provider.*;
  *
  * <p>
  * Deliberately outside the scan ({@link #EXCLUDED_SCRIPTS}): the petstore example app's {@code petstore.js} and
- * {@code dev/secure.js}, and the legacy {@code juneau-rest-server} {@code htdocs/scripts/MenuItemWidget.js}.  They are
- * example-app and legacy scripts, not shipped console JS, and the discovery in a03 only walks {@code juneau-*.js}.
+ * {@code dev/secure.js}, the legacy {@code juneau-rest-server} {@code htdocs/scripts/MenuItemWidget.js}, and the vendor
+ * ECharts WebJar asset {@code echarts.min.js} ({@code org.webjars.npm:echarts}, served by the {@code echarts} toolkit
+ * pack).  They are example-app, legacy and third-party scripts, not shipped console JS, and the discovery in a03 only
+ * walks {@code juneau-*.js}.
  */
 class ShippedJs_SinkScan_Test extends TestBase {
 
 	/** Files that must stay completely sink-free: no hit at all, and never an allowlist entry. */
 	private static final List<String> ZERO_SINK_FILES = List.of(
-		"src/main/resources/org/apache/juneau/views/juneau-console-output.js",
 		"src/main/resources/org/apache/juneau/views/juneau-run-view.js",
 		"../juneau-rest-server-console-ui/src/main/resources/org/apache/juneau/console/juneau-charts.js",
 		"../juneau-rest-server-console-ui/src/main/resources/org/apache/juneau/console/juneau-joblog.js",
 		"../juneau-rest-server-console-ui/src/main/resources/org/apache/juneau/console/juneau-badges.js",
+		"../juneau-rest-server-console-ui/src/main/resources/org/apache/juneau/console/juneau-dashboard.js",
 		"../juneau-rest-server-terminal/src/main/resources/org/apache/juneau/terminal/juneau-terminal.js",
 		"src/main/resources/org/apache/juneau/views/juneau-regions.js",
-		"src/main/resources/org/apache/juneau/views/juneau-renders.js");
+		"src/main/resources/org/apache/juneau/views/juneau-renders.js",
+		"src/main/resources/org/apache/juneau/views/juneau-data.js");
 
 	/** Example-app and legacy scripts that are intentionally not scanned (see the class javadoc). */
-	private static final List<String> EXCLUDED_SCRIPTS = List.of("petstore.js", "secure.js", "MenuItemWidget.js");
+	private static final List<String> EXCLUDED_SCRIPTS = List.of("petstore.js", "secure.js", "MenuItemWidget.js", "echarts.min.js");
 
 	private static final String VIEWS_JS = "src/main/resources/org/apache/juneau/views/juneau-views.js";
 

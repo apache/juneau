@@ -16,7 +16,7 @@
  */
 
 /*
- * header-sort-search.cjs - always-on Node harness for the header sort + per-column search glyphs (design 7.1).
+ * header-sort-search.cjs - always-on Node harness for the header sort + per-column search glyphs.
  * Builds DT2-shaped header cells (title then order span), drives wireHeaderSortSearch(...), and reports the
  * resulting glyph DOM order plus the active-state class.  Every assertion lives in the Java test.
  *

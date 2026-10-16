@@ -67,8 +67,9 @@ class DescriptorTest(unittest.TestCase):
 
     def test_root_files(self):
         sources = [f.findtext(f"{ASM}source") for f in self.root.findall(f"{ASM}files/{ASM}file")]
-        self.assertEqual(sources, ["${project.basedir}/src/main/python/bootstrap.py", "${project.basedir}/../LICENSE",
-                                   "${project.basedir}/../NOTICE"])
+        self.assertEqual(sources, ["${project.basedir}/src/main/python/bootstrap.py",
+                                   "${project.basedir}/src/main/python/pytest_plugin/juneau_run_pytest.py",
+                                   "${project.basedir}/../LICENSE", "${project.basedir}/../NOTICE"])
         for s in sources:
             self.assertTrue(Path(s.replace("${project.basedir}", str(MODULE_ROOT))).is_file(), s)
 
@@ -76,7 +77,7 @@ class DescriptorTest(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp:
             with zipfile.ZipFile(build_zip(Path(tmp) / "t.zip")) as z:
                 names = sorted(z.namelist())
-        self.assertEqual(names, sorted(package_files() + ["LICENSE", "NOTICE", "bootstrap.py"]))
+        self.assertEqual(names, sorted(package_files() + ["LICENSE", "NOTICE", "bootstrap.py", "pytest_plugin/juneau_run_pytest.py"]))
 
 
 @unittest.skipUnless(os.environ.get("JUNEAU_SCRIPTS_CHECK_ZIP"), "set JUNEAU_SCRIPTS_CHECK_ZIP to a mvn package zip")
@@ -87,7 +88,7 @@ class RealZipTest(unittest.TestCase):
     def test_real_zip_holds_exactly_the_toolkit(self):
         with zipfile.ZipFile(os.environ["JUNEAU_SCRIPTS_CHECK_ZIP"]) as z:
             names = sorted(n for n in z.namelist() if not n.endswith("/"))
-        self.assertEqual(names, sorted(package_files() + ["LICENSE", "NOTICE", "bootstrap.py"]))
+        self.assertEqual(names, sorted(package_files() + ["LICENSE", "NOTICE", "bootstrap.py", "pytest_plugin/juneau_run_pytest.py"]))
 
 
 class PomTest(unittest.TestCase):
@@ -116,6 +117,7 @@ class PomTest(unittest.TestCase):
         self.assertEqual([(a.findtext(f"{POM}file"), a.findtext(f"{POM}type"), a.findtext(f"{POM}classifier"))
                           for a in artifacts],
                          [("${project.basedir}/src/main/python/juneau_run.py", "py", None),
+                          ("${project.basedir}/src/main/python/pytest_plugin/juneau_run_pytest.py", "py", "pytest"),
                           ("${project.build.directory}/juneau-run.zip", "zip", None)])
 
     def test_description_names_the_toolkit(self):

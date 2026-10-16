@@ -58,3 +58,30 @@ def test_run_command_echoes_lines_before_the_command_exits(test_mod, monkeypatch
         f"echo first; for i in $(seq 50); do [ -f '{marker}' ] && echo second && exit 0; sleep 0.1; done; exit 1")
     assert code == 0
     assert "second\n" in seen
+
+
+def test_a_step_id_command_still_streams_in_plain_mode(test_mod, monkeypatch, tmp_path):
+    """Through run_tool (markers off, default sinks), a step's lines still reach stdout before the command exits."""
+    marker = tmp_path / "marker"
+    seen = []
+
+    class Recorder:
+        def write(self, s):
+            seen.append(s)
+            if "first" in s:
+                marker.touch()
+            return len(s)
+
+        def flush(self):
+            pass
+
+        def isatty(self):
+            return False
+
+    monkeypatch.setattr("sys.stdout", Recorder())
+    code, out = test_mod.run_command(
+        f"echo first; for i in $(seq 50); do [ -f '{marker}' ] && echo second && exit 0; sleep 0.1; done; exit 1",
+        "tests", "Tests")
+    assert code == 0
+    assert out == "first\nsecond\n"
+    assert any("second" in s for s in seen)

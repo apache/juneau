@@ -79,14 +79,14 @@ function declaredOf(el) {
 const out = {};
 
 (async function () { // NOSONAR javascript:S3776 -- linear test scenario
-	const params = { linesUrl: '/runs/{id}/lines', compact: true, rows: 8, markers: 'hide' };
+	const params = { eventsUrl: '/runs/{id}/events', compact: true, rows: 8 };
 
 	{
-		const c = await build({ id: 'output', type: 'row-detail', populate: 'console-output', params: params });
+		const c = await build({ id: 'output', type: 'row-detail', populate: 'run-view', params: params });
 		const d = declaredOf(c.region);
 		out.a01_paramsCopied = !!(d && JSON.stringify(d.params) === JSON.stringify(params));
 		out.a01_noDataUrl = !!(d && !Object.hasOwn(d, 'dataUrl'));
-		out.a01_populate = c.region?.dataset.juneauRegionPopulate === 'console-output';
+		out.a01_populate = c.region?.dataset.juneauRegionPopulate === 'run-view';
 	}
 
 	{
@@ -128,8 +128,7 @@ const out = {};
 			c.R.initRegion(c.region);
 		}
 		await Promise.resolve();
-		out.a06_roundTrip = !!(seen && seen.linesUrl === '/runs/{id}/lines' && seen.compact === true && seen.rows === 8
-			&& seen.markers === 'hide');
+		out.a06_roundTrip = !!(seen && seen.eventsUrl === '/runs/{id}/events' && seen.compact === true && seen.rows === 8);
 		out.a06_noErrors = c.rec.errors.length === 0;
 	}
 

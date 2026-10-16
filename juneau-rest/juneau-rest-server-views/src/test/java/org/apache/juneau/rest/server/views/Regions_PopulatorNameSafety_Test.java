@@ -27,7 +27,7 @@ import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
 
 /**
- * Design test <b>35</b> (R11, §13): <b>the populator name is never interpolated into a selector or into
+ * <b>The populator name is never interpolated into a selector or into
  * markup</b>.
  *
  * <p>
@@ -37,7 +37,7 @@ import org.junit.jupiter.api.*;
  * name concatenated into markup is an XSS. It must only ever be a <b>key</b>.
  *
  * <p>
- * Server-side the name is additionally allowlisted at startup (design test 37, already covered by
+ * Server-side the name is additionally allowlisted at startup (already covered by
  * {@code RegionDef_Test.b03}), so on a page Juneau emitted the name is a known-good token. This test covers the
  * client side, which cannot assume that: the runtime reads the attribute off whatever DOM it is handed.
  *

@@ -237,6 +237,40 @@ const late = [];
 	late.push(() => { out.cardReported.events = r.cardEvents.map(e => e.kind); });
 }
 
+// 10. A bare card of a non-html type keeps a host div with the card id and adopter classes and renders its
+// handler there, but carries jc-card-bare instead of jc-card and no title; a bare params card still waits for its
+// params; a bare card of a not-yet-registered type is pending with the same host.
+{
+	const r = load({});
+	r.JC.registerCard('chromeless', (card, el) => { el.appendChild(r.doc.createTextNode('body:' + card.id)); });
+	const res = r.JC.mount(C({ cards: [
+		{ id: 'bc', type: 'chromeless', bare: true, title: 'Hidden', class: 'adopter other' },
+		{ id: 'nc', type: 'chromeless', title: 'Shown' },
+		{ id: 'bp', type: 'chromeless', bare: true, title: 'Hidden', src: '/api/{x}',
+			subscribes: [{ topic: 'sel:x', as: 'params', map: { x: 'ids.0' }, emptyText: 'Pick one.' }] },
+		{ id: 'lt', type: 'later', bare: true, title: 'Hidden', class: 'adopter' },
+		{ id: 'sb', type: 'chromeless', bare: 'true', title: 'Strict' }
+	] }), { root: r.doc.body, document: r.doc });
+	const info = id => {
+		const h = res.cards[id];
+		return {
+			tag: h.tagName, id: h.id, isCard: h.classList.contains('jc-card'),
+			isBare: h.classList.contains('jc-card-bare'),
+			adopter: h.classList.contains('adopter'), other: h.classList.contains('other'),
+			title: !!h.querySelector('.jc-card-title'), text: h.textContent,
+			inDoc: r.doc.getElementById(id) === h
+		};
+	};
+	const before = info('lt');
+	before.pending = res.cards.lt.hasAttribute('data-juneau-card-pending');
+	r.JC.registerCard('later', (card, el) => { el.appendChild(r.doc.createTextNode('later:' + card.id)); });
+	out.bareChromeless = {
+		errors: r.errors, bare: info('bc'), normal: info('nc'), strict: info('sb'), params: info('bp'),
+		pendingBefore: before,
+		pendingAfter: info('lt'), pendingAfterAttr: res.cards.lt.hasAttribute('data-juneau-card-pending')
+	};
+}
+
 Promise.resolve(out.refreshCoalesce).then(resolved => {
 	out.refreshCoalesce = resolved;
 	setImmediate(() => {

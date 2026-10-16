@@ -18,7 +18,7 @@
 /*
  * regions-bus-topics.cjs - always-on Node harness for a region's view of the PAGE bus (juneau-bus.js):
  * ctx.publish / ctx.subscribe with the region key as owner, self-echo, the "message" re-populate and its
- * messageSignal (decision (i) of the C2 bus plan, Task 2), the per-invocation sweep, teardown disposing the owner,
+ * messageSignal (the signal that re-populates a region), the per-invocation sweep, teardown disposing the owner,
  * the separation from the region bus (ctx.emit / ctx.on), and E-JS-46 when juneau-bus.js is missing.  Every
  * assertion lives in Regions_BusTopics_Test.
  *

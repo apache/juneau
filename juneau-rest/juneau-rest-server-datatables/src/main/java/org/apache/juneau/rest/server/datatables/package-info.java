@@ -23,7 +23,7 @@
  * <p>
  * This package holds <b>only</b> the DataTables JSON <b>input</b> ({@link org.apache.juneau.rest.server.datatables.DataTablesRequest})
  * and <b>output</b> ({@link org.apache.juneau.rest.server.datatables.DataTablesResults}) beans, plus the
- * client-helper mixin.  It carries <b>no</b> query-engine types (design §5.3): the beans know nothing about
+ * client-helper mixin.  It carries <b>no</b> query-engine types: the beans know nothing about
  * {@link org.apache.juneau.commons.beanquery.BeanQuery}.
  *
  * <p>

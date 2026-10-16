@@ -46,7 +46,7 @@ final class CardRequirements {
 	}
 
 	/**
-	 * @param type The card type ({@code html}, {@code datatables}, {@code console-output}, {@code run-view}, {@code terminal}).
+	 * @param type The card type ({@code html}, {@code datatables}, {@code run-view}, {@code terminal}).
 	 * @return The packs the type requires, in order.
 	 */
 	List<String> forType(String type) {

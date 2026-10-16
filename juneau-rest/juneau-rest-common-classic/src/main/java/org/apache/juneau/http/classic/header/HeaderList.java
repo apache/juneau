@@ -886,7 +886,7 @@ public class HeaderList extends ArrayList<Header> {
 	 * Returns an unmodifiable snapshot of this list.
 	 *
 	 * <p>
-	 * D1 idempotency: if this list is already an {@link Unmodifiable} snapshot, it is returned as-is.
+	 * Idempotency: if this list is already an {@link Unmodifiable} snapshot, it is returned as-is.
 	 *
 	 * @return An unmodifiable snapshot of this list, or this list if it is already unmodifiable.
 	 */
@@ -955,7 +955,7 @@ public class HeaderList extends ArrayList<Header> {
 	 * An unmodifiable snapshot of a {@link HeaderList}.
 	 *
 	 * <p>
-	 * This is the D4 "collection-mutator-override" variant of the immutability paradigm.  Because {@link HeaderList}
+	 * This is the "collection-mutator-override" variant of the immutability paradigm.  Because {@link HeaderList}
 	 * extends {@link ArrayList}, a single {@code modify()} funnel cannot intercept the inherited {@code ArrayList}
 	 * mutators, so this subclass snapshot-copies the elements in its constructor and overrides the entire
 	 * collection-mutator surface — its own fluent mutators plus the inherited {@code ArrayList} mutators (including the

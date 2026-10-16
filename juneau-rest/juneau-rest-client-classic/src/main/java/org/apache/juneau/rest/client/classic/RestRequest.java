@@ -40,6 +40,7 @@ import org.apache.http.client.*;
 import org.apache.http.client.config.*;
 import org.apache.http.client.entity.*;
 import org.apache.http.client.methods.*;
+import org.apache.http.client.protocol.HttpClientContext;
 import org.apache.http.client.utils.*;
 import org.apache.http.concurrent.*;
 import org.apache.http.entity.BasicHttpEntity;
@@ -58,6 +59,7 @@ import org.apache.juneau.http.classic.header.ContentType;
 import org.apache.juneau.http.classic.part.*;
 import org.apache.juneau.http.classic.resource.*;
 import org.apache.juneau.http.remote.*;
+import org.apache.juneau.rest.client.RedirectSecurity;
 import org.apache.juneau.rest.client.classic.remote.*;
 import org.apache.juneau.marshall.*;
 import org.apache.juneau.marshall.bson.*;
@@ -204,6 +206,10 @@ public class RestRequest extends MarshallingSession implements HttpUriRequest, C
 	private boolean ignoreErrors;
 	private boolean suppressLogging;
 	private HttpContext context;
+	// Set for the request of an SSRF-guard-active @Remote call (by RestClient, or by run() while the calling thread runs
+	// a guarded call); it then sends every hop with the SsrfGuardMarker on its context.  Volatile: the request's
+	// HttpClient may run on another thread.
+	private volatile boolean ssrfGuarded;
 	private HttpHost target;
 	private HttpPartSchema contentSchema;
 	private HttpPartSerializerSession partSerializerSession;
@@ -2139,7 +2145,9 @@ public class RestRequest extends MarshallingSession implements HttpUriRequest, C
 				request2.setEntity(entity);
 			}
 
-			var httpResponse = RemoteUrlPolicyState.isActive() ? runWithPolicyRedirects() : client.run(target, request, context);
+			if (RemoteUrlPolicyState.isActive())
+				ssrfGuarded = true;
+			var httpResponse = ssrfGuarded ? runWithPolicyRedirects() : client.run(target, request, context);
 			response = client.createResponse(this, httpResponse, parser2);
 
 			if (isDebug() || client.logRequests == DetailLevel.FULL)
@@ -2221,28 +2229,64 @@ public class RestRequest extends MarshallingSession implements HttpUriRequest, C
 	}
 
 	// -----------------------------------------------------------------------------------------------------------------
-	// SSRF-guard redirect revalidation (active only while RemoteUrlPolicyState.isActive() -- see that class)
+	// SSRF-guard redirect revalidation (active only for a guarded request -- see SsrfGuardMarker)
 	// -----------------------------------------------------------------------------------------------------------------
+
+	// Marks this as the request of an SSRF-guard-active @Remote call.
+	void ssrfGuard() {
+		ssrfGuarded = true;
+	}
+
+	// Whether this is the request of an SSRF-guard-active @Remote call.
+	boolean isSsrfGuarded() { return ssrfGuarded; }
 
 	/**
 	 * Runs this request with Apache HttpClient's own automatic redirect-following disabled (see
 	 * {@code PolicyAwareRedirectStrategy}) and instead follows {@code 3xx} hops in a Juneau-controlled loop that
-	 * re-validates the {@code Location} of every hop against {@link RemoteUrlPolicy} &mdash; and, since
-	 * {@link RemoteUrlPolicyState} remains set on the calling thread for the whole loop, every hop leases its connection
-	 * from the client's dedicated pinned pool ({@code SsrfGuardConnectionManager}), which pin-on-connects each hop's
-	 * resolved address and never hands out a connection an ordinary request opened.  Only called while
-	 * {@link RemoteUrlPolicyState#isActive()}, i.e. for a {@code @Remote} call with the SSRF guard in effect.
+	 * re-validates the {@code Location} of every hop against {@link RemoteUrlPolicy} &mdash; and, since every hop is
+	 * sent with the {@code SsrfGuardMarker} on its context, every hop leases its connection from the client's dedicated
+	 * pinned pool ({@code SsrfGuardConnectionManager}), which pin-on-connects each hop's resolved address and never hands
+	 * out a connection an ordinary request opened, on whichever thread the client runs it.  Only called for a guarded
+	 * request, i.e. for a {@code @Remote} call with the SSRF guard in effect.
 	 */
 	private HttpResponse runWithPolicyRedirects() throws IOException {
+		// A context set with context(...) carries the marker, and the redirect credential guard's origin, for the call only.
+		var previousMarker = nn(context) ? SsrfGuardMarker.mark(context) : null;
+		var previousOrigin = nn(context) ? ClassicRedirectCredentialGuard.origin(context) : null;
+		try {
+			return runWithPolicyRedirects2();
+		} finally {
+			if (nn(context)) {
+				context.setAttribute(SsrfGuardMarker.ATTRIBUTE, previousMarker);
+				ClassicRedirectCredentialGuard.origin(context, previousOrigin);
+			}
+		}
+	}
+
+	private HttpResponse runWithPolicyRedirects2() throws IOException {
 		var currentTarget = target;
 		HttpRequestBase currentRequest = request;
+		URI firstOrigin = null;
 		for (var hop = 0; hop < RemoteUrlPolicy.MAX_REDIRECT_HOPS; hop++) {
 			// Hop 0's URI was already validated (or is the operator-configured client root, which the resolution
 			// path intentionally does not re-check -- see RemoteUrlPolicy.requireAllowedUrl) before this request
 			// was built; only a redirect Location -- a URL discovered at runtime -- needs a fresh pre-check here.
 			if (hop > 0)
 				requirePolicyAllowed(currentRequest.getURI());
-			var httpResponse = client.run(currentTarget, currentRequest, context);
+			// Without a context(...) setting each hop gets a fresh context, as Apache HttpClient gives one to a request
+			// sent with none: sharing one would carry the authentication state of a hop to the next host.
+			var hopContext = context;
+			if (hopContext == null) {
+				hopContext = new BasicHttpContext();
+				SsrfGuardMarker.mark(hopContext);
+			}
+			// The redirect credential guard compares every hop with the first hop's origin, as it does on the one context
+			// of a redirect Apache HttpClient follows itself, and strips what the client's interceptors and default headers
+			// add on another origin.  On hop 0 this clears an origin an earlier call left on a context(...) setting.
+			ClassicRedirectCredentialGuard.origin(hopContext, firstOrigin);
+			var httpResponse = client.run(currentTarget, currentRequest, hopContext);
+			if (hop == 0)
+				firstOrigin = ClassicRedirectCredentialGuard.origin(hopContext);
 			var sc = httpResponse.getStatusLine().getStatusCode();
 			if (! isRedirectStatus(sc))
 				return httpResponse;
@@ -2256,6 +2300,12 @@ public class RestRequest extends MarshallingSession implements HttpUriRequest, C
 			} catch (IllegalArgumentException e) {
 				throw new ClientProtocolException(e.getMessage(), e);
 			}
+			// On a context(...) setting shared by all hops, the authentication state of the target is reset on a hop to
+			// another origin, as Apache HttpClient's own redirect handling resets it on a change of host: otherwise the
+			// credentials that answered one host's challenge are sent unasked to the next.  The credentials provider is
+			// still asked per AuthScope, and the auth cache is keyed by host, so neither carries them across.
+			if (nn(context) && crossesOrigin(currentRequest.getURI(), target2))
+				resetTargetAuthState(context);
 			currentRequest = buildRedirectRequest(currentRequest, target2, sc);
 			currentTarget = null; // Recomputed by the connection route planner from the request's own absolute URI.
 		}
@@ -2263,9 +2313,9 @@ public class RestRequest extends MarshallingSession implements HttpUriRequest, C
 			+ " hops) while following a policy-covered @Remote redirect chain, starting at: " + request.getURI());
 	}
 
-	private static void requirePolicyAllowed(URI uri) throws ClientProtocolException {
+	private void requirePolicyAllowed(URI uri) throws ClientProtocolException {
 		try {
-			RemoteUrlPolicy.requireAllowedUrl(uri.toString(), false);
+			RemoteUrlPolicy.requireAllowedUrl(uri.toString(), false, client.getAllowedAddressRanges());
 		} catch (IllegalArgumentException e) {
 			throw new ClientProtocolException(e.getMessage(), e);
 		}
@@ -2281,6 +2331,12 @@ public class RestRequest extends MarshallingSession implements HttpUriRequest, C
 	 * original method was already {@code GET}/{@code HEAD}; {@code 307}/{@code 308} preserve the original method
 	 * and entity. A non-{@linkplain HttpEntity#isRepeatable() repeatable} entity cannot be safely re-sent, so such a
 	 * redirect is refused (fail closed) rather than risking a corrupt or partial replay.
+	 *
+	 * <p>
+	 * A hop to another origin (or an {@code https}&rarr;{@code http} downgrade) drops the caller-set credential headers
+	 * ({@link RedirectSecurity#stripOnCrossOrigin()}), as {@code ClassicRedirectCredentialGuard} does for a redirect
+	 * Apache HttpClient follows itself: that guard keys the first origin on the context, and here each hop may have a
+	 * context of its own.  Once dropped they stay dropped, even if a later hop comes back to the first origin.
 	 */
 	private HttpRequestBase buildRedirectRequest(HttpRequestBase current, URI target2, int statusCode) throws ClientProtocolException {
 		var method = current.getMethod();
@@ -2301,10 +2357,30 @@ public class RestRequest extends MarshallingSession implements HttpUriRequest, C
 			next = new BasicHttpRequestBase(this, rewriteToGet ? "GET" : method);
 		}
 		next.setURI(target2);
+		var strip = crossesOrigin(current.getURI(), target2);
 		for (var h : current.getAllHeaders())
-			if (! (rewriteToGet && (eqic(h.getName(), "Content-Length") || eqic(h.getName(), HEADER_CONTENT_TYPE))))
+			if (! (rewriteToGet && (eqic(h.getName(), "Content-Length") || eqic(h.getName(), HEADER_CONTENT_TYPE))) && ! (strip && isCredentialHeader(h.getName())))
 				next.addHeader(h);
 		return next;
+	}
+
+	// Whether a hop from one URI to the other leaves the origin, or cannot be told not to (either is not absolute).
+	private static boolean crossesOrigin(URI from, URI to) {
+		return from.getScheme() == null || from.getHost() == null || to.getScheme() == null || to.getHost() == null
+			|| RedirectSecurity.shouldStripCredentials(from, to);
+	}
+
+	// The shared RedirectSecurity set, plus Proxy-Authorization whatever that set holds: a guarded call never goes
+	// through a proxy (one is refused), so on any hop it could only be a credential sent to the target itself.
+	// Defense in depth: the shared set holds Proxy-Authorization today, so no test can tell this pin from it.
+	private static boolean isCredentialHeader(String name) {
+		return eqic(name, "Proxy-Authorization") || RedirectSecurity.stripOnCrossOrigin().stream().anyMatch(x -> eqic(x, name));
+	}
+
+	private static void resetTargetAuthState(HttpContext context) {
+		var state = HttpClientContext.adapt(context).getTargetAuthState();
+		if (nn(state))
+			state.reset();
 	}
 
 	/**

@@ -16,7 +16,7 @@
  */
 
 /**
- * The DataTables &harr; {@link org.apache.juneau.commons.beanquery.BeanQuery} adapter (design §5.3).
+ * The DataTables &harr; {@link org.apache.juneau.commons.beanquery.BeanQuery} adapter.
  *
  * <p>
  * Kept separate from {@code org.apache.juneau.rest.server.datatables}, which holds only the DataTables JSON

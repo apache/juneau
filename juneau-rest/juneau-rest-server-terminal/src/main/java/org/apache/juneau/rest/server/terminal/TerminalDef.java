@@ -39,7 +39,13 @@ import org.apache.juneau.rest.server.views.*;
 public class TerminalDef {
 
 	/** The keys {@link #fromMap(String, Map)} accepts, in {@link #toMap()} order. */
-	public static final List<String> KEYS = List.of("bytesUrl", "eventsUrl", "refreshMs", "title", "tailBytes", "input", "inputId");
+	public static final List<String> KEYS = List.of("bytesUrl", "eventsUrl", "refreshMs", "title", "tailBytes", "input", "inputId", "terminal");
+
+	/** The keys the {@code terminal} option map accepts, in {@link #toMap()} order; they match the client-side xterm allowlist. */
+	public static final List<String> TERMINAL_KEYS = List.of("convertEol", "scrollback", "fontFamily");
+
+	/** The largest {@code terminal.scrollback}, in lines. */
+	public static final int MAX_SCROLLBACK = 1_000_000;
 
 	/** The tail the card replays on its first load when {@link #tailBytes} is not set: 2 MiB. */
 	public static final long DEFAULT_TAIL_BYTES = 2L * 1024 * 1024;
@@ -53,7 +59,7 @@ public class TerminalDef {
 	public String bytesUrl;
 	/** The run-view events endpoint path, or <jk>null</jk> for no steps. */
 	public String eventsUrl;
-	/** The poll interval; clamped to {@link ConsoleOutputDef#MIN_REFRESH_MS}. */
+	/** The poll interval; clamped to {@link org.apache.juneau.rest.server.runreport.RunViewChecks#MIN_REFRESH_MS}. */
 	public Long refreshMs;
 	/** The card header title. */
 	public String title;
@@ -63,6 +69,8 @@ public class TerminalDef {
 	public Boolean input;
 	/** The terminal id sent as the payload {@code id} of a {@code term.input} frame. */
 	public String inputId;
+	/** The xterm options passed to the client terminal, limited to {@link #TERMINAL_KEYS}; <jk>null</jk> for none. */
+	public Map<String,Object> terminal;
 
 	private TerminalDef(String id) {
 		this.id = id;
@@ -115,10 +123,37 @@ public class TerminalDef {
 				case "tailBytes" -> d.tailBytes = integer(id, k, v);
 				case "input" -> d.input = bool(id, k, v);
 				case "inputId" -> d.inputId = string(id, k, v);
+				case "terminal" -> d.terminal = terminalOptions(id, v);
 				default -> throw iaex("TerminalDef '%s' unknown key '%s'; allowed: %s.", id, clip(k), KEYS);
 			}
 		}
 		return d;
+	}
+
+	private static Map<String,Object> terminalOptions(String id, Object v) {
+		if (! (v instanceof Map<?,?> m))
+			throw iaex("TerminalDef '%s' terminal must be an object.", id);
+		for (var k : m.keySet())
+			if (! (k instanceof String ks) || ! TERMINAL_KEYS.contains(ks))
+				throw iaex("TerminalDef '%s' terminal unknown key '%s'; allowed: %s.", id, clip(String.valueOf(k)), TERMINAL_KEYS);
+		var out = new LinkedHashMap<String,Object>();
+		if (m.containsKey("convertEol")) {
+			if (! (m.get("convertEol") instanceof Boolean b))
+				throw iaex("TerminalDef '%s' terminal.convertEol must be a boolean.", id);
+			out.put("convertEol", b);
+		}
+		if (m.containsKey("scrollback")) {
+			var n = integer(id, "terminal.scrollback", m.get("scrollback"));
+			if (n < 0 || n > MAX_SCROLLBACK)
+				throw iaex("TerminalDef '%s' terminal.scrollback must be 0..%s; got %s.", id, MAX_SCROLLBACK, n);
+			out.put("scrollback", n);
+		}
+		if (m.containsKey("fontFamily")) {
+			if (! (m.get("fontFamily") instanceof String f) || f.isEmpty())
+				throw iaex("TerminalDef '%s' terminal.fontFamily must be a non-empty string.", id);
+			out.put("fontFamily", f);
+		}
+		return out;
 	}
 
 	private static String string(String id, String k, Object v) {
@@ -145,7 +180,7 @@ public class TerminalDef {
 	public TerminalDef bytesUrl(String value) { bytesUrl = value; return this; }
 	/** @param value The run-view events endpoint path. @return This object. */
 	public TerminalDef eventsUrl(String value) { eventsUrl = value; return this; }
-	/** @param value The poll interval; clamped to {@link ConsoleOutputDef#MIN_REFRESH_MS}. @return This object. */
+	/** @param value The poll interval; clamped to {@link org.apache.juneau.rest.server.runreport.RunViewChecks#MIN_REFRESH_MS}. @return This object. */
 	public TerminalDef refreshMs(long value) { refreshMs = value; return this; }
 	/** @param value The card header title. @return This object. */
 	public TerminalDef title(String value) { title = value; return this; }
@@ -156,6 +191,13 @@ public class TerminalDef {
 	public TerminalDef input(boolean value) { input = value; return this; }
 	/** @param value The terminal id sent as the {@code term.input} payload {@code id}. @return This object. */
 	public TerminalDef inputId(String value) { inputId = value; return this; }
+
+	/**
+	 * @param value The xterm options, a map of {@code convertEol} (boolean), {@code scrollback} (integer 0..{@value #MAX_SCROLLBACK})
+	 * 	and {@code fontFamily} (non-empty string); checked by {@link #validate()}.
+	 * @return This object.
+	 */
+	public TerminalDef terminal(Map<String,?> value) { terminal = value == null ? null : new LinkedHashMap<>(value); return this; }
 
 	/**
 	 * Validates this declaration (fail-closed).
@@ -179,6 +221,8 @@ public class TerminalDef {
 			throw iaex("TerminalDef '%s' inputId must match [A-Za-z0-9_-]{1,128}; got '%s'.", id, clip(inputId));
 		if (Boolean.TRUE.equals(input) && inputId == null)
 			throw iaex("TerminalDef '%s' input needs inputId.", id);
+		if (terminal != null)
+			terminal = terminalOptions(id, terminal);
 		return this;
 	}
 
@@ -194,16 +238,18 @@ public class TerminalDef {
 	 * Returns the set options in {@link #KEYS} order, with {@code refreshMs} clamped.
 	 *
 	 * @return A new ordered map.
+	 * @throws IllegalArgumentException If the {@code terminal} options are invalid.
 	 */
 	public Map<String,Object> toMap() {
 		var m = new LinkedHashMap<String,Object>();
 		put(m, "bytesUrl", bytesUrl);
 		put(m, "eventsUrl", eventsUrl);
-		put(m, "refreshMs", refreshMs == null ? null : Math.max(ConsoleOutputDef.MIN_REFRESH_MS, refreshMs));
+		put(m, "refreshMs", refreshMs == null ? null : Math.max(MIN_REFRESH_MS, refreshMs));
 		put(m, "title", title);
 		put(m, "tailBytes", tailBytes);
 		put(m, "input", input);
 		put(m, "inputId", inputId);
+		put(m, "terminal", terminal == null ? null : terminalOptions(id, terminal));
 		return m;
 	}
 

@@ -133,7 +133,7 @@ public class StringEntity extends BasicHttpEntity<StringEntity> {
 	@Override /* Overridden from Object */
 	public boolean equals(Object o) {
 		// Leaf-type gate: keeps this entity from comparing equal to a different leaf with equal base content, while
-		// preserving D3 (StringEntity.Unmodifiable IS-A StringEntity, so bean.equals(bean.unmodifiable()) still holds).
+		// preserving content equality (StringEntity.Unmodifiable IS-A StringEntity, so bean.equals(bean.unmodifiable()) still holds).
 		// byteCache is a memoized derivation of the inherited content/charset and is intentionally excluded from equality.
 		return o instanceof StringEntity && super.equals(o);
 	}

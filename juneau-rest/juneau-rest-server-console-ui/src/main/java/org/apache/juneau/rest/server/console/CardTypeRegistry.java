@@ -26,7 +26,7 @@ import org.apache.juneau.marshall.collections.*;
 /**
  * The open set of server-side card type handlers. {@link #standard()} holds the built-ins ({@code html}),
  * every {@link CardTypeHandler} found through {@link java.util.ServiceLoader} (this is how
- * console-ui-freemarker contributes {@code datatables} and {@code console-output}), and falls back to the
+ * console-ui-freemarker contributes {@code datatables} and {@code terminal}), and falls back to the
  * generic passthrough for unknown types. {@link #standard()} is immutable; a host that adds its own types
  * works on a {@link #copy()}, so one host's types never leak into another's.
  *
@@ -43,16 +43,15 @@ import org.apache.juneau.marshall.collections.*;
 public final class CardTypeRegistry {
 
 	/**
-	 * Reserved type names: {@code html} (built in), {@code datatables}, {@code console-output}, {@code run-view},
+	 * Reserved type names: {@code html} (built in), {@code datatables}, {@code run-view},
 	 * {@code terminal}, {@code chart} and {@code job-log} (console-ui-freemarker).
 	 */
-	public static final Set<String> RESERVED = Set.of("html", "datatables", "console-output", "run-view", "terminal", "chart", "job-log");
+	public static final Set<String> RESERVED = Set.of("html", "datatables", "run-view", "terminal", "chart", "job-log");
 
 	/** The one simple class name allowed to bind each reserved type (E-22's identity check). */
 	private static final Map<String,String> RESERVED_OWNER_SIMPLE_NAMES = Map.of(
 		"html", "HtmlCardType",
 		"datatables", "DatatablesCardType",
-		"console-output", "ConsoleOutputCardType",
 		"run-view", "RunViewCardType",
 		"terminal", "TerminalCardType",
 		"chart", "ChartCardType",

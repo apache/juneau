@@ -471,7 +471,7 @@
       0,
       1
     ],
-    "comment": "IRS parity gap 4's exact example: a bare VERSION value defaults to $prefix (dotted-tuple prefix), not typed-equals, so 250 matches 250.1 and 250.2.3 but not 25, 2500 or 25.0."
+    "comment": "A bare VERSION value defaults to $prefix (dotted-tuple prefix), not typed-equals, so 250 matches 250.1 and 250.2.3 but not 25, 2500 or 25.0."
   },
   {
     "id": "c07",
@@ -486,7 +486,7 @@
       "10.1.0"
     ],
     "matches": [],
-    "comment": "IRS parity gap 4: the non-matching side of the same dotted-tuple-prefix rule as c06."
+    "comment": "The non-matching side of the same dotted-tuple-prefix rule as c06."
   },
   {
     "id": "d01a",
@@ -2165,7 +2165,7 @@
       0,
       2
     ],
-    "comment": "IRS parity gap 2: the [+-]<n>(ms|s|m|h|d) relative-duration token round-trips as a plain literal — no special grammar — which is all sub-project #3 owns. Deliberately typed TEXT here rather than TIMESTAMP/duration: SearchExpressionParser never sees a column type (parseExpr takes no type argument), so the grammar/tree-shape point this case makes is identical regardless of the eventual column's type, and TEXT keeps this case clear of #4's (not-yet-landed) typed-value validation. Interpreting the digits+unit as an offset from request time, on an actual TIMESTAMP/duration column, is #1's and #4's job, not this parser's."
+    "comment": "The [+-]<n>(ms|s|m|h|d) relative-duration token round-trips as a plain literal — no special grammar. Deliberately typed TEXT here rather than TIMESTAMP/duration: SearchExpressionParser never sees a column type (parseExpr takes no type argument), so the grammar/tree-shape point this case makes is identical regardless of the eventual column's type, and TEXT keeps this case independent of typed-value validation. Interpreting the digits+unit as an offset from request time is not this parser's job."
   },
   {
     "id": "t02",

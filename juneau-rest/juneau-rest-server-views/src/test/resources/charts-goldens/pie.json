@@ -1,0 +1,52 @@
+{
+  "tooltip": {
+    "trigger": "item",
+    "renderMode": "richText"
+  },
+  "legend": {
+    "bottom": 8,
+    "itemGap": 16
+  },
+  "series": [
+    {
+      "id": "slices",
+      "type": "pie",
+      "radius": "60%",
+      "center": [
+        "50%",
+        "42%"
+      ],
+      "minShowLabelAngle": 7.2,
+      "encode": {
+        "itemName": "s",
+        "value": "n"
+      }
+    }
+  ],
+  "aria": {
+    "enabled": true
+  },
+  "dataset": [
+    {
+      "id": "juneau",
+      "dimensions": [
+        {
+          "name": "s",
+          "type": "ordinal"
+        },
+        {
+          "name": "n",
+          "type": "number"
+        }
+      ],
+      "source": {
+        "s": [
+          "a",
+          "b",
+          "c"
+        ],
+        "n": "[Float64Array 3: 50,47,3]"
+      }
+    }
+  ]
+}

@@ -43,7 +43,7 @@ import org.junit.jupiter.api.*;
 })
 class CardDirective_Test extends TestBase {
 
-	// renderResponseStackTraces=true so the reject() diagnostic reaches the 500 body verbatim (F1 / b02): the
+	// renderResponseStackTraces=true so the reject() diagnostic reaches the 500 body verbatim: the
 	// secure default suppressed-body path runs RestContext.scrubForXss, which replaces '<' '>' '&' with spaces
 	// as an XSS defense, so literal "<@card>" cannot survive there.  In DEBUG mode the full stack trace (with
 	// the plain-cause IllegalArgumentException carrying the frozen sentence) is written unscrubbed.
@@ -80,6 +80,10 @@ class CardDirective_Test extends TestBase {
 		public View cardsClassDigit() { return FreemarkerView.of("admin/page-cards-class-digit.ftlh"); }
 		@RestGet(path="/card-html-template")
 		public View cardHtmlTemplate() { return FreemarkerView.of("admin/page-card-html-template.ftlh"); }
+		@RestGet(path="/card-html-sanitize")
+		public View cardHtmlSanitize() { return FreemarkerView.of("admin/page-card-html-sanitize.ftlh"); }
+		@RestGet(path="/card-html-sanitize-bad")
+		public View cardHtmlSanitizeBad() { return FreemarkerView.of("admin/page-card-html-sanitize-bad.ftlh"); }
 	}
 
 	static String get(String path) throws Exception {
@@ -134,7 +138,7 @@ class CardDirective_Test extends TestBase {
 		assertEquals("/rest/releases/data", table.getString("dataUrl"));
 		var col0 = table.getList("columns").getMap(0);
 		assertBean(col0, "key,label", "name,Name");
-		// The bridge card has no server markup; the shell renders its mount (spec §4.6).
+		// The bridge card has no server markup; the shell renders its mount.
 		assertFalse(body.contains("data-juneau-layout=\"wide\""), () -> body);
 	}
 
@@ -236,5 +240,22 @@ class CardDirective_Test extends TestBase {
 				assertTrue(body.contains("<@card id='bad'> class='"), () -> body);
 				assertTrue(body.contains("must be a space-separated list of CSS class names"), () -> body);
 			}
+	}
+
+	@Test void b19_sanitizeAttr_isInContractOnlyWhenTrue() throws Exception {
+		var body = get("/card-html-sanitize");
+		assertEquals(true, card(body, "on").get("sanitize"));
+		assertEquals("/rest/fragment", card(body, "on").getString("src"));
+		assertFalse(card(body, "off").containsKey("sanitize"));
+		assertFalse(card(body, "plain").containsKey("sanitize"));
+	}
+
+	@Test void b20_sanitizeAttr_withoutSrc_isRejected() throws Exception {
+		try (var c = MockRestClient.buildLax(Host.class);
+			var rsp = c.get("/card-html-sanitize-bad").run()) {
+			rsp.assertStatus(500);
+			var body = rsp.getContent().asString();
+			assertTrue(body.contains("<@card id='bad'> sanitize= applies only to an html card with src=."), () -> body);
+		}
 	}
 }

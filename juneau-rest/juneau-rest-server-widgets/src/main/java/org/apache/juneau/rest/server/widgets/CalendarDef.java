@@ -280,7 +280,7 @@ public class CalendarDef implements Widget {
 	 *
 	 * <p>
 	 * When {@link #initialYear}/{@link #initialMonth} are unset, the emitter resolves the effective window from the
-	 * injected clock (F1) and passes it here so seed events are still checked against the month actually rendered.
+	 * injected clock and passes it here so seed events are still checked against the month actually rendered.
 	 *
 	 * @param effectiveYear The year the initial month is rendered for, or <jk>null</jk> to skip the off-month check.
 	 * @param effectiveMonth The 1-based month rendered, or <jk>null</jk> to skip the off-month check.

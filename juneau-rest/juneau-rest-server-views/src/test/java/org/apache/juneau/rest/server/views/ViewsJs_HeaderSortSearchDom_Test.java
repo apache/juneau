@@ -31,7 +31,7 @@ import org.apache.juneau.marshall.marshaller.*;
 import org.junit.jupiter.api.*;
 
 /**
- * Behavioral DOM-order coverage for the header sort + per-column search glyphs (design 7.1).  A Node harness
+ * Behavioral DOM-order coverage for the header sort + per-column search glyphs.  A Node harness
  * ({@code header-sort-search.cjs}) builds DT2-shaped header cells and drives {@code wireHeaderSortSearch(...)},
  * then reports the resulting glyph order and active-state class.  Source-shape pins live in
  * {@link ViewsJs_HeaderSortSearch_Test}.  Gated on {@code node} being on {@code PATH}.

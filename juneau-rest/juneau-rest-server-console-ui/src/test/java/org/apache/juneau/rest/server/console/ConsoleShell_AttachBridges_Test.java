@@ -25,10 +25,10 @@ import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
 
 /**
- * The shell attaches the contract's server bridges (spec §11.5): {@code juneau-console.js} calls
- * {@code JuneauViews.bus.wiring.attachBridges(contract)} exactly once, after Task 5's wiring validation, so the
+ * The shell attaches the contract's server bridges: {@code juneau-console.js} calls
+ * {@code JuneauViews.bus.wiring.attachBridges(contract)} exactly once, after the wiring validation, so the
  * page's error painter is already registered.  The behavior of {@code attachBridges} is pinned by
- * {@code ViewsJs_BusBridgeWs_Test}; the end-to-end bridge is {@code ConsoleBusBridge_BrowserTest} (Task 18).
+ * {@code ViewsJs_BusBridgeWs_Test}; the end-to-end bridge is {@code ConsoleBusBridge_BrowserTest}.
  */
 class ConsoleShell_AttachBridges_Test extends TestBase {
 
@@ -43,7 +43,7 @@ class ConsoleShell_AttachBridges_Test extends TestBase {
 		var js = shell();
 		var validate = js.indexOf(".wiring.validate(");
 		var attach = js.indexOf(".wiring.attachBridges(");
-		assertTrue(validate >= 0, "Task 5's wiring.validate call is missing");
+		assertTrue(validate >= 0, "The wiring.validate call is missing");
 		assertTrue(attach > validate, "attachBridges must be called after wiring.validate");
 		assertEquals(attach, js.lastIndexOf(".wiring.attachBridges("), "attachBridges is called exactly once");
 	}

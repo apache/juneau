@@ -26,7 +26,7 @@ import org.apache.juneau.marshall.marshaller.*;
 import org.junit.jupiter.api.*;
 
 /**
- * Behavioral coverage for the stock SSE source (spec §11.3 step 2a, §11.6).  {@code bus-bridge-sse.cjs} drives
+ * Behavioral coverage for the stock SSE source.  {@code bus-bridge-sse.cjs} drives
  * {@code JuneauViews.bus.sources.sse} with a scripted {@code fetch}, hand-fed response streams and a fake clock, and
  * reports the session POST, the stream GET, chunked frame parsing, the HTTP status table, session-body checks,
  * CSRF, the same-origin rule, the watchdog, per-message errors and detach.  Gated on {@code node} being on
@@ -225,5 +225,13 @@ class ViewsJs_BusBridgeSse_Test extends TestBase {
 	@Test void a17_aRejectedReadIsARetryableTransportClose() {
 		assertJson("""
 			{"state":"reconnecting","nextRetryMs":1000,"error":"bridge 's': transport 'sse' unavailable: network reset","codes":[]}""", section("readFails"));
+	}
+
+	@Test void a18_theDefaultFetchIsBoundSoCallingItAsAMethodDoesNotThrowIllegalInvocation() {
+		var r = section("defaultFetch");
+		// The default (global) fetch is reached as env.fetch(...); it must still see the window as `this`.
+		assertJson("{\"calls\":{\"stub\":1,\"supplied\":0,\"badThis\":0},\"state\":\"failed\",\"errors\":[\"E-JS-53\"]}", r.get("unsupplied"));
+		// A caller-supplied fetch is used as given; the global one is never touched.
+		assertJson("{\"calls\":{\"stub\":0,\"supplied\":1,\"badThis\":0},\"state\":\"failed\",\"errors\":[\"E-JS-53\"]}", r.get("supplied"));
 	}
 }

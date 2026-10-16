@@ -37,7 +37,7 @@ import org.junit.jupiter.api.*;
  * <p>Two layers, the same split {@code ViewsJs_RibbonDialog_Test} uses:
  * <ul class='spaced-list'>
  * 	<li><b>Default-gate source pins</b> (a-group): the <b>coupling guard</b> that keeps
- * 		{@code submitActionDialog} byte-identical, the <b>enforcement by absence</b> that makes the receipt
+ * 		{@code submitActionDialog} free of receipt coupling, the <b>enforcement by absence</b> that makes the receipt
  * 		non-submittable, the hold's one-settle discipline, and the narrow allowlist of sites permitted to tear the
  * 		dialog stack down automatically.
  * 	<li><b>A behavioral harness</b> ({@code dialog-receipt.cjs}) walking all nine submit terminals and checking
@@ -85,24 +85,24 @@ class ViewsJs_DialogReceipt_Test extends TestBase {
 	 * rule's tripwire there precisely because it is the only path.  Threading a receipt parameter through it would
 	 * re-open a reviewed function to add a feature that has nothing to do with what it decides.  The coupling
 	 * therefore runs through a ctx-scoped hold registered at CLICK time instead, which leaves this function
-	 * byte-identical.
+	 * with no receipt coupling.
 	 */
-	@Test void a01_submitActionDialogIsUntouched() throws Exception {
+	@Test void a01_submitActionDialogHasNoReceiptCoupling() throws Exception {
 		var fn = functionBody(viewsJs(), "\tfunction submitActionDialog(");
-		// The J0512 precedence rule and its opt-in gate, quoted verbatim.
+		// The targetId precedence rule and its opt-in gate, quoted verbatim.
 		assertTrue(fn.contains("const targetId = (modal?.selfTargeted && modal?.idempotencyKey != null)"), fn);
 		assertTrue(fn.contains(": (tr?.dataset?.juneauRowId ?? null);"), fn);
 		// Nothing about the receipt reached it: no hold, no callback, no result-form parameter.
 		for (var forbidden : List.of("_resultHold", "beginDialogResultHold", "settleDialogResultHold",
 				"resultForm", "keepOpenOnSubmit", "onResult", "callback")) {
 			assertFalse(fn.contains(forbidden),
-				() -> "submitActionDialog must stay byte-identical - it grew '" + forbidden + "':\n" + fn);
+				() -> "submitActionDialog must have no receipt coupling - it grew '" + forbidden + "':\n" + fn);
 		}
-		// Its signature is unchanged too: no trailing parameter was appended.
-		assertTrue(viewsJs().contains("function submitActionDialog(modal, action, table, tr, ctx, fields) {"), fn);
+		// Its only trailing parameter beyond the original signature is the rowActions.run caller's extra - nothing receipt-shaped.
+		assertTrue(viewsJs().contains("function submitActionDialog(modal, action, table, tr, ctx, fields, callerExtra) {"), fn);
 	}
 
-	/** {@code startJobStream} is likewise untouched - T5 closes the dialog BEFORE handing off to it. */
+	/** {@code startJobStream} is likewise untouched - the job path closes the dialog BEFORE handing off to it. */
 	@Test void a02_startJobStreamIsUntouched() throws Exception {
 		var fn = functionBody(viewsJs(), "\tfunction startJobStream(");
 		for (var forbidden : List.of("_resultHold", "settleDialogResultHold", "resultForm", "keepOpenOnSubmit"))
@@ -113,7 +113,7 @@ class ViewsJs_DialogReceipt_Test extends TestBase {
 		var close = settle.indexOf("settleDialogResultHold(ctx, \"closeCommitted\")");
 		var stream = settle.indexOf("startJobStream(started");
 		assertTrue(close >= 0 && stream >= 0, settle);
-		assertTrue(close < stream, () -> "T5 must close the held dialog BEFORE streaming:\n" + settle);
+		assertTrue(close < stream, () -> "the job path must close the held dialog BEFORE streaming:\n" + settle);
 	}
 
 	/**
@@ -167,7 +167,7 @@ class ViewsJs_DialogReceipt_Test extends TestBase {
 	}
 
 	/**
-	 * Every terminal in the submit graph hands off exactly once, and the F19 exemption is per-disposition.
+	 * Every terminal in the submit graph hands off exactly once, and the exemption is per-disposition.
 	 *
 	 * <p>{@code closeCommitted} returns {@code false} on purpose: the dialog is gone, so the row / ribbon banner is
 	 * the only surviving signal and suppressing it would leave a committed write with no visible confirmation
@@ -178,15 +178,16 @@ class ViewsJs_DialogReceipt_Test extends TestBase {
 		var views = viewsJs();
 		var submit = functionBody(views, "\tfunction submitRowAction(");
 		var settle = functionBody(views, "\tfunction settleActionResponse(");
-		// T1 (client refuse) + T2 (network reject).
+		// Client refusal + network reject.
 		assertEquals(2, countOf(submit, "settleDialogResultHold(ctx, "),
 			() -> "submitRowAction has exactly two terminals:\n" + submit);
-		// T3..T8 - six terminals, six hand-offs, one each.
+		// The six response terminals, six hand-offs, one each.
 		assertEquals(6, countOf(settle, "settleDialogResultHold(ctx, "),
 			() -> "settleActionResponse has exactly six terminals:\n" + settle);
-		// T9 is shared by BOTH readBodyText chains, so it is one function reached from two `.catch` arms.
+		// The body-read failure terminal is shared by BOTH readBodyText chains, so it is one function reached from two
+		// `.catch` arms.
 		assertEquals(2, countOf(settle, "settleBodyReadFailure(action, table, tr, ctx)"),
-			() -> "both body-read chains must route to T9, or a held dialog hangs forever:\n" + settle);
+			() -> "both body-read chains must route to the body-read terminal, or a held dialog hangs:\n" + settle);
 		assertEquals(1, countOf(functionBody(views, "\tfunction settleBodyReadFailure("),
 			"settleDialogResultHold(ctx, "), views);
 		// The dispositions actually used, and no others.
@@ -403,7 +404,7 @@ class ViewsJs_DialogReceipt_Test extends TestBase {
 		assertEquals(true, report().get("hasReceiptSeam"), report()::toString);
 	}
 
-	/** T8-receipt: the swap.  Same layer, no submit controls, the submitted form gone. */
+	/** Receipt: the swap.  Same layer, no submit controls, the submitted form gone. */
 	@Test void b01_aHeldSuccessWithAResultFormSwapsInPlace() {
 		assertAllTrue("receipt_dialogOpened", "receipt_stillOpenAtSameDepth", "receipt_marked",
 			"receipt_titleFromPayload", "receipt_fieldsRepainted", "receipt_exactlyOneFieldList",
@@ -430,14 +431,14 @@ class ViewsJs_DialogReceipt_Test extends TestBase {
 		assertAllTrue("kinds_unknownFallsBackToText");
 	}
 
-	/** T8-commit / T6: with the dialog gone, the row banner is the only surviving signal and must still render. */
+	/** Commit: with the dialog gone, the row banner is the only surviving signal and must still render. */
 	@Test void b05_aHeldSuccessWithoutAResultFormClosesAndStillPaintsTheRow() {
 		assertAllTrue("commit_dialogClosed", "commit_noDialogInDom", "commit_rowOutcomeRendered", "commit_noReceipt");
 		assertEquals("success", report().get("commit_rowOutcomeState"), report()::toString);
 	}
 
 	/**
-	 * F4: a resultForm on a dialog that never opted in.
+	 * a resultForm on a dialog that never opted in.
 	 *
 	 * <p>The write SUCCEEDED, so the success banner stays byte-identical and this adds exactly one non-alarming
 	 * {@code role=status} diagnostic.  Never a new layer (the forbidden shape), and never a refusal - which would
@@ -448,7 +449,7 @@ class ViewsJs_DialogReceipt_Test extends TestBase {
 			"f4_diagnosticPresent", "f4_diagnosticIsStatusNotAlert", "f4_noNewLayer");
 	}
 
-	/** F1c: a receipt payload carrying a form is the forbidden shape arriving through the receipt door. */
+	/** a receipt payload carrying a form is the forbidden shape arriving through the receipt door. */
 	@Test void b07_aReceiptPayloadCarryingAFormIsRefusedWithItsOwnWording() {
 		assertAllTrue("f1c_stillOpen", "f1c_notPaintedAsReceipt", "f1c_noInputsPainted", "f1c_closeOnlyRow",
 			"f1c_noConfirm", "f1c_busyCleared");
@@ -460,7 +461,7 @@ class ViewsJs_DialogReceipt_Test extends TestBase {
 	}
 
 	/**
-	 * F12: the follow-up read failed three different ways, all of them post-commit.
+	 * the follow-up read failed three different ways, all of them post-commit.
 	 *
 	 * <p>The rejected-promise arm matters as much as the other two: without it a single dropped packet on the
 	 * follow-up read leaves the promise rejected, the terminal unreached, and Confirm stuck disabled + busy on a
@@ -476,14 +477,14 @@ class ViewsJs_DialogReceipt_Test extends TestBase {
 			assertEquals(expected, r.get(k), () -> k + " in " + r);
 	}
 
-	/** T1: nothing was even sent, so the operator can fix the declaration and press Confirm again. */
+	/** nothing was even sent, so the operator can fix the declaration and press Confirm again. */
 	@Test void b09_aPreflightClientRefusalIsRetryable() {
 		assertAllTrue("t1_nothingSent", "t1_stillOpen", "t1_noticePresent", "t1_confirmReEnabled",
 			"t1_busyCleared", "t1_noCloseOnlyRow", "t1_noRowBanner", "t1_formStillStanding");
 	}
 
 	/**
-	 * T2: a network reject is AMBIGUOUS, not retryable.
+	 * a network reject is AMBIGUOUS, not retryable.
 	 *
 	 * <p>{@code fetch} rejects on a connection dropped AFTER the request was fully sent and processed, so this
 	 * does not prove the write didn't land - re-enabling Confirm would hand the operator a one-click duplicate of
@@ -496,7 +497,7 @@ class ViewsJs_DialogReceipt_Test extends TestBase {
 			+ "re-check before retrying.", report().get("t2_noticeText"), report()::toString);
 	}
 
-	/** T4 / T8-refusal: a gate said no and nothing was written, so retry is safe and is the point (F11). */
+	/** Transport or typed refusal: a gate said no and nothing was written, so retry is safe and is the point. */
 	@Test void b11_refusalsReEnableConfirm() {
 		assertAllTrue("t4_stillOpen", "t4_noticePresent", "t4_confirmReEnabled", "t4_noCloseOnlyRow",
 			"t4_busyCleared", "t8refuse_confirmReEnabled", "t8refuse_noCloseOnlyRow", "t8refuse_noticePresent");
@@ -512,7 +513,7 @@ class ViewsJs_DialogReceipt_Test extends TestBase {
 			"failResultForm_terminalCloseOnly", "failResultForm_noDiagnostic");
 	}
 
-	/** T5: the close happens first, so the row-anchored job affordance is not painted behind a live backdrop. */
+	/** the close happens first, so the row-anchored job affordance is not painted behind a live backdrop. */
 	@Test void b14_aJobPointerClosesTheDialogBeforeStreaming() {
 		assertAllTrue("t5_dialogClosed", "t5_noDialogInDom", "t5_rowAnchoredSignalVisible",
 			"t5_rowSignalIsNotInADialog");

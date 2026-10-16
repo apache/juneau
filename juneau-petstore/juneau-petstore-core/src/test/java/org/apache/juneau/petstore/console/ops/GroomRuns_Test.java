@@ -16,87 +16,90 @@
  */
 package org.apache.juneau.petstore.console.ops;
 
-import static java.util.stream.Collectors.*;
+import static java.nio.charset.StandardCharsets.*;
 import static org.apache.juneau.BasicTestUtils.*;
 import static org.apache.juneau.test.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.io.*;
 import java.nio.file.*;
 import java.util.*;
+import java.util.regex.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.rest.server.views.*;
-import org.apache.juneau.rest.server.views.ConsoleOutputLine.*;
+import org.apache.juneau.rest.server.terminal.*;
 import org.junit.jupiter.api.*;
 
 @SuppressWarnings({
-	"java:S2925" // Waits for a 1 ms-period run to finish; the log has no completion hook to wait on.
+	"java:S2925" // Waits for a 1 ms-period run to finish; the run has no completion hook to wait on.
 })
 class GroomRuns_Test extends TestBase {
 
+	private static final Pattern ANSI = Pattern.compile("\u001b\\[[0-9;]*m");
+
 	private static GroomRuns.Run await(GroomRuns.Run r) throws Exception {
-		for (var i = 0; i < 1000 && ! r.log().tail(0).terminal; i++)
+		for (var i = 0; i < 1000 && ! r.done(); i++)
 			Thread.sleep(5);
-		assertTrue(r.log().tail(0).terminal, () -> "Run '" + r.id() + "' did not finish");
+		assertTrue(r.done(), () -> "Run '" + r.id() + "' did not finish");
 		return r;
 	}
 
-	private static String visible(ConsoleOutputLine l) {
-		if (l.frags == null)
-			return l.text;
-		return l.frags.stream().map(f -> f.text == null ? "" : f.text).collect(joining());
+	/** Reads the whole source from offset 0. */
+	private static String read(TerminalSource s) throws IOException {
+		var out = new ByteArrayOutputStream();
+		s.copyTo(out);
+		return out.toString(UTF_8);
+	}
+
+	private static List<String> plain(TerminalSource s) throws IOException {
+		return Arrays.stream(ANSI.matcher(read(s)).replaceAll("").split("\r\n")).toList();
 	}
 
 	@Test void a01_aRunWritesTheScriptAndFinishes() throws Exception {
 		try (var g = new GroomRuns(1)) {
 			var r = await(g.start("Rex", false, null));
-			var lines = r.log().stream().toList();
-			assertBean(r.log().tail(0), "state,stateStyle,terminal", "DONE,SUCCESS,true");
-			assertEquals(GroomRuns.SCRIPT.size() - 1 + GroomRuns.TRANSCRIPT.size(), lines.size());
-			assertString("Grooming Rex", lines.get(0).text);
-			assertList(lines.stream().filter(l -> l.ui != null && Boolean.TRUE.equals(l.ui.marker)).map(GroomRuns_Test::visible).toList(),
-				"Grooming Rex", "Wash", "Dry", "Trim");
-			assertList(lines.stream().filter(l -> l.ui != null && l.ui.icon != null).map(l -> l.ui.icon).toList(), "check", "cancel", "check");
-			assertList(lines.stream().map(l -> l.level).distinct().sorted().toList(), "SEVERE", "WARNING", "INFO", "FINE");
-			assertTrue(lines.stream().anyMatch(l -> l.level == Level.SEVERE && l.text.contains("\n    at Dryer.heat(Dryer.java:42)")));
-			assertList(lines.stream().filter(l -> l.ui != null && l.ui.image != null).map(l -> l.ui.image.src).toList(), GroomRuns.PHOTO);
+			var lines = plain(r.terminal());
+			assertEquals(GroomRuns.SCRIPT.size() + GroomRuns.TRANSCRIPT.size() - 1 + 2, lines.size() - 1, () -> "lines: " + lines);
+			assertString("Grooming Rex", lines.get(0));
+			assertTrue(lines.contains("\u2713 All tools ready"), () -> "lines: " + lines);
+			assertTrue(lines.contains("\u2717 Bow tie: none in stock"), () -> "lines: " + lines);
+			assertTrue(lines.contains("    at Dryer.heat(Dryer.java:42)"), () -> "lines: " + lines);
+			assertTrue(read(r.terminal()).contains("\u001b[1m" + "Grooming Rex"), "styled marker");
+			assertBean(r.terminal().read(0, 1), "done", "false");
+			assertBean(r.row(), "state,lines", "DONE," + lines.size());
 		}
 	}
 
-	@Test void a02_progressStripLinksEachWashPass() throws Exception {
+	@Test void a02_progressStripShowsEachWashPass() throws Exception {
 		try (var g = new GroomRuns(1)) {
-			var lines = await(g.start("Rex", false, null)).log().stream().toList();
-			var passes = lines.stream().filter(l -> l.text != null && l.text.startsWith("Wash pass ")).map(l -> "#" + GroomRuns.ANCHOR_PREFIX + l.n).toList();
-			var strip = lines.stream().filter(l -> l.frags != null && l.frags.stream().anyMatch(f -> f.href != null)).findFirst().orElseThrow();
-			assertString("Wash passes ", strip.frags.get(0).text);
-			assertEquals(passes, strip.frags.stream().skip(1).map(f -> f.href).toList());
-			assertBean(strip.frags.get(1), "style,tooltip,label", "SUCCESS,Pass 1: clean,Pass 1");
-			assertBean(strip.frags.get(GroomRuns.WASH_PASSES), "style,tooltip", "WARN,Pass " + GroomRuns.WASH_PASSES + ": rinse again");
+			var text = read(await(g.start("Rex", false, null)).terminal());
+			var strip = Arrays.stream(text.split("\r\n")).filter(l -> l.startsWith("Wash passes ")).findFirst().orElseThrow();
+			assertEquals(GroomRuns.WASH_PASSES, strip.chars().filter(c -> c == '\u25a0').count());
+			assertEquals(GroomRuns.WASH_PASSES - 2, strip.split("\u001b\\[32m", -1).length - 1);
 		}
 	}
 
-	@Test void a03_ansiTranscriptIsConvertedAndStripped() throws Exception {
+	@Test void a03_ansiTranscriptIsWrittenAsIs() throws Exception {
 		try (var g = new GroomRuns(1)) {
-			var text = await(g.start("Rex", false, null)).log().stream().map(GroomRuns_Test::visible).toList();
-			assertTrue(text.contains("groomer 2.1 starting"), () -> "lines: " + text);
-			assertTrue(text.contains("drying 100%"), () -> "lines: " + text);
-			assertTrue(text.stream().noneMatch(t -> t.contains("\u001b") || t.contains("\u0007") || t.contains("groom-pet")), () -> "lines: " + text);
+			var text = read(await(g.start("Rex", false, null)).terminal());
+			assertTrue(text.contains("\u001b[1mgroomer 2.1\u001b[0m starting"), "bold title kept");
+			assertTrue(text.contains("drying  10%\rdrying  40%\rdrying  70%\rdrying 100%"), "carriage-return counter kept");
 		}
 	}
 
-	@Test void a04_verboseRunShowsLoadEarlier() throws Exception {
+	@Test void a04_verboseRunWritesTheBulkUpFront() throws Exception {
 		try (var g = new GroomRuns(60_000)) {
 			var r = g.start("Rex", true, null);
-			assertEquals(GroomRuns.VERBOSE_LINES, r.log().size());
-			assertNotNull(r.log().tail(5000).before);
-			assertEquals(Level.FINE, r.log().stream().findFirst().orElseThrow().level);
+			assertEquals(GroomRuns.VERBOSE_LINES, r.row().getInt("lines"));
+			assertTrue(plain(r.terminal()).get(0).startsWith("verbose: inspected coat patch 1 of "));
+			assertBean(r.terminal().read(0, 1), "truncated", "false");
 		}
 	}
 
 	@Test void a05_sourcesAreLookedUpByRunId() throws Exception {
 		try (var g = new GroomRuns(1)) {
 			var r = await(g.start("Rex", false, null));
-			assertSame(r.log(), g.source(r.id()).orElseThrow());
+			assertSame(r.terminal(), g.source(r.id()).orElseThrow());
 			assertSame(r.fileSource(), g.source(r.id() + GroomRuns.FILE_SUFFIX).orElseThrow());
 			assertTrue(g.source("nope").isEmpty());
 			assertTrue(g.source("nope" + GroomRuns.FILE_SUFFIX).isEmpty());
@@ -108,13 +111,12 @@ class GroomRuns_Test extends TestBase {
 	@Test void a06_fileSourceTailsTheTranscript() throws Exception {
 		try (var g = new GroomRuns(1)) {
 			var r = await(g.start("Rex", false, null));
-			for (var i = 0; i < 1000 && ! r.fileSource().tail(0).terminal; i++)
-				Thread.sleep(5);
-			var p = r.fileSource().tail(1000);
-			assertBean(p, "state,terminal", "DONE,true");
-			assertEquals(GroomRuns.SCRIPT.size(), p.lines.size());
-			assertString("groomer 2.1 starting", visible(p.lines.get(0)));
-			assertString("groom finished", visible(p.lines.get(p.lines.size() - 1)));
+			var c = r.fileSource().read(0, TerminalSource.MAX_READ_BYTES);
+			assertBean(c, "done,cols,rows", "true," + GroomRuns.COLS + "," + GroomRuns.ROWS);
+			var lines = plain(r.fileSource());
+			assertEquals(GroomRuns.SCRIPT.size(), lines.size(), () -> "lines: " + lines);
+			assertTrue(lines.get(0).endsWith("groomer 2.1 starting"), () -> "lines: " + lines); // The OSC title survives the SGR-only strip.
+			assertString("groom finished", lines.get(lines.size() - 1));
 		}
 	}
 
@@ -136,6 +138,7 @@ class GroomRuns_Test extends TestBase {
 			assertEquals(GroomRuns.MAX_RUNS, g.list().size());
 			assertTrue(g.get(first.id()).isEmpty());
 			assertFalse(Files.exists(first.file()));
+			assertFalse(Files.exists(first.sizeFile));
 			assertSame(last, g.latest());
 		}
 	}

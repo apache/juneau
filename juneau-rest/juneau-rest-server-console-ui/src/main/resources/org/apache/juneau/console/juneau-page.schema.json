@@ -17,10 +17,106 @@
     "cards":     { "type": "array", "items": { "$ref": "#/$defs/card" } },
     "topics":    { "type": "array", "items": { "$ref": "#/$defs/topicDecl" } },
     "bridges":   { "type": "array", "items": { "$ref": "#/$defs/bridgeDecl" } },
-    "facts":     { "type": "object", "description": "Page-level facts (for example the viewer's roles) that visibleWhen rules test; presentation only, never an authorization gate." }
+    "dataSources": { "type": "array", "items": { "$ref": "#/$defs/dataSource" } },
+    "facts":     { "type": "object", "description": "Page-level facts (for example the viewer's roles) that visibleWhen rules test; presentation only, never an authorization gate." },
+    "dashboard": { "$ref": "#/$defs/dashboard" }
   },
   "$defs": {
     "id":       { "type": "string", "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,63}$" },
+    "dashboardTopic": { "type": "string", "pattern": "^filter:[A-Za-z][A-Za-z0-9_-]{0,63}$" },
+    "dashboardKey":   { "type": "string", "pattern": "^[A-Za-z0-9_.-]{1,128}$" },
+    "dashboardName":  { "type": "string", "pattern": "^[a-z][a-zA-Z0-9]*(\\.[a-z][a-zA-Z0-9-]*)+$" },
+    "dashboard": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "grid", "panels"],
+      "properties": {
+        "id":      { "$ref": "#/$defs/id" },
+        "title":   { "type": "string" },
+        "grid":    { "enum": [1, 2, 3, 4] },
+        "panels":  { "type": "array", "items": { "$ref": "#/$defs/dashboardPanel" } },
+        "rail":    { "$ref": "#/$defs/dashboardRail" },
+        "status":  { "type": "array", "items": { "type": "string", "pattern": "^data:[A-Za-z0-9_.-]{1,128}$" } },
+        "persist": { "$ref": "#/$defs/dashboardPersist" }
+      }
+    },
+    "dashboardPanel": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["card", "span"],
+      "properties": {
+        "card": { "$ref": "#/$defs/id" },
+        "span": { "enum": [1, 2, 3, 4] }
+      }
+    },
+    "dashboardRail": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["side", "width", "sections"],
+      "properties": {
+        "side":     { "enum": ["left", "right"] },
+        "width":    { "type": "integer", "description": "Default width in px, 200-480 (checked by Rail)." },
+        "sections": { "type": "array", "items": { "$ref": "#/$defs/dashboardSection" } }
+      }
+    },
+    "dashboardSection": {
+      "oneOf": [
+        {
+          "type": "object", "additionalProperties": false,
+          "required": ["id", "kind", "topic", "presets", "custom", "defaultPreset"],
+          "properties": {
+            "id": { "$ref": "#/$defs/id" }, "kind": { "const": "range" }, "topic": { "$ref": "#/$defs/dashboardTopic" },
+            "label": { "type": "string" },
+            "presets": { "type": "array", "minItems": 1, "items": { "type": "string", "pattern": "^([1-9][0-9]{0,3}[dh]|ytd)$" } },
+            "custom": { "type": "boolean" },
+            "defaultPreset": { "type": "string", "pattern": "^([1-9][0-9]{0,3}[dh]|ytd)$" }
+          }
+        },
+        {
+          "type": "object", "additionalProperties": false,
+          "required": ["id", "kind", "topic"],
+          "properties": {
+            "id": { "$ref": "#/$defs/id" }, "kind": { "const": "search" }, "topic": { "$ref": "#/$defs/dashboardTopic" },
+            "label": { "type": "string" }, "placeholder": { "type": "string" }
+          }
+        },
+        {
+          "type": "object", "additionalProperties": false,
+          "required": ["id", "kind", "topic", "source", "dim", "max"],
+          "properties": {
+            "id": { "$ref": "#/$defs/id" }, "kind": { "const": "choice" }, "topic": { "$ref": "#/$defs/dashboardTopic" },
+            "label": { "type": "string" },
+            "source": { "$ref": "#/$defs/dashboardKey" }, "dim": { "$ref": "#/$defs/dashboardKey" },
+            "max": { "type": "integer" }
+          }
+        },
+        {
+          "type": "object", "additionalProperties": false,
+          "required": ["kind", "card"],
+          "properties": { "kind": { "const": "card" }, "card": { "$ref": "#/$defs/id" }, "label": { "type": "string" } }
+        },
+        {
+          "type": "object", "additionalProperties": false,
+          "required": ["id", "kind", "topic", "name", "args"],
+          "properties": {
+            "id": { "$ref": "#/$defs/id" }, "kind": { "const": "custom" }, "topic": { "$ref": "#/$defs/dashboardTopic" },
+            "label": { "type": "string" }, "name": { "$ref": "#/$defs/dashboardName" }, "args": { "type": "object" }
+          }
+        }
+      ]
+    },
+    "dashboardPersist": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["ns", "version", "topics", "shareLink", "decoders"],
+      "properties": {
+        "ns":        { "type": "string", "pattern": "^[a-z][a-z0-9.-]{0,63}$" },
+        "version":   { "type": "integer", "description": "At least 1 (checked by PersistSpec)." },
+        "topics":    { "type": "array", "minItems": 1, "items": { "type": "string", "pattern": "^(filter|zoom|legend):[A-Za-z][A-Za-z0-9_-]{0,63}$" } },
+        "shareLink": { "type": "boolean" },
+        "decoders":  { "type": "array", "items": { "$ref": "#/$defs/dashboardName" } }
+      }
+    },
     "slotName": { "type": "string", "pattern": "^[a-z][a-z0-9-]{0,31}$" },
     "url":      { "type": "string", "minLength": 1 },
     "theme": {
@@ -128,28 +224,29 @@
       "oneOf": [
         { "$ref": "#/$defs/htmlCard" },
         { "$ref": "#/$defs/datatablesCard" },
-        { "$ref": "#/$defs/consoleOutputCard" },
         { "$ref": "#/$defs/runViewCard" },
         { "$ref": "#/$defs/terminalCard" },
         { "$ref": "#/$defs/chartCard" },
         { "$ref": "#/$defs/jobLogCard" },
-        { "properties": { "type": { "not": { "enum": ["html", "datatables", "console-output", "run-view", "terminal", "chart", "job-log"] } } } }
+        { "properties": { "type": { "not": { "enum": ["html", "datatables", "run-view", "terminal", "chart", "job-log"] } } } }
       ]
     },
     "htmlCard": {
       "properties": {
         "type": { "const": "html" },
         "id": true, "title": true, "template": true, "class": true, "publishes": true, "subscribes": true,
-        "src": { "description": "Trusted same-origin endpoint returning an HTML fragment. The shell inserts the response as-is (not sanitized), so the endpoint must be first-party and must escape any data it embeds. Must never be derived from request data." },
-        "bare": { "type": "boolean", "default": false }
+        "src": { "description": "Trusted same-origin endpoint returning an HTML fragment. Unless sanitize is true, the shell inserts the response as-is (not sanitized), so the endpoint must be first-party and must escape any data it embeds. Must never be derived from request data." },
+        "sanitize": { "type": "boolean", "default": false, "description": "Opt-in. When true, the fragment fetched from src is rebuilt through the views attribute-allowlist sanitizer (script, event handlers, unsafe URLs and unlisted attributes are dropped) instead of being inserted as-is. Needs the views toolkit on the page. Only valid on a card with src." },
+        "bare": { "type": "boolean", "default": false, "description": "When true the card is inserted with no wrapper element at all." }
       },
       "additionalProperties": false,
-      "oneOf": [ { "required": ["template"] }, { "required": ["src"] } ]
+      "oneOf": [ { "required": ["template"], "not": { "required": ["sanitize"] } }, { "required": ["src"] } ]
     },
     "datatablesCard": {
       "properties": {
         "type":  { "const": "datatables" },
         "id": true, "title": true, "visibleWhen": true, "class": true, "publishes": true, "subscribes": true,
+        "bare":  { "type": "boolean", "description": "When true the card keeps its host element but drops the card chrome and the title." },
         "src":   { "$ref": "#/$defs/url" },
         "page":  { "type": "object" },
         "table": { "$ref": "#/$defs/tableCatalog" }
@@ -185,9 +282,47 @@
         "selection":     { "$ref": "#/$defs/selection" },
         "bulk":          { "$ref": "#/$defs/bulk" },
         "detail":        { "$ref": "#/$defs/rowDetail" },
-        "quickStats":    { "type": "object", "required": ["items"] },
+        "quickStats":    { "$ref": "#/$defs/quickStats" },
         "urlState":      { "$ref": "#/$defs/urlState" }
       }
+    },
+    "quickStats": {
+      "type": "object", "additionalProperties": false, "required": ["items"],
+      "properties": {
+        "id":    { "type": "string", "minLength": 1 },
+        "items": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/quickStatItem" } }
+      }
+    },
+    "quickStatTone": { "type": "string", "enum": ["neutral", "info", "success", "warning", "error"] },
+    "quickStatItem": {
+      "oneOf": [
+        { "type": "object", "additionalProperties": false, "required": ["id", "type"],
+          "properties": { "id": { "type": "string", "minLength": 1 }, "type": { "const": "tile" },
+            "label": { "type": ["string", "null"] }, "value": { "type": ["string", "number", "boolean", "null"] }, "tone": { "$ref": "#/$defs/quickStatTone" } } },
+        { "type": "object", "additionalProperties": false, "required": ["id", "type", "label", "value", "max"],
+          "properties": { "id": { "type": "string", "minLength": 1 }, "type": { "const": "meter" },
+            "label": { "type": "string", "minLength": 1 }, "value": { "type": "number" }, "max": { "type": "number" },
+            "text": { "type": "string" }, "tone": { "$ref": "#/$defs/quickStatTone" } } },
+        { "type": "object", "additionalProperties": false, "required": ["id", "type", "label", "segments"],
+          "properties": { "id": { "type": "string", "minLength": 1 }, "type": { "const": "segmented" },
+            "label": { "type": "string", "minLength": 1 }, "segments": { "$ref": "#/$defs/quickStatSegments" } } },
+        { "type": "object", "additionalProperties": false, "required": ["id"],
+          "properties": { "id": { "type": "string", "minLength": 1 },
+            "label": { "type": ["string", "null"] }, "value": { "type": ["string", "number", "boolean", "null"] }, "tone": { "$ref": "#/$defs/quickStatTone" } } },
+        { "type": "object", "additionalProperties": false, "required": ["id", "label", "value", "max"],
+          "properties": { "id": { "type": "string", "minLength": 1 },
+            "label": { "type": "string", "minLength": 1 }, "value": { "type": "number" }, "max": { "type": "number" },
+            "text": { "type": "string" }, "tone": { "$ref": "#/$defs/quickStatTone" } } },
+        { "type": "object", "additionalProperties": false, "required": ["id", "label", "segments"],
+          "properties": { "id": { "type": "string", "minLength": 1 },
+            "label": { "type": "string", "minLength": 1 }, "segments": { "$ref": "#/$defs/quickStatSegments" } } }
+      ]
+    },
+    "quickStatSegments": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/quickStatSegment" } },
+    "quickStatSegment": {
+      "type": "object", "required": ["label", "count"], "additionalProperties": false,
+      "properties": { "label": { "type": "string", "minLength": 1 }, "count": { "type": "number" },
+                      "tone": { "$ref": "#/$defs/quickStatTone" } }
     },
     "tableColumn": {
       "type": "object",
@@ -233,6 +368,27 @@
     },
     "rowAction":   { "type": "object", "required": ["id", "endpoint"], "description": "RowAction wire shape (id, endpoint, method, present, and the other optional RowAction fields).",
       "properties": { "present": { "enum": ["page", "dialog", "inline"], "description": "How the action's form/confirmation is presented. inline = fired from its cell pill or edit cell only; it is never listed in the row menu." } } },
+    "chartAction": {
+      "type": "object",
+      "required": ["id", "endpoint", "method"],
+      "description": "A RowAction a chart card runs: same-origin endpoint (and form), a non-safe method, present absent or dialog, and no navigate on success. ChartCardType checks the rules the schema cannot.",
+      "properties": {
+        "id":              { "type": "string", "minLength": 1 },
+        "label":           { "type": "string" },
+        "icon":            { "type": "string" },
+        "endpoint":        { "type": "string", "minLength": 1, "pattern": "^/", "description": "A same-origin path; no servlet: prefix." },
+        "method":          { "enum": ["POST", "PUT", "PATCH", "DELETE"] },
+        "confirm":         { "oneOf": [ { "type": "string" }, { "const": false } ] },
+        "confirmLabel":    { "type": "string" },
+        "confirmRenderer": { "type": "string" },
+        "tone":            { "type": "string" },
+        "form":            { "type": "string", "pattern": "^/", "description": "A same-origin path; no servlet: prefix." },
+        "present":         { "const": "dialog" },
+        "onSuccess":       { "enum": ["redraw", "mergeRow"] },
+        "enabledWhen":     { "type": "array", "items": { "$ref": "#/$defs/enabledRule" } },
+        "visibleWhen":     { "type": "array", "items": { "$ref": "#/$defs/visibleRule" }, "description": "Rules that must all match, tested against the clicked point's fields (not the page facts). Always an array: a single object is refused." }
+      }
+    },
     "enabledRule": { "type": "object", "required": ["field", "op"], "properties": { "field": { "type": "string" }, "op": { "type": "string" }, "value": true, "reason": { "type": "string" } } },
     "rowDetail":   { "type": "object", "required": ["endpoint"], "properties": { "contractVersion": false } },
     "visibleRule": {
@@ -240,7 +396,7 @@
       "additionalProperties": false,
       "required": ["field", "op"],
       "properties": {
-        "field": { "type": "string", "minLength": 1, "description": "Dotted path into the page facts, e.g. viewer.roles." },
+        "field": { "type": "string", "minLength": 1, "description": "Dotted path to the value the rule tests. For a card rule it is a path into the page facts, e.g. viewer.roles. For a row action or chart action rule it is a field of the row, or of the clicked point." },
         "op":    { "enum": ["eq", "ne", "present", "absent", "in", "contains"] },
         "value": true
       }
@@ -281,14 +437,14 @@
     "topic": {
       "description": "A bus topic: a framework family or a namespaced custom family, with an optional key.",
       "type": "string",
-      "pattern": "^(card|selection|filter|redraw|detail|bulk|cmd|probe|job|badge|bridge|[a-z][a-z0-9-]{0,31}\\.[a-z][a-z0-9-]{0,31})(:[A-Za-z0-9_.-]{1,128})?$"
+      "pattern": "^(card|selection|filter|redraw|detail|bulk|cmd|probe|job|badge|bridge|data|zoom|legend|[a-z][a-z0-9-]{0,31}\\.[a-z][a-z0-9-]{0,31})(:[A-Za-z0-9_.-]{1,128})?$"
     },
     "topicDecl": {
       "type": "object",
       "additionalProperties": false,
       "required": ["topic", "retain", "publisher"],
       "properties": {
-        "topic":     { "type": "string", "pattern": "^([a-z][a-z0-9-]{0,31}\\.[a-z][a-z0-9-]{0,31}(:([A-Za-z0-9_.-]{1,128}|\\*))?|job:\\*)$" },
+        "topic":     { "type": "string", "pattern": "^([a-z][a-z0-9-]{0,31}\\.[a-z][a-z0-9-]{0,31}(:([A-Za-z0-9_.-]{1,128}|\\*))?|job:\\*|data:[A-Za-z0-9_.-]{1,128})$" },
         "retain":    { "type": "boolean" },
         "publisher": { "enum": ["script", "server", "ribbon"] }
       }
@@ -298,7 +454,7 @@
       "additionalProperties": false,
       "required": ["topic", "retain"],
       "properties": {
-        "topic":  { "type": "string", "pattern": "^[a-z][a-z0-9-]{0,31}\\.[a-z][a-z0-9-]{0,31}(:([A-Za-z0-9_.-]{1,128}|\\*))?$" },
+        "topic":  { "type": "string", "pattern": "^([a-z][a-z0-9-]{0,31}\\.[a-z][a-z0-9-]{0,31}(:([A-Za-z0-9_.-]{1,128}|\\*))?|(zoom|legend):[A-Za-z0-9_.-]{1,128})$" },
         "retain": { "type": "boolean" }
       }
     },
@@ -328,6 +484,39 @@
         "maxAttempts": { "type": "integer" }
       }
     },
+    "dataSource": {
+      "description": "A browser data source (kind source) or derived source (kind derived), published on data:<id>. Cross-field rules are checked by DataSourceDef/Derived (E-76) and BusWiringValidator (E-71).",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "kind"],
+      "properties": {
+        "id":           { "$ref": "#/$defs/id" },
+        "kind":         { "enum": ["source", "derived"] },
+        "url":          { "type": "string", "minLength": 1 },
+        "parser":       { "type": "string", "minLength": 1 },
+        "builder":      { "type": "string", "minLength": 1 },
+        "columns":      { "type": "array", "items": { "type": "object", "additionalProperties": false, "required": ["name", "type"],
+                          "properties": { "name": { "type": "string", "minLength": 1 }, "type": { "enum": ["number", "time", "string", "bool"] } } } },
+        "subscribes":   { "type": "array", "items": { "$ref": "#/$defs/subscription" } },
+        "chunk":        { "type": "object", "additionalProperties": false, "required": ["unit", "start", "end"],
+                          "properties": { "unit": { "enum": ["hour", "day", "week"] }, "start": { "type": "string", "minLength": 1 }, "end": { "type": "string", "minLength": 1 } } },
+        "concurrency":  { "type": "integer" },
+        "debounceMs":   { "type": "integer" },
+        "cache":        { "enum": ["indexedDb", "memory", "none"] },
+        "epoch":        { "type": "object", "additionalProperties": false, "required": ["url", "path"],
+                          "properties": { "url": { "type": "string", "minLength": 1 }, "path": { "type": "string", "minLength": 1 } } },
+        "mode":         { "enum": ["raw", "aggregate", "auto"] },
+        "maxRows":      { "type": "integer" },
+        "aggregateUrl": { "type": "string", "minLength": 1 },
+        "aggregate":    { "type": "object", "additionalProperties": false, "required": ["bucket"],
+                          "properties": { "bucket": { "enum": ["hour", "day", "week", "month", "auto"] },
+                                          "groupBy": { "type": "array", "items": { "type": "string" } },
+                                          "measures": { "type": "array", "items": { "type": "string" } } } },
+        "from":         { "$ref": "#/$defs/id" },
+        "transforms":   { "type": "array", "items": { "type": "object", "additionalProperties": false, "required": ["use"],
+                          "properties": { "use": { "type": "string", "minLength": 1 }, "args": { "type": "object" } } } }
+      }
+    },
     "ribbonPublish": {
       "description": "The publish ribbon item. Enforced by BusWiringValidator (E-48); tableCatalog keeps ribbon items open, so nothing references this.",
       "type": "object",
@@ -355,8 +544,16 @@
             "params": {
               "type": "object",
               "additionalProperties": false,
-              "properties": { "start": { "type": "string", "minLength": 1 }, "end": { "type": "string", "minLength": 1 } }
+              "properties": { "start": { "type": "string", "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,63}$" }, "end": { "type": "string", "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,63}$" } }
             }
+          }
+        },
+        "day": {
+          "description": "day(YYYY-MM-DD): one calendar day sent as one request param (named 'day' unless param is set); a value that is not a real date is ignored.",
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "param": { "type": "string", "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,63}$" }
           }
         },
         "ids": {
@@ -364,38 +561,11 @@
           "type": "object",
           "additionalProperties": false,
           "properties": {
-            "param": { "type": "string", "minLength": 1 },
-            "max": { "type": "integer" }
+            "param": { "type": "string", "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,63}$" },
+            "max": { "type": "integer", "minimum": 1 }
           }
         }
       }
-    },
-    "consoleOutputCard": {
-      "description": "Console-output bridge card; the shell calls JuneauViews.consoleOutput.mount(body, output). Ranges are checked by ConsoleOutputDef.",
-      "properties": {
-        "type":   { "const": "console-output" },
-        "id": true, "title": true, "class": true, "publishes": true, "subscribes": true,
-        "output": {
-          "type": "object",
-          "properties": {
-            "linesUrl":     { "type": "string", "minLength": 1 },
-            "downloadUrl":  { "type": "string", "minLength": 1 },
-            "refreshMs":    { "type": "integer" },
-            "tail":         { "type": "integer" },
-            "earlierLimit": { "type": "integer" },
-            "rows":         { "type": "integer" },
-            "compact":      { "type": "boolean" },
-            "anchorPrefix": { "type": "string", "pattern": "^[A-Za-z][A-Za-z0-9_-]{0,31}$" },
-            "showTime":     { "type": "boolean" },
-            "markers":      { "enum": ["dim", "hide", "show"] },
-            "title":        { "type": "string" }
-          },
-          "additionalProperties": false,
-          "required": ["linesUrl"]
-        }
-      },
-      "additionalProperties": false,
-      "required": ["output"]
     },
     "runViewCard": {
       "description": "Run-view bridge card; the shell calls JuneauViews.runView.mount(body, runView). Ranges are checked by RunViewDef. eventsUrl is required unless poll is false (anyOf, because the subset validator has no if/then).",
@@ -436,7 +606,16 @@
             "title":     { "type": "string" },
             "tailBytes": { "type": "integer" },
             "input":     { "type": "boolean" },
-            "inputId":   { "type": "string", "pattern": "^[A-Za-z0-9_-]{1,128}$" }
+            "inputId":   { "type": "string", "pattern": "^[A-Za-z0-9_-]{1,128}$" },
+            "terminal":  {
+              "type": "object",
+              "properties": {
+                "convertEol": { "type": "boolean" },
+                "scrollback": { "type": "integer" },
+                "fontFamily": { "type": "string", "minLength": 1 }
+              },
+              "additionalProperties": false
+            }
           },
           "additionalProperties": false,
           "required": ["bytesUrl"]
@@ -446,20 +625,60 @@
       "required": ["terminal"]
     },
     "chartCard": {
-      "description": "Chart card; juneau-charts.js renders it as inline SVG. Kind-specific keys stay open so registered kinds can add their own; ChartCardType checks the built-in ones.",
+      "description": "Chart card; juneau-charts.js draws it with ECharts. A helper (or the legacy flat kind) and/or a raw option; ChartCardType checks the keys.",
       "properties": {
         "type":  { "const": "chart" },
         "id": true, "title": true, "class": true, "visibleWhen": true, "publishes": true, "subscribes": true,
-        "bare":  { "type": "boolean" },
+        "bare":  { "type": "boolean", "description": "When true the card keeps its host element but drops the card chrome and the title." },
         "src":   { "$ref": "#/$defs/url" },
-        "kind":  { "type": "string", "pattern": "^[a-z][a-z0-9-]{0,31}$" },
+        "source": { "type": "string", "pattern": "^data:[A-Za-z0-9_.-]{1,128}$" },
+        "kind":  { "enum": ["line", "bar", "donut", "heatmap", "scatter", "pie", "treemap"] },
+        "helper": { "type": "object", "properties": {
+          "kind": { "enum": ["line", "bar", "donut", "heatmap", "scatter", "pie", "treemap"] },
+          "groupBy": { "type": "array", "minItems": 1, "items": { "type": "string" } },
+          "size": { "type": "string" },
+          "color": { "type": "object", "properties": {
+            "field": { "type": "string" },
+            "legend": { "type": "array", "items": { "type": "object", "required": ["value"], "properties": {
+              "value": { "type": "string" }, "label": { "type": "string" }, "tone": { "type": "string" } } } } },
+            "required": ["field"] },
+          "tileFields": { "type": "array", "items": { "type": "string", "pattern": "^[A-Za-z0-9_.-]+$" } }
+        }, "required": ["kind"] },
+        "option": { "type": "object" },
+        "patch": { "type": "object" },
+        "decorators": { "type": "array", "items": { "type": "object", "required": ["use"], "properties": { "use": { "type": "string" } } } },
+        "on": { "type": "object", "additionalProperties": { "type": "string" } },
+        "onClick": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "href":   { "$ref": "#/$defs/url" },
+            "action": { "$ref": "#/$defs/chartAction" }
+          },
+          "oneOf": [ { "required": ["href"] }, { "required": ["action"] } ]
+        },
+        "topicActions": { "type": "array", "description": "Actions run when a topic the card publishes through on fires. Only click has a keyboard equivalent (Enter on the focused point); actions on other events are pointer-only.", "items": {
+          "type": "object", "required": ["topic", "action"], "properties": {
+            "topic":  { "type": "string" },
+            "action": { "$ref": "#/$defs/chartAction" } } } },
+        "actions": { "type": "array", "description": "Dialog actions other actions can open as steps; each must be present=dialog.", "items": {
+          "allOf": [ { "$ref": "#/$defs/chartAction" } ], "required": ["present"] } },
+        "group": { "type": "string" },
+        "renderer": { "enum": ["canvas", "svg"] },
+        "theme": { "type": "string" },
+        "largeData": { "type": "object" },
+        "partialFrames": { "type": "boolean" },
+        "maps": { "type": "object", "additionalProperties": { "$ref": "#/$defs/url" } },
+        "a11y": { "type": "object" },
         "data":  { "type": "array" },
         "refreshMs": { "type": "integer" }
       },
-      "required": ["kind"],
+      "anyOf": [ { "required": ["kind"] }, { "required": ["helper"] }, { "required": ["option"] } ],
+      "not": { "required": ["kind", "helper"] },
       "oneOf": [
-        { "required": ["src"], "not": { "required": ["data"] } },
-        { "required": ["data"], "not": { "required": ["src"] } }
+        { "required": ["src"], "not": { "anyOf": [ { "required": ["data"] }, { "required": ["source"] } ] } },
+        { "required": ["data"], "not": { "anyOf": [ { "required": ["src"] }, { "required": ["source"] } ] } },
+        { "required": ["source"], "not": { "anyOf": [ { "required": ["src"] }, { "required": ["data"] } ] } }
       ]
     },
     "jobLogCard": {
@@ -467,7 +686,7 @@
       "properties": {
         "type":   { "const": "job-log" },
         "id": true, "title": true, "class": true, "visibleWhen": true, "publishes": true, "subscribes": true,
-        "bare":   { "type": "boolean" },
+        "bare":   { "type": "boolean", "description": "When true the card keeps its host element but drops the card chrome and the title." },
         "submit": {
           "type": "object",
           "properties": {

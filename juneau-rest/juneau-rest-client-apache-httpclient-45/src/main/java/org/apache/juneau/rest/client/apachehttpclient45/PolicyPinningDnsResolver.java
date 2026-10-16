@@ -28,6 +28,10 @@ import org.apache.juneau.http.remote.*;
  * {@code Host} header and TLS SNI/hostname verification.
  *
  * <p>
+ * The allow-list of special-purpose address ranges it applies is fixed per instance (the shared {@link #INSTANCE}
+ * allows none); {@link ApacheHc45Transport} gives each distinct per-client allow-list its own pool.
+ *
+ * <p>
  * It is installed only on the connection manager of {@link ApacheHc45Transport}'s dedicated client for guarded
  * requests, so every connection in that pool is opened through the pin.  Ordinary (non-{@code @Remote}) requests use
  * the transport's other client, with its own pool and the system resolver, and are completely unaffected.
@@ -36,14 +40,18 @@ import org.apache.juneau.http.remote.*;
  */
 final class PolicyPinningDnsResolver implements DnsResolver {
 
-	static final PolicyPinningDnsResolver INSTANCE = new PolicyPinningDnsResolver();
+	static final PolicyPinningDnsResolver INSTANCE = new PolicyPinningDnsResolver(RemoteUrlPolicy.AllowedRanges.NONE);
 
-	private PolicyPinningDnsResolver() {}
+	private final RemoteUrlPolicy.AllowedRanges allowedRanges;
+
+	PolicyPinningDnsResolver(RemoteUrlPolicy.AllowedRanges allowedRanges) {
+		this.allowedRanges = allowedRanges;
+	}
 
 	@Override /* DnsResolver */
 	public InetAddress[] resolve(String host) throws UnknownHostException {
 		// Guarded requests are SSRF-guard-active only when the allowPrivateUrls opt-in is off
 		// (TransportRequest.isSsrfGuardActive()), so the deny-private checks always apply here.
-		return new InetAddress[]{RemoteUrlPolicy.selectAllowedAddress(host, false, RemoteUrlPolicy.AddressResolver.DEFAULT)};
+		return new InetAddress[]{RemoteUrlPolicy.selectAllowedAddress(host, false, RemoteUrlPolicy.AddressResolver.DEFAULT, allowedRanges)};
 	}
 }

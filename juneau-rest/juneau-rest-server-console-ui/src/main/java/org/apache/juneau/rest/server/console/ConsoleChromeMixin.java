@@ -149,9 +149,52 @@ public class ConsoleChromeMixin {
 	 */
 	public static final List<String> BUILTIN_THEME_NAMES = List.copyOf(STOCK_THEMES.keySet());
 
+	/**
+	 * The colour-scheme pin values, in documented order.
+	 *
+	 * <p>
+	 * {@code auto} (the default) follows the browser's {@code prefers-color-scheme}; {@code light} and {@code dark}
+	 * pin the page to that scheme. Accepted by {@code <@console scheme="…">}, {@code PageSpec.scheme(String)} and
+	 * {@link #schemeHead(RestRequest, String, boolean)}.
+	 */
+	public static final List<String> SCHEMES = List.of("auto", "light", "dark");
+
+	/**
+	 * The inline pre-paint script that picks the page's colour scheme before first paint.
+	 *
+	 * <p>
+	 * It sets {@code data-jc-scheme} on the root element from, in order: the visitor's stored choice (only when the
+	 * root carries {@code data-jc-scheme-toggle}), the server pin ({@code data-jc-scheme-pin}), then the browser's
+	 * {@code prefers-color-scheme}. It never throws: storage and media-query failures fall through to the next
+	 * source, ending at {@code light}.
+	 *
+	 * <p>
+	 * The text is a byte-for-byte constant so {@link #SCHEME_SCRIPT_CSP_HASH} is stable. Emit it as the first child
+	 * of {@code <head>}, ahead of every stylesheet.
+	 */
+	public static final String SCHEME_SCRIPT = String.join("\n",
+		"(function(d){var e=d.documentElement,k=\"juneau-console:scheme\",s=null;",
+		"if(e.hasAttribute(\"data-jc-scheme-toggle\")){try{s=localStorage.getItem(k)}catch(x){}}",
+		"if(s!==\"light\"&&s!==\"dark\"){s=e.getAttribute(\"data-jc-scheme-pin\");}",
+		"if(s!==\"light\"&&s!==\"dark\"){try{s=matchMedia(\"(prefers-color-scheme: dark)\").matches?\"dark\":\"light\"}catch(x){s=\"light\"}}",
+		"e.setAttribute(\"data-jc-scheme\",s);})(document);");
+
+	/**
+	 * The CSP source expression for {@link #SCHEME_SCRIPT}: {@code 'sha256-<base64>'} over its UTF-8 bytes.
+	 *
+	 * <p>
+	 * Add it to a {@code script-src} directive to allow the pre-paint script without a nonce. It covers only the
+	 * script. The console shell's inline {@code <style>} (theme override blocks) still needs the request nonce or
+	 * {@code 'unsafe-inline'} in {@code style-src}.
+	 */
+	public static final String SCHEME_SCRIPT_CSP_HASH = sha256Source(SCHEME_SCRIPT);
+
 	/** The served stock stylesheet file names, derived from {@link #BUILTIN_THEME_NAMES}. */
-	private static final Set<String> ALLOWED_THEME_FILES = BUILTIN_THEME_NAMES.stream()
-		.map(n -> "juneau-theme-" + n + ".css")
+	private static final Set<String> ALLOWED_THEME_FILES = Stream.concat(
+			BUILTIN_THEME_NAMES.stream().map(n -> "juneau-theme-" + n + ".css"),
+			// The shared dark neutral layer is a served theme file but not a selectable theme, so it is not in
+			// BUILTIN_THEME_NAMES (theme="dark" must keep failing validation).
+			Stream.of("juneau-theme-dark.css"))
 		.collect(Collectors.toUnmodifiableSet());
 
 	private static Map<String,Theme> stockThemes() {
@@ -206,6 +249,15 @@ public class ConsoleChromeMixin {
 	/** Classpath location of the job-log card runtime. */
 	public static final String JOBLOG_JS_RESOURCE = "/org/apache/juneau/console/juneau-joblog.js";
 
+	/** Context-root-absolute path of the dashboard chrome runtime. */
+	public static final String DASHBOARD_JS_PATH = "/juneau-console/juneau-dashboard.js";
+
+	/** {@link #DASHBOARD_JS_PATH} minus the {@code /juneau-console} prefix. */
+	public static final String DASHBOARD_JS_PATH_UNPREFIXED = "/juneau-dashboard.js";
+
+	/** Classpath resource behind {@link #DASHBOARD_JS_PATH}. */
+	public static final String DASHBOARD_JS_RESOURCE = "/org/apache/juneau/console/juneau-dashboard.js";
+
 	/** Context-root-absolute path of the page-contract schema. */
 	public static final String SCHEMA_PATH = "/juneau-console/juneau-page.schema.json";
 
@@ -244,15 +296,20 @@ public class ConsoleChromeMixin {
 	 * values; no token name is declared by both.
 	 *
 	 * <p>
+	 * {@code --jc-danger-text} and {@code --jc-success-text} are the text-ink roles of the danger and success
+	 * colours; the fills keep {@code --jc-danger} and {@code --jc-success}.
+	 *
+	 * <p>
 	 * {@code --jc-header-bg} (and, transitively, {@code --jc-nav-bg}) keys off {@code --jc-white}, not
-	 * {@code --jc-chrome-bg}: the header and both page-nav rows (Page Tabs and Page Subtabs) stay white on
-	 * every stock theme, matching {@link Theme#OPEN}'s blue look. Theme accent still paints the selected-tab
+	 * {@code --jc-chrome-bg}: in the light scheme the header and both page-nav rows (Page Tabs and Page Subtabs)
+	 * stay white on every stock theme (the dark layer sets the header background directly), matching
+	 * {@link Theme#OPEN}'s blue look. Theme accent still paints the selected-tab
 	 * indicator, page-nav floor, and the rest of the page; {@code --jc-chrome-bg} remains the page-chrome
 	 * fallback under {@code --jc-page-bg}, the hover fill, and dialog chrome. Pinning header/nav to
 	 * {@code --jc-chrome-bg} washed those bars in light-red / light-brown / red / gray. {@code --jc-page-nav-accent}
 	 * defaults to {@code --jc-accent} so a consumer can retint the page-nav floor / selected-section bar without
 	 * recoloring buttons. {@code --jc-table-header-bg} also keys off {@code --jc-white} so DataTable / views-table
-	 * column headers stay white (IRS {@code table.dataTable thead th} has no background), not the page-chrome grey.
+	 * column headers stay white (the original artwork gives {@code table.dataTable thead th} no background), not the page-chrome grey.
 	 */
 	static final String OPEN_ROLE_ALIASES = String.join("",
 		"--jc-surface:var(--jc-white);",
@@ -265,15 +322,41 @@ public class ConsoleChromeMixin {
 		"--jc-on-accent:var(--jc-white);",
 		"--jc-on-btn-primary:var(--jc-on-accent);",
 		"--jc-hover-bg:var(--jc-chrome-bg);",
-		// DataTable / views-table headers are white (IRS `table.dataTable thead th` carries no background;
+		// DataTable / views-table headers are white (the original artwork gives `table.dataTable thead th` no background;
 		// the white card shows through). Do not key this off --jc-chrome-bg — that page-chrome grey tints
-		// every column header and is the wrong IRS surface (detail-table thead #f6f4f4 is a different widget).
+		// every column header and is the wrong surface (the detail-table thead grey is a different widget).
 		"--jc-table-header-bg:var(--jc-white);",
 		"--jc-control-border:var(--jc-border-2);",
 		"--jc-header-icon-text:var(--jc-header-icon-color);",
 		"--jc-btn-primary-bg:var(--jc-btn-primary);",
-		"--jc-btn-primary-bg-hover:var(--jc-btn-primary-hover);"
+		"--jc-btn-primary-bg-hover:var(--jc-btn-primary-hover);",
+		// Text roles: danger/success used as ink, so the dark layer can lighten them without touching the fills.
+		"--jc-danger-text:var(--jc-danger);",
+		"--jc-success-text:var(--jc-success);"
 	);
+
+	/**
+	 * The names of the role aliases the chrome declares (for example {@code --jc-surface} and
+	 * {@code --jc-danger-text}), derived from the same declarations the stylesheet emits.
+	 */
+	private static final Set<String> ROLE_ALIAS_NAMES = Arrays.stream(OPEN_ROLE_ALIASES.split(";"))
+		.map(d -> d.substring(0, d.indexOf(':')))
+		.collect(Collectors.toUnmodifiableSet());
+
+	/**
+	 * Returns the names of the role aliases the chrome declares, such as {@code --jc-surface},
+	 * {@code --jc-danger-text} and {@code --jc-header-bg}.
+	 *
+	 * <p>
+	 * These are the custom properties the chrome derives from the {@link Theme#OPEN} tokens. They are not tokens of
+	 * any {@link Theme}, but a page resolves them at run time, so the FreeMarker {@code <@token scheme="dark">}
+	 * alias check accepts them as targets.
+	 *
+	 * @return An unmodifiable set of custom-property names; never <jk>null</jk>.
+	 */
+	public static Set<String> roleAliasNames() {
+		return ROLE_ALIAS_NAMES;
+	}
 
 	/** The shipped static chrome.css bytes, read once from the classpath (shared - the static file never varies by theme). */
 	private static volatile String staticCss;
@@ -427,6 +510,21 @@ public class ConsoleChromeMixin {
 	}
 
 	/**
+	 * [GET /juneau-console/juneau-dashboard.js] &mdash; serve the dashboard chrome runtime.
+	 *
+	 * @return The script.
+	 */
+	@RestGet(
+		path={DASHBOARD_JS_PATH, DASHBOARD_JS_PATH_UNPREFIXED},
+		summary="Console dashboard chrome runtime",
+		description="The rail, grid, status header, persistence and share links of a PageSpec dashboard.",
+		swagger=@OpSwagger(ignore=true)
+	)
+	public HttpResource getDashboardJs() {
+		return ASSET_CACHE.serve(DASHBOARD_JS_RESOURCE, JS_CONTENT_TYPE, CACHE_CONTROL);
+	}
+
+	/**
 	 * [GET /juneau-console/juneau-page.schema.json] &mdash; serve the page-contract schema.
 	 *
 	 * @return The schema.
@@ -505,7 +603,7 @@ public class ConsoleChromeMixin {
 	 * {@code joblog} toolkit packs.
 	 *
 	 * @param req The current request.
-	 * @param path {@link #CHARTS_JS_PATH} or {@link #JOBLOG_JS_PATH}.
+	 * @param path {@link #CHARTS_JS_PATH}, {@link #JOBLOG_JS_PATH} or {@link #DASHBOARD_JS_PATH}.
 	 * @return The URL.
 	 * @throws IllegalArgumentException If {@code path} is neither.
 	 */
@@ -514,6 +612,8 @@ public class ConsoleChromeMixin {
 			return consoleMountUrl(req, CHARTS_JS_PATH, CHARTS_JS_RESOURCE);
 		if (JOBLOG_JS_PATH.equals(path))
 			return consoleMountUrl(req, JOBLOG_JS_PATH, JOBLOG_JS_RESOURCE);
+		if (DASHBOARD_JS_PATH.equals(path))
+			return consoleMountUrl(req, DASHBOARD_JS_PATH, DASHBOARD_JS_RESOURCE);
 		throw iaex("Unknown console asset '%s'.", path);
 	}
 
@@ -644,6 +744,154 @@ public class ConsoleChromeMixin {
 			sb.append(e.getKey()).append(':').append(e.getValue()).append(';');
 		}
 		return sb.append('}').toString();
+	}
+
+	/**
+	 * The two head insertion points for a colour-scheme-aware page.
+	 *
+	 * <p>
+	 * They are separate because they land in different places: {@link #htmlAttributes()} goes inside the
+	 * {@code <html>} start tag, and {@link #head()} goes immediately after {@code <head>}, ahead of every stylesheet.
+	 *
+	 * @param htmlAttributes The attributes for the {@code <html>} start tag, space-separated with no leading space,
+	 * 	or an empty string when the page is neither pinned nor toggleable.
+	 * @param head The pre-paint script element followed by the dark-layer stylesheet link, newline-terminated.
+	 */
+	public record SchemeHead(String htmlAttributes, String head) {}
+
+	/**
+	 * Returns the colour-scheme head pieces for a page that does not render through the FreeMarker console directive.
+	 *
+	 * <p>
+	 * A pinned page ({@code light} or {@code dark}) gets {@code data-jc-scheme} and {@code data-jc-scheme-pin} set to
+	 * the pin, so it paints in that scheme even with scripts disabled. A toggleable page gets
+	 * {@code data-jc-scheme-toggle}, which lets the pre-paint script honour the visitor's stored choice. The head
+	 * piece is {@link #SCHEME_SCRIPT} (stamped with the request's CSP nonce when one is set) followed by a link to the
+	 * shipped dark layer.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	SchemeHead <jv>h</jv> = ConsoleChromeMixin.<jsm>schemeHead</jsm>(<jv>req</jv>, <js>"auto"</js>, <jk>true</jk>);
+	 * 	<jk>var</jk> <jv>attrs</jv> = <jv>h</jv>.htmlAttributes().isEmpty() ? <js>""</js> : <js>" "</js> + <jv>h</jv>.htmlAttributes();
+	 * 	<jv>out</jv>.write(<js>"&lt;html lang=\"en\""</js> + <jv>attrs</jv> + <js>"&gt;&lt;head&gt;"</js> + <jv>h</jv>.head());
+	 * </p>
+	 *
+	 * <p>
+	 * The head piece carries only the scheme script and the dark layer.  It does not replace the page's own links to
+	 * the chrome stylesheet and a theme palette, which the caller still emits.
+	 *
+	 * @param req The current request, supplying the context path and any CSP nonce.
+	 * @param pin One of the {@link #SCHEMES}.
+	 * @param toggle Whether the visitor may override the scheme with a stored choice.
+	 * @return The head pieces.
+	 * @throws IllegalArgumentException If {@code pin} is <jk>null</jk> or not one of the {@link #SCHEMES}.
+	 */
+	public static SchemeHead schemeHead(RestRequest req, String pin, boolean toggle) {
+		var attrs = schemeHtmlAttributes(pin, toggle);
+		var nonce = req.getAttribute(RestRequest.CSP_NONCE_ATTR).as(String.class).orElse(null);
+		var head = schemeScriptElement(nonce) + "\n<link rel=\"stylesheet\" href=\"" + attrEscape(themeAssetUrl(req, "dark")) + "\">\n";
+		return new SchemeHead(attrs, head);
+	}
+
+	/**
+	 * Returns the {@code <html>} start-tag attributes for a scheme pin and toggle flag.
+	 *
+	 * <p>
+	 * The FreeMarker console directive and {@link #schemeHead(RestRequest, String, boolean)} share this so the two
+	 * shells stamp identical attributes.
+	 *
+	 * @param pin One of the {@link #SCHEMES}.
+	 * @param toggle Whether the visitor may override the scheme with a stored choice.
+	 * @return The attributes, space-separated with no leading space, or an empty string.
+	 * @throws IllegalArgumentException If {@code pin} is <jk>null</jk> or not one of the {@link #SCHEMES}.
+	 */
+	public static String schemeHtmlAttributes(String pin, boolean toggle) {
+		if (pin == null || ! SCHEMES.contains(pin))
+			throw iaex("Unknown scheme '%s'.  Schemes: %s.", pin, String.join(", ", SCHEMES));
+		var sb = new StringBuilder();
+		if (! "auto".equals(pin))
+			sb.append("data-jc-scheme=\"").append(pin).append("\" data-jc-scheme-pin=\"").append(pin).append('"');
+		if (toggle)
+			sb.append(sb.isEmpty() ? "" : " ").append("data-jc-scheme-toggle");
+		return sb.toString();
+	}
+
+	/**
+	 * Returns the {@link #SCHEME_SCRIPT} element, carrying {@code nonce} as an attribute when it is not <jk>null</jk>.
+	 *
+	 * @param nonce The request's CSP nonce, or <jk>null</jk>.
+	 * @return The {@code <script>} element, with no trailing newline.
+	 */
+	public static String schemeScriptElement(String nonce) {
+		return "<script" + nonceAttr(nonce) + ">" + SCHEME_SCRIPT + "</script>";
+	}
+
+	/**
+	 * Returns {@code  nonce="…"} (with a leading space, attribute-escaped) or an empty string for <jk>null</jk>.
+	 *
+	 * @param nonce The request's CSP nonce, or <jk>null</jk>.
+	 * @return The attribute text.
+	 */
+	public static String nonceAttr(String nonce) {
+		return nonce == null ? "" : " nonce=\"" + attrEscape(nonce) + "\"";
+	}
+
+	/**
+	 * Renders the dark-scheme override rule for app-declared dark tokens.
+	 *
+	 * <p>
+	 * The rule is {@code @media not print{html:root[data-jc-scheme="dark"]{…}}}, so it wins over the light override
+	 * block only while the page is dark and never reaches print. Leaves come first, then aliases, each in declaration
+	 * order. A leaf must be a literal: a dark leaf that is itself a {@code var()} reference is rejected, because it
+	 * would resolve against the light palette. A live link belongs in an alias. Names and values get the same checks
+	 * as {@link Theme.Builder}: the name shape, the reserved {@code --jc-chrome-*} namespace, the value grammar, and
+	 * one channel per name.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 * 	String <jv>css</jv> = ConsoleChromeMixin.<jsm>schemeOverrideBlock</jsm>(
+	 * 		Map.<jsm>of</jsm>(<js>"--jc-link"</js>, <js>"#6cb4ff"</js>), Map.<jsm>of</jsm>(<js>"--jc-focus"</js>, <js>"var(--jc-accent)"</js>));
+	 * 	<jc>// @media not print{html:root[data-jc-scheme="dark"]{--jc-link:#6cb4ff;--jc-focus:var(--jc-accent);}}</jc>
+	 * </p>
+	 *
+	 * @param tokens The dark leaf tokens by name.  Must not be <jk>null</jk>.
+	 * @param aliases The dark aliases by name, each a {@code var(--jc-name)} reference.  Must not be <jk>null</jk>.
+	 * @return The rule, or an empty string if both maps are empty.
+	 * @throws IllegalArgumentException If a name or value fails validation.
+	 */
+	public static String schemeOverrideBlock(Map<String,String> tokens, Map<String,String> aliases) {
+		if (tokens.isEmpty() && aliases.isEmpty())
+			return "";
+		var b = Theme.create("dark");
+		for (var e : tokens.entrySet()) {
+			if (CssValueGrammar.normalize(e.getValue()).toLowerCase(Locale.ROOT).contains("var("))
+				throw iaex("Dark token '%s' is '%s', but dark values must be literals.  Declare a live reference as an alias.", e.getKey(), e.getValue());
+			b.token(e.getKey(), e.getValue());
+		}
+		for (var e : aliases.entrySet())
+			b.alias(e.getKey(), e.getValue());
+		var t = b.build();
+		var sb = new StringBuilder("@media not print{html:root[data-jc-scheme=\"dark\"]{");
+		for (var e : t.getTokens().entrySet())
+			sb.append(e.getKey()).append(':').append(CssValueEscaper.escape(e.getValue())).append(';');
+		for (var e : t.getAliases().entrySet())
+			sb.append(e.getKey()).append(':').append(e.getValue()).append(';');
+		return sb.append("}}").toString();
+	}
+
+	/** Escapes text for a double-quoted HTML attribute value. */
+	private static String attrEscape(String s) {
+		return s.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;").replace("\"", "&quot;");
+	}
+
+	/** Returns the CSP {@code 'sha256-…'} source expression for {@code text}'s UTF-8 bytes. */
+	private static String sha256Source(String text) {
+		try {
+			var digest = java.security.MessageDigest.getInstance("SHA-256").digest(text.getBytes(StandardCharsets.UTF_8));
+			return "'sha256-" + Base64.getEncoder().encodeToString(digest) + "'";
+		} catch (java.security.NoSuchAlgorithmException e) {  // HTT: every Java platform must provide SHA-256.
+			throw new IllegalStateException(e);
+		}
 	}
 
 	/**

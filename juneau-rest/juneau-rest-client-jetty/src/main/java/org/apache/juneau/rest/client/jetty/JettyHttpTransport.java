@@ -218,7 +218,14 @@ public final class JettyHttpTransport implements HttpTransport {
 	private Request buildJettyRequest(TransportRequest request) throws TransportException {
 		Request jettyRequest;
 		try {
-			jettyRequest = httpClient.newRequest(request.getUri()).method(request.getMethod());
+			// A client this transport created strips credential headers from every redirect copy itself; a caller-supplied
+			// client is left unchanged, so its requests are created as CredentialGuardingHttpRequest, which strips them from
+			// its own copies.  That is what HttpClient.newRequest(URI) builds too, but in a guarded subclass: Jetty copies a
+			// request for a redirect with the request's own copy(URI), and does not carry its listeners or attributes over,
+			// so the guard cannot be attached to whatever a client's newRequest returns.  An override of
+			// newRequest(URI) on a caller-supplied client is therefore not called; see JettyHttpTransportBuilder.httpClient.
+			jettyRequest = (policySupported ? httpClient.newRequest(request.getUri()) : new CredentialGuardingHttpRequest(httpClient, request.getUri()))
+				.method(request.getMethod());
 		} catch (IllegalArgumentException e) {
 			// Jetty refuses a URI that java.net.URI parsed with a null host (for example an underscore host name).
 			throw new TransportException("HTTP transport error: " + e.getMessage(), e);
@@ -226,7 +233,7 @@ public final class JettyHttpTransport implements HttpTransport {
 		// The tag is part of Jetty's destination key, so a guarded request gets a connection pool of its own whose
 		// connections are all opened through the pin; it can never reuse a connection an unguarded request opened.
 		if (request.isSsrfGuardActive())
-			jettyRequest.tag(PolicyPinningSocketAddressResolver.PINNED_TAG);
+			jettyRequest.tag(PolicyPinningSocketAddressResolver.tagFor(request.getAllowedAddressRanges()));
 		for (var h : request.getHeaders())
 			jettyRequest.headers(fields -> fields.add(h.name(), h.value()));
 		var body = request.getBody();

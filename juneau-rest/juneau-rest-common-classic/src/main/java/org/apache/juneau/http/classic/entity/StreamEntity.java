@@ -141,7 +141,7 @@ public class StreamEntity extends BasicHttpEntity<StreamEntity> {
 	@Override /* Overridden from Object */
 	public boolean equals(Object o) {
 		// Leaf-type gate: keeps this entity from comparing equal to a different leaf with equal base content, while
-		// preserving D3 (StreamEntity.Unmodifiable IS-A StreamEntity, so bean.equals(bean.unmodifiable()) still holds).
+		// preserving content equality (StreamEntity.Unmodifiable IS-A StreamEntity, so bean.equals(bean.unmodifiable()) still holds).
 		// byteCache/stringCache are memoized derivations of the inherited content/charset and are excluded from equality.
 		return o instanceof StreamEntity && super.equals(o);
 	}

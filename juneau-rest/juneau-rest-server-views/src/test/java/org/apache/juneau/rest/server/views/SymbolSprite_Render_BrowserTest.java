@@ -207,7 +207,7 @@ class SymbolSprite_Render_BrowserTest extends TestBase {
 			// The four-glyph document family plus the one glyph the redraw gave a new meaning, whose ribbon-size
 			// distinguishability against both settings and spreadsheet is a named review check.
 			"family", List.of("csv", "pdf", "spreadsheet", "copy"),
-			// the locked-scope glyph distinguishability pin LD-1: every pairwise combination of the four locked-scope glyphs (cancel, columns,
+			// the glyph distinguishability pin: every pairwise combination of the four locked-scope glyphs (cancel, columns,
 			// edit, settings), plus the pre-existing columns-spreadsheet review-only pair (columns-settings is
 			// reused rather than duplicated). See c01_fourLockedGlyphsStayMutuallyDistinguishable() below.
 			"adjacencies", List.of(
@@ -294,10 +294,10 @@ class SymbolSprite_Render_BrowserTest extends TestBase {
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
-	// c: the four the locked-scope glyph distinguishability pin LD-1 glyphs stay mutually distinguishable  (real coverage, not a human PNG review)
+	// c: the four locked-scope glyphs stay mutually distinguishable  (real coverage, not a human PNG review)
 	//------------------------------------------------------------------------------------------------------------------
 
-	/** {@code the locked-scope glyph distinguishability pin} LD-1's exact locked scope - these four stems, and no others. */
+	/** The exact locked scope - these four stems, and no others. */
 	private static final List<String> FOUR_GLYPHS = List.of("cancel", "columns", "edit", "settings");
 
 	/**
@@ -310,7 +310,7 @@ class SymbolSprite_Render_BrowserTest extends TestBase {
 	 * size). This floor sits well under half the smallest of those - loose enough that ordinary antialiasing
 	 * jitter from a future Playwright/Chromium pin bump should not trip it (both sides of the comparison move
 	 * together across a pin bump; see the class javadoc), but tight enough that two glyphs actually drifting
-	 * into each other visually - the real risk this check exists for, per the closed {@code Q2} scare where
+	 * into each other visually - the real risk this check exists for, as in the earlier scare where
 	 * {@code columns} briefly appeared to have been left as a copy of the {@code settings} cog - would have to
 	 * land far closer to identical than any plausible accidental redraw before this goes green.
 	 */

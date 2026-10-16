@@ -80,7 +80,7 @@ class ConsoleCustomCard_BrowserTest extends TestBase {
 	}
 
 	@Test void a03_neverRegistered_failsLoudlyAtDomContentLoaded() {
-		assertFailure(report.get("never"), "E-JS-4", "card 'n1' has unknown type 'nope'; registered types: 'html, console-output, run-view'");
+		assertFailure(report.get("never"), "E-JS-4", "card 'n1' has unknown type 'nope'; registered types: 'html, run-view'");
 	}
 
 	@SuppressWarnings("unchecked")

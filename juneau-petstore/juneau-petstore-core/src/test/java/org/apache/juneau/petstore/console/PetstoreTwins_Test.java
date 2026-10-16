@@ -56,22 +56,12 @@ class PetstoreTwins_Test extends TestBase {
 		@Override public String toString() { return path; }
 	}
 
-	static final String HTML_SRC = "PageSpec cannot build an html card with src=: PageSpec.html rejects src and PageSpec.card rejects type 'html'.";
-
-	static final List<Gap> GAPS = List.of(
-		new Gap("/console/store", HTML_SRC, List.of("hours")),
-		new Gap("/console/dev/flavors/html", HTML_SRC, List.of("flavor")),
-		new Gap("/console/dev/flavors/freemarker", HTML_SRC, List.of("flavor")),
-		new Gap("/console/dev/flavors/mustache", HTML_SRC, List.of("flavor"))
-	);
+	// Intentionally empty: every builder page now matches its FTL twin.  Kept for future known gaps.
+	static final List<Gap> GAPS = List.of();
 
 	static Stream<String> twins() {
 		var gapped = GAPS.stream().map(Gap::path).toList();
 		return PetstorePages_ContractTest.PAGE_PATHS.stream().filter(x -> ! gapped.contains(x));
-	}
-
-	static Stream<Gap> gaps() {
-		return GAPS.stream();
 	}
 
 	@ParameterizedTest(name="{0}")
@@ -81,9 +71,13 @@ class PetstoreTwins_Test extends TestBase {
 		assertSameContract(path, ftl(c, path), builder(c, path));
 	}
 
-	@ParameterizedTest(name="{0}")
-	@MethodSource("gaps")
-	void a02_twinsEqualOutsideGaps(Gap g) throws Exception {
+	// A plain loop, not a parameterized test: JUnit rejects an empty source, and GAPS is empty when no gaps are known.
+	@Test void a02_twinsEqualOutsideGaps() throws Exception {
+		for (var g : GAPS)
+			assertTwinsEqualOutsideGap(g);
+	}
+
+	private static void assertTwinsEqualOutsideGap(Gap g) throws Exception {
 		var c = client();
 		var ftl = ftl(c, g.path());
 		var contract = ftl.contract();
@@ -112,10 +106,25 @@ class PetstoreTwins_Test extends TestBase {
 		}
 	}
 
-	@Disabled(HTML_SRC) @Test void b01_store() throws Exception { assertFull("/console/store"); }
-	@Disabled(HTML_SRC) @Test void b02_flavorsHtml() throws Exception { assertFull("/console/dev/flavors/html"); }
-	@Disabled(HTML_SRC) @Test void b03_flavorsFreemarker() throws Exception { assertFull("/console/dev/flavors/freemarker"); }
-	@Disabled(HTML_SRC) @Test void b04_flavorsMustache() throws Exception { assertFull("/console/dev/flavors/mustache"); }
+	@Test void a05_photoUploadTokenTwinsAgree() throws Exception {
+		var c = client();
+		var ftl = tokenPage(c, "/console/pets/1/photo");
+		var builder = tokenPage(c, "/console/pets/1/photo?builder");
+		assertSameContract("/console/pets/1/photo (admin, api token)", ftl, builder);
+	}
+
+	private static PageContractAssert tokenPage(MockRestClient c, String path) throws Exception {
+		var html = c.get(path).accept("text/html").header("Authorization", "Bearer petstore-admin")
+			.attribute(PetstoreApiBoundary.TOKEN_ATTRIBUTE, "0123456789abcdef".repeat(8))
+			.run().assertStatus(200).getContent().asString();
+		assertTrue(html.contains("data-petstore-csrf="), () -> path + " rendered no api token");
+		return assertPage(html).isValid();
+	}
+
+	@Test void b01_store() throws Exception { assertFull("/console/store"); }
+	@Test void b02_flavorsHtml() throws Exception { assertFull("/console/dev/flavors/html"); }
+	@Test void b03_flavorsFreemarker() throws Exception { assertFull("/console/dev/flavors/freemarker"); }
+	@Test void b04_flavorsMustache() throws Exception { assertFull("/console/dev/flavors/mustache"); }
 	@Test void b05_petOrders() throws Exception { assertFull("/console/pets/1/orders"); }
 	@Test void b06_jobs() throws Exception { assertFull("/console/ops/jobs"); }
 

@@ -28,7 +28,7 @@ The script supports resuming from any step, allowing you to restart at arbitrary
 in the release process.
 
 Usage:
-    python3 scripts/release.py [--start-step STEP_NAME] [--list-steps] [--skip-step STEP_NAME] [--resume]
+    python3 scripts/release.py [--start-step STEP_NAME | --resume] [--list-steps] [--skip-step STEP_NAME]
                                [--revert] [--detail LEVEL]
 
 Options:
@@ -41,7 +41,7 @@ Options:
 """
 
 import argparse
-import importlib.util
+import importlib
 import json
 import os
 import re
@@ -53,6 +53,11 @@ import xml.etree.ElementTree as ET
 from contextlib import contextmanager
 from datetime import datetime, timedelta
 from pathlib import Path
+
+# The shared loader (_juneau.py) sits beside this script; appended, so no script here shadows an installed module.
+if str(Path(__file__).resolve().parent) not in sys.path:
+    sys.path.append(str(Path(__file__).resolve().parent))
+import _juneau  # noqa: E402
 
 # Constants for duplicated string literals
 POM_XML = 'pom.xml'
@@ -93,32 +98,62 @@ STEP_TITLES = {
     'verify_distribution': ('Dist check', 'Verifying distribution'),
 }
 
-RUN_MODULE_PATH = Path(__file__).resolve().parent.parent / 'juneau-run' / 'src' / 'main' / 'python' / 'juneau_run.py'
+# The steps in order.  Each is a ReleaseScript method of the same name, looked up when the step runs.
+RELEASE_STEPS = list(STEP_TITLES)
+
+# The command the resume hint names.
+RESUME_PROG = 'python3 scripts/release.py'
+
+# The checkpoint's key for the last finished step before juneau_scripts' Checkpoint, which calls it "last".
+LEGACY_LAST_STEP = 'last_step'
+
+REPO_ROOT = Path(__file__).resolve().parent.parent
 
 
-def run_module():
-    """The in-tree juneau_run module (shared if already loaded), or None if its source is not there."""
-    module = sys.modules.get('juneau_run')
-    if module is None and RUN_MODULE_PATH.exists():
-        spec = importlib.util.spec_from_file_location('juneau_run', RUN_MODULE_PATH)
-        module = importlib.util.module_from_spec(spec)
-        sys.modules['juneau_run'] = module
-        # Keep the module's source directory free of __pycache__ (the Maven build's RAT check scans it).
-        previous, sys.dont_write_bytecode = sys.dont_write_bytecode, True
-        try:
-            spec.loader.exec_module(module)
-        finally:
-            sys.dont_write_bytecode = previous
-    return module
+def toolkit(name):
+    """A juneau_scripts module (run, steps, state, prompt) from the in-tree toolkit."""
+    _juneau.load()
+    return importlib.import_module(f"juneau_scripts.{name}")
 
 
 def say(text='', level='info'):
     """Status text: printed as before, or a filtered note when a console view owns the screen."""
-    run = run_module()
-    if run is None:
-        print(text)
-    else:
-        run.say(text, level=level)
+    toolkit('run').say(text, level)
+
+
+def ask(prompt, default=''):
+    """The stripped answer to a prompt, default when it is empty.  Ctrl-D cancels like Ctrl-C: it never means the
+    default."""
+    answer = toolkit('prompt').text(prompt, default=default)
+    if answer is None:
+        raise KeyboardInterrupt
+    return answer
+
+
+def build_registry(steps, call):
+    """A steps.Registry of the named steps, titled and labelled from STEP_TITLES.  call(name) gives a step's
+    function."""
+    registry = toolkit('steps').Registry()
+    for name in steps:
+        label, title = STEP_TITLES.get(name, (None, name))
+        registry.step(name, title, label=label)(call(name))
+    return registry
+
+
+def open_checkpoint():
+    """The release checkpoint, with a legacy last_step key read as "last".  A corrupt or unreadable file, or one the
+    migration cannot write back, warns and fails: a release never resumes from a guess, and the file is left for you
+    to inspect or delete."""
+    state = toolkit('state')
+    checkpoint = state.Checkpoint(STATE_FILE)
+    try:
+        legacy = checkpoint.get(LEGACY_LAST_STEP)
+        if checkpoint.get('last') is None and isinstance(legacy, str):
+            checkpoint.set('last', legacy)
+    except (state.CheckpointError, OSError) as e:
+        say(f"Warning: Could not load state file: {e}", 'warn')
+        sys.exit(1)
+    return checkpoint
 
 
 def tool_options(cmd):
@@ -139,86 +174,36 @@ def command_title(cmd, width=60):
     return text if len(text) <= width else text[:width - 1] + '…'
 
 
-def ask_rc(run, prompt, default=None) -> int:
+def ask_rc(prompt, default=None) -> int:
     """Ask for a release candidate number until you give one.  Enter takes the default when there is one."""
     while True:
-        answer = run.ask(prompt).strip()
+        answer = ask(prompt)
         if not answer and default is not None:
             return int(default)
         if not answer:
-            run.say("Release candidate number is required. Please enter a value.", level='warn')
+            say("Release candidate number is required. Please enter a value.", 'warn')
             continue
         try:
             return int(answer)
         except ValueError:
-            run.say("Please enter a valid number.", level='warn')
+            say("Please enter a valid number.", 'warn')
 
 
 def release_log_path(release, now=None) -> Path:
     """~/.juneau-release-logs/<release>-<YYYYMMDD-HHMMSS>.log"""
     return RELEASE_LOG_DIR / f"{release}-{(now or datetime.now()):%Y%m%d-%H%M%S}.log"
 
-class ReleaseState:
-    """Manages the release state for checkpoint/resume functionality."""
-    
-    def __init__(self):
-        self.state_file = STATE_FILE
-        self.data = self._load()
-    
-    def _load(self) -> Dict:
-        """Load state from file."""
-        if self.state_file.exists():
-            try:
-                with open(self.state_file, 'r') as f:
-                    return json.load(f)
-            except Exception as e:
-                say(f"Warning: Could not load state file: {e}", 'warn')
-        return {}
-    
-    def save(self):
-        """Save current state to file."""
-        try:
-            with open(self.state_file, 'w') as f:
-                json.dump(self.data, f, indent=2)
-        except Exception as e:
-            say(f"Warning: Could not save state file: {e}", 'warn')
-    
-    def get(self, key: str, default=None):
-        """Get a state value."""
-        return self.data.get(key, default)
-    
-    def set(self, key: str, value):
-        """Set a state value."""
-        self.data[key] = value
-        self.save()
-    
-    def clear(self):
-        """Clear all state."""
-        self.data = {}
-        if self.state_file.exists():
-            self.state_file.unlink()
-    
-    def get_last_step(self) -> Optional[str]:
-        """Get the last completed step."""
-        return self.data.get('last_step')
-    
-    def set_last_step(self, step: str):
-        """Set the last completed step."""
-        self.set('last_step', step)
-
 class ReleaseScript:
     """Main release script class."""
     
     def __init__(self, rc: Optional[int] = None, start_step: Optional[str] = None, skip_steps: List[str] = None, resume: bool = False, load_env: bool = True):
-        self.jr = run_module()   # juneau_run; not self.run, which would hide the run() method
-        if self.jr is None:
-            sys.exit(f"release.py needs juneau_run.py at {RUN_MODULE_PATH}")
+        self.jr = _juneau.load()[0]   # juneau_run; not self.run, which would hide the run() method
         self.current = None      # the step whose row run_command's sub-rows go under
         self._sub = 0            # sub-row counter within the current step
         self.summary = None      # the current step's row text, set by the step method
         self.full_log = None
         self._versions = None    # (java -version, mvn -version) output, probed once
-        self.state = ReleaseState()
+        self.state = open_checkpoint()
         self.rc = rc  # Will be set during _load_env if not provided
         self.start_step = start_step
         self.skip_steps = set(skip_steps or [])
@@ -228,23 +213,8 @@ class ReleaseScript:
         if load_env:
             self._load_env()
         
-        # Define all steps in order
-        self.steps = [
-            'check_prerequisites',
-            'check_java_version',
-            'check_maven_version',
-            'clean_maven_repo',
-            'make_git_folder',
-            'clone_juneau',
-            'configure_git',
-            'run_clean_verify',
-            'run_deploy',
-            'run_release_prepare',
-            'run_git_diff',
-            'run_release_perform',
-            'create_binary_artifacts',
-            'verify_distribution',
-        ]
+        # All steps in order
+        self.steps = list(RELEASE_STEPS)
     
     def _get_version_from_pom(self, pom_path: Path) -> str:
         """Extract version from pom.xml using current-release.py script."""
@@ -304,7 +274,7 @@ class ReleaseScript:
         """Prompt for a value with a default."""
         full_prompt = f"{prompt} [{default}]: " if default else f"{prompt}: "
         while True:
-            response = self.jr.ask(full_prompt).strip()
+            response = ask(full_prompt)
             if response:
                 return response
             if default:
@@ -345,7 +315,7 @@ class ReleaseScript:
             rc_match = re.search(RC_PATTERN, history.get('X_RELEASE_CANDIDATE') or '')
             default_rc = rc_match.group(1) if rc_match else None
             rc_prompt = "Release candidate number" + (f" [{default_rc}]" if default_rc else "") + ": "
-            self.rc = ask_rc(self.jr, rc_prompt, default_rc)
+            self.rc = ask_rc(rc_prompt, default_rc)
         
         release_candidate = f"RC{self.rc}"
         
@@ -427,8 +397,8 @@ class ReleaseScript:
         self.state.clear()
     
     def yprompt(self, prompt: str) -> bool:
-        """Yes/no prompt.  Enter means yes."""
-        response = self.jr.ask(f"{prompt} (Y/n): ").strip()
+        """Yes/no prompt.  Enter means yes; Ctrl-D cancels."""
+        response = ask(f"{prompt} (Y/n): ")
         return not response or response.lower() in ('y', 'yes')
     
     def run_command(self, cmd: List[str], cwd: Optional[Path] = None, check: bool = True,
@@ -447,34 +417,6 @@ class ReleaseScript:
         if check and result.exit != 0:
             self.fail(f"Command failed (exit {result.exit}): {' '.join(cmd)}")
         return subprocess.CompletedProcess(cmd, result.exit, result.output, None)
-    
-    def should_run_step(self, step_name: str) -> bool:
-        """Determine if a step should run based on start_step and skip_steps."""
-        if step_name in self.skip_steps:
-            return False
-        
-        if self.resume:
-            last_step = self.state.get_last_step()
-            if last_step:
-                # Find the index of last_step and step_name
-                try:
-                    last_idx = self.steps.index(last_step)
-                    step_idx = self.steps.index(step_name)
-                    # Only run if this step comes after the last completed step
-                    return step_idx > last_idx
-                except ValueError:
-                    pass
-        
-        if self.start_step:
-            try:
-                start_idx = self.steps.index(self.start_step)
-                step_idx = self.steps.index(step_name)
-                # Only run if this step is at or after the start step
-                return step_idx >= start_idx
-            except ValueError:
-                self.fail(f"Unknown start step: {self.start_step}")
-        
-        return True
     
     def check_prerequisites(self):
         """Check that required tools are available."""
@@ -502,7 +444,6 @@ class ReleaseScript:
             os.environ['GPG_TTY'] = tty.stdout.strip()
         
         self.summary = f"{len(required_tools)} tools found"
-        self.state.set_last_step('check_prerequisites')
     
     def check_java_version(self):
         """Check Java version, from the java -version output the header already probed."""
@@ -515,7 +456,6 @@ class ReleaseScript:
             self.fail(f"Java version {java_version} detected. Java {MIN_JAVA_VERSION} or higher is required.")
         
         self.summary = f"Java {self._java_version_text() or java_version}"
-        self.state.set_last_step('check_java_version')
     
     def _parse_java_version(self, version_text: str) -> Optional[int]:
         """Parse Java version from java -version output."""
@@ -563,7 +503,6 @@ class ReleaseScript:
             self.fail(f"Maven version {maven_version} detected. Maven {MIN_MAVEN_VERSION} or higher is required.")
         
         self.summary = f"Maven {self._maven_version_text() or maven_version}"
-        self.state.set_last_step('check_maven_version')
     
     def _get_maven_version(self) -> Optional[int]:
         """Get Maven version using maven-version.py script."""
@@ -599,8 +538,6 @@ class ReleaseScript:
                 self.summary = "moved aside, deleting in the background"
             else:
                 self.summary = "already empty"
-        
-        self.state.set_last_step('clean_maven_repo')
     
     def make_git_folder(self):
         """Create git staging folder."""
@@ -617,7 +554,6 @@ class ReleaseScript:
         git_dir.mkdir(parents=True)
         
         self.summary = str(staging)
-        self.state.set_last_step('make_git_folder')
     
     def clone_juneau(self):
         """Clone juneau.git repository."""
@@ -630,8 +566,6 @@ class ReleaseScript:
             ['git', 'clone', 'https://gitbox.apache.org/repos/asf/juneau.git'],
             cwd=git_dir
         )
-        
-        self.state.set_last_step('clone_juneau')
     
     def configure_git(self):
         """Configure git user name and email."""
@@ -647,7 +581,6 @@ class ReleaseScript:
             self.run_command(['git', 'config', 'user.email', email], cwd=juneau_dir)
         
         self.summary = f"{username or '?'} <{email or '?'}>"
-        self.state.set_last_step('configure_git')
     
     def run_clean_verify(self):
         """Run Maven clean verify."""
@@ -655,8 +588,6 @@ class ReleaseScript:
         juneau_dir = staging / 'git' / 'juneau'
         
         self.run_command(['mvn', 'clean', 'verify'], cwd=juneau_dir)
-        
-        self.state.set_last_step('run_clean_verify')
     
     def run_deploy(self):
         """Run Maven deploy."""
@@ -664,8 +595,6 @@ class ReleaseScript:
         juneau_dir = staging / 'git' / 'juneau'
         
         self.run_command(['mvn', 'deploy', '-Daether.checksums.algorithms=MD5,SHA-1,SHA-512'], cwd=juneau_dir)
-        
-        self.state.set_last_step('run_deploy')
     
     def run_release_prepare(self):
         """Run Maven release:prepare."""
@@ -717,7 +646,6 @@ class ReleaseScript:
         ], cwd=juneau_dir)
         
         self.summary = f"tag {release}"
-        self.state.set_last_step('run_release_prepare')
     
     def run_git_diff(self):
         """Show what release:prepare changed against the release tag, in the pager, before release:perform."""
@@ -734,7 +662,6 @@ class ReleaseScript:
             self.jr.show(result.stdout or f"No differences against {release}.", pager=True)
             files = sum(1 for line in result.stdout.splitlines() if line.startswith('diff --git '))
             self.summary = f"{files} file(s)" if files else "no changes"
-        self.state.set_last_step('run_git_diff')
     
     def run_release_perform(self):
         """Run Maven release:perform."""
@@ -757,7 +684,7 @@ class ReleaseScript:
             "Once closing has finished (check with Refresh), browse to the URL of the staging repository which should "
             "be something like https://repository.apache.org/content/repositories/orgapachejuneau-1000.\n")
         
-        repo_input = self.jr.ask("Enter the staging repository name AFTER CLOSING IT!!!: orgapachejuneau-").strip()
+        repo_input = ask("Enter the staging repository name AFTER CLOSING IT!!!: orgapachejuneau-")
         repo_name = f"orgapachejuneau-{repo_input}"
         
         if not self.yprompt(f"X_REPO = {repo_name}.  Is this correct?"):
@@ -767,7 +694,6 @@ class ReleaseScript:
         self.state.set('X_REPO', repo_name)
         
         self.summary = f"staging repo {repo_name}"
-        self.state.set_last_step('run_release_perform')
     
     def create_binary_artifacts(self):
         """Create binary artifacts and upload to SVN."""
@@ -863,7 +789,6 @@ class ReleaseScript:
         self.run_command(['svn', 'commit', '-m', release], cwd=dist_dir)
         
         self.summary = f"committed {release} to dist/dev" + (f" · removed {removed} old" if removed else "")
-        self.state.set_last_step('create_binary_artifacts')
     
     def _svn_rm_contents(self, dist_dir: Path, *dirs: Path) -> int:
         """
@@ -936,8 +861,6 @@ class ReleaseScript:
         
         # Generate vote email
         self._generate_vote_email(version, release, dist_dir)
-        
-        self.state.set_last_step('verify_distribution')
     
     def _calculate_vote_end_date(self) -> str:
         """Calculate vote end date (72 hours from now, minimum 3 days)."""
@@ -1065,13 +988,6 @@ Anyone can participate in testing and voting, not just committers, please feel f
         # Display email to console
         self.jr.show(f"{'=' * 79}\nVOTE EMAIL BODY:\n{'=' * 79}\n{email_body}{'=' * 79}")
     
-    def list_steps(self):
-        """List all available steps."""
-        print("\nAvailable steps:")
-        for i, step in enumerate(self.steps, 1):
-            print(f"  {i:2d}. {step}")
-        print()
-    
     def revert_release(self):
         """Revert a release by deleting the tag, reverting Maven versions, and cleaning up SVN files: one row each."""
         # Get version and release from state or environment
@@ -1083,8 +999,7 @@ Anyone can participate in testing and voting, not just committers, please feel f
         
         # Confirm with user
         if not self.yprompt(f"Are you sure you want to revert release {release}? This will delete the git tag and clean up SVN files."):
-            say("Revert cancelled.")
-            return 'cancelled'
+            raise KeyboardInterrupt   # a cancel, like Ctrl-C: the session says so and exits 130
         
         staging = Path(os.environ.get('X_STAGING', STAGING_DIR)).expanduser()
         git_dir = staging / 'git' / 'juneau'
@@ -1195,50 +1110,83 @@ Anyone can participate in testing and voting, not just committers, please feel f
         java, maven = self._java_version_text(), self._maven_version_text()
         return [release] + ([f"Java {java}"] if java else []) + ([f"Maven {maven}"] if maven else [])
     
-    def start_session(self, title, header):
+    def _in_session(self, title, body, header, plan=None):
         """
-        Start the console view.  The full log always goes to ~/.juneau-release-logs/<release>-<ts>.log, whatever
-        JUNEAU_RUN_CONSOLE says, and session() puts its path in the header.
+        Run body in one juneau_scripts session: done(ok|fail|cancelled), exit 130 on Ctrl-C or Ctrl-D, 1 on a
+        failure.  The full log always goes to ~/.juneau-release-logs/<release>-<ts>.log, whatever
+        JUNEAU_RUN_CONSOLE says, and juneau_run puts its path in the header.
         """
         release = os.environ.get('X_RELEASE') or self.state.get('X_RELEASE') or 'juneau-release'
         self.full_log = release_log_path(release)
         self.full_log.parent.mkdir(parents=True, exist_ok=True)
         self.full_log.touch()
         os.environ['JUNEAU_RUN_FULL_LOG'] = str(self.full_log)
-        self.jr.session(f"🚀 {title}", header)
-    
-    def _in_session(self, title, body, header):
-        """Run body in a console session and end it with done(ok|fail|cancelled).  body may return 'cancelled'."""
-        self.start_session(title, header)
-        try:
-            status = body() or 'ok'
-        except (KeyboardInterrupt, EOFError):   # Ctrl-C, or Ctrl-D at a prompt
-            self._end('cancelled')
-            sys.exit(130)
-        except SystemExit as e:
-            self._end('fail' if e.code else 'ok')
-            raise
-        except BaseException:
-            self._end('fail')
-            raise
-        self._end(status)
-    
-    def _end(self, status):
-        """done(status).  The final line names the full log only on fail (juneau_run's format_final), so say it
-        first, at warn: info would be hidden at the default detail."""
-        if status != 'fail':
+
+        def full_log_note():
+            # The final line names the full log only on fail (juneau_run's format_final), so say it first, at
+            # warn: info would be hidden at the default detail.
             self.jr.say(f"full log: {self.full_log}", level='warn')
-        self.jr.done(status)
-    
+
+        def guarded():
+            try:
+                body()
+            except (KeyboardInterrupt, EOFError) as e:   # Ctrl-C, or Ctrl-D at a prompt
+                full_log_note()
+                raise KeyboardInterrupt from e
+            except SystemExit as e:
+                if not e.code:
+                    full_log_note()
+                raise
+            else:
+                full_log_note()
+
+        with toolkit('run').session(f"🚀 {title}", header=header, repo=REPO_ROOT, exit=False, plan=plan,
+                                    bell=False) as session:
+            guarded()
+        if session.code:
+            sys.exit(session.code)
+
+    def selection(self):
+        """The step selection this script was built with, in the argparse shape steps.Registry reads."""
+        return argparse.Namespace(list_steps=False, start_step=self.start_step, resume=self.resume,
+                                  skip_step=sorted(self.skip_steps))
+
+    def registry(self):
+        """This run's steps, each calling the method looked up when it runs (a stub set after this still runs)."""
+        registry = build_registry(self.steps, self._step)
+        registry.add_arguments(argparse.ArgumentParser(prog=RESUME_PROG))   # names the resume hint's command
+        return registry
+
+    def _step(self, name):
+        """The registry function for step name: the method in a row, its sub-rows under it, self.summary its text.
+        The registry prints the resume hint after a failure, once, at error level."""
+        def call(ctx):
+            self.current, self._sub, self.summary = name, 0, None
+            try:
+                getattr(self, name)()
+            except KeyboardInterrupt:
+                self.jr.failure(f"Interrupted in {name}.", step=name)
+                raise
+            except Exception as e:  # NOSONAR python:S2221 - any step error fails the release
+                self.jr.failure(f"❌ Error in step {name}: {e}", step=name)
+                raise SystemExit(1) from e
+            finally:
+                self.current = None
+            return self.summary
+        return call
+
     def run(self):
         """Run the release steps in one console session."""
-        self._in_session('Juneau release', self._run_steps, self.header_lines())
-    
+        registry, selection = self.registry(), self.selection()
+        self._in_session('Juneau release', lambda: self._run_steps(registry, selection), self.header_lines(),
+                         plan=registry.plan(selection, self.state))
+
     def run_revert(self):
         """Run revert_release in its own console session."""
         release = os.environ.get('X_RELEASE') or self.state.get('X_RELEASE') or '?'
-        self._in_session('Juneau release revert', self.revert_release, [release])
-    
+        self._in_session('Juneau release revert', self.revert_release, [release],
+                         plan=['revert_pull', 'revert_tag', 'revert_versions', 'revert_svn'])
+
     def _prompt_pgp(self):
         """Prime the gpg agent before any long step, on the real terminal: pinentry needs it."""
         prompt_script = Path(__file__).parent / 'prompt-pgp-passphrase.py'
@@ -1264,40 +1212,16 @@ Anyone can participate in testing and voting, not just committers, please feel f
         finally:
             self.current = None
     
-    def _run_steps(self):
-        """The release steps in order, one row each.  A step that does not run is a dim row saying why."""
+    def _run_steps(self, registry, selection):
+        """
+        The release steps in order, one row each, recording each finished one in the checkpoint.  A step that does
+        not run is a dim row saying why.  Every step done clears the checkpoint.
+        """
         self._prompt_pgp()
-        
-        if self.resume:
-            last_step = self.state.get_last_step()
-            if last_step in self.steps[:-1]:
-                self.start_step = self.steps[self.steps.index(last_step) + 1]
-                say(f"Resuming after {last_step}: starting from {self.start_step}")
-        
-        for n, name in enumerate(self.steps, 1):
-            label, title = STEP_TITLES.get(name, (None, name))
-            if not self.should_run_step(name):
-                with self.jr.row(name, title, label=label) as s:
-                    s.skip()
-                    s.summary = '(skipped)' if name in self.skip_steps else '(done earlier)'
-                continue
-            
-            resume = f"To resume: python3 scripts/release.py --start-step {name}"
-            try:
-                with self._phase(name, n, title, label):
-                    getattr(self, name)()
-            except KeyboardInterrupt:
-                self.jr.failure(f"Interrupted in {name}. {resume}", step=name)
-                raise
-            except SystemExit as e:
-                if e.code:
-                    self.jr.failure(resume, step=name)
-                raise
-            except Exception as e:
-                self.jr.failure(f"❌ Error in step {name}: {e}\n{resume}", step=name)
-                raise
-        
-        self.success()
+        if registry.run(selection, None, self.state, show_unselected=True).ok:
+            self.success()
+        else:
+            sys.exit(1)
 
 
 def main(argv=None):
@@ -1306,26 +1230,9 @@ def main(argv=None):
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog=__doc__
     )
-    parser.add_argument(
-        '--start-step',
-        help='Start execution from the specified step (skips all previous steps)'
-    )
-    parser.add_argument(
-        '--list-steps',
-        action='store_true',
-        help='List all available steps and exit'
-    )
-    parser.add_argument(
-        '--skip-step',
-        action='append',
-        default=[],
-        help='Skip a specific step (can be used multiple times)'
-    )
-    parser.add_argument(
-        '--resume',
-        action='store_true',
-        help='Resume from the last checkpoint (if available)'
-    )
+    # --list-steps, --start-step, --skip-step and --resume, validated against the step names
+    registry = build_registry(RELEASE_STEPS, lambda name: lambda ctx: None)   # only parses; never runs a step
+    registry.add_arguments(parser)
     parser.add_argument(
         '--revert',
         action='store_true',
@@ -1338,9 +1245,7 @@ def main(argv=None):
     
     args = parser.parse_args(argv)
     
-    run = run_module()
-    if run is None:
-        parser.error(f"juneau_run.py not found at {RUN_MODULE_PATH}")
+    run = _juneau.load()[0]
     if os.environ.pop('RUN_MARKERS', None):
         run.warn("release.py does not emit run markers; RUN_MARKERS is ignored")
     try:
@@ -1350,9 +1255,7 @@ def main(argv=None):
     
     # If just listing steps, don't require RC
     if args.list_steps:
-        # Create a dummy script just to call list_steps (don't load env)
-        script = ReleaseScript(rc=None, start_step=None, skip_steps=[], resume=False, load_env=False)
-        script.list_steps()
+        registry.run(args, None)
         return
     
     # If reverting, handle it separately
@@ -1436,7 +1339,7 @@ def main(argv=None):
         
         # If we still don't have RC, prompt for it
         if version and rc is None:
-            rc = ask_rc(run, "Release candidate number: ")
+            rc = ask_rc("Release candidate number: ")
         
         # Construct X_RELEASE if we have version and RC
         if version and rc:

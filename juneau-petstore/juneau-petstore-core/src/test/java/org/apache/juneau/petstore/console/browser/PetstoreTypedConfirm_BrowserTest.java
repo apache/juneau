@@ -34,6 +34,7 @@ import org.junit.jupiter.api.extension.*;
  * row's id, or a ribbon-hosted action's own id), the fail-closed refusal when there is nothing to type, Cancel and
  * Escape resolving false, and the Orders row Delete requiring its exact order id.
  */
+@HookCovers({"rowActions", "dialogs"})
 @EnabledIfSystemProperty(named=PetstoreBrowser.GATE, matches="true", disabledReason=PetstoreBrowser.DISABLED)
 class PetstoreTypedConfirm_BrowserTest extends TestBase {
 
@@ -42,8 +43,8 @@ class PetstoreTypedConfirm_BrowserTest extends TestBase {
 
 	private static final String DLG = "dialog.petstore-typed-confirm";
 	private static final String INPUT = DLG + " input";
-	private static final String OK = DLG + " button:nth-of-type(1)";
-	private static final String CANCEL = DLG + " button:nth-of-type(2)";
+	private static final String OK = DLG + " .petstore-typed-confirm-ok";
+	private static final String CANCEL = DLG + " .petstore-typed-confirm-cancel";
 
 	// Records the typed dialog's label and Confirm state under a key, so a case can observe several steps.
 	private static final String SNAP = "window.__snap = k => {"

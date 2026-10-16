@@ -580,8 +580,7 @@ class Characterization_Test {
 	/**
 	 * The opaque {@code requestState} minted into {@code MRTR-resume-input-required-again}'s second PAUSE is
 	 * redacted for {@code a01}'s byte comparison, so its embedded round counter is verified here instead: unseal
-	 * the live token with the same fixed-key codec {@link F_Mrtr} uses and assert the round advanced to 2 (plan
-	 * Phase 4 Task 12 decode-and-check).
+	 * the live token with the same fixed-key codec {@link F_Mrtr} uses and assert the round advanced to 2.
 	 */
 	@Test
 	void a02_resumeInputRequiredAgain_sealedRoundIsTwo() throws Exception {

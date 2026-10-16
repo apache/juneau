@@ -25,7 +25,7 @@ import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
 
 /**
- * Behavioral coverage for the {@code juneau-bus.js} core (message bus addendum, spec §3, §6.3, §7).  The Node
+ * Behavioral coverage for the {@code juneau-bus.js} core.  The Node
  * harness {@code bus-core.cjs} loads the bus standalone into the DOM shim and reports one section per subject; every
  * assertion is here, so a failure names the subject in surefire.  Gated on {@code node} being on {@code PATH}.
  */
@@ -71,7 +71,7 @@ class ViewsJs_BusCore_Test extends TestBase {
 
 	@Test void a00_sourceShape() throws Exception {
 		var js = BusHarness.source(ViewsMixin.BUS_JS_RESOURCE);
-		assertTrue(js.contains("juneau-bus.js"), "the header comment names the asset (Task 3's serving test greps for it)");
+		assertTrue(js.contains("juneau-bus.js"), "the header comment names the asset");
 		var end = js.indexOf(CORE_END);
 		assertTrue(end > 0, "the stock-sources section marker is present");
 		var core = js.substring(0, end);
@@ -88,7 +88,7 @@ class ViewsJs_BusCore_Test extends TestBase {
 	@Test void t01_constantsAndApi() {
 		var s = section("t01");
 		assertEquals("1", s.get("contractVersion"));
-		assertEquals(List.of("card", "selection", "filter", "redraw", "detail", "bulk", "cmd", "probe", "job", "badge", "bridge"), s.get("families"));
+		assertEquals(List.of("card", "selection", "filter", "redraw", "detail", "bulk", "cmd", "probe", "job", "badge", "bridge", "data", "zoom", "legend"), s.get("families"));
 		assertEquals(true, s.get("familiesFrozen"));
 		assertEquals(64, num(s, "drainCap"));
 		assertEquals(256, num(s, "historyCap"));
@@ -206,7 +206,7 @@ class ViewsJs_BusCore_Test extends TestBase {
 		assertEquals(p + "\"1\"", s.get("text"));
 		assertEquals(p + "a null payload", s.get("nullPayload"));
 		assertEquals("ok", s.get("ok"));
-		assertEquals(true, s.get("customUnchecked"), "custom topics are not checked (OQ-B9)");
+		assertEquals(true, s.get("customUnchecked"), "custom topics are not checked");
 	}
 
 	@Test void t10_breadthFirst() {
@@ -422,5 +422,15 @@ class ViewsJs_BusCore_Test extends TestBase {
 		assertEquals(true, s.get("aRepublish"), "so republishing v2 is a change");
 		assertEquals(true, s.get("bGet"), "a clear that is the overflowing message is not undone");
 		assertEquals(true, s.get("bRepublish"));
+	}
+
+	@Test void t33_chartStateFamiliesAreRetainedSingleOwner() {
+		var s = section("t33");
+		assertEquals(List.of(
+			"zoom:t/state/true/false/1/1|true/E-JS-50",
+			"legend:t/state/true/false/1/1|true/E-JS-50",
+			"data:t/state/true/false/1/1|true/E-JS-50"), s.get("rows"),
+			"kind state, the owner writes, another owner is refused, late subscribers replay it, retain=false cannot be re-declared");
+		assertEquals(3, num(s, "denied"), "one E-JS-49 per refused publish");
 	}
 }

@@ -67,6 +67,12 @@ public final class OkHttpTransportBuilder {
 	 * when OkHttp follows a redirect to a different origin.  The client passed in is not modified.
 	 *
 	 * <p>
+	 * Once a hop has been stripped, later hops of the same call stay stripped, including one back to the first origin.  That
+	 * state travels on a tag of the request, so a network interceptor or an {@link okhttp3.Authenticator} on the client
+	 * that builds a request from scratch (rather than from {@code request.newBuilder()}) must preserve the request's tags,
+	 * or the sticky strip is lost.
+	 *
+	 * <p>
 	 * OkHttp recommends sharing a single {@link OkHttpClient} instance across the application.
 	 * When sharing, the caller is responsible for lifecycle management; {@link OkHttpTransport#close()}
 	 * will still attempt to drain the client's connection pool and executor.

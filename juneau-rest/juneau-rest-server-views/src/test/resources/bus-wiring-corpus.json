@@ -280,7 +280,7 @@
 			"name": "c28-chart-roles",
 			"contract": {"contractVersion":"1","title":"T","nav":[],"activeNav":[],"cards":[{"id":"t","type":"datatables","table":{"dataUrl":"/api/t","columns":[{"key":"id"}],"selection":{"rowIdField":"id"}}},{"id":"g","type":"chart","kind":"bar","src":"/api/g?ids={ids}","subscribes":[{"topic":"selection:t","as":"params","map":{"ids":"ids.0"}},{"topic":"filter:t","as":"refresh"},{"topic":"filter:t","as":"filter"}]}]},
 			"expect": [
-				{"code":"E-44","message":"card 'g' (type 'chart') has no role 'filter'; accepted: params, refresh"}
+				{"code":"E-44","message":"card 'g' (type 'chart') has no role 'filter'; accepted: data, params, refresh"}
 			],
 			"expectJs": [
 				{"code":"E-JS-47","message":"card 'g' (type 'chart') does not accept role 'filter'"}
@@ -345,6 +345,318 @@
 				{"code":"E-JS-52","message":"bridge 'term': upstream is only allowed on a websocket bridge"},
 				{"code":"E-JS-52","message":"terminal card 'term' has input: true but no websocket bridge carries 'term.input' upstream and 'term.input-status' downstream"}
 			]
+		},
+		{
+			"name": "c35-chart-zoom-own",
+			"contract": {"contractVersion":"1","title":"T","nav":[],"activeNav":[],"cards":[{"id":"t","type":"chart","kind":"line","data":[],"x":{"field":"d"},"series":["v"],"publishes":[{"topic":"zoom:t","retain":true}]},{"id":"h","type":"html","template":"h","subscribes":[{"topic":"zoom:t","as":"refresh"}]}]},
+			"expect": [],
+			"expectJs": []
+		},
+		{
+			"name": "c36-chart-zoom-other-card",
+			"contract": {"contractVersion":"1","title":"T","nav":[],"activeNav":[],"cards":[{"id":"h","type":"html","template":"h","publishes":[{"topic":"zoom:t","retain":true}]}]},
+			"expect": [{"code":"E-45","message":"'zoom' is a framework family; framework topics are implicit and may not be declared"}],
+			"expectJs": []
+		},
+		{
+			"name": "c37-data-script",
+			"contract": {"contractVersion":"1","title":"T","nav":[],"activeNav":[],"topics":[{"topic":"data:x","retain":true,"publisher":"script"}],"cards":[{"id":"t","type":"chart","kind":"line","data":[],"x":{"field":"d"},"series":["v"],"source":"data:x","subscribes":[{"topic":"data:x","as":"data"}]}]},
+			"expect": [],
+			"expectJs": []
+		},
+		{
+			"name": "c38-data-unpublished",
+			"contract": {"contractVersion":"1","title":"T","nav":[],"activeNav":[],"cards":[{"id":"t","type":"chart","kind":"line","data":[],"x":{"field":"d"},"series":["v"],"source":"data:x","subscribes":[{"topic":"data:x","as":"data"}]}]},
+			"expect": [{"code":"E-71","message":"topic 'data:x' needs exactly one source publisher; found 0"}],
+			"expectJs": [{"code":"E-JS-41","message":"card 't' subscribes to 'data:x' but nothing publishes it"}]
+		},
+		{
+			"name": "c39-on-not-published",
+			"contract": {"contractVersion":"1","title":"T","nav":[],"activeNav":[],"cards":[{"id":"t","type":"chart","kind":"line","data":[],"x":{"field":"d"},"series":["v"],"on":{"click":"app.pick"}}]},
+			"expect": [{"code":"E-72","message":"chart card 't' on.click targets 'app.pick', which the card does not publish"}],
+			"expectJs": []
+		},
+		{
+			"name": "c40-on-published",
+			"contract": {"contractVersion":"1","title":"T","nav":[],"activeNav":[],"cards":[{"id":"t","type":"chart","kind":"line","data":[],"x":{"field":"d"},"series":["v"],"on":{"click":"app.pick"},"publishes":[{"topic":"app.pick","retain":false}]}]},
+			"expect": [],
+			"expectJs": []
+		},
+		{
+			"name": "c41-cmd-names-source",
+			"contract": {"contractVersion":"1","title":"T","nav":[],"activeNav":[],"dataSources":[{"id":"orders"}],"cards":[{"id":"h","type":"html","template":"h","ribbon":[{"type":"publish","title":"R","topic":"cmd:orders"}]}]},
+			"expect": [],
+			"expectJs": []
+		},
+		{
+			"name": "c42-cmd-group-undeclared",
+			"contract": {"contractVersion":"1","title":"T","nav":[],"activeNav":[],"cards":[{"id":"h","type":"html","template":"h","ribbon":[{"type":"publish","title":"Z","topic":"cmd:t","payload":{"schemaVersion":1,"op":"zoomTo","target":"group"}}]},{"id":"t","type":"chart","kind":"line","data":[],"x":{"field":"d"},"series":["v"]}]},
+			"expect": [{"code":"E-73","message":"'h' sends cmd 'zoomTo' to group '<none>', which no chart card declares"}],
+			"expectJs": []
+		},
+		{
+			"name": "c43-cmd-group-declared",
+			"contract": {"contractVersion":"1","title":"T","nav":[],"activeNav":[],"cards":[{"id":"h","type":"html","template":"h","ribbon":[{"type":"publish","title":"Z","topic":"cmd:t","payload":{"schemaVersion":1,"op":"zoomTo","target":"group"}}]},{"id":"t","type":"chart","kind":"line","data":[],"x":{"field":"d"},"series":["v"],"group":"g"}]},
+			"expect": [],
+			"expectJs": []
+		},
+		{
+			"name": "c44-bad-extension-name",
+			"contract": {"contractVersion":"1","title":"T","nav":[],"activeNav":[],"cards":[{"id":"t","type":"chart","kind":"line","data":[],"x":{"field":"d"},"series":["v"],"decorators":[{"use":"Bad"}],"patch":{"tooltip":{"formatter":{"$fn":"compact"}}}}]},
+			"expect": [{"code":"E-74","message":"'Bad' is not a valid decorator name"}],
+			"expectJs": []
+		},
+		{
+			"name": "c45-id-collision",
+			"contract": {"contractVersion":"1","title":"T","nav":[],"activeNav":[],"dataSources":[{"id":"orders"}],"dashboard":{"id":"main","rail":{"sections":[{"id":"orders"}]}},"cards":[{"id":"orders","type":"html","template":"orders"}]},
+			"expect": [{"code":"E-76","message":"data source 'orders': id duplicates card 'orders'"},{"code":"E-77","message":"dashboard 'main': section id 'orders' duplicates card 'orders'"}],
+			"expectJs": []
+		},
+		{
+			"name": "c46-filter-section-owner",
+			"contract": {"contractVersion":"1","title":"T","nav":[],"activeNav":[],"dashboard":{"rail":{"sections":[{"id":"range"}]}},"cards":[{"id":"h","type":"html","template":"h","subscribes":[{"topic":"filter:range","as":"refresh"}]}]},
+			"expect": [],
+			"expectJs": []
+		},
+		{
+			"name": "c47-state-on-bridge",
+			"contract": {"contractVersion":"1","title":"T","nav":[],"activeNav":[],"bridges":[{"id":"ws","transport":"websocket","session":"/bus/s","downstream":["data:x","zoom:t","legend:t"]}],"cards":[{"id":"t","type":"chart","kind":"line","data":[],"x":{"field":"d"},"series":["v"]}]},
+			"expect": [{"code":"E-54","message":"bridge 'ws' may not carry framework state topic 'data:x' (only job:*, and cmd:<cardId> downstream)"},{"code":"E-54","message":"bridge 'ws' may not carry framework state topic 'zoom:t' (only job:*, and cmd:<cardId> downstream)"},{"code":"E-54","message":"bridge 'ws' may not carry framework state topic 'legend:t' (only job:*, and cmd:<cardId> downstream)"}],
+			"expectJs": [{"code":"E-JS-52","message":"bridge 'ws' may not carry framework state topic 'data:x' (only job:*, and cmd:<cardId> downstream)"},{"code":"E-JS-52","message":"bridge 'ws' may not carry framework state topic 'zoom:t' (only job:*, and cmd:<cardId> downstream)"},{"code":"E-JS-52","message":"bridge 'ws' may not carry framework state topic 'legend:t' (only job:*, and cmd:<cardId> downstream)"}]
+		},
+		{
+			"name": "c48-zoom-other-chart",
+			"contract": {"contractVersion":"1","title":"T","nav":[],"activeNav":[],"cards":[{"id":"t","type":"chart","kind":"line","data":[],"x":{"field":"d"},"series":["v"]},{"id":"u","type":"chart","kind":"line","data":[],"x":{"field":"d"},"series":["v"],"publishes":[{"topic":"zoom:t","retain":true}]}]},
+			"expect": [{"code":"E-45","message":"'zoom' is a framework family; framework topics are implicit and may not be declared"}],
+			"expectJs": []
+		},
+		{
+			"name": "c49-zoom-html-card",
+			"contract": {"contractVersion":"1","title":"T","nav":[],"activeNav":[],"cards":[{"id":"h","type":"html","template":"h","publishes":[{"topic":"zoom:h","retain":true}]},{"id":"x","type":"html","template":"x","subscribes":[{"topic":"zoom:h","as":"refresh"}]}]},
+			"expect": [{"code":"E-45","message":"'zoom' is a framework family; framework topics are implicit and may not be declared"},{"code":"E-43","message":"card 'h' (type 'html') does not publish 'zoom:h'"}],
+			"expectJs": []
+		},
+		{
+			"name": "c50-data-ribbon-publisher",
+			"contract": {"contractVersion":"1","title":"T","nav":[],"activeNav":[],"topics":[{"topic":"data:x","retain":true,"publisher":"ribbon"}],"cards":[{"id":"t","type":"chart","kind":"line","data":[],"x":{"field":"d"},"series":["v"],"subscribes":[{"topic":"data:x","as":"data"}]}]},
+			"expect": [{"code":"E-45","message":"'data' is a framework family; framework topics are implicit and may not be declared"},{"code":"E-71","message":"topic 'data:x' needs exactly one source publisher; found 0"}],
+			"expectJs": [{"code":"E-JS-41","message":"card 't' subscribes to 'data:x' but nothing publishes it"}]
+		},
+		{
+			"name": "c51-data-retain-false",
+			"contract": {"contractVersion":"1","title":"T","nav":[],"activeNav":[],"topics":[{"topic":"data:x","retain":false,"publisher":"script"}],"cards":[{"id":"t","type":"chart","kind":"line","data":[],"x":{"field":"d"},"series":["v"],"subscribes":[{"topic":"data:x","as":"data"}]}]},
+			"expect": [{"code":"E-45","message":"'data' is a framework family; framework topics are implicit and may not be declared"}],
+			"expectJs": []
+		},
+		{
+			"name": "c52-data-server",
+			"contract": {"contractVersion":"1","title":"T","nav":[],"activeNav":[],"topics":[{"topic":"data:x","retain":true,"publisher":"server"}],"cards":[{"id":"t","type":"chart","kind":"line","data":[],"x":{"field":"d"},"series":["v"],"subscribes":[{"topic":"data:x","as":"data"}]}]},
+			"expect": [{"code":"E-45","message":"'data' is a framework family; framework topics are implicit and may not be declared"},{"code":"E-71","message":"topic 'data:x' needs exactly one source publisher; found 0"}],
+			"expectJs": [{"code":"E-JS-41","message":"card 't' subscribes to 'data:x' but nothing publishes it"}]
+		},
+		{
+			"name": "c53-on-event-name",
+			"contract": {"contractVersion":"1","title":"T","nav":[],"activeNav":[],"cards":[{"id":"t","type":"chart","kind":"line","data":[],"x":{"field":"d"},"series":["v"],"on":{"Bad":"app.pick"},"publishes":[{"topic":"app.pick","retain":false}]}]},
+			"expect": [{"code":"E-74","message":"'Bad' is not a valid event name"}],
+			"expectJs": []
+		},
+		{
+			"name": "c54-decorator-valid-and-bad",
+			"contract": {"contractVersion":"1","title":"T","nav":[],"activeNav":[],"cards":[{"id":"t","type":"chart","kind":"line","data":[],"x":{"field":"d"},"series":["v"],"decorators":[{"use":"ok"},{"use":"Bad"}]}]},
+			"expect": [{"code":"E-74","message":"'Bad' is not a valid decorator name"}],
+			"expectJs": []
+		},
+		{
+			"name": "c55-fn-in-patch",
+			"contract": {"contractVersion":"1","title":"T","nav":[],"activeNav":[],"cards":[{"id":"t","type":"chart","kind":"line","data":[],"x":{"field":"d"},"series":["v"],"patch":{"series":[{"label":{"formatter":{"$fn":"Bad"}}}]}}]},
+			"expect": [{"code":"E-74","message":"'Bad' is not a valid $fn name"}],
+			"expectJs": []
+		},
+		{
+			"name": "c56-fn-in-decorator-args",
+			"contract": {"contractVersion":"1","title":"T","nav":[],"activeNav":[],"cards":[{"id":"t","type":"chart","kind":"line","data":[],"x":{"field":"d"},"series":["v"],"decorators":[{"use":"ok","args":{"f":{"$fn":"Bad"}}}]}]},
+			"expect": [{"code":"E-74","message":"'Bad' is not a valid $fn name"}],
+			"expectJs": []
+		},
+		{
+			"name": "c57-fn-not-a-marker",
+			"contract": {"contractVersion":"1","title":"T","nav":[],"activeNav":[],"cards":[{"id":"t","type":"chart","kind":"line","data":[],"x":{"field":"d"},"series":["v"],"patch":{"x":{"$fn":"Bad","other":1}}}]},
+			"expect": [],
+			"expectJs": []
+		},
+		{
+			"name": "c58-group-self-without-group",
+			"contract": {"contractVersion":"1","title":"T","nav":[],"activeNav":[],"cards":[{"id":"h","type":"html","template":"h","ribbon":[{"type":"publish","title":"Z","topic":"cmd:t","payload":{"schemaVersion":1,"op":"zoomTo","target":"self"}}]},{"id":"t","type":"chart","kind":"line","data":[],"x":{"field":"d"},"series":["v"]}]},
+			"expect": [],
+			"expectJs": []
+		},
+		{
+			"name": "c59-section-duplicates-source",
+			"contract": {"contractVersion":"1","title":"T","nav":[],"activeNav":[],"dataSources":[{"id":"orders"}],"dashboard":{"id":"main","rail":{"sections":[{"id":"orders"}]}},"cards":[]},
+			"expect": [{"code":"E-77","message":"dashboard 'main': section id 'orders' duplicates data source 'orders'"}],
+			"expectJs": []
+		},
+		{
+			"name": "c60-section-duplicates-source-no-dashboard-id",
+			"contract": {"contractVersion":"1","title":"T","nav":[],"activeNav":[],"dataSources":[{"id":"orders"}],"dashboard":{"rail":{"sections":[{"id":"orders"}]}},"cards":[]},
+			"expect": [{"code":"E-77","message":"dashboard '<none>': section id 'orders' duplicates data source 'orders'"}],
+			"expectJs": []
+		},
+		{
+			"name": "c61-duplicates-within",
+			"contract": {"contractVersion":"1","title":"T","nav":[],"activeNav":[],"dataSources":[{"id":"a"},{"id":"a"}],"dashboard":{"id":"main","rail":{"sections":[{"id":"r"},{"id":"r"}]}},"cards":[]},
+			"expect": [{"code":"E-76","message":"data source 'a': id duplicates data source 'a'"},{"code":"E-77","message":"dashboard 'main': section id 'r' duplicates section 'r'"}],
+			"expectJs": []
+		},
+		{
+			"name": "c62-zoom-unknown-card",
+			"contract": {"contractVersion":"1","title":"T","nav":[],"activeNav":[],"cards":[{"id":"h","type":"html","template":"h","subscribes":[{"topic":"zoom:gone","as":"refresh"}]}]},
+			"expect": [{"code":"E-42","message":"topic 'zoom:gone' names card 'gone', which is not on this page"}],
+			"expectJs": []
+		},
+		{
+			"name": "c63-chart-subscribes-own-zoom",
+			"contract": {"contractVersion":"1","title":"T","nav":[],"activeNav":[],"cards":[{"id":"t","type":"chart","kind":"line","data":[],"x":{"field":"d"},"series":["v"],"publishes":[{"topic":"zoom:t","retain":true}],"subscribes":[{"topic":"zoom:t","as":"refresh"}]}]},
+			"expect": [{"code":"E-49","message":"card 't' subscribes to its own topic 'zoom:t'; use ctx.subscribe with {echo:true} in JS if this is intended"}],
+			"expectJs": []
+		},
+		{
+			"name": "c64-on-non-string",
+			"contract": {"contractVersion":"1","title":"T","nav":[],"activeNav":[],"cards":[{"id":"t","type":"chart","kind":"line","data":[],"x":{"field":"d"},"series":["v"],"on":{"click":1}}]},
+			"expect": [{"code":"E-72","message":"chart card 't' on.click targets '<not a string: 1>', which the card does not publish"}],
+			"expectJs": []
+		},
+		{
+			"name": "c65-selection-names-source",
+			"contract": {"contractVersion":"1","title":"T","nav":[],"activeNav":[],"dataSources":[{"id":"orders"}],"cards":[{"id":"h","type":"html","template":"h","subscribes":[{"topic":"selection:orders","as":"refresh"}]}]},
+			"expect": [{"code":"E-41","message":"card 'h' subscribes to 'selection:orders' but nothing publishes it"}],
+			"expectJs": [{"code":"E-JS-41","message":"card 'h' subscribes to 'selection:orders' but nothing publishes it"}]
+		},
+		{
+			"name": "c66-zoom-names-section",
+			"contract": {"contractVersion":"1","title":"T","nav":[],"activeNav":[],"dashboard":{"rail":{"sections":[{"id":"range"}]}},"cards":[{"id":"h","type":"html","template":"h","subscribes":[{"topic":"zoom:range","as":"refresh"}]}]},
+			"expect": [{"code":"E-41","message":"card 'h' subscribes to 'zoom:range' but nothing publishes it"}],
+			"expectJs": [{"code":"E-JS-41","message":"card 'h' subscribes to 'zoom:range' but nothing publishes it"}]
+		},
+		{
+			"name": "c67-filter-names-source",
+			"contract": {"contractVersion":"1","title":"T","nav":[],"activeNav":[],"dataSources":[{"id":"rangx"}],"dashboard":{"rail":{"sections":[{"id":"range"}]}},"cards":[{"id":"h","type":"html","template":"h","subscribes":[{"topic":"filter:rangx","as":"refresh"}]}]},
+			"expect": [{"code":"E-41","message":"card 'h' subscribes to 'filter:rangx' but nothing publishes it; did you mean 'filter:range'?"}],
+			"expectJs": [{"code":"E-JS-41","message":"card 'h' subscribes to 'filter:rangx' but nothing publishes it; did you mean 'filter:range'?"}]
+		},
+		{
+			"name": "c68-ribbon-option-to-source",
+			"contract": {"contractVersion":"1","title":"T","nav":[],"activeNav":[],"dataSources":[{"id":"orders"}],"cards":[{"id":"h","type":"html","template":"h","ribbon":[{"type":"option","id":"o","title":"O","target":"orders"}]}]},
+			"expect": [{"code":"E-43","message":"card 'orders' (type 'dataSource') does not handle op 'set-filter'"}],
+			"expectJs": []
+		},
+		{
+			"name": "c69-publish-op-to-source",
+			"contract": {"contractVersion":"1","title":"T","nav":[],"activeNav":[],"dataSources":[{"id":"orders"}],"cards":[{"id":"h","type":"html","template":"h","ribbon":[{"type":"publish","title":"Z","topic":"cmd:orders","payload":{"schemaVersion":1,"op":"zoomTo"}}]}]},
+			"expect": [{"code":"E-43","message":"card 'orders' (type 'dataSource') does not handle op 'zoomTo'"}],
+			"expectJs": []
+		},
+		{
+			"name": "c70-ribbon-refresh-sends-reload-and-refresh-op-both-accepted-by-source",
+			"contract": {"contractVersion":"1","title":"T","nav":[],"activeNav":[],"dataSources":[{"id":"orders"}],"cards":[{"id":"h","type":"html","template":"h","ribbon":[{"type":"refresh","target":"orders"},{"type":"publish","title":"R","topic":"cmd:orders","payload":{"schemaVersion":1,"op":"refresh"}}]}]},
+			"expect": [],
+			"expectJs": []
+		},
+		{
+			"name": "c71-zoom-retain-false",
+			"contract": {"contractVersion":"1","title":"T","nav":[],"activeNav":[],"cards":[{"id":"t","type":"chart","kind":"line","data":[],"x":{"field":"d"},"series":["v"],"publishes":[{"topic":"zoom:t","retain":false}]}]},
+			"expect": [{"code":"E-45","message":"'zoom' is a framework family; framework topics are implicit and may not be declared"}],
+			"expectJs": []
+		},
+		{
+			"name": "c72-group-cmd-lists-groups",
+			"contract": {"contractVersion":"1","title":"T","nav":[],"activeNav":[],"cards":[{"id":"h","type":"html","template":"h","ribbon":[{"type":"publish","title":"Z","topic":"cmd:t","payload":{"schemaVersion":1,"op":"zoomTo","target":"group"}}]},{"id":"t","type":"chart","kind":"line","data":[],"x":{"field":"d"},"series":["v"]},{"id":"u","type":"chart","kind":"line","data":[],"x":{"field":"d"},"series":["v"],"group":"g"}]},
+			"expect": [{"code":"E-73","message":"'h' sends cmd 'zoomTo' to group '<none> (page groups: g)', which no chart card declares"}],
+			"expectJs": []
+		},
+		{
+			"name": "c73-group-cmd-needs-chart-target",
+			"contract": {"contractVersion":"1","title":"T","nav":[],"activeNav":[],"dataSources":[{"id":"orders"}],"cards":[{"id":"h","type":"html","template":"h","ribbon":[{"type":"publish","title":"S","topic":"cmd:orders","payload":{"schemaVersion":1,"op":"refresh","target":"group"}},{"type":"publish","title":"P","topic":"cmd:p","payload":{"schemaVersion":1,"op":"zoomTo","target":"group"}}]},{"id":"p","type":"html","template":"p"}]},
+			"expect": [],
+			"expectJs": []
+		},
+		{
+			"name": "c74-fn-in-data-rows-not-walked",
+			"contract": {"contractVersion":"1","title":"T","nav":[],"activeNav":[],"cards":[{"id":"t","type":"chart","kind":"line","data":[],"x":{"field":"d"},"series":["v"],"option":{"dataset":[{"source":[{"$fn":"Bad"}]}],"series":[{"data":[{"$fn":"Bad"}]}]}}]},
+			"expect": [],
+			"expectJs": []
+		},
+		{
+			"name": "c75-publish-without-op-to-source-passes",
+			"contract": {"contractVersion":"1","title":"T","nav":[],"activeNav":[],"dataSources":[{"id":"orders"}],"cards":[{"id":"h","type":"html","template":"h","ribbon":[{"type":"publish","title":"P","topic":"cmd:orders","payload":{"schemaVersion":1}}]}]},
+			"expect": [],
+			"expectJs": []
+		},
+		{
+			"name": "c76-subscribe-cmd-source-not-e41",
+			"contract": {"contractVersion":"1","title":"T","nav":[],"activeNav":[],"dataSources":[{"id":"orders"}],"cards":[{"id":"h","type":"html","template":"h","subscribes":[{"topic":"cmd:orders","as":"refresh"}]}]},
+			"expect": [],
+			"expectJs": []
+		},
+		{
+			"name": "c77-publish-reload-op-to-source-passes",
+			"contract": {"contractVersion":"1","title":"T","nav":[],"activeNav":[],"dataSources":[{"id":"orders"}],"cards":[{"id":"h","type":"html","template":"h","ribbon":[{"type":"publish","title":"R","topic":"cmd:orders","payload":{"schemaVersion":1,"op":"reload"}}]}]},
+			"expect": [],
+			"expectJs": []
+		},
+		{
+			"name": "c78-data-source-read",
+			"contract": {"contractVersion":"1","title":"T","nav":[],"activeNav":[],"dataSources":[{"id":"orders","kind":"source","url":"/x"}],"cards":[{"id":"t","type":"chart","kind":"line","data":[],"x":{"field":"d"},"series":["v"],"source":"data:orders","subscribes":[{"topic":"data:orders","as":"data"}]}]},
+			"expect": [],
+			"expectJs": []
+		},
+		{
+			"name": "c79-data-two-publishers",
+			"contract": {"contractVersion":"1","title":"T","nav":[],"activeNav":[],"topics":[{"topic":"data:orders","retain":true,"publisher":"script"}],"dataSources":[{"id":"orders","kind":"source","url":"/x"}],"cards":[{"id":"t","type":"chart","kind":"line","data":[],"x":{"field":"d"},"series":["v"],"source":"data:orders","subscribes":[{"topic":"data:orders","as":"data"}]}]},
+			"expect": [{"code":"E-71","message":"topic 'data:orders' needs exactly one source publisher; found 2"}],
+			"expectJs": []
+		},
+		{
+			"name": "c80-data-derived",
+			"contract": {"contractVersion":"1","title":"T","nav":[],"activeNav":[],"dataSources":[{"id":"orders","kind":"source","url":"/x"},{"id":"top","kind":"derived","from":"orders","transforms":[{"use":"topN","args":{"by":"v","n":5}}]}],"cards":[{"id":"t","type":"chart","kind":"line","data":[],"x":{"field":"d"},"series":["v"],"source":"data:top","subscribes":[{"topic":"data:top","as":"data"}]}]},
+			"expect": [],
+			"expectJs": []
+		},
+		{
+			"name": "c81-data-derived-missing-input",
+			"contract": {"contractVersion":"1","title":"T","nav":[],"activeNav":[],"dataSources":[{"id":"top","kind":"derived","from":"nope","transforms":[]}],"cards":[{"id":"t","type":"chart","kind":"line","data":[],"x":{"field":"d"},"series":["v"],"source":"data:top","subscribes":[{"topic":"data:top","as":"data"}]}]},
+			"expect": [{"code":"E-71","message":"topic 'data:nope' needs exactly one source publisher; found 0"}],
+			"expectJs": []
+		},
+		{
+			"name": "c82-data-parser-name",
+			"contract": {"contractVersion":"1","title":"T","nav":[],"activeNav":[],"dataSources":[{"id":"orders","kind":"source","url":"/x","parser":"Bad"}],"cards":[]},
+			"expect": [{"code":"E-74","message":"'Bad' is not a valid parser name"}],
+			"expectJs": []
+		},
+		{
+			"name": "c83-dashboard-sections-and-source",
+			"contract": {"contractVersion":"1","title":"T","nav":[],"activeNav":[],"cards":[{"id":"notes","type":"html","template":"notes","subscribes":[{"topic":"filter:range","as":"refresh"}]}],"dataSources":[{"id":"orders","kind":"source","subscribes":[{"topic":"filter:range","as":"params"}]}],"dashboard":{"id":"d","grid":2,"panels":[{"card":"notes","span":1}],"rail":{"side":"left","width":280,"sections":[{"id":"range","kind":"range","topic":"filter:range","presets":["7d"],"custom":false,"defaultPreset":"7d"},{"id":"reasons","kind":"choice","topic":"filter:reasons","source":"orders","dim":"reason","max":50}]},"status":["data:orders"]}},
+			"expect": [],
+			"expectJs": []
+		},
+		{
+			"name": "c84-filter-neither-card-nor-section",
+			"contract": {"contractVersion":"1","title":"T","nav":[],"activeNav":[],"cards":[{"id":"notes","type":"html","template":"notes","subscribes":[{"topic":"filter:nope","as":"refresh"}]}],"dashboard":{"id":"d","grid":1,"panels":[],"rail":{"side":"left","width":280,"sections":[{"id":"range","kind":"range","topic":"filter:range","presets":["7d"],"custom":false,"defaultPreset":"7d"}]}}},
+			"expect": [{"code":"E-42","message":"topic 'filter:nope' names card 'nope', which is not on this page"}],
+			"expectJs": []
+		},
+		{
+			"name": "c85-status-undeclared",
+			"contract": {"contractVersion":"1","title":"T","nav":[],"activeNav":[],"cards":[],"dashboard":{"id":"d","grid":1,"panels":[],"status":["data:orders"]}},
+			"expect": [{"code":"E-77","message":"dashboard 'd': status topic 'data:orders' is not a declared data source"}],
+			"expectJs": []
+		},
+		{
+			"name": "c86-choice-source-undeclared",
+			"contract": {"contractVersion":"1","title":"T","nav":[],"activeNav":[],"cards":[],"dashboard":{"id":"d","grid":1,"panels":[],"rail":{"side":"left","width":280,"sections":[{"id":"reasons","kind":"choice","topic":"filter:reasons","source":"orders","dim":"reason","max":50}]}}},
+			"expect": [{"code":"E-77","message":"dashboard 'd': choice section 'reasons' names source 'orders', which is not a declared data source"}],
+			"expectJs": []
 		}
 	]
 }

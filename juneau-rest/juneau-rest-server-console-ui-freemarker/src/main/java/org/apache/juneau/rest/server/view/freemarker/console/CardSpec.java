@@ -39,12 +39,16 @@ import org.apache.juneau.rest.server.views.*;
  */
 public final class CardSpec {
 
+	/** Card types whose schema definition has no {@code bare} property, so a bare card of that type would fail validation. */
+	private static final Set<String> BARE_UNSUPPORTED = Set.of("run-view", "terminal");
+
 	private final String type;
 	private final String id;
 	private String title;
 	private String src;
 	private String template;
 	private boolean bare;
+	private boolean sanitize;
 	private String cssClass;
 	private final Map<String,Object> body = new LinkedHashMap<>();
 	private final List<Map<String,Object>> publishes = new ArrayList<>(), subscribes = new ArrayList<>();
@@ -74,8 +78,34 @@ public final class CardSpec {
 	/** @param templateId The id of a {@code <template data-card>} element. @return This object. */
 	public CardSpec template(String templateId) { template = templateId; return this; }
 
-	/** @param v Whether an html card is inserted without the {@code .jc-card} wrapper. @return This object. */
-	public CardSpec bare(boolean v) { bare = v; return this; }
+	/**
+	 * @param v
+	 * 	Whether the card drops its chrome: an html card is inserted with no wrapper element, any other type keeps a
+	 * 	wrapper element (class {@code jc-card-bare} instead of {@code jc-card}) but loses the card chrome and its
+	 * 	title.
+	 * @return This object.
+	 */
+	public CardSpec bare(boolean v) {
+		if (v && BARE_UNSUPPORTED.contains(type))
+			throw iaex("card '%s': a %s card does not support bare.", id, type);
+		bare = v;
+		return this;
+	}
+
+	/** @return Whether this card drops its chrome. */
+	boolean bare() { return bare; }
+
+	/** @return Whether this card declares any {@code publishes} topics. */
+	boolean hasPublishes() { return ! publishes.isEmpty(); }
+
+	/** @return Whether this card declares any {@code subscribes} entries. */
+	boolean hasSubscribes() { return ! subscribes.isEmpty(); }
+
+	/** @param v Whether an html card's fetched {@code src} fragment is rebuilt through the views attribute-allowlist sanitizer instead of being inserted as-is. @return This object. */
+	public CardSpec sanitize(boolean v) { sanitize = v; return this; }
+
+	/** @return Whether this card asks for its {@code src} fragment to be sanitized. */
+	boolean sanitize() { return sanitize; }
 
 	/** @param v Space-separated CSS class names stamped on the card wrapper element. @return This object. */
 	public CardSpec cssClass(String v) { cssClass = v; return this; }
@@ -138,6 +168,7 @@ public final class CardSpec {
 		c.src = src;
 		c.template = template;
 		c.bare = bare;
+		c.sanitize = sanitize;
 		c.cssClass = cssClass;
 		c.body.putAll(body);
 		return c.wiringFrom(this);
@@ -190,6 +221,11 @@ public final class CardSpec {
 		if (nn(src)) m.put("src", src);
 		if (nn(template)) m.put("template", template);
 		if (bare) m.put("bare", true);
+		if (sanitize) {
+			if (! eq(type, "html") || ! nn(src))
+				throw iaex("card '%s': sanitize applies only to an html card with src.", id);
+			m.put("sanitize", true);
+		}
 		if (nn(cssClass)) m.put("class", cssClass);
 		if (! visibleWhen.isEmpty()) m.put("visibleWhen", visibleWhen.stream().map(VisibilityRule::toMap).toList());
 		if (! publishes.isEmpty()) m.put("publishes", List.copyOf(publishes));

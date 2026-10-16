@@ -1,0 +1,52 @@
+{
+  "baseOption": {
+    "series": []
+  },
+  "options": [
+    {
+      "tooltip": {
+        "formatter": "<b>{b}</b>",
+        "renderMode": "richText"
+      }
+    },
+    {
+      "tooltip": [
+        {
+          "formatter": "<b>{b}</b>",
+          "renderMode": "richText"
+        }
+      ]
+    }
+  ],
+  "aria": {
+    "enabled": true
+  },
+  "dataset": [
+    {
+      "id": "juneau",
+      "dimensions": [
+        {
+          "name": "day",
+          "type": "ordinal"
+        },
+        {
+          "name": "placed",
+          "type": "number"
+        },
+        {
+          "name": "delivered",
+          "type": "number"
+        }
+      ],
+      "source": {
+        "day": [
+          "Mon",
+          "Tue",
+          "Wed"
+        ],
+        "placed": "[Float64Array 3: 3,5,4]",
+        "delivered": "[Float64Array 3: 1,2,4]"
+      }
+    }
+  ]
+}

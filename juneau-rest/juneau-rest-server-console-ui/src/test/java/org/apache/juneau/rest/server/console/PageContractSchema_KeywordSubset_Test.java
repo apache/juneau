@@ -43,7 +43,7 @@ class PageContractSchema_KeywordSubset_Test extends TestBase {
 			SchemaSubsetValidator.KEYWORDS,
 			Set.of("$schema", "$id", "$defs", "$ref", "title", "description", "default", "type", "const", "enum",
 				"required", "properties", "additionalProperties", "propertyNames", "items", "pattern", "minLength",
-				"maxLength", "minItems", "allOf", "anyOf", "oneOf", "not"));
+				"maxLength", "minItems", "minimum", "allOf", "anyOf", "oneOf", "not"));
 	}
 
 	// Walks schema objects. Inside "properties" and "$defs" the keys are names, not keywords.

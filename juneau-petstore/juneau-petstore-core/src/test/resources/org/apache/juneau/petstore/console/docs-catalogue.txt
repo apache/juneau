@@ -1,0 +1,67 @@
+# Licensed to the Apache Software Foundation (ASF) under one or more
+# contributor license agreements.  See the NOTICE file distributed with
+# this work for additional information regarding copyright ownership.
+# The ASF licenses this file to You under the Apache License, Version 2.0
+# (the "License"); you may not use this file except in compliance with
+# the License.  You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+# Docs catalogue for the petstore tour (juneau-docs pages/topics/19.*).  Verified by PetstoreDocsCatalogue_Test.
+# page|<id in PetstorePages_ContractTest.PAGES, or a builder-only name>|<path>|<docs file>
+# failloud|<PetstoreFailLoud_Test method>|<fixture under failloud/ or ->|<code asserted or ->
+#
+# Pages (19.01 is the chrome/nav page and 19.17/19.18 are the twins and FailLoud pages; none maps to one console path).
+page|P1|/console/store|19.02.PetstoreStore.md
+page|P2|/console/pets|19.03.PetstorePets.md
+page|P3|/console/pets/sold|19.04.PetstoreSoldPets.md
+page|P4|/console/pets/1/summary|19.05.PetstorePetDetail.md
+page|P4p|/console/pets/1/photo|19.05.PetstorePetDetail.md
+page|P4o|/console/pets/1/orders|19.05.PetstorePetDetail.md
+page|P4h|/console/pets/1/history|19.05.PetstorePetDetail.md
+page|P5|/console/orders|19.06.PetstoreOrders.md
+page|jobs|/console/ops/jobs|19.07.PetstoreJobs.md
+page|audit|/console/ops/audit|19.08.PetstoreAudit.md
+page|custom-cards|/console/dev/cards|19.09.PetstoreCustomCards.md
+page|themes|/console/dev/themes|19.10.PetstoreThemes.md
+page|P10|/console/pets/changes|19.11.PetstorePendingChanges.md
+page|P11|/console/users|19.12.PetstoreUsers.md
+page|flavors-html|/console/dev/flavors/html|19.13.PetstoreRenderingFlavors.md
+page|flavors-freemarker|/console/dev/flavors/freemarker|19.13.PetstoreRenderingFlavors.md
+page|flavors-mustache|/console/dev/flavors/mustache|19.13.PetstoreRenderingFlavors.md
+page|flavors-react|/console/dev/flavors/react|19.13.PetstoreRenderingFlavors.md
+page|secure|/console/dev/secure|19.14.PetstoreSecure.md
+page|about|/console/about|19.15.PetstoreAbout.md
+# Builder-only pages (PetstorePages_ContractTest.BUILDER_ONLY).
+page|charts|/console/dev/charts|19.16.PetstoreDeveloperPages.md
+page|data|/console/dev/data|19.16.PetstoreDeveloperPages.md
+page|dashboard|/console/dev/dashboard|19.16.PetstoreDeveloperPages.md
+#
+# FailLoud rows.  Most assert message text, so the code column is "-"; a code is listed only where an assertion pins one.
+failloud|a01_unknownCardType_rendersThroughTheGenericPassthrough|unknown-card-type.ftlh|-
+failloud|a02_badNavPath|bad-nav-path.ftlh|-
+failloud|a04_malformedJson5|malformed-json5.ftlh|-
+failloud|a05_nodeUnderOutsidePage|node-under-outside-page.ftlh|-
+failloud|a06_nodeUnderInNavigation|node-under-in-navigation.ftlh|-
+failloud|a07_nodeUnderUnknownParent|node-under-unknown-parent.ftlh|-
+# a08 is @Disabled; the duplicate-sibling message is asserted in console-ui-freemarker ConsoleDirective_Errors_Test (line 46).
+failloud|a08_nodeDuplicateSibling|-|-
+failloud|a10_badgeDuplicate|-|-
+failloud|a11_factsDuplicate|-|-
+failloud|a12_factsBadType|facts-bad-type.ftlh|-
+failloud|a13_visibleWhenBadOp|visible-when-bad-op.ftlh|-
+failloud|a14_badgeScopeUnknownNode|badge-scope-unknown-node.ftlh|-
+failloud|a15_adopterHandlerForAReservedType_failsAtMixinBuild|-|-
+failloud|a16_reservedBodyKey|reserved-key.ftlh|-
+failloud|a17_markupOnDatatables|markup-on-datatables.ftlh|-
+failloud|a18_badCustomTypeId|bad-custom-type-id.ftlh|-
+failloud|a19_terminalUnsafeBytesUrl|terminal-unsafe.ftlh|-
+failloud|a20_inventoryGaugeBodyRejected|gauge-unknown-species.ftlh|-
+failloud|b01_scriptInPetNameIsEscaped|-|-
+failloud|b02_devModeRejectsAnInvalidContract|dev-bad-template.ftlh|R-4

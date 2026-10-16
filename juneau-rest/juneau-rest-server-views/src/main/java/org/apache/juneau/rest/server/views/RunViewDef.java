@@ -17,7 +17,7 @@
 package org.apache.juneau.rest.server.views;
 
 import static org.apache.juneau.commons.utils.Shorts.*;
-import static org.apache.juneau.rest.server.views.ConsoleOutputChecks.clip;
+import static org.apache.juneau.rest.server.runreport.RunViewChecks.clip;
 
 import java.util.*;
 import org.apache.juneau.rest.server.runreport.*;
@@ -44,7 +44,7 @@ public class RunViewDef {
 	public static final String POPULATOR = "run-view";
 
 	/** The refresh floor in milliseconds. */
-	public static final long MIN_REFRESH_MS = ConsoleOutputDef.MIN_REFRESH_MS;
+	public static final long MIN_REFRESH_MS = RunViewChecks.MIN_REFRESH_MS;
 
 	/** The default poll interval in milliseconds. */
 	public static final long DEFAULT_REFRESH_MS = 2000;
@@ -71,7 +71,7 @@ public class RunViewDef {
 	public boolean compact;
 	/** Accessible name and heading. */
 	public String title;
-	/** Raw-console link template with one {@code {line}} or one {@code {offset}} placeholder. */
+	/** Raw-console link template with one {@code {offset}} placeholder. */
 	public String rawHref;
 
 	private RunViewDef(String id) {
@@ -162,7 +162,7 @@ public class RunViewDef {
 	public RunViewDef compact(boolean value) { compact = value; return this; }
 	/** @param value The accessible name and heading. @return This object. */
 	public RunViewDef title(String value) { title = value; return this; }
-	/** @param value The raw-console link template, with one {@code {line}} or one {@code {offset}}. @return This object. */
+	/** @param value The raw-console link template, with one {@code {offset}}. @return This object. */
 	public RunViewDef rawHref(String value) { rawHref = value; return this; }
 
 	/**
@@ -189,7 +189,7 @@ public class RunViewDef {
 		if (refreshMs <= 0)
 			throw iaex("RunViewDef '%s' refreshMs must be > 0; got %s.", id, refreshMs);
 		if (rawHref != null && ! RunViewChecks.isRawHrefTemplate(rawHref))
-			throw iaex("RunViewDef '%s' rawHref must contain exactly one {line} or one {offset} and be a same-origin path or fragment; got '%s'.", id, clip(rawHref));
+			throw iaex("RunViewDef '%s' rawHref must contain exactly one {offset} and be a same-origin path or fragment; got '%s'.", id, clip(rawHref));
 		return this;
 	}
 

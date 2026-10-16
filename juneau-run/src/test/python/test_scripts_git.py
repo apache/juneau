@@ -236,7 +236,17 @@ class WritersTest(GitCase):
     def test_plain_write_inherits_the_terminal(self):
         self.write("a.txt")
         self.g("add", "a.txt")
-        r = git.commit_index("a", self.work)
+        saved = [os.dup(1), os.dup(2)]            # the child inherits fds 1/2; point them at /dev/null so git's line stays off the test log
+        null = os.open(os.devnull, os.O_WRONLY)
+        try:
+            os.dup2(null, 1)
+            os.dup2(null, 2)
+            r = git.commit_index("a", self.work)
+        finally:
+            os.dup2(saved[0], 1)
+            os.dup2(saved[1], 2)
+            for fd in saved + [null]:
+                os.close(fd)
         self.assertTrue(r.ok)
         self.assertEqual((r.out, r.err), ("", ""))
 

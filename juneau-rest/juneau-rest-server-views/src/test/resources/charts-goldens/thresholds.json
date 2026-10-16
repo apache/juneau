@@ -1,0 +1,103 @@
+{
+  "tooltip": {
+    "trigger": "axis",
+    "renderMode": "richText"
+  },
+  "legend": {
+    "bottom": 0
+  },
+  "xAxis": {
+    "type": "category"
+  },
+  "yAxis": {
+    "type": "value"
+  },
+  "series": [
+    {
+      "id": "placed",
+      "name": "Placed",
+      "type": "line",
+      "encode": {
+        "x": "day",
+        "y": "placed"
+      }
+    },
+    {
+      "id": "delivered",
+      "name": "Delivered",
+      "type": "line",
+      "encode": {
+        "x": "day",
+        "y": "delivered"
+      },
+      "itemStyle": {
+        "color": "#2e8540"
+      },
+      "lineStyle": {
+        "color": "#2e8540"
+      }
+    },
+    {
+      "id": "juneau-thresholds-0",
+      "type": "line",
+      "data": [],
+      "silent": true,
+      "markLine": {
+        "symbol": "none",
+        "silent": true,
+        "lineStyle": {
+          "type": "solid",
+          "color": "#5a5a5a"
+        },
+        "label": {
+          "position": "end",
+          "formatter": "[fn template]"
+        },
+        "data": [
+          {
+            "yAxis": 4,
+            "name": "SLO",
+            "lineStyle": {
+              "color": "#c23934"
+            }
+          },
+          {
+            "yAxis": 1,
+            "name": "Floor"
+          }
+        ]
+      }
+    }
+  ],
+  "aria": {
+    "enabled": true
+  },
+  "dataset": [
+    {
+      "id": "juneau",
+      "dimensions": [
+        {
+          "name": "day",
+          "type": "ordinal"
+        },
+        {
+          "name": "placed",
+          "type": "number"
+        },
+        {
+          "name": "delivered",
+          "type": "number"
+        }
+      ],
+      "source": {
+        "day": [
+          "Mon",
+          "Tue",
+          "Wed"
+        ],
+        "placed": "[Float64Array 3: 3,5,4]",
+        "delivered": "[Float64Array 3: 1,2,4]"
+      }
+    }
+  ]
+}

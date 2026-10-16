@@ -102,9 +102,9 @@
 	function isSafeRawHref(s) {
 		if (!isStr(s))
 			return false;
-		if (countOf(s, "{line}") + countOf(s, "{offset}") !== 1)
+		if (countOf(s, "{offset}") !== 1)
 			return false;
-		return isSafeLineHref(s.replace("{line}", "1").replace("{offset}", "1"));
+		return isSafeLineHref(s.replace("{offset}", "1"));
 	}
 
 	/** 850 ms / 1.2 s / 42 s / 4 m 05 s / 1 h 02 m; non-numbers and negatives give "". */
@@ -173,7 +173,7 @@
 		}
 		switch (raw.ev) {
 			case "step":
-				req("id", 0, STEP_ID); req("title", MAX_TITLE); optInt("n", 1, 9999); oneOf("status", STEP_STATES, false); optInt("rawLine", 1, MAX_SAFE); optInt("rawOffset", 0, MAX_SAFE);
+				req("id", 0, STEP_ID); req("title", MAX_TITLE); optInt("n", 1, 9999); oneOf("status", STEP_STATES, false); optInt("rawOffset", 0, MAX_SAFE);
 				break;
 			case "end":
 				req("id", 0, STEP_ID); oneOf("status", END_STATUSES, true); optInt("ms", 0, MAX_SAFE); optInt("exit", -MAX_SAFE, MAX_SAFE);
@@ -188,13 +188,12 @@
 					counts[k] = c[k];
 				}
 				ev.counts = counts;
-				optInt("rawLine", 1, MAX_SAFE);
 				optInt("rawOffset", 0, MAX_SAFE);
 				break;
 			}
 			case "test":
 				result(); req("name", MAX_NAME); oneOf("status", TEST_STATUSES, true); optInt("ms", 0, MAX_SAFE);
-				opt("msg", MAX_MSG); opt("trace", MAX_TRACE); optInt("rawLine", 1, MAX_SAFE); optInt("rawOffset", 0, MAX_SAFE);
+				opt("msg", MAX_MSG); opt("trace", MAX_TRACE); optInt("rawOffset", 0, MAX_SAFE);
 				break;
 			case "replace":
 				req("step", 0, STEP_ID);
@@ -231,7 +230,7 @@
 
 	function newStep(ev) {
 		return { id: ev.id, title: ev.title, n: ev.n, status: ev.status || "running", ended: false, ms: undefined, exit: undefined,
-			rawLine: ev.rawLine, rawOffset: ev.rawOffset, suites: new Map(), suiteOrder: [], notes: [], dirty: true };
+			rawOffset: ev.rawOffset, suites: new Map(), suiteOrder: [], notes: [], dirty: true };
 	}
 
 	/**
@@ -276,7 +275,7 @@
 				drop("E-RV-9", "E-RV-9:suites:" + step.id, "step " + step.id + " holds more than " + MAX_SUITES + " suites; further suites are not shown");
 				return null;
 			}
-			s = { fw: ev.fw, suite: ev.suite, pass: 0, fail: 0, skip: 0, detailed: false, tests: [], rawLine: undefined, rawOffset: undefined, dropped: 0, ver: 0 };
+			s = { fw: ev.fw, suite: ev.suite, pass: 0, fail: 0, skip: 0, detailed: false, tests: [], rawOffset: undefined, dropped: 0, ver: 0 };
 			step.suites.set(key, s);
 			step.suiteOrder.push(key);
 			if (model.fwOrder.indexOf(ev.fw) < 0)
@@ -299,7 +298,6 @@
 					st.title = ev.title;
 					if (ev.n !== undefined) st.n = ev.n;
 					if (ev.status !== undefined) st.status = ev.status;
-					if (ev.rawLine !== undefined) st.rawLine = ev.rawLine;
 					if (ev.rawOffset !== undefined) st.rawOffset = ev.rawOffset;
 					st.dirty = true;
 				}
@@ -330,7 +328,6 @@
 				s.pass = ev.counts.pass;
 				s.fail = ev.counts.fail;
 				s.skip = ev.counts.skip;
-				s.rawLine = ev.rawLine;
 				s.rawOffset = ev.rawOffset;
 				s.ver++;
 				st.dirty = true;
@@ -353,7 +350,7 @@
 				const bad = ev.status === "fail" || ev.status === "error";
 				if (bad ? model.retainedBad < MAX_BAD_RECORDS : model.retainedOk < MAX_OK_RECORDS) {
 					const rec = { name: ev.name, status: ev.status };
-					for (const k of ["ms", "msg", "trace", "rawLine", "rawOffset"])
+					for (const k of ["ms", "msg", "trace", "rawOffset"])
 						if (ev[k] !== undefined) rec[k] = ev[k];
 					s.tests.push(rec);
 					if (bad) model.retainedBad++; else model.retainedOk++;
@@ -535,14 +532,12 @@
 		return (i < 0 ? s : s.slice(0, i)).trim();
 	}
 
-	/** The record's raw link: {offset} takes rec.rawOffset, {line} takes rec.rawLine; null when either is missing. */
+	/** The record's raw link: {offset} takes rec.rawOffset; null when the record has none. */
 	function rawLink(inst, rec) {
 		if (!inst.rawHref)
 			return null;
 		const t = stripTabCrLf(inst.rawHref);
-		if (t.indexOf("{offset}") >= 0)
-			return rec.rawOffset !== undefined ? t.replace("{offset}", String(rec.rawOffset)) : null;
-		return rec.rawLine !== undefined ? t.replace("{line}", String(rec.rawLine)) : null;
+		return rec.rawOffset !== undefined ? t.replace("{offset}", String(rec.rawOffset)) : null;
 	}
 
 	function relFor(href) { return href.startsWith("#") ? null : "nofollow noreferrer"; }
@@ -919,7 +914,7 @@
 		emitState(inst, d);
 	}
 
-	// Tooltip (modelled on the console-output module's, which does not export it)
+	// Tooltip (a small fixed-position tip, as the other views widgets use)
 	function tipBlock(inst, target) {
 		const b = target && typeof target.closest === "function" ? target.closest("[data-juneau-co-tip]") : null;
 		return b && inst.root.contains(b) ? b : null;
@@ -1021,8 +1016,8 @@
 
 	/**
 	 * Validates the create() options.  Besides id, compact, title, rawHref and emit, onBlockClick(info) is called on a click
-	 * on a test block (or Enter/Space on a focused non-link block) with info = {stepId, line, offset, kind}: stepId is the event model's step id
-	 * (also stamped on each block as data-step-id), line is the block's rawLine and is omitted (absent from info) when it has none, and kind is the test status
+	 * on a test block (or Enter/Space on a focused non-link block) with info = {stepId, offset, kind}: stepId is the event model's step id
+	 * (also stamped on each block as data-step-id), offset is the block's rawOffset and is omitted (absent from info) when it has none, and kind is the test status
 	 * (pass, fail, skip or error).  Link blocks still navigate; the hook never replaces that.
 	 */
 	function checkOptions(el, options) {
@@ -1037,7 +1032,7 @@
 		if (o.title !== undefined && (!isStr(o.title) || o.title.length > MAX_TITLE))
 			throw configError(id, "title must be a string of at most " + MAX_TITLE + " characters");
 		if (o.rawHref !== undefined && !isSafeRawHref(o.rawHref))
-			throw configError(id, "rawHref must contain one {line} or one {offset} and be a safe same-origin link template");
+			throw configError(id, "rawHref must contain one {offset} and be a safe same-origin link template");
 		if (o.emit !== undefined && typeof o.emit !== "function")
 			throw configError(id, "emit must be a function");
 		if (o.onBlockClick !== undefined && typeof o.onBlockClick !== "function")
@@ -1148,13 +1143,11 @@
 		}
 	}
 
-	/** Reports a block click to the onBlockClick hook as {stepId, line, offset, kind}; a throwing hook is logged, never propagated. */
+	/** Reports a block click to the onBlockClick hook as {stepId, offset, kind}; a throwing hook is logged, never propagated. */
 	function notifyBlockClick(inst, rv) {
 		if (!inst.onBlockClick)
 			return;
 		const info = { stepId: rv.step.id, kind: rv.test.status };
-		if (rv.test.rawLine !== undefined)
-			info.line = rv.test.rawLine;
 		if (rv.test.rawOffset !== undefined)
 			info.offset = rv.test.rawOffset;
 		try {
@@ -1209,7 +1202,7 @@
 			status: d.status,
 			steps: d.steps.map(function (x) {
 				const st = x.step;
-				return { id: st.id, title: st.title, n: st.n, status: x.shown, ms: st.ms, exit: st.exit, rawLine: st.rawLine, rawOffset: st.rawOffset,
+				return { id: st.id, title: st.title, n: st.n, status: x.shown, ms: st.ms, exit: st.exit, rawOffset: st.rawOffset,
 					suites: st.suiteOrder.map(function (k) {
 						const s = st.suites.get(k);
 						return { fw: s.fw, suite: s.suite, pass: s.pass, fail: s.fail, skip: s.skip, detailed: s.detailed };
@@ -1431,7 +1424,7 @@
 			});
 	}
 
-	/** The fatal [code, args] for a page that breaks the contract (spec 1.1, 5.3), or null. */
+	/** The fatal [code, args] for a page that breaks the contract, or null. */
 	function pageProblem(inst, page) {
 		if (page.contractVersion !== CONTRACT_VERSION)
 			return ["E-RV-2", [inst.id, String(page.contractVersion)]];
@@ -1485,7 +1478,7 @@
 	}
 
 	/**
-	 * The polling loop (spec 5.3): a setTimeout chain with one request in flight.  Resolves at terminal, done,
+	 * The polling loop: a setTimeout chain with one request in flight.  Resolves at terminal, done,
 	 * abort, destroy or a fatal code; never rejects.
 	 */
 	function poll(api, opts) {
@@ -1678,7 +1671,7 @@
 	}
 
 	/**
-	 * create() + poll() (spec 5.4).  Synchronous: returns the cleanup, never a promise.  Every configuration error
+	 * create() + poll().  Synchronous: returns the cleanup, never a promise.  Every configuration error
 	 * throws E-RV-1 before any DOM exists.  ctx = {signal, rowId, id, emit}; all optional, and the card path passes {}.
 	 */
 	function mount(el, options, ctx) {

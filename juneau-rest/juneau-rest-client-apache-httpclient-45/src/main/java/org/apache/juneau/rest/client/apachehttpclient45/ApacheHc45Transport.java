@@ -19,6 +19,7 @@ package org.apache.juneau.rest.client.apachehttpclient45;
 import java.io.*;
 import java.net.*;
 import java.util.*;
+import java.util.concurrent.*;
 
 import org.apache.http.*;
 import org.apache.http.client.config.*;
@@ -29,6 +30,7 @@ import org.apache.http.conn.ssl.*;
 import org.apache.http.entity.*;
 import org.apache.http.impl.client.*;
 import org.apache.http.impl.conn.*;
+import org.apache.juneau.http.remote.*;
 import org.apache.juneau.rest.client.*;
 
 /**
@@ -66,17 +68,27 @@ public final class ApacheHc45Transport implements HttpTransport {
 
 	private final CloseableHttpClient httpClient;
 	private final CloseableHttpClient pinnedHttpClient;
+	private final BasicCookieStore cookieStore;
+	// One further pinned client (own connection pool) per distinct non-empty per-client allow-list, created on first use,
+	// so a connection opened under one allow-list can never be handed to a request with another.
+	private final Map<RemoteUrlPolicy.AllowedRanges,CloseableHttpClient> rangedPinnedHttpClients = new ConcurrentHashMap<>();
+	private final boolean guardPerRequest;
 
 	ApacheHc45Transport(ApacheHc45TransportBuilder builder) {
 		if (builder.httpClient != null) {
-			// A caller-supplied client cannot be given pin-on-connect, so supportsUrlPolicy() reports false for it.
+			// A caller-supplied client cannot be given pin-on-connect, so supportsUrlPolicy() reports false for it.  It is
+			// immutable once built, so the redirect credential guard cannot be added to it as an interceptor; each request
+			// is sent with a guarding context instead (see Hc45RedirectCredentialGuard.newGuardingContext()).
 			this.httpClient = builder.httpClient;
 			this.pinnedHttpClient = null;
+			this.cookieStore = null;
+			this.guardPerRequest = true;
 		} else {
 			// Two clients, one per connection pool, sharing a cookie store so that cookies behave as on one client.
-			var cookieStore = new BasicCookieStore();
+			this.cookieStore = new BasicCookieStore();
 			this.httpClient = createDefaultHttpClient(cookieStore);
-			this.pinnedHttpClient = createPinnedHttpClient(cookieStore);
+			this.pinnedHttpClient = createPinnedHttpClient(cookieStore, PolicyPinningDnsResolver.INSTANCE);
+			this.guardPerRequest = false;
 		}
 	}
 
@@ -92,13 +104,13 @@ public final class ApacheHc45Transport implements HttpTransport {
 	// through PolicyPinningDnsResolver, so every connection in its pool was opened through the pin; a guarded request
 	// can never be handed an idle connection that an unguarded request opened.  Redirect handling is disabled so that
 	// PolicyEnforcedRedirects can revalidate every hop.
-	private static CloseableHttpClient createPinnedHttpClient(BasicCookieStore cookieStore) {
+	private static CloseableHttpClient createPinnedHttpClient(BasicCookieStore cookieStore, PolicyPinningDnsResolver resolver) {
 		var registry = RegistryBuilder.<ConnectionSocketFactory>create()
 			.register("http", PlainConnectionSocketFactory.getSocketFactory())
 			.register("https", SSLConnectionSocketFactory.getSocketFactory())
 			.build();
 		return HttpClients.custom()
-			.setConnectionManager(new PoolingHttpClientConnectionManager(registry, PolicyPinningDnsResolver.INSTANCE))
+			.setConnectionManager(new PoolingHttpClientConnectionManager(registry, resolver))
 			.setDefaultCookieStore(cookieStore)
 			.addInterceptorLast(new Hc45RedirectCredentialGuard())
 			.disableRedirectHandling()
@@ -128,14 +140,14 @@ public final class ApacheHc45Transport implements HttpTransport {
 		if (request.isSsrfGuardActive())
 			return executeWithPolicy(request);
 		try {
-			return sendOnce(request, httpClient);
+			return sendOnce(request, httpClient, guardPerRequest);
 		} catch (StaleConnectionException e) {
 			// A pooled keep-alive connection was torn down by the server before any response was received.
 			// Replay once on a fresh connection, but only when it is provably safe (idempotent + repeatable body).
 			if (! request.isSafeToReplay())
 				throw e.asTransportException();
 			try {
-				return sendOnce(request, httpClient);
+				return sendOnce(request, httpClient, guardPerRequest);
 			} catch (StaleConnectionException e2) {
 				throw e2.asTransportException();
 			}
@@ -158,7 +170,7 @@ public final class ApacheHc45Transport implements HttpTransport {
 	// HttpClient propagates unchanged; it is reported as the documented TransportException.
 	private TransportResponse sendOncePinned(TransportRequest request) throws TransportException {
 		try {
-			return sendOnce(request, pinnedHttpClient != null ? pinnedHttpClient : httpClient);
+			return sendOnce(request, pinnedClientFor(request), guardPerRequest);
 		} catch (StaleConnectionException e) {
 			throw e.asTransportException();
 		} catch (IllegalArgumentException e) {
@@ -166,13 +178,25 @@ public final class ApacheHc45Transport implements HttpTransport {
 		}
 	}
 
+	// The pinned client for the request's per-client allow-list: the shared one when it allows nothing, else a dedicated
+	// one (own pool, own resolver) per distinct allow-list.  A caller-supplied client has none, and is used as is.
+	private CloseableHttpClient pinnedClientFor(TransportRequest request) {
+		if (pinnedHttpClient == null)
+			return httpClient;
+		var ranges = request.getAllowedAddressRanges();
+		if (ranges.isEmpty())
+			return pinnedHttpClient;
+		return rangedPinnedHttpClients.computeIfAbsent(ranges, r -> createPinnedHttpClient(cookieStore, new PolicyPinningDnsResolver(r)));
+	}
+
 	// Performs a single HTTP exchange.  Throws StaleConnectionException (a retryable signal) when the failure is a
-	// pre-response stale-connection failure; throws TransportException for every other failure.
-	private static TransportResponse sendOnce(TransportRequest request, CloseableHttpClient client) throws TransportException, StaleConnectionException {
+	// pre-response stale-connection failure; throws TransportException for every other failure.  guarded sends the request
+	// with a context that applies the redirect credential guard, for a client that does not carry it as an interceptor.
+	private static TransportResponse sendOnce(TransportRequest request, CloseableHttpClient client, boolean guarded) throws TransportException, StaleConnectionException {
 		var hcRequest = buildHcRequest(request, client);
 		CloseableHttpResponse hcResponse;
 		try {
-			hcResponse = client.execute(hcRequest);
+			hcResponse = client.execute(hcRequest, guarded ? Hc45RedirectCredentialGuard.newGuardingContext() : null);
 		} catch (IOException e) {
 			// httpClient.execute() only returns once response headers have been read, so any IOException here
 			// occurred before any response bytes were received.
@@ -212,8 +236,13 @@ public final class ApacheHc45Transport implements HttpTransport {
 		try {
 			httpClient.close();
 		} finally {
-			if (pinnedHttpClient != null)
-				pinnedHttpClient.close();
+			try {
+				if (pinnedHttpClient != null)
+					pinnedHttpClient.close();
+			} finally {
+				for (var c : rangedPinnedHttpClients.values())
+					c.close();
+			}
 		}
 	}
 

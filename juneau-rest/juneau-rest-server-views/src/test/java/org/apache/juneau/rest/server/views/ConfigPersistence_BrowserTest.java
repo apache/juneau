@@ -176,7 +176,7 @@ class ConfigPersistence_BrowserTest extends TestBase {
 	}
 
 	@Test void b05_deletingTheActiveViewResolvesToDefaultPlusDanglingNotice() {
-		// The dangling-active resolution (§3.2 should-fix) proven at runtime, not just asserted present in source.
+		// The dangling-active resolution proven at runtime, not just asserted present in source.
 		var r = obj("a_activeAfterDelete");
 		assertNull(r.get("name"), () -> "a dangling active pointer must resolve to Default (null): " + report);
 		assertEquals(Boolean.TRUE, r.get("dangling"), () -> "the dangling flag must be raised: " + report);
@@ -188,7 +188,7 @@ class ConfigPersistence_BrowserTest extends TestBase {
 	}
 
 	@Test void b07_twoPagesSharingAViewIdDoNotCollide() {
-		// pageId-qualification (§3.1) proven at runtime: reportsB/orders sees none of reportsA/orders' saved views.
+		// pageId-qualification proven at runtime: reportsB/orders sees none of reportsA/orders' saved views.
 		var r = obj("a_otherPageScopeIsIndependent");
 		assertNull(r.get("active"), () -> report.toString());
 		assertEquals(List.of(), views(r), () -> report.toString());
@@ -234,14 +234,14 @@ class ConfigPersistence_BrowserTest extends TestBase {
 	}
 
 	@Test void f02_committedViewSettingsAreRestoredAfterReload() {
-		// The exact blob written before the reload comes back verbatim from REAL localStorage (design §6.1).
+		// The exact blob written before the reload comes back verbatim from REAL localStorage.
 		var restored = obj("f_reload");
 		assertBean(restored, "restored{schemaVersion,visible,search,sort,options{pageSize,wrap,density}}",
 			"{2,[a,b],[a],[{column=b,dir=asc}],{50,true,compact}}");
 	}
 
 	@Test void f03_secondViewIdKeepsItsOwnIndependentSlotAcrossReload() {
-		// Per-table keying (§6.2): a different view id is neither clobbered by nor merged with the first.
+		// Per-table keying: a different view id is neither clobbered by nor merged with the first.
 		var restored = obj("f_reload");
 		assertBean(restored, "other{visible,options{pageSize,wrap,density}}", "{[z],{10,false,comfortable}}");
 	}

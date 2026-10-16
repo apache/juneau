@@ -35,12 +35,12 @@ import org.apache.juneau.commons.bean.PropertyNamerULC;
  * via {@code org.apache.juneau.rest.client.mcp.auth.McpProtectedResourceMetadata} /
  * {@code McpProtectedResourceMetadataClient}.
  *
- * <h5 class='section'>Q5 client/server split:</h5>
+ * <h5 class='section'>Client/server split:</h5>
  * <p>
  * This intentionally duplicates the shape of the client-side
- * {@code org.apache.juneau.rest.client.mcp.auth.McpProtectedResourceMetadata} record (accepted per READY-312f Q5); the
+ * {@code org.apache.juneau.rest.client.mcp.auth.McpProtectedResourceMetadata} record; the
  * two live in different modules with different dependency footprints (the client parses via Nimbus; the server emits via
- * Juneau marshalling).  Sub-project D later rationalizes a shared, dependency-neutral bean.
+ * Juneau marshalling).  A shared, dependency-neutral bean may replace both later.
  *
  * @since 10.0.0
  */

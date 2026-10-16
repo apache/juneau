@@ -44,7 +44,7 @@ import org.junit.jupiter.api.*;
  *
  * <p>
  * {@code resources/templates/list} wire mapping, pagination, cache hints, and capability derivation are
- * already covered by {@link McpPromptResource_Test} and {@link McpWire_Test} (Task 5); this class does not
+ * already covered by {@link McpPromptResource_Test} and {@link McpWire_Test}; this class does not
  * duplicate that coverage.
  */
 @SuppressWarnings({

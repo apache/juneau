@@ -26,6 +26,7 @@ import org.apache.juneau.marshall.collections.*;
 import org.apache.juneau.rest.server.console.*;
 import org.apache.juneau.rest.server.views.*;
 import org.apache.juneau.rest.server.widgets.Op;
+import org.apache.juneau.rest.server.widgets.StatusTone;
 import org.junit.jupiter.api.*;
 
 class DatatablesCardType_Test extends TestBase {
@@ -323,7 +324,7 @@ class DatatablesCardType_Test extends TestBase {
 		Path.of("../juneau-rest-server-console-ui/src/main/java/org/apache/juneau/rest/server/console");
 
 	@Test void dualHat_cardSource_usesJson5ParserOnly() throws Exception {
-		// The card body is parsed with the Juneau Json5Parser, never an IRS Json5l reader, and the file
+		// The card body is parsed with the Juneau Json5Parser, never a third-party Json5 reader, and the file
 		// carries no Salesforce package/SLDS markers.
 		var s = Files.readString(CONSOLE_UI_MAIN.resolve("CardSource.java"));
 		assertTrue(s.contains("Json5Parser"), () -> s);
@@ -352,9 +353,164 @@ class DatatablesCardType_Test extends TestBase {
 		assertFalse(((Map<?,?>)((Map<?,?>)f.get("table")).get("detail")).containsKey("region"));
 	}
 
+	// ---- E-37: quickStats ----
+
+	private static String qs(String items) {
+		return "{dataUrl:'/x', columns:[{key:'id', label:'Id'}], quickStats:{id:'s', items:" + items + "}}";
+	}
+
+	private void refused(String body, String msg) {
+		var ex = assertThrows(IllegalArgumentException.class, () -> h.toFragment(src("t", body)));
+		assertEquals("<@card id='t'> " + msg, ex.getMessage());
+	}
+
+	@Test void quickStats_itemsMissingOrEmpty_refused() {
+		var m = "quickStats items must be a non-empty array.";
+		refused("{dataUrl:'/x', columns:[{key:'id'}], quickStats:{id:'s'}}", m);
+		refused(qs("[]"), m);
+		refused(qs("'x'"), m);
+		refused("{dataUrl:'/x', columns:[{key:'id'}], quickStats:'x'}", m);
+	}
+
+	@Test void quickStats_itemNotObject_refused() {
+		refused(qs("[1]"), "quickStats items must be objects.");
+	}
+
+	@Test void quickStats_itemIdBlank_refused() {
+		var m = "quickStats item ids must be non-blank strings.";
+		refused(qs("[{label:'A', value:1}]"), m);
+		refused(qs("[{id:' ', value:1}]"), m);
+	}
+
+	@Test void quickStats_duplicateId_refused() {
+		refused(qs("[{id:'a', value:1}, {id:'a', value:2}]"), "quickStats item 'a': duplicate id.");
+	}
+
+	@Test void quickStats_unknownType_refused() {
+		refused(qs("[{id:'a', type:'chart'}]"), "quickStats item 'a': unknown type 'chart'.");
+	}
+
+	@Test void quickStats_typeShapeMismatch_refused() {
+		var seg = "segments:[{label:'x', count:1}]";
+		refused(qs("[{id:'a', type:'tile', " + seg + "}]"), "quickStats item 'a': type 'tile' does not match its shape.");
+		refused(qs("[{id:'a', type:'tile', max:2, value:1}]"), "quickStats item 'a': type 'tile' does not match its shape.");
+		refused(qs("[{id:'a', type:'meter', label:'L', value:1}]"), "quickStats item 'a': type 'meter' does not match its shape.");
+		refused(qs("[{id:'a', type:'meter', label:'L', value:1, max:2, " + seg + "}]"), "quickStats item 'a': type 'meter' does not match its shape.");
+		refused(qs("[{id:'a', type:'segmented', max:2, " + seg + "}]"), "quickStats item 'a': type 'segmented' does not match its shape.");
+		refused(qs("[{id:'a', type:'segmented'}]"), "quickStats item 'a': type 'segmented' does not match its shape.");
+	}
+
+	@Test void quickStats_shapeOnlySegmentsAndMax_refused() {
+		refused(qs("[{id:'a', max:2, value:1, segments:[{label:'x', count:1}]}]"), "quickStats item 'a': has both segments and max; set type.");
+	}
+
+	@Test void quickStats_meterNumbers_refused() {
+		var v = "quickStats item 'a': meter value must be a number >= 0.";
+		var m = "quickStats item 'a': meter max must be a number > 0.";
+		refused(qs("[{id:'a', type:'meter', label:'L', value:'1', max:2}]"), v);
+		refused(qs("[{id:'a', type:'meter', label:'L', value:-1, max:2}]"), v);
+		refused(qs("[{id:'a', type:'meter', label:'L', value:1, max:0}]"), m);
+		refused(qs("[{id:'a', type:'meter', label:'L', value:1, max:-2}]"), m);
+		refused(qs("[{id:'a', type:'meter', label:'L', value:1, max:'4'}]"), m);
+	}
+
+	@Test void quickStats_meterTextNotString_refused() {
+		refused(qs("[{id:'a', type:'meter', label:'L', value:1, max:2, text:5}]"), "quickStats item 'a': text must be a string.");
+	}
+
+	@Test void quickStats_segmentsCountOutOfRange_refused() {
+		var m = "quickStats item 'a': segments must be an array of 1 to 8 objects.";
+		refused(qs("[{id:'a', type:'segmented', label:'L', segments:[]}]"), m);
+		var nine = String.join(",", Collections.nCopies(9, "{label:'x', count:1}"));
+		refused(qs("[{id:'a', type:'segmented', label:'L', segments:[" + nine + "]}]"), m);
+		var eight = String.join(",", Collections.nCopies(8, "{label:'x', count:1}"));
+		assertDoesNotThrow(() -> h.toFragment(src("t", qs("[{id:'a', type:'segmented', label:'L', segments:[" + eight + "]}]"))));
+	}
+
+	@Test void quickStats_segmentBad_refused() {
+		var m = "quickStats item 'a': segment 1 must be an object with a non-blank label and a whole count >= 0.";
+		for (var seg : List.of("1", "{count:1}", "{label:' ', count:1}", "{label:'x', count:-1}", "{label:'x', count:3.5}", "{label:'x', count:'3'}"))
+			refused(qs("[{id:'a', type:'segmented', label:'L', segments:[" + seg + "]}]"), m);
+	}
+
+	@Test void quickStats_segmentIntegralDouble_passes() {
+		assertDoesNotThrow(() -> h.toFragment(src("t", qs("[{id:'a', type:'segmented', label:'L', segments:[{label:'x', count:3.0}]}]"))));
+	}
+
+	@Test void quickStats_segmentedItemLevelKeys_refused() {
+		var m = "quickStats item 'a': a segmented item takes no tone or text; tone each segment.";
+		refused(qs("[{id:'a', type:'segmented', label:'L', segments:[{label:'x', count:1}], tone:'info'}]"), m);
+		refused(qs("[{id:'a', type:'segmented', label:'L', segments:[{label:'x', count:1}], text:'x'}]"), m);
+	}
+
+	@Test void quickStats_offPaletteTone_refused_everyKind() {
+		var m = "quickStats item 'a': tone 'accent' is not one of neutral, info, success, warning, error.";
+		refused(qs("[{id:'a', value:1, tone:'accent'}]"), m);
+		refused(qs("[{id:'a', type:'meter', label:'L', value:1, max:2, tone:'accent'}]"), m);
+		refused(qs("[{id:'a', type:'segmented', label:'L', segments:[{label:'x', count:1, tone:'accent'}]}]"), "quickStats item 'a' segment 1: tone 'accent' is not one of neutral, info, success, warning, error.");
+	}
+
+	@Test void quickStats_nonFiniteNumbers_refused() {
+		var v = "quickStats item 'a': meter value must be a number >= 0.";
+		var m = "quickStats item 'a': meter max must be a number > 0.";
+		refused(qs("[{id:'a', type:'meter', label:'L', value:Infinity, max:2}]"), v);
+		refused(qs("[{id:'a', type:'meter', label:'L', value:NaN, max:2}]"), v);
+		refused(qs("[{id:'a', type:'meter', label:'L', value:1, max:Infinity}]"), m);
+		refused(qs("[{id:'a', type:'meter', label:'L', value:1, max:NaN}]"), m);
+		refused(qs("[{id:'a', type:'segmented', label:'L', segments:[{label:'x', count:Infinity}]}]"),
+			"quickStats item 'a': segment 1 must be an object with a non-blank label and a whole count >= 0.");
+	}
+
+	@Test void quickStats_meterAndSegmentedNeedLabel_refused() {
+		for (var kind : List.of("meter", "segmented")) {
+			var m = "quickStats item 'a': a " + kind + " item needs a non-blank label.";
+			var rest = kind.equals("meter") ? "value:1, max:2" : "segments:[{label:'x', count:1}]";
+			refused(qs("[{id:'a', type:'" + kind + "', " + rest + "}]"), m);
+			refused(qs("[{id:'a', type:'" + kind + "', label:' ', " + rest + "}]"), m);
+			refused(qs("[{id:'a', type:'" + kind + "', label:5, " + rest + "}]"), m);
+		}
+		assertDoesNotThrow(() -> h.toFragment(src("t", qs("[{id:'a', label:null, value:1}]"))));
+	}
+
+	@Test void quickStats_segmentToneNamesSegment_refused() {
+		refused(qs("[{id:'a', type:'segmented', label:'L', segments:[{label:'x', count:1}, {label:'y', count:1, tone:'accent'}]}]"),
+			"quickStats item 'a' segment 2: tone 'accent' is not one of neutral, info, success, warning, error.");
+	}
+
+	@Test void quickStats_validKinds_pass() {
+		var items = "[{id:'t1', value:1, tone:'neutral'}, {id:'t2', value:1, tone:'info'}, {id:'t3', value:1, tone:'success'},"
+			+ " {id:'t4', value:1, tone:'warning'}, {id:'t5', value:1, tone:'error'}, {id:'t6', type:'tile', label:'T', value:'n/a'},"
+			+ " {id:'m1', type:'meter', label:'L', value:1, max:2, text:'x', tone:'success'}, {id:'g1', type:'segmented', label:'L', segments:[{label:'x', count:1, tone:'info'}]},"
+			+ " {id:'m2', label:'L', value:1, max:2}, {id:'m0', type:'meter', label:'L', value:0, max:2}, {id:'g2', label:'L', segments:[{label:'x', count:0}]}]";
+		var table = (Map<?,?>)h.toFragment(src("t", qs(items))).get("table");
+		assertEquals(11, ((List<?>)((Map<?,?>)table.get("quickStats")).get("items")).size());
+	}
+
+	@Test void quickStats_contractVersion_e31Wins() {
+		var ex = assertThrows(IllegalArgumentException.class, () -> h.toFragment(src("t",
+			"{dataUrl:'/x', columns:[{key:'id'}], quickStats:{contractVersion:'1', items:[{id:'a', type:'chart'}]}}")));
+		assertTrue(ex.getMessage().contains("'quickStats' sets contractVersion"), ex.getMessage());
+	}
+
+	@Test void quickStats_srcCard_unaffected() {
+		assertTrue(h.toFragment(CardSource.create("datatables", "t").src("/x").build()).isEmpty());
+	}
+
+	@Test void quickStats_absent_unaffected() {
+		assertDoesNotThrow(() -> h.toFragment(src("t", "{dataUrl:'/x', columns:[{key:'id'}]}")));
+	}
+
+	@Test void quickStats_bodyMapFromTableSpec_passes() {
+		var body = TableSpec.create("t").dataUrl("/x").columns(Column.create("id"))
+			.quickStats("s", QuickStat.of("a", "A", 1).statusTone(StatusTone.INFO), QuickStat.meter("m", "M", 1, 2),
+				QuickStat.segmented("g", "G").segment("A", 1).segment("B", 2, StatusTone.SUCCESS))
+			.toCardBody();
+		assertDoesNotThrow(() -> h.toFragment(CardSource.create("datatables", "t").bodyMap(body).build()));
+	}
+
 	@Test void dualHat_newMainSources_haveNoSalesforceMarkers() throws Exception {
 		var files = List.of(MAIN.resolve("PageDirectiveModel.java"), MAIN.resolve("CardDirectiveModel.java"),
-			MAIN.resolve("DatatablesCardType.java"), MAIN.resolve("ConsoleOutputCardType.java"),
+			MAIN.resolve("DatatablesCardType.java"), MAIN.resolve("TerminalCardType.java"),
 			MAIN.resolve("ToolkitPackRegistry.java"), MAIN.resolve("FtlAttrLists.java"));
 		for (var p : files) {
 			assertTrue(Files.exists(p), () -> "missing source: " + p);

@@ -16,15 +16,15 @@
  */
 package org.apache.juneau.petstore.console.pages;
 
-import static org.apache.juneau.commons.utils.Shorts.*;
-
 import java.util.*;
 
 import org.apache.juneau.petstore.dto.*;
 import org.apache.juneau.petstore.service.*;
 import org.apache.juneau.rest.server.view.freemarker.console.*;
 import org.apache.juneau.rest.server.views.*;
+import org.apache.juneau.rest.server.views.RowAction.*;
 import org.apache.juneau.rest.server.views.TableSpec.*;
+import org.apache.juneau.rest.server.widgets.*;
 
 /**
  * Builder twin of the Store page (P1, {@code store.ftlh}).
@@ -49,10 +49,12 @@ public final class StorePageBuilders {
 	 * @param available Available pets.
 	 * @param pending Pending pets.
 	 * @param sold Sold pets.
-	 * @param orders Placed / approved / delivered order counts.
-	 * @param inventory Available pets of all pets.
+	 * @param ordersPlaced Placed orders.
+	 * @param ordersApproved Approved orders.
+	 * @param ordersDelivered Delivered orders.
+	 * @param petTotal All pets, the inventory meter's maximum.
 	 */
-	public record QuickStats(long available, long pending, long sold, String orders, String inventory) {
+	public record QuickStats(long available, long pending, long sold, long ordersPlaced, long ordersApproved, long ordersDelivered, long petTotal) {
 
 		/**
 		 * Counts the tiles from the store.
@@ -63,10 +65,8 @@ public final class StorePageBuilders {
 		public static QuickStats of(PetStore store) {
 			var pets = store.getPets();
 			var orders = store.getOrders();
-			var available = count(pets, PetStatus.AVAILABLE);
-			return new QuickStats(available, count(pets, PetStatus.PENDING), count(pets, PetStatus.SOLD),
-				f("%s / %s / %s", count(orders, OrderStatus.PLACED), count(orders, OrderStatus.APPROVED), count(orders, OrderStatus.DELIVERED)),
-				f("%s of %s", available, pets.size()));
+			return new QuickStats(count(pets, PetStatus.AVAILABLE), count(pets, PetStatus.PENDING), count(pets, PetStatus.SOLD),
+				count(orders, OrderStatus.PLACED), count(orders, OrderStatus.APPROVED), count(orders, OrderStatus.DELIVERED), pets.size());
 		}
 
 		private static long count(Collection<Pet> pets, PetStatus status) {
@@ -78,6 +78,21 @@ public final class StorePageBuilders {
 		}
 	}
 
+	/** The store strip: three status tiles, an order breakdown, and an inventory meter (a tile when there are no pets). */
+	private static QuickStat[] storeQuickStats(QuickStats qs) {
+		var inventory = qs.petTotal() > 0
+			? QuickStat.meter("inventory", "Inventory", qs.available(), qs.petTotal()).text(qs.available() + " of " + qs.petTotal())
+			: QuickStat.of("inventory", "Inventory", "0 of 0");
+		return new QuickStat[] {
+			QuickStat.of("available", "Available", qs.available()),
+			QuickStat.of("pending", "Pending", qs.pending()),
+			QuickStat.of("sold", "Sold", qs.sold()),
+			QuickStat.segmented("orders", "Orders").segment("Placed", qs.ordersPlaced())
+				.segment("Approved", qs.ordersApproved(), StatusTone.INFO).segment("Delivered", qs.ordersDelivered(), StatusTone.SUCCESS),
+			inventory
+		};
+	}
+
 	/**
 	 * P1 Store.
 	 *
@@ -85,7 +100,7 @@ public final class StorePageBuilders {
 	 * @return The page spec.
 	 */
 	public static PageSpec store(QuickStats qs) {
-		return PageSpec.create().tab("store").toolkit("views")
+		return PageSpec.create().tab("store").toolkit("views").init("/console/dev/cards/petstore-cards.js")
 			.html("welcome", "Welcome to the petstore", """
 				<div class="jc-prose"><p>Browse pets, place orders and review what changed. Every page here is built from the same
 				Juneau console pieces your own app can use.</p>
@@ -96,14 +111,23 @@ public final class StorePageBuilders {
 					Column.create("petId").label("Pet").href("/console/pets/{petId}/summary"),
 					Column.create("shipDate").label("Ship date").render("date"),
 					Column.create("status").label("Status").render("pill"))
-				.quickStats("store",
-					QuickStat.of("available", "Available", qs.available()),
-					QuickStat.of("pending", "Pending", qs.pending()),
-					QuickStat.of("sold", "Sold", qs.sold()),
-					QuickStat.of("orders", "Orders", qs.orders()),
-					QuickStat.of("inventory", "Inventory", qs.inventory())), "Recent orders");
-			// Blocked: ChartDef.  The three chart cards (orders-trend, by-species, by-status) go here, in this order.
-			// Blocked: PageSpec cannot build an html card with src=, so the "hours" card (src=/console/store/fragments/hours)
-			// has no twin yet.
+				.quickStats("store", storeQuickStats(qs)), "Recent orders")
+			.card(CardSpec.of("kpi", "revenue").title("Revenue")
+				.body("label", "Revenue today").body("dataUrl", "/console/store/kpi/revenue"))
+			.card(ChartDef.line("orders-trend").title("Orders, last 30 days").src("/console/store/stats/daily")
+				.x("day", null, "Day").series("placed", "Placed").series("delivered", "Delivered", "ok")
+				.onClickHref("/console/orders?state=day({day})").toCardSpec())
+			.card(ChartDef.donut("by-species").title("Pets by species").src("/console/store/stats/species")
+				.label("species").value("count").center("total").toCardSpec())
+			.card(ChartDef.bar("by-status").title("Pets by status").src("/console/store/stats/status")
+				.x("status").series("count", "Pets").toCardSpec())
+			.card(ChartDef.treemap("pets-map").title("Pets by species and status").src("/console/store/stats/pets")
+				.groupBy("species", "status").label("name")
+				.colorBy("status", ChartDef.legendItem("AVAILABLE", "Available", "ok"),
+					ChartDef.legendItem("PENDING", "Pending", "warning"),
+					ChartDef.legendItem("SOLD", "Sold", null))
+				.tileFields("id", "name", "species", "status")
+				.onClickAction(PetsPageBuilders.editPetAction(OnSuccess.REDRAW)).toCardSpec())
+			.htmlSrc("hours", "Store hours", "/console/store/fragments/hours");
 	}
 }

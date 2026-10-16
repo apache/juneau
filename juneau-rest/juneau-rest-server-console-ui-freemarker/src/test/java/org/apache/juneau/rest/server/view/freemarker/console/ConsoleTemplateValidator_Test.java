@@ -137,6 +137,17 @@ class ConsoleTemplateValidator_Test extends TestBase {
 			"<@console> chrome= must be true or false; got 'yes'.");
 	}
 
+	@Test void c04_strictBoolean_consoleSchemeToggle() {
+		assertOne("<@console schemeToggle=\"yes\"><@main/></@console>", 1, 1, "strict-boolean",
+			"<@console> schemeToggle= must be true or false; got 'yes'.");
+		assertClean("<@console schemeToggle=true><@main/></@console>");
+	}
+
+	@Test void c05_consoleScheme_isKnown() {
+		assertClean("<@console scheme=\"dark\" schemeToggle=\"false\"><@main/></@console>");
+		assertClean("<@console><@theme name=\"open\"><@token name=\"--jc-link\" value=\"#6cb4ff\" scheme=\"dark\"/></@theme><@main/></@console>");
+	}
+
 	//-----------------------------------------------------------------------------------------------------------------
 	// dangling-template
 	//-----------------------------------------------------------------------------------------------------------------
@@ -342,5 +353,91 @@ class ConsoleTemplateValidator_Test extends TestBase {
 
 	@Test void z01_factsDirective_rejectsAnyAttribute() {
 		assertOne("<@console><@facts foo=1>{}</@facts><@main/></@console>", 1, 11, "unknown-attribute", "<@facts> unknown attribute 'foo'.");
+	}
+
+	@Test void w01_chartCard_absentWebJar_isMissingWebjar() {
+		var f = ConsoleTemplateValidator.create().webJarProbe(a -> { throw new IllegalStateException("x"); })
+			.validateSource("t.ftlh", "<@card type=\"chart\" id=\"c\">{kind:'line'}</@card>");
+		assertSize(1, f);
+		assertString("missing-webjar", f.get(0).rule());
+		assertContains("E-70: chart cards need the ECharts WebJar", f.get(0).message());
+	}
+
+	@Test void w02_chartCard_presentWebJar_clean() {
+		assertEmpty(ConsoleTemplateValidator.create().validateSource("t.ftlh",
+			"<@card type=\"chart\" id=\"c\">{kind:'line',src:'/x',x:{field:'d'},series:['v']}</@card>")
+			.stream().filter(x -> x.rule().equals("missing-webjar")).toList());
+	}
+
+	private static final String CHART_CARD = "<@card type=\"chart\" id=\"c\">{kind:'line'}</@card>";
+
+	private static List<ConsoleTemplateValidator.Finding> missingWebJar(List<ConsoleTemplateValidator.Finding> f) {
+		return f.stream().filter(x -> x.rule().equals("missing-webjar")).toList();
+	}
+
+	@Test void w03_chartCard_echartsProvided_noMissingWebjar() {
+		var f = ConsoleTemplateValidator.create().providedPacks("echarts")
+			.webJarProbe(a -> { throw new IllegalStateException("x"); })
+			.validateSource("t.ftlh", CHART_CARD);
+		assertEmpty(missingWebJar(f));
+	}
+
+	@Test void w04_chartCard_echartsOverridden_noMissingWebjar() {
+		var cdn = ToolkitPack.create("echarts").kind(ToolkitPack.Kind.VENDOR)
+			.resolver((req, path) -> path).js("https://cdn.example.com/echarts.min.js").build();
+		var f = ConsoleTemplateValidator.create().registerToolkitPack(cdn)
+			.webJarProbe(a -> { throw new IllegalStateException("x"); })
+			.validateSource("t.ftlh", CHART_CARD);
+		assertEmpty(missingWebJar(f));
+	}
+
+	@Test void w05_twoChartCards_probesOnce() {
+		var calls = new java.util.concurrent.atomic.AtomicInteger();
+		var v = ConsoleTemplateValidator.create().webJarProbe(a -> { calls.incrementAndGet(); throw new IllegalStateException("x"); });
+		var f = v.validateSource("t.ftlh", CHART_CARD + "<@card type=\"chart\" id=\"d\">{kind:'line'}</@card>");
+		assertSize(2, missingWebJar(f));
+		v.validateSource("u.ftlh", CHART_CARD);
+		assertEquals(1, calls.get());
+	}
+
+	@Test void w06_nullProbe_rejected() {
+		assertThrows(NullPointerException.class, () -> ConsoleTemplateValidator.create().webJarProbe(null));
+	}
+
+	@Test void w07_cacheResets_afterProvidedPacks_andRegisterToolkitPack() {
+		var v = ConsoleTemplateValidator.create().webJarProbe(a -> { throw new IllegalStateException("x"); });
+		assertSize(1, missingWebJar(v.validateSource("t.ftlh", CHART_CARD)));
+		v.providedPacks("echarts");
+		assertEmpty(missingWebJar(v.validateSource("t.ftlh", CHART_CARD)));
+
+		var v2 = ConsoleTemplateValidator.create().webJarProbe(a -> { throw new IllegalStateException("x"); });
+		assertSize(1, missingWebJar(v2.validateSource("t.ftlh", CHART_CARD)));
+		v2.registerToolkitPack(ToolkitPack.create("echarts").kind(ToolkitPack.Kind.VENDOR)
+			.resolver((req, path) -> path).js("https://cdn.example.com/echarts.min.js").build());
+		assertEmpty(missingWebJar(v2.validateSource("t.ftlh", CHART_CARD)));
+	}
+
+	@Test void w08_chartsPackReplaced_withoutEchartsDependency_noFinding() {
+		var plain = ToolkitPack.create("charts").kind(ToolkitPack.Kind.RUNTIME)
+			.resolver((req, path) -> path).js("/my-charts.js").build();
+		var f = ConsoleTemplateValidator.create().registerToolkitPack(plain)
+			.webJarProbe(a -> { throw new IllegalStateException("x"); })
+			.validateSource("t.ftlh", CHART_CARD);
+		assertEmpty(missingWebJar(f));
+	}
+
+	@Test void w09_brokenPackGraph_isAFinding_notACrash() {
+		var bad = ToolkitPack.create("charts").kind(ToolkitPack.Kind.RUNTIME)
+			.resolver((req, path) -> path).js("/my-charts.js").dependsOn("nope").build();
+		var f = ConsoleTemplateValidator.create().registerToolkitPack(bad).validateSource("t.ftlh", CHART_CARD);
+		assertSize(1, f);
+		assertString("invalid-pack-graph", f.get(0).rule());
+		assertContains("nope", f.get(0).message());
+	}
+
+	@Test void w10_providedPacks_unknownName_rejected() {
+		var v = ConsoleTemplateValidator.create();
+		var e = assertThrows(IllegalArgumentException.class, () -> v.providedPacks("nope"));
+		assertContains("Unknown toolkit pack 'nope'", e.getMessage());
 	}
 }

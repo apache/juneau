@@ -22,6 +22,7 @@ import java.io.*;
 import java.net.*;
 import java.nio.charset.*;
 
+import org.apache.juneau.http.remote.*;
 import org.apache.juneau.rest.client.apachehttpclient45.*;
 import org.junit.jupiter.api.*;
 
@@ -96,6 +97,41 @@ class ApacheHc45Transport_SsrfGuard_Test {
 		var numeric = url.replace("127.0.0.1", "2130706433");
 		try (var transport = ApacheHc45Transport.create()) {
 			assertPinRefused(transport, TransportRequest.builder().method("GET").uri(numeric).remoteUrlPolicy(true, false).build(), "2130706433");
+		}
+	}
+
+	// =================================================================================================================
+	// B: per-client allowed address ranges (RestClient.Builder.allowAddressRanges)
+	// =================================================================================================================
+
+	private static final String LAB_URL = "http://224.0.0.1:1/x";
+	private static final RemoteUrlPolicy.AllowedRanges LAB = RemoteUrlPolicy.AllowedRanges.of("224.0.0.0/4");
+
+	private static TransportRequest ranged(String uri, RemoteUrlPolicy.AllowedRanges ranges) {
+		return TransportRequest.builder().method("GET").uri(uri).remoteUrlPolicy(true, false).allowedAddressRanges(ranges)
+			.timeout(java.time.Duration.ofSeconds(2)).build();
+	}
+
+	@Test
+	void b01_withRanges_specialPurposeTarget_notRefusedByPin_whileWithoutRangesIsRefused_sameTransport() throws Exception {
+		try (var transport = ApacheHc45Transport.create()) {
+			assertPinRefused(transport, ranged(LAB_URL, RemoteUrlPolicy.AllowedRanges.NONE), "224.0.0.1");
+			try {
+				transport.execute(ranged(LAB_URL, LAB)).close();
+			} catch (TransportException e) {
+				// The connect itself may fail (a multicast address cannot be connected to over TCP); it must not be the policy refusal.
+				assertFalse(e.getMessage().contains("No allowed address"), e.getMessage());
+			}
+			// The allowed client's pool is separate: an unranged request to the same URL is still refused afterwards.
+			assertPinRefused(transport, ranged(LAB_URL, RemoteUrlPolicy.AllowedRanges.NONE), "224.0.0.1");
+		}
+	}
+
+	@Test
+	void b02_withRanges_loopbackAndMetadata_stillRefused() throws Exception {
+		try (var transport = ApacheHc45Transport.create()) {
+			assertPinRefused(transport, ranged(url, LAB), "127.0.0.1");
+			assertPinRefused(transport, ranged("http://169.254.169.254:1/x", LAB), "169.254.169.254");
 		}
 	}
 

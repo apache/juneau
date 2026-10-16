@@ -23,14 +23,19 @@ import java.net.*;
 import java.net.http.*;
 import java.net.http.HttpResponse.*;
 import java.time.*;
+import java.util.*;
+import java.util.regex.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.microservice.*;
+import org.apache.juneau.petstore.console.*;
 import org.apache.juneau.testing.*;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.*;
 import org.junit.jupiter.params.*;
 import org.junit.jupiter.params.provider.*;
+
+import jakarta.servlet.DispatcherType;
 
 /**
  * Integration test that boots the petstore Jetty deployment on an ephemeral port and exercises the CRUD surface
@@ -306,6 +311,169 @@ class PetstoreJetty_Test extends TestBase {
 	})
 	void f01_retiredPathIs404(String path) throws Exception {
 		assertEquals(404, get(path, "text/html").statusCode(), path);
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// g — the console CSRF boundary is wired in (parity with springboot h)
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Test void g01_consolePageCarriesTheCsrfToken() throws Exception {
+		var resp = get("/console/store", "text/html");
+		assertEquals(200, resp.statusCode(), "body: " + resp.body());
+		assertTrue(resp.body().matches("(?s).*<body[^>]*\\sdata-juneau-csrf=\"[0-9a-f]{64}\".*"), "no data-juneau-csrf on <body>");
+	}
+
+	@Test void g02_consoleWriteWithoutTheTokenIsRefused() throws Exception {
+		var req = HttpRequest.newBuilder()
+			.uri(URI.create(fixture.getRootUrl() + "/console/pets/1/sell"))
+			.timeout(Duration.ofSeconds(30))
+			.header("Origin", fixture.getRootUrl().toString())
+			.header("Content-Type", "application/json")
+			.header("Accept", "application/json")
+			.POST(HttpRequest.BodyPublishers.ofString("{}"))
+			.build();
+		var resp = HTTP.send(req, BodyHandlers.ofString());
+		assertEquals(403, resp.statusCode(), "body: " + resp.body());
+		assertEquals("CSRF_TOKEN_MISSING", resp.headers().firstValue("X-Request-Boundary").orElse(null));
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// g — the API's CSRF boundary guards /petstore/*
+	//-----------------------------------------------------------------------------------------------------------------
+
+	private static final Pattern API_TOKEN = Pattern.compile("data-petstore-csrf=\"([0-9a-f]{128})\"");
+	private static final Pattern CONSOLE_TOKEN = Pattern.compile("<body[^>]*\\sdata-juneau-csrf=\"([0-9a-f]{64})\"");
+	private static final String PET_JSON = "{\"name\":\"Gus\",\"species\":\"RABBIT\",\"price\":12.50,\"status\":\"AVAILABLE\"}";
+
+	/** The API token the admin Photo tab stamps on its upload form. */
+	private static String apiToken() throws Exception {
+		var resp = getWithAuth("/console/pets/1/photo", "text/html", "Bearer petstore-admin");
+		assertEquals(200, resp.statusCode(), "body: " + resp.body());
+		var m = API_TOKEN.matcher(resp.body());
+		assertTrue(m.find(), "no data-petstore-csrf on the admin photo page");
+		return m.group(1);
+	}
+
+	private static String consoleToken() throws Exception {
+		var m = CONSOLE_TOKEN.matcher(get("/console/store", "text/html").body());
+		assertTrue(m.find(), "no data-juneau-csrf on the console page");
+		return m.group(1);
+	}
+
+	private static String boundaryReason(HttpResponse<?> resp) {
+		return resp.headers().firstValue("X-Request-Boundary").orElse(null);
+	}
+
+	private static HttpResponse<String> send(String method, String path, String contentType, String origin, String token, String body) throws Exception {
+		var b = HttpRequest.newBuilder().uri(URI.create(fixture.getRootUrl() + path)).timeout(Duration.ofSeconds(30))
+			.header("Accept", "application/json").method(method, HttpRequest.BodyPublishers.ofString(body));
+		if (contentType != null)
+			b.header("Content-Type", contentType);
+		if (origin != null)
+			b.header("Origin", origin);
+		if (token != null)
+			b.header("X-Csrf-Token", token);
+		return HTTP.send(b.build(), BodyHandlers.ofString());
+	}
+
+	private static String self() {
+		return fixture.getRootUrl().toString();
+	}
+
+	@Test void g03_apiWriteWithSameOriginAndNoTokenIsRefused() throws Exception {
+		var resp = send("POST", "/petstore/pets", "application/json", self(), null, PET_JSON);
+		assertEquals(403, resp.statusCode(), "body: " + resp.body());
+		assertEquals("CSRF_TOKEN_MISSING", boundaryReason(resp));
+	}
+
+	// Shared-instance evidence, not presence evidence: the token the console boundary published is the one the API filter
+	// verifies.  Stays green with the API boundary deleted.
+	@Test void g04_apiWriteWithTheTokenPasses() throws Exception {
+		var resp = send("POST", "/petstore/pets", "application/json", self(), apiToken(), PET_JSON);
+		assertEquals(200, resp.statusCode(), "body: " + resp.body());
+		assertNull(boundaryReason(resp));
+	}
+
+	@Test void g05_apiCrossOriginFormPostIsRefused() throws Exception {
+		var resp = send("POST", "/petstore/pets", "application/x-www-form-urlencoded", "http://evil.example", null, "name=Evil&species=CAT&price=1");
+		assertEquals(403, resp.statusCode(), "body: " + resp.body());
+		assertEquals("ORIGIN_MISMATCH", boundaryReason(resp));
+	}
+
+	@Test void g06_apiConsoleTokenIsRefused() throws Exception {
+		var resp = send("PUT", "/petstore/pets/1/photo", "image/png", self(), consoleToken(), "x");
+		assertEquals(403, resp.statusCode(), "body: " + resp.body());
+		assertEquals("CSRF_TOKEN_MISMATCH", boundaryReason(resp));
+	}
+
+	// Pins that the API filter does not cover /console (the console boundary alone judges it).  Stays green with the API
+	// boundary deleted.
+	@Test void g07_consoleIsUnaffected() throws Exception {
+		var token = consoleToken();
+		var sell = HttpRequest.newBuilder().uri(URI.create(self() + "/console/pets/3/sell")).timeout(Duration.ofSeconds(30))
+			.header("Origin", self()).header("X-Csrf-Token", token).header("Authorization", "Bearer petstore-admin")
+			.header("Content-Type", "application/json").header("Accept", "application/json")
+			.POST(HttpRequest.BodyPublishers.ofString("{}")).build();
+		var ok = HTTP.send(sell, BodyHandlers.ofString());
+		assertEquals(200, ok.statusCode(), "body: " + ok.body());
+		assertNull(boundaryReason(ok));
+
+		// The API's token is not the console's.
+		var swapped = HttpRequest.newBuilder().uri(URI.create(self() + "/console/pets/3/sell")).timeout(Duration.ofSeconds(30))
+			.header("Origin", self()).header("X-Csrf-Token", apiToken()).header("Authorization", "Bearer petstore-admin")
+			.header("Content-Type", "application/json").header("Accept", "application/json")
+			.POST(HttpRequest.BodyPublishers.ofString("{}")).build();
+		var refused = HTTP.send(swapped, BodyHandlers.ofString());
+		assertEquals(403, refused.statusCode(), "body: " + refused.body());
+		assertEquals("CSRF_TOKEN_MISMATCH", boundaryReason(refused));
+	}
+
+	// Premise pin, not CSRF evidence: stays green with the API boundary deleted.
+	@Test void g08_petstoreUiAndAssetsAreOutsideTheApiBoundary() throws Exception {
+		var ui = get("/petstore-ui", "text/html");
+		assertEquals(200, ui.statusCode(), "body: " + ui.body());
+		assertNull(boundaryReason(ui));
+		var post = send("POST", "/petstore-ui/x", "application/x-www-form-urlencoded", "http://evil.example", null, "a=b");
+		assertNull(boundaryReason(post), "status " + post.statusCode());
+	}
+
+	@Test void g09_apiBoundaryIsMappedForRequestOnly() throws Exception {
+		var handler = fixture.getJettyServerComponent().getServletContextHandler().getServletHandler();
+		var mappings = handler.getFilterMappings();
+		var api = -1;
+		var console = -1;
+		for (var i = 0; i < mappings.length; i++) {
+			var filter = handler.getFilter(mappings[i].getFilterName()).getFilter();
+			if (filter instanceof PetstoreApiBoundary) {
+				api = i;
+				assertArrayEquals(new String[]{PetstoreApiBoundary.URL_PATTERN}, mappings[i].getPathSpecs());
+				assertEquals(EnumSet.of(DispatcherType.REQUEST), mappings[i].getDispatcherTypes());
+			} else if (filter instanceof PetstoreConsoleBoundary) {
+				console = i;
+			}
+		}
+		assertTrue(api >= 0, "no PetstoreApiBoundary mapped");
+		assertTrue(console >= 0 && console < api, "console boundary must be ahead of the API boundary");
+		var registrations = ServletFilterRegistration.collect(fixture.getMicroservice().getBeanStore()).stream()
+			.filter(r -> r.getFilter() instanceof PetstoreApiBoundary).toList();
+		assertEquals(1, registrations.size());
+		assertEquals(ServletFilterRegistration.HIGHEST_PRECEDENCE + 10, registrations.get(0).getOrder());
+	}
+
+	// Premise pin, not CSRF evidence: stays green with the API boundary deleted.
+	@ParameterizedTest(name="{0}")
+	@CsvSource({"/petstore,404", "/petstore/pets/1,200", "/petstore/pets,200", "/petstore/api,200", "/petstore/stats,200"})
+	void g10_apiHtmlPagesRenderNoPostForm(String path, int status) throws Exception {
+		// The bare /petstore path has no HTML page (404 for text/html), so its premise is that the error body has no POST form either.
+		var resp = get(path, "text/html");
+		assertEquals(status, resp.statusCode(), "body: " + resp.body());
+		assertFalse(resp.body().toLowerCase().contains("method=\"post\""), path + " renders a POST form");
+	}
+
+	@Test void g13_apiSimpleFormPostWithoutOriginIsRefused() throws Exception {
+		var resp = send("POST", "/petstore/pets", "application/x-www-form-urlencoded", null, null, "name=Legacy&species=CAT&price=1");
+		assertEquals(403, resp.statusCode(), "body: " + resp.body());
+		assertEquals("SIMPLE_REQUEST_WITHOUT_ORIGIN", boundaryReason(resp));
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

@@ -31,6 +31,8 @@ _spec.loader.exec_module(jr)
 import os as _os
 import tempfile as _tempfile
 _os.environ["JUNEAU_RUN_LOG_DIR"] = _tempfile.mkdtemp(prefix="juneau-run-test-logs-")
+# Run history is default-on; keep it out of ~/.cache too.
+_os.environ["JUNEAU_RUN_HISTORY_DIR"] = _tempfile.mkdtemp(prefix="juneau-run-test-history-")
 
 
 def reset_run_state():
@@ -42,6 +44,7 @@ def reset_run_state():
     jr._events = None
     jr._line_offset = 0
     jr._pause_depth = 0
+    jr._history = None
     jr._subscribers.clear()
     if getattr(jr, "_console", None) is not None:
         jr._console.close()
@@ -57,10 +60,15 @@ def isolate_run_env(case):
     import os
     saved = dict(os.environ)  # not mock.patch.dict(...).start(): tests that call mock.patch.stopall() would undo it
     case.addCleanup(lambda: (os.environ.clear(), os.environ.update(saved)))
+    # `python3 -m unittest` (3.10 and earlier) sets argv[0] to "python3 -m unittest", which names the default full log
+    argv = sys.argv
+    case.addCleanup(lambda: setattr(sys, "argv", argv))
+    sys.argv = ["/x/scripts/test.py"]
     for key in list(os.environ):
         if (key in ("RUN_MARKERS", "RUN_ARTIFACTS") or key.startswith("JUNEAU_PUSH_")
                 or (key.startswith("JUNEAU_RUN_") and key != "JUNEAU_RUN_PY")):
             del os.environ[key]
+    os.environ["JUNEAU_RUN_HISTORY"] = "0"
 
 
 class Screen:

@@ -37,7 +37,7 @@ import org.junit.jupiter.api.*;
  *
  * <h5 class='section'>The design's universal is now the pin</h5>
  * <p>
- * The design states test 33 as a universal &mdash; <i>every</i> {@code rawText} takes a sidecar payload, i.e. the
+ * The contract is universal &mdash; <i>every</i> {@code rawText} takes a sidecar payload, i.e. the
  * content-bearing count is <b>zero</b>.  That is now true: the page/card declarative-content emitters
  * ({@code Tab}/{@code Subtab}/{@code CardContent}) are gone, {@link #KNOWN_CONTENT_SINKS} is empty, and a
  * <b>new</b> content-bearing {@code rawText} anywhere in either tree fails this test.

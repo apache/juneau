@@ -29,7 +29,7 @@ import org.apache.juneau.rest.server.view.freemarker.*;
 import org.junit.jupiter.api.*;
 
 /**
- * Dev mode (spec §4.7, E-14): {@code <@console>} validates its contract before writing it.
+ * Dev mode (E-14): {@code <@console>} validates its contract before writing it.
  *
  * @since 10.0.0
  */

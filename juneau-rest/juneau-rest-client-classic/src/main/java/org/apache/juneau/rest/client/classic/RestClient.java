@@ -1097,6 +1097,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		private BiPredicate<RestRequest,RestResponse> logRequestsPredicate;
 		private boolean detectLeaks;
 		private boolean allowPrivateUrls;
+		private final List<String> allowedAddressRanges = new ArrayList<>();
 		private boolean executorServiceShutdownOnClose;
 		private boolean ignoreErrors;
 		private boolean keepHttpClientOpen;
@@ -1405,6 +1406,8 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 
 		@Override /* Overridden from Context.Builder<?> */
 		public RestClient build() {
+			// Validated here, ahead of the reflective construction, so a bad entry surfaces as the IllegalArgumentException itself.
+			RemoteUrlPolicy.AllowedRanges.of(allowedAddressRanges.toArray(new String[0]));
 			return build(RestClient.class);
 		}
 
@@ -1432,8 +1435,8 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * </p>
 		 *
 		 * <h5 class='section'>Notes:</h5><ul>
-		 * 	<li class='warn'>The SSRF guard of {@code @Remote} calls depends on the request running on the calling thread,
-		 * 		which this client cannot guarantee for a custom handler.  So a client with any handler other than
+		 * 	<li class='warn'>The SSRF guard of {@code @Remote} calls travels on the request's {@link HttpContext}, and a
+		 * 		custom handler may copy the request, or send it with another context, without it.  So a client with any handler other than
 		 * 		{@link BasicRestCallHandler} itself, or with a {@code BasicRestCallHandler} bound to a different client
 		 * 		(through {@code impl(...)}), refuses every SSRF-guard-active {@code @Remote} call (one without the
 		 * 		{@link #allowPrivateUrls(boolean) allowPrivateUrls} opt-in).  Ordinary requests are unaffected.
@@ -1854,6 +1857,30 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 */
 		public SELF allowPrivateUrls(boolean value) {
 			allowPrivateUrls = value;
+			return self();
+		}
+
+		/**
+		 * Allows this client's SSRF-guarded {@code @Remote}/{@code @Url} calls to reach hosts inside the given
+		 * special-purpose address ranges that the default policy denies (see {@code org.apache.juneau.http.remote.RemoteUrlPolicy}).
+		 *
+		 * <p>
+		 * Same narrow semantics and validation as the JVM-wide {@code RestClient.allowAddressRanges} system property: each
+		 * entry is a CIDR range or single address (parsed without DNS) that must lie inside {@code 192.0.0.0/24},
+		 * {@code 198.18.0.0/15}, {@code 224.0.0.0/4}, {@code 240.0.0.0/4} or {@code ff00::/8}.  It never re-opens
+		 * loopback, link-local/cloud-metadata, private, unspecified or any other deny.
+		 *
+		 * <p>
+		 * The effective allow-list is the union of this setting and the system property.  Repeated calls accumulate.
+		 * An invalid entry fails {@link #build()} with an {@link IllegalArgumentException}.
+		 *
+		 * @param value The CIDR ranges or addresses to allow.  Can be <jk>null</jk> or empty (no effect).
+		 * @return This object.
+		 */
+		public SELF allowAddressRanges(String...value) {
+			if (nn(value))
+				for (var v : value)
+					allowedAddressRanges.add(v);
 			return self();
 		}
 
@@ -2706,6 +2733,10 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * 	<li class='warn'>A socket factory set with {@code setSSLSocketFactory} on the given builder is used for
 		 * 		SSRF-guard-active {@code @Remote} calls too, and must connect to exactly the address it is given (see
 		 * 		{@link #sslSocketFactory(LayeredConnectionSocketFactory)}).
+		 * 	<li class='warn'>A client built by an {@code HttpClientBuilder} subclass that overrides (or inherits an override
+		 * 		of) {@code build()}, {@code createMainExec(...)}, {@code decorateMainExec(...)} or
+		 * 		{@code decorateProtocolExec(...)} refuses every SSRF-guard-active {@code @Remote} call: the override may
+		 * 		build the client around another connection manager or request executor.
 		 * </ul>
 		 *
 		 * @param value The {@link HttpClientBuilder} that will be used to create the {@link HttpClient} used by {@link RestClient}.
@@ -2719,6 +2750,14 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 
 		/**
 		 * Assigns {@link HttpProcessor} instance.
+		 *
+		 * <h5 class='section'>Notes:</h5><ul>
+		 * 	<li class='warn'>The processor replaces all of the client's request interceptors, among them the ones that
+		 * 		enforce the SSRF guard and strip credentials on cross-origin redirects.  So a client with one refuses every
+		 * 		SSRF-guard-active {@code @Remote} call (one without the {@link #allowPrivateUrls(boolean) allowPrivateUrls}
+		 * 		opt-in).  Add interceptors with {@link HttpClientBuilder#addInterceptorLast(HttpRequestInterceptor)} on the
+		 * 		{@link #httpClientBuilder() HttpClientBuilder} instead.
+		 * </ul>
 		 *
 		 * @param httpprocessor New property value.
 		 * @return This object.
@@ -6095,6 +6134,79 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 			return false;
 		}
 
+		// Why guarded @Remote calls cannot be sent through a client built by b, or null if they can.  The checks of the
+		// client RestClient makes afterwards only see the connection manager the client stores, so they cannot tell:
+		// - an HttpClientBuilder subclass whose build() or exec-chain factory may build the client around another
+		//   connection manager or request executor, or put a step in front of them that sends the request elsewhere;
+		// - an HttpProcessor, which replaces the client's request interceptors (the SSRF guard's lease hand-over and the
+		//   redirect credential guard among them).
+		private static String ssrfBuilderRefusal(HttpClientBuilder b) {
+			var optOut = "or set allowPrivateUrls(true) if this is an intentional local-dev/intranet target.";
+			if (! HttpClientBuilderSettings.isReadable())
+				// HTT: only an HttpClient release without the HttpClientBuilder fields, or a JVM that denies reflective access
+				// to them, gets here (and then the default createConnectionManager() has already failed).
+				return "Refusing to send a policy-covered @Remote request: the settings of " + HttpClientBuilder.class.getName()
+					+ " cannot be read, so whether the client it built honors the SSRF guardrail's connect-time contract "
+					+ "(pin-on-connect + redirect revalidation) cannot be confirmed.  Use an HttpClient 4.5.x release, " + optOut;
+			var override = overriddenBuilderMethod(b.getClass());
+			if (nn(override))
+				return "Refusing to send a policy-covered @Remote request through a client built by an HttpClientBuilder "
+					+ "subclass (" + override + "): the override may build the client around another connection manager or "
+					+ "request executor, so the SSRF guardrail's connect-time contract (pin-on-connect + redirect "
+					+ "revalidation) cannot be confirmed.  Remove the override (configure the builder through its setters "
+					+ "instead), " + optOut;
+			if (HttpClientBuilderSettings.hasHttpProcessor(b))
+				return "Refusing to send a policy-covered @Remote request through a client whose HttpProcessor was set: "
+					+ "httpProcessor(...) replaces the client's request interceptors, among them the SSRF guardrail's own and "
+					+ "the redirect credential guard, so its connect-time contract (pin-on-connect + redirect revalidation) "
+					+ "cannot be confirmed.  Remove the httpProcessor(...) setting (add interceptors with "
+					+ "addInterceptorFirst(...) or addInterceptorLast(...) instead), " + optOut;
+			var change = lateBuilderChange(b);
+			if (nn(change))
+				return "Refusing to send a policy-covered @Remote request through a client whose HttpClientBuilder was changed "
+					+ "after the SSRF guard was wired into it (" + change + "), as an override of createHttpClient() does that "
+					+ "changes the builder after super.createHttpClient() and builds again.  The change may add credentials to "
+					+ "a redirect hop on another origin, follow redirects without revalidation or send the request past the "
+					+ "guard's executor, so the SSRF guardrail's connect-time contract (pin-on-connect + redirect revalidation) "
+					+ "cannot be confirmed.  Make the change before super.createHttpClient() (on httpClientBuilder() or through "
+					+ "this builder's setters), " + optOut;
+			return null;
+		}
+
+		// What was changed on b after the default createHttpClient() wired the SSRF guard into it, or null if nothing it
+		// wired was: the guard's two request interceptors must still be the last ones (the redirect credential guard strips
+		// what every interceptor before it added), and its redirect strategy and request executor must still be set.
+		private static String lateBuilderChange(HttpClientBuilder b) {
+			var last = HttpClientBuilderSettings.lastRequestInterceptors(b);
+			var n = last.size();
+			if (n < 2 || ! (last.get(n - 2) instanceof ClassicRedirectCredentialGuard) || ! (last.get(n - 1) instanceof SsrfGuardConnectionManager.GuardInterceptor))
+				return "a request interceptor was added after the SSRF guard's own";
+			if (! (HttpClientBuilderSettings.redirectStrategy(b) instanceof PolicyAwareRedirectStrategy))
+				return "the redirect strategy was replaced";
+			if (! (HttpClientBuilderSettings.requestExecutor(b) instanceof SsrfGuardConnectionManager.GuardedRequestExecutor))
+				return "the request executor was replaced";
+			return null;
+		}
+
+		// The HttpClientBuilder methods that decide which connection manager and request executor a built client uses.
+		private static final List<Method> BUILDER_EXEC_METHODS = Arrays.stream(HttpClientBuilder.class.getDeclaredMethods())
+			.filter(m -> Set.of("build", "createMainExec", "decorateMainExec", "decorateProtocolExec").contains(m.getName()))
+			.toList();
+
+		// Returns "<class> overrides <method>(<params>)" for the first of BUILDER_EXEC_METHODS a class between c and
+		// HttpClientBuilder declares, or null if there is none.
+		private static String overriddenBuilderMethod(Class<?> c) {
+			for (var x = c; nn(x) && x != HttpClientBuilder.class; x = x.getSuperclass()) {
+				for (var m : BUILDER_EXEC_METHODS) {
+					try {
+						x.getDeclaredMethod(m.getName(), m.getParameterTypes());
+						return cn(x) + " overrides " + m.getName() + "(" + String.join(",", Arrays.stream(m.getParameterTypes()).map(Class::getSimpleName).toList()) + ")";
+					} catch (@SuppressWarnings("unused") NoSuchMethodException e) { /* Not declared here. */ }
+				}
+			}
+			return null;
+		}
+
 		private static HttpClientConnectionManager newConnectionManager(Registry<ConnectionSocketFactory> registry, DnsResolver dnsResolver, PoolSettings p) {
 			if (! p.pooling()) {
 				var cm = new BasicHttpClientConnectionManager(registry, null, null, dnsResolver);
@@ -6167,6 +6279,19 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 * The default implementation returns an instance of {@link HttpClient} using the client builder returned by
 		 * {@link #createHttpClientBuilder()}.
 		 *
+		 * <h5 class='section'>Notes:</h5><ul>
+		 * 	<li class='warn'>SSRF-guard-active {@code @Remote} calls (ones without the
+		 * 		{@link #allowPrivateUrls(boolean) allowPrivateUrls} opt-in) are only sent through the client this default
+		 * 		implementation builds, which it wires to the connection manager that pins them.  The client refuses every
+		 * 		such call if an override returns any other client (including a wrapper around the one it built), or after
+		 * 		{@code super.createHttpClient()} sets an {@link HttpProcessor} on the {@link HttpClientBuilder}, adds a request
+		 * 		interceptor with {@code addInterceptorLast(...)}, or replaces its redirect strategy or request executor (make
+		 * 		such changes before calling {@code super}), or if the builder is a
+		 * 		subclass that overrides {@link HttpClientBuilder#build()} or one of its exec-chain methods
+		 * 		({@code createMainExec}, {@code decorateMainExec}, {@code decorateProtocolExec}), even an override that
+		 * 		returns or decorates nothing but what {@code super} built.  Ordinary requests are unaffected.
+		 * </ul>
+		 *
 		 * <h5 class='section'>Example:</h5>
 		 * <p class='bjava'>
 		 * 	<jc>// A Builder that provides it's own customized HttpClient.</jc>
@@ -6191,7 +6316,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 			// reports the SSRF guard as unsupported and refuses guarded @Remote calls.  The twin is built from the same
 			// socket factories and pool settings as cm (defaultRegistry and defaultPoolSettings), so it is the same kind;
 			// settings an override applied to the cm instance afterwards reach it before each guarded lease.
-			ssrfGuard = nn(cm) && cm == defaultConnectionManager ? new SsrfGuardConnectionManager(cm, newConnectionManager(defaultRegistry, PolicyPinningDnsResolver.INSTANCE, defaultPoolSettings)) : null;
+			ssrfGuard = nn(cm) && cm == defaultConnectionManager ? new SsrfGuardConnectionManager(cm, newConnectionManager(defaultRegistry, pinningResolver(), defaultPoolSettings)) : null;
 			ownsConnectionManager = nn(ssrfGuard) && connectionManager == null && ! overridesCreateConnectionManager(getClass());
 			if (nn(ssrfGuard))
 				cm = ssrfGuard;
@@ -6199,8 +6324,21 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 			// Once per HttpClientBuilder: a builder reused after build() keeps the interceptors earlier builds added.
 			if (! HttpClientBuilderSettings.hasLastRequestInterceptor(httpClientBuilder(), ClassicRedirectCredentialGuard.class))
 				httpClientBuilder().addInterceptorLast(new ClassicRedirectCredentialGuard());
+			if (nn(ssrfGuard) && HttpClientBuilderSettings.isReadable()) {
+				// The guard of a request travels on its context (see SsrfGuardMarker): the interceptor reads it before the
+				// connection lease, and the executor refuses a guarded request on a connection of the ordinary pool.
+				if (! HttpClientBuilderSettings.hasLastRequestInterceptor(httpClientBuilder(), SsrfGuardConnectionManager.GuardInterceptor.class))
+					httpClientBuilder().addInterceptorLast(new SsrfGuardConnectionManager.GuardInterceptor());
+				httpClientBuilder().setRequestExecutor(new SsrfGuardConnectionManager.GuardedRequestExecutor(HttpClientBuilderSettings.requestExecutor(httpClientBuilder()), ssrfGuard));
+			}
 			httpClientBuilder().setRedirectStrategy(new PolicyAwareRedirectStrategy());
 			return httpClientBuilder().build();
+		}
+
+		// The shared pinning resolver unless this builder set per-client allowed address ranges, which need a resolver of their own.
+		private PolicyPinningDnsResolver pinningResolver() {
+			var ranges = RemoteUrlPolicy.AllowedRanges.of(allowedAddressRanges.toArray(new String[0]));
+			return ranges.isEmpty() ? PolicyPinningDnsResolver.INSTANCE : new PolicyPinningDnsResolver(ranges);
 		}
 
 		/**
@@ -6333,6 +6471,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 
 	protected final boolean detectLeaks;
 	protected final boolean allowPrivateUrls;
+	private final RemoteUrlPolicy.AllowedRanges allowedAddressRanges;
 	protected final boolean ignoreErrors;
 	protected final boolean keepHttpClientOpen;
 	protected final boolean skipEmptyFormData;
@@ -6393,14 +6532,22 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		creationStack = isDebug() ? Thread.currentThread().getStackTrace() : null;
 		detectLeaks = builder.detectLeaks;
 		allowPrivateUrls = builder.allowPrivateUrls || Boolean.getBoolean(RemoteUrlPolicy.ALLOW_PRIVATE_URLS_PROPERTY);
+		allowedAddressRanges = RemoteUrlPolicy.AllowedRanges.of(builder.allowedAddressRanges.toArray(new String[0]));
 		errorCodes = builder.errorCodes;
 		formData = builder.formData().copy();
 		headerData = builder.headers().copy();
 		httpClient = builder.getHttpClient();
-		// Read after getHttpClient(): the default createHttpClient() sets ssrfGuard.
-		ssrfGuard = builder.httpClient == null ? builder.ssrfGuard : null;
+		// Read after getHttpClient(): the default createHttpClient() sets ssrfGuard.  It wires it into the client it
+		// builds, but an override of createHttpClient() or of HttpClientBuilder.build() may return another client.
+		var builtGuard = builder.httpClient == null ? builder.ssrfGuard : null;
+		ssrfGuard = nn(builtGuard) && builtGuard.isConnectionManagerOf(httpClient) ? builtGuard : null;
 		ownsConnectionManager = nn(ssrfGuard) && builder.ownsConnectionManager;
-		ssrfRefusal = ssrfRefusal();
+		// The HttpClientBuilder is checked as it is now, not when the default createHttpClient() built from it: an override
+		// may call super, change the builder and build again.  What is checked: a builder subclass override, an
+		// HttpProcessor, and whether what createHttpClient() wired (the guard's interceptors last, its redirect strategy and
+		// request executor) is still in place.  One of these changes made after the client was built is refused too (fail
+		// closed): which client it went into cannot be told.  A change undone before the override returns is not seen.
+		ssrfRefusal = ssrfRefusal(builtGuard, nn(builtGuard) ? Builder.ssrfBuilderRefusal(builder.httpClientBuilder()) : null);
 		ssrfPolicySupported = ssrfRefusal == null;
 		ignoreErrors = builder.ignoreErrors;
 		interceptors = nn(builder.interceptors) ? builder.interceptors.toArray(EMPTY_REST_CALL_INTERCEPTORS) : EMPTY_REST_CALL_INTERCEPTORS;
@@ -6458,6 +6605,15 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 	 */
 	public boolean isAllowPrivateUrls() {
 		return allowPrivateUrls;
+	}
+
+	/**
+	 * Returns the per-client allowed address ranges set through {@link Builder#allowAddressRanges(String...)}.
+	 *
+	 * @return The ranges; never <jk>null</jk>, empty when none were set.
+	 */
+	public RemoteUrlPolicy.AllowedRanges getAllowedAddressRanges() {
+		return allowedAddressRanges;
 	}
 
 	/**
@@ -7837,9 +7993,9 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 	 * Subclasses can override this method to provide their own specialized {@link RestRequest} objects.
 	 *
 	 * <h5 class='section'>Notes:</h5><ul>
-	 * 	<li class='warn'>The SSRF guard of {@code @Remote} calls depends on the request running on the calling thread,
-	 * 		which this client cannot guarantee if the returned request's class overrides {@link RestRequest#run()}, and on
-	 * 		its connection manager, which a request bound to a different client does not use.  So an SSRF-guard-active
+	 * 	<li class='warn'>The SSRF guard of {@code @Remote} calls travels on the request's {@link HttpContext}, which an
+	 * 		override of {@link RestRequest#run()} in the returned request's class may drop (by copying the request, or
+	 * 		sending it with another context), and depends on this client's connection manager, which a request bound to a different client does not use.  So an SSRF-guard-active
 	 * 		{@code @Remote} call (one without the {@link Builder#allowPrivateUrls(boolean) allowPrivateUrls} opt-in) is
 	 * 		refused through such a request, whether this method or {@link #request(String, Object, boolean)} returns it.
 	 * 		Ordinary requests are unaffected.
@@ -8149,8 +8305,8 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 	 * The behavior of this method can also be modified by specifying a different {@link RestCallHandler}.
 	 *
 	 * <h5 class='section'>Notes:</h5><ul>
-	 * 	<li class='warn'>The SSRF guard of {@code @Remote} calls depends on the request running on the calling thread,
-	 * 		which this client cannot guarantee for an override.  So a client whose class overrides this method,
+	 * 	<li class='warn'>The SSRF guard of {@code @Remote} calls travels on the request's {@code HttpContext}, which this
+	 * 		client cannot guarantee an override passes on unchanged.  So a client whose class overrides this method,
 	 * 		{@link #execute(HttpHost, HttpRequest, HttpContext)} or {@link #execute(HttpUriRequest, HttpContext)} refuses every
 	 * 		SSRF-guard-active {@code @Remote} call (one without the {@link Builder#allowPrivateUrls(boolean) allowPrivateUrls}
 	 * 		opt-in).  Ordinary requests are unaffected.
@@ -8192,13 +8348,31 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		}
 	}
 
-	// Why this client cannot guarantee the SSRF guard of @Remote calls, or null if it can.  The guard state is a
-	// thread-local, so anything that may run the request on another thread (a custom call handler, a handler bound to
-	// another client, a subclass that overrides the request dispatch) defeats it, as does a connection manager this
-	// client did not build (it has no pinned pool).
-	private String ssrfRefusal() {
+	// Why this client cannot guarantee the SSRF guard of @Remote calls, or null if it can.  A connection manager this
+	// client did not build has no pinned pool, an HttpClient other than the one the default createHttpClient() wired to
+	// it (builtGuard) does not use it, and builderRefusal says why the HttpClientBuilder may have built the client around
+	// something else.  The guard travels on each request's context, so it holds on another thread as long as the request
+	// that carries it is the one sent; but anything that may send a different request (a custom call handler, a handler
+	// bound to another client, a subclass that overrides the request dispatch: each may copy the request, or send it with
+	// another context) is refused, and these refusals are what keep such paths from going out unpinned.
+	private String ssrfRefusal(SsrfGuardConnectionManager builtGuard, String builderRefusal) {
 		var tail = "the SSRF guardrail's connect-time contract (pin-on-connect + redirect revalidation) is not in force.  ";
 		var optOut = "or set allowPrivateUrls(true) if this is an intentional local-dev/intranet target.";
+		if (ssrfGuard == null && nn(builtGuard) && ! SsrfGuardConnectionManager.canCheckWiring())
+			// HTT: only an HttpClient release whose InternalHttpClient has no connManager field, or a JVM that denies
+			// reflective access to it, gets here.
+			return "Refusing to send a policy-covered @Remote request: this RestClient cannot read the connection manager of "
+				+ "the HttpClient it built (org.apache.http.impl.client.InternalHttpClient.connManager), so it cannot confirm "
+				+ "that the client uses its SSRF-guard connection manager, and " + tail + "Use an HttpClient 4.5.x release, "
+				+ optOut;
+		if (ssrfGuard == null && nn(builtGuard))
+			return "Refusing to send a policy-covered @Remote request through an HttpClient that is not the one this RestClient "
+				+ "wired to its SSRF-guard connection manager: an overridden createHttpClient() or HttpClientBuilder.build() "
+				+ "returned another client, or a wrapper around one, which may send the request without the pinned pool, so "
+				+ tail + "Return the client super.createHttpClient() or HttpClientBuilder.build() built, unwrapped (customize it "
+				+ "through httpClientBuilder(...) instead), " + optOut;
+		if (nn(builderRefusal))
+			return builderRefusal;
 		if (ssrfGuard == null)
 			return "Refusing to send a policy-covered @Remote request through a caller-supplied HttpClient or connection "
 				+ "manager that cannot be guaranteed to honor the SSRF guardrail's connect-time contract (pin-on-connect + "
@@ -8208,7 +8382,8 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 				+ optOut;
 		if (callHandler.getClass() != BasicRestCallHandler.class)
 			return "Refusing to send a policy-covered @Remote request through a custom RestCallHandler (" + cn(callHandler)
-				+ "): it may run the request on another thread, where " + tail + "Remove the callHandler(...) setting, " + optOut;
+				+ "): it may copy the request, or send it with another context, without the SSRF guard the request carries, so "
+				+ tail + "Remove the callHandler(...) setting, " + optOut;
 		if (((BasicRestCallHandler)callHandler).client() != this)
 			return "Refusing to send a policy-covered @Remote request through a BasicRestCallHandler bound to a different "
 				+ "RestClient: it sends the request through that client's connection manager, where " + tail
@@ -8216,13 +8391,14 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		var dispatch = overriddenDispatch(getClass());
 		if (nn(dispatch))
 			return "Refusing to send a policy-covered @Remote request through a RestClient subclass (" + dispatch
-				+ "): the override may run the request on another thread, where " + tail + "Remove the override, " + optOut;
+				+ "): the override may copy the request, or send it with another context, without the SSRF guard the request "
+				+ "carries, so " + tail + "Remove the override, " + optOut;
 		return null;
 	}
 
 	// Why a guarded call cannot be sent through rc (the request createRequest(...) returned), or null if it can: a request
-	// bound to another client goes out through that client's HttpClient, and an override of RestRequest.run() may run
-	// the request on another thread.
+	// bound to another client goes out through that client's HttpClient, and an override of RestRequest.run() may copy
+	// the request, or send it with another context, without the guard it carries.
 	private String requestRefusal(RestRequest rc) {
 		if (rc.client != this)
 			return "Refusing to send a policy-covered @Remote request through a RestRequest bound to a different "
@@ -8234,8 +8410,8 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 			try {
 				x.getDeclaredMethod("run");
 				return "Refusing to send a policy-covered @Remote request through a RestRequest subclass (" + cn(x)
-					+ " overrides run()): the override may run the request on another thread, where the SSRF guardrail's "
-					+ "connect-time contract (pin-on-connect + redirect revalidation) is not in force.  Remove the override "
+					+ " overrides run()): the override may copy the request, or send it with another context, without the "
+					+ "SSRF guard the request carries, so the SSRF guardrail's connect-time contract (pin-on-connect + redirect revalidation) is not in force.  Remove the override "
 					+ "(or the createRequest(...) override that returns it), or set allowPrivateUrls(true) if this is an "
 					+ "intentional local-dev/intranet target.";
 			} catch (@SuppressWarnings("unused") NoSuchMethodException e) { /* Not declared here. */ }
@@ -8277,7 +8453,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 			var v = arg == null ? null : arg.toString();
 			if (v == null || v.trim().isEmpty())
 				throw new RemoteMetadataException(interfaceClass, "@Url parameter on " + method.getDeclaringClass().getName() + "." + method.getName() + " must not be null or blank.");
-			uri = RemoteProxyUtils.requireHttpScheme(v.trim(), allowPrivate);
+			uri = RemoteProxyUtils.requireHttpScheme(v.trim(), allowPrivate, allowedAddressRanges);
 			// A scheme-less @Url value is relative and resolved against the client root URL only.
 			if (uri.indexOf("://") == -1)
 				uri = restUrl2 + '/' + trimSlashes(uri);
@@ -8285,7 +8461,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 			// Option B: a declarative base/host override (method-level wins over interface-level).
 			var baseUrl = firstNonEmpty(rom.getBaseUrl(), rm.getBaseUrl());
 			if (ine(baseUrl)) {
-				uri = RemoteProxyUtils.requireHttpScheme(RemoteProxyUtils.combinePaths(baseUrl, fullPath), allowPrivate);
+				uri = RemoteProxyUtils.requireHttpScheme(RemoteProxyUtils.combinePaths(baseUrl, fullPath), allowPrivate, allowedAddressRanges);
 			} else {
 				uri = fullPath;
 				if (uri.indexOf("://") == -1)
@@ -8301,7 +8477,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		// the full deny-private policy, not just the http/https scheme check (Review R4: the default (no-override)
 		// path is policy-covered too once it is absolute).
 		try {
-			RemoteUrlPolicy.requireAllowedUrl(uri, allowPrivate);
+			RemoteUrlPolicy.requireAllowedUrl(uri, allowPrivate, allowedAddressRanges);
 		} catch (IllegalArgumentException e) {
 			throw new RemoteMetadataException(interfaceClass, e.getMessage());
 		}
@@ -8512,6 +8688,8 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 				var refusal = requestRefusal(rc);
 				if (nn(refusal))
 					throw new RestCallException(null, null, "%s", refusal);
+				// Carried on the request's context, so the guard holds on whichever thread the request is sent.
+				rc.ssrfGuard();
 			}
 
 			// Non-repeatable body: never retry (resending a consumed stream would corrupt the call).
@@ -8522,7 +8700,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 				RemoteUrlPolicyState.activate();
 			try {
 				res = rc.run();
-			} catch (SsrfGuardConnectionManager.ProxyRouteRefusedException e) {
+			} catch (SsrfGuardConnectionManager.GuardRefusedException e) {
 				// Reported like the other guard refusals (and other transport failures), not as a raw runtime exception.
 				throw new RestCallException(null, e, "%s", e.getMessage());
 			} catch (RestCallException e) {

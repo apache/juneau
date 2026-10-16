@@ -33,7 +33,7 @@ import org.junit.jupiter.api.*;
 /**
  * Coverage for {@link McpClient#callRaw(String, RequestParams)}: the result-type-agnostic dispatch a
  * Multi-Round-Trip-Request (SEP-2322) caller needs to receive an {@code input_required} response and echo its
- * {@code requestState}/{@code inputResponses} on a resume call (plan Phase 5, Task 14).
+ * {@code requestState}/{@code inputResponses} on a resume call.
  */
 @SuppressWarnings({
 	"resource" // Mock HttpTransport lambdas and the client(...) test-helper factory (@Owning; callers close via try-with-resources) are short-lived test fixtures.

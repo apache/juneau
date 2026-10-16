@@ -594,7 +594,7 @@ class ReactiveResponseProcessor_Test extends TestBase {
 	}
 
 	// -----------------------------------------------------------------------------------------------------------------
-	// K: the NDJSON shape writes each element as one compact JSON line (console-output custom download path).
+	// K: the NDJSON shape writes each element as one compact JSON line (a custom download path).
 	// -----------------------------------------------------------------------------------------------------------------
 
 	@Rest(serializers = JsonSerializer.class)

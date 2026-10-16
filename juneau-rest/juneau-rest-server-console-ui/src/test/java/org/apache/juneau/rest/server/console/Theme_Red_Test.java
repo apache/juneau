@@ -37,8 +37,8 @@ class Theme_Red_Test extends TestBase {
 		assertEquals(Theme.OPEN.getTokens().keySet(), Theme.RED.getTokens().keySet());
 	}
 
-	@Test void a02_tokenCount_is82_mirroringOpensPin() {
-		assertEquals(82, Theme.RED.getTokens().size());
+	@Test void a02_tokenCount_is100_mirroringOpensPin() {
+		assertEquals(100, Theme.RED.getTokens().size());
 	}
 
 	@Test void a03_name_isRed() {
@@ -47,7 +47,7 @@ class Theme_Red_Test extends TestBase {
 
 	@Test void b01_recoloredSignatureValues() {
 		var tokens = Theme.RED.getTokens();
-		assertBean(tokens, "--jc-chrome-bg,--jc-accent,--jc-link,--jc-btn-primary", "#BF2600,#FF5630,#BF2600,#BF2600");
+		assertBean(tokens, "--jc-chrome-bg,--jc-accent,--jc-link,--jc-btn-primary", "#ffd9cf,#FF5630,#BF2600,#BF2600");
 	}
 
 	@Test void b02_keptFromOpen_semanticStatusAndTagValues_areUnchanged() {

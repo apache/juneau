@@ -172,7 +172,7 @@ public final class JavaHttpTransport implements HttpTransport {
 				+ "allowPrivateUrls(true) if this is an intentional local-dev/intranet target.");
 		InetAddress pinned;
 		try {
-			pinned = RemoteUrlPolicy.selectAllowedAddress(requireHost(uri), false, RemoteUrlPolicy.AddressResolver.DEFAULT);
+			pinned = RemoteUrlPolicy.selectAllowedAddress(requireHost(uri), false, RemoteUrlPolicy.AddressResolver.DEFAULT, request.getAllowedAddressRanges());
 		} catch (UnknownHostException e) {
 			throw new TransportException("Could not resolve @Remote request host: " + uri.getHost(), e);
 		} catch (IllegalArgumentException e) {

@@ -38,7 +38,8 @@ import org.junit.jupiter.api.condition.*;
 import com.sun.net.httpserver.*;
 
 /**
- * The real-browser, real-server canary for Gap 1 end to end: a column hidden through the View Settings dialog
+ * The real-browser, real-server canary for View Settings restore end to end: a column hidden through the View Settings
+ * dialog
  * <i>stays</i> hidden after a real page reload, in both server-mode and client-mode tables.
  *
  * <p>

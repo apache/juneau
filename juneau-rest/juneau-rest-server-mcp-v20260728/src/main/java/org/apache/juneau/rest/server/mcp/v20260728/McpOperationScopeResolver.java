@@ -28,8 +28,8 @@ import java.util.*;
  *
  * <p>
  * The default resolver is a <b>static per-operation map</b> populated via
- * {@link McpResourceServerConfig#addOperationScope(String, String, String...)} &mdash; sufficient for 10.0 per the
- * READY-312f settled premise.  This interface is the seam a future <em>dynamic</em> resolver (e.g. one inspecting
+ * {@link McpResourceServerConfig#addOperationScope(String, String, String...)} &mdash; sufficient for 10.0.
+ * This interface is the seam a future <em>dynamic</em> resolver (e.g. one inspecting
  * {@link McpOperationContext#params() params}) could plug into via
  * {@link McpResourceServerConfig#setOperationScopeResolver(McpOperationScopeResolver)}; that dynamic capability is
  * deliberately not built for 10.0.

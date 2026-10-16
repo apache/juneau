@@ -16,7 +16,8 @@
  */
 
 /*
- * view-settings-reload-browser.cjs - real-browser, real-server prober for Gap 1 end to end: a column hidden through
+ * view-settings-reload-browser.cjs - real-browser, real-server prober for View Settings restore end to end: a column
+ * hidden through
  * the View Settings dialog STAYS hidden after a real page reload, in both data modes.  Real DataTables, real
  * juneau-views.js / juneau-config.js, real localStorage (same http:// origin across the reload), real dialog clicks.
  *

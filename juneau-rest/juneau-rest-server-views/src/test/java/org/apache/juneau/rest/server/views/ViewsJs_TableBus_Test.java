@@ -25,7 +25,7 @@ import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
 
 /**
- * The datatables card type's bus surface (message bus addendum, spec §4.2-§4.5, §5.3, §5.4): the five publishers, the
+ * The datatables card type's bus surface: the five publishers, the
  * {@code cmd:<id>} ops, the {@code filter} role, and the per-card gating of {@code selection}/{@code detail}/{@code bulk}.
  * Runs {@code table-bus.cjs} through {@link BusHarness}.
  */
@@ -288,13 +288,13 @@ class ViewsJs_TableBus_Test extends TestBase {
 		assertEquals(1, m.get("published"));
 		assertEquals("{\"schemaVersion\":1,\"viewId\":\"changes\",\"action\":\"close\",\"succeeded\":[\"c-17\"],\"notFound\":[\"c-30\"],\"failed\":[{\"id\":\"c-21\",\"status\":409}]}", m.get("payload"));
 		assertEquals("[\"c-21\"]", m.get("selected"), "a failed id stays selected for a retry");
-		assertEquals("[1]", m.get("bulkPublishedAfterToast"), "bulk: goes out after its summary toast (spec 4.4)");
+		assertEquals("[1]", m.get("bulkPublishedAfterToast"), "bulk: goes out after its summary toast");
 	}
 
-	@Test void n02_aggregateBulkRunReportsZeroForAFailureWithNoStatus() {
+	@Test void n02_aggregateBulkRunReportsZeroStatusForEveryFailure() {
 		var m = map(report.get("bulkAggregate"));
 		assertEquals(1, m.get("published"));
-		assertEquals("{\"schemaVersion\":1,\"viewId\":\"changes\",\"action\":\"close\",\"succeeded\":[\"c-17\"],\"notFound\":[],\"failed\":[{\"id\":\"c-21\",\"status\":409},{\"id\":\"c-30\",\"status\":0}]}", m.get("payload"));
+		assertEquals("{\"schemaVersion\":1,\"viewId\":\"changes\",\"action\":\"close\",\"succeeded\":[\"c-17\"],\"notFound\":[],\"failed\":[{\"id\":\"c-21\",\"status\":0},{\"id\":\"c-30\",\"status\":0}]}", m.get("payload"));
 		assertEquals("[1]", m.get("bulkPublishedAfterToast"));
 	}
 

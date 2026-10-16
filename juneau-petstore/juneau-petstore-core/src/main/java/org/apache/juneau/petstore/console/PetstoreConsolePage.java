@@ -98,7 +98,7 @@ public abstract class PetstoreConsolePage extends BasicRestServlet {
 		// assetUrl('/console/petstore.js') versions the shared page script served by PetstoreConsoleResource.
 		return ConsoleFreemarkerMixin.create().basePath(TEMPLATES).chromeTemplate("base.ftlh")
 			.adopterAssets(PetstoreConsolePage.class.getClassLoader(), "org/apache/juneau/petstore")
-			.cardType(new InventoryGaugeCardType()).build();
+			.cardType(new InventoryGaugeCardType()).requirePacks("charts").build();
 	}
 
 	/**

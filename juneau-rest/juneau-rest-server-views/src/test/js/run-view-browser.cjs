@@ -216,11 +216,11 @@ kase('a09', async page => {
 		host.id = 'hooked';
 		document.body.appendChild(host);
 		window.__clicks = [];
-		const rv = window.JuneauViews.runView.create(host, { id: 'hooked', rawHref: '#raw-L{line}', onBlockClick: i => window.__clicks.push(i) });
+		const rv = window.JuneauViews.runView.create(host, { id: 'hooked', rawHref: '#raw-O{offset}', onBlockClick: i => window.__clicks.push(i) });
 		rv.append([
 			{ ev: 'step', id: 'build', title: 'Build' },
 			{ ev: 'test', step: 'build', fw: 'surefire', suite: 'FooTest', name: 'a', status: 'pass' },
-			{ ev: 'test', step: 'build', fw: 'surefire', suite: 'FooTest', name: 'b', status: 'fail', rawLine: 12 },
+			{ ev: 'test', step: 'build', fw: 'surefire', suite: 'FooTest', name: 'b', status: 'fail', rawOffset: 120 },
 			{ ev: 'end', id: 'build', status: 'fail' },
 			{ ev: 'done', status: 'fail' }]);
 	});

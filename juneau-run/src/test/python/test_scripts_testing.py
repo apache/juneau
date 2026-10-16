@@ -77,6 +77,12 @@ class CleanRunEnvTest(unittest.TestCase):
             self.assertEqual(os.environ["RUN_MARKERS"], "1")
             self.assertIs(sys.modules.get("juneau_run"), saved)
 
+    def test_clean_run_env_disables_history_and_restores(self):
+        with mock.patch.dict(os.environ, {"JUNEAU_RUN_HISTORY": "1"}):
+            with testing.clean_run_env():
+                self.assertEqual(os.environ.get("JUNEAU_RUN_HISTORY"), "0")
+            self.assertEqual(os.environ["JUNEAU_RUN_HISTORY"], "1")
+
 
 class FakeToolTest(unittest.TestCase):
     def test_logs_argv_prints_and_exits_with_the_code(self):

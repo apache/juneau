@@ -33,7 +33,7 @@ import org.apache.juneau.rest.server.servlet.*;
 import org.junit.jupiter.api.*;
 
 /**
- * Drives {@link BusEventsMixin} through a {@link MockRestClient} (spec §11.3, §12): the session POST's grant and
+ * Drives {@link BusEventsMixin} through a {@link MockRestClient}: the session POST's grant and
  * refusals, the SSE stream's resync and live frames, the 404 cases, and the boundary checks.
  */
 @SuppressWarnings({
@@ -258,7 +258,7 @@ class BusEventsMixin_Session_Test extends TestBase {
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
-	// c) BusPolicy.boundary: the LoopbackBoundary checks
+	// c) BusPolicy.boundary: the LoopbackBoundary and CsrfBoundary checks
 	//------------------------------------------------------------------------------------------------------------------
 
 	private static void useBoundary() {
@@ -292,5 +292,76 @@ class BusEventsMixin_Session_Test extends TestBase {
 			.header("Accept", "text/event-stream").header("Host", "evil.example:8790").run().assertStatus(421);
 		C.get(BusEventsMixin.STREAM_PATH.replace("{sessionId}", "0".repeat(64))).userPrincipal(JB)
 			.header("Accept", "text/event-stream").header("Host", AUTHORITY).run().assertStatus(404);
+	}
+
+	@Test void c04_sessionPostWithMethodParamJudgedAsWrite() throws Exception {
+		useBoundary();
+		// A method parameter cannot turn the POST into a read: the request line is the floor.
+		var text = C.post(BusEventsMixin.SESSION_PATH + "?method=GET").userPrincipal(JB).contentString(body("sse", "ops.jobs"))
+			.contentType("application/json").header("Accept", "application/json")
+			.header("Host", AUTHORITY).header("Origin", "http://" + AUTHORITY).header("Sec-Fetch-Site", "same-origin")
+			.run().assertStatus(403).getContent().asString();
+		assertTrue(text.contains("bus:refused"), text);
+		assertTrue(R.bus.sessions().isEmpty());
+		// A GET claiming DELETE on the stream is judged as the write it claims, so it needs an Origin.
+		C.get(BusEventsMixin.STREAM_PATH.replace("{sessionId}", "0".repeat(64)) + "?method=DELETE").userPrincipal(JB)
+			.header("Accept", "text/event-stream").header("Host", AUTHORITY).run().assertStatus(403);
+	}
+
+	private static final String APP_HOST = "app.example";
+	private static final String APP_ORIGIN = "http://" + APP_HOST;
+
+	private static CsrfBoundary useCsrfBoundary() {
+		R.bus.close();
+		var b = CsrfBoundary.create().tokens(CsrfTokens.perProcess()).allowedHosts(APP_HOST).build();
+		use(policy().boundary(b).build());
+		return b;
+	}
+
+	/** A token the boundary accepts: a per-process strategy never reads the request it is handed. */
+	private static String tokenOf(CsrfBoundary b) {
+		var req = (jakarta.servlet.http.HttpServletRequest) java.lang.reflect.Proxy.newProxyInstance(
+			jakarta.servlet.http.HttpServletRequest.class.getClassLoader(), new Class<?>[]{jakarta.servlet.http.HttpServletRequest.class},
+			(proxy, method, args) -> method.getReturnType() == boolean.class ? (Object) false : null);
+		return b.tokenFor(req);
+	}
+
+	private static MockRestRequest csrfPost(String origin) throws Exception {
+		return C.post(BusEventsMixin.SESSION_PATH).userPrincipal(JB).contentString(body("sse", "ops.jobs"))
+			.contentType("application/json").header("Accept", "application/json")
+			.header("Host", APP_HOST).header("Origin", origin);
+	}
+
+	@Test void c05_csrfBoundaryAcceptedAsPolicy() throws Exception {
+		var b = useCsrfBoundary();
+		assertSame(b, R.bus.policy().boundary());
+
+		var ok = csrfPost(APP_ORIGIN).header("X-Csrf-Token", tokenOf(b)).run().assertStatus(200).getContent().asString();
+		assertTrue(ok.contains("sessionId"), ok);
+
+		var refused = JsonMap.ofString(csrfPost("http://evil.example").header("X-Csrf-Token", tokenOf(b)).run()
+			.assertStatus(403).getContent().asString(), JsonParser.DEFAULT);
+		assertEquals("bus:refused", refused.getString("code"));
+		assertEquals(Set.of("code", "message"), refused.keySet(), "the reason name is not part of the bus refusal");
+		assertFalse(refused.getString("message").contains("evil.example"), "the presented Origin is never echoed");
+		assertEquals(1, R.bus.sessions().size());
+	}
+
+	@Test void c05b_sameOriginPostWithoutTokenRefused() throws Exception {
+		useCsrfBoundary();
+		var text = csrfPost(APP_ORIGIN).run().assertStatus(403).getContent().asString();
+		assertTrue(text.contains("bus:refused"), text);
+		assertTrue(R.bus.sessions().isEmpty());
+	}
+
+	@Test void c06_streamAppliesCsrfBoundary() throws Exception {
+		useCsrfBoundary();
+		var stream = BusEventsMixin.STREAM_PATH.replace("{sessionId}", "0".repeat(64));
+		// allowedHosts applies to the read as well.
+		C.get(stream).userPrincipal(JB).header("Accept", "text/event-stream").header("Host", "rebind.example").run().assertStatus(421);
+		C.get(stream).userPrincipal(JB).header("Accept", "text/event-stream").header("Host", APP_HOST).run().assertStatus(404);
+		// A read claiming a write gets the write checks.
+		C.get(stream + "?method=DELETE").userPrincipal(JB).header("Accept", "text/event-stream").header("Host", APP_HOST)
+			.header("Origin", "http://evil.example").run().assertStatus(403);
 	}
 }

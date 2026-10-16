@@ -15,8 +15,8 @@
  * limitations under the License.
  */
 /*
- * bus-bridge-ws.cjs - Node harness for the stock WebSocket source (spec §11.3 step 2b, §11.6) and the shell hook
- * JuneauViews.bus.wiring.attachBridges (§11.5). A FakeWebSocket records construction URLs and sent text and lets
+ * bus-bridge-ws.cjs - Node harness for the stock WebSocket source and the shell hook
+ * JuneauViews.bus.wiring.attachBridges. A FakeWebSocket records construction URLs and sent text and lets
  * the harness deliver messages and close codes. Every assertion lives in ViewsJs_BusBridgeWs_Test.
  *
  *   Usage:  node bus-bridge-ws.cjs <juneau-bus.js>

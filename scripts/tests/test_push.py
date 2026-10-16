@@ -30,7 +30,7 @@ test_off_path_never_invokes_subprocess pins that all the way down to the subproc
 
 commit_and_push()'s tests build REAL temporary git repositories (a bare repo standing in for
 the GitHub remote, and a real clone of it) and let real git run against them, following the
-same pattern as test_reset_side_clones.py and for the same reason: this function's entire risk
+same pattern as the board repo's reset-side-clones tests and for the same reason: this function's entire risk
 is real git behavior (does a push actually move the remote ref? does a refused commit actually
 leave the index untouched?), which a mocked subprocess would let pass while proving nothing.
 Temp repos get their identity and config isolation from environment variables, never `git
@@ -40,8 +40,13 @@ config`. Nothing here ever touches the real juneau checkout or a real remote.
 from __future__ import annotations
 
 import argparse
+import builtins
+import hashlib
 import importlib.util
+import inspect
+import io
 import os
+import pathlib
 import subprocess
 from pathlib import Path
 
@@ -72,7 +77,7 @@ def _args(tracker_audit: bool) -> argparse.Namespace:
 
 # ---------------------------------------------------------------------------------------
 # Real-git fixtures for commit_and_push() / check_upstream_changes() / get_staged_paths() /
-# check_unreviewed_changes(). Mirrors test_reset_side_clones.py's hermetic_git_env and
+# check_unreviewed_changes(). Mirrors the board repo's reset-side-clones tests' hermetic_git_env and
 # _run/_commit helpers.
 # ---------------------------------------------------------------------------------------
 @pytest.fixture(autouse=True)
@@ -300,10 +305,9 @@ class TestRunTrackerAuditGateExitCodeMapping:
     def test_invokes_todo_status_audit_script_via_current_interpreter(self, push_module, monkeypatch):
         captured = {}
 
-        def _fake_run(cmd, cwd, check):
+        def _fake_run(cmd, cwd, **kwargs):
             captured["cmd"] = cmd
             captured["cwd"] = cwd
-            captured["check"] = check
             return subprocess.CompletedProcess(args=cmd, returncode=0)
 
         monkeypatch.setattr(push_module.subprocess, "run", _fake_run)
@@ -311,7 +315,6 @@ class TestRunTrackerAuditGateExitCodeMapping:
         push_module.run_tracker_audit_gate(Path("/repo"), 1)
 
         assert captured["cwd"] == Path("/repo")
-        assert captured["check"] is False
         assert captured["cmd"][0] == push_module.sys.executable
         # The audit script and the tracker it scans both moved out of this repo on 2026-08-30,
         # consolidated into ~/Project Work/scripts/ and parameterized by --project instead of
@@ -917,6 +920,26 @@ class TestResolveCommitMessage:
             push_module.resolve_commit_message(None)
         assert e.value.code == 1
 
+    def test_empty_commit_message_fails_with_exit_1(self, push_module, monkeypatch, capsys):
+        prompt = push_module.toolkit("prompt")
+        asked = []
+        real = prompt.text
+        monkeypatch.setattr(prompt, "text", lambda msg, **k: asked.append(msg) or real(msg, **k))
+        monkeypatch.setattr("builtins.input", lambda _prompt: "")
+        with pytest.raises(SystemExit) as e:
+            push_module.resolve_commit_message(None)
+        assert e.value.code == 1
+        assert asked == ["Commit message: "]
+        assert "commit message cannot be empty" in capsys.readouterr().out
+
+    def test_ctrl_c_at_the_prompt_exits_1(self, push_module, monkeypatch):
+        def interrupted(_prompt):
+            raise KeyboardInterrupt
+        monkeypatch.setattr("builtins.input", interrupted)
+        with pytest.raises(SystemExit) as e:
+            push_module.resolve_commit_message(None)
+        assert e.value.code == 1
+
     def test_eof_exits(self, push_module, monkeypatch):
         def _eof(_prompt):
             raise EOFError
@@ -924,3 +947,265 @@ class TestResolveCommitMessage:
         with pytest.raises(SystemExit) as e:
             push_module.resolve_commit_message(None)
         assert e.value.code == 1
+
+
+# ---------------------------------------------------------------------------------------
+# Characterization: the test step's command, the history .tsv call, and the refusal guard's
+# exact text, pinned before the toolkit adoption.
+# ---------------------------------------------------------------------------------------
+def test_build_test_command_has_no_timing_log(push_module):
+    args = argparse.Namespace(js_tests=False, no_js_tests=False)
+    assert push_module.build_test_command("t.py", args) == [push_module.sys.executable, "t.py", "--full"]
+    assert push_module.build_test_command("t.py", argparse.Namespace(js_tests=True, no_js_tests=False))[-1] == \
+        "--js-tests"
+
+
+def _stub_push_flow(push_module, monkeypatch, *, tests_pass, test_py=True):
+    """Every gate and side effect of push.main() replaced; returns the _append_test_run_history calls."""
+    calls = []
+    for name in ("play_sound", "run_timing_report", "verify_starter_repos", "verify_apache_identity"):
+        monkeypatch.setattr(push_module, name, lambda *a, **k: True)
+    monkeypatch.setattr(push_module, "prompt_pgp_passphrase", lambda *a, **k: None)
+    monkeypatch.setattr(push_module, "run_command",
+                        lambda cmd, *a, **k: tests_pass if cmd == ["mvn", "test"] else True)
+    monkeypatch.setattr(push_module, "_append_test_run_history", lambda *a: calls.append(a))
+    monkeypatch.setattr(push_module, "current_branch", lambda root: "main")
+    monkeypatch.setenv("JUNEAU_SCRIPTS_QUIET", "1")    # the session's bell and sound
+    monkeypatch.setattr(push_module, "run_test_script",
+                        lambda cmd, cwd, run, **k: subprocess.CompletedProcess(cmd, 0 if tests_pass else 1))
+    if not test_py:
+        monkeypatch.setattr(push_module.Path, "exists", lambda self: self.name != "test.py" and Path.is_file(self))
+    monkeypatch.setattr(push_module.sys, "argv", ["push.py", "--test-only"])
+    return calls
+
+
+@pytest.mark.parametrize("test_py", [True, False], ids=["test.py", "mvn-fallback"])
+def test_append_test_run_history_is_called_once_after_a_passing_test_step(push_module, monkeypatch, test_py):
+    calls = _stub_push_flow(push_module, monkeypatch, tests_pass=True, test_py=test_py)
+    assert push_module.main() == 0
+    assert len(calls) == 1
+    root, wall = calls[0]
+    assert root == Path(push_module.__file__).resolve().parent.parent and isinstance(wall, int)
+
+
+@pytest.mark.parametrize("test_py", [True, False], ids=["test.py", "mvn-fallback"])
+def test_append_test_run_history_is_not_called_after_a_failing_test_step(push_module, monkeypatch, test_py):
+    calls = _stub_push_flow(push_module, monkeypatch, tests_pass=False, test_py=test_py)
+    assert push_module.main() == 1
+    assert calls == []
+
+
+APPEND_TEST_RUN_HISTORY_SHA256 = "c8570df4e5c1cce64d15f68b1fc78232d51422dfedad204758d7686145381975"
+
+
+def test_append_test_run_history_is_unchanged_and_the_only_tsv_writer(push_module, monkeypatch):
+    """The tsv writer is byte-identical, and a stubbed --test-only run opens nothing at the real tsv path."""
+    source = inspect.getsource(push_module._append_test_run_history)
+    assert hashlib.sha256(source.encode()).hexdigest() == APPEND_TEST_RUN_HISTORY_SHA256
+    _stub_push_flow(push_module, monkeypatch, tests_pass=True)
+    tsv = (Path(push_module.__file__).resolve().parent.parent / "juneau-integration-tests"
+           / "test-run-history.tsv").resolve()
+    opened = []
+
+    def spy(real):
+        def wrapped(*args, **kwargs):
+            target = args[0] if args else kwargs.get("file")
+            if isinstance(target, (str, bytes, os.PathLike)):
+                try:
+                    opened.append(Path(os.fsdecode(target)).resolve())
+                except (OSError, ValueError):
+                    pass
+            return real(*args, **kwargs)
+        return wrapped
+
+    monkeypatch.setattr(builtins, "open", spy(builtins.open))
+    monkeypatch.setattr(io, "open", spy(io.open))
+    monkeypatch.setattr(os, "open", spy(os.open))
+    monkeypatch.setattr(pathlib.Path, "open", spy(pathlib.Path.open))
+    assert push_module.main() == 0
+    assert tsv not in opened
+
+
+def _said(push_module, monkeypatch):
+    lines = []
+    monkeypatch.setattr(push_module, "say", lambda text="", level="info": lines.append(text))
+    monkeypatch.setattr(push_module, "play_sound", lambda success=True: None)
+    return lines
+
+
+class TestRefusalGuardCharacterization:
+    def test_refusal_guard_text_is_exact(self, push_module, repo, remote_repo, git_spy, monkeypatch):
+        (repo / "a b.txt").write_text("tracked\n", encoding="utf-8")
+        _commit(repo, "add a b")
+        _run(repo, "git", "push")
+        (repo / "reviewed.txt").write_text("staged and reviewed\n", encoding="utf-8")
+        _run(repo, "git", "add", "reviewed.txt")
+        (repo / "a b.txt").write_text("mid-edit\n", encoding="utf-8")
+        (repo / "new.txt").write_text("untracked\n", encoding="utf-8")
+        head_before = _run(repo, "git", "rev-parse", "HEAD")
+        remote_before = _run(remote_repo, "git", "rev-parse", "master")
+        git_spy.clear()
+        lines = _said(push_module, monkeypatch)
+
+        assert push_module.commit_and_push(repo, "message", 4) == ("error", 4)
+
+        assert lines == [
+            "\n🔍 Checking for upstream changes...",
+            "\n❌ ERROR: The working tree has unreviewed changes -- staging is how this script knows something has "
+            "been reviewed, and these paths are not staged:",
+            "   a b.txt",
+            "   new.txt",
+            "   Why: everything this pushes should be something you've read, not just",
+            "   something that happened to be in the tree.",
+            "\n   Nothing was committed or pushed. Stage each path above if you've reviewed",
+            "   it, or set it aside for this run and restore it after:",
+            "     git stash push -- 'a b.txt' new.txt",
+            "     git stash pop",
+        ]
+        assert _run(repo, "git", "rev-parse", "HEAD") == head_before
+        assert _run(remote_repo, "git", "rev-parse", "master") == remote_before
+        assert not any(argv[:2] in (["git", "commit"], ["git", "push"]) for argv in git_spy)
+
+    def test_refusal_guard_ignores_gitignored_untracked_files(self, push_module, repo, remote_repo, monkeypatch):
+        (repo / ".gitignore").write_text("build.log\n", encoding="utf-8")
+        _run(repo, "git", "add", ".gitignore")
+        (repo / "build.log").write_text("noise\n", encoding="utf-8")
+        lines = _said(push_module, monkeypatch)
+
+        status, _ = push_module.commit_and_push(repo, "add gitignore", 4)
+
+        assert status == "ok"
+        assert not any("unreviewed changes" in line for line in lines)
+
+    def test_refusal_guard_fails_closed_when_git_cannot_list(self, push_module, repo, remote_repo, monkeypatch):
+        (repo / "reviewed.txt").write_text("staged and reviewed\n", encoding="utf-8")
+        _run(repo, "git", "add", "reviewed.txt")
+        head_before = _run(repo, "git", "rev-parse", "HEAD")
+
+        def broken(repo_dir):
+            raise OSError("git is gone")
+        monkeypatch.setattr(push_module, "check_unreviewed_changes", broken)
+        lines = _said(push_module, monkeypatch)
+
+        assert push_module.commit_and_push(repo, "message", 4) == ("error", 4)
+        assert lines[1].startswith("\n❌ ERROR: Could not check for unreviewed changes")
+        assert _run(repo, "git", "rev-parse", "HEAD") == head_before
+
+
+# ---------------------------------------------------------------------------------------
+# The git readers come from the juneau_scripts toolkit; the refusal guard around them is unchanged.
+# ---------------------------------------------------------------------------------------
+@pytest.fixture
+def toolkit_git(push_module):
+    return push_module.toolkit("git")
+
+
+def test_staged_paths_come_from_the_toolkit(push_module, toolkit_git, monkeypatch):
+    seen = []
+    monkeypatch.setattr(toolkit_git, "staged_paths", lambda repo: seen.append(repo) or ["a b.txt"])
+    assert push_module.get_staged_paths(Path("/r")) == ["a b.txt"]
+    assert seen == [Path("/r")]
+
+
+def test_unreviewed_changes_are_the_toolkits_unstaged_then_untracked(push_module, toolkit_git, monkeypatch):
+    monkeypatch.setattr(toolkit_git, "unstaged_paths", lambda repo: ["m.txt"])
+    monkeypatch.setattr(toolkit_git, "untracked_paths", lambda repo: ["new.txt"])
+    assert push_module.check_unreviewed_changes(Path("/r")) == ["m.txt", "new.txt"]
+
+
+def test_upstream_check_uses_ahead_behind_with_fetch(push_module, toolkit_git, monkeypatch):
+    calls = []
+    answers = iter([(2, 1, None), (None, None, "no upstream"), (None, None, "fatal: unable to access")])
+    monkeypatch.setattr(toolkit_git, "ahead_behind", lambda repo, **k: calls.append((repo, k)) or next(answers))
+    assert push_module.check_upstream_changes(Path("/r")) == (2, 1, None)
+    assert push_module.check_upstream_changes(Path("/r")) == (None, None, None)
+    assert push_module.check_upstream_changes(Path("/r")) == (None, None, "Git command failed: fatal: unable to access")
+    assert calls == [(Path("/r"), {"fetch": True})] * 3
+
+
+def test_upstream_check_reports_a_git_error_instead_of_raising(push_module, toolkit_git, monkeypatch):
+    def broken(repo, **k):
+        raise toolkit_git.GitError(["git", "rev-parse"], toolkit_git.Result(False, 128, err="not a repo"))
+    monkeypatch.setattr(toolkit_git, "ahead_behind", broken)
+    ahead, behind, error = push_module.check_upstream_changes(Path("/r"))
+    assert (ahead, behind) == (None, None) and error.startswith("Git command failed: git rev-parse failed")
+
+
+@pytest.mark.parametrize(("branch", "head", "expected"), [
+    ("main", "abc1234", "main"), (None, "abc1234", "HEAD"), (None, None, "unknown")])
+def test_current_branch_falls_back_to_unknown(push_module, toolkit_git, monkeypatch, branch, head, expected):
+    monkeypatch.setattr(toolkit_git, "current_branch", lambda repo: branch)
+    monkeypatch.setattr(toolkit_git, "short_head", lambda repo: head)
+    assert push_module.current_branch(Path("/r")) == expected
+
+
+def test_current_branch_on_a_detached_head_is_still_head(push_module, repo):
+    _run(repo, "git", "checkout", "-q", "--detach")
+    assert push_module.current_branch(repo) == "HEAD"
+
+
+def test_the_identity_is_read_through_the_toolkit(push_module, toolkit_git, monkeypatch, capsys):
+    monkeypatch.setattr(toolkit_git, "user_email", lambda repo: None)
+    assert push_module.verify_apache_identity(Path("/r")) is False
+    assert "user.email = '(unset)'" in capsys.readouterr().out
+    monkeypatch.setattr(toolkit_git, "user_email", lambda repo: push_module.REQUIRED_GIT_EMAIL)
+    assert push_module.verify_apache_identity(Path("/r")) is True
+
+
+@pytest.mark.parametrize("reader", ["get_staged_paths", "check_unreviewed_changes"])
+def test_refusal_guard_fails_closed_on_a_git_error(push_module, toolkit_git, repo, monkeypatch, reader):
+    (repo / "reviewed.txt").write_text("staged and reviewed\n", encoding="utf-8")
+    _run(repo, "git", "add", "reviewed.txt")
+    head_before = _run(repo, "git", "rev-parse", "HEAD")
+
+    def broken(repo_dir):
+        raise toolkit_git.GitError(["git", "diff"], toolkit_git.Result(False, 128, err="boom"))
+    monkeypatch.setattr(push_module, reader, broken)
+    lines = _said(push_module, monkeypatch)
+
+    assert push_module.commit_and_push(repo, "message", 4) == ("error", 4)
+    assert lines[1].startswith("\n❌ ERROR: Could not check ")
+    assert _run(repo, "git", "rev-parse", "HEAD") == head_before
+
+
+# ---------------------------------------------------------------------------------------
+# The opt-in gates run through the toolkit's run.gate; each keeps its own exit-code contract.
+# ---------------------------------------------------------------------------------------
+def _gate_exits(push_module, monkeypatch, returncode):
+    monkeypatch.setattr(push_module, "_python310", lambda: push_module.sys.executable)
+    monkeypatch.setattr(push_module, "current_branch", lambda root: "master")
+    monkeypatch.setattr(push_module.subprocess, "run",
+                        lambda cmd, *a, **k: subprocess.CompletedProcess(cmd, returncode))
+
+
+@pytest.mark.parametrize(("returncode", "expected"), [(0, "pass"), (2, "fail"), (3, "skip"), (1, "error"),
+                                                      (77, "error")])
+def test_sonar_gate_maps_0_2_3_and_other_to_error(push_module, monkeypatch, returncode, expected):
+    _gate_exits(push_module, monkeypatch, returncode)
+    assert push_module.run_sonarqube_gate(Path("/repo"), 1) == expected
+
+
+@pytest.mark.parametrize(("returncode", "expected"), [(0, "pass"), (1, "fail"), (2, "error"), (3, "error"),
+                                                      (77, "error")])
+def test_tracker_gate_maps_0_pass_1_fail_other_error(push_module, monkeypatch, returncode, expected):
+    _gate_exits(push_module, monkeypatch, returncode)
+    assert push_module.run_tracker_audit_gate(Path("/repo"), 1) == expected
+
+
+def test_the_gates_go_through_the_toolkit_gate(push_module, monkeypatch):
+    run = push_module.toolkit("run")
+    seen = []
+    real = run.gate
+
+    def spy(cmd, **kw):
+        seen.append({k: kw.get(k) for k in ("title", "id", "label", "cwd", "codes")})
+        return real(cmd, **kw)
+    monkeypatch.setattr(run, "gate", spy)
+    _gate_exits(push_module, monkeypatch, 0)
+    push_module.run_sonarqube_gate(Path("/repo"), 1)
+    push_module.run_tracker_audit_gate(Path("/repo"), 1)
+    assert seen == [
+        {"title": "SonarQube gate", "id": "sonar", "label": "Sonar", "cwd": Path("/repo"), "codes": None},
+        {"title": "Tracker audit", "id": "tracker", "label": "Tracker", "cwd": Path("/repo"),
+         "codes": {0: "pass", 1: "fail"}},
+    ]

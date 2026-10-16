@@ -234,4 +234,74 @@ class ThemeDirective_Test extends TestBase {
 		assertEquals(1, count(body, "juneau-theme-gray.css"), () -> body);
 		assertFalse(body.contains("html:root{"), () -> body);
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// f) nameless <@theme>: seeds from the page theme (console theme=, else PageSpec theme, else open)
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Rest(mixins=FreemarkerMixin.class, renderResponseStackTraces="true")
+	public static class F_NamelessHost extends BasicRestServlet {
+		private static final long serialVersionUID = 1L;
+		@Bean public FreemarkerMixin freemarker() { return ConsoleFreemarkerMixin.create().basePath("/templates/").build(); }
+		@RestGet(path="/plain")
+		public View plain(RestRequest req) {
+			return PageSpec.create().template("admin/theme-nameless.ftlh").view(req);
+		}
+		@RestGet(path="/console-attr")
+		public View consoleAttr(RestRequest req) {
+			return PageSpec.create().template("admin/theme-nameless-console-attr.ftlh").view(req);
+		}
+		@RestGet(path="/spec-gray")
+		public View specGray(RestRequest req) {
+			return PageSpec.create().theme("gray").template("admin/theme-nameless.ftlh").view(req);
+		}
+		@RestGet(path="/named-differs")
+		public View namedDiffers(RestRequest req) {
+			return PageSpec.create().theme("open").template("admin/page-merge-theme.ftlh").view(req);
+		}
+		@RestGet(path="/empty-name")
+		public View emptyName(RestRequest req) {
+			return PageSpec.create().template("admin/theme-empty-name.ftlh").view(req);
+		}
+	}
+
+	private static String fget(String path, int status) throws Exception {
+		try (var c = MockRestClient.buildLax(F_NamelessHost.class); var rsp = c.get(path).run()) {
+			rsp.assertStatus(status);
+			return rsp.getContent().asString();
+		}
+	}
+
+	@Test void f01_nameless_noPageTheme_seedsOpen() throws Exception {
+		var body = fget("/plain", 200);
+		assertEquals(1, count(body, "juneau-theme-open.css"), () -> body);
+		assertFalse(body.contains("html:root{"), () -> body);
+		assertPage(body).isValid().hasTheme("open");
+	}
+
+	@Test void f02_nameless_underConsoleThemeAttr_seedsThatTheme_plusOverrides() throws Exception {
+		var body = fget("/console-attr", 200);
+		assertEquals(1, count(body, "juneau-theme-light-brown.css"), () -> body);
+		assertTrue(body.contains("--jc-link:#754d16;"), () -> body);  // the light-brown seed, not open's
+		assertTrue(body.contains("--jc-accent-selected:#112233;"), () -> body);  // the nested override on top
+		assertPage(body).isValid().hasTheme("light-brown");
+	}
+
+	@Test void f03_nameless_withPageSpecTheme_inheritsIt_noConflict() throws Exception {
+		var body = fget("/spec-gray", 200);
+		assertEquals(1, count(body, "juneau-theme-gray.css"), () -> body);
+		assertFalse(body.contains("conflicts with"), () -> body);
+		assertPage(body).isValid().hasTheme("gray");
+	}
+
+	@Test void f04_named_differentFromPageSpecTheme_stillConflicts() throws Exception {
+		var body = fget("/named-differs", 500);
+		assertTrue(body.contains(
+			"PageSpec theme 'open' conflicts with <@theme name='light-brown'>; remove name= from <@theme> to inherit the page theme."), () -> body);
+	}
+
+	@Test void f05_emptyName_isStillRejected() throws Exception {
+		var body = fget("/empty-name", 500);
+		assertTrue(body.contains("<@theme> name= must not be empty; omit name= to inherit the page theme."), () -> body);
+	}
 }

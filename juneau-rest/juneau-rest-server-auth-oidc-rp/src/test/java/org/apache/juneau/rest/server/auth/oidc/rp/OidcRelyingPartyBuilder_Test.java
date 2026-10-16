@@ -140,7 +140,7 @@ class OidcRelyingPartyBuilder_Test extends TestBase {
 	// F: stateNonceTtl (0, MAX_TTL] cap enforced on a site that runs for CUSTOM stores + loginStateStore hook.
 	// -----------------------------------------------------------------------------------------------------------------
 
-	// A TTL-oblivious no-op store, constructed independently of any TTL value (S1): it does NOT implement the
+	// A TTL-oblivious no-op store, constructed independently of any TTL value: it does NOT implement the
 	// (0, MAX_TTL] cap, so a rejection with this store injected proves the cap comes from the builder side, not
 	// from the default InMemoryLoginStateStore constructor (which is skipped when a custom store is supplied).
 	private static final LoginStateStore NOOP_STORE = new LoginStateStore() {
@@ -150,8 +150,8 @@ class OidcRelyingPartyBuilder_Test extends TestBase {
 
 	/**
 	 * Over-30-min TTL rejected even when a TTL-oblivious custom store is injected — proves the cap runs on the
-	 * custom-store path (Phase 2 gate).  On main the cap lives only in the default impl ctor, which a custom
-	 * store skips, so this over-TTL config would build successfully → gate red.
+	 * custom-store path.  Otherwise the cap would live only in the default impl ctor, which a custom
+	 * store skips, so this over-TTL config would build successfully.
 	 */
 	@Test void f01_stateNonceTtl_over30Min_rejected_customStorePath() {
 		assertThrows(IllegalArgumentException.class,
@@ -180,9 +180,9 @@ class OidcRelyingPartyBuilder_Test extends TestBase {
 	}
 
 	/**
-	 * Over-30-min TTL rejected on the DEFAULT-store path too (S5 throw-site test).  Same
-	 * {@link IllegalArgumentException} type as on main; only the throw <i>site</i> moves (impl ctor at
-	 * {@code build()} &rarr; the {@code stateNonceTtl(...)} setter), pinning the Decision-3 delta.
+	 * Over-30-min TTL rejected on the DEFAULT-store path too (pins the throw site).  Same
+	 * {@link IllegalArgumentException} type as before; only the throw <i>site</i> moves (impl ctor at
+	 * {@code build()} &rarr; the {@code stateNonceTtl(...)} setter), and this test pins that.
 	 */
 	@Test void f06_stateNonceTtl_over30Min_rejected_defaultStorePath() {
 		assertThrows(IllegalArgumentException.class, () -> base().stateNonceTtl(Duration.ofMinutes(31)).build());

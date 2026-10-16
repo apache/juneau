@@ -37,8 +37,8 @@ import org.junit.jupiter.api.*;
  * {@code juneau-rest-server-views} HTML emitters already give every {@code Widget} they consume.
  *
  * <p>
- * This is the REST-boundary inverse of the (f1)/(f2) tests: those pin that a malformed,
- * never-{@code checked()} modal/form serializes successfully with the current contract version and does not
+ * This is the REST-boundary inverse of the serialization tests in {@link ModalDef_FormDef_Test}: those pin that a
+ * malformed, never-{@code checked()} modal/form serializes successfully with the current contract version and does not
  * throw. Here, served over a real REST response instead of a bare {@link Json#of(Object) Json.of(...)} call, the
  * same malformed shapes now fail loud with a 500 &mdash; which is this item's entire reason to exist (see
  * {@code h2} below for the pin that {@link Json#of(Object) Json.of(...)} itself is deliberately untouched).
@@ -47,7 +47,7 @@ import org.junit.jupiter.api.*;
  * No {@code @Rest(mixins=WidgetsMixin.class)} composition is required on any host below except {@code HostC}
  * (the double-registration guard): the validator is discovered via {@code ServiceLoader} from this module's
  * {@code META-INF/services} entry on the test classpath, with no consumer opt-in, which is the point of the
- * design (design doc &sect;4.1 reason 1).
+ * design.
  */
 @SuppressWarnings({
 	"java:S125", // Comments are explanatory; they are not commented-out code.
@@ -56,7 +56,7 @@ import org.junit.jupiter.api.*;
 class ModalDef_ServingPathValidation_Test extends TestBase {
 
 	//------------------------------------------------------------------------------------------------------------------
-	// Malformed-shape builders - one per J0520 harm-table row (design doc &sect;8(a3)), built WITHOUT the
+	// Malformed-shape builders - one per harm-table row, built WITHOUT the
 	// public factories' own argument checks so the shape survives construction and only fails at validate() time.
 	//------------------------------------------------------------------------------------------------------------------
 
@@ -275,8 +275,8 @@ class ModalDef_ServingPathValidation_Test extends TestBase {
 
 	@Test void h2_jsonOf_malformedModal_stillSucceeds_notTheSerializerLevelGate() {
 		// A ResponseProcessor never runs for Json.of(...): this is the pin that this item did not accidentally
-		// become the serializer-level gate the design rejected (design doc fork F12(f), section 4.3(d)).  It is
-		// deliberately uncomfortable to read, exactly like the (f1) test.
+		// become the serializer-level gate the design rejected.  It is deliberately
+		// uncomfortable to read, exactly like the unchecked-serialization tests in ModalDef_FormDef_Test.
 		assertDoesNotThrow(() -> Json.of(noOptionSelect()));
 	}
 }

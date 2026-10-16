@@ -437,7 +437,7 @@ public abstract class BasicResource<SELF extends BasicResource<SELF>> implements
 	 * Returns an unmodifiable snapshot of this bean.
 	 *
 	 * <p>
-	 * D1 idempotency: if this bean is already an unmodifiable snapshot, it is returned as-is.
+	 * Idempotency: if this bean is already an unmodifiable snapshot, it is returned as-is.
 	 *
 	 * @return An unmodifiable snapshot of this bean, or this bean if it is already unmodifiable.
 	 */

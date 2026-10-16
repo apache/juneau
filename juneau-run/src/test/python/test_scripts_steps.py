@@ -157,6 +157,17 @@ class RegistryTest(RegistryCase):
         self.assertIn("❌ ERROR: ValueError: bad input", out.getvalue())
         self.assertIn("To resume: r.py --start-step one", out.getvalue())
 
+    def test_the_resume_hint_is_an_error_line_so_every_detail_level_shows_it(self):
+        def broken(ctx):
+            raise ValueError("bad input")
+        reg = steps.Registry()
+        reg.step("one", "One")(broken)
+        parser = argparse.ArgumentParser(prog="r.py")
+        reg.add_arguments(parser)
+        with mock.patch.object(run, "say") as say:
+            reg.run(parser.parse_args([]), ctx=None)
+        self.assertIn(mock.call("To resume: r.py --start-step one", "error"), say.call_args_list)
+
     def test_keyboard_interrupt_prints_the_hint_and_propagates(self):
         def cancel(ctx):
             raise KeyboardInterrupt
@@ -168,6 +179,138 @@ class RegistryTest(RegistryCase):
         with redirect_stdout(out), self.assertRaises(KeyboardInterrupt):
             reg.run(parser.parse_args([]), ctx=None)
         self.assertIn("To resume: r.py --start-step one", out.getvalue())
+
+    def test_registry_plan_start_skip_and_resume(self):
+        self.assertEqual(self.reg.plan(self.parser.parse_args(["--start-step", "tag"])), ["tag", "publish"])
+        self.assertEqual(self.reg.plan(self.parser.parse_args(["--skip-step", "build"])), ["prereqs", "tag", "publish"])
+        self.cp.set("last", "build")
+        with redirect_stdout(io.StringIO()):
+            planned = self.reg.plan(self.parser.parse_args(["--resume"]), self.cp)
+        self.assertEqual(planned, ["tag", "publish"])
+
+    def test_registry_plan_is_empty_when_every_step_is_done(self):
+        self.cp.set("last", "publish")
+        with redirect_stdout(io.StringIO()):
+            self.assertEqual(self.reg.plan(self.parser.parse_args(["--resume"]), self.cp), [])
+
+    def test_plan_with_resume_prints_nothing_and_run_prints_once(self):
+        self.cp.set("last", "build")
+        out = io.StringIO()
+        with redirect_stdout(out):
+            self.reg.plan(self.parser.parse_args(["--resume"]), self.cp)
+        self.assertEqual(out.getvalue(), "")
+        _, printed = self.go("--resume")
+        self.assertEqual(printed.count("Resuming after build"), 1)
+
+    def test_plan_and_run_cannot_disagree(self):
+        argv = ["--skip-step", "build"]
+        planned = self.reg.plan(self.parser.parse_args(argv))
+        self.go(*argv)
+        self.assertEqual(planned, self.ran)
+
+
+class _StepSpy:
+    """Stands in for run.step: records each row's id, n, label, and final status and summary."""
+
+    def __init__(self):
+        self.rows = []
+
+    def __call__(self, id, title, *, n=None, parent=None, label=None):  # NOSONAR python:S5806 - mirrors run.step
+        spy = self
+
+        class _Ctx:
+            def __enter__(self):
+                self.s = run._NullStep()
+                self.s.status, self.s.summary = "ok", None
+                self.s.skip = lambda: setattr(self.s, "status", "skip")
+                self.s.fail = lambda exit=None: setattr(self.s, "status", "fail")
+                return self.s
+
+            def __exit__(self, *exc):
+                spy.rows.append({"id": id, "n": n, "label": label, "status": self.s.status,
+                                 "summary": self.s.summary})
+                return False
+        return _Ctx()
+
+
+class RegistryLabelsAndUnselectedTest(RegistryCase):
+    def spy_go(self, *argv, reg=None, **kw):
+        spy = _StepSpy()
+        out = io.StringIO()
+        reg = reg or self.reg
+        with mock.patch.object(run, "step", spy), redirect_stdout(out):
+            r = reg.run(self.parser.parse_args(list(argv)), ctx={}, checkpoint=self.cp, **kw)
+        return r, spy.rows, out.getvalue()
+
+    def labelled(self):
+        reg = steps.Registry()
+        for name, title, label in (("prereqs", "Prerequisites", None), ("build", "Build", "mvn"),
+                                   ("tag", "Tag", None), ("publish", "Publish", "nexus")):
+            reg.step(name, title, label=label)(self.make(name))
+        return reg
+
+    def test_a_step_label_reaches_run_step(self):
+        _, rows, _ = self.spy_go(reg=self.labelled())
+        self.assertEqual([(r["id"], r["label"]) for r in rows],
+                         [("prereqs", None), ("build", "mvn"), ("tag", None), ("publish", "nexus")])
+
+    def test_names_plan_and_run_are_unchanged_by_labels(self):
+        reg = self.labelled()
+        parser = argparse.ArgumentParser(prog="release.py")
+        reg.add_arguments(parser)
+        self.assertEqual(reg.names, self.reg.names)
+        for argv in ([], ["--start-step", "tag"], ["--skip-step", "build"]):
+            self.assertEqual(reg.plan(parser.parse_args(argv)), self.reg.plan(self.parser.parse_args(argv)))
+        outs = []
+        for r in (self.reg, reg):
+            out = io.StringIO()
+            with redirect_stdout(out):
+                r.run(self.parser.parse_args(["--list-steps"]), ctx={})
+            outs.append(out.getvalue())
+        self.assertEqual(outs[0], outs[1])
+
+    def test_unselected_steps_are_dim_rows_numbered_from_one_when_asked(self):
+        r, rows, _ = self.spy_go("--start-step", "build", show_unselected=True)
+        self.assertTrue(r.ok)
+        self.assertEqual(self.ran, ["build", "tag", "publish"])
+        self.assertEqual([(x["id"], x["n"], x["status"], x["summary"]) for x in rows],
+                         [("prereqs", 1, "skip", "(done earlier)"), ("build", 2, "ok", None),
+                          ("tag", 3, "ok", None), ("publish", 4, "ok", None)])
+
+    def test_a_done_earlier_row_leaves_the_checkpoint_alone(self):
+        self.fail_in = "build"
+        r, rows, _ = self.spy_go("--start-step", "build", show_unselected=True)
+        self.assertFalse(r.ok)
+        self.assertEqual(rows[0]["summary"], "(done earlier)")
+        self.assertIsNone(self.cp.last())
+
+    def test_a_skip_step_row_is_recorded_as_last(self):
+        self.fail_in = "tag"
+        r, _, _ = self.spy_go("--skip-step", "build", show_unselected=True)
+        self.assertFalse(r.ok)
+        self.assertEqual(self.cp.last(), "build")
+
+    def test_skipped_steps_say_skipped_when_asked(self):
+        _, rows, out = self.spy_go("--skip-step", "build", show_unselected=True)
+        self.assertEqual(self.ran, ["prereqs", "tag", "publish"])
+        self.assertEqual([(x["id"], x["status"], x["summary"]) for x in rows if x["status"] == "skip"],
+                         [("build", "skip", "(skipped)")])
+        self.assertEqual(out, "")
+
+    def test_a_step_that_returns_text_sets_its_row_summary(self):
+        reg = steps.Registry()
+        reg.step("prereqs", "Prerequisites")(lambda ctx: "Java 17")
+        reg.step("build", "Build")(lambda ctx: None)
+        reg.step("tag", "Tag")(lambda ctx: Result(True, 0))
+        _, rows, _ = self.spy_go(reg=reg)
+        self.assertEqual([(x["id"], x["status"], x["summary"]) for x in rows],
+                         [("prereqs", "ok", "Java 17"), ("build", "ok", None), ("tag", "ok", None)])
+
+    def test_unselected_rows_are_off_by_default(self):
+        _, rows, out = self.spy_go("--start-step", "tag", "--skip-step", "publish")
+        self.assertEqual([(x["id"], x["n"], x["status"], x["summary"]) for x in rows],
+                         [("tag", 3, "ok", None), ("publish", 4, "skip", None)])
+        self.assertIn("⏭  Skipping 4. Publish", out)
 
 
 class RegistryErrorsTest(RegistryCase):

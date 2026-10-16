@@ -36,8 +36,8 @@ import org.apache.juneau.rest.server.staticfile.*;
  */
 final class TerminalHarness {
 
-	/** The five assets, in the order {@code terminal-browser.cjs} takes them. */
-	static final List<String> BROWSER_ASSETS = List.of("xterm.js", "xterm.css", "juneau-terminal.js", "juneau-terminal.css", "juneau-views.css");
+	/** The six assets, in the order {@code terminal-browser.cjs} takes them. */
+	static final List<String> BROWSER_ASSETS = List.of("xterm.js", "xterm.css", "juneau-terminal.js", "juneau-terminal.css", "juneau-views.css", "juneau-theme-dark.css");
 
 	private static final Map<String,Map<?,?>> CACHE = new ConcurrentHashMap<>();
 
@@ -113,6 +113,7 @@ final class TerminalHarness {
 			case "juneau-terminal.js" -> TerminalEndpoints.JS_RESOURCE.substring(1);
 			case "juneau-terminal.css" -> TerminalEndpoints.CSS_RESOURCE.substring(1);
 			case "juneau-views.css" -> "org/apache/juneau/views/juneau-views.css";
+			case "juneau-theme-dark.css" -> "org/apache/juneau/console/juneau-theme-dark.css";
 			default -> throw new IllegalArgumentException(name);
 		};
 		try (var in = TerminalHarness.class.getClassLoader().getResourceAsStream(path)) {

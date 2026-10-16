@@ -300,7 +300,7 @@ public class BasicHttpException extends BasicRuntimeException implements HttpRes
 
 	@Override /* Overridden from Object */
 	public boolean equals(Object o) {
-		// D3 content equality.  The 'content' HttpEntity is deliberately excluded: it is a wrapper without value
+		// Content equality.  The 'content' HttpEntity is deliberately excluded: it is a wrapper without value
 		// semantics (two StringEntity instances of the same text are not equal), and it is derived from the message
 		// (getEntity() lazily builds stringEntity(getMessage())), which is already compared here.
 		return o instanceof BasicHttpException other && eq(this, other, (x, y) ->

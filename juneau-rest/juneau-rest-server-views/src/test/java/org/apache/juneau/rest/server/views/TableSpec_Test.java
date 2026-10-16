@@ -106,6 +106,12 @@ class TableSpec_Test extends TestBase {
 		assertEquals("TableSpec quickStats requires at least one item.", ex.getMessage());
 	}
 
+	@Test void a14_quickStats_acceptsMeterAndSegmented() {
+		var t = TableSpec.create("slo").quickStats("s", QuickStat.meter("m", "M", 1, 2), QuickStat.segmented("g", "G").segment("A", 1));
+		var qs = (Map<?,?>)t.toCardBody().get("quickStats");
+		assertEquals(2, ((List<?>)qs.get("items")).size());
+	}
+
 	@Test void a99_rowClass_collectionOp_rejected() {
 		var t = TableSpec.create("slo");
 		var ex = assertThrows(IllegalArgumentException.class, () -> t.rowClass("state", Op.IN, "x", "row-x"));

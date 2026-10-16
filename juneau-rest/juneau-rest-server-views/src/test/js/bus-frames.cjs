@@ -15,8 +15,8 @@
  * limitations under the License.
  */
 /*
- * bus-frames.cjs - Node harness for the frame codec (spec §11.4). Runs every case of the shared
- * bus-frames-corpus.json (also read by the Java BusFrames_Corpus_Test, Task 14) through JuneauViews.bus.frames
+ * bus-frames.cjs - Node harness for the frame codec. Runs every case of the shared
+ * bus-frames-corpus.json (also read by the Java BusFrames_Corpus_Test) through JuneauViews.bus.frames
  * and reports what the JS side actually produced, in corpus order. It also runs two JS-only groups the shared
  * corpus does not hold: the maxFrameBytes boundary and the SseParser cases. ViewsJs_BusFrames_Test compares the
  * report with the corpus and the expected values; the harness itself asserts nothing.

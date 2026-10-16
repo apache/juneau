@@ -58,6 +58,12 @@
 
 		<!-- Test scope -->
 		<dependency>
+			<groupId>org.webjars.npm</groupId>
+			<artifactId>echarts</artifactId>
+			<version>${webjars-echarts.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
 			<groupId>org.junit.jupiter</groupId>
 			<artifactId>junit-jupiter</artifactId>
 			<version>${junit.version}</version>
@@ -79,6 +85,19 @@
 			<groupId>org.apache.juneau</groupId>
 			<artifactId>juneau-rest-mock</artifactId>
 			<version>${project.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<!-- A real servlet container, so a browser test can put a servlet filter in front of a real page. -->
+		<dependency>
+			<groupId>org.eclipse.jetty</groupId>
+			<artifactId>jetty-server</artifactId>
+			<version>${jetty.version}</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.eclipse.jetty.ee${jetty.ee.version}</groupId>
+			<artifactId>jetty-ee${jetty.ee.version}-servlet</artifactId>
+			<version>${jetty.version}</version>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>

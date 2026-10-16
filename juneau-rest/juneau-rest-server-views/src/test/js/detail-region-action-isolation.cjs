@@ -16,7 +16,8 @@
  */
 
 /*
- * detail-region-action-isolation.cjs - always-on Node harness for design test 35a (§13.6): a POPULATE'S OWN
+ * detail-region-action-isolation.cjs - always-on Node harness for the detail-region action-isolation contract: a
+ * POPULATE'S OWN
  * BUTTONS DO NOT REACH `submitRowAction`.
  *
  *   Usage:  node detail-region-action-isolation.cjs <juneau-renders.js> <juneau-views.js>

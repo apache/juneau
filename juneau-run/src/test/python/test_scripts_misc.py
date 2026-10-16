@@ -167,6 +167,9 @@ class RunGroupTest(unittest.TestCase):
         tmp = tempfile.TemporaryDirectory()
         self.addCleanup(tmp.cleanup)
         self.ready = Path(tmp.name) / "ready"
+        # A test process launched from a background shell inherits SIGINT as SIG_IGN, so the os.kill(SIGINT) below
+        # would never raise KeyboardInterrupt; make the outcome independent of how the suite was launched.
+        self.addCleanup(signal.signal, signal.SIGINT, signal.signal(signal.SIGINT, signal.default_int_handler))
 
     def interrupt_when_ready(self):
         def watch():

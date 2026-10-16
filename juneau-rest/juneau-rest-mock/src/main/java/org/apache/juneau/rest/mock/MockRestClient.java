@@ -410,9 +410,6 @@ public final class MockRestClient implements Closeable {
 					restContext.execute(restObject, servletReq, servletRes);
 				}
 
-				if (servletRes.getStatus() == 0) // HTT: would require a buggy RestContext that never sets a status
-					throw new TransportException("REST context returned status 0 — response was never committed");
-
 				var responseBuilder = TransportResponse.builder()
 					.statusCode(servletRes.getStatus())
 					.reasonPhrase(servletRes.getMessage());

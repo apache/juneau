@@ -61,10 +61,20 @@ class CardDirective_Chart_Test extends TestBase {
 	@ParameterizedTest
 	@CsvSource(delimiter='|', value={
 		"ch-card-template|<@card id='trend'> type='chart' takes a JSON5 body (plus src= for remote data); template= is not allowed.",
-		"ch-card-nokind|<@card id='trend'> type='chart' requires a non-blank 'kind'.",
-		"ch-card-both|<@card id='trend'> type='chart' requires exactly one of src= or a data body.",
+		"ch-card-nokind|<@card id='trend'> type='chart' requires 'helper', a legacy 'kind' or an 'option'.",
+		"ch-card-both|<@card id='trend'> type='chart' requires exactly one of src=, a data body or a source.",
 	})
 	void a04_errors(String fixture, String message) {
 		assertError(fixture, message);
+	}
+
+	@Test void a10_optionCard() {
+		var c = card(render("ch-card-option"), "g");
+		assertEquals(Json5.to("{id:'g',type:'chart',src:'/s',option:{series:[{type:'gauge',data:[{value:3}]}]}}", Map.class), Json5.to(Json.of(c), Map.class));
+	}
+
+	@Test void a11_sourceCard() {
+		var c = card(render("ch-card-source"), "t");
+		assertEquals("data:x", c.getString("source"));
 	}
 }

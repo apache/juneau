@@ -81,7 +81,7 @@ class ElicitationResponses_Test extends TestBase {
 	/**
 	 * Documents the wire-shape symmetry between this client module's {@link ElicitationRequests}/
 	 * {@link ElicitationResponses} pair and the server module's {@code ElicitationRequests}/
-	 * {@code ElicitationResponses} (Phase 4) without introducing an illegal cross-module test dependency:
+	 * {@code ElicitationResponses} without introducing an illegal cross-module test dependency:
 	 * {@code juneau-rest-client-mcp-v20260728} must not depend on {@code juneau-rest-server-mcp-v20260728}, so
 	 * the server-side raw shape is hand-built here to match it exactly (verified by inspection/spec
 	 * cross-reference against {@code ElicitationRequests.of}/{@code ElicitationResponses.get}, not a live

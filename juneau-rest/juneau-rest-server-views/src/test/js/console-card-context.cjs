@@ -18,7 +18,7 @@
 /*
  * console-card-context.cjs - dependency-free Node harness for the CardContext members added to juneau-console.js:
  * fetchJson (supersede, abort, CSRF, error-message precedence), isAbort, paintLoading/paintError, every
- * (hidden/pauseWhen/destroy), prefs (namespacing, corrupt JSON, storage-throws), onDestroy, announce.
+ * (hidden/pauseWhen/destroy, setMs re-arm), prefs (namespacing, corrupt JSON, storage-throws), onDestroy, announce.
  * Every assertion lives in ConsoleCards_Shell_Test.
  *
  *   Usage:  node console-card-context.cjs <juneau-console.js>
@@ -47,21 +47,33 @@ function load(fetchImpl, opts) {
 	}
 	const storage = (opts && opts.storage) || makeStorage();
 	const errors = [];
+	const warns = [];
 	const sandbox = {
 		window: env.window, document: doc,
-		console: { error: m => errors.push(String(m)), log: () => {}, warn: () => {} },
+		console: { error: m => errors.push(String(m)), log: () => {}, warn: m => warns.push(String(m)) },
 		URLSearchParams: env.window.URLSearchParams, CustomEvent: env.window.CustomEvent,
 		WeakSet, Map, Set, Promise, JSON, Object, Array, Error, TypeError, String, AbortController,
 		localStorage: storage,
 		fetch: fetchImpl,
 		setTimeout: (fn, ms) => fn(), clearTimeout: () => {},
-		setInterval: (fn, ms) => { sandbox.__intervals = sandbox.__intervals || []; sandbox.__intervals.push(fn); return sandbox.__intervals.length; },
-		clearInterval: id => { if (sandbox.__intervals && id > 0) sandbox.__intervals[id - 1] = () => {}; }
+		setInterval: (fn, ms) => {
+			sandbox.__intervals = sandbox.__intervals || [];
+			sandbox.__periods = sandbox.__periods || [];
+			sandbox.__intervals.push(fn);
+			sandbox.__periods.push(ms);
+			return sandbox.__intervals.length;
+		},
+		clearInterval: id => {
+			if (sandbox.__intervals && id > 0) {
+				sandbox.__intervals[id - 1] = () => {};
+				sandbox.__periods[id - 1] = null;
+			}
+		}
 	};
 	env.window.window = env.window;
 	env.window.document = doc;
 	vm.runInNewContext(shellSrc, sandbox, { filename: 'juneau-console.js' });
-	return { env, doc, errors, JC: sandbox.window.JuneauConsole, sandbox, storage };
+	return { env, doc, errors, warns, JC: sandbox.window.JuneauConsole, sandbox, storage };
 }
 
 function makeStorage(behavior) {
@@ -170,6 +182,91 @@ const out = {};
 	r.JC.destroyCard('p1');
 	runInterval();
 	out.every = { afterOne, whileHidden, whilePaused, afterDestroy: tick };
+}
+
+// 5b. every handle setMs: re-arms at the new period; paused/hidden still skip; a destroyed card ignores it.
+{
+	const activePeriods = r => (r.sandbox.__periods || []).filter(p => p != null);
+	const runInterval = r => { for (const f of r.sandbox.__intervals || []) f(); };
+	const make = (id, onTick) => {
+		let handle = null;
+		const r = load(() => Promise.resolve({ ok: true, json: () => Promise.resolve({}) }), {});
+		r.JC.registerCard('poll2', {
+			render(card, el, ctx) {
+				handle = ctx.every(1000, onTick, { pauseWhen: () => r.doc.__paused === true });
+			}
+		});
+		r.JC.mount(C({ cards: [{ id, type: 'poll2' }] }), { root: r.doc.body, document: r.doc });
+		return { r, handle };
+	};
+	// (a) shorter period re-arms the timer and the old one stops firing.
+	let ticksA = 0;
+	const a = make('s1', () => { ticksA++; });
+	const before = activePeriods(a.r);
+	a.handle.setMs(250);
+	const afterSet = activePeriods(a.r);
+	runInterval(a.r);
+	// (b) setMs while hidden or paused re-arms but nothing fires until resumed.
+	let ticksB = 0;
+	const b = make('s2', () => { ticksB++; });
+	b.r.doc.hidden = true;
+	b.handle.setMs(250);
+	runInterval(b.r);
+	const whileHidden = ticksB;
+	b.r.doc.hidden = false;
+	b.r.doc.__paused = true;
+	b.handle.setMs(125);
+	runInterval(b.r);
+	const whilePaused = ticksB;
+	b.r.doc.__paused = false;
+	runInterval(b.r);
+	const afterResume = ticksB;
+	const periodsB = activePeriods(b.r);
+	// (c) setMs after destroy, and after stop, arms nothing.
+	let ticksC = 0;
+	const c = make('s3', () => { ticksC++; });
+	c.r.JC.destroyCard('s3');
+	const countBefore = (c.r.sandbox.__periods || []).length;
+	c.handle.setMs(250);
+	const armedAfterDestroy = (c.r.sandbox.__periods || []).length - countBefore;
+	runInterval(c.r);
+	let ticksD = 0;
+	const d = make('s4', () => { ticksD++; });
+	d.handle.stop();
+	const countBeforeStop = (d.r.sandbox.__periods || []).length;
+	d.handle.setMs(250);
+	const armedAfterStop = (d.r.sandbox.__periods || []).length - countBeforeStop;
+	// (d) invalid periods: setMs keeps the existing timer; every refuses to arm and returns an inert handle.
+	let ticksE = 0;
+	const e = make('s5', () => { ticksE++; });
+	const periodsBeforeBad = activePeriods(e.r);
+	const countBeforeBad = (e.r.sandbox.__periods || []).length;
+	for (const bad of [NaN, 0, -5, undefined, Infinity, '250']) e.handle.setMs(bad);
+	const badSetMs = { armed: (e.r.sandbox.__periods || []).length - countBeforeBad, active: activePeriods(e.r), before: periodsBeforeBad };
+	runInterval(e.r);
+	const everyBad = [];
+	{
+		const r = load(() => Promise.resolve({ ok: true }), {});
+		let ticksF = 0;
+		let hs = [];
+		r.JC.registerCard('poll3', {
+			render(card, el, ctx) {
+				for (const bad of [NaN, 0, -1, undefined, '1000']) hs.push(ctx.every(bad, () => { ticksF++; }));
+			}
+		});
+		r.JC.mount(C({ cards: [{ id: 's6', type: 'poll3' }] }), { root: r.doc.body, document: r.doc });
+		let threw = null;
+		try { for (const h of hs) { h.setMs(100); h.stop(); } } catch (x) { threw = String(x); }
+		runInterval(r);
+		everyBad.push({ armed: (r.sandbox.__periods || []).length, ticks: ticksF, threw, warned: r.warns.length });
+	}
+	out.everySetMs = {
+		badSetMs, ticksAfterBadSetMs: ticksE, everyBad: everyBad[0],
+		before, afterSet, ticksAfterRun: ticksA,
+		whileHidden, whilePaused, afterResume, periodsB,
+		armedAfterDestroy, ticksAfterDestroy: ticksC,
+		armedAfterStop, activeAfterStop: activePeriods(d.r), ticksAfterStop: ticksD
+	};
 }
 
 // 6. prefs: namespaced key, corrupt JSON falls back to default, a throwing storage falls back without throwing.

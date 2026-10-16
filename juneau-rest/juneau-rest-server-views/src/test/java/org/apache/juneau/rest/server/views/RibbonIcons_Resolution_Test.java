@@ -30,8 +30,8 @@ import org.junit.jupiter.params.provider.*;
 
 /**
  * Default-icon lookup + {@code resolveButtonIcon(...)} pure-function assertions for {@code juneau-ribbon.js}
- * (DataTables ribbon visual-parity design doc §4.A, plan Task 2). Option-A (content-substring +
- * function-body-extraction) coverage, mirroring {@code ViewsMixin_Serving_Test}'s established idiom.
+ * (DataTables ribbon icons). Content-substring and
+ * function-body-extraction coverage, mirroring {@code ViewsMixin_Serving_Test}'s established idiom.
  */
 @SuppressWarnings({
 	"resource" // Closeable test fixtures held in static fields; lifecycle managed by the test/framework, not a real leak.

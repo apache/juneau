@@ -21,12 +21,12 @@ todo-next-id.py / todo-status-audit.py set (it re-pins the *other* two repos rat
 in them), so this file is not copied anywhere else.
 
 check_dirty() and main()'s guard wiring are exercised against real temporary git repositories,
-following test_reset_side_clones.py's and test_push.py's own rationale for doing the same: the
+following test_push.py's own rationale for doing the same: the
 guard's entire risk is real `git status --porcelain` behavior across modified/staged/
 untracked-ignored cases, which a mocked subprocess would let pass while proving nothing. The
 refusal path is additionally proven by monkeypatching run_streaming to raise if it is ever
 called -- so "refused" means "mvn was never invoked", not just "the exit code was 1", the same
-style test_push.py and test_reset_side_clones.py use for their own refusal proofs.
+style test_push.py uses for their own refusal proofs.
 
 Nothing here ever runs a real `mvn` command (run_streaming is always stubbed) or touches the
 real juneau / release-manager / sandbox-support-console checkouts.
@@ -82,9 +82,9 @@ def _init_repo(path: Path) -> Path:
     return path
 
 
-def _commit_all(repo: Path, message: str) -> str:
+def _commit_all(repo: Path, message: str, allow_empty: bool = False) -> str:
     _run(repo, "git", "add", "-A")
-    _run(repo, "git", "commit", "-q", "-m", message)
+    _run(repo, "git", "commit", "-q", *(["--allow-empty"] if allow_empty else []), "-m", message)
     return _run(repo, "git", "rev-parse", "HEAD")
 
 
@@ -93,13 +93,13 @@ def _commit_all(repo: Path, message: str) -> str:
 # ---------------------------------------------------------------------------------------
 def test_check_dirty_clean_repo_is_empty(module, tmp_path):
     repo = _init_repo(tmp_path / "clean")
-    _commit_all(repo, "init")
+    _commit_all(repo, "init", allow_empty=True)
     assert module.check_dirty(repo) == []
 
 
 def test_check_dirty_flags_untracked_file(module, tmp_path):
     repo = _init_repo(tmp_path / "untracked")
-    _commit_all(repo, "init")
+    _commit_all(repo, "init", allow_empty=True)
     (repo / "new.txt").write_text("junk\n", encoding="utf-8")
     dirty = module.check_dirty(repo)
     assert len(dirty) == 1
@@ -199,7 +199,7 @@ def test_describe_head_unpushed_when_head_is_ahead(module, tmp_path):
 
 def test_describe_head_none_when_no_origin(module, tmp_path):
     repo = _init_repo(tmp_path / "no-origin")
-    _commit_all(repo, "init")
+    _commit_all(repo, "init", allow_empty=True)
     _, _, unpushed = module.describe_head(repo)
     assert unpushed is None
 
@@ -210,7 +210,7 @@ def test_describe_head_none_when_no_origin(module, tmp_path):
 # ---------------------------------------------------------------------------------------
 def test_main_refuses_dirty_tree_without_ever_invoking_mvn(module, tmp_path, monkeypatch, capsys):
     repo = _init_repo(tmp_path / "dirty")
-    _commit_all(repo, "init")
+    _commit_all(repo, "init", allow_empty=True)
     (repo / "untracked.txt").write_text("junk\n", encoding="utf-8")
 
     def _boom(*args, **kwargs):
@@ -243,7 +243,7 @@ def test_main_exits_2_for_non_git_dir(module, tmp_path, monkeypatch):
 def test_main_proceeds_past_guard_when_clean(module, tmp_path, monkeypatch):
     """A clean tree must reach run_streaming -- proves the guard does not falsely refuse."""
     repo = _init_repo(tmp_path / "clean")
-    _commit_all(repo, "init")
+    _commit_all(repo, "init", allow_empty=True)
 
     calls = []
 
@@ -262,7 +262,7 @@ def test_main_proceeds_past_guard_when_clean(module, tmp_path, monkeypatch):
 
 def test_main_returns_3_when_install_fails(module, tmp_path, monkeypatch):
     repo = _init_repo(tmp_path / "clean")
-    _commit_all(repo, "init")
+    _commit_all(repo, "init", allow_empty=True)
 
     monkeypatch.setattr(module, "run_streaming", lambda argv, cwd, env: 1)
     monkeypatch.setattr("sys.argv", ["repin-consumers.py", "--juneau-dir", str(repo)])
@@ -273,7 +273,7 @@ def test_main_returns_3_when_install_fails(module, tmp_path, monkeypatch):
 def test_main_verify_consumers_skips_missing_dirs_and_returns_4(module, tmp_path, monkeypatch):
     """--verify-consumers reports a missing consumer dir as a failure (exit 4) without crashing."""
     repo = _init_repo(tmp_path / "clean")
-    _commit_all(repo, "init")
+    _commit_all(repo, "init", allow_empty=True)
 
     monkeypatch.setattr(module, "run_streaming", lambda argv, cwd, env: 0)
     monkeypatch.setattr(

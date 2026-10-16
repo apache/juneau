@@ -19,7 +19,7 @@
  * run-view-poll.cjs - the run-view module's network harness: poll() against a signal-honouring fake fetch and the
  * fake clock, mount() and the "run-view" region populator.
  *
- * Every case gets a FRESH environment (console-output-env.cjs) and passes by returning without throwing; the report
+ * Every case gets a FRESH environment (run-view-env.cjs) and passes by returning without throwing; the report
  * maps the case name to true, or to the failure's stack.
  *
  *   Usage:  node run-view-poll.cjs <renders> <views> <regions> <helpers> <run-view> <vectors.json>
@@ -27,7 +27,7 @@
 'use strict';
 
 const path = require('node:path');
-const E = require(path.join(__dirname, 'console-output-env.cjs'));
+const E = require(path.join(__dirname, 'run-view-env.cjs'));
 
 const argv = process.argv.slice(2);
 if (argv.length < 6) {

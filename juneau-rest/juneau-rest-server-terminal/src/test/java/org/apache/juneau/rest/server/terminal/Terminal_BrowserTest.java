@@ -92,9 +92,18 @@ class Terminal_BrowserTest extends TestBase {
 	@Test void a13_inputCardArmsTheTerminal() { ok("b13_inputCardArmsTheTerminal"); }
 	@Test void a14_inputStatusRoleReachesItsCard() { ok("b14_inputStatusRoleReachesItsCard"); }
 	@Test void a15_toneBackgroundsStayLegibleWithViewsCss() { ok("b15_toneBackgroundsStayLegibleWithViewsCss"); }
+	@Test void a16_nudgeRoleFetchesAtOnce() { ok("b16_nudgeRoleFetchesAtOnce"); }
+	@Test void a17_cardWithoutNudgeSubscriptionPollsNormally() { ok("b17_cardWithoutNudgeSubscriptionPollsNormally"); }
+	@Test void a18_destroyUnregistersTheNudgeLink() { ok("b18_destroyUnregistersTheNudgeLink"); }
+	@Test void a19_nudgeFetchesAndRestores() { ok("b19_nudgeFetchesAndRestores"); }
+	@Test void a20_wildcardNudgeTopicNeverLinks() { ok("b20_wildcardNudgeTopicNeverLinks"); }
+	@Test void a21_terminalOptionsReachTheXterm() { ok("b21_terminalOptionsReachTheXterm"); }
+	@Test void a22_absentTerminalKeepsTheDefaultXtermOptions() { ok("b22_absentTerminalKeepsTheDefaultXtermOptions"); }
+
+	@Test void a15d_toneBackgroundsLegibleUnderDark() { ok("b15d_toneBackgroundsLegibleUnderDark"); }
 
 	@Test void z01_everyCaseHasAMethod() {
 		var cases = (Map<?,?>)report.get("cases");
-		assertEquals(15, cases.size(), () -> "case count changed; add a method per new case: " + cases.keySet());
+		assertEquals(23, cases.size(), () -> "case count changed; add a method per new case: " + cases.keySet());
 	}
 }

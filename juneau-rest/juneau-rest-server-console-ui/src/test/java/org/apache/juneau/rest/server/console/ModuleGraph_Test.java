@@ -120,7 +120,7 @@ class ModuleGraph_Test extends TestBase {
 	}
 
 	/**
-	 * {@code views} now composes the console shell script (C1 Task 5) by taking a compile-scope dependency on
+	 * {@code views} now composes the console shell script by taking a compile-scope dependency on
 	 * {@code console-ui}; that edge is one-directional &mdash; {@code console-ui} stays engine/toolkit-agnostic and
 	 * must still not depend back on {@code views} (see {@link #a12_consoleUi_doesNotDependOnViews()}).
 	 */

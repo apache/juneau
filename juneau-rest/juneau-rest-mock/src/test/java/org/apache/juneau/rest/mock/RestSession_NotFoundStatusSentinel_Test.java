@@ -22,7 +22,7 @@ import org.apache.juneau.rest.server.*;
 import org.junit.jupiter.api.*;
 
 /**
- * [legacy item 401] Bug B: {@link RestSession#run()}'s NotFound status sentinel must not depend on the container's
+ * {@link RestSession#run()}'s NotFound status sentinel must not depend on the container's
  * pre-dispatch default status code.
  *
  * <p>
@@ -33,8 +33,8 @@ import org.junit.jupiter.api.*;
  * {@code RestContext.handleNotFound}/{@code handleError}.
  *
  * <p>
- * {@link RealContainerLikeResponse} models a real container's spec-correct {@code 200} default so the mis-mapping
- * is reproducible in-process.  The fix keys off an explicit {@code statusExplicitlySet} flag instead, so a genuine
+ * {@link MockServletResponse} now defaults to the same spec-correct {@code 200}, so the mis-mapping is reproducible
+ * in-process.  The fix keys off an explicit {@code statusExplicitlySet} flag instead, so a genuine
  * 404 stays a 404 regardless of the container's numeric default.
  *
  * @since 10.0.0
@@ -49,46 +49,22 @@ class RestSession_NotFoundStatusSentinel_Test {
 		}
 	}
 
-	/**
-	 * A {@link MockServletResponse} that behaves like a real servlet container: {@link #getStatus()} returns the
-	 * servlet-spec default of {@code 200} until an explicit {@link #setStatus(int)} is made, instead of
-	 * {@code MockServletResponse}'s coincidental {@code 0} default.
-	 */
-	static class RealContainerLikeResponse extends MockServletResponse {
-		private boolean explicit;
-		@Override public void setStatus(int sc) { explicit = true; super.setStatus(sc); }
-		@Override public int getStatus() { return explicit ? super.getStatus() : 200; }
-	}
-
 	private static RestContext buildContext(Object resource) throws Exception {
 		return new RestContext(new RestContext.Args(resource.getClass(), null, null, () -> resource, "", null, null, null, RestContext.ContextKind.ROOT))
 			.postInit().postInitChildFirst();
 	}
 
-	private static int dispatch(HttpServletResponseFactory f) throws Exception {
+	private static int dispatch() throws Exception {
 		var resource = new A_Resource();
 		var ctx = buildContext(resource);
-		var res = f.create();
+		var res = new MockServletResponse();
 		ctx.execute(resource, MockServletRequest.create("GET", "/nonexistent").header("Accept", "application/json"), res);
 		return res.getStatus();
 	}
 
-	@FunctionalInterface
-	interface HttpServletResponseFactory {
-		MockServletResponse create();
-	}
-
-	@Test void a01_genuineNotFound_realContainerDefault_stays404() throws Exception {
-		// RED (before the fix): a real-container-like 200 default made getStatus()==0 false, skipping the 404
-		// default, so the NotFound was mis-mapped to a 500.  GREEN (after): the explicit-status flag keeps it 404.
-		assertEquals(404, dispatch(RealContainerLikeResponse::new),
-			"A genuine unmatched-path 404 must stay 404 under a real-container-like (200-default) response");
-	}
-
-	@Test void a02_genuineNotFound_mockZeroDefault_stays404_regressionGuard() throws Exception {
-		// Continuity: the plain MockServletResponse (0-default) path is 404 both before and after the fix, proving
-		// the fix does not depend on (or break) the framework suite's coincidental mock behavior.
-		assertEquals(404, dispatch(MockServletResponse::new),
-			"A genuine unmatched-path 404 must stay 404 under the plain MockServletResponse (0-default)");
+	@Test void a01_genuineNotFound_stays404() throws Exception {
+		// The mock now defaults to the servlet-spec 200 like a real container, so this is the real-container case:
+		// the not-found sentinel must not depend on a coincidental 0 default.
+		assertEquals(404, dispatch(), "A genuine unmatched-path 404 must stay 404 under a 200-default response");
 	}
 }

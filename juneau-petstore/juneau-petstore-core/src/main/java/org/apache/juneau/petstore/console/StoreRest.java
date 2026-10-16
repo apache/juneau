@@ -29,7 +29,11 @@ import org.apache.juneau.rest.server.view.*;
 import org.apache.juneau.rest.server.view.freemarker.*;
 
 /**
- * Store: the petstore dashboard.
+ * The Store page, the petstore dashboard, and the feeds its charts, tiles and fragments read.
+ *
+ * <p>
+ * The page is {@code store.ftlh}, with a builder twin at {@code ?builder}.  The feeds are read-only JSON over the
+ * live store, and the revenue tile counts days by the store's clock in UTC.
  *
  * <h5 class='section'>Example:</h5>
  * <p class='bjava'>
@@ -39,7 +43,20 @@ import org.apache.juneau.rest.server.view.freemarker.*;
  * <p class='bcode'>
  * 	&lt;@page tab="store" toolkit="views"&gt;
  * 	  &lt;@card id="welcome" title="Welcome to the petstore"&gt;&lt;div class="jc-prose"&gt;...&lt;/div&gt;&lt;/@card&gt;
+ * 	  &lt;@card type="chart" id="by-status" title="Pets by status" src="/console/store/stats/status"&gt;
+ * 	  { kind: 'bar', x: { field: 'status' }, series: [ { field: 'count', label: 'Pets' } ] }
+ * 	  &lt;/@card&gt;
  * 	&lt;/@page&gt;
+ * </p>
+ * <p class='bcode'>
+ * 	GET /console/store                   the page
+ * 	GET /console/store/recent-orders     the ten newest orders
+ * 	GET /console/store/stats/daily       {day, placed, delivered} for each recent day
+ * 	GET /console/store/kpi/revenue       {label, value, unit} for the revenue tile
+ * 	GET /console/store/stats/species     {species, count} for each species
+ * 	GET /console/store/stats/status      {status, count} for each status
+ * 	GET /console/store/stats/pets        {id, name, species, status} for each pet
+ * 	GET /console/store/fragments/hours   the opening hours, as markup only
  * </p>
  * <p class='bcode'>
  * 	&lt;@badge id="pending" src="/console/pets/changes/pending" href="/console/pets/changes" refreshMs=60000/&gt;
@@ -68,8 +85,10 @@ public class StoreRest extends PetstoreConsolePage {
 			.attr("qsAvailable", qs.available())
 			.attr("qsPending", qs.pending())
 			.attr("qsSold", qs.sold())
-			.attr("qsOrders", qs.orders())
-			.attr("qsInventory", qs.inventory());
+			.attr("qsOrdersPlaced", qs.ordersPlaced())
+			.attr("qsOrdersApproved", qs.ordersApproved())
+			.attr("qsOrdersDelivered", qs.ordersDelivered())
+			.attr("qsPetTotal", qs.petTotal());
 	}
 
 	/** @return The 10 most recent orders, by ship date then id, newest first. */
@@ -100,6 +119,25 @@ public class StoreRest extends PetstoreConsolePage {
 		return rows;
 	}
 
+	/**
+	 * The revenue tile: the summed pet prices of the orders delivered today, by the store clock in UTC.
+	 *
+	 * @return {@code {label, value, unit}}, with the value rounded to cents.
+	 */
+	@RestGet(path="/kpi/revenue")
+	public JsonMap revenue() {
+		var today = LocalDate.ofInstant(store().clock().instant(), ZoneOffset.UTC).toString();
+		var total = 0d;
+		for (var o : store().getOrders()) {
+			if (o.getStatus() == OrderStatus.DELIVERED && today.equals(o.getShipDate())) {
+				var p = store().getPet(o.getPetId());
+				if (p != null)
+					total += p.getPrice();
+			}
+		}
+		return JsonMap.of("label", "Revenue today", "value", Math.round(total * 100) / 100d, "unit", "USD");
+	}
+
 	/** @return One row {@code {species, count}} per species, in enum order, zero counts included. */
 	@RestGet(path="/stats/species")
 	public JsonList species() {
@@ -117,6 +155,15 @@ public class StoreRest extends PetstoreConsolePage {
 		var rows = new JsonList();
 		for (var s : PetStatus.values())
 			rows.add(JsonMap.of("status", s.name(), "count", counts.getOrDefault(s, 0L)));
+		return rows;
+	}
+
+	/** @return One row {@code {id, name, species, status}} per pet, by id; the treemap groups them and opens the edit dialog from a tile. */
+	@RestGet(path="/stats/pets")
+	public JsonList pets() {
+		var rows = new JsonList();
+		store().getPets().stream().sorted(Comparator.comparingLong(Pet::getId)).forEach(p ->
+			rows.add(JsonMap.of("id", p.getId(), "name", p.getName(), "species", p.getSpecies() == null ? null : p.getSpecies().name(), "status", p.getStatus() == null ? null : p.getStatus().name())));
 		return rows;
 	}
 

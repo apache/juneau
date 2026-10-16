@@ -28,7 +28,7 @@ import org.junit.jupiter.api.*;
  * Immutability-paradigm tests for the {@link BasicHttpResponse} hierarchy, using {@link Ok} as a representative leaf.
  *
  * <p>
- * Mirrors the Phase 1 pilot ({@code BasicStatusLine_Test} b01–b06): reflective mutator guard, idempotency, content
+ * Mirrors the pilot ({@code BasicStatusLine_Test} b01–b06): reflective mutator guard, idempotency, content
  * equality, snapshot independence, and snapshot-construction regression.
  */
 class BasicHttpResponse_Test extends TestBase {
@@ -66,7 +66,7 @@ class BasicHttpResponse_Test extends TestBase {
 	}
 
 	@Test void b04_contentEquality_equalContentComparesEqual() {
-		// D3 content equality — satisfiable slices for Phase 2.
+		// Content equality — the slices satisfiable on their own.
 		// Two independently-frozen snapshots of equal content compare equal.
 		var u1 = new Ok().setHeader2("X-Test", "v").unmodifiable();
 		var u2 = new Ok().setHeader2("X-Test", "v").unmodifiable();
@@ -77,7 +77,7 @@ class BasicHttpResponse_Test extends TestBase {
 		var m2 = new Ok().setHeader2("X-Test", "v");
 		assertEquals(m1, m2);
 		assertEquals(m1.hashCode(), m2.hashCode());
-		// D3 cross-boundary equality (Phase 5): now that HeaderList equality is content-only, a modifiable bean
+		// Cross-boundary equality: now that HeaderList equality is content-only, a modifiable bean
 		// compares equal to its own frozen snapshot.
 		assertEquals(m1, m1.unmodifiable());
 		assertEquals(m1.hashCode(), m1.unmodifiable().hashCode());

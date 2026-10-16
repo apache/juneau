@@ -1,0 +1,29 @@
+{
+  "number": "1,234.5",
+  "number-digits": "1,235",
+  "percent": "12.5%",
+  "percent-scale": "12.5%",
+  "compact": "15.3K",
+  "bytes": "1.5 MB",
+  "bytes-binary": "1.0 MiB",
+  "duration": "1h 02m",
+  "datetime-utc": "Oct 11, 2026",
+  "template-rich": "a｛b｝: 3",
+  "template-html": "&lt;b&gt;&amp;",
+  "template-formats": "50%",
+  "symbol-size-max": 24,
+  "symbol-size-min": 4,
+  "bytes-below-1000": "999 B",
+  "bytes-tier-boundary": "1.0 MB",
+  "bytes-negative": "-1.5 kB",
+  "duration-below-1s": "999 ms",
+  "duration-unit-s": "1m 30s",
+  "duration-tier-boundary": "1m 00s",
+  "duration-negative": "-5.0 s",
+  "number-nan": "",
+  "datetime-null": "",
+  "throwing-fn-blank": "",
+  "unknown-e-js-90": {
+    "error": "E-JS-90: 'c' references unknown $fn 'app.missing'; registered: <list>"
+  }
+}

@@ -26,6 +26,8 @@ import java.util.*;
 
 import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.params.*;
+import org.junit.jupiter.params.provider.*;
 
 import jakarta.servlet.*;
 import jakarta.servlet.http.*;
@@ -72,9 +74,10 @@ class LoopbackBoundaryFilter_Test extends TestBase {
 		return m;
 	}
 
-	/** A response paired with the body the filter wrote to it. */
-	private record Capture(HttpServletResponse res, CapturingOutputStream out) {
+	/** A response paired with the body the filter wrote to it and the headers it ended up with. */
+	private record Capture(HttpServletResponse res, CapturingOutputStream out, Map<String,List<String>> headers) {
 		String body() { return out.captured(); }
+		List<String> header(String name) { return headers.getOrDefault(name, List.of()); }
 	}
 
 	/**
@@ -90,7 +93,37 @@ class LoopbackBoundaryFilter_Test extends TestBase {
 		var out = new CapturingOutputStream();
 		var r = mock(HttpServletResponse.class);
 		when(r.getOutputStream()).thenReturn(out);
-		return new Capture(r, out);
+		// The response keeps its headers the way a container does, so a test can assert the values a header ends up
+		// with rather than only which calls were made: setHeader replaces, addHeader appends, reset clears.
+		var headers = new TreeMap<String,List<String>>(String.CASE_INSENSITIVE_ORDER);
+		doAnswer(x -> headers.put(x.getArgument(0), new ArrayList<>(List.of((String)x.getArgument(1))))).when(r).setHeader(anyString(), anyString());
+		doAnswer(x -> headers.computeIfAbsent(x.getArgument(0), k -> new ArrayList<>()).add(x.getArgument(1))).when(r).addHeader(anyString(), anyString());
+		doAnswer(x -> { headers.clear(); return null; }).when(r).reset();
+		return new Capture(r, out, headers);
+	}
+
+	/** A legitimate write with one header replaced, or removed when {@code value} is <jk>null</jk>. */
+	private static HttpServletRequest write(String header, String value, String contentType) {
+		var h = goodWriteHeaders();
+		if (value == null)
+			h.remove(header);
+		else
+			h.put(header, value);
+		return req("POST", h, contentType);
+	}
+
+	/** A request that {@link LoopbackBoundary} refuses for exactly {@code reason}. */
+	private static HttpServletRequest refusedFor(BoundaryReason reason) {
+		return switch (reason) {
+			case HOST_MISMATCH -> write("Host", "evil.example", "application/json");
+			case ORIGIN_MISSING -> write("Origin", null, "application/json");
+			case ORIGIN_MISMATCH -> write("Origin", "http://evil.example", "application/json");
+			case FETCH_SITE_NOT_SAME_ORIGIN -> write("Sec-Fetch-Site", "cross-site", "application/json");
+			case CONTENT_TYPE_NOT_JSON -> write("Sec-Fetch-Site", "same-origin", "text/plain");
+			case CSRF_TOKEN_MISSING -> write("X-Csrf-Token", null, "application/json");
+			case CSRF_TOKEN_MISMATCH -> write("X-Csrf-Token", "wrong", "application/json");
+			default -> throw new IllegalArgumentException("LoopbackBoundary does not emit " + reason);
+		};
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
@@ -175,6 +208,18 @@ class LoopbackBoundaryFilter_Test extends TestBase {
 		assertFalse(body.isBlank(), "a refusal must not render as an empty body");
 	}
 
+	@Test void f01_rejectionHeaderIsRequestBoundary() throws Exception {
+		assertEquals("X-Request-Boundary", LoopbackBoundaryFilter.REJECTION_HEADER);
+		var h = goodWriteHeaders();
+		h.put("Origin", "http://evil.example");
+		var capture = capturing();
+
+		filter().doFilter(req("POST", h, "application/json"), capture.res(), mock(FilterChain.class));
+
+		verify(capture.res()).setHeader("X-Request-Boundary", "ORIGIN_MISMATCH");
+		verify(capture.res(), never()).setHeader(eq("X-Loopback-Boundary"), anyString());
+	}
+
 	@Test void c02_hostMismatchAnswers421() throws Exception {
 		var capture = capturing();
 		filter().doFilter(req("GET", Map.of("Host", "evil.example"), null), capture.res(), mock(FilterChain.class));
@@ -210,6 +255,68 @@ class LoopbackBoundaryFilter_Test extends TestBase {
 		var body = capture.body();
 		assertTrue(body.contains("\\\"Odd\\\""), () -> "expected escaped quotes: " + body);
 		assertTrue(body.contains("\\\\Header"), () -> "expected escaped backslash: " + body);
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// h) Caching, the shared filter, and what a refusal may say
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Test void h01_rejectionHasNoStore() throws Exception {
+		var capture = capturing();
+		filter().doFilter(refusedFor(BoundaryReason.ORIGIN_MISMATCH), capture.res(), mock(FilterChain.class));
+		assertEquals(List.of("no-store"), capture.header("Cache-Control"));
+	}
+
+	@ParameterizedTest
+	@EnumSource(value=BoundaryReason.class, names={
+		"HOST_MISMATCH", "ORIGIN_MISSING", "ORIGIN_MISMATCH", "FETCH_SITE_NOT_SAME_ORIGIN", "CONTENT_TYPE_NOT_JSON",
+		"CSRF_TOKEN_MISSING", "CSRF_TOKEN_MISMATCH"
+	})
+	void h02_rejectionHasNoStoreOnEveryReason(BoundaryReason reason) throws Exception {
+		var capture = capturing();
+		filter().doFilter(refusedFor(reason), capture.res(), mock(FilterChain.class));
+		assertEquals(List.of(reason.name()), capture.header(RequestBoundaryFilter.REJECTION_HEADER));
+		assertEquals(List.of("no-store"), capture.header("Cache-Control"));
+	}
+
+	@Test void h03_aliasConstantsResolve() {
+		assertEquals(RequestBoundaryFilter.TOKEN_ATTRIBUTE, LoopbackBoundaryFilter.TOKEN_ATTRIBUTE);
+		assertEquals(RequestBoundaryFilter.HEADER_ATTRIBUTE, LoopbackBoundaryFilter.HEADER_ATTRIBUTE);
+		assertEquals(RequestBoundaryFilter.REJECTION_HEADER, LoopbackBoundaryFilter.REJECTION_HEADER);
+	}
+
+	@Test void h04_filterAcceptsAnyRequestBoundary() throws Exception {
+		var stub = new RequestBoundary() {
+			@Override public BoundaryResult check(HttpServletRequest req) { return BoundaryResult.ALLOWED; }
+			@Override public String csrfHeader() { return "X-Stub-Csrf"; }
+			@Override public String tokenFor(HttpServletRequest req) { return "token-for-" + req.getRequestURI(); }
+		};
+		var req = mock(HttpServletRequest.class);
+		when(req.getRequestURI()).thenReturn("/page");
+		var res = mock(HttpServletResponse.class);
+		var chain = mock(FilterChain.class);
+		new RequestBoundaryFilter(stub).doFilter(req, res, chain);
+		verify(req).setAttribute(RequestBoundaryFilter.TOKEN_ATTRIBUTE, "token-for-/page");
+		verify(req).setAttribute(RequestBoundaryFilter.HEADER_ATTRIBUTE, "X-Stub-Csrf");
+		verify(chain).doFilter(req, res);
+	}
+
+	@Test void h05_rejectionBodyEchoesNothing() throws Exception {
+		var hostile = "http://evil.example\"'<script>\u0001\r\n";
+		var capture = capturing();
+		filter().doFilter(write("Origin", hostile, "application/json"), capture.res(), mock(FilterChain.class));
+		var body = capture.body();
+		for (var fragment : List.of("evil.example", "<script>", "\"'", "\u0001"))
+			assertFalse(body.contains(fragment), () -> "the rejection body echoes caller input: " + body);
+		capture.headers().forEach((k, v) -> v.forEach(x ->
+			assertFalse(x.contains("evil.example") || x.contains("<script>"), () -> "header " + k + " echoes caller input: " + x)));
+	}
+
+	@Test void h06_markTokenBearingReplacesExistingCacheControl() throws Exception {
+		var capture = capturing();
+		capture.res().setHeader("Cache-Control", "public, max-age=60");
+		RequestBoundaryFilter.markTokenBearing(capture.res());
+		assertEquals(List.of("private, no-store"), capture.header("Cache-Control"));
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

@@ -25,7 +25,7 @@ import org.junit.jupiter.params.*;
 import org.junit.jupiter.params.provider.*;
 
 /**
- * Strict booleans (spec §4.4, E-5) for {@code <@node visible|selected>} and {@code <@console chrome>}.
+ * Strict booleans (E-5) for {@code <@node visible|selected>} and {@code <@console chrome>}.
  *
  * @since 10.0.0
  */

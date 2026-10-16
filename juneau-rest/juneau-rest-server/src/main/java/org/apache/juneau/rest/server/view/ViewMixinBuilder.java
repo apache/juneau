@@ -22,7 +22,7 @@ package org.apache.juneau.rest.server.view;
  * {@code FreemarkerMixin.Builder}).
  *
  * <p>
- * The four view-engine bridges each evolved their own builder independently (§2.3.1 worker-bean
+ * The four view-engine bridges each evolved their own builder independently (worker-bean
  * composition), and their per-engine knobs legitimately diverge &mdash; e.g. only Thymeleaf exposes
  * {@code templateMode(...)}, only Mustache/FreeMarker expose {@code templateSuffix(...)}. This
  * interface pins down the small subset of knobs that are meaningful to <b>every</b> engine, so a

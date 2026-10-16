@@ -17,7 +17,7 @@
 /*
 
 /*
- * table-bus.cjs - Node harness for juneau-views.js's NS.tableBus (message bus addendum, spec 4.2-4.5, 5.3, 5.4).
+ * table-bus.cjs - Node harness for juneau-views.js's NS.tableBus.
  *
  *   Usage:  node table-bus.cjs <juneau-bus.js> <juneau-renders.js> <juneau-views.js> <juneau-ribbon.js> <juneau-search.js>
  *
@@ -625,12 +625,12 @@ function recorder(cardId) {
 		bulkPublishedAfterToast: J(oTrace.slice(traceMark).filter(function (t) { return t.topic === 'bulk:drv'; }).map(function (t) { return t.toasts; }))
 	};
 
-	// runBulkAction, aggregate: a failure that names no status reports 0.
+	// runBulkAction, aggregate: BulkResult.Failure is (id, message) - it carries no HTTP status, so every aggregate failure reports 0 (a stray 'status' field on the wire is ignored).
 	Array.from(env.body.querySelectorAll('.juneau-view-bulk-toast')).forEach(function (t) { t.remove(); });
 	const agg = { id: 'close', label: 'Close', method: 'POST', endpoint: '/api/changes/close', bulkMode: 'aggregate' };
 	fetchImpl = function () {
 		return Promise.resolve({ status: 200, ok: true, text: function () {
-			return Promise.resolve(J({ contractVersion: '1', succeeded: ['c-17'], notFound: [], failed: [{ id: 'c-21', status: 409 }, { id: 'c-30' }] }));
+			return Promise.resolve(J({ contractVersion: '1', succeeded: ['c-17'], notFound: [], failed: [{ id: 'c-21', message: 'merged', status: 409 }, { id: 'c-30', message: 'gone' }] }));
 		} });
 	};
 	pick(['c-17', 'c-21', 'c-30']);

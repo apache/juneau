@@ -75,6 +75,18 @@ class PageSpec_View_Test extends TestBase {
 		public View built(RestRequest req) {
 			return PageSpec.create().csrf("tok", "X-CSRF").view(req);
 		}
+		@RestGet(path="/toolkit-views")
+		public View toolkitViews(RestRequest req) {
+			return PageSpec.create().toolkit("views").view(req);
+		}
+		@RestGet(path="/toolkit-unknown")
+		public View toolkitUnknown(RestRequest req) {
+			return PageSpec.create().toolkit("no-such-pack").view(req);
+		}
+		@RestGet(path="/card-only")
+		public View cardOnly(RestRequest req) {
+			return PageSpec.create().card(ChartDef.line("trend").src("/s").x("day").series("placed", "Placed").toCardSpec()).view(req);
+		}
 		@RestGet(path="/cached")
 		public View cached(RestRequest req) {
 			return CACHED.view(req);
@@ -178,6 +190,24 @@ class PageSpec_View_Test extends TestBase {
 		var body = get("/built", 200);
 		assertPage(body).isValid();
 		assertTrue(body.contains("data-juneau-csrf=\"tok\" data-juneau-csrf-header=\"X-CSRF\""), body);
+	}
+
+	@Test void a09b_builtPage_emitsItsSeededToolkitAssets() throws Exception {
+		var body = get("/toolkit-views", 200);
+		assertTrue(body.contains("juneau-views.js") && body.contains("data-toolkit-js"), body);
+		assertTrue(body.contains("juneau-views.css") && body.contains("data-toolkit-css"), body);
+		assertEquals(1, body.split("juneau-views\\.js", -1).length - 1, "emitted once: " + body);
+	}
+
+	@Test void a09c_builtPage_unknownToolkit_failsLikePageDirective() throws Exception {
+		var body = get("/toolkit-unknown", 500);
+		assertTrue(body.contains("Unknown toolkit pack 'no-such-pack'"), body);
+	}
+
+	@Test void a09d_builtPage_cardOnly_noToolkitCall_emitsTheCardsPackAssets() throws Exception {
+		var body = get("/card-only", 200);
+		assertTrue(body.contains("data-toolkit-js") && body.contains("juneau-charts.js"), body);
+		assertTrue(body.contains("echarts"), body);
 	}
 
 	@Test void a10_cachedSpec_rendersTwice() throws Exception {

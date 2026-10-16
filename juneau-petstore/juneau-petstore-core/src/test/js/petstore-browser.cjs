@@ -18,14 +18,29 @@
 /*
  * Petstore browser harness: node petstore-browser.cjs <cases.json>
  *
- * Input:  {baseUrl, snapshots, cases:[{name, path, actions?, queries?, fetches?, capture?, allowFailedLoads?}]}
- * Output (stdout): {cases:{<name>:{status, jsFailures, deprecations, queries, fetches, requests, timeouts}}}
+ * Input:  {baseUrl, snapshots, cases:[{name, path, viewport?, waitUntil?, initScript?, actions?, queries?, fetches?,
+ *          capture?, allowFailedLoads?}]}
+ * Output (stdout): {cases:{<name>:{status, jsFailures, deprecations, queries, fetches, requests, downloads, timeouts}}}
  *
  * Each action is one of:
  *   {click: selector} {fill: [selector, text]} {press: [selector, key]}
  *   {waitFor: jsExpression, timeoutMs?}  (records the expression in timeouts if it never becomes truthy)
  *   {waitForCaptured: n, timeoutMs?}  (waits until n requests matching the case's capture were recorded)
  *   {evaluate: jsExpression}  {screenshot: fileName}
+ *   {reload: true}  (reloads the page in the same context, so IndexedDB and the captured requests carry over; a
+ *     reload through evaluate would destroy the execution context mid-call)
+ *   {back: true} {forward: true}  (the browser's own back and forward buttons)
+ *   {download: selector, as?, timeoutMs?}  (clicks and records the download as downloads[as]: {name, bytes, head}, head being its first 20000 characters)
+ *   {goto: path}  {follow: jsExpression}  (follow navigates to the URL the expression returns; both wait like reload)
+ *   {drag: [selector, dx]}  (presses the mouse at the element's centre, moves dx pixels right, and releases)
+ * reload waits for the case's waitUntil, as the first load does.  back and forward wait only for the navigation to
+ * commit: follow them with a waitFor on what the page should then show.
+ *
+ * waitUntil is the navigation's Playwright wait state, networkidle by default.  A case on a page that polls can pass
+ * 'load' and start its actions with a waitFor, so it never depends on the poll leaving a quiet gap.
+ *
+ * viewport is [width, height] (default [1280, 900]).  initScript is JS source run at the start of every document the
+ * case opens, reloads included.
  *
  * allowFailedLoads drops Chromium's own "Failed to load resource" console errors, which a deliberate 401/404
  * fetch produces; the case then asserts the status itself.  Script errors are still recorded.
@@ -52,9 +67,11 @@ const { chromium } = require('playwright');
 });
 
 async function runCase(browser, input, c) {
-	const context = await browser.newContext({ viewport: { width: 1280, height: 900 } });
+	const vp = Array.isArray(c.viewport) ? c.viewport : [1280, 900];
+	const context = await browser.newContext({ viewport: { width: vp[0], height: vp[1] }, acceptDownloads: true });
+	if (c.initScript) await context.addInitScript(c.initScript);
 	const page = await context.newPage();
-	const r = { status: 0, jsFailures: [], deprecations: [], queries: {}, fetches: {}, requests: [], timeouts: [] };
+	const r = { status: 0, jsFailures: [], deprecations: [], queries: {}, fetches: {}, requests: [], downloads: {}, timeouts: [] };
 	page.on('pageerror', e => r.jsFailures.push(String(e)));
 	page.on('console', m => {
 		const t = m.text();
@@ -69,7 +86,7 @@ async function runCase(browser, input, c) {
 		});
 	}
 	try {
-		const resp = await page.goto(input.baseUrl + c.path, { waitUntil: 'networkidle' });
+		const resp = await page.goto(input.baseUrl + c.path, { waitUntil: c.waitUntil || 'networkidle' });
 		r.status = resp ? resp.status() : 0;
 		for (const a of c.actions || []) await act(page, input, c, a, r);
 		for (const [k, expr] of Object.entries(c.queries || {})) {
@@ -93,6 +110,21 @@ async function act(page, input, c, a, r) {
 	if (a.click) return page.click(a.click);
 	if (a.fill) return page.fill(a.fill[0], a.fill[1]);
 	if (a.press) return page.press(a.press[0], a.press[1]);
+	const until = { waitUntil: c.waitUntil || 'networkidle' };
+	if (a.reload) return page.reload(until);
+	if (a.goto) return page.goto(input.baseUrl + a.goto, until);
+	if (a.follow) return page.goto(String(await page.evaluate(a.follow)), until);
+	if (a.drag) {
+		const box = await page.locator(a.drag[0]).boundingBox();
+		if (!box) throw new Error('drag: ' + a.drag[0] + ' is not visible');
+		const x = box.x + box.width / 2, y = box.y + box.height / 2;
+		await page.mouse.move(x, y);
+		await page.mouse.down();
+		await page.mouse.move(x + a.drag[1], y, { steps: 4 });
+		return page.mouse.up();
+	}
+	if (a.back) return page.goBack({ waitUntil: 'commit' });
+	if (a.forward) return page.goForward({ waitUntil: 'commit' });
 	if (a.evaluate) return page.evaluate(a.evaluate);
 	if (a.screenshot) return page.screenshot({ path: path.join(input.snapshots, a.screenshot), fullPage: true });
 	if (a.waitFor) {
@@ -107,6 +139,13 @@ async function act(page, input, c, a, r) {
 		const deadline = Date.now() + (a.timeoutMs || 10000);
 		while (r.requests.length < a.waitForCaptured && Date.now() < deadline) await page.waitForTimeout(100);
 		if (r.requests.length < a.waitForCaptured) r.timeouts.push('captured ' + a.waitForCaptured + ' of ' + c.capture);
+		return;
+	}
+	if (a.download) {
+		const [dl] = await Promise.all([page.waitForEvent('download', { timeout: a.timeoutMs || 10000 }), page.click(a.download)]);
+		const file = await dl.path();
+		r.downloads[a.as || 'download'] = { name: dl.suggestedFilename(), bytes: fs.statSync(file).size,
+			head: fs.readFileSync(file, 'utf8').slice(0, 20000) };
 		return;
 	}
 	throw new Error('Unknown action ' + JSON.stringify(a));

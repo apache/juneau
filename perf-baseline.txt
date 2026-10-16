@@ -19,12 +19,16 @@
 #
 # Tolerance: JUNEAU_CI_PERF_THRESHOLD (default 0.20).  Min seconds: JUNEAU_CI_PERF_MIN_SECONDS (default 3).
 #
-# To re-baseline once a few pushes have recorded module rows:
-#     python3 scripts/test.py --rebaseline [--window 20] [--min-runs 5] [--timing-log <path>]
-# It reads the push history (default ~/.cache/juneau-push-timings/<branch>.jsonl), takes each key's
-# median over its last 20 passing runs (dropping runs over 3× that median), rounds up to 0.1s,
-# rewrites the suite line and the [modules] section, and prints what changed.  A key with fewer
-# than 5 runs keeps its value.  Review the diff; nothing is committed.
+# To re-baseline once a few test.py runs have recorded module timings:
+#     python3 scripts/test.py --rebaseline [--window 20] [--min-runs 5]
+# It reads this repo's test.py run history (the passing `tests` records in
+# ~/.cache/juneau-run/history/<repo>-<sha8>/test.jsonl, shared by every branch and worktree) that have
+# the newest record's command signature (so --no-container and wrapper runs don't skew it), takes
+# each key's median over its last 20 passing runs (dropping runs over 3× that median), rounds up to
+# 0.1s, rewrites the suite line and the [modules] section, and prints what changed.  A key with
+# fewer than 5 runs keeps its value; a command shape with fewer than 5 runs prints "no baseline for this
+# command shape" and rewrites nothing.  With JUNEAU_RUN_HISTORY=0 there is no history and nothing is
+# rewritten.  Review the diff; nothing is committed.
 #
 # --rebaseline rewrites the [modules] section wholesale: keep comments above the [modules] line,
 # and keep the suite line above it too.

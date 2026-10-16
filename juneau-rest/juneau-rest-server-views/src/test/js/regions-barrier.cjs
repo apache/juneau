@@ -354,7 +354,7 @@ function emitOnce(h, id, msg) {
 		const slowFetch = H.deferred();
 		control(h, 'ctl', { kind: 'M1' });
 		subscriber(h, 'healthy');
-		// The §8.5 row-1 mix-wrapper shape, with the declarative delegation stubbed out (that half is a later
+		// The row-1 mix-wrapper shape, with the declarative delegation stubbed out (that half is a later
 		// child): await the declared fetch, THEN subscribe.
 		subscriber(h, 'slow', {
 			subscribeNow: false,

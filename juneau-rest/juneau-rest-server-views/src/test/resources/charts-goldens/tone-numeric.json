@@ -1,0 +1,69 @@
+{
+  "tooltip": {
+    "trigger": "axis",
+    "renderMode": "richText"
+  },
+  "legend": {
+    "bottom": 0
+  },
+  "xAxis": {
+    "type": "category"
+  },
+  "yAxis": {
+    "type": "value"
+  },
+  "series": [
+    {
+      "id": "placed",
+      "name": "placed",
+      "type": "bar",
+      "encode": {
+        "x": "day",
+        "y": "placed"
+      },
+      "itemStyle": {
+        "color": "#2e8540"
+      }
+    },
+    {
+      "id": "delivered",
+      "name": "delivered",
+      "type": "bar",
+      "encode": {
+        "x": "day",
+        "y": "delivered"
+      }
+    }
+  ],
+  "aria": {
+    "enabled": true
+  },
+  "dataset": [
+    {
+      "id": "juneau",
+      "dimensions": [
+        {
+          "name": "day",
+          "type": "ordinal"
+        },
+        {
+          "name": "placed",
+          "type": "number"
+        },
+        {
+          "name": "delivered",
+          "type": "number"
+        }
+      ],
+      "source": {
+        "day": [
+          "Mon",
+          "Tue",
+          "Wed"
+        ],
+        "placed": "[Float64Array 3: 3,5,4]",
+        "delivered": "[Float64Array 3: 1,2,4]"
+      }
+    }
+  ]
+}

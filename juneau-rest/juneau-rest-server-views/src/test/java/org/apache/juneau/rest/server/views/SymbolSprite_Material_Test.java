@@ -68,10 +68,9 @@ class SymbolSprite_Material_Test extends TestBase {
 		assertTrue(body.contains("q-33 0-56.5-23.5T280-320"), body);
 	}
 
-	@Test void a04_notIrsOrSldsArt() throws Exception {
+	@Test void a04_notThirdPartyConsoleOrSldsArt() throws Exception {
 		var body = svg();
 		assertFalse(body.contains("slds-"), body);
-		assertFalse(body.contains("irs-icon-overrides"), body);
-		assertFalse(body.contains("irs-symbols"), body);
+		assertFalse(body.contains("icon-overrides"), body);
 	}
 }

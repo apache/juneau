@@ -393,12 +393,12 @@ class ViewsJs_RowActions_Test extends TestBase {
 
 	@Test void b02_literalEndpointWithNoTokenIsPreservedByteIdentical_backwardCompat() {
 		var r = report();
-		// With rowData, without rowData, and via the pre-J0509 4-argument call signature - all three unaffected.
+		// With rowData, without rowData, and via the legacy 4-argument call signature - all three unaffected.
 		assertBean(r, "literal_withRowData,literal_noRowData,literal_preFeatureCallSignature",
 			"servlet:/incidents/ack,servlet:/incidents/ack,servlet:/incidents/ack");
 	}
 
-	@Test void b03_noIdOrNullIdRowRefusesTheSubmission_WORK_J0521_B1b() {
+	@Test void b03_noIdOrNullIdRowRefusesTheSubmission() {
 		// this REPLACES the previous empty-substitution SUCCESS pin.  Column.href's
 		// interpolateHref still substitutes a missing/null/absent-rowData `{id}` to "" - that part is unchanged
 		// and correct for RENDERING - but firing a WRITE against the resulting malformed "/x//y" is not a safe
@@ -444,9 +444,9 @@ class ViewsJs_RowActions_Test extends TestBase {
 		assertBean(r, "helper_direct,helper_noToken", "/x/a1,/x/ack");
 	}
 
-	@Test void b09_gracefullyDegradesButRefusesATemplatedEndpoint_whenRendersJsIsNotLoaded_WORK_J0521_S5() {
+	@Test void b09_gracefullyDegradesButRefusesATemplatedEndpoint_whenRendersJsIsNotLoaded() {
 		// If a caller ships juneau-views.js without its juneau-renders.js peer, substitution is unavailable -
-		// the SAME degradation DETECTION as before (hasInterpolateHref stays false) - but S5 FLIPS
+		// the SAME degradation DETECTION as before (hasInterpolateHref stays false) - but now
 		// what happens to a TEMPLATED endpoint: it now REFUSES (reason "unresolved-endpoint", no `url`) instead
 		// of firing the literal-token URL `servlet:/incidents/{id}/ack`, which is a URL the action's author
 		// demonstrably did not write.  The valuable, UNCHANGED half is the real point of this test: a
@@ -458,11 +458,11 @@ class ViewsJs_RowActions_Test extends TestBase {
 	}
 
 	// -----------------------------------------------------------------------------------------------------------
-	// B1a (`..` path-walk), B1c (blank endpoint), S3 (row-less inheritance),
-	// S5 (residual token, above), plus Terra's query-context should-fix and two false-positive boundary checks.
+	// `..` path-walk, blank endpoint, row-less inheritance, residual token (above), a query-context case and
+	// two false-positive boundary checks.
 	// -----------------------------------------------------------------------------------------------------------
 
-	@Test void b10_dotDotRowValueRefuses_WORK_J0521_B1a() {
+	@Test void b10_dotDotRowValueRefuses() {
 		// The headline finding: encodeURIComponent('..') === '..' (`.` is RFC 3986 unreserved, never escaped), so
 		// a row value of `..` would otherwise turn `servlet:/incidents/{id}/ack` into
 		// `servlet:/incidents/../ack`, which browser URL resolution normalizes to `/ack` - a DIFFERENT, undeclared
@@ -472,7 +472,7 @@ class ViewsJs_RowActions_Test extends TestBase {
 
 	@Test void b11_dotDotDeclaredInTemplateAlsoRefuses_deliberateConsequence() {
 		// The resolved-URL check also refuses an author-DECLARED `..`, with no row value involved at all - a
-		// deliberate consequence of checking the result rather than only the substituted token (design §4.5).
+		// deliberate consequence of checking the result rather than only the substituted token.
 		assertRefusal((Map<?,?>) report().get("dotdot_inTemplate"), "unsafe-endpoint");
 	}
 
@@ -483,7 +483,7 @@ class ViewsJs_RowActions_Test extends TestBase {
 		assertRefusal((Map<?,?>) report().get("whitespaceOnly_rowValue"), "empty-substitution");
 	}
 
-	@Test void b13_blankOrAbsentEndpointRefuses_WORK_J0521_B1c() {
+	@Test void b13_blankOrAbsentEndpointRefuses() {
 		// No test previously pinned today's fetch(null) -> the relative path "null" for a blank/absent endpoint.
 		// The exact precedent for refusing sits at buildJobCancelRequest's "no-cancel-url".
 		var r = report();
@@ -494,18 +494,18 @@ class ViewsJs_RowActions_Test extends TestBase {
 	}
 
 	@Test void b14_queryContextInjectionIsSafelyEncoded_terraShouldFix() {
-		// Terra's should-fix: a row value must not be able to inject `&`, `=`, or `#` into a query string. This
+		// A row value must not be able to inject `&`, `=`, or `#` into a query string. This
 		// should already pass via encodeURIComponent - pinned as explicit coverage so a future "optimization"
 		// that swaps it for something cheaper cannot silently break this property.
 		var marker = (Map<?,?>) report().get("queryContext_resolved");
 		assertEquals("servlet:/incidents/ack?target=a%26b%3Dc%23d", marker.get("url"));
 	}
 
-	@Test void b15_rowLessRibbonDialogInheritsTheSameGuard_WORK_J0521_S3() {
-		// S3: the row-less ribbon-dialog seam (openRibbonDialog -> openActionDialog(..., null, ...) ->
+	@Test void b15_rowLessRibbonDialogInheritsTheSameGuard() {
+		// the row-less ribbon-dialog seam (openRibbonDialog -> openActionDialog(..., null, ...) ->
 		// submitActionDialog -> submitRowAction -> rowDataForTr(ctx, null) === null) reaches this SAME guard
 		// with no extra code, closing it for free - named separately (even though b03's noId_absentRowData
-		// proves the identical input shape) so a reader tracing S3 finds a dedicated case.
+		// proves the identical input shape) so a reader tracing row-less inheritance finds a dedicated case.
 		assertRefusal((Map<?,?>) report().get("rowLess_idTemplate"), "empty-substitution");
 	}
 

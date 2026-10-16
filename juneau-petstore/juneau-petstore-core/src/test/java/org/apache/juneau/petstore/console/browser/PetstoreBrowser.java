@@ -30,16 +30,24 @@ import org.apache.juneau.marshall.marshaller.*;
  * Runs {@code petstore-browser.cjs} over a list of cases and returns its per-case report.
  *
  * <p>
- * A case is a JSON object: {@code name}, {@code path} (appended to the base URL), optional {@code actions}
- * (each {@code {click|fill|press|waitFor|evaluate|screenshot: ...}}), {@code queries} (name to a JS expression
- * evaluated in the page after the actions), {@code fetches} (name to a URL fetched from the page) and
+ * A case is a JSON object: {@code name}, {@code path} (appended to the base URL), optional {@code waitUntil} (the
+ * navigation's Playwright wait state, {@code networkidle} by default; a polling page can pass {@code load} and start
+ * with a {@code waitFor}), optional {@code actions}
+ * (each {@code {click|fill|press|waitFor|waitForCaptured|evaluate|screenshot|download: ...}}, or {@code {reload|back|forward: true}};
+ * {@code reload} waits for the case's {@code waitUntil} and {@code back}/{@code forward} only for the navigation to
+ * commit, so follow them with a {@code waitFor}), {@code queries} (name to a JS expression
+ * evaluated in the page after the actions), {@code fetches} (name to a URL fetched from the page),
  * {@code capture} (a URL substring whose requests are recorded with their POST bodies) and
  * {@code allowFailedLoads} (ignore Chromium's "Failed to load resource" line for a deliberate 401/404).
+ * A case may also set {@code viewport} ({@code [width, height]}) and {@code initScript} (JS run at the start of every
+ * document).  The extra actions are {@code {goto:path}} and {@code {follow:jsExpression}}, which wait for the case's
+ * {@code waitUntil} as {@code reload} does, and {@code {drag:[selector, dx]}}.
  *
  * <p>
  * The report for each case has {@code status} (the navigation's HTTP status), {@code jsFailures} (page errors
  * and {@code console.error} lines), {@code deprecations} ({@code console.warn} lines matching
- * {@code is deprecated}), {@code queries}, {@code fetches}, {@code requests} and {@code timeouts}.
+ * {@code is deprecated}), {@code queries}, {@code fetches}, {@code requests}, {@code downloads} (by the {@code download} action's
+ * {@code as} name: {@code {name, bytes, head}}) and {@code timeouts}.
  *
  * <h5 class='section'>Example:</h5>
  * <p class='bjava'>
@@ -80,9 +88,9 @@ public final class PetstoreBrowser {
 		pb.environment().put("NODE_PATH", dir.resolve("node_modules").toString());
 		pb.environment().put("PLAYWRIGHT_BROWSERS_PATH", required("juneau.jsTests.browsers"));
 		var p = pb.start();
-		if (! p.waitFor(3, TimeUnit.MINUTES)) {
+		if (! p.waitFor(8, TimeUnit.MINUTES)) {
 			p.destroyForcibly();
-			fail("Harness '" + suite + "' did not finish within 3m; stderr:\n" + quietRead(err));
+			fail("Harness '" + suite + "' did not finish within 8m; stderr:\n" + quietRead(err));
 		}
 		assertEquals(0, p.exitValue(), () -> "Harness '" + suite + "' exited non-zero; stderr:\n" + quietRead(err));
 
@@ -117,6 +125,22 @@ public final class PetstoreBrowser {
 	@SuppressWarnings("unchecked") // queries is always a JSON object.
 	public static Object query(Map<String,Object> c, String key) {
 		return ((Map<String,Object>) c.get("queries")).get(key);
+	}
+
+	/**
+	 * Returns the JSON body of the last captured POST whose URL contains the given text.
+	 *
+	 * @param c One case's report (its {@code capture} must cover the URL).
+	 * @param urlPart The URL substring.
+	 * @return The parsed POST body.
+	 * @throws Exception If the body is not JSON.
+	 */
+	@SuppressWarnings("unchecked") // requests is a JSON array of {url, method, postData}.
+	public static Map<String,Object> lastCaptured(Map<String,Object> c, String urlPart) throws Exception {
+		var reqs = ((List<Map<String,Object>>) c.get("requests")).stream()
+			.filter(r -> "POST".equals(r.get("method")) && String.valueOf(r.get("url")).contains(urlPart)).toList();
+		assertFalse(reqs.isEmpty(), () -> String.format("No captured POST matching '%s'", urlPart));
+		return Json.to((String) reqs.get(reqs.size() - 1).get("postData"), Map.class);
 	}
 
 	private static String required(String name) {

@@ -29,7 +29,7 @@ import org.apache.juneau.commons.bean.*;
  * <a class="doclink" href="https://datatables.net/manual/server-side">DataTables server-side request</a>; it carries
  * <b>no</b> query-engine types and knows nothing about {@code BeanQuery}.  The adapter in
  * {@code org.apache.juneau.rest.server.datatables.adapter} maps a parsed instance onto a
- * {@link org.apache.juneau.commons.beanquery.BeanQuery} (design §5.3).
+ * {@link org.apache.juneau.commons.beanquery.BeanQuery}.
  *
  * <p>
  * Shape (fields omitted from the request keep their defaults):
@@ -249,7 +249,7 @@ public class DataTablesRequest {
 		}
 
 		/**
-		 * Returns the raw search term.  For this design the term is a {@code $}-language expression (design §5.1).
+		 * Returns the raw search term.  The term is a {@code $}-language expression.
 		 *
 		 * @return The search term, or <jk>null</jk> if none.
 		 */

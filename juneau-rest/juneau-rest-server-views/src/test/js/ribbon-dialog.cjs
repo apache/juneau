@@ -65,6 +65,12 @@ const ribbonJsSource = fs.readFileSync(path.resolve(ribbonJsPath), 'utf8');
  */
 function loadBoth() {
 	const env = makeEnv();
+	const sources = [];
+	const FakeES = function (url) { this.url = url; this.l = {}; this.closed = false; sources.push(this); };
+	FakeES.prototype.addEventListener = function (t, f) { (this.l[t] = this.l[t] || []).push(f); };
+	FakeES.prototype.close = function () { this.closed = true; };
+	FakeES.prototype.fire = function (t, d) { (this.l[t] || []).forEach(function (f) { f({ data: d }); }); };
+	env.EventSource = FakeES;
 	const loaded = loadViews(rendersJsPath, viewsJsPath, env);
 	const sandbox = {
 		window: env.window, document: env.document, console: console,
@@ -74,7 +80,7 @@ function loadBoth() {
 	// NOSONAR javascript:S1523 -- loading the production juneau-ribbon.js source into a VM sandbox is this
 	// harness's intended mechanism; the path is a fixed local file supplied by the test.
 	vm.runInNewContext(ribbonJsSource, sandbox, { filename: 'juneau-ribbon.js' }); // NOSONAR javascript:S1523 -- the harness evaluates the module's own bundled script
-	return { env: env, NS: env.window.JuneauViews, I: loaded.I };
+	return { env: env, NS: env.window.JuneauViews, I: loaded.I, sources: sources };
 }
 
 const out = {};
@@ -317,6 +323,45 @@ function anyRowBanner(env) {
 
 		out.mergeRowless_redrawCalledOnce = fx.ctx.redrawCount() === 1;
 		out.mergeRowless_outcomeStillRendered = ribbonOutcome(env)?.dataset?.state === 'success';
+	})();
+
+	// --- 8) A ribbon dialog whose submit starts a job streams into the ribbon host (the original row-less job bug) ---
+	await (async function () {
+		const { env, NS, I, sources } = loadBoth();
+		const action = { type: 'dialog', id: 'add-project', title: 'Add project', method: 'POST', endpoint: '/projects' };
+		const fx = buildFixture(env, NS, action);
+		let n = 0;
+		env.setFetch(function () {
+			n++;
+			return Promise.resolve(jsonResponse({ jobId: 'rj-' + n, streamUrl: '/s/rj-' + n, cancelUrl: '/c/rj-' + n }, { status: 202 }));
+		});
+		async function openAndConfirm() {
+			const btn = dialogButton(fx);
+			if (btn) btn.dispatch('click');
+			await flush();
+			const confirmBtn = env.body.querySelector('.juneau-view-dialog-confirm');
+			if (confirmBtn) confirmBtn.dispatch('click');
+			await flush();
+		}
+		await openAndConfirm();
+		out.job_streamOpened = sources.length === 1 && sources[0].url === '/s/rj-1';
+		const host = env.body.querySelector('.juneau-view-ribbon-banner-host');
+		out.job_progressInRibbonHost = host != null && host.querySelector('.juneau-view-job-progress') != null;
+		out.job_cancelInRibbonHost = host != null && host.querySelector('.juneau-view-job-cancel') != null;
+		out.job_dialogClosed = I.dialogLayerCount() === 0;
+		out.job_noRowBanner = !anyRowBanner(env);
+		// a second job while the first still streams keeps its own progress element
+		await openAndConfirm();
+		out.job_twoStreams = sources.length === 2;
+		out.job_twoProgress = env.body.querySelectorAll('.juneau-view-job-progress').length === 2;
+		// the first job's result clears only its own element and paints into the ribbon outcome
+		sources[0].fire('result', JSON.stringify({ outcome: 'success', message: 'first done' }));
+		await flush();
+		out.job_oneProgressLeft = env.body.querySelectorAll('.juneau-view-job-progress').length === 1;
+		out.job_outcomeInRibbon = (ribbonOutcome(env)?.textContent || '').indexOf('first done') >= 0;
+		// tearing the table down closes the stream that is still open
+		I.teardownTable(fx.table, fx.ctx);
+		out.job_teardownClosedStream = sources[1].closed === true;
 	})();
 
 	process.stdout.write(JSON.stringify(out));

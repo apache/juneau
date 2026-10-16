@@ -54,7 +54,7 @@
 	 * JUNEAU_VIEW_CONTRACT_VERSION or JUNEAU_ACTION_RESULT_CONTRACT_VERSION, so a bulk-actions-list revision can
 	 * never force a VIEW_META (ViewDef) contract bump (R2/design-doc guard). A sidecar whose contractVersion
 	 * differs is refused (fail-loud), leaving row selection itself fully functional - only the bulk toolbar is
-	 * withheld, per the two-independent-opt-ins separability guarantee (HIGH-5).
+	 * withheld, per the two-independent-opt-ins separability guarantee.
 	 */
 	const JUNEAU_BULK_CONTRACT_VERSION = "2";
 	/** BulkResult's OWN wire contract - independent of the bulk-def version above (MUST equal BulkResult.CONTRACT_VERSION). */
@@ -119,7 +119,7 @@
 	/**
 	 * Row-selection/bulk-mutation feature's DOM attribute names - MUST equal ViewTable's constants of the same names
 	 * (SELECT_ATTR, ROW_ID_FIELD_ATTR, SELECT_ALL_ATTR, BULK_ATTR, BULK_SIDECAR_ID_PREFIX) on the server. Selection
-	 * and bulk-mutation are two INDEPENDENT opt-ins (HIGH-5): a table carries SELECT_ATTR with or without
+	 * and bulk-mutation are two INDEPENDENT opt-ins: a table carries SELECT_ATTR with or without
 	 * BULK_ATTR, but never the reverse (ViewTable.of(..., BulkMutateDef) always stamps both, since a
 	 * BulkMutateDef is only constructible against a SelectionDef it requires at compile time).  All of this is
 	 * pure DOM-attribute signaling - none of it is part of the VIEW_META wire contract (R2 guard; see
@@ -150,10 +150,10 @@
 	// region-hosting runtime and never registers with the ready()/registerRuntime() barrier.
 	const REGION_MARKER = "data-juneau-region";
 
-	// DT1 table-overflow-wrap discipline: the DT1 "Approach B" single-node wrap (the DT2 dogfood path uses the
-	// CSS-only "Approach D" overflow box on the flex .dt-layout-cell instead - see juneau-views.css).
+	// DT1 table-overflow-wrap discipline: the DT1 single-node wrap (the DT2 dogfood path uses the
+	// CSS-only overflow box on the flex .dt-layout-cell instead - see juneau-views.css).
 	const TABLE_SCROLL_CLASS = "juneau-view-table-scroll";
-	// L12 A: a generic (Juneau-vocabulary) label applied to the scroll region ONLY when it actually overflows.
+	// A generic (Juneau-vocabulary) label applied to the scroll region ONLY when it actually overflows.
 	const TABLE_SCROLL_LABEL = "Table, horizontally scrollable";
 	// Per-cell opt-out from the `.juneau-view-table td` clip/ellipsis default (see ViewTable.CELL_WRAP_CLASS).  Used
 	// by the named emitters' `class` facets and by any cell whose content is a panel rather than a line of text.
@@ -203,7 +203,7 @@
 
 	// View-level catalog keys copied verbatim onto view (defaultOrder is lifted separately).
 	const VIEW_KEYS = ["dataUrl", "rowType", "dataMode", "ribbon", "pollIntervalMs", "pausePollingWhileEditing",
-		"columnConfig", "cleanAddress", "primary", "copyLink", "rowActions", "rowClassRules"];
+		"columnConfig", "cleanAddress", "primary", "copyLink", "rowActions", "rowClassRules", "urlState"];
 
 	/**
 	 * Lift a datatables card's author catalog (`card.table`) into the SLOT_META envelope `paintSlotTable` consumes,
@@ -285,7 +285,9 @@
 		}
 		return work.then(function () {
 			return paintSlotTable(body, envelope);
-		}).then(function (table) {
+		}).then(function (painted) {
+			// A slot-built table is not handed back by the paint; take it from the body it was painted into.
+			const table = painted || body.querySelector("table[data-juneau-view]");
 			cardTables.set(card.id, { el: body, table: table });
 			ctx.setApi({
 				reload: function () { return NS.card.reload(card.id); },
@@ -328,8 +330,8 @@
 	// ==================================================================================================================
 
 	/**
-	 * Shared page-size vocabulary (visual-parity design doc §4.B) - a client-side default for this pass (not a new
-	 * ViewDef wire field; see the non-goal in design doc §11).  Consumed by buildOptions' default pageLength below
+	 * Shared page-size vocabulary - a client-side default for this pass (not a new
+	 * ViewDef wire field).  Consumed by buildOptions' default pageLength below
 	 * AND by the unified paging ribbon's page-size menu (buildPageSizeMenu, below).
 	 */
 	const PAGE_SIZE_OPTIONS = [
@@ -347,7 +349,7 @@
 	}
 
 	/**
-	 * The live DataTables index of `dataKey` in the ACTUAL `opts.columns` array.  Delegates to slice 4's
+	 * The live DataTables index of `dataKey` in the ACTUAL `opts.columns` array.  Delegates to the
 	 * {@code JuneauViews.config.dtIndex} when juneau-config.js is present; otherwise walks the same array
 	 * (the no-config-js seam still has to fix the selection-offset off-by-one).  Returns -1 when absent.
 	 */
@@ -392,7 +394,7 @@
 	}
 
 	/**
-	 * Evaluates a view's rowClassRules against one row, returning the list of CSS classes to add.  op grammar (§6.3):
+	 * Evaluates a view's rowClassRules against one row, returning the list of CSS classes to add.  op grammar:
 	 * eq/ne compare row[field] to the rule value; present/absent test whether row[field] is non-null/non-empty.
 	 */
 	function evaluateRowClassRules(rules, rowData) {
@@ -471,6 +473,14 @@
 	}
 
 	/**
+	 * Whether a job URL taken from a response body may be used: exactly a same-origin URL, with none of the characters
+	 * that trimming or URL parsing would silently change, so the string checked is the string fetched or streamed.
+	 */
+	function isTrustedJobUrl(u) {
+		return typeof u === "string" && u.trim() !== "" && !hasUnsafeUrlChars(u) && isSameOriginUrl(u);
+	}
+
+	/**
 	 * Substitutes `{id}` via encodeURIComponent and re-checks the result is still a same-origin path.
 	 * Returns null when the template or the substituted URL is unsafe.
 	 */
@@ -502,7 +512,8 @@
 	// protected nothing - the framework's own region container is always a bare <div> from RegionTable.of(), never
 	// carrying [data-juneau-action] - while opening a bypass: a populate painting
 	// `<button data-juneau-action="x" data-juneau-region="y">` would self-match, be treated as NOT in a region, and
-	// have its click routed straight into submitRowAction, which is the exact thing §13.6 exists to prevent.
+	// have its click routed straight into submitRowAction, which is the exact thing the detail-region isolation exists
+	// to prevent.
 	//
 	// The `scopeEl.contains(region)` bound is equally load-bearing in the other direction: a whole view TABLE may
 	// itself be hosted inside a region, and in that case the detail panel's own framework-emitted action buttons
@@ -533,7 +544,7 @@
 	}
 
 	/**
-	 * Resolves a row's STABLE selection id (MED-11) from its data, via the `rowIdField` key the host declared in
+	 * Resolves a row's STABLE selection id from its data, via the `rowIdField` key the host declared in
 	 * its {@code SelectionDef} (carried client-side only via the {@code ROW_ID_FIELD_ATTR} DOM attribute - never
 	 * VIEW_META).  Deliberately NEVER a DOM/table index: a poll/sort/page tick reshuffles which data occupies
 	 * which row index, but this always resolves to the SAME id for the SAME underlying record.  Returns
@@ -545,7 +556,7 @@
 	}
 
 	/**
-	 * The persistence rule (Q2/MED-11): given the currently-selected ids and the ids actually present in the
+	 * The persistence rule: given the currently-selected ids and the ids actually present in the
 	 * latest draw (sort/page/poll), returns the subset of `selectedIds` that are STILL present - silently
 	 * DROPPING any id that has left the current page/result set, so a selection can never be kept "live" for a
 	 * row that is no longer on screen (closing the "bulk action hits the wrong target" case).  Pure - no DOM, no
@@ -571,7 +582,7 @@
 	 * The safe (non-state-changing) HTTP methods - mirrors {@code MethodSafety.SAFE_METHODS}.  A row action bound to
 	 * one of these would skip Origin/CSRF/JSON at the server boundary (a CSRF-able write), so the runtime refuses to
 	 * issue it.  The Java builder ({@code RowAction.Method}) already makes a safe method unexpressible; this is the
-	 * client half of that same HIGH-7 refusal, for a hand-edited or stale sidecar.
+	 * client half of that same safe-method refusal, for a hand-edited or stale sidecar.
 	 */
 	const SAFE_METHODS = { GET: 1, HEAD: 1, OPTIONS: 1, TRACE: 1 };
 
@@ -651,12 +662,18 @@
 	}
 
 	/**
+	 * The `Accept` header every action write sends: JSON first, because the typed action result is parsed as JSON,
+	 * and a low-weight wildcard so an endpoint that cannot produce JSON still answers instead of refusing with a 406.
+	 */
+	const ACTION_ACCEPT = "application/json, */*;q=0.1";
+
+	/**
 	 * Builds the fail-closed row-action request descriptor from a RowAction intent, a token, a header name, and
 	 * the row's own data - pure, DOM/fetch-free (plain data in, plain data out) so the fail-closed contract is
 	 * unit-testable without a browser.  Returns EITHER a `{refuse:true, reason}` marker (the caller renders a
 	 * VISIBLE refusal) OR a ready-to-issue `{url, method, headers, body}`:
-	 *   - a missing or SAFE method refuses (`reason:"safe-method"`) - HIGH-7;
-	 *   - a blank/absent/whitespace token refuses (`reason:"missing-token"`) - HIGH-1 fail-closed;
+	 *   - a missing or SAFE method refuses (`reason:"safe-method"`);
+	 *   - a blank/absent/whitespace token refuses (`reason:"missing-token"`) - fail-closed;
 	 *   - a blank/absent `action.endpoint` refuses (`reason:"no-endpoint"`), mirrors
 	 *     {@link #buildJobCancelRequest}'s `no-cancel-url`;
 	 *   - a `{property}` token whose row value is absent/`null`/blank refuses (`reason:"empty-substitution"`) -
@@ -670,18 +687,23 @@
 	 *     unreserved) and browser URL resolution would normalize it to a different, undeclared endpoint;
 	 *   - otherwise `url` is `action.endpoint` with any `{property}` token substituted via
 	 *     {@link #substituteRowActionEndpoint}, and the body is JSON with the headers carrying
-	 *     `Content-Type: application/json` (so the write passes `LoopbackBoundary.isJson`) plus the CSRF token
+	 *     `Content-Type: application/json` (so the write passes `LoopbackBoundary.isJson`), `Accept` set to
+	 *     ACTION_ACCEPT (JSON preferred, since the typed result is parsed as JSON, with a low-weight wildcard fallback
+	 *     so an endpoint that cannot produce JSON still answers rather than refusing with a 406) and the CSRF token
 	 *     under `headerName` (defaulting to DEFAULT_CSRF_HEADER).
 	 *
 	 * The four endpoint guards are appended AFTER the two original guards (`b07`'s invariant: a refusal never
 	 * reaches substitution work), and are judged against the resolved URL where relevant - which is what closes
-	 * the row-less ribbon-dialog seam (S3) for free, since every row-less path funnels through this same pure
+	 * the row-less ribbon-dialog seam for free, since every row-less path funnels through this same pure
 	 * builder without needing its own guard.
 	 *
 	 * The optional `extra` object is merged into the JSON body - the declarative-modal submit path uses it to carry
 	 * the server-minted `idempotencyKey` and the `targetId`, so a double-click/re-submit/browser-retry all carry the
 	 * same key and the server can check the key's `(action, targetId)` binding.  A bare submit (no `extra`) sends
-	 * exactly `{action}` as before.  `rowData` is optional (absent/`null` mirrors a Column-href row with no id: every
+	 * exactly `{action}` as before.  `action` is the one reserved key: an `extra.action` is ignored, so a caller's `extra` can
+	 * add fields but can never change which action the request invokes.  Other keys (`targetId`, `idempotencyKey`,
+	 * `fields`) are ordinary extras - callers set them deliberately and each call site decides its own precedence.
+	 * `rowData` is optional (absent/`null` mirrors a Column-href row with no id: every
 	 * `{property}` token substitutes to `""`), so every earlier caller of this pure function keeps working.
 	 */
 	function buildActionRequest(action, token, headerName, extra, rowData) {
@@ -698,10 +720,13 @@
 			return { refuse: true, reason: "unresolved-endpoint" };
 		if (hasDotDotSegment(url))
 			return { refuse: true, reason: "unsafe-endpoint" };
-		const headers = { "Content-Type": "application/json" };
+		// Accept: the typed action result is read as JSON, and a server whose default rendering is HTML would otherwise
+		// answer with a page that parses as no result at all - a bare success with no outcome shown.  The low-weight
+		// wildcard keeps an endpoint that cannot produce JSON working (a bare success) instead of refusing with a 406.
+		const headers = { "Content-Type": "application/json", "Accept": ACTION_ACCEPT };
 		headers[headerName || DEFAULT_CSRF_HEADER] = token;
 		const payload = { action: action.id };
-		if (extra) for (const k in extra) if (Object.hasOwn(extra, k) && extra[k] != null) payload[k] = extra[k];
+		if (extra) for (const k in extra) if (k !== "action" && Object.hasOwn(extra, k) && extra[k] != null) payload[k] = extra[k];
 		return {
 			url: url,
 			method: action.method,
@@ -726,6 +751,8 @@
 			return "the action's URL resolved to an unsafe path, so the request was not sent";
 		if (reason === "request-failed")
 			return "the request could not be completed";
+		if (reason === "untrusted-cancel-url")
+			return "the job's cancel URL is not on this site, so the cancel request was not sent";
 		return "the action was refused";
 	}
 
@@ -790,6 +817,8 @@
 	function buildJobCancelRequest(cancelUrl, token, headerName) {
 		if (isBlankToken(cancelUrl))
 			return { refuse: true, reason: "no-cancel-url" };
+		if (!isTrustedJobUrl(cancelUrl))
+			return { refuse: true, reason: "untrusted-cancel-url" };
 		if (isBlankToken(token))
 			return { refuse: true, reason: "missing-token" };
 		const headers = { "Content-Type": "application/json" };
@@ -798,8 +827,8 @@
 	}
 
 	/**
-	 * Builds a visible, non-optimistic transport-refusal classification for ANY non-2xx action response (HIGH-3),
-	 * WITHOUT requiring the typed action-result schema.  Prefers the boundary's `X-Loopback-Boundary` reason header,
+	 * Builds a visible, non-optimistic transport-refusal classification for ANY non-2xx action response,
+	 * WITHOUT requiring the typed action-result schema.  Prefers the boundary's `X-Request-Boundary` reason header,
 	 * then the small `{reason,message}` JSON envelope the LoopbackBoundaryFilter emits, then a status-derived
 	 * fallback - so a 403/415/421 (or a missing/malformed body) always maps to a comprehensible named refusal rather
 	 * than a generic/empty/silent failure on a security refusal.
@@ -823,11 +852,13 @@
 	/**
 	 * The visible text for a settled action outcome - a pure (data-in/text-out) mapping over every outcome the typed
 	 * result can carry AND the transport-refusal case, so no terminal state is silent.  `cls` is
-	 * `{outcome, refusalCode, message, replay, transport}`.
+	 * `{outcome, refusalCode, message, replay, transport}`.  The sentence supplies its own closing period, so a trailing
+	 * run of periods on the server message is dropped first (other terminal punctuation is left alone).
 	 */
 	function actionOutcomeMessage(cls) {
 		const replay = cls.replay ? " (replay of a previous attempt)" : "";
-		const detail = cls.message ? ": " + cls.message : "";
+		const message = cls.message ? String(cls.message).replace(/\.+$/, "") : "";
+		const detail = message ? ": " + message : "";
 		switch (cls.outcome) {
 			case "success": return "Done" + detail + replay + ".";
 			case "failure": return "Failed" + detail + ".";
@@ -857,11 +888,14 @@
 	 * The one row-action dispatch every activation surface shares (row-action menu, cell pill, detail ActionBar
 	 * button, rowActions.run): a present=dialog action opens its dialog; any other action that declares `confirm` or
 	 * `confirmRenderer` prompts first through the confirm-only dialog and submits only on Confirm; everything else is
-	 * the direct fail-closed submit.  `extra` reaches only the direct submit, as it always has for a dialog.
+	 * the direct fail-closed submit.  `extra` reaches the submit on both the direct and the confirm-only path (a
+	 * present=dialog action opens its own dialog and, as it always has, does not carry it).  On the confirm path the
+	 * row's `data-juneau-row-id` replaces any caller-supplied `targetId`; the direct path sends it as given.  On both
+	 * paths a caller-supplied `extra.action` is ignored (see {@link #buildActionRequest}): `extra` adds fields only.
 	 */
 	function dispatchRowAction(action, table, tr, ctx, extra) {
 		if (isDialogAction(action)) return openActionDialog(action, table, tr, ctx);
-		if (needsConfirmPrompt(action)) return openConfirmOnlyDialog(action, table, tr, ctx);
+		if (needsConfirmPrompt(action)) return openConfirmOnlyDialog(action, table, tr, ctx, extra);
 		return submitRowAction(action, table, tr, ctx, extra);
 	}
 
@@ -910,7 +944,7 @@
 	}
 
 	/**
-	 * Builds the compact "n-n of n" paging-summary string (visual-parity design doc §4.C, item 3) from a
+	 * Builds the compact "n-n of n" paging-summary string from a
 	 * DataTables `page.info()`-shaped object - pure, DOM/library-free (`pageInfo` is plain data).  Mirrors
 	 * DataTables' own default `language.info` convention (1-based inclusive display range: `start+1` to `end`)
 	 * against `recordsDisplay` (the FILTERED count - the same number that default info text's `_TOTAL_`
@@ -925,7 +959,7 @@
 
 	/**
 	 * Computes the unified paging pill's selected/disabled state from a DataTables `page.info()`-shaped object
-	 * (visual-parity design doc §4.C) - pure, DOM/library-free (`pageInfo` is plain data, never the DataTables API
+	 * - pure, DOM/library-free (`pageInfo` is plain data, never the DataTables API
 	 * object itself).  `first`/`previous` disable on the first page; `next`/`last` disable on the last page,
 	 * INCLUDING the always-disabled-when-there-is-only-one-page case (`pages === 0`, e.g. an empty result set, is
 	 * treated the same as "already on the last page").
@@ -1058,9 +1092,9 @@
 	/**
 	 * Pure helper: appends `params`' own enumerable keys onto `url` as query-string entries (each key/value through
 	 * `encodeURIComponent`), preserving whatever query string `url` already carries.  A `params` with no own keys
-	 * returns `url` unchanged.  Used by the server-mode `beforeSend` re-derivation below - the POST/JSON wire (D1)
+	 * returns `url` unchanged.  Used by the server-mode `beforeSend` re-derivation below - the POST/JSON wire
 	 * carries `param:`-scoped ribbon options and the nested-scope param as URL query parameters, not JSON-body
-	 * fields, so an `@Query`-bound server endpoint keeps working unchanged (BeanQuery datatables design doc §3.1).
+	 * fields, so an `@Query`-bound server endpoint keeps working unchanged.
 	 */
 	function appendQueryParams(url, params) {
 		const keys = params ? Object.keys(params) : [];
@@ -1076,23 +1110,23 @@
 	 * (`ribbonActiveState()`) - the one ribbon input genuinely DOM/localStorage-derived and not computable from
 	 * `viewDef` alone.  Everything else about ribbon encoding goes through the shared, pure
 	 * `window.JuneauViews.ribbon` functions in `juneau-ribbon.js` that downstream ribbon parity corpora pin
-	 * directly (BeanQuery DataTables design §3.1), so this file and that corpus cannot drift:
+	 * directly, so this file and that corpus cannot drift:
 	 * `ribbon.ribbonColumnSearches(viewDef, activeState, optsColumns)` for column-scoped contributions,
 	 * `ribbon.ribbonQueryParams(viewDef, activeState)` for `param:`-scoped ones, and `ribbon.mergeColumnSearches` to
 	 * AND a column-scoped contribution onto the user's own typed search on that column.
 	 *
-	 * The serverSide fork (§6.7, amended by BeanQuery datatables design doc §3.1/D8 and by the column-scoped
-	 * ribbon fix): server -> serverSide:true + `window.JuneauDataTables.ajax(url, {...})` (the POST/JSON wire, D1), where
+	 * The serverSide fork (amended by the column-scoped
+	 * ribbon fix): server -> serverSide:true + `window.JuneauDataTables.ajax(url, {...})` (the POST/JSON wire), where
 	 * `ribbon.ribbonColumnSearches()`'s output is merged into the outgoing JSON body's `columns[i].search.value`
 	 * through `ribbon.mergeColumnSearches` (via the `extra.data` hook `JuneauDataTables.ajax` itself calls before
 	 * stringifying), while `ribbon.ribbonQueryParams()`'s output and the nested-scope param (if any) are re-derived
 	 * onto the request URL on every request through `beforeSend`.  Column-scoped ribbon state is JSON-body-only,
 	 * never a URL query parameter the POST-only endpoint cannot see (a column-scoped ribbon filter sent as a
 	 * URL param was silently dropped).  Client -> serverSide:false + ajax{dataSrc:""} (a plain GET of a JSON array,
-	 * unchanged by D8).
+	 * unchanged).
 	 *
 	 * A missing `window.JuneauDataTables` at server-mode init fails loudly through `deps.warn` - there is no silent
-	 * GET fallback to the wire format D1 removed.  A view with ribbon options but no `window.JuneauViews.ribbon`
+	 * GET fallback to the POST/JSON wire format.  A view with ribbon options but no `window.JuneauViews.ribbon`
 	 * loaded (`juneau-ribbon.js` missing) also warns through `deps.warn`, and simply contributes no ribbon filters at
 	 * all - it degrades, it does not throw.
 	 */
@@ -1104,10 +1138,10 @@
 		// present; otherwise the sidecar catalog.
 		const catalog = deps?.effectiveColumns || viewDef.columns || [];
 		opts.columns = catalog.map(function (c) { return buildColumnDef(c, deps); });
-		// Text polish (design doc §4.B): the native search input's label is blanked (searchPlaceholder replaces it
+		// Text polish: the native search input's label is blanked (searchPlaceholder replaces it
 		// as the input's placeholder attribute); the native length-select's language.lengthMenu is deliberately NOT
-		// set here - Task 9's paging pill hides and replaces that control entirely, so there is nothing left for it
-		// to style (design doc §4.B's resolved ambiguity).
+		// set here - the paging pill hides and replaces that control entirely, so there is nothing left for it
+		// to style.
 		opts.language = { search: "", searchPlaceholder: "Search" };
 		opts.pageLength = PAGE_SIZE_OPTIONS[0].value;
 		// Disable DataTables' own "Showing X to Y of Z entries" line at the source (rather than CSS-hiding it
@@ -1137,7 +1171,7 @@
 
 		// Nested-table parent scoping.  `deps.nestedScope`, present ONLY for a nested table, merges exactly ONE extra
 		// query parameter (its declared scope-param name -> the parent row id) into the request in BOTH data modes -
-		// as a re-derived URL query parameter in server mode (design doc §3.1/D8), or into the GET's `data` object in
+		// as a re-derived URL query parameter in server mode, or into the GET's `data` object in
 		// client mode.  The parent id is read through a getter at REQUEST time (off the live data-juneau-parent-id
 		// attribute) so the scope stays correct even if the nested table is re-init'd against a different parent
 		// row.  This is deliberately nested-only: a top-level view never carries deps.nestedScope.
@@ -1159,7 +1193,7 @@
 	}
 
 	/**
-	 * Server-mode half of `buildOptions` (design doc §3.1/D8): installs `opts.ajax` from
+	 * Server-mode half of `buildOptions`: installs `opts.ajax` from
 	 * `window.JuneauDataTables.ajax`, with a `data` hook that merges column-scoped ribbon filters into the JSON body
 	 * and a `beforeSend` that re-derives the `param:`-scoped ribbon params onto the URL per request.  Leaves
 	 * `opts.ajax` unset (and warns) when `juneau-datatables.js` has not loaded.
@@ -1179,7 +1213,7 @@
 				+ "(window.JuneauViews.ribbon) has not loaded - ribbon filters will not reach the server.");
 		}
 		if (!dt || typeof dt.ajax !== "function") {
-			// Loud failure (design doc §3.1/D8): juneau-datatables.js did not load before juneau-views.js on this
+			// Loud failure: juneau-datatables.js did not load before juneau-views.js on this
 			// page, so there is no POST/JSON wiring available.  opts.ajax is left unset deliberately - DataTables
 			// itself then fails loudly on this serverSide table instead of quietly falling back to a GET the
 			// POST-only endpoint would reject.
@@ -1248,7 +1282,7 @@
 	}
 
 	/**
-	 * Merges a nested table's parent-scope parameter into an already-built `opts.ajax` (design doc §3.1/D8).
+	 * Merges a nested table's parent-scope parameter into an already-built `opts.ajax`.
 	 * `scope` is `{param, parentId}` where `param` is the query-parameter name and `parentId` is a getter (or a
 	 * plain value) read at request time.  A null/blank parent id contributes nothing (the request goes out
 	 * unscoped rather than with an empty param) - a fail-closed caller withholds init entirely when the parent id
@@ -1256,7 +1290,8 @@
 	 * server-mode `opts.ajax` (built by `window.JuneauDataTables.ajax`) carries a `beforeSend`, which this wraps to
 	 * append the scope param onto the re-derived URL after any ribbon params the prior `beforeSend` already
 	 * appended; a client-mode `opts.ajax` has no `beforeSend`, so this wraps (or installs) its `data` contributor
-	 * instead, exactly as before D8.  A missing `opts.ajax` (the server-mode "no JuneauDataTables" loud-failure
+	 * instead, exactly as for a client-mode table.  A missing `opts.ajax` (the server-mode "no JuneauDataTables"
+	 * loud-failure
 	 * case) is a no-op.  Pure: mutates the passed `opts` and touches no DOM/jQuery.
 	 */
 	function applyNestedScope(opts, scope) {
@@ -1296,12 +1331,12 @@
 	function error(msg) { if (window.console?.error) console.error(msg); }
 
 	/**
-	 * Builds one icon-only 32px toolbar button under the given `className` (visual-parity design doc §4.A/§4.C).
+	 * Builds one icon-only 32px toolbar button under the given `className`.
 	 * Deliberately self-contained rather than reusing juneau-ribbon.js's button(...) helper (Design decision #3):
 	 * this module's buttons are not RibbonActions and have no built-in-id/symbol-override duality to resolve, so
 	 * they resolve their fixed glyph names directly via window.JuneauViews.icons.resolveIcon(...) - the two files
 	 * share the icon mechanism without either depending on the other's toolbar-construction logic.  An unknown glyph draws
-	 * nothing (spec U11); the button keeps its aria-label / tooltip, stamped from the label above.
+	 * nothing; the button keeps its aria-label / tooltip, stamped from the label above.
 	 */
 	function toolbarButton(className, label, iconName, onClick) {
 		const b = document.createElement("button");
@@ -1321,7 +1356,7 @@
 	}
 
 	/**
-	 * Builds the central "n-n of n" segment of the unified paging ribbon (visual-parity follow-up: consolidates
+	 * Builds the central "n-n of n" segment of the unified paging ribbon (consolidates
 	 * the old standalone page-size <select> INTO this segment rather than keeping it as a separate control).  It
 	 * is a WAI-ARIA "menu button": the button's own visible content IS the compact range summary (so it never
 	 * shows a redundant "Page size" label), `aria-haspopup="listbox"` + `aria-expanded` mark it as a popup
@@ -1449,7 +1484,7 @@
 
 	/**
 	 * Builds the unified paging ribbon - `[First] [Prev] [<range> + page-size menu] [Next] [Last]` - and wires it
-	 * to the given DataTables instance (visual-parity follow-up).  Called unconditionally from initTable(...) -
+	 * to the given DataTables instance.  Called unconditionally from initTable(...) -
 	 * every view table gets one, regardless of whether it declares any ribbon actions.  Supersedes BOTH the old
 	 * standalone page-size <select> (folded into buildPageSizeMenu's central segment above) AND the old
 	 * right-side compact prev/next ribbon (removed entirely) - paging now exists in exactly ONE place.  Returns
@@ -1501,7 +1536,7 @@
 	 * Header sort + per-column search icons.  DataTables sorts on a click anywhere in the
 	 * {@code th}; we capture-stop that unless the click is on the sort control ({@code span.dt-column-order}
 	 * or a DT1 fallback {@code .juneau-view-col-sort-icon}).  Searchable columns get a Juneau {@code search}
-	 * glyph that opens a small popover (not an IRS/SLDS copy).  Idempotent per header cell.
+	 * glyph that opens a small popover (drawn in-house, not a copy of any third-party icon).  Idempotent per header cell.
 	 */
 	function wireHeaderSortSearch(table, ctx) {
 		if (!table || !ctx?.dataTable) return;
@@ -1671,7 +1706,7 @@
 		return ctx?.viewDef?.dataMode !== "server";
 	}
 
-	/** Whether the column's own `search.operators` list offers `$regex` (S8: a shared link cannot smuggle one in). */
+	/** Whether the column's own `search.operators` list offers `$regex` (so a shared link cannot smuggle one in). */
 	function columnAllowsRegex(meta) {
 		return Array.isArray(meta?.operators) && meta.operators.some(function (o) { return o?.name === "$regex"; });
 	}
@@ -1696,8 +1731,8 @@
 	}
 
 	/**
-	 * Compiles {@code raw} for a DSL column with the server's strict rules (D3), against the page's custom-operator
-	 * registry (D4) and the column's own `$regex` allowance (S8).  A `custom:true` operator the column advertises
+	 * Compiles {@code raw} for a DSL column with the server's strict rules, against the page's custom-operator
+	 * registry and the column's own `$regex` allowance.  A `custom:true` operator the column advertises
 	 * with no registered client predicate is rejected, and warned about once per name.
 	 */
 	function compileColumnExpr(ctx, info, raw) {
@@ -1721,7 +1756,7 @@
 	/**
 	 * A raw-cell reader for column {@code data}, built once per expression: DataTables' own {@code util.get} (dotted
 	 * paths) when available, else a plain dotted-path walk.  Reads the row's RAW value, never the rendered/stringified
-	 * search data, so the engine sees exactly what the server's InMemoryMatch sees (S5).
+	 * search data, so the engine sees exactly what the server's InMemoryMatch sees.
 	 */
 	function rawCellGetter(data) {
 		const util = window.jQuery?.fn?.dataTable?.util;
@@ -1768,7 +1803,7 @@
 			return { ok: true, error: null, api: col.search.fixed(DSL_FIXED_SEARCH, null) };
 		}
 		ctx._colExprs[info.data] = c.raw;
-		// N2: one "now" per filter pass, so a relative window such as $gte(-24h) is stable across every row of a draw;
+		// one "now" per filter pass, so a relative window such as $gte(-24h) is stable across every row of a draw;
 		// refreshed here and on each data reload (xhr.dt, wired in constructTable).
 		ctx._searchNow = Date.now();
 		const get = rawCellGetter(info.data);
@@ -1789,7 +1824,7 @@
 	// inside an argument is not mistaken for an operator when checking membership in the column's effective set.
 	const COL_SEARCH_OP_RE = /\$[A-Za-z]\w*(?=\s*\()/g;
 
-	/** Every operator "$name" invoked in a raw expression (design §4.3 effective-set membership check). */
+	/** Every operator "$name" invoked in a raw expression. */
 	function usedOperatorNames(raw) {
 		const out = [];
 		let m;
@@ -1799,10 +1834,10 @@
 	}
 
 	/**
-	 * Classifies a draft column-search string against the column's metadata and the JuneauViews.search engine
-	 * (design §5).  Returns {@code {trimmed, dollar, empty, incomplete, rejected}}: {@code dollar} = a leading
+	 * Classifies a draft column-search string against the column's metadata and the JuneauViews.search engine. Returns
+	 * {@code {trimmed, dollar, empty, incomplete, rejected}}: {@code dollar} = a leading
 	 * {@code $} expression (commit deferred to Enter/Apply); {@code rejected} = an unparseable expression OR one
-	 * naming an operator not on the column's effective set (a reject, not a silent rewrite - §4.3); {@code
+	 * naming an operator not on the column's effective set (a reject, not a silent rewrite); {@code
 	 * incomplete} = a still-being-typed {@code $} draft that must not touch the grid.
 	 *
 	 * <p>
@@ -1868,7 +1903,7 @@
 		const meta = columnSearchMeta(ctx, col);
 		const search = window.JuneauViews?.search;
 		const serverSide = !isClientFiltered(ctx);
-		// Client-filtered DSL column: commits go through the strict server-parity gate (D3).
+		// Client-filtered DSL column: commits go through the strict server-parity gate.
 		const dsl = dslColumnInfo(ctx, col);
 		const strict = dsl ? function (t) { return compileColumnExpr(ctx, dsl, t); } : null;
 		const el = document.createElement("div");
@@ -1888,8 +1923,8 @@
 		status.setAttribute("role", "status");
 		status.setAttribute("aria-live", "polite");
 		el.appendChild(heading);
-		// Per-type bare-value help (Gap 8 / spec 4a D9): what a plain, non-"$operator" value means for a column
-		// of this type - sourced straight from `col.search.bareHelp` (sub-project #3's SearchType.bareHelp(),
+		// Per-type bare-value help: what a plain, non-"$operator" value means for a column
+		// of this type - sourced straight from `col.search.bareHelp` (SearchType.bareHelp(),
 		// serialized onto the catalog), so the wording stays in sync with that type automatically. Rendered BEFORE
 		// the per-operator help list below, since a bare value - no "$name(...)" - is the common case. Absent
 		// (older catalog, or no search metadata) is a silent no-op.
@@ -1901,14 +1936,14 @@
 		}
 		el.appendChild(input);
 		el.appendChild(status);
-		// Operator help (design §4.5): rendered straight from the VIEW_META operator list so a developer's custom
+		// Operator help: rendered straight from the VIEW_META operator list so a developer's custom
 		// operator help shows exactly the way a built-in's does.  Absent when the column shipped no search metadata.
 		if (meta && Array.isArray(meta.operators) && meta.operators.length) {
 			const helpList = document.createElement("div");
 			helpList.className = "juneau-view-col-search-popover-help";
 			meta.operators.forEach(function (o) {
 				if (!o?.name) return;
-				// D4: on a client-filtered table a custom operator is only offered once the page registered its predicate.
+				// on a client-filtered table a custom operator is only offered once the page registered its predicate.
 				if (dsl && o.custom && !(typeof search?.hasCustom === "function" && search.hasCustom(o.name))) return;
 				const row = document.createElement("div");
 				row.className = "juneau-view-col-search-popover-help-op";
@@ -1922,7 +1957,7 @@
 			});
 			el.appendChild(helpList);
 		}
-		// S6: offset-less dates/date-times are UTC on both engines (server parity), which a local-time user would
+		// offset-less dates/date-times are UTC on both engines (server parity), which a local-time user would
 		// not guess - say so on a client-filtered timestamp column.
 		if (dsl?.type === "timestamp") {
 			const tz = document.createElement("div");
@@ -1953,7 +1988,7 @@
 		};
 		// Live preview per keystroke: an emptied box clears the filter; a bare quick-filter previews live on a client
 		// table but waits for Enter/Apply on a server table (no fetch-per-keystroke); a `$`-expression NEVER previews
-		// (design §5) - an incomplete draft must not blank the grid, and an out-of-set operator is a reject.
+		// - an incomplete draft must not blank the grid, and an out-of-set operator is a reject.
 		const onInput = function () {
 			const d = evaluateColumnSearchDraft(input.value, meta, search, strict);
 			if (d.empty) { setStatus("", ""); applyValue(""); return; }
@@ -1980,7 +2015,7 @@
 		pushLayer(el, {
 			kind: "menu", portal: true, lightDismiss: true, trapFocus: false, detachOnPop: true,
 			returnFocusTo: iconEl,
-			// Esc / click-away reverts (design §5): undo any live preview back to the value the popover opened with,
+			// Esc / click-away reverts: undo any live preview back to the value the popover opened with,
 			// unless Enter/Apply already committed.
 			onDismiss: function () {
 				if (ctx._colSearchPopover === el) ctx._colSearchPopover = null;
@@ -1988,7 +2023,7 @@
 					drawColumnExpr(ctx, setColumnExpr(ctx, col, current));
 					iconEl.classList.toggle("is-active", !!current);
 				}
-				// Announce a reverted or never-applied edit (design §4.2): covers both the live-preview revert above
+				// Announce a reverted or never-applied edit: covers both the live-preview revert above
 				// AND a `$`-draft/server-deferred value that never previewed at all, whenever the box no longer
 				// matches what actually reached the grid.
 				if (!committed && input.value.trim() !== String(current).trim())
@@ -2001,7 +2036,7 @@
 	}
 
 	/**
-	 * The live-announcer's message catalog (design §4.1): one small constant map so every announced string is defined
+	 * The live-announcer's message catalog: one small constant map so every announced string is defined
 	 * in one place and tests can compare exact text.  A function entry builds a message from its argument.
 	 */
 	const ANNOUNCE = {
@@ -2027,8 +2062,8 @@
 	}
 
 	/**
-	 * Announces {@code message} politely for screen readers on a per-table live region that lives OUTSIDE the popover
-	 * (design §4), so a popover's own removal can never take the announcement down with it.  Clears the region first
+	 * Announces {@code message} politely for screen readers on a per-table live region that lives OUTSIDE the popover,
+	 * so a popover's own removal can never take the announcement down with it.  Clears the region first
 	 * and re-sets it on a fresh tick, so two consecutive identical messages both announce (a no-op `textContent`
 	 * write is not observed as a change by assistive tech).
 	 */
@@ -2157,14 +2192,13 @@
 	 * Whether `table` currently has a row marked in-flight - a row-action implementation is expected to set
 	 * `data-juneau-inflight` (any truthy attribute value) on a `<tr>` while its write is pending.  A poll landing
 	 * mid-write must not overwrite that row with the pre-write server view, or the UI would appear to undo the
-	 * user's action and then redo it once the write's own result repaints it (design doc §9.1 B5) - so a poll
+	 * user's action and then redo it once the write's own result repaints it - so a poll
 	 * tick skips its ENTIRE redraw whenever ANY row in this table carries the marker, leaving the table exactly
 	 * as-is (stale, but honestly so) until that write settles.
 	 *
 	 * <p>Scoped to SYNCHRONOUS writes ONLY: it reads `data-juneau-inflight`, NOT the async job marker
 	 * (`data-juneau-job`, set by setRowJobRunning).  A long-running async-SSE-job must NOT freeze the whole table's
-	 * polling for up to the 120s hard timeout - so it uses the distinct marker this function deliberately ignores
-	 * (HIGH-9).
+	 * polling for up to the 120s hard timeout - so it uses the distinct marker this function deliberately ignores.
 	 */
 	function hasInFlightRow(table) {
 		return !!table.querySelector("tbody tr[data-juneau-inflight]");
@@ -2268,7 +2302,7 @@
 	function isPollSuspended(table, ctx, viewDef) {
 		if (ctx?._pollPaused) return true;
 		if (! viewDef?.pausePollingWhileEditing) return false;
-		// ctx._configBackdrop is the View Settings dialog (Gap 7): neither the detail-row nor the action-dialog
+		// ctx._configBackdrop is the View Settings dialog: neither the detail-row nor the action-dialog
 		// check covers it.
 		return hasOpenDetailRow(table) || hasOpenActionDialog(ctx) || !!ctx?._configBackdrop;
 	}
@@ -2490,11 +2524,11 @@
 	 * assigns {@code innerHTML}.  Missing {@code DOMParser} fails closed to {@code textContent}.
 	 */
 	/**
-	 * Resolves `document`/`DOMParser`, wraps `html` in a `<div>`, and parses it - the shared first half of
-	 * both fillMarkdownSlot and fillRenderSlot.  `unsupported` covers both "no DOMParser/document available"
-	 * and "parseFromString threw"; both cases fail closed to the caller's plain-text fallback.  A parse that
-	 * succeeds but yields no wrapper element (`wrap` falsy) is NOT "unsupported" - callers leave the
-	 * already-cleared slot empty in that case, matching prior behavior.
+	 * Resolves `document`/`DOMParser`, parses `html` as the content of a `<body>`, and returns that body as `wrap` -
+	 * the shared first half of both fillMarkdownSlot and fillRenderSlot.  `unsupported` covers both "no
+	 * DOMParser/document available" and "parseFromString threw"; both cases fail closed to the caller's plain-text
+	 * fallback.  A conforming parser always yields a body, so a falsy `wrap` is defensive only; it is NOT
+	 * "unsupported" - callers leave the already-cleared slot empty in that case.
 	 */
 	function parseSanitizedHtmlWrap(html) {
 		const doc = typeof document !== "undefined" ? document : null;
@@ -2508,11 +2542,13 @@
 			return { doc: doc, wrap: null, unsupported: true };
 		let parsed;
 		try {
-			parsed = new Parser().parseFromString("<div>" + String(html) + "</div>", "text/html");
+			// An explicit <body> start tag (not a string-wrapped <div>) so a stray end tag in the fragment, like an
+			// unbalanced </div>, is ignored by the parser instead of closing the wrapper and dropping the rest.
+			parsed = new Parser().parseFromString("<body>" + String(html), "text/html");
 		} catch (e) { // NOSONAR javascript:S2486 -- parser failure is reported through the unsupported flag
 			return { doc: doc, wrap: null, unsupported: true };
 		}
-		return { doc: doc, wrap: parsed?.body?.firstChild || null, unsupported: false };
+		return { doc: doc, wrap: parsed?.body || null, unsupported: false };
 	}
 
 	// NOSONAR javascript:S3776 -- encodes a views/widgets state machine; complexity is inherent.
@@ -2899,21 +2935,22 @@
 
 	/**
 	 * Paints an action's message into the first field slot of the section that owns that action button
-	 * (in-tab Diagnose findings).  TEXT slots use textContent; markdown slots use fillMarkdownSlot.
+	 * (in-tab Diagnose findings).  TEXT slots use textContent; markdown slots use fillMarkdownSlot.  Returns whether
+	 * the message was painted anywhere.
 	 */
 	function paintActionMessageIntoDetail(tr, actionId, message) { // NOSONAR javascript:S3776 -- encodes a views/widgets state machine; complexity is inherent.
 		const panel = tr?._juneauDetailPanel;
-		if (!panel || typeof panel.querySelectorAll !== "function") return;
+		if (!panel || typeof panel.querySelectorAll !== "function") return false;
 		const want = String(actionId == null ? "" : actionId);
-		if (!want) return;
+		if (!want) return false;
 		const buttons = panel.querySelectorAll("[data-juneau-action]");
 		let btn = null;
 		for (const b of buttons) {
 			if (b.dataset.juneauAction === want) { btn = b; break; }
 		}
-		if (!btn) return;
+		if (!btn) return false;
 		const section = btn.closest ? btn.closest("[data-juneau-detail-section]") : null;
-		if (!section || typeof section.querySelector !== "function") return;
+		if (!section || typeof section.querySelector !== "function") return false;
 		// A field-hosted bar (fieldGrid catalog actions) paints into its OWN field's slot, not the section's first
 		// one -- otherwise a button in the second field would paint a message next to the first.  Section- and
 		// header-hosted bars are never inside a `.juneau-view-detail-field` container, so they fall through to
@@ -2922,12 +2959,13 @@
 		const slot = fieldContainer && section.contains(fieldContainer)
 			? fieldContainer.querySelector("[data-juneau-field]")
 			: section.querySelector("[data-juneau-field]");
-		if (!slot) return;
+		if (!slot) return false;
 		const value = message == null ? "" : String(message);
 		if (slot.dataset.juneauFieldFormat === "markdown")
 			fillMarkdownSlot(slot, value);
 		else
 			slot.textContent = value;
+		return true;
 	}
 
 	// ==================================================================================================================
@@ -3753,7 +3791,9 @@
 
 	/** Whether `action` is shown for the row; an action with no `visibleWhen` always is. */
 	function isRowActionVisible(action, rowData) {
-		return !action?.visibleWhen?.length || evaluateRules(action.visibleWhen, rowRuleScope(rowData));
+		const rules = action?.visibleWhen;
+		// Only null or an empty array is "no gate"; a single rule object is a gate (evaluateRules reads it as a list of one).
+		return rules == null || Array.isArray(rules) && !rules.length || evaluateRules(rules, rowRuleScope(rowData));
 	}
 
 	// ==================================================================================================================
@@ -3779,14 +3819,15 @@
 	 * lets a gated action through.
 	 */
 	function firstFailingRowActionRule(action, rowData) {
-		const rules = action?.enabledWhen;
-		if (!rules?.length) return null;
+		const raw = action?.enabledWhen;
+		if (raw == null || Array.isArray(raw) && !raw.length) return null;
 		const map = rowData && typeof rowData === "object" ? rowData : {};
-		return firstFailingActionRule(rules, map);
+		return firstFailingActionRule(Array.isArray(raw) ? raw : [raw], map);
 	}
 
 	/** This table's already-fetched data for `tr` via DataTables' own row API (the openCellPopover lookup pattern). */
 	function rowDataForTr(ctx, tr) {
+		if (!tr && ctx?._rowOverride) return ctx._rowOverride;   // a chart card's click: the clicked point stands in for the row
 		const dt = ctx?.dataTable;
 		if (!dt || !tr || typeof dt.row !== "function") return null;
 		const row = dt.row(tr);
@@ -3883,7 +3924,7 @@
 		if (!parentTr) return true;
 		const row = dt.row(parentTr);
 		if (row?.child?.isShown()) {
-			// Removal path 1/5 (design §9.3's teardown table): tear down any enrolled regions in this panel
+			// Removal path 1/5: tear down any enrolled regions in this panel
 			// BEFORE the child row DOM is discarded, same reason as the nested-DataTables teardown right below -
 			// a torn-down region's in-flight fetch is aborted and its bus subscription released while the panel
 			// is still attached, never left to leak with the detached nodes.
@@ -4058,6 +4099,8 @@
 	 * deeper stack.
 	 */
 	const MAX_DIALOG_DEPTH = 2;
+	// Page-wide safety ceiling on dialog layers across all hosts; MAX_DIALOG_DEPTH is the per-host stack cap.
+	const MAX_PAGE_DIALOG_DEPTH = MAX_DIALOG_DEPTH * 4;
 
 	/**
 	 * A monotonic dialog sequence, incremented ONLY on a dialog-kind push, that namespaces the form field element ids
@@ -4086,11 +4129,22 @@
 		return popupLayerStack.length ? popupLayerStack.at(-1) : null;
 	}
 
-	/** The number of {@code kind === "dialog"} layers currently open (the depth cap counts these, not stack.length). */
-	function dialogLayerCount() {
+	/**
+	 * The number of {@code kind === "dialog"} layers currently open (the depth cap counts these, not stack.length).
+	 * With a {@code ctx}, only the dialog layers that ctx opened are counted (a ctx that has not opened one yet owns
+	 * none); without a ctx, every dialog on the page.
+	 */
+	function dialogLayerCount(ctx) {
+		const own = ctx ? (ctx._dialogStack ?? []) : null;
 		let n = 0;
-		for (const layer of popupLayerStack) if (layer.kind === "dialog") n++;
+		for (const layer of popupLayerStack)
+			if (layer.kind === "dialog" && (own === null || own.includes(layer.el))) n++;
 		return n;
+	}
+
+	/** True when opening one more dialog for {@code ctx} would exceed its own stack cap or the page-wide ceiling. */
+	function dialogDepthExceeded(ctx) {
+		return dialogLayerCount(ctx) >= MAX_DIALOG_DEPTH || dialogLayerCount() >= MAX_PAGE_DIALOG_DEPTH;
 	}
 
 	function focusablesIn(el) {
@@ -4179,6 +4233,45 @@
 		const restore = removed.length ? removed[0].returnFocusTo : null;
 		dismissRemovedLayers(removed);
 		restoreLayerFocus(restore);
+	}
+
+	/**
+	 * Pops a dialog's backdrop layer plus what sits above it that belongs with it: the owning {@code ctx}'s own nested
+	 * dialogs and any transient non-dialog layer (menu, popover).  A dialog that another host opened and that happens
+	 * to sit higher on the shared stack is left open.  Survivors are re-stamped so z-index tracks their new position.
+	 */
+	function popDialogLayers(el, ctx) {
+		const idx = findLayerIndex(el);
+		if (idx < 0) return;
+		const own = ctx?._dialogStack;
+		const removed = [popupLayerStack[idx]];
+		const kept = [];
+		let keptDialog = false;   // once another host's dialog stays, the transient layers above it stay with it
+		for (let i = idx + 1; i < popupLayerStack.length; i++) {
+			const rec = popupLayerStack[i];
+			const mine = rec.kind === "dialog" ? own?.includes(rec.el) === true : ! keptDialog;
+			if (mine) removed.push(rec);
+			else { kept.push(rec); if (rec.kind === "dialog") keptDialog = true; }
+		}
+		popupLayerStack.splice(idx, popupLayerStack.length - idx, ...kept);
+		for (let i = idx; i < popupLayerStack.length; i++) {
+			const e = popupLayerStack[i].el;
+			if (e?.style) e.style.zIndex = String(layerZBase() + i * layerZStep());
+			if (e?.dataset) e.dataset.juneauLayer = String(i);
+		}
+		dismissRemovedLayers(removed);
+		// Another host's modal that is now on top keeps focus: sending it back behind that modal's backdrop would
+		// defeat its trap.
+		const foreign = foreignTrapLayer(ctx);
+		if (foreign) {
+			if (! foreign.el.contains?.(document.activeElement)) focusFirstInLayer(foreign);
+		} else restoreLayerFocus(removed[0].returnFocusTo);
+	}
+
+	/** The top layer when it traps focus and was not opened by {@code ctx} (another host's modal), else null. */
+	function foreignTrapLayer(ctx) {
+		const top = topLayer();
+		return ctx && top?.trapFocus && ctx._dialogStack?.includes(top.el) !== true ? top : null;
 	}
 
 	function handleLayerTab(e) {
@@ -4534,7 +4627,8 @@
 				state.busy = false;
 				field.disabled = false;
 				if (o.outcome === "success") {
-					applySuccessBehavior(action, table, tr, ctx, o.result);
+					const painted = applySuccessBehavior(action, table, tr, ctx, o.result);
+					if (o.result?.message && ! painted) showBulkSummaryToast(String(o.result.message), false);   // no detail panel to carry it
 					const redrawn = action.onSuccess === "redraw" || (action.onSuccess === "mergeRow" && o.result?.row != null);
 					if (!redrawn && ctx?.dataTable) reloadTableData(ctx.dataTable, true);   // keep the current page
 					close(value);
@@ -4593,7 +4687,7 @@
 	}
 
 	/**
-	 * Design §9.3's missing-runtime failure mode, at the detail-panel enrolment site: a `[data-juneau-region]`
+	 * The missing-runtime failure mode, at the detail-panel enrolment site: a `[data-juneau-region]`
 	 * node with no `juneau-regions.js` loaded to run it renders loud, not blank.  Duplicated here because no
 	 * cross-module JS dependency exists to share it, and this file itself uses its own already-local
 	 * `renderAsyncStatus` rather than reaching through `NS.init` for a function this very module defines.
@@ -4726,7 +4820,7 @@
 			settleMap();
 		}
 
-		// CREATION BEFORE ENROLMENT (design §12.3.3 rule 2a).  This block used to sit BELOW the enrolment walk, and
+		// CREATION BEFORE ENROLMENT.  This block used to sit BELOW the enrolment walk, and
 		// that ordering was the bug: a row-detail region's `fetchDeclared()` for the panel's own projected endpoint
 		// is specified to JOIN this in-flight entry rather than issue a second request, and a region that enrolled
 		// (and populated) before the entry existed would find nothing to join and fetch the same URL again - exactly
@@ -4781,7 +4875,7 @@
 			return body.fields;
 		}
 
-		// Enrolment call site 3/3 (design §9.3), and LAST on purpose: only now is the clone in the document (so a
+		// Enrolment call site 3/3, and LAST on purpose: only now is the clone in the document (so a
 		// detail-panel region can find its host and its declaration) AND the in-flight entry created (so a region
 		// never races the map).  Runtime-agnostic: `enrolIn` itself is
 		// idempotent per node and a no-op walk when the template carried no region at all, so this call is
@@ -4951,7 +5045,8 @@
 	}
 
 	// ==================================================================================================================
-	// ROW SELECTION + BULK MUTATION (row-selection/bulk-mutation feature) - two INDEPENDENT opt-ins (HIGH-5), detected purely from DOM
+	// ROW SELECTION + BULK MUTATION (row-selection/bulk-mutation feature) - two INDEPENDENT opt-ins, detected purely
+	// from DOM
 	// attributes ViewTable stamps (SELECT_ATTR / BULK_ATTR) - NEVER from VIEW_META/viewDef.  Enabling selection
 	// alone can never surface a bulk-mutate control: hasBulk(...) is only ever consulted from within the
 	// `hasSelection(table)` branch of initTable, and BULK_ATTR is only ever stamped by ViewTable when a
@@ -4969,7 +5064,7 @@
 	}
 
 	/**
-	 * Stamps the STABLE row id (MED-11) onto a just-created `<tr>`, read from that row's OWN data via the
+	 * Stamps the STABLE row id onto a just-created `<tr>`, read from that row's OWN data via the
 	 * `rowIdField` key - never a DOM/table index. A no-op when `rowIdField` is absent (selection not declared) or
 	 * the row has no such key (nothing to stamp; that row is simply unselectable). This is where `ROW_ID_ATTR`
 	 * ORIGINATES; every reader elsewhere (selection wiring, bulk execution, the declarative-modal path's
@@ -5035,7 +5130,7 @@
 	/**
 	 * Dual-chevron markup for the dedicated row-expand cell (the .juneau-view-detail-control column).  Collapsed (right)
 	 * and expanded (down) glyphs; CSS on {@code .juneau-view-detail-open} swaps which one shows.  An unknown
-	 * glyph draws nothing (spec U11).  A real {@code <button>} so keyboard (Enter/Space)
+	 * glyph draws nothing.  A real {@code <button>} so keyboard (Enter/Space)
 	 * activates expand without making the rest of the row a click target.
 	 */
 	function detailsControlCellMarkup() {
@@ -5093,7 +5188,7 @@
 	/**
 	 * Wires row selection: per-row checkbox toggle (delegated `change` listener - checkboxes are re-created on
 	 * every draw, the table element is not), the optional select-all header checkbox (only when `SelectionDef`
-	 * declared `selectAll`), and the off-screen-id-drop persistence rule (Q2/MED-11) on every `draw.dt` (sort,
+	 * declared `selectAll`), and the off-screen-id-drop persistence rule on every `draw.dt` (sort,
 	 * page, or an auto-refresh poll tick).  Select-all is scoped to the CURRENT draw's rows only (the ones actually on
 	 * screen) - consistent with the drop rule, it can never reach into an off-screen page.
 	 */
@@ -5627,7 +5722,7 @@
 			const body = await submitAggregateBulk(action, table, ids);
 			if (!body) return;
 			outcome = { succeeded: body.succeeded, notFound: body.notFound, failed: body.failed.map(function (f) { return f.id; }) };
-			failedRows = body.failed.map(function (f) { return { id: f.id, status: f.status || 0 }; });
+			failedRows = body.failed.map(function (f) { return { id: f.id, status: 0 }; });   // BulkResult.Failure is (id, message): an aggregate failure has no per-id HTTP status
 		} else {
 			outcome = await submitPerRowBulk(action, table, ctx, selectionState, ids);
 			failedRows = outcome.failed.map(function (id) { return { id: id, status: outcome.failedStatus[id] || 0 }; });
@@ -5648,7 +5743,7 @@
 		const message = buildBulkSummaryMessage(action.label || action.id, outcome.succeeded.length, outcome.notFound.length, outcome.failed);
 		showBulkSummaryToast(message, outcome.failed.length > 0);
 		announce(table, message);
-		publishBulk(ctx, action.id, outcome.succeeded.slice(), outcome.notFound.slice(), failedRows);   // after its toast (spec 4.4)
+		publishBulk(ctx, action.id, outcome.succeeded.slice(), outcome.notFound.slice(), failedRows);   // after its toast
 
 		if (action.onSuccess !== "none" && ctx.dataTable) reloadTableData(ctx.dataTable, true);
 	}
@@ -5681,27 +5776,33 @@
 		const req = buildActionRequest(
 			action, resolveCsrfToken(table), resolveCsrfHeaderName(table), extra, rowDataForTr(ctx, tr));
 		if (req.refuse) {
-			// T1 - the ONE terminal where nothing was even SENT: this guard returns before fetch is ever called, so
+			// Client refusal - the ONE terminal where nothing was even SENT: this guard returns before fetch is ever
+			// called, so
 			// a held dialog can re-enable Confirm and let the operator retry once the declaration is corrected.
-			if (settleDialogResultHold(ctx, "retryable")) renderHeldResultNotice(actionRefusalMessage(req.reason));
+			recordRunOutcome(ctx, { outcome: "refusal", message: actionRefusalMessage(req.reason) });
+			if (settleDialogResultHold(ctx, "retryable")) renderHeldResultNotice(ctx, actionRefusalMessage(req.reason));
 			else renderActionRefusalFor(tr, action, req.reason, ctx);
 			return;
 		}
 		setRowInFlight(tr, true);
+		const release = holdRun(ctx);   // the run stays open until this request has settled, whatever the dialog stack does meanwhile
 		fetch(req.url, { method: req.method, headers: req.headers, body: req.body, credentials: "same-origin" })
 			.then(function (resp) {
-				settleActionResponse(resp, action, table, tr, ctx);
+				return settleActionResponse(resp, action, table, tr, ctx);
 			})
 			.catch(function () {
 				// A network-level failure is itself a terminal outcome: clear the marker (so polling resumes) and
 				// render a visible refusal rather than leaving the row stuck in-flight.
 				setRowInFlight(tr, false);
-				// T2 - AMBIGUOUS, not retryable.  fetch rejects on a connection dropped AFTER the request was fully
+				// Network reject - AMBIGUOUS, not retryable.  fetch rejects on a connection dropped AFTER the request
+				// was fully
 				// sent and processed, so this does NOT prove the write didn't land; re-enabling Confirm would hand
 				// the operator a one-click duplicate of a non-idempotent write.  Terminal + Close-only instead.
-				if (settleDialogResultHold(ctx, "terminal")) renderHeldResultNotice(REQUEST_UNCONFIRMED_NOTICE);
+				if (settleDialogResultHold(ctx, "terminal")) renderHeldResultNotice(ctx, REQUEST_UNCONFIRMED_NOTICE);
 				else renderActionRefusalFor(tr, action, "request-failed", ctx);
-			});
+				recordRunOutcome(ctx, { outcome: "unknown", message: REQUEST_UNCONFIRMED_NOTICE });   // after the paint: the paint records a refusal, and a lost response is not one
+			})
+			.then(release, release);
 	}
 
 	/**
@@ -5721,7 +5822,7 @@
 			.then(function (resp) {
 				setRowInFlight(tr, false);
 				if (!resp.ok) {
-					const boundary = (typeof resp.headers?.get === "function") ? resp.headers.get("X-Loopback-Boundary") : null;
+					const boundary = (typeof resp.headers?.get === "function") ? resp.headers.get("X-Request-Boundary") : null;
 					return readBodyText(resp).then(function (text) {
 						return { outcome: "refusal", message: transportRefusal(resp.status, boundary, parseJsonSafe(text)).message };
 					});
@@ -5738,7 +5839,7 @@
 	}
 
 	/**
-	 * Whether `table` currently has a row marked in-flight (design doc §9.1 B5) - see hasInFlightRow above; this is
+	 * Whether `table` currently has a row marked in-flight - see hasInFlightRow above; this is
 	 * the setter half.  Marks the `<tr>` in-flight for an OUTSTANDING SYNCHRONOUS WRITE and disables its action
 	 * trigger so a double-click cannot issue a second write.  The marker is scoped to synchronous writes
 	 * ONLY - a long-running async-SSE-job uses a distinct affordance that does not inhibit table polling,
@@ -5755,9 +5856,9 @@
 	/**
 	 * Settles a row from an action-submit response - the declarative-modal / in-flight-marker join point.  It ALWAYS clears the in-flight
 	 * marker and re-enables the action FIRST (on success, failure, refusal, unknown, AND a transport refusal), so a
-	 * stuck marker can never freeze the whole table's polling (MED-4); then it renders the outcome:
-	 *   - non-2xx  -> a visible TRANSPORT refusal built from `X-Loopback-Boundary` + the `{reason,message}` envelope,
-	 *                 WITHOUT requiring the typed action-result schema (HIGH-3);
+	 * stuck marker can never freeze the whole table's polling; then it renders the outcome:
+	 *   - non-2xx  -> a visible TRANSPORT refusal built from `X-Request-Boundary` + the `{reason,message}` envelope,
+	 *                 WITHOUT requiring the typed action-result schema;
 	 *   - 2xx + typed ActionResult -> success (merge/redraw the row from the authoritative payload), failure,
 	 *                 named refusal, or a non-optimistic unknown - every outcome is rendered, none is silent;
 	 *   - 2xx + no typed body -> a bare success (the pre-416 behavior: redraw for an onSuccess=redraw action).
@@ -5766,37 +5867,38 @@
 	function settleActionResponse(resp, action, table, tr, ctx) { // NOSONAR javascript:S3776 -- encodes a views/widgets state machine, so complexity is inherent.
 		setRowInFlight(tr, false);   // EVERY terminal outcome clears the marker first - polling must always resume.
 		if (! resp) {
-			// T3: an absent response does not prove the write didn't land, so `unknown` never re-enables Confirm.
+			// an absent response does not prove the write didn't land, so `unknown` never re-enables Confirm.
 			const o = { outcome: "unknown" };
-			if (settleDialogResultHold(ctx, "terminal")) renderHeldResultNotice(actionOutcomeMessage(o));
+			recordRunOutcome(ctx, o);
+			if (settleDialogResultHold(ctx, "terminal")) renderHeldResultNotice(ctx, actionOutcomeMessage(o));
 			else renderActionOutcomeFor(tr, o, ctx);
 			return;
 		}
 
 		if (! resp.ok) {
 			const boundaryReason = (typeof resp.headers?.get === "function")
-				? resp.headers.get("X-Loopback-Boundary") : null;
-			readBodyText(resp).then(function (text) {
+				? resp.headers.get("X-Request-Boundary") : null;
+			return readBodyText(resp).then(function (text) {
 				const t = transportRefusal(resp.status, boundaryReason, parseJsonSafe(text));
 				const o = { outcome: "refusal", transport: true, refusalCode: t.code, message: t.message };
-				// T4: a boundary/transport refusal is a gate saying no - nothing was written, so retry is safe and
+				recordRunOutcome(ctx, o);
+				// a boundary/transport refusal is a gate saying no - nothing was written, so retry is safe and
 				// is the point.  The hand-off sits INSIDE this callback, next to the paint it replaces: at the
 				// arm's outer `return` the refusal text does not exist yet and the notice would race the button.
-				if (settleDialogResultHold(ctx, "retryable")) renderHeldResultNotice(actionOutcomeMessage(o));
+				if (settleDialogResultHold(ctx, "retryable")) renderHeldResultNotice(ctx, actionOutcomeMessage(o));
 				else renderActionOutcomeFor(tr, o, ctx);
-			}).catch(function () { settleBodyReadFailure(action, table, tr, ctx); });   // T9
-			return;
+			}).catch(function () { settleBodyReadFailure(action, table, tr, ctx); });   // body-read failure
 		}
 
-		readBodyText(resp).then(function (text) { // NOSONAR javascript:S3776 -- encodes a views/widgets state machine; complexity is inherent.
+		return readBodyText(resp).then(function (text) { // NOSONAR javascript:S3776 -- encodes a views/widgets state machine; complexity is inherent.
 			// Async-SSE-job feature: an ASYNC action's start POST returns a job pointer (not a terminal result).  The in-flight
 			// marker was ALREADY cleared above (first line of settle), so table polling has resumed BEFORE the long
 			// job runs - the job then uses the DISTINCT job-running affordance (data-juneau-job), never
 			// data-juneau-inflight, so hasInFlightRow/initPolling never freeze the whole table for the job's
-			// duration (HIGH-9).
+			// duration.
 			const started = parseJobStarted(text);
 			if (started) {
-				// T5: CLOSE FIRST, then stream.  The order is load-bearing, not cosmetic - startJobStream paints
+				// CLOSE FIRST, then stream.  The order is load-bearing, not cosmetic - startJobStream paints
 				// setRowJobRunning/renderJobProgress into the ROW, so a still-open backdrop would hide the whole
 				// progress affordance behind a dialog that can never settle (a job pointer is not a terminal
 				// result and can never carry a resultForm), and a throw in stream setup would strand that busy
@@ -5808,7 +5910,8 @@
 			const result = parseActionResult(text);
 			if (! result) {                    // bare 2xx, no typed result -> pre-416 success behavior.
 				applySuccessBehavior(action, table, tr, ctx, null);
-				// T6: a bare 2xx IS a success carrying no typed body and therefore no resultForm - the matrix's
+				recordRunOutcome(ctx, { outcome: "success" });
+				// a bare 2xx IS a success carrying no typed body and therefore no resultForm - the matrix's
 				// "success, no resultForm" cell.  Whole-stack close, and the row render is left exactly as today
 				// (closeCommitted returns false, so nothing downstream is skipped).
 				settleDialogResultHold(ctx, "closeCommitted");
@@ -5818,20 +5921,24 @@
 				const o = { outcome: "unknown",
 					message: "action-result contract mismatch (page='" + result.contractVersion +
 						"', runtime='" + JUNEAU_ACTION_RESULT_CONTRACT_VERSION + "')" };
-				// T7: same family as T3 - the mismatch text is carried into the dialog notice verbatim.
-				if (settleDialogResultHold(ctx, "terminal")) renderHeldResultNotice(actionOutcomeMessage(o));
+				// same family as the contract-mismatch terminal - the mismatch text is carried into the dialog notice
+				// verbatim.
+				recordRunOutcome(ctx, o);
+				if (settleDialogResultHold(ctx, "terminal")) renderHeldResultNotice(ctx, actionOutcomeMessage(o));
 				else renderActionOutcomeFor(tr, o, ctx);
 				return;
 			}
 			const outcome = normalizeOutcome(result);
-			// T8, the one terminal with more than one disposition.  Keyed on the hold's ABSENCE rather than on a
-			// falsy hand-off return, because closeCommitted also returns false and must emit NO F4 diagnostic.
+			// The typed-outcome terminal is the one with more than one disposition.  Keyed on the hold's ABSENCE rather
+			// than on a
+			// falsy hand-off return, because closeCommitted also returns false and must emit NO diagnostic.
 			const held = ctx?._resultHold != null;
 			if (outcome === "success")
 				applySuccessBehavior(action, table, tr, ctx, result);
 			const o = (outcome === "success")
 				? { outcome: "success", replay: !! result.replay, message: result.message }
 				: { outcome: outcome, refusalCode: result.refusalCode, message: result.message, replay: !! result.replay };
+			recordRunOutcome(ctx, o);
 			if (held && outcome === "success" && ! isBlankToken(result.resultForm)) {
 				// The RECEIPT branch, and it FETCHES BEFORE IT SETTLES.  Settling here would clear ctx._resultHold
 				// before the GET resolves, so every arm inside fetchResultForm would take the layer-gone escape and
@@ -5842,29 +5949,32 @@
 			let disposition = "terminal";
 			if (outcome === "success") disposition = "closeCommitted";
 			else if (outcome === "refusal") disposition = "retryable";
-			if (settleDialogResultHold(ctx, disposition)) renderHeldResultNotice(actionOutcomeMessage(o));
+			if (settleDialogResultHold(ctx, disposition)) renderHeldResultNotice(ctx, actionOutcomeMessage(o));
 			else renderActionOutcomeFor(tr, o, ctx);
-			// F4: an UNHELD success carrying a resultForm keeps its success banner byte-identical and adds ONE
+			// an UNHELD success carrying a resultForm keeps its success banner byte-identical and adds ONE
 			// non-alarming diagnostic - a consumer authoring mistake must not make a committed write look failed.
 			if (! held && outcome === "success" && ! isBlankToken(result.resultForm))
 				renderResultFormIgnored(tr, ctx);
-		}).catch(function () { settleBodyReadFailure(action, table, tr, ctx); });   // T9
+		}).catch(function () { settleBodyReadFailure(action, table, tr, ctx); });   // body-read failure
 	}
 
 	/**
-	 * T9 - the shared terminal for a REJECTED response-body read, on either of settleActionResponse's two
+	 * The shared terminal for a REJECTED response-body read, on either of settleActionResponse's two
 	 * readBodyText(...) chains.  readBodyText is defensive about `resp.text` being absent or throwing
 	 * synchronously, but it returns the real {@code Response.text()} promise for a real response, and that
 	 * REJECTS on a truncated / aborted body stream, a decode error, or an already-consumed body.  With no handler
-	 * such a failure bypasses T4 on the non-2xx chain and T5-T8 on the 2xx chain entirely: no hand-off runs,
+	 * such a failure bypasses the transport-refusal terminal on the non-2xx chain and the typed-outcome terminals on
+	 * the 2xx chain entirely: no hand-off runs,
 	 * ctx._resultHold is never cleared, and a held dialog sits disabled + busy forever.
 	 *
-	 * <p>Terminal, for the same reason T2 is: to have a body to read at all the response HEADERS were already
+	 * <p>Terminal, for the same reason a network reject is: to have a body to read at all the response HEADERS were
+	 * already
 	 * received, so the request reached the server and the server answered - the write is not provably absent and
 	 * Confirm must not re-enable.  Unheld, it falls back to today's honest non-optimistic `unknown` render.
 	 */
 	function settleBodyReadFailure(action, table, tr, ctx) {
-		if (settleDialogResultHold(ctx, "terminal")) renderHeldResultNotice(BODY_UNREADABLE_NOTICE);
+		recordRunOutcome(ctx, { outcome: "unknown", message: BODY_UNREADABLE_NOTICE });
+		if (settleDialogResultHold(ctx, "terminal")) renderHeldResultNotice(ctx, BODY_UNREADABLE_NOTICE);
 		else renderActionOutcomeFor(tr, { outcome: "unknown", message: BODY_UNREADABLE_NOTICE }, ctx);
 	}
 
@@ -5884,15 +5994,18 @@
 	 * <p>A ROW-LESS (ribbon-hosted) dialog declaring `mergeRow` has no row to merge into, so it redraws instead:
 	 * mergeRowFromResult is never called with a null `tr` (it dereferences it), and a successful row-less write
 	 * still shows up in the table rather than silently changing nothing.
+	 *
+	 * <p>Returns whether the result's message was painted into the row's detail panel, so a caller with no other place
+	 * to show it can fall back to a toast.
 	 */
 	function applySuccessBehavior(action, table, tr, ctx, result) {
-		if (result?.message)
-			paintActionMessageIntoDetail(tr, action?.id, result.message);
+		const painted = result?.message ? paintActionMessageIntoDetail(tr, action?.id, result.message) : false;
 		if (action.onSuccess === "mergeRow" && result?.row != null && tr) {
 			mergeRowFromResult(tr, ctx, result.row);
-		} else if ((action.onSuccess === "redraw" || (action.onSuccess === "mergeRow" && ! tr)) && ctx?.redraw) {
+		} else if ((action.onSuccess === "redraw" || (action.onSuccess === "mergeRow" && ! tr)) && ctx?.redraw && !ctx._released) {
 			ctx.redraw();
 		}
+		return painted;
 	}
 
 	/**
@@ -5969,6 +6082,33 @@
 	}
 
 	/**
+	 * Tells the run tracker on `ctx` (a chart card's action run; see NS.actions) how the run is going.  A no-op on
+	 * every ctx that has no tracker, which is every table and ribbon ctx.  The LAST outcome recorded is the one the
+	 * run resolves with.
+	 */
+	function recordRunOutcome(ctx, o) {
+		if (typeof ctx?._recordOutcome === "function")
+			ctx._recordOutcome({ outcome: o?.outcome || "unknown", message: o?.message });
+	}
+
+	/**
+	 * Marks one piece of asynchronous work (a submit, a form GET, a confirm prompt) as keeping the tracked run open,
+	 * and returns the function that ends it - idempotent, and it checks whether the run has now settled.  Without a
+	 * tracker on `ctx` this does nothing.
+	 */
+	function holdRun(ctx) {
+		if (!ctx?._runTracker) return function () { /* nothing is tracking this ctx */ };
+		ctx._submitsInFlight++;
+		let done = false;
+		return function () {
+			if (done) return;
+			done = true;
+			ctx._submitsInFlight--;
+			ctx._checkSettle?.();
+		};
+	}
+
+	/**
 	 * Lazily creates this view's RIBBON-ANCHORED banner host - where a row-less dialog's refusals and settled
 	 * outcomes render, since there is no row actions cell to put them in.  Anchored immediately after the toolbar
 	 * row that holds the ribbon, so the message reads as belonging to the control that opened the dialog.
@@ -5979,9 +6119,10 @@
 	 */
 	function ribbonBannerHost(ctx) {
 		const table = ctx?.table;
-		if (! table) return null;
+		if (! table || ctx._released) return null;
 		const existing = ctx._ribbonBannerHost;
 		if (existing?.parentNode) return existing;
+		if (ctx._chartHost) return null;   // a chart card's banner host is made once per run, never rebuilt outside the card
 		const row = ownToolbarRow(table);
 		const parent = row?.parentNode || findViewWrapper(table);
 		if (! parent?.appendChild) return null;
@@ -6033,12 +6174,14 @@
 	 * a row-less caller must land in the row-less host, not in a null-tolerant version of the row one.
 	 */
 	function renderActionRefusalFor(tr, action, reason, ctx) {
+		recordRunOutcome(ctx, { outcome: "refusal", message: actionRefusalMessage(reason) });
 		if (tr) renderRowActionRefusal(tr, action, reason);
 		else renderRibbonActionRefusal(ctx, action, reason);
 	}
 
 	/** The settled-outcome half of renderActionRefusalFor's routing (renderActionOutcome also dereferences `tr`). */
 	function renderActionOutcomeFor(tr, cls, ctx) {
+		recordRunOutcome(ctx, cls);
 		if (tr) renderActionOutcome(tr, cls);
 		else renderRibbonActionOutcome(ctx, cls);
 	}
@@ -6050,7 +6193,8 @@
 	/**
 	 * Marks a row as running a LONG async job (async-SSE-job feature) - deliberately a DIFFERENT attribute
 	 * (`data-juneau-job`) from the synchronous in-flight marker (`data-juneau-inflight`).  This is the whole point
-	 * of HIGH-9: hasInFlightRow (and therefore initPolling) freezes the ENTIRE table's polling while ANY row
+	 * of the separate marker: hasInFlightRow (and therefore initPolling) freezes the ENTIRE table's polling while ANY
+	 * row
 	 * carries `data-juneau-inflight`, which is correct for a short synchronous write but catastrophic for a job
 	 * that can run up to the server's 120s hard timeout - it would hide a resurrected incident on a PagerDuty
 	 * table for the whole job.  A job therefore NEVER sets `data-juneau-inflight`; it sets this distinct marker,
@@ -6066,63 +6210,168 @@
 	}
 
 	/**
-	 * Renders (and updates) the VISIBLE, live job-progress banner in the row's actions cell, plus a Cancel button
-	 * wired to the job's cancelUrl.  The progress text is painted with `textContent` ONLY (never innerHTML) - the
-	 * streamed content is customer-adjacent and this origin holds the CSRF token, so a typed/escaped path is the
-	 * only safe one (same invariant as the modal fields, BLK-1/MED-9).  Distinct `data-testid`/class from the
-	 * settled-outcome banner so a running job and a terminal outcome are never confused.
+	 * Where an async job paints, for either kind of caller: a table row (the row's actions cell) or a row-less one (the
+	 * ribbon-anchored banner host, or a chart card's banner host, which the chart action context presets as the same
+	 * ctx slot).  Internal: a null `container()` means there is nowhere to paint, and every method then does nothing
+	 * rather than throwing.
+	 *
+	 * <p>A row marks itself running through {@link #setRowJobRunning}; a row-less host counts its running jobs in
+	 * `data-juneau-job` on the container (absent again at zero), so two overlapping jobs do not clear each other's
+	 * marker.
 	 */
-	function renderJobProgress(tr, text, started, table) {
-		const cell = tr.querySelector ? (tr.querySelector(".juneau-view-actions-cell") || tr.lastElementChild || tr) : tr;
-		let banner = cell.querySelector ? cell.querySelector(".juneau-view-job-progress") : null;
+	function jobHostFor(tr, ctx) {
+		const host = {
+			row: tr || null,
+			container: function () {
+				if (tr) return tr.querySelector ? (tr.querySelector(".juneau-view-actions-cell") || tr.lastElementChild || tr) : tr;
+				return ribbonBannerHost(ctx);
+			},
+			setRunning: function (on) {
+				if (tr) { setRowJobRunning(tr, on); return; }
+				const c = host.container();
+				if (!c?.dataset) return;
+				const n = Math.max(0, (Number.parseInt(c.dataset.juneauJob, 10) || 0) + (on ? 1 : -1));
+				if (n > 0) c.dataset.juneauJob = String(n);
+				else delete c.dataset.juneauJob;
+			},
+			outcome: function (o) { if (!ctx?._released) renderActionOutcomeFor(tr, o, ctx); },
+			refusal: function (action, reason) {
+				if (ctx?._released) return;
+				if (tr) renderRowActionRefusal(tr, action, reason);
+				else renderRibbonActionRefusal(ctx, action, reason);
+			},
+			focusAnchor: function () {
+				if (tr) return tr.querySelector ? tr.querySelector(".juneau-view-action-trigger") : null;
+				const chart = ctx?._chartHost;
+				if (chart) {
+					const plot = chart.querySelector ? chart.querySelector(".jc-chart-plot") : null;
+					return plot && chart.isConnected !== false ? plot : null;
+				}
+				const c = host.container();
+				if (c?.setAttribute) c.setAttribute("tabindex", "-1");
+				return c;
+			}
+		};
+		return host;
+	}
+
+	const JOB_KEYS = new WeakMap();
+	let jobKeySeq = 0;
+
+	/** The stable per-job key that names a job's progress element: its jobId when that is a legal key, else a minted one. */
+	function jobKeyFor(started) {
+		if (typeof started?.jobId === "string" && BUS_TOPIC_KEY.test(started.jobId)) return started.jobId;
+		let key = JOB_KEYS.get(started);
+		if (!key) {
+			key = "j" + (++jobKeySeq);
+			if (started && typeof started === "object") JOB_KEYS.set(started, key);
+		}
+		return key;
+	}
+
+	/** This job's progress element inside `container`, or null. */
+	function findJobProgress(container, key) {
+		if (!container?.querySelectorAll) return null;
+		for (const el of container.querySelectorAll(".juneau-view-job-progress"))
+			if (el.getAttribute("data-juneau-job-key") === key) return el;
+		return null;
+	}
+
+	/**
+	 * Renders (and updates) this job's VISIBLE, live progress element in the host's container, plus a Cancel button
+	 * wired to the job's cancelUrl when that URL is trusted.  One element per job (`data-juneau-job-key`), so two jobs
+	 * on one host each keep their own.  The progress text is painted with `textContent` ONLY (never innerHTML) - the
+	 * streamed content is customer-adjacent and this origin holds the CSRF token, so a typed/escaped path is the
+	 * only safe one (same invariant as the modal fields), and an unchanged text is not rewritten.
+	 * Distinct `data-testid`/class from the settled-outcome banner so a running job and a terminal outcome are never
+	 * confused.
+	 */
+	function renderJobProgress(host, started, action, table, text) {
+		const cell = host.container();
+		if (!cell) return;
+		const key = jobKeyFor(started);
+		let banner = findJobProgress(cell, key);
 		if (! banner) {
 			banner = document.createElement("div");
 			banner.className = "juneau-view-job-progress";
 			banner.dataset.testid = "job-progress";
+			banner.setAttribute("data-juneau-job-key", key);
 			banner.setAttribute("role", "status");
 			const msg = document.createElement("span");
 			msg.className = "juneau-view-job-progress-msg";
 			banner.appendChild(msg);
-			if (! isBlankToken(started?.cancelUrl)) {
+			if (isTrustedJobUrl(started?.cancelUrl)) {
 				const cancel = document.createElement("button");
 				cancel.type = "button";
 				cancel.className = "juneau-view-job-cancel";
 				cancel.textContent = "Cancel";
-				cancel.addEventListener("click", function () { cancelJob(started, table, tr); });
+				cancel.setAttribute("aria-label", "Cancel " + (actionDisplayName(action) || "job"));
+				cancel.addEventListener("click", function () {
+					if (cancel.disabled) return;
+					cancel.disabled = true;   // one cancel request per click; only a failed request hands the button back
+					cancelJob(started, table, host, action).then(function (sent) { if (!sent) cancel.disabled = false; });
+				});
 				banner.appendChild(cancel);
 			}
 			cell.appendChild(banner);
 		}
 		const msgEl = banner.querySelector(".juneau-view-job-progress-msg");
-		if (msgEl) msgEl.textContent = (text == null ? "" : String(text));
-	}
-
-	/** Removes the live job-progress banner from a row (called when the job settles to a terminal outcome). */
-	function clearJobProgress(tr) {
-		const cell = tr.querySelector ? (tr.querySelector(".juneau-view-actions-cell") || tr.lastElementChild || tr) : tr;
-		const banner = cell.querySelector ? cell.querySelector(".juneau-view-job-progress") : null;
-		if (banner?.parentNode) banner.remove();
+		const next = (text == null ? "" : String(text));
+		if (msgEl && msgEl.textContent !== next) msgEl.textContent = next;
 	}
 
 	/**
-	 * Opens the SSE progress stream for a started async job and drives the row through its lifecycle (async-SSE-job feature).
-	 * The stream URL ITSELF is the capability (an unguessable >=128-bit token) - a browser EventSource CANNOT set
-	 * an X-Csrf-Token header, so unguessability is the access control, not a CSRF header (HIGH-4).  `progress`
-	 * events update the live banner; the single terminal `result` event carries the typed ActionResult and settles
-	 * the row (reusing the same normalize/contract-check/render path as a synchronous result, so cancelled /
-	 * cancelled-after-effect render via actionOutcomeMessage without any new UI).  A stream error is itself a
-	 * non-optimistic terminal outcome.  Throughout, the row carries only the DISTINCT `data-juneau-job` marker, so
-	 * the table keeps polling (HIGH-9).
+	 * Removes one job's live progress element (called when that job settles to a terminal outcome).  If focus was on
+	 * the element being removed, it moves to the host's anchor so a keyboard user is not dropped onto the page body.
 	 */
-	function startJobStream(started, action, table, tr, ctx) {
+	function clearJobProgress(host, started) {
+		const el = findJobProgress(host.container(), jobKeyFor(started));
+		if (!el?.parentNode) return;
+		const hadFocus = typeof el.contains === "function" && el.contains(document.activeElement);
+		el.remove();
+		if (!hadFocus) return;
+		const anchor = host.focusAnchor();
+		if (typeof anchor?.focus === "function") anchor.focus();
+	}
+
+	/**
+	 * Opens the SSE progress stream for a started async job and drives its host through the lifecycle (async-SSE-job feature).
+	 * The stream URL ITSELF is the capability (an unguessable >=128-bit token) - a browser EventSource CANNOT set
+	 * an X-Csrf-Token header, so unguessability is the access control, not a CSRF header; it is therefore
+	 * opened only when it is a same-origin URL, never a URL a response body pointed elsewhere.  `progress`
+	 * events update the live element; the single terminal `result` event carries the typed ActionResult and settles
+	 * the host (reusing the same normalize/contract-check/render path as a synchronous result, so cancelled /
+	 * cancelled-after-effect render via actionOutcomeMessage without any new UI).  A stream error is itself a
+	 * non-optimistic terminal outcome.  Throughout, a row carries only the DISTINCT `data-juneau-job` marker, so
+	 * the table keeps polling.
+	 *
+	 * <p>Row-less callers (a ribbon dialog, a chart card) pass `tr == null`; their progress and outcome paint through
+	 * the host's own container.  A run tracker on `ctx` counts the job for as long as its stream is open.
+	 */
+	// NOSONAR javascript:S3776 -- encodes a views/widgets state machine; complexity is inherent.
+	function startJobStream(started, action, table, tr, ctx) { // NOSONAR javascript:S3776 -- encodes a views/widgets state machine, so complexity is inherent.
+		if (ctx?._released) return null;   // the host was released while the start request was in flight: open no stream
+		const host = jobHostFor(tr, ctx);
 		if (typeof EventSource === "undefined") {
 			// No SSE transport in this browser - a visible, non-optimistic outcome; polling was never frozen.
-			renderActionOutcome(tr, { outcome: "unknown", message: "live progress is unavailable in this browser" });
+			host.outcome({ outcome: "unknown", message: "live progress is unavailable in this browser" });
 			return null;
 		}
-		setRowJobRunning(tr, true);
-		renderJobProgress(tr, "Working\u2026", started, table);
-		const es = new EventSource(started.streamUrl);
+		if (!isTrustedJobUrl(started.streamUrl)) {
+			host.outcome({ outcome: "unknown",
+				message: "the job started, but its progress URL is not on this site, so progress is not shown" });
+			return null;
+		}
+		let es;
+		try {
+			es = new EventSource(started.streamUrl);
+		} catch (e) {
+			host.outcome({ outcome: "unknown", message: "the progress stream could not be opened" });
+			return null;
+		}
+		host.setRunning(true);
+		renderJobProgress(host, started, action, table, "Working\u2026");
+		if (ctx?._runTracker) ctx._jobsRunning++;
 		const st = { settled: false };
 		publishJobEvent(started, "start");
 		function finish(result, fallback) {
@@ -6130,14 +6379,19 @@
 			st.settled = true;
 			es.close();
 			if (ctx?._jobSources) ctx._jobSources.delete(es);
-			setRowJobRunning(tr, false);
-			clearJobProgress(tr);
-			if (result) finishJobFromResult(action, table, tr, ctx, result);
-			else renderActionOutcome(tr, fallback);
+			try {
+				host.setRunning(false);
+				clearJobProgress(host, started);
+				if (result) finishJobFromResult(action, table, host, ctx, result);
+				else host.outcome(fallback);
+			} finally {
+				if (ctx?._runTracker) ctx._jobsRunning--;
+				ctx?._checkSettle?.();
+			}
 		}
 		es.addEventListener("progress", function (e) {
 			if (! st.settled) {
-				renderJobProgress(tr, e.data, started, table);
+				renderJobProgress(host, started, action, table, e.data);
 				paintActionMessageIntoDetail(tr, action?.id, e.data);
 				publishJobEvent(started, "progress", e.data);
 			}
@@ -6159,25 +6413,25 @@
 	}
 
 	/**
-	 * Settles a row from an async job's terminal ActionResult (the SSE `result` event) - the async twin of
+	 * Settles a job host from an async job's terminal ActionResult (the SSE `result` event) - the async twin of
 	 * settleActionResponse's 2xx typed branch, reusing the SAME contract-version handshake, outcome normalization,
 	 * success behavior and visible-outcome render.  cancelled / cancelled-after-effect are just outcomes here;
-	 * actionOutcomeMessage already renders both.
+	 * actionOutcomeMessage already renders both.  `host` is a job host (see jobHostFor).
 	 */
-	function finishJobFromResult(action, table, tr, ctx, result) {
-		if (! result) { renderActionOutcome(tr, { outcome: "unknown" }); return; }
+	function finishJobFromResult(action, table, host, ctx, result) {
+		if (! result) { host.outcome({ outcome: "unknown" }); return; }
 		if (result.contractVersion != null && result.contractVersion !== JUNEAU_ACTION_RESULT_CONTRACT_VERSION) {
-			renderActionOutcome(tr, { outcome: "unknown",
+			host.outcome({ outcome: "unknown",
 				message: "action-result contract mismatch (page='" + result.contractVersion +
 					"', runtime='" + JUNEAU_ACTION_RESULT_CONTRACT_VERSION + "')" });
 			return;
 		}
 		const outcome = normalizeOutcome(result);
 		if (outcome === "success") {
-			applySuccessBehavior(action, table, tr, ctx, result);
-			renderActionOutcome(tr, { outcome: "success", replay: !! result.replay, message: result.message });
+			applySuccessBehavior(action, table, host.row ?? null, ctx, result);
+			host.outcome({ outcome: "success", replay: !! result.replay, message: result.message });
 		} else {
-			renderActionOutcome(tr, {
+			host.outcome({
 				outcome: outcome, refusalCode: result.refusalCode, message: result.message, replay: !! result.replay
 			});
 		}
@@ -6186,16 +6440,24 @@
 	/**
 	 * Requests cancellation of a running job (fail-closed CSRF POST to the job's cancelUrl).  The SERVER is
 	 * authoritative - the terminal cancelled / cancelled-after-effect outcome still arrives over the SSE `result`
-	 * event, so this only asks; a blank token or missing cancelUrl renders a visible refusal and sends nothing.
+	 * event, so this only asks; a blank token or an untrusted or missing cancelUrl renders a visible refusal and sends
+	 * nothing.  Resolves true once the request was sent and accepted, false when it was refused or failed.
+	 *
+	 * <p>`hostOrTr` is a job host, or - the older three-argument form - a row element, which is wrapped.
 	 */
-	function cancelJob(started, table, tr) {
+	function cancelJob(started, table, hostOrTr, action) {
+		const host = typeof hostOrTr?.container === "function" ? hostOrTr : jobHostFor(hostOrTr, null);
+		const cancelAction = { id: "cancel", label: "Cancel" };
 		const req = buildJobCancelRequest(started?.cancelUrl, resolveCsrfToken(table), resolveCsrfHeaderName(table));
 		if (req.refuse) {
-			renderRowActionRefusal(tr, { id: "cancel", label: "Cancel" }, req.reason === "missing-token" ? "missing-token" : "request-failed");
-			return;
+			host.refusal(cancelAction, req.reason === "missing-token" || req.reason === "untrusted-cancel-url" ? req.reason : "request-failed");
+			return Promise.resolve(false);
 		}
-		fetch(req.url, { method: req.method, headers: req.headers, body: req.body, credentials: "same-origin" })
-			.catch(function () { renderRowActionRefusal(tr, { id: "cancel", label: "Cancel" }, "request-failed"); });
+		return fetch(req.url, { method: req.method, headers: req.headers, body: req.body, credentials: "same-origin" })
+			.then(function (resp) {
+				if (resp && resp.ok === false) { host.refusal(cancelAction, "request-failed"); return false; }
+				return true;
+			}, function () { host.refusal(cancelAction, "request-failed"); return false; });
 	}
 
 	/**
@@ -6219,8 +6481,8 @@
 	/**
 	 * Opens a `present=dialog` action's modal overlay (declarative-modal path).  When the action declares a form-source URL, the
 	 * modal-open confirmation is a READ-ONLY GET that returns the typed ModalDef JSON (confirmation fields + the
-	 * server-minted idempotency key) - it never mutates (HIGH-7); its typed fields are painted with `textContent`
-	 * (never `innerHTML`, never raw markup - BLK-1/MED-9).  With no form URL the dialog is a confirm-only prompt
+	 * server-minted idempotency key) - it never mutates; its typed fields are painted with `textContent`
+	 * (never `innerHTML`, never raw markup).  With no form URL the dialog is a confirm-only prompt
 	 * from the declared `confirm` text.  The mutation is the SEPARATE non-safe submit the confirm button issues.
 	 *
 	 * <p>Also the entry point for a ROW-LESS, ribbon-hosted dialog (`tr == null`): every refusal and
@@ -6244,7 +6506,7 @@
 	 * filled, else its name.  An action naming a `confirmRenderer` goes through the confirm pipeline and submits only
 	 * on a true answer; every other action keeps the built-in dialog, carrying `confirmLabel` and `tone`.
 	 */
-	function openConfirmOnlyDialog(action, table, tr, ctx) {
+	function openConfirmOnlyDialog(action, table, tr, ctx, extra) {
 		const rowData = rowDataForTr(ctx, tr);
 		const resolved = resolveConfirmText(action.confirm, rowData);
 		if (resolved.refuse) {
@@ -6253,11 +6515,12 @@
 		}
 		const modal = { title: resolved.text || actionDisplayName(action) };
 		if (isBlankToken(action.confirmRenderer)) {
-			showActionDialog(modal, action, table, tr, ctx);
+			showActionDialog(modal, action, table, tr, ctx, extra);
 			return;
 		}
 		// The row, its label field and its id field reach the renderer the same way the bulk path passes them, so a
 		// per-row typed confirm can name the row it guards.  A ribbon-hosted dialog has no row: rows is empty.
+		const release = holdRun(ctx);   // a renderer-driven prompt has no dialog on this ctx, so the run is held open here
 		confirmPipeline({
 			title: modal.title,
 			confirmLabel: action.confirmLabel || action.label || "Confirm",
@@ -6267,14 +6530,15 @@
 			rowIdField: ctx?.selectionState?.rowIdField ?? table?.getAttribute?.(ROW_ID_FIELD_ATTR),
 			action: action
 		}).then(function (ok) {
-			if (ok) submitActionDialog(modal, action, table, tr, ctx, null);
-		}).catch(function () { /* already logged by the pipeline; the action does not run */ }); // NOSONAR javascript:S2486 -- the unregistered-renderer rejection is logged where it is raised
+			if (ok) submitActionDialog(modal, action, table, tr, ctx, null, extra);
+		}).catch(function () { /* already logged by the pipeline; the action does not run */ }) // NOSONAR javascript:S2486 -- the unregistered-renderer rejection is logged where it is raised
+			.then(release, release);
 	}
 
 	// NOSONAR javascript:S3776 -- encodes a views/widgets state machine; complexity is inherent.
 	function openActionDialog(action, table, tr, ctx) {
 		// v1 depth cap (counts dialog-kind layers): a third dialog is a visible refusal inside the current top dialog.
-		if (dialogLayerCount() >= MAX_DIALOG_DEPTH) { renderDialogDepthRefusal(); return; }
+		if (dialogDepthExceeded(ctx)) { renderDialogDepthRefusal(ctx); return; }
 		if (isBlankToken(action.form)) {
 			// Confirm-only LOCAL path (no form-source URL): unversioned, and never fail-loud on a missing version.
 			// The name read is widened (label, then title, then id) so a ribbon-hosted action - which carries
@@ -6288,13 +6552,14 @@
 			renderActionRefusalFor(tr, action, resolved.reason, ctx);
 			return;
 		}
+		const release = holdRun(ctx);   // the run stays open while the form is being fetched
 		fetch(resolved.url, { method: "GET", credentials: "same-origin", headers: { "Accept": "application/json" } })
 			.then(function (resp) {
 				if (! resp?.ok) {
 					// A non-2xx on the read-only confirmation fetch is itself a visible transport refusal - the
 					// modal never opens optimistically on a boundary rejection.
 					const boundaryReason = (typeof resp?.headers?.get === "function")
-						? resp.headers.get("X-Loopback-Boundary") : null;
+						? resp.headers.get("X-Request-Boundary") : null;
 					return readBodyText(resp).then(function (text) {
 						const t = transportRefusal(resp?.status ?? 0, boundaryReason, parseJsonSafe(text));
 						renderActionOutcomeFor(tr, { outcome: "refusal", transport: true, refusalCode: t.code, message: t.message }, ctx);
@@ -6304,7 +6569,7 @@
 					const payload = parseJsonSafe(text);
 					if (! payload) {
 						// A form-source GET that did not parse: do NOT optimistically open a title-only dialog once forms
-						// exist (SF-6).  Treat as a form-bearing-expected failure -> visible refusal.
+						// exist.  Treat as a form-bearing-expected failure -> visible refusal.
 						renderActionRefusalFor(tr, action, "request-failed", ctx);
 						return;
 					}
@@ -6324,7 +6589,8 @@
 					showActionDialog(payload, action, table, tr, ctx);
 				});
 			})
-			.catch(function () { renderActionRefusalFor(tr, action, "request-failed", ctx); });
+			.catch(function () { renderActionRefusalFor(tr, action, "request-failed", ctx); })
+			.then(release, release);
 	}
 
 	// THIRD bar-slot host: a dialog's ModalDef.barSlot (client-painted; attribute names are shared with the console shell).
@@ -6333,7 +6599,7 @@
 	// sidecar from that JSON in the same shape the row-detail host uses, rather than relocating server-painted markup.  Identity minting,
 	// enhance-on-insert, and collapse teardown are NOT reimplemented here: this caller reuses
 	// mintDetailBarSlotIdentity / enhanceChromeInPanel / teardownDetailBarSlot verbatim (see showActionDialog below),
-	// exactly as spec'd - the shared strip builder never learns ANY bar-slot host exists (FINISHED-J0445u/J0445w).
+	// exactly as spec'd - the shared strip builder never learns ANY bar-slot host exists.
 	const DIALOG_BAR_SLOT_CLASS = "juneau-view-dialog-bar-slot";
 	const DIALOG_BAR_ANCHOR = "dialog-title";
 	const BAR_SLOT_ANCHOR_ATTR = "data-juneau-bar-slot-anchor";
@@ -6400,7 +6666,7 @@
 	/**
 	 * Builds a dialog's bar-slot region + id-less sidecar from the JSON `bar` (a {@code ModalDef.barSlot}), in
 	 * the same region + id-less dynamic-count sidecar shape as the row-detail host - {@code createElement}/{@code textContent} only, NEVER
-	 * {@code innerHTML} (BLK-1/MED-9: this is fetched, attacker-influenceable data, the same reasoning
+	 * {@code innerHTML} (this is fetched, attacker-influenceable data, the same reasoning
 	 * {@code buildDialogOverlay} states for the confirmation fields below).  Returns <jk>null</jk> for a
 	 * missing/malformed/empty bar - a peripheral, additive feature failing closed must never block the confirm/cancel
 	 * dialog itself from opening.
@@ -6454,7 +6720,7 @@
 	/**
 	 * Builds a `present=dialog` overlay DOM node (a backdrop + a `role=dialog` box) from a ModalDef, painting the
 	 * title and each typed confirmation field with `textContent` ONLY - never `innerHTML`, never raw markup, never a
-	 * live-data HTML blob (BLK-1/MED-9): live/remote data is attacker-influenceable and this origin holds the CSRF
+	 * live-data HTML blob: live/remote data is attacker-influenceable and this origin holds the CSRF
 	 * token, so a typed/escaped path is the only safe one here.  The optional header figure is the one exception:
 	 * icon-registry sprite markup via {@code buildDialogHeaderFigure} (same as toolbarButton).  Returns the pieces
 	 * so the caller can wire buttons.
@@ -6558,12 +6824,12 @@
 	}
 
 	/**
-	 * Whether `type` is a legal FormDef.Input token the client paints (the frozen v1 6-type allowlist: text, textarea,
+	 * Whether `type` is a legal FormDef.Input token the client paints (the 7-type allowlist: text, textarea, password,
 	 * checkbox, toggle, select, action).  Anything else is skipped so a hostile type token cannot become an element.
 	 */
 	function isTypedFormInputType(type) {
-		return type === "text" || type === "textarea" || type === "checkbox" || type === "toggle"
-			|| type === "select" || type === "action";
+		return type === "text" || type === "textarea" || type === "password" || type === "checkbox"
+			|| type === "toggle" || type === "select" || type === "action";
 	}
 
 	/** Whether a checkbox/toggle prefill token means "checked": "true" (case-insensitive) or "on" (decision 9). */
@@ -6575,11 +6841,11 @@
 
 	/**
 	 * Paints ONE typed FormDef.Input control into `row` via createElement (never innerHTML).  Dispatches on the frozen
-	 * 6-type allowlist - text/textarea (native inputs), checkbox, toggle (checkbox + role=switch), select (native
+	 * 7-type allowlist - text/textarea (native inputs), password (masked, never pre-filled), checkbox, toggle (checkbox + role=switch), select (native
 	 * &lt;select&gt; with &lt;option&gt; text via textContent), action (a &lt;button type=button&gt; that opens a nested
 	 * dialog for the named RowAction).  Prefills use `.value` / `.checked`.  Unknown types are skipped (returns null).
 	 * A `type=action` whose id is absent from the enclosing view's `rowActions` catalog is painted DISABLED (a visible,
-	 * fail-closed refusal at paint time; never a throw - SF-1 / H-P4-S1).
+	 * fail-closed refusal at paint time; never a throw).
 	 */
 	function buildSelectFormControl(f) {
 		const control = document.createElement("select");
@@ -6590,6 +6856,15 @@
 			opt.textContent = o.label != null ? String(o.label) : String(o.value);
 			control.appendChild(opt);
 		}
+		return control;
+	}
+
+	// A masked, write-only input: never pre-filled from the form data (not even on edit or re-open), and the browser
+	// is told not to autofill a saved credential into it.
+	function buildPasswordFormControl() {
+		const control = document.createElement("input");
+		control.type = "password";
+		control.setAttribute("autocomplete", "new-password");
 		return control;
 	}
 
@@ -6610,7 +6885,7 @@
 	}
 
 	// A `type=action` button: its name/id wiring is entirely its own (no shared tail post-processing), and
-	// a missing/non-dialog action id paints DISABLED rather than throwing (SF-1 / H-P4-S1).  A resolvable action
+	// a missing/non-dialog action id paints DISABLED rather than throwing.  A resolvable action
 	// gated-and-failing for this row paints disabled too, with both enabledWhen reason channels.
 	function buildActionFormControl(f, table, tr, ctx, row, childCatalog) {
 		const control = document.createElement("button");
@@ -6663,6 +6938,7 @@
 		if (type === "textarea") control = document.createElement("textarea");
 		else if (type === "select") control = buildSelectFormControl(f);
 		else if (type === "checkbox" || type === "toggle") control = buildCheckboxFormControl(type, f);
+		else if (type === "password") control = buildPasswordFormControl();
 		else { control = document.createElement("input"); control.type = "text"; }
 
 		control.id = id;
@@ -6675,7 +6951,7 @@
 		return control;
 	}
 
-	/** Whether `actionId` names a present=dialog RowAction on the enclosing view (paint-time catalog check, SF-1). */
+	/** Whether `actionId` names a present=dialog RowAction on the enclosing view (paint-time catalog check). */
 	function dialogActionIsOpenable(ctx, actionId) {
 		const catalog = (ctx?.viewDef?.rowActions) || [];
 		for (const c of catalog)
@@ -6728,7 +7004,7 @@
 	/**
 	 * A `type=action` button click: opens a nested dialog for the named RowAction on the enclosing view WITHOUT
 	 * closing the parent dialog (pushes a child layer).  A missing / non-dialog action is a visible refusal painted
-	 * into the current top dialog - never a throw (SF-1).  A resolvable action gated-and-failing for this row is
+	 * into the current top dialog - never a throw.  A resolvable action gated-and-failing for this row is
 	 * the SAME kind of visible refusal (fresh, fail-closed re-check - never a silent no-op, never a throw): the
 	 * button's own disabled state (buildActionFormControl) is defense in depth, not the only gate.
 	 */
@@ -6762,7 +7038,7 @@
 	 *
 	 * <p>Deliberately NOT a RowAction: a child action is reachable only from the form of the dialog that declares it,
 	 * so it never surfaces in buildRowActionMenu, never surfaces in the ribbon resolver, and needs no exclusion
-	 * filter in either - the same disjoint-catalog argument that keeps J0512's ribbon dialogs out of the row menus.
+	 * filter in either - the same disjoint-catalog argument that keeps the ribbon dialogs out of the row menus.
 	 * The ChildAction shape is then adapted to the RowAction shape openActionDialog already takes, so the child rides
 	 * the SAME reviewed dialog machinery (confirmation GET, typed fields, optional form, fail-closed CSRF submit,
 	 * typed-result settling) rather than a parallel implementation of it.
@@ -6776,8 +7052,8 @@
 		// The server rejects carryDrafts on a child with no form, so the second half of this guard is defense in
 		// depth against a hand-rolled payload - not a shape the validator lets through.
 		if (child.carryDrafts && child.form != null) {
-			resolved = withDraftQuery(child, collectDialogFormFields(topDialogEl()));
-			if (! resolved) { renderDialogDraftRefusal(child.id); return; }
+			resolved = withDraftQuery(child, collectDialogFormFields(topDialogEl(), true));
+			if (! resolved) { renderDialogDraftRefusal(child.id, ctx); return; }
 		}
 		openActionDialog({
 			id: String(resolved.id),
@@ -6801,15 +7077,26 @@
 			"Action '" + String(actionId) + "' is not available" + suffix + ".");
 	}
 
-	/** Paints the depth-cap refusal into the CURRENT top dialog (H-P5-S5), not a row-cell banner behind two backdrops. */
-	function renderDialogDepthRefusal() {
-		renderTopDialogNotice("juneau-view-dialog-depth-refusal", "dialog-depth-refusal",
-			"Only " + MAX_DIALOG_DEPTH + " stacked dialogs are supported.");
+	/** Paints the depth-cap refusal into the CURRENT top dialog, not a row-cell banner behind two backdrops. */
+	function renderDialogDepthRefusal(ctx) {
+		// The page-wide ceiling tripped for a ctx that is itself under its own cap: say so, and do not paint into a
+		// dialog that belongs to another host.
+		const text = dialogLayerCount(ctx) < MAX_DIALOG_DEPTH
+			? "Too many dialogs are open on this page."
+			: "Only " + MAX_DIALOG_DEPTH + " stacked dialogs are supported.";
+		recordRunOutcome(ctx, { outcome: "refusal", message: text });
+		const cls = "juneau-view-dialog-depth-refusal", testid = "dialog-depth-refusal";
+		if (! ctx || ctx._dialogStack?.length) { renderTopDialogNotice(cls, testid, text, ctx); return; }
+		const banner = ribbonBanner(ctx, cls, testid);
+		if (! banner) return;
+		banner.setAttribute("role", "alert");
+		banner.textContent = text;
 	}
 
-	function renderTopDialogNotice(cls, testid, text) {
+	/** Paints a notice in the top dialog: the owning {@code ctx}'s own top dialog when it has one, else the page's. */
+	function renderTopDialogNotice(cls, testid, text, ownerCtx) {
 		const top = topLayer();
-		const el = top?.el;
+		const el = ownerCtx?._dialogStack?.at(-1) ?? top?.el;
 		const host = (el?.querySelector?.(".juneau-view-dialog")) || el;
 		if (! host?.appendChild) return;
 		let banner = host.querySelector ? host.querySelector("." + cls) : null;
@@ -6850,7 +7137,7 @@
 	 * sectioned form paints its rows into a per-section pane with byte-identical row markup.
 	 */
 	// Attach live references / ids for validation's aria-describedby concatenation (help present at paint;
-	// error id added only when invalid - S5).
+	// error id added only when invalid).
 	function appendDialogFormHelpAndError(row, dialog, control, f, id) {
 		let helpId = null;
 		if (f.help != null && String(f.help) !== "") {
@@ -7055,7 +7342,7 @@
 
 	// Reads one collectable control's submit entry, or null when it carries no submit value (an unnamed
 	// node, a `type=action` button, or a tag outside the typed-control allowlist).
-	function collectDialogFormFieldEntry(el) {
+	function collectDialogFormFieldEntry(el, skipSecrets) {
 		const name = el.dataset?.juneauFormField ?? null;
 		if (name == null || name === "") return null;
 		const tag = el.tagName ? String(el.tagName).toLowerCase() : "";
@@ -7064,14 +7351,15 @@
 		if (tag !== "input") return null;
 		const itype = el.type ? String(el.type).toLowerCase() : "text";
 		if (itype === "checkbox") return { name: name, value: el.checked ? "true" : "false" };
+		if (skipSecrets && itype === "password") return null;   // a secret never rides a URL (drafts land in logs/history)
 		return { name: name, value: controlStringValue(el) };
 	}
 
-	function collectDialogFormFields(dialog) {
+	function collectDialogFormFields(dialog, skipSecrets) {
 		const out = {};
 		if (!dialog?.querySelectorAll) return out;
 		for (const el of dialog.querySelectorAll("[data-juneau-form-field]")) {
-			const entry = collectDialogFormFieldEntry(el);
+			const entry = collectDialogFormFieldEntry(el, skipSecrets);
 			if (entry) out[entry.name] = entry.value;
 		}
 		return out;
@@ -7181,7 +7469,7 @@
 			state.proceed(extra?.fields ?? collectDialogFormFields(ui.dialog));
 			return Promise.resolve({});
 		};
-		ui.close = function () { popLayer(ui.backdrop); };   // pops this dialog's layer (and anything stacked above it), never a sibling below
+		ui.close = function () { popDialogLayers(ui.backdrop, ctx); };   // pops this dialog and what is stacked above it that belongs with it, never a sibling below
 		ui.closed = closed;
 		return state;
 	}
@@ -7192,34 +7480,47 @@
 	 * layer (portal to body, no light-dismiss): Escape / z-order / focus-restore are owned by the stack.  A dialog-only
 	 * {@code seq} namespaces the form field ids.  Confirm runs {@link validateDialogForm} first and only submits when
 	 * the client-side form is valid (fail-loud, advisory to the authoritative server submit).  A push that would exceed
-	 * the depth cap is a visible refusal inside the current top dialog rather than a new overlay (H-P5-S5).
+	 * the depth cap is a visible refusal inside the current top dialog rather than a new overlay.
 	 */
 	// NOSONAR javascript:S3776 -- encodes a views/widgets state machine; complexity is inherent.
-	function showActionDialog(modal, action, table, tr, ctx) {
+	function showActionDialog(modal, action, table, tr, ctx, callerExtra) {
+		if (ctx?._released) return null;   // a response that lands after the host was released opens nothing
 		if (modal?.chrome && !dialogChromes[modal.chrome]) {
 			console.error("[juneau-views] E-JS-72: " + fmt("dialog chrome '%s' is not registered", modal.chrome));
 			return null;
 		}
-		if (dialogLayerCount() >= MAX_DIALOG_DEPTH) { renderDialogDepthRefusal(); return null; }
+		if (dialogDepthExceeded(ctx)) { renderDialogDepthRefusal(ctx); return null; }
 		const seq = ++dialogSeq;
 		const ui = buildDialogOverlay(modal, action, table, tr, ctx, seq);
 		if (modal?.chrome) applyDialogChrome(modal, ui);
 		const state = wireDialogHandle(ui, modal, action, table, tr, ctx);
-		function close() { popLayer(ui.backdrop); }
+		function close() { popDialogLayers(ui.backdrop, ctx); }
 		ui.cancelBtn.addEventListener("click", close);
 		if (ui.dismissBtn) ui.dismissBtn.addEventListener("click", close);
 		function proceed(fields) {
 			// A modal that opted in to hosting its own result KEEPS ITS LAYER and registers a hold instead of
 			// closing; the settle then decides that layer's fate from the outcome.  Registration happens BEFORE the
 			// submit because the submit's client-refusal terminal can settle synchronously.  The hold is passed
-			// ctx-scoped rather than as a submit parameter on purpose: submitActionDialog stays byte-identical, so
-			// J0512's targetId precedence and its tripwire keep covering the only submit path there is.
+			// ctx-scoped rather than as a submit parameter on purpose: submitActionDialog has no receipt coupling, so
+			// The targetId precedence and its tripwire keep covering the only submit path there is.
 			// No ctx means no hold registry AND no dialog stack to check liveness against, so it closes as today -
 			// the fail-safe direction: today's behavior, not a dialog nothing can ever settle.
 			state.submitted = true;
-			if (modal?.keepOpenOnSubmit && ctx) beginDialogResultHold(ui, action, modal, ctx);
-			else close();
-			submitActionDialog(modal, action, table, tr, ctx, fields);
+			const release = holdRun(ctx);   // closing the dialog below must not settle a run whose submit has not started yet
+			// An unheld STACKED step closes only its own layer here, so remember the parent it sat on: if the write
+			// then commits, the settle takes the rest of the stack down too (see settleDialogResultHold).
+			const held = modal?.keepOpenOnSubmit && ctx;
+			if (ctx) ctx._stackedSubmitParent = held ? null : lockStackedParent(ctx, ui.backdrop);
+			if (held) beginDialogResultHold(ui, action, modal, ctx);
+			else {
+				close();
+				// Closing the child restores focus to the parent's child-action button, which the lock just disabled
+				// (a disabled control cannot take focus), so park focus on the parent's Cancel instead.
+				// (skipped when another host's modal is on top: it owns focus)
+				if (! foreignTrapLayer(ctx)) restoreLayerFocus(ctx?._stackedSubmitParent?.cancelBtn);
+			}
+			try { submitActionDialog(modal, action, table, tr, ctx, fields, callerExtra); }
+			finally { release(); }
 		}
 		ui.confirmBtn.addEventListener("click", function () {
 			if (! validateDialogForm(ui.dialog, true)) return;   // fail-loud client validation before the submit
@@ -7249,21 +7550,24 @@
 				}
 				notifyPollPausedChange(ctx);
 				state.dismissed();
+				ctx?._checkSettle?.();
 			}
 		});
 		if ((modal?.tone || action?.tone) === "danger" && typeof ui.cancelBtn.focus === "function") ui.cancelBtn.focus();
 		notifyPollPausedChange(ctx);
 		// Enhance-on-insert for a dialog-hosted bar slot: MUST run after pushLayer has portalled the dialog into the
 		// document (initAll() scans document-wide), reusing the SAME chrome entry + shared wired marker the
-		// row-detail host's enhanceChromeInPanel already uses - mirroring FINISHED-J0445u.
+		// row-detail host's enhanceChromeInPanel already uses.
 		enhanceChromeInPanel(ui.dialog);
 		return ui;
 	}
 
 	/**
 	 * Issues the dialog's non-safe submit, carrying the server-minted idempotency key and the row's targetId so the
-	 * server can check the key's `(action, targetId)` binding (HIGH-8) - a double-click / re-submit / browser retry
+	 * server can check the key's `(action, targetId)` binding - a double-click / re-submit / browser retry
 	 * therefore all carry the SAME key.  Typed FormDef values collected via `.value` ride in `extra.fields`.
+	 * The optional `callerExtra` (a rowActions.run caller's `extra`, carried through the confirm-only prompt) seeds the
+	 * payload; this function's own `targetId`, `idempotencyKey` and `fields` keys take precedence over it.
 	 * Delegates the fail-closed CSRF submit + in-flight marker + typed-result settling to submitRowAction(...).
 	 *
 	 * <p>The submitted target is the row's id, EXCEPT for a modal that has explicitly opted in with
@@ -7277,8 +7581,8 @@
 	 * artifact-bound key (`mint(action, realRowId)`) and sets `idempotencyKey` for that reason - the pattern the
 	 * example app's ack form uses - must keep sending the row's real id, or its own binding check becomes vacuous.
 	 */
-	function submitActionDialog(modal, action, table, tr, ctx, fields) {
-		const extra = {};
+	function submitActionDialog(modal, action, table, tr, ctx, fields, callerExtra) {
+		const extra = Object.assign({}, callerExtra);   // a rowActions.run caller's extra; the dialog's own keys below win
 		const targetId = (modal?.selfTargeted && modal?.idempotencyKey != null)
 			? modal.idempotencyKey
 			: (tr?.dataset?.juneauRowId ?? null);
@@ -7302,7 +7606,7 @@
 	//
 	// The hold is registered on `ctx` rather than passed as a callback parameter ON PURPOSE: submitActionDialog is a
 	// shared submit seam with its own pinned target-precedence rule, and threading a completion callback through it
-	// would couple this feature's diff to that one.  Coupling through ctx._resultHold leaves it byte-identical.
+	// would couple this feature's diff to that one.  Coupling through ctx._resultHold leaves it with no receipt coupling.
 	//
 	// WHY THE RESULT HOST IS NOT THE PREVIOUSLY-REJECTED "open a follow-up dialog from the response" shape: the
 	// distinguishing property is POSITION RELATIVE TO THE COMMIT, and it is enforced by three independently-testable
@@ -7318,25 +7622,25 @@
 	const DIALOG_RESULT_NOTICE_CLASS = "juneau-view-dialog-result-notice";
 	const DIALOG_RESULT_NOTICE_TESTID = "dialog-result-notice";
 
-	/** T2's wording: the request WAS sent, so the outcome is ambiguous rather than a plain "try again". */
+	/** Network-reject wording: the request WAS sent, so the outcome is ambiguous rather than a plain "try again". */
 	const REQUEST_UNCONFIRMED_NOTICE =
 		"The request was sent but no response came back.  It may or may not have been applied - re-check before retrying.";
 
-	/** T9's wording: headers arrived, so the server answered; only the body was unreadable. */
+	/** Wording for a body-read failure: headers arrived, so the server answered; only the body was unreadable. */
 	const BODY_UNREADABLE_NOTICE =
 		"The server answered but the response body could not be read.  The action may or may not have been applied.";
 
-	/** F12: the write COMMITTED and only the follow-up read failed - nothing here casts doubt on the write. */
+	/** the write COMMITTED and only the follow-up read failed - nothing here casts doubt on the write. */
 	const RESULT_FORM_UNAVAILABLE_NOTICE =
 		"The action completed, but its result could not be loaded.";
 
-	/** F1c: a well-formed payload of the FORBIDDEN shape - a consumer authoring bug, diagnosed as one. */
+	/** a well-formed payload of the FORBIDDEN shape - a consumer authoring bug, diagnosed as one. */
 	const RESULT_FORM_REFUSED_NOTICE =
 		"The action completed, but its result was not shown: a result form must not carry inputs.";
 
 	/** Paints (or OVERWRITES) the one in-dialog held-outcome notice, through the shared top-dialog notice painter. */
-	function renderHeldResultNotice(text) {
-		renderTopDialogNotice(DIALOG_RESULT_NOTICE_CLASS, DIALOG_RESULT_NOTICE_TESTID, text);
+	function renderHeldResultNotice(ctx, text) {
+		renderTopDialogNotice(DIALOG_RESULT_NOTICE_CLASS, DIALOG_RESULT_NOTICE_TESTID, text, ctx);
 	}
 
 	/** The `.juneau-view-dialog` element of the CURRENT top layer, or null when no layer is open. */
@@ -7369,8 +7673,9 @@
 	}
 
 	/**
-	 * The ONE Close-only action row every non-receipt `terminal` surface uses (T2, T3, T7, T9, T8-failure,
-	 * T8-unknown, plus the two post-commit cells F12 and F1c).  Its only listener is the WHOLE-STACK teardown, so
+	 * The ONE Close-only action row every non-receipt `terminal` surface uses (network reject, contract mismatch,
+	 * body-read failure, failure,
+	 * unknown outcome, plus the two post-commit cells).  Its only listener is the WHOLE-STACK teardown, so
 	 * the operator's exit from a terminal held dialog is identical everywhere and lives in exactly one place.
 	 *
 	 * <p>Factoring it here is also what makes the terminal dispositions buildable at all: the automatic-teardown
@@ -7408,25 +7713,78 @@
 	 * step whose parent already committed.
 	 */
 	function beginDialogResultHold(ui, action, modal, ctx) {
-		ui.confirmBtn.disabled = true;
-		ui.dialog.dataset.juneauDialogBusy = "1";
+		const lock = lockDialogForWrite(ui.backdrop, ui.dialog, ui.confirmBtn);
+		lock.action = action;
+		lock.modal = modal;
+		ctx._resultHold = lock;
+	}
+
+	/**
+	 * Disables a dialog's Confirm and child-action buttons and marks it busy, returning the record
+	 * {@link restoreHeldChildActions} and {@link clearDialogBusyMarker} undo it from.  Child actions that were
+	 * already gated are remembered so a restore never enables them.
+	 */
+	function lockDialogForWrite(backdrop, dialog, confirmBtn) {
+		const confirmWasDisabled = confirmBtn?.disabled === true;
+		if (confirmBtn) confirmBtn.disabled = true;
+		dialog.dataset.juneauDialogBusy = "1";
 		const disabledChildren = [];
-		if (ui.dialog.querySelectorAll)
-			for (const c of ui.dialog.querySelectorAll(".juneau-view-dialog-form-action")) {
+		if (dialog.querySelectorAll)
+			for (const c of dialog.querySelectorAll(".juneau-view-dialog-form-action")) {
 				if (c.disabled) { disabledChildren.push(c); continue; }
 				c.disabled = true;
 				c.setAttribute("aria-disabled", "true");
 			}
-		ctx._resultHold = {
-			backdrop: ui.backdrop, dialog: ui.dialog, confirmBtn: ui.confirmBtn,
-			action: action, modal: modal, disabledChildren: disabledChildren
-		};
+		return { backdrop: backdrop, dialog: dialog, confirmBtn: confirmBtn, confirmWasDisabled: confirmWasDisabled,
+			disabledChildren: disabledChildren };
+	}
+
+	/**
+	 * Locks the parent an unheld stacked step was opened from for the duration of that step's write, so the write
+	 * cannot be confirmed again or stacked on by a new child.  Returns the record to record on the ctx, or null at
+	 * the bottom of the stack.  A parent that is already locked keeps its FIRST record, so a second programmatic
+	 * submit over it cannot overwrite what the first write's settle needs to undo.
+	 */
+	function lockStackedParent(ctx, backdrop) {
+		const parent = stackedParentOf(ctx, backdrop);
+		const dialog = parent?.querySelector ? (parent.querySelector(".juneau-view-dialog") || parent) : null;
+		if (! dialog) return null;
+		if (dialog.dataset?.juneauDialogBusy === "1")
+			return ctx._stackedSubmitParent ?? null;
+		const confirmBtn = parent.querySelector(".juneau-view-dialog-confirm");
+		const lock = lockDialogForWrite(parent, dialog, confirmBtn);
+		lock.cancelBtn = parent.querySelector(".juneau-view-dialog-cancel");
+		return lock;
 	}
 
 	/** Whether the held dialog's layer is still on this ctx's dialog stack (it is not, after Cancel or Escape). */
 	function heldLayerIsLive(ctx, hold) {
 		const stack = ctx?._dialogStack;
 		return stack?.includes(hold.backdrop) === true;
+	}
+
+	/** The layer directly under `backdrop` on this ctx's dialog stack, or null when `backdrop` is the bottom one. */
+	function stackedParentOf(ctx, backdrop) {
+		const stack = ctx?._dialogStack;
+		const i = stack ? stack.indexOf(backdrop) : -1;
+		return i > 0 ? stack[i - 1] : null;
+	}
+
+	/**
+	 * Hands a stacked parent back after its child's write did not commit, mirroring a held dialog.  A `terminal`
+	 * disposition (the write may have landed) leaves Confirm and the child actions disabled and swaps the actions row
+	 * for a Close-only one; anything else (a refused, never-sent write) restores the parent to its pre-lock state.
+	 */
+	function unlockStackedParent(lock, disposition, ctx) {
+		clearDialogBusyMarker(lock);
+		if (disposition === "terminal") {
+			removeDialogActionsRow(lock.dialog);
+			restoreLayerFocus(appendDialogCloseOnlyRow(lock.dialog, ctx));
+			return;
+		}
+		if (lock.confirmBtn) lock.confirmBtn.disabled = lock.confirmWasDisabled === true;
+		restoreHeldChildActions(lock);
+		restoreLayerFocus(lock.confirmBtn?.disabled === false ? lock.confirmBtn : lock.cancelBtn);
 	}
 
 	/** Drops the busy marker a hold stamped on its dialog. */
@@ -7456,7 +7814,14 @@
 	 *
 	 * <p>Returns <code>false</code>, having done nothing, when there is no hold at all or when the registered layer
 	 * is no longer on the stack (the operator pressed Cancel or Escape mid-flight).  The caller then paints into
-	 * the row / ribbon host exactly as it does today, which is what makes leaving Cancel enabled safe.
+	 * the row / ribbon host exactly as it does today, which is what makes leaving Cancel enabled safe.  The one
+	 * exception is an UNHELD stacked step's `closeCommitted`: that step closed its own layer at click time and
+	 * recorded the parent it sat on (locked while the write was in flight) in `ctx._stackedSubmitParent`, so when that
+	 * parent is still on the stack the whole stack is closed (and <code>false</code> returned, so the banner still
+	 * paints).  Any other disposition on a parent that is still on the stack unlocks it (a `terminal` one leaves it
+	 * Close-only, like a held dialog) and returns <code>true</code>, because the notice belongs in it; a parent that
+	 * is gone returns <code>false</code> with nothing unlocked.  The record is cleared on every settle, together
+	 * with the hold.
 	 *
 	 * <p>Returns <code>true</code> for `retryable` / `terminal` / `receipt` - the three dispositions that leave the
 	 * dialog ON SCREEN, so the notice belongs in the dialog where the operator can read it and painting the row
@@ -7470,8 +7835,24 @@
 	 */
 	function settleDialogResultHold(ctx, disposition) {
 		const hold = ctx?._resultHold ?? null;
-		if (ctx) ctx._resultHold = null;   // cleared FIRST: no terminal may settle the same hold twice
-		if (! hold || ! heldLayerIsLive(ctx, hold)) return false;
+		const locked = ctx?._stackedSubmitParent ?? null;
+		const parent = locked?.backdrop ?? null;
+		if (ctx) {
+			ctx._resultHold = null;   // cleared FIRST: no terminal may settle the same hold twice
+			ctx._stackedSubmitParent = null;
+		}
+		// An UNHELD stacked step already closed its own layer at click time, so there is no hold - but its committed
+		// write still leaves the parent it was opened from standing, stale, unless the stack is closed here too.
+		const stackedCommit = disposition === "closeCommitted" && ! hold && parent != null
+			&& ctx?._dialogStack?.includes(parent) === true;
+		if (! hold && ! stackedCommit && locked) {
+			// A stacked write that did not commit: hand the parent back, still open, and let the caller's notice
+			// land in it (it is the top layer again) instead of in a banner behind it.  A cancelled parent is gone.
+			if (ctx?._dialogStack?.includes(parent) !== true) return false;
+			unlockStackedParent(locked, disposition, ctx);
+			return true;
+		}
+		if (! stackedCommit && (! hold || ! heldLayerIsLive(ctx, hold))) return false;
 		clearDialogBusyMarker(hold);
 		if (disposition === "closeCommitted") {
 			// The ONE automatic teardown in the whole graph, and it takes the WHOLE stack: a terminal surface for a
@@ -7488,9 +7869,10 @@
 			return true;
 		}
 		if (disposition === "terminal") {
-			// Actions row only.  The form body is left standing on purpose: T2/T3/T7/T9 are not confirmed-commit
+			// Actions row only.  The form body is left standing on purpose: the non-commit terminals are not
+			// confirmed-commit
 			// surfaces, so the operator keeps their typed values on screen to copy out before Close.  The two
-			// post-commit `terminal` cells (F12, F1c) run the body teardown themselves, in fetchResultForm.
+			// post-commit `terminal` cells run the body teardown themselves, in fetchResultForm.
 			removeDialogActionsRow(hold.dialog);
 			appendDialogCloseOnlyRow(hold.dialog, ctx);
 		}
@@ -7498,7 +7880,7 @@
 	}
 
 	/**
-	 * F4 - a result carried a resultForm but its dialog never opted in with keepOpenOnSubmit.
+	 * A result carried a resultForm but its dialog never opted in with keepOpenOnSubmit.
 	 *
 	 * <p>The write SUCCEEDED, so the success banner is left byte-identical and this adds exactly one non-alarming
 	 * `role=status` diagnostic into the SAME outcome host the success already used.  Never a new layer (that is the
@@ -7631,13 +8013,13 @@
 	/**
 	 * Issues the follow-up READ-ONLY receipt GET and routes its four outcomes.
 	 *
-	 * <p>Three of them are the same F12 terminal - "the write committed, we just could not show you the result":
+	 * <p>Three of them are the same terminal - "the write committed, we just could not show you the result":
 	 * a non-2xx, an unparseable payload, and a REJECTED promise.  The third arm matters as much as the other two:
 	 * without it a single dropped packet on the follow-up read leaves the promise rejected, the terminal unreached,
 	 * and Confirm stuck disabled + busy on a write that had ALREADY COMMITTED.
 	 *
 	 * <p>The fourth is distinct and must stay distinct: a 2xx that parses fine but carries a `form` is a
-	 * SUCCESSFUL read of a payload of the forbidden shape.  It shares F12's disposition, teardown and Close-only
+	 * SUCCESSFUL read of a payload of the forbidden shape.  It shares that disposition, teardown and Close-only
 	 * row, but it carries its own wording, because folding a consumer authoring bug into a transport-failure
 	 * message hides it.
 	 *
@@ -7648,8 +8030,9 @@
 		const dialog = ctx?._resultHold?.dialog ?? null;
 		function resultFormTerminal(text) {
 			teardownCommittedWriteBody(dialog);   // post-commit surface: the submitted inputs come out
-			if (settleDialogResultHold(ctx, "terminal")) renderHeldResultNotice(text);
+			if (settleDialogResultHold(ctx, "terminal")) renderHeldResultNotice(ctx, text);
 		}
+		if (!isTrustedJobUrl(url)) { resultFormTerminal(RESULT_FORM_UNAVAILABLE_NOTICE); return; }   // a body-supplied URL: same trust as the job URLs
 		fetch(url, { method: "GET", credentials: "same-origin", headers: { "Accept": "application/json" } })
 			.then(function (resp) {
 				if (! resp?.ok) { resultFormTerminal(RESULT_FORM_UNAVAILABLE_NOTICE); return null; }
@@ -7662,11 +8045,11 @@
 				});
 			})
 			.catch(function () {
-				// F12's third arm, written out here rather than delegated: the pin on this function slices from its
+				// The third arm, written out here rather than delegated: the pin on this function slices from its
 				// last `.catch(` to the end and requires the SETTLE inside it, because a `.catch` that merely logs
 				// would satisfy a bare "has a catch" check while leaving the hold uncleared on a committed write.
 				teardownCommittedWriteBody(dialog);
-				if (settleDialogResultHold(ctx, "terminal")) renderHeldResultNotice(RESULT_FORM_UNAVAILABLE_NOTICE);
+				if (settleDialogResultHold(ctx, "terminal")) renderHeldResultNotice(ctx, RESULT_FORM_UNAVAILABLE_NOTICE);
 			});
 	}
 
@@ -7739,10 +8122,10 @@
 	}
 
 	/** The visible over-cap refusal: the child does not open, and the operator is told why. */
-	function renderDialogDraftRefusal(actionId) {
+	function renderDialogDraftRefusal(actionId, ctx) {
 		renderTopDialogNotice("juneau-view-dialog-action-refusal", "dialog-action-refusal",
 			"Action '" + String(actionId) + "' was not opened: its form draft exceeds "
-			+ MAX_DRAFT_QUERY_BYTES + " bytes.");
+			+ MAX_DRAFT_QUERY_BYTES + " bytes.", ctx);
 	}
 
 	/** Renders a VISIBLE row-action refusal (anti-silent-degradation) into the row's actions cell. */
@@ -7899,19 +8282,22 @@
 
 	/**
 	 * Tears down this ctx's whole dialog stack: snapshot {@code ctx._dialogStack} and pop each backdrop layer (bottom
-	 * pop takes its nested children with it), then clear the tracking.  A defensive document sweep removes any orphaned
-	 * backdrop that was never (or is no longer) a registered layer.
+	 * pop takes its nested children with it), then clear the tracking.  A defensive sweep removes any orphaned
+	 * backdrop that was never (or is no longer) a registered layer; a backdrop that is a live layer of another host
+	 * is never touched.
 	 */
 	function closeActionDialog(ctx) {
 		if (ctx?._dialogStack?.length) {
 			const snapshot = ctx._dialogStack.slice();
-			for (let i = snapshot.length - 1; i >= 0; i--) popLayer(snapshot[i]);
+			for (let i = snapshot.length - 1; i >= 0; i--) popDialogLayers(snapshot[i], ctx);
 			ctx._dialogStack = [];
 		}
 		const el = ctx?._actionDialog;
 		if (el?.parentNode) el.remove();
 		if (ctx) ctx._actionDialog = null;
-		Array.prototype.forEach.call(document.querySelectorAll(".juneau-view-dialog-backdrop"), removeEl);
+		Array.prototype.forEach.call(document.querySelectorAll(".juneau-view-dialog-backdrop"), function (el) {
+			if (findLayerIndex(el) < 0) removeEl(el);
+		});
 	}
 
 	/**
@@ -7967,7 +8353,7 @@
 	}
 
 	function teardownTable(table, ctx) {
-		// Removal path 5/5 (B3, design §9.3): the reinit/destroy path.  First and unguarded - unlike the preDraw.dt
+		// Removal path 5/5: the reinit/destroy path.  First and unguarded - unlike the preDraw.dt
 		// guard below, there is no in-flight redraw to protect against here, and every region this table (or any
 		// open row-detail panel beneath it) still owns must be torn down before the DataTable instance is
 		// destroyed a few lines down, discarding the DOM structure regions were enrolled against.
@@ -8008,7 +8394,8 @@
 			ctx.dataTable = null;
 		}
 		stripGeneratedDom(table);
-		// DT1 table-overflow-wrap discipline: remove the DT1 wrap (INV-5) so a reconstruct cannot nest the toolbar inside the overflow box.
+		// DT1 table-overflow-wrap discipline: remove the DT1 wrap so a reconstruct cannot nest the toolbar inside the
+		// overflow box.
 		unwrapTableScroll(table);
 	}
 
@@ -8071,22 +8458,22 @@
 	}
 
 	/**
-	 * DT1 table-overflow-wrap discipline — DT1 "Approach B" single-node wrap.  Gives a DT1 {@code <table>} its own
+	 * DT1 table-overflow-wrap discipline — DT1 single-node wrap.  Gives a DT1 {@code <table>} its own
 	 * horizontal-scroll container ({@code .juneau-view-table-scroll}) so a table wider than its card scrolls inside
-	 * its own region while the toolbar / paging-pill menu (a sibling lineage) and the page chrome stay put (INV-1 /
-	 * INV-2).  No-op on the DT2 dogfood path: DataTables 2's flex {@code .dt-layout-cell} is ALREADY the scroll box
-	 * (CSS-only "Approach D"), so wrapping there would nest a second scroll box inside it (INV-5 double scrollbar).
+	 * its own region while the toolbar / paging-pill menu (a sibling lineage) and the page chrome stay put.  No-op on
+	 * the DT2 dogfood path: DataTables 2's flex {@code .dt-layout-cell} is ALREADY the scroll box
+	 * (CSS-only), so wrapping there would nest a second scroll box (a double scrollbar).
 	 *
 	 * <p>
-	 * Skip-guard order matters (N-P5-B1): the {@code .dt-layout-cell} DT2 no-op MUST precede the already-wrapped
+	 * Skip-guard order matters: the {@code .dt-layout-cell} DT2 no-op MUST precede the already-wrapped
 	 * skip, because a DT2 table's parent is the layout cell, not a {@code .juneau-view-table-scroll}.  Also skips a
-	 * table already inside a scroll box so a nested {@code constructTable} (445g) does not double-wrap inner tables
-	 * (N5).  Moves the existing {@code <table>} node (never clones — DataTables' bindings ride the live node) and
-	 * calls {@code columns.adjust()} so header/body re-align against the now-constrained containing block (S5).
+	 * table already inside a scroll box so a nested {@code constructTable} (445g) does not double-wrap inner tables.
+	 * Moves the existing {@code <table>} node (never clones — DataTables' bindings ride the live node) and
+	 * calls {@code columns.adjust()} so header/body re-align against the now-constrained containing block.
 	 */
 	function ensureTableScroll(table, ctx) {
 		if (!table || typeof table.closest !== "function") return;
-		// DT2 (Approach D): the flex .dt-layout-cell is the scroll box already — do not double-scroll.
+		// DT2: the flex .dt-layout-cell is the scroll box already — do not double-scroll.
 		if (table.closest(".dt-layout-cell")) return;
 		// Nested (445g) or a leftover wrap from a prior construct — already inside a scroll box.
 		if (table.closest("." + TABLE_SCROLL_CLASS)) return;
@@ -8104,7 +8491,7 @@
 	}
 
 	/**
-	 * Paired teardown for {@link #ensureTableScroll} (INV-5): removes the DT1 wrap and restores the {@code <table>}
+	 * Paired teardown for {@link #ensureTableScroll}: removes the DT1 wrap and restores the {@code <table>}
 	 * to the wrap's former parent, so a {@code destroy()} + reconstruct cannot leave the toolbar nested inside the
 	 * overflow box.  No-op on the DT2 path (there is no JS-inserted wrap to remove).
 	 */
@@ -8132,11 +8519,11 @@
 	}
 
 	/**
-	 * L12 A: keyboard-reachable scroll region ONLY when it actually overflows (WCAG 2.1.1).  When
+	 * Keyboard-reachable scroll region ONLY when it actually overflows (WCAG 2.1.1).  When
 	 * {@code scrollWidth > clientWidth} the region gets {@code tabindex="0"} + a generic Juneau-vocabulary label;
 	 * otherwise both are removed (an unconditional tab stop on a non-overflowing table is a false "scrollable"
 	 * announcement, and a focus ring can inflate {@code documentElement.scrollWidth}).  A {@code ResizeObserver}
-	 * keeps it honest; the observer is stored on {@code ctx} so {@code teardownTable} can disconnect it (S3/N-P5-S3).
+	 * keeps it honest; the observer is stored on {@code ctx} so {@code teardownTable} can disconnect it.
 	 */
 	function applyScrollRegionA11y(table, ctx) {
 		const region = scrollRegionFor(table);
@@ -8222,14 +8609,14 @@
 	}
 
 	/** Converts a restored Sort facet's ordered {@code {column,dir}[]} into the `viewDef.defaultOrder` shape
-	 * {@link #resolveOrder} already understands (Gap 1 / Gap 6) - a pure mapping, no DataTables dependency. */
+	 * {@link #resolveOrder} already understands - a pure mapping, no DataTables dependency. */
 	function defaultOrderFromSort(sortList) {
 		return (sortList || []).map(function (e) { return { data: e.column, dir: e.dir }; });
 	}
 
 	/**
-	 * Applies a restored Options facet (page size / text wrap / row density / auto-refresh - Gap 1, Gap 7 / spec
-	 * §3.4) to an already-constructed live grid.  Runs AFTER `buildTable` returns, from both `initTableFromDef`'s
+	 * Applies a restored Options facet (page size / text wrap / row density / auto-refresh)
+	 * to an already-constructed live grid.  Runs AFTER `buildTable` returns, from both `initTableFromDef`'s
 	 * construction-time restore and `applyDraft`'s Apply handler, so the two paths share one definition of what
 	 * "Options restore" means.  `options` absent, or `ctx.dataTable` not yet set, is a no-op.
 	 */
@@ -8248,7 +8635,7 @@
 	}
 
 	/**
-	 * Wires the operator-chosen auto-refresh interval (Gap 7 / spec §3.4 Options tab) - independent of
+	 * Wires the operator-chosen auto-refresh interval - independent of
 	 * {@code viewDef.pollIntervalMs}'s own {@link #initPolling} timer, so turning one on never disturbs the
 	 * other.  Reuses only the generic pieces of that timer: {@link #hasInFlightRow} (never paint over a draw
 	 * already in flight) and {@link #isPollSuspended} with a synthetic {@code {pausePollingWhileEditing: true}}
@@ -8274,11 +8661,11 @@
 	}
 
 	// ==================================================================================================================
-	// SHAREABLE URL STATE  (design §6.3 / T17–T19 — live ?state= sync + open restore; View Settings stay in the store)
+	// SHAREABLE URL STATE
 	// ==================================================================================================================
 
 	/**
-	 * Whether {@code table} is the page's shareable primary (design §6.3: primary table only). Nested tables never
+	 * Whether {@code table} is the page's shareable primary. Nested tables never
 	 * qualify. An explicit {@code view.primary === true} / {@code data-juneau-primary} wins; {@code primary:false}
 	 * opts out; otherwise the first non-nested {@code table[data-juneau-view]} on the page is primary.
 	 */
@@ -8470,11 +8857,11 @@
 	}
 
 	/**
-	 * Applies an open {@code ?state=} payload to the live grid (T19). Incomplete / rejected filter expressions are
+	 * Applies an open {@code ?state=} payload to the live grid. Incomplete / rejected filter expressions are
 	 * skipped so a bad link cannot blank the grid. Does not touch View Settings (columns / membership / options).
 	 * Each filter is checked against its column's own `search` metadata (operator membership); on a client-filtered
 	 * DSL column it must also pass the strict server-parity gate, which skips a `$regex` the column
-	 * does not offer or one over the server's pattern-length cap (S8), so a crafted link cannot hang the tab.
+	 * does not offer or one over the server's pattern-length cap, so a crafted link cannot hang the tab.
 	 */
 	function applyShareableOpenState(table, ctx, state) { // NOSONAR javascript:S3776 -- encodes a views/widgets state machine; complexity is inherent.
 		if (!state || !ctx?.dataTable) return;
@@ -8485,7 +8872,7 @@
 			if (NS.pageState && typeof NS.pageState.page === "function")
 				NS.pageState.page("share").set("tab", String(state.tab));
 			const tabId = String(state.tab);
-			// Never build a selector from `?state=` input (F1): enumerate the constant-shaped selector and compare
+			// Never build a selector from `?state=` input: enumerate the constant-shaped selector and compare
 			// dataset.juneauStripTab by plain string equality instead of concatenating tabId into the selector text.
 			let btn = null;
 			if (typeof document.querySelectorAll === "function") {
@@ -8519,7 +8906,7 @@
 			if (colIdx < 0) continue;
 			const api = ctx.dataTable.column(colIdx);
 			if (!api || typeof api.search !== "function") continue;
-			// Incomplete / invalid $-DSL must not blank the grid (design §6.3 / column-search commit rule).
+			// Incomplete / invalid $-DSL must not blank the grid.
 			const dsl = dslColumnInfo(ctx, api);
 			const strict = dsl ? function (t) { return compileColumnExpr(ctx, dsl, t); } : null;
 			const draft = evaluateColumnSearchDraft(expr, columnSearchMeta(ctx, api), search, strict);
@@ -8547,7 +8934,7 @@
 		if (typeof ctx.dataTable.draw === "function") ctx.dataTable.draw(false);
 	}
 
-	/** T17/T18: sync the address bar to the live shareable state (no-op under clean-address). */
+	/** Sync the address bar to the live shareable state (no-op under clean-address). */
 	function syncShareableUrlState(table, ctx) {
 		const U = NS.urlState;
 		if (!U || typeof U.writeToAddressBar !== "function") return false;
@@ -8561,7 +8948,7 @@
 
 	/**
 	 * Builds (and optionally copies) the shareable URL for the primary table — always carries {@code ?state=} even
-	 * under clean-address (T17/T18). Hosts call this for Copy link; T20's toolbar button is out of this pass.
+	 * under clean-address. Hosts call this for Copy link.
 	 */
 	function buildShareableUrl(table, ctx) {
 		const U = NS.urlState;
@@ -8625,7 +9012,7 @@
 	}
 
 	/**
-	 * Wires live address-bar sync (T17/T18) and open precedence (T19) for the primary table. Nested / non-primary
+	 * Wires live address-bar sync and open precedence for the primary table. Nested / non-primary
 	 * tables are a no-op. Idempotent per table.
 	 */
 	function wireShareableUrlState(table, ctx) { // NOSONAR javascript:S3776 -- encodes a views/widgets state machine; complexity is inherent.
@@ -8637,7 +9024,7 @@
 		const U = NS.urlState;
 		if (!U) return;
 
-		// T19: apply ?state= once per table lifetime (not again on every View-Settings Apply rebuild).
+		// apply ?state= once per table lifetime (not again on every View-Settings Apply rebuild).
 		if (!ctx._urlStateOpenApplied) {
 			ctx._urlStateOpenApplied = true;
 			const fromUrl = typeof U.readFromSearch === "function" ? U.readFromSearch(window.location.search) : null;
@@ -8730,14 +9117,14 @@
 			effectiveColumns: effectiveColumns,
 			hasRowDetail: !!findRowDetailTemplate(table),
 			// The ribbon's live active-toggle state, read at REQUEST time; buildOptions turns it into body column
-			// searches / URL params through window.JuneauViews.ribbon (design doc §3.1/D8).
+			// searches / URL params through window.JuneauViews.ribbon.
 			ribbonActiveState: function () { return ctx.activeState || {}; },
 			// Present ONLY for a nested table (set by prepareNestedTable); a top-level view leaves it undefined so
 			// buildOptions merges no parent-scope parameter.
 			nestedScope: ctx.nestedScope,
 			// The view table, so a server-mode data request can carry the CSRF token (read per request).
 			table: table,
-			// Request params contributed by registered ?state= directives (window / ids), read at REQUEST time.
+			// Request params contributed by registered ?state= directives (window / ids / day), read at REQUEST time.
 			urlStateParams: function () { return urlStateRequestParams(ctx); }
 		};
 		prepareUrlStateDirectives(table, viewDef, ctx);
@@ -8757,7 +9144,7 @@
 
 		if (ctx.clientFiltered) installClientRibbonFilter(table, viewDef, ctx);
 		ctx.dataTable = $(table).DataTable(opts);
-		// N2: re-anchor relative-duration column filters ($gte(-24h)) on every data reload.
+		// re-anchor relative-duration column filters ($gte(-24h)) on every data reload.
 		if (ctx.clientFiltered && typeof ctx.dataTable.on === "function")
 			ctx.dataTable.on("xhr.dt", function () { ctx._searchNow = Date.now(); });
 		if (NS.config && typeof NS.config.paintHeaderTitles === "function")
@@ -8797,7 +9184,7 @@
 		// primary view (isCopyLinkVisible), with its own opt-outs (viewDef.primary === false / copyLink === false).
 		mountCopyLinkButton(table, ctx, toolbarRow);
 
-		// Shareable URL facet (design §6.3 / T17–T19): live address-bar sync + open restore for the primary table.
+		// Shareable URL facet: live address-bar sync + open restore for the primary table.
 		// View Settings stay in the page-state store; this never writes them into ?state=.
 		wireShareableUrlState(table, ctx);
 
@@ -8967,6 +9354,7 @@
 			table: table,
 			viewDef: viewDef,
 			dataTable: null,
+			_dialogStack: [],
 			activeState: NS.ribbon?.loadPersistedState ? NS.ribbon.loadPersistedState(viewDef) : {},
 			selectionState: selectionState,
 			nested: true,
@@ -9148,7 +9536,7 @@
 		if (viewDef.rowActions?.length) initRowActions(table, viewDef, ctx);
 	}
 
-	function resolveTableBulkDef(ctx, key, table, id) { // NOSONAR javascript:S1481 -- J0532 bulk-def seam; kept for source-scan tests.
+	function resolveTableBulkDef(ctx, key, table, id) { // NOSONAR javascript:S1481 -- bulk-def seam; kept for source-scan tests.
 		if (!hasBulk(table)) return;
 		const bulkDef = readBulkDef(key, table);
 		if (!bulkDef) {
@@ -9205,6 +9593,7 @@
 			table: table,
 			viewDef: viewDef,
 			dataTable: null,
+			_dialogStack: [],
 			activeState: activeState,
 			selectionState: selectionState,
 			_jobSources: new Set(),
@@ -9241,10 +9630,10 @@
 		}
 
 		function go(saved) {
-			// Gap 1: the per-table View Settings blob, not the named-saved-view blob, is the preferred restore
+			// the per-table View Settings blob, not the named-saved-view blob, is the preferred restore
 			// source - it is the one `applyDraft` writes on EVERY Apply, named or not.  The named-saved-view
 			// path (`saved`, from `resolveActiveView`) is only a fallback for a table with no View Settings blob
-			// at all.  Gap-g: a facet whose tab is hidden by `columnConfig: {tabs:[...]}` is never restored from
+			// at all.  A facet whose tab is hidden by `columnConfig: {tabs:[...]}` is never restored from
 			// it, even if a (possibly stale) blob for it exists.
 			// Gated on columnConfig: a table without the chooser never applies (or deletes) a stored blob.  The
 			// `reset` flag rides on the memoized result and is surfaced by the chooser's single seed point
@@ -9523,15 +9912,31 @@
 		return strip;
 	}
 
+	// Resolves the item's kind (an explicit type wins and must fit the shape; otherwise segments -> segmented,
+	// own max -> meter, else tile) and fails closed on anything ambiguous, because src= envelopes reach the
+	// client without any server-side check.
 	function paintQuickStatItem(item) {
 		if (!item || typeof item !== "object")
 			throw new Error("Juneau QuickStats: unknown item type.");
-		if (item.segments)
+		const hasSegments = Object.hasOwn(item, "segments");
+		const hasMax = Object.hasOwn(item, "max");
+		let kind;
+		if (item.type == null) {
+			if (hasSegments && hasMax)
+				throw new Error("Juneau QuickStats: item '" + item.id + "' has both segments and max.");
+			kind = hasSegments ? "segmented" : hasMax ? "meter" : "tile";
+		} else {
+			if (!["tile", "meter", "segmented"].includes(item.type))
+				throw new Error("Juneau QuickStats: unknown item type '" + item.type + "'.");
+			kind = item.type;
+			const fits = kind === "tile" ? !hasSegments && !hasMax : kind === "meter" ? hasMax && !hasSegments : hasSegments && !hasMax;
+			if (!fits)
+				throw new Error("Juneau QuickStats: item '" + item.id + "' type '" + kind + "' does not match its shape.");
+		}
+		if (kind === "segmented")
 			return paintStatSegments(item);
-		if (Object.hasOwn(item, "max"))
+		if (kind === "meter")
 			return paintStatBar(item);
-		if (item.type && item.type !== "tile")
-			throw new Error("Juneau QuickStats: unknown item type '" + item.type + "'.");
 		return paintStatTile(item);
 	}
 
@@ -9559,52 +9964,112 @@
 		return div;
 	}
 
+	// A meter: one value against a known max.  The fill is sized through CSSOM (CSP style-src safe), and the
+	// whole tile is read once through role="meter"; warning, error and over-limit are also spelled out in
+	// aria-valuetext so they are never conveyed by colour alone.
 	function paintStatBar(item) {
+		const max = item.max;
+		const value = item.value;
+		if (typeof max !== "number" || !Number.isFinite(max) || max <= 0
+				|| typeof value !== "number" || !Number.isFinite(value) || value < 0)
+			throw new Error("Juneau QuickStats: item '" + item.id + "' is malformed.");
+		// The label names the meter for assistive technology, so a missing one is malformed.
+		if (typeof item.label !== "string" || item.label.trim() === "")
+			throw new Error("Juneau QuickStats: item '" + item.id + "' is malformed.");
+		const labelText = item.label;
+		const pct = Math.max(0, Math.min(100, Math.round((value * 100) / max)));
+		const over = value > max;
+		const shown = typeof item.text === "string" && item.text.trim() !== "" ? item.text : value + " / " + max;
+		let valueText = shown;
+		if (over)
+			valueText += ", over limit";
+		if (item.tone === "warning" || item.tone === "error")
+			valueText += ", " + item.tone;
 		const div = document.createElement("div");
-		div.className = "jc-stat jc-stat-bar";
+		div.className = over ? "jc-stat jc-stat-bar is-over" : "jc-stat jc-stat-bar";
 		div.dataset.juneauStat = item.id;
+		if (over)
+			div.dataset.juneauOver = "true";
+		div.setAttribute("role", "meter");
+		div.setAttribute("aria-label", labelText);
+		div.setAttribute("aria-valuemin", "0");
+		div.setAttribute("aria-valuemax", String(max));
+		div.setAttribute("aria-valuenow", String(Math.min(value, max)));
+		div.setAttribute("aria-valuetext", valueText);
 		const label = document.createElement("span");
 		label.className = "jc-stat-label";
-		label.textContent = item.label == null ? "" : String(item.label);
-		const max = Number(item.max) || 0;
-		const value = Number(item.value) || 0;
-		const pct = max <= 0 ? 0 : Math.max(0, Math.min(100, Math.round((value * 100.0) / max)));
+		label.setAttribute("aria-hidden", "true");
+		label.textContent = labelText;
 		const track = document.createElement("span");
-		track.className = "jc-stat-track";
+		track.className = item.tone === "error" ? "jc-stat-track is-error" : "jc-stat-track";
 		track.setAttribute("aria-hidden", "true");
 		const fill = document.createElement("span");
 		fill.className = toneClass("jc-stat-fill", item.tone);
-		fill.setAttribute("style", "width:" + pct + "%");
+		fill.style.width = pct + "%";
+		if (value > 0)
+			fill.style.minWidth = "2px";
 		track.appendChild(fill);
 		const val = document.createElement("span");
 		val.className = "jc-stat-value";
-		val.textContent = value + " / " + max;
+		val.setAttribute("aria-hidden", "true");
+		val.textContent = shown;
 		div.appendChild(label);
 		div.appendChild(track);
 		div.appendChild(val);
 		return div;
 	}
 
+	// A segmented tile: a proportional bar (one fill per non-zero count, sized through CSSOM) plus a legend
+	// with every segment, zeros included.  The legend is the accessible content; the bar is decorative.
+	// Untoned segments take positional chart colours, counted among untoned segments only.
 	function paintStatSegments(item) {
+		const segs = item.segments;
+		if (!Array.isArray(segs) || segs.length === 0)
+			throw new Error("Juneau QuickStats: item '" + item.id + "' is malformed.");
+		// The label names the group for assistive technology, so a missing one is malformed.
+		if (typeof item.label !== "string" || item.label.trim() === "")
+			throw new Error("Juneau QuickStats: item '" + item.id + "' is malformed.");
+		const labelText = item.label;
 		const div = document.createElement("div");
 		div.className = "jc-stat jc-stat-segments";
 		div.dataset.juneauStat = item.id;
+		div.setAttribute("role", "group");
+		div.setAttribute("aria-label", labelText);
 		const label = document.createElement("span");
 		label.className = "jc-stat-label";
-		label.textContent = item.label == null ? "" : String(item.label);
+		label.setAttribute("aria-hidden", "true");
+		label.textContent = labelText;
+		const bar = document.createElement("span");
+		bar.className = "jc-stat-segbar";
+		bar.setAttribute("aria-hidden", "true");
 		div.appendChild(label);
-		const segs = item.segments || [];
-		for (const s of segs) {
+		div.appendChild(bar);
+		let untoned = 0;
+		for (const raw of segs) {
+			const s = raw && typeof raw === "object" ? raw : {};
+			const toned = toneClass("jc-stat-segment", s.tone);
+			const colour = toned === "jc-stat-segment" ? "is-c" + Math.min(++untoned, 8) : toned.slice("jc-stat-segment ".length);
+			const count = typeof s.count === "number" && Number.isFinite(s.count) && s.count > 0 ? s.count : 0;
+			if (count > 0) {
+				const fill = document.createElement("span");
+				fill.className = "jc-stat-segfill " + colour;
+				fill.style.flexGrow = String(count);
+				bar.appendChild(fill);
+			}
 			const seg = document.createElement("span");
-			seg.className = toneClass("jc-stat-segment", s.tone);
-			const count = document.createElement("span");
-			count.className = "jc-stat-segment-count";
-			count.textContent = s.count == null ? "" : String(s.count);
-			const sl = document.createElement("span");
-			sl.className = "jc-stat-segment-label";
-			sl.textContent = s.label == null ? "" : String(s.label);
-			seg.appendChild(count);
-			seg.appendChild(sl);
+			seg.className = "jc-stat-segment " + colour;
+			const swatch = document.createElement("span");
+			swatch.className = "jc-stat-swatch";
+			swatch.setAttribute("aria-hidden", "true");
+			const countEl = document.createElement("span");
+			countEl.className = "jc-stat-segment-count";
+			countEl.textContent = s.count == null ? "" : String(s.count);
+			const segLabel = document.createElement("span");
+			segLabel.className = "jc-stat-segment-label";
+			segLabel.textContent = s.label == null ? "" : String(s.label);
+			seg.appendChild(swatch);
+			seg.appendChild(countEl);
+			seg.appendChild(segLabel);
 			div.appendChild(seg);
 		}
 		return div;
@@ -9620,8 +10085,13 @@
 			else
 				warn("Juneau view: detail.endpoint '" + detail.endpoint + "' is not same-origin; detail fetches skipped.");
 		}
-		if (detail.region?.titleFields?.length)
-			tpl.dataset.juneauTitleFields = detail.region.titleFields.join(",");
+		// Title allowlist = the region's declared titleFields UNION the {key} placeholders the header title itself
+		// names.  Only named keys are ever allowlisted, so other endpoint fields still cannot leak into the title.
+		const titleKeys = new Set(detail.region?.titleFields ?? []);
+		if (typeof detail.title === "string")
+			for (const m of detail.title.matchAll(/\{(\w+)\}/g)) titleKeys.add(m[1]);
+		if (titleKeys.size)
+			tpl.dataset.juneauTitleFields = Array.from(titleKeys).join(",");
 		// Expand clones tpl.content (expandDetailRow). Chromium's template.appendChild
 		// leaves that fragment empty - the HTML parser is what fills .content. Paint
 		// into the fragment the expander clones, never the template element's light DOM.
@@ -9671,7 +10141,7 @@
 			d.dataset.juneauRegionPopulate = region.populate;
 		const declared = {};
 		if (region.dataUrl) declared.dataUrl = region.dataUrl;
-		// Catalog region params (for example a row-detail console-output region) reach readDeclaredDescriptor.
+		// Catalog region params (for example a row-detail run-view region) reach readDeclaredDescriptor.
 		if (region.params && typeof region.params === "object" && !Array.isArray(region.params))
 			declared.params = region.params;
 		d.dataset.juneauRegionDeclared = JSON.stringify(declared);
@@ -9688,7 +10158,7 @@
 		return built;
 	}
 
-	function buildNestedSlot(nested, parentTable) { // NOSONAR javascript:S1481 -- J0532 nested-slot seam; do not delete.
+	function buildNestedSlot(nested, parentTable) { // NOSONAR javascript:S1481 -- nested-slot seam; do not delete.
 		const wrap = document.createElement("div");
 		wrap.className = "juneau-view-detail-nested";
 		wrap.dataset.juneauNested = "1";
@@ -9857,7 +10327,7 @@
 
 	/**
 	 * Accessible name + custom cursor tip, never a native `title` (browsers cannot style that
-	 * bubble; it is taller than IRS's compact tooltip).
+	 * bubble; it is taller than the compact tooltip used here).
 	 */
 	function stampChromeTip(el, text) {
 		const t = text == null ? "" : String(text);
@@ -10006,7 +10476,7 @@
 	}
 
 	// ==================================================================================================================
-	// BUS BINDING  (message bus addendum, spec 4.2-4.5, 5.3, 5.4)
+	// BUS BINDING
 	// ==================================================================================================================
 
 	/**
@@ -10037,10 +10507,10 @@
 	 * JuneauViews.tableBus.applyCmd(t, t.__juneauCtx, {schemaVersion: 1, op: 'reload', resetPaging: true});
 	 */
 
-	/** Rows carried in selection:<id> before rowsTruncated is set (spec 4.2); a card's selectionRowsCap overrides it. */
+	/** Rows carried in selection:<id> before rowsTruncated is set; a card's selectionRowsCap overrides it. */
 	const SELECTION_ROWS_CAP = 200;
 
-	/** The cmd:<id> ops the datatables type handles.  The shell owns `refresh` for every type (spec 4.5). */
+	/** The cmd:<id> ops the datatables type handles.  The shell owns `refresh` for every type. */
 	const TABLE_OP_IMPLS = {
 		"reload": function (table, ctx, cmd) {
 			const d = ctx.dataTable;
@@ -10076,7 +10546,7 @@
 		return out;
 	}
 
-	/** Only non-empty columns appear, keys sorted so two equal filters serialize identically (spec 4.3). */
+	/** Only non-empty columns appear, keys sorted so two equal filters serialize identically. */
 	function filterPayload(viewId, search, columns, options) {
 		const cols = {};
 		Object.keys(columns || {}).sort().forEach(function (k) {
@@ -10113,7 +10583,7 @@
 	}
 
 	/**
-	 * The framework topics a datatables card publishes without declaring them (spec 5.4).  The same rule as the Java
+	 * The framework topics a datatables card publishes without declaring them.  The same rule as the Java
 	 * {@code DatatablesCardType.implicitTopics}: a card with no {@code dataUrl} (its columns come from a catalog,
 	 * which this runs before knowing) gets all five; one with a {@code dataUrl} gets only the optional topics it sets.
 	 */
@@ -10280,7 +10750,7 @@
 	}
 
 	/**
-	 * The set-filter op (spec 4.5): options -> activeState (+ persist), then search/columns, then ONE redraw, then
+	 * The set-filter op: options -> activeState (+ persist), then search/columns, then ONE redraw, then
 	 * filter:<id>.  CLIENT mode rebuilds the ribbon row filter and draws in memory; SERVER mode reloads, so the
 	 * request derivation carries the options.  A column goes through setColumnExpr, so a client-filtered column with
 	 * search metadata installs its DSL predicate and an expression the engine rejects is logged and not applied.
@@ -10335,7 +10805,7 @@
 		return applied;
 	}
 
-	/** Runs one cmd:<id> payload against a table.  An op this type does not handle is E-JS-48 (spec 4.5). */
+	/** Runs one cmd:<id> payload against a table.  An op this type does not handle is E-JS-48. */
 	function applyCmd(table, ctx, cmd) {
 		const op = Object.hasOwn(TABLE_OP_IMPLS, cmd?.op) ? TABLE_OP_IMPLS[cmd.op] : null;
 		if (!op)
@@ -10344,7 +10814,7 @@
 	}
 
 	/**
-	 * The `filter` role (spec 5.3): a filter:-shaped payload, or `map`ped fields whose targets are dotted
+	 * The `filter` role: a filter:-shaped payload, or `map`ped fields whose targets are dotted
 	 * ("columns.region", "options.age", "search"), applied as a set-filter patch.  An option or column this table
 	 * lacks is skipped quietly (the source is foreign).  The role remembers which columns and options it last applied;
 	 * one the next payload no longer carries is cleared, so a cleared source column clears this table's, while a
@@ -10503,10 +10973,10 @@
 		assembleFullColumnArray: assembleFullColumnArray,
 		restoreHeaderShell: restoreHeaderShell,
 		teardownTable: teardownTable,
-		// DT1 table-overflow-wrap discipline (DT1 "Approach B" wrap) - exposed for the Node harness.
+		// DT1 table-overflow-wrap discipline (DT1 wrap) - exposed for the Node harness.
 		ensureTableScroll: ensureTableScroll,
 		unwrapTableScroll: unwrapTableScroll,
-		// L12 A scroll-region a11y - exposed so the Node harness can drive the overflowing/not-overflowing fork
+		// Scroll-region a11y - exposed so the Node harness can drive the overflowing/not-overflowing fork
 		// directly (the shim cannot lay out, but it can carry scrollWidth/clientWidth as plain properties).
 		scrollRegionFor: scrollRegionFor,
 		applyScrollRegionA11y: applyScrollRegionA11y,
@@ -10515,11 +10985,11 @@
 		// Card-hosted identity: the minted sidecar key and the card-scoped sidecar lookup built on it.
 		viewSidecarKey: viewSidecarKey,
 		findSidecarNode: findSidecarNode,
-		// visual-parity pass: exposed for manual verification.
+		// Exposed for manual verification.
 		buildPagingPill: buildPagingPill,
 		buildPageSizeMenu: buildPageSizeMenu,
 		initCursorTooltip: initCursorTooltip,
-		// Header sort + per-column search glyphs (design §7.1) - exposed for the node harness + manual verification.
+		// Header sort + per-column search glyphs - exposed for the node harness + manual verification.
 		wireHeaderSortSearch: wireHeaderSortSearch,
 		ensureHeaderSortControl: ensureHeaderSortControl,
 		renderHeaderSearchIcon: renderHeaderSearchIcon,
@@ -10532,7 +11002,7 @@
 		isClientFiltered: isClientFiltered,
 		getColumnExpr: getColumnExpr,
 		setColumnExpr: setColumnExpr,
-		// Shareable URL facet (design §6.3 / T17–T19) — exposed for the node harness + host Copy link.
+		// Shareable URL facet — exposed for the node harness + host Copy link.
 		isShareablePrimaryTable: isShareablePrimaryTable,
 		announceMessages: ANNOUNCE,
 		isCopyLinkVisible: isCopyLinkVisible,
@@ -10667,6 +11137,7 @@
 		// Complex forms + nested popups / shared layer stack (shared-layer-stack feature) - exposed for the canary and harnesses.
 		JUNEAU_DIALOG_FORM_CONTRACT_VERSION: JUNEAU_DIALOG_FORM_CONTRACT_VERSION,
 		MAX_DIALOG_DEPTH: MAX_DIALOG_DEPTH,
+		MAX_PAGE_DIALOG_DEPTH: MAX_PAGE_DIALOG_DEPTH,
 		paintFormControl: paintFormControl,
 		isCheckedToken: isCheckedToken,
 		validateDialogForm: validateDialogForm,
@@ -10704,6 +11175,9 @@
 		popLayer: popLayer,
 		topLayer: topLayer,
 		dialogLayerCount: dialogLayerCount,
+		dialogDepthExceeded: dialogDepthExceeded,
+		renderHeldResultNotice: renderHeldResultNotice,
+		renderDialogDraftRefusal: renderDialogDraftRefusal,
 		// Async jobs + SSE streaming (async-SSE-job feature) - exposed for the canary and manual verification.  The job-running
 		// affordance (setRowJobRunning) is DISTINCT from the synchronous in-flight marker: it never freezes polling.
 		parseJobStarted: parseJobStarted,
@@ -10798,6 +11272,179 @@
 		return el ? (owningViewTable(el) || el) : null;
 	}
 
+	// ==================================================================================================================
+	// JuneauViews.actions: run a RowAction from outside any table (a chart card's click), through the table machinery
+	// ==================================================================================================================
+	//
+	// A chart card has no row and no DataTable, but the action machinery needs only a handful of things from its ctx:
+	// a place to paint (the banner host), the clicked point as the row's data (the `_rowOverride` seam in
+	// rowDataForTr), a catalog to resolve a dialog's child actions against (`viewDef.rowActions`), and a redraw
+	// callback.  This builds that ctx per card host and runs the SAME dispatchRowAction every table surface runs, so
+	// confirm prompts, dialogs, stacked steps, result receipts, async jobs and every refusal are the table's own code
+	// rather than a second copy.  The one new piece is the run tracker, which turns "the dialog stack, the in-flight
+	// requests and the running jobs are all quiet" into a single resolved promise.
+
+	/** The per-host action ctx, so a card's second run reuses the first run's dialog stack and job sources. */
+	const ACTION_HOSTS = new WeakMap();
+	const ACTION_DUPLICATES_WARNED = new WeakMap();
+	const CHART_ACTION_BANNER_CLASS = "jc-chart-action-banner";
+
+	function isActionObject(a) {
+		return a !== null && typeof a === "object" && !Array.isArray(a);
+	}
+
+	/** Warns, once per host and id, that a catalog lists the same id twice (the first entry is the one used). */
+	function warnDuplicateOnce(host, id) {
+		let seen = ACTION_DUPLICATES_WARNED.get(host);
+		if (!seen) { seen = new Set(); ACTION_DUPLICATES_WARNED.set(host, seen); }
+		if (seen.has(id)) return;
+		seen.add(id);
+		console.warn("[juneau-views] " + fmt("action catalog lists '%s' more than once; the first entry is used", id));
+	}
+
+	/**
+	 * The ordered action list for a run: the triggering action first, then the catalog's usable entries.  An id that
+	 * was already taken is dropped (the first entry wins), so the button a dialog paints and the action its click
+	 * opens always name the same entry.
+	 */
+	function chartActionList(host, action, catalog) {
+		const seen = new Set([action.id]);
+		const entries = [];
+		for (const e of Array.isArray(catalog) ? catalog : []) {
+			if (!isActionObject(e) || typeof e.id !== "string" || !e.id.trim()) continue;
+			if (seen.has(e.id)) { warnDuplicateOnce(host, e.id); continue; }
+			seen.add(e.id);
+			entries.push(e);
+		}
+		return Object.freeze([action].concat(entries));
+	}
+
+	/** (Re)builds the ctx for one run on `host`; the dialog stack and job sources persist across runs. */
+	function chartActionCtx(host, action, row, onRedraw, catalog) {
+		let ctx = ACTION_HOSTS.get(host);
+		if (!ctx) {
+			ctx = { _dialogStack: [], _jobSources: new Set(), _runTracker: true, _running: false, _settled: true };
+			ACTION_HOSTS.set(host, ctx);
+		}
+		ctx.table = host;
+		ctx._chartHost = host;
+		ctx._rowOverride = Object.freeze(Object.assign({}, row));
+		ctx.redraw = typeof onRedraw === "function" ? onRedraw : function () { /* no redraw callback was given */ };
+		ctx.viewDef = Object.freeze({ rowActions: chartActionList(host, action, catalog) });
+		if (!ctx._ribbonBannerHost || ctx._ribbonBannerHost.parentNode !== host) {
+			const banner = document.createElement("div");
+			banner.className = RIBBON_BANNER_HOST_CLASS + " " + CHART_ACTION_BANNER_CLASS;
+			banner.dataset.testid = "chart-action-banner";
+			host.appendChild(banner);
+			ctx._ribbonBannerHost = banner;
+		}
+		return ctx;
+	}
+
+	/**
+	 * Runs `go` and returns a promise that resolves, exactly once, with the run's outcome once the run is quiet: no
+	 * dialog open on this ctx, no request in flight (including a form fetch or a confirm prompt waiting on its
+	 * renderer) and no job still streaming.  The outcome is the last one the run recorded, or `cancelled` when the run
+	 * recorded none (the operator dismissed a dialog, or a confirm prompt was declined).
+	 */
+	function startRun(ctx, go) {
+		ctx._outcome = null;
+		ctx._submitsInFlight = 0;
+		ctx._jobsRunning = 0;
+		ctx._settled = false;
+		ctx._running = true;
+		const promise = new Promise(function (resolve) { ctx._resolveRun = resolve; });
+		ctx._recordOutcome = function (o) { if (!ctx._settled) ctx._outcome = o; };
+		ctx._checkSettle = function () {
+			if (ctx._settled || ctx._dialogStack?.length || ctx._submitsInFlight > 0 || ctx._jobsRunning > 0) return;
+			ctx._settled = true;
+			ctx._running = false;
+			ctx._resolveRun(ctx._outcome || { outcome: "cancelled" });
+		};
+		try { go(); }
+		catch (e) { ctx._recordOutcome({ outcome: "unknown", message: "the action could not be started" }); }
+		ctx._checkSettle();
+		return promise;
+	}
+
+	/** Paints a refusal the ribbon-anchored banner host shows verbatim (no "not sent" wording): a rule gate's text. */
+	function paintBannerRefusalText(ctx, text) {
+		const banner = ribbonBanner(ctx, "juneau-view-ribbon-action-refusal", "ribbon-action-refusal");
+		if (!banner) return;
+		banner.setAttribute("role", "alert");
+		banner.textContent = text;
+	}
+
+	/**
+	 * The same visibleWhen / enabledWhen gates the table surfaces apply, evaluated against the clicked point.  A
+	 * failing gate is a visible refusal that sends nothing and records `refusal`.  Parity with the table surfaces, not
+	 * a security gate: the endpoint still authorizes.
+	 */
+	function passesRuleGates(action, ctx) {
+		const row = ctx._rowOverride;
+		const name = actionDisplayName(action) || "action";
+		let text = null;
+		if (!isRowActionVisible(action, row)) {
+			text = name + " is not available for this item";
+		} else {
+			const failing = firstFailingRowActionRule(action, row);
+			if (failing) text = isBlankToken(failing.reason) ? name + " is not available for this item" : String(failing.reason);
+		}
+		if (text == null) return true;
+		recordRunOutcome(ctx, { outcome: "refusal", message: text });
+		paintBannerRefusalText(ctx, text);
+		return false;
+	}
+
+	/**
+	 * Ends a host's action surface: closes its job streams, closes its dialogs (only when it has any, so a table's
+	 * dialog on the same page is never touched), removes its banner host and settles a still-pending run as
+	 * `unknown` without painting anything.  A host that never ran an action is a no-op.
+	 */
+	function releaseActionHost(host) {
+		const ctx = host ? ACTION_HOSTS.get(host) : null;
+		if (!ctx) return;
+		ACTION_HOSTS.delete(host);
+		ctx._released = true;
+		ctx._jobSources.forEach(function (es) { try { es.close(); } catch (e) { /* already closed */ } }); // NOSONAR javascript:S2486 -- teardown is best-effort
+		ctx._jobSources.clear();
+		if (!ctx._settled) {
+			ctx._settled = true;
+			ctx._running = false;
+			ctx._resolveRun?.({ outcome: "unknown" });
+		}
+		if (ctx._dialogStack?.length) closeActionDialog(ctx);
+		const banner = ctx._ribbonBannerHost;
+		if (banner?.parentNode) banner.remove();
+		ctx._ribbonBannerHost = null;
+	}
+
+	NS.actions = Object.freeze({
+		/**
+		 * Runs `action` for a chart card's click: `opts.host` is the card element, `opts.row` the clicked point (the
+		 * row the action's `{token}` substitutions and rule gates read), `opts.extra` extra body fields for a direct
+		 * send, `opts.onRedraw` called when the action asks for a redraw, and `opts.catalog` the actions a dialog may
+		 * open.  Resolves with `{outcome, message}` once the run is quiet.
+		 */
+		run: function (action, opts) {
+			const o = opts || {};
+			const host = o.host;
+			if (!isActionObject(action) || !host || typeof host.closest !== "function")
+				return Promise.resolve({ outcome: "refusal", message: "the action or its host is missing" });
+			const csrfEl = host.closest("[data-juneau-csrf]") || document.body;
+			if (ACTION_HOSTS.get(host)?._running)   // checked BEFORE the ctx is rebuilt: a refused run must not swap the live run's row or catalog
+				return Promise.resolve({ outcome: "refusal", message: "an action is already running on this card" });
+			const ctx = chartActionCtx(host, action, o.row, o.onRedraw, o.catalog);
+			const banner = ctx._ribbonBannerHost;
+			while (banner.firstChild) banner.removeChild(banner.firstChild);   // the last run's messages do not outlive it
+			return startRun(ctx, function () {
+				if (!passesRuleGates(action, ctx)) return;
+				dispatchRowAction(action, csrfEl, null, ctx, o.extra || {});
+			});
+		},
+		release: releaseActionHost
+	});
+
 	NS.rowActions = Object.freeze({
 		contextOf: hookContextOf,
 		find: function (viewDefOrEl, actionId) {
@@ -10888,6 +11535,16 @@
 		esc: function (s) { return typeof NS._render?.escHtml === "function" ? NS._render.escHtml(s) : String(s ?? ""); },
 		escAttr: viewEscAttr
 	});
+
+	/**
+	 * The public hook namespaces this script assigns, in one frozen list: every frozen object namespace that
+	 * `juneau-views.js` itself puts on `JuneauViews` is listed here (constants such as the `*_CONTRACT_VERSION`
+	 * strings, unfrozen helpers, and this array are not hook namespaces; frozen members attached by other scripts
+	 * are not covered).  A consumer's coverage test iterates this instead of a hand-written list, and the hooks
+	 * test fails when a frozen namespace is added or removed here without updating it.
+	 */
+	NS.HOOK_NAMESPACES = Object.freeze(["actions", "rowActions", "dialogs", "probeSelection", "tables", "status",
+		"csrf", "rules", "details", "html"]);
 
 	initCursorTooltip();
 	if (document.readyState === "loading") {

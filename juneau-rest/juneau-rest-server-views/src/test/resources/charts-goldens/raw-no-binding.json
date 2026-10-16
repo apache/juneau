@@ -1,0 +1,20 @@
+{
+  "dataset": {
+    "id": "mine",
+    "source": [
+      [
+        1,
+        2
+      ]
+    ]
+  },
+  "series": [
+    {
+      "type": "line",
+      "datasetId": "mine"
+    }
+  ],
+  "aria": {
+    "enabled": true
+  }
+}

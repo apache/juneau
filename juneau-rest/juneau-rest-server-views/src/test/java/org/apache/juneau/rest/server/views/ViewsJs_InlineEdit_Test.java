@@ -92,6 +92,15 @@ class ViewsJs_InlineEdit_Test extends TestBase {
 		assertEquals(Map.of("owner", "blurred"), b.get("fields"));
 	}
 
+	@Test void c04_commitOnAConfirmActionNeverPrompts() {
+		var n = map("confirmActionNoPrompt");
+		assertEquals(0, ((Number)n.get("enterDialogs")).intValue(), "Enter must not open a confirm dialog");
+		assertEquals(0, ((Number)n.get("blurDialogs")).intValue(), "blur must not open a confirm dialog");
+		assertEquals(0, ((Number)n.get("afterDialogs")).intValue());
+		assertEquals(2, ((Number)n.get("fetches")).intValue());
+		assertEquals(List.of(Map.of("owner", "enter-new"), Map.of("owner", "blur-new")), n.get("fields"));
+	}
+
 	@Test void d01_failureKeepsTheEditorOpenWithTheErrorInline() {
 		var f = map("failure");
 		assertEquals(Boolean.TRUE, f.get("stillOpen"));
@@ -118,5 +127,21 @@ class ViewsJs_InlineEdit_Test extends TestBase {
 
 	@Test void e02_aNestedTablesPencilIsNotTheParentsToHandle() {
 		assertEquals(Boolean.TRUE, report().get("nestedIgnored"));
+	}
+
+	@Test void f01_aSavedEditsMessageShowsAsAStatusToastWhenThereIsNoDetailPanel() {
+		var m = map("messageNoPanel");
+		assertEquals(Boolean.TRUE, m.get("closed"));
+		assertEquals(List.of(Map.of("role", "status", "text", "Staged 'Rex'")), m.get("toasts"));
+	}
+
+	@Test void f02_aSavedEditsMessageStaysInTheDetailPanelWhenThereIsOne() {
+		var m = map("messageWithPanel");
+		assertEquals("Staged 'Rex'", m.get("panelText"));
+		assertEquals(List.of(), m.get("toasts"));
+	}
+
+	@Test void f03_aSavedEditWithNoMessageShowsNoToast() {
+		assertEquals(0, ((Number)report().get("noMessageNoToast")).intValue());
 	}
 }

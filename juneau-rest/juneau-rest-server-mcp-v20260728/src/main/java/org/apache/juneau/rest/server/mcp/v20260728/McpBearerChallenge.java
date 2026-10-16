@@ -32,13 +32,13 @@ import static org.apache.juneau.commons.utils.Shorts.*;
  * ({@code < 0x20} and {@code 0x7F}, including CR/LF that would otherwise enable header injection) are stripped, and
  * {@code "}/{@code \} are backslash-escaped ({@code \"} / {@code \\}) rather than mangled.
  *
- * <h5 class='section'>F3 extensibility:</h5>
+ * <h5 class='section'>Extensibility:</h5>
  * <p>
  * The baseline emits {@link #realm(String) realm}, {@link #error(String) error},
  * {@link #errorDescription(String) error_description}, {@link #scope(Collection) scope}, and
- * {@link #resourceMetadata(URI) resource_metadata}.  The generic {@link #param(String, String)} seam lets F3
- * (SEP-2350 scoped step-up) add further auth-params without touching this class &mdash; F2 deliberately does not
- * implement scope-accumulation/step-up.
+ * {@link #resourceMetadata(URI) resource_metadata}.  The generic {@link #param(String, String)} seam lets a
+ * later layer (SEP-2350 scoped step-up) add further auth-params without touching this class &mdash; this class
+ * deliberately does not implement scope-accumulation/step-up.
  *
  * @since 10.0.0
  */

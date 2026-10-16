@@ -28,10 +28,10 @@ import org.apache.juneau.rest.server.*;
 import jakarta.servlet.http.*;
 
 /**
- * The Phase B (request-completion) half of the JUL-level-driven REST debug pipeline.
+ * The request-completion half of the JUL-level-driven REST debug pipeline.
  *
  * <p>
- * Phase A (request start) is handled by {@code RestContext}/{@code RestOpContext}, which install bounded body-caching
+ * The request-start half is handled by {@code RestContext}/{@code RestOpContext}, which install bounded body-caching
  * wrappers only when the resolved logger is loggable at {@link Level#FINEST FINEST}. This class re-derives the cumulative
  * tier from the resolved logger, renders a single cumulative message through the resolved {@link RestDebugFormatter},
  * and emits exactly one {@link LogRecord}:
@@ -130,7 +130,7 @@ public class RestDebugPipeline {
 
 		// Capture the request thread's LogContext snapshot here (on the request thread, before any async handoff), so an
 		// async completion record can re-establish the structured requestId even though the completion thread's live
-		// LogContext is empty (design §8.2). Empty singleton when no context is active — no allocation.
+		// LogContext is empty. Empty singleton when no context is active — no allocation.
 		return new RestDebugSnapshot(logger, resolveFormatter(session), tier, RichLogger.context().snapshot());
 	}
 
@@ -159,7 +159,7 @@ public class RestDebugPipeline {
 			logRecord.setThrown(thrown);
 		// Pre-seed the record's correlation context from the request-thread snapshot BEFORE log(). Because log()'s own
 		// attach (RichLogger) is attachIfAbsent and the completion thread's live LogContext is empty, the pre-seeded
-		// map wins — this is what carries requestId across the async hop (design §8.2). No-op / empty short-circuit
+		// map wins — this is what carries requestId across the async hop. No-op / empty short-circuit
 		// inside attachIfAbsent when the map is empty (the common synchronous case).
 		LogRecordContext.attachIfAbsent(logRecord, snapshot.context());
 		snapshot.logger().log(logRecord);

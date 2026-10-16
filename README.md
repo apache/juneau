@@ -65,7 +65,7 @@ The `2026-07-28` revision is a strict superset of `2025-06-18` and is where new 
 * **[Framework Comparisons](https://juneau.apache.org/docs/topics/FrameworkComparisons)** - Compare Juneau with Jackson, Spring Boot, and JAX-RS
 * **[Examples](https://juneau.apache.org/docs/topics/JuneauExamplesCore)** - Code examples and tutorials
   * [juneau-examples-core](https://juneau.apache.org/docs/topics/JuneauExamplesCore) - Core serialization examples
-  * [juneau-petstore](https://juneau.apache.org/docs/topics/JuneauPetstoreOverview) - Canonical petstore showcase application (deployed under both Jetty/Microservice and Spring Boot)
+  * [juneau-petstore](https://juneau.apache.org/docs/topics/JuneauPetstore) - Canonical petstore showcase application (deployed under both Jetty/Microservice and Spring Boot)
 * **[Test Reports](https://juneau.apache.org/site/surefire.html)** - JUnit test execution results
 * **[Dependencies](https://juneau.apache.org/site/dependency-info.html)** - Project dependency analysis
 * **[Project Reports](https://juneau.apache.org/site/project-reports.html)** - Complete Maven site reports

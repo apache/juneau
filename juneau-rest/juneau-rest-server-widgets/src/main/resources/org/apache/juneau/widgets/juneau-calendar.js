@@ -149,7 +149,7 @@
 
 	/**
 	 * The always-6-week (42-cell) grid for a month.  Each cell is {key, y, m, d, inMonth}; adjacent-month cells are
-	 * flagged inMonth=false and (per design doc §5.8) never carry events.
+	 * flagged inMonth=false and never carry events.
 	 */
 	function buildMonthCells(y, m, weekStart) {
 		const start = toEpochDay(y, m, 1) - firstWeekdayOffset(y, m, weekStart);
@@ -401,7 +401,7 @@
 			.sort(chipCompare);
 	}
 
-	/** Splits a day's chips into the shown ones (<= maxPerDay) and the overflow count (design doc §5.11). */
+	/** Splits a day's chips into the shown ones (<= maxPerDay) and the overflow count. */
 	function applyCap(events, maxPerDay) {
 		const cap = maxPerDay > 0 ? maxPerDay : events.length;
 		return { shown: events.slice(0, cap), overflow: Math.max(0, events.length - cap) };
@@ -602,7 +602,7 @@
 		return typeof views?.pushLayer === "function" && typeof views?.popLayer === "function" ? views : null;
 	}
 
-	/** Renders a visible inline error and paints an empty month (single attempt - no retry storm; design doc §5.15). */
+	/** Renders a visible inline error and paints an empty month (single attempt - no retry storm). */
 	function showError(state, message) {
 		const grid = state.grid;
 		let err = state.root.querySelector(".jc-cal-error");

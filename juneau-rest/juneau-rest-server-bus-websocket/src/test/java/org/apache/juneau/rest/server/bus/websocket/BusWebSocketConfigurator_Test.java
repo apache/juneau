@@ -287,4 +287,254 @@ class BusWebSocketConfigurator_Test extends TestBase {
 		var c = withBoundary();
 		assertThrows(InstantiationException.class, () -> c.getEndpointInstance(Object.class));
 	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// CsrfBoundary fixtures
+	//------------------------------------------------------------------------------------------------------------------
+
+	private static final String APP = "app.example";
+	private static final String APP_ORIGIN = "http://" + APP;
+
+	private CsrfBoundary csrf;
+
+	private BusWebSocketConfigurator withCsrf() {
+		return withCsrf(CsrfBoundary.create().tokens(CsrfTokens.perProcess()));
+	}
+
+	private BusWebSocketConfigurator withCsrf(CsrfBoundary.Builder b) {
+		csrf = b.build();
+		use(policy().boundary(csrf).build());
+		return new BusWebSocketConfigurator(bus, BusWebSocketConfigurator.allowedOrigins(bus.policy()));
+	}
+
+	/** Opens a websocket session through the session POST, which the CsrfBoundary guards. */
+	private String openCsrf(Principal principal) throws Exception {
+		var token = csrf.tokenFor(mock(jakarta.servlet.http.HttpServletRequest.class));
+		return BusFixture.open(C, principal, "websocket", DOWN, UP, "Host", APP, "Origin", APP_ORIGIN, "X-Csrf-Token", token);
+	}
+
+	/** A handshake request for {@code uri}, which may be <jk>null</jk> or relative. */
+	private static HandshakeRequest requestAt(String uri, Principal principal, String...headerPairs) {
+		var r = request("", principal, headerPairs);
+		when(r.getRequestURI()).thenReturn(uri == null ? null : URI.create(uri));
+		return r;
+	}
+
+	private static boolean allowed(Map<String,Object> props) {
+		return props.get(BusWebSocketConfigurator.REFUSAL_PROPERTY) == null && props.get(BusWebSocketConfigurator.SESSION_PROPERTY) != null;
+	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// d) checkOrigin with a CsrfBoundary: well-formed only, since the Host is not visible yet
+	//------------------------------------------------------------------------------------------------------------------
+
+	@Test void d01_csrfCheckOriginRejectsMissingOrigin() {
+		assertFalse(withCsrf().checkOrigin(null));
+	}
+
+	@Test void d02_csrfCheckOriginRejectsBlank() {
+		var c = withCsrf();
+		assertFalse(c.checkOrigin(""));
+		assertFalse(c.checkOrigin("   "));
+	}
+
+	@Test void d03_csrfCheckOriginRejectsNull() {
+		var c = withCsrf();
+		assertFalse(c.checkOrigin("null"));
+		assertFalse(c.checkOrigin("NULL"));
+	}
+
+	@Test void d04_csrfCheckOriginRejectsUnparseable() {
+		var c = withCsrf();
+		for (var o : List.of("app.example", "http://", "http://app.example/", "http://app.example/path", "http://user@app.example",
+				"http://app.example?x", "http://app.example:0", "http://app.example:080", "http://app .example", " http://app.example",
+				"http://[::1", "http://[fe80::1%25en0]"))
+			assertFalse(c.checkOrigin(o), o);
+	}
+
+	@Test void d05_csrfCheckOriginRejectsNonHttpScheme() {
+		var c = withCsrf();
+		for (var o : List.of("file://", "file://app.example", "chrome-extension://abcdefghijklmnop", "ws://app.example", "ftp://app.example"))
+			assertFalse(c.checkOrigin(o), o);
+	}
+
+	@Test void d06_csrfCheckOriginPassesWellFormed() {
+		var c = withCsrf();
+		for (var o : List.of(APP_ORIGIN, "https://other.example", "HTTP://App.Example:8080", "http://[::1]:8080", "https://10.0.0.1"))
+			assertTrue(c.checkOrigin(o), o);
+	}
+
+	@Test void d07_loopbackCheckOriginUnchanged() {
+		var c = withBoundary();
+		assertTrue(c.checkOrigin(ORIGIN));
+		assertFalse(c.checkOrigin("http://localhost:8080"), "well-formed is not enough for a loopback boundary");
+		assertFalse(c.checkOrigin("https://other.example"));
+		assertEquals(Set.of(ORIGIN), BusWebSocketConfigurator.allowedOrigins(bus.policy()));
+	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// e) modifyHandshake with a CsrfBoundary: Origin against the handshake's own Host and scheme
+	//------------------------------------------------------------------------------------------------------------------
+
+	@Test void e01_handshakeSameOriginWsMapsToHttp() throws Exception {
+		var c = withCsrf();
+		var id = openCsrf(JB);
+		assertTrue(allowed(handshake(c, requestAt("ws://" + APP + path(id), JB, "Host", APP, "Origin", APP_ORIGIN))));
+		assertEquals(4403, refusalCode(handshake(c, requestAt("ws://" + APP + path(id), JB, "Host", APP, "Origin", "https://" + APP))));
+	}
+
+	@Test void e02_wssMapsToHttps() throws Exception {
+		var c = withCsrf();
+		var id = openCsrf(JB);
+		assertTrue(allowed(handshake(c, requestAt("wss://" + APP + path(id), JB, "Host", APP, "Origin", "https://" + APP))));
+		assertEquals(4403, refusalCode(handshake(c, requestAt("wss://" + APP + path(id), JB, "Host", APP, "Origin", APP_ORIGIN))));
+	}
+
+	@Test void e03_httpAndHttpsUriUsedAsIs() throws Exception {
+		var c = withCsrf();
+		var id = openCsrf(JB);
+		assertTrue(allowed(handshake(c, requestAt("http://" + APP + path(id), JB, "Host", APP, "Origin", APP_ORIGIN))));
+		assertTrue(allowed(handshake(c, requestAt("https://" + APP + path(id), JB, "Host", APP, "Origin", "https://" + APP))));
+		assertTrue(allowed(handshake(c, requestAt("WSS://" + APP + path(id), JB, "Host", APP, "Origin", "https://" + APP))), "the scheme is case-insensitive");
+	}
+
+	@Test void e04_crossSiteOriginRefused() throws Exception {
+		var c = withCsrf();
+		var id = openCsrf(JB);
+		var uri = "ws://" + APP + path(id);
+		for (var o : List.of("http://evil.example", "http://app.example.evil.example", "http://evil.app.example", "http://app.example."))
+			assertEquals(4403, refusalCode(handshake(c, requestAt(uri, JB, "Host", APP, "Origin", o))), o);
+		assertEquals(4403, refusalCode(handshake(c, requestAt(uri, JB, "Host", APP))), "no Origin at all");
+		assertEquals(4403, refusalCode(handshake(c, requestAt(uri, JB, "Host", APP, "Origin", "null"))));
+		var two = requestAt(uri, JB, "Host", APP);
+		when(two.getHeaders()).thenReturn(Map.of("Host", List.of(APP), "Origin", List.of(APP_ORIGIN, "http://evil.example")));
+		assertEquals(4403, refusalCode(handshake(c, two)), "two Origin values");
+	}
+
+	@Test void e05_sameSiteFetchSiteRefused() throws Exception {
+		var c = withCsrf();
+		var id = openCsrf(JB);
+		assertEquals(4403, refusalCode(handshake(c, requestAt("ws://" + APP + path(id), JB, "Host", APP, "Origin", APP_ORIGIN, "Sec-Fetch-Site", "same-site"))));
+	}
+
+	@Test void e06_fetchSiteCrossSiteRefused() throws Exception {
+		var c = withCsrf();
+		var id = openCsrf(JB);
+		for (var site : List.of("cross-site", "none", "Same-Origin", " same-origin"))
+			assertEquals(4403, refusalCode(handshake(c, requestAt("ws://" + APP + path(id), JB, "Host", APP, "Origin", APP_ORIGIN, "Sec-Fetch-Site", site))), site);
+		assertTrue(allowed(handshake(c, requestAt("ws://" + APP + path(id), JB, "Host", APP, "Origin", APP_ORIGIN, "Sec-Fetch-Site", "same-origin"))));
+	}
+
+	@Test void e07_fetchSiteAbsentAllowedWithMatchingOrigin() throws Exception {
+		var c = withCsrf();
+		var id = openCsrf(JB);
+		assertTrue(allowed(handshake(c, requestAt("ws://" + APP + path(id), JB, "Host", APP, "Origin", APP_ORIGIN))));
+	}
+
+	@Test void e08_ipv6Host() throws Exception {
+		var c = withCsrf();
+		var id = openCsrf(JB);
+		var uri = "ws://[::1]:8080" + path(id);
+		assertTrue(allowed(handshake(c, requestAt(uri, JB, "Host", "[::1]:8080", "Origin", "http://[::1]:8080"))));
+		assertTrue(allowed(handshake(c, requestAt(uri, JB, "Host", "[::1]:8080", "Origin", "http://[::1]:8080".toUpperCase(Locale.ROOT)))));
+		assertEquals(4403, refusalCode(handshake(c, requestAt(uri, JB, "Host", "[::1]:8080", "Origin", "http://[0:0:0:0:0:0:0:1]:8080"))),
+			"no re-canonicalization");
+		assertEquals(4403, refusalCode(handshake(c, requestAt(uri, JB, "Host", "::1:8080", "Origin", "http://[::1]:8080"))), "unbracketed Host");
+	}
+
+	@Test void e09_defaultPortEquivalence() throws Exception {
+		var c = withCsrf();
+		var id = openCsrf(JB);
+		assertTrue(allowed(handshake(c, requestAt("ws://" + APP + path(id), JB, "Host", APP + ":80", "Origin", APP_ORIGIN))));
+		assertTrue(allowed(handshake(c, requestAt("ws://" + APP + path(id), JB, "Host", APP, "Origin", APP_ORIGIN + ":80"))));
+		assertTrue(allowed(handshake(c, requestAt("wss://" + APP + path(id), JB, "Host", APP + ":443", "Origin", "https://" + APP))));
+		assertEquals(4403, refusalCode(handshake(c, requestAt("ws://" + APP + path(id), JB, "Host", APP + ":443", "Origin", APP_ORIGIN))));
+	}
+
+	@Test void e10_portMismatchRefused() throws Exception {
+		var c = withCsrf();
+		var id = openCsrf(JB);
+		assertEquals(4403, refusalCode(handshake(c, requestAt("ws://" + APP + ":8080" + path(id), JB, "Host", APP + ":8080", "Origin", APP_ORIGIN + ":8081"))));
+	}
+
+	@Test void e11_schemeMismatchRefused() throws Exception {
+		var c = withCsrf();
+		var id = openCsrf(JB);
+		assertEquals(4403, refusalCode(handshake(c, requestAt("http://" + APP + path(id), JB, "Host", APP, "Origin", "https://" + APP))));
+		assertEquals(4403, refusalCode(handshake(c, requestAt("ws://" + APP + path(id), JB, "Host", APP, "Origin", "https://" + APP))));
+	}
+
+	@Test void e12_allowedHostsMissRefused() throws Exception {
+		var c = withCsrf(CsrfBoundary.create().tokens(CsrfTokens.perProcess()).allowedHosts(APP));
+		var id = openCsrf(JB);
+		assertEquals(4403, refusalCode(handshake(c, requestAt("ws://rebind.example" + path(id), JB, "Host", "rebind.example", "Origin", "http://rebind.example"))));
+		assertTrue(allowed(handshake(c, requestAt("ws://" + APP + path(id), JB, "Host", APP + ":8080", "Origin", APP_ORIGIN + ":8080"))), "ports are ignored");
+	}
+
+	@Test void e13_xForwardedHostIgnored() throws Exception {
+		var c = withCsrf();
+		var id = openCsrf(JB);
+		var r = requestAt("ws://internal:8080" + path(id), JB, "Host", "internal:8080", "Origin", "https://" + APP,
+			"X-Forwarded-Host", APP, "X-Forwarded-Proto", "https", "Forwarded", "host=" + APP + ";proto=https");
+		assertEquals(4403, refusalCode(handshake(c, r)));
+		assertEquals(4403, refusalCode(handshake(c, requestAt("ws://" + APP + path(id), JB, "X-Forwarded-Host", APP, "Origin", APP_ORIGIN))),
+			"no Host at all");
+	}
+
+	@Test void e14_untrustworthyRequestUriFailsClosed() throws Exception {
+		var c = withCsrf();
+		var id = openCsrf(JB);
+		for (var uri : Arrays.asList(path(id), "ftp://" + APP + path(id), "//" + APP + path(id), null))
+			assertEquals(4403, refusalCode(handshake(c, requestAt(uri, JB, "Host", APP, "Origin", APP_ORIGIN))), String.valueOf(uri));
+	}
+
+	@Test void e15_refusalSetsRefusalPropertyWithoutEchoingValues() throws Exception {
+		var c = withCsrf();
+		var id = openCsrf(JB);
+		var props = handshake(c, requestAt("ws://" + APP + path(id), JB, "Host", APP, "Origin", "http://evil-marker.example"));
+		assertSame(BusWebSocketConfigurator.REFUSED, props.get(BusWebSocketConfigurator.REFUSAL_PROPERTY));
+		assertEquals(Set.of(BusWebSocketConfigurator.REFUSAL_PROPERTY), props.keySet());
+		assertFalse(props.toString().contains("evil-marker"), props::toString);
+	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// f) onOpen after a CsrfBoundary handshake
+	//------------------------------------------------------------------------------------------------------------------
+
+	/** Runs onOpen with the handshake's user properties and returns the close code, checking no frame was sent first. */
+	private int openWith(Map<String,Object> props) throws Exception {
+		var ws = mock(Session.class);
+		var config = mock(EndpointConfig.class);
+		when(config.getUserProperties()).thenReturn(props);
+		new BusWebSocketEndpoint(bus).onOpen(ws, config);
+		var reason = org.mockito.ArgumentCaptor.forClass(CloseReason.class);
+		verify(ws).close(reason.capture());
+		verify(ws, never()).getAsyncRemote();
+		verify(ws, never()).getBasicRemote();
+		verify(ws, never()).addMessageHandler(eq(String.class), any(MessageHandler.Whole.class));
+		return reason.getValue().getCloseCode().getCode();
+	}
+
+	@Test void f01_onOpenClosesWithRefusedBeforeAnyFrame() throws Exception {
+		var c = withCsrf();
+		var id = openCsrf(JB);
+		var props = handshake(c, requestAt("ws://" + APP + path(id), JB, "Host", APP, "Origin", "http://evil.example"));
+		assertEquals(4403, openWith(props));
+		assertFalse(bus.session(id, JB).orElseThrow().isConnected());
+	}
+
+	@Test void f02_unknownSessionStill4401() throws Exception {
+		var c = withCsrf();
+		var props = handshake(c, requestAt("ws://" + APP + path("0".repeat(64)), JB, "Host", APP, "Origin", APP_ORIGIN));
+		assertEquals(4401, refusalCode(props));
+		assertEquals(4401, openWith(props));
+	}
+
+	@Test void f03_csrfBoundarySessionRequired() throws Exception {
+		var c = withCsrf();
+		openCsrf(JB);
+		var props = handshake(c, requestAt("ws://" + APP + BusWebSockets.PREFIX + "/", JB, "Host", APP, "Origin", APP_ORIGIN));
+		assertEquals(4401, refusalCode(props));
+		assertEquals(4401, openWith(props));
+	}
 }

@@ -1,0 +1,71 @@
+{
+  "tooltip": {
+    "trigger": "item",
+    "renderMode": "richText"
+  },
+  "xAxis": {
+    "type": "category"
+  },
+  "yAxis": {
+    "type": "category"
+  },
+  "visualMap": {
+    "type": "continuous",
+    "show": false,
+    "min": 0,
+    "max": 10,
+    "dimension": 2,
+    "inRange": {
+      "color": [
+        "#e8f1fb",
+        "#1b6ac9"
+      ]
+    }
+  },
+  "series": [
+    {
+      "id": "cells",
+      "type": "heatmap",
+      "encode": {
+        "x": "hour",
+        "y": "dow",
+        "value": "n"
+      }
+    }
+  ],
+  "aria": {
+    "enabled": true
+  },
+  "dataset": [
+    {
+      "id": "juneau",
+      "dimensions": [
+        {
+          "name": "hour",
+          "type": "ordinal"
+        },
+        {
+          "name": "dow",
+          "type": "ordinal"
+        },
+        {
+          "name": "n",
+          "type": "number"
+        }
+      ],
+      "source": {
+        "hour": [
+          "9",
+          "10",
+          "9"
+        ],
+        "dow": [
+          "Mon",
+          "Mon",
+          "Tue"
+        ],
+        "n": "[Float64Array 3: 2,7,4]"
+      }
+    }
+  ]
+}

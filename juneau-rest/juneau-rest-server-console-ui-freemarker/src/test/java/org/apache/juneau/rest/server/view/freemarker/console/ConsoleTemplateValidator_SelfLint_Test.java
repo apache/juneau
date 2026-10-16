@@ -49,13 +49,13 @@ class ConsoleTemplateValidator_SelfLint_Test extends TestBase {
 		"c1/bool-chrome-tru.ftlh",        // NodeDirective_StrictBoolean_Test.a04_rejected_E5 expects E-5 strict-boolean
 		"c1/bool-chrome-empty.ftlh",      // NodeDirective_StrictBoolean_Test.a04_rejected_E5 expects E-5 strict-boolean
 		"c1/rv-card-src.ftlh",            // CardDirective_RunView_Test expects the src= rejection; card-src-and-body also flags it
-		"c1/co-card-src.ftlh",            // CardDirective_ConsoleOutput_Test expects the src= rejection; card-src-and-body also flags it
 		"c1/tm-card-src.ftlh",            // CardDirective_Terminal_Test expects the src= rejection; card-src-and-body also flags it
 		"c1/ch-card-template.ftlh",       // CardDirective_Chart_Test expects the template= rejection; dangling-template also flags it
 		"c1/jl-card-src.ftlh",            // CardDirective_JobLog_Test expects the src= rejection; card-src-and-body also flags it
 		"c1/jl-card-both.ftlh",           // CardDirective_JobLog_Test expects the src= and template= rejection; card-src-and-body also flags it
 		"c1/jl-card-template.ftlh",       // CardDirective_JobLog_Test expects the template= rejection; dangling-template also flags it
 		"c1/cv-pinned-stale.ftlh",        // ViewContractVersion_Test.b03_render_prebuiltSlotMeta_failsWithE28 expects E-28
+		"c1/rv-card-both.ftlh",           // CardDirective_RunView_Test expects the src= and template= rejection; card-src-and-body also flags it
 		"c1/rv-card-template.ftlh"        // CardDirective_RunView_Test rejects template= on a run-view card
 	);
 

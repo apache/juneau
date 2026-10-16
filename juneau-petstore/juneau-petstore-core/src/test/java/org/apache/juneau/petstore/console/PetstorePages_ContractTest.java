@@ -37,7 +37,7 @@ import org.junit.jupiter.params.provider.*;
 @SuppressWarnings({
 	"resource" // MockRestClient is a no-op close.
 })
-class PetstorePages_ContractTest extends TestBase {
+public class PetstorePages_ContractTest extends TestBase {
 
 	record Page(String id, String path, Consumer<PageContractAssert> expect) {
 		@Override public String toString() { return id; }
@@ -45,25 +45,32 @@ class PetstorePages_ContractTest extends TestBase {
 
 	static final List<Page> PAGES = List.of(
 		new Page("P1", "/console/store", p -> p.hasActiveNav("store")
-			.hasCardOrder("welcome", "stats", "hours")   // the chart ids join this list when ChartDef lands
-			.hasCard("welcome", "html").hasCard("stats", "datatables").hasCardKey("stats", "/table/quickStats/id", "store")
+			.hasCardOrder("welcome", "stats", "revenue", "orders-trend", "by-species", "by-status", "pets-map", "hours")
+			.hasCard("welcome", "html").hasCard("stats", "datatables").hasCard("revenue", "kpi").hasCardKey("stats", "/table/quickStats/id", "store")
+			.hasCardKey("stats", "/table/quickStats/items/3/type", "segmented").hasCardKey("stats", "/table/quickStats/items/4/type", "meter")
+			.hasCard("orders-trend", "chart").hasCard("by-species", "chart").hasCard("by-status", "chart")
+			.hasCard("pets-map", "chart")
 			.hasCard("hours", "html")),
-		new Page("jobs", "/console/ops/jobs", p -> p.hasActiveNav("ops", "jobs").hasCard("jobs", "datatables")
-			.hasCard("groom-output", "console-output").hasCard("groom-file", "console-output").hasCard("groom-runs", "datatables")),
+		new Page("jobs", "/console/ops/jobs", p -> p.hasActiveNav("ops", "jobs")
+			.hasCardOrder("restock-help", "restock", "jobs", "groom-output", "groom-file", "groom-runs")
+			.hasCard("restock", "job-log").hasCard("jobs", "datatables")
+			.hasCard("groom-output", "terminal").hasCard("groom-file", "terminal").hasCard("groom-runs", "datatables")),
 		new Page("audit", "/console/ops/audit", p -> p.hasActiveNav("ops", "audit").hasCard("audit", "datatables")),
 		new Page("flavors-html", "/console/dev/flavors/html", p -> p.hasActiveNav("dev", "flavors", "html").hasCardOrder("caption", "flavor")),
 		new Page("flavors-freemarker", "/console/dev/flavors/freemarker", p -> p.hasActiveNav("dev", "flavors", "freemarker").hasCardOrder("caption", "flavor")),
 		new Page("flavors-mustache", "/console/dev/flavors/mustache", p -> p.hasActiveNav("dev", "flavors", "mustache").hasCardOrder("caption", "flavor")),
 		new Page("flavors-react", "/console/dev/flavors/react", p -> p.hasActiveNav("dev", "flavors", "react").hasCardOrder("caption", "flavor")),
 		new Page("secure", "/console/dev/secure", p -> p.hasActiveNav("dev", "secure").hasCardOrder("about", "try")),
-		new Page("custom-cards", "/console/dev/cards", p -> p.hasActiveNav("dev", "cards").hasCardOrder("available", "gauge", "toolbar", "how")
+		new Page("custom-cards", "/console/dev/cards", p -> p.hasActiveNav("dev", "cards").hasCardOrder("available", "gauge", "bands", "prices", "toolbar", "how")
 			.hasCard("available", "kpi").hasCard("gauge", "inventory-gauge")),
 		new Page("about", "/console/about", p -> p.hasActiveNav("about").hasCardOrder("overview", "links", "beans")),
 		new Page("themes", "/console/dev/themes", p -> p.hasActiveNav("dev", "themes").hasCardOrder("swatches", "picker", "authoring").hasTheme("open")),
 		new Page("P2", "/console/pets", p -> p.hasActiveNav("pets")
 			.hasCard("pets", "datatables")
 			.hasCardKey("pets", "/table/dataMode", "server")
-			.hasCardKey("pets", "/table/selection/scope", "persistent")),
+			.hasCardKey("pets", "/table/selection/scope", "persistent")
+			.hasCardKey("pets", "/table/columnConfig", true)
+			.hasCardKey("pets", "/table/urlState/ids", Map.of())),
 		new Page("P3", "/console/pets/sold", p -> p.hasNoActiveNav().hasNavPath("pets", "sold")
 			.hasCard("sold", "datatables")),
 		new Page("P10", "/console/pets/changes", p -> p.hasActiveNav("pets", "changes")
@@ -81,13 +88,22 @@ class PetstorePages_ContractTest extends TestBase {
 			.hasCardKey("pet-orders", "/table/detail/endpoint", "/console/pets/1/orders/{id}/detail")),
 		new Page("P4h", "/console/pets/1/history", p -> p.hasActiveNav("pets", "p1", "history").hasCard("history", "datatables")),
 		new Page("P5", "/console/orders", p -> p.hasActiveNav("orders").hasCard("orders", "datatables").hasCardKey("orders", "/table/dataMode", "server")
-			.hasCardKey("orders", "/table/rowActions/3/confirm", "Delete order '{id}'?")),
+			.hasCardKey("orders", "/table/rowActions/3/confirm", "Delete order '{id}'?")
+			.hasCardKey("orders", "/table/urlState/day", Map.of())
+			.hasCardKey("orders", "/table/urlState/window", Map.of())
+			.hasCardKey("orders", "/table/columnConfig", Map.of("tabs", List.of("columns", "sort")))),
 		new Page("P11", "/console/users", p -> p.hasActiveNav("users").hasCard("users", "datatables").hasCardKey("users", "/table/dataMode", "server"))
 		// Later tasks append rows here.
 	);
 
-	/** Page paths for the vocabulary and asset-order gates. */
-	static final List<String> PAGE_PATHS = PAGES.stream().map(Page::path).toList();
+	/**
+	 * Builder-only developer pages: no FTL twin and no nav node of their own, so they are not in {@link #PAGES}.
+	 * Their own tests ({@code ChartsRest_Test}, {@code DataRest_Test}, {@code DashboardRest_Test}) assert the contract.
+	 */
+	public static final List<String> BUILDER_ONLY = List.of("/console/dev/charts", "/console/dev/data", "/console/dev/dashboard");
+
+	/** Page paths for the vocabulary, asset-order and twin gates (the browser twin test reads it too). */
+	public static final List<String> PAGE_PATHS = PAGES.stream().map(Page::path).toList();
 
 	static Stream<Page> pages() {
 		return PAGES.stream();

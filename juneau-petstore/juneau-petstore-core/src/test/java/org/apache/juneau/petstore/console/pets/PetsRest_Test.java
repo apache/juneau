@@ -18,6 +18,7 @@ package org.apache.juneau.petstore.console.pets;
 
 import static org.apache.juneau.petstore.console.PetstoreConsoleFixture.*;
 import static org.apache.juneau.test.bct.BctAssertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.apache.juneau.*;
@@ -79,6 +80,37 @@ class PetsRest_Test extends TestBase {
 	@Test void a04_malformedExpressionIs200WithError() throws Exception {
 		client().post(Q, dt(4, "$nope(x)", null)).contentType("application/json").run()
 			.assertStatus(200).assertContent().isContains("\"draw\":4", "\"error\":");
+	}
+
+	private static final String IDS_BODY = "{\"draw\":1,\"start\":0,\"length\":-1,\"columns\":[{\"data\":\"id\"},{\"data\":\"status\"}]}";
+	private static final String SOLD_BODY = "{\"draw\":1,\"start\":0,\"length\":-1,\"columns\":[{\"data\":\"id\"},{\"data\":\"status\",\"search\":{\"value\":\"$eq(SOLD)\"}}]}";
+
+	private static java.util.List<Long> idsOf(String qs, String body) throws Exception {
+		var r = json(client().post(Q + qs, body).contentType("application/json").run().assertStatus(200).getContent().asString());
+		var ids = new java.util.ArrayList<Long>();
+		for (var m : r.getList("data").elements(JsonMap.class))
+			ids.add(m.getLong("id"));
+		java.util.Collections.sort(ids);
+		return ids;
+	}
+
+	@Test void a05_idsKeepsOnlyThosePets() throws Exception {
+		assertEquals(java.util.List.of(1L, 2L), idsOf("?ids=1,2", IDS_BODY));
+		assertEquals(java.util.List.of(2L), idsOf("?ids=%202%20,2,999999", IDS_BODY), "ids are trimmed and unknown ones match nothing");
+	}
+
+	@Test void a06_idsAndsWithTheColumnFilter() throws Exception {
+		var sold = idsOf("", SOLD_BODY);
+		assertNotEmpty(sold);
+		var live = idsOf("?ids=" + sold.get(0) + ",1", SOLD_BODY);
+		assertEquals(java.util.List.of(sold.get(0)), live, "id 1 is not SOLD, so the column filter still drops it");
+	}
+
+	@Test void a07_noUsableIdsMeansNoFilter() throws Exception {
+		var all = idsOf("", IDS_BODY);
+		for (var bad : java.util.List.of("", "%20", "garbage", ",,", "x,y"))
+			assertEquals(all, idsOf("?ids=" + bad, IDS_BODY), "ids '" + bad + "' is ignored");
+		assertEquals(java.util.List.of(1L), idsOf("?ids=1,garbage", IDS_BODY), "an unusable token is dropped, the usable ones stay");
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

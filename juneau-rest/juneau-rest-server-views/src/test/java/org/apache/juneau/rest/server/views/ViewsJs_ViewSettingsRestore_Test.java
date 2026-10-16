@@ -31,7 +31,7 @@ import org.apache.juneau.marshall.marshaller.*;
 import org.junit.jupiter.api.*;
 
 /**
- * Always-on behavioral coverage for Gap 1: a persisted View Settings blob is applied to the live grid at table
+ * Always-on behavioral coverage that a persisted View Settings blob is applied to the live grid at table
  * construction, in BOTH data modes.
  *
  * <p>Regression for the JRM e2e "a column hidden in View Settings comes back after a reload": {@code initTableFromDef}'s

@@ -18,6 +18,9 @@ package org.apache.juneau.rest.server;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.util.*;
+import java.util.function.*;
+
 import org.apache.juneau.rest.server.filter.*;
 import org.junit.jupiter.api.*;
 
@@ -247,6 +250,77 @@ class MethodSafety_Test extends org.apache.juneau.TestBase {
 		// existed, which is what makes turning this on safe for every application already in the wild.
 		var ctx = new RestContext(argsOf(Fix_PlainGet.class, Fix_PlainGet::new));
 		assertEquals(1, ctx.getRestOperations().getOpContexts().size());
+	}
+
+	//-----------------------------------------------------------------------------------------------------------
+	// e - the effective method a request is judged on
+	//-----------------------------------------------------------------------------------------------------------
+
+	/** A header lookup that knows no headers. */
+	static final UnaryOperator<String> NO_HEADERS = x -> null;
+
+	/** A header lookup holding exactly one header, matched case-insensitively as a servlet container would. */
+	static UnaryOperator<String> header(String name, String value) {
+		return x -> name.equalsIgnoreCase(x) ? value : null;
+	}
+
+	@Test void e01_noOverrideKeepsRequestLineMethod() {
+		assertEquals("GET", MethodSafety.effectiveMethod("GET", null, NO_HEADERS));
+		assertEquals("GET", MethodSafety.effectiveMethod("GET", "page=2&sort=name", NO_HEADERS));
+	}
+
+	@Test void e02_queryMethodParamOverrides() {
+		assertEquals("DELETE", MethodSafety.effectiveMethod("GET", "method=DELETE", NO_HEADERS));
+		assertEquals("DELETE", MethodSafety.effectiveMethod("GET", "page=2&method=DELETE", NO_HEADERS));
+	}
+
+	@Test void e03_queryParamCaseInsensitive() {
+		assertEquals("DELETE", MethodSafety.effectiveMethod("GET", "method=dElEtE", NO_HEADERS));
+		assertEquals("DELETE", MethodSafety.effectiveMethod("GET", "METHOD=delete", NO_HEADERS));
+	}
+
+	@Test void e04_eachOverrideHeader() {
+		for (var h : List.of("X-Method", "X-HTTP-Method-Override", "X-HTTP-Method", "X-Method-Override"))
+			assertEquals("PATCH", MethodSafety.effectiveMethod("GET", null, header(h, "PATCH")), h);
+	}
+
+	@Test void e05_malformedPercentEscapeFailsToUnsafe() {
+		// A claim that cannot be decoded is still a claim; reading it as "no override" would let it slip through as GET.
+		assertFalse(MethodSafety.isSafe(MethodSafety.effectiveMethod("GET", "method=%ZZ", NO_HEADERS)));
+		assertFalse(MethodSafety.isSafe(MethodSafety.effectiveMethod("GET", "method=%", NO_HEADERS)));
+	}
+
+	@Test void e06_nullQueryAndNullHeaders() {
+		assertEquals("GET", MethodSafety.effectiveMethod("GET", null, NO_HEADERS));
+		assertEquals("HEAD", MethodSafety.effectiveMethod("HEAD", "", NO_HEADERS));
+		assertEquals("GET", MethodSafety.effectiveMethod("GET", "method=&method", NO_HEADERS));
+	}
+
+	@Test void e07_unknownOverrideValueIsUnsafe() {
+		assertFalse(MethodSafety.isSafe(MethodSafety.effectiveMethod("GET", "method=FROB", NO_HEADERS)));
+	}
+
+	@Test void e08_duplicateMethodParamTakesUnsafeIfAnyUnsafe() {
+		assertEquals("DELETE", MethodSafety.effectiveMethod("GET", "method=GET&method=DELETE", NO_HEADERS));
+		assertEquals("DELETE", MethodSafety.effectiveMethod("GET", "method=options&method=delete", NO_HEADERS));
+	}
+
+	@Test void e09_postOverriddenToGetStaysUnsafe() {
+		// The request line is the floor: an override can raise the severity of a request but never lower it.
+		assertEquals("POST", MethodSafety.effectiveMethod("POST", "method=GET", NO_HEADERS));
+		assertEquals("POST", MethodSafety.effectiveMethod("post", null, header("X-HTTP-Method-Override", "GET")));
+	}
+
+	@Test void e10_safeOverrideOfASafeMethodKeepsTheRequestLine() {
+		assertEquals("GET", MethodSafety.effectiveMethod("GET", "method=HEAD", header("X-Method", "OPTIONS")));
+	}
+
+	@Test void e12_safeQueryClaimDoesNotMaskUnsafeHeaderClaim() {
+		assertEquals("DELETE", MethodSafety.effectiveMethod("GET", "method=HEAD", header("X-Method", "DELETE")));
+	}
+
+	@Test void e11_nullHeaderFunctionRejected() {
+		assertThrows(IllegalArgumentException.class, () -> MethodSafety.effectiveMethod("GET", null, null));
 	}
 
 	/** The framework wraps init failures, so assertions match against the whole cause chain. */

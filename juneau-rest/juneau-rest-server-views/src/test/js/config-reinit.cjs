@@ -16,7 +16,7 @@
  */
 
 /*
- * config-reinit.cjs - always-on Node harness for the destroy/reinit index rebind (slice 5):
+ * config-reinit.cjs - always-on Node harness for the destroy/reinit index rebind:
  * resolveOrder against the live opts.columns array via dtIndex, plus applyView / resolveActiveView
  * export presence.
  *
@@ -134,7 +134,7 @@ out.unknownFallbackDir = unknownOrder?.[0] ? unknownOrder[0][1] : null;
 
 out.applyViewNotInit = C.applyView({}, null);
 
-// Gap 1: applySearchMembershipToColumns never upgrades an intrinsically incapable column, downgrades an
+// applySearchMembershipToColumns never upgrades an intrinsically incapable column, downgrades an
 // absent-from-membership capable one, and passes everything through unchanged when membership is null.
 const searchCatalogEffective = C.computeEffectiveColumns(
 	[
@@ -150,19 +150,19 @@ out.searchMembershipKeepsA = downgraded.find(function (c) { return c.data === 'A
 out.searchMembershipNeverUpgradesC = downgraded.find(function (c) { return c.data === 'C'; }).searchable;
 out.searchMembershipNullIsNoop = C.applySearchMembershipToColumns(searchCatalogEffective, null) === searchCatalogEffective;
 
-// Gap 1: defaultOrderFromSort is a pure {column,dir}[] -> {data,dir}[] mapping, empty/absent-safe.
+// defaultOrderFromSort is a pure {column,dir}[] -> {data,dir}[] mapping, empty/absent-safe.
 out.defaultOrderFromSort = I.defaultOrderFromSort([{ column: 'C', dir: 'desc' }, { column: 'A', dir: 'asc' }]);
 out.defaultOrderFromSortEmpty = I.defaultOrderFromSort(null);
 
-// Gap 1: resolveLastAppliedViewSettings memoizes - the second call on the same ctx returns the SAME cached result
-// object (so storage is never read twice and the Q1 reset notice cannot be lost to a second read).
+// resolveLastAppliedViewSettings memoizes - the second call on the same ctx returns the SAME cached result
+// object (so storage is never read twice and the reset notice cannot be lost to a second read).
 const memoCtx = { table: {}, viewDef: { columns: [{ data: 'A' }] } };
 const firstResolve = C.resolveLastAppliedViewSettings(memoCtx.table, memoCtx);
 const secondResolve = C.resolveLastAppliedViewSettings(memoCtx.table, memoCtx);
 out.resolveLastAppliedIsMemoized = firstResolve === secondResolve && memoCtx._lastAppliedViewSettings === firstResolve;
 out.resolveLastAppliedNoBlobIsNull = memoCtx._lastAppliedViewSettings.draft;
 
-// Gap 1: applyView's new overrides param reaches NS.init.buildTable - spy it (applyView calls it via NS.init).
+// applyView's new overrides param reaches NS.init.buildTable - spy it (applyView calls it via NS.init).
 let captured = null;
 const realBuildTable = I.buildTable;
 I.buildTable = function (table, viewDef, effective, ctx) { captured = { viewDef: viewDef, effective: effective }; return { ok: true }; };
@@ -176,7 +176,7 @@ I.buildTable = realBuildTable;
 out.applyViewOverridesDefaultOrder = captured?.viewDef?.defaultOrder;
 out.applyViewOverridesSearchableB = captured?.effective?.find(function (c) { return c.data === 'B'; })?.searchable;
 
-// Gap 7: defaultOptions/normalizeOptions carry autoRefreshMs, defaulting Off and dropping an out-of-range value.
+// defaultOptions/normalizeOptions carry autoRefreshMs, defaulting Off and dropping an out-of-range value.
 out.defaultOptionsAutoRefreshOff = C.defaultOptions().autoRefreshMs;
 out.normalizeOptionsDropsBadAutoRefresh = C.normalizeOptions({ autoRefreshMs: 12345 }).autoRefreshMs;
 out.normalizeOptionsKeepsGoodAutoRefresh = C.normalizeOptions({ autoRefreshMs: 60000 }).autoRefreshMs;

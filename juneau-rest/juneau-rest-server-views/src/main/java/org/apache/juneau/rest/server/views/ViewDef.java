@@ -24,10 +24,10 @@ import org.apache.juneau.commons.beanquery.*;
 
 /**
  * A datatable view definition &mdash; an ordered set of {@link Column} definitions carrying each column's search
- * configuration (design §4.3).  This is the bean the {@code VIEW_META} search block is serialized from.
+ * configuration.  This is the bean the {@code VIEW_META} search block is serialized from.
  *
  * <p>
- * A view may also carry a table-level {@link SearchOperatorSet} (design §4.3): it is inherited by every column that
+ * A view may also carry a table-level {@link SearchOperatorSet}: it is inherited by every column that
  * does not supply its own set (see {@link Column#effectiveOperators(SearchOperatorSet)} and
  * {@link Column#searchMeta(SearchOperatorSet)}).  A column that supplies its own set entirely replaces the
  * table-level set for that column.
@@ -35,8 +35,8 @@ import org.apache.juneau.commons.beanquery.*;
  * <h5 class='section'>Mutability</h5>
  * <p>
  * Deliberately mutable, like {@link Column} and {@link RegionDef}: a {@link ViewDef} is a server-side authoring
- * bean built up once via fluent setters and {@link #column(Column)} calls while constructing a view (design
- * §4.1&ndash;§4.3), not an immutable value object.  Callers must not mutate one concurrently from more than one
+ * bean built up once via fluent setters and {@link #column(Column)} calls while constructing a view,
+ * not an immutable value object.  Callers must not mutate one concurrently from more than one
  * thread, and must not reuse one across requests unless every request treats it as read-only after construction.
  *
  * <h5 class='section'>Example:</h5>
@@ -92,7 +92,7 @@ public final class ViewDef {
 	}
 
 	/**
-	 * Sets the table-level {@link SearchOperatorSet} (design §4.3) &mdash; inherited by every column that does not
+	 * Sets the table-level {@link SearchOperatorSet} &mdash; inherited by every column that does not
 	 * supply its own set.
 	 *
 	 * @param value The operator set.  Can be <jk>null</jk> to clear it (columns without their own set then fall

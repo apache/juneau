@@ -33,11 +33,11 @@ import jakarta.servlet.*;
  * <p>
  * Reaching {@code handleNotFound} means no operation matched the request, so the outcome must always be a 404 for any
  * non-error status.  The status carried into this method mirrors {@code HttpServletResponse.getStatus()}: under a real
- * servlet container that defaults to {@code 200}, whereas {@link org.apache.juneau.rest.mock.MockServletResponse}'s
- * status defaults to a coincidental {@code 0}.  That mock default is exactly why a straight {@code else}-throws-500
- * branch stayed invisible to the mock-based suite while turning every unmatched path into an HTTP 500 in production.
- * These tests stub the session status directly so both the container-default {@code 200} and the mock-default
- * {@code 0} are exercised, without depending on {@code juneau-rest-mock} (which is intentionally absent from this
+ * servlet container that defaults to {@code 200}; {@link org.apache.juneau.rest.mock.MockServletResponse} used to
+ * default to a coincidental {@code 0}, which hid a straight {@code else}-throws-500 branch from the mock-based suite
+ * while it turned every unmatched path into an HTTP 500 in production.
+ * These tests stub the session status directly so both the container-default {@code 200} and an unset {@code 0}
+ * are exercised, without depending on {@code juneau-rest-mock} (which is intentionally absent from this
  * module's test scope to avoid a Maven reactor cycle).
  *
  * @since 10.0.0
@@ -100,6 +100,22 @@ class RestContext_HandleNotFound_Test extends org.apache.juneau.TestBase {
 
 	@Test void c01_unexpectedErrorStatus_throwsServletException() {
 		var e = assertThrows(ServletException.class, () -> bareContext().handleNotFound(sessionWithStatus(SC_INTERNAL_SERVER_ERROR)));
+		assertTrue(e.getMessage().contains("Invalid method response"));
+	}
+
+	//-----------------------------------------------------------------------------------------------------------
+	// d - Another client-error status left by a start call is kept, not turned into a 500.
+	//-----------------------------------------------------------------------------------------------------------
+
+	@Test void d01_otherClientErrorStatus_keepsStatus() {
+		for (var rc : new int[]{SC_BAD_REQUEST, SC_UNAUTHORIZED, SC_FORBIDDEN, SC_CONFLICT}) {
+			var e = assertThrows(org.apache.juneau.http.response.BasicHttpException.class, () -> bareContext().handleNotFound(sessionWithStatus(rc)));
+			assertEquals(rc, e.getStatusCode());
+		}
+	}
+
+	@Test void d02_serverErrorStatus_throwsServletException() {
+		var e = assertThrows(ServletException.class, () -> bareContext().handleNotFound(sessionWithStatus(SC_SERVICE_UNAVAILABLE)));
 		assertTrue(e.getMessage().contains("Invalid method response"));
 	}
 }

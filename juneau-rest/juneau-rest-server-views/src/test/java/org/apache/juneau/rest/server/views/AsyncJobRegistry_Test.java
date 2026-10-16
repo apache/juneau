@@ -21,16 +21,17 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.time.*;
 import java.util.*;
+import java.util.concurrent.*;
 
 import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
 
 /**
- * Unit test for the in-memory {@link AsyncJobRegistry} (design doc §6.3, Q2).
+ * Unit test for the in-memory {@link AsyncJobRegistry}.
  *
  * <p>
  * Pins the load-bearing server-side controls: the unguessable {@value AsyncJobRegistry#CAPABILITY_BITS}-bit
- * capability id (HIGH-4), the concurrent-job cap, the enumeration-resistant lookup, and the deterministic
+ * capability id, the concurrent-job cap, the enumeration-resistant lookup, and the deterministic
  * hard-timeout sweep + retention reaping (driven by an injected clock rather than wall time).
  */
 @SuppressWarnings({
@@ -58,7 +59,7 @@ class AsyncJobRegistry_Test extends TestBase {
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
-	// a) The capability id is unguessable: 256-bit SecureRandom, hex, unique (HIGH-4)
+	// a) The capability id is unguessable: 256-bit SecureRandom, hex, unique
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Test void a01_capabilityIdIs256BitHex() {
@@ -82,7 +83,7 @@ class AsyncJobRegistry_Test extends TestBase {
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
-	// b) Enumeration-resistant lookup: an unknown id is empty, indistinguishable from any other (HIGH-4)
+	// b) Enumeration-resistant lookup: an unknown id is empty, indistinguishable from any other
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Test void b01_getUnknownIsEmpty() {
@@ -96,7 +97,7 @@ class AsyncJobRegistry_Test extends TestBase {
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
-	// c) Concurrent-job cap: the 9th is refused; a freed slot re-opens it (MED-6)
+	// c) Concurrent-job cap: the 9th is refused; a freed slot re-opens it
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Test void c01_concurrentJobCapRefusesNinth() {
@@ -116,7 +117,7 @@ class AsyncJobRegistry_Test extends TestBase {
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
-	// d) Hard-timeout sweep (deterministic via the injected clock) - a data-egress bound (HIGH-4/MED-6/Task-11)
+	// d) Hard-timeout sweep (deterministic via the injected clock) - a data-egress bound
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Test void d01_sweepTimesOutExpiredJobs() {
@@ -159,7 +160,7 @@ class AsyncJobRegistry_Test extends TestBase {
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
-	// f) Cancel by id (Q4)
+	// f) Cancel by id
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Test void f01_cancelById() {
@@ -172,7 +173,7 @@ class AsyncJobRegistry_Test extends TestBase {
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
-	// g) A registry-minted job carries the configured subscriber cap (MED-6)
+	// g) A registry-minted job carries the configured subscriber cap
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Test void g01_mintedJobCarriesSubscriberCap() {
@@ -323,5 +324,100 @@ class AsyncJobRegistry_Test extends TestBase {
 
 	@Test void j03_concurrentKeyedAndUnkeyedMixNeverExceedCap() throws Exception {
 		race((r, n) -> n % 2 == 0 ? r.tryCreate() : r.tryCreate(IdempotencyKey.mintSelfTargeted("create")));
+	}
+
+	//------------------------------------------------------------------------------------------------------------------
+	// k) The scheduled hard timeout settles the job even when its task fires at (or a tick before) the deadline
+	//------------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * Captures scheduled tasks and their delays instead of running them, so a test fires each one at a chosen clock
+	 * instant.  The registry schedules a {@code Callable} (its lambda returns a value), so both overloads capture.
+	 */
+	private static final class CapturingScheduler extends ScheduledThreadPoolExecutor {
+		final List<Runnable> tasks = new ArrayList<>();
+		final List<Long> delays = new ArrayList<>();
+		CapturingScheduler() { super(1); }
+		@Override public ScheduledFuture<?> schedule(Runnable command, long delay, TimeUnit unit) {
+			tasks.add(command);
+			delays.add(unit.toNanos(delay));
+			return null;
+		}
+		@Override public <V> ScheduledFuture<V> schedule(Callable<V> callable, long delay, TimeUnit unit) {
+			schedule(() -> {
+				try {
+					callable.call();
+				} catch (Exception e) {
+					throw new IllegalStateException(e);
+				}
+			}, delay, unit);
+			return null;
+		}
+	}
+
+	private static AsyncJobRegistry registry(TestClock clock, CapturingScheduler s) {
+		return new AsyncJobRegistry(clock, Duration.ofSeconds(5), AsyncJobRegistry.MAX_OUTPUT_BYTES,
+			AsyncJobRegistry.MAX_SUBSCRIBERS_PER_JOB, s);
+	}
+
+	private static long millis(long nanos) {
+		return TimeUnit.NANOSECONDS.toMillis(nanos);
+	}
+
+	@Test void k01_wholeMillisecondDeadlineSchedulesOnePast() {
+		var clock = new TestClock(T0);
+		var s = new CapturingScheduler();
+		try {
+			var job = registry(clock, s).create();
+			// The deadline is exactly 5000 ms away; a task at 5000 ms would land on it, where nothing settles.
+			assertEquals(List.of(5001L), s.delays.stream().map(AsyncJobRegistry_Test::millis).toList());
+			clock.set(job.deadline());                     // timer granularity can still fire it here
+			s.tasks.get(0).run();
+			assertFalse(job.isTerminal());
+			assertEquals(List.of(5001L, 1L), s.delays.stream().map(AsyncJobRegistry_Test::millis).toList(),
+				"a timeout task that fires on the deadline must re-arm itself one millisecond past it");
+			clock.set(job.deadline().plusMillis(1));
+			s.tasks.get(1).run();
+			assertEquals("app:hard-timeout-exceeded", job.result().message);
+		} finally {
+			s.shutdownNow();
+		}
+	}
+
+	@Test void k02_earlyFireReArmsRoundedUp() {
+		var clock = new TestClock(T0);
+		var s = new CapturingScheduler();
+		try {
+			var job = registry(clock, s).create();
+			clock.set(job.deadline().minusNanos(2_400_000));  // fires 2.4 ms early
+			s.tasks.get(0).run();
+			assertFalse(job.isTerminal());
+			assertEquals(2, s.tasks.size(), "a timeout task that fires early must re-arm itself");
+			assertEquals(3L, millis(s.delays.get(1)), "2.4 ms to the deadline must round up to 3 ms, not down to 2");
+			clock.set(clock.instant().plusMillis(3));
+			s.tasks.get(1).run();
+			assertEquals("app:hard-timeout-exceeded", job.result().message);
+			assertEquals(2, s.tasks.size());
+		} finally {
+			s.shutdownNow();
+		}
+	}
+
+	@Test void k03_reArmedTaskStopsOnceTheJobSettles() {
+		var clock = new TestClock(T0);
+		var s = new CapturingScheduler();
+		try {
+			var job = registry(clock, s).create();
+			clock.set(job.deadline().minusMillis(1));
+			s.tasks.get(0).run();
+			assertEquals(2, s.tasks.size(), "a timeout task that fires early must re-arm itself");
+			job.complete(ActionResult.success(null));
+			clock.set(job.deadline());                     // the re-armed task also fires a tick early
+			s.tasks.get(1).run();
+			assertEquals(2, s.tasks.size(), "a settled job must not keep re-arming its timeout");
+			assertEquals("success", job.result().outcome);
+		} finally {
+			s.shutdownNow();
+		}
 	}
 }

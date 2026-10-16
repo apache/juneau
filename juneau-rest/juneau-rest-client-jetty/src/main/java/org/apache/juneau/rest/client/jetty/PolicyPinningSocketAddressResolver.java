@@ -43,14 +43,21 @@ import org.eclipse.jetty.util.*;
 final class PolicyPinningSocketAddressResolver implements SocketAddressResolver {
 
 	/**
-	 * The Jetty request tag that marks an SSRF-guard-active request.
+	 * The Jetty request tag that marks an SSRF-guard-active request, carrying the request's per-client allowed address ranges.
 	 *
 	 * <p>
-	 * A plain {@link Object}, so it equals only itself: Jetty's destination lookup (which compares tags with
-	 * {@code equals()}) never puts a request tagged with anything else in the pinned connection pool, and this
-	 * resolver's own check compares by identity.
+	 * Value-equal on its ranges: Jetty's destination lookup (which compares tags with {@code equals()}) puts requests
+	 * with the same ranges in one connection pool and never puts a request tagged with anything else (including a
+	 * guarded request with different ranges) in it, so a connection opened under one allow-list is never reused under another.
 	 */
-	static final Object PINNED_TAG = new Object();
+	record PinTag(RemoteUrlPolicy.AllowedRanges ranges) {}
+
+	/** The tag for a guarded request with no per-client allowed address ranges. */
+	static final PinTag PINNED_TAG = new PinTag(RemoteUrlPolicy.AllowedRanges.NONE);
+
+	static PinTag tagFor(RemoteUrlPolicy.AllowedRanges ranges) {
+		return ranges.isEmpty() ? PINNED_TAG : new PinTag(ranges);
+	}
 
 	private final SocketAddressResolver delegate;
 
@@ -60,14 +67,15 @@ final class PolicyPinningSocketAddressResolver implements SocketAddressResolver 
 
 	@Override /* SocketAddressResolver */
 	public void resolve(String host, int port, Map<String, Object> context, Promise<List<InetSocketAddress>> promise) {
-		if (! isPinned(context)) {
+		var tag = pinTag(context);
+		if (tag == null) {
 			delegate.resolve(host, port, context, promise);
 			return;
 		}
 		try {
 			// A destination is tagged only for an SSRF-guard-active request, and the guard is active only when the
 			// allowPrivateUrls opt-in is off (TransportRequest.isSsrfGuardActive()), so the deny-private checks always apply here.
-			var pinned = RemoteUrlPolicy.selectAllowedAddress(host, false, RemoteUrlPolicy.AddressResolver.DEFAULT);
+			var pinned = RemoteUrlPolicy.selectAllowedAddress(host, false, RemoteUrlPolicy.AddressResolver.DEFAULT, tag.ranges());
 			promise.succeeded(List.of(new InetSocketAddress(pinned, port)));
 		} catch (UnknownHostException | RuntimeException e) {
 			promise.failed(e);
@@ -75,7 +83,7 @@ final class PolicyPinningSocketAddressResolver implements SocketAddressResolver 
 	}
 
 	// Jetty puts the destination the connection is being opened for into the resolve context.
-	private static boolean isPinned(Map<String, Object> context) {
-		return context.get(Destination.CONTEXT_KEY) instanceof Destination d && d.getOrigin().getTag() == PINNED_TAG;
+	private static PinTag pinTag(Map<String, Object> context) {
+		return context.get(Destination.CONTEXT_KEY) instanceof Destination d && d.getOrigin().getTag() instanceof PinTag t ? t : null;
 	}
 }

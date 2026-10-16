@@ -59,6 +59,9 @@ class ViewsJs_PopupLayer_Test extends TestBase {
 		assertTrue(body.contains("function dialogLayerCount("), body);
 		assertTrue(body.contains("function topLayer("), body);
 		assertTrue(body.contains("MAX_DIALOG_DEPTH"), body);
+		assertTrue(body.contains("function popDialogLayers("), body);
+		assertTrue(body.contains("popDialogLayers(ui.backdrop, ctx)"), body);
+		assertTrue(body.contains("MAX_PAGE_DIALOG_DEPTH"), body);
 		assertTrue(body.contains("function bindLayerStackDocumentListeners("), body);
 		assertTrue(body.contains("_layerListenersBound"), body);
 	}
@@ -78,7 +81,7 @@ class ViewsJs_PopupLayer_Test extends TestBase {
 	}
 
 	@Test void a02_sourceShape_timestampIsNotALayerStackClient() throws Exception {
-		// SF-3: the timestamp popup stays a plain show/hide element - it must never become a pushLayer client.
+		// the timestamp popup stays a plain show/hide element - it must never become a pushLayer client.
 		var body = viewsJs();
 		assertTrue(body.contains("function hideTsPopupIfPresent("), body);
 		assertFalse(body.contains("kind:\"timestamp\"") || body.contains("kind: \"timestamp\""),

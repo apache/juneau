@@ -41,7 +41,7 @@ import org.apache.juneau.rest.server.servlet.*;
 import org.junit.jupiter.api.*;
 
 /**
- * End-to-end HTTP coverage for the READY-312f F2 OAuth 2.1 resource-server baseline on the {@code 2026-07-28}
+ * End-to-end HTTP coverage for the OAuth 2.1 resource-server baseline on the {@code 2026-07-28}
  * {@link McpRestServlet} and {@link McpEndpoint} bindings: RFC 9728 PRM serving + SEP-2351 well-known routing, bearer
  * validation, the {@code 401 WWW-Authenticate} challenge with {@code resource_metadata}, RFC 8707 audience enforcement,
  * baseline insufficient-scope handling, and the auth-disabled default leaving behavior unchanged.
@@ -127,7 +127,7 @@ class McpResourceServerBinding_Test extends TestBase {
 		}
 		@Override protected McpOptions createMcpOptions() { return rsEnabled(); }
 
-		// M1 probe: a non-MCP POST op that is still gated (the servlet gates every effective POST); asserts the
+		// A non-MCP POST op that is still gated (the servlet gates every effective POST); asserts the
 		// authenticated principal reached the framework-standard PRINCIPAL_ATTR so @Auth Principal resolves.
 		@RestPost(path = "/whoami")
 		public String whoami(@Auth Principal p) {
@@ -147,7 +147,7 @@ class McpResourceServerBinding_Test extends TestBase {
 	}
 
 	@Test void a02_missingToken_401WithResourceMetadataAndScopeHint() throws Exception {
-		// M1/SEP-2350: the initial 401 carries no error code but DOES hint the baseline scope.
+		// The initial 401 carries no error code but DOES hint the baseline scope.
 		clientA().post("/").contentString(body(1, "server/discover", null))
 			.header("Mcp-Method", "server/discover").header("Mcp-Name", "")
 			.run()
@@ -195,7 +195,7 @@ class McpResourceServerBinding_Test extends TestBase {
 		assertContains("\"resource\":\"" + RESOURCE + "\"", json);
 	}
 
-	// M1: the authenticated principal reaches the framework-standard PRINCIPAL_ATTR so @Auth Principal resolves on a
+	// The authenticated principal reaches the framework-standard PRINCIPAL_ATTR so @Auth Principal resolves on a
 	// gated request.
 	@Test void a09_principalResolvesViaAuthArg() throws Exception {
 		var s = clientA().post("/whoami").contentString("").header("Authorization", "Bearer good").run().assertStatus(200).getContent().asString();
@@ -213,13 +213,13 @@ class McpResourceServerBinding_Test extends TestBase {
 			.assertHeader("WWW-Authenticate").is("Bearer realm=\"mcp\", error=\"insufficient_scope\", scope=\"mcp.read\", resource_metadata=\"" + PRM_URL + "\"");
 	}
 
-	// M5: the wildcard well-known route must not serve this endpoint's PRM for an arbitrary suffix.
+	// The wildcard well-known route must not serve this endpoint's PRM for an arbitrary suffix.
 	@Test void a08_wellKnownWrongSuffix_404() throws Exception {
 		clientA().get("/.well-known/oauth-protected-resource/some-other-resource").run().assertStatus(404);
 	}
 
 	// ---------------------------------------------------------------------------------------------
-	// SEP-2350 (F3) per-operation step-up: an end-to-end HTTP round-trip exercising the POST-parse enforcement
+	// SEP-2350 per-operation step-up: an end-to-end HTTP round-trip exercising the POST-parse enforcement
 	// point in McpRevision.dispatch (a token satisfying the endpoint-wide baseline but not the operation's scope
 	// yields a scoped 403 insufficient_scope challenge; only the exact required scope dispatches).
 	// ---------------------------------------------------------------------------------------------
@@ -298,7 +298,7 @@ class McpResourceServerBinding_Test extends TestBase {
 	}
 
 	// ---------------------------------------------------------------------------------------------
-	// M6: the per-operation resolver seam sees the RAW JSON-RPC params (for tools/call that is
+	// The per-operation resolver seam sees the RAW JSON-RPC params (for tools/call that is
 	// {name:..., arguments:{...}}), NOT the unwrapped tool arguments.  A resolver capturing the context proves
 	// exactly what McpRevision hands a future dynamic resolver.
 	// ---------------------------------------------------------------------------------------------
@@ -345,7 +345,7 @@ class McpResourceServerBinding_Test extends TestBase {
 	}
 
 	// ---------------------------------------------------------------------------------------------
-	// F4 (READY-312f): the F2-authenticated principal is threaded into the RequestStateCodec seal/unseal seam so
+	// The authenticated principal is threaded into the RequestStateCodec seal/unseal seam so
 	// a hardened codec can bind the requestState to who requested it.  A capturing codec records the principal it
 	// receives; an end-to-end pause (seal) then resume (unseal), both under the same bearer token, proves the
 	// authenticated principal reaches the codec at BOTH points.
@@ -518,7 +518,7 @@ class McpResourceServerBinding_Test extends TestBase {
 	// ---------------------------------------------------------------------------------------------
 	// Mixin path (POST /mcp) with RS auth ENABLED - parity.
 	//
-	// Root-mounted (no @Rest(path=...)) so the advertised origin-root PRM URL genuinely resolves; see the H1
+	// Root-mounted (no @Rest(path=...)) so the advertised origin-root PRM URL genuinely resolves; see the
 	// origin-root-mount constraint enforced by McpResourceServerSupport.assertOriginRootMount and exercised by
 	// fixture G below.
 	// ---------------------------------------------------------------------------------------------
@@ -556,7 +556,7 @@ class McpResourceServerBinding_Test extends TestBase {
 		assertContains("\"resource\":\"" + RESOURCE + "\"", json);
 	}
 
-	// B1 - BLOCKER: the bearer gate must not be bypassable via a trailing slash on the resolved MCP path.
+	// The bearer gate must not be bypassable via a trailing slash on the resolved MCP path.
 	// The router is trailing-slash tolerant, so POST /mcp/ still dispatches to the MCP JSON-RPC handler and MUST be
 	// gated.  (Sent as an absolute URL because MockPathResolver trims trailing slashes off relative paths.)
 	@Test void c04_mixinTrailingSlash_gated() throws Exception {
@@ -567,7 +567,7 @@ class McpResourceServerBinding_Test extends TestBase {
 			.assertHeader("WWW-Authenticate").is("Bearer realm=\"mcp\", scope=\"mcp.read\", resource_metadata=\"" + PRM_URL + "\"");
 	}
 
-	// B1 - BLOCKER: the gate must not be bypassable via percent-encoding.  The router decodes %6D to 'm', so
+	// The gate must not be bypassable via percent-encoding.  The router decodes %6D to 'm', so
 	// POST /%6Dcp dispatches to the MCP handler and MUST be gated.
 	@Test void c05_mixinPercentEncoded_gated() throws Exception {
 		clientC().post("/%6Dcp").contentString(body(1, "server/discover", null))
@@ -578,7 +578,7 @@ class McpResourceServerBinding_Test extends TestBase {
 	}
 
 	// ---------------------------------------------------------------------------------------------
-	// H3 - HIGH: method-override channels must not bypass the gate.  A host allowing ?method=POST lets
+	// Method-override channels must not bypass the gate.  A host allowing ?method=POST lets
 	// GET /?method=POST route to the MCP POST endpoint; the gate must see the RESOLVED method, not the raw GET.
 	// ---------------------------------------------------------------------------------------------
 
@@ -613,7 +613,7 @@ class McpResourceServerBinding_Test extends TestBase {
 	}
 
 	// ---------------------------------------------------------------------------------------------
-	// H1 - HIGH: on a non-origin-root mount the advertised origin-root PRM URL cannot be served, so RS auth must
+	// On a non-origin-root mount the advertised origin-root PRM URL cannot be served, so RS auth must
 	// fail fast with a clear 500 rather than silently 404 the discovery document.
 	// ---------------------------------------------------------------------------------------------
 
@@ -652,7 +652,7 @@ class McpResourceServerBinding_Test extends TestBase {
 	// authenticating, and serves full unauthenticated MCP dispatch.  The router-aligned gate must identify the
 	// RESOLVED operation instead.
 	//
-	// H1 UNIFICATION: identifying the resolved operation is not enough on its own - the same re-mount that
+	// Identifying the resolved operation is not enough on its own - the same re-mount that
 	// defeats a hardcoded path also moves the well-known PRM route off the origin root (h03), so a 401 here would
 	// advertise a resource_metadata URL that itself 500s.  The gate therefore also consults the resolved op's
 	// mixin mount prefixes (the same signal assertWellKnownMountReachable uses) and fails fast with the SAME
@@ -675,7 +675,7 @@ class McpResourceServerBinding_Test extends TestBase {
 		return MockRestClient.create(H.class).json().contentType("application/json").accept("application/json").ignoreErrors().build();
 	}
 
-	// B1/H1 - BLOCKER repro, now unified with the well-known route: a @Mixin re-mount is not merely unauthenticated
+	// A @Mixin re-mount is not merely unauthenticated
 	// (401) but UNSUPPORTED for MCP RS auth - the gate must fail fast with the same origin-root 500 diagnostic as
 	// the well-known route (h03), because the resource_metadata URL a 401 would advertise is itself unreachable
 	// under the re-mount (see h03). Was 401 (it authenticated) before the gate consulted the mixin mount prefixes.
@@ -720,7 +720,7 @@ class McpResourceServerBinding_Test extends TestBase {
 		return MockRestClient.create(I.class).json().contentType("application/json").accept("application/json").ignoreErrors().build();
 	}
 
-	// Same H1 unification as h01: a multi-mount @Mixin(paths=...) re-mount fails fast with the origin-root 500
+	// As in h01, a multi-mount @Mixin(paths=...) re-mount fails fast with the origin-root 500
 	// diagnostic rather than authenticating. Was 401 before the gate consulted the mixin mount prefixes.
 	@Test void i01_multiMount_pathA_gated() throws Exception {
 		var s = clientI().post("/a/mcp").contentString(body(1, "server/discover", null))

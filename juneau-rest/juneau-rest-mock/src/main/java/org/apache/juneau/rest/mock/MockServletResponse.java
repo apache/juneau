@@ -58,7 +58,7 @@ public class MockServletResponse implements HttpServletResponse {
 	private ByteArrayOutputStream baos = new ByteArrayOutputStream();
 	private int bufferSize;
 	private Locale locale;
-	private int sc;
+	private int sc = 200;
 	private String msg;
 
 	private Map<String,String[]> headerMap = map();

@@ -40,7 +40,7 @@ import org.apache.juneau.commons.logging.*;
  * snapshot taken at the async-dispatch handoff. For an async response the completion thread's live {@code LogContext} is
  * empty (v1 is thread-confined; there is no general async propagation), so {@code RestDebugPipeline.emit(...)} pre-seeds
  * the completion-thread record from this carried map &mdash; the only way the async debug record retains its structured
- * {@code requestId} (design §8.2). Empty (the shared empty-map singleton) when no request context was active.
+ * {@code requestId}. Empty (the shared empty-map singleton) when no request context was active.
  *
  * @param logger The resolved logger the record is emitted through.
  * @param formatter The resolved (non-<jk>null</jk>) formatter used to render the message.

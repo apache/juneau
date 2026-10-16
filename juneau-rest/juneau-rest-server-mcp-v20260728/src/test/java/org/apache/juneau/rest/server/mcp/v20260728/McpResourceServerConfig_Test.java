@@ -45,7 +45,7 @@ class McpResourceServerConfig_Test {
 		assertTrue(c.getScopesSupported().isEmpty());
 		assertTrue(c.getRequiredScopes().isEmpty());
 		assertEquals(Set.of("header"), c.getBearerMethodsSupported());
-		assertTrue(c.isRequireAudienceClaim());  // H2: fail-closed by default.
+		assertTrue(c.isRequireAudienceClaim());  // Fail-closed by default.
 	}
 
 	@Test void a05_requireAudienceClaimIsSettable() {

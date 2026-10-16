@@ -57,6 +57,12 @@ public final class JettyHttpTransportBuilder {
 	 * If the provided client has not been started, {@link JettyHttpTransport} will start it automatically.
 	 * When {@link JettyHttpTransport#close()} is called, the client will be stopped.
 	 *
+	 * <p>
+	 * The client itself is not changed.  So that a redirect it follows does not carry caller-set credential headers to
+	 * another origin, the transport creates each request itself, as a guarded subclass of Jetty's request, instead of
+	 * calling {@link HttpClient#newRequest(java.net.URI)}; an override of that method is not called.  Customize requests
+	 * with the client's own settings and request listeners instead.
+	 *
 	 * @param value The client to use. Must not be <jk>null</jk>.
 	 * @return This object.
 	 */

@@ -86,7 +86,7 @@
 	const CLAUSE_JOIN_PARAMS = { search: true };
 
 	/**
-	 * The HTTP API carries exactly ONE `search` query parameter and ONE `opt` query parameter (design §5.3: no
+	 * The HTTP API carries exactly ONE `search` query parameter and ONE `opt` query parameter (no
 	 * repeated params).  When more than one active toggle contributes to the SAME single-string parameter, the browser
 	 * JOINS their clauses into that one string with a top-level comma - the very clause SEPARATOR the Java
 	 * {@code ClauseParser} uses to fold clauses server-side - rather than the later contribution
@@ -102,7 +102,7 @@
 	}
 
 	/**
-	 * Shared walk (BeanQuery DataTables design §3.1) over every ACTIVE query-contributing ribbon entry: a top-level
+	 * Shared walk over every ACTIVE query-contributing ribbon entry: a top-level
 	 * `option` whose `activeState[id]` is truthy, and the selected member of each `optionGroup`. Calls
 	 * `fn(opt, ownerId)` once per active entry, in `viewDef.ribbon`'s own declared order — `ownerId` is the
 	 * option's own id for a top-level option, or the enclosing group's id for a selected group member, which is
@@ -131,11 +131,11 @@
 	}
 
 	/**
-	 * The pure counterpart of the server-side column-scoped ribbon mapping (BeanQuery DataTables design §3.1):
+	 * The pure counterpart of the server-side column-scoped ribbon mapping:
 	 * the column-scoped search expressions the ribbon's ACTIVE toggle state contributes, keyed by live `dtIndex`
 	 * (the same index the outgoing `columns[]` array in a BeanQuery DataTables POST body uses) — never by a
 	 * URL-shaped param name. This is the half of the ribbon-to-request mapping that MUST land in the JSON body:
-	 * a POST/JSON server-mode endpoint (BeanQuery datatables design doc §3.1/D8) does not read URL query params at
+	 * a POST/JSON server-mode endpoint does not read URL query params at
 	 * all, so the old behavior of putting every ribbon contribution on the URL silently dropped column-scoped
 	 * filters once that switch happened (the bug this split fixes). Pair with `mergeColumnSearches` to AND a
 	 * contribution onto the user's own typed search on the same column, and never with `ribbonQueryParams`'s
@@ -174,8 +174,8 @@
 	 * The pure counterpart of the server-side `param:`-scoped ribbon mapping: the URL query parameters the ribbon's
 	 * ACTIVE toggle state contributes — every active option/member that is NOT column-scoped (`opt.column == null`,
 	 * `opt.param != null`). Column-scoped contributions are `ribbonColumnSearches`'s job, never this function's (see
-	 * that function's doc for why the split exists — BeanQuery DataTables design §3.1). Keeps the existing
-	 * `search`/`opt` clause-joining behavior (design doc §5.3) via the shared `addQueryParam` helper: multiple
+	 * that function's doc for why the split exists). Keeps the existing
+	 * `search`/`opt` clause-joining behavior via the shared `addQueryParam` helper: multiple
 	 * active contributions to the SAME single-string parameter name are comma-joined rather than one clobbering
 	 * another; any other parameter name is single-valued (last contribution wins).
 	 * @param {object} viewDef - the VIEW_META view definition (`viewDef.ribbon`).
@@ -195,7 +195,7 @@
 	}
 
 	/**
-	 * Pure helper (BeanQuery DataTables design §3.1): merges a column-scoped ribbon contribution map
+	 * Pure helper: merges a column-scoped ribbon contribution map
 	 * (`ribbonColumnSearches`'s own output shape) with the per-column search values the user has already typed,
 	 * keyed the same way (by `dtIndex`). When both sides set the same column, the ribbon narrows the user's search
 	 * rather than replacing it: the merged value is `$and(<user>,<ribbon>)`. When only one side sets a
@@ -306,13 +306,13 @@
 		return { ok: ok, missing: missing };
 	}
 
-	/** localStorage key for a persisted ribbon toggle (VIEW_META §6.8: juneau.view.<viewId>.ribbon.<optionId>). */
+	/** localStorage key for a persisted ribbon toggle (juneau.view.<viewId>.ribbon.<optionId>). */
 	function ribbonStorageKey(viewId, optionId) {
 		return "juneau.view." + viewId + ".ribbon." + optionId;
 	}
 
 	/**
-	 * Default built-in id -> icon-name lookup (visual-parity design doc §4.A).  Keyed by *button id* for the export
+	 * Default built-in id -> icon-name lookup.  Keyed by *button id* for the export
 	 * cluster (one export action renders one button per resolved id) and by *action type* for refresh
 	 * (which renders exactly one button).  `print` is a button id like `copy`/`csv`/`excel`/`pdf` -
 	 * a caller opts into it via an `export` ribbon action (`buttons: ["copy", "csv", "print"]`); unlike `excel`/`pdf` it needs no extra
@@ -346,7 +346,7 @@
 	};
 
 	/**
-	 * Resolves the icon NAME (not markup) for a ribbon button - pure, DOM-free (§4.A).  An explicit `symbol` on the
+	 * Resolves the icon NAME (not markup) for a ribbon button - pure, DOM-free.  An explicit `symbol` on the
 	 * action/Opt always wins; otherwise a `defaultKey` (the export button id, or the action `type`) resolves from
 	 * DEFAULT_ICONS; a custom option/optionGroup member with neither falls back to the neutral "tune" glyph, never
 	 * blank/unset.  Markup resolution (NS.icons.resolveIcon(name)) and the "unregistered name -> draw nothing"
@@ -400,7 +400,7 @@
 	}
 
 	/**
-	 * Reads a ribbon-toggle value.  Prefers the slice-2 persistence SPI's synchronous {@code getItem}
+	 * Reads a ribbon-toggle value.  Prefers the persistence SPI's synchronous {@code getItem}
 	 * (same exact keys) when {@code juneau-config.js} is loaded; falls back to localStorage so a
 	 * non-configurable table (no config.js) keeps working and the ribbon never becomes Promise-based.
 	 */
@@ -462,7 +462,7 @@
 	}
 
 	/**
-	 * The ribbon's message channel (message bus addendum, spec 5.5).  `send` delivers one cmd:<target> payload: on a
+	 * The ribbon's message channel.  `send` delivers one cmd:<target> payload: on a
 	 * console page (`ctx.bus`) it is ALWAYS published - even to the ribbon's own table, so the click is on the trace;
 	 * on a plain page an own-table command runs NS.tableBus.applyCmd directly and a cross-card target is refused
 	 * loudly.  `onOptions` registers a painter fed by filter:<target> (or the own table's onFilter without a bus);
@@ -540,7 +540,7 @@
 	 * Builds the ribbon toolbar element for a view and wires it to its DataTables instance.  Returns the toolbar
 	 * element (or null when there is no ribbon).  `ctx` carries { table, dataTable (the DT api), activeState, redraw }.
 	 *
-	 * <p>Adjacent actions sharing a non-null {@code group} id (visual-parity design doc §4.A, item 2/5) are
+	 * <p>Adjacent actions sharing a non-null {@code group} id are
 	 * clustered into ONE segmented {@code .juneau-view-ribbon-group} wrapper (shared borders, rounded only on the
 	 * outer ends - see juneau-views.css) via the local {@code place(el, groupId)} helper below.  Actions with no
 	 * explicit {@code group} (excluding {@code refresh}, see below) share the synthetic {@code __ungrouped} id so
@@ -553,7 +553,7 @@
 	 * control reads as self-contained rather than welded to whatever ungrouped buttons happen to sit beside it.
 	 * A {@code refresh} with an explicit {@code group} opts out of that move entirely.
 	 */
-	// NOSONAR javascript:S3776 -- one dispatch branch per ribbon action type (design doc §4.A); each branch is a
+	// NOSONAR javascript:S3776 -- one dispatch branch per ribbon action type; each branch is a
 	// few lines and several are pinned verbatim by the wiring canary tests below `functionBody(body, "function
 	// buildRibbon(")`, so splitting them into further helpers would reduce test/code locality without reducing
 	// real complexity.
@@ -621,10 +621,12 @@
 				if (ids.length && ctx.dataTable && $?.fn?.dataTable?.Buttons) {
 					try {
 						// Still registers/feature-gates each button with DataTables Buttons - but renders our own
-						// first-party icon buttons instead of delegating to Buttons' own DOM (design doc §4.A); a
-						// click programmatically triggers the SAME, already-reviewed Buttons action (design doc §7).
+						// first-party icon buttons instead of delegating to Buttons' own DOM; a
+						// click programmatically triggers the SAME, already-reviewed Buttons action.
+						// Each button is registered under its own name, so a click can find it again: Buttons reads a
+						// bare string selector as a filter on its button nodes, which never matches an id like "csv".
 						new $.fn.dataTable.Buttons(ctx.dataTable, {
-							buttons: ids,
+							buttons: ids.map(function (id) { return { extend: id, name: id }; }),
 							exportOptions: { columns: ":visible" }
 						});
 						registered = true;
@@ -643,7 +645,7 @@
 						place(dead, exportGroupId);
 					} else {
 						place(button(id, resolveButtonIcon(null, id), function () {
-							ctx.dataTable.button(id).trigger();
+							ctx.dataTable.button(id + ":name").trigger();
 						}, a.appearance), exportGroupId);
 					}
 				}
@@ -662,7 +664,7 @@
 				return;
 			}
 			if (a.type === "publish") {
-				// A custom-topic (or cmd:<cardId>) publish (spec 5.5).  Topics exist only on a console page.
+				// A custom-topic (or cmd:<cardId>) publish.  Topics exist only on a console page.
 				if (!ctx.bus) {
 					console.error("Juneau view '" + viewDef.id + "': ribbon publish item '" + (a.title || a.topic) +
 						"' needs a console page (no message bus); not rendered.");
@@ -735,14 +737,14 @@
 	}
 
 	/**
-	 * Builds one icon-only 32px ribbon/pill button (visual-parity design doc §4.A/§2.2).  No visible text label -
+	 * Builds one icon-only 32px ribbon/pill button.  No visible text label -
 	 * `label` becomes data-jc-tip (custom cursor tooltip) and aria-label only — never a native `title`
 	 * (browsers cannot style that bubble).  Resolves
 	 * `iconName` via the icon registry (`NS.icons.resolveIcon`); the markup assigned to `innerHTML` is ALWAYS a
 	 * SVG `<use>` host string the icon registry builds from a sanitised sprite stem - never request-supplied markup;
 	 * the sprite layers themselves may be app-supplied (replacement / override URLs), but they are fetched and
 	 * parsed as SVG symbols, never assigned as HTML - so
-	 * this is not an HTML-injection sink (design doc §7).  An icon name found in none of the sprite layers
+	 * this is not an HTML-injection sink.  An icon name found in none of the sprite layers
 	 * draws nothing (U11); the label remains the accessible name and tooltip.
 	 */
 	function button(label, iconName, onClick, appearance) {

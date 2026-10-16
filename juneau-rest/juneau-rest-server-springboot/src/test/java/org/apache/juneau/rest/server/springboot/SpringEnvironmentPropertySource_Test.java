@@ -28,7 +28,7 @@ import org.springframework.core.env.*;
 import org.springframework.mock.env.*;
 
 /**
- * Tests for {@link SpringEnvironmentPropertySource} — the Phase 4 bridge from a Spring
+ * Tests for {@link SpringEnvironmentPropertySource} — the bridge from a Spring
  * {@link Environment} into the Juneau {@link Settings} singleton.
  *
  * <p>

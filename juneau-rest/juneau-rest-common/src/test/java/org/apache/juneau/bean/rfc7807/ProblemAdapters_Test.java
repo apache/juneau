@@ -188,7 +188,7 @@ class ProblemAdapters_Test extends TestBase {
 
 	@Test
 	void d02_type_isNeverSynthesized() {
-		// Locked decision Q7: never set type (don't synthesize about:blank on the wire).
+		// Never set type (don't synthesize about:blank on the wire).
 		var p = ProblemAdapters.fromException(new BadRequest("oops"));
 		assertNull(p.getType());
 		assertNull(p.getInstance());

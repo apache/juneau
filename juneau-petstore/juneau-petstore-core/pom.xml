@@ -94,6 +94,16 @@
 			<artifactId>juneau-rest-server-datatables</artifactId>
 			<version>${project.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>org.apache.juneau</groupId>
+			<artifactId>juneau-rest-server-terminal</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.webjars.npm</groupId>
+			<artifactId>echarts</artifactId>
+			<version>${webjars-echarts.version}</version>
+		</dependency>
 
 		<!-- Test dependencies -->
 		<dependency>

@@ -33,8 +33,7 @@ import org.junit.jupiter.api.condition.*;
 /**
  * The end-to-end half of the module's <b>JavaScript-execution harness</b>: runs the REAL served
  * {@code juneau-views.js} / {@code juneau-urlstate.js} / {@code juneau-search.js} / {@code juneau-pagestate.js} /
- * {@code juneau-config.js} in a real headless browser and proves, together in one page, the four scenarios spec
- * §9's last table row lists for F1 + F2 + F3 + Q1 (plus a fifth, Copy-link): a malformed {@code ?state=} tab id applied alongside a real
+ * {@code juneau-config.js} in a real headless browser and proves, together in one page, four scenarios plus a fifth, Copy-link: a malformed {@code ?state=} tab id applied alongside a real
  * filter clause; the View Settings dialog driven keyboard-only; a column-search popover's Escape-revert
  * announcement and focus return; and a version-mismatched {@code schemaVersion} blob's one-time reset notice surviving a real
  * page reload; and a real click on the Copy-link toolbar button copying and announcing the built URL.
@@ -151,7 +150,7 @@ class ViewSettingsA11y_BrowserTest extends TestBase {
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
-	// Scenario 1 (F1): ?state=tab(a%5C);filter(status=$eq(OK)) decodes and applies with no throw
+	// Scenario 1: ?state=tab(a%5C);filter(status=$eq(OK)) decodes and applies with no throw
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Test void f1_01_theBackslashTabIdDecodesExactlyAndOnlyThatTabIsClicked() {
@@ -173,7 +172,7 @@ class ViewSettingsA11y_BrowserTest extends TestBase {
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
-	// Scenario 2 (F3): keyboard-only dialog nav - gear, Enter, Tab, Right x3, End, Home
+	// Scenario 2: keyboard-only dialog nav - gear, Enter, Tab, Right x3, End, Home
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Test void f2_01_enterOnTheFocusedGearOpensTheDialogAndTabLandsOnTheViewTab() {
@@ -195,7 +194,7 @@ class ViewSettingsA11y_BrowserTest extends TestBase {
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
-	// Scenario 3 (F2): type into the column-search popover, Escape reverts and announces
+	// Scenario 3: type into the column-search popover, Escape reverts and announces
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Test void f3_01_escapeRemovesThePopoverAndReturnsFocusToTheSearchIcon() {
@@ -208,7 +207,7 @@ class ViewSettingsA11y_BrowserTest extends TestBase {
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
-	// Scenario 4 (Q1): a version-mismatched schemaVersion blob survives a reload, notices once, never twice
+	// Scenario 4: a version-mismatched schemaVersion blob survives a reload, notices once, never twice
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Test void f4_01_firstOpenAfterReloadShowsTheResetNoticeOnce() {
