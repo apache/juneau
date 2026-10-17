@@ -141,5 +141,62 @@ class PlaywrightUnitsTest(unittest.TestCase):
         self.assertEqual(units(events), [("units", "w", 4, "tests"), ("unit", "w", 1, None), ("unit", "w", 2, None)])
 
 
+def total_mark(files):
+    return '##pytest ' + json.dumps({"ev": "total", "n": sum(files.values()), "f": files})
+
+
+def test_mark(outcome, nid, late=False):
+    return '##pytest ' + json.dumps({"ev": "test", "o": outcome, "id": nid, "s": 0.0, **({"late": 1} if late else {})})
+
+
+class FileGrainTest(unittest.TestCase):
+    """With per-file counts in the plugin's total marker, the unit is the test file."""
+
+    def test_total_announces_files_not_tests(self):
+        events = ev(new_parser(), ['##pytest {"ev":"hello","v":1}', total_mark({"a.py": 2, "b.py": 3})])
+        self.assertEqual(units(events), [("units", "p", 2, "files")])
+
+    def test_a_file_finishes_with_its_last_test(self):
+        p = new_parser()
+        events = ev(p, [total_mark({"a.py": 2, "b.py": 1}), test_mark("passed", "a.py::t1"), test_mark("passed", "b.py::t1"),
+                        test_mark("passed", "a.py::t2")])
+        self.assertEqual(units(events), [("units", "p", 2, "files"), ("unit", "p", 1, "pass"), ("unit", "p", 2, "pass")])
+        self.assertEqual([e for e in events if e[0] == "tests"][-1], ("tests", "p", 3, 0, 0, 0))   # still counted per test
+
+    def test_a_failed_or_errored_test_fails_its_file(self):
+        events = ev(new_parser(), [total_mark({"a.py": 2, "b.py": 2}),
+                                   test_mark("passed", "a.py::t1"), test_mark("failed", "a.py::t2"),
+                                   test_mark("error", "b.py::t1"), test_mark("passed", "b.py::t2")])
+        self.assertEqual([e for e in events if e[0] == "unit"], [("unit", "p", 1, "fail"), ("unit", "p", 2, "fail")])
+
+    def test_a_file_is_skipped_only_when_every_test_skipped(self):
+        events = ev(new_parser(), [total_mark({"a.py": 2, "b.py": 2}),
+                                   test_mark("skipped", "a.py::t1"), test_mark("xfailed", "a.py::t2"),
+                                   test_mark("skipped", "b.py::t1"), test_mark("passed", "b.py::t2")])
+        self.assertEqual([e for e in events if e[0] == "unit"], [("unit", "p", 1, "skip"), ("unit", "p", 2, "pass")])
+
+    def test_interleaved_files_finish_in_completion_order(self):    # xdist: tests of different files mix
+        events = ev(new_parser(), [total_mark({"a.py": 2, "b.py": 2}),
+                                   test_mark("passed", "a.py::t1"), test_mark("passed", "b.py::t1"),
+                                   test_mark("failed", "b.py::t2"), test_mark("passed", "a.py::t2")])
+        self.assertEqual([e for e in events if e[0] == "unit"], [("unit", "p", 1, "fail"), ("unit", "p", 2, "pass")])
+
+    def test_a_late_error_fixes_a_finished_file_and_fails_an_open_one(self):
+        events = ev(new_parser(), [total_mark({"a.py": 1, "b.py": 2}), test_mark("passed", "a.py::t1"),
+                                   test_mark("error", "a.py::t1", late=True),
+                                   test_mark("passed", "b.py::t1"), test_mark("error", "b.py::t1", late=True),
+                                   test_mark("passed", "b.py::t2")])
+        self.assertIn(("unit_fix", "p", 0, "fail"), events)
+        self.assertEqual([e for e in events if e[0] == "unit"][-1], ("unit", "p", 2, "fail"))
+
+    def test_total_without_file_counts_stays_per_test(self):         # an older plugin, or the fallback
+        events = ev(new_parser(), ['##pytest {"ev":"total","n":3}', test_mark("passed", "a.py::t1")])
+        self.assertEqual(units(events), [("units", "p", 3, "tests"), ("unit", "p", 1, "pass")])
+
+    def test_scraped_xdist_progress_has_no_file_names_and_stays_per_test(self):
+        events = ev(new_parser(), ["collected 6 items", "..F  [ 50%]"])
+        self.assertEqual(units(events)[0], ("units", "p", 6, "tests"))
+
+
 if __name__ == "__main__":
     unittest.main()

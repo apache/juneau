@@ -96,21 +96,33 @@ def pytest_configure(config):
 
 def pytest_collection_finish(session):
     if not _worker(session.config):
-        _total(session.config, len(session.items))
+        _total(session.config, len(session.items), _file_counts(i.nodeid for i in session.items))
 
 
 class _XdistHooks:
     """Registered only when xdist is loaded: pytest rejects a plain hook function for an unknown hook name."""
 
     def pytest_xdist_node_collection_finished(self, node, ids):
-        _total(node.config, len(ids))
+        _total(node.config, len(ids), _file_counts(ids))
 
 
-def _total(config, n):
+def _file_counts(ids):
+    """Tests per test file, keyed by the file part of the node id; the runner draws one bar cell per file."""
+    counts = {}
+    for nid in ids:
+        f = nid.split("::", 1)[0][:400]
+        counts[f] = counts.get(f, 0) + 1
+    return counts
+
+
+def _total(config, n, files=None):
     global _total_sent
     if n > _total_sent:             # once (even for 0), and again only for a larger count (spec 1.1)
         _total_sent = n
-        _emit(config, {"ev": "total", "n": n})
+        mark = {"ev": "total", "n": n}
+        if files:
+            mark["f"] = files
+        _emit(config, mark)
 
 
 _durations = {}

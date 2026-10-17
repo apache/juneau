@@ -36,9 +36,9 @@ import org.junit.jupiter.api.*;
  * store's real argument construction and output parsing deterministically on every OS &mdash; no
  * {@code /usr/bin/security}, no login-keychain mutation, and no GUI unlock/auth prompt.  The {@link FailMode} and
  * validation tests use a deliberately bad binary path so they also run deterministically on any platform without
- * touching a real keychain.  There is intentionally no test against the real {@code security} binary: doing so
- * without risking a hung, unattended GUI prompt on an interactive/locked login keychain would require this store to
- * support targeting an isolated, freshly-created keychain, which is out of scope here.
+ * touching a real keychain.  The only test against the real {@code security} binary is {@link #f01_realKeychainRoundTrip},
+ * which mutates the login keychain (a throwaway item, always deleted) and so runs only on macOS, only when
+ * {@code /usr/bin/security} exists, and only when opted in with {@code -Djuneau.keychain.integration=true}.
  */
 class KeychainSecretStore_Test {
 
@@ -63,24 +63,55 @@ class KeychainSecretStore_Test {
 
 		@Override
 		public KeychainSecretStore.Result run(byte[] stdin, String[] args) {
+			// store() runs "security -i" and sends the add-generic-password command line on stdin.
+			if (args.length == 1 && args[0].equals("-i"))
+				return interactive(stdin);
 			return switch (args[0]) {
-				case "add-generic-password" -> addGenericPassword(stdin, args);
 				case "find-generic-password" -> findGenericPassword(args);
 				case "delete-generic-password" -> deleteGenericPassword(args);
 				default -> throw new IllegalArgumentException("Unsupported command: " + args[0]);
 			};
 		}
 
-		private KeychainSecretStore.Result addGenericPassword(byte[] stdin, String[] args) {
-			// The value and its CLI confirmation re-entry arrive doubled and newline-delimited (see
-			// KeychainSecretStore.store's javadoc); both copies must match, mirroring the real prompt.
-			var lines = new String(stdin, UTF_8).split("\n", -1);
-			var value = lines[0];
-			var confirmation = lines[1];
-			if (! value.equals(confirmation))
-				return new KeychainSecretStore.Result(1, new byte[0], "Password confirmation did not match.");
-			entries.put(key(args), value.toCharArray());
+		private KeychainSecretStore.Result interactive(byte[] stdin) {
+			var line = new String(stdin, UTF_8);
+			if (! line.endsWith("\n") || line.indexOf('\n') != line.length() - 1)
+				throw new IllegalArgumentException("Expected exactly one newline-terminated command line.");
+			var args = tokenize(line.substring(0, line.length() - 1));
+			if (! args[0].equals("add-generic-password"))
+				throw new IllegalArgumentException("Unsupported command: " + args[0]);
+			entries.put(key(args), opt(args, "-w").toCharArray());
 			return new KeychainSecretStore.Result(0, new byte[0], "");
+		}
+
+		/** Mirrors the verified {@code security -i} parser: whitespace-separated, double-quoted tokens, backslash escapes the next char. */
+		static String[] tokenize(String line) {
+			var tokens = new ArrayList<String>();
+			var sb = new StringBuilder();
+			var inToken = false;
+			var quoted = false;
+			for (var i = 0; i < line.length(); i++) {
+				var c = line.charAt(i);
+				if (c == '\\') {
+					sb.append(line.charAt(++i));
+					inToken = true;
+				} else if (c == '"') {
+					quoted = ! quoted;
+					inToken = true;
+				} else if (Character.isWhitespace(c) && ! quoted) {
+					if (inToken)
+						tokens.add(sb.toString());
+					sb.setLength(0);
+					inToken = false;
+				} else {
+					sb.append(c);
+					inToken = true;
+				}
+			}
+			assertFalse(quoted, "unterminated quote");
+			if (inToken)
+				tokens.add(sb.toString());
+			return tokens.toArray(new String[0]);
 		}
 
 		private KeychainSecretStore.Result findGenericPassword(String[] args) {
@@ -166,14 +197,39 @@ class KeychainSecretStore_Test {
 
 			var argvContent = Files.readString(argvDump.toPath());
 			assertFalse(argvContent.contains(secret), "secret must not appear in the child process's argv");
+			assertEquals("-i\n", argvContent, "store() must invoke 'security -i' with no other arguments (no bare -w prompt)");
 
 			var stdinContent = Files.readString(stdinDump.toPath());
-			assertEquals(secret + "\n" + secret + "\n", stdinContent, "secret should be delivered via stdin, doubled for the CLI's confirmation prompt");
+			assertEquals("add-generic-password -U -a \"acct\" -s \"svc\" -w \"" + secret + "\"\n", stdinContent, "command line should be delivered via stdin");
 		} finally {
 			argvDump.delete();
 			stdinDump.delete();
 			script.delete();
 		}
+	}
+
+	@Test void a04_quotingEdgeCasesRoundTrip() {
+		var store = new KeychainSecretStore("my svc \"q\" \\", FailMode.FAIL_CLOSED, new FakeKeychain());
+		var values = new String[] {
+			"plain", "a b", "a\"b", "a'b", "a\\b", "a\\\\b", "\\\"", "\"", "'", "a\tb", " lead", "trail ", "#hash",
+			"$x `y` ;|&", "", "\u00e9 \u00fc \u6f22", "-x", "--", "a\\nb", "\"; add-generic-password -a evil -s evil -w \"x"
+		};
+		for (var acct : new String[] {"acct", "my acct", "q\"uo'te\\", "\u00e9"}) {
+			for (var v : values) {
+				store.store(acct, v.toCharArray());
+				assertArrayEquals(v.toCharArray(), store.find(acct).orElseThrow(), "acct=" + acct + " value=" + v);
+			}
+		}
+	}
+
+	@Test void a05_payloadIsOneLineWithExpectedEscaping() {
+		var captured = new byte[1][];
+		var store = new KeychainSecretStore("s\"v\\c", FailMode.FAIL_CLOSED, (stdin, args) -> {
+			captured[0] = stdin.clone();
+			return new KeychainSecretStore.Result(0, new byte[0], "");
+		});
+		store.store("a b", "p\"w\\d 'x'".toCharArray());
+		assertEquals("add-generic-password -U -a \"a b\" -s \"s\\\"v\\\\c\" -w \"p\\\"w\\\\d 'x'\"\n", new String(captured[0], UTF_8));
 	}
 
 	// -----------------------------------------------------------------------------------------------------------------
@@ -238,13 +294,23 @@ class KeychainSecretStore_Test {
 	}
 
 	@Test void c05_secretWithNewlineOrCarriageReturnRejectedBeforeAnyProcessStarts() {
-		// The stdin-delivered value/confirmation pair (see a03) is newline-delimited, so an embedded '\n' or '\r'
-		// in the secret would desynchronize the CLI's confirmation prompt; reject it up front instead.
+		// The stdin-delivered command (see a03) is newline-terminated, so an embedded '\n' or '\r' in the secret
+		// would end or inject a command; reject it up front instead.
 		var store = unavailable(FailMode.FAIL_CLOSED);
 		var withNewline = "line1\nline2".toCharArray();
 		var withCarriageReturn = "line1\rline2".toCharArray();
 		assertThrows(IllegalArgumentException.class, () -> store.store("acct", withNewline));
 		assertThrows(IllegalArgumentException.class, () -> store.store("acct", withCarriageReturn));
+	}
+
+	@Test void c06_keyOrServiceWithNewlineRejectedBeforeAnyProcessStarts() {
+		// "security -i" reads one command per line, so a newline in the key or service would inject a second command.
+		var secret = "v".toCharArray();
+		var store = unavailable(FailMode.FAIL_OPEN);
+		assertThrows(IllegalArgumentException.class, () -> store.store("a\nb", secret));
+		assertThrows(IllegalArgumentException.class, () -> store.store("a\rb", secret));
+		var badService = new KeychainSecretStore("s\nvc", FailMode.FAIL_OPEN, 5L, "/nonexistent/juneau-not-security");
+		assertThrows(IllegalArgumentException.class, () -> badService.store("k", secret));
 	}
 
 	// -----------------------------------------------------------------------------------------------------------------
@@ -359,6 +425,31 @@ class KeychainSecretStore_Test {
 		} finally {
 			script.delete();
 		}
+	}
+
+	// -----------------------------------------------------------------------------------------------------------------
+	// Real login keychain (opt-in; macOS only).
+	// -----------------------------------------------------------------------------------------------------------------
+
+	@Test void f01_realKeychainRoundTrip() {
+		assumeTrue("true".equals(System.getProperty("juneau.keychain.integration")), "Set -Djuneau.keychain.integration=true to run against the real login keychain");
+		assumeTrue(System.getProperty("os.name", "").toLowerCase().contains("mac"), "macOS only");
+		assumeTrue(new File("/usr/bin/security").canExecute(), "/usr/bin/security not available");
+		var service = "org.apache.juneau.test.j0837." + UUID.randomUUID();
+		var store = new KeychainSecretStore(service, FailMode.FAIL_CLOSED, 20L);
+		var acct = "it acct \"q\" \\";
+		var secret = "pa ss\"w\\rd 'x' $y";
+		try {
+			assertFalse(store.exists(acct));
+			store.store(acct, secret.toCharArray());
+			assertTrue(store.exists(acct));
+			assertArrayEquals(secret.toCharArray(), store.find(acct).orElseThrow());
+			store.store(acct, "second".toCharArray());
+			assertArrayEquals("second".toCharArray(), store.find(acct).orElseThrow());
+		} finally {
+			store.delete(acct);
+		}
+		assertFalse(store.exists(acct));
 	}
 
 	private static void assertContains(String expected, String actual) {

@@ -52,15 +52,19 @@ import org.apache.juneau.commons.secret.*;
  * absent/no-op, while {@link FailMode#FAIL_CLOSED} (the default) throws.
  *
  * <p>
- * <b>Secret handling.</b> {@link #store} never places the secret on the {@code security} process's argv: it invokes
- * <c>add-generic-password</c> with a bare, valueless <c>-w</c> (which makes the CLI prompt) and writes the secret,
- * followed by a newline, twice to the child process's stdin &mdash; once for the value and once for the CLI's own
- * confirmation re-entry &mdash; so the secret is never visible in the process table (e.g. to {@code ps}).  Neither
+ * <b>Secret handling.</b> {@link #store} never places the secret on the {@code security} process's argv, and never
+ * relies on the CLI's password prompt (a bare <c>-w</c> makes {@code security} read from the controlling terminal,
+ * <c>/dev/tty</c>, whenever the JVM has one &mdash; not from stdin &mdash; so it would hang).  Instead it runs
+ * <c>security -i</c> (interactive mode, which reads commands from stdin) and writes a single command line to stdin:
+ * <c>add-generic-password -U -a "<i>key</i>" -s "<i>service</i>" -w "<i>secret</i>"</c>.  The secret is therefore
+ * never visible in the process table (e.g. to {@code ps}), and no terminal is ever read.  Each of the three values is
+ * double-quoted, with only <c>"</c> and <c>\</c> escaped by a preceding backslash (verified against {@code security -i}
+ * for spaces, tabs, single and double quotes, backslashes, shell metacharacters, and non-ASCII text).  Neither
  * {@link #store} nor {@link #find} materializes the secret as a {@link String}: {@code store} encodes the
  * {@code char[]} directly to the stdin byte payload, and {@code find} decodes the retrieved bytes into a
- * {@code char[]}.  The value is never logged or {@code toString()}'d by this class.  Because the confirmation
- * prompt splits input on newlines, a secret containing {@code '\n'} or {@code '\r'} cannot be delivered this way
- * and is rejected by {@link #store} before any process is started.
+ * {@code char[]}.  The value is never logged or {@code toString()}'d by this class.  Because the command is
+ * newline-terminated, a key, service, or secret containing {@code '\n'} or {@code '\r'} cannot be delivered this way
+ * (it would end or inject a command) and is rejected by {@link #store} before any process is started.
  *
  * @since 10.0.0
  */
@@ -140,12 +144,14 @@ public class KeychainSecretStore implements SecretStore {
 	public void store(String key, char[] secret) {
 		reqnn("key", key);
 		reqnn("secret", secret);
+		req(! containsNewline(key), "Argument 'key' must not contain a newline or carriage return character.");
+		req(! containsNewline(service), "The service name must not contain a newline or carriage return character.");
 		req(! containsNewline(secret), "Argument 'secret' must not contain a newline or carriage return character.");
-		var payload = stdinConfirmationPayload(secret);
+		var payload = addCommandPayload(key, secret);
 		try {
-			// A bare, valueless "-w" makes the CLI prompt (twice, for confirmation) on stdin/stderr instead
-			// of accepting the password as an argv element, so the secret never appears in the process table.
-			var r = run(payload, "add-generic-password", "-U", "-a", key, "-s", service, "-w");
+			// "security -i" reads commands from stdin; a bare "-w" would prompt on /dev/tty (hanging when the JVM has
+			// a terminal), and "-w <secret>" on argv would expose the secret to ps.  The command line goes on stdin.
+			var r = run(payload, "-i");
 			if (r.exit() != 0)
 				throw backendFailure("add-generic-password", r);
 		} catch (RuntimeException e) {
@@ -301,32 +307,54 @@ public class KeychainSecretStore implements SecretStore {
 		return isex("Keychain '%s' failed with exit code %s: %s", subcommand, r.exit(), r.stderr().strip());
 	}
 
-	private static boolean containsNewline(char[] secret) {
-		for (char c : secret)
+	private static boolean containsNewline(String s) {
+		return s.indexOf('\n') >= 0 || s.indexOf('\r') >= 0;
+	}
+
+	private static boolean containsNewline(char[] chars) {
+		for (char c : chars)
 			if (c == '\n' || c == '\r')
 				return true;
 		return false;
 	}
 
 	/**
-	 * Encodes {@code secret} as UTF-8 and doubles it with a trailing newline after each copy (<c>secret\nsecret\n</c>),
-	 * matching the value-then-confirmation prompt that <c>security ... -w</c> (with no value) issues on stdin.
-	 * Built directly from the {@code char[]}, without an intermediate {@link String}.
+	 * Builds the <c>security -i</c> stdin payload
+	 * <c>add-generic-password -U -a "key" -s "service" -w "secret"\n</c>, double-quoting each value and escaping
+	 * <c>"</c> and <c>\</c> with a backslash.  The secret is encoded and escaped directly from the {@code char[]},
+	 * without an intermediate {@link String}, and the intermediate byte copy is zeroed.
 	 */
-	private static byte[] stdinConfirmationPayload(char[] secret) {
+	private byte[] addCommandPayload(String key, char[] secret) {
+		var head = ("add-generic-password -U -a " + quote(key) + " -s " + quote(service) + " -w \"").getBytes(UTF_8);
 		var encoded = UTF_8.encode(CharBuffer.wrap(secret));
 		var secretBytes = new byte[encoded.remaining()];
 		encoded.get(secretBytes);
+		if (encoded.hasArray())
+			Arrays.fill(encoded.array(), (byte) 0);
 		try {
-			var payload = new byte[(secretBytes.length + 1) * 2];
-			System.arraycopy(secretBytes, 0, payload, 0, secretBytes.length);
-			payload[secretBytes.length] = '\n';
-			System.arraycopy(secretBytes, 0, payload, secretBytes.length + 1, secretBytes.length);
-			payload[payload.length - 1] = '\n';
+			var escapes = 0;
+			for (var b : secretBytes)
+				if (b == '"' || b == '\\')
+					escapes++;
+			var payload = new byte[head.length + secretBytes.length + escapes + 2];
+			System.arraycopy(head, 0, payload, 0, head.length);
+			var i = head.length;
+			for (var b : secretBytes) {
+				if (b == '"' || b == '\\')
+					payload[i++] = '\\';
+				payload[i++] = b;
+			}
+			payload[i++] = '"';
+			payload[i] = '\n';
 			return payload;
 		} finally {
 			Arrays.fill(secretBytes, (byte) 0);
 		}
+	}
+
+	/** Double-quotes a non-secret value for <c>security -i</c>, escaping <c>"</c> and <c>\</c>. */
+	private static String quote(String s) {
+		return '"' + s.replace("\\", "\\\\").replace("\"", "\\\"") + '"';
 	}
 
 	/** Decodes UTF-8 stdout bytes into a char[], dropping a single trailing newline, without an intermediate String. */

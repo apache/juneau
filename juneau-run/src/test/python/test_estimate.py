@@ -108,5 +108,20 @@ class MakeEstimatorTest(unittest.TestCase):
                 self.assertEqual(est("mvn", "maven", "other").runs, 4)     # fewer than 3 like: falls back to all
 
 
+class ExpectedTestsTest(unittest.TestCase):
+    def rec(self, tests, **kw):
+        return dict({"ok": True, "complete": True, "wall_s": 10.0, "tests": tests}, **kw)
+
+    def test_median_test_count_of_the_records_used(self):
+        self.assertEqual(jr.estimate_from([self.rec(100), self.rec(300), self.rec(200)], None).tests, 200)
+
+    def test_none_without_test_counts(self):
+        self.assertIsNone(jr.estimate_from([{"ok": True, "complete": True, "wall_s": 5.0}], None).tests)
+
+    def test_prefers_like_for_like_records(self):
+        records = [self.rec(10, sig="a")] + [self.rec(500, sig="b") for _ in range(3)]
+        self.assertEqual(jr.estimate_from(records, "b").tests, 500)
+
+
 if __name__ == "__main__":
     unittest.main()

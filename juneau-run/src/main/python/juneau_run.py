@@ -385,7 +385,7 @@ def fmt_elapsed(ms):
     return f"{h}:{m:02d}:{s:02d}" if h else f"{m}:{s:02d}"
 
 
-Estimate = collections.namedtuple("Estimate", "wall_s units rate runs")
+Estimate = collections.namedtuple("Estimate", "wall_s units rate runs tests", defaults=(None,))
 
 
 def _median(xs):
@@ -403,10 +403,12 @@ def estimate_from(records, sig):
     if not use:
         return None
     withunits = [r for r in use if (r.get("units") or {}).get("total")]
+    withtests = [r for r in use if isinstance(r.get("tests"), (int, float)) and r["tests"] > 0]
     return Estimate(_median([r["wall_s"] for r in use]),
                     _median([r["units"]["total"] for r in withunits]) if withunits else None,
                     _median([r["wall_s"] / r["units"]["total"] for r in withunits]) if withunits else None,
-                    len(use))
+                    len(use),
+                    _median([r["tests"] for r in withtests]) if withtests else None)
 
 
 def eta_figures(e, k, n, est):
@@ -435,6 +437,29 @@ def eta_figures(e, k, n, est):
     if est and est.wall_s:
         return min(99, int(100 * e / est.wall_s)), (est.wall_s if est.wall_s > e else None), True
     return None, None, False
+
+
+def _step_for(seconds):
+    """The coarseness the displayed estimates round to: 5s under a minute, 15s under ten, 30s above."""
+    return 5 if seconds < 60 else 15 if seconds < 600 else 30
+
+
+def round_estimate(seconds, floor=0):
+    """`seconds` rounded to its _step_for step, and above `floor` (the elapsed time) so a shown total never trails it."""
+    step = _step_for(seconds)
+    rounded = int(seconds / step + 0.5) * step
+    return rounded if rounded > floor else (int(floor // step) + 1) * step
+
+
+def damp_total(shown, new, e, rounded=True):
+    """The estimated total to display (seconds): the one already `shown` is kept until `new` differs from it by more
+    than max(15s, 10%) or the elapsed time `e` reaches it; a replacement is rounded (see round_estimate) unless
+    `rounded` is off.  None when `new` is None."""
+    if new is None:
+        return None
+    if shown is not None and e < shown and abs(new - shown) <= max(15, 0.1 * shown):
+        return shown
+    return round_estimate(new, e) if rounded else new
 
 
 def timer_text(e, total):
@@ -507,11 +532,13 @@ def _totals(t):
     return (t["total"], t["fail"], t["err"], t["skip"])
 
 
-def fmt_totals(totals, tests_mode=False):
+def fmt_totals(totals, tests_mode=False, expected=None):
+    """The totals text; `expected` (history's median test count) shows as `41,200 / ~83,000 tests` until the count passes it."""
     if not totals or not totals[0]:
         return "no tests run" if tests_mode else ""
     total, fail, err, _ = totals
-    return f"{total:,} tests" + (f", {fail + err} failed" if fail + err else "")
+    of = f" / ~{round(expected):,}" if expected and total < expected else ""
+    return f"{total:,}{of} tests" + (f", {fail + err} failed" if fail + err else "")
 
 
 def format_final(status, ms, failed_title, full_log):
@@ -604,6 +631,7 @@ class _Row:
         self.units_dropped = 0  # tests-mode modules that ran no tests, taken out of units_total (see _drop_unit)
         self.progress = None    # live progress text from the tool's own output; shown on the running row only
         self.estimate = None    # the Estimate from history, when there is one (spec 5.1)
+        self.shown_total = None # the estimated total last displayed, held steady by damp_total
 
     @property
     def running(self):
@@ -644,6 +672,7 @@ class Board:
         self.aliases = {}           # a run_tool sub-row's step id -> its parent row's id (parent=, release.py)
         self.setup = None           # the run's one Setup row (pom modules), owned by the first Maven row that has poms
         self.plan = None            # the planned top-level step ids, in order (spec 6), or None
+        self.shown_end = None       # the Overall figure's projected end (session seconds) last displayed, held by damp_total
         self.plan_estimates = {}    # planned step id -> history wall_s or None, asked of the estimator once per plan
         self.session_t0 = self.t0   # when the session event arrived (the Overall figure's E)
 
@@ -734,13 +763,20 @@ class Board:
             elif r.running:
                 e = now - r.t0
                 _, total, _ = eta_figures(e, r.units_done, r.units_total, r.estimate)
+                total = r.shown_total = damp_total(r.shown_total, total, e)
                 if total is None and r.estimate is not None:
                     total = max(r.estimate.wall_s, e)      # overran its history: nothing left to add
                 steps.append((sid, "running", r.estimate.wall_s if r.estimate else None,
                               (total, e) if total is not None else None))
             elif r.status != "skip":
                 steps.append((sid, "done", None, None))
-        return overall_figures(now - self.session_t0, steps)
+        o = overall_figures(now - self.session_t0, steps)
+        if o is None or o.remaining <= 0:
+            return o
+        elapsed = now - self.session_t0       # damp the projected end like a row's total, then show what is left of it
+        self.shown_end = damp_total(self.shown_end, elapsed + o.remaining, elapsed, rounded=False)
+        left = max(self.shown_end - elapsed, 0)
+        return o._replace(remaining=round_estimate(left) if left > 0 else left)
 
     def _on_step_start(self, f):
         parent = self.rows.get(f.get("parent"))
@@ -1056,11 +1092,13 @@ def row_cells(row, glyphs, now, pending=False):
     elapsed = fmt_elapsed(ms) if ms >= 1000 else ""
     if row.running and row.estimate is not None:
         pct, total, approx = eta_figures(ms / 1000, row.units_done, row.units_total, row.estimate)
+        total = row.shown_total = damp_total(row.shown_total, total, ms / 1000)
         if pct is not None and ms >= 1000:
             parts.append(("~" if approx else "") + f"{pct}%")
         if elapsed:
             elapsed = timer_text(ms / 1000, total)
-    text = row.summary if row.summary is not None else fmt_totals(row.totals, row.tests_mode and not row.running)
+    expected = row.estimate.tests if row.running and row.estimate is not None else None
+    text = row.summary if row.summary is not None else fmt_totals(row.totals, row.tests_mode and not row.running, expected)
     if text:
         parts.append(text)
     return cells, "  ".join(parts), elapsed
@@ -1250,7 +1288,7 @@ def _fit_row(label, cells, rest, elapsed, cols, wrap=False):
     room = cols - (len(elapsed) + 2 if elapsed else 0) - _vlen(label + "    " + rest)
     if wrap and room >= 1:
         indent = _vlen(label) + 2
-        per = max(1, cols - indent)
+        per = room          # every line holds as many cells as the first
         first, more = cells[:room], cells[room:]
         lines = [_fit(label + "  " + "".join(first) + "  " + rest, elapsed, cols)]
         lines += [" " * indent + "".join(more[i:i + per]) for i in range(0, len(more), per)]
@@ -2870,6 +2908,12 @@ class PytestParser(Parser):
         self.n = 0
         self.failed = self.errors = self.skipped = 0
         self.index = OrderedDict()   # node id -> unit index, bounded: a late marker follows its test at once
+        # File grain (plugin total marker with per-file test counts): one bar unit per test file, finished with its last test
+        self.files = None            # file -> tests it holds; None until a total marker carries them
+        self.file_seen = {}          # file -> tests finished so far
+        self.file_state = {}         # file -> [any failed, all skipped]
+        self.file_cell = {}          # finished file -> its bar index
+        self.files_done = 0
 
     def prepare(self, cmd, env, cwd):
         existing = None
@@ -2919,6 +2963,13 @@ class PytestParser(Parser):
             n = m.get("n")
             if isinstance(n, int) and n >= 0:
                 self.n = n
+                files = m.get("f")
+                if isinstance(files, dict) and files and all(isinstance(v, int) for v in files.values()):
+                    changed = self.files is None or len(files) != len(self.files)
+                    self.files = files
+                    return [("units", self.step_id, len(files), "files")] if changed else []
+                if self.files is not None:
+                    return []
                 return [("units", self.step_id, n, "tests")]
             return []
         if kind != "test":
@@ -2930,7 +2981,15 @@ class PytestParser(Parser):
         if m.get("late"):
             self.errors += 1
             events = []
-            idx = self.index.get(m.get("id"))
+            fname = self._file_of(m.get("id"))
+            if self.files is not None:
+                if fname in self.file_cell:
+                    events.append(("unit_fix", self.step_id, self.file_cell[fname], "fail"))
+                elif fname in self.files:
+                    self._file_note(fname, "error")
+                idx = None
+            else:
+                idx = self.index.get(m.get("id"))
             if idx is not None:
                 events.append(("unit_fix", self.step_id, idx, "fail"))
             events.append(self._tests_event())
@@ -2946,7 +3005,31 @@ class PytestParser(Parser):
             self.errors += 1
         elif unit == "skip":
             self.skipped += 1
+        if self.files is not None:
+            events = [self._tests_event()]
+            fname = self._file_of(m.get("id"))
+            if fname in self.files:
+                self._file_note(fname, outcome)
+                self.file_seen[fname] = self.file_seen.get(fname, 0) + 1
+                if self.file_seen[fname] >= self.files[fname] and fname not in self.file_cell:
+                    state = self.file_state[fname]
+                    self.file_cell[fname] = self.files_done
+                    self.files_done += 1
+                    events.insert(0, ("unit", self.step_id, self.files_done,
+                                      "fail" if state[0] else "skip" if state[1] else "pass"))
+            return events
         return [("unit", self.step_id, self.done, unit), self._tests_event()]
+
+    @staticmethod
+    def _file_of(node_id):
+        return str(node_id).split("::", 1)[0][:400]
+
+    def _file_note(self, fname, outcome):
+        state = self.file_state.setdefault(fname, [False, True])
+        if outcome in ("failed", "error"):
+            state[0] = True
+        if self.OUTCOME.get(outcome) != "skip":
+            state[1] = False
 
     def _set_n(self, n):
         if n == self.n:

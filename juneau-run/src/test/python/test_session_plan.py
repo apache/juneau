@@ -90,7 +90,7 @@ class BoardPlanTest(unittest.TestCase):
 
     def test_pending_plan(self):
         o = self.board().overall()
-        self.assertEqual((o.remaining, o.done, o.total, o.percent), (200, 0, 3, 0))
+        self.assertEqual((o.remaining, o.done, o.total, o.percent), (195, 0, 3, 0))
 
     def test_finished_and_running(self):
         b = self.board()
@@ -98,13 +98,13 @@ class BoardPlanTest(unittest.TestCase):
         b.apply(*end("a")); b.apply(*start("b")); self.clock.advance(30)
         o = b.overall()
         self.assertEqual(o.done, 1)
-        self.assertEqual(o.remaining, 70 + 40)       # b: 100 - 30, c: 40
+        self.assertEqual(o.remaining, 120)       # b: 100 - 30, c: 40 = 110, shown on the 15s step
 
     def test_skipped_planned_step_stops_counting(self):
         b = self.board()
         b.apply(*start("a")); b.apply(*end("a", "skip"))
         o = b.overall()
-        self.assertEqual((o.total, o.done, o.remaining), (2, 0, 140))
+        self.assertEqual((o.total, o.done, o.remaining), (2, 0, 135))       # 140 on the 15s step
 
     def test_pending_step_passed_over_stops_counting(self):
         b = self.board()
@@ -117,7 +117,7 @@ class BoardPlanTest(unittest.TestCase):
         b = self.board()
         b.apply(*start("x")); self.clock.advance(50); b.apply(*end("x"))
         o = b.overall()
-        self.assertEqual(o.remaining, 200)
+        self.assertEqual(o.remaining, 195)       # 200 on the 15s step
         self.assertEqual(o.percent, 20)               # 50 / (50 + 200)
 
     def test_missing_history_is_a_lower_bound(self):
@@ -143,7 +143,7 @@ class BoardPlanTest(unittest.TestCase):
         r.units_total, r.units_done = 10, 5
         self.clock.advance(30)                      # 5 of 10 units in 30s: ~60s total, 30s left
         o = b.overall()
-        self.assertEqual(o.remaining, 30 + 100 + 40)
+        self.assertEqual(o.remaining, 165)       # 170 on the 15s step
 
     def test_overrun_with_nothing_else_known_has_no_left_time(self):
         b = self.board(plan=("a",), hist={"a": 10.0})

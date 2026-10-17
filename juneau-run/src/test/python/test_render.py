@@ -575,7 +575,7 @@ class RowEstimateTest(unittest.TestCase):
         b.apply("unit", dict(step="s", done=26, outcome="pass"))
         cells, rest, elapsed = self.cells(b)
         self.assertIn("26/100  26%", rest)
-        self.assertEqual(elapsed, "0:26 / ~1:40")
+        self.assertEqual(elapsed, "0:26 / ~1:45")
 
     def test_finished_row_shows_elapsed_only(self):
         b = self.board(lambda step, tool, sig=None: self.est)
@@ -603,17 +603,17 @@ class RowEstimateTest(unittest.TestCase):
         cells, rest, elapsed = self.cells(b)
         label = b.rows["s"].label.ljust(b.width())
         wide = jr._fit_row(label, cells, rest, elapsed, 80)
-        self.assertTrue(wide.endswith("0:26 / ~1:40"))
+        self.assertTrue(wide.endswith("0:26 / ~1:45"))
         narrow = jr._fit_row(label, cells, rest, elapsed, len(label) + len(rest) + 8)
         self.assertTrue(narrow.endswith("0:26"), narrow)
-        self.assertNotIn("~1:40", narrow)
+        self.assertNotIn("~1:45", narrow)
 
     def test_marked_when_history_driven(self):
         b = self.board(lambda step, tool, sig=None: jr.Estimate(wall_s=100.0, units=None, rate=None, runs=5))
         self.clock.advance(63)
         cells, rest, elapsed = self.cells(b)
         self.assertEqual(rest, "~63%")
-        self.assertEqual(elapsed, "1:03 / ~1:40")
+        self.assertEqual(elapsed, "1:03 / ~1:45")
 
     def test_no_estimator_matches_today(self):
         for estimator in (None, lambda step, tool, sig=None: None):
@@ -1406,6 +1406,69 @@ class RobustnessTest(unittest.TestCase):
             self.assertIs(signal.getsignal(signal.SIGTERM), jr._sigterm)
             jr._end_session()
         self.assertEqual(signal.getsignal(signal.SIGTERM), signal.SIG_DFL)
+
+
+class WrapAndExpectedTest(unittest.TestCase):
+    """Equal-width continuation lines and the expected test total."""
+
+    def test_every_line_of_a_wrapped_bar_holds_the_same_number_of_cells(self):
+        line = jr._fit_row("Tests", ["#"] * 50, "50/50", "0:05", 40, wrap=True)
+        lines = line.split("\n")
+        counts = [l.count("#") for l in lines]
+        self.assertGreater(len(lines), 2)
+        self.assertEqual(len(set(counts[:-1])), 1, counts)
+        self.assertLessEqual(counts[-1], counts[0])
+        self.assertEqual(sum(counts), 50)
+
+    def test_expected_total_shows_until_the_count_passes_it(self):
+        self.assertEqual(jr.fmt_totals((41200, 0, 0, 0), expected=83000), "41,200 / ~83,000 tests")
+        self.assertEqual(jr.fmt_totals((83051, 0, 0, 0), expected=83000), "83,051 tests")
+        self.assertEqual(jr.fmt_totals((5, 2, 0, 0), expected=None), "5 tests, 2 failed")
+
+    def test_running_row_shows_expected_tests_and_finished_row_drops_it(self):
+        reset_run_state()
+        self.addCleanup(reset_run_state)
+        clock = Clock()
+        est = jr.Estimate(wall_s=100.0, units=None, rate=None, runs=5, tests=1000)
+        b = jr.Board("actionable", nested=False, full_log=None, clock=clock, estimator=lambda *a: est)
+        b.apply("step_start", dict(id="s", n=1, title="py", parent=None, tool="pytest", sig=""))
+        b.apply("tests", dict(step="s", total=400, fail=0, err=0, skip=0))
+        clock.advance(2)
+        self.assertIn("400 / ~1,000 tests", jr.row_cells(b.rows["s"], jr.PLAIN_GLYPHS, clock())[1])
+        b.apply("step_end", dict(id="s", status="ok", ms=3000))
+        self.assertNotIn("~1,000", jr.row_cells(b.rows["s"], jr.PLAIN_GLYPHS, clock())[1])
+
+    def test_no_history_means_no_expected_total(self):
+        reset_run_state()
+        self.addCleanup(reset_run_state)
+        clock = Clock()
+        b = jr.Board("actionable", nested=False, full_log=None, clock=clock, estimator=lambda *a: None)
+        b.apply("step_start", dict(id="s", n=1, title="py", parent=None, tool="pytest", sig=""))
+        b.apply("tests", dict(step="s", total=400, fail=0, err=0, skip=0))
+        clock.advance(2)
+        self.assertEqual(jr.row_cells(b.rows["s"], jr.PLAIN_GLYPHS, clock())[1], "400 tests")
+
+
+class DampedEstimateTest(unittest.TestCase):
+    def test_rounding_steps(self):
+        self.assertEqual(jr.round_estimate(32), 30)
+        self.assertEqual(jr.round_estimate(100), 105)
+        self.assertEqual(jr.round_estimate(700), 690)
+        self.assertEqual(jr.round_estimate(1000), 990)
+
+    def test_a_rounded_total_stays_above_elapsed(self):
+        self.assertGreater(jr.round_estimate(31, floor=30), 30)
+
+    def test_small_changes_keep_the_shown_total(self):
+        self.assertEqual(jr.damp_total(472, 480, 100), 472)
+        self.assertEqual(jr.damp_total(472, 472 + 47, 100), 472)       # within 10%
+        self.assertEqual(jr.damp_total(40, 54, 10), 40)                # within 15s
+
+    def test_a_large_change_or_an_overrun_moves_it(self):
+        self.assertEqual(jr.damp_total(472, 600, 100), 600)
+        self.assertEqual(jr.damp_total(100, 105, 100), 105)            # elapsed reached the shown total
+        self.assertIsNone(jr.damp_total(100, None, 10))
+        self.assertEqual(jr.damp_total(None, 472, 10), 465)
 
 
 if __name__ == "__main__":
