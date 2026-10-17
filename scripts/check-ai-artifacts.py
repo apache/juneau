@@ -13,10 +13,17 @@
 # ***************************************************************************************************************************
 """
 Checks AI artifacts freshness (including static/llms.txt) and source drift signals.
+
+Usage:
+    python3 scripts/check-ai-artifacts.py [--docs-root DIR] [--juneau-root DIR]
+
+--juneau-root defaults to the sibling ../juneau checkout next to the docs root.
+Pass it explicitly for worktrees or other layouts.
 """
 
 from __future__ import annotations
 
+import argparse
 import json
 import re
 import subprocess
@@ -28,9 +35,12 @@ def run(cmd: list[str], cwd: Path) -> subprocess.CompletedProcess[str]:
     return subprocess.run(cmd, cwd=cwd, text=True, capture_output=True)
 
 
-def check_ai_artifact_freshness(docs_root: Path) -> list[str]:
+def check_ai_artifact_freshness(docs_root: Path, juneau_root: Path) -> list[str]:
     result = run(
-        [sys.executable, "scripts/generate-ai-artifacts.py", "--check", "--docs-root", str(docs_root)],
+        [
+            sys.executable, "scripts/generate-ai-artifacts.py", "--check",
+            "--docs-root", str(docs_root), "--juneau-root", str(juneau_root),
+        ],
         docs_root,
     )
     if result.returncode == 0:
@@ -106,14 +116,28 @@ def resolve_current_release(juneau_root: Path) -> str:
     return result.stdout.strip()
 
 
-def main() -> int:
+def parse_args() -> argparse.Namespace:
     script_dir = Path(__file__).resolve().parent
-    docs_root = script_dir.parent
-    juneau_root = (docs_root.parent / "juneau").resolve()
+    parser = argparse.ArgumentParser(description="Check Juneau docs AI artifacts.")
+    parser.add_argument("--docs-root", type=Path, default=script_dir.parent,
+                        help="juneau-docs checkout root (default: parent of this script's folder)")
+    parser.add_argument("--juneau-root", type=Path, default=None,
+                        help="Juneau source checkout (default: sibling ../juneau)")
+    return parser.parse_args()
+
+
+def main() -> int:
+    args = parse_args()
+    docs_root = args.docs_root.resolve()
+    juneau_root = (args.juneau_root or docs_root.parent / "juneau").resolve()
+    if not (juneau_root / "scripts" / "current-release.py").is_file():
+        print(f"ERROR: Juneau checkout not found at {juneau_root} (missing scripts/current-release.py).")
+        print("Pass --juneau-root /path/to/juneau to specify it explicitly.")
+        return 1
 
     release = resolve_current_release(juneau_root)
     errors: list[str] = []
-    errors.extend(check_ai_artifact_freshness(docs_root))
+    errors.extend(check_ai_artifact_freshness(docs_root, juneau_root))
     errors.extend(check_manifest_shape(docs_root))
     errors.extend(check_llms_txt_shape(docs_root))
     errors.extend(check_readme_version(docs_root, release))

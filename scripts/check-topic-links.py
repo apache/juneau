@@ -19,8 +19,15 @@ This script:
 2. Extracts slug names and titles from the frontmatter
 3. Scans the entire source tree for links to https://juneau.apache.org/docs/topics/SLUG">TITLE</a>
 4. Reports any mismatches between expected and actual slug/title combinations
+
+Usage:
+    python3 scripts/check-topic-links.py [--docs-root DIR] [--juneau-root DIR]
+
+--juneau-root defaults to a sibling ../master checkout, then ../juneau, next to
+the docs root.  Pass it explicitly for worktrees or other layouts.
 """
 
+import argparse
 import os
 import re
 import sys
@@ -149,48 +156,58 @@ def check_links(links, topics):
     
     return warnings
 
-def find_master_branch_sibling(script_dir):
+def find_juneau_root(docs_dir, juneau_root_arg):
     """
-    Find the master branch sibling folder.
-    
-    The docs branch and master branch should be sibling folders:
-    - /git/apache/juneau/docs/
-    - /git/apache/juneau/master/
-    
+    Resolve the Juneau source checkout to scan for topic links.
+
+    Order: --juneau-root, then the legacy sibling layout (../master next to the
+    docs folder), then ../juneau next to the docs folder.
+
     Args:
-        script_dir: Path to the scripts directory (should be in docs/scripts)
-        
+        docs_dir: Path to the docs checkout root
+        juneau_root_arg: Path from --juneau-root, or None
+
     Returns:
-        Path to the master branch folder
-        
+        Path to the Juneau source checkout
+
     Raises:
-        SystemExit: If the master branch sibling folder doesn't exist
+        SystemExit: If no valid checkout can be found
     """
-    # Get the parent of the docs folder (should be /git/apache/juneau/)
-    docs_dir = script_dir.parent  # docs/
-    parent_dir = docs_dir.parent  # /git/apache/juneau/
-    master_dir = parent_dir / 'master'
-    
-    if not master_dir.exists():
-        print(f"ERROR: Master branch sibling folder not found at {master_dir}")
-        print(f"Expected structure:")
-        print(f"  {parent_dir}/docs/  (current)")
-        print(f"  {parent_dir}/master/  (missing)")
-        print("\nPlease ensure the master branch is cloned as a sibling folder.")
-        sys.exit(1)
-    
-    if not (master_dir / '.git').exists():
-        print(f"ERROR: {master_dir} exists but is not a git repository")
-        sys.exit(1)
-    
-    return master_dir
+    if juneau_root_arg is not None:
+        juneau_root = juneau_root_arg.resolve()
+        if not juneau_root.is_dir():
+            print(f"ERROR: --juneau-root {juneau_root} is not a directory")
+            sys.exit(1)
+        return juneau_root
+
+    parent_dir = docs_dir.parent
+    candidates = [parent_dir / 'master', parent_dir / 'juneau']
+    for candidate in candidates:
+        if candidate.is_dir() and (candidate / '.git').exists():
+            return candidate
+
+    print("ERROR: Could not locate the Juneau source checkout.")
+    print("Looked for:")
+    for candidate in candidates:
+        print(f"  {candidate}")
+    print("\nPass --juneau-root /path/to/juneau to specify it explicitly.")
+    sys.exit(1)
+
+
+def parse_args():
+    script_dir = Path(__file__).resolve().parent
+    parser = argparse.ArgumentParser(description="Check Juneau topic links against the docs topic pages.")
+    parser.add_argument("--docs-root", type=Path, default=script_dir.parent,
+                        help="juneau-docs checkout root (default: parent of this script's folder)")
+    parser.add_argument("--juneau-root", type=Path, default=None,
+                        help="Juneau source checkout to scan (default: sibling ../master, then ../juneau)")
+    return parser.parse_args()
 
 
 def main():
-    # Get the script directory (should be in docs/scripts)
-    script_dir = Path(__file__).parent
-    docs_dir = script_dir.parent  # docs/
-    master_root = find_master_branch_sibling(script_dir)
+    args = parse_args()
+    docs_dir = args.docs_root.resolve()
+    master_root = find_juneau_root(docs_dir, args.juneau_root)
     
     print("Juneau Topic Link Checker")
     print("=" * 50)
