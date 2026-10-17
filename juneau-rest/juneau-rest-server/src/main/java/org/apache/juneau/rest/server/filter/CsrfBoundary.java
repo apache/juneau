@@ -18,6 +18,7 @@ package org.apache.juneau.rest.server.filter;
 
 import static org.apache.juneau.commons.utils.Shorts.*;
 
+import java.net.*;
 import java.util.*;
 import java.util.concurrent.atomic.*;
 import java.util.function.*;
@@ -65,6 +66,11 @@ import jakarta.servlet.http.*;
  * 	<tr><td>Own origin</td><td>Unsafe requests</td>
  * 		<td>{@code Host} (on HTTP/2, {@code :authority}) is absent, repeated, or not a host with an optional port</td>
  * 		<td>{@code HOST_MISSING}, {@code HOST_MALFORMED}</td><td>400</td></tr>
+ * 	<tr><td>Peer</td><td>Unsafe requests, and safe ones when {@code allowedHosts} is set, when
+ * 		{@link Builder#trustedProxies(String...)} is set</td>
+ * 		<td>The peer is not in the allow-list and the request carries a forwarded host in the selected family; without
+ * 		one, the request is judged on the container's own view instead</td>
+ * 		<td>{@code FORWARDED_PEER_NOT_TRUSTED}</td><td>403</td></tr>
  * 	<tr><td>Forwarded origin</td><td>Unsafe requests, and safe ones when {@code allowedHosts} is set, when
  * 		{@link Builder#trustedForwarding(ForwardedSource)} is on</td>
  * 		<td>The forwarded host or proto is missing, malformed, or has fewer or unequal entries than the trusted hop count;
@@ -149,6 +155,14 @@ import jakarta.servlet.http.*;
  * 		{@link OriginSource#HOST_HEADER} and on handshakes, a container host that equals an entry left of the selected
  * 		one is refused too, because the container trusted a hop the client could have written.
  * 	<li>A handshake is judged only through {@link #checkHandshake(String, HandshakeHosts, Map)}.
+ * 	<li>To believe the headers only from your proxy's own address, add {@link Builder#trustedProxies(String...)}.  A
+ * 		request from another peer that carries a forwarded host is refused ({@code FORWARDED_PEER_NOT_TRUSTED}); one
+ * 		that does not is judged on the container's view.  It needs a container that reports the TCP peer (no
+ * 		{@code RemoteIpValve}, {@code ForwardedRequestCustomizer} or PROXY protocol).  A handshake's peer comes from
+ * 		{@link #checkHandshake(String, HandshakeHosts, Map, java.net.InetAddress)}: Jetty supplies it, Tomcat does not,
+ * 		so on Tomcat a handshake that carries a forwarded host is refused while the list is set.  Only the peer is
+ * 		checked: the allow-list does not walk {@code X-Forwarded-For} or {@code for=}, so a trusted proxy that appends
+ * 		behind another untrusted tier is still believed for what it wrote.
  * </ul>
  *
  * <h5 class='section'>HTTP/2 and {@code :authority}</h5>
@@ -184,8 +198,9 @@ import jakarta.servlet.http.*;
  * 		cookie attributes.
  * 	<li><b>Script running inside the page</b> (XSS, a malicious extension) passes every check.
  * 	<li><b>HTML form POSTs</b> and {@code Referer} checking.
- * 	<li><b>Telling a trustworthy proxy from a client</b> (a peer-address allow-list).  See
- * 		{@link Builder#trustedForwarding(ForwardedSource)}.
+ * 	<li><b>Telling a trustworthy proxy from a client by anything but its address.</b>  The optional allow-list of
+ * 		{@link Builder#trustedProxies(String...)} checks the peer address and nothing more: it does not authenticate
+ * 		the proxy, and a client behind a listed address (a shared NAT, a sidecar) is believed too.
  * </ul>
  *
  * <h5 class='section'>What an application must do</h5>
@@ -201,8 +216,8 @@ import jakarta.servlet.http.*;
  * A rejection message names the header at fault and the kind of value expected.  It never echoes a value the request
  * presented, never prints this server's own origin, and never reveals whether a session exists.  Each refusal is
  * logged at {@code FINE} without the query string, the token header, {@code Cookie} or {@code Authorization}; the raw
- * {@code Origin} and {@code Host} appear only at {@code FINEST}, stripped of control characters and truncated.  Three
- * misconfiguration patterns are logged once per process at {@code WARNING}: a scheme-only mismatch, a port-only
+ * {@code Origin} and {@code Host} (and, for a {@code FORWARDED_*} refusal, the forwarded headers) appear only at
+ * {@code FINEST}, stripped of control characters and truncated.  Three misconfiguration patterns are logged once per process at {@code WARNING}: a scheme-only mismatch, a port-only
  * mismatch, and repeated missing tokens from the application's own origin.
  *
  * <h5 class='section'>Example:</h5>
@@ -308,6 +323,7 @@ public class CsrfBoundary implements RequestBoundary {
 	private final boolean createSessions;
 	private final ForwardedSource trustedForwarding;
 	private final int trustedHops;
+	private final PeerRanges trustedProxies;
 
 	/**
 	 * Constructor.
@@ -325,6 +341,7 @@ public class CsrfBoundary implements RequestBoundary {
 		this.createSessions = builder.createSessions;
 		this.trustedForwarding = builder.trustedForwarding;
 		this.trustedHops = builder.trustedHops;
+		this.trustedProxies = builder.trustedProxies;
 	}
 
 	/**
@@ -357,10 +374,18 @@ public class CsrfBoundary implements RequestBoundary {
 			// Judged only where the own origin is needed, so a direct health probe still passes.
 			if (MethodSafety.isSafe(method) && allowedHosts.isEmpty())
 				return BoundaryResult.ALLOWED;
-			var forwarded = forwardedSelf(req, method, hosts);
-			if (forwarded.refusal() != null)
-				return forwarded.refusal();
-			self = forwarded.origin();
+			if (trustedProxies != null && ! trustedProxies.contains(req.getRemoteAddr())) {
+				// Not a proxy we trust: a forwarded host from it is refused, anything else is judged as if forwarding were off.
+				if (ForwardedOrigin.claimsHost(trustedForwarding, name -> forwardedLines(req, name)))
+					return refuse(req, method, BoundaryReason.FORWARDED_PEER_NOT_TRUSTED, 403,
+						forwardedMessage(BoundaryReason.FORWARDED_PEER_NOT_TRUSTED));
+				self = hosts.size() == 1 ? selfOrigin(req, BoundaryChecks.parseHost(hosts.get(0))) : null;
+			} else {
+				var forwarded = forwardedSelf(req, method, hosts);
+				if (forwarded.refusal() != null)
+					return forwarded.refusal();
+				self = forwarded.origin();
+			}
 		}
 
 		// The rebinding control runs on every request: a read is as exfiltratable as a write.
@@ -502,7 +527,7 @@ public class CsrfBoundary implements RequestBoundary {
 		reqnn("hosts", hosts);
 		reqnn("origins", origins);
 		reqnn("fetchSites", fetchSites);
-		return handshake(scheme, hosts, origins, fetchSites, null);
+		return handshake(scheme, hosts, origins, fetchSites, null, null);
 	}
 
 	/**
@@ -522,9 +547,29 @@ public class CsrfBoundary implements RequestBoundary {
 	 * 	handshake presented.
 	 */
 	public BoundaryResult checkHandshake(String scheme, HandshakeHosts hosts, Map<String,List<String>> headers) {
+		return checkHandshake(scheme, hosts, headers, null);
+	}
+
+	/**
+	 * Applies this boundary to a WebSocket handshake whose peer address the container reported.
+	 *
+	 * <p>
+	 * As {@link #checkHandshake(String, HandshakeHosts, Map)}, plus the peer allow-list of
+	 * {@link Builder#trustedProxies(String...)}: when it is set, the forwarded headers are believed only from a peer on
+	 * it.  The Jakarta WebSocket API has no peer address; a container that supplies none (Tomcat) passes <jk>null</jk>,
+	 * which is never on the list.  A <jk>null</jk> peer is not looked at when the list is not set.
+	 *
+	 * @param scheme The scheme of the handshake's request URI.  Can be <jk>null</jk>, which is refused.
+	 * @param hosts The handshake's {@code Host} values.  Must not be <jk>null</jk>.
+	 * @param headers The handshake's headers.  Can be <jk>null</jk>, which is empty.
+	 * @param peer The address of the TCP peer, or <jk>null</jk> when the container did not report it.
+	 * @return {@link BoundaryResult#ALLOWED}, or the first rejection.  A rejection message never echoes a value the
+	 * 	handshake presented.
+	 */
+	public BoundaryResult checkHandshake(String scheme, HandshakeHosts hosts, Map<String,List<String>> headers, InetAddress peer) {
 		reqnn("hosts", hosts);
 		Function<String,List<String>> lookup = name -> handshakeHeader(headers, name);
-		return handshake(scheme, hosts, handshakeHeader(headers, "Origin"), handshakeHeader(headers, "Sec-Fetch-Site"), lookup);
+		return handshake(scheme, hosts, handshakeHeader(headers, "Origin"), handshakeHeader(headers, "Sec-Fetch-Site"), lookup, peer);
 	}
 
 	/**
@@ -552,57 +597,64 @@ public class CsrfBoundary implements RequestBoundary {
 	}
 
 	private BoundaryResult handshake(String scheme, HandshakeHosts hosts, List<String> origins, List<String> fetchSites,
-			Function<String,List<String>> forwardedHeaders) {
+			Function<String,List<String>> forwardedHeaders, InetAddress peer) {
 		var values = hosts.values();
 		var host = values.size() == 1 ? BoundaryChecks.parseHost(values.get(0)) : null;
 		if (host == null) {
 			if (values.isEmpty())
 				return refuseHandshake(BoundaryReason.HOST_MISSING, 400,
-					"A WebSocket handshake must carry a 'Host' header (or, over HTTP/2, ':authority').", hosts, origins);
+					"A WebSocket handshake must carry a 'Host' header (or, over HTTP/2, ':authority').", hosts, origins, forwardedHeaders, peer);
 			return refuseHandshake(BoundaryReason.HOST_MALFORMED, 400,
 				"Handshake 'Host' must be a single header holding a host name, IPv4 address or bracketed IPv6 address, "
-				+ "with an optional port.", hosts, origins);
+				+ "with an optional port.", hosts, origins, forwardedHeaders, peer);
 		}
 
 		var ownScheme = BoundaryChecks.handshakeScheme(scheme);
 		if (ownScheme == null)
 			return refuseHandshake(BoundaryReason.ORIGIN_MISMATCH, 403,
-				"The WebSocket handshake's own scheme could not be determined, so its 'Origin' cannot be checked.", hosts, origins);
+				"The WebSocket handshake's own scheme could not be determined, so its 'Origin' cannot be checked.", hosts, origins, forwardedHeaders, peer);
 
 		var self = new Origin(ownScheme, host.host(), host.port() >= 0 ? host.port() : BoundaryChecks.defaultPort(ownScheme));
 		if (trustedForwarding != ForwardedSource.NONE) {
-			// With no header access (the list-based forms) the forwarded host is missing, never guessed.
-			var resolved = forwardedHeaders == null
-				? new ForwardedOrigin.Resolved(null, List.of(), false, BoundaryReason.FORWARDED_HOST_MISSING)
-				: ForwardedOrigin.resolve(trustedForwarding, trustedHops, forwardedHeaders);
-			if (resolved.reason() != null)
-				return refuseHandshake(resolved.reason(), 403, forwardedMessage(resolved.reason()), hosts, origins);
-			if (containerDisagrees(self, resolved))
-				return refuseHandshake(BoundaryReason.FORWARDED_CONTAINER_MISMATCH, 403,
-					forwardedMessage(BoundaryReason.FORWARDED_CONTAINER_MISMATCH), hosts, origins);
-			self = resolved.origin();
+			// The list-based forms have no header access, so they refuse below before any peer logic.
+			var untrusted = forwardedHeaders != null && trustedProxies != null && ! trustedProxies.contains(peer);
+			if (untrusted && ForwardedOrigin.claimsHost(trustedForwarding, forwardedHeaders))
+				return refuseHandshake(BoundaryReason.FORWARDED_PEER_NOT_TRUSTED, 403,
+					forwardedMessage(BoundaryReason.FORWARDED_PEER_NOT_TRUSTED), hosts, origins, forwardedHeaders, peer);
+			if (! untrusted) {
+				// With no header access (the list-based forms) the forwarded host is missing, never guessed.
+				var resolved = forwardedHeaders == null
+					? new ForwardedOrigin.Resolved(null, List.of(), false, BoundaryReason.FORWARDED_HOST_MISSING)
+					: ForwardedOrigin.resolve(trustedForwarding, trustedHops, forwardedHeaders);
+				if (resolved.reason() != null)
+					return refuseHandshake(resolved.reason(), 403, forwardedMessage(resolved.reason()), hosts, origins, forwardedHeaders, peer);
+				if (containerDisagrees(self, resolved))
+					return refuseHandshake(BoundaryReason.FORWARDED_CONTAINER_MISMATCH, 403,
+						forwardedMessage(BoundaryReason.FORWARDED_CONTAINER_MISMATCH), hosts, origins, forwardedHeaders, peer);
+				self = resolved.origin();
+			}
 		}
 
 		if (! allowedHosts.isEmpty() && ! allowedHosts.contains(self.host()))
 			return refuseHandshake(BoundaryReason.HOST_NOT_ALLOWED, 421,
-				"Handshake 'Host' is not a host name this server answers to.", hosts, origins);
+				"Handshake 'Host' is not a host name this server answers to.", hosts, origins, forwardedHeaders, peer);
 
 		if (origins.isEmpty())
-			return refuseHandshake(BoundaryReason.ORIGIN_MISSING, 403, "A WebSocket handshake must carry an 'Origin' header.", hosts, origins);
+			return refuseHandshake(BoundaryReason.ORIGIN_MISSING, 403, "A WebSocket handshake must carry an 'Origin' header.", hosts, origins, forwardedHeaders, peer);
 		if (origins.size() == 1 && "null".equalsIgnoreCase(origins.get(0)))
 			return refuseHandshake(BoundaryReason.ORIGIN_NULL, 403,
-				"A WebSocket handshake must not carry an opaque 'null' value in 'Origin'.", hosts, origins);
+				"A WebSocket handshake must not carry an opaque 'null' value in 'Origin'.", hosts, origins, forwardedHeaders, peer);
 		var parsed = origins.size() == 1 ? BoundaryChecks.parseOrigin(origins.get(0)) : null;
 		if (parsed == null || ! parsed.equals(self)) {
 			if (parsed != null)
 				warnNearMiss(parsed, self);
 			return refuseHandshake(BoundaryReason.ORIGIN_MISMATCH, 403,
-				"Handshake 'Origin' must be a single header naming this server's own origin.", hosts, origins);
+				"Handshake 'Origin' must be a single header naming this server's own origin.", hosts, origins, forwardedHeaders, peer);
 		}
 
 		if (! fetchSites.isEmpty() && ! isSameOriginFetch(fetchSites))
 			return refuseHandshake(BoundaryReason.FETCH_SITE_NOT_SAME_ORIGIN, 403,
-				"Handshake 'Sec-Fetch-Site' must be a single 'same-origin' value when present.", hosts, origins);
+				"Handshake 'Sec-Fetch-Site' must be a single 'same-origin' value when present.", hosts, origins, forwardedHeaders, peer);
 
 		return BoundaryResult.ALLOWED;
 	}
@@ -644,6 +696,7 @@ public class CsrfBoundary implements RequestBoundary {
 			case FORWARDED_HOPS_INSUFFICIENT -> "The forwarded header holds fewer entries than the trusted hop count.";
 			case FORWARDED_HOPS_MISMATCH -> "The forwarded host and proto headers hold different numbers of entries.";
 			case FORWARDED_CONTAINER_MISMATCH -> "The container's view of the request disagrees with the forwarded origin.";
+			case FORWARDED_PEER_NOT_TRUSTED -> "The forwarded header was sent by a peer that is not a trusted proxy.";
 			default -> throw iaex("Not a forwarded-host reason: {0}", reason);
 		};
 	}
@@ -669,13 +722,28 @@ public class CsrfBoundary implements RequestBoundary {
 	}
 
 	/** Logs a refused handshake and builds its result.  {@code message} must be a fixed text, as for {@code refuse}. */
-	private static BoundaryResult refuseHandshake(BoundaryReason reason, int status, String message, HandshakeHosts hosts, List<String> origins) {
-		LOG.fine(() -> "CSRF boundary refused a WebSocket handshake: reason=" + reason);
+	private static BoundaryResult refuseHandshake(BoundaryReason reason, int status, String message, HandshakeHosts hosts, List<String> origins,
+			Function<String,List<String>> forwardedHeaders, InetAddress peer) {
+		LOG.fine(() -> "CSRF boundary refused a WebSocket handshake: reason=" + reason
+			+ ", peer=" + (peer == null ? "unknown" : sanitize(peer.getHostAddress())));
 		if (LOG.isLoggable(Level.FINEST))
 			LOG.finest("CSRF boundary refused a WebSocket handshake: reason=" + reason
 				+ ", Origin=" + sanitize(String.join(", ", origins))
-				+ ", Host=" + (hosts.synthesised() ? "(h2 :authority) " : "") + sanitize(String.join(", ", hosts.values())));
+				+ ", Host=" + (hosts.synthesised() ? "(h2 :authority) " : "") + sanitize(String.join(", ", hosts.values()))
+				+ (forwardedHeaders == null || ! reason.name().startsWith("FORWARDED_") ? "" : ", " + forwardedValues(forwardedHeaders)));
 		return new BoundaryResult(reason, status, message);
+	}
+
+	/** The forwarded header values of a request, as one sanitized log fragment; a name read as {@code null} is shown as such. */
+	private static String forwardedValues(Function<String,List<String>> lookup) {
+		var sb = new StringBuilder();
+		for (var name : new String[] { "X-Forwarded-Host", "X-Forwarded-Proto", "Forwarded" }) {
+			var lines = lookup.apply(name);
+			if (sb.length() > 0)
+				sb.append(", ");
+			sb.append(name).append('=').append(lines == null ? "(unordered)" : sanitize(String.join(" | ", lines)));
+		}
+		return sb.toString();
 	}
 
 	/** The token and JSON checks for a request that came from a page, or that the policy holds to a page's rules. */
@@ -780,7 +848,8 @@ public class CsrfBoundary implements RequestBoundary {
 			LOG.finest("CSRF boundary refused a request: reason=" + reason
 				+ ", Origin=" + sanitize(String.join(", ", BoundaryChecks.headerValues(req, "Origin")))
 				+ ", Host=" + (BoundaryChecks.isSynthesisedHost(req) ? "(h2 :authority) " : "")
-				+ sanitize(String.join(", ", BoundaryChecks.hostValues(req))));
+				+ sanitize(String.join(", ", BoundaryChecks.hostValues(req)))
+				+ (reason.name().startsWith("FORWARDED_") ? ", " + forwardedValues(name -> forwardedLines(req, name)) : ""));
 		return new BoundaryResult(reason, status, message);
 	}
 
@@ -888,6 +957,14 @@ public class CsrfBoundary implements RequestBoundary {
 	public int trustedHops() { return trustedHops; }
 
 	/**
+	 * The peer address ranges whose forwarded headers are believed.
+	 *
+	 * @return An unmodifiable list of normalized ranges (masked, {@code address/prefix}); empty when the setting is
+	 * 	off.
+	 */
+	public List<String> trustedProxies() { return trustedProxies == null ? List.of() : trustedProxies.texts(); }
+
+	/**
 	 * Whether every admitted unsafe request must carry a single {@code application/json} content type.
 	 *
 	 * @return <jk>true</jk> if JSON is required.
@@ -918,7 +995,8 @@ public class CsrfBoundary implements RequestBoundary {
 	public String toString() {
 		return "CsrfBoundary(tokens=" + tokens + ", nonBrowser=" + nonBrowser + ", originSource=" + originSource
 			+ ", requireJson=" + requireJson + ", allowedHosts=" + new TreeSet<>(allowedHosts) + ", csrfHeader=" + csrfHeader
-			+ ", createSessions=" + createSessions + ", trustedForwarding=" + trustedForwarding + ", trustedHops=" + trustedHops + ")";
+			+ ", createSessions=" + createSessions + ", trustedForwarding=" + trustedForwarding + ", trustedHops=" + trustedHops
+			+ ", trustedProxies=" + trustedProxies() + ")";
 	}
 
 	/**
@@ -935,6 +1013,7 @@ public class CsrfBoundary implements RequestBoundary {
 		boolean createSessions = true;
 		ForwardedSource trustedForwarding = ForwardedSource.NONE;
 		int trustedHops = 1;
+		PeerRanges trustedProxies;
 
 		/**
 		 * Constructor.
@@ -1058,6 +1137,7 @@ public class CsrfBoundary implements RequestBoundary {
 		 * <p>
 		 * <b>Turn this on only if every request reaches the server through a proxy that removes or appends after any
 		 * client-supplied copy of the header.</b>  A server clients can reach directly lets them choose the origin.
+		 * See also {@link #trustedProxies(String...)} to believe only a listed peer address.
 		 *
 		 * @param value The source.  Must not be <jk>null</jk>.  Defaults to {@link ForwardedSource#NONE}.
 		 * @return This object.
@@ -1088,14 +1168,51 @@ public class CsrfBoundary implements RequestBoundary {
 		}
 
 		/**
+		 * Believes the forwarded headers only from peers in these address ranges.
+		 *
+		 * <p>
+		 * Without this, {@link #trustedForwarding(ForwardedSource)} believes the forwarded headers from whoever sends
+		 * them.  With it, the peer address the container reports (HTTP: {@link HttpServletRequest#getRemoteAddr()}) must
+		 * be in a range.  A request from another peer that carries a forwarded host in the selected family is refused
+		 * ({@code FORWARDED_PEER_NOT_TRUSTED}); one that does not is judged on the container's own view, as if forwarding
+		 * were off.  A peer that cannot be parsed, or that the container did not report, is not trusted.
+		 *
+		 * <p>
+		 * Each entry is an IPv4 or IPv6 literal with an optional {@code /prefix}.  Host bits are masked
+		 * ({@code 10.0.0.1/8} is {@code 10.0.0.0/8}); {@code /0} trusts every peer of its family.  Names are never
+		 * resolved, and a bracketed form, a zone id or an IPv4-mapped IPv6 form is refused (write the IPv4 form).  An IPv4-mapped IPv6 peer
+		 * is matched as the IPv4 address it carries.
+		 *
+		 * <p>
+		 * Use this only where the container reports the TCP peer: it is meaningless, or unsafe, where the container
+		 * rewrites the peer from a header (Jetty's {@code ForwardedRequestCustomizer}, Tomcat's {@code RemoteIpValve},
+		 * the PROXY protocol).  On WebSocket handshakes the peer comes from {@link #checkHandshake(String, HandshakeHosts, Map, java.net.InetAddress)};
+		 * a container that supplies none (Tomcat) refuses every handshake that carries a forwarded host.
+		 *
+		 * @param cidrs The ranges.  At least one; none may be <jk>null</jk> or invalid.  Replaces any earlier list.
+		 * @return This object.
+		 * @throws IllegalArgumentException If there are no ranges or one is invalid.
+		 */
+		public Builder trustedProxies(String...cidrs) {
+			trustedProxies = new PeerRanges(cidrs);
+			return this;
+		}
+
+		/**
 		 * Builds the boundary.
 		 *
 		 * @return A new {@link CsrfBoundary}.
-		 * @throws IllegalArgumentException If {@link #trustedHops(int)} is not 1 while no forwarded source is trusted.
+		 * @throws IllegalArgumentException If {@link #trustedHops(int)} is not 1 while no forwarded source is trusted,
+		 * 	or if {@link #trustedProxies(String...)} is set without a forwarded source or with
+		 * 	{@link OriginSource#CONTAINER}.
 		 */
 		public CsrfBoundary build() {
 			if (trustedHops != 1 && trustedForwarding == ForwardedSource.NONE)
 				throw iaex("trustedHops requires trustedForwarding.");
+			if (trustedProxies != null && trustedForwarding == ForwardedSource.NONE)
+				throw iaex("trustedProxies requires trustedForwarding.");
+			if (trustedProxies != null && originSource == OriginSource.CONTAINER)
+				throw iaex("trustedProxies cannot be combined with originSource(CONTAINER): the container is then the forwarding authority.");
 			return new CsrfBoundary(this);
 		}
 	}

@@ -481,6 +481,30 @@
 	}
 
 	/**
+	 * The history form of a job's stream URL: the same URL with `lastEventId=0`, so a fresh attach replays the job's
+	 * whole log instead of only what arrives from now on.  The same transform as juneau-joblog.js's `historyUrl`, which
+	 * keeps its own copy because the page-level card has no views dependency.  Where `URL` is unavailable the query is
+	 * edited as text: any existing `lastEventId` is dropped, `lastEventId=0` appended and the fragment dropped (an
+	 * EventSource never sends one).  Only ever called on a URL {@link #isTrustedJobUrl} accepted.
+	 */
+	function jobHistoryUrl(streamUrl) {
+		const s = String(streamUrl);
+		const loc = window.location;
+		if (typeof URL === "function" && loc?.href) {
+			const u = new URL(s, loc.href);
+			u.searchParams.set("lastEventId", "0");
+			return /^[a-z][a-z0-9+.-]*:/i.test(s) ? u.href : u.pathname + u.search;
+		}
+		const hash = s.indexOf("#");
+		const head = hash >= 0 ? s.slice(0, hash) : s;
+		const q = head.indexOf("?");
+		const path = q >= 0 ? head.slice(0, q) : head;
+		const params = q >= 0 ? head.slice(q + 1).split("&").filter(function (p) { return p !== "" && p.split("=")[0] !== "lastEventId"; }) : [];
+		params.push("lastEventId=0");
+		return path + "?" + params.join("&");
+	}
+
+	/**
 	 * Substitutes `{id}` via encodeURIComponent and re-checks the result is still a same-origin path.
 	 * Returns null when the template or the substituted URL is unsafe.
 	 */
@@ -753,6 +777,12 @@
 			return "the request could not be completed";
 		if (reason === "untrusted-cancel-url")
 			return "the job's cancel URL is not on this site, so the cancel request was not sent";
+		if (reason === "no-row-id")
+			return "the row has no id to bind the job to, so the request was not sent";
+		if (reason === "row-job-running")
+			return "a job is already running on this row";
+		if (reason === "no-action")
+			return "the job declares no action id, so the request was not sent";
 		return "the action was refused";
 	}
 
@@ -2301,6 +2331,8 @@
 
 	function isPollSuspended(table, ctx, viewDef) {
 		if (ctx?._pollPaused) return true;
+		// Not opt-in: a redraw would destroy an expanded panel whose job is still streaming into it.
+		if (hasOpenRunningJobPanel(table)) return true;
 		if (! viewDef?.pausePollingWhileEditing) return false;
 		// ctx._configBackdrop is the View Settings dialog: neither the detail-row nor the action-dialog
 		// check covers it.
@@ -4955,12 +4987,16 @@
 		 * 		never touched it; only the child row is at risk.
 		 * </ul>
 		 *
+		 * <p>An expanded panel whose row is running a `JuneauViews.jobs` job holds the draw too, opted in or not
+		 * (see hasOpenRunningJobPanel).
+		 *
 		 * <p>Cancelling at `preDraw.dt` rather than aborting the XHR is deliberate: an abort surfaces as `error.dt`
 		 * and would paint "Refresh failed" over a refresh that did not fail.  A cancelled draw fires neither event,
 		 * so the clock simply keeps climbing - which is the honest reading, since the visible table did NOT update.
 		 */
 		ctx._shouldCancelPollDraw = function () {
-			return !! ctx._pollDrawPending && !! viewDef.pausePollingWhileEditing && hasOpenDetailRow(table);
+			return !! ctx._pollDrawPending
+				&& ((!! viewDef.pausePollingWhileEditing && hasOpenDetailRow(table)) || hasOpenRunningJobPanel(table));
 		};
 
 		// Both preDraw.dt handlers consult the SAME predicate, so their binding order stops mattering.  It would
@@ -5998,8 +6034,8 @@
 	 * <p>Returns whether the result's message was painted into the row's detail panel, so a caller with no other place
 	 * to show it can fall back to a toast.
 	 */
-	function applySuccessBehavior(action, table, tr, ctx, result) {
-		const painted = result?.message ? paintActionMessageIntoDetail(tr, action?.id, result.message) : false;
+	function applySuccessBehavior(action, table, tr, ctx, result, quiet) {
+		const painted = ! quiet && result?.message ? paintActionMessageIntoDetail(tr, action?.id, result.message) : false;
 		if (action.onSuccess === "mergeRow" && result?.row != null && tr) {
 			mergeRowFromResult(tr, ctx, result.row);
 		} else if ((action.onSuccess === "redraw" || (action.onSuccess === "mergeRow" && ! tr)) && ctx?.redraw && !ctx._released) {
@@ -6218,30 +6254,38 @@
 	 * <p>A row marks itself running through {@link #setRowJobRunning}; a row-less host counts its running jobs in
 	 * `data-juneau-job` on the container (absent again at zero), so two overlapping jobs do not clear each other's
 	 * marker.
+	 *
+	 * <p>A row host never trusts the `<tr>` it was given: a poll redraw replaces it, so every method paints the row's
+	 * CURRENT `<tr>` (see liveRowFor), or the original one when the row is no longer drawn.
 	 */
 	function jobHostFor(tr, ctx) {
+		const live = liveRowFor(tr);
 		const host = {
-			row: tr || null,
+			get row() { return live(); },
 			container: function () {
-				if (tr) return tr.querySelector ? (tr.querySelector(".juneau-view-actions-cell") || tr.lastElementChild || tr) : tr;
+				const r = live();
+				if (r) return r.querySelector ? (r.querySelector(".juneau-view-actions-cell") || r.lastElementChild || r) : r;
 				return ribbonBannerHost(ctx);
 			},
 			setRunning: function (on) {
-				if (tr) { setRowJobRunning(tr, on); return; }
+				const r = live();
+				if (r) { setRowJobRunning(r, on); return; }
 				const c = host.container();
 				if (!c?.dataset) return;
 				const n = Math.max(0, (Number.parseInt(c.dataset.juneauJob, 10) || 0) + (on ? 1 : -1));
 				if (n > 0) c.dataset.juneauJob = String(n);
 				else delete c.dataset.juneauJob;
 			},
-			outcome: function (o) { if (!ctx?._released) renderActionOutcomeFor(tr, o, ctx); },
+			outcome: function (o) { if (!ctx?._released) renderActionOutcomeFor(live(), o, ctx); },
 			refusal: function (action, reason) {
 				if (ctx?._released) return;
-				if (tr) renderRowActionRefusal(tr, action, reason);
+				const r = live();
+				if (r) renderRowActionRefusal(r, action, reason);
 				else renderRibbonActionRefusal(ctx, action, reason);
 			},
 			focusAnchor: function () {
-				if (tr) return tr.querySelector ? tr.querySelector(".juneau-view-action-trigger") : null;
+				const r = live();
+				if (r) return r.querySelector ? r.querySelector(".juneau-view-action-trigger") : null;
 				const chart = ctx?._chartHost;
 				if (chart) {
 					const plot = chart.querySelector ? chart.querySelector(".jc-chart-plot") : null;
@@ -6253,6 +6297,150 @@
 			}
 		};
 		return host;
+	}
+
+	/**
+	 * A resolver for `tr`'s current `<tr>`: `tr` itself while it is still in its view table, else the redrawn row with
+	 * the same `data-juneau-row-id`, else `tr`.  Without a table or a row id there is nothing to look up, so it is `tr`.
+	 */
+	function liveRowFor(tr) {
+		if (! tr) return function () { return null; };
+		const table = owningViewTable(tr);
+		const rowId = typeof tr.getAttribute === "function" ? tr.getAttribute(ROW_ID_ATTR) : null;
+		return function () {
+			if (! table || isBlankToken(rowId) || isInside(table, tr)) return tr;
+			return findRowTr(table, rowId) || tr;
+		};
+	}
+
+	/** {@code table}'s own drawn `<tr>` whose `data-juneau-row-id` is `rowId`, or null. */
+	function findRowTr(table, rowId) {
+		for (const n of ownNodes(table, table, "tr[" + ROW_ID_ATTR + "]"))
+			if (n.getAttribute(ROW_ID_ATTR) === rowId) return n;
+		return null;
+	}
+
+	// ------------------------------------------------------------------------------------------------------------------
+	// The page's row-job registry: one entry per (view, row id) while a job is pending (key fetch, submit) or running.
+	// The map, not the DOM marker, is what "this row is busy" means, because a redraw replaces the <tr>.
+	// ------------------------------------------------------------------------------------------------------------------
+
+	const ROW_JOBS = new Map();
+
+	function rowJobKey(table, rowId) {
+		return viewSidecarKey(table) + "\u0000" + rowId;
+	}
+
+	/** Registers a pending entry for the row, or returns null when one already exists. */
+	function reserveRowJob(table, rowId, actionId) {
+		const key = rowJobKey(table, rowId);
+		if (ROW_JOBS.has(key)) return null;
+		const entry = { key: key, sidecar: viewSidecarKey(table), rowId: rowId, action: actionId, state: "pending", started: null };
+		// Settles with the job pointer when the entry starts running, or null when it is released first (jobs.pending).
+		entry.ready = new Promise(function (resolve) { entry.resolveReady = resolve; });
+		ROW_JOBS.set(key, entry);
+		return entry;
+	}
+
+	/** Marks `entry` running for `started` and wakes every jobs.pending waiter. */
+	function startRowJob(entry, started) {
+		entry.state = "running";
+		entry.started = started;
+		entry.resolveReady(started);
+	}
+
+	/**
+	 * Marks the row's entry running for `started`, and hooks the table's redraw so the marker survives it.  A
+	 * `JuneauViews.jobs` run passes the entry it reserved (`owned`) and adopts only that one; a row action, which has no
+	 * pending phase, registers its own entry and never adopts another's.  Returns the entry, or null for a row-less job,
+	 * a row whose entry belongs to a different job, or an owned entry that was released first.
+	 */
+	function claimRowJob(table, tr, ctx, started, action, owned) {
+		const rowId = tr && typeof tr.getAttribute === "function" ? tr.getAttribute(ROW_ID_ATTR) : null;
+		if (! table || ! tr || isBlankToken(rowId)) return null;
+		let entry = ROW_JOBS.get(rowJobKey(table, rowId));
+		if (owned ? entry !== owned : entry) return null;
+		if (! entry) {
+			entry = reserveRowJob(table, rowId, action?.id ?? null);
+			entry.rowAction = true;
+		}
+		startRowJob(entry, started);
+		hookRowJobRedraw(ctx);
+		notifyPollPausedChange(ctx);
+		return entry;
+	}
+
+	/** Drops `entry` if it is still the registered one (idempotent). */
+	function releaseRowJob(entry, ctx) {
+		if (! entry || ROW_JOBS.get(entry.key) !== entry) return;
+		ROW_JOBS.delete(entry.key);
+		entry.resolveReady(null);
+		notifyPollPausedChange(ctx);
+	}
+
+	/** Re-applies `data-juneau-job` to every drawn row of `table` that has a registry entry. */
+	function reapplyRowJobMarkers(table) {
+		if (! table || ROW_JOBS.size === 0) return;
+		const sidecar = viewSidecarKey(table);
+		for (const e of ROW_JOBS.values()) {
+			if (e.sidecar !== sidecar) continue;
+			const tr = findRowTr(table, e.rowId);
+			if (tr) setRowJobRunning(tr, true);
+		}
+	}
+
+	/** Binds reapplyRowJobMarkers to the table's `draw.dt`, once per ctx. */
+	function hookRowJobRedraw(ctx) {
+		const dt = ctx?.dataTable;
+		if (! dt || ctx._jobsDrawHooked || typeof dt.on !== "function") return;
+		ctx._jobsDrawHooked = true;
+		dt.on("draw.dt", function (e) {
+			if (e && ctx.table && e.target !== ctx.table) return;   // a nested table's draw bubbles up
+			reapplyRowJobMarkers(ctx.table);
+		});
+	}
+
+	/**
+	 * Whether some row of `table` with a pending or running `JuneauViews.jobs` job has its detail panel expanded and
+	 * attached.  Holds the poll timer's draw (isPollSuspended, ctx._shouldCancelPollDraw) for every view, opted in or
+	 * not: the draw would destroy the panel the job is streaming into.  A collapsed row's job, a row action's job (it
+	 * streams into the row, not the panel) and a job on a row that is not drawn hold nothing.
+	 */
+	function hasOpenRunningJobPanel(table) {
+		if (! table || ROW_JOBS.size === 0) return false;
+		const sidecar = viewSidecarKey(table);
+		for (const e of ROW_JOBS.values()) {
+			if (e.sidecar !== sidecar || e.rowAction) continue;
+			const tr = findRowTr(table, e.rowId);
+			const panel = tr?._juneauDetailPanel;
+			if (panel && tr.classList?.contains("juneau-view-detail-open") && isAttachedNode(panel)) return true;
+		}
+		return false;
+	}
+
+	/** The `JuneauViews.jobs` state of a typed terminal result. */
+	function jobStateOf(result) {
+		if (! result) return "error";
+		if (result.contractVersion != null && result.contractVersion !== JUNEAU_ACTION_RESULT_CONTRACT_VERSION) return "error";
+		const outcome = normalizeOutcome(result);
+		if (outcome === "refusal") return "refused";
+		if (outcome === "failure") return "failed";
+		return JOB_STATE_BY_OUTCOME[outcome] || "error";
+	}
+
+	/** Calls one `JuneauViews.jobs` hook; a throw is logged (E-JS-113) and never interrupts the job. */
+	function callJobHook(hooks, name, arg) {
+		const fn = hooks?.[name];
+		if (typeof fn !== "function") return;
+		try {
+			fn(arg);
+		} catch (e) {
+			console.error("[juneau-views] E-JS-113: " + fmt("jobs hook '%s' threw: %s", name, e?.message || e));
+		}
+	}
+
+	function endJobHooks(hooks, state, result, error) {
+		callJobHook(hooks, "onEnd", Object.freeze({ state: state, result: result ?? null, error: error ?? null }));
 	}
 
 	const JOB_KEYS = new WeakMap();
@@ -6347,53 +6535,84 @@
 	 *
 	 * <p>Row-less callers (a ribbon dialog, a chart card) pass `tr == null`; their progress and outcome paint through
 	 * the host's own container.  A run tracker on `ctx` counts the job for as long as its stream is open.
+	 *
+	 * <p>A row job is registered in the row-job registry for as long as its stream is open, so a redraw re-applies its
+	 * marker and a second `JuneauViews.jobs` run on the row is refused.
+	 *
+	 * <p>`opts` (`JuneauViews.jobs`; absent for every other caller, which keeps their behavior unchanged):
+	 * <ul>
+	 * 	<li>`fromStart` - open the history form of the stream URL (jobHistoryUrl), so the whole log replays.
+	 * 	<li>`tolerateReconnect` - an `error` while the source is CONNECTING is the browser reconnecting, not the end.
+	 * 	<li>`hooks` - `onStart(ref)`, `onProgress(line)`, `onResult(result)`, `onEnd({state, result, error})`; every
+	 * 		return path, early ones included, ends with exactly one `onEnd`.
+	 * 	<li>`paint: "none"` - paint nothing (no progress element, no outcome, no detail message); the marker, the run
+	 * 		tracker, the source bookkeeping and the bus events stay.
+	 * 	<li>`signal` - an AbortSignal that closes the stream (the server job keeps running).
+	 * 	<li>`entry` - the row-job registry entry the run reserved; the stream adopts only that one (claimRowJob).
+	 * </ul>
 	 */
 	// NOSONAR javascript:S3776 -- encodes a views/widgets state machine; complexity is inherent.
-	function startJobStream(started, action, table, tr, ctx) { // NOSONAR javascript:S3776 -- encodes a views/widgets state machine, so complexity is inherent.
-		if (ctx?._released) return null;   // the host was released while the start request was in flight: open no stream
+	function startJobStream(started, action, table, tr, ctx, opts) { // NOSONAR javascript:S3776 -- encodes a views/widgets state machine, so complexity is inherent.
+		const o = opts || {};
+		const paint = o.paint !== "none";
+		const hooks = o.hooks || null;
+		if (ctx?._released) {   // the host was released while the start request was in flight: open no stream
+			endJobHooks(hooks, "error", null, { reason: "released" });
+			return null;
+		}
 		const host = jobHostFor(tr, ctx);
 		if (typeof EventSource === "undefined") {
 			// No SSE transport in this browser - a visible, non-optimistic outcome; polling was never frozen.
-			host.outcome({ outcome: "unknown", message: "live progress is unavailable in this browser" });
+			if (paint) host.outcome({ outcome: "unknown", message: "live progress is unavailable in this browser" });
+			endJobHooks(hooks, "error", null, { reason: "no-event-source" });
 			return null;
 		}
 		if (!isTrustedJobUrl(started.streamUrl)) {
-			host.outcome({ outcome: "unknown",
+			if (paint) host.outcome({ outcome: "unknown",
 				message: "the job started, but its progress URL is not on this site, so progress is not shown" });
+			endJobHooks(hooks, "error", null, { reason: "untrusted-stream-url" });
 			return null;
 		}
 		let es;
 		try {
-			es = new EventSource(started.streamUrl);
+			es = o.fromStart ? new EventSource(jobHistoryUrl(started.streamUrl)) : new EventSource(started.streamUrl);
 		} catch (e) {
-			host.outcome({ outcome: "unknown", message: "the progress stream could not be opened" });
+			if (paint) host.outcome({ outcome: "unknown", message: "the progress stream could not be opened" });
+			endJobHooks(hooks, "error", null, { reason: "stream-failed" });
 			return null;
 		}
 		host.setRunning(true);
-		renderJobProgress(host, started, action, table, "Working\u2026");
+		const entry = claimRowJob(table, tr, ctx, started, action, o.entry);
+		if (paint) renderJobProgress(host, started, action, table, "Working\u2026");
 		if (ctx?._runTracker) ctx._jobsRunning++;
 		const st = { settled: false };
 		publishJobEvent(started, "start");
+		callJobHook(hooks, "onStart", started);
 		function finish(result, fallback) {
-			if (st.settled) return;
+			if (st.settled) return false;
 			st.settled = true;
 			es.close();
 			if (ctx?._jobSources) ctx._jobSources.delete(es);
 			try {
 				host.setRunning(false);
-				clearJobProgress(host, started);
-				if (result) finishJobFromResult(action, table, host, ctx, result);
-				else host.outcome(fallback);
+				if (paint) clearJobProgress(host, started);
+				if (result) finishJobFromResult(action, table, host, ctx, result, ! paint);
+				else if (paint) host.outcome(fallback);
 			} finally {
+				releaseRowJob(entry, ctx);
 				if (ctx?._runTracker) ctx._jobsRunning--;
 				ctx?._checkSettle?.();
 			}
+			return true;
 		}
 		es.addEventListener("progress", function (e) {
 			if (! st.settled) {
-				renderJobProgress(host, started, action, table, e.data);
-				paintActionMessageIntoDetail(tr, action?.id, e.data);
+				if (paint) {
+					renderJobProgress(host, started, action, table, e.data);
+					paintActionMessageIntoDetail(host.row, action?.id, e.data);
+				}
 				publishJobEvent(started, "progress", e.data);
+				callJobHook(hooks, "onProgress", e.data);
 			}
 		});
 		es.addEventListener("result", function (e) {
@@ -6401,11 +6620,25 @@
 			const first = ! st.settled;
 			finish(result, { outcome: "unknown", message: "the job produced no readable result" });
 			if (first) publishJobEvent(started, "result", result);   // after finish(): the row has settled before any subscriber reacts
+			if (first && hooks) {
+				if (result) callJobHook(hooks, "onResult", result);
+				endJobHooks(hooks, jobStateOf(result), result, result ? null : { reason: "no-result" });
+			}
 		});
 		es.addEventListener("error", function () {
-			finish(null, { outcome: "unknown", message: "the progress stream was interrupted" });
+			if (o.tolerateReconnect && es.readyState === 0) return;   // CONNECTING: the browser is reconnecting
+			if (finish(null, { outcome: "unknown", message: "the progress stream was interrupted" }))
+				endJobHooks(hooks, "error", null, { reason: "stream-interrupted" });
 		});
-		if (ctx) {
+		if (o.signal && typeof o.signal.addEventListener === "function") {
+			const abort = function () {
+				if (finish(null, { outcome: "unknown", message: "the progress stream was closed" }))
+					endJobHooks(hooks, "error", null, { reason: "aborted" });
+			};
+			if (o.signal.aborted) abort();
+			else o.signal.addEventListener("abort", abort, { once: true });
+		}
+		if (ctx && ! st.settled) {
 			if (!ctx._jobSources) ctx._jobSources = new Set();
 			ctx._jobSources.add(es);
 		}
@@ -6416,22 +6649,24 @@
 	 * Settles a job host from an async job's terminal ActionResult (the SSE `result` event) - the async twin of
 	 * settleActionResponse's 2xx typed branch, reusing the SAME contract-version handshake, outcome normalization,
 	 * success behavior and visible-outcome render.  cancelled / cancelled-after-effect are just outcomes here;
-	 * actionOutcomeMessage already renders both.  `host` is a job host (see jobHostFor).
+	 * actionOutcomeMessage already renders both.  `host` is a job host (see jobHostFor).  `quiet` (a
+	 * `paint: "none"` job) applies the success behavior without painting anything.
 	 */
-	function finishJobFromResult(action, table, host, ctx, result) {
-		if (! result) { host.outcome({ outcome: "unknown" }); return; }
+	function finishJobFromResult(action, table, host, ctx, result, quiet) {
+		const paint = quiet ? function () {} : function (o) { host.outcome(o); };
+		if (! result) { paint({ outcome: "unknown" }); return; }
 		if (result.contractVersion != null && result.contractVersion !== JUNEAU_ACTION_RESULT_CONTRACT_VERSION) {
-			host.outcome({ outcome: "unknown",
+			paint({ outcome: "unknown",
 				message: "action-result contract mismatch (page='" + result.contractVersion +
 					"', runtime='" + JUNEAU_ACTION_RESULT_CONTRACT_VERSION + "')" });
 			return;
 		}
 		const outcome = normalizeOutcome(result);
 		if (outcome === "success") {
-			applySuccessBehavior(action, table, host.row ?? null, ctx, result);
-			host.outcome({ outcome: "success", replay: !! result.replay, message: result.message });
+			applySuccessBehavior(action, table, host.row ?? null, ctx, result, quiet);
+			paint({ outcome: "success", replay: !! result.replay, message: result.message });
 		} else {
-			host.outcome({
+			paint({
 				outcome: outcome, refusalCode: result.refusalCode, message: result.message, replay: !! result.replay
 			});
 		}
@@ -10144,6 +10379,9 @@
 		// Catalog region params (for example a row-detail run-view region) reach readDeclaredDescriptor.
 		if (region.params && typeof region.params === "object" && !Array.isArray(region.params))
 			declared.params = region.params;
+		// RegionDef.config (a job-log region's submit/detail/output) reaches readDeclaredDescriptor as ctx.declared.config.
+		if (region.config && typeof region.config === "object" && !Array.isArray(region.config))
+			declared.config = region.config;
 		d.dataset.juneauRegionDeclared = JSON.stringify(declared);
 		return d;
 	}
@@ -11188,6 +11426,13 @@
 		startJobStream: startJobStream,
 		finishJobFromResult: finishJobFromResult,
 		cancelJob: cancelJob,
+		// Row jobs (JuneauViews.jobs) - exposed for the harness.
+		jobHistoryUrl: jobHistoryUrl,
+		jobHostFor: jobHostFor,
+		hasOpenRunningJobPanel: hasOpenRunningJobPanel,
+		rowOfElement: rowOfElement,
+		substituteJobUrl: substituteJobUrl,
+		jobStateOf: jobStateOf,
 		// Row selection + bulk mutation (row-selection/bulk-mutation feature) - two independent opt-ins - exposed for the canary and manual
 		// verification.  BULK_CONTRACT_VERSION is exposed above (NS.BULK_CONTRACT_VERSION) alongside the other two
 		// independently-versioned contracts.
@@ -11234,6 +11479,28 @@
 		return String(msg).replaceAll("%s", () => String(args[i++]));
 	}
 
+	/** The nearest body `<tr>` enclosing `el` (a `tbody tr`, not a header row), or null. */
+	function closestBodyRow(el) {
+		let tr = el.closest("tr");
+		while (tr && tr.parentNode?.tagName !== "TBODY")
+			tr = typeof tr.parentNode?.closest === "function" ? tr.parentNode.closest("tr") : null;
+		return tr;
+	}
+
+	/**
+	 * The row `el` belongs to: `{tr, panel}`.  An element inside an expanded detail panel belongs to the panel's
+	 * PARENT row (`panel._juneauParentTr`), not to the child row DataTables wraps the panel in; an element inside a
+	 * nested view table's own row, within that panel, still belongs to the nested row.  `panel` is set only when the
+	 * parent row was taken from it.  The one resolver for hookContextOf and `JuneauViews.jobs`.
+	 */
+	function rowOfElement(el) {
+		if (typeof el?.closest !== "function") return { tr: null, panel: null };
+		const cand = closestBodyRow(el);
+		const panel = el.closest(".juneau-view-detail-panel");
+		if (panel?._juneauParentTr && (! cand || isInside(cand, panel))) return { tr: panel._juneauParentTr, panel: panel };
+		return { tr: cand, panel: null };
+	}
+
 	/**
 	 * Resolves the row context (table, tr, row, viewDef) for any element inside a view table row or its row-detail
 	 * panel.  Walks up via owningViewTable first; when that misses (the element lives inside a portalled row-detail
@@ -11244,7 +11511,8 @@
 		let table = owningViewTable(el);
 		let tr = null;
 		if (table) {
-			tr = typeof el.closest === "function" ? el.closest("tbody tr") : null;
+			tr = rowOfElement(el).tr;
+			table = tr ? owningViewTable(tr) : null;
 		} else {
 			const panel = typeof el.closest === "function" ? el.closest("[data-juneau-row-detail]") : null;
 			tr = panel?._juneauParentTr || null;
@@ -11536,6 +11804,274 @@
 		escAttr: viewEscAttr
 	});
 
+	// ==================================================================================================================
+	// JuneauViews.jobs: run a row-bound async job from any element in a row or its detail panel
+	// ==================================================================================================================
+
+	/** Keys fetched from a keyUrl and not yet answered by the server, by row, action and key URL (§ key lifecycle). */
+	const JOB_KEY_CACHE = new Map();
+
+	/** Rejects with E-JS-109 after logging it. */
+	function jobKeyError(detail) {
+		console.error("[juneau-views] E-JS-109: " + fmt("jobs key endpoint: %s", detail));
+		return new Error("E-JS-109");
+	}
+
+	function abortError() {
+		const e = new Error("aborted");
+		e.name = "AbortError";
+		return e;
+	}
+
+	/**
+	 * Where a job for `el` runs: its row (rowOfElement), owning table, ctx and row id, its CSRF source, and the job
+	 * host.  `refuse` is a refusal reason when the row cannot be resolved.  Never reads a row id from row data.
+	 */
+	function resolveJobTarget(el) {
+		const r = rowOfElement(el);
+		const tr = r.tr && typeof r.tr.getAttribute === "function" && (r.panel || r.tr.hasAttribute?.(ROW_ID_ATTR) !== false) ? r.tr : null;
+		const t = { tr: tr, panel: r.panel, table: null, ctx: null, rowId: null, csrfEl: null, refuse: null };
+		if (tr) {
+			t.table = owningViewTable(tr);
+			t.ctx = t.table?.__juneauCtx || null;
+			const rowId = (r.panel || tr).getAttribute(ROW_ID_ATTR);
+			if (! t.ctx || isBlankToken(rowId) || (r.panel && tr.getAttribute(ROW_ID_ATTR) !== rowId)) t.refuse = "no-row-id";
+			else t.rowId = String(rowId);
+		} else {
+			t.table = owningViewTable(el);
+			t.ctx = t.table?.__juneauCtx || null;
+		}
+		const tableToken = t.table ? resolveCsrfToken(t.table) : null;
+		t.csrfEl = ! isBlankToken(tableToken) ? t.table : (el.closest("[data-juneau-csrf]") || t.table);
+		return t;
+	}
+
+	function jobCsrf(t) {
+		const token = t.csrfEl ? t.csrfEl.getAttribute("data-juneau-csrf") : null;
+		const override = t.csrfEl?.dataset?.juneauCsrfHeader;
+		return { token: token, headerName: isBlankToken(override) ? DEFAULT_CSRF_HEADER : override.trim() };
+	}
+
+	/**
+	 * Substitutes `{id}` (and only `{id}`) in a job URL template with the encoded row id: `{url}` or `{refuse,
+	 * reason}`.  A row-less call has no id, so its template must carry no token at all.
+	 */
+	function substituteJobUrl(template, rowId) {
+		if (isBlankToken(template)) return { refuse: true, reason: "no-endpoint" };
+		const t = String(template);
+		if (hasResidualToken(t.split("{id}").join(""))) return { refuse: true, reason: "unresolved-endpoint" };
+		if (t.includes("{id}") && isBlankToken(rowId)) return { refuse: true, reason: "empty-substitution" };
+		const url = substituteDetailUrl(t, rowId == null ? "" : rowId);
+		if (! url || hasDotDotSegment(url) || ! isSameOriginUrl(url)) return { refuse: true, reason: "unsafe-endpoint" };
+		return { url: url };
+	}
+
+	/** POSTs the key endpoint and checks its answer (contract, action, row, non-blank key). */
+	function requestJobKey(url, action, rowId, csrf, signal) {
+		if (signal?.aborted) return Promise.reject(abortError());
+		const headers = { "Content-Type": "application/json", "Accept": "application/json" };
+		headers[csrf.headerName] = csrf.token;
+		const init = { method: "POST", headers: headers, body: "{}", credentials: "same-origin" };
+		if (signal) init.signal = signal;
+		return fetch(url, init).then(function (resp) {
+			if (signal?.aborted) throw abortError();
+			if (! resp || resp.ok === false) throw jobKeyError(fmt("'%s' answered %s", url, resp?.status ?? 0));
+			return readBodyText(resp);
+		}).then(function (text) {
+			if (signal?.aborted) throw abortError();
+			const o = parseJsonSafe(text);
+			if (! o || typeof o !== "object") throw jobKeyError(fmt("'%s' did not answer a JSON object", url));
+			if (o.contractVersion !== "1") throw jobKeyError(fmt("contractVersion '%s' is not '1'", o.contractVersion));
+			if (o.action !== action) throw jobKeyError(fmt("action '%s' is not '%s'", o.action, action));
+			if (rowId != null && o.targetId !== rowId) throw jobKeyError(fmt("targetId '%s' is not this row's id", o.targetId));
+			if (typeof o.idempotencyKey !== "string" || o.idempotencyKey.trim() === "") throw jobKeyError("no idempotencyKey");
+			return o.idempotencyKey;
+		});
+	}
+
+	/**
+	 * `JuneauViews.jobs.run`: see the views docs ("Row jobs").  Guards run synchronously, before any I/O: the row
+	 * resolves, the registry has no entry for it (one is registered now, as pending), the URLs substitute, and a CSRF
+	 * token exists.  Then the key (given, cached or fetched), the submit, and the settle: a job pointer streams through
+	 * startJobStream; a typed result settles at once; anything else is an error.
+	 */
+	function runRowJob(spec) { // NOSONAR javascript:S3776 -- encodes the job lifecycle state machine; complexity is inherent.
+		const s = spec || {};
+		const hooks = s.hooks || {};
+		const paint = s.paint === "none" ? "none" : "row";
+		const signal = s.signal || null;
+		const el = s.el;
+		const trigger = s.trigger || null;
+		const envelope = s.envelope === "action" ? "action" : "flat";
+		const st = { settled: false, started: null, entry: null };
+		let resolveDone;
+		const done = new Promise(function (resolve) { resolveDone = resolve; });
+		const handle = Object.freeze({
+			done: done,
+			cancel: function () {
+				return st.started && st.host ? cancelJob(st.started, st.cancelTable, st.host, st.action) : Promise.resolve(false);
+			},
+			get job() { return st.started; }
+		});
+		if (trigger) trigger.disabled = true;
+		function end(state, result, error) {
+			if (st.settled) return;
+			st.settled = true;
+			if (trigger) trigger.disabled = false;
+			releaseRowJob(st.entry, st.ctx);
+			const out = Object.freeze({ state: state, result: result ?? null, error: error ?? null });
+			callJobHook(hooks, "onEnd", out);
+			resolveDone(out);
+		}
+		function refuse(reason) {
+			if (paint === "row" && st.host) st.host.refusal(st.action, reason);
+			end("refused", null, { reason: reason });
+		}
+		if (typeof el?.closest !== "function") { end("error", null, { reason: "no-element" }); return handle; }
+
+		const t = resolveJobTarget(el);
+		st.ctx = t.ctx;
+		st.host = jobHostFor(t.tr && ! t.refuse ? t.tr : null, t.ctx);
+		const actionId = isBlankToken(s.action) ? null : String(s.action);
+		const declared = actionId ? findRowActionById(t.ctx?.viewDef, actionId) : null;
+		st.action = { id: actionId || "job", label: declared?.label, method: String(s.method || "POST").toUpperCase() };
+		if (t.refuse) { refuse(t.refuse); return handle; }
+		if (! t.tr && envelope === "action" && ! isBlankToken(s.keyUrl)) { refuse("no-row-id"); return handle; }
+		if (t.tr) {
+			st.entry = reserveRowJob(t.table, t.rowId, actionId);
+			if (! st.entry) { refuse("row-job-running"); return handle; }
+			notifyPollPausedChange(t.ctx);
+		}
+		if (envelope === "action" && ! actionId) { refuse("no-action"); return handle; }
+		const ep = substituteJobUrl(s.endpoint, t.rowId);
+		if (ep.refuse) { refuse(ep.reason); return handle; }
+		st.action.endpoint = ep.url;
+		let keyUrl = null;
+		if (s.idempotencyKey == null && ! isBlankToken(s.keyUrl)) {
+			const k = substituteJobUrl(s.keyUrl, t.rowId);
+			if (k.refuse) { refuse(k.reason); return handle; }
+			keyUrl = k.url;
+		}
+		const csrf = jobCsrf(t);
+		if (isBlankToken(csrf.token)) { refuse("missing-token"); return handle; }
+		st.cancelTable = t.csrfEl;
+
+		// The card stops hearing from a job whose element left the page or whose registry entry is no longer its own;
+		// the job itself keeps running, and active() can reattach to it.
+		function alive() {
+			if (el.isConnected === false || ! isAttachedNode(el)) return false;
+			// Released by this job's own settle (the stream's onResult fires after it) still counts as ours.
+			const cur = st.entry ? ROW_JOBS.get(st.entry.key) : null;
+			return ! cur || cur === st.entry;
+		}
+		function liveHook(name) { return function (arg) { if (alive()) callJobHook(hooks, name, arg); }; }
+		const cacheKey = keyUrl ? (st.entry ? st.entry.key : "") + "\u0000" + st.action.id + "\u0000" + keyUrl : null;
+
+		Promise.resolve().then(function () {
+			if (signal?.aborted) throw abortError();
+			if (s.idempotencyKey != null) return String(s.idempotencyKey);
+			if (! keyUrl) return null;
+			const cached = JOB_KEY_CACHE.get(cacheKey);
+			if (cached) return cached;
+			return requestJobKey(keyUrl, actionId, t.rowId, csrf, signal).then(function (key) {
+				JOB_KEY_CACHE.set(cacheKey, key);
+				return key;
+			});
+		}).then(function (key) {
+			if (signal?.aborted) throw abortError();
+			if (! alive()) { end("error", null, { reason: "detached" }); return null; }
+			const fields = typeof s.fields === "function" ? s.fields() : (s.fields || {});
+			let extras;
+			if (envelope === "action") extras = { targetId: t.rowId ?? key, idempotencyKey: key, fields: fields };
+			else extras = Object.assign({}, fields, { idempotencyKey: key });
+			const req = buildActionRequest(st.action, csrf.token, csrf.headerName, extras, { id: t.rowId });
+			if (req.refuse) { refuse(req.reason); return null; }
+			const init = { method: req.method, headers: req.headers, body: req.body, credentials: "same-origin" };
+			if (signal) init.signal = signal;
+			return fetch(req.url, init).then(function (resp) {
+				if (cacheKey) JOB_KEY_CACHE.delete(cacheKey);   // the server answered: this key is spent either way
+				return readBodyText(resp).then(function (text) { return { resp: resp, text: text }; });
+			}, function (e) {
+				// No answer: the key is kept, so a retry dedups on the server.
+				if (signal?.aborted || e?.name === "AbortError") throw abortError();
+				if (paint === "row") st.host.outcome({ outcome: "unknown", message: "the request could not be completed" });
+				end("error", null, { reason: "request-failed" });
+				return null;
+			});
+		}).then(function (answered) {
+			if (! answered || st.settled) return;
+			const resp = answered.resp;
+			const ok = resp?.ok !== false;
+			const started = ok ? parseJobStarted(answered.text) : null;
+			if (started) {
+				st.started = started;
+				if (st.entry) startRowJob(st.entry, started);
+				const streamHooks = {
+					onStart: liveHook("onStart"),
+					onProgress: liveHook("onProgress"),
+					onResult: liveHook("onResult"),
+					onEnd: function (x) { end(x.state, x.result, x.error); }
+				};
+				startJobStream(started, st.action, t.tr ? t.table : t.csrfEl, t.tr, t.ctx,
+					{ hooks: streamHooks, paint: paint, fromStart: true, tolerateReconnect: true, signal: signal, entry: st.entry });
+				return;
+			}
+			const result = parseActionResult(answered.text);
+			if (result) {
+				callJobHook(hooks, "onResult", result);
+				if (paint === "row") finishJobFromResult(st.action, t.table, st.host, t.ctx, result);
+				end(jobStateOf(result), result, null);
+				return;
+			}
+			const status = resp?.status ?? 0;
+			if (paint === "row") st.host.outcome({ outcome: "unknown" });
+			end("error", null, { reason: ok ? "no-result" : "http:" + status, status: status });
+		}).catch(function (e) {
+			if (e?.name === "AbortError") end("error", null, { reason: "aborted" });
+			else end("error", null, { reason: e?.message === "E-JS-109" ? "key-refused" : "request-failed", code: e?.message });
+		});
+		return handle;
+	}
+
+	NS.jobs = Object.freeze({
+		run: runRowJob,
+		/** The checked key for `el`'s row from `keyUrl` (`{id}` substituted): `Promise<string>`, E-JS-109 on a bad answer. */
+		fetchKey: function (opts) {
+			const o = opts || {};
+			if (typeof o.el?.closest !== "function") return Promise.reject(new Error("E-JS-109"));
+			const t = resolveJobTarget(o.el);
+			if (t.refuse || ! t.tr) return Promise.reject(jobKeyError("the element is not inside a view table row"));
+			const k = substituteJobUrl(o.keyUrl, t.rowId);
+			if (k.refuse) return Promise.reject(jobKeyError(fmt("keyUrl refused (%s)", k.reason)));
+			const csrf = jobCsrf(t);
+			if (isBlankToken(csrf.token)) return Promise.reject(jobKeyError("no CSRF token"));
+			return requestJobKey(k.url, o.action, t.rowId, csrf, o.signal || null);
+		},
+		/** The running job's ref for `el`'s row and `action` (null when none, or when it is still pending). */
+		active: function (el, action) {
+			if (typeof el?.closest !== "function") return null;
+			const t = resolveJobTarget(el);
+			if (t.refuse || ! t.tr) return null;
+			const e = ROW_JOBS.get(rowJobKey(t.table, t.rowId));
+			if (! e || e.state !== "running" || ! e.started) return null;
+			if (action != null && e.action !== action) return null;
+			return e.started;
+		},
+		/**
+		 * For a job on `el`'s row and `action` that is still pending (key fetch or submit), a `Promise` of its ref once
+		 * it starts, or of null when it ends first; null when no such job is pending.
+		 */
+		pending: function (el, action) {
+			if (typeof el?.closest !== "function") return null;
+			const t = resolveJobTarget(el);
+			if (t.refuse || ! t.tr) return null;
+			const e = ROW_JOBS.get(rowJobKey(t.table, t.rowId));
+			if (! e || e.state !== "pending") return null;
+			if (action != null && e.action !== action) return null;
+			return e.ready;
+		}
+	});
+
 	/**
 	 * The public hook namespaces this script assigns, in one frozen list: every frozen object namespace that
 	 * `juneau-views.js` itself puts on `JuneauViews` is listed here (constants such as the `*_CONTRACT_VERSION`
@@ -11544,7 +12080,7 @@
 	 * test fails when a frozen namespace is added or removed here without updating it.
 	 */
 	NS.HOOK_NAMESPACES = Object.freeze(["actions", "rowActions", "dialogs", "probeSelection", "tables", "status",
-		"csrf", "rules", "details", "html"]);
+		"csrf", "rules", "details", "html", "jobs"]);
 
 	initCursorTooltip();
 	if (document.readyState === "loading") {

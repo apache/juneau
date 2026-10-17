@@ -480,4 +480,42 @@ class ConsoleJobLog_Test extends TestBase {
 		assertEquals(1, ((Number)r.get("streams")).intValue());
 		assertEquals("done", ((Map<?,?>)r.get("state")).get("phase"));
 	}
+
+	@Test void a29_hiddenField_notShown_sentWithItsDefault_andEveryInputIsAddressable() {
+		var r = part("pageHidden");
+		var f = (Map<?,?>)r.get("form");
+		assertEquals(List.of("Reason", "Shards", "Notes"), f.get("labels"));
+		assertEquals("hidden", f.get("type"));
+		assertEquals("full", f.get("value"));
+		assertEquals(false, f.get("inLabel"));
+		assertEquals(List.of("reason", "shards", "notes", "mode"), f.get("fieldAttrs"));
+		// The flat body is the pre-row-aware body plus the hidden value, in field order, then the key.
+		assertEquals("{\"reason\":\"nightly\",\"shards\":4,\"notes\":\"\",\"mode\":\"full\",\"idempotencyKey\":\"uuid-1\"}", String.valueOf(r.get("body")));
+		var bare = (Map<?,?>)r.get("noDefault");
+		assertEquals("E-JS-110: job-log card 'rebuild' hidden field 'mode' has no default", bare.get("banner"));
+		assertEquals(0, ((Number)bare.get("sent")).intValue());
+	}
+
+	@Test void a30_actionEnvelope_isSelfTargeted() {
+		var r = part("pageEnvelope");
+		assertEquals(Map.of("action", "rebuild-index", "targetId", "uuid-1", "idempotencyKey", "uuid-1", "fields", Map.of("reason", "nightly", "shards", 2, "notes", "")), r.get("body"));
+		assertEquals("running", r.get("phase"));
+	}
+
+	@Test void a31_output_writesTheCardsOwnFieldOnSuccessOnly_andNeverOutsideTheCard() {
+		var r = part("pageOutput");
+		var ok = (Map<?,?>)r.get("success");
+		assertEquals("indexed 4 shards", ok.get("notes"));
+		assertEquals(0, ((Number)ok.get("errors")).intValue());
+		assertEquals("", ((Map<?,?>)r.get("failure")).get("notes"));
+		var outside = (Map<?,?>)r.get("outside");
+		assertEquals("", outside.get("outside"));
+		assertEquals(1, ((Number)outside.get("errors")).intValue());
+	}
+
+	@Test void a32_pageTransport_neverReadsJuneauViews() {
+		var r = part("pageNoViews");
+		assertEquals(0, ((Number)r.get("reads")).intValue());
+		assertEquals("done", r.get("phase"));
+	}
 }

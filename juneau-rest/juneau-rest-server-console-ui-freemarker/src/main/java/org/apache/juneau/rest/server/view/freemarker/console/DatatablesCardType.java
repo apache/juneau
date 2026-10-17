@@ -169,7 +169,7 @@ public final class DatatablesCardType implements CardTypeHandler {
 			resolveSearch(source, col, ident);
 		}
 		catalog.put("columns", normalized);
-		projectDetailRegion(catalog);
+		projectDetailRegion(source, catalog);
 
 		if (catalog.get("ribbon") instanceof List<?> ribbon)
 			for (var item : ribbon) {
@@ -199,20 +199,54 @@ public final class DatatablesCardType implements CardTypeHandler {
 	/**
 	 * Projects the detail endpoint onto the detail region, as the builder path's {@code RowDetail.toMap()} does:
 	 * {@code type} defaults to {@code row-detail} and {@code dataUrl} to the detail endpoint, so a region that
-	 * declares neither joins the panel's own expand GET instead of fetching again.  Explicit values are kept, and the
-	 * authored (possibly immutable) maps are copied rather than written to.
+	 * declares neither joins the panel's own expand GET instead of fetching again, and {@code lazy} to its effective
+	 * per-type value ({@link RegionDef#effectiveLazy()}), which the builder always emits.  Explicit values are kept,
+	 * and the authored (possibly immutable) maps are copied rather than written to.
 	 */
 	@SuppressWarnings("unchecked")
-	private static void projectDetailRegion(JsonMap catalog) {
+	private static void projectDetailRegion(CardSource source, JsonMap catalog) {
 		if (! (catalog.get("detail") instanceof Map<?,?> detail) || ! (detail.get("region") instanceof Map<?,?> region)
 				|| ! (detail.get("endpoint") instanceof String endpoint))
 			return;
 		var regionCopy = new LinkedHashMap<>((Map<String,Object>)region);
 		regionCopy.putIfAbsent("type", RegionDef.TYPE_ROW_DETAIL);
 		regionCopy.putIfAbsent("dataUrl", endpoint);
+		regionCopy.putIfAbsent("lazy", RegionDef.TYPE_TAB_BODY.equals(regionCopy.get("type")));
+		if (isJobLogRegion(region))
+			regionCopy.put("config", jobLogConfig(source, regionCopy));
 		var detailCopy = new LinkedHashMap<>((Map<String,Object>)detail);
 		detailCopy.put("region", regionCopy);
 		catalog.put("detail", detailCopy);
+	}
+
+	/**
+	 * Validates a job-log region's {@code config} through {@link JobLogRegion}, the same rules as the builder path,
+	 * and returns it in the builder's canonical key order so the two paths emit the same sidecar.
+	 */
+	@SuppressWarnings("unchecked")
+	private static Map<String,Object> jobLogConfig(CardSource source, Map<String,Object> region) {
+		var id = region.get("id") instanceof String s ? s : "";
+		var config = region.get("config");
+		if (! (config instanceof Map<?,?>))
+			throw source.error("type='datatables' detail.region '%s' with populate 'job-log' requires a 'config' object.", id);
+		try {
+			return JobLogRegion.fromMap(id, (Map<String,Object>)config).validate().toMap();
+		} catch (IllegalArgumentException e) {
+			throw source.error("type='datatables' detail.region: %s", e.getMessage());
+		}
+	}
+
+	private static boolean isJobLogRegion(Object region) {
+		return region instanceof Map<?,?> r && JobLogRegion.POPULATOR.equals(r.get("populate"));
+	}
+
+	/** A datatables card whose detail region is a job-log region needs the {@code joblog} pack's populator. */
+	@Override
+	public List<String> requiredPacks(JsonMap body) {
+		if (body != null && body.get("table") instanceof Map<?,?> table && table.get("detail") instanceof Map<?,?> detail
+				&& isJobLogRegion(detail.get("region")))
+			return List.of(ToolkitPackRegistry.PACK_JOBLOG);
+		return List.of();
 	}
 
 	private static void validateRows(CardSource source, JsonMap catalog) {

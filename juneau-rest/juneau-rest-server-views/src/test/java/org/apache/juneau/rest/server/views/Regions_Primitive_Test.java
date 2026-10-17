@@ -152,6 +152,11 @@ class Regions_Primitive_Test extends TestBase {
 		assertAllTrue(r, "t2_idsSectionNullOnRowDetail", "t2_declaredFieldsNull", "t2_declaredTitleFieldsNull");
 	}
 
+	/** {@code declared.config} carries a region's {@code RegionDef.config} to its populator, and only an object. */
+	@Test void b02b_declaredConfigIsPassedThroughWhenItIsAnObject() {
+		assertAllTrue(report(), "t2b_configPassedThrough", "t2b_arrayConfigDropped");
+	}
+
 	/**
 	 * {@code ctx.signal.fork()}'s ATTACHMENT MECHANICS, in six parts.  {@code fork} is a non-standard method on a
 	 * standard type, so each of these is a distinct way to get it subtly wrong: a look-alike object the platform's own

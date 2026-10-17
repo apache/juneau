@@ -1294,6 +1294,8 @@
 		};
 		// Present only when the region declares one, so a region without it keeps its exact prior shape.
 		if (Array.isArray(body.visibleWhen) && body.visibleWhen.length) declared.visibleWhen = body.visibleWhen;
+		// RegionDef.config: the populator's own declaration (a job-log region's submit/output), passed through as-is.
+		if (body.config && typeof body.config === "object" && !Array.isArray(body.config)) declared.config = body.config;
 		return {
 			declared: declared,
 			params: (body.params && typeof body.params === "object" && !Array.isArray(body.params)) ? body.params : {}

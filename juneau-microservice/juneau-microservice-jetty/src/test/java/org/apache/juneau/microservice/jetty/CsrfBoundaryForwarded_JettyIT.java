@@ -81,6 +81,14 @@ class CsrfBoundaryForwarded_JettyIT extends TestBase {
 		}
 	}
 
+	/** Reports the peer address the container sees. */
+	static final class PeerServlet extends HttpServlet {
+		private static final long serialVersionUID = 1L;
+		@Override protected void doGet(HttpServletRequest req, HttpServletResponse res) throws IOException {
+			res.getWriter().write(req.getRemoteAddr());
+		}
+	}
+
 	/** Reports the container's own view of the request: scheme, server name and server port. */
 	static final class SeenServlet extends HttpServlet {
 		private static final long serialVersionUID = 1L;
@@ -89,8 +97,9 @@ class CsrfBoundaryForwarded_JettyIT extends TestBase {
 		}
 	}
 
-	record App(Server server, int port, CsrfBoundary boundary, ServerBus bus) {
-		String origin() { return "http://127.0.0.1:" + port; }
+	record App(Server server, int port, CsrfBoundary boundary, ServerBus bus, String host) {
+		String authority() { return (host.indexOf(':') >= 0 ? "[" + host + "]" : host) + ":" + port; }
+		String origin() { return "http://" + authority(); }
 	}
 
 	private App app;
@@ -104,6 +113,10 @@ class CsrfBoundaryForwarded_JettyIT extends TestBase {
 	}
 
 	private App start(boolean customizer, CsrfBoundary.Builder b) throws Exception {
+		return start("127.0.0.1", customizer, b);
+	}
+
+	private App start(String host, boolean customizer, CsrfBoundary.Builder b) throws Exception {
 		var boundary = b.tokens(CsrfTokens.perProcess()).build();
 		var bus = ServerBus.create(BusPolicy.create().downstream("ops.jobs", true).boundary(boundary).build());
 		var server = new Server();
@@ -111,7 +124,7 @@ class CsrfBoundaryForwarded_JettyIT extends TestBase {
 		if (customizer)
 			config.addCustomizer(new ForwardedRequestCustomizer());
 		var connector = new ServerConnector(server, new HttpConnectionFactory(config));
-		connector.setHost("127.0.0.1");
+		connector.setHost(host);
 		connector.setPort(0);
 		server.addConnector(connector);
 		var ctx = new ServletContextHandler();
@@ -119,12 +132,13 @@ class CsrfBoundaryForwarded_JettyIT extends TestBase {
 		ctx.addFilter(new FilterHolder(new RequestBoundaryFilter(boundary)), "/write", EnumSet.of(DispatcherType.REQUEST));
 		ctx.addServlet(new ServletHolder(new WriteServlet()), "/write");
 		ctx.addServlet(new ServletHolder(new SeenServlet()), "/seen");
+		ctx.addServlet(new ServletHolder(new PeerServlet()), "/peer");
 		ctx.addServlet(new ServletHolder(new BusRest(bus)), "/rest/*");
 		JakartaWebSocketServletContainerInitializer.configure(ctx, (sc, container) -> BusWebSockets.register(container, bus));
 		server.setHandler(ctx);
 		server.start();
 		bus.publish("ops.jobs", JsonMap.of("schemaVersion", 1, "running", List.of()));
-		app = new App(server, connector.getLocalPort(), boundary, bus);
+		app = new App(server, connector.getLocalPort(), boundary, bus, host);
 		WriteServlet.WRITES.set(0);
 		return app;
 	}
@@ -136,7 +150,7 @@ class CsrfBoundaryForwarded_JettyIT extends TestBase {
 	}
 
 	private static HttpResponse<String> post(App a, String path, String body, String...headers) throws Exception {
-		var b = HttpRequest.newBuilder(URI.create("http://127.0.0.1:" + a.port() + path)).timeout(Duration.ofSeconds(10))
+		var b = HttpRequest.newBuilder(URI.create("http://" + a.authority() + path)).timeout(Duration.ofSeconds(10))
 			.header("Content-Type", JSON).header("Accept", JSON).header(a.boundary().csrfHeader(), token(a.boundary()));
 		for (var i = 0; i < headers.length; i += 2)
 			b.header(headers[i], headers[i + 1]);
@@ -180,7 +194,7 @@ class CsrfBoundaryForwarded_JettyIT extends TestBase {
 		var b = HttpClient.newHttpClient().newWebSocketBuilder();
 		for (var i = 0; i < headers.length; i += 2)
 			b.header(headers[i], headers[i + 1]);
-		var ws = b.buildAsync(URI.create("ws://127.0.0.1:" + a.port() + path), frames).get(10, TimeUnit.SECONDS);
+		var ws = b.buildAsync(URI.create("ws://" + a.authority() + path), frames).get(10, TimeUnit.SECONDS);
 		var first = frames.frames.poll(5, TimeUnit.SECONDS);
 		if (first != null) {
 			ws.sendClose(WebSocket.NORMAL_CLOSURE, "").get(10, TimeUnit.SECONDS);
@@ -245,7 +259,7 @@ class CsrfBoundaryForwarded_JettyIT extends TestBase {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	private static String seen(App a, String...headers) throws Exception {
-		var b = HttpRequest.newBuilder(URI.create("http://127.0.0.1:" + a.port() + "/seen")).timeout(Duration.ofSeconds(10));
+		var b = HttpRequest.newBuilder(URI.create("http://" + a.authority() + "/seen")).timeout(Duration.ofSeconds(10));
 		for (var i = 0; i < headers.length; i += 2)
 			b.header(headers[i], headers[i + 1]);
 		return HTTP.send(b.GET().build(), BodyHandlers.ofString()).body();
@@ -292,5 +306,77 @@ class CsrfBoundaryForwarded_JettyIT extends TestBase {
 		assertEquals(200, write.statusCode(), write::body);
 		var path = wsPath(session(a, forwarded(PUBLIC, "app.example", "https")));
 		assertTrue(connects(a, path, forwarded(PUBLIC, "app.example", "https")));
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// trustedProxies: the peer is the TCP peer Jetty reports
+	//-----------------------------------------------------------------------------------------------------------------
+
+	private static CsrfBoundary.Builder proxies(String...cidrs) {
+		return CsrfBoundary.create().trustedForwarding(CsrfBoundary.ForwardedSource.X_FORWARDED).trustedProxies(cidrs);
+	}
+
+	/** Proves Jetty supplies the peer property to the handshake: if it stops, the handshake half fails. */
+	@Test void c01_listedPeerIsBelievedOnWriteAndHandshake() throws Exception {
+		var a = start(false, proxies("127.0.0.1/32"));
+		var write = post(a, "/write", "{}", forwarded(PUBLIC, "app.example", "https"));
+		assertEquals(200, write.statusCode(), write::body);
+		var path = wsPath(session(a, forwarded(PUBLIC, "app.example", "https")));
+		assertTrue(connects(a, path, forwarded(PUBLIC, "app.example", "https")));
+	}
+
+	@Test void c02_unlistedPeerWithForwardedHeaderRefused() throws Exception {
+		var a = start(false, proxies("10.0.0.0/8"));
+		var write = post(a, "/write", "{}", forwarded(PUBLIC, "app.example", "https"));
+		assertEquals(403, write.statusCode(), write::body);
+		assertEquals("FORWARDED_PEER_NOT_TRUSTED", write.headers().firstValue(RequestBoundaryFilter.REJECTION_HEADER).orElse(null));
+		assertEquals(0, WriteServlet.WRITES.get());
+		var path = wsPath(session(a, "Origin", a.origin()));
+		assertFalse(connects(a, path, forwarded(PUBLIC, "app.example", "https")));
+	}
+
+	@Test void c03_unlistedPeerWithoutHeaderJudgedOnContainerView() throws Exception {
+		var a = start(false, proxies("10.0.0.0/8"));
+		var write = post(a, "/write", "{}", "Origin", a.origin());
+		assertEquals(200, write.statusCode(), write::body);
+		var path = wsPath(session(a, "Origin", a.origin()));
+		assertTrue(connects(a, path, "Origin", a.origin()));
+	}
+
+	/** Records which spelling Jetty reports for an IPv6 loopback peer, then runs a listed write over it. */
+	@Test void c04_ipv6LoopbackPeer() throws Exception {
+		Assumptions.assumeTrue(ipv6Loopback(), "no IPv6 loopback on this host");
+		var a = start("::1", false, proxies("::1/128"));
+		var peer = HTTP.send(HttpRequest.newBuilder(URI.create("http://" + a.authority() + "/peer")).build(), BodyHandlers.ofString()).body();
+		assertTrue(Set.of("::1", "0:0:0:0:0:0:0:1", "[::1]", "[0:0:0:0:0:0:0:1]", "0:0:0:0:0:0:0:1%0").contains(peer), "Jetty reported: " + peer);
+		var write = post(a, "/write", "{}", forwarded(PUBLIC, "app.example", "https"));
+		assertEquals(200, write.statusCode(), () -> "peer " + peer + ": " + write.body());
+	}
+
+	private static boolean ipv6Loopback() {
+		try (var s = new ServerSocket(0, 1, InetAddress.getByName("::1"))) {
+			return true;
+		} catch (IOException e) {
+			return false;
+		}
+	}
+
+	/**
+	 * Under {@code ForwardedRequestCustomizer} the HTTP peer is rewritten from {@code X-Forwarded-For}, so a client
+	 * chooses it (the reason the docs warn against the combination).  The handshake does not see the rewritten peer (it is
+	 * either unknown or the real socket peer, and neither is listed), so the handshake is stricter: it refuses.  This
+	 * locks that asymmetry, and fails loudly if Jetty starts rewriting the handshake peer too.
+	 */
+	@Test void c05_customizerRewrittenPeerIsWhatTheBoundarySees() throws Exception {
+		var a = start(true, proxies("10.0.0.0/8"));
+		var peer = HTTP.send(HttpRequest.newBuilder(URI.create("http://" + a.authority() + "/peer"))
+			.header("X-Forwarded-For", "10.1.2.3").build(), BodyHandlers.ofString()).body();
+		var write = post(a, "/write", "{}", "Origin", PUBLIC, "X-Forwarded-For", "10.1.2.3", "X-Forwarded-Host", "app.example", "X-Forwarded-Proto", "https");
+		var httpTrusted = write.statusCode() == 200;
+		assertEquals("10.1.2.3".equals(peer), httpTrusted, "peer " + peer + ", write " + write.statusCode());
+		var path = wsPath(session(a, "Origin", a.origin()));
+		var wsTrusted = connects(a, path, "Origin", PUBLIC, "X-Forwarded-For", "10.1.2.3", "X-Forwarded-Host", "app.example", "X-Forwarded-Proto", "https");
+		assertTrue(httpTrusted, "HTTP sees the rewritten peer");
+		assertFalse(wsTrusted, "the handshake does not see a listed peer");
 	}
 }

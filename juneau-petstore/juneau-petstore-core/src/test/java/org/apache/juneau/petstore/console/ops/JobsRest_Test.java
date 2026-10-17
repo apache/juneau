@@ -22,6 +22,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.time.*;
 import java.util.*;
+import java.util.concurrent.*;
 import java.util.concurrent.atomic.*;
 
 import org.apache.juneau.*;
@@ -54,6 +55,23 @@ class JobsRest_Test extends TestBase {
 	}
 
 	static final Duration HARD_TIMEOUT = Duration.ofSeconds(12);
+
+	/** {@link ClockedHost}'s key-ledger clock; only g11 uses that host, so only g11 moves it. */
+	static final AtomicReference<Instant> KEY_NOW = new AtomicReference<>(Instant.now());
+
+	/** A host whose row-key ledger runs on {@link #KEY_NOW}, so a test can age a key past its TTL. */
+	public static class ClockedHost extends Host {
+		private static final long serialVersionUID = 1L;
+
+		/** @return The ledger's clock. */
+		@Bean public JobsRest.KeyClock jobsKeyClock() {
+			return new JobsRest.KeyClock(new Clock() {
+				@Override public ZoneId getZone() { return ZoneOffset.UTC; }
+				@Override public Clock withZone(ZoneId zone) { return this; }
+				@Override public Instant instant() { return KEY_NOW.get(); }
+			});
+		}
+	}
 
 	private static MockRestClient client() {
 		return MockRestClient.create(Host.class).noTrace().ignoreErrors().header("Accept", "application/json").build();
@@ -250,7 +268,7 @@ class JobsRest_Test extends TestBase {
 
 	@Test void e01_restockCardIsAJobLog() throws Exception {
 		assertPage(PetstoreConsoleFixture.page(client(), "/console/ops/jobs"))
-			.hasCardOrder("restock-help", "restock", "jobs", "groom-output", "groom-file", "groom-runs")
+			.hasCardOrder("restock-help", "restock", "jobs", "species", "groom-output", "groom-file", "groom-runs")
 			.hasCard("restock", "job-log")
 			.hasCardKey("restock", "/submit/endpoint", "/console/ops/jobs/restock")
 			.hasCardKey("restock", "/urlParam", "job");
@@ -343,5 +361,192 @@ class JobsRest_Test extends TestBase {
 			.assertStatus(400).assertContent().isContains("Invalid holdMs '20000'; must be a whole number 0-10000");
 		c.post("/console/ops/jobs/restock", "{\"DOG\":1,\"holdMs\":2.5,\"idempotencyKey\":\"k-f02b\"}").contentType("application/json").run()
 			.assertStatus(400).assertContent().isContains("Invalid holdMs '2.5'; must be a whole number 0-10000");
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// g - row jobs: ledger keys bound to one row
+	//-----------------------------------------------------------------------------------------------------------------
+
+	private static JsonMap key(MockRestClient c, String url) throws Exception {
+		return new JsonMap(c.post(url, "{}").contentType("application/json").run().assertStatus(200).getContent().asString());
+	}
+
+	private static String envelope(String action, String targetId, String key, String fields) {
+		return "{\"action\":\"" + action + "\",\"targetId\":\"" + targetId + "\",\"idempotencyKey\":\"" + key + "\",\"fields\":" + fields + "}";
+	}
+
+	private static String restockSpecies(MockRestClient c, String species, String body, int status) throws Exception {
+		return c.post("/console/ops/jobs/species/" + species + "/restock", body).contentType("application/json").run().assertStatus(status).getContent().asString();
+	}
+
+	private static long available(MockRestClient c, String species) throws Exception {
+		for (var row : new JsonList(c.get("/console/ops/jobs/species").run().assertStatus(200).getContent().asString()).elements(JsonMap.class))
+			if (species.equals(row.getString("id")))
+				return row.getLong("available");
+		return fail("No species row '" + species + "'");
+	}
+
+	@Test void g01_speciesRowsDetailAndKey() throws Exception {
+		var c = client();
+		var rows = new JsonList(c.get("/console/ops/jobs/species").run().assertStatus(200).getContent().asString());
+		assertSize(Species.values().length, rows);
+		assertContains("{\"id\":\"DOG\",\"species\":\"DOG\",\"available\":" + available(c, "DOG") + "}", rows.toString());
+		var detail = new JsonMap(c.get("/console/ops/jobs/species/DOG").run().assertStatus(200).getContent().asString());
+		assertBean(detail, "contractVersion", "1");
+		assertString(String.valueOf(available(c, "DOG")), detail.getMap("fields").getLong("available"));
+		assertBean(key(c, "/console/ops/jobs/species/DOG/key"), "contractVersion,action,targetId", "1,restock-species,DOG");
+		c.get("/console/ops/jobs/species/WOLF").run().assertStatus(404);
+		c.post("/console/ops/jobs/species/WOLF/key", "{}").contentType("application/json").run().assertStatus(404);
+		c.post("/console/ops/jobs/species/dog/key", "{}").contentType("application/json").run().assertStatus(404);
+	}
+
+	@Test void g02_rowSubmitRunsReplaysAndReturnsTheRow() throws Exception {
+		var c = client();
+		var before = available(c, "DOG");
+		var k = key(c, "/console/ops/jobs/species/DOG/key").getString("idempotencyKey");
+		var ref = new JsonMap(restockSpecies(c, "DOG", envelope("restock-species", "DOG", k, "{\"count\":2}"), 202));
+		assertString(ref.getString("jobId"), new JsonMap(restockSpecies(c, "DOG", envelope("restock-species", "DOG", k, "{\"count\":2}"), 202)).getString("jobId"));
+		var done = await(c, ref.getString("jobId"));
+		assertBean(done, "state,result{outcome,message,row{id,available}}", "DONE,{success,Restocked 2 pets,{DOG," + (before + 2) + "}}");
+		// Settled but not yet reaped: the replay still answers the same job, and nothing restocks twice.
+		assertString(ref.getString("jobId"), new JsonMap(restockSpecies(c, "DOG", envelope("restock-species", "DOG", k, "{\"count\":2}"), 202)).getString("jobId"));
+		assertString(String.valueOf(before + 2), available(c, "DOG"));
+		assertNotNull(new JsonMap(c.get("/console/ops/jobs/species/DOG").run().assertStatus(200).getContent().asString()).getMap("fields").getString("lastRestock"));
+	}
+
+	@Test void g03_aKeyForOneRowIsRefusedForAnother() throws Exception {
+		var c = client();
+		var k = key(c, "/console/ops/jobs/species/DOG/key").getString("idempotencyKey");
+		var refusal = "outcome,refusalCode,message";
+		var expected = "refusal," + JobKeyLedger.REFUSAL_CODE + ",This key is not valid for this row.";
+		// The DOG key, retargeted to CAT.
+		assertBean(new JsonMap(restockSpecies(c, "CAT", envelope("restock-species", "CAT", k, "{\"count\":1}"), 409)), refusal, expected);
+		// The DOG envelope, posted to CAT's path.
+		assertBean(new JsonMap(restockSpecies(c, "CAT", envelope("restock-species", "DOG", k, "{\"count\":1}"), 409)), refusal, expected);
+		// A key the ledger never issued (as an expired one, which the ledger has forgotten), and the wrong action.
+		assertBean(new JsonMap(restockSpecies(c, "DOG", envelope("restock-species", "DOG", "forged-" + k, "{\"count\":1}"), 409)), refusal, expected);
+		assertBean(new JsonMap(restockSpecies(c, "DOG", envelope("restock", "DOG", k, "{\"count\":1}"), 409)), refusal, expected);
+		// The key is still good for its own row.
+		await(c, new JsonMap(restockSpecies(c, "DOG", envelope("restock-species", "DOG", k, "{\"count\":1}"), 202)).getString("jobId"));
+	}
+
+	@Test void g04_theSpeciesComesFromTheTargetNeverTheFields() throws Exception {
+		var c = client();
+		var dog = available(c, "DOG");
+		var cat = available(c, "CAT");
+		var k = key(c, "/console/ops/jobs/species/DOG/key").getString("idempotencyKey");
+		var ref = new JsonMap(restockSpecies(c, "DOG", envelope("restock-species", "DOG", k, "{\"count\":1,\"species\":\"CAT\",\"CAT\":5}"), 202));
+		await(c, ref.getString("jobId"));
+		assertString(String.valueOf(dog + 1), available(c, "DOG"));
+		assertString(String.valueOf(cat), available(c, "CAT"));
+	}
+
+	@Test void g05_badCount400() throws Exception {
+		var c = client();
+		for (var count : List.of("0", "51", "1.5", "\"many\"", "null")) {
+			var k = key(c, "/console/ops/jobs/species/DOG/key").getString("idempotencyKey");
+			restockSpecies(c, "DOG", envelope("restock-species", "DOG", k, "{\"count\":" + count + "}"), 400);
+		}
+	}
+
+	@Test void g06_regroomIsLedgerOnlyAndBoundToItsRun() throws Exception {
+		var c = client();
+		var a = groom(c, "{\"pet\":\"Rex\"}").getMap("row").getString("id");
+		var b = groom(c, "{\"pet\":\"Max\"}").getMap("row").getString("id");
+		assertBean(new JsonMap(c.get("/console/ops/jobs/groom-runs/" + a).run().assertStatus(200).getContent().asString()), "fields{id,pet}", "{" + a + ",Rex}");
+		var k = key(c, "/console/ops/jobs/groom-runs/" + a + "/key").getString("idempotencyKey");
+		var url = "/console/ops/jobs/groom-runs/" + a + "/regroom";
+		var first = new JsonMap(c.post(url, envelope("regroom", a, k, "{}")).contentType("application/json").run().assertStatus(200).getContent().asString());
+		assertBean(first, "outcome,message,row{pet}", "success,Grooming Rex again,{Rex}");
+		var again = first.getMap("row").getString("id");
+		assertNotEquals(a, again);
+		var replay = new JsonMap(c.post(url, envelope("regroom", a, k, "{}")).contentType("application/json").run().assertStatus(200).getContent().asString());
+		assertString(again, replay.getMap("row").getString("id"));
+		// Run A's key for run B, a restock-species key for a regroom, and a self-targeted key: all refused.
+		c.post("/console/ops/jobs/groom-runs/" + b + "/regroom", envelope("regroom", b, k, "{}")).contentType("application/json").run().assertStatus(409);
+		var species = key(c, "/console/ops/jobs/species/DOG/key").getString("idempotencyKey");
+		c.post(url, envelope("restock-species", a, species, "{}")).contentType("application/json").run().assertStatus(409)
+			.assertContent().isContains(JobKeyLedger.REFUSAL_CODE);
+		c.post(url, envelope("regroom", a, species, "{}")).contentType("application/json").run().assertStatus(409);
+		c.post(url, envelope("regroom", "k-g06", "k-g06", "{}")).contentType("application/json").run().assertStatus(409);
+		c.get("/console/ops/jobs/groom-runs/nope").run().assertStatus(404);
+		c.post("/console/ops/jobs/groom-runs/nope/key", "{}").contentType("application/json").run().assertStatus(404);
+	}
+
+	@Test void g07_aReapedJobsReplayIsSpentNeverASecondJob() {
+		// The registry reaps a settled job RETENTION after it ends; a registry that no longer holds the claimed job is
+		// that state.  The replay must refuse, not start the job again.
+		try (var registry = new AsyncJobRegistry(Duration.ofSeconds(5))) {
+			var r = JobsRest.replay("reaped-job", registry);
+			assertBean(r, "outcome,refusalCode", "refusal," + JobKeyLedger.SPENT_CODE);
+			assertString("0", registry.size());
+			var live = registry.create();
+			assertBean(JobsRest.replay(live.id(), registry), "jobId", live.id());
+			assertString("1", registry.size());
+		}
+	}
+
+	@Test void g09_aDoubleSubmitOfOneKeyRestocksOnce() throws Exception {
+		// Two first submits of one key, released together: one starts the job, the other replays it.  Several rounds,
+		// since a lost race only shows on some of them; each round awaits its job, so the job limit never refuses.
+		var c = client();
+		for (var round = 0; round < 3; round++) {
+			var before = available(c, "BIRD");
+			var k = key(c, "/console/ops/jobs/species/BIRD/key").getString("idempotencyKey");
+			var body = envelope("restock-species", "BIRD", k, "{\"count\":3}");
+			var go = new CountDownLatch(1);
+			var pool = Executors.newFixedThreadPool(2);
+			try {
+				var a = pool.submit(() -> { go.await(); return new JsonMap(restockSpecies(c, "BIRD", body, 202)).getString("jobId"); });
+				var b = pool.submit(() -> { go.await(); return new JsonMap(restockSpecies(c, "BIRD", body, 202)).getString("jobId"); });
+				go.countDown();
+				var id = a.get(10, TimeUnit.SECONDS);
+				assertString(id, b.get(10, TimeUnit.SECONDS));
+				assertBean(await(c, id), "state,result{row{available}}", "DONE,{{" + (before + 3) + "}}");
+				assertString(String.valueOf(before + 3), available(c, "BIRD"));
+			} finally {
+				pool.shutdownNow();
+			}
+		}
+	}
+
+	@Test void g10_aRegroomReplayAnswersItsRunUntilEvictedThenIsSpent() throws Exception {
+		var c = client();
+		var a = groom(c, "{\"pet\":\"Rex\"}").getMap("row").getString("id");
+		var k = key(c, "/console/ops/jobs/groom-runs/" + a + "/key").getString("idempotencyKey");
+		var url = "/console/ops/jobs/groom-runs/" + a + "/regroom";
+		var again = new JsonMap(c.post(url, envelope("regroom", a, k, "{}")).contentType("application/json").run().assertStatus(200).getContent().asString())
+			.getMap("row").getString("id");
+		// The run list evicts oldest first: the target goes before the run its regroom started.  The replay still
+		// answers that run.
+		while (c.get("/console/ops/jobs/groom-runs/" + a).run().getStatusCode() != 404)
+			groom(c, "{\"pet\":\"Max\"}");
+		c.get("/console/ops/jobs/groom-runs/" + again).run().assertStatus(200);
+		var replay = new JsonMap(c.post(url, envelope("regroom", a, k, "{}")).contentType("application/json").run().assertStatus(200).getContent().asString());
+		assertString(again, replay.getMap("row").getString("id"));
+		// Once that run is evicted too, the key is spent: never a second run.
+		while (c.get("/console/ops/jobs/groom-runs/" + again).run().getStatusCode() != 404)
+			groom(c, "{\"pet\":\"Max\"}");
+		var spent = new JsonMap(c.post(url, envelope("regroom", a, k, "{}")).contentType("application/json").run().assertStatus(409).getContent().asString());
+		assertBean(spent, "outcome,refusalCode", "refusal," + JobKeyLedger.SPENT_CODE);
+	}
+
+	@Test void g11_anExpiredKeyIs409() throws Exception {
+		var c = MockRestClient.create(ClockedHost.class).noTrace().ignoreErrors().header("Accept", "application/json").build();
+		var k = key(c, "/console/ops/jobs/species/FISH/key").getString("idempotencyKey");
+		KEY_NOW.updateAndGet(x -> x.plus(JobKeyLedger.DEFAULT_TTL).plusSeconds(1));
+		assertBean(new JsonMap(restockSpecies(c, "FISH", envelope("restock-species", "FISH", k, "{\"count\":1}"), 409)),
+			"outcome,refusalCode", "refusal," + JobKeyLedger.REFUSAL_CODE);
+		// A key issued on the moved clock is good on it.
+		var fresh = key(c, "/console/ops/jobs/species/FISH/key").getString("idempotencyKey");
+		await(c, new JsonMap(restockSpecies(c, "FISH", envelope("restock-species", "FISH", fresh, "{\"count\":1}"), 202)).getString("jobId"));
+	}
+
+	@Test void g08_theKeyEndpointIsPostOnly() throws Exception {
+		var c = client();
+		var status = c.get("/console/ops/jobs/species/DOG/key").run().getStatusCode();
+		assertTrue(status == 404 || status == 405, "GET on the key endpoint must not be served; got " + status);
+		status = c.get("/console/ops/jobs/groom-runs/x/key").run().getStatusCode();
+		assertTrue(status == 404 || status == 405, "GET on the key endpoint must not be served; got " + status);
 	}
 }

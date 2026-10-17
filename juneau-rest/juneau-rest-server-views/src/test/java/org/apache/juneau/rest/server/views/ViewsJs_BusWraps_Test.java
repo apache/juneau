@@ -70,7 +70,7 @@ class ViewsJs_BusWraps_Test extends TestBase {
 
 	@Test void a02_jobPublish_wiredIntoStartJobStream() throws IOException {
 		var js = BusHarness.source(ViewsMixin.VIEWS_JS_RESOURCE);
-		var s = js.indexOf("function startJobStream(started, action, table, tr, ctx) {");
+		var s = js.indexOf("function startJobStream(started, action, table, tr, ctx, opts) {");
 		assertTrue(s > 0, "startJobStream not found");
 		var body = js.substring(s, js.indexOf("\n\t}\n", s));
 		assertTrue(body.contains("publishJobEvent(started, \"start\")"), body);

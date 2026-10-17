@@ -295,6 +295,8 @@ class CsrfBoundaryFilter_Test extends TestBase {
 				r("POST", "http", HOST, ORIGIN, "Content-Type", JSON).h("X-Forwarded-Host", "a, b").h("X-Forwarded-Proto", "http"));
 			case FORWARDED_CONTAINER_MISMATCH -> forwarded(x -> x.originSource(OriginSource.CONTAINER),
 				r("POST", "http", HOST, ORIGIN, "Content-Type", JSON).h("X-Forwarded-Host", "app.example").h("X-Forwarded-Proto", "https"));
+			case FORWARDED_PEER_NOT_TRUSTED -> forwarded(x -> x.trustedProxies("10.0.0.0/8"),
+				r("POST", "http", HOST, ORIGIN, "Content-Type", JSON).h("X-Forwarded-Host", "app.example").h("X-Forwarded-Proto", "https"));
 			default -> throw new IllegalArgumentException("CsrfBoundary does not emit " + reason);
 		};
 	}
@@ -310,7 +312,8 @@ class CsrfBoundaryFilter_Test extends TestBase {
 		"HOST_MISSING", "HOST_MALFORMED", "HOST_NOT_ALLOWED", "ORIGIN_MISSING", "ORIGIN_NULL", "ORIGIN_MISMATCH",
 		"FETCH_SITE_NOT_SAME_ORIGIN", "SIMPLE_REQUEST_WITHOUT_ORIGIN", "CONTENT_TYPE_NOT_JSON", "CSRF_TOKEN_MISSING",
 		"CSRF_TOKEN_MISMATCH", "FORWARDED_HOST_MISSING", "FORWARDED_PROTO_MISSING", "FORWARDED_HOST_MALFORMED",
-		"FORWARDED_PROTO_MALFORMED", "FORWARDED_HOPS_INSUFFICIENT", "FORWARDED_HOPS_MISMATCH", "FORWARDED_CONTAINER_MISMATCH"
+		"FORWARDED_PROTO_MALFORMED", "FORWARDED_HOPS_INSUFFICIENT", "FORWARDED_HOPS_MISMATCH", "FORWARDED_CONTAINER_MISMATCH",
+		"FORWARDED_PEER_NOT_TRUSTED"
 	})
 	void a10_rejectionNoStoreAndNoCacheOnAllReasons(BoundaryReason reason) throws Exception {
 		var x = refusedFor(reason);

@@ -90,20 +90,32 @@ class BusWebSocketCsrf_TomcatIT extends TestBase {
 	static final String GATE = "juneau.busIt";
 
 	private static final BlockingQueue<String> PROBED = new LinkedBlockingQueue<>();
+	private static final BlockingQueue<List<String>> FORWARDED_HOSTS = new LinkedBlockingQueue<>();
 	private static Tomcat plain;
 	private static Tomcat valved;
 	private static Tomcat hostValved;
+	private static Tomcat trusted;
 	private static final List<Path> TEMP = new ArrayList<>();
 	private static int plainPort;
 	private static int valvedPort;
 	private static int hostValvedPort;
+	private static int trustedPort;
 	private static ServerBus bus;
 	private static CsrfBoundary boundary;
+	private static ServerBus trustedBus;
+	private static CsrfBoundary trustedBoundary;
 
 	@Rest
 	public static class BusRest extends BasicRestServlet implements BusEventsMixin {
 		private static final long serialVersionUID = 1L;
 		@Override public ServerBus serverBus() { return bus; }
+	}
+
+	/** The same REST resource over the bus that sits behind a {@code trustedProxies} boundary. */
+	@Rest
+	public static class TrustedBusRest extends BasicRestServlet implements BusEventsMixin {
+		private static final long serialVersionUID = 1L;
+		@Override public ServerBus serverBus() { return trustedBus; }
 	}
 
 	/** Accepts and does nothing; the probe configurator is what matters. */
@@ -115,11 +127,21 @@ class BusWebSocketCsrf_TomcatIT extends TestBase {
 	static final class ProbeConfigurator extends ServerEndpointConfig.Configurator {
 		@Override public void modifyHandshake(ServerEndpointConfig sec, HandshakeRequest request, HandshakeResponse response) {
 			PROBED.add(request.getRequestURI() + " Host=" + request.getHeaders().get("Host"));
+			var lines = new ArrayList<String>();
+			request.getHeaders().forEach((k, v) -> {
+				if ("X-Forwarded-Host".equalsIgnoreCase(k))
+					lines.addAll(v);
+			});
+			FORWARDED_HOSTS.add(lines);
 		}
 	}
 
 	/** Boots a Tomcat, with a {@link RemoteIpValve} when {@code valve} is set (reading the host from {@code hostHeader} when non-null). */
 	private static Tomcat boot(boolean valve, String hostHeader) throws Exception {
+		return boot(valve, hostHeader, new BusRest(), bus);
+	}
+
+	private static Tomcat boot(boolean valve, String hostHeader, HttpServlet rest, ServerBus serverBus) throws Exception {
 		var tomcat = new Tomcat();
 		var base = Files.createTempDirectory("tc-bus-it");
 		TEMP.add(base);
@@ -143,13 +165,13 @@ class BusWebSocketCsrf_TomcatIT extends TestBase {
 			private static final long serialVersionUID = 1L;
 		});
 		ctx.addServletMappingDecoded("/", "default");
-		var wrapper = Tomcat.addServlet(ctx, "bus", new BusRest());
+		var wrapper = Tomcat.addServlet(ctx, "bus", rest);
 		wrapper.setLoadOnStartup(1);
 		ctx.addServletMappingDecoded("/rest/*", "bus");
 		ctx.addApplicationListener(org.apache.tomcat.websocket.server.WsContextListener.class.getName());
 		tomcat.start();
 		var sc = (ServerContainer) ctx.getServletContext().getAttribute(ServerContainer.class.getName());
-		BusWebSockets.register(sc, bus);
+		BusWebSockets.register(sc, serverBus);
 		sc.addEndpoint(ServerEndpointConfig.Builder.create(ProbeEndpoint.class, "/probe")
 			.configurator(new ProbeConfigurator())
 			.build());
@@ -162,22 +184,36 @@ class BusWebSocketCsrf_TomcatIT extends TestBase {
 			.downstream("ops.jobs", true)
 			.boundary(boundary)
 			.build());
+		trustedBoundary = CsrfBoundary.create().tokens(CsrfTokens.perProcess())
+			.trustedForwarding(CsrfBoundary.ForwardedSource.X_FORWARDED).trustedProxies("127.0.0.1/32").build();
+		trustedBus = ServerBus.create(BusPolicy.create()
+			.downstream("ops.jobs", true)
+			.boundary(trustedBoundary)
+			.build());
 		plain = boot(false, null);
+		trusted = boot(false, null, new TrustedBusRest(), trustedBus);
 		valved = boot(true, null);
 		hostValved = boot(true, "X-Forwarded-Host");
 		plainPort = plain.getConnector().getLocalPort();
 		valvedPort = valved.getConnector().getLocalPort();
 		hostValvedPort = hostValved.getConnector().getLocalPort();
+		trustedPort = trusted.getConnector().getLocalPort();
 		assertNotEquals(plainPort, valvedPort);
 		assertNotEquals(plainPort, hostValvedPort);
 		assertNotEquals(valvedPort, hostValvedPort);
+		assertNotEquals(trustedPort, plainPort);
+		assertNotEquals(trustedPort, valvedPort);
+		assertNotEquals(trustedPort, hostValvedPort);
 		bus.publish("ops.jobs", JsonMap.of("schemaVersion", 1, "running", List.of()));
+		trustedBus.publish("ops.jobs", JsonMap.of("schemaVersion", 1, "running", List.of()));
 	}
 
 	@AfterAll static void stop() throws Exception {
 		if (bus != null)
 			bus.close();
-		for (var t : new Tomcat[]{plain, valved, hostValved})
+		if (trustedBus != null)
+			trustedBus.close();
+		for (var t : new Tomcat[]{plain, valved, hostValved, trusted})
 			if (t != null) {
 				t.stop();
 				t.destroy();
@@ -395,6 +431,77 @@ class BusWebSocketCsrf_TomcatIT extends TestBase {
 		assertEquals("ws://127.0.0.1:" + valvedPort + "/probe Host=[127.0.0.1:" + valvedPort + "]", probe(valvedPort), "(c)");
 		assertEquals("ws://127.0.0.1:" + plainPort + "/probe Host=[127.0.0.1:" + plainPort + "]", probe(plainPort, "X-Forwarded-Proto", "https"), "(d)");
 		assertEquals("ws://evil.example:" + hostValvedPort + "/probe Host=[127.0.0.1:" + hostValvedPort + "]", probe(hostValvedPort, "X-Forwarded-Host", "evil.example"), "(e)");
+	}
+
+	/**
+	 * Trusted forwarding picks the rightmost entry, which relies on the handshake's repeated header lines keeping their
+	 * wire order.  Three lines, sent raw because the JDK client cannot repeat a header, come back in order.
+	 */
+	@Test void a09_repeatedForwardedHostLinesKeepWireOrder() throws Exception {
+		FORWARDED_HOSTS.clear();
+		try (var socket = new Socket("127.0.0.1", plainPort)) {
+			socket.setSoTimeout(10_000);
+			var out = socket.getOutputStream();
+			out.write(("GET /probe HTTP/1.1\r\n"
+				+ "Host: 127.0.0.1:" + plainPort + "\r\n"
+				+ "X-Forwarded-Host: first.example\r\n"
+				+ "X-Forwarded-Host: second.example\r\n"
+				+ "X-Forwarded-Host: third.example\r\n"
+				+ "Connection: Upgrade\r\n"
+				+ "Upgrade: websocket\r\n"
+				+ "Sec-WebSocket-Version: 13\r\n"
+				+ "Sec-WebSocket-Key: dGhlIHNhbXBsZSBub25jZQ==\r\n\r\n").getBytes(StandardCharsets.US_ASCII));
+			out.flush();
+			var seen = FORWARDED_HOSTS.poll(10, TimeUnit.SECONDS);
+			assertEquals(List.of("first.example", "second.example", "third.example"), seen);
+		}
+	}
+
+	/** Opens a session through the {@code trustedProxies} instance with a forwarded write, as a proxy on the loopback peer would send it. */
+	private static String openTrustedSession(HttpClient http) throws Exception {
+		var body = "{\"v\":1,\"bridge\":\"ops\",\"transport\":\"websocket\",\"downstream\":[\"ops.jobs\"],\"upstream\":[]}";
+		var req = (HttpServletRequest) java.lang.reflect.Proxy.newProxyInstance(HttpServletRequest.class.getClassLoader(), new Class<?>[]{HttpServletRequest.class},
+			(proxy, method, args) -> method.getReturnType() == boolean.class ? (Object) false : null);
+		var res = http.send(HttpRequest.newBuilder(URI.create(origin(trustedPort) + "/rest" + BusEventsMixin.SESSION_PATH))
+			.header("Content-Type", "application/json")
+			.header("Accept", "application/json")
+			.header("Origin", origin(trustedPort))
+			.header("X-Forwarded-Host", "127.0.0.1:" + trustedPort)
+			.header("X-Forwarded-Proto", "http")
+			.header(trustedBoundary.csrfHeader(), trustedBoundary.tokenFor(req))
+			.POST(HttpRequest.BodyPublishers.ofString(body))
+			.build(), HttpResponse.BodyHandlers.ofString());
+		assertEquals(200, res.statusCode(), res::body);
+		return JsonMap.ofString(res.body()).getMap("paths").getString("websocket");
+	}
+
+	/**
+	 * With {@code trustedProxies} set, Tomcat reports the peer on HTTP (the loopback proxy is believed) but supplies none
+	 * on a handshake, so the peer there is unknown and untrusted.  A handshake that carries a forwarded host is refused
+	 * with {@code 4403}; the documented recipe (same scheme, {@code Host} preserved, no forwarded header on the socket)
+	 * connects.  This fails loudly if a future Tomcat starts supplying the peer.
+	 */
+	@Test void i01_trustedProxiesOnTomcat() throws Exception {
+		var http = HttpClient.newHttpClient();
+		var path = openTrustedSession(http);
+
+		var refused = new Frames();
+		http.newWebSocketBuilder()
+			.header("Origin", origin(trustedPort))
+			.header("X-Forwarded-Host", "127.0.0.1:" + trustedPort)
+			.header("X-Forwarded-Proto", "http")
+			.buildAsync(wsUri(trustedPort, path), refused).get(10, TimeUnit.SECONDS);
+		assertEquals(4403, refused.closed.get(10, TimeUnit.SECONDS));
+		assertTrue(refused.frames.isEmpty(), "a refused handshake saw a frame");
+
+		var frames = new Frames();
+		var ws = http.newWebSocketBuilder()
+			.header("Origin", origin(trustedPort))
+			.buildAsync(wsUri(trustedPort, openTrustedSession(http)), frames).get(10, TimeUnit.SECONDS);
+		var first = frames.frames.poll(10, TimeUnit.SECONDS);
+		assertNotNull(first, "no frame within 10s; closed with " + frames.closed.getNow(null));
+		assertEquals("resync-begin", first.getString("type"));
+		ws.sendClose(WebSocket.NORMAL_CLOSURE, "").get(10, TimeUnit.SECONDS);
 	}
 
 	/** What an h2c connection did with an RFC 8441 extended CONNECT: the SETTINGS it sent and how the stream ended. */

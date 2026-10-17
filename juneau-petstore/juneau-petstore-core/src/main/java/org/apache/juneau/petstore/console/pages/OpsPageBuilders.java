@@ -65,6 +65,19 @@ public final class OpsPageBuilders {
 				.ribbon(
 					RibbonItem.dialog("restock").title("Restock").endpoint("/console/ops/jobs/restock").method(Method.POST).form("/console/ops/jobs/restock-form"),
 					RibbonItem.refresh().id("refresh")))
+			.table(TableSpec.create("species").dataMode(DataMode.CLIENT).dataUrl("/console/ops/jobs/species")
+				.pollIntervalMs(2000)
+				.columns(
+					Column.create("species").label("Species"),
+					Column.create("available").label("Available"))
+				.detail(RowDetail.create("/console/ops/jobs/species/{id}").region(JobLogRegion.create("restock-species")
+					.submit(JobLogRegion.Submit.create("/console/ops/jobs/species/{id}/restock", "restock-species", "/console/ops/jobs/species/{id}/key")
+						.submitLabel("Restock")
+						.field(JobLogRegion.Field.of("count").label("How many (1-50)").type("number").defaultValue(1).required(true))
+						.field(JobLogRegion.Field.of("species").type("hidden").source("row.species")))
+					.detail(JobLogRegion.Detail.of("fieldGrid", RegionDef.Field.of("available").label("Available")))
+					.output(JobLogRegion.Output.field("available").from("row.available"))
+					.toRegion())))
 			.card(CardSpec.of("terminal", "groom-output").title("Groom run").body("terminal", groomOutput.toMap()))
 			.card(CardSpec.of("terminal", "groom-file").title("Groom transcript (file)").body("terminal", groomFile.toMap()))
 			.table(TableSpec.create("groom-runs").dataMode(DataMode.CLIENT).dataUrl("/console/ops/jobs/groom-rows")
@@ -73,6 +86,8 @@ public final class OpsPageBuilders {
 					Column.create("submitted").label("Submitted").render("timestamp"),
 					Column.create("state").label("State").render("pill"),
 					Column.create("lines").label("Lines"))
+				.detail(RowDetail.create("/console/ops/jobs/groom-runs/{id}")
+					.region(RegionDef.create("regroom").type(RegionDef.TYPE_ROW_DETAIL).populate("petstore-regroom").allowPopulators("petstore-regroom")))
 				.ribbon(
 					RibbonItem.dialog("groom").title("Groom").endpoint("/console/ops/jobs/groom").method(Method.POST).form("/console/ops/jobs/groom-form"),
 					RibbonItem.refresh().id("groom-refresh")));

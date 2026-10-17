@@ -109,6 +109,20 @@
 		});
 	}
 
+	// Jobs page: a groom run's detail panel offers "Groom again".  The button runs through JuneauViews.jobs, which fetches
+	// a key bound to this run from the key endpoint and fills {id} from the panel's parent row.
+	if (views && views.regions && views.regions.register) {
+		views.regions.register('petstore-regroom', function(ctx, container) {
+			container.appendChild(ctx.helpers.jobButton({
+				label: 'Groom again',
+				endpoint: '/console/ops/jobs/groom-runs/{id}/regroom',
+				action: 'regroom',
+				envelope: 'action',
+				keyUrl: '/console/ops/jobs/groom-runs/{id}/key'
+			}));
+		});
+	}
+
 	// R10: a compact dialog chrome, selected by a modal's chrome:'compact'.  fn(parts, modal) restyles the dialog parts.
 	// The new-order wizard (both steps) opts in with ModalDef.chrome("compact").
 	if (views && views.dialogs && views.dialogs.registerChrome) {

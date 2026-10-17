@@ -111,10 +111,16 @@ class ViewsJs_Hooks_Test extends TestBase {
 		var r = report();
 		assertEquals(Boolean.TRUE, r.get("hookNamespacesFrozen"), "HOOK_NAMESPACES must be a frozen array");
 		assertEquals(new TreeSet<>(List.of("actions", "rowActions", "dialogs", "probeSelection", "tables", "status",
-			"csrf", "rules", "details", "html")), new TreeSet<>((Collection<?>)r.get("hookNamespaces")));
+			"csrf", "rules", "details", "html", "jobs")), new TreeSet<>((Collection<?>)r.get("hookNamespaces")));
 		assertEquals(new TreeSet<>((Collection<?>)r.get("hookNamespaces")),
 			new TreeSet<>((Collection<?>)r.get("frozenNamespaces")),
 			"every frozen top-level JuneauViews namespace must be listed in HOOK_NAMESPACES, and vice versa");
+	}
+
+	@Test void b01b_jobsHasTheFullMemberSet() {
+		var members = (Map<?,?>)ns("jobs").get("members");
+		for (var m : List.of("run", "fetchKey", "active", "pending"))
+			assertEquals("function", members.get(m), m);
 	}
 
 	@Test void b02_rowActionsHasTheFullMemberSet() {

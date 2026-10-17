@@ -60,6 +60,35 @@ final class ForwardedOrigin {
 		return source == ForwardedSource.FORWARDED ? resolveForwarded(hops, headers) : resolveXForwarded(hops, headers);
 	}
 
+	/**
+	 * Whether the request claims a forwarded host in the selected family, for the peer allow-list.
+	 *
+	 * <p>
+	 * A claim is any sign that a proxy, or something posing as one, spoke: a null lookup (the container cannot say), a
+	 * header with a line that does not tokenize, or a value present at all.  The other family is never looked at.
+	 *
+	 * @param source The family to read.  Must not be {@link ForwardedSource#NONE}.
+	 * @param headers Every value of the named header, in wire order, or <jk>null</jk> when the container cannot say.
+	 * @return <jk>true</jk> if the request claims a forwarded host.
+	 */
+	static boolean claimsHost(ForwardedSource source, Function<String,List<String>> headers) {
+		if (source != ForwardedSource.FORWARDED) {
+			var lines = headers.apply("X-Forwarded-Host");
+			return lines == null || ! lines.isEmpty();
+		}
+		var lines = headers.apply("Forwarded");
+		if (lines == null)
+			return true;
+		var elements = new ArrayList<Element>();
+		for (var line : lines)
+			if (! tokenize(line == null ? "" : line, elements))
+				return true;
+		for (var e : elements)
+			if (e.params().containsKey("host") || e.repeated().contains("host"))
+				return true;
+		return false;
+	}
+
 	private static Resolved refused(BoundaryReason reason) {
 		return new Resolved(null, List.of(), false, reason);
 	}

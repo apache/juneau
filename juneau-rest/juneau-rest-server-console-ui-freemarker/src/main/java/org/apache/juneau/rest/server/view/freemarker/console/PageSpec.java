@@ -951,7 +951,7 @@ public final class PageSpec {
 				: CardTypeRegistry.RESERVED.contains(card.type()) ? new Built(card.copy(), markup)
 				: liftCustom(card, markup, cardModel);
 			cap.addBuiltCard(built.card(), built.markupOrNull());
-			cardModel.recordRequirements(cap, built.card().type(), built.card().id(), List.of());
+			cardModel.recordRequirements(cap, built.card().type(), built.card().id(), List.of(), built.card().bodyMap());
 		}
 		try {
 			for (var t : topics)

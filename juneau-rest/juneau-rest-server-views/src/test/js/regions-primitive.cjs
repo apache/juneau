@@ -119,6 +119,21 @@ function stateOf(el) {
 	}
 
 	// =================================================================================================================
+	// Test 2b - declared.config (RegionDef.config) is passed through to the populator as-is, and only when it is an
+	// object; a region without one keeps the exact golden above.
+	// =================================================================================================================
+	{
+		const { env, R } = H.load(rendersJsPath, viewsJsPath, regionsJsPath);
+		const seen = {};
+		R.register('capture-config', function (c) { seen[c.id] = c.declared; });
+		const config = { submit: { endpoint: '/x/{id}', action: 'go' }, height: 120 };
+		R.initRegion(H.mkRegion(env, { id: 'withConfig', type: 'row-detail', populate: 'capture-config', declared: { contractVersion: '1', config: config } }));
+		R.initRegion(H.mkRegion(env, { id: 'arrayConfig', type: 'row-detail', populate: 'capture-config', declared: { contractVersion: '1', config: [1] } }));
+		out.t2b_configPassedThrough = JSON.stringify(seen.withConfig && seen.withConfig.config) === JSON.stringify(config);
+		out.t2b_arrayConfigDropped = !!seen.arrayConfig && !Object.hasOwn(seen.arrayConfig, 'config');
+	}
+
+	// =================================================================================================================
 	// Test 8a - fork() attachment mechanics: six assertions, because `fork` is a non-standard method on a standard
 	// type and every one of these is a way to get it subtly wrong.
 	// =================================================================================================================

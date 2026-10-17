@@ -25,8 +25,9 @@
  * juneau-views.js (whose format copiers, renderer-slot filler and async-status painter it reuses) and after
  * juneau-regions.js (a page of purely custom regions can load the bus/primitive without the paint library).
  *
- * TWELVE HELPERS:
+ * THIRTEEN HELPERS:
  *   fieldGrid, kvTable, button, buttonRow, text, pill, icon         - promoted (export work)
+ *   jobButton                                                       - a button that runs a row job (JuneauViews.jobs)
  *   tabStrip                                                        - promoted AND WIDENED (lazy per-tab
  *                                                                     populate, fill-once, contained throws)
  *   dataPane, recordTable                                           - net-new
@@ -229,6 +230,39 @@
 		row.setAttribute("role", "group");
 		for (const item of specs) row.appendChild(button(item));
 		return row;
+	}
+
+	/**
+	 * A button that runs a row-bound job through `JuneauViews.jobs.run` with this button as both `el` and `trigger`,
+	 * so the button is disabled until the job ends and resolves its row like the job-log region does.  `spec` is a
+	 * `jobs.run` spec plus `label` and `appearance`; `spec.fields` may be an object or a `() => object` read at click.
+	 * `JuneauViews.jobs` is looked up at click, so load order does not matter; when it is absent the click logs
+	 * E-JS-111 and sends nothing.  The key lifecycle (fetch on first need, reuse until the server answers) is the
+	 * jobs runtime's; this helper keeps no state of its own.
+	 */
+	function jobButton(spec) {
+		spec = spec || {};
+		const btn = button({
+			label: spec.label,
+			appearance: spec.appearance,
+			tone: spec.tone,
+			icon: spec.icon,
+			onClick: function () {
+				const jobs = window.JuneauViews?.jobs;
+				if (typeof jobs?.run !== "function") {
+					console.error("[juneau-helpers] E-JS-111: jobButton needs JuneauViews.jobs (juneau-views.js); nothing was sent.");
+					return;
+				}
+				const run = Object.assign({}, spec, { el: btn, trigger: btn });
+				delete run.label;
+				delete run.appearance;
+				delete run.tone;
+				delete run.icon;
+				jobs.run(run);
+			}
+		});
+		btn.classList.add("juneau-view-helper-job-btn");
+		return btn;
 	}
 
 	function buildFieldActionBar(actionsSpec, fieldData, onAction) {
@@ -1360,6 +1394,7 @@
 		kvTable: kvTable,
 		button: button,
 		buttonRow: buttonRow,
+		jobButton: jobButton,
 		tabStrip: tabStrip,
 		dataPane: dataPane,
 		recordTable: recordTable,

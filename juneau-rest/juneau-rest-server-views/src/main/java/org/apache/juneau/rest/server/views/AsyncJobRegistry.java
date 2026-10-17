@@ -82,6 +82,7 @@ import java.util.concurrent.*;
  * 	<li class='jc'>{@link AsyncJob}
  * 	<li class='jc'>{@link AsyncJobsMixin}
  * 	<li class='jc'>{@link IdempotencyKey}
+ * 	<li class='jc'>{@link JobKeyLedger}
  * </ul>
  *
  * @since 10.0.0

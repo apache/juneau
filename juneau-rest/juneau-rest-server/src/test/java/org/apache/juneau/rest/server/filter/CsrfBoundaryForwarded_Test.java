@@ -20,6 +20,7 @@ import static org.apache.juneau.rest.server.filter.BoundaryReason.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
+import java.net.*;
 import java.util.*;
 
 import org.apache.juneau.*;
@@ -534,5 +535,273 @@ class CsrfBoundaryForwarded_Test extends TestBase {
 		assertTrue(b.toString().contains("trustedForwarding=X_FORWARDED") && b.toString().contains("trustedHops=16"), b.toString());
 		assertEquals(ForwardedSource.NONE, CsrfBoundary.create().build().trustedForwarding());
 		assertEquals(1, CsrfBoundary.create().build().trustedHops());
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Peer allow-list
+	//-----------------------------------------------------------------------------------------------------------------
+
+	private static final String TRUSTED = "10.1.2.3";
+	private static final String UNTRUSTED = "203.0.113.7";
+
+	private static CsrfBoundary.Builder tp(String...cidrs) {
+		return xf().trustedProxies(cidrs);
+	}
+
+	private static R viaXfFrom(CsrfBoundary b, String peer, String origin, String host, String proto) {
+		return viaXf(b, origin, host, proto).remote(peer);
+	}
+
+	private static InetAddress ip(String literal) {
+		try {
+			return InetAddress.getByName(literal);
+		} catch (UnknownHostException e) {
+			throw new IllegalArgumentException(e);
+		}
+	}
+
+	/** Whether a forwarded write from {@code peer} is believed under the given ranges. */
+	private static boolean trusts(String peer, String...ranges) {
+		var b = tp(ranges).build();
+		var x = b.check(viaXfFrom(b, peer, PUBLIC, "app.example", "https").build());
+		if (! x.isAllowed())
+			assertEquals(FORWARDED_PEER_NOT_TRUSTED, x.reason(), x::toString);
+		return x.isAllowed();
+	}
+
+	@Test void g01_trustedPeerGetsPlainForwardedBehaviour() {
+		var b = tp("10.0.0.0/8").build();
+		allowed(b, viaXfFrom(b, TRUSTED, PUBLIC, "app.example", "https"));
+		refused(b, post(b, PUBLIC).remote(TRUSTED), FORWARDED_HOST_MISSING);
+		refused(b, post(b, PUBLIC).h("X-Forwarded-Host", "app.example").remote(TRUSTED), FORWARDED_PROTO_MISSING);
+		refused(b, viaXfFrom(b, TRUSTED, PUBLIC, "", "https"), FORWARDED_HOST_MALFORMED);
+		refused(b, viaXfFrom(b, TRUSTED, "http://evil.example", "app.example", "https"), ORIGIN_MISMATCH);
+		var two = tp("10.0.0.0/8").trustedHops(2).build();
+		refused(two, viaXfFrom(two, TRUSTED, PUBLIC, "app.example", "https"), FORWARDED_HOPS_INSUFFICIENT);
+		var r = new R().method("POST").scheme("http").remote(TRUSTED).h("Host", "left.example").h("Origin", PUBLIC)
+			.h("Content-Type", "application/json").h(b.csrfHeader(), b.tokenFor(new R().build()))
+			.h("X-Forwarded-Host", "\"left.example\", app.example").h("X-Forwarded-Proto", "http, https");
+		refused(b, r, FORWARDED_CONTAINER_MISMATCH);
+	}
+
+	@Test void g02_untrustedPeerWithHeaderRefused() {
+		var b = tp("10.0.0.0/8").build();
+		refused(b, viaXfFrom(b, UNTRUSTED, PUBLIC, "app.example", "https"), FORWARDED_PEER_NOT_TRUSTED);
+		// The rebinding forge: a page on the attacker's name choosing its own origin.
+		refused(b, viaXfFrom(b, UNTRUSTED, "http://evil.example", "evil.example", "http"), FORWARDED_PEER_NOT_TRUSTED);
+		var listed = tp("10.0.0.0/8").allowedHosts("evil.example").build();
+		refused(listed, viaXfFrom(listed, UNTRUSTED, "http://evil.example", "evil.example", "http"), FORWARDED_PEER_NOT_TRUSTED);
+	}
+
+	@Test void g03_untrustedPeerWithoutHeaderJudgedOnContainerView() {
+		var b = tp("10.0.0.0/8").build();
+		allowed(b, post(b, "http://backend:8080"));
+		refused(b, post(b, PUBLIC), ORIGIN_MISMATCH);
+		var listed = tp("10.0.0.0/8").allowedHosts("app.example").build();
+		refused(listed, post(listed, "http://backend:8080"), HOST_NOT_ALLOWED);
+		var backendListed = tp("10.0.0.0/8").allowedHosts("app.example", "backend").build();
+		allowed(backendListed, post(backendListed, "http://backend:8080"));
+	}
+
+	@Test void g04_protoOnlyFromUntrustedPeerIsNotRefused() {
+		var b = tp("10.0.0.0/8").build();
+		allowed(b, post(b, "http://backend:8080").h("X-Forwarded-Proto", "https"));
+		var f = fwd().trustedProxies("10.0.0.0/8").build();
+		allowed(f, post(f, "http://backend:8080").h("Forwarded", "for=1.2.3.4;proto=https"));
+	}
+
+	@Test void g05_forwardedFamily() {
+		var f = fwd().trustedProxies("10.0.0.0/8").build();
+		refused(f, post(f, PUBLIC).h("Forwarded", "for=1.2.3.4;host=app.example"), FORWARDED_PEER_NOT_TRUSTED);
+		// Another family is not the selected one.
+		allowed(f, post(f, "http://backend:8080").h("X-Forwarded-Host", "app.example").h("X-Forwarded-Proto", "https"));
+		// A header the container will not enumerate counts as a claim.
+		var req = post(f, PUBLIC).h("Forwarded", "host=app.example;proto=https").build();
+		when(req.getHeaders("Forwarded")).thenReturn(null);
+		assertEquals(FORWARDED_PEER_NOT_TRUSTED, f.check(req).reason());
+		var b = tp("10.0.0.0/8").build();
+		var req2 = post(b, PUBLIC).h("X-Forwarded-Host", "app.example").build();
+		when(req2.getHeaders("X-Forwarded-Host")).thenReturn(null);
+		assertEquals(FORWARDED_PEER_NOT_TRUSTED, b.check(req2).reason());
+	}
+
+	@Test void g06_safeMethods() {
+		var open = tp("10.0.0.0/8").build();
+		allowed(open, new R().method("GET").h("Host", "backend:8080").h("X-Forwarded-Host", "evil.example").remote(UNTRUSTED));
+		var listed = tp("10.0.0.0/8").allowedHosts("app.example").build();
+		refused(listed, new R().method("GET").h("Host", "backend:8080").h("X-Forwarded-Host", "app.example")
+			.h("X-Forwarded-Proto", "https").remote(UNTRUSTED), FORWARDED_PEER_NOT_TRUSTED);
+		refused(listed, new R().method("GET").h("Host", "backend:8080").remote(UNTRUSTED), HOST_NOT_ALLOWED);
+		allowed(listed, new R().method("GET").h("Host", "backend:8080").h("X-Forwarded-Host", "app.example")
+			.h("X-Forwarded-Proto", "https").remote(TRUSTED));
+	}
+
+	@ParameterizedTest
+	@ValueSource(strings = { "10.1.2.3", "[::1]", "0:0:0:0:0:0:0:1", "::1", "fe80::1%eth0", "fe80::1%2", "::ffff:10.1.2.3", "::ffff:127.0.0.1" })
+	void g07a_peerTrusted(String peer) {
+		assertTrue(trusts(peer, "10.0.0.0/8", "::1/128", "fe80::/10", "127.0.0.0/8"), peer);
+	}
+
+	@ParameterizedTest
+	@ValueSource(strings = {
+		"::10.1.2.3", "64:ff9b::a01:203", "", "localhost", "proxy.internal", "/tmp/jetty.sock", "unknown", "10.1", "010.1.2.3",
+		"10.1.2.3.", "[10.1.2.3]x", "fe80::1%", "::1%eth0%1", ".::1", ".:"
+	})
+	void g07b_peerUntrusted(String peer) {
+		// "localhost" would be trusted if it were resolved.
+		assertFalse(trusts(peer, "10.0.0.0/8", "::1/128", "fe80::/10", "127.0.0.0/8"), peer);
+	}
+
+	@Test void g07c_nullPeerUntrusted() {
+		assertFalse(trusts(null, "0.0.0.0/0", "::/0"));
+	}
+
+	@Test void g08_prefixBoundaries() {
+		assertTrue(trusts("172.16.0.0", "172.16.0.0/12"));
+		assertTrue(trusts("172.31.255.255", "172.16.0.0/12"));
+		assertFalse(trusts("172.32.0.0", "172.16.0.0/12"));
+		assertFalse(trusts("172.15.255.255", "172.16.0.0/12"));
+		assertTrue(trusts("2001:db8::", "2001:db8::/127"));
+		assertTrue(trusts("2001:db8::1", "2001:db8::/127"));
+		assertFalse(trusts("2001:db8::2", "2001:db8::/127"));
+		assertTrue(trusts("10.0.0.1", "10.0.0.1"));
+		assertFalse(trusts("10.0.0.2", "10.0.0.1"));
+		assertFalse(trusts("::a01:203", "10.0.0.0/8"));
+		assertFalse(trusts("10.1.2.3", "::/0"));
+	}
+
+	private static BoundaryResult hsFrom(CsrfBoundary b, InetAddress peer, String scheme, String host, String...headers) {
+		return b.checkHandshake(scheme, new HandshakeHosts(host == null ? List.of() : List.of(host), false), map(headers), peer);
+	}
+
+	private static void hsFromRefused(CsrfBoundary b, BoundaryReason reason, InetAddress peer, String host, String...headers) {
+		var x = hsFrom(b, peer, "ws", host, headers);
+		assertFalse(x.isAllowed(), () -> "expected " + reason + ", got allowed");
+		assertEquals(reason, x.reason(), x::toString);
+	}
+
+	@Test void g09_handshake() throws Exception {
+		var b = tp("10.0.0.0/8").build();
+		var trusted = ip(TRUSTED);
+		var untrusted = ip(UNTRUSTED);
+		var fwdHeaders = new String[] { "Origin", PUBLIC, "X-Forwarded-Host", "app.example", "X-Forwarded-Proto", "https" };
+		assertTrue(hsFrom(b, trusted, "ws", "backend:8080", fwdHeaders).isAllowed());
+		assertEquals(FORWARDED_HOST_MISSING, hsFrom(b, trusted, "ws", "backend:8080", "Origin", PUBLIC).reason());
+		hsFromRefused(b, FORWARDED_PEER_NOT_TRUSTED, untrusted, "backend:8080", fwdHeaders);
+		hsFromRefused(b, FORWARDED_PEER_NOT_TRUSTED, untrusted, "backend:8080", "Origin", "http://evil.example",
+			"X-Forwarded-Host", "evil.example", "X-Forwarded-Proto", "http");
+		// Without the header: the container view.
+		assertTrue(hsFrom(b, untrusted, "ws", "backend:8080", "Origin", "http://backend:8080").isAllowed());
+		hsFromRefused(b, ORIGIN_MISMATCH, untrusted, "backend:8080", "Origin", PUBLIC);
+		// An unknown peer is untrusted.
+		hsFromRefused(b, FORWARDED_PEER_NOT_TRUSTED, null, "backend:8080", fwdHeaders);
+		assertTrue(hsFrom(b, null, "ws", "backend:8080", "Origin", "http://backend:8080").isAllowed());
+		// The three-argument form has no peer.
+		var legacy = b.checkHandshake("ws", new HandshakeHosts(List.of("backend:8080"), false), map(fwdHeaders));
+		assertEquals(FORWARDED_PEER_NOT_TRUSTED, legacy.reason());
+		// Safe-method style allowedHosts applies to the container view.
+		var listed = tp("10.0.0.0/8").allowedHosts("app.example").build();
+		hsFromRefused(listed, HOST_NOT_ALLOWED, untrusted, "backend:8080", "Origin", "http://backend:8080");
+		// A mapped Inet6Address (which getByName would have collapsed) is unwrapped.
+		var mapped = Inet6Address.getByAddress(null, new byte[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, (byte)0xff, (byte)0xff, 10, 1, 2, 3 }, -1);
+		assertTrue(hsFrom(b, mapped, "ws", "backend:8080", fwdHeaders).isAllowed());
+		// Presence rows.
+		hsFromRefused(b, FORWARDED_PEER_NOT_TRUSTED, untrusted, "backend:8080", "Origin", PUBLIC, "X-Forwarded-Host", "a",
+			"x-forwarded-host", "b");
+		hsFromRefused(b, FORWARDED_PEER_NOT_TRUSTED, untrusted, "backend:8080", "Origin", PUBLIC, "X-Forwarded-Host", "");
+		// Host is parsed first.
+		hsFromRefused(b, HOST_MALFORMED, untrusted, "bad host", fwdHeaders);
+		// The list overloads refuse before any peer logic.
+		var list = b.checkHandshake("ws", new HandshakeHosts(List.of("backend:8080"), false), List.of(PUBLIC), List.of());
+		assertEquals(FORWARDED_HOST_MISSING, list.reason());
+		// Off: the peer is never read.
+		var plain = xf().build();
+		assertTrue(hsFrom(plain, untrusted, "ws", "backend:8080", fwdHeaders).isAllowed());
+	}
+
+	@Test void g11_presenceAndOrder() {
+		var b = tp("10.0.0.0/8").build();
+		refused(b, post(b, PUBLIC).h("X-Forwarded-Host", ""), FORWARDED_PEER_NOT_TRUSTED);
+		allowed(b, post(b, "http://backend:8080").h("Forwarded", "host=evil"));
+		var f = fwd().trustedProxies("10.0.0.0/8").build();
+		allowed(f, post(f, "http://backend:8080").h("Forwarded", "for=1.2.3.4;proto=https"));
+		refused(f, post(f, PUBLIC).h("Forwarded", "for=1.2.3.4;host=app.example"), FORWARDED_PEER_NOT_TRUSTED);
+		refused(f, post(f, PUBLIC).h("Forwarded", "HOST=app.example"), FORWARDED_PEER_NOT_TRUSTED);
+		refused(f, post(f, PUBLIC).h("Forwarded", "host="), FORWARDED_PEER_NOT_TRUSTED);
+		refused(f, post(f, PUBLIC).h("Forwarded", "host=\"\""), FORWARDED_PEER_NOT_TRUSTED);
+		refused(f, post(f, PUBLIC).h("Forwarded", ";;="), FORWARDED_PEER_NOT_TRUSTED);
+		refused(f, post(f, PUBLIC).h("Forwarded", "for=a").h("Forwarded", "host=x"), FORWARDED_PEER_NOT_TRUSTED);
+		// The peer comes before the Host parse.
+		var bad = new R().method("POST").h("Host", "bad host").h("Origin", PUBLIC).h("X-Forwarded-Host", "app.example");
+		refused(b, bad, FORWARDED_PEER_NOT_TRUSTED);
+		var bad2 = new R().method("POST").h("Host", "bad host").h("Origin", PUBLIC);
+		var x = b.check(bad2.build());
+		assertEquals(HOST_MALFORMED, x.reason());
+		assertEquals(400, x.status());
+	}
+
+	@Test void g10_builder() {
+		for (var bad : new String[] {
+			"10.1", "010.0.0.1", "10.0.0.256", "10.0.0.1.", "[::1]", "fe80::1%eth0", "::ffff:10.0.0.0/104", "::ffff:10.0.0.1",
+			"10.0.0.0/33", "::/129", "10.0.0.0/+8", "10.0.0.0/-1", "10.0.0.0/08", "10.0.0.0/a", "10.0.0.0/", "10.0.0.0/8/8",
+			"localhost", "proxy.example", "", "  ", "g::1", "1:2:3:4:5:6:7:8:9", ".::1/128", ".:"
+		})
+			assertThrows(IllegalArgumentException.class, () -> CsrfBoundary.create().trustedProxies(bad), bad);
+		assertThrows(IllegalArgumentException.class, () -> CsrfBoundary.create().trustedProxies());
+		assertThrows(IllegalArgumentException.class, () -> CsrfBoundary.create().trustedProxies(new String[0]));
+		assertThrows(IllegalArgumentException.class, () -> CsrfBoundary.create().trustedProxies((String)null));
+		assertThrows(IllegalArgumentException.class, () -> CsrfBoundary.create().trustedProxies((String[])null));
+		assertThrows(IllegalArgumentException.class, () -> CsrfBoundary.create().trustedProxies("10.0.0.0/8", null));
+
+		// Accepted, masked and normalized.
+		assertEquals(List.of("10.0.0.0/8"), tp("10.0.0.1/8").build().trustedProxies());
+		assertEquals(List.of("192.168.1.0/24"), tp("192.168.1.1/24", "192.168.1.0/24").build().trustedProxies());
+		assertEquals(List.of("10.0.0.1/32"), tp("10.0.0.1", "10.0.0.1/32").build().trustedProxies());
+		assertEquals(List.of("2001:db8:0:0:0:0:0:0/32"), tp("2001:db8::1/32").build().trustedProxies());
+		assertEquals(List.of("2001:db8:0:0:0:0:0:0/32"), tp("2001:db8::/32").build().trustedProxies());
+		assertEquals(List.of("0:0:0:0:0:0:0:1/128"), tp("::1").build().trustedProxies());
+		assertEquals(List.of("10.0.0.0/8", "fd00:0:0:0:0:0:0:0/8"), tp(" 10.0.0.0/8 ", "fd00::/8").build().trustedProxies());
+		assertEquals(List.of("172.16.0.0/12"), tp("172.31.1.1/12").build().trustedProxies());
+		assertEquals(List.of("0:0:0:0:0:0:0:0/0"), tp("::/0").build().trustedProxies());
+		// The last call replaces the earlier ones.
+		assertEquals(List.of("10.0.0.0/8"), xf().trustedProxies("192.168.0.0/16").trustedProxies("10.0.0.0/8").build().trustedProxies());
+		// Masked ranges match.
+		assertTrue(trusts("10.255.255.255", "10.0.0.1/8"));
+		// /0 is per family.
+		assertTrue(trusts("203.0.113.7", "0.0.0.0/0"));
+		assertTrue(trusts("::ffff:203.0.113.7", "0.0.0.0/0"));
+		assertFalse(trusts("2001:db8::1", "0.0.0.0/0"));
+		assertTrue(trusts("2001:db8::1", "::/0"));
+		assertFalse(trusts("203.0.113.7", "::/0"));
+
+		// Cross-setting checks.
+		assertThrows(IllegalArgumentException.class, () -> CsrfBoundary.create().trustedProxies("10.0.0.0/8").build());
+		assertThrows(IllegalArgumentException.class, () -> xf().originSource(OriginSource.CONTAINER).trustedProxies("10.0.0.0/8").build());
+		assertThrows(IllegalArgumentException.class, () -> fwd().originSource(OriginSource.CONTAINER).trustedProxies("10.0.0.0/8").build());
+		assertTrue(CsrfBoundary.create().build().trustedProxies().isEmpty());
+		assertTrue(tp("10.0.0.0/8").build().toString().contains("trustedProxies=[10.0.0.0/8]"));
+		assertThrows(UnsupportedOperationException.class, () -> tp("10.0.0.0/8").build().trustedProxies().add("x"));
+
+		// Not set means every peer is believed, exactly as before.
+		var off = xf().build();
+		allowed(off, viaXfFrom(off, UNTRUSTED, PUBLIC, "app.example", "https"));
+		allowed(off, viaXfFrom(off, null, PUBLIC, "app.example", "https"));
+	}
+
+	/** A forwarded refusal logs the forwarded values at FINEST only, without line breaks and capped in length. */
+	@Test void l01_forwardedRefusalLogsValuesAtFinestOnly() {
+		var b = xf().build();
+		var log = CsrfBoundary_Test.captureLog(() -> hsRefused(b, FORWARDED_HOST_MALFORMED, "ws", "app.example",
+			"Origin", PUBLIC, "X-Forwarded-Host", "bad host\r\nforged-line" + "z".repeat(500), "X-Forwarded-Proto", "https"));
+		var finest = log.stream().filter(x -> x.getLevel() == java.util.logging.Level.FINEST).map(CsrfBoundary_Test::text).toList();
+		assertEquals(1, finest.size(), log::toString);
+		var m = finest.get(0);
+		assertTrue(m.contains("X-Forwarded-Host=bad hostforged-line"), m);
+		assertTrue(m.contains("X-Forwarded-Proto=https"), m);
+		assertTrue(m.chars().noneMatch(c -> c < 0x20 || c == 0x7f), m);
+		assertFalse(m.contains("z".repeat(201)), m);
+		for (var x : log)
+			if (x.getLevel() != java.util.logging.Level.FINEST)
+				assertFalse(CsrfBoundary_Test.text(x).contains("forged-line"), CsrfBoundary_Test.text(x));
 	}
 }

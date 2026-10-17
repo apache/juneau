@@ -390,7 +390,17 @@
       }
     },
     "enabledRule": { "type": "object", "required": ["field", "op"], "properties": { "field": { "type": "string" }, "op": { "type": "string" }, "value": true, "reason": { "type": "string" } } },
-    "rowDetail":   { "type": "object", "required": ["endpoint"], "properties": { "contractVersion": false } },
+    "rowDetail":   { "type": "object", "required": ["endpoint"], "properties": {
+      "contractVersion": false,
+      "region": {
+        "type": "object",
+        "description": "Only a region that opts into populate 'job-log' is constrained; it then needs a jobLogRegionConfig.",
+        "anyOf": [
+          { "not": { "required": ["populate"], "properties": { "populate": { "const": "job-log" } } } },
+          { "required": ["config"], "properties": { "config": { "$ref": "#/$defs/jobLogRegionConfig" } } }
+        ]
+      }
+    } },
     "visibleRule": {
       "type": "object",
       "additionalProperties": false,
@@ -692,27 +702,86 @@
           "properties": {
             "endpoint":    { "type": "string", "minLength": 1 },
             "method":      { "enum": ["POST", "PUT"] },
-            "fields":      { "type": "array", "items": {
-              "type": "object",
-              "properties": {
-                "name":        { "type": "string", "minLength": 1 },
-                "label":       { "type": "string" },
-                "type":        { "enum": ["text", "textarea", "number"] },
-                "placeholder": { "type": "string" },
-                "required":    { "type": "boolean" },
-                "default":     true
-              },
-              "additionalProperties": false,
-              "required": ["name"]
-            } },
+            "envelope":    { "enum": ["flat", "action"], "default": "flat" },
+            "action":      { "$ref": "#/$defs/id" },
+            "fields":      { "type": "array", "items": { "allOf": [ { "$ref": "#/$defs/jobLogField" }, { "not": { "required": ["source"] } } ], "description": "A page card has no row, so no field takes a source." } },
             "submitLabel": { "type": "string" }
           },
           "additionalProperties": false,
-          "required": ["endpoint"]
+          "required": ["endpoint"],
+          "anyOf": [
+            { "not": { "required": ["envelope"], "properties": { "envelope": { "const": "action" } } } },
+            { "required": ["action"] }
+          ]
         },
         "height":        { "type": "integer", "default": 240 },
         "urlParam":      { "type": "string", "pattern": "^[A-Za-z][A-Za-z0-9_-]*$" },
-        "clearOnSubmit": { "type": "boolean", "default": true }
+        "clearOnSubmit": { "type": "boolean", "default": true },
+        "output":        { "$ref": "#/$defs/jobLogOutput" }
+      },
+      "additionalProperties": false,
+      "required": ["submit"]
+    },
+    "jobLogField": {
+      "type": "object",
+      "properties": {
+        "name":        { "type": "string", "minLength": 1 },
+        "label":       { "type": "string" },
+        "type":        { "enum": ["text", "textarea", "number", "hidden"] },
+        "placeholder": { "type": "string" },
+        "required":    { "type": "boolean" },
+        "default":     true,
+        "source":      { "type": "string", "pattern": "^row\\.[A-Za-z_][A-Za-z0-9_]{0,63}$" }
+      },
+      "additionalProperties": false,
+      "required": ["name"]
+    },
+    "jobLogOutput": {
+      "type": "object",
+      "properties": {
+        "target": {
+          "type": "object",
+          "properties": {
+            "field":    { "type": "string", "minLength": 1 },
+            "selector": { "type": "string", "minLength": 1 }
+          },
+          "additionalProperties": false,
+          "oneOf": [ { "required": ["field"] }, { "required": ["selector"] } ]
+        },
+        "mode": { "enum": ["replace", "append"], "default": "replace" },
+        "from": { "type": "string", "pattern": "^(message|row\\.[A-Za-z_][A-Za-z0-9_]{0,63})$", "default": "message" },
+        "when": { "enum": ["success", "any"], "default": "success" }
+      },
+      "additionalProperties": false,
+      "required": ["target"]
+    },
+    "jobLogRegionConfig": {
+      "description": "Config of a row-detail region with populate 'job-log'. Floors are checked by JobLogChecks.",
+      "type": "object",
+      "properties": {
+        "submit": {
+          "type": "object",
+          "properties": {
+            "endpoint":    { "type": "string", "minLength": 1 },
+            "method":      { "enum": ["POST", "PUT"] },
+            "envelope":    { "const": "action", "default": "action" },
+            "action":      { "$ref": "#/$defs/id" },
+            "keyUrl":      { "type": "string", "minLength": 1 },
+            "fields":      { "type": "array", "items": { "$ref": "#/$defs/jobLogField" } },
+            "submitLabel": { "type": "string" }
+          },
+          "additionalProperties": false,
+          "required": ["endpoint", "action", "keyUrl"]
+        },
+        "detail": {
+          "type": "object",
+          "properties": { "renderer": { "type": "string", "minLength": 1 }, "fields": { "type": "array", "items": { "type": "object" } } },
+          "additionalProperties": false,
+          "required": ["renderer", "fields"]
+        },
+        "height":        { "type": "integer", "default": 240 },
+        "clearOnSubmit": { "type": "boolean", "default": true },
+        "output":        { "$ref": "#/$defs/jobLogOutput" }
       },
       "additionalProperties": false,
       "required": ["submit"]

@@ -24,6 +24,7 @@ import java.util.regex.*;
 import org.apache.juneau.commons.http.*;
 import org.apache.juneau.marshall.collections.*;
 import org.apache.juneau.rest.server.console.*;
+import org.apache.juneau.rest.server.views.*;
 
 /**
  * The built-in {@code job-log} card type: a form that submits to an endpoint returning an {@code AsyncJobRef}, then
@@ -32,12 +33,16 @@ import org.apache.juneau.rest.server.console.*;
  *
  * <p>
  * The body keys are {@code submit} ({@code endpoint}, required and same-origin; {@code method} {@code POST} or
- * {@code PUT}; {@code fields}; {@code submitLabel}), {@code height} (at least {@value #MIN_HEIGHT} pixels),
- * {@code urlParam} and {@code clearOnSubmit} (a boolean).  A field takes {@code name} (required), {@code label},
- * {@code type} ({@code text}, {@code textarea} or {@code number}), {@code placeholder}, {@code required} and
- * {@code default}.  Unknown keys are rejected at every level, as the page schema rejects them.  No field may be named
- * {@code idempotencyKey}: the runtime adds that key, with a fresh value, to every submit body.  There is no typed builder; build it with
- * {@link CardSpec#of(String, String)}.
+ * {@code PUT}; {@code envelope} {@code flat} (the default) or {@code action}; {@code action}, required with the
+ * action envelope; {@code fields}; {@code submitLabel}), {@code height} (at least {@value #MIN_HEIGHT} pixels),
+ * {@code urlParam}, {@code clearOnSubmit} (a boolean) and {@code output}.  A field takes {@code name} (required),
+ * {@code label}, {@code type} ({@code text}, {@code textarea}, {@code number} or {@code hidden}), {@code placeholder},
+ * {@code required} and {@code default}; {@code source} is rejected, since a page card has no row (use a
+ * {@link JobLogRegion}).  Unknown keys are rejected at every level, as the page schema rejects them.  In the flat
+ * envelope no field may be named {@code idempotencyKey}: the runtime adds that key, with a fresh value, to every
+ * submit body.  The action envelope sends {@code {action, targetId, idempotencyKey, fields}}, self-targeted:
+ * {@code targetId} is the key's own value.  The shape rules are {@link JobLogChecks}, shared with
+ * {@link JobLogRegion}.  There is no typed builder; build it with {@link CardSpec#of(String, String)}.
  *
  * <h5 class='section'>Example:</h5>
  * <p class='bcode'>
@@ -56,15 +61,9 @@ import org.apache.juneau.rest.server.console.*;
 public final class JobLogCardType implements CardTypeHandler {
 
 	/** The smallest accepted {@code height}, in pixels. */
-	public static final int MIN_HEIGHT = 80;
+	public static final int MIN_HEIGHT = JobLogRegion.MIN_HEIGHT;
 
-	private static final Set<String> BODY_KEYS = new LinkedHashSet<>(List.of("submit", "height", "urlParam", "clearOnSubmit", "visibleWhen"));
-	private static final Set<String> SUBMIT_KEYS = new LinkedHashSet<>(List.of("endpoint", "method", "fields", "submitLabel"));
-	private static final Set<String> FIELD_KEYS = new LinkedHashSet<>(List.of("name", "label", "type", "placeholder", "required", "default"));
-	private static final Set<String> FIELD_TYPES = Set.of("text", "textarea", "number");
-	private static final Set<String> METHODS = Set.of("POST", "PUT");
-	// juneau-joblog.js adds a fresh idempotencyKey to every submit body, so a field of that name would be overwritten.
-	private static final String RESERVED_FIELD = "idempotencyKey";
+	private static final Set<String> BODY_KEYS = new LinkedHashSet<>(List.of("submit", "height", "urlParam", "clearOnSubmit", "output", "visibleWhen"));
 	private static final Pattern URL_PARAM = Pattern.compile("[A-Za-z][A-Za-z0-9_-]*");
 
 	/** Public no-arg constructor, required by {@link java.util.ServiceLoader}. */
@@ -99,56 +98,22 @@ public final class JobLogCardType implements CardTypeHandler {
 			throw source.error("type='job-log' requires submit.endpoint.");
 		if (! SafePathTemplate.isSameOriginPath(endpoint))
 			throw source.error("type='job-log' submit.endpoint must be a same-origin path; got '%s'.", endpoint);
-		for (var k : submit.keySet())
-			if (! SUBMIT_KEYS.contains(k))
-				throw source.error("type='job-log' submit unknown key '%s'; allowed: '%s'.", k, String.join(", ", SUBMIT_KEYS));
-		var method = submit.get("method");
-		if (nn(method) && ! METHODS.contains(method))
-			throw source.error("type='job-log' submit.method must be POST or PUT; got '%s'.", method);
-		var submitLabel = submit.get("submitLabel");
-		if (nn(submitLabel) && ! (submitLabel instanceof String))
-			throw source.error("type='job-log' submit.submitLabel must be a string; got '%s'.", submitLabel);
-		var fields = submit.get("fields");
-		if (nn(fields)) {
-			if (! (fields instanceof List<?> list))
-				throw source.error("type='job-log' submit.fields must be an array; got '%s'.", fields);
-			for (var i = 0; i < list.size(); i++)
-				checkField(source, i, list.get(i));
-		}
-		var height = body.get("height");
-		if (nn(height) && ! ((height instanceof Integer || height instanceof Long) && ((Number)height).longValue() >= MIN_HEIGHT))
-			throw source.error("type='job-log' height must be an integer of at least '%s'; got '%s'.", MIN_HEIGHT, height);
 		var urlParam = body.get("urlParam");
-		if (nn(urlParam) && ! (urlParam instanceof String u && URL_PARAM.matcher(u).matches()))
-			throw source.error("type='job-log' urlParam must match '%s'; got '%s'.", URL_PARAM.pattern(), urlParam);
-		var clear = body.get("clearOnSubmit");
-		if (nn(clear) && ! (clear instanceof Boolean))
-			throw source.error("type='job-log' clearOnSubmit must be a boolean; got '%s'.", clear);
+		try {
+			// The shared rules (submit keys, envelope, action, fields, output) live in JobLogChecks, beside the region's.
+			JobLogChecks.submit(submit, JobLogChecks.Mode.PAGE);
+			JobLogChecks.height(body.get("height"), MIN_HEIGHT);
+			if (nn(urlParam) && ! (urlParam instanceof String u && URL_PARAM.matcher(u).matches()))
+				throw iaex("urlParam must match '%s'; got '%s'.", URL_PARAM.pattern(), urlParam);
+			JobLogChecks.clearOnSubmit(body.get("clearOnSubmit"));
+			if (body.containsKey("output"))
+				JobLogChecks.output(body.get("output"));
+		} catch (IllegalArgumentException e) {
+			throw source.error("type='job-log' %s", e.getMessage());
+		}
 		var frag = new JsonMap();
 		frag.putAll(body);
 		frag.remove("visibleWhen");
 		return frag;
-	}
-
-	// The same shape the page schema's jobLogCard holds a field to.
-	private static void checkField(CardSource source, int i, Object f) {
-		if (! (f instanceof Map<?,?> m))
-			throw source.error("type='job-log' submit.fields[%s] must be an object; got '%s'.", i, f);
-		for (var k : m.keySet())
-			if (! FIELD_KEYS.contains(k))
-				throw source.error("type='job-log' submit.fields[%s] unknown key '%s'; allowed: '%s'.", i, k, String.join(", ", FIELD_KEYS));
-		if (! (m.get("name") instanceof String name) || name.isBlank())
-			throw source.error("type='job-log' submit.fields[%s] requires a non-blank 'name'.", i);
-		if (RESERVED_FIELD.equals(name))
-			throw source.error("type='job-log' submit.fields name '%s' is reserved; the runtime sends it with every submit.", RESERVED_FIELD);
-		var type = m.get("type");
-		if (nn(type) && ! FIELD_TYPES.contains(type))
-			throw source.error("type='job-log' submit.fields[%s] type must be 'text', 'textarea' or 'number'; got '%s'.", i, type);
-		for (var k : List.of("label", "placeholder"))
-			if (nn(m.get(k)) && ! (m.get(k) instanceof String))
-				throw source.error("type='job-log' submit.fields[%s] %s must be a string; got '%s'.", i, k, m.get(k));
-		var required = m.get("required");
-		if (nn(required) && ! (required instanceof Boolean))
-			throw source.error("type='job-log' submit.fields[%s] required must be a boolean; got '%s'.", i, required);
 	}
 }

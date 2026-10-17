@@ -52,8 +52,8 @@ public class PetstorePages_ContractTest extends TestBase {
 			.hasCard("pets-map", "chart")
 			.hasCard("hours", "html")),
 		new Page("jobs", "/console/ops/jobs", p -> p.hasActiveNav("ops", "jobs")
-			.hasCardOrder("restock-help", "restock", "jobs", "groom-output", "groom-file", "groom-runs")
-			.hasCard("restock", "job-log").hasCard("jobs", "datatables")
+			.hasCardOrder("restock-help", "restock", "jobs", "species", "groom-output", "groom-file", "groom-runs")
+			.hasCard("restock", "job-log").hasCard("jobs", "datatables").hasCard("species", "datatables")
 			.hasCard("groom-output", "terminal").hasCard("groom-file", "terminal").hasCard("groom-runs", "datatables")),
 		new Page("audit", "/console/ops/audit", p -> p.hasActiveNav("ops", "audit").hasCard("audit", "datatables")),
 		new Page("flavors-html", "/console/dev/flavors/html", p -> p.hasActiveNav("dev", "flavors", "html").hasCardOrder("caption", "flavor")),

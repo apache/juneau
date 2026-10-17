@@ -45,6 +45,37 @@ Submitting twice from the same dialog runs one job.  Give the card below a wait 
     { type: 'refresh', id: 'refresh' }
   ]
 }</@card>
+<@card type="datatables" id="species">{
+  dataMode: 'client',
+  dataUrl: '/console/ops/jobs/species',
+  pollIntervalMs: 2000,
+  columns: [
+    { key: 'species', label: 'Species' },
+    { key: 'available', label: 'Available' }
+  ],
+  detail: {
+    endpoint: '/console/ops/jobs/species/{id}',
+    region: {
+      id: 'restock-species',
+      populate: 'job-log',
+      config: {
+        submit: {
+          endpoint: '/console/ops/jobs/species/{id}/restock',
+          envelope: 'action',
+          action: 'restock-species',
+          keyUrl: '/console/ops/jobs/species/{id}/key',
+          submitLabel: 'Restock',
+          fields: [
+            { name: 'count', label: 'How many (1-50)', type: 'number', default: 1, required: true },
+            { name: 'species', type: 'hidden', source: 'row.species' }
+          ]
+        },
+        detail: { renderer: 'fieldGrid', fields: [ { data: 'available', label: 'Available' } ] },
+        output: { target: { field: 'available' }, from: 'row.available' }
+      }
+    }
+  }
+}</@card>
 <@card type="terminal" id="groom-output" title="Groom run">
 {
   contractVersion: '1',
@@ -72,6 +103,10 @@ Submitting twice from the same dialog runs one job.  Give the card below a wait 
     { key: 'state', label: 'State', render: { id: 'pill' } },
     { key: 'lines', label: 'Lines' }
   ],
+  detail: {
+    endpoint: '/console/ops/jobs/groom-runs/{id}',
+    region: { id: 'regroom', populate: 'petstore-regroom' }
+  },
   ribbon: [
     { type: 'dialog', id: 'groom', title: 'Groom', endpoint: '/console/ops/jobs/groom', method: 'POST', form: '/console/ops/jobs/groom-form' },
     { type: 'refresh', id: 'groom-refresh' }

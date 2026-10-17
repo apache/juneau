@@ -270,4 +270,49 @@ class RegionDef_Test extends TestBase {
 		r.validate();
 		assertFalse(r.toContractMap().containsKey("fields"), "row-detail must carry no fields member at all");
 	}
+
+	// -----------------------------------------------------------------------------------------------------------
+	// config: populator-owned structured configuration.
+	// -----------------------------------------------------------------------------------------------------------
+
+	@Test void k01_config_nestedMapsAndLists_emitted() {
+		var cfg = new LinkedHashMap<String,Object>();
+		cfg.put("submit", Map.of("endpoint", "/a/{id}", "fields", List.of(Map.of("name", "n"))));
+		cfg.put("height", 120);
+		var r = RegionDef.create("job").type(RegionDef.TYPE_ROW_DETAIL).config(cfg);
+		r.validate();
+		assertSame(cfg, r.toContractMap().get("config"));
+	}
+
+	@Test void k02_config_nullOrEmpty_notEmitted() {
+		assertFalse(RegionDef.create("a").toContractMap().containsKey("config"));
+		assertFalse(RegionDef.create("a").config(Map.of()).toContractMap().containsKey("config"));
+	}
+
+	@Test void k03_config_nonJsonValue_rejected() {
+		var r = RegionDef.create("job").config(Map.of("when", new Object()));
+		var e = assertThrows(IllegalArgumentException.class, r::validate);
+		assertEquals("RegionDef 'job' config values must be maps, lists, strings, numbers, booleans or null; got Object.", e.getMessage());
+	}
+
+	@Test void k04_config_nonStringKey_rejected() {
+		var inner = new HashMap<Object,Object>();
+		inner.put(1, "x");
+		var r = RegionDef.create("job").config(Map.of("submit", inner));
+		var e = assertThrows(IllegalArgumentException.class, r::validate);
+		assertEquals("RegionDef 'job' config keys must be strings.", e.getMessage());
+	}
+
+	@Test void k05_config_cycle_rejected() {
+		var cfg = new HashMap<String,Object>();
+		cfg.put("self", cfg);
+		var r = RegionDef.create("job").config(cfg);
+		var e = assertThrows(IllegalArgumentException.class, r::validate);
+		assertEquals("RegionDef 'job' config must not contain a cycle.", e.getMessage());
+	}
+
+	@Test void k06_config_sharedNonCyclicValue_accepted() {
+		var shared = List.of("x");
+		RegionDef.create("job").config(Map.of("a", shared, "b", shared)).validate();
+	}
 }

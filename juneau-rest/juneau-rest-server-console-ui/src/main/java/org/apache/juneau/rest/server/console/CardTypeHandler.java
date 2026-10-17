@@ -109,4 +109,21 @@ public interface CardTypeHandler {
 	 * @return The handled op names, or {@code null} if unknown.
 	 */
 	default Set<String> acceptedOps() { return null; }
+
+	/**
+	 * Toolkit packs this card needs because of what its body declares, beyond the packs its type always needs.
+	 * Unioned with the type's packs and the card's {@code requires=}.  Default: none.
+	 *
+	 * <h5 class='section'>Example:</h5>
+	 * <p class='bjava'>
+	 *   <ja>@Override</ja>
+	 *   <jk>public</jk> List&lt;String&gt; requiredPacks(JsonMap <jv>body</jv>) {
+	 *     <jk>return</jk> <jv>body</jv>.containsKey(<js>"terminal"</js>) ? List.<jsm>of</jsm>(<js>"terminal"</js>) : List.<jsm>of</jsm>();
+	 *   }
+	 * </p>
+	 *
+	 * @param body The card's body: this type's fragment, as {@link #toFragment(CardSource)} returned it.
+	 * @return The pack names; each must be a registered pack.
+	 */
+	default List<String> requiredPacks(JsonMap body) { return List.of(); }
 }

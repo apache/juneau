@@ -1,0 +1,3 @@
+{"contractVersion":"1","title":"T","nav":[],"activeNav":[],"cards":[
+  {"id":"rebuild","type":"job-log","submit":{"endpoint":"/console/jobs/rebuild","fields":[{"name":"species","type":"hidden","source":"row.species"}]}}
+]}

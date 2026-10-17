@@ -1513,6 +1513,10 @@ textarea.jc-joblog-input { min-width: 16rem; min-height: 3rem; }
 .jc-joblog-output { margin: 0; padding: var(--jc-space-2); overflow: auto; box-sizing: border-box; background-color: var(--jc-control-bg); border-width: 1px; border-style: solid; border-color: var(--jc-border); border-radius: var(--jc-radius); font-family: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, monospace; font-size: 0.8125rem; white-space: pre-wrap; }
 .jc-joblog-line { display: block; }
 .jc-joblog-notice { color: var(--jc-text-muted); font-style: italic; }
+/* In a row's detail panel: the optional field grid above the form, and the region's own polite announce span. */
+.jc-joblog-detail { margin-bottom: var(--jc-space-3); }
+.jc-joblog-detail:empty { display: none; }
+.jc-joblog-sr { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
 
 /* ==========================================================================
    Dashboard chrome (juneau-dashboard.js)

@@ -26,22 +26,23 @@ import jakarta.websocket.*;
 import jakarta.websocket.server.*;
 
 /**
- * The handshake guards of the bus's WebSocket endpoint (Origin, Host, fetch-site and capability checks).  Not for direct use: it is public only
- * because the container calls it.  {@link BusWebSockets#register} installs it.
+ * The handshake guards of the bus's WebSocket endpoint (Origin, Host, fetch-site and capability checks).  Not for
+ * direct use: it is public only because the container calls it.  {@link BusWebSockets#register} installs it.
  *
  * <ul>
  * 	<li>{@link #checkOrigin(String)}: runs before any upgrade, and a refusal is the container's {@code 403}.  Under a
- * 		{@link LoopbackBoundary} or {@code allowedOrigins} it is an exact match.  Under a {@link CsrfBoundary} it
- * 		can only see the {@code Origin} value, so it refuses a missing value, {@code null}, and anything that is not a
+ * 		{@link LoopbackBoundary} or {@code allowedOrigins} it is an exact match.  Under a {@link CsrfBoundary} it can
+ * 		only see the {@code Origin} value, so it refuses a missing value, {@code null}, and anything that is not a
  * 		well-formed http(s) origin; a well-formed cross-site value passes it and is refused by the next step.
  * 	<li>{@link #modifyHandshake}: under a {@link LoopbackBoundary}, Host against the boundary's authority; under a
- * 		{@link CsrfBoundary}, {@link CsrfBoundary#checkHandshake(String, HandshakeHosts, Map)} with the scheme of the handshake's request URI and
- * 		its headers (so {@link CsrfBoundary.Builder#trustedForwarding trusted forwarding}, when set, sees the forwarded headers).  Over HTTP/2 (RFC 8441), where the handshake has
- * 		no {@code Host}, {@code Sec-WebSocket-Key} or {@code Upgrade}, the request URI's authority stands in for
- * 		{@code Host} ({@link HandshakeHosts}).  Otherwise {@code Sec-Fetch-Site} (when
- * 		present) must be {@code same-origin}.  Last, the capability and principal.  A failure is recorded in the per-connection
- * 		user properties, and {@link BusWebSocketEndpoint#onOpen} closes at once with {@code 4403} ({@code bus:refused})
- * 		or {@code 4401} ({@code bus:unknown-session}).
+ * 		{@link CsrfBoundary}, {@link CsrfBoundary#checkHandshake(String, HandshakeHosts, Map)} with the scheme of the
+ * 		handshake's request URI and its headers (so
+ * 		{@link CsrfBoundary.Builder#trustedForwarding trusted forwarding}, when set, sees the forwarded headers).
+ * 		Over HTTP/2 (RFC 8441), where the handshake has no {@code Host}, {@code Sec-WebSocket-Key} or
+ * 		{@code Upgrade}, the request URI's authority stands in for {@code Host} ({@link HandshakeHosts}).  Otherwise
+ * 		{@code Sec-Fetch-Site} (when present) must be {@code same-origin}.  Last, the capability and principal.  A
+ * 		failure is recorded in the per-connection user properties, and {@link BusWebSocketEndpoint#onOpen} closes at
+ * 		once with {@code 4403} ({@code bus:refused}) or {@code 4401} ({@code bus:unknown-session}).
  * </ul>
  *
  * <p>
@@ -51,6 +52,18 @@ import jakarta.websocket.server.*;
  * The refusal and session are stored in the user-properties map of the handshake, which relies on the container giving
  * each handshake its own copy of that map (WebSocket 2.1 and later; Jetty and Tomcat do).  A container that shares one
  * map across handshakes would mix up concurrent connections.
+ *
+ * <p>
+ * With {@link CsrfBoundary.Builder#trustedProxies(String...) trustedProxies} set, the handshake's peer is read from the
+ * Jetty user property {@code jakarta.websocket.endpoint.remoteAddress}.  Jakarta WebSocket has no standard peer
+ * address; a container that records none (Tomcat) leaves the peer unknown, and an unknown peer is not trusted, so a
+ * handshake that carries a forwarded host is refused there.  The property is believable only because Jetty writes it
+ * into the per-handshake copy of the user properties; a container that copied client input into it would break that.
+ *
+ * <p>
+ * Trusted forwarding selects a hop by counting entries from the right, which relies on the container returning the
+ * repeated lines of a forwarded header in the order they arrived on the wire.  Jetty and Tomcat both do.  A container
+ * that reorders them would select the wrong hop.
  *
  * <h5 class='section'>Example:</h5>
  * <p class='bjava'>
@@ -67,6 +80,13 @@ public final class BusWebSocketConfigurator extends ServerEndpointConfig.Configu
 
 	/** User-property key of the {@link Refusal} a failed handshake recorded. */
 	static final String REFUSAL_PROPERTY = "juneau.bus.refusal";
+
+	/**
+	 * User-property key under which Jetty records the TCP peer of a handshake.  Non-standard.  It is trusted only
+	 * because Jetty writes it into the per-handshake copy of the user properties after the client's headers are read, so
+	 * a client cannot supply it.
+	 */
+	static final String PEER_PROPERTY = "jakarta.websocket.endpoint.remoteAddress";
 
 	/** A handshake failure that {@code onOpen} turns into a close frame. */
 	record Refusal(int code, String reason) {}
@@ -125,7 +145,8 @@ public final class BusWebSocketConfigurator extends ServerEndpointConfig.Configu
 		var uri = request.getRequestURI();
 		if (csrf != null) {
 			var hosts = HandshakeHosts.of(request.getHeaders(), uri);
-			var result = csrf.checkHandshake(uri == null ? null : uri.getScheme(), hosts, request.getHeaders());
+			var peer = csrf.trustedProxies().isEmpty() ? null : peer(props);
+			var result = csrf.checkHandshake(uri == null ? null : uri.getScheme(), hosts, request.getHeaders(), peer);
 			if (! result.isAllowed())
 				return REFUSED;
 		} else {
@@ -143,6 +164,17 @@ public final class BusWebSocketConfigurator extends ServerEndpointConfig.Configu
 			return UNKNOWN_SESSION;
 		props.put(SESSION_PROPERTY, session.get());
 		return null;
+	}
+
+	/**
+	 * The TCP peer Jetty records in the handshake's user properties, or {@code null} when there is none to trust.
+	 *
+	 * <p>
+	 * Only a resolved {@link InetSocketAddress} counts, and only its address bytes are used: never a host name, so
+	 * nothing is looked up.  Tomcat records nothing, so the peer is unknown there and is not trusted.
+	 */
+	private static InetAddress peer(Map<String,Object> props) {
+		return props.get(PEER_PROPERTY) instanceof InetSocketAddress a && ! a.isUnresolved() ? a.getAddress() : null;
 	}
 
 	/** The last path segment after {@link BusWebSockets#PREFIX}, or {@code null} when the path is malformed. */

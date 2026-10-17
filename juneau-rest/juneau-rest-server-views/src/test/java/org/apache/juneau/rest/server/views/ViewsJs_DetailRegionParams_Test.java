@@ -25,8 +25,8 @@ import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
 
 /**
- * A datatables catalog's {@code detail.region.params} are copied into the row-detail region's declared descriptor,
- * so a row-detail run-view region receives its params.  Drives {@code detail-region-params.cjs}.
+ * A datatables catalog's {@code detail.region.params} and {@code detail.region.config} are copied into the row-detail
+ * region's declared descriptor, so a row-detail run-view region receives its params and a job-log region its config.  Drives {@code detail-region-params.cjs}.
  */
 class ViewsJs_DetailRegionParams_Test extends TestBase {
 
@@ -48,4 +48,5 @@ class ViewsJs_DetailRegionParams_Test extends TestBase {
 	@Test void a04_nonObjectParamsAreDropped() { assertAllTrue("a04_nonObjectsDropped"); }
 	@Test void a05_emptyObjectIsWritten() { assertAllTrue("a05_emptyObjectWritten"); }
 	@Test void a06_paramsReachThePopulator() { assertAllTrue("a06_roundTrip", "a06_noErrors"); }
+	@Test void a07_configIsCopiedAndReachesThePopulator() { assertAllTrue("a07_configCopied", "a07_roundTrip", "a07_nonObjectAndAbsentDropped"); }
 }

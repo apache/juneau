@@ -99,10 +99,18 @@ public enum BoundaryReason {
 	/** Trusted forwarding is on and the request carried a forwarded host but no forwarded proto.  Answered with 403 Forbidden. */
 	FORWARDED_PROTO_MISSING,
 
-	/** Trusted forwarding is on and the forwarded host, or the {@code Forwarded} header, was malformed.  Answered with 403 Forbidden. */
+	/**
+	 * Trusted forwarding is on and the forwarded host, or the {@code Forwarded} header, was malformed.  Answered with
+	 * 403 Forbidden.  Also used when the order of the header's lines cannot be established (a handshake map that holds
+	 * the name under more than one spelling, or a container that will not enumerate the lines).
+	 */
 	FORWARDED_HOST_MALFORMED,
 
-	/** Trusted forwarding is on and the forwarded proto was not {@code http} or {@code https}.  Answered with 403 Forbidden. */
+	/**
+	 * Trusted forwarding is on and the forwarded proto was not {@code http} or {@code https}.  Answered with 403
+	 * Forbidden.  Also used when the order of the proto header's lines cannot be established (see
+	 * {@link #FORWARDED_HOST_MALFORMED}).
+	 */
 	FORWARDED_PROTO_MALFORMED,
 
 	/** Trusted forwarding is on and the forwarded header held fewer entries than the trusted hop count.  Answered with 403 Forbidden. */
@@ -115,5 +123,12 @@ public enum BoundaryReason {
 	 * Trusted forwarding is on and the container's own view of the request disagrees with the forwarded origin.
 	 * Answered with 403 Forbidden.
 	 */
-	FORWARDED_CONTAINER_MISMATCH
+	FORWARDED_CONTAINER_MISMATCH,
+
+	/**
+	 * Trusted forwarding is on with a {@link CsrfBoundary.Builder#trustedProxies(String...) peer allow-list}, and a
+	 * forwarded host arrived from a peer that is not on it (or whose address the container did not report).
+	 * Answered with 403 Forbidden.
+	 */
+	FORWARDED_PEER_NOT_TRUSTED
 }

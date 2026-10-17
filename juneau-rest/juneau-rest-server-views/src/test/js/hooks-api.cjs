@@ -87,6 +87,7 @@ out.status = shape(NS?.status, ['render']);
 out.csrf = shape(NS?.csrf, ['token', 'headerName', 'headers']);
 out.details = shape(NS?.details, ['fillSlots']);
 out.html = shape(NS?.html, ['esc', 'escAttr']);
+out.jobs = shape(NS?.jobs, ['run', 'fetchKey', 'active', 'pending']);
 out.htmlEscOutput = typeof NS?.html?.esc === 'function' ? NS.html.esc('<a>&"\'') : null;
 
 // csrf.headers against a fake table element (no owning view table, so the element itself is read).

@@ -72,10 +72,13 @@ def prompt_pgp_passphrase():
     """
     Make a dummy PGP call to prompt for passphrase early in the execution.
 
+    Returns False when gpg ran and exited non-zero; True otherwise, including timeout and gpg-missing.
+
     This ensures the user is prompted for their PGP passphrase at the beginning
     rather than waiting until signing is needed near the end of the process.
     """
     print("\n🔐 Prompting for PGP passphrase (dummy call)...")
+    gpg_ok = True
     try:
         # Create a small dummy file to sign
         with tempfile.NamedTemporaryFile(mode='w', delete=False, suffix='.txt') as tmp:
@@ -107,7 +110,12 @@ def prompt_pgp_passphrase():
                     os.unlink(tmp_path + ".asc")
             except OSError:
                 pass
-            print("✅ PGP passphrase entered successfully")
+            if result.returncode == 0:
+                print("✅ PGP passphrase entered successfully")
+            else:
+                gpg_ok = False
+                print(f"⚠ gpg exited with code {result.returncode} - the PGP passphrase was not accepted; "
+                      "signing later in this run will probably fail")
         except subprocess.TimeoutExpired:
             print("⚠ PGP passphrase prompt timed out (this is okay if signing isn't needed)")
         except FileNotFoundError:
@@ -117,7 +125,8 @@ def prompt_pgp_passphrase():
             print(f"⚠ Could not prompt for PGP passphrase: {e}")
     except Exception as e:
         print(f"⚠ Could not set up PGP passphrase prompt: {e}")
-    return True  # Never block the build; we're best-effort
+    # Best-effort: the callers (push.py, release.py) treat a non-zero exit as a warning only and never stop the build.
+    return gpg_ok
 
 
 def main():

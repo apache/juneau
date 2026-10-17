@@ -90,6 +90,18 @@ public class JobsRest extends PetstoreConsolePage implements AsyncJobsMixin, Ter
 
 	private static final String GROOM = "groom";
 
+	/** The species row's restock action; its keys come from the ledger, bound to the species and the caller. */
+	static final String RESTOCK_SPECIES = "restock-species";
+
+	/** The groom run row's "groom again" action. */
+	static final String REGROOM = "regroom";
+
+	/** Row keys: issued by the {@code /key} endpoints, checked and claimed by the row submits. */
+	private final transient JobKeyLedger jobKeys = JobKeyLedger.create();
+
+	/** When each species was last restocked from its row, for the row's detail panel. */
+	private final transient Map<Species,Instant> lastRestock = new ConcurrentHashMap<>();
+
 	/** The groom-pet demo runs; one verbose run is seeded so the page always has a log. */
 	private final transient GroomRuns groom = GroomRuns.seeded(Long.getLong(GroomRuns.PERIOD_PROPERTY, GroomRuns.DEFAULT_PERIOD_MS));
 
@@ -122,11 +134,25 @@ public class JobsRest extends PetstoreConsolePage implements AsyncJobsMixin, Ter
 	 */
 	public record HardTimeout(Duration value) {}
 
+	/**
+	 * A per-host clock for the row-key ledger, so a test can age a key past its TTL.  Declare it as a {@code @Bean} on
+	 * the host, as {@link HardTimeout}.
+	 *
+	 * @param value The clock.
+	 */
+	public record KeyClock(Clock value) {}
+
 	@SuppressWarnings({
 		"java:S2226" // the field is set by the framework's @Bean injection after construction, so it cannot be final.
 	})
 	@Bean
 	private transient HardTimeout hardTimeout;
+
+	@SuppressWarnings({
+		"java:S2226" // the field is set by the framework's @Bean injection after construction, so it cannot be final.
+	})
+	@Bean
+	private transient KeyClock keyClock;
 
 	private transient volatile AsyncJobRegistry jobs;
 	private final transient ExecutorService pool = Executors.newCachedThreadPool(r -> {
@@ -209,6 +235,12 @@ public class JobsRest extends PetstoreConsolePage implements AsyncJobsMixin, Ter
 			}
 			throw new BadRequest("Invalid %s '%s'; must be a whole number 0-%s", name, v, max);
 		}
+	}
+
+	/** @return The row-key ledger, on the host's {@link KeyClock} if it declares one. */
+	private JobKeyLedger jobKeys() {
+		var c = keyClock;
+		return c == null ? jobKeys : jobKeys.clock(c.value());
 	}
 
 	@Override /* AsyncJobsMixin */
@@ -356,6 +388,19 @@ public class JobsRest extends PetstoreConsolePage implements AsyncJobsMixin, Ter
 	 * @param effect The restock itself; returns the added pets.
 	 */
 	static void run(AsyncJob job, Restock body, Supplier<List<Pet>> effect) {
+		run(job, body, effect, () -> null);
+	}
+
+	/**
+	 * Same as {@link #run(AsyncJob, Restock, Supplier)}, but the success result carries a value, read after the
+	 * effect: a row job returns its row's new state, which the card's {@code output} writes back into the row.
+	 *
+	 * @param job The job.
+	 * @param body The restock.
+	 * @param effect The restock itself; returns the added pets.
+	 * @param value The success result's value.
+	 */
+	static void run(AsyncJob job, Restock body, Supplier<List<Pet>> effect, Supplier<Object> value) {
 		try {
 			if (body.slowMs() > 0) {
 				job.progress(f("Waiting %s ms before restocking", body.slowMs()));
@@ -370,7 +415,7 @@ public class JobsRest extends PetstoreConsolePage implements AsyncJobsMixin, Ter
 			var pets = effect.get();
 			pets.forEach(p -> job.progress(f("Added %s", p.getName())));
 			if (hold(job, body.holdMs()))
-				job.complete(ActionResult.success(null).message(f("Restocked %s pets", pets.size())));
+				job.complete(ActionResult.success(value.get()).message(f("Restocked %s pets", pets.size())));
 		} catch (InterruptedException e) {
 			Thread.currentThread().interrupt();
 			job.complete(ActionResult.unknown().message("Interrupted"));
@@ -459,5 +504,232 @@ public class JobsRest extends PetstoreConsolePage implements AsyncJobsMixin, Ter
 	@RestGet(path="/groom-rows")
 	public List<JsonMap> groomRows() {
 		return groom.list().stream().map(GroomRuns.Run::row).toList();
+	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// Row jobs: a key bound to one row, issued by the server and checked on submit.
+	//-----------------------------------------------------------------------------------------------------------------
+
+	/**
+	 * @return One row per species: {@code {id, species, available}}.
+	 */
+	@RestGet(path="/species")
+	public List<JsonMap> speciesRows() {
+		return Arrays.stream(Species.values()).map(this::speciesRow).toList();
+	}
+
+	/**
+	 * A species row's detail panel.
+	 *
+	 * @param id The species name, for example {@code DOG}.
+	 * @return {@code {contractVersion, fields:{available, lastRestock}}}.
+	 * @throws NotFound If the species is unknown.
+	 */
+	@RestGet(path="/species/{id}")
+	public JsonMap speciesDetail(@Path("id") String id) {
+		var s = species(id);
+		var last = lastRestock.get(s);
+		var fields = new JsonMap().append("available", available(s)).append("lastRestock", last == null ? null : last.toString());
+		return RowDetail.response(fields);
+	}
+
+	/**
+	 * Issues a restock key bound to one species and the caller.
+	 *
+	 * <p>
+	 * A POST, so it sits behind the console's CSRF boundary like every other console write; it changes nothing but the
+	 * key ledger.
+	 *
+	 * @param req The request.
+	 * @param id The species name.
+	 * @return {@code {contractVersion, action, targetId, idempotencyKey}}.
+	 * @throws NotFound If the species is unknown.
+	 */
+	@RestPost(path="/species/{id}/key")
+	public Map<String,Object> speciesKey(RestRequest req, @Path("id") String id) {
+		var s = species(id);
+		return JobKeyLedger.response(jobKeys().issue(RESTOCK_SPECIES, s.name(), ConsoleWrites.actor(req)));
+	}
+
+	/**
+	 * Restocks one species from its row's detail panel.
+	 *
+	 * <p>
+	 * The species is the path's {@code {id}}, which must equal the body's {@code targetId}, which the key must be bound
+	 * to.  The body's {@code fields} supply only {@code count}; any other field (the panel's hidden {@code species}
+	 * included) is ignored.  A replay of a claimed key returns the same job, or a {@link JobKeyLedger#SPENT_CODE}
+	 * refusal once the registry has aged the job out.
+	 *
+	 * @param req The request.
+	 * @param res The response (202, or 409 on a refusal).
+	 * @param id The species name.
+	 * @param json The action envelope {@code {action, targetId, idempotencyKey, fields:{count}}}.
+	 * @return The job ref (202), a 409 refusal, or a 429 {@code app:job-limit} refusal.
+	 * @throws NotFound If the species is unknown.
+	 * @throws BadRequest If the envelope is malformed or {@code count} is not a whole number 1-50.
+	 */
+	@RestPost(path="/species/{id}/restock")
+	public Object restockSpecies(RestRequest req, RestResponse res, @Path("id") String id, @Content JsonMap json) {
+		var s = species(id);
+		var submit = RowJobSubmit.parse(json);
+		if (! s.name().equals(submit.targetId()))
+			return refused(res, RowJobSubmit.bindingRefusal());
+		var actor = ConsoleWrites.actor(req);
+		var ledger = jobKeys();
+		var registry = asyncJobRegistry();
+		AsyncJob job;
+		// The ledger's own monitor: the verify that reads the claim and the claim itself happen under one lock, so of
+		// two concurrent submits of one key the second sees the first's job and replays it instead of starting it again.
+		synchronized (ledger) {
+			var grant = submit.verify(ledger, RESTOCK_SPECIES, actor).orElse(null);
+			if (grant == null)
+				return refused(res, RowJobSubmit.bindingRefusal());
+			var claimed = grant.jobId().orElse(null);
+			if (claimed != null) {
+				var r = replay(claimed, registry);
+				res.setStatus(r instanceof ActionResult ? RowJobSubmit.REFUSAL_STATUS : 202);
+				return r;
+			}
+			// After the replay check: a replay answers its job even if this resubmit's fields have changed.
+			var body = new Restock(Map.of(s, count(submit.fields())), grant.key().value(), 0, DEFAULT_HOLD_MS);
+			var created = registry.runningCount() >= Integer.getInteger(LIMIT_PROPERTY, 2) ? null : registry.tryCreate(grant.key()).orElse(null);
+			if (created == null)
+				return limitReached(res, registry.runningCount());
+			ledger.claim(grant.key(), created.id());
+			job = created;
+			remember(created, body);
+			pool.execute(() -> run(created, body, () -> restocked(s, body, actor), () -> speciesRow(s)));
+		}
+		res.setStatus(202);
+		return AsyncJobRef.of(job);
+	}
+
+	/**
+	 * A claimed key's replay: its job's ref, or a {@link JobKeyLedger#SPENT_CODE} refusal once the registry has reaped
+	 * the job.  Never a second job: the key was spent on the first.
+	 *
+	 * @param jobId The job the key was claimed for.
+	 * @param registry The registry.
+	 * @return The {@link AsyncJobRef}, or the refusal.
+	 */
+	static Object replay(String jobId, AsyncJobRegistry registry) {
+		return registry.get(jobId).<Object>map(AsyncJobRef::of)
+			.orElseGet(() -> ActionResult.refusal(JobKeyLedger.SPENT_CODE).message("This key's job has aged out; fetch a new key"));
+	}
+
+	private List<Pet> restocked(Species s, Restock body, String actor) {
+		var pets = store().restock(body.perSpecies(), "job:restock-species:" + actor);
+		lastRestock.put(s, Instant.now());
+		return pets;
+	}
+
+	/**
+	 * A groom run's detail panel.
+	 *
+	 * @param id The run id.
+	 * @return {@code {contractVersion, fields:<the run's row>}}.
+	 * @throws NotFound If the run is unknown.
+	 */
+	@RestGet(path="/groom-runs/{id}")
+	public JsonMap groomRunDetail(@Path("id") String id) {
+		return RowDetail.response(groomRun(id).row());
+	}
+
+	/**
+	 * Issues a regroom key bound to one groom run and the caller.
+	 *
+	 * @param req The request.
+	 * @param id The run id.
+	 * @return {@code {contractVersion, action, targetId, idempotencyKey}}.
+	 * @throws NotFound If the run is unknown.
+	 */
+	@RestPost(path="/groom-runs/{id}/key")
+	public Map<String,Object> groomRunKey(RestRequest req, @Path("id") String id) {
+		var r = groomRun(id);
+		return JobKeyLedger.response(jobKeys().issue(REGROOM, r.id(), ConsoleWrites.actor(req)));
+	}
+
+	/**
+	 * Grooms a run's pet again.
+	 *
+	 * <p>
+	 * Ledger keys only, bound to the path's run: the pet comes from the server's run record, never the request.
+	 * {@code /groom} stays the dialog's self-targeted endpoint; one endpoint taking both kinds of key would be only as
+	 * strong as the self-targeted one.  A replay returns the same new run while it is kept, then a
+	 * {@link JobKeyLedger#SPENT_CODE} refusal once the run list has evicted it; never a second run.
+	 *
+	 * @param req The request.
+	 * @param res The response (409 on a refusal).
+	 * @param id The run id.
+	 * @param json The action envelope {@code {action, targetId, idempotencyKey}}.
+	 * @return The new run's row, or a 409 refusal.
+	 * @throws NotFound If the key is unclaimed and the run is unknown.
+	 * @throws BadRequest If the envelope is malformed.
+	 * @throws IOException If the new run's temp file cannot be created.
+	 */
+	@RestPost(path="/groom-runs/{id}/regroom")
+	public ActionResult regroom(RestRequest req, RestResponse res, @Path("id") String id, @Content JsonMap json) throws IOException {
+		var submit = RowJobSubmit.parse(json);
+		if (! id.equals(submit.targetId()))
+			return refused(res, RowJobSubmit.bindingRefusal());
+		var ledger = jobKeys();
+		// As restockSpecies: the claim is read and recorded under the ledger's lock.  The replay check comes before the
+		// run lookup, because GroomRuns evicts the oldest runs first and a replay must still answer once its target is gone.
+		synchronized (ledger) {
+			var grant = submit.verify(ledger, REGROOM, ConsoleWrites.actor(req)).orElse(null);
+			if (grant == null)
+				return refused(res, RowJobSubmit.bindingRefusal());
+			var claimed = grant.jobId().orElse(null);
+			if (claimed != null)
+				return groom.get(claimed).map(x -> ActionResult.success(x.row()).message(f("Grooming %s again", x.pet())))
+					.orElseGet(() -> refused(res, ActionResult.refusal(JobKeyLedger.SPENT_CODE).message("This key's run has aged out; fetch a new key")));
+			var again = groom.start(groomRun(id).pet(), false, grant.key().value());
+			ledger.claim(grant.key(), again.id());
+			return ActionResult.success(again.row()).message(f("Grooming %s again", again.pet()));
+		}
+	}
+
+	private static ActionResult refused(RestResponse res, ActionResult refusal) {
+		res.setStatus(RowJobSubmit.REFUSAL_STATUS);
+		return refusal;
+	}
+
+	private void remember(AsyncJob job, Restock body) {
+		synchronized (submitted) {
+			submitted.addFirst(JsonMap.of("jobId", job.id(), "submitted", job.createdAt().toString(), "request", body.perSpecies(), "idempotencyKey", body.idempotencyKey()));
+			while (submitted.size() > MAX_SUBMITTED)
+				submitted.removeLast();
+		}
+	}
+
+	private JsonMap speciesRow(Species s) {
+		return JsonMap.of("id", s.name(), "species", s.name(), "available", available(s));
+	}
+
+	private long available(Species s) {
+		return store().getPets().stream().filter(p -> p.getSpecies() == s && p.getStatus() == PetStatus.AVAILABLE).count();
+	}
+
+	private static Species species(String id) {
+		for (var s : Species.values())
+			if (s.name().equals(id))
+				return s;
+		throw new NotFound("Unknown species '%s'", id);
+	}
+
+	private GroomRuns.Run groomRun(String id) {
+		return groom.get(id).orElseThrow(() -> new NotFound("Unknown groom run '%s'", id));
+	}
+
+	private static int count(JsonMap fields) {
+		var v = fields == null ? null : fields.get("count");
+		try {
+			var n = v == null ? 0 : Integer.parseInt(String.valueOf(v).trim());
+			if (n >= 1 && n <= 50)
+				return n;
+		} catch (NumberFormatException e) {
+			// Not a whole number (a decimal included): falls through to the 400 below.
+		}
+		throw new BadRequest("Field 'count' must be a whole number between 1 and 50");
 	}
 }

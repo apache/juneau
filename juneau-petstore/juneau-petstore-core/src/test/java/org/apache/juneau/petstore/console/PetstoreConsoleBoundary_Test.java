@@ -337,4 +337,28 @@ class PetstoreConsoleBoundary_Test extends TestBase {
 		assertTrue(r.headers().firstValue("Access-Control-Allow-Origin").isEmpty(), r.headers().map().toString());
 		assertTrue(r.headers().firstValue("Access-Control-Allow-Methods").isEmpty(), r.headers().map().toString());
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// i - row-job key endpoints are console writes
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Test void i01_keyEndpointsNeedTheToken() throws Exception {
+		assertRefused(json("POST", "/console/ops/jobs/species/DOG/key", base, null), 403, "CSRF_TOKEN_MISSING");
+		assertRefused(json("POST", "/console/ops/jobs/species/DOG/key", EVIL, token), 403, "ORIGIN_MISMATCH");
+		var r = json("POST", "/console/ops/jobs/species/DOG/key", base, token);
+		assertEquals(200, r.statusCode(), r.body());
+		assertBean(new JsonMap(r.body()), "action,targetId", "restock-species,DOG");
+	}
+
+	@Test void i02_keyEndpointsAreNotServedOnGet() throws Exception {
+		var r = send("GET", "/console/ops/jobs/species/DOG/key", null, null, null, null);
+		assertTrue(r.statusCode() == 404 || r.statusCode() == 405, () -> r.statusCode() + " " + r.body());
+		assertNotContains("idempotencyKey", r.body());
+	}
+
+	@Test void i03_rowSubmitWithoutTheTokenIsRefused() throws Exception {
+		var key = new JsonMap(json("POST", "/console/ops/jobs/species/DOG/key", base, token).body()).getString("idempotencyKey");
+		var body = "{\"action\":\"restock-species\",\"targetId\":\"DOG\",\"idempotencyKey\":\"" + key + "\",\"fields\":{\"count\":1}}";
+		assertRefused(send("POST", "/console/ops/jobs/species/DOG/restock", base, null, "application/json", body), 403, "CSRF_TOKEN_MISSING");
+	}
 }

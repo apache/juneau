@@ -677,6 +677,71 @@ const out = {};
 		out.replayEnds = { resultDuring, atCap, probing, timedOut, abortedOnTeardown: aborted - before };
 	} catch (e) { const c = { crash: String(e && e.stack || e) }; out.replayEnds = c; }
 
+	// 29. A hidden field: no label, not shown, not in the required check, sent with its default; every input carries
+	// data-juneau-field.  The flat body is unchanged otherwise.
+	try {
+		const r = load();
+		const hidden = card({ submit: Object.assign({}, CARD.submit, { fields: CARD.submit.fields.concat([{ name: 'mode', type: 'hidden', default: 'full' }]) }) });
+		r.mount([hidden]);
+		await flush();
+		const h = all(r, '.jc-joblog-input').find(n => n.name === 'mode');
+		const form = { labels: all(r, '.jc-joblog-label').map(n => n.textContent), type: h.type, value: h.value,
+			inLabel: !!(h.parentNode && h.parentNode.classList && h.parentNode.classList.contains('jc-joblog-field')),
+			fieldAttrs: all(r, '.jc-joblog-input').map(n => n.getAttribute('data-juneau-field')) };
+		await submit(r);
+		// A hidden field with no default: a page card has no row, so the refusal names the default, not a source.
+		const bare = load();
+		bare.mount([card({ submit: Object.assign({}, CARD.submit, { fields: CARD.submit.fields.concat([{ name: 'mode', type: 'hidden' }]) }) })]);
+		await flush();
+		await submit(bare);
+		out.pageHidden = { form, body: r.fetches[0].body, noDefault: { banner: state(bare).banner, sent: bare.fetches.length } };
+	} catch (e) { const c = { crash: String(e && e.stack || e) }; out.pageHidden = c; }
+
+	// 30. envelope "action": the page card is self-targeted (targetId is the key), the values go under fields.
+	try {
+		const r = load();
+		r.mount([card({ submit: Object.assign({}, CARD.submit, { envelope: 'action', action: 'rebuild-index' }) })]);
+		await flush();
+		await submit(r, { reason: 'nightly', shards: '2', notes: '' });
+		out.pageEnvelope = { body: r.fetches[0].body, phase: state(r).phase };
+	} catch (e) { const c = { crash: String(e && e.stack || e) }; out.pageEnvelope = c; }
+
+	// 31. output: a success writes the message into the card's own field (a textarea gets .value); a failure does not; a
+	// selector that only matches outside the card logs E-JS-112 and writes nothing.
+	try {
+		const run = async (output, outcome, message) => {
+			const r = load();
+			const outside = r.doc.createElement('div');
+			outside.className = 'elsewhere';
+			r.mount([card({ output })]);
+			r.doc.body.appendChild(outside);
+			await flush();
+			await submit(r);
+			r.es[0].emit('result', result(outcome, message));
+			return { notes: one(r, 'textarea').value, outside: outside.textContent, errors: r.errors.filter(e => e.indexOf('E-JS-112') >= 0).length };
+		};
+		out.pageOutput = {
+			success: await run({ target: { field: 'notes' } }, 'success', 'indexed 4 shards'),
+			failure: await run({ target: { field: 'notes' } }, 'failure', 'boom'),
+			outside: await run({ target: { selector: '.elsewhere' } }, 'success', 'x')
+		};
+	} catch (e) { const c = { crash: String(e && e.stack || e) }; out.pageOutput = c; }
+
+	// 32. The page transport never reads window.JuneauViews (mount, submit, stream, cancel); only the load-time
+	// populator registration looks, and that is before the count starts.
+	try {
+		const r = load();
+		let reads = 0;
+		Object.defineProperty(r.w, 'JuneauViews', { configurable: true, get: () => { reads++; return undefined; } });
+		r.mount([CARD]);
+		await flush();
+		await submit(r);
+		r.es[0].emit('progress', 'p1');
+		r.w.JuneauConsole.cardApi('rebuild').cancel();
+		await flush();
+		out.pageNoViews = { reads, phase: state(r).phase };
+	} catch (e) { const c = { crash: String(e && e.stack || e) }; out.pageNoViews = c; }
+
 	process.stdout.write(JSON.stringify(out));
 })().catch(e => {
 	console.error(e && e.stack || e);

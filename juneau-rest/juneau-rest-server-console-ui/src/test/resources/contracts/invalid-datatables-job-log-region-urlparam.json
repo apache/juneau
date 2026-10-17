@@ -1,0 +1,3 @@
+{"contractVersion":"1","title":"T","nav":[],"activeNav":[],"cards":[
+  {"id":"species","type":"datatables","table":{"dataUrl":"/console/ops/jobs/species","columns":[{"key":"species","label":"Species"},{"key":"available","label":"Available"}],"detail":{"endpoint":"/console/ops/jobs/species/{id}","region":{"id":"restock","populate":"job-log","config":{"submit":{"endpoint":"/console/ops/jobs/species/{id}/restock","action":"restock-species","keyUrl":"/console/ops/jobs/species/{id}/key"},"urlParam":"job"}}}}}
+]}

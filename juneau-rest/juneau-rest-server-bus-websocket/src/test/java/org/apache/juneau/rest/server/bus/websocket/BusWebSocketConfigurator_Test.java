@@ -644,6 +644,81 @@ class BusWebSocketConfigurator_Test extends TestBase {
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
+	// i) Peer allow-list: the peer is the address Jetty puts in the per-handshake user properties
+	//------------------------------------------------------------------------------------------------------------------
+
+	private static final String PEER_PROPERTY = "jakarta.websocket.endpoint.remoteAddress";
+	private static final Object ABSENT = new Object();
+
+	/** The session POST is judged on its own Host (the mock client's peer is untrusted), the handshake on the forwarded origin. */
+	private BusWebSocketConfigurator withProxies(String...ranges) {
+		return withCsrf(CsrfBoundary.create().tokens(CsrfTokens.perProcess()).trustedForwarding(CsrfBoundary.ForwardedSource.X_FORWARDED)
+			.trustedProxies(ranges));
+	}
+
+	private static HandshakeRequest forwardedAt(String id, String...extra) {
+		var headers = new ArrayList<>(List.of("Host", "internal:8080", "Origin", "https://" + APP));
+		headers.addAll(List.of(extra));
+		return requestAt("ws://internal:8080" + path(id), JB, headers.toArray(new String[0]));
+	}
+
+	private static Map<String,Object> handshakeFrom(BusWebSocketConfigurator c, HandshakeRequest r, Object peer) {
+		var props = new HashMap<String,Object>();
+		if (peer != ABSENT)
+			props.put(PEER_PROPERTY, peer);
+		handshake(c, r, props);
+		return props;
+	}
+
+	private static InetSocketAddress addr(String ip) throws Exception {
+		return new InetSocketAddress(InetAddress.getByName(ip), 5000);
+	}
+
+	private static final String[] FORWARDED = { "X-Forwarded-Host", APP, "X-Forwarded-Proto", "https" };
+
+	@Test void i01_jettyPeerPropertyTrusted() throws Exception {
+		var c = withProxies("10.0.0.0/8");
+		var id = openCsrf(JB);
+		assertTrue(allowed(handshakeFrom(c, forwardedAt(id, FORWARDED), addr("10.1.2.3"))));
+	}
+
+	@Test void i02_untrustedPeerRefused() throws Exception {
+		var c = withProxies("10.0.0.0/8");
+		var id = openCsrf(JB);
+		assertEquals(4403, refusalCode(handshakeFrom(c, forwardedAt(id, FORWARDED), addr("203.0.113.7"))));
+	}
+
+	@Test void i03_absentOrForeignPropertyIsUnknown() throws Exception {
+		var c = withProxies("10.0.0.0/8");
+		var id = openCsrf(JB);
+		var r = forwardedAt(id, FORWARDED);
+		assertEquals(4403, refusalCode(handshakeFrom(c, r, ABSENT)));
+		assertEquals(4403, refusalCode(handshakeFrom(c, r, "10.1.2.3")));
+		assertEquals(4403, refusalCode(handshakeFrom(c, r, InetSocketAddress.createUnresolved("10.1.2.3", 5000))));
+		assertEquals(4403, refusalCode(handshakeFrom(c, r, UnixDomainSocketAddress.of("/tmp/x.sock"))));
+		assertEquals(4403, refusalCode(handshakeFrom(c, r, null)));
+		// Without the forwarded header an unknown peer is judged on the container view, which here is "internal:8080" over http.
+		var plain = requestAt("ws://internal:8080" + path(id), JB, "Host", "internal:8080", "Origin", "http://internal:8080");
+		assertTrue(allowed(handshakeFrom(c, plain, ABSENT)));
+	}
+
+	@Test void i04_propertyNotReadWhenUnset() throws Exception {
+		var c = withForwarding();
+		var id = openForwarded(JB);
+		var r = forwardedAt(id, FORWARDED);
+		assertTrue(allowed(handshakeFrom(c, r, ABSENT)));
+		assertTrue(allowed(handshakeFrom(c, r, "not an address")));
+		assertTrue(allowed(handshakeFrom(c, r, addr("203.0.113.7"))));
+	}
+
+	@Test void i05_noReverseLookup() throws Exception {
+		var c = withProxies("10.0.0.0/8");
+		var id = openCsrf(JB);
+		var named = new InetSocketAddress(InetAddress.getByAddress("proxy.example", new byte[] { 10, 1, 2, 3 }), 5000);
+		assertTrue(allowed(handshakeFrom(c, forwardedAt(id, FORWARDED), named)));
+	}
+
+	//------------------------------------------------------------------------------------------------------------------
 	// f) onOpen after a CsrfBoundary handshake
 	//------------------------------------------------------------------------------------------------------------------
 

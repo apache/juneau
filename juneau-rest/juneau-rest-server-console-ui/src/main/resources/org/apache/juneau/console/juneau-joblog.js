@@ -19,15 +19,22 @@
  * AsyncJobRef {jobId, streamUrl, cancelUrl}, then streams the job's progress lines from AsyncJobsMixin over
  * EventSource until its terminal ActionResult, with cancel and reload re-attach.
  *
- * Phases (data-phase on .jc-joblog): idle -> submitting -> running -> done; "New run" returns to idle.
- * The running job is stored under ctx.prefs() key "job" and, with urlParam, mirrored into the URL with
- * history.replaceState, so a reload re-attaches to the same stream.
+ * Phases (data-phase on .jc-joblog): idle -> submitting -> running -> done; "New run" returns to idle.  A region adds
+ * "keying" (waiting for the row's server-minted key) before idle.
+ *
+ * One view layer, two transports:
+ *   - page (the "job-log" console card): the shell's fetchJson, a client-minted key, the card's own EventSource, and
+ *     reload re-attach through ctx.prefs() key "job" (mirrored into the URL with urlParam).  It never reads
+ *     window.JuneauViews.
+ *   - region (the "job-log" row-detail populator, and JuneauJobLog.mount): JuneauViews.jobs.run with paint "none",
+ *     a key from the row's keyUrl, and a view-only re-attach through JuneauViews.jobs.active after a collapse.
  */
 (function () {
 	"use strict";
 
 	const MIN_HEIGHT = 80, DEFAULT_HEIGHT = 240;
 	const CLOSED = 2;   // EventSource.CLOSED
+	const POPULATOR = "job-log";
 	const NOT_FOUND = "Job not found; it may have finished or the server restarted.";
 	const ATTACH_FAILED = "Could not attach to the job's progress stream; the server may be busy. Reload the page to try again.";
 	const REPLAY_QUIET_MS = 250;   // a reattach replay ends after this long with no new line
@@ -43,11 +50,29 @@
 		"cancelled": "Cancelled.",
 		"cancelled-after-effect": "Cancelled after the job had already made changes."
 	};
+	// A region's refusals and errors before any result (JuneauViews.jobs onEnd reasons).
+	const END_TEXT = {
+		"row-job-running": "A job is already running for this row.",
+		"missing-token": "The page has no CSRF token, so the job was not sent.",
+		"no-row-id": "This row has no id, so the job was not sent.",
+		"request-failed": "The request could not be completed; try again.",
+		"no-result": "The server's answer was neither a job nor a result.",
+		"no-event-source": NO_SSE,
+		"stream-interrupted": INTERRUPTED
+	};
 	const MSG = {
 		"E-JS-77": "job-log card '%s' submit response is not a valid AsyncJobRef: '%s'",
 		"E-JS-78": "job-log card '%s' stream event could not be parsed: '%s'",
-		"E-JS-81": "job-log card '%s' submit.endpoint is not a same-origin path: '%s'"
+		"E-JS-81": "job-log card '%s' submit.endpoint is not a same-origin path: '%s'",
+		"E-JS-109": "job-log card '%s' could not get a submit key from '%s'",
+		"E-JS-110": "job-log card '%s' field '%s' source '%s' is not a string, number, boolean or null, and has no default",
+		// The same code for a hidden field with no source at all (a page card has no row to read): nothing to send.
+		"E-JS-110 no-source": "job-log card '%s' hidden field '%s' has no default",
+		"E-JS-111": "job-log region mode needs window.JuneauViews.%s; load juneau-views.js and juneau-regions.js",
+		"E-JS-112": "job-log card '%s' output target %s %s"
 	};
+	// The one preset grammar (JobLogChecks.SOURCE): an own property of the parent row, never a path.
+	const SOURCE_RE = /^row\.([A-Za-z_][A-Za-z0-9_]{0,63})$/;
 
 	const states = new WeakMap();
 
@@ -57,8 +82,10 @@
 		return t.replace(/%s/g, () => String(args[i++]));
 	}
 
-	function jobError(code) {
-		const e = new Error(code + ": " + fmt.apply(null, [MSG[code]].concat(Array.prototype.slice.call(arguments, 1))));
+	// `key` is a code, or a code, a space and a variant naming another message under the same code.
+	function jobError(key) {
+		const code = key.split(" ")[0];
+		const e = new Error(code + ": " + fmt.apply(null, [MSG[key]].concat(Array.prototype.slice.call(arguments, 1))));
 		e.code = code;
 		return e;
 	}
@@ -165,24 +192,128 @@
 		return n;
 	}
 
+	function isAbort(e) {
+		return !!e && e.name === "AbortError";
+	}
+
+	// ==================================================================================================================
+	// Field presets and output (shared by both transports)
+	// ==================================================================================================================
+
+	// A preset's value: an own property of the parent row (never another row, the DOM or the page), else the field's
+	// default; undefined when neither gives a string, finite number, boolean or null.
+	function sourceValue(st, f) {
+		const m = typeof f.source === "string" ? SOURCE_RE.exec(f.source) : null;
+		const row = m ? st.rowData() : null;
+		const v = row && typeof row === "object" && has(row, m[1]) ? row[m[1]] : undefined;
+		if (isScalar(v)) return v;
+		return has(f, "default") && isScalar(f.default) ? f.default : undefined;
+	}
+
+	function isScalar(v) {
+		return v === null || typeof v === "string" || typeof v === "boolean" || (typeof v === "number" && Number.isFinite(v));
+	}
+
+	// The submitted values, by field name: visible inputs as typed (number: empty is null), hidden fields bound now
+	// (a source reads the row as of the click; the table may have polled since render).  Throws E-JS-110.
+	function fieldValues(st) {
+		const values = {};
+		for (const x of st.inputs) {
+			const f = x.field;
+			if (f.type === "hidden") {
+				const v = sourceValue(st, f);
+				if (v === undefined)
+					throw f.source == null ? jobError("E-JS-110 no-source", st.card.id, f.name) : jobError("E-JS-110", st.card.id, f.name, preview(f.source));
+				values[f.name] = v;
+			} else {
+				values[f.name] = f.type === "number" ? (x.input.value === "" ? null : Number(x.input.value)) : x.input.value;
+			}
+		}
+		return values;
+	}
+
+	function outputTarget(st, t) {
+		const scope = st.el;
+		let found = null;
+		if (t && typeof t.field === "string") {
+			found = Array.from(scope.querySelectorAll("[data-juneau-field]")).find(n => n.getAttribute("data-juneau-field") === t.field) || null;
+			if (!found) log(jobError("E-JS-112", st.card.id, "field '" + t.field + "'", "was not found within the card"));
+			return found;
+		}
+		const sel = t && typeof t.selector === "string" ? t.selector : null;
+		try {
+			found = sel == null ? null : scope.querySelector(sel);
+		} catch (e) {
+			log(jobError("E-JS-112", st.card.id, "selector '" + preview(sel) + "'", "is not a valid selector"));
+			return null;
+		}
+		if (!found) log(jobError("E-JS-112", st.card.id, "selector '" + preview(sel) + "'", "was not found within the card"));
+		return found;
+	}
+
+	// Writes a terminal result's value into output.target, within the card (or region) only, as text: an input or
+	// textarea gets .value, anything else textContent, never markup.  An absent value writes nothing.
+	function applyOutput(st, r) {
+		const o = st.card.output;
+		if (!o || typeof o !== "object" || !r || typeof r !== "object") return;
+		if (o.when !== "any" && r.outcome !== "success") return;
+		const from = o.from == null ? "message" : o.from;
+		let v;
+		if (from === "message") {
+			v = r.message;
+		} else {
+			const m = typeof from === "string" ? SOURCE_RE.exec(from) : null;
+			v = m && r.row && typeof r.row === "object" && has(r.row, m[1]) ? r.row[m[1]] : undefined;
+		}
+		if (v === null || !isScalar(v)) return;
+		const target = outputTarget(st, o.target);
+		if (!target) return;
+		const s = String(v), append = o.mode === "append";
+		if (target.tagName === "INPUT" || target.tagName === "TEXTAREA") {
+			const cur = target.value || "";
+			target.value = append && cur !== "" ? cur + "\n" + s : s;
+		} else {
+			const cur = target.textContent || "";
+			target.textContent = append && cur !== "" ? cur + "\n" + s : s;
+		}
+	}
+
+	// ==================================================================================================================
+	// The view layer
+	// ==================================================================================================================
+
 	function build(st) {
-		const doc = st.ctx.document, card = st.card, submit = card.submit || {};
-		const root = node(doc, "div", "jc-card-body jc-joblog");
+		const doc = st.doc, card = st.card, submit = card.submit || {};
+		const root = node(doc, "div", st.region ? "jc-joblog jc-joblog-region" : "jc-card-body jc-joblog");
 		const form = node(doc, "form", "jc-joblog-form");
 		st.inputs = [];
 		for (const f of Array.isArray(submit.fields) ? submit.fields : []) {
+			if (f.type === "hidden") {
+				// Not shown, not focusable, not in the required check; the value is bound at submit.
+				const input = node(doc, "input", "jc-joblog-input jc-joblog-hidden");
+				input.type = "hidden";
+				input.name = f.name;
+				input.setAttribute("data-juneau-field", f.name);
+				if (f.source == null && f.default != null) input.value = String(f.default);
+				form.appendChild(input);
+				st.inputs.push({ field: f, input: input });
+				continue;
+			}
 			const label = node(doc, "label", "jc-joblog-field");
 			const span = node(doc, "span", "jc-joblog-label");
 			span.textContent = f.label || f.name;
 			const input = node(doc, f.type === "textarea" ? "textarea" : "input", "jc-joblog-input");
 			if (f.type !== "textarea") input.type = f.type === "number" ? "number" : "text";
 			input.name = f.name;
+			input.setAttribute("data-juneau-field", f.name);
 			if (f.placeholder) input.setAttribute("placeholder", f.placeholder);
 			if (f.required) {
 				input.required = true;
 				input.setAttribute("required", "");
 			}
-			if (f.default != null) input.value = String(f.default);
+			// A visible preset is a prefill; the user's edit wins at submit.
+			const v = f.source != null ? sourceValue(st, f) : f.default;
+			if (v != null) input.value = String(v);
 			label.appendChild(span);
 			label.appendChild(input);
 			form.appendChild(label);
@@ -197,6 +328,18 @@
 		newRun.hidden = true;
 		actions.appendChild(btn);
 		actions.appendChild(newRun);
+		if (st.region) {
+			const retry = node(doc, "button", "jc-joblog-retry");
+			retry.type = "button";
+			retry.textContent = "Retry";
+			retry.hidden = true;
+			retry.addEventListener("click", () => {
+				setBanner(st, null);
+				awaitKey(st);
+			});
+			actions.appendChild(retry);
+			st.retry = retry;
+		}
 		form.appendChild(actions);
 		const banner = node(doc, "div", "jc-joblog-banner");
 		banner.hidden = true;
@@ -206,6 +349,19 @@
 		output.setAttribute("tabindex", "0");
 		const h = Number.isInteger(card.height) ? Math.max(MIN_HEIGHT, card.height) : DEFAULT_HEIGHT;
 		output.style.height = h + "px";
+		if (st.region) {
+			// A region has no shell announce region; this one reads its non-error banners and replay summaries.
+			const sr = node(doc, "span", "jc-joblog-sr");
+			sr.setAttribute("role", "status");
+			sr.setAttribute("aria-live", "polite");
+			sr.style.position = "absolute";
+			sr.style.left = "-9999px";
+			root.appendChild(sr);
+			st.sr = sr;
+			const detail = node(doc, "div", "jc-joblog-detail");
+			root.appendChild(detail);
+			st.detail = detail;
+		}
 		root.appendChild(form);
 		root.appendChild(banner);
 		root.appendChild(output);
@@ -227,22 +383,28 @@
 
 	// A focused button that is about to be disabled would drop focus to the page; park it on the log pane instead.
 	function keepFocusOffDisabled(st) {
-		if (st.btn.disabled && st.ctx.document.activeElement === st.btn && typeof st.output.focus === "function") st.output.focus();
+		if (st.btn.disabled && st.doc.activeElement === st.btn && typeof st.output.focus === "function") st.output.focus();
+	}
+
+	function canCancel(st) {
+		return !!(st.job && st.job.cancelUrl) && (!st.region || !!st.handle);
 	}
 
 	function setPhase(st, phase) {
 		// The Run/Cancel button and "New run" swap places at done/idle; keep keyboard focus on whichever is visible.
-		const active = st.ctx.document.activeElement;
+		const active = st.doc.activeElement;
 		const hadFocus = active === st.btn ? st.btn : active === st.newRun ? st.newRun : null;
 		st.phase = phase;
 		st.root.setAttribute("data-phase", phase);
 		const running = phase === "running";
-		for (const x of st.inputs) x.input.disabled = phase !== "idle";
-		st.btn.hidden = phase === "done";
+		for (const x of st.inputs) x.input.disabled = phase !== "idle" && phase !== "keying";
+		// A view-only region (attached to a job another view started) has no submit and no cancel until it is done.
+		st.btn.hidden = phase === "done" || (st.viewOnly && phase !== "idle" && phase !== "keying");
 		st.btn.type = running ? "button" : "submit";
 		st.btn.textContent = running ? "Cancel" : (st.card.submit && st.card.submit.submitLabel) || "Run";
-		st.btn.disabled = phase === "submitting" || (running && !(st.job && st.job.cancelUrl));
+		st.btn.disabled = phase === "submitting" || phase === "keying" || (running && !canCancel(st));
 		st.newRun.hidden = phase !== "done";
+		if (st.retry) st.retry.hidden = !(phase === "keying" && st.keyFailed);
 		if (hadFocus && hadFocus.hidden) {
 			const next = hadFocus === st.btn ? st.newRun : st.btn;
 			if (!next.hidden && typeof next.focus === "function") next.focus();
@@ -267,11 +429,11 @@
 		b.textContent = "";
 		b.textContent = text;
 		b.hidden = false;
-		if (tone !== "error") st.ctx.announce(text);
+		if (tone !== "error") st.announce(text);
 	}
 
 	function addLine(st, text, cls) {
-		const n = node(st.ctx.document, "span", "jc-joblog-line" + (cls ? " " + cls : ""));
+		const n = node(st.doc, "span", "jc-joblog-line" + (cls ? " " + cls : ""));
 		n.textContent = text;
 		st.output.appendChild(n);
 		st.output.scrollTop = st.output.scrollHeight;
@@ -300,7 +462,7 @@
 		st.replayCap = null;
 		st.output.setAttribute("aria-live", "polite");
 		if (announce && st.replayCount > 0)
-			st.ctx.announce("Reattached to the running job; " + st.replayCount + " earlier " + (st.replayCount === 1 ? "line" : "lines") + " shown.");
+			st.announce("Reattached to the running job; " + st.replayCount + " earlier " + (st.replayCount === 1 ? "line" : "lines") + " shown.");
 	}
 
 	function closeStream(st) {
@@ -317,14 +479,22 @@
 
 	function forget(st) {
 		st.job = null;
+		if (st.region) return;
 		st.prefs.remove("job");
 		setUrlParam(st.card.urlParam, null);
+	}
+
+	// Back to the form: a region waits for a key first.
+	function toIdle(st) {
+		st.viewOnly = false;
+		if (st.region) awaitKey(st);
+		else setPhase(st, "idle");
 	}
 
 	function submitForm(st) {
 		const card = st.card, submit = card.submit || {};
 		// A scripted submit (and the Node harness) skips the browser's constraint validation, so check required here.
-		const missing = st.inputs.filter(x => x.field.required && String(x.input.value == null ? "" : x.input.value).trim() === "");
+		const missing = st.inputs.filter(x => x.field.required && x.field.type !== "hidden" && String(x.input.value == null ? "" : x.input.value).trim() === "");
 		for (const x of st.inputs) {
 			if (missing.indexOf(x) >= 0) x.input.setAttribute("aria-invalid", "true");
 			else x.input.removeAttribute("aria-invalid");
@@ -334,16 +504,30 @@
 			if (typeof missing[0].input.focus === "function") missing[0].input.focus();
 			return undefined;
 		}
+		let values;
+		try {
+			values = fieldValues(st);
+		} catch (e) {
+			log(e);
+			setBanner(st, "error", e.message);
+			return undefined;
+		}
+		if (st.region) return regionSubmit(st, values);
 		if (!isSafeEndpoint(submit.endpoint)) {
 			const e = jobError("E-JS-81", card.id, preview(submit.endpoint));
 			log(e);
 			setBanner(st, "error", e.message);
 			return undefined;
 		}
-		const body = {};
-		for (const x of st.inputs)
-			body[x.field.name] = x.field.type === "number" ? (x.input.value === "" ? null : Number(x.input.value)) : x.input.value;
-		body.idempotencyKey = mintKey();
+		const key = mintKey();
+		let body;
+		if (submit.envelope === "action") {
+			// Self-targeted: the key is its own target, as a self-targeted dialog sends it.
+			body = { action: submit.action, targetId: key, idempotencyKey: key, fields: values };
+		} else {
+			body = values;
+			body.idempotencyKey = key;
+		}
 		if (card.clearOnSubmit !== false) clearOutput(st);
 		setBanner(st, null);
 		setPhase(st, "submitting");
@@ -428,9 +612,13 @@
 	}
 
 	function settle(st, r) {
-		if (st.phase !== "running") return;
+		// A region's synchronous answer (a 2xx or 4xx ActionResult) settles before any stream: still "submitting".
+		if (st.phase !== "running" && !(st.region && st.phase === "submitting")) return;
 		const outcome = has(OUTCOME_TEXT, r.outcome) ? r.outcome : "unknown";
 		finish(st, outcome === "success" ? "ok" : "error", OUTCOME_TEXT[outcome] + (r.message ? " " + r.message : ""));
+		applyOutput(st, r);
+		// A view-only region never held a key; get one for the next run now.
+		if (st.region && st.viewOnly) prefetchKey(st);
 	}
 
 	function finish(st, tone, text) {
@@ -487,28 +675,38 @@
 		addLine(st, NOT_FOUND, "jc-joblog-notice");
 		forget(st);
 		setBanner(st, null);
-		setPhase(st, "idle");
+		toIdle(st);
 	}
 
 	function cancel(st) {
 		const job = st.job;
-		if (st.phase !== "running" || st.cancelling || !job || !job.cancelUrl) return;
+		if (st.phase !== "running" || st.cancelling || !canCancel(st)) return;
 		st.cancelling = true;
-		const hadFocus = st.ctx.document.activeElement === st.btn;
+		const hadFocus = st.doc.activeElement === st.btn;
 		st.btn.textContent = "Cancelling\u2026";
 		st.btn.disabled = true;
 		keepFocusOffDisabled(st);
 		const stillThisJob = () => states.get(st.el) === st && st.phase === "running" && st.job === job;
+		const failed = text => {
+			st.cancelling = false;
+			setPhase(st, "running");
+			setBanner(st, "error", text);
+			if (hadFocus && !st.btn.disabled && typeof st.btn.focus === "function") st.btn.focus();
+		};
+		if (st.region) {
+			// JuneauViews.jobs posts the cancel with the row's CSRF token; the outcome still arrives on the stream.
+			st.handle.cancel().then(ok => {
+				if (!ok && stillThisJob()) failed("The cancel request failed; the job is still running.");
+			});
+			return;
+		}
 		// A write boundary rejects a POST that is not JSON (415), so send an empty JSON object, as the views runtime does.
 		st.ctx.fetchJson(job.cancelUrl, { method: "POST", headers: { "Content-Type": "application/json" }, body: "{}" }).then(r => {
 			if (!stillThisJob()) return;
 			settle(st, r && typeof r === "object" && typeof r.outcome === "string" ? r : { outcome: "cancelled" });
 		}, e => {
 			if (!stillThisJob() || st.ctx.isAbort(e)) return;
-			st.cancelling = false;
-			setPhase(st, "running");
-			setBanner(st, "error", (e && e.message) || String(e));
-			if (hadFocus && !st.btn.disabled && typeof st.btn.focus === "function") st.btn.focus();
+			failed((e && e.message) || String(e));
 		});
 	}
 
@@ -517,7 +715,7 @@
 		closeStream(st);
 		forget(st);
 		setBanner(st, null);
-		setPhase(st, "idle");
+		toIdle(st);
 	}
 
 	function teardown(el) {
@@ -526,13 +724,22 @@
 		states.delete(el);
 		st.seq++;
 		closeStream(st);
+		if (st.ctl) {
+			try { st.ctl.abort(); } catch (e) { /* already aborted */ }
+		}
 	}
+
+	// ==================================================================================================================
+	// The page transport: the "job-log" console card
+	// ==================================================================================================================
 
 	function render(card, el, ctx) {
 		teardown(el);
 		for (const c of Array.from(el.childNodes))
 			if (!(c.classList && c.classList.contains("jc-card-title"))) el.removeChild(c);
-		const st = { card: card, el: el, ctx: ctx, prefs: ctx.prefs(), phase: "idle", seq: 0, job: null, es: null, events: 0, cancelling: false, replaying: false, replayTimer: null, replayCap: null, probe: null, replayCount: 0 };
+		const st = { card: card, el: el, ctx: ctx, doc: ctx.document, announce: ctx.announce, rowData: () => null, region: false,
+			prefs: ctx.prefs(), phase: "idle", seq: 0, job: null, es: null, events: 0, cancelling: false, replaying: false, replayTimer: null,
+			replayCap: null, probe: null, replayCount: 0 };
 		states.set(el, st);
 		build(st);
 		setPhase(st, "idle");
@@ -556,7 +763,257 @@
 		teardown(el);
 	}
 
-	window.JuneauJobLog = Object.freeze({ version: "1" });
+	// ==================================================================================================================
+	// The region transport: JuneauViews.jobs
+	// ==================================================================================================================
+
+	function viewsApi(name) {
+		const V = window.JuneauViews;
+		return V && V[name] ? V[name] : null;
+	}
+
+	// Fetches the row's key once at a time; st.key is set when it arrives.  A failure is left to the caller.
+	function fetchKey(st) {
+		if (!st.keyPromise) {
+			const submit = st.card.submit || {};
+			const p = st.jobs.fetchKey({ el: st.el, keyUrl: submit.keyUrl, action: submit.action, signal: st.ctl.signal });
+			st.keyPromise = p;
+			p.then(k => {
+				if (st.keyPromise === p) { st.keyPromise = null; st.key = k; }
+			}, () => {
+				if (st.keyPromise === p) st.keyPromise = null;
+			});
+		}
+		return st.keyPromise;
+	}
+
+	function prefetchKey(st) {
+		if (!st.key && states.get(st.el) === st) fetchKey(st).catch(() => { /* reported when the form needs it */ });
+	}
+
+	// "keying" until the row's key arrives, then idle.  A refused or failed key leaves submit disabled behind an error
+	// banner and a Retry button.
+	function awaitKey(st) {
+		if (st.key) {
+			setPhase(st, "idle");
+			return;
+		}
+		st.keyFailed = false;
+		setPhase(st, "keying");
+		fetchKey(st).then(() => {
+			if (states.get(st.el) === st && st.phase === "keying") setPhase(st, "idle");
+		}, e => {
+			if (states.get(st.el) !== st || st.phase !== "keying" || isAbort(e)) return;
+			// JuneauViews.jobs has already logged why the key was refused; the banner says which card is waiting.
+			st.keyFailed = true;
+			setBanner(st, "error", jobError("E-JS-109", st.card.id, preview((st.card.submit || {}).keyUrl)).message);
+			setPhase(st, "keying");
+		});
+	}
+
+	function regionSubmit(st, values) {
+		const card = st.card, submit = card.submit || {};
+		if (!st.key) {
+			awaitKey(st);
+			return undefined;
+		}
+		if (card.clearOnSubmit !== false) clearOutput(st);
+		setBanner(st, null);
+		setPhase(st, "submitting");
+		const seq = ++st.seq;
+		const live = () => current(st, seq);
+		// A refusal ends the run before run() returns, so the handle is only kept for a run that is still going.
+		let h = null, ended = false;
+		// No signal: a collapse ends this view, never the job, which stays in the row's registry for a re-expand to
+		// re-attach to.  The hooks are bound to this view's root, so they go quiet once it leaves the page.
+		h = st.jobs.run({
+			el: st.root, endpoint: submit.endpoint, method: submit.method || "POST", action: submit.action, envelope: "action",
+			idempotencyKey: st.key, fields: values, paint: "none",
+			hooks: {
+				onStart: ref => {
+					if (!live()) return;
+					st.job = toJob(ref);
+					st.events = 0;
+					setPhase(st, "running");
+				},
+				onProgress: line => { if (live()) addLine(st, line != null ? String(line) : ""); },
+				onResult: r => { if (live()) settle(st, r); },
+				onEnd: x => {
+					ended = true;
+					if (live()) regionEnd(st, x, h);
+				}
+			}
+		});
+		if (!ended) st.handle = h;
+		return undefined;
+	}
+
+	// The key lives until the server answers: a job pointer, a result or an HTTP error spends it; no answer keeps it,
+	// so a retry dedups on the server.
+	function regionEnd(st, x, h) {
+		const reason = x && x.error ? x.error.reason : null;
+		const answered = !!(h && h.job) || (x && x.result != null) || reason === "no-result" || /^http:/.test(String(reason));
+		st.handle = null;
+		st.cancelling = false;
+		if (answered) {
+			st.key = null;
+			prefetchKey(st);
+		}
+		if (st.phase === "done") return;   // settle already showed the outcome
+		closeStream(st);
+		const text = has(END_TEXT, reason) ? END_TEXT[reason]
+			: /^http:/.test(String(reason)) ? "The server refused the request (HTTP " + String(reason).substring(5) + ")."
+				: x && x.state === "refused" ? "The job was not sent (" + reason + ")."
+					: "The job's progress could not be shown (" + reason + ").";
+		const tone = reason === "stream-interrupted" || reason === "no-event-source" ? "warning" : "error";
+		if (answered) {
+			setPhase(st, "done");
+		} else {
+			st.job = null;
+			setPhase(st, "idle");
+		}
+		setBanner(st, tone, text);
+	}
+
+	// A job already running (or still being submitted) for this row and action, from a view that is gone: show it
+	// view-only, from the start of its log.
+	function attachActive(st) {
+		const action = (st.card.submit || {}).action;
+		const ref = st.jobs.active(st.el, action);
+		if (isRef(ref)) {
+			st.viewOnly = true;
+			open(st, toJob(ref), true);
+			return true;
+		}
+		const pending = typeof st.jobs.pending === "function" ? st.jobs.pending(st.el, action) : null;
+		if (!pending) return false;
+		st.viewOnly = true;
+		setPhase(st, "submitting");
+		pending.then(r => {
+			if (states.get(st.el) !== st || st.phase !== "submitting") return;
+			if (isRef(r)) open(st, toJob(r), true);
+			else toIdle(st);
+		});
+		return true;
+	}
+
+	function paintDetail(st, opts) {
+		const d = st.card.detail;
+		if (!d || typeof d !== "object" || typeof opts.values !== "function") return Promise.resolve();
+		const helpers = opts.helpers || viewsApi("helpers");
+		return Promise.resolve(opts.values()).then(values => {
+			if (states.get(st.el) !== st) return;
+			const fn = helpers ? helpers[d.renderer] : null;
+			if (typeof fn !== "function") throw new Error("job-log card '" + st.card.id + "' detail renderer '" + d.renderer + "' is not a JuneauViews helper.");
+			const n = fn(d.fields || [], { values: values });
+			if (n != null) st.detail.appendChild(n);
+		});
+	}
+
+	function mountView(el, config, opts) {
+		opts = opts || {};
+		const jobs = viewsApi("jobs");
+		if (!jobs || typeof jobs.run !== "function") {
+			const e = jobError("E-JS-111", "jobs");
+			log(e);
+			throw e;
+		}
+		teardown(el);
+		while (el.firstChild) el.removeChild(el.firstChild);
+		const doc = el.ownerDocument || window.document;
+		const card = Object.assign({}, config || {});
+		if (card.id == null) card.id = opts.id != null ? opts.id : POPULATOR;
+		const st = { card: card, el: el, ctx: null, doc: doc, region: true, jobs: jobs, ctl: new AbortController(),
+			rowData: () => {
+				const ra = viewsApi("rowActions");
+				const c = ra && typeof ra.contextOf === "function" ? ra.contextOf(el) : null;
+				return c ? c.row : null;
+			},
+			phase: "idle", seq: 0, job: null, es: null, events: 0, cancelling: false, replaying: false, replayTimer: null, replayCap: null,
+			probe: null, replayCount: 0, key: null, keyPromise: null, keyFailed: false, handle: null, viewOnly: false };
+		st.announce = text => {
+			st.sr.textContent = "";
+			st.sr.textContent = text;
+		};
+		states.set(el, st);
+		build(st);
+		setPhase(st, "idle");
+		if (!attachActive(st)) awaitKey(st);
+		const sig = opts.signal;
+		if (sig && typeof sig.addEventListener === "function") {
+			// The view goes, the job does not.
+			if (sig.aborted) destroyView(st);
+			else sig.addEventListener("abort", () => destroyView(st), { once: true });
+		}
+		st.ready = paintDetail(st, opts);
+		return st;
+	}
+
+	function destroyView(st) {
+		if (states.get(st.el) !== st) return;
+		teardown(st.el);
+		if (st.root && st.root.parentNode) st.root.parentNode.removeChild(st.root);
+	}
+
+	function viewApi(st) {
+		return Object.freeze({
+			destroy: () => destroyView(st),
+			cancel: () => cancel(st),
+			phase: () => st.phase
+		});
+	}
+
+	/**
+	 * Mounts a row-bound job-log into `el` (an element inside a view table row or its detail panel), from a job-log
+	 * region config ({submit, detail, height, clearOnSubmit, output}).  `opts.signal` destroys the view when aborted
+	 * (never the job).  Throws E-JS-111 without JuneauViews.jobs.
+	 */
+	function mount(el, config, opts) {
+		return viewApi(mountView(el, config, opts));
+	}
+
+	// The populator: the region's own signal, its declared payload for the detail grid, and its helpers.
+	function mountRegion(el, config, ctx) {
+		const st = mountView(el, config, {
+			signal: ctx.signal, id: ctx.id, helpers: ctx.helpers,
+			values: () => ctx.data != null ? ctx.data : ctx.fetchDeclared()
+		});
+		return st.ready.then(() => () => destroyView(st));
+	}
+
+	function populate(ctx, el) {
+		return mountRegion(el, ctx.declared && ctx.declared.config, ctx);
+	}
+
+	// Registers the populator once JuneauViews.regions exists, whatever the script order; an app's own "job-log"
+	// populator, registered first, is kept (and one registered later wins, since register is last-write-wins).
+	let registered = false;
+	function tryRegister() {
+		if (registered) return true;
+		const R = viewsApi("regions");
+		if (!R || typeof R.register !== "function") return false;
+		registered = true;
+		if (typeof R.resolve !== "function" || typeof R.resolve(POPULATOR) !== "function") R.register(POPULATOR, populate);
+		return true;
+	}
+
+	function reportUnregistered() {
+		const doc = window.document;
+		if (tryRegister() || !doc || typeof doc.querySelector !== "function") return;
+		if (doc.querySelector("[data-juneau-region-populate=\"" + POPULATOR + "\"]")) log(jobError("E-JS-111", "regions"));
+	}
+
+	window.JuneauJobLog = Object.freeze({ version: "1", mount: mount });
 
 	(window.JuneauConsoleCards = window.JuneauConsoleCards || []).push(["job-log", { render: render, refresh: refresh, destroy: destroy }]);
+
+	if (!tryRegister()) {
+		const doc = window.document;
+		if (doc && doc.readyState === "complete") {
+			reportUnregistered();
+		} else {
+			if (doc && typeof doc.addEventListener === "function") doc.addEventListener("DOMContentLoaded", tryRegister);
+			if (typeof window.addEventListener === "function") window.addEventListener("load", reportUnregistered);
+		}
+	}
 })();

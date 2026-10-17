@@ -148,13 +148,14 @@ public final class CardDirectiveModel implements TemplateDirectiveModel {
 		if (sanitize && (! eq(cardType, "html") || src.isEmpty()))
 			throw FtlAttrLists.reject(f("<@card id='%s'> sanitize= applies only to an html card with src=.", authoredId));
 		var id = authoredId.isEmpty() && eq(cardType, "html") ? cap.nextCardId() : authoredId;
+		Map<String,Object> cardBody = Map.of();
 		if (eq(cardType, "run-view"))
 			runViewCard(cap, id, title, src, template, markup, cssClass, pubsAttr, subsAttr);
 		else if (eq(cardType, "html"))
 			htmlCard(cap, id, title, src, template, markup, cssClass, sanitize, pubsAttr, subsAttr);
 		else
-			registryCard(cap, cardType, id, title, src, template, markup, cssClass, pubsAttr, subsAttr);
-		recordRequirements(cap, cardType, id, requires);
+			cardBody = registryCard(cap, cardType, id, title, src, template, markup, cssClass, pubsAttr, subsAttr).bodyMap();
+		recordRequirements(cap, cardType, id, requires, cardBody);
 	}
 
 	/**
@@ -220,10 +221,13 @@ public final class CardDirectiveModel implements TemplateDirectiveModel {
 		}
 	}
 
-	// The one place a card's packs are recorded; <@page> resolves them after its body.
-	void recordRequirements(PageCapture cap, String type, String id, List<String> requires) throws TemplateModelException {
+	// The one place a card's packs are recorded; <@page> resolves them after its body.  The handler's body-aware packs
+	// (for example a datatables card whose detail region is a job-log region) are unioned in.
+	void recordRequirements(PageCapture cap, String type, String id, List<String> requires, Map<String,Object> body)
+			throws TemplateModelException {
 		try {
-			cap.require(requirements.forCard(type, id, requires));
+			var bodyPacks = cardTypes.handler(type).requiredPacks(new JsonMap(body));
+			cap.require(requirements.forCard(type, id, requires, bodyPacks));
 		} catch (IllegalArgumentException e) {
 			throw FtlAttrLists.reject(e.getMessage());
 		}
@@ -268,7 +272,7 @@ public final class CardDirectiveModel implements TemplateDirectiveModel {
 	 * {@link CardTypeRegistry} (a registered handler such as {@code datatables}, {@code terminal} or {@code job-log}, or the
 	 * generic passthrough for an unregistered type).
 	 */
-	private void registryCard(PageCapture cap, String type, String id, String title, String src, String template,
+	private CardSpec registryCard(PageCapture cap, String type, String id, String title, String src, String template,
 			String markup, String cssClass, Object pubs, Object subs) throws TemplateModelException {
 		if (id.isEmpty())
 			throw FtlAttrLists.reject(f("<@card type=\"%s\"> requires id=.", type));
@@ -316,6 +320,7 @@ public final class CardDirectiveModel implements TemplateDirectiveModel {
 			spec.cssClass(cssClass);
 		wire(spec, pubs != null ? pubs : bodyPubs, subs != null ? subs : bodySubs);
 		cap.addCard(spec, captured[0] ? markup : null);
+		return spec;
 	}
 
 	/**

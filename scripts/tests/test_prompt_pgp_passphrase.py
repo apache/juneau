@@ -43,7 +43,7 @@ class CardNoiseTest(unittest.TestCase):
         with mock.patch.object(mod, "_resolve_gpg", return_value="/x/gpg"), \
                 mock.patch.object(mod.subprocess, "run", return_value=done) as run, \
                 contextlib.redirect_stderr(err), contextlib.redirect_stdout(io.StringIO()):
-            self.assertTrue(mod.prompt_pgp_passphrase())
+            self.assertFalse(mod.prompt_pgp_passphrase())  # gpg exited 2
         return err.getvalue(), run
 
     def test_the_card_probe_line_is_dropped(self):
@@ -54,6 +54,55 @@ class CardNoiseTest(unittest.TestCase):
     def test_real_gpg_errors_are_kept(self):
         err, _ = self.run_with_stderr(f"{CARD}\ngpg: signing failed: Bad passphrase\ngpg: no secret key\n")
         self.assertEqual(err, "gpg: signing failed: Bad passphrase\ngpg: no secret key\n")
+
+
+class OutcomeTest(unittest.TestCase):
+    def run_prompt(self, expect=True, **run_kwargs):
+        mod = load()
+        out = io.StringIO()
+        with mock.patch.object(mod, "_resolve_gpg", return_value="/x/gpg"), \
+                mock.patch.object(mod.subprocess, "run", **run_kwargs), \
+                contextlib.redirect_stderr(io.StringIO()), contextlib.redirect_stdout(out):
+            self.assertEqual(mod.prompt_pgp_passphrase(), expect)
+        return out.getvalue()
+
+    def test_exit_zero_prints_success(self):
+        out = self.run_prompt(return_value=subprocess.CompletedProcess([], 0, stdout=None, stderr=""))
+        self.assertIn("✅ PGP passphrase entered successfully", out)
+        self.assertNotIn("⚠", out)
+
+    def test_non_zero_exit_warns_with_code_and_no_success(self):
+        out = self.run_prompt(expect=False, return_value=subprocess.CompletedProcess([], 2, stdout=None, stderr=""))
+        self.assertNotIn("✅", out)
+        self.assertIn("⚠ gpg exited with code 2", out)
+        self.assertIn("signing later in this run will probably fail", out)
+
+    def test_main_exit_code_follows_gpg_result(self):
+        for rc, expected in ((0, 0), (2, 1)):
+            mod = load()
+            done = subprocess.CompletedProcess([], rc, stdout=None, stderr="")
+            with mock.patch.object(mod, "_resolve_gpg", return_value="/x/gpg"), \
+                    mock.patch.object(mod.subprocess, "run", return_value=done), \
+                    contextlib.redirect_stderr(io.StringIO()), contextlib.redirect_stdout(io.StringIO()), \
+                    self.assertRaises(SystemExit) as ctx:
+                mod.main()
+            self.assertEqual(ctx.exception.code, expected)
+
+    def test_timeout_warns(self):
+        out = self.run_prompt(side_effect=subprocess.TimeoutExpired("gpg", 60))
+        self.assertNotIn("✅", out)
+        self.assertIn("timed out", out)
+
+    def test_gpg_missing_warns(self):
+        mod = load()
+        out = io.StringIO()
+        with mock.patch.object(mod, "_resolve_gpg", return_value=None), \
+                mock.patch.object(mod.subprocess, "run") as run, \
+                contextlib.redirect_stdout(out):
+            self.assertTrue(mod.prompt_pgp_passphrase())
+        run.assert_not_called()
+        self.assertNotIn("✅", out.getvalue())
+        self.assertIn("gpg command not found", out.getvalue())
 
 
 if __name__ == "__main__":

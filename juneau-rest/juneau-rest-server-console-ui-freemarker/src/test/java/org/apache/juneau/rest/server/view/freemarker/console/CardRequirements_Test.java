@@ -67,4 +67,16 @@ class CardRequirements_Test extends TestBase {
 		assertTrue(PACKS.reaches("charts", "echarts"));
 		assertTrue(PACKS.reaches("charts", "data"));
 	}
+
+	@Test void a07_forCard_bodyPacks_followTypePacks() {
+		var r = CardRequirements.create().build(PACKS);
+		assertList(r.forCard("datatables", "rel", List.of("datatables-buttons"), List.of("joblog")), "datatables-glue", "joblog", "datatables-buttons");
+		assertList(r.forCard("datatables", "rel", List.of(), List.of("datatables-glue")), "datatables-glue");
+	}
+
+	@Test void a08_forCard_unknownBodyPack_namesCardAndType() {
+		var r = CardRequirements.create().build(PACKS);
+		var e = assertThrows(IllegalArgumentException.class, () -> r.forCard("datatables", "rel", List.of(), List.of("ghost")));
+		assertString("Unknown toolkit pack 'ghost' (<@card id='rel'> type 'datatables' requiredPacks).", e.getMessage());
+	}
 }

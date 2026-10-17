@@ -63,10 +63,29 @@ final class CardRequirements {
 	 * @throws IllegalArgumentException If a {@code requires=} name is not a registered pack.
 	 */
 	List<String> forCard(String type, String id, List<String> requires) {
+		return forCard(type, id, requires, List.of());
+	}
+
+	/**
+	 * The packs one card requires: its type's packs, then the packs its handler derives from its body
+	 * ({@code CardTypeHandler.requiredPacks}), then its {@code requires=} packs, each once.
+	 *
+	 * @param type The card type.
+	 * @param id The card id, for the message.
+	 * @param requires The card's {@code requires=} pack names.
+	 * @param bodyPacks The packs the card's handler requires for this card's body.
+	 * @return The pack names, in order.
+	 * @throws IllegalArgumentException If a {@code requires=} or body pack name is not a registered pack.
+	 */
+	List<String> forCard(String type, String id, List<String> requires, List<String> bodyPacks) {
 		for (var name : requires)
 			if (! packs.contains(name))
 				throw iaex("Unknown toolkit pack '%s' (<@card id='%s'> requires=).", name, id);
+		for (var name : bodyPacks)
+			if (! packs.contains(name))
+				throw iaex("Unknown toolkit pack '%s' (<@card id='%s'> type '%s' requiredPacks).", name, id, type);
 		var out = new LinkedHashSet<>(forType(type));
+		out.addAll(bodyPacks);
 		out.addAll(requires);
 		return List.copyOf(out);
 	}

@@ -23,6 +23,7 @@ import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.marshall.collections.*;
+import org.apache.juneau.marshall.marshaller.*;
 import org.apache.juneau.rest.server.console.*;
 import org.apache.juneau.rest.server.views.*;
 import org.apache.juneau.rest.server.widgets.Op;
@@ -348,9 +349,63 @@ class DatatablesCardType_Test extends TestBase {
 		assertEquals("custom", region.get("type"));
 	}
 
+	@Test void a02b_detailRegionLazyIsItsEffectivePerTypeValueUnlessDeclared() {
+		var row = region(h.toFragment(src("t", "{dataUrl:'/x', columns:[{key:'a'}], detail:{endpoint:'/x/{id}', region:{id:'out'}}}")));
+		assertEquals(false, row.get("lazy"));
+		var tab = region(h.toFragment(src("t", "{dataUrl:'/x', columns:[{key:'a'}], detail:{endpoint:'/x/{id}', region:{id:'out', type:'tab-body'}}}")));
+		assertEquals(true, tab.get("lazy"));
+		var declared = region(h.toFragment(src("t", "{dataUrl:'/x', columns:[{key:'a'}], detail:{endpoint:'/x/{id}', region:{id:'out', lazy:true}}}")));
+		assertEquals(true, declared.get("lazy"));
+	}
+
 	@Test void a03_detailWithoutRegionStaysWithoutOne() {
 		var f = h.toFragment(src("t", "{dataUrl:'/x', columns:[{key:'a'}], detail:{endpoint:'/x/{id}'}}"));
 		assertFalse(((Map<?,?>)((Map<?,?>)f.get("table")).get("detail")).containsKey("region"));
+	}
+
+	// ---- Job-log row-detail region ----
+
+	private static final String JOB_LOG_CONFIG = "{height:120,submit:{keyUrl:'/x/{id}/key',action:'restock',endpoint:'/x/{id}/restock',fields:[{type:'hidden',name:'s',source:'row.s'}]}}";
+
+	private static Map<?,?> region(Map<?,?> fragment) {
+		return (Map<?,?>)((Map<?,?>)((Map<?,?>)fragment.get("table")).get("detail")).get("region");
+	}
+
+	@Test void a04_jobLogRegion_configIsValidatedAndCanonicalized() {
+		var f = h.toFragment(src("t", "{dataUrl:'/x', columns:[{key:'a'}], detail:{endpoint:'/x/{id}', region:{id:'job', populate:'job-log', allowedPopulators:['job-log'], config:" + JOB_LOG_CONFIG + "}}}"));
+		var config = (Map<?,?>)region(f).get("config");
+		assertEquals(List.of("submit", "height"), List.copyOf(config.keySet()));
+		assertEquals(List.of("endpoint", "envelope", "action", "keyUrl", "fields"), List.copyOf(((Map<?,?>)config.get("submit")).keySet()));
+	}
+
+	@Test void a05_jobLogRegion_withoutConfig_isRejected() {
+		var ex = assertThrows(IllegalArgumentException.class,
+			() -> h.toFragment(src("t", "{dataUrl:'/x', columns:[{key:'a'}], detail:{endpoint:'/x/{id}', region:{id:'job', populate:'job-log'}}}")));
+		assertEquals("<@card id='t'> type='datatables' detail.region 'job' with populate 'job-log' requires a 'config' object.", ex.getMessage());
+	}
+
+	@Test void a06_jobLogRegion_badConfig_namesTheRegion() {
+		var ex = assertThrows(IllegalArgumentException.class,
+			() -> h.toFragment(src("t", "{dataUrl:'/x', columns:[{key:'a'}], detail:{endpoint:'/x/{id}', region:{id:'job', populate:'job-log', config:{submit:{endpoint:'/e',action:'a',keyUrl:'/k'},urlParam:'j'}}}}")));
+		assertEquals("<@card id='t'> type='datatables' detail.region: JobLogRegion 'job' urlParam is not allowed in a row-detail region; a page reload does not reattach.", ex.getMessage());
+	}
+
+	@Test void a07_jobLogRegion_builderAndCardBody_emitTheSameRegion() {
+		var built = JobLogRegion.create("job").height(120)
+			.submit(JobLogRegion.Submit.create("/x/{id}/restock", "restock", "/x/{id}/key").field(JobLogRegion.Field.of("s").type("hidden").source("row.s")))
+			.toRegion();
+		var spec = TableSpec.create("t").dataUrl("/x").columns(Column.create("a")).detail(RowDetail.create("/x/{id}").region(built));
+		spec.validate();
+		var viaBuilder = region(h.toFragment(CardSource.create("datatables", "t").bodyMap(spec.toCardBody()).build()));
+		var viaCard = region(h.toFragment(src("t", "{dataUrl:'/x', columns:[{key:'a'}], detail:{endpoint:'/x/{id}', region:{id:'job', populate:'job-log', allowedPopulators:['job-log'], config:" + JOB_LOG_CONFIG + "}}}")));
+		assertEquals(Json5.of(viaBuilder.get("config")), Json5.of(viaCard.get("config")));
+	}
+
+	@Test void a08_requiredPacks_jobLogRegionNeedsJoblog() {
+		assertEquals(List.of("joblog"), h.requiredPacks(JsonMap.of("table", Map.of("detail", Map.of("region", Map.of("populate", "job-log"))))));
+		assertEquals(List.of(), h.requiredPacks(JsonMap.of("table", Map.of("detail", Map.of("region", Map.of("populate", "p"))))));
+		assertEquals(List.of(), h.requiredPacks(new JsonMap()));
+		assertEquals(List.of(), h.requiredPacks(null));
 	}
 
 	// ---- E-37: quickStats ----

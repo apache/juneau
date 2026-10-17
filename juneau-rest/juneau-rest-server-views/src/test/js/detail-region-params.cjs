@@ -132,6 +132,28 @@ const out = {};
 		out.a06_noErrors = c.rec.errors.length === 0;
 	}
 
+	{
+		// RegionDef.config (a job-log region's declaration) is copied the same way and reaches ctx.declared.config.
+		const config = { submit: { endpoint: '/runs/{id}/go', action: 'go', keyUrl: '/runs/{id}/key' } };
+		const c = await build({ id: 'cfg', type: 'row-detail', populate: 'cfgprobe', config: config });
+		const d = declaredOf(c.region);
+		out.a07_configCopied = !!(d && JSON.stringify(d.config) === JSON.stringify(config));
+		let seen = null;
+		c.R.register('cfgprobe', function (ctx) { seen = ctx.declared && ctx.declared.config; });
+		if (c.region) {
+			c.env.body.appendChild(c.region);
+			c.R.initRegion(c.region);
+		}
+		await Promise.resolve();
+		out.a07_roundTrip = !!(seen && seen.submit && seen.submit.keyUrl === '/runs/{id}/key');
+		const arr = await build({ id: 'cfgarr', type: 'row-detail', populate: 'p', config: ['x'] });
+		const none = await build({ id: 'cfgnone', type: 'row-detail', populate: 'p' });
+		out.a07_nonObjectAndAbsentDropped = [arr, none].every(function (x) {
+			const dd = declaredOf(x.region);
+			return dd !== null && !Object.hasOwn(dd, 'config');
+		});
+	}
+
 	process.stdout.write(JSON.stringify(out));
 })().catch(function (error) {
 	process.stderr.write(String(error?.stack ? error.stack : error));

@@ -86,6 +86,7 @@ class CsrfBoundary_Test extends TestBase {
 		R uri(String v) { uri = v; return this; }
 		R container(String name, int port) { serverName = name; serverPort = port; return this; }
 		R protocol(String v) { protocol = v; return this; }
+		R remote(String v) { remote = v; return this; }
 		R param(String n, String v) { params.put(n, v); return this; }
 
 		R h(String name, String value) {

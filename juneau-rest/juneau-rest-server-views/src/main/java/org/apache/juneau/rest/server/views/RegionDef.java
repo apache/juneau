@@ -324,6 +324,28 @@ public class RegionDef {
 	}
 
 	/**
+	 * Populator-owned structured configuration.  <jk>null</jk> or empty means none.
+	 *
+	 * <p>
+	 * Unlike {@link #params}, nested maps and lists are allowed, and the value is never appended to {@link #dataUrl}
+	 * nor sent back to the server: it reaches the client only as {@code ctx.declared.config}.  Its shape belongs to
+	 * the populator that reads it (for example {@link JobLogRegion}); {@link #validate()} only checks that it is
+	 * JSON-serializable (string keys, no cycles).
+	 */
+	public Map<String,Object> config;
+
+	/**
+	 * Sets the populator-owned structured configuration.
+	 *
+	 * @param value The configuration; see {@link #config}.
+	 * @return This object.
+	 */
+	public RegionDef config(Map<String,Object> value) {
+		config = value;
+		return this;
+	}
+
+	/**
 	 * Sets the field catalog.
 	 *
 	 * @param value The catalog, in declaration order. Card/tab regions only &mdash; see {@link #fields}.
@@ -400,6 +422,7 @@ public class RegionDef {
 		validateDataUrlAndParams();
 		validateTitleFields();
 		validateFields();
+		validateConfig();
 	}
 
 	/**
@@ -460,6 +483,34 @@ public class RegionDef {
 				+ "a field-grid with no catalog would silently paint an unlabeled/empty grid.", id);
 	}
 
+	private void validateConfig() {
+		if (config != null)
+			checkSerializable(config, Collections.newSetFromMap(new IdentityHashMap<>()));
+	}
+
+	private void checkSerializable(Object v, Set<Object> path) {
+		if (v instanceof Map<?,?> || v instanceof Collection<?>) {
+			if (! path.add(v))
+				throw iaex("RegionDef '%s' config must not contain a cycle.", id);
+			if (v instanceof Map<?,?> m) {
+				for (var e : m.entrySet()) {
+					if (! (e.getKey() instanceof String))
+						throw iaex("RegionDef '%s' config keys must be strings.", id);
+					checkSerializable(e.getValue(), path);
+				}
+			} else {
+				for (var x : (Collection<?>)v)
+					checkSerializable(x, path);
+			}
+			path.remove(v);
+			return;
+		}
+		if (v == null || v instanceof String || v instanceof Number || v instanceof Boolean)
+			return;
+		throw iaex("RegionDef '%s' config values must be maps, lists, strings, numbers, booleans or null; got %s.", id,
+			v.getClass().getSimpleName());
+	}
+
 	/** Extracts the query-string keys already present in {@code url}'s own {@code ?...} portion, if any. */
 	private static Set<String> queryKeysOf(String url) {
 		if (url == null)
@@ -508,6 +559,8 @@ public class RegionDef {
 		}
 		if (visibleWhen != null && !visibleWhen.isEmpty())
 			m.put("visibleWhen", VisibilityRule.toMaps(visibleWhen));
+		if (config != null && !config.isEmpty())
+			m.put("config", config);
 		return m;
 	}
 

@@ -48,6 +48,7 @@ class PageContractSchema_Test extends TestBase {
 		"valid-chart-src.json", "valid-chart-data.json", "valid-job-log.json",
 		"valid-html-src-sanitize.json", "valid-chart-bare.json", "valid-chart-option.json", "valid-chart-helper.json", "valid-chart-action-visiblewhen.json",
 		"valid-job-log-bare.json", "valid-rowaction-inline.json", "valid-data-sources.json",
+		"valid-job-log-envelope-action.json", "valid-job-log-hidden.json", "valid-job-log-output.json", "valid-datatables-job-log-region.json",
 		"valid-datatables-bare.json", "valid-dashboard.json", "valid-quickstats-kinds.json", "valid-urlstate-day-param.json", "valid-urlstate-config.json", "valid-urlstate-config-ids-max-one.json"})
 	void a01_validCorpusPasses(String name) throws Exception {
 		var errors = PageContractSchema.get().validate(fixture(name));
@@ -128,6 +129,13 @@ class PageContractSchema_Test extends TestBase {
 		"invalid-chart-source.json|oneOf",
 		"invalid-job-log-extra.json|oneOf",
 		"invalid-job-log-noendpoint.json|oneOf",
+		"invalid-job-log-envelope-noaction.json|oneOf",
+		"invalid-job-log-source-on-page.json|oneOf",
+		"invalid-job-log-output-both-targets.json|oneOf",
+		"invalid-job-log-source-dotted.json|oneOf",
+		"invalid-datatables-job-log-region-flat.json|oneOf",
+		"invalid-datatables-job-log-region-nokeyurl.json|oneOf",
+		"invalid-datatables-job-log-region-urlparam.json|oneOf",
 		"invalid-chart-kind.json|oneOf",
 		"invalid-job-log-bare.json|oneOf",
 		"invalid-chart-bare.json|oneOf",
