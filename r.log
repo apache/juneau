@@ -1,0 +1,1165 @@
+Picked up JAVA_TOOL_OPTIONS: -Djava.io.tmpdir=/var/folders/1h/88ggm66x64v1bldm8_pw3hvc0000gn/T/
+[INFO] Scanning for projects...
+[INFO] ------------------------------------------------------------------------
+[INFO] Reactor Build Order:
+[INFO] 
+[INFO] Apache Juneau                                                      [pom]
+[INFO] Apache Juneau Core                                                 [pom]
+[INFO] Apache Juneau Commons                                           [bundle]
+[INFO] Apache Juneau Test Utilities                                       [jar]
+[INFO] Apache Juneau Testing Toolkit                                   [bundle]
+[INFO] Apache Juneau Marshall                                          [bundle]
+[INFO] Apache Juneau Beans                                                [pom]
+[INFO] Apache Juneau RFC 7807 Beans                                    [bundle]
+[INFO] Apache Juneau Marshall Test Utilities                           [bundle]
+[INFO] Apache Juneau REST                                                 [pom]
+[INFO] Apache Juneau REST Common                                       [bundle]
+[INFO] Apache Juneau Config                                            [bundle]
+[INFO] Apache Juneau Common Beans                                      [bundle]
+[INFO] Apache Juneau HTML5 Beans                                       [bundle]
+[INFO] Apache Juneau JSON Schema Beans                                 [bundle]
+[INFO] Apache Juneau Swagger 2.0 Beans                                 [bundle]
+[INFO] Apache Juneau OpenAPI 3.0 Beans                                 [bundle]
+[INFO] Apache Juneau REST Server                                       [bundle]
+[INFO] Apache Juneau REST Client                                       [bundle]
+[INFO] Apache Juneau REST Common (Classic)                             [bundle]
+[INFO] Apache Juneau REST Client (Classic)                             [bundle]
+[INFO] Apache Juneau REST Mock                                         [bundle]
+[INFO] Apache Juneau REST Server DataTables                            [bundle]
+[INFO] Apache Juneau Run Report                                        [bundle]
+[INFO] Apache Juneau REST Server Widgets                               [bundle]
+[INFO] Apache Juneau REST Server Console UI                            [bundle]
+[INFO] Apache Juneau REST Server Views                                 [bundle]
+[INFO] 
+[INFO] ----------------------< org.apache.juneau:juneau >----------------------
+[INFO] Building Apache Juneau 10.0.0-SNAPSHOT                            [1/27]
+[INFO]   from pom.xml
+[INFO] --------------------------------[ pom ]---------------------------------
+[INFO] 
+[INFO] --- enforcer:3.6.2:enforce (enforce-maven-version) @ juneau ---
+[INFO] Rule 0: org.apache.maven.enforcer.rules.version.RequireMavenVersion passed
+[INFO] 
+[INFO] --- enforcer:3.6.2:enforce (enforce-java-version) @ juneau ---
+[INFO] Rule 0: org.apache.maven.enforcer.rules.version.RequireJavaVersion passed
+[INFO] 
+[INFO] --- enforcer:3.6.2:enforce (enforce-maven) @ juneau ---
+[INFO] Rule 0: org.apache.maven.enforcer.rules.version.RequireMavenVersion passed
+[INFO] 
+[INFO] --- jacoco:0.8.15:prepare-agent (prepare-agent) @ juneau ---
+[INFO] argLine set to -javaagent:/Users/james.bognar/.m2/repository/org/jacoco/org.jacoco.agent/0.8.15/org.jacoco.agent-0.8.15-runtime.jar=destfile=/Users/james.bognar/git/apache/juneau-wt/J0832/target/jacoco.exec
+[INFO] 
+[INFO] --- remote-resources:3.3.0:process (process-resource-bundles) @ juneau ---
+[INFO] Preparing remote bundle org.apache.apache.resources:apache-jar-resource-bundle:1.7
+[INFO] Copying 3 resources from 1 bundle.
+[INFO] 
+[INFO] --- jacoco:0.8.15:report (report) @ juneau ---
+[INFO] Skipping JaCoCo execution due to missing execution data file.
+[INFO] 
+[INFO] -------------------< org.apache.juneau:juneau-core >--------------------
+[INFO] Building Apache Juneau Core 10.0.0-SNAPSHOT                       [2/27]
+[INFO]   from juneau-core/pom.xml
+[INFO] --------------------------------[ pom ]---------------------------------
+[INFO] 
+[INFO] --- enforcer:3.6.2:enforce (enforce-maven-version) @ juneau-core ---
+[INFO] 
+[INFO] --- enforcer:3.6.2:enforce (enforce-java-version) @ juneau-core ---
+[INFO] 
+[INFO] --- enforcer:3.6.2:enforce (enforce-maven) @ juneau-core ---
+[INFO] 
+[INFO] --- jacoco:0.8.15:prepare-agent (prepare-agent) @ juneau-core ---
+[INFO] argLine set to -javaagent:/Users/james.bognar/.m2/repository/org/jacoco/org.jacoco.agent/0.8.15/org.jacoco.agent-0.8.15-runtime.jar=destfile=/Users/james.bognar/git/apache/juneau-wt/J0832/juneau-core/target/jacoco.exec
+[INFO] 
+[INFO] --- remote-resources:3.3.0:process (process-resource-bundles) @ juneau-core ---
+[INFO] Preparing remote bundle org.apache.apache.resources:apache-jar-resource-bundle:1.7
+[INFO] Copying 3 resources from 1 bundle.
+[INFO] 
+[INFO] --- jacoco:0.8.15:report (report) @ juneau-core ---
+[INFO] Skipping JaCoCo execution due to missing execution data file.
+[INFO] 
+[INFO] ------------------< org.apache.juneau:juneau-commons >------------------
+[INFO] Building Apache Juneau Commons 10.0.0-SNAPSHOT                    [3/27]
+[INFO]   from juneau-core/juneau-commons/pom.xml
+[INFO] -------------------------------[ bundle ]-------------------------------
+[INFO] 
+[INFO] --- enforcer:3.6.2:enforce (enforce-maven-version) @ juneau-commons ---
+[INFO] Rule 0: org.apache.maven.enforcer.rules.version.RequireMavenVersion passed
+[INFO] 
+[INFO] --- enforcer:3.6.2:enforce (enforce-java-version) @ juneau-commons ---
+[INFO] Rule 0: org.apache.maven.enforcer.rules.version.RequireJavaVersion passed
+[INFO] 
+[INFO] --- enforcer:3.6.2:enforce (enforce-maven) @ juneau-commons ---
+[INFO] Rule 0: org.apache.maven.enforcer.rules.version.RequireMavenVersion passed
+[INFO] 
+[INFO] --- jacoco:0.8.15:prepare-agent (prepare-agent) @ juneau-commons ---
+[INFO] argLine set to -javaagent:/Users/james.bognar/.m2/repository/org/jacoco/org.jacoco.agent/0.8.15/org.jacoco.agent-0.8.15-runtime.jar=destfile=/Users/james.bognar/git/apache/juneau-wt/J0832/juneau-core/juneau-commons/target/jacoco.exec
+[INFO] 
+[INFO] --- jacoco:0.8.15:prepare-agent (default-prepare-agent) @ juneau-commons ---
+[INFO] argLine set to -javaagent:/Users/james.bognar/.m2/repository/org/jacoco/org.jacoco.agent/0.8.15/org.jacoco.agent-0.8.15-runtime.jar=destfile=/Users/james.bognar/git/apache/juneau-wt/J0832/juneau-core/juneau-commons/target/jacoco.exec
+[INFO] 
+[INFO] --- remote-resources:3.3.0:process (process-resource-bundles) @ juneau-commons ---
+[INFO] Preparing remote bundle org.apache.apache.resources:apache-jar-resource-bundle:1.7
+[INFO] Copying 3 resources from 1 bundle.
+[INFO] 
+[INFO] --- resources:3.4.0:resources (default-resources) @ juneau-commons ---
+[INFO] Copying 4 resources from src/main/resources to target/classes
+[INFO] Copying 3 resources from target/maven-shared-archive-resources to target/classes
+[INFO] 
+[INFO] --- compiler:3.16.0:compile (default-compile) @ juneau-commons ---
+[INFO] Nothing to compile - all classes are up to date.
+[INFO] 
+[INFO] --- bundle:6.2.0:manifest (bundle-manifest) @ juneau-commons ---
+[INFO] Stale files detected, re-generating manifest.
+[INFO] Writing manifest: /Users/james.bognar/git/apache/juneau-wt/J0832/juneau-core/juneau-commons/target/classes/META-INF/MANIFEST.MF
+[INFO] 
+[INFO] --- resources:3.4.0:testResources (default-testResources) @ juneau-commons ---
+[INFO] Copying 108 resources from src/test/resources to target/test-classes
+[INFO] Copying 3 resources from target/maven-shared-archive-resources to target/test-classes
+[INFO] 
+[INFO] --- compiler:3.16.0:testCompile (default-testCompile) @ juneau-commons ---
+[INFO] Nothing to compile - all classes are up to date.
+[INFO] 
+[INFO] --- surefire:3.5.4:test (default-test) @ juneau-commons ---
+[INFO] 
+[INFO] --- jacoco:0.8.15:report (report) @ juneau-commons ---
+[INFO] Skipping JaCoCo execution due to missing execution data file.
+[INFO] 
+[INFO] ----------------< org.apache.juneau:juneau-test-utils >-----------------
+[INFO] Building Apache Juneau Test Utilities 10.0.0-SNAPSHOT             [4/27]
+[INFO]   from juneau-core/juneau-test-utils/pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- enforcer:3.6.2:enforce (enforce-maven-version) @ juneau-test-utils ---
+[INFO] 
+[INFO] --- enforcer:3.6.2:enforce (enforce-java-version) @ juneau-test-utils ---
+[INFO] 
+[INFO] --- enforcer:3.6.2:enforce (enforce-maven) @ juneau-test-utils ---
+[INFO] 
+[INFO] --- jacoco:0.8.15:prepare-agent (prepare-agent) @ juneau-test-utils ---
+[INFO] argLine set to -javaagent:/Users/james.bognar/.m2/repository/org/jacoco/org.jacoco.agent/0.8.15/org.jacoco.agent-0.8.15-runtime.jar=destfile=/Users/james.bognar/git/apache/juneau-wt/J0832/juneau-core/juneau-test-utils/target/jacoco.exec
+[INFO] 
+[INFO] --- remote-resources:3.3.0:process (process-resource-bundles) @ juneau-test-utils ---
+[INFO] Preparing remote bundle org.apache.apache.resources:apache-jar-resource-bundle:1.7
+[INFO] Copying 3 resources from 1 bundle.
+[INFO] 
+[INFO] --- resources:3.4.0:resources (default-resources) @ juneau-test-utils ---
+[INFO] skip non existing resourceDirectory /Users/james.bognar/git/apache/juneau-wt/J0832/juneau-core/juneau-test-utils/src/main/resources
+[INFO] Copying 3 resources from target/maven-shared-archive-resources to target/classes
+[INFO] 
+[INFO] --- compiler:3.16.0:compile (default-compile) @ juneau-test-utils ---
+[INFO] Nothing to compile - all classes are up to date.
+[INFO] 
+[INFO] --- resources:3.4.0:testResources (default-testResources) @ juneau-test-utils ---
+[INFO] skip non existing resourceDirectory /Users/james.bognar/git/apache/juneau-wt/J0832/juneau-core/juneau-test-utils/src/test/resources
+[INFO] Copying 3 resources from target/maven-shared-archive-resources to target/test-classes
+[INFO] 
+[INFO] --- compiler:3.16.0:testCompile (default-testCompile) @ juneau-test-utils ---
+[INFO] No sources to compile
+[INFO] 
+[INFO] --- surefire:3.5.4:test (default-test) @ juneau-test-utils ---
+[INFO] 
+[INFO] --- jacoco:0.8.15:report (report) @ juneau-test-utils ---
+[INFO] Skipping JaCoCo execution due to missing execution data file.
+[INFO] 
+[INFO] -------------------< org.apache.juneau:juneau-test >--------------------
+[INFO] Building Apache Juneau Testing Toolkit 10.0.0-SNAPSHOT            [5/27]
+[INFO]   from juneau-core/juneau-test/pom.xml
+[INFO] -------------------------------[ bundle ]-------------------------------
+[INFO] 
+[INFO] --- enforcer:3.6.2:enforce (enforce-maven-version) @ juneau-test ---
+[INFO] 
+[INFO] --- enforcer:3.6.2:enforce (enforce-java-version) @ juneau-test ---
+[INFO] 
+[INFO] --- enforcer:3.6.2:enforce (enforce-maven) @ juneau-test ---
+[INFO] 
+[INFO] --- jacoco:0.8.15:prepare-agent (prepare-agent) @ juneau-test ---
+[INFO] argLine set to -javaagent:/Users/james.bognar/.m2/repository/org/jacoco/org.jacoco.agent/0.8.15/org.jacoco.agent-0.8.15-runtime.jar=destfile=/Users/james.bognar/git/apache/juneau-wt/J0832/juneau-core/juneau-test/target/jacoco.exec
+[INFO] 
+[INFO] --- jacoco:0.8.15:prepare-agent (default-prepare-agent) @ juneau-test ---
+[INFO] argLine set to -javaagent:/Users/james.bognar/.m2/repository/org/jacoco/org.jacoco.agent/0.8.15/org.jacoco.agent-0.8.15-runtime.jar=destfile=/Users/james.bognar/git/apache/juneau-wt/J0832/juneau-core/juneau-test/target/jacoco.exec
+[INFO] 
+[INFO] --- remote-resources:3.3.0:process (process-resource-bundles) @ juneau-test ---
+[INFO] Preparing remote bundle org.apache.apache.resources:apache-jar-resource-bundle:1.7
+[INFO] Copying 3 resources from 1 bundle.
+[INFO] 
+[INFO] --- resources:3.4.0:resources (default-resources) @ juneau-test ---
+[INFO] Copying 1 resource from src/main/resources to target/classes
+[INFO] Copying 3 resources from target/maven-shared-archive-resources to target/classes
+[INFO] 
+[INFO] --- compiler:3.16.0:compile (default-compile) @ juneau-test ---
+[INFO] Nothing to compile - all classes are up to date.
+[INFO] 
+[INFO] --- bundle:6.2.0:manifest (bundle-manifest) @ juneau-test ---
+[INFO] Stale files detected, re-generating manifest.
+[INFO] Writing manifest: /Users/james.bognar/git/apache/juneau-wt/J0832/juneau-core/juneau-test/target/classes/META-INF/MANIFEST.MF
+[INFO] 
+[INFO] --- resources:3.4.0:testResources (default-testResources) @ juneau-test ---
+[INFO] Copying 4 resources from src/test/resources to target/test-classes
+[INFO] Copying 3 resources from target/maven-shared-archive-resources to target/test-classes
+[INFO] 
+[INFO] --- compiler:3.16.0:testCompile (default-testCompile) @ juneau-test ---
+[INFO] Nothing to compile - all classes are up to date.
+[INFO] 
+[INFO] --- surefire:3.5.4:test (default-test) @ juneau-test ---
+[INFO] 
+[INFO] --- jacoco:0.8.15:report (report) @ juneau-test ---
+[INFO] Skipping JaCoCo execution due to missing execution data file.
+[INFO] 
+[INFO] -----------------< org.apache.juneau:juneau-marshall >------------------
+[INFO] Building Apache Juneau Marshall 10.0.0-SNAPSHOT                   [6/27]
+[INFO]   from juneau-core/juneau-marshall/pom.xml
+[INFO] -------------------------------[ bundle ]-------------------------------
+[INFO] 
+[INFO] --- enforcer:3.6.2:enforce (enforce-maven-version) @ juneau-marshall ---
+[INFO] 
+[INFO] --- enforcer:3.6.2:enforce (enforce-java-version) @ juneau-marshall ---
+[INFO] 
+[INFO] --- enforcer:3.6.2:enforce (enforce-maven) @ juneau-marshall ---
+[INFO] 
+[INFO] --- jacoco:0.8.15:prepare-agent (prepare-agent) @ juneau-marshall ---
+[INFO] argLine set to -javaagent:/Users/james.bognar/.m2/repository/org/jacoco/org.jacoco.agent/0.8.15/org.jacoco.agent-0.8.15-runtime.jar=destfile=/Users/james.bognar/git/apache/juneau-wt/J0832/juneau-core/juneau-marshall/target/jacoco.exec
+[INFO] 
+[INFO] --- jacoco:0.8.15:prepare-agent (default-prepare-agent) @ juneau-marshall ---
+[INFO] argLine set to -javaagent:/Users/james.bognar/.m2/repository/org/jacoco/org.jacoco.agent/0.8.15/org.jacoco.agent-0.8.15-runtime.jar=destfile=/Users/james.bognar/git/apache/juneau-wt/J0832/juneau-core/juneau-marshall/target/jacoco.exec
+[INFO] 
+[INFO] --- remote-resources:3.3.0:process (process-resource-bundles) @ juneau-marshall ---
+[INFO] Preparing remote bundle org.apache.apache.resources:apache-jar-resource-bundle:1.7
+[INFO] Copying 3 resources from 1 bundle.
+[INFO] 
+[INFO] --- resources:3.4.0:resources (default-resources) @ juneau-marshall ---
+[INFO] Copying 2 resources from src/main/resources to target/classes
+[INFO] Copying 3 resources from target/maven-shared-archive-resources to target/classes
+[INFO] 
+[INFO] --- compiler:3.16.0:compile (default-compile) @ juneau-marshall ---
+[INFO] Nothing to compile - all classes are up to date.
+[INFO] 
+[INFO] --- bundle:6.2.0:manifest (bundle-manifest) @ juneau-marshall ---
+[INFO] Stale files detected, re-generating manifest.
+[INFO] Writing manifest: /Users/james.bognar/git/apache/juneau-wt/J0832/juneau-core/juneau-marshall/target/classes/META-INF/MANIFEST.MF
+[INFO] 
+[INFO] --- resources:3.4.0:testResources (default-testResources) @ juneau-marshall ---
+[INFO] Copying 204 resources from src/test/resources to target/test-classes
+[INFO] Copying 3 resources from target/maven-shared-archive-resources to target/test-classes
+[INFO] 
+[INFO] --- compiler:3.16.0:testCompile (default-testCompile) @ juneau-marshall ---
+[INFO] Recompiling the module because of changed source code.
+[INFO] Compiling 580 source files with javac [debug release 17] to target/test-classes
+[INFO] 
+[INFO] --- surefire:3.5.4:test (default-test) @ juneau-marshall ---
+[INFO] 
+[INFO] --- jacoco:0.8.15:report (report) @ juneau-marshall ---
+[INFO] Skipping JaCoCo execution due to missing execution data file.
+[INFO] 
+[INFO] -------------------< org.apache.juneau:juneau-bean >--------------------
+[INFO] Building Apache Juneau Beans 10.0.0-SNAPSHOT                      [7/27]
+[INFO]   from juneau-bean/pom.xml
+[INFO] --------------------------------[ pom ]---------------------------------
+[INFO] 
+[INFO] --- enforcer:3.6.2:enforce (enforce-maven-version) @ juneau-bean ---
+[INFO] 
+[INFO] --- enforcer:3.6.2:enforce (enforce-java-version) @ juneau-bean ---
+[INFO] 
+[INFO] --- enforcer:3.6.2:enforce (enforce-maven) @ juneau-bean ---
+[INFO] 
+[INFO] --- jacoco:0.8.15:prepare-agent (prepare-agent) @ juneau-bean ---
+[INFO] argLine set to -javaagent:/Users/james.bognar/.m2/repository/org/jacoco/org.jacoco.agent/0.8.15/org.jacoco.agent-0.8.15-runtime.jar=destfile=/Users/james.bognar/git/apache/juneau-wt/J0832/juneau-bean/target/jacoco.exec
+[INFO] 
+[INFO] --- remote-resources:3.3.0:process (process-resource-bundles) @ juneau-bean ---
+[INFO] Preparing remote bundle org.apache.apache.resources:apache-jar-resource-bundle:1.7
+[INFO] Copying 3 resources from 1 bundle.
+[INFO] 
+[INFO] --- jacoco:0.8.15:report (report) @ juneau-bean ---
+[INFO] Skipping JaCoCo execution due to missing execution data file.
+[INFO] 
+[INFO] ---------------< org.apache.juneau:juneau-bean-rfc7807 >----------------
+[INFO] Building Apache Juneau RFC 7807 Beans 10.0.0-SNAPSHOT             [8/27]
+[INFO]   from juneau-bean/juneau-bean-rfc7807/pom.xml
+[INFO] -------------------------------[ bundle ]-------------------------------
+[INFO] 
+[INFO] --- enforcer:3.6.2:enforce (enforce-maven-version) @ juneau-bean-rfc7807 ---
+[INFO] 
+[INFO] --- enforcer:3.6.2:enforce (enforce-java-version) @ juneau-bean-rfc7807 ---
+[INFO] 
+[INFO] --- enforcer:3.6.2:enforce (enforce-maven) @ juneau-bean-rfc7807 ---
+[INFO] 
+[INFO] --- jacoco:0.8.15:prepare-agent (prepare-agent) @ juneau-bean-rfc7807 ---
+[INFO] argLine set to -javaagent:/Users/james.bognar/.m2/repository/org/jacoco/org.jacoco.agent/0.8.15/org.jacoco.agent-0.8.15-runtime.jar=destfile=/Users/james.bognar/git/apache/juneau-wt/J0832/juneau-bean/juneau-bean-rfc7807/target/jacoco.exec
+[INFO] 
+[INFO] --- jacoco:0.8.15:prepare-agent (default-prepare-agent) @ juneau-bean-rfc7807 ---
+[INFO] argLine set to -javaagent:/Users/james.bognar/.m2/repository/org/jacoco/org.jacoco.agent/0.8.15/org.jacoco.agent-0.8.15-runtime.jar=destfile=/Users/james.bognar/git/apache/juneau-wt/J0832/juneau-bean/juneau-bean-rfc7807/target/jacoco.exec
+[INFO] 
+[INFO] --- remote-resources:3.3.0:process (process-resource-bundles) @ juneau-bean-rfc7807 ---
+[INFO] Preparing remote bundle org.apache.apache.resources:apache-jar-resource-bundle:1.7
+[INFO] Copying 3 resources from 1 bundle.
+[INFO] 
+[INFO] --- resources:3.4.0:resources (default-resources) @ juneau-bean-rfc7807 ---
+[INFO] skip non existing resourceDirectory /Users/james.bognar/git/apache/juneau-wt/J0832/juneau-bean/juneau-bean-rfc7807/src/main/resources
+[INFO] Copying 3 resources from target/maven-shared-archive-resources to target/classes
+[INFO] 
+[INFO] --- compiler:3.16.0:compile (default-compile) @ juneau-bean-rfc7807 ---
+[INFO] Nothing to compile - all classes are up to date.
+[INFO] 
+[INFO] --- bundle:6.2.0:manifest (bundle-manifest) @ juneau-bean-rfc7807 ---
+[INFO] Stale files detected, re-generating manifest.
+[INFO] Writing manifest: /Users/james.bognar/git/apache/juneau-wt/J0832/juneau-bean/juneau-bean-rfc7807/target/classes/META-INF/MANIFEST.MF
+[INFO] 
+[INFO] --- resources:3.4.0:testResources (default-testResources) @ juneau-bean-rfc7807 ---
+[INFO] skip non existing resourceDirectory /Users/james.bognar/git/apache/juneau-wt/J0832/juneau-bean/juneau-bean-rfc7807/src/test/resources
+[INFO] Copying 3 resources from target/maven-shared-archive-resources to target/test-classes
+[INFO] 
+[INFO] --- compiler:3.16.0:testCompile (default-testCompile) @ juneau-bean-rfc7807 ---
+[INFO] Nothing to compile - all classes are up to date.
+[INFO] 
+[INFO] --- surefire:3.5.4:test (default-test) @ juneau-bean-rfc7807 ---
+[INFO] 
+[INFO] --- jacoco:0.8.15:report (report) @ juneau-bean-rfc7807 ---
+[INFO] Skipping JaCoCo execution due to missing execution data file.
+[INFO] 
+[INFO] ------------< org.apache.juneau:juneau-test-marshall-utils >------------
+[INFO] Building Apache Juneau Marshall Test Utilities 10.0.0-SNAPSHOT    [9/27]
+[INFO]   from juneau-core/juneau-test-marshall-utils/pom.xml
+[INFO] -------------------------------[ bundle ]-------------------------------
+[INFO] 
+[INFO] --- enforcer:3.6.2:enforce (enforce-maven-version) @ juneau-test-marshall-utils ---
+[INFO] 
+[INFO] --- enforcer:3.6.2:enforce (enforce-java-version) @ juneau-test-marshall-utils ---
+[INFO] 
+[INFO] --- enforcer:3.6.2:enforce (enforce-maven) @ juneau-test-marshall-utils ---
+[INFO] 
+[INFO] --- jacoco:0.8.15:prepare-agent (prepare-agent) @ juneau-test-marshall-utils ---
+[INFO] argLine set to -javaagent:/Users/james.bognar/.m2/repository/org/jacoco/org.jacoco.agent/0.8.15/org.jacoco.agent-0.8.15-runtime.jar=destfile=/Users/james.bognar/git/apache/juneau-wt/J0832/juneau-core/juneau-test-marshall-utils/target/jacoco.exec
+[INFO] 
+[INFO] --- remote-resources:3.3.0:process (process-resource-bundles) @ juneau-test-marshall-utils ---
+[INFO] Preparing remote bundle org.apache.apache.resources:apache-jar-resource-bundle:1.7
+[INFO] Copying 3 resources from 1 bundle.
+[INFO] 
+[INFO] --- resources:3.4.0:resources (default-resources) @ juneau-test-marshall-utils ---
+[INFO] skip non existing resourceDirectory /Users/james.bognar/git/apache/juneau-wt/J0832/juneau-core/juneau-test-marshall-utils/src/main/resources
+[INFO] Copying 3 resources from target/maven-shared-archive-resources to target/classes
+[INFO] 
+[INFO] --- compiler:3.16.0:compile (default-compile) @ juneau-test-marshall-utils ---
+[INFO] Nothing to compile - all classes are up to date.
+[INFO] 
+[INFO] --- bundle:6.2.0:manifest (bundle-manifest) @ juneau-test-marshall-utils ---
+[INFO] Stale files detected, re-generating manifest.
+[INFO] Writing manifest: /Users/james.bognar/git/apache/juneau-wt/J0832/juneau-core/juneau-test-marshall-utils/target/classes/META-INF/MANIFEST.MF
+[INFO] 
+[INFO] --- resources:3.4.0:testResources (default-testResources) @ juneau-test-marshall-utils ---
+[INFO] skip non existing resourceDirectory /Users/james.bognar/git/apache/juneau-wt/J0832/juneau-core/juneau-test-marshall-utils/src/test/resources
+[INFO] Copying 3 resources from target/maven-shared-archive-resources to target/test-classes
+[INFO] 
+[INFO] --- compiler:3.16.0:testCompile (default-testCompile) @ juneau-test-marshall-utils ---
+[INFO] No sources to compile
+[INFO] 
+[INFO] --- surefire:3.5.4:test (default-test) @ juneau-test-marshall-utils ---
+[INFO] 
+[INFO] --- jacoco:0.8.15:report (report) @ juneau-test-marshall-utils ---
+[INFO] Skipping JaCoCo execution due to missing execution data file.
+[INFO] 
+[INFO] -------------------< org.apache.juneau:juneau-rest >--------------------
+[INFO] Building Apache Juneau REST 10.0.0-SNAPSHOT                      [10/27]
+[INFO]   from juneau-rest/pom.xml
+[INFO] --------------------------------[ pom ]---------------------------------
+[INFO] 
+[INFO] --- enforcer:3.6.2:enforce (enforce-maven-version) @ juneau-rest ---
+[INFO] 
+[INFO] --- enforcer:3.6.2:enforce (enforce-java-version) @ juneau-rest ---
+[INFO] 
+[INFO] --- enforcer:3.6.2:enforce (enforce-maven) @ juneau-rest ---
+[INFO] 
+[INFO] --- jacoco:0.8.15:prepare-agent (prepare-agent) @ juneau-rest ---
+[INFO] argLine set to -javaagent:/Users/james.bognar/.m2/repository/org/jacoco/org.jacoco.agent/0.8.15/org.jacoco.agent-0.8.15-runtime.jar=destfile=/Users/james.bognar/git/apache/juneau-wt/J0832/juneau-rest/target/jacoco.exec
+[INFO] 
+[INFO] --- remote-resources:3.3.0:process (process-resource-bundles) @ juneau-rest ---
+[INFO] Preparing remote bundle org.apache.apache.resources:apache-jar-resource-bundle:1.7
+[INFO] Copying 3 resources from 1 bundle.
+[INFO] 
+[INFO] --- jacoco:0.8.15:report (report) @ juneau-rest ---
+[INFO] Skipping JaCoCo execution due to missing execution data file.
+[INFO] 
+[INFO] ----------------< org.apache.juneau:juneau-rest-common >----------------
+[INFO] Building Apache Juneau REST Common 10.0.0-SNAPSHOT               [11/27]
+[INFO]   from juneau-rest/juneau-rest-common/pom.xml
+[INFO] -------------------------------[ bundle ]-------------------------------
+[INFO] 
+[INFO] --- enforcer:3.6.2:enforce (enforce-maven-version) @ juneau-rest-common ---
+[INFO] 
+[INFO] --- enforcer:3.6.2:enforce (enforce-java-version) @ juneau-rest-common ---
+[INFO] 
+[INFO] --- enforcer:3.6.2:enforce (enforce-maven) @ juneau-rest-common ---
+[INFO] 
+[INFO] --- jacoco:0.8.15:prepare-agent (prepare-agent) @ juneau-rest-common ---
+[INFO] argLine set to -javaagent:/Users/james.bognar/.m2/repository/org/jacoco/org.jacoco.agent/0.8.15/org.jacoco.agent-0.8.15-runtime.jar=destfile=/Users/james.bognar/git/apache/juneau-wt/J0832/juneau-rest/juneau-rest-common/target/jacoco.exec
+[INFO] 
+[INFO] --- remote-resources:3.3.0:process (process-resource-bundles) @ juneau-rest-common ---
+[INFO] Preparing remote bundle org.apache.apache.resources:apache-jar-resource-bundle:1.7
+[INFO] Copying 3 resources from 1 bundle.
+[INFO] 
+[INFO] --- resources:3.4.0:resources (default-resources) @ juneau-rest-common ---
+[INFO] skip non existing resourceDirectory /Users/james.bognar/git/apache/juneau-wt/J0832/juneau-rest/juneau-rest-common/src/main/resources
+[INFO] Copying 3 resources from target/maven-shared-archive-resources to target/classes
+[INFO] 
+[INFO] --- compiler:3.16.0:compile (default-compile) @ juneau-rest-common ---
+[INFO] Nothing to compile - all classes are up to date.
+[INFO] 
+[INFO] --- bundle:6.2.0:manifest (bundle-manifest) @ juneau-rest-common ---
+[INFO] Stale files detected, re-generating manifest.
+[INFO] Writing manifest: /Users/james.bognar/git/apache/juneau-wt/J0832/juneau-rest/juneau-rest-common/target/classes/META-INF/MANIFEST.MF
+[INFO] 
+[INFO] --- resources:3.4.0:testResources (default-testResources) @ juneau-rest-common ---
+[INFO] skip non existing resourceDirectory /Users/james.bognar/git/apache/juneau-wt/J0832/juneau-rest/juneau-rest-common/src/test/resources
+[INFO] Copying 3 resources from target/maven-shared-archive-resources to target/test-classes
+[INFO] 
+[INFO] --- compiler:3.16.0:testCompile (default-testCompile) @ juneau-rest-common ---
+[INFO] Nothing to compile - all classes are up to date.
+[INFO] 
+[INFO] --- surefire:3.5.4:test (default-test) @ juneau-rest-common ---
+[INFO] 
+[INFO] --- jacoco:0.8.15:report (report) @ juneau-rest-common ---
+[INFO] Skipping JaCoCo execution due to missing execution data file.
+[INFO] 
+[INFO] ------------------< org.apache.juneau:juneau-config >-------------------
+[INFO] Building Apache Juneau Config 10.0.0-SNAPSHOT                    [12/27]
+[INFO]   from juneau-core/juneau-config/pom.xml
+[INFO] -------------------------------[ bundle ]-------------------------------
+[INFO] 
+[INFO] --- enforcer:3.6.2:enforce (enforce-maven-version) @ juneau-config ---
+[INFO] 
+[INFO] --- enforcer:3.6.2:enforce (enforce-java-version) @ juneau-config ---
+[INFO] 
+[INFO] --- enforcer:3.6.2:enforce (enforce-maven) @ juneau-config ---
+[INFO] 
+[INFO] --- jacoco:0.8.15:prepare-agent (prepare-agent) @ juneau-config ---
+[INFO] argLine set to -javaagent:/Users/james.bognar/.m2/repository/org/jacoco/org.jacoco.agent/0.8.15/org.jacoco.agent-0.8.15-runtime.jar=destfile=/Users/james.bognar/git/apache/juneau-wt/J0832/juneau-core/juneau-config/target/jacoco.exec
+[INFO] 
+[INFO] --- jacoco:0.8.15:prepare-agent (default-prepare-agent) @ juneau-config ---
+[INFO] argLine set to -javaagent:/Users/james.bognar/.m2/repository/org/jacoco/org.jacoco.agent/0.8.15/org.jacoco.agent-0.8.15-runtime.jar=destfile=/Users/james.bognar/git/apache/juneau-wt/J0832/juneau-core/juneau-config/target/jacoco.exec
+[INFO] 
+[INFO] --- remote-resources:3.3.0:process (process-resource-bundles) @ juneau-config ---
+[INFO] Preparing remote bundle org.apache.apache.resources:apache-jar-resource-bundle:1.7
+[INFO] Copying 3 resources from 1 bundle.
+[INFO] 
+[INFO] --- resources:3.4.0:resources (default-resources) @ juneau-config ---
+[INFO] Copying 1 resource from src/main/resources to target/classes
+[INFO] Copying 3 resources from target/maven-shared-archive-resources to target/classes
+[INFO] 
+[INFO] --- compiler:3.16.0:compile (default-compile) @ juneau-config ---
+[INFO] Nothing to compile - all classes are up to date.
+[INFO] 
+[INFO] --- bundle:6.2.0:manifest (bundle-manifest) @ juneau-config ---
+[INFO] Stale files detected, re-generating manifest.
+[INFO] Writing manifest: /Users/james.bognar/git/apache/juneau-wt/J0832/juneau-core/juneau-config/target/classes/META-INF/MANIFEST.MF
+[INFO] 
+[INFO] --- resources:3.4.0:testResources (default-testResources) @ juneau-config ---
+[INFO] Copying 2 resources from src/test/resources to target/test-classes
+[INFO] Copying 3 resources from target/maven-shared-archive-resources to target/test-classes
+[INFO] 
+[INFO] --- compiler:3.16.0:testCompile (default-testCompile) @ juneau-config ---
+[INFO] Nothing to compile - all classes are up to date.
+[INFO] 
+[INFO] --- surefire:3.5.4:test (default-test) @ juneau-config ---
+[INFO] 
+[INFO] --- jacoco:0.8.15:report (report) @ juneau-config ---
+[INFO] Skipping JaCoCo execution due to missing execution data file.
+[INFO] 
+[INFO] ----------------< org.apache.juneau:juneau-bean-common >----------------
+[INFO] Building Apache Juneau Common Beans 10.0.0-SNAPSHOT              [13/27]
+[INFO]   from juneau-bean/juneau-bean-common/pom.xml
+[INFO] -------------------------------[ bundle ]-------------------------------
+[INFO] 
+[INFO] --- enforcer:3.6.2:enforce (enforce-maven-version) @ juneau-bean-common ---
+[INFO] 
+[INFO] --- enforcer:3.6.2:enforce (enforce-java-version) @ juneau-bean-common ---
+[INFO] 
+[INFO] --- enforcer:3.6.2:enforce (enforce-maven) @ juneau-bean-common ---
+[INFO] 
+[INFO] --- jacoco:0.8.15:prepare-agent (prepare-agent) @ juneau-bean-common ---
+[INFO] argLine set to -javaagent:/Users/james.bognar/.m2/repository/org/jacoco/org.jacoco.agent/0.8.15/org.jacoco.agent-0.8.15-runtime.jar=destfile=/Users/james.bognar/git/apache/juneau-wt/J0832/juneau-bean/juneau-bean-common/target/jacoco.exec
+[INFO] 
+[INFO] --- jacoco:0.8.15:prepare-agent (default-prepare-agent) @ juneau-bean-common ---
+[INFO] argLine set to -javaagent:/Users/james.bognar/.m2/repository/org/jacoco/org.jacoco.agent/0.8.15/org.jacoco.agent-0.8.15-runtime.jar=destfile=/Users/james.bognar/git/apache/juneau-wt/J0832/juneau-bean/juneau-bean-common/target/jacoco.exec
+[INFO] 
+[INFO] --- dependency:3.9.0:properties (mockito-agent-path) @ juneau-bean-common ---
+[INFO] 
+[INFO] --- remote-resources:3.3.0:process (process-resource-bundles) @ juneau-bean-common ---
+[INFO] Preparing remote bundle org.apache.apache.resources:apache-jar-resource-bundle:1.7
+[INFO] Copying 3 resources from 1 bundle.
+[INFO] 
+[INFO] --- resources:3.4.0:resources (default-resources) @ juneau-bean-common ---
+[INFO] skip non existing resourceDirectory /Users/james.bognar/git/apache/juneau-wt/J0832/juneau-bean/juneau-bean-common/src/main/resources
+[INFO] Copying 3 resources from target/maven-shared-archive-resources to target/classes
+[INFO] 
+[INFO] --- compiler:3.16.0:compile (default-compile) @ juneau-bean-common ---
+[INFO] Nothing to compile - all classes are up to date.
+[INFO] 
+[INFO] --- bundle:6.2.0:manifest (bundle-manifest) @ juneau-bean-common ---
+[INFO] Stale files detected, re-generating manifest.
+[INFO] Writing manifest: /Users/james.bognar/git/apache/juneau-wt/J0832/juneau-bean/juneau-bean-common/target/classes/META-INF/MANIFEST.MF
+[INFO] 
+[INFO] --- resources:3.4.0:testResources (default-testResources) @ juneau-bean-common ---
+[INFO] skip non existing resourceDirectory /Users/james.bognar/git/apache/juneau-wt/J0832/juneau-bean/juneau-bean-common/src/test/resources
+[INFO] Copying 3 resources from target/maven-shared-archive-resources to target/test-classes
+[INFO] 
+[INFO] --- compiler:3.16.0:testCompile (default-testCompile) @ juneau-bean-common ---
+[INFO] Nothing to compile - all classes are up to date.
+[INFO] 
+[INFO] --- surefire:3.5.4:test (default-test) @ juneau-bean-common ---
+[INFO] 
+[INFO] --- jacoco:0.8.15:report (report) @ juneau-bean-common ---
+[INFO] Skipping JaCoCo execution due to missing execution data file.
+[INFO] 
+[INFO] ----------------< org.apache.juneau:juneau-bean-html5 >-----------------
+[INFO] Building Apache Juneau HTML5 Beans 10.0.0-SNAPSHOT               [14/27]
+[INFO]   from juneau-bean/juneau-bean-html5/pom.xml
+[INFO] -------------------------------[ bundle ]-------------------------------
+[INFO] 
+[INFO] --- enforcer:3.6.2:enforce (enforce-maven-version) @ juneau-bean-html5 ---
+[INFO] 
+[INFO] --- enforcer:3.6.2:enforce (enforce-java-version) @ juneau-bean-html5 ---
+[INFO] 
+[INFO] --- enforcer:3.6.2:enforce (enforce-maven) @ juneau-bean-html5 ---
+[INFO] 
+[INFO] --- jacoco:0.8.15:prepare-agent (prepare-agent) @ juneau-bean-html5 ---
+[INFO] argLine set to -javaagent:/Users/james.bognar/.m2/repository/org/jacoco/org.jacoco.agent/0.8.15/org.jacoco.agent-0.8.15-runtime.jar=destfile=/Users/james.bognar/git/apache/juneau-wt/J0832/juneau-bean/juneau-bean-html5/target/jacoco.exec
+[INFO] 
+[INFO] --- jacoco:0.8.15:prepare-agent (default-prepare-agent) @ juneau-bean-html5 ---
+[INFO] argLine set to -javaagent:/Users/james.bognar/.m2/repository/org/jacoco/org.jacoco.agent/0.8.15/org.jacoco.agent-0.8.15-runtime.jar=destfile=/Users/james.bognar/git/apache/juneau-wt/J0832/juneau-bean/juneau-bean-html5/target/jacoco.exec
+[INFO] 
+[INFO] --- remote-resources:3.3.0:process (process-resource-bundles) @ juneau-bean-html5 ---
+[INFO] Preparing remote bundle org.apache.apache.resources:apache-jar-resource-bundle:1.7
+[INFO] Copying 3 resources from 1 bundle.
+[INFO] 
+[INFO] --- resources:3.4.0:resources (default-resources) @ juneau-bean-html5 ---
+[INFO] skip non existing resourceDirectory /Users/james.bognar/git/apache/juneau-wt/J0832/juneau-bean/juneau-bean-html5/src/main/resources
+[INFO] Copying 3 resources from target/maven-shared-archive-resources to target/classes
+[INFO] 
+[INFO] --- compiler:3.16.0:compile (default-compile) @ juneau-bean-html5 ---
+[INFO] Nothing to compile - all classes are up to date.
+[INFO] 
+[INFO] --- bundle:6.2.0:manifest (bundle-manifest) @ juneau-bean-html5 ---
+[INFO] Stale files detected, re-generating manifest.
+[INFO] Writing manifest: /Users/james.bognar/git/apache/juneau-wt/J0832/juneau-bean/juneau-bean-html5/target/classes/META-INF/MANIFEST.MF
+[INFO] 
+[INFO] --- resources:3.4.0:testResources (default-testResources) @ juneau-bean-html5 ---
+[INFO] skip non existing resourceDirectory /Users/james.bognar/git/apache/juneau-wt/J0832/juneau-bean/juneau-bean-html5/src/test/resources
+[INFO] Copying 3 resources from target/maven-shared-archive-resources to target/test-classes
+[INFO] 
+[INFO] --- compiler:3.16.0:testCompile (default-testCompile) @ juneau-bean-html5 ---
+[INFO] Nothing to compile - all classes are up to date.
+[INFO] 
+[INFO] --- surefire:3.5.4:test (default-test) @ juneau-bean-html5 ---
+[INFO] 
+[INFO] --- jacoco:0.8.15:report (report) @ juneau-bean-html5 ---
+[INFO] Skipping JaCoCo execution due to missing execution data file.
+[INFO] 
+[INFO] --------------< org.apache.juneau:juneau-bean-jsonschema >--------------
+[INFO] Building Apache Juneau JSON Schema Beans 10.0.0-SNAPSHOT         [15/27]
+[INFO]   from juneau-bean/juneau-bean-jsonschema/pom.xml
+[INFO] -------------------------------[ bundle ]-------------------------------
+[INFO] 
+[INFO] --- enforcer:3.6.2:enforce (enforce-maven-version) @ juneau-bean-jsonschema ---
+[INFO] 
+[INFO] --- enforcer:3.6.2:enforce (enforce-java-version) @ juneau-bean-jsonschema ---
+[INFO] 
+[INFO] --- enforcer:3.6.2:enforce (enforce-maven) @ juneau-bean-jsonschema ---
+[INFO] 
+[INFO] --- jacoco:0.8.15:prepare-agent (prepare-agent) @ juneau-bean-jsonschema ---
+[INFO] argLine set to -javaagent:/Users/james.bognar/.m2/repository/org/jacoco/org.jacoco.agent/0.8.15/org.jacoco.agent-0.8.15-runtime.jar=destfile=/Users/james.bognar/git/apache/juneau-wt/J0832/juneau-bean/juneau-bean-jsonschema/target/jacoco.exec
+[INFO] 
+[INFO] --- jacoco:0.8.15:prepare-agent (default-prepare-agent) @ juneau-bean-jsonschema ---
+[INFO] argLine set to -javaagent:/Users/james.bognar/.m2/repository/org/jacoco/org.jacoco.agent/0.8.15/org.jacoco.agent-0.8.15-runtime.jar=destfile=/Users/james.bognar/git/apache/juneau-wt/J0832/juneau-bean/juneau-bean-jsonschema/target/jacoco.exec
+[INFO] 
+[INFO] --- remote-resources:3.3.0:process (process-resource-bundles) @ juneau-bean-jsonschema ---
+[INFO] Preparing remote bundle org.apache.apache.resources:apache-jar-resource-bundle:1.7
+[INFO] Copying 3 resources from 1 bundle.
+[INFO] 
+[INFO] --- resources:3.4.0:resources (default-resources) @ juneau-bean-jsonschema ---
+[INFO] Copying 1 resource from src/main/resources to target/classes
+[INFO] Copying 3 resources from target/maven-shared-archive-resources to target/classes
+[INFO] 
+[INFO] --- compiler:3.16.0:compile (default-compile) @ juneau-bean-jsonschema ---
+[INFO] Nothing to compile - all classes are up to date.
+[INFO] 
+[INFO] --- bundle:6.2.0:manifest (bundle-manifest) @ juneau-bean-jsonschema ---
+[INFO] Stale files detected, re-generating manifest.
+[INFO] Writing manifest: /Users/james.bognar/git/apache/juneau-wt/J0832/juneau-bean/juneau-bean-jsonschema/target/classes/META-INF/MANIFEST.MF
+[INFO] 
+[INFO] --- resources:3.4.0:testResources (default-testResources) @ juneau-bean-jsonschema ---
+[INFO] skip non existing resourceDirectory /Users/james.bognar/git/apache/juneau-wt/J0832/juneau-bean/juneau-bean-jsonschema/src/test/resources
+[INFO] Copying 3 resources from target/maven-shared-archive-resources to target/test-classes
+[INFO] 
+[INFO] --- compiler:3.16.0:testCompile (default-testCompile) @ juneau-bean-jsonschema ---
+[INFO] Nothing to compile - all classes are up to date.
+[INFO] 
+[INFO] --- surefire:3.5.4:test (default-test) @ juneau-bean-jsonschema ---
+[INFO] 
+[INFO] --- jacoco:0.8.15:report (report) @ juneau-bean-jsonschema ---
+[INFO] Skipping JaCoCo execution due to missing execution data file.
+[INFO] 
+[INFO] --------------< org.apache.juneau:juneau-bean-swagger-v2 >--------------
+[INFO] Building Apache Juneau Swagger 2.0 Beans 10.0.0-SNAPSHOT         [16/27]
+[INFO]   from juneau-bean/juneau-bean-swagger-v2/pom.xml
+[INFO] -------------------------------[ bundle ]-------------------------------
+[INFO] 
+[INFO] --- enforcer:3.6.2:enforce (enforce-maven-version) @ juneau-bean-swagger-v2 ---
+[INFO] 
+[INFO] --- enforcer:3.6.2:enforce (enforce-java-version) @ juneau-bean-swagger-v2 ---
+[INFO] 
+[INFO] --- enforcer:3.6.2:enforce (enforce-maven) @ juneau-bean-swagger-v2 ---
+[INFO] 
+[INFO] --- jacoco:0.8.15:prepare-agent (prepare-agent) @ juneau-bean-swagger-v2 ---
+[INFO] argLine set to -javaagent:/Users/james.bognar/.m2/repository/org/jacoco/org.jacoco.agent/0.8.15/org.jacoco.agent-0.8.15-runtime.jar=destfile=/Users/james.bognar/git/apache/juneau-wt/J0832/juneau-bean/juneau-bean-swagger-v2/target/jacoco.exec
+[INFO] 
+[INFO] --- jacoco:0.8.15:prepare-agent (default-prepare-agent) @ juneau-bean-swagger-v2 ---
+[INFO] argLine set to -javaagent:/Users/james.bognar/.m2/repository/org/jacoco/org.jacoco.agent/0.8.15/org.jacoco.agent-0.8.15-runtime.jar=destfile=/Users/james.bognar/git/apache/juneau-wt/J0832/juneau-bean/juneau-bean-swagger-v2/target/jacoco.exec
+[INFO] 
+[INFO] --- remote-resources:3.3.0:process (process-resource-bundles) @ juneau-bean-swagger-v2 ---
+[INFO] Preparing remote bundle org.apache.apache.resources:apache-jar-resource-bundle:1.7
+[INFO] Copying 3 resources from 1 bundle.
+[INFO] 
+[INFO] --- resources:3.4.0:resources (default-resources) @ juneau-bean-swagger-v2 ---
+[INFO] skip non existing resourceDirectory /Users/james.bognar/git/apache/juneau-wt/J0832/juneau-bean/juneau-bean-swagger-v2/src/main/resources
+[INFO] Copying 3 resources from target/maven-shared-archive-resources to target/classes
+[INFO] 
+[INFO] --- compiler:3.16.0:compile (default-compile) @ juneau-bean-swagger-v2 ---
+[INFO] Nothing to compile - all classes are up to date.
+[INFO] 
+[INFO] --- bundle:6.2.0:manifest (bundle-manifest) @ juneau-bean-swagger-v2 ---
+[INFO] Stale files detected, re-generating manifest.
+[INFO] Writing manifest: /Users/james.bognar/git/apache/juneau-wt/J0832/juneau-bean/juneau-bean-swagger-v2/target/classes/META-INF/MANIFEST.MF
+[INFO] 
+[INFO] --- resources:3.4.0:testResources (default-testResources) @ juneau-bean-swagger-v2 ---
+[INFO] skip non existing resourceDirectory /Users/james.bognar/git/apache/juneau-wt/J0832/juneau-bean/juneau-bean-swagger-v2/src/test/resources
+[INFO] Copying 3 resources from target/maven-shared-archive-resources to target/test-classes
+[INFO] 
+[INFO] --- compiler:3.16.0:testCompile (default-testCompile) @ juneau-bean-swagger-v2 ---
+[INFO] Nothing to compile - all classes are up to date.
+[INFO] 
+[INFO] --- surefire:3.5.4:test (default-test) @ juneau-bean-swagger-v2 ---
+[INFO] 
+[INFO] --- jacoco:0.8.15:report (report) @ juneau-bean-swagger-v2 ---
+[INFO] Skipping JaCoCo execution due to missing execution data file.
+[INFO] 
+[INFO] --------------< org.apache.juneau:juneau-bean-openapi-v3 >--------------
+[INFO] Building Apache Juneau OpenAPI 3.0 Beans 10.0.0-SNAPSHOT         [17/27]
+[INFO]   from juneau-bean/juneau-bean-openapi-v3/pom.xml
+[INFO] -------------------------------[ bundle ]-------------------------------
+[INFO] 
+[INFO] --- enforcer:3.6.2:enforce (enforce-maven-version) @ juneau-bean-openapi-v3 ---
+[INFO] 
+[INFO] --- enforcer:3.6.2:enforce (enforce-java-version) @ juneau-bean-openapi-v3 ---
+[INFO] 
+[INFO] --- enforcer:3.6.2:enforce (enforce-maven) @ juneau-bean-openapi-v3 ---
+[INFO] 
+[INFO] --- jacoco:0.8.15:prepare-agent (prepare-agent) @ juneau-bean-openapi-v3 ---
+[INFO] argLine set to -javaagent:/Users/james.bognar/.m2/repository/org/jacoco/org.jacoco.agent/0.8.15/org.jacoco.agent-0.8.15-runtime.jar=destfile=/Users/james.bognar/git/apache/juneau-wt/J0832/juneau-bean/juneau-bean-openapi-v3/target/jacoco.exec
+[INFO] 
+[INFO] --- jacoco:0.8.15:prepare-agent (default-prepare-agent) @ juneau-bean-openapi-v3 ---
+[INFO] argLine set to -javaagent:/Users/james.bognar/.m2/repository/org/jacoco/org.jacoco.agent/0.8.15/org.jacoco.agent-0.8.15-runtime.jar=destfile=/Users/james.bognar/git/apache/juneau-wt/J0832/juneau-bean/juneau-bean-openapi-v3/target/jacoco.exec
+[INFO] 
+[INFO] --- remote-resources:3.3.0:process (process-resource-bundles) @ juneau-bean-openapi-v3 ---
+[INFO] Preparing remote bundle org.apache.apache.resources:apache-jar-resource-bundle:1.7
+[INFO] Copying 3 resources from 1 bundle.
+[INFO] 
+[INFO] --- resources:3.4.0:resources (default-resources) @ juneau-bean-openapi-v3 ---
+[INFO] skip non existing resourceDirectory /Users/james.bognar/git/apache/juneau-wt/J0832/juneau-bean/juneau-bean-openapi-v3/src/main/resources
+[INFO] Copying 3 resources from target/maven-shared-archive-resources to target/classes
+[INFO] 
+[INFO] --- compiler:3.16.0:compile (default-compile) @ juneau-bean-openapi-v3 ---
+[INFO] Nothing to compile - all classes are up to date.
+[INFO] 
+[INFO] --- bundle:6.2.0:manifest (bundle-manifest) @ juneau-bean-openapi-v3 ---
+[INFO] Stale files detected, re-generating manifest.
+[INFO] Writing manifest: /Users/james.bognar/git/apache/juneau-wt/J0832/juneau-bean/juneau-bean-openapi-v3/target/classes/META-INF/MANIFEST.MF
+[INFO] 
+[INFO] --- resources:3.4.0:testResources (default-testResources) @ juneau-bean-openapi-v3 ---
+[INFO] skip non existing resourceDirectory /Users/james.bognar/git/apache/juneau-wt/J0832/juneau-bean/juneau-bean-openapi-v3/src/test/resources
+[INFO] Copying 3 resources from target/maven-shared-archive-resources to target/test-classes
+[INFO] 
+[INFO] --- compiler:3.16.0:testCompile (default-testCompile) @ juneau-bean-openapi-v3 ---
+[INFO] Nothing to compile - all classes are up to date.
+[INFO] 
+[INFO] --- surefire:3.5.4:test (default-test) @ juneau-bean-openapi-v3 ---
+[INFO] 
+[INFO] --- jacoco:0.8.15:report (report) @ juneau-bean-openapi-v3 ---
+[INFO] Skipping JaCoCo execution due to missing execution data file.
+[INFO] 
+[INFO] ----------------< org.apache.juneau:juneau-rest-server >----------------
+[INFO] Building Apache Juneau REST Server 10.0.0-SNAPSHOT               [18/27]
+[INFO]   from juneau-rest/juneau-rest-server/pom.xml
+[INFO] -------------------------------[ bundle ]-------------------------------
+[INFO] 
+[INFO] --- enforcer:3.6.2:enforce (enforce-maven-version) @ juneau-rest-server ---
+[INFO] 
+[INFO] --- enforcer:3.6.2:enforce (enforce-java-version) @ juneau-rest-server ---
+[INFO] 
+[INFO] --- enforcer:3.6.2:enforce (enforce-maven) @ juneau-rest-server ---
+[INFO] 
+[INFO] --- jacoco:0.8.15:prepare-agent (prepare-agent) @ juneau-rest-server ---
+[INFO] argLine set to -javaagent:/Users/james.bognar/.m2/repository/org/jacoco/org.jacoco.agent/0.8.15/org.jacoco.agent-0.8.15-runtime.jar=destfile=/Users/james.bognar/git/apache/juneau-wt/J0832/juneau-rest/juneau-rest-server/target/jacoco.exec
+[INFO] 
+[INFO] --- dependency:3.9.0:properties (mockito-agent-path) @ juneau-rest-server ---
+[INFO] 
+[INFO] --- remote-resources:3.3.0:process (process-resource-bundles) @ juneau-rest-server ---
+[INFO] Preparing remote bundle org.apache.apache.resources:apache-jar-resource-bundle:1.7
+[INFO] Copying 3 resources from 1 bundle.
+[INFO] 
+[INFO] --- resources:3.4.0:resources (default-resources) @ juneau-rest-server ---
+[INFO] Copying 22 resources from src/main/resources to target/classes
+[INFO] Copying 3 resources from target/maven-shared-archive-resources to target/classes
+[INFO] 
+[INFO] --- compiler:3.16.0:compile (default-compile) @ juneau-rest-server ---
+[INFO] Nothing to compile - all classes are up to date.
+[INFO] 
+[INFO] --- bundle:6.2.0:manifest (bundle-manifest) @ juneau-rest-server ---
+[INFO] Stale files detected, re-generating manifest.
+[INFO] Writing manifest: /Users/james.bognar/git/apache/juneau-wt/J0832/juneau-rest/juneau-rest-server/target/classes/META-INF/MANIFEST.MF
+[INFO] 
+[INFO] --- resources:3.4.0:testResources (default-testResources) @ juneau-rest-server ---
+[INFO] Copying 6 resources from src/test/resources to target/test-classes
+[INFO] Copying 3 resources from target/maven-shared-archive-resources to target/test-classes
+[INFO] 
+[INFO] --- compiler:3.16.0:testCompile (default-testCompile) @ juneau-rest-server ---
+[INFO] Nothing to compile - all classes are up to date.
+[INFO] 
+[INFO] --- surefire:3.5.4:test (default-test) @ juneau-rest-server ---
+[INFO] 
+[INFO] --- jacoco:0.8.15:report (report) @ juneau-rest-server ---
+[INFO] Skipping JaCoCo execution due to missing execution data file.
+[INFO] 
+[INFO] ----------------< org.apache.juneau:juneau-rest-client >----------------
+[INFO] Building Apache Juneau REST Client 10.0.0-SNAPSHOT               [19/27]
+[INFO]   from juneau-rest/juneau-rest-client/pom.xml
+[INFO] -------------------------------[ bundle ]-------------------------------
+[INFO] 
+[INFO] --- enforcer:3.6.2:enforce (enforce-maven-version) @ juneau-rest-client ---
+[INFO] 
+[INFO] --- enforcer:3.6.2:enforce (enforce-java-version) @ juneau-rest-client ---
+[INFO] 
+[INFO] --- enforcer:3.6.2:enforce (enforce-maven) @ juneau-rest-client ---
+[INFO] 
+[INFO] --- jacoco:0.8.15:prepare-agent (prepare-agent) @ juneau-rest-client ---
+[INFO] argLine set to -javaagent:/Users/james.bognar/.m2/repository/org/jacoco/org.jacoco.agent/0.8.15/org.jacoco.agent-0.8.15-runtime.jar=destfile=/Users/james.bognar/git/apache/juneau-wt/J0832/juneau-rest/juneau-rest-client/target/jacoco.exec
+[INFO] 
+[INFO] --- remote-resources:3.3.0:process (process-resource-bundles) @ juneau-rest-client ---
+[INFO] Preparing remote bundle org.apache.apache.resources:apache-jar-resource-bundle:1.7
+[INFO] Copying 3 resources from 1 bundle.
+[INFO] 
+[INFO] --- resources:3.4.0:resources (default-resources) @ juneau-rest-client ---
+[INFO] Copying 1 resource from src/main/resources to target/classes
+[INFO] Copying 3 resources from target/maven-shared-archive-resources to target/classes
+[INFO] 
+[INFO] --- compiler:3.16.0:compile (default-compile) @ juneau-rest-client ---
+[INFO] Nothing to compile - all classes are up to date.
+[INFO] 
+[INFO] --- bundle:6.2.0:manifest (bundle-manifest) @ juneau-rest-client ---
+[INFO] Stale files detected, re-generating manifest.
+[INFO] Writing manifest: /Users/james.bognar/git/apache/juneau-wt/J0832/juneau-rest/juneau-rest-client/target/classes/META-INF/MANIFEST.MF
+[INFO] 
+[INFO] --- resources:3.4.0:testResources (default-testResources) @ juneau-rest-client ---
+[INFO] skip non existing resourceDirectory /Users/james.bognar/git/apache/juneau-wt/J0832/juneau-rest/juneau-rest-client/src/test/resources
+[INFO] Copying 3 resources from target/maven-shared-archive-resources to target/test-classes
+[INFO] 
+[INFO] --- compiler:3.16.0:testCompile (default-testCompile) @ juneau-rest-client ---
+[INFO] Nothing to compile - all classes are up to date.
+[INFO] 
+[INFO] --- surefire:3.5.4:test (default-test) @ juneau-rest-client ---
+[INFO] 
+[INFO] --- jacoco:0.8.15:report (report) @ juneau-rest-client ---
+[INFO] Skipping JaCoCo execution due to missing execution data file.
+[INFO] 
+[INFO] ------------< org.apache.juneau:juneau-rest-common-classic >------------
+[INFO] Building Apache Juneau REST Common (Classic) 10.0.0-SNAPSHOT     [20/27]
+[INFO]   from juneau-rest/juneau-rest-common-classic/pom.xml
+[INFO] -------------------------------[ bundle ]-------------------------------
+[INFO] 
+[INFO] --- enforcer:3.6.2:enforce (enforce-maven-version) @ juneau-rest-common-classic ---
+[INFO] 
+[INFO] --- enforcer:3.6.2:enforce (enforce-java-version) @ juneau-rest-common-classic ---
+[INFO] 
+[INFO] --- enforcer:3.6.2:enforce (enforce-maven) @ juneau-rest-common-classic ---
+[INFO] 
+[INFO] --- jacoco:0.8.15:prepare-agent (prepare-agent) @ juneau-rest-common-classic ---
+[INFO] argLine set to -javaagent:/Users/james.bognar/.m2/repository/org/jacoco/org.jacoco.agent/0.8.15/org.jacoco.agent-0.8.15-runtime.jar=destfile=/Users/james.bognar/git/apache/juneau-wt/J0832/juneau-rest/juneau-rest-common-classic/target/jacoco.exec
+[INFO] 
+[INFO] --- remote-resources:3.3.0:process (process-resource-bundles) @ juneau-rest-common-classic ---
+[INFO] Preparing remote bundle org.apache.apache.resources:apache-jar-resource-bundle:1.7
+[INFO] Copying 3 resources from 1 bundle.
+[INFO] 
+[INFO] --- resources:3.4.0:resources (default-resources) @ juneau-rest-common-classic ---
+[INFO] skip non existing resourceDirectory /Users/james.bognar/git/apache/juneau-wt/J0832/juneau-rest/juneau-rest-common-classic/src/main/resources
+[INFO] Copying 3 resources from target/maven-shared-archive-resources to target/classes
+[INFO] 
+[INFO] --- compiler:3.16.0:compile (default-compile) @ juneau-rest-common-classic ---
+[INFO] Nothing to compile - all classes are up to date.
+[INFO] 
+[INFO] --- bundle:6.2.0:manifest (bundle-manifest) @ juneau-rest-common-classic ---
+[INFO] Stale files detected, re-generating manifest.
+[INFO] Writing manifest: /Users/james.bognar/git/apache/juneau-wt/J0832/juneau-rest/juneau-rest-common-classic/target/classes/META-INF/MANIFEST.MF
+[INFO] 
+[INFO] --- resources:3.4.0:testResources (default-testResources) @ juneau-rest-common-classic ---
+[INFO] skip non existing resourceDirectory /Users/james.bognar/git/apache/juneau-wt/J0832/juneau-rest/juneau-rest-common-classic/src/test/resources
+[INFO] Copying 3 resources from target/maven-shared-archive-resources to target/test-classes
+[INFO] 
+[INFO] --- compiler:3.16.0:testCompile (default-testCompile) @ juneau-rest-common-classic ---
+[INFO] Nothing to compile - all classes are up to date.
+[INFO] 
+[INFO] --- surefire:3.5.4:test (default-test) @ juneau-rest-common-classic ---
+[INFO] 
+[INFO] --- jacoco:0.8.15:report (report) @ juneau-rest-common-classic ---
+[INFO] Skipping JaCoCo execution due to missing execution data file.
+[INFO] 
+[INFO] ------------< org.apache.juneau:juneau-rest-client-classic >------------
+[INFO] Building Apache Juneau REST Client (Classic) 10.0.0-SNAPSHOT     [21/27]
+[INFO]   from juneau-rest/juneau-rest-client-classic/pom.xml
+[INFO] -------------------------------[ bundle ]-------------------------------
+[INFO] 
+[INFO] --- enforcer:3.6.2:enforce (enforce-maven-version) @ juneau-rest-client-classic ---
+[INFO] 
+[INFO] --- enforcer:3.6.2:enforce (enforce-java-version) @ juneau-rest-client-classic ---
+[INFO] 
+[INFO] --- enforcer:3.6.2:enforce (enforce-maven) @ juneau-rest-client-classic ---
+[INFO] 
+[INFO] --- jacoco:0.8.15:prepare-agent (prepare-agent) @ juneau-rest-client-classic ---
+[INFO] argLine set to -javaagent:/Users/james.bognar/.m2/repository/org/jacoco/org.jacoco.agent/0.8.15/org.jacoco.agent-0.8.15-runtime.jar=destfile=/Users/james.bognar/git/apache/juneau-wt/J0832/juneau-rest/juneau-rest-client-classic/target/jacoco.exec
+[INFO] 
+[INFO] --- remote-resources:3.3.0:process (process-resource-bundles) @ juneau-rest-client-classic ---
+[INFO] Preparing remote bundle org.apache.apache.resources:apache-jar-resource-bundle:1.7
+[INFO] Copying 3 resources from 1 bundle.
+[INFO] 
+[INFO] --- resources:3.4.0:resources (default-resources) @ juneau-rest-client-classic ---
+[INFO] skip non existing resourceDirectory /Users/james.bognar/git/apache/juneau-wt/J0832/juneau-rest/juneau-rest-client-classic/src/main/resources
+[INFO] Copying 3 resources from target/maven-shared-archive-resources to target/classes
+[INFO] 
+[INFO] --- compiler:3.16.0:compile (default-compile) @ juneau-rest-client-classic ---
+[INFO] Nothing to compile - all classes are up to date.
+[INFO] 
+[INFO] --- bundle:6.2.0:manifest (bundle-manifest) @ juneau-rest-client-classic ---
+[INFO] Stale files detected, re-generating manifest.
+[INFO] Writing manifest: /Users/james.bognar/git/apache/juneau-wt/J0832/juneau-rest/juneau-rest-client-classic/target/classes/META-INF/MANIFEST.MF
+[INFO] 
+[INFO] --- resources:3.4.0:testResources (default-testResources) @ juneau-rest-client-classic ---
+[INFO] skip non existing resourceDirectory /Users/james.bognar/git/apache/juneau-wt/J0832/juneau-rest/juneau-rest-client-classic/src/test/resources
+[INFO] Copying 3 resources from target/maven-shared-archive-resources to target/test-classes
+[INFO] 
+[INFO] --- compiler:3.16.0:testCompile (default-testCompile) @ juneau-rest-client-classic ---
+[INFO] Nothing to compile - all classes are up to date.
+[INFO] 
+[INFO] --- surefire:3.5.4:test (default-test) @ juneau-rest-client-classic ---
+[INFO] 
+[INFO] --- jacoco:0.8.15:report (report) @ juneau-rest-client-classic ---
+[INFO] Skipping JaCoCo execution due to missing execution data file.
+[INFO] 
+[INFO] -----------------< org.apache.juneau:juneau-rest-mock >-----------------
+[INFO] Building Apache Juneau REST Mock 10.0.0-SNAPSHOT                 [22/27]
+[INFO]   from juneau-rest/juneau-rest-mock/pom.xml
+[INFO] -------------------------------[ bundle ]-------------------------------
+[INFO] 
+[INFO] --- enforcer:3.6.2:enforce (enforce-maven-version) @ juneau-rest-mock ---
+[INFO] 
+[INFO] --- enforcer:3.6.2:enforce (enforce-java-version) @ juneau-rest-mock ---
+[INFO] 
+[INFO] --- enforcer:3.6.2:enforce (enforce-maven) @ juneau-rest-mock ---
+[INFO] 
+[INFO] --- jacoco:0.8.15:prepare-agent (prepare-agent) @ juneau-rest-mock ---
+[INFO] argLine set to -javaagent:/Users/james.bognar/.m2/repository/org/jacoco/org.jacoco.agent/0.8.15/org.jacoco.agent-0.8.15-runtime.jar=destfile=/Users/james.bognar/git/apache/juneau-wt/J0832/juneau-rest/juneau-rest-mock/target/jacoco.exec
+[INFO] 
+[INFO] --- dependency:3.9.0:properties (mockito-agent-path) @ juneau-rest-mock ---
+[INFO] 
+[INFO] --- remote-resources:3.3.0:process (process-resource-bundles) @ juneau-rest-mock ---
+[INFO] Preparing remote bundle org.apache.apache.resources:apache-jar-resource-bundle:1.7
+[INFO] Copying 3 resources from 1 bundle.
+[INFO] 
+[INFO] --- resources:3.4.0:resources (default-resources) @ juneau-rest-mock ---
+[INFO] skip non existing resourceDirectory /Users/james.bognar/git/apache/juneau-wt/J0832/juneau-rest/juneau-rest-mock/src/main/resources
+[INFO] Copying 3 resources from target/maven-shared-archive-resources to target/classes
+[INFO] 
+[INFO] --- compiler:3.16.0:compile (default-compile) @ juneau-rest-mock ---
+[INFO] Nothing to compile - all classes are up to date.
+[INFO] 
+[INFO] --- bundle:6.2.0:manifest (bundle-manifest) @ juneau-rest-mock ---
+[INFO] Stale files detected, re-generating manifest.
+[INFO] Writing manifest: /Users/james.bognar/git/apache/juneau-wt/J0832/juneau-rest/juneau-rest-mock/target/classes/META-INF/MANIFEST.MF
+[INFO] 
+[INFO] --- resources:3.4.0:testResources (default-testResources) @ juneau-rest-mock ---
+[INFO] Copying 9 resources from src/test/resources to target/test-classes
+[INFO] Copying 3 resources from target/maven-shared-archive-resources to target/test-classes
+[INFO] 
+[INFO] --- compiler:3.16.0:testCompile (default-testCompile) @ juneau-rest-mock ---
+[INFO] Nothing to compile - all classes are up to date.
+[INFO] 
+[INFO] --- surefire:3.5.4:test (default-test) @ juneau-rest-mock ---
+[INFO] 
+[INFO] --- jacoco:0.8.15:report (report) @ juneau-rest-mock ---
+[INFO] Skipping JaCoCo execution due to missing execution data file.
+[INFO] 
+[INFO] ----------< org.apache.juneau:juneau-rest-server-datatables >-----------
+[INFO] Building Apache Juneau REST Server DataTables 10.0.0-SNAPSHOT    [23/27]
+[INFO]   from juneau-rest/juneau-rest-server-datatables/pom.xml
+[INFO] -------------------------------[ bundle ]-------------------------------
+[INFO] 
+[INFO] --- enforcer:3.6.2:enforce (enforce-maven-version) @ juneau-rest-server-datatables ---
+[INFO] 
+[INFO] --- enforcer:3.6.2:enforce (enforce-java-version) @ juneau-rest-server-datatables ---
+[INFO] 
+[INFO] --- enforcer:3.6.2:enforce (enforce-maven) @ juneau-rest-server-datatables ---
+[INFO] 
+[INFO] --- jacoco:0.8.15:prepare-agent (prepare-agent) @ juneau-rest-server-datatables ---
+[INFO] argLine set to -javaagent:/Users/james.bognar/.m2/repository/org/jacoco/org.jacoco.agent/0.8.15/org.jacoco.agent-0.8.15-runtime.jar=destfile=/Users/james.bognar/git/apache/juneau-wt/J0832/juneau-rest/juneau-rest-server-datatables/target/jacoco.exec
+[INFO] 
+[INFO] --- jacoco:0.8.15:prepare-agent (default-prepare-agent) @ juneau-rest-server-datatables ---
+[INFO] argLine set to -javaagent:/Users/james.bognar/.m2/repository/org/jacoco/org.jacoco.agent/0.8.15/org.jacoco.agent-0.8.15-runtime.jar=destfile=/Users/james.bognar/git/apache/juneau-wt/J0832/juneau-rest/juneau-rest-server-datatables/target/jacoco.exec
+[INFO] 
+[INFO] --- remote-resources:3.3.0:process (process-resource-bundles) @ juneau-rest-server-datatables ---
+[INFO] Preparing remote bundle org.apache.apache.resources:apache-jar-resource-bundle:1.7
+[INFO] Copying 3 resources from 1 bundle.
+[INFO] 
+[INFO] --- resources:3.4.0:resources (default-resources) @ juneau-rest-server-datatables ---
+[INFO] Copying 1 resource from src/main/resources to target/classes
+[INFO] Copying 3 resources from target/maven-shared-archive-resources to target/classes
+[INFO] 
+[INFO] --- compiler:3.16.0:compile (default-compile) @ juneau-rest-server-datatables ---
+[INFO] Nothing to compile - all classes are up to date.
+[INFO] 
+[INFO] --- bundle:6.2.0:manifest (bundle-manifest) @ juneau-rest-server-datatables ---
+[INFO] Stale files detected, re-generating manifest.
+[INFO] Writing manifest: /Users/james.bognar/git/apache/juneau-wt/J0832/juneau-rest/juneau-rest-server-datatables/target/classes/META-INF/MANIFEST.MF
+[INFO] 
+[INFO] --- resources:3.4.0:testResources (default-testResources) @ juneau-rest-server-datatables ---
+[INFO] Copying 2 resources from src/test/resources to target/test-classes
+[INFO] Copying 3 resources from target/maven-shared-archive-resources to target/test-classes
+[INFO] 
+[INFO] --- compiler:3.16.0:testCompile (default-testCompile) @ juneau-rest-server-datatables ---
+[INFO] Nothing to compile - all classes are up to date.
+[INFO] 
+[INFO] --- surefire:3.5.4:test (default-test) @ juneau-rest-server-datatables ---
+[INFO] 
+[INFO] --- jacoco:0.8.15:report (report) @ juneau-rest-server-datatables ---
+[INFO] Skipping JaCoCo execution due to missing execution data file.
+[INFO] 
+[INFO] ----------------< org.apache.juneau:juneau-run-report >-----------------
+[INFO] Building Apache Juneau Run Report 10.0.0-SNAPSHOT                [24/27]
+[INFO]   from juneau-rest/juneau-run-report/pom.xml
+[INFO] -------------------------------[ bundle ]-------------------------------
+[INFO] 
+[INFO] --- enforcer:3.6.2:enforce (enforce-maven-version) @ juneau-run-report ---
+[INFO] 
+[INFO] --- enforcer:3.6.2:enforce (enforce-java-version) @ juneau-run-report ---
+[INFO] 
+[INFO] --- enforcer:3.6.2:enforce (enforce-maven) @ juneau-run-report ---
+[INFO] 
+[INFO] --- jacoco:0.8.15:prepare-agent (prepare-agent) @ juneau-run-report ---
+[INFO] argLine set to -javaagent:/Users/james.bognar/.m2/repository/org/jacoco/org.jacoco.agent/0.8.15/org.jacoco.agent-0.8.15-runtime.jar=destfile=/Users/james.bognar/git/apache/juneau-wt/J0832/juneau-rest/juneau-run-report/target/jacoco.exec
+[INFO] 
+[INFO] --- jacoco:0.8.15:prepare-agent (default-prepare-agent) @ juneau-run-report ---
+[INFO] argLine set to -javaagent:/Users/james.bognar/.m2/repository/org/jacoco/org.jacoco.agent/0.8.15/org.jacoco.agent-0.8.15-runtime.jar=destfile=/Users/james.bognar/git/apache/juneau-wt/J0832/juneau-rest/juneau-run-report/target/jacoco.exec
+[INFO] 
+[INFO] --- remote-resources:3.3.0:process (process-resource-bundles) @ juneau-run-report ---
+[INFO] Preparing remote bundle org.apache.apache.resources:apache-jar-resource-bundle:1.7
+[INFO] Copying 3 resources from 1 bundle.
+[INFO] 
+[INFO] --- resources:3.4.0:resources (default-resources) @ juneau-run-report ---
+[INFO] skip non existing resourceDirectory /Users/james.bognar/git/apache/juneau-wt/J0832/juneau-rest/juneau-run-report/src/main/resources
+[INFO] Copying 3 resources from target/maven-shared-archive-resources to target/classes
+[INFO] 
+[INFO] --- compiler:3.16.0:compile (default-compile) @ juneau-run-report ---
+[INFO] Nothing to compile - all classes are up to date.
+[INFO] 
+[INFO] --- bundle:6.2.0:manifest (bundle-manifest) @ juneau-run-report ---
+[INFO] Stale files detected, re-generating manifest.
+[INFO] Writing manifest: /Users/james.bognar/git/apache/juneau-wt/J0832/juneau-rest/juneau-run-report/target/classes/META-INF/MANIFEST.MF
+[INFO] 
+[INFO] --- resources:3.4.0:testResources (default-testResources) @ juneau-run-report ---
+[INFO] Copying 10 resources from src/test/resources to target/test-classes
+[INFO] Copying 3 resources from target/maven-shared-archive-resources to target/test-classes
+[INFO] 
+[INFO] --- compiler:3.16.0:testCompile (default-testCompile) @ juneau-run-report ---
+[INFO] Nothing to compile - all classes are up to date.
+[INFO] 
+[INFO] --- surefire:3.5.4:test (default-test) @ juneau-run-report ---
+[INFO] 
+[INFO] --- jacoco:0.8.15:report (report) @ juneau-run-report ---
+[INFO] Skipping JaCoCo execution due to missing execution data file.
+[INFO] 
+[INFO] ------------< org.apache.juneau:juneau-rest-server-widgets >------------
+[INFO] Building Apache Juneau REST Server Widgets 10.0.0-SNAPSHOT       [25/27]
+[INFO]   from juneau-rest/juneau-rest-server-widgets/pom.xml
+[INFO] -------------------------------[ bundle ]-------------------------------
+[INFO] 
+[INFO] --- enforcer:3.6.2:enforce (enforce-maven-version) @ juneau-rest-server-widgets ---
+[INFO] 
+[INFO] --- enforcer:3.6.2:enforce (enforce-java-version) @ juneau-rest-server-widgets ---
+[INFO] 
+[INFO] --- enforcer:3.6.2:enforce (enforce-maven) @ juneau-rest-server-widgets ---
+[INFO] 
+[INFO] --- jacoco:0.8.15:prepare-agent (prepare-agent) @ juneau-rest-server-widgets ---
+[INFO] argLine set to -javaagent:/Users/james.bognar/.m2/repository/org/jacoco/org.jacoco.agent/0.8.15/org.jacoco.agent-0.8.15-runtime.jar=destfile=/Users/james.bognar/git/apache/juneau-wt/J0832/juneau-rest/juneau-rest-server-widgets/target/jacoco.exec
+[INFO] 
+[INFO] --- jacoco:0.8.15:prepare-agent (default-prepare-agent) @ juneau-rest-server-widgets ---
+[INFO] argLine set to -javaagent:/Users/james.bognar/.m2/repository/org/jacoco/org.jacoco.agent/0.8.15/org.jacoco.agent-0.8.15-runtime.jar=destfile=/Users/james.bognar/git/apache/juneau-wt/J0832/juneau-rest/juneau-rest-server-widgets/target/jacoco.exec
+[INFO] 
+[INFO] --- remote-resources:3.3.0:process (process-resource-bundles) @ juneau-rest-server-widgets ---
+[INFO] Preparing remote bundle org.apache.apache.resources:apache-jar-resource-bundle:1.7
+[INFO] Copying 3 resources from 1 bundle.
+[INFO] 
+[INFO] --- resources:3.4.0:resources (default-resources) @ juneau-rest-server-widgets ---
+[INFO] Copying 3 resources from src/main/resources to target/classes
+[INFO] Copying 3 resources from target/maven-shared-archive-resources to target/classes
+[INFO] 
+[INFO] --- compiler:3.16.0:compile (default-compile) @ juneau-rest-server-widgets ---
+[INFO] Nothing to compile - all classes are up to date.
+[INFO] 
+[INFO] --- bundle:6.2.0:manifest (bundle-manifest) @ juneau-rest-server-widgets ---
+[INFO] Stale files detected, re-generating manifest.
+[INFO] Writing manifest: /Users/james.bognar/git/apache/juneau-wt/J0832/juneau-rest/juneau-rest-server-widgets/target/classes/META-INF/MANIFEST.MF
+[INFO] 
+[INFO] --- resources:3.4.0:testResources (default-testResources) @ juneau-rest-server-widgets ---
+[INFO] skip non existing resourceDirectory /Users/james.bognar/git/apache/juneau-wt/J0832/juneau-rest/juneau-rest-server-widgets/src/test/resources
+[INFO] Copying 3 resources from target/maven-shared-archive-resources to target/test-classes
+[INFO] 
+[INFO] --- compiler:3.16.0:testCompile (default-testCompile) @ juneau-rest-server-widgets ---
+[INFO] Nothing to compile - all classes are up to date.
+[INFO] 
+[INFO] --- surefire:3.5.4:test (default-test) @ juneau-rest-server-widgets ---
+[INFO] 
+[INFO] --- jacoco:0.8.15:report (report) @ juneau-rest-server-widgets ---
+[INFO] Skipping JaCoCo execution due to missing execution data file.
+[INFO] 
+[INFO] ----------< org.apache.juneau:juneau-rest-server-console-ui >-----------
+[INFO] Building Apache Juneau REST Server Console UI 10.0.0-SNAPSHOT    [26/27]
+[INFO]   from juneau-rest/juneau-rest-server-console-ui/pom.xml
+[INFO] -------------------------------[ bundle ]-------------------------------
+[INFO] 
+[INFO] --- enforcer:3.6.2:enforce (enforce-maven-version) @ juneau-rest-server-console-ui ---
+[INFO] 
+[INFO] --- enforcer:3.6.2:enforce (enforce-java-version) @ juneau-rest-server-console-ui ---
+[INFO] 
+[INFO] --- enforcer:3.6.2:enforce (enforce-maven) @ juneau-rest-server-console-ui ---
+[INFO] 
+[INFO] --- jacoco:0.8.15:prepare-agent (prepare-agent) @ juneau-rest-server-console-ui ---
+[INFO] argLine set to -javaagent:/Users/james.bognar/.m2/repository/org/jacoco/org.jacoco.agent/0.8.15/org.jacoco.agent-0.8.15-runtime.jar=destfile=/Users/james.bognar/git/apache/juneau-wt/J0832/juneau-rest/juneau-rest-server-console-ui/target/jacoco.exec
+[INFO] 
+[INFO] --- jacoco:0.8.15:prepare-agent (default-prepare-agent) @ juneau-rest-server-console-ui ---
+[INFO] argLine set to -javaagent:/Users/james.bognar/.m2/repository/org/jacoco/org.jacoco.agent/0.8.15/org.jacoco.agent-0.8.15-runtime.jar=destfile=/Users/james.bognar/git/apache/juneau-wt/J0832/juneau-rest/juneau-rest-server-console-ui/target/jacoco.exec
+[INFO] 
+[INFO] --- remote-resources:3.3.0:process (process-resource-bundles) @ juneau-rest-server-console-ui ---
+[INFO] Preparing remote bundle org.apache.apache.resources:apache-jar-resource-bundle:1.7
+[INFO] Copying 3 resources from 1 bundle.
+[INFO] 
+[INFO] --- resources:3.4.0:resources (default-resources) @ juneau-rest-server-console-ui ---
+[INFO] Copying 13 resources from src/main/resources to target/classes
+[INFO] Copying 3 resources from target/maven-shared-archive-resources to target/classes
+[INFO] 
+[INFO] --- compiler:3.16.0:compile (default-compile) @ juneau-rest-server-console-ui ---
+[INFO] Nothing to compile - all classes are up to date.
+[INFO] 
+[INFO] --- bundle:6.2.0:manifest (bundle-manifest) @ juneau-rest-server-console-ui ---
+[INFO] Stale files detected, re-generating manifest.
+[INFO] Writing manifest: /Users/james.bognar/git/apache/juneau-wt/J0832/juneau-rest/juneau-rest-server-console-ui/target/classes/META-INF/MANIFEST.MF
+[INFO] 
+[INFO] --- resources:3.4.0:testResources (default-testResources) @ juneau-rest-server-console-ui ---
+[INFO] Copying 143 resources from src/test/resources to target/test-classes
+[INFO] Copying 3 resources from target/maven-shared-archive-resources to target/test-classes
+[INFO] 
+[INFO] --- compiler:3.16.0:testCompile (default-testCompile) @ juneau-rest-server-console-ui ---
+[INFO] Nothing to compile - all classes are up to date.
+[INFO] 
+[INFO] --- surefire:3.5.4:test (default-test) @ juneau-rest-server-console-ui ---
+[INFO] 
+[INFO] --- jacoco:0.8.15:report (report) @ juneau-rest-server-console-ui ---
+[INFO] Skipping JaCoCo execution due to missing execution data file.
+[INFO] 
+[INFO] -------------< org.apache.juneau:juneau-rest-server-views >-------------
+[INFO] Building Apache Juneau REST Server Views 10.0.0-SNAPSHOT         [27/27]
+[INFO]   from juneau-rest/juneau-rest-server-views/pom.xml
+[INFO] -------------------------------[ bundle ]-------------------------------
+[INFO] 
+[INFO] --- enforcer:3.6.2:enforce (enforce-maven-version) @ juneau-rest-server-views ---
+[INFO] 
+[INFO] --- enforcer:3.6.2:enforce (enforce-java-version) @ juneau-rest-server-views ---
+[INFO] 
+[INFO] --- enforcer:3.6.2:enforce (enforce-maven) @ juneau-rest-server-views ---
+[INFO] 
+[INFO] --- jacoco:0.8.15:prepare-agent (prepare-agent) @ juneau-rest-server-views ---
+[INFO] argLine set to -javaagent:/Users/james.bognar/.m2/repository/org/jacoco/org.jacoco.agent/0.8.15/org.jacoco.agent-0.8.15-runtime.jar=destfile=/Users/james.bognar/git/apache/juneau-wt/J0832/juneau-rest/juneau-rest-server-views/target/jacoco.exec
+[INFO] 
+[INFO] --- jacoco:0.8.15:prepare-agent (default-prepare-agent) @ juneau-rest-server-views ---
+[INFO] argLine set to -javaagent:/Users/james.bognar/.m2/repository/org/jacoco/org.jacoco.agent/0.8.15/org.jacoco.agent-0.8.15-runtime.jar=destfile=/Users/james.bognar/git/apache/juneau-wt/J0832/juneau-rest/juneau-rest-server-views/target/jacoco.exec
+[INFO] 
+[INFO] --- remote-resources:3.3.0:process (process-resource-bundles) @ juneau-rest-server-views ---
+[INFO] Preparing remote bundle org.apache.apache.resources:apache-jar-resource-bundle:1.7
+[INFO] Copying 3 resources from 1 bundle.
+[INFO] 
+[INFO] --- resources:3.4.0:resources (default-resources) @ juneau-rest-server-views ---
+[INFO] Copying 20 resources from src/main/resources to target/classes
+[INFO] Copying 3 resources from target/maven-shared-archive-resources to target/classes
+[INFO] 
+[INFO] --- compiler:3.16.0:compile (default-compile) @ juneau-rest-server-views ---
+[INFO] Nothing to compile - all classes are up to date.
+[INFO] 
+[INFO] --- bundle:6.2.0:manifest (bundle-manifest) @ juneau-rest-server-views ---
+[INFO] Stale files detected, re-generating manifest.
+[INFO] Writing manifest: /Users/james.bognar/git/apache/juneau-wt/J0832/juneau-rest/juneau-rest-server-views/target/classes/META-INF/MANIFEST.MF
+[INFO] 
+[INFO] --- resources:3.4.0:testResources (default-testResources) @ juneau-rest-server-views ---
+[INFO] Copying 81 resources from src/test/resources to target/test-classes
+[INFO] Copying 3 resources from target/maven-shared-archive-resources to target/test-classes
+[INFO] 
+[INFO] --- compiler:3.16.0:testCompile (default-testCompile) @ juneau-rest-server-views ---
+[INFO] Nothing to compile - all classes are up to date.
+[INFO] 
+[INFO] --- surefire:3.5.4:test (default-test) @ juneau-rest-server-views ---
+[INFO] Using auto detected provider org.apache.maven.surefire.junitplatform.JUnitPlatformProvider
+[WARNING] The system property java.util.logging.config.file is configured twice! The property appears in <argLine/> and any of <systemPropertyVariables/>, <systemProperties/> or user property.
+[INFO] 
+[INFO] -------------------------------------------------------
+[INFO]  T E S T S
+[INFO] -------------------------------------------------------
+Picked up JAVA_TOOL_OPTIONS: -Djava.io.tmpdir=/var/folders/1h/88ggm66x64v1bldm8_pw3hvc0000gn/T/
+[INFO] Running org.apache.juneau.rest.server.views.ConsoleJobLogRegion_Test
+[INFO] Tests run: 19, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.475 s -- in org.apache.juneau.rest.server.views.ConsoleJobLogRegion_Test
+[INFO] 
+[INFO] Results:
+[INFO] 
+[INFO] Tests run: 19, Failures: 0, Errors: 0, Skipped: 0
+[INFO] 
+[INFO] 
+[INFO] --- jacoco:0.8.15:report (report) @ juneau-rest-server-views ---
+[INFO] Loading execution data file /Users/james.bognar/git/apache/juneau-wt/J0832/juneau-rest/juneau-rest-server-views/target/jacoco.exec
+[INFO] Analyzed bundle 'Apache Juneau REST Server Views' with 75 classes
+[INFO] ------------------------------------------------------------------------
+[INFO] Reactor Summary for Apache Juneau 10.0.0-SNAPSHOT:
+[INFO] 
+[INFO] Apache Juneau ...................................... SUCCESS [  0.208 s]
+[INFO] Apache Juneau Core ................................. SUCCESS [  0.015 s]
+[INFO] Apache Juneau Commons .............................. SUCCESS [  0.700 s]
+[INFO] Apache Juneau Test Utilities ....................... SUCCESS [  0.086 s]
+[INFO] Apache Juneau Testing Toolkit ...................... SUCCESS [  0.133 s]
+[INFO] Apache Juneau Marshall ............................. SUCCESS [  5.703 s]
+[INFO] Apache Juneau Beans ................................ SUCCESS [  0.011 s]
+[INFO] Apache Juneau RFC 7807 Beans ....................... SUCCESS [  0.118 s]
+[INFO] Apache Juneau Marshall Test Utilities .............. SUCCESS [  0.105 s]
+[INFO] Apache Juneau REST ................................. SUCCESS [  0.009 s]
+[INFO] Apache Juneau REST Common .......................... SUCCESS [  0.174 s]
+[INFO] Apache Juneau Config ............................... SUCCESS [  0.117 s]
+[INFO] Apache Juneau Common Beans ......................... SUCCESS [  0.214 s]
+[INFO] Apache Juneau HTML5 Beans .......................... SUCCESS [  0.118 s]
+[INFO] Apache Juneau JSON Schema Beans .................... SUCCESS [  0.105 s]
+[INFO] Apache Juneau Swagger 2.0 Beans .................... SUCCESS [  0.114 s]
+[INFO] Apache Juneau OpenAPI 3.0 Beans .................... SUCCESS [  0.121 s]
+[INFO] Apache Juneau REST Server .......................... SUCCESS [  0.291 s]
+[INFO] Apache Juneau REST Client .......................... SUCCESS [  0.129 s]
+[INFO] Apache Juneau REST Common (Classic) ................ SUCCESS [  0.173 s]
+[INFO] Apache Juneau REST Client (Classic) ................ SUCCESS [  0.161 s]
+[INFO] Apache Juneau REST Mock ............................ SUCCESS [  0.199 s]
+[INFO] Apache Juneau REST Server DataTables ............... SUCCESS [  0.176 s]
+[INFO] Apache Juneau Run Report ........................... SUCCESS [  0.107 s]
+[INFO] Apache Juneau REST Server Widgets .................. SUCCESS [  0.168 s]
+[INFO] Apache Juneau REST Server Console UI ............... SUCCESS [  0.202 s]
+[INFO] Apache Juneau REST Server Views .................... SUCCESS [  1.442 s]
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  11.551 s
+[INFO] Finished at: 2026-10-17T12:15:39-04:00
+[INFO] ------------------------------------------------------------------------
+EXIT=0

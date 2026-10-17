@@ -448,6 +448,173 @@ const guard = async (name, fn) => {
 		return { running, cancelling, cancelPosted: t.calls.some(c => c.url === '/c/j-1' && c.method === 'POST'), done: view(el) };
 	});
 
+	// 13. A re-attached view cancels through JuneauViews.jobs.cancel: Cancel is shown and enabled, one POST, the outcome
+	// from the view's own stream, nothing painted in the row.
+	await guard('reattachCancel', async () => {
+		const t = setup();
+		t.expand();
+		const el = await t.region(config());
+		await submit(t, el);
+		const jobES = lastES();
+		t.collapse();
+		t.expand();
+		const el2 = await t.region(config());
+		const viewES = lastES();
+		const attached = view(el2);
+		const btn = q(el2, '.jc-joblog-submit');
+		btn.dispatch('click', { preventDefault: () => {} });
+		await settle(t.clock);
+		const cancelling = view(el2);
+		const posts = t.calls.filter(c => c.url === '/c/j-1' && c.method === 'POST').length;
+		jobES.fire('result', result('cancelled'));
+		viewES.fire('result', result('cancelled'));
+		await settle(t.clock);
+		return { attached, cancelling, posts, done: view(el2), refusal: !!t.tr.querySelector('.juneau-view-action-refusal') };
+	});
+
+	// 14. The original run's stream ends first (the entry is released) while the re-attached view's stream stays live:
+	// the next event hides Cancel; a click before any event sends nothing and says why.
+	await guard('originalEndsFirst', async () => {
+		const one = async (clickFirst) => {
+			const t = setup();
+			t.expand();
+			const el = await t.region(config());
+			await submit(t, el);
+			const jobES = lastES();
+			t.collapse();
+			t.expand();
+			const el2 = await t.region(config());
+			const viewES = lastES();
+			const before = view(el2);
+			jobES.fire('error');   // the original stream ends; the registry entry is released
+			await settle(t.clock);
+			const callsBefore = t.calls.length;
+			let clicked = null;
+			if (clickFirst) {
+				q(el2, '.jc-joblog-submit').dispatch('click', { preventDefault: () => {} });
+				await settle(t.clock);
+				clicked = view(el2);
+			} else {
+				viewES.fire('progress', 'more');
+				await settle(t.clock);
+			}
+			return { before, activeAfter: !!t.NS.jobs.active(t.tr, 'restock-species'), after: view(el2), clicked,
+				fetches: t.calls.length - callsBefore, viewStreamOpen: viewES.readyState !== 2 };
+		};
+		return { event: await one(false), click: await one(true) };
+	});
+
+	// 15. A cancelUrl the runtime refuses (a backslash, a leading space) or no cancelUrl: no usable Cancel.
+	await guard('unsafeUrl', async () => {
+		const one = async (cancelUrl) => {
+			const started = cancelUrl === undefined ? { jobId: 'j-1', streamUrl: '/s/j-1' } : { jobId: 'j-1', streamUrl: '/s/j-1', cancelUrl };
+			const t = setup({ routes: { '/species/r1/restock': () => Promise.resolve(jsonResponse(started, { status: 202 })) } });
+			t.expand();
+			const el = await t.region(config());
+			await submit(t, el);
+			const original = view(el);
+			t.collapse();
+			t.expand();
+			const el2 = await t.region(config());
+			return { original, attached: view(el2) };
+		};
+		return { backslash: await one('/c\\j-1'), space: await one(' /c/j-1'), none: await one(undefined) };
+	});
+
+	// 16. An older juneau-views.js without jobs.cancel: the originating view keeps its handle.cancel(); a re-attached
+	// view stays view-only.
+	await guard('olderRuntime', async () => {
+		const t = setup();
+		t.expand();
+		const jobs = t.NS.jobs;
+		const entries = Object.keys(jobs).filter(k => k !== 'cancel').map(k => [k, jobs[k]]);
+		t.NS.jobs = Object.freeze(Object.fromEntries(entries));
+		const el = await t.region(config());
+		await submit(t, el);
+		const running = view(el);
+		q(el, '.jc-joblog-submit').dispatch('click', { preventDefault: () => {} });
+		await settle(t.clock);
+		const posted = t.calls.filter(c => c.url === '/c/j-1' && c.method === 'POST').length;
+		t.collapse();
+		t.expand();
+		const el2 = await t.region(config());
+		return { hasCancel: typeof t.NS.jobs.cancel, running, posted, attached: view(el2) };
+	});
+
+	// 17. Cancel vs completion: the cancel POST is accepted but the job had already succeeded; the card settles from
+	// its stream only, so it never says Cancelled.
+	await guard('cancelVsDone', async () => {
+		const t = setup();
+		t.expand();
+		const el = await t.region(config());
+		await submit(t, el);
+		q(el, '.jc-joblog-submit').dispatch('click', { preventDefault: () => {} });
+		await settle(t.clock);
+		const cancelling = view(el);
+		lastES().fire('result', result('success', { message: 'ok' }));
+		await settle(t.clock);
+		return { cancelling, done: view(el) };
+	});
+
+	// 18. A failed cancel on the live entry: the error banner, still running, Cancel re-enabled, nothing in the row.
+	await guard('cancelFails', async () => {
+		const t = setup({ routes: { '/c/j-1': () => Promise.resolve(jsonResponse({}, { status: 500 })) } });
+		t.expand();
+		const el = await t.region(config());
+		await submit(t, el);
+		t.collapse();
+		t.expand();
+		const el2 = await t.region(config());
+		q(el2, '.jc-joblog-submit').dispatch('click', { preventDefault: () => {} });
+		await settle(t.clock);
+		return { view: view(el2), refusal: !!t.tr.querySelector('.juneau-view-action-refusal'),
+			posts: t.calls.filter(c => c.url === '/c/j-1').length };
+	});
+
+	// 19. Cancel accepted, then collapse and re-expand before the result: the new view's click sends a second POST and
+	// the replayed stream shows Cancelled.
+	await guard('cancelThenReexpand', async () => {
+		const t = setup();
+		t.expand();
+		const el = await t.region(config());
+		await submit(t, el);
+		q(el, '.jc-joblog-submit').dispatch('click', { preventDefault: () => {} });
+		await settle(t.clock);
+		const jobES = lastES();
+		t.collapse();
+		t.expand();
+		const el2 = await t.region(config());
+		const viewES = lastES();
+		const attached = view(el2);
+		q(el2, '.jc-joblog-submit').dispatch('click', { preventDefault: () => {} });
+		await settle(t.clock);
+		jobES.fire('result', result('cancelled'));
+		viewES.fire('result', result('cancelled'));
+		await settle(t.clock);
+		return { attached, posts: t.calls.filter(c => c.url === '/c/j-1').length, done: view(el2) };
+	});
+
+	// 20. The cancel request fails after the original stream released the entry: the card says it can no longer be
+	// cancelled from this page, not that the request failed.
+	await guard('cancelFailsAfterRelease', async () => {
+		const gate = deferred();
+		const t = setup({ routes: { '/c/j-1': () => gate.promise } });
+		t.expand();
+		const el = await t.region(config());
+		await submit(t, el);
+		const jobES = lastES();
+		t.collapse();
+		t.expand();
+		const el2 = await t.region(config());
+		q(el2, '.jc-joblog-submit').dispatch('click', { preventDefault: () => {} });
+		await settle(t.clock);
+		jobES.fire('error');   // the entry is released while the cancel is in flight
+		await settle(t.clock);
+		gate.resolve(jsonResponse({}, { status: 500 }));
+		await settle(t.clock);
+		return { view: view(el2), refusal: !!t.tr.querySelector('.juneau-view-action-refusal') };
+	});
+
 	process.stdout.write(JSON.stringify(out));
 })().catch(e => {
 	console.error(e && e.stack || e);

@@ -83,6 +83,15 @@ public class JobsRest extends PetstoreConsolePage implements AsyncJobsMixin, Ter
 	/** System property: the most restocks that may run at once (default 2; the registry's own cap is 8). */
 	public static final String LIMIT_PROPERTY = "petstore.jobs.limit";
 
+	/**
+	 * System property: how long a species row's restock holds after its effect, in milliseconds (default {@value #DEFAULT_HOLD_MS}, at most {@value #MAX_HOLD_MS}).
+	 *
+	 * <p>
+	 * Read on every request, so a test can widen the window in which a cancel lands as {@code cancelled-after-effect}.
+	 * A sample-only knob: the row form never accepts a hold.
+	 */
+	public static final String SPECIES_HOLD_PROPERTY = "petstore.jobs.speciesHoldMs";
+
 	private static final String ACTION = "restock";
 
 	/** Where this resource is mounted; the terminal URLs are built from it. */
@@ -591,7 +600,8 @@ public class JobsRest extends PetstoreConsolePage implements AsyncJobsMixin, Ter
 				return r;
 			}
 			// After the replay check: a replay answers its job even if this resubmit's fields have changed.
-			var body = new Restock(Map.of(s, count(submit.fields())), grant.key().value(), 0, DEFAULT_HOLD_MS);
+			var body = new Restock(Map.of(s, count(submit.fields())), grant.key().value(), 0,
+				Math.max(0, Math.min(Integer.getInteger(SPECIES_HOLD_PROPERTY, DEFAULT_HOLD_MS), MAX_HOLD_MS)));
 			var created = registry.runningCount() >= Integer.getInteger(LIMIT_PROPERTY, 2) ? null : registry.tryCreate(grant.key()).orElse(null);
 			if (created == null)
 				return limitReached(res, registry.runningCount());

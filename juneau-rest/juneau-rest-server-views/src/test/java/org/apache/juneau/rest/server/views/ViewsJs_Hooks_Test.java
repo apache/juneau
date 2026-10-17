@@ -119,7 +119,7 @@ class ViewsJs_Hooks_Test extends TestBase {
 
 	@Test void b01b_jobsHasTheFullMemberSet() {
 		var members = (Map<?,?>)ns("jobs").get("members");
-		for (var m : List.of("run", "fetchKey", "active", "pending"))
+		for (var m : List.of("run", "fetchKey", "active", "pending", "cancel"))
 			assertEquals("function", members.get(m), m);
 	}
 

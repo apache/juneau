@@ -147,7 +147,7 @@ class ConsoleJobLogRegion_Test {
 		assertEquals("ok", r.get("regionState"));
 	}
 
-	@Test void r08_collapseAndReexpand_reattachesViewOnly() {
+	@Test void r08_collapseAndReexpand_reattachesWithCancelButNoSubmit() {
 		var r = part("reattach");
 		var c = m(r, "afterCollapse");
 		assertEquals(true, c.get("jobStreamOpen"));
@@ -157,7 +157,9 @@ class ConsoleJobLogRegion_Test {
 		assertEquals(true, r.get("distinctStream"));
 		var a = m(r, "attached");
 		assertEquals("running", a.get("phase"));
-		assertEquals(true, a.get("submitHidden"));
+		assertEquals(false, a.get("submitHidden"));
+		assertEquals("Cancel", a.get("submitText"));
+		assertEquals(false, a.get("submitDisabled"));
 		var done = m(r, "done");
 		assertEquals("done", done.get("phase"));
 		assertEquals("Done. ok", done.get("banner"));
@@ -173,7 +175,8 @@ class ConsoleJobLogRegion_Test {
 		assertEquals(true, w.get("submitHidden"));
 		var a = m(r, "attached");
 		assertEquals("running", a.get("phase"));
-		assertEquals(true, a.get("submitHidden"));
+		assertEquals(false, a.get("submitHidden"));
+		assertEquals("Cancel", a.get("submitText"));
 		assertEquals(List.of("/s/j-1?lastEventId=0", "/s/j-1?lastEventId=0"), r.get("streams"));
 	}
 
@@ -202,5 +205,85 @@ class ConsoleJobLogRegion_Test {
 		assertEquals("Cancelling…", m(r, "cancelling").get("submitText"));
 		assertEquals(true, r.get("cancelPosted"));
 		assertEquals("Cancelled.", m(r, "done").get("banner"));
+	}
+
+	@Test void r13_aReattachedViewCancels_throughJobsCancel_outcomeFromItsStream() {
+		var r = part("reattachCancel");
+		var a = m(r, "attached");
+		assertEquals("running", a.get("phase"));
+		assertEquals(false, a.get("submitHidden"));
+		assertEquals("Cancel", a.get("submitText"));
+		assertEquals(false, a.get("submitDisabled"));
+		assertEquals("Cancelling…", m(r, "cancelling").get("submitText"));
+		assertEquals(1, n(r, "posts"));
+		assertEquals("Cancelled.", m(r, "done").get("banner"));
+		assertEquals(false, r.get("refusal"));
+	}
+
+	@Test void r14_whenTheOriginalStreamEndsFirst_theReattachedViewLosesCancel() {
+		var r = part("originalEndsFirst");
+		var e = m(r, "event");
+		assertEquals(false, m(e, "before").get("submitHidden"));
+		assertEquals(false, e.get("activeAfter"));
+		assertEquals(true, e.get("viewStreamOpen"));
+		assertEquals(true, m(e, "after").get("submitHidden"));
+		assertEquals("running", m(e, "after").get("phase"));
+		var c = m(r, "click");
+		assertEquals(0, n(c, "fetches"));
+		assertEquals(true, m(c, "clicked").get("submitHidden"));
+		assertEquals("running", m(c, "clicked").get("phase"));
+		assertEquals("This job can no longer be cancelled from this page.", m(c, "clicked").get("banner"));
+	}
+
+	@Test void r15_aCancelUrlTheRuntimeRefuses_orNone_showsNoCancel() {
+		var r = part("unsafeUrl");
+		for (var k : List.of("backslash", "space", "none")) {
+			var v = m(r, k);
+			assertEquals(true, m(v, "attached").get("submitHidden"), k);
+			assertEquals("running", m(v, "attached").get("phase"), k);
+			assertEquals(true, m(v, "original").get("submitDisabled"), k);
+		}
+	}
+
+	@Test void r16_anOlderRuntime_keepsTheOriginatingViewsCancel_andLeavesAReattachedViewViewOnly() {
+		var r = part("olderRuntime");
+		assertEquals("undefined", r.get("hasCancel"));
+		assertEquals(false, m(r, "running").get("submitDisabled"));
+		assertEquals(1, n(r, "posted"));
+		assertEquals(true, m(r, "attached").get("submitHidden"));
+	}
+
+	@Test void r17_cancelVsCompletion_theCardSettlesFromItsStreamOnly() {
+		var r = part("cancelVsDone");
+		assertEquals("Cancelling…", m(r, "cancelling").get("submitText"));
+		assertEquals("done", m(r, "done").get("phase"));
+		assertEquals("Done. ok", m(r, "done").get("banner"));
+	}
+
+	@Test void r18_aFailedCancel_showsTheErrorBanner_staysRunning_paintsNothingInTheRow() {
+		var r = part("cancelFails");
+		var v = m(r, "view");
+		assertEquals("running", v.get("phase"));
+		assertEquals("The cancel request failed; the job is still running.", v.get("banner"));
+		assertEquals(false, v.get("submitDisabled"));
+		assertEquals("Cancel", v.get("submitText"));
+		assertEquals(false, r.get("refusal"));
+		assertEquals(1, n(r, "posts"));
+	}
+
+	@Test void r19_cancelAcceptedThenReexpand_sendsASecondPost() {
+		var r = part("cancelThenReexpand");
+		assertEquals(false, m(r, "attached").get("submitDisabled"));
+		assertEquals(2, n(r, "posts"));
+		assertEquals("Cancelled.", m(r, "done").get("banner"));
+	}
+
+	@Test void r20_aCancelThatFailsAfterTheEntryWasReleased_saysItCanNoLongerBeCancelled() {
+		var r = part("cancelFailsAfterRelease");
+		var v = m(r, "view");
+		assertEquals("running", v.get("phase"));
+		assertEquals("This job can no longer be cancelled from this page.", v.get("banner"));
+		assertEquals(true, v.get("submitHidden"));
+		assertEquals(false, r.get("refusal"));
 	}
 }

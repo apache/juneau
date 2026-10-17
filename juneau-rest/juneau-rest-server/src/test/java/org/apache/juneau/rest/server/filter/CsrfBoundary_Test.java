@@ -1014,6 +1014,13 @@ class CsrfBoundary_Test extends TestBase {
 		assertRefused(b, write(), CSRF_TOKEN_MISSING, 403);
 	}
 
+	@Test void j09b_forwardedMessageUsesCorrectPlaceholder() {
+		// Verify that forwardedMessage formats the BoundaryReason with %s, not {0}.
+		// Test the default branch (invalid reason) to catch the format bug.
+		var ex = assertThrows(IllegalArgumentException.class, () -> CsrfBoundary.forwardedMessage(CSRF_TOKEN_MISSING));
+		assertEquals("Not a forwarded-host reason: CSRF_TOKEN_MISSING", ex.getMessage());
+	}
+
 	//-----------------------------------------------------------------------------------------------------------------
 	// k) HTTP/2: no Host header, so :authority (the container's server name and port) stands in
 	//-----------------------------------------------------------------------------------------------------------------

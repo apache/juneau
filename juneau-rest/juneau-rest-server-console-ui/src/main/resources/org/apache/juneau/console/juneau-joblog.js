@@ -386,8 +386,14 @@
 		if (st.btn.disabled && st.doc.activeElement === st.btn && typeof st.output.focus === "function") st.output.focus();
 	}
 
+	// Region mode cancels through JuneauViews.jobs.cancel, which needs the row's registry entry to be running; an older
+	// runtime without it keeps the originating view's handle.cancel() and leaves a re-attached view view-only.
 	function canCancel(st) {
-		return !!(st.job && st.job.cancelUrl) && (!st.region || !!st.handle);
+		const u = st.job && st.job.cancelUrl;
+		if (typeof u !== "string" || u === "" || hasUnsafeUrlChars(u)) return false;
+		if (!st.region) return true;
+		if (typeof st.jobs.cancel === "function") return st.jobs.active(st.el, (st.card.submit || {}).action) != null;
+		return !!st.handle;
 	}
 
 	function setPhase(st, phase) {
@@ -398,8 +404,10 @@
 		st.root.setAttribute("data-phase", phase);
 		const running = phase === "running";
 		for (const x of st.inputs) x.input.disabled = phase !== "idle" && phase !== "keying";
-		// A view-only region (attached to a job another view started) has no submit and no cancel until it is done.
-		st.btn.hidden = phase === "done" || (st.viewOnly && phase !== "idle" && phase !== "keying");
+		// A view-only region (attached to a job another view started) has no submit; while the job runs it shows Cancel
+		// when the job can be cancelled from this page.
+		st.btn.hidden = phase === "done" || (st.viewOnly && phase !== "idle" && phase !== "keying"
+			&& !(running && canCancel(st)));
 		st.btn.type = running ? "button" : "submit";
 		st.btn.textContent = running ? "Cancel" : (st.card.submit && st.card.submit.submitLabel) || "Run";
 		st.btn.disabled = phase === "submitting" || phase === "keying" || (running && !canCancel(st));
@@ -582,6 +590,8 @@
 			// No client-side dedupe: the server resumes after Last-Event-ID, so a repeated line is a server bug, shown.
 			addLine(st, ev && ev.data != null ? String(ev.data) : "");
 			replayLine(st, true);
+			// A re-attached view's Cancel goes once the row's job can no longer be cancelled from this page.
+			if (st.viewOnly && st.phase === "running" && !st.btn.hidden && !st.cancelling && !canCancel(st)) setPhase(st, "running");
 		});
 		es.addEventListener("result", ev => {
 			if (st.es !== es) return;
@@ -678,9 +688,20 @@
 		toIdle(st);
 	}
 
+	// The row's registry entry is gone (the original stream ended) while the job may still run: drop Cancel, keep streaming.
+	function cannotCancel(st) {
+		st.cancelling = false;
+		setPhase(st, "running");
+		setBanner(st, "info", "This job can no longer be cancelled from this page.");
+	}
+
 	function cancel(st) {
 		const job = st.job;
-		if (st.phase !== "running" || st.cancelling || !canCancel(st)) return;
+		if (st.phase !== "running" || st.cancelling) return;
+		if (!canCancel(st)) {
+			if (st.region && !st.btn.hidden) cannotCancel(st);   // the button outlived the row's registry entry
+			return;
+		}
 		st.cancelling = true;
 		const hadFocus = st.doc.activeElement === st.btn;
 		st.btn.textContent = "Cancelling\u2026";
@@ -695,8 +716,15 @@
 		};
 		if (st.region) {
 			// JuneauViews.jobs posts the cancel with the row's CSRF token; the outcome still arrives on the stream.
-			st.handle.cancel().then(ok => {
-				if (!ok && stillThisJob()) failed("The cancel request failed; the job is still running.");
+			const sent = typeof st.jobs.cancel === "function" ? st.jobs.cancel(st.el, (st.card.submit || {}).action) : st.handle.cancel();
+			sent.then(ok => {
+				if (ok || !stillThisJob()) return;
+				if (canCancel(st)) {
+					failed("The cancel request failed; the job is still running.");
+				} else {
+					// The row's entry was released (the original stream ended) while the job may still run.
+					cannotCancel(st);
+				}
 			});
 			return;
 		}

@@ -441,7 +441,7 @@ public class LoopbackBoundary implements RequestBoundary {
 			if (v.isEmpty())
 				throw iaex("Argument 'value' must not be blank.");
 			if (v.contains("://") || v.indexOf('/') >= 0)
-				throw iaex("Argument 'value' must be a bare host and port with no scheme or path: ''%s''.", value);
+				throw iaex("Argument 'value' must be a bare host and port with no scheme or path: '%s'.", value);
 			authority = v;
 			return this;
 		}

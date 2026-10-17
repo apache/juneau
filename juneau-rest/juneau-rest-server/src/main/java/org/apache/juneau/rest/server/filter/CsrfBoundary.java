@@ -686,8 +686,8 @@ public class CsrfBoundary implements RequestBoundary {
 		return ! c.host().equals(f.origin().host()) && (f.leftUnparsed() || f.leftHosts().contains(c.host()));
 	}
 
-	/** The fixed text for a forwarded-host refusal. */
-	private static String forwardedMessage(BoundaryReason reason) {
+	/** The fixed text for a forwarded-host refusal. Visibility relaxed for testing. */
+	static String forwardedMessage(BoundaryReason reason) {
 		return switch (reason) {
 			case FORWARDED_HOST_MISSING -> "A trusted-forwarding boundary requires the forwarded host header; none was usable.";
 			case FORWARDED_PROTO_MISSING -> "A trusted-forwarding boundary requires the forwarded proto alongside the forwarded host.";
@@ -697,7 +697,7 @@ public class CsrfBoundary implements RequestBoundary {
 			case FORWARDED_HOPS_MISMATCH -> "The forwarded host and proto headers hold different numbers of entries.";
 			case FORWARDED_CONTAINER_MISMATCH -> "The container's view of the request disagrees with the forwarded origin.";
 			case FORWARDED_PEER_NOT_TRUSTED -> "The forwarded header was sent by a peer that is not a trusted proxy.";
-			default -> throw iaex("Not a forwarded-host reason: {0}", reason);
+			default -> throw iaex("Not a forwarded-host reason: %s", reason);
 		};
 	}
 

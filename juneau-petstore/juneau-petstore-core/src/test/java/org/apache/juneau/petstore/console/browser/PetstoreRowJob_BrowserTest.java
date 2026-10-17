@@ -24,6 +24,7 @@ import java.util.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.microservice.*;
+import org.apache.juneau.petstore.console.ops.*;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.condition.*;
 import org.junit.jupiter.api.extension.*;
@@ -78,10 +79,27 @@ class PetstoreRowJob_BrowserTest extends TestBase {
 		return Map.of("evaluate", DOG_ROW + ".querySelector('.juneau-view-detail-toggle').click()");
 	}
 
+	/** Widens every species restock's post-effect hold, so a cancel in any scenario lands in it. */
+	private static final String HOLD_MS = "7000";
+
 	@BeforeAll
 	static void probe() throws Exception {
 		var base = PetstoreTestServer.awaitReady(server);
-		report = run("row-job", base, List.of(
+		System.setProperty(JobsRest.SPECIES_HOLD_PROPERTY, HOLD_MS);
+		try {
+			report = runBatch(base);
+		} finally {
+			System.clearProperty(JobsRest.SPECIES_HOLD_PROPERTY);
+		}
+	}
+
+	@AfterAll
+	static void restoreHold() {
+		System.clearProperty(JobsRest.SPECIES_HOLD_PROPERTY);
+	}
+
+	private static Map<String,Map<String,Object>> runBatch(String base) throws Exception {
+		return run("row-job", base, List.of(
 			// The retargeted submit's 409 is expected.
 			Map.of("name", "species", "path", "/console/ops/jobs", "allowFailedLoads", true,
 				"actions", List.of(
@@ -89,16 +107,19 @@ class PetstoreRowJob_BrowserTest extends TestBase {
 					Map.of("evaluate", AVAILABLE + ".then(n => { window.__before = n; })"), wait("window.__before != null", 8000),
 					toggleDog(), phase("idle", 8000),
 					Map.of("fill", List.of(R + " .jc-joblog-input[name=count]", "3")),
+					Map.of("evaluate", "window.__t0 = Date.now()"),
 					Map.of("click", R + " .jc-joblog-submit"),
 					phase("running", 8000),
 					// Decision 12: while the open panel's job runs, the timer's draw is held and the pill says so.
 					wait("document.querySelector('" + PILL + "[data-state=paused]')", 4000),
 					Map.of("evaluate", "window.__during = {marker: " + DOG_ROW + ".hasAttribute('data-juneau-job'), pill: document.querySelector('" + PILL + "').dataset.state}"),
 					phase("done", 15000),
+					Map.of("evaluate", "window.__ms = Date.now() - window.__t0"),
 					wait("document.querySelector('" + PILL + "[data-state=fresh]')", 8000),
 					Map.of("evaluate", RETARGET + ".then(v => { window.__retarget = v; })"), wait("window.__retarget && window.__retarget.status", 8000)),
 				"queries", Map.of(
 					"before", "window.__before",
+					"ms", "window.__ms",
 					"during", "window.__during",
 					"lines", "[...document.querySelectorAll('" + R + " .jc-joblog-line')].map(l => l.textContent)",
 					"slot", "document.querySelector('" + R + " [data-juneau-field=available]')?.textContent ?? null",
@@ -121,6 +142,22 @@ class PetstoreRowJob_BrowserTest extends TestBase {
 					Map.of("click", R + " .jc-joblog-submit"),
 					phase("done", 15000)),
 				"queries", Map.of("banner", "document.querySelector('" + R + " .jc-joblog-banner')?.textContent ?? null")),
+			// One collapse and re-expand (the job's two stream slots); the re-attached view's button is the cancel.
+			Map.of("name", "reattachCancel", "path", "/console/ops/jobs",
+				"actions", List.of(
+					wait(DOG_ROW, 8000), toggleDog(), phase("idle", 8000),
+					Map.of("click", R + " .jc-joblog-submit"),
+					phase("running", 8000),
+					toggleDog(), wait("!document.querySelector('" + R + "')", 4000),
+					toggleDog(), phase("running", 8000),
+					Map.of("evaluate", "window.__btn = (b => ({text: b.textContent, hidden: b.hidden, disabled: b.disabled}))(document.querySelector('" + R + " .jc-joblog-submit'))"),
+					Map.of("click", R + " .jc-joblog-submit"),
+					phase("done", 20000),
+					Map.of("evaluate", "window.__active = JuneauViews.jobs.active(" + DOG_ROW + ") == null")),
+				"queries", Map.of("btn", "window.__btn",
+					"banner", "document.querySelector('" + R + " .jc-joblog-banner')?.textContent ?? null",
+					"marker", DOG_ROW + ".hasAttribute('data-juneau-job')",
+					"activeNull", "window.__active")),
 			Map.of("name", "regroom", "path", "/console/ops/jobs",
 				"actions", List.of(
 					wait("document.querySelector('#groom-runs-body tbody tr .juneau-view-detail-toggle')", 8000),
@@ -142,6 +179,8 @@ class PetstoreRowJob_BrowserTest extends TestBase {
 		assertContains("Restocking 3 pets", String.valueOf(query(c, "lines")));
 		assertString(String.valueOf(before + 3), query(c, "slot"));
 		assertEquals(false, query(c, "markerAfter"));
+		// The speciesHoldMs knob was read for this request: the default hold alone would finish in about a second.
+		assertTrue(((Number)query(c, "ms")).intValue() >= 6000, () -> String.valueOf(query(c, "ms")));
 	}
 
 	@Test void a02_aKeyForOneRowIsRefusedForAnother() {
@@ -153,7 +192,15 @@ class PetstoreRowJob_BrowserTest extends TestBase {
 	}
 
 	@Test void a05_cancelEndsTheRowJob() {
-		assertContains("ancel", query(assertClean(report, "cancel"), "banner"));
+		assertString("Cancelled after the job had already made changes.", query(assertClean(report, "cancel"), "banner"));
+	}
+
+	@Test void a06_aReattachedPanelCancelsItsJob() {
+		var c = assertClean(report, "reattachCancel");
+		assertBean(query(c, "btn"), "text,hidden,disabled", "Cancel,false,false");
+		assertString("Cancelled after the job had already made changes.", query(c, "banner"));
+		assertEquals(false, query(c, "marker"));
+		assertEquals(true, query(c, "activeNull"));
 	}
 
 	@Test void a04_groomAgainStartsANewRun() {

@@ -69,7 +69,7 @@ function setup(o) {
 	const drawHandlers = [];
 	table.__juneauCtx = {
 		table: table,
-		viewDef: { id: 'species', rowActions: [{ id: 'restock-species', label: 'Restock' }] },
+		viewDef: { id: 'species', rowActions: [{ id: 'restock-species', label: 'Restock' }, { id: 'ping', label: 'Ping', endpoint: '/species/{id}/ping', method: 'POST' }] },
 		dataTable: {
 			row: function (tr) { return { data: function () { return rowData.get(tr); } }; },
 			on: function (ev, fn) { if (ev === 'draw.dt') drawHandlers.push(fn); }
@@ -581,6 +581,277 @@ function recorder() {
 		s.sources[0].fire('result', JSON.stringify({ outcome: 'success', message: 'regroomed' }));
 		await flush();
 		out.j20_released = s.NS.jobs.active(s.r1._btn) === null && s.r1.dataset.juneauJob === undefined;
+	}
+
+	// --- j21: an ordinary row action is refused on a row whose job is pending or running, and runs once it ends --------
+	{
+		const s = setup();
+		const pings = function () { return s.calls.filter(function (c) { return c.url === '/species/r1/ping'; }).length; };
+		const banner = function () { return s.r1.querySelector('.juneau-view-action-refusal'); };
+		const panel = s.expand(s.r1);
+		const h = s.NS.jobs.run({ el: panel._btn, trigger: panel._btn, endpoint: RESTOCK, keyUrl: KEY_URL, action: 'restock-species', envelope: 'action' });
+		await s.NS.rowActions.run(s.r1._btn, 'ping');   // the run is still pending (key fetch / submit)
+		await flush();
+		out.j21_pendingSentNothing = pings() === 0;
+		out.j21_pendingBanner = banner() && banner().textContent.includes('a job is already running on this row');
+		out.j21_otherRowUnaffected = (await s.NS.rowActions.run(s.r2._btn, 'ping'), s.calls.some(function (c) { return c.url === '/species/r2/ping'; }));
+		s.sources[0].fire('result', JSON.stringify({ outcome: 'success', message: 'ok' }));
+		await h.done;
+		await s.NS.rowActions.run(s.r1._btn, 'ping');
+		await flush();
+		out.j21_afterEndSent = pings() === 1;
+		// A row action's own job also blocks a second one.
+		s.I.startJobStream({ jobId: 'j-4', streamUrl: '/s/j-4', cancelUrl: '/c/j-4' }, { id: 'regroom', label: 'Regroom' }, s.table, s.r1, s.table.__juneauCtx);
+		await s.NS.rowActions.run(s.r1._btn, 'ping');
+		await flush();
+		out.j21_rowJobSentNothing = pings() === 1;
+	}
+
+	// --- k01: jobs.cancel on a running row: one POST to the start-time URL with the row table's token ------------------
+	{
+		const s = setup();
+		s.table.setAttribute('data-juneau-csrf-header', 'X-Alt');
+		const panel = s.expand(s.r1);
+		const h = s.NS.jobs.run({ el: panel._btn, endpoint: RESTOCK, idempotencyKey: 'k', action: 'restock-species', envelope: 'action' });
+		await flush();
+		const sent = await s.NS.jobs.cancel(panel._btn, 'restock-species');
+		const posts = s.calls.filter(function (c) { return c.url === '/c/j-1'; });
+		out.k01_resolved = sent;
+		out.k01_posts = posts.length;
+		out.k01_method = posts[0] && posts[0].method;
+		out.k01_header = posts[0] && posts[0].headers['X-Alt'];
+		out.k01_noDefaultHeader = posts[0] && posts[0].headers['X-Csrf-Token'] === undefined;
+		out.k01_body = posts[0] && posts[0].body;
+		out.k01_stillRegistered = s.NS.jobs.active(panel._btn) != null && s.r1.dataset.juneauJob === '1';
+		out.k01_nullActionMeansAny = (await s.NS.jobs.cancel(s.r1)) === true && s.calls.filter(function (c) { return c.url === '/c/j-1'; }).length === 2;
+		s.sources[0].fire('result', JSON.stringify({ outcome: 'cancelled' }));
+		out.k01_state = (await h.done).state;
+		out.k01_afterRelease = (await s.NS.jobs.cancel(s.r1)) === false;
+	}
+
+	// --- k02: the cancel URL is a start-time snapshot; rewriting the shared ref redirects nothing ------------------------
+	{
+		const s = setup();
+		const h = s.NS.jobs.run({ el: s.r1._btn, endpoint: RESTOCK, idempotencyKey: 'k', action: 'restock-species', envelope: 'action' });
+		await flush();
+		s.NS.jobs.active(s.r1).cancelUrl = '/elsewhere/cancel';
+		h.job.cancelUrl = '/elsewhere/cancel';
+		out.k02_jobs = await s.NS.jobs.cancel(s.r1);
+		out.k02_handle = await h.cancel();
+		const urls = s.calls.filter(function (c) { return c.url.indexOf('/c/') === 0 || c.url.indexOf('/elsewhere') === 0; }).map(function (c) { return c.url; });
+		out.k02_urls = urls.join(',');
+		s.sources[0].fire('result', JSON.stringify({ outcome: 'cancelled' }));
+		await h.done;
+		// A job whose 202 had no cancelUrl, later given one through the ref, still cancels nothing.
+		const t = setup({ routes: { '/species/r1/restock': function () { return Promise.resolve(jsonResponse({ jobId: 'j-9', streamUrl: '/s/j-9' }, { status: 202 })); } } });
+		const h2 = t.NS.jobs.run({ el: t.r1._btn, endpoint: RESTOCK, idempotencyKey: 'k', action: 'restock-species', envelope: 'action' });
+		await flush();
+		t.NS.jobs.active(t.r1).cancelUrl = '/c/j-1';
+		const before = t.calls.length;
+		out.k02_noUrl = await t.NS.jobs.cancel(t.r1);
+		out.k02_noUrlFetches = t.calls.length - before;
+		t.sources[0].fire('result', JSON.stringify({ outcome: 'cancelled' }));
+		await h2.done;
+	}
+
+	// --- k03: element resolution and the no-I/O false cases ---------------------------------------------------------------
+	{
+		const s = setup();
+		const h = s.NS.jobs.run({ el: s.r1._btn, endpoint: RESTOCK, idempotencyKey: 'k', action: 'restock-species', envelope: 'action' });
+		await flush();
+		const n0 = s.calls.length;
+		const fetches = function () { return s.calls.length - n0; };
+		out.k03_rowB = await s.NS.jobs.cancel(s.r2._btn);
+		out.k03_rowBFetches = fetches();
+		out.k03_actionMismatch = await s.NS.jobs.cancel(s.r1, 'other');
+		out.k03_nonElement = (await s.NS.jobs.cancel(null)) === false && (await s.NS.jobs.cancel({})) === false;
+		out.k03_noRowFetches = fetches();
+		const panel = s.expand(s.r1);
+		out.k03_panelElement = await s.NS.jobs.cancel(panel._btn, 'restock-species');
+		out.k03_panelFetches = fetches();
+		s.sources[0].fire('result', JSON.stringify({ outcome: 'cancelled' }));
+		await h.done;
+		// Pending: the submit is held.
+		let release;
+		const p = setup({ routes: { '/species/r1/restock': function () { return new Promise(function (res) { release = res; }); } } });
+		const hp = p.NS.jobs.run({ el: p.r1._btn, endpoint: RESTOCK, idempotencyKey: 'k', action: 'restock-species', envelope: 'action' });
+		await flush();
+		const pn = p.calls.length;
+		out.k03_pending = await p.NS.jobs.cancel(p.r1);
+		out.k03_pendingFetches = p.calls.length - pn;
+		release(jsonResponse(STARTED, { status: 202 }));
+		await flush();
+		p.sources[0].fire('result', JSON.stringify({ outcome: 'cancelled' }));
+		await hp.done;
+		// Blank token / untrusted URL / no cancel URL.
+		const b = setup();
+		const hb = b.NS.jobs.run({ el: b.r1._btn, endpoint: RESTOCK, idempotencyKey: 'k', action: 'restock-species', envelope: 'action' });
+		await flush();
+		b.table.setAttribute('data-juneau-csrf', '  ');
+		const bn = b.calls.length;
+		out.k03_blankToken = await b.NS.jobs.cancel(b.r1);
+		out.k03_blankFetches = b.calls.length - bn;
+		b.table.setAttribute('data-juneau-csrf', 'tok-1');
+		b.sources[0].fire('result', JSON.stringify({ outcome: 'cancelled' }));
+		await hb.done;
+		const u = setup({ routes: { '/species/r1/restock': function () { return Promise.resolve(jsonResponse({ jobId: 'j-9', streamUrl: '/s/j-9', cancelUrl: 'https://evil.test/c' }, { status: 202 })); } } });
+		const hu = u.NS.jobs.run({ el: u.r1._btn, endpoint: RESTOCK, idempotencyKey: 'k', action: 'restock-species', envelope: 'action' });
+		await flush();
+		const un = u.calls.length;
+		out.k03_untrusted = await u.NS.jobs.cancel(u.r1);
+		out.k03_untrustedFetches = u.calls.length - un;
+		u.sources[0].fire('result', JSON.stringify({ outcome: 'cancelled' }));
+		await hu.done;
+	}
+
+	// --- k04: a stale entry (released, or replaced by a later job on the row) cancels nothing -----------------------------
+	{
+		const s = setup();
+		const h = s.NS.jobs.run({ el: s.r1._btn, endpoint: RESTOCK, idempotencyKey: 'k', action: 'restock-species', envelope: 'action' });
+		await flush();
+		const oldEntry = s.I.rowJobEntryFor(s.table, 'r1');
+		out.k04_captured = oldEntry != null && oldEntry.cancelUrl === '/c/j-1';
+		s.sources[0].fire('result', JSON.stringify({ outcome: 'success', message: 'ok' }));
+		await h.done;
+		const h2 = s.NS.jobs.run({ el: s.r1._btn, endpoint: RESTOCK, idempotencyKey: 'k2', action: 'restock-species', envelope: 'action' });
+		await flush();
+		const n0 = s.calls.length;
+		out.k04_stale = await s.I.cancelRowJob(oldEntry, s.table, s.I.jobHostFor(s.r1, null), { id: 'x' });
+		out.k04_staleFetches = s.calls.length - n0;
+		out.k04_newJobLive = s.NS.jobs.active(s.r1) != null;
+		s.sources[1].fire('result', JSON.stringify({ outcome: 'cancelled' }));
+		await h2.done;
+	}
+
+	// --- k05: failures resolve false and the next call sends again; in-flight requests are shared; success is not cached ----
+	{
+		let mode = 'fail';
+		let gate = null;
+		const s = setup({ routes: { '/c/j-1': function () {
+			if (mode === 'fail') { return Promise.resolve(jsonResponse({}, { status: 500 })); }
+			if (mode === 'net') { return Promise.reject(new TypeError('offline')); }
+			if (mode === 'html') { return Promise.resolve(jsonResponse('<html>login</html>', { headers: { 'content-type': 'text/html' } })); }
+			return new Promise(function (res) { gate = res; });
+		} } });
+		const h = s.NS.jobs.run({ el: s.r1._btn, endpoint: RESTOCK, idempotencyKey: 'k', action: 'restock-species', envelope: 'action' });
+		await flush();
+		const posts = function () { return s.calls.filter(function (c) { return c.url === '/c/j-1'; }).length; };
+		out.k05_nonOk = await s.NS.jobs.cancel(s.r1);
+		mode = 'net';
+		out.k05_network = await s.NS.jobs.cancel(s.r1);
+		out.k05_sentEachTime = posts() === 2;
+		mode = 'gate';
+		const a = s.NS.jobs.cancel(s.r1);
+		const b = s.NS.jobs.cancel(s.r1);
+		const c = h.cancel();
+		await flush();
+		out.k05_inflightPosts = posts() - 2;
+		out.k05_clearedWhileInFlight = s.I.rowJobEntryFor(s.table, 'r1').cancelling != null;
+		gate(jsonResponse({}));
+		const r = await Promise.all([a, b, c]);
+		out.k05_sharedResult = r.join(',');
+		out.k05_clearedAfter = s.I.rowJobEntryFor(s.table, 'r1').cancelling === null;
+		mode = 'html';
+		out.k05_secondPostAfterTrue = (await s.NS.jobs.cancel(s.r1)) === true && posts() === 4;
+		out.k05_htmlTrueCleared = s.I.rowJobEntryFor(s.table, 'r1').cancelling === null;
+		out.k05_thenAgain = (await s.NS.jobs.cancel(s.r1)) === true && posts() === 5;
+		s.sources[0].fire('result', JSON.stringify({ outcome: 'cancelled' }));
+		await h.done;
+	}
+
+	// --- k06: a progress button and jobs.cancel share one request; a row-less job keeps the direct path --------------------
+	{
+		let gate = null;
+		const s = setup({ routes: { '/c/j-3': function () { return new Promise(function (res) { gate = res; }); } } });
+		const ctx = s.table.__juneauCtx;
+		s.I.startJobStream({ jobId: 'j-3', streamUrl: '/s/j-3', cancelUrl: '/c/j-3' }, { id: 'regroom', label: 'Regroom' }, s.table, s.r1, ctx);
+		const btn = s.r1.querySelector('.juneau-view-job-cancel');
+		out.k06_button = btn != null;
+		btn.dispatch('click', {});
+		const viaApi = s.NS.jobs.cancel(s.r1);
+		await flush();
+		out.k06_posts = s.calls.filter(function (c) { return c.url === '/c/j-3'; }).length;
+		gate(jsonResponse({}));
+		out.k06_apiResult = await viaApi;
+		out.k06_rowActionCancelled = true;
+		s.sources[0].fire('result', JSON.stringify({ outcome: 'cancelled' }));
+		await flush();
+		// A row-less job (no row): no registry entry; handle.cancel() posts directly.
+		const t = setup({ routes: { '/x': function () { return Promise.resolve(jsonResponse({ jobId: 'j-5', streamUrl: '/s/j-5', cancelUrl: '/c/j-5' }, { status: 202 })); },
+			'/c/j-5': function () { return Promise.resolve(jsonResponse({})); } } });
+		const holder = t.env.el('div');
+		holder.setAttribute('data-juneau-csrf', 'tok-1');
+		const hb = t.env.el('button');
+		holder.appendChild(hb);
+		t.env.body.appendChild(holder);
+		const rh = t.NS.jobs.run({ el: hb, endpoint: '/x', idempotencyKey: 'k' });
+		await flush();
+		out.k06_rowlessCancel = await rh.cancel();
+		out.k06_rowlessPosts = t.calls.filter(function (c) { return c.url === '/c/j-5'; }).length;
+	}
+
+	// --- k07: paint: "none" never paints a failed cancel; "row" and the progress button still do -------------------------------
+	{
+		const failing = { '/c/j-1': function () { return Promise.resolve(jsonResponse({}, { status: 500 })); } };
+		const refusal = function (s) { return s.r1.querySelector('.juneau-view-action-refusal') != null; };
+		const run = async function (paint) {
+			const s = setup({ routes: failing });
+			const h = s.NS.jobs.run({ el: s.r1._btn, endpoint: RESTOCK, idempotencyKey: 'k', action: 'restock-species', envelope: 'action', paint: paint });
+			await flush();
+			return { s: s, h: h };
+		};
+		const a = await run('none');
+		out.k07_noneViaApi = (await a.s.NS.jobs.cancel(a.s.r1)) === false && !refusal(a.s);
+		out.k07_noneViaHandle = (await a.h.cancel()) === false && !refusal(a.s);
+		const b = await run('row');
+		out.k07_rowViaApi = (await b.s.NS.jobs.cancel(b.s.r1)) === false && refusal(b.s);
+		const c = await run('row');
+		out.k07_rowViaHandle = (await c.h.cancel()) === false && refusal(c.s);
+		// The row-less direct path honors paint too.
+		const s = setup({ routes: { '/c/j-3': function () { return Promise.resolve(jsonResponse({}, { status: 500 })); } } });
+		s.I.startJobStream({ jobId: 'j-3', streamUrl: '/s/j-3', cancelUrl: '/c/j-3' }, { id: 'regroom', label: 'Regroom' }, s.table, s.r1, s.table.__juneauCtx);
+		s.r1.querySelector('.juneau-view-job-cancel').dispatch('click', {});
+		await flush();
+		out.k07_progressButtonStillPaints = refusal(s);
+		// Four-argument cancelJob still paints.
+		const d = setup({ routes: { '/c/j-3': function () { return Promise.resolve(jsonResponse({}, { status: 500 })); } } });
+		await d.I.cancelJob({ cancelUrl: '/c/j-3' }, d.table, d.r1, { id: 'regroom' });
+		out.k07_fourArgPaints = refusal(d);
+		const e = setup();
+		await e.I.cancelJob({ cancelUrl: 'https://evil.test/c' }, e.table, e.r1, { id: 'regroom' });
+		out.k07_fourArgRefusalPaints = refusal(e);
+		const f = setup();
+		await f.I.cancelJob({ cancelUrl: 'https://evil.test/c' }, f.table, f.r1, { id: 'regroom' }, true);
+		out.k07_quietSkips = !refusal(f);
+	}
+
+	// --- k08: release timing after an accepted cancel ---------------------------------------------------------------------
+	{
+		const s = setup();
+		const h = s.NS.jobs.run({ el: s.r1._btn, endpoint: RESTOCK, idempotencyKey: 'k', action: 'restock-species', envelope: 'action' });
+		await flush();
+		out.k08_accepted = await s.NS.jobs.cancel(s.r1);
+		out.k08_stillActive = s.NS.jobs.active(s.r1) != null && s.r1.dataset.juneauJob === '1';
+		await s.NS.rowActions.run(s.r1._btn, 'ping');
+		await flush();
+		out.k08_pingRefused = s.calls.filter(function (c) { return c.url === '/species/r1/ping'; }).length === 0;
+		s.sources[0].fire('result', JSON.stringify({ outcome: 'cancelled' }));
+		const end = await h.done;
+		out.k08_state = end.state;
+		out.k08_released = s.NS.jobs.active(s.r1) === null && s.r1.dataset.juneauJob === undefined;
+		await s.NS.rowActions.run(s.r1._btn, 'ping');
+		await flush();
+		out.k08_pingRuns = s.calls.filter(function (c) { return c.url === '/species/r1/ping'; }).length === 1;
+	}
+
+	// --- k09: jobs.cancel cancels a row action's entry through the URL its progress button uses --------------------------------
+	{
+		const s = setup({ routes: { '/c/j-3': function () { return Promise.resolve(jsonResponse({})); } } });
+		s.I.startJobStream({ jobId: 'j-3', streamUrl: '/s/j-3', cancelUrl: '/c/j-3' }, { id: 'regroom', label: 'Regroom' }, s.table, s.r1, s.table.__juneauCtx);
+		out.k09_sent = await s.NS.jobs.cancel(s.r1, 'regroom');
+		out.k09_url = s.calls.filter(function (c) { return c.url === '/c/j-3'; }).length;
+		s.sources[0].fire('result', JSON.stringify({ outcome: 'cancelled' }));
+		await flush();
 	}
 
 	// --- u01: jobHistoryUrl sets lastEventId=0, replacing any existing one ---------------------------------------------

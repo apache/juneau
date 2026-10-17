@@ -177,6 +177,73 @@ class ViewsJs_RowJobs_Test {
 		assertEquals("row-job-running", s("j20_runRefused"));
 	}
 
+	@Test void j21_anOrdinaryRowActionIsRefusedOnABusyRowAndRunsOnceItEnds() {
+		yes("j21_pendingSentNothing", "j21_pendingBanner", "j21_otherRowUnaffected", "j21_afterEndSent", "j21_rowJobSentNothing");
+	}
+
+	@Test void k01_jobsCancel_postsOnceToTheStartUrl_withTheRowTablesToken() {
+		yes("k01_resolved", "k01_noDefaultHeader", "k01_stillRegistered", "k01_nullActionMeansAny", "k01_afterRelease");
+		assertEquals(1, ((Number)r().get("k01_posts")).intValue());
+		assertEquals("POST", s("k01_method"));
+		assertEquals("tok-1", s("k01_header"));
+		assertEquals("{}", s("k01_body"));
+		assertEquals("cancelled", s("k01_state"));
+	}
+
+	@Test void k02_theCancelUrlIsAStartTimeSnapshot() {
+		yes("k02_jobs", "k02_handle");
+		assertEquals("/c/j-1,/c/j-1", s("k02_urls"));
+		assertEquals(false, r().get("k02_noUrl"));
+		assertEquals(0, ((Number)r().get("k02_noUrlFetches")).intValue());
+	}
+
+	@Test void k03_jobsCancel_resolvesFalseWithoutIo_forEveryUnusableCase() {
+		yes("k03_panelElement", "k03_nonElement");
+		assertEquals(false, r().get("k03_rowB"));
+		assertEquals(false, r().get("k03_actionMismatch"));
+		assertEquals(false, r().get("k03_pending"));
+		assertEquals(false, r().get("k03_blankToken"));
+		assertEquals(false, r().get("k03_untrusted"));
+		for (var k : List.of("k03_rowBFetches", "k03_noRowFetches", "k03_pendingFetches", "k03_blankFetches", "k03_untrustedFetches"))
+			assertEquals(0, ((Number)r().get(k)).intValue(), k);
+		assertEquals(1, ((Number)r().get("k03_panelFetches")).intValue());
+	}
+
+	@Test void k04_aStaleEntryCancelsNothing() {
+		yes("k04_captured", "k04_newJobLive");
+		assertEquals(false, r().get("k04_stale"));
+		assertEquals(0, ((Number)r().get("k04_staleFetches")).intValue());
+	}
+
+	@Test void k05_failuresRetry_inFlightIsShared_successIsNotCached() {
+		assertEquals(false, r().get("k05_nonOk"));
+		assertEquals(false, r().get("k05_network"));
+		yes("k05_sentEachTime", "k05_clearedWhileInFlight", "k05_clearedAfter", "k05_secondPostAfterTrue", "k05_htmlTrueCleared", "k05_thenAgain");
+		assertEquals(1, ((Number)r().get("k05_inflightPosts")).intValue());
+		assertEquals("true,true,true", s("k05_sharedResult"));
+	}
+
+	@Test void k06_aProgressButtonAndJobsCancelShareOneRequest() {
+		yes("k06_button", "k06_apiResult", "k06_rowlessCancel");
+		assertEquals(1, ((Number)r().get("k06_posts")).intValue());
+		assertEquals(1, ((Number)r().get("k06_rowlessPosts")).intValue());
+	}
+
+	@Test void k07_aFailedCancelPaintsInTheRowOnlyForPaintRow() {
+		yes("k07_noneViaApi", "k07_noneViaHandle", "k07_rowViaApi", "k07_rowViaHandle", "k07_progressButtonStillPaints",
+			"k07_fourArgPaints", "k07_fourArgRefusalPaints", "k07_quietSkips");
+	}
+
+	@Test void k08_theEntryStaysRegisteredUntilTheStreamsResult() {
+		yes("k08_accepted", "k08_stillActive", "k08_pingRefused", "k08_released", "k08_pingRuns");
+		assertEquals("cancelled", s("k08_state"));
+	}
+
+	@Test void k09_jobsCancel_cancelsARowActionsJob() {
+		yes("k09_sent");
+		assertEquals(1, ((Number)r().get("k09_url")).intValue());
+	}
+
 	@Test void h01_hookContextOfResolvesAPanelElementToItsParentRow() {
 		yes("h01_parentTr", "h01_table", "h01_plainRow", "h01_nestedTr", "h01_resolverNested", "h01_resolverPanel");
 		assertEquals("cat", s("h01_parentRow"));

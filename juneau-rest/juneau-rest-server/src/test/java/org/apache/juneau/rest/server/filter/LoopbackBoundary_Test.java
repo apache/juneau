@@ -493,6 +493,12 @@ class LoopbackBoundary_Test extends TestBase {
 		assertThrows(IllegalArgumentException.class, () -> b.authority("127.0.0.1:8790/rest"));
 	}
 
+	@Test void i03b_authorityRejectsSchemeOrPathWithCorrectMessageFormat() {
+		var b = LoopbackBoundary.create();
+		var ex = assertThrows(IllegalArgumentException.class, () -> b.authority("http://127.0.0.1:8790"));
+		assertEquals("Argument 'value' must be a bare host and port with no scheme or path: 'http://127.0.0.1:8790'.", ex.getMessage());
+	}
+
 	@Test void i04_authorityRejectsNullAndBlank() {
 		var b = LoopbackBoundary.create();
 		assertThrows(IllegalArgumentException.class, () -> b.authority(null));

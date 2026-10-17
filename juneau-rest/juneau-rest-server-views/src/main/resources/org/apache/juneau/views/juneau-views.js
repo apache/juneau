@@ -924,6 +924,7 @@
 	 * paths a caller-supplied `extra.action` is ignored (see {@link #buildActionRequest}): `extra` adds fields only.
 	 */
 	function dispatchRowAction(action, table, tr, ctx, extra) {
+		if (refuseBusyRow(action, table, tr, ctx)) return;
 		if (isDialogAction(action)) return openActionDialog(action, table, tr, ctx);
 		if (needsConfirmPrompt(action)) return openConfirmOnlyDialog(action, table, tr, ctx, extra);
 		return submitRowAction(action, table, tr, ctx, extra);
@@ -6205,6 +6206,18 @@
 	}
 
 	/**
+	 * One job per row: refuses `action` with `row-job-running`, sending nothing and opening no dialog, when the row
+	 * already has a pending or running job in ROW_JOBS (a `JuneauViews.jobs` run or another row action's job).  Returns
+	 * whether it refused.  A row-less dispatch has no row to be busy and always proceeds.
+	 */
+	function refuseBusyRow(action, table, tr, ctx) {
+		const rowId = tr && typeof tr.getAttribute === "function" ? tr.getAttribute(ROW_ID_ATTR) : null;
+		if (! table || isBlankToken(rowId) || ! ROW_JOBS.has(rowJobKey(table, rowId))) return false;
+		renderActionRefusalFor(tr, action, "row-job-running", ctx);
+		return true;
+	}
+
+	/**
 	 * Routes a pre-flight refusal to the host that exists: a row's actions cell when there is a row, the
 	 * ribbon-anchored host when there is not.  renderRowActionRefusal itself is left dereferencing `tr` unguarded -
 	 * a row-less caller must land in the row-less host, not in a null-tolerant version of the row one.
@@ -6332,10 +6345,11 @@
 	}
 
 	/** Registers a pending entry for the row, or returns null when one already exists. */
-	function reserveRowJob(table, rowId, actionId) {
+	function reserveRowJob(table, rowId, actionId, paint) {
 		const key = rowJobKey(table, rowId);
 		if (ROW_JOBS.has(key)) return null;
-		const entry = { key: key, sidecar: viewSidecarKey(table), rowId: rowId, action: actionId, state: "pending", started: null };
+		const entry = { key: key, sidecar: viewSidecarKey(table), rowId: rowId, action: actionId, state: "pending", started: null,
+			paint: paint === "none" ? "none" : "row", cancelUrl: null, cancelling: null };
 		// Settles with the job pointer when the entry starts running, or null when it is released first (jobs.pending).
 		entry.ready = new Promise(function (resolve) { entry.resolveReady = resolve; });
 		ROW_JOBS.set(key, entry);
@@ -6346,6 +6360,8 @@
 	function startRowJob(entry, started) {
 		entry.state = "running";
 		entry.started = started;
+		// A string copy: a later rewrite of the shared ref (active, handle.job, onStart) must not redirect the cancel.
+		entry.cancelUrl = typeof started?.cancelUrl === "string" ? started.cancelUrl : null;
 		entry.resolveReady(started);
 	}
 
@@ -6474,7 +6490,7 @@
 	 * Distinct `data-testid`/class from the settled-outcome banner so a running job and a terminal outcome are never
 	 * confused.
 	 */
-	function renderJobProgress(host, started, action, table, text) {
+	function renderJobProgress(host, started, action, table, text, entry) {
 		const cell = host.container();
 		if (!cell) return;
 		const key = jobKeyFor(started);
@@ -6497,7 +6513,8 @@
 				cancel.addEventListener("click", function () {
 					if (cancel.disabled) return;
 					cancel.disabled = true;   // one cancel request per click; only a failed request hands the button back
-					cancelJob(started, table, host, action).then(function (sent) { if (!sent) cancel.disabled = false; });
+					const sending = entry ? cancelRowJob(entry, table, host, action) : cancelJob(started, table, host, action);
+					sending.then(function (sent) { if (!sent) cancel.disabled = false; });
 				});
 				banner.appendChild(cancel);
 			}
@@ -6583,7 +6600,7 @@
 		}
 		host.setRunning(true);
 		const entry = claimRowJob(table, tr, ctx, started, action, o.entry);
-		if (paint) renderJobProgress(host, started, action, table, "Working\u2026");
+		if (paint) renderJobProgress(host, started, action, table, "Working\u2026", entry);
 		if (ctx?._runTracker) ctx._jobsRunning++;
 		const st = { settled: false };
 		publishJobEvent(started, "start");
@@ -6608,7 +6625,7 @@
 		es.addEventListener("progress", function (e) {
 			if (! st.settled) {
 				if (paint) {
-					renderJobProgress(host, started, action, table, e.data);
+					renderJobProgress(host, started, action, table, e.data, entry);
 					paintActionMessageIntoDetail(host.row, action?.id, e.data);
 				}
 				publishJobEvent(started, "progress", e.data);
@@ -6680,19 +6697,36 @@
 	 *
 	 * <p>`hostOrTr` is a job host, or - the older three-argument form - a row element, which is wrapped.
 	 */
-	function cancelJob(started, table, hostOrTr, action) {
+	function cancelJob(started, table, hostOrTr, action, quiet) {
 		const host = typeof hostOrTr?.container === "function" ? hostOrTr : jobHostFor(hostOrTr, null);
 		const cancelAction = { id: "cancel", label: "Cancel" };
 		const req = buildJobCancelRequest(started?.cancelUrl, resolveCsrfToken(table), resolveCsrfHeaderName(table));
 		if (req.refuse) {
-			host.refusal(cancelAction, req.reason === "missing-token" || req.reason === "untrusted-cancel-url" ? req.reason : "request-failed");
+			if (! quiet) host.refusal(cancelAction, req.reason === "missing-token" || req.reason === "untrusted-cancel-url" ? req.reason : "request-failed");
 			return Promise.resolve(false);
 		}
 		return fetch(req.url, { method: req.method, headers: req.headers, body: req.body, credentials: "same-origin" })
 			.then(function (resp) {
-				if (resp && resp.ok === false) { host.refusal(cancelAction, "request-failed"); return false; }
+				if (resp && resp.ok === false) { if (! quiet) host.refusal(cancelAction, "request-failed"); return false; }
 				return true;
-			}, function () { host.refusal(cancelAction, "request-failed"); return false; });
+			}, function () { if (! quiet) host.refusal(cancelAction, "request-failed"); return false; });
+	}
+
+	/**
+	 * The single place a row-job registry entry's cancel is sent.  Resolves false with no I/O when `entry` is no longer
+	 * the registered one or is not running.  Concurrent callers share one in-flight request (`entry.cancelling`); an
+	 * accepted cancel is not cached (a 2xx can be a redirected login page, and the server answers a repeat idempotently).
+	 * Sends to the start-time `entry.cancelUrl` snapshot, never the shared ref, and paints a failure only for a
+	 * `paint: "row"` job.  `csrfEl` is the element carrying the CSRF token; `host` is the job host to paint into.
+	 */
+	function cancelRowJob(entry, csrfEl, host, action) {
+		if (! entry || ROW_JOBS.get(entry.key) !== entry || entry.state !== "running") return Promise.resolve(false);
+		if (entry.cancelling) return entry.cancelling;
+		function clear() { entry.cancelling = null; }
+		const sending = cancelJob({ cancelUrl: entry.cancelUrl }, csrfEl, host, action, entry.paint === "none");
+		entry.cancelling = sending;
+		sending.then(clear, clear);
+		return sending;
 	}
 
 	/**
@@ -11426,6 +11460,8 @@
 		startJobStream: startJobStream,
 		finishJobFromResult: finishJobFromResult,
 		cancelJob: cancelJob,
+		cancelRowJob: cancelRowJob,
+		rowJobEntryFor: function (table, rowId) { return ROW_JOBS.get(rowJobKey(table, rowId)) || null; },
 		// Row jobs (JuneauViews.jobs) - exposed for the harness.
 		jobHistoryUrl: jobHistoryUrl,
 		jobHostFor: jobHostFor,
@@ -11909,7 +11945,9 @@
 		const handle = Object.freeze({
 			done: done,
 			cancel: function () {
-				return st.started && st.host ? cancelJob(st.started, st.cancelTable, st.host, st.action) : Promise.resolve(false);
+				if (! st.started || ! st.host) return Promise.resolve(false);
+				if (st.entry) return cancelRowJob(st.entry, st.cancelTable, st.host, st.action);
+				return cancelJob(st.started, st.cancelTable, st.host, st.action, paint === "none");
 			},
 			get job() { return st.started; }
 		});
@@ -11938,7 +11976,7 @@
 		if (t.refuse) { refuse(t.refuse); return handle; }
 		if (! t.tr && envelope === "action" && ! isBlankToken(s.keyUrl)) { refuse("no-row-id"); return handle; }
 		if (t.tr) {
-			st.entry = reserveRowJob(t.table, t.rowId, actionId);
+			st.entry = reserveRowJob(t.table, t.rowId, actionId, paint);
 			if (! st.entry) { refuse("row-job-running"); return handle; }
 			notifyPollPausedChange(t.ctx);
 		}
@@ -12056,6 +12094,21 @@
 			if (! e || e.state !== "running" || ! e.started) return null;
 			if (action != null && e.action !== action) return null;
 			return e.started;
+		},
+		/**
+		 * Cancels the running job on `el`'s row (filtered by `action` as in `active`): `Promise<boolean>`, true once the
+		 * cancel POST was answered ok.  Takes no URL or token; sends to the URL the server returned when the job started,
+		 * with the row's CSRF token.  Resolves false with no I/O for no row, no running entry, an action mismatch, a
+		 * pending entry, or a blank token / missing or untrusted cancel URL.  The outcome still arrives on the stream.
+		 */
+		cancel: function (el, action) {
+			if (typeof el?.closest !== "function") return Promise.resolve(false);
+			const t = resolveJobTarget(el);
+			if (t.refuse || ! t.tr) return Promise.resolve(false);
+			const e = ROW_JOBS.get(rowJobKey(t.table, t.rowId));
+			if (! e || e.state !== "running") return Promise.resolve(false);
+			if (action != null && e.action !== action) return Promise.resolve(false);
+			return cancelRowJob(e, t.csrfEl, jobHostFor(t.tr, t.ctx), { id: e.action || "job", label: "Cancel" });
 		},
 		/**
 		 * For a job on `el`'s row and `action` that is still pending (key fetch or submit), a `Promise` of its ref once
