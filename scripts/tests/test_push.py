@@ -76,7 +76,7 @@ def _args(tracker_audit: bool) -> argparse.Namespace:
 
 
 # ---------------------------------------------------------------------------------------
-# Real-git fixtures for commit_and_push() / check_upstream_changes() / get_staged_paths() /
+# Real-git fixtures for commit_and_push() / prechecks() / get_staged_paths() /
 # check_unreviewed_changes(). Mirrors the board repo's reset-side-clones tests' hermetic_git_env and
 # _run/_commit helpers.
 # ---------------------------------------------------------------------------------------
@@ -156,9 +156,8 @@ def docs_repo(tmp_path: Path, docs_remote_repo: Path, push_module) -> Path:
     A real clone of docs_remote_repo, seeded with a stub scripts/build-docs.py that exits 0 (so
     tests can exercise the real pre_commit_hook smoke-check wiring without a real Docusaurus
     site), living at <tmp_path>/juneau-docs so juneau_root.parent / "juneau-docs" resolves to
-    it. Also configures the repo-local (never global) git identity commit_and_push()'s
-    verify_apache_identity() check reads, since that check is real, pre-existing behavior this
-    task doesn't touch and unrelated tests still need it satisfied.
+    it. Also configures the repo-local (never global) git identity the docs Prechecks' identity
+    check reads, so tests that run them see it satisfied.
     """
     seed = tmp_path / "docs-seed"
     seed.mkdir()
@@ -326,20 +325,23 @@ class TestRunTrackerAuditGateExitCodeMapping:
         ]
 
 
-class TestCheckUpstreamChangesAheadBehind:
+class TestUpstreamVerdictAheadBehind:
     """
-    check_upstream_changes() against real git: the ahead count is the fix, so it needs to be
-    right, not just the pre-existing behind count.
+    The upstream verdict commit_and_push() reads (the toolkit's git.upstream_verdict) against real
+    git: the ahead count is the fix, so it needs to be right, not just the pre-existing behind count.
     """
 
+    @staticmethod
+    def _verdict(push_module, repo_dir):
+        v = push_module.toolkit("git").upstream_verdict(repo_dir)
+        return (v.status, v.ahead, v.behind)
+
     def test_clean_and_synced_is_zero_and_zero(self, push_module, repo):
-        ahead, behind, error = push_module.check_upstream_changes(repo)
-        assert (ahead, behind, error) == (0, 0, None)
+        assert self._verdict(push_module, repo) == ("ok", 0, 0)
 
     def test_a_local_only_commit_is_one_ahead_zero_behind(self, push_module, repo):
         _local_only_commit(repo)
-        ahead, behind, error = push_module.check_upstream_changes(repo)
-        assert (ahead, behind, error) == (1, 0, None)
+        assert self._verdict(push_module, repo) == ("ok", 1, 0)
 
     def test_an_upstream_only_commit_is_zero_ahead_one_behind(self, push_module, tmp_path, repo, remote_repo):
         other = tmp_path / "other-clone"
@@ -347,20 +349,16 @@ class TestCheckUpstreamChangesAheadBehind:
         _local_only_commit(other, filename="from-elsewhere.txt", message="pushed by someone else")
         _run(other, "git", "push", "origin", "master")
 
-        ahead, behind, error = push_module.check_upstream_changes(repo)
+        assert self._verdict(push_module, repo) == ("behind", 0, 1)
 
-        assert (ahead, behind, error) == (0, 1, None)
-
-    def test_no_upstream_configured_is_none_none_none(self, push_module, tmp_path):
+    def test_no_upstream_configured_is_none_none(self, push_module, tmp_path):
         lone = tmp_path / "lone"
         lone.mkdir()
         _run(lone, "git", "init", "-b", "master", ".")
         (lone / "f.txt").write_text("x\n", encoding="utf-8")
         _commit(lone, "no remote at all")
 
-        ahead, behind, error = push_module.check_upstream_changes(lone)
-
-        assert (ahead, behind, error) == (None, None, None)
+        assert self._verdict(push_module, lone) == ("no-upstream", None, None)
 
 
 class TestGetStagedPaths:
@@ -829,22 +827,19 @@ class TestRunDocsFollowup:
         assert remote_head == local_head, "the juneau-docs remote must actually have moved"
         assert any(argv[:2] == ["git", "push"] for argv in git_spy)
 
-    def test_identity_gate_still_runs_for_an_ahead_only_push(
-        self, push_module, docs_repo, docs_remote_repo, juneau_root
+    def test_the_docs_identity_is_a_precheck_for_an_ahead_only_push(
+        self, push_module, docs_repo, juneau_root
     ):
         """
-        The identity gate is the pre_flight_hook specifically because it must run even when
-        there's nothing to commit -- only something to push. Breaking the repo-local identity
-        AFTER the commit (env vars, not this config, are what let the commit itself succeed)
-        proves the gate is consulted on this path, not bypassed because has_changes is False.
+        With nothing to commit -- only something to push -- juneau-docs is still active, so the
+        Prechecks row checks its identity (which replaced the follow-up's own identity hook).
         """
-        local_head = _local_only_commit(docs_repo)
+        _local_only_commit(docs_repo)
         _run(docs_repo, "git", "config", "--unset", "user.email")
 
-        status, _ = push_module.run_docs_followup(juneau_root, "message", 6)
+        listed = {c.name: c for c in push_module.prechecks(juneau_root)}
 
-        assert status == "error"
-        assert _run(docs_remote_repo, "git", "rev-parse", "master") != local_head
+        assert push_module.toolkit("checks").evaluate(listed["docs identity"]).status == "fail"
 
     def test_smoke_check_does_not_run_for_an_ahead_only_push(
         self, push_module, docs_repo, docs_remote_repo, juneau_root, capsys
@@ -963,7 +958,7 @@ def test_build_test_command_has_no_timing_log(push_module):
 def _stub_push_flow(push_module, monkeypatch, *, tests_pass, test_py=True):
     """Every gate and side effect of push.main() replaced; returns the _append_test_run_history calls."""
     calls = []
-    for name in ("play_sound", "run_timing_report", "verify_starter_repos", "verify_apache_identity"):
+    for name in ("run_timing_report", "verify_starter_repos"):
         monkeypatch.setattr(push_module, name, lambda *a, **k: True)
     monkeypatch.setattr(push_module, "prompt_pgp_passphrase", lambda *a, **k: None)
     monkeypatch.setattr(push_module, "run_command",
@@ -1029,7 +1024,6 @@ def test_append_test_run_history_is_unchanged_and_the_only_tsv_writer(push_modul
 def _said(push_module, monkeypatch):
     lines = []
     monkeypatch.setattr(push_module, "say", lambda text="", level="info": lines.append(text))
-    monkeypatch.setattr(push_module, "play_sound", lambda success=True: None)
     return lines
 
 
@@ -1113,22 +1107,35 @@ def test_unreviewed_changes_are_the_toolkits_unstaged_then_untracked(push_module
     assert push_module.check_unreviewed_changes(Path("/r")) == ["m.txt", "new.txt"]
 
 
-def test_upstream_check_uses_ahead_behind_with_fetch(push_module, toolkit_git, monkeypatch):
+def test_the_late_upstream_check_uses_the_toolkit_verdict(push_module, toolkit_git, repo, monkeypatch):
     calls = []
-    answers = iter([(2, 1, None), (None, None, "no upstream"), (None, None, "fatal: unable to access")])
-    monkeypatch.setattr(toolkit_git, "ahead_behind", lambda repo, **k: calls.append((repo, k)) or next(answers))
-    assert push_module.check_upstream_changes(Path("/r")) == (2, 1, None)
-    assert push_module.check_upstream_changes(Path("/r")) == (None, None, None)
-    assert push_module.check_upstream_changes(Path("/r")) == (None, None, "Git command failed: fatal: unable to access")
-    assert calls == [(Path("/r"), {"fetch": True})] * 3
+
+    def verdict(repo_dir, **k):
+        calls.append(k)
+        return toolkit_git.UpstreamVerdict("behind", 0, 1)
+    monkeypatch.setattr(toolkit_git, "upstream_verdict", verdict)
+    lines = _said(push_module, monkeypatch)
+    assert push_module.commit_and_push(repo, "message", 4, git_cmd="git -C x") == ("error", 4)
+    assert calls == [{"git_cmd": "git -C x"}]
+    assert any("Nothing was committed or pushed." in line for line in lines)
 
 
-def test_upstream_check_reports_a_git_error_instead_of_raising(push_module, toolkit_git, monkeypatch):
-    def broken(repo, **k):
-        raise toolkit_git.GitError(["git", "rev-parse"], toolkit_git.Result(False, 128, err="not a repo"))
-    monkeypatch.setattr(toolkit_git, "ahead_behind", broken)
-    ahead, behind, error = push_module.check_upstream_changes(Path("/r"))
-    assert (ahead, behind) == (None, None) and error.startswith("Git command failed: git rev-parse failed")
+def test_a_late_upstream_error_fails_closed_before_the_commit(push_module, toolkit_git, repo, git_spy,
+                                                              monkeypatch):
+    (repo / "reviewed.txt").write_text("staged and reviewed\n", encoding="utf-8")
+    _run(repo, "git", "add", "reviewed.txt")
+    head_before = _run(repo, "git", "rev-parse", "HEAD")
+    monkeypatch.setattr(toolkit_git, "upstream_verdict",
+                        lambda repo_dir, **k: toolkit_git.UpstreamVerdict("error", reason="could not check upstream: x"))
+    lines = _said(push_module, monkeypatch)
+    git_spy.clear()
+
+    assert push_module.commit_and_push(repo, "message", 4, git_cmd=push_module.DOCS_GIT) == ("error", 4)
+
+    assert "\n❌ ERROR: could not check upstream: x. Nothing was committed or pushed." in lines
+    assert f"   Re-run the push once `{push_module.DOCS_GIT} fetch` works." in lines
+    assert _run(repo, "git", "rev-parse", "HEAD") == head_before
+    assert not any(argv[:2] in (["git", "commit"], ["git", "push"]) for argv in git_spy)
 
 
 @pytest.mark.parametrize(("branch", "head", "expected"), [
@@ -1142,14 +1149,6 @@ def test_current_branch_falls_back_to_unknown(push_module, toolkit_git, monkeypa
 def test_current_branch_on_a_detached_head_is_still_head(push_module, repo):
     _run(repo, "git", "checkout", "-q", "--detach")
     assert push_module.current_branch(repo) == "HEAD"
-
-
-def test_the_identity_is_read_through_the_toolkit(push_module, toolkit_git, monkeypatch, capsys):
-    monkeypatch.setattr(toolkit_git, "user_email", lambda repo: None)
-    assert push_module.verify_apache_identity(Path("/r")) is False
-    assert "user.email = '(unset)'" in capsys.readouterr().out
-    monkeypatch.setattr(toolkit_git, "user_email", lambda repo: push_module.REQUIRED_GIT_EMAIL)
-    assert push_module.verify_apache_identity(Path("/r")) is True
 
 
 @pytest.mark.parametrize("reader", ["get_staged_paths", "check_unreviewed_changes"])
@@ -1209,3 +1208,233 @@ def test_the_gates_go_through_the_toolkit_gate(push_module, monkeypatch):
         {"title": "Tracker audit", "id": "tracker", "label": "Tracker", "cwd": Path("/repo"),
          "codes": {0: "pass", 1: "fail"}},
     ]
+
+
+# ---------------------------------------------------------------------------------------
+# Prechecks: unreviewed changes and a behind-upstream branch refuse before any gate runs.
+# ---------------------------------------------------------------------------------------
+class _PastPrechecks(Exception):
+    """Raised by the stubbed PGP row: the push got past its Prechecks to the first gate."""
+
+
+@pytest.fixture
+def flow(push_module, repo, monkeypatch):
+    """_main() pointed at `repo` (scripts/ beside it) with a stand-in session: the real Prechecks run, and the push
+    stops at the PGP row.  `gates` records "pgp" and "session" when the push got that far."""
+    (repo / "scripts").mkdir()
+    (repo / "scripts" / push_module.PGP_PROMPT).write_text("", encoding="utf-8")
+    monkeypatch.setattr(push_module, "__file__", str(repo / "scripts" / "push.py"))
+    _run(repo, "git", "config", "user.email", push_module.REQUIRED_GIT_EMAIL)
+    gates = []
+    run = push_module.toolkit("run")
+
+    class Session:
+        def checks(self, id, title, listed):
+            result = run.checks(id, title, listed)
+            if not result.ok:
+                raise SystemExit(1)
+            return result
+
+    def in_session(title, body, **kw):
+        try:
+            return body(Session())
+        except SystemExit as e:
+            return e.code
+        except _PastPrechecks:
+            gates.append("session")
+            return 0
+
+    def pgp(script_dir):
+        gates.append("pgp")
+        raise _PastPrechecks()
+
+    monkeypatch.setattr(push_module, "pgp_row", pgp)
+    monkeypatch.setattr(push_module, "_in_session", in_session)
+    monkeypatch.setattr(push_module, "resolve_commit_message", lambda m: m)
+    monkeypatch.setattr(push_module, "current_branch", lambda root: "master")
+    # scripts/ is untracked in `repo`; ignore it so it isn't itself an unreviewed change
+    (repo / ".git" / "info" / "exclude").write_text("scripts/\n", encoding="utf-8")
+
+    def go(*argv):
+        monkeypatch.setattr(push_module.sys, "argv", ["push.py", *argv])
+        return push_module._main()
+
+    go.gates = gates
+    return go
+
+
+def _push_from_elsewhere(tmp_path: Path, remote_repo: Path) -> None:
+    other = tmp_path / "other-clone"
+    _run(tmp_path, "git", "clone", str(remote_repo), str(other))
+    _local_only_commit(other, filename="from-elsewhere.txt", message="pushed by someone else")
+    _run(other, "git", "push", "origin", "master")
+
+
+class TestPrechecks:
+    def test_up_to_date_and_clean_proceeds_to_the_gates(self, flow):
+        assert flow("message") == 0
+        assert flow.gates == ["pgp", "session"]
+
+    def test_behind_refuses_before_any_gate_with_ff_only_hint(self, flow, tmp_path, remote_repo, capsys):
+        _push_from_elsewhere(tmp_path, remote_repo)
+
+        assert flow("message") == 1
+        assert flow.gates == []    # no PGP prompt, no gate, mvn or test.py was reached
+        out = capsys.readouterr().out
+        assert "✗ upstream: 1 commit behind upstream" in out
+        assert "git merge --ff-only @{upstream}" in out
+        assert "--autostash" not in out
+
+    def test_behind_with_local_commits_gets_the_stash_rebase_hint(self, flow, tmp_path, repo, remote_repo, capsys):
+        _push_from_elsewhere(tmp_path, remote_repo)
+        _local_only_commit(repo)
+
+        assert flow("message") == 1
+        assert flow.gates == []
+        out = capsys.readouterr().out
+        assert "git stash push && git pull --rebase && git stash pop --index" in out
+        assert "--ff-only" not in out and "--autostash" not in out
+
+    def test_unreviewed_changes_refuse_before_any_gate(self, flow, repo, capsys):
+        (repo / "README.md").write_text("edited\n", encoding="utf-8")
+        (repo / "new.txt").write_text("new\n", encoding="utf-8")
+
+        assert flow("message") == 1
+        assert flow.gates == []
+        out = capsys.readouterr().out
+        assert "✗ unreviewed: 2 paths are not staged" in out
+        assert "README.md" in out and "new.txt" in out
+        assert "Nothing was built, committed or pushed." in out
+        assert "git stash push -- " in out
+
+    def test_the_wrong_identity_refuses_before_any_gate(self, push_module, flow, repo, capsys):
+        _run(repo, "git", "config", "user.email", "someone@example.invalid")
+
+        assert flow("message") == 1
+        assert flow.gates == []
+        out = capsys.readouterr().out
+        assert f"git user.email is someone@example.invalid, not {push_module.REQUIRED_GIT_EMAIL}" in out
+        assert f"git config user.email {push_module.REQUIRED_GIT_EMAIL}" in out
+
+    def test_staged_changes_do_not_refuse(self, flow, repo):
+        (repo / "README.md").write_text("edited\n", encoding="utf-8")
+        _run(repo, "git", "add", "README.md")
+        assert flow("message") == 0
+        assert "session" in flow.gates
+
+    def test_no_upstream_proceeds(self, flow, repo):
+        _run(repo, "git", "branch", "--unset-upstream")
+        assert flow("message") == 0
+        assert "session" in flow.gates
+
+    def test_fetch_error_fails_closed(self, flow, repo, remote_repo, capsys):
+        _run(repo, "git", "remote", "set-url", "origin", str(remote_repo) + "-missing")
+
+        assert flow("message") == 1
+        assert flow.gates == []
+        assert "✗ upstream: could not check upstream" in capsys.readouterr().out
+
+    def test_skip_tests_still_runs_the_prechecks(self, flow, tmp_path, remote_repo):
+        _push_from_elsewhere(tmp_path, remote_repo)
+
+        assert flow("message", "--skip-tests") == 1
+        assert flow.gates == []
+
+    def test_test_only_skips_the_prechecks(self, flow, tmp_path, remote_repo):
+        _push_from_elsewhere(tmp_path, remote_repo)
+
+        assert flow("--test-only") == 0    # nothing is committed or pushed, so behind-upstream is irrelevant
+        assert flow.gates == ["pgp", "session"]
+
+    def test_dry_run_reports_would_refuse_and_exits_zero(self, flow, tmp_path, repo, remote_repo, capsys):
+        _push_from_elsewhere(tmp_path, remote_repo)
+        (repo / "new.txt").write_text("new\n", encoding="utf-8")
+
+        assert flow("message", "--dry-run") == 0
+        out = capsys.readouterr().out
+        assert "⚠ unreviewed: would refuse: 1 path is not staged" in out
+        assert "⚠ upstream: would refuse: 1 commit behind upstream" in out
+        assert "Nothing would be built, committed or pushed." in out
+        assert "Prechecks" in out
+        assert flow.gates == []
+
+    def test_late_check_in_commit_and_push_is_kept(self, push_module, tmp_path, repo, remote_repo):
+        _push_from_elsewhere(tmp_path, remote_repo)    # upstream moved after the Prechecks would have passed
+
+        status, _ = push_module.commit_and_push(repo, "message", 4)
+
+        assert status == "error"
+
+
+# ---------------------------------------------------------------------------------------
+# The juneau-docs Prechecks run only when juneau-docs has something to push.
+# ---------------------------------------------------------------------------------------
+DOCS_CHECKS = ["docs identity", "docs unreviewed", "docs upstream"]
+
+
+class TestDocsPrechecksWhenIdle:
+    @staticmethod
+    def _docs_checks(push_module, juneau_root):
+        return [c.name for c in push_module.prechecks(juneau_root) if c.name.startswith("docs ")]
+
+    def test_an_idle_docs_tree_is_not_checked_so_its_dirt_does_not_block(self, push_module, docs_repo,
+                                                                          juneau_root):
+        (docs_repo / "README.md").write_text("mid-edit\n", encoding="utf-8")
+        (docs_repo / "scratch.md").write_text("untracked\n", encoding="utf-8")
+        _run(docs_repo, "git", "config", "--unset", "user.email")
+
+        assert push_module.docs_active(docs_repo) is False
+        assert self._docs_checks(push_module, juneau_root) == []
+
+    def test_staged_docs_changes_are_checked_and_their_dirt_blocks(self, push_module, docs_repo, juneau_root):
+        (docs_repo / "reviewed.md").write_text("staged\n", encoding="utf-8")
+        _run(docs_repo, "git", "add", "reviewed.md")
+        (docs_repo / "scratch.md").write_text("untracked\n", encoding="utf-8")
+
+        listed = {c.name: c for c in push_module.prechecks(juneau_root)}
+
+        assert self._docs_checks(push_module, juneau_root) == DOCS_CHECKS
+        verdict = push_module.toolkit("checks").evaluate(listed["docs unreviewed"])
+        assert verdict.status == "fail" and "scratch.md" in " ".join(verdict.hint)
+
+    def test_unpushed_docs_commits_are_checked(self, push_module, docs_repo, juneau_root):
+        _local_only_commit(docs_repo)
+        (docs_repo / "scratch.md").write_text("untracked\n", encoding="utf-8")
+
+        assert push_module.docs_active(docs_repo) is True
+        assert self._docs_checks(push_module, juneau_root) == DOCS_CHECKS
+
+    def test_docs_only_always_checks_the_docs(self, push_module, docs_repo):
+        assert push_module.docs_active(docs_repo) is False
+        assert [c.name for c in push_module.docs_prechecks(docs_repo)] == DOCS_CHECKS
+
+
+# ---------------------------------------------------------------------------------------
+# Console default: flag > JUNEAU_RUN_CONSOLE > condensed.
+# ---------------------------------------------------------------------------------------
+class TestConsoleDefault:
+    @pytest.fixture(autouse=True)
+    def _clean_env(self, monkeypatch):
+        monkeypatch.setenv("JUNEAU_RUN_CONSOLE", "")    # registers the restore; deleted next so the test starts unset
+        monkeypatch.delenv("JUNEAU_RUN_CONSOLE")
+
+    def test_defaults_to_condensed(self, push_module):
+        push_module.parse_args(["msg"])
+        assert os.environ["JUNEAU_RUN_CONSOLE"] == "condensed"
+
+    def test_environment_beats_the_default(self, push_module, monkeypatch):
+        monkeypatch.setenv("JUNEAU_RUN_CONSOLE", "full")
+        push_module.parse_args(["msg"])
+        assert os.environ["JUNEAU_RUN_CONSOLE"] == "full"
+
+    @pytest.mark.parametrize("mode", ["full", "condensed", "none"])
+    def test_flag_beats_the_environment(self, push_module, monkeypatch, mode):
+        monkeypatch.setenv("JUNEAU_RUN_CONSOLE", "full" if mode != "full" else "none")
+        push_module.parse_args(["msg", "--console", mode])
+        assert os.environ["JUNEAU_RUN_CONSOLE"] == mode
+
+    def test_help_says_condensed_is_the_default(self, push_module, monkeypatch, capsys):
+        monkeypatch.setattr(push_module.sys, "argv", ["push.py", "--help"])
+        with pytest.raises(SystemExit):
+            push_module._main()
+        assert "condensed (default)" in " ".join(capsys.readouterr().out.split())

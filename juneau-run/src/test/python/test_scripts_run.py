@@ -102,6 +102,28 @@ class RoutedTest(MarkerCase):
             self.assertTrue(run.console_requested())
 
 
+class ExportConsoleTest(PlainCase):
+    def test_export_console_precedence(self):
+        with mock.patch.dict(os.environ, {}):
+            os.environ.pop("JUNEAU_RUN_CONSOLE", None)
+            self.assertEqual(run.export_console(), "condensed")                  # the default
+            self.assertEqual(run.export_console(default="full"), "condensed")    # now the env wins over the default
+            os.environ["JUNEAU_RUN_CONSOLE"] = "none"
+            self.assertEqual(run.export_console(), "none")
+            self.assertEqual(run.export_console("full"), "full")                 # the flag wins over the env
+            self.assertEqual(os.environ["JUNEAU_RUN_CONSOLE"], "full")
+            with self.assertRaises(ValueError):
+                run.export_console("loud")
+            self.assertEqual(os.environ["JUNEAU_RUN_CONSOLE"], "full")
+
+    def test_add_console_argument(self):
+        import argparse
+        parser = argparse.ArgumentParser()
+        run.add_console_argument(parser)
+        self.assertIsNone(parser.parse_args([]).console)
+        self.assertEqual(parser.parse_args(["--console", "none"]).console, "none")
+
+
 class CmdMarkersTest(MarkerCase):
     def test_runs_through_run_tool_with_the_step_number(self):
         r, got, _ = self.capture(run.cmd, [PY, "-c", "print('x')"], title="Build it", n=4)

@@ -86,10 +86,11 @@ class RegionCollapsedWidthTest(unittest.TestCase):
         live = jr.LiveRenderer(lambda t: None, size=lambda: os.terminal_size((60, 24)), clock=lambda: 100.0, color=False)
         size = live.size()
         lines = live.region(b, size.columns - 1, size.lines - 2)
-        collapsed = [l for l in lines if l.startswith("  ")][0]
+        collapsed = [l for l in lines if l.startswith("    ")][0]
         self.assertLessEqual(jr._vlen(collapsed), 59)
         names = [f"{i:02d}" for i in range(30)]
-        self.assertEqual(collapsed, "  " + jr.collapse_names(names, 59))     # region's cols already is columns - 1: no second -1
+        # region's cols already is columns - 1: no second -1; the 4-space indent takes two more than the default 2
+        self.assertEqual(collapsed, "    " + jr.collapse_names(names, 57))
 
 
 if __name__ == "__main__":

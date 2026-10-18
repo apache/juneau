@@ -14,7 +14,7 @@
 juneau_scripts: helpers for writing push.py and release.py scripts.  A toolkit, not a framework: every policy (what
 may be committed, which identity is required, what a dry run means) is the script author's own code.
 
-Modules: git, run, tools, notify, java, lock, prompt, state, steps, proc, coverage, testing.  Import them explicitly
+Modules: git, checks, run, tools, notify, java, lock, prompt, state, steps, proc, coverage, testing.  Import them explicitly
 (`from juneau_scripts import git, run`); this file imports nothing heavy, and never testing or its pytest plugin.
 
 No helper in git, run or tools runs `git add`, passes `--force` or `--no-verify`, or writes git config.  The toolkit

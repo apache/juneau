@@ -167,17 +167,29 @@ def run(mode, project, branch, head):
 class Step:
     """Mutable outcome of a step() block; defaults to ok.  summary is the console row's text, when set."""
 
-    def __init__(self):
+    def __init__(self, id=None):  # NOSONAR python:S5806 - parameter names mirror protocol field names
+        self.id = id
         self.status = "ok"
         self.exit = None
         self.summary = None
+        self.warned = False
 
     def fail(self, exit=None):  # NOSONAR python:S5806 - parameter names mirror protocol field names
         self.status = "fail"
         self.exit = exit
 
-    def skip(self):
+    def skip(self, reason=None):
+        """End the step skipped; reason, when given, is the row's text."""
         self.status = "skip"
+        if reason is not None:
+            self.summary = reason
+
+    def warn(self, text):
+        """The step still ends ok, but its row draws ⚠ with text as its reason: a warn note on the step."""
+        self.warned = True
+        note("warn", text, step=self.id)
+        if not _console_owns_screen():
+            _out(f"⚠ {text}\n")
 
 
 @contextmanager
@@ -186,7 +198,7 @@ def step(id, n, title, *, parent=None, label=None):  # NOSONAR python:S5806 - pa
     emit("step", id=id, n=n, title=title, parent=parent)
     publish("step_start", id=id, n=n, title=title, parent=parent, tool=None, sig="",
             **({"label": label} if label else {}))
-    s = Step()
+    s = Step(id)
     t0 = time.monotonic()
     try:
         yield s
@@ -287,12 +299,28 @@ def failure(text, step=None):
     publish("failure", text=text, step=step)
 
 
+def hint(lines, step=None):
+    """Lines that tell the user what to do about a failure, at every detail level: printed as-is, or by the console
+    view when it owns the screen, beneath the running row (held until it ends) or at once when none is running."""
+    lines = [lines] if isinstance(lines, str) else list(lines)
+    if not _console_owns_screen():
+        _out("".join(line + "\n" for line in lines))
+    publish("hint", step=step, lines=lines)
+
+
+def tick():
+    """Let the console view redraw (the spinner, the elapsed time) during script work that blocks.  Throttled by the
+    view; a no-op with no session."""
+    if _console is not None:
+        _console.tick()
+
+
 @contextmanager
 def row(id, title, *, label=None):  # NOSONAR python:S5806 - parameter names mirror protocol field names
     """A console row around a block, with no marker.  For script work that is not a protocol step (Perf, Timing)."""
     publish("step_start", id=id, n=None, title=title, parent=None, tool=None, sig="",
             **({"label": label} if label else {}))
-    s = Step()
+    s = Step(id)
     t0 = time.monotonic()
     try:
         yield s
@@ -361,16 +389,23 @@ LABEL_WIDTH_ENV = "JUNEAU_RUN_LABEL_WIDTH"
 LIVE_ENV = "JUNEAU_RUN_LIVE"
 HEARTBEAT_SECONDS = 15.0
 # "run" is a unit that has started but not ended (distinct from PENDING, which has not started)
-PLAIN_GLYPHS = {"pass": "#", "fail": "F", "skip": ".", "run": "~"}
-NO_COLOR_GLYPHS = {"pass": "█", "fail": "F", "skip": "·", "run": "▒"}
+# "warn" is a checks unit that would refuse or only warns; a checks bar never shows "run", so the two yellows can't meet
+PLAIN_GLYPHS = {"pass": "#", "fail": "F", "skip": ".", "run": "~", "warn": "!"}
+NO_COLOR_GLYPHS = {"pass": "█", "fail": "F", "skip": "·", "run": "▒", "warn": "!"}
 COLOR_GLYPHS = {"pass": "\x1b[32m█\x1b[0m", "fail": "\x1b[31m█\x1b[0m", "skip": "\x1b[2m█\x1b[0m",
-                "run": "\x1b[33m█\x1b[0m"}
+                "run": "\x1b[33m█\x1b[0m", "warn": "\x1b[33m█\x1b[0m"}
 PENDING = "░"
 DOT_GLYPHS = {"pass": "•", "fail": "F", "skip": "·"}
 COLOR_DOT_GLYPHS = {"pass": "\x1b[32m•\x1b[0m", "fail": "\x1b[31m✗\x1b[0m", "skip": "\x1b[2m•\x1b[0m"}
 _MARK_COLORS = {"✓": "\x1b[32m✓\x1b[0m", "✗": "\x1b[31m✗\x1b[0m"}
 _MARK_RE = re.compile("(?<!m)[✓✗]")   # not one already coloured (right after an SGR escape)
 _NOTE_PREFIX = {"info": "ℹ", "warn": "⚠", "error": "✗"}
+PENDING_ENV = "JUNEAU_RUN_PENDING"     # a parent session's labelled pending rows, [[id, label], ...], for a nested one
+# A row's icon (spec 5.2): a spinner while it runs, then its outcome.  No VS16 after ⚠: it must stay one column.
+SPINNER = "⠋⠙⠹⠸⠼⠴⠦⠧⠇⠏"
+ICONS = {"ok": "✔", "warn": "⚠", "skip": "⊘", "fail": "✗", "pending": "○"}
+_ICON_COLORS = {"running": "\x1b[36m", "ok": "\x1b[32m", "warn": "\x1b[33m", "skip": "\x1b[2m", "fail": "\x1b[31m",
+                "pending": "\x1b[2m"}
 
 
 def tint(text):
@@ -508,6 +543,7 @@ def overall_text(o):
 
 UNIT_PASS, UNIT_FAIL, UNIT_SKIP = 1, 2, 3     # bytes in a row's unit_cells; 0 is "not finished"
 UNIT_RUN = 4        # only in a view built by _Row.unit_view(), never stored in unit_cells: started, not ended
+UNIT_WARN = 5       # a checks unit that warned
 
 
 def unit_bar(cells, total, glyphs):
@@ -519,6 +555,7 @@ def unit_bar(cells, total, glyphs):
     for i in range(max(0, total)):
         v = cells[i] if i < len(cells) else 0
         out.append(glyphs["fail"] if v == UNIT_FAIL else glyphs["run"] if v == UNIT_RUN
+                   else glyphs["warn"] if v == UNIT_WARN
                    else glyphs["pass"] if v == UNIT_PASS else glyphs["skip"] if v == UNIT_SKIP else PENDING)
     return out
 
@@ -579,6 +616,7 @@ class _Setup:
         self.ids = list(dict.fromkeys(ids))     # pom module ids, in reactor order, once each
         self.boxes = {i: None for i in self.ids}    # None while pending, else pass or fail
         self.t0 = t0
+        self.ended = False          # every box set, or its owner row ended: the row is permanent (spec 5.4)
 
     @property
     def total(self):
@@ -588,7 +626,13 @@ class _Setup:
     def done(self):
         return sum(1 for b in self.boxes.values() if b is not None)
 
+    @property
+    def failed(self):
+        return any(b == "fail" for b in self.boxes.values())
+
     def add(self, ids):
+        if self.ended:
+            return
         for i in dict.fromkeys(ids):
             if i not in self.boxes:
                 self.ids.append(i)
@@ -619,7 +663,14 @@ class _Row:
         self.totals = None
         self.modules = OrderedDict()
         self.order = []         # module ids, in the order their boxes were granted
-        self.notes = []         # (level, text), held until the row ends
+        self.notes = []         # (level, text), held until the row ends: info ones for the screen at `all`, warn
+                                # and error ones (full text) for the condensed log
+        self.warned = False     # a warn (or an error on a row that still ends ok) was attributed to it: ⚠ when ok
+        self.reason = None      # the newest warn or error text's first line, cut only when drawn
+        self.reason_level = None    # warn or error; an error reason is never replaced by a warn
+        self.hints = []         # lines printed beneath the row when it ends failed (spec 5.1)
+        self.held_failure = False   # failure text is among the hints: they print however the row ends
+        self.failed_mods = []   # titles of its failed modules, in failure order, for the row's text
         self.size = None        # reactor size N
         self.poms = set()
         self.tests_mode = False
@@ -655,6 +706,15 @@ class _Row:
         return view
 
 
+def _parent_pending():
+    """JUNEAU_RUN_PENDING as [(id, label)], or [] when it is unset or malformed."""
+    try:
+        value = json.loads(os.environ.get(PENDING_ENV) or "[]")
+        return [(str(i), str(label)) for i, label in value]
+    except (ValueError, TypeError):
+        return []
+
+
 class Board:
     """The run's state for the console view.  apply(kind, fields) returns the blocks that event produces."""
 
@@ -672,13 +732,78 @@ class Board:
         self.aliases = {}           # a run_tool sub-row's step id -> its parent row's id (parent=, release.py)
         self.setup = None           # the run's one Setup row (pom modules), owned by the first Maven row that has poms
         self.plan = None            # the planned top-level step ids, in order (spec 6), or None
+        self.plan_labels = {}       # planned step id -> label, for the ones that draw a pending row
+        self.parent_pending = _parent_pending() if nested else []     # a parent session's pending rows, (id, label)
+        self.finished = False       # the done event arrived: nothing is pending any more
         self.shown_end = None       # the Overall figure's projected end (session seconds) last displayed, held by damp_total
         self.plan_estimates = {}    # planned step id -> history wall_s or None, asked of the estimator once per plan
         self.session_t0 = self.t0   # when the session event arrived (the Overall figure's E)
 
     def width(self):
         env = os.environ.get(LABEL_WIDTH_ENV, "")
-        return max([int(env) if env.isdigit() else 10] + [len(r.label) for r in self.rows.values()])
+        return max([int(env) if env.isdigit() else 10] + [len(r.label) for r in self.rows.values()]
+                   + [len(label) for label in self.plan_labels.values()]
+                   + [len(label) for _, label in self.parent_pending])
+
+    def pending(self):
+        """The pending rows, as (id, label): the labelled planned steps that have not started, in plan order, then
+        a parent session's (JUNEAU_RUN_PENDING) that this one has no row or pending row for.  A planned step that a
+        later started one has passed over is not pending (as in overall())."""
+        if self.finished:
+            return []
+        out = []
+        if self.plan:
+            last = max((i for i, sid in enumerate(self.plan) if sid in self.rows), default=-1)
+            out = [(sid, self.plan_labels[sid]) for i, sid in enumerate(self.plan)
+                   if i > last and sid in self.plan_labels and sid not in self.rows]
+        have = set(self.rows) | {i for i, _ in out}
+        return out + [(i, label) for i, label in self.parent_pending if i not in have]
+
+    def setup_failed(self):
+        """The titles of the Setup row's failed pom modules, in reactor order."""
+        owner = self.rows.get(self.setup.row) if self.setup is not None else None
+        return [owner.modules[i].title if owner is not None and i in owner.modules else i
+                for i in self.setup.ids if self.setup.boxes[i] == "fail"] if self.setup is not None else []
+
+    def _end_setup(self):
+        """The Setup row goes permanent, once: when every pom box is set or its owner row ends."""
+        if self.setup is None or self.setup.ended:
+            return []
+        self.setup.ended = True
+        return [("setup",)]
+
+    def _setup_settled(self):
+        if self.setup is not None and self.setup.total and self.setup.done == self.setup.total:
+            return self._end_setup()
+        return []
+
+    def _attribute(self, step_id):
+        """The row a note, say, hint or failure belongs to: the step's (or its module's), else the newest running
+        row."""
+        if step_id:
+            r = self._target(step_id) or self.module_rows.get(step_id)
+            if r is not None:
+                return r
+        return self._latest_running()
+
+    def _hold(self, r, lines):
+        """Hint lines for r, less those a failure event already showed."""
+        r.hints += [line for line in lines if line.strip() not in self.failure_lines]
+
+    def _reason(self, r, level, text):
+        """A warn or error attributed to a running row: its first line is the row's reason (an error is never
+        replaced by a warn), an error's other lines are hints, and the row is warned."""
+        lines = text.splitlines()
+        first = next((i for i, line in enumerate(lines) if line.strip()), None)
+        r.warned = True
+        if first is None:
+            return
+        if level == "error" or r.reason_level != "error":
+            if level == "error" and r.reason_level == "error" and r.reason:
+                self._hold(r, [r.reason])     # an older error is not lost: it joins the hints
+            r.reason, r.reason_level = lines[first].strip(), level
+        if level == "error":
+            self._hold(r, lines[first + 1:])
 
     def running(self):
         return [r for r in self.rows.values() if r.running]
@@ -731,6 +856,7 @@ class Board:
 
     def _on_plan(self, f):
         self.plan = list(f["ids"])
+        self.plan_labels = dict(f.get("labels") or {})
         self.plan_estimates = {}
         return []
 
@@ -803,6 +929,7 @@ class Board:
             self.module_rows[f["module"]] = r
             if f["module"] in r.poms:     # a pom has no work to wait for; under -T its end only comes with the summary
                 self._setup_box(r, r.modules[f["module"]], "pass")
+                return self._setup_settled()
         return []
 
     def _on_reactor(self, f):
@@ -868,7 +995,7 @@ class Board:
         r.units_total += 1
         self._resize_cells(r)
 
-    OUTCOME_BYTE = {"pass": UNIT_PASS, "fail": UNIT_FAIL, "skip": UNIT_SKIP}     # anything else counts as a pass
+    OUTCOME_BYTE = {"pass": UNIT_PASS, "fail": UNIT_FAIL, "skip": UNIT_SKIP, "warn": UNIT_WARN}     # anything else: pass
 
     def _on_units(self, f):
         r = self._adopt(f["step"])
@@ -965,9 +1092,15 @@ class Board:
         failed = m.status == "fail" or bool(m.totals and m.totals[1] + m.totals[2])
         if m.dropped and (m.outcomes or (m.totals and m.totals[0])):
             self._undrop_unit(r, m)         # its totals arrived late: it did run tests
+        blocks = []
         if m.id in r.poms:      # a pom lives on the Setup row only, never in a bar's order
             m.box = "fail" if failed else "pass"
+            was_failed = self.setup is not None and self.setup.failed
             self._setup_box(r, m, m.box)
+            if self.setup is not None and self.setup.ended and self.setup.failed and not was_failed:
+                blocks = [("setup",)]     # it went permanent green at the pom's start: print it again, red
+            else:
+                blocks = self._setup_settled()
         else:
             if failed:
                 self._grant(r, m, "fail")
@@ -975,6 +1108,8 @@ class Board:
                 self._grant(r, m, "skip" if m.status == "skip" else "pass")
             # a module already boxed red (compile or test failure) stays a failed unit when finish() closes it as skip
             failed = failed or m.box == "fail"
+            if failed and m.title not in r.failed_mods:
+                r.failed_mods.append(m.title)
             if r.tests_mode and not failed and m.unit_index is None and not (m.outcomes or (m.totals and m.totals[0])):
                 self._drop_unit(r, m)       # ended without ever running a test (no module_tested, or a skipped module)
             else:
@@ -982,7 +1117,10 @@ class Board:
                 self._count_unit(r, m, "fail" if failed else "skip" if m.status == "skip" else
                                  self._tests_outcome(m) if tested else "pass")
         has_tests = bool(m.totals and m.totals[0])
-        return [("module", r, m)] if shows_module(self.detail, failed, has_tests) else []
+        # finished-module lines only at modules and all: below that a failed module is in its row's text (spec 5.1)
+        if self.detail in ("modules", "all") and shows_module(self.detail, failed, has_tests):
+            blocks.append(("module", r, m))
+        return blocks
 
     def _on_step_progress(self, f):
         r = self._target(f["step"])
@@ -1018,31 +1156,79 @@ class Board:
         for m in r.modules.values():   # never ended: it ran nothing we saw (close_children ends the open ones)
             if m.box is None and m.id not in r.poms:
                 self._grant(r, m, "fail" if "fail" in m.outcomes else "pass" if m.outcomes else "skip")
+                if m.box == "fail" and m.title not in r.failed_mods:
+                    r.failed_mods.append(m.title)
         if r.status == "fail" and self.failed_title is None:
             self.failed_title = r.label
-        notes = []
+        blocks = self._end_setup() if self.setup is not None and self.setup.row == r.id else []
+        blocks.append(("row", r))
+        hints = r.status not in ("ok", "skip") or r.held_failure or (r.unit_kind == "checks" and r.warned)
+        shown = {line.strip() for line in r.hints} if hints else set()
         for level, text in r.notes:
             kept = [line for line in text.splitlines() if line.strip() not in self.failure_lines]
-            if kept:
-                notes.append(("text", f"  {_NOTE_PREFIX[level]} " + "\n    ".join(kept)))
-        return [("row", r)] + notes
+            if level == "say":
+                blocks += [("text", "\n".join(kept))] if kept else []
+            elif level == "info":
+                blocks += [("text", f"    {_NOTE_PREFIX[level]} " + "\n      ".join(kept))] if kept else []
+            else:   # the full warn or error text, for the condensed log only (D6), less what the hints repeat
+                kept = kept[:1] + [line for line in kept[1:] if line.strip() not in shown]
+                blocks += [("logonly", f"    {_NOTE_PREFIX[level]} " + "\n      ".join(kept))] if kept else []
+        if hints and r.hints:
+            blocks.append(("hint", r, list(r.hints)))
+        return blocks
 
     def _on_note(self, f):
-        if not shows_note(self.detail, f["level"]):
-            return []
-        r = self._target(f.get("step")) or self.module_rows.get(f.get("step")) or self._latest_running()
+        """A warn or error note on a running row sets its reason and emits nothing (at every level: summary and
+        actionable look the same on screen); an info one is held for the row's end at `all` only.  With no running
+        row the note prints at once, filtered by the detail level."""
+        level = f["level"]
+        r = self._attribute(f.get("step"))
         if r is not None and r.running:
-            r.notes.append((f["level"], f["text"]))
+            if level != "info":
+                self._reason(r, level, f["text"])
+                r.notes.append((level, f["text"]))
+            elif shows_note(self.detail, level):
+                r.notes.append((level, f["text"]))
             return []
-        line = f"{_NOTE_PREFIX[f['level']]} {f['text']}"
-        return [("text", "  " + line if r is not None else line)]
+        if not shows_note(self.detail, level):
+            return []
+        line = f"{_NOTE_PREFIX[level]} {f['text']}"
+        return [("text", "    " + line if r is not None else line)]
 
     def _on_failure(self, f):
-        self.failure_lines.update(line.strip() for line in f["text"].splitlines())
+        """Failure text: held in the running row's hints (it prints when the row ends), else printed at once."""
+        lines = f["text"].splitlines()
+        new = {line.strip() for line in lines}
+        self.failure_lines.update(new)
+        r = self._attribute(f.get("step"))
+        if r is not None and r.running:
+            r.hints = [line for line in r.hints if line.strip() not in new] + lines
+            r.held_failure = True
+            return []
         return [("text", f["text"])]
 
+    def _on_hint(self, f):
+        """Hint lines: held on the running row (beneath it when it ends failed), else printed at once."""
+        r = self._attribute(f.get("step"))
+        if r is not None and r.running:
+            self._hold(r, f["lines"])
+            return []
+        lines = [line for line in f["lines"] if line.strip() not in self.failure_lines]
+        return [("hint", None, lines)] if lines else []
+
     def _on_say(self, f):
-        return [("text", f["text"])] if shows_note(self.detail, f["level"]) else []
+        """A say is a note on the running row (warn and error set its reason, info is held at `all`), else printed
+        at once, filtered by the detail level."""
+        level = f["level"]
+        r = self._attribute(f.get("step"))
+        if r is not None and r.running:
+            if level != "info":
+                self._reason(r, level, f["text"])
+                r.notes.append((level, f["text"]))
+            elif shows_note(self.detail, level):
+                r.notes.append(("say", f["text"]))
+            return []
+        return [("text", f["text"])] if shows_note(self.detail, level) else []
 
     def _on_ask(self, f):
         return [("logonly", f"{f['prompt']}{f['answer']}")]
@@ -1066,14 +1252,49 @@ class Board:
         return []
 
     def _on_done(self, f):
+        self.finished = True
         if self.nested:
             return []
         return [("final", f["status"], int((self.clock() - self.t0) * 1000), self.failed_title, self.full_log)]
 
 
-def row_cells(row, glyphs, now, pending=False):
-    """A step row as (cells, rest, elapsed): its bar's cells (None when it has no bar), the count and totals text
-    after the bar, and the elapsed time.  Elapsed is empty under a second, so instant rows (Install) show none."""
+def row_state(row):
+    """running, ok, warn, skip or fail (spec 5.2): fail wins; a skip is always skip; ok with a warn is warn."""
+    if row.running:
+        return "running"
+    if row.status == "skip":
+        return "skip"
+    if row.status == "ok":
+        return "warn" if row.warned else "ok"
+    return "fail"
+
+
+def icon(state, now=0.0, color=False):
+    """The glyph for a row state (or "pending"): the spinner frame for `now` while running.  color adds its SGR."""
+    if state == "running":
+        glyph = SPINNER[int(now / LiveRenderer.REDRAW_SECONDS) % len(SPINNER)]
+    else:
+        glyph = ICONS[state]
+    return f"{_ICON_COLORS[state]}{glyph}\x1b[0m" if color else glyph
+
+
+def row_icon(row, now, color):
+    """The row's icon: a spinner (cyan) while it runs, then ✔ (green), ⚠ (yellow), ⊘ (dim) or ✗ (red)."""
+    return icon(row_state(row), now, color)
+
+
+def _failed_text(row, expected):
+    """A row with failed modules: `N failed: <first> [+N-1]`, or in tests mode the totals and `: <first> [+N-1]`."""
+    names = row.failed_mods[0] + (f" +{len(row.failed_mods) - 1}" if len(row.failed_mods) > 1 else "")
+    totals = fmt_totals(row.totals, False, expected) if row.tests_mode else ""
+    return f"{totals}: {names}" if totals else f"{len(row.failed_mods)} failed: {names}"
+
+
+def row_text(row, glyphs, now, pending=False):
+    """A step row as (cells, count, text, elapsed, cut): its bar's cells (None when it has no bar), the count and
+    percent after the bar, one text (the failed modules, else the reason, else the summary or totals), the elapsed
+    time, and whether text may be cut to fit (a reason or failed-module text).  Elapsed is empty under a second, so
+    instant rows (Install) show none."""
     cells, parts = None, []
     # A module row can carry a unit bar too, hence the `row.modules` test below.  A unit bar's PENDING cells also
     # show on a finished row whose units did not all report.
@@ -1098,10 +1319,25 @@ def row_cells(row, glyphs, now, pending=False):
         if elapsed:
             elapsed = timer_text(ms / 1000, total)
     expected = row.estimate.tests if row.running and row.estimate is not None else None
-    text = row.summary if row.summary is not None else fmt_totals(row.totals, row.tests_mode and not row.running, expected)
-    if text:
-        parts.append(text)
-    return cells, "  ".join(parts), elapsed
+    cut = True
+    if row.failed_mods:
+        text = _failed_text(row, expected)
+    elif row.reason:
+        text = row.reason
+    else:
+        cut = False
+        text = row.summary if row.summary is not None else fmt_totals(row.totals, row.tests_mode and not row.running,
+                                                                       expected)
+        if row.status == "skip" and text and text.startswith("(") and text.endswith(")"):
+            text = text[1:-1]       # "⊘ Install    done by Tests"
+    return cells, "  ".join(parts), text or "", elapsed, cut
+
+
+def row_cells(row, glyphs, now, pending=False):
+    """A step row as (cells, rest, elapsed): its bar's cells (None when it has no bar), the count and text after the
+    bar (row_text), and the elapsed time."""
+    cells, count, text, elapsed, _ = row_text(row, glyphs, now, pending)
+    return cells, "  ".join(p for p in (count, text) if p), elapsed
 
 
 def row_parts(row, glyphs, now, pending=False):
@@ -1110,19 +1346,48 @@ def row_parts(row, glyphs, now, pending=False):
     return ("  ".join(p for p in ("".join(cells), rest) if p) if cells is not None else rest), elapsed
 
 
+def row_label(row, width, now, color=False):
+    """The row's label column: its icon, a space and the label padded to width."""
+    return f"{row_icon(row, now, color)} {row.label.ljust(width)}"
+
+
+def pending_line(label, color=False):
+    """A planned step that has not started: a dim ○ and its label."""
+    return f"\x1b[2m○ {label}\x1b[0m" if color else f"○ {label}"
+
+
 def module_line(mod, glyphs, now):
     ms = mod.ms if mod.ms is not None else int((now - mod.t0) * 1000)
     tests = fmt_totals(mod.totals)
-    return f"  {glyphs[mod.box or 'pass']} {mod.title}  {fmt_elapsed(ms)}" + (f"  {tests}" if tests else "")
+    return f"    {glyphs[mod.box or 'pass']} {mod.title}  {fmt_elapsed(ms)}" + (f"  {tests}" if tests else "")
 
 
-def setup_line(board, glyphs, cols=None):
-    """The Setup row as a line: the label column, one box per pom module and the totals text."""
+def hint_lines(block):
+    """A hint block's lines: indented under the row's label when it belongs to a row, else as given."""
+    _, row, lines = block
+    return [("    " + line if row is not None else line) for line in lines]
+
+
+def setup_line(board, glyphs, cols=None, now=0.0, color=False):
+    """The Setup row as a line: its icon (a spinner until every pom box is set or its owner ends, then ✔ or ✗), the
+    label column, one box per pom module, and the totals text or, when a pom failed, `N failed: <pom>`."""
     setup = board.setup
-    label = "Setup".ljust(board.width())
+    state = "running" if not setup.ended else "fail" if setup.failed else "ok"
+    label = f"{icon(state, now, color)} {'Setup'.ljust(board.width())}"
+    failed = board.setup_failed()
+    text = (f"{len(failed)} failed: {failed[0]}" + (f" +{len(failed) - 1}" if len(failed) > 1 else "")
+            if failed else setup_text(setup))
     if cols is None:
-        return label + "  " + "".join(setup_cells(setup, glyphs)) + "  " + setup_text(setup)
-    return _fit_row(label, setup_cells(setup, glyphs), setup_text(setup), "", cols)
+        return label + "  " + "".join(setup_cells(setup, glyphs)) + "  " + text
+    return _fit_row(label, setup_cells(setup, glyphs), text, "", cols)
+
+
+def _cut_text(text, room, minimum=12):
+    """text cut with an ellipsis to fit room columns, but never below minimum (the bar gives way after that)."""
+    if _vlen(text) <= room:
+        return text
+    keep = max(room, min(minimum, _vlen(text)))
+    return _vcut(text, max(0, keep - 1)) + "…" if keep >= 1 else ""
 
 
 class PlainRenderer:
@@ -1136,7 +1401,6 @@ class PlainRenderer:
         self.clock = clock
         self.last_beat = clock()
         self.prompting = False      # the last write left a watchdog prompt's partial line (Console._close_screen)
-        self.setup_printed = False  # the Setup line goes out once, with its owning row
 
     def _write(self, text):
         self.write(text)
@@ -1148,11 +1412,13 @@ class PlainRenderer:
             if kind in ("header", "text"):
                 self._write(block[1] + "\n")
             elif kind == "row":
-                if board.setup is not None and board.setup.row == block[1].id and not self.setup_printed:
-                    self.setup_printed = True
-                    self._write(setup_line(board, self.glyphs) + "\n")
                 text, elapsed = row_parts(block[1], self.glyphs, self.clock())
-                self._write("  ".join(p for p in (block[1].label.ljust(board.width()), text, elapsed) if p) + "\n")
+                label = row_label(block[1], board.width(), self.clock())
+                self._write("  ".join(p for p in (label, text, elapsed) if p) + "\n")
+            elif kind == "setup":
+                self._write(setup_line(board, self.glyphs) + "\n")
+            elif kind == "hint":
+                self._write("".join(line + "\n" for line in hint_lines(block)))
             elif kind == "module":
                 self._write(module_line(block[2], self.glyphs, self.clock()) + "\n")
             elif kind == "raw":
@@ -1305,7 +1571,6 @@ class LiveRenderer:
     REDRAW_SECONDS, and never taller than the terminal's rows minus 2."""
 
     REDRAW_SECONDS = 0.1
-    MAX_SUB_LINES = 3
 
     def __init__(self, write, size=shutil.get_terminal_size, clock=time.monotonic, color=True):
         self.write = write
@@ -1342,9 +1607,11 @@ class LiveRenderer:
             elif kind in ("header", "text"):
                 lines.append(block[1])
             elif kind == "row":
-                if board.setup is not None and board.setup.row == block[1].id:
-                    lines.append(setup_line(board, self.glyphs, self.size().columns - 1))
                 lines.append(self._row(board, block[1], self.size().columns - 1))
+            elif kind == "setup":
+                lines.append(setup_line(board, self.glyphs, self.size().columns - 1, self.clock(), self.color))
+            elif kind == "hint":
+                lines += hint_lines(block)
             elif kind == "module":
                 lines.append(module_line(block[2], self.glyphs, self.clock()))
             elif kind == "final":
@@ -1354,12 +1621,18 @@ class LiveRenderer:
         self._draw(force=bool(blocks))
 
     def _row(self, board, r, cols, pending=False):
-        cells, rest, elapsed = row_cells(r, self.glyphs, self.clock(), pending)
+        now = self.clock()
+        cells, count, text, elapsed, cut = row_text(r, self.glyphs, now, pending)
+        label = row_label(r, board.width(), now, self.color)
+        if cut and text:    # a reason gives way (cut with …) before the bar does
+            used = _vlen(label) + (2 + len(cells) if cells is not None else 0) + (2 + _vlen(count) if count else 0)
+            text = _cut_text(text, cols - (len(elapsed) + 2 if elapsed else 0) - used - 2)
+        rest = "  ".join(p for p in (count, text) if p)
         if pending and r.quiet:
             rest += f" · quiet {r.quiet}s"
-        if r.running and r.progress and not r.unit_kind:
+        if r.running and r.progress and (not r.unit_kind or r.unit_kind == "checks"):
             rest = f"{rest} · {r.progress}" if rest else r.progress
-        return _fit_row(r.label.ljust(board.width()), cells, rest, elapsed, cols, wrap=bool(r.unit_kind))
+        return _fit_row(label, cells, rest, elapsed, cols, wrap=bool(r.unit_kind))
 
     def _flush(self, lines):
         if lines:
@@ -1374,6 +1647,9 @@ class LiveRenderer:
         self._draw()
 
     def region(self, board, cols, max_lines):
+        """Overall, the running rows in start order (each with its Setup row and sub-lines), then the pending rows in
+        plan order.  When it is taller than max_lines the pending rows fold first (into "○ +N more pending", kept
+        while anything is pending), then the module sub-lines (+N more running), then the bottom is cut."""
         running = board.running()
         inflight = [(r, m) for r in running for m in r.modules.values() if m.in_progress and m.id not in r.poms]
         subs = [(r, m) for r, m in inflight if m.outcomes or m.totals]
@@ -1382,40 +1658,51 @@ class LiveRenderer:
             names = [m.title for owner, m in inflight if owner is r and not (m.outcomes or m.totals)]
             if names:
                 prefix = common_prefix([m.title for m in r.modules.values() if m.id not in r.poms])
-                collapsed[r.id] = "  " + collapse_names([t[len(prefix):] or t for t in names], cols)
+                collapsed[r.id] = "    " + collapse_names([t[len(prefix):] or t for t in names], cols - 2)
         blocks = {id(m): self._sub_lines(m, cols) for _, m in subs}
-        owner_running = board.setup is not None and any(r.id == board.setup.row for r in running)
+        setup_running = (board.setup is not None and not board.setup.ended
+                         and any(r.id == board.setup.row for r in running))
         overall = board.overall()
-        row_text = {r.id: self._row(board, r, cols, pending=True) for r in running}
-        row_lines = sum(t.count("\n") + 1 for t in row_text.values())     # a wrapped unit bar spans several lines
-        budget = max_lines - row_lines - len(collapsed) - (1 if owner_running else 0) - (1 if overall else 0)
+        row_text_ = {r.id: self._row(board, r, cols, pending=True) for r in running}
+        row_lines = sum(t.count("\n") + 1 for t in row_text_.values())     # a wrapped unit bar spans several lines
+        fixed = row_lines + len(collapsed) + (1 if setup_running else 0) + (1 if overall else 0)
+        pending = board.pending()
+        shown = len(pending)
+        if pending and fixed + sum(len(b) for b in blocks.values()) + shown > max_lines:
+            shown = max(0, max_lines - fixed - sum(len(b) for b in blocks.values()) - 1)
+            if shown + 1 >= len(pending):
+                shown = len(pending)
+        pending_lines = [_vcut(pending_line(label, self.color), cols) for _, label in pending[:shown]]
+        if shown < len(pending):
+            pending_lines.append(pending_line(f"+{len(pending) - shown} more pending", self.color))
+        budget = max_lines - fixed - len(pending_lines)
         folded = {}
         while subs and sum(len(blocks[id(m)]) for _, m in subs) + len(folded) > budget:
             r, _ = subs.pop(0)
             folded[r.id] = folded.get(r.id, 0) + 1
         lines = [_vcut(overall_text(overall), cols)] if overall else []
         for r in running:
-            if board.setup is not None and board.setup.row == r.id:
-                lines.append(setup_line(board, self.glyphs, cols))
-            lines.append(row_text[r.id])
+            if setup_running and board.setup.row == r.id:
+                lines.append(setup_line(board, self.glyphs, cols, self.clock(), self.color))
+            lines.append(row_text_[r.id])
             if r.id in collapsed:
                 lines.append(collapsed[r.id])
             if r.id in folded:
-                lines.append(f"  +{folded[r.id]} more running")
+                lines.append(f"    +{folded[r.id]} more running")
             lines += [line for owner, m in subs if owner is r for line in blocks[id(m)]]
+        lines += pending_lines
         return [part for line in lines for part in line.split("\n")][:max(1, max_lines)]
 
     def _sub_lines(self, m, cols):
-        prefix = f"  {_vcut(m.title, max(1, cols // 2))}  "
+        """One line per module: the newest dots that fit, behind a "… +N " prefix counting the ones dropped."""
+        prefix = f"    {_vcut(m.title, max(1, cols // 2))}  "
         per = max(1, cols - _vlen(prefix))
         cells = [self.dots[o] for o in m.outcomes]
-        cap = per * self.MAX_SUB_LINES
-        if len(cells) > cap:
+        if len(cells) > per:
             width = len(f"… +{len(cells)} ")
-            keep = max(1, cap - width)
+            keep = max(1, per - width)
             cells = list(f"… +{len(cells) - keep} ".ljust(width)) + cells[-keep:]
-        chunks = [cells[i:i + per] for i in range(0, len(cells), per)] or [[]]
-        return [(prefix if i == 0 else " " * _vlen(prefix)) + "".join(c) for i, c in enumerate(chunks)]
+        return [prefix + "".join(cells)]
 
     def _draw(self, force=False):
         if self.closed or self.paused or self.prompting or self.board is None:
@@ -1526,6 +1813,8 @@ class Console:
 
     def __call__(self, kind, fields):
         owned = not self.stopped    # say() and failure() left this event's text to the view
+        if kind in self._FULL_TEXT:
+            self._append_full(kind, fields)
         if self.board_failed:
             self._plain(kind, fields, self._final_blocks(kind, fields), owned)
             return
@@ -1551,6 +1840,25 @@ class Console:
                 self.log = None
                 self._note(f"⚠ condensed log stopped ({e!r})")
         self._plain(kind, fields, unshown, owned)
+
+    # The script text each event carries, as the full log gets it: every level, whatever the view shows (spec 5.1).
+    _FULL_TEXT = {
+        "say": lambda f: f["text"],
+        "note": lambda f: f"{_NOTE_PREFIX.get(f['level'], '')} {f['text']}",
+        "hint": lambda f: "\n".join(f["lines"]),
+        "failure": lambda f: f["text"],
+    }
+
+    def _append_full(self, kind, fields):
+        """Append the event's text to the session's full log, best-effort: never a reason to fail the run."""
+        if self.sinks.full_path is None:
+            return
+        try:
+            text = self._FULL_TEXT[kind](fields)
+            with open(self.sinks.full_path, "ab") as f:
+                f.write((text + "\n").encode("utf-8", errors="replace"))
+        except (OSError, TypeError, KeyError):
+            pass
 
     def tick(self):
         if self.screen is not None:
@@ -1703,12 +2011,15 @@ def session(title, header=(), *, detail=None, sinks=None, repo="."):
 
 
 def plan(ids):
-    """Declare the planned top-level step ids, in order, for the Overall figure (spec 6.1).  Replaces any earlier
-    plan; a duplicate id raises ValueError."""
-    ids = list(ids)    # validated here as well as in Session.plan so a bad plan fails in a plain run, not only under a view
+    """Declare the planned top-level steps, in order, for the Overall figure (spec 6.1).  Each entry is a step id, or
+    (id, label): a labelled step draws as a dim pending row (○) until it starts; an unlabelled one only counts toward
+    Overall.  Replaces any earlier plan; a duplicate id raises ValueError."""
+    entries = [e if isinstance(e, str) else tuple(e) for e in ids]
+    ids = [e if isinstance(e, str) else e[0] for e in entries]
+    # validated here as well as in Session.plan so a bad plan fails in a plain run, not only under a view
     if len(set(ids)) != len(ids):
         raise ValueError("duplicate step id in plan: " + ", ".join(sorted({i for i in ids if ids.count(i) > 1})))
-    publish("plan", ids=ids)
+    publish("plan", ids=ids, labels={e[0]: e[1] for e in entries if not isinstance(e, str) and e[1]})
 
 
 def _end_session():
@@ -1831,12 +2142,17 @@ def passthrough(cmd, step_id, title, *, n=None, parent=None, cwd=None, env=None,
 @contextmanager
 def handoff():
     """Give the terminal to a child session (push.py running test.py) for the block.  Yields the env the child needs
-    so its rows line up with ours (label width, detail level); empty with no session."""
+    so its rows line up with ours (label width, detail level) and our pending rows stay visible under its own
+    (JUNEAU_RUN_PENDING); empty with no session."""
     if _console is None:
         yield {}
         return
+    env = {LABEL_WIDTH_ENV: str(_console.board.width()), DETAIL_ENV: _console.board.detail}
+    pending = list(_console.board.pending())
+    if pending:
+        env[PENDING_ENV] = json.dumps([[i, label] for i, label in pending])
     with _paused():
-        yield {LABEL_WIDTH_ENV: str(_console.board.width()), DETAIL_ENV: _console.board.detail}
+        yield env
 
 
 # ---------------------------------------------------------------------------------------------------------------------

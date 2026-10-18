@@ -174,7 +174,13 @@ class PlanApiTest(unittest.TestCase):
         seen = []
         jr.subscribe(lambda kind, f: seen.append((kind, f)))
         jr.plan(("a", "b"))
-        self.assertEqual(seen, [("plan", {"ids": ["a", "b"]})])
+        self.assertEqual(seen, [("plan", {"ids": ["a", "b"], "labels": {}})])
+
+    def test_plan_publishes_labels_for_labelled_entries(self):
+        seen = []
+        jr.subscribe(lambda kind, f: seen.append((kind, f)))
+        jr.plan(["a", ("b", "Build")])
+        self.assertEqual(seen, [("plan", {"ids": ["a", "b"], "labels": {"b": "Build"}})])
 
     def test_session_plan_duplicate_raises_in_plain_mode(self):
         import sys

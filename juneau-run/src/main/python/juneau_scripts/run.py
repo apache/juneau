@@ -25,12 +25,15 @@ import time
 from types import MappingProxyType
 
 from . import _base, git, notify
+from . import checks as _checks
 from ._base import Result
 
 ACTIVE_ENV = "JUNEAU_RUN_ACTIVE"
 SESSION_ENV = "JUNEAU_RUN_SESSION"
 PUSH_ACTIVE_ENV = "JUNEAU_PUSH_ACTIVE"
 N_BASE_ENV = "JUNEAU_RUN_N_BASE"
+CONSOLE_ENV = "JUNEAU_RUN_CONSOLE"
+CONSOLE_MODES = ("full", "condensed", "none")
 PROTOCOL_ENV = ("RUN_MARKERS", "RUN_ARTIFACTS")
 # The gate-script contract (Juneau scripts/push.py:405-413 at HEAD): 0 pass, 2 fail, 3 skip.  Not pytest's.
 GATE_CODES = MappingProxyType({0: "pass", 2: "fail", 3: "skip"})
@@ -66,6 +69,30 @@ def console_requested():
     return jr is not None and not jr.Sinks().is_default
 
 
+def export_console(flag=None, *, default="condensed"):
+    """Resolve the console mode and export it as JUNEAU_RUN_CONSOLE, so the session and child scripts use it: flag
+    (the --console value, None when not given), else JUNEAU_RUN_CONSOLE, else default.  Call it before session().
+    An unknown mode raises ValueError.  Returns the mode."""
+    value = flag or os.environ.get(CONSOLE_ENV) or default
+    if value not in CONSOLE_MODES:
+        raise ValueError(f"console must be one of {', '.join(CONSOLE_MODES)}, not {value!r}")
+    os.environ[CONSOLE_ENV] = value
+    return value
+
+
+def add_console_argument(parser):
+    """Add --console {full,condensed,none} (default None, so export_console(args.console) applies the precedence)."""
+    parser.add_argument("--console", choices=CONSOLE_MODES, default=None,
+                        help="console output: full, condensed or none (also JUNEAU_RUN_CONSOLE; the flag wins)")
+
+
+def paused():
+    """jr.paused() when juneau_run is loaded: the console view is cleared for the block, so a prompt or an
+    interactive child isn't drawn over.  A no-op context otherwise."""
+    jr = _base.jr()
+    return jr.paused() if jr is not None else contextlib.nullcontext()
+
+
 def say(text="", level="info", *, step=None):
     """print() in a plain run; jr.say under markers or the console (a filtered note when the view owns the screen)."""
     jr = _base.jr()
@@ -83,8 +110,12 @@ class _NullStep:
     def fail(self, exit=None):  # NOSONAR python:S5806 - mirrors juneau_run.Step.fail
         pass
 
-    def skip(self):
+    def skip(self, reason=None):
         pass
+
+    def warn(self, text):
+        """Mirrors juneau_run.Step.warn: in a plain run the text is printed."""
+        print(f"⚠ {text}", flush=True)
 
 
 @contextlib.contextmanager
@@ -202,6 +233,79 @@ def child_env(*, strip_protocol=True, keep=("JUNEAU_RUN_PY",)):
     return env
 
 
+@dataclasses.dataclass(frozen=True)
+class CheckResult:
+    """checks()'s answer: ok is False when a check failed (never in a dry run); verdicts maps each check's name to
+    its checks.Verdict, in check order."""
+    ok: bool
+    verdicts: dict
+
+
+_VERDICT_ICON = {"pass": "✔", "warn": "⚠", "fail": "✗"}
+
+
+def checks(id, title, checks, *, label="Prechecks", n=None, dry_run=False):  # NOSONAR python:S5806 - mirrors step()
+    """
+    Run gate checks (juneau_scripts.checks.Check) as one step: one bar cell per check (green pass, yellow warn, red
+    fail), the running check's name as the row's progress, and when any check fails or warns the row's reason (the
+    first one's, plus " +N" for the others) and every hint beneath the row, each headed "<name>: ".  Every check runs,
+    even after a failure.  A check that raises fails with "could not check <name>: <error>".  A failure fails the
+    row.  With dry_run each fail is a warn whose reason starts "would refuse: ", the hints still print, and the
+    result is ok.
+
+    The step is one marker step with a note per warn or fail.  Without a console view (a plain run, markers, or
+    --console full) each check prints a line instead: "✔ <name>", "⚠ <name>: <reason>" or "✗ <name>: <reason>",
+    then the hints.  Returns CheckResult(ok, verdicts).
+    """
+    checks = list(checks)
+    _base.remember(title)
+    with step(id, title, n=n, label=label) as st:
+        result = drive_checks(id, st, checks, dry_run=dry_run)
+    return result
+
+
+def drive_checks(id, st, checks, *, dry_run=False):  # NOSONAR python:S5806 - mirrors step()
+    """The body of checks() for a step that is already open (id, and st the step it yielded): runs the checks on
+    its row, fails st when one fails, and returns the CheckResult.  Registry.checks uses it."""
+    jr = _base.jr()
+    verdicts = {}
+    if jr is None:
+        verdicts = {c.name: _checks.evaluate(c, dry_run=dry_run) for c in checks}
+        _print_verdicts(verdicts)
+    else:
+        jr.publish("units", step=id, total=len(checks), kind="checks")
+        for i, c in enumerate(checks):
+            jr.publish("step_progress", step=id, text=c.name)
+            jr.tick()
+            v = verdicts[c.name] = _checks.evaluate(c, dry_run=dry_run)
+            jr.publish("unit", step=id, done=i + 1, outcome=v.status)
+            if v.status != "pass":
+                jr.emit("note", level="error" if v.status == "fail" else "warn",
+                        text=f"{c.name}: {v.reason or 'failed'}", href=None, step=id)
+            jr.tick()
+    level, reason, hint = _checks.summary(verdicts)
+    if jr is not None and not jr.console_active():
+        _print_verdicts(verdicts)
+    elif jr is not None and level is not None:
+        jr.publish("note", level=level, text=reason, href=None, step=id)
+        if hint:
+            jr.publish("hint", step=id, lines=list(hint))
+    if level == "error":
+        st.fail()
+    return CheckResult(level != "error", verdicts)
+
+
+_run_checks = checks     # Session.checks's parameter of the same name hides it
+
+
+def _print_verdicts(verdicts):
+    for name, v in verdicts.items():
+        say(f"{_VERDICT_ICON[v.status]} {name}" + (f": {v.reason}" if v.status != "pass" and v.reason else ""),
+            "info" if v.status == "pass" else "warn" if v.status == "warn" else "error")
+    for line in _checks.summary(verdicts)[2]:
+        say(f"  {line}", "error")
+
+
 class _SessionFailed(BaseException):
     """Raised by Session.fail; only session() catches it.  BaseException, so a script's `except Exception` can't
     swallow it."""
@@ -216,23 +320,39 @@ class Session:
         self.code = None
 
     def plan(self, ids):
-        """Declare (or replace) the planned top-level step ids, in order, for the Overall figure.  Does nothing in a
-        plain run."""
-        ids = list(ids)
+        """Declare (or replace) the planned top-level steps, in order, for the Overall figure.  Each entry is a step
+        id, or (id, label): a labelled step draws as a dim pending row until it starts.  Does nothing in a plain
+        run."""
+        entries = [e if isinstance(e, str) else tuple(e) for e in ids]
+        ids = [e if isinstance(e, str) else e[0] for e in entries]
         # validated here even in a plain run (where jr is None) so a bad plan fails the same way everywhere
         if len(set(ids)) != len(ids):
             raise ValueError("duplicate step id in plan: " + ", ".join(sorted({i for i in ids if ids.count(i) > 1})))
         jr = _base.jr()
         if jr is not None:
-            jr.plan(ids)
+            jr.plan(entries)
 
     def fail(self, msg, *, hint=None):
         """Print msg verbatim (level error), then the hint lines, and end the session as failed.  msg is required
-        (Decision Q5): a failure always says why."""
+        (Decision Q5): a failure always says why.  The hint goes out as a hint event, which every detail level
+        shows: beneath the running row when there is one, else at once."""
         say(msg, "error")
-        for line in [hint] if isinstance(hint, str) else hint or ():
-            say(line)
+        lines = [hint] if isinstance(hint, str) else list(hint or ())
+        jr = _base.jr()
+        if jr is None:
+            for line in lines:
+                print(line, flush=True)
+        elif lines:
+            jr.hint(lines)
         raise _SessionFailed
+
+    def checks(self, id, title, checks, **kwargs):  # NOSONAR python:S5806 - mirrors run.checks
+        """run.checks(...), and on a failure (never in a dry run) end the session failed with no further message:
+        the row already says why."""
+        result = _run_checks(id, title, checks, **kwargs)
+        if not result.ok:
+            raise _SessionFailed
+        return result
 
     def require(self, result, msg=None, *, hint=None):
         """result when result.ok (a skipped gate is ok); otherwise fail with msg or a default naming the last step."""

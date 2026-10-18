@@ -14,6 +14,7 @@
 
 import contextlib
 import io
+import json
 import os
 import re
 import shlex
@@ -138,7 +139,7 @@ class BoardTest(unittest.TestCase):
         self.assertEqual(b.rows["py"].progress, "52% \u00b7 test_foo.py")
         blocks = feed(b, ("step_end", {"id": "py", "status": "ok", "ms": 2000, "exit": None, "summary": "3 passed",
                                        "totals": None}))
-        self.assertEqual(plain(b, blocks, self.clock), "Python".ljust(10) + "  3 passed  0:02\n")
+        self.assertEqual(plain(b, blocks, self.clock), "✔ " + "Python".ljust(10) + "  3 passed  0:02\n")
         self.assertIsNone(b.rows["py"].progress)
 
     def test_a_sub_rows_step_end_clears_the_progress_it_put_on_its_parent_row(self):
@@ -169,23 +170,25 @@ class BoardTest(unittest.TestCase):
         self.assertEqual(blocks, [])
         blocks = feed(b, ("step_end", {"id": "bom", "status": "ok", "ms": 2000, "exit": None,
                                        "summary": "73 modules", "totals": None}))
-        self.assertEqual(plain(b, blocks, self.clock), "BOM".ljust(10) + "  73 modules  0:02\n")
+        self.assertEqual(plain(b, blocks, self.clock), "✔ " + "BOM".ljust(10) + "  73 modules  0:02\n")
 
     def test_elapsed_under_a_second_is_left_off(self):
         b = self.board()
         blocks = feed(b, ("step_start", {"id": "install", "n": 7, "title": "Install", "parent": None}),
                       ("step_end", {"id": "install", "status": "ok", "ms": 3, "exit": None,
                                     "summary": "(done by Tests)", "totals": None}))
-        self.assertEqual(plain(b, blocks, self.clock), "Install".ljust(10) + "  (done by Tests)\n")
+        self.assertEqual(plain(b, blocks, self.clock), "✔ " + "Install".ljust(10) + "  (done by Tests)\n")
 
     def test_tests_mode_boxes_and_the_failed_module_keeps_its_sub_row(self):
         b = self.board()
         blocks = feed(b, *maven_events())
-        self.assertEqual(plain(b, blocks, self.clock), "  F Mod B  0:02  10 tests, 2 failed\n")
+        # Setup finishes once every pom box is set; actionable prints no module line (the row's text names it)
+        self.assertEqual(plain(b, blocks, self.clock), "✔ " + "Setup".ljust(10) + "  #  1 pom module\n")
         blocks = feed(b, ("step_end", {"id": "tests", "status": "fail", "ms": 161000, "exit": 1, "summary": None,
                                        "totals": {"total": 7149, "fail": 2, "err": 0, "skip": 0}}))
-        # the pom parent left the bar for the Setup row, so the bar counts the two real modules (spec 2.1)
-        self.assertEqual(plain(b, blocks, self.clock), "Setup".ljust(10) + "  #  1 pom module\n" + "Tests".ljust(10) + "  #F  2/2  7,149 tests, 2 failed  2:41\n")
+        # the pom parent left the bar for the Setup row, so the bar counts the two real modules
+        self.assertEqual(plain(b, blocks, self.clock),
+                         "✗ " + "Tests".ljust(10) + "  #F  2/2  7,149 tests, 2 failed: Mod B  2:41\n")
         self.assertEqual(b.failed_title, "Tests")
 
     def test_compile_mode_boxes_come_from_module_compiled(self):
@@ -193,10 +196,11 @@ class BoardTest(unittest.TestCase):
         events = [e for e in maven_events("build", tests_mode=False) if e[0] != "module_tested"]
         events[0] = ("step_start", {"id": "build", "n": 3, "title": "Build", "parent": None, "label": "Compile"})
         events.insert(12, ("module_compiled", {"step": "build", "module": "build/b", "ok": False}))
-        feed(b, *events)
-        blocks = feed(b, ("step_end", {"id": "build", "status": "fail", "ms": 36000, "exit": 1, "summary": None,
-                                       "totals": None}))
-        self.assertEqual(plain(b, blocks, self.clock), "Setup".ljust(10) + "  #  1 pom module\n" + "Compile".ljust(10) + "  #F  2/2  0:36\n")
+        blocks = feed(b, *events)
+        blocks += feed(b, ("step_end", {"id": "build", "status": "fail", "ms": 36000, "exit": 1, "summary": None,
+                                        "totals": None}))
+        self.assertEqual(plain(b, blocks, self.clock), "✔ " + "Setup".ljust(10) + "  #  1 pom module\n"
+                         + "✗ " + "Compile".ljust(10) + "  #F  2/2  1 failed: Mod B  0:36\n")
 
     def test_a_module_that_compiled_green_turns_red_on_a_later_error(self):
         b = self.board()
@@ -227,11 +231,16 @@ class BoardTest(unittest.TestCase):
         self.assertEqual(feed(b, ("note", {"level": "warn", "text": "careful", "step": "tests"}),
                               ("note", {"level": "error", "text": "Bad.java:[1,21] incompatible types",
                                         "step": "tests"})), [])
-        self.assertEqual(feed(b, ("failure", {"text": "Bad.java:[1,21] incompatible types", "step": "tests"})),
-                         [("text", "Bad.java:[1,21] incompatible types")])
+        # failure text on a running row is held and goes out beneath it, replacing the error's identical line
+        self.assertEqual(feed(b, ("failure", {"text": "Bad.java:[1,21] incompatible types", "step": "tests"})), [])
         blocks = feed(b, ("step_end", {"id": "tests", "status": "fail", "ms": 0, "exit": 1, "summary": "x",
                                        "totals": None}))
-        self.assertEqual(blocks[1:], [("text", "  ⚠ careful")])
+        r = b.rows["tests"]
+        self.assertEqual((r.reason, r.reason_level), ("Bad.java:[1,21] incompatible types", "error"))
+        self.assertEqual(blocks[0], ("row", r))
+        self.assertIn(("logonly", "    ⚠ careful"), blocks)
+        hints = [blk for blk in blocks if blk[0] == "hint"]
+        self.assertEqual(hints, [("hint", r, ["Bad.java:[1,21] incompatible types"])])
 
     def test_a_note_without_a_step_attaches_to_the_latest_running_row(self):
         b = self.board()
@@ -239,7 +248,10 @@ class BoardTest(unittest.TestCase):
              ("note", {"level": "warn", "text": "13 over baseline", "step": None}))
         blocks = feed(b, ("step_end", {"id": "perf", "status": "ok", "ms": 0, "exit": None, "summary": "x",
                                        "totals": None}))
-        self.assertEqual(blocks[1:], [("text", "  ⚠ 13 over baseline")])
+        r = b.rows["perf"]
+        self.assertEqual((r.reason, r.warned), ("13 over baseline", True))
+        self.assertEqual(blocks[1:], [("logonly", "    ⚠ 13 over baseline")])
+        self.assertEqual(plain(b, blocks, self.clock), "⚠ " + "Perf".ljust(10) + "  13 over baseline\n")
 
     def test_a_note_with_no_row_prints_at_once(self):
         self.assertEqual(feed(self.board(), ("note", {"level": "error", "text": "no", "step": None})),
@@ -286,23 +298,25 @@ class BoardTest(unittest.TestCase):
     def test_a_sub_rows_maven_modules_draw_on_its_parent_row(self):
         """release.py: each command is a run_tool sub-row (parent=<step>), and Maven's modules fill the step's bar."""
         b = self.board()
-        feed(b, ("step_start", {"id": "verify", "n": 1, "title": "Clean verify", "parent": None, "label": "Verify"}),
+        blocks = feed(b, ("step_start", {"id": "verify", "n": 1, "title": "Clean verify", "parent": None,
+                                         "label": "Verify"}),
              ("step_start", {"id": "verify.1", "n": 1, "title": "git status", "parent": "verify"}),
              ("step_end", {"id": "verify.1", "status": "ok", "ms": 10, "exit": None, "summary": None,
                            "totals": None}))
         self.assertEqual(b.rows["verify"].boxes(), ["pass"])        # a generic command is one box
         events = maven_events("verify.2")
         events[0] = ("step_start", {"id": "verify.2", "n": 2, "title": "mvn -B clean verify", "parent": "verify"})
-        feed(b, *events, ("quiet", {"step": "verify.2", "seconds": 20}))
+        blocks += feed(b, *events, ("quiet", {"step": "verify.2", "seconds": 20}))
         r = b.rows["verify"]
         self.assertEqual(list(b.rows), ["verify"])
         self.assertEqual((r.boxes(), r.size, r.quiet), (["pass", "fail"], 3, 20))     # the pom is on the Setup row, not in the bar
         self.assertEqual(feed(b, ("step_end", {"id": "verify.2", "status": "fail", "ms": 5000, "exit": 1,
                                                "summary": None,
                                                "totals": {"total": 7149, "fail": 2, "err": 0, "skip": 0}})), [])
-        blocks = feed(b, ("step_end", {"id": "verify", "status": "fail", "ms": 6000, "exit": None, "summary": None,
-                                       "totals": None}))
-        self.assertEqual(plain(b, blocks, self.clock), "Setup".ljust(10) + "  #  1 pom module\n" + "Verify".ljust(10) + "  #F  2/2  7,149 tests, 2 failed  0:06\n")
+        blocks += feed(b, ("step_end", {"id": "verify", "status": "fail", "ms": 6000, "exit": None, "summary": None,
+                                        "totals": None}))
+        self.assertEqual(plain(b, blocks, self.clock), "✔ " + "Setup".ljust(10) + "  #  1 pom module\n"
+                         + "✗ " + "Verify".ljust(10) + "  #F  2/2  7,149 tests, 2 failed: Mod B  0:06\n")
 
     def test_a_module_that_never_ended_is_skipped_when_its_step_ends(self):
         b = self.board()
@@ -361,8 +375,8 @@ class ConsoleTest(unittest.TestCase):
             c("step_end", {"id": "tests", "status": "fail", "ms": 20000, "exit": 1, "summary": None, "totals": None})
             c.close()
             text = log.read_text(encoding="utf-8")
-        self.assertIn("  F Mod B  0:02  10 tests, 2 failed\n", text)
-        self.assertIn("Setup".ljust(10) + "  #  1 pom module\n" + "Tests".ljust(10) + "  #F  2/2", text)
+        self.assertNotIn("Mod B  0:02", text)          # no module lines at actionable
+        self.assertIn("✔ " + "Setup".ljust(10) + "  #  1 pom module\n" + "✗ " + "Tests".ljust(10) + "  #F  2/2", text)
         self.assertNotIn("…", text)
 
     def test_plain_screen_heartbeat_every_15_seconds(self):
@@ -421,19 +435,19 @@ class OverallDisplayTest(unittest.TestCase):
         b = self.board()
         lines = self.live().region(b, 79, 18)
         self.assertEqual(lines[0], "Overall  25%  ~1:30 left  · 0 of 2 steps")       # 30 / (30 + 30 + 60)
-        self.assertTrue(lines[1].startswith("A"))
+        self.assertTrue(lines[1][2:].startswith("A"))
         self.assertEqual(len(self.live().region(b, 79, 1)), 1)                          # the budget still holds
 
     def test_absent_without_a_plan_without_history_and_when_nested(self):
         for b in (self.board(plan=None), self.board(hist={}), self.board(nested=True)):
-            self.assertTrue(self.live().region(b, 79, 18)[0].startswith("A"))
+            self.assertTrue(self.live().region(b, 79, 18)[0][2:].startswith("A"))
 
     def test_setup_row_sits_below_the_overall_line(self):
         b = self.board()
         b.apply("reactor", dict(step="a", size=5, poms=["p0", "p1"], tests=False))
         lines = self.live().region(b, 79, 18)
         self.assertTrue(lines[0].startswith("Overall"))
-        self.assertEqual(lines[1].split()[0], "Setup")
+        self.assertEqual(lines[1].split()[1], "Setup")
 
     def test_plain_heartbeat_gains_percent_and_remaining(self):
         out = []
@@ -674,27 +688,31 @@ class LiveTest(unittest.TestCase):
         self.clock.advance(1)
         self.live.render(self.board, feed(self.board, *events))
 
+    def spin(self):
+        return jr.icon("running", self.clock()) + " "
+
     def test_a_running_row_and_its_module_redraw_in_place(self):
         self.push(*start(), mod_start("a"))
         self.push(cls("a"), cls("a", "fail"))
         self.assertEqual(self.screen.text(), "\n".join([
-            ("Tests".ljust(10) + "  ▒░░  0/3").ljust(59 - 4) + "0:01",     # Mod A is in flight
-            "  Mod A  •F",
+            (self.spin() + "Tests".ljust(10) + "  ▒░░  0/3").ljust(59 - 4) + "0:01",     # Mod A is in flight
+            "    Mod A  •F",
         ]))
         self.push(("module_end", {"step": "tests", "module": "tests/a", "status": "fail", "ms": 1000,
                                   "totals": (2, 1, 0, 0)}))
         self.push(("step_end", {"id": "tests", "status": "fail", "ms": 4000, "exit": 1, "summary": None,
                                 "totals": None}))
         self.assertEqual(self.screen.text(), "\n".join([
-            "  F Mod A  0:01  2 tests, 1 failed",
-            ("Tests".ljust(10) + "  F░░  1/3  no tests run").ljust(59 - 4) + "0:04",    # a unit bar keeps its pending cells
+            # no module line at actionable: the row names the failed module; a unit bar keeps its pending cells
+            ("✗ " + "Tests".ljust(10) + "  F░░  1/3  1 failed: Mod A").ljust(59 - 4) + "0:04",
         ]))
         self.assertFalse(self.screen.clamped)
 
     def test_a_running_row_shows_its_progress_and_step_end_clears_it(self):
         self.push(*start(size=0))
         self.push(("step_progress", {"step": "tests", "text": "52% \u00b7 test_foo.py"}))
-        self.assertEqual(self.screen.text(), ("Tests".ljust(10) + "  52% \u00b7 test_foo.py").ljust(59 - 4) + "0:01")
+        self.assertEqual(self.screen.text(),
+                         (self.spin() + "Tests".ljust(10) + "  52% \u00b7 test_foo.py").ljust(59 - 4) + "0:01")
         self.push(("step_progress", {"step": "tests", "text": "60% \u00b7 test_foo.py"}))
         self.assertIn("60% \u00b7 test_foo.py", self.screen.text())
         self.assertNotIn("52%", self.screen.text())
@@ -745,7 +763,7 @@ class LiveTest(unittest.TestCase):
         self.assertGreater(len(lines), 1)
         self.assertTrue(all(len(line) <= 79 for line in lines), lines)
         self.assertEqual(sum(line.count("#") for line in lines), 84)
-        indent = len("Tests".ljust(self.board.width())) + 2
+        indent = len("⠋ " + "Tests".ljust(self.board.width())) + 2
         self.assertTrue(all(line.startswith(" " * indent + "#") for line in lines[1:]), lines)
         self.assertIn("84/84", lines[0])                                        # count stays on the first line
         self.assertTrue(all("84/84" not in line for line in lines[1:]))
@@ -809,27 +827,27 @@ class LiveTest(unittest.TestCase):
         self.push(*start(size=5), *[mod_start(n) for n in "abcde"], *[cls(n) for n in "abcde"])
         region = self.live.region(self.board, 59, 4)
         self.assertEqual(len(region), 4)
-        self.assertEqual(region[1], "  +3 more running")
-        self.assertTrue(region[2].startswith("  Mod D  ") and region[3].startswith("  Mod E  "), region)
+        self.assertEqual(region[1], "    +3 more running")
+        self.assertTrue(region[2].startswith("    Mod D  ") and region[3].startswith("    Mod E  "), region)
         self.assertTrue(all(len(line) <= 59 for line in region), region)
         self.assertEqual(len(self.screen.text().splitlines()), 4)
         self.assertTrue(all(len(line) <= 59 for line in self.screen.lines), self.screen.lines)
         self.assertFalse(self.screen.clamped)
 
-    def test_boxes_wrap_and_cap_at_three_lines(self):
+    def test_boxes_cap_at_one_line(self):
         self.dims = (40, 10)
         self.push(*start(), mod_start("a"), *[cls("a") for _ in range(200)])
-        lines = self.live.region(self.board, 39, 8)[1:]
-        self.assertEqual(lines, [
-            "  Mod A  … +117 " + "•" * 23,
-            " " * 9 + "•" * 30,
-            " " * 9 + "•" * 30,
-        ])
+        self.assertEqual(self.live.region(self.board, 39, 8)[1:], ["    Mod A  … +179 " + "•" * 21])
 
-    def test_a_short_module_wraps_without_the_cap(self):
+    def test_a_module_that_exactly_fits_has_no_prefix(self):
         self.dims = (40, 10)
-        self.push(*start(), mod_start("a"), *[cls("a") for _ in range(35)])
-        self.assertEqual(self.live.region(self.board, 39, 8)[1:], ["  Mod A  " + "•" * 30, " " * 9 + "•" * 5])
+        self.push(*start(), mod_start("a"), *[cls("a") for _ in range(28)])
+        self.assertEqual(self.live.region(self.board, 39, 8)[1:], ["    Mod A  " + "•" * 28])
+
+    def test_a_module_one_over_shows_the_prefix(self):
+        self.dims = (40, 10)
+        self.push(*start(), mod_start("a"), *[cls("a") for _ in range(29)])
+        self.assertEqual(self.live.region(self.board, 39, 8)[1:], ["    Mod A  … +7  " + "•" * 22])
 
     def test_shrinking_the_region_clears_the_old_lines(self):
         self.push(*start(), mod_start("a"), mod_start("b"))
@@ -889,7 +907,7 @@ class LiveTest(unittest.TestCase):
         self.live.tick(self.board)
         self.assertEqual(self.screen.text(), "")
         self.live.resume()
-        self.assertTrue(self.screen.text().startswith("Tests"))
+        self.assertTrue(self.screen.text().startswith(self.spin() + "Tests"))
 
     def test_a_watchdog_prompt_stops_redraws_until_the_line_ends(self):
         self.push(*start())
@@ -900,16 +918,18 @@ class LiveTest(unittest.TestCase):
         self.live.tick(self.board)
         self.assertEqual(self.screen.text(), "Passphrase:")
         self.push(("prompt_end", {"step": "tests"}))
-        self.assertTrue(self.screen.text().splitlines()[1].startswith("Tests"))
+        self.assertTrue(self.screen.text().splitlines()[1].startswith(self.spin() + "Tests"))
         self.assertFalse(self.screen.cursor_visible)
 
     def test_a_line_printed_during_a_prompt_starts_on_its_own_line(self):
         self.push(*start())
         self.push(("prompt", {"step": "tests", "text": "Passphrase: "}))
-        self.push(("say", {"text": "⚠ dirty tree", "level": "warn", "step": None}))
-        self.assertEqual(self.screen.text().splitlines()[:2], ["Passphrase:", "⚠ dirty tree"])
+        self.push(("step_end", {"id": "tests", "status": "ok", "ms": 0, "exit": None, "summary": "done",
+                                "totals": None}))
+        self.assertEqual(self.screen.text().splitlines()[:2], ["Passphrase:", "✔ " + "Tests".ljust(10) + "  done"])
 
     def test_a_large_reactor_keeps_its_count_and_totals_and_wraps_the_bar(self):
+        self.dims = (64, 10)            # 8 region lines of 10 cells hold the 80 modules
         self.push(*start(size=80))
         for i in range(80):
             name = f"m{i}"
@@ -917,16 +937,16 @@ class LiveTest(unittest.TestCase):
                                                        "ms": 1, "totals": (1, 0, 0, 0)}))
         self.push(("tests", {"step": "tests", "total": 7139, "fail": 2, "err": 0, "skip": 0}))
         lines = self.screen.text().splitlines()
-        self.assertTrue(all(len(line) <= 59 for line in lines), lines)
+        self.assertTrue(all(len(line) <= 63 for line in lines), lines)
         self.assertNotIn("\u2026", "".join(lines))        # no cell is cut: the bar wraps instead
         self.assertEqual("".join(lines).count("\u2588"), 80)
         self.assertTrue(lines[0].rstrip().endswith("80/80  7,139 tests, 2 failed  1:21"), lines[0])
         self.push(("step_end", {"id": "tests", "status": "fail", "ms": 90000, "exit": 1, "summary": None,
                                 "totals": None}))
         row = self.screen.text().splitlines()[0]
-        self.assertLessEqual(len(row), 59, row)
+        self.assertLessEqual(len(row), 63, row)
         self.assertTrue(row.endswith("80/80  7,139 tests, 2 failed  1:30"), row)
-        self.assertTrue(row.startswith("Tests".ljust(10) + "  ██"), row)
+        self.assertTrue(row.startswith("✗ " + "Tests".ljust(10) + "  ██"), row)
 
     def test_a_row_too_long_even_without_its_bar_is_cut_from_the_right(self):
         line = jr._fit_row("A very long step label", ["█"] * 5, "5/5  7,139 tests, 2 failed", "0:01", 20)
@@ -941,10 +961,9 @@ class LiveTest(unittest.TestCase):
         self.push(*start(), ("module_start", {"step": "tests", "module": "tests/a", "title": "测试" * 20}),
                   *[cls("a") for _ in range(100)])
         subs = self.live.region(self.board, 39, 8)[1:]
-        self.assertEqual(len(subs), 3)
-        self.assertTrue(all(jr._vlen(line) <= 39 for line in subs), subs)
-        self.assertTrue(subs[0].startswith("  " + "测试" * 4 + "测  "), subs[0])
-        self.assertEqual(jr._vlen(subs[1]), 39)
+        self.assertEqual(len(subs), 1)
+        self.assertTrue(jr._vlen(subs[0]) <= 39, subs)
+        self.assertTrue(subs[0].startswith("    " + "测试" * 4 + "测  "), subs[0])
 
     def test_close_is_idempotent_and_stops_redraws(self):
         writes = []
@@ -958,8 +977,9 @@ class LiveTest(unittest.TestCase):
         self.assertEqual(len(writes), closed)
         live.render(self.board, feed(self.board, ("module_end", {"step": "tests", "module": "tests/a",
                                                                  "status": "ok", "ms": 1, "totals": None}),
-                                     ("say", {"text": "⚠ late", "level": "warn", "step": None})))
-        self.assertEqual("".join(writes[closed:]), "⚠ late\n")
+                                     ("step_end", {"id": "tests", "status": "ok", "ms": 0, "exit": None,
+                                                   "summary": "late", "totals": None})))
+        self.assertEqual("".join(writes[closed:]), "✔ " + "Tests".ljust(10) + "  late\n")
 
     def test_step_end_clears_the_quiet_state(self):
         b = jr.Board("actionable", clock=self.clock)
@@ -1012,20 +1032,20 @@ class CollapsedModuleLineTest(unittest.TestCase):
                 self.board = jr.Board(clock=lambda: 100.0)
                 lines = self.region(*start(step, 4), mod_start("a", step), mod_start("b", step), mod_start("c", step))
                 self.assertEqual(len(lines), 2)
-                self.assertEqual(lines[1], "  A, B, C")
+                self.assertEqual(lines[1], "    A, B, C")
 
     def test_modules_with_results_keep_their_own_sub_lines(self):
         lines = self.region(*start(), mod_start("a"), mod_start("b"), cls("a"), cls("a", "fail"))
         self.assertEqual(len(lines), 3)
-        self.assertEqual(lines[1], "  B")                       # name-only first, then the detail sub-lines
-        self.assertTrue(lines[2].startswith("  Mod A  "))
+        self.assertEqual(lines[1], "    B")                       # name-only first, then the detail sub-lines
+        self.assertTrue(lines[2].startswith("    Mod A  "))
 
     def test_a_module_with_a_first_result_leaves_the_collapsed_line_on_the_next_redraw(self):
         lines = self.region(*start(), mod_start("a"), mod_start("b"))
-        self.assertEqual(lines[1], "  A, B")
+        self.assertEqual(lines[1], "    A, B")
         lines = self.region(cls("b"))
-        self.assertEqual(lines[1], "  A")
-        self.assertTrue(lines[2].startswith("  Mod B  "))
+        self.assertEqual(lines[1], "    A")
+        self.assertTrue(lines[2].startswith("    Mod B  "))
 
     def test_pom_modules_are_never_on_the_collapsed_line(self):
         feed(self.board, ("step_start", {"id": "mvn", "n": 1, "title": "mvn", "parent": None}),
@@ -1033,13 +1053,13 @@ class CollapsedModuleLineTest(unittest.TestCase):
              ("module_start", {"step": "mvn", "module": "mvn/p", "title": "Mod P"}))
         lines = self.region(("module_start", {"step": "mvn", "module": "mvn/a", "title": "Mod A"}),
                             ("module_start", {"step": "mvn", "module": "mvn/b", "title": "Mod B"}))
-        self.assertEqual([line for line in lines if line.startswith("  ")], ["  A, B"])
+        self.assertEqual([line for line in lines if line.startswith("    ")], ["    A, B"])
 
     def test_the_prefix_uses_every_module_seen_not_only_those_in_flight(self):
         lines = self.region(*start(), mod_start("a"), mod_start("b"), mod_start("c"),
                             ("module_end", {"step": "tests", "module": "tests/b", "status": "ok", "ms": 1}),
                             ("module_end", {"step": "tests", "module": "tests/c", "status": "ok", "ms": 1}))
-        self.assertEqual(lines[1], "  A")                      # still "Mod " stripped though only one is in flight
+        self.assertEqual(lines[1], "    A")                      # still "Mod " stripped though only one is in flight
 
 
 class LiveConsoleTest(unittest.TestCase):
@@ -1134,7 +1154,8 @@ class RobustnessTest(unittest.TestCase):
         console = self.live_console(out)
         console("step_start", {"id": "a", "n": 1, "title": "Alpha", "parent": None})
         with mock.patch.object(jr, "row_cells", side_effect=RuntimeError("shared")), \
-                mock.patch.object(jr, "row_parts", side_effect=RuntimeError("shared")):
+                mock.patch.object(jr, "row_parts", side_effect=RuntimeError("shared")), \
+                mock.patch.object(jr, "row_text", side_effect=RuntimeError("shared")):
             console("step_end", {"id": "a", "status": "ok", "ms": 10, "exit": None, "summary": None, "totals": None})
             console("step_start", {"id": "b", "n": 2, "title": "Beta", "parent": None})
             console.tick()
@@ -1170,7 +1191,10 @@ class RobustnessTest(unittest.TestCase):
         for kind, fields in start() + [mod_start("a"), cls("a")]:
             console(kind, fields)
         with mock.patch.object(jr.LiveRenderer, "_sub_lines", side_effect=RuntimeError("sub")):
-            console("say", {"text": "⚠ hello-once", "level": "warn", "step": None})
+            # a warn say would become the running row's reason, so print a finished row instead
+            console("step_start", {"id": "b", "n": 2, "title": "Beta", "parent": None})
+            console("step_end", {"id": "b", "status": "ok", "ms": 0, "exit": None, "summary": "hello-once",
+                                 "totals": None})
         self.assertIsInstance(console.screen, jr.PlainRenderer)
         self.assertEqual(out.getvalue().count("hello-once"), 1)
 
@@ -1469,6 +1493,353 @@ class DampedEstimateTest(unittest.TestCase):
         self.assertEqual(jr.damp_total(100, 105, 100), 105)            # elapsed reached the shown total
         self.assertIsNone(jr.damp_total(100, None, 10))
         self.assertEqual(jr.damp_total(None, 472, 10), 465)
+
+
+def step_end(step, status="ok", ms=2000, summary=None, totals=None, exit=None):
+    return ("step_end", {"id": step, "status": status, "ms": ms, "exit": exit, "summary": summary, "totals": totals})
+
+
+def step_start(step, title=None, n=1, parent=None):
+    return ("step_start", {"id": step, "n": n, "title": title or step.title(), "parent": parent})
+
+
+def note(level, text, step=None):
+    return ("note", {"level": level, "text": text, "href": None, "step": step})
+
+
+class RowCase(unittest.TestCase):
+    def setUp(self):
+        reset_run_state()
+        self.addCleanup(reset_run_state)
+        self.clock = Clock()
+
+    def board(self, detail="actionable", **kw):
+        return jr.Board(detail, nested=kw.pop("nested", False), full_log=None, clock=self.clock, **kw)
+
+    def finished(self, *events, detail="actionable"):
+        """A board fed `events` then the row "a"'s end (ok unless an event set otherwise); returns (row, blocks)."""
+        b = self.board(detail)
+        blocks = feed(b, step_start("a"), *events)
+        return b, b.rows["a"], blocks
+
+
+class IconTest(RowCase):
+    def test_spinner_frame_follows_clock(self):
+        frames = [jr.icon("running", 100.0 + i * jr.LiveRenderer.REDRAW_SECONDS + 0.01) for i in range(11)]
+        self.assertEqual("".join(frames[:10]), "⠋⠙⠹⠸⠼⠴⠦⠧⠇⠏")
+        self.assertEqual(frames[10], frames[0])
+        self.assertEqual(jr.icon("running", 100.01, color=True), "\x1b[36m⠋\x1b[0m")       # cyan
+
+    def test_finished_icons_coloured(self):
+        for state, glyph, sgr in (("ok", "✔", "32"), ("warn", "⚠", "33"), ("fail", "✗", "31"), ("pending", "○", "2")):
+            with self.subTest(state=state):
+                self.assertEqual(jr.icon(state, color=True), f"\x1b[{sgr}m{glyph}\x1b[0m")
+
+    def test_skip_icon_dim_single_column(self):
+        self.assertEqual(jr.icon("skip", color=True), "\x1b[2m⊘\x1b[0m")
+        self.assertEqual(jr._vlen("⊘"), 1)
+        self.assertNotIn("️", "".join(jr.ICONS.values()))                       # never with VS16
+
+    def test_no_color_same_glyphs(self):
+        for state, glyph in jr.ICONS.items():
+            with self.subTest(state=state):
+                self.assertEqual(jr.icon(state), glyph)
+
+    def test_plain_and_log_static_icon(self):
+        b = self.board()
+        blocks = feed(b, step_start("a"), step_end("a"), step_start("b"), step_end("b", "skip", summary="(skipped)"))
+        self.assertEqual(plain(b, blocks, self.clock), "✔ A           0:02\n⊘ B           skipped  0:02\n".replace(
+            "A           ", "A".ljust(10) + "  ").replace("B           ", "B".ljust(10) + "  "))
+        self.assertNotIn("\x1b[", plain(b, blocks, self.clock))
+
+
+class RowStatusTest(RowCase):
+    def test_warn_note_flips_ok_row_to_warn(self):
+        b, r, _ = self.finished(note("warn", "13 over baseline"), step_end("a"))
+        self.assertEqual((r.status, jr.row_state(r), jr.row_icon(r, 0, False)), ("ok", "warn", "⚠"))
+
+    def test_error_note_on_ok_row_is_warn(self):
+        b, r, _ = self.finished(note("error", "flaky"), step_end("a"))
+        self.assertEqual(jr.row_state(r), "warn")
+
+    def test_fail_beats_warn(self):
+        b, r, _ = self.finished(note("warn", "careful"), step_end("a", "fail", exit=1))
+        self.assertEqual(jr.row_state(r), "fail")
+
+    def test_every_skip_is_skip_icon(self):
+        for summary in ("(skipped)", "(done by Tests)", "(done earlier)", None):
+            with self.subTest(summary=summary):
+                b, r, blocks = self.finished(step_end("a", "skip", summary=summary))
+                self.assertEqual(jr.row_icon(r, 0, False), "⊘")
+                if summary:
+                    self.assertIn(summary.strip("()"), plain(b, blocks, self.clock))
+                    self.assertNotIn("(", plain(b, blocks, self.clock))
+
+    def test_warn_on_skipped_row_keeps_skip_icon(self):
+        b, r, blocks = self.finished(note("warn", "no docs checkout"), step_end("a", "skip", summary="(skipped)"))
+        self.assertEqual((jr.row_icon(r, 0, False), r.reason), ("⊘", "no docs checkout"))
+        self.assertIn("no docs checkout", plain(b, blocks, self.clock))
+
+    def test_newest_warn_is_reason(self):
+        b, r, blocks = self.finished(note("warn", "first"), note("warn", "second\nmore"), step_end("a"))
+        self.assertEqual((r.reason, r.reason_level), ("second", "warn"))
+        self.assertIn("⚠ " + "A".ljust(10) + "  second", plain(b, blocks, self.clock))
+
+    def test_error_reason_not_replaced_by_warn(self):
+        b, r, _ = self.finished(note("error", "broke"), note("warn", "later"), step_end("a", "fail", exit=1))
+        self.assertEqual((r.reason, r.reason_level), ("broke", "error"))
+
+    def test_reason_cut_before_bar(self):
+        b = self.board()
+        feed(b, step_start("a"), ("units", {"step": "a", "total": 5, "kind": "checks"}),
+             *[("unit", {"step": "a", "done": i + 1, "outcome": "pass"}) for i in range(5)],
+             note("warn", "a reason far too long to fit on the row beside its bar " * 3))
+        live = jr.LiveRenderer(lambda t: None, size=lambda: os.terminal_size((60, 10)), clock=self.clock, color=False)
+        line = live._row(b, b.rows["a"], 59, pending=True)
+        self.assertNotIn("\n", line)
+        self.assertLessEqual(jr._vlen(line), 59)
+        self.assertIn("█████  5/5  a reason", line)                       # every cell kept
+        self.assertIn("…", line)
+
+    def test_failed_modules_reason_first_plus_n(self):
+        b = self.board()
+        events = [step_start("a", "Build"), ("reactor", {"step": "a", "size": 3, "poms": [], "tests": False})]
+        for name, status in (("x", "fail"), ("y", "ok"), ("z", "fail")):
+            events += [("module_start", {"step": "a", "module": name, "title": f"Mod {name.upper()}"}),
+                       ("module_end", {"step": "a", "module": name, "status": status, "ms": 1, "totals": None})]
+        blocks = feed(b, *events, step_end("a", "fail", exit=1))
+        self.assertIn("2 failed: Mod X +1", plain(b, blocks, self.clock))
+
+    def test_tests_row_reason_appends_failed_module(self):
+        b = self.board()
+        blocks = feed(b, *maven_events(), step_end("tests", "fail", exit=1,
+                                                    totals={"total": 7149, "fail": 2, "err": 0, "skip": 0}))
+        self.assertIn("7,149 tests, 2 failed: Mod B  ", plain(b, blocks, self.clock))
+
+
+class HintTest(RowCase):
+    def test_fail_prints_hint_lines_beneath_row(self):
+        b, r, blocks = self.finished(("hint", {"step": "a", "lines": ["run this:", "  git pull"]}))
+        blocks += feed(b, step_end("a", "fail", exit=1))
+        self.assertEqual(plain(b, blocks, self.clock).splitlines()[1:], ["    run this:", "      git pull"])
+
+    def test_failure_text_held_until_row_ends(self):
+        b, r, blocks = self.finished(("failure", {"text": "Bad.java:[1,2] oops", "step": "a"}))
+        self.assertEqual(blocks, [])
+        blocks = feed(b, step_end("a", "fail", exit=1))
+        self.assertEqual(plain(b, blocks, self.clock).splitlines()[1:], ["    Bad.java:[1,2] oops"])
+
+    def test_hint_dedup_with_failure_lines(self):
+        b, r, _ = self.finished(("failure", {"text": "same line", "step": "a"}),
+                                ("hint", {"step": "a", "lines": ["same line", "new line"]}))
+        blocks = feed(b, step_end("a", "fail", exit=1))
+        self.assertEqual(plain(b, blocks, self.clock).splitlines()[1:], ["    same line", "    new line"])
+
+    def test_session_fail_hint_reaches_screen_at_actionable(self):
+        import scripts_support  # noqa: F401 - puts juneau_scripts on sys.path
+        from juneau_scripts import run
+        out = io.StringIO()
+        with mock.patch.dict(os.environ, {"RUN_MARKERS": ""}), mock.patch.dict(sys.modules, {"juneau_run": jr}):
+            jr._console = jr.subscribe(jr.Console(jr.Sinks(console="condensed"), stream=out))
+            self.assertEqual(jr._console.board.detail, "actionable")
+            with self.assertRaises(run._SessionFailed):
+                run.Session().fail("❌ No.", hint=["   try this"])
+            jr._console.close()
+        self.assertIn("   try this", out.getvalue())
+
+    def test_hint_without_running_row_prints_at_once(self):
+        b = self.board()
+        blocks = feed(b, ("hint", {"step": None, "lines": ["do this"]}))
+        self.assertEqual(plain(b, blocks, self.clock), "do this\n")
+
+
+class FullLogNotesTest(RowCase):
+    def test_say_note_hint_failure_appended_to_full_log(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            full = Path(tmp) / "full.log"
+            c = jr.Console(jr.Sinks(console="none", full_log=str(full)), stream=io.StringIO(), clock=self.clock)
+            c("step_start", {"id": "a", "n": 1, "title": "A", "parent": None})
+            c("say", {"text": "said", "level": "info", "step": None})
+            c("note", {"level": "warn", "text": "noted", "href": None, "step": "a"})
+            c("hint", {"step": "a", "lines": ["hint one", "hint two"]})
+            c("failure", {"text": "failed text", "step": "a"})
+            c.close()
+            text = full.read_text(encoding="utf-8")
+        self.assertEqual(text.splitlines()[-5:], ["said", "⚠ noted", "hint one", "hint two", "failed text"])
+
+
+class PendingCase(RowCase):
+    def live(self, rows=20, cols=80):
+        return jr.LiveRenderer(lambda t: None, size=lambda: os.terminal_size((cols, rows)), clock=self.clock,
+                               color=False)
+
+    def planned(self, plan, **kw):
+        b = self.board(**kw)
+        feed(b, ("plan", {"ids": [e if isinstance(e, str) else e[0] for e in plan],
+                          "labels": {e[0]: e[1] for e in plan if not isinstance(e, str)}}))
+        return b
+
+
+class PendingTest(PendingCase):
+    PLAN = [("pre", "Prechecks"), ("tests", "Tests"), "hidden", ("install", "Install"), ("commit", "Commit")]
+
+    def test_labelled_plan_draws_pending_rows(self):
+        b = self.planned(self.PLAN)
+        feed(b, step_start("pre", "Prechecks"))
+        region = self.live().region(b, 79, 18)
+        self.assertEqual(region[-3:], ["○ Tests", "○ Install", "○ Commit"])
+
+    def test_unlabelled_ids_count_but_do_not_draw(self):
+        b = self.planned(self.PLAN)
+        feed(b, step_start("pre", "Prechecks"))
+        self.assertNotIn("○ hidden", self.live().region(b, 79, 18))
+        self.assertEqual(b.plan, ["pre", "tests", "hidden", "install", "commit"])
+
+    def test_started_row_replaces_pending(self):
+        b = self.planned(self.PLAN)
+        feed(b, step_start("pre", "Prechecks"), step_end("pre"), step_start("tests", "Tests"))
+        region = self.live().region(b, 79, 18)
+        self.assertNotIn("○ Tests", region)
+        self.assertTrue(any(line[2:].startswith("Tests") for line in region), region)
+
+    def test_passed_over_pending_not_drawn(self):
+        b = self.planned(self.PLAN)
+        feed(b, step_start("install", "Install"))                   # Prechecks and Tests were passed over
+        self.assertEqual([line for line in self.live().region(b, 79, 18) if line.startswith("○")], ["○ Commit"])
+
+    def test_width_includes_pending_labels(self):
+        b = self.planned([("a", "A"), ("long", "A much longer label")])
+        feed(b, step_start("a", "A"))
+        self.assertEqual(b.width(), len("A much longer label"))
+
+    def test_no_plan_unchanged(self):
+        b = self.board()
+        feed(b, step_start("a", "A"))
+        self.assertEqual(b.pending(), [])
+        self.assertEqual(len(self.live().region(b, 79, 18)), 1)
+
+
+class FoldTest(PendingCase):
+    def busy(self):
+        b = self.planned([("tests", "Tests")] + [(f"p{i}", f"Pending {i}") for i in range(6)])
+        feed(b, *start(size=4), *[mod_start(n) for n in "abcd"], *[cls(n) for n in "abcd"])
+        return b
+
+    def test_pending_folds_before_module_lines(self):
+        region = self.live().region(self.busy(), 79, 8)
+        self.assertEqual(len(region), 8)
+        self.assertEqual(sum(line.startswith("    Mod ") for line in region), 4)     # every module line kept
+        self.assertEqual(region[-1], "○ +4 more pending")
+        self.assertEqual(region[-3:-1], ["○ Pending 0", "○ Pending 1"])
+
+    def test_more_pending_line_always_kept(self):
+        region = self.live().region(self.busy(), 79, 4)
+        self.assertEqual(region[-1], "○ +6 more pending")
+
+    def test_then_module_lines_fold(self):
+        region = self.live().region(self.busy(), 79, 5)
+        self.assertEqual(len(region), 5)
+        self.assertIn("    +2 more running", region)
+        self.assertEqual(region[-1], "○ +6 more pending")
+
+
+class ModuleLinesTest(RowCase):
+    def test_no_finished_module_lines_at_actionable(self):
+        for detail in ("summary", "actionable"):
+            with self.subTest(detail=detail):
+                b = self.board(detail)
+                self.assertEqual([blk for blk in feed(b, *maven_events()) if blk[0] == "module"], [])
+
+    def test_modules_detail_keeps_lines(self):
+        b = self.board("modules")
+        blocks = feed(b, *maven_events())
+        self.assertIn("    F Mod B  0:02  10 tests, 2 failed\n", plain(b, blocks, self.clock))
+
+    def test_inflight_sub_line_unchanged(self):
+        b = self.board()
+        feed(b, *start(), mod_start("a"), cls("a"), cls("a", "fail"))
+        live = jr.LiveRenderer(lambda t: None, size=lambda: os.terminal_size((60, 10)), clock=self.clock, color=False)
+        self.assertEqual(live.region(b, 59, 8)[1:], ["    Mod A  •F"])
+
+
+class SetupRowTest(RowCase):
+    def events(self, pom_status="ok"):
+        return [step_start("tests", "Tests"),
+                ("reactor", {"step": "tests", "size": 3, "poms": ["p0", "p1"], "tests": True}),
+                ("module_start", {"step": "tests", "module": "p0", "title": "Parent"}),
+                ("module_end", {"step": "tests", "module": "p0", "status": "ok", "ms": 1, "totals": None}),
+                ("module_start", {"step": "tests", "module": "p1", "title": "Bom"}),
+                ("module_end", {"step": "tests", "module": "p1", "status": pom_status, "ms": 1, "totals": None})]
+
+    def test_setup_finishes_when_poms_done(self):
+        b = self.board()
+        blocks = feed(b, *self.events()[:-2])
+        self.assertNotIn(("setup",), blocks)
+        blocks = feed(b, *self.events()[-2:])      # a pom's box is set when it starts: a pom has no work to wait for
+        self.assertEqual(blocks, [("setup",)])
+        self.assertTrue(b.setup.ended)
+        self.assertEqual(plain(b, blocks, self.clock), "✔ " + "Setup".ljust(10) + "  ##  2 pom modules\n")
+
+    def test_setup_fails_on_pom_failure(self):
+        b = self.board()
+        out = []
+        renderer = jr.PlainRenderer(out.append, clock=self.clock)
+        for event in self.events("fail"):
+            renderer.render(b, feed(b, event))
+        # green at the last pom's start, then printed again red when that pom fails
+        self.assertEqual("".join(out), "✔ " + "Setup".ljust(10) + "  ##  2 pom modules\n"
+                         + "✗ " + "Setup".ljust(10) + "  #F  1 failed: Bom\n")
+
+    def test_setup_ends_with_owner(self):
+        b = self.board()
+        feed(b, *self.events()[:4])                                      # p1 never reports
+        blocks = feed(b, step_end("tests", "fail", exit=1))
+        self.assertEqual(blocks[0], ("setup",))
+        self.assertEqual(blocks[1], ("row", b.rows["tests"]))
+        self.assertTrue(b.setup.ended)
+        self.assertEqual(feed(b, step_start("next")), [])               # a later row does not reopen it
+
+
+class NestedPendingTest(PendingCase):
+    def test_handoff_exports_pending(self):
+        b = self.planned([("pre", "Prechecks"), ("tests", "Tests"), ("install", "Install")])
+        feed(b, step_start("pre", "Prechecks"), step_end("pre"), step_start("tests", "Tests"))
+        self.assertEqual(b.pending(), [("install", "Install")])
+        console = mock.Mock(mode="live", board=b)
+        with mock.patch.object(jr, "_console", console), jr.handoff() as env:
+            self.assertEqual(json.loads(env["JUNEAU_RUN_PENDING"]), [["install", "Install"]])
+
+    def test_child_draws_parent_pending_dedup(self):
+        pending = json.dumps([["install", "Install"], ["commit", "Commit"]])
+        with mock.patch.dict(os.environ, {"JUNEAU_RUN_PENDING": pending}):
+            b = self.planned([("install", "Install")], nested=True)
+        feed(b, step_start("compile", "Compile"))
+        self.assertEqual(b.pending(), [("install", "Install"), ("commit", "Commit")])
+        self.assertEqual([line for line in self.live().region(b, 79, 18) if line.startswith("○")],
+                         ["○ Install", "○ Commit"])
+        feed(b, step_end("compile"), ("done", {"status": "ok", "commit": None}))
+        self.assertEqual(b.pending(), [])
+
+
+class LogTest(RowCase):
+    def run_log(self, *events):
+        with tempfile.TemporaryDirectory() as tmp:
+            log = Path(tmp) / "c.log"
+            c = jr.Console(jr.Sinks(console="none", condensed_log=str(log)), stream=io.StringIO(), clock=self.clock)
+            for kind, fields in events:
+                c(kind, fields)
+            c.close()
+            return log.read_text(encoding="utf-8")
+
+    def test_log_keeps_note_text_beneath_row(self):
+        text = self.run_log(step_start("a", "A"), note("warn", "first line\nsecond line", "a"), step_end("a"))
+        self.assertIn("⚠ " + "A".ljust(10) + "  first line", text)
+        self.assertIn("    ⚠ first line\n      second line\n", text)
+
+    def test_log_has_no_pending_rows(self):
+        text = self.run_log(("plan", {"ids": ["a", "b"], "labels": {"a": "A", "b": "B"}}), step_start("a", "A"),
+                            step_end("a"))
+        self.assertNotIn("○", text)
 
 
 if __name__ == "__main__":

@@ -46,6 +46,20 @@ def _no_real_run_history():
         shutil.rmtree(tmp, ignore_errors=True)
 
 
+@pytest.fixture(autouse=True)
+def _full_console(monkeypatch):
+    """push.main() exports the condensed console default into os.environ; pin the full console for every test (set,
+    not unset, so teardown restores it) so that export cannot leak into later tests.  Tests of the default or of
+    the flag/env precedence set JUNEAU_RUN_CONSOLE themselves."""
+    monkeypatch.setenv("JUNEAU_RUN_CONSOLE", "full")
+
+
+@pytest.fixture(autouse=True)
+def _no_push_sound(monkeypatch):
+    """Keep push.py's end-of-run bell and sound silent in every test, including subprocess runs (they inherit it)."""
+    monkeypatch.setenv("JUNEAU_PUSH_NO_SOUND", "1")
+
+
 def load_juneau_run():
     """The juneau_run module the scripts share (sys.modules["juneau_run"]), loaded from the tree if not yet loaded."""
     module = sys.modules.get("juneau_run")

@@ -408,7 +408,7 @@ t('runBulkAction_perRow_offScreenRowUsesSnapshotForEndpointTokens', async () => 
 	const urls = [];
 	f.env.setFetch(url => { urls.push(url); return Promise.resolve(jsonResponse('', { status: 200 })); });
 	await f.NS.runBulkAction(perRowAction, f.table, f.ctx, f.state, ['a', 'zz']);
-	assert.deepEqual(urls.toSorted(), ['/api/changes/a/abort', '/api/changes/zz/abort']);
+	assert.deepEqual(urls.sort(), ['/api/changes/a/abort', '/api/changes/zz/abort']); // NOSONAR javascript:S4043 -- the CI Node lacks Array.prototype.toSorted; urls is a local array, so sorting it in place is safe
 });
 
 t('runBulkAction_perRow_missingCsrfToken_failsClosedWithoutFetch', async () => {

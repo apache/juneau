@@ -21,6 +21,7 @@ class Registry:
         self._steps = []    # (name, title, fn), in registration order
         self._labels = {}   # name -> the console row's label, for the steps registered with one
         self._prog = None
+        self._current = None    # the open step's handle while a step's fn runs (Registry.checks)
 
     @property
     def names(self):
@@ -39,6 +40,18 @@ class Registry:
                 self._labels[name] = label
             return fn
         return register
+
+    def checks(self, name, title, checks, *, label=None):
+        """Register the next step as a run of gate checks (run.checks semantics, on this step's row): checks is a
+        list of checks.Check, or fn(ctx) returning one.  A failed check fails the step, which prints the resume
+        hint."""
+        def fn(ctx):
+            listed = checks(ctx) if callable(checks) else checks
+            st = self._current
+            result = run.drive_checks(name, st, list(listed))
+            return Result(True, 0) if result.ok else Result(False, 1)
+        self.step(name, title, label=label)(fn)
+        return fn
 
     def add_arguments(self, parser):
         """--list-steps, --start-step NAME, --skip-step NAME (repeatable) and --resume.  Unknown names are argparse
@@ -121,6 +134,7 @@ class Registry:
                     else:
                         run.say(f"⏭  Skipping {n}. {title}")
                 else:
+                    self._current = st
                     try:
                         out = fn(ctx)
                     except Exception as e:  # NOSONAR python:S2221 - a step's error is reported, then the hint

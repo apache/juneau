@@ -140,7 +140,7 @@ class SetupRowTest(unittest.TestCase):
     def test_region_draws_setup_above_first_owning_row_and_counts_height(self):
         b, _ = self.board()
         lines = live_region_lines(b, rows=24, cols=100)         # no plan is set, so no Overall line (G2) precedes it
-        self.assertEqual(lines[0].split()[0], "Setup")
+        self.assertEqual(lines[0].split()[1], "Setup")
         self.assertIn("16 pom modules", lines[0])
         self.assertLessEqual(len(lines), 22)                   # max_lines = rows - 2 still honoured
 
@@ -153,7 +153,7 @@ class SetupRowTest(unittest.TestCase):
 
     def test_plain_renderer_prints_one_setup_line(self):
         out = plain_run(setup_events())
-        self.assertEqual(len([l for l in out.splitlines() if l.startswith("Setup")]), 1)
+        self.assertEqual(len([l for l in out.splitlines() if l.split()[1:2] == ["Setup"]]), 1)
         self.assertIn("3 pom modules", out)
 
 

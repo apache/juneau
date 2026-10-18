@@ -19,6 +19,9 @@
 Build and Push Script for Juneau
 
 This script automates the build, test, and deployment workflow:
+0. Prechecks: refuses up front unless git has the ASF committer identity, the tree has no unreviewed
+   (unstaged/untracked) changes and the branch isn't behind its upstream -- for juneau and, when it exists, the
+   sibling juneau-docs -- before any build or test work (commit_and_push() repeats the last two at the end)
 1. Runs all tests
 2. Builds and installs the project
 3. Commits changes to Git
@@ -105,9 +108,12 @@ def run_gate(cmd, cwd, step_id, title, label):
                         label=label).exit
 
 
+PGP_PROMPT = "prompt-pgp-passphrase.py"
+
+
 def prompt_pgp_passphrase(script_dir):
     """Run the dummy-sign prompt on the bare terminal: True or False for how it went, None if the script is absent."""
-    prompt_script = script_dir / "prompt-pgp-passphrase.py"
+    prompt_script = script_dir / PGP_PROMPT
     if not prompt_script.exists():
         return None
     try:
@@ -116,6 +122,35 @@ def prompt_pgp_passphrase(script_dir):
     except Exception as e:
         print(f"⚠ Could not run PGP passphrase prompt: {e}")
         return False
+
+
+def pgp_row(script_dir):
+    """
+    The PGP row: the dummy-sign prompt, with the console paused so the prompt has the bare terminal.  A prompt that
+    fails warns on the row and the push goes on (signing just prompts again later).
+    """
+    run = toolkit("run")
+    with run.step("pgp", "PGP passphrase", label="PGP") as step:
+        with run.paused():
+            ok = prompt_pgp_passphrase(script_dir)
+        if ok is False:
+            step.warn("passphrase not cached; signing will prompt again")
+
+
+def aborted(text, *hint):
+    """
+    Stop the push after a failed row: text and the hint lines as error lines, or under a console view (where the
+    failed row already says what stopped) only the hint lines, as a hint.  Returns the exit code, 1.
+    """
+    run = _juneau.load()[0]
+    if run.console_active():
+        if hint:
+            run.hint(list(hint))
+    else:
+        say(text, "error")
+        for line in hint:
+            say(line, "error")
+    return 1
 
 
 def next_step_number(count=1):
@@ -205,17 +240,6 @@ def run_command(cmd, description, cwd=None, tool=None, step_id=None, title=None,
 
 #: Set to exactly "1" to silence the end-of-run sound and the terminal bell (also honored by test.py).
 PUSH_NO_SOUND_ENV = "JUNEAU_PUSH_NO_SOUND"
-
-
-def play_sound(success=True):
-    """
-    The terminal bell and the success or failure sound (the toolkit's notify.bell and notify.sound), for a run that
-    ends before its session opens; inside the session, run.session plays them once at the end.  Silent in the Claude
-    Code sandbox or when JUNEAU_PUSH_NO_SOUND=1.
-    """
-    notify = toolkit("notify")
-    notify.bell(silence_env=(PUSH_NO_SOUND_ENV,))
-    notify.sound(success, silence_env=(PUSH_NO_SOUND_ENV,))
 
 
 def _python310():
@@ -383,6 +407,9 @@ def maybe_run_tracker_audit_gate(args, juneau_root, step_num):
 # release-docs-stage.py) so the two repos enforce this check identically.
 REQUIRED_GIT_EMAIL = "jamesbognar@apache.org"
 
+#: How the hints reach the juneau-docs sibling from the juneau checkout.
+DOCS_GIT = "git -C ../juneau-docs"
+
 
 def resolve_commit_message(cli_message):
     """Use the CLI-supplied message, or prompt for one; abort if still empty."""
@@ -402,33 +429,6 @@ def resolve_commit_message(cli_message):
         sys.exit(1)
 
     return message
-
-
-def verify_apache_identity(repo_dir):
-    """Refuse to proceed unless git is configured with the ASF committer identity."""
-    def report(text):
-        # Mid-session (the docs follow-up) a raw print would tear the live region.
-        if console_active():
-            say(text, "error")
-        else:
-            print(text)
-
-    try:
-        email = toolkit("git").user_email(repo_dir) or ""
-    except Exception as e:
-        report(f"❌ ERROR: Could not read git user.email: {e}")
-        return False
-
-    if email != REQUIRED_GIT_EMAIL:
-        report("❌ ERROR: Git identity is not the ASF committer identity.")
-        report(f"   Found:    user.email = '{email or '(unset)'}'")
-        report(f"   Required: user.email = '{REQUIRED_GIT_EMAIL}'")
-        report("")
-        report("   Fix (this script cannot mutate git config):")
-        report(f"     git config user.email {REQUIRED_GIT_EMAIL}")
-        report('     git config user.name "James Bognar"')
-        return False
-    return True
 
 
 def get_staged_paths(repo_dir):
@@ -478,32 +478,66 @@ def check_unreviewed_changes(repo_dir):
     return [*git.unstaged_paths(repo_dir), *git.untracked_paths(repo_dir)]
 
 
-def check_upstream_changes(repo_dir):
+def report_unreviewed(unreviewed_paths, label, outcome, lead="ERROR"):
     """
-    Fetch from the remote and compare the local branch to its upstream tracking branch.
-
-    Returns:
-        tuple: (ahead, behind, error_message)
-        - ahead: commits on the local branch not yet on the upstream branch, or None if there
-          is no upstream branch configured
-        - behind: commits on the upstream branch not yet on the local branch, or None if there
-          is no upstream branch configured
-        - error_message: Error message if the check failed, None otherwise
-
-    ahead/behind are None (not 0) when there's no upstream branch configured, so callers can
-    tell "nothing to push because there's no remote to compare against" apart from "checked,
-    and there's genuinely nothing ahead".
+    Print the unreviewed-changes refusal: the paths, why they matter, `outcome` (what was and wasn't done) and the
+    stash hint.  Shared by the pre-flight and by commit_and_push()'s late check so the two read alike.
     """
+    say(f"\n❌ {lead}: The working tree{label} has unreviewed changes -- staging is how "
+        "this script knows something has been reviewed, and these paths are not staged:", "error")
+    for path in unreviewed_paths:
+        say(f"   {path}", "error")
+    say("   Why: everything this pushes should be something you've read, not just", "error")
+    say("   something that happened to be in the tree.", "error")
+    say(f"\n   {outcome} Stage each path above if you've reviewed", "error")
+    say("   it, or set it aside for this run and restore it after:", "error")
+    quoted_paths = " ".join(shlex.quote(path) for path in unreviewed_paths)
+    say(f"     git stash push -- {quoted_paths}", "error")
+    say("     git stash pop", "error")
+
+
+def prechecks(juneau_root, *, dry_run=False, docs=True):
+    """
+    The Prechecks row's checks, which refuse before any build or test gate a push that commit_and_push() would
+    only refuse at the end: git's user.email isn't the ASF committer identity, the tree has unreviewed changes, or
+    the branch is behind its upstream (no upstream configured passes; a failed fetch or git error fails closed).
+    With docs and the juneau-docs sibling present and active -- something staged, or commits ahead of its upstream
+    (docs_active) -- the same three for juneau-docs follow (docs_prechecks); an idle juneau-docs is not checked, so
+    its dirt doesn't block a juneau push.  The late checks stay (upstream can move during the long build); these
+    only save the wait.
+    """
+    checks = toolkit("checks")
+    outcome = "Nothing would be built, committed or pushed." if dry_run else "Nothing was built, committed or pushed."
+    listed = [checks.identity(juneau_root, required=REQUIRED_GIT_EMAIL),
+              checks.unreviewed(juneau_root, outcome=outcome),
+              checks.upstream(juneau_root)]
+    docs_root = juneau_root.parent / "juneau-docs"
+    if docs and docs_root.exists() and docs_active(docs_root):
+        listed += docs_prechecks(docs_root, dry_run=dry_run)
+    return listed
+
+
+def docs_active(docs_root):
+    """Whether the juneau-docs follow-up has anything to push: something staged, or commits ahead of its upstream
+    (as of the last fetch).  A git error counts as active, so the docs Prechecks run and report it."""
     git = toolkit("git")
     try:
-        ahead, behind, error = git.ahead_behind(repo_dir, fetch=True)
-    except git.GitError as e:
-        return (None, None, f"Git command failed: {e}")
-    if error == "no upstream":
-        return (None, None, None)
-    if error:
-        return (None, None, f"Git command failed: {error}")
-    return (ahead, behind, None)
+        if git.staged_paths(docs_root):
+            return True
+        ahead, _, err = git.ahead_behind(docs_root, fetch=False)
+    except git.GitError:
+        return True
+    return bool(ahead) or (err is not None and err != "no upstream")
+
+
+def docs_prechecks(docs_root, *, dry_run=False):
+    """prechecks()' three checks for the juneau-docs sibling, named "docs identity", "docs unreviewed" and "docs
+    upstream", with hints that reach it from the juneau checkout."""
+    checks = toolkit("checks")
+    outcome = "Nothing would be built, committed or pushed." if dry_run else "Nothing was built, committed or pushed."
+    return [checks.identity(docs_root, required=REQUIRED_GIT_EMAIL, label="docs identity"),
+            checks.unreviewed(docs_root, git_cmd=DOCS_GIT, label="docs unreviewed", outcome=outcome),
+            checks.upstream(docs_root, git_cmd=DOCS_GIT, label="docs upstream")]
 
 
 def current_branch(repo_dir):
@@ -704,7 +738,7 @@ def commit_and_push(
     step_num,
     *,
     label="",
-    pull_hint="git pull",
+    git_cmd="git",
     pre_flight_hook=None,
     pre_commit_hook=None,
     step_prefix="",
@@ -755,17 +789,16 @@ def commit_and_push(
         label: Optional text identifying which repo this is, appended to output messages (e.g.
             " (juneau-docs)") so a caller running this against more than one repo per invocation
             can tell them apart in the log. Empty by default.
-        pull_hint: The `git pull` command shown in the behind-upstream error message. Callers
-            operating outside the repo's own directory (e.g. main() running against the
-            juneau-docs sibling while cwd is juneau) can pass a `-C <path>`-qualified form.
+        git_cmd: The git invocation shown in the behind-upstream hint. Callers operating outside
+            the repo's own directory (e.g. main() running against the juneau-docs sibling while cwd
+            is juneau) pass a `-C <path>`-qualified form.
         pre_flight_hook: Optional zero-arg callable invoked once it's established that there is
             something to commit and/or push (i.e. NOT the nothing_to_do case) and that the tree
             has nothing unreviewed in it, before any git state is mutated. Must return True to
             proceed or False to abort (and is responsible for printing its own error and playing
             the failure sound before returning False). Used for checks that must run before ANY
-            push, including a push-only run with nothing new to commit -- e.g. the juneau-docs
-            Apache-identity gate in main()'s Step 6 follow-up. None (the default) means no such
-            check is needed.
+            push, including a push-only run with nothing new to commit. None (the default) means no
+            such check is needed.
         pre_commit_hook: Optional zero-arg callable invoked only when there ARE staged changes to
             commit, immediately before `git commit`. Same True/False contract as pre_flight_hook.
             Used for checks that have nothing new to validate when nothing changed -- e.g. the
@@ -780,30 +813,30 @@ def commit_and_push(
         - step_num: the input step_num, advanced past whichever of the commit/push steps
           actually ran (unchanged for "nothing_to_do"/"error").
     """
+    git = toolkit("git")
     say(f"\n🔍 Checking for upstream changes{label}...")
-    commits_ahead, commits_behind, error_msg = check_upstream_changes(repo_dir)
-    if error_msg:
-        say(f"\n⚠ Warning: Could not check upstream changes{label}: {error_msg}", "warn")
-        say("Continuing anyway...", "warn")
-    elif commits_behind:
-        say(f"\n❌ ERROR: Local branch{label} is behind upstream/remote branch.", "error")
-        say("Please pull/merge upstream changes before pushing.", "error")
-        say(f"Run: {pull_hint}", "error")
+    upstream = git.upstream_verdict(repo_dir, git_cmd=git_cmd)
+    commits_ahead = upstream.ahead
+    if upstream.status == "error":
+        # Fails closed like the Prechecks: a branch nobody could compare with its upstream is not pushed.
+        say(f"\n❌ ERROR: {upstream.reason}{label}. Nothing was committed or pushed.", "error")
+        say(f"   Re-run the push once `{git_cmd} fetch` works.", "error")
+        return ("error", step_num)
+    if not upstream.ok:
+        say(f"\n❌ ERROR: Local branch{label} is {upstream.reason}. Nothing was committed or pushed.", "error")
+        for line in upstream.hint:
+            say(f"   {line}", "error")
         return ("error", step_num)
 
     try:
         has_staged = bool(get_staged_paths(repo_dir))
-    except (subprocess.CalledProcessError, OSError, toolkit("git").GitError) as e:
+    except (subprocess.CalledProcessError, OSError, git.GitError) as e:
         say(f"\n❌ ERROR: Could not check the Git index{label}: {e}", "error")
         return ("error", step_num)
 
     # Nothing staged skips the commit, not the push -- see docstring above.
     if not has_staged and not commits_ahead:
-        if error_msg:
-            say(f"\nℹ Nothing staged{label}, and the upstream comparison could not be "
-                "verified (see warning above) -- assuming nothing to push.")
-        else:
-            say(f"\nℹ Nothing staged and no unpushed commits{label}.")
+        say(f"\nℹ Nothing staged and no unpushed commits{label}.")
         say(f"🎉 Push{label} completed successfully (nothing to commit or push)!")
         return ("nothing_to_do", step_num)
 
@@ -812,21 +845,11 @@ def commit_and_push(
     # a push-only run.
     try:
         unreviewed_paths = check_unreviewed_changes(repo_dir)
-    except (subprocess.CalledProcessError, OSError, toolkit("git").GitError) as e:
+    except (subprocess.CalledProcessError, OSError, git.GitError) as e:
         say(f"\n❌ ERROR: Could not check for unreviewed changes{label}: {e}", "error")
         return ("error", step_num)
     if unreviewed_paths:
-        say(f"\n❌ ERROR: The working tree{label} has unreviewed changes -- staging is how "
-            "this script knows something has been reviewed, and these paths are not staged:", "error")
-        for path in unreviewed_paths:
-            say(f"   {path}", "error")
-        say("   Why: everything this pushes should be something you've read, not just", "error")
-        say("   something that happened to be in the tree.", "error")
-        say("\n   Nothing was committed or pushed. Stage each path above if you've reviewed", "error")
-        say("   it, or set it aside for this run and restore it after:", "error")
-        quoted_paths = " ".join(shlex.quote(path) for path in unreviewed_paths)
-        say(f"     git stash push -- {quoted_paths}", "error")
-        say("     git stash pop", "error")
+        report_unreviewed(unreviewed_paths, label, "Nothing was committed or pushed.")
         return ("error", step_num)
 
     if pre_flight_hook is not None and not pre_flight_hook():
@@ -845,7 +868,7 @@ def commit_and_push(
             step_id=f"{step_prefix}commit", title=f"Commit{label}", label=row_labels[0],
             capture=True, tty=True, summarize=commit_summary,
         ):
-            say(f"\n❌ git commit failed{label} -- aborting.", "error")
+            aborted(f"\n❌ git commit failed{label} -- aborting.")
             return ("error", step_num)
         say(f"✅ Step {step_num}: Git commit completed{label}.")
         step_num += 1
@@ -853,16 +876,22 @@ def commit_and_push(
         say(f"\nℹ Nothing staged to commit{label} -- {commits_ahead} unpushed commit(s) "
             "already on this branch will be pushed now.")
 
-    # Step N (or N+1): Push to remote
+    # Step N (or N+1): Push to remote -- to the tracked upstream (git.push_command), never a guessed remote.
+    try:
+        push_cmd = git.push_command(repo_dir)
+    except git.GitError as e:
+        say(f"\n❌ ERROR: Could not work out where to push{label}: {e}", "error")
+        say(f"⚠ Local commits exist but were not pushed{label}.", "warn")
+        return ("error", step_num)
     upstream = upstream_name(repo_dir) if console_active() else ""
     if not run_command(
-        ["git", "push"],
+        push_cmd,
         f"🚀 Step {step_num}: Pushing changes to remote repository{label}...",
         repo_dir,
         step_id=f"{step_prefix}push", title=f"Push{label}", label=row_labels[1],
         tty=True, summarize=lambda _text: f"{upstream} ✓" if upstream else None,
     ):
-        say(f"\n❌ git push failed{label}.", "error")
+        aborted(f"\n❌ git push failed{label}.")
         say(f"⚠ Local commits exist but were not pushed{label}.", "warn")
         return ("error", step_num)
     say(f"✅ Step {step_num}: Changes pushed to remote{label}.")
@@ -884,10 +913,9 @@ def run_docs_followup(juneau_root, message, step_num):
     interrupted run, and this follow-up has to run for that case too or it silently never
     pushes them -- the same false-success shape commit_and_push() exists to fix, one level up.
 
-    Uses two commit_and_push() hooks: the Apache-identity gate must run before ANY push
-    (including a push-only run with no new commit to make), so it's the pre_flight_hook; the
-    Docusaurus smoke check only has anything new to validate when there IS a commit about to be
-    made, so it's the pre_commit_hook.
+    The juneau-docs identity is checked by the Prechecks row (docs_prechecks) whenever juneau-docs has
+    something to push.  The Docusaurus smoke check only has anything new to validate when there IS a
+    commit about to be made, so it's commit_and_push()'s pre_commit_hook.
 
     Args:
         juneau_root: The juneau repo root (used only to locate the juneau-docs sibling).
@@ -906,13 +934,6 @@ def run_docs_followup(juneau_root, message, step_num):
     if not docs_root.exists():
         return ("no_docs_root", step_num)
 
-    def _verify_docs_identity():
-        say("\n🔐 Verifying git identity (apache.org email) on juneau-docs...")
-        if not verify_apache_identity(docs_root):
-            return False
-        say("✅ Git identity verified")
-        return True
-
     def _docs_smoke_check():
         say("\n📚 juneau-docs has changes — running Docusaurus smoke check first...")
         docs_build_script = docs_root / "scripts" / "build-docs.py"
@@ -924,7 +945,7 @@ def run_docs_followup(juneau_root, message, step_num):
             )
             docs_smoke_elapsed = time.time() - docs_smoke_start
             if returncode != 0:
-                say("\n❌ Docs smoke check failed — fix the Docusaurus build before pushing juneau-docs.", "error")
+                aborted("\n❌ Docs smoke check failed — fix the Docusaurus build before pushing juneau-docs.")
                 return False
             say(f"✅ Docs smoke check passed ({docs_smoke_elapsed:.1f}s)")
             return True
@@ -935,8 +956,7 @@ def run_docs_followup(juneau_root, message, step_num):
     docs_status, step_num = commit_and_push(
         docs_root, message, step_num,
         label=" (juneau-docs)",
-        pull_hint="git -C ../juneau-docs pull",
-        pre_flight_hook=_verify_docs_identity,
+        git_cmd=DOCS_GIT,
         pre_commit_hook=_docs_smoke_check,
         step_prefix="docs-", row_labels=("Docs", "Docs push"),
     )
@@ -981,41 +1001,39 @@ def run_docs_only(args, juneau_root):
             print("🔍 DRY RUN MODE - No actual changes will be made")
         print("=" * 70)
 
-    if not docs_root.exists():
-        print(f"\n❌ ERROR: juneau-docs repo not found at {docs_root}")
-        print("   Expected it as a sibling of the juneau checkout.")
-        play_sound(success=False)
-        return 1
-
+    missing = (f"❌ ERROR: juneau-docs repo not found at {docs_root}",
+               "   Expected it as a sibling of the juneau checkout.")
     if args.dry_run:
+        if not docs_root.exists():
+            print("\n" + "\n".join(missing))
+            return 1
         print("\nSteps that would be executed:")
-        print(f"  1. Verify Apache git identity on juneau-docs (user.email == {REQUIRED_GIT_EMAIL})")
-        print("  2. Check for upstream changes on juneau-docs (git fetch + compare to upstream)")
-        print("  3. Check juneau-docs git status (exit 0 with a no-changes message if clean)")
-        print("  4. Run docs verification gate: python3 scripts/build-docs.py --skip-maven (runs verify-docs.py)")
-        print(f"  5. Commit whatever is already staged: git commit -m \"{args.message}\"  (in juneau-docs; "
+        print(f"  1. Prechecks on juneau-docs: refuse unless git user.email is {REQUIRED_GIT_EMAIL}, the tree has no")
+        print("     unreviewed changes and the branch isn't behind upstream (git fetch + compare), before any gate runs;")
+        print("     the last two are checked again just before the commit")
+        print("  2. Check juneau-docs git status (exit 0 with a no-changes message if clean)")
+        print("  3. Run docs verification gate: python3 scripts/build-docs.py --skip-maven (runs verify-docs.py)")
+        print(f"  4. Commit whatever is already staged: git commit -m \"{args.message}\"  (in juneau-docs; "
               "refuses if anything is unstaged/untracked-and-not-gitignored)")
-        print("  6. Push to remote: git push  (in juneau-docs)")
+        print("  5. Push to the tracked upstream  (in juneau-docs)")
+        toolkit("run").checks("prechecks", "Prechecks", docs_prechecks(docs_root, dry_run=True), dry_run=True)
         print("\nDry run complete. Use without --dry-run to execute.")
         return 0
 
-    # Step 1: Apache identity gate — must hold before any work begins.
-    if not console:
-        print("\n🔐 Step 1: Verifying git identity (apache.org email) on juneau-docs...")
-    if not verify_apache_identity(docs_root):
-        play_sound(success=False)    # the session isn't open yet, so it can't sound the failure
-        return 1
-    if not console:
-        print("✅ Step 1: Git identity verified")
-    return _in_session(f"📚 Juneau docs push · {current_branch(docs_root)}",
-                       lambda: _docs_only_steps(args, console, docs_root),
-                       header=[f"{REQUIRED_GIT_EMAIL} ✓"] if console else [], mode="push", repo=docs_root,
-                       plan=["docs-smoke", "commit", "push"])
+    repo = docs_root if docs_root.exists() else juneau_root
+    return _in_session(f"📚 Juneau docs push · {current_branch(repo)}",
+                       lambda s: _docs_only_steps(s, args, console, docs_root, missing),
+                       mode="push", repo=repo,
+                       plan=[("prechecks", "Prechecks"), ("docs-smoke", "Docs build"), ("commit", "Commit"),
+                             ("push", "Push")])
 
 
-def _docs_only_steps(args, console, docs_root):
-    """--docs-only's steps inside its session.  Returns the exit code."""
-    # Steps 2-6: upstream check, no-op detection, unreviewed-changes guard, docs smoke check,
+def _docs_only_steps(s, args, console, docs_root, missing):
+    """--docs-only's steps inside its session s.  Returns the exit code."""
+    if not docs_root.exists():
+        s.fail(missing[0], hint=missing[1:])
+    s.checks("prechecks", "Prechecks", docs_prechecks(docs_root))
+    # After Prechecks: upstream check, no-op detection, unreviewed-changes guard, docs smoke check,
     # commit, and push -- all delegated to commit_and_push() (shared with main()'s Step 6
     # follow-up) so the nothing-staged-vs-nothing-to-push fix and the unreviewed-changes guard
     # live in one place. The Docusaurus smoke build only has anything new to validate when there
@@ -1030,7 +1048,7 @@ def _docs_only_steps(args, console, docs_root):
                 docs_root, "docs-smoke", "Docs smoke check", "Docs build"
             )
             if returncode != 0:
-                say("\n❌ Docs smoke check failed — fix the Docusaurus build before pushing juneau-docs.", "error")
+                aborted("\n❌ Docs smoke check failed — fix the Docusaurus build before pushing juneau-docs.")
                 return False
             say("✅ Docs smoke check passed")
             return True
@@ -1041,7 +1059,7 @@ def _docs_only_steps(args, console, docs_root):
     status, _ = commit_and_push(
         docs_root, args.message, 5,
         label=" (juneau-docs)",
-        pull_hint="git -C ../juneau-docs pull",
+        git_cmd=DOCS_GIT,
         pre_commit_hook=_docs_smoke_check,
     )
     if status == "error":
@@ -1057,23 +1075,12 @@ def _docs_only_steps(args, console, docs_root):
     return 0
 
 
-def _export_console(argv):
-    """Export --console as JUNEAU_RUN_CONSOLE before juneau_run is loaded, so the flag and the variable behave alike
-    (an argument beats a value already in the environment).  main()'s parser validates the value again."""
-    parser = argparse.ArgumentParser(add_help=False, allow_abbrev=False)
-    parser.add_argument("--console")
-    args, _ = parser.parse_known_args(argv)
-    if args.console in ("full", "condensed", "none"):
-        os.environ["JUNEAU_RUN_CONSOLE"] = args.console
-
-
 def main():
     """
-    The push.  _main() does the work up to the identity and PGP checks, then opens the run session, which owns the run
-    and done markers, the console, the summary line, the bell and the sound.  A Ctrl-C (or, with markers on, a
+    The push.  _main() parses the arguments and resolves the commit message, then opens the run session, which owns
+    the run and done markers, the console, the summary line, the bell and the sound.  A Ctrl-C (or, with markers on, a
     SIGTERM) before the session opens exits 130 with "Cancelled." too.
     """
-    _export_console(sys.argv[1:])
     run = _juneau.load()[0]
     previous_sigterm = None
     if run.enabled():
@@ -1092,9 +1099,24 @@ def main():
             signal.signal(signal.SIGTERM, previous_sigterm)
 
 
+#: Each step's row label, for the labelled plan (a pending row until the step starts).  build, tests and js-tests
+#: are test.py's rows; the others are this script's.
+PLAN_LABELS = {
+    "prechecks": "Prechecks", "pgp": "PGP", "sonar": "Sonar", "tracker": "Tracker", "container-tags": "Tags",
+    "bom": "BOM", "build": "Compile", "tests": "Tests", "js-tests": "Browser tests", "timing": "Timing",
+    "install": "Install", "starters": "Starters", "commit": "Commit", "push": "Push", "docs-smoke": "Docs build",
+    "docs-commit": "Docs", "docs-push": "Docs push",
+}
+
+
 def push_plan(args, script_dir, juneau_root, console):
-    """The top-level step ids this run will take, in order, for the console's Overall figure."""
-    ids = ["sonar"] if args.sonarqube else []
+    """The top-level steps this run will take, in order, as (id, label) pairs, for the console's pending rows and
+    Overall figure."""
+    ids = [] if args.test_only else ["prechecks"]
+    if (script_dir / PGP_PROMPT).exists():
+        ids.append("pgp")
+    if args.sonarqube:
+        ids.append("sonar")
     if args.tracker_audit:
         ids.append("tracker")
     if args.skip_tests:
@@ -1113,20 +1135,22 @@ def push_plan(args, script_dir, juneau_root, console):
         ids += ["commit", "push"]
         if (juneau_root.parent / "juneau-docs").exists():
             ids += ["docs-smoke", "docs-commit", "docs-push"]
-    return ids
+    return [(step_id, PLAN_LABELS[step_id]) for step_id in ids]
 
 
-def _in_session(title, body, *, header, mode, repo, plan):
-    """Run body() -- which returns an exit code -- inside the run session; returns the session's exit code."""
-    with toolkit("run").session(title, header=header, bell=True, sound=True, silence_env=(PUSH_NO_SOUND_ENV,),
+def _in_session(title, body, *, mode, repo, plan):
+    """Run body(session) -- which returns an exit code -- inside the run session; returns the session's exit code."""
+    with toolkit("run").session(title, bell=True, sound=True, silence_env=(PUSH_NO_SOUND_ENV,),
                                 mode=mode, project=repo.name, repo=repo, exit=False, plan=plan) as session:
-        code = body()
+        code = body(session)
         if code:
             raise SystemExit(code)
     return session.code
 
 
-def _main():  # NOSONAR python:S3776 -- Cognitive complexity is acceptable for this main function
+def parse_args(argv=None):
+    """The command line, validated, with --console and --detail exported (JUNEAU_RUN_CONSOLE, default condensed, and
+    JUNEAU_RUN_DETAIL) so the session and test.py use them.  Exits 2 on a bad combination."""
     parser = argparse.ArgumentParser(
         description="Build, test, and push Juneau project to Git repository",
         formatter_class=argparse.RawDescriptionHelpFormatter,
@@ -1233,7 +1257,7 @@ Examples:
     parser.add_argument(
         "--console",
         choices=("full", "condensed", "none"),
-        help="Maven output on the console: full (default), condensed or none (also JUNEAU_RUN_CONSOLE)."
+        help="Maven output on the console: full, condensed (default) or none (also JUNEAU_RUN_CONSOLE; the flag wins)."
     )
 
     parser.add_argument(
@@ -1241,19 +1265,25 @@ Examples:
         help="Console detail: summary, actionable (default), modules or all (also JUNEAU_RUN_DETAIL)."
     )
 
-    args = parser.parse_args()
+    args = parser.parse_args(argv)
     if args.js_tests and args.no_js_tests:
         parser.error("--js-tests and --no-js-tests are mutually exclusive")
     if args.test_only and (args.docs_only or args.sonarqube or args.tracker_audit or args.skip_tests):
         parser.error("--test-only cannot be combined with --docs-only, --sonarqube, --tracker-audit or --skip-tests")
-    run = _juneau.load()[0]
+    toolkit("run").export_console(args.console)    # precedence: flag > environment > condensed
     try:
-        run.export_detail(args.detail)
+        _juneau.load()[0].export_detail(args.detail)
     except ValueError as e:
         parser.error(str(e))
+    return args
+
+
+def _main():  # NOSONAR python:S3776 -- Cognitive complexity is acceptable for this main function
+    args = parse_args()
+    run = _juneau.load()[0]
     if not args.test_only:
         args.message = resolve_commit_message(args.message)
-    
+
     # Get the Juneau root directory
     script_dir = Path(__file__).parent
     juneau_root = script_dir.parent
@@ -1291,6 +1321,11 @@ Examples:
     if args.dry_run:
         print("\nSteps that would be executed:")
         step_num = 1
+        if not args.test_only:
+            print(f"  {step_num}. Prechecks: refuse unless git user.email is {REQUIRED_GIT_EMAIL}, the tree has no unreviewed "
+                  "(unstaged/untracked) changes and the branch isn't behind upstream (git fetch + compare) -- juneau, and "
+                  "juneau-docs when present -- before any gate runs; the last two are checked again before the commit")
+            step_num += 1
         print(f"  {step_num}. Prompt for PGP passphrase (dummy call)")
         step_num += 1
         if args.sonarqube:
@@ -1321,42 +1356,27 @@ Examples:
             print(f"  {step_num}. Commit whatever is already staged: git commit -m \"{args.message}\" "
                   "(refuses if anything is unstaged/untracked-and-not-gitignored -- stage or discard it first)")
             step_num += 1
-            print(f"  {step_num}. Push to remote: git push")
+            print(f"  {step_num}. Push to the tracked upstream")
+        if not args.test_only:
+            toolkit("run").checks("prechecks", "Prechecks", prechecks(juneau_root, dry_run=True), dry_run=True)
         print("\nDry run complete. Use without --dry-run to execute.")
         return 0
 
-    branch = current_branch(juneau_root)
-
-    # Identity gate — must hold before the expensive build/test gate and any commit/push.
-    # Extended (maintainer-approved) from the --docs-only path to the default flow too;
-    # juneau-docs gets its own check further down, right before its Step 6 commit/push,
-    # since the two repos can have independent git config user.email.
-    # --test-only never commits or pushes, so it has no identity to verify.
-    header = []
-    if not args.test_only:
-        if not console:
-            print("\n🔐 Verifying git identity (apache.org email) on juneau...")
-        if not verify_apache_identity(juneau_root):
-            play_sound(success=False)    # the session isn't open yet, so it can't sound the failure
-            return 1
-        if console:
-            header.append(f"{REQUIRED_GIT_EMAIL} ✓")
-        else:
-            print("✅ Git identity verified")
-
-    # The PGP prompt runs before the gates and before the session starts: it gets the bare terminal, and the
-    # header can show how it went.
-    pgp = prompt_pgp_passphrase(script_dir)
-    if pgp is not None:
-        header.append("PGP ✓" if pgp else "PGP ⚠")
-    return _in_session(f"🚀 Juneau push · {branch}", lambda: _push_steps(args, run, console, script_dir, juneau_root),
-                       header=header, mode="test" if args.test_only else "push", repo=juneau_root,
+    return _in_session(f"🚀 Juneau push · {current_branch(juneau_root)}",
+                       lambda s: _push_steps(s, args, run, console, script_dir, juneau_root),
+                       mode="test" if args.test_only else "push", repo=juneau_root,
                        plan=push_plan(args, script_dir, juneau_root, console))
 
 
-def _push_steps(args, run, console, script_dir, juneau_root):  # NOSONAR python:S3776 -- Cognitive complexity is acceptable for this function
-    """The steps of the push inside its session.  Returns the exit code."""
+def _push_steps(s, args, run, console, script_dir, juneau_root):  # NOSONAR python:S3776 -- Cognitive complexity is acceptable for this function
+    """The steps of the push inside its session s.  Returns the exit code."""
     step_num = 1
+    # Prechecks refuse before any gate (the row says why); --test-only never commits or pushes, so it has none.
+    if not args.test_only:
+        s.checks("prechecks", "Prechecks", prechecks(juneau_root))
+    # The PGP prompt gets the bare terminal (the console pauses for it), before the long gates.
+    if (script_dir / PGP_PROMPT).exists():
+        pgp_row(script_dir)
     if console and args.skip_tests:
         say("⚠ Tests will be SKIPPED (--skip-tests)", "warn")
 
@@ -1365,15 +1385,13 @@ def _push_steps(args, run, console, script_dir, juneau_root):  # NOSONAR python:
     if args.sonarqube:
         gate_status = run_sonarqube_gate(juneau_root, step_num)
         if gate_status == "fail":
-            say("\n❌ Push aborted: SonarCloud currently reports open issues for this branch.", "error")
-            say("   Note: this reflects SonarCloud's last CI-analyzed commit (a ratchet), not your local diff.", "error")
-            say("   Resolve/triage the reported issues, or omit --sonarqube to push without this gate.", "error")
-            return 1
+            return aborted("\n❌ Push aborted: SonarCloud currently reports open issues for this branch.",
+                           "   Note: this reflects SonarCloud's last CI-analyzed commit (a ratchet), not your local diff.",
+                           "   Resolve/triage the reported issues, or omit --sonarqube to push without this gate.")
         if gate_status == "error":
-            say("\n❌ Push aborted: the SonarQube gate could not be run.", "error")
-            say(f"   Fix the issue {'in the full log' if console else 'reported above'} "
-                "(e.g. install a Python >= 3.10 interpreter), or omit --sonarqube to push without this gate.", "error")
-            return 1
+            return aborted("\n❌ Push aborted: the SonarQube gate could not be run.",
+                           f"   Fix the issue {'in the full log' if console else 'reported above'} "
+                           "(e.g. install a Python >= 3.10 interpreter), or omit --sonarqube to push without this gate.")
         if gate_status == "skip":
             say(f"⚠ Step {step_num}: SonarQube gate skipped — SonarCloud has no analysis for this "
                 "branch yet (a new branch CI hasn't scanned). Continuing without the Sonar gate.", "warn")
@@ -1386,16 +1404,14 @@ def _push_steps(args, run, console, script_dir, juneau_root):  # NOSONAR python:
     tracker_gate_status = maybe_run_tracker_audit_gate(args, juneau_root, step_num)
     if tracker_gate_status is not None:
         if tracker_gate_status == "fail":
-            say("\n❌ Push aborted: the tracker audit flagged at least one plan file "
-                "under ~/Project Work/todos/juneau/.", "error")
-            say("   Run `python3 ~/Project\\ Work/scripts/todo-status-audit.py --project juneau` for "
-                "details, or omit --tracker-audit to push without this gate.", "error")
-            return 1
+            return aborted("\n❌ Push aborted: the tracker audit flagged at least one plan file "
+                           "under ~/Project Work/todos/juneau/.",
+                           "   Run `python3 ~/Project\\ Work/scripts/todo-status-audit.py --project juneau` for "
+                           "details, or omit --tracker-audit to push without this gate.")
         if tracker_gate_status == "error":
-            say("\n❌ Push aborted: the tracker audit gate could not be run.", "error")
-            say(f"   Fix the issue {'in the full log' if console else 'reported above'}, "
-                "or omit --tracker-audit to push without this gate.", "error")
-            return 1
+            return aborted("\n❌ Push aborted: the tracker audit gate could not be run.",
+                           f"   Fix the issue {'in the full log' if console else 'reported above'}, "
+                           "or omit --tracker-audit to push without this gate.")
         say(f"✅ Step {step_num}: Tracker audit gate passed — no plan file flagged.")
         step_num += 1
 
@@ -1412,8 +1428,7 @@ def _push_steps(args, run, console, script_dir, juneau_root):  # NOSONAR python:
                 label="Tags",
                 summarize=tags_summary
             ):
-                say("\n❌ Build process aborted due to missing container test tags.", "error")
-                return 1
+                return aborted("\n❌ Build process aborted due to missing container test tags.")
             step_num += 1
 
         check_bom = script_dir / "check-bom-completeness.py"
@@ -1426,8 +1441,7 @@ def _push_steps(args, run, console, script_dir, juneau_root):  # NOSONAR python:
                 label="BOM",
                 summarize=bom_summary
             ):
-                say("\n❌ Build process aborted: juneau-bom is out of sync with the reactor.", "error")
-                return 1
+                return aborted("\n❌ Build process aborted: juneau-bom is out of sync with the reactor.")
             step_num += 1
 
         test_script = script_dir / 'test.py'
@@ -1445,8 +1459,7 @@ def _push_steps(args, run, console, script_dir, juneau_root):  # NOSONAR python:
                     result = run_test_script(test_cmd, juneau_root, run, env={**os.environ, **extra})
                 _test_wall_sec = int(time.time() - _test_start)
                 if result.returncode != 0:
-                    say("\n❌ Build process aborted due to test failures.", "error")
-                    return 1
+                    return aborted("\n❌ Build process aborted due to test failures.")
                 say(f"✅ Step {step_num}: Tests passed")
                 _append_test_run_history(juneau_root, _test_wall_sec)
             except Exception as e:
@@ -1464,8 +1477,7 @@ def _push_steps(args, run, console, script_dir, juneau_root):  # NOSONAR python:
             )
             _test_wall_sec = int(time.time() - _test_start)
             if not _mvn_ok:
-                say("\n❌ Build process aborted due to test failures.", "error")
-                return 1
+                return aborted("\n❌ Build process aborted due to test failures.")
             _append_test_run_history(juneau_root, _test_wall_sec)
         timing_report = script_dir / "push-timings.py"
         if timing_report.exists():
@@ -1481,8 +1493,7 @@ def _push_steps(args, run, console, script_dir, juneau_root):  # NOSONAR python:
     else:
         say(f"\n⏭️  Step {step_num}: Skipping tests (--skip-tests flag)")
         with run.row("tests", "Tests", label="Tests") as tests_row:
-            tests_row.skip()
-            tests_row.summary = "(--skip-tests)"
+            tests_row.skip("--skip-tests")
         step_num += 1
     
     # Step 2: Build and install -- unless test.py --full has just done `mvn clean install {PARALLELISM} -DskipTests`
@@ -1490,8 +1501,7 @@ def _push_steps(args, run, console, script_dir, juneau_root):  # NOSONAR python:
     if installed_by_tests:
         # Still the protocol step `install` (end status skip), so the release manager's step list doesn't change.
         with marked_step("install", "Build and install", label="Install") as install_step:
-            install_step.skip()
-            install_step.summary = "(done by Tests)"
+            install_step.skip("done by Tests")
         if not console:
             say(f"\n⏭️  Step {step_num}: Build and install already done by test.py --full")
     elif not run_marked(
@@ -1502,8 +1512,7 @@ def _push_steps(args, run, console, script_dir, juneau_root):  # NOSONAR python:
         tool="maven",
         label="Install",
     ):
-        say("\n❌ Build process aborted due to build failure.", "error")
-        return 1
+        return aborted("\n❌ Build process aborted due to build failure.")
     step_num += 1
 
     # Step 3 (TODO-158): Build external starter repos against the freshly-installed local SNAPSHOT (blocking gate)
@@ -1512,8 +1521,7 @@ def _push_steps(args, run, console, script_dir, juneau_root):  # NOSONAR python:
         if not starters_ok:
             starters_step.fail()
     if not starters_ok:
-        say("\n❌ Build process aborted due to external starter repo verification failure.", "error")
-        return 1
+        return aborted("\n❌ Build process aborted due to external starter repo verification failure.")
     step_num += 1
     
     if args.test_only:

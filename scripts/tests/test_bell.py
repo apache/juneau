@@ -62,6 +62,13 @@ def test_mod(monkeypatch):
     return module
 
 
+def end_of_run(push_mod, success):
+    """What push.py's session does when it ends: the toolkit's bell and sound, silenced by push.py's variable."""
+    notify = push_mod.toolkit("notify")
+    notify.bell(silence_env=(push_mod.PUSH_NO_SOUND_ENV,))
+    notify.sound(success, silence_env=(push_mod.PUSH_NO_SOUND_ENV,))
+
+
 def terminal(monkeypatch, tty=True):
     out = Stdout(tty)
     monkeypatch.setattr("sys.stdout", out)
@@ -71,27 +78,27 @@ def terminal(monkeypatch, tty=True):
 @pytest.mark.parametrize("success", [True, False])
 def test_push_rings_on_a_tty_whether_the_run_passed_or_failed(push_mod, monkeypatch, success):
     out = terminal(monkeypatch)
-    push_mod.play_sound(success=success)
+    end_of_run(push_mod, success)
     assert out.getvalue() == "\a"
 
 
 def test_push_is_silent_off_a_tty(push_mod, monkeypatch):
     out = terminal(monkeypatch, tty=False)
-    push_mod.play_sound(success=True)
+    end_of_run(push_mod, True)
     assert out.getvalue() == ""
 
 
 def test_push_is_silent_in_the_sandbox(push_mod, monkeypatch):
     monkeypatch.setenv("SANDBOX_RUNTIME", "1")
     out = terminal(monkeypatch)
-    push_mod.play_sound(success=True)
+    end_of_run(push_mod, True)
     assert out.getvalue() == ""
 
 
 def test_push_is_silent_when_opted_out(push_mod, monkeypatch):
     monkeypatch.setenv("JUNEAU_PUSH_NO_SOUND", "1")
     out = terminal(monkeypatch)
-    push_mod.play_sound(success=False)
+    end_of_run(push_mod, False)
     assert out.getvalue() == ""
 
 
@@ -103,7 +110,7 @@ def test_push_no_sound_silences_the_toolkit_sound(push_mod, monkeypatch, silence
     if silenced:
         monkeypatch.setenv("JUNEAU_PUSH_NO_SOUND", "1")
     terminal(monkeypatch, tty=False)
-    push_mod.play_sound(success=False)
+    end_of_run(push_mod, False)
     assert played == ([] if silenced else [False])
 
 
@@ -116,7 +123,7 @@ def test_push_never_raises_when_stdout_cannot_be_written(push_mod, monkeypatch):
             raise OSError("closed")
 
     monkeypatch.setattr("sys.stdout", Broken())
-    push_mod.play_sound(success=True)
+    end_of_run(push_mod, True)
 
 
 @pytest.mark.parametrize("code", [0, 1])
