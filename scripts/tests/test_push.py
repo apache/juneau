@@ -65,6 +65,8 @@ def clean_run_env(monkeypatch):
     monkeypatch.delenv("RUN_MARKERS", raising=False)
     monkeypatch.delenv("RUN_ARTIFACTS", raising=False)
     monkeypatch.delitem(sys.modules, "juneau_run", raising=False)
+    # Pin the plain view: push.py itself now defaults to condensed; the tests below that want the default unset this.
+    monkeypatch.setenv("JUNEAU_RUN_CONSOLE", "full")
     monkeypatch.setenv("JRM_PUSH_NO_BELL", "1")  # keep the main()-calling tests quiet under `pytest -s`
 
 
@@ -148,15 +150,16 @@ def repo(tmp_path: Path, remote_repo: Path) -> Path:
 
 @pytest.fixture
 def git_spy(push_module, monkeypatch):
-    """Record every argv passed to subprocess.run (the toolkit's git helpers use it) while still running real git."""
+    """Record every argv the toolkit's git helpers start, while still running real git.  subprocess.run is built on
+    Popen (and the console's polled path uses Popen directly), so spying on Popen sees both."""
     calls: list[list[str]] = []
-    real_run = subprocess.run
+    real_popen = subprocess.Popen
 
     def _spy(cmd, *args, **kwargs):
         calls.append(list(cmd) if isinstance(cmd, (list, tuple)) else [cmd])
-        return real_run(cmd, *args, **kwargs)
+        return real_popen(cmd, *args, **kwargs)
 
-    monkeypatch.setattr(subprocess, "run", _spy)
+    monkeypatch.setattr(subprocess, "Popen", _spy)
     return calls
 
 
@@ -480,21 +483,18 @@ class _FakeStdout:
 
 
 def _run_main(push_module, monkeypatch, *, tty, identity=True, commit_result=0, commit_raises=None):
-    """Run main() with the identity and commit steps stubbed; return (exit_code, fake_stdout)."""
+    """Run main() with commit_and_push (the Prechecks, commit and push) stubbed; return (exit_code, fake_stdout)."""
     fake = _FakeStdout(tty)
     monkeypatch.setattr(sys, "stdout", fake)
 
-    def fake_identity(s, _repo):
+    def fake_commit_and_push(s, *_args, **_kwargs):
         if not identity:
             s.fail("❌ ERROR: no git identity configured")
-
-    def fake_commit_and_push(s, *_args, **_kwargs):
         if commit_raises is not None:
             raise commit_raises
         if commit_result:
             s.fail("❌ refused")
 
-    monkeypatch.setattr(push_module.module, "_identity", fake_identity)
     monkeypatch.setattr(push_module.module, "commit_and_push", fake_commit_and_push)
     return push_module.main(["msg"]), fake
 
@@ -518,7 +518,7 @@ class TestEndOfRunBell:
         assert code == 1
         assert fake.written.endswith("\a")
 
-    def test_rings_on_tty_when_identity_gate_exits(self, push_module, monkeypatch):
+    def test_rings_on_tty_when_the_prechecks_fail(self, push_module, monkeypatch):
         code, fake = _run_main(push_module, monkeypatch, tty=True, identity=False)
         assert code == 1
         assert fake.written.endswith("\a")
@@ -576,7 +576,6 @@ class TestConsoleFlag:
 
     def _main(self, push_module, monkeypatch, *flags):
         monkeypatch.setattr(sys, "stdout", _FakeStdout(False))
-        monkeypatch.setattr(push_module.module, "_identity", lambda *_a: None)
         monkeypatch.setattr(push_module.module, "commit_and_push", lambda *_a, **_k: None)
         return push_module.main([*flags, "msg"])
 
@@ -595,6 +594,14 @@ class TestConsoleFlag:
         assert self._main(push_module, monkeypatch) == 0
         assert os.environ["JUNEAU_RUN_CONSOLE"] == "full"
 
+    def test_no_flag_and_no_env_var_defaults_to_condensed(self, push_module, monkeypatch):
+        assert self._main(push_module, monkeypatch) == 0
+        assert os.environ["JUNEAU_RUN_CONSOLE"] == "condensed"
+
+    def test_unknown_mode_in_the_environment_is_an_error(self, push_module, monkeypatch):
+        monkeypatch.setenv("JUNEAU_RUN_CONSOLE", "loud")
+        assert self._main(push_module, monkeypatch) == 2
+
     def test_unknown_mode_is_a_usage_error(self, push_module):
         with pytest.raises(SystemExit) as exc:
             push_module.main(["--console", "loud", "msg"])
@@ -612,3 +619,165 @@ class TestCondensedConsole:
     def test_a_plain_run_loads_no_juneau_run(self, push_module, repo):
         assert push_module.main(["--dry-run", "msg"], repo_dir=repo) == 0
         assert "juneau_run" not in sys.modules
+
+
+# ---------------------------------------------------------------------------------------
+# The upstream gate: a branch behind its upstream is refused before the commit.
+# ---------------------------------------------------------------------------------------
+def _upstream_commit(repo: Path, name: str = "other.txt") -> None:
+    """Land a commit on the remote's master from a second clone, leaving `repo` one commit behind (once it fetches)."""
+    remote = Path(_run(repo, "git", "remote", "get-url", "origin"))
+    other = repo.parent / f"other-{name}"
+    _run(repo.parent, "git", "clone", str(remote), str(other))
+    (other / name).write_text("o\n", encoding="utf-8")
+    _commit(other, "upstream work")
+    _run(other, "git", "push", "origin", "master")
+
+
+def _stage(repo: Path, name: str = "README.md") -> None:
+    (repo / name).write_text("new content\n", encoding="utf-8")
+    _run(repo, "git", "add", name)
+
+
+class TestUpstreamGate:
+    def test_behind_is_refused_before_the_commit(self, push_module, repo, remote_repo, capsys):
+        _stage(repo)
+        _upstream_commit(repo)
+        head, remote_head = _run(repo, "git", "rev-parse", "HEAD"), _run(remote_repo, "git", "rev-parse", "master")
+
+        assert push_module.commit_and_push(repo, "msg") == 1
+
+        out = capsys.readouterr().out
+        assert "1 commit behind upstream" in out  # the row's reason
+        assert "1 commit behind its upstream" in out  # the hint
+        assert _run(repo, "git", "rev-parse", "HEAD") == head  # no commit was made
+        assert _run(remote_repo, "git", "rev-parse", "master") == remote_head
+        assert _run(repo, "git", "diff", "--cached", "--name-only") == "README.md"  # the reviewed index is untouched
+
+    def test_behind_with_no_local_commits_hints_ff_only(self, push_module, repo, capsys):
+        _stage(repo)
+        _upstream_commit(repo)
+        assert push_module.commit_and_push(repo, "msg") == 1
+        out = capsys.readouterr().out
+        assert "git merge --ff-only @{upstream}" in out
+        assert "--autostash" not in out
+
+    def test_behind_with_local_commits_hints_a_rebase_that_keeps_the_index(self, push_module, repo, capsys):
+        (repo / "local.txt").write_text("l\n", encoding="utf-8")
+        _commit(repo, "local")
+        _upstream_commit(repo)
+        _stage(repo)
+        assert push_module.commit_and_push(repo, "msg") == 1
+        out = capsys.readouterr().out
+        assert "git stash push && git pull --rebase && git stash pop --index" in out
+        assert "--ff-only" not in out and "--autostash" not in out
+
+    def test_up_to_date_proceeds(self, push_module, repo, remote_repo):
+        _stage(repo)
+        assert push_module.commit_and_push(repo, "msg") == 0
+        assert _run(remote_repo, "git", "rev-parse", "master") == _run(repo, "git", "rev-parse", "HEAD")
+
+    def test_ahead_only_proceeds(self, push_module, repo, remote_repo):
+        (repo / "local.txt").write_text("l\n", encoding="utf-8")
+        _commit(repo, "local")
+        _stage(repo)
+        assert push_module.commit_and_push(repo, "msg") == 0
+        assert _run(remote_repo, "git", "rev-parse", "master") == _run(repo, "git", "rev-parse", "HEAD")
+
+    def test_no_upstream_proceeds_and_the_push_sets_it(self, push_module, repo, remote_repo):
+        _run(repo, "git", "branch", "--unset-upstream")
+        _stage(repo)
+        assert push_module.commit_and_push(repo, "msg") == 0
+        assert _run(remote_repo, "git", "rev-parse", "master") == _run(repo, "git", "rev-parse", "HEAD")
+        assert _run(repo, "git", "rev-parse", "--abbrev-ref", "@{upstream}") == "origin/master"
+
+    def test_a_fetch_error_fails_closed(self, push_module, repo, capsys):
+        _stage(repo)
+        _run(repo, "git", "remote", "set-url", "origin", str(repo.parent / "missing.git"))
+        head = _run(repo, "git", "rev-parse", "HEAD")
+        assert push_module.commit_and_push(repo, "msg") == 1
+        assert "could not check upstream" in capsys.readouterr().out
+        assert _run(repo, "git", "rev-parse", "HEAD") == head
+
+    def test_dry_run_behind_reports_would_refuse_and_exits_zero(self, push_module, repo, capsys):
+        _stage(repo)
+        _upstream_commit(repo)
+        head = _run(repo, "git", "rev-parse", "HEAD")
+        assert push_module.commit_and_push(repo, "msg", dry_run=True) == 0
+        out = capsys.readouterr().out
+        assert "would refuse" in out and "1 commit behind" in out
+        assert _run(repo, "git", "rev-parse", "HEAD") == head
+
+
+# ---------------------------------------------------------------------------------------
+# The Prechecks row: all checks run, and the push goes to the tracked branch.
+# ---------------------------------------------------------------------------------------
+class TestPrechecks:
+    def test_every_check_runs_so_one_refusal_reports_all_the_problems(self, push_module, repo, capsys):
+        _stage(repo)
+        (repo / "scratch.txt").write_text("not staged\n", encoding="utf-8")
+        _upstream_commit(repo)
+
+        assert push_module.commit_and_push(repo, "msg") == 1
+
+        out = capsys.readouterr().out
+        assert "✗ unreviewed" in out and "✗ upstream" in out
+        assert "scratch.txt" in out and "git merge --ff-only @{upstream}" in out
+
+    def test_a_missing_identity_fails_with_the_config_command_and_never_sets_it(self, push_module, repo, capsys, git_spy):
+        _run(repo, "git", "config", "--unset", "user.email")
+        _stage(repo)
+        git_spy.clear()
+
+        assert push_module.commit_and_push(repo, "msg") == 1
+
+        assert "git config user.email" in capsys.readouterr().out
+        assert not any(argv[:2] == ["git", "commit"] for argv in git_spy)
+        assert not any(argv[:3] == ["git", "config", "user.email"] and len(argv) > 3 and not argv[3].startswith("--")
+                       for argv in git_spy), "the script must only read git config"
+
+    def test_a_clean_tree_warns_nothing_staged(self, push_module, repo, capsys):
+        assert push_module.commit_and_push(repo, "msg") == 0
+        out = capsys.readouterr().out
+        assert "⚠ staged" in out and "Nothing to commit" in out
+
+    def test_dry_run_with_a_dirty_tree_still_reports_every_would_refuse(self, push_module, repo, capsys):
+        _stage(repo)
+        (repo / "scratch.txt").write_text("not staged\n", encoding="utf-8")
+        _upstream_commit(repo)
+
+        assert push_module.commit_and_push(repo, "msg", dry_run=True) == 0
+
+        out = capsys.readouterr().out
+        assert "⚠ unreviewed: would refuse" in out and "⚠ upstream: would refuse" in out
+        assert "DRY RUN" not in out  # no would-commit report when a check would refuse
+
+
+class TestPushTracked:
+    def test_the_push_goes_to_the_branchs_tracked_remote_ref(self, push_module, repo, remote_repo):
+        _run(repo, "git", "push", "origin", "master:topic")
+        _run(repo, "git", "branch", "--set-upstream-to=origin/topic")
+        _stage(repo)
+
+        assert push_module.commit_and_push(repo, "msg") == 0
+
+        head = _run(repo, "git", "rev-parse", "HEAD")
+        assert _run(remote_repo, "git", "rev-parse", "topic") == head
+        assert _run(remote_repo, "git", "rev-parse", "master") != head
+
+    def test_a_tracked_local_branch_is_refused_after_the_commit_reports_the_local_commit(
+        self, push_module, repo, capsys
+    ):
+        _run(repo, "git", "branch", "side")
+        _run(repo, "git", "branch", "--set-upstream-to=side")
+        _stage(repo)
+
+        assert push_module.commit_and_push(repo, "msg") == 1
+
+        out = capsys.readouterr().out
+        assert "tracks a local branch" in out and "push did not complete" in out
+
+    def test_dry_run_reports_the_real_push_command(self, push_module, repo, capsys):
+        _stage(repo)
+        assert push_module.commit_and_push(repo, "msg", dry_run=True) == 0
+        assert "git push origin HEAD:refs/heads/master" in capsys.readouterr().out

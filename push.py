@@ -25,15 +25,22 @@ Usage:
     ./push.py "commit message"
     ./push.py                     # prompts for a commit message
     ./push.py --dry-run "message" # show what would happen, change nothing
-    ./push.py --console condensed "message"   # the steps as console rows; git output goes to the full log
+    ./push.py --console full "message"        # plain output; the default is the condensed console rows
 
     --console full|condensed|none sets JUNEAU_RUN_CONSOLE before juneau_run is loaded (the flag wins over a value
-    already in the environment), exactly as scripts/test.py does in apache/juneau.  Only condensed (or RUN_MARKERS=1)
-    makes this script load juneau_run; full and none leave it unloaded, so both give the plain output.  This script
-    has no Maven step, so the console view shows the identity, review, commit and push steps only.
+    already in the environment; with neither, the default is condensed), exactly as scripts/test.py does in
+    apache/juneau.  Condensed (the default, or RUN_MARKERS=1) makes this script load juneau_run, with the git output
+    going to the full log; full and none leave it unloaded, so both give the plain output.  This script
+    has no Maven step, so the console view shows the Prechecks, Commit and Push steps only.
 
     When a run ends (success or failure) on a terminal, push.py rings the terminal bell.
     Set JRM_PUSH_NO_BELL=1 to silence it (it is also skipped when SANDBOX_RUNTIME=1).
+
+Steps: Prechecks, Commit, Push.  Prechecks is one row of four checks that all run, none stopping at the first
+    failure: identity, unreviewed (the review gate), staged (a warning, "nothing staged", ends the run with nothing to
+    do) and upstream.  The upstream check fetches and refuses (before the commit) when the branch is behind its
+    upstream, since the push would be rejected anyway; a branch with no upstream proceeds (the push then sets it),
+    and a fetch error fails closed.  Under --dry-run each failing check shows as a "would refuse" warning.
 
 Safety:
     - Never uses --force or --no-verify.
@@ -66,7 +73,7 @@ import bootstrap  # noqa: E402
 from bootstrap import run_requested  # noqa: E402,F401  (push.run_requested is the environment rule tests check)
 
 # The toolkit modules, bound by toolkit() on first use so that importing this file has no side effects.
-git = run = notify = None
+git = run = notify = checks = None
 
 
 class _NoMarkers:
@@ -86,10 +93,10 @@ run_markers = _NoMarkers()
 
 def toolkit():
     """Load juneau_scripts (once per process) and bind git, run and notify.  Returns the package."""
-    global git, run, notify
+    global git, run, notify, checks
     # cache_dir: the first load fixes it for the process, so a fetched copy lands in <repo>/target as before.
     _, js = bootstrap.load(REPO_DIR / "pom.xml", run=False, cache_dir=REPO_DIR / "target" / "juneau-run")
-    from juneau_scripts import git, notify, run  # noqa: F811
+    from juneau_scripts import checks, git, notify, run  # noqa: F811
     return js
 
 
@@ -112,7 +119,8 @@ def resolve_commit_message(s, cli_message):
     if cli_message:
         return cli_message
     try:
-        message = input("Commit message: ").strip()
+        with run.paused():
+            message = input("Commit message: ").strip()
     except (EOFError, KeyboardInterrupt):
         s.fail("\n❌ Aborted: no commit message provided.")
     if not message:
@@ -120,61 +128,52 @@ def resolve_commit_message(s, cli_message):
     return message
 
 
-def _review(s, repo_dir, dry_run):
+def _prechecks(s, repo_dir, dry_run):
     """
-    The review gate (step 2).  Returns the staged paths, or None when a dry run would refuse.
+    The Prechecks row: identity, unreviewed, staged and upstream, all of which run (none stops at the first failure).
+    Returns the CheckResult; a failure ends the session (the row already says why), except under --dry-run, where each
+    failing check is a "would refuse" warning.
 
-    A staged path is the operator's record that they've reviewed it and it's good -- staging as they review, not as
-    a mechanical step right before committing.  So this commits the index exactly as it finds it (no `git add`,
-    anywhere, ever) and refuses outright -- commits and pushes NOTHING -- if the working tree has any unstaged
-    modification to a tracked file, or any untracked, non-gitignored file, since their presence means the review pass
-    isn't finished.  Gitignored untracked files are not flagged: build output was never going to be staged or
-    reviewed.  This is deliberately strict with no override flag -- even a flag that names the exact paths being
+    The review gate: a staged path is the operator's record that they've reviewed it and it's good -- staging as they
+    review, not as a mechanical step right before committing.  So this commits the index exactly as it finds it (no
+    `git add`, anywhere, ever) and refuses outright -- commits and pushes NOTHING -- if the working tree has any
+    unstaged modification to a tracked file, or any untracked, non-gitignored file, since their presence means the
+    review pass isn't finished.  Gitignored untracked files are not flagged: build output was never going to be staged
+    or reviewed.  This is deliberately strict with no override flag -- even a flag that names the exact paths being
     overridden is still a way to push something nobody reviewed, which is the one thing this refusal exists to
     prevent.  For genuinely partial work, the sanctioned way out is `git stash push -- <paths>` before running
-    push.py and `git stash pop` after; the refusal message prints that command with the offending paths filled in.
+    push.py and `git stash pop` after; the refusal hint prints that command with the offending paths filled in.
 
-    Both queries are read-only, so they run under --dry-run too: it reports the REAL outcome instead of a guess.  They
-    also fail closed: if git can't run, the run is refused rather than proceeding unchecked.
+    The upstream gate fails early when the push is going to be rejected anyway: behind refuses before the commit, with a
+    hint that keeps the reviewed index staged (never a plain `--autostash`, which would unstage reviewed changes).  No
+    upstream proceeds; a fetch or rev-list error fails closed.  Every check only reads (the upstream check fetches), so
+    a dry run reports the REAL outcome instead of a guess, and each check fails closed if git can't run.
     """
-    with run.step("review", "Review gate (staged index)", n=2):
-        try:
-            unreviewed = git.unstaged_paths(repo_dir) + git.untracked_paths(repo_dir)
-            staged = git.staged_paths(repo_dir)
-        except git.GitError as e:
-            s.fail(f"\n❌ ERROR: Could not check the working tree/index: {e}")
-        if not unreviewed:
-            return staged
-        header = "🔍 DRY RUN — would REFUSE" if dry_run else "❌ ERROR"
-        first = (f"\n{header}: the working tree has unreviewed changes — staging is how this "
-                 "script knows something has been reviewed, and these paths are not staged:")
-        rest = [f"   {path}" for path in unreviewed]
-        rest += ["   Why: everything this pushes should be something you've read, not just",
-                 "   something that happened to be in the tree.",
-                 "\n   Nothing was committed or pushed. Stage each path above if you've reviewed",
-                 "   it, or set it aside for this run and restore it after:"]
-        rest += [f"     {line}" for line in git.stash_hint(unreviewed).splitlines()]
-        if not dry_run:
-            s.fail(first, hint=rest)
-        for line in (first, *rest):
-            say(line)
-        run_markers.note("warn", "Dry run — would refuse: unreviewed changes", step="review")
-        return None
+    return s.checks("prechecks", "Prechecks", [
+        checks.identity(repo_dir),
+        checks.unreviewed(repo_dir),
+        checks.staged(repo_dir),
+        checks.upstream(repo_dir),
+    ], dry_run=dry_run)
 
 
-def _dry_run_report(staged, message, branch):
+def _dry_run_report(staged, message, repo_dir):
     """The --dry-run report: what the commit and push would do."""
     plural = "" if len(staged) == 1 else "s"
-    say(f"\n🔍 DRY RUN — no changes will be made. Would commit the staged index "
-        f"({len(staged)} path{plural}) and push to origin/{branch}:")
+    say(f"\n🔍 DRY RUN — no changes will be made. Would commit the staged index ({len(staged)} path{plural}):")
     say(f"   git commit -F- <<< {message!r}")
-    say(f"   git push origin {branch}")
+    try:
+        say(f"   {' '.join(git.push_command(repo_dir))}")
+    except git.GitError as e:
+        say(f"⚠ Would refuse to push: {e}")
+        run_markers.note("warn", f"Dry run — would refuse to push: {e}")
+        return
     run_markers.note("info", "Dry run — no changes made.")
 
 
 def _commit(s, repo_dir, message):
-    """Commit the index exactly as found (step 3).  Returns the short sha; s.commit is set as soon as it exists."""
-    with run.step("commit", "Commit", n=3):
+    """Commit the index exactly as found.  Returns the short sha; s.commit is set as soon as it exists."""
+    with run.step("commit", "Commit") as c:
         say("\n📝 Committing...")
         # Message via stdin (git commit -F -) so multi-line messages and odd characters need no quoting.
         r = git.commit_index(message, repo_dir, stdin=True)
@@ -182,6 +181,7 @@ def _commit(s, repo_dir, message):
             s.fail(f"\n❌ ERROR: git commit failed (exit code {r.code}).")
         sha = git.short_head(repo_dir)
         s.commit = sha
+        c.summary = sha
         run_markers.note("info", f"Committed {sha}", step="commit")
     return sha
 
@@ -192,15 +192,18 @@ def _push_incomplete(sha):
     run_markers.note("warn", text, step="push")
 
 
-def _push(s, repo_dir, branch, sha):
-    """Push the new commit to origin (step 4).  A failed or interrupted push still reports the local commit."""
+def _push(s, repo_dir, sha):
+    """Push the new commit to the branch's upstream (origin/<branch> with -u when it has none).  A failed or
+    interrupted push still reports the local commit."""
     try:
-        with run.step("push", "Push", n=4) as p:
-            say(f"🚀 Pushing to origin/{branch}...")
-            r = git.push(repo_dir, branch=branch)
+        with run.step("push", "Push") as p:
+            say("🚀 Pushing...")
+            r = git.push_tracked(repo_dir)
             if r.ok:
-                run_markers.note("info", f"Pushed origin/{branch}", step="push")
+                run_markers.note("info", "Pushed", step="push")
             else:
+                if r.err:
+                    say(r.err, "error")  # a refusal from push_command; git's own output went to the terminal or log
                 p.fail()
     except KeyboardInterrupt:
         _push_incomplete(sha)
@@ -212,34 +215,34 @@ def _push(s, repo_dir, branch, sha):
 
 def commit_and_push(s, repo_dir, cli_message, *, dry_run=False):
     """
-    Commit whatever is already staged in repo_dir and push, refusing to commit or push ANYTHING if the working tree
-    has unreviewed content (see _review()).
+    Run the Prechecks, then commit whatever is already staged in repo_dir and push, refusing to commit or push ANYTHING
+    if a precheck fails (identity, unreviewed content, behind upstream; see _prechecks()).
 
     A fully CLEAN tree (nothing staged, nothing unreviewed) is a benign no-op, not a refusal: there is genuinely
     nothing to commit, and this repo has no push-only path.  --dry-run reports the real outcome and changes nothing;
-    a refusal under it is reported as "would REFUSE" and does not fail the run.
+    a refusal under it is reported as "would refuse" and does not fail the run.
 
     Returns normally on success (committed and pushed, a no-op on a clean tree, or a --dry-run report); every failure
     ends the session through s.fail().  s.commit is set as soon as the commit exists, so the done marker reports it
     even when the push then fails or is cancelled.
     """
-    staged = _review(s, repo_dir, dry_run)
-    if staged is None:
+    result = _prechecks(s, repo_dir, dry_run)
+    if result.refused:
         return
-    if not staged:
+    if result.verdicts["staged"].status == "warn":
         say("⚠ Nothing to commit — working tree is clean. Nothing to do.")
         run_markers.note("warn", "Nothing to commit — working tree is clean.")
         return
 
     message = resolve_commit_message(s, cli_message)
-    branch = git.current_branch(repo_dir) or "HEAD"
 
     if dry_run:
-        _dry_run_report(staged, message, branch)
+        _dry_run_report(git.staged_paths(repo_dir), message, repo_dir)
         return
 
+    branch = git.current_branch(repo_dir) or "HEAD"
     sha = _commit(s, repo_dir, message)
-    _push(s, repo_dir, branch, sha)
+    _push(s, repo_dir, sha)
 
     say("\n" + "=" * 70)
     say("✅ Push complete.")
@@ -247,20 +250,6 @@ def commit_and_push(s, repo_dir, cli_message, *, dry_run=False):
     say(f"   Commit: {sha}")
     say(f"   Remote: {git.remote_url(repo_dir) or '(no remote)'}")
     say("=" * 70)
-
-
-def _identity(s, repo_dir):
-    """The identity gate (step 1) -- must hold before anything else."""
-    with run.step("identity", "Git identity", n=1):
-        say("🔐 Checking git identity...")
-        if git.user_email(repo_dir):
-            say("✅ Git identity configured.")
-            return
-        s.fail("❌ ERROR: no git identity configured (git config user.email is unset).",
-               hint=["   This has caused a failed push before on this repo. Fix it with:",
-                     '     git config user.email "you@example.com"',
-                     '     git config user.name "Your Name"',
-                     "   (this script will never set it for you)"])
 
 
 def ring_bell():
@@ -279,7 +268,10 @@ Examples:
   ./push.py "Fix credential validator NPE"
   ./push.py
   ./push.py --dry-run "Would-be commit message"
-  ./push.py --console condensed "Fix credential validator NPE"
+  ./push.py --console full "Fix credential validator NPE"
+
+Steps: Prechecks (identity, review gate, staged, upstream: refuses when behind upstream, before committing), Commit,
+Push.
         """,
     )
     parser.add_argument(
@@ -296,30 +288,31 @@ Examples:
     parser.add_argument(
         "--console",
         choices=("full", "condensed", "none"),
-        help="Console view of the steps: full (default), condensed or none (also JUNEAU_RUN_CONSOLE).",
+        help="Console view of the steps: full, condensed (default) or none (also JUNEAU_RUN_CONSOLE).",
     )
     args = parser.parse_args(argv)
-    if args.console:
-        # Before toolkit()/bootstrap.load() read the environment; an argument beats a value already set there.
-        os.environ["JUNEAU_RUN_CONSOLE"] = args.console
-
     try:
         toolkit()
+        # Before juneau_run loads: the flag beats JUNEAU_RUN_CONSOLE, which beats the condensed default.
+        run.export_console(args.console)
         jr, _ = bootstrap.load(REPO_DIR / "pom.xml")
     except bootstrap.BootstrapError as e:
         print(f"❌ ERROR: {e}", file=sys.stderr)
         print("   (juneau-run 10.0.0-SNAPSHOT must be in ~/.m2: build Juneau first.)", file=sys.stderr)
         return 1
+    except ValueError as e:
+        print(f"❌ ERROR: {e}", file=sys.stderr)
+        return 2
     run_markers = jr if jr is not None else _NoMarkers()
 
     with run.session("🚀 juneau-release-manager push", header=(git.current_branch(repo_dir) or "HEAD",), bell=True,
                      silence_env="JRM_PUSH_NO_BELL", mode="push", project="juneau-release-manager",
-                     repo=repo_dir, exit=False) as s:
+                     repo=repo_dir, exit=False,
+                     plan=[("prechecks", "Prechecks"), ("commit", "Commit"), ("push", "Push")]) as s:
         if not run_markers.console_active():
             say("=" * 70)
             say("📦 juneau-release-manager push")
             say("=" * 70)
-        _identity(s, repo_dir)
         commit_and_push(s, repo_dir, args.message, dry_run=args.dry_run)
     return s.code
 
