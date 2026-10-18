@@ -18,7 +18,7 @@ The factories wrap the git readers.  None of them changes the repository: they o
 """
 
 from collections.abc import Callable
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
 from . import git
 
@@ -28,10 +28,11 @@ STATUSES = ("pass", "warn", "fail")
 @dataclass(frozen=True)
 class Verdict:
     """A check's outcome.  status is pass, warn or fail; reason is one line for the row; hint is the lines printed
-    beneath the row."""
+    beneath the row.  refused is set by evaluate on a dry-run warn that stands in for a fail; it is not part of equality."""
     status: str
     reason: str = ""
     hint: tuple = ()
+    refused: bool = field(default=False, compare=False)
 
     def __post_init__(self):
         if self.status not in STATUSES:
@@ -52,7 +53,7 @@ class Check:
 
 def evaluate(check, *, dry_run=False):
     """Run one check and return its Verdict.  A check that raises fails closed with "could not check <name>: <error>".
-    With dry_run a fail becomes a warn whose reason starts "would refuse: "."""
+    With dry_run a fail becomes a warn whose reason starts "would refuse: " and whose refused is True."""
     try:
         out = check.fn()
     except Exception as e:  # NOSONAR python:S2221 - a gate that cannot decide refuses
@@ -64,7 +65,7 @@ def evaluate(check, *, dry_run=False):
     elif not isinstance(out, Verdict):
         out = Verdict("fail", f"could not check {check.name}: it returned {type(out).__name__}, not a Verdict")
     if dry_run and out.status == "fail":
-        out = Verdict("warn", "would refuse: " + (out.reason or f"{check.name} failed"), out.hint)
+        out = Verdict("warn", "would refuse: " + (out.reason or f"{check.name} failed"), out.hint, refused=True)
     return out
 
 

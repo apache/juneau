@@ -236,9 +236,11 @@ def child_env(*, strip_protocol=True, keep=("JUNEAU_RUN_PY",)):
 @dataclasses.dataclass(frozen=True)
 class CheckResult:
     """checks()'s answer: ok is False when a check failed (never in a dry run); verdicts maps each check's name to
-    its checks.Verdict, in check order."""
+    its checks.Verdict, in check order.  refused is True when any check failed, including the dry-run fails that
+    became "would refuse" warns; consumers use it instead of matching the reason's wording."""
     ok: bool
     verdicts: dict
+    refused: bool = False
 
 
 _VERDICT_ICON = {"pass": "✔", "warn": "⚠", "fail": "✗"}
@@ -255,7 +257,7 @@ def checks(id, title, checks, *, label="Prechecks", n=None, dry_run=False):  # N
 
     The step is one marker step with a note per warn or fail.  Without a console view (a plain run, markers, or
     --console full) each check prints a line instead: "✔ <name>", "⚠ <name>: <reason>" or "✗ <name>: <reason>",
-    then the hints.  Returns CheckResult(ok, verdicts).
+    then the hints.  Returns CheckResult(ok, verdicts, refused).
     """
     checks = list(checks)
     _base.remember(title)
@@ -292,7 +294,8 @@ def drive_checks(id, st, checks, *, dry_run=False):  # NOSONAR python:S5806 - mi
             jr.publish("hint", step=id, lines=list(hint))
     if level == "error":
         st.fail()
-    return CheckResult(level != "error", verdicts)
+    refused = any(v.status == "fail" or v.refused for v in verdicts.values())
+    return CheckResult(level != "error", verdicts, refused)
 
 
 _run_checks = checks     # Session.checks's parameter of the same name hides it

@@ -841,6 +841,44 @@ class TestRunDocsFollowup:
 
         assert push_module.toolkit("checks").evaluate(listed["docs identity"]).status == "fail"
 
+    def test_idle_at_prechecks_then_active_with_a_good_identity_proceeds(
+        self, push_module, docs_repo, docs_remote_repo, juneau_root
+    ):
+        local_head = _local_only_commit(docs_repo)
+
+        status, _ = push_module.run_docs_followup(juneau_root, "message", 6, docs_prechecked=False)
+
+        assert status == "ok"
+        assert _run(docs_remote_repo, "git", "rev-parse", "master") == local_head
+
+    def test_idle_at_prechecks_then_active_with_a_bad_identity_refuses_before_the_commit(
+        self, push_module, docs_repo, docs_remote_repo, juneau_root, git_spy
+    ):
+        (docs_repo / "README.md").write_text("became active during the build\n", encoding="utf-8")
+        _run(docs_repo, "git", "add", "README.md")
+        _run(docs_repo, "git", "config", "user.email", "someone@example.com")
+        head_before = _run(docs_repo, "git", "rev-parse", "HEAD")
+        remote_before = _run(docs_remote_repo, "git", "rev-parse", "master")
+        git_spy.clear()
+
+        status, _ = push_module.run_docs_followup(juneau_root, "message", 6, docs_prechecked=False)
+
+        assert status == "error"
+        assert _run(docs_repo, "git", "rev-parse", "HEAD") == head_before
+        assert _run(docs_remote_repo, "git", "rev-parse", "master") == remote_before
+        assert not any(argv[:2] == ["git", "commit"] for argv in git_spy)
+        assert not any(argv[:2] == ["git", "push"] for argv in git_spy)
+
+    def test_active_at_prechecks_is_not_checked_again(self, push_module, docs_repo, juneau_root, monkeypatch):
+        _local_only_commit(docs_repo)
+        _run(docs_repo, "git", "config", "user.email", "someone@example.com")
+        checked = []
+        monkeypatch.setattr(push_module, "docs_active", lambda root: checked.append(root) or True)
+
+        push_module.run_docs_followup(juneau_root, "message", 6, docs_prechecked=True)
+
+        assert checked == []
+
     def test_smoke_check_does_not_run_for_an_ahead_only_push(
         self, push_module, docs_repo, docs_remote_repo, juneau_root, capsys
     ):

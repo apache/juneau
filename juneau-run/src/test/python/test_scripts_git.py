@@ -544,6 +544,7 @@ class RebaseKeepingIndexTest(UpstreamCase):
         self.assertIn(git.STASH_MESSAGE, self.g("stash", "list"))
         self.assertTrue(any("stash@{0}" in line for line in result.hint))
         self.assertTrue(any("git stash pop --index stash@{0}" in line for line in result.hint))
+        self.assertTrue(any(f"The stash is commit {result.stash_sha[:12]};" in line for line in result.hint))
 
     def test_rebase_conflict_keeps_the_stash(self):
         self.upstream_commit({"README.md": "upstream readme\n"})
@@ -555,6 +556,7 @@ class RebaseKeepingIndexTest(UpstreamCase):
         self.assertEqual(self.stash_count(), 1)
         self.assertTrue(any("git rebase --abort" in line for line in result.hint))
         self.assertTrue(any(result.stash_ref in line for line in result.hint))
+        self.assertTrue(any(f"The stash is commit {result.stash_sha[:12]};" in line for line in result.hint))
         self.g("rebase", "--abort")
 
     def test_both_sides_delete_proceeds_with_the_deletion_left_out(self):

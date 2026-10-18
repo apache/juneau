@@ -99,6 +99,11 @@ class ChecksTest(ConsoleCase):
         self.assertEqual(list(result.verdicts), ["a", "b", "c"])
         self.assertEqual(jr._console.board.rows["pre"].reason, "a broke +2")
 
+    def test_refused_is_true_for_a_fail_and_false_for_pass_and_plain_warn(self):
+        self.assertTrue(run.checks("pre", "Prechecks", [UNREVIEWED]).refused)
+        self.assertFalse(run.checks("pre", "Prechecks", [Check("a", lambda: True)]).refused)
+        self.assertFalse(run.checks("pre", "Prechecks", [Check("a", lambda: Verdict("warn", "meh"))], dry_run=True).refused)
+
     def test_raise_fails_closed(self):
         result = run.checks("pre", "Prechecks", [Check("java", lambda: 1 / 0)])
         self.assertFalse(result.ok)
@@ -107,6 +112,7 @@ class ChecksTest(ConsoleCase):
     def test_dry_run_fail_becomes_warn_with_hints(self):
         result = run.checks("pre", "Prechecks", [UPSTREAM, UNREVIEWED], dry_run=True)
         self.assertTrue(result.ok)
+        self.assertTrue(result.refused)
         self.assertEqual(result.verdicts["unreviewed"], Verdict("warn", "would refuse: 2 unreviewed paths",
                                                                ("a.txt", "b.txt")))
         self.assertEqual([u["outcome"] for u in self.of("unit")], ["pass", "warn"])

@@ -500,7 +500,9 @@ def rebase_keeping_index(repo=".", *, fetch=True, merges=False, exempt=()):
                                                     f"{_last(stashed, 'check git status')}")
     ref = stash_entry_ref(repo, sha) if sha else None
     held = (f"Your reviewed changes are kept in stash {ref or sha}.",
-            f"  git stash pop --index {ref or sha}   (gets them back staged)") if sha else ()
+            f"  git stash pop --index {ref or sha}   (gets them back staged)",
+            f"(The stash is commit {sha[:12]}; if other stashes were pushed since, find it with "
+            "`git stash list`.)") if sha else ()
 
     rebased = _write(["git", "rebase", *(["--rebase-merges"] if merges else []), "@{upstream}"], repo, capture=True)
     if not rebased.ok:

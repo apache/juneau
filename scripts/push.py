@@ -900,7 +900,7 @@ def commit_and_push(
     return ("ok", step_num)
 
 
-def run_docs_followup(juneau_root, message, step_num):
+def run_docs_followup(juneau_root, message, step_num, *, docs_prechecked=False):
     """
     juneau-docs follow-up to a default-flow juneau push: smoke check + commit + push, via
     commit_and_push() (shared with --docs-only's run_docs_only()).
@@ -914,13 +914,16 @@ def run_docs_followup(juneau_root, message, step_num):
     pushes them -- the same false-success shape commit_and_push() exists to fix, one level up.
 
     The juneau-docs identity is checked by the Prechecks row (docs_prechecks) whenever juneau-docs has
-    something to push.  The Docusaurus smoke check only has anything new to validate when there IS a
-    commit about to be made, so it's commit_and_push()'s pre_commit_hook.
+    something to push.  When it was idle then (docs_prechecked False) but has become active during the build, the
+    identity is checked here, just before anything is committed, and a mismatch refuses.  The Docusaurus smoke
+    check only has anything new to validate when there IS a commit about to be made, so it's commit_and_push()'s
+    pre_commit_hook.
 
     Args:
         juneau_root: The juneau repo root (used only to locate the juneau-docs sibling).
         message: Commit message to use if a juneau-docs commit is made.
         step_num: The current step number (for output formatting).
+        docs_prechecked: Whether the Prechecks row already ran docs_prechecks (juneau-docs was active then).
 
     Returns:
         tuple: (status, step_num)
@@ -933,6 +936,14 @@ def run_docs_followup(juneau_root, message, step_num):
     docs_root = juneau_root.parent / "juneau-docs"
     if not docs_root.exists():
         return ("no_docs_root", step_num)
+
+    if not docs_prechecked and docs_active(docs_root):
+        checks = toolkit("checks")
+        verdict = checks.evaluate(checks.identity(docs_root, required=REQUIRED_GIT_EMAIL, label="docs identity"))
+        if verdict.status != "pass":
+            aborted(f"\n❌ juneau-docs became active during the build and its identity check failed: "
+                    f"{verdict.reason}  Nothing was committed or pushed in juneau-docs.", *verdict.hint)
+            return ("error", step_num)
 
     def _docs_smoke_check():
         say("\n📚 juneau-docs has changes — running Docusaurus smoke check first...")
@@ -1372,8 +1383,12 @@ def _push_steps(s, args, run, console, script_dir, juneau_root):  # NOSONAR pyth
     """The steps of the push inside its session s.  Returns the exit code."""
     step_num = 1
     # Prechecks refuse before any gate (the row says why); --test-only never commits or pushes, so it has none.
+    # Whether they covered juneau-docs (it was active then) decides whether the docs follow-up checks its identity late.
+    docs_prechecked = False
     if not args.test_only:
-        s.checks("prechecks", "Prechecks", prechecks(juneau_root))
+        listed = prechecks(juneau_root)
+        docs_prechecked = any(c.name == "docs identity" for c in listed)
+        s.checks("prechecks", "Prechecks", listed)
     # The PGP prompt gets the bare terminal (the console pauses for it), before the long gates.
     if (script_dir / PGP_PROMPT).exists():
         pgp_row(script_dir)
@@ -1544,7 +1559,7 @@ def _push_steps(s, args, run, console, script_dir, juneau_root):  # NOSONAR pyth
 
     # Step 6 (optional): juneau-docs follow-up — see run_docs_followup() for why the guard is
     # "does juneau-docs exist" rather than "does it have local changes".
-    docs_status, step_num = run_docs_followup(juneau_root, args.message, step_num)
+    docs_status, step_num = run_docs_followup(juneau_root, args.message, step_num, docs_prechecked=docs_prechecked)
     if docs_status == "error":
         return 1
     # "no_docs_root" or "ok" (including juneau-docs itself having had nothing to do) both fall

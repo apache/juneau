@@ -898,7 +898,7 @@ def test_the_docs_followup_keeps_its_rows_apart_from_juneaus(push_mod, console, 
     (tmp_path / "juneau-docs").mkdir()
     stub_push_flow(push_mod, monkeypatch)
     calls = routed_calls(run, monkeypatch)
-    assert push_mod.run_docs_followup(tmp_path / "juneau", "msg", 5) == ("ok", 7)
+    assert push_mod.run_docs_followup(tmp_path / "juneau", "msg", 5, docs_prechecked=True) == ("ok", 7)
     assert [(c["step_id"], c["label"]) for c in calls] == [
         ("docs-smoke", "Docs build"), ("docs-commit", "Docs"), ("docs-push", "Docs push")]
 
