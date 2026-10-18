@@ -41,12 +41,12 @@ function fakeEcharts() {
 				setOption(o, so) { calls.push(['setOption', o, so]); inst.options.push(o); inst.optionOpts.push(so); last = o; },
 				getOption() { calls.push(['getOption']); return last; },
 				setTheme(t) { calls.push(['setTheme', t]); inst.themes.push(t); },
-				on(ev, fn) { calls.push(['on', ev]); (handlers[ev] = handlers[ev] || []).push(fn); },
+				on(ev, fn) { calls.push(['on', ev]); handlers[ev] ||= []; handlers[ev].push(fn); },
 				off(ev) { calls.push(['off', ev]); delete handlers[ev]; },
 				dispatchAction(a) { calls.push(['dispatchAction', a]); },
 				resize() { calls.push(['resize']); },
 				dispose() { calls.push(['dispose']); inst.disposed = true; },
-				getDataURL(o) { calls.push(['getDataURL', o]); return 'data:image/' + (o && o.type || 'png') + ';base64,RkFLRQ=='; },
+				getDataURL(o) { calls.push(['getDataURL', o]); return 'data:image/' + (o?.type || 'png') + ';base64,RkFLRQ=='; },
 				fire(ev, params) { for (const fn of handlers[ev] || []) fn(params); }
 			};
 			calls.push(['init', theme, opts]);
@@ -66,7 +66,7 @@ function load(chartsPath, opts) {
 	opts = opts || {};
 	const errors = [], warnings = [];
 	const fake = fakeEcharts();
-	const window = Object.assign({ echarts: fake.echarts, JuneauViews: {} }, opts.window || {});
+	const window = { echarts: fake.echarts, JuneauViews: {}, ...opts.window || {} };
 	const sandbox = {
 		window, console: { error: m => errors.push(String(m)), warn: m => warnings.push(String(m)), log: () => {} },
 		setTimeout, clearTimeout, AbortController,
@@ -76,7 +76,7 @@ function load(chartsPath, opts) {
 	if (Array.isArray(opts.queue)) window.JuneauConsoleCharts = opts.queue.slice();
 	const ctx = vm.createContext(sandbox);
 	if (opts.spy) opts.spy(ctx);
-	vm.runInContext(fs.readFileSync(chartsPath, 'utf8'), ctx, { filename: 'juneau-charts.js' });
+	vm.runInContext(fs.readFileSync(chartsPath, 'utf8'), ctx, { filename: 'juneau-charts.js' }); // NOSONAR javascript:S1523 - loads the shipped script into a vm sandbox for the test
 	const regs = opts.registrations;
 	if (typeof regs === 'function') regs(window.JuneauCharts);
 	else for (const t of regs || []) window.JuneauConsoleCharts.push(t);
@@ -99,7 +99,7 @@ function runPipeline(env, card, f, ctx) {
 const INLINE_MAX = 16;
 
 function cellText(x) {
-	if (typeof x === 'number') return x !== x ? 'null' : String(x);
+	if (typeof x === 'number') return Number.isNaN(x) ? 'null' : String(x);
 	if (x === null || x === undefined) return 'null';
 	return typeof x === 'object' ? JSON.stringify(x) : String(x);
 }

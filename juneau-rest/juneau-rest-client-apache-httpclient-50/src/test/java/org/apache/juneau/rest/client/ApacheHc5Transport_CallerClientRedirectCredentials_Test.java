@@ -46,6 +46,7 @@ import com.sun.net.httpserver.*;
  * credential headers from the cross-origin hop.
  */
 @SuppressWarnings({
+	"java:S3415", // Expected value is already first; Sonar mistakes the upper-case constant or field for the expected value
 	"resource" // Transport/client instances are short-lived test fixtures.
 })
 // SEPARATE_THREAD: a socket read blocked on a non-responding peer ignores interrupts, so SAME_THREAD would still hang.

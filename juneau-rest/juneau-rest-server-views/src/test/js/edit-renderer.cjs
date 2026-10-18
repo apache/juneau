@@ -76,10 +76,10 @@ function fixture(rowData, action, opts) {
 	value.textContent = String(rowData.owner);
 	const pencil = env.el('button');
 	pencil.className = 'juneau-edit-pencil';
-	pencil.setAttribute('data-juneau-edit', 'assign');
-	pencil.setAttribute('data-juneau-edit-col', 'owner');
-	pencil.setAttribute('data-juneau-edit-input', opts.input || 'text');
-	if (opts.options) pencil.setAttribute('data-juneau-edit-options', opts.options);
+	pencil.dataset.juneauEdit = 'assign';
+	pencil.dataset.juneauEditCol = 'owner';
+	pencil.dataset.juneauEditInput = opts.input || 'text';
+	if (opts.options) pencil.dataset.juneauEditOptions = opts.options;
 	cell.appendChild(value);
 	cell.appendChild(pencil);
 	td.appendChild(cell);
@@ -111,10 +111,10 @@ const key = function (input, k) { input.dispatch('keydown', { key: k, preventDef
 	out.gateExposed = typeof I.applyInlineEditGates === 'function';
 	if (out.gateExposed) {
 		out.unknownActionHides = gated.pencil.hidden === true;
-		const hid = fixture({ id: 2, owner: 'a', locked: true }, Object.assign({}, ASSIGN, { visibleWhen: [{ field: 'locked', op: 'eq', value: false }] }));
+		const hid = fixture({ id: 2, owner: 'a', locked: true }, { ...ASSIGN, visibleWhen: [{ field: 'locked', op: 'eq', value: false }] });
 		I.applyInlineEditGates(hid.tr, { id: 2, locked: true }, hid.viewDef);
 		out.visibleWhenHides = hid.pencil.hidden === true;
-		const dis = fixture({ id: 3, owner: 'a', closed: true }, Object.assign({}, ASSIGN, { enabledWhen: [{ field: 'closed', op: 'eq', value: false, reason: 'Closed rows cannot be reassigned' }] }));
+		const dis = fixture({ id: 3, owner: 'a', closed: true }, { ...ASSIGN, enabledWhen: [{ field: 'closed', op: 'eq', value: false, reason: 'Closed rows cannot be reassigned' }] });
 		I.applyInlineEditGates(dis.tr, { id: 3, closed: true }, dis.viewDef);
 		out.enabledWhenDisables = { disabled: dis.pencil.disabled === true || dis.pencil.getAttribute('aria-disabled') === 'true', title: dis.pencil.getAttribute('title') };
 		click(dis);
@@ -200,7 +200,7 @@ const key = function (input, k) { input.dispatch('keydown', { key: k, preventDef
 	out.nestedIgnored = editorOf(f) === null;
 
 	// an inline commit on a confirm action never prompts: Enter and blur submit straight away, no dialog opens
-	const guarded = Object.assign({}, ASSIGN, { confirm: 'Reassign {id}?', confirmRenderer: 'typed' });
+	const guarded = { ...ASSIGN, confirm: 'Reassign {id}?', confirmRenderer: 'typed' };
 	f = fixture({ id: 15, owner: 'old' }, guarded);
 	click(f);
 	inputOf(f).value = 'enter-new';

@@ -67,8 +67,7 @@ class PetstoreTwins_Test extends TestBase {
 	@ParameterizedTest(name="{0}")
 	@MethodSource("twins")
 	void a01_ftlEqualsBuilder(String path) throws Exception {
-		var c = client();
-		assertSameContract(path, ftl(c, path), builder(c, path));
+		assertFull(path);
 	}
 
 	// A plain loop, not a parameterized test: JUnit rejects an empty source, and GAPS is empty when no gaps are known.
@@ -86,8 +85,10 @@ class PetstoreTwins_Test extends TestBase {
 		var builderContract = builder.contract();
 		var builderTemplates = new TreeMap<>(builder.templates());
 		for (var d : g.dropped()) {
-			// | not ||: drop from both sides.
-			var dropped = drop(contract, templates, d) | drop(builderContract, builderTemplates, d);
+			// Drop from both sides, whether or not the first side had it.
+			var droppedFtl = drop(contract, templates, d);
+			var droppedBuilder = drop(builderContract, builderTemplates, d);
+			var dropped = droppedFtl || droppedBuilder;
 			assertTrue(dropped, () -> "nothing to drop at '" + d + "' on either side of '" + g.path() + "'");
 		}
 		assertTwinsAt(g.path(), contract, templates, builderContract, builderTemplates);

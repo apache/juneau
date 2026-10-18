@@ -109,6 +109,10 @@ class ConsoleJobLog_Test extends TestBase {
 		assertEquals(4, ((Number)body.get("shards")).intValue());
 		assertEquals("", body.get("notes"));
 		assertEquals("uuid-1", body.get("idempotencyKey"));
+	}
+
+	@Test void a03b_submitStreamSuccess_finalState() {
+		var r = part("success");
 		assertEquals(List.of("/jobs/j1/stream?lastEventId=0"), r.get("streams"));
 		assertEquals(List.of("/?job=j1"), r.get("replaced"));
 		assertEquals(REF, r.get("stored"));

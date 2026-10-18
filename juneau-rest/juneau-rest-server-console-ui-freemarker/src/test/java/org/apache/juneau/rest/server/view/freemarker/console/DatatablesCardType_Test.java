@@ -100,48 +100,56 @@ class DatatablesCardType_Test extends TestBase {
 	}
 
 	@Test void missingDataUrlOrColumns_throwsE27() {
-		var ex = assertThrows(IllegalArgumentException.class, () -> h.toFragment(src("t", "{columns:[{key:'a'}]}")));
+		var arg = src("t", "{columns:[{key:'a'}]}");
+		var ex = assertThrows(IllegalArgumentException.class, () -> h.toFragment(arg));
 		assertEquals("<@card id='t'> type='datatables' requires src= or a body with 'columns' and exactly one of 'dataUrl' or 'rows'.", ex.getMessage());
 	}
 
 	@Test void preBuiltSlotMeta_throwsE28() {
 		var expected = "<@card id='t'> type='datatables' body is a pre-built SLOT_META envelope; "
 			+ "remove 'contractVersion', 'layout' and 'view' and author the catalog form.";
+		var arg2 = src("t", "{contractVersion:'1', view:{id:'t', dataUrl:'/x', columns:[]}}");
 		var ex = assertThrows(IllegalArgumentException.class,
-			() -> h.toFragment(src("t", "{contractVersion:'1', view:{id:'t', dataUrl:'/x', columns:[]}}")));
+			() -> h.toFragment(arg2));
 		assertEquals(expected, ex.getMessage());
+		var arg3 = src("t", "{view:{id:'t', dataUrl:'/x', columns:[]}}");
 		ex = assertThrows(IllegalArgumentException.class,
-			() -> h.toFragment(src("t", "{view:{id:'t', dataUrl:'/x', columns:[]}}")));
+			() -> h.toFragment(arg3));
 		assertEquals(expected, ex.getMessage());
 	}
 
 	@Test void columnMissingKeyAndData_throwsE29() {
+		var arg4 = src("t", "{dataUrl:'/x', columns:[{label:'No key'}]}");
 		var ex = assertThrows(IllegalArgumentException.class,
-			() -> h.toFragment(src("t", "{dataUrl:'/x', columns:[{label:'No key'}]}")));
+			() -> h.toFragment(arg4));
 		assertEquals("<@card id='t'> columns['0'] requires 'key'.", ex.getMessage());
 	}
 
 	@Test void duplicateColumnKey_throwsE30() {
+		var arg5 = src("t", "{dataUrl:'/x', columns:[{key:'a'},{key:'a'}]}");
 		var ex = assertThrows(IllegalArgumentException.class,
-			() -> h.toFragment(src("t", "{dataUrl:'/x', columns:[{key:'a'},{key:'a'}]}")));
+			() -> h.toFragment(arg5));
 		assertEquals("<@card id='t'> declares column 'a' twice.", ex.getMessage());
 	}
 
 	@Test void contractVersionAnywhere_throwsE31() {
+		var arg6 = src("t", "{dataUrl:'/x', columns:[{key:'a'}], detail:{contractVersion:'1', endpoint:'/x'}}");
 		var ex = assertThrows(IllegalArgumentException.class,
-			() -> h.toFragment(src("t", "{dataUrl:'/x', columns:[{key:'a'}], detail:{contractVersion:'1', endpoint:'/x'}}")));
+			() -> h.toFragment(arg6));
 		assertTrue(ex.getMessage().contains("sets contractVersion; remove it"), ex.getMessage());
 	}
 
 	@Test void unknownSearchType_throwsE32() {
+		var arg7 = src("t", "{dataUrl:'/x', columns:[{key:'a', searchType:'bogus'}]}");
 		var ex = assertThrows(IllegalArgumentException.class,
-			() -> h.toFragment(src("t", "{dataUrl:'/x', columns:[{key:'a', searchType:'bogus'}]}")));
+			() -> h.toFragment(arg7));
 		assertTrue(ex.getMessage().startsWith("<@card id='t'> column 'a' searchType 'bogus' is unknown; known: '"), ex.getMessage());
 	}
 
 	@Test void unknownSearchOperator_throwsE33() {
+		var arg8 = src("t", "{dataUrl:'/x', columns:[{key:'a', searchType:'text', searchOperators:['$bogus']}]}");
 		var ex = assertThrows(IllegalArgumentException.class,
-			() -> h.toFragment(src("t", "{dataUrl:'/x', columns:[{key:'a', searchType:'text', searchOperators:['$bogus']}]}")));
+			() -> h.toFragment(arg8));
 		assertTrue(ex.getMessage().startsWith("<@card id='t'> column 'a' searchOperators names unknown operator '$bogus'; known: '"),
 			ex.getMessage());
 	}
@@ -154,40 +162,46 @@ class DatatablesCardType_Test extends TestBase {
 	}
 
 	@Test void bulkWithoutSelection_throwsE34() {
-		var ex = assertThrows(IllegalArgumentException.class, () -> h.toFragment(src("t",
-			"{dataUrl:'/x', columns:[{key:'a'}], bulk:{actions:[{id:'x',endpoint:'/x'}]}}")));
+		var arg9 = src("t",
+			"{dataUrl:'/x', columns:[{key:'a'}], bulk:{actions:[{id:'x',endpoint:'/x'}]}}");
+		var ex = assertThrows(IllegalArgumentException.class, () -> h.toFragment(arg9));
 		assertEquals("<@card id='t'> sets bulk without selection.", ex.getMessage());
 	}
 
 	@Test void aggregateEndpointWithFieldToken_throwsE35_noCardPrefix() {
-		var ex = assertThrows(IllegalArgumentException.class, () -> h.toFragment(src("t",
+		var arg10 = src("t",
 			"{dataUrl:'/x', columns:[{key:'a'}], selection:{rowIdField:'a'}, "
-			+ "bulk:{actions:[{id:'abort', endpoint:'/rest/{id}/abort', mode:'aggregate'}]}}")));
+			+ "bulk:{actions:[{id:'abort', endpoint:'/rest/{id}/abort', mode:'aggregate'}]}}");
+		var ex = assertThrows(IllegalArgumentException.class, () -> h.toFragment(arg10));
 		assertEquals("Bulk action 'abort' has mode 'aggregate' but its endpoint '/rest/{id}/abort' contains a "
 			+ "{field} token; aggregate endpoints receive {ids} in the body.", ex.getMessage());
 	}
 
 	@Test void unknownColumnKey_throwsE36() {
+		var arg11 = src("t", "{dataUrl:'/x', columns:[{key:'a', bogus:1}]}");
 		var ex = assertThrows(IllegalArgumentException.class,
-			() -> h.toFragment(src("t", "{dataUrl:'/x', columns:[{key:'a', bogus:1}]}")));
+			() -> h.toFragment(arg11));
 		assertTrue(ex.getMessage().startsWith("<@card id='t'> column 'a' has unknown key 'bogus'; known: '"), ex.getMessage());
 	}
 
 	@Test void ribbonUnknownType_isRejected_columnSearchToggle() {
+		var arg12 = src("t", "{dataUrl:'/x', columns:[{key:'a'}], ribbon:[{type:'columnSearchToggle'}]}");
 		var ex = assertThrows(IllegalArgumentException.class,
-			() -> h.toFragment(src("t", "{dataUrl:'/x', columns:[{key:'a'}], ribbon:[{type:'columnSearchToggle'}]}")));
+			() -> h.toFragment(arg12));
 		assertTrue(ex.getMessage().startsWith("<@card id='t'> RibbonItem type 'columnSearchToggle' is not one of '"), ex.getMessage());
 	}
 
 	@Test void ribbonUnknownKey_isRejected() {
+		var arg13 = src("t", "{dataUrl:'/x', columns:[{key:'a'}], ribbon:[{type:'refresh', bogus:1}]}");
 		var ex = assertThrows(IllegalArgumentException.class,
-			() -> h.toFragment(src("t", "{dataUrl:'/x', columns:[{key:'a'}], ribbon:[{type:'refresh', bogus:1}]}")));
+			() -> h.toFragment(arg13));
 		assertEquals("<@card id='t'> RibbonItem refresh does not accept 'bogus'.", ex.getMessage());
 	}
 
 	@Test void ribbonExportWithoutButtons_isRejected() {
+		var arg14 = src("t", "{dataUrl:'/x', columns:[{key:'a'}], ribbon:[{type:'export'}]}");
 		var ex = assertThrows(IllegalArgumentException.class,
-			() -> h.toFragment(src("t", "{dataUrl:'/x', columns:[{key:'a'}], ribbon:[{type:'export'}]}")));
+			() -> h.toFragment(arg14));
 		assertEquals("<@card id='t'> RibbonItem export requires at least one button.", ex.getMessage());
 	}
 
@@ -197,14 +211,16 @@ class DatatablesCardType_Test extends TestBase {
 	}
 
 	@Test void ribbonDividerWithGroup_isRejected() {
+		var arg15 = src("t", "{dataUrl:'/x', columns:[{key:'a'}], ribbon:[{type:'divider', group:'g'}]}");
 		var ex = assertThrows(IllegalArgumentException.class,
-			() -> h.toFragment(src("t", "{dataUrl:'/x', columns:[{key:'a'}], ribbon:[{type:'divider', group:'g'}]}")));
+			() -> h.toFragment(arg15));
 		assertEquals("<@card id='t'> RibbonItem divider does not accept 'group'.", ex.getMessage());
 	}
 
 	@Test void ribbonVisibleWhen_isChecked() {
+		var arg16 = src("t", "{dataUrl:'/x', columns:[{key:'a'}], ribbon:[{type:'refresh', visibleWhen:5}]}");
 		var ex = assertThrows(IllegalArgumentException.class,
-			() -> h.toFragment(src("t", "{dataUrl:'/x', columns:[{key:'a'}], ribbon:[{type:'refresh', visibleWhen:5}]}")));
+			() -> h.toFragment(arg16));
 		assertTrue(ex.getMessage().contains("visibleWhen must be a list"), ex.getMessage());
 	}
 
@@ -220,26 +236,30 @@ class DatatablesCardType_Test extends TestBase {
 	}
 
 	@Test void ribbonBadOptionGroupMemberKey_isRejected() {
-		var ex = assertThrows(IllegalArgumentException.class, () -> h.toFragment(src("t",
-			"{dataUrl:'/x', columns:[{key:'a'}], ribbon:[{type:'optionGroup', id:'g', options:[{id:'a', persist:true}]}]}")));
+		var arg17 = src("t",
+			"{dataUrl:'/x', columns:[{key:'a'}], ribbon:[{type:'optionGroup', id:'g', options:[{id:'a', persist:true}]}]}");
+		var ex = assertThrows(IllegalArgumentException.class, () -> h.toFragment(arg17));
 		assertEquals("<@card id='t'> RibbonItem optionGroup 'g' member 'a' does not accept 'persist'.", ex.getMessage());
 	}
 
 	@Test void ribbonNonMapItem_isRejected() {
+		var arg18 = src("t", "{dataUrl:'/x', columns:[{key:'a'}], ribbon:['refresh']}");
 		var ex = assertThrows(IllegalArgumentException.class,
-			() -> h.toFragment(src("t", "{dataUrl:'/x', columns:[{key:'a'}], ribbon:['refresh']}")));
+			() -> h.toFragment(arg18));
 		assertEquals("<@card id='t'> ribbon each item must be an object.", ex.getMessage());
 	}
 
 	@Test void ribbonMissingType_saysSo() {
+		var arg19 = src("t", "{dataUrl:'/x', columns:[{key:'a'}], ribbon:[{id:'x'}]}");
 		var ex = assertThrows(IllegalArgumentException.class,
-			() -> h.toFragment(src("t", "{dataUrl:'/x', columns:[{key:'a'}], ribbon:[{id:'x'}]}")));
+			() -> h.toFragment(arg19));
 		assertTrue(ex.getMessage().startsWith("<@card id='t'> RibbonItem requires a 'type'"), ex.getMessage());
 	}
 
 	@Test void ribbonOptionWithoutScope_isRejected() {
+		var arg20 = src("t", "{dataUrl:'/x', columns:[{key:'a'}], ribbon:[{type:'option', id:'o', value:'v'}]}");
 		var ex = assertThrows(IllegalArgumentException.class,
-			() -> h.toFragment(src("t", "{dataUrl:'/x', columns:[{key:'a'}], ribbon:[{type:'option', id:'o', value:'v'}]}")));
+			() -> h.toFragment(arg20));
 		assertEquals("<@card id='t'> RibbonItem option 'o' sets neither column nor param.", ex.getMessage());
 	}
 
@@ -276,27 +296,33 @@ class DatatablesCardType_Test extends TestBase {
 	}
 
 	@Test void inlineRows_andDataUrl_throwsE27() {
+		var arg21 = src("t", "{dataUrl:'/d', rows:[], columns:[{key:'a'}]}");
 		var ex = assertThrows(IllegalArgumentException.class,
-			() -> h.toFragment(src("t", "{dataUrl:'/d', rows:[], columns:[{key:'a'}]}")));
+			() -> h.toFragment(arg21));
 		assertTrue(ex.getMessage().contains("exactly one of 'dataUrl' or 'rows'"), ex.getMessage());
 	}
 
 	@Test void missingColumns_throwsE27() {
-		var ex = assertThrows(IllegalArgumentException.class, () -> h.toFragment(src("t", "{dataUrl:'/d'}")));
+		var arg22 = src("t", "{dataUrl:'/d'}");
+		var ex = assertThrows(IllegalArgumentException.class, () -> h.toFragment(arg22));
 		assertTrue(ex.getMessage().contains("'columns'"), ex.getMessage());
 	}
 
 	@Test void inlineRows_malformed_rejected() {
-		assertThrows(IllegalArgumentException.class, () -> h.toFragment(src("t", "{rows:'nope', columns:[{key:'a'}]}")));
-		assertThrows(IllegalArgumentException.class, () -> h.toFragment(src("t", "{rows:[1], columns:[{key:'a'}]}")));
+		var arg23 = src("t", "{rows:'nope', columns:[{key:'a'}]}");
+		assertThrows(IllegalArgumentException.class, () -> h.toFragment(arg23));
+		var arg24 = src("t", "{rows:[1], columns:[{key:'a'}]}");
+		assertThrows(IllegalArgumentException.class, () -> h.toFragment(arg24));
 	}
 
 	@Test void inlineRows_withServerModeOrPolling_rejected() {
+		var arg25 = src("t", "{rows:[], dataMode:'server', columns:[{key:'a'}]}");
 		var server = assertThrows(IllegalArgumentException.class,
-			() -> h.toFragment(src("t", "{rows:[], dataMode:'server', columns:[{key:'a'}]}")));
+			() -> h.toFragment(arg25));
 		assertTrue(server.getMessage().contains("dataMode"), server.getMessage());
+		var arg26 = src("t", "{rows:[], pollIntervalMs:5000, columns:[{key:'a'}]}");
 		var poll = assertThrows(IllegalArgumentException.class,
-			() -> h.toFragment(src("t", "{rows:[], pollIntervalMs:5000, columns:[{key:'a'}]}")));
+			() -> h.toFragment(arg26));
 		assertTrue(poll.getMessage().contains("pollIntervalMs"), poll.getMessage());
 		assertDoesNotThrow(() -> h.toFragment(src("t", "{rows:[], dataMode:'client', columns:[{key:'a'}]}")));
 	}
@@ -308,13 +334,15 @@ class DatatablesCardType_Test extends TestBase {
 	}
 
 	@Test void bareUrlBody_isE25() {
-		var ex = assertThrows(IllegalArgumentException.class, () -> h.toFragment(src("t", "/rest/t")));
+		var arg27 = src("t", "/rest/t");
+		var ex = assertThrows(IllegalArgumentException.class, () -> h.toFragment(arg27));
 		assertEquals("<@card id='t'> type='datatables' requires a JSON5 object body; got '/rest/t'.", ex.getMessage());
 	}
 
 	@Test void customOperatorNotAnObject_throws() {
+		var arg28 = src("t", "{dataUrl:'/x', columns:[{key:'a', searchType:'text', customOperators:['x']}]}");
 		var ex = assertThrows(IllegalArgumentException.class,
-			() -> h.toFragment(src("t", "{dataUrl:'/x', columns:[{key:'a', searchType:'text', customOperators:['x']}]}")));
+			() -> h.toFragment(arg28));
 		assertTrue(ex.getMessage().contains("each customOperator must be an object."), ex.getMessage());
 	}
 
@@ -379,14 +407,16 @@ class DatatablesCardType_Test extends TestBase {
 	}
 
 	@Test void a05_jobLogRegion_withoutConfig_isRejected() {
+		var arg29 = src("t", "{dataUrl:'/x', columns:[{key:'a'}], detail:{endpoint:'/x/{id}', region:{id:'job', populate:'job-log'}}}");
 		var ex = assertThrows(IllegalArgumentException.class,
-			() -> h.toFragment(src("t", "{dataUrl:'/x', columns:[{key:'a'}], detail:{endpoint:'/x/{id}', region:{id:'job', populate:'job-log'}}}")));
+			() -> h.toFragment(arg29));
 		assertEquals("<@card id='t'> type='datatables' detail.region 'job' with populate 'job-log' requires a 'config' object.", ex.getMessage());
 	}
 
 	@Test void a06_jobLogRegion_badConfig_namesTheRegion() {
+		var arg30 = src("t", "{dataUrl:'/x', columns:[{key:'a'}], detail:{endpoint:'/x/{id}', region:{id:'job', populate:'job-log', config:{submit:{endpoint:'/e',action:'a',keyUrl:'/k'},urlParam:'j'}}}}");
 		var ex = assertThrows(IllegalArgumentException.class,
-			() -> h.toFragment(src("t", "{dataUrl:'/x', columns:[{key:'a'}], detail:{endpoint:'/x/{id}', region:{id:'job', populate:'job-log', config:{submit:{endpoint:'/e',action:'a',keyUrl:'/k'},urlParam:'j'}}}}")));
+			() -> h.toFragment(arg30));
 		assertEquals("<@card id='t'> type='datatables' detail.region: JobLogRegion 'job' urlParam is not allowed in a row-detail region; a page reload does not reattach.", ex.getMessage());
 	}
 
@@ -415,7 +445,8 @@ class DatatablesCardType_Test extends TestBase {
 	}
 
 	private void refused(String body, String msg) {
-		var ex = assertThrows(IllegalArgumentException.class, () -> h.toFragment(src("t", body)));
+		var arg31 = src("t", body);
+		var ex = assertThrows(IllegalArgumentException.class, () -> h.toFragment(arg31));
 		assertEquals("<@card id='t'> " + msg, ex.getMessage());
 	}
 
@@ -542,8 +573,9 @@ class DatatablesCardType_Test extends TestBase {
 	}
 
 	@Test void quickStats_contractVersion_e31Wins() {
-		var ex = assertThrows(IllegalArgumentException.class, () -> h.toFragment(src("t",
-			"{dataUrl:'/x', columns:[{key:'id'}], quickStats:{contractVersion:'1', items:[{id:'a', type:'chart'}]}}")));
+		var arg32 = src("t",
+			"{dataUrl:'/x', columns:[{key:'id'}], quickStats:{contractVersion:'1', items:[{id:'a', type:'chart'}]}}");
+		var ex = assertThrows(IllegalArgumentException.class, () -> h.toFragment(arg32));
 		assertTrue(ex.getMessage().contains("'quickStats' sets contractVersion"), ex.getMessage());
 	}
 

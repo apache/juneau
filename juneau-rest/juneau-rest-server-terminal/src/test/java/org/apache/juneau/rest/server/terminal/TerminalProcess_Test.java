@@ -33,6 +33,9 @@ import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.condition.*;
 import org.junit.jupiter.api.io.*;
 
+@SuppressWarnings({
+	"java:S2925" // Timing-dependent process/file test; it polls or waits on real time
+})
 class TerminalProcess_Test extends TestBase {
 
 	@TempDir Path dir;
@@ -78,7 +81,10 @@ class TerminalProcess_Test extends TestBase {
 		assertEquals("/prop.py", Files.readAllLines(bin.resolve("argv.txt")).get(0));
 		TerminalProcess.start("generic", List.of("true"), 80, 24, run.resolve("2"), host(null, "/env.py")).waitFor(30, TimeUnit.SECONDS);
 		assertEquals("/env.py", Files.readAllLines(bin.resolve("argv.txt")).get(0));
-		var e = assertThrows(IllegalStateException.class, () -> TerminalProcess.start("generic", List.of("true"), 80, 24, run.resolve("3"), host(null, null)));
+		var run3 = run.resolve("3");
+		var noScript = host(null, null);
+		var cmd = List.of("true");
+		var e = assertThrows(IllegalStateException.class, () -> TerminalProcess.start("generic", cmd, 80, 24, run3, noScript));
 		assertTrue(e.getMessage().contains(TerminalProcess.SCRIPT_PROPERTY) && e.getMessage().contains(TerminalProcess.SCRIPT_ENV), e.getMessage());
 	}
 
@@ -89,7 +95,8 @@ class TerminalProcess_Test extends TestBase {
 
 	@Test void a04_windowsRefused() {
 		var h = new Host("Windows 11", "/x.py", null, bin.toString());
-		assertThrows(UnsupportedOperationException.class, () -> TerminalProcess.start("generic", List.of("true"), 80, 24, run, h));
+		var cmd = List.of("true");
+		assertThrows(UnsupportedOperationException.class, () -> TerminalProcess.start("generic", cmd, 80, 24, run, h));
 	}
 
 	@DisabledOnOs(OS.WINDOWS)

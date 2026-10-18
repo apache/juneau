@@ -174,7 +174,13 @@ public final class OkHttpTransport implements HttpTransport {
 		var explicit = httpClient.proxy();
 		var uri = url.uri();
 		// Like OkHttp, skip the ProxySelector when java.net.URI cannot parse a host (e.g. an underscore host name).
-		var proxies = explicit != null ? List.of(explicit) : uri.getHost() == null ? List.of(Proxy.NO_PROXY) : selectedProxies(uri);
+		List<Proxy> proxies;
+		if (explicit != null)
+			proxies = List.of(explicit);
+		else if (uri.getHost() == null)
+			proxies = List.of(Proxy.NO_PROXY);
+		else
+			proxies = selectedProxies(uri);
 		for (var p : proxies)
 			if (p.type() != Proxy.Type.DIRECT)
 				throw iaex("Request to '%s' would be routed through a proxy, which resolves the target host itself and bypasses the SSRF guard's address pinning; use a client without a proxy (or set allowPrivateUrls)", url.host());

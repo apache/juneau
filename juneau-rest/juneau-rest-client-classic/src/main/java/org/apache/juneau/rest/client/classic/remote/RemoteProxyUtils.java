@@ -151,7 +151,7 @@ public class RemoteProxyUtils {
 	 *
 	 * @param url The URL to validate.
 	 * @param allowPrivateUrls When <jk>true</jk>, the deny-private check is skipped.
-	 * @param allowedRanges The client's {@link RemoteUrlPolicy.AllowedRanges}, unioned with the {@code RestClient.allowAddressRanges} property.
+	 * @param allowedRanges The client's {@link org.apache.juneau.http.remote.RemoteUrlPolicy.AllowedRanges}, unioned with the {@code RestClient.allowAddressRanges} property.
 	 * @return The unchanged URL.
 	 * @throws IllegalArgumentException If {@code url} is absolute and violates the policy.
 	 */

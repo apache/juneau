@@ -44,6 +44,9 @@ import org.apache.juneau.rest.server.console.*;
  *
  * @since 10.0.0
  */
+@SuppressWarnings({
+	"java:S3776" // Validation and rendering chains many independent guards; splitting them adds no clarity.
+})
 public final class DataSourceDef {
 
 	static final String E76 = "E-76: data source '%s': %s";
@@ -51,7 +54,7 @@ public final class DataSourceDef {
 	static final Set<String> BUCKETS = Set.of("hour", "day", "week", "month", "auto");
 	static final Pattern FIELD = Pattern.compile("^[^,()\\s]+$");
 	static final Pattern MEASURE = Pattern.compile("^(count|(sum|avg|min|max)\\([^,()\\s]+\\))$");
-	static final Pattern DOTTED_PATH = Pattern.compile("^[A-Za-z0-9_-]+(\\.[A-Za-z0-9_-]+)*$");
+	static final Pattern DOTTED_PATH = Pattern.compile("^[A-Za-z0-9_-]++(?:\\.[A-Za-z0-9_-]++)*+$");
 
 	/** The built-in parser for each wire format. */
 	public enum Format {
@@ -75,7 +78,9 @@ public final class DataSourceDef {
 
 	/** How the window is split into requests; UTC calendar units. */
 	public static final class Chunking {
-		final String unit, start, end;
+		final String unit;
+		final String start;
+		final String end;
 
 		private Chunking(String unit, String start, String end) {
 			this.unit = unit;
@@ -155,11 +160,17 @@ public final class DataSourceDef {
 	}
 
 	private final String id;
-	private String url, parser = "csv", builder = "columnar", aggregateUrl, epochUrl, epochPath;
+	private String url;
+	private String parser = "csv";
+	private String builder = "columnar";
+	private String aggregateUrl;
+	private String epochUrl;
+	private String epochPath;
 	private final List<JsonMap> columns = new ArrayList<>();
 	private final List<JsonMap> subscribes = new ArrayList<>();
 	private Chunking chunk = Chunking.none();
-	private int concurrency = 1, debounceMs = 250;
+	private int concurrency = 1;
+	private int debounceMs = 250;
 	private Cache cache = Cache.memory();
 	private Mode mode = Mode.RAW;
 	private Long maxRows;

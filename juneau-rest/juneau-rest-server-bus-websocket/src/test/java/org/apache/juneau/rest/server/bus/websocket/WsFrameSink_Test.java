@@ -194,7 +194,7 @@ class WsFrameSink_Test extends TestBase {
 		assertEquals("after", order.get(1001));
 	}
 
-	@Test void e02_aFailedSendAfterAClose_doesNotCloseAgain() throws Exception {
+	@Test void e02_aFailedSendAfterAClose_doesNotCloseAgain() {
 		sink.offer("f1");
 		var h = sentHandler("f1");
 		sink.close(1001, "bus:closed");

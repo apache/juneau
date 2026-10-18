@@ -37,6 +37,9 @@ import org.apache.juneau.rest.server.widgets.*;
  *
  * @since 10.0.0
  */
+@SuppressWarnings({
+	"java:S1192" // Repeated literals are contract wire keys; named constants would obscure the contract shape.
+})
 public final class QuickStat {
 
 	/** The tile's visual tone. */

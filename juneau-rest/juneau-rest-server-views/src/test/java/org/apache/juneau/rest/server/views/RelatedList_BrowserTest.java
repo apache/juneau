@@ -18,7 +18,6 @@ package org.apache.juneau.rest.server.views;
 
 import static java.nio.charset.StandardCharsets.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
-import static org.apache.juneau.test.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.*;
@@ -299,21 +298,21 @@ class RelatedList_BrowserTest extends TestBase {
 
 	@Test void a01_nestedListPagesToTheSecondPage() throws Exception {
 		var report = (Map<?,?>)runHarness().get("paging");
-		assertEquals("evt-01", report.get("firstPageFirstRow"), () -> report.toString());
-		assertNotEquals(report.get("firstPageFirstRow"), report.get("secondPageFirstRow"), () -> report.toString());
+		assertEquals("evt-01", report.get("firstPageFirstRow"), report::toString);
+		assertNotEquals(report.get("firstPageFirstRow"), report.get("secondPageFirstRow"), report::toString);
 		assertTrue(nestedBodies.stream().anyMatch(b -> ! b.contains("\"start\":0")), () -> "no paged request in " + nestedBodies);
 	}
 
 	@Test void a02_nestedListSortsOnTheServer() throws Exception {
 		var report = (Map<?,?>)runHarness().get("sorting");
-		assertEquals("evt-30", report.get("firstRowDescending"), () -> report.toString());
+		assertEquals("evt-30", report.get("firstRowDescending"), report::toString);
 		assertTrue(nestedBodies.stream().anyMatch(b -> b.contains("\"desc\"")), () -> "no descending order in " + nestedBodies);
 	}
 
 	@Test void a03_nestedRowActionRunsAgainstTheServer() throws Exception {
 		var report = (Map<?,?>)runHarness().get("action");
-		assertEquals(Boolean.TRUE, report.get("menuOpened"), () -> report.toString());
-		assertEquals(1, acks.size(), () -> acks.toString());
+		assertEquals(Boolean.TRUE, report.get("menuOpened"), report::toString);
+		assertEquals(1, acks.size(), acks::toString);
 		assertTrue(acks.get(0).startsWith("POST /ack/evt-"), acks.get(0));
 		assertTrue(acks.get(0).contains("csrf=tok-9"), acks.get(0));
 	}

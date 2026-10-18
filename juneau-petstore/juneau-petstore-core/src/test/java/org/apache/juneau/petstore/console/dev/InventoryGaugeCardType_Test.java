@@ -35,7 +35,8 @@ class InventoryGaugeCardType_Test extends TestBase {
 	}
 
 	private static String rejected(String body) {
-		return assertThrows(IllegalArgumentException.class, () -> H.toFragment(gauge(body))).getMessage();
+		var source = gauge(body);
+		return assertThrows(IllegalArgumentException.class, () -> H.toFragment(source)).getMessage();
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

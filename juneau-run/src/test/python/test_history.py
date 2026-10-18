@@ -86,7 +86,7 @@ class StoreTest(HistoryEnv, unittest.TestCase):
     def test_concurrent_appends_none_lost(self):
         code = ("import sys; sys.path.insert(0, %r); import support; jr = support.jr\n"
                 "import os\nos.environ['JUNEAU_RUN_HISTORY_DIR']=%r; os.environ['JUNEAU_RUN_HISTORY']='1'\n"
-                "h = jr.HistoryStore(%r, 'push')\n"
+                "h = jr.HistoryStore(%r, 'push'); h.LOCK_WAIT = 60\n"   # compactions can hold the lock past the 2s default
                 "for i in range(50): h.append({'v':1,'step':'s'+sys.argv[1],'tool':'t','wall_s':i,'pad':'x'*3000})\n"
                 % (str(support.FIXTURES.parent), self.dir, self.repo))
         procs = [subprocess.Popen([sys.executable, "-c", code, str(i)]) for i in range(8)]

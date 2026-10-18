@@ -42,7 +42,7 @@ function load() {
 	};
 	ctx.window = ctx;
 	vm.createContext(ctx);
-	vm.runInContext(src, ctx, { filename: 'juneau-dashboard.js' });
+	vm.runInContext(src, ctx, { filename: 'juneau-dashboard.js' }); // NOSONAR javascript:S1523 - loads the shipped script into a vm sandbox for the test
 	return { w: ctx, I: ctx.JuneauDashboard._internals };
 }
 
@@ -53,7 +53,7 @@ const out = {};
 		const r = load(), I = r.I;
 		let seed = 0x5eed0694;
 		const rnd = () => {   // mulberry32
-			seed = (seed + 0x6D2B79F5) | 0;
+			seed = (seed + 0x6D2B79F5) | 0; // NOSONAR javascript:S7767 - 32-bit wrap is the PRNG's design
 			let t = Math.imul(seed ^ (seed >>> 15), 1 | seed);
 			t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
 			return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
@@ -69,12 +69,12 @@ const out = {};
 		const anyValue = d => {
 			const k = int(d > 3 ? 5 : 8);
 			if (k === 0) return null;
-			if (k === 1) return int(3) ? int(200) - 50 : pick([NaN, Infinity, -0, 1e308]);
+			if (k === 1) return int(3) ? int(200) - 50 : pick([Number.NaN, Infinity, -0, 1e308]);
 			if (k === 2) return word();
 			if (k === 3) return !!int(2);
 			if (k === 4) return undefined;
-			if (k < 7) { const a = []; for (let i = int(4); i > 0; i--) a.push(anyValue(d + 1)); return a; }
-			const o = {}; for (let i = int(4); i > 0; i--) o[pick(['schemaVersion', 'viewId', 'search', 'columns', 'options', 'start', 'end', 'selected', 'range', 'reason', 'zz'])] = anyValue(d + 1); return o;
+			if (k < 7) { const a = []; for (let i = int(4); i > 0; i--) { a.push(anyValue(d + 1)); } return a; }
+			const o = {}; for (let i = int(4); i > 0; i--) { o[pick(['schemaVersion', 'viewId', 'search', 'columns', 'options', 'start', 'end', 'selected', 'range', 'reason', 'zz'])] = anyValue(d + 1); } return o;
 		};
 		// A payload close to valid, so the validators see near misses as well as junk.
 		const payload = topic => {
@@ -103,12 +103,12 @@ const out = {};
 		const goodLink = () => I.encodeLink(P, topicMap());
 		const HASH = [
 			// [name, bad, make]
-			['randomBytes', true, () => { let s = '#s='; for (let i = int(60); i > 0; i--) s += String.fromCharCode(int(256)); return s; }],
+			['randomBytes', true, () => { let s = '#s='; for (let i = int(60); i > 0; i--) s += String.fromCodePoint(int(256)); return s; }],
 			['truncatedBase64', true, () => { const g = goodLink(); return g.slice(0, 3 + int(Math.max(1, g.length - 4))) + pick(['', '=', '%', '*']); }],
 			['notJson', true, () => '#s=' + b64(pick(['{', '{"v":2,', 'undefined', "{'v':2}", '[1,]']) + word())],
 			['wrongType', true, () => '#s=' + b64(JSON.stringify(pick([[1], 'x', 3, null, true, { v: 2, ns: 'app.dash', t: [1] }, { v: 2, ns: 'app.dash' }, { v: 2, ns: 'app.dash', t: 'x' }])))],
 			['oversize', true, () => '#s=' + 'A'.repeat(8190 + int(5000))],
-			['wrongNsOrV', true, () => I.encodeLink(pick([{ ns: 'other', version: 2 }, { ns: 'app.dash', version: 1 }, { ns: 'app.dash', version: '2' }].map(x => Object.assign({}, P, x))), topicMap())],
+			['wrongNsOrV', true, () => I.encodeLink(pick([{ ns: 'other', version: 2 }, { ns: 'app.dash', version: 1 }, { ns: 'app.dash', version: '2' }].map(x => ({ ...P, ...x }))), topicMap())],
 			['bannedKey', true, () => {
 				const json = JSON.stringify({ v: 2, ns: 'app.dash', t: { 'filter:q': { schemaVersion: 1, viewId: 'd', options: JSON.parse(nested('x', int(5))) } } });
 				return '#s=' + b64(json.replace('"x":1', '"' + pick(BANNED) + '":' + pick(['1', '{}', '{"polluted":true}'])));
@@ -155,7 +155,7 @@ const out = {};
 			try {
 				const hash = make();
 				const names = NAMES.filter(() => !int(4));
-				const persist = Object.assign({}, P, { decoders: names.sort(() => rnd() - 0.5) });
+				const persist = { ...P, decoders: [...names].sort(() => rnd() - 0.5) };
 				const [savedCat, savedMake] = pick(SAVED);
 				const saved = savedMake();
 
@@ -175,11 +175,14 @@ const out = {};
 				if (warns.length > 1 + names.filter(x => WARNS.has(x)).length) fail('too many warnings: ' + warns);
 
 				const src = res.source;
-				sources[src === null ? 'null' : src.indexOf('decoder:') === 0 ? 'decoder' : src] = true;
-				if (!(src === null || src === 'link' || src === 'saved' || (typeof src === 'string' && names.indexOf(src.slice(8)) >= 0 && src.indexOf('decoder:') === 0)))
+				let sourceKey = src;
+				if (src === null) sourceKey = 'null';
+				else if (src.startsWith('decoder:')) sourceKey = 'decoder';
+				sources[sourceKey] = true;
+				if (!(src === null || src === 'link' || src === 'saved' || (typeof src === 'string' && names.indexOf(src.slice(8)) >= 0 && src.startsWith('decoder:'))))
 					fail('source ' + src);
 				if (bad && src === 'link') fail('a bad link won');
-				const decoderWon = typeof src === 'string' && src.indexOf('decoder:') === 0;
+				const decoderWon = typeof src === 'string' && src.startsWith('decoder:');
 				if (!decoderWon && src !== 'link') {
 					if (savedCat === 'valid' && src !== 'saved') fail('valid saved state lost to ' + src);
 					if (savedCat !== 'valid' && src !== null) fail('source ' + src + ' with ' + savedCat + ' saved state');
@@ -195,12 +198,12 @@ const out = {};
 				if (topics['filter:reasons']) I.BUILTIN.choice.validate(topics['filter:reasons'], choice);
 				if (topics['filter:q']) I.BUILTIN.search.validate(topics['filter:q']);
 			} catch (e) {
-				fail('threw ' + String(e && e.stack || e));
+				fail('threw ' + String(e?.stack || e));
 			}
 		}
-		out.fuzz = { cases: CASES, failures, sources: Object.keys(sources).sort(), perCategory,
-			polluted: ({}).polluted === undefined && Object.prototype.polluted === undefined && vm.runInContext('Object.prototype.polluted', r.w) === undefined };
-	} catch (e) { out.fuzz = { crash: String(e && e.stack || e) }; }
+		out.fuzz = { cases: CASES, failures, sources: Object.keys(sources).sort((a, b) => (a < b ? -1 : Number(a > b))), perCategory,
+			polluted: ({}).polluted === undefined && Object.prototype.polluted === undefined && vm.runInContext('Object.prototype.polluted', r.w) === undefined }; // NOSONAR javascript:S1523 - loads the shipped script into a vm sandbox for the test
+	} catch (e) { out.fuzz = { crash: String(e?.stack || e) }; }
 
 	// 2. Edge cases, by hand: every banned key, depth and cycle rejection, and the size caps.
 	try {
@@ -210,8 +213,8 @@ const out = {};
 		const good = { schemaVersion: 1, viewId: 'd', search: 'x' };
 		const resolve = (extra, decoders) => {
 			const warns = [];
-			const persist = Object.assign({}, P, extra.persist || {});
-			const res = I.resolveInitial(Object.assign({ persist, hash: '', saved: null, decoders: decoders || new Map(), location: {}, warn: m => warns.push(m) }, extra.env || {}));
+			const persist = { ...P, ...extra.persist || {} };
+			const res = I.resolveInitial({ persist, hash: '', saved: null, decoders: decoders || new Map(), location: {}, warn: m => warns.push(m), ...extra.env || {} });
 			return { res, warns };
 		};
 		const e = out.edges = {};
@@ -226,7 +229,7 @@ const out = {};
 			return { source: x.res.source, warns: x.warns };
 		});
 
-		const deep = n => { let o = { schemaVersion: 1, viewId: 'd' }; for (let i = 0; i < n; i++) o = { a: o }; return o; };
+		const deep = n => { let o = { schemaVersion: 1, viewId: 'd' }; for (let i = 0; i < n; i++) { o = { a: o }; } return o; };
 		const viaDecoder = v => {
 			const x = resolve({ persist: { decoders: ['app.d'] } }, new Map([['app.d', () => v]]));
 			return { source: x.res.source, warns: x.warns };
@@ -240,7 +243,7 @@ const out = {};
 		e.deepDecoder = viaDecoder({ 'filter:q': deep(70) });
 		e.shallowDecoder = viaDecoder({ 'filter:q': { schemaVersion: 1, viewId: 'd', options: deep(40) } });
 		e.deepSaved = (() => { const x = resolve({ env: { saved: { v: 2, topics: { 'filter:q': deep(70) } } } }); return { source: x.res.source, deleteSaved: x.res.deleteSaved }; })();
-		const nest = n => { let s = '1'; for (let i = 0; i < n; i++) s = '{"a":' + s + '}'; return s; };
+		const nest = n => { let s = '1'; for (let i = 0; i < n; i++) { s = '{"a":' + s + '}'; } return s; };
 		e.deepLink = I.decodeShareLink('#s=' + b64('{"v":2,"ns":"app.dash","t":' + nest(70) + '}'), P).error;
 		e.shallowLink = Object.keys(I.decodeShareLink('#s=' + b64('{"v":2,"ns":"app.dash","t":{"filter:q":' + nest(40) + '}}'), P));
 
@@ -255,7 +258,7 @@ const out = {};
 			return p;
 		};
 		const bytes = p => Buffer.byteLength(JSON.stringify(p), 'utf8');
-		const keptTopics = (cur) => { const l = I.encodeLink(P, cur); return l === null ? null : Object.keys(I.decodeShareLink(l, P).t).sort(); };
+		const keptTopics = (cur) => { const l = I.encodeLink(P, cur); return l === null ? null : Object.keys(I.decodeShareLink(l, P).t).sort((a, b) => (a < b ? -1 : Number(a > b))); };
 		const at = sized(4096, '\u00e9'), over = sized(4097, '\u00e9'), chars = { schemaVersion: 1, viewId: 'd', search: '\u00e9'.repeat(2049) };
 		const three = sized(4096, '\u20ac'), fourByte = sized(4096, '\ud83d\ude00');
 		e.cap = {
@@ -275,6 +278,6 @@ const out = {};
 			over: I.decodeShareLink('#s=' + 'A'.repeat(8190), P).error
 		};
 		e.polluted = ({}).polluted === undefined;
-	} catch (err) { out.edges = { crash: String(err && err.stack || err) }; }
+	} catch (err) { out.edges = { crash: String(err?.stack || err) }; }
 
 	process.stdout.write(JSON.stringify(out));

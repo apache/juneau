@@ -21,6 +21,7 @@ import static org.apache.juneau.commons.utils.Shorts.*;
 import java.util.*;
 import java.util.function.*;
 import java.util.regex.*;
+import java.util.stream.*;
 
 import org.apache.juneau.marshall.collections.*;
 import org.apache.juneau.rest.server.*;
@@ -67,6 +68,10 @@ import freemarker.template.*;
  *
  * @since 10.0.0
  */
+@SuppressWarnings({
+	"java:S1845", // Fluent-builder setters intentionally mirror field names (Juneau DSL convention)
+	"java:S3776" // Validation and rendering chains many independent guards; splitting them adds no clarity.
+})
 public final class PageSpec {
 
 	/** Data-model attribute that carries the spec into the render. */
@@ -706,9 +711,7 @@ public final class PageSpec {
 	 * nav-node check needs the resolved chrome, so it only runs at {@code </@console>}.
 	 */
 	private void checkBadgesAgainstOwnCards() {
-		var cardIds = new HashSet<String>();
-		for (var c : cards)
-			cardIds.add(c.id());
+		var cardIds = cards.stream().map(CardSpec::id).collect(Collectors.toSet());
 		for (var b : badges) {
 			var m = b.toContractMap();
 			for (var card : PageCapture.badgeCardRefs(m))
@@ -888,6 +891,9 @@ public final class PageSpec {
 
 	// The exact-type-else-registered-subtype lookup the renderer runs, without its two-beans ambiguity check (the
 	// renderer still reports that itself at render time).
+	@SuppressWarnings({
+		"resource" // The request context owns its bean store.
+	})
 	private static ConsoleFreemarkerMixin resolveConsoleMixin(RestRequest req) {
 		var store = req.getContext().getBeanStore();
 		FreemarkerMixin found = store.getBean(FreemarkerMixin.class).orElse(null);
@@ -946,10 +952,15 @@ public final class PageSpec {
 			throw FtlAttrLists.reject("PageSpec cards need the console card directive; the render has no ConsoleFreemarkerMixin.");
 		for (var card : cards) {
 			var markup = cardMarkup.get(card.id());
-			var built = tableBodies.containsKey(card.id()) ? new Built(liftTable(card, cardModel), markup)
-				: LIFTED_TYPES.contains(card.type()) ? new Built(liftChecked(card, cardModel), markup)
-				: CardTypeRegistry.RESERVED.contains(card.type()) ? new Built(card.copy(), markup)
-				: liftCustom(card, markup, cardModel);
+			Built built;
+			if (tableBodies.containsKey(card.id()))
+				built = new Built(liftTable(card, cardModel), markup);
+			else if (LIFTED_TYPES.contains(card.type()))
+				built = new Built(liftChecked(card, cardModel), markup);
+			else if (CardTypeRegistry.RESERVED.contains(card.type()))
+				built = new Built(card.copy(), markup);
+			else
+				built = liftCustom(card, markup, cardModel);
 			cap.addBuiltCard(built.card(), built.markupOrNull());
 			cardModel.recordRequirements(cap, built.card().type(), built.card().id(), List.of(), built.card().bodyMap());
 		}

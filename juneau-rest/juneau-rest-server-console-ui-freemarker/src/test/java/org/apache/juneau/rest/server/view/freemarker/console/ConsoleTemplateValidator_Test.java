@@ -207,7 +207,7 @@ class ConsoleTemplateValidator_Test extends TestBase {
 	@Test void cb03_prebuiltSlotMeta_reportsOnlyViewContractVersionAfterGc1() {
 		// inline-slot-meta is gone at GC-1 (E-28 at render); C1's view-contract-version rule stays (Auto-decision 4).
 		var f = lint("<@page><@card id=\"t\" type=\"datatables\">{view:{contractVersion:'0',id:'t'}}</@card></@page>");
-		assertEquals(List.of("view-contract-version"), f.stream().map(x -> x.rule()).toList());
+		assertEquals(List.of("view-contract-version"), f.stream().map(ConsoleTemplateValidator.Finding::rule).toList());
 	}
 
 	@Test void cb05_cardReservedKey() {
@@ -300,10 +300,11 @@ class ConsoleTemplateValidator_Test extends TestBase {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Test void i01_hardcodedJuneauAssets_flagged() {
-		var f = lint("<link rel=\"stylesheet\" href=\"/rest/home/juneau-views.css\">\n"
-			+ "<script src='/juneau-console/juneau-console.js?v=1'></script>\n"
-			+ "<link href=\"/juneau-console/chrome.css\">\n"
-			+ "<link href=\"themes/juneau-theme-red.css\">");
+		var f = lint("""
+			<link rel="stylesheet" href="/rest/home/juneau-views.css">
+			<script src='/juneau-console/juneau-console.js?v=1'></script>
+			<link href="/juneau-console/chrome.css">
+			<link href="themes/juneau-theme-red.css">""");
 		assertBean(f, "size", "4");
 		assertBeans(f, "line,rule", "1,hardcoded-asset-url", "2,hardcoded-asset-url", "3,hardcoded-asset-url", "4,hardcoded-asset-url");
 		assertTrue(f.get(0).message().contains("'/rest/home/juneau-views.css'"), f.get(0).message());
@@ -401,7 +402,8 @@ class ConsoleTemplateValidator_Test extends TestBase {
 	}
 
 	@Test void w06_nullProbe_rejected() {
-		assertThrows(NullPointerException.class, () -> ConsoleTemplateValidator.create().webJarProbe(null));
+		var target = ConsoleTemplateValidator.create();
+		assertThrows(NullPointerException.class, () -> target.webJarProbe(null));
 	}
 
 	@Test void w07_cacheResets_afterProvidedPacks_andRegisterToolkitPack() {

@@ -75,6 +75,8 @@ class BasicDateHeader_Test extends TestBase {
 
 	@Test void b02_assertZonedDateTime() {
 		new BasicDateHeader(NAME, DATE).assertZonedDateTime().is(DATE);
-		assertThrows(AssertionError.class, () -> new BasicDateHeader(NAME, DATE).assertZonedDateTime().is(DATE.plusDays(1)));
+		var assertion = new BasicDateHeader(NAME, DATE).assertZonedDateTime();
+		var other = DATE.plusDays(1);
+		assertThrows(AssertionError.class, () -> assertion.is(other));
 	}
 }

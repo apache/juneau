@@ -62,7 +62,7 @@ public final class AssetResolutionAssert {
 		var m = p.matcher(attrs);
 		if (! m.find())
 			return null;
-		return m.group(1) != null ? m.group(1) : m.group(2);
+		return m.group(m.group(1) != null ? 1 : 2);
 	}
 
 	private static boolean isAssetLink(String attrs) {
@@ -118,6 +118,9 @@ public final class AssetResolutionAssert {
 	 * @param statusOf Fetches a URL and returns its HTTP status code.
 	 * @return One {@code "<status> <url>"} entry per failing asset, sorted; empty when every asset resolves.
 	 */
+	@SuppressWarnings({
+		"java:S4276" // A null status signals failure, so it cannot be a ToIntFunction
+	})
 	public static List<String> unresolved(String html, Function<String,Integer> statusOf) {
 		var bad = new TreeSet<String>();
 		for (var url : assetUrls(html)) {
@@ -135,6 +138,9 @@ public final class AssetResolutionAssert {
 	 * @param statusOf Fetches a URL and returns its HTTP status code.
 	 * @throws AssertionError If any linked asset does not resolve; the message lists each one.
 	 */
+	@SuppressWarnings({
+		"java:S4276" // A null status signals failure, so it cannot be a ToIntFunction
+	})
 	public static void assertAssetsResolve(String html, Function<String,Integer> statusOf) {
 		assertAssetsResolve(null, html, statusOf);
 	}
@@ -147,6 +153,9 @@ public final class AssetResolutionAssert {
 	 * @param statusOf Fetches a URL and returns its HTTP status code.
 	 * @throws AssertionError If any linked asset does not resolve; the message lists each one.
 	 */
+	@SuppressWarnings({
+		"java:S4276" // A null status signals failure, so it cannot be a ToIntFunction
+	})
 	public static void assertAssetsResolve(String page, String html, Function<String,Integer> statusOf) {
 		var bad = unresolved(html, statusOf);
 		if (! bad.isEmpty())

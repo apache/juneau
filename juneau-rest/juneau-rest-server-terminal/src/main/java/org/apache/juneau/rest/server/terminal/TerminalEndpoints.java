@@ -197,7 +197,7 @@ public final class TerminalEndpoints {
 		var s = req.getQueryParam(name).asString().orElse(null);
 		if (s == null)
 			return dflt;
-		if (! s.matches("0|[1-9][0-9]{0,15}"))
+		if (! s.matches("0|[1-9]\\d{0,15}"))
 			throw new BadRequest(name + " must be a non-negative integer");
 		var n = Long.parseLong(s);
 		if (n > limit)

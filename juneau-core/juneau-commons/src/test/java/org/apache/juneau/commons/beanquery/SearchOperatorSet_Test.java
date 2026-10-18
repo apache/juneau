@@ -130,8 +130,9 @@ class SearchOperatorSet_Test extends TestBase {
 
 	@Test
 	void d04_customOperatorStillRequiresHelp() {
-		assertThrows(IllegalArgumentException.class, () -> SearchOperator.create("$near", " ").build());
-		assertThrows(IllegalArgumentException.class, () -> SearchOperator.create("$near", "x").help(null).build());
+		assertThrows(IllegalArgumentException.class, () -> SearchOperator.create("$near", " "));
+		var noHelp = SearchOperator.create("$near", "x").help(null);
+		assertThrows(IllegalArgumentException.class, noHelp::build);
 	}
 
 	//====================================================================================================

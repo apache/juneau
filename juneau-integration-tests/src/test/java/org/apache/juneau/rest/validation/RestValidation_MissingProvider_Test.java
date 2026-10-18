@@ -70,7 +70,7 @@ class RestValidation_MissingProvider_Test extends TestBase {
 	}
 
 	@Test
-	void a01_missingProvider_violatingPayload_isPassedThrough() throws Exception {
+	void a01_missingProvider_violatingPayload_isPassedThrough() {
 		BeanValidator.simulateProviderMissingForTesting();
 		var a = MockRestClient.buildLax(A.class);
 		// Even though @Valid is present and the bean has a @NotBlank-violating field, with the provider
@@ -90,7 +90,7 @@ class RestValidation_MissingProvider_Test extends TestBase {
 	}
 
 	@Test
-	void a02_missingProvider_validPayload_alsoPassesThrough() throws Exception {
+	void a02_missingProvider_validPayload_alsoPassesThrough() {
 		BeanValidator.simulateProviderMissingForTesting();
 		var a = MockRestClient.buildLax(A.class);
 		// Sanity check &mdash; the missing-provider path also lets valid payloads through. We're verifying the

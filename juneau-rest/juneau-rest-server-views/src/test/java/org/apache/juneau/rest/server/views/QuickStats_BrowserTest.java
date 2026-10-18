@@ -134,12 +134,12 @@ class QuickStats_BrowserTest extends TestBase {
 
 	private static void assertFillRatio(Map<String,Object> p) {
 		var tolerance = 1.0 / num(p.get("trackWidth"));
-		assertEquals(0.30, num(p.get("fillRatio")), tolerance + 0.005, () -> p.toString());
+		assertEquals(0.30, num(p.get("fillRatio")), tolerance + 0.005, p::toString);
 	}
 
 	private static void assertOrderedWidths(Map<String,Object> p) {
 		var w = list(p.get("segWidths"));
-		assertEquals(3, w.size(), () -> p.toString());
+		assertEquals(3, w.size(), p::toString);
 		assertTrue(num(w.get(0)) < num(w.get(1)) && num(w.get(1)) < num(w.get(2)), () -> "3:5:9 widths: " + w);
 	}
 
@@ -153,27 +153,27 @@ class QuickStats_BrowserTest extends TestBase {
 
 	@Test void a02_light_paint() {
 		var p = p("light");
-		assertEquals(p.get("tokenBg"), p.get("trackBg"), () -> p.toString());
-		assertEquals(p.get("tokenBg"), p.get("segbarBg"), () -> p.toString());
+		assertEquals(p.get("tokenBg"), p.get("trackBg"), p::toString);
+		assertEquals(p.get("tokenBg"), p.get("segbarBg"), p::toString);
 		assertFillRatio(p);
 		var bgs = list(p.get("segBgs"));
 		assertEquals(3, bgs.size());
 		for (var bg : bgs) {
-			assertNotEquals("rgba(0, 0, 0, 0)", bg, () -> p.toString());
-			assertNotEquals(p.get("segbarBg"), bg, () -> p.toString());
+			assertNotEquals("rgba(0, 0, 0, 0)", bg, p::toString);
+			assertNotEquals(p.get("segbarBg"), bg, p::toString);
 		}
 		assertEquals(3, new HashSet<>(bgs).size(), () -> "segment colours must be pairwise distinct: " + bgs);
 		assertOrderedWidths(p);
-		assertTrue(String.valueOf(p.get("stripe")).contains("repeating-linear-gradient"), () -> p.toString());
-		assertTrue(String.valueOf(p.get("warnStripe")).contains("repeating-linear-gradient"), () -> p.toString());
-		assertTrue(String.valueOf(p.get("segStripe")).contains("repeating-linear-gradient"), () -> p.toString());
-		assertEquals("none", p.get("okStripe"), () -> p.toString());
-		assertEquals("none", p.get("okSegStripe"), () -> p.toString());
+		assertTrue(String.valueOf(p.get("stripe")).contains("repeating-linear-gradient"), p::toString);
+		assertTrue(String.valueOf(p.get("warnStripe")).contains("repeating-linear-gradient"), p::toString);
+		assertTrue(String.valueOf(p.get("segStripe")).contains("repeating-linear-gradient"), p::toString);
+		assertEquals("none", p.get("okStripe"), p::toString);
+		assertEquals("none", p.get("okSegStripe"), p::toString);
 		assertNotEquals("none", p.get("overShadow"), () -> "the over-limit cue must paint: " + p);
-		assertEquals("solid", p.get("errOutline"), () -> p.toString());
-		assertEquals("none", p.get("okOutline"), () -> p.toString());
+		assertEquals("solid", p.get("errOutline"), p::toString);
+		assertEquals("none", p.get("okOutline"), p::toString);
 		var swatches = list(p.get("swatchBgs"));
-		assertEquals(3, swatches.size(), () -> p.toString());
+		assertEquals(3, swatches.size(), p::toString);
 		for (var bg : swatches)
 			assertNotEquals("rgba(0, 0, 0, 0)", bg, () -> "swatch must be filled: " + p);
 	}
@@ -181,14 +181,14 @@ class QuickStats_BrowserTest extends TestBase {
 	@Test void a03_dark_paint() {
 		var p = p("dark");
 		var l = p("light");
-		assertEquals(p.get("tokenBg"), p.get("trackBg"), () -> p.toString());
-		assertEquals(p.get("tokenBg"), p.get("segbarBg"), () -> p.toString());
+		assertEquals(p.get("tokenBg"), p.get("trackBg"), p::toString);
+		assertEquals(p.get("tokenBg"), p.get("segbarBg"), p::toString);
 		assertNotEquals(l.get("trackBg"), p.get("trackBg"), () -> "the dark layer must be live; light=" + l.get("trackBg") + " dark=" + p.get("trackBg"));
-		assertNotEquals("rgba(0, 0, 0, 0)", p.get("fillBg"), () -> p.toString());
-		assertNotEquals(p.get("trackBg"), p.get("fillBg"), () -> p.toString());
+		assertNotEquals("rgba(0, 0, 0, 0)", p.get("fillBg"), p::toString);
+		assertNotEquals(p.get("trackBg"), p.get("fillBg"), p::toString);
 		for (var bg : list(p.get("segBgs"))) {
-			assertNotEquals("rgba(0, 0, 0, 0)", bg, () -> p.toString());
-			assertNotEquals(p.get("segbarBg"), bg, () -> p.toString());
+			assertNotEquals("rgba(0, 0, 0, 0)", bg, p::toString);
+			assertNotEquals(p.get("segbarBg"), bg, p::toString);
 		}
 	}
 
@@ -201,15 +201,15 @@ class QuickStats_BrowserTest extends TestBase {
 
 	@Test void a05_forcedColors() {
 		var p = p("forced");
-		assertEquals(p.get("canvasText"), p.get("fillBg"), () -> p.toString());
+		assertEquals(p.get("canvasText"), p.get("fillBg"), p::toString);
 		for (var bg : list(p.get("segBgs")))
-			assertEquals(p.get("canvasText"), bg, () -> p.toString());
-		assertNotEquals("0px", p.get("trackBorder"), () -> p.toString());
+			assertEquals(p.get("canvasText"), bg, p::toString);
+		assertNotEquals("0px", p.get("trackBorder"), p::toString);
 		assertEquals(p.get("canvasBg"), p.get("trackBg"), () -> "the track must be on Canvas: " + p);
 		assertEquals(p.get("canvasBg"), p.get("segbarBg"), () -> "the segment bar must be on Canvas: " + p);
 		for (var bg : list(p.get("swatchBgs")))
-			assertEquals(p.get("canvasText"), bg, () -> p.toString());
-		assertEquals("none", p.get("adjust"), () -> p.toString());
+			assertEquals(p.get("canvasText"), bg, p::toString);
+		assertEquals("none", p.get("adjust"), p::toString);
 		assertNotEquals("none", p.get("overShadow"), () -> "the over-limit cue must survive forced colours: " + p);
 		// Warning and error keep a stripe in system colours, so they differ from a plain success fill.
 		for (var key : List.of("warnStripe", "stripe", "segStripe")) {
@@ -217,9 +217,9 @@ class QuickStats_BrowserTest extends TestBase {
 			assertTrue(stripe.contains("repeating-linear-gradient"), () -> key + ": " + p);
 			assertTrue(stripe.contains(String.valueOf(p.get("canvasBg"))), () -> key + " must be drawn in the Canvas system colour: " + p);
 		}
-		assertEquals("none", p.get("okStripe"), () -> p.toString());
-		assertNotEquals(p.get("okStripe"), p.get("warnStripe"), () -> p.toString());
-		assertEquals("none", p.get("okSegStripe"), () -> p.toString());
+		assertEquals("none", p.get("okStripe"), p::toString);
+		assertNotEquals(p.get("okStripe"), p.get("warnStripe"), p::toString);
+		assertEquals("none", p.get("okSegStripe"), p::toString);
 	}
 
 	@Test void a06_noShellErrors() {

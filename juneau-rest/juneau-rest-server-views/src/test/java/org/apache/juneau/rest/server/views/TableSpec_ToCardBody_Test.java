@@ -219,10 +219,13 @@ class TableSpec_ToCardBody_Test extends TestBase {
 	}
 
 	@Test void b02e_urlStateDayParam_rejectsBlankAndMalformed() {
-		assertThrows(IllegalArgumentException.class, () -> minimal().urlStateDayParam(" "));
-		assertThrows(IllegalArgumentException.class, () -> minimal().urlStateDayParam(null));
+		var target = minimal();
+		assertThrows(IllegalArgumentException.class, () -> target.urlStateDayParam(" "));
+		var target2 = minimal();
+		assertThrows(IllegalArgumentException.class, () -> target2.urlStateDayParam(null));
+		var target3 = minimal();
 		for (var bad : List.of("", "on&x=1", "a b", " on", "on ", "1on", "-on", "o.n", "a".repeat(65)))
-			assertThrows(IllegalArgumentException.class, () -> minimal().urlStateDayParam(bad), "'" + bad + "'");
+			assertThrows(IllegalArgumentException.class, () -> target3.urlStateDayParam(bad), "'" + bad + "'");
 		assertEquals(Map.of("day", Map.of("param", "a".repeat(64))), minimal().urlStateDayParam("a".repeat(64)).toCardBody().get("urlState"));
 	}
 
@@ -270,23 +273,32 @@ class TableSpec_ToCardBody_Test extends TestBase {
 			Map.of("param", "x"), Map.of("params", "x"), Map.of("params", Map.of("middle", "m")), Map.of("params", Map.of("start", "")),
 			Map.of("params", Map.of("end", "a&b")), Map.of("params", Map.of("start", 1))))
 			assertThrows(IllegalArgumentException.class, () -> t.urlState("window", bad), "window " + bad);
-		assertThrows(IllegalArgumentException.class, () -> t.urlState(" ", Map.of()));
-		assertThrows(IllegalArgumentException.class, () -> t.urlState((String)null, Map.of()));
-		assertThrows(IllegalArgumentException.class, () -> t.urlState("ids", (Map<String,Object>)null));
+		Map<String,Object> arg2 = Map.of();
+		assertThrows(IllegalArgumentException.class, () -> t.urlState(" ", arg2));
+		Map<String,Object> arg3 = Map.of();
+		assertThrows(IllegalArgumentException.class, () -> t.urlState((String)null, arg3));
+		var arg4 = (Map<String,Object>)null;
+		assertThrows(IllegalArgumentException.class, () -> t.urlState("ids", arg4));
 		// A refused call leaves nothing behind.
 		assertFalse(t.toCardBody().containsKey("urlState"));
 		var partial = minimal().urlState("ids", Map.of("param", "ok"));
-		assertThrows(IllegalArgumentException.class, () -> partial.urlState("ids", Map.of("param", "also-ok", "max", 0)));
+		Map<String,Object> invalid = Map.of("param", "also-ok", "max", 0);
+		assertThrows(IllegalArgumentException.class, () -> partial.urlState("ids", invalid));
 		assertEquals(Map.of("ids", Map.of("param", "ok")), partial.toCardBody().get("urlState"));
 	}
 
 	@Test void b02j_urlStateConfig_refusesNonBuiltInDirectives() {
+		var target4 = minimal();
+		Map<String,Object> none = Map.of();
 		for (var name : List.of("custom", "Day", "tab", "filter", "sort"))
-			assertThrows(IllegalArgumentException.class, () -> minimal().urlState(name, Map.of()), name);
-		assertThrows(IllegalArgumentException.class, () -> minimal().urlState("custom", Map.of("k", "v")));
+			assertThrows(IllegalArgumentException.class, () -> target4.urlState(name, none), name);
+		var target5 = minimal();
+		Map<String,Object> arg = Map.of("k", "v");
+		assertThrows(IllegalArgumentException.class, () -> target5.urlState("custom", arg));
 		// The names-only form refuses the same names, with the same message.
 		for (var name : List.of("custom", "Day", "tab", "filter", "sort")) {
-			var ex = assertThrows(IllegalArgumentException.class, () -> minimal().urlState(name), name);
+			var target6 = minimal();
+			var ex = assertThrows(IllegalArgumentException.class, () -> target6.urlState(name), name);
 			assertEquals("urlState '" + name + "' is not a built-in directive; expected day, ids or window.", ex.getMessage());
 		}
 		assertEquals(Map.of("day", Map.of(), "ids", Map.of(), "window", Map.of()), minimal().urlState("day", "ids", "window").toCardBody().get("urlState"));
@@ -335,8 +347,10 @@ class TableSpec_ToCardBody_Test extends TestBase {
 	}
 
 	@Test void b02c_urlState_rejectsABlankName() {
-		assertThrows(IllegalArgumentException.class, () -> minimal().urlState(" "));
-		assertThrows(IllegalArgumentException.class, () -> minimal().urlState((String)null));
+		var target7 = minimal();
+		assertThrows(IllegalArgumentException.class, () -> target7.urlState(" "));
+		var target8 = minimal();
+		assertThrows(IllegalArgumentException.class, () -> target8.urlState((String)null));
 	}
 
 	@Test void b03_viewKeys_falseIsEmitted() {
@@ -355,7 +369,8 @@ class TableSpec_ToCardBody_Test extends TestBase {
 
 	@Test void b05_columnConfig_nullOptionsRejected() {
 		var t = minimal();
-		assertThrows(NullPointerException.class, () -> t.columnConfig((Map<String,Object>)null));
+		var arg5 = (Map<String,Object>)null;
+		assertThrows(NullPointerException.class, () -> t.columnConfig(arg5));
 	}
 
 	private static void assertPlain(Object o) {

@@ -63,7 +63,8 @@ class BusFrames_Test extends TestBase {
 	}
 
 	@Test void a05_encodeRejectsUnknownType() {
-		var e = assertThrows(IllegalArgumentException.class, () -> BusFrames.encode(Map.of("v", 1, "type", "nope")));
+		var frame = Map.<String,Object>of("v", 1, "type", "nope");
+		var e = assertThrows(IllegalArgumentException.class, () -> BusFrames.encode(frame));
 		assertEquals("BusFrames.encode: unknown frame type 'nope'", e.getMessage());
 	}
 
@@ -78,10 +79,11 @@ class BusFrames_Test extends TestBase {
 			Map.of("v", 1, "type", "error", "code", "c", "message", "m", "topic", 7))) {
 			assertThrows(IllegalArgumentException.class, () -> BusFrames.encode(bad), bad.toString());
 		}
-		var e = assertThrows(IllegalArgumentException.class,
-			() -> BusFrames.encode(Map.of("v", 1, "type", "pub", "topic", "ops.jobs", "payload", Map.of(), "retained", "yes")));
+		var badRetained = Map.<String,Object>of("v", 1, "type", "pub", "topic", "ops.jobs", "payload", Map.of(), "retained", "yes");
+		var e = assertThrows(IllegalArgumentException.class, () -> BusFrames.encode(badRetained));
 		assertEquals("BusFrames.encode: 'retained' must be a boolean", e.getMessage());
-		e = assertThrows(IllegalArgumentException.class, () -> BusFrames.encode(Map.of("v", 1, "type", "clear")));
+		var noTopic = Map.<String,Object>of("v", 1, "type", "clear");
+		e = assertThrows(IllegalArgumentException.class, () -> BusFrames.encode(noTopic));
 		assertEquals("BusFrames.encode: 'topic' must be a string", e.getMessage());
 	}
 

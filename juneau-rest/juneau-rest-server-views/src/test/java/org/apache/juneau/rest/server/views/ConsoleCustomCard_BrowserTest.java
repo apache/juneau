@@ -17,7 +17,6 @@
 package org.apache.juneau.rest.server.views;
 
 import static org.apache.juneau.rest.server.views.ConsoleBrowserFixture.*;
-import static org.apache.juneau.test.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
@@ -68,15 +67,15 @@ class ConsoleCustomCard_BrowserTest extends TestBase {
 	@Test void a01_queuedBeforeLoad_rendersAndFiresMounted() {
 		var r = report.get("before");
 		assertNoShellErrors(r);
-		assertTrue(String.valueOf(queries(r).get("k1")).contains("kpi:k1"), () -> r.toString());
-		assertEquals(List.of("k1"), eventIds(r, "mounted"), () -> r.toString());
+		assertTrue(String.valueOf(queries(r).get("k1")).contains("kpi:k1"), r::toString);
+		assertEquals(List.of("k1"), eventIds(r, "mounted"), r::toString);
 	}
 
 	@Test void a02_registeredAfterLoad_rendersPendingCardAndFiresMounted() {
 		var r = report.get("after");
 		assertNoShellErrors(r);
-		assertTrue(String.valueOf(queries(r).get("w1")).contains("widget:w1"), () -> r.toString());
-		assertEquals(List.of("w1"), eventIds(r, "mounted"), () -> r.toString());
+		assertTrue(String.valueOf(queries(r).get("w1")).contains("widget:w1"), r::toString);
+		assertEquals(List.of("w1"), eventIds(r, "mounted"), r::toString);
 	}
 
 	@Test void a03_neverRegistered_failsLoudlyAtDomContentLoaded() {

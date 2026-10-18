@@ -183,6 +183,9 @@ public final class QueryProperty {
 	 * @throws IllegalArgumentException If <c>bean</c> is <jk>null</jk>.
 	 * @throws IllegalStateException If the property is not writable.
 	 */
+	@SuppressWarnings({
+		"java:S3011" // Field.set on a public field; no accessibility override, reflection is the point of this class.
+	})
 	public void write(Object bean, Object value) {
 		reqnn("bean", bean);
 		if (! canWrite())

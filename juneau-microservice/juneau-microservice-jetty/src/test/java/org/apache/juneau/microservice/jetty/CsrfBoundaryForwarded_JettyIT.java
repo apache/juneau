@@ -57,6 +57,9 @@ import jakarta.servlet.http.*;
  */
 @EnabledIfSystemProperty(named=CsrfBoundary_JettyIT.GATE, matches="true",
 	disabledReason="binds a socket; run with -Dtest='CsrfBoundaryForwarded_JettyIT' -Djuneau.busIt=true")
+@SuppressWarnings({
+	"resource" // The server, connector and bus are started per test and stopped in @AfterEach; servlet response writers belong to the container.
+})
 class CsrfBoundaryForwarded_JettyIT extends TestBase {
 
 	private static final String PUBLIC = "https://app.example";

@@ -119,7 +119,7 @@ class VirtualThreadDispatch_Test extends TestBase {
 		public String ok() { return "ok"; }
 	}
 
-	@Test void b01_degradation_handlerStillWorks() throws Exception {
+	@Test void b01_degradation_handlerStillWorks() {
 		// Whether we're on Java 17 (graceful degradation) or Java 21 (real VT), the handler must respond.
 		var c = MockRestClient.buildLax(B.class);
 		var records = LogRecordCapture.quietly(RestContext.class, () -> c.get("/ok").run().assertStatus(200).assertContent().isContains("ok"));
@@ -134,7 +134,7 @@ class VirtualThreadDispatch_Test extends TestBase {
 
 	@Test
 	@DisabledForJreRange(min = JAVA_21)
-	void b02_java17_logsWarningOnce() throws Exception {
+	void b02_java17_logsWarningOnce() {
 		// Capture the WARNING emitted by RestContext when @Rest(virtualThreads=true) is configured on Java < 21.
 		var records = LogRecordCapture.quietly(RestContext.class, () -> MockRestClient.buildLax(BWarning.class).get("/x").run().assertStatus(200));
 		assertEquals(1, records.size(), records::toString);

@@ -242,13 +242,15 @@ class McpWire_Test {
 	}
 
 	@Test void e09_customContentImplementation_internalError() {
-		var e = assertThrows(McpException.class, () -> McpWire.toNeutral(new Content() {}));
+		var content = new Content() {};
+		var e = assertThrows(McpException.class, () -> McpWire.toNeutral(content));
 		assertEquals(McpRevision.CODE_INTERNAL_ERROR, e.getCode());
 		assertTrue(e.getMessage().startsWith("Unsupported content type: "), e.getMessage());
 	}
 
 	@Test void e10_customResourceContentsImplementation_internalError() {
-		var e = assertThrows(McpException.class, () -> McpWire.toNeutral(new EmbeddedResourceContent().setResource(new ResourceContents() {})));
+		var content = new EmbeddedResourceContent().setResource(new ResourceContents() {});
+		var e = assertThrows(McpException.class, () -> McpWire.toNeutral(content));
 		assertEquals(McpRevision.CODE_INTERNAL_ERROR, e.getCode());
 		assertTrue(e.getMessage().startsWith("Unsupported resource contents type: "), e.getMessage());
 	}

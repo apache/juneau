@@ -27,7 +27,6 @@ import org.apache.juneau.*;
 import org.apache.juneau.rest.server.auth.*;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.io.*;
-import org.opensaml.security.credential.*;
 
 /**
  * End-to-end tests for {@link SamlAssertionValidator} resolving the IdP signing certificate from real SAML
@@ -91,14 +90,16 @@ class SamlAssertionValidator_Metadata_Test extends TestBase {
 		// The trust-anchor certificate is rejected outside its validity window, so no signing credential remains.
 		var early = Clock.fixed(Instant.parse("2020-01-01T00:00:00Z"), ZoneOffset.UTC);
 		var v = validator(metadata(certElement(SamlTestKeys.CERT_BASE64)), early);
-		var ex = assertThrows(AuthenticationException.class, () -> v.validate(signedResponse()));
+		var xml = signedResponse();
+		var ex = assertThrows(AuthenticationException.class, () -> v.validate(xml));
 		assertTrue(ex.getMessage().contains("No signing X.509 certificate"), ex.getMessage());
 	}
 
 	@Test void a04_certificateExpired_rejected() throws Exception {
 		var late = Clock.fixed(Instant.parse("2130-01-01T00:00:00Z"), ZoneOffset.UTC);
 		var v = validator(metadata(certElement(SamlTestKeys.CERT_BASE64)), late);
-		var ex = assertThrows(AuthenticationException.class, () -> v.validate(signedResponse()));
+		var xml = signedResponse();
+		var ex = assertThrows(AuthenticationException.class, () -> v.validate(xml));
 		assertTrue(ex.getMessage().contains("No signing X.509 certificate"), ex.getMessage());
 	}
 

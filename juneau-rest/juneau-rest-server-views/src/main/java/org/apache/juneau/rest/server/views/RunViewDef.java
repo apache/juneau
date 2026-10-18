@@ -38,6 +38,10 @@ import org.apache.juneau.rest.server.runreport.*;
  * 		.toRegion();
  * </p>
  */
+@SuppressWarnings({
+	"java:S1192", // Repeated literals are contract wire keys; named constants would obscure the contract shape.
+	"java:S1845" // Fluent-builder setters intentionally mirror field names (Juneau DSL convention)
+})
 public class RunViewDef {
 
 	/** The populator name. */

@@ -140,7 +140,8 @@ class Section_Test extends TestBase {
 	@Test void a13_nullInputs() {
 		assertEquals("E-77: dashboard 'd': range section 'r' preset 'null' is not Nd, Nh or ytd",
 			e77(() -> RangeSection.quick("7d", null).publishes(Topics.filter("r")).check("d")));
-		assertThrows(NullPointerException.class, () -> Rail.left().sections((Section)null));
+		var target = Rail.left();
+		assertThrows(NullPointerException.class, () -> target.sections((Section)null));
 		assertThrows(NullPointerException.class, () -> CardSection.of((CardSpec)null));
 		assertThrows(NullPointerException.class, () -> CardSection.of((ChartDef)null));
 	}

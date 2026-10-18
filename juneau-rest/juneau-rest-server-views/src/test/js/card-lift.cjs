@@ -44,7 +44,7 @@ for (const c of corpus.cases) {
 			assert.throws(() => NS.card.liftCatalog(c.name, c.catalog), e => e.message.includes(c.expectedError), c.name);
 		} else {
 			// Round-trip through JSON: the sandbox's objects come from another realm, so deepStrictEqual's prototype check would fail.
-			assert.deepStrictEqual(JSON.parse(JSON.stringify(NS.card.liftCatalog(c.name, c.catalog))), c.expected, c.name + ': lift mismatch');
+			assert.deepStrictEqual(JSON.parse(JSON.stringify(NS.card.liftCatalog(c.name, c.catalog))), c.expected, c.name + ': lift mismatch'); // NOSONAR javascript:S7784 - the JSON round-trip deliberately normalizes to plain JSON
 		}
 		console.log('ok - ' + c.name);
 	} catch (e) {

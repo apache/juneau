@@ -150,12 +150,12 @@ class SseSubscription_Test {
 
 	@Test void b03_pollReturnsPromptlyOnceClosed() throws Exception {
 		var sub = new SseSubscription("s1", 4, id -> {});
+		var poller = Thread.currentThread();
 		var closer = new Thread(() -> {
-			try {
-				Thread.sleep(50);
-			} catch (InterruptedException e) {
-				Thread.currentThread().interrupt();
-			}
+			// Close only once the poller is parked in its wait, bounded so a missed park cannot hang the test.
+			var deadline = System.nanoTime() + 5_000_000_000L;
+			while (poller.getState() != Thread.State.TIMED_WAITING && poller.getState() != Thread.State.WAITING && System.nanoTime() < deadline)
+				Thread.onSpinWait();
 			sub.close();
 		});
 		closer.start();

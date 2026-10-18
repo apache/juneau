@@ -18,7 +18,8 @@
  * Test-only card type for the console-bus browser suite.  It counts renders (so a `refresh` subscription is
  * observable) and records every role call (`filter`, `state`) with its already-mapped payload.
  */
-(window.JuneauConsoleCards = window.JuneauConsoleCards || []).push(['recorder', {
+window.JuneauConsoleCards ||= [];
+window.JuneauConsoleCards.push(['recorder', {
 	render(card, el) {
 		const T = window.__busTest;
 		T.renders[card.id] = (T.renders[card.id] || 0) + 1;

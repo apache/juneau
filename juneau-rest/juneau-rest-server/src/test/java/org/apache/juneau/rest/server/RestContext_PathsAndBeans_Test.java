@@ -193,7 +193,7 @@ class RestContext_PathsAndBeans_Test extends org.apache.juneau.TestBase {
 		@Bean(name = "startCallMethods") public MethodList myStartCallMethods() { return MethodList.of(List.of()); }
 	}
 
-	@Test void d01_beanMethodListOverrides_allSevenNamedSlots_resolveToOverride() throws Exception {
+	@Test void d01_beanMethodListOverrides_allSevenNamedSlots_resolveToOverride() {
 		var holder = new RestContext[1];
 		var records = LogRecordCapture.quietly(RestContext.class, () -> holder[0] = new RestContext(argsOf(Fix_MethodListBeans.class, Fix_MethodListBeans::new)));
 		assertEquals(1, records.size(), records::toString);
@@ -225,7 +225,7 @@ class RestContext_PathsAndBeans_Test extends org.apache.juneau.TestBase {
 		}
 	}
 
-	@Test void e01_beanOverrides_replaceAnnotationDerivedDefaults() throws Exception {
+	@Test void e01_beanOverrides_replaceAnnotationDerivedDefaults() {
 		var holder = new RestContext[1];
 		var records = LogRecordCapture.quietly(RestContext.class, () -> holder[0] = new RestContext(argsOf(Fix_DefaultHeaderBeans.class, Fix_DefaultHeaderBeans::new)));
 		assertEquals(1, records.size(), records::toString);

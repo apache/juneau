@@ -86,6 +86,8 @@ final class BusStream {
 	 * @return The path, or {@code ""} for a root servlet in a root context.
 	 */
 	static String trimBase(String path) {
-		return path == null || path.equals("/") ? "" : path.endsWith("/") ? path.substring(0, path.length() - 1) : path;
+		if (path == null || path.equals("/"))
+			return "";
+		return path.endsWith("/") ? path.substring(0, path.length() - 1) : path;
 	}
 }

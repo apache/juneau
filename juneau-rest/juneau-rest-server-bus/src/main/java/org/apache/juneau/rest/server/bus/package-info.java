@@ -18,9 +18,9 @@
  * Server half of the console message bus.
  *
  * <p>
- * A {@link ServerBus} holds retained topic values and the sessions that bridge them
+ * A {@link org.apache.juneau.rest.server.bus.ServerBus} holds retained topic values and the sessions that bridge them
  * to pages; a {@link org.apache.juneau.rest.server.bus.BusPolicy} says what may flow, in which direction, to whom
- * (everything else is denied); {@link BusEventsMixin} exposes the CSRF-guarded session
+ * (everything else is denied); {@link org.apache.juneau.rest.server.bus.BusEventsMixin} exposes the CSRF-guarded session
  * POST and the capability-gated SSE stream on a REST resource.  The WebSocket transport is the separate
  * {@code juneau-rest-server-bus-websocket} module.
  *

@@ -75,7 +75,8 @@ import freemarker.template.*;
  * @since 10.0.0
  */
 @SuppressWarnings({
-	"java:S1192" // Duplicated literals read more clearly inline than as constants
+	"java:S1192", // Duplicated literals read more clearly inline than as constants
+	"java:S3776" // Validation and rendering chains many independent guards; splitting them adds no clarity.
 })
 public final class TokenDirectiveModel implements TemplateDirectiveModel {
 

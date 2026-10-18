@@ -46,7 +46,7 @@ class ApacheHc45Transport_SsrfGuard_Test {
 		server.createContext("/hello", exchange -> {
 			var body = "hi".getBytes(StandardCharsets.UTF_8);
 			exchange.sendResponseHeaders(200, body.length);
-			exchange.getResponseBody().write(body);
+			try (var os = exchange.getResponseBody()) { os.write(body); }
 			exchange.close();
 		});
 		server.start();
@@ -148,9 +148,9 @@ class ApacheHc45Transport_SsrfGuard_Test {
 	}
 
 	private static void assertPlainOk(ApacheHc45Transport transport) throws Exception {
-		try (var response = transport.execute(plain())) {
+		try (var response = transport.execute(plain()); var in = response.getBody()) {
 			assertEquals(200, response.getStatusCode());
-			assertEquals("hi", new String(response.getBody().readAllBytes(), StandardCharsets.UTF_8));
+			assertEquals("hi", new String(in.readAllBytes(), StandardCharsets.UTF_8));
 		}
 	}
 

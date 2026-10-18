@@ -28,7 +28,6 @@ import java.util.function.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.rest.server.filter.CsrfBoundary.*;
-import org.apache.juneau.rest.server.filter.CsrfBoundary_Test.*;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.*;
 import org.junit.jupiter.params.provider.*;
@@ -336,6 +335,7 @@ class CsrfBoundaryFilter_Test extends TestBase {
 		verify(req, never()).setAttribute(eq(RequestBoundaryFilter.TOKEN_SUPPLIER_ATTRIBUTE), any());
 	}
 
+	@SuppressWarnings("resource") // verify(...).getWriter() only checks that the mock was never asked for a writer; nothing is opened.
 	@Test void a12_rejectionProducedWithBrokenSerializers() throws Exception {
 		// No REST context, serializer or writer exists here: the refusal is built and written as bytes by the filter.
 		var c = run(filter(), build(r("POST", "http", HOST, EVIL, "Content-Type", JSON)), mock(FilterChain.class));

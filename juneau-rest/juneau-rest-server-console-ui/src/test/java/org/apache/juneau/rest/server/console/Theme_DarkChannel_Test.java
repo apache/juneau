@@ -39,7 +39,8 @@ class Theme_DarkChannel_Test extends TestBase {
 	@Test void a01_builderDark() {
 		var theme = Theme.create("x").token("--jc-accent", "#123456").dark("--jc-link", "#6cb4ff").build();
 		assertEquals(map("--jc-link", "#6cb4ff"), theme.getDarkTokens());
-		assertThrows(UnsupportedOperationException.class, () -> theme.getDarkTokens().put("--jc-focus", "#fff"));
+		var target = theme.getDarkTokens();
+		assertThrows(UnsupportedOperationException.class, () -> target.put("--jc-focus", "#fff"));
 	}
 
 	@Test void a02_darkRejectsVar() {

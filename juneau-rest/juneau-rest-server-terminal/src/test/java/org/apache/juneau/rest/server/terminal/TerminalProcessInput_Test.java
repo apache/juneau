@@ -36,6 +36,9 @@ import org.junit.jupiter.api.io.*;
  * {@link TerminalProcess} input mode, over a fake {@code python3} runner, and over the real {@code juneau_run.py} for
  * the bytes reaching the job.
  */
+@SuppressWarnings({
+	"java:S2925" // Timing-dependent process/file test; it polls or waits on real time
+})
 @DisabledOnOs(OS.WINDOWS)
 class TerminalProcessInput_Test extends TestBase {
 

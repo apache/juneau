@@ -93,6 +93,9 @@ public interface CardTypeHandler {
 	 *
 	 * @return The accepted role names, or {@code null} if unknown.
 	 */
+	@SuppressWarnings({
+		"java:S1168" // null means "unknown to Java" in the public API
+	})
 	default Set<String> acceptedRoles() { return null; }
 
 	/**
@@ -108,6 +111,9 @@ public interface CardTypeHandler {
 	 *
 	 * @return The handled op names, or {@code null} if unknown.
 	 */
+	@SuppressWarnings({
+		"java:S1168" // null means "unknown to Java" in the public API
+	})
 	default Set<String> acceptedOps() { return null; }
 
 	/**

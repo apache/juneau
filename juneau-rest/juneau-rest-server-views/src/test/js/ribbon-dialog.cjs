@@ -67,7 +67,7 @@ function loadBoth() {
 	const env = makeEnv();
 	const sources = [];
 	const FakeES = function (url) { this.url = url; this.l = {}; this.closed = false; sources.push(this); };
-	FakeES.prototype.addEventListener = function (t, f) { (this.l[t] = this.l[t] || []).push(f); };
+	FakeES.prototype.addEventListener = function (t, f) { this.l[t] ||= []; this.l[t].push(f); };
 	FakeES.prototype.close = function () { this.closed = true; };
 	FakeES.prototype.fire = function (t, d) { (this.l[t] || []).forEach(function (f) { f({ data: d }); }); };
 	env.EventSource = FakeES;
@@ -197,7 +197,7 @@ function anyRowBanner(env) {
 		out.submit_outcomeTestid = outcome ? outcome.dataset.testid : null;
 		out.submit_hostAnchoredAfterToolbarRow = (function () {
 			const host = env.body.querySelector('.juneau-view-ribbon-banner-host');
-			if (!host || host.parentNode !== fx.wrapper) return false;
+			if (host?.parentNode !== fx.wrapper) return false;
 			const kids = fx.wrapper.childNodes;
 			return kids.indexOf(host) === kids.findIndex(function (c) { return c.className === 'juneau-view-toolbar-row'; }) + 1;
 		})();
@@ -346,8 +346,8 @@ function anyRowBanner(env) {
 		await openAndConfirm();
 		out.job_streamOpened = sources.length === 1 && sources[0].url === '/s/rj-1';
 		const host = env.body.querySelector('.juneau-view-ribbon-banner-host');
-		out.job_progressInRibbonHost = host != null && host.querySelector('.juneau-view-job-progress') != null;
-		out.job_cancelInRibbonHost = host != null && host.querySelector('.juneau-view-job-cancel') != null;
+		out.job_progressInRibbonHost = host?.querySelector('.juneau-view-job-progress') != null;
+		out.job_cancelInRibbonHost = host?.querySelector('.juneau-view-job-cancel') != null;
 		out.job_dialogClosed = I.dialogLayerCount() === 0;
 		out.job_noRowBanner = !anyRowBanner(env);
 		// a second job while the first still streams keeps its own progress element

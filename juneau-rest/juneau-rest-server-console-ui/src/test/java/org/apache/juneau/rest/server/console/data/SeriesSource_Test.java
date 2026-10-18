@@ -112,7 +112,7 @@ class SeriesSource_Test extends TestBase {
 		var src = new SeriesSource(SeriesSource.Format.CSV, s);
 		var e1 = assertThrows(IllegalStateException.class, () -> src.write(Stream.empty()));
 		assertEquals("SeriesSource.write: columns(...) not set", e1.getMessage());
-		assertThrows(IllegalArgumentException.class, () -> src.columns());
+		assertThrows(IllegalArgumentException.class, src::columns);
 		assertThrows(IllegalArgumentException.class, () -> src.cap(0));
 	}
 

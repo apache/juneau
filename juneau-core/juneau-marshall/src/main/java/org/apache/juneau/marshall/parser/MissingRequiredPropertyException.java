@@ -68,6 +68,9 @@ public class MissingRequiredPropertyException extends ParseException {
 	 * @return The same bean map, for chaining.
 	 * @throws MissingRequiredPropertyException If a required property was never written.
 	 */
+	@SuppressWarnings({
+		"java:S1168" // Pass-through for chaining: returns the argument itself, so null in gives null out
+	})
 	public static <T> BeanMap<T> check(ParserSession session, BeanMap<T> m) {
 		if (m == null)
 			return null;

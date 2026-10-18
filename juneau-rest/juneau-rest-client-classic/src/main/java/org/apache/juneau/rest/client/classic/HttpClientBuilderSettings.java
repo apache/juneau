@@ -52,6 +52,10 @@ import org.apache.http.protocol.*;
  * @param connTimeToLiveTimeUnit The time unit of {@code connTimeToLive}.
  * @param systemProperties Whether {@link HttpClientBuilder#useSystemProperties()} was called.
  */
+@SuppressWarnings({
+	"java:S1192", // The field name repeats where each HttpClientBuilder field is read.
+	"java:S3011" // The HttpClientBuilder fields are read reflectively because the builder exposes no getters for them.
+})
 record HttpClientBuilderSettings(
 	SSLContext sslContext,
 	LayeredConnectionSocketFactory sslSocketFactory,
@@ -182,6 +186,9 @@ record HttpClientBuilderSettings(
 	 * @return The interceptors (empty if none were added).
 	 * @throws IllegalStateException If the builder's fields cannot be read (see {@link #isReadable()}).
 	 */
+	@SuppressWarnings({
+		"java:S1452" // Package-private helper; interceptors are of mixed types
+	})
 	static List<?> lastRequestInterceptors(HttpClientBuilder b) {
 		List<?> interceptors = get(requireReadable(b), "requestLast");
 		return interceptors == null ? List.of() : interceptors;

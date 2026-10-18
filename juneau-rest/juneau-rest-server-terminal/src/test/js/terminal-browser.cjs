@@ -27,7 +27,7 @@
  *   {cases: {name: true | "failure"}, pageErrors: {name: [...]}, consoleErrors: {name: [...]}}
  */
 
-const fs = require('fs');
+const fs = require('node:fs');
 const { chromium } = require('playwright');
 
 const ORIGIN = 'http://term.test';
@@ -48,9 +48,32 @@ const ASSETS = {
 	'/a/juneau-theme-dark.css': ['text/css', DARK_CSS]
 };
 
+/** An OSC 8 hyperlink escape sequence around the text. */
+function osc8Link(href, text) { return '\u001b]8;;' + href + '\u0007' + text + '\u001b]8;;\u0007'; }
+
+/** Runs in the page: the contrast of the four tone-coloured elements, creating a probe element for each as needed. */
+function toneProbe() {
+	const lum = function (c) { // NOSONAR javascript:S7721 - runs inside the browser page; it must stay in the serialized function
+		const m = c.match(/[\d.]+/g).map(Number).slice(0, 3).map(function (v) { v /= 255; return v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4); });
+		return 0.2126 * m[0] + 0.7152 * m[1] + 0.0722 * m[2];
+	};
+	return ['juneau-term-badge', 'juneau-term-ok', 'juneau-term-chip', 'juneau-term-banner'].map(function (cls) {
+		let el = document.querySelector('.' + cls + '.probe');
+		if (!el) {
+			el = document.createElement('span');
+			el.className = cls + ' probe';
+			el.textContent = 'x';
+			document.body.appendChild(el);
+		}
+		const cs = getComputedStyle(el);
+		const a = lum(cs.backgroundColor), b = lum(cs.color);
+		return { cls: cls, bg: cs.backgroundColor, color: cs.color, ratio: (Math.max(a, b) + 0.05) / (Math.min(a, b) + 0.05) };
+	});
+}
+
 /** {log, done, cols, rows, events} -> a page.route handler for the page, its assets and the two endpoints. */
 function server(fx) {
-	const f = Object.assign({ done: true, cols: 80, rows: 24, events: null }, fx);
+	const f = { done: true, cols: 80, rows: 24, events: null, ...fx };
 	return function (route) {
 		const u = new URL(route.request().url());
 		const asset = ASSETS[u.pathname];
@@ -96,7 +119,7 @@ async function open(page, fx, opts) {
 		if (o.hash)
 			window.location.hash = o.hash;
 		window.__cleanup = window.JuneauTerminal.mount(document.getElementById('host'), o.opts);
-	}, { opts: Object.assign({ id: 't', bytesUrl: '/t/bytes' }, fx.events ? { eventsUrl: '/t/events' } : {}, opts || {}), hash: fx.hash || null });
+	}, { opts: { id: 't', bytesUrl: '/t/bytes', ...(fx.events ? { eventsUrl: '/t/events' } : {}), ...opts }, hash: fx.hash || null });
 	await page.waitForFunction(function () {
 		const b = document.querySelector('.juneau-term-badge');
 		return b && b.textContent !== 'Connecting' && b.textContent !== 'Running';
@@ -106,7 +129,7 @@ async function open(page, fx, opts) {
 function rows(page) {
 	return page.evaluate(function () {
 		return Array.from(document.querySelectorAll('.xterm-rows > div')).map(function (d) {
-			return d.textContent.replace(/\u00a0/g, ' ').replace(/\s+$/, '');
+			return d.textContent.replaceAll('\u00a0', ' ').trimEnd();
 		});
 	});
 }
@@ -114,13 +137,13 @@ function rows(page) {
 async function waitRow0(page, text) {
 	await page.waitForFunction(function (t) {
 		const r = document.querySelector('.xterm-rows > div');
-		return r && r.textContent.replace(/\u00a0/g, ' ').trim() === t;
+		return r && r.textContent.replaceAll('\u00a0', ' ').trim() === t;
 	}, text, { timeout: 5000 });
 }
 
 /** Wraps window.Terminal so the case can read each xterm's options; returns once the page and its scripts are up. */
 async function openRunning(page, fx) {
-	await page.route(ORIGIN + '/**', server(Object.assign({ done: false }, fx)));
+	await page.route(ORIGIN + '/**', server({ done: false, ...fx }));
 	await page.goto(ORIGIN + '/page');
 	await page.waitForFunction(function () { return typeof window.Terminal === 'function' && !!window.JuneauTerminal; });
 	await page.evaluate(function () {
@@ -138,7 +161,7 @@ async function openRunning(page, fx) {
 function waitRunning(page, id) {
 	return page.waitForFunction(function (i) {
 		const b = document.querySelector('#' + i + ' .juneau-term-badge');
-		return b && b.textContent === 'Running' && document.querySelector('#' + i + ' .xterm');
+		return b?.textContent === 'Running' && document.querySelector('#' + i + ' .xterm');
 	}, id, { timeout: 5000 });
 }
 
@@ -147,7 +170,7 @@ function waitRunning(page, id) {
  * is kept in window.__bridge; every bytes request URL is recorded in n.urls.
  */
 async function nudgeCard(page, o) {
-	const opts = Object.assign({ topic: 'term.nudge:t1' }, o);
+	const opts = { topic: 'term.nudge:t1', ...o };
 	const n = { f: { log: Buffer.from('hello\r\n'), done: false }, urls: [] };
 	await page.route(ORIGIN + '/**', function (route) {
 		const u = new URL(route.request().url());
@@ -341,14 +364,14 @@ const CASES = [
 				const rowsEl = document.querySelector('.xterm-rows');
 				return {
 					host: document.getElementById('host').getBoundingClientRect().width, screen: xs.width,
-					font: parseFloat(getComputedStyle(rowsEl).fontSize), rows: rowsEl.children.length,
+					font: Number.parseFloat(getComputedStyle(rowsEl).fontSize), rows: rowsEl.children.length,
 					first: rowsEl.children[0].textContent.length
 				};
 			});
 		};
 		const wide = await measure();
 		await page.evaluate(function () { document.getElementById('host').style.width = '500px'; });
-		await page.waitForFunction(function (f) { return parseFloat(getComputedStyle(document.querySelector('.xterm-rows')).fontSize) < f; }, wide.font, { timeout: 5000 });
+		await page.waitForFunction(function (f) { return Number.parseFloat(getComputedStyle(document.querySelector('.xterm-rows')).fontSize) < f; }, wide.font, { timeout: 5000 });
 		const narrow = await measure();
 		expect(wide.rows === 24 && narrow.rows === 24, 'rows stay 24: ' + wide.rows + ' ' + narrow.rows);
 		expect(narrow.first === 80, 'the 80-column row is not rewrapped: ' + narrow.first);
@@ -362,8 +385,7 @@ const CASES = [
 		expect((await rows(page))[0] === 'after', 'the sequence itself prints nothing');
 	}],
 	['b09_onlyHttpLinksOpen', async function (page) {
-		const link = function (href, text) { return '\u001b]8;;' + href + '\u0007' + text + '\u001b]8;;\u0007'; };
-		await open(page, { log: Buffer.from(link('javascript:alert(1)', 'BAD') + ' ' + link('https://example.org/ok', 'GOOD') + '\r\n'), cols: 80, rows: 24 });
+		await open(page, { log: Buffer.from(osc8Link('javascript:alert(1)', 'BAD') + ' ' + osc8Link('https://example.org/ok', 'GOOD') + '\r\n'), cols: 80, rows: 24 });
 		const box = await page.evaluate(function () {
 			const r = document.querySelector('.xterm-screen').getBoundingClientRect();
 			return { x: r.left, y: r.top, w: r.width / 80, h: r.height / 24 };
@@ -427,8 +449,8 @@ const CASES = [
 			const chip = bar.querySelector('.juneau-term-chip--input');
 			return {
 				order: [at('.juneau-term-input'), at('.juneau-term-chip--input'), at('.juneau-term-badge')],
-				tag: toggle && toggle.tagName, type: toggle && toggle.type, label: toggle && toggle.textContent,
-				pressed: toggle && toggle.getAttribute('aria-pressed'), chipRole: chip && chip.getAttribute('role'), chipHidden: chip && chip.hidden,
+				tag: toggle?.tagName, type: toggle?.type, label: toggle?.textContent,
+				pressed: toggle?.getAttribute('aria-pressed'), chipRole: chip?.getAttribute('role'), chipHidden: chip?.hidden,
 				stdin: window.__terms[0].options.disableStdin
 			};
 		});
@@ -447,7 +469,7 @@ const CASES = [
 			const chip = document.querySelector('#host .juneau-term-chip--input');
 			return {
 				stdin: window.__terms[0].options.disableStdin, pressed: document.querySelector('#host .juneau-term-input').getAttribute('aria-pressed'),
-				chip: chip.textContent, chipState: chip.getAttribute('data-state'), chipHidden: chip.hidden,
+				chip: chip.textContent, chipState: chip.dataset.state, chipHidden: chip.hidden,
 				badge: document.querySelector('#host .juneau-term-badge').textContent
 			};
 		});
@@ -489,7 +511,8 @@ const CASES = [
 			window.__h.roles['input-status']({ id: 't1', state: 'live' }, {}, { id: 'nope' });
 		});
 		const r = await page.evaluate(function () {
-			const p = function (h) { return document.querySelector('#' + h + ' .juneau-term-input').getAttribute('aria-pressed'); };
+			const p = function (h) { // NOSONAR javascript:S7721 - runs inside the browser page; it must stay in the serialized function
+ return document.querySelector('#' + h + ' .juneau-term-input').getAttribute('aria-pressed'); };
 			return { one: p('host'), two: p('host2'), pub: window.__pub, subs: window.__subs };
 		});
 		expect(r.one === 'true' && r.two === 'false', 'only card1 armed: ' + JSON.stringify(r));
@@ -601,30 +624,12 @@ const CASES = [
 	['b15_toneBackgroundsStayLegibleWithViewsCss', async function (page) {
 		await page.route(ORIGIN + '/**', server({ log: Buffer.from('x') }));
 		await page.goto(ORIGIN + '/page');
-		const probe = function () {
-			const lum = function (c) {
-				const m = c.match(/[\d.]+/g).map(Number).slice(0, 3).map(function (v) { v /= 255; return v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4); });
-				return 0.2126 * m[0] + 0.7152 * m[1] + 0.0722 * m[2];
-			};
-			return ['juneau-term-badge', 'juneau-term-ok', 'juneau-term-chip', 'juneau-term-banner'].map(function (cls) {
-				let el = document.querySelector('.' + cls + '.probe');
-				if (!el) {
-					el = document.createElement('span');
-					el.className = cls + ' probe';
-					el.textContent = 'x';
-					document.body.appendChild(el);
-				}
-				const cs = getComputedStyle(el);
-				const a = lum(cs.backgroundColor), b = lum(cs.color);
-				return { cls: cls, bg: cs.backgroundColor, color: cs.color, ratio: (Math.max(a, b) + 0.05) / (Math.min(a, b) + 0.05) };
-			});
-		};
-		const light = await page.evaluate(probe);
+		const light = await page.evaluate(toneProbe);
 		light.forEach(function (r) { expect(r.ratio >= 4.5, 'legible with views CSS only: ' + JSON.stringify(r)); });
 		// A theme (e.g. dark) that overrides the tag palette must reach all four.
 		await page.addStyleTag({ content: ':root{--jc-tag-blue-bg:rgb(1,2,3);--jc-tag-blue-text:rgb(250,250,250);--jc-tag-green-bg:rgb(2,3,4);--jc-tag-green-text:rgb(250,250,250);'
 			+ '--jc-tag-amber-bg:rgb(3,4,5);--jc-tag-amber-text:rgb(250,250,250)}' });
-		const dark = await page.evaluate(probe);
+		const dark = await page.evaluate(toneProbe);
 		const want = ['rgb(1, 2, 3)', 'rgb(2, 3, 4)', 'rgb(3, 4, 5)', 'rgb(3, 4, 5)'];
 		dark.forEach(function (r, i) { expect(r.bg === want[i] && r.color === 'rgb(250, 250, 250)', 'follows the tag palette: ' + JSON.stringify(r)); });
 		// The neutral "Input live" chip must not pick up the chip's amber text.
@@ -641,9 +646,9 @@ const CASES = [
 	['b15d_toneBackgroundsLegibleUnderDark', async function (page) {
 		await page.route(ORIGIN + '/**', server({ log: Buffer.from('x') }));
 		await page.goto(ORIGIN + '/page');
-		await page.evaluate(function () { document.documentElement.setAttribute('data-jc-scheme', 'dark'); });
+		await page.evaluate(function () { document.documentElement.dataset.jcScheme = 'dark'; });
 		const r = await page.evaluate(function () {
-			const lum = function (c) {
+			const lum = function (c) { // NOSONAR javascript:S7721 - runs inside the browser page; it must stay in the serialized function
 				const m = c.match(/[\d.]+/g).map(Number).slice(0, 3).map(function (v) { v /= 255; return v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4); });
 				return 0.2126 * m[0] + 0.7152 * m[1] + 0.0722 * m[2];
 			};
@@ -680,13 +685,13 @@ const CASES = [
 			});
 			const page = await ctx.newPage();
 			const pageErrors = [], consoleErrors = [];
-			page.on('pageerror', function (e) { pageErrors.push(String(e && e.stack || e)); });
+			page.on('pageerror', function (e) { pageErrors.push(String(e?.stack || e)); });
 			page.on('console', function (m) { if (m.type() === 'error') consoleErrors.push(m.text()); });
 			try {
 				await fn(page);
 				report.cases[name] = true;
 			} catch (e) {
-				report.cases[name] = String(e && e.stack || e);
+				report.cases[name] = String(e?.stack || e);
 			}
 			report.pageErrors[name] = pageErrors;
 			report.consoleErrors[name] = consoleErrors;
@@ -697,5 +702,5 @@ const CASES = [
 	}
 	process.stdout.write(JSON.stringify(report));
 })().catch(function (e) {
-	process.stdout.write(JSON.stringify({ harnessError: String(e && e.stack || e) }));
+	process.stdout.write(JSON.stringify({ harnessError: String(e?.stack || e) }));
 });

@@ -43,4 +43,16 @@ class RemoteMetadataException_Test {
 		assertFalse(e.getMessage().contains("on method"), "Unexpected message: " + e.getMessage());
 		assertTrue(e.getMessage().contains("Bad thing: reason"), "Unexpected message: " + e.getMessage());
 	}
+
+	@Test void a03_nullClass_stillYieldsReadableMessage() {
+		var e = new RemoteMetadataException((Class<?>)null, "Bad thing: %s", "reason");
+		assertTrue(e.getMessage().contains("Invalid remote definition found on class null"), "Unexpected message: " + e.getMessage());
+		assertTrue(e.getMessage().contains("Bad thing: reason"), "Unexpected message: " + e.getMessage());
+	}
+
+	@Test void a04_nullMethod_stillYieldsReadableMessage() {
+		var e = new RemoteMetadataException((java.lang.reflect.Method)null, "Bad thing: %s", "reason");
+		assertTrue(e.getMessage().contains("Invalid remote definition found on class null"), "Unexpected message: " + e.getMessage());
+		assertTrue(e.getMessage().contains("Bad thing: reason"), "Unexpected message: " + e.getMessage());
+	}
 }

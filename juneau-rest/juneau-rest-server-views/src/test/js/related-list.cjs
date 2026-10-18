@@ -65,12 +65,6 @@ const PROBE = async function () {
 	function nestedRows() { // NOSONAR javascript:S7721 -- must stay nested: page.evaluate(PROBE) serializes only PROBE's own source into the browser
 		return document.querySelectorAll('table[data-juneau-view="events"] > tbody > tr');
 	}
-	// The root table has a row-detail template, so column 0 is the expander (td.juneau-view-detail-control):
-	// id is children[1], name is children[2].
-	function rootName(row) {
-		const tr = rootRows()[row];
-		return tr?.children[2] ? tr.children[2].textContent : null;
-	}
 	function detailControl(row) {
 		const tr = rootRows()[row];
 		return tr ? tr.querySelector('td.juneau-view-detail-control') : null;

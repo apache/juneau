@@ -152,6 +152,7 @@ class Log4j2LogBackend_Test extends org.apache.juneau.TestBase {
 		}
 	}
 
+	@SuppressWarnings("resource") // The stub LoggerContext is handed to the backend under test and never started, so there is nothing to close.
 	private static Log4j2LogBackend backendFor(Configuration config) {
 		return new Log4j2LogBackend(new LoggerContext("stub") {
 			@Override

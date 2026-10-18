@@ -232,7 +232,8 @@ class McpDynamicClientRegistrar_Test extends TestBase {
 		assertThrows(IllegalArgumentException.class, () -> b.clientName(" "));
 		assertThrows(IllegalArgumentException.class, () -> b.initialAccessToken(" "));
 		assertThrows(IllegalArgumentException.class, () -> b.httpTimeout(Duration.ZERO));
-		assertThrows(IllegalArgumentException.class, () -> b.httpTimeout(Duration.ofSeconds(-1)));
+		var negative = Duration.ofSeconds(-1);
+		assertThrows(IllegalArgumentException.class, () -> b.httpTimeout(negative));
 	}
 
 	@Test void e05_toStringWithoutInitialAccessToken() {
@@ -270,7 +271,9 @@ class McpDynamicClientRegistrar_Test extends TestBase {
 
 	@Test void f05_errorWithoutDescriptionOmitsParenthetical() {
 		var body = "{\"error\":\"invalid_client_metadata\"}";
-		var e = assertThrows(McpAuthException.class, () -> base().build().parseRegistrationResponse(jsonResponse(400, body)));
+		var registrar = base().build();
+		var response = jsonResponse(400, body);
+		var e = assertThrows(McpAuthException.class, () -> registrar.parseRegistrationResponse(response));
 		assertFalse(e.getMessage().contains("("), e::getMessage);
 	}
 
@@ -281,7 +284,7 @@ class McpDynamicClientRegistrar_Test extends TestBase {
 		var auth = new AtomicReference<String>();
 		server.createContext("/register", ex -> {
 			auth.set(ex.getRequestHeaders().getFirst("Authorization"));
-			ex.getRequestBody().readAllBytes();
+			try (var in = ex.getRequestBody()) { in.readAllBytes(); }
 			var b = ("{\"client_id\":\"live\",\"redirect_uris\":[\"http://127.0.0.1:3000/callback\"],"
 				+ "\"application_type\":\"native\"}").getBytes(StandardCharsets.UTF_8);
 			ex.getResponseHeaders().add("Content-Type", "application/json");

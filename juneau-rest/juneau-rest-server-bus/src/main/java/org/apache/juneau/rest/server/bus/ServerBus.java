@@ -23,6 +23,7 @@ import java.util.concurrent.*;
 import java.util.concurrent.atomic.*;
 import java.util.function.*;
 import java.util.logging.*;
+import java.util.stream.*;
 
 import org.apache.juneau.marshall.collections.*;
 import org.apache.juneau.marshall.marshaller.*;
@@ -59,6 +60,10 @@ import jakarta.servlet.http.*;
  *
  * @since 10.0.0
  */
+@SuppressWarnings({
+	"java:S1192", // Transport names and refusal reasons are protocol literals; named constants would not clarify them.
+	"java:S3776" // Branching is inherent to openSession() and receive().
+})
 public final class ServerBus implements AutoCloseable {
 
 	private static final Logger LOGGER = Logger.getLogger(ServerBus.class.getName());
@@ -280,13 +285,10 @@ public final class ServerBus implements AutoCloseable {
 			throw BusRefusal.transportUnavailable();
 
 		var authorizer = policy.authorizer();
-		var denied = new ArrayList<String>();
-		for (var x : downstream)
-			if (policy.downstreamRetain(x).isEmpty() || ! authorizer.test(req, x))
-				denied.add(x);
-		for (var x : upstream)
-			if (! policy.allowsUpstream(x) || ! authorizer.test(req, x))
-				denied.add(x);
+		var denied = Stream.concat(
+			downstream.stream().filter(x -> policy.downstreamRetain(x).isEmpty() || ! authorizer.test(req, x)),
+			upstream.stream().filter(x -> ! policy.allowsUpstream(x) || ! authorizer.test(req, x))
+		).toList();
 		if (! denied.isEmpty())
 			throw BusRefusal.topicDenied(echoable(denied));
 
@@ -360,8 +362,7 @@ public final class ServerBus implements AutoCloseable {
 				sink.close(4401, "bus:unknown-session");
 				return;
 			}
-			var old = s.sink;
-			s.sink = sink;
+			var old = s.sink.getAndSet(sink);
 			s.lastSent = clock.instant();
 			if (old != null)
 				old.close(4409, "bus:replaced");
@@ -386,8 +387,8 @@ public final class ServerBus implements AutoCloseable {
 	public void disconnect(BusSession session, FrameSink sink) {
 		var s = impl(session);
 		synchronized (lock) {
-			if (sink != null && s.sink == sink) {
-				s.sink = null;
+			if (sink != null && s.sink.get() == sink) {
+				s.sink.set(null);
 				s.disconnectedAt = clock.instant();
 			}
 		}
@@ -504,9 +505,7 @@ public final class ServerBus implements AutoCloseable {
 	 */
 	JsonMap grant(BusSession session, String busBase, String contextPath) {
 		var s = impl(session);
-		var down = new ArrayList<JsonMap>();
-		for (var t : s.downstream)
-			down.add(JsonMap.of("topic", t, "retain", policy.downstreamRetain(t).orElse(false)));
+		var down = s.downstream.stream().map(t -> JsonMap.of("topic", t, "retain", policy.downstreamRetain(t).orElse(false))).toList();
 		var paths = JsonMap.of("sse", busBase + "/stream/" + s.id);
 		var ws = webSocketPrefix;
 		if (ws != null)
@@ -524,7 +523,7 @@ public final class ServerBus implements AutoCloseable {
 			sweep(now);
 			var idle = policy.heartbeat();
 			for (var s : List.copyOf(sessions.values()))
-				if (s.sink != null && ! now.isBefore(s.lastSent.plus(idle)))
+				if (s.sink.get() != null && ! now.isBefore(s.lastSent.plus(idle)))
 					s.offer(BusFrames.ping());
 		}
 	}
@@ -582,11 +581,9 @@ public final class ServerBus implements AutoCloseable {
 
 	/** Keeps only denied topics that are safe to echo in a 403 body: inside a topic grammar and short. */
 	private static List<String> echoable(List<String> denied) {
-		var out = new ArrayList<String>();
-		for (var x : denied)
-			if (x.length() <= MAX_ECHO_LENGTH && (BusPolicy.DOWNSTREAM_PATTERN.matcher(x).matches() || BusPolicy.UPSTREAM_TOPIC.matcher(x).matches()))
-				out.add(x);
-		return out;
+		return denied.stream()
+			.filter(x -> x.length() <= MAX_ECHO_LENGTH && (BusPolicy.DOWNSTREAM_PATTERN.matcher(x).matches() || BusPolicy.UPSTREAM_TOPIC.matcher(x).matches()))
+			.toList();
 	}
 
 	private static List<String> topics(JsonMap body, String key) throws BusRefusal {
@@ -620,7 +617,7 @@ public final class ServerBus implements AutoCloseable {
 		return new IllegalArgumentException("E-56: " + String.format(format, args));
 	}
 
-	/** A session.  Every mutable field is guarded by the bus lock; {@code sink} is also volatile for {@link #isConnected()}. */
+	/** A session.  Every mutable field is guarded by the bus lock; {@code sink} is also atomic for {@link #isConnected()}. */
 	private final class SessionImpl implements BusSession {
 
 		final String id;
@@ -633,13 +630,16 @@ public final class ServerBus implements AutoCloseable {
 		final Set<String> upstream;
 		final Instant createdAt;
 
-		volatile FrameSink sink;
+		final AtomicReference<FrameSink> sink = new AtomicReference<>();
 		Instant disconnectedAt;
 		Instant lastSent;
 		long seq;
 		Instant windowStart = Instant.EPOCH;
 		int windowCount;
 
+		@SuppressWarnings({
+			"java:S107" // internal constructor; the parameters are the bus configuration
+		})
 		SessionImpl(String id, String bridgeId, String transport, String principalName, Map<String,Object> attributes,
 				List<String> downstream, List<String> upstream, Instant now) {
 			this.id = id;
@@ -660,7 +660,7 @@ public final class ServerBus implements AutoCloseable {
 		@Override public Object attribute(String name) { return attributes.get(name); }
 		@Override public Set<String> downstream() { return downstream; }
 		@Override public Set<String> upstream() { return upstream; }
-		@Override public boolean isConnected() { return sink != null; }
+		@Override public boolean isConnected() { return sink.get() != null; }
 
 		/** Whether the grant covers a concrete topic: an exact entry, or {@code family:*} for {@code family:key}. */
 		boolean grants(String topic) {
@@ -672,14 +672,14 @@ public final class ServerBus implements AutoCloseable {
 
 		/** Sends a frame that carries the next {@code seq}.  Not connected: nothing happens and seq is not consumed. */
 		boolean send(LongFunction<String> frame) {
-			if (sink == null)
+			if (sink.get() == null)
 				return false;
 			return offer(frame.apply(++seq));
 		}
 
 		/** Offers a frame; on a full queue detaches the sink and closes it with 4429. */
 		boolean offer(String frame) {
-			var k = sink;
+			var k = sink.get();
 			if (k == null)
 				return false;
 			if (k.offer(frame)) {
@@ -691,10 +691,10 @@ public final class ServerBus implements AutoCloseable {
 		}
 
 		void detach(int code, String reason) {
-			var k = sink;
+			var k = sink.get();
 			if (k == null)
 				return;
-			sink = null;
+			sink.set(null);
 			disconnectedAt = clock.instant();
 			k.close(code, reason);
 		}
@@ -702,7 +702,7 @@ public final class ServerBus implements AutoCloseable {
 		boolean expired(Instant now) {
 			if (! now.isBefore(createdAt.plus(policy.maxSessionAge())))
 				return true;
-			return sink == null && ! now.isBefore(disconnectedAt.plus(policy.sessionGrace()));
+			return sink.get() == null && ! now.isBefore(disconnectedAt.plus(policy.sessionGrace()));
 		}
 
 		boolean admitUpstream(Instant now, int max) {

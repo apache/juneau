@@ -69,6 +69,9 @@ import jakarta.servlet.http.*;
 @org.apache.juneau.testing.SpringbootTest
 @EnabledIfSystemProperty(named="juneau.busIt", matches="true",
 	disabledReason="binds a socket; run with -Dtest='CsrfBoundary_SpringIT' -Djuneau.busIt=true")
+@SuppressWarnings({
+	"resource" // Raw-socket stream chains are closed with the socket and the JDK client is not a resource; the Spring context owns the server lifecycle.
+})
 class CsrfBoundary_SpringIT {
 
 	private static final String JSON = "application/json";
@@ -420,11 +423,10 @@ class CsrfBoundary_SpringIT {
 		out.write(frame(0x1, 0x5, 1, h.toByteArray())); // HEADERS: END_STREAM | END_HEADERS
 
 		var body = new StringBuilder();
-		try (var socket = new Socket("127.0.0.1", port)) {
+		try (var socket = new Socket("127.0.0.1", port); var in = new DataInputStream(socket.getInputStream())) {
 			socket.setSoTimeout(10_000);
 			socket.getOutputStream().write(out.toByteArray());
 			socket.getOutputStream().flush();
-			var in = new DataInputStream(socket.getInputStream());
 			for (;;) {
 				var head = new byte[9];
 				in.readFully(head);

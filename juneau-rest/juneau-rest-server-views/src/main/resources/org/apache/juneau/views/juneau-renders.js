@@ -469,7 +469,8 @@
 			const value = cellData == null ? "" : String(cellData);
 			if (!action) return escHtml(value);
 			const input = meta?.input === "number" || meta?.input === "select" ? meta.input : "text";
-			const options = meta?.options == null ? "" : (Array.isArray(meta.options) ? JSON.stringify(meta.options) : String(meta.options));
+			let options = "";
+			if (meta?.options != null) options = Array.isArray(meta.options) ? JSON.stringify(meta.options) : String(meta.options);
 			return '<span class="juneau-edit-cell"><span class="juneau-edit-value">' + escHtml(value) + "</span>"
 				+ '<button type="button" class="juneau-edit-pencil" aria-label="Edit" data-juneau-edit="' + escAttr(action) + '"'
 				+ ' data-juneau-edit-col="' + escAttr(meta?.column ?? "") + '" data-juneau-edit-input="' + input + '"'

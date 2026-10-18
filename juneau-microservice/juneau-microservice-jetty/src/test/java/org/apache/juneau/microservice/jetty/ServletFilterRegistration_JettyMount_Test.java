@@ -46,6 +46,7 @@ import jakarta.servlet.http.*;
 @org.apache.juneau.testing.JettyMicroserviceTest
 @SuppressWarnings({
 	"java:S1192", // Repeated URL pattern and tag literals keep each test self-contained and readable.
+	"java:S3415", // Expected value is already first; Sonar misreads the upper-case LOG constant as the expected argument
 	"resource" // Microservice/Server instances are test fixtures managed by the test lifecycle; explicit close is not needed for these assertions.
 })
 class ServletFilterRegistration_JettyMount_Test extends TestBase {
@@ -519,8 +520,11 @@ class ServletFilterRegistration_JettyMount_Test extends TestBase {
 		try {
 			ms.start();
 			var c = ms.getBeanStore().getBean(JettyServerComponent.class).orElseThrow();
-			assertThrows(IllegalStateException.class, () -> c.addFilter(new Recorder("L"), EnumSet.of(DispatcherType.REQUEST), "/hello/*"));
-			assertThrows(IllegalStateException.class, () -> c.addFilter(ServletFilterRegistration.create(new Recorder("L")).urlPatterns("/hello/*").build()));
+			var late = new Recorder("L");
+			var req = EnumSet.of(DispatcherType.REQUEST);
+			var registration = ServletFilterRegistration.create(late).urlPatterns("/hello/*").build();
+			assertThrows(IllegalStateException.class, () -> c.addFilter(late, req, "/hello/*"));
+			assertThrows(IllegalStateException.class, () -> c.addFilter(registration));
 		} finally {
 			ms.stop();
 		}
@@ -536,7 +540,8 @@ class ServletFilterRegistration_JettyMount_Test extends TestBase {
 			assertThrows(IllegalArgumentException.class, () -> c.addFilter(null, req, "/a/*"));
 			assertThrows(IllegalArgumentException.class, () -> c.addFilter(f, req));
 			assertThrows(IllegalArgumentException.class, () -> c.addFilter(f, req, "/console*"));
-			assertThrows(IllegalArgumentException.class, () -> c.addFilter(f, EnumSet.noneOf(DispatcherType.class), "/a/*"));
+			var none = EnumSet.noneOf(DispatcherType.class);
+			assertThrows(IllegalArgumentException.class, () -> c.addFilter(f, none, "/a/*"));
 			assertThrows(IllegalArgumentException.class, () -> c.addFilter((ServletFilterRegistration)null));
 		} finally {
 			ms.stop();

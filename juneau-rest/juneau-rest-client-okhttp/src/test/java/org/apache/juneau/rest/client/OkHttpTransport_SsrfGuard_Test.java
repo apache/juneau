@@ -54,7 +54,7 @@ class OkHttpTransport_SsrfGuard_Test {
 		server.createContext("/hello", exchange -> {
 			var body = "hi".getBytes(StandardCharsets.UTF_8);
 			exchange.sendResponseHeaders(200, body.length);
-			exchange.getResponseBody().write(body);
+			try (var os = exchange.getResponseBody()) { os.write(body); }
 			exchange.close();
 		});
 		server.createContext("/to-numeric", exchange -> {
@@ -77,7 +77,7 @@ class OkHttpTransport_SsrfGuard_Test {
 	// =================================================================================================================
 
 	@Test
-	void a01_guarded_freshTransport_rejected() throws Exception {
+	void a01_guarded_freshTransport_rejected() {
 		try (var transport = OkHttpTransport.create()) {
 			assertRejectedLoopback(transport);
 		}
@@ -109,7 +109,7 @@ class OkHttpTransport_SsrfGuard_Test {
 	// =================================================================================================================
 
 	@Test
-	void b01_unguarded_unknownHost_transportExceptionWithUnknownHostCause() throws Exception {
+	void b01_unguarded_unknownHost_transportExceptionWithUnknownHostCause() {
 		var ex = assertThrows(TransportException.class, () -> executeWithDns(host -> { throw new UnknownHostException(host); }));
 		assertInstanceOf(UnknownHostException.class, ex.getCause());
 	}
@@ -126,21 +126,21 @@ class OkHttpTransport_SsrfGuard_Test {
 	// =================================================================================================================
 
 	@Test
-	void c01_guarded_ipv4LiteralLoopback_rejected() throws Exception {
+	void c01_guarded_ipv4LiteralLoopback_rejected() {
 		try (var transport = OkHttpTransport.create()) {
 			assertRejectedLiteral(transport, "http://127.0.0.1:" + server.getAddress().getPort() + "/hello", "127.0.0.1");
 		}
 	}
 
 	@Test
-	void c02_guarded_ipv6LiteralLoopback_rejected() throws Exception {
+	void c02_guarded_ipv6LiteralLoopback_rejected() {
 		try (var transport = OkHttpTransport.create()) {
 			assertRejectedLiteral(transport, "http://[::1]:" + server.getAddress().getPort() + "/hello", "::1");
 		}
 	}
 
 	@Test
-	void c03_guarded_ipv4LiteralPrivate_rejectedOnCallerSuppliedClient() throws Exception {
+	void c03_guarded_ipv4LiteralPrivate_rejectedOnCallerSuppliedClient() {
 		var client = new okhttp3.OkHttpClient.Builder().proxy(Proxy.NO_PROXY).build();
 		try (var transport = OkHttpTransport.builder().httpClient(client).build()) {
 			assertRejectedLiteral(transport, "http://10.1.2.3:9/hello", "10.1.2.3");
@@ -166,7 +166,7 @@ class OkHttpTransport_SsrfGuard_Test {
 	}
 
 	@Test
-	void c06_guarded_numericHost_rejected() throws Exception {
+	void c06_guarded_numericHost_rejected() {
 		// OkHttp treats an all-digit host as an IP literal (2130706433 == 127.0.0.1) and connects without consulting Dns.
 		try (var transport = OkHttpTransport.create()) {
 			assertRejectedLiteral(transport, "http://2130706433:" + server.getAddress().getPort() + "/hello", "2130706433");
@@ -174,14 +174,17 @@ class OkHttpTransport_SsrfGuard_Test {
 	}
 
 	@Test
-	void c07_guarded_shortDottedHost_rejected() throws Exception {
+	void c07_guarded_shortDottedHost_rejected() {
 		try (var transport = OkHttpTransport.create()) {
 			assertRejectedLiteral(transport, "http://127.1:" + server.getAddress().getPort() + "/hello", "127.1");
 		}
 	}
 
 	@Test
-	void c08_guarded_redirectToNumericHost_rejected() throws Exception {
+	@SuppressWarnings({
+		"resource" // The stubbed Response and ResponseBody are handed to OkHttp's call chain, which closes them.
+	})
+	void c08_guarded_redirectToNumericHost_rejected() {
 		var target = "http://2130706433:" + server.getAddress().getPort() + "/hello";
 		// An application interceptor answers hop 0 (a public-looking name) with a redirect, so no network or Dns is needed.
 		okhttp3.Interceptor redirector = chain -> {
@@ -200,7 +203,7 @@ class OkHttpTransport_SsrfGuard_Test {
 	}
 
 	@Test
-	void d06_guarded_underscoreHost_selectorNotConsulted() throws Exception {
+	void d06_guarded_underscoreHost_selectorNotConsulted() {
 		// java.net.URI parses an underscore host with a null host; OkHttp skips the ProxySelector for it, so must we.
 		var calls = new AtomicInteger();
 		var selector = new ProxySelector() {
@@ -220,7 +223,7 @@ class OkHttpTransport_SsrfGuard_Test {
 	}
 
 	@Test
-	void c09_guarded_malformedNumericHost_failsClosed() throws Exception {
+	void c09_guarded_malformedNumericHost_failsClosed() {
 		// Matches OkHttp's IP-literal pattern but is not a valid literal: refused outright, never handed to a resolver.
 		try (var transport = OkHttpTransport.create()) {
 			for (var host : List.of("1.2.3.4.5", "127.0.0.1.", "256.1.1.1", "1.2.3.256", "1.2.65536", "4294967296", "010.0.0.1")) {
@@ -251,7 +254,7 @@ class OkHttpTransport_SsrfGuard_Test {
 	}
 
 	@Test
-	void d02_guarded_proxySelectorReturnsProxy_rejected() throws Exception {
+	void d02_guarded_proxySelectorReturnsProxy_rejected() {
 		var selector = new ProxySelector() {
 			@Override public List<Proxy> select(URI uri) {
 				return List.of(new Proxy(Proxy.Type.HTTP, new InetSocketAddress("127.0.0.1", 1)));
@@ -267,7 +270,7 @@ class OkHttpTransport_SsrfGuard_Test {
 	}
 
 	@Test
-	void d07_guarded_selectorReturnsNullOrEmpty_treatedAsDirect() throws Exception {
+	void d07_guarded_selectorReturnsNullOrEmpty_treatedAsDirect() {
 		for (var answer : Arrays.<List<Proxy>>asList(null, List.of())) {
 			var selector = new ProxySelector() {
 				@Override public List<Proxy> select(URI uri) { return answer; }
@@ -282,7 +285,7 @@ class OkHttpTransport_SsrfGuard_Test {
 	}
 
 	@Test
-	void d03_explicitProxy_supportsUrlPolicyFalse() throws Exception {
+	void d03_explicitProxy_supportsUrlPolicyFalse() {
 		var client = new okhttp3.OkHttpClient.Builder().proxy(new Proxy(Proxy.Type.SOCKS, new InetSocketAddress("127.0.0.1", 1))).build();
 		try (var transport = OkHttpTransport.builder().httpClient(client).build()) {
 			assertFalse(transport.supportsUrlPolicy());
@@ -290,7 +293,7 @@ class OkHttpTransport_SsrfGuard_Test {
 	}
 
 	@Test
-	void d04_noProxy_supportsUrlPolicyTrue() throws Exception {
+	void d04_noProxy_supportsUrlPolicyTrue() {
 		var client = new okhttp3.OkHttpClient.Builder().proxy(Proxy.NO_PROXY).build();
 		try (var transport = OkHttpTransport.builder().httpClient(client).build()) {
 			assertTrue(transport.supportsUrlPolicy());
@@ -338,7 +341,7 @@ class OkHttpTransport_SsrfGuard_Test {
 	}
 
 	@Test
-	void e02_withRanges_loopbackAndMetadataLiterals_stillRefused() throws Exception {
+	void e02_withRanges_loopbackAndMetadataLiterals_stillRefused() {
 		try (var transport = OkHttpTransport.create()) {
 			for (var host : new String[]{"127.0.0.1", "169.254.169.254", "10.1.2.3"}) {
 				var req = ranged("http://" + host + ":1/x", LAB);
@@ -361,9 +364,9 @@ class OkHttpTransport_SsrfGuard_Test {
 	}
 
 	private static void assertPlainOk(OkHttpTransport transport) throws Exception {
-		try (var response = transport.execute(plain())) {
+		try (var response = transport.execute(plain()); var in = response.getBody()) {
 			assertEquals(200, response.getStatusCode());
-			assertEquals("hi", new String(response.getBody().readAllBytes(), StandardCharsets.UTF_8));
+			assertEquals("hi", new String(in.readAllBytes(), StandardCharsets.UTF_8));
 		}
 	}
 
@@ -381,6 +384,9 @@ class OkHttpTransport_SsrfGuard_Test {
 	}
 
 	/** Minimal SOCKS5 endpoint that records the domain name from the CONNECT request, then closes the connection. */
+	@SuppressWarnings({
+		"resource" // The ServerSocket is owned by this class and closed in close().
+	})
 	private static final class FakeSocksProxy implements Closeable {
 		private final ServerSocket ss;
 		private final AtomicReference<String> host = new AtomicReference<>();
@@ -405,17 +411,17 @@ class OkHttpTransport_SsrfGuard_Test {
 		private void serve() {
 			try (var s = ss.accept()) {
 				s.setSoTimeout(2000);
-				var in = new DataInputStream(s.getInputStream());
-				var out = s.getOutputStream();
-				in.readByte(); // version
-				in.readFully(new byte[in.readUnsignedByte()]); // methods
-				out.write(new byte[]{5, 0});
-				out.flush();
-				in.readFully(new byte[3]); // ver, cmd, rsv
-				if (in.readUnsignedByte() == 3) { // ATYP domain name
-					var b = new byte[in.readUnsignedByte()];
-					in.readFully(b);
-					host.set(new String(b, StandardCharsets.US_ASCII));
+				try (var in = new DataInputStream(s.getInputStream()); var out = s.getOutputStream()) {
+					in.readByte(); // version
+					in.readFully(new byte[in.readUnsignedByte()]); // methods
+					out.write(new byte[]{5, 0});
+					out.flush();
+					in.readFully(new byte[3]); // ver, cmd, rsv
+					if (in.readUnsignedByte() == 3) { // ATYP domain name
+						var b = new byte[in.readUnsignedByte()];
+						in.readFully(b);
+						host.set(new String(b, StandardCharsets.US_ASCII));
+					}
 				}
 			} catch (IOException e) {
 				// Expected when no client connects or the client gives up; nothing was recorded.

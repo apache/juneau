@@ -58,22 +58,26 @@ class PageSpec_Test extends TestBase {
 	}
 
 	@Test void a05_tab_blank_rejected() {
-		var ex = assertThrows(IllegalArgumentException.class, () -> PageSpec.create().tab(""));
+		var target = PageSpec.create();
+		var ex = assertThrows(IllegalArgumentException.class, () -> target.tab(""));
 		assertEquals(TAB_MSG.formatted(""), ex.getMessage());
 	}
 
 	@Test void a06_tab_null_rejected() {
-		var ex = assertThrows(IllegalArgumentException.class, () -> PageSpec.create().tab(null));
+		var target2 = PageSpec.create();
+		var ex = assertThrows(IllegalArgumentException.class, () -> target2.tab(null));
 		assertEquals(TAB_MSG.formatted("null"), ex.getMessage());
 	}
 
 	@Test void a07_tab_emptySegment_rejected() {
-		var ex = assertThrows(IllegalArgumentException.class, () -> PageSpec.create().tab("home//core"));
+		var target3 = PageSpec.create();
+		var ex = assertThrows(IllegalArgumentException.class, () -> target3.tab("home//core"));
 		assertEquals(TAB_MSG.formatted("home//core"), ex.getMessage());
 	}
 
 	@Test void a08_tab_trailingSlash_rejected() {
-		var ex = assertThrows(IllegalArgumentException.class, () -> PageSpec.create().tab("home/"));
+		var target4 = PageSpec.create();
+		var ex = assertThrows(IllegalArgumentException.class, () -> target4.tab("home/"));
 		assertEquals(TAB_MSG.formatted("home/"), ex.getMessage());
 	}
 
@@ -90,7 +94,8 @@ class PageSpec_Test extends TestBase {
 	}
 
 	@Test void a11_theme_unknown_rejected() {
-		var ex = assertThrows(IllegalArgumentException.class, () -> PageSpec.create().theme("teal"));
+		var target5 = PageSpec.create();
+		var ex = assertThrows(IllegalArgumentException.class, () -> target5.theme("teal"));
 		assertEquals("Unknown stock theme name: 'teal'.  Built-in themes: open, light-red, light-brown, red, gray.", ex.getMessage());
 	}
 
@@ -107,29 +112,34 @@ class PageSpec_Test extends TestBase {
 	}
 
 	@Test void a14_header_title_rejected() {
-		var ex = assertThrows(IllegalArgumentException.class, () -> PageSpec.create().header(h -> h.title("Nope")));
+		var target6 = PageSpec.create();
+		var ex = assertThrows(IllegalArgumentException.class, () -> target6.header(h -> h.title("Nope")));
 		assertEquals(HEADER_MSG.formatted("title"), ex.getMessage());
 	}
 
 	@Test void a15_header_logo_rejected() {
-		var ex = assertThrows(IllegalArgumentException.class, () -> PageSpec.create().header(h -> h.logo("/img/logo.svg", "/", "Logo")));
+		var target7 = PageSpec.create();
+		var ex = assertThrows(IllegalArgumentException.class, () -> target7.header(h -> h.logo("/img/logo.svg", "/", "Logo")));
 		assertEquals(HEADER_MSG.formatted("logo"), ex.getMessage());
 	}
 
 	@Test void a16_header_chrome_rejected() {
-		var ex = assertThrows(IllegalArgumentException.class, () -> PageSpec.create().header(h -> h.chrome(true)));
+		var target8 = PageSpec.create();
+		var ex = assertThrows(IllegalArgumentException.class, () -> target8.header(h -> h.chrome(true)));
 		assertEquals(HEADER_MSG.formatted("chrome"), ex.getMessage());
 	}
 
 	@Test void a17_header_link_rejected() {
-		var ex = assertThrows(IllegalArgumentException.class, () -> PageSpec.create().header(h -> h.link("Docs", "/docs")));
+		var target9 = PageSpec.create();
+		var ex = assertThrows(IllegalArgumentException.class, () -> target9.header(h -> h.link("Docs", "/docs")));
 		assertEquals(HEADER_MSG.formatted("link"), ex.getMessage());
 	}
 
 	@Test void a18_addCard_duplicateId_rejected() {
 		var spec = PageSpec.create();
 		spec.addCard(CardSpec.html("intro"));
-		var ex = assertThrows(IllegalArgumentException.class, () -> spec.addCard(CardSpec.html("intro")));
+		var arg = CardSpec.html("intro");
+		var ex = assertThrows(IllegalArgumentException.class, () -> spec.addCard(arg));
 		assertEquals("PageSpec card id 'intro' is already declared.", ex.getMessage());
 	}
 
@@ -165,13 +175,15 @@ class PageSpec_Test extends TestBase {
 	}
 
 	@Test void a22_attr_reservedKey_rejected() {
-		var ex = assertThrows(IllegalArgumentException.class, () -> PageSpec.create().attr(PageSpec.ATTR, "x"));
+		var target10 = PageSpec.create();
+		var ex = assertThrows(IllegalArgumentException.class, () -> target10.attr(PageSpec.ATTR, "x"));
 		assertEquals("PageSpec.attr key 'jcPageSpec' is reserved for the spec itself.", ex.getMessage());
 	}
 
 	@Test void a23_header_userMenuUnknownKey_rejected() {
+		var target11 = PageSpec.create();
 		var ex = assertThrows(IllegalArgumentException.class,
-			() -> PageSpec.create().header(h -> h.userMenu(Map.of("label", "Jane", "href", "/p"))));
+			() -> target11.header(h -> h.userMenu(Map.of("label", "Jane", "href", "/p"))));
 		assertEquals("PageSpec.header userMenu key 'href' is not allowed; allowed: label, initials, avatar, items.", ex.getMessage());
 	}
 
@@ -188,8 +200,9 @@ class PageSpec_Test extends TestBase {
 	}
 
 	@Test void a25_navUnder_blankPath_rejected() {
-		var ex = assertThrows(IllegalArgumentException.class, () -> PageSpec.create().navUnder("", n -> {}));
-		assertTrue(ex.getMessage().contains("navUnder"), () -> ex.getMessage());
+		var target12 = PageSpec.create();
+		var ex = assertThrows(IllegalArgumentException.class, () -> target12.navUnder("", n -> {}));
+		assertTrue(ex.getMessage().contains("navUnder"), ex::getMessage);
 	}
 
 	@Test void a26_navUnder_reusedSpec_eachCaptureGetsItsOwnAddition() throws Exception {
@@ -206,7 +219,8 @@ class PageSpec_Test extends TestBase {
 	}
 
 	@Test void a27_scheme_unknown_rejected() {
-		var ex = assertThrows(IllegalArgumentException.class, () -> PageSpec.create().scheme("dim"));
+		var target13 = PageSpec.create();
+		var ex = assertThrows(IllegalArgumentException.class, () -> target13.scheme("dim"));
 		assertEquals("Unknown scheme 'dim'.  Schemes: auto, light, dark.", ex.getMessage());
 	}
 

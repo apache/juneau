@@ -29,7 +29,7 @@
  */
 'use strict';
 
-const fs = require('fs');
+const fs = require('node:fs');
 const { chromium } = require('playwright');
 
 const ROWS = JSON.parse(process.env.CORPUS_ROWS);
@@ -46,7 +46,7 @@ async function until(pred, what, timeoutMs) {
 
 const statusSearch = body => {
 	const c = (body.columns || []).find(x => x.data === 'status');
-	return c && c.search ? c.search.value : null;
+	return c?.search ? c.search.value : null;
 };
 
 (async function () {
@@ -97,9 +97,9 @@ const statusSearch = body => {
 		const before = out.posts.length;
 		await page.locator('[aria-label="Dropped only"]').first().click();
 		await until(() => out.posts.length > before, 'the server-mode request after toggling the option off');
-		out.serverAfterToggleStatusSearch = statusSearch(out.posts[out.posts.length - 1]);
+		out.serverAfterToggleStatusSearch = statusSearch(out.posts.at(-1));
 	} finally {
 		await browser.close();
 	}
 	process.stdout.write(JSON.stringify(out));
-})().catch(e => { process.stderr.write(String(e && e.stack || e) + '\n'); process.exit(1); });
+})().catch(e => { process.stderr.write(String(e?.stack || e) + '\n'); process.exit(1); });

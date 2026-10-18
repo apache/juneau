@@ -39,7 +39,7 @@ const PROBE = async function () {
 		'/badges/denied': { status: 403, body: {} }
 	};
 	window.fetch = function (url) {
-		const r = bodies[String(url).split('?')[0]] || { status: 404, body: {} };
+		const r = bodies[String(url).split('?')[0]] || { status: 404, body: {} }; // NOSONAR javascript:S6551 - the badge code only fetches string URLs
 		return Promise.resolve({ status: r.status, json: function () { return Promise.resolve(r.body); } });
 	};
 	NS.mount([

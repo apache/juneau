@@ -93,7 +93,7 @@ public final class AdminBoundary {
 	private static final String[] PATHS = { "/config", "/logs", "/shutdown" };
 
 	// One or more "/segment" parts of unreserved characters, so every pattern built on it is one the container matches.
-	private static final Pattern PREFIX = Pattern.compile("(/[A-Za-z0-9_~-][A-Za-z0-9._~-]*)*");
+	private static final Pattern PREFIX = Pattern.compile("(?:/[A-Za-z0-9_~-][A-Za-z0-9._~-]*+)*+");
 
 	private AdminBoundary() {}
 

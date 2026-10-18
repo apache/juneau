@@ -48,7 +48,8 @@ public final class Subscription {
 	}
 
 	private final String topic;
-	private String role, emptyText;
+	private String role;
+	private String emptyText;
 	private WhenEmpty whenEmpty;
 	private final Map<String,String> map = new LinkedHashMap<>();
 

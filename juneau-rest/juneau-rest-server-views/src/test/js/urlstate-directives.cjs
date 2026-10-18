@@ -102,7 +102,7 @@ const histCalls = [];
 window.history = { state: null, replaceState: function (s, t, url) { histCalls.push(url); } };
 window.location = { pathname: '/rest/x', search: '?state=ids(p,q)', hash: '', origin: 'https://h' };
 const listeners = {};
-window.addEventListener = function (ev, fn) { (listeners[ev] = listeners[ev] || []).push(fn); };
+window.addEventListener = function (ev, fn) { listeners[ev] ||= []; listeners[ev].push(fn); };
 
 // A fresh registry per scenario is impossible (page-global): prepareUrlStateDirectives only registers a name that is
 // not yet registered, so window and ids reuse the hand registrations above, while day is registered here from the

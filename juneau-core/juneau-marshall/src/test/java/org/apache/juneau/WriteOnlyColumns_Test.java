@@ -21,7 +21,6 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.util.*;
 
 import org.apache.juneau.commons.bean.*;
-import org.apache.juneau.marshall.*;
 import org.apache.juneau.marshall.csv.*;
 import org.apache.juneau.marshall.html.*;
 import org.apache.juneau.marshall.cbor.*;
@@ -127,7 +126,7 @@ class WriteOnlyColumns_Test extends TestBase {
 		assertEquals("pw", l.get(0).secretword);
 	}
 
-	@Test void b03_beanMapPutStillSetsWriteOnly() throws Exception {
+	@Test void b03_beanMapPutStillSetsWriteOnly() {
 		var m = org.apache.juneau.marshall.MarshallingContext.DEFAULT.newBeanMap(User.class);
 		m.put("secretword", "pw");
 		assertEquals("pw", m.getBean().secretword);

@@ -37,6 +37,9 @@ import org.junit.jupiter.api.*;
  *
  * @since 10.0.0
  */
+@SuppressWarnings({
+	"resource" // MockRestClient and its responses are in-memory test doubles that hold no OS resource; the shared client lives in a static field for the class lifetime.
+})
 class ReactiveResponseProcessor_Adapter_Test extends TestBase {
 
 	/** Wrapper type recognised by {@link StreamAdapter}. */

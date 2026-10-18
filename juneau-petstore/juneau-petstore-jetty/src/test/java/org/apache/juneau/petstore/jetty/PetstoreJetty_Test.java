@@ -55,7 +55,8 @@ import jakarta.servlet.DispatcherType;
 @JettyMicroserviceTest
 @SuppressWarnings({
 	"java:S2925", // warmUpServer() readiness loop needs a back-off between retries; without it a ConnectException would busy-spin. No event/latch to await and Awaitility isn't on the test classpath.
-	"java:S8692" // warmUpServer() polls a real HTTP server against a genuine wall-clock deadline; a fixed clock would break the retry loop.
+	"java:S8692", // warmUpServer() polls a real HTTP server against a genuine wall-clock deadline; a fixed clock would break the retry loop.
+	"resource" // The microservice bean store is owned by the fixture, which closes it.
 })
 class PetstoreJetty_Test extends TestBase {
 
@@ -84,8 +85,7 @@ class PetstoreJetty_Test extends TestBase {
 	 * exceed the tight 10s per-request timeout the test methods use. Absorbing that cold-start here (with a
 	 * generous budget + retry) removes the startup race from {@code a01} while keeping the per-test timeouts tight.
 	 */
-	@BeforeAll
-	static void warmUpServer() throws Exception {
+	private static void warmUpServer() throws Exception {
 		var deadline = Instant.now().plusSeconds(30);
 		Exception last = null;
 		while (Instant.now().isBefore(deadline)) {
@@ -114,9 +114,8 @@ class PetstoreJetty_Test extends TestBase {
 	 * The boundary filters sit in front of the root servlet by path, so they cover the replacement exactly as they cover
 	 * the original.  The {@code GET} answers {@code 405} and does not exit.
 	 */
-	@BeforeAll
-	static void mountTestShutdown() throws Exception {
-		get("/", "text/html");  // Initializes the root servlet, whichever @BeforeAll runs first.
+	private static void mountTestShutdown() throws Exception {
+		get("/", "text/html");  // Initializes the root servlet before the shutdown resource is mounted.
 		RootResources root = null;
 		for (var h : fixture.getJettyServerComponent().getServletContextHandler().getServletHandler().getServlets())
 			if (h.getServlet() instanceof RootResources r)
@@ -128,6 +127,13 @@ class PetstoreJetty_Test extends TestBase {
 		assertEquals(1, mounted.size());
 		assertSame(SHUTDOWN, mounted.get(0).getResource(), "The test's shutdown resource must be the mounted one");
 		assertEquals(405, get("/shutdown", "application/json").statusCode());
+	}
+
+	/** Warms the server up, then mounts the test shutdown resource; the order is fixed. */
+	@BeforeAll
+	static void setUpServer() throws Exception {
+		warmUpServer();
+		mountTestShutdown();
 	}
 
 	private static HttpResponse<String> get(String path, String accept) throws Exception {
@@ -356,7 +362,7 @@ class PetstoreJetty_Test extends TestBase {
 	@Test void g01_consolePageCarriesTheCsrfToken() throws Exception {
 		var resp = get("/console/store", "text/html");
 		assertEquals(200, resp.statusCode(), "body: " + resp.body());
-		assertTrue(resp.body().matches("(?s).*<body[^>]*\\sdata-juneau-csrf=\"[0-9a-f]{64}\".*"), "no data-juneau-csrf on <body>");
+		assertTrue(Pattern.compile("<body(?:\\s++[^>\\s]++)*\\s++data-juneau-csrf=\"[0-9a-f]{64}\"").matcher(resp.body()).find(), "no data-juneau-csrf on <body>");
 	}
 
 	@Test void g02_consoleWriteWithoutTheTokenIsRefused() throws Exception {
@@ -473,7 +479,7 @@ class PetstoreJetty_Test extends TestBase {
 		assertNull(boundaryReason(post), "status " + post.statusCode());
 	}
 
-	@Test void g09_apiBoundaryIsMappedForRequestOnly() throws Exception {
+	@Test void g09_apiBoundaryIsMappedForRequestOnly() {
 		var handler = fixture.getJettyServerComponent().getServletContextHandler().getServletHandler();
 		var mappings = handler.getFilterMappings();
 		var api = -1;
@@ -597,13 +603,12 @@ class PetstoreJetty_Test extends TestBase {
 	// Sends a GET with a Host header the HTTP client would not let us set, and returns "<status> <boundary reason>".
 	private static String rawGet(String path, String host) throws Exception {
 		var root = fixture.getRootUrl();
-		try (var s = new Socket(root.getHost(), root.getPort())) {
+		try (var s = new Socket(root.getHost(), root.getPort()); var out = s.getOutputStream();
+			var in = new BufferedReader(new InputStreamReader(s.getInputStream(), StandardCharsets.US_ASCII))) {
 			s.setSoTimeout(30_000);
-			var out = s.getOutputStream();
 			out.write(("GET " + path + " HTTP/1.1\r\nHost: " + host + "\r\nAccept: text/plain\r\nConnection: close\r\n\r\n")
 				.getBytes(StandardCharsets.US_ASCII));
 			out.flush();
-			var in = new BufferedReader(new InputStreamReader(s.getInputStream(), StandardCharsets.US_ASCII));
 			var status = in.readLine().split(" ")[1];
 			String reason = null;
 			for (var line = in.readLine(); line != null && ! line.isEmpty(); line = in.readLine())
@@ -657,7 +662,7 @@ class PetstoreJetty_Test extends TestBase {
 		}
 	}
 
-	@Test void g23_adminBoundaryIsItsOwnRequestOnlyFilter() throws Exception {
+	@Test void g23_adminBoundaryIsItsOwnRequestOnlyFilter() {
 		var handler = fixture.getJettyServerComponent().getServletContextHandler().getServletHandler();
 		var mappings = handler.getFilterMappings();
 		var api = -1;

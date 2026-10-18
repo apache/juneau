@@ -50,7 +50,7 @@ function setup(o) {
 			if (opts.throwOnOpen) throw new Error('blocked');
 			this.url = url; this.listeners = {}; this.closed = false; sources.push(this);
 		};
-		FakeES.prototype.addEventListener = function (type, fn) { (this.listeners[type] = this.listeners[type] || []).push(fn); };
+		FakeES.prototype.addEventListener = function (type, fn) { this.listeners[type] ||= []; this.listeners[type].push(fn); };
 		FakeES.prototype.close = function () { this.closed = true; };
 		FakeES.prototype.fire = function (type, data) { (this.listeners[type] || []).forEach(function (fn) { fn({ data: data }); }); };
 		env.EventSource = FakeES;
@@ -64,8 +64,8 @@ function setup(o) {
 	const calls = [];
 	const started = opts.started || { jobId: 'j-1', streamUrl: '/s/j-1', cancelUrl: '/c/j-1' };
 	env.setFetch(function (url, init) {
-		const method = (init && init.method) || 'GET';
-		calls.push({ url: String(url), method: method, headers: (init && init.headers) || {} });
+		const method = (init?.method) || 'GET';
+		calls.push({ url: String(url), method: method, headers: (init?.headers) || {} });
 		if (url === '/x/run') return Promise.resolve(jsonResponse(started));
 		return opts.cancelResp ? opts.cancelResp() : Promise.resolve(jsonResponse({}));
 	});
@@ -88,14 +88,14 @@ const bannerText = (s) => text(s, '[data-testid="chart-action-banner"]');
 		out.r01_sourceOpened = s.sources.length === 1 && s.sources[0].url === '/s/j-1';
 		out.r01_progressShown = q(s, '[data-testid="job-progress"]') != null;
 		out.r01_cancelButton = q(s, '.juneau-view-job-cancel') != null;
-		out.r01_cancelLabel = q(s, '.juneau-view-job-cancel') && q(s, '.juneau-view-job-cancel').getAttribute('aria-label');
-		out.r01_runningMarker = s.host.getAttribute('data-juneau-job') || (s.host.dataset && s.host.dataset.juneauJob) || null;
+		out.r01_cancelLabel = q(s, '.juneau-view-job-cancel') && q(s, '.juneau-view-job-cancel').getAttribute('aria-label'); // NOSONAR javascript:S6582 - null (not undefined) reaches the serialized assertion
+		out.r01_runningMarker = s.host.dataset.juneauJob || null;
 		s.sources[0].fire('progress', '40%');
 		out.r01_progressText = text(s, '.juneau-view-job-progress-msg');
 		s.sources[0].fire('result', JSON.stringify({ outcome: 'success', message: 'all done' }));
 		await flush(); await p;
-		out.r01_outcome = done && done.outcome;
-		out.r01_message = done && done.message;
+		out.r01_outcome = done?.outcome;
+		out.r01_message = done?.message;
 		out.r01_progressGone = q(s, '[data-testid="job-progress"]') === null;
 		out.r01_closed = s.sources[0].closed;
 		out.r01_painted = (bannerText(s) || '').indexOf('all done') >= 0;
@@ -159,7 +159,7 @@ const bannerText = (s) => text(s, '[data-testid="chart-action-banner"]');
 		await flush();
 		const cancels = s.calls.filter((c) => c.url === '/c/j-1');
 		out.r07_cancelPosts = cancels.length;
-		out.r07_csrf = JSON.stringify(cancels[0] && cancels[0].headers).indexOf('tok-1') >= 0;
+		out.r07_csrf = JSON.stringify(cancels[0]?.headers).indexOf('tok-1') >= 0;
 		out.r07_disabled = btn.disabled === true;
 		s.sources[0].fire('result', JSON.stringify({ outcome: 'cancelled', message: 'stopped' }));
 		const r = await p;
@@ -189,7 +189,7 @@ const bannerText = (s) => text(s, '[data-testid="chart-action-banner"]');
 		s.NS.actions.release(s.host);
 		await flush();
 		out.r09_closed = s.sources[0].closed;
-		out.r09_outcome = done && done.outcome;
+		out.r09_outcome = done?.outcome;
 		out.r09_bannerGone = q(s, '[data-testid="chart-action-banner"]') === null;
 		// a late event that still reaches a released run paints nothing: no banner host is rebuilt on the card's parent
 		s.sources[0].fire('progress', '90%');
@@ -239,7 +239,7 @@ const bannerText = (s) => text(s, '[data-testid="chart-action-banner"]');
 
 	// --- r12: job URL shapes that must never be streamed or cancelled -------------------------------------------------
 	{
-		const bad = { backslash: '/\\evil', lead: ' /s/x', c0: '/s/\u0001x', newline: '/s/x\n', proto: '//evil.example/s', scheme: 'javascript:alert(1)' };
+		const bad = { backslash: String.raw`/\evil`, lead: ' /s/x', c0: '/s/\u0001x', newline: '/s/x\n', proto: '//evil.example/s', scheme: 'javascript:alert(1)' };
 		for (const k of Object.keys(bad)) {
 			const s = setup({ started: { jobId: 'j-5', streamUrl: bad[k], cancelUrl: '/c/j-5' } });
 			const r = await s.NS.actions.run(ACTION, { host: s.host, row: ROW });

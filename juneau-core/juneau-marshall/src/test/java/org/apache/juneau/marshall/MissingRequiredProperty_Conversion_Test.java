@@ -46,8 +46,9 @@ class MissingRequiredProperty_Conversion_Test extends TestBase {
 	public static class Holder { public List<A> items; }
 
 	@Test void a01_convertToType_missing() {
+		var input = JsonMap.of("age", 1);
 		var e = assertThrows(MissingRequiredPropertyException.class,
-			() -> MarshallingContext.DEFAULT_SESSION.convertToType(JsonMap.of("age", 1), A.class));
+			() -> MarshallingContext.DEFAULT_SESSION.convertToType(input, A.class));
 		assertList(e.getPropertyNames(), "name");
 		assertFalse(e.getMessage().contains("At: "), e.getMessage());   // no parser session, so no position
 	}

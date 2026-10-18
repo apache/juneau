@@ -46,6 +46,10 @@ function attempt(fn) {
 	catch (e) { return { code: e.code || null, reason: e.detail ? e.detail.reason : null, message: e.message }; }
 }
 
+function decodeVerdict(text) {
+	return attempt(function () { return F.decode(text); }).ok ? 'ok' : 'bad';
+}
+
 /** A downstream pub whose encoding is exactly `bytes` UTF-8 bytes long. */
 function paddedPub(bytes) {
 	const frame = { v: 1, type: 'pub', topic: 'app.big', payload: '', retained: false, seq: 1 };
@@ -87,7 +91,7 @@ const out = {
 	tooLarge: {
 		atLimitBytes: atLimitText.ok ? F.utf8Length(atLimitText.ok) : null,
 		encodeAtLimit: atLimitText.ok ? 'ok' : atLimitText.reason,
-		decodeAtLimit: atLimitText.ok ? (attempt(function () { return F.decode(atLimitText.ok); }).ok ? 'ok' : 'bad') : null,
+		decodeAtLimit: atLimitText.ok ? decodeVerdict(atLimitText.ok) : null,
 		encodeOverLimit: attempt(function () { return F.encode(overLimit); }).reason,
 		decodeOverLimit: attempt(function () { return F.decode(JSON.stringify(overLimit)); }).reason,
 		utf8: [F.utf8Length('a'), F.utf8Length('é'), F.utf8Length('✓'), F.utf8Length('🚀'), F.utf8Length('\ud800x')]

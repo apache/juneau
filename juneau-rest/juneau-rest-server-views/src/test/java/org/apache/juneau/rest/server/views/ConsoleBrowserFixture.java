@@ -81,11 +81,15 @@ final class ConsoleBrowserFixture {
 	}
 
 	/** The chrome stylesheet exactly as {@code GET /juneau-console/chrome.css} serves it; read once. */
+	@SuppressWarnings({
+		"resource" // assertOk() returns the same response the try already closes.
+	})
 	static String servedChromeCss() throws IOException {
 		var s = servedChromeCss;
 		if (s == null) {
 			try (var c = MockRestClient.create(ChromeHost.class); var r = c.get(ConsoleChromeMixin.CHROME_CSS_PATH).run()) {
-				s = r.assertOk().getBodyAsString();
+				r.assertOk();
+				s = r.getBodyAsString();
 			}
 			servedChromeCss = s;
 		}

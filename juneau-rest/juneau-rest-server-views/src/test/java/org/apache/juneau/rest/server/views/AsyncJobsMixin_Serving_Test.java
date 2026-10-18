@@ -125,6 +125,9 @@ class AsyncJobsMixin_Serving_Test extends TestBase {
 	}
 
 	/** Waits (bounded by the caller's preemptive timeout) until the job has {@code n} subscribers. */
+	@SuppressWarnings({
+		"java:S2925" // Bounded poll helper; the caller's preemptive timeout caps the wait.
+	})
 	private static void awaitSubscribers(AsyncJob job, int n) throws InterruptedException {
 		while (job.subscriberCount() != n)
 			Thread.sleep(5);

@@ -31,6 +31,9 @@ import org.apache.juneau.marshall.marshaller.Json;
  * A tree is acceptable here because both tools write the file once at the end and the size is capped by
  * {@link ReportLimits#maxFileBytes()}.
  */
+@SuppressWarnings({
+	"java:S1168" // null is the sentinel for "no usable object"; callers branch on it.
+})
 final class ReportJson {
 
 	private ReportJson() {}
@@ -70,6 +73,9 @@ final class ReportJson {
 		return o instanceof Map ? (Map<String,Object>)o : null;
 	}
 
+	@SuppressWarnings({
+		"java:S1452" // Wildcard return reflects heterogeneous element types.
+	})
 	static List<?> list(Object o) {
 		return o instanceof List ? (List<?>)o : List.of();
 	}

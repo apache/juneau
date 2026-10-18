@@ -82,7 +82,7 @@ class RdfParserSerializerSet_DefaultMediaTypes_Test extends TestBase {
 					return f.get(null);
 		var create = ownCreate(c);
 		if (create != null) {
-			var o = ((Context.Builder)create.invoke(null)).build();
+			var o = ((Context.Builder<?>)create.invoke(null)).build();
 			return o.getClass() == c ? o : null;
 		}
 		// A nested variant without its own create() (for example XmlDocSerializer.Ns) is built from its enclosing

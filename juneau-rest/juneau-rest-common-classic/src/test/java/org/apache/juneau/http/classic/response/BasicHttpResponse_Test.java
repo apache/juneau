@@ -210,7 +210,7 @@ class BasicHttpResponse_Test extends TestBase {
 	@Test void c06_equalsAndHashCode_distinguishContent() {
 		var x = new Ok().setHeader2("X-A", "1").setContent("body");
 		assertEquals(x, x);
-		assertNotEquals(x, "not a response");
+		assertNotEquals("not a response", x);
 		assertNotEquals(x, new Ok().setHeader2("X-A", "2").setContent("body"));
 		assertNotEquals(x, new Ok().setHeader2("X-A", "1").setContent("other"));
 		assertNotEquals(x, new Created().setHeader2("X-A", "1").setContent("body"));
@@ -227,6 +227,7 @@ class BasicHttpResponse_Test extends TestBase {
 		assertThrows(UnsupportedOperationException.class, () -> u.setLocation("http://localhost/x"));
 		assertThrows(UnsupportedOperationException.class, () -> u.setStatusLine(HttpVersion.HTTP_1_1, 200));
 		assertThrows(UnsupportedOperationException.class, () -> u.setStatusLine(HttpVersion.HTTP_1_1, 200, "OK"));
-		assertThrows(UnsupportedOperationException.class, () -> u.setStatusLine(new org.apache.http.message.BasicStatusLine(HttpVersion.HTTP_1_1, 200, "OK")));
+		var statusLine = new org.apache.http.message.BasicStatusLine(HttpVersion.HTTP_1_1, 200, "OK");
+		assertThrows(UnsupportedOperationException.class, () -> u.setStatusLine(statusLine));
 	}
 }

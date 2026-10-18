@@ -78,6 +78,9 @@ final class OkHttpRedirectCredentialGuard implements Interceptor {
 	 * <p>
 	 * OkHttp builds every retry and redirect hop with {@link Request#newBuilder()}, which carries the tag along.
 	 */
+	@SuppressWarnings({
+		"resource" // returned Response is owned and closed by OkHttp's call chain, not by this interceptor.
+	})
 	static final Interceptor FIRST_HOP_RECORDER = chain -> {
 		var request = chain.request();
 		return chain.proceed(request.newBuilder().tag(FirstHop.class, new FirstHop(request)).build());
@@ -99,6 +102,8 @@ final class OkHttpRedirectCredentialGuard implements Interceptor {
 
 	@Override /* Interceptor */
 	@SuppressWarnings({
+		"java:S135", // Guard clauses keep the redirect credential-strip check readable.
+		"java:S3776", // Single linear pass over the redirect hop's credential-stripping rules; splitting it would scatter them.
 		"resource" // returned Response is owned and closed by OkHttp's call chain, not by this interceptor.
 	})
 	public Response intercept(Chain chain) throws IOException {

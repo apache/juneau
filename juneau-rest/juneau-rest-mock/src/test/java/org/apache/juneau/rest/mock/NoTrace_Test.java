@@ -25,6 +25,8 @@ import org.apache.juneau.http.*;
 import org.apache.juneau.http.response.*;
 import org.apache.juneau.rest.server.*;
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.params.*;
+import org.junit.jupiter.params.provider.*;
 
 /**
  * Verifies that the <c>No-Trace</c> request header and the <js>"NoTrace"</js> request attribute keep the stack trace off
@@ -84,9 +86,15 @@ class NoTrace_Test {
 		}
 	}
 
-	@Test void a01_withoutNoTrace_recordCarriesThrown() {
+	@ParameterizedTest
+	@CsvSource({
+		"/bad?n=abc,    false",  // No No-Trace anywhere.
+		"/failPlain,    false",  // Exception set with no NoTrace attribute.
+		"/failAttrFalse, true"   // The attribute (false) wins over the header (true).
+	})
+	void a01_recordCarriesThrown(String path, boolean noTrace) {
 		var client = MockRestClient.create(A_Resource.class);
-		var rec = capture(c -> run(c, "/bad?n=abc", false), client);
+		var rec = capture(c -> run(c, path, noTrace), client);
 		assertNotNull(rec.getThrown());
 	}
 
@@ -115,12 +123,6 @@ class NoTrace_Test {
 		assertNotNull(rec.getThrown());
 	}
 
-	@Test void a05a_noAttribute_recordCarriesThrown() {
-		var client = MockRestClient.create(A_Resource.class);
-		var rec = capture(c -> run(c, "/failPlain", false), client);
-		assertNotNull(rec.getThrown());
-	}
-
 	@Test void a05_requestAttribute_suppressesThrown() {
 		var client = MockRestClient.create(A_Resource.class);
 		var rec = capture(c -> run(c, "/failAttr", false), client);
@@ -131,12 +133,6 @@ class NoTrace_Test {
 		// ignoreErrors-style defaults do not turn No-Trace on: a plain client still logs the trace.
 		var client = MockRestClient.builder(A_Resource.class).build();
 		var rec = capture(c -> run(c, "/bad?n=abc", false), client);
-		assertNotNull(rec.getThrown());
-	}
-
-	@Test void a07_attributeFalse_winsOverHeaderTrue_keepsThrown() {
-		var client = MockRestClient.create(A_Resource.class);
-		var rec = capture(c -> run(c, "/failAttrFalse", true), client);
 		assertNotNull(rec.getThrown());
 	}
 }

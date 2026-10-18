@@ -53,7 +53,8 @@ class BasicCsvHeader_Test extends TestBase {
 		assertEquals(java.util.List.of("a", "b"), h.asList().get());
 		assertArrayEquals(new String[]{"a", "b"}, h.toArray());
 		assertEquals(java.util.List.of("a", "b"), h.toList());
-		assertThrows(UnsupportedOperationException.class, () -> h.toList().add("c"));
+		var list = h.toList();
+		assertThrows(UnsupportedOperationException.class, () -> list.add("c"));
 	}
 
 	@Test void b02_arrayIsDefensiveCopy() {
@@ -71,7 +72,8 @@ class BasicCsvHeader_Test extends TestBase {
 
 	@Test void b04_assertList() {
 		new BasicCsvHeader(NAME, "a,b").assertList().isSize(2);
-		assertThrows(AssertionError.class, () -> new BasicCsvHeader(NAME, "a,b").assertList().isSize(3));
+		var assertion = new BasicCsvHeader(NAME, "a,b").assertList();
+		assertThrows(AssertionError.class, () -> assertion.isSize(3));
 	}
 
 	@Test void c01_contains_fixedValue() {

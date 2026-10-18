@@ -55,7 +55,7 @@
 	function fmt(msg) {
 		const args = Array.prototype.slice.call(arguments, 1);
 		let i = 0;
-		return String(msg).replace(/%s/g, function () { return i < args.length ? String(args[i++]) : "%s"; });
+		return String(msg).replaceAll('%s', function () { return i < args.length ? String(args[i++]) : "%s"; });
 	}
 
 	// ==================================================================================================================
@@ -437,7 +437,7 @@
 	 */
 	function loadPersistedState(viewDef) {
 		const state = {};
-		(viewDef.ribbon || []).forEach(function (a) {
+		(viewDef.ribbon || []).forEach(function (a) { // NOSONAR javascript:S3776 - branching mirrors the behavior being implemented; splitting it would obscure the flow
 			if (a.type === "option") {
 				const raw = a.persist ? storageGet(ribbonStorageKey(viewDef.id, a.id)) : null;
 				if (raw != null) state[a.id] = (raw === "true");
@@ -485,9 +485,9 @@
 		return {
 			target: function (a) { return a.target == null ? own : a.target; },
 			optionsOf: function (target) { return seen[target] || (target === own ? ctx.activeState : {}); },
-			onOptions: function (target, fn) { (painters[target] = painters[target] || []).push(fn); },
+			onOptions: function (target, fn) { painters[target] ||= []; painters[target].push(fn); },
 			send: function (target, op, extra) {
-				const cmd = Object.assign({ schemaVersion: 1, op: op }, extra);
+				const cmd = { schemaVersion: 1, op: op, ...extra };
 				if (ctx.bus) {
 					ctx.bus.publish("cmd:" + target, cmd);
 				} else if (target !== own) {
@@ -589,7 +589,7 @@
 				bar.appendChild(el);
 				return;
 			}
-			if (!openGroup || openGroup.id !== groupId) {
+			if (openGroup?.id !== groupId) {
 				const wrap = document.createElement("span");
 				wrap.className = "juneau-view-ribbon-group";
 				bar.appendChild(wrap);
@@ -671,7 +671,7 @@
 					return;
 				}
 				place(button(a.title || a.topic, resolveButtonIcon(a, null), function () {
-					ctx.bus.publish(a.topic, JSON.parse(JSON.stringify(a.payload === undefined ? {} : a.payload)));
+					ctx.bus.publish(a.topic, JSON.parse(JSON.stringify(a.payload === undefined ? {} : a.payload))); // NOSONAR javascript:S7784 -- JSON round-trip deliberately normalizes to plain JSON
 				}, a.appearance), a.group || "__ungrouped");
 				return;
 			}

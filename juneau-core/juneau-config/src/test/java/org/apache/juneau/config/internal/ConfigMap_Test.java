@@ -19,6 +19,7 @@ package org.apache.juneau.config.internal;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.*;
+import java.util.concurrent.*;
 import java.util.concurrent.atomic.*;
 
 import org.apache.juneau.config.format.*;
@@ -68,15 +69,10 @@ class ConfigMap_Test {
 		@Override
 		public synchronized String write(String name, String expectedContents, String newContents) {
 			update(name, stale);
-			new Thread(() -> {
-				try {
-					Thread.sleep(300);
-				} catch (@SuppressWarnings("unused") InterruptedException e) {
-					Thread.currentThread().interrupt();
-				}
+			CompletableFuture.runAsync(() -> {
 				realEventDelivered.set(true);
 				update(name, newContents);
-			}).start();
+			}, CompletableFuture.delayedExecutor(300, TimeUnit.MILLISECONDS));
 			return null;
 		}
 	}

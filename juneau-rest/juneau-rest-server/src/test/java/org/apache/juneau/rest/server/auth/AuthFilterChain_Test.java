@@ -149,7 +149,7 @@ class AuthFilterChain_Test extends TestBase {
 		assertInstanceOf(AuthenticatedRequestWrapper.class, capturing.captured);
 	}
 
-	@Test void a04_firstSuccessPrincipalWins() throws Exception {
+	@Test void a04_firstSuccessPrincipalWins() {
 		var chain = AuthFilterChain.create(null)
 			.append(succeeds(ALICE, "user"))
 			.append(succeeds(BOB, "admin"))
@@ -162,7 +162,7 @@ class AuthFilterChain_Test extends TestBase {
 		assertSame(ALICE, w.getUserPrincipal());
 	}
 
-	@Test void a05_roleAggregation_unionAcrossSuccessfulFilters() throws Exception {
+	@Test void a05_roleAggregation_unionAcrossSuccessfulFilters() {
 		var chain = AuthFilterChain.create(null)
 			.append(succeeds(ALICE, "user"))
 			.append(succeeds(BOB, "admin", "billing"))

@@ -362,7 +362,7 @@ class PetstoreSpringboot_Test {
 	@Test void h01_consolePageCarriesTheCsrfToken() throws Exception {
 		var resp = get("/console/store", "text/html");
 		assertEquals(200, resp.statusCode(), "body: " + resp.body());
-		assertTrue(resp.body().matches("(?s).*<body[^>]*\\sdata-juneau-csrf=\"[0-9a-f]{64}\".*"), "no data-juneau-csrf on <body>");
+		assertTrue(Pattern.compile("<body(?:\\s++[^>\\s]++)*\\s++data-juneau-csrf=\"[0-9a-f]{64}\"").matcher(resp.body()).find(), "no data-juneau-csrf on <body>");
 	}
 
 	@Test void h02_consoleWriteWithoutTheTokenIsRefused() throws Exception {

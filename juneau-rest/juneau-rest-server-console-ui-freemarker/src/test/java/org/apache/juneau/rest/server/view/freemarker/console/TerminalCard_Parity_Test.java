@@ -78,14 +78,16 @@ class TerminalCard_Parity_Test extends TestBase {
 		envelope.put("contractVersion", "1");
 		envelope.putAll(body);
 		var source = CardSource.create("terminal", "build").body(Json5.of(envelope)).build();
-		return assertThrows(IllegalArgumentException.class, () -> new TerminalCardType().toFragment(source)).getMessage();
+		var target = new TerminalCardType();
+		return assertThrows(IllegalArgumentException.class, () -> target.toFragment(source)).getMessage();
 	}
 
 	private static String builderMessage(Map<String,Object> body) {
 		var card = CardSpec.of("terminal", "build");
 		body.forEach(card::body);
 		var spec = PageSpec.create().card(card);
-		return assertThrows(TemplateModelException.class, () -> spec.applyTo(new PageCapture(), MODEL)).getMessage();
+		var arg = new PageCapture();
+		return assertThrows(TemplateModelException.class, () -> spec.applyTo(arg, MODEL)).getMessage();
 	}
 
 	@ParameterizedTest(name = "{0}")
@@ -114,7 +116,8 @@ class TerminalCard_Parity_Test extends TestBase {
 		if (template != null)
 			card.template(template);
 		var spec = PageSpec.create().card(card);
-		var ex = assertThrows(TemplateModelException.class, () -> spec.applyTo(new PageCapture(), MODEL));
+		var arg2 = new PageCapture();
+		var ex = assertThrows(TemplateModelException.class, () -> spec.applyTo(arg2, MODEL));
 		var body = C1Fixtures.renderError(fixture);
 		assertTrue(body.contains(ex.getMessage()), () -> "expected '" + ex.getMessage() + "' in:\n" + body);
 	}

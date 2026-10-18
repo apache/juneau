@@ -2340,8 +2340,8 @@ class RdfParser_Test extends TestBase {
 		}
 
 		public interface M36_EmptyInterface {
-			// No bean properties at all -- canCreateNewInstance() is FALSE, so readAnything falls all
-			// the way through to the final `else if (n.isResource())` generic-map branch.
+			// No bean properties at all, so the type cannot create a new instance and readAnything falls all
+			// the way through to the final resource branch that builds a generic map.
 		}
 
 		@Test void m36_readAnything_typeProperty_unresolvableName_genericMapCast() {

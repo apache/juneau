@@ -21,7 +21,6 @@ import static java.util.stream.Collectors.*;
 import static org.apache.juneau.test.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
-import java.io.*;
 import java.util.*;
 import java.util.stream.*;
 
@@ -146,7 +145,7 @@ class BusWiringValidator_Test extends TestBase {
 		assertEquals(List.of("E-42 topic 'selection:chanegs' names card 'chanegs', which is not on this page"), ps.stream().map(x -> x.split("; ")[0]).filter(x -> x.startsWith("E-42")).toList());
 	}
 
-	@Test void a09_schemaInvalidWiringDoesNotThrow() throws Exception {
+	@Test void a09_schemaInvalidWiringDoesNotThrow() {
 		// A topics entry with no publisher, carried by a bridge and a ribbon publish item.
 		assertDoesNotThrow(() -> problems(page("\"topics\":[{\"topic\":\"app.a\",\"retain\":true}],"
 			+ "\"bridges\":[{\"id\":\"b\",\"transport\":\"websocket\",\"session\":\"/s\",\"downstream\":[\"app.a\"],\"upstream\":[\"app.a\"]}],"

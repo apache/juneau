@@ -77,7 +77,7 @@ class SchemeHead_Test extends TestBase {
 
 	@Test void a02_hash() throws Exception {
 		var digest = MessageDigest.getInstance("SHA-256").digest(EXPECTED_SCRIPT.getBytes(StandardCharsets.UTF_8));
-		assertEquals("'sha256-" + Base64.getEncoder().encodeToString(digest) + "'", ConsoleChromeMixin.SCHEME_SCRIPT_CSP_HASH);
+		assertEquals(ConsoleChromeMixin.SCHEME_SCRIPT_CSP_HASH, "'sha256-" + Base64.getEncoder().encodeToString(digest) + "'");
 	}
 
 	@Test void a03_overrideBlock() {
@@ -95,19 +95,26 @@ class SchemeHead_Test extends TestBase {
 	}
 
 	@Test void a03c_overrideBlock_rejectsNonLiteralLeaf() {
+		var arg = Map.of("--jc-link", "var(--jc-accent)");
+		Map<String,String> none = Map.of();
 		var ex = assertThrows(IllegalArgumentException.class,
-			() -> ConsoleChromeMixin.schemeOverrideBlock(Map.of("--jc-link", "var(--jc-accent)"), Map.of()));
+			() -> ConsoleChromeMixin.schemeOverrideBlock(arg, none));
 		assertTrue(ex.getMessage().contains("dark values must be literals"), ex::getMessage);
 	}
 
 	@Test void a03d_overrideBlock_rejectsBadAliasAndReservedName() {
+		var arg2 = Map.of("--jc-focus", "#fff;}body{");
+		Map<String,String> none = Map.of();
 		assertThrows(IllegalArgumentException.class,
-			() -> ConsoleChromeMixin.schemeOverrideBlock(Map.of(), Map.of("--jc-focus", "#fff;}body{")));
+			() -> ConsoleChromeMixin.schemeOverrideBlock(none, arg2));
+		var arg3 = Map.of("--jc-chrome-foo", "#fff");
 		var ex = assertThrows(IllegalArgumentException.class,
-			() -> ConsoleChromeMixin.schemeOverrideBlock(Map.of("--jc-chrome-foo", "#fff"), Map.of()));
+			() -> ConsoleChromeMixin.schemeOverrideBlock(arg3, none));
 		assertTrue(ex.getMessage().contains("Cannot declare reserved token '--jc-chrome-foo'"), ex::getMessage);
+		var arg4 = Map.of("--jc-x", "#fff");
+		var arg5 = Map.of("--jc-x", "var(--jc-accent)");
 		ex = assertThrows(IllegalArgumentException.class,
-			() -> ConsoleChromeMixin.schemeOverrideBlock(Map.of("--jc-x", "#fff"), Map.of("--jc-x", "var(--jc-accent)")));
+			() -> ConsoleChromeMixin.schemeOverrideBlock(arg4, arg5));
 		assertTrue(ex.getMessage().contains("both a leaf token and an alias"), ex::getMessage);
 	}
 

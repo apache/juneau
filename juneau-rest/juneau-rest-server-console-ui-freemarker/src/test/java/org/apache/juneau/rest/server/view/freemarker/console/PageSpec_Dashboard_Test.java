@@ -59,18 +59,22 @@ class PageSpec_Dashboard_Test extends TestBase {
 
 	@Test void a03_secondDashboard_isE77() {
 		var spec = PageSpec.create().html("notes", "<p>n</p>").dashboard(dash());
+		var arg = DashboardSpec.create("other");
 		assertEquals("E-77: dashboard 'other': a page has at most one dashboard",
-			assertThrows(IllegalArgumentException.class, () -> spec.dashboard(DashboardSpec.create("other"))).getMessage());
+			assertThrows(IllegalArgumentException.class, () -> spec.dashboard(arg)).getMessage());
 	}
 
 	@Test void a04_byIdPanel_mustPrecedeDashboard() {
+		var target = PageSpec.create();
+		var arg2 = dash();
 		assertEquals("E-77: dashboard 'orders': panel 'notes' names no card on this page",
-			assertThrows(IllegalArgumentException.class, () -> PageSpec.create().dashboard(dash())).getMessage());
+			assertThrows(IllegalArgumentException.class, () -> target.dashboard(arg2)).getMessage());
 	}
 
 	@Test void a05_null_rejected() {
+		var target2 = PageSpec.create();
 		assertEquals("PageSpec.dashboard requires a dashboard.",
-			assertThrows(IllegalArgumentException.class, () -> PageSpec.create().dashboard(null)).getMessage());
+			assertThrows(IllegalArgumentException.class, () -> target2.dashboard(null)).getMessage());
 	}
 
 	@Test void a06_earlyWiring_seesDashboard() {

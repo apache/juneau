@@ -119,8 +119,8 @@ class ViewsJs_RibbonBus_Test extends TestBase {
 		assertEquals("true", m.get("pressed"));
 		assertEquals(false, m.get("publishRendered"));
 		var errs = (List<?>)m.get("errors");
-		assertTrue(errs.stream().anyMatch(e -> e.toString().contains("targets card 'other'")), () -> errs.toString());
-		assertTrue(errs.stream().anyMatch(e -> e.toString().contains("ribbon publish item 'Nowhere'")), () -> errs.toString());
+		assertTrue(errs.stream().anyMatch(e -> e.toString().contains("targets card 'other'")), errs::toString);
+		assertTrue(errs.stream().anyMatch(e -> e.toString().contains("ribbon publish item 'Nowhere'")), errs::toString);
 	}
 
 	@Test void e02_ribbonAloneAppliesItsOwnCommandLocally() {

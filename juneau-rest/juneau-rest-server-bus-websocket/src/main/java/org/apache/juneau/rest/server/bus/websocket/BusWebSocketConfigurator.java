@@ -54,7 +54,7 @@ import jakarta.websocket.server.*;
  * map across handshakes would mix up concurrent connections.
  *
  * <p>
- * With {@link CsrfBoundary.Builder#trustedProxies(String...) trustedProxies} set, the handshake's peer is read from the
+ * With {@link org.apache.juneau.rest.server.filter.CsrfBoundary.Builder#trustedProxies(String...) trustedProxies} set, the handshake's peer is read from the
  * Jetty user property {@code jakarta.websocket.endpoint.remoteAddress}.  Jakarta WebSocket has no standard peer
  * address; a container that records none (Tomcat) leaves the peer unknown, and an unknown peer is not trusted, so a
  * handshake that carries a forwarded host is refused there.  The property is believable only because Jetty writes it
@@ -141,6 +141,9 @@ public final class BusWebSocketConfigurator extends ServerEndpointConfig.Configu
 			props.put(REFUSAL_PROPERTY, refusal);
 	}
 
+	@SuppressWarnings({
+		"java:S3776" // Handshake gate: boundary variants and session lookup read best as one sequential check
+	})
 	private Refusal check(HandshakeRequest request, Map<String,Object> props) {
 		var uri = request.getRequestURI();
 		if (csrf != null) {

@@ -85,17 +85,24 @@ class DashboardRest_Test extends TestBase {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Test void b01_oneRowPerUtcDay() throws Exception {
-		assertString("day,reason,orders\n"
-			+ "2026-10-01T00:00:00Z,wrong-item,15\n"
-			+ "2026-10-02T00:00:00Z,late,22\n"
-			+ "2026-10-03T00:00:00Z,lost,29\n",
+		assertString("""
+			day,reason,orders
+			2026-10-01T00:00:00Z,wrong-item,15
+			2026-10-02T00:00:00Z,late,22
+			2026-10-03T00:00:00Z,lost,29
+			""",
 			csv("ok", "?start=2026-10-01T00:00:00Z&end=2026-10-04T00:00:00Z"));
 	}
 
 	@Test void b02_filters() throws Exception {
 		var week = "?start=2026-10-01T00:00:00Z&end=2026-10-08T00:00:00Z";
-		assertString("day,reason,orders\n"
-			+ "2026-10-02T00:00:00Z,late,22\n2026-10-03T00:00:00Z,lost,29\n2026-10-06T00:00:00Z,late,27\n2026-10-07T00:00:00Z,lost,11\n",
+		assertString("""
+			day,reason,orders
+			2026-10-02T00:00:00Z,late,22
+			2026-10-03T00:00:00Z,lost,29
+			2026-10-06T00:00:00Z,late,27
+			2026-10-07T00:00:00Z,lost,11
+			""",
 			csv("ok", week + "&reasons=late&reasons=lost"));
 		assertString("day,reason,orders\n2026-10-03T00:00:00Z,lost,29\n2026-10-07T00:00:00Z,lost,11\n", csv("ok", week + "&q=OS"));
 		assertString("day,reason,orders\n2026-10-02T00:00:00Z,late,22\n2026-10-06T00:00:00Z,late,27\n", csv("ok", week + "&lateOnly=true"));

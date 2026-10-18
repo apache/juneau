@@ -20,7 +20,7 @@ import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.rest.server.view.freemarker.console.ToolkitPack.Kind.*;
 
 import java.util.*;
-import java.util.function.Function;
+import java.util.function.UnaryOperator;
 import java.util.logging.*;
 
 import org.apache.juneau.rest.server.*;
@@ -77,6 +77,9 @@ import org.apache.juneau.rest.server.widgets.*;
  *
  * @since 10.0.0
  */
+@SuppressWarnings({
+	"java:S1192" // Repeated literals are contract wire keys; named constants would obscure the contract shape.
+})
 public final class ToolkitPackRegistry {
 
 	private static final Logger LOG = Logger.getLogger(ToolkitPackRegistry.class.getName());
@@ -344,7 +347,7 @@ public final class ToolkitPackRegistry {
 	}
 
 	// Package-private: the probe is injectable because the echarts jar is on every test classpath.
-	synchronized ToolkitPackRegistry checkWebJars(Collection<String> roots, Function<String,String> probe) {
+	synchronized ToolkitPackRegistry checkWebJars(Collection<String> roots, UnaryOperator<String> probe) {
 		for (var pack : expand(new LinkedHashSet<>(roots), "requirePacks")) {
 			if (provided.contains(pack.name()) || pack.kind() != VENDOR || pack.resolver() != WEBJAR_RESOLVER)
 				continue;
@@ -451,7 +454,7 @@ public final class ToolkitPackRegistry {
 			}
 			var dup = pageFiles.get(fileName(url));
 			if (nn(dup)) {
-				LOG.warning(f("Template '%s': skipped pack '%s' asset %s; the page already loads %s.", template, pack.name(), url, dup));
+				LOG.log(Level.WARNING, () -> f("Template '%s': skipped pack '%s' asset %s; the page already loads %s.", template, pack.name(), url, dup));
 				continue;
 			}
 			out.add(url);

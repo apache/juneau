@@ -1879,8 +1879,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		 */
 		public SELF allowAddressRanges(String...value) {
 			if (nn(value))
-				for (var v : value)
-					allowedAddressRanges.add(v);
+				Collections.addAll(allowedAddressRanges, value);
 			return self();
 		}
 
@@ -6104,7 +6103,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 
 		private static String[] splitSystemProperty(String name) {
 			var v = System.getProperty(name);
-			return ib(v) ? null : v.split(" *, *");
+			return ib(v) ? null : v.split(" *+, *+");
 		}
 
 		// The pool settings, applied as Apache HttpClientBuilder applies them to its own connection manager.  The
@@ -6114,8 +6113,10 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 		private PoolSettings poolSettings(HttpClientBuilderSettings s) {
 			var systemMax = (systemProperties || s.systemProperties()) && "true".equalsIgnoreCase(System.getProperty("http.keepAlive", "true"))
 				? Integer.parseInt(System.getProperty("http.maxConnections", "5")) : 0;
-			var maxTotal = maxConnTotal > 0 ? maxConnTotal : s.maxConnTotal() > 0 ? s.maxConnTotal() : 2 * systemMax;
-			var maxPerRoute = maxConnPerRoute > 0 ? maxConnPerRoute : s.maxConnPerRoute() > 0 ? s.maxConnPerRoute() : systemMax;
+			var settingsTotal = s.maxConnTotal() > 0 ? s.maxConnTotal() : 2 * systemMax;
+			var settingsPerRoute = s.maxConnPerRoute() > 0 ? s.maxConnPerRoute() : systemMax;
+			var maxTotal = maxConnTotal > 0 ? maxConnTotal : settingsTotal;
+			var maxPerRoute = maxConnPerRoute > 0 ? maxConnPerRoute : settingsPerRoute;
 			var ownTtl = connTimeToLive > 0;
 			var ttl = ownTtl ? connTimeToLive : s.connTimeToLive();
 			var ttlUnit = ownTtl ? connTimeToLiveTimeUnit : s.connTimeToLiveTimeUnit();
@@ -6313,9 +6314,9 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 			// connection manager down, so a reused builder must not hand an earlier client's to the next one.
 			var cm = nn(connectionManager) ? connectionManager : createConnectionManager();
 			// Only a connection manager this builder created can be given a pinned twin; for any other one, the client
-			// reports the SSRF guard as unsupported and refuses guarded @Remote calls.  The twin is built from the same
-			// socket factories and pool settings as cm (defaultRegistry and defaultPoolSettings), so it is the same kind;
-			// settings an override applied to the cm instance afterwards reach it before each guarded lease.
+			// reports the SSRF guard as unsupported and refuses guarded remote calls.  The twin is built from the same
+			// socket factories and pool settings as the connection manager, so it is the same kind; settings an
+			// override applied to that instance afterwards reach it before each guarded lease.
 			ssrfGuard = nn(cm) && cm == defaultConnectionManager ? new SsrfGuardConnectionManager(cm, newConnectionManager(defaultRegistry, pinningResolver(), defaultPoolSettings)) : null;
 			ownsConnectionManager = nn(ssrfGuard) && connectionManager == null && ! overridesCreateConnectionManager(getClass());
 			if (nn(ssrfGuard))
@@ -6497,7 +6498,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 	private final Logger logger;
 	private final Map<Class<?>,HttpPartParser> partParsers = new ConcurrentHashMap<>();
 	private final Map<Class<?>,HttpPartSerializer> partSerializers = new ConcurrentHashMap<>();
-	private final Pattern absUrlPattern = Pattern.compile("^\\w+\\:\\/\\/.*");
+	private final Pattern absUrlPattern = Pattern.compile("^\\w++://.*");
 	private final PrintStream console;
 	private final RestCallHandler callHandler;
 	private StackTraceElement[] closedStack;

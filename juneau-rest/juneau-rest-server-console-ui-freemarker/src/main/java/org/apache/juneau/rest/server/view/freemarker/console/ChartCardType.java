@@ -63,6 +63,10 @@ import org.apache.juneau.rest.server.console.*;
  *
  * @since 10.0.0
  */
+@SuppressWarnings({
+	"java:S1192", // Repeated literals are contract wire keys; named constants would obscure the contract shape.
+	"java:S3776" // Validation and rendering chains many independent guards; splitting them adds no clarity.
+})
 public final class ChartCardType implements CardTypeHandler {
 
 	// The non-safe methods only: a safe method skips the server's Origin and CSRF checks.
@@ -71,7 +75,9 @@ public final class ChartCardType implements CardTypeHandler {
 	private static final Set<String> OPS = Set.of("highlight", "downplay", "showTip", "hideTip", "zoomTo", "legendSelect", "export", "refresh");
 
 	/** Public no-arg constructor, required by {@link java.util.ServiceLoader}. */
-	public ChartCardType() {}
+	public ChartCardType() {
+		// No state; instantiated by ServiceLoader.
+	}
 
 	@Override
 	public String type() {
@@ -127,7 +133,11 @@ public final class ChartCardType implements CardTypeHandler {
 			throw source.error("type='chart' requires 'helper', a legacy 'kind' or an 'option'.");
 		if (body.containsKey("helper") && ! (body.get("helper") instanceof Map))
 			throw source.error("type='chart' helper must be a JSON object.");
-		Map<?,?> helper = body.get("helper") instanceof Map<?,?> h ? h : body.containsKey("kind") ? body : null;
+		Map<?,?> helper = null;
+		if (body.get("helper") instanceof Map<?,?> h)
+			helper = h;
+		else if (body.containsKey("kind"))
+			helper = body;
 		if (helper != null)
 			checkHelper(source, helper);
 		for (var k : List.of("option", "patch"))

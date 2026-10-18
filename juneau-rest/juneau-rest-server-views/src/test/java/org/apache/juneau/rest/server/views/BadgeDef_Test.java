@@ -73,7 +73,8 @@ class BadgeDef_Test {
 	}
 
 	@Test void a04_e61_srcRequired() {
-		var e = assertThrows(IllegalArgumentException.class, () -> BadgeDef.create("pending").validate());
+		var target = BadgeDef.create("pending");
+		var e = assertThrows(IllegalArgumentException.class, target::validate);
 		assertEquals("<@badge id='pending'> requires src=.", e.getMessage());
 	}
 

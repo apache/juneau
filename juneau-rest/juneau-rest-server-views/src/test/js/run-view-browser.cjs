@@ -50,7 +50,7 @@ async function ctl(page, log, action, query) {
 async function open(page, c, opts) {
 	const o = opts || {};
 	await page.goto(baseUrl + 'page/' + c + '?theme=' + (o.theme || 'gray'));
-	await page.waitForFunction(() => !!(window.JuneauViews && window.JuneauViews.runView), null, { timeout: 15000 });
+	await page.waitForFunction(() => !!(window.JuneauViews?.runView), null, { timeout: 15000 });
 }
 
 async function waitText(page, selector, text, timeout) {
@@ -69,14 +69,14 @@ function headline(page) {
 
 /* The contrast of the headline, the step glyphs and the counts line against their first opaque ancestor background. */
 const CONTRAST = function () {
-	function rgb(s) {
+	function rgb(s) { // NOSONAR javascript:S7721 - must stay nested: the enclosing probe is serialized into the browser
 		const m = /rgba?\(([^)]+)\)/.exec(s);
 		if (!m) return null;
 		const p = m[1].split(/[\s,/]+/).filter(Boolean).map(Number);
 		return { r: p[0], g: p[1], b: p[2], a: p.length > 3 ? p[3] : 1 };
 	}
-	function lum(c) {
-		const f = function (v) { v /= 255; return v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4); };
+	function lum(c) { // NOSONAR javascript:S7721 - must stay nested: the enclosing probe is serialized into the browser
+		const f = function (v) { v /= 255; return v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4); }; // NOSONAR javascript:S7721 -- must stay nested: the enclosing function is serialized into the browser
 		return 0.2126 * f(c.r) + 0.7152 * f(c.g) + 0.0722 * f(c.b);
 	}
 	function background(el) {
@@ -98,7 +98,7 @@ const CONTRAST = function () {
 	}
 	const out = { headline: ratio(document.querySelector('.juneau-rv-headline')), counts: ratio(document.querySelector('.juneau-rv-counts')) };
 	Array.from(document.querySelectorAll('.juneau-rv-glyph')).forEach(function (g) {
-		const k = Array.from(g.classList).filter(c => c.indexOf('juneau-rv-state-') === 0)[0] || 'glyph';
+		const k = Array.from(g.classList).find(c => c.startsWith('juneau-rv-state-')) || 'glyph';
 		out[k] = ratio(g);
 	});
 	return out;
@@ -195,7 +195,7 @@ kase('a07', async page => {
 	const themes = {};
 	for (const theme of THEMES) {
 		await page.goto(baseUrl + 'page/a07?theme=' + theme);
-		await page.waitForFunction(() => !!(window.JuneauViews && window.JuneauViews.runView), null, { timeout: 15000 });
+		await page.waitForFunction(() => !!(window.JuneauViews?.runView), null, { timeout: 15000 });
 		await waitText(page, HEAD, 'Failed at');
 		themes[theme] = await page.evaluate(CONTRAST);
 	}
@@ -225,7 +225,7 @@ kase('a09', async page => {
 			{ ev: 'done', status: 'fail' }]);
 	});
 	await page.waitForSelector('#hooked .juneau-co-block');
-	const stepIds = await page.$$eval('#hooked .juneau-co-block', bs => bs.map(b => b.getAttribute('data-step-id')));
+	const stepIds = await page.$$eval('#hooked .juneau-co-block', bs => bs.map(b => b.dataset.stepId));
 	await page.locator('#hooked span.juneau-co-block').first().click();
 	await page.locator('#hooked a.juneau-co-block').first().click();
 	return { stepIds: stepIds, clicks: await page.evaluate(() => window.__clicks) };

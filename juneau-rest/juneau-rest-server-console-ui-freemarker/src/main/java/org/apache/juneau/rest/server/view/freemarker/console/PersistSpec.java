@@ -38,6 +38,9 @@ import java.util.regex.*;
  *
  * @since 10.0.0
  */
+@SuppressWarnings({
+	"java:S1845" // Fluent-builder setters intentionally mirror field names (Juneau DSL convention)
+})
 public final class PersistSpec {
 
 	private static final Pattern NS = Pattern.compile("^[a-z][a-z0-9.-]{0,63}$");

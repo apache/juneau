@@ -42,7 +42,7 @@ function expect(cond, detail) {
 }
 function canon(v) {
 	if (Array.isArray(v)) return v.map(canon);
-	if (v && typeof v === 'object') { const o = {}; for (const k of Object.keys(v).sort()) o[k] = canon(v[k]); return o; }
+	if (v && typeof v === 'object') { const o = {}; for (const k of Object.keys(v).sort((a, b) => (a < b ? -1 : Number(a > b)))) { o[k] = canon(v[k]); } return o; }
 	return v;
 }
 function same(a, b) { return JSON.stringify(canon(a)) === JSON.stringify(canon(b)); }
@@ -62,7 +62,7 @@ test('chk01_vectors', function (t) {
 		for (const row of t.vectors[g])
 			if (groups[g](row[0]) !== row[1]) bad.push(g + '(' + JSON.stringify(row[0]) + ') should be ' + JSON.stringify(row[1]));
 	for (const v of [null, undefined, 42, {}, []])
-		if (RV.isSafeNoteHref(v) || RV.isSafeRawHref(v)) bad.push('non-string accepted: ' + String(v));
+		if (RV.isSafeNoteHref(v) || RV.isSafeRawHref(v)) bad.push('non-string accepted: ' + JSON.stringify(v));
 	expect(bad.length === 0, bad.join('\n'));
 });
 
@@ -78,7 +78,7 @@ const VALID = [
 
 test('chk02_validateEventAccepts', function (t) {
 	for (const e of VALID) {
-		const r = t.RV.validateEvent(Object.assign({ extra: 1 }, e));
+		const r = t.RV.validateEvent({ extra: 1, ...e });
 		expect(r.event !== null && r.problems.length === 0 && !r.ignored, 'accepts ' + e.ev + ': ' + JSON.stringify(r));
 		expectSame(r.event, e, e.ev);
 	}
@@ -89,18 +89,18 @@ test('chk03_validateEventDrops', function (t) {
 	const s = VALID[0], te = VALID[3];
 	const inputs = [
 		null, 'x', 42, [], {}, { seq: 1 }, { ev: 7 },
-		Object.assign({}, s, { id: '-bad' }), Object.assign({}, s, { id: 'a b' }), Object.assign({}, s, { id: undefined }),
-		Object.assign({}, s, { title: '' }), Object.assign({}, s, { title: 3 }),
-		Object.assign({}, s, { n: 0 }), Object.assign({}, s, { n: 10000 }), Object.assign({}, s, { n: 1.5 }),
-		Object.assign({}, s, { status: 'ok' }), Object.assign({}, s, { rawOffset: -1 }), Object.assign({}, s, { seq: 0 }),
-		Object.assign({}, s, { seq: 1.5 }), Object.assign({}, s, { seq: '1' }),
+		{ ...s, id: '-bad' }, { ...s, id: 'a b' }, { ...s, id: undefined },
+		{ ...s, title: '' }, { ...s, title: 3 },
+		{ ...s, n: 0 }, { ...s, n: 10000 }, { ...s, n: 1.5 },
+		{ ...s, status: 'ok' }, { ...s, rawOffset: -1 }, { ...s, seq: 0 },
+		{ ...s, seq: 1.5 }, { ...s, seq: '1' },
 		{ ev: 'end', id: 'a' }, { ev: 'end', id: 'a', status: 'running' }, { ev: 'end', id: 'a', status: 'ok', ms: -1 },
-		Object.assign({}, VALID[2], { counts: undefined }), Object.assign({}, VALID[2], { counts: { pass: 1, fail: 1 } }),
-		Object.assign({}, VALID[2], { counts: { pass: 1, fail: -1, skip: 0 } }),
-		Object.assign({}, VALID[2], { counts: { pass: 1000000001, fail: 0, skip: 0 } }),
-		Object.assign({}, VALID[2], { fw: 'Jest' }), Object.assign({}, VALID[2], { suite: '' }),
-		Object.assign({}, te, { status: 'bogus' }), Object.assign({}, te, { name: '' }), Object.assign({}, te, { rawOffset: -1 }),
-		Object.assign({}, te, { ms: -1 }), Object.assign({}, te, { msg: 5 }), Object.assign({}, te, { step: 'a b' }),
+		{ ...VALID[2], counts: undefined }, { ...VALID[2], counts: { pass: 1, fail: 1 } },
+		{ ...VALID[2], counts: { pass: 1, fail: -1, skip: 0 } },
+		{ ...VALID[2], counts: { pass: 1000000001, fail: 0, skip: 0 } },
+		{ ...VALID[2], fw: 'Jest' }, { ...VALID[2], suite: '' },
+		{ ...te, status: 'bogus' }, { ...te, name: '' }, { ...te, rawOffset: -1 },
+		{ ...te, ms: -1 }, { ...te, msg: 5 }, { ...te, step: 'a b' },
 		{ ev: 'replace' }, { ev: 'replace', step: '' },
 		{ ev: 'note', level: 'fatal', text: 'x' }, { ev: 'note', level: 'info', text: '' }, { ev: 'note', level: 'info', text: 'x', step: '!' },
 		{ ev: 'done', status: 'maybe' }, { ev: 'done' }
@@ -151,9 +151,10 @@ test('chk08_rawOffsetValidated', function (t) {
 
 function RT(t) { return t.RV.__test; }
 function mkModel(t) { const R = RT(t); return { R: R, m: R.newModel() }; }
-function feed(x, evs) { return [].concat(evs).map(function (e) { return x.R.reduce(x.m, e); }); }
-function stepEv(id, extra) { return Object.assign({ ev: 'step', id: id, title: 'T ' + id }, extra); }
-function testEv(step, name, status, extra) { return Object.assign({ ev: 'test', step: step, fw: 'jest', suite: 'a.test.js', name: name, status: status }, extra); }
+function feed(x, evs) { return [evs].flat().map(function (e) { return x.R.reduce(x.m, e); }); }
+function stepEv(id, extra) { return { ev: 'step', id: id, title: 'T ' + id, ...extra }; }
+function suiteEv(step, counts, extra) { return { ev: 'suite', step: step, fw: 'jest', suite: 'a.test.js', counts: counts, ...extra }; }
+function testEv(step, name, status, extra) { return { ev: 'test', step: step, fw: 'jest', suite: 'a.test.js', name: name, status: status, ...extra }; }
 function stepOf(x, id) { return x.m.stepIndex.get(id); }
 function onlySuite(x, id) { return Array.from(stepOf(x, id).suites.values())[0]; }
 
@@ -205,20 +206,18 @@ test('red05_endUnknownStepDropped', function (t) {
 
 test('red06_suitePlaceholderThenReplaceCounts', function (t) {
 	const x = mkModel(t);
-	const sv = function (c) { return { ev: 'suite', step: 'a', fw: 'jest', suite: 'a.test.js', counts: c, rawOffset: 3 }; };
-	feed(x, [stepEv('a'), sv({ pass: 1, fail: 0, skip: 0 })]);
-	feed(x, sv({ pass: 4, fail: 1, skip: 2 }));
+	feed(x, [stepEv('a'), suiteEv('a', { pass: 1, fail: 0, skip: 0 }, { rawOffset: 3 })]);
+	feed(x, suiteEv('a', { pass: 4, fail: 1, skip: 2 }, { rawOffset: 3 }));
 	const s = onlySuite(x, 'a');
 	expect(stepOf(x, 'a').suites.size === 1 && s.pass === 4 && s.fail === 1 && s.skip === 2 && !s.detailed && s.rawOffset === 3, JSON.stringify(s));
 });
 
 test('red07_testsWinOverPlaceholders', function (t) {
 	const x = mkModel(t);
-	const sv = function (c) { return { ev: 'suite', step: 'a', fw: 'jest', suite: 'a.test.js', counts: c }; };
-	feed(x, [stepEv('a'), sv({ pass: 9, fail: 9, skip: 9 }), testEv('a', 'n1', 'pass')]);
+	feed(x, [stepEv('a'), suiteEv('a', { pass: 9, fail: 9, skip: 9 }), testEv('a', 'n1', 'pass')]);
 	let s = onlySuite(x, 'a');
 	expect(s.detailed && s.pass === 1 && s.fail === 0 && s.skip === 0 && s.tests.length === 1, 'converted, placeholder counts discarded');
-	const r = feed(x, sv({ pass: 50, fail: 0, skip: 0 }))[0];
+	const r = feed(x, suiteEv('a', { pass: 50, fail: 0, skip: 0 }))[0];
 	expect(!r.applied && r.problems.length === 0 && s.pass === 1 && x.m.stats.ignored === 1, 'late placeholder ignored');
 });
 
@@ -324,16 +323,16 @@ test('red15_retentionCaps', function (t) {
 test('red16_structuralCaps', function (t) {
 	let x = mkModel(t);
 	const probs = [];
-	for (let i = 0; i < 1001; i++) probs.push.apply(probs, x.R.reduce(x.m, stepEv('s' + i)).problems);
+	for (let i = 0; i < 1001; i++) probs.push(...x.R.reduce(x.m, stepEv('s' + i)).problems);
 	expect(x.m.steps.length === 1000 && codes(probs).join() === 'E-RV-9', 'steps: ' + x.m.steps.length + ' ' + codes(probs));
 	x = mkModel(t);
 	feed(x, stepEv('a'));
 	const sp = [];
-	for (let i = 0; i < 5001; i++) sp.push.apply(sp, x.R.reduce(x.m, { ev: 'suite', step: 'a', fw: 'jest', suite: 's' + i, counts: { pass: 1, fail: 0, skip: 0 } }).problems);
+	for (let i = 0; i < 5001; i++) sp.push(...x.R.reduce(x.m, { ev: 'suite', step: 'a', fw: 'jest', suite: 's' + i, counts: { pass: 1, fail: 0, skip: 0 } }).problems);
 	expect(stepOf(x, 'a').suites.size === 5000 && codes(sp).join() === 'E-RV-9', 'suites per step');
 	x = mkModel(t);
 	const np = [];
-	for (let i = 0; i < 1001; i++) np.push.apply(np, x.R.reduce(x.m, { ev: 'note', level: 'info', text: 'n' + i }).problems);
+	for (let i = 0; i < 1001; i++) np.push(...x.R.reduce(x.m, { ev: 'note', level: 'info', text: 'n' + i }).problems);
 	expect(x.m.notes.length === 1000 && codes(np).join() === 'E-RV-9', 'notes');
 });
 
@@ -379,7 +378,7 @@ function mkRun(t, opts) {
 		host: host, api: api, q: q, all: all, flush: flush,
 		root: function () { return q('.juneau-rv'); },
 		head: function () { return q('.juneau-rv-headline').textContent; },
-		step: function (id) { return all('.juneau-rv-step').find(function (l) { return l.getAttribute('data-step') === id; }) || null; },
+		step: function (id) { return all('.juneau-rv-step').find(function (l) { return l.dataset.step === id; }) || null; },
 		send: function (evs) { const r = api.append(evs); flush(); return r; }
 	};
 }
@@ -387,9 +386,9 @@ function mkRun(t, opts) {
 test('core01_createAndRoot', function (t) {
 	const c = mkRun(t, { id: 'run1', title: 'Build 7' });
 	const r = c.root();
-	expect(r && r.tagName === 'SECTION' && r.getAttribute('role') === 'region', 'region root');
+	expect(r?.tagName === 'SECTION' && r.getAttribute('role') === 'region', 'region root');
 	expect(r.getAttribute('aria-label') === 'Build 7', 'aria-label from title');
-	expect(r.getAttribute('data-juneau-rv-status') === 'empty', 'starts empty');
+	expect(r.dataset.juneauRvStatus === 'empty', 'starts empty');
 	expect(c.head() === '⋯ Waiting for events…', 'headline: ' + c.head());
 	const h = c.q('.juneau-rv-headline');
 	expect(h.getAttribute('aria-live') === 'polite' && h.getAttribute('aria-atomic') === 'true', 'live region');
@@ -405,13 +404,13 @@ test('core02_badOptionsThrowBeforeDom', function (t) {
 		const host = t.env.document.createElement('div');
 		let err = null;
 		try { t.RV.create(host, o); } catch (e) { err = e; }
-		expect(err && err.code === 'E-RV-1' && err.name === 'JuneauRunViewError', 'throws E-RV-1 for ' + JSON.stringify(o));
+		expect(err?.code === 'E-RV-1' && err.name === 'JuneauRunViewError', 'throws E-RV-1 for ' + JSON.stringify(o));
 		expect(host.children.length === 0, 'no DOM for ' + JSON.stringify(o));
 	}
 	expect(t.rec.errorsMatching('E-RV-1').length === bad.length, 'one console.error each');
 	let e2 = null;
 	try { t.RV.create(null, {}); } catch (e) { e2 = e; }
-	expect(e2 && e2.code === 'E-RV-1', 'no container');
+	expect(e2?.code === 'E-RV-1', 'no container');
 });
 
 test('core03_oneRenderPerBatch', function (t) {
@@ -445,11 +444,11 @@ test('core04_destroyIsIdempotent', function (t) {
 
 // @cases:sum
 
-function stepOk(id, extra) { return Object.assign({ ev: 'step', id: id, title: id.toUpperCase() }, extra || {}); }
+function stepOk(id, extra) { return { ev: 'step', id: id, title: id.toUpperCase(), ...extra || {} }; }
 
 test('sum01_headlineAndStatus', function (t) {
 	const c = mkRun(t);
-	const status = function () { return c.root().getAttribute('data-juneau-rv-status'); };
+	const status = function () { return c.root().dataset.juneauRvStatus; };
 	c.send(stepOk('a'));
 	expect(status() === 'running' && c.head() === '⋯ Running', 'running: ' + c.head());
 	c.send({ ev: 'step', id: 'w', title: 'Approve', status: 'waiting' });
@@ -459,7 +458,7 @@ test('sum01_headlineAndStatus', function (t) {
 	expect(status() === 'fail' && c.head().indexOf('✗ Failed') === 0, 'failed: ' + c.head());
 	const d = mkRun(t);
 	d.send([stepOk('a'), { ev: 'done', status: 'ok' }]);
-	expect(d.head() === '✓ Passed' && d.root().getAttribute('data-juneau-rv-status') === 'ok', 'passed');
+	expect(d.head() === '✓ Passed' && d.root().dataset.juneauRvStatus === 'ok', 'passed');
 	const e = mkRun(t);
 	e.send([stepOk('a'), { ev: 'done', status: 'cancelled' }]);
 	expect(e.head() === '○ Cancelled', 'cancelled');
@@ -513,10 +512,10 @@ test('step01_createdOnceUpdatedInPlace', function (t) {
 	c.send(stepOk('a', { n: 2 }));
 	const li = c.step('a');
 	expect(li.querySelector('.juneau-rv-title').textContent === '2. A', 'numbered title');
-	expect(li.getAttribute('data-state') === 'running' && li.querySelector('.juneau-rv-glyph').textContent === '⋯', 'running glyph');
+	expect(li.dataset.state === 'running' && li.querySelector('.juneau-rv-glyph').textContent === '⋯', 'running glyph');
 	c.send({ ev: 'end', id: 'a', status: 'ok', ms: 1500 });
 	expect(c.step('a') === li, 'same li');
-	expect(li.getAttribute('data-state') === 'ok' && li.querySelector('.juneau-rv-glyph').textContent === '✓', 'ok glyph');
+	expect(li.dataset.state === 'ok' && li.querySelector('.juneau-rv-glyph').textContent === '✓', 'ok glyph');
 	expect(li.querySelector('.juneau-rv-dur').textContent === '1.5 s', 'duration: ' + li.querySelector('.juneau-rv-dur').textContent);
 	expect(li.querySelector('.juneau-co-sr').textContent === 'passed: ', 'sr text');
 	expect(li.querySelector('.juneau-rv-glyph').getAttribute('aria-hidden') === 'true', 'glyph hidden from AT');
@@ -556,19 +555,19 @@ test('step03_exitCodeTooltip', function (t) {
 	const c = mkRun(t);
 	c.send([stepOk('a'), { ev: 'end', id: 'a', status: 'fail', exit: 2 }, stepOk('b'), { ev: 'end', id: 'b', status: 'ok' }]);
 	const ha = c.step('a').querySelector('.juneau-rv-step-head'), hb = c.step('b').querySelector('.juneau-rv-step-head');
-	expect(ha.getAttribute('data-juneau-co-tip') === 'exit 2' && ha.getAttribute('tabindex') === '0', 'exit tip + focusable');
-	expect(hb.getAttribute('data-juneau-co-tip') === null && hb.getAttribute('tabindex') === null, 'no exit, no tip');
+	expect(ha.dataset.juneauCoTip === 'exit 2' && ha.getAttribute('tabindex') === '0', 'exit tip + focusable');
+	expect(hb.dataset.juneauCoTip === undefined && hb.getAttribute('tabindex') === null, 'no exit, no tip');
 });
 
 test('step04_doneClosesOpenSteps', function (t) {
 	const c = mkRun(t);
 	c.send([stepOk('a'), stepOk('b'), { ev: 'end', id: 'a', status: 'ok' }]);
 	c.send({ ev: 'done', status: 'fail' });
-	expect(c.step('a').getAttribute('data-state') === 'ok', 'ended step untouched');
-	expect(c.step('b').getAttribute('data-state') === 'fail', 'open step shown as failed');
+	expect(c.step('a').dataset.state === 'ok', 'ended step untouched');
+	expect(c.step('b').dataset.state === 'fail', 'open step shown as failed');
 	const d = mkRun(t);
 	d.send([stepOk('a'), { ev: 'done', status: 'cancelled' }]);
-	expect(d.step('a').getAttribute('data-state') === 'skip', 'cancelled shows skipped');
+	expect(d.step('a').dataset.state === 'skip', 'cancelled shows skipped');
 	expect(d.api.state().steps[0].status === 'skip', 'state() agrees');
 });
 
@@ -618,7 +617,7 @@ test('api01_resetStateStats', function (t) {
 	expect(c.api.state().steps.length === 1, 'state is a copy');
 	c.api.reset();
 	expect(c.api.lastSeq() === 0 && c.all('.juneau-rv-step').length === 0, 'reset clears');
-	expect(c.root().getAttribute('data-juneau-rv-status') === 'empty' && c.head() === '⋯ Waiting for events…', 'reset to empty');
+	expect(c.root().dataset.juneauRvStatus === 'empty' && c.head() === '⋯ Waiting for events…', 'reset to empty');
 	c.send(stepOk('a'));
 	expect(c.all('.juneau-rv-step').length === 1, 'usable after reset');
 });
@@ -627,7 +626,7 @@ test('api01_resetStateStats', function (t) {
 
 function testEvs(step, fw, suite, specs) {
 	return specs.map(function (sp) {
-		return Object.assign({ ev: 'test', step: step, fw: fw, suite: suite, name: sp[0], status: sp[1] }, sp[2] || {});
+		return { ev: 'test', step: step, fw: fw, suite: suite, name: sp[0], status: sp[1], ...sp[2] || {} };
 	});
 }
 function suiteRows(c) { return c.all('.juneau-rv-suite'); }
@@ -684,12 +683,12 @@ test('blk01_blockClassesAndAttributes', function (t) {
 	expect(b.length === 4, 'four blocks');
 	expect(b[0].className.indexOf('juneau-co-fill-success') >= 0 && b[1].className.indexOf('juneau-co-fill-error') >= 0
 		&& b[3].className.indexOf('juneau-co-block-empty') >= 0, 'fill classes');
-	expect(b[0].getAttribute('data-juneau-co-tip') === 'good\npass · 1.5 s', 'tip: ' + JSON.stringify(b[0].getAttribute('data-juneau-co-tip')));
-	expect(b[1].getAttribute('data-juneau-co-tip') === 'bad\nfail · 20 ms\nfirst', 'tip with msg: ' + JSON.stringify(b[1].getAttribute('data-juneau-co-tip')));
-	expect(b[3].getAttribute('data-juneau-co-tip') === 'skp\nskip', 'empty lines omitted');
+	expect(b[0].dataset.juneauCoTip === 'good\npass · 1.5 s', 'tip: ' + JSON.stringify(b[0].dataset.juneauCoTip));
+	expect(b[1].dataset.juneauCoTip === 'bad\nfail · 20 ms\nfirst', 'tip with msg: ' + JSON.stringify(b[1].dataset.juneauCoTip));
+	expect(b[3].dataset.juneauCoTip === 'skp\nskip', 'empty lines omitted');
 	expect(b[0].getAttribute('aria-label') === 'good, pass, 1.5 s' && b[3].getAttribute('aria-label') === 'skp, skip', 'aria-label');
 	expect(b[0].getAttribute('tabindex') === '0' && b[0].getAttribute('role') === 'img', 'span block focusable');
-	expect(b[1].getAttribute('data-juneau-co-tip') !== b[2].getAttribute('data-juneau-co-tip')
+	expect(b[1].dataset.juneauCoTip !== b[2].dataset.juneauCoTip
 		&& b[1].className === b[2].className, 'error and fail differ in tooltip only');
 });
 
@@ -724,7 +723,7 @@ test('blk03b_blocksCarryStepId', function (t) {
 		const c = mkRun(t, { compact: compact });
 		c.send([stepOk('a'), stepOk('b.2', { title: 'B (attempt 2)' })]
 			.concat(testEvs('a', 'jest', 'sa', [['x', 'fail', { msg: 'm' }], ['y', 'pass']]), testEvs('b.2', 'jest', 'sb', [['z', 'fail']])));
-		const ids = c.all('.juneau-co-block').map(function (b) { return b.getAttribute('data-step-id'); });
+		const ids = c.all('.juneau-co-block').map(function (b) { return b.dataset.stepId; });
 		expectSame(ids, ['a', 'a', 'b.2'], 'data-step-id per block, compact=' + compact);
 	}
 });
@@ -772,7 +771,7 @@ test('blk03g_stepLinkScrollsAMountedTerminalWithoutNavigating', function (t) {
 	c.send([stepOk('a', { rawOffset: 3400 })]);
 	const link = c.step('a').querySelector('.juneau-rv-title');
 	let prevented = 0;
-	const fire = function (extra) { c.root().dispatch('click', Object.assign({ target: link, preventDefault: function () { prevented++; } }, extra)); };
+	const fire = function (extra) { c.root().dispatch('click', { target: link, preventDefault: function () { prevented++; }, ...extra }); };
 	fire();
 	expectSame(calls, [3400], 'the mounted terminal scrolls');
 	expect(prevented === 1, 'the hash navigation is cancelled');
@@ -790,7 +789,7 @@ test('blk03d_onBlockClickMustBeFunction', function (t) {
 	const host = t.env.document.createElement('div');
 	let err = null;
 	try { t.RV.create(host, { onBlockClick: 3 }); } catch (e) { err = e; }
-	expect(err && err.code === 'E-RV-1' && host.children.length === 0, 'non-function rejected before DOM');
+	expect(err?.code === 'E-RV-1' && host.children.length === 0, 'non-function rejected before DOM');
 });
 
 test('blk04_traceDisclosure', function (t) {
@@ -800,7 +799,7 @@ test('blk04_traceDisclosure', function (t) {
 	expect(c.all('.juneau-rv-trace').length === 0, 'closed at first');
 	c.root().dispatch('keydown', { target: blk(0), key: 'Enter', preventDefault: function () {} });
 	const d = c.q('.juneau-rv-trace');
-	expect(d && d.tagName === 'DETAILS' && d.querySelectorAll('pre').length === 2, 'Enter opens a trace');
+	expect(d?.tagName === 'DETAILS' && d.querySelectorAll('pre').length === 2, 'Enter opens a trace');
 	expect(d.querySelector('.juneau-rv-trace-text').textContent === 'at x.js:1', 'trace text');
 	c.root().dispatch('keydown', { target: blk(0), key: ' ', preventDefault: function () {} });
 	expect(c.all('.juneau-rv-trace').length === 0, 'Space closes it');
@@ -949,7 +948,7 @@ test('cmp01_compactMode', function (t) {
 	c.send([stepOk('a')].concat(testEvs('a', 'jest', 'c1', [['a', 'pass']]), testEvs('a', 'jest', 'c2', [['a', 'pass'], ['b', 'pass']]),
 		testEvs('a', 'jest', 'bad', [['x', 'fail', { msg: 'm' }]])));
 	const line = c.q('.juneau-rv-clean-line');
-	expect(line && line.textContent.indexOf('2 suites') === 0 && line.querySelector('.juneau-rv-suite-sum').textContent === ' · 3 ✓ ▸', 'one line for clean suites: ' + (line && line.textContent));
+	expect(line?.textContent.indexOf('2 suites') === 0 && line.querySelector('.juneau-rv-suite-sum').textContent === ' · 3 ✓ ▸', 'one line for clean suites: ' + (line?.textContent));
 	expect(rowOf(c, 'c1') === undefined && toggleOf(c, 'bad').getAttribute('aria-expanded') === 'true', 'clean rows hidden, failing expanded');
 	click(c, line.querySelector('.juneau-rv-suite-toggle'));
 	expect(rowOf(c, 'c1') !== undefined && rowOf(c, 'c2') !== undefined, 'toggle reveals the clean rows');
@@ -960,13 +959,13 @@ test('cmp01_compactMode', function (t) {
 // @cases:golden
 
 function serialize(n) {
-	const keys = Object.keys(n.attrs || {}).filter(function (k) { return k !== 'class' && k !== 'id'; }).sort();
-	const cls = String(n.className || '').split(/\s+/).filter(Boolean).sort().join('.');
+	const keys = Object.keys(n.attrs || {}).filter(function (k) { return k !== 'class' && k !== 'id'; }).sort((a, b) => (a < b ? -1 : Number(a > b)));
+	const cls = String(n.className || '').split(/\s+/).filter(Boolean).sort((a, b) => (a < b ? -1 : Number(a > b))).join('.');
 	let s = n.tagName.toLowerCase() + (cls ? '.' + cls : '');
 	if (keys.length) s += '[' + keys.map(function (k) { return k + '=' + n.attrs[k]; }).join(',') + ']';
 	if (n.hidden === true) s += '(hidden)';
 	const els = n.childNodes.filter(function (c) { return c.nodeType === 1; });
-	return s + '{' + (els.length ? els.map(serialize).join('') : String(n.textContent || '').replace(/\n/g, '\\n')) + '}';
+	return s + '{' + (els.length ? els.map(serialize).join('') : String(n.textContent || '').replaceAll('\n', String.raw`\n`)) + '}';
 }
 
 function goldRun() {
@@ -979,12 +978,15 @@ function goldRun() {
 		{ ev: 'note', step: 'test', level: 'info', text: 'retried once', href: 'https://example.org/log' },
 		{ ev: 'end', id: 'test', status: 'fail', ms: 5300, exit: 1 }
 	];
-	for (let i = 0; i < 22; i++) e.push({ ev: 'test', step: 'test', fw: 'jest', suite: 'web.test.js', name: 'case ' + i, status: i === 7 ? 'fail' : i === 9 ? 'skip' : 'pass', ms: 10 + i,
-		msg: i === 7 ? 'expected 1\nreceived 2' : undefined, trace: i === 7 ? 'at web.test.js:7' : undefined, rawOffset: i + 1 });
+	for (let i = 0; i < 22; i++) {
+		let status = 'pass';
+		if (i === 7) status = 'fail';
+		else if (i === 9) status = 'skip';
+		e.push({ ev: 'test', step: 'test', fw: 'jest', suite: 'web.test.js', name: 'case ' + i, status: status, ms: 10 + i,
+			msg: i === 7 ? 'expected 1\nreceived 2' : undefined, trace: i === 7 ? 'at web.test.js:7' : undefined, rawOffset: i + 1 });
+	}
 	for (let i = 0; i < 6; i++) e.push({ ev: 'test', step: 'test', fw: 'jest', suite: 'api.test.js', name: 'api ' + i, status: 'pass' });
-	e.push({ ev: 'step', id: 'deploy', title: 'Deploy', n: 3, status: 'waiting' });
-	e.push({ ev: 'note', level: 'warn', text: 'run note' });
-	e.push({ ev: 'done', status: 'fail' });
+	e.push({ ev: 'step', id: 'deploy', title: 'Deploy', n: 3, status: 'waiting' }, { ev: 'note', level: 'warn', text: 'run note' }, { ev: 'done', status: 'fail' });
 	return e;
 }
 
@@ -1023,7 +1025,7 @@ test('gold03_replaceFlow', function (t) {
 
 test('gold04_idempotentAppend', function (t) {
 	const c = mkRun(t);
-	const evs = goldRun().map(function (e, i) { return Object.assign({ seq: i + 1 }, e); });
+	const evs = goldRun().map(function (e, i) { return { seq: i + 1, ...e }; });
 	c.send(evs);
 	const first = serialize(c.root());
 	c.send(evs);
@@ -1034,7 +1036,7 @@ test('gold04_idempotentAppend', function (t) {
 
 // @cases:attempts
 
-function attemptIds(c) { return c.all('.juneau-rv-step').filter(function (l) { return l.getAttribute('data-juneau-rv-attempt') === 'earlier'; }).map(function (l) { return l.getAttribute('data-step'); }); }
+function attemptIds(c) { return c.all('.juneau-rv-step').filter(function (l) { return l.dataset.juneauRvAttempt === 'earlier'; }).map(function (l) { return l.dataset.step; }); }
 function attemptToggle(c, id) { return c.step(id).querySelector('.juneau-rv-attempts-toggle'); }
 
 test('att01_groupingByIdAndTitle', function (t) {
@@ -1053,7 +1055,7 @@ test('att02_collapsedByDefaultWithToggle', function (t) {
 	const tg = attemptToggle(c, 'build.2');
 	expect(tg !== null && attemptToggle(c, 'build') === null, 'toggle on the latest attempt only');
 	expect(tg.querySelector('.juneau-rv-attempts-label').textContent === '1 earlier attempt', 'label: ' + tg.textContent);
-	expect(tg.getAttribute('aria-expanded') === 'false' && tg.getAttribute('data-juneau-rv-act') === 'toggle-attempts', 'collapsed');
+	expect(tg.getAttribute('aria-expanded') === 'false' && tg.dataset.juneauRvAct === 'toggle-attempts', 'collapsed');
 	const ul = c.step('build.2').querySelector('.juneau-rv-attempts');
 	expect(ul.hidden === true && attemptIds(c).join() === 'build', 'earlier attempt nested under the latest and hidden');
 	expect(c.root().querySelector('.juneau-rv-steps').children.length === 1, 'only the latest is a top-level step');
@@ -1117,11 +1119,11 @@ GOLD.replace = "section.juneau-rv[aria-label=Run,data-juneau-rv-status=fail,role
 			await c.fn(fresh());
 			out[c.name] = true;
 		} catch (e) {
-			out[c.name] = String((e && e.stack) || e);
+			out[c.name] = String((e?.stack) || e);
 		}
 	}
 	process.stdout.write(JSON.stringify(out));
 })().catch(function (e) {
-	process.stderr.write(String((e && e.stack) || e));
+	process.stderr.write(String((e?.stack) || e));
 	process.exit(1);
 });

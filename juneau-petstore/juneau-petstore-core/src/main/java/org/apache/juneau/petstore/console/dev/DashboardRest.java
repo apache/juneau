@@ -96,14 +96,16 @@ public class DashboardRest extends PetstoreConsolePage {
 	 * @throws IOException If the response can't be written.
 	 */
 	@RestGet(path="/series/{variant}")
+	@SuppressWarnings({
+		"java:S3776" // Branching is inherent to the demo source's variants.
+	})
 	public void series(RestRequest req, RestResponse res, @Path("variant") String variant, @Query("q") @Schema(aev=true) String q,
 			@Query("start") String start, @Query("end") String end, @Query("lateOnly") String lateOnly) throws IOException {
 		SERIES_REQUESTS.incrementAndGet();
 		if ("error".equals(variant))
 			throw new InternalServerError("The demo source failed on purpose (variant=error).");
 		var reasons = new HashSet<String>();
-		for (var p : req.getQueryParams().getAll("reasons"))
-			reasons.add(p.getValue());
+		req.getQueryParams().getAll("reasons").forEach(p -> reasons.add(p.getValue()));
 		var e = instant(end, LocalDate.now(ZoneOffset.UTC).plusDays(1).atStartOfDay(ZoneOffset.UTC).toInstant());
 		var s = instant(start, e.minus(Duration.ofDays(30)));
 		if (s.isBefore(e.minus(MAX_WINDOW)))

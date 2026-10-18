@@ -40,15 +40,18 @@ class CardBusAttrs_Test {
 	}
 
 	@Test void b01_hashWithoutTopic_isIae() {
-		var e1 = assertThrows(IllegalArgumentException.class, () -> CardBusAttrs.subscriptions("c", List.of(Map.of("as", "refresh"))));
+		var subs = List.of(Map.of("as", "refresh"));
+		var e1 = assertThrows(IllegalArgumentException.class, () -> CardBusAttrs.subscriptions("c", subs));
 		assertEquals("<@card id='c'> subscribes entry requires a topic", e1.getMessage());
-		var e2 = assertThrows(IllegalArgumentException.class, () -> CardBusAttrs.publications("c", List.of(Map.of("retain", true))));
+		var pubs = List.of(Map.of("retain", true));
+		var e2 = assertThrows(IllegalArgumentException.class, () -> CardBusAttrs.publications("c", pubs));
 		assertEquals("<@card id='c'> publishes entry requires a topic", e2.getMessage());
 	}
 
 	@Test void b02_nonBooleanRetain_isIae() {
+		var pubs = List.of(Map.of("topic", "t.x", "retain", 1));
 		var e = assertThrows(IllegalArgumentException.class,
-			() -> CardBusAttrs.publications("c", List.of(Map.of("topic", "t.x", "retain", 1))));
+			() -> CardBusAttrs.publications("c", pubs));
 		assertEquals("<@card id='c'> publishes entry retain must be a boolean (true or false); got '1'", e.getMessage());
 	}
 }

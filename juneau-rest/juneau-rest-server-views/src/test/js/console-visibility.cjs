@@ -53,7 +53,7 @@ function mountPage(contract) {
 	};
 	env.window.window = env.window;
 	env.window.document = doc;
-	vm.runInNewContext(shellSrc, sandbox, { filename: 'juneau-console.js' });
+	vm.runInNewContext(shellSrc, sandbox, { filename: 'juneau-console.js' }); // NOSONAR javascript:S1523 - loads the shipped script into a vm sandbox for the test
 	const JC = sandbox.window.JuneauConsole;
 	JC.registerCard('note', (card, el) => { el.textContent = 'note:' + card.id; });
 	const result = JC.mount(contract, { root: doc.body, document: doc });
@@ -63,29 +63,29 @@ function mountPage(contract) {
 const base = { contractVersion: '1', title: 'T', nav: [], activeNav: [] };
 const out = {};
 out.cases = corpus.map(function (c) {
-	const p = mountPage(Object.assign({}, base, { facts: c.facts, cards: [{ id: 'c1', type: 'note', visibleWhen: c.rules }] }));
+	const p = mountPage({ ...base, facts: c.facts, cards: [{ id: 'c1', type: 'note', visibleWhen: c.rules }] });
 	return { name: c.name, expected: c.expected, actual: !!p.result.cards.c1 };
 });
 
 {
-	const p = mountPage(Object.assign({}, base, { cards: [
+	const p = mountPage({ ...base, cards: [
 		{ id: 'plain', type: 'note' },
 		{ id: 'single', type: 'note', visibleWhen: { field: 'viewer.admin', op: 'eq', value: true } },
 		{ id: 'noFacts', type: 'note', visibleWhen: [{ field: 'viewer.admin', op: 'present' }] }
-	] }));
-	out.noFactsMounted = Object.keys(p.result.cards).sort();
+	] });
+	out.noFactsMounted = Object.keys(p.result.cards).sort((a, b) => (a < b ? -1 : Number(a > b)));
 	out.hiddenCardNotInMountedSet = !p.JC.cardApi || true;
 }
 {
-	const p = mountPage(Object.assign({}, base, { facts: { viewer: { admin: true } }, cards: [
+	const p = mountPage({ ...base, facts: { viewer: { admin: true } }, cards: [
 		{ id: 'single', type: 'note', visibleWhen: { field: 'viewer.admin', op: 'eq', value: true } }
-	] }));
+	] });
 	out.singleObjectMounted = Object.keys(p.result.cards);
 }
 {
-	const p = mountPage(Object.assign({}, base, { facts: { a: 1 }, cards: [
+	const p = mountPage({ ...base, facts: { a: 1 }, cards: [
 		{ id: 'bad', type: 'note', visibleWhen: [{ field: 'a', op: 'bogus' }] }
-	] }));
+	] });
 	out.unknownOpMounted = Object.keys(p.result.cards);
 	out.unknownOpLogged = p.errors.some(e => e.includes('unknown op'));
 }

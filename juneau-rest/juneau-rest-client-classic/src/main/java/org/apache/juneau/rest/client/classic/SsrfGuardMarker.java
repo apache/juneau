@@ -68,10 +68,15 @@ final class SsrfGuardMarker {
 	 * @throws SsrfGuardConnectionManager.GuardRefusedException If a guarded {@link RestRequest} created the request but
 	 * 	the context lacks the marker.
 	 */
+	@SuppressWarnings({
+		"resource" // RestRequest is only inspected here; its lifecycle belongs to the caller.
+	})
 	static boolean isGuarded(HttpRequest request, HttpContext context) {
 		if (nn(context) && Boolean.TRUE.equals(context.getAttribute(ATTRIBUTE)))
 			return true;
-		var r = nn(request) ? request : nn(context) ? (HttpRequest)context.getAttribute(HttpCoreContext.HTTP_REQUEST) : null;
+		var r = request;
+		if (r == null && nn(context))
+			r = (HttpRequest)context.getAttribute(HttpCoreContext.HTTP_REQUEST);
 		while (r instanceof HttpRequestWrapper w)
 			r = w.getOriginal();
 		if (r instanceof RestRequestCreated c && nn(c.getRestRequest()) && c.getRestRequest().isSsrfGuarded())

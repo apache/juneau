@@ -41,6 +41,9 @@ import freemarker.template.*;
  *
  * @since 10.0.0
  */
+@SuppressWarnings({
+	"java:S1192" // Repeated literals are contract wire keys; named constants would obscure the contract shape.
+})
 public final class TopicDirectiveModel implements TemplateDirectiveModel {
 
 	/** The shared-variable name this directive registers under. */

@@ -110,7 +110,7 @@ class MissingRequiredProperty_Formats_Test extends TestBase {
 		assertThrows(MissingRequiredPropertyException.class, () -> CsvParser.DEFAULT.read(in, List.class, A.class));
 	}
 
-	@Test void b02_openApi() throws Exception {
+	@Test void b02_openApi() {
 		assertThrows(MissingRequiredPropertyException.class, () -> OpenApiParser.DEFAULT.read("age=7", A.class));
 	}
 

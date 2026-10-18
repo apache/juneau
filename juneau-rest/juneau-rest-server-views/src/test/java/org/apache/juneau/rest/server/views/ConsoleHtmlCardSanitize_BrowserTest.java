@@ -132,7 +132,7 @@ class ConsoleHtmlCardSanitize_BrowserTest extends TestBase {
 		assertTrue(((List<?>)p.get("attrs")).contains("A:href,title"), () -> "allowlisted href/title survive: " + p);
 		assertEquals("Frag", p.get("title"), () -> "sanitized paint must not clear the card title: " + p);
 		var b = probe(benignReport.get("on"));
-		assertEquals(List.of("P", "B", "TABLE", "TBODY", "TR", "TD", "TD", "A"), b.get("tags"), () -> b.toString());
+		assertEquals(List.of("P", "B", "TABLE", "TBODY", "TR", "TD", "TD", "A"), b.get("tags"), b::toString);
 	}
 
 	@Test void a03_flagAbsent_fragmentIsInsertedAsServed() {

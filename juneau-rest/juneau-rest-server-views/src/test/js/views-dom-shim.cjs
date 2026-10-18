@@ -50,7 +50,7 @@ function compileSelector(selector) {
 	return String(selector).split(',').map(function (part) {
 		const s = parseSimple(part);
 		return function (n) {
-			if (!n || n.nodeType !== 1) return false;
+			if (n?.nodeType !== 1) return false;
 			if (s.tag && n.tagName !== s.tag) return false;
 			if (s.cls && (' ' + (n.className || '') + ' ').indexOf(' ' + s.cls + ' ') < 0) return false;
 			if (s.attr) {

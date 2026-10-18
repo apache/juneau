@@ -19,7 +19,7 @@ package org.apache.juneau.rest.server.view.freemarker.console;
 import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.util.*;
-import java.util.function.Function;
+import java.util.function.UnaryOperator;
 
 import org.apache.juneau.rest.server.*;
 import org.apache.juneau.rest.server.console.*;
@@ -83,6 +83,9 @@ import freemarker.template.*;
  *
  * @since 10.0.0
  */
+@SuppressWarnings({
+	"java:S3776" // Validation and rendering chains many independent guards; splitting them adds no clarity.
+})
 public class ConsoleFreemarkerMixin extends FreemarkerMixin {
 
 	static {
@@ -294,7 +297,7 @@ public class ConsoleFreemarkerMixin extends FreemarkerMixin {
 		final List<ToolkitPack> extraPacks = new ArrayList<>();
 		final List<String> providedPacks = new ArrayList<>();
 		final List<String> requiredPacks = new ArrayList<>();
-		Function<String,String> webJarProbe = WebJarResolver::resolvePath;
+		UnaryOperator<String> webJarProbe = WebJarResolver::resolvePath;
 		final CardRequirements.Builder cardRequirements = CardRequirements.create();
 		final CardTypeRegistry.Builder cardTypes = CardTypeRegistry.standard().copy();
 		boolean devMode = Boolean.getBoolean("juneau.console.devMode");
@@ -390,7 +393,7 @@ public class ConsoleFreemarkerMixin extends FreemarkerMixin {
 		}
 
 		// Package-private: tests simulate an absent WebJar (the jar is on every test classpath).
-		Builder webJarProbe(Function<String,String> probe) {
+		Builder webJarProbe(UnaryOperator<String> probe) {
 			webJarProbe = rnn(probe);
 			return this;
 		}

@@ -46,7 +46,8 @@ class RibbonItem_Bus_Test extends TestBase {
 	}
 
 	@Test void b01_target_notAccepted() {
-		var e = assertThrows(IllegalArgumentException.class, () -> RibbonItem.dialog("add").target("tasks").toMap());
+		var target2 = RibbonItem.dialog("add").target("tasks");
+		var e = assertThrows(IllegalArgumentException.class, target2::toMap);
 		assertEquals("RibbonItem dialog 'add' does not accept 'target'.", e.getMessage());
 	}
 
@@ -57,7 +58,8 @@ class RibbonItem_Bus_Test extends TestBase {
 	}
 
 	@Test void b03_target_badId() {
-		var e = assertThrows(IllegalArgumentException.class, () -> RibbonItem.refresh().target("1x"));
+		var target3 = RibbonItem.refresh();
+		var e = assertThrows(IllegalArgumentException.class, () -> target3.target("1x"));
 		assertEquals("RibbonItem target '1x' must match ^[A-Za-z][A-Za-z0-9_-]{0,63}$.", e.getMessage());
 	}
 
@@ -69,7 +71,8 @@ class RibbonItem_Bus_Test extends TestBase {
 	}
 
 	@Test void b05_publish_rejectsTarget() {
-		var e = assertThrows(IllegalArgumentException.class, () -> RibbonItem.publish("T", "app.x", null).target("tasks").toMap());
+		var target4 = RibbonItem.publish("T", "app.x", null).target("tasks");
+		var e = assertThrows(IllegalArgumentException.class, target4::toMap);
 		assertTrue(e.getMessage().endsWith("does not accept 'target'."), e.getMessage());
 	}
 }

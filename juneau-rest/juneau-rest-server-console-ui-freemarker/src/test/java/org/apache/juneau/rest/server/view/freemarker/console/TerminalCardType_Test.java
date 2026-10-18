@@ -30,7 +30,9 @@ class TerminalCardType_Test extends TestBase {
 		var b = CardSource.create("terminal", "build");
 		if (body != null)
 			b.body(body);
-		return assertThrows(IllegalArgumentException.class, () -> new TerminalCardType().toFragment(b.build()));
+		var target = new TerminalCardType();
+		var arg = b.build();
+		return assertThrows(IllegalArgumentException.class, () -> target.toFragment(arg));
 	}
 
 	@Test void a01_minimal() {

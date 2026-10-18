@@ -78,8 +78,8 @@ const out = {};
 		senderKey: bus.FRAMEWORK_SENDER_KEY,
 		missingFunctions: ['publish', 'subscribe', 'get', 'declare', 'clear', 'topics', 'trace', 'history', 'owner',
 			'claim', 'onError'].filter(function (k) { return typeof bus[k] !== 'function'; }),
-		util: Object.keys(bus.util).sort(),
-		timers: Object.keys(bus.config.timers).sort(),
+		util: Object.keys(bus.util).sort((a, b) => (a < b ? -1 : Number(a > b))),
+		timers: Object.keys(bus.config.timers).sort((a, b) => (a < b ? -1 : Number(a > b))),
 		namespaceKeys: Object.keys(env.window.JuneauViews),
 		busError: { name: e.name, code: e.code, message: e.message, topic: e.detail.topic, hasStack: typeof e.stack === 'string' },
 		reloadKeepsInstance: loadScripts([busJsPath], env).NS.bus === bus
@@ -187,7 +187,7 @@ const out = {};
 	cyc.self = cyc;
 	const cases = {
 		fn: { f: function () {} }, undef: { u: undefined }, dom: { el: env.el('div') }, cycle: cyc,
-		nan: { n: NaN }, inf: [Infinity], symbol: { s: Symbol('x') }, top: undefined
+		nan: { n: Number.NaN }, inf: [Infinity], symbol: { s: Symbol('x') }, top: undefined
 	};
 	let delivered = 0;
 	bus.subscribe('app.x', function () { delivered++; });
@@ -212,7 +212,7 @@ const out = {};
 	out.t08 = {
 		deepFrozen: [rec, rec.a, rec.a.b, rec.a.b[1]].every(function (o) { return Object.isFrozen(o); }),
 		copied: rec !== original, originalFrozen: Object.isFrozen(original),
-		mutationName: mutation && mutation.name, value: rec.a.b[1].c, sameInstanceForAll: recs[0] === recs[1]
+		mutationName: mutation?.name, value: rec.a.b[1].c, sameInstanceForAll: recs[0] === recs[1]
 	};
 }
 
@@ -258,7 +258,7 @@ const out = {};
 		first: first, deliveries: deliveries,
 		trueReturns: returns.filter(function (r) { return r === true; }).length,
 		falseReturns: returns.filter(function (r) { return r === false; }).length,
-		lastReturn: returns[returns.length - 1],
+		lastReturn: returns.at(-1),
 		capErrors: cap.length, message: cap.length ? cap[0].message : null,
 		from: cap.length ? cap[0].from : null, paintOn: cap.length ? cap[0].paintOn : null,
 		dropped: bus.history().filter(function (h) { return h.dropped; }).length,
@@ -319,7 +319,7 @@ const out = {};
 	bus.publish('ssc.focus:triage', { v: 1 });
 	const late = [];
 	bus.subscribe('ssc.focus:triage', function (p) { late.push(p.v); });
-	const entry = bus.topics().filter(function (t) { return t.topic === 'app.x'; })[0];
+	const entry = bus.topics().find(function (t) { return t.topic === 'app.x'; });
 	out.t14 = {
 		conflict: conflict, framework: framework, frameworkOk: frameworkOk, patternConflict: patternConflict,
 		patternRetained: late, badOpts: thrown(function () { bus.declare('app.y', {}); }).name,
@@ -336,7 +336,7 @@ const out = {};
 	const late = [];
 	bus.subscribe('app.u', function (p) { late.push(p); });
 	out.t15 = { live: live, late: late.length,
-		entry: J(bus.topics().filter(function (t) { return t.topic === 'app.u'; })[0]) };
+		entry: J(bus.topics().find(function (t) { return t.topic === 'app.u'; })) };
 }
 
 // --- t16: self-echo suppression for owner-bound subscriptions -----------------------------------------------------------
@@ -359,12 +359,12 @@ const out = {};
 	const { bus } = fresh();
 	for (let i = 0; i < 300; i++) bus.publish('app.h', { i: i });
 	const h = bus.history();
-	const head = { length: h.length, firstSeq: h[0].seq, lastSeq: h[h.length - 1].seq, keys: Object.keys(h[0]).sort(),
-		frozen: Object.isFrozen(h[0]), size: h[h.length - 1].size, copy: bus.history() !== h };
+	const head = { length: h.length, firstSeq: h[0].seq, lastSeq: h.at(-1).seq, keys: Object.keys(h[0]).sort((a, b) => (a < b ? -1 : Number(a > b))),
+		frozen: Object.isFrozen(h[0]), size: h.at(-1).size, copy: bus.history() !== h };
 	bus.declare('app.r', { retain: true });
 	bus.publish('app.r', { a: 1 });
 	bus.publish('app.r', { a: 1 });
-	const last = bus.history().slice(-1)[0];
+	const last = bus.history().at(-1);
 	out.t17 = Object.assign(head, { lastSuppressed: last.suppressed, lastSeqAfter: last.seq });
 }
 
@@ -385,17 +385,15 @@ const out = {};
 }
 
 // --- t19: the trace's enabling flags ------------------------------------------------------------------------------------
-{
-	out.t19 = {
-		viaStorage: fresh(function (env) { env.window.localStorage.setItem('juneau-bus-trace', '1'); }).bus.trace(),
-		viaUrl: fresh(function (env) { env.window.location = { search: '?x=1&juneau-bus-trace' }; }).bus.trace(),
-		otherValue: fresh(function (env) { env.window.localStorage.setItem('juneau-bus-trace', '0'); }).bus.trace(),
-		off: fresh().bus.trace(),
-		blockedStorage: fresh(function (env) {
-			env.window.localStorage = { getItem: function () { throw new Error('blocked'); } };
-		}).bus.trace()
-	};
-}
+out.t19 = {
+	viaStorage: fresh(function (env) { env.window.localStorage.setItem('juneau-bus-trace', '1'); }).bus.trace(),
+	viaUrl: fresh(function (env) { env.window.location = { search: '?x=1&juneau-bus-trace' }; }).bus.trace(),
+	otherValue: fresh(function (env) { env.window.localStorage.setItem('juneau-bus-trace', '0'); }).bus.trace(),
+	off: fresh().bus.trace(),
+	blockedStorage: fresh(function (env) {
+		env.window.localStorage = { getItem: function () { throw new Error('blocked'); } };
+	}).bus.trace()
+};
 
 // --- t20: error sinks ------------------------------------------------------------------------------------------------
 {

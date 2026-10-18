@@ -26,7 +26,6 @@ import java.util.*;
 import java.util.function.*;
 
 import org.apache.juneau.*;
-import org.apache.juneau.rest.server.filter.CsrfBoundary_Test.*;
 import org.junit.jupiter.api.*;
 
 import jakarta.servlet.*;
@@ -72,6 +71,7 @@ class CsrfBoundaryChain_Test extends TestBase {
 	}
 
 	/** A response that keeps the headers it is given the way a container does, and swallows the body. */
+	@SuppressWarnings("resource") // The stub output stream is returned from the mocked response and holds nothing to close.
 	private static HttpServletResponse response(Map<String,String> headers) throws IOException {
 		var res = mock(HttpServletResponse.class);
 		doAnswer(x -> headers.put(x.getArgument(0), x.getArgument(1))).when(res).setHeader(anyString(), anyString());

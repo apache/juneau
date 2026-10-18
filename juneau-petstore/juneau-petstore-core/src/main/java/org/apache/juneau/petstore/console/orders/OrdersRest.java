@@ -22,7 +22,6 @@ import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 
-import org.apache.juneau.commons.bean.*;
 import org.apache.juneau.commons.beanquery.*;
 import org.apache.juneau.commons.Schema;
 import org.apache.juneau.http.*;
@@ -60,7 +59,8 @@ import org.apache.juneau.rest.server.widgets.*;
  */
 @Rest(path="/orders", title="Orders")
 @SuppressWarnings({
-	"java:S110" // Inheritance depth comes from the BasicRestServlet hierarchy, not this page.
+	"java:S110", // Inheritance depth comes from the BasicRestServlet hierarchy, not this page.
+	"java:S1192" // Route paths and field names repeat as inline literals by design.
 })
 public class OrdersRest extends PetstoreConsolePage {
 

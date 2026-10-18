@@ -42,7 +42,7 @@ function fresh() {
 	bus.config.timers = clock.timers;
 	const errors = [];
 	bus.onError(function (e) {
-		errors.push({ code: e.code, message: e.message, banner: !!(e.detail && e.detail.banner), from: e.detail ? e.detail.from : null });
+		errors.push({ code: e.code, message: e.message, banner: !!(e.detail?.banner), from: e.detail ? e.detail.from : null });
 	});
 	['app.a', 'app.b'].forEach(function (t) { bus.declare(t, { retain: true }); });
 	['app.ev', 'app.up'].forEach(function (t) { bus.declare(t, { retain: false }); });
@@ -60,22 +60,20 @@ function watch(bus, id) {
 
 /** A hand-driven source: the harness calls src.ctx.* to play the server. */
 function manual(id, extra) {
-	const src = Object.assign({
-		id: id, downstream: ['app.a', 'app.b', 'app.ev', 'ns.items:*', 'cmd:t1'],
+	const src = { id: id, downstream: ['app.a', 'app.b', 'app.ev', 'ns.items:*', 'cmd:t1'],
 		connects: 0, closes: 0, sent: [], ctx: null,
 		connect: function (ctx) {
 			src.connects++;
 			src.ctx = ctx;
 			return { close: function () { src.closes++; }, send: function (f) { src.sent.push(f); } };
-		}
-	}, extra || {});
+		}, ...extra || {} };
 	return src;
 }
 
 function open(src) { src.ctx.resyncBegin(); src.ctx.resyncEnd(); }
-function drop(src, info) { src.ctx.state('closed', Object.assign({ retryable: true }, info || {})); }
+function drop(src, info) { src.ctx.state('closed', { retryable: true, ...info || {} }); }
 function codes(errors) { return errors.map(function (e) { return e.code; }); }
-function last(seen) { return seen[seen.length - 1]; }
+function last(seen) { return seen.at(-1); }
 
 const out = {};
 

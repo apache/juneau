@@ -423,7 +423,7 @@ function envelope(NS, extra) {
 			return { allow: allow == null ? null : allow, text: h2.textContent };
 		}
 		function det(extra) {
-			return Object.assign({ contractVersion: NS.ROW_DETAIL_CONTRACT_VERSION, endpoint: '/o/{id}' }, extra);
+			return { contractVersion: NS.ROW_DETAIL_CONTRACT_VERSION, endpoint: '/o/{id}', ...extra };
 		}
 		const hdr = await titleFor(det({ title: 'Order {id}' }), { id: '42', secret: 'leak' });
 		out.tf_headerOnlyRendersId = hdr.text === 'Order 42';

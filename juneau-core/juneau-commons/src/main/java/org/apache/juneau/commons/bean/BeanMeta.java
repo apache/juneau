@@ -1540,8 +1540,8 @@ public class BeanMeta<T> {
 
 	// Package-private seam so tests can force setAccessible() to report failure.
 	static ConstructorInfo makeRecordConstructorAccessible(ClassInfo ci, ConstructorInfo rcon, Predicate<ConstructorInfo> accessor) {
-		// Always attempt setAccessible (a public record nested in a non-public class still needs it);
-		// only fail loudly when the record is not effectively public.
+		// Always attempt to make the constructor accessible, since a public record nested in a non-public class still needs it.
+		// Only fail loudly when the record is not effectively public.
 		var ok = accessor.test(rcon);
 		if (! ok && ! (rcon.isPublic() && isEffectivelyPublic(ci))) {
 			var pkg = ci.getPackage() == null ? "" : ci.getPackage().getName();

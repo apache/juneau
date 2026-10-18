@@ -24,79 +24,31 @@ import org.apache.juneau.rest.server.runreport.RunEvent.*;
 
 /**
  * What a {@link ReportReader} recovered from a report.
+ *
+ * @param fw The framework key.
+ * @param tests The recovered tests, in report order.
+ * @param warnings Human-readable warnings, for example <c>report truncated: unexpected end of file after 4120 tests</c>.
+ * @param truncated Whether the file ended early or the test limit was hit.
+ * @param skippedFiles The number of files that were not read (over the size limit, unreadable).
  */
-public final class ReportResult {
+public record ReportResult(String fw, List<ReportTest> tests, List<String> warnings, boolean truncated, int skippedFiles) {
 
 	private static final String UNNAMED = "(unnamed)";
-
-	private final String fw;
-	private final List<ReportTest> tests;
-	private final List<String> warnings;
-	private final boolean truncated;
-	private final int skippedFiles;
 
 	/**
 	 * Constructor.
 	 *
 	 * @param fw The framework key.
 	 * @param tests The recovered tests.
-	 * @param warnings Human-readable warnings, for example <c>report truncated: unexpected end of file after 4120 tests</c>.
+	 * @param warnings Human-readable warnings.
 	 * @param truncated Whether the file ended early or the test limit was hit.
-	 * @param skippedFiles The number of files that were not read (over the size limit, unreadable).
+	 * @param skippedFiles The number of files that were not read.
 	 */
-	public ReportResult(String fw, List<ReportTest> tests, List<String> warnings, boolean truncated, int skippedFiles) {
+	public ReportResult {
 		if (! RunViewChecks.isFw(fw))
 			throw iaex("ReportResult fw must match ^[a-z0-9][a-z0-9._-]{0,31}$; got '%s'.", fw);
-		this.fw = fw;
-		this.tests = List.copyOf(tests);
-		this.warnings = List.copyOf(warnings);
-		this.truncated = truncated;
-		this.skippedFiles = skippedFiles;
-	}
-
-	/**
-	 * Returns the framework key.
-	 *
-	 * @return The key.
-	 */
-	public String fw() {
-		return fw;
-	}
-
-	/**
-	 * Returns the recovered tests.
-	 *
-	 * @return An unmodifiable list, in report order.
-	 */
-	public List<ReportTest> tests() {
-		return tests;
-	}
-
-	/**
-	 * Returns the warnings.
-	 *
-	 * @return An unmodifiable list.
-	 */
-	public List<String> warnings() {
-		return warnings;
-	}
-
-	/**
-	 * Returns whether the file ended early or the test limit was hit.
-	 *
-	 * @return <jk>true</jk> if so.
-	 */
-	public boolean truncated() {
-		return truncated;
-	}
-
-	/**
-	 * Returns the number of files that were not read.
-	 *
-	 * @return The count.
-	 */
-	public int skippedFiles() {
-		return skippedFiles;
+		tests = List.copyOf(tests);
+		warnings = List.copyOf(warnings);
 	}
 
 	/**
@@ -114,10 +66,8 @@ public final class ReportResult {
 		var out = new ArrayList<RunEvent>();
 		if (! (tests.isEmpty() && ! warnings.isEmpty()))
 			out.add(RunEvent.replace(step));
-		for (var t : tests)
-			out.add(toEvent(step, t));
-		for (var w : warnings)
-			out.add(RunEvent.note(Level.WARN, clip(w, RunEvent.MAX_NOTE)).withStep(step));
+		out.addAll(tests.stream().map(t -> toEvent(step, t)).toList());
+		out.addAll(warnings.stream().map(w -> RunEvent.note(Level.WARN, clip(w, RunEvent.MAX_NOTE)).withStep(step)).toList());
 		return out;
 	}
 

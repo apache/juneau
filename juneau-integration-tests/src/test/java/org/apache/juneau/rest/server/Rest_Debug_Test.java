@@ -49,7 +49,7 @@ class Rest_Debug_Test extends TestBase {
 		MockRestClient.buildJson5(A.class).get("/a").run().assertContent("false");
 	}
 
-	@Test void a02_isDebugTrueWhenLoggerRaised() throws Exception {
+	@Test void a02_isDebugTrueWhenLoggerRaised() {
 		// debug() raises the resource-class logger to FINEST → loggable at FINE → isDebug() true.
 		var records = LogRecordCapture.quietly(RestClient.class, () -> {
 			try {

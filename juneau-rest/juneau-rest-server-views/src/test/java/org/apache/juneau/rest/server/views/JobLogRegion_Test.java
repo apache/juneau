@@ -91,12 +91,14 @@ class JobLogRegion_Test extends TestBase {
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Test void b01_fromMap_unknownKey() {
-		var e = assertThrows(IllegalArgumentException.class, () -> JobLogRegion.fromMap("r", json("{colour:'red'}")));
+		var arg = json("{colour:'red'}");
+		var e = assertThrows(IllegalArgumentException.class, () -> JobLogRegion.fromMap("r", arg));
 		assertEquals("JobLogRegion 'r' unknown key 'colour'; allowed: [submit, detail, height, clearOnSubmit, output].", e.getMessage());
 	}
 
 	@Test void b02_fromMap_urlParam_hasItsOwnRefusal() {
-		var e = assertThrows(IllegalArgumentException.class, () -> JobLogRegion.fromMap("r", json("{urlParam:'job'}")));
+		var arg2 = json("{urlParam:'job'}");
+		var e = assertThrows(IllegalArgumentException.class, () -> JobLogRegion.fromMap("r", arg2));
 		assertEquals("JobLogRegion 'r' urlParam is not allowed in a row-detail region; a page reload does not reattach.", e.getMessage());
 	}
 

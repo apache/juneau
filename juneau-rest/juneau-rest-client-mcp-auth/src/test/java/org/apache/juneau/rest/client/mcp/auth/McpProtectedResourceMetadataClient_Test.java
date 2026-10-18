@@ -208,7 +208,8 @@ class McpProtectedResourceMetadataClient_Test extends TestBase {
 	@Test void e01_httpTimeoutMustBePositive() {
 		var b = McpProtectedResourceMetadataClient.create();
 		assertThrows(IllegalArgumentException.class, () -> b.httpTimeout(Duration.ZERO));
-		assertThrows(IllegalArgumentException.class, () -> b.httpTimeout(Duration.ofSeconds(-1)));
+		var negative = Duration.ofSeconds(-1);
+		assertThrows(IllegalArgumentException.class, () -> b.httpTimeout(negative));
 		assertDoesNotThrow(() -> b.httpTimeout(Duration.ofSeconds(3)));
 	}
 

@@ -19,7 +19,6 @@ package org.apache.juneau.rest.server.bus.websocket;
 import java.security.*;
 import java.util.*;
 
-import org.apache.juneau.*;
 import org.apache.juneau.marshall.collections.*;
 import org.apache.juneau.marshall.json.JsonParser;
 import org.apache.juneau.marshall.marshaller.*;

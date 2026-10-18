@@ -93,7 +93,7 @@ class ToolkitPackRegistry_Test extends TestBase {
 			"juneau-ribbon.js", "juneau-views.js", "juneau-config.js", "juneau-regions.js",
 			"juneau-run-view.js", "juneau-helpers.js");
 		// The bus is the very first runtime JS entry.
-		assertTrue(r.runtimeJs().get(0).toString().contains("juneau-bus.js"), () -> r.runtimeJs().toString());
+		assertTrue(r.runtimeJs().get(0).contains("juneau-bus.js"), () -> r.runtimeJs().toString());
 		assertEmpty(r.vendorCss());
 		assertEmpty(r.vendorJs());
 	}
@@ -118,7 +118,9 @@ class ToolkitPackRegistry_Test extends TestBase {
 	@Test void a05_unknownRequested_namesSource() throws Exception {
 		var reg = new ToolkitPackRegistry();
 		var req = dummyRequest();
-		var e = assertThrows(IllegalArgumentException.class, () -> reg.resolve(List.of("nope"), req, List.of(), ""));
+		var arg = List.of("nope");
+		List<String> noPageUrls = List.of();
+		var e = assertThrows(IllegalArgumentException.class, () -> reg.resolve(arg, req, noPageUrls, ""));
 		assertString("Unknown toolkit pack 'nope' (requested).", e.getMessage());
 	}
 
@@ -185,8 +187,9 @@ class ToolkitPackRegistry_Test extends TestBase {
 	}
 
 	@Test void a13_checkWebJars_absentEcharts_isE70() {
-		var e = assertThrows(IllegalStateException.class, () -> new ToolkitPackRegistry().checkWebJars(List.of("charts"),
-			a -> { throw new IllegalStateException("needs org.webjars.npm:echarts on the classpath (no META-INF/maven/org.webjars.npm/echarts/pom.properties)."); }));
+		var target = new ToolkitPackRegistry();
+		var arg2 = List.of("charts");
+		var e = assertThrows(IllegalStateException.class, () -> target.checkWebJars(arg2, a -> { throw new IllegalStateException("needs org.webjars.npm:echarts on the classpath (no META-INF/maven/org.webjars.npm/echarts/pom.properties)."); }));
 		assertContains("E-70: chart cards need the ECharts WebJar org.webjars.npm:echarts, which is not on the classpath; add it to the application's pom (version property 'webjars-echarts.version')", e.getMessage());
 	}
 
@@ -205,35 +208,42 @@ class ToolkitPackRegistry_Test extends TestBase {
 			.resolver((req, path) -> { throw new IllegalStateException("needs WebJar file 'echarts/6.1.0/dist/echarts.min.js' (org.webjars.npm:echarts:6.1.0), which is not on the classpath."); })
 			.js(ToolkitPackRegistry.ECHARTS_JS_ASSET).build());
 		var req = dummyRequest();
-		var e = assertThrows(IllegalStateException.class, () -> reg.resolve(List.of("charts"), req, List.of(), "t.ftlh"));
+		var arg3 = List.of("charts");
+		List<String> noPageUrls2 = List.of();
+		var e = assertThrows(IllegalStateException.class, () -> reg.resolve(arg3, req, noPageUrls2, "t.ftlh"));
 		assertContains("E-70: chart cards need the ECharts WebJar org.webjars.npm:echarts, which is not on the classpath; add it to the application's pom (version property 'webjars-echarts.version')", e.getMessage());
 	}
 
 	@Test void a17_e70_appendsCauseMessage_soJarAbsentAndFileMissingDiffer() {
-		var absent = assertThrows(IllegalStateException.class, () -> new ToolkitPackRegistry().checkWebJars(List.of("charts"),
-			a -> { throw new IllegalStateException("needs org.webjars.npm:echarts on the classpath (no META-INF/maven/org.webjars.npm/echarts/pom.properties)."); }));
-		var missingFile = assertThrows(IllegalStateException.class, () -> new ToolkitPackRegistry().checkWebJars(List.of("charts"),
-			a -> { throw new IllegalStateException("needs WebJar file 'echarts/6.1.0/dist/echarts.min.js' (org.webjars.npm:echarts:6.1.0), which is not on the classpath."); }));
+		var target2 = new ToolkitPackRegistry();
+		var arg4 = List.of("charts");
+		var absent = assertThrows(IllegalStateException.class, () -> target2.checkWebJars(arg4, a -> { throw new IllegalStateException("needs org.webjars.npm:echarts on the classpath (no META-INF/maven/org.webjars.npm/echarts/pom.properties)."); }));
+		var target3 = new ToolkitPackRegistry();
+		var arg5 = List.of("charts");
+		var missingFile = assertThrows(IllegalStateException.class, () -> target3.checkWebJars(arg5, a -> { throw new IllegalStateException("needs WebJar file 'echarts/6.1.0/dist/echarts.min.js' (org.webjars.npm:echarts:6.1.0), which is not on the classpath."); }));
 		assertContains("[needs org.webjars.npm:echarts on the classpath (no META-INF/maven/org.webjars.npm/echarts/pom.properties).]", absent.getMessage());
 		assertContains("[needs WebJar file 'echarts/6.1.0/dist/echarts.min.js' (org.webjars.npm:echarts:6.1.0), which is not on the classpath.]", missingFile.getMessage());
-		assertFalse(absent.getMessage().equals(missingFile.getMessage()));
+		assertNotEquals(absent.getMessage(), missingFile.getMessage());
 	}
 
 	@Test void a19_e70Pack_appendsCauseMessage() {
-		var e = assertThrows(IllegalStateException.class, () -> new ToolkitPackRegistry().checkWebJars(List.of("echarts-gl"),
-			a -> { if (a.contains(":echarts-gl:")) throw new IllegalStateException("needs org.webjars.npm:echarts-gl on the classpath (no pom)."); return a; }));
+		var target4 = new ToolkitPackRegistry();
+		var arg6 = List.of("echarts-gl");
+		var e = assertThrows(IllegalStateException.class, () -> target4.checkWebJars(arg6, a -> { if (a.contains(":echarts-gl:")) throw new IllegalStateException("needs org.webjars.npm:echarts-gl on the classpath (no pom)."); return a; }));
 		assertTrue(e.getMessage().endsWith(" [needs org.webjars.npm:echarts-gl on the classpath (no pom).]"), e.getMessage());
 	}
 
 	@Test void a20_e70_nullCauseMessage_hasNoSuffix() {
-		var e = assertThrows(IllegalStateException.class, () -> new ToolkitPackRegistry().checkWebJars(List.of("charts"),
-			a -> { throw new IllegalStateException((String)null); }));
+		var target5 = new ToolkitPackRegistry();
+		var arg7 = List.of("charts");
+		var e = assertThrows(IllegalStateException.class, () -> target5.checkWebJars(arg7, a -> { throw new IllegalStateException((String)null); }));
 		assertEquals("E-70: " + ToolkitPackRegistry.E70, e.getMessage());
 	}
 
 	@Test void a18_e70Pack_echartsGl_namesVersionProperty() {
-		var e = assertThrows(IllegalStateException.class, () -> new ToolkitPackRegistry().checkWebJars(List.of("echarts-gl"),
-			a -> { if (a.contains(":echarts-gl:")) throw new IllegalStateException("x"); return a; }));
+		var target6 = new ToolkitPackRegistry();
+		var arg8 = List.of("echarts-gl");
+		var e = assertThrows(IllegalStateException.class, () -> target6.checkWebJars(arg8, a -> { if (a.contains(":echarts-gl:")) throw new IllegalStateException("x"); return a; }));
 		assertContains("E-70: toolkit pack 'echarts-gl' needs the WebJar org.webjars.npm:echarts-gl, which is not on the classpath; add it to the application's pom (version property 'webjars-echarts-gl.version')", e.getMessage());
 	}
 
@@ -283,7 +293,9 @@ class ToolkitPackRegistry_Test extends TestBase {
 		var reg = new ToolkitPackRegistry();
 		reg.register(pack("x", VENDOR, "/x.js", "ghost"));
 		var req = dummyRequest();
-		var e = assertThrows(IllegalArgumentException.class, () -> reg.resolve(List.of("x"), req, List.of(), ""));
+		var arg9 = List.of("x");
+		List<String> noPageUrls3 = List.of();
+		var e = assertThrows(IllegalArgumentException.class, () -> reg.resolve(arg9, req, noPageUrls3, ""));
 		assertString("Unknown toolkit pack 'ghost' (dependsOn of pack 'x').", e.getMessage());
 	}
 
@@ -300,7 +312,9 @@ class ToolkitPackRegistry_Test extends TestBase {
 		reg.register(pack("a", VENDOR, "/a.js", "b"));
 		reg.register(pack("b", VENDOR, "/b.js", "a"));
 		var req = dummyRequest();
-		var e = assertThrows(IllegalArgumentException.class, () -> reg.resolve(List.of("b"), req, List.of(), ""));
+		var arg10 = List.of("b");
+		List<String> noPageUrls4 = List.of();
+		var e = assertThrows(IllegalArgumentException.class, () -> reg.resolve(arg10, req, noPageUrls4, ""));
 		assertString("Toolkit pack cycle: b → a → b.", e.getMessage());
 	}
 
@@ -349,7 +363,8 @@ class ToolkitPackRegistry_Test extends TestBase {
 	@Test void b14_requireKnown_namesSource() {
 		var reg = new ToolkitPackRegistry();
 		reg.requireKnown(List.of(ToolkitPackRegistry.PACK_VIEWS), "<@page toolkit=>");
-		var e = assertThrows(IllegalArgumentException.class, () -> reg.requireKnown(List.of("views", "nope"), "<@page toolkit=>"));
+		var arg11 = List.of("views", "nope");
+		var e = assertThrows(IllegalArgumentException.class, () -> reg.requireKnown(arg11, "<@page toolkit=>"));
 		assertString("Unknown toolkit pack 'nope' (<@page toolkit=>).", e.getMessage());
 	}
 
@@ -357,7 +372,9 @@ class ToolkitPackRegistry_Test extends TestBase {
 		var reg = new ToolkitPackRegistry();
 		reg.register(ToolkitPack.create("p").kind(VENDOR).js("x").resolver((req, path) -> { throw new IllegalStateException("needs org.example:p on the classpath."); }).build());
 		var req = dummyRequest();
-		var e = assertThrows(IllegalStateException.class, () -> reg.resolve(List.of("p"), req, List.of(), ""));
+		var arg12 = List.of("p");
+		List<String> noPageUrls5 = List.of();
+		var e = assertThrows(IllegalStateException.class, () -> reg.resolve(arg12, req, noPageUrls5, ""));
 		assertString("Pack 'p' needs org.example:p on the classpath.", e.getMessage());
 	}
 

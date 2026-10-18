@@ -470,8 +470,8 @@ public class JettyServerComponent implements MicroserviceListener {
 	public JettyServerComponent addFilter(ServletFilterRegistration registration) {
 		if (registration == null)
 			throw iaex("registration must not be null.");
-		var server = getServer();
-		if (server.isRunning() || server.isStopping())
+		var jetty = getServer();
+		if (jetty.isRunning() || jetty.isStopping())
 			throw isex("Filters must be added before the server starts.");
 		var filter = registration.getFilter();
 		var name = registration.getName().orElseGet(() -> cn(filter) + "#" + UUID.randomUUID());
@@ -495,7 +495,7 @@ public class JettyServerComponent implements MicroserviceListener {
 	 *
 	 * @param filter The filter instance.  Cannot be <jk>null</jk>.
 	 * @param dispatcherTypes The dispatcher types.  Cannot be empty.
-	 * @param urlPatterns The URL patterns.  At least one is required; see {@link ServletFilterRegistration.Builder#urlPatterns(String...)}.
+	 * @param urlPatterns The URL patterns.  At least one is required; see {@link org.apache.juneau.microservice.ServletFilterRegistration.Builder#urlPatterns(String...)}.
 	 * @return This object.
 	 * @throws IllegalArgumentException If an argument is invalid.
 	 * @throws IllegalStateException If the server has already started.

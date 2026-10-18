@@ -27,6 +27,8 @@ import java.util.concurrent.atomic.*;
 import org.apache.juneau.*;
 import org.apache.juneau.rest.auth.oauth.flow.*;
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.params.*;
+import org.junit.jupiter.params.provider.*;
 
 import com.nimbusds.oauth2.sdk.*;
 import com.nimbusds.oauth2.sdk.pkce.*;
@@ -400,7 +402,7 @@ class McpAuthorizationCodeAcquirer_Test extends TestBase {
 		}
 	}
 
-	@Test void e02_requireIssuerParameterRejectsCallbackWithoutIss() throws IOException {
+	@Test void e02_requireIssuerParameterRejectsCallbackWithoutIss() {
 		// With requireIssuerResponseParameter(true) the end-to-end flow must reject a callback that omits iss.
 		var acquirer = minimal()
 			.requireIssuerResponseParameter(true)
@@ -416,14 +418,16 @@ class McpAuthorizationCodeAcquirer_Test extends TestBase {
 				}
 			})
 			.build();
-		var e = assertThrows(McpAuthException.class, () -> acquirer.acquire(Duration.ofSeconds(5)));
+		var timeout = Duration.ofSeconds(5);
+		var e = assertThrows(McpAuthException.class, () -> acquirer.acquire(timeout));
 		assertTrue(e.getMessage().contains("missing the required iss"), e::getMessage);
 	}
 
 	@Test void e03_acquireFailsWhenFixedPortInUse() throws IOException {
 		try (var occupied = new ServerSocket(0, 0, InetAddress.getLoopbackAddress())) {
 			var acquirer = minimal().redirectPort(occupied.getLocalPort()).build();
-			var e = assertThrows(McpAuthException.class, () -> acquirer.acquire(Duration.ofMillis(100)));
+			var timeout = Duration.ofMillis(100);
+			var e = assertThrows(McpAuthException.class, () -> acquirer.acquire(timeout));
 			assertTrue(e.getMessage().contains("loopback redirect listener"), e::getMessage);
 		}
 	}
@@ -437,7 +441,8 @@ class McpAuthorizationCodeAcquirer_Test extends TestBase {
 				.authorizationEndpoint(URI.create("https://idp.example.com/authorize"))
 				.tokenEndpoint(URI.create("https://idp.example.com/token"))
 				.clientId("cli-app").resource(RESOURCE).expectedIssuer(ISSUER).build();
-			assertThrows(McpAuthException.class, () -> acquirer.acquire(Duration.ofMillis(100)));
+			var timeout = Duration.ofMillis(100);
+			assertThrows(McpAuthException.class, () -> acquirer.acquire(timeout));
 		} finally {
 			System.setOut(original);
 		}
@@ -446,28 +451,18 @@ class McpAuthorizationCodeAcquirer_Test extends TestBase {
 		assertTrue(out.contains("https://idp.example.com/authorize"), out);
 	}
 
-	@Test void e05_handleCallbackMissingStateRejected() {
+	@ParameterizedTest
+	@CsvSource(delimiter = '|', value = {
+		"http://127.0.0.1:1/callback?code=the-code                    | missing the state",
+		"http://127.0.0.1:1/callback?code=the-code&state=never-issued | unknown, expired, or replayed",
+		"http://127.0.0.1:1/callback                                  | could not be parsed"  // No parameters at all.
+	})
+	void e05_handleCallbackRejected(String callback, String expectedMessage) {
 		var acquirer = minimal().build();
 		var flow = flowFor(URI.create("https://idp.example.com/token"));
-		var cb = URI.create("http://127.0.0.1:1/callback?code=the-code");
+		var cb = URI.create(callback);
 		var e = assertThrows(McpAuthException.class, () -> acquirer.handleCallback(flow, cb));
-		assertTrue(e.getMessage().contains("missing the state"), e::getMessage);
-	}
-
-	@Test void e06_handleCallbackUnknownStateRejected() {
-		var acquirer = minimal().build();
-		var flow = flowFor(URI.create("https://idp.example.com/token"));
-		var cb = URI.create("http://127.0.0.1:1/callback?code=the-code&state=never-issued");
-		var e = assertThrows(McpAuthException.class, () -> acquirer.handleCallback(flow, cb));
-		assertTrue(e.getMessage().contains("unknown, expired, or replayed"), e::getMessage);
-	}
-
-	@Test void e07_handleCallbackUnparseableRejected() {
-		var acquirer = minimal().build();
-		var flow = flowFor(URI.create("https://idp.example.com/token"));
-		var cb = URI.create("http://127.0.0.1:1/callback");  // no parameters at all
-		var e = assertThrows(McpAuthException.class, () -> acquirer.handleCallback(flow, cb));
-		assertTrue(e.getMessage().contains("could not be parsed"), e::getMessage);
+		assertTrue(e.getMessage().contains(expectedMessage), e::getMessage);
 	}
 
 	@Test void e08_validateMissingStateParamIsCsrfMismatch() {
@@ -546,7 +541,8 @@ class McpAuthorizationCodeAcquirer_Test extends TestBase {
 		assertThrows(IllegalArgumentException.class, () -> b.clientSecret(" "));
 		assertThrows(IllegalArgumentException.class, () -> b.scope(" "));
 		assertThrows(IllegalArgumentException.class, () -> b.httpTimeout(Duration.ZERO));
-		assertThrows(IllegalArgumentException.class, () -> b.httpTimeout(Duration.ofSeconds(-1)));
+		var negative = Duration.ofSeconds(-1);
+		assertThrows(IllegalArgumentException.class, () -> b.httpTimeout(negative));
 	}
 
 	@Test void e14_validFixedRedirectPortAccepted() {

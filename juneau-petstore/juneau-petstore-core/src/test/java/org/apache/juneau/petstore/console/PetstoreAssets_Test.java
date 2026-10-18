@@ -105,7 +105,7 @@ class PetstoreAssets_Test extends TestBase {
 			C.get(url).run().assertStatus(200).assertHeader("Content-Type").asString().isContains("javascript");
 	}
 
-	@Test void b04_aPathOutsideTheWebJarsDoesNotResolve() throws Exception {
+	@Test void b04_aPathOutsideTheWebJarsDoesNotResolve() {
 		org.junit.jupiter.api.Assertions.assertEquals(404, status("/console/ops/audit/webjars/../x"));
 		org.junit.jupiter.api.Assertions.assertEquals(404, status("/console/ops/audit/webjars/no-such/file.js"));
 		org.junit.jupiter.api.Assertions.assertEquals(404, status("/console/vendor/jquery/3.7.1/jquery.min.js"));

@@ -53,8 +53,8 @@ sandbox.globalThis = sandbox;
 // NOSONAR javascript:S1523 -- the harness's purpose is to load the production runtime under test (a repo-local path
 // from argv) into an isolated VM sandbox.
 if (rendersJsPath)
-	vm.runInNewContext(fs.readFileSync(path.resolve(rendersJsPath), 'utf8'), sandbox, { filename: 'juneau-renders.js' });
-vm.runInNewContext(fs.readFileSync(path.resolve(viewsJsPath), 'utf8'), sandbox, { filename: 'juneau-views.js' });
+	vm.runInNewContext(fs.readFileSync(path.resolve(rendersJsPath), 'utf8'), sandbox, { filename: 'juneau-renders.js' }); // NOSONAR javascript:S1523 - loads the shipped script into a vm sandbox for the test
+vm.runInNewContext(fs.readFileSync(path.resolve(viewsJsPath), 'utf8'), sandbox, { filename: 'juneau-views.js' }); // NOSONAR javascript:S1523 - loads the shipped script into a vm sandbox for the test
 
 const NS = window.JuneauViews;
 const out = {};

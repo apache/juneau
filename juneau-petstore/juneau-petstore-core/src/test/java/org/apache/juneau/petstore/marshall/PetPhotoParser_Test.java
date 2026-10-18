@@ -62,7 +62,8 @@ class PetPhotoParser_Test extends TestBase {
 	}
 
 	@Test void a04_nonImageInputThrowsParseException() {
-		assertThrows(ParseException.class, () -> parser.read("not an image".getBytes(StandardCharsets.UTF_8), BufferedImage.class));
+		var input = "not an image".getBytes(StandardCharsets.UTF_8);
+		assertThrows(ParseException.class, () -> parser.read(input, BufferedImage.class));
 	}
 
 	@Test void a05_corruptJpegThrowsParseException() throws Exception {

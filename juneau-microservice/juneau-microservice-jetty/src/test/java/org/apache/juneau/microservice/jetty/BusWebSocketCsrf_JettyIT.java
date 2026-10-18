@@ -19,7 +19,6 @@ package org.apache.juneau.microservice.jetty;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.*;
-import java.lang.reflect.*;
 import java.net.*;
 import java.net.http.*;
 import java.nio.charset.*;
@@ -61,6 +60,9 @@ import jakarta.websocket.server.*;
  */
 @EnabledIfSystemProperty(named=BusWebSocketCsrf_JettyIT.GATE, matches="true",
 	disabledReason="binds a socket; run with -Dtest='BusWebSocketCsrf_JettyIT' -Djuneau.busIt=true")
+@SuppressWarnings({
+	"resource" // Servers, connectors and buses are fixtures started in @BeforeAll and stopped in @AfterAll or returned to the caller that stops them; the JDK client is not a resource.
+})
 class BusWebSocketCsrf_JettyIT extends TestBase {
 
 	static final String GATE = "juneau.busIt";
@@ -83,7 +85,7 @@ class BusWebSocketCsrf_JettyIT extends TestBase {
 
 	/** Accepts and does nothing; the probe configurator is what matters. */
 	public static class ProbeEndpoint extends Endpoint {
-		@Override public void onOpen(jakarta.websocket.Session session, EndpointConfig config) {}
+		@Override public void onOpen(jakarta.websocket.Session session, EndpointConfig config) { /* no-op by design */ }
 	}
 
 	/** Records the handshake's request URI as the container reports it, and which of the RFC 6455 headers it carried. */
@@ -387,11 +389,10 @@ class BusWebSocketCsrf_JettyIT extends TestBase {
 			CsrfBoundary_JettyIT.literal(h, extra[i], extra[i + 1]);
 		out.write(CsrfBoundary_JettyIT.frame(0x1, 0x4, 1, h.toByteArray())); // HEADERS: END_HEADERS only, so the stream stays open
 
-		try (var socket = new Socket("127.0.0.1", port)) {
+		try (var socket = new Socket("127.0.0.1", port); var in = new DataInputStream(socket.getInputStream())) {
 			socket.setSoTimeout(10_000);
 			socket.getOutputStream().write(out.toByteArray());
 			socket.getOutputStream().flush();
-			var in = new DataInputStream(socket.getInputStream());
 			var decoder = new HpackDecoder(8192, () -> 0L);
 			var connectProtocol = false;
 			var status = -1;
@@ -427,7 +428,9 @@ class BusWebSocketCsrf_JettyIT extends TestBase {
 					case 0x3, 0x7 -> {
 						return new Ext(connectProtocol, status, null, true);
 					}
-					default -> {}
+					default -> {
+						// other opcodes are ignored
+					}
 				}
 			}
 		}

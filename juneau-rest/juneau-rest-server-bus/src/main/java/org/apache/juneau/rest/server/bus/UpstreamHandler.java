@@ -43,5 +43,8 @@ public interface UpstreamHandler {
 	 * @param payload The JSON-object payload.  Never <jk>null</jk>.
 	 * @throws Exception Any failure; it is logged and never crosses the wire.
 	 */
+	@SuppressWarnings({
+		"java:S112" // SPI: any implementer failure is logged and never crosses the wire
+	})
 	void handle(BusSession session, String topic, JsonMap payload) throws Exception;
 }

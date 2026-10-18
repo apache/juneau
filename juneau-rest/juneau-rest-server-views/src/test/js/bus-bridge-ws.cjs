@@ -61,11 +61,9 @@ function wsFactory() {
 }
 
 function sessionBody(over) {
-	return Object.assign({
-		v: 1, sessionId: SID, heartbeatMs: 15000,
+	return { v: 1, sessionId: SID, heartbeatMs: 15000,
 		downstream: [{ topic: 'app.a', retain: true }], upstream: ['app.up'],
-		paths: { sse: '/rest/ops/juneau-bus/stream/' + SID, websocket: '/rest/ops/juneau-bus/ws/' + SID }
-	}, over || {});
+		paths: { sse: '/rest/ops/juneau-bus/stream/' + SID, websocket: '/rest/ops/juneau-bus/ws/' + SID }, ...over || {} };
 }
 
 function fresh(opts) {
@@ -77,7 +75,7 @@ function fresh(opts) {
 	bus.declare('app.a', { retain: true });
 	bus.declare('app.up', { retain: false });
 	const errors = [];
-	bus.onError(function (e) { errors.push({ code: e.code, message: e.message, banner: !!(e.detail && e.detail.banner) }); });
+	bus.onError(function (e) { errors.push({ code: e.code, message: e.message, banner: !!(e.detail?.banner) }); });
 	const posts = [];
 	const fetch = function (url, init) {
 		posts.push({ url: url, body: JSON.parse(init.body) });
@@ -88,9 +86,7 @@ function fresh(opts) {
 	const sourceOptions = { fetch: fetch, location: opts.location || HTTPS, document: document,
 		WebSocket: opts.noWebSocket ? null : ws.WebSocket };
 	function attach(over) {
-		return bus.attachSource(bus.sources.websocket(Object.assign({
-			id: 'w', session: '/rest/ops/juneau-bus/session', downstream: ['app.a'], upstream: ['app.up']
-		}, sourceOptions, over || {})));
+		return bus.attachSource(bus.sources.websocket({ id: 'w', session: '/rest/ops/juneau-bus/session', downstream: ['app.a'], upstream: ['app.up'], ...sourceOptions, ...over || {} }));
 	}
 	return { env: env, NS: NS, bus: bus, clock: clock, errors: errors, posts: posts, ws: ws, attach: attach, sourceOptions: sourceOptions };
 }
@@ -101,11 +97,36 @@ function codes(errors) { return errors.map(function (e) { return e.code; }); }
 
 async function openSocket(h) {
 	await settle();
-	const s = h.ws.sockets[h.ws.sockets.length - 1];
+	const s = h.ws.sockets.at(-1);
 	s.open();
 	RESYNC.forEach(function (f) { s.message(f); });
 	return s;
 }
+
+// --- the close-code table ---
+async function closeWith(code, reason) {
+	const h = fresh();
+	h.attach();
+	const s = await openSocket(h);
+	s.serverClose(code, reason);
+	const st = h.bus.get('bridge:w');
+	h.clock.advance(st.nextRetryMs);
+	await settle();
+	let message = st.error ? st.error.message : null;
+	if (h.errors.length) message = h.errors[0].message;
+	return { state: st.state, nextRetryMs: st.nextRetryMs, error: st.error ? st.error.code : null, codes: codes(h.errors),
+		message: message,
+		posts: h.posts.length, sockets: h.ws.sockets.length };
+}
+
+const count = function (contract) {
+	const h = fresh();
+	const listeners = {};
+	h.env.window.addEventListener = function (type, fn) { listeners[type] ||= []; listeners[type].push(fn); };
+	const links = h.bus.wiring.attachBridges(contract, { sourceOptions: h.sourceOptions });
+	return { links: links.length, listeners: (listeners.pagehide || []).length, codes: codes(h.errors),
+		message: h.errors.length ? h.errors[0].message : null, banner: h.errors.length ? h.errors[0].banner : null };
+};
 
 async function main() {
 	const out = {};
@@ -133,19 +154,6 @@ async function main() {
 		out.notOpen = { sent: s.sent.length, codes: codes(h.errors), message: h.errors[0].message };
 	}
 
-	// --- the close-code table ---
-	async function closeWith(code, reason) {
-		const h = fresh();
-		h.attach();
-		const s = await openSocket(h);
-		s.serverClose(code, reason);
-		const st = h.bus.get('bridge:w');
-		h.clock.advance(st.nextRetryMs);
-		await settle();
-		return { state: st.state, nextRetryMs: st.nextRetryMs, error: st.error ? st.error.code : null, codes: codes(h.errors),
-			message: h.errors.length ? h.errors[0].message : (st.error ? st.error.message : null),
-			posts: h.posts.length, sockets: h.ws.sockets.length };
-	}
 	out.close = {
 		c1000: await closeWith(1000, 'bye'),
 		c1001: await closeWith(1001),
@@ -166,7 +174,7 @@ async function main() {
 		h.attach();
 		for (let i = 0; i < 3; i++) {
 			await settle();
-			h.ws.sockets[h.ws.sockets.length - 1].serverClose(4401, 'bus:unknown-session');
+			h.ws.sockets.at(-1).serverClose(4401, 'bus:unknown-session');
 			h.clock.advance(0);
 		}
 		await settle();
@@ -245,7 +253,7 @@ async function main() {
 	{
 		const h = fresh();
 		const listeners = {};
-		h.env.window.addEventListener = function (type, fn) { (listeners[type] = listeners[type] || []).push(fn); };
+		h.env.window.addEventListener = function (type, fn) { listeners[type] ||= []; listeners[type].push(fn); };
 		const sseFetches = [];
 		const sseFetch = function (url, init) {
 			sseFetches.push({ url: url, method: init.method });
@@ -266,7 +274,7 @@ async function main() {
 			if (body.transport === 'websocket') return h.sourceOptions.fetch(url, init);
 			return sseFetch(url, init);
 		};
-		const links = h.bus.wiring.attachBridges(contract, { sourceOptions: Object.assign({}, h.sourceOptions, { fetch: sharedFetch }) });
+		const links = h.bus.wiring.attachBridges(contract, { sourceOptions: { ...h.sourceOptions, fetch: sharedFetch } });
 		await settle();
 		const before = { live: h.bus.get('bridge:live').transport, cmd: h.bus.get('bridge:cmd').transport,
 			odd: h.bus.get('bridge:odd') === undefined ? null : 'present', links: links.length, sockets: h.ws.sockets.length,
@@ -281,7 +289,7 @@ async function main() {
 	{
 		const h = fresh();
 		const listeners = {};
-		h.env.window.addEventListener = function (type, fn) { (listeners[type] = listeners[type] || []).push(fn); };
+		h.env.window.addEventListener = function (type, fn) { listeners[type] ||= []; listeners[type].push(fn); };
 		h.bus.wiring.attachBridges({ bridges: [
 			{ id: 'w', transport: 'websocket', session: '/rest/ops/juneau-bus/session', downstream: ['app.a'], upstream: ['app.up'] }
 		] }, { sourceOptions: h.sourceOptions });
@@ -294,14 +302,6 @@ async function main() {
 
 	// --- attachBridges registers no pagehide listener when nothing was attached ---
 	{
-		const count = function (contract) {
-			const h = fresh();
-			const listeners = {};
-			h.env.window.addEventListener = function (type, fn) { (listeners[type] = listeners[type] || []).push(fn); };
-			const links = h.bus.wiring.attachBridges(contract, { sourceOptions: h.sourceOptions });
-			return { links: links.length, listeners: (listeners.pagehide || []).length, codes: codes(h.errors),
-				message: h.errors.length ? h.errors[0].message : null, banner: h.errors.length ? h.errors[0].banner : null };
-		};
 		out.noListener = { empty: count({}), noBridges: count({ bridges: [] }),
 			unknownOnly: count({ bridges: [{ id: 'odd', transport: 'carrier-pigeon', session: '/x', downstream: ['app.a'] }] }) };
 	}
@@ -331,7 +331,7 @@ async function main() {
 		link.detach();
 		const h2 = fresh();
 		const listeners = {};
-		h2.env.window.addEventListener = function (type, fn) { (listeners[type] = listeners[type] || []).push(fn); };
+		h2.env.window.addEventListener = function (type, fn) { listeners[type] ||= []; listeners[type].push(fn); };
 		h2.bus.wiring.attachBridges({ bridges: [
 			{ id: 'w', transport: 'websocket', session: '/rest/ops/juneau-bus/session', downstream: ['app.a'], upstream: ['app.up'] }
 		] }, { sourceOptions: h2.sourceOptions });
@@ -346,4 +346,4 @@ async function main() {
 	process.stdout.write(JSON.stringify(out));
 }
 
-main().catch(function (e) { console.error(e && e.stack || e); process.exit(1); });
+main().catch(function (e) { console.error(e?.stack || e); process.exit(1); });

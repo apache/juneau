@@ -30,6 +30,9 @@ const vm = require('node:vm');
 const H = require(path.join(__dirname, 'regions-harness.cjs'));
 const { makeEnv, jsonResponse } = require(path.join(__dirname, 'views-dom-shim.cjs'));
 
+/** The app's own job-log renderer: an identity-only marker. */
+function appJobLog() { /* identity-only marker */ }
+
 const [, , rendersJsPath, viewsJsPath, regionsJsPath, helpersJsPath, jobLogPath] = process.argv;
 if (!rendersJsPath || !viewsJsPath || !regionsJsPath || !helpersJsPath || !jobLogPath) {
 	console.error('usage: node job-log-region.cjs <juneau-renders.js> <juneau-views.js> <juneau-regions.js> <juneau-helpers.js> <juneau-joblog.js>');
@@ -44,13 +47,13 @@ const SUBMIT = {
 	submitLabel: 'Restock',
 	fields: [{ name: 'count', label: 'How many', type: 'number', default: 1 }]
 };
-const config = o => Object.assign({ submit: SUBMIT }, o || {});
-const submitWith = fields => Object.assign({}, SUBMIT, { fields });
-const result = (outcome, extra) => JSON.stringify(Object.assign({ contractVersion: '1', outcome }, extra || {}));
+const config = o => ({ submit: SUBMIT, ...o || {} });
+const submitWith = fields => ({ ...SUBMIT, fields });
+const result = (outcome, extra) => JSON.stringify({ contractVersion: '1', outcome, ...extra || {} });
 
 class FakeES {
 	constructor(url) { this.url = String(url); this.listeners = {}; this.readyState = 1; FakeES.all.push(this); }
-	addEventListener(type, fn) { (this.listeners[type] = this.listeners[type] || []).push(fn); }
+	addEventListener(type, fn) { this.listeners[type] ||= []; this.listeners[type].push(fn); }
 	close() { this.readyState = 2; }
 	fire(type, data) { if (this.readyState !== 2) (this.listeners[type] || []).slice().forEach(fn => fn({ type, data })); }
 }
@@ -90,8 +93,8 @@ function setup(opts) {
 	});
 	const { env, NS, R, rec, clock } = loaded;
 	const table = env.el('table');
-	table.setAttribute('data-juneau-view', 'species');
-	table.setAttribute('data-juneau-csrf', 'tok-1');
+	table.dataset.juneauView = 'species';
+	table.dataset.juneauCsrf = 'tok-1';
 	const tbody = env.el('tbody');
 	table.appendChild(tbody);
 	env.body.appendChild(table);
@@ -101,7 +104,7 @@ function setup(opts) {
 		dataTable: { row: tr => ({ data: () => rowData.get(tr) }), on: () => {} }
 	};
 	const tr = env.el('tr');
-	tr.setAttribute('data-juneau-row-id', 'r1');
+	tr.dataset.juneauRowId = 'r1';
 	tbody.appendChild(tr);
 	rowData.set(tr, opts.row || { id: 'r1', species: 'cat' });
 	let child = null, panel = null;
@@ -110,8 +113,8 @@ function setup(opts) {
 		const td = env.el('td');
 		panel = env.el('div');
 		panel.className = 'juneau-view-detail-panel';
-		panel.setAttribute('data-juneau-row-detail', '');
-		panel.setAttribute('data-juneau-row-id', 'r1');
+		panel.dataset.juneauRowDetail = '';
+		panel.dataset.juneauRowId = 'r1';
 		panel._juneauParentTr = tr;
 		tr._juneauDetailPanel = panel;
 		td.appendChild(panel);
@@ -122,16 +125,14 @@ function setup(opts) {
 	/** Collapses: the panel's regions are torn down and its child row leaves the table. */
 	function collapse() {
 		R.teardownRegionsIn(panel);
-		tbody.removeChild(child);
+		child.remove();
 		tr._juneauDetailPanel = null;
 	}
 	let keys = 0;
 	const calls = [];
-	const routes = Object.assign({
-		'/species/r1/key': () => Promise.resolve(jsonResponse({ contractVersion: '1', action: 'restock-species', targetId: 'r1', idempotencyKey: 'k-' + (++keys) })),
+	const routes = { '/species/r1/key': () => Promise.resolve(jsonResponse({ contractVersion: '1', action: 'restock-species', targetId: 'r1', idempotencyKey: 'k-' + (++keys) })),
 		'/species/r1/restock': () => Promise.resolve(jsonResponse(STARTED, { status: 202 })),
-		'/c/j-1': () => Promise.resolve(jsonResponse({}))
-	}, opts.routes || {});
+		'/c/j-1': () => Promise.resolve(jsonResponse({})), ...opts.routes || {} };
 	env.setFetch((url, init) => {
 		const i = init || {};
 		calls.push({ url: String(url), method: i.method || 'GET', body: i.body ? JSON.parse(i.body) : null });
@@ -140,8 +141,8 @@ function setup(opts) {
 	});
 	/** A job-log region in the (current) panel, populated. */
 	async function region(cfg, extra) {
-		const el = H.mkRegion(env, Object.assign({ id: 'restock', type: 'row-detail', populate: 'job-log', parent: panel,
-			declared: Object.assign({ contractVersion: '1', config: cfg }, (extra && extra.declared) || {}) }));
+		const el = H.mkRegion(env, {id: 'restock', type: 'row-detail', populate: 'job-log', parent: panel,
+			declared: { contractVersion: '1', config: cfg, ...(extra?.declared) || {} }});
 		R.initRegion(el);
 		await settle(clock);
 		return el;
@@ -158,10 +159,10 @@ function view(el) {
 	const banner = q(el, '.jc-joblog-banner');
 	const retry = q(el, '.jc-joblog-retry');
 	return {
-		phase: root ? root.getAttribute('data-phase') : null,
-		submitText: btn && btn.textContent,
-		submitDisabled: !!(btn && btn.disabled),
-		submitHidden: !!(btn && btn.hidden),
+		phase: root ? (root.dataset.phase ?? null) : null,
+		submitText: btn?.textContent,
+		submitDisabled: !!(btn?.disabled),
+		submitHidden: !!(btn?.hidden),
 		inputsDisabled: Array.from(el.querySelectorAll('.jc-joblog-input')).filter(n => n.type !== 'hidden').map(n => n.disabled),
 		retryShown: !!(retry && !retry.hidden),
 		banner: banner && !banner.hidden ? banner.textContent : null,
@@ -172,11 +173,11 @@ async function submit(t, el) {
 	q(el, '.jc-joblog-form').dispatch('submit', { preventDefault: () => {} });
 	await settle(t.clock);
 }
-const lastES = () => FakeES.all[FakeES.all.length - 1];
+const lastES = () => FakeES.all.at(-1);
 
 const out = {};
 const guard = async (name, fn) => {
-	try { out[name] = await fn(); } catch (e) { out[name] = { crash: String(e && e.stack || e) }; }
+	try { out[name] = await fn(); } catch (e) { out[name] = { crash: String(e?.stack || e) }; }
 };
 
 (async () => {
@@ -192,15 +193,14 @@ const guard = async (name, fn) => {
 			const sandbox = { window: env.window, document: env.document, console: { error: () => {} }, setTimeout, clearTimeout,
 				setInterval: () => 0, clearInterval: () => {}, Promise, URL, AbortController, AbortSignal, DOMException,
 				fetch: () => Promise.reject(new Error('none')) };
-			vm.runInNewContext(jobLogSrc, sandbox, { filename: 'juneau-joblog.js' });
+			vm.runInNewContext(jobLogSrc, sandbox, { filename: 'juneau-joblog.js' }); // NOSONAR javascript:S1523 - loads the shipped script into a vm sandbox for the test
 			const before = !!env.window.JuneauViews;
 			for (const p of [rendersJsPath, viewsJsPath, regionsJsPath, helpersJsPath])
-				vm.runInNewContext(fs.readFileSync(p, 'utf8'), sandbox, { filename: path.basename(p) });
-			const own = function appJobLog() {};
-			if (keep) env.window.JuneauViews.regions.register('job-log', own);
+				vm.runInNewContext(fs.readFileSync(p, 'utf8'), sandbox, { filename: path.basename(p) }); // NOSONAR javascript:S1523 - loads the shipped script into a vm sandbox for the test
+			if (keep) env.window.JuneauViews.regions.register('job-log', appJobLog);
 			env.dispatchDocument('DOMContentLoaded');
 			const fn = env.window.JuneauViews.regions.resolve('job-log');
-			return { viewsBeforeJobLog: before, registered: typeof fn === 'function', appKept: fn === own };
+			return { viewsBeforeJobLog: before, registered: typeof fn === 'function', appKept: fn === appJobLog };
 		};
 		return { immediate: now, late: late(false), appFirst: late(true) };
 	});
@@ -216,11 +216,11 @@ const guard = async (name, fn) => {
 		const errors = [];
 		const sandbox = { window: env.window, document: env.document, console: { error: m => errors.push(String(m)) }, setTimeout, clearTimeout,
 			Promise, URL, AbortController };
-		vm.runInNewContext(jobLogSrc, sandbox, { filename: 'juneau-joblog.js' });
+		vm.runInNewContext(jobLogSrc, sandbox, { filename: 'juneau-joblog.js' }); // NOSONAR javascript:S1523 - loads the shipped script into a vm sandbox for the test
 		let thrown = null;
 		try { env.window.JuneauJobLog.mount(env.el('div'), config()); } catch (e) { thrown = e.code || String(e); }
 		const r = env.el('div');
-		r.setAttribute('data-juneau-region-populate', 'job-log');
+		r.dataset.juneauRegionPopulate = 'job-log';
 		env.body.appendChild(r);
 		env.dispatchDocument('DOMContentLoaded');
 		loadFns.forEach(fn => fn());
@@ -252,7 +252,7 @@ const guard = async (name, fn) => {
 		await settle(t2.clock);
 		const retried = view(el2);
 		await submit(t2, el2);
-		return { keying, ready, refused, logged, retried, retriedKey: t2.submits()[0] && t2.submits()[0].body.idempotencyKey };
+		return { keying, ready, refused, logged, retried, retriedKey: t2.submits()[0]?.body.idempotencyKey };
 	});
 
 	// 4. Submit: the action envelope with the row id as target and the row's key; progress lines; the result; the key
@@ -323,7 +323,7 @@ const guard = async (name, fn) => {
 			const slot = q(el, '[data-juneau-field="available"]');
 			if (slot) slot.textContent = 'old';
 			const note = Array.from(el.querySelectorAll('.jc-joblog-input')).find(n => n.name === 'note');
-			if (note && extra && extra.note != null) note.value = extra.note;
+			if (note && extra?.note != null) note.value = extra.note;
 			await submit(t, el);
 			lastES().fire('result', result(outcome, { message: 'm1', row: { available: 9, obj: { x: 1 } } }));
 			await settle(t.clock);
@@ -354,7 +354,7 @@ const guard = async (name, fn) => {
 		const root = q(el, '.jc-joblog');
 		return { gridInDetail: !!(d && slot && d.contains(slot)), value: slot ? slot.textContent : null,
 			beforeForm: !!root && root.childNodes.indexOf(d) < root.childNodes.indexOf(q(el, '.jc-joblog-form')),
-			regionState: el.getAttribute('data-juneau-region-state') };
+			regionState: el.dataset.juneauRegionState ?? null };
 	});
 
 	// 8. Collapse and re-expand while the job runs: the job keeps going; the new view attaches view-only from the
@@ -413,14 +413,17 @@ const guard = async (name, fn) => {
 		await submit(t, el);
 		q(host, '.jc-joblog-form').dispatch('submit', { preventDefault: () => {} });
 		await settle(t.clock);
-		return { second: view(host), submits: t.submits().length, apiKeys: Object.keys(second).sort(), phase: second.phase() };
+		return { second: view(host), submits: t.submits().length, apiKeys: Object.keys(second).sort((a, b) => (a < b ? -1 : Number(a > b))), phase: second.phase() };
 	});
 
 	// 11. A transport failure keeps the key (the retry sends the same one); an HTTP error spends it.
 	await guard('keyLifecycle', async () => {
 		let mode = 'fail';
-		const t = setup({ routes: { '/species/r1/restock': () => mode === 'fail' ? Promise.reject(new TypeError('offline'))
-			: mode === 'http' ? Promise.resolve(jsonResponse('nope', { status: 500 })) : Promise.resolve(jsonResponse(STARTED, { status: 202 })) } });
+		const restock = () => {
+			if (mode === 'fail') return Promise.reject(new TypeError('offline'));
+			return Promise.resolve(mode === 'http' ? jsonResponse('nope', { status: 500 }) : jsonResponse(STARTED, { status: 202 }));
+		};
+		const t = setup({ routes: { '/species/r1/restock': restock } });
 		t.expand();
 		const el = await t.region(config());
 		await submit(t, el);
@@ -518,7 +521,7 @@ const guard = async (name, fn) => {
 			const el2 = await t.region(config());
 			return { original, attached: view(el2) };
 		};
-		return { backslash: await one('/c\\j-1'), space: await one(' /c/j-1'), none: await one(undefined) };
+		return { backslash: await one(String.raw`/c\j-1`), space: await one(' /c/j-1'), none: await one(undefined) };
 	});
 
 	// 16. An older juneau-views.js without jobs.cancel: the originating view keeps its handle.cancel(); a re-attached
@@ -617,6 +620,6 @@ const guard = async (name, fn) => {
 
 	process.stdout.write(JSON.stringify(out));
 })().catch(e => {
-	console.error(e && e.stack || e);
+	console.error(e?.stack || e);
 	process.exit(1);
 });

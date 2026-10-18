@@ -18,8 +18,6 @@ package org.apache.juneau.rest.server.view.freemarker.console;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import java.util.*;
-
 import org.apache.juneau.*;
 import org.apache.juneau.marshall.collections.*;
 import org.apache.juneau.marshall.marshaller.*;
@@ -71,40 +69,46 @@ class PageSpec_Bus_Test extends TestBase {
 
 	@Test void b01_retainConflict_isE46() {
 		var spec = PageSpec.create().topic(TopicDecl.of("ops.jobs").retain(true).publisher(Publisher.SERVER));
+		var conflict = TopicDecl.of("ops.jobs").retain(false).publisher(Publisher.SERVER);
 		var e = assertThrows(IllegalArgumentException.class,
-			() -> spec.topic(TopicDecl.of("ops.jobs").retain(false).publisher(Publisher.SERVER)));
+			() -> spec.topic(conflict));
 		assertEquals("topic 'ops.jobs' is declared with retain=false here and retain=true at PageSpec.topic", e.getMessage());
 	}
 
 	@Test void b03_publisherConflict_isE46() {
 		var spec = PageSpec.create().topic(TopicDecl.of("ops.jobs").retain(true).publisher(Publisher.SERVER));
+		var conflict = TopicDecl.of("ops.jobs").retain(true).publisher(Publisher.SCRIPT);
 		var e = assertThrows(IllegalArgumentException.class,
-			() -> spec.topic(TopicDecl.of("ops.jobs").retain(true).publisher(Publisher.SCRIPT)));
+			() -> spec.topic(conflict));
 		assertEquals("topic 'ops.jobs' is declared with publisher=script here and publisher=server at PageSpec.topic", e.getMessage());
 	}
 
 	@Test void b04_servletSession_withoutRequest_failsClearly() {
+		var bridge = BridgeDecl.sse("ops", "servlet:/juneau-bus/session").downstream("ops.jobs");
 		var e = assertThrows(IllegalArgumentException.class,
-			() -> PageSpec.resolvedBridge(BridgeDecl.sse("ops", "servlet:/juneau-bus/session").downstream("ops.jobs"), null));
+			() -> PageSpec.resolvedBridge(bridge, null));
 		assertEquals("BridgeDecl 'ops' session 'servlet:/juneau-bus/session' needs a request to resolve.", e.getMessage());
 	}
 
 	@Test void b02_duplicateBridge_isE51() {
 		var spec = PageSpec.create().bridge(BridgeDecl.sse("ops", "/s").downstream("ops.a"));
-		var e = assertThrows(IllegalArgumentException.class, () -> spec.bridge(BridgeDecl.sse("ops", "/t").downstream("ops.b")));
+		var dup = BridgeDecl.sse("ops", "/t").downstream("ops.b");
+		var e = assertThrows(IllegalArgumentException.class, () -> spec.bridge(dup));
 		assertEquals("bridge 'ops': duplicate id", e.getMessage());
 	}
 
 	@Test void c01_earlyR10_whenNoPageTemplate() {
 		var spec = PageSpec.create().html("b", "<p/>", c -> c.subscribes(Subscription.to("ssc.focus").as("refresh")));
-		var e = assertThrows(IllegalArgumentException.class, () -> spec.checkWiringEarly(CardTypeRegistry.standard(), null));
+		var reg = CardTypeRegistry.standard();
+		var e = assertThrows(IllegalArgumentException.class, () -> spec.checkWiringEarly(reg, null));
 		assertTrue(e.getMessage().startsWith("card 'b' subscribes to 'ssc.focus' but nothing publishes it"), e.getMessage());
 	}
 
 	@Test void c02_earlyR10_seesTableRibbonTarget() {
 		var spec = PageSpec.create().table(TableSpec.create("changes").dataUrl("/rest/changes/data").columns(Column.create("pod"))
 			.ribbon(RibbonItem.refresh().title("Refresh tasks").target("nope")));
-		var e = assertThrows(IllegalArgumentException.class, () -> spec.checkWiringEarly(CardTypeRegistry.standard(), null));
+		var reg = CardTypeRegistry.standard();
+		var e = assertThrows(IllegalArgumentException.class, () -> spec.checkWiringEarly(reg, null));
 		assertEquals("topic 'cmd:nope' names card 'nope', which is not on this page", e.getMessage());
 	}
 
@@ -118,9 +122,15 @@ class PageSpec_Bus_Test extends TestBase {
 		}
 	}
 
+	@SuppressWarnings({
+		"resource" // The request in the try header is not itself closeable; the response is closed by the try.
+	})
 	@Test void c04_servletSession_resolvesBeforeEarlyCheck() throws Exception {
-		MockRestClient.buildLax(Host.class).get("/x").run();
-		var req = Host.CAPTURED.get();
+		RestRequest req;
+		try (var c = MockRestClient.buildLax(Host.class); var r = c.get("/x").run()) {
+			assertNotNull(r);
+			req = Host.CAPTURED.get();
+		}
 		var spec = PageSpec.create()
 			.topic(TopicDecl.of("ops.jobs").retain(true).publisher(Publisher.SERVER))
 			.bridge(BridgeDecl.sse("ops", "servlet:/juneau-bus/session").downstream("ops.jobs"))

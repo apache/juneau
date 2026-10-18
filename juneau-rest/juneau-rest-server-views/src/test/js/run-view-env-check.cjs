@@ -50,7 +50,7 @@ const doc = t.env.document;
 	const g = doc.createDocumentFragment();
 	const c = doc.createElement('p'); c.textContent = 'c';
 	g.appendChild(c);
-	host.insertBefore(g, ref);
+	host.insertBefore(g, ref); // NOSONAR javascript:S7768 - DOM fake has no before()
 	out.t01_fragments = host.textContent === 'abcz' && f.childNodes.length === 0 && a.parentNode === host
 		&& host.children.length === 4 && c.previousSibling === b && c.nextSibling === ref;
 })();
@@ -73,9 +73,9 @@ const doc = t.env.document;
 (function () {
 	const pane = doc.createElement('div');
 	pane.clientHeight = 100;
-	for (let i = 0; i < 20; i++) { const r = doc.createElement('div'); r.setAttribute('data-n', String(i + 1)); pane.appendChild(r); }
+	for (let i = 0; i < 20; i++) { const r = doc.createElement('div'); r.dataset.n = String(i + 1); pane.appendChild(r); }
 	pane.children[10].scrollIntoView({ block: 'center' });
-	const rec = t.scrolled[t.scrolled.length - 1];
+	const rec = t.scrolled.at(-1);
 	out.t03_scrollIntoView = rec.n === '11' && rec.block === 'center' && pane.scrollTop === 10 * E.ROW_H - 50 + E.ROW_H / 2;
 })();
 

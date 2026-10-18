@@ -37,7 +37,8 @@ import org.junit.jupiter.api.*;
 class ChromeCss_NavRules_Test extends TestBase {
 
 	@SuppressWarnings({
-		"java:S5852" // Possessive quantifiers: no backtracking; input is the module's own bundled stylesheet.
+		"java:S5852", // Possessive quantifiers: no backtracking; input is the module's own bundled stylesheet.
+		"java:S8786" // Test-only regex over a short fixture.
 	})
 	private static final Pattern RULE = Pattern.compile("([^{}]++)\\{[^}]*+\\}");
 
@@ -84,6 +85,9 @@ class ChromeCss_NavRules_Test extends TestBase {
 		assertEquals(Set.of(), views, () -> "juneau-views.css still carries nav rules: " + views);
 	}
 
+	@SuppressWarnings({
+		"java:S8786" // Test-only regex over a short fixture.
+	})
 	@Test void a02_newShellRules() throws Exception {
 		var css = stripComments(read(ConsoleChromeMixin.class, "/org/apache/juneau/console/chrome.css"));
 		for (var sel : List.of(".jc-brand-subtitle", ".jc-card-title", ".jc-console-error", ".jc-console-error-item",

@@ -155,9 +155,10 @@ class SamlMetadataResolvers_Signed_Test extends TestBase {
 	@Test void b03_connectionClosedMidBody_throwsIOException() throws Exception {
 		withServer(exchange -> {
 			exchange.sendResponseHeaders(200, 100_000); // promise far more bytes than are sent
-			var os = exchange.getResponseBody();
-			os.write(new byte[16]);
-			os.flush();
+			try (var os = exchange.getResponseBody()) {
+				os.write(new byte[16]);
+				os.flush();
+			}
 			exchange.close();
 		}, url -> assertThrows(IOException.class, () -> SamlMetadataResolvers.url(url)));
 	}

@@ -63,7 +63,7 @@ class PetstoreOrderWizard_BrowserTest extends TestBase {
 	private static Map<String,Map<String,Object>> report;
 
 	/** One full pass through the wizard at the given viewport, shipping on the given date. */
-	private static Map<String,Object> wizard(String name, List<Integer> viewport, String shipDate, String shown) {
+	private static Map<String,Object> wizard(String name, List<Integer> viewport, String shipDate) {
 		return Map.of("name", name, "path", "/console/orders", "capture", "/console/orders", "viewport", viewport,
 			"actions", List.of(
 				wait(NEW_ORDER + " && " + ROWS + " > 0"),
@@ -110,8 +110,8 @@ class PetstoreOrderWizard_BrowserTest extends TestBase {
 	static void probe() throws Exception {
 		var base = PetstoreTestServer.awaitReady(server);
 		report = run("order-wizard", base, List.of(
-			wizard("wide", List.of(1280, 900), "2031-03-14", "Mar 14, 2031"),
-			wizard("narrow", List.of(420, 800), "2032-04-15", "Apr 15, 2032")));
+			wizard("wide", List.of(1280, 900), "2031-03-14"),
+			wizard("narrow", List.of(420, 800), "2032-04-15")));
 	}
 
 	/** The order this places is left in the throwaway test server's store; nothing else reads it. */

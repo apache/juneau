@@ -110,10 +110,10 @@ class ViewsJs_Hooks_Test extends TestBase {
 	@Test void b01a_registryIsFrozenAndListsEveryHookNamespace() {
 		var r = report();
 		assertEquals(Boolean.TRUE, r.get("hookNamespacesFrozen"), "HOOK_NAMESPACES must be a frozen array");
-		assertEquals(new TreeSet<>(List.of("actions", "rowActions", "dialogs", "probeSelection", "tables", "status",
-			"csrf", "rules", "details", "html", "jobs")), new TreeSet<>((Collection<?>)r.get("hookNamespaces")));
-		assertEquals(new TreeSet<>((Collection<?>)r.get("hookNamespaces")),
-			new TreeSet<>((Collection<?>)r.get("frozenNamespaces")),
+		assertEquals(new HashSet<>(List.of("actions", "rowActions", "dialogs", "probeSelection", "tables", "status",
+			"csrf", "rules", "details", "html", "jobs")), new HashSet<>((Collection<?>)r.get("hookNamespaces")));
+		assertEquals(new HashSet<>((Collection<?>)r.get("hookNamespaces")),
+			new HashSet<>((Collection<?>)r.get("frozenNamespaces")),
 			"every frozen top-level JuneauViews namespace must be listed in HOOK_NAMESPACES, and vice versa");
 	}
 

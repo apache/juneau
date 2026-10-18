@@ -241,6 +241,9 @@ class CardAssetDependencies_Test extends TestBase {
 	// d - mounting
 	//-----------------------------------------------------------------------------------------------------------------
 
+	@SuppressWarnings({
+		"java:S8786" // Test-only; matching /jquery needs backtracking within a short attribute value.
+	})
 	private static String jqueryUrl(String body) {
 		var m = Pattern.compile("src=\"([^\"]*/jquery\\.min\\.js[^\"]*)\"").matcher(body);
 		assertTrue(m.find(), () -> body);
@@ -265,7 +268,7 @@ class CardAssetDependencies_Test extends TestBase {
 	// e - duplicates against the page's own init=
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@Test void e01_initJquery_skipsPackJquery() throws Exception {
+	@Test void e01_initJquery_skipsPackJquery() {
 		var holder = new String[1];
 		var records = LogRecordCapture.quietly(ToolkitPackRegistry.class, () -> holder[0] = get(Host.class, "dup-init"));
 		assertEquals(1, records.size(), records::toString);

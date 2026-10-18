@@ -48,7 +48,7 @@ const PROBE = async function () {
 
 	out.bulkContractVersion = NS.BULK_CONTRACT_VERSION;
 
-	const tick = () => new Promise(r => setTimeout(r, 0));
+	const tick = () => new Promise(r => setTimeout(r, 0)); // NOSONAR javascript:S7721 -- must stay nested: page.evaluate(PROBE) serializes only PROBE's own source into the browser
 
 	// Builds a table with one row per id in `rowIds`, each carrying the stable ROW_ID_ATTR (never a DOM index),
 	// a selection-cell checkbox, and an actions-cell + trigger (for the bulk-settle path to render into).
@@ -205,20 +205,20 @@ const PROBE = async function () {
 
 	// ---- shared helpers for the toolbar / confirm / run scenarios ----
 	const flush = async function () { for (let i = 0; i < 8; i++) await tick(); };
-	const clearOverlays = function () {
+	const clearOverlays = function () { // NOSONAR javascript:S7721 - must stay nested: page.evaluate(PROBE) serializes only PROBE's own source into the browser
 		document.querySelectorAll('.juneau-view-bulk-toast, .juneau-view-confirm-modal, .juneau-view-announcer')
 			.forEach(function (n) { n.remove(); });
 	};
-	const bulkAction = function (extra) {
-		return Object.assign({ id: 'abort', label: 'Abort', method: 'POST', endpoint: '/x/{id}/abort' }, extra);
+	const bulkAction = function (extra) { // NOSONAR javascript:S7721 - must stay nested: page.evaluate(PROBE) serializes only PROBE's own source into the browser
+		return { id: 'abort', label: 'Abort', method: 'POST', endpoint: '/x/{id}/abort', ...extra };
 	};
 	// A selected-rows fixture: `n` rows ids '1'..'n', all checked + selected, each with a snapshot (so {id} resolves
 	// and the confirm dialog can label it).
 	function bulkFixture(n, selectionOpts) {
 		const ids = Array.from({ length: n }, function (_, i) { return String(i + 1); });
 		const dom = makeTable(ids, { select: true, rowIdField: 'id', bulk: true, csrf: 'tok-xyz' });
-		const selectionState = Object.assign({ selected: new Set(ids), rowIdField: 'id', scope: 'persistent',
-			labelField: 'name', snapshots: {}, selectableWhen: null }, selectionOpts);
+		const selectionState = { selected: new Set(ids), rowIdField: 'id', scope: 'persistent',
+			labelField: 'name', snapshots: {}, selectableWhen: null, ...selectionOpts };
 		ids.forEach(function (id) {
 			selectionState.snapshots[id] = { id: id, name: 'Change ' + id };
 			dom.trs[id].querySelector('.juneau-view-select-checkbox').checked = true;
@@ -229,7 +229,7 @@ const PROBE = async function () {
 		return { dom: dom, ids: ids, selectionState: selectionState, ctx: ctx, reloads: function () { return reloads; } };
 	}
 	// Installs a fetch stub for the duration of `fn`; `handler(url, body, opts)` returns {status, body} or a Promise.
-	async function withFetch(handler, fn) {
+	async function withFetch(handler, fn) { // NOSONAR javascript:S7721 -- must stay nested: page.evaluate(PROBE) serializes only PROBE's own source into the browser
 		const realFetch = window.fetch;
 		const calls = [];
 		window.fetch = function (url, opts) {
@@ -246,9 +246,9 @@ const PROBE = async function () {
 		try { await fn(calls); } finally { window.fetch = realFetch; }
 		return calls;
 	}
-	const toastOf = function () { return document.querySelector('.juneau-view-bulk-toast'); };
-	const announcerText = function () { return document.querySelector('.juneau-view-announcer')?.textContent ?? null; };
-	const sortedIds = function (set) { return Array.from(set).sort((a, b) => a.localeCompare(b)); };
+	const toastOf = function () { return document.querySelector('.juneau-view-bulk-toast'); }; // NOSONAR javascript:S7721 - must stay nested: page.evaluate(PROBE) serializes only PROBE's own source into the browser
+	const announcerText = function () { return document.querySelector('.juneau-view-announcer')?.textContent ?? null; }; // NOSONAR javascript:S7721 - must stay nested: page.evaluate(PROBE) serializes only PROBE's own source into the browser
+	const sortedIds = function (set) { return Array.from(set).sort((a, b) => a.localeCompare(b)); }; // NOSONAR javascript:S7721 - must stay nested: page.evaluate(PROBE) serializes only PROBE's own source into the browser
 
 	// ---- c2) toolbar: single action = button, several = dropdown + Go; lives in the RIGHT cluster; hidden at zero ----
 	{
@@ -296,7 +296,7 @@ const PROBE = async function () {
 		f.ctx.bulkToolbar = tb;
 		document.body.appendChild(tb.el);
 		tb.refresh(f.ids.length);
-		const calls = await withFetch(function () { return { status: 200, body: '' }; }, async function (c) {
+		await withFetch(function () { return { status: 200, body: '' }; }, async function (c) {
 			tb.el.querySelector('.juneau-view-bulk-action-btn').click();
 			await flush();
 			const modal = document.querySelector('.juneau-view-confirm-modal');
@@ -325,7 +325,10 @@ const PROBE = async function () {
 		clearOverlays();
 		const f = bulkFixture(3);
 		const calls = await withFetch(function (url, body) {
-			return { status: body.targetId === '2' ? 500 : body.targetId === '3' ? 404 : 200, body: '' };
+			let status = 200;
+			if (body.targetId === '2') status = 500;
+			else if (body.targetId === '3') status = 404;
+			return { status: status, body: '' };
 		}, async function () {
 			await init.runBulkAction(bulkAction(), f.dom.table, f.ctx, f.selectionState, f.ids);
 			await flush();
@@ -404,7 +407,7 @@ const PROBE = async function () {
 				banner: Array.from(document.querySelectorAll('.juneau-view-error')).map(function (n) { return n.textContent; }),
 				toastRole: toastOf()?.getAttribute('role') ?? null,
 				toastIsSticky: !!toastOf()?.querySelector('.juneau-view-bulk-toast-close'),
-				consoleErrorText: errors[errors.length - 1] ?? null,
+				consoleErrorText: errors.at(-1) ?? null,
 				selectionAfter: sortedIds(t.selectionState.selected)
 			};
 
@@ -413,7 +416,7 @@ const PROBE = async function () {
 			const b = bulkFixture(2);
 			await withFetch(function () { return { status: 200, body: { ok: true } }; },
 				async function () { await init.runBulkAction(agg, b.dom.table, b.ctx, b.selectionState, b.ids); await flush(); });
-			out.aggregateBadResponseShape = { consoleErrorText: errors[errors.length - 1] ?? null, selectionAfter: sortedIds(b.selectionState.selected) };
+			out.aggregateBadResponseShape = { consoleErrorText: errors.at(-1) ?? null, selectionAfter: sortedIds(b.selectionState.selected) };
 		} finally { console.error = realErr; }
 	}
 

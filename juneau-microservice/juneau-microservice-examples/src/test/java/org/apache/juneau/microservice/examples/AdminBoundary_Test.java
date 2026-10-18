@@ -36,6 +36,9 @@ import jakarta.servlet.http.*;
  * The decision tests drive the filter itself with mock servlet objects and a counting chain.  A mock REST client would
  * not do: it never runs a servlet filter, so a test built on it passes with no boundary installed.
  */
+@SuppressWarnings({
+	"java:S3415" // Expected value is already first; Sonar misreads the upper-case LOOPBACK_HOSTS constant as the expected argument
+})
 class AdminBoundary_Test extends TestBase {
 
 	private static final String HOST = "localhost:10000";

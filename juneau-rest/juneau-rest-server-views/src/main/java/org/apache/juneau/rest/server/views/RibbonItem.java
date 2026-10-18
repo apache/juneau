@@ -57,6 +57,10 @@ import org.apache.juneau.marshall.collections.*;
  *
  * @since 10.0.0
  */
+@SuppressWarnings({
+	"java:S1192", // Repeated literals are contract wire keys; named constants would obscure the contract shape.
+	"java:S3776" // Validation and rendering chains many independent guards; splitting them adds no clarity.
+})
 public final class RibbonItem {
 
 	private static final List<String> EXPORT_BUTTONS = List.of("copy", "csv", "print", "excel", "pdf");
@@ -557,10 +561,7 @@ public final class RibbonItem {
 		if (visibleWhen != null)
 			m.put("visibleWhen", VisibilityRule.toMaps(visibleWhen));
 		if (options != null) {
-			var list = new JsonList();
-			for (var o : options)
-				list.add(o.toMap(false));
-			m.put("options", list);
+			m.put("options", new JsonList(options.stream().map(o -> o.toMap(false)).toList()));
 		}
 		return m;
 	}
@@ -583,7 +584,8 @@ public final class RibbonItem {
 	private static void check(Map<?,?> m, String parentId) {
 		var isMember = parentId != null;
 		var t = m.get("type");
-		var type = isMember ? "option" : (t instanceof String ts ? ts : null);
+		var declaredType = t instanceof String ts ? ts : null;
+		var type = isMember ? "option" : declaredType;
 		if (! isMember && (type == null || ! ALLOWED.containsKey(type))) {
 			if (t == null)
 				throw iaex("RibbonItem requires a 'type'; one of '%s'.", String.join(", ", new TreeSet<>(ALLOWED.keySet())));

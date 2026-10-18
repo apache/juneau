@@ -103,15 +103,16 @@ const PROBE = function (arg) {
  * color() or lab() value) is never treated as transparent or as no colour; the element is skipped and the result
  * carries errors: ["<text>: unparseable background|foreground <value>"].
  */
-const CONTRAST = function (entries) {
-	const parse = function (s) {
-		const m = /rgba?\(\s*([\d.]+)[,\s]+([\d.]+)[,\s]+([\d.]+)(?:\s*[,/]\s*([\d.]+%?))?\s*\)/.exec(s || '');
+const CONTRAST = function (entries) { // NOSONAR javascript:S3776 - branching mirrors the behavior being implemented; splitting it would obscure the flow
+	const parse = function (s) { // NOSONAR javascript:S7721 - must stay nested: the enclosing probe is serialized into the browser
+		const m = /rgba?\(\s*([\d.]+)[,\s]+([\d.]+)[,\s]+([\d.]+)(?:\s*[,/]\s*([\d.]+%?))?\s*\)/.exec(s || ''); // NOSONAR javascript:S5843 - one colour-function pattern; splitting it would obscure the grammar
 		if (!m) return null;
-		let a = m[4] === undefined ? 1 : m[4].endsWith('%') ? Number.parseFloat(m[4]) / 100 : Number.parseFloat(m[4]);
+		let a = 1;
+		if (m[4] !== undefined) a = m[4].endsWith('%') ? Number.parseFloat(m[4]) / 100 : Number.parseFloat(m[4]);
 		return [Number(m[1]), Number(m[2]), Number(m[3]), a];
 	};
 	// Thrown for a colour the probe cannot measure, so the element is reported rather than measured wrongly.
-	const unparseable = function (what, value) {
+	const unparseable = function (what, value) { // NOSONAR javascript:S7721 - must stay nested: the enclosing probe is serialized into the browser
 		return { unparseable: 'unparseable ' + what + ' ' + value };
 	};
 	const NON_RGB = /\b(?:color|lab|lch|oklab|oklch|hwb|hsla?|color-mix)\(|#[0-9a-f]{3,8}\b/i;
@@ -119,9 +120,9 @@ const CONTRAST = function (entries) {
 		if (!img || img.indexOf('gradient(') < 0) return null;
 		const all = img.match(/rgba?\([^)]*\)/g) || [];
 		if (all.length < 2 || NON_RGB.test(img)) throw unparseable('background', img);
-		return [parse(all[0]), parse(all[all.length - 1])];
+		return [parse(all[0]), parse(all.at(-1))];
 	};
-	const over = function (top, under) {
+	const over = function (top, under) { // NOSONAR javascript:S7721 - must stay nested: the enclosing probe is serialized into the browser
 		const a = top[3] + under[3] * (1 - top[3]);
 		if (a === 0) return [0, 0, 0, 0];
 		return [0, 1, 2].map(function (i) { return (top[i] * top[3] + under[i] * under[3] * (1 - top[3])) / a; }).concat([a]);
@@ -129,7 +130,7 @@ const CONTRAST = function (entries) {
 	// The candidate effective backgrounds behind el: one per gradient end stop combination (usually exactly one).
 	const backgrounds = function (el) {
 		const layers = [];
-		for (let n = el; n && n.nodeType === 1; n = n.parentElement) {
+		for (let n = el; n?.nodeType === 1; n = n.parentElement) {
 			const cs = getComputedStyle(n);
 			const g = stops(cs.backgroundImage);
 			const c = parse(cs.backgroundColor);
@@ -146,23 +147,23 @@ const CONTRAST = function (entries) {
 		}
 		return res;
 	};
-	const lum = function (c) {
-		const f = function (v) { v /= 255; return v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4); };
+	const lum = function (c) { // NOSONAR javascript:S7721 - must stay nested: the enclosing probe is serialized into the browser
+		const f = function (v) { v /= 255; return v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4); }; // NOSONAR javascript:S7721 -- must stay nested: the enclosing function is serialized into the browser
 		return 0.2126 * f(c[0]) + 0.7152 * f(c[1]) + 0.0722 * f(c[2]);
 	};
 	const ratio = function (a, b) {
 		const x = lum(a), y = lum(b);
 		return (Math.max(x, y) + 0.05) / (Math.min(x, y) + 0.05);
 	};
-	const hex = function (c) {
+	const hex = function (c) { // NOSONAR javascript:S7721 - must stay nested: the enclosing probe is serialized into the browser
 		return '#' + c.slice(0, 3).map(function (v) { return Math.round(v).toString(16).padStart(2, '0'); }).join('');
 	};
-	const opacity = function (el) {
+	const opacity = function (el) { // NOSONAR javascript:S7721 - must stay nested: the enclosing probe is serialized into the browser
 		let o = 1;
-		for (let n = el; n && n.nodeType === 1; n = n.parentElement) o *= Number.parseFloat(getComputedStyle(n).opacity);
+		for (let n = el; n?.nodeType === 1; n = n.parentElement) o *= Number.parseFloat(getComputedStyle(n).opacity);
 		return o;
 	};
-	const foreground = function (el, kind) {
+	const foreground = function (el, kind) { // NOSONAR javascript:S7721 - must stay nested: the enclosing probe is serialized into the browser
 		if (kind === 'placeholder') return getComputedStyle(el, '::placeholder').color;
 		if (kind === 'outline') {
 			el.focus();
@@ -207,16 +208,16 @@ const CONTRAST = function (entries) {
 			let bgs;
 			try {
 				bgs = backgrounds(start);
-			} catch (x) {
-				if (!x || !x.unparseable) throw x;
-				errors.push(item.text + ': ' + x.unparseable);
+			} catch (error_) {
+				if (!error_?.unparseable) throw error_;
+				errors.push(item.text + ': ' + error_.unparseable);
 				continue;
 			}
 			for (const bg of bgs) {
 				const fg = over(f, bg);
 				const rt = Math.round(ratio(fg, bg) * 100) / 100;
 				if (!worst || worst.ratio === null || rt < worst.ratio)
-					worst = Object.assign({}, item, { fg: hex(fg), bg: hex(bg), ratio: rt });
+					worst = { ...item, fg: hex(fg), bg: hex(bg), ratio: rt };
 			}
 		}
 		out[e.name] = { count: els.length - hidden, hidden: hidden };
@@ -226,7 +227,7 @@ const CONTRAST = function (entries) {
 	return out;
 };
 
-(async () => {
+(async () => { // NOSONAR javascript:S3776 - branching mirrors the behavior being implemented; splitting it would obscure the flow
 	const [casesFile] = process.argv.slice(2);
 	if (!casesFile) {
 		process.stderr.write('usage: node console-shell.cjs <cases.json>\n');
@@ -243,14 +244,14 @@ const CONTRAST = function (entries) {
 			const context = await browser.newContext({ viewport: { width: 1280, height: 800 }, ...(c.colorScheme ? { colorScheme: c.colorScheme } : {}) });
 			if (c.storage)
 				await context.addInitScript(seed => {
-					try { for (const k of Object.keys(seed)) localStorage.setItem(k, seed[k]); } catch (e) { /* opaque origin */ }
+					try { for (const k of Object.keys(seed)) localStorage.setItem(k, seed[k]); } catch (e) { /* opaque origin */ } // NOSONAR javascript:S2486 - the failure is an expected outcome here and the fallback handles it
 				}, c.storage);
 			if (c.firstFrame)
 				await context.addInitScript(() => {
 					requestAnimationFrame(() => {
 						const b = document.body;
 						window.__firstFrame = {
-							scheme: document.documentElement.getAttribute('data-jc-scheme'),
+							scheme: document.documentElement.dataset.jcScheme ?? null,
 							bodyBg: b ? getComputedStyle(b).backgroundColor : null,
 							hasBody: !!b
 						};
@@ -334,7 +335,7 @@ const CONTRAST = function (entries) {
 			await page.evaluate(() => new Promise(requestAnimationFrame));
 			if (c.watchRequests) await quiet();
 			// A real key press puts the page in keyboard modality, so a programmatic focus() matches :focus-visible.
-			if (c.contrast && c.contrast.some(e => e.kind === 'outline' || e.kind === 'focus-border')) await page.keyboard.press('Shift');
+			if (c.contrast?.some(e => e.kind === 'outline' || e.kind === 'focus-border')) await page.keyboard.press('Shift');
 			const contrast = c.contrast ? await page.evaluate(CONTRAST, c.contrast) : undefined;
 			const r = await page.evaluate(PROBE, { queries: c.queries || {}, computed: !!c.computed, selectors: SELECTORS, props: PROPS });
 			if (c.firstFrame) r.firstFrame = await page.evaluate(() => window.__firstFrame || null);

@@ -22,6 +22,7 @@ import java.io.*;
 import java.util.*;
 import java.util.function.*;
 import java.util.regex.*;
+import java.util.stream.*;
 
 import org.apache.juneau.commons.http.*;
 import org.apache.juneau.marshall.collections.*;
@@ -56,7 +57,8 @@ import freemarker.template.utility.*;
  * @since 10.0.0
  */
 @SuppressWarnings({
-	"java:S1192" // Duplicated literals read more clearly inline than as constants
+	"java:S1192", // Duplicated literals read more clearly inline than as constants
+	"java:S3776" // Validation and rendering chains many independent guards; splitting them adds no clarity.
 })
 public final class PageCapture {
 
@@ -152,7 +154,9 @@ public final class PageCapture {
 	private Map<String,Object> dashboard;
 	private final Map<String,Map<String,Object>> dataSources = new LinkedHashMap<>();
 	private final Map<String,BadgeDef> badges = new LinkedHashMap<>();
-	private Map<String,Object> javaFacts = Map.of(), chromeFacts = Map.of(), facts = Map.of();
+	private Map<String,Object> javaFacts = Map.of();
+	private Map<String,Object> chromeFacts = Map.of();
+	private Map<String,Object> facts = Map.of();
 	// Cards from a PageSpec, held until placed or the page closes.  builtCards: not yet placed, in declaration order.
 	// builtCardIds: every id ever registered here, kept after placement.
 	private final Map<String,CardSpec> builtCards = new LinkedHashMap<>();
@@ -791,11 +795,8 @@ public final class PageCapture {
 	}
 
 	private static Set<String> bodyAttrNames(String text) {
-		var names = new TreeSet<String>(String.CASE_INSENSITIVE_ORDER);
-		for (var a : tokenizeBodyAttrs(text))
-			if (a.hasValue())
-				names.add(a.name());
-		return names;
+		return tokenizeBodyAttrs(text).stream().filter(BodyAttr::hasValue).map(BodyAttr::name)
+			.collect(Collectors.toCollection(() -> new TreeSet<>(String.CASE_INSENSITIVE_ORDER)));
 	}
 
 	/**

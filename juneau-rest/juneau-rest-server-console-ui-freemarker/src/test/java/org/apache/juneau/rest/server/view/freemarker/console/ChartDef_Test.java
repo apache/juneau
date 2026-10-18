@@ -75,57 +75,87 @@ class ChartDef_Test extends TestBase {
 	}
 
 	@Test void a06_errors() {
+		var target = ChartDef.line("t").x("d").series("v", "V");
 		assertEquals("ChartDef 't' requires exactly one of src(...), data(...) or source(...).",
-			assertThrows(IllegalArgumentException.class, () -> ChartDef.line("t").x("d").series("v", "V").toCardSpec()).getMessage());
+			assertThrows(IllegalArgumentException.class, target::toCardSpec).getMessage());
+		var target2 = ChartDef.donut("t").src("/s").data(List.of());
 		assertEquals("ChartDef 't' requires exactly one of src(...), data(...) or source(...).",
-			assertThrows(IllegalArgumentException.class, () -> ChartDef.donut("t").src("/s").data(List.of()).toCardSpec()).getMessage());
+			assertThrows(IllegalArgumentException.class, target2::toCardSpec).getMessage());
+		var target3 = ChartDef.line("t").src("/s").x("d");
 		assertEquals("ChartDef 't' kind 'line' requires x(...) and at least one series(...).",
-			assertThrows(IllegalArgumentException.class, () -> ChartDef.line("t").src("/s").x("d").toCardSpec()).getMessage());
+			assertThrows(IllegalArgumentException.class, target3::toCardSpec).getMessage());
+		var target4 = ChartDef.line("t");
 		assertEquals("ChartDef 't' series tone '9' must be 1-8.",
-			assertThrows(IllegalArgumentException.class, () -> ChartDef.line("t").series("v", "V", 9)).getMessage());
+			assertThrows(IllegalArgumentException.class, () -> target4.series("v", "V", 9)).getMessage());
+		var target5 = ChartDef.line("t");
 		assertEquals("ChartDef 't' series tone 'pink' must be 'danger', 'ok' or 'warning'.",
-			assertThrows(IllegalArgumentException.class, () -> ChartDef.line("t").series("v", "V", "pink")).getMessage());
+			assertThrows(IllegalArgumentException.class, () -> target5.series("v", "V", "pink")).getMessage());
+		var target6 = ChartDef.line("t");
 		assertEquals("ChartDef 't' x type 'date' must be 'category', 'number' or 'time'.",
-			assertThrows(IllegalArgumentException.class, () -> ChartDef.line("t").x("d", "date", null)).getMessage());
+			assertThrows(IllegalArgumentException.class, () -> target6.x("d", "date", null)).getMessage());
+	}
+
+	@Test void a06d_errors_optionLimits() {
+		var target7 = ChartDef.line("t");
 		assertEquals("ChartDef 't' legend 'top' must be 'bottom', 'right' or 'none'.",
-			assertThrows(IllegalArgumentException.class, () -> ChartDef.line("t").legend("top")).getMessage());
+			assertThrows(IllegalArgumentException.class, () -> target7.legend("top")).getMessage());
+		var target8 = ChartDef.line("t");
 		assertEquals("ChartDef 't' height '100' is below the minimum '120'.",
-			assertThrows(IllegalArgumentException.class, () -> ChartDef.line("t").height(100)).getMessage());
+			assertThrows(IllegalArgumentException.class, () -> target8.height(100)).getMessage());
+		var target9 = ChartDef.line("t");
 		assertEquals("ChartDef 't' refreshMs '1000' is below the minimum '5000'.",
-			assertThrows(IllegalArgumentException.class, () -> ChartDef.line("t").refreshMs(1000)).getMessage());
+			assertThrows(IllegalArgumentException.class, () -> target9.refreshMs(1000)).getMessage());
+		var target10 = ChartDef.line("t");
+		var arg4 = List.of();
 		assertEquals("ChartDef 't' key 'series' has a dedicated method.",
-			assertThrows(IllegalArgumentException.class, () -> ChartDef.line("t").set("series", List.of())).getMessage());
+			assertThrows(IllegalArgumentException.class, () -> target10.set("series", arg4)).getMessage());
+		var target11 = ChartDef.line("t");
 		assertEquals("ChartDef 't' key 'src' has a dedicated method.",
-			assertThrows(IllegalArgumentException.class, () -> ChartDef.line("t").set("src", "/x")).getMessage());
+			assertThrows(IllegalArgumentException.class, () -> target11.set("src", "/x")).getMessage());
+	}
+
+	@Test void a06e_errors_hrefDataAndRequiredFields() {
+		var target12 = ChartDef.line("t");
+		var target13 = ChartDef.line("t");
+		var target14 = ChartDef.donut("t").data(List.of()).refreshMs(6000);
 		assertEquals("ChartDef 't' onClick href must be a same-origin path; got 'https://evil.test/x'.",
-			assertThrows(IllegalArgumentException.class, () -> ChartDef.line("t").onClickHref("https://evil.test/x")).getMessage());
+			assertThrows(IllegalArgumentException.class, () -> target12.onClickHref("https://evil.test/x")).getMessage());
 		assertEquals("ChartDef 't' onClick href must be a same-origin path; got '//evil.test/x'.",
-			assertThrows(IllegalArgumentException.class, () -> ChartDef.line("t").onClickHref("//evil.test/x")).getMessage());
+			assertThrows(IllegalArgumentException.class, () -> target13.onClickHref("//evil.test/x")).getMessage());
 		assertEquals("ChartDef 't' refreshMs(...) needs src(...); inline data never refreshes.",
-			assertThrows(IllegalArgumentException.class, () -> ChartDef.donut("t").data(List.of()).refreshMs(6000).toCardSpec()).getMessage());
+			assertThrows(IllegalArgumentException.class, target14::toCardSpec).getMessage());
+		var target15 = ChartDef.donut("t");
 		assertEquals("ChartDef 't' data rows must not be null.",
-			assertThrows(IllegalArgumentException.class, () -> ChartDef.donut("t").data(null)).getMessage());
+			assertThrows(IllegalArgumentException.class, () -> target15.data(null)).getMessage());
+		var target16 = ChartDef.line("t");
 		assertEquals("ChartDef 't' onClick href must be a same-origin path; got 'null'.",
-			assertThrows(IllegalArgumentException.class, () -> ChartDef.line("t").onClickHref(null)).getMessage());
+			assertThrows(IllegalArgumentException.class, () -> target16.onClickHref(null)).getMessage());
+		var target17 = ChartDef.donut("t").src("/s").label("s");
 		assertEquals("ChartDef 't' kind 'donut' requires label(...) and value(...).",
-			assertThrows(IllegalArgumentException.class, () -> ChartDef.donut("t").src("/s").label("s").toCardSpec()).getMessage());
+			assertThrows(IllegalArgumentException.class, target17::toCardSpec).getMessage());
+		var target18 = ChartDef.donut("t").src("/s").value("n");
 		assertEquals("ChartDef 't' kind 'donut' requires label(...) and value(...).",
-			assertThrows(IllegalArgumentException.class, () -> ChartDef.donut("t").src("/s").value("n").toCardSpec()).getMessage());
+			assertThrows(IllegalArgumentException.class, target18::toCardSpec).getMessage());
+		var target19 = ChartDef.donut("t").src("/s").label(" ").value("n");
 		assertEquals("ChartDef 't' kind 'donut' requires label(...) and value(...).",
-			assertThrows(IllegalArgumentException.class, () -> ChartDef.donut("t").src("/s").label(" ").value("n").toCardSpec()).getMessage());
+			assertThrows(IllegalArgumentException.class, target19::toCardSpec).getMessage());
+		var target20 = ChartDef.line("t");
 		assertEquals("ChartDef 't' series requires a non-blank field.",
-			assertThrows(IllegalArgumentException.class, () -> ChartDef.line("t").series(null, "V")).getMessage());
+			assertThrows(IllegalArgumentException.class, () -> target20.series(null, "V")).getMessage());
+		var target21 = ChartDef.bar("t");
 		assertEquals("ChartDef 't' series requires a non-blank field.",
-			assertThrows(IllegalArgumentException.class, () -> ChartDef.bar("t").series(" ", "V", 2)).getMessage());
+			assertThrows(IllegalArgumentException.class, () -> target21.series(" ", "V", 2)).getMessage());
+		var target22 = ChartDef.bar("t");
 		assertEquals("ChartDef 't' series requires a non-blank field.",
-			assertThrows(IllegalArgumentException.class, () -> ChartDef.bar("t").series("", "V", "ok")).getMessage());
+			assertThrows(IllegalArgumentException.class, () -> target22.series("", "V", "ok")).getMessage());
 	}
 
 	@ParameterizedTest
 	@ValueSource(strings = {"publishes", "subscribes", "template", "bare", "class"})
 	void a06b_cardLevelKeys_pointAtToCardSpec(String key) {
+		var target23 = ChartDef.line("t");
 		assertEquals("ChartDef 't' key '" + key + "' is card-level; set it on toCardSpec().",
-			assertThrows(IllegalArgumentException.class, () -> ChartDef.line("t").set(key, "x")).getMessage());
+			assertThrows(IllegalArgumentException.class, () -> target23.set(key, "x")).getMessage());
 	}
 
 	@Test void a06c_wiringGoesOnTheCardSpec() {
@@ -161,7 +191,8 @@ class ChartDef_Test extends TestBase {
 	}
 
 	@Test void b03_raw_requiresOption() {
-		var e = assertThrows(IllegalArgumentException.class, () -> ChartDef.raw("r").src("/r").toCardSpec());
+		var target24 = ChartDef.raw("r").src("/r");
+		var e = assertThrows(IllegalArgumentException.class, target24::toCardSpec);
 		assertString("ChartDef 'r' raw(...) requires option(...).", e.getMessage());
 	}
 
@@ -186,9 +217,13 @@ class ChartDef_Test extends TestBase {
 	}
 
 	@Test void b07_decorate_badName_isE74() {
-		var e = assertThrows(IllegalArgumentException.class, () -> ChartDef.line("t").decorate("Bad", JsonMap.of()));
+		var target25 = ChartDef.line("t");
+		var arg = JsonMap.of();
+		var e = assertThrows(IllegalArgumentException.class, () -> target25.decorate("Bad", arg));
 		assertString("E-74: 'Bad' is not a valid decorator name", e.getMessage());
-		assertThrows(IllegalArgumentException.class, () -> ChartDef.line("t").decorate("ok", JsonMap.of("use", "x")));
+		var target26 = ChartDef.line("t");
+		var arg2 = JsonMap.of("use", "x");
+		assertThrows(IllegalArgumentException.class, () -> target26.decorate("ok", arg2));
 	}
 
 	@Test void b08_patch_mergesInOrder_byKeyAndById() {
@@ -207,7 +242,8 @@ class ChartDef_Test extends TestBase {
 		var m = map(ChartDef.line("t").src("/s").x("d").series("v", "V").on("click", "app.pick"));
 		assertEquals(j("{click:'app.pick'}"), m.get("on"));
 		assertEquals(j("[{topic:'app.pick',retain:false}]"), m.get("publishes"));
-		var e = assertThrows(IllegalArgumentException.class, () -> ChartDef.line("t").on("Click", "app.pick"));
+		var target27 = ChartDef.line("t");
+		var e = assertThrows(IllegalArgumentException.class, () -> target27.on("Click", "app.pick"));
 		assertString("E-74: 'Click' is not a valid event name", e.getMessage());
 	}
 
@@ -220,9 +256,11 @@ class ChartDef_Test extends TestBase {
 		var m = map(ChartDef.line("t").source(Topics.data("x")).x("d").series("v", "V"));
 		assertEquals("data:x", m.get("source"));
 		assertEquals(j("[{topic:'data:x',as:'data'}]"), m.get("subscribes"));
-		var e = assertThrows(IllegalArgumentException.class, () -> ChartDef.line("t").src("/s").source("data:x").x("d").series("v", "V").toCardSpec());
+		var target28 = ChartDef.line("t").src("/s").source("data:x").x("d").series("v", "V");
+		var e = assertThrows(IllegalArgumentException.class, target28::toCardSpec);
 		assertString("ChartDef 't' requires exactly one of src(...), data(...) or source(...).", e.getMessage());
-		assertThrows(IllegalArgumentException.class, () -> ChartDef.line("t").source("filter:x"));
+		var target29 = ChartDef.line("t");
+		assertThrows(IllegalArgumentException.class, () -> target29.source("filter:x"));
 	}
 
 	@Test void b13_group_renderer_theme() {
@@ -230,7 +268,8 @@ class ChartDef_Test extends TestBase {
 		assertEquals("g", m.get("group"));
 		assertEquals("svg", m.get("renderer"));
 		assertEquals("juneau-open", m.get("theme"));
-		assertThrows(IllegalArgumentException.class, () -> ChartDef.line("t").renderer("webgl"));
+		var target30 = ChartDef.line("t");
+		assertThrows(IllegalArgumentException.class, () -> target30.renderer("webgl"));
 	}
 
 	@Test void b14_largeData_partialFrames_a11y() {
@@ -242,29 +281,36 @@ class ChartDef_Test extends TestBase {
 	}
 
 	@Test void b15_partialFrames_needsSource() {
-		var e = assertThrows(IllegalArgumentException.class, () -> ChartDef.line("t").src("/s").x("d").series("v", "V").partialFrames().toCardSpec());
+		var target31 = ChartDef.line("t").src("/s").x("d").series("v", "V").partialFrames();
+		var e = assertThrows(IllegalArgumentException.class, target31::toCardSpec);
 		assertString("ChartDef 't' partialFrames() needs source(...).", e.getMessage());
 	}
 
 	@Test void b16_kindOnlyMethods_rejectedOnOtherKinds() {
-		assertThrows(IllegalArgumentException.class, () -> ChartDef.line("t").yField("r"));
-		assertThrows(IllegalArgumentException.class, () -> ChartDef.bar("t").symbolSizeBy("r"));
-		assertThrows(IllegalArgumentException.class, () -> ChartDef.line("t").scale(0, 1));
+		var target32 = ChartDef.line("t");
+		assertThrows(IllegalArgumentException.class, () -> target32.yField("r"));
+		var target33 = ChartDef.bar("t");
+		assertThrows(IllegalArgumentException.class, () -> target33.symbolSizeBy("r"));
+		var target34 = ChartDef.line("t");
+		assertThrows(IllegalArgumentException.class, () -> target34.scale(0, 1));
 	}
 
 	@Test void b17_heatmap_requiresXyValue() {
-		var e = assertThrows(IllegalArgumentException.class, () -> ChartDef.heatmap("h").src("/h").x("a").toCardSpec());
+		var target35 = ChartDef.heatmap("h").src("/h").x("a");
+		var e = assertThrows(IllegalArgumentException.class, target35::toCardSpec);
 		assertString("ChartDef 'h' kind 'heatmap' requires x(...), yField(...) and value(...).", e.getMessage());
 	}
 
 	@Test void b18_newKeysAreDedicated() {
+		var target36 = ChartDef.line("t");
 		for (var k : List.of("source", "helper", "option", "patch", "decorators", "on", "group", "renderer", "theme", "largeData", "partialFrames", "a11y", "maps"))
-			assertThrows(IllegalArgumentException.class, () -> ChartDef.line("t").set(k, 1), k);
+			assertThrows(IllegalArgumentException.class, () -> target36.set(k, 1), k);
 	}
 
 	@Test void b19_maps_sameOrigin() {
 		assertEquals(j("{world:'/geo/world.json'}"), map(ChartDef.raw("r").src("/r").option("{}").map("world", "/geo/world.json")).get("maps"));
-		assertThrows(IllegalArgumentException.class, () -> ChartDef.raw("r").map("world", "https://x/w.json"));
+		var target37 = ChartDef.raw("r");
+		assertThrows(IllegalArgumentException.class, () -> target37.map("world", "https://x/w.json"));
 	}
 
 	@Test void b20_ofIsGone() {
@@ -272,12 +318,14 @@ class ChartDef_Test extends TestBase {
 	}
 
 	@Test void b21_largeData_thresholdBelowOne_rejected() {
-		var e = assertThrows(IllegalArgumentException.class, () -> ChartDef.line("t").largeData(0));
+		var target38 = ChartDef.line("t");
+		var e = assertThrows(IllegalArgumentException.class, () -> target38.largeData(0));
 		assertString("ChartDef 't' largeData threshold '0' must be at least 1.", e.getMessage());
 	}
 
 	@Test void b22_group_blank_rejected() {
-		var e = assertThrows(IllegalArgumentException.class, () -> ChartDef.line("t").group(" "));
+		var target39 = ChartDef.line("t");
+		var e = assertThrows(IllegalArgumentException.class, () -> target39.group(" "));
 		assertString("ChartDef 't' group must be non-blank.", e.getMessage());
 	}
 
@@ -289,15 +337,19 @@ class ChartDef_Test extends TestBase {
 
 	@Test void b24_decorate_customDecoratorWithBadName_isE74() {
 		Decorator bad = () -> JsonMap.of("use", "Bad");
-		var e = assertThrows(IllegalArgumentException.class, () -> ChartDef.line("t").decorate(bad));
+		var target40 = ChartDef.line("t");
+		var e = assertThrows(IllegalArgumentException.class, () -> target40.decorate(bad));
 		assertString("E-74: 'Bad' is not a valid decorator name", e.getMessage());
 		Decorator none = () -> JsonMap.of("x", 1);
-		var e2 = assertThrows(IllegalArgumentException.class, () -> ChartDef.line("t").decorate(none));
+		var target41 = ChartDef.line("t");
+		var e2 = assertThrows(IllegalArgumentException.class, () -> target41.decorate(none));
 		assertString("E-74: 'null' is not a valid decorator name", e2.getMessage());
 	}
 
 	@Test void b25_decorateWithUse_inArgs_rejected() {
-		var e = assertThrows(IllegalArgumentException.class, () -> ChartDef.line("t").decorate("app.x", JsonMap.of("use", "y")));
+		var target42 = ChartDef.line("t");
+		var arg3 = JsonMap.of("use", "y");
+		var e = assertThrows(IllegalArgumentException.class, () -> target42.decorate("app.x", arg3));
 		assertString("ChartDef 't' decorator 'app.x' args must not set 'use'.", e.getMessage());
 	}
 
@@ -308,9 +360,11 @@ class ChartDef_Test extends TestBase {
 	}
 
 	@Test void b26_raw_withHelperKeys_rejected() {
-		var e = assertThrows(IllegalArgumentException.class, () -> ChartDef.raw("r").src("/s").option("{}").x("d").toCardSpec());
+		var target43 = ChartDef.raw("r").src("/s").option("{}").x("d");
+		var e = assertThrows(IllegalArgumentException.class, target43::toCardSpec);
 		assertString("ChartDef 'r' raw(...) takes no helper keys (x, y, series, ...); put them in option(...).", e.getMessage());
-		assertThrows(IllegalArgumentException.class, () -> ChartDef.raw("r").src("/s").option("{}").series("v", "V").toCardSpec());
+		var target44 = ChartDef.raw("r").src("/s").option("{}").series("v", "V");
+		assertThrows(IllegalArgumentException.class, target44::toCardSpec);
 		assertNotNull(ChartDef.raw("r").src("/s").option("{}").height(200).toCardSpec());
 	}
 

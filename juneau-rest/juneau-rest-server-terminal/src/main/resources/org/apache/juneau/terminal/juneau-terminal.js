@@ -76,16 +76,41 @@
 
 	function isStr(v) { return typeof v === "string"; }
 
+	/** An Error that onFailure treats as unrecoverable and shows as the badge text. */
+	function fatalError(message) {
+		const e = new Error(message);
+		e.fatal = message;
+		return e;
+	}
+
+	/** An Error that carries the HTTP status of a failed request; onFailure decides from it whether to retry. */
+	function statusError(status) {
+		const e = new Error("HTTP " + status);
+		e.status = status;
+		return e;
+	}
+
+	function checkStatus(res) {
+		if (res.status === 404)
+			throw fatalError("Terminal not found");
+		if (!res.ok)
+			throw statusError(res.status);
+	}
+
 	/** The font size that makes a screen measured at {@code current} px fill the panel, clamped to 8-20. */
 	function fitFont(current, panelWidth, screenWidth) {
-		if (!(panelWidth > 0) || !(screenWidth > 0))
+		if (!(panelWidth > 0) || !(screenWidth > 0)) // NOSONAR javascript:S1940 - NaN-safe negation; the inverted comparison differs for NaN
 			return current;
 		return Math.min(MAX_FONT, Math.max(MIN_FONT, Math.floor(current * panelWidth / screenWidth)));
 	}
 
 	/** "2 MiB", "1.5 MiB", "512 KiB" or "10 B". */
 	function formatSize(n) {
-		const unit = n >= 1024 * 1024 ? ["MiB", 1024 * 1024] : n >= 1024 ? ["KiB", 1024] : ["B", 1];
+		let unit = ["B", 1];
+		if (n >= 1024 * 1024)
+			unit = ["MiB", 1024 * 1024];
+		else if (n >= 1024)
+			unit = ["KiB", 1024];
 		const v = n / unit[1];
 		return (Number.isInteger(v) ? String(v) : v.toFixed(1)) + " " + unit[0];
 	}
@@ -104,12 +129,16 @@
 	 * the top or, backward, the bottom), wrapping once.  Returns {y, x, length} or null.  Wrapped rows are searched
 	 * one row at a time, so a match split across a wrap is not found.
 	 */
-	function findNext(buffer, query, from, backward) {
+	function findNext(buffer, query, from, backward) { // NOSONAR javascript:S3776 - one flat search loop; splitting it would scatter the wrap logic
 		const q = isStr(query) ? query.toLowerCase() : "";
 		const n = buffer.length;
 		if (!q || n === 0)
 			return null;
-		const startY = from ? from.y : backward ? n - 1 : 0;
+		let startY = 0;
+		if (from)
+			startY = from.y;
+		else if (backward)
+			startY = n - 1;
 		for (let k = 0; k <= n; k++) {
 			const y = (((backward ? startY - k : startY + k) % n) + n) % n;
 			const line = buffer.getLine(y);
@@ -117,10 +146,16 @@
 				continue;
 			const text = line.translateToString(true).toLowerCase();
 			let x;
-			if (k === 0 && from)
-				x = backward ? (from.x > 0 ? text.lastIndexOf(q, from.x - 1) : -1) : text.indexOf(q, from.x + 1);
-			else
+			if (k === 0 && from) {
+				if (!backward)
+					x = text.indexOf(q, from.x + 1);
+				else if (from.x > 0)
+					x = text.lastIndexOf(q, from.x - 1);
+				else
+					x = -1;
+			} else {
 				x = backward ? text.lastIndexOf(q) : text.indexOf(q);
+			}
 			if (x >= 0)
 				return { y: y, x: x, length: query.length };
 		}
@@ -145,12 +180,12 @@
 	/** The Term-* headers, or null when one that must be there is missing or malformed. */
 	function readHeaders(res) {
 		const get = function (k) { return res.headers.get(k); };
-		const num = function (k) { const v = get(k); return isStr(v) && OFFSET.test(v) ? Number(v) : NaN; };
+		const num = function (k) { const v = get(k); return isStr(v) && OFFSET.test(v) ? Number(v) : Number.NaN; };
 		const h = {
 			next: num("Term-Next"), end: num("Term-End"), cols: num("Term-Cols"), rows: num("Term-Rows"),
 			done: get("Term-Done") === "true", truncated: get("Term-Truncated") === "true", gone: get("Term-Error") === "gone"
 		};
-		if (!Number.isSafeInteger(h.next) || !Number.isSafeInteger(h.end) || !(h.cols >= 1) || !(h.rows >= 1))
+		if (!Number.isSafeInteger(h.next) || !Number.isSafeInteger(h.end) || !(h.cols >= 1) || !(h.rows >= 1)) // NOSONAR javascript:S1940 - NaN-safe negation; a missing header parses to NaN, which the inverted comparison would accept
 			return null;
 		return h;
 	}
@@ -200,7 +235,7 @@
 
 		function checkpoint(offset) {
 			const line = curLine();
-			const last = s.checkpoints[s.checkpoints.length - 1];
+			const last = s.checkpoints.at(-1);
 			if (!last || last[1] !== line)
 				s.checkpoints.push([offset, line]);
 		}
@@ -292,7 +327,7 @@
 		}
 
 		/** Writes {@code bytes} (which start at offset {@code at}), split at every step offset inside them. */
-		async function writeSplit(gen, bytes, at) {
+		async function writeSplit(gen, bytes, at) { // NOSONAR javascript:S3776 - one sequential write loop; splitting it would scatter the offset bookkeeping
 			const end = at + bytes.length;
 			let pos = at;
 			for (const o of s.steps) {
@@ -328,7 +363,7 @@
 			checkStatus(res);
 			const h = readHeaders(res);
 			if (!h)
-				throw { fatal: "Bad response from the terminal endpoint" };
+				throw fatalError("Bad response from the terminal endpoint");
 			if (!s.term)
 				s.term = env.open(h.cols, h.rows);
 			s.end = h.end;
@@ -345,15 +380,8 @@
 			emit();
 		}
 
-		function checkStatus(res) {
-			if (res.status === 404)
-				throw { fatal: "Terminal not found" };
-			if (!res.ok)
-				throw { status: res.status };
-		}
-
 		/** One bytes request.  Returns true when the source has more bytes than it sent (catch-up). */
-		async function pollBytes(gen) {
+		async function pollBytes(gen) { // NOSONAR javascript:S3776 - one sequential poll step; splitting it would scatter the offset bookkeeping
 			const from = s.next;
 			const res = await request(withQuery(bytesUrl, "from=" + from));
 			if (gen !== s.gen)
@@ -361,12 +389,12 @@
 			checkStatus(res);
 			const h = readHeaders(res);
 			if (!h)
-				throw { fatal: "Bad response from the terminal endpoint" };
+				throw fatalError("Bad response from the terminal endpoint");
 			// A gone source answers with no bytes and Term-Next equal to the requested offset.  Keep what is rendered and
 			// keep our own s.next; never move it to the answer's Term-Next.
 			if (h.gone) {
 				s.bytesDone = true;
-				throw { fatal: "Source unavailable" };
+				throw fatalError("Source unavailable");
 			}
 			let body = new Uint8Array(await res.arrayBuffer());
 			if (gen !== s.gen)
@@ -407,7 +435,7 @@
 			return !h.done && h.next < h.end && !(received === 0 && h.next === from);
 		}
 
-		async function pollEvents(gen) {
+		async function pollEvents(gen) { // NOSONAR javascript:S3776 - one sequential paging loop with its early exits
 			for (let i = 0; i < MAX_EVENT_PAGES; i++) {
 				const url = s.eventsNext === null ? eventsUrl : withQuery(eventsUrl, "after=" + encodeURIComponent(s.eventsNext));
 				const res = await request(url);
@@ -418,7 +446,7 @@
 					continue;
 				}
 				if (res.status >= 500 || res.status === 408 || res.status === 429)
-					throw { status: res.status };
+					throw statusError(res.status);
 				if (!res.ok) {
 					console.warn(LOG_TAG, "steps are off: the events endpoint answered HTTP " + res.status);
 					s.eventsDone = true;
@@ -427,7 +455,8 @@
 				let page;
 				try {
 					page = await res.json();
-				} catch (e) {
+				} catch (e) { // NOSONAR javascript:S2486 - a body that is not JSON is the same as no page
+					// A body that is not JSON is the same as no page; the check below turns the steps off.
 					page = null;
 				}
 				if (gen !== s.gen)
@@ -490,7 +519,7 @@
 			emit();
 		}
 
-		async function tick() {
+		async function tick() { // NOSONAR javascript:S3776 - the poll-cycle state machine; its guards must stay in one place
 			s.timer = null;
 			if (s.stopped)
 				return;
@@ -526,7 +555,10 @@
 					return;
 				}
 				setBadge("Running", "running");
-				schedule(s.nudged ? Math.max(refreshMs, NUDGE_REFRESH_MS) : (isIdle() ? IDLE_REFRESH_MS : refreshMs));
+				let nextMs = isIdle() ? IDLE_REFRESH_MS : refreshMs;
+				if (s.nudged)
+					nextMs = Math.max(refreshMs, NUDGE_REFRESH_MS);
+				schedule(nextMs);
 			} catch (e) {
 				if (gen !== s.gen || s.stopped)
 					return;
@@ -565,7 +597,7 @@
 			// A retry is waiting out its back-off: a nudge must not skip it.
 			if (s.failures > 0)
 				return;
-			if (!(p.end > s.next || (p.done === true && !s.bytesDone)))
+			if (!(p.end > s.next || (p.done === true && !s.bytesDone))) // NOSONAR javascript:S1940 - NaN-safe negation; the inverted comparison differs for NaN
 				return;
 			if (s.ticking) {
 				s.nudgePending = true;
@@ -678,7 +710,11 @@
 
 	/** The UTF-8 length of one code point. */
 	function utf8Len(cp) {
-		return cp < 0x80 ? 1 : cp < 0x800 ? 2 : cp < 0x10000 ? 3 : 4;
+		if (cp < 0x80)
+			return 1;
+		if (cp < 0x800)
+			return 2;
+		return cp < 0x10000 ? 3 : 4;
 	}
 
 	/** The longest prefix of {@code s} that is whole code points and at most {@code max} UTF-8 bytes. */
@@ -701,7 +737,7 @@
 	function linkFor(contract) {
 		const bridges = contract && Array.isArray(contract.bridges) ? contract.bridges : [];
 		for (const b of bridges) {
-			if (b && b.transport === "websocket" && isStr(b.id) && Array.isArray(b.upstream) && b.upstream.includes(INPUT_TOPIC)
+			if (b?.transport === "websocket" && isStr(b.id) && Array.isArray(b.upstream) && b.upstream.includes(INPUT_TOPIC)
 					&& Array.isArray(b.downstream) && b.downstream.includes(INPUT_STATUS_TOPIC))
 				return b.id;
 		}
@@ -726,7 +762,11 @@
 			pending: null, lastEsc: null, connected: true, disposed: false };
 
 		function view() {
-			const label = s.state === "denied" ? "Input not permitted" : s.state === "closed" ? "Job ended" : "Enable input";
+			let label = "Enable input";
+			if (s.state === "denied")
+				label = "Input not permitted";
+			else if (s.state === "closed")
+				label = "Job ended";
 			return {
 				state: s.state, chip: s.chip, chipState: s.chipState,
 				toggle: { label: label, pressed: s.state === "armed", disabled: s.state === "denied" || s.state === "closed" }
@@ -874,7 +914,7 @@
 
 		/** xterm's custom key event handler: Esc twice within 500 ms disarms, and the second Esc is swallowed. */
 		function onKeyDown(ev) {
-			if (s.state !== "armed" || !ev || ev.type !== "keydown")
+			if (s.state !== "armed" || ev?.type !== "keydown")
 				return true;
 			if (ev.key !== "Escape") {
 				s.lastEsc = null;
@@ -962,7 +1002,7 @@
 	 * new object.
 	 */
 	function xtermOptions(base, extra) {
-		const o = Object.assign({}, base);
+		const o = { ...base };
 		if (!extra || typeof extra !== "object" || Array.isArray(extra))
 			return o;
 		const convertEol = extra.convertEol;
@@ -1011,7 +1051,7 @@
 	 * It takes the payload of a {@code term.nudge:<id>} bus message, {end, done?}, and behaves as the card's nudge role does:
 	 * a nudge at or behind the bytes already read is ignored, and one after cleanup does nothing.
 	 */
-	function mount(host, opts, link, nudgeLink) {
+	function mount(host, opts, link, nudgeLink) { // NOSONAR javascript:S3776 - builds and wires the whole card region in one place
 		const doc = host.ownerDocument;
 		const win = doc.defaultView;
 		if (typeof win.Terminal !== "function")
@@ -1051,7 +1091,7 @@
 		} else {
 			bar.append(search, copy, followLabel, reconnecting, badge);
 		}
-		if (/\/bytes$/.test(opts.bytesUrl)) {
+		if (opts.bytesUrl.endsWith("/bytes")) {
 			const raw = el(doc, "a", "juneau-term-raw", "Raw");
 			try {
 				const u = new URL(opts.bytesUrl.replace(/\/bytes$/, "/raw"), win.location.href);
@@ -1099,7 +1139,7 @@
 			follow.checked = st.follow;
 			banner.hidden = !st.banner;
 			bannerText.textContent = st.banner ? st.banner.text : "";
-			bannerSlow.textContent = st.banner && st.banner.slow ? " " + st.banner.slow : "";
+			bannerSlow.textContent = st.banner?.slow ? " " + st.banner.slow : "";
 			if (input && (st.kind === "ok" || st.kind === "fail"))
 				input.runEnded();
 		}
@@ -1112,9 +1152,9 @@
 				inputChip.textContent = v.chip || "";
 			inputChip.hidden = v.chip === null;
 			if (v.chipState)
-				inputChip.setAttribute("data-state", v.chipState);
+				inputChip.dataset.state = v.chipState;
 			else
-				inputChip.removeAttribute("data-state");
+				delete inputChip.dataset.state;
 		}
 
 		if (hasInput) {
@@ -1198,7 +1238,7 @@
 		});
 		search.addEventListener("input", function () { match = null; });
 		copy.addEventListener("click", function () {
-			if (term && term.hasSelection() && win.navigator.clipboard)
+			if (term?.hasSelection() && win.navigator.clipboard)
 				win.navigator.clipboard.writeText(term.getSelection()).catch(function () {});
 		});
 		follow.addEventListener("change", function () { engine.setFollow(follow.checked); });
@@ -1249,8 +1289,7 @@
 				ro.disconnect();
 			if (term)
 				term.dispose();
-			if (root.parentNode)
-				root.parentNode.removeChild(root);
+			root.remove();
 		}
 		cleanup.nudge = engine.nudge;
 		return cleanup;
@@ -1302,7 +1341,7 @@
 
 	/** The nudge link for a card that subscribes to a nudge topic and whose topic a bridge carries.  Null otherwise. */
 	function cardNudgeLink(card, ctx) {
-		const entry = (card.subscribes || []).find(function (e) { return e && e.as === "nudge" && isStr(e.topic) && !e.topic.endsWith(":*"); });
+		const entry = (card.subscribes || []).find(function (e) { return e?.as === "nudge" && isStr(e.topic) && !e.topic.endsWith(":*"); });
 		if (!entry || !ctx || typeof ctx.subscribe !== "function")
 			return null;
 		const jc = window.JuneauConsole;
@@ -1321,7 +1360,7 @@
 			if (prev)
 				prev();
 			const terminal = card.terminal || {};
-			MOUNTED.set(host, mount(host, Object.assign({ id: card.id }, terminal), terminal.input === true ? cardLink(ctx) : null, cardNudgeLink(card, ctx)));
+			MOUNTED.set(host, mount(host, { id: card.id, ...terminal }, terminal.input === true ? cardLink(ctx) : null, cardNudgeLink(card, ctx)));
 		},
 		destroy: function (card, host) {
 			const cleanup = MOUNTED.get(host);
@@ -1350,5 +1389,6 @@
 		findNext: findNext, parseHash: parseHash, xtermOptions: xtermOptions,
 		formatSize: formatSize, linkHandlerFor: linkHandlerFor, handle: handle
 	});
-	(window.JuneauConsoleCards = window.JuneauConsoleCards || []).push(["terminal", cardHandler]);
+	window.JuneauConsoleCards = window.JuneauConsoleCards || [];
+	window.JuneauConsoleCards.push(["terminal", cardHandler]);
 })();

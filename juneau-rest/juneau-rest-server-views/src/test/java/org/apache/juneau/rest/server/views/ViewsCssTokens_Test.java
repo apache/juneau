@@ -36,10 +36,14 @@ import org.junit.jupiter.api.*;
  */
 class ViewsCssTokens_Test extends TestBase {
 
+	@SuppressWarnings({
+		"java:S8786" // Test-only regex over a short fixture.
+	})
 	private static final Pattern COMMENT = Pattern.compile("/\\*.*?\\*/", Pattern.DOTALL);
 
 	@SuppressWarnings({
-		"java:S5852" // Possessive quantifiers: no backtracking; input is the module's own bundled stylesheet.
+		"java:S5852", // Possessive quantifiers: no backtracking; input is the module's own bundled stylesheet.
+		"java:S8786" // Test-only regex over a short fixture.
 	})
 	private static final Pattern RULE = Pattern.compile("([^{}]++)\\{([^}]*+)\\}");
 

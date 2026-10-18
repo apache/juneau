@@ -41,6 +41,11 @@ import org.apache.juneau.marshall.marshaller.*;
  *
  * @since 10.0.0
  */
+@SuppressWarnings({
+	"java:S127", // utf8Length() and quote() skip the low surrogate of a pair inside the loop body.
+	"java:S1192", // Frame field names and types are wire-format literals; named constants would not clarify them.
+	"java:S3776" // Branching is inherent to decode() and isSingleObject().
+})
 public final class BusFrames {
 
 	/** The wire format version. */
@@ -221,7 +226,8 @@ public final class BusFrames {
 	 */
 	public static int utf8Length(String s) {
 		var n = 0;
-		for (var i = 0; i < s.length(); i++) {
+		var i = 0;
+		while (i < s.length()) {
 			var c = s.charAt(i);
 			if (c < 0x80)
 				n++;
@@ -232,6 +238,7 @@ public final class BusFrames {
 				i++;
 			} else
 				n += 3;
+			i++;
 		}
 		return n;
 	}
@@ -245,7 +252,8 @@ public final class BusFrames {
 	 */
 	static String quote(String s) {
 		var sb = new StringBuilder(s.length() + 2).append('"');
-		for (var i = 0; i < s.length(); i++) {
+		var i = 0;
+		while (i < s.length()) {
 			var c = s.charAt(i);
 			switch (c) {
 				case '"' -> sb.append("\\\"");
@@ -267,6 +275,7 @@ public final class BusFrames {
 						sb.append(c);
 				}
 			}
+			i++;
 		}
 		return sb.append('"').toString();
 	}
@@ -292,13 +301,11 @@ public final class BusFrames {
 						i++;
 			} else if (c == '{' || c == '[') {
 				depth++;
-			} else if (c == '}' || c == ']') {
-				if (--depth == 0) {
-					for (i++; i < n; i++)
-						if (! isWhitespace(text.charAt(i)))
-							return false;
-					return true;
-				}
+			} else if ((c == '}' || c == ']') && --depth == 0) {
+				for (i++; i < n; i++)
+					if (! isWhitespace(text.charAt(i)))
+						return false;
+				return true;
 			}
 		}
 		return false;

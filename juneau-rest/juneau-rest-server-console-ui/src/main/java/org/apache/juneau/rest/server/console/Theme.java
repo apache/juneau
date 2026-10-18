@@ -275,6 +275,11 @@ public final class Theme {
 		.token("--jc-page-nav-hairline", "2px")            // line between page-nav sections row and children row
 		.token("--jc-page-nav-section-font-size", "13px")  // Page Tabs (top row) type; independent of children
 		.token("--jc-page-nav-child-font-size", "12px")    // page-nav children (second row) type; independent of sections
+		.token("--jc-nav-tab-padding-block", "8px")        // Page Tab (and HTML-slot section) vertical padding; with line-height and the indicator border sets tab height
+		.token("--jc-nav-tab-padding-inline", "10px")      // Page Tab horizontal padding
+		.token("--jc-nav-tab-line-height", "1.5")          // Page Tab / Page Subtab line box (unitless multiple of the font size)
+		.token("--jc-page-nav-child-padding-block", "6px")   // Page Subtab vertical padding; less than the tab's 8px so the strip stays subordinate
+		.token("--jc-page-nav-child-padding-inline", "10px") // Page Subtab horizontal padding
 		.token("--jc-card-shadow", "0 2px 2px rgba(0, 0, 0, 0.05)")  // (c) content-card / title-card elevation; table-chrome clears it
 		.token("--jc-danger-wash", "#fdeceb")              // (d) themeable .jc-btn-danger:hover fill (was a hardcoded hex)
 		.token("--jc-success-wash", "#eaf6ee")             // (d) themeable .jc-btn-success:hover fill (was a hardcoded hex)

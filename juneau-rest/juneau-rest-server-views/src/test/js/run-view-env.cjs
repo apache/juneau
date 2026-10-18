@@ -55,14 +55,14 @@ function decorateNode(n, t) {
 	const nativeAppend = n.appendChild;
 	const nativeInsert = n.insertBefore;
 	n.appendChild = function (c) {
-		if (c && c.nodeType === 11) {
+		if (c?.nodeType === 11) {
 			for (const k of c.childNodes.slice()) nativeAppend.call(this, k);
 			return c;
 		}
 		return nativeAppend.call(this, c);
 	};
 	n.insertBefore = function (c, ref) {
-		if (c && c.nodeType === 11) {
+		if (c?.nodeType === 11) {
 			for (const k of c.childNodes.slice()) nativeInsert.call(this, k, ref);
 			return c;
 		}
@@ -90,12 +90,12 @@ function decorateNode(n, t) {
 		offsetTop: { get: function () {
 			const sibs = this.parentNode?.childNodes || [];
 			let y = 0;
-			for (const s of sibs) { if (s === this) break; if (isVisible(s)) y += ROW_H; }
+			for (const s of sibs) { if (s === this) { break; } if (isVisible(s)) { y += ROW_H; } }
 			return y;
 		} }
 	});
 	n.scrollIntoView = function (opts) {
-		t.scrolled.push({ n: this.getAttribute('data-n'), block: opts?.block || 'start', behavior: opts?.behavior || 'auto' });
+		t.scrolled.push({ n: this.dataset.n ?? null, block: opts?.block || 'start', behavior: opts?.behavior || 'auto' });
 		const p = this.parentNode;
 		if (p) p.scrollTop = this.offsetTop - p.clientHeight / 2 + ROW_H / 2;
 	};
@@ -104,7 +104,7 @@ function decorateNode(n, t) {
 
 function makeDate(clock) {
 	const RealDate = Date;
-	function FakeDate(...a) {
+	function FakeDate(...a) { // NOSONAR javascript:S3800 - mirrors Date: string when called, Date when constructed
 		if (!new.target) return new RealDate(BASE_MS + clock.now()).toString();
 		return a.length ? new RealDate(...a) : new RealDate(BASE_MS + clock.now());
 	}
@@ -147,7 +147,7 @@ function load(argv, opts) {
 				return f;
 			};
 			doc.hidden = false;
-			doc.addEventListener = function (type, fn) { (docListeners[type] = docListeners[type] || []).push(fn); };
+			doc.addEventListener = function (type, fn) { docListeners[type] ||= []; docListeners[type].push(fn); };
 			doc.removeEventListener = function (type, fn) {
 				const l = docListeners[type] || [];
 				const i = l.indexOf(fn);
@@ -156,7 +156,7 @@ function load(argv, opts) {
 			const w = env.window;
 			w.sessionStorage = makeStorage();
 			w.location = { hash: '', pathname: '/x', search: '', href: 'http://localhost/x', origin: 'http://localhost' };
-			w.addEventListener = function (type, fn) { (winListeners[type] = winListeners[type] || []).push(fn); };
+			w.addEventListener = function (type, fn) { winListeners[type] ||= []; winListeners[type].push(fn); };
 			w.removeEventListener = function (type, fn) {
 				const l = winListeners[type] || [];
 				const i = l.indexOf(fn);

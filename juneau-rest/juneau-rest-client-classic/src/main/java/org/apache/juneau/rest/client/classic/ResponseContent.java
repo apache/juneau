@@ -32,6 +32,7 @@ import org.apache.http.*;
 import org.apache.http.conn.*;
 import org.apache.juneau.commons.conversion.*;
 import org.apache.juneau.commons.http.*;
+import org.apache.juneau.commons.reflect.ConstructorInfo;
 import org.apache.juneau.commons.reflect.ExecutableException;
 import org.apache.juneau.commons.utils.*;
 import org.apache.juneau.http.classic.entity.*;
@@ -262,15 +263,8 @@ public class ResponseContent implements HttpEntity {
 				type = (ClassMeta<T>)getClassMeta(StreamResource.class);
 
 			var responseCtor = type.getPublicConstructor(x -> x.hasParameterTypes(HttpResponse.class));
-			if (responseCtor.isPresent()) {
-				try {
-					return responseCtor.get().newInstance(response);
-				} catch (ExecutableException e) {
-					// The (HttpResponse) constructor rejected the response (e.g. the status code does not match the class).
-					response.close();
-					throw new RestCallException(response, e.getCause() == null ? e : e.getCause(), "Could not construct %s from response.", type.inner().getName());
-				}
-			}
+			if (responseCtor.isPresent())
+				return construct(responseCtor.get(), type);
 
 			var ct = firstNonEmpty(response.getHeader(HEADER_ContentType).orElse(CONTENT_TYPE_TEXT_PLAIN));
 
@@ -282,30 +276,8 @@ public class ResponseContent implements HttpEntity {
 			if ((parser == null || (mt.toString().contains(CONTENT_TYPE_TEXT_PLAIN) && ! parser.canHandle(ct))) && type.hasStringMutater())
 				return BasicConverter.INSTANCE.to(asString(), type.inner());
 
-			if (nn(parser)) {
-				try (Closeable in = parser.isReaderParser() ? asReader() : asInputStream()) {
-
-					// @formatter:off
-					T t = parser
-						.createSession()
-						.properties(JsonMap.create().inner(request.getSessionProperties()))
-						.locale(response.getLocale())
-						.mediaType(mt)
-						.schema(schema)
-						.build()
-						.read(in, type);
-					// @formatter:on
-
-					// Some HTTP responses have no body, so try to create these beans if they've got no-arg constructors.
-					if (t == null && ! type.is(String.class)) {
-						var result2 = type.getPublicConstructor(cons -> cons.getParameterCount() == 0).map(c -> safe(() -> (T)c.newInstance()));
-						if (result2.isPresent())
-							return result2.get();
-					}
-
-					return t;
-				}
-			}
+			if (nn(parser))
+				return parse(type, mt);
 
 			if (type.hasReaderMutater())
 				return BasicConverter.INSTANCE.to(asReader(), type.inner());
@@ -323,6 +295,50 @@ public class ResponseContent implements HttpEntity {
 		} catch (ParseException | IOException e) {
 			response.close();
 			throw new RestCallException(response, e, "Could not parse response body.");
+		}
+	}
+
+	/**
+	 * Constructs the target type from the response through its {@code (HttpResponse)} constructor.
+	 */
+	private <T> T construct(ConstructorInfo ctor, ClassMeta<T> type) throws RestCallException {
+		try {
+			return ctor.newInstance(response);
+		} catch (ExecutableException e) {
+			// The (HttpResponse) constructor rejected the response (e.g. the status code does not match the class).
+			response.close();
+			throw new RestCallException(response, e.getCause() == null ? e : e.getCause(), "Could not construct %s from response.", type.inner().getName());
+		}
+	}
+
+	/**
+	 * Parses the response body with the matched parser.
+	 */
+	@SuppressWarnings({
+		"unchecked" // Type erasure requires unchecked casts in content parsing
+	})
+	private <T> T parse(ClassMeta<T> type, MediaType mt) throws ParseException, IOException {
+		try (Closeable in = parser.isReaderParser() ? asReader() : asInputStream()) {
+
+			// @formatter:off
+			T t = parser
+				.createSession()
+				.properties(JsonMap.create().inner(request.getSessionProperties()))
+				.locale(response.getLocale())
+				.mediaType(mt)
+				.schema(schema)
+				.build()
+				.read(in, type);
+			// @formatter:on
+
+			// Some HTTP responses have no body, so try to create these beans if they've got no-arg constructors.
+			if (t == null && ! type.is(String.class)) {
+				var result2 = type.getPublicConstructor(cons -> cons.getParameterCount() == 0).map(c -> safe(() -> (T)c.newInstance()));
+				if (result2.isPresent())
+					return result2.get();
+			}
+
+			return t;
 		}
 	}
 

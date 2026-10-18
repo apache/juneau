@@ -58,7 +58,7 @@ class PageCapture_Merge_Test extends TestBase {
 		assertEquals("PageSpec sets tab='slo' and <@page tab='activity'> also sets it; set it in one place.", ex.getMessage());
 	}
 
-	@Test void a05_mergeTheme_conflictRejected() throws TemplateModelException {
+	@Test void a05_mergeTheme_conflictRejected() {
 		var cap = new PageCapture();
 		cap.theme("light-red");  // As a page spec seeds it.
 		var ex = assertThrows(TemplateModelException.class, () -> cap.mergeTheme("open"));

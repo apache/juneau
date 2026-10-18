@@ -160,12 +160,15 @@ class QuickStat_Test extends TestBase {
 	}
 
 	@Test void a21_segment_blankLabel() {
-		assertEquals("QuickStat 's': segment label must not be null or blank.", assertThrows(IllegalArgumentException.class, () -> QuickStat.segmented("s", "S").segment(" ", 1)).getMessage());
-		assertEquals("QuickStat 's': segment label must not be null or blank.", assertThrows(IllegalArgumentException.class, () -> QuickStat.segmented("s", "S").segment(null, 1)).getMessage());
+		var target = QuickStat.segmented("s", "S");
+		assertEquals("QuickStat 's': segment label must not be null or blank.", assertThrows(IllegalArgumentException.class, () -> target.segment(" ", 1)).getMessage());
+		var target2 = QuickStat.segmented("s", "S");
+		assertEquals("QuickStat 's': segment label must not be null or blank.", assertThrows(IllegalArgumentException.class, () -> target2.segment(null, 1)).getMessage());
 	}
 
 	@Test void a22_segment_negativeCount() {
-		assertEquals("QuickStat 's': segment count must be >= 0.", assertThrows(IllegalArgumentException.class, () -> QuickStat.segmented("s", "S").segment("A", -1)).getMessage());
+		var target3 = QuickStat.segmented("s", "S");
+		assertEquals("QuickStat 's': segment count must be >= 0.", assertThrows(IllegalArgumentException.class, () -> target3.segment("A", -1)).getMessage());
 	}
 
 	@Test void a23_segment_ninth_rejected() {
@@ -178,30 +181,39 @@ class QuickStat_Test extends TestBase {
 	}
 
 	@Test void a24_segmented_noSegments_throwsAtToMap() {
-		assertEquals("QuickStat 's': a segmented item needs at least one segment.", assertThrows(IllegalArgumentException.class, () -> QuickStat.segmented("s", "S").toMap()).getMessage());
+		var target4 = QuickStat.segmented("s", "S");
+		assertEquals("QuickStat 's': a segmented item needs at least one segment.", assertThrows(IllegalArgumentException.class, target4::toMap).getMessage());
 	}
 
 	@Test void a25_text_onlyOnMeter() {
-		assertEquals("QuickStat 't': text(...) is only valid on a meter item.", assertThrows(IllegalArgumentException.class, () -> QuickStat.of("t", "T", 1).text("x")).getMessage());
-		assertEquals("QuickStat 's': text(...) is only valid on a meter item.", assertThrows(IllegalArgumentException.class, () -> QuickStat.segmented("s", "S").text("x")).getMessage());
+		var target5 = QuickStat.of("t", "T", 1);
+		assertEquals("QuickStat 't': text(...) is only valid on a meter item.", assertThrows(IllegalArgumentException.class, () -> target5.text("x")).getMessage());
+		var target6 = QuickStat.segmented("s", "S");
+		assertEquals("QuickStat 's': text(...) is only valid on a meter item.", assertThrows(IllegalArgumentException.class, () -> target6.text("x")).getMessage());
 	}
 
 	@Test void a26_text_null() {
-		assertEquals("QuickStat 'm': text must not be null.", assertThrows(IllegalArgumentException.class, () -> QuickStat.meter("m", "M", 1, 2).text(null)).getMessage());
+		var target7 = QuickStat.meter("m", "M", 1, 2);
+		assertEquals("QuickStat 'm': text must not be null.", assertThrows(IllegalArgumentException.class, () -> target7.text(null)).getMessage());
 	}
 
 	@Test void a27_segment_onlyOnSegmented() {
-		assertEquals("QuickStat 't': segment(...) is only valid on a segmented item.", assertThrows(IllegalArgumentException.class, () -> QuickStat.of("t", "T", 1).segment("A", 1)).getMessage());
-		assertEquals("QuickStat 'm': segment(...) is only valid on a segmented item.", assertThrows(IllegalArgumentException.class, () -> QuickStat.meter("m", "M", 1, 2).segment("A", 1, StatusTone.INFO)).getMessage());
+		var target8 = QuickStat.of("t", "T", 1);
+		assertEquals("QuickStat 't': segment(...) is only valid on a segmented item.", assertThrows(IllegalArgumentException.class, () -> target8.segment("A", 1)).getMessage());
+		var target9 = QuickStat.meter("m", "M", 1, 2);
+		assertEquals("QuickStat 'm': segment(...) is only valid on a segmented item.", assertThrows(IllegalArgumentException.class, () -> target9.segment("A", 1, StatusTone.INFO)).getMessage());
 	}
 
 	@Test void a28_statusTone_onSegmented() {
-		assertEquals("QuickStat 's': statusTone(...) is not valid on a segmented item; tone each segment instead.", assertThrows(IllegalArgumentException.class, () -> QuickStat.segmented("s", "S").statusTone(StatusTone.INFO)).getMessage());
-		assertEquals("QuickStat 's': statusTone(...) is not valid on a segmented item; tone each segment instead.", assertThrows(IllegalArgumentException.class, () -> QuickStat.segmented("s", "S").statusTone(null)).getMessage());
+		var target10 = QuickStat.segmented("s", "S");
+		assertEquals("QuickStat 's': statusTone(...) is not valid on a segmented item; tone each segment instead.", assertThrows(IllegalArgumentException.class, () -> target10.statusTone(StatusTone.INFO)).getMessage());
+		var target11 = QuickStat.segmented("s", "S");
+		assertEquals("QuickStat 's': statusTone(...) is not valid on a segmented item; tone each segment instead.", assertThrows(IllegalArgumentException.class, () -> target11.statusTone(null)).getMessage());
 	}
 
 	@Test void a29_tone_onSegmented() {
-		assertEquals("QuickStat 's': tone(...) is not valid on a segmented item; tone each segment instead.", assertThrows(IllegalArgumentException.class, () -> QuickStat.segmented("s", "S").tone(QuickStat.Tone.INFO)).getMessage());
+		var target12 = QuickStat.segmented("s", "S");
+		assertEquals("QuickStat 's': tone(...) is not valid on a segmented item; tone each segment instead.", assertThrows(IllegalArgumentException.class, () -> target12.tone(QuickStat.Tone.INFO)).getMessage());
 	}
 
 	@Test void a30_tone_and_statusTone_sameToken_lastWins() {

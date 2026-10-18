@@ -54,7 +54,7 @@ function patchElement(env, node, downloads) {
 			get() { return this.childNodes.map(c => c.className || '').join(' '); },
 			set(v) {
 				if (v !== '') throw new Error('harness: only innerHTML = "" is supported');
-				for (const c of this.childNodes.slice()) this.removeChild(c);
+				for (const c of this.childNodes.slice()) c.remove();
 			}
 		});
 	if (!node.dispatchEvent) node.dispatchEvent = function (ev) { env.document.dispatchEvent(ev); return true; };
@@ -90,7 +90,7 @@ async function page(contract, opts) {
 	const island = doc.createElement('script');
 	island.setAttribute('type', 'application/json');
 	island.id = 'juneau-page';
-	island.textContent = JSON.stringify(Object.assign({ contractVersion: '1', title: 'T', nav: [], activeNav: [] }, contract));
+	island.textContent = JSON.stringify({ contractVersion: '1', title: 'T', nav: [], activeNav: [], ...contract });
 	doc.body.appendChild(island);
 	doc.readyState = 'loading';
 	const errors = [], warns = [], intervals = [], fetches = [], ros = [], rafs = [];
@@ -107,7 +107,7 @@ async function page(contract, opts) {
 		URLSearchParams: env.window.URLSearchParams, URL, CustomEvent: env.window.CustomEvent, AbortController,
 		localStorage: { getItem: () => null, setItem: () => {}, removeItem: () => {} },
 		fetch: (url, init) => {
-			fetches.push({ url: String(url), accept: init && init.headers && init.headers.Accept });
+			fetches.push({ url: String(url), accept: init?.headers?.Accept });
 			return (opts.fetch || (() => Promise.reject(new TypeError('no fetch'))))(String(url), init);
 		},
 		setTimeout: opts.setTimeout || setTimeout, clearTimeout,
@@ -121,17 +121,17 @@ async function page(contract, opts) {
 	env.window.document = doc;
 	env.window.localStorage = sandbox.localStorage;
 	env.window.open = (u, t, f) => { opened.push([String(u), t, f]); return null; };
-	env.window.getComputedStyle = () => ({ getPropertyValue: k => (opts.tokens && opts.tokens[k]) || '' });
+	env.window.getComputedStyle = () => ({ getPropertyValue: k => (opts.tokens?.[k]) || '' });
 	doc.defaultView = env.window;
 	if (!opts.noEcharts) env.window.echarts = fake.echarts;
 	if (opts.queue) env.window.JuneauConsoleCharts = opts.queue.slice();
 	if (opts.before) opts.before(env.window);
 	vm.createContext(sandbox);
-	vm.runInContext(busSrc, sandbox, { filename: 'juneau-bus.js' });
-	vm.runInContext(dataSrc, sandbox, { filename: 'juneau-data.js' });
-	if (opts.chartsFirst) vm.runInContext(chartsSrc, sandbox, { filename: 'juneau-charts.js' });
-	vm.runInContext(shellSrc, sandbox, { filename: 'juneau-console.js' });
-	if (!opts.chartsFirst) vm.runInContext(chartsSrc, sandbox, { filename: 'juneau-charts.js' });
+	vm.runInContext(busSrc, sandbox, { filename: 'juneau-bus.js' }); // NOSONAR javascript:S1523 - loads the shipped script into a vm sandbox for the test
+	vm.runInContext(dataSrc, sandbox, { filename: 'juneau-data.js' }); // NOSONAR javascript:S1523 - loads the shipped script into a vm sandbox for the test
+	if (opts.chartsFirst) vm.runInContext(chartsSrc, sandbox, { filename: 'juneau-charts.js' }); // NOSONAR javascript:S1523 - loads the shipped script into a vm sandbox for the test
+	vm.runInContext(shellSrc, sandbox, { filename: 'juneau-console.js' }); // NOSONAR javascript:S1523 - loads the shipped script into a vm sandbox for the test
+	if (!opts.chartsFirst) vm.runInContext(chartsSrc, sandbox, { filename: 'juneau-charts.js' }); // NOSONAR javascript:S1523 - loads the shipped script into a vm sandbox for the test
 	const w = env.window;
 	if (opts.afterLoad) opts.afterLoad(w);
 	await flush();
@@ -149,10 +149,10 @@ const all = (r, id, sel) => { const h = host(r, id); return h ? Array.from(h.que
 const one = (r, id, sel) => all(r, id, sel)[0] || null;
 const text = (r, id, sel) => { const n = one(r, id, sel); return n ? n.textContent : null; };
 const tick = r => r.intervals.filter(x => x.live).forEach(x => x.fn());
-const inst = (r, id) => r.fake.instances.filter(i => i.el && host(r, id) && host(r, id).contains(i.el) && !i.disposed).pop() || null;
-const lastOption = i => i ? JSON.parse(JSON.stringify(i.options[i.options.length - 1])) : null;
+const inst = (r, id) => r.fake.instances.findLast(i => i.el && host(r, id) && host(r, id).contains(i.el) && !i.disposed) || null;
+const lastOption = i => i ? JSON.parse(JSON.stringify(i.options.at(-1))) : null; // NOSONAR javascript:S7784 - JSON round-trip deliberately normalizes to plain JSON (options may carry functions)
 // A column of the bound dataset (typed arrays do not survive JSON).
-const col = (i, name) => Array.from(i.options[i.options.length - 1].dataset[0].source[name]);
+const col = (i, name) => Array.from(i.options.at(-1).dataset[0].source[name]);
 const seriesIds = o => (o.series || []).map(s => s.id || null);
 const actions = (r, from) => r.fake.calls.slice(from || 0).filter(c => c[0] === 'dispatchAction').map(c => c[1]);
 const cardError = (r, id) => text(r, id, '.jc-card-error');
@@ -165,23 +165,23 @@ const LINE = {
 	id: 'c1', type: 'chart', title: 'Orders', kind: 'line', x: { field: 'day', label: 'Day' },
 	series: [{ field: 'placed', label: 'Placed' }, { field: 'delivered', label: 'Delivered', tone: 'ok' }], data: ROWS
 };
-const card = o => Object.assign({}, LINE, o);
+const card = o => ({ ...LINE, ...o });
 const out = {};
 
 // A source card on topic data:x and a page that publishes DataRegistry frames (rows given) through the real bus.
 const DIMS = [{ name: 'day', type: 'string' }, { name: 'placed', type: 'number' }];
-const srcCard = o => Object.assign({ id: 'src', type: 'chart', title: 'S', source: 'data:x', subscribes: [{ topic: 'data:x', as: 'data' }],
-	helper: { kind: 'line', x: 'day', series: [{ field: 'placed' }] } }, o);
+const srcCard = o => ({ id: 'src', type: 'chart', title: 'S', source: 'data:x', subscribes: [{ topic: 'data:x', as: 'data' }],
+	helper: { kind: 'line', x: 'day', series: [{ field: 'placed' }] }, ...o });
 async function srcPage(cards, opts) {
 	opts = opts || {};
 	const r = await page({ topics: [{ topic: 'data:x', retain: true, publisher: 'script' }], cards: cards },
-		Object.assign({}, opts, { afterLoad: w => { w.JuneauViews.bus.declare('data:x', { retain: true, by: 'test' }); if (opts.afterLoad) opts.afterLoad(w); } }));
+		{ ...opts, afterLoad: w => { w.JuneauViews.bus.declare('data:x', { retain: true, by: 'test' }); if (opts.afterLoad) opts.afterLoad(w); } });
 	const own = r.bus.owner('test'), data = r.w.JuneauViews.data;
 	r.publish = async (rows, status, more) => {
 		const v = data.put('x', { dims: DIMS, rowCount: rows.length, truncated: false, columns: {
 			day: { codes: Int32Array.from(rows, (_, i) => i), dict: rows.map(x => x.day) }, placed: Float64Array.from(rows.map(x => x.placed)) } });
-		own.publish('data:x', Object.assign({ schemaVersion: 1, source: 'x', version: v, status: status || 'ready', progress: { loaded: rows.length },
-			rowCount: rows.length, truncated: false, dims: DIMS }, more));
+		own.publish('data:x', { schemaVersion: 1, source: 'x', version: v, status: status || 'ready', progress: { loaded: rows.length },
+			rowCount: rows.length, truncated: false, dims: DIMS, ...more });
 		await flush();
 		return v;
 	};
@@ -199,7 +199,7 @@ async function section(name, fn) {
 	try {
 		out[name] = await fn();
 	} catch (e) {
-		out[name] = { crash: String(e && e.stack || e) };
+		out[name] = { crash: String(e?.stack || e) };
 	}
 }
 
@@ -214,7 +214,7 @@ async function section(name, fn) {
 			labelledby: plot.getAttribute('aria-labelledby'), tabindex: plot.getAttribute('tabindex'),
 			canvasHeight: one(r, 'c1', '.jc-chart-canvas').style.height,
 			init: [i.theme, i.opts], seriesIds: seriesIds(o), seriesNames: o.series.map(s => s.name),
-			datasetIds: (o.dataset || []).map(d => d.id), aria: o.aria, okColor: o.series[1].itemStyle && o.series[1].itemStyle.color,
+			datasetIds: (o.dataset || []).map(d => d.id), aria: o.aria, okColor: o.series[1].itemStyle?.color,
 			setOptionOpts: r.fake.calls.filter(c => c[0] === 'setOption').map(c => c[2] || null),
 			bannerHidden: one(r, 'c1', '.jc-chart-banner').hidden, errors: r.errors
 		};
@@ -244,7 +244,7 @@ async function section(name, fn) {
 			helper: { kind: 'bar', x: 'day', series: [{ field: 'placed' }, { field: 'delivered' }], stacked: true, orientation: 'horizontal' } }] },
 			{ fetch: url => url === '/api/rows' ? ok({ rows: ROWS }) : bad(404, {}) });
 		const o = lastOption(inst(r, 'b1'));
-		return { fetches: r.fetches, stack: o.series.map(s => s.stack || null), yAxis: o.yAxis && o.yAxis.type,
+		return { fetches: r.fetches, stack: o.series.map(s => s.stack || null), yAxis: o.yAxis?.type,
 			caption: text(r, 'b1', '.jc-chart-caption'), errors: r.errors };
 	});
 
@@ -262,7 +262,7 @@ async function section(name, fn) {
 	await section('pieLegend', async () => {
 		const shape = async (kind, legend) => {
 			const r = await page({ cards: [{ id: 'p1', type: 'chart', title: 'Mix',
-				helper: Object.assign({ kind: kind, label: 's', value: 'n', center: 'total' }, legend ? { legend: legend } : {}),
+				helper: { kind: kind, label: 's', value: 'n', center: 'total', ...(legend ? { legend: legend } : {}) },
 				data: [{ s: 'a', n: 50 }, { s: 'b', n: 47 }] }] });
 			const o = lastOption(inst(r, 'p1'));
 			const g = (o.graphic || []).find(x => x.id === 'juneau-center');
@@ -291,7 +291,7 @@ async function section(name, fn) {
 		fail = true;
 		tick(r);
 		await flush();
-		const stale = { cls: host(r, 'p').querySelector('.jc-chart--stale') !== null, title: one(r, 'p', '.jc-chart--stale') && one(r, 'p', '.jc-chart--stale').getAttribute('title') };
+		const stale = { cls: host(r, 'p').querySelector('.jc-chart--stale') !== null, title: one(r, 'p', '.jc-chart--stale') && one(r, 'p', '.jc-chart--stale').getAttribute('title') }; // NOSONAR javascript:S6582 - null (not undefined) reaches the serialized assertion
 		fail = false;
 		tick(r);
 		await flush();
@@ -318,7 +318,7 @@ async function section(name, fn) {
 		r.w.JuneauConsole.destroyCard('w3');
 		r.w.JuneauConsoleCharts.push(['fn', 'app.money', () => v => '$' + v]);
 		await flush();
-		const fnOf = id => { const i = inst(r, id); return i ? typeof i.options[i.options.length - 1].tooltip.valueFormatter : null; };
+		const fnOf = id => { const i = inst(r, id); return i ? typeof i.options.at(-1).tooltip.valueFormatter : null; };
 		return { before, after: { w1: state('w1'), sw: state('sw') }, fns: { w1: fnOf('w1'), sw: fnOf('sw') }, w2: state('w2'), w3: state('w3'),
 			log: r.errors.filter(e => e.includes('E-JS-90')) };
 	});
@@ -347,11 +347,11 @@ async function section(name, fn) {
 			cards: [card({ id: 'k', on: { click: 'app.picked' }, onClick: { href: '/orders?day={day}' }, publishes: [{ topic: 'app.picked', retain: false }] }),
 				card({ id: 'x', onClick: { href: 'java\tscript:alert({day})' } })]
 		});
-		r.bus.subscribe('app.picked', p => got.push(JSON.parse(JSON.stringify(p))));
+		r.bus.subscribe('app.picked', p => got.push(structuredClone(p)));
 		const p = { componentType: 'series', seriesId: 'placed', seriesName: 'Placed', dataIndex: 1, name: 'Tue', value: 5,
 			data: { meta: { big: 'x'.repeat(5000) } }, event: { event: {} } };
 		inst(r, 'k').fire('click', p);
-		inst(r, 'k').fire('click', Object.assign({}, p, { dataIndex: 2, data: { meta: { id: 7 } }, event: { event: { ctrlKey: true } } }));
+		inst(r, 'k').fire('click', { ...p, dataIndex: 2, data: { meta: { id: 7 } }, event: { event: { ctrlKey: true } } });
 		inst(r, 'x').fire('click', p);
 		return { got, navigated: r.navigated, opened: r.opened, log: r.errors.filter(e => e.includes('E-JS-79')) };
 	});
@@ -391,8 +391,8 @@ async function section(name, fn) {
 			before: w => { w.JuneauViews = w.JuneauViews || {}; w.JuneauViews.dashboard = { initial: t => t === 'zoom:s' ? { start: 10, end: 60 } : { selected: { Placed: false } } }; }
 		});
 		const first = lastOption(inst(r, 's'));
-		const restored = { zoom: JSON.parse(JSON.stringify(r.bus.get('zoom:s') || null)), legend: JSON.parse(JSON.stringify(r.bus.get('legend:s') || null)) };
-		r.bus.subscribe('zoom:s', v => seen.push(JSON.parse(JSON.stringify(v))), { retained: false });
+		const restored = { zoom: structuredClone(r.bus.get('zoom:s') || null), legend: structuredClone(r.bus.get('legend:s') || null) };
+		r.bus.subscribe('zoom:s', v => seen.push(structuredClone(v)), { retained: false });
 		const i = inst(r, 's');
 		// The published state is read when the timer fires: it varies per read, so a second timer (no coalescing) or a zero delay shows.
 		let reads = 0;
@@ -404,7 +404,7 @@ async function section(name, fn) {
 		await wait(200);
 		i.fire('legendselectchanged', { selected: { Placed: true, Delivered: false } });
 		return { folded: { zoom: first.dataZoom[0], legend: first.legend.selected }, restored, early, reads, seen,
-			legend: JSON.parse(JSON.stringify(r.bus.get('legend:s'))), errors: r.errors };
+			legend: structuredClone(r.bus.get('legend:s')), errors: r.errors };
 	});
 
 	// a15c. A legend selection over the 4 KiB state cap publishes only the deselected names; when even that is over the cap the last good
@@ -414,24 +414,24 @@ async function section(name, fn) {
 		const r = await page({ cards: [card({ id: 'big', publishes: pubs, option: { legend: {} } })] });
 		const i = inst(r, 'big');
 		const seen = [];
-		r.bus.subscribe('legend:big', v => seen.push(JSON.parse(JSON.stringify(v))), { retained: false });
-		const all = (n, off) => { const m = {}; for (let k = 0; k < n; k++) m['series-name-' + k] = off.indexOf(k) < 0; return m; };
+		r.bus.subscribe('legend:big', v => seen.push(structuredClone(v)), { retained: false });
+		const all = (n, off) => { const m = {}; for (let k = 0; k < n; k++) { m['series-name-' + k] = off.indexOf(k) < 0; } return m; };
 		i.fire('legendselectchanged', { selected: { A: false, B: true } });
 		i.fire('legendselectchanged', { selected: all(400, [3, 7]) });
 		i.fire('legendselectchanged', { selected: all(400, Array.from({ length: 400 }, (_, k) => k)) });
-		return { seen, last: JSON.parse(JSON.stringify(r.bus.get('legend:big'))), errors: r.errors };
+		return { seen, last: structuredClone(r.bus.get('legend:big')), errors: r.errors };
 	});
 
 	// a15d. A restored legend map over the 4 KiB state cap is folded and re-published as the compact deselected-only map; one too big even
 	// compact is neither folded nor re-published.
 	await section('legendRestoreOverCap', async () => {
-		const mk = (n, off) => { const m = {}; for (let k = 0; k < n; k++) m['series-name-' + k] = off.indexOf(k) < 0; return m; };
+		const mk = (n, off) => { const m = {}; for (let k = 0; k < n; k++) { m['series-name-' + k] = off.indexOf(k) < 0; } return m; };
 		const run = async (sel) => {
 			const r = await page({ cards: [card({ id: 'rs', publishes: [{ topic: 'legend:rs', retain: true }], option: { legend: {} } })] }, {
 				before: w => { w.JuneauViews = w.JuneauViews || {}; w.JuneauViews.dashboard = { initial: () => ({ selected: sel }) }; }
 			});
 			const o = lastOption(inst(r, 'rs'));
-			return { folded: o.legend && o.legend.selected || null, published: JSON.parse(JSON.stringify(r.bus.get('legend:rs') || null)), errors: r.errors };
+			return { folded: o.legend?.selected || null, published: structuredClone(r.bus.get('legend:rs') || null), errors: r.errors };
 		};
 		return { compact: await run(mk(400, [3, 7])), tooBig: await run(mk(400, Array.from({ length: 400 }, (_, k) => k))) };
 	});
@@ -442,8 +442,8 @@ async function section(name, fn) {
 		const r = await page({ cards: [card({ id: 'ev', on: { legendselectchanged: 'app.legend' }, publishes: [{ topic: 'app.legend', retain: false }], option: { legend: {} } })] });
 		const i = inst(r, 'ev');
 		const seen = [];
-		r.bus.subscribe('app.legend', v => seen.push(JSON.parse(JSON.stringify(v)).selected), { retained: false });
-		const mk = (n, off) => { const m = {}; for (let k = 0; k < n; k++) m['series-name-' + k] = off.indexOf(k) < 0; return m; };
+		r.bus.subscribe('app.legend', v => seen.push(structuredClone(v).selected), { retained: false });
+		const mk = (n, off) => { const m = {}; for (let k = 0; k < n; k++) { m['series-name-' + k] = off.indexOf(k) < 0; } return m; };
 		i.fire('legendselectchanged', { selected: { A: false, B: true } });
 		i.fire('legendselectchanged', { selected: mk(400, [3, 7]) });
 		i.fire('legendselectchanged', { selected: mk(400, Array.from({ length: 400 }, (_, k) => k)) });
@@ -492,17 +492,17 @@ async function section(name, fn) {
 		tokens['--jc-chart-1'] = '#654321';
 		r.doc.dispatchEvent({ type: 'juneau:theme-changed' });
 		await flush();
-		const regAfter = r.fake.calls.filter(c => c[0] === 'registerTheme'), t = reg[0] && reg[0][2];
-		return { registered: reg.map(c => c[1]), color0: t && t.color[0],
-			registeredAfter: regAfter.map(c => c[1]), color0After: regAfter.length > 1 ? regAfter[regAfter.length - 1][2].color[0] : null,
+		const regAfter = r.fake.calls.filter(c => c[0] === 'registerTheme'), t = reg[0]?.[2];
+		return { registered: reg.map(c => c[1]), color0: t?.color[0],
+			registeredAfter: regAfter.map(c => c[1]), color0After: regAfter.length > 1 ? regAfter.at(-1)[2].color[0] : null,
 			inits: r.fake.calls.filter(c => c[0] === 'init').map(c => [c[1], c[2]]),
 			reinit: r.fake.instances.length - before, disposed: r.fake.instances.filter(i => i.disposed).length,
 			setThemeCalls: { t1: i1.themes.length, t2: i2.themes.length }, setThemeColor0: i1.themes.length ? i1.themes[0].color[0] : null,
 			setOptionAfter: { t1: i1.optionOpts.length - opts1, t2: i2.optionOpts.length - opts2 },
-			replaceMerge: i1.optionOpts.length > opts1 ? i1.optionOpts[i1.optionOpts.length - 1] : null,
+			replaceMerge: i1.optionOpts.length > opts1 ? i1.optionOpts.at(-1) : null,
 			sameInstance: inst(r, 't1') === i1 && inst(r, 't2') === i2,
-			toolbox: t && t.toolbox, dataZoom: t && t.dataZoom, brush: t && t.brush,
-			tooltipRenderMode: t && t.tooltip.renderMode === undefined, errors: r.errors };
+			toolbox: t?.toolbox, dataZoom: t?.dataZoom, brush: t?.brush,
+			tooltipRenderMode: t && t.tooltip.renderMode === undefined, errors: r.errors }; // NOSONAR javascript:S6582 - null vs true differs when t is null
 	});
 
 	// A theme change while a refresh is in flight waits for that draw to end, then re-themes the same instance.
@@ -556,9 +556,9 @@ async function section(name, fn) {
 	await section('tonesText', async () => {
 		const tone = { series: [{ field: 'placed', label: 'Placed', tone: 'danger' }, { field: 'delivered', label: 'Delivered', tone: 'ok' }] };
 		const color = (r, i) => lastOption(inst(r, 'tt')).series[i].itemStyle.color;
-		const withText = await page({ cards: [card(Object.assign({ id: 'tt' }, tone))] }, { tokens: {
+		const withText = await page({ cards: [card({ id: 'tt', ...tone })] }, { tokens: {
 			'--jc-danger-text': '#f07a75', '--jc-danger': '#c23934', '--jc-success-text': '#5cc275', '--jc-success': '#2e8540' } });
-		const fillOnly = await page({ cards: [card(Object.assign({ id: 'tt' }, tone))] }, { tokens: { '--jc-danger': '#aa1111', '--jc-success': '#11aa11' } });
+		const fillOnly = await page({ cards: [card({ id: 'tt', ...tone })] }, { tokens: { '--jc-danger': '#aa1111', '--jc-success': '#11aa11' } });
 		return { withText: color(withText, 0), fillOnly: color(fillOnly, 0), okWithText: color(withText, 1), okFillOnly: color(fillOnly, 1) };
 	});
 
@@ -617,7 +617,7 @@ async function section(name, fn) {
 				tokens,
 				fetch: () => {
 					if (++k !== 2) return ok([{ day: 'Mon', label: 'm' }]);
-					return moved ? new Promise(res => { release = () => res({ ok: false, status: 500, json: () => Promise.resolve({}) }); }) : bad(500, {});
+					return moved ? new Promise(res => { release = () => res({ ok: false, status: 500, json: () => Promise.resolve({}) }); }) : bad(500, {}); // NOSONAR javascript:S2004 - test nesting mirrors describe/it structure
 				}
 			});
 			const i = inst(r, 'tf');
@@ -670,8 +670,8 @@ async function section(name, fn) {
 	// a18. A source card: the data role draws the DataRegistry frame its handle names, shows load progress, goes
 	// stale, rejects a malformed handle (E-JS-95) and redraws from the current handle on refresh.
 	await section('source', async () => {
-		const handle = (v, status, extra) => Object.assign({ schemaVersion: 1, source: 'x', version: v, status, progress: { loaded: 0 },
-			rowCount: 0, truncated: false, dims: [{ name: 'day', type: 'string' }, { name: 'placed', type: 'number' }] }, extra);
+		const handle = (v, status, extra) => ({ schemaVersion: 1, source: 'x', version: v, status, progress: { loaded: 0 },
+			rowCount: 0, truncated: false, dims: [{ name: 'day', type: 'string' }, { name: 'placed', type: 'number' }], ...extra });
 		const r = await page({
 			topics: [{ topic: 'data:x', retain: true, publisher: 'script' }],
 			cards: [{ id: 'src', type: 'chart', title: 'S', source: 'data:x', subscribes: [{ topic: 'data:x', as: 'data' }],
@@ -698,7 +698,7 @@ async function section(name, fn) {
 		r.bus.publish('cmd:src', { schemaVersion: 1, op: 'refresh' });
 		await flush();
 		const refreshDrew = r.fake.calls.filter(c => c[0] === 'setOption').length - setOptions;
-		const refreshOpts = r.fake.calls.filter(c => c[0] === 'setOption').slice(-1)[0][2];
+		const refreshOpts = r.fake.calls.findLast(c => c[0] === 'setOption')[2];
 		own.publish('data:x', { schemaVersion: 1, nope: true });
 		await flush();
 		return { loading, drawn, progress, stale, refreshDrew, refreshOpts, points: col(inst(r, 'src'), 'day').length,
@@ -715,9 +715,9 @@ async function section(name, fn) {
 		const url = api && await api.export('png', { pixelRatio: 2 });
 		let svg = null;
 		try { await api.export('svg'); } catch (e) { svg = e.message; }
-		const marked = api && api.getOption();
+		const marked = api?.getOption();
 		return { note: text(r, 'a', '.jc-chart-table-note'), rows: all(r, 'a', 'tr').length, url, svg,
-			marker: marked && marked.tooltip.valueFormatter, chart: api && api.chart() === inst(r, 'a'),
+			marker: marked?.tooltip.valueFormatter, chart: api?.chart() === inst(r, 'a'),
 			noToggle: one(r, 'n', '.jc-chart-toggle') === null, noTable: one(r, 'n', '.jc-chart-table') === null };
 	});
 
@@ -732,8 +732,8 @@ async function section(name, fn) {
 			fetch: (url, init) => { signals.push(init.signal); return ok(url === '/api/rows' ? { rows: ROWS } : MARKS); }
 		});
 		const o = lastOption(inst(r1, 'i1'));
-		const done = { urls: r1.fetches.map(f => f.url).sort(), aborted: signals.filter(x => x && x.aborted).length,
-			carriers: seriesIds(o).filter(x => x && x.startsWith('juneau-markers-')), errors: r1.errors };
+		const done = { urls: r1.fetches.map(f => f.url).sort((a, b) => (a < b ? -1 : Number(a > b))), aborted: signals.filter(x => x?.aborted).length,
+			carriers: seriesIds(o).filter(x => x?.startsWith('juneau-markers-')), errors: r1.errors };
 		const pending = [];
 		const r2 = await page({ cards: [decorated('i2')] }, {
 			fetch: (url, init) => {
@@ -760,7 +760,7 @@ async function section(name, fn) {
 		const N = 1000000;
 		const placed = new Float64Array(N);
 		let reads = 0;
-		const spy = new Proxy(placed, { get: (t, k) => { if (typeof k === 'string' && /^[0-9]+$/.test(k)) reads++; const v = t[k]; return typeof v === 'function' ? v.bind(t) : v; } });
+		const spy = new Proxy(placed, { get: (t, k) => { if (typeof k === 'string' && /^\d+$/.test(k)) { reads++; } const v = t[k]; return typeof v === 'function' ? v.bind(t) : v; } });
 		const r = await page({
 			topics: [{ topic: 'data:big', retain: true, publisher: 'script' }],
 			cards: [{ id: 'L', type: 'chart', title: 'L', source: 'data:big', subscribes: [{ topic: 'data:big', as: 'data' }], a11y: { table: false },
@@ -773,8 +773,8 @@ async function section(name, fn) {
 		r.bus.owner('test').publish('data:big', { schemaVersion: 1, source: 'big', version: v, status: 'ready', progress: { loaded: N },
 			rowCount: N, truncated: false, dims });
 		await flush();
-		const i = inst(r, 'L'), last = i && i.options[i.options.length - 1];
-		return { sameArray: !!last && last.dataset[0].source.placed === spy, sameX: !!last && last.dataset[0].source.n === n,
+		const i = inst(r, 'L'), last = i?.options.at(-1);
+		return { sameArray: last?.dataset[0].source.placed === spy, sameX: last?.dataset[0].source.n === n,
 			walked: reads - before, fn: !!last && typeof last.tooltip.valueFormatter === 'function',
 			sampling: last ? last.series[0].sampling : null, errors: r.errors };
 	});
@@ -801,7 +801,7 @@ async function section(name, fn) {
 		let n = 0, boom = false;
 		const r = await page({ cards: [card({ id: 'q', data: undefined, src: '/api/q', refreshMs: 5000 })] }, {
 			fetch: () => ok([{ day: 'Mon', placed: ++n, delivered: 0 }]),
-			afterLoad: w => { const init = w.echarts.init; w.echarts.init = (...a) => { const i = init(...a); const so = i.setOption; i.setOption = (...b) => { if (boom) throw new Error('kaput'); return so.apply(i, b); }; return i; }; }
+			afterLoad: w => { const init = w.echarts.init; w.echarts.init = (...a) => { const i = init(...a); const so = i.setOption; i.setOption = (...b) => { if (boom) { throw new Error('kaput'); } return so.apply(i, b); }; return i; }; }
 		});
 		const first = col(inst(r, 'q'), 'placed');
 		boom = true;
@@ -822,17 +822,16 @@ async function section(name, fn) {
 		const r = await page({ cards: [withDec('k1'), card({ id: 'k2' })] }, { fetch: () => ok([{ day: 'Tue', label: 'Deploy' }]) });
 		const o = lastOption(inst(r, 'k1'));
 		return { withCaption: text(r, 'k1', '.jc-chart-caption'), plainCaption: text(r, 'k2', '.jc-chart-caption'),
-			ids: seriesIds(o), ariaEnabled: !!(o.aria && o.aria.enabled), errors: r.errors };
+			ids: seriesIds(o), ariaEnabled: !!(o.aria?.enabled), errors: r.errors };
 	});
 
 	// a25. Every URL the lifecycle fetches or links must be a same-origin path: a card src, a map url, a decorator
 	// src and an exported data URL that is not an image.
 	await section('sameOrigin', async () => {
-		const bad = ['https://evil.example/x', '//evil.example/x', 'javascript:alert(1)', '/a/../b', '/a\\b'];
+		const bad = ['https://evil.example/x', '//evil.example/x', 'javascript:alert(1)', '/a/../b', String.raw`/a\b`];
 		const cards = bad.map((u, i) => card({ id: 'u' + i, data: undefined, src: u }));
-		cards.push(card({ id: 'um', maps: { m: 'https://evil.example/m.json' } }));
-		cards.push(card({ id: 'ud', decorators: [{ use: 'markers', src: '//evil.example/m', at: 'day', label: 'label' }] }));
-		cards.push(card({ id: 'ux', renderer: 'svg' }));
+		cards.push(card({ id: 'um', maps: { m: 'https://evil.example/m.json' } }),
+			card({ id: 'ud', decorators: [{ use: 'markers', src: '//evil.example/m', at: 'day', label: 'label' }] }), card({ id: 'ux', renderer: 'svg' }));
 		const r = await page({ cards }, { fetch: () => ok(ROWS), afterLoad: w => { const init = w.echarts.init; w.echarts.init = (...a) => { const i = init(...a); i.getDataURL = () => 'javascript:alert(1)'; return i; }; } });
 		r.bus.publish('cmd:ux', { schemaVersion: 1, op: 'export', options: { type: 'svg' } });
 		await flush();
@@ -856,12 +855,12 @@ async function section(name, fn) {
 		const cyc = { a: 1 };
 		cyc.self = cyc;
 		const meta = JSON.parse('{"__proto__":{"polluted":1},"ok":1}');
-		Object.assign(meta, { d: new Date(0), f() {}, n: NaN, u: undefined, nest: { list: [1, undefined, () => 1] }, cyc });
-		inst(r, 'mm').fire('click', { componentType: 'series', seriesId: 'placed', dataIndex: 0, name: 'Mon', value: [1, NaN, new Date(0)], data: { meta }, event: { event: {} } });
+		Object.assign(meta, { d: new Date(0), f() {}, n: Number.NaN, u: undefined, nest: { list: [1, undefined, () => 1] }, cyc });
+		inst(r, 'mm').fire('click', { componentType: 'series', seriesId: 'placed', dataIndex: 0, name: 'Mon', value: [1, Number.NaN, new Date(0)], data: { meta }, event: { event: {} } });
 		const p = got[0];
 		let json = null, err = null;
-		try { json = JSON.parse(JSON.stringify(p)); } catch (e) { err = String(e); }
-		return { published: got.length, err, meta: json && json.meta, value: json && json.value, sameShape: p ? JSON.stringify(p) === JSON.stringify(JSON.parse(JSON.stringify(p))) : null,
+		try { json = JSON.parse(JSON.stringify(p)); } catch (e) { err = String(e); } // NOSONAR javascript:S7784 - the test asserts the payload survives a JSON round-trip
+		return { published: got.length, err, meta: json?.meta, value: json?.value, sameShape: p ? JSON.stringify(p) === JSON.stringify(structuredClone(p)) : null,
 			polluted: ({}).polluted === undefined };
 	});
 
@@ -929,16 +928,16 @@ async function section(name, fn) {
 		const plot1 = one(r, 'src', '.jc-chart-plot');
 		const state = () => r.ros.map(x => ({ live: x.live, onPlot: x.target === one(r, 'src', '.jc-chart-plot') && x.target !== null }));
 		const drawn = { ros: state(), firstOnPlot1: r.ros[0].target === plot1 };
-		r.ros.filter(x => x.live)[0].cb();
+		r.ros.find(x => x.live).cb();
 		const pendingBeforeEmpty = r.rafs.filter(x => !x.cancelled).length;
 		await r.publish([]);
 		const empty = { ros: r.ros.map(x => x.live), rafsCancelled: r.rafs.map(x => x.cancelled), pendingBefore: pendingBeforeEmpty };
 		await r.publish(rowsOf(2));
 		const redrawn = state();
-		const live = r.ros.filter(x => x.live)[0];
+		const live = r.ros.find(x => x.live);
 		live.cb();
 		const resizesBefore = r.fake.calls.filter(c => c[0] === 'resize').length;
-		r.rafs[r.rafs.length - 1].fn();
+		r.rafs.at(-1).fn();
 		const afterFrame = { resizes: r.fake.calls.filter(c => c[0] === 'resize').length - resizesBefore };
 		live.cb();
 		const rafCount = r.rafs.length;
@@ -973,7 +972,7 @@ async function section(name, fn) {
 	// a33. On the source path: a redraw that fails keeps the last picture, marks it stale and logs; a later good handle recovers.
 	await section('sourceRedrawThrow', async () => {
 		let boom = false;
-		const r = await srcPage([srcCard()], { afterLoad: w => { const init = w.echarts.init; w.echarts.init = (...a) => { const i = init(...a); const so = i.setOption; i.setOption = (...b) => { if (boom) throw new Error('kaput'); return so.apply(i, b); }; return i; }; } });
+		const r = await srcPage([srcCard()], { afterLoad: w => { const init = w.echarts.init; w.echarts.init = (...a) => { const i = init(...a); const so = i.setOption; i.setOption = (...b) => { if (boom) { throw new Error('kaput'); } return so.apply(i, b); }; return i; }; } });
 		await r.publish(rowsOf(1));
 		const first = col(inst(r, 'src'), 'placed');
 		boom = true;
@@ -1003,7 +1002,7 @@ async function section(name, fn) {
 		await wait(250);
 		const first = lastOption(i);
 		return { restores, seen: seen.length, legends: legends.length,
-			foldedZoom: first.dataZoom[0], foldedLegend: first.legend && first.legend.selected || null,
+			foldedZoom: first.dataZoom[0], foldedLegend: first.legend?.selected || null,
 			control: { drawn: inst(r, 'yr') !== null, error: cardError(r, 'yr') }, errors: r.errors.filter(e => e.includes('juneau-charts')) };
 	});
 
@@ -1040,7 +1039,7 @@ async function section(name, fn) {
 		const r3 = await srcPage([srcCard({ id: 's3', decorators: [{ use: 'markers', src: '/api/m', at: 'day', label: 'label' }] })], {
 			fetch: (url, init) => {
 				srcSignals.push(init.signal);
-				if (++sk === 2) return new Promise(res => { srcRelease = () => res({ ok: false, status: 500, json: () => Promise.resolve({}) }); });
+				if (++sk === 2) return new Promise(res => { srcRelease = () => res({ ok: false, status: 500, json: () => Promise.resolve({}) }); }); // NOSONAR javascript:S2004 - test nesting mirrors describe/it structure
 				return ok([{ day: 'd0', label: 'm' }]);
 			}
 		});
@@ -1093,7 +1092,7 @@ async function section(name, fn) {
 		const r = await page({ topics: [{ topic: 'app.picked', retain: false }], cards: [
 			card({ id: 'cc', on: { click: 'app.picked' }, publishes: [{ topic: 'app.picked', retain: false }], onClick: { href: '/o?c={constructor}&d={day}' },
 				decorators: [{ use: 'markers', src: '/api/m', at: 'day', label: 'label' }] })] }, { fetch: () => ok([{ day: 'Tue', label: 'Deploy' }]) });
-		r.bus.subscribe('app.picked', p => got.push(JSON.parse(JSON.stringify(p))));
+		r.bus.subscribe('app.picked', p => got.push(structuredClone(p)));
 		const i = inst(r, 'cc');
 		i.fire('click', { componentType: 'series', seriesId: 'juneau-markers-0', dataIndex: 0, name: 'Tue', event: { event: {} } });
 		const afterCarrier = { rows: got.map(g => g.row), seriesIds: got.map(g => g.seriesId), navigated: r.navigated.slice() };
@@ -1101,14 +1100,14 @@ async function section(name, fn) {
 		const afterEnter = { published: got.length, navigated: r.navigated.length };
 		key(r, 'cc', 'ArrowRight');
 		key(r, 'cc', 'Enter');
-		return { afterCarrier, afterEnter, afterWalk: { published: got.length, row: got[got.length - 1] && got[got.length - 1].row, dataIndex: got[got.length - 1] && got[got.length - 1].dataIndex,
+		return { afterCarrier, afterEnter, afterWalk: { published: got.length, row: got.at(-1)?.row, dataIndex: got.at(-1)?.dataIndex,
 			navigated: r.navigated } };
 	});
 
 	// a38. the export pixel ratio is clamped to 1..4 and a throwing getDataURL rejects (never throws out of the card API).
 	await section('exportClamp', async () => {
 		const r = await page({ cards: [card({ id: 'ex' }), card({ id: 'ey', renderer: 'svg' })] }, {
-			afterLoad: w => { const init = w.echarts.init; w.echarts.init = (...a) => { const i = init(...a); const g = i.getDataURL; i.getDataURL = o => { if (i.throwNext) throw new Error('canvas-boom'); return g(o); }; return i; }; }
+			afterLoad: w => { const init = w.echarts.init; w.echarts.init = (...a) => { const i = init(...a); const g = i.getDataURL; i.getDataURL = o => { if (i.throwNext) { throw new Error('canvas-boom'); } return g(o); }; return i; }; }
 		});
 		for (const pr of [1e6, 0.1, 2.5, 3])
 			r.bus.publish('cmd:ex', { schemaVersion: 1, op: 'export', options: { type: 'png', pixelRatio: pr } });
@@ -1155,7 +1154,7 @@ async function section(name, fn) {
 
 	await section('keys', async () => {
 		const r = await page({ cards: [LINE] });
-		const run = ks => { const from = r.fake.calls.length; for (const k of ks) key(r, 'c1', k); return actions(r, from).map(a => a.type + ':' + (a.dataIndex === undefined ? '' : a.dataIndex)); };
+		const run = ks => { const from = r.fake.calls.length; for (const k of ks) { key(r, 'c1', k); } return actions(r, from).map(a => a.type + ':' + (a.dataIndex === undefined ? '' : a.dataIndex)); };
 		const walk = run(['ArrowRight', 'ArrowRight']);
 		const end = run(['End']);
 		const home = run(['Home']);
@@ -1191,7 +1190,7 @@ async function section(name, fn) {
 			// The console replaces JuneauConsoleCards with its own register-on-push object: wrap it to see the chart handler the glue registers.
 			let v;
 			Object.defineProperty(w, 'JuneauConsoleCards', { configurable: true, get: () => v, set: x => {
-				v = x && !Array.isArray(x) && typeof x.push === 'function' ? { push: e => { if (e && e[0] === 'chart') handler = e[1]; return x.push(e); } } : x; } });
+				v = x && !Array.isArray(x) && typeof x.push === 'function' ? { push: e => { if (e?.[0] === 'chart') { handler = e[1]; } return x.push(e); } } : x; } });
 		} });
 		const impl = handler.implicit;
 		const pub = (zoom, legend) => ({ id: 'q', publishes: [].concat(zoom === undefined ? [] : [{ topic: 'zoom:q', retain: zoom }], legend === undefined ? [] : [{ topic: 'legend:q', retain: legend }]) });
@@ -1254,7 +1253,7 @@ async function section(name, fn) {
 		await wait(20);
 		await flush();
 		// col throws while the card has no chart; count that as no points, so the red run fails on points, not a crash.
-		const points = (() => { try { return col(inst(r, 'oc'), 'placed').length; } catch (e) { return 0; } })();
+		const points = (() => { try { return col(inst(r, 'oc'), 'placed').length; } catch (e) { return 0; } })(); // NOSONAR javascript:S2486 - the failure is an expected outcome here and the fallback handles it
 		const cmds = [];
 		r.bus.subscribe('cmd:orders', p => cmds.push(p), { retained: false });
 		r.bus.publish('cmd:oc', { schemaVersion: 1, op: 'refresh', options: { clearCache: true } });
@@ -1266,7 +1265,7 @@ async function section(name, fn) {
 		await flush();
 		const h = r.bus.get('data:orders');
 		const missing = await page({ dataSources: [SRC], cards: [] },
-			{ afterLoad: w => { w.JuneauViews = Object.assign({}, w.JuneauViews, { data: undefined }); } });
+			{ afterLoad: w => { w.JuneauViews = { ...w.JuneauViews, data: undefined }; } });
 		return { points, cmds: first, plainCmds: cmds.slice(first.length), fetches: r.fetches.map(f => f.url),
 			handle: { status: h.status, version: h.version }, errors: r.errors, missing: missing.errors };
 	});
@@ -1277,7 +1276,7 @@ async function section(name, fn) {
 	const TM_HELPER = { kind: 'treemap', groupBy: ['region', 'cluster'], label: 'host',
 		color: { field: 'health', legend: [{ value: 'ok', label: 'Healthy', tone: 'ok' }, { value: 'down', label: 'Down', tone: 'danger' }] },
 		tileFields: ['host', 'health', 'cpu'] };
-	const tm = o => Object.assign({ id: 'tm', type: 'chart', title: 'Fleet', helper: TM_HELPER, data: TM_ROWS }, o);
+	const tm = o => ({ id: 'tm', type: 'chart', title: 'Fleet', helper: TM_HELPER, data: TM_ROWS, ...o });
 	const tmTree = (r, id) => lastOption(inst(r, id)).series[0].data;
 	const tmLeaves = nodes => nodes.flatMap(n => n.children ? tmLeaves(n.children) : [n]);
 
@@ -1298,8 +1297,8 @@ async function section(name, fn) {
 
 	await section('treemapTree', async () => {
 		const rows = [{ g: 'a/b', h: 'x', w: 5 }, { g: 'z', h: 'x', w: -2 }, { g: 'a/b', h: 'x', w: 3 }, { g: 'a/b', h: 'y' }];
-		const mk = (id, helper) => ({ id: id, type: 'chart', helper: Object.assign({ kind: 'treemap', groupBy: ['g'], label: 'h' }, helper), data: rows });
-		const r = await page({ cards: [mk('w', { size: 'w', tileFields: ['h', 'w'] }), mk('u', {}), tm({ id: 'cpu', helper: Object.assign({}, TM_HELPER, { size: 'cpu' }) })] });
+		const mk = (id, helper) => ({ id: id, type: 'chart', helper: { kind: 'treemap', groupBy: ['g'], label: 'h', ...helper }, data: rows });
+		const r = await page({ cards: [mk('w', { size: 'w', tileFields: ['h', 'w'] }), mk('u', {}), tm({ id: 'cpu', helper: { ...TM_HELPER, size: 'cpu' } })] });
 		const t = tmTree(r, 'w')[0].children, leaves = tmLeaves(t);
 		return {
 			groupOrder: t.map(n => n.id), groupNames: t.map(n => n.name), leafIds: leaves.map(n => n.id), weights: leaves.map(n => n.value),
@@ -1324,7 +1323,7 @@ async function section(name, fn) {
 		return {
 			groupIds: top.children.map(n => n.id), groupNames: top.children.map(n => n.name), nested: top.children[0].children.map(n => n.id),
 			leafIds: tmLeaves(tmTree(r, 'e1')).map(n => n.id), unique: new Set(ids).size === ids.length, noneEmpty: ids.every(i => i !== ''),
-			sizedWeights: tmLeaves(tmTree(r, 'e2')).map(n => n.value), firstExtra: l3[0].meta.extra, lastExtra: l3[l3.length - 1].meta.extra,
+			sizedWeights: tmLeaves(tmTree(r, 'e2')).map(n => n.value), firstExtra: l3[0].meta.extra, lastExtra: l3.at(-1).meta.extra,
 			errors: r.errors
 		};
 	});
@@ -1351,8 +1350,8 @@ async function section(name, fn) {
 
 	await section('treemapLeafClick', async () => {
 		const got = [];
-		const r = await page({ topics: [{ topic: 'app.tm', retain: false }], cards: [tm(TM_CLICK), card(Object.assign({ id: 'line' }, TM_CLICK))] });
-		r.bus.subscribe('app.tm', p => got.push(JSON.parse(JSON.stringify(p))));
+		const r = await page({ topics: [{ topic: 'app.tm', retain: false }], cards: [tm(TM_CLICK), card({ id: 'line', ...TM_CLICK })] });
+		r.bus.subscribe('app.tm', p => got.push(structuredClone(p)));
 		inst(r, 'tm').fire('click', TM_LEAF);
 		inst(r, 'line').fire('click', { componentType: 'series', seriesId: 'placed', dataIndex: 0, name: 'Mon', value: 3, event: { event: {} } });
 		return { got, errors: r.errors };
@@ -1360,8 +1359,8 @@ async function section(name, fn) {
 
 	await section('treemapGroupClick', async () => {
 		const got = [];
-		const r = await page({ topics: [{ topic: 'app.tm', retain: false }], cards: [tm(Object.assign({ onClick: { href: '/x/{host}' } }, TM_CLICK))] });
-		r.bus.subscribe('app.tm', p => got.push(JSON.parse(JSON.stringify(p))));
+		const r = await page({ topics: [{ topic: 'app.tm', retain: false }], cards: [tm({ onClick: { href: '/x/{host}' }, ...TM_CLICK })] });
+		r.bus.subscribe('app.tm', p => got.push(structuredClone(p)));
 		const group = { componentType: 'series', seriesType: 'treemap', seriesId: 'tiles', dataIndex: 1, name: 'eu', value: 12,
 			data: { id: 'eu', children: [{ id: 'eu/c1' }] }, event: { event: {} } };
 		inst(r, 'tm').fire('click', group);
@@ -1373,16 +1372,16 @@ async function section(name, fn) {
 	await section('treemapMeta', async () => {
 		const got = [];
 		const r = await page({ topics: [{ topic: 'app.tm', retain: false }], cards: [tm(TM_CLICK)] });
-		r.bus.subscribe('app.tm', p => got.push(JSON.parse(JSON.stringify(p))));
-		inst(r, 'tm').fire('click', Object.assign({}, TM_LEAF, { data: { id: 'eu/c1/h1', meta: { big: 'x'.repeat(5000) } } }));
+		r.bus.subscribe('app.tm', p => got.push(structuredClone(p)));
+		inst(r, 'tm').fire('click', { ...TM_LEAF, data: { id: 'eu/c1/h1', meta: { big: 'x'.repeat(5000) } } });
 		return { published: got.length, metaNull: got[0].meta === null, rowNull: got[0].row === null };
 	});
 
 	await section('treemapKeys', async () => {
 		const got = [];
 		const r = await page({ topics: [{ topic: 'app.tm', retain: false }], cards: [tm(TM_CLICK)] });
-		r.bus.subscribe('app.tm', p => got.push(JSON.parse(JSON.stringify(p))));
-		const run = ks => { const from = r.fake.calls.length; for (const k of ks) key(r, 'tm', k); return actions(r, from).map(a => a.type + ':' + (a.dataIndex === undefined ? a.targetNodeId + '@' + a.seriesIndex : a.dataIndex)); };
+		r.bus.subscribe('app.tm', p => got.push(structuredClone(p)));
+		const run = ks => { const from = r.fake.calls.length; for (const k of ks) { key(r, 'tm', k); } return actions(r, from).map(a => a.type + ':' + (a.dataIndex === undefined ? a.targetNodeId + '@' + a.seriesIndex : a.dataIndex)); };
 		const walk = run(['ArrowRight', 'ArrowRight']);
 		const enter = run(['Enter']);
 		const end = run(['End']);
@@ -1408,7 +1407,7 @@ async function section(name, fn) {
 	function stubHook(sync) {
 		const h = { runs: [], releases: [], pending: [] };
 		h.api = {
-			run: (a, o) => { h.runs.push({ a, o }); if (sync) throw new Error('boom'); return new Promise((res, rej) => h.pending.push({ res, rej })); },
+			run: (a, o) => { h.runs.push({ a, o }); if (sync) { throw new Error('boom'); } return new Promise((res, rej) => h.pending.push({ res, rej })); },
 			release: el => { h.releases.push(el); }
 		};
 		return h;
@@ -1423,7 +1422,7 @@ async function section(name, fn) {
 			arr.push = function (e) {
 				const h = e[1];
 				cap.handler = h;
-				return orig.call(this, [e[0], Object.assign({}, h, { render: (c, el, ctx) => { cap.ctxs[c.id] = ctx; return h.render(c, el, ctx); } })]);
+				return orig.call(this, [e[0], { ...h, render: (c, el, ctx) => { cap.ctxs[c.id] = ctx; return h.render(c, el, ctx); } }]);
 			};
 			w.JuneauConsoleCards = arr;
 		};
@@ -1433,17 +1432,17 @@ async function section(name, fn) {
 
 	await section('actClick', async () => {
 		const h = stubHook();
-		const r = await actPage([card(Object.assign({ id: 'ac' }, ACT_CLICK))], h);
-		inst(r, 'ac').fire('click', Object.assign({}, PT, { data: { meta: { name: 'MetaName', extra: 1 } } }));
+		const r = await actPage([card({ id: 'ac', ...ACT_CLICK })], h);
+		inst(r, 'ac').fire('click', { ...PT, data: { meta: { name: 'MetaName', extra: 1 } } });
 		await flush();
 		const run = h.runs[0];
-		return { runs: h.runs.length, action: run && run.a.id, host: run && run.o.host === host(r, 'ac'), row: run && run.o.row,
-			catalog: run && run.o.catalog === r.w.JuneauConsole && false, catalogIds: run && (run.o.catalog || []).map(c => c.id), hasRedraw: run && typeof run.o.onRedraw === 'function', errors: r.errors };
+		return { runs: h.runs.length, action: run?.a.id, host: run?.o.host === host(r, 'ac'), row: run?.o.row,
+			catalog: run?.o.catalog === r.w.JuneauConsole, catalogIds: run && (run.o.catalog || []).map(c => c.id), hasRedraw: run && typeof run.o.onRedraw === 'function', errors: r.errors };
 	});
 
 	await section('actRedraw', async () => {
 		const h = stubHook();
-		const r = await actPage([card(Object.assign({ id: 'ar' }, ACT_CLICK))], h);
+		const r = await actPage([card({ id: 'ar', ...ACT_CLICK })], h);
 		const i = inst(r, 'ar');
 		i.fire('click', PT);
 		await flush();
@@ -1455,26 +1454,26 @@ async function section(name, fn) {
 
 	await section('actEnter', async () => {
 		const h = stubHook();
-		const r = await actPage([card(Object.assign({ id: 'ae' }, ACT_CLICK))], h);
+		const r = await actPage([card({ id: 'ae', ...ACT_CLICK })], h);
 		key(r, 'ae', 'ArrowRight');
 		key(r, 'ae', 'Enter');
 		await flush();
-		return { runs: h.runs.length, row: h.runs[0] && h.runs[0].o.row, errors: r.errors };
+		return { runs: h.runs.length, row: h.runs[0]?.o.row, errors: r.errors };
 	});
 
 	await section('actInFlight', async () => {
 		const h = stubHook();
-		const r = await actPage([card(Object.assign({ id: 'af' }, ACT_CLICK))], h);
+		const r = await actPage([card({ id: 'af', ...ACT_CLICK })], h);
 		const i = inst(r, 'af'), el = host(r, 'af');
 		i.fire('click', PT);
 		await flush();
-		const busyOn = { aria: one(r, 'af', '.jc-chart-plot').getAttribute('aria-busy'), cardAria: el.getAttribute('aria-busy'), flag: el.getAttribute('data-juneau-action-busy') !== null, cursor: one(r, 'af', '.jc-chart-plot').style.cursor };
+		const busyOn = { aria: one(r, 'af', '.jc-chart-plot').getAttribute('aria-busy'), cardAria: el.getAttribute('aria-busy'), flag: el.dataset.juneauActionBusy !== undefined, cursor: one(r, 'af', '.jc-chart-plot').style.cursor };
 		i.fire('click', PT);
 		await flush();
 		const whileBusy = h.runs.length;
 		h.pending[0].res({ outcome: 'success' });
 		await flush(); await flush();
-		const busyOff = { aria: one(r, 'af', '.jc-chart-plot').getAttribute('aria-busy'), cardAria: el.getAttribute('aria-busy'), flag: el.getAttribute('data-juneau-action-busy') !== null, cursor: one(r, 'af', '.jc-chart-plot').style.cursor };
+		const busyOff = { aria: one(r, 'af', '.jc-chart-plot').getAttribute('aria-busy'), cardAria: el.getAttribute('aria-busy'), flag: el.dataset.juneauActionBusy !== undefined, cursor: one(r, 'af', '.jc-chart-plot').style.cursor };
 		i.fire('click', PT);
 		await flush();
 		return { busyOn, whileBusy, busyOff, afterSettle: h.runs.length, errors: r.errors };
@@ -1482,7 +1481,7 @@ async function section(name, fn) {
 
 	await section('actRejectReleases', async () => {
 		const h = stubHook();
-		const r = await actPage([card(Object.assign({ id: 'arj' }, ACT_CLICK))], h);
+		const r = await actPage([card({ id: 'arj', ...ACT_CLICK })], h);
 		const i = inst(r, 'arj');
 		i.fire('click', PT);
 		await flush();
@@ -1495,18 +1494,18 @@ async function section(name, fn) {
 
 	await section('actSyncThrow', async () => {
 		const h = stubHook(true);
-		const r = await actPage([card(Object.assign({ id: 'as' }, ACT_CLICK))], h);
+		const r = await actPage([card({ id: 'as', ...ACT_CLICK })], h);
 		const el = host(r, 'as');
 		inst(r, 'as').fire('click', PT);
 		await flush();
 		const first = h.runs.length;
 		inst(r, 'as').fire('click', PT);
 		await flush();
-		return { first, second: h.runs.length, busy: one(r, 'as', '.jc-chart-plot').getAttribute('aria-busy'), flag: el.getAttribute('data-juneau-action-busy') !== null, errors: r.errors };
+		return { first, second: h.runs.length, busy: one(r, 'as', '.jc-chart-plot').getAttribute('aria-busy'), flag: el.dataset.juneauActionBusy !== undefined, errors: r.errors };
 	});
 
 	await section('actNoHook', async () => {
-		const r = await page({ topics: [{ topic: 'app.act', retain: false }], cards: [card(Object.assign({ id: 'nh' }, ACT_CLICK)), card(Object.assign({ id: 'nh2' }, ACT_CLICK))] });
+		const r = await page({ topics: [{ topic: 'app.act', retain: false }], cards: [card({ id: 'nh', ...ACT_CLICK }), card({ id: 'nh2', ...ACT_CLICK })] });
 		inst(r, 'nh').fire('click', PT);
 		inst(r, 'nh').fire('click', PT);
 		inst(r, 'nh2').fire('click', PT);
@@ -1516,7 +1515,7 @@ async function section(name, fn) {
 
 	await section('actDispose', async () => {
 		const h = stubHook();
-		const r = await actPage([card(Object.assign({ id: 'ad' }, ACT_CLICK))], h);
+		const r = await actPage([card({ id: 'ad', ...ACT_CLICK })], h);
 		const i = inst(r, 'ad'), el = host(r, 'ad');
 		r.w.JuneauConsole.destroyCard('ad');
 		await flush();
@@ -1539,7 +1538,7 @@ async function section(name, fn) {
 
 	await section('actCatalogIdentity', async () => {
 		const h = stubHook();
-		const c = card(Object.assign({ id: 'ci' }, ACT_CLICK));
+		const c = card({ id: 'ci', ...ACT_CLICK });
 		const r = await actPage([c], h);
 		inst(r, 'ci').fire('click', PT);
 		await flush();
@@ -1551,7 +1550,7 @@ async function section(name, fn) {
 		const h = stubHook();
 		const r = await page({
 			topics: [{ topic: 'app.k', retain: true, publisher: 'script' }, { topic: 'app.act', retain: false }],
-			cards: [card(Object.assign({ id: 'rr', data: undefined, src: '/api/g?k={k}', subscribes: [{ topic: 'app.k', as: 'params', map: { k: 'k' } }] }, ACT_CLICK))]
+			cards: [card({ id: 'rr', data: undefined, src: '/api/g?k={k}', subscribes: [{ topic: 'app.k', as: 'params', map: { k: 'k' } }], ...ACT_CLICK })]
 		}, Object.assign(withHook(h), { afterLoad: w => w.JuneauViews.bus.declare('app.k', { retain: true, by: 'test' }), fetch: () => new Promise(() => {}) }));
 		const own = r.bus.owner('test');
 		own.publish('app.k', { k: 1 }); await flush(); await wait(20);
@@ -1563,12 +1562,12 @@ async function section(name, fn) {
 
 	await section('actInPlaceRefresh', async () => {
 		const h = stubHook();
-		const r = await actPage([card(Object.assign({ id: 'ip' }, ACT_CLICK))], h);
+		const r = await actPage([card({ id: 'ip', ...ACT_CLICK })], h);
 		const el = host(r, 'ip');
 		inst(r, 'ip').fire('click', PT);
 		await flush();
 		const banner = r.w.document.createElement('div');
-		banner.setAttribute('data-testid', 'chart-action-banner');
+		banner.dataset.testid = 'chart-action-banner';
 		el.appendChild(banner);
 		h.runs[0].o.onRedraw();
 		await flush(); await wait(20);
@@ -1577,7 +1576,7 @@ async function section(name, fn) {
 
 	await section('actDestroyedRedraw', async () => {
 		const h = stubHook();
-		const r = await actPage([card(Object.assign({ id: 'dr' }, ACT_CLICK))], h);
+		const r = await actPage([card({ id: 'dr', ...ACT_CLICK })], h);
 		inst(r, 'dr').fire('click', PT);
 		await flush();
 		const onRedraw = h.runs[0].o.onRedraw;
@@ -1602,7 +1601,7 @@ async function section(name, fn) {
 		key(r, 'tm', 'ArrowRight');
 		key(r, 'tm', 'Enter');
 		await flush();
-		return { runs: h.runs.length, row: h.runs[0] && h.runs[0].o.row, enterRow: h.runs[1] && h.runs[1].o.row, errors: r.errors };
+		return { runs: h.runs.length, row: h.runs[0]?.o.row, enterRow: h.runs[1]?.o.row, errors: r.errors };
 	});
 
 	await section('treemapGroupEvents', async () => {
@@ -1611,7 +1610,7 @@ async function section(name, fn) {
 		const r = await page({ topics: [{ topic: 'app.tmd', retain: false }, { topic: 'app.act', retain: false }],
 			cards: [tm({ on: { click: 'app.act', dblclick: 'app.tmd' }, publishes: [{ topic: 'app.act', retain: false }, { topic: 'app.tmd', retain: false }],
 				topicActions: [{ topic: 'app.tmd', action: ACT }] })] }, withHook(h));
-		r.bus.subscribe('app.tmd', p => got.push(JSON.parse(JSON.stringify(p))));
+		r.bus.subscribe('app.tmd', p => got.push(structuredClone(p)));
 		const group = { componentType: 'series', seriesType: 'treemap', seriesId: 'tiles', dataIndex: 1, name: 'eu', value: 12,
 			data: { id: 'eu', children: [{ id: 'eu/c1' }] }, event: { event: {} } };
 		inst(r, 'tm').fire('dblclick', group);
@@ -1619,12 +1618,12 @@ async function section(name, fn) {
 		const afterGroup = { published: got.length, runs: h.runs.length };
 		inst(r, 'tm').fire('dblclick', TM_LEAF);
 		await flush();
-		return { afterGroup, afterLeaf: { published: got.length, runs: h.runs.length, row: h.runs[0] && h.runs[0].o.row }, errors: r.errors };
+		return { afterGroup, afterLeaf: { published: got.length, runs: h.runs.length, row: h.runs[0]?.o.row }, errors: r.errors };
 	});
 
 	await section('walkAnnounce', async () => {
 		const h = stubHook();
-		const r = await actPage([tm(ACT_CLICK), card(Object.assign({ id: 'cart' }, ACT_CLICK)), card({ id: 'plain' })], h);
+		const r = await actPage([tm(ACT_CLICK), card({ id: 'cart', ...ACT_CLICK }), card({ id: 'plain' })], h);
 		const live = id => { const n = one(r, id, '.jc-chart-live'); return n ? n.textContent : null; };
 		const plot = id => one(r, id, '.jc-chart-plot');
 		const hintOf = id => { const d = plot(id).getAttribute('aria-describedby'); const n = d && r.doc.getElementById(d); return n ? n.textContent : null; };
@@ -1667,7 +1666,7 @@ async function section(name, fn) {
 		inst(r, 'rb').fire('click', PT);
 		await flush();
 		// Same topics, a new action: the new action runs.
-		await refresh(Object.assign({}, base, { onClick: { action: ACT2 }, topicActions: [{ topic: 'app.mark', action: ACT2 }] }));
+		await refresh({ ...base, onClick: { action: ACT2 }, topicActions: [{ topic: 'app.mark', action: ACT2 }] });
 		h.pending[0].res({ outcome: 'success' });
 		await flush(); await flush();
 		inst(r, 'rb').fire('click', PT);
@@ -1681,7 +1680,7 @@ async function section(name, fn) {
 		h.pending[2].res({ outcome: 'success' });
 		await flush(); await flush();
 		const before = h.runs.length;
-		await refresh(Object.assign({}, base, { onClick: { action: ACT2 }, topicActions: [{ topic: 'app.mark2', action: ACT2 }] }));
+		await refresh({ ...base, onClick: { action: ACT2 }, topicActions: [{ topic: 'app.mark2', action: ACT2 }] });
 		r.bus.publish('app.mark', { schemaVersion: 1, name: 'M' });
 		await flush();
 		const oldTopic = h.runs.length - before;
@@ -1697,7 +1696,7 @@ async function section(name, fn) {
 			Object.assign(withHook(h), { chartsFirst: true, before: w => { withHook(h).before(w); cap.before(w); } }));
 		const plot = () => one(r, 'ri', '.jc-chart-plot');
 		const out = { first: plot().getAttribute('role') };
-		await cap.handler.refresh(card(Object.assign({ id: 'ri' }, ACT_CLICK)), host(r, 'ri'), cap.ctxs.ri);
+		await cap.handler.refresh(card({ id: 'ri', ...ACT_CLICK }), host(r, 'ri'), cap.ctxs.ri);
 		await flush();
 		out.added = { role: plot().getAttribute('role'), live: !!one(r, 'ri', '.jc-chart-live') };
 		await cap.handler.refresh(card(plain), host(r, 'ri'), cap.ctxs.ri);
@@ -1711,7 +1710,7 @@ async function section(name, fn) {
 		const h = stubHook();
 		const TA = { on: { click: 'app.act' }, publishes: [{ topic: 'app.act', retain: false }], topicActions: [{ topic: 'app.act', action: ACT }] };
 		const XF = { on: { click: 'app.act' }, publishes: [{ topic: 'app.act', retain: false }] };
-		const r = await actPage([tm(TA), card(Object.assign({ id: 'cart' }, TA)), tm(Object.assign({ id: 'xf' }, XF))], h);
+		const r = await actPage([tm(TA), card({ id: 'cart', ...TA }), tm({ id: 'xf', ...XF })], h);
 		const plot = id => one(r, id, '.jc-chart-plot');
 		const group = { componentType: 'series', seriesType: 'treemap', seriesId: 'tiles', dataIndex: 1, name: 'eu', value: 12,
 			data: { id: 'eu', children: [{ id: 'eu/c1' }] }, event: { event: {} } };
@@ -1727,9 +1726,9 @@ async function section(name, fn) {
 	await section('walkTime', async () => {
 		const h = stubHook();
 		const t0 = Date.UTC(2026, 9, 13);
-		const r = await actPage([card(Object.assign({ id: 'wt', x: undefined, kind: undefined, series: undefined,
+		const r = await actPage([card({ id: 'wt', x: undefined, kind: undefined, series: undefined,
 			helper: { kind: 'line', x: { field: 'day', type: 'time' }, series: [{ field: 'placed' }, { field: 'delivered' }] },
-			data: [{ day: t0, placed: 3, delivered: null }, { day: t0 + 86400000, placed: 4, delivered: 2 }] }, ACT_CLICK))], h);
+			data: [{ day: t0, placed: 3, delivered: null }, { day: t0 + 86400000, placed: 4, delivered: 2 }], ...ACT_CLICK })], h);
 		key(r, 'wt', 'ArrowRight');
 		const first = one(r, 'wt', '.jc-chart-live').textContent;
 		key(r, 'wt', 'ArrowRight');
@@ -1746,12 +1745,12 @@ async function section(name, fn) {
 		const afterClick = h.runs.length;
 		r.bus.publish('app.mark', { schemaVersion: 1, name: 'Marked', meta: { k: 'v' } });
 		await flush();
-		return { afterClick, runs: h.runs.length, row: h.runs[0] && h.runs[0].o.row, errors: r.errors };
+		return { afterClick, runs: h.runs.length, row: h.runs[0]?.o.row, errors: r.errors };
 	});
 
 	await section('actDialogHeld', async () => {
 		const h = stubHook();
-		const r = await actPage([card(Object.assign({ id: 'dh' }, ACT_CLICK))], h);
+		const r = await actPage([card({ id: 'dh', ...ACT_CLICK })], h);
 		const i = inst(r, 'dh');
 		i.fire('click', PT);
 		await flush();

@@ -74,6 +74,7 @@ class ConsoleLoudFailure_BrowserTest extends TestBase {
 				+ "\"src\":\"/rest/releases/data\"}]"), "", viewsPack(), ""),
 				"cardError", "#releases-body .jc-card-error")
 			.run();
+		probeRegister();
 	}
 
 	private static String noIslandPage(String script) {
@@ -87,8 +88,7 @@ class ConsoleLoudFailure_BrowserTest extends TestBase {
 		return "<script>window.__probe = {}; try { " + call + " } catch (e) { window.__probe.caught = { name: e.name, code: e.code, message: e.message }; }</script>";
 	}
 
-	@BeforeAll
-	static void probeRegister() throws Exception {
+	private static void probeRegister() throws Exception {
 		var shell = "<script src=\"" + SHELL + "\"></script>\n";
 		var badType = shell + caught("JuneauConsole.registerCard('Bad_Type', function(){});");
 		var badHandler = shell + caught("JuneauConsole.registerCard('ok', 'nope');");

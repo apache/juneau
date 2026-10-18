@@ -163,6 +163,9 @@ public abstract class Section {
 	}
 
 	/** @return <jk>true</jk> if {@code name} is a dotted extension name (the E-74 shape). */
+	@SuppressWarnings({
+		"java:S2692" // A leading dot is deliberately invalid, so indexOf must be > 0, not >= 0.
+	})
 	static boolean isDottedName(String name) {
 		return name != null && name.indexOf('.') > 0 && BusWiringValidator.EXTENSION_NAME.matcher(name).matches();
 	}
@@ -184,7 +187,7 @@ public abstract class Section {
 
 		Custom(String name, JsonMap args) {
 			this.name = name;
-			this.args = args == null ? JsonMap.of() : new JsonMap((Map<?,?>)args);
+			this.args = args == null ? JsonMap.of() : new JsonMap(args);
 		}
 
 		@Override /* Section */

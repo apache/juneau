@@ -772,15 +772,15 @@
 			throw quotaError("aggregate saved-view count reached MAX_VIEWS_PER_USER (" + LOCALSTORAGE_MAX_VIEWS_PER_USER + ")");
 	}
 
-	function createLocalStorageProvider() {
+	function persistBlob(scope, name, blob) {
+		const v = validateNameForLocalStorage(name);
+		if (!v.ok) throw malformedError(v.message);
+		assertSupportedSchema(blob);
+		enforceBounds(scope, name, blob);
+		window.localStorage.setItem(viewKeyFor(scope, v.encoded), JSON.stringify(blob));
+	}
 
-		function persistBlob(scope, name, blob) {
-			const v = validateNameForLocalStorage(name);
-			if (!v.ok) throw malformedError(v.message);
-			assertSupportedSchema(blob);
-			enforceBounds(scope, name, blob);
-			window.localStorage.setItem(viewKeyFor(scope, v.encoded), JSON.stringify(blob));
-		}
+	function createLocalStorageProvider() {
 
 		return {
 

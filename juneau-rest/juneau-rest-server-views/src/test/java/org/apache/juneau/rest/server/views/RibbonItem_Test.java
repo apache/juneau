@@ -173,7 +173,8 @@ class RibbonItem_Test extends TestBase {
 	}
 
 	@Test void a23_optionGroup_nonOptionMember_rejected() {
-		var ex = assertThrows(IllegalArgumentException.class, () -> RibbonItem.optionGroup("phase", RibbonItem.refresh()));
+		var arg = RibbonItem.refresh();
+		var ex = assertThrows(IllegalArgumentException.class, () -> RibbonItem.optionGroup("phase", arg));
 		assertEquals("RibbonItem optionGroup 'phase' member must be an option, not 'refresh'.", ex.getMessage());
 	}
 
@@ -275,44 +276,53 @@ class RibbonItem_Test extends TestBase {
 
 	@Test void a36_validate_divider_ok() {
 		RibbonItem.validate(Map.of("type", "divider"));
-		assertThrows(IllegalArgumentException.class, () -> RibbonItem.validate(Map.of("type", "divider", "group", "g")));
+		var arg2 = Map.of("type", "divider", "group", "g");
+		assertThrows(IllegalArgumentException.class, () -> RibbonItem.validate(arg2));
 	}
 
 	@Test void a37_validate_sharesToMapRules() {
-		var badMember = assertThrows(IllegalArgumentException.class, () -> RibbonItem.validate(
-			Map.of("type", "optionGroup", "id", "g", "options", List.of(Map.of("id", "a", "persist", true)))));
+		var arg11 = Map.of("type", "optionGroup", "id", "g", "options", List.of(Map.of("id", "a", "persist", true)));
+		var badMember = assertThrows(IllegalArgumentException.class, () -> RibbonItem.validate(arg11));
 		assertEquals("RibbonItem optionGroup 'g' member 'a' does not accept 'persist'.", badMember.getMessage());
-		assertThrows(IllegalArgumentException.class, () -> RibbonItem.validate(Map.of("type", "option", "id", "o", "value", "v")));
-		assertThrows(IllegalArgumentException.class, () -> RibbonItem.validate(
-			Map.of("type", "option", "id", "o", "column", "c", "param", "p", "value", "v")));
-		assertThrows(IllegalArgumentException.class, () -> RibbonItem.validate(Map.of("type", "option", "id", "o", "column", "c")));
-		assertThrows(IllegalArgumentException.class, () -> RibbonItem.validate(
-			Map.of("type", "option", "id", "o", "column", "c", "value", "v", "default", false)));
-		assertThrows(IllegalArgumentException.class, () -> RibbonItem.validate(
-			Map.of("type", "optionGroup", "id", "g", "default", "zzz", "options", List.of(Map.of("id", "a")))));
+		var arg3 = Map.of("type", "option", "id", "o", "value", "v");
+		assertThrows(IllegalArgumentException.class, () -> RibbonItem.validate(arg3));
+		var arg4 = Map.of("type", "option", "id", "o", "column", "c", "param", "p", "value", "v");
+		assertThrows(IllegalArgumentException.class, () -> RibbonItem.validate(arg4));
+		var arg5 = Map.of("type", "option", "id", "o", "column", "c");
+		assertThrows(IllegalArgumentException.class, () -> RibbonItem.validate(arg5));
+		var arg9 = Map.of("type", "option", "id", "o", "column", "c", "value", "v", "default", false);
+		assertThrows(IllegalArgumentException.class, () -> RibbonItem.validate(arg9));
+		var arg10 = Map.of("type", "optionGroup", "id", "g", "default", "zzz", "options", List.of(Map.of("id", "a")));
+		assertThrows(IllegalArgumentException.class, () -> RibbonItem.validate(arg10));
 		RibbonItem.validate(Map.of("type", "optionGroup", "id", "g", "default", "a", "options", List.of(Map.of("id", "a"))));
-		assertThrows(IllegalArgumentException.class, () -> RibbonItem.validate(Map.of("type", "export", "buttons", List.of("bogus"))));
-		assertThrows(IllegalArgumentException.class, () -> RibbonItem.validate(
-			Map.of("type", "export", "buttons", List.of("copy"), "optional", List.of("csv"))));
-		assertThrows(IllegalArgumentException.class, () -> RibbonItem.validate(Map.of("type", "refresh", "appearance", "big")));
-		assertThrows(IllegalArgumentException.class, () -> RibbonItem.validate(Map.of("type", "refresh", "target", "1 bad")));
+		var arg12 = Map.of("type", "export", "buttons", List.of("bogus"));
+		assertThrows(IllegalArgumentException.class, () -> RibbonItem.validate(arg12));
+		var arg13 = Map.of("type", "export", "buttons", List.of("copy"), "optional", List.of("csv"));
+		assertThrows(IllegalArgumentException.class, () -> RibbonItem.validate(arg13));
+		var arg6 = Map.of("type", "refresh", "appearance", "big");
+		assertThrows(IllegalArgumentException.class, () -> RibbonItem.validate(arg6));
+		var arg7 = Map.of("type", "refresh", "target", "1 bad");
+		assertThrows(IllegalArgumentException.class, () -> RibbonItem.validate(arg7));
 		RibbonItem.validate(Map.of("type", "refresh", "target", "orders"));
 	}
 
 	@Test void a37b_validate_visibleWhenAndNonListButtons() {
-		assertThrows(IllegalArgumentException.class, () -> RibbonItem.validate(Map.of("type", "refresh", "visibleWhen", 5)));
-		assertThrows(IllegalArgumentException.class, () -> RibbonItem.validate(
-			Map.of("type", "refresh", "visibleWhen", List.of(Map.of("field", "f", "op", "bogus")))));
+		var arg14 = Map.of("type", "refresh", "visibleWhen", 5);
+		assertThrows(IllegalArgumentException.class, () -> RibbonItem.validate(arg14));
+		var arg15 = Map.of("type", "refresh", "visibleWhen", List.of(Map.of("field", "f", "op", "bogus")));
+		assertThrows(IllegalArgumentException.class, () -> RibbonItem.validate(arg15));
 		RibbonItem.validate(Map.of("type", "refresh", "visibleWhen", List.of(Map.of("field", "f", "op", "eq", "value", 1))));
-		var ex = assertThrows(IllegalArgumentException.class, () -> RibbonItem.validate(
-			Map.of("type", "export", "buttons", new String[]{"copy"})));
+		var arg16 = Map.of("type", "export", "buttons", new String[]{"copy"});
+		var ex = assertThrows(IllegalArgumentException.class, () -> RibbonItem.validate(arg16));
 		assertEquals("RibbonItem export button list must be a list.", ex.getMessage());
 	}
 
 	@Test void a38_validate_missingOrNonStringType() {
-		var none = assertThrows(IllegalArgumentException.class, () -> RibbonItem.validate(Map.of("id", "x")));
+		var arg8 = Map.of("id", "x");
+		var none = assertThrows(IllegalArgumentException.class, () -> RibbonItem.validate(arg8));
 		assertTrue(none.getMessage().startsWith("RibbonItem requires a 'type'"), none.getMessage());
-		var num = assertThrows(IllegalArgumentException.class, () -> RibbonItem.validate(Map.of("type", 5)));
+		var arg17 = Map.of("type", 5);
+		var num = assertThrows(IllegalArgumentException.class, () -> RibbonItem.validate(arg17));
 		assertTrue(num.getMessage().startsWith("RibbonItem 'type' must be a string, not '5'"), num.getMessage());
 	}
 
@@ -324,11 +334,14 @@ class RibbonItem_Test extends TestBase {
 
 	@Test void a40_id_rejectedWhereTheRuntimeIgnoresIt() {
 		assertIgnored("divider", RibbonItem.divider().id("x"), "id");
-		assertThrows(IllegalArgumentException.class, () -> RibbonItem.export("copy").id("x").toMap());
+		var target2 = RibbonItem.export("copy").id("x");
+		assertThrows(IllegalArgumentException.class, target2::toMap);
 	}
 
 	@Test void a41_id_blank_rejected() {
-		assertThrows(IllegalArgumentException.class, () -> RibbonItem.refresh().id(null));
-		assertThrows(IllegalArgumentException.class, () -> RibbonItem.refresh().id(" "));
+		var target3 = RibbonItem.refresh();
+		assertThrows(IllegalArgumentException.class, () -> target3.id(null));
+		var target4 = RibbonItem.refresh();
+		assertThrows(IllegalArgumentException.class, () -> target4.id(" "));
 	}
 }

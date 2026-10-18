@@ -52,7 +52,8 @@ class TableSpec_Test extends TestBase {
 
 	@Test void a05_columns_duplicateAcrossCalls_rejected() {
 		var t = TableSpec.create("slo").columns(Column.create("pod"));
-		var ex = assertThrows(IllegalArgumentException.class, () -> t.columns(Column.create("pod")));
+		var arg = Column.create("pod");
+		var ex = assertThrows(IllegalArgumentException.class, () -> t.columns(arg));
 		assertEquals("TableSpec 'slo' declares column 'pod' twice.", ex.getMessage());
 	}
 
@@ -95,8 +96,9 @@ class TableSpec_Test extends TestBase {
 
 	@Test void a12_quickStats_blankId_rejected() {
 		var t = TableSpec.create("slo");
+		var arg2 = QuickStat.of("x", "X", 1);
 		var ex = assertThrows(IllegalArgumentException.class,
-			() -> t.quickStats(" ", QuickStat.of("x", "X", 1)));
+			() -> t.quickStats(" ", arg2));
 		assertEquals("TableSpec quickStats id must not be null or blank.", ex.getMessage());
 	}
 

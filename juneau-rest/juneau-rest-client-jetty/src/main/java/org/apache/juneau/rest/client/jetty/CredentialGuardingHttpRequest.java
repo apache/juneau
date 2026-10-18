@@ -62,6 +62,9 @@ final class CredentialGuardingHttpRequest extends HttpRequest {
 	}
 
 	@Override /* HttpRequest */
+	@SuppressWarnings({
+		"resource" // the new request is returned to the caller, which owns it.
+	})
 	protected HttpRequest copyInstance(URI newURI) {
 		return new CredentialGuardingHttpRequest(getHttpClient(), getConversation(), newURI);
 	}

@@ -27,8 +27,8 @@
  * It asserts nothing; the Java *_BrowserTest asserts.
  */
 'use strict';
-const fs = require('fs');
-const path = require('path');
+const fs = require('node:fs');
+const path = require('node:path');
 const { chromium } = require('playwright');
 
 const ROWS = [
@@ -40,13 +40,13 @@ const ROWS = [
 // ---- In-page helpers: installed once, before the scenario (evaluated in the page, so self-contained) ----
 function installHelpers() {
 	const P = window.__probe = {};
-	P.bus = () => window.JuneauViews && window.JuneauViews.bus;
+	P.bus = () => window.JuneauViews?.bus;
 	P.tick = () => new Promise(r => setTimeout(r, 0));
-	P.settle = async () => { for (let i = 0; i < 5; i++) await P.tick(); await new Promise(requestAnimationFrame); };
+	P.settle = async () => { for (let i = 0; i < 5; i++) { await P.tick(); } await new Promise(requestAnimationFrame); };
 	P.waitFor = async (pred, ms) => {
 		const end = Date.now() + (ms || 5000);
 		while (Date.now() < end) {
-			try { if (pred()) return true; } catch (e) { /* not ready */ }
+			try { if (pred()) return true; } catch (e) { /* not ready */ } // NOSONAR javascript:S2486 - the failure is an expected outcome here and the fallback handles it
 			await new Promise(r => setTimeout(r, 20));
 		}
 		throw new Error('waitFor timed out after ' + (ms || 5000) + 'ms: ' + pred);
@@ -56,33 +56,33 @@ function installHelpers() {
 	// A mounted datatables card hands its id to the table and never gets it back, so the host is cached the first time it is found.
 	const hosts = {};
 	P.host = id => {
-		if (hosts[id] && hosts[id].isConnected) return hosts[id];
+		if (hosts[id]?.isConnected) return hosts[id];
 		const b = document.getElementById(id + '-body');
 		const h = b ? b.parentElement : document.getElementById(id);
-		if (h && h.tagName !== 'TABLE') hosts[id] = h;
+		if (h && h.tagName !== 'TABLE') hosts[id] = h; // NOSONAR javascript:S6582 - h?.tagName !== 'TABLE' is true for a missing host
 		return h;
 	};
-	P.empty = id => { const h = P.host(id); const e = h && h.querySelector('.jc-card-empty'); return e ? e.textContent.trim() : null; };
+	P.empty = id => { const h = P.host(id); const e = h?.querySelector('.jc-card-empty'); return e ? e.textContent.trim() : null; };
 	P.text = id => { const h = P.host(id); return h ? h.textContent.trim() : null; };
 	P.cardError = id => {
 		const host = P.host(id);
 		const e = (host || document).querySelector('.jc-card-bus-error');
-		return e ? { code: e.getAttribute('data-juneau-error'), text: e.textContent.trim() } : null;
+		return e ? { code: e.dataset.juneauError ?? null, text: e.textContent.trim() } : null;
 	};
 	P.pageError = () => {
 		const b = document.querySelector('.jc-console-error');
 		if (!b) return null;
 		const items = Array.from(b.querySelectorAll('.jc-console-error-item'));
-		return { codes: items.map(e => e.getAttribute('data-juneau-error')), text: items.map(e => e.textContent.trim()).join(' | '), role: b.getAttribute('role') };
+		return { codes: items.map(e => e.dataset.juneauError ?? null), text: items.map(e => e.textContent.trim()).join(' | '), role: b.getAttribute('role') };
 	};
 	P.row = (cardId, rowId) => {
 		const body = document.getElementById(cardId + '-body');
-		return body ? Array.from(body.querySelectorAll('tr[data-juneau-row-id]')).find(r => r.getAttribute('data-juneau-row-id') === rowId) || null : null;
+		return body ? Array.from(body.querySelectorAll('tr[data-juneau-row-id]')).find(r => r.dataset.juneauRowId === rowId) || null : null;
 	};
 	P.hasRow = (cardId, rowId) => !!P.row(cardId, rowId);
 	P.selectRow = (cardId, rowId) => {
 		const r = P.row(cardId, rowId);
-		const cb = r && r.querySelector('.juneau-view-select-checkbox, input[type="checkbox"]');
+		const cb = r?.querySelector('.juneau-view-select-checkbox, input[type="checkbox"]');
 		if (!cb) return false;
 		cb.click();
 		return true;
@@ -107,15 +107,15 @@ function installHelpers() {
 		return b ? b.getAttribute('aria-pressed') : null;
 	};
 	P.fetches = pred => window.__busTest.fetches.filter(pred);
-	P.lastFetch = pred => { const f = P.fetches(pred); return f.length ? f[f.length - 1] : null; };
+	P.lastFetch = pred => { const f = P.fetches(pred); return f.length ? f.at(-1) : null; };
 	// columns[i].search.value for the column whose data/name is `key`, from the DataTables JSON request.
 	P.columnSearch = (req, key) => {
 		if (!req || !Array.isArray(req.columns)) return null;
 		const c = req.columns.find(c => c && (c.data === key || c.name === key));
-		return c && c.search ? c.search.value : null;
+		return c?.search ? c.search.value : null;
 	};
-	['changes', 'tasks', 'peers', 'byOwner'].forEach(P.host);
-	P.sse = (seq, frame) => 'event: bus\nid: ' + seq + '\ndata: ' + JSON.stringify(Object.assign({ seq }, frame)) + '\n\n';
+	['changes', 'tasks', 'peers', 'byOwner'].forEach(id => P.host(id));
+	P.sse = (seq, frame) => 'event: bus\nid: ' + seq + '\ndata: ' + JSON.stringify({ seq, ...frame }) + '\n\n';
 	P.isTasksFetch = f => /^\/api\/changes\/[^/]+\/tasks$/.test(f.path);
 	P.isChangesFetch = f => f.path === '/api/changes';
 	P.isPeersFetch = f => f.path === '/api/peers';
@@ -127,7 +127,7 @@ const SCENARIOS = {
 		const P = window.__probe, bus = P.bus(), out = {};
 		await P.waitFor(() => P.hasRow('changes', 'c-17'));
 		await P.settle();
-		out.cardStates = ['changes', 'tasks', 'byOwner'].map(id => { const s = bus.get('card:' + id); return s && s.state; });
+		out.cardStates = ['changes', 'tasks', 'byOwner'].map(id => { const s = bus.get('card:' + id); return s?.state; });
 		out.initial = {
 			tasksEmpty: P.empty('tasks'),
 			tasksFetches: P.fetches(P.isTasksFetch).length,
@@ -176,13 +176,13 @@ const SCENARIOS = {
 		let changesBefore = P.fetches(P.isChangesFetch).length;
 		const rolesBefore = T.roleCalls.length;
 		out.mineClicked = P.clickControl('changes', 'Mine only');
-		await P.waitFor(() => { const f = bus.get('filter:changes'); return f && f.options && f.options.mine === true; });
+		await P.waitFor(() => { const f = bus.get('filter:changes'); return f?.options && f.options.mine === true; });
 		await P.settle();
 		const byOwner = T.roleCalls.slice(rolesBefore).filter(c => c.card === 'byOwner' && c.role === 'filter');
 		out.mine = {
 			filter: bus.get('filter:changes'),
 			pressed: P.pressed('changes', 'Mine only'),
-			byOwnerLast: byOwner.length ? byOwner[byOwner.length - 1].payload : null,
+			byOwnerLast: byOwner.length ? byOwner.at(-1).payload : null,
 			cmdChangesInHistory: bus.history().some(h => h.topic === 'cmd:changes')
 		};
 
@@ -250,7 +250,7 @@ const SCENARIOS = {
 		const cs = e ? getComputedStyle(e) : null;
 		out.card = {
 			found: !!e,
-			code: e ? e.getAttribute('data-juneau-error') : null,
+			code: e ? (e.dataset.juneauError ?? null) : null,
 			text: e ? e.textContent.trim() : null,
 			inHost: !!e && host.contains(e),
 			inBanner: !!e && !!e.closest('.jc-console-error'),
@@ -276,11 +276,11 @@ const SCENARIOS = {
 
 	bridge: async () => {
 		const P = window.__probe, T = window.__busTest, bus = P.bus(), out = {};
-		const state = () => { const b = bus.get('bridge:ops'); return b && b.state; };
+		const state = () => { const b = bus.get('bridge:ops'); return b?.state; };
 		const resync = (s, seq, running) => {
 			s.push(P.sse(seq, { v: 1, type: 'resync-begin' }));
-			s.push(P.sse(seq + 1, { v: 1, type: 'pub', topic: 'ops.jobs', payload: { schemaVersion: 1, running }, retained: true }));
-			s.push(P.sse(seq + 2, { v: 1, type: 'resync-end' }));
+			s.push(P.sse(seq + 1, { v: 1, type: 'pub', topic: 'ops.jobs', payload: { schemaVersion: 1, running }, retained: true })); // NOSONAR javascript:S7778 - this stream fake accepts one chunk per push
+			s.push(P.sse(seq + 2, { v: 1, type: 'resync-end' })); // NOSONAR javascript:S7778 - this stream fake accepts one chunk per push
 		};
 
 		await P.waitFor(() => T.streams.length === 1);
@@ -311,7 +311,7 @@ const SCENARIOS = {
 			sessionPosts: P.fetches(f => f.path.endsWith('/juneau-bus/session')).length,
 			streamPaths: P.fetches(f => f.path.includes('/juneau-bus/stream/')).map(f => f.path)
 		};
-		out.states = T.roleCalls.filter(c => c.card === 'opsStatus').map(c => c.payload && c.payload.state);
+		out.states = T.roleCalls.filter(c => c.card === 'opsStatus').map(c => c.payload?.state);
 		out.statusError = P.pageError();
 		return out;
 	},
@@ -369,7 +369,7 @@ function answer(urlPath, req) {
 			} else if (u.pathname.startsWith('/api/')) {
 				const body = req.postData();
 				let parsed = {};
-				try { parsed = body ? JSON.parse(body) : {}; } catch (e) { parsed = {}; }
+				try { parsed = body ? JSON.parse(body) : {}; } catch (e) { parsed = {}; } // NOSONAR javascript:S2486 - the failure is an expected outcome here and the fallback handles it
 				const headers = {};
 				for (const [k, v] of Object.entries(req.headers())) headers[k.toLowerCase()] = v;
 				const rec = { url: u.pathname + u.search, path: u.pathname, method: req.method(), headers, body, request: parsed };

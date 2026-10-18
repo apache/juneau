@@ -21,7 +21,6 @@ import static org.apache.juneau.rest.server.runreport.RunViewChecks.*;
 
 import java.util.*;
 
-import org.apache.juneau.rest.server.views.*;
 
 /**
  * The options of a {@code terminal} card: where its bytes and (optionally) its step events come from.
@@ -36,6 +35,10 @@ import org.apache.juneau.rest.server.views.*;
  *
  * @since 10.0.0
  */
+@SuppressWarnings({
+	"java:S1192", // The option keys are protocol literals, spelled out where they are read and written.
+	"java:S1845" // Fluent-builder setters intentionally mirror field names (Juneau DSL convention)
+})
 public class TerminalDef {
 
 	/** The keys {@link #fromMap(String, Map)} accepts, in {@link #toMap()} order. */
@@ -130,6 +133,9 @@ public class TerminalDef {
 		return d;
 	}
 
+	@SuppressWarnings({
+		"java:S3776" // One flat check per option key; splitting it would only scatter them.
+	})
 	private static Map<String,Object> terminalOptions(String id, Object v) {
 		if (! (v instanceof Map<?,?> m))
 			throw iaex("TerminalDef '%s' terminal must be an object.", id);

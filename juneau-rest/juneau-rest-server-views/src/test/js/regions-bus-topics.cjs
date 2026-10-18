@@ -46,7 +46,7 @@ function withBus() {
 }
 
 function mk(h, id, populate, opts) {
-	const el = H.mkRegion(h.env, Object.assign({ id: id, type: 'card-body', populate: populate }, opts || {}));
+	const el = H.mkRegion(h.env, { id: id, type: 'card-body', populate: populate, ...opts || {} });
 	h.R.initRegion(el);
 	return el;
 }
@@ -61,7 +61,7 @@ function thrown(fn) {
 		fn();
 		return null;
 	} catch (e) {
-		return (e && e.code ? e.code + ': ' : '') + String(e && e.message);
+		return (e?.code ? e.code + ': ' : '') + String(e?.message);
 	}
 }
 

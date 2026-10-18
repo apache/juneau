@@ -37,17 +37,20 @@ class TopicDecl_Test extends TestBase {
 	@Test void a02_jobWildcard_onlyWithServer() {
 		assertEquals("{topic:'job:*',retain:true,publisher:'server'}",
 			Json5.DEFAULT.write(TopicDecl.of("job:*").retain(true).publisher(Publisher.SERVER).toMap()));
-		var e = assertThrows(IllegalArgumentException.class, () -> TopicDecl.of("job:*").retain(true).publisher(Publisher.SCRIPT).toMap());
+		var target = TopicDecl.of("job:*").retain(true).publisher(Publisher.SCRIPT);
+		var e = assertThrows(IllegalArgumentException.class, target::toMap);
 		assertEquals("'job' is a framework family; framework topics are implicit and may not be declared", e.getMessage());
 	}
 
 	@Test void a03_publication() {
 		assertEquals("{topic:'ssc.focus',retain:true}", Json5.DEFAULT.write(TopicDecl.of("ssc.focus").retain(true).toPublicationMap()));
+		var target2 = TopicDecl.of("ssc.focus").retain(true).publisher(Publisher.SCRIPT);
 		var e = assertThrows(IllegalArgumentException.class,
-			() -> TopicDecl.of("ssc.focus").retain(true).publisher(Publisher.SCRIPT).toPublicationMap());
+			target2::toPublicationMap);
 		assertEquals("topic 'ssc.focus': publisher is page-level only; a card's publishes may not set it", e.getMessage());
+		var target3 = TopicDecl.of("job:*").retain(true);
 		e = assertThrows(IllegalArgumentException.class,
-			() -> TopicDecl.of("job:*").retain(true).toPublicationMap());
+			target3::toPublicationMap);
 		assertEquals("'job' is a framework family; framework topics are implicit and may not be declared", e.getMessage());
 	}
 
@@ -70,13 +73,16 @@ class TopicDecl_Test extends TestBase {
 	}
 
 	@Test void b04_retainRequired() {
-		var e = assertThrows(IllegalArgumentException.class, () -> TopicDecl.of("ssc.focus").publisher(Publisher.SCRIPT).toMap());
+		var target4 = TopicDecl.of("ssc.focus").publisher(Publisher.SCRIPT);
+		var e = assertThrows(IllegalArgumentException.class, target4::toMap);
 		assertEquals("topic 'ssc.focus' is declared with retain=unset here; call retain(true) or retain(false)", e.getMessage());
-		assertThrows(IllegalArgumentException.class, () -> TopicDecl.of("ssc.focus").toPublicationMap());
+		var target5 = TopicDecl.of("ssc.focus");
+		assertThrows(IllegalArgumentException.class, target5::toPublicationMap);
 	}
 
 	@Test void b05_pageLevelNeedsPublisher() {
-		var e = assertThrows(IllegalArgumentException.class, () -> TopicDecl.of("ssc.focus").retain(true).toMap());
+		var target6 = TopicDecl.of("ssc.focus").retain(true);
+		var e = assertThrows(IllegalArgumentException.class, target6::toMap);
 		assertEquals("topic 'ssc.focus': a page-level topic needs publisher(SCRIPT|SERVER|RIBBON)", e.getMessage());
 	}
 
@@ -85,17 +91,22 @@ class TopicDecl_Test extends TestBase {
 	}
 
 	@Test void d02_data_rejectsOtherShapes() {
-		assertThrows(IllegalArgumentException.class, () -> TopicDecl.of("data:x").retain(false).publisher(TopicDecl.Publisher.SCRIPT).toMap());
-		assertThrows(IllegalArgumentException.class, () -> TopicDecl.of("data:x").retain(true).publisher(TopicDecl.Publisher.SERVER).toMap());
-		assertThrows(IllegalArgumentException.class, () -> TopicDecl.of("data:x").retain(true).toPublicationMap());
+		var target7 = TopicDecl.of("data:x").retain(false).publisher(TopicDecl.Publisher.SCRIPT);
+		assertThrows(IllegalArgumentException.class, target7::toMap);
+		var target8 = TopicDecl.of("data:x").retain(true).publisher(TopicDecl.Publisher.SERVER);
+		assertThrows(IllegalArgumentException.class, target8::toMap);
+		var target9 = TopicDecl.of("data:x").retain(true);
+		assertThrows(IllegalArgumentException.class, target9::toPublicationMap);
 		assertThrows(IllegalArgumentException.class, () -> TopicDecl.of("data:*"));
 	}
 
 	@Test void d03_zoomLegend_cardPublicationRetained() {
 		assertBean(TopicDecl.of("zoom:t").retain(true).toPublicationMap(), "topic,retain", "zoom:t,true");
 		assertBean(TopicDecl.of("legend:t").retain(true).toPublicationMap(), "topic,retain", "legend:t,true");
-		assertThrows(IllegalArgumentException.class, () -> TopicDecl.of("zoom:t").retain(false).toPublicationMap());
-		assertThrows(IllegalArgumentException.class, () -> TopicDecl.of("zoom:t").retain(true).publisher(TopicDecl.Publisher.SCRIPT).toMap());
+		var target10 = TopicDecl.of("zoom:t").retain(false);
+		assertThrows(IllegalArgumentException.class, target10::toPublicationMap);
+		var target11 = TopicDecl.of("zoom:t").retain(true).publisher(TopicDecl.Publisher.SCRIPT);
+		assertThrows(IllegalArgumentException.class, target11::toMap);
 	}
 
 	@Test void d04_otherFramework_stillE45() {

@@ -34,6 +34,9 @@ import org.apache.juneau.rest.server.runreport.RunEvent.*;
  * failing child is kept only up to the trace limit, so memory does not grow with the file.  The factory comes from
  * {@link SecureXMLInputFactory}, so DTDs and external entities are never resolved.
  */
+@SuppressWarnings({
+	"java:S1192" // The warning prefix is message text, not a shared token.
+})
 final class JUnitXmlParser {
 
 	private JUnitXmlParser() {}
@@ -92,10 +95,16 @@ final class JUnitXmlParser {
 		return RunViewChecks.firstLine(s);
 	}
 
+	@SuppressWarnings({
+		"java:S3776" // The streaming state machine is inherently branchy.
+	})
 	private static void read(XMLStreamReader r, ReportLimits lim, ReportBuilder out) throws XMLStreamException {
 		var suiteName = "";
 		var inCase = false;
-		String cName = null, cClass = null, cTime = null, cMsg = null;
+		String cName = null;
+		String cClass = null;
+		String cTime = null;
+		String cMsg = null;
 		TestStatus cStatus = null;
 		StringBuilder text = null;
 		var childDepth = 0;
@@ -119,13 +128,17 @@ final class JUnitXmlParser {
 					} else if (inCase && childDepth == 0) {
 						switch (el) {
 							case "failure", "error", "skipped" -> {
-								cStatus = el.equals("failure") ? TestStatus.FAIL : el.equals("error") ? TestStatus.ERROR : TestStatus.SKIP;
+								cStatus = switch (el) {
+									case "failure" -> TestStatus.FAIL;
+									case "error" -> TestStatus.ERROR;
+									default -> TestStatus.SKIP;
+								};
 								cMsg = r.getAttributeValue(null, "message");
 								text = new StringBuilder();
 								childDepth = 1;
 							}
 							case "flakyFailure", "flakyError", "rerunFailure", "rerunError" -> skipDepth = 1;
-							default -> { /* system-out, properties and the like */ skipDepth = 1; }
+							default -> skipDepth = 1; // system-out, properties and the like
 						}
 					} else if (inCase) {
 						childDepth++;
@@ -157,9 +170,13 @@ final class JUnitXmlParser {
 		}
 	}
 
+	@SuppressWarnings({
+		"java:S107" // Internal factory; parameters are the parsed fields.
+	})
 	private static ReportTest build(String suiteName, String cClass, String cName, String cTime, TestStatus status, String attrMsg, StringBuilder text, ReportLimits lim) {
 		var suite = cClass != null && ! cClass.isEmpty() ? cClass : suiteName;
-		String msg = null, trace = null;
+		String msg = null;
+		String trace = null;
 		if (status != TestStatus.PASS) {
 			var body = text == null ? "" : stripAnsi(text.toString()).strip();
 			if (attrMsg != null && ! attrMsg.isEmpty())

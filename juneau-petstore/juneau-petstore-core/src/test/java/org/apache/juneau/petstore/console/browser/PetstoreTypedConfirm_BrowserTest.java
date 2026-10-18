@@ -80,7 +80,6 @@ class PetstoreTypedConfirm_BrowserTest extends TestBase {
 	private static final String RES_FALSE = "window.__res === false";
 
 	private static Map<String,Map<String,Object>> report;
-	private static Map<String,Object> orders;
 
 	@BeforeAll
 	static void probe() throws Exception {

@@ -52,7 +52,7 @@
 	const EVENT_NAME_RE = /^[a-z][a-z0-9_]{0,31}$/;
 	const REGISTRIES = ["fn", "decorator", "parser", "builder", "transform"];
 	// The theme tokens the ECharts theme is built from (ConsoleChromeMixin_Test c03 reads this list).
-	const THEME_TOKENS = ["--jc-chart-1", "--jc-chart-2", "--jc-chart-3", "--jc-chart-4", "--jc-chart-5", "--jc-chart-6",
+	const THEME_TOKENS = ["--jc-chart-1", "--jc-chart-2", "--jc-chart-3", "--jc-chart-4", "--jc-chart-5", "--jc-chart-6", // NOSONAR javascript:S1481,javascript:S1854 - the list is read by the chrome token test
 		"--jc-chart-7", "--jc-chart-8", "--jc-chart-bg", "--jc-chart-text", "--jc-chart-axis", "--jc-chart-grid",
 		"--jc-chart-tooltip-bg", "--jc-chart-tooltip-text", "--jc-chart-mark", "--jc-chart-band", "--jc-chart-heat-low",
 		"--jc-chart-heat-high"];
@@ -99,17 +99,17 @@
 	function fmt(t) {
 		const args = Array.prototype.slice.call(arguments, 1);
 		let i = 0;
-		return t.replace(/%s/g, () => String(args[i++]));
+		return t.replaceAll('%s', () => String(args[i++]));
 	}
 
 	function chartError(code) {
-		const e = new Error(code + ": " + fmt.apply(null, [MSG[code]].concat(Array.prototype.slice.call(arguments, 1))));
+		const e = new Error(code + ": " + fmt(MSG[code], ...Array.prototype.slice.call(arguments, 1)));
 		e.code = code;
 		return e;
 	}
 
 	function log(e) {
-		console.error("[juneau-charts] " + (e && e.message || e));
+		console.error("[juneau-charts] " + (e?.message || e));
 	}
 
 	function warn(msg) {
@@ -125,7 +125,7 @@
 	}
 
 	function msgOf(e) {
-		return e && e.message || String(e);
+		return e?.message || String(e);
 	}
 
 	// ---- B. registries --------------------------------------------------------------------------------------------
@@ -156,7 +156,7 @@
 		return Object.freeze({
 			register: (name, impl) => register(kind, name, impl, false),
 			get: name => impls[kind].get(name) || null,
-			names: () => Array.from(impls[kind].keys()).sort()
+			names: () => Array.from(impls[kind].keys()).sort(byCodeUnit)
 		});
 	}
 
@@ -198,13 +198,46 @@
 	}
 
 	function toNumber(v, type) {
-		if (v == null || v === "") return NaN;
+		if (v == null || v === "") return Number.NaN;
 		if (type === "time" && typeof v === "string") return Date.parse(v);
 		const n = typeof v === "number" ? v : Number(v);
-		return isFinite(n) ? n : NaN;
+		return Number.isFinite(n) ? n : Number.NaN;
 	}
 
-	function frameOf(dims, records) {
+	// Orders strings by UTF-16 code unit, which is what a bare sort() does.
+	function byCodeUnit(a, b) {
+		return Number(a > b) - Number(a < b);
+	}
+
+	// Option sections may be a single object or a list; always hand back a list.
+	function asList(v) {
+		if (Array.isArray(v)) return v;
+		return isObj(v) ? [v] : [];
+	}
+
+	function echartsDimType(t) {
+		if (t === "time") return "time";
+		return t === "string" ? "ordinal" : "number";
+	}
+
+	// Option keys whose value is an opaque row payload, mapped to the member holding the rows.
+	function opaqueKeyOf(k) {
+		if (k === "dataset") return "source";
+		return k === "series" ? "data" : null;
+	}
+
+	function autoPattern(span) {
+		if (span == null) return "datetime";
+		if (span <= DAY_MS) return "time";
+		return span <= 90 * DAY_MS ? "date" : "month";
+	}
+
+	function arrowStep(k) {
+		if (k === "ArrowRight" || k === "ArrowDown") return 1;
+		return k === "ArrowLeft" || k === "ArrowUp" ? -1 : 0;
+	}
+
+	function frameOf(dims, records) { // NOSONAR javascript:S3776 - flat chain of independent guards; splitting adds no clarity
 		const n = records.length, columns = {};
 		for (const d of dims) {
 			if (d.type === "string") {
@@ -222,7 +255,7 @@
 				const col = new Int8Array(n);
 				for (let i = 0; i < n; i++) {
 					const v = records[i][d.name];
-					col[i] = v == null ? -1 : v ? 1 : 0;
+					col[i] = v == null ? -1 : Number(Boolean(v));
 				}
 				columns[d.name] = col;
 			} else {
@@ -246,7 +279,8 @@
 	};
 
 	function fieldOf(v) {
-		return typeof v === "string" ? v : isObj(v) && typeof v.field === "string" ? v.field : null;
+		if (typeof v === "string") return v;
+		return isObj(v) && typeof v.field === "string" ? v.field : null;
 	}
 
 	function seriesOf(h) {
@@ -254,12 +288,12 @@
 	}
 
 	// [{name, type}] for the fields a helper reads, in order.
-	function helperFields(h) {
+	function helperFields(h) { // NOSONAR javascript:S3776 - flat chain of independent guards; splitting adds no clarity
 		const out = [];
 		const add = (name, type) => { if (name && !out.some(d => d.name === name)) out.push({ name: name, type: type }); };
 		const xType = isObj(h.x) ? h.x.type : null;
 		if (h.kind === "line" || h.kind === "bar") {
-			add(fieldOf(h.x), xType === "time" ? "time" : xType === "number" ? "number" : "string");
+			add(fieldOf(h.x), xType === "time" || xType === "number" ? xType : "string");
 			for (const s of seriesOf(h)) add(s.field, "number");
 		} else if (h.kind === "scatter") {
 			add(fieldOf(h.x), xType === "time" ? "time" : "number");
@@ -283,7 +317,7 @@
 		return out;
 	}
 
-	function inferDims(rows, h) {
+	function inferDims(rows, h) { // NOSONAR javascript:S3776 - flat chain of independent guards; splitting adds no clarity
 		const dims = h ? helperFields(h) : [];
 		const seen = new Set(dims.map(d => d.name));
 		for (const r of rows.slice(0, INFER_ROWS)) {
@@ -295,7 +329,7 @@
 			}
 		}
 		// A tile field that is null or absent in the sniffed rows is still a column, so later rows can fill meta.
-		if (h && h.kind === "treemap")
+		if (h?.kind === "treemap")
 			for (const f of arr(h.tileFields))
 				if (typeof f === "string" && !seen.has(f)) { seen.add(f); dims.push({ name: f, type: "string" }); }
 		return dims;
@@ -323,7 +357,7 @@
 		}
 		if (d.type === "bool") return col[i] < 0 ? null : col[i] === 1;
 		const v = col[i];
-		return v === v ? v : null;
+		return Number.isNaN(v) ? null : v;
 	}
 
 	function rowAt(frame, i) {
@@ -357,7 +391,7 @@
 	function datasetOf(frame) {
 		return {
 			id: "juneau",
-			dimensions: frame.dims.map(d => ({ name: d.name, type: d.type === "time" ? "time" : d.type === "string" ? "ordinal" : "number" })),
+			dimensions: frame.dims.map(d => ({ name: d.name, type: echartsDimType(d.type) })),
 			source: keyedSource(frame)
 		};
 	}
@@ -370,7 +404,7 @@
 			return option;
 		}
 		const own = Array.isArray(option.dataset) ? option.dataset : [option.dataset];
-		const series = Array.isArray(option.series) ? option.series : isObj(option.series) ? [option.series] : [];
+		const series = asList(option.series);
 		const wants = series.some(s => isObj(s) && (s.datasetId === "juneau" || (s.datasetId == null && s.data == null)));
 		if (!wants) return option;
 		option.dataset = [ds].concat(own);
@@ -449,7 +483,7 @@
 	}
 
 	function pieHelper(donut) {
-		return function (h, frame, tokens) {
+		return function (h, frame, tokens) { // NOSONAR javascript:S3776 - flat chain of independent guards; splitting adds no clarity
 			const fit = pieLegendOf(h);
 			const outer = Math.round(fit.radius * 100);
 			const series = { id: "slices", type: "pie", radius: donut ? [Math.round(outer * 0.65) + "%", outer + "%"] : outer + "%",
@@ -460,7 +494,7 @@
 				if (h.center === "total") {
 					const col = frame.columns[h.value];
 					let total = 0;
-					if (col) for (let i = 0; i < frame.rowCount; i++) if (col[i] === col[i]) total += col[i];
+					if (col) for (let i = 0; i < frame.rowCount; i++) if (!Number.isNaN(col[i])) total += col[i];
 					text = new Intl.NumberFormat(undefined, { maximumFractionDigits: 2 }).format(total);
 				}
 				// A zero-size group sits on the ring's centre; ECharts places a text element's bounding-box edge, not its middle, at left/top.
@@ -480,7 +514,7 @@
 		} else {
 			const col = frame.columns[h.value];
 			let lo = Infinity, hi = -Infinity;
-			if (col) for (let i = 0; i < frame.rowCount; i++) if (col[i] === col[i]) { lo = Math.min(lo, col[i]); hi = Math.max(hi, col[i]); }
+			if (col) for (let i = 0; i < frame.rowCount; i++) if (!Number.isNaN(col[i])) { lo = Math.min(lo, col[i]); hi = Math.max(hi, col[i]); }
 			if (lo <= hi) { min = lo; max = hi; }
 		}
 		const dim = frame.dims.findIndex(d => d.name === h.value);
@@ -488,7 +522,7 @@
 			tooltip: { trigger: "item" },
 			xAxis: { type: "category" },
 			yAxis: { type: "category" },
-			visualMap: { type: "continuous", show: false, min: min, max: max, dimension: dim < 0 ? 0 : dim,
+			visualMap: { type: "continuous", show: false, min: min, max: max, dimension: Math.max(0, dim),
 				inRange: { color: [tokens["--jc-chart-heat-low"], tokens["--jc-chart-heat-high"]] } },
 			series: [{ id: "cells", type: "heatmap", encode: { x: xf, y: yf, value: h.value } }]
 		};
@@ -525,7 +559,7 @@
 
 	// Frame rows to nested nodes: one level per groupBy field, one leaf per row, all under one invisible top node so that
 	// "fit" has a target.  Ids are encoded group paths, so they are stable across refreshes.
-	function treemapTree(h, frame, tokens) {
+	function treemapTree(h, frame, tokens) { // NOSONAR javascript:S3776 - flat chain of independent guards; splitting adds no clarity
 		const dims = new Map(frame.dims.map(d => [d.name, d]));
 		const val = (name, i) => dims.has(name) ? cell(frame, dims.get(name), i) : null;
 		// An encoded segment never contains a bare "%", so "%" stands for a null or empty value and "jc-root%" for a value
@@ -555,8 +589,8 @@
 				parent = node;
 			});
 			const label = val(h.label, i), base = (groups.length ? path + "/" : "") + seg(label);
-			let id = base;
-			for (let n = 2; used.has(id); n++) id = base + "~" + n;
+			let id = base, n = 2;
+			while (used.has(id)) id = base + "~" + n++;
 			used.add(id);
 			const meta = {};
 			for (const f of tiles) meta[f] = val(f, i);
@@ -605,7 +639,7 @@
 	// Deep copy of JSON-ish values; functions and typed arrays are kept by reference, a Date is copied as a Date.
 	function copyValue(v) {
 		if (Array.isArray(v)) return v.map(copyValue);
-		if (Object.prototype.toString.call(v) === "[object Date]") return new Date(v.getTime());
+		if (Object.prototype.toString.call(v) === "[object Date]") return new Date(v);
 		if (!isObj(v)) return v;
 		const out = {};
 		for (const k of Object.keys(v)) if (k !== "__proto__") out[k] = copyValue(v[k]);
@@ -635,21 +669,25 @@
 
 	// Umbrella section 4 step 5: objects merge by key; arrays merge by element id (no ids: b replaces a).
 	function mergeOption(a, b) {
-		const out = Object.assign({}, a);
+		const out = { ...a };
 		for (const k of Object.keys(b)) {
 			if (k === "__proto__") continue;
-			const opaque = k === "dataset" ? "source" : k === "series" ? "data" : null;
-			out[k] = Object.hasOwn(a, k) ? merge(a[k], b[k], opaque) : (opaque ? copyList(b[k], opaque) : copyValue(b[k]));
+			const opaque = opaqueKeyOf(k);
+			if (Object.hasOwn(a, k)) out[k] = merge(a[k], b[k], opaque);
+			else out[k] = opaque ? copyList(b[k], opaque) : copyValue(b[k]);
 		}
 		return out;
 	}
 
-	function merge(a, b, opaque) {
+	function merge(a, b, opaque) { // NOSONAR javascript:S3776 - flat chain of independent guards; splitting adds no clarity
 		if (Array.isArray(a) && Array.isArray(b)) return mergeList(a, b, opaque);
 		if (isObj(a) && isObj(b)) {
-			const out = Object.assign({}, a);
-			for (const k of Object.keys(b))
-				if (k !== "__proto__") out[k] = k === opaque ? b[k] : Object.hasOwn(a, k) ? merge(a[k], b[k], null) : copyValue(b[k]);
+			const out = { ...a };
+			for (const k of Object.keys(b)) {
+				if (k === "__proto__") continue;
+				if (k === opaque) out[k] = b[k];
+				else out[k] = Object.hasOwn(a, k) ? merge(a[k], b[k], null) : copyValue(b[k]);
+			}
 			return out;
 		}
 		return opaque && isObj(b) ? copyList(b, opaque) : copyValue(b);
@@ -678,7 +716,7 @@
 	// "html" when any scope's first tooltip says so, else "richText".  enforceRenderMode has already normalised every value
 	// to "richText" or an html tooltip with a $fn formatter.  Every tooltip $fn is built in this one mode, so a $fn built
 	// unescaped (richText) can never end up rendered as html.
-	function chartTooltipMode(option) {
+	function chartTooltipMode(option) { // NOSONAR javascript:S3776 - flat chain of independent guards; splitting adds no clarity
 		const scopes = [option];
 		if (isObj(option.baseOption)) scopes.push(option.baseOption);
 		if (Array.isArray(option.media)) for (const m of option.media) if (isObj(m) && isObj(m.option)) scopes.push(m.option);
@@ -693,7 +731,7 @@
 	function makeFn(card, marker, mode, fctx) {
 		const name = marker.$fn;
 		const factory = impls.fn.get(name);
-		if (!factory) throw chartError("E-JS-90", card.id, name, impls.fn.size ? Array.from(impls.fn.keys()).sort().join(", ") : "none");
+		if (!factory) throw chartError("E-JS-90", card.id, name, impls.fn.size ? Array.from(impls.fn.keys()).sort(byCodeUnit).join(", ") : "none");
 		let f;
 		try {
 			f = factory(isObj(marker.args) ? marker.args : {},
@@ -725,7 +763,7 @@
 	function resolveFns(card, option, frame) {
 		const fctx = { frame: frame, useUTC: option.useUTC === true };
 		const tipMode = chartTooltipMode(option);
-		const scope = o => {
+		const scope = o => { // NOSONAR javascript:S3776 - flat chain of independent guards; splitting adds no clarity
 			const html = tipMode;
 			const walk = (v, mode, opaque) => {
 				if (isMarker(v)) return makeFn(card, v, mode, fctx);
@@ -755,7 +793,7 @@
 					if (Array.isArray(o[k])) o[k] = o[k].map(t => walk(t, tipMode, null));
 					else o[k] = walk(o[k], tipMode, null);
 				} else {
-					const opaque = k === "dataset" ? "source" : k === "series" ? "data" : null;
+					const opaque = opaqueKeyOf(k);
 					if (opaque) {
 						const list = Array.isArray(o[k]) ? o[k] : [o[k]];
 						for (const e of list) if (isObj(e)) walk(e, "richText", opaque);
@@ -777,8 +815,8 @@
 	// renders html for every renderMode except the exact string "richText" (and an unset one), so the rule is an allowlist:
 	// a missing renderMode becomes "richText", and anything but "richText" or "html" with a $fn formatter is downgraded.
 	// Every option scope is guarded: the option, baseOption, media[*].option and options[*].
-	function enforceRenderMode(card, option) {
-		const list = Array.isArray(option.tooltip) ? option.tooltip : isObj(option.tooltip) ? [option.tooltip] : [];
+	function enforceRenderMode(card, option) { // NOSONAR javascript:S3776 - flat chain of independent guards; splitting adds no clarity
+		const list = asList(option.tooltip);
 		// No tooltip component: nothing renders html.
 		for (const t of list) {
 			if (!isObj(t)) continue;
@@ -795,14 +833,16 @@
 	}
 
 	// C4: above the threshold, set the large-data options only where the option leaves them unset.
-	function applyLarge(card, option, frame) {
+	function applyLarge(card, option, frame) { // NOSONAR javascript:S3776 - flat chain of independent guards; splitting adds no clarity
 		const ld = isObj(card.largeData) ? card.largeData : {};
 		const threshold = typeof ld.threshold === "number" ? ld.threshold : LARGE.threshold;
-		if (!(frame.rowCount > threshold)) return option;
-		const progressive = ld.progressive === false ? 0 : typeof ld.progressive === "number" ? ld.progressive : LARGE.progressive;
+		if (!(frame.rowCount > threshold)) return option; // NOSONAR javascript:S1940 - NaN-safe negation; the inverted comparison differs for NaN
+		let progressive = LARGE.progressive;
+		if (ld.progressive === false) progressive = 0;
+		else if (typeof ld.progressive === "number") progressive = ld.progressive;
 		const unset = (o, k, v) => { if (o[k] === undefined) o[k] = v; };
 		unset(option, "animation", false);
-		const series = Array.isArray(option.series) ? option.series : isObj(option.series) ? [option.series] : [];
+		const series = asList(option.series);
 		for (const s of series) {
 			if (!isObj(s)) continue;
 			if (s.type === "line") unset(s, "sampling", "lttb");
@@ -827,19 +867,20 @@
 	// goes through isSafeHref in perDrawFetch.json, so a decorator cannot reach another origin.
 	function decoratorCtx(card, ctx, fetcher, cache) {
 		const base = ctx || {}, views = window.JuneauViews;
-		return Object.assign({}, base, {
+		return {
+			...base,
 			card: card,
 			publish: typeof base.publish === "function" ? base.publish : () => {},
-			data: views && views.data || null,
+			data: views?.data || null,
 			registry: window.JuneauCharts,
-			tokens: base.tokens ? Object.freeze(Object.assign({}, base.tokens)) : TOKEN_FALLBACKS,
+			tokens: base.tokens ? Object.freeze({ ...base.tokens }) : TOKEN_FALLBACKS,
 			fetch: cachedFetch(cache || new Map(), fetcher || perDrawFetch(base.signal))
-		});
+		};
 	}
 
 	// Steps 3-7.  Returns {marked, option}: marked keeps the $fn markers (getOption), option has functions.
 	function pipeline(card, frame, dctx) {
-		try {
+		try { // NOSONAR javascript:S4822 - a synchronous throw from runPipeline is turned into a rejected promise
 			return runPipeline(card, frame, dctx);
 		} catch (e) {
 			return Promise.reject(e);
@@ -852,7 +893,7 @@
 		let base = {};
 		if (h) {
 			const make = HELPERS[h.kind];
-			if (!make) return Promise.reject(chartError("E-JS-60", card.id, h.kind, Object.keys(HELPERS).sort().join(", ")));
+			if (!make) return Promise.reject(chartError("E-JS-60", card.id, h.kind, Object.keys(HELPERS).sort(byCodeUnit).join(", ")));
 			base = make(h, frame, tokens);
 		}
 		if (isObj(card.option)) base = mergeOption(base, card.option);
@@ -863,10 +904,10 @@
 			chain = chain.then(o => {
 				const name = isObj(spec) ? spec.use : null;
 				const d = impls.decorator.get(name);
-				if (!d) throw chartError("E-JS-91", card.id, name, impls.decorator.size ? Array.from(impls.decorator.keys()).sort().join(", ") : "none");
+				if (!d) throw chartError("E-JS-91", card.id, name, impls.decorator.size ? Array.from(impls.decorator.keys()).sort(byCodeUnit).join(", ") : "none");
 				let r;
 				try {
-					r = d(copyOption(o), frame, spec, Object.assign({}, dctx, { index: index }));
+					r = d(copyOption(o), frame, spec, { ...dctx, index: index });
 				} catch (e) {
 					throw chartError("E-JS-98", card.id, "decorator", name, msgOf(e));
 				}
@@ -886,7 +927,7 @@
 	// ---- H. same-origin href (verbatim; ViewsJs_SameOriginPath_Test checks the copies) ---------------------------
 
 	function resolveHref(tpl, row) {
-		return tpl.replace(/\{([^}]+)\}/g, (m, f) => encodeURIComponent(row && row[f] != null ? String(row[f]) : ""));
+		return tpl.replace(/\{([^}]+)\}/g, (m, f) => encodeURIComponent(row?.[f] != null ? String(row[f]) : "")); // NOSONAR javascript:S8786 - linear in practice on short inputs
 	}
 
 	/**
@@ -899,7 +940,7 @@
 	 * string.
 	 */
 	function hasUnsafeUrlChars(s) {
-		return s.charCodeAt(0) <= 32 || s.charCodeAt(s.length - 1) <= 32 || /[\\\u0000-\u001f\u007f]/.test(s);
+		return s.codePointAt(0) <= 32 || s.codePointAt(s.length - 1) <= 32 || /[\\\u0000-\u001f\u007f]/.test(s);
 	}
 
 	// Exact parity with SafePathTemplate.isSameOriginPath (juneau-commons): the original string is refused outright
@@ -936,13 +977,13 @@
 
 	// What a fn prints for a value it cannot format: nothing for null/undefined/NaN, else the value as text.
 	function plainText(v) {
-		return v == null || (typeof v === "number" && v !== v) ? "" : String(v);
+		return v == null || Number.isNaN(v) ? "" : String(v);
 	}
 
 	function numberText(nf, fctx) {
 		return p => {
 			const v = plainValue(p);
-			return escapeFor(fctx.renderMode, typeof v === "number" && isFinite(v) ? nf.format(v) : plainText(v));
+			return escapeFor(fctx.renderMode, typeof v === "number" && Number.isFinite(v) ? nf.format(v) : plainText(v));
 		};
 	}
 
@@ -956,8 +997,8 @@
 		s = String(s);
 		if (mode === "raw") return s;   // template's formats sub-fns: only the outermost template escapes
 		if (mode === "html")
-			return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#39;");
-		return s.replace(/\{/g, "\uff5b").replace(/\}/g, "\uff5d");
+			return s.replaceAll("&", "&amp;").replaceAll("<", "&lt;").replaceAll(">", "&gt;").replaceAll('"', "&quot;").replaceAll("'", "&#39;");
+		return s.replaceAll("{", "\uff5b").replaceAll("}", "\uff5d");
 	}
 
 	// A numeric (typed-array) column of the frame, or null: an author field such as "constructor" must not find an Object member.
@@ -967,12 +1008,12 @@
 	}
 
 	function timeSpan(frame) {
-		const d = frame && frame.dims.find(x => x.type === "time");
+		const d = frame?.dims.find(x => x.type === "time");
 		if (!d) return null;
 		const col = numericColumn(frame, d.name);
 		if (!col) return null;
 		let lo = Infinity, hi = -Infinity;
-		for (let i = 0; i < frame.rowCount; i++) if (col[i] === col[i]) { lo = Math.min(lo, col[i]); hi = Math.max(hi, col[i]); }
+		for (let i = 0; i < frame.rowCount; i++) if (!Number.isNaN(col[i])) { lo = Math.min(lo, col[i]); hi = Math.max(hi, col[i]); }
 		return lo <= hi ? hi - lo : null;
 	}
 
@@ -985,7 +1026,7 @@
 			const k = args.scale === 100 ? 1 : 100;
 			return p => {
 				const v = plainValue(p);
-				return escapeFor(fctx.renderMode, typeof v === "number" && isFinite(v) ? nf.format(v * k) + "%" : plainText(v));
+				return escapeFor(fctx.renderMode, typeof v === "number" && Number.isFinite(v) ? nf.format(v * k) + "%" : plainText(v));
 			};
 		},
 		compact: (args, fctx) => numberText(new Intl.NumberFormat(args.locale, { notation: "compact", maximumFractionDigits: digitsOf(args, 1) }), fctx),
@@ -995,7 +1036,7 @@
 			const base = args.binary === true ? 1024 : 1000, units = base === 1024 ? BINARY_UNITS : DECIMAL_UNITS;
 			return p => {
 				let v = plainValue(p);
-				if (typeof v !== "number" || !isFinite(v)) return escapeFor(fctx.renderMode, plainText(v));
+				if (typeof v !== "number" || !Number.isFinite(v)) return escapeFor(fctx.renderMode, plainText(v));
 				let u = 0;
 				const printed = () => (u === 0 ? Math.round(v) : Number(v.toFixed(1)));
 				while (u < units.length - 1 && Math.abs(printed()) >= base) { v /= base; u++; }
@@ -1009,7 +1050,7 @@
 			const two = n => (n < 10 ? "0" : "") + n;
 			return p => {
 				const v = plainValue(p);
-				if (typeof v !== "number" || !isFinite(v)) return escapeFor(fctx.renderMode, plainText(v));
+				if (typeof v !== "number" || !Number.isFinite(v)) return escapeFor(fctx.renderMode, plainText(v));
 				const total = Math.round(v * k), sign = total < 0 ? "-" : "", ms = Math.abs(total);
 				let s = Math.floor(ms / 1000), out;
 				if (ms < 1000) out = ms + " ms";
@@ -1027,16 +1068,16 @@
 			let pattern = args.pattern || "auto";
 			if (pattern === "auto") {
 				const span = timeSpan(fctx.frame);
-				pattern = span == null ? "datetime" : span <= DAY_MS ? "time" : span <= 90 * DAY_MS ? "date" : "month";
+				pattern = autoPattern(span);
 			}
 			const utc = typeof args.utc === "boolean" ? args.utc : fctx.useUTC;
-			const df = new Intl.DateTimeFormat(args.locale, Object.assign({}, DATE_PATTERNS[pattern] || DATE_PATTERNS.datetime, utc ? { timeZone: "UTC" } : {}));
+			const df = new Intl.DateTimeFormat(args.locale, { ...(DATE_PATTERNS[pattern] || DATE_PATTERNS.datetime), ...(utc ? { timeZone: "UTC" } : {}) });
 			return p => {
 				const v = plainValue(p);
 				// new Date(null) is the epoch, so null and NaN are "no value", never 1970.
-				if (v == null || v !== v) return "";
+				if (v == null || Number.isNaN(v)) return "";
 				const d = new Date(typeof v === "string" ? Date.parse(v) : v);
-				return escapeFor(fctx.renderMode, isNaN(d.getTime()) ? plainText(v) : df.format(d));
+				return escapeFor(fctx.renderMode, Number.isNaN(d.getTime()) ? plainText(v) : df.format(d));
 			};
 		},
 		template: (args, fctx) => {
@@ -1053,7 +1094,7 @@
 					else if (tok === "name" || tok === "seriesName") v = params[tok];
 					else if (tok.indexOf("meta.") === 0) v = isObj(params.data) && isObj(params.data.meta) && Object.hasOwn(params.data.meta, tok.slice(5)) ? params.data.meta[tok.slice(5)] : undefined;
 					else {
-						const d = fctx.frame && fctx.frame.dims.find(x => x.name === tok);
+						const d = fctx.frame?.dims.find(x => x.name === tok);
 						v = d && typeof params.dataIndex === "number" ? cell(fctx.frame, d, params.dataIndex) : undefined;
 					}
 					if (formats[tok]) v = formats[tok](v);
@@ -1065,11 +1106,11 @@
 			const min = typeof args.min === "number" ? args.min : 4, max = typeof args.max === "number" ? args.max : 24;
 			const col = numericColumn(fctx.frame, args.field);
 			let lo = Infinity, hi = -Infinity;
-			if (col) for (let i = 0; i < fctx.frame.rowCount; i++) if (col[i] === col[i]) { lo = Math.min(lo, col[i]); hi = Math.max(hi, col[i]); }
+			if (col) for (let i = 0; i < fctx.frame.rowCount; i++) if (!Number.isNaN(col[i])) { lo = Math.min(lo, col[i]); hi = Math.max(hi, col[i]); }
 			return (value, params) => {
 				const i = params && typeof params.dataIndex === "number" ? params.dataIndex : -1;
-				const v = col && i >= 0 ? col[i] : NaN;
-				if (!(v === v) || !(hi > lo)) return (min + max) / 2;
+				const v = col && i >= 0 ? col[i] : Number.NaN;
+				if (Number.isNaN(v) || !(hi > lo)) return (min + max) / 2; // NOSONAR javascript:S1940 - NaN-safe negation; the inverted comparison differs for NaN
 				return min + Math.sqrt((v - lo) / (hi - lo)) * (max - min);
 			};
 		}
@@ -1080,7 +1121,7 @@
 	// ---- G. the per-draw fetch helper and the built-in decorators --------------------------------------------------
 
 	function isAbortError(e) {
-		return !!e && e.name === "AbortError";
+		return e?.name === "AbortError";
 	}
 
 	// One AbortController per draw, aborted only when the draw is superseded or the card is destroyed.
@@ -1104,8 +1145,11 @@
 				if (!isSafeHref(url)) return Promise.reject(new Error("'" + url + "' is not a same-origin path"));
 				return fetch(url, { credentials: "same-origin", headers: { Accept: "application/json" }, signal: controller.signal }).then(r => {
 					if (r.ok) return r.json();
-					return r.json().then(b => { throw new Error(b && b.message || "HTTP " + r.status); },
-						e => { if (isAbortError(e)) throw e; throw new Error("HTTP " + r.status); });
+					return r.json().then(b => { throw new Error(b?.message || "HTTP " + r.status); },
+						e => {
+							if (isAbortError(e)) throw e;
+							throw new Error("HTTP " + r.status);
+						});
 				}, e => {
 					if (isAbortError(e)) throw e;
 					throw new Error("Request failed");
@@ -1146,15 +1190,15 @@
 				throw new Error("the response is not an array of rows");
 			});
 		if (typeof spec.source === "string") {
-			const views = window.JuneauViews, h = views && views.bus ? views.bus.get(spec.source) : undefined;
-			const f = h && ctx.data && ctx.data.isHandle(h) ? ctx.data.get(h) : null;
+			const views = window.JuneauViews, h = views?.bus ? views.bus.get(spec.source) : undefined;
+			const f = h && ctx.data?.isHandle(h) ? ctx.data.get(h) : null;
 			return Promise.resolve(f ? framesRows(f) : []);
 		}
 		return Promise.resolve([]);
 	}
 
 	function seriesList(option) {
-		return Array.isArray(option.series) ? option.series : isObj(option.series) ? [option.series] : [];
+		return asList(option.series);
 	}
 
 	// A decorator value that comes from DATA (a fetched or topic row) is a scalar: a string, a number or a Date.  Anything else
@@ -1184,7 +1228,7 @@
 	}
 
 	// C8: "now" on a category axis is today's date (UTC when the option's useUTC is true, else local).
-	function nowAt(option) {
+	function nowAt(option) { // NOSONAR javascript:S3800 - returns a number or a string by design (a time-axis value or a category name)
 		const t = Date.now();
 		if (firstAxisType(option, "xAxis") !== "category") return t;
 		const d = new Date(t), utc = option.useUTC === true;
@@ -1211,7 +1255,7 @@
 	}
 
 	// No-data bands: runs of buckets where the first series is null or 0, widened by half a bucket.
-	function gapBands(option, frame, spec) {
+	function gapBands(option, frame, spec) { // NOSONAR javascript:S3776 - flat chain of independent guards; splitting adds no clarity
 		const f = firstSeriesFields(option);
 		const xd = f && frame.dims.find(d => d.name === f.x), ycol = f && numericColumn(frame, f.y);
 		if (!xd || !ycol || frame.rowCount < 2) return [];
@@ -1229,7 +1273,7 @@
 		const out = [];
 		let start = -1;
 		for (let i = 0; i <= frame.rowCount; i++) {
-			const empty = i < frame.rowCount && (!(ycol[i] === ycol[i]) || ycol[i] === 0);
+			const empty = i < frame.rowCount && (Number.isNaN(ycol[i]) || ycol[i] === 0);
 			if (empty && start < 0) start = i;
 			if (!empty && start >= 0) {
 				if (i - start >= minGap)
@@ -1270,7 +1314,7 @@
 				label: { position: "end", formatter: labelFn("{name}") }, data: data } });
 	}
 
-	function annotations(option, frame, spec, ctx) {
+	function annotations(option, frame, spec, ctx) { // NOSONAR javascript:S3776 - flat chain of independent guards; splitting adds no clarity
 		const label = typeof spec.label === "string" ? { formatter: labelFn(spec.label) } : undefined;
 		const presets = arr(spec.presets).filter(p => p === "max" || p === "min" || p === "average");
 		if (presets.length) {
@@ -1303,21 +1347,21 @@
 	// juneau-theme-<name>.css on the first matching stylesheet link names the ECharts theme juneau-<name>.  The dark scheme
 	// layer (juneau-theme-dark.css) is linked ahead of the palette and is not a palette, so it is skipped.
 	function themeName(doc) {
-		const links = doc && doc.querySelectorAll ? Array.from(doc.querySelectorAll("link")) : [];
+		const links = doc?.querySelectorAll ? Array.from(doc.querySelectorAll("link")) : [];
 		for (const l of links) {
 			if (String(l.getAttribute("rel") || "").toLowerCase() !== "stylesheet") continue;
 			const m = /(?:^|\/)juneau-theme-([a-z0-9-]+)\.css(?:[?#]|$)/.exec(String(l.getAttribute("href") || ""));
-			if (m && m[1] !== "dark") return "juneau-" + m[1];
+			if (m && m[1] !== "dark") return "juneau-" + m[1]; // NOSONAR javascript:S6582 - not equivalent: with m null, m?.[1] !== "dark" would be true
 		}
 		return "juneau-open";
 	}
 
 	// The computed style of the root element, or null when the page cannot give one.
 	function rootStyle(doc) {
-		const view = doc && doc.defaultView || window;
+		const view = doc?.defaultView || window;
 		try {
 			return view && typeof view.getComputedStyle === "function" ? view.getComputedStyle(doc.documentElement) : null;
-		} catch (e) {
+		} catch (e) { // NOSONAR javascript:S2486 - an unavailable computed style is reported as null; callers fall back
 			return null;
 		}
 	}
@@ -1327,7 +1371,7 @@
 	}
 
 	function readTokens(doc) {
-		const out = Object.assign({}, TOKEN_FALLBACKS);
+		const out = { ...TOKEN_FALLBACKS };
 		const cs = rootStyle(doc);
 		if (cs) {
 			for (const k of Object.keys(out)) {
@@ -1388,7 +1432,7 @@
 
 	// ECharts 6.1.0 bundles the EN and ZH locales.
 	function localeOf(doc) {
-		const root = doc && doc.documentElement;
+		const root = doc?.documentElement;
 		const lang = root && typeof root.getAttribute === "function" ? String(root.getAttribute("lang") || "") : "";
 		return /^zh(-|$)/i.test(lang) ? "ZH" : "EN";
 	}
@@ -1410,11 +1454,11 @@
 	}
 
 	function clear(n) {
-		while (n.firstChild) n.removeChild(n.firstChild);
+		while (n.firstChild) n.firstChild.remove();
 	}
 
 	function count(n) {
-		return String(n).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+		return String(n).replace(/\B(?=(\d{3})+(?!\d))/g, ","); // NOSONAR javascript:S8786 - linear in practice on short inputs
 	}
 
 	function report(st, e) {
@@ -1431,7 +1475,7 @@
 
 	// A draw-phase failure that carries no code of its own (the load is E-JS-62 and setOption E-JS-80, both coded at their source).
 	function drawError(card, e) {
-		return e && e.code ? e : chartError("E-JS-98", card.id, "draw", "pipeline", msgOf(e));
+		return e?.code ? e : chartError("E-JS-98", card.id, "draw", "pipeline", msgOf(e));
 	}
 
 	function isCarrier(s) {
@@ -1439,7 +1483,7 @@
 	}
 
 	function dataSeries(option) {
-		const list = Array.isArray(option.series) ? option.series : isObj(option.series) ? [option.series] : [];
+		const list = asList(option.series);
 		const out = [];
 		list.forEach((s, i) => { if (isObj(s) && !isCarrier(s)) out.push({ s: s, index: i }); });
 		return out;
@@ -1479,7 +1523,7 @@
 			hint.hidden = true;
 			const h = helperOf(card);
 			hint.textContent = "Arrow keys walk the points, Enter activates the focused point, Escape ends the walk."
-				+ (h && h.kind === "treemap" ? " Plus and minus zoom, 0 resets." : "");
+				+ (h?.kind === "treemap" ? " Plus and minus zoom, 0 resets." : "");
 			plot.setAttribute("aria-describedby", hint.id);
 			plot.appendChild(hint);
 			live = htmlNode(doc, "p", "jc-chart-live");
@@ -1556,7 +1600,7 @@
 	// An out-of-range or non-finite time is shown as its own text, never a RangeError that fails the whole draw.
 	function isoOf(v) {
 		const t = new Date(v);
-		return isFinite(t.getTime()) ? t.toISOString() : String(v);
+		return Number.isFinite(t.getTime()) ? t.toISOString() : String(v);
 	}
 
 	function cellText(frame, d, i) {
@@ -1566,7 +1610,7 @@
 	}
 
 	// The default caption: "Line chart, 3 series, 120 points, 2026-09-11 to 2026-10-11", unless a11y.summary is set.
-	function summary(card, frame, option) {
+	function summary(card, frame, option) { // NOSONAR javascript:S3776 - flat chain of independent guards; splitting adds no clarity
 		const a = a11yOf(card);
 		if (typeof a.summary === "string") return a.summary;
 		const h = helperOf(card);
@@ -1577,11 +1621,11 @@
 		let text = parts.join(", ");
 		const x = xDimOf(card, frame);
 		if (x && frame.rowCount > 1) {
-			const iso = v => { const t = new Date(v); return isFinite(t.getTime()) ? t.toISOString().slice(0, 10) : String(v); };
+			const iso = v => { const t = new Date(v); return Number.isFinite(t.getTime()) ? t.toISOString().slice(0, 10) : String(v); };
 			if (x.type === "time" || x.type === "number") {
 				const col = frame.columns[x.name];
 				let lo = Infinity, hi = -Infinity;
-				for (let i = 0; i < frame.rowCount; i++) if (isFinite(col[i])) { lo = Math.min(lo, col[i]); hi = Math.max(hi, col[i]); }
+				for (let i = 0; i < frame.rowCount; i++) if (Number.isFinite(col[i])) { lo = Math.min(lo, col[i]); hi = Math.max(hi, col[i]); }
 				if (hi >= lo) text += ", " + (x.type === "time" ? iso(lo) + " to " + iso(hi) : lo + " to " + hi);
 			} else if (h && h.kind !== "donut" && h.kind !== "pie") {
 				text += ", " + cellText(frame, x, 0) + " to " + cellText(frame, x, frame.rowCount - 1);
@@ -1641,9 +1685,10 @@
 		}
 		const p = isObj(handle.progress) ? handle.progress : {};
 		st.overlay.hidden = false;
+		const loaded = typeof p.loaded === "number" ? p.loaded : 0;
 		st.overlay.textContent = typeof p.total === "number" && p.total > 0 && typeof p.loaded === "number"
 			? "Loading " + Math.min(100, Math.floor(100 * p.loaded / p.total)) + "%"
-			: "Loading " + count(typeof p.loaded === "number" ? p.loaded : 0) + " rows";
+			: "Loading " + count(loaded) + " rows";
 	}
 
 	function setStale(st, e) {
@@ -1679,7 +1724,7 @@
 
 	// A picture the user is looking at: a chart that has completed a draw and whose chrome is still in the body.
 	function hasPicture(st) {
-		return !!(st.inst && st.frame && st.fig && st.fig.parentNode === st.body);
+		return !!(st.inst && st.frame && st.fig && st.fig.parentNode === st.body); // NOSONAR javascript:S6582 - not equivalent when st.body is undefined
 	}
 
 	function loadRows(st) {
@@ -1710,7 +1755,7 @@
 			let p = mapLoads.get(name);
 			if (!p) {
 				p = perDrawFetch(null).json(maps[name])
-					.catch(e => { throw e && e.code ? e : chartError("E-JS-62", st.card.id, msgOf(e)); })
+					.catch(e => { throw e?.code ? e : chartError("E-JS-62", st.card.id, msgOf(e)); })
 					.then(geo => { ec.registerMap(name, geo); });
 				mapLoads.set(name, p);
 				p.catch(() => { if (mapLoads.get(name) === p) mapLoads.delete(name); });
@@ -1719,16 +1764,16 @@
 		}));
 	}
 
-	function foldState(option, st) {
+	function foldState(option, st) { // NOSONAR javascript:S3776 - flat chain of independent guards; splitting adds no clarity
 		const z = st.zoom;
 		if (z) {
-			const list = Array.isArray(option.dataZoom) ? option.dataZoom : isObj(option.dataZoom) ? [option.dataZoom] : [];
+			const list = asList(option.dataZoom);
 			for (const d of list)
 				if (isObj(d)) for (const k of ["start", "end", "startValue", "endValue"]) if (z[k] != null) d[k] = z[k];
 		}
 		if (st.legend && isObj(st.legend.selected)) {
 			const l = Array.isArray(option.legend) ? option.legend[0] : option.legend;
-			if (isObj(l)) l.selected = Object.assign({}, st.legend.selected);
+			if (isObj(l)) l.selected = { ...st.legend.selected };
 		}
 		return option;
 	}
@@ -1736,7 +1781,7 @@
 	// True once a draw is no longer the card's current one: superseded by a later draw, the card destroyed, or its signal aborted.
 	// Every async continuation checks this, never the AbortError name (a decorator's aborted fetch surfaces as E-JS-98).
 	function stale(st, seq) {
-		return seq !== st.seq || st.destroyed || !!(st.ctx.signal && st.ctx.signal.aborted);
+		return seq !== st.seq || st.destroyed || !!(st.ctx.signal?.aborted);
 	}
 
 	// rethemed: this draw re-applies the page theme to a drawn chart (see retheme).
@@ -1753,7 +1798,7 @@
 		let t = null;
 		return Promise.resolve().then(() => {
 			t = currentTheme(st.ctx.document);
-			const dctx = decoratorCtx(card, Object.assign({}, st.ctx, { tokens: t.tokens }), fetcher, st.cache);
+			const dctx = decoratorCtx(card, { ...st.ctx, tokens: t.tokens }, fetcher, st.cache);
 			return Promise.all([pipeline(card, frame, dctx), loadMaps(st, ec)]);
 		}).then(r => {
 			if (stale(st, seq)) return;
@@ -1763,7 +1808,7 @@
 
 	// themed: on a re-theme draw, the theme the option's colours were baked from; the instance takes it in the same task as the
 	// option, so nothing is painted in between.
-	function paint(st, frame, r, themed) {
+	function paint(st, frame, r, themed) { // NOSONAR javascript:S3776 - flat chain of independent guards; splitting adds no clarity
 		const card = st.card;
 		ensureChrome(st);
 		setBanner(st, frame);
@@ -1796,7 +1841,7 @@
 		if (st.keyIndex >= frame.rowCount || treemapEntry(st)) { st.keyIndex = -1; announce(st, ""); }
 		// A redraw replaces the treemap series, so a zoom from the keyboard starts over.
 		st.treemapRoot = TREEMAP_ROOT;
-		if (first) for (const topic of st.restored.splice(0)) st.ctx.publish(topic, topic.indexOf("zoom:") === 0 ? st.zoom : st.legend);
+		if (first) for (const topic of st.restored.splice(0)) st.ctx.publish(topic, topic.startsWith("zoom:") ? st.zoom : st.legend);
 	}
 
 	function initChart(st) {
@@ -1837,7 +1882,7 @@
 		const card = st.card, seq = beginDraw(st);
 		if (!st.inst && !Array.isArray(card.data)) st.ctx.paintLoading(st.body);
 		// Only the load is E-JS-62; anything else uncoded is a draw-phase failure (E-JS-98).
-		const loaded = loadRows(st).catch(e => { throw e && e.code ? e : chartError("E-JS-62", card.id, msgOf(e)); });
+		const loaded = loadRows(st).catch(e => { throw e?.code ? e : chartError("E-JS-62", card.id, msgOf(e)); });
 		return loaded.then(rows => {
 			if (stale(st, seq)) return undefined;
 			return drawFrame(st, rowsFrame(card, rows), seq).then(() => { if (!stale(st, seq)) setStale(st, null); });
@@ -1857,7 +1902,7 @@
 		const card = st.card;
 		if (st.poll || card.refreshMs == null || typeof card.src !== "string") return;
 		let ms = Number(card.refreshMs);
-		if (!(ms >= MIN_REFRESH_MS)) {
+		if (!(ms >= MIN_REFRESH_MS)) { // NOSONAR javascript:S1940 - NaN-safe negation; the inverted comparison differs for NaN
 			log(chartError("E-JS-75", card.id, card.refreshMs, MIN_REFRESH_MS));
 			ms = MIN_REFRESH_MS;
 		}
@@ -1868,10 +1913,10 @@
 
 	// ---- J3. a source card: the data role ----
 
-	function onHandle(handle, meta, card, el) {
+	function onHandle(handle, meta, card, el) { // NOSONAR javascript:S3776 - flat chain of independent guards; splitting adds no clarity
 		const st = states.get(el);
 		if (!st || st.destroyed || handle == null) return undefined;
-		const data = window.JuneauViews && window.JuneauViews.data;
+		const data = window.JuneauViews?.data;
 		if (!data || !data.isHandle(handle) || handle.source !== String(card.source).slice(5)) {
 			log(chartError("E-JS-95", card.source, JSON.stringify(handle)));
 			return undefined;
@@ -1888,7 +1933,7 @@
 			drawEnded(st);
 			return undefined;
 		}
-		const partial = card.partialFrames === true && handle.status === "loading" ? data.get(Object.assign({}, handle, { partial: true })) : null;
+		const partial = card.partialFrames === true && handle.status === "loading" ? data.get({ ...handle, partial: true }) : null;
 		const frame = partial || data.get(handle);
 		const settle = () => {
 			setOverlay(st, handle);
@@ -1918,13 +1963,13 @@
 
 	// A JSON-safe copy of event data (Date to ISO text, non-finite numbers to null, functions/DOM/typed arrays dropped), bounded in
 	// depth (8) and in total nodes, scalars included (JSON_NODES_MAX; over it the rest is dropped), and never carrying a "__proto__" key.
-	function jsonCopy(v, depth, budget) {
+	function jsonCopy(v, depth, budget) { // NOSONAR javascript:S3776 - flat chain of independent guards; splitting adds no clarity
 		budget = budget || { n: JSON_NODES_MAX };
 		if (--budget.n < 0) return undefined;
 		if (v == null || typeof v === "string" || typeof v === "boolean") return v;
-		if (typeof v === "number") return isFinite(v) ? v : null;
+		if (typeof v === "number") return Number.isFinite(v) ? v : null;
 		if (typeof v !== "object" || depth > 8 || typeof v.nodeType === "number" || ArrayBuffer.isView(v)) return undefined;
-		if (Object.prototype.toString.call(v) === "[object Date]") return isFinite(v.getTime()) ? v.toISOString() : null;
+		if (Object.prototype.toString.call(v) === "[object Date]") return Number.isFinite(v.getTime()) ? v.toISOString() : null;
 		if (Array.isArray(v)) {
 			const list = [];
 			for (let i = 0; i < v.length && budget.n > 0; i++) { const c = jsonCopy(v[i], depth + 1, budget); list.push(c === undefined ? null : c); }
@@ -1998,7 +2043,7 @@
 	}
 
 	// Umbrella 3.1: only the listed fields leave the chart.
-	function sanitize(st, event, p) {
+	function sanitize(st, event, p) { // NOSONAR javascript:S3776 - flat chain of independent guards; splitting adds no clarity
 		p = isObj(p) ? p : {};
 		const out = { schemaVersion: 1, card: st.card.id, event: event };
 		if (typeof p.seriesId === "string") out.seriesId = p.seriesId;
@@ -2028,19 +2073,19 @@
 			log(chartError("E-JS-79", st.card.id, url));
 			return;
 		}
-		const ev = p && p.event && p.event.event || p && p.domEvent || null;
+		const ev = p?.event?.event || p?.domEvent || null;
 		if (ev && (ev.ctrlKey || ev.metaKey || ev.shiftKey || ev.button === 1)) window.open(url, "_blank", "noopener");
 		else window.location.assign(url);
 	}
 
 	// A group header runs nothing (the click only zooms), so a card that runs something on a tile says so for a moment.
 	function hintTile(st) {
-		if (!isInteractive(st.card) || !st.banner || st.frame && st.frame.truncated) return;
+		if (!isInteractive(st.card) || !st.banner || st.frame?.truncated) return;
 		st.banner.textContent = "Select a tile, not a group, to open it.";
 		st.banner.hidden = false;
 		clearTimeout(st.hintTimer);
 		st.hintTimer = setTimeout(() => {
-			if (!st.destroyed && st.banner && !(st.frame && st.frame.truncated)) { st.banner.hidden = true; st.banner.textContent = ""; }
+			if (!st.destroyed && st.banner && !(st.frame?.truncated)) { st.banner.hidden = true; st.banner.textContent = ""; }
 		}, 4000);
 	}
 
@@ -2055,11 +2100,11 @@
 	// The zoom range and legend selection on screen, in the shape foldState reads.
 	function viewState(st) {
 		const o = st.inst.getOption(), l = o && Array.isArray(o.legend) ? o.legend[0] : null;
-		return { zoom: zoomState(st), legend: isObj(l) && isObj(l.selected) ? { selected: Object.assign({}, l.selected) } : null };
+		return { zoom: zoomState(st), legend: isObj(l) && isObj(l.selected) ? { selected: { ...l.selected } } : null };
 	}
 
 	function zoomState(st) {
-		const o = st.inst && st.inst.getOption();
+		const o = st.inst?.getOption();
 		const d = o && Array.isArray(o.dataZoom) ? o.dataZoom[0] : null;
 		if (!isObj(d)) return null;
 		const v = k => typeof d[k] === "number" || typeof d[k] === "string" ? d[k] : null;
@@ -2084,7 +2129,7 @@
 			});
 		if (publishesRetained(card, legend))
 			inst.on("legendselectchanged", p => {
-				const sel = legendSelected(p && p.selected);
+				const sel = legendSelected(p?.selected);
 				if (!sel) return;
 				st.legend = { schemaVersion: 1, selected: sel };
 				st.ctx.publish(legend, st.legend);
@@ -2099,7 +2144,7 @@
 	// The leaves of the treemap series in pre-order.  dataIndex is the leaf's position in the option tree counting ECharts' own
 	// virtual root as 0, so the top node is 1.  parentId is the enclosing group, which a zoom targets.
 	function treemapLeaves(st, entry) {
-		if (st.leafCache && st.leafCache.of === st.marked) return st.leafCache.leaves;
+		if (st.leafCache && st.leafCache.of === st.marked) return st.leafCache.leaves; // NOSONAR javascript:S6582 - not equivalent when st.marked is undefined
 		const leaves = [];
 		let n = 1;
 		const walk = (nodes, parentId) => {
@@ -2137,7 +2182,7 @@
 		announce(st, "");
 	}
 
-	function onTreemapKey(st, ev, entry) {
+	function onTreemapKey(st, ev, entry) { // NOSONAR javascript:S3776 - flat chain of independent guards; splitting adds no clarity
 		const leaves = treemapLeaves(st, entry), n = leaves.length, k = ev.key;
 		const at = st.keyIndex >= 0 && st.keyIndex < n ? leaves[st.keyIndex] : null;
 		const root = st.treemapRoot || TREEMAP_ROOT;
@@ -2172,13 +2217,14 @@
 			announce(st, "Zoom reset");
 			return;
 		}
-		const step = k === "ArrowRight" || k === "ArrowDown" ? 1 : k === "ArrowLeft" || k === "ArrowUp" ? -1 : 0;
+		const step = arrowStep(k);
 		if (!n || (!step && k !== "Home" && k !== "End")) return;
 		ev.preventDefault();
 		let next;
 		if (k === "Home") next = 0;
 		else if (k === "End") next = n - 1;
-		else next = st.keyIndex < 0 ? (step > 0 ? 0 : n - 1) : Math.max(0, Math.min(n - 1, st.keyIndex + step));
+		else if (st.keyIndex < 0) next = step > 0 ? 0 : n - 1;
+		else next = Math.max(0, Math.min(n - 1, st.keyIndex + step));
 		if (at) st.inst.dispatchAction({ type: "downplay", seriesIndex: entry.index, dataIndex: at.dataIndex });
 		st.keyIndex = next;
 		st.inst.dispatchAction({ type: "highlight", seriesIndex: entry.index, dataIndex: leaves[next].dataIndex });
@@ -2186,7 +2232,7 @@
 		announce(st, leafText(leaves[next].node));
 	}
 
-	function onKey(st, ev) {
+	function onKey(st, ev) { // NOSONAR javascript:S3776 - flat chain of independent guards; splitting adds no clarity
 		if (!st.inst || !st.frame || !st.marked) return;
 		const tree = treemapEntry(st);
 		if (tree) { onTreemapKey(st, ev, tree); return; }
@@ -2201,13 +2247,14 @@
 				dataIndex: st.keyIndex, domEvent: ev });
 			return;
 		}
-		const step = k === "ArrowRight" || k === "ArrowDown" ? 1 : k === "ArrowLeft" || k === "ArrowUp" ? -1 : 0;
+		const step = arrowStep(k);
 		if (!n || (!step && k !== "Home" && k !== "End")) return;
 		ev.preventDefault();
 		let next;
 		if (k === "Home") next = 0;
 		else if (k === "End") next = n - 1;
-		else next = st.keyIndex < 0 ? (step > 0 ? 0 : n - 1) : Math.max(0, Math.min(n - 1, st.keyIndex + step));
+		else if (st.keyIndex < 0) next = step > 0 ? 0 : n - 1;
+		else next = Math.max(0, Math.min(n - 1, st.keyIndex + step));
 		if (st.keyIndex >= 0) st.inst.dispatchAction({ type: "downplay", seriesIndex: first.index, dataIndex: st.keyIndex });
 		st.keyIndex = next;
 		st.inst.dispatchAction({ type: "highlight", seriesIndex: first.index, dataIndex: st.keyIndex });
@@ -2229,32 +2276,32 @@
 		if (t === "svg" && st.card.renderer !== "svg") return Promise.reject(new Error("svg export needs renderer 'svg'"));
 		const opts = isObj(o) ? o : {};
 		// The pixel ratio is clamped (a bus publisher must not size a huge canvas); a throwing getDataURL rejects.
-		const ratio = typeof opts.pixelRatio === "number" && isFinite(opts.pixelRatio) ? Math.min(4, Math.max(1, opts.pixelRatio)) : 1;
+		const ratio = typeof opts.pixelRatio === "number" && Number.isFinite(opts.pixelRatio) ? Math.min(4, Math.max(1, opts.pixelRatio)) : 1;
 		// A transparent chart background would export light ink on nothing under a dark scheme: the image takes the surface instead.
 		const doc = st.ctx.document, bg = currentTheme(doc).tokens["--jc-chart-bg"];
 		const backgroundColor = bg === "transparent" && cssValue(rootStyle(doc), "--jc-surface") || bg;
-		return new Promise(resolve => resolve(st.inst.getDataURL({ type: t, pixelRatio: ratio, backgroundColor: backgroundColor })));
+		return new Promise(resolve => resolve(st.inst.getDataURL({ type: t, pixelRatio: ratio, backgroundColor: backgroundColor }))); // NOSONAR javascript:S4634 - the executor turns a throwing getDataURL into a rejection
 	}
 
 	function download(st, url, type) {
 		// Only the image data URL ECharts produced is linked; anything else (a hostile or buggy getDataURL) is refused.
-		if (typeof url !== "string" || !/^data:image\//.test(url)) throw new Error("the export is not an image data URL");
+		if (typeof url !== "string" || !url.startsWith("data:image/")) throw new Error("the export is not an image data URL");
 		const a = htmlNode(st.ctx.document, "a");
 		a.setAttribute("href", url);
 		a.setAttribute("download", st.card.id + "." + (type === "svg" ? "svg" : "png"));
 		st.body.appendChild(a);
 		a.click();
-		st.body.removeChild(a);
+		a.remove();
 	}
 
-	function applyOp(st, op, o) {
+	function applyOp(st, op, o) { // NOSONAR javascript:S3776 - flat chain of independent guards; splitting adds no clarity
 		const inst = st.inst;
 		if (op === "highlight" || op === "downplay")
-			return inst.dispatchAction(Object.assign({ type: op }, pick(o, ["seriesId", "seriesName", "dataIndex", "name"])));
+			return inst.dispatchAction({ type: op, ...pick(o, ["seriesId", "seriesName", "dataIndex", "name"]) });
 		if (op === "showTip" || op === "hideTip")
-			return inst.dispatchAction(Object.assign({ type: op }, pick(o, ["seriesIndex", "dataIndex", "name"])));
+			return inst.dispatchAction({ type: op, ...pick(o, ["seriesIndex", "dataIndex", "name"]) });
 		if (op === "zoomTo")
-			return inst.dispatchAction(Object.assign({ type: "dataZoom" }, pick(o, ["start", "end", "startValue", "endValue"])));
+			return inst.dispatchAction({ type: "dataZoom", ...pick(o, ["start", "end", "startValue", "endValue"]) });
 		if (op === "legendSelect") {
 			if (typeof o.name === "string")
 				return inst.dispatchAction({ type: o.selected === false ? "legendUnSelect" : "legendSelect", name: o.name });
@@ -2266,7 +2313,7 @@
 		return exportImage(st, o.type, o).then(url => download(st, url, o.type));
 	}
 
-	function runOp(op, cmd, el) {
+	function runOp(op, cmd, el) { // NOSONAR javascript:S3776 - flat chain of independent guards; splitting adds no clarity
 		const st = states.get(el);
 		if (!st || st.destroyed) return undefined;
 		const fail = reason => { log(chartError("E-JS-103", st.card.id, op, reason)); };
@@ -2279,7 +2326,10 @@
 		}
 		const runs = [];
 		for (const s of targets) {
-			if (!s.inst) { if (s === st) fail("the chart is not drawn yet"); continue; }
+			if (!s.inst) {
+				if (s === st) fail("the chart is not drawn yet");
+				continue;
+			}
 			try {
 				const r = applyOp(s, op, o);
 				if (r && typeof r.then === "function") runs.push(r.catch(e => fail(msgOf(e))));
@@ -2296,15 +2346,15 @@
 	// ---- J6. render, refresh, destroy ----
 
 	// A published zoom:/legend: value restored by the dashboard, folded in before the first draw.
-	function restore(st) {
-		const dash = window.JuneauViews && window.JuneauViews.dashboard;
+	function restore(st) { // NOSONAR javascript:S3776 - flat chain of independent guards; splitting adds no clarity
+		const dash = window.JuneauViews?.dashboard;
 		if (!dash || typeof dash.initial !== "function") return;
 		for (const topic of ["zoom:" + st.card.id, "legend:" + st.card.id]) {
 			if (!publishesRetained(st.card, topic)) continue;
 			let v = null;
 			try { v = dash.initial(topic); } catch (e) { log(e); }
 			if (!isObj(v)) continue;
-			if (topic.indexOf("zoom:") === 0) st.zoom = Object.assign({ schemaVersion: 1 }, pick(v, ["start", "end", "startValue", "endValue"]));
+			if (topic.startsWith("zoom:")) st.zoom = { schemaVersion: 1, ...pick(v, ["start", "end", "startValue", "endValue"]) };
 			else {
 				const sel = isObj(v.selected) ? legendSelected(v.selected) : null;
 				if (!sel) continue;
@@ -2325,7 +2375,10 @@
 				if (isObj(v.args)) walk(v.args, depth + 1);
 				return;
 			}
-			if (Array.isArray(v)) { for (const x of v) walk(x, depth + 1); return; }
+			if (Array.isArray(v)) {
+				for (const x of v) walk(x, depth + 1);
+				return;
+			}
 			if (isObj(v)) for (const k of Object.keys(v)) walk(v[k], depth + 1);
 		};
 		walk(card.helper, 0);
@@ -2340,7 +2393,7 @@
 
 	// A source card draws from its current bus handle (a refresh or a late registration re-seeds it); null when there is none.
 	function seedFromBus(st) {
-		const bus = window.JuneauViews && window.JuneauViews.bus;
+		const bus = window.JuneauViews?.bus;
 		const h = bus && typeof bus.get === "function" ? bus.get(st.card.source) : null;
 		if (!h) return null;
 		st.version = -1;
@@ -2351,7 +2404,7 @@
 		st.waiting = false;
 		if (typeof st.card.source === "string") {
 			const seeded = seedFromBus(st);
-			if (seeded) return seeded;
+			if (seeded !== null) return seeded;
 			st.ctx.paintLoading(st.body);
 			return undefined;
 		}
@@ -2369,10 +2422,10 @@
 		};
 		for (const m of missing) waitFor(m.kind, m.name, resume, st);
 		st.ctx.onReady(() => {
-			if (!st.waiting || st.destroyed || (st.ctx.signal && st.ctx.signal.aborted)) return;
+			if (!st.waiting || st.destroyed || (st.ctx.signal?.aborted)) return;
 			const m = missingNames(st.card)[0];
 			if (!m) return;
-			const names = Array.from(impls[m.kind].keys()).sort().join(", ") || "none";
+			const names = Array.from(impls[m.kind].keys()).sort(byCodeUnit).join(", ") || "none";
 			report(st, m.kind === "fn" ? chartError("E-JS-90", st.card.id, m.name, names) : chartError("E-JS-91", st.card.id, m.name, names));
 		});
 	}
@@ -2400,31 +2453,31 @@
 	function setBusy(st, on) {
 		st.actionBusy = on;
 		const el = st.el, plot = el.querySelector(".jc-chart-plot") || st.plot;
-		if (on) el.setAttribute("data-juneau-action-busy", "");
-		else el.removeAttribute("data-juneau-action-busy");
-		if (plot && plot.setAttribute) {
+		if (on) el.dataset.juneauActionBusy = "";
+		else delete el.dataset.juneauActionBusy;
+		if (plot?.setAttribute) {
 			if (on) plot.setAttribute("aria-busy", "true");
 			else plot.removeAttribute("aria-busy");
 		}
-		if (plot && plot.style) plot.style.cursor = on ? "progress" : "";
+		if (plot?.style) plot.style.cursor = on ? "progress" : "";
 	}
 
 	// Runs one action for a clicked point through the views hook; one run at a time per card, released when the run settles.
 	function runAction(st, action, payload) {
 		if (st.destroyed || st.actionBusy) return;
-		const hook = window.JuneauViews && window.JuneauViews.actions;
+		const hook = window.JuneauViews?.actions;
 		if (!hook || typeof hook.run !== "function") {
 			if (!st.warnedNoHook) { st.warnedNoHook = true; log(chartError("E-JS-108", st.card.id)); }
 			return;
 		}
 		const p = isObj(payload) ? payload : {};
-		const row = Object.assign({}, { name: p.name, value: p.value, seriesName: p.seriesName },
-			isObj(p.row) ? p.row : {}, isObj(p.meta) ? p.meta : {});
+		const row = { name: p.name, value: p.value, seriesName: p.seriesName,
+			...(isObj(p.row) ? p.row : {}), ...(isObj(p.meta) ? p.meta : {}) };
 		setBusy(st, true);
 		let pending;
 		try {
 			pending = Promise.resolve(hook.run(action, { host: st.el, row: row, onRedraw: () => { if (!st.destroyed) st.ctx.refresh(); }, catalog: st.card.actions }));
-		} catch (e) {
+		} catch (e) { // NOSONAR javascript:S2486 - a synchronous hook failure only clears the busy state; the action has nothing to report
 			setBusy(st, false);
 			return;
 		}
@@ -2445,7 +2498,7 @@
 		dropWaiters(st);
 		for (const off of st.actionOffs || []) off();
 		st.actionOffs = null;
-		const hook = window.JuneauViews && window.JuneauViews.actions;
+		const hook = window.JuneauViews?.actions;
 		if (hook && typeof hook.release === "function") hook.release(el);
 		disposeInst(st);
 	}
@@ -2454,7 +2507,7 @@
 		teardown(el);
 		const doc = ctx.document;
 		for (const c of Array.from(el.childNodes))
-			if (!(c.classList && c.classList.contains("jc-card-title"))) el.removeChild(c);
+			if (!(c.classList?.contains("jc-card-title"))) c.remove();
 		const body = htmlNode(doc, "div", "jc-card-body jc-chart-body");
 		el.appendChild(body);
 		const st = {
@@ -2502,7 +2555,7 @@
 		st.cache.clear();
 		if (typeof card.source === "string") {
 			// A source card redraws from its current handle; the source refreshes itself.
-			return seedFromBus(st) || undefined;
+			return seedFromBus(st) ?? undefined;
 		}
 		return cycle(st, true);
 	}
@@ -2568,7 +2621,7 @@
 	// The data-source built-ins ([registry, name, impl] triples on JuneauViews.data.builtins) may use bare names.
 	function drainBuiltins() {
 		const views = window.JuneauViews;
-		for (const t of arr(views && views.data && views.data.builtins)) {
+		for (const t of arr(views?.data?.builtins)) {
 			try {
 				if (Array.isArray(t) && t.length === 3 && REGISTRIES.indexOf(t[0]) >= 0) register(t[0], t[1], t[2], true);
 			} catch (e) {
@@ -2600,8 +2653,8 @@
 
 	function aliasOnConsole() {
 		const jc = window.JuneauConsole;
-		if (jc && jc.charts !== api) {
-			try { jc.charts = api; } catch (e) { /* a frozen JuneauConsole keeps only window.JuneauCharts */ }
+		if (jc && jc.charts !== api) { // NOSONAR javascript:S6582 - not equivalent: with jc null, jc?.charts !== api would be true
+			try { jc.charts = api; } catch (e) { /* a frozen JuneauConsole keeps only window.JuneauCharts */ } // NOSONAR javascript:S2486 - a frozen JuneauConsole keeps only window.JuneauCharts
 		}
 	}
 
@@ -2613,6 +2666,7 @@
 	window.JuneauConsoleCharts = { push: queueEntry };
 	queued.forEach(queueEntry);
 
-	(window.JuneauConsoleCards = window.JuneauConsoleCards || []).push(["chart",
+	window.JuneauConsoleCards = window.JuneauConsoleCards || [];
+	window.JuneauConsoleCards.push(["chart",
 		{ render: render, refresh: refresh, destroy: destroy, roles: { data: onHandle }, ops: ops, implicit: implicit }]);
 })();

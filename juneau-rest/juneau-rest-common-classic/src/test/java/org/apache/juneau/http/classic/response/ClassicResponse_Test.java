@@ -263,19 +263,19 @@ class ClassicResponse_Test extends TestBase {
 
 	@ParameterizedTest
 	@MethodSource("a06_exceptionClasses")
-	void b01_exceptionFluentSetters(Class<? extends BasicHttpException> type, int expectedCode, String expectedPhrase) throws Exception {
+	void b01_exceptionFluentSetters(Class<? extends BasicHttpException> type) throws Exception {
 		var methods = fluentMethods(type);
 		assertTrue(methods.size() >= 10, type::getName);
 		for (var m : methods) {
 			var instance = type.getDeclaredConstructor().newInstance().setHeader2("Pre", "1").setReasonPhrase2("Custom");
 			var args = sampleArgs(m);
 			assertSame(instance, m.invoke(instance, args), m::getName);
-			assertSetterState(instance, m, args, expectedCode, expectedPhrase);
+			assertSetterState(instance, m, args);
 		}
 	}
 
 	/** Asserts the observable state change each fluent setter promises (sample args come from {@link #sampleArg}). */
-	private static void assertSetterState(BasicHttpException x, Method m, Object[] a, int expectedCode, String expectedPhrase) throws Exception {
+	private static void assertSetterState(BasicHttpException x, Method m, Object[] a) throws Exception {
 		Supplier<String> what = m::toString;
 		switch (m.getName()) {
 			case "setContent" -> {
@@ -345,7 +345,7 @@ class ClassicResponse_Test extends TestBase {
 
 	@ParameterizedTest
 	@MethodSource("a06_exceptionClasses")
-	void b04b_exceptionResponseConstructorRejectsMismatchedStatus(Class<? extends BasicHttpException> type, int expectedCode, String expectedPhrase) throws Exception {
+	void b04b_exceptionResponseConstructorRejectsMismatchedStatus(Class<? extends BasicHttpException> type, int expectedCode, String expectedPhrase) {
 		var ex = assertThrows(InvocationTargetException.class, () -> type.getConstructor(HttpResponse.class).newInstance(new BasicHttpException(599)));
 		assertInstanceOf(IllegalArgumentException.class, ex.getCause());
 		assertTrue(ex.getCause().getMessage().contains("Expected:[" + expectedCode + "], Actual:[599]"), ex.getCause().getMessage());
@@ -353,7 +353,7 @@ class ClassicResponse_Test extends TestBase {
 
 	@ParameterizedTest
 	@MethodSource("a01_responseClasses")
-	void b05b_responseResponseConstructorRejectsMismatchedStatus(Class<? extends BasicHttpResponse<?>> type, int expectedCode, String expectedPhrase) throws Exception {
+	void b05b_responseResponseConstructorRejectsMismatchedStatus(Class<? extends BasicHttpResponse<?>> type, int expectedCode, String expectedPhrase) {
 		var ex = assertThrows(InvocationTargetException.class, () -> type.getConstructor(HttpResponse.class).newInstance(new BasicHttpException(599)));
 		assertInstanceOf(IllegalArgumentException.class, ex.getCause());
 		assertTrue(ex.getCause().getMessage().contains("Expected:[" + expectedCode + "], Actual:[599]"), ex.getCause().getMessage());

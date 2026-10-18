@@ -29,6 +29,9 @@ import org.apache.juneau.rest.server.views.TableSpec.*;
  * 	<jk>return</jk> <jsm>twin</jsm>(<jv>req</jv>, UsersPageBuilders.<jsm>users</jsm>());
  * </p>
  */
+@SuppressWarnings({
+	"java:S1192" // Page-definition ids and labels repeat as inline literals by design.
+})
 public final class UsersPageBuilders {
 
 	private UsersPageBuilders() {}

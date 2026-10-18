@@ -401,10 +401,12 @@ a:hover { text-decoration: underline; }
 .jc-nav-tab {
   display: flex;
   align-items: center;
+  box-sizing: border-box;
   font-size: 0.8125rem;
+  line-height: var(--jc-nav-tab-line-height);
   font-weight: 400;
   color: var(--jc-text-soft);
-  padding: 9px 12px;
+  padding: var(--jc-nav-tab-padding-block) var(--jc-nav-tab-padding-inline);
   margin-right: 0;
   border-top: var(--jc-nav-indicator-width) solid transparent;
   border-bottom: none;
@@ -422,6 +424,7 @@ a:hover { text-decoration: underline; }
   border-top-color: var(--jc-page-nav-accent);
   border-bottom: none;
   color: var(--jc-text);
+  font-weight: 700;
 }
 
 /* ==========================================================================
@@ -525,10 +528,9 @@ a:hover { text-decoration: underline; }
   flex: 0 0 auto;
   display: inline-flex;
   align-items: center;
-  padding-top: 0.45em;
-  padding-bottom: 0.45em;
-  padding-left: var(--jc-space-3);
-  padding-right: var(--jc-space-3);
+  box-sizing: border-box;
+  padding-left: var(--jc-nav-tab-padding-inline);
+  padding-right: var(--jc-nav-tab-padding-inline);
   font-weight: 400;
   text-decoration: none;
   border: none;
@@ -538,6 +540,8 @@ a:hover { text-decoration: underline; }
 }
 
 .juneau-page-nav-section {
+  padding: var(--jc-nav-tab-padding-block) var(--jc-nav-tab-padding-inline);
+  line-height: var(--jc-nav-tab-line-height);
   color: var(--jc-text-soft);
   font-size: var(--jc-page-nav-section-font-size);
   border-top-width: var(--jc-nav-indicator-width);
@@ -555,10 +559,12 @@ a:hover { text-decoration: underline; }
   background-color: var(--jc-accent-wash);
   border-top-color: var(--jc-page-nav-accent);
   color: var(--jc-text);
-  font-weight: 600;
+  font-weight: 700;
 }
 
 .juneau-page-nav-child {
+  padding: var(--jc-page-nav-child-padding-block) var(--jc-page-nav-child-padding-inline);
+  line-height: var(--jc-nav-tab-line-height);
   color: var(--jc-text-soft);
   font-size: var(--jc-page-nav-child-font-size);
 }
@@ -572,6 +578,7 @@ a:hover { text-decoration: underline; }
 .juneau-page-nav-child[aria-current="page"] {
   color: var(--jc-text);
   background-color: var(--jc-accent-wash);
+  font-weight: 700;
 }
 
 /* ==========================================================================

@@ -49,20 +49,20 @@ function load(opts) {
 		console: { error: m => errors.push(String(m)), log: () => {}, warn: () => {} },
 		URLSearchParams: env.window.URLSearchParams, CustomEvent: env.window.CustomEvent,
 		WeakSet, Map, Set, Promise, JSON, Object, Array, Error, TypeError, String, AbortController,
-		localStorage: (opts && opts.localStorage) || makeFakeStorage(),
-		fetch: (opts && opts.fetch) || (() => Promise.reject(new Error('no fetch in harness'))),
+		localStorage: (opts?.localStorage) || makeFakeStorage(),
+		fetch: (opts?.fetch) || (() => Promise.reject(new Error('no fetch in harness'))),
 		setTimeout: (fn, ms) => fn(), clearTimeout: () => {},
-		setInterval: (opts && opts.setInterval) || (() => 0), clearInterval: () => {}
+		setInterval: (opts?.setInterval) || (() => 0), clearInterval: () => {}
 	};
 	env.window.window = env.window;
 	env.window.document = doc;
-	if (opts && opts.queueBefore) env.window.JuneauConsoleCards = opts.queueBefore.slice();
+	if (opts?.queueBefore) env.window.JuneauConsoleCards = opts.queueBefore.slice();
 	doc.addEventListener('juneau:console-mounted', ev => { mountedEvents.push(ev.detail); });
 	doc.addEventListener('juneau:card-mounted', ev => { cardEvents.push({ kind: 'mounted', detail: ev.detail }); });
 	doc.addEventListener('juneau:card-failed', ev => { cardEvents.push({ kind: 'failed', detail: ev.detail }); });
 	let threw = null;
 	try {
-		vm.runInNewContext(shellSrc, sandbox, { filename: 'juneau-console.js' });
+		vm.runInNewContext(shellSrc, sandbox, { filename: 'juneau-console.js' }); // NOSONAR javascript:S1523 - loads the shipped script into a vm sandbox for the test
 	} catch (e) {
 		threw = { name: e.name, code: e.code, message: e.message };
 	}
@@ -84,7 +84,7 @@ function txt(doc, sel) {
 }
 
 const base = { contractVersion: '1', title: 'T', nav: [], activeNav: [], cards: [] };
-const C = o => Object.assign({}, base, o);
+const C = o => ({ ...base, ...o });
 
 const out = {};
 // Card events settle on a promise, so these fields are filled in once the microtask queue has drained.
@@ -101,7 +101,7 @@ const late = [];
 	const res = r.JC.mount(C({ cards: [{ id: 'b1', type: 'beta' }, { id: 'a1', type: 'alpha' }] }), { root: r.doc.body, document: r.doc });
 	out.queueBefore = {
 		threw: r.threw, errors: r.errors,
-		a1: res.cards.a1 && res.cards.a1.textContent, b1: res.cards.b1 && res.cards.b1.textContent,
+		a1: res.cards.a1?.textContent, b1: res.cards.b1?.textContent,
 		types: r.JC.cardTypes()
 	};
 }
@@ -111,7 +111,7 @@ const late = [];
 	const r = load({});
 	r.sandbox.window.JuneauConsoleCards.push(['gamma', (card, el) => { el.textContent = 'gamma:' + card.id; }]);
 	const res = r.JC.mount(C({ cards: [{ id: 'g1', type: 'gamma' }] }), { root: r.doc.body, document: r.doc });
-	out.queueAfter = { threw: r.threw, errors: r.errors, g1: res.cards.g1 && res.cards.g1.textContent, types: r.JC.cardTypes() };
+	out.queueAfter = { threw: r.threw, errors: r.errors, g1: res.cards.g1?.textContent, types: r.JC.cardTypes() };
 }
 
 // 3. Pending card: unregistered type at mount time gets data-juneau-card-pending + loading paint, then renders
@@ -122,10 +122,10 @@ const late = [];
 		{ id: 'p1', type: 'delta', title: 'P1' }, { id: 'p2', type: 'delta' }, { id: 'p3', type: 'epsilon' }
 	] }), { root: r.doc.body, document: r.doc });
 	const beforeReg = {
-		p1Pending: res.cards.p1 && res.cards.p1.hasAttribute('data-juneau-card-pending'),
+		p1Pending: res.cards.p1?.dataset.juneauCardPending !== undefined,
 		p1Loading: !!res.cards.p1 && !!res.cards.p1.querySelector('.jc-card-loading'),
 		p1Title: !!res.cards.p1 && !!res.cards.p1.querySelector('.jc-card-title'),
-		p3Pending: res.cards.p3 && res.cards.p3.hasAttribute('data-juneau-card-pending')
+		p3Pending: res.cards.p3?.dataset.juneauCardPending !== undefined
 	};
 	const order = [];
 	r.JC.registerCard('delta', (card, el) => { order.push(card.id); el.appendChild(r.doc.createTextNode('delta:' + card.id)); });
@@ -133,8 +133,8 @@ const late = [];
 		threw: r.threw, errors: r.errors, beforeReg, order,
 		p1Rendered: res.cards.p1.textContent,
 		p1LoadingGone: !res.cards.p1.querySelector('.jc-card-loading'),
-		p1StillPending: res.cards.p1 && res.cards.p1.hasAttribute('data-juneau-card-pending'),
-		p3StillPending: res.cards.p3 && res.cards.p3.hasAttribute('data-juneau-card-pending'),
+		p1StillPending: res.cards.p1?.dataset.juneauCardPending !== undefined,
+		p3StillPending: res.cards.p3?.dataset.juneauCardPending !== undefined,
 		mountedEventKinds: null
 	};
 	late.push(() => { out.pending.mountedEventKinds = r.cardEvents.map(e => e.kind); });
@@ -148,7 +148,7 @@ const late = [];
 	r.env.fireDOMContentLoaded();
 	out.domContentLoadedPending = {
 		errors: r.errors, banner: txt(r.doc, '.jc-console-error'),
-		codes: Array.from(r.doc.querySelectorAll('.jc-console-error-item')).map(e => e.getAttribute('data-juneau-error')),
+		codes: Array.from(r.doc.querySelectorAll('.jc-console-error-item')).map(e => e.dataset.juneauError ?? null),
 		failedEvents: r.cardEvents.filter(e => e.kind === 'failed').map(e => e.detail.id)
 	};
 }
@@ -164,7 +164,7 @@ const late = [];
 	e23 = { threw: r2.threw, errors: r2.errors };
 	r.JC.registerCard('obj', { render(card, el) { el.textContent = 'obj:' + card.id; } });
 	const res = r.JC.mount(C({ cards: [{ id: 'o1', type: 'obj' }] }), { root: r.doc.body, document: r.doc });
-	out.registerErrors = { e20, e21a, e21b, e23, objFormText: res.cards.o1 && res.cards.o1.textContent };
+	out.registerErrors = { e20, e21a, e21b, e23, objFormText: res.cards.o1?.textContent };
 }
 
 // 6. refreshCard coalescing: a refresh requested while one is in flight collapses into one follow-up.
@@ -208,7 +208,7 @@ const late = [];
 	try { r.JC.refreshCard('w1'); } catch (e) { e22 = { name: e.name, code: e.code, message: e.message }; }
 	let e22b = null;
 	try { r.JC.cardApi('nope-never-mounted'); } catch (e) { e22b = { name: e.name, code: e.code, message: e.message }; }
-	out.destroyOnce = { apiPing: apiBefore && apiBefore.ping(), destroyCount, e22, e22b, e22c, errors: r.errors, banner: txt(r.doc, '.jc-console-error') };
+	out.destroyOnce = { apiPing: apiBefore?.ping(), destroyCount, e22, e22b, e22c, errors: r.errors, banner: txt(r.doc, '.jc-console-error') };
 }
 
 // 8. cardTypes() is sorted; events carry {id, type, el}/{id, type, error}.
@@ -262,12 +262,12 @@ const late = [];
 		};
 	};
 	const before = info('lt');
-	before.pending = res.cards.lt.hasAttribute('data-juneau-card-pending');
+	before.pending = res.cards.lt.dataset.juneauCardPending !== undefined;
 	r.JC.registerCard('later', (card, el) => { el.appendChild(r.doc.createTextNode('later:' + card.id)); });
 	out.bareChromeless = {
 		errors: r.errors, bare: info('bc'), normal: info('nc'), strict: info('sb'), params: info('bp'),
 		pendingBefore: before,
-		pendingAfter: info('lt'), pendingAfterAttr: res.cards.lt.hasAttribute('data-juneau-card-pending')
+		pendingAfter: info('lt'), pendingAfterAttr: res.cards.lt.dataset.juneauCardPending !== undefined
 	};
 }
 

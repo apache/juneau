@@ -162,9 +162,12 @@ class BusEventsMixin_Session_Test extends TestBase {
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
-	// b) GET juneau-bus/stream/{sessionId}
+	// b) GET juneau-bus/stream/<sessionId>
 	//------------------------------------------------------------------------------------------------------------------
 
+	@SuppressWarnings({
+		"java:S2925" // Deadline-bounded poll for the stream to connect
+	})
 	@Test void b01_resyncThenLiveThenClose() throws Exception {
 		R.bus.publish("ops.jobs", JsonMap.of("n", 1));
 		var id = post(JB, body("sse", "ops.jobs", "ops.alert:*"), 200).getString("sessionId");
@@ -233,6 +236,9 @@ class BusEventsMixin_Session_Test extends TestBase {
 		assertFalse(body.contains("\"type\":\"resync-end\""), body);
 	}
 
+	@SuppressWarnings({
+		"java:S2925" // Deadline-bounded poll for the stream to connect
+	})
 	@Test void b05_aSecondStreamReplacesTheFirstQuietly() throws Exception {
 		var id = post(JB, body("sse", "ops.jobs"), 200).getString("sessionId");
 		var pool = java.util.concurrent.Executors.newFixedThreadPool(2);

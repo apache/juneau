@@ -40,6 +40,7 @@ import okhttp3.OkHttpClient;
  * same-origin redirect.
  */
 @SuppressWarnings({
+	"java:S3415", // Expected value is already first; Sonar mistakes the upper-case constant or field for the expected value
 	"resource" // Transport/client instances are short-lived test fixtures.
 })
 // SEPARATE_THREAD: a socket read blocked on a non-responding peer ignores interrupts, so SAME_THREAD would still hang.
@@ -214,7 +215,9 @@ class OkHttpTransport_RedirectCredentials_Test {
 		// BridgeInterceptor loads the target's own cookies from the client's CookieJar for each hop.
 		var jar = new CookieJar() {
 			@Override
-			public void saveFromResponse(HttpUrl url, List<Cookie> cookies) {}
+			public void saveFromResponse(HttpUrl url, List<Cookie> cookies) {
+				// no-op by design: this jar never stores cookies
+			}
 			@Override
 			public List<Cookie> loadForRequest(HttpUrl url) {
 				return url.port() == portB ? List.of(new Cookie.Builder().name("jar").value("b").domain("127.0.0.1").build()) : List.of();

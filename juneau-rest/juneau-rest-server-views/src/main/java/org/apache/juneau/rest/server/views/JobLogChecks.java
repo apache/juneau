@@ -32,7 +32,9 @@ import java.util.regex.*;
  * @since 10.0.0
  */
 @SuppressWarnings({
-	"java:S1192" // Duplicated key names are wire keys of the job-log body; constants would obscure the schema.
+	"java:S1192", // Duplicated key names are wire keys of the job-log body; constants would obscure the schema.
+	"java:S3776", // Validation and rendering chains many independent guards; splitting them adds no clarity.
+	"java:S6353" // Pattern text mirrors the JS-side check and is pinned by tests.
 })
 public final class JobLogChecks {
 
@@ -63,7 +65,7 @@ public final class JobLogChecks {
 	public static final List<String> FIELD_KEYS = List.of("name", "label", "type", "placeholder", "required", "default", "source");
 
 	/** The field types. */
-	public static final Set<String> FIELD_TYPES = new LinkedHashSet<>(List.of("text", "textarea", "number", "hidden"));
+	public static final Set<String> FIELD_TYPES = Collections.unmodifiableSet(new LinkedHashSet<>(List.of("text", "textarea", "number", "hidden")));
 
 	/** The {@code output} keys, in message order. */
 	public static final List<String> OUTPUT_KEYS = List.of("target", "mode", "from", "when");

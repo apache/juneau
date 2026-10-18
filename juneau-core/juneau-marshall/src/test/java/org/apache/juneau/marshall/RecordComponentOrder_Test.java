@@ -106,8 +106,8 @@ class RecordComponentOrder_Test extends TestBase {
 
 	@Test void b06_csvColumnOrderFollowsBeanOrder() {
 		var unsorted = CsvSerializer.create().unsortedProperties().build();
-		assertEquals("zeta,alpha", unsorted.write(List.of(new B2())).toString().lines().findFirst().orElse(""));
-		assertEquals("alpha,zeta", CsvSerializer.DEFAULT.write(List.of(new B2())).toString().lines().findFirst().orElse(""));
+		assertEquals("zeta,alpha", unsorted.write(List.of(new B2())).lines().findFirst().orElse(""));
+		assertEquals("alpha,zeta", CsvSerializer.DEFAULT.write(List.of(new B2())).lines().findFirst().orElse(""));
 	}
 
 	@Test void b07_parseRoundTripUnaffected() {
@@ -117,8 +117,8 @@ class RecordComponentOrder_Test extends TestBase {
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------
-	// d - precedence (moved from commons BeanMeta_DeclarationOrder_Test d01: commons BeanMeta.of ignores @BeanType;
-	// the d02 @BeanType(unsorted) case is covered by b04)
+	// d - precedence (moved from the commons declaration-order test: the commons bean metadata ignores the bean type annotation;
+	// the unsorted bean type case is covered by b04)
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@BeanType(properties="mid,zeta")

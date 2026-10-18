@@ -45,6 +45,9 @@ import org.junit.jupiter.api.condition.*;
  */
 @EnabledIfSystemProperty(named=BusWebSocket_JettyIT.GATE, matches="true",
 	disabledReason="binds a socket; run with -Dtest='BusWebSocket_JettyIT' -Djuneau.busIt=true")
+@SuppressWarnings({
+	"resource" // The server, bus and connector are fixtures started in @BeforeAll and stopped in @AfterAll, and the fluent HttpClient/socket chains return no resource the test owns.
+})
 class BusWebSocket_JettyIT extends TestBase {
 
 	static final String GATE = "juneau.busIt";

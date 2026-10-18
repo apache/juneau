@@ -30,6 +30,9 @@ import org.junit.jupiter.api.*;
  * Pins the run-view section of {@code juneau-views.css}: the class surface the module emits, the status and
  * state tones, and the "no literal colours, no new tokens" rule.
  */
+@SuppressWarnings({
+	"java:S8786" // Test-only regexes over a short fixture.
+})
 class RunViewCss_Test extends TestBase {
 
 	private static final String MARKER = ".juneau-rv {";
@@ -56,7 +59,7 @@ class RunViewCss_Test extends TestBase {
 	/** Selector (each comma-separated selector, whitespace-normalised) to its declarations, later rules overriding. */
 	private static Map<String,Map<String,String>> parse(String text) {
 		var out = new LinkedHashMap<String,Map<String,String>>();
-		var m = Pattern.compile("([^{}]+)\\{([^{}]*)\\}").matcher(text);
+		var m = Pattern.compile("([^{}]++)\\{([^{}]*+)\\}").matcher(text);
 		while (m.find()) {
 			var decls = new LinkedHashMap<String,String>();
 			for (var d : m.group(2).split(";")) {

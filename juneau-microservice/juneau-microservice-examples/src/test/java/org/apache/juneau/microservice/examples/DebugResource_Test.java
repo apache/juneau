@@ -27,6 +27,7 @@ import org.junit.jupiter.api.*;
  */
 class DebugResource_Test extends TestBase {
 
+	@SuppressWarnings("resource") // MockRestClient and its request/response are in-memory test doubles that hold no OS resource.
 	@Test void a01_threadDumpNavlink_plainGet() throws Exception {
 		var body = MockRestClient.create(DebugResource.class).ignoreErrors().build()
 			.get("/").accept("text/html").run()

@@ -83,8 +83,12 @@ public final class TerminalNudges implements TerminalNudgePublisher, AutoCloseab
 	}
 
 	private static final class State {
-		long end, lastSentAt = Long.MIN_VALUE, lastTouched;
-		boolean done, scheduled, cleanupPending;
+		long end;
+		long lastSentAt = Long.MIN_VALUE;
+		long lastTouched;
+		boolean done;
+		boolean scheduled;
+		boolean cleanupPending;
 	}
 
 	private final TerminalAccess access;
@@ -143,7 +147,7 @@ public final class TerminalNudges implements TerminalNudgePublisher, AutoCloseab
 			if (this.bus != null)
 				throw new IllegalStateException("TerminalNudges.bind: already bound");
 			var retain = bus.policy().downstreamRetain(FAMILY + ":*");
-			if (retain.isEmpty() || retain.get())
+			if (retain.orElse(true))
 				throw new IllegalStateException("TerminalNudges.bind: the bus policy must allow '" + FAMILY + ":*' downstream without retention");
 			// Started before the bus is visible: a nudge that sees the bus must find a running scheduler.
 			scheduler.start();

@@ -139,16 +139,14 @@ function sessionCookie(cookies) {
 		const page = watch(await context.newPage());
 
 		// The token page, as a navigation.
-		{
-			const loaded = await page.goto(app + '/page');
-			const headers = loaded.headers();
-			report.a10 = {
-				status: loaded.status(),
-				cacheControl: headers['cache-control'] ?? null,
-				expires: headers['expires'] ?? null,
-				sessionCookie: sessionCookie(await context.cookies(app)) != null
-			};
-		}
+		const loaded = await page.goto(app + '/page');
+		const headers = loaded.headers();
+		report.a10 = {
+			status: loaded.status(),
+			cacheControl: headers['cache-control'] ?? null,
+			expires: headers['expires'] ?? null,
+			sessionCookie: sessionCookie(await context.cookies(app)) != null
+		};
 
 		// The two embedded copies of the token: different strings, both accepted.
 		report.a09 = await page.evaluate(async function () {
@@ -210,12 +208,10 @@ function sessionCookie(cookies) {
 			await page.waitForURL(u => u.pathname === '/count/a03');
 			report.a03 = { status: response.status() };
 		}
-		{
-			await page.goto(attacker + '/attack/no-cors');
-			await page.waitForFunction(() => window.attackDone != null, null, { timeout: 15000 });
-			report.a04 = { result: await page.evaluate(() => window.attackDone) };
-		}
-		{
+		await page.goto(attacker + '/attack/no-cors');
+		await page.waitForFunction(() => window.attackDone != null, null, { timeout: 15000 });
+		report.a04 = { result: await page.evaluate(() => window.attackDone) };
+		{ // NOSONAR javascript:S1199 - block scopes response
 			const response = await postTo(page, 'a05', () => page.goto(attacker + '/attack/sandboxed'));
 			report.a05 = { status: response.status() };
 		}

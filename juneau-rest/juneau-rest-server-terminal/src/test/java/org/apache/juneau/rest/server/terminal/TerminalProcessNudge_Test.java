@@ -33,6 +33,9 @@ import org.junit.jupiter.api.io.*;
 /**
  * {@link TerminalProcess} nudges, over a fake {@code python3} runner.
  */
+@SuppressWarnings({
+	"java:S2925" // Timing-dependent process/file test; it polls or waits on real time
+})
 @DisabledOnOs(OS.WINDOWS)
 class TerminalProcessNudge_Test extends TestBase {
 

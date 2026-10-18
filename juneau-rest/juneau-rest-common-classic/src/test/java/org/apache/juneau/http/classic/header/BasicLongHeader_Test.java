@@ -77,7 +77,8 @@ class BasicLongHeader_Test extends TestBase {
 
 	@Test void b04_assertLong() {
 		new BasicLongHeader(NAME, "5").assertLong().is(5L);
-		assertThrows(AssertionError.class, () -> new BasicLongHeader(NAME, "5").assertLong().is(6L));
+		var assertion = new BasicLongHeader(NAME, "5").assertLong();
+		assertThrows(AssertionError.class, () -> assertion.is(6L));
 	}
 
 	@Test void b05_wireString_invalid_throws() {

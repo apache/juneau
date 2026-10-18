@@ -50,9 +50,15 @@ import jakarta.websocket.server.*;
 public final class BusWebSockets {
 
 	/** The context-relative endpoint path. */
+	@SuppressWarnings({
+		"java:S1075" // Documented default endpoint path; public constant
+	})
 	public static final String PATH = "/juneau-bus/ws/{sessionId}";
 
 	/** {@link #PATH} without its path parameter; passed to {@link ServerBus#enableWebSocket(String)}. */
+	@SuppressWarnings({
+		"java:S1075" // Documented default endpoint path; public constant
+	})
 	public static final String PREFIX = "/juneau-bus/ws";
 
 	static final String NO_CONTAINER = "BusWebSockets.register: the container exposes no jakarta.websocket ServerContainer (add the container's WebSocket module)";

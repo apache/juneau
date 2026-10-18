@@ -35,7 +35,6 @@ import org.apache.juneau.rest.server.filter.*;
 import org.apache.juneau.rest.server.servlet.*;
 
 import jakarta.servlet.*;
-import jakarta.servlet.http.*;
 
 /**
  * The browser tests' server: the {@code /console} tree, the {@code /petstore} API and the {@code /petstore-ui}

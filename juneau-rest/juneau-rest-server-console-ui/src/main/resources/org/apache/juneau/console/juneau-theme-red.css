@@ -93,6 +93,11 @@ html:root {
 	--jc-page-nav-hairline: 2px;
 	--jc-page-nav-section-font-size: 13px;
 	--jc-page-nav-child-font-size: 12px;
+	--jc-nav-tab-padding-block: 8px;
+	--jc-nav-tab-padding-inline: 10px;
+	--jc-nav-tab-line-height: 1.5;
+	--jc-page-nav-child-padding-block: 6px;
+	--jc-page-nav-child-padding-inline: 10px;
 	--jc-card-shadow: 0 2px 2px rgba(0, 0, 0, 0.05);
 	--jc-danger-wash: #fdeceb;
 	--jc-success-wash: #eaf6ee;

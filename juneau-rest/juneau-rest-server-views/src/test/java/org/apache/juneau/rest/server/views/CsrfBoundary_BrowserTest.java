@@ -76,6 +76,9 @@ import jakarta.servlet.http.*;
  */
 @EnabledIfSystemProperty(named=CsrfBoundary_BrowserTest.GATE, matches="true",
 	disabledReason="JS-execution harness is opt-in; run with `mvn -Pjs-tests -f juneau-rest/juneau-rest-server-views/pom.xml test`")
+@SuppressWarnings({
+	"resource" // Servlet response writers belong to the container, and each connector belongs to the server it is added to; none is closed here.
+})
 class CsrfBoundary_BrowserTest extends TestBase {
 
 	/** System property the {@code js-tests} profile sets to enable this class. */

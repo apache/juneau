@@ -49,8 +49,10 @@ class VisibilityRule_Test extends TestBase {
 	}
 
 	@Test void a05_eqRejectsNullValue() {
-		assertThrows(IllegalArgumentException.class, () -> VisibilityRule.when("status").eq(null));
-		assertThrows(IllegalArgumentException.class, () -> VisibilityRule.when("status").contains(null));
+		var target = VisibilityRule.when("status");
+		assertThrows(IllegalArgumentException.class, () -> target.eq(null));
+		var target2 = VisibilityRule.when("status");
+		assertThrows(IllegalArgumentException.class, () -> target2.contains(null));
 	}
 
 	@Test void a06_testMatchesAndRule() {
@@ -85,7 +87,9 @@ class VisibilityRule_Test extends TestBase {
 	@Test void a11_unknownOpThrows() {
 		var r = VisibilityRule.when("status").eq("open");
 		r.op = "bogus";
-		var ex = assertThrows(IllegalArgumentException.class, () -> VisibilityRule.test(List.of(r), Map.of("status", "open")));
+		Map<String,Object> arg = Map.of("status", "open");
+		var rules = List.of(r);
+		var ex = assertThrows(IllegalArgumentException.class, () -> VisibilityRule.test(rules, arg));
 		assertTrue(ex.getMessage().contains("'bogus'"), ex.getMessage());
 	}
 

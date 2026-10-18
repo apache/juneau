@@ -146,7 +146,8 @@ class SameOriginPath_Corpus_Test extends TestBase {
 			if (r.accepted())
 				assertFalse(threw, () -> e.getKey() + " card src '" + r.name() + "' must pass the page-build check");
 			else {
-				var ex = assertThrows(IllegalArgumentException.class, () -> registry.toCard(e.getValue().apply(r.input())));
+				var arg = e.getValue().apply(r.input());
+				var ex = assertThrows(IllegalArgumentException.class, () -> registry.toCard(arg));
 				assertTrue(ex.getMessage().contains("'" + e.getValue().apply(r.input()).id() + "'"), () -> "names the card id: " + ex.getMessage());
 				assertTrue(ex.getMessage().contains("src"), ex::getMessage);
 			}

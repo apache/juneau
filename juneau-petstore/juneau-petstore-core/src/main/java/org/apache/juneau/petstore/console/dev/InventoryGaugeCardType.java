@@ -41,6 +41,9 @@ import org.apache.juneau.rest.server.console.*;
  * 	ConsoleFreemarkerMixin.<jsm>create</jsm>().cardType(<jk>new</jk> InventoryGaugeCardType()).build();
  * </p>
  */
+@SuppressWarnings({
+	"java:S1845" // type() returns the public TYPE constant; the shared name is intentional
+})
 public class InventoryGaugeCardType implements CardTypeHandler {
 
 	/** The card type name. */

@@ -48,8 +48,8 @@ const tick = function () { return new Promise(function (r) { setTimeout(r, 5); }
 function drain() { while (I.topLayer()) I.popLayer(); }
 
 function deleteAction(extra) {
-	return Object.assign({ id: 'delete', label: 'Delete', endpoint: '/x/{id}', method: 'DELETE',
-		confirm: "Delete '{name}'?", confirmLabel: 'Delete', tone: 'danger' }, extra || {});
+	return { id: 'delete', label: 'Delete', endpoint: '/x/{id}', method: 'DELETE',
+		confirm: "Delete '{name}'?", confirmLabel: 'Delete', tone: 'danger', ...extra || {} };
 }
 
 /** One view table with one row, plus the bits each surface needs to find the row and the action. */
@@ -58,7 +58,7 @@ function fixture(action) {
 	const table = env.el('table');
 	table.dataset.juneauView = 'v';
 	table.dataset.juneauCsrf = 'tok-1';
-	table.setAttribute('data-juneau-row-id-field', 'id');
+	table.dataset.juneauRowIdField = 'id';
 	const tpl = env.el('template');   // a sibling row-detail template, so initDetailsExpander wires the detail delegate
 	tpl.dataset.juneauRowDetail = '1';
 	host.appendChild(table);
@@ -168,11 +168,11 @@ const SURFACES = {
 	const asked = [];
 	NS.rowActions.registerConfirmRenderer('verdict', function (modal) { asked.push(modal.title); return Promise.resolve(verdict); });
 	calls.length = 0;
-	await SURFACES.menu(fixture(deleteAction({ confirm: undefined, confirmRenderer: 'verdict' })));
+	SURFACES.menu(fixture(deleteAction({ confirm: undefined, confirmRenderer: 'verdict' })));
 	await tick();
 	const rendererNo = { asked: asked.length, fetches: calls.length };
 	verdict = true;
-	await SURFACES.menu(fixture(deleteAction({ confirm: undefined, confirmRenderer: 'verdict' })));
+	SURFACES.menu(fixture(deleteAction({ confirm: undefined, confirmRenderer: 'verdict' })));
 	await tick();
 	out.renderer = { no: rendererNo, yes: { asked: asked.length, fetches: calls.length }, titles: asked };
 	drain();

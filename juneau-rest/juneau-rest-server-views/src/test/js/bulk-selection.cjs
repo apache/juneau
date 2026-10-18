@@ -42,9 +42,9 @@ function load() {
 
 function freshTable(doc) {
 	const table = doc.createElement('table');
-	table.setAttribute('data-juneau-select', '1');
-	table.setAttribute('data-juneau-row-id-field', 'id');
-	table.setAttribute('data-juneau-select-all', '1');
+	table.dataset.juneauSelect = '1';
+	table.dataset.juneauRowIdField = 'id';
+	table.dataset.juneauSelectAll = '1';
 	// The shim's selector engine matches one compound (no descendant combinators), so ownRowsWithId's
 	// "tbody tr[...]" would resolve to a tbody.  Fold the combinator away for this table only.
 	const qsa = table.querySelectorAll;
@@ -55,7 +55,7 @@ function freshTable(doc) {
 
 function addRow(doc, table, id) {
 	const tr = doc.createElement('tr');
-	tr.setAttribute('data-juneau-row-id', id);
+	tr.dataset.juneauRowId = id;
 	const cb = doc.createElement('input');
 	cb.type = 'checkbox';
 	cb.className = 'juneau-view-select-checkbox';
@@ -95,7 +95,7 @@ t('persistentScope_keepsOffScreenSelectionAcrossDraws', () => {
 	const ctx = { table, dataTable: fakeDt(new Map()), selectionState: stateOf('persistent', ['r1', 'r9']) };
 	NS.bindSelectionPrune(table, ctx);
 	ctx.dataTable.handlers['draw.dt']({ target: table });
-	assert.deepEqual(Array.from(ctx.selectionState.selected).sort(), ['r1', 'r9']);
+	assert.deepEqual(Array.from(ctx.selectionState.selected).sort((a, b) => (a < b ? -1 : Number(a > b))), ['r1', 'r9']);
 });
 
 t('pageScope_prunesIdsNotInCurrentDraw', () => {
@@ -198,7 +198,7 @@ t('readSelectableWhen_parsesSidecar_nullOnMissingOrMalformed', () => {
 });
 
 t('initSelection_selectAllSkipsDisabledRows_andCapturesSnapshots', () => {
-	const { doc, env, NS } = load();
+	const { doc, NS } = load();
 	const table = freshTable(doc);
 	const tr1 = addRow(doc, table, 'r1');
 	const tr2 = addRow(doc, table, 'r2');
@@ -212,7 +212,6 @@ t('initSelection_selectAllSkipsDisabledRows_andCapturesSnapshots', () => {
 	assert.deepEqual(Array.from(ctx.selectionState.selected), ['r1']);
 	assert.deepEqual(ctx.selectionState.snapshots.r1, { id: 'r1' });
 	assert.equal(allCb.checked, true, 'header reflects the one selectable row');
-	void env;
 });
 
 function freshCtx() {
@@ -345,7 +344,7 @@ const { jsonResponse } = require(path.join(__dirname, 'views-dom-shim.cjs'));
 function bulkFixture(ids, scope) {
 	const L = load();
 	const table = freshTable(L.doc);
-	table.setAttribute('data-juneau-csrf', 'tok');
+	table.dataset.juneauCsrf = 'tok';
 	ids.forEach(id => { addRow(L.doc, table, id).querySelector('.juneau-view-select-checkbox').checked = true; });
 	const state = stateOf(scope || 'persistent', ids);
 	ids.forEach(id => { state.snapshots[id] = { id }; });
@@ -363,18 +362,22 @@ t('runBulkAction_perRow_allSucceed_clearsSelectionAndShowsStatusToast', async ()
 	f.env.setFetch((url, init) => { calls.push({ url, init }); return Promise.resolve(jsonResponse('', { status: 200 })); });
 	await f.NS.runBulkAction(perRowAction, f.table, f.ctx, f.state, ['a', 'b', 'c']);
 	assert.equal(calls.length, 3);
-	assert.deepEqual(calls.map(c => c.url).sort(), ['/api/changes/a/abort', '/api/changes/b/abort', '/api/changes/c/abort']);
+	assert.deepEqual(calls.map(c => c.url).sort((a, b) => (a < b ? -1 : Number(a > b))), ['/api/changes/a/abort', '/api/changes/b/abort', '/api/changes/c/abort']);
 	assert.equal(JSON.parse(calls[0].init.body).targetId !== undefined, true);
 	assert.equal(f.state.selected.size, 0);
-	assert.deepEqual(f.toolbarCounts[f.toolbarCounts.length - 1], 0);
+	assert.deepEqual(f.toolbarCounts.at(-1), 0);
 	const toasts = toastsOf(f.doc);
 	assert.equal(toasts.length, 0, 'status toast auto-dismisses (immediate-fire timer in the shim)');
 });
 
 t('runBulkAction_perRow_failedStaysSelected_notFoundCleared_alertToastSticky', async () => {
 	const f = bulkFixture(['a', 'b', 'c']);
-	f.env.setFetch(url => Promise.resolve(
-		url.includes('/b/') ? jsonResponse('', { status: 500 }) : url.includes('/c/') ? jsonResponse('', { status: 404 }) : jsonResponse('', { status: 200 })));
+	f.env.setFetch(url => {
+		let status = 200;
+		if (url.includes('/b/')) status = 500;
+		else if (url.includes('/c/')) status = 404;
+		return Promise.resolve(jsonResponse('', { status }));
+	});
 	await f.NS.runBulkAction(perRowAction, f.table, f.ctx, f.state, ['a', 'b', 'c']);
 	assert.deepEqual(Array.from(f.state.selected), ['b']);
 	assert.equal(f.state.snapshots.b !== undefined, true);
@@ -391,7 +394,7 @@ t('runBulkAction_perRow_concurrencyNeverExceedsFour', async () => {
 	let live = 0, peak = 0;
 	f.env.setFetch(() => {
 		live++; peak = Math.max(peak, live);
-		return Promise.resolve().then(() => Promise.resolve()).then(() => { live--; return jsonResponse('', { status: 200 }); });
+		return Promise.resolve().then(() => undefined).then(() => { live--; return jsonResponse('', { status: 200 }); });
 	});
 	await f.NS.runBulkAction(perRowAction, f.table, f.ctx, f.state, ids);
 	assert.equal(peak, 4);
@@ -405,12 +408,12 @@ t('runBulkAction_perRow_offScreenRowUsesSnapshotForEndpointTokens', async () => 
 	const urls = [];
 	f.env.setFetch(url => { urls.push(url); return Promise.resolve(jsonResponse('', { status: 200 })); });
 	await f.NS.runBulkAction(perRowAction, f.table, f.ctx, f.state, ['a', 'zz']);
-	assert.deepEqual(urls.sort(), ['/api/changes/a/abort', '/api/changes/zz/abort']);
+	assert.deepEqual(urls.toSorted(), ['/api/changes/a/abort', '/api/changes/zz/abort']);
 });
 
 t('runBulkAction_perRow_missingCsrfToken_failsClosedWithoutFetch', async () => {
 	const f = bulkFixture(['a']);
-	f.table.removeAttribute('data-juneau-csrf');
+	delete f.table.dataset.juneauCsrf;
 	let called = 0;
 	f.env.setFetch(() => { called++; return Promise.resolve(jsonResponse('', { status: 200 })); });
 	await f.NS.runBulkAction(perRowAction, f.table, f.ctx, f.state, ['a']);
@@ -430,7 +433,7 @@ t('runBulkAction_aggregate_postsIdsAndIdempotencyKey_appliesBulkResult', async (
 	assert.equal(sent.url, '/api/changes/abort');
 	assert.deepEqual(sent.body.ids, ['a', 'b', 'c']);
 	assert.equal(typeof sent.body.idempotencyKey, 'string');
-	assert.equal(Object.keys(sent.body).sort().join(','), 'idempotencyKey,ids');
+	assert.equal(Object.keys(sent.body).sort((a, b) => (a < b ? -1 : Number(a > b))).join(','), 'idempotencyKey,ids');
 	assert.deepEqual(Array.from(f.state.selected), ['c']);
 	assert.equal(toastsOf(f.doc)[0].textContent.includes('Abort: 1 succeeded, 1 not found, 1 failed (ids: c)'), true);
 });
@@ -469,7 +472,7 @@ t('buildBulkSummaryMessage_omitsZeroOptionalClauses', () => {
 			console.log('ok   ' + c.name);
 		} catch (e) {
 			failed++;
-			console.error('FAIL ' + c.name + '\n' + (e && e.stack || e));
+			console.error('FAIL ' + c.name + '\n' + (e?.stack || e));
 		}
 	}
 	if (failed) process.exit(1);

@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.rest.server.views;
 
-import static org.apache.juneau.test.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.apache.juneau.*;
@@ -29,7 +28,8 @@ class RunViewEndpoints_Test extends TestBase {
 		assertEquals("run-1", RunViewEndpoints.checkRunId("run-1"));
 		assertThrows(BadRequest.class, () -> RunViewEndpoints.checkRunId("../x"));
 		assertThrows(BadRequest.class, () -> RunViewEndpoints.checkRunId(null));
-		assertThrows(BadRequest.class, () -> RunViewEndpoints.checkRunId("x".repeat(129)));
+		var tooLong = "x".repeat(129);
+		assertThrows(BadRequest.class, () -> RunViewEndpoints.checkRunId(tooLong));
 	}
 
 	@Test void a02_caps() {

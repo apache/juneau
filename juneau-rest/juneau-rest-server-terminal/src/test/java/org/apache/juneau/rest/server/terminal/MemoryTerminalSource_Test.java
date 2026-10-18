@@ -194,7 +194,8 @@ class MemoryTerminalSource_Test extends TestBase {
 		assertThrows(NullPointerException.class, () -> s.nudges(null, p));
 		assertThrows(NullPointerException.class, () -> s.nudges("t1", null));
 		assertThrows(IllegalArgumentException.class, () -> s.nudges("bad id", p));
-		assertThrows(IllegalArgumentException.class, () -> s.nudges("a".repeat(129), p));
+		var tooLong = "a".repeat(129);
+		assertThrows(IllegalArgumentException.class, () -> s.nudges(tooLong, p));
 		assertSame(s, s.nudges("t1", p));
 		assertThrows(IllegalStateException.class, () -> s.nudges("t2", p));
 	}

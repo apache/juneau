@@ -341,7 +341,7 @@ class ViewsJs_RibbonNormalize_Test extends TestBase {
 		assertEquals("{\"1\":\"$and($eq(ACTIVE),$eq(DROPPED))\",\"2\":\"$ne(Waiting)\"}", Json.of(report().get("split_merged")));
 	}
 
-	@Test void g04_ribbonToQueryParamsWrapperRemoved() throws Exception {
+	@Test void g04_ribbonToQueryParamsWrapperRemoved() {
 		assertEquals(Boolean.TRUE, report().get("split_wrapperRemoved"), () -> report().toString());
 	}
 }

@@ -31,6 +31,9 @@ import java.util.regex.*;
  *
  * @since 10.0.0
  */
+@SuppressWarnings({
+	"java:S1192" // Repeated literals are contract wire keys; named constants would obscure the contract shape.
+})
 public final class Topics {
 
 	/** The framework families, in the order {@code JuneauViews.bus.FRAMEWORK_FAMILIES} lists them (pinned by a test). */
@@ -49,7 +52,7 @@ public final class Topics {
 	/** Framework families a declaration may name (with a concrete key): {@code data} page-level, {@code zoom}/{@code legend} on a card. */
 	static final Set<String> DECLARABLE_FRAMEWORK = Set.of("data", "zoom", "legend");
 	static final Pattern ROLE = Pattern.compile("^[a-z][a-z0-9-]{0,31}$");
-	static final Pattern MAP_PATH = Pattern.compile("^[A-Za-z0-9_-]+(\\.[A-Za-z0-9_-]+)*$");
+	static final Pattern MAP_PATH = Pattern.compile("^[A-Za-z0-9_-]++(?:\\.[A-Za-z0-9_-]++)*+$");
 	/** Builder-time bridge session: same-origin path (no {@code //} or {@code /\}) or a {@code servlet:} / {@code context:} URI resolved at render. */
 	static final Pattern SESSION = Pattern.compile("^(/(?![/\\\\])|servlet:/|context:/)\\S*$");
 	/** The card and dashboard-section id grammar ({@code $defs/id} in the page schema). */

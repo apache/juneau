@@ -20,7 +20,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.net.*;
 
-import org.apache.juneau.rest.client.*;
 import org.eclipse.jetty.client.*;
 import org.junit.jupiter.api.*;
 
@@ -68,7 +67,9 @@ class CredentialGuardingHttpClient_Test {
 	void a04_underscoreHostRedirectTarget_rejectedByJettyBeforeTheOriginCheck() {
 		// java.net.URI parses an underscore host name with a null host, and Jetty refuses to build a request for a null
 		// host, so a redirect to such a host fails in Jetty itself and never reaches this client's origin comparison.
-		var ex = assertThrows(IllegalArgumentException.class, () -> client.copyRequest(oldRequest(), URI.create("http://my_service:8080/next")));
+		var old = oldRequest();
+		var next = URI.create("http://my_service:8080/next");
+		var ex = assertThrows(IllegalArgumentException.class, () -> client.copyRequest(old, next));
 		assertTrue(ex.getMessage().contains("Invalid URI host"), ex.getMessage());
 	}
 }

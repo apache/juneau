@@ -27,17 +27,21 @@ class ConsoleFreemarkerMixin_CardType_Test extends TestBase {
 
 	@Test void a01_reservedType_throwsE22AtBuilder() {
 		var b = ConsoleFreemarkerMixin.create();
-		var ex = assertThrows(IllegalArgumentException.class, () -> b.cardType(new Named("datatables")));
+		var arg = new Named("datatables");
+		var ex = assertThrows(IllegalArgumentException.class, () -> b.cardType(arg));
 		assertTrue(ex.getMessage().startsWith("Card type 'datatables' is reserved and cannot be replaced; reserved: '"), ex.getMessage());
 	}
 
 	@Test void a02_badName_throwsE21AtBuilder() {
-		assertThrows(IllegalArgumentException.class, () -> ConsoleFreemarkerMixin.create().cardType(new Named("KPI")));
+		var target = ConsoleFreemarkerMixin.create();
+		var arg2 = new Named("KPI");
+		assertThrows(IllegalArgumentException.class, () -> target.cardType(arg2));
 	}
 
 	@Test void a03_duplicate_throwsE20AtBuilder() {
 		var b = ConsoleFreemarkerMixin.create().cardType(new Named("kpi"));
-		assertThrows(IllegalArgumentException.class, () -> b.cardType(new Named("kpi")));
+		var arg3 = new Named("kpi");
+		assertThrows(IllegalArgumentException.class, () -> b.cardType(arg3));
 	}
 
 	@Test void a04_terminalIsRegisteredInStandard() {

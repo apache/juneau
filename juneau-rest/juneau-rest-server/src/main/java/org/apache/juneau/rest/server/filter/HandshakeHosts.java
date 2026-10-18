@@ -70,6 +70,9 @@ public record HandshakeHosts(List<String> values, boolean synthesised) {
 	 * @param requestUri The handshake's request URI.  Can be <jk>null</jk>.
 	 * @return The hosts.  Never <jk>null</jk>.
 	 */
+	@SuppressWarnings({
+		"java:S3776" // Header-case, HTTP/1.1 and HTTP/2 authority branches read best as one sequence
+	})
 	public static HandshakeHosts of(Map<String,List<String>> headers, URI requestUri) {
 		var hosts = new ArrayList<String>();
 		var rfc6455 = false;

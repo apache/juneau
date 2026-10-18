@@ -73,7 +73,8 @@ import org.apache.juneau.marshall.collections.*;
  * @since 10.0.0
  */
 @SuppressWarnings({
-	"java:S1168" // null (not an empty map) is the wire contract: a non-searchable column omits the search block; an empty map would read as searchable.
+	"java:S1168", // null (not an empty map) is the wire contract: a non-searchable column omits the search block; an empty map would read as searchable.
+	"java:S3776" // Validation and rendering chains many independent guards; splitting them adds no clarity.
 })
 public final class Column {
 

@@ -81,7 +81,7 @@ import org.apache.juneau.rest.server.views.ActionResult.*;
 public final class AsyncJob {
 
 	/** A resume value after trimming: 1 to 10 ASCII digits (so {@link Long#parseLong(String)} cannot overflow). */
-	private static final Pattern RESUME_VALUE = Pattern.compile("[0-9]{1,10}");
+	private static final Pattern RESUME_VALUE = Pattern.compile("\\d{1,10}");
 
 	/**
 	 * Bytes charged toward the output cap for every progress event, on top of its payload.  Without it an empty

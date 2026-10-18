@@ -51,7 +51,7 @@ function setup(responses, opts) {
 	win.document = doc;
 	const errors = [], urls = [], inits = [], assigned = [], timers = [], reloaded = [];
 	const winListeners = {};
-	win.addEventListener = (type, fn) => { (winListeners[type] = winListeners[type] || []).push(fn); };
+	win.addEventListener = (type, fn) => { winListeners[type] ||= []; winListeners[type].push(fn); };
 	const fireWindow = type => (winListeners[type] || []).forEach(fn => fn({ type }));
 	const header = doc.createElement('div');
 	header.className = 'jc-header-actions';
@@ -81,8 +81,8 @@ function setup(responses, opts) {
 		setTimeout: (fn, ms) => { timers.push({ fn, ms }); return timers.length; },
 		clearTimeout: () => {}
 	};
-	if (opts.bus && busSrc) vm.runInNewContext(busSrc, sandbox, { filename: 'juneau-bus.js' });
-	vm.runInNewContext(src, sandbox, { filename: 'juneau-badges.js' });
+	if (opts.bus && busSrc) vm.runInNewContext(busSrc, sandbox, { filename: 'juneau-bus.js' }); // NOSONAR javascript:S1523 - loads the shipped script into a vm sandbox for the test
+	vm.runInNewContext(src, sandbox, { filename: 'juneau-badges.js' }); // NOSONAR javascript:S1523 - loads the shipped script into a vm sandbox for the test
 	const h = { pending: [] };
 	Object.assign(h, { env, doc, win, NS: win.JuneauConsoleBadges, errors, urls, inits, assigned, timers, reloaded, header, fireWindow });
 	return h;
@@ -111,14 +111,14 @@ async function tick(h) {
 		report.role = b.getAttribute('role');
 		report.ariaLive = b.getAttribute('aria-live');
 		report.inHeaderBadges = b.parentNode.className;
-		report.defaultTone = b.getAttribute('data-juneau-badge-tone');
+		report.defaultTone = b.dataset.juneauBadgeTone ?? null;
 		await tick(h);
 		report.singularLabel = b.textContent;
 		await tick(h);
 		report.mineLabel = b.textContent;
 		report.noPulseOnDecreaseOrFirst = true;
 		// A content-negotiating server (Juneau's own) would otherwise answer the poll with HTML.
-		report.pollAccept = h.inits.map(i => i && i.headers && i.headers.Accept);
+		report.pollAccept = h.inits.map(i => i?.headers?.Accept);
 	}
 
 	// custom label templates, tone mapping
@@ -128,7 +128,7 @@ async function tick(h) {
 		await flush();
 		const b = badge(h.doc, 'x');
 		report.customLabel = b.textContent;
-		report.dangerTone = b.getAttribute('data-juneau-badge-tone');
+		report.dangerTone = b.dataset.juneauBadgeTone ?? null;
 	}
 
 	// (d) zero hides, then >0 un-hides and pulses
@@ -204,7 +204,7 @@ async function tick(h) {
 		const h = setup([{ body: { total: 1 } }]);
 		h.NS.mount([{ id: 'c', src: '/p', refreshMs: 100 }]);
 		await flush();
-		report.clampedInterval = h.timers[h.timers.length - 1].ms;
+		report.clampedInterval = h.timers.at(-1).ms;
 	}
 
 	// visibleWhen: gated by facts, never fetched when hidden
@@ -277,10 +277,10 @@ async function tick(h) {
 		b.dispatch('focus');
 		const pop = h.doc.querySelector('.jc-count-badge-popover');
 		report.tooltipOpen = pop !== null;
-		report.tooltipRole = pop && pop.getAttribute('role');
+		report.tooltipRole = pop?.getAttribute('role');
 		report.tooltipItems = pop ? pop.querySelectorAll('.jc-count-badge-popover-item').length : -1;
 		report.tooltipMore = pop ? pop.querySelector('.jc-count-badge-popover-more').textContent : null;
-		report.describedBy = b.getAttribute('aria-describedby') === (pop && pop.id);
+		report.describedBy = b.getAttribute('aria-describedby') === (pop?.id);
 		h.env.dispatchDocument('keydown', { key: 'Escape' });
 		report.escapeCloses = h.doc.querySelector('.jc-count-badge-popover') === null;
 		b.dispatch('mouseenter');
@@ -304,14 +304,14 @@ async function tick(h) {
 		badge(h.doc, 'filt').dispatch('click');
 		report.plainNav = h.assigned[0];
 		report.filteredNav = h.assigned[1];
-		report.encodeArg = encoded[0] && encoded[0].filters[0];
+		report.encodeArg = encoded[0]?.filters[0];
 	}
 
 	// same-origin guard: a cross-host src is never fetched, a cross-host href is never navigated to, and a poll-body
 	// item href that is not a same-origin path is not copied onto the popover row
 	{
 		const h = setup([{ body: { total: 1 } }]);
-		h.NS.mount([{ id: 'badsrc', src: '//evil.test/p' }, { id: 'badhref', src: '/p', href: '\\\\evil.test/x' }]);
+		h.NS.mount([{ id: 'badsrc', src: '//evil.test/p' }, { id: 'badhref', src: '/p', href: String.raw`\\evil.test/x` }]);
 		await flush();
 		report.guard_urls = h.urls.slice();
 		badge(h.doc, 'badhref').dispatch('click');
@@ -345,7 +345,7 @@ async function tick(h) {
 			h.NS.mount([{ id: 'pending', src: '/p', refreshes: ['tasks'] }]);
 			await flush();
 			report.bus_badge_first = badgeMsgs[0] || null;
-			report.bus_badge_from = (bus.history().filter(e => e.topic === 'badge:pending')[0] || {}).from || null;
+			report.bus_badge_from = (bus.history().find(e => e.topic === 'badge:pending') || {}).from || null;
 			report.bus_cmd_afterFirst = cmdMsgs.length;
 			await tick(h);
 			report.bus_badge_second = badgeMsgs[1] || null;
@@ -408,4 +408,4 @@ async function tick(h) {
 	}
 
 	console.log(JSON.stringify(report));
-})().catch(e => { console.error(e && e.stack || e); process.exit(1); });
+})().catch(e => { console.error(e?.stack || e); process.exit(1); });

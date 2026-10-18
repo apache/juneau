@@ -34,6 +34,9 @@ import org.apache.juneau.marshall.json.*;
  * <p>
  * A {@link #seq()} of <c>0</c> means the event has not been numbered yet; sources assign it.
  */
+@SuppressWarnings({
+	"java:S1192" // Wire member names and event keys are protocol literals.
+})
 public final class RunEvent {
 
 	/** The event kinds.  The wire form is lower case. */
@@ -443,6 +446,9 @@ public final class RunEvent {
 	 * @return A new event.
 	 * @throws IllegalArgumentException If the map is not a valid event.
 	 */
+	@SuppressWarnings({
+		"java:S3776" // Validating every wire member is inherently branchy.
+	})
 	public static RunEvent fromMap(Map<?,?> map) {
 		if (map == null)
 			throw iaex("RunEvent map must not be null");

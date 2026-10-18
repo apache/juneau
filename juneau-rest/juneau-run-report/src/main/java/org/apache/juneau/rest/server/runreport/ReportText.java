@@ -75,9 +75,7 @@ public final class ReportText {
 	 * @return The display paths, in the same order.
 	 */
 	public static List<String> stripCommonDir(List<String> paths) {
-		var segs = new ArrayList<String[]>(paths.size());
-		for (var p : paths)
-			segs.add(p.replace('\\', '/').split("/", -1));
+		var segs = paths.stream().map(p -> p.replace('\\', '/').split("/", -1)).toList();
 		var out = new ArrayList<String>(paths.size());
 		if (segs.isEmpty())
 			return out;
@@ -93,8 +91,8 @@ public final class ReportText {
 		var keep = 0;
 		while (keep < common && allEqual(segs, first[keep], keep))
 			keep++;
-		for (var s : segs)
-			out.add(String.join("/", Arrays.copyOfRange(s, keep, s.length)));
+		var drop = keep;
+		out.addAll(segs.stream().map(s -> String.join("/", Arrays.copyOfRange(s, drop, s.length))).toList());
 		return out;
 	}
 

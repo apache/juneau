@@ -163,7 +163,7 @@ function makeComment(value) {
 			return sibs ? sibs[sibs.indexOf(this) + 1] || null : null;
 		},
 		remove: function () {
-			if (this.parentNode) this.parentNode.removeChild(this);
+			if (this.parentNode) this.parentNode.removeChild(this); // NOSONAR javascript:S7762 - this IS the shim's remove(); it must delegate to the shim's own removeChild().
 		}
 	};
 }

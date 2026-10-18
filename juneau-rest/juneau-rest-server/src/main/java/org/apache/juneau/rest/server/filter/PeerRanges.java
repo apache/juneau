@@ -37,10 +37,13 @@ import java.util.regex.*;
  */
 final class PeerRanges {
 
-	private static final Pattern PREFIX = Pattern.compile("0|[1-9][0-9]{0,2}");
+	private static final Pattern PREFIX = Pattern.compile("0|[1-9]\\d{0,2}");
 	private static final Pattern IPV6_CHARS = Pattern.compile("[0-9A-Fa-f:][0-9A-Fa-f:.]*");
 	private static final Pattern ZONE = Pattern.compile("[0-9A-Za-z_.~-]+");
 
+	@SuppressWarnings({
+		"java:S6218" // Private record; never compared, hashed or printed
+	})
 	private record Range(byte[] network, int bits) {
 		boolean contains(byte[] address) {
 			if (address.length != network.length)
@@ -157,6 +160,9 @@ final class PeerRanges {
 	}
 
 	// A strict dotted quad: four decimal octets 0-255, no signs and no leading zeros.  Null if it is not one.
+	@SuppressWarnings({
+		"java:S1168" // null signals an unparseable address; callers test for it
+	})
 	private static byte[] parseIpv4(String s) {
 		var parts = s.split("\\.", -1);
 		if (parts.length != 4)
@@ -164,7 +170,7 @@ final class PeerRanges {
 		var out = new byte[4];
 		for (var i = 0; i < 4; i++) {
 			var p = parts[i];
-			if (! (p.equals("0") || p.matches("[1-9][0-9]{0,2}")))
+			if (! (p.equals("0") || p.matches("[1-9]\\d{0,2}")))
 				return null;
 			var v = Integer.parseInt(p);
 			if (v > 255)
@@ -176,6 +182,9 @@ final class PeerRanges {
 
 	// Only hex digits, colons and dots reach getByName, which then parses a literal and never asks a resolver.  Returns
 	// null for anything else, and for a form Java collapses to IPv4 (the address length then tells the caller).
+	@SuppressWarnings({
+		"java:S1168" // null signals an unparseable address; callers test for it
+	})
 	private static byte[] parseIpv6(String s) {
 		if (! IPV6_CHARS.matcher(s).matches() || s.indexOf(':') < 0)
 			return null;
@@ -187,6 +196,9 @@ final class PeerRanges {
 	}
 
 	// A peer as the container reports it: optional surrounding brackets and an optional zone, which is dropped.
+	@SuppressWarnings({
+		"java:S1168" // null signals an unparseable address; callers test for it
+	})
 	private static byte[] parsePeer(String peer) {
 		if (peer == null)
 			return null;

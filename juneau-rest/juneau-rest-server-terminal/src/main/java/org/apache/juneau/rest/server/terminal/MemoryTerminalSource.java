@@ -20,6 +20,7 @@ import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.rest.server.runreport.RunViewChecks.*;
 
 import java.util.*;
+import java.util.concurrent.atomic.*;
 import java.util.logging.*;
 
 /**
@@ -44,10 +45,11 @@ public final class MemoryTerminalSource implements TerminalSource {
 	private record Nudge(String id, TerminalNudgePublisher publisher) {}
 
 	private final byte[] ring;
-	private final int cols, rows;
+	private final int cols;
+	private final int rows;
 	private long end;
 	private boolean finished;
-	private volatile Nudge nudge;
+	private final AtomicReference<Nudge> nudge = new AtomicReference<>();
 
 	private MemoryTerminalSource(int capacity, int cols, int rows) {
 		ring = new byte[capacity];
@@ -92,9 +94,9 @@ public final class MemoryTerminalSource implements TerminalSource {
 		if (! isRunId(terminalId))
 			throw iaex("MemoryTerminalSource nudge id is not a valid run id: '%s'.", terminalId);
 		synchronized (this) {
-			if (nudge != null)
+			if (nudge.get() != null)
 				throw new IllegalStateException("MemoryTerminalSource nudges are already set.");
-			nudge = new Nudge(terminalId, publisher);
+			nudge.set(new Nudge(terminalId, publisher));
 		}
 		return this;
 	}
@@ -134,7 +136,7 @@ public final class MemoryTerminalSource implements TerminalSource {
 			System.arraycopy(b, off + first, ring, 0, len - first);
 			end += len;
 			e = end;
-			n = nudge;
+			n = nudge.get();
 		}
 		if (n != null)
 			publish(n, e, false);
@@ -147,7 +149,7 @@ public final class MemoryTerminalSource implements TerminalSource {
 		synchronized (this) {
 			finished = true;
 			e = end;
-			n = nudge;
+			n = nudge.get();
 		}
 		if (n != null)
 			publish(n, e, true);

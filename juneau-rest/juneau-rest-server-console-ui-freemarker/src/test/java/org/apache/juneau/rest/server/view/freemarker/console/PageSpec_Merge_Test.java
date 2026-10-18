@@ -19,8 +19,6 @@ package org.apache.juneau.rest.server.view.freemarker.console;
 import static org.apache.juneau.rest.server.console.test.PageContractAssert.*;
 import static org.junit.jupiter.api.Assertions.*;
 
-import java.util.*;
-
 import org.apache.juneau.*;
 import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.rest.mock.classic.*;

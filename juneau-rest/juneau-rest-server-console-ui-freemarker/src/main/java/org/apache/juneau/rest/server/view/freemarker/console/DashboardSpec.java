@@ -42,6 +42,9 @@ import org.apache.juneau.rest.server.console.*;
  *
  * @since 10.0.0
  */
+@SuppressWarnings({
+	"java:S3776" // Validation and rendering chains many independent guards; splitting them adds no clarity.
+})
 public final class DashboardSpec {
 
 	/** A panel: a card this dashboard adds, or the id of a card already on the page. */
@@ -211,10 +214,7 @@ public final class DashboardSpec {
 
 	/** @return The cards this dashboard adds to the page: the built panels, then the card sections, in order. */
 	List<CardSpec> ownedCards() {
-		var out = new ArrayList<CardSpec>();
-		for (var p : panels)
-			if (p.card() != null)
-				out.add(p.card());
+		var out = new ArrayList<CardSpec>(panels.stream().map(Panel::card).filter(Objects::nonNull).toList());
 		if (rail != null)
 			for (var s : rail.sections())
 				out.addAll(s.cards());

@@ -20,7 +20,6 @@ import static org.apache.juneau.petstore.console.browser.PetstoreBrowser.*;
 import static org.apache.juneau.test.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
 
-import java.net.*;
 import java.net.http.*;
 import java.util.*;
 

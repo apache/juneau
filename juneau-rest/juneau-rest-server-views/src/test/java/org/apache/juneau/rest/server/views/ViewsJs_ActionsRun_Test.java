@@ -22,6 +22,8 @@ import static org.junit.jupiter.api.Assumptions.*;
 import java.util.*;
 
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.params.*;
+import org.junit.jupiter.params.provider.*;
 
 /** Node behavioral checks for {@code JuneauViews.actions.run} and {@code release}: the hook a chart card uses to run an action for a clicked point. */
 class ViewsJs_ActionsRun_Test {
@@ -94,38 +96,24 @@ class ViewsJs_ActionsRun_Test {
 		assertEquals("k-1", s("a09_extra"));
 	}
 
-	@Test void b01_visibleWhenFailureRefusesWithTheFixedText() {
-		var c = m("b01");
+	@ParameterizedTest(name = "{0}")
+	@CsvSource({
+		"b01, Acknowledge is not available for this item", // visible-when failure refuses with the fixed text
+		"b02, West only", // enabled-when failure shows the rule's reason
+		"b04, Acknowledge is not available for this item", // single-object visible-when fails closed
+		"b05, West only" // single-object enabled-when fails closed with its reason
+	})
+	void b_gateRefusals(String key, String text) {
+		var c = m(key);
 		assertEquals(0, ((Number)c.get("sent")).intValue());
 		assertEquals("refusal", c.get("outcome"));
-		assertEquals("Acknowledge is not available for this item", c.get("text"));
-	}
-
-	@Test void b02_enabledWhenFailureShowsTheRulesReason() {
-		var c = m("b02");
-		assertEquals(0, ((Number)c.get("sent")).intValue());
-		assertEquals("refusal", c.get("outcome"));
-		assertEquals("West only", c.get("text"));
+		assertEquals(text, c.get("text"));
 	}
 
 	@Test void b03_passingGateSends() {
 		var c = m("b03");
 		assertEquals(1, ((Number)c.get("sent")).intValue());
 		assertEquals("success", c.get("outcome"));
-	}
-
-	@Test void b04_singleObjectVisibleWhenFailsClosed() {
-		var c = m("b04");
-		assertEquals(0, ((Number)c.get("sent")).intValue());
-		assertEquals("refusal", c.get("outcome"));
-		assertEquals("Acknowledge is not available for this item", c.get("text"));
-	}
-
-	@Test void b05_singleObjectEnabledWhenFailsClosedWithItsReason() {
-		var c = m("b05");
-		assertEquals(0, ((Number)c.get("sent")).intValue());
-		assertEquals("refusal", c.get("outcome"));
-		assertEquals("West only", c.get("text"));
 	}
 
 	@Test void c01_dialogRunStaysPendingUntilTheSubmitSettles() {

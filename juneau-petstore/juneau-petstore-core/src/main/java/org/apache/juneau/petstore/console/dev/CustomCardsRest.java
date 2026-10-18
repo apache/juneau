@@ -115,8 +115,7 @@ public class CustomCardsRest extends PetstoreConsolePage {
 	@RestGet(path="/inventory/all")
 	public JsonList inventoryAll() {
 		var rows = new JsonList();
-		for (var s : Species.values())
-			rows.add(inventory(s.name()));
+		Arrays.stream(Species.values()).forEach(s -> rows.add(inventory(s.name())));
 		return rows;
 	}
 

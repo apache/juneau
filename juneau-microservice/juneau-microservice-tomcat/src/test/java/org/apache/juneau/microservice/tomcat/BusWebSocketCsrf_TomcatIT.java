@@ -85,6 +85,9 @@ import jakarta.websocket.server.*;
  */
 @EnabledIfSystemProperty(named=BusWebSocketCsrf_TomcatIT.GATE, matches="true",
 	disabledReason="binds a socket; run with -Dtest='BusWebSocketCsrf_TomcatIT' -Djuneau.busIt=true")
+@SuppressWarnings({
+	"resource" // The Tomcat servers and buses are static fixtures started in @BeforeAll and stopped in @AfterAll; raw-socket chains are closed with the socket.
+})
 class BusWebSocketCsrf_TomcatIT extends TestBase {
 
 	static final String GATE = "juneau.busIt";
@@ -120,7 +123,7 @@ class BusWebSocketCsrf_TomcatIT extends TestBase {
 
 	/** Accepts and does nothing; the probe configurator is what matters. */
 	public static class ProbeEndpoint extends Endpoint {
-		@Override public void onOpen(jakarta.websocket.Session session, EndpointConfig config) {}
+		@Override public void onOpen(jakarta.websocket.Session session, EndpointConfig config) { /* no-op by design */ }
 	}
 
 	/** Records the handshake's request URI as the container reports it. */
@@ -161,13 +164,13 @@ class BusWebSocketCsrf_TomcatIT extends TestBase {
 		}
 		Context ctx = tomcat.addContext("", base.toString());
 		// The WebSocket filter only runs for a request that maps to a servlet.
-		Tomcat.addServlet(ctx, "default", new HttpServlet() {
+		var dflt = Tomcat.addServlet(ctx, "default", new HttpServlet() {
 			private static final long serialVersionUID = 1L;
 		});
-		ctx.addServletMappingDecoded("/", "default");
+		dflt.addMapping("/");
 		var wrapper = Tomcat.addServlet(ctx, "bus", rest);
 		wrapper.setLoadOnStartup(1);
-		ctx.addServletMappingDecoded("/rest/*", "bus");
+		wrapper.addMapping("/rest/*");
 		ctx.addApplicationListener(org.apache.tomcat.websocket.server.WsContextListener.class.getName());
 		tomcat.start();
 		var sc = (ServerContainer) ctx.getServletContext().getAttribute(ServerContainer.class.getName());
@@ -346,9 +349,8 @@ class BusWebSocketCsrf_TomcatIT extends TestBase {
 	 */
 	@Test void a04_hostOriginMismatchCloses4403() throws Exception {
 		var path = openSession(HttpClient.newHttpClient());
-		try (var socket = new Socket("127.0.0.1", plainPort)) {
+		try (var socket = new Socket("127.0.0.1", plainPort); var out = socket.getOutputStream(); var in = new BufferedInputStream(socket.getInputStream())) {
 			socket.setSoTimeout(10_000);
-			var out = socket.getOutputStream();
 			out.write(("GET " + path + " HTTP/1.1\r\n"
 				+ "Host: evil.example\r\n"
 				+ "Origin: " + origin(plainPort) + "\r\n"
@@ -357,7 +359,6 @@ class BusWebSocketCsrf_TomcatIT extends TestBase {
 				+ "Sec-WebSocket-Version: 13\r\n"
 				+ "Sec-WebSocket-Key: dGhlIHNhbXBsZSBub25jZQ==\r\n\r\n").getBytes(StandardCharsets.US_ASCII));
 			out.flush();
-			var in = new BufferedInputStream(socket.getInputStream());
 			var head = new StringBuilder();
 			while (! head.toString().endsWith("\r\n\r\n")) {
 				var b = in.read();
@@ -439,9 +440,8 @@ class BusWebSocketCsrf_TomcatIT extends TestBase {
 	 */
 	@Test void a09_repeatedForwardedHostLinesKeepWireOrder() throws Exception {
 		FORWARDED_HOSTS.clear();
-		try (var socket = new Socket("127.0.0.1", plainPort)) {
+		try (var socket = new Socket("127.0.0.1", plainPort); var out = socket.getOutputStream()) {
 			socket.setSoTimeout(10_000);
-			var out = socket.getOutputStream();
 			out.write(("GET /probe HTTP/1.1\r\n"
 				+ "Host: 127.0.0.1:" + plainPort + "\r\n"
 				+ "X-Forwarded-Host: first.example\r\n"
@@ -550,11 +550,10 @@ class BusWebSocketCsrf_TomcatIT extends TestBase {
 		var seen = new StringBuilder();
 		var settings = false;
 		var advertised = false;
-		try (var socket = new Socket("127.0.0.1", port)) {
+		try (var socket = new Socket("127.0.0.1", port); var in = new DataInputStream(socket.getInputStream())) {
 			socket.setSoTimeout(3_000);
 			socket.getOutputStream().write(out.toByteArray());
 			socket.getOutputStream().flush();
-			var in = new DataInputStream(socket.getInputStream());
 			try {
 				for (;;) {
 					var head = new byte[9];

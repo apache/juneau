@@ -60,10 +60,10 @@ function fail(calls, i, err) {
 }
 
 function page(o) {
-	return Object.assign({ contractVersion: '1', events: [], next: '0', more: false, terminal: false }, o || {});
+	return { contractVersion: '1', events: [], next: '0', more: false, terminal: false, ...o || {} };
 }
 
-function stepEv(id, extra) { return Object.assign({ ev: 'step', id: id, title: id.toUpperCase() }, extra || {}); }
+function stepEv(id, extra) { return { ev: 'step', id: id, title: id.toUpperCase(), ...extra || {} }; }
 
 function mkHost(t) {
 	const host = t.env.document.createElement('div');
@@ -80,10 +80,10 @@ function start(t, createOpts, pollOpts) {
 	const c = {
 		host: host, api: api, calls: calls, q: q, outcome: null,
 		head: function () { return q('.juneau-rv-headline').textContent; },
-		steps: function () { return host.querySelectorAll('.juneau-rv-step').map(function (l) { return l.getAttribute('data-step'); }); },
-		code: function () { const i = q('.jc-console-error-item'); return i ? i.getAttribute('data-juneau-error') : null; }
+		steps: function () { return host.querySelectorAll('.juneau-rv-step').map(function (l) { return l.dataset.step ?? null; }); },
+		code: function () { const i = q('.jc-console-error-item'); return i ? (i.dataset.juneauError ?? null) : null; }
 	};
-	t.NS.runView.poll(api, Object.assign({ eventsUrl: '/x/events' }, pollOpts || {}))
+	t.NS.runView.poll(api, { eventsUrl: '/x/events', ...pollOpts || {} })
 		.then(function () { c.outcome = 'resolved'; }, function () { c.outcome = 'rejected'; });
 	return c;
 }
@@ -153,7 +153,7 @@ test('poll05_stopsOnTerminal', async function (t) {
 	await settle();
 	t.clock.advance(0);
 	expect(c.outcome === 'resolved', 'poll resolved at terminal: ' + c.outcome);
-	expect(c.q('.juneau-rv').getAttribute('data-juneau-rv-status') === 'stopped' && c.head() === '⏸ Stopped', 'stopped, not running: ' + c.head());
+	expect(c.q('.juneau-rv').dataset.juneauRvStatus === 'stopped' && c.head() === '⏸ Stopped', 'stopped, not running: ' + c.head());
 	t.clock.advance(120000);
 	expect(c.calls.length === 1, 'no request after terminal');
 });
@@ -213,7 +213,7 @@ test('poll09_backoffOnOutage_andRecovers', async function (t) {
 	fail(c.calls, 0);
 	await settle();
 	const conn = c.q('.juneau-rv-reconnect');
-	expect(conn && conn.textContent === 'Reconnecting…' && conn.hidden !== true, 'shows Reconnecting');
+	expect(conn?.textContent === 'Reconnecting…' && conn.hidden !== true, 'shows Reconnecting');
 	const waits = [4000, 8000, 16000, 32000, 60000, 60000];
 	for (let i = 0; i < waits.length; i++) {
 		t.clock.advance(waits[i] - 1);
@@ -239,7 +239,7 @@ test('poll09_backoffOnOutage_andRecovers', async function (t) {
 test('poll10_4xxIsFatal', async function (t) {
 	const msgs = [];
 	const host = mkHost(t);
-	host.setAttribute('data-juneau-region', 'r');
+	host.dataset.juneauRegion = 'r';
 	const calls = E.abortableFetch(t.env);
 	const api = t.NS.runView.create(host, { id: 'r', emit: function (m) { msgs.push(m); } });
 	let outcome = null;
@@ -250,14 +250,14 @@ test('poll10_4xxIsFatal', async function (t) {
 	calls.resolve(1, {}, { status: 404 });
 	await settle();
 	const banner = host.querySelector('.jc-console-error');
-	expect(banner && banner.getAttribute('role') === 'alert', 'banner');
+	expect(banner?.getAttribute('role') === 'alert', 'banner');
 	expect(banner.textContent.indexOf('fetching events failed (HTTP 404)') >= 0, banner.textContent);
-	expect(host.querySelector('.jc-console-error-item').getAttribute('data-juneau-error') === 'E-RV-4', 'code');
+	expect(host.querySelector('.jc-console-error-item').dataset.juneauError === 'E-RV-4', 'code');
 	expect(host.querySelectorAll('.juneau-rv-step').length === 1, 'content kept');
-	expect(host.getAttribute('data-juneau-region-state') === 'error', 'host marked as errored');
+	expect(host.dataset.juneauRegionState === 'error', 'host marked as errored');
 	expect(outcome === 'resolved', 'resolved, not rejected');
 	expect(t.rec.errorsMatching('E-RV-4').length === 1, 'one fatal E-RV-4');
-	expectSame(msgs[msgs.length - 1], { kind: 'run-view.state', id: 'r', state: 'error', terminal: false }, 'bus message');
+	expectSame(msgs.at(-1), { kind: 'run-view.state', id: 'r', state: 'error', terminal: false }, 'bus message');
 	t.clock.advance(120000);
 	expect(calls.length === 2, 'polling stopped');
 });
@@ -473,7 +473,7 @@ test('mount03_idSubstitution', function (t) {
 		const host = mkHost(t);
 		let err = null;
 		try { t.NS.runView.mount(host, b[0], b[1]); } catch (e) { err = e; }
-		if (!err || err.code !== 'E-RV-1' || err.name !== 'JuneauRunViewError') problems.push(JSON.stringify(b[0]) + ' -> ' + String(err));
+		if (err?.code !== 'E-RV-1' || err.name !== 'JuneauRunViewError') problems.push(JSON.stringify(b[0]) + ' -> ' + String(err));
 		if (host.childNodes.length !== 0) problems.push(JSON.stringify(b[0]) + ' created DOM');
 	}
 	expect(problems.length === 0, problems.join('\n'));
@@ -504,7 +504,7 @@ test('mount05_populatorRegistered', async function (t) {
 	await settle();
 	t.clock.advance(0);
 	await settle();
-	expect(calls.length === 1 && calls[0].url === '/x/events', 'params reached mount: ' + (calls[0] && calls[0].url));
+	expect(calls.length === 1 && calls[0].url === '/x/events', 'params reached mount: ' + (calls[0]?.url));
 	expect(el.querySelector('.juneau-rv').getAttribute('aria-label') === 'Build', 'title param');
 	t.R.teardownRegion(el._juneauRegion);
 	await settle();
@@ -537,7 +537,7 @@ test('mount06_emitsRunViewState', async function (t) {
 	await settle();
 	calls.resolve(2, page({ contractVersion: '9' }));
 	await settle();
-	expect(el2.getAttribute('data-juneau-region-state') === 'error', 'region state error');
+	expect(el2.dataset.juneauRegionState === 'error', 'region state error');
 	expect(got.some(function (m) { return m.id === 'bad' && m.state === 'error'; }), 'error published');
 });
 
@@ -571,7 +571,7 @@ test('chk99_noStubsLeft', function (t) {
 		if (k !== '__test' && typeof t.NS.runView[k] !== 'function' && typeof t.NS.runView[k] !== 'string') bad.push(k);
 	expect(bad.length === 0, 'stubs: ' + bad.join(','));
 	expect(Object.isFrozen(t.NS.runView), 'frozen');
-	expectSame(Object.keys(t.NS.runView).sort(), ['CONTRACT_VERSION', 'create', 'formatDuration', 'isSafeNoteHref', 'isSafeRawHref', 'mount', 'of', 'poll', 'validateEvent', '__test'].sort(), 'public surface');
+	expectSame(Object.keys(t.NS.runView).sort((a, b) => (a < b ? -1 : Number(a > b))), ['CONTRACT_VERSION', 'create', 'formatDuration', 'isSafeNoteHref', 'isSafeRawHref', 'mount', 'of', 'poll', 'validateEvent', '__test'].sort((a, b) => (a < b ? -1 : Number(a > b))), 'public surface');
 });
 
 // @cases:end
@@ -583,11 +583,11 @@ test('chk99_noStubsLeft', function (t) {
 			await c.fn(E.load(argv));
 			out[c.name] = true;
 		} catch (e) {
-			out[c.name] = String((e && e.stack) || e);
+			out[c.name] = String((e?.stack) || e);
 		}
 	}
 	process.stdout.write(JSON.stringify(out));
 })().catch(function (e) {
-	process.stderr.write(String((e && e.stack) || e));
+	process.stderr.write(String((e?.stack) || e));
 	process.exit(1);
 });

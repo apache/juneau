@@ -43,7 +43,7 @@ if (!rendersJsPath || !viewsJsPath || !busJsPath) {
 const env = makeEnv();
 loadScripts([busJsPath], env);
 const { I, NS } = loadViews(rendersJsPath, viewsJsPath, env);
-const bus = NS && NS.bus;
+const bus = NS?.bus;
 const out = {
 	hasBus: !!bus,
 	hasHelpers: typeof I?.probeGroupTopicKey === 'function' && typeof I?.publishJobEvent === 'function'
@@ -60,7 +60,7 @@ function probe(e, id, opts) {
 	opts = opts || {};
 	const el = e.el('button');
 	el.className = 'jc-probe jc-probe-ok' + (opts.disabled ? ' is-disabled' : '');
-	el.setAttribute('data-juneau-probe', id);
+	el.dataset.juneauProbe = id;
 	if (opts.checked) el.setAttribute('aria-checked', 'true');
 	if (opts.disabled) el.setAttribute('aria-disabled', 'true');
 	return el;
@@ -68,8 +68,8 @@ function probe(e, id, opts) {
 function group(e, probes, attrs) {
 	const g = e.el('div');
 	g.className = 'jc-probe-group';
-	g.setAttribute('data-juneau-probe-group', (attrs && attrs.groupAttr) || '');
-	if (attrs && attrs.id) g.setAttribute('id', attrs.id);
+	g.dataset.juneauProbeGroup = (attrs?.groupAttr) || '';
+	if (attrs?.id) g.setAttribute('id', attrs.id);
 	probes.forEach(function (p) { g.appendChild(p); });
 	e.body.appendChild(g);
 	return g;
@@ -78,7 +78,7 @@ function probeHistory(topic) {
 	return bus.history().filter(function (h) { return h.topic === topic; });
 }
 function anyProbeHistory() {
-	return bus.history().filter(function (h) { return String(h.topic).indexOf('probe:') === 0; }).length;
+	return bus.history().filter(function (h) { return String(h.topic).startsWith('probe:'); }).length;
 }
 const key = function (k) { return { key: k, preventDefault: function () {} }; };
 
@@ -130,7 +130,7 @@ out.reclick_repaint_historyCount = probeHistory('probe:grp-a').length;
 // ---- 5) Keyboard selection is user-driven and publishes. -------------------------------------------------------
 gA.dispatch('keydown', key('ArrowRight'));   // fail -> ok (wraps)
 out.key_historyCount = probeHistory('probe:grp-a').length;
-out.key_lastId = seen['probe:grp-a'].length ? seen['probe:grp-a'][seen['probe:grp-a'].length - 1].id : null;
+out.key_lastId = seen['probe:grp-a'].length ? seen['probe:grp-a'].at(-1).id : null;
 
 // ---- 6) Group key: the attribute value wins over the element id. ------------------------------------------------
 const c1 = probe(env, 'p'), c2 = probe(env, 'q');
@@ -176,7 +176,7 @@ I.publishJobEvent({ jobId: 'j-1' }, 'start');
 I.publishJobEvent({ jobId: 'j-1' }, 'progress', 'Copying 3/10');
 I.publishJobEvent({ jobId: 'j-1' }, 'result', { outcome: 'success', message: 'done' });
 out.job_j1 = seen['job:j-1'];
-out.job_from = (jobHistory('j-1')[0] || {}).from || null;
+out.job_from = jobHistory('j-1')[0]?.from || null;
 const outcomes = ['cancelled', 'cancelled-after-effect', 'failure', 'refusal', 'unknown'];
 out.job_states = outcomes.map(function (o, i) {
 	I.publishJobEvent({ jobId: 'j-o' + i }, 'result', { outcome: o });
@@ -195,7 +195,7 @@ try {
 	bus.claim('job:j-srv', 'bridge:ops');
 	I.publishJobEvent({ jobId: 'j-srv' }, 'progress', 'local');
 	I.publishJobEvent({ jobId: 'j-k' }, 'bogus', 'x');
-} catch (e) { threw = String(e && e.message); }
+} catch (e) { threw = String(e?.message); }
 out.job_guard_threw = threw;
 out.job_badId_count = bus.history().filter(function (h) { return h.topic === 'job:a b' || h.topic === 'job:undefined' || h.topic === 'job:null'; }).length;
 out.job_claimed_localCount = bus.history().filter(function (h) { return h.topic === 'job:j-srv' && h.from !== 'bridge:ops'; }).length;
@@ -206,7 +206,7 @@ out.job_bogusKind_count = seen['job:j-k'].length;
 	const realOwner = bus.owner;
 	let thrown = null;
 	bus.owner = function () { throw new Error('boom'); };
-	try { I.publishJobEvent({ jobId: 'j-throw' }, 'start'); } catch (e) { thrown = String(e && e.message); }
+	try { I.publishJobEvent({ jobId: 'j-throw' }, 'start'); } catch (e) { thrown = String(e?.message); }
 	bus.owner = realOwner;
 	out.job_busThrows_threw = thrown;
 }
@@ -216,7 +216,7 @@ out.job_bogusKind_count = seen['job:j-k'].length;
 	const env2 = makeEnv();
 	const sources = [];
 	function FakeEventSource(url) { this.url = url; this.listeners = {}; this.closed = false; sources.push(this); }
-	FakeEventSource.prototype.addEventListener = function (type, fn) { (this.listeners[type] = this.listeners[type] || []).push(fn); };
+	FakeEventSource.prototype.addEventListener = function (type, fn) { this.listeners[type] ||= []; this.listeners[type].push(fn); };
 	FakeEventSource.prototype.close = function () { this.closed = true; };
 	FakeEventSource.prototype.fire = function (type, data) { (this.listeners[type] || []).forEach(function (fn) { fn({ data: data }); }); };
 	env2.EventSource = FakeEventSource;
@@ -233,7 +233,7 @@ out.job_bogusKind_count = seen['job:j-k'].length;
 			rec.settledAtPublish.push(!tr.dataset.juneauJob);
 		});
 		I2.startJobStream({ jobId: jobId, streamUrl: '/s/' + jobId }, { id: 'a' }, env2.el('table'), tr, null);
-		rec.es = sources[sources.length - 1];
+		rec.es = sources.at(-1);
 		return rec;
 	}
 	const cancelled = JSON.stringify({ outcome: 'cancelled', message: 'stopped' });
@@ -270,8 +270,8 @@ try {
 	PI.enhanceProbeGroup(gN, { onSelect: function (id) { selN.push(id); } });
 	gN.dispatch('click', { target: n2 });
 	PI.publishJobEvent({ jobId: 'j-1' }, 'start');
-} catch (e) { nobusThrew = String(e && e.message); }
-out.nobus_hasBus = !!(plain.NS && plain.NS.bus);
+} catch (e) { nobusThrew = String(e?.message); }
+out.nobus_hasBus = !!(plain.NS?.bus);
 out.nobus_onSelect = selN.join(',');
 out.nobus_threw = nobusThrew;
 

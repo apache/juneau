@@ -311,7 +311,8 @@ class McpTokenProvider_Test extends TestBase {
 	@Test void e04_httpTimeoutMustBePositive() {
 		var b = McpTokenProvider.clientCredentials();
 		assertThrows(IllegalArgumentException.class, () -> b.httpTimeout(Duration.ZERO));
-		assertThrows(IllegalArgumentException.class, () -> b.httpTimeout(Duration.ofSeconds(-1)));
+		var negative = Duration.ofSeconds(-1);
+		assertThrows(IllegalArgumentException.class, () -> b.httpTimeout(negative));
 	}
 
 	@Test void e05_injectedClockDrivesExpiry() {

@@ -43,14 +43,18 @@ class Derived_Test extends TestBase {
 	}
 
 	@Test void a02_errors() {
-		var e = assertThrows(IllegalArgumentException.class, () -> Derived.from("a").transform("Bad", null));
+		var target = Derived.from("a");
+		var e = assertThrows(IllegalArgumentException.class, () -> target.transform("Bad", null));
 		assertEquals("E-74: 'Bad' is not a valid transform name", e.getMessage());
-		var s = assertThrows(IllegalStateException.class, () -> Derived.from("a").toMap());
+		var target2 = Derived.from("a");
+		var s = assertThrows(IllegalStateException.class, target2::toMap);
 		assertEquals("Derived.from('a'): as(id) not called", s.getMessage());
-		e = assertThrows(IllegalArgumentException.class, () -> Derived.from("a").as("a"));
+		var target3 = Derived.from("a");
+		e = assertThrows(IllegalArgumentException.class, () -> target3.as("a"));
 		assertEquals("E-76: data source 'a': a derived source cannot read its own topic", e.getMessage());
-		e = assertThrows(IllegalArgumentException.class, () -> Derived.from("a")
-			.params(Subscription.to("app.x").as("refresh")).as("b").toMap());
+		var target4 = Derived.from("a")
+			.params(Subscription.to("app.x").as("refresh")).as("b");
+		e = assertThrows(IllegalArgumentException.class, target4::toMap);
 		assertEquals("E-76: data source 'b': subscription to 'app.x' has role 'refresh'; "
 			+ "a derived source accepts params", e.getMessage());
 		assertThrows(IllegalArgumentException.class, () -> Derived.from("bad id"));
@@ -64,7 +68,8 @@ class Derived_Test extends TestBase {
 		assertEquals("{\"field\":\"x\"}", ((JsonMap)((List<?>)m.get("transforms")).get(0)).get("args").toString());
 		((JsonMap)((List<?>)m.get("transforms")).get(0)).put("use", "zzz");
 		assertEquals("filter", ((JsonMap)((List<?>)d.toMap().get("transforms")).get(0)).get("use"));
-		var e = assertThrows(IllegalArgumentException.class, () -> Derived.from("a").params((Subscription)null));
+		var target5 = Derived.from("a");
+		var e = assertThrows(IllegalArgumentException.class, () -> target5.params((Subscription)null));
 		assertEquals("E-76: data source 'a': subscription is null", e.getMessage());
 	}
 
@@ -72,7 +77,8 @@ class Derived_Test extends TestBase {
 		var msg = "E-76: data source '%s': id must match ^[A-Za-z][A-Za-z0-9_-]{0,63}$";
 		assertEquals(msg.formatted("1st"), assertThrows(IllegalArgumentException.class, () -> Derived.from("1st"))
 			.getMessage());
+		var target6 = Derived.from("a");
 		assertEquals(msg.formatted("a.b"),
-			assertThrows(IllegalArgumentException.class, () -> Derived.from("a").as("a.b")).getMessage());
+			assertThrows(IllegalArgumentException.class, () -> target6.as("a.b")).getMessage());
 	}
 }

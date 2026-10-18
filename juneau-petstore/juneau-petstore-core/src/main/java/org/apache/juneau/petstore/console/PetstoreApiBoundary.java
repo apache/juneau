@@ -71,7 +71,7 @@ import jakarta.servlet.http.*;
  * <p>
  * Behind a TLS-terminating proxy the browser's {@code https} origin does not match the {@code http} request the
  * container sees, so writes are refused.  Such a deployment needs the container's forwarded-header support and the
- * framework boundary's {@link CsrfBoundary.OriginSource#CONTAINER CONTAINER} origin source, which this demo does not
+ * framework boundary's {@link org.apache.juneau.rest.server.filter.CsrfBoundary.OriginSource#CONTAINER CONTAINER} origin source, which this demo does not
  * configure.
  *
  * <h5 class='section'>Example:</h5>

@@ -21,7 +21,6 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.io.*;
 import java.net.*;
 import java.nio.charset.*;
-import java.util.*;
 import java.util.concurrent.atomic.*;
 
 import org.apache.http.*;
@@ -316,7 +315,9 @@ class ApacheHc45Transport_CallerClientRedirectCredentials_Test {
 	@SuppressWarnings("deprecation") // The legacy AbstractHttpClient family is exactly what is refused.
 	void e01_legacyDefaultHttpClient_isRefused() {
 		// Reproduced before the refusal: a legacy client never re-sets the request before the wire, so the store cookie followed a cross-origin redirect.
-		var ex = assertThrows(IllegalArgumentException.class, () -> ApacheHc45Transport.builder().httpClient(new org.apache.http.impl.client.DefaultHttpClient()));
+		var builder = ApacheHc45Transport.builder();
+		var legacy = new org.apache.http.impl.client.DefaultHttpClient();
+		var ex = assertThrows(IllegalArgumentException.class, () -> builder.httpClient(legacy));
 		assertTrue(ex.getMessage().contains("AbstractHttpClient"), ex.getMessage());
 	}
 

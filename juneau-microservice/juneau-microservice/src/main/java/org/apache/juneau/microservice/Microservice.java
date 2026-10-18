@@ -1178,9 +1178,9 @@ public class Microservice implements ConfigEventListener {
 				mkdirs(logDirFile, false);
 				logDir = logDirFile.getAbsolutePath();
 				// Intentional real-JVM-property publish: the resolved log directory is exposed as a process-global
-				// system property so external config/templates can reference it via the raw-reading $S{juneau.logDir}
-				// SVL var (SystemPropertiesVar reads System.getProperty directly, bypassing the Settings override
-				// chain).  A Settings-based write would not be visible to $S{...}, so this is kept.
+				// system property so external config and templates can reference it through the raw-reading
+				// juneau.logDir SVL variable.  That variable reads the JVM property directly and bypasses the
+				// Settings override chain, so a Settings-based write would not be visible to it.
 				System.setProperty("juneau.logDir", logDir);
 
 				var append = coalesce(logConfig.append, config.get("Logging/append").asBoolean().orElse(false));

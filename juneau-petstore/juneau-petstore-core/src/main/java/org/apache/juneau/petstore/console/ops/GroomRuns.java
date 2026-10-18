@@ -51,7 +51,8 @@ import org.apache.juneau.rest.server.terminal.*;
  * </p>
  */
 @SuppressWarnings({
-	"java:S1192" // The script's literals are demo text; constants would obscure it.
+	"java:S1192", // The script's literals are demo text; constants would obscure it.
+	"resource" // Each Run owns its file-backed source, closed by drop()/close(); seeded() hands the new GroomRuns to its caller.
 })
 public final class GroomRuns implements AutoCloseable {
 
@@ -68,7 +69,10 @@ public final class GroomRuns implements AutoCloseable {
 	static final int RING_BYTES = 1 << 20;
 
 	/** The terminal size, in columns and rows, of both of a run's terminals. */
-	static final int COLS = 100, ROWS = 24;
+	static final int COLS = 100;
+
+	/** The terminal height, in rows, of both of a run's terminals. */
+	static final int ROWS = 24;
 
 	private static final String RESET = "\u001b[0m";
 	private static final String BOLD = "\u001b[1m";
@@ -120,7 +124,7 @@ public final class GroomRuns implements AutoCloseable {
 		final AtomicInteger lines = new AtomicInteger();
 		final AtomicInteger step = new AtomicInteger();
 		volatile boolean done;
-		volatile ScheduledFuture<?> task;
+		final AtomicReference<ScheduledFuture<?>> task = new AtomicReference<>();
 		volatile String key;
 
 		Run(String id, String pet, boolean verbose, Path file) {
@@ -214,6 +218,9 @@ public final class GroomRuns implements AutoCloseable {
 	 * @return The run.
 	 * @throws IOException If the temp file cannot be created.
 	 */
+	@SuppressWarnings({
+		"java:S5443" // Files.createTempFile creates the file owner-only (rw-------) on POSIX
+	})
 	public Run start(String pet, boolean verbose, String idempotencyKey) throws IOException {
 		synchronized (order) {
 			if (idempotencyKey != null) {
@@ -239,7 +246,7 @@ public final class GroomRuns implements AutoCloseable {
 			}
 			while (order.size() > MAX_RUNS)
 				drop(order.removeLast());
-			r.task = ticker.scheduleAtFixedRate(() -> tick(r), periodMs, periodMs, TimeUnit.MILLISECONDS);
+			r.task.set(ticker.scheduleAtFixedRate(() -> tick(r), periodMs, periodMs, TimeUnit.MILLISECONDS));
 			return r;
 		}
 	}
@@ -308,13 +315,13 @@ public final class GroomRuns implements AutoCloseable {
 		r.done = true;
 		r.terminal.finish();
 		r.fileDone.set(true);
-		var t = r.task;
+		var t = r.task.get();
 		if (t != null)
 			t.cancel(false);
 	}
 
 	private void drop(Run r) {
-		var t = r.task;
+		var t = r.task.get();
 		if (t != null)
 			t.cancel(false);
 		runs.remove(r.id);

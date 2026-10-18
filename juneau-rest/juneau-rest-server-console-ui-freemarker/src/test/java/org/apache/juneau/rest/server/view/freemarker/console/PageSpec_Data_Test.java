@@ -57,15 +57,19 @@ class PageSpec_Data_Test extends TestBase {
 
 	@Test void a03_duplicateId_isE76() {
 		var spec = PageSpec.create().data(DataSourceDef.create("orders").url("/a"));
-		var e = assertThrows(IllegalArgumentException.class, () -> spec.data(DataSourceDef.create("orders").url("/b")));
+		var arg = DataSourceDef.create("orders").url("/b");
+		var e = assertThrows(IllegalArgumentException.class, () -> spec.data(arg));
 		assertEquals("E-76: data source 'orders': duplicate id", e.getMessage());
-		e = assertThrows(IllegalArgumentException.class, () -> spec.data(Derived.from("x").as("orders")));
+		var arg2 = Derived.from("x").as("orders");
+		e = assertThrows(IllegalArgumentException.class, () -> spec.data(arg2));
 		assertEquals("E-76: data source 'orders': duplicate id", e.getMessage());
 	}
 
 	@Test void a04_badDeclaration_failsAtTheCallSite() {
-		var e = assertThrows(IllegalArgumentException.class, () -> PageSpec.create()
-			.data(DataSourceDef.create("orders")));
+		var target = PageSpec.create()
+			;
+		var arg3 = DataSourceDef.create("orders");
+		var e = assertThrows(IllegalArgumentException.class, () -> target.data(arg3));
 		assertEquals("E-76: data source 'orders': url is required", e.getMessage());
 	}
 
@@ -79,7 +83,8 @@ class PageSpec_Data_Test extends TestBase {
 	@Test void a05_earlyWiring_runsWithDataSources() {
 		// A declared source is its data: topic's one publisher; without it the read is E-71, not E-41 (R-E1).
 		var reg = CardTypeRegistry.standard();
-		var e = assertThrows(IllegalArgumentException.class, () -> withConsumer(false).checkWiringEarly(reg, null));
+		var target2 = withConsumer(false);
+		var e = assertThrows(IllegalArgumentException.class, () -> target2.checkWiringEarly(reg, null));
 		assertEquals("topic 'data:orders' needs exactly one source publisher; found 0", e.getMessage());
 		assertDoesNotThrow(() -> withConsumer(true).checkWiringEarly(reg, null));
 		assertDoesNotThrow(() -> page().checkWiringEarly(reg, null));

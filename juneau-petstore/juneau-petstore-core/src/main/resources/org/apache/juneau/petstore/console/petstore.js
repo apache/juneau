@@ -19,18 +19,18 @@
 	// P4 Photo tab: submit the upload form as a PUT to the API's own photo endpoint, then reload; a failure stays on the page.
 	// The upload carries the API's CSRF token (stamped on the form by the server) in the API's token header.
 	document.addEventListener('submit', function(e) {
-		var form = e.target.closest ? e.target.closest('form[data-petstore-upload]') : null;
+		const form = e.target.closest ? e.target.closest('form[data-petstore-upload]') : null;
 		if (!form)
 			return;
 		e.preventDefault();
-		var file = form.querySelector('input[type=file]').files[0];
+		const file = form.querySelector('input[type=file]').files[0];
 		if (!file)
 			return;
-		var headers = { 'Content-Type': file.type, 'Accept': 'text/plain' };
-		var csrf = form.getAttribute('data-petstore-csrf');
-		if (csrf !== null)
+		const headers = { 'Content-Type': file.type, 'Accept': 'text/plain' };
+		const csrf = form.dataset.petstoreCsrf;
+		if (csrf !== undefined)
 			headers['X-Csrf-Token'] = csrf;
-		fetch(form.getAttribute('data-petstore-upload'), { method: 'PUT', headers: headers, body: file })
+		fetch(form.dataset.petstoreUpload, { method: 'PUT', headers: headers, body: file })
 			.then(function(r) {
 				if (r.ok)
 					return window.location.reload();
@@ -41,15 +41,15 @@
 
 	// The toolkit's status line under the form (JuneauViews.status), or a plain alert paragraph without the toolkit.
 	function showError(form, message) {
-		var views = window.JuneauViews;
-		if (views && views.status) {
+		const views = window.JuneauViews;
+		if (views?.status) {
 			views.status.render(form, 'error', message);
 			return;
 		}
-		var p = form.querySelector('p[data-petstore-error]');
+		let p = form.querySelector('p[data-petstore-error]');
 		if (!p) {
 			p = document.createElement('p');
-			p.setAttribute('data-petstore-error', '');
+			p.dataset.petstoreError = '';
 			p.setAttribute('role', 'alert');
 			form.appendChild(p);
 		}
@@ -59,40 +59,45 @@
 	// R10: a typed-confirmation renderer.  A renderer is fn(modal, request) and paints its own UI; it returns a Promise
 	// of true to proceed.  The user types the expected value (the row id, or the selected count for an aggregate bulk
 	// action) before Confirm enables.
-	var views = window.JuneauViews;
-	if (views && views.rowActions && views.rowActions.registerConfirmRenderer) {
+	const views = window.JuneauViews;
+	if (views?.rowActions?.registerConfirmRenderer) {
 		views.rowActions.registerConfirmRenderer('typed', function(modal, request) {
-			var rows = request.rows || [];
-			var idField = request.rowIdField || 'id';
+			const rows = request.rows || [];
+			const idField = request.rowIdField || 'id';
 			// One row (a per-row or single-selection action): type its id.  Several: type the count.  A ribbon-hosted
 			// action has no row, so it types the action's own id.
-			var raw = rows.length > 1 ? rows.length
-				: rows.length ? rows[0][idField] : request.action && request.action.id;
+			let raw;
+			if (rows.length > 1)
+				raw = rows.length;
+			else if (rows.length)
+				raw = rows[0][idField];
+			else
+				raw = request.action?.id;
 			// Fail closed: a missing, null or blank value (no action id, or a row without a usable id) would otherwise
 			// become '' (an empty input satisfies the gate), 'undefined' or 'null' (a nonsense word to type).  A typed
 			// gate with nothing meaningful to type is no gate, so refuse with a warning instead of opening a dialog.
-			var expected = raw == null ? '' : String(raw);
+			const expected = raw == null ? '' : String(raw);
 			if (expected.trim() === '') {
 				console.warn('[petstore] typed confirm refused: nothing to type (no usable row id or action id)');
 				return Promise.resolve(false);
 			}
 			return new Promise(function(resolve) {
-				var dlg = document.createElement('dialog');
+				const dlg = document.createElement('dialog');
 				dlg.className = 'jc-dialog petstore-typed-confirm';
-				var h = document.createElement('h2');
+				const h = document.createElement('h2');
 				h.textContent = modal.title;
-				var p = document.createElement('p');
+				const p = document.createElement('p');
 				p.textContent = modal.body || '';
-				var input = document.createElement('input');
+				const input = document.createElement('input');
 				input.type = 'text';
 				input.className = 'jc-input';
 				input.setAttribute('aria-label', 'Type ' + expected + ' to confirm');
-				var ok = document.createElement('button');
+				const ok = document.createElement('button');
 				ok.type = 'button';
 				ok.className = 'jc-button petstore-typed-confirm-ok';
 				ok.textContent = modal.confirmLabel;
 				ok.disabled = true;
-				var cancel = document.createElement('button');
+				const cancel = document.createElement('button');
 				cancel.type = 'button';
 				cancel.className = 'jc-button petstore-typed-confirm-cancel';
 				cancel.textContent = modal.cancelLabel;
@@ -111,7 +116,7 @@
 
 	// Jobs page: a groom run's detail panel offers "Groom again".  The button runs through JuneauViews.jobs, which fetches
 	// a key bound to this run from the key endpoint and fills {id} from the panel's parent row.
-	if (views && views.regions && views.regions.register) {
+	if (views?.regions?.register) {
 		views.regions.register('petstore-regroom', function(ctx, container) {
 			container.appendChild(ctx.helpers.jobButton({
 				label: 'Groom again',
@@ -125,7 +130,7 @@
 
 	// R10: a compact dialog chrome, selected by a modal's chrome:'compact'.  fn(parts, modal) restyles the dialog parts.
 	// The new-order wizard (both steps) opts in with ModalDef.chrome("compact").
-	if (views && views.dialogs && views.dialogs.registerChrome) {
+	if (views?.dialogs?.registerChrome) {
 		views.dialogs.registerChrome('compact', function(parts) {
 			parts.dialog.classList.add('petstore-dialog-compact');
 		});

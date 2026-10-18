@@ -164,10 +164,10 @@ class DashboardSpec_Test extends TestBase {
 
 	@Test void a13_persistOwnedTopics() {
 		var legend = ChartDef.donut("share").data(ROWS).label("d").value("v").publishLegend();
-		DashboardSpec.create("d").panel(legend).persist(PersistSpec.page("a").topics(Topics.legend("share"))).toJson();
+		assertDoesNotThrow(() -> DashboardSpec.create("d").panel(legend).persist(PersistSpec.page("a").topics(Topics.legend("share"))).toJson());
 		var zoomCard = ChartDef.line("z").data(ROWS).x("d").series("v", "V").publishZoom();
-		DashboardSpec.create("d").rail(Rail.left().sections(CardSection.of(zoomCard)))
-			.persist(PersistSpec.page("a").topics(Topics.zoom("z"))).toJson();
+		assertDoesNotThrow(() -> DashboardSpec.create("d").rail(Rail.left().sections(CardSection.of(zoomCard)))
+			.persist(PersistSpec.page("a").topics(Topics.zoom("z"))).toJson());
 	}
 
 	@Test void a14_badStatusKey() {
@@ -183,7 +183,8 @@ class DashboardSpec_Test extends TestBase {
 	@Test void a16_nullPanelId() {
 		assertEquals("E-77: dashboard 'd': panel 'null' names no card on this page",
 			e77(() -> DashboardSpec.create("d").panel((String)null).toJson()));
-		assertThrows(NullPointerException.class, () -> DashboardSpec.create("d").panel((ChartDef)null));
+		var target = DashboardSpec.create("d");
+		assertThrows(NullPointerException.class, () -> target.panel((ChartDef)null));
 	}
 
 	@Test void a17_duplicateStatusTopic() {

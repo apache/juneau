@@ -21,6 +21,7 @@ import static org.apache.juneau.commons.utils.Shorts.*;
 import java.util.*;
 
 import org.apache.juneau.commons.http.*;
+import org.apache.juneau.commons.utils.Shorts;
 import org.apache.juneau.marshall.collections.*;
 import org.apache.juneau.marshall.json5.*;
 import org.apache.juneau.marshall.marshaller.Json;
@@ -46,6 +47,10 @@ import org.apache.juneau.rest.server.views.*;
  *
  * @since 10.0.0
  */
+@SuppressWarnings({
+	"java:S1192", // Repeated literals are contract wire keys; named constants would obscure the contract shape.
+	"java:S3776" // Validation and rendering chains many independent guards; splitting them adds no clarity.
+})
 public final class ChartDef {
 
 	/** Minimum chart height in pixels. */
@@ -83,8 +88,11 @@ public final class ChartDef {
 	// on the CardSpec that toCardSpec() returns, never through set(...).
 	private static final Set<String> CARD_LEVEL = Set.of("publishes", "subscribes", "template", "bare", "class");
 
-	private final String kind, id;
-	private String title, src, source;
+	private final String kind;
+	private final String id;
+	private String title;
+	private String src;
+	private String source;
 	private List<Map<String,Object>> data;
 	private final Map<String,Object> body = new LinkedHashMap<>();
 	private final List<Map<String,Object>> series = new ArrayList<>();
@@ -406,7 +414,7 @@ public final class ChartDef {
 	/** @param fields The treemap group fields, outermost first; at least one, each non-blank. @return This object. */
 	public ChartDef groupBy(String... fields) {
 		only("treemap", "groupBy");
-		if (fields == null || fields.length == 0 || Arrays.stream(fields).anyMatch(f -> ib(f)))
+		if (fields == null || fields.length == 0 || Arrays.stream(fields).anyMatch(Shorts::ib))
 			throw iaex("ChartDef '%s' groupBy requires at least one non-blank field.", id);
 		body.put("groupBy", List.of(fields));
 		return this;

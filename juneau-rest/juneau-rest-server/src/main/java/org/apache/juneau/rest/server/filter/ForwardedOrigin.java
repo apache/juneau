@@ -31,6 +31,9 @@ import org.apache.juneau.rest.server.filter.CsrfBoundary.*;
  * order into entries, the {@code n}th entry from the right is selected, and everything to its left is ignored.  Every
  * failure is a refusal: nothing here falls back to another value.
  */
+@SuppressWarnings({
+	"java:S135" // Guard clauses keep the header parsing readable
+})
 final class ForwardedOrigin {
 
 	/**
@@ -97,6 +100,9 @@ final class ForwardedOrigin {
 	// X-Forwarded-Host / X-Forwarded-Proto
 	//-----------------------------------------------------------------------------------------------------------------
 
+	@SuppressWarnings({
+		"java:S3776" // Header-pair validation is a flat sequence of refusals; splitting it would scatter the order
+	})
 	private static Resolved resolveXForwarded(int hops, Function<String,List<String>> headers) {
 		var hostLines = headers.apply("X-Forwarded-Host");
 		var protoLines = headers.apply("X-Forwarded-Proto");
@@ -166,6 +172,9 @@ final class ForwardedOrigin {
 	/** One element of {@code Forwarded}: its parameters by lower-cased name, or a marker for a repeated name. */
 	private record Element(boolean empty, Map<String,String> params, Set<String> repeated) {}
 
+	@SuppressWarnings({
+		"java:S3776" // RFC 7239 element walk with per-hop refusals; splitting it would scatter the order
+	})
 	private static Resolved resolveForwarded(int hops, Function<String,List<String>> headers) {
 		var lines = headers.apply("Forwarded");
 		if (lines == null)
@@ -232,6 +241,9 @@ final class ForwardedOrigin {
 	 *
 	 * @return <jk>false</jk> if the line does not tokenize.
 	 */
+	@SuppressWarnings({
+		"java:S3776" // Single-pass tokenizer state machine for the Forwarded grammar
+	})
 	private static boolean tokenize(String s, List<Element> out) {
 		var n = s.length();
 		var i = 0;

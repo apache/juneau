@@ -732,7 +732,7 @@ class BusWebSocketConfigurator_Test extends TestBase {
 		verify(ws).close(reason.capture());
 		verify(ws, never()).getAsyncRemote();
 		verify(ws, never()).getBasicRemote();
-		verify(ws, never()).addMessageHandler(eq(String.class), any(MessageHandler.Whole.class));
+		verify(ws, never()).addMessageHandler(eq(String.class), org.mockito.ArgumentMatchers.<MessageHandler.Whole<String>>any());
 		return reason.getValue().getCloseCode().getCode();
 	}
 

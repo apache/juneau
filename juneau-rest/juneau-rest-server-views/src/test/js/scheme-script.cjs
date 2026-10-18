@@ -39,7 +39,7 @@ const KEY = 'juneau-console:scheme';
 
 /** The <html> element: attribute access only, which is all the script touches. */
 function htmlElement(attrs) {
-	const a = Object.assign({}, attrs);
+	const a = { ...attrs };
 	return {
 		hasAttribute: n => Object.hasOwn(a, n),
 		getAttribute: n => (Object.hasOwn(a, n) ? a[n] : null),
@@ -69,8 +69,8 @@ function run(src, opts) {
 		sandbox.localStorage = { getItem: k => (Object.hasOwn(store, k) ? store[k] : null) };
 	if (!opts.noMatchMedia)
 		sandbox.matchMedia = q => ({ matches: q === '(prefers-color-scheme: dark)' && opts.os === 'dark', media: q });
-	vm.runInNewContext(src, sandbox, { timeout: 1000 });
-	return html.getAttribute('data-jc-scheme');
+	vm.runInNewContext(src, sandbox, { timeout: 1000 }); // NOSONAR javascript:S1523 - loads the shipped script into a vm sandbox for the test
+	return html.getAttribute('data-jc-scheme'); // NOSONAR javascript:S7761 -- DOM fake has no dataset
 }
 
 const [scriptFile] = process.argv.slice(2);
@@ -80,6 +80,11 @@ if (!scriptFile) {
 }
 const src = fs.readFileSync(scriptFile, 'utf8');
 
+const storedValue = stored => {
+	if (stored === 'none') return null;
+	return stored === 'garbage' ? 'blue' : stored;
+};
+
 const rows = {};
 for (const toggle of ['no', 'yes'])
 	for (const stored of ['none', 'light', 'dark', 'garbage'])
@@ -87,7 +92,7 @@ for (const toggle of ['no', 'yes'])
 			for (const os of ['light', 'dark'])
 				rows['toggle=' + toggle + ' stored=' + stored + ' pin=' + pin + ' os=' + os] = run(src, {
 					toggle: toggle === 'yes',
-					stored: stored === 'none' ? null : stored === 'garbage' ? 'blue' : stored,
+					stored: storedValue(stored),
 					pin: pin === 'none' ? null : pin,
 					os: os
 				});

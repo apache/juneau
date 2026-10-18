@@ -239,7 +239,8 @@ import jakarta.servlet.http.*;
  * @since 10.0.0
  */
 @SuppressWarnings({
-	"java:S1192" // Duplicate string literals are HTTP header names (e.g. Origin); a constant per header would obscure the wire contract.
+	"java:S1192", // Duplicate string literals are HTTP header names (e.g. Origin); a constant per header would obscure the wire contract.
+	"java:S3776" // The request and handshake checks are ordered refusal ladders; splitting them would scatter the order that matters
 })
 public class CsrfBoundary implements RequestBoundary {
 
@@ -739,7 +740,7 @@ public class CsrfBoundary implements RequestBoundary {
 		var sb = new StringBuilder();
 		for (var name : new String[] { "X-Forwarded-Host", "X-Forwarded-Proto", "Forwarded" }) {
 			var lines = lookup.apply(name);
-			if (sb.length() > 0)
+			if (! sb.isEmpty())
 				sb.append(", ");
 			sb.append(name).append('=').append(lines == null ? "(unordered)" : sanitize(String.join(" | ", lines)));
 		}
@@ -755,8 +756,8 @@ public class CsrfBoundary implements RequestBoundary {
 		if (presented.isEmpty() || (presented.size() == 1 && presented.get(0).isBlank())) {
 			if (originMatched && MISSING_FROM_OWN_ORIGIN.get() < MISSING_TOKEN_WARN_AT
 					&& MISSING_FROM_OWN_ORIGIN.incrementAndGet() == MISSING_TOKEN_WARN_AT)
-				LOG.warning("CSRF boundary: " + MISSING_TOKEN_WARN_AT + " requests from this server's own origin arrived "
-					+ "without the '" + csrfHeader + "' header.  Does the page embed the token, or is this an HTML form POST?");
+				LOG.log(Level.WARNING, "CSRF boundary: {0} requests from this server''s own origin arrived without the ''{1}'' header.  Does the page embed the token, or is this an HTML form POST?",
+					new Object[] { String.valueOf(MISSING_TOKEN_WARN_AT), csrfHeader });
 			return refuse(req, method, BoundaryReason.CSRF_TOKEN_MISSING, 403,
 				"A state-changing request must carry the CSRF token in the '" + csrfHeader + "' header.");
 		}

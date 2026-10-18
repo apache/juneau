@@ -48,6 +48,9 @@ class SseFrameSink_Test extends TestBase {
 		return e.getData();
 	}
 
+	@SuppressWarnings({
+		"java:S2925" // Timing helper; the tests under test are time-driven
+	})
 	private static void sleep(long ms) {
 		try {
 			Thread.sleep(ms);

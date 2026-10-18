@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.rest.server.staticfile;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
+
 import java.io.*;
 import java.util.*;
 import java.util.concurrent.*;
@@ -99,7 +101,7 @@ public final class WebJarResolver {
 		var a = parse(asset);
 		var version = version(a[0], a[1]);
 		var path = a[2].replace(VERSION_TOKEN, version);
-		if (! PRESENT.computeIfAbsent(path, k -> LOADER.getResource(WEBJARS_ROOT + k) != null))
+		if (! b(PRESENT.computeIfAbsent(path, k -> LOADER.getResource(WEBJARS_ROOT + k) != null)))
 			throw new IllegalStateException(String.format("needs WebJar file '%s' (%s:%s:%s), which is not on the classpath.", path, a[0], a[1], version));
 		return path;
 	}

@@ -16,8 +16,6 @@
  */
 package org.apache.juneau.rest.client.apachehttpclient45;
 
-import static org.apache.juneau.commons.utils.Shorts.*;
-
 import java.util.*;
 
 import org.apache.http.*;
@@ -139,6 +137,9 @@ final class Hc45RedirectCredentialGuard implements HttpRequestInterceptor {
 		private boolean protocolPass;
 
 		@Override /* HttpCoreContext */
+		@SuppressWarnings({
+			"java:S3776" // Linear attribute-observation state machine; splitting it would scatter the pass tracking.
+		})
 		public void setAttribute(String id, Object obj) {
 			super.setAttribute(id, obj);
 			if (HttpCoreContext.HTTP_TARGET_HOST.equals(id))

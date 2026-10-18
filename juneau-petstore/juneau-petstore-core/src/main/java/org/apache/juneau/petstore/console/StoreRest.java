@@ -143,8 +143,7 @@ public class StoreRest extends PetstoreConsolePage {
 	public JsonList species() {
 		var counts = store().getPets().stream().filter(p -> p.getSpecies() != null).collect(Collectors.groupingBy(Pet::getSpecies, Collectors.counting()));
 		var rows = new JsonList();
-		for (var s : Species.values())
-			rows.add(JsonMap.of("species", s.name(), "count", counts.getOrDefault(s, 0L)));
+		Arrays.stream(Species.values()).forEach(s -> rows.add(JsonMap.of("species", s.name(), "count", counts.getOrDefault(s, 0L))));
 		return rows;
 	}
 
@@ -153,8 +152,7 @@ public class StoreRest extends PetstoreConsolePage {
 	public JsonList status() {
 		var counts = store().getPets().stream().filter(p -> p.getStatus() != null).collect(Collectors.groupingBy(Pet::getStatus, Collectors.counting()));
 		var rows = new JsonList();
-		for (var s : PetStatus.values())
-			rows.add(JsonMap.of("status", s.name(), "count", counts.getOrDefault(s, 0L)));
+		Arrays.stream(PetStatus.values()).forEach(s -> rows.add(JsonMap.of("status", s.name(), "count", counts.getOrDefault(s, 0L))));
 		return rows;
 	}
 

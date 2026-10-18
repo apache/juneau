@@ -66,7 +66,7 @@ function load() {
 	};
 	g.window = g;
 	vm.createContext(g);
-	vm.runInContext(TERMINAL_JS, g);
+	vm.runInContext(TERMINAL_JS, g); // NOSONAR javascript:S1523 - the harness loads the shipped script into a vm sandbox
 	return { win: g, JT: g.JuneauTerminal, warns: warns };
 }
 
@@ -77,7 +77,7 @@ function realTerminal() {
 	g.window = g;
 	g.self = g;
 	vm.createContext(g);
-	vm.runInContext(XTERM_JS, g);
+	vm.runInContext(XTERM_JS, g); // NOSONAR javascript:S1523 - the harness loads the xterm bundle into a vm sandbox
 	return g.Terminal;
 }
 
@@ -123,7 +123,7 @@ function stubTerm(cols, rows, hold) {
 			if (t.hold) t.held.push(apply);
 			else queueMicrotask(apply);
 		},
-		flush: function () { const f = t.held.shift(); if (f) f(); return !!f; },
+		flush: function () { const f = t.held.shift(); if (f) { f(); } return !!f; },
 		reset: function () { t.resets++; t.cursor = 0; t.buffer.normal.cursorY = 0; },
 		scrollToLine: function (l) { t.scrolledTo.push(l); },
 		scrollToBottom: function () { t.bottoms++; },
@@ -143,7 +143,7 @@ function bytesRes(body, h) {
 	if (h.error) hdr['Term-Error'] = h.error;
 	return {
 		status: 200, ok: true,
-		headers: { get: function (k) { return Object.prototype.hasOwnProperty.call(hdr, k) ? hdr[k] : null; } },
+		headers: { get: function (k) { return Object.hasOwn(hdr, k) ? hdr[k] : null; } },
 		arrayBuffer: function () { return Promise.resolve(b.buffer.slice(b.byteOffset, b.byteOffset + b.length)); }
 	};
 }
@@ -156,7 +156,7 @@ function statusRes(status, h) {
 }
 
 function pageRes(events, next, o) {
-	const p = Object.assign({ contractVersion: '1', events: events, next: next, more: false, terminal: false }, o || {});
+	const p = { contractVersion: '1', events: events, next: next, more: false, terminal: false, ...o };
 	return { status: 200, ok: true, headers: { get: function () { return null; } }, json: function () { return Promise.resolve(p); } };
 }
 
@@ -180,14 +180,14 @@ function start(t, opts, route, termOpts) {
 			return function () { const i = c.visibleFns.indexOf(fn); if (i >= 0) c.visibleFns.splice(i, 1); };
 		},
 		open: function (cols, rows) {
-			c.term = termOpts && termOpts.real ? new termOpts.real({ cols: cols, rows: rows, scrollback: 100000, allowProposedApi: false })
-				: stubTerm(cols, rows, termOpts && termOpts.hold);
+			c.term = termOpts?.real ? new termOpts.real({ cols: cols, rows: rows, scrollback: 100000, allowProposedApi: false })
+				: stubTerm(cols, rows, termOpts?.hold);
 			c.opened = [cols, rows];
 			return c.term;
 		},
 		onStatus: function (st) { c.statuses.push(st); }
 	};
-	c.engine = t.JT.createEngine(Object.assign({ bytesUrl: '/t/bytes' }, opts || {}), env);
+	c.engine = t.JT.createEngine({ bytesUrl: '/t/bytes', ...opts }, env);
 	c.status = function () { return c.engine.status(); };
 	c.show = function () { c.hidden = false; c.visibleFns.slice().forEach(function (f) { f(); }); };
 	c.engine.start();
@@ -196,7 +196,7 @@ function start(t, opts, route, termOpts) {
 
 /** A byte log served from a string: from/max honoured, done once `done` is set. */
 function logServer(log, o) {
-	const srv = Object.assign({ log: log, done: false, max: 1 << 18 }, o || {});
+	const srv = { log: log, done: false, max: 1 << 18, ...o };
 	srv.route = function (url) {
 		const m = /from=(\d+)(?:&max=(\d+))?/.exec(url);
 		const from = Number(m[1]);
@@ -225,7 +225,7 @@ test('f02_parseHashAndFormatSize', function (t) {
 	for (const bad of ['#build-O', '#build-O-1', '#build-O1.5', '#other-O3', '#build-O12345678901234567', '', null])
 		expect(t.JT.parseHash(bad, 'build') === null, 'rejects ' + bad);
 	expect(t.JT.parseHash('#-O3', '') === null, 'no id, no hash link');
-	expectSame([2 * 1024 * 1024, 1536 * 1024, 512 * 1024, 10].map(t.JT.formatSize), ['2 MiB', '1.5 MiB', '512 KiB', '10 B'], 'sizes');
+	expectSame([2 * 1024 * 1024, 1536 * 1024, 512 * 1024, 10].map(n => t.JT.formatSize(n)), ['2 MiB', '1.5 MiB', '512 KiB', '10 B'], 'sizes');
 });
 
 test('f04_linkHandlerOpensOnlyHttp', function (t) {
@@ -235,8 +235,8 @@ test('f04_linkHandlerOpensOnlyHttp', function (t) {
 	for (const bad of ['javascript:alert(1)', 'data:text/html,x', 'file:///etc/passwd', 'not a url', ''])
 		h.activate(null, bad);
 	h.activate(null, 'https://example.org/ok');
-	h.activate(null, 'http://example.org/a b');
-	expectSame(opened, [['https://example.org/ok', '_blank', 'noopener,noreferrer'], ['http://example.org/a%20b', '_blank', 'noopener,noreferrer']], 'opened');
+	h.activate(null, 'http://example.org/a b'); // NOSONAR javascript:S5332 - test fixture URL, never fetched over the network
+	expectSame(opened, [['https://example.org/ok', '_blank', 'noopener,noreferrer'], ['http://example.org/a%20b', '_blank', 'noopener,noreferrer']], 'opened'); // NOSONAR javascript:S5332 - test fixture URL, never fetched over the network
 });
 
 test('f03_findNextWrapsBothWays', function (t) {
@@ -265,7 +265,7 @@ test('c01_cardHandlerIsQueued', function (t) {
 	g.window = g;
 	g.JuneauConsoleCards = { push: function (e) { pushed.push(e[0]); } };
 	vm.createContext(g);
-	vm.runInContext(TERMINAL_JS, g);
+	vm.runInContext(TERMINAL_JS, g); // NOSONAR javascript:S1523 - the harness loads the shipped script into a vm sandbox
 	expectSame(pushed, ['terminal'], 'a shell that has already drained gets push()');
 });
 
@@ -315,7 +315,7 @@ test('p02_idleBacksOffAfterThreeEmptyPolls', async function (t) {
 	c.clock.advance(5000);
 	await settle();
 	expectSame(c.clock.pending(), [1500], 'new bytes reset the backoff');
-	expect(c.urls[c.urls.length - 1] === '/t/bytes?from=3', 'resumes from next');
+	expect(c.urls.at(-1) === '/t/bytes?from=3', 'resumes from next');
 });
 
 test('p03_stopsOnDone', async function (t) {
@@ -346,14 +346,17 @@ test('p05_bytesDoneWaitsForTheEvents', async function (t) {
 	const srv = logServer('x\n', { done: true });
 	let terminal = false;
 	const c = start(t, { eventsUrl: '/t/events' }, function (url) {
-		return url.startsWith('/t/events') ? pageRes(terminal ? [{ ev: 'done', status: 'ok' }] : [], terminal ? '2' : '1', { terminal: terminal }) : srv.route(url);
+		if (!url.startsWith('/t/events'))
+			return srv.route(url);
+		const events = terminal ? [{ ev: 'done', status: 'ok' }] : [];
+		return pageRes(events, terminal ? '2' : '1', { terminal: terminal });
 	});
 	await settle();
 	expect(c.status().badge === 'Running' && c.clock.pending().length === 1, 'still polling the events');
 	terminal = true;
 	c.clock.advance(1000);
 	await settle();
-	expect(c.urls[c.urls.length - 1] === '/t/events?after=1', 'after= the last token');
+	expect(c.urls.at(-1) === '/t/events?after=1', 'after= the last token');
 	expect(c.status().badge === 'Done' && c.status().stopped, 'done once the events end');
 	expect(c.urls.filter(function (u) { return u.startsWith('/t/bytes?from=2'); }).length === 0, 'no bytes request once bytes are done');
 });
@@ -423,7 +426,7 @@ test('r01_retryLadderKeepsTheTerminal', async function (t) {
 	expectSame(delays, [1000, 2000, 5000, 10000, 10000], 'the ladder');
 	expect(!c.status().reconnecting, 'chip cleared on success');
 	expect(c.term.resets === 0, 'never reset');
-	expect(c.urls[c.urls.length - 1] === '/t/bytes?from=3', 'resumes from the last good next');
+	expect(c.urls.at(-1) === '/t/bytes?from=3', 'resumes from the last good next');
 	srv.log += 'more';
 	c.clock.advance(c.clock.pending()[0]);
 	await settle();
@@ -566,7 +569,7 @@ test('s01_splitAtOffsetsRecordsTheLine', async function (t) {
 	});
 	await settle();
 	expectSame(c.term.texts(), ['aaaaa\n', 'bbbbb\n', 'ccc'], 'split at 6 and 12, not at the chunk start');
-	expectSame([0, 6, 12].map(c.engine.lineFor), [0, 1, 2], 'recorded lines');
+	expectSame([0, 6, 12].map(o => c.engine.lineFor(o)), [0, 1, 2], 'recorded lines');
 });
 
 test('s02_scrollToOffsetPicksTheNearestStepAtOrBelow', async function (t) {
@@ -600,7 +603,7 @@ test('s03_lateStepUsesTheNearestCheckpoint', async function (t) {
 	evs = evs.concat([{ ev: 'step', id: 'b', title: 'B', rawOffset: 8 }]);
 	c.clock.advance(1000);
 	await settle();
-	expect(c.urls[c.urls.length - 1] === '/t/events?after=1', 'only the events were polled');
+	expect(c.urls.at(-1) === '/t/events?after=1', 'only the events were polled');
 	expect(c.engine.lineFor(8) === 2, 'the checkpoint written at offset 8 is on line 2: ' + c.engine.lineFor(8));
 });
 
@@ -654,7 +657,7 @@ test('x01_realXtermLinesAndCells', async function (t) {
 	const b = c.term.buffer.active;
 	expect(b.getLine(0).translateToString(true) === 'red', 'line 0');
 	expect(b.getLine(0).getCell(0).getFgColor() === 1 && b.getLine(0).getCell(0).isFgPalette(), 'SGR 31 is palette red');
-	expect(b.getLine(1).translateToString(true) === '100%', 'the \\r counter is one line');
+	expect(b.getLine(1).translateToString(true) === '100%', String.raw`the \r counter is one line`);
 	expect(c.engine.lineFor(25) === 2, 'the step at offset 25 is on line 2: ' + c.engine.lineFor(25));
 	expect(c.term.options.scrollback === 100000, 'scrollback');
 	c.term.reset();
@@ -698,7 +701,7 @@ test('i02_liveArms', function (t) {
 	const v = e.view();
 	expect(v.state === 'armed' && v.chip === 'Input live' && v.chipState === 'live', 'chip: ' + JSON.stringify(v));
 	expect(v.toggle.pressed === true && v.toggle.disabled === false, 'pressed: ' + JSON.stringify(v.toggle));
-	expect(e.views.length > 0 && e.views[e.views.length - 1].state === 'armed', 'onChange saw the arm');
+	expect(e.views.length > 0 && e.views.at(-1).state === 'armed', 'onChange saw the arm');
 });
 
 test('i03_deniedDisablesTheToggle', function (t) {
@@ -984,10 +987,10 @@ test('i24_throttledChipSurvivesTheDrain', function (t) {
 test('l01_linkForPicksTheBridge', function (t) {
 	const both = { downstream: ['term.input-status'], upstream: ['term.input'] };
 	const c = { bridges: [
-		Object.assign({ id: 'sse', transport: 'sse' }, both),
+		{ id: 'sse', transport: 'sse', ...both },
 		{ id: 'half', transport: 'websocket', downstream: ['other'], upstream: ['term.input'] },
-		Object.assign({ id: 'term', transport: 'websocket' }, both),
-		Object.assign({ id: 'later', transport: 'websocket' }, both)
+		{ id: 'term', transport: 'websocket', ...both },
+		{ id: 'later', transport: 'websocket', ...both }
 	] };
 	expect(t.JT.linkFor(c) === 'term', 'the first websocket bridge carrying both topics: ' + t.JT.linkFor(c));
 	expect(t.JT.linkFor({ bridges: [c.bridges[0], c.bridges[1]] }) === null, 'none carries both');
@@ -1237,7 +1240,7 @@ test('n08_badPayloadIgnored', async function (t) {
 	c.engine.nudgeConnected(true);
 	await settle();
 	const n = c.urls.length;
-	[null, {}, { end: -1 }, { end: '5' }, { end: NaN }, { end: 10.5 }, { end: Infinity }, { end: Number.MAX_SAFE_INTEGER + 2 }].forEach(function (p) {
+	[null, {}, { end: -1 }, { end: '5' }, { end: Number.NaN }, { end: 10.5 }, { end: Infinity }, { end: Number.MAX_SAFE_INTEGER + 2 }].forEach(function (p) {
 		c.engine.nudge(p);
 	});
 	await settle();
@@ -1331,7 +1334,7 @@ test('o04_wrongTypesAreIgnored', function (t) {
 	const base = xtermCtorOptions(t, undefined);
 	const o = xtermCtorOptions(t, { convertEol: 'true', scrollback: '500', fontFamily: 12 });
 	expectSame(o, base, 'nothing merged');
-	for (const bad of [-1, 1.5, NaN, Infinity, null, 1000001, 1e21, Number.MAX_SAFE_INTEGER + 1])
+	for (const bad of [-1, 1.5, Number.NaN, Infinity, null, 1000001, 1e21, Number.MAX_SAFE_INTEGER + 1])
 		expect(xtermCtorOptions(t, { scrollback: bad }).scrollback === base.scrollback, 'scrollback ' + bad + ' ignored');
 	expect(xtermCtorOptions(t, { scrollback: 1000000 }).scrollback === 1000000, 'scrollback at the cap accepted');
 	expect(!('fontFamily' in xtermCtorOptions(t, { fontFamily: '' })), 'empty fontFamily ignored');
@@ -1356,12 +1359,13 @@ test('o06_absentTerminalCopiesBase', function (t) {
 /** A DOM element stub: just enough surface for mount() to build and tear down its region. */
 function fakeEl(tag) {
 	const e = {
-		tagName: tag, children: [], attrs: {}, className: '', textContent: '', hidden: false, parentNode: null, clientWidth: 0,
+		tagName: tag, children: [], attrs: {}, dataset: {}, className: '', textContent: '', hidden: false, parentNode: null, clientWidth: 0,
 		appendChild: function (c) { c.parentNode = e; e.children.push(c); return c; },
 		append: function () { Array.from(arguments).forEach(function (c) { e.appendChild(c); }); },
-		removeChild: function (c) { const i = e.children.indexOf(c); if (i >= 0) e.children.splice(i, 1); c.parentNode = null; },
+		remove: function () { if (e.parentNode) e.parentNode.removeChild(e); }, // NOSONAR javascript:S7762 - this is the fake's own remove(); it cannot call itself
+		removeChild: function (c) { const i = e.children.indexOf(c); if (i >= 0) { e.children.splice(i, 1); } c.parentNode = null; },
 		setAttribute: function (k, v) { e.attrs[k] = v; },
-		getAttribute: function (k) { return Object.prototype.hasOwnProperty.call(e.attrs, k) ? e.attrs[k] : null; },
+		getAttribute: function (k) { return Object.hasOwn(e.attrs, k) ? e.attrs[k] : null; },
 		removeAttribute: function (k) { delete e.attrs[k]; },
 		addEventListener: function () {}, removeEventListener: function () {}, focus: function () {},
 		querySelector: function () { return null; },
@@ -1384,19 +1388,19 @@ async function mountThemed(t, tokens, terminalOpts) {
 		hidden: false, documentElement: fakeEl('html'),
 		createElement: fakeEl,
 		createTextNode: function (x) { return { text: x }; },
-		addEventListener: function (n, f) { (listeners[n] = listeners[n] || []).push(f); },
+		addEventListener: function (n, f) { listeners[n] ??= []; listeners[n].push(f); },
 		removeEventListener: function (n, f) { const l = listeners[n] || []; const i = l.indexOf(f); if (i >= 0) l.splice(i, 1); }
 	};
 	const win = {
 		TextEncoder: TextEncoder, URL: URL, Promise: Promise, Date: Date, console: console,
-		location: { href: 'http://x/p', hash: '' },
+		location: { href: 'http://x/p', hash: '' }, // NOSONAR javascript:S5332 - test fixture URL, never fetched over the network
 		setTimeout: clock.setTimeout, clearTimeout: clock.clearTimeout,
 		fetch: function (url) { return Promise.resolve().then(function () { return srv.route(url); }); },
 		addEventListener: function () {}, removeEventListener: function () {},
-		getComputedStyle: function () { return { getPropertyValue: function (n) { return Object.prototype.hasOwnProperty.call(tokens, n) ? tokens[n] : ''; } }; },
+		getComputedStyle: function () { return { getPropertyValue: function (n) { return Object.hasOwn(tokens, n) ? tokens[n] : ''; } }; },
 		Terminal: function (o) {
 			const term = stubTerm(o.cols, o.rows, false);
-			term.options = Object.assign({}, o);
+			term.options = { ...o };
 			term.open = function () {}; term.dispose = function () { term.disposed = true; };
 			term.onData = function () {}; term.attachCustomKeyEventHandler = function () {};
 			created.ctorOptions = o; created.term = term;
@@ -1462,11 +1466,11 @@ test('t05_listenerRemovedOnCleanup', async function (t) {
 			await c.fn(load());
 			out[c.name] = true;
 		} catch (e) {
-			out[c.name] = String((e && e.stack) || e);
+			out[c.name] = String(e?.stack || e);
 		}
 	}
 	process.stdout.write(JSON.stringify(out));
 })().catch(function (e) {
-	process.stderr.write(String((e && e.stack) || e));
+	process.stderr.write(String(e?.stack || e));
 	process.exit(1);
 });

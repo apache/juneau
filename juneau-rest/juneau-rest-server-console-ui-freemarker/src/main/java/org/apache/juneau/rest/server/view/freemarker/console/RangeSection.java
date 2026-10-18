@@ -36,9 +36,12 @@ import java.util.regex.*;
  *
  * @since 10.0.0
  */
+@SuppressWarnings({
+	"java:S1192" // Repeated literals are contract wire keys; named constants would obscure the contract shape.
+})
 public final class RangeSection extends Section {
 
-	private static final Pattern PRESET = Pattern.compile("^([1-9][0-9]{0,3}[dh]|ytd)$");
+	private static final Pattern PRESET = Pattern.compile("^([1-9]\\d{0,3}[dh]|ytd)$");
 
 	private final List<String> presets;
 	private boolean custom;

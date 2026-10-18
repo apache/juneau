@@ -37,7 +37,7 @@ class ViewsJs_BusBridge_Test extends TestBase {
 	private static Map<String,Object> report;
 
 	@BeforeAll
-	static void runHarness() throws Exception {
+	static void runHarness() {
 		report = BusHarness.run("bus-bridge.cjs", "/org/apache/juneau/views/juneau-bus.js");
 	}
 

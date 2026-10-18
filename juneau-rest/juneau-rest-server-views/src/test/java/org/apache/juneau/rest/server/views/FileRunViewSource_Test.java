@@ -244,6 +244,7 @@ class FileRunViewSource_Test extends TestBase {
 
 	@Test void g01_indexMustMatchFile() {
 		var other = FileLineIndex.of(dir.resolve("other.jsonl"));
-		assertThrows(IllegalArgumentException.class, () -> FileRunViewSource.create(f).index(other).build());
+		var target = FileRunViewSource.create(f).index(other);
+		assertThrows(IllegalArgumentException.class, target::build);
 	}
 }

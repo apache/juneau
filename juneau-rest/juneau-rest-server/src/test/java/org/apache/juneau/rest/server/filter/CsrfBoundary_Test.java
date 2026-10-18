@@ -988,19 +988,20 @@ class CsrfBoundary_Test extends TestBase {
 	}
 
 	@Test void j08_builderRejectsBadInput() {
-		assertThrows(IllegalArgumentException.class, () -> CsrfBoundary.create().tokens(null));
-		assertThrows(IllegalArgumentException.class, () -> CsrfBoundary.create().nonBrowser(null));
-		assertThrows(IllegalArgumentException.class, () -> CsrfBoundary.create().originSource(null));
-		assertThrows(IllegalArgumentException.class, () -> CsrfBoundary.create().csrfHeader(null));
-		assertThrows(IllegalArgumentException.class, () -> CsrfBoundary.create().csrfHeader(""));
-		assertThrows(IllegalArgumentException.class, () -> CsrfBoundary.create().csrfHeader("  "));
-		assertThrows(IllegalArgumentException.class, () -> CsrfBoundary.create().allowedHosts((String[])null));
-		assertThrows(IllegalArgumentException.class, () -> CsrfBoundary.create().allowedHosts((String)null));
-		assertThrows(IllegalArgumentException.class, () -> CsrfBoundary.create().allowedHosts(""));
-		assertThrows(IllegalArgumentException.class, () -> CsrfBoundary.create().allowedHosts("  "));
-		assertThrows(IllegalArgumentException.class, () -> CsrfBoundary.create().allowedHosts("app.example", " "));
-		assertThrows(IllegalArgumentException.class, () -> CsrfBoundary.create().allowedHosts("app.example:8080"));
-		assertThrows(IllegalArgumentException.class, () -> CsrfBoundary.create().allowedHosts("a, b"));
+		var bad = CsrfBoundary.create();
+		assertThrows(IllegalArgumentException.class, () -> bad.tokens(null));
+		assertThrows(IllegalArgumentException.class, () -> bad.nonBrowser(null));
+		assertThrows(IllegalArgumentException.class, () -> bad.originSource(null));
+		assertThrows(IllegalArgumentException.class, () -> bad.csrfHeader(null));
+		assertThrows(IllegalArgumentException.class, () -> bad.csrfHeader(""));
+		assertThrows(IllegalArgumentException.class, () -> bad.csrfHeader("  "));
+		assertThrows(IllegalArgumentException.class, () -> bad.allowedHosts((String[])null));
+		assertThrows(IllegalArgumentException.class, () -> bad.allowedHosts((String)null));
+		assertThrows(IllegalArgumentException.class, () -> bad.allowedHosts(""));
+		assertThrows(IllegalArgumentException.class, () -> bad.allowedHosts("  "));
+		assertThrows(IllegalArgumentException.class, () -> bad.allowedHosts("app.example", " "));
+		assertThrows(IllegalArgumentException.class, () -> bad.allowedHosts("app.example:8080"));
+		assertThrows(IllegalArgumentException.class, () -> bad.allowedHosts("a, b"));
 		assertThrows(IllegalArgumentException.class, () -> B.check(null));
 		assertThrows(IllegalArgumentException.class, () -> B.tokenFor(null));
 		var b = CsrfBoundary.create().csrfHeader(" X-My-Token ").createSessions(false).build();

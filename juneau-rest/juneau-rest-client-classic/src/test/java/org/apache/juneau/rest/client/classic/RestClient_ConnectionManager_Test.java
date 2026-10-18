@@ -119,19 +119,19 @@ class RestClient_ConnectionManager_Test {
 	}
 
 	private static void hello(HttpExchange exchange) throws IOException {
-		exchange.getRequestBody().readAllBytes();
+		try (var in = exchange.getRequestBody()) { in.readAllBytes(); }
 		var body = "hi".getBytes(StandardCharsets.UTF_8);
 		exchange.sendResponseHeaders(200, body.length);
-		exchange.getResponseBody().write(body);
+		try (var os = exchange.getResponseBody()) { os.write(body); }
 		exchange.close();
 	}
 
 	// Answers with the TLS protocol version the connection negotiated.
 	private static void protocol(HttpExchange exchange) throws IOException {
-		exchange.getRequestBody().readAllBytes();
+		try (var in = exchange.getRequestBody()) { in.readAllBytes(); }
 		var body = ((HttpsExchange)exchange).getSSLSession().getProtocol().getBytes(StandardCharsets.UTF_8);
 		exchange.sendResponseHeaders(200, body.length);
-		exchange.getResponseBody().write(body);
+		try (var os = exchange.getResponseBody()) { os.write(body); }
 		exchange.close();
 	}
 
@@ -144,7 +144,10 @@ class RestClient_ConnectionManager_Test {
 			"-validity", "2", "-dname", "CN=localhost", "-ext", "SAN=dns:localhost", "-storetype", "PKCS12",
 			"-keystore", file.toString(), "-storepass", "changeit", "-keypass", "changeit")
 			.redirectErrorStream(true).start();
-		var out = new String(p.getInputStream().readAllBytes(), StandardCharsets.UTF_8);
+		String out;
+		try (var is = p.getInputStream()) {
+			out = new String(is.readAllBytes(), StandardCharsets.UTF_8);
+		}
 		assertEquals(0, p.waitFor(), out);
 		var ks = KeyStore.getInstance("PKCS12");
 		try (var in = Files.newInputStream(file)) {
@@ -176,26 +179,26 @@ class RestClient_ConnectionManager_Test {
 
 	@Test void a01_sslContext_customTrustStore_honoured() throws Exception {
 		try (var c = RestClient.create().sslContext(trustingContext).build()) {
-			assertEquals("hi", c.get("https://localhost:" + tlsPort + "/hello").run().getContent().asString());
+			assertEquals("hi", fetch(c, "https://localhost:" + tlsPort + "/hello"));
 		}
 	}
 
 	@Test void a02_sslContext_defaultHostnameVerification_stillApplies() throws Exception {
 		try (var c = RestClient.create().sslContext(trustingContext).build()) {
-			var ex = assertThrows(Exception.class, () -> c.get("https://127.0.0.1:" + tlsPort + "/hello").run());
+			var ex = assertThrows(Exception.class, () -> fetch(c, "https://127.0.0.1:" + tlsPort + "/hello"));
 			assertContains("doesn't match any of the subject alternative names", messages(ex));
 		}
 	}
 
 	@Test void a03_sslHostnameVerifier_honoured() throws Exception {
 		try (var c = RestClient.create().sslContext(trustingContext).sslHostnameVerifier(NoopHostnameVerifier.INSTANCE).build()) {
-			assertEquals("hi", c.get("https://127.0.0.1:" + tlsPort + "/hello").run().getContent().asString());
+			assertEquals("hi", fetch(c, "https://127.0.0.1:" + tlsPort + "/hello"));
 		}
 	}
 
 	@Test void a04_sslSocketFactory_honoured() throws Exception {
 		try (var c = RestClient.create().sslSocketFactory(new SSLConnectionSocketFactory(trustingContext)).build()) {
-			assertEquals("hi", c.get("https://localhost:" + tlsPort + "/hello").run().getContent().asString());
+			assertEquals("hi", fetch(c, "https://localhost:" + tlsPort + "/hello"));
 		}
 	}
 
@@ -232,7 +235,9 @@ class RestClient_ConnectionManager_Test {
 		try (var c = RestClient.create().pooled().maxConnTotal(9).build()) {
 			var ordinary = (PoolingHttpClientConnectionManager)ordinaryPool(c);
 			assertEquals(9, ordinary.getMaxTotal());
-			assertEquals(new PoolingHttpClientConnectionManager().getDefaultMaxPerRoute(), ordinary.getDefaultMaxPerRoute());
+			try (var expected = new PoolingHttpClientConnectionManager()) {
+				assertEquals(expected.getDefaultMaxPerRoute(), ordinary.getDefaultMaxPerRoute());
+			}
 		}
 	}
 
@@ -248,11 +253,14 @@ class RestClient_ConnectionManager_Test {
 			assertSame(NoopHostnameVerifier.INSTANCE, field(httpsFactory(ordinaryPool(c)), "hostnameVerifier"));
 			assertSame(httpsFactory(ordinaryPool(c)), httpsFactory(pinnedPool(c)));
 			// The default trust store does not trust the self-signed certificate.
-			var ex = assertThrows(Exception.class, () -> c.get("https://localhost:" + tlsPort + "/hello").run());
+			var ex = assertThrows(Exception.class, () -> fetch(c, "https://localhost:" + tlsPort + "/hello"));
 			assertContains("PKIX path building failed", messages(ex));
 		}
 	}
 
+	@SuppressWarnings({
+		"resource" // The pools are owned and closed by the client; the test only inspects them.
+	})
 	@Test void a11_noPoolSettings_basicManagerKept() throws Exception {
 		try (var c = RestClient.create().build()) {
 			assertInstanceOf(BasicHttpClientConnectionManager.class, ordinaryPool(c));
@@ -276,10 +284,13 @@ class RestClient_ConnectionManager_Test {
 		// The loopback server answers the proxied request itself; the target host is never resolved.
 		try (var c = RestClient.create().rootUrl("http://target.invalid").proxy(new HttpHost("127.0.0.1", port)).allowPrivateUrls(true).build()) {
 			assertEquals("hi", c.getRemote(HelloRemote.class).call());
-			assertEquals("hi", c.get("http://target.invalid/hello").run().getContent().asString());
+			assertEquals("hi", fetch(c, "http://target.invalid/hello"));
 		}
 	}
 
+	@SuppressWarnings({
+		"resource" // The router shuts both pools down in the finally block.
+	})
 	@Test void b03_router_proxiedRoute_guardedLease_refused() {
 		var ordinary = new PoolingHttpClientConnectionManager();
 		var pinned = new PoolingHttpClientConnectionManager();
@@ -363,6 +374,9 @@ class RestClient_ConnectionManager_Test {
 		}
 	}
 
+	@SuppressWarnings({
+		"resource" // The caller-supplied manager is shut down in the finally block.
+	})
 	@Test void d03_builderReused_callerSuppliedConnectionManager_kept() throws Exception {
 		var cm = new PoolingHttpClientConnectionManager();
 		var b = RestClient.create().rootUrl(url).connectionManager(cm).connectionManagerShared(true);
@@ -387,6 +401,9 @@ class RestClient_ConnectionManager_Test {
 		assertShutDown(pinned);
 	}
 
+	@SuppressWarnings({
+		"resource" // The subject is closeQuietly() itself, so the client is closed explicitly.
+	})
 	@Test void d05_connectionManagerShared_defaultManager_shutDownOnCloseQuietly() throws Exception {
 		var c = RestClient.create().rootUrl(url).pooled().connectionManagerShared(true).build();
 		assertPlainOk(c);
@@ -396,19 +413,22 @@ class RestClient_ConnectionManager_Test {
 		assertShutDown(pinnedPool(c));
 	}
 
+	@SuppressWarnings({
+		"resource" // The subject is closeQuietly() on a client sharing the manager, which is shut down in the finally block.
+	})
 	@Test void d06_connectionManagerShared_callerSuppliedManager_leftOpenOnClose() throws Exception {
-		var cm = new PoolingHttpClientConnectionManager();
-		try {
+		try (var cm = new PoolingHttpClientConnectionManager()) {
 			try (var c = RestClient.create().rootUrl(url).connectionManager(cm).connectionManagerShared(true).build()) {
 				assertPlainOk(c);
 			}
 			RestClient.create().rootUrl(url).connectionManager(cm).connectionManagerShared(true).build().closeQuietly();
 			assertOpen(cm);
-		} finally {
-			cm.shutdown();
 		}
 	}
 
+	@SuppressWarnings({
+		"resource" // The subject is close() itself; the pools are shut down in the finally block.
+	})
 	@Test void d07_connectionManagerShared_keepHttpClientOpen_defaultManagerLeftOpen() throws Exception {
 		var c = RestClient.create().rootUrl(url).pooled().connectionManagerShared(true).keepHttpClientOpen().build();
 		var ordinary = ordinaryPool(c);
@@ -423,6 +443,9 @@ class RestClient_ConnectionManager_Test {
 		}
 	}
 
+	@SuppressWarnings({
+		"resource" // The subject is close() on clients sharing a manager, so the clients are closed explicitly.
+	})
 	@Test void d08_connectionManagerShared_overriddenCreateConnectionManager_leftOpenOnClose() throws Exception {
 		var b = new ReusingBuilder().rootUrl(url).pooled().connectionManagerShared(true);
 		var c1 = b.build();
@@ -448,8 +471,8 @@ class RestClient_ConnectionManager_Test {
 	@Test void d09_connectionManagerShared_suppliedDefaultManager_leftOpenOnClose() throws Exception {
 		var b = RestClient.create().rootUrl(url).pooled().connectionManagerShared(true);
 		var cm = b.createConnectionManager();
-		b.connectionManager(cm);
 		try {
+			b.connectionManager(cm);
 			try (var c = b.build()) {
 				assertPlainOk(c);
 			}
@@ -538,6 +561,9 @@ class RestClient_ConnectionManager_Test {
 		}
 	}
 
+	@SuppressWarnings({
+		"resource" // The caller-supplied manager is owned by the client built from it.
+	})
 	@Test void e09_basicCallHandlerOfAnotherClient_guardedCall_refused() throws Exception {
 		try (var other = RestClient.create().connectionManager(new PoolingHttpClientConnectionManager()).build()) {
 			var b = RestClient.create().rootUrl(url);
@@ -557,6 +583,9 @@ class RestClient_ConnectionManager_Test {
 		}
 	}
 
+	@SuppressWarnings({
+		"resource" // The caller-supplied manager is owned by the client built from it.
+	})
 	@Test void e11_subclassCreatesRequestBoundToAnotherClient_guardedCall_refused() throws Exception {
 		try (var other = RestClient.create().connectionManager(new PoolingHttpClientConnectionManager()).build()) {
 			try (var c = RestClient.create().rootUrl(url).build(OtherClientRequestClient.class)) {
@@ -575,11 +604,17 @@ class RestClient_ConnectionManager_Test {
 
 	// Creates its requests on another client, so they go out through that client's HttpClient.
 	public static class OtherClientRequestClient extends RestClient {
+		@SuppressWarnings({
+			"resource" // A test fixture set and cleared by the test that closes it.
+		})
 		static volatile RestClient other;
 		public OtherClientRequestClient(RestClient.Builder<?> builder) {
 			super(builder);
 		}
 		@Override
+		@SuppressWarnings({
+			"resource" // The request is returned to the caller, which owns it.
+		})
 		protected RestRequest createRequest(URI uri, String method, boolean hasBody) throws RestCallException {
 			return new RestRequest(other, uri, method, hasBody);
 		}
@@ -590,6 +625,9 @@ class RestClient_ConnectionManager_Test {
 			super(builder);
 		}
 		@Override
+		@SuppressWarnings({
+			"resource" // The request is returned to the caller, which owns it.
+		})
 		protected RestRequest createRequest(URI uri, String method, boolean hasBody) throws RestCallException {
 			return new OtherThreadRequest(this, uri, method, hasBody);
 		}
@@ -601,6 +639,9 @@ class RestClient_ConnectionManager_Test {
 			super(client, uri, method, hasBody);
 		}
 		@Override
+		@SuppressWarnings({
+			"resource" // The response is returned to the caller, which owns it.
+		})
 		public RestResponse run() throws RestCallException {
 			var es = Executors.newSingleThreadExecutor();
 			try {
@@ -669,7 +710,7 @@ class RestClient_ConnectionManager_Test {
 
 	@Test void f01_callerBuilder_sslContext_customTrustStore_honoured() throws Exception {
 		try (var c = RestClient.create().httpClientBuilder(HttpClientBuilder.create().setSSLContext(trustingContext)).build()) {
-			assertEquals("hi", c.get("https://localhost:" + tlsPort + "/hello").run().getContent().asString());
+			assertEquals("hi", fetch(c, "https://localhost:" + tlsPort + "/hello"));
 			assertSame(httpsFactory(ordinaryPool(c)), httpsFactory(pinnedPool(c)));
 		}
 	}
@@ -677,7 +718,7 @@ class RestClient_ConnectionManager_Test {
 	@Test void f02_callerBuilder_sslHostnameVerifier_honoured() throws Exception {
 		var b = HttpClientBuilder.create().setSSLContext(trustingContext).setSSLHostnameVerifier(NoopHostnameVerifier.INSTANCE);
 		try (var c = RestClient.create().httpClientBuilder(b).build()) {
-			assertEquals("hi", c.get("https://127.0.0.1:" + tlsPort + "/hello").run().getContent().asString());
+			assertEquals("hi", fetch(c, "https://127.0.0.1:" + tlsPort + "/hello"));
 		}
 	}
 
@@ -711,7 +752,7 @@ class RestClient_ConnectionManager_Test {
 	}
 
 	@Test void f06_callerBuilder_dnsResolver_ordinaryPoolOnly() throws Exception {
-		DnsResolver resolver = host -> SystemDefaultDnsResolver.INSTANCE.resolve(host);
+		DnsResolver resolver = SystemDefaultDnsResolver.INSTANCE::resolve;
 		try (var c = RestClient.create().rootUrl(url).httpClientBuilder(HttpClientBuilder.create().setDnsResolver(resolver)).build()) {
 			assertSame(resolver, field(field(ordinaryPool(c), "connectionOperator"), "dnsResolver"));
 			// The pinned pool keeps the pin, so guarded calls are still checked.
@@ -725,7 +766,7 @@ class RestClient_ConnectionManager_Test {
 		// sslContext(...) was set on the builder created first; the replacement carries a context with the default trust store.
 		var b = RestClient.create().sslContext(trustingContext).httpClientBuilder(HttpClientBuilder.create().setSSLContext(SSLContexts.createDefault()));
 		try (var c = b.build()) {
-			assertEquals("hi", c.get("https://localhost:" + tlsPort + "/hello").run().getContent().asString());
+			assertEquals("hi", fetch(c, "https://localhost:" + tlsPort + "/hello"));
 		}
 	}
 
@@ -739,7 +780,7 @@ class RestClient_ConnectionManager_Test {
 		var previous = SSLContext.getDefault();
 		SSLContext.setDefault(trustingContext);
 		try (var c = RestClient.create().useSystemProperties().build()) {
-			assertEquals("hi", c.get("https://localhost:" + tlsPort + "/hello").run().getContent().asString());
+			assertEquals("hi", fetch(c, "https://localhost:" + tlsPort + "/hello"));
 			assertSame(httpsFactory(ordinaryPool(c)), httpsFactory(pinnedPool(c)));
 		} finally {
 			SSLContext.setDefault(previous);
@@ -749,7 +790,7 @@ class RestClient_ConnectionManager_Test {
 	@Test void g02_useSystemProperties_httpsProtocols_honoured() throws Exception {
 		withSystemProperty("https.protocols", "TLSv1.2", () -> {
 			try (var c = RestClient.create().useSystemProperties().sslContext(trustingContext).build()) {
-				assertEquals("TLSv1.2", c.get("https://localhost:" + tlsPort + "/protocol").run().getContent().asString());
+				assertEquals("TLSv1.2", fetch(c, "https://localhost:" + tlsPort + "/protocol"));
 				for (var pool : pools(c))
 					assertArrayEquals(new String[]{"TLSv1.2"}, (String[])field(httpsFactory(pool), "supportedProtocols"));
 			}
@@ -787,6 +828,9 @@ class RestClient_ConnectionManager_Test {
 		});
 	}
 
+	@SuppressWarnings({
+		"resource" // The pools are owned and closed by the client; the test only inspects them.
+	})
 	@Test void g06_useSystemProperties_keepAliveOff_noPoolLimitsApplied() throws Exception {
 		withSystemProperty("http.keepAlive", "false", () -> {
 			try (var c = RestClient.create().useSystemProperties().build()) {
@@ -824,6 +868,9 @@ class RestClient_ConnectionManager_Test {
 		}
 	}
 
+	@SuppressWarnings({
+		"resource" // The pools are owned and closed by the client; the test only inspects them.
+	})
 	@Test void h03_connectionTimeToLive_pooledInBothPools() throws Exception {
 		try (var c = RestClient.create().rootUrl(url).connectionTimeToLive(5, TimeUnit.SECONDS).build()) {
 			for (var pool : pools(c)) {
@@ -847,6 +894,9 @@ class RestClient_ConnectionManager_Test {
 	// J: connection-manager settings made through this builder carry over a replaced HttpClientBuilder
 	// =================================================================================================================
 
+	@SuppressWarnings({
+		"resource" // The pools are owned and closed by the client; the test only inspects them.
+	})
 	@Test void j01_connectionTimeToLive_carriesOverReplacedBuilder() throws Exception {
 		var b = RestClient.create().connectionTimeToLive(5, TimeUnit.SECONDS).httpClientBuilder(HttpClientBuilder.create());
 		try (var c = b.build()) {
@@ -886,7 +936,7 @@ class RestClient_ConnectionManager_Test {
 		var previous = SSLContext.getDefault();
 		SSLContext.setDefault(trustingContext);
 		try (var c = RestClient.create().useSystemProperties().httpClientBuilder(HttpClientBuilder.create()).build()) {
-			assertEquals("hi", c.get("https://localhost:" + tlsPort + "/hello").run().getContent().asString());
+			assertEquals("hi", fetch(c, "https://localhost:" + tlsPort + "/hello"));
 		} finally {
 			SSLContext.setDefault(previous);
 		}
@@ -990,10 +1040,11 @@ class RestClient_ConnectionManager_Test {
 	@Test void k07_guardedRequest_otherThreadWithoutContext_refused() throws Exception {
 		try (var c = RestClient.create().rootUrl(url).callHandler(OtherThreadCallHandler.class).build()) {
 			OtherThreadCallHandler.dropContext = true;
-			var rc = c.get(url + "/hello");
-			rc.ssrfGuard();
-			var ex = assertThrows(Exception.class, rc::run);
-			assertContains("lacks the SSRF-guard marker", messages(ex));
+			try (var rc = c.get(url + "/hello")) {
+				rc.ssrfGuard();
+				var ex = assertThrows(Exception.class, rc::run);
+				assertContains("lacks the SSRF-guard marker", messages(ex));
+			}
 			// An ordinary request through the same handler is unaffected.
 			assertPlainOk(c);
 		} finally {
@@ -1003,21 +1054,27 @@ class RestClient_ConnectionManager_Test {
 
 	@Test void k11_guardedRequest_otherThreadWithContext_pinned() throws Exception {
 		try (var c = RestClient.create().rootUrl(url).callHandler(OtherThreadCallHandler.class).build()) {
-			var rc = c.get(url + "/hello");
-			rc.ssrfGuard();
-			var ex = assertThrows(Exception.class, rc::run);
-			assertContains("No allowed address for host '2130706433'", messages(ex));
+			try (var rc = c.get(url + "/hello")) {
+				rc.ssrfGuard();
+				var ex = assertThrows(Exception.class, rc::run);
+				assertContains("No allowed address for host '2130706433'", messages(ex));
+			}
 			assertPlainOk(c);
 		}
 	}
 
+	@SuppressWarnings({
+		"resource" // context() returns the request itself, which the try-with-resources closes.
+	})
 	@Test void k12_guardedRequest_callerContext_markedForTheCallOnly() throws Exception {
 		try (var c = RestClient.create().rootUrl(url).build()) {
 			var context = new BasicHttpContext();
-			var rc = c.get(url + "/hello").context(context);
-			rc.ssrfGuard();
-			var ex = assertThrows(Exception.class, rc::run);
-			assertContains("No allowed address for host '2130706433'", messages(ex));
+			try (var rc = c.get(url + "/hello")) {
+				rc.context(context);
+				rc.ssrfGuard();
+				var ex = assertThrows(Exception.class, rc::run);
+				assertContains("No allowed address for host '2130706433'", messages(ex));
+			}
 			assertNull(context.getAttribute(SsrfGuardMarker.ATTRIBUTE));
 		}
 	}
@@ -1152,60 +1209,60 @@ class RestClient_ConnectionManager_Test {
 	}
 
 	@Test void k24_guardedRedirect_noContext_crossOrigin_interceptorAndDefaultHeadersStripped() throws Exception {
-		try (var server = new RoutedServer("https://93.184.216.35/end")) {
+		try (var routed = new RoutedServer("https://93.184.216.35/end")) {
 			var b = HttpClientBuilder.create().setDefaultHeaders(List.of(new BasicHeader("X-API-Key", "dflt")))
 				.addInterceptorLast((HttpRequestInterceptor)(r, x) -> r.setHeader("Authorization", "Bearer itcp"));
-			try (var c = server.client(RestClient.create().httpClientBuilder(b))) {
-				assertEquals(200, server.guarded(c, null));
+			try (var c = routed.client(RestClient.create().httpClientBuilder(b))) {
+				assertEquals(200, routed.guarded(c, null));
 			}
-			assertEquals("93.184.216.34:Bearer itcp|dflt,93.184.216.35:null|null", server.hops());
+			assertEquals("93.184.216.34:Bearer itcp|dflt,93.184.216.35:null|null", routed.hops());
 			// Real Apache execution: each hop was pinned to its own (public) address.
-			assertEquals("[/93.184.216.34:443, /93.184.216.35:443]", server.connects.toString());
+			assertEquals("[/93.184.216.34:443, /93.184.216.35:443]", routed.connects.toString());
 		}
 	}
 
 	@Test void k25_guardedRedirect_noContext_sameOrigin_interceptorAndDefaultHeadersKept() throws Exception {
-		try (var server = new RoutedServer("https://93.184.216.34/end")) {
+		try (var routed = new RoutedServer("https://93.184.216.34/end")) {
 			var b = HttpClientBuilder.create().setDefaultHeaders(List.of(new BasicHeader("X-API-Key", "dflt")))
 				.addInterceptorLast((HttpRequestInterceptor)(r, x) -> r.setHeader("Authorization", "Bearer itcp"));
-			try (var c = server.client(RestClient.create().httpClientBuilder(b))) {
-				assertEquals(200, server.guarded(c, null));
+			try (var c = routed.client(RestClient.create().httpClientBuilder(b))) {
+				assertEquals(200, routed.guarded(c, null));
 			}
-			assertEquals("93.184.216.34:Bearer itcp|dflt,93.184.216.34:Bearer itcp|dflt", server.hops());
+			assertEquals("93.184.216.34:Bearer itcp|dflt,93.184.216.34:Bearer itcp|dflt", routed.hops());
 		}
 	}
 
 	@Test void k26_guardedRedirect_callerContext_crossOrigin_targetAuthStateReset() throws Exception {
-		try (var server = new RoutedServer("https://93.184.216.35/end")) {
-			server.challenge = true;
-			try (var c = server.client(RestClient.create().basicAuth("93.184.216.34", 443, "user", "pw"))) {
-				assertEquals(200, server.guarded(c, HttpClientContext.create()));
+		try (var routed = new RoutedServer("https://93.184.216.35/end")) {
+			routed.challenge = true;
+			try (var c = routed.client(RestClient.create().basicAuth("93.184.216.34", 443, "user", "pw"))) {
+				assertEquals(200, routed.guarded(c, HttpClientContext.create()));
 			}
 			// Challenged, answered for the first host only; the answer is not carried to the second.
-			assertEquals("93.184.216.34:null|null,93.184.216.34:Basic dXNlcjpwdw==|null,93.184.216.35:null|null", server.hops());
+			assertEquals("93.184.216.34:null|null,93.184.216.34:Basic dXNlcjpwdw==|null,93.184.216.35:null|null", routed.hops());
 		}
 	}
 
 	@Test void k27_guardedRedirect_callerContext_sameOrigin_targetAuthStateKept() throws Exception {
-		try (var server = new RoutedServer("https://93.184.216.34/end")) {
-			server.challenge = true;
-			try (var c = server.client(RestClient.create().basicAuth("93.184.216.34", 443, "user", "pw"))) {
-				assertEquals(200, server.guarded(c, HttpClientContext.create()));
+		try (var routed = new RoutedServer("https://93.184.216.34/end")) {
+			routed.challenge = true;
+			try (var c = routed.client(RestClient.create().basicAuth("93.184.216.34", 443, "user", "pw"))) {
+				assertEquals(200, routed.guarded(c, HttpClientContext.create()));
 			}
-			assertEquals("93.184.216.34:null|null,93.184.216.34:Basic dXNlcjpwdw==|null,93.184.216.34:Basic dXNlcjpwdw==|null", server.hops());
+			assertEquals("93.184.216.34:null|null,93.184.216.34:Basic dXNlcjpwdw==|null,93.184.216.34:Basic dXNlcjpwdw==|null", routed.hops());
 		}
 	}
 
 	@Test void k28_guardedRedirect_reusedCallerContext_originIsTheCallsFirstHop() throws Exception {
-		try (var server = new RoutedServer("https://93.184.216.35/end")) {
+		try (var routed = new RoutedServer("https://93.184.216.35/end")) {
 			var b = HttpClientBuilder.create().addInterceptorLast((HttpRequestInterceptor)(r, x) -> r.setHeader("Authorization", "Bearer itcp"));
-			try (var c = server.client(RestClient.create().httpClientBuilder(b))) {
+			try (var c = routed.client(RestClient.create().httpClientBuilder(b))) {
 				var context = HttpClientContext.create();
 				// An earlier ordinary call with the same context, to the host the guarded call is later redirected to.
 				assertEquals(200, status(c, context, "https://93.184.216.35/end"));
-				assertEquals(200, server.guarded(c, context));
+				assertEquals(200, routed.guarded(c, context));
 			}
-			assertEquals("93.184.216.35:Bearer itcp|null,93.184.216.34:Bearer itcp|null,93.184.216.35:null|null", server.hops());
+			assertEquals("93.184.216.35:Bearer itcp|null,93.184.216.34:Bearer itcp|null,93.184.216.35:null|null", routed.hops());
 		}
 	}
 
@@ -1233,11 +1290,11 @@ class RestClient_ConnectionManager_Test {
 	// guarded @Remote call (whose /start redirects to another origin) is refused before anything is sent, and an ordinary
 	// call still goes through.
 	private static void assertLateChangeRefused(java.util.function.Consumer<HttpClientBuilder> change, String expected) throws Exception {
-		try (var server = new RoutedServer("https://93.184.216.35/end")) {
-			try (var c = server.client(new LateChangeHttpClientBuilder(change).rootUrl("https://93.184.216.34"))) {
+		try (var routed = new RoutedServer("https://93.184.216.35/end")) {
+			try (var c = routed.client(new LateChangeHttpClientBuilder(change).rootUrl("https://93.184.216.34"))) {
 				var ex = assertThrows(Exception.class, () -> c.getRemote(StartRemote.class).start());
 				assertContains(expected, messages(ex));
-				assertEquals("", server.hops());
+				assertEquals("", routed.hops());
 				assertEquals(200, status(c, null, "https://93.184.216.35/end"));
 			}
 		}
@@ -1250,6 +1307,9 @@ class RestClient_ConnectionManager_Test {
 			this.change = change;
 		}
 		@Override
+		@SuppressWarnings({
+			"resource" // The discarded client shares the builder's connection manager with the one returned, so it must stay open.
+		})
 		protected CloseableHttpClient createHttpClient() {
 			super.createHttpClient();
 			change.accept(httpClientBuilder());
@@ -1287,6 +1347,9 @@ class RestClient_ConnectionManager_Test {
 			httpServer.start();
 		}
 
+		@SuppressWarnings({
+			"resource" // The client is returned to the caller, which owns it.
+		})
 		RestClient client(RestClient.Builder<?> b) {
 			var port2 = httpServer.getAddress().getPort();
 			return b.sslSocketFactory(new LayeredConnectionSocketFactory() {
@@ -1309,13 +1372,17 @@ class RestClient_ConnectionManager_Test {
 		}
 
 		// Sends a guarded GET for https://93.184.216.34/start with the given context (null for none).
+		@SuppressWarnings({
+			"resource" // context() returns the request itself, which the try-with-resources closes.
+		})
 		int guarded(RestClient c, HttpContext context) throws Exception {
-			var rc = c.get("https://93.184.216.34/start");
-			if (context != null)
-				rc.context(context);
-			rc.ssrfGuard();
-			try (var r = rc.run()) {
-				return r.getStatusCode();
+			try (var rc = c.get("https://93.184.216.34/start")) {
+				if (context != null)
+					rc.context(context);
+				rc.ssrfGuard();
+				try (var r = rc.run()) {
+					return r.getStatusCode();
+				}
 			}
 		}
 
@@ -1332,6 +1399,9 @@ class RestClient_ConnectionManager_Test {
 	// Calls super.createHttpClient(), then sets an HttpProcessor on the builder and builds again.
 	static final class RebuildingHttpClientBuilder extends RestClient.Builder<RebuildingHttpClientBuilder> {
 		@Override
+		@SuppressWarnings({
+			"resource" // The discarded client shares the builder's connection manager with the one returned, so it must stay open.
+		})
 		protected CloseableHttpClient createHttpClient() {
 			super.createHttpClient();
 			httpClientBuilder().setHttpProcessor(HttpProcessorBuilder.create().build());
@@ -1342,12 +1412,15 @@ class RestClient_ConnectionManager_Test {
 	// Sends a guarded GET for http://93.184.216.34/start with credential headers (one in lower case: header names are
 	// case-insensitive) through RedirectingCallHandler, which
 	// answers /start with a 302 to the given location, /back with a 302 to /end on the first host, and /end with 200.
+	@SuppressWarnings({
+		"resource" // header() returns the request itself, which the try-with-resources closes.
+	})
 	private static List<RedirectingCallHandler.Hop> guardedRedirect(String location) throws Exception {
 		RedirectingCallHandler.HOPS.clear();
 		RedirectingCallHandler.location = location;
-		try (var c = RestClient.create().callHandler(RedirectingCallHandler.class).build()) {
-			var rc = c.get("http://93.184.216.34/start").header("Authorization", "Bearer secret").header("Cookie", "session=abc").header("x-api-key", "key")
-				.header("Proxy-Authorization", "Basic proxy");
+		try (var c = RestClient.create().callHandler(RedirectingCallHandler.class).build();
+				var rc = c.get("http://93.184.216.34/start").header("Authorization", "Bearer secret").header("Cookie", "session=abc").header("x-api-key", "key")
+					.header("Proxy-Authorization", "Basic proxy")) {
 			rc.ssrfGuard();
 			try (var r = rc.run()) {
 				assertEquals(200, r.getStatusCode());
@@ -1388,6 +1461,9 @@ class RestClient_ConnectionManager_Test {
 	// Overrides build(), returning the client super.build() built.
 	static final class SuperBuildHttpClientBuilder extends HttpClientBuilder {
 		@Override
+		@SuppressWarnings({
+			"resource" // The client is returned to the caller, which owns it.
+		})
 		public CloseableHttpClient build() {
 			return super.build();
 		}
@@ -1396,6 +1472,9 @@ class RestClient_ConnectionManager_Test {
 	// Swaps the connection manager and request executor at the exec-chain layer; build() itself is not overridden.
 	static final class MainExecSwapHttpClientBuilder extends HttpClientBuilder {
 		@Override
+		@SuppressWarnings({
+			"resource" // The connection manager is handed to the exec chain, which owns it.
+		})
 		protected ClientExecChain createMainExec(HttpRequestExecutor requestExec, HttpClientConnectionManager connManager,
 				ConnectionReuseStrategy reuseStrategy, ConnectionKeepAliveStrategy keepAliveStrategy, HttpProcessor proxyHttpProcessor,
 				AuthenticationStrategy targetAuthStrategy, AuthenticationStrategy proxyAuthStrategy, UserTokenHandler userTokenHandler) {
@@ -1426,6 +1505,9 @@ class RestClient_ConnectionManager_Test {
 	// Calls super.createHttpClient(), then returns a client of its own.
 	static final class OtherHttpClientBuilder extends RestClient.Builder<OtherHttpClientBuilder> {
 		@Override
+		@SuppressWarnings({
+			"resource" // The client is returned to the caller, which owns it.
+		})
 		protected CloseableHttpClient createHttpClient() {
 			try {
 				super.createHttpClient().close();
@@ -1439,6 +1521,9 @@ class RestClient_ConnectionManager_Test {
 	// Calls super.createHttpClient(), then returns a wrapper around a client of its own.
 	static final class WrappingHttpClientBuilder extends RestClient.Builder<WrappingHttpClientBuilder> {
 		@Override
+		@SuppressWarnings({
+			"resource" // The client is returned to the caller, which owns it.
+		})
 		protected CloseableHttpClient createHttpClient() {
 			try {
 				super.createHttpClient().close();
@@ -1452,6 +1537,9 @@ class RestClient_ConnectionManager_Test {
 	// Returns the client super.createHttpClient() built.
 	static final class SuperHttpClientBuilder extends RestClient.Builder<SuperHttpClientBuilder> {
 		@Override
+		@SuppressWarnings({
+			"resource" // The client is returned to the caller, which owns it.
+		})
 		protected CloseableHttpClient createHttpClient() {
 			return super.createHttpClient();
 		}
@@ -1460,6 +1548,9 @@ class RestClient_ConnectionManager_Test {
 	// Builds the client it was configured for, then returns another one.
 	static final class OtherClientHttpClientBuilder extends HttpClientBuilder {
 		@Override
+		@SuppressWarnings({
+			"resource" // The client is returned to the caller, which owns it.
+		})
 		public CloseableHttpClient build() {
 			try {
 				super.build().close();
@@ -1473,6 +1564,9 @@ class RestClient_ConnectionManager_Test {
 	// Replaces the connection manager it was given before building.
 	static final class SwappingHttpClientBuilder extends HttpClientBuilder {
 		@Override
+		@SuppressWarnings({
+			"resource" // The connection manager is handed to the built client, which owns it.
+		})
 		public CloseableHttpClient build() {
 			setConnectionManager(new PoolingHttpClientConnectionManager());
 			return super.build();
@@ -1480,7 +1574,8 @@ class RestClient_ConnectionManager_Test {
 	}
 
 	@SuppressWarnings({
-		"deprecation" // getParams() and getConnectionManager() are abstract in CloseableHttpClient.
+		"deprecation", // getParams() and getConnectionManager() are abstract in CloseableHttpClient.
+		"resource" // The wrapped client is owned by this wrapper and closed in close(); doExecute() returns the response to the caller.
 	})
 	static final class WrappingHttpClient extends CloseableHttpClient {
 		private final CloseableHttpClient inner;
@@ -1560,8 +1655,14 @@ class RestClient_ConnectionManager_Test {
 		return List.of(ordinaryPool(c), pinnedPool(c));
 	}
 
+	private static String fetch(RestClient c, String uri) throws Exception {
+		try (var req = c.get(uri); var res = req.run()) {
+			return res.getContent().asString();
+		}
+	}
+
 	private static void assertPlainOk(RestClient c) throws Exception {
-		assertEquals("hi", c.get(url + "/hello").run().getContent().asString());
+		assertEquals("hi", fetch(c, url + "/hello"));
 	}
 
 	private static void assertGuardedRejected(RestClient c) {
@@ -1569,6 +1670,9 @@ class RestClient_ConnectionManager_Test {
 		assertContains("No allowed address for host '2130706433'", messages(ex));
 	}
 
+	@SuppressWarnings({
+		"resource" // The leased connection goes back to the pool through releaseConnection(), not close().
+	})
 	private static void assertOpen(HttpClientConnectionManager pool) throws Exception {
 		var conn = pool.requestConnection(new HttpRoute(new HttpHost("127.0.0.1", port)), null).get(1, TimeUnit.SECONDS);
 		pool.releaseConnection(conn, null, 0, TimeUnit.SECONDS);
@@ -1576,7 +1680,14 @@ class RestClient_ConnectionManager_Test {
 
 	private static void assertShutDown(HttpClientConnectionManager pool) {
 		var route = new HttpRoute(new HttpHost("127.0.0.1", port));
-		assertThrows(IllegalStateException.class, () -> pool.requestConnection(route, null).get(1, TimeUnit.SECONDS));
+		assertThrows(IllegalStateException.class, () -> lease(pool, route));
+	}
+
+	@SuppressWarnings({
+		"resource" // The test only needs the lease to succeed or throw; the connection is never used.
+	})
+	private static void lease(HttpClientConnectionManager pool, HttpRoute route) throws Exception {
+		pool.requestConnection(route, null).get(1, TimeUnit.SECONDS);
 	}
 
 	private static HttpClientConnectionManager ordinaryPool(RestClient c) throws Exception {

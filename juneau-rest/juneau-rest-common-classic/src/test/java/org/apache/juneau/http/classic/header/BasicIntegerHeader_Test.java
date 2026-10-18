@@ -77,7 +77,8 @@ class BasicIntegerHeader_Test extends TestBase {
 
 	@Test void b04_assertInteger() {
 		new BasicIntegerHeader(NAME, "5").assertInteger().is(5);
-		assertThrows(AssertionError.class, () -> new BasicIntegerHeader(NAME, "5").assertInteger().is(6));
+		var assertion = new BasicIntegerHeader(NAME, "5").assertInteger();
+		assertThrows(AssertionError.class, () -> assertion.is(6));
 	}
 
 	@Test void b05_wireString_invalid_throws() {

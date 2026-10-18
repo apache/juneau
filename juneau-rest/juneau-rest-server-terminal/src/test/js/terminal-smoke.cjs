@@ -49,7 +49,7 @@ const CASES = [
 		const r = await page.evaluate(function () {
 			const b = document.querySelector('.juneau-term-badge');
 			const red = Array.from(document.querySelectorAll('.xterm-rows span')).find(function (s) { return s.textContent === 'red tail'; });
-			const rows = Array.from(document.querySelectorAll('.xterm-rows > div')).map(function (d) { return d.textContent.replace(/\u00a0/g, ' ').replace(/\s+$/, ''); });
+			const rows = Array.from(document.querySelectorAll('.xterm-rows > div')).map(function (d) { return d.textContent.replaceAll('\u00a0', ' ').trimEnd(); });
 			return { badge: b.textContent, kind: b.className, red: red ? red.className : null, progress: rows.indexOf('progress 100%') >= 0 };
 		});
 		expect(r.badge === 'exit 3' && /juneau-term-fail/.test(r.kind), 'badge: ' + r.badge + ' ' + r.kind);
@@ -83,7 +83,7 @@ const CASES = [
 			};
 		});
 		expect(r.href === new URL('/juneau-terminal/smoke/raw', BASE).href && r.status === 200, 'raw link: ' + JSON.stringify(r));
-		expect(/^attachment;/.test(r.disposition || ''), 'an attachment: ' + r.disposition);
+		expect((r.disposition || '').startsWith('attachment;'), 'an attachment: ' + r.disposition);
 		expect(String(r.length) === r.end && r.done === 'true', 'the whole finished log: ' + JSON.stringify(r));
 	}]
 ];
@@ -96,13 +96,13 @@ const CASES = [
 			const ctx = await browser.newContext({ viewport: { width: 1200, height: 900 } });
 			const page = await ctx.newPage();
 			const pageErrors = [], consoleErrors = [];
-			page.on('pageerror', function (e) { pageErrors.push(String(e && e.stack || e)); });
+			page.on('pageerror', function (e) { pageErrors.push(String(e?.stack || e)); });
 			page.on('console', function (m) { if (m.type() === 'error') consoleErrors.push(m.text()); });
 			try {
 				await fn(page);
 				report.cases[name] = true;
 			} catch (e) {
-				report.cases[name] = String(e && e.stack || e);
+				report.cases[name] = String(e?.stack || e);
 			}
 			report.pageErrors[name] = pageErrors;
 			report.consoleErrors[name] = consoleErrors;
@@ -113,5 +113,5 @@ const CASES = [
 	}
 	process.stdout.write(JSON.stringify(report));
 })().catch(function (e) {
-	process.stdout.write(JSON.stringify({ harnessError: String(e && e.stack || e) }));
+	process.stdout.write(JSON.stringify({ harnessError: String(e?.stack || e) }));
 });

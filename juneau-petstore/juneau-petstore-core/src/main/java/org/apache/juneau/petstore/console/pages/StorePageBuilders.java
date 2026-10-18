@@ -34,6 +34,9 @@ import org.apache.juneau.rest.server.widgets.*;
  * 	<jk>return</jk> <jsm>twin</jsm>(<jv>req</jv>, StorePageBuilders.<jsm>store</jsm>(QuickStats.<jsm>of</jsm>(store())));
  * </p>
  */
+@SuppressWarnings({
+	"java:S1192" // Page-definition ids and labels repeat as inline literals by design.
+})
 public final class StorePageBuilders {
 
 	private StorePageBuilders() {}

@@ -334,7 +334,8 @@ class ConsoleFreemarkerMixin_Test extends TestBase {
 	}
 
 	@Test void g02_requirePacks_unknown_failsAtBuild() {
-		var e = assertThrows(IllegalArgumentException.class, () -> ConsoleFreemarkerMixin.create().requirePacks("nope").build());
+		var target = ConsoleFreemarkerMixin.create().requirePacks("nope");
+		var e = assertThrows(IllegalArgumentException.class, target::build);
 		assertEquals("Unknown toolkit pack 'nope' (requirePacks).", e.getMessage());
 	}
 
@@ -343,15 +344,17 @@ class ConsoleFreemarkerMixin_Test extends TestBase {
 	}
 
 	@Test void g04_requirePacks_absentWebJar_isE70() {
-		var e = assertThrows(IllegalStateException.class, () -> ConsoleFreemarkerMixin.create().requirePacks("charts")
-			.webJarProbe(a -> { throw new IllegalStateException("x"); }).build());
+		var target2 = ConsoleFreemarkerMixin.create().requirePacks("charts")
+			.webJarProbe(a -> { throw new IllegalStateException("x"); });
+		var e = assertThrows(IllegalStateException.class, target2::build);
 		assertContains("E-70: chart cards need the ECharts WebJar", e.getMessage());
 	}
 
 	@Test void g05_appPackDependsOnEcharts_isOptIn() {
-		var e = assertThrows(IllegalStateException.class, () -> ConsoleFreemarkerMixin.create()
+		var target3 = ConsoleFreemarkerMixin.create()
 			.registerToolkitPack(ToolkitPack.create("app.charts").kind(ToolkitPack.Kind.RUNTIME).js("/a.js").dependsOn("charts").build())
-			.webJarProbe(a -> { throw new IllegalStateException("x"); }).build());
+			.webJarProbe(a -> { throw new IllegalStateException("x"); });
+		var e = assertThrows(IllegalStateException.class, target3::build);
 		assertContains("E-70: ", e.getMessage());
 	}
 

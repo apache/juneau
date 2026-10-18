@@ -171,7 +171,7 @@ public final class JobKeyLedger {
 	 * @throws IllegalArgumentException If an argument is <jk>null</jk> or blank.
 	 */
 	public IdempotencyKey issue(String action, String targetId) {
-		return record(action, targetId, null);
+		return recordKey(action, targetId, null);
 	}
 
 	/**
@@ -186,10 +186,10 @@ public final class JobKeyLedger {
 	public IdempotencyKey issue(String action, String targetId, String principal) {
 		if (principal == null || principal.isBlank())
 			throw iaex("Argument 'principal' must not be blank.");
-		return record(action, targetId, principal);
+		return recordKey(action, targetId, principal);
 	}
 
-	private synchronized IdempotencyKey record(String action, String targetId, String principal) {
+	private synchronized IdempotencyKey recordKey(String action, String targetId, String principal) {
 		var key = IdempotencyKey.mint(action, targetId);
 		var now = clock.instant();
 		sweep(now);

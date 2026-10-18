@@ -23,6 +23,8 @@ import java.util.*;
 
 import org.apache.juneau.*;
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.params.*;
+import org.junit.jupiter.params.provider.*;
 
 /**
  * Tests for {@link WwwAuthenticateChallenge} (RFC 6750 / RFC 9728 challenge parsing).
@@ -80,8 +82,14 @@ class WwwAuthenticateChallenge_Test extends TestBase {
 		assertEquals("Basic", c.scheme());
 	}
 
-	@Test void b05_missingResourceMetadataIsEmpty() {
-		var c = WwwAuthenticateChallenge.parse("Bearer realm=\"mcp\"").orElseThrow();
+	@ParameterizedTest
+	@ValueSource(strings = {
+		"Bearer realm=\"mcp\"",                       // Missing.
+		"Bearer resource_metadata=\"not a uri\"",     // Unparseable.
+		"Bearer resource_metadata=\"\""               // Blank.
+	})
+	void b05_missingOrUnusableResourceMetadataIsEmpty(String header) {
+		var c = WwwAuthenticateChallenge.parse(header).orElseThrow();
 		assertTrue(c.resourceMetadata().isEmpty());
 	}
 
@@ -135,16 +143,6 @@ class WwwAuthenticateChallenge_Test extends TestBase {
 	@Test void c09_unterminatedQuotedValueTakesRemainder() {
 		var c = WwwAuthenticateChallenge.parse("Bearer a=\"abc").orElseThrow();
 		assertEquals("abc", c.parameter("a").orElseThrow());
-	}
-
-	@Test void c10_unparseableResourceMetadataIsEmpty() {
-		var c = WwwAuthenticateChallenge.parse("Bearer resource_metadata=\"not a uri\"").orElseThrow();
-		assertTrue(c.resourceMetadata().isEmpty());
-	}
-
-	@Test void c11_blankResourceMetadataIsEmpty() {
-		var c = WwwAuthenticateChallenge.parse("Bearer resource_metadata=\"\"").orElseThrow();
-		assertTrue(c.resourceMetadata().isEmpty());
 	}
 
 	@Test void c12_blankScopeIsEmptySet() {

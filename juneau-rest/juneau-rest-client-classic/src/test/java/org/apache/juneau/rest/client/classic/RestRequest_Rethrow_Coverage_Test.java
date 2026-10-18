@@ -69,6 +69,10 @@ class RestRequest_Rethrow_Coverage_Test {
 	/** Has an {@code (HttpResponse)} constructor that fails for a reason other than a status mismatch, plus a {@code (String)} fallback. */
 	public static class ExcWithFailingResponseCtor extends RuntimeException {
 		private static final long serialVersionUID = 1L;
+		@SuppressWarnings({
+			"java:S1172", // The (HttpResponse) signature is what the rethrow resolution looks up reflectively.
+			"unused" // Same: the parameter exists only to select this constructor.
+		})
 		public ExcWithFailingResponseCtor(org.apache.http.HttpResponse r) { throw new IllegalStateException("boom"); }
 		public ExcWithFailingResponseCtor(String msg) { super(msg); }
 	}

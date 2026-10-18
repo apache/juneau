@@ -62,7 +62,7 @@ function fnText(file, name) {
 	return src[file].slice(from, end + 3);
 }
 function constText(file, name) {
-	const m = new RegExp('\\n\\tconst ' + name + ' = [^\\n]*;').exec(src[file]);
+	const m = new RegExp(String.raw`\n\tconst ` + name + String.raw` = [^\n]*;`).exec(src[file]);
 	if (!m) throw new Error(file + ': no const ' + name);
 	return m[0].slice(1);
 }
@@ -70,8 +70,8 @@ function constText(file, name) {
 // One evaluated guard: the named production functions, plus any production consts they close over.
 function load(file, fns, consts, target, extraGlobals) {
 	const text = (consts || []).map(c => constText(file, c)).concat(fns.map(f => fnText(file, f))).join('\n');
-	const ctx = vm.createContext(Object.assign({ URL: URL }, extraGlobals || {}));
-	vm.runInContext(text + '\nthis.__guard = ' + target + ';', ctx);
+	const ctx = vm.createContext({ URL: URL, ...extraGlobals || {} });
+	vm.runInContext(text + '\nthis.__guard = ' + target + ';', ctx); // NOSONAR javascript:S1523 - loads the shipped script into a vm sandbox for the test
 	return { fn: ctx.__guard, text: fnText(file, target) };
 }
 
@@ -110,7 +110,7 @@ const FETCH_CASES = [
 	['same host, other port', 'https://app.example:8443/x', false],
 	['userinfo trick', 'https://app.example@evil.test/x', false],
 	['protocol-relative', '//evil.test/x', false],
-	['backslash host', 'https:\\\\evil.test/x', false],
+	['backslash host', String.raw`https:\\evil.test/x`, false],
 	['leading space', ' ' + FETCH_ORIGIN + '/x', false],
 	['trailing newline', FETCH_ORIGIN + '/x\n', false],
 	['javascript scheme', 'javascript:alert(1)', false],
@@ -120,10 +120,10 @@ const fetchUrl = FETCH_CASES.map(c => ({ name: c[0], input: c[1], expected: c[2]
 
 const joblog = load('joblog', [HELPER, 'isSameOrigin', 'isSafeEndpoint'], [], 'isSafeEndpoint', { window: joblogWindow });
 
-function crossHostOf(input) {
+function crossHostOf(input) { // NOSONAR javascript:S3800 - returns the string 'parseError' as a distinct label alongside the boolean
 	try {
-		return new URL(input, BASE).origin !== new URL(BASE).origin ? true : false;
-	} catch (e) {
+		return new URL(input, BASE).origin !== new URL(BASE).origin;
+	} catch (e) { // NOSONAR javascript:S2486 - the failure is an expected outcome here and the fallback handles it
 		return 'parseError';
 	}
 }
@@ -140,7 +140,7 @@ for (const row of corpus.cases) {
 		const spec = GUARDS[name];
 		const overrides = row.guards || {};
 		const key = OVERRIDE_KEY[spec.kind] || name;
-		const expected = Object.prototype.hasOwnProperty.call(overrides, key) ? overrides[key] : row.accepted;
+		const expected = Object.hasOwn(overrides, key) ? overrides[key] : row.accepted;
 		if (row.crossHost === true && expected === true) crossHostOverrides.push({ guard: name, row: row.name });
 		let got;
 		try { got = spec.g.fn(row.input); } catch (e) { got = 'threw: ' + e.message; }
@@ -148,7 +148,7 @@ for (const row of corpus.cases) {
 	}
 	if (row.crossHost === true && joblog.fn(row.input) !== false) joblogAccepted.push(row.name);
 	// A trailing space or control character is refused by Java and by the shared helper, so joblog must refuse it too.
-	if (row.input.length > 0 && row.input.charCodeAt(row.input.length - 1) <= 32 && joblog.fn(row.input) !== false) joblogTrailingAccepted.push(row.name);
+	if (row.input.length > 0 && row.input.codePointAt(row.input.length - 1) <= 32 && joblog.fn(row.input) !== false) joblogTrailingAccepted.push(row.name);
 }
 
 // The shared prefix rule must be one comment-identical helper in each file that applies it.
@@ -170,7 +170,7 @@ const out = {
 	helperIdentical: helperIdentical,
 	helperText: helperTexts[0],
 	notUsingHelper: notUsingHelper,
-	nodeFoldsBackslash: crossHostOf('\\\\evil.test/x') === true && crossHostOf('/\\evil.test') === true,
+	nodeFoldsBackslash: crossHostOf(String.raw`\\evil.test/x`) === true && crossHostOf(String.raw`/\evil.test`) === true,
 	nodeStripsLeadingSpace: crossHostOf(' //evil.test') === true
 };
 process.stdout.write(JSON.stringify(out));

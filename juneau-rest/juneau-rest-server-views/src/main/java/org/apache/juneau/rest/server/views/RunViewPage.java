@@ -138,9 +138,7 @@ public final class RunViewPage {
 	public Map<String,Object> toContractMap() {
 		var m = new LinkedHashMap<String,Object>();
 		m.put("contractVersion", CONTRACT_VERSION);
-		var list = new ArrayList<Map<String,Object>>(events.size());
-		for (var e : events)
-			list.add(e.toContractMap());
+		var list = events.stream().map(RunEvent::toContractMap).toList();
 		m.put("events", list);
 		m.put("next", next);
 		m.put("more", more);

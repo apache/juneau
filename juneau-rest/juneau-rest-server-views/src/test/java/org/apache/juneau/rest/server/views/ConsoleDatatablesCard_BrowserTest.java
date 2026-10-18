@@ -94,13 +94,13 @@ class ConsoleDatatablesCard_BrowserTest extends TestBase {
 		assertEquals("alpha", queries(r).get("t1"), () -> "inline catalog lifted and painted: " + r);
 		assertEquals("Name", queries(r).get("t1Head"), () -> "label lifted to title: " + r);
 		assertEquals("beta", queries(r).get("t2"), () -> "src envelope fetched and painted: " + r);
-		assertEquals(Set.of("t1", "t2"), Set.copyOf(eventIds(r, "mounted")), () -> r.toString());
+		assertEquals(Set.of("t1", "t2"), Set.copyOf(eventIds(r, "mounted")), r::toString);
 	}
 
 	@Test void a02_viewsBeforeShell_queuedRegistrationPaintsTheSame() {
 		var r = report.get("views-before");
 		assertNoShellErrors(r);
-		assertEquals("alpha", queries(r).get("t1"), () -> r.toString());
+		assertEquals("alpha", queries(r).get("t1"), r::toString);
 	}
 
 	@Test void a03_viewsNeverLoads_failsLoudlyWithE_JS_10() {

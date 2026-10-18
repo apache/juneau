@@ -129,7 +129,7 @@ function stateOf(el) {
 		const config = { submit: { endpoint: '/x/{id}', action: 'go' }, height: 120 };
 		R.initRegion(H.mkRegion(env, { id: 'withConfig', type: 'row-detail', populate: 'capture-config', declared: { contractVersion: '1', config: config } }));
 		R.initRegion(H.mkRegion(env, { id: 'arrayConfig', type: 'row-detail', populate: 'capture-config', declared: { contractVersion: '1', config: [1] } }));
-		out.t2b_configPassedThrough = JSON.stringify(seen.withConfig && seen.withConfig.config) === JSON.stringify(config);
+		out.t2b_configPassedThrough = JSON.stringify(seen.withConfig?.config) === JSON.stringify(config);
 		out.t2b_arrayConfigDropped = !!seen.arrayConfig && !Object.hasOwn(seen.arrayConfig, 'config');
 	}
 

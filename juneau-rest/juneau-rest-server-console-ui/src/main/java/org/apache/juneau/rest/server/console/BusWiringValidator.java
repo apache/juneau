@@ -18,6 +18,7 @@ package org.apache.juneau.rest.server.console;
 
 import java.util.*;
 import java.util.regex.*;
+import java.util.stream.*;
 
 import org.apache.juneau.marshall.collections.*;
 
@@ -46,6 +47,10 @@ import org.apache.juneau.marshall.collections.*;
  *
  * @since 10.0.0
  */
+@SuppressWarnings({
+	"java:S1192", // Repeated literals are contract wire keys; named constants would obscure the contract shape.
+	"java:S3776" // Validation and rendering chains many independent guards; splitting them adds no clarity.
+})
 public final class BusWiringValidator {
 
 	/**
@@ -98,6 +103,9 @@ public final class BusWiringValidator {
 	static final String E71 = "topic '%s' needs exactly one source publisher; found %s";
 
 	/** Names for $fn, decorators, sections, parsers, builders and transforms (rule R-E5); juneau-charts.js has the same literal. */
+	@SuppressWarnings({
+		"java:S5998" // Pattern text is pinned to the identical literal in the JS files; possessive quantifiers are not valid JS
+	})
 	public static final Pattern EXTENSION_NAME = Pattern.compile("^[a-z][a-zA-Z0-9]*(\\.[a-z][a-zA-Z0-9-]*)*$");
 	/** ECharts event names a chart card's {@code on} may use. */
 	public static final Pattern EVENT_NAME = Pattern.compile("^[a-z][a-z0-9_]{0,31}$");
@@ -389,8 +397,7 @@ public final class BusWiringValidator {
 		// R-E2 (E-72), R-E5 (E-74) for one chart card.
 		void checkChart(Map<?,?> card) {
 			var id = str(card.get("id"));
-			var pubs = new HashSet<String>();
-			for (var p : maps(card.get("publishes"))) if (str(p.get("topic")) != null) pubs.add(str(p.get("topic")));
+			var pubs = maps(card.get("publishes")).stream().map(p -> str(p.get("topic"))).filter(Objects::nonNull).collect(Collectors.toSet());
 			if (card.get("on") instanceof Map<?,?> on)
 				for (var e : on.entrySet()) {
 					var ev = String.valueOf(e.getKey());
@@ -462,10 +469,8 @@ public final class BusWiringValidator {
 			// Only a chart card has a group; a data source or another card type is not a group member.
 			if (target == null || ! "chart".equals(str(target.get("type"))) || str(target.get("group")) != null)
 				return;
-			var groups = new TreeSet<String>();
-			for (var c : cards.values())
-				if ("chart".equals(str(c.get("type"))) && str(c.get("group")) != null)
-					groups.add(str(c.get("group")));
+			var groups = cards.values().stream().filter(c -> "chart".equals(str(c.get("type")))).map(c -> str(c.get("group")))
+				.filter(Objects::nonNull).collect(Collectors.toCollection(TreeSet::new));
 			add("E-73", E73, from, str(p.get("op")), groups.isEmpty() ? "<none>" : "<none> (page groups: " + String.join(", ", groups) + ")");
 		}
 
@@ -503,8 +508,7 @@ public final class BusWiringValidator {
 				if (name != null && name.startsWith("data:"))
 					declared.add(name);
 			}
-			for (var id : sourceIds)
-				declared.add("data:" + id);
+			sourceIds.stream().map(id -> "data:" + id).forEach(declared::add);
 			if (dashboard.get("status") instanceof List<?> status)
 				for (var o : status)
 					if (o instanceof String t && ! declared.contains(t))
@@ -840,6 +844,9 @@ public final class BusWiringValidator {
 		}
 
 		/** E-58: a terminal card with {@code input: true} must carry the whole input wiring (publish, subscribe, server topic, bridge). */
+		@SuppressWarnings({
+			"java:S135" // Guard clauses keep the card filtering readable
+		})
 		void checkTerminalInput() {
 			for (var c : cards.values()) {
 				if (! "terminal".equals(str(c.get("type"))))
@@ -903,6 +910,9 @@ public final class BusWiringValidator {
 		return o instanceof String s ? s : null;
 	}
 
+	@SuppressWarnings({
+		"java:S1452" // wildcard return reflects heterogeneous element types
+	})
 	static List<Map<?,?>> maps(Object o) {
 		var out = new ArrayList<Map<?,?>>();
 		if (o instanceof List<?> l)
@@ -922,10 +932,16 @@ public final class BusWiringValidator {
 	}
 
 	/** A datatables card's catalog (its {@code table}), or the card itself for every other shape. */
+	@SuppressWarnings({
+		"java:S1452" // wildcard return reflects heterogeneous element types
+	})
 	static Map<?,?> view(Map<?,?> card) {
 		return card.get("table") instanceof Map<?,?> t ? t : card;
 	}
 
+	@SuppressWarnings({
+		"java:S1452" // wildcard return reflects heterogeneous element types
+	})
 	static List<Map<?,?>> ribbon(Map<?,?> card) {
 		return maps(view(card).get("ribbon"));
 	}

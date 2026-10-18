@@ -52,12 +52,15 @@ class CardSpec_Bus_Test extends TestBase {
 
 	@Test void b01_publishesRejectsPublisher() {
 		var d = TopicDecl.of("ssc.focus").retain(true).publisher(TopicDecl.Publisher.SCRIPT);
-		var e = assertThrows(IllegalArgumentException.class, () -> CardSpec.html("x").publishes(d));
+		var target = CardSpec.html("x");
+		var e = assertThrows(IllegalArgumentException.class, () -> target.publishes(d));
 		assertEquals("topic 'ssc.focus': publisher is page-level only; a card's publishes may not set it", e.getMessage());
 	}
 
 	@Test void b02_bodyCannotSetWiringKeys() {
-		var e = assertThrows(IllegalArgumentException.class, () -> CardSpec.html("x").body("subscribes", java.util.List.of()));
+		var target2 = CardSpec.html("x");
+		var arg3 = java.util.List.of();
+		var e = assertThrows(IllegalArgumentException.class, () -> target2.body("subscribes", arg3));
 		assertEquals("card 'x': 'subscribes' is a base key; use subscribes(...)", e.getMessage());
 	}
 
@@ -72,7 +75,9 @@ class CardSpec_Bus_Test extends TestBase {
 	}
 
 	@Test void b03_wiringRejectsNonMapEntries() {
-		var e = assertThrows(IllegalArgumentException.class, () -> CardSpec.html("x").wiring(java.util.List.of("oops"), null));
+		var target3 = CardSpec.html("x");
+		var arg = java.util.List.of("oops");
+		var e = assertThrows(IllegalArgumentException.class, () -> target3.wiring(arg, null));
 		assertTrue(e.getMessage().contains("must be objects"), e.getMessage());
 	}
 }

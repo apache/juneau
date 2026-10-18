@@ -56,7 +56,8 @@ class Decorators_Test extends TestBase {
 	@Test void a04_markers_rejects() {
 		assertThrows(IllegalArgumentException.class, () -> Markers.from("https://evil/x"));
 		assertThrows(IllegalArgumentException.class, () -> Markers.source("filter:x"));
-		assertThrows(IllegalArgumentException.class, () -> Markers.now("x").style("wavy"));
+		var target = Markers.now("x");
+		assertThrows(IllegalArgumentException.class, () -> target.style("wavy"));
 	}
 
 	@Test void a05_bands() {
@@ -64,13 +65,15 @@ class Decorators_Test extends TestBase {
 			Bands.from("/rest/outages").start("from").end("to").label("Outage").toJson());
 		assertEquals(j("{use:'bands',auto:'gaps',label:'No data'}"), Bands.gaps().label("No data").toJson());
 		assertEquals(j("{use:'bands',auto:'gaps',minGap:2}"), Bands.gaps().minGap(2).toJson());
-		assertThrows(IllegalArgumentException.class, () -> Bands.gaps().minGap(0));
+		var target2 = Bands.gaps();
+		assertThrows(IllegalArgumentException.class, () -> target2.minGap(0));
 	}
 
 	@Test void a06_thresholds() {
 		assertEquals(j("{use:'thresholds',values:[{y:500,label:'SLO',tone:'danger'}]}"),
 			Thresholds.at(500).label("SLO").tone("danger").toJson());
-		assertThrows(IllegalArgumentException.class, () -> Thresholds.at(1).tone("pink"));
+		var target3 = Thresholds.at(1);
+		assertThrows(IllegalArgumentException.class, () -> target3.tone("pink"));
 	}
 
 	@Test void a07_annotations() {

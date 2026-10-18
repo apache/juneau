@@ -59,6 +59,9 @@ import org.apache.juneau.rest.server.widgets.Op;
  *
  * @since 10.0.0
  */
+@SuppressWarnings({
+	"java:S3776" // Validation and rendering chains many independent guards; splitting them adds no clarity.
+})
 public final class TableSpec {
 
 	/** Where a view's rows come from. Wire tokens are lowercase. */
@@ -521,10 +524,9 @@ public final class TableSpec {
 			throw iaex("urlState '%s' is not a built-in directive; expected day, ids or window.", name);
 	}
 
-	@SuppressWarnings("unchecked") // nested values are the window.params maps built by checkUrlStateOption
 	private static JsonMap copyUrlStateConfig(Map<String,Object> cfg) {
 		var out = new JsonMap();
-		cfg.forEach((k, v) -> out.put(k, v instanceof Map<?,?> m ? new JsonMap((Map<String,Object>)m) : v));
+		cfg.forEach((k, v) -> out.put(k, v instanceof Map<?,?> m ? new JsonMap(m) : v));
 		return out;
 	}
 

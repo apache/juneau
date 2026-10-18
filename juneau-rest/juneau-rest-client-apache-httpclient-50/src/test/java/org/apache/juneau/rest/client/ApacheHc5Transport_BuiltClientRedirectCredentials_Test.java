@@ -27,7 +27,6 @@ import java.util.concurrent.*;
 import java.util.concurrent.atomic.*;
 
 import org.apache.hc.client5.http.*;
-import org.apache.hc.client5.http.protocol.*;
 import org.apache.juneau.http.entity.*;
 import org.apache.juneau.rest.client.apachehttpclient50.*;
 import org.junit.jupiter.api.*;
@@ -40,6 +39,7 @@ import com.sun.net.httpserver.*;
  * HttpClient's own redirect handling (method rewrite, redirect cap, circular-redirect check) is unchanged.
  */
 @SuppressWarnings({
+	"java:S3415", // Expected value is already first; Sonar mistakes the upper-case constant or field for the expected value
 	"resource" // Transport/client instances are short-lived test fixtures.
 })
 // SEPARATE_THREAD: a socket read blocked on a non-responding peer ignores interrupts, so SAME_THREAD would still hang.

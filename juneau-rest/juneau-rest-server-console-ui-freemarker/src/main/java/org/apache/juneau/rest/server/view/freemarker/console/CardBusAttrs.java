@@ -24,6 +24,10 @@ import org.apache.juneau.rest.server.console.*;
 import org.apache.juneau.rest.server.console.Subscription.*;
 
 /** Lowers {@code <@card subscribes/publishes>} (attribute or JSON5 body) through the {@link Subscription} and {@link TopicDecl} builders. */
+@SuppressWarnings({
+	"java:S1192", // Repeated literals are contract wire keys; named constants would obscure the contract shape.
+	"java:S3776" // Validation and rendering chains many independent guards; splitting them adds no clarity.
+})
 final class CardBusAttrs {
 
 	private static final Set<String> SUB_KEYS = new LinkedHashSet<>(List.of("topic", "as", "map", "whenEmpty", "emptyText"));
@@ -96,11 +100,7 @@ final class CardBusAttrs {
 		if (v == null)
 			return List.of();
 		if (v instanceof String s) {
-			var l = new ArrayList<String>();
-			for (var part : s.split(","))
-				if (! part.isBlank())
-					l.add(part.trim());
-			return l;
+			return Arrays.stream(s.split(",")).filter(part -> ! part.isBlank()).map(String::trim).toList();
 		}
 		if (v instanceof Collection<?> c)
 			return List.copyOf(c);

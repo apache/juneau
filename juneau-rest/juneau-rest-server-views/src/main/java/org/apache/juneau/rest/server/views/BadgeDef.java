@@ -44,6 +44,9 @@ import org.apache.juneau.commons.http.*;
  *
  * @since 10.0.0
  */
+@SuppressWarnings({
+	"java:S3776" // Validation and rendering chains many independent guards; splitting them adds no clarity.
+})
 public final class BadgeDef {
 
 	/** The minimum poll interval, in milliseconds ({@code refreshMs.minimum}). */

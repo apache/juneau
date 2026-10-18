@@ -276,8 +276,8 @@ class BusWebSocketEndpoint_Test extends TestBase {
 		var log = java.util.logging.Logger.getLogger(BusWebSocketEndpoint.class.getName());
 		var handler = new java.util.logging.Handler() {
 			@Override public void publish(java.util.logging.LogRecord r) { records.add(r); }
-			@Override public void flush() {}
-			@Override public void close() {}
+			@Override public void flush() { /* nothing buffered */ }
+			@Override public void close() { /* nothing to release */ }
 		};
 		var old = log.getLevel();
 		log.setLevel(java.util.logging.Level.ALL);
@@ -306,7 +306,7 @@ class BusWebSocketEndpoint_Test extends TestBase {
 	@Test void e01_theMessageHandlerIsRegisteredAfterTheBusConnects() {
 		var handlerAtFirstSend = new boolean[] {false};
 		var added = new boolean[] {false};
-		doAnswer(i -> { added[0] = true; return null; }).when(ws).addMessageHandler(eq(String.class), any(MessageHandler.Whole.class));
+		doAnswer(i -> { added[0] = true; return null; }).when(ws).addMessageHandler(eq(String.class), ArgumentMatchers.<MessageHandler.Whole<String>>any());
 		doAnswer(i -> {
 			if (sent.isEmpty())
 				handlerAtFirstSend[0] = added[0];
@@ -325,8 +325,8 @@ class BusWebSocketEndpoint_Test extends TestBase {
 		var log = java.util.logging.Logger.getLogger(BusWebSocketEndpoint.class.getName());
 		var handler = new java.util.logging.Handler() {
 			@Override public void publish(java.util.logging.LogRecord r) { records.add(r); }
-			@Override public void flush() {}
-			@Override public void close() {}
+			@Override public void flush() { /* nothing buffered */ }
+			@Override public void close() { /* nothing to release */ }
 		};
 		var useParent = log.getUseParentHandlers();
 		log.setUseParentHandlers(false);  // the expected warning stays out of the test output
@@ -342,6 +342,6 @@ class BusWebSocketEndpoint_Test extends TestBase {
 		var r = closedWith();
 		assertEquals(1011, r.getCloseCode().getCode());
 		assertEquals("bus:connect-failed", r.getReasonPhrase());
-		verify(ws, never()).addMessageHandler(eq(String.class), any(MessageHandler.Whole.class));
+		verify(ws, never()).addMessageHandler(eq(String.class), ArgumentMatchers.<MessageHandler.Whole<String>>any());
 	}
 }

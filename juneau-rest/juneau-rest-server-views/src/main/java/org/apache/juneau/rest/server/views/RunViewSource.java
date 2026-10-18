@@ -41,6 +41,9 @@ public interface RunViewSource {
 	/**
 	 * Thrown for an unknown or stale token; endpoints answer <c>410 Gone</c>.
 	 */
+	@SuppressWarnings({
+		"java:S9398" // Public API: the exception is part of the RunViewSource contract and is referenced as RunViewSource.UnknownTokenException.
+	})
 	class UnknownTokenException extends RuntimeException {
 		private static final long serialVersionUID = 1L;
 

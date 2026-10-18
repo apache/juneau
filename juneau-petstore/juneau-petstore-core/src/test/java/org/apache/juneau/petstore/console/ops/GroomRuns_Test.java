@@ -96,6 +96,9 @@ class GroomRuns_Test extends TestBase {
 		}
 	}
 
+	@SuppressWarnings({
+		"resource" // The run owns its terminal sources; the enclosing GroomRuns closes them.
+	})
 	@Test void a05_sourcesAreLookedUpByRunId() throws Exception {
 		try (var g = new GroomRuns(1)) {
 			var r = await(g.start("Rex", false, null));
@@ -108,6 +111,9 @@ class GroomRuns_Test extends TestBase {
 		}
 	}
 
+	@SuppressWarnings({
+		"resource" // The run owns its terminal sources; the enclosing GroomRuns closes them.
+	})
 	@Test void a06_fileSourceTailsTheTranscript() throws Exception {
 		try (var g = new GroomRuns(1)) {
 			var r = await(g.start("Rex", false, null));

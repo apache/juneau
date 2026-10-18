@@ -149,6 +149,9 @@ class PetstoreFailLoud_Test extends TestBase {
 		assert500("malformed-json5", "Card JSON5 is invalid:");
 	}
 
+	@SuppressWarnings({
+		"java:S5778" // The reserved-type rejection may come from either cardType(...) or build(); the lambda must cover both
+	})
 	@Test void a15_adopterHandlerForAReservedType_failsAtMixinBuild() {
 		var ex = assertThrows(IllegalArgumentException.class,
 			() -> ConsoleFreemarkerMixin.create().cardType(new ImpostorDatatables()).build());

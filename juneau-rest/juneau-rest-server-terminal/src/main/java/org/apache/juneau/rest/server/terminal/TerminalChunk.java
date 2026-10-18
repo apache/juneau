@@ -40,6 +40,9 @@ import java.util.*;
  * @param gone Whether the backing store disappeared; implies {@code done}.  A gone chunk is empty, and its {@code next}
  * 	and {@code end} are the requested offset.
  */
+@SuppressWarnings({
+	"java:S6218" // Equality on bytes is by identity, as documented; chunks are never compared, hashed or printed
+})
 public record TerminalChunk(byte[] bytes, long next, long end, boolean done, int cols, int rows, boolean truncated, boolean gone) {
 
 	/**

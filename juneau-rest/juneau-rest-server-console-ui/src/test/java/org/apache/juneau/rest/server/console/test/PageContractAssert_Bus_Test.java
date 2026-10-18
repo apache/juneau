@@ -65,7 +65,8 @@ class PageContractAssert_Bus_Test extends TestBase {
 			{"contractVersion":"1","title":"t","nav":[],"activeNav":[],
 			 "cards":[{"id":"b","type":"html","template":"b","subscribes":[{"topic":"ssc.focus","as":"refresh"}]}]}
 			""");
-		var e = assertThrows(AssertionError.class, () -> PageContractAssert.assertPage(broken).hasNoWiringErrors());
+		var target = PageContractAssert.assertPage(broken);
+		var e = assertThrows(AssertionError.class, target::hasNoWiringErrors);
 		assertTrue(e.getMessage().startsWith("page wiring has errors:\nE-41 card 'b' subscribes to 'ssc.focus' but nothing publishes it"), e.getMessage());
 	}
 

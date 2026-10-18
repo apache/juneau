@@ -97,7 +97,7 @@ class JestJsonReportReader_Test extends TestBase {
 		}
 	}
 
-	@Test void b06_maxTests(@TempDir Path d) throws Exception {
+	@Test void b06_maxTests() {
 		var r = new JestJsonReportReader().read(resource("jest-mixed.json"), new ReportLimits(1 << 20, 2, 512, 2000, 8000));
 		assertEquals(2, r.tests().size());
 		assertTrue(r.truncated());

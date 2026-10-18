@@ -50,8 +50,10 @@ class RibbonItem_VisibleWhen_Test {
 	}
 
 	@Test void a04_nullRules_areRejected() {
-		assertThrows(IllegalArgumentException.class, () -> RibbonItem.refresh().visibleWhen((VisibilityRule[])null));
-		assertThrows(IllegalArgumentException.class, () -> RibbonItem.refresh().visibleWhen((VisibilityRule)null));
+		var target = RibbonItem.refresh();
+		assertThrows(IllegalArgumentException.class, () -> target.visibleWhen((VisibilityRule[])null));
+		var target2 = RibbonItem.refresh();
+		assertThrows(IllegalArgumentException.class, () -> target2.visibleWhen((VisibilityRule)null));
 	}
 
 	@Test void a05_optionGroupMember_cannotCarryVisibleWhen() {

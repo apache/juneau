@@ -16,7 +16,6 @@
  */
 package org.apache.juneau.rest.server.runreport;
 
-import static org.apache.juneau.BasicTestUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.nio.file.*;

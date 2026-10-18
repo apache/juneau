@@ -41,7 +41,7 @@ public final class RunViewLog implements RunViewSource {
 	/** The default capacity. */
 	public static final int DEFAULT_MAX_EVENTS = 200_000;
 
-	private static final Pattern TOKEN = Pattern.compile("^([0-9a-z]{6})\\.(0|[1-9][0-9]{0,17})$");
+	private static final Pattern TOKEN = Pattern.compile("^([0-9a-z]{6})\\.(0|[1-9]\\d{0,17})$");
 	private static final String ALPHABET = "0123456789abcdefghijklmnopqrstuvwxyz";
 
 	private final int maxEvents;

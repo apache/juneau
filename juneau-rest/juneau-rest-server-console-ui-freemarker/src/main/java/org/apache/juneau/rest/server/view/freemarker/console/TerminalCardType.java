@@ -36,12 +36,17 @@ import org.apache.juneau.rest.server.terminal.*;
  *
  * @since 10.0.0
  */
+@SuppressWarnings({
+	"java:S1192" // Repeated literals are contract wire keys; named constants would obscure the contract shape.
+})
 public final class TerminalCardType implements CardTypeHandler {
 
 	private static final Set<String> BODY_KEYS = new LinkedHashSet<>(List.of("contractVersion", "terminal"));
 
 	/** Public no-arg constructor, required by {@link java.util.ServiceLoader}. */
-	public TerminalCardType() {}
+	public TerminalCardType() {
+		// No state; instantiated by ServiceLoader.
+	}
 
 	@Override
 	public String type() {

@@ -97,9 +97,9 @@ class ViewsJs_TableBus_Test extends TestBase {
 	@Test void b04_unknownOptionMemberAndColumnAreRefusedLoudly() {
 		var m = map(report.get("refused"));
 		var errs = list(m.get("errors"));
-		assertTrue(errs.stream().anyMatch(e -> e.toString().contains("unknown ribbon option 'nope'")), () -> errs.toString());
-		assertTrue(errs.stream().anyMatch(e -> e.toString().contains("optionGroup 'age' has no member 'nope'")), () -> errs.toString());
-		assertTrue(errs.stream().anyMatch(e -> e.toString().contains("unknown column 'nope'")), () -> errs.toString());
+		assertTrue(errs.stream().anyMatch(e -> e.toString().contains("unknown ribbon option 'nope'")), errs::toString);
+		assertTrue(errs.stream().anyMatch(e -> e.toString().contains("optionGroup 'age' has no member 'nope'")), errs::toString);
+		assertTrue(errs.stream().anyMatch(e -> e.toString().contains("unknown column 'nope'")), errs::toString);
 		assertEquals("[]", m.get("searches"));
 		assertEquals("all", m.get("ageStill"));
 		assertEquals(0, m.get("newFilters"), "a refused patch changes nothing, so nothing is republished");
@@ -137,7 +137,7 @@ class ViewsJs_TableBus_Test extends TestBase {
 		var m = map(report.get("unknownOp"));
 		assertNotNull(m, "an unknown op must throw, not be ignored");
 		assertEquals("E-JS-48", m.get("code"));
-		assertTrue(m.get("message").toString().contains("card 'changes' (type 'datatables') has no op 'explode'"), () -> m.toString());
+		assertTrue(m.get("message").toString().contains("card 'changes' (type 'datatables') has no op 'explode'"), m::toString);
 	}
 
 	@Test void d01_checkboxChangePublishesSelection() {
@@ -194,7 +194,7 @@ class ViewsJs_TableBus_Test extends TestBase {
 		var m = map(report.get("unmounted"));
 		assertNotNull(m);
 		assertEquals("E-JS-48", m.get("code"));
-		assertTrue(m.get("message").toString().contains("before its table is mounted"), () -> m.toString());
+		assertTrue(m.get("message").toString().contains("before its table is mounted"), m::toString);
 	}
 
 	@Test void j01_dslColumnFilterIsInstalledAsAFixedPredicate() {
@@ -210,8 +210,8 @@ class ViewsJs_TableBus_Test extends TestBase {
 	@Test void j02_invalidDslColumnFilterIsRefusedAndKeepsTheOldOne() {
 		var m = map(report.get("dslBad"));
 		var errs = list(m.get("errors"));
-		assertEquals(1, errs.size(), () -> errs.toString());
-		assertTrue(errs.get(0).toString().contains("column 'stage'"), () -> errs.toString());
+		assertEquals(1, errs.size(), errs::toString);
+		assertTrue(errs.get(0).toString().contains("column 'stage'"), errs::toString);
 		assertEquals("$eq(open)", m.get("store"));
 		assertEquals(0, m.get("newFixed"));
 		assertEquals(0, m.get("newFilters"));
@@ -273,14 +273,14 @@ class ViewsJs_TableBus_Test extends TestBase {
 	@Test void m01_aPageScopedPruneOnDrawPublishesTheSelection() {
 		var m = map(report.get("selectionPrune"));
 		assertEquals(1, m.get("published"));
-		assertTrue(m.get("last").toString().contains("\"ids\":[\"c-17\"]") && m.get("last").toString().contains("\"removed\":[\"c-99\"]"), () -> m.toString());
+		assertTrue(m.get("last").toString().contains("\"ids\":[\"c-17\"]") && m.get("last").toString().contains("\"removed\":[\"c-99\"]"), m::toString);
 	}
 
 	@Test void m02_clearSelectionLinkPublishesTheEmptySelection() {
 		var m = map(report.get("clearLink"));
 		assertEquals(0, m.get("selected"));
 		assertEquals(1, m.get("published"));
-		assertTrue(m.get("last").toString().contains("\"ids\":[]") && m.get("last").toString().contains("\"removed\":[\"c-17\",\"c-21\"]"), () -> m.toString());
+		assertTrue(m.get("last").toString().contains("\"ids\":[]") && m.get("last").toString().contains("\"removed\":[\"c-17\",\"c-21\"]"), m::toString);
 	}
 
 	@Test void n01_perRowBulkRunPublishesOutcomeWithHttpStatusAfterItsToast() {

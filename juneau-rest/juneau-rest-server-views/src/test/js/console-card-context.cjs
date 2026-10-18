@@ -41,11 +41,11 @@ function load(fetchImpl, opts) {
 	const env = makeConsoleEnv(opts);
 	const doc = env.document;
 	doc.readyState = 'loading';
-	if (opts && opts.csrf) {
-		doc.body.setAttribute('data-juneau-csrf', opts.csrf);
-		if (opts.csrfHeader) doc.body.setAttribute('data-juneau-csrf-header', opts.csrfHeader);
+	if (opts?.csrf) {
+		doc.body.dataset.juneauCsrf = opts.csrf;
+		if (opts.csrfHeader) doc.body.dataset.juneauCsrfHeader = opts.csrfHeader;
 	}
-	const storage = (opts && opts.storage) || makeStorage();
+	const storage = (opts?.storage) || makeStorage();
 	const errors = [];
 	const warns = [];
 	const sandbox = {
@@ -72,22 +72,22 @@ function load(fetchImpl, opts) {
 	};
 	env.window.window = env.window;
 	env.window.document = doc;
-	vm.runInNewContext(shellSrc, sandbox, { filename: 'juneau-console.js' });
+	vm.runInNewContext(shellSrc, sandbox, { filename: 'juneau-console.js' }); // NOSONAR javascript:S1523 - loads the shipped script into a vm sandbox for the test
 	return { env, doc, errors, warns, JC: sandbox.window.JuneauConsole, sandbox, storage };
 }
 
 function makeStorage(behavior) {
 	const m = new Map();
 	return {
-		getItem: k => { if (behavior === 'throw') throw new Error('storage unavailable'); return m.has(k) ? m.get(k) : null; },
-		setItem: (k, v) => { if (behavior === 'throw') throw new Error('storage unavailable'); m.set(k, String(v)); },
+		getItem: k => { if (behavior === 'throw') { throw new Error('storage unavailable'); } return m.has(k) ? m.get(k) : null; },
+		setItem: (k, v) => { if (behavior === 'throw') { throw new Error('storage unavailable'); } m.set(k, String(v)); },
 		removeItem: k => { m.delete(k); },
 		_raw: m
 	};
 }
 
 const base = { contractVersion: '1', title: 'T', nav: [], activeNav: [], cards: [] };
-const C = o => Object.assign({}, base, o);
+const C = o => ({ ...base, ...o });
 const out = {};
 
 // 1. fetchJson supersede: a second call before the first settles aborts the first; the first's promise
@@ -97,10 +97,10 @@ const out = {};
 	let ctxRef = null;
 	const r = load((url, init) => new Promise((resolve, reject) => {
 		seen.push(url);
-		if (init && init.signal) init.signal.addEventListener('abort', () => {
+		if (init?.signal) init.signal.addEventListener('abort', () => {
 			const e = new Error('aborted'); e.name = 'AbortError'; reject(e);
 		});
-		Promise.resolve().then(() => Promise.resolve()).then(() => resolve({ ok: true, json: () => Promise.resolve({ v: url }) }));
+		Promise.resolve().then(() => undefined).then(() => resolve({ ok: true, json: () => Promise.resolve({ v: url }) }));
 	}), {});
 	r.JC.registerCard('kpi', {
 		render(card, el, ctx) { ctxRef = ctx; return Promise.resolve(); }
@@ -115,7 +115,7 @@ const out = {};
 {
 	const calls = [];
 	let ctxRef = null;
-	const r = load((url, init) => { calls.push({ url, method: (init && init.method) || 'GET', headers: Object.assign({}, init && init.headers) }); return Promise.resolve({ ok: true, json: () => Promise.resolve({}) }); },
+	const r = load((url, init) => { calls.push({ url, method: (init?.method) || 'GET', headers: { ...init?.headers } }); return Promise.resolve({ ok: true, json: () => Promise.resolve({}) }); },
 		{ csrf: 'tok-123', csrfHeader: 'X-My-Csrf' });
 	r.JC.registerCard('kpi', { render(card, el, ctx) { ctxRef = ctx; } });
 	r.JC.mount(C({ cards: [{ id: 'k1', type: 'kpi' }] }), { root: r.doc.body, document: r.doc });
@@ -148,13 +148,13 @@ const out = {};
 	const r = load(() => Promise.resolve({ ok: true, json: () => Promise.resolve({}) }), {});
 	r.JC.registerCard('kpi', { render(card, el, ctx) { ctxRef = ctx; ctx.paintLoading(el); } });
 	const res = r.JC.mount(C({ cards: [{ id: 'k1', type: 'kpi' }] }), { root: r.doc.body, document: r.doc });
-	const loadingRole = r.doc.querySelector('#k1 .jc-card-loading') && r.doc.querySelector('#k1 .jc-card-loading').getAttribute('role');
+	const loadingRole = r.doc.querySelector('#k1 .jc-card-loading') && r.doc.querySelector('#k1 .jc-card-loading').getAttribute('role'); // NOSONAR javascript:S6582 - null (not undefined) reaches the serialized assertion
 	ctxRef.paintError(res.cards.k1, new Error('boom'));
 	out.paint = {
 		loadingRole,
 		loadingThenError: !!r.doc.querySelector('#k1 .jc-card-error') && !r.doc.querySelector('#k1 .jc-card-loading'),
-		errorRole: r.doc.querySelector('#k1 .jc-card-error') && r.doc.querySelector('#k1 .jc-card-error').getAttribute('role'),
-		errorText: r.doc.querySelector('#k1 .jc-card-error') && r.doc.querySelector('#k1 .jc-card-error').textContent
+		errorRole: r.doc.querySelector('#k1 .jc-card-error') && r.doc.querySelector('#k1 .jc-card-error').getAttribute('role'), // NOSONAR javascript:S6582 - null (not undefined) reaches the serialized assertion
+		errorText: r.doc.querySelector('#k1 .jc-card-error') && r.doc.querySelector('#k1 .jc-card-error').textContent // NOSONAR javascript:S6582 - null (not undefined) reaches the serialized assertion
 	};
 }
 
@@ -241,7 +241,7 @@ const out = {};
 	const e = make('s5', () => { ticksE++; });
 	const periodsBeforeBad = activePeriods(e.r);
 	const countBeforeBad = (e.r.sandbox.__periods || []).length;
-	for (const bad of [NaN, 0, -5, undefined, Infinity, '250']) e.handle.setMs(bad);
+	for (const bad of [Number.NaN, 0, -5, undefined, Infinity, '250']) e.handle.setMs(bad);
 	const badSetMs = { armed: (e.r.sandbox.__periods || []).length - countBeforeBad, active: activePeriods(e.r), before: periodsBeforeBad };
 	runInterval(e.r);
 	const everyBad = [];
@@ -251,12 +251,12 @@ const out = {};
 		let hs = [];
 		r.JC.registerCard('poll3', {
 			render(card, el, ctx) {
-				for (const bad of [NaN, 0, -1, undefined, '1000']) hs.push(ctx.every(bad, () => { ticksF++; }));
+				for (const bad of [Number.NaN, 0, -1, undefined, '1000']) hs.push(ctx.every(bad, () => { ticksF++; }));
 			}
 		});
 		r.JC.mount(C({ cards: [{ id: 's6', type: 'poll3' }] }), { root: r.doc.body, document: r.doc });
 		let threw = null;
-		try { for (const h of hs) { h.setMs(100); h.stop(); } } catch (x) { threw = String(x); }
+		try { for (const h of hs) { h.setMs(100); h.stop(); } } catch (error_) { threw = String(error_); }
 		runInterval(r);
 		everyBad.push({ armed: (r.sandbox.__periods || []).length, ticks: ticksF, threw, warned: r.warns.length });
 	}

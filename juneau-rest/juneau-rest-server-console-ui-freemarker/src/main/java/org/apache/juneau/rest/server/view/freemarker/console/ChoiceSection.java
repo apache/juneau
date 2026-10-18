@@ -44,6 +44,9 @@ import org.apache.juneau.rest.server.console.*;
  *
  * @since 10.0.0
  */
+@SuppressWarnings({
+	"java:S1192" // Repeated literals are contract wire keys; named constants would obscure the contract shape.
+})
 public final class ChoiceSection extends Section {
 
 	private final String source;

@@ -20,7 +20,6 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 
-import java.security.*;
 import java.util.*;
 
 import org.apache.juneau.*;
@@ -35,6 +34,9 @@ import jakarta.websocket.*;
 import jakarta.websocket.server.*;
 
 /** {@link BusWebSockets#register}: the missing-container and missing-Origin-rule errors in both forms, the endpoint config, and {@link ServerBus#enableWebSocket}. */
+@SuppressWarnings({
+	"java:S3415" // Expected value is already first; Sonar mistakes the computed or constant value for the actual value
+})
 class BusWebSockets_Test extends TestBase {
 
 	private ServerBus bus;

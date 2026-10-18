@@ -66,7 +66,7 @@ if (!out.hasGetColumnExpr || !out.hasSetColumnExpr || !out.hasCompile) {
 // ---------------------------------------------------------------------------------------------------------------
 
 function op(name, extra) {
-	return Object.assign({ name: name, help: name + ' help.', minArgs: 1, maxArgs: 1, combinator: false, custom: false }, { ...extra });
+	return { name: name, help: name + ' help.', minArgs: 1, maxArgs: 1, combinator: false, custom: false, ...extra };
 }
 
 const ENUM_OPS = [op('$eq'), op('$ne'), op('$in', { maxArgs: -1 }), op('$not', { combinator: true })];

@@ -36,6 +36,9 @@ import org.apache.juneau.rest.server.widgets.*;
  * 	<jk>return</jk> <jsm>twin</jsm>(<jv>req</jv>, PetsPageBuilders.<jsm>pets</jsm>());
  * </p>
  */
+@SuppressWarnings({
+	"java:S1192" // Page-definition ids and labels repeat as inline literals by design.
+})
 public final class PetsPageBuilders {
 
 	/**

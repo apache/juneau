@@ -95,9 +95,7 @@ public final class Rail {
 
 	/** @return The rail JSON. */
 	Map<String,Object> toMap() {
-		var list = new ArrayList<Map<String,Object>>();
-		for (var s : sections)
-			list.add(s.toMap());
+		var list = sections.stream().map(Section::toMap).toList();
 		var m = new LinkedHashMap<String,Object>();
 		m.put("side", side);
 		m.put("width", width);

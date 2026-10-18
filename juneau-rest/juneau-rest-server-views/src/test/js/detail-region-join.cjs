@@ -47,7 +47,7 @@ const DETAIL_URL = '/scripts/{id}';
 
 /** Expands one row whose panel carries a single region declared as `declared`; returns the fetch log. */
 async function run(declared, href) {
-	const { env, NS, I } = load(rendersJsPath, viewsJsPath, regionsJsPath);
+	const { env, I } = load(rendersJsPath, viewsJsPath, regionsJsPath);
 	if (href) env.window.location = { href: href };
 	const fetches = [];
 	let regionEl = null;
@@ -149,7 +149,7 @@ function count(fetches, prefix) {
 	out.a06_trailingSlashFetchesTwice = trailing.fetches.length === 2;
 
 	// URL-resolution branch (window.location stubbed): spellings that resolve to the panel's resource join ...
-	const HREF = 'http://h/page';
+	const HREF = 'http://h/page'; // NOSONAR javascript:S5332 - test fixture URL, never fetched over the network
 	const dotSegment = await run({ contractVersion: '1', dataUrl: '/scripts/./{id}', params: { a: '1' } }, HREF);
 	out.a07_dotSegmentResolvesAndJoins = dotSegment.fetches.length === 1;
 	const relative = await run({ contractVersion: '1', dataUrl: 'scripts/{id}', params: { a: '1' } }, HREF);
@@ -157,12 +157,12 @@ function count(fetches, prefix) {
 	const withParamsLoc = await run({ contractVersion: '1', dataUrl: DETAIL_URL, params: { a: '1' } }, HREF);
 	out.a09_paramsJoinUnderLocation = withParamsLoc.fetches.length === 1;
 	// A literal dataUrl (no {id}) skips the same-origin check, so absolute spellings reach the join key.
-	const absSame = await run({ contractVersion: '1', dataUrl: 'http://h/scripts/s-77' }, HREF);
+	const absSame = await run({ contractVersion: '1', dataUrl: 'http://h/scripts/s-77' }, HREF); // NOSONAR javascript:S5332 - test fixture URL, never fetched over the network
 	out.a12_absoluteSameOriginJoins = absSame.fetches.length === 1;
-	const absOther = await run({ contractVersion: '1', dataUrl: 'http://other/scripts/s-77' }, HREF);
+	const absOther = await run({ contractVersion: '1', dataUrl: 'http://other/scripts/s-77' }, HREF); // NOSONAR javascript:S5332 - test fixture URL, never fetched over the network
 	out.a13_crossOriginDoesNotJoin = absOther.fetches.length === 2;
 	// ... and a relative path resolved against a DIFFERENT directory is a different resource.
-	const otherDir = await run({ contractVersion: '1', dataUrl: 'scripts/{id}' }, 'http://h/a/page');
+	const otherDir = await run({ contractVersion: '1', dataUrl: 'scripts/{id}' }, 'http://h/a/page'); // NOSONAR javascript:S5332 - test fixture URL, never fetched over the network
 	out.a10_relativeUnderOtherDirectoryDoesNotJoin = otherDir.fetches.length === 2;
 	// The author's query still separates under URL resolution.
 	const queryLoc = await run({ contractVersion: '1', dataUrl: DETAIL_URL + '?v=2' }, HREF);
@@ -179,7 +179,7 @@ function count(fetches, prefix) {
 	out.a14_refreshIssuesSecondGet = refreshed.fetches.length === 2;
 	out.a14_refreshSendsParams = refreshed.fetches[1] === own + '?a=1';
 	const fresh = await refreshed.regionEl._juneauRegion.ctx.fetchDeclared();
-	out.a14_refreshReadsNewBody = fresh && fresh.n === 3;
+	out.a14_refreshReadsNewBody = fresh?.n === 3;
 	out.a14_log = refreshed.fetches.join(' ');
 
 	process.stdout.write(JSON.stringify(out));

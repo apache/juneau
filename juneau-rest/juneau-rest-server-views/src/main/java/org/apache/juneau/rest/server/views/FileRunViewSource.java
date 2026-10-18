@@ -66,13 +66,17 @@ import org.apache.juneau.rest.server.runreport.*;
  * 		.build();
  * </p>
  */
+@SuppressWarnings({
+	"java:S135", // Guard clauses keep the loop readable.
+	"java:S3776" // Validation and rendering chains many independent guards; splitting them adds no clarity.
+})
 public final class FileRunViewSource implements RunViewSource {
 
 	/** Lines longer than this many bytes are skipped without being decoded. */
 	private static final int MAX_LINE_BYTES = RunEvent.MAX_EVENT_CHARS * 4;
 	private static final Logger LOG = Logger.getLogger(FileRunViewSource.class.getName());
 
-	private static final Pattern TOKEN = Pattern.compile("^([0-9a-z]{6})\\.(0|[1-9][0-9]{0,17})$");
+	private static final Pattern TOKEN = Pattern.compile("^([0-9a-z]{6})\\.(0|[1-9]\\d{0,17})$");
 
 	/**
 	 * Builder for {@link FileRunViewSource}.
@@ -237,6 +241,9 @@ public final class FileRunViewSource implements RunViewSource {
 	}
 
 	/** Sequential reader of the complete lines in [start, end); opens the file lazily. */
+	@SuppressWarnings({
+		"resource" // The channel is opened lazily by next() and closed by close().
+	})
 	private static final class LineReader implements Closeable {
 		private final Path file;
 		private final long end;

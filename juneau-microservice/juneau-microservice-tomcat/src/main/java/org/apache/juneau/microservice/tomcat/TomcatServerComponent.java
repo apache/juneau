@@ -514,7 +514,7 @@ public class TomcatServerComponent implements MicroserviceListener {
 	 *
 	 * @param filter The filter instance.  Cannot be <jk>null</jk>.
 	 * @param dispatcherTypes The dispatcher types.  Cannot be empty.
-	 * @param urlPatterns The URL patterns.  At least one is required; see {@link ServletFilterRegistration.Builder#urlPatterns(String...)}.
+	 * @param urlPatterns The URL patterns.  At least one is required; see {@link org.apache.juneau.microservice.ServletFilterRegistration.Builder#urlPatterns(String...)}.
 	 * @return This object.
 	 * @throws IllegalArgumentException If an argument is invalid.
 	 * @throws IllegalStateException If the server has already started.

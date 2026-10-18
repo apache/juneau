@@ -50,6 +50,10 @@ import freemarker.template.*;
  *
  * @since 10.0.0
  */
+@SuppressWarnings({
+	"java:S1192", // Repeated literals are contract wire keys; named constants would obscure the contract shape.
+	"java:S3776" // Validation and rendering chains many independent guards; splitting them adds no clarity.
+})
 public final class BadgeDirectiveModel implements TemplateDirectiveModel {
 
 	/** The shared-variable name this directive registers under. */
@@ -173,9 +177,7 @@ public final class BadgeDirectiveModel implements TemplateDirectiveModel {
 		for (var e : values)
 			if (wire.apply(e).equals(v))
 				return e;
-		var allowed = new ArrayList<String>();
-		for (var e : values)
-			allowed.add(wire.apply(e));
+		var allowed = Arrays.stream(values).map(wire).toList();
 		throw FtlAttrLists.reject(f("<@badge id='%s'> %s= '%s' is not one of '%s'.", badgeId, attr, v,
 			String.join(", ", allowed)));
 	}
@@ -187,9 +189,7 @@ public final class BadgeDirectiveModel implements TemplateDirectiveModel {
 		for (var e : m.entrySet()) {
 			if (! (e.getValue() instanceof List<?> l))
 				throw FtlAttrLists.reject("<@badge id='" + badgeId + "'> scopeValues must be a JSON5 object of string lists.");
-			var vals = new ArrayList<String>();
-			for (var item : l)
-				vals.add(String.valueOf(item));
+			var vals = new ArrayList<>(l.stream().map(Objects::toString).toList());
 			out.put(String.valueOf(e.getKey()), vals);
 		}
 		return out;

@@ -22,7 +22,7 @@ import static org.apache.juneau.commons.utils.Shorts.*;
 import java.io.*;
 import java.nio.file.*;
 import java.util.*;
-import java.util.function.Function;
+import java.util.function.UnaryOperator;
 import java.util.regex.*;
 import java.util.stream.*;
 
@@ -59,7 +59,8 @@ import freemarker.template.*;
  * @since 10.0.0
  */
 @SuppressWarnings({
-	"java:S1075" // "/" is the template-name separator, not a file-system path.
+	"java:S1075", // "/" is the template-name separator, not a file-system path.
+	"java:S3776" // Validation and rendering chains many independent guards; splitting them adds no clarity.
 })
 public final class ConsoleTemplateValidator {
 
@@ -130,7 +131,7 @@ public final class ConsoleTemplateValidator {
 	private String classpathRoot;
 	private String chromeTemplate;
 	private final Set<String> allowed = new TreeSet<>();
-	private Function<String,String> webJarProbe = WebJarResolver::resolvePath;
+	private UnaryOperator<String> webJarProbe = WebJarResolver::resolvePath;
 	private final ToolkitPackRegistry packs = new ToolkitPackRegistry();
 	private String echartsProblem;         // cached E-70 (or invalid-pack-graph) message; null when the probe passed
 	private String echartsRule;            // the rule id the cached problem is reported under
@@ -202,7 +203,7 @@ public final class ConsoleTemplateValidator {
 	}
 
 	// Package-private: tests simulate an absent WebJar.
-	ConsoleTemplateValidator webJarProbe(Function<String,String> probe) {
+	ConsoleTemplateValidator webJarProbe(UnaryOperator<String> probe) {
 		webJarProbe = rnn(probe);
 		echartsProbed = false;
 		return this;
@@ -383,7 +384,7 @@ public final class ConsoleTemplateValidator {
 
 		var a = ASSET_REF.matcher(text);
 		while (a.find()) {
-			var url = nn(a.group(1)) ? a.group(1) : a.group(2);
+			var url = a.group(nn(a.group(1)) ? 1 : 2);
 			if (! url.contains("${") && ! url.contains("<#") && JUNEAU_ASSET.matcher(url).find())
 				add(out, name, lines, a.start(), "hardcoded-asset-url", f(
 					"Hard-coded Juneau asset URL '%s' is unversioned and goes stale in browser caches; use viewAssetUrl(...), consoleJsUrl(...), chromeCssUrl(...) or themeAssetUrl(...) so it carries ?v= (an adopter's own assets can use assetUrl(...)).", url));
@@ -433,6 +434,9 @@ public final class ConsoleTemplateValidator {
 	 * The C2 card-body rules: {@code card-src-and-body} and {@code card-reserved-key}.
 	 * Reads the body the same way {@link #checkViewVersion} does, up to the next {@code </@card}.
 	 */
+	@SuppressWarnings({
+		"java:S107" // Internal helper whose parameters are the render/validation context.
+	})
 	private static void checkCardBody(List<Finding> out, String name, int[] lines, int at, String text, int bodyStart, Value id, Value src, Value type) {
 		var end = text.indexOf("</@card", bodyStart);
 		var body = text.substring(bodyStart, end < 0 ? text.length() : end);
@@ -499,7 +503,7 @@ public final class ConsoleTemplateValidator {
 			String v;
 			boolean literal;
 			if (nn(m.group(2)) || nn(m.group(3))) {
-				v = nn(m.group(2)) ? m.group(2) : m.group(3);
+				v = m.group(nn(m.group(2)) ? 2 : 3);
 				literal = ! v.contains("${");
 			} else {
 				v = m.group(4);

@@ -77,18 +77,23 @@ class SamlAssertionValidator_Rejections_Test extends TestBase {
 
 	@Test void a01_statusNotSuccess_rejected() throws Exception {
 		var xml = response("<samlp:Status><samlp:StatusCode Value=\"urn:oasis:names:tc:SAML:2.0:status:Responder\"/></samlp:Status>");
-		var ex = assertThrows(AuthenticationException.class, () -> base(cred()).build().validate(xml));
+		var v = base(cred()).build();
+		var ex = assertThrows(AuthenticationException.class, () -> v.validate(xml));
 		assertTrue(ex.getMessage().contains("not Success"), ex.getMessage());
 		assertTrue(challenge(ex).contains("invalid_response"));
 	}
 
 	@Test void a02_noStatusElement_rejected() throws Exception {
-		var ex = assertThrows(AuthenticationException.class, () -> base(cred()).build().validate(response("")));
+		var xml = response("");
+		var v = base(cred()).build();
+		var ex = assertThrows(AuthenticationException.class, () -> v.validate(xml));
 		assertTrue(ex.getMessage().contains("not Success"), ex.getMessage());
 	}
 
 	@Test void a03_statusWithoutStatusCode_rejected() throws Exception {
-		var ex = assertThrows(AuthenticationException.class, () -> base(cred()).build().validate(response("<samlp:Status/>")));
+		var xml = response("<samlp:Status/>");
+		var v = base(cred()).build();
+		var ex = assertThrows(AuthenticationException.class, () -> v.validate(xml));
 		assertTrue(ex.getMessage().contains("not Success"), ex.getMessage());
 	}
 
@@ -99,14 +104,16 @@ class SamlAssertionValidator_Rejections_Test extends TestBase {
 	@Test void b01_signatureWithoutSignatureMethod_rejectedAtParse() throws Exception {
 		var cred = cred();
 		var xml = signed(cred).replaceAll("<(\\w+:)?SignatureMethod[^>]*/>", "");
-		var ex = assertThrows(AuthenticationException.class, () -> base(cred).build().validate(xml));
+		var v = base(cred).build();
+		var ex = assertThrows(AuthenticationException.class, () -> v.validate(xml));
 		assertTrue(ex.getMessage().contains("could not be parsed"), ex.getMessage());
 	}
 
 	@Test void b02_sha1ReferenceDigest_rejected() throws Exception {
 		var cred = cred();
 		var xml = signed(cred).replace(SignatureConstants.ALGO_ID_DIGEST_SHA256, SignatureConstants.ALGO_ID_DIGEST_SHA1);
-		var ex = assertThrows(AuthenticationException.class, () -> base(cred).build().validate(xml));
+		var v = base(cred).build();
+		var ex = assertThrows(AuthenticationException.class, () -> v.validate(xml));
 		assertTrue(ex.getMessage().contains("digest algorithm not allowlisted"), ex.getMessage());
 		assertTrue(challenge(ex).contains("signature_algorithm_rejected"));
 	}
@@ -114,7 +121,8 @@ class SamlAssertionValidator_Rejections_Test extends TestBase {
 	@Test void b03_emptyReferenceDigest_rejected() throws Exception {
 		var cred = cred();
 		var xml = signed(cred).replace("Algorithm=\"" + SignatureConstants.ALGO_ID_DIGEST_SHA256 + "\"", "Algorithm=\"\"");
-		var ex = assertThrows(AuthenticationException.class, () -> base(cred).build().validate(xml));
+		var v = base(cred).build();
+		var ex = assertThrows(AuthenticationException.class, () -> v.validate(xml));
 		assertTrue(ex.getMessage().contains("digest algorithm not allowlisted"), ex.getMessage());
 	}
 
@@ -136,7 +144,8 @@ class SamlAssertionValidator_Rejections_Test extends TestBase {
 	@Test void b06_referenceNotPointingAtAssertion_profileValidationFails() throws Exception {
 		var cred = cred();
 		var xml = signed(cred).replaceAll("<(\\w+:)?Reference URI=\"#[^\"]*\"", "<ds:Reference URI=\"#_other\"");
-		var ex = assertThrows(AuthenticationException.class, () -> base(cred).build().validate(xml));
+		var v = base(cred).build();
+		var ex = assertThrows(AuthenticationException.class, () -> v.validate(xml));
 		assertTrue(ex.getMessage().contains("signature profile validation failed"), ex.getMessage());
 		assertTrue(challenge(ex).contains("signature_invalid"));
 	}
@@ -182,21 +191,24 @@ class SamlAssertionValidator_Rejections_Test extends TestBase {
 		var sc = scb.buildObject();
 		sc.setMethod(SubjectConfirmation.METHOD_BEARER);
 		var xml = signedWithConfirmation(cred, sc);
-		var ex = assertThrows(AuthenticationException.class, () -> base(cred).build().validate(xml, ACS));
+		var v = base(cred).build();
+		var ex = assertThrows(AuthenticationException.class, () -> v.validate(xml, ACS));
 		assertTrue(ex.getMessage().contains("SubjectConfirmationData> is missing"), ex.getMessage());
 	}
 
 	@Test void d02_confirmationNotYetValid_rejected() throws Exception {
 		var cred = cred();
 		var xml = signedWithConfirmation(cred, SamlTestSupport.bearerConfirmation(ACS, NOW.plusSeconds(600), NOA, null, null));
-		var ex = assertThrows(AuthenticationException.class, () -> base(cred).build().validate(xml, ACS));
+		var v = base(cred).build();
+		var ex = assertThrows(AuthenticationException.class, () -> v.validate(xml, ACS));
 		assertTrue(ex.getMessage().contains("not yet valid"), ex.getMessage());
 	}
 
 	@Test void d03_unsolicitedConfirmationWithInResponseTo_rejected() throws Exception {
 		var cred = cred();
 		var xml = signedWithConfirmation(cred, SamlTestSupport.bearerConfirmation(ACS, null, NOA, "_req1", null));
-		var ex = assertThrows(AuthenticationException.class, () -> base(cred).build().validate(xml, ACS));
+		var v = base(cred).build();
+		var ex = assertThrows(AuthenticationException.class, () -> v.validate(xml, ACS));
 		assertTrue(ex.getMessage().contains("unsolicited"), ex.getMessage());
 	}
 
@@ -215,7 +227,8 @@ class SamlAssertionValidator_Rejections_Test extends TestBase {
 		var assertion = SamlTestSupport.buildMinimalAssertion(ISSUER, AUDIENCE, "alice", NBF, NOA);
 		assertion.setID(null);
 		var xml = SamlTestSupport.signAndBuildResponse(cred, ISSUER, assertion);
-		var ex = assertThrows(AuthenticationException.class, () -> base(cred).build().validate(xml));
+		var v = base(cred).build();
+		var ex = assertThrows(AuthenticationException.class, () -> v.validate(xml));
 		assertTrue(ex.getMessage().contains("no ID"), ex.getMessage());
 	}
 }

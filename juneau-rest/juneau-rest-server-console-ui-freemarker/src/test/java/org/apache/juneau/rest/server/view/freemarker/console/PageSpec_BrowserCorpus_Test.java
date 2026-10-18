@@ -44,6 +44,9 @@ class PageSpec_BrowserCorpus_Test extends TestBase {
 
 	private static final Path DIR = Path.of("..", "juneau-rest-server-views", "src", "test", "resources", "pagespec-corpus");
 
+	@SuppressWarnings({
+		"resource" // The request in the try header is not itself closeable; the response is closed by the try.
+	})
 	private static void check(String caseName) throws Exception {
 		String html;
 		try (var c = MockRestClient.buildLax(PageSpec_Parity_Test.Host.class); var rsp = c.get("/spec/" + caseName).run()) {

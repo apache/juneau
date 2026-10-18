@@ -29,6 +29,9 @@ import org.junit.jupiter.api.io.*;
 /**
  * {@link FileTerminalSource} nudges.
  */
+@SuppressWarnings({
+	"java:S2925" // Timing-dependent process/file test; it polls or waits on real time
+})
 class FileTerminalSourceNudge_Test extends TestBase {
 
 	private record Nudged(String id, long end, boolean done) {}
@@ -96,7 +99,7 @@ class FileTerminalSourceNudge_Test extends TestBase {
 		assertThrows(IllegalStateException.class, () -> s.nudges("t1", (id, end, done) -> {}));
 	}
 
-	@Test void a04_validation() throws Exception {
+	@Test void a04_validation() {
 		TerminalNudgePublisher n = (id, end, done) -> {};
 		try (var s = FileTerminalSource.create(log).build()) {
 			assertThrows(NullPointerException.class, () -> s.nudges(null, n));

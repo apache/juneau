@@ -24,6 +24,7 @@ import java.nio.*;
 import java.nio.channels.*;
 import java.nio.file.*;
 import java.util.*;
+import java.util.concurrent.atomic.*;
 import java.util.function.*;
 import java.util.logging.*;
 
@@ -107,15 +108,18 @@ public final class FileTerminalSource implements TerminalSource, AutoCloseable {
 		}
 	}
 
-	private final Path file, sizeFile;
+	private final Path file;
+	private final Path sizeFile;
 	private final BooleanSupplier terminal;
-	private volatile int[] size;
-	private volatile boolean seen, warned;
+	private final AtomicReference<int[]> sizeRef = new AtomicReference<>();
+	private volatile boolean seen;
+	private volatile boolean warned;
 
 	// Nudges.  nudgeThread, nudgeSet and nudgeClosed are guarded by nudgeLock.
 	private final Object nudgeLock = new Object();
 	private Thread nudgeThread;
-	private boolean nudgeSet, nudgeClosed;
+	private boolean nudgeSet;
+	private boolean nudgeClosed;
 	private volatile boolean nudgeStop;
 
 	private FileTerminalSource(Builder b) {
@@ -272,12 +276,12 @@ public final class FileTerminalSource implements TerminalSource, AutoCloseable {
 	}
 
 	private int[] size() {
-		var s = size;
+		var s = sizeRef.get();
 		if (s != null)
 			return s;
 		s = parseSize(sizeFile);
 		if (s != null) {
-			size = s;
+			sizeRef.set(s);
 			return s;
 		}
 		if (! warned) {
@@ -288,6 +292,9 @@ public final class FileTerminalSource implements TerminalSource, AutoCloseable {
 	}
 
 	/** Returns {cols, rows} from a {"cols":C,"rows":R} file, or null when it is missing or malformed. */
+	@SuppressWarnings({
+		"java:S1168" // null means the size sidecar is missing or malformed; callers test for it
+	})
 	static int[] parseSize(Path p) {
 		try {
 			var m = Json.to(Files.readString(p), Map.class);

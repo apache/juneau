@@ -19,6 +19,7 @@ package org.apache.juneau.rest.server.bus.websocket;
 import static java.nio.charset.StandardCharsets.*;
 
 import java.util.concurrent.*;
+import java.util.concurrent.atomic.*;
 import java.util.logging.*;
 
 import org.apache.juneau.rest.server.bus.*;
@@ -54,8 +55,8 @@ public final class BusWebSocketEndpoint extends Endpoint {
 
 	private final ServerBus bus;
 	private final Executor closer;
-	private volatile BusSession busSession;
-	private volatile WsFrameSink sink;
+	private final AtomicReference<BusSession> busSession = new AtomicReference<>();
+	private final AtomicReference<WsFrameSink> sink = new AtomicReference<>();
 
 	BusWebSocketEndpoint(ServerBus bus) {
 		this(bus, null);
@@ -83,8 +84,8 @@ public final class BusWebSocketEndpoint extends Endpoint {
 		var maxBytes = policy.maxFrameBytes();
 		session.setMaxTextMessageBufferSize(maxBytes);
 		var k = closer == null ? new WsFrameSink(session, policy.maxQueuedFrames()) : new WsFrameSink(session, policy.maxQueuedFrames(), closer);
-		busSession = s;
-		sink = k;
+		busSession.set(s);
+		sink.set(k);
 		try {
 			bus.connect(s, k);
 		} catch (RuntimeException e) {
@@ -112,10 +113,10 @@ public final class BusWebSocketEndpoint extends Endpoint {
 
 	@Override /* Endpoint */
 	public void onClose(Session session, CloseReason closeReason) {
-		var k = sink;
+		var k = sink.get();
 		if (k != null) {
 			k.markClosed();
-			bus.disconnect(busSession, k);
+			bus.disconnect(busSession.get(), k);
 		}
 	}
 

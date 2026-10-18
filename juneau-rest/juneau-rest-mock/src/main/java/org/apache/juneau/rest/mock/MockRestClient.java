@@ -305,7 +305,7 @@ public final class MockRestClient implements Closeable {
 				var overlay = overridingBeanStore;
 				// Only class-based contexts are cached; a caller-supplied instance always gets its own context.
 				var cacheable = isClass && overlay == null;
-				RestContext restContext = cacheable ? restContextCache.get((Class<?>)impl) : null;
+				RestContext restContext = cacheable ? restContextCache.get(impl) : null;
 				if (restContext == null) {
 					var o = isClass ? ((Class<?>)impl).getDeclaredConstructor().newInstance() : impl;
 					restContext = new RestContext(new RestContext.Args(o.getClass(), null, null, () -> o, "", bs -> {

@@ -151,7 +151,8 @@ class Column_DisplayProperties_Test extends TestBase {
 	}
 
 	@Test void a10g_render_blank_rejected() {
-		assertThrows(IllegalArgumentException.class, () -> Column.create("k").render(""));
+		var target = Column.create("k");
+		assertThrows(IllegalArgumentException.class, () -> target.render(""));
 	}
 
 	@Test void a10h_href_null_clearsPreviousHref() {
@@ -160,7 +161,8 @@ class Column_DisplayProperties_Test extends TestBase {
 	}
 
 	@Test void a11_viewDef_nullColumn_message() {
-		var ex = assertThrows(IllegalArgumentException.class, () -> ViewDef.create("pets").column(null));
+		var target2 = ViewDef.create("pets");
+		var ex = assertThrows(IllegalArgumentException.class, () -> target2.column(null));
 		assertEquals("ViewDef 'pets' column must not be null.", ex.getMessage());
 	}
 }

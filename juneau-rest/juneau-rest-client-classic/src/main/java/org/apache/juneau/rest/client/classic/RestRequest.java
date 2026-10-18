@@ -2174,16 +2174,8 @@ public class RestRequest extends MarshallingSession implements HttpUriRequest, C
 						var ci = ClassInfo.of(t);
 						Throwable thrownInstance = null;
 						c = ci.getPublicConstructor(x -> x.hasParameterTypes(HttpResponse.class)).orElse(null);
-						if (nn(c)) {
-							try {
-								thrownInstance = c.<Throwable>newInstance(response);
-							} catch (ExecutableException e) {
-								// Only a status-code rejection (IllegalArgumentException from the Xxx(HttpResponse) status check) falls through to the remaining constructors; anything else propagates unchanged.
-								if (! (e.getCause() instanceof IllegalArgumentException))
-									throw e;
-								thrownInstance = null;
-							}
-						}
+						if (nn(c))
+							thrownInstance = newThrownFromResponse(c);
 						if (thrownInstance == null) {
 							c = ci.getPublicConstructor(x -> x.hasParameterTypes(String.class)).orElse(null);
 							if (nn(c)) {
@@ -2323,6 +2315,23 @@ public class RestRequest extends MarshallingSession implements HttpUriRequest, C
 
 	private static boolean isRedirectStatus(int statusCode) {
 		return statusCode == 301 || statusCode == 302 || statusCode == 303 || statusCode == 307 || statusCode == 308;
+	}
+
+	/**
+	 * Constructs the server-thrown exception through its {@code (HttpResponse)} constructor.
+	 *
+	 * @param c The constructor.
+	 * @return The instance, or <jk>null</jk> if the constructor rejected the response's status code.
+	 */
+	private Throwable newThrownFromResponse(ConstructorInfo c) {
+		try {
+			return c.<Throwable>newInstance(response);
+		} catch (ExecutableException e) {
+			// Only a status-code rejection (IllegalArgumentException from the Xxx(HttpResponse) status check) falls through to the remaining constructors; anything else propagates unchanged.
+			if (! (e.getCause() instanceof IllegalArgumentException))
+				throw e;
+			return null;
+		}
 	}
 
 	/**
@@ -3080,9 +3089,6 @@ public class RestRequest extends MarshallingSession implements HttpUriRequest, C
 	 * cursor opened over a temporary buffer, then sending the buffered bytes as the request
 	 * body.
 	 */
-	@SuppressWarnings({
-		"rawtypes" // The body consumer's element type depends on the writer kind, so it is invoked through a raw Consumer.
-	})
 	private HttpEntity streamBodyEntity(RecordStreamBody body, Serializer serializer) {
 		if (serializer == null)
 			throw iaex("No serializer registered for cursor-streamed request body.");
@@ -3100,12 +3106,7 @@ public class RestRequest extends MarshallingSession implements HttpUriRequest, C
 				? new OutputStreamWriter(buf, java.nio.charset.StandardCharsets.UTF_8)
 				: buf;
 
-			try (var w = (writerKind == TokenWriter.class)
-					? ((TokenWritable) serializer).writeTokens(output)
-					: ((RecordWritable) serializer).writeRecords(output)) {
-				((Consumer) consumer).accept(w);
-				w.flush();
-			}
+			writeCursor(serializer, writerKind, consumer, output);
 
 			// Use the serializer's primary produces() media type if no explicit Content-Type set.
 			var ct = serializer.getPrimaryMediaType();
@@ -3113,6 +3114,18 @@ public class RestRequest extends MarshallingSession implements HttpUriRequest, C
 			return byteArrayEntity(buf.toByteArray(), getRequestContentType(contentType2));
 		} catch (IOException e) {
 			throw rex(e, "I/O error streaming request body.");
+		}
+	}
+
+	@SuppressWarnings({
+		"rawtypes" // The body consumer's element type depends on the writer kind, so it is invoked through a raw Consumer.
+	})
+	private static void writeCursor(Serializer serializer, Class<?> writerKind, Object consumer, Object output) throws IOException {
+		try (var w = (writerKind == TokenWriter.class)
+				? ((TokenWritable) serializer).writeTokens(output)
+				: ((RecordWritable) serializer).writeRecords(output)) {
+			((Consumer) consumer).accept(w);
+			w.flush();
 		}
 	}
 }

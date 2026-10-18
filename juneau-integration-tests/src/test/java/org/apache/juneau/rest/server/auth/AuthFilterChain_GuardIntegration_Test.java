@@ -155,7 +155,7 @@ class AuthFilterChain_GuardIntegration_Test extends TestBase {
 		assertFalse(w.isUserInRole("user"));
 	}
 
-	@Test void a03_bothCredentials_bearerPrincipalWins_rolesNotUnionedAcrossDistinctPrincipals() throws Exception {
+	@Test void a03_bothCredentials_bearerPrincipalWins_rolesNotUnionedAcrossDistinctPrincipals() {
 		// Both bearer-user (alice, user role) and apikey-admin (bob, admin role) present.
 		// Bearer is registered first → alice wins for principal; bob is a DIFFERENT principal, so his
 		// admin role must NOT be unioned onto alice's identity.

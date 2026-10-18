@@ -70,15 +70,15 @@ final class SsrfGuardConnectionManager implements HttpClientConnectionManager {
 	private final HttpClientConnectionManager ordinary;
 	private final HttpClientConnectionManager pinned;
 
-	// The lease decision GuardInterceptor hands to the next requestConnection(...) on the same thread: set (to TRUE) for
-	// a guarded request, absent otherwise.  GuardInterceptor sets or clears it for every request and requestConnection
+	// The lease decision that GuardInterceptor hands to the next requestConnection call on the same thread: set to true
+	// for a guarded request, absent otherwise.  GuardInterceptor sets or clears it for every request and requestConnection
 	// clears it before anything else, so a decision can only be left over when a request interceptor after GuardInterceptor
 	// throws before the lease; the next lease on that thread is then pinned although its request is not guarded.  A
-	// leftover can only over-guard (pin an ordinary request), never let a guarded one through unpinned.
+	// leftover can only over-guard by pinning an ordinary request, and never lets a guarded one through unpinned.
 	private static final ThreadLocal<Boolean> NEXT_LEASE_GUARDED = new ThreadLocal<>();
 
-	// Leased connections of the pinned pool.  Connection classes use identity equality, so this is an identity map;
-	// weak keys mean a leaked (never released) connection is not kept alive by this map.
+	// Leased connections of the pinned pool.  Connection classes use identity equality, so this is an identity map.
+	// Weak keys mean a leaked (never released) connection is not kept alive by this map.
 	private final Map<HttpClientConnection,Boolean> pinnedLeases = Collections.synchronizedMap(new WeakHashMap<>());
 
 	SsrfGuardConnectionManager(HttpClientConnectionManager ordinary, HttpClientConnectionManager pinned) {
@@ -102,6 +102,9 @@ final class SsrfGuardConnectionManager implements HttpClientConnectionManager {
 		var request = pinned.requestConnection(route, state);
 		return new ConnectionRequest() {
 			@Override /* ConnectionRequest */
+			@SuppressWarnings({
+				"resource" // the leased connection is handed to the caller, which releases it through releaseConnection().
+			})
 			public HttpClientConnection get(long timeout, TimeUnit timeUnit) throws InterruptedException, ExecutionException, ConnectionPoolTimeoutException {
 				var conn = request.get(timeout, timeUnit);
 				pinnedLeases.put(conn, Boolean.TRUE);
@@ -160,6 +163,9 @@ final class SsrfGuardConnectionManager implements HttpClientConnectionManager {
 	// not wired, so guarded calls are refused).
 	private static final Field CONN_MANAGER = connManagerField();
 
+	@SuppressWarnings({
+		"java:S3011" // The client's connection manager has no accessor, so the field is read reflectively.
+	})
 	private static Field connManagerField() {
 		try {
 			var f = Class.forName("org.apache.http.impl.client.InternalHttpClient").getDeclaredField("connManager");
@@ -220,6 +226,9 @@ final class SsrfGuardConnectionManager implements HttpClientConnectionManager {
 
 	// Copies the ordinary pool's settings onto the pinned pool (both are built by the same factory, so they are always
 	// the same kind).  Only changed values are written: each setter takes the pool's lock.
+	@SuppressWarnings({
+		"java:S3776" // One flat run of compare-and-copy steps, one per pool setting.
+	})
 	private void mirrorSettings(HttpRoute route) {
 		if (ordinary instanceof PoolingHttpClientConnectionManager o) {
 			var p = (PoolingHttpClientConnectionManager)pinned;

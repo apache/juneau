@@ -49,7 +49,7 @@ class CardTypeRegistry_Test {
 		var r = CardTypeRegistry.standard();
 		var sink = new JsonMap();
 		var src = CardSource.create("kpi", "k").body("<p>hi</p>")
-			.templateSink((id, markup) -> sink.put(id, markup)).build();
+			.templateSink(sink::put).build();
 		var card = r.toCard(src);
 		assertEquals("k", card.get("template"));
 		assertEquals("<p>hi</p>", sink.get("k"));
@@ -65,19 +65,22 @@ class CardTypeRegistry_Test {
 	@Test void add_duplicateType_throwsE20() {
 		var b = CardTypeRegistry.standard().copy();
 		b.add(new TestCardType("kpi"));
-		var ex = assertThrows(IllegalArgumentException.class, () -> b.add(new TestCardType("kpi")));
+		var arg = new TestCardType("kpi");
+		var ex = assertThrows(IllegalArgumentException.class, () -> b.add(arg));
 		assertTrue(ex.getMessage().startsWith("Card type 'kpi' is already registered by '"), ex.getMessage());
 	}
 
 	@Test void add_badName_throwsE21() {
 		var b = CardTypeRegistry.standard().copy();
-		var ex = assertThrows(IllegalArgumentException.class, () -> b.add(new TestCardType("KPI")));
+		var arg2 = new TestCardType("KPI");
+		var ex = assertThrows(IllegalArgumentException.class, () -> b.add(arg2));
 		assertEquals("Card type 'KPI' must match ^[a-z][a-z0-9-]{0,31}$.", ex.getMessage());
 	}
 
 	@Test void add_reservedType_throwsE22() {
 		var b = CardTypeRegistry.standard().copy();
-		var ex = assertThrows(IllegalArgumentException.class, () -> b.add(new TestCardType("datatables")));
+		var arg3 = new TestCardType("datatables");
+		var ex = assertThrows(IllegalArgumentException.class, () -> b.add(arg3));
 		assertTrue(ex.getMessage().startsWith("Card type 'datatables' is reserved and cannot be replaced; reserved: '"),
 			ex.getMessage());
 	}
@@ -128,17 +131,20 @@ class CardTypeRegistry_Test {
 
 	@Test void add_chartIsReserved_throwE22() {
 		var b = CardTypeRegistry.standard().copy();
-		assertThrows(IllegalArgumentException.class, () -> b.add(new TestCardType("chart")));
+		var arg4 = new TestCardType("chart");
+		assertThrows(IllegalArgumentException.class, () -> b.add(arg4));
 	}
 
 	@Test void add_terminalIsReserved_throwE22() {
 		var b = CardTypeRegistry.standard().copy();
-		assertThrows(IllegalArgumentException.class, () -> b.add(new TestCardType("terminal")));
+		var arg5 = new TestCardType("terminal");
+		assertThrows(IllegalArgumentException.class, () -> b.add(arg5));
 	}
 
 	@Test void add_jobLogIsReserved_throwE22() {
 		var b = CardTypeRegistry.standard().copy();
-		var ex = assertThrows(IllegalArgumentException.class, () -> b.add(new TestCardType("job-log")));
+		var arg6 = new TestCardType("job-log");
+		var ex = assertThrows(IllegalArgumentException.class, () -> b.add(arg6));
 		assertEquals("Card type 'job-log' is reserved and cannot be replaced; reserved: "
 			+ "'chart, datatables, html, job-log, run-view, terminal'.", ex.getMessage());
 	}

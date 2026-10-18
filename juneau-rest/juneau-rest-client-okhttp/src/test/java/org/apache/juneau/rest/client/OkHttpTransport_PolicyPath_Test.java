@@ -48,6 +48,7 @@ import okio.BufferedSource;
  * {@link SocketFactory} redirects every connect to a loopback server, recording the address the transport asked for.
  */
 @SuppressWarnings({
+	"java:S3415", // Expected value is already first; Sonar mistakes the upper-case constant or field for the expected value
 	"resource" // Transport/response Closeables are exercised inline; lifecycle is managed by the test.
 })
 // SEPARATE_THREAD: a socket read blocked on a non-responding peer ignores interrupts, so SAME_THREAD would still hang.
@@ -134,7 +135,7 @@ class OkHttpTransport_PolicyPath_Test {
 	}
 
 	@Test
-	void a04_guarded_redirectToLoopback_refusedBeforeConnect() throws Exception {
+	void a04_guarded_redirectToLoopback_refusedBeforeConnect() {
 		var connects = new CopyOnWriteArrayList<String>();
 		try (var transport = transport(connects)) {
 			var ex = assertThrows(TransportException.class, () -> transport.execute(guarded("http://8.8.8.8:" + port + "/to-loopback")).close());
@@ -149,7 +150,7 @@ class OkHttpTransport_PolicyPath_Test {
 	// =================================================================================================================
 
 	@Test
-	void b01_bodyWiringFails_transportException_andResponseClosed() throws Exception {
+	void b01_bodyWiringFails_transportException_andResponseClosed() {
 		var sourceCalls = new AtomicInteger();
 		Interceptor breakBody = chain -> {
 			var response = chain.proceed(chain.request());

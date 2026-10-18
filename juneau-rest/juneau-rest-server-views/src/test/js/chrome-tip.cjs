@@ -193,7 +193,7 @@ function leave(target, related) {
 	hover(btn, 40, 50);
 	out.menubtn_stillNoNativeTitle = btn.getAttribute('title') == null && (btn.title === '' || btn.title == null);
 	out.menubtn_tipText = tipNode() ? tipNode().textContent : null;
-	out.menubtn_tipVisible = !!(tipNode()?.style.display === 'block');
+	out.menubtn_tipVisible = tipNode()?.style.display === 'block';
 	leave(btn, env.body);
 })();
 

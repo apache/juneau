@@ -246,6 +246,10 @@ class ConsoleCards_Shell_Test extends TestBase {
 		assertEquals(true, strict.get("isCard"));
 		assertEquals(false, strict.get("isBare"));
 		assertEquals(true, strict.get("title"));
+	}
+
+	@Test void a10b_bareNonHtmlCardIsChromeless_paramsAndLateType() {
+		var c = cards("bareChromeless");
 		// a bare card awaiting params still waits: the empty text is painted and the handler has not run
 		var params = map(c.get("params"));
 		assertEquals("DIV", params.get("tag"));

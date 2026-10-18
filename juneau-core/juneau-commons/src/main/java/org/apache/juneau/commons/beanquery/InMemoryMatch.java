@@ -137,6 +137,9 @@ final class InMemoryMatch {
 		return v != null && v.toLowerCase(Locale.ROOT).contains(arg.toLowerCase(Locale.ROOT));
 	}
 
+	@SuppressWarnings({
+		"javabugs:S2259" // Only caller is matchBare(), whose literal node value comes from the parser's decodeLiteral() and is never null.
+	})
 	private static boolean hasWildcard(String token) {
 		return token.indexOf('*') >= 0 || token.indexOf('?') >= 0;
 	}
@@ -354,7 +357,8 @@ final class InMemoryMatch {
 	}
 
 	@SuppressWarnings({
-		"java:S1168" // Private sentinel: null means "not a version", distinct from any parsed (possibly zero-length) value; hot sort path.
+		"java:S1168", // Private sentinel: null means "not a version", distinct from any parsed (possibly zero-length) value; hot sort path.
+		"javabugs:S2259" // The ib(v) guard returns for a null or blank v before v.strip().
 	})
 	private static int[] version(String v) {
 		if (ib(v))

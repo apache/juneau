@@ -76,7 +76,7 @@ const CASES = [
 
 // Render-mode guard: ECharts renders html for every renderMode except the exact string "richText", so only "richText" and
 // an html tooltip with a $fn formatter may reach it.
-const tip = (extra) => Object.assign({ formatter: '<b>{b}</b>' }, extra);
+const tip = (extra) => ({ formatter: '<b>{b}</b>', ...extra });
 CASES.push(
 	['render-mode-html-string-formatter', { id: 'c', option: { tooltip: tip({ renderMode: 'html' }), series: [] } }, DAYS, ROWS],
 	['render-mode-auto', { id: 'c', option: { tooltip: tip({ renderMode: 'auto' }), series: [] } }, DAYS, ROWS],
@@ -182,7 +182,7 @@ const FN_CASES = [
 	['duration-unit-s', { $fn: 'duration', args: { unit: 's' } }, 'richText', [90]],
 	['duration-tier-boundary', { $fn: 'duration' }, 'richText', [59950]],
 	['duration-negative', { $fn: 'duration' }, 'richText', [-5000]],
-	['number-nan', { $fn: 'number' }, 'richText', [NaN]],
+	['number-nan', { $fn: 'number' }, 'richText', [Number.NaN]],
 	['datetime-null', { $fn: 'datetime' }, 'richText', [null]],
 	['throwing-fn-blank', { $fn: 'app.boom' }, 'richText', [1]],
 	['unknown-e-js-90', { $fn: 'app.missing' }, 'richText', [1]]
@@ -194,7 +194,7 @@ let tokensFrozen = null;
 // The stand-in network: every fetch lands in fetched[]; /api/fail answers HTTP 500, every other path a JSON array of rows.
 const fetched = [];
 const fakeFetch = (url, init) => {
-	fetched.push({ url: String(url), signal: init && init.signal, credentials: init && init.credentials });
+	fetched.push({ url: String(url), signal: init?.signal, credentials: init?.credentials });
 	if (String(url) === '/api/fail') return Promise.resolve({ ok: false, status: 500, json: () => Promise.resolve({ message: 'nope' }) });
 	if (String(url) === '/api/rows-fn') return Promise.resolve({ ok: true, status: 200, json: () => Promise.resolve([{ at: { $fn: 'nope.x' }, label: { $fn: 'compact' } }]) });
 	if (String(url) === '/api/rows-object') return Promise.resolve({ ok: true, status: 200, json: () => Promise.resolve({ rows: [{ at: 'Wed', label: 'FromRows' }] }) });
@@ -202,7 +202,7 @@ const fakeFetch = (url, init) => {
 };
 let stampFrame = null, rawResult = null;
 const REGISTRATIONS = [
-	['fn', 'app.tip', () => p => String(p)],
+	['fn', 'app.tip', () => String],
 	['fn', 'app.boom', () => () => { throw new Error('boom'); }],
 	['fn', 'app.mode', (a, c) => () => c.renderMode],
 	['fn', 'app.size', () => () => 1],
@@ -231,7 +231,7 @@ const REGISTRATIONS = [
 		}
 		caseWarnings[name] = env.warnings.slice(w);
 	}
-	if (typeof FN_CASES !== 'undefined') {
+	if (FN_CASES !== undefined) {
 		const f = H.frame(env, POINTS, POINT_ROWS);
 		const fns = {}, w0 = env.warnings.length;
 		for (const [name, marker, mode, args] of FN_CASES) {
@@ -248,10 +248,10 @@ const REGISTRATIONS = [
 	}
 	await runChecks(env);
 	process.stdout.write(JSON.stringify({ goldens, caseWarnings, thrown, checks, errors: env.errors, warnings: env.warnings }));
-})().catch(e => { console.error(e && e.stack || e); process.exit(1); });
+})().catch(e => { console.error(e?.stack || e); process.exit(1); });
 
 // Behaviours a golden cannot show: the mode a $fn is built in, build()'s promise, frozen tokens, __proto__ keys.
-async function runChecks(env) {
+async function runChecks(env) { // NOSONAR javascript:S3776 - branching mirrors the behavior being implemented; splitting it would obscure the flow
 	const fr = H.frame(env, DAYS, ROWS);
 	const run = (card) => H.runPipeline(env, card, fr);
 	const modeOf = async (option, pick) => pick(await run({ id: 'c', option: option }))();
@@ -282,7 +282,7 @@ async function runChecks(env) {
 	let promise = null, message = null;
 	try {
 		promise = env.charts.build({ id: 'c', get helper() { throw new Error('sync boom'); } }, fr);
-	} catch (e) {
+	} catch (e) { // NOSONAR javascript:S2486 - the failure is an expected outcome here and the fallback handles it
 		message = 'threw';
 	}
 	checks.buildReturnsPromise = promise !== null && typeof promise.then === 'function';
@@ -292,7 +292,7 @@ async function runChecks(env) {
 	let ctxPromise = null, ctxMessage = null;
 	try {
 		ctxPromise = env.charts.build({ id: 'c', option: { series: [] } }, fr, { get tokens() { throw new Error('ctx boom'); } });
-	} catch (e) {
+	} catch (e) { // NOSONAR javascript:S2486 - the failure is an expected outcome here and the fallback handles it
 		ctxMessage = 'threw';
 	}
 	checks.buildReturnsPromiseForThrowingCtx = ctxPromise !== null && typeof ctxPromise.then === 'function';
@@ -318,7 +318,7 @@ async function runChecks(env) {
 	// Every URL a decorator can fetch goes through the same-origin rule: nothing else reaches fetch().
 	fetched.length = 0;
 	let unsafeOk = true;
-	for (const bad of ['//evil.example/x', 'https://evil.example/x', 'http:/x', '/a/../b', '/x\\y', ' /x', '/x ', '/x\ny', '/x\ty', 'javascript:alert(1)', 'x:y', '..', '', '\\\\evil.example', '/x\u007f']) {
+	for (const bad of ['//evil.example/x', 'https://evil.example/x', 'http:/x', '/a/../b', String.raw`/x\y`, ' /x', '/x ', '/x\ny', '/x\ty', 'javascript:alert(1)', 'x:y', '..', '', String.raw`\\evil.example`, '/x\u007f']) {
 		for (const via of ['spec', 'ctx']) {
 			rawResult = null;
 			let msg = null;
@@ -336,7 +336,7 @@ async function runChecks(env) {
 	// Non-aborting: a second fetch never aborts the first, and a failed fetch is not cached.
 	fetched.length = 0;
 	await run({ id: 'c', helper: line, decorators: [{ use: 'app.twoFetch' }] });
-	checks.decoratorFetchesDoNotAbortEachOther = fetched.length === 2 && fetched.every(x => x.signal && x.signal.aborted === false);
+	checks.decoratorFetchesDoNotAbortEachOther = fetched.length === 2 && fetched.every(x => x.signal?.aborted === false);
 	fetched.length = 0;
 	await run({ id: 'c', helper: line, decorators: [{ use: 'app.retry' }] });
 	checks.decoratorFailedFetchNotCached = fetched.length === 2;
@@ -391,10 +391,10 @@ async function runEscapeChecks(env) {
 	// No value is "", never "NaN" / 1970.
 	for (const name of ['number', 'percent', 'compact', 'bytes', 'duration', 'datetime']) {
 		const f = await fnIn({ $fn: name }, 'richText');
-		checks['fnNaNBlank:' + name] = f(NaN) === '' && f({ value: NaN }) === '' && f(null) === '' && f(undefined) === '';
+		checks['fnNaNBlank:' + name] = f(Number.NaN) === '' && f({ value: Number.NaN }) === '' && f(null) === '' && f(undefined) === '';
 	}
 	const dt = await fnIn({ $fn: 'datetime' }, 'richText');
-	checks.datetimeNullBlank = dt(null) === '' && dt({ value: null }) === '' && dt(NaN) === '';
+	checks.datetimeNullBlank = dt(null) === '' && dt({ value: null }) === '' && dt(Number.NaN) === '';
 	// Tier boundaries and negatives.
 	const by = await fnIn({ $fn: 'bytes' }, 'richText'), byb = await fnIn({ $fn: 'bytes', args: { binary: true } }, 'richText');
 	checks.bytesTierBoundary = by(999999) === '1.0 MB' && by(999949) === '999.9 kB' && by(999) === '999 B' && by(999.6) === '1.0 kB' && by(1000) === '1.0 kB' && byb(1048575) === '1.0 MiB' && by(-1500) === '-1.5 kB' && by(-999999) === '-1.0 MB' && by(0) === '0 B';
@@ -414,7 +414,7 @@ async function runCacheCheck() {
 	const fetch = (url, init) => { calls.push(url); return new Promise((res, rej) => init.signal.addEventListener('abort', () => rej(Object.assign(new Error('a'), { name: 'AbortError' })))); };
 	const window = { echarts: {}, JuneauViews: {} };
 	window.window = window;
-	vm.runInContext(src, vm.createContext({ window, console: { error() {}, warn() {}, log() {} }, setTimeout, clearTimeout, AbortController, fetch }));
+	vm.runInContext(src, vm.createContext({ window, console: { error() {}, warn() {}, log() {} }, setTimeout, clearTimeout, AbortController, fetch })); // NOSONAR javascript:S1523 - loads the shipped script into a vm sandbox for the test
 	const { perDrawFetch, cachedFetch } = window.__t;
 	const cache = new Map();
 	const f1 = perDrawFetch(null), p1 = cachedFetch(cache, f1)('/api/m');
@@ -447,7 +447,7 @@ async function runCacheCheck() {
 }
 
 // Decorator row data, the decorators' fields and the surviving mutations.
-async function runDecoratorChecks(env, line) {
+async function runDecoratorChecks(env, line) { // NOSONAR javascript:S3776 - branching mirrors the behavior being implemented; splitting it would obscure the flow
 	const fr = H.frame(env, DAYS, ROWS);
 	const run = card => H.runPipeline(env, card, fr);
 	const sid = (o, id) => o.series.find(x => x.id === id);
@@ -456,10 +456,10 @@ async function runDecoratorChecks(env, line) {
 	let o = await run(mk([{ at: 'Mon', label: 'a', meta: { $fn: 'compact' } }]));
 	checks.metaFnInert = isPlain(sid(o, 'juneau-markers-0').markLine.data[0].meta) && sid(o, 'juneau-markers-0').markLine.data[0].meta.$fn === 'compact';
 	let unknownOk = false;
-	try { o = await run(mk([{ at: 'Mon', label: 'a', meta: { $fn: 'nope.x' } }])); unknownOk = sid(o, 'juneau-markers-0').markLine.data[0].meta.$fn === 'nope.x'; } catch (e) { unknownOk = false; }
+	try { o = await run(mk([{ at: 'Mon', label: 'a', meta: { $fn: 'nope.x' } }])); unknownOk = sid(o, 'juneau-markers-0').markLine.data[0].meta.$fn === 'nope.x'; } catch (e) { unknownOk = false; } // NOSONAR javascript:S2486 - the failure is an expected outcome here and the fallback handles it
 	checks.metaUnknownFnInert = unknownOk;
 	let otcOk = false;
-	try { o = await run(mk([{ at: 'Mon', label: 'a', meta: { optionToContent: { $fn: 'compact' } } }])); otcOk = isPlain(sid(o, 'juneau-markers-0').markLine.data[0].meta.optionToContent); } catch (e) { otcOk = false; }
+	try { o = await run(mk([{ at: 'Mon', label: 'a', meta: { optionToContent: { $fn: 'compact' } } }])); otcOk = isPlain(sid(o, 'juneau-markers-0').markLine.data[0].meta.optionToContent); } catch (e) { otcOk = false; } // NOSONAR javascript:S2486 - the failure is an expected outcome here and the fallback handles it
 	checks.metaOptionToContentInert = otcOk;
 	const bm = await run({ id: 'c', helper: line, decorators: [{ use: 'bands', values: [{ start: 'Mon', end: 'Tue', meta: { $fn: 'nope.x' } }] }] });
 	checks.metaInertInBands = isPlain(sid(bm, 'juneau-bands-0').markArea.data[0][0].meta);
@@ -472,7 +472,7 @@ async function runDecoratorChecks(env, line) {
 		o = await run(mk([{ at: unk, label: reg }, { at: reg, label: unk }, { at: [1], label: true }, { at: true, label: null }, { at: null, label: [1] }]));
 		const d = sid(o, 'juneau-markers-0').markLine.data;
 		scalarOk = d.length === 5 && d.every(x => x.xAxis === undefined && x.name === '');
-	} catch (e) { scalarOk = false; }
+	} catch (e) { scalarOk = false; } // NOSONAR javascript:S2486 - the failure is an expected outcome here and the fallback handles it
 	checks.dataRowNonScalarMarkers = scalarOk;
 	o = await run(mk([{ at: 'Tue', label: 'D' }, { at: 5, label: 7 }, { at: new Date(0), label: 'x' }]));
 	const sd = sid(o, 'juneau-markers-0').markLine.data;
@@ -482,7 +482,7 @@ async function runDecoratorChecks(env, line) {
 		o = await run({ id: 'c', helper: line, decorators: [{ use: 'bands', label: 'T', values: [{ start: unk, end: reg, label: unk }, { start: [1], end: false, label: reg }] }] });
 		const bd = sid(o, 'juneau-bands-0').markArea.data;
 		bandOk = bd.length === 2 && bd.every(p => p[0].xAxis === undefined && p[1].xAxis === undefined && p[0].name === 'T');
-	} catch (e) { bandOk = false; }
+	} catch (e) { bandOk = false; } // NOSONAR javascript:S2486 - the failure is an expected outcome here and the fallback handles it
 	checks.dataRowNonScalarBands = bandOk;
 	o = await run({ id: 'c', helper: line, decorators: [{ use: 'bands', values: [{ start: 'Mon', end: 5, label: 'Out' }, { start: new Date(0), end: 'Wed' }] }] });
 	const bs = sid(o, 'juneau-bands-0').markArea.data;
@@ -494,13 +494,13 @@ async function runDecoratorChecks(env, line) {
 		o = await run({ id: 'c', helper: line, decorators: [{ use: 'markers', src: '/api/rows-fn' }] });
 		const fd = sid(o, 'juneau-markers-0').markLine.data;
 		srcOk = fd.length === 1 && fd[0].xAxis === undefined && fd[0].name === '';
-	} catch (e) { srcOk = false; }
+	} catch (e) { srcOk = false; } // NOSONAR javascript:S2486 - the failure is an expected outcome here and the fallback handles it
 	checks.dataRowNonScalarFromSrc = srcOk;
 	// no $fn marker anywhere under toolbox.feature.dataView.
 	for (const [n, dv] of [['optionToContent', { optionToContent: { $fn: 'compact' } }], ['title', { title: { $fn: 'compact' } }], ['lang', { lang: [{ $fn: 'compact' }, 'x'] }], ['nested', { x: { y: { $fn: 'compact' } } }]]) {
 		let msg = null;
 		try { await run({ id: 'c', option: { toolbox: { feature: { dataView: dv } }, series: [] } }); } catch (e) { msg = e.message; }
-		checks['dataViewRefusesFn:' + n] = typeof msg === 'string' && msg.includes('E-JS-98') && msg.includes('a $fn may not format');
+		checks['dataViewRefusesFn:' + n] = typeof msg === 'string' && msg.includes('E-JS-98') && msg.includes('a $fn may not format'); // NOSONAR javascript:S6551 - value is always a primitive
 	}
 	// Label text: goldens print [fn template], so evaluate the label fns.
 	o = await run({ id: 'c', helper: line, decorators: [{ use: 'markers', values: [{ at: 'Tue', label: 'Deploy' }] }, { use: 'bands', values: [{ start: 'Mon', end: 'Tue', label: 'Out' }] },
@@ -520,7 +520,7 @@ async function runDecoratorChecks(env, line) {
 	o = await H.runPipeline(env, { id: 'c', helper: { kind: 'line', x: { field: 't', type: 'time' }, series: [{ field: 'n' }] }, decorators: [{ use: 'markers', values: [], now: { label: 'Now' } }] }, stamps);
 	const nowItem = sid(o, 'juneau-markers-0').markLine.data.find(d => d.name === 'Now');
 	checks.markersNowTime = !!nowItem && typeof nowItem.xAxis === 'number' && nowItem.xAxis >= t0 && nowItem.xAxis <= Date.now();
-	const today = () => { const d = new Date(), two = n => (n < 10 ? '0' : '') + n; return d.getFullYear() + '-' + two(d.getMonth() + 1) + '-' + two(d.getDate()); };
+	const today = () => { const d = new Date(), two = n => (n < 10 ? '0' : '') + n; return d.getFullYear() + '-' + two(d.getMonth() + 1) + '-' + two(d.getDate()); }; // NOSONAR javascript:S6551 - two() only ever receives numbers
 	const todayUtc = () => new Date().toISOString().slice(0, 10);
 	const d0 = today(), u0 = todayUtc();
 	o = await run({ id: 'c', helper: line, decorators: [{ use: 'markers', values: [], now: { label: 'Now' } }] });
@@ -549,7 +549,7 @@ async function runDecoratorChecks(env, line) {
 	// a single-object option.series still gets the presets.
 	o = await run({ id: 'c', option: { xAxis: { type: 'category' }, yAxis: {}, series: { type: 'bar', id: 's1', data: [1, 2] } }, decorators: [{ use: 'annotations', presets: ['min'] }] });
 	const one = Array.isArray(o.series) ? o.series[0] : o.series;
-	checks.annotationsSingleObjectSeries = one.id === 's1' && Array.isArray(one.markPoint && one.markPoint.data) && one.markPoint.data[0].type === 'min';
+	checks.annotationsSingleObjectSeries = one.id === 's1' && Array.isArray(one.markPoint?.data) && one.markPoint.data[0].type === 'min';
 	// Bands minGap: a one-bucket gap is dropped when minGap is 2.
 	const gapRows = [{ t: 0, n: 1 }, { t: 3600000, n: 0 }, { t: 7200000, n: 2 }, { t: 10800000, n: 0 }, { t: 14400000, n: 0 }, { t: 18000000, n: 3 }];
 	const gf = H.frame(env, STAMPS, gapRows), gcard = md => ({ id: 'c', helper: { kind: 'line', x: { field: 't', type: 'time' }, series: [{ field: 'n' }] }, decorators: [{ use: 'bands', auto: 'gaps', minGap: md }] });

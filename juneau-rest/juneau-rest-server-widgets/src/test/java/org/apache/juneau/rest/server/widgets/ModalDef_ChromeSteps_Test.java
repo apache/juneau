@@ -59,7 +59,8 @@ class ModalDef_ChromeSteps_Test extends TestBase {
 	}
 
 	@Test void b01_validate_blankChromeRejected() {
-		assertThrows(IllegalArgumentException.class, () -> ModalDef.create("t").chrome(" ").validate());
+		var m = ModalDef.create("t").chrome(" ");
+		assertThrows(IllegalArgumentException.class, m::validate);
 	}
 
 	@Test void b02_validate_blankStepIdRejected() {
@@ -77,11 +78,13 @@ class ModalDef_ChromeSteps_Test extends TestBase {
 	@Test void b04_validate_stepFieldKindChecked() {
 		var step = ModalDef.Step.of("a").field("L", "v");
 		step.fields.get(0).kind = "bogus";
-		assertThrows(IllegalArgumentException.class, () -> ModalDef.create("t").step(step).validate());
+		var m = ModalDef.create("t").step(step);
+		assertThrows(IllegalArgumentException.class, m::validate);
 	}
 
 	@Test void b05_validate_nullStepRejected() {
-		assertThrows(IllegalArgumentException.class, () -> ModalDef.create("t").step(null));
+		var m = ModalDef.create("t");
+		assertThrows(IllegalArgumentException.class, () -> m.step(null));
 	}
 
 	@Test void b06_validate_wellFormedPasses() {

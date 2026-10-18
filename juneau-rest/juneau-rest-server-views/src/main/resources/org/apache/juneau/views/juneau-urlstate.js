@@ -89,7 +89,7 @@
 
 	/** Percent-encodes the characters the directive grammar is sensitive to, so a codec body always parses. */
 	function encodeArg(s) {
-		return String(s == null ? '' : s).replace(/[;(),=%]/g, function (c) { return '%' + c.charCodeAt(0).toString(16).toUpperCase(); });
+		return String(s == null ? '' : s).replaceAll(/[;(),=%]/g, function (c) { return '%' + c.codePointAt(0).toString(16).toUpperCase(); });
 	}
 
 	/** Decodes an {@link encodeArg} value; a malformed %-sequence is kept as-is. */
@@ -104,7 +104,7 @@
 
 	/** Built-in `window` directive: body `start=<iso>;end=<iso>`, either half optional; `params` renames the request params. */
 	function windowDirectiveCodec(cfg) {
-		const params = (cfg && cfg.params) || {};
+		const params = (cfg?.params) || {};
 		const startParam = params.start || 'start';
 		const endParam = params.end || 'end';
 		return {
@@ -163,6 +163,14 @@
 		};
 	}
 
+	function realDay(text) {
+		const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(text);
+		if (! m) return null;
+		const d = new Date(0);
+		d.setUTCFullYear(+m[1], +m[2] - 1, +m[3]); // not Date.UTC: it maps years 0-99 to 1900-1999
+		return d.getUTCFullYear() === +m[1] && d.getUTCMonth() === +m[2] - 1 && d.getUTCDate() === +m[3] ? text : null;
+	}
+
 	/**
 	 * Built-in `day` directive: body `YYYY-MM-DD`, one calendar day sent as a single request param (`param`, default `day`).
 	 * A body that is not a real calendar date parses to nothing, so the directive is dropped from the address bar and no
@@ -170,13 +178,6 @@
 	 */
 	function dayDirectiveCodec(cfg) {
 		const param = cfg?.param || 'day';
-		function realDay(text) {
-			const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(text);
-			if (! m) return null;
-			const d = new Date(0);
-			d.setUTCFullYear(+m[1], +m[2] - 1, +m[3]); // not Date.UTC: it maps years 0-99 to 1900-1999
-			return d.getUTCFullYear() === +m[1] && d.getUTCMonth() === +m[2] - 1 && d.getUTCDate() === +m[3] ? text : null;
-		}
 		return {
 			parse: function (body) { return realDay(decodeArg(String(body || '')).trim()); },
 			serialize: function (v) { return encodeArg(v); },
@@ -233,7 +234,7 @@
 			const codec = registry[extName].codec;
 			if (extValueEmpty(codec, ext[extName])) continue;
 			// '%' is doubled so decodeState's one whole-string percent-decode leaves the codec's own %XX escapes intact.
-			parts.push(extName + '(' + String(codec.serialize(ext[extName])).replace(/%/g, '%25') + ')');
+			parts.push(extName + '(' + String(codec.serialize(ext[extName])).replaceAll('%', '%25') + ')');
 		}
 		return parts.join(';');
 	}
@@ -377,7 +378,7 @@
 		let st = S1, name = '', body = '', depth = 0, pendingName = '', pendingBody = '';
 		const len = raw.length;
 
-		function applyDirective(n, b) {
+		function applyDirective(n, b) { // NOSONAR javascript:S3776 - branching mirrors the behavior being implemented; splitting it would obscure the flow
 			n = n.trim();
 			if (n === '') return;
 			if (n === 'tab') {

@@ -100,6 +100,9 @@ final class BoundaryChecks {
 	 * @param value The header value.  Can be <jk>null</jk>.
 	 * @return The parsed value, or <jk>null</jk> if it is <jk>null</jk> or malformed.
 	 */
+	@SuppressWarnings({
+		"java:S3776" // Strict header grammar: the bracketed and plain host branches read best as one sequence
+	})
 	static Authority parseHost(String value) {
 		if (value == null || value.isEmpty())
 			return null;
@@ -186,7 +189,7 @@ final class BoundaryChecks {
 			return null;
 		return switch (scheme.toLowerCase(Locale.ROOT)) {
 			case "ws", "http" -> HTTP;
-			case "wss", "https" -> HTTPS;
+			case "wss", HTTPS -> HTTPS;
 			default -> null;
 		};
 	}

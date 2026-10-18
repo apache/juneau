@@ -48,7 +48,7 @@
 	function put(source, frame) {
 		const e = held.get(source) || { version: 0, current: null, previous: null, building: null };
 		const version = e.version + 1;
-		const f = Object.assign({}, frame, { source: source, version: version });
+		const f = { ...frame, source: source, version: version };
 		held.set(source, { version: version, current: f, previous: e.current, building: null });
 		return version;
 	}
@@ -58,8 +58,8 @@
 		const e = held.get(handle.source);
 		if (!e) return null;
 		if (handle.partial === true) return e.building;
-		if (e.current && e.current.version === handle.version) return e.current;
-		if (e.previous && e.previous.version === handle.version) return e.previous;
+		if (e.current?.version === handle.version) return e.current;
+		if (e.previous?.version === handle.version) return e.previous;
 		return null;
 	}
 
@@ -79,7 +79,7 @@
 	function openableIdb() {
 		try {
 			return typeof indexedDB !== "undefined" ? indexedDB : null;
-		} catch (e) {
+		} catch (e) { // NOSONAR javascript:S2486 - the failure is an expected outcome here and the fallback handles it
 			return null;
 		}
 	}
@@ -100,7 +100,7 @@
 			URLSearchParams: typeof URLSearchParams === "function" ? URLSearchParams : null,
 			IDBKeyRange: typeof IDBKeyRange !== "undefined" ? IDBKeyRange : null,
 			indexedDB: openableIdb(),
-			subtle: typeof crypto !== "undefined" && crypto && crypto.subtle ? crypto.subtle : null
+			subtle: typeof crypto !== "undefined" && crypto?.subtle ? crypto.subtle : null
 		},
 		log: {
 			error: msg => console.error("[juneau-data] " + msg),
@@ -126,7 +126,7 @@
 
 	function fmt(msg, ...args) {
 		let i = 0;
-		return msg.replace(/%s/g, () => String(args[i++]));
+		return msg.replaceAll('%s', () => String(args[i++]));
 	}
 
 	// The handle's error object: {code, message}, the message without the code.
@@ -143,7 +143,7 @@
 	}
 
 	function msgOf(e) {
-		return e && e.message || String(e);
+		return e?.message || String(e);
 	}
 
 	// Test-visible helpers, frozen at export (each section adds its own).
@@ -200,7 +200,7 @@
 
 	function charts(kind) {
 		const jc = window.JuneauCharts;
-		const ok = jc && jc[kind] && typeof jc[kind].get === "function" && typeof jc[kind].names === "function";
+		const ok = jc?.[kind] && typeof jc[kind].get === "function" && typeof jc[kind].names === "function";
 		return ok ? jc[kind] : null;
 	}
 
@@ -208,10 +208,10 @@
 	function lookup(kind, name) {
 		const jc = charts(kind);
 		if (!jc) readQueue();
-		const impl = jc && jc.get(name) || local[kind].get(name) || null;
+		const impl = jc?.get(name) || local[kind].get(name) || null;
 		const names = new Set(local[kind].keys());
 		if (jc) jc.names().forEach(n => names.add(n));
-		return { impl: impl, names: Array.from(names).sort() };
+		return { impl: impl, names: Array.from(names).sort((a, b) => (a < b ? -1 : Number(a > b))) };
 	}
 
 	Object.assign(util, { lookup: lookup });
@@ -228,7 +228,7 @@
 	 * string.
 	 */
 	function hasUnsafeUrlChars(s) {
-		return s.charCodeAt(0) <= 32 || s.charCodeAt(s.length - 1) <= 32 || /[\\\u0000-\u001f\u007f]/.test(s);
+		return s.codePointAt(0) <= 32 || s.codePointAt(s.length - 1) <= 32 || /[\\\u0000-\u001f\u007f]/.test(s);
 	}
 
 	// Exact parity with SafePathTemplate.isSameOriginPath (juneau-commons): the original string is refused outright
@@ -252,14 +252,14 @@
 	// half-filled picker); E-JS-100 for an unusable value (naming the template) or a result that is not a same-origin
 	// path (naming the URL).  extra (the chunk window) wins.
 	// The template's own query stays verbatim and first; a key in both appears twice.  A fragment is E-JS-100.
-	function resolveUrl(id, tpl, params, extra) {
+	function resolveUrl(id, tpl, params, extra) { // NOSONAR javascript:S3776 - branching mirrors the behavior being implemented; splitting it would obscure the flow
 		if (typeof tpl !== "string" || tpl.indexOf("#") >= 0) throw dataError("E-JS-100", id, String(tpl));
-		const all = Object.assign({}, params || {}, extra || {});
+		const all = { ...params || {}, ...extra || {} };
 		const used = new Set();
 		let missing = false, bad = false;
-		const path = tpl.replace(TOKEN_RE, (m, name) => {
+		const path = tpl.replaceAll(TOKEN_RE, (m, name) => {
 			used.add(name);
-			const v = Object.prototype.hasOwnProperty.call(all, name) ? all[name] : null;
+			const v = Object.hasOwn(all, name) ? all[name] : null;
 			if (v == null || v === "") missing = true;
 			else if (!isScalar(v)) bad = true;
 			else return encodeURIComponent(String(v));
@@ -268,7 +268,7 @@
 		if (bad) throw dataError("E-JS-100", id, tpl);
 		if (missing) return { missing: true };
 		const qs = new config.platform.URLSearchParams();
-		for (const k of Object.keys(all).sort()) {
+		for (const k of Object.keys(all).sort((a, b) => (a < b ? -1 : Number(a > b)))) {
 			if (used.has(k) || all[k] == null) continue;
 			for (const x of Array.isArray(all[k]) ? all[k] : [all[k]]) {
 				if (x == null) continue;
@@ -279,7 +279,8 @@
 		const q = qs.toString();
 		// A trailing "?" is already a separator; a trailing "&" is one only when the path has a query.
 		const hasQuery = path.indexOf("?") >= 0;
-		const sep = /\?$/.test(path) || (hasQuery && /&$/.test(path)) ? "" : hasQuery ? "&" : "?";
+		let sep = hasQuery ? "&" : "?";
+		if (path.endsWith("?") || (hasQuery && path.endsWith('&'))) sep = "";
 		const url = q ? path + sep + q : path;
 		if (!isSafeDataPath(url)) throw dataError("E-JS-100", id, url);
 		return { url: url };
@@ -305,16 +306,16 @@
 		const init = { method: "GET", credentials: "same-origin", headers: { Accept: accept || "*/*" } };
 		if (signal) init.signal = signal;
 		return Promise.resolve().then(() => f(url, init)).then(res => {
-			if (!res || !res.ok) {
+			if (!res?.ok) {
 				try {
-					const c = res && res.body && typeof res.body.cancel === "function" ? res.body.cancel() : null;
-					if (c && typeof c.catch === "function") c.catch(() => { /* the stream is already closed */ });
-				} catch (x) { /* the stream is already closed */ }
+					if (res?.body && typeof res.body.cancel === "function")
+						Promise.resolve(res.body.cancel()).catch(() => { /* the stream is already closed */ });
+				} catch (error_) { /* the stream is already closed */ } // NOSONAR javascript:S2486 - the failure is an expected outcome here and the fallback handles it
 				throw dataError("E-JS-62", id, "HTTP " + (res ? res.status : "no response"));
 			}
 			return res;
 		}, e => {
-			if (e && e.name === "AbortError" && signal && signal.aborted) throw e;
+			if (e?.name === "AbortError" && signal?.aborted) throw e;
 			throw dataError("E-JS-62", id, msgOf(e));
 		});
 	}
@@ -342,7 +343,7 @@
 			try {
 				const c = reader.cancel();
 				if (c && typeof c.catch === "function") c.catch(() => { /* the stream is already closed */ });
-			} catch (x) { /* the stream is already closed */ }
+			} catch (error_) { /* the stream is already closed */ } // NOSONAR javascript:S2486 - the failure is an expected outcome here and the fallback handles it
 			throw e;
 		}
 	}
@@ -353,7 +354,7 @@
 	// ---- D. parsers ------------------------------------------------------------------------------------------------
 
 	const INFER_ROWS = 100;
-	const NUMBER_RE = /^-?(\d+\.?\d*|\.\d+)([eE][-+]?\d+)?$/;
+	const NUMBER_RE = /^-?(\d+\.?\d*|\.\d+)([eE][-+]?\d+)?$/; // NOSONAR javascript:S8786 - linear in practice on short inputs; JS has no possessive quantifiers
 	const TYPES = ["number", "time", "string", "bool"];
 	const OWN = Object.prototype.hasOwnProperty;
 
@@ -368,7 +369,7 @@
 	}
 
 	function declared(opts) {
-		const cols = opts && opts.columns;
+		const cols = opts?.columns;
 		return Array.isArray(cols) && cols.length ? cols.map(c => ({ name: c.name, type: c.type })) : null;
 	}
 
@@ -378,7 +379,7 @@
 		return t => {
 			if (!first || !t) return t;
 			first = false;
-			return t.charCodeAt(0) === 0xFEFF ? t.slice(1) : t;
+			return t.codePointAt(0) === 0xFEFF ? t.slice(1) : t;
 		};
 	}
 
@@ -404,13 +405,15 @@
 	}
 
 	// Object records: keys in first-seen order; number, bool or string by the JSON type, a mix being a string.
-	function inferObjects(rows) {
+	function inferObjects(rows) { // NOSONAR javascript:S3776 - branching mirrors the behavior being implemented; splitting it would obscure the flow
 		const seen = new Map();
 		for (const r of rows) {
 			for (const k of Object.keys(r)) {
 				const v = r[k];
-				const t = typeof v === "number" ? "number" : typeof v === "boolean" ? "bool" : v == null ? null
-					: "string";
+				let t = "string";
+				if (typeof v === "number") t = "number";
+				else if (typeof v === "boolean") t = "bool";
+				else if (v == null) t = null;
 				if (!seen.has(k)) seen.set(k, t);
 				else if (t && seen.get(k) && seen.get(k) !== t) seen.set(k, "string");
 				else if (t && !seen.get(k)) seen.set(k, t);
@@ -436,7 +439,7 @@
 
 		function endField() {
 			if (rec.length === 0) firstQuoted = quoted;
-			rec.push(quoted ? field : field === "" ? null : field);
+			rec.push(! quoted && field === "" ? null : field);
 			field = "";
 			quoted = closed = false;
 			atStart = true;
@@ -457,7 +460,7 @@
 			held = [];
 		}
 
-		function endRecord() {
+		function endRecord() { // NOSONAR javascript:S3776 - branching mirrors the behavior being implemented; splitting it would obscure the flow
 			const r = rec;
 			rec = [];
 			if (r.length === 1 && r[0] === null) return;
@@ -483,7 +486,7 @@
 			emit(r);
 		}
 
-		function scan(s) {
+		function scan(s) { // NOSONAR javascript:S3776 - branching mirrors the behavior being implemented; splitting it would obscure the flow
 			let i = 0;
 			while (i < s.length) {
 				if (skipLF) {
@@ -595,7 +598,7 @@
 			let v;
 			try {
 				v = JSON.parse(s);
-			} catch (e) {
+			} catch (e) { // NOSONAR javascript:S2486 - the failure is an expected outcome here and the fallback handles it
 				throw parseError(line, "the line is not JSON");
 			}
 			if (!v || typeof v !== "object" || Array.isArray(v))
@@ -613,7 +616,7 @@
 			}
 		}
 
-		function take() {
+		function take() { // NOSONAR javascript:S4144 - each parser closes over its own records buffer
 			const out = records;
 			records = [];
 			return out;
@@ -665,17 +668,22 @@
 				let v;
 				try {
 					v = JSON.parse(text);
-				} catch (e) {
+				} catch (e) { // NOSONAR javascript:S2486 - the failure is an expected outcome here and the fallback handles it
 					throw parseError(0, "the body is not JSON");
 				}
-				const rows = Array.isArray(v) ? v : v && typeof v === "object" && Array.isArray(v.rows) ? v.rows : null;
+				let rows = null;
+				if (Array.isArray(v)) rows = v;
+				else if (v && typeof v === "object" && Array.isArray(v.rows)) rows = v.rows;
 				if (!rows) throw parseError(0, "the body is not an array or {rows}");
 				rows.forEach((r, i) => {
 					if (!r || typeof r !== "object" || Array.isArray(r))
 						throw parseError(i + 1, "the row is not a JSON object");
 				});
-				if (!Array.isArray(v))
-					sentinel = v.truncated === true ? rows.length : isCount(v.truncated) ? v.truncated : null;
+				if (!Array.isArray(v)) {
+					sentinel = null;
+					if (v.truncated === true) sentinel = rows.length;
+					else if (isCount(v.truncated)) sentinel = v.truncated;
+				}
 				if (!dims) dims = inferObjects(rows.slice(0, INFER_ROWS));
 				return rows;
 			},
@@ -697,8 +705,8 @@
 
 	// A finite number, or NaN: strings must be numeric text (no blanks, hex, or Infinity), other types are NaN.
 	function toNumber(v) {
-		if (typeof v === "string") v = NUMBER_RE.test(v) ? Number(v) : NaN;
-		return typeof v === "number" && Number.isFinite(v) ? v : NaN;
+		if (typeof v === "string") v = NUMBER_RE.test(v) ? Number(v) : Number.NaN;
+		return typeof v === "number" && Number.isFinite(v) ? v : Number.NaN;
 	}
 
 	const ISO_DATE_RE = /^\d{4}-\d{2}-\d{2}/;
@@ -709,7 +717,7 @@
 	// Epoch ms of numeric text, or of ISO-8601 text (it starts with YYYY-MM-DD; no zone means UTC); else NaN.
 	function textTime(v) {
 		if (NUMBER_RE.test(v)) return Number(v);
-		if (!ISO_DATE_RE.test(v)) return NaN;
+		if (!ISO_DATE_RE.test(v)) return Number.NaN;
 		return Date.parse(NO_ZONE_RE.test(v) ? v.replace(" ", "T") + "Z" : v);
 	}
 
@@ -717,7 +725,7 @@
 	// textTime); anything else is NaN.
 	function toTime(v) {
 		if (typeof v === "string") v = textTime(v);
-		return typeof v === "number" && Number.isFinite(v) ? v : NaN;
+		return typeof v === "number" && Number.isFinite(v) ? v : Number.NaN;
 	}
 
 	function toBool(v) {
@@ -759,23 +767,39 @@
 	// The default builder.  Columns grow by doubling; finish() and snapshot() copy them out trimmed, so a frame never
 	// shares a buffer with the builder or a cache.  layout names an array record's positions (CSV); object
 	// records are read by own key, a missing key being null and extra keys ignored.
+	function newColumnData(type) {
+		if (type === "string") return new Int32Array(INITIAL);
+		if (type === "bool") return new Int8Array(INITIAL);
+		return new Float64Array(INITIAL);
+	}
+
+	function cellCode(c, v) {
+		if (c.str) return c.str.code(v);
+		if (c.type === "bool") return toBool(v);
+		if (c.type === "time") return toTime(v);
+		return toNumber(v);
+	}
+
+	function cellValue(r, arr, c) {
+		if (arr) return c.at >= 0 ? r[c.at] : null;
+		return OWN.call(r, c.name) ? r[c.name] : null;
+	}
+
 	function columnarBuilder(dims, opts) {
 		const layout = opts && Array.isArray(opts.layout) ? opts.layout : null;
 		const cols = dims.map(d => ({
 			name: d.name, type: d.type, at: layout ? layout.indexOf(d.name) : -1,
-			data: d.type === "string" ? new Int32Array(INITIAL)
-				: d.type === "bool" ? new Int8Array(INITIAL) : new Float64Array(INITIAL),
+			data: newColumnData(d.type),
 			str: d.type === "string" ? strings() : null
 		}));
 		let n = 0;
 
-		function onRecord(r) {
+		function onRecord(r) { // NOSONAR javascript:S3776 - branching mirrors the behavior being implemented; splitting it would obscure the flow
 			const arr = Array.isArray(r);
 			for (const c of cols) {
-				const v = arr ? (c.at >= 0 ? r[c.at] : null) : OWN.call(r, c.name) ? r[c.name] : null;
+				const v = cellValue(r, arr, c);
 				c.data = grown(c.data, n);
-				c.data[n] = c.str ? c.str.code(v)
-					: c.type === "bool" ? toBool(v) : c.type === "time" ? toTime(v) : toNumber(v);
+				c.data[n] = cellCode(c, v);
 			}
 			n++;
 		}
@@ -798,7 +822,7 @@
 	// The generation's frame: the chunk frames in time order, merged by dim name into fresh arrays.  A chunk without
 	// a dim, or with another type for it, contributes nulls.  Strings are re-interned into one dict.  This works on
 	// typed arrays from another realm (a structured clone), because it only calls subarray/set and reads by index.
-	function concatFrames(dims, frames) {
+	function concatFrames(dims, frames) { // NOSONAR javascript:S3776 - branching mirrors the behavior being implemented; splitting it would obscure the flow
 		const total = frames.reduce((a, f) => a + f.rowCount, 0);
 		const columns = Object.create(null);
 		for (const d of dims) {
@@ -818,7 +842,7 @@
 				const out = d.type === "bool" ? new Int8Array(total) : new Float64Array(total);
 				for (const f of frames) {
 					if (sameType(f, d)) out.set(f.columns[d.name].subarray(0, f.rowCount), o);
-					else out.fill(d.type === "bool" ? -1 : NaN, o, o + f.rowCount);
+					else out.fill(d.type === "bool" ? -1 : Number.NaN, o, o + f.rowCount);
 					o += f.rowCount;
 				}
 				columns[d.name] = out;
@@ -835,7 +859,7 @@
 	};
 
 	// Null for a body that meets the aggregate contract, else the reason for E-JS-96.
-	function aggregateProblem(b) {
+	function aggregateProblem(b) { // NOSONAR javascript:S3776 - branching mirrors the behavior being implemented; splitting it would obscure the flow
 		if (!b || typeof b !== "object" || Array.isArray(b)) return "the body is not an object";
 		if (b.schemaVersion !== 1) return "schemaVersion is not 1";
 		if (!Array.isArray(b.dims)) return "dims is not an array";
@@ -851,7 +875,7 @@
 			if (!Array.isArray(col)) return "dim '" + d.name + "' has no column";
 			if (len >= 0 && col.length !== len) return "the columns have unequal lengths";
 			len = col.length;
-			if (!col.every(IS_TYPE[d.type])) return "column '" + d.name + "' holds a value that is not a " + d.type;
+			if (!col.every(v => IS_TYPE[d.type](v))) return "column '" + d.name + "' holds a value that is not a " + d.type;
 		}
 		if (!b.dims.some(d => d.name === "bucket" && d.type === "time")) return "there is no bucket time dim";
 		return null;
@@ -866,8 +890,11 @@
 			if (d.type === "string") {
 				const str = strings();
 				columns[d.name] = { codes: Int32Array.from(src, v => str.code(v)), dict: str.dict };
-			} else if (d.type === "bool") columns[d.name] = Int8Array.from(src, v => v === null ? -1 : v ? 1 : 0);
-			else columns[d.name] = Float64Array.from(src, v => v === null ? NaN : v);
+			} else if (d.type === "bool") columns[d.name] = Int8Array.from(src, v => {
+				if (v === null) return -1;
+				return v ? 1 : 0;
+			});
+			else columns[d.name] = Float64Array.from(src, v => v === null ? Number.NaN : v);
 		}
 		return { dims: copyDims(b.dims), rowCount: n, truncated: b.truncated, columns: columns };
 	}
@@ -906,7 +933,9 @@
 
 	// An ISO-8601 instant, epoch ms, or epoch ms as digits; null for anything else (the same rule as toTime).
 	function parseTime(v) {
-		const t = typeof v === "number" ? v : typeof v === "string" ? textTime(v) : NaN;
+		let t = Number.NaN;
+		if (typeof v === "number") t = v;
+		else if (typeof v === "string") t = textTime(v);
 		return Number.isFinite(t) ? t : null;
 	}
 
@@ -950,7 +979,7 @@
 	// empty or reversed window has no chunks.
 	function chunkList(start, end, unit, now) {
 		const out = [];
-		if (!(end > start)) return out;
+		if (!(end > start)) return out; // NOSONAR javascript:S1940 - NaN must take the rejecting branch, so the negated comparison is deliberate
 		for (let u = floorUnit(start, unit); u < end; u = nextUnit(u, unit)) {
 			const next = nextUnit(u, unit);
 			const s = Math.max(u, start), e = Math.min(next, end);
@@ -1000,7 +1029,7 @@
 				c.continue();
 			};
 			txDone(tx).catch(() => {});
-		} catch (e) {
+		} catch (e) { // NOSONAR javascript:S2486 - the failure is an expected outcome here and the fallback handles it
 			// An old or odd database: leave the records for the next open.
 		}
 	}
@@ -1009,7 +1038,7 @@
 	function openDb() {
 		if (dbOpen) return dbOpen;
 		const idb = config.platform.indexedDB;
-		if (!idb) return (dbOpen = Promise.resolve({ db: null, reason: "no indexedDB" }));
+		if (!idb) { dbOpen = Promise.resolve({ db: null, reason: "no indexedDB" }); return dbOpen; }
 		dbOpen = new Promise(resolve => {
 			let timer = null, late = false;
 			const fail = e => {
@@ -1102,7 +1131,7 @@
 	function canonicalJson(v) {
 		if (Array.isArray(v)) return "[" + v.map(canonicalJson).join(",") + "]";
 		if (v && typeof v === "object")
-			return "{" + Object.keys(v).sort().filter(k => v[k] !== undefined)
+			return "{" + Object.keys(v).sort((a, b) => (a < b ? -1 : Number(a > b))).filter(k => v[k] !== undefined)
 				.map(k => JSON.stringify(k) + ":" + canonicalJson(v[k])).join(",") + "}";
 		return JSON.stringify(v === undefined ? null : v);
 	}
@@ -1118,6 +1147,35 @@
 	function usable(r) {
 		return !!r && r.schemaVersion === SCHEMA_VERSION && Array.isArray(r.dims)
 			&& !!r.columns && typeof r.columns === "object";
+	}
+
+	// The window params are not part of the namespace, so every window shares one set of chunk records.
+	async function namespace(def, params) {
+		const win = def.chunk ? [def.chunk.start, def.chunk.end] : [];
+		const p = Object.create(null);
+		for (const k of Object.keys(params || {})) if (win.indexOf(k) < 0 && params[k] != null) p[k] = params[k];
+		const text = canonicalJson({ url: def.url, params: p, columns: def.columns || null, format: def.parser,
+			chunk: def.chunk ? def.chunk.unit : null, schemaVersion: SCHEMA_VERSION });
+		const subtle = config.platform.subtle, TE = config.platform.TextEncoder;
+		if (!subtle || !TE) return text;
+		const buf = await subtle.digest("SHA-256", new TE().encode(text));
+		return Array.from(new Uint8Array(buf), b => (b < 16 ? "0" : "") + b.toString(16)).join("").slice(0, 32);
+	}
+
+	function idbGet(db, keys) {
+		const tx = db.transaction([STORE], "readonly"), store = tx.objectStore(STORE);
+		const out = keys.map(() => undefined);
+		keys.forEach((k, i) => {
+			const r = store.get(k);
+			r.onsuccess = () => { out[i] = r.result; };
+		});
+		return txDone(tx).then(() => out);
+	}
+
+	// A record read from IndexedDB is a structured clone, so its columns lose their null prototype.
+	function detached(r) {
+		if (usable(r)) r.columns = Object.assign(Object.create(null), r.columns);
+		return r;
 	}
 
 	// A source's cache.  mode is the def's cache: indexedDb, memory or none.  kind() is the handle's cache value:
@@ -1148,35 +1206,6 @@
 			return opened;
 		}
 
-		// The window params are not part of the namespace, so every window shares one set of chunk records.
-		async function namespace(def, params) {
-			const win = def.chunk ? [def.chunk.start, def.chunk.end] : [];
-			const p = Object.create(null);
-			for (const k of Object.keys(params || {})) if (win.indexOf(k) < 0 && params[k] != null) p[k] = params[k];
-			const text = canonicalJson({ url: def.url, params: p, columns: def.columns || null, format: def.parser,
-				chunk: def.chunk ? def.chunk.unit : null, schemaVersion: SCHEMA_VERSION });
-			const subtle = config.platform.subtle, TE = config.platform.TextEncoder;
-			if (!subtle || !TE) return text;
-			const buf = await subtle.digest("SHA-256", new TE().encode(text));
-			return Array.from(new Uint8Array(buf), b => (b < 16 ? "0" : "") + b.toString(16)).join("").slice(0, 32);
-		}
-
-		function idbGet(db, keys) {
-			const tx = db.transaction([STORE], "readonly"), store = tx.objectStore(STORE);
-			const out = keys.map(() => undefined);
-			keys.forEach((k, i) => {
-				const r = store.get(k);
-				r.onsuccess = () => { out[i] = r.result; };
-			});
-			return txDone(tx).then(() => out);
-		}
-
-		// A record read from IndexedDB is a structured clone, so its columns lose their null prototype.
-		function detached(r) {
-			if (usable(r)) r.columns = Object.assign(Object.create(null), r.columns);
-			return r;
-		}
-
 		// Every listed chunk's record, in one transaction: a Map from chunk key to record.  With a known epoch, a
 		// record from another epoch (or none) makes the read a miss and drops the namespace.
 		async function read(ns, chunks, epoch) {
@@ -1204,7 +1233,7 @@
 
 		// Stores finished chunk records.  A failed IndexedDB write (QuotaExceededError or any other) falls back for the
 		// page and keeps the records in memory.
-		async function write(records) {
+		async function write(records) { // NOSONAR javascript:S3776 - branching mirrors the behavior being implemented; splitting it would obscure the flow
 			if (!kind || !records.length) return;
 			const db = await open();
 			if (db && kind === "indexedDb") {
@@ -1216,8 +1245,8 @@
 					await txDone(tx);
 					return;
 				} catch (e) {
-					if (tx) try { tx.abort(); } catch (ignored) { /* already finished or aborted */ }
-					fallback(e && e.name === "QuotaExceededError" ? "quota exceeded" : "write failed: " + msgOf(e));
+					if (tx) try { tx.abort(); } catch (error_) { /* already finished or aborted */ } // NOSONAR javascript:S2486 - the failure is an expected outcome here and the fallback handles it
+					fallback(e?.name === "QuotaExceededError" ? "quota exceeded" : "write failed: " + msgOf(e));
 				}
 			}
 			for (const r of records) memory.set(r.key, r);
@@ -1262,7 +1291,7 @@
 	// True when [start, end) spans more than limit chunks of the unit.  It stops counting at limit + 1, so a huge
 	// window is never walked or listed in full.
 	function overChunkLimit(start, end, unit, limit) {
-		if (!(end > start)) return false;
+		if (!(end > start)) return false; // NOSONAR javascript:S1940 - NaN must take the rejecting branch, so the negated comparison is deliberate
 		let n = 0;
 		for (let u = floorUnit(start, unit); u < end; u = nextUnit(u, unit))
 			if (++n > limit) return true;
@@ -1298,9 +1327,21 @@
 	// a superseded generation passes through.
 	function bodyOf(id, res, signal, onText) {
 		return readBody(res, onText).catch(e => {
-			const own = e && (e.superseded || e.problem || (e.name === "AbortError" && signal && signal.aborted));
+			const own = e && (e.superseded || e.problem || (e.name === "AbortError" && signal?.aborted));
 			throw own ? e : dataError("E-JS-62", id, msgOf(e));
 		});
+	}
+
+	function progressOf(st) {
+		return st.total == null ? { loaded: st.loaded } : { loaded: st.loaded, total: st.total };
+	}
+
+	// Abort this generation for a switch to AGGREGATE; the caller throws the result, and start's catch (not the
+	// generation) then loads the aggregate for the same window with no debounce.
+	function switchTo(st) {
+		st.switch = st.stopped = true;
+		st.ctl.abort();
+		return supersededError();
 	}
 
 	// One DataSource.  def is a dataSources[] entry of kind source; partial: a partialFrames card reads it.  Every
@@ -1309,11 +1350,11 @@
 	function createSource(entry, bus, opts) {
 		// A field the entry leaves out takes the Java DataSourceDef default (concurrency 1 and mode raw are applied
 		// where they are read).
-		const def = Object.assign({}, entry, { parser: entry.parser || "csv", builder: entry.builder || "columnar",
-			cache: entry.cache || "memory", debounceMs: entry.debounceMs == null ? 250 : entry.debounceMs });
+		const def = { ...entry, parser: entry.parser || "csv", builder: entry.builder || "columnar",
+			cache: entry.cache || "memory", debounceMs: entry.debounceMs == null ? 250 : entry.debounceMs };
 		const id = def.id, topic = "data:" + id;
 		const own = bus.owner("data-source:" + id);
-		const partial = !!(opts && opts.partial);
+		const partial = !!(opts?.partial);
 		const cache = sourceCache(id, def.cache);
 		const columnar = def.builder === "columnar";
 		const params = Object.create(null);
@@ -1327,14 +1368,10 @@
 				truncatedAt: shown ? shown.truncatedAt : null, dims: copyDims(shown ? shown.dims : def.columns || []),
 				error: null };
 			if (cache.kind()) h.cache = cache.kind();
-			const mode = status === "loading" ? st.mode : shown && shown.mode;
+			const mode = status === "loading" ? st.mode : shown?.mode;
 			if (mode) h.mode = mode;
 			if (shown) h.loadedAt = shown.loadedAt;
 			own.publish(topic, Object.assign(h, extra));
-		}
-
-		function progressOf(st) {
-			return st.total == null ? { loaded: st.loaded } : { loaded: st.loaded, total: st.total };
 		}
 
 		function live(st) {
@@ -1352,14 +1389,6 @@
 			building(id, null);
 			config.log.error(p.code + ": " + p.message);
 			publish(st, shown ? "stale" : "error", { error: p });
-		}
-
-		// Abort this generation for a switch to AGGREGATE; the caller throws the result, and start's catch (not the
-		// generation) then loads the aggregate for the same window with no debounce.
-		function switchTo(st) {
-			st.switch = st.stopped = true;
-			st.ctl.abort();
-			return supersededError();
 		}
 
 		function schedule(clear) {
@@ -1402,9 +1431,9 @@
 						gen++;
 						start(gen, "aggregate", false);
 					} else
-						fail(st, e && e.problem || problem("E-JS-98", id, "source", def.url || id, msgOf(e)));
-				} catch (x) {
-					config.log.error("E-JS-98: " + msgOf(x));
+						fail(st, e?.problem || problem("E-JS-98", id, "source", def.url || id, msgOf(e)));
+				} catch (error_) {
+					config.log.error("E-JS-98: " + msgOf(error_));
 				}
 			});
 		}
@@ -1435,11 +1464,12 @@
 			let body;
 			try {
 				body = JSON.parse(text);
-			} catch (e) {
+			} catch (e) { // NOSONAR javascript:S2486 - the failure is an expected outcome here and the fallback handles it
 				throw dataError("E-JS-62", id, "the epoch response is not JSON");
 			}
 			const v = bus.util.resolvePath(body, def.epoch.path);
-			return v == null ? null : typeof v === "object" ? canonicalJson(v) : String(v);
+			if (v == null) return null;
+			return typeof v === "object" ? canonicalJson(v) : String(v);
 		}
 
 		// Throttled progress: at most every PROGRESS_MS, a partial snapshot first when a card reads one.
@@ -1471,7 +1501,7 @@
 			return concatFrames(generationDims(parts), parts);
 		}
 
-		async function runRaw(st) {
+		async function runRaw(st) { // NOSONAR javascript:S3776 - branching mirrors the behavior being implemented; splitting it would obscure the flow
 			const parser = lookup("parser", def.parser);
 			if (!parser.impl) throw dataError("E-JS-92", id, def.parser, parser.names.join(", "));
 			st.parser = parser.impl;
@@ -1535,7 +1565,7 @@
 			} catch (e) {
 				throw dataError("E-JS-98", id, "builder", def.builder, msgOf(e));
 			}
-			finish(st, Object.assign({}, f, { truncated: !!f.truncated || parts.some(p => p.truncated) }));
+			finish(st, { ...f, truncated: !!f.truncated || parts.some(p => p.truncated) });
 		}
 
 		// concurrency workers over items.  A fetch error (or a switch, or a newer generation) stops every worker; a
@@ -1547,7 +1577,7 @@
 					try {
 						await loadChunk(st, items[next++]);
 					} catch (e) {
-						if (e && e.parse) {
+						if (e?.parse) {
 							if (!st.parseFailure) st.parseFailure = e;
 							continue;
 						}
@@ -1579,7 +1609,7 @@
 				try {
 					return fn();
 				} catch (e) {
-					const x = dataError("E-JS-99", id, c.label, e && e.record != null ? e.record : "?", msgOf(e));
+					const x = dataError("E-JS-99", id, c.label, e?.record != null ? e.record : "?", msgOf(e));
 					x.parse = true;
 					throw x;
 				}
@@ -1645,7 +1675,7 @@
 			let body;
 			try {
 				body = JSON.parse(text);
-			} catch (e) {
+			} catch (e) { // NOSONAR javascript:S2486 - the failure is an expected outcome here and the fallback handles it
 				throw dataError("E-JS-96", id, "the body is not JSON");
 			}
 			const why = aggregateProblem(body);
@@ -1667,8 +1697,10 @@
 			f.mode = st.mode;
 			f.loadedAt = iso(config.timers.now());
 			const version = put(id, f);
+			let truncatedAt = null;
+			if (f.truncated) truncatedAt = st.cap !== null ? st.cap : f.rowCount;
 			shown = { version: version, rowCount: f.rowCount, truncated: !!f.truncated,
-				truncatedAt: f.truncated ? (st.cap !== null ? st.cap : f.rowCount) : null, dims: f.dims, mode: f.mode,
+				truncatedAt: truncatedAt, dims: f.dims, mode: f.mode,
 				loadedAt: f.loadedAt };
 			run = null;
 			publish(st, "ready", {});
@@ -1679,7 +1711,7 @@
 		// With a map, a message that leaves the mapped values as they were (arrays and objects compared by value)
 		// starts nothing.  So an identical republish no longer retries a source in the error state; a retry comes from
 		// cmd refresh or reload.
-		function onParams(sub, payload) {
+		function onParams(sub, payload) { // NOSONAR javascript:S3776 - branching mirrors the behavior being implemented; splitting it would obscure the flow
 			if (sub.map && typeof sub.map === "object") {
 				const m = mapParams(bus, sub, payload);
 				let changed = false;
@@ -1726,8 +1758,8 @@
 				else if (sub.as === "params") own.subscribe(sub.topic, payload => onParams(sub, payload));
 			}
 			own.subscribe("cmd:" + id, payload => {
-				const op = payload && payload.op;
-				if (op === "refresh" || op === "reload") schedule(!!(payload.options && payload.options.clearCache));
+				const op = payload?.op;
+				if (op === "refresh" || op === "reload") schedule(!!(payload.options?.clearCache));
 			}, { retained: false });
 			schedule(false);
 		} catch (e) {
@@ -1779,7 +1811,7 @@
 	function measuresOf(frame, args) {
 		const list = listArg(args, "measures");
 		const seenText = new Set();
-		return (list && list.length ? list : ["count"]).map(t => {
+		return (list?.length ? list : ["count"]).map(t => {
 			const m = measureOf(t);
 			if (seenText.has(m.text)) throw new Error("duplicate measure '" + m.text + "'");
 			seenText.add(m.text);
@@ -1840,7 +1872,7 @@
 	}
 
 	// A filter value as the field's own type; a value of another type is an error, not "no bound".
-	function filterValue(d, v) {
+	function filterValue(d, v) { // NOSONAR javascript:S3800 - returns the field's own type (number or string)
 		if (d.type === "time") {
 			const t = parseTime(v);
 			if (t === null) throw new Error("'" + v + "' is not a time");
@@ -1862,7 +1894,7 @@
 
 	// String tests run once per dict entry and match strictly by value (no coercion).  A null cell is kept by in only
 	// when in names null, dropped by notIn when notIn names null, and never passes contains, min or max.
-	function filterTransform(frame, args) {
+	function filterTransform(frame, args) { // NOSONAR javascript:S3776 - branching mirrors the behavior being implemented; splitting it would obscure the flow
 		const d = dimArg(frame, args, "field");
 		const inList = listArg(args, "in"), notIn = listArg(args, "notIn");
 		const nullOk0 = (!inList || hasNull(inList)) && !hasNull(notIn);
@@ -1873,7 +1905,7 @@
 			const include = inList && new Set(inList.filter(v => typeof v === "string"));
 			const exclude = notIn && new Set(notIn.filter(v => typeof v === "string"));
 			const needle = args.contains == null ? null : String(args.contains).toLowerCase();
-			const ok = col.dict.map(s => (!include || include.has(s)) && (!exclude || !exclude.has(s))
+			const ok = col.dict.map(s => (!include || include.has(s)) && (!exclude?.has(s))
 				&& (needle === null || s.toLowerCase().indexOf(needle) >= 0));
 			const nullOk = nullOk0 && needle === null;
 			test = i => col.codes[i] < 0 ? nullOk : ok[col.codes[i]];
@@ -1882,8 +1914,8 @@
 			if (d.type === "bool" && (args.min != null || args.max != null))
 				throw new Error("min and max need a number or time field");
 			const conv = v => filterValue(d, v);
-			const include = inList && inList.filter(v => v != null).map(conv);
-			const exclude = notIn && notIn.filter(v => v != null).map(conv);
+			const include = inList?.filter(v => v != null).map(conv);
+			const exclude = notIn?.filter(v => v != null).map(conv);
 			const min = args.min == null ? null : conv(args.min), max = args.max == null ? null : conv(args.max);
 			const nullOk = nullOk0 && min === null && max === null;
 			test = i => {
@@ -1902,7 +1934,7 @@
 	// whose floor leaves it, is a row with no time.
 	const MAX_TIME = 8.64e15;
 	function bucketFloor(t, unit, weekStart) {
-		if (!(Math.abs(t) <= MAX_TIME)) return null;
+		if (!(Math.abs(t) <= MAX_TIME)) return null; // NOSONAR javascript:S1940 - NaN must take the rejecting branch, so the negated comparison is deliberate
 		const f = floorUnit(t, unit, weekStart);
 		return Math.abs(f) <= MAX_TIME ? f : null;
 	}
@@ -1940,7 +1972,7 @@
 					a.n++;
 					return;
 				}
-				const v = cols[j] === null ? NaN : cols[j][i];
+				const v = cols[j] === null ? Number.NaN : cols[j][i];
 				if (!Number.isFinite(v)) return;
 				a.n++;
 				a.sum += v;
@@ -1957,7 +1989,8 @@
 		if (m.op === "count") return a.n;
 		if (m.op === "sum") return a.sum;
 		if (a.n === 0) return null;
-		return m.op === "avg" ? a.sum / a.n : m.op === "min" ? a.min : a.max;
+		if (m.op === "avg") return a.sum / a.n;
+		return m.op === "min" ? a.min : a.max;
 	}
 
 	function cellsFrame(keyDims, cells, measures) {
@@ -2055,8 +2088,9 @@
 	// A weekday name or a Date.getUTCDay index (an integer 0-6); Monday when absent.
 	function weekStartOf(v) {
 		if (v == null) return 1;
-		const i = typeof v === "number" && Number.isInteger(v) ? v
-			: typeof v === "string" ? WEEKDAYS.indexOf(v.toLowerCase()) : -1;
+		let i = -1;
+		if (typeof v === "number" && Number.isInteger(v)) i = v;
+		else if (typeof v === "string") i = WEEKDAYS.indexOf(v.toLowerCase());
 		if (i < 0 || i > 6) throw new Error("'" + v + "' is not a weekday");
 		return i;
 	}
@@ -2073,7 +2107,7 @@
 		if (u === "auto") {
 			let lo = Infinity, hi = -Infinity;
 			for (let i = 0; i < frame.rowCount; i++) {
-				if (!(Math.abs(col[i]) <= MAX_TIME)) continue;
+				if (!(Math.abs(col[i]) <= MAX_TIME)) continue; // NOSONAR javascript:S1940 - NaN must take the rejecting branch, so the negated comparison is deliberate
 				lo = Math.min(lo, col[i]);
 				hi = Math.max(hi, col[i]);
 			}
@@ -2125,7 +2159,7 @@
 	// any token has no value.  Only the params' own keys are looked up.
 	function fillArgs(v, params) {
 		let missing = false;
-		const fill = x => {
+		const fill = x => { // NOSONAR javascript:S3776 - branching mirrors the behavior being implemented; splitting it would obscure the flow
 			if (typeof x === "string") {
 				const m = TOKEN_ARG_RE.exec(x);
 				if (!m) return x;
@@ -2175,8 +2209,8 @@
 			const h = { schemaVersion: 1, source: id, version: shown ? shown.version : 0, status: status,
 				progress: null, rowCount: shown ? shown.rowCount : 0, truncated: shown ? shown.truncated : false,
 				truncatedAt: shown ? shown.truncatedAt : null, dims: copyDims(shown ? shown.dims : []), error: null };
-			if (input && input.cache) h.cache = input.cache;
-			if (input && input.mode) h.mode = input.mode;
+			if (input?.cache) h.cache = input.cache;
+			if (input?.mode) h.mode = input.mode;
 			if (shown) h.loadedAt = shown.loadedAt;
 			own.publish(topic, Object.assign(h, extra));
 		}
@@ -2201,7 +2235,7 @@
 			return { frame: f };
 		}
 
-		function apply() {
+		function apply() { // NOSONAR javascript:S3776 - branching mirrors the behavior being implemented; splitting it would obscure the flow
 			const h = input;
 			if (!isHandle(h)) return;
 			if (h.status === "loading") return publish("loading", { progress: h.progress || { loaded: 0 } });
@@ -2232,10 +2266,12 @@
 					return fail(r.problem);
 				}
 				failed = null;
-				const f = Object.assign({}, r.frame, { loadedAt: h.loadedAt || iso(config.timers.now()) });
+				const f = { ...r.frame, loadedAt: h.loadedAt || iso(config.timers.now()) };
 				const version = put(id, f);
+				let truncatedAt = null;
+				if (f.truncated) truncatedAt = typeof h.truncatedAt === "number" ? h.truncatedAt : f.rowCount;
 				shown = { version: version, rowCount: f.rowCount, truncated: !!f.truncated,
-					truncatedAt: f.truncated ? (typeof h.truncatedAt === "number" ? h.truncatedAt : f.rowCount) : null,
+					truncatedAt: truncatedAt,
 					dims: f.dims, loadedAt: f.loadedAt };
 				lastKey = key;
 				lastFrame = upstream;
@@ -2243,7 +2279,7 @@
 				// The handle and the held frame carry the input's latest loadedAt.
 				shown.loadedAt = h.loadedAt;
 				const e = held.get(id);
-				if (e && e.current) e.current.loadedAt = h.loadedAt;
+				if (e?.current) e.current.loadedAt = h.loadedAt;
 			}
 			publish(h.status, { error: h.status === "stale" ? h.error : null });
 		}
@@ -2280,7 +2316,7 @@
 			});
 			// A refresh aimed at the derived topic reloads its input.
 			own.subscribe("cmd:" + id, payload => {
-				const op = payload && payload.op;
+				const op = payload?.op;
 				if (op === "refresh" || op === "reload") own.publish("cmd:" + def.from, payload);
 			}, { retained: false });
 		} catch (e) {
@@ -2299,14 +2335,14 @@
 	// throws does not stop the entries after it; the first error is rethrown once every entry has been tried.
 	function boot(contract) {
 		const bus = NS.bus;
-		const cards = Array.isArray(contract && contract.cards) ? contract.cards : [];
-		const defs = Array.isArray(contract && contract.dataSources) ? contract.dataSources : [];
+		const cards = Array.isArray(contract?.cards) ? contract.cards : [];
+		const defs = Array.isArray(contract?.dataSources) ? contract.dataSources : [];
 		const made = [];
 		let failed = null;
 		for (const def of defs) {
 			try {
 				made.push(def.kind === "derived" ? createDerived(def, bus) : createSource(def, bus,
-					{ partial: cards.some(c => c && c.partialFrames === true && c.source === "data:" + def.id) }));
+					{ partial: cards.some(c => c?.partialFrames === true && c.source === "data:" + def.id) }));
 			} catch (e) {
 				if (!failed) failed = { error: e };
 			}

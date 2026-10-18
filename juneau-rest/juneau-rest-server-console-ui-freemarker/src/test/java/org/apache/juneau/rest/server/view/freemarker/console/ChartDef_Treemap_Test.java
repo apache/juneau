@@ -110,8 +110,8 @@ class ChartDef_Treemap_Test extends TestBase {
 			var cardKinds = (List<?>)((Map<?,?>)props.get("kind")).get("enum");
 			var helperProps = (Map<?,?>)((Map<?,?>)props.get("helper")).get("properties");
 			var helperKinds = (List<?>)((Map<?,?>)helperProps.get("kind")).get("enum");
-			assertEquals(new TreeSet<>(ChartDef.KINDS), new TreeSet<>(cardKinds));
-			assertEquals(new TreeSet<>(ChartDef.KINDS), new TreeSet<>(helperKinds));
+			assertEquals(new HashSet<>(ChartDef.KINDS), new HashSet<>(cardKinds));
+			assertEquals(new HashSet<>(ChartDef.KINDS), new HashSet<>(helperKinds));
 			for (var k : List.of("groupBy", "size", "color", "tileFields"))
 				assertTrue(helperProps.containsKey(k), "schema helper property " + k);
 		}

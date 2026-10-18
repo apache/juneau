@@ -110,7 +110,7 @@ class RibbonItem_Parity_Test extends TestBase {
 
 	private static List<Map<String,Object>> normalized(List<Map<String,Object>> ribbon) {
 		// The corpus case still opens with the retired columnSearchToggle entry; the builder has no such item.
-		return ribbon.stream().filter(e -> ! "columnSearchToggle".equals(e.get("type"))).collect(Collectors.toList());
+		return ribbon.stream().filter(e -> ! "columnSearchToggle".equals(e.get("type"))).toList();
 	}
 
 	@Test void a01_everyCorpusCaseMatches() throws Exception {
@@ -119,7 +119,7 @@ class RibbonItem_Parity_Test extends TestBase {
 		for (var c : cases) {
 			var builder = BUILDERS.get(c.name);
 			assertNotNull(builder, "No builder for corpus case '" + c.name + "'");
-			var actual = builder.get().stream().map(i -> (Map<String,Object>)i.toMap()).collect(Collectors.toList());
+			var actual = builder.get().stream().map(i -> (Map<String,Object>)i.toMap()).toList();
 			assertEquals(normalized(c.ribbon), actual, c.name);
 		}
 	}

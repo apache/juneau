@@ -54,7 +54,7 @@ class RestDebugFinishContainment_Test {
 		}
 	}
 
-	@Test void a01_formatterThrowsRuntimeAtFinest_requestStillCompletes_fixedTokenOnly() throws Exception {
+	@Test void a01_formatterThrowsRuntimeAtFinest_requestStillCompletes_fixedTokenOnly() {
 		var records = LogRecordCapture.quietly(FINISH_LOGGER, () -> LogRecordCapture.quietly(org.apache.juneau.rest.client.classic.RestClient.class, () -> {
 			var client = org.apache.juneau.rest.mock.classic.MockRestClient.create(A_ThrowsRuntimeInBody.class).debug().build();
 

@@ -42,7 +42,7 @@ console.error = function () { consoleErrors.push(Array.prototype.map.call(argume
 // juneau-charts.js loads into the same window, so the chart row below is its real handler.
 const env = makeEnv();
 const bus = loadScripts([busJsPath, chartsJsPath], env).NS.bus;
-const validate = bus.wiring && bus.wiring.validate;
+const validate = bus.wiring?.validate;
 
 // The card-type table the shell builds (cardTypeTable()), with the stock types stubbed as the shell defines them:
 // html accepts no roles beyond the shell's; datatables accepts 'filter' and handles the seven table ops.
@@ -101,7 +101,7 @@ if (out.hasValidate) {
 		try {
 			row.got = validate(c.contract, types);
 		} catch (e) {
-			row.threw = String(e && e.stack || e);
+			row.threw = String(e?.stack || e);
 		}
 		out.cases.push(row);
 	});

@@ -49,7 +49,7 @@ class TerminalNudges_Test extends TestBase {
 			return true;
 		}
 
-		@Override public void close(int code, String reason) {}
+		@Override public void close(int code, String reason) { /* no-op: the recorder keeps frames only */ }
 
 		void reset() { frames.clear(); }
 
@@ -194,16 +194,19 @@ class TerminalNudges_Test extends TestBase {
 
 	@Test void a02_bindTwice() {
 		assertThrows(IllegalStateException.class, () -> nudges.bind(bus));
-		var fresh = new TerminalNudges(access, new Manual(), () -> 0L);
-		assertThrows(IllegalArgumentException.class, () -> fresh.bind(null));
+		try (var fresh = new TerminalNudges(access, new Manual(), () -> 0L)) {
+			assertThrows(IllegalArgumentException.class, () -> fresh.bind(null));
+		}
 	}
 
 	@Test void a03_bindPolicy() {
 		var none = bus(BusPolicy.create().downstream("other.topic", false).build());
 		var retained = bus(BusPolicy.create().downstream("term.nudge:*", true).build());
 		try {
-			assertThrows(IllegalStateException.class, () -> new TerminalNudges(access, new Manual(), () -> 0L).bind(none));
-			assertThrows(IllegalStateException.class, () -> new TerminalNudges(access, new Manual(), () -> 0L).bind(retained));
+			try (var n1 = new TerminalNudges(access, new Manual(), () -> 0L); var n2 = new TerminalNudges(access, new Manual(), () -> 0L)) {
+				assertThrows(IllegalStateException.class, () -> n1.bind(none));
+				assertThrows(IllegalStateException.class, () -> n2.bind(retained));
+			}
 		} finally {
 			none.close();
 			retained.close();
@@ -426,14 +429,15 @@ class TerminalNudges_Test extends TestBase {
 
 	@Test void d01_beforeBindDropped() throws Exception {
 		var m = new Manual();
-		var fresh = new TerminalNudges(access, m, m::clock);
-		var a = join("alice", T1);
-		fresh.nudge("t1", 10, false);
-		fresh.bind(bus);
-		m.advance(0);
-		m.advance(1000);
-		assertTrue(a.frames.isEmpty());
-		assertEquals(0, m.pending());
+		try (var fresh = new TerminalNudges(access, m, m::clock)) {
+			var a = join("alice", T1);
+			fresh.nudge("t1", 10, false);
+			fresh.bind(bus);
+			m.advance(0);
+			m.advance(1000);
+			assertTrue(a.frames.isEmpty());
+			assertEquals(0, m.pending());
+		}
 	}
 
 	@Test void d02_afterCloseDropped() throws Exception {
@@ -474,21 +478,22 @@ class TerminalNudges_Test extends TestBase {
 	@Test void d04_nudgeDuringBindIsNotLost() throws Exception {
 		var m = new Manual();
 		m.requireStart = true;
-		var fresh = new TerminalNudges(access, m, m::clock);
-		var a = join("alice", T1);
-		var racer = new Thread(() -> fresh.nudge("t1", 10, false));
-		m.onStart = () -> {
-			racer.start();
-			try {
-				racer.join(300);
-			} catch (InterruptedException e) {
-				Thread.currentThread().interrupt();
-			}
-		};
-		fresh.bind(bus);
-		racer.join();
-		m.advance(0);
-		assertEquals(List.of("{\"end\":10}"), a.on(T1));
+		try (var fresh = new TerminalNudges(access, m, m::clock)) {
+			var a = join("alice", T1);
+			var racer = new Thread(() -> fresh.nudge("t1", 10, false));
+			m.onStart = () -> {
+				racer.start();
+				try {
+					racer.join(300);
+				} catch (InterruptedException e) {
+					Thread.currentThread().interrupt();
+				}
+			};
+			fresh.bind(bus);
+			racer.join();
+			m.advance(0);
+			assertEquals(List.of("{\"end\":10}"), a.on(T1));
+		}
 	}
 
 	@Test void d03_defaultSchedulerThread() throws Exception {

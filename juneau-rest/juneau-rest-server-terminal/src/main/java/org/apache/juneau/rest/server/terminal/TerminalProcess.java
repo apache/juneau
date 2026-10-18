@@ -78,6 +78,9 @@ import org.apache.juneau.rest.server.views.*;
  * 	<jv>runViews</jv>.put(<jv>id</jv>, <jv>p</jv>.events());
  * </p>
  */
+@SuppressWarnings({
+	"java:S3776" // Start-up validation and shutdown are linear sequences of independent steps.
+})
 public final class TerminalProcess implements AutoCloseable, TerminalSink {
 
 	/** The system property naming {@code juneau_run.py}. */
@@ -121,26 +124,30 @@ public final class TerminalProcess implements AutoCloseable, TerminalSink {
 	}
 
 	private final Process process;
-	private final Path log, events;
+	private final Path logFile;
+	private final Path events;
 	private final AtomicBoolean done = new AtomicBoolean();
 	private final FileTerminalSource terminal;
 	private final FileRunViewSource runView;
 	private final ExecutorService executor;
 	private final CompletableFuture<Integer> exit;
-	private volatile Thread exitThread;
+	private final AtomicReference<Thread> exitThread = new AtomicReference<>();
 
 	// Input mode.  pending, pendingBytes, writing, inputFailed and closed are guarded by inLock.
 	private final boolean input;
 	private final Object inLock = new Object();
 	private final ArrayDeque<byte[]> pending = new ArrayDeque<>();
 	private int pendingBytes;  // Queued bytes only; a chunk leaves the count when the writer takes it, before it is written.
-	private boolean writing, inputFailed, closed;
+	private boolean writing;
+	private boolean inputFailed;
+	private boolean closed;
 	private final Thread writer;
 
 	// Nudges.  nudgeThread, nudgeSet and nudgeClosed are guarded by nudgeLock.
 	private final Object nudgeLock = new Object();
 	private Thread nudgeThread;
-	private boolean nudgeSet, nudgeClosed;
+	private boolean nudgeSet;
+	private boolean nudgeClosed;
 	private volatile boolean nudgeStop;
 
 	/** Appends the missing done event; replaced in tests. */
@@ -152,7 +159,7 @@ public final class TerminalProcess implements AutoCloseable, TerminalSink {
 	private TerminalProcess(Process process, Path log, Path events, DoneWriter doneWriter, boolean input) {
 		this.process = process;
 		this.input = input;
-		this.log = log;
+		this.logFile = log;
 		this.events = events;
 		terminal = FileTerminalSource.create(log).terminal(done::get).build();
 		runView = FileRunViewSource.create(events).terminal(done::get).build();
@@ -162,7 +169,7 @@ public final class TerminalProcess implements AutoCloseable, TerminalSink {
 			return t;
 		});
 		exit = process.onExit().thenApplyAsync(p -> {
-			exitThread = Thread.currentThread();
+			exitThread.set(Thread.currentThread());
 			try {
 				doneWriter.ensureDone(events, p.exitValue());
 			} catch (Exception e) {
@@ -189,6 +196,9 @@ public final class TerminalProcess implements AutoCloseable, TerminalSink {
 	}
 
 	/** The writer thread: copies pending chunks to stdin, never holding {@link #inLock} while writing. */
+	@SuppressWarnings({
+		"java:S3626" // The return exits the while(true) loop after a failed write; removing it would spin forever.
+	})
 	private void pump() {
 		var out = process.getOutputStream();
 		try {
@@ -203,27 +213,34 @@ public final class TerminalProcess implements AutoCloseable, TerminalSink {
 					pendingBytes -= chunk.length;
 					writing = true;
 				}
-				try {
-					out.write(chunk);
-					out.flush();
-				} catch (IOException e) {
-					synchronized (inLock) {
-						inputFailed = true;
-						pending.clear();
-						pendingBytes = 0;
-					}
-					LOG.log(Level.FINE, e, () -> "TerminalProcess input pipe failed for '" + events + "'.");
+				if (! writeChunk(out, chunk))
 					return;
-				} finally {
-					synchronized (inLock) {
-						writing = false;
-					}
-				}
 			}
 		} catch (InterruptedException e) {
 			Thread.currentThread().interrupt();
 		} finally {
 			closeQuietly(out);
+		}
+	}
+
+	// Writes one chunk to stdin; false once the pipe has failed and the pending input has been dropped.
+	private boolean writeChunk(OutputStream out, byte[] chunk) {
+		try {
+			out.write(chunk);
+			out.flush();
+			return true;
+		} catch (IOException e) {
+			synchronized (inLock) {
+				inputFailed = true;
+				pending.clear();
+				pendingBytes = 0;
+			}
+			LOG.log(Level.FINE, e, () -> "TerminalProcess input pipe failed for '" + events + "'.");
+			return false;
+		} finally {
+			synchronized (inLock) {
+				writing = false;
+			}
 		}
 	}
 
@@ -294,6 +311,9 @@ public final class TerminalProcess implements AutoCloseable, TerminalSink {
 		return start(tool, cmd, cols, rows, dir, host, doneWriter, false);
 	}
 
+	@SuppressWarnings({
+		"java:S107" // internal entry point; the parameters are the process configuration
+	})
 	static TerminalProcess start(String tool, List<String> cmd, int cols, int rows, Path dir, Host host, DoneWriter doneWriter, boolean input) throws IOException {
 		if (host.osName().toLowerCase(Locale.ROOT).startsWith("windows"))
 			throw new UnsupportedOperationException("TerminalProcess needs a POSIX pseudo-terminal; Windows is not supported.");
@@ -350,7 +370,9 @@ public final class TerminalProcess implements AutoCloseable, TerminalSink {
 			try (var ch = FileChannel.open(events, StandardOpenOption.READ)) {
 				var from = Math.max(0, ch.size() - TAIL_BYTES);
 				var buf = ByteBuffer.allocate((int)(ch.size() - from));
-				while (buf.hasRemaining() && ch.read(buf, from + buf.position()) >= 0) {}
+				while (buf.hasRemaining() && ch.read(buf, from + buf.position()) >= 0) {
+					// The condition does the reading; the loop has no body.
+				}
 				text = new String(buf.array(), 0, buf.position(), UTF_8);
 			}
 		}
@@ -401,7 +423,7 @@ public final class TerminalProcess implements AutoCloseable, TerminalSink {
 	 * @return The log path.
 	 */
 	public Path log() {
-		return log;
+		return logFile;
 	}
 
 	/**
@@ -515,7 +537,7 @@ public final class TerminalProcess implements AutoCloseable, TerminalSink {
 		var last = -1L;
 		while (! nudgeStop) {
 			var fin = isDone();
-			var size = sizeOrZero(log);
+			var size = sizeOrZero(logFile);
 			if (size > last || fin) {
 				try {
 					publisher.nudge(id, size, fin);
@@ -550,7 +572,7 @@ public final class TerminalProcess implements AutoCloseable, TerminalSink {
 
 	/** The thread the exit hook ran on, or <jk>null</jk> before it has run; for tests. */
 	Thread exitThread() {
-		return exitThread;
+		return exitThread.get();
 	}
 
 	/**

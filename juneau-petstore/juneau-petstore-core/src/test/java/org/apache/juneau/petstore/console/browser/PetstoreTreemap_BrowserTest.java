@@ -222,7 +222,7 @@ class PetstoreTreemap_BrowserTest extends TestBase {
 		assertEquals(List.of(), query(c, "writes"));
 	}
 
-	@Test void a03_submitEdit_putWithCsrf_dialogCloses_treemapRedrawsWithNewSpecies() throws Exception {
+	@Test void a03_submitEdit_putWithCsrf_dialogCloses_treemapRedrawsWithNewSpecies() {
 		assertSaved("save", moveTo);
 	}
 
@@ -231,7 +231,7 @@ class PetstoreTreemap_BrowserTest extends TestBase {
 		assertEquals(target.getString("species"), new JsonMap(get("/petstore/pets/" + target.getLong("id"))).getString("species"));
 	}
 
-	private void assertSaved(String name, String species) throws Exception {
+	private void assertSaved(String name, String species) {
 		var c = assertClean(report, name);
 		@SuppressWarnings("unchecked") // writes is a JSON array of {url, method, status, csrf, body}.
 		var w = (List<Map<String,Object>>)query(c, "writes");

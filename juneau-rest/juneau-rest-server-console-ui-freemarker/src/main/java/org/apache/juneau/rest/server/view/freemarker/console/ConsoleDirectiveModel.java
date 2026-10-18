@@ -107,7 +107,8 @@ public final class ConsoleDirectiveModel implements TemplateDirectiveModel {
 		if (! schemeAttr.isEmpty() && ! ConsoleChromeMixin.SCHEMES.contains(schemeAttr))
 			throw FtlAttrLists.reject("<@console> unknown scheme '" + schemeAttr + "'.  Schemes: "
 				+ String.join(", ", ConsoleChromeMixin.SCHEMES) + ".");
-		var scheme = ! schemeAttr.isEmpty() ? schemeAttr : nn(cap.scheme()) ? cap.scheme() : ConsoleChromeMixin.SCHEMES.get(0);
+		var capScheme = nn(cap.scheme()) ? cap.scheme() : ConsoleChromeMixin.SCHEMES.get(0);
+		var scheme = ! schemeAttr.isEmpty() ? schemeAttr : capScheme;
 		var schemeToggle = FtlAttrLists.strictBoolean(p, NAME, "schemeToggle", cap.schemeToggle());
 
 		var icon = FtlAttrLists.scalar(p, "icon");

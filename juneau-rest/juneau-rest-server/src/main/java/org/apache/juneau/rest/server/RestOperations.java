@@ -20,6 +20,7 @@ import static org.apache.juneau.commons.utils.CollectionUtils.*;
 import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.util.*;
+import java.util.stream.*;
 
 import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.http.response.*;
@@ -218,11 +219,10 @@ public class RestOperations {
 	 * @since 10.0.0
 	 */
 	public String allowedMethods(RestSession session) {
-		var methods = new TreeSet<String>();
-		for (var e : map.entrySet()) {
-			if (e.getValue().stream().anyMatch(x -> x.matchesPath(session)))
-				methods.add(eq(e.getKey(), "*") ? ucr(session.getRequest().getMethod()) : e.getKey());
-		}
+		var methods = map.entrySet().stream()
+			.filter(e -> e.getValue().stream().anyMatch(x -> x.matchesPath(session)))
+			.map(e -> eq(e.getKey(), "*") ? ucr(session.getRequest().getMethod()) : e.getKey())
+			.collect(Collectors.toCollection(TreeSet::new));
 		return String.join(", ", methods);
 	}
 

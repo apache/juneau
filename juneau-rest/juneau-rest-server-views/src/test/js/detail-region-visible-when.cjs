@@ -63,19 +63,19 @@ function region(env, id, status) {
 	});
 
 	const table = env.el('table');
-	table.setAttribute('data-juneau-view', 'pets');
+	table.dataset.juneauView = 'pets';
 	const tbody = env.el('tbody');
 	table.appendChild(tbody);
 	env.body.appendChild(table);
 	const tr = env.el('tr');
-	tr.setAttribute('data-juneau-row-id', 'p1');
+	tr.dataset.juneauRowId = 'p1';
 	tbody.appendChild(tr);
 	const childTr = env.el('tr');
 	const childTd = env.el('td');
 	const panel = env.el('div');
 	panel.className = 'juneau-view-detail-panel';
-	panel.setAttribute('data-juneau-row-detail', '');
-	panel.setAttribute('data-juneau-row-id', 'p1');
+	panel.dataset.juneauRowDetail = '';
+	panel.dataset.juneauRowId = 'p1';
 	panel._juneauParentTr = tr;
 	tr._juneauDetailPanel = panel;
 	childTd.appendChild(panel);
@@ -95,9 +95,9 @@ function region(env, id, status) {
 	NS.regions.enrolIn(panel);
 	await flush(12);
 
-	out.matchingRegionShown = open.hidden !== true && open.getAttribute('data-juneau-region-hidden') == null;
+	out.matchingRegionShown = open.hidden !== true && open.dataset.juneauRegionHidden === undefined;
 	out.matchingRegionFetched = fetches.indexOf('/pets/p1/open') >= 0;
-	out.otherRegionHidden = closed.hidden === true && closed.getAttribute('data-juneau-region-hidden') === 'rule';
+	out.otherRegionHidden = closed.hidden === true && closed.dataset.juneauRegionHidden === 'rule';
 	out.otherRegionNotFetched = fetches.indexOf('/pets/p1/closed') < 0;
 
 	process.stdout.write(JSON.stringify(out));

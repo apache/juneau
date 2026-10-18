@@ -20,7 +20,9 @@ import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.net.*;
 import java.util.*;
+import java.util.concurrent.atomic.*;
 import java.util.regex.*;
+import java.util.stream.*;
 
 /**
  * Shared SSRF-hardening policy for the {@link Remote @Remote}/{@link RemoteOp @RemoteOp} proxy engines.
@@ -313,6 +315,21 @@ public final class RemoteUrlPolicy {
 
 	/** A parsed CIDR range. */
 	private record Cidr(byte[] prefix, int bits) {
+		@Override /* Object */
+		public boolean equals(Object o) {
+			return o instanceof Cidr other && bits == other.bits && Arrays.equals(prefix, other.prefix);
+		}
+
+		@Override /* Object */
+		public int hashCode() {
+			return 31 * Arrays.hashCode(prefix) + bits;
+		}
+
+		@Override /* Object */
+		public String toString() {
+			return "Cidr[prefix=" + Arrays.toString(prefix) + ", bits=" + bits + "]";
+		}
+
 		boolean contains(byte[] b) {
 			if (b.length != prefix.length)
 				return false;
@@ -346,10 +363,7 @@ public final class RemoteUrlPolicy {
 
 		private AllowedRanges(List<Cidr> ranges) {
 			this.ranges = ranges;
-			var k = new TreeSet<String>();
-			for (var r : ranges)
-				k.add(Arrays.toString(r.prefix()) + "/" + r.bits());
-			this.key = k;
+			this.key = ranges.stream().map(r -> Arrays.toString(r.prefix()) + "/" + r.bits()).collect(Collectors.toCollection(TreeSet::new));
 		}
 
 		/**
@@ -400,11 +414,7 @@ public final class RemoteUrlPolicy {
 
 	// Parses a spec without touching the single-entry property cache; an invalid entry throws.
 	private static List<Cidr> parseAllowedRangesStrict(String spec) {
-		var list = new ArrayList<Cidr>();
-		for (var token : spec.trim().split("[,\\s]+"))
-			if (! token.isEmpty())
-				list.add(parseAllowEntry(token));
-		return list;
+		return Arrays.stream(spec.trim().split("[,\\s]+")).filter(token -> ! token.isEmpty()).map(RemoteUrlPolicy::parseAllowEntry).toList();
 	}
 
 	// The only ranges the allow-list may re-permit (and that every allow entry must lie within).
@@ -416,19 +426,21 @@ public final class RemoteUrlPolicy {
 		new Cidr(new byte[]{(byte)0xFF, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}, 8)
 	);
 
-	private static final Pattern ALLOW_ENTRY = Pattern.compile("^([0-9.]+|[0-9A-Fa-f:.]*:[0-9A-Fa-f:.]*)(?:/(0|[1-9][0-9]{0,2}))?$");
+	private static final Pattern ALLOW_ENTRY = Pattern.compile("^([\\d.]+|[\\dA-Fa-f.]*:[\\dA-Fa-f:.]*)(?:/(0|[1-9]\\d{0,2}))?$");
 
 	// Single-entry cache (successes and failures): the spec is normally a constant system property, so parse once per
 	// distinct value.  A failed parse is remembered by message so the same string throws again without re-parsing.
 	private record ParsedAllow(String spec, List<Cidr> ranges, String error) {}
-	private static volatile ParsedAllow parsedAllow = new ParsedAllow("", List.of(), null);
+	private static final AtomicReference<ParsedAllow> PARSED_ALLOW = new AtomicReference<>(new ParsedAllow("", List.of(), null));
 
 	private static List<Cidr> parseAllowedRanges(String spec) {
 		if (spec == null || spec.isBlank())
 			return List.of();
-		var cached = parsedAllow;
-		if (! cached.spec().equals(spec))
-			cached = parsedAllow = parseAllowSpec(spec);
+		var cached = PARSED_ALLOW.get();
+		if (! cached.spec().equals(spec)) {
+			cached = parseAllowSpec(spec);
+			PARSED_ALLOW.set(cached);
+		}
 		if (cached.error() != null)
 			throw iaex("%s", cached.error());
 		return cached.ranges();
@@ -443,6 +455,9 @@ public final class RemoteUrlPolicy {
 	}
 
 	// Parses a dotted-quad IPv4 literal purely syntactically (octets 0-255, no leading zeros); returns null if invalid.
+	@SuppressWarnings({
+		"java:S1168" // null signals an invalid IPv4 literal (see comment); callers test for it
+	})
 	private static byte[] parseIpv4(String s) {
 		var parts = s.split("\\.", -1);
 		if (parts.length != 4)
@@ -450,7 +465,7 @@ public final class RemoteUrlPolicy {
 		var out = new byte[4];
 		for (var i = 0; i < 4; i++) {
 			var p = parts[i];
-			if (! (p.equals("0") || p.matches("[1-9][0-9]{0,2}")))
+			if (! (p.equals("0") || p.matches("[1-9]\\d{0,2}")))
 				return null;
 			var v = Integer.parseInt(p);
 			if (v > 255)
@@ -541,6 +556,9 @@ public final class RemoteUrlPolicy {
 	 * Unwraps an IPv6 address that embeds an IPv4 address (IPv4-mapped, IPv4-compatible, IPv4-translated, NAT64
 	 * or 6to4) to the embedded {@link Inet4Address}; any other address is returned unchanged.
 	 */
+	@SuppressWarnings({
+		"java:S3776" // One flat decision table over the IPv6 embedding prefixes; splitting it would scatter the byte-layout rules.
+	})
 	private static InetAddress unwrapEmbeddedIpv4(InetAddress addr) {
 		if (! (addr instanceof Inet6Address))
 			return addr;

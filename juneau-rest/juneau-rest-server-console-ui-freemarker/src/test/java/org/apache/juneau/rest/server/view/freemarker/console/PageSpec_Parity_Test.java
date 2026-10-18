@@ -162,7 +162,7 @@ class PageSpec_Parity_Test extends TestBase {
 	@Test void case13_navUnderDepth3() throws Exception { assertParity("13-navunder-depth3", a -> a.hasActiveNav("fleet", "instances", "i-1", "logs")); }
 	@Test void case14_theme() throws Exception { assertParity("14-theme", a -> a.hasTheme("light-red")); }
 	@Test void case15_customCardType() throws Exception { assertParity("15-custom-card-type", a -> a.hasCard("slo-trend", "kpi")); }
-	@Test void case16_csrfBodyAttrs() throws Exception { { assertParity("16-csrf-body-attrs", a -> {}); var html = get("/spec/16-csrf-body-attrs"); assertTrue(html.contains("data-app-flag") && html.contains("tok-123"), html); }; }
+	@Test void case16_csrfBodyAttrs() throws Exception { assertParity("16-csrf-body-attrs", a -> {}); var html = get("/spec/16-csrf-body-attrs"); assertTrue(html.contains("data-app-flag") && html.contains("tok-123"), html); }
 	@Test void case17_badgeVsDirective() throws Exception { assertParity("17-badge-vs-directive", a -> assertNotNull(a.contract().getMap("header").get("badges"), "header.badges")); }
 	@Test void case18_factsDeepMerge() throws Exception { assertParity("18-facts-deep-merge", a -> assertNotNull(a.contract().get("facts"), "facts")); }
 	@Test void case20_themeInherit() throws Exception { assertParity("20-theme-inherit", a -> assertEquals("open", a.contract().getMap("theme").get("name"))); }
@@ -213,8 +213,10 @@ class PageSpec_Parity_Test extends TestBase {
 			"quickStats", Map.of("id", "store", "items", List.of(
 				Map.of("id", "orders", "type", "segmented", "label", "Orders", "segments", List.of(
 					Map.of("label", "Placed", "count", 3), Map.of("label", "Approved", "count", 5, "tone", "accent"))))));
+		var target = new DatatablesCardType();
+		var arg = org.apache.juneau.rest.server.console.CardSource.create("datatables", "t").bodyMap(body).build();
 		var ex = assertThrows(IllegalArgumentException.class,
-			() -> new DatatablesCardType().toFragment(org.apache.juneau.rest.server.console.CardSource.create("datatables", "t").bodyMap(body).build()));
+			() -> target.toFragment(arg));
 		assertEquals(msg, ex.getMessage());
 	}
 

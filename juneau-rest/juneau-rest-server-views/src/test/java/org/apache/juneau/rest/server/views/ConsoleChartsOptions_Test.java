@@ -135,13 +135,13 @@ class ConsoleChartsOptions_Test extends TestBase {
 		var caseWarnings = (Map<?,?>)r.get("caseWarnings");
 		for (var name : NAMES)
 			assertEquals(WARNINGS.getOrDefault(name, List.of()), caseWarnings.get(name), name);
-		assertEquals(new TreeMap<>(THROWN), new TreeMap<>((Map<?,?>)r.get("thrown")));
+		assertEquals(THROWN, r.get("thrown"));
 	}
 
 	@Test void a03_behaviourChecks() {
 		var checks = (Map<?,?>)report().get("checks");
 		assertFalse(checks.isEmpty());
-		var failed = checks.entrySet().stream().filter(e -> ! Boolean.TRUE.equals(e.getValue())).map(e -> e.getKey()).toList();
+		var failed = checks.entrySet().stream().filter(e -> ! Boolean.TRUE.equals(e.getValue())).map(Map.Entry::getKey).toList();
 		assertEquals(List.of(), failed);
 	}
 }

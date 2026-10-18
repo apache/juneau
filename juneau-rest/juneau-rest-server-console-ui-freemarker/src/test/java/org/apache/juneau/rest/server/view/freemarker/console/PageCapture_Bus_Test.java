@@ -67,23 +67,26 @@ class PageCapture_Bus_Test extends TestBase {
 	@Test void b01_retainConflict_isE46() {
 		var cap = new PageCapture();
 		cap.addTopic(TopicDecl.of("ops.jobs").retain(true).publisher(Publisher.SERVER).toMap(), "PageSpec.topic");
+		var arg = TopicDecl.of("ops.jobs").retain(false).publisher(Publisher.SERVER).toMap();
 		var e = assertThrows(IllegalArgumentException.class,
-			() -> cap.addTopic(TopicDecl.of("ops.jobs").retain(false).publisher(Publisher.SERVER).toMap(), "<@topic>"));
+			() -> cap.addTopic(arg, "<@topic>"));
 		assertEquals("topic 'ops.jobs' is declared with retain=false here and retain=true at PageSpec.topic", e.getMessage());
 	}
 
 	@Test void b03_publisherConflict_isE46() {
 		var cap = new PageCapture();
 		cap.addTopic(TopicDecl.of("ops.jobs").retain(true).publisher(Publisher.SERVER).toMap(), "PageSpec.topic");
+		var arg2 = TopicDecl.of("ops.jobs").retain(true).publisher(Publisher.SCRIPT).toMap();
 		var e = assertThrows(IllegalArgumentException.class,
-			() -> cap.addTopic(TopicDecl.of("ops.jobs").retain(true).publisher(Publisher.SCRIPT).toMap(), "<@topic>"));
+			() -> cap.addTopic(arg2, "<@topic>"));
 		assertEquals("topic 'ops.jobs' is declared with publisher=script here and publisher=server at PageSpec.topic", e.getMessage());
 	}
 
 	@Test void b02_duplicateBridge_isE51() {
 		var cap = new PageCapture();
 		cap.addBridge(BridgeDecl.sse("ops", "/s").downstream("ops.a").toMap());
-		var e = assertThrows(IllegalArgumentException.class, () -> cap.addBridge(BridgeDecl.sse("ops", "/t").downstream("ops.b").toMap()));
+		var arg3 = BridgeDecl.sse("ops", "/t").downstream("ops.b").toMap();
+		var e = assertThrows(IllegalArgumentException.class, () -> cap.addBridge(arg3));
 		assertEquals("bridge 'ops': duplicate id", e.getMessage());
 	}
 
@@ -91,7 +94,8 @@ class PageCapture_Bus_Test extends TestBase {
 		var cap = new PageCapture();
 		cap.addTopic(TopicDecl.of("ops.jobs").retain(true).publisher(Publisher.SERVER).toMap(), "PageSpec.topic");
 		// R-11: a server topic that no bridge carries.
-		var e = assertThrows(IllegalArgumentException.class, () -> cap.checkWiring(CardTypeRegistry.standard()));
+		var arg4 = CardTypeRegistry.standard();
+		var e = assertThrows(IllegalArgumentException.class, () -> cap.checkWiring(arg4));
 		assertEquals("topic 'ops.jobs' is declared publisher=server but no bridge carries it downstream", e.getMessage());
 	}
 }

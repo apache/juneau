@@ -47,6 +47,9 @@ import org.apache.juneau.rest.server.*;
  *
  * @since 10.0.0
  */
+@SuppressWarnings({
+	"resource" // The output stream belongs to the response and is closed by the container, not by this streamer.
+})
 public final class SeriesSource {
 
 	/** One row; {@link #get(String)} returns the value for a column, or null. */

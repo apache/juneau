@@ -150,7 +150,7 @@ async function openParent(opts) {
 	return { env: env, I: I, fx: fx, gets: gets, btn: q(env, '.juneau-view-dialog-form-action') };
 }
 
-(async function main() {
+(async function main() { // NOSONAR javascript:S3776 - branching mirrors the behavior being implemented; splitting it would obscure the flow
 
 	// --- 1) A child action opens a STACKED step, and never appears in a row menu -----------------------------
 	{
@@ -387,8 +387,8 @@ async function openParent(opts) {
 	// refused write that never went out (client refusal, transport refusal, typed refusal) restores it to its
 	// pre-lock state; one that may have landed (typed failure, network reject) leaves it Close-only.  Either way the
 	// notice is shown inside the parent rather than in the ribbon banner behind it.
-	const DEFERRED = ['cancelled', 'pending', 'escape', 'double'];
-	const STACK_ONLY = ['failure', 'pending', 'transport', 'noCsrf', 'netreject'];
+	const DEFERRED = new Set(['cancelled', 'pending', 'escape', 'double']);
+	const STACK_ONLY = new Set(['failure', 'pending', 'transport', 'noCsrf', 'netreject']);
 	for (const [hosted, verdict] of [['ribbon', 'success'], ['row', 'success'], ['ribbon', 'failure'],
 			['ribbon', 'bare'], ['ribbon', 'cancelled'], ['ribbon', 'pending'], ['row', 'failure'],
 			['ribbon', 'transport'], ['ribbon', 'noCsrf'], ['ribbon', 'netreject'], ['ribbon', 'escape'],
@@ -435,7 +435,7 @@ async function openParent(opts) {
 			accepts.push(init?.headers?.Accept ?? null);
 			if (verdict === 'bare') return Promise.resolve({ ok: true, status: 200, headers: { get: function () { return null; } },
 				text: function () { return Promise.resolve(''); } });
-			if (DEFERRED.includes(verdict)) return new Promise(function (r) { releasers.push(r); });
+			if (DEFERRED.has(verdict)) return new Promise(function (r) { releasers.push(r); });
 			if (verdict === 'netreject') return Promise.reject(new Error('down'));
 			if (verdict === 'transport') return Promise.resolve(jsonResponse({}, { status: 403 }));
 			return Promise.resolve(jsonResponse(verdict === 'failure'
@@ -513,16 +513,16 @@ async function openParent(opts) {
 			releasers[0](jsonResponse(REFUSAL));
 			await flush();
 		}
-		if (STACK_ONLY.includes(verdict)) {
+		if (STACK_ONLY.has(verdict)) {
 			const dlg = pb.querySelector('.juneau-view-dialog');
 			const pConfirm = pb.querySelector('.juneau-view-dialog-confirm');
 			const children = pb.querySelectorAll('.juneau-view-dialog-form-action');
 			out[k + 'settled_confirmGone'] = pConfirm == null;
-			out[k + 'settled_confirmEnabled'] = pConfirm != null && pConfirm.disabled === false;
-			out[k + 'settled_confirmStillDisabled'] = pConfirm != null && pConfirm.disabled === true;
+			out[k + 'settled_confirmEnabled'] = pConfirm?.disabled === false;
+			out[k + 'settled_confirmStillDisabled'] = pConfirm?.disabled === true;
 			out[k + 'settled_childActionEnabled'] = children[0].disabled === false;
 			out[k + 'settled_childActionDisabled'] = children[0].disabled === true;
-			out[k + 'settled_extraChildStillDisabled'] = extraChild != null && extraChild.disabled === true;
+			out[k + 'settled_extraChildStillDisabled'] = extraChild?.disabled === true;
 			out[k + 'settled_notBusy'] = dlg.dataset.juneauDialogBusy === undefined;
 			out[k + 'settled_closeOnly'] = pb.querySelector('.juneau-view-dialog-close') != null;
 			const active = env.getActive();

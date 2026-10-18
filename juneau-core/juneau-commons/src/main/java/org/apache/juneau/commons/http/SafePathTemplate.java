@@ -71,6 +71,9 @@ public final class SafePathTemplate {
 	 * @param path The candidate path.  Can be <jk>null</jk>.
 	 * @return <jk>true</jk> if the string is a same-origin path.
 	 */
+	@SuppressWarnings({
+		"java:S3776" // Flat sequence of independent rejection checks; splitting it would obscure the security rules.
+	})
 	public static boolean isSameOriginPath(String path) {
 		if (path == null || path.isBlank())
 			return false;

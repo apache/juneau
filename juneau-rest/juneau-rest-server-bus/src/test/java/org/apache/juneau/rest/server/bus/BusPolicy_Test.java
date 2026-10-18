@@ -75,11 +75,12 @@ class BusPolicy_Test extends TestBase {
 	//------------------------------------------------------------------------------------------------------------------
 
 	@Test void b01_badDownstreamPatterns() {
+		var b = BusPolicy.create();
 		for (var bad : List.of("ops", "Ops.jobs", "card:t1", "selection:t1", "cmd:*", "ops.jobs:*:*", "ops.jobs:", "a.b.c", "")) {
-			var e = assertThrows(IllegalArgumentException.class, () -> BusPolicy.create().downstream(bad, true), bad);
+			var e = assertThrows(IllegalArgumentException.class, () -> b.downstream(bad, true), bad);
 			assertEquals("E-57: BusPolicy: '" + bad + "' is not a valid topic pattern", e.getMessage());
 		}
-		var e = assertThrows(IllegalArgumentException.class, () -> BusPolicy.create().downstream(null, true));
+		var e = assertThrows(IllegalArgumentException.class, () -> b.downstream(null, true));
 		assertEquals("E-57: BusPolicy: 'null' is not a valid topic pattern", e.getMessage());
 	}
 
@@ -90,26 +91,30 @@ class BusPolicy_Test extends TestBase {
 	}
 
 	@Test void b03_upstreamWithoutHandler() {
-		var e = assertThrows(IllegalArgumentException.class, () -> BusPolicy.create().upstream("ops.cancel-all", null));
+		var b = BusPolicy.create();
+		var e = assertThrows(IllegalArgumentException.class, () -> b.upstream("ops.cancel-all", null));
 		assertEquals("E-57: BusPolicy: upstream topic 'ops.cancel-all' has no handler", e.getMessage());
 	}
 
 	@Test void b04_badUpstreamTopic() {
+		var b = BusPolicy.create();
 		for (var bad : List.of("ops.x:*", "job:*", "cmd:jobs", "ops")) {
-			var e = assertThrows(IllegalArgumentException.class, () -> BusPolicy.create().upstream(bad, NOOP), bad);
+			var e = assertThrows(IllegalArgumentException.class, () -> b.upstream(bad, NOOP), bad);
 			assertEquals("E-57: BusPolicy: '" + bad + "' is not a valid topic pattern", e.getMessage());
 		}
 	}
 
 	@Test void b05_nonPositiveLimits() {
-		assertThrows(IllegalArgumentException.class, () -> BusPolicy.create().sessionGrace(Duration.ZERO));
-		assertThrows(IllegalArgumentException.class, () -> BusPolicy.create().maxSessionAge(Duration.ofSeconds(-1)));
-		assertThrows(IllegalArgumentException.class, () -> BusPolicy.create().heartbeat(null));
-		assertThrows(IllegalArgumentException.class, () -> BusPolicy.create().maxSessions(0));
-		assertThrows(IllegalArgumentException.class, () -> BusPolicy.create().maxQueuedFrames(0));
-		assertThrows(IllegalArgumentException.class, () -> BusPolicy.create().maxFrameBytes(0));
-		assertThrows(IllegalArgumentException.class, () -> BusPolicy.create().maxUpstreamPerSecond(0));
-		assertThrows(IllegalArgumentException.class, () -> BusPolicy.create().allowedOrigins(" "));
+		var b = BusPolicy.create();
+		assertThrows(IllegalArgumentException.class, () -> b.sessionGrace(Duration.ZERO));
+		var negative = Duration.ofSeconds(-1);
+		assertThrows(IllegalArgumentException.class, () -> b.maxSessionAge(negative));
+		assertThrows(IllegalArgumentException.class, () -> b.heartbeat(null));
+		assertThrows(IllegalArgumentException.class, () -> b.maxSessions(0));
+		assertThrows(IllegalArgumentException.class, () -> b.maxQueuedFrames(0));
+		assertThrows(IllegalArgumentException.class, () -> b.maxFrameBytes(0));
+		assertThrows(IllegalArgumentException.class, () -> b.maxUpstreamPerSecond(0));
+		assertThrows(IllegalArgumentException.class, () -> b.allowedOrigins(" "));
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -149,21 +154,24 @@ class BusPolicy_Test extends TestBase {
 
 	@Test void d02_checkListsEveryDenial() {
 		var p = BusPolicy.create().downstream("ops.jobs", true).build();
-		var e = assertThrows(IllegalStateException.class, () -> p.check(contract(
+		var c = contract(
 			JsonMap.of("id", "ops", "transport", "websocket",
-				"downstream", List.of("ops.jobs", "ops.secret"), "upstream", List.of("ops.cancel-all")))));
+				"downstream", List.of("ops.jobs", "ops.secret"), "upstream", List.of("ops.cancel-all")));
+		var e = assertThrows(IllegalStateException.class, () -> p.check(c));
 		assertEquals("E-55: BusPolicy denies downstream topic 'ops.secret' that bridge 'ops' requests\n"
 			+ "E-55: BusPolicy denies upstream topic 'ops.cancel-all' that bridge 'ops' requests", e.getMessage());
 	}
 
 	@Test void d03_checkListsEveryDenialAcrossTopicsAndBridges() {
 		var p = BusPolicy.create().downstream("ops.jobs", true).build();
-		var e = assertThrows(IllegalStateException.class, () -> p.check(contract(
+		var c = contract(
 			JsonMap.of("id", "a", "transport", "sse", "downstream", List.of("ops.x", "ops.y")),
-			JsonMap.of("id", "b", "transport", "sse", "downstream", List.of("ops.z")))));
-		assertEquals("E-55: BusPolicy denies downstream topic 'ops.x' that bridge 'a' requests\n"
-			+ "E-55: BusPolicy denies downstream topic 'ops.y' that bridge 'a' requests\n"
-			+ "E-55: BusPolicy denies downstream topic 'ops.z' that bridge 'b' requests", e.getMessage());
+			JsonMap.of("id", "b", "transport", "sse", "downstream", List.of("ops.z")));
+		var e = assertThrows(IllegalStateException.class, () -> p.check(c));
+		assertEquals("""
+			E-55: BusPolicy denies downstream topic 'ops.x' that bridge 'a' requests
+			E-55: BusPolicy denies downstream topic 'ops.y' that bridge 'a' requests
+			E-55: BusPolicy denies downstream topic 'ops.z' that bridge 'b' requests""", e.getMessage());
 	}
 
 	//------------------------------------------------------------------------------------------------------------------
@@ -178,15 +186,17 @@ class BusPolicy_Test extends TestBase {
 	}
 
 	@Test void e02_allowedOriginsRejectsNullAndBlank() {
-		assertThrows(NullPointerException.class, () -> BusPolicy.create().allowedOrigins((String[]) null));
-		assertThrows(IllegalArgumentException.class, () -> BusPolicy.create().allowedOrigins("https://a.example", null));
-		assertThrows(IllegalArgumentException.class, () -> BusPolicy.create().allowedOrigins("https://a.example", ""));
+		var b = BusPolicy.create();
+		assertThrows(NullPointerException.class, () -> b.allowedOrigins((String[]) null));
+		assertThrows(IllegalArgumentException.class, () -> b.allowedOrigins("https://a.example", null));
+		assertThrows(IllegalArgumentException.class, () -> b.allowedOrigins("https://a.example", ""));
 		assertEquals(List.of("https://a.example"), BusPolicy.create().allowedOrigins("https://a.example").build().allowedOrigins());
 	}
 
 	@Test void e03_authorizerAndSessionAttributesRejectNull() {
-		assertThrows(NullPointerException.class, () -> BusPolicy.create().authorizer(null));
-		assertThrows(NullPointerException.class, () -> BusPolicy.create().sessionAttributes(null));
+		var b = BusPolicy.create();
+		assertThrows(NullPointerException.class, () -> b.authorizer(null));
+		assertThrows(NullPointerException.class, () -> b.sessionAttributes(null));
 	}
 
 	@Test void e04_keyedUpstreamIsExact() {

@@ -143,6 +143,9 @@ public abstract class AbstractMcpRestServlet extends BasicRestServlet implements
 	 *
 	 * @param state The per-service readiness state published by the embedded-server lifecycle component.
 	 */
+	@SuppressWarnings({
+		"java:S2654" // Not a constructor escape: the lifecycle calls this on a fully constructed servlet, and the callback only closes the broker.
+	})
 	@Override /* ReadinessStateAware */
 	public void acceptReadinessState(ReadinessState state) {
 		state.onOutOfService(this, () -> {

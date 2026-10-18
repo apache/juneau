@@ -134,7 +134,7 @@ class PolicyPinningSocketAddressResolver_Test {
 		var a = PolicyPinningSocketAddressResolver.tagFor(org.apache.juneau.http.remote.RemoteUrlPolicy.AllowedRanges.of("198.18.0.0/15"));
 		var b = PolicyPinningSocketAddressResolver.tagFor(org.apache.juneau.http.remote.RemoteUrlPolicy.AllowedRanges.of("198.18.0.0/15"));
 		assertEquals(a, b);
-		assertNotEquals(a, PolicyPinningSocketAddressResolver.PINNED_TAG);
+		assertNotEquals(PolicyPinningSocketAddressResolver.PINNED_TAG, a);
 		assertSame(PolicyPinningSocketAddressResolver.PINNED_TAG, PolicyPinningSocketAddressResolver.tagFor(org.apache.juneau.http.remote.RemoteUrlPolicy.AllowedRanges.NONE));
 	}
 }

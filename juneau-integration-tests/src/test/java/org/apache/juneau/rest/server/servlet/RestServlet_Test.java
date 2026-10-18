@@ -348,11 +348,7 @@ class RestServlet_Test extends TestBase {
 	@Test void h01_serviceCatchesAndSendsError() throws Exception {
 		// A servlet that was never initialized has no context, so service() fails before dispatching and must catch
 		// the exception and call resp.sendError(500, ...).
-		var s = new A();
-		var req = mock(HttpServletRequest.class);
-		var resp = mock(HttpServletResponse.class);
-		s.service(req, resp);
-		verify(resp).sendError(eq(HttpServletResponse.SC_INTERNAL_SERVER_ERROR), anyString());
+		c01_serviceWhenContextNullSendsError();
 	}
 
 	//------------------------------------------------------------------------------------------------------------------

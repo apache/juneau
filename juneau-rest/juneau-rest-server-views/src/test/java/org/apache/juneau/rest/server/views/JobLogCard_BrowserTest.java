@@ -113,8 +113,15 @@ class JobLogCard_BrowserTest extends TestBase {
 	private static final String STREAM_1 = "retry: 50\n\nid: 1\nevent: progress\ndata: p1\n\nid: 2\nevent: progress\ndata: p2\n\n";
 
 	/** The resumed response: id 3, then the result, which closes the stream before this body ends. */
-	private static final String STREAM_2 = "id: 3\nevent: progress\ndata: p3\n\n"
-		+ "event: result\ndata: {\"outcome\":\"success\",\"message\":\"Rebuilt.\",\"contractVersion\":\"1\"}\n\n";
+	private static final String STREAM_2 = """
+		id: 3
+		event: progress
+		data: p3
+
+		event: result
+		data: {"outcome":"success","message":"Rebuilt.","contractVersion":"1"}
+
+		""";
 
 	private static Map<String,Map<String,Object>> report;
 

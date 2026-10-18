@@ -58,30 +58,36 @@ class BridgeDecl_Test extends TestBase {
 	}
 
 	@Test void b03_upstreamOnSse() {
-		var e = assertThrows(IllegalArgumentException.class, () -> BridgeDecl.sse("ops", "/s").upstream("ops.x"));
+		var target = BridgeDecl.sse("ops", "/s");
+		var e = assertThrows(IllegalArgumentException.class, () -> target.upstream("ops.x"));
 		assertEquals("bridge 'ops': upstream is allowed only on a websocket bridge", e.getMessage());
 	}
 
 	@Test void b04_bothDirections() {
+		var target2 = BridgeDecl.websocket("ops", "/s").downstream("ops.x").upstream("ops.x");
 		var e = assertThrows(IllegalArgumentException.class,
-			() -> BridgeDecl.websocket("ops", "/s").downstream("ops.x").upstream("ops.x").toMap());
+			target2::toMap);
 		assertEquals("bridge 'ops': topic 'ops.x' is both downstream and upstream", e.getMessage());
 	}
 
 	@Test void b05_maxAttempts() {
-		var e = assertThrows(IllegalArgumentException.class, () -> BridgeDecl.sse("ops", "/s").maxAttempts(0));
+		var target3 = BridgeDecl.sse("ops", "/s");
+		var e = assertThrows(IllegalArgumentException.class, () -> target3.maxAttempts(0));
 		assertEquals("bridge 'ops': maxAttempts must be >= 1; got 0", e.getMessage());
 	}
 
 	@Test void b06_noTopics() {
-		var e = assertThrows(IllegalArgumentException.class, () -> BridgeDecl.sse("ops", "/s").toMap());
+		var target4 = BridgeDecl.sse("ops", "/s");
+		var e = assertThrows(IllegalArgumentException.class, target4::toMap);
 		assertEquals("bridge 'ops': carries no topics; add downstream(...) or upstream(...)", e.getMessage());
 	}
 
 	@Test void b07_badTopicSyntax_isE40() {
-		var e = assertThrows(IllegalArgumentException.class, () -> BridgeDecl.sse("ops", "/s").downstream("Ops.Jobs"));
+		var target5 = BridgeDecl.sse("ops", "/s");
+		var e = assertThrows(IllegalArgumentException.class, () -> target5.downstream("Ops.Jobs"));
 		assertEquals("invalid topic 'Ops.Jobs': expected family[:key] (see the topic syntax)", e.getMessage());
-		e = assertThrows(IllegalArgumentException.class, () -> BridgeDecl.websocket("ops", "/s").upstream("ops.x:*"));
+		var target6 = BridgeDecl.websocket("ops", "/s");
+		e = assertThrows(IllegalArgumentException.class, () -> target6.upstream("ops.x:*"));
 		assertEquals("invalid topic 'ops.x:*': expected family[:key] (see the topic syntax)", e.getMessage());
 	}
 }

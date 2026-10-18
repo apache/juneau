@@ -1815,8 +1815,8 @@ class RdfSerializer_Test extends TestBase {
 		}
 
 		@Test void o11_stream_serialize_reader_ioException_wrapped() {
-			// A Reader that throws mid-read — covers the catch(IOException) -> onException.accept(e) ->
-			// handleThrown(e) path inside IoUtils.read(Reader, Consumer) (line 376's residual instructions,
+			// A Reader that throws mid-read: covers the IOException handler inside the reader-reading helper, which
+			// passes the failure on to the serializer session's thrown-exception handling (residual instructions
 			// never exercised by n05's happy-path StringReader).
 			var s = RdfStreamSerializer.create().language(Constants.LANG_RDFTHRIFT).build();
 			assertThrows(Exception.class, () -> s.write(new O11_ThrowingReader()));
@@ -1850,9 +1850,9 @@ class RdfSerializer_Test extends TestBase {
 			// was enabled — see SerializerSession_Test#i01_listener_beanGetterException_ignored_doesNotThrow,
 			// which documents this exact BeanContext-level short-circuit for JSON). With the setting left at
 			// its default (false), the getter's exception instead propagates out of bpm.get(...), IS caught by
-			// forEachValue's catch(Exception), and IS surfaced as a non-null BeanPropertyValue.getThrown() —
-			// which reaches line 407's onBeanGetterException(bpMeta, t) call, and since
-			// isIgnoreInvocationExceptionsOnGetters() is false there too, it rethrows as a SerializeException.
+			// the catch block in forEachValue, and IS surfaced as a non-null BeanPropertyValue.getThrown() —
+			// which reaches line 407's bean-getter-exception callback, and since the ignore-invocation-exceptions
+			// setting is false there too, it rethrows as a SerializeException.
 			var s = RdfStreamSerializer.create().language(Constants.LANG_RDFTHRIFT).build();
 			assertThrows(Exception.class, () -> s.write(new O13_ThrowingGetterBean()));
 		}
@@ -1959,9 +1959,9 @@ class RdfSerializer_Test extends TestBase {
 		}
 
 		@Test void q06_serialize_multiValued_disableAutoDetectNamespaces_skipsAddModelPrefix() throws Exception {
-			// ns != null (from the property's own @Rdf namespace) AND isAutoDetectNamespaces()==FALSE --
-			// covers the FALSE side of writeToMultiProperties' own "else if (isAutoDetectNamespaces())"
-			// check (distinct from writeBeanMap's identical-shaped check, already covered for the FALSE
+			// The namespace is set (from the property's own @Rdf namespace) AND auto-detect namespaces is off:
+			// covers the FALSE side of writeToMultiProperties' own auto-detect check
+			// (distinct from writeBeanMap's identical-shaped check, already covered for the FALSE
 			// side by m11).
 			var s = RdfSerializer.create().ntriple().disableAutoDetectNamespaces().build();
 			var result = s.write(new Q06_BeanWithMultiValuedNsProperty());

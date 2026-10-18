@@ -21,6 +21,7 @@ import static org.apache.juneau.rest.server.runreport.ReportText.*;
 
 import java.nio.file.*;
 import java.util.*;
+import java.util.stream.*;
 
 import org.apache.juneau.rest.server.runreport.RunEvent.*;
 
@@ -42,6 +43,10 @@ public final class JestJsonReportReader implements ReportReader {
 	}
 
 	@Override /* ReportReader */
+	@SuppressWarnings({
+		"java:S135", // Guard clauses keep the loop readable.
+		"java:S3776" // Walking files and their assertions is inherently nested.
+	})
 	public ReportResult read(Path path, ReportLimits lim) {
 		var out = new ReportBuilder();
 		var root = readRoot(path, lim, out);
@@ -51,7 +56,7 @@ public final class JestJsonReportReader implements ReportReader {
 		var files = new ArrayList<String>();
 		var rows = new ArrayList<ReportTest>();
 		var rowFiles = new ArrayList<String>();
-		outer: for (var tr : list(root.get("testResults"))) {
+		for (var tr : list(root.get("testResults"))) {
 			var file = map(tr);
 			if (file == null)
 				continue;
@@ -71,18 +76,8 @@ public final class JestJsonReportReader implements ReportReader {
 				rowFiles.add(raw);
 				continue;
 			}
-			for (var a : assertions) {
-				var am = map(a);
-				if (am == null)
-					continue;
-				if (rows.size() >= lim.maxTests()) {
-					out.truncated = true;
-					out.warnings.add("report truncated at " + lim.maxTests() + " tests");
-					break outer;
-				}
-				rows.add(assertion(am, lim));
-				rowFiles.add(raw);
-			}
+			if (! addAssertions(assertions, raw, lim, out, rows, rowFiles))
+				break;
 		}
 		var display = stripCommonDir(files);
 		for (var i = 0; i < rows.size(); i++) {
@@ -93,13 +88,28 @@ public final class JestJsonReportReader implements ReportReader {
 		return out.build(fw());
 	}
 
+	// Returns false when the test limit was reached.
+	private static boolean addAssertions(List<?> assertions, String raw, ReportLimits lim, ReportBuilder out, List<ReportTest> rows, List<String> rowFiles) {
+		for (var a : assertions) {
+			var am = map(a);
+			if (am == null)
+				continue;
+			if (rows.size() >= lim.maxTests()) {
+				out.truncated = true;
+				out.warnings.add("report truncated at " + lim.maxTests() + " tests");
+				return false;
+			}
+			rows.add(assertion(am, lim));
+			rowFiles.add(raw);
+		}
+		return true;
+	}
+
 	private static ReportTest assertion(Map<String,Object> a, ReportLimits lim) {
 		var name = str(a.get("fullName"));
 		if (name == null || name.isEmpty()) {
-			var parts = new ArrayList<String>();
-			for (var t : list(a.get("ancestorTitles")))
-				if (t instanceof String s)
-					parts.add(s);
+			var parts = list(a.get("ancestorTitles")).stream().filter(String.class::isInstance).map(String.class::cast)
+				.collect(Collectors.toCollection(ArrayList::new));
 			var title = str(a.get("title"));
 			if (title != null)
 				parts.add(title);
@@ -110,11 +120,10 @@ public final class JestJsonReportReader implements ReportReader {
 			case "failed" -> TestStatus.FAIL;
 			default -> TestStatus.SKIP;
 		};
-		String msg = null, trace = null;
-		var fm = new ArrayList<String>();
-		for (var m : list(a.get("failureMessages")))
-			if (m instanceof String s)
-				fm.add(stripAnsi(s));
+		String msg = null;
+		String trace = null;
+		var fm = list(a.get("failureMessages")).stream().filter(String.class::isInstance).map(String.class::cast)
+			.map(ReportText::stripAnsi).toList();
 		if (! fm.isEmpty()) {
 			var first = firstLine(fm.get(0).strip());
 			msg = first.isEmpty() ? null : clip(first, lim.maxMsgChars());

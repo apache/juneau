@@ -55,7 +55,7 @@ class StockThemeCss_Test extends TestBase {
 		var open = light.indexOf('{');
 		var close = light.lastIndexOf('}');
 		assertTrue(open >= 0 && close > open, () -> "no html:root{} block:\n" + light);
-		assertTrue(light.substring(0, open).trim().equals("html:root"), () -> "light block must come first:\n" + light);
+		assertEquals("html:root", light.substring(0, open).trim(), () -> "light block must come first:\n" + light);
 		var dark = css.substring(media);
 		var sel = dark.indexOf(DARK_SELECTOR);
 		assertTrue(sel > 0, () -> "no " + DARK_SELECTOR + " rule in the @media block:\n" + dark);

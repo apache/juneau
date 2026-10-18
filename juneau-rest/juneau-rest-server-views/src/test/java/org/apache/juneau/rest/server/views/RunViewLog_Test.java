@@ -57,14 +57,14 @@ class RunViewLog_Test extends TestBase {
 		assertEquals(List.of(3L, 4L, 5L), seqs(p2));
 		assertFalse(p2.more());
 		assertTrue(log.page(p2.next(), 10).events().isEmpty());
-		assertDoesNotThrow(() -> p1.validate());
-		assertDoesNotThrow(() -> p2.validate());
+		assertDoesNotThrow(p1::validate);
+		assertDoesNotThrow(p2::validate);
 	}
 
 	@Test void a03_firstPageOfEmptyLogHasToken() {
 		var p = RunViewLog.create().page(null, 10);
 		assertNotNull(p.next());
-		assertDoesNotThrow(() -> p.validate());
+		assertDoesNotThrow(p::validate);
 		assertTrue(p.next().endsWith(".0"));
 	}
 
@@ -132,7 +132,8 @@ class RunViewLog_Test extends TestBase {
 	@Test void c05_oversizeEventRejected() {
 		var ctl = "\u0001";
 		var e = RunEvent.test("a", "jest", ctl.repeat(512), ctl.repeat(512), TestStatus.FAIL).withMsg(ctl.repeat(2000)).withTrace(ctl.repeat(8000));
-		assertThrows(IllegalArgumentException.class, () -> RunViewLog.create().append(e));
+		var target = RunViewLog.create();
+		assertThrows(IllegalArgumentException.class, () -> target.append(e));
 	}
 
 	@Test void c06_maxClamped() {
@@ -165,6 +166,6 @@ class RunViewLog_Test extends TestBase {
 		var page = log.page(null, 100);
 		assertEquals("replace", page.events().get(0).toContractMap().get("ev"));
 		assertEquals(3, page.events().size());
-		assertDoesNotThrow(() -> page.validate());
+		assertDoesNotThrow(page::validate);
 	}
 }

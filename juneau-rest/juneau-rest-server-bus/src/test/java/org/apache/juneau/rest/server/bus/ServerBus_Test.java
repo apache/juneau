@@ -158,17 +158,19 @@ class ServerBus_Test extends TestBase {
 
 	@Test void a03_e56WhenThePolicyDeniesTheTopic() {
 		var bus = bus(policy().build());
+		var empty = JsonMap.of();
 		for (var t : Arrays.asList("ops.secret", "ops.alert:*", "job:1", "ops.jobs:x", null)) {
-			var e = assertThrows(IllegalArgumentException.class, () -> bus.publish(t, JsonMap.of()), String.valueOf(t));
+			var e = assertThrows(IllegalArgumentException.class, () -> bus.publish(t, empty), String.valueOf(t));
 			assertEquals("E-56: ServerBus.publish('" + t + "'): the policy does not allow it downstream", e.getMessage());
 		}
-		var e = assertThrows(IllegalArgumentException.class, () -> bus.publishTo(s -> true, "ops.secret", JsonMap.of()));
+		var e = assertThrows(IllegalArgumentException.class, () -> bus.publishTo(s -> true, "ops.secret", empty));
 		assertEquals("E-56: ServerBus.publishTo('ops.secret'): the policy does not allow it downstream", e.getMessage());
 	}
 
 	@Test void a04_e56WhenTheFrameIsTooLarge() {
 		var bus = bus(policy().maxFrameBytes(256).build());
-		var e = assertThrows(IllegalArgumentException.class, () -> bus.publish("ops.jobs", JsonMap.of("blob", "x".repeat(300))));
+		var big = JsonMap.of("blob", "x".repeat(300));
+		var e = assertThrows(IllegalArgumentException.class, () -> bus.publish("ops.jobs", big));
 		assertTrue(e.getMessage().startsWith("E-56: ServerBus.publish('ops.jobs'): frame too large ("), e.getMessage());
 		assertTrue(bus.retainedJson("ops.jobs").isEmpty(), "a refused publish stores nothing");
 		assertTrue(bus.publish("ops.jobs", JsonMap.of("blob", "x".repeat(10))));
@@ -295,12 +297,13 @@ class ServerBus_Test extends TestBase {
 	}
 
 	@Test void b08_enableWebSocketValidatesThePrefix() {
-		var bus = new ServerBus(policy().build(), clock, null);
-		for (var bad : Arrays.asList("juneau-bus/ws", "/juneau-bus/ws/", null))
-			assertThrows(IllegalArgumentException.class, () -> bus.enableWebSocket(bad), String.valueOf(bad));
-		assertNull(bus.webSocketPrefix());
-		bus.enableWebSocket("/juneau-bus/ws");
-		assertEquals("/juneau-bus/ws", bus.webSocketPrefix());
+		try (var bus = new ServerBus(policy().build(), clock, null)) {
+			for (var bad : Arrays.asList("juneau-bus/ws", "/juneau-bus/ws/", null))
+				assertThrows(IllegalArgumentException.class, () -> bus.enableWebSocket(bad), String.valueOf(bad));
+			assertNull(bus.webSocketPrefix());
+			bus.enableWebSocket("/juneau-bus/ws");
+			assertEquals("/juneau-bus/ws", bus.webSocketPrefix());
+		}
 	}
 
 	@Test void b09_grantDescribesTheSession() throws Exception {
@@ -674,7 +677,8 @@ class ServerBus_Test extends TestBase {
 		var worst = BusFrames.utf8Length(BusFrames.pub("ops.jobs", Json.of("x".repeat(10)), false, Long.MAX_VALUE));
 		var bus = bus(policy().maxFrameBytes(worst).build());
 		assertTrue(bus.publish("ops.jobs", "x".repeat(10)), "exactly maxFrameBytes is accepted");
-		var e = assertThrows(IllegalArgumentException.class, () -> bus.publish("ops.jobs", "x".repeat(11)));
+		var tooBig = "x".repeat(11);
+		var e = assertThrows(IllegalArgumentException.class, () -> bus.publish("ops.jobs", tooBig));
 		assertTrue(e.getMessage().contains("frame too large"), e.getMessage());
 
 		var frame = up("ops.cancel-all", "{\"reason\":\"" + "y".repeat(20) + "\"}");
@@ -713,6 +717,9 @@ class ServerBus_Test extends TestBase {
 		@Override public void close(int code, String reason) { /* nothing to do */ }
 	}
 
+	@SuppressWarnings({
+		"java:S2925" // Stress-run window; the workers run for a fixed time
+	})
 	@Test void h07_concurrentPublishConnectDisconnectKeepsSeqAndResyncOrder() throws Exception {
 		var bus = bus(policy().maxQueuedFrames(1_000_000).build());
 		var stop = new AtomicBoolean();

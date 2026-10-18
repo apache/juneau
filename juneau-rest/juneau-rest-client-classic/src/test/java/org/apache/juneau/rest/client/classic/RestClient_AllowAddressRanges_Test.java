@@ -71,9 +71,12 @@ class RestClient_AllowAddressRanges_Test {
 	// =================================================================================================================
 
 	@Test void a01_invalidSpec_failsAtBuild() {
-		assertThrows(IllegalArgumentException.class, () -> RestClient.create().allowAddressRanges("10.0.0.0/8").build());
-		assertThrows(IllegalArgumentException.class, () -> RestClient.create().allowAddressRanges("not-an-address").build());
-		assertThrows(IllegalArgumentException.class, () -> RestClient.create().allowAddressRanges("127.0.0.1").build());
+		var tenSlashEight = RestClient.create().allowAddressRanges("10.0.0.0/8");
+		var notAnAddress = RestClient.create().allowAddressRanges("not-an-address");
+		var bareAddress = RestClient.create().allowAddressRanges("127.0.0.1");
+		assertThrows(IllegalArgumentException.class, tenSlashEight::build);
+		assertThrows(IllegalArgumentException.class, notAnAddress::build);
+		assertThrows(IllegalArgumentException.class, bareAddress::build);
 	}
 
 	@Test void a02_getter_reflectsSettingAndAccumulates() throws Exception {

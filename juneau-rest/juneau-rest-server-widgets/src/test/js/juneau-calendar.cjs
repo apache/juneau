@@ -43,7 +43,7 @@ if (!calendarJsPath) {
 // ------------------------------------------------------------------------------------------------------------------
 
 function elMatches(node, sel) {
-	if (!node || node.nodeType !== 1) return false;
+	if (node?.nodeType !== 1) return false;
 	// tag[attr] / tag[attr="v"]
 	let m = /^([a-zA-Z][\w-]*)?(?:\[([\w:-]+)(?:="([^"]*)")?\])?$/.exec(sel);
 	if (m && (m[1] || m[2])) {
@@ -163,9 +163,10 @@ function textNode(value) {
 
 const VOID_TAGS = { br: 1, hr: 1, img: 1, input: 1, meta: 1, link: 1, base: 1 };
 
+const ATTR_VALUE = String.raw`"([^"]*)"|'([^']*)'|([^\s>]+)`;
 function parseAttrs(raw, node) {
 	if (!raw) return;
-	const re = /([:@\w-]+)(?:\s*=\s*(?:"([^"]*)"|'([^']*)'|([^\s>]+)))?/g;
+	const re = new RegExp(String.raw`([:@\w-]+)(?:\s*=\s*(?:${ATTR_VALUE}))?`, 'g');
 	let m;
 	while ((m = re.exec(raw))) {
 		node.setAttribute(m[1], m[2] ?? m[3] ?? m[4] ?? '');
@@ -243,7 +244,7 @@ function installViewsLayerStack() {
 			node.dataset.juneauLayer = String(layerStack.length - 1);
 			return rec;
 		},
-		popLayer: function (node) {
+		popLayer: function (node) { // NOSONAR javascript:S3776 - early-return guards and the dismiss loop read best together
 			if (!layerStack.length) return;
 			let from = layerStack.length - 1;
 			if (node) {

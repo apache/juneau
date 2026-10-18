@@ -97,8 +97,8 @@ public final class CardSource {
 	String template() { return template; }
 
 	/**
-	 * @return <jk>true</jk> when {@link #bodyMap(Map)} was used, or the raw body's first non-whitespace character
-	 * 	is {@code '{'}.
+	 * @return <jk>true</jk> when {@link Builder#bodyMap(Map)} was used, or the raw body's first non-whitespace character
+	 * 	is an opening curly brace.
 	 */
 	public boolean hasJsonBody() {
 		if (bodyMap != null)
@@ -109,7 +109,7 @@ public final class CardSource {
 	/**
 	 * Parses the body as JSON5 (cached after the first call).
 	 *
-	 * @return The parsed body, or the {@link #bodyMap(Map)} wrapped as a {@link JsonMap} when that was used.
+	 * @return The parsed body, or the {@link Builder#bodyMap(Map)} wrapped as a {@link JsonMap} when that was used.
 	 * @throws IllegalArgumentException E-25 if the body is not JSON5 shaped; E-24 if it is but fails to parse.
 	 */
 	public JsonMap json() {

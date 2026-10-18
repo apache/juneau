@@ -48,8 +48,8 @@ function fixture(rowData, selectionState) {
 	const table = env.el('table');
 	table.dataset.juneauView = 'v';
 	table.dataset.juneauCsrf = 'tok-1';
-	table.setAttribute('data-juneau-row-id-field', 'id');
-	table.setAttribute('data-juneau-select-label-field', 'name');
+	table.dataset.juneauRowIdField = 'id';
+	table.dataset.juneauSelectLabelField = 'name';
 	const tbody = env.el('tbody');
 	const tr = env.el('tr');
 	tr.dataset.juneauRowId = String(rowData.id);
@@ -91,11 +91,11 @@ NS.rowActions.registerConfirmRenderer('verdict', function (modal, request) { req
 	const sel = fixture({ id: 9, name: 'Gadget' }, { labelField: 'title', rowIdField: 'pid' });
 	await NS.rowActions.run(sel, 'delete');
 	await tick();
-	out.selectionRequest = requests[requests.length - 1];
+	out.selectionRequest = requests.at(-1);
 	const ribbonTable = sel.parentNode.parentNode.parentNode;
 	await NS.rowActions.open({ id: 'rb', label: 'Go', endpoint: '/x', method: 'POST', present: 'dialog', confirm: 'Proceed?', confirmRenderer: 'verdict' }, { table: ribbonTable, tr: null });
 	await tick();
-	out.ribbonRequest = requests[requests.length - 1];
+	out.ribbonRequest = requests.at(-1);
 
 	const blank = fixture({ id: 8, name: '' });
 	const before = asked.length;

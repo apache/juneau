@@ -56,6 +56,9 @@ import com.sun.net.httpserver.*;
  */
 @EnabledIfSystemProperty(named=RunView_BrowserTest.GATE, matches="true",
 	disabledReason="JS-execution harness is opt-in; run with `mvn -Pjs-tests -f juneau-rest/juneau-rest-server-views/pom.xml test`")
+@SuppressWarnings({
+	"resource" // The shared mock client lives for the whole test class, and the in-memory mock requests and responses hold no OS resources.
+})
 class RunView_BrowserTest extends TestBase {
 
 	/** System property the {@code js-tests} profile sets to enable this class. */
@@ -365,7 +368,7 @@ class RunView_BrowserTest extends TestBase {
 		clean("a02");
 		var m = c("a02");
 		assertBean(m, "role,hiddenAfterEscape", "tooltip,true");
-		assertContains(() -> m.toString(), "b", (String) m.get("tipText"));
+		assertContains(m::toString, "b", (String) m.get("tipText"));
 	}
 
 	@Test void a03_blockLinkSetsTheHash() {
@@ -411,15 +414,15 @@ class RunView_BrowserTest extends TestBase {
 	@Test void a09_blocksCarryStepIdAndFireOnBlockClick() {
 		clean("a09");
 		var m = c("a09");
-		assertEquals(List.of("build", "build"), m.get("stepIds"), () -> m.toString());
+		assertEquals(List.of("build", "build"), m.get("stepIds"), m::toString);
 		assertEquals(List.of(Map.of("stepId", "build", "kind", "pass"), Map.of("stepId", "build", "offset", 120, "kind", "fail")),
-			m.get("clicks"), () -> m.toString());
+			m.get("clicks"), m::toString);
 	}
 
 	@Test void a08_twelveThousandTestsStayBounded() {
 		clean("a08");
 		var m = c("a08");
-		assertContains(() -> m.toString(), "12000", (String) m.get("counts"));
+		assertContains(m::toString, "12000", (String) m.get("counts"));
 		assertTrue(((Number) m.get("blocks")).intValue() < 1500, () -> "blocks in the DOM: " + m);
 	}
 }

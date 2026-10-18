@@ -118,9 +118,26 @@ class KeychainSecretStore_Test {
 			var value = entries.get(key(args));
 			if (value == null)
 				return notFound();
-			if (! Arrays.asList(args).contains("-w"))
+			if (! Arrays.asList(args).contains("-g"))
 				return new KeychainSecretStore.Result(0, new byte[0], "");
-			return new KeychainSecretStore.Result(0, (new String(value) + "\n").getBytes(UTF_8), "");
+			return new KeychainSecretStore.Result(0, "keychain: \"/fake/login.keychain-db\"\n".getBytes(UTF_8), passwordLine(value));
+		}
+
+		/** Mirrors the verified {@code security -g} stderr: plain printable text is quoted, anything else is hex plus an escaped rendering. */
+		static String passwordLine(char[] value) {
+			var bytes = new String(value).getBytes(UTF_8);
+			if (bytes.length == 0)
+				return "password: \n";
+			var plain = true;
+			for (var b : bytes)
+				if (b < 0x20 || b > 0x7e || b == '"' || b == '\\')
+					plain = false;
+			if (plain)
+				return "password: \"" + new String(bytes, UTF_8) + "\"\n";
+			var hex = new StringBuilder("password: 0x");
+			for (var b : bytes)
+				hex.append(String.format("%02X", b));
+			return hex + "  \"<escaped>\"\n";
 		}
 
 		private KeychainSecretStore.Result deleteGenericPassword(String[] args) {
@@ -212,7 +229,7 @@ class KeychainSecretStore_Test {
 		var store = new KeychainSecretStore("my svc \"q\" \\", FailMode.FAIL_CLOSED, new FakeKeychain());
 		var values = new String[] {
 			"plain", "a b", "a\"b", "a'b", "a\\b", "a\\\\b", "\\\"", "\"", "'", "a\tb", " lead", "trail ", "#hash",
-			"$x `y` ;|&", "", "\u00e9 \u00fc \u6f22", "-x", "--", "a\\nb", "\"; add-generic-password -a evil -s evil -w \"x"
+			"$x `y` ;|&", "", "\u00e9 \u00fc \u6f22", "-x", "--", "a\\nb", "abcd", "0x41", "610962", "\u0001\u007f", "\"; add-generic-password -a evil -s evil -w \"x"
 		};
 		for (var acct : new String[] {"acct", "my acct", "q\"uo'te\\", "\u00e9"}) {
 			for (var v : values) {
@@ -340,15 +357,39 @@ class KeychainSecretStore_Test {
 		assertDoesNotThrow(() -> store.store("k", secret));
 	}
 
-	@Test void d03_findDropsSingleTrailingNewline() {
-		var store = new KeychainSecretStore("svc", FailMode.FAIL_CLOSED, (stdin, args) -> new KeychainSecretStore.Result(0, "pw\r\n".getBytes(UTF_8), ""));
-		assertArrayEquals("pw".toCharArray(), store.find("k").orElseThrow());
-		var doubled = new KeychainSecretStore("svc", FailMode.FAIL_CLOSED, (stdin, args) -> new KeychainSecretStore.Result(0, "pw\n\n".getBytes(UTF_8), ""));
-		assertArrayEquals("pw\n".toCharArray(), doubled.find("k").orElseThrow());
-		var bare = new KeychainSecretStore("svc", FailMode.FAIL_CLOSED, (stdin, args) -> new KeychainSecretStore.Result(0, "pw".getBytes(UTF_8), ""));
-		assertArrayEquals("pw".toCharArray(), bare.find("k").orElseThrow());
-		var empty = new KeychainSecretStore("svc", FailMode.FAIL_CLOSED, (stdin, args) -> new KeychainSecretStore.Result(0, new byte[0], ""));
-		assertEquals(0, empty.find("k").orElseThrow().length);
+	private static KeychainSecretStore stderrReturning(String stderr) {
+		return new KeychainSecretStore("svc", FailMode.FAIL_CLOSED, (stdin, args) -> new KeychainSecretStore.Result(0, new byte[0], stderr));
+	}
+
+	@Test void d03_findParsesPasswordLine() {
+		// Printable text; extra stderr lines around it are ignored; a decoy that merely contains the prefix is not matched.
+		assertArrayEquals("pw".toCharArray(), stderrReturning("password: \"pw\"\n").find("k").orElseThrow());
+		assertArrayEquals("pw".toCharArray(), stderrReturning("warn: x\npassword: \"pw\"\r\nmore\n").find("k").orElseThrow());
+		assertArrayEquals("pw".toCharArray(), stderrReturning("password: \"pw\"").find("k").orElseThrow());
+		assertArrayEquals("p w".toCharArray(), stderrReturning("x password: \"no\"\npassword: \"p w\"\n").find("k").orElseThrow());
+		// Empty.
+		assertEquals(0, stderrReturning("password: \n").find("k").orElseThrow().length);
+		assertEquals(0, stderrReturning("password: ").find("k").orElseThrow().length);
+		// Hex form (tab, non-ASCII, quote/backslash), including the trailing escaped rendering.
+		assertArrayEquals("a\tb".toCharArray(), stderrReturning("password: 0x610962  \"a\\011b\"\n").find("k").orElseThrow());
+		assertArrayEquals("\u00e9 \u00fc \u6f22".toCharArray(), stderrReturning("password: 0xC3A920C3BC20E6BCA2  \"x\"\n").find("k").orElseThrow());
+		assertArrayEquals("say \"hi\" \\ x".toCharArray(), stderrReturning("password: 0x7361792022686922205C2078  \"x\"\n").find("k").orElseThrow());
+		assertArrayEquals("a\tb".toCharArray(), stderrReturning("password: 0x610962\n").find("k").orElseThrow());
+		// Looks like hex or a hex prefix but is quoted text, so it is literal.
+		assertArrayEquals("abcd".toCharArray(), stderrReturning("password: \"abcd\"\n").find("k").orElseThrow());
+		assertArrayEquals("0x41".toCharArray(), stderrReturning("password: \"0x41\"\n").find("k").orElseThrow());
+		assertArrayEquals("0x610962".toCharArray(), stderrReturning("password: \"0x610962\"\n").find("k").orElseThrow());
+	}
+
+	@Test void d05_findMalformedOutputIsBackendFailure() {
+		var noPassword = stderrReturning("");
+		var oddHex = stderrReturning("password: 0x610\n");
+		var garbage = stderrReturning("password: zzz\n");
+		assertContains("did not contain a password line", assertThrows(IllegalStateException.class, () -> noPassword.find("k")).getMessage());
+		assertContains("malformed hex", assertThrows(IllegalStateException.class, () -> oddHex.find("k")).getMessage());
+		assertContains("unrecognized", assertThrows(IllegalStateException.class, () -> garbage.find("k")).getMessage());
+		var open = new KeychainSecretStore("svc", FailMode.FAIL_OPEN, (stdin, args) -> new KeychainSecretStore.Result(0, new byte[0], ""));
+		assertTrue(open.find("k").isEmpty());
 	}
 
 	@Test void d04_nullRunnerRejected() {
@@ -370,10 +411,10 @@ class KeychainSecretStore_Test {
 	@Test void e01_processRunnerForwardsArgsAndClosesNullStdin() throws IOException {
 		assumeTrue(posixShellAvailable(), "POSIX shell not available");
 		// "cat >/dev/null" only returns if the runner closes the child's stdin; otherwise the call would time out.
-		var script = fakeSecurity("printf '%s\\n' \"$@\"; cat >/dev/null; exit 0");
+		var script = fakeSecurity("printf 'password: \"%s\"\\n' \"$*\" >&2; cat >/dev/null; exit 0");
 		try {
 			var store = new KeychainSecretStore("svc", FailMode.FAIL_CLOSED, 5L, script.getAbsolutePath());
-			assertArrayEquals("find-generic-password\n-a\nk\n-s\nsvc\n-w".toCharArray(), store.find("k").orElseThrow());
+			assertArrayEquals("find-generic-password -a k -s svc -g".toCharArray(), store.find("k").orElseThrow());
 			assertTrue(store.exists("k"));
 		} finally {
 			script.delete();
@@ -435,7 +476,7 @@ class KeychainSecretStore_Test {
 		assumeTrue("true".equals(System.getProperty("juneau.keychain.integration")), "Set -Djuneau.keychain.integration=true to run against the real login keychain");
 		assumeTrue(System.getProperty("os.name", "").toLowerCase().contains("mac"), "macOS only");
 		assumeTrue(new File("/usr/bin/security").canExecute(), "/usr/bin/security not available");
-		var service = "org.apache.juneau.test.j0837." + UUID.randomUUID();
+		var service = "org.apache.juneau.test.j0840." + UUID.randomUUID();
 		var store = new KeychainSecretStore(service, FailMode.FAIL_CLOSED, 20L);
 		var acct = "it acct \"q\" \\";
 		var secret = "pa ss\"w\\rd 'x' $y";
@@ -444,6 +485,11 @@ class KeychainSecretStore_Test {
 			store.store(acct, secret.toCharArray());
 			assertTrue(store.exists(acct));
 			assertArrayEquals(secret.toCharArray(), store.find(acct).orElseThrow());
+			// Tab, non-ASCII, hex-looking, and empty secrets (the CLI's -w flag returns a hex dump for some of these).
+			for (var v : new String[] {"a\tb", "\u00e9 \u00fc \u6f22", "abcd", "0x41", "610962", ""}) {
+				store.store(acct, v.toCharArray());
+				assertArrayEquals(v.toCharArray(), store.find(acct).orElseThrow(), "value=" + v);
+			}
 			store.store(acct, "second".toCharArray());
 			assertArrayEquals("second".toCharArray(), store.find(acct).orElseThrow());
 		} finally {

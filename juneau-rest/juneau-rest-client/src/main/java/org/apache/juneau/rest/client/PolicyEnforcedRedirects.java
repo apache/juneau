@@ -160,6 +160,9 @@ public final class PolicyEnforcedRedirects {
 		return eqic(method, "GET") || eqic(method, "HEAD");
 	}
 
+	@SuppressWarnings({
+		"java:S3776" // Redirect method/body/header rewriting rules read best as one linear sequence.
+	})
 	private static TransportRequest forRedirect(TransportRequest initial, TransportRequest current, URI target, int statusCode, boolean left) throws TransportException {
 		var preserveMethod = eqic(current.getMethod(), "GET") || eqic(current.getMethod(), "HEAD");
 		var rewriteToGet = ! preserveMethod && (statusCode == 301 || statusCode == 302 || statusCode == 303);

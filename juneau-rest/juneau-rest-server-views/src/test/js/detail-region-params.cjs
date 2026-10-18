@@ -63,7 +63,7 @@ async function build(region) {
 	const host = slot(ctx.env, 'runs-slot');
 	await Promise.resolve(ctx.NS.init.mountTableSlot(host, envelope(ctx.NS, region)));
 	const tpl = host.querySelector('template[data-juneau-row-detail]');
-	const content = tpl && tpl.content ? tpl.content : null;
+	const content = tpl?.content ? tpl.content : null;
 	ctx.region = content ? content.querySelector('[data-juneau-region="' + region.id + '"]') : null;
 	return ctx;
 }
@@ -92,8 +92,7 @@ const out = {};
 	{
 		const c = await build({ id: 'both', type: 'row-detail', populate: 'p', dataUrl: '/runs/{id}/d', params: { a: 1 } });
 		const d = declaredOf(c.region);
-		out.a02_dataUrlAndParams = !!(d && d.dataUrl === '/runs/{id}/d' && d.params && d.params.a === 1
-			&& Object.keys(d).length === 2);
+		out.a02_dataUrlAndParams = !!(d?.dataUrl === '/runs/{id}/d' && d.params?.a === 1 && Object.keys(d).length === 2);
 	}
 
 	{
@@ -115,7 +114,7 @@ const out = {};
 	{
 		const c = await build({ id: 'empty', type: 'row-detail', populate: 'p', params: {} });
 		const d = declaredOf(c.region);
-		out.a05_emptyObjectWritten = !!(d && d.params && Object.keys(d.params).length === 0);
+		out.a05_emptyObjectWritten = !!(d?.params && Object.keys(d.params).length === 0);
 	}
 
 	{
@@ -128,7 +127,7 @@ const out = {};
 			c.R.initRegion(c.region);
 		}
 		await Promise.resolve();
-		out.a06_roundTrip = !!(seen && seen.eventsUrl === '/runs/{id}/events' && seen.compact === true && seen.rows === 8);
+		out.a06_roundTrip = !!(seen?.eventsUrl === '/runs/{id}/events' && seen.compact === true && seen.rows === 8);
 		out.a06_noErrors = c.rec.errors.length === 0;
 	}
 
@@ -139,13 +138,13 @@ const out = {};
 		const d = declaredOf(c.region);
 		out.a07_configCopied = !!(d && JSON.stringify(d.config) === JSON.stringify(config));
 		let seen = null;
-		c.R.register('cfgprobe', function (ctx) { seen = ctx.declared && ctx.declared.config; });
+		c.R.register('cfgprobe', function (ctx) { seen = ctx.declared?.config; });
 		if (c.region) {
 			c.env.body.appendChild(c.region);
 			c.R.initRegion(c.region);
 		}
 		await Promise.resolve();
-		out.a07_roundTrip = !!(seen && seen.submit && seen.submit.keyUrl === '/runs/{id}/key');
+		out.a07_roundTrip = seen?.submit?.keyUrl === '/runs/{id}/key';
 		const arr = await build({ id: 'cfgarr', type: 'row-detail', populate: 'p', config: ['x'] });
 		const none = await build({ id: 'cfgnone', type: 'row-detail', populate: 'p' });
 		out.a07_nonObjectAndAbsentDropped = [arr, none].every(function (x) {

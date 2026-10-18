@@ -71,6 +71,9 @@ public final class ApacheHc45TransportBuilder {
 	 * @return This object.
 	 * @throws IllegalArgumentException If the client is an {@link AbstractHttpClient}.
 	 */
+	@SuppressWarnings({
+		"deprecation" // AbstractHttpClient is referenced only to refuse the legacy client type; there is no replacement check.
+	})
 	public ApacheHc45TransportBuilder httpClient(CloseableHttpClient value) {
 		if (reqnn("value", value) instanceof AbstractHttpClient)
 			throw iaex("A legacy AbstractHttpClient (%s) is not supported: it cannot apply the redirect credential guard.  Build the client with HttpClients instead.", value.getClass().getName());

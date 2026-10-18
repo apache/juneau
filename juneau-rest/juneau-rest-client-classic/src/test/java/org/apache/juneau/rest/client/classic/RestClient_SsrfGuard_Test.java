@@ -55,11 +55,11 @@ class RestClient_SsrfGuard_Test {
 		// Explicit IPv4 loopback bind, as in RestClient_Coverage2_Test.
 		server = HttpServer.create(new InetSocketAddress("127.0.0.1", 0), 0);
 		server.createContext("/hello", exchange -> {
-			exchange.getRequestBody().readAllBytes();
+			try (var in = exchange.getRequestBody()) { in.readAllBytes(); }
 			var body = "hi".getBytes(StandardCharsets.UTF_8);
 			// A fixed Content-Length keeps the connection alive for reuse once the body is consumed.
 			exchange.sendResponseHeaders(200, body.length);
-			exchange.getResponseBody().write(body);
+			try (var os = exchange.getResponseBody()) { os.write(body); }
 			exchange.close();
 		});
 		server.start();
@@ -136,6 +136,9 @@ class RestClient_SsrfGuard_Test {
 	// B: a connection manager this RestClient did not create cannot be pinned, so guarded calls are refused
 	// =================================================================================================================
 
+	@SuppressWarnings({
+		"resource" // The caller-supplied manager is owned by the client built from it.
+	})
 	@Test void b01_callerSuppliedConnectionManager_guardActive_refused() throws Exception {
 		try (var c = RestClient.create().rootUrl(url).connectionManager(new PoolingHttpClientConnectionManager()).build()) {
 			assertGuardedRefused(c);
@@ -159,6 +162,9 @@ class RestClient_SsrfGuard_Test {
 		}
 	}
 
+	@SuppressWarnings({
+		"resource" // The caller-supplied manager is owned by the client built from it.
+	})
 	@Test void b04_callerSuppliedConnectionManager_allowPrivateUrls_succeeds() throws Exception {
 		try (var c = RestClient.create().rootUrl(url).connectionManager(new PoolingHttpClientConnectionManager()).allowPrivateUrls(true).build()) {
 			assertEquals("hi", c.getRemote(HelloRemote.class).call());
@@ -177,6 +183,9 @@ class RestClient_SsrfGuard_Test {
 	// C: the two-pool router sends each operation to the right pool
 	// =================================================================================================================
 
+	@SuppressWarnings({
+		"resource" // The leased connection goes back to the router through releaseConnection(), not close().
+	})
 	@Test void c01_router_guardedLease_allOperationsGoToPinnedPool() throws Exception {
 		var ordinary = new Recorder("ordinary");
 		var pinned = new Recorder("pinned");
@@ -200,6 +209,9 @@ class RestClient_SsrfGuard_Test {
 		assertEquals("[]", ordinary.calls.toString());
 	}
 
+	@SuppressWarnings({
+		"resource" // The leased connection goes back to the router through releaseConnection(), not close().
+	})
 	@Test void c02_router_unguardedLease_allOperationsGoToOrdinaryPool() throws Exception {
 		var ordinary = new Recorder("ordinary");
 		var pinned = new Recorder("pinned");
@@ -285,6 +297,9 @@ class RestClient_SsrfGuard_Test {
 		}
 	}
 
+	@SuppressWarnings({
+		"resource" // The pool is owned and closed by the client; the test only inspects it.
+	})
 	@Test void d02_pooled_settingsChangedAfterBuild_mirroredOnNextGuardedLease() throws Exception {
 		var holder = new HttpClientConnectionManager[1];
 		try (var c = new ConfiguringBuilder(cm -> holder[0] = cm).rootUrl(url).pooled().build()) {
@@ -368,6 +383,9 @@ class RestClient_SsrfGuard_Test {
 	// F: the pinned pool is always this client's own, so closing the client shuts it down
 	// =================================================================================================================
 
+	@SuppressWarnings({
+		"resource" // The subject is close() itself, so the client is closed explicitly.
+	})
 	@Test void f01_connectionManagerShared_close_shutsDownBothOwnPools() throws Exception {
 		var c = RestClient.create().rootUrl(url).pooled().connectionManagerShared(true).build();
 		var router = routerOf(c);
@@ -375,19 +393,25 @@ class RestClient_SsrfGuard_Test {
 		var pinned = (HttpClientConnectionManager)field(router, "pinned");
 		c.close();
 		var route = new HttpRoute(new HttpHost("localhost", 80));
-		assertThrows(IllegalStateException.class, () -> pinned.requestConnection(route, null).get(1, TimeUnit.SECONDS));
+		assertThrows(IllegalStateException.class, () -> lease(pinned, route));
 		// The ordinary pool was built by this client and nothing else can reach it, so "shared" does not keep it open.
-		assertThrows(IllegalStateException.class, () -> ordinary.requestConnection(route, null).get(1, TimeUnit.SECONDS));
+		assertThrows(IllegalStateException.class, () -> lease(ordinary, route));
 	}
 
+	@SuppressWarnings({
+		"resource" // The subject is closeQuietly() itself, so the client is closed explicitly.
+	})
 	@Test void f02_closeQuietly_shutsDownPinnedPool() throws Exception {
 		var c = RestClient.create().rootUrl(url).connectionManagerShared(true).build();
 		var pinned = (HttpClientConnectionManager)field(routerOf(c), "pinned");
 		c.closeQuietly();
 		var route = new HttpRoute(new HttpHost("localhost", 80));
-		assertThrows(IllegalStateException.class, () -> pinned.requestConnection(route, null).get(1, TimeUnit.SECONDS));
+		assertThrows(IllegalStateException.class, () -> lease(pinned, route));
 	}
 
+	@SuppressWarnings({
+		"resource" // The subject is close() itself; the leased connection goes back through releaseConnection().
+	})
 	@Test void f03_keepHttpClientOpen_close_leavesPinnedPoolOpen() throws Exception {
 		var c = RestClient.create().rootUrl(url).keepHttpClientOpen().build();
 		var pinned = (HttpClientConnectionManager)field(routerOf(c), "pinned");
@@ -402,6 +426,9 @@ class RestClient_SsrfGuard_Test {
 	// Helpers
 	// =================================================================================================================
 
+	@SuppressWarnings({
+		"resource" // The client is returned to the caller, which owns it.
+	})
 	private static RestClient client(boolean pooled) {
 		var b = RestClient.create().rootUrl(url);
 		if (pooled)
@@ -410,7 +437,9 @@ class RestClient_SsrfGuard_Test {
 	}
 
 	private static void assertPlainOk(RestClient c) throws Exception {
-		assertEquals("hi", c.get(url + "/hello").run().getContent().asString());
+		try (var req = c.get(url + "/hello"); var res = req.run()) {
+			assertEquals("hi", res.getContent().asString());
+		}
 	}
 
 	private static void assertGuardedRejected(RestClient c) {
@@ -427,6 +456,13 @@ class RestClient_SsrfGuard_Test {
 	}
 
 	// The two-pool router installed on the client's HttpClient (read reflectively: neither exposes it).
+	@SuppressWarnings({
+		"resource" // The test only needs the lease to succeed or throw; the connection is never used.
+	})
+	private static void lease(HttpClientConnectionManager manager, HttpRoute route) throws Exception {
+		manager.requestConnection(route, null).get(1, TimeUnit.SECONDS);
+	}
+
 	private static Object routerOf(RestClient c) throws Exception {
 		var router = field(c.httpClient, "connManager");
 		assertEquals("SsrfGuardConnectionManager", router.getClass().getSimpleName());

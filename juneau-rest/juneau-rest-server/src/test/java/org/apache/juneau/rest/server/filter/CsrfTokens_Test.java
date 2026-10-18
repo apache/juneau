@@ -251,8 +251,10 @@ class CsrfTokens_Test extends TestBase {
 
 	@Test void a16_perProcessRejectsNonSixtyFourHex() {
 		var hex64 = SynchronizerToken.generate().value();
-		for (var v : List.of("the-real-token", hex64.substring(1), hex64 + "a", hex64.toUpperCase()))
-			assertThrows(IllegalArgumentException.class, () -> CsrfTokens.perProcess(SynchronizerToken.of(v)), v);
+		for (var v : List.of("the-real-token", hex64.substring(1), hex64 + "a", hex64.toUpperCase())) {
+			var bad = SynchronizerToken.of(v);
+			assertThrows(IllegalArgumentException.class, () -> CsrfTokens.perProcess(bad), v);
+		}
 		assertThrows(IllegalArgumentException.class, () -> CsrfTokens.perProcess(null));
 
 		var secret = SynchronizerToken.generate();

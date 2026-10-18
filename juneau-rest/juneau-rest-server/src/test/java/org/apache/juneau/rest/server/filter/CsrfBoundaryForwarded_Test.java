@@ -525,10 +525,12 @@ class CsrfBoundaryForwarded_Test extends TestBase {
 	//-----------------------------------------------------------------------------------------------------------------
 
 	@Test void e01_builder() {
-		assertThrows(IllegalArgumentException.class, () -> CsrfBoundary.create().trustedHops(0));
-		assertThrows(IllegalArgumentException.class, () -> CsrfBoundary.create().trustedHops(17));
-		assertThrows(IllegalArgumentException.class, () -> CsrfBoundary.create().trustedHops(2).build());
-		assertThrows(IllegalArgumentException.class, () -> CsrfBoundary.create().trustedForwarding(null));
+		var bld = CsrfBoundary.create();
+		var twoHops = CsrfBoundary.create().trustedHops(2);
+		assertThrows(IllegalArgumentException.class, () -> bld.trustedHops(0));
+		assertThrows(IllegalArgumentException.class, () -> bld.trustedHops(17));
+		assertThrows(IllegalArgumentException.class, twoHops::build);
+		assertThrows(IllegalArgumentException.class, () -> bld.trustedForwarding(null));
 		var b = xf().trustedHops(16).build();
 		assertEquals(ForwardedSource.X_FORWARDED, b.trustedForwarding());
 		assertEquals(16, b.trustedHops());
@@ -740,19 +742,22 @@ class CsrfBoundaryForwarded_Test extends TestBase {
 		assertEquals(400, x.status());
 	}
 
-	@Test void g10_builder() {
+	@Test void g10a_builderRefusesBadEntries() {
+		var proxies = CsrfBoundary.create();
 		for (var bad : new String[] {
 			"10.1", "010.0.0.1", "10.0.0.256", "10.0.0.1.", "[::1]", "fe80::1%eth0", "::ffff:10.0.0.0/104", "::ffff:10.0.0.1",
 			"10.0.0.0/33", "::/129", "10.0.0.0/+8", "10.0.0.0/-1", "10.0.0.0/08", "10.0.0.0/a", "10.0.0.0/", "10.0.0.0/8/8",
 			"localhost", "proxy.example", "", "  ", "g::1", "1:2:3:4:5:6:7:8:9", ".::1/128", ".:"
 		})
-			assertThrows(IllegalArgumentException.class, () -> CsrfBoundary.create().trustedProxies(bad), bad);
-		assertThrows(IllegalArgumentException.class, () -> CsrfBoundary.create().trustedProxies());
-		assertThrows(IllegalArgumentException.class, () -> CsrfBoundary.create().trustedProxies(new String[0]));
-		assertThrows(IllegalArgumentException.class, () -> CsrfBoundary.create().trustedProxies((String)null));
-		assertThrows(IllegalArgumentException.class, () -> CsrfBoundary.create().trustedProxies((String[])null));
-		assertThrows(IllegalArgumentException.class, () -> CsrfBoundary.create().trustedProxies("10.0.0.0/8", null));
+			assertThrows(IllegalArgumentException.class, () -> proxies.trustedProxies(bad), bad);
+		assertThrows(IllegalArgumentException.class, proxies::trustedProxies);
+		assertThrows(IllegalArgumentException.class, () -> proxies.trustedProxies(new String[0]));
+		assertThrows(IllegalArgumentException.class, () -> proxies.trustedProxies((String)null));
+		assertThrows(IllegalArgumentException.class, () -> proxies.trustedProxies((String[])null));
+		assertThrows(IllegalArgumentException.class, () -> proxies.trustedProxies("10.0.0.0/8", null));
+	}
 
+	@Test void g10b_builderAcceptsMaskedAndNormalized() {
 		// Accepted, masked and normalized.
 		assertEquals(List.of("10.0.0.0/8"), tp("10.0.0.1/8").build().trustedProxies());
 		assertEquals(List.of("192.168.1.0/24"), tp("192.168.1.1/24", "192.168.1.0/24").build().trustedProxies());
@@ -773,14 +778,20 @@ class CsrfBoundaryForwarded_Test extends TestBase {
 		assertFalse(trusts("2001:db8::1", "0.0.0.0/0"));
 		assertTrue(trusts("2001:db8::1", "::/0"));
 		assertFalse(trusts("203.0.113.7", "::/0"));
+	}
 
+	@Test void g10c_builderCrossSettingChecks() {
 		// Cross-setting checks.
-		assertThrows(IllegalArgumentException.class, () -> CsrfBoundary.create().trustedProxies("10.0.0.0/8").build());
-		assertThrows(IllegalArgumentException.class, () -> xf().originSource(OriginSource.CONTAINER).trustedProxies("10.0.0.0/8").build());
-		assertThrows(IllegalArgumentException.class, () -> fwd().originSource(OriginSource.CONTAINER).trustedProxies("10.0.0.0/8").build());
+		var plain = CsrfBoundary.create().trustedProxies("10.0.0.0/8");
+		var xfContainer = xf().originSource(OriginSource.CONTAINER).trustedProxies("10.0.0.0/8");
+		var fwdContainer = fwd().originSource(OriginSource.CONTAINER).trustedProxies("10.0.0.0/8");
+		assertThrows(IllegalArgumentException.class, plain::build);
+		assertThrows(IllegalArgumentException.class, xfContainer::build);
+		assertThrows(IllegalArgumentException.class, fwdContainer::build);
 		assertTrue(CsrfBoundary.create().build().trustedProxies().isEmpty());
 		assertTrue(tp("10.0.0.0/8").build().toString().contains("trustedProxies=[10.0.0.0/8]"));
-		assertThrows(UnsupportedOperationException.class, () -> tp("10.0.0.0/8").build().trustedProxies().add("x"));
+		var trusted = tp("10.0.0.0/8").build().trustedProxies();
+		assertThrows(UnsupportedOperationException.class, () -> trusted.add("x"));
 
 		// Not set means every peer is believed, exactly as before.
 		var off = xf().build();

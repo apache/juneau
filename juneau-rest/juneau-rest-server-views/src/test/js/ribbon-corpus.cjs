@@ -44,7 +44,7 @@ const sources = [searchJs, ribbonJs].map(function (f) { return { file: f, code: 
 function canon(v) {
 	if (v == null) return 'null';
 	if (Array.isArray(v)) return '[' + v.map(canon).join(',') + ']';
-	if (typeof v === 'object') return '{' + Object.keys(v).sort().map(function (k) { return JSON.stringify(k) + ':' + canon(v[k]); }).join(',') + '}';
+	if (typeof v === 'object') return '{' + Object.keys(v).sort((a, b) => (a < b ? -1 : Number(a > b))).map(function (k) { return JSON.stringify(k) + ':' + canon(v[k]); }).join(',') + '}';
 	return JSON.stringify(v);
 }
 function same(a, b) { return canon(a) === canon(b); }
@@ -82,7 +82,7 @@ function runCase(c) {
 		const columnSearches = R.ribbonColumnSearches(viewDef, state, columns);
 		const queryParams = R.ribbonQueryParams(viewDef, state);
 		const merged = R.mergeColumnSearches(c.userSearch || {}, columnSearches);
-		const expectedMerged = c.expect.merged || Object.assign({}, c.userSearch || {}, c.expect.columnSearches || {});
+		const expectedMerged = c.expect.merged || ({ ...c.userSearch || {}, ...c.expect.columnSearches || {} });
 
 		let rowIds = null;
 		if (c.expect.rowIds != null) {
@@ -106,7 +106,7 @@ function runCase(c) {
 			actual: { state: state, columnSearches: columnSearches, queryParams: queryParams, merged: merged, rowIds: rowIds, errors: errors }
 		};
 	} catch (e) {
-		return { name: c.name, threw: String(e && e.stack || e) };
+		return { name: c.name, threw: String(e?.stack || e) };
 	}
 }
 

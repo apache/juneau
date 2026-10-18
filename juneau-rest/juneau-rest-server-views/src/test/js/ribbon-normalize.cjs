@@ -374,7 +374,7 @@ if (first.NS?.ribbon && typeof first.NS.ribbon.ribbonColumnSearches === 'functio
 	out.split_columnSearches = R.ribbonColumnSearches(vd, all, null);
 	out.split_queryParams = R.ribbonQueryParams(vd, all);
 	out.split_merged = R.mergeColumnSearches({ '1': '$eq(ACTIVE)', '0': '  ' }, { '1': '$eq(DROPPED)', '2': '$ne(Waiting)' });
-	out.split_wrapperRemoved = (typeof R.ribbonToQueryParams === 'undefined');
+	out.split_wrapperRemoved = (R.ribbonToQueryParams === undefined);
 }
 
 process.stdout.write(JSON.stringify(out));

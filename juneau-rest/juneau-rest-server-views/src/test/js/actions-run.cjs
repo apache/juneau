@@ -49,7 +49,7 @@ function setup(o) {
 	const sources = [];
 	if (opts.es) {
 		const FakeES = function (url) { this.url = url; this.l = {}; this.closed = false; sources.push(this); };
-		FakeES.prototype.addEventListener = function (t, f) { (this.l[t] = this.l[t] || []).push(f); };
+		FakeES.prototype.addEventListener = function (t, f) { this.l[t] ||= []; this.l[t].push(f); };
 		FakeES.prototype.close = function () { this.closed = true; };
 		FakeES.prototype.fire = function (t, d) { (this.l[t] || []).forEach(function (f) { f({ data: d }); }); };
 		env.EventSource = FakeES;
@@ -63,8 +63,8 @@ function setup(o) {
 	const calls = [];
 	const respond = opts.respond || function () { return Promise.resolve(jsonResponse({ outcome: 'success', message: 'done' })); };
 	env.setFetch(function (url, init) {
-		const method = (init && init.method) || 'GET';
-		calls.push({ url: String(url), method: method, headers: (init && init.headers) || {}, body: init && init.body ? JSON.parse(init.body) : null });
+		const method = (init?.method) || 'GET';
+		calls.push({ url: String(url), method: method, headers: (init?.headers) || {}, body: init?.body ? JSON.parse(init.body) : null });
 		return respond(String(url), method, init);
 	});
 	return { env: env, NS: NS, I: I, host: host, wrapper: wrapper, calls: calls, sources: sources };
@@ -80,20 +80,20 @@ const POST = { id: 'ack', label: 'Acknowledge', endpoint: '/x/{id}/ack', method:
 const ROW = { id: 'INC-7', region: 'east' };
 
 function dialogPayload(extra) {
-	return Object.assign({ contractVersion: '2', title: 'Step', form: { contractVersion: '2', fields: [{ name: 'note', type: 'text', label: 'Note' }] } }, extra || {});
+	return { contractVersion: '2', title: 'Step', form: { contractVersion: '2', fields: [{ name: 'note', type: 'text', label: 'Note' }] }, ...extra || {} };
 }
 const confirmBtn = (s) => q(s, '[data-testid="dialog-confirm"]') || q(s, '.juneau-view-dialog-confirm');
 
-(async function main() {
+(async function main() { // NOSONAR javascript:S3776 - branching mirrors the behavior being implemented; splitting it would obscure the flow
 
 	// --- a01: a direct POST substitutes the row, sends the ancestor's CSRF token, and resolves with the outcome ---
 	{
 		const s = setup();
 		const r = await s.NS.actions.run(POST, { host: s.host, row: ROW });
 		out.a01_calls = writes(s).length;
-		out.a01_url = writes(s)[0] && writes(s)[0].url;
-		out.a01_method = writes(s)[0] && writes(s)[0].method;
-		out.a01_csrf = JSON.stringify(writes(s)[0] && writes(s)[0].headers).indexOf('tok-1') >= 0;
+		out.a01_url = writes(s)[0]?.url;
+		out.a01_method = writes(s)[0]?.method;
+		out.a01_csrf = JSON.stringify(writes(s)[0]?.headers).indexOf('tok-1') >= 0;
 		out.a01_outcome = r.outcome;
 		out.a01_message = r.message;
 	}
@@ -142,7 +142,7 @@ const confirmBtn = (s) => q(s, '[data-testid="dialog-confirm"]') || q(s, '.junea
 	{
 		let n = 0;
 		const s = setup();
-		await s.NS.actions.run(Object.assign({ onSuccess: 'redraw' }, POST), { host: s.host, row: ROW, onRedraw: () => { n++; } });
+		await s.NS.actions.run({ onSuccess: 'redraw', ...POST }, { host: s.host, row: ROW, onRedraw: () => { n++; } });
 		out.a06_redraws = n;
 		let m = 0;
 		const t = setup();
@@ -155,7 +155,7 @@ const confirmBtn = (s) => q(s, '[data-testid="dialog-confirm"]') || q(s, '.junea
 		const s = setup();
 		await s.NS.actions.run(POST, { host: s.host, row: ROW });
 		const first = banner(s);
-		s.host.removeChild(first);
+		first.remove();
 		await s.NS.actions.run(POST, { host: s.host, row: ROW });
 		out.a07_rebuilt = banner(s) != null && banner(s) !== first && banner(s).parentNode === s.host;
 		out.a07_oneBanner = s.host.querySelectorAll('[data-testid="chart-action-banner"]').length;
@@ -172,29 +172,29 @@ const confirmBtn = (s) => q(s, '[data-testid="dialog-confirm"]') || q(s, '.junea
 	{
 		const s = setup();
 		await s.NS.actions.run(POST, { host: s.host, row: ROW, extra: { idempotencyKey: 'k-1' } });
-		out.a09_extra = writes(s)[0] && writes(s)[0].body && writes(s)[0].body.idempotencyKey;
+		out.a09_extra = writes(s)[0]?.body?.idempotencyKey;
 	}
 
 	// --- b: rule gates -------------------------------------------------------------------------------------------
 	{
-		const vis = Object.assign({ visibleWhen: [{ field: 'region', op: 'eq', value: 'west' }] }, POST);
+		const vis = { visibleWhen: [{ field: 'region', op: 'eq', value: 'west' }], ...POST };
 		const s = setup();
 		const r = await s.NS.actions.run(vis, { host: s.host, row: ROW });
 		out.b01 = { sent: writes(s).length, outcome: r.outcome, text: bannerText(s) };
-		const en = Object.assign({ enabledWhen: [{ field: 'region', op: 'eq', value: 'west', reason: 'West only' }] }, POST);
+		const en = { enabledWhen: [{ field: 'region', op: 'eq', value: 'west', reason: 'West only' }], ...POST };
 		const t = setup();
 		const r2 = await t.NS.actions.run(en, { host: t.host, row: ROW });
 		out.b02 = { sent: writes(t).length, outcome: r2.outcome, text: bannerText(t) };
-		const en2 = Object.assign({ enabledWhen: [{ field: 'region', op: 'eq', value: 'east', reason: 'East only' }] }, POST);
+		const en2 = { enabledWhen: [{ field: 'region', op: 'eq', value: 'east', reason: 'East only' }], ...POST };
 		const u = setup();
 		const r3 = await u.NS.actions.run(en2, { host: u.host, row: ROW });
 		out.b03 = { sent: writes(u).length, outcome: r3.outcome };
 		// A single rule object (not an array) is still a gate: it must fail closed, never read as "no gate".
-		const visObj = Object.assign({ visibleWhen: { field: 'region', op: 'eq', value: 'west' } }, POST);
+		const visObj = { visibleWhen: { field: 'region', op: 'eq', value: 'west' }, ...POST };
 		const v = setup();
 		const r4 = await v.NS.actions.run(visObj, { host: v.host, row: ROW });
 		out.b04 = { sent: writes(v).length, outcome: r4.outcome, text: bannerText(v) };
-		const enObj = Object.assign({ enabledWhen: { field: 'region', op: 'eq', value: 'west', reason: 'West only' } }, POST);
+		const enObj = { enabledWhen: { field: 'region', op: 'eq', value: 'west', reason: 'West only' }, ...POST };
 		const w = setup();
 		const r5 = await w.NS.actions.run(enObj, { host: w.host, row: ROW });
 		out.b05 = { sent: writes(w).length, outcome: r5.outcome, text: bannerText(w) };
@@ -218,7 +218,7 @@ const confirmBtn = (s) => q(s, '[data-testid="dialog-confirm"]') || q(s, '.junea
 			out.c01_hasConfirm = b != null;
 			if (b) b.dispatch('click');
 			await flush(); await p;
-			out.c01_outcome = done && done.outcome;
+			out.c01_outcome = done?.outcome;
 			out.c01_closed = s.I.dialogLayerCount() === 0;
 		}
 		// c02: dismissing the dialog resolves cancelled and sends nothing
@@ -229,7 +229,7 @@ const confirmBtn = (s) => q(s, '[data-testid="dialog-confirm"]') || q(s, '.junea
 			await flush();
 			s.env.dispatchDocument('keydown', { key: 'Escape' });
 			await flush(); await p;
-			out.c02_outcome = done && done.outcome;
+			out.c02_outcome = done?.outcome;
 			out.c02_writes = writes(s).length;
 		}
 		// c03: a second run while one is open is refused and leaves the first intact
@@ -255,7 +255,7 @@ const confirmBtn = (s) => q(s, '[data-testid="dialog-confirm"]') || q(s, '.junea
 			const b = confirmBtn(s);
 			if (b) b.dispatch('click');
 			await flush(); await p;
-			out.c03b_url = writes(s)[0] && writes(s)[0].url;
+			out.c03b_url = writes(s)[0]?.url;
 		}
 		// c04: a declined confirmRenderer resolves cancelled, sends nothing
 		{
@@ -294,12 +294,12 @@ const confirmBtn = (s) => q(s, '[data-testid="dialog-confirm"]') || q(s, '.junea
 		s.NS.actions.release(s.host);
 		await flush();
 		out.e01_openAfter = s.I.dialogLayerCount();
-		out.e01_outcome = done && done.outcome;
+		out.e01_outcome = done?.outcome;
 		out.e01_bannerGone = banner(s) === null;
 		// releasing a host that never ran is a no-op
 		const t = setup();
 		let threw = false;
-		try { t.NS.actions.release(t.host); t.NS.actions.release(null); } catch (e) { threw = true; }
+		try { t.NS.actions.release(t.host); t.NS.actions.release(null); } catch (e) { threw = true; } // NOSONAR javascript:S2486 - the failure is an expected outcome here and the fallback handles it
 		out.e02_noop = !threw;
 		// the hook is frozen
 		out.e03_frozen = Object.isFrozen(t.NS.actions);
@@ -335,7 +335,7 @@ const confirmBtn = (s) => q(s, '[data-testid="dialog-confirm"]') || q(s, '.junea
 		if (b) b.dispatch('click');
 		await flush(); await p;
 		out.g01_writesAfter = writes(s).length;
-		out.g01_outcome = done && done.outcome;
+		out.g01_outcome = done?.outcome;
 	}
 	{
 		// g02: a bare 2xx (no typed body) resolves success
@@ -350,7 +350,7 @@ const confirmBtn = (s) => q(s, '[data-testid="dialog-confirm"]') || q(s, '.junea
 		const DLG = { id: 'edit', label: 'Edit', endpoint: '/x/edit', method: 'POST', present: 'dialog', form: FORM_URL };
 		const u = setup({ respond: (url, method) => method === 'GET' ? Promise.resolve(jsonResponse(dialogPayload({ keepOpenOnSubmit: true }))) : Promise.reject(new Error('net')) });
 		let done = null;
-		const p = u.NS.actions.run(DLG, { host: u.host, row: ROW }).then((x) => { done = x; });
+		u.NS.actions.run(DLG, { host: u.host, row: ROW }).then((x) => { done = x; });
 		await flush();
 		const b = confirmBtn(u);
 		if (b) b.dispatch('click');
@@ -358,7 +358,7 @@ const confirmBtn = (s) => q(s, '[data-testid="dialog-confirm"]') || q(s, '.junea
 		out.g03b_pendingWhileHeld = done === null;
 		u.env.dispatchDocument('keydown', { key: 'Escape' });
 		await flush();
-		out.g03b_outcome = done && done.outcome;
+		out.g03b_outcome = done?.outcome;
 	}
 	{
 		// g04: a catalog entry is usable from inside the dialog the action opened; without it the button is disabled
@@ -372,12 +372,12 @@ const confirmBtn = (s) => q(s, '[data-testid="dialog-confirm"]') || q(s, '.junea
 		await flush();
 		const btn = q(s, '.juneau-view-dialog-form-action');
 		out.g04_buttonFound = btn != null;
-		out.g04_enabled = btn != null && btn.disabled !== true && !(btn.dataset && btn.dataset.juneauActionMissing);
+		out.g04_enabled = btn != null && btn.disabled !== true && !(btn.dataset?.juneauActionMissing);
 		const t = setup({ respond: respond });
 		t.NS.actions.run(DLG, { host: t.host, row: ROW });
 		await flush();
 		const b2 = q(t, '.juneau-view-dialog-form-action');
-		out.g04_missingDisabled = b2 != null && (b2.disabled === true || !!(b2.dataset && b2.dataset.juneauActionMissing));
+		out.g04_missingDisabled = b2 != null && (b2.disabled === true || !!(b2.dataset?.juneauActionMissing));
 	}
 	{
 		// g05: a duplicate catalog id warns once per host and the first entry is the one used
@@ -458,7 +458,7 @@ const confirmBtn = (s) => q(s, '[data-testid="dialog-confirm"]') || q(s, '.junea
 			const d = deferred();
 			let redraws = 0;
 			const s = setup({ respond: () => d.pr });
-			s.NS.actions.run(Object.assign({ onSuccess: 'redraw' }, POST), { host: s.host, row: ROW, onRedraw: () => { redraws++; } });
+			s.NS.actions.run({ onSuccess: 'redraw', ...POST }, { host: s.host, row: ROW, onRedraw: () => { redraws++; } });
 			await flush();
 			s.NS.actions.release(s.host);
 			d.res(jsonResponse({ outcome: 'success', message: 'late' }));
@@ -485,7 +485,7 @@ const confirmBtn = (s) => q(s, '[data-testid="dialog-confirm"]') || q(s, '.junea
 	// --- i: a resultForm URL from the response body is trusted like the job URLs ------------------------------------
 	{
 		const DLG = { id: 'edit', label: 'Edit', endpoint: '/x/edit', method: 'POST', present: 'dialog', form: FORM_URL };
-		const shapes = { evil: 'https://evil.example/r', backslash: '/\\evil', lead: ' /x/receipt', trail: '/x/receipt ', proto: '//evil.example/r' };
+		const shapes = { evil: 'https://evil.example/r', backslash: String.raw`/\evil`, lead: ' /x/receipt', trail: '/x/receipt ', proto: '//evil.example/r' };
 		for (const k of Object.keys(shapes)) {
 			const s = setup({ respond: (url, method) => {
 				if (method === 'GET' && url === FORM_URL) return Promise.resolve(jsonResponse(dialogPayload({ keepOpenOnSubmit: true })));
@@ -516,7 +516,7 @@ const confirmBtn = (s) => q(s, '[data-testid="dialog-confirm"]') || q(s, '.junea
 		out.i_control_pendingWhileReceiptOpen = done === null && s.I.dialogLayerCount() === 1;
 		s.env.dispatchDocument('keydown', { key: 'Escape' });
 		await flush();
-		out.i_control_outcome = done && done.outcome;
+		out.i_control_outcome = done?.outcome;
 	}
 
 	// --- j: outcomes on one host do not leak into each other; a throw while handling a 2xx still settles ------------
@@ -528,8 +528,8 @@ const confirmBtn = (s) => q(s, '[data-testid="dialog-confirm"]') || q(s, '.junea
 		await flush();
 		s.env.dispatchDocument('keydown', { key: 'Escape' });
 		await flush(); await p1;
-		seq.push((await s.NS.actions.run({ id: 'x', label: 'X', endpoint: '/x', method: 'GET' }, { host: s.host, row: ROW })).outcome);
-		seq.push((await s.NS.actions.run(POST, { host: s.host, row: ROW })).outcome);
+		seq.push((await s.NS.actions.run({ id: 'x', label: 'X', endpoint: '/x', method: 'GET' }, { host: s.host, row: ROW })).outcome,
+			(await s.NS.actions.run(POST, { host: s.host, row: ROW })).outcome);
 		out.j01_sequence = seq.join(',');
 		// j02: the 2xx body cannot be read -> the run still settles (unknown), it does not hang
 		const t = setup({ respond: () => Promise.resolve({ ok: true, status: 200, headers: { get: () => null }, text: () => Promise.reject(new Error('boom')) }) });
@@ -537,7 +537,7 @@ const confirmBtn = (s) => q(s, '[data-testid="dialog-confirm"]') || q(s, '.junea
 		out.j02_outcome = r.outcome;
 		// j03: a 2xx whose handler THROWS (the redraw callback) still settles the run, and the caller sees an outcome
 		const u = setup({ respond: () => Promise.resolve(jsonResponse({ outcome: 'success', message: 'ok' })) });
-		const r3 = await u.NS.actions.run(Object.assign({}, POST, { onSuccess: 'redraw' }), { host: u.host, row: ROW, onRedraw: () => { throw new Error('redraw boom'); } });
+		const r3 = await u.NS.actions.run({ ...POST, onSuccess: 'redraw' }, { host: u.host, row: ROW, onRedraw: () => { throw new Error('redraw boom'); } });
 		out.j03_outcome = r3.outcome;
 	}
 
@@ -575,7 +575,7 @@ const confirmBtn = (s) => q(s, '[data-testid="dialog-confirm"]') || q(s, '.junea
 			return Promise.resolve(jsonResponse({ outcome: 'success', message: 'saved' }));
 		};
 		const startStack = (s, h) => { const o = { r: null }; s.NS.actions.run(STACK, { host: h, row: ROW, catalog: [OTHER] }).then((r) => { o.r = r; }); return o; };
-		const pushChild = async (s, backdrop) => { const b = backdrop.querySelector('.juneau-view-dialog-form-action'); if (b) b.dispatch('click'); await flush(); };
+		const pushChild = async (s, backdrop) => { const b = backdrop.querySelector('.juneau-view-dialog-form-action'); if (b) { b.dispatch('click'); } await flush(); };
 
 		// m01: releasing one card's host leaves another card's open dialog alone
 		{
@@ -589,11 +589,11 @@ const confirmBtn = (s) => q(s, '[data-testid="dialog-confirm"]') || q(s, '.junea
 			await flush();
 			out.m01_after = s.I.dialogLayerCount();
 			out.m01_backdrops = backdrops(s).length;
-			out.m01_aOutcome = a.r && a.r.outcome;
+			out.m01_aOutcome = a.r?.outcome;
 			out.m01_bPending = b.r === null;
-			out.m01_survivorLayer = backdrops(s)[0] && backdrops(s)[0].dataset.juneauLayer;
-			out.m01_survivorZ = backdrops(s)[0] && backdrops(s)[0].style.zIndex;
-			out.m01_focusInSurvivor = !!backdrops(s)[0] && backdrops(s)[0].contains(s.env.getActive());
+			out.m01_survivorLayer = backdrops(s)[0]?.dataset.juneauLayer;
+			out.m01_survivorZ = backdrops(s)[0]?.style.zIndex;
+			out.m01_focusInSurvivor = !!backdrops(s)[0]?.contains(s.env.getActive());
 		}
 
 		// m02: committing one card's dialog closes only that card's dialog
@@ -609,10 +609,10 @@ const confirmBtn = (s) => q(s, '[data-testid="dialog-confirm"]') || q(s, '.junea
 			await flush();
 			out.m02_after = s.I.dialogLayerCount();
 			out.m02_backdrops = backdrops(s).length;
-			out.m02_aOutcome = a.r && a.r.outcome;
+			out.m02_aOutcome = a.r?.outcome;
 			out.m02_bPending = b.r === null;
-			out.m02_survivorLayer = backdrops(s)[0] && backdrops(s)[0].dataset.juneauLayer;
-			out.m02_focusInSurvivor = !!backdrops(s)[0] && backdrops(s)[0].contains(s.env.getActive());
+			out.m02_survivorLayer = backdrops(s)[0]?.dataset.juneauLayer;
+			out.m02_focusInSurvivor = !!backdrops(s)[0]?.contains(s.env.getActive());
 		}
 
 		// m03: one card's open dialog does not consume another card's depth budget
@@ -622,7 +622,7 @@ const confirmBtn = (s) => q(s, '[data-testid="dialog-confirm"]') || q(s, '.junea
 			const runs = hosts.map((h) => start(s, h));
 			await flush();
 			out.m03_count = s.I.dialogLayerCount();
-			out.m03_refused = runs.filter((o) => o.r && o.r.outcome === 'refusal').length;
+			out.m03_refused = runs.filter((o) => o.r?.outcome === 'refusal').length;
 		}
 
 		// m04: the page-wide ceiling still refuses once enough cards have dialogs open
@@ -634,9 +634,9 @@ const confirmBtn = (s) => q(s, '[data-testid="dialog-confirm"]') || q(s, '.junea
 			await flush();
 			out.m04_ceiling = ceiling;
 			out.m04_count = s.I.dialogLayerCount();
-			out.m04_refused = runs.filter((o) => o.r && o.r.outcome === 'refusal').length;
-			const refused = runs.find((o) => o.r && o.r.outcome === 'refusal');
-			out.m04_message = refused && refused.r.message;
+			out.m04_refused = runs.filter((o) => o.r?.outcome === 'refusal').length;
+			const refused = runs.find((o) => o.r?.outcome === 'refusal');
+			out.m04_message = refused?.r.message;
 			out.m04_noticeInDialog = Array.prototype.reduce.call(backdrops(s), (n, b) => n + b.querySelectorAll('[data-testid="dialog-depth-refusal"]').length, 0);
 			out.m04_noticeInCard = s.env.body.querySelectorAll('[data-testid="dialog-depth-refusal"]').length;
 		}
@@ -645,7 +645,8 @@ const confirmBtn = (s) => q(s, '[data-testid="dialog-confirm"]') || q(s, '.junea
 		{
 			const s = setup({ respond: stackResponder(false) });
 			const hb = extraHost(s);
-			const a0 = startStack(s, s.host), b0 = start(s, hb);
+			startStack(s, s.host);
+			const b0 = start(s, hb);
 			await flush();
 			const bBackdrop = backdrops(s)[1];
 			await pushChild(s, backdrops(s)[0]);      // [A0, B0, A1]
@@ -663,10 +664,10 @@ const confirmBtn = (s) => q(s, '[data-testid="dialog-confirm"]') || q(s, '.junea
 		{
 			const s = setup({ respond: stackResponder(false) });
 			const hb = extraHost(s);
-			const a0 = startStack(s, s.host);
+			startStack(s, s.host);
 			await flush();
 			await pushChild(s, backdrops(s)[0]);      // [A0, A1]
-			const b0 = start(s, hb);
+			start(s, hb);
 			await flush();
 			const bBackdrop = backdrops(s)[2];
 			out.m05b_before = s.I.dialogLayerCount();
@@ -674,14 +675,15 @@ const confirmBtn = (s) => q(s, '[data-testid="dialog-confirm"]') || q(s, '.junea
 			await flush();
 			out.m05b_after = s.I.dialogLayerCount();
 			out.m05b_survivorIsB = backdrops(s).length === 1 && backdrops(s)[0] === bBackdrop;
-			out.m05b_survivorLayer = bBackdrop && bBackdrop.dataset.juneauLayer;
+			out.m05b_survivorLayer = bBackdrop?.dataset.juneauLayer;
 		}
 
 		// m06: a transient layer sitting above another card's surviving dialog stays with that dialog
 		{
 			const s = setup({ respond: respond });
 			const hb = extraHost(s);
-			const a0 = start(s, s.host), b0 = start(s, hb);
+			start(s, s.host);
+			start(s, hb);
 			await flush();
 			const pop = s.env.el('div'); s.env.body.appendChild(pop);
 			s.I.pushLayer(pop, { kind: 'popover', portal: false });   // [A0, B0, Bpop]
@@ -702,7 +704,7 @@ const confirmBtn = (s) => q(s, '[data-testid="dialog-confirm"]') || q(s, '.junea
 			await flush();
 			out.m07_count = s.I.dialogLayerCount();
 			out.m07_remainingIsA = backdrops(s).length === 1 && backdrops(s)[0] === aBackdrop;
-			out.m07_bOutcome = b0.r && b0.r.outcome;
+			out.m07_bOutcome = b0.r?.outcome;
 			out.m07_aPending = a0.r === null;
 		}
 
@@ -722,8 +724,8 @@ const confirmBtn = (s) => q(s, '[data-testid="dialog-confirm"]') || q(s, '.junea
 		{
 			const s = setup({ respond: stackResponder(true) });
 			const hb = extraHost(s);
-			const b0 = start(s, hb);
-			const a0 = startStack(s, s.host);
+			start(s, hb);
+			startStack(s, s.host);
 			await flush();
 			await pushChild(s, backdrops(s)[1]);      // A1: allowed, A is at 1 of 2 although the page holds 3
 			out.m09_count = s.I.dialogLayerCount();
@@ -731,14 +733,15 @@ const confirmBtn = (s) => q(s, '[data-testid="dialog-confirm"]') || q(s, '.junea
 			out.m09_countAfter = s.I.dialogLayerCount();
 			out.m09_noticeInA1 = backdrops(s)[2].querySelectorAll('[data-testid="dialog-depth-refusal"]').length;
 			out.m09_noticeInB = backdrops(s)[0].querySelectorAll('[data-testid="dialog-depth-refusal"]').length;
-			out.m09_noticeText = (q(s, '[data-testid="dialog-depth-refusal"]') || {}).textContent;
+			out.m09_noticeText = q(s, '[data-testid="dialog-depth-refusal"]')?.textContent;
 		}
 
 		// m11: a stacked step that commits while another card's modal sits above does not pull focus behind that modal
 		{
 			const s = setup({ respond: stackResponder(false) });
 			const hb = extraHost(s);
-			const a0 = startStack(s, s.host), b0 = start(s, hb);
+			startStack(s, s.host);
+			start(s, hb);
 			await flush();
 			const bBackdrop = backdrops(s)[1];
 			await pushChild(s, backdrops(s)[0]);      // [A0, B0, A1]

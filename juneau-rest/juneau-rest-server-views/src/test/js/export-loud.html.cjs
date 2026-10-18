@@ -39,7 +39,7 @@ const PROBE = async function () {
 	// and its trigger is recorded as unmatched.
 	const names = [];
 	window.jQuery = { fn: { dataTable: { Buttons: function (dt, cfg) {
-		(cfg.buttons || []).forEach(function (b) { if (b && b.name) names.push(b.name); });
+		(cfg.buttons || []).forEach(function (b) { if (b?.name) names.push(b.name); });
 	} } } };
 	const calls = [];
 	const ctx = { dataTable: { button: function (sel) {

@@ -65,10 +65,14 @@ class ApacheHc5Transport_Edge_Test {
 		}
 
 		@Override /* ModalCloseable */
-		public void close(CloseMode closeMode) {}
+		public void close(CloseMode closeMode) {
+			// no-op by design: test stub
+		}
 
 		@Override /* Closeable */
-		public void close() {}
+		public void close() {
+			// no-op by design: test stub
+		}
 	}
 
 	/** Same stub, but {@link Configurable} with a configurable (possibly null) default config. */
@@ -118,10 +122,14 @@ class ApacheHc5Transport_Edge_Test {
 				}
 
 				@Override /* HttpEntity */
-				public void writeTo(OutputStream out) {}
+				public void writeTo(OutputStream out) {
+					// no-op by design: test stub
+				}
 
 				@Override /* Closeable */
-				public void close() {}
+				public void close() {
+					// no-op by design: test stub
+				}
 			});
 		}
 

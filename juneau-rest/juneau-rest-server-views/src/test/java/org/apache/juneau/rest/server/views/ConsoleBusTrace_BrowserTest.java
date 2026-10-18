@@ -45,13 +45,33 @@ class ConsoleBusTrace_BrowserTest extends TestBase {
 		return list(report.get("history")).stream().map(h -> map(h).get("topic").toString()).toList();
 	}
 
+	/**
+	 * Sorts each run of adjacent {@code redraw:} topics.  Tables load over independent requests, so which one finishes
+	 * first (and publishes its redraw first) is a network race, not part of the contract; every other topic keeps its place.
+	 */
+	private static List<String> redrawRunsUnordered(List<String> topics) {
+		var out = new ArrayList<String>();
+		for (var i = 0; i < topics.size();) {
+			if (! topics.get(i).startsWith("redraw:")) {
+				out.add(topics.get(i++));
+				continue;
+			}
+			var run = new ArrayList<String>();
+			while (i < topics.size() && topics.get(i).startsWith("redraw:"))
+				run.add(topics.get(i++));
+			Collections.sort(run);
+			out.addAll(run);
+		}
+		return out;
+	}
+
 	@Test void a01_theFlagLogsEveryPublishAsABusDebugLine() {
 		var lines = list(traced.get("busDebug")).stream().map(Object::toString).toList();
 		assertFalse(lines.isEmpty());
-		assertTrue(lines.stream().allMatch(l -> l.startsWith("[bus] ")), () -> lines.toString());
+		assertTrue(lines.stream().allMatch(l -> l.startsWith("[bus] ")), lines::toString);
 		for (var t : List.of("card:changes", "filter:changes", "selection:changes", "redraw:tasks"))
 			assertTrue(lines.stream().anyMatch(l -> l.contains(" " + t + " ")), () -> t + " not traced in " + lines);
-		assertTrue(lines.stream().anyMatch(l -> l.contains("suppressed (unchanged)")), () -> lines.toString());
+		assertTrue(lines.stream().anyMatch(l -> l.contains("suppressed (unchanged)")), lines::toString);
 		assertEquals(List.of(), list(traced.get("jsFailures")));
 	}
 
@@ -60,6 +80,6 @@ class ConsoleBusTrace_BrowserTest extends TestBase {
 		var t = topics(quiet);
 		assertTrue(t.contains("selection:changes") && t.contains("redraw:tasks"), t::toString);
 		assertTrue(list(quiet.get("history")).stream().anyMatch(h -> Boolean.TRUE.equals(map(h).get("suppressed"))), () -> quiet.toString());
-		assertEquals(topics(traced), t, "the flag must not change what is published");
+		assertEquals(redrawRunsUnordered(topics(traced)), redrawRunsUnordered(t), "the flag must not change what is published");
 	}
 }

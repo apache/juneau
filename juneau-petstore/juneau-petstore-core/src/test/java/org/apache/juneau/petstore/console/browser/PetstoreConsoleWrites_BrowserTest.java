@@ -50,6 +50,9 @@ import jakarta.servlet.http.*;
 @Covers(value="inline-edit", pages="/console/pets/1/summary")
 @HookCovers("status")
 @EnabledIfSystemProperty(named=PetstoreBrowser.GATE, matches="true", disabledReason=PetstoreBrowser.DISABLED)
+@SuppressWarnings({
+	"resource" // The connector belongs to the attacker server, which closes it; servlet response writers belong to the container.
+})
 class PetstoreConsoleWrites_BrowserTest extends TestBase {
 
 	@RegisterExtension

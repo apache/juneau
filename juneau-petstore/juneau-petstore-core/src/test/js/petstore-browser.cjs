@@ -106,7 +106,7 @@ async function runCase(browser, input, c) {
 	return r;
 }
 
-async function act(page, input, c, a, r) {
+async function act(page, input, c, a, r) { // NOSONAR javascript:S3776 - one flat dispatch over the action kinds
 	if (a.click) return page.click(a.click);
 	if (a.fill) return page.fill(a.fill[0], a.fill[1]);
 	if (a.press) return page.press(a.press[0], a.press[1]);

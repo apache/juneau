@@ -72,9 +72,11 @@ class DataSourceDef_Test extends TestBase {
 		var m = DataSourceDef.create("orders").url("/x").parser("app.csv").builder("app.rows").toMap();
 		assertEquals("app.csv", m.get("parser"));
 		assertEquals("app.rows", m.get("builder"));
-		var e = assertThrows(IllegalArgumentException.class, () -> DataSourceDef.create("orders").parser("Bad"));
+		var target = DataSourceDef.create("orders");
+		var e = assertThrows(IllegalArgumentException.class, () -> target.parser("Bad"));
 		assertEquals("E-74: 'Bad' is not a valid parser name", e.getMessage());
-		e = assertThrows(IllegalArgumentException.class, () -> DataSourceDef.create("orders").builder("x..y"));
+		var target2 = DataSourceDef.create("orders");
+		e = assertThrows(IllegalArgumentException.class, () -> target2.builder("x..y"));
 		assertEquals("E-74: 'x..y' is not a valid builder name", e.getMessage());
 	}
 

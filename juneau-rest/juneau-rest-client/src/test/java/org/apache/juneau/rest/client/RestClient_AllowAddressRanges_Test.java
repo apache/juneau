@@ -19,7 +19,6 @@ package org.apache.juneau.rest.client;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.*;
-import java.lang.reflect.*;
 import java.util.*;
 
 import org.apache.juneau.*;
@@ -59,9 +58,7 @@ class RestClient_AllowAddressRanges_Test extends TestBase {
 		}
 	}
 
-	private static Throwable root(Throwable t) {
-		return t instanceof UndeclaredThrowableException u && u.getCause() != null ? u.getCause() : t;
-	}
+
 
 	//------------------------------------------------------------------------------------------------------------------
 	// a - builder validation
@@ -103,7 +100,8 @@ class RestClient_AllowAddressRanges_Test extends TestBase {
 		try (var a = RestClient.builder().transport(withOption).allowAddressRanges("198.18.0.0/15").build();
 			var b = RestClient.builder().transport(without).build()) {
 			a.remote(Api.class).get("http://198.18.0.5/x");
-			var ex = assertThrows(IllegalArgumentException.class, () -> b.remote(Api.class).get("http://198.18.0.5/x"));
+			var api = b.remote(Api.class);
+			var ex = assertThrows(IllegalArgumentException.class, () -> api.get("http://198.18.0.5/x"));
 			assertTrue(ex.getMessage().contains("denied by default"), ex.getMessage());
 			assertTrue(without.requests.isEmpty());
 			assertEquals(1, withOption.requests.size());
@@ -113,8 +111,9 @@ class RestClient_AllowAddressRanges_Test extends TestBase {
 	@Test void b03_option_neverReopensLoopbackOrMetadataOrOtherRanges() throws Exception {
 		var transport = new Recording();
 		try (var client = RestClient.builder().transport(transport).allowAddressRanges("198.18.0.0/15").build()) {
+			var api = client.remote(Api.class);
 			for (var url : new String[]{"http://127.0.0.1/x", "http://169.254.169.254/latest", "http://10.0.0.1/x", "http://192.0.0.1/x", "http://224.0.0.1/x", "http://localhost/x"}) {
-				var ex = assertThrows(IllegalArgumentException.class, () -> client.remote(Api.class).get(url), url);
+				var ex = assertThrows(IllegalArgumentException.class, () -> api.get(url), url);
 				assertTrue(ex.getMessage().contains("denied by default"), ex.getMessage());
 			}
 			assertTrue(transport.requests.isEmpty());
@@ -130,7 +129,8 @@ class RestClient_AllowAddressRanges_Test extends TestBase {
 				client.remote(Api.class).get("http://192.0.0.5/x");
 				client.remote(Api.class).get("http://198.18.0.5/x");
 				assertEquals(2, transport.requests.size());
-				assertThrows(IllegalArgumentException.class, () -> client.remote(Api.class).get("http://224.0.0.5/x"));
+				var api = client.remote(Api.class);
+				assertThrows(IllegalArgumentException.class, () -> api.get("http://224.0.0.5/x"));
 			}
 		} finally {
 			if (previous == null)

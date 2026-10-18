@@ -189,7 +189,7 @@ class PolicyEnforcedRedirects_Test {
 		assertList(headerNames(hops.last()), "Authorization", "Accept");
 	}
 
-	@Test void a05f_locationWithUserInfo_isRefused() throws Exception {
+	@Test void a05f_locationWithUserInfo_isRefused() {
 		var ex = assertThrows(TransportException.class, () -> run(request("http://a.example.com/start"), "http://b.example.com/x", "http://user:pw@a.example.com/echo"));
 		assertTrue(ex.getMessage().contains("user info"), ex.getMessage());
 	}

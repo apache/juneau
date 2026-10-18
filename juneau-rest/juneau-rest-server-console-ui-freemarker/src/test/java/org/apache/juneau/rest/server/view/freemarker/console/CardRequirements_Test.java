@@ -58,7 +58,8 @@ class CardRequirements_Test extends TestBase {
 
 	@Test void a05_forCard_unknownRequires_namesCard() {
 		var r = CardRequirements.create().build(PACKS);
-		var e = assertThrows(IllegalArgumentException.class, () -> r.forCard("html", "box", List.of("ghost")));
+		var arg = List.of("ghost");
+		var e = assertThrows(IllegalArgumentException.class, () -> r.forCard("html", "box", arg));
 		assertString("Unknown toolkit pack 'ghost' (<@card id='box'> requires=).", e.getMessage());
 	}
 
@@ -76,7 +77,9 @@ class CardRequirements_Test extends TestBase {
 
 	@Test void a08_forCard_unknownBodyPack_namesCardAndType() {
 		var r = CardRequirements.create().build(PACKS);
-		var e = assertThrows(IllegalArgumentException.class, () -> r.forCard("datatables", "rel", List.of(), List.of("ghost")));
+		var arg2 = List.of("ghost");
+		List<String> noRequires = List.of();
+		var e = assertThrows(IllegalArgumentException.class, () -> r.forCard("datatables", "rel", noRequires, arg2));
 		assertString("Unknown toolkit pack 'ghost' (<@card id='rel'> type 'datatables' requiredPacks).", e.getMessage());
 	}
 }

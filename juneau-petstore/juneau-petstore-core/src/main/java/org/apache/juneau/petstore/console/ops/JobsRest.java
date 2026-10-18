@@ -22,6 +22,7 @@ import java.io.*;
 import java.time.*;
 import java.util.*;
 import java.util.concurrent.*;
+import java.util.concurrent.atomic.*;
 import java.util.function.*;
 
 import org.apache.juneau.commons.inject.*;
@@ -97,7 +98,7 @@ public class JobsRest extends PetstoreConsolePage implements AsyncJobsMixin, Ter
 	/** Where this resource is mounted; the terminal URLs are built from it. */
 	public static final String MOUNT = "/console/ops/jobs";
 
-	private static final String GROOM = "groom";
+	private static final String GROOM_JOB = "groom";
 
 	/** The species row's restock action; its keys come from the ledger, bound to the species and the caller. */
 	static final String RESTOCK_SPECIES = "restock-species";
@@ -163,7 +164,7 @@ public class JobsRest extends PetstoreConsolePage implements AsyncJobsMixin, Ter
 	@Bean
 	private transient KeyClock keyClock;
 
-	private transient volatile AsyncJobRegistry jobs;
+	private final transient AtomicReference<AsyncJobRegistry> jobs = new AtomicReference<>();
 	private final transient ExecutorService pool = Executors.newCachedThreadPool(r -> {
 		var t = new Thread(r, "petstore-restock");
 		t.setDaemon(true);
@@ -254,12 +255,14 @@ public class JobsRest extends PetstoreConsolePage implements AsyncJobsMixin, Ter
 
 	@Override /* AsyncJobsMixin */
 	public AsyncJobRegistry asyncJobRegistry() {
-		var j = jobs;
+		var j = jobs.get();
 		if (j == null) {
 			synchronized (this) {
-				j = jobs;
-				if (j == null)
-					jobs = j = new AsyncJobRegistry(hardTimeout == null ? DEFAULT_HARD_TIMEOUT : hardTimeout.value());
+				j = jobs.get();
+				if (j == null) {
+					j = new AsyncJobRegistry(hardTimeout == null ? DEFAULT_HARD_TIMEOUT : hardTimeout.value());
+					jobs.set(j);
+				}
 			}
 		}
 		return j;
@@ -271,8 +274,9 @@ public class JobsRest extends PetstoreConsolePage implements AsyncJobsMixin, Ter
 	@RestDestroy
 	public void closeJobs() {
 		pool.shutdownNow();
-		if (jobs != null)
-			jobs.close();
+		var j = jobs.get();
+		if (j != null)
+			j.close();
 		groom.close();
 	}
 
@@ -480,7 +484,7 @@ public class JobsRest extends PetstoreConsolePage implements AsyncJobsMixin, Ter
 		form.field(FormDef.Input.of("pet", "Pet name", "text").value("Rex"));
 		form.field(FormDef.Input.of("verbose", "Verbose (8000 extra lines)", "checkbox"));
 		return ModalDef.create("Groom a pet").form(form)
-			.idempotencyKey(IdempotencyKey.mintSelfTargeted(GROOM).value()).selfTargeted(true);
+			.idempotencyKey(IdempotencyKey.mintSelfTargeted(GROOM_JOB).value()).selfTargeted(true);
 	}
 
 	/**

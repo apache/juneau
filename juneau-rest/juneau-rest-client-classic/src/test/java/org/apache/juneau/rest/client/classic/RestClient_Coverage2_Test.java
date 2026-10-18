@@ -373,9 +373,9 @@ class RestClient_Coverage2_Test {
 	}
 
 	@Test void a22_onCallClose_checkedException_wrappedThenLoggedNotThrown() throws Exception {
-		// RestCallException extends org.apache.http.HttpException, a CHECKED exception, so RestResponse#close's own
-		// try/catch (RuntimeException rethrown, everything else logged) swallows it -- proving the generic-exception
-		// wrapping branch of onCallClose executes without asserting on a exception type that never surfaces to the caller.
+		// RestCallException extends org.apache.http.HttpException, a CHECKED exception, so the close method of RestResponse
+		// rethrows runtime exceptions but logs everything else, and so swallows it.  That proves the generic-exception
+		// wrapping branch of onCallClose executes, without asserting on an exception type that never reaches the caller.
 		try (var out = new ByteArrayOutputStream();
 				var c = RestClient.create().interceptors(new ThrowingOnCloseInterceptor()).logToConsole().console(new PrintStream(out)).build();
 				var req = c.get(url() + "/echo");

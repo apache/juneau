@@ -153,6 +153,9 @@ public final class BusPolicy {
 	 * @param contract The page contract (for example {@code PageCapture.of(html).contract()}).
 	 * @throws IllegalStateException Listing every denied topic, one {@code E-55} line each.
 	 */
+	@SuppressWarnings({
+		"java:S3776" // Walking the bridge contract is inherently nested.
+	})
 	public void check(Map<String,?> contract) {
 		var problems = new ArrayList<String>();
 		if (contract != null && contract.get("bridges") instanceof Collection<?> bridges) {

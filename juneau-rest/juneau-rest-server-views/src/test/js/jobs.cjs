@@ -53,15 +53,15 @@ function setup(o) {
 	const env = makeEnv();
 	const sources = [];
 	const FakeES = function (url) { this.url = url; this.listeners = {}; this.closed = false; this.readyState = 1; sources.push(this); };
-	FakeES.prototype.addEventListener = function (type, fn) { (this.listeners[type] = this.listeners[type] || []).push(fn); };
+	FakeES.prototype.addEventListener = function (type, fn) { this.listeners[type] ||= []; this.listeners[type].push(fn); };
 	FakeES.prototype.close = function () { this.closed = true; this.readyState = 2; };
 	FakeES.prototype.fire = function (type, data) { (this.listeners[type] || []).forEach(function (fn) { fn({ data: data }); }); };
 	env.EventSource = FakeES;
 	const { NS } = loadScripts([rendersJsPath, viewsJsPath, helpersJsPath], env);
 	const table = env.el('table');
-	table.setAttribute('data-juneau-view', 'species');
+	table.dataset.juneauView = 'species';
 	table.setAttribute('id', 'species-t');
-	if (!opts.noCsrf) table.setAttribute('data-juneau-csrf', 'tok-1');
+	if (!opts.noCsrf) table.dataset.juneauCsrf = 'tok-1';
 	const tbody = env.el('tbody');
 	table.appendChild(tbody);
 	env.body.appendChild(table);
@@ -77,7 +77,7 @@ function setup(o) {
 	};
 	function makeRow(id, data) {
 		const tr = env.el('tr');
-		if (id != null) tr.setAttribute('data-juneau-row-id', id);
+		if (id != null) tr.dataset.juneauRowId = id;
 		const td = env.el('td');
 		td.className = 'juneau-view-actions-cell';
 		const trig = env.el('button');
@@ -100,8 +100,8 @@ function setup(o) {
 		const td = env.el('td');
 		const panel = env.el('div');
 		panel.className = 'juneau-view-detail-panel';
-		panel.setAttribute('data-juneau-row-detail', '');
-		panel.setAttribute('data-juneau-row-id', panelId == null ? tr.getAttribute('data-juneau-row-id') : panelId);
+		panel.dataset.juneauRowDetail = '';
+		panel.dataset.juneauRowId = panelId == null ? tr.dataset.juneauRowId : panelId;
 		panel._juneauParentTr = tr;
 		tr._juneauDetailPanel = panel;
 		tr.classList.add('juneau-view-detail-open');
@@ -117,21 +117,19 @@ function setup(o) {
 	/** Redraws: every body row is replaced by a fresh <tr> with the same id, then draw.dt fires. */
 	function redraw() {
 		const old = Array.prototype.slice.call(tbody.childNodes);
-		old.forEach(function (n) { tbody.removeChild(n); });
+		old.forEach(function (n) { n.remove(); });
 		const fresh = {};
 		old.forEach(function (n) {
-			const id = n.getAttribute('data-juneau-row-id');
+			const id = n.dataset.juneauRowId ?? null;
 			if (id != null) fresh[id] = makeRow(id, rowData.get(n));
 		});
 		drawHandlers.forEach(function (fn) { fn({ target: table }); });
 		return fresh;
 	}
 	const calls = [];
-	const routes = Object.assign({
-		'/species/r1/key': function () { return Promise.resolve(jsonResponse({ contractVersion: '1', action: 'restock-species', targetId: 'r1', idempotencyKey: 'k-' + (++keyCount) })); },
+	const routes = { '/species/r1/key': function () { return Promise.resolve(jsonResponse({ contractVersion: '1', action: 'restock-species', targetId: 'r1', idempotencyKey: 'k-' + (++keyCount) })); },
 		'/species/r1/restock': function () { return Promise.resolve(jsonResponse(STARTED, { status: 202 })); },
-		'/c/j-1': function () { return Promise.resolve(jsonResponse({})); }
-	}, opts.routes || {});
+		'/c/j-1': function () { return Promise.resolve(jsonResponse({})); }, ...opts.routes || {} };
 	let keyCount = 0;
 	env.setFetch(function (url, init) {
 		const i = init || {};
@@ -158,7 +156,7 @@ function recorder() {
 	return { hooks: hooks, order: order, seen: seen };
 }
 
-(async function main() {
+(async function main() { // NOSONAR javascript:S3776 - branching mirrors the behavior being implemented; splitting it would obscure the flow
 
 	// --- j01: action envelope from inside a detail panel: key, submit, history stream, registry, hooks, release -------
 	{
@@ -170,14 +168,14 @@ function recorder() {
 		out.j01_triggerDisabled = panel._btn.disabled === true;
 		out.j01_pendingHoldsPoll = s.I.hasOpenRunningJobPanel(s.table) === true;
 		await flush();
-		out.j01_keyCall = s.calls[0] && s.calls[0].url === '/species/r1/key' && s.calls[0].method === 'POST';
-		out.j01_keyCsrf = s.calls[0] && s.calls[0].headers['X-Csrf-Token'] === 'tok-1';
-		out.j01_keyBody = s.calls[0] && s.calls[0].body;
-		out.j01_submitUrl = s.calls[1] && s.calls[1].url;
+		out.j01_keyCall = s.calls[0]?.url === '/species/r1/key' && s.calls[0].method === 'POST';
+		out.j01_keyCsrf = s.calls[0]?.headers['X-Csrf-Token'] === 'tok-1';
+		out.j01_keyBody = s.calls[0]?.body;
+		out.j01_submitUrl = s.calls[1]?.url;
 		out.j01_submitBody = s.calls[1] && bodyOf(s.calls[1]);
-		out.j01_streamUrl = s.sources[0] && s.sources[0].url;
+		out.j01_streamUrl = s.sources[0]?.url;
 		out.j01_marker = s.r1.dataset.juneauJob === '1';
-		out.j01_activeMatches = s.NS.jobs.active(panel._btn, 'restock-species') === h.job && h.job != null && h.job.jobId === 'j-1';
+		out.j01_activeMatches = s.NS.jobs.active(panel._btn, 'restock-species') === h.job && h.job?.jobId === 'j-1';
 		out.j01_activeOtherAction = s.NS.jobs.active(panel._btn, 'other') === null;
 		out.j01_activeOtherRow = s.NS.jobs.active(s.r2._btn) === null;
 		out.j01_runningHoldsPoll = s.I.hasOpenRunningJobPanel(s.table) === true;
@@ -187,7 +185,7 @@ function recorder() {
 		out.j01_state = end.state;
 		out.j01_order = rec.order.join(',');
 		out.j01_progressArg = rec.seen.onProgress;
-		out.j01_resultMessage = rec.seen.onResult && rec.seen.onResult.message;
+		out.j01_resultMessage = rec.seen.onResult?.message;
 		out.j01_endFrozen = Object.isFrozen(end) && rec.seen.onEnd === end;
 		out.j01_handleFrozen = Object.isFrozen(h);
 		out.j01_markerCleared = s.r1.dataset.juneauJob === undefined;
@@ -214,10 +212,10 @@ function recorder() {
 		const s = setup();
 		const end = await s.NS.jobs.run({ el: s.r1._btn, endpoint: '/species/{species}/restock', idempotencyKey: 'k' }).done;
 		out.j03_state = end.state;
-		out.j03_reason = end.error && end.error.reason;
+		out.j03_reason = end.error?.reason;
 		out.j03_calls = s.calls.length;
 		const k = await s.NS.jobs.run({ el: s.r1._btn, endpoint: RESTOCK, keyUrl: '/species/{name}/key', action: 'restock-species', envelope: 'action' }).done;
-		out.j03_keyReason = k.error && k.error.reason;
+		out.j03_keyReason = k.error?.reason;
 		out.j03_keyCalls = s.calls.length;
 		out.j03_encoded = s.I.substituteJobUrl('/species/{id}/x', 'a b').url;
 		out.j03_rowlessToken = s.I.substituteJobUrl('/species/{id}/x', null).reason;
@@ -228,10 +226,10 @@ function recorder() {
 		const s = setup();
 		const bare = s.makeRow(null);
 		const a = await s.NS.jobs.run({ el: bare._btn, endpoint: '/x', keyUrl: '/k', action: 'restock-species', envelope: 'action' }).done;
-		out.j04_unstamped = a.error && a.error.reason;
+		out.j04_unstamped = a.error?.reason;
 		const panel = s.expand(s.r2, 'r9');
 		const b = await s.NS.jobs.run({ el: panel._btn, endpoint: '/x', idempotencyKey: 'k' }).done;
-		out.j04_mismatch = b.error && b.error.reason;
+		out.j04_mismatch = b.error?.reason;
 		out.j04_calls = s.calls.length;
 		out.j04_state = b.state;
 	}
@@ -241,19 +239,18 @@ function recorder() {
 		const s = setup({ routes: { '/species/r1/key': never } });
 		const first = s.NS.jobs.run({ el: s.r1._btn, endpoint: RESTOCK, keyUrl: KEY_URL, action: 'restock-species', envelope: 'action' });
 		const second = await s.NS.jobs.run({ el: s.r1._btn, endpoint: RESTOCK, keyUrl: KEY_URL, action: 'restock-species', envelope: 'action' }).done;
-		out.j05_reason = second.error && second.error.reason;
+		out.j05_reason = second.error?.reason;
 		out.j05_firstPending = first.job === null;
-		const other = s.NS.jobs.run({ el: s.r2._btn, endpoint: '/never', idempotencyKey: 'k' });
+		s.NS.jobs.run({ el: s.r2._btn, endpoint: '/never', idempotencyKey: 'k' });
 		await flush();
 		out.j05_otherRowNotRefused = s.calls.some(function (c) { return c.url === '/never'; });
-		void other;
 	}
 
 	// --- j06: no CSRF token refuses before any request ------------------------------------------------------------------
 	{
 		const s = setup({ noCsrf: true });
 		const end = await s.NS.jobs.run({ el: s.r1._btn, endpoint: RESTOCK, keyUrl: KEY_URL, action: 'restock-species', envelope: 'action' }).done;
-		out.j06_reason = end.error && end.error.reason;
+		out.j06_reason = end.error?.reason;
 		out.j06_calls = s.calls.length;
 		// The row is free again: the refusal released its registry entry.
 		out.j06_released = s.NS.jobs.active(s.r1._btn) === null;
@@ -280,7 +277,7 @@ function recorder() {
 		out.j07_logged = errors.filter(function (e) { return e.indexOf('E-JS-109') >= 0; }).length;
 		// A run whose key is refused never submits.
 		const end = await s.NS.jobs.run({ el: s.r1._btn, endpoint: RESTOCK, keyUrl: '/wrong/{id}', action: 'restock-species', envelope: 'action' }).done;
-		out.j07_runReason = end.error && end.error.reason;
+		out.j07_runReason = end.error?.reason;
 		out.j07_runNoSubmit = !s.calls.some(function (c) { return c.url === '/species/r1/restock'; });
 	}
 
@@ -295,9 +292,9 @@ function recorder() {
 		} } });
 		const spec = function () { return { el: s.r1._btn, endpoint: RESTOCK, keyUrl: KEY_URL, action: 'restock-species', envelope: 'action' }; };
 		const a = await s.NS.jobs.run(spec()).done;
-		out.j08_firstReason = a.error && a.error.reason;
+		out.j08_firstReason = a.error?.reason;
 		const b = await s.NS.jobs.run(spec()).done;
-		out.j08_secondReason = b.error && b.error.reason;
+		out.j08_secondReason = b.error?.reason;
 		out.j08_keysAfterTwo = s.keyCalls();
 		const submitKeys = s.calls.filter(function (c) { return c.url === '/species/r1/restock'; }).map(function (c) { return bodyOf(c).idempotencyKey; });
 		const c = await s.NS.jobs.run(spec()).done;
@@ -316,7 +313,7 @@ function recorder() {
 		} });
 		const a = await s.NS.jobs.run({ el: s.r1._btn, endpoint: RESTOCK, idempotencyKey: 'k' }).done;
 		out.j09_refused = a.state;
-		out.j09_refusedResult = a.result && a.result.message;
+		out.j09_refusedResult = a.result?.message;
 		const b = await s.NS.jobs.run({ el: s.r2._btn, endpoint: '/species/{id}/fail', idempotencyKey: 'k' }).done;
 		out.j09_failed = b.state;
 	}
@@ -378,7 +375,7 @@ function recorder() {
 		s.sources[0].fire('error');
 		const end = await h.done;
 		out.j13_state = end.state;
-		out.j13_reason = end.error && end.error.reason;
+		out.j13_reason = end.error?.reason;
 	}
 
 	// --- j14: cancel() posts the job's cancel URL with the CSRF token ----------------------------------------------------
@@ -398,7 +395,7 @@ function recorder() {
 		const ac = new AbortController();
 		ac.abort();
 		const a = await s.NS.jobs.run({ el: s.r1._btn, endpoint: RESTOCK, keyUrl: KEY_URL, action: 'restock-species', envelope: 'action', signal: ac.signal }).done;
-		out.j15_reason = a.error && a.error.reason;
+		out.j15_reason = a.error?.reason;
 		out.j15_noCalls = s.calls.length === 0;
 		const ac2 = new AbortController();
 		const h = s.NS.jobs.run({ el: s.r1._btn, endpoint: RESTOCK, idempotencyKey: 'k', signal: ac2.signal });
@@ -406,7 +403,7 @@ function recorder() {
 		out.j15_streaming = s.sources.length === 1;
 		ac2.abort();
 		const b = await h.done;
-		out.j15_streamAborted = b.error && b.error.reason;
+		out.j15_streamAborted = b.error?.reason;
 		out.j15_streamClosed = s.sources[0].closed;
 		out.j15_released = s.NS.jobs.active(s.r1._btn) === null;
 	}
@@ -437,24 +434,24 @@ function recorder() {
 		const panel = s.expand(s.r1);
 		const c = s.NS.rowActions.contextOf(panel._btn);
 		out.h01_parentTr = !!c && c.tr === s.r1;
-		out.h01_parentRow = c && c.row && c.row.species;
+		out.h01_parentRow = c?.row?.species;
 		out.h01_table = !!c && c.table === s.table;
 		const plain = s.NS.rowActions.contextOf(s.r2._btn);
 		out.h01_plainRow = !!plain && plain.tr === s.r2 && plain.row.species === 'dog';
 		// A nested view table inside the panel: its own row stays its own.
 		const nested = s.env.el('table');
-		nested.setAttribute('data-juneau-view', 'litters');
+		nested.dataset.juneauView = 'litters';
 		nested.setAttribute('id', 'litters-t');
 		const nb = s.env.el('tbody');
 		const ntr = s.env.el('tr');
-		ntr.setAttribute('data-juneau-row-id', 'n1');
+		ntr.dataset.juneauRowId = 'n1';
 		const ntd = s.env.el('td');
 		const nbtn = s.env.el('button');
 		ntd.appendChild(nbtn); ntr.appendChild(ntd); nb.appendChild(ntr); nested.appendChild(nb); panel.appendChild(nested);
 		nested.__juneauCtx = { table: nested, viewDef: { id: 'litters' }, dataTable: { row: function () { return { data: function () { return { id: 'n1', kind: 'nested' }; } }; } } };
 		const nc = s.NS.rowActions.contextOf(nbtn);
 		out.h01_nestedTr = !!nc && nc.tr === ntr && nc.table === nested;
-		out.h01_nestedRow = nc && nc.row && nc.row.kind;
+		out.h01_nestedRow = nc?.row?.kind;
 		const r = s.I.rowOfElement(nbtn);
 		out.h01_resolverNested = r.tr === ntr && r.panel === null;
 		const rp = s.I.rowOfElement(panel._btn);
@@ -474,7 +471,7 @@ function recorder() {
 		await flush();
 		release(jsonResponse(STARTED, { status: 202 }));
 		const ref = await p;
-		out.j17_ref = ref && ref.jobId;
+		out.j17_ref = ref?.jobId;
 		out.j17_noneWhileRunning = s.NS.jobs.pending(s.r1, 'restock-species') === null;
 		const s2 = setup({ routes: { '/species/r1/restock': function () { return Promise.reject(new TypeError('offline')); } } });
 		s2.NS.jobs.run({ el: s2.r1._btn, endpoint: RESTOCK, keyUrl: KEY_URL, action: 'restock-species', envelope: 'action' });
@@ -490,7 +487,7 @@ function recorder() {
 		const ctx = s.table.__juneauCtx;
 		const viewDef = { pollIntervalMs: 5000 };
 		const handlers = {};
-		const dt = { on: function (ev, fn) { (handlers[ev] = handlers[ev] || []).push(fn); }, ajax: { reload: function () { /* not fired */ } } };
+		const dt = { on: function (ev, fn) { handlers[ev] ||= []; handlers[ev].push(fn); }, ajax: { reload: function () { /* not fired */ } } };
 		/** Lands a timer (or user) reload: preDraw.dt first; a false from any handler cancels the draw. */
 		function land(timer) {
 			ctx._pollDrawPending = timer;
@@ -504,7 +501,7 @@ function recorder() {
 		function collapse(tr) {
 			const panel = tr._juneauDetailPanel;
 			const child = panel.parentNode.parentNode;
-			child.parentNode.removeChild(child);
+			child.remove();
 			tr.classList.remove('juneau-view-detail-open');
 			tr._juneauDetailPanel = null;
 		}
@@ -577,7 +574,7 @@ function recorder() {
 		out.j20_marker = s.r1.dataset.juneauJob === '1';
 		out.j20_noHold = s.I.hasOpenRunningJobPanel(s.table) === false;
 		const refused = await s.NS.jobs.run({ el: s.r1._btn, endpoint: RESTOCK, idempotencyKey: 'k' }).done;
-		out.j20_runRefused = refused.error && refused.error.reason;
+		out.j20_runRefused = refused.error?.reason;
 		s.sources[0].fire('result', JSON.stringify({ outcome: 'success', message: 'regroomed' }));
 		await flush();
 		out.j20_released = s.NS.jobs.active(s.r1._btn) === null && s.r1.dataset.juneauJob === undefined;
@@ -593,7 +590,7 @@ function recorder() {
 		await s.NS.rowActions.run(s.r1._btn, 'ping');   // the run is still pending (key fetch / submit)
 		await flush();
 		out.j21_pendingSentNothing = pings() === 0;
-		out.j21_pendingBanner = banner() && banner().textContent.includes('a job is already running on this row');
+		out.j21_pendingBanner = banner()?.textContent.includes('a job is already running on this row');
 		out.j21_otherRowUnaffected = (await s.NS.rowActions.run(s.r2._btn, 'ping'), s.calls.some(function (c) { return c.url === '/species/r2/ping'; }));
 		s.sources[0].fire('result', JSON.stringify({ outcome: 'success', message: 'ok' }));
 		await h.done;
@@ -610,7 +607,7 @@ function recorder() {
 	// --- k01: jobs.cancel on a running row: one POST to the start-time URL with the row table's token ------------------
 	{
 		const s = setup();
-		s.table.setAttribute('data-juneau-csrf-header', 'X-Alt');
+		s.table.dataset.juneauCsrfHeader = 'X-Alt';
 		const panel = s.expand(s.r1);
 		const h = s.NS.jobs.run({ el: panel._btn, endpoint: RESTOCK, idempotencyKey: 'k', action: 'restock-species', envelope: 'action' });
 		await flush();
@@ -618,10 +615,10 @@ function recorder() {
 		const posts = s.calls.filter(function (c) { return c.url === '/c/j-1'; });
 		out.k01_resolved = sent;
 		out.k01_posts = posts.length;
-		out.k01_method = posts[0] && posts[0].method;
-		out.k01_header = posts[0] && posts[0].headers['X-Alt'];
+		out.k01_method = posts[0]?.method;
+		out.k01_header = posts[0]?.headers['X-Alt'];
 		out.k01_noDefaultHeader = posts[0] && posts[0].headers['X-Csrf-Token'] === undefined;
-		out.k01_body = posts[0] && posts[0].body;
+		out.k01_body = posts[0]?.body;
 		out.k01_stillRegistered = s.NS.jobs.active(panel._btn) != null && s.r1.dataset.juneauJob === '1';
 		out.k01_nullActionMeansAny = (await s.NS.jobs.cancel(s.r1)) === true && s.calls.filter(function (c) { return c.url === '/c/j-1'; }).length === 2;
 		s.sources[0].fire('result', JSON.stringify({ outcome: 'cancelled' }));
@@ -687,11 +684,11 @@ function recorder() {
 		const b = setup();
 		const hb = b.NS.jobs.run({ el: b.r1._btn, endpoint: RESTOCK, idempotencyKey: 'k', action: 'restock-species', envelope: 'action' });
 		await flush();
-		b.table.setAttribute('data-juneau-csrf', '  ');
+		b.table.dataset.juneauCsrf = '  ';
 		const bn = b.calls.length;
 		out.k03_blankToken = await b.NS.jobs.cancel(b.r1);
 		out.k03_blankFetches = b.calls.length - bn;
-		b.table.setAttribute('data-juneau-csrf', 'tok-1');
+		b.table.dataset.juneauCsrf = 'tok-1';
 		b.sources[0].fire('result', JSON.stringify({ outcome: 'cancelled' }));
 		await hb.done;
 		const u = setup({ routes: { '/species/r1/restock': function () { return Promise.resolve(jsonResponse({ jobId: 'j-9', streamUrl: '/s/j-9', cancelUrl: 'https://evil.test/c' }, { status: 202 })); } } });
@@ -710,7 +707,7 @@ function recorder() {
 		const h = s.NS.jobs.run({ el: s.r1._btn, endpoint: RESTOCK, idempotencyKey: 'k', action: 'restock-species', envelope: 'action' });
 		await flush();
 		const oldEntry = s.I.rowJobEntryFor(s.table, 'r1');
-		out.k04_captured = oldEntry != null && oldEntry.cancelUrl === '/c/j-1';
+		out.k04_captured = oldEntry?.cancelUrl === '/c/j-1';
 		s.sources[0].fire('result', JSON.stringify({ outcome: 'success', message: 'ok' }));
 		await h.done;
 		const h2 = s.NS.jobs.run({ el: s.r1._btn, endpoint: RESTOCK, idempotencyKey: 'k2', action: 'restock-species', envelope: 'action' });
@@ -780,7 +777,7 @@ function recorder() {
 		const t = setup({ routes: { '/x': function () { return Promise.resolve(jsonResponse({ jobId: 'j-5', streamUrl: '/s/j-5', cancelUrl: '/c/j-5' }, { status: 202 })); },
 			'/c/j-5': function () { return Promise.resolve(jsonResponse({})); } } });
 		const holder = t.env.el('div');
-		holder.setAttribute('data-juneau-csrf', 'tok-1');
+		holder.dataset.juneauCsrf = 'tok-1';
 		const hb = t.env.el('button');
 		holder.appendChild(hb);
 		t.env.body.appendChild(holder);
@@ -867,4 +864,4 @@ function recorder() {
 
 	console.error = realError;
 	process.stdout.write(JSON.stringify(out));
-})().catch(function (e) { console.error = realError; console.error(e && e.stack || e); process.exit(1); });
+})().catch(function (e) { console.error = realError; console.error(e?.stack || e); process.exit(1); });

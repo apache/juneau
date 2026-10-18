@@ -117,15 +117,15 @@ import jakarta.servlet.http.*;
  * @since 10.0.0
  */
 @SuppressWarnings({
+	"java:S1192", // Media-type literals are protocol tokens; the alias table reads best with them inline
 	"java:S2095", // Writer is response-owned; we never close it.
-	"java:S3077", // The lazily loaded static adapters list and the stream's Flow.Subscription are volatile references set once and read across threads, with no compound updates
 	"resource" // Closeables here are framework-managed and not owned/closed by this class; not a real leak.
 })
 public class ReactiveResponseProcessor implements ResponseProcessor {
 
 	private static final Logger LOG = Logger.getLogger(ReactiveResponseProcessor.class.getName());
 
-	private static volatile List<ReactiveStreamsAdapter> adapters;
+	private static final AtomicReference<List<ReactiveStreamsAdapter>> ADAPTERS = new AtomicReference<>();
 
 	private enum Shape { BUFFER, SSE, NDJSON }
 
@@ -439,13 +439,13 @@ public class ReactiveResponseProcessor implements ResponseProcessor {
 	// -----------------------------------------------------------------------------------------------------------------
 
 	private static List<ReactiveStreamsAdapter> adapters() {
-		var a = adapters;
+		var a = ADAPTERS.get();
 		if (a == null) {
 			synchronized (ReactiveResponseProcessor.class) {
-				a = adapters;
+				a = ADAPTERS.get();
 				if (a == null) { // HTT: inner DCL null-check missed branch requires concurrent first-load race
 					a = loadAdapters();
-					adapters = a;
+					ADAPTERS.set(a);
 				}
 			}
 		}
@@ -502,7 +502,7 @@ public class ReactiveResponseProcessor implements ResponseProcessor {
 		private volatile boolean wrote;
 
 		/** Published once by {@code onSubscribe} (Reactive Streams: at most one call); read by {@code onNext}/{@code cancel}. */
-		private volatile Flow.Subscription subscription;
+		private final AtomicReference<Flow.Subscription> subscription = new AtomicReference<>();
 
 		StreamingSubscriber(RestResponse res, FinishablePrintWriter writer, FrameEncoder encoder,
 				Map<String,String> mdc, Consumer<Throwable> onTerminate) {
@@ -514,16 +514,16 @@ public class ReactiveResponseProcessor implements ResponseProcessor {
 		}
 
 		@Override public void onSubscribe(Flow.Subscription s) {
-			subscription = s;
+			subscription.set(s);
 			s.request(1);
 		}
 
 		@Override public void onNext(Object item) {
 			try {
 				withMdc(() -> writeFrame(item));
-				subscription.request(1);
+				subscription.get().request(1);
 			} catch (RuntimeException e) {
-				subscription.cancel();
+				subscription.get().cancel();
 				terminate(unwrap(e));
 			}
 		}
@@ -541,7 +541,7 @@ public class ReactiveResponseProcessor implements ResponseProcessor {
 		void cancel() {
 			if (! terminated.compareAndSet(false, true)) // HTT: true branch needs the publisher to terminate between the wait timing out and cancel(), a cross-thread race; a seam would make this testable
 				return;
-			var s = subscription;
+			var s = subscription.get();
 			if (s != null)
 				s.cancel();
 		}

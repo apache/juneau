@@ -69,7 +69,8 @@ class PageSpec_Cards_Test extends TestBase {
 
 	@Test void a05_table_validatesImmediately() {
 		var t = TableSpec.create("slo").columns(Column.create("pod"));
-		var ex = assertThrows(IllegalStateException.class, () -> PageSpec.create().table(t));
+		var target = PageSpec.create();
+		var ex = assertThrows(IllegalStateException.class, () -> target.table(t));
 		assertEquals("TableSpec 'slo' requires dataUrl.", ex.getMessage());
 	}
 
@@ -85,7 +86,8 @@ class PageSpec_Cards_Test extends TestBase {
 
 	@Test void a07_table_duplicateId_rejected() {
 		var spec = PageSpec.create().table(table("slo"));
-		var ex = assertThrows(IllegalArgumentException.class, () -> spec.table(table("slo")));
+		var arg = table("slo");
+		var ex = assertThrows(IllegalArgumentException.class, () -> spec.table(arg));
 		assertEquals("PageSpec card id 'slo' is already declared.", ex.getMessage());
 	}
 
@@ -106,17 +108,20 @@ class PageSpec_Cards_Test extends TestBase {
 	}
 
 	@Test void a11_html_nullMarkup_rejected() {
-		var ex = assertThrows(IllegalArgumentException.class, () -> PageSpec.create().html("intro", null));
+		var target2 = PageSpec.create();
+		var ex = assertThrows(IllegalArgumentException.class, () -> target2.html("intro", null));
 		assertEquals("PageSpec.html id 'intro' requires a non-null markup.", ex.getMessage());
 	}
 
 	@Test void a12_html_consumerSettingSrc_rejected() {
-		var ex = assertThrows(IllegalArgumentException.class, () -> PageSpec.create().html("intro", "<p/>", c -> c.src("/x")));
+		var target3 = PageSpec.create();
+		var ex = assertThrows(IllegalArgumentException.class, () -> target3.html("intro", "<p/>", c -> c.src("/x")));
 		assertEquals("PageSpec.html id 'intro' sets a markup body; its Consumer<CardSpec> must not also set src or template.", ex.getMessage());
 	}
 
 	@Test void a13_html_consumerSettingTemplate_rejected() {
-		assertThrows(IllegalArgumentException.class, () -> PageSpec.create().html("intro", "<p/>", c -> c.template("t")));
+		var target4 = PageSpec.create();
+		assertThrows(IllegalArgumentException.class, () -> target4.html("intro", "<p/>", c -> c.template("t")));
 	}
 
 	@Test void a14_card_registeredCustomType_accepted() {
@@ -131,21 +136,29 @@ class PageSpec_Cards_Test extends TestBase {
 
 	@Test void a16_card_removedType_rejected() {
 		for (var type : List.of("js", "json", "calendar")) {
-			var ex = assertThrows(IllegalArgumentException.class, () -> PageSpec.create().card(CardSpec.of(type, "x")));
+			var target5 = PageSpec.create();
+			var arg2 = CardSpec.of(type, "x");
+			var ex = assertThrows(IllegalArgumentException.class, () -> target5.card(arg2));
 			assertEquals("PageSpec.card type '" + type + "' was removed in 10.0.0; use PageSpec.html(...) with a markup/template, or a registered card type.", ex.getMessage());
 		}
 	}
 
 	@Test void a17_card_dedicatedMethodTypes_rejected() {
-		var h = assertThrows(IllegalArgumentException.class, () -> PageSpec.create().card(CardSpec.html("x")));
+		var target6 = PageSpec.create();
+		var arg3 = CardSpec.html("x");
+		var h = assertThrows(IllegalArgumentException.class, () -> target6.card(arg3));
 		assertEquals("PageSpec.card type 'html' has a dedicated method; use PageSpec.html(...).", h.getMessage());
-		var d = assertThrows(IllegalArgumentException.class, () -> PageSpec.create().card(CardSpec.of("datatables", "x")));
+		var target7 = PageSpec.create();
+		var arg4 = CardSpec.of("datatables", "x");
+		var d = assertThrows(IllegalArgumentException.class, () -> target7.card(arg4));
 		assertEquals("PageSpec.card type 'datatables' has a dedicated method; use PageSpec.table(...).", d.getMessage());
 	}
 
 	@Test void a18_card_reservedWithoutHandler_rejected() {
 		for (var type : List.of("run-view")) {
-			var ex = assertThrows(IllegalArgumentException.class, () -> PageSpec.create().card(CardSpec.of(type, "x")));
+			var target8 = PageSpec.create();
+			var arg5 = CardSpec.of(type, "x");
+			var ex = assertThrows(IllegalArgumentException.class, () -> target8.card(arg5));
 			assertEquals("PageSpec.card type '" + type + "' is reserved and has no card-type handler; it cannot be built with PageSpec.", ex.getMessage());
 		}
 	}
@@ -195,41 +208,52 @@ class PageSpec_Cards_Test extends TestBase {
 	@Test void a25_applyTo_duplicateOfAuthoredCard_rejected() throws Exception {
 		var cap = new PageCapture();
 		cap.addCard(CardSpec.html("intro"), null);
+		var target18 = PageSpec.create().html("intro", "<p/>");
 		var ex = assertThrows(freemarker.template.TemplateModelException.class,
-			() -> PageSpec.create().html("intro", "<p/>").applyTo(cap, MODEL));
+			() -> target18.applyTo(cap, MODEL));
 		assertTrue(ex.getMessage().contains("<@card id='intro'> duplicates an existing card id."));
 	}
 
 	@Test void a26_addCard_afterBuiltCardWithSameId_rejected() throws Exception {
 		var cap = new PageCapture();
 		PageSpec.create().html("intro", "<p/>").applyTo(cap, MODEL);
-		var ex = assertThrows(freemarker.template.TemplateModelException.class, () -> cap.addCard(CardSpec.html("intro"), null));
+		var arg10 = CardSpec.html("intro");
+		var ex = assertThrows(freemarker.template.TemplateModelException.class, () -> cap.addCard(arg10, null));
 		assertTrue(ex.getMessage().contains("<@card id='intro'> duplicates an existing card id."));
 	}
 
 	@Test void a27_bodyAttr_badName_rejected() {
 		for (var name : new String[]{null, "", "1a", "a b", "a=\"b", "a>"}) {
-			var ex = assertThrows(IllegalArgumentException.class, () -> PageSpec.create().bodyAttr(name, "v"));
+			var target9 = PageSpec.create();
+			var ex = assertThrows(IllegalArgumentException.class, () -> target9.bodyAttr(name, "v"));
 			assertEquals("PageSpec.bodyAttr name '" + name + "' must match [A-Za-z_:][-A-Za-z0-9_:.]*.", ex.getMessage());
 		}
 	}
 
 	@Test void a28_csrf_nullToken_rejected() {
-		var ex = assertThrows(IllegalArgumentException.class, () -> PageSpec.create().csrf(null, "X"));
+		var target10 = PageSpec.create();
+		var ex = assertThrows(IllegalArgumentException.class, () -> target10.csrf(null, "X"));
 		assertEquals("PageSpec.csrf requires a non-null token.", ex.getMessage());
 	}
 
 	@Test void a29_card_nullCardOrType_rejected() {
+		var target11 = PageSpec.create();
 		assertEquals("PageSpec.card requires a non-null card.",
-			assertThrows(IllegalArgumentException.class, () -> PageSpec.create().card((CardSpec)null)).getMessage());
+			assertThrows(IllegalArgumentException.class, () -> target11.card((CardSpec)null)).getMessage());
+		var target12 = PageSpec.create();
+		var arg6 = CardSpec.of(null, "x");
 		assertEquals("PageSpec.card id 'x' requires a non-blank type.",
-			assertThrows(IllegalArgumentException.class, () -> PageSpec.create().card(CardSpec.of(null, "x"))).getMessage());
+			assertThrows(IllegalArgumentException.class, () -> target12.card(arg6)).getMessage());
 	}
 
 	@Test void a30_table_consumerSettingSrcOrTemplate_rejected() {
-		var ex = assertThrows(IllegalArgumentException.class, () -> PageSpec.create().table(table("slo"), c -> c.src("/x")));
+		var target13 = PageSpec.create();
+		var arg7 = table("slo");
+		var ex = assertThrows(IllegalArgumentException.class, () -> target13.table(arg7, c -> c.src("/x")));
 		assertEquals("PageSpec.table id 'slo' sets src or template; the table supplies the card's data.", ex.getMessage());
-		assertThrows(IllegalArgumentException.class, () -> PageSpec.create().table(table("slo"), c -> c.template("t")));
+		var target14 = PageSpec.create();
+		var arg8 = table("slo");
+		assertThrows(IllegalArgumentException.class, () -> target14.table(arg8, c -> c.template("t")));
 	}
 
 	@Test void a31_copy_isIndependent() {
@@ -278,8 +302,10 @@ class PageSpec_Cards_Test extends TestBase {
 	}
 
 	@Test void a35_applyTo_cardsWithoutCardModel_rejected() {
+		var target19 = PageSpec.create().html("intro", "<p/>");
+		var arg11 = new PageCapture();
 		var ex = assertThrows(freemarker.template.TemplateModelException.class,
-			() -> PageSpec.create().html("intro", "<p/>").applyTo(new PageCapture(), null));
+			() -> target19.applyTo(arg11, null));
 		assertTrue(ex.getMessage().contains("PageSpec cards need the console card directive"), ex.getMessage());
 	}
 
@@ -302,13 +328,15 @@ class PageSpec_Cards_Test extends TestBase {
 
 	@Test void a37_applyTo_invalidChartCard_rejectedByHandler() {
 		var spec = PageSpec.create().card(CardSpec.of("chart", "trend").src("/s").body("kind", "line"));
-		var ex = assertThrows(freemarker.template.TemplateModelException.class, () -> spec.applyTo(new PageCapture(), MODEL));
+		var arg12 = new PageCapture();
+		var ex = assertThrows(freemarker.template.TemplateModelException.class, () -> spec.applyTo(arg12, MODEL));
 		assertTrue(ex.getMessage().contains("type='chart' kind='line' requires x and at least one series."), ex.getMessage());
 	}
 
 	@Test void a38_applyTo_chartCardReservedBodyKey_rejected() {
 		var spec = PageSpec.create().card(CardSpec.of("chart", "trend").src("/s").body("kind", "line").body("title", "x"));
-		var ex = assertThrows(freemarker.template.TemplateModelException.class, () -> spec.applyTo(new PageCapture(), MODEL));
+		var arg13 = new PageCapture();
+		var ex = assertThrows(freemarker.template.TemplateModelException.class, () -> spec.applyTo(arg13, MODEL));
 		assertTrue(ex.getMessage().contains("reserved"), ex.getMessage());
 	}
 
@@ -320,7 +348,8 @@ class PageSpec_Cards_Test extends TestBase {
 
 	@Test void a40_applyTo_chartCardWithTemplate_rejected() {
 		var spec = PageSpec.create().card(ChartDef.line("trend").src("/s").x("day").series("placed", "Placed").toCardSpec().template("tpl"));
-		var ex = assertThrows(freemarker.template.TemplateModelException.class, () -> spec.applyTo(new PageCapture(), MODEL));
+		var arg14 = new PageCapture();
+		var ex = assertThrows(freemarker.template.TemplateModelException.class, () -> spec.applyTo(arg14, MODEL));
 		assertTrue(ex.getMessage().contains("<@card id='trend'> type='chart' takes a JSON5 body (plus src= for remote data); template= is not allowed."), ex.getMessage());
 	}
 
@@ -346,38 +375,45 @@ class PageSpec_Cards_Test extends TestBase {
 
 	@Test void a41c_applyTo_terminalCard_bareRefused() {
 		var spec = PageSpec.create().card(CardSpec.of("terminal", "out").body("terminal", Map.of("bytesUrl", "/t")));
-		var ex = assertThrows(IllegalArgumentException.class, () -> PageSpec.create().card(CardSpec.of("terminal", "out").bare(true)));
+		var base = CardSpec.of("terminal", "out");
+		var ex = assertThrows(IllegalArgumentException.class, () -> base.bare(true));
 		assertTrue(ex.getMessage().contains("a terminal card does not support bare"), ex.getMessage());
 		assertDoesNotThrow(() -> spec.applyTo(new PageCapture(), MODEL));
 	}
 
 	@Test void a42_applyTo_jobLogCard_crossOriginEndpoint_rejected() {
+		var arg15 = new PageCapture();
 		var spec = PageSpec.create().card(CardSpec.of("job-log", "rebuild").body("submit", Map.of("endpoint", "//evil.test/x")));
-		var ex = assertThrows(freemarker.template.TemplateModelException.class, () -> spec.applyTo(new PageCapture(), MODEL));
+		var ex = assertThrows(freemarker.template.TemplateModelException.class, () -> spec.applyTo(arg15, MODEL));
 		assertTrue(ex.getMessage().contains("type='job-log' submit.endpoint must be a same-origin path; got '//evil.test/x'."), ex.getMessage());
 	}
 
 	@Test void a43_applyTo_jobLogCardWithTemplate_rejected() {
 		var spec = PageSpec.create().card(CardSpec.of("job-log", "rebuild").body("submit", Map.of("endpoint", "/a")).template("tpl"));
-		var ex = assertThrows(freemarker.template.TemplateModelException.class, () -> spec.applyTo(new PageCapture(), MODEL));
+		var arg16 = new PageCapture();
+		var ex = assertThrows(freemarker.template.TemplateModelException.class, () -> spec.applyTo(arg16, MODEL));
 		assertTrue(ex.getMessage().contains("<@card id='rebuild'> type='job-log' takes its options as the body; template= is not allowed."), ex.getMessage());
 	}
 
 	@Test void a44_applyTo_jobLogCardWithSrc_rejected() {
 		var spec = PageSpec.create().card(CardSpec.of("job-log", "rebuild").src("/a").body("submit", Map.of("endpoint", "/a")));
-		var ex = assertThrows(freemarker.template.TemplateModelException.class, () -> spec.applyTo(new PageCapture(), MODEL));
+		var arg17 = new PageCapture();
+		var ex = assertThrows(freemarker.template.TemplateModelException.class, () -> spec.applyTo(arg17, MODEL));
 		assertTrue(ex.getMessage().contains("<@card id='rebuild'> type='job-log' takes its options as the body; src= is not allowed."), ex.getMessage());
 	}
 
 	@Test void a45_applyTo_unsafeCardSrc_rejectedForNonLiftedType() {
 		var spec = PageSpec.create().card(CardSpec.of("my-widget", "w").src("\\\\evil.test/x"));
-		var ex = assertThrows(freemarker.template.TemplateModelException.class, () -> spec.applyTo(new PageCapture(), MODEL));
+		var arg18 = new PageCapture();
+		var ex = assertThrows(freemarker.template.TemplateModelException.class, () -> spec.applyTo(arg18, MODEL));
 		assertTrue(ex.getMessage().contains("<@card id='w'> type='my-widget' src must be a same-origin path"), ex::getMessage);
 	}
 
 	@Test void a46_addCard_unsafeSrc_rejected() {
+		var target20 = new PageCapture();
+		var arg19 = CardSpec.html("h").src("//evil.test/x");
 		var ex = assertThrows(freemarker.template.TemplateModelException.class,
-			() -> new PageCapture().addCard(CardSpec.html("h").src("//evil.test/x"), null));
+			() -> target20.addCard(arg19, null));
 		assertTrue(ex.getMessage().contains("<@card id='h'> type='html' src must be a same-origin path"), ex::getMessage);
 		assertDoesNotThrow(() -> new PageCapture().addCard(CardSpec.html("h").src("/ok/{id}"), null));
 	}
@@ -410,21 +446,25 @@ class PageSpec_Cards_Test extends TestBase {
 	@Test void a50_htmlSrc_unsafeSrc_refusedAtApplyTo() {
 		for (var src : new String[]{"//evil.test/x", "https://evil.test/x", "javascript:alert(1)", "/a/../b", "\\\\evil.test/x"}) {
 			var spec = PageSpec.create().htmlSrc("h", "H", src);
-			var ex = assertThrows(freemarker.template.TemplateModelException.class, () -> spec.applyTo(new PageCapture(), MODEL), src);
+			var arg20 = new PageCapture();
+			var ex = assertThrows(freemarker.template.TemplateModelException.class, () -> spec.applyTo(arg20, MODEL), src);
 			assertTrue(ex.getMessage().contains("<@card id='h'> type='html' src must be a same-origin path"), ex::getMessage);
 		}
 	}
 
 	@Test void a50b_htmlSrc_sanitizeWithUnsafeSrc_srcRefusalWins() {
+		var arg21 = new PageCapture();
 		var spec = PageSpec.create().htmlSrc("h", "H", "//evil.test/x", true);
-		var ex = assertThrows(freemarker.template.TemplateModelException.class, () -> spec.applyTo(new PageCapture(), MODEL));
+		var ex = assertThrows(freemarker.template.TemplateModelException.class, () -> spec.applyTo(arg21, MODEL));
 		assertTrue(ex.getMessage().contains("src must be a same-origin path"), ex::getMessage);
 	}
 
 	@Test void a51_htmlSrc_blankSrc_rejected() {
-		var nul = assertThrows(IllegalArgumentException.class, () -> PageSpec.create().htmlSrc("h", "H", null));
+		var target16 = PageSpec.create();
+		var nul = assertThrows(IllegalArgumentException.class, () -> target16.htmlSrc("h", "H", null));
 		assertEquals("PageSpec.htmlSrc id 'h' requires a non-blank src.", nul.getMessage());
-		assertThrows(IllegalArgumentException.class, () -> PageSpec.create().htmlSrc("h", "H", "  "));
+		var target17 = PageSpec.create();
+		assertThrows(IllegalArgumentException.class, () -> target17.htmlSrc("h", "H", "  "));
 	}
 
 	@Test void a52_htmlSrc_sanitize_matchesTemplateTwin() throws Exception {
@@ -448,10 +488,12 @@ class PageSpec_Cards_Test extends TestBase {
 
 	@Test void a55_sanitize_onNonHtmlOrSrcless_refusedWithTemplateMessage() {
 		var notHtml = PageSpec.create().card(CardSpec.of("my-widget", "t").src("/rest/data").sanitize(true));
-		var ex = assertThrows(freemarker.template.TemplateModelException.class, () -> notHtml.applyTo(new PageCapture(), MODEL));
+		var arg22 = new PageCapture();
+		var ex = assertThrows(freemarker.template.TemplateModelException.class, () -> notHtml.applyTo(arg22, MODEL));
 		assertTrue(ex.getMessage().contains("<@card id='t'> sanitize= applies only to an html card with src=."), ex::getMessage);
 		var noSrc = CardSpec.html("h").template("tpl").sanitize(true);
-		var ex2 = assertThrows(freemarker.template.TemplateModelException.class, () -> new PageCapture().addCard(noSrc, null));
+		var target21 = new PageCapture();
+		var ex2 = assertThrows(freemarker.template.TemplateModelException.class, () -> target21.addCard(noSrc, null));
 		assertTrue(ex2.getMessage().contains("<@card id='h'> sanitize= applies only to an html card with src=."), ex2::getMessage);
 	}
 
@@ -467,13 +509,15 @@ class PageSpec_Cards_Test extends TestBase {
 
 	@Test void a57_applyTo_invalidCustomCard_refusedByItsHandler() {
 		var spec = PageSpec.create().card(CardSpec.of("meter", "load").body("max", 4));
-		var ex = assertThrows(freemarker.template.TemplateModelException.class, () -> spec.applyTo(new PageCapture(), CUSTOM));
+		var arg23 = new PageCapture();
+		var ex = assertThrows(freemarker.template.TemplateModelException.class, () -> spec.applyTo(arg23, CUSTOM));
 		assertTrue(ex.getMessage().contains("<@card id='load'> type='meter' requires a numeric 'value'."), ex::getMessage);
 	}
 
 	@Test void a58_applyTo_customCardWithoutBody_refusedWithTheTemplateMessage() {
 		var spec = PageSpec.create().card(CardSpec.of("meter", "load"));
-		var ex = assertThrows(freemarker.template.TemplateModelException.class, () -> spec.applyTo(new PageCapture(), CUSTOM));
+		var arg24 = new PageCapture();
+		var ex = assertThrows(freemarker.template.TemplateModelException.class, () -> spec.applyTo(arg24, CUSTOM));
 		assertTrue(ex.getMessage().contains("<@card id='load'> type='meter' requires a JSON5 object body; got ''."), ex::getMessage);
 	}
 
@@ -491,13 +535,15 @@ class PageSpec_Cards_Test extends TestBase {
 
 	@Test void a60_applyTo_unregisteredType_reservedBodyKey_refusedWithTheTemplateMessage() {
 		var spec = PageSpec.create().card(CardSpec.of("my-widget", "w").body("template", "t"));
-		var ex = assertThrows(freemarker.template.TemplateModelException.class, () -> spec.applyTo(new PageCapture(), MODEL));
+		var arg25 = new PageCapture();
+		var ex = assertThrows(freemarker.template.TemplateModelException.class, () -> spec.applyTo(arg25, MODEL));
 		assertTrue(ex.getMessage().contains("<@card id='w'> body key 'template' is reserved; set it as an attribute."), ex::getMessage);
 	}
 
 	@Test void a61_applyTo_customCardWithBodyAndSrc_refusedWithTheTemplateMessage() {
 		var spec = PageSpec.create().card(CardSpec.of("my-widget", "w").src("/rest/w").body("k", 1));
-		var ex = assertThrows(freemarker.template.TemplateModelException.class, () -> spec.applyTo(new PageCapture(), MODEL));
+		var arg26 = new PageCapture();
+		var ex = assertThrows(freemarker.template.TemplateModelException.class, () -> spec.applyTo(arg26, MODEL));
 		assertTrue(ex.getMessage().contains("<@card id='w'> type='my-widget' takes at most one of a body, template= or src=."), ex::getMessage);
 	}
 
@@ -516,7 +562,8 @@ class PageSpec_Cards_Test extends TestBase {
 
 	@Test void a64_applyTo_customCardMarkup_isTheHandlersBody() {
 		var spec = PageSpec.create().card(CardSpec.of("meter", "load"), "<b>x</b>");
-		var ex = assertThrows(freemarker.template.TemplateModelException.class, () -> spec.applyTo(new PageCapture(), CUSTOM));
+		var arg27 = new PageCapture();
+		var ex = assertThrows(freemarker.template.TemplateModelException.class, () -> spec.applyTo(arg27, CUSTOM));
 		assertTrue(ex.getMessage().contains("<@card id='load'> type='meter' requires a JSON5 object body; got '<b>x</b>'."), ex::getMessage);
 	}
 
@@ -531,7 +578,8 @@ class PageSpec_Cards_Test extends TestBase {
 
 	@Test void a66_applyTo_customCardWithBodyAndMarkup_refusedWithTheTemplateMessage() {
 		var spec = PageSpec.create().card(CardSpec.of("my-widget", "w").body("k", 1), "<b>x</b>");
-		var ex = assertThrows(freemarker.template.TemplateModelException.class, () -> spec.applyTo(new PageCapture(), MODEL));
+		var arg28 = new PageCapture();
+		var ex = assertThrows(freemarker.template.TemplateModelException.class, () -> spec.applyTo(arg28, MODEL));
 		assertTrue(ex.getMessage().contains("<@card id='w'> type='my-widget' takes at most one of a body, template= or src=."), ex::getMessage);
 	}
 
@@ -544,7 +592,8 @@ class PageSpec_Cards_Test extends TestBase {
 
 	@Test void a68_applyTo_customCardWithBodyAndTemplate_refusedWithTheTemplateMessage() {
 		var spec = PageSpec.create().card(CardSpec.of("my-widget", "w").template("t").body("k", 1));
-		var ex = assertThrows(freemarker.template.TemplateModelException.class, () -> spec.applyTo(new PageCapture(), MODEL));
+		var arg29 = new PageCapture();
+		var ex = assertThrows(freemarker.template.TemplateModelException.class, () -> spec.applyTo(arg29, MODEL));
 		assertTrue(ex.getMessage().contains("<@card id='w'> type='my-widget' takes at most one of a body, template= or src=."), ex::getMessage);
 	}
 
@@ -568,13 +617,15 @@ class PageSpec_Cards_Test extends TestBase {
 	@Test void a71_applyTo_customCardJsonMarkupBusKeys_withSpecWiring_refusedWithTheTemplateMessage() {
 		var spec = PageSpec.create().card(CardSpec.of("my-widget", "w").subscribes(org.apache.juneau.rest.server.console.Subscription.to("ops.jobs").as("refresh")),
 			"{k: 1, subscribes: [ { topic: 'ssc.focus', as: 'refresh' } ]}");
-		var ex = assertThrows(freemarker.template.TemplateModelException.class, () -> spec.applyTo(new PageCapture(), MODEL));
+		var arg30 = new PageCapture();
+		var ex = assertThrows(freemarker.template.TemplateModelException.class, () -> spec.applyTo(arg30, MODEL));
 		assertTrue(ex.getMessage().contains("<@card id='w'> body key 'subscribes' is reserved; set it as an attribute."), ex::getMessage);
 	}
 
 	@Test void a72_applyTo_sanitizeOnCustomCard_refusedBeforeItsHandler() {
 		var spec = PageSpec.create().card(CardSpec.of("meter", "load").body("max", 4).sanitize(true));
-		var ex = assertThrows(freemarker.template.TemplateModelException.class, () -> spec.applyTo(new PageCapture(), CUSTOM));
+		var arg31 = new PageCapture();
+		var ex = assertThrows(freemarker.template.TemplateModelException.class, () -> spec.applyTo(arg31, CUSTOM));
 		assertTrue(ex.getMessage().contains("<@card id='load'> sanitize= applies only to an html card with src=."), ex::getMessage);
 	}
 }

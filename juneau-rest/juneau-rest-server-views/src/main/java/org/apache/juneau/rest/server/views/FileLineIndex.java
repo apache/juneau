@@ -25,6 +25,7 @@ import java.nio.channels.*;
 import java.nio.file.*;
 import java.nio.file.attribute.*;
 import java.util.*;
+import java.util.concurrent.atomic.*;
 import java.util.concurrent.locks.*;
 import java.util.zip.*;
 
@@ -135,7 +136,7 @@ public final class FileLineIndex {
 	private final int initialStride;
 	private final int maxEntries;
 	private final ReentrantLock lock = new ReentrantLock();
-	private volatile Snapshot snapshot;
+	private final AtomicReference<Snapshot> snapshot = new AtomicReference<>();
 	private volatile String earlyEpoch;
 
 	// Guarded by lock.
@@ -153,7 +154,7 @@ public final class FileLineIndex {
 		initialStride = b.stride;
 		maxEntries = b.maxEntries;
 		reset(null);
-		snapshot = new Snapshot(epoch(null, EMPTY), 0, 0, 0);
+		snapshot.set(new Snapshot(epoch(null, EMPTY), 0, 0, 0));
 	}
 
 	/**
@@ -191,7 +192,7 @@ public final class FileLineIndex {
 	 * @return The snapshot.
 	 */
 	public Snapshot snapshot() {
-		return snapshot;
+		return snapshot.get();
 	}
 
 	/**
@@ -277,7 +278,7 @@ public final class FileLineIndex {
 	 * @return <jk>true</jk> if tokens with this epoch are still valid.
 	 */
 	boolean acceptsEpoch(String epoch) {
-		return epoch != null && (epoch.equals(snapshot.epoch()) || epoch.equals(earlyEpoch));
+		return epoch != null && (epoch.equals(snapshot.get().epoch()) || epoch.equals(earlyEpoch));
 	}
 
 	/** Current stride (grows when the entry cap is reached). */
@@ -356,7 +357,7 @@ public final class FileLineIndex {
 				if (buf.get(k) == '\n') {
 					indexedLines++;
 					indexedBytes = pos + k + 1;
-					record(indexedLines + 1, indexedBytes);
+					recordLine(indexedLines + 1, indexedBytes);
 				}
 			}
 			pos += r;
@@ -364,7 +365,7 @@ public final class FileLineIndex {
 		scannedBytes = pos;
 	}
 
-	private void record(long line, long offset) {
+	private void recordLine(long line, long offset) {
 		if ((line - 1) % stride != 0)
 			return;
 		if (count == maxEntries) {
@@ -387,7 +388,7 @@ public final class FileLineIndex {
 		if (! full)
 			earlyEpoch = epoch;
 		var s = new Snapshot(epoch, indexedBytes, indexedLines, size);
-		snapshot = s;
+		snapshot.set(s);
 		return s;
 	}
 

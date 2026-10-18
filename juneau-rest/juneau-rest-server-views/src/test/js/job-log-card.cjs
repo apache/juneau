@@ -52,8 +52,8 @@ const CARD = {
 	},
 	height: 320, urlParam: 'job'
 };
-const card = o => Object.assign({}, CARD, o);
-const result = (outcome, message) => JSON.stringify(Object.assign({ outcome, contractVersion: '1' }, message ? { message } : {}));
+const card = o => ({ ...CARD, ...o });
+const result = (outcome, message) => JSON.stringify({ outcome, contractVersion: '1', ...(message ? { message } : {}) });
 
 class FakeEventSource {
 	constructor(url) {
@@ -62,7 +62,7 @@ class FakeEventSource {
 		this.listeners = {};
 		FakeEventSource.instances.push(this);
 	}
-	addEventListener(type, fn) { (this.listeners[type] = this.listeners[type] || []).push(fn); }
+	addEventListener(type, fn) { this.listeners[type] ||= []; this.listeners[type].push(fn); }
 	close() { this.readyState = 2; }
 	// id (optional) is the SSE id the server sent with the event; it is set as the event's lastEventId, as a browser does.
 	emit(type, data, id) { if (this.readyState !== 2) this.dispatch(type, data, id); }
@@ -81,7 +81,7 @@ function load(opts) {
 	const env = makeConsoleEnv({ location: { search: opts.search || '' } });
 	const doc = env.document;
 	doc.readyState = 'loading';
-	doc.body.setAttribute('data-juneau-csrf', 'tok');
+	doc.body.dataset.juneauCsrf = 'tok';
 	const w = env.window;
 	const replaced = [];
 	w.history = {
@@ -108,13 +108,13 @@ function load(opts) {
 			removeItem: k => storage.delete(k)
 		},
 		fetch: (url, init) => {
-			const headers = (init && init.headers) || {};
+			const headers = (init?.headers) || {};
 			fetches.push({
 				url: String(url),
-				method: init && init.method,
+				method: init?.method,
 				contentType: headers['Content-Type'] || null,
 				csrf: Object.values(headers).indexOf('tok') >= 0,
-				body: init && init.body ? JSON.parse(init.body) : null
+				body: init?.body ? JSON.parse(init.body) : null
 			});
 			return (opts.fetch || (() => ok(REF)))(String(url), init);
 		},
@@ -125,10 +125,10 @@ function load(opts) {
 	w.window = w;
 	w.document = doc;
 	const ctx = vm.createContext(sandbox);
-	vm.runInContext(shellSrc, ctx, { filename: 'juneau-console.js' });
-	vm.runInContext(jobLogSrc, ctx, { filename: 'juneau-joblog.js' });
+	vm.runInContext(shellSrc, ctx, { filename: 'juneau-console.js' }); // NOSONAR javascript:S1523 - loads the shipped script into a vm sandbox for the test
+	vm.runInContext(jobLogSrc, ctx, { filename: 'juneau-joblog.js' }); // NOSONAR javascript:S1523 - loads the shipped script into a vm sandbox for the test
 	const r = { env, doc, w, errors, fetches, replaced, storage, es: FakeEventSource.instances };
-	r.mount = cards => w.JuneauConsole.mount(Object.assign({}, base, { cards }), { root: doc.body, document: doc });
+	r.mount = cards => w.JuneauConsole.mount({ ...base, cards }, { root: doc.body, document: doc });
 	return r;
 }
 
@@ -158,14 +158,14 @@ function state(r) {
 	const s = one(r, '.jc-joblog-submit');
 	const nr = one(r, '.jc-joblog-newrun');
 	return {
-		phase: one(r, '.jc-joblog') && one(r, '.jc-joblog').getAttribute('data-phase'),
+		phase: one(r, '.jc-joblog') && (one(r, '.jc-joblog').dataset.phase ?? null),
 		banner: b && !b.hidden ? b.textContent : null,
 		tone: b && !b.hidden ? ['ok', 'error', 'warning'].find(t => b.classList.contains('jc-joblog-' + t)) || null : null,
 		role: b && !b.hidden ? b.getAttribute('role') : null,
-		submitText: s && s.textContent,
-		submitHidden: !!(s && s.hidden),
-		submitDisabled: !!(s && s.disabled),
-		newRunHidden: !!(nr && nr.hidden),
+		submitText: s?.textContent,
+		submitHidden: !!(s?.hidden),
+		submitDisabled: !!(s?.disabled),
+		newRunHidden: !!(nr?.hidden),
 		inputsDisabled: all(r, '.jc-joblog-input').map(n => n.disabled)
 	};
 }
@@ -182,7 +182,7 @@ function focused(r) {
 }
 const out = {};
 
-(async () => {
+(async () => { // NOSONAR javascript:S3776 - branching mirrors the behavior being implemented; splitting it would obscure the flow
 	// 1. The form.
 	try {
 		const r = load();
@@ -201,12 +201,12 @@ const out = {};
 			ariaLive: o.getAttribute('aria-live'),
 			tabindex: o.getAttribute('tabindex'),
 			height: o.style.height,
-			api: Object.keys(r.w.JuneauConsole.cardApi('rebuild') || {}).sort(),
-			version: r.w.JuneauJobLog && r.w.JuneauJobLog.version,
+			api: Object.keys(r.w.JuneauConsole.cardApi('rebuild') || {}).sort((a, b) => (a < b ? -1 : Number(a > b))),
+			version: r.w.JuneauJobLog?.version,
 			state: state(r),
 			errors: r.errors
 		};
-	} catch (e) { const c = { crash: String(e && e.stack || e) }; out.form = c; }
+	} catch (e) { const c = { crash: String(e?.stack || e) }; out.form = c; }
 
 	// 2. Defaults: no fields, "Run", 240px.
 	try {
@@ -214,7 +214,7 @@ const out = {};
 		r.mount([{ id: 'rebuild', type: 'job-log', submit: { endpoint: '/a' } }]);
 		await flush();
 		out.defaults = { submitText: text(r, '.jc-joblog-submit'), height: one(r, '.jc-joblog-output').style.height, inputs: all(r, '.jc-joblog-input').length };
-	} catch (e) { const c = { crash: String(e && e.stack || e) }; out.defaults = c; }
+	} catch (e) { const c = { crash: String(e?.stack || e) }; out.defaults = c; }
 
 	// 3. Submit, stream, success.
 	try {
@@ -243,7 +243,7 @@ const out = {};
 			announced: announced(r),
 			errors: r.errors
 		};
-	} catch (e) { const c = { crash: String(e && e.stack || e) }; out.success = c; }
+	} catch (e) { const c = { crash: String(e?.stack || e) }; out.success = c; }
 
 	// 4. Every non-success outcome uses the error tone; the message is appended.
 	try {
@@ -260,7 +260,7 @@ const out = {};
 		}
 		out.outcomes = outcomes;
 		out.outcomesAnnounced = announcedOutcomes;
-	} catch (e) { const c = { crash: String(e && e.stack || e) }; out.outcomes = c; }
+	} catch (e) { const c = { crash: String(e?.stack || e) }; out.outcomes = c; }
 
 	// 5. A submit response that is not an AsyncJobRef: E-JS-77 inline, form kept.
 	try {
@@ -269,7 +269,7 @@ const out = {};
 		await flush();
 		await submit(r);
 		out.badRef = { state: state(r), streams: r.es.length, stored: stored(r), form: !!one(r, '.jc-joblog-form'), errors: r.errors };
-	} catch (e) { const c = { crash: String(e && e.stack || e) }; out.badRef = c; }
+	} catch (e) { const c = { crash: String(e?.stack || e) }; out.badRef = c; }
 
 	// 6. A submit rejected by the server (e.g. a job limit): the response message, inline.
 	try {
@@ -278,7 +278,7 @@ const out = {};
 		await flush();
 		await submit(r);
 		out.submitError = { state: state(r), streams: r.es.length };
-	} catch (e) { const c = { crash: String(e && e.stack || e) }; out.submitError = c; }
+	} catch (e) { const c = { crash: String(e?.stack || e) }; out.submitError = c; }
 
 	// 7. An unparsable result event: E-JS-78, stream closed.
 	try {
@@ -288,7 +288,7 @@ const out = {};
 		await submit(r);
 		r.es[0].emit('result', 'not json');
 		out.badEvent = { state: state(r), closed: r.es[0].readyState, errors: r.errors };
-	} catch (e) { const c = { crash: String(e && e.stack || e) }; out.badEvent = c; }
+	} catch (e) { const c = { crash: String(e?.stack || e) }; out.badEvent = c; }
 
 	// 8. Cancel: POST cancelUrl, settle from the response, ignore the late stream result.
 	try {
@@ -301,7 +301,7 @@ const out = {};
 		await flush();
 		r.es[0].forceEmit('result', result('success', 'too late'));
 		out.cancel = { cancelling, fetches: r.fetches.map(f => ({ url: f.url, method: f.method, csrf: f.csrf, contentType: f.contentType, body: f.url === REF.cancelUrl ? f.body : undefined })), state: state(r), closed: r.es[0].readyState };
-	} catch (e) { const c = { crash: String(e && e.stack || e) }; out.cancel = c; }
+	} catch (e) { const c = { crash: String(e?.stack || e) }; out.cancel = c; }
 
 	// 9. Reload re-attach: the URL param matches the stored job.
 	try {
@@ -310,7 +310,7 @@ const out = {};
 		await flush();
 		r.es[0].emit('progress', 'replayed');
 		out.reattach = { streams: r.es.map(e => e.url), fetches: r.fetches.length, state: state(r), lines: lines(r) };
-	} catch (e) { const c = { crash: String(e && e.stack || e) }; out.reattach = c; }
+	} catch (e) { const c = { crash: String(e?.stack || e) }; out.reattach = c; }
 
 	// 10. Re-attach without urlParam: the stored job alone is enough.
 	try {
@@ -318,7 +318,7 @@ const out = {};
 		r.mount([card({ urlParam: undefined })]);
 		await flush();
 		out.reattachNoParam = { streams: r.es.map(e => e.url), phase: state(r).phase };
-	} catch (e) { const c = { crash: String(e && e.stack || e) }; out.reattachNoParam = c; }
+	} catch (e) { const c = { crash: String(e?.stack || e) }; out.reattachNoParam = c; }
 
 	// 11. Mismatch: a URL job id with no matching stored job falls back to the form, no error, storage untouched.
 	try {
@@ -326,7 +326,7 @@ const out = {};
 		r.mount([CARD]);
 		await flush();
 		out.mismatch = { streams: r.es.length, state: state(r), stored: stored(r), errors: r.errors };
-	} catch (e) { const c = { crash: String(e && e.stack || e) }; out.mismatch = c; }
+	} catch (e) { const c = { crash: String(e?.stack || e) }; out.mismatch = c; }
 
 	// 11b. A URL job id with nothing stored (a shared link, another browser): the form, no stream, no error.
 	try {
@@ -334,7 +334,7 @@ const out = {};
 		r.mount([CARD]);
 		await flush();
 		out.urlNoStored = { streams: r.es.length, fetches: r.fetches.length, state: state(r), stored: stored(r), errors: r.errors };
-	} catch (e) { const c = { crash: String(e && e.stack || e) }; out.urlNoStored = c; }
+	} catch (e) { const c = { crash: String(e?.stack || e) }; out.urlNoStored = c; }
 
 	// 12. Not found: the stream closes before any event.
 	try {
@@ -350,7 +350,7 @@ const out = {};
 			replaced: r.replaced,
 			state: state(r)
 		};
-	} catch (e) { const c = { crash: String(e && e.stack || e) }; out.notFound = c; }
+	} catch (e) { const c = { crash: String(e?.stack || e) }; out.notFound = c; }
 
 	// 12b. A refused attach that is not a 404 (429, 5xx, a network failure) is a failed attach, not "Job not found": the stored
 	// job and the URL param stay so a reload can try again.
@@ -366,7 +366,7 @@ const out = {};
 		};
 		out.attachFailed = { busy: await attach(() => bad(429, {})), server: await attach(() => bad(503, {})),
 			network: await attach(() => Promise.reject(new TypeError('down'))) };
-	} catch (e) { const c = { crash: String(e && e.stack || e) }; out.attachFailed = c; }
+	} catch (e) { const c = { crash: String(e?.stack || e) }; out.attachFailed = c; }
 
 	// 13. Interrupted: a reconnecting error is ignored; a close after events is a warning, prefs kept.
 	try {
@@ -379,7 +379,7 @@ const out = {};
 		const reconnecting = state(r).phase;
 		r.es[0].fail(2);
 		out.interrupted = { reconnecting, state: state(r), stored: stored(r), announced: announced(r) };
-	} catch (e) { const c = { crash: String(e && e.stack || e) }; out.interrupted = c; }
+	} catch (e) { const c = { crash: String(e?.stack || e) }; out.interrupted = c; }
 
 	// 14. No EventSource in this browser.
 	try {
@@ -388,7 +388,7 @@ const out = {};
 		await flush();
 		await submit(r);
 		out.noSse = { state: state(r), stored: stored(r), fetches: r.fetches.length, announced: announced(r) };
-	} catch (e) { const c = { crash: String(e && e.stack || e) }; out.noSse = c; }
+	} catch (e) { const c = { crash: String(e?.stack || e) }; out.noSse = c; }
 
 	// 15. New run, and clearOnSubmit (default true) vs false.
 	try {
@@ -407,7 +407,7 @@ const out = {};
 		};
 		out.newRun = await runTwice(CARD);
 		out.keepLog = await runTwice(card({ clearOnSubmit: false }));
-	} catch (e) { const c = { crash: String(e && e.stack || e) }; out.newRun = c; out.keepLog = c; }
+	} catch (e) { const c = { crash: String(e?.stack || e) }; out.newRun = c; out.keepLog = c; }
 
 	// 16. refresh is a no-op (a running stream survives it); destroy closes the stream.
 	try {
@@ -421,7 +421,7 @@ const out = {};
 		const afterRefresh = { streams: r.es.length, open: r.es[0].readyState, lines: lines(r), phase: state(r).phase };
 		r.w.JuneauConsole.destroyCard('rebuild');
 		out.lifecycle = { afterRefresh, closedOnDestroy: r.es[0].readyState };
-	} catch (e) { const c = { crash: String(e && e.stack || e) }; out.lifecycle = c; }
+	} catch (e) { const c = { crash: String(e?.stack || e) }; out.lifecycle = c; }
 
 	// 17. A job with no cancelUrl: the running button reads Cancel but is disabled, and clicking it sends nothing.
 	try {
@@ -433,7 +433,7 @@ const out = {};
 		await clickSubmitButton(r);
 		await flush();
 		out.noCancelUrl = { running, fetches: r.fetches.length, state: state(r), open: r.es[0].readyState };
-	} catch (e) { const c = { crash: String(e && e.stack || e) }; out.noCancelUrl = c; }
+	} catch (e) { const c = { crash: String(e?.stack || e) }; out.noCancelUrl = c; }
 
 	// 18. A failed cancel: the error is shown, the job keeps running and can still finish on the stream.
 	try {
@@ -447,7 +447,7 @@ const out = {};
 		const afterFailedCancel = Object.assign(state(r), { open: r.es[0].readyState, focus: focused(r) });
 		r.es[0].emit('result', result('success'));
 		out.cancelFailed = { afterFailedCancel, fetches: r.fetches.map(f => f.url), state: state(r) };
-	} catch (e) { const c = { crash: String(e && e.stack || e) }; out.cancelFailed = c; }
+	} catch (e) { const c = { crash: String(e?.stack || e) }; out.cancelFailed = c; }
 
 	// 19. Required fields: the shim's form has no constraint validation (nor does a scripted submit), so the runtime
 	// checks them: nothing is sent, the field is marked and focused, and a filled-in resubmit goes through.
@@ -461,7 +461,7 @@ const out = {};
 			focused: r.env.getActive() === reason };
 		await submit(r, { reason: 'nightly' });
 		out.required = { blocked, fetches: r.fetches.length, invalidAfter: reason.getAttribute('aria-invalid'), phase: state(r).phase };
-	} catch (e) { const c = { crash: String(e && e.stack || e) }; out.required = c; }
+	} catch (e) { const c = { crash: String(e?.stack || e) }; out.required = c; }
 
 	// 20. Reconnect: every progress event carries an SSE id and the browser's own reconnect sends Last-Event-ID, so the
 	// server resumes after the last event shown; the runtime just shows what arrives, and the stream stays open while
@@ -487,7 +487,7 @@ const out = {};
 		es.emit('progress', 'p4', 4);
 		es.emit('result', result('success'));
 		out.reconnect = { dropped, afterFirst, lines: lines(r), streams: r.es.length, state: state(r) };
-	} catch (e) { const c = { crash: String(e && e.stack || e) }; out.reconnect = c; }
+	} catch (e) { const c = { crash: String(e?.stack || e) }; out.reconnect = c; }
 
 	// 21. Same-origin: a submit response or stored job whose streamUrl/cancelUrl points at another origin is rejected
 	// before anything is opened or sent (the cancel POST would carry the CSRF token); an absolute same-origin URL is fine.
@@ -519,7 +519,7 @@ const out = {};
 		await flush();
 		const absolute = { streams: abs.es.map(e => e.url), fetches: abs.fetches.map(f => ({ url: f.url, csrf: f.csrf })), phase: state(abs).phase };
 		out.crossOrigin = { cancel, stream, poisoned, absolute };
-	} catch (e) { const c = { crash: String(e && e.stack || e) }; out.crossOrigin = c; }
+	} catch (e) { const c = { crash: String(e?.stack || e) }; out.crossOrigin = c; }
 
 	// 22. Focus: a focused button that is disabled (submitting, cancelling) hands focus to the log pane; the Run/Cancel
 	// button and "New run" hand focus to each other as they swap at done and idle.
@@ -543,7 +543,7 @@ const out = {};
 		const whileCancelling = focused(r);
 		await flush();
 		out.focus = { whileSubmitting, afterDone, afterNewRun, whileCancelling, phase: state(r).phase };
-	} catch (e) { const c = { crash: String(e && e.stack || e) }; out.focus = c; }
+	} catch (e) { const c = { crash: String(e?.stack || e) }; out.focus = c; }
 
 	// 23. Endpoint origin: the submit POST carries the CSRF token, so an endpoint that resolves to another origin is
 	// refused in the browser too (Java checks it at render): an inline error, no fetch, the form stays idle.  Backslash
@@ -551,17 +551,17 @@ const out = {};
 	try {
 		const tryEndpoint = async endpoint => {
 			const r = load();
-			r.mount([card({ submit: Object.assign({}, CARD.submit, { endpoint }) })]);
+			r.mount([card({ submit: { ...CARD.submit, endpoint } })]);
 			await flush();
 			await submit(r);
 			return { fetches: r.fetches.map(f => f.url), streams: r.es.length, state: state(r), errors: r.errors };
 		};
 		out.crossEndpoint = {};
-		for (const [k, ep] of [['backslash', '\\evil.test/x'], ['protocolRelative', '//evil.test'], ['leadingSpace', ' //evil.test'],
+		for (const [k, ep] of [['backslash', String.raw`\evil.test/x`], ['protocolRelative', '//evil.test'], ['leadingSpace', ' //evil.test'],
 				['absolute', 'https://evil.test/jobs/rebuild'], ['sameOrigin', '/jobs/rebuild'],
 				['sameOriginQuery', '/jobs/x?a=b'], ['relative', 'jobs/x']])
 			out.crossEndpoint[k] = await tryEndpoint(ep);
-	} catch (e) { const c = { crash: String(e && e.stack || e) }; out.crossEndpoint = c; }
+	} catch (e) { const c = { crash: String(e?.stack || e) }; out.crossEndpoint = c; }
 
 	// 24. Banner order: role is set before the text, and the text is cleared first, so an identical repeated error
 	// is a fresh change to the alert region and is announced again.
@@ -578,11 +578,11 @@ const out = {};
 		let hidden = b.hidden;
 		Object.defineProperty(b, 'hidden', { configurable: true, get() { return hidden; }, set(v) { events.push('hidden:' + v); hidden = v; } });
 		const sa = b.setAttribute.bind(b), ra = b.removeAttribute.bind(b);
-		b.setAttribute = (n, v) => { if (n === 'role') events.push('role:' + v); sa(n, v); };
-		b.removeAttribute = n => { if (n === 'role') events.push('role:-'); ra(n); };
+		b.setAttribute = (n, v) => { if (n === 'role') { events.push('role:' + v); } sa(n, v); };
+		b.removeAttribute = n => { if (n === 'role') { events.push('role:-'); } ra(n); };
 		await submit(r, { reason: '' });
 		out.bannerOrder = { events, state: state(r) };
-	} catch (e) { const c = { crash: String(e && e.stack || e) }; out.bannerOrder = c; }
+	} catch (e) { const c = { crash: String(e?.stack || e) }; out.bannerOrder = c; }
 
 	// 25. An id-less stream (an older server): every line is shown, across a drop too.
 	try {
@@ -598,7 +598,7 @@ const out = {};
 		es.emit('progress', 'p3');
 		es.emit('result', result('success'));
 		out.idless = { lines: lines(r), streams: r.es.length, state: state(r) };
-	} catch (e) { const c = { crash: String(e && e.stack || e) }; out.idless = c; }
+	} catch (e) { const c = { crash: String(e?.stack || e) }; out.idless = c; }
 
 	// 26. A server that re-sends an event after a drop: the repeat is shown, never hidden (fail-loud).
 	try {
@@ -615,7 +615,7 @@ const out = {};
 		es.emit('progress', 'p3', 3);
 		es.emit('result', result('success'));
 		out.repeatedId = { lines: lines(r), streams: r.es.length, state: state(r) };
-	} catch (e) { const c = { crash: String(e && e.stack || e) }; out.repeatedId = c; }
+	} catch (e) { const c = { crash: String(e?.stack || e) }; out.repeatedId = c; }
 
 	// 27. A reattach replays the buffer in a burst: the log pane is silenced (aria-live off) while the lines arrive and one summary
 	// is announced once the burst goes quiet, then the pane is polite again for live lines.  A fresh submit is not silenced.
@@ -636,7 +636,7 @@ const out = {};
 		await flush();
 		await submit(fresh);
 		out.replayQuiet = { before, during, after, lines: lines(r), freshLive: one(fresh, '.jc-joblog-output').getAttribute('aria-live') };
-	} catch (e) { const c = { crash: String(e && e.stack || e) }; out.replayQuiet = c; }
+	} catch (e) { const c = { crash: String(e?.stack || e) }; out.replayQuiet = c; }
 
 	// 28. A replay also ends when the job finishes during it (polite again, no summary), when the stream is refused (polite again), and at
 	// the cap even if lines keep arriving; the attach probe is aborted when the card is torn down, and a probe that never answers reads
@@ -645,7 +645,7 @@ const out = {};
 		const live = r => one(r, '.jc-joblog-output').getAttribute('aria-live');
 		const reattach = async (extra) => {
 			const timers = [];
-			const r = load(Object.assign({ search: '?job=j1', storage: { [KEY]: JSON.stringify(REF) }, timers }, extra || {}));
+			const r = load({ search: '?job=j1', storage: { [KEY]: JSON.stringify(REF) }, timers, ...extra || {} });
 			r.mount([CARD]);
 			await flush();
 			return { r, timers };
@@ -661,50 +661,50 @@ const out = {};
 		cap.r.es[0].emit('progress', 'c');
 		const atCap = { before: beforeCap, live: live(cap.r), announced: announced(cap.r) };
 		let aborted = 0;
-		const hang = await reattach({ fetch: (u, init) => new Promise((_, rej) => { if (init && init.signal) init.signal.addEventListener('abort', () => { aborted++; rej(new Error('aborted')); }); }) });
+		const hang = await reattach({ fetch: (u, init) => new Promise((_, rej) => { if (init?.signal) init.signal.addEventListener('abort', () => { aborted++; rej(new Error('aborted')); }); }) });
 		hang.r.es[0].fail(2);
 		await flush();
 		const probing = { phase: state(hang.r).phase, live: live(hang.r) };
 		for (const fn of hang.timers.splice(0)) if (fn) fn();   // the probe timeout
 		await flush();
 		const timedOut = { state: state(hang.r), aborted, stored: stored(hang.r) };
-		const torn = await reattach({ fetch: (u, init) => new Promise((_, rej) => { if (init && init.signal) init.signal.addEventListener('abort', () => { aborted++; rej(new Error('aborted')); }); }) });
+		const torn = await reattach({ fetch: (u, init) => new Promise((_, rej) => { if (init?.signal) init.signal.addEventListener('abort', () => { aborted++; rej(new Error('aborted')); }); }) });
 		torn.r.es[0].fail(2);
 		await flush();
 		const before = aborted;
 		torn.r.w.JuneauConsole.destroyCard('rebuild');
 		await flush();
 		out.replayEnds = { resultDuring, atCap, probing, timedOut, abortedOnTeardown: aborted - before };
-	} catch (e) { const c = { crash: String(e && e.stack || e) }; out.replayEnds = c; }
+	} catch (e) { const c = { crash: String(e?.stack || e) }; out.replayEnds = c; }
 
 	// 29. A hidden field: no label, not shown, not in the required check, sent with its default; every input carries
 	// data-juneau-field.  The flat body is unchanged otherwise.
 	try {
 		const r = load();
-		const hidden = card({ submit: Object.assign({}, CARD.submit, { fields: CARD.submit.fields.concat([{ name: 'mode', type: 'hidden', default: 'full' }]) }) });
+		const hidden = card({ submit: { ...CARD.submit, fields: CARD.submit.fields.concat([{ name: 'mode', type: 'hidden', default: 'full' }]) } });
 		r.mount([hidden]);
 		await flush();
 		const h = all(r, '.jc-joblog-input').find(n => n.name === 'mode');
 		const form = { labels: all(r, '.jc-joblog-label').map(n => n.textContent), type: h.type, value: h.value,
-			inLabel: !!(h.parentNode && h.parentNode.classList && h.parentNode.classList.contains('jc-joblog-field')),
-			fieldAttrs: all(r, '.jc-joblog-input').map(n => n.getAttribute('data-juneau-field')) };
+			inLabel: !!(h.parentNode?.classList?.contains('jc-joblog-field')),
+			fieldAttrs: all(r, '.jc-joblog-input').map(n => n.dataset.juneauField ?? null) };
 		await submit(r);
 		// A hidden field with no default: a page card has no row, so the refusal names the default, not a source.
 		const bare = load();
-		bare.mount([card({ submit: Object.assign({}, CARD.submit, { fields: CARD.submit.fields.concat([{ name: 'mode', type: 'hidden' }]) }) })]);
+		bare.mount([card({ submit: { ...CARD.submit, fields: CARD.submit.fields.concat([{ name: 'mode', type: 'hidden' }]) } })]);
 		await flush();
 		await submit(bare);
 		out.pageHidden = { form, body: r.fetches[0].body, noDefault: { banner: state(bare).banner, sent: bare.fetches.length } };
-	} catch (e) { const c = { crash: String(e && e.stack || e) }; out.pageHidden = c; }
+	} catch (e) { const c = { crash: String(e?.stack || e) }; out.pageHidden = c; }
 
 	// 30. envelope "action": the page card is self-targeted (targetId is the key), the values go under fields.
 	try {
 		const r = load();
-		r.mount([card({ submit: Object.assign({}, CARD.submit, { envelope: 'action', action: 'rebuild-index' }) })]);
+		r.mount([card({ submit: { ...CARD.submit, envelope: 'action', action: 'rebuild-index' } })]);
 		await flush();
 		await submit(r, { reason: 'nightly', shards: '2', notes: '' });
 		out.pageEnvelope = { body: r.fetches[0].body, phase: state(r).phase };
-	} catch (e) { const c = { crash: String(e && e.stack || e) }; out.pageEnvelope = c; }
+	} catch (e) { const c = { crash: String(e?.stack || e) }; out.pageEnvelope = c; }
 
 	// 31. output: a success writes the message into the card's own field (a textarea gets .value); a failure does not; a
 	// selector that only matches outside the card logs E-JS-112 and writes nothing.
@@ -725,7 +725,7 @@ const out = {};
 			failure: await run({ target: { field: 'notes' } }, 'failure', 'boom'),
 			outside: await run({ target: { selector: '.elsewhere' } }, 'success', 'x')
 		};
-	} catch (e) { const c = { crash: String(e && e.stack || e) }; out.pageOutput = c; }
+	} catch (e) { const c = { crash: String(e?.stack || e) }; out.pageOutput = c; }
 
 	// 32. The page transport never reads window.JuneauViews (mount, submit, stream, cancel); only the load-time
 	// populator registration looks, and that is before the count starts.
@@ -740,10 +740,10 @@ const out = {};
 		r.w.JuneauConsole.cardApi('rebuild').cancel();
 		await flush();
 		out.pageNoViews = { reads, phase: state(r).phase };
-	} catch (e) { const c = { crash: String(e && e.stack || e) }; out.pageNoViews = c; }
+	} catch (e) { const c = { crash: String(e?.stack || e) }; out.pageNoViews = c; }
 
 	process.stdout.write(JSON.stringify(out));
 })().catch(e => {
-	console.error(e && e.stack || e);
+	console.error(e?.stack || e);
 	process.exit(1);
 });

@@ -134,13 +134,15 @@ class PageSpec_View_Test extends TestBase {
 
 	@Test void a01_view_noMixinBean_rejectedWithFoundNone() throws Exception {
 		var req = capture(NoMixinHost.class, NoMixinHost.CAPTURED);
-		var ex = assertThrows(IllegalStateException.class, () -> PageSpec.create().view(req));
+		var target = PageSpec.create();
+		var ex = assertThrows(IllegalStateException.class, () -> target.view(req));
 		assertEquals("PageSpec.view needs a ConsoleFreemarkerMixin bean; found 'none'.", ex.getMessage());
 	}
 
 	@Test void a02_view_plainFreemarkerMixinBean_rejected() throws Exception {
 		var req = capture(PlainMixinHost.class, PlainMixinHost.CAPTURED);
-		var ex = assertThrows(IllegalStateException.class, () -> PageSpec.create().view(req));
+		var target2 = PageSpec.create();
+		var ex = assertThrows(IllegalStateException.class, () -> target2.view(req));
 		assertEquals("PageSpec.view needs a ConsoleFreemarkerMixin bean; found 'FreemarkerMixin'.", ex.getMessage());
 	}
 
@@ -230,7 +232,8 @@ class PageSpec_View_Test extends TestBase {
 	}
 
 	@Test void a12_view_nullRequest_rejected() {
-		var ex = assertThrows(IllegalArgumentException.class, () -> PageSpec.create().view(null));
+		var target3 = PageSpec.create();
+		var ex = assertThrows(IllegalArgumentException.class, () -> target3.view(null));
 		assertEquals("PageSpec.view requires a non-null request.", ex.getMessage());
 	}
 

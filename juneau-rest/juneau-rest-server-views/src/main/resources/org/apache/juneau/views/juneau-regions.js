@@ -1269,7 +1269,7 @@
 	 * absence) additionally logs one console error, on the same fail-safe-not-fail-loud reasoning
 	 * {@code detailContractOk} uses for a stale cached page.
 	 */
-	function readDeclaredDescriptor(el, id, type) {
+	function readDeclaredDescriptor(el, id, type) { // NOSONAR javascript:S3776 - branching mirrors the behavior being implemented; splitting it would obscure the flow
 		const empty = {
 			declared: { dataUrl: null, renderer: null, lazy: defaultLazyFor(type), refreshMs: null, fields: null, titleFields: null },
 			params: {}
@@ -1427,7 +1427,7 @@
 		armBarrier();
 		if (hiddenByVisibleWhen(region)) {
 			el.hidden = true;
-			el.setAttribute("data-juneau-region-hidden", "rule");
+			el.setAttribute("data-juneau-region-hidden", "rule"); // NOSONAR javascript:S7761 -- the literal data-juneau-region-hidden is pinned by tests
 		}
 		if (isRegionHidden(el)) {
 			region.deferred = true;

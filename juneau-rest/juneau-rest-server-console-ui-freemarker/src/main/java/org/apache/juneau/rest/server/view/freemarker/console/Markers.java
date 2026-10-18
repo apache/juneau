@@ -19,6 +19,7 @@ package org.apache.juneau.rest.server.view.freemarker.console;
 import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.util.*;
+import java.util.stream.*;
 
 import org.apache.juneau.commons.http.*;
 import org.apache.juneau.marshall.collections.*;
@@ -96,10 +97,7 @@ public final class Markers implements Decorator {
 	static List<Map<String,Object>> copyRows(List<? extends Map<String,?>> rows) {
 		if (rows == null)
 			throw iaex("Decorator values must not be null.");
-		var out = new ArrayList<Map<String,Object>>();
-		for (var r : rows)
-			out.add(new LinkedHashMap<>(r));
-		return out;
+		return rows.stream().<Map<String,Object>>map(LinkedHashMap::new).collect(Collectors.toCollection(ArrayList::new));
 	}
 
 	static String dataTopicOf(String who, String topic) {

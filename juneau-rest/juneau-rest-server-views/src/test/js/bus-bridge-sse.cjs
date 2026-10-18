@@ -40,6 +40,8 @@ const SID = 'a'.repeat(64);
 const LOCATION = { protocol: 'https:', host: 'console.example.test', origin: 'https://console.example.test' };
 const enc = new TextEncoder();
 
+function settleStep(step) { return step.reject ? Promise.reject(step.reject) : Promise.resolve(step); }
+
 /** A ReadableStream stand-in: the harness pushes text chunks; read() resolves as chunks arrive. */
 function stream() {
 	const queue = [];
@@ -62,7 +64,6 @@ function stream() {
 			}
 		}
 	};
-	function settleStep(step) { return step.reject ? Promise.reject(step.reject) : Promise.resolve(step); }
 	function deliver(step) {
 		if (!waiting.length) return queue.push(step);
 		const w = waiting.shift();
@@ -76,11 +77,9 @@ function streamResponse(s, status) {
 }
 
 function sessionBody(over) {
-	return Object.assign({
-		v: 1, sessionId: SID, heartbeatMs: 15000,
+	return { v: 1, sessionId: SID, heartbeatMs: 15000,
 		downstream: [{ topic: 'app.a', retain: true }, { topic: 'app.ev', retain: false }],
-		upstream: [], paths: { sse: '/rest/ops/juneau-bus/stream/' + SID, websocket: '/rest/ops/juneau-bus/ws/' + SID }
-	}, over || {});
+		upstream: [], paths: { sse: '/rest/ops/juneau-bus/stream/' + SID, websocket: '/rest/ops/juneau-bus/ws/' + SID }, ...over || {} };
 }
 
 /**
@@ -95,7 +94,7 @@ function fresh(script, bodyAttrs) {
 	bus.declare('app.a', { retain: true });
 	bus.declare('app.ev', { retain: false });
 	const errors = [];
-	bus.onError(function (e) { errors.push({ code: e.code, message: e.message, banner: !!(e.detail && e.detail.banner) }); });
+	bus.onError(function (e) { errors.push({ code: e.code, message: e.message, banner: !!(e.detail?.banner) }); });
 	const requests = [];
 	const signals = [];
 	const queue = script.slice();
@@ -113,10 +112,8 @@ function fresh(script, bodyAttrs) {
 	const states = [];
 	bus.subscribe('bridge:s', function (p) { if (p) states.push(p.state); });
 	function attach(over) {
-		return bus.attachSource(bus.sources.sse(Object.assign({
-			id: 's', session: '/rest/ops/juneau-bus/session', downstream: ['app.a', 'app.ev'],
-			fetch: fetch, location: LOCATION, document: document, TextDecoder: TextDecoder, AbortController: AbortController
-		}, over || {})));
+		return bus.attachSource(bus.sources.sse({ id: 's', session: '/rest/ops/juneau-bus/session', downstream: ['app.a', 'app.ev'],
+			fetch: fetch, location: LOCATION, document: document, TextDecoder: TextDecoder, AbortController: AbortController, ...over || {} }));
 	}
 	return { bus: bus, clock: clock, errors: errors, requests: requests, signals: signals, states: states, attach: attach };
 }
@@ -126,6 +123,75 @@ function ev(frame) { return 'event: bus\ndata: ' + JSON.stringify(frame) + '\n\n
 const RESYNC = [{ v: 1, type: 'resync-begin', seq: 1 }, { v: 1, type: 'pub', topic: 'app.a', payload: { n: 1 }, retained: true, seq: 2 },
 	{ v: 1, type: 'resync-end', seq: 3 }];
 function codes(errors) { return errors.map(function (e) { return e.code; }); }
+
+const nf = function () { return jsonResponse({ code: 'bus:unknown-session' }, { status: 404 }); };
+
+// --- status table: session POST and stream GET ---
+async function postStatus(status, body, headers) {
+	const h = fresh([function () { return jsonResponse(body || { code: 'bus:x' }, { status: status, headers: headers }); }]);
+	h.attach();
+	await settle();
+	const st = h.bus.get('bridge:s');
+	let message = st.error ? st.error.message : null;
+	if (h.errors.length) message = h.errors[0].message;
+	return { state: st.state, nextRetryMs: st.nextRetryMs, error: st.error ? st.error.code : null, codes: codes(h.errors),
+		message: message };
+}
+
+async function streamStatus(status, headers) {
+	const h = fresh([sessionOk(), function () { return jsonResponse('', { status: status, headers: headers }); }]);
+	h.attach();
+	await settle();
+	const st = h.bus.get('bridge:s');
+	return { state: st.state, nextRetryMs: st.nextRetryMs, error: st.error ? st.error.code : null, codes: codes(h.errors) };
+}
+
+// --- session-body validation: malformed id, grant mismatch, retain mismatch ---
+async function badSession(over) {
+	const h = fresh([sessionOk(over)]);
+	h.attach();
+	await settle();
+	return { state: h.bus.get('bridge:s').state, codes: codes(h.errors), message: h.errors.length ? h.errors[0].message : null,
+		fetches: h.requests.length };
+}
+
+// --- watchdog: 3 x heartbeatMs with no bytes kills the stream ---
+async function watchdogAt(ms) {
+	const s = stream();
+	const h = fresh([sessionOk({ heartbeatMs: 15000 }), function () { return streamResponse(s); }]);
+	h.attach();
+	await settle();
+	RESYNC.forEach(function (f) { s.push(ev(f)); });
+	await settle();
+	h.clock.advance(ms);
+	await settle();
+	const st = h.bus.get('bridge:s');
+	return { state: st.state, cancelled: s.cancelled, error: st.error ? st.error.message : null };
+}
+
+function run(supplied) {
+	const env = makeEnv();
+	const calls = { stub: 0, supplied: 0, badThis: 0 };
+	const sandbox = {
+		window: env.window, document: env.document, console: console, Promise: Promise,
+		setTimeout: function () { return 0; }, clearTimeout: function () { /* no-op */ },
+		fetch: function () {
+			calls.stub++;
+			if (this !== env.window) { calls.badThis++; throw new TypeError('Illegal invocation'); }
+			return Promise.resolve(jsonResponse(sessionBody(), { status: 403 }));
+		}
+	};
+	vm.runInNewContext(fs.readFileSync(path.resolve(busJs), 'utf8'), sandbox, { filename: 'juneau-bus.js' }); // NOSONAR javascript:S1523 -- the harness evaluates the module's own script
+	const bus = env.window.JuneauViews.bus;
+	const errors = [];
+	bus.declare('app.a', { retain: true });
+	bus.onError(function (e) { errors.push(e.code); });
+	const over = supplied ? { fetch: function () { calls.supplied++; return Promise.resolve(jsonResponse({ code: 'bus:x' }, { status: 400 })); } } : {};
+	bus.attachSource(bus.sources.sse({ id: 's', session: '/rest/ops/juneau-bus/session', downstream: ['app.a'],
+		location: LOCATION, document: { body: { getAttribute: function () { return null; } } },
+		TextDecoder: TextDecoder, AbortController: AbortController, ...over }));
+	return settle().then(function () { return { calls: calls, state: bus.get('bridge:s').state, errors: errors }; });
+}
 
 async function main() {
 	const out = {};
@@ -168,12 +234,11 @@ async function main() {
 		RESYNC.forEach(function (f) { s2.push(ev(f)); });
 		await settle();
 		out.reconnect = { methods: h.requests.map(function (r) { return r.method; }), afterEnd: { state: st.state, nextRetryMs: st.nextRetryMs,
-			error: st.error && st.error.message }, final: h.bus.get('bridge:s').state, gap: h.bus.get('bridge:s').gap };
+			error: st.error?.message }, final: h.bus.get('bridge:s').state, gap: h.bus.get('bridge:s').gap };
 	}
 
 	// --- stream 404 => capability refusal: re-POST immediately; three in a row => E-JS-57 ---
 	{
-		const nf = function () { return jsonResponse({ code: 'bus:unknown-session' }, { status: 404 }); };
 		const h = fresh([sessionOk(), nf, sessionOk(), nf, sessionOk(), nf]);
 		h.attach();
 		for (let i = 0; i < 3; i++) { await settle(); h.clock.advance(0); }
@@ -181,22 +246,6 @@ async function main() {
 		out.capability = { methods: h.requests.map(function (r) { return r.method; }), state: h.bus.get('bridge:s').state, errors: h.errors };
 	}
 
-	// --- status table: session POST and stream GET ---
-	async function postStatus(status, body, headers) {
-		const h = fresh([function () { return jsonResponse(body || { code: 'bus:x' }, { status: status, headers: headers }); }]);
-		h.attach();
-		await settle();
-		const st = h.bus.get('bridge:s');
-		return { state: st.state, nextRetryMs: st.nextRetryMs, error: st.error ? st.error.code : null, codes: codes(h.errors),
-			message: h.errors.length ? h.errors[0].message : (st.error ? st.error.message : null) };
-	}
-	async function streamStatus(status, headers) {
-		const h = fresh([sessionOk(), function () { return jsonResponse('', { status: status, headers: headers }); }]);
-		h.attach();
-		await settle();
-		const st = h.bus.get('bridge:s');
-		return { state: st.state, nextRetryMs: st.nextRetryMs, error: st.error ? st.error.code : null, codes: codes(h.errors) };
-	}
 	out.postStatus = {
 		s403: await postStatus(403, { code: 'bus:topic-denied', message: 'not granted', denied: ['app.ev'] }),
 		s400: await postStatus(400, { code: 'bus:bad-request' }),
@@ -211,14 +260,6 @@ async function main() {
 		noBody: await streamStatus(200)
 	};
 
-	// --- session-body validation: malformed id, grant mismatch, retain mismatch ---
-	async function badSession(over) {
-		const h = fresh([sessionOk(over)]);
-		h.attach();
-		await settle();
-		return { state: h.bus.get('bridge:s').state, codes: codes(h.errors), message: h.errors.length ? h.errors[0].message : null,
-			fetches: h.requests.length };
-	}
 	out.sessionBody = {
 		badId: await badSession({ sessionId: 'abc' }),
 		grant: await badSession({ downstream: [{ topic: 'app.a', retain: true }] }),
@@ -241,7 +282,7 @@ async function main() {
 		out.csrf = {
 			customHeader: h1.requests[0].headers['X-App-Csrf'] || null, defaultAbsent: h1.requests[0].headers['X-Csrf-Token'] === undefined,
 			blank: { fetches: h2.requests.length, state: h2.bus.get('bridge:s').state, codes: codes(h2.errors), message: h2.errors.length ? h2.errors[0].message : null },
-			none: Object.keys(h3.requests[0].headers).sort()
+			none: Object.keys(h3.requests[0].headers).sort((a, b) => (a < b ? -1 : Number(a > b)))
 		};
 	}
 
@@ -271,7 +312,7 @@ async function main() {
 
 	// --- control characters cannot smuggle a cross-origin path past the same-origin check ---
 	{
-		const urls = ['/\t/evil.example.test/x', '/\n/evil.example.test/x', '/ok\u0000', '/\\evil.example.test/x'];
+		const urls = ['/\t/evil.example.test/x', '/\n/evil.example.test/x', '/ok\u0000', String.raw`/\evil.example.test/x`];
 		let fetches = 0;
 		const cs = [];
 		for (const u of urls) {
@@ -292,9 +333,9 @@ async function main() {
 		const link = h.attach();
 		await settle();
 		const signal = h.signals[1];
-		const abortedBefore = !!(signal && signal.aborted);
+		const abortedBefore = !!(signal?.aborted);
 		link.detach();
-		const abortedAfter = !!(signal && signal.aborted);
+		const abortedAfter = !!(signal?.aborted);
 		release(streamResponse(s));
 		await settle();
 		out.detachPending = { hasSignal: !!signal, abortedBefore: abortedBefore, abortedAfter: abortedAfter, cancelled: s.cancelled };
@@ -328,22 +369,9 @@ async function main() {
 		s.fail(new Error('network reset'));
 		await settle();
 		const st = h.bus.get('bridge:s');
-		out.readFails = { state: st.state, nextRetryMs: st.nextRetryMs, error: st.error && st.error.message, codes: codes(h.errors) };
+		out.readFails = { state: st.state, nextRetryMs: st.nextRetryMs, error: st.error?.message, codes: codes(h.errors) };
 	}
 
-	// --- watchdog: 3 x heartbeatMs with no bytes kills the stream ---
-	async function watchdogAt(ms) {
-		const s = stream();
-		const h = fresh([sessionOk({ heartbeatMs: 15000 }), function () { return streamResponse(s); }]);
-		h.attach();
-		await settle();
-		RESYNC.forEach(function (f) { s.push(ev(f)); });
-		await settle();
-		h.clock.advance(ms);
-		await settle();
-		const st = h.bus.get('bridge:s');
-		return { state: st.state, cancelled: s.cancelled, error: st.error ? st.error.message : null };
-	}
 	out.watchdog = { at44999: await watchdogAt(44999), at45000: await watchdogAt(45000) };
 	{
 		// a comment line (server heartbeat) feeds the watchdog too
@@ -399,33 +427,10 @@ async function main() {
 	// --- the DEFAULT fetch must survive being called as env.fetch(...): a browser's fetch throws "Illegal invocation"
 	// unless `this` is the window, so the stub throws unless it is; a caller-supplied fetch is used as given ---
 	{
-		function run(supplied) {
-			const env = makeEnv();
-			const calls = { stub: 0, supplied: 0, badThis: 0 };
-			const sandbox = {
-				window: env.window, document: env.document, console: console, Promise: Promise,
-				setTimeout: function () { return 0; }, clearTimeout: function () { /* no-op */ },
-				fetch: function () {
-					calls.stub++;
-					if (this !== env.window) { calls.badThis++; throw new TypeError('Illegal invocation'); }
-					return Promise.resolve(jsonResponse(sessionBody(), { status: 403 }));
-				}
-			};
-			vm.runInNewContext(fs.readFileSync(path.resolve(busJs), 'utf8'), sandbox, { filename: 'juneau-bus.js' }); // NOSONAR javascript:S1523 -- the harness evaluates the module's own script
-			const bus = env.window.JuneauViews.bus;
-			const errors = [];
-			bus.declare('app.a', { retain: true });
-			bus.onError(function (e) { errors.push(e.code); });
-			const over = supplied ? { fetch: function () { calls.supplied++; return Promise.resolve(jsonResponse({ code: 'bus:x' }, { status: 400 })); } } : {};
-			bus.attachSource(bus.sources.sse(Object.assign({ id: 's', session: '/rest/ops/juneau-bus/session', downstream: ['app.a'],
-				location: LOCATION, document: { body: { getAttribute: function () { return null; } } },
-				TextDecoder: TextDecoder, AbortController: AbortController }, over)));
-			return settle().then(function () { return { calls: calls, state: bus.get('bridge:s').state, errors: errors }; });
-		}
 		out.defaultFetch = { unsupplied: await run(false), supplied: await run(true) };
 	}
 
 	process.stdout.write(JSON.stringify(out));
 }
 
-main().catch(function (e) { console.error(e && e.stack || e); process.exit(1); });
+main().catch(function (e) { console.error(e?.stack || e); process.exit(1); });

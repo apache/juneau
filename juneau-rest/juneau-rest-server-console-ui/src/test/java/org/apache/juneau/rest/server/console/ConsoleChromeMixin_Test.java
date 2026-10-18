@@ -413,13 +413,13 @@ class ConsoleChromeMixin_Test extends TestBase {
 	}
 
 	@Test void j03_themeOpenTokenCount_pinned_unaffectedByAssetsFeature() {
-		// 100 = 70 (55 base + the 15 canonical --jc-pill-* status-chip tokens; the 15 legacy --jc-tag-* tokens are
+		// 105 = 100 (the 5 --jc-nav-tab-* / --jc-page-nav-child-padding-* tab-box tokens are the last five) = 70 (55 base + the 15 canonical --jc-pill-* status-chip tokens; the 15 legacy --jc-tag-* tokens are
 		// RETAINED as var(--jc-pill-*) aliases for badges/avatars/frozen calendar) plus the 12 --jc-probe-* status
 		// probe tokens (4 statuses x bg/text/dot); the selected-probe ring reuses the existing --jc-accent-selected
 		// token, so the probe family adds exactly 12, not a ring token, plus the 18 --jc-chart-* tokens (8 series slots and 10 chart roles) read by juneau-charts.js.
 		assertBean(Theme.OPEN.getTokens(),
 			"size,--jc-main-bg,--jc-card-bg,--jc-card-padding,--jc-chrome-icon,--jc-text,--jc-text-soft,--jc-card-shadow,--jc-page-nav-hairline,--jc-page-nav-section-font-size,--jc-page-nav-child-font-size",
-			"100,#f5f6f9,#ffffff,16px 16px 8px,#666666,#080707,#080707cc,0 2px 2px rgba(0, 0, 0, 0.05),2px,13px,12px");
+			"105,#f5f6f9,#ffffff,16px 16px 8px,#666666,#080707,#080707cc,0 2px 2px rgba(0, 0, 0, 0.05),2px,13px,12px");
 		assertFalse(Theme.OPEN.getTokens().containsKey("--jc-logo"));
 		assertFalse(Theme.OPEN.getTokens().containsKey("--jc-page-bg-image"));
 		assertFalse(Theme.OPEN.getTokens().containsKey("--jc-card-surface"));
@@ -472,6 +472,33 @@ class ConsoleChromeMixin_Test extends TestBase {
 			".juneau-view-ribbon-group[data-juneau-strip-mode=\"tab\"] .juneau-view-ribbon-btn[aria-selected=\"true\"] {");
 		assertEquals(2, countOccurrences(css, "background-color: var(--jc-accent-selected)"),
 			() -> "expected exactly the two ribbon-format selected-state selectors (Page Tabs are wash + top accent), css:\n" + css);
+	}
+
+	@Test void j05b_pageTabsAndSubtabs_useTokenizedBoxAndBoldWhenSelected() throws Exception {
+		var css = readChromeCss();
+		var navTabStart = css.indexOf("\n.jc-nav-tab {");
+		var navTabBlock = css.substring(navTabStart, css.indexOf("}", navTabStart));
+		assertTrue(navTabBlock.contains("padding: var(--jc-nav-tab-padding-block) var(--jc-nav-tab-padding-inline)"), () -> "Page Tab padding tokens, block:\n" + navTabBlock);
+		assertTrue(navTabBlock.contains("line-height: var(--jc-nav-tab-line-height)"), () -> "Page Tab line-height token, block:\n" + navTabBlock);
+		assertTrue(navTabBlock.contains("font-size: 0.8125rem"), () -> "Page Tab text is 13px, block:\n" + navTabBlock);
+		assertTrue(navTabBlock.contains("box-sizing: border-box"), () -> "box-sizing consistent, block:\n" + navTabBlock);
+		assertFalse(navTabBlock.contains("min-height"), () -> "no min-height approximation, block:\n" + navTabBlock);
+		var activeStart = css.indexOf(".jc-nav-tab.active {");
+		assertTrue(css.substring(activeStart, css.indexOf("}", activeStart)).contains("font-weight: 700"), "selected Page Tab is bold");
+		var childStart = css.indexOf(".juneau-page-nav-child[aria-current=\"page\"] {");
+		assertTrue(css.substring(childStart, css.indexOf("}", childStart)).contains("font-weight: 700"), "selected Page Subtab is bold");
+		var childBase = css.indexOf("\n.juneau-page-nav-child {");
+		var childBlock = css.substring(childBase, css.indexOf("}", childBase));
+		assertTrue(childBlock.contains("padding: var(--jc-page-nav-child-padding-block) var(--jc-page-nav-child-padding-inline)"), () -> "Page Subtab padding tokens, block:\n" + childBlock);
+		var secBase = css.indexOf("\n.juneau-page-nav-section {");
+		var secBlock = css.substring(secBase, css.indexOf("}", secBase));
+		assertTrue(secBlock.contains("padding: var(--jc-nav-tab-padding-block) var(--jc-nav-tab-padding-inline)"), () -> "HTML-slot tab shares tab padding tokens, block:\n" + secBlock);
+		assertTrue(secBlock.contains("font-size: var(--jc-page-nav-section-font-size)"), "HTML-slot tab stays on the 13px section token");
+		var secStart = css.indexOf(".juneau-page-nav-section[aria-current=\"page\"] {");
+		assertTrue(css.substring(secStart, css.indexOf("}", secStart)).contains("font-weight: 700"), "selected section tab is bold");
+		assertEquals("8px,10px,1.5,6px,10px", Theme.OPEN.getTokens().get("--jc-nav-tab-padding-block") + "," + Theme.OPEN.getTokens().get("--jc-nav-tab-padding-inline")
+			+ "," + Theme.OPEN.getTokens().get("--jc-nav-tab-line-height") + "," + Theme.OPEN.getTokens().get("--jc-page-nav-child-padding-block")
+			+ "," + Theme.OPEN.getTokens().get("--jc-page-nav-child-padding-inline"));
 	}
 
 	@Test void j05_navTabActive_selectedAccentIsTopEdge_notBottomBarOrSolidFill() throws Exception {
@@ -613,7 +640,7 @@ class ConsoleChromeMixin_Test extends TestBase {
 		var sharedBlock = navRules.substring(sharedStart, navRules.indexOf("}", sharedStart));
 		assertTrue(sharedBlock.contains("display: inline-flex"),
 			() -> "tab links must be inline-flex, block:\n" + sharedBlock);
-		assertTrue(sharedBlock.contains("padding-left: var(--jc-space-3)"),
+		assertTrue(sharedBlock.contains("padding-left: var(--jc-nav-tab-padding-inline)"),
 			() -> "tab links must have horizontal padding so labels do not run together, block:\n" + sharedBlock);
 		var sectionTypeStart = navRules.indexOf("\n.juneau-page-nav-section {");
 		assertTrue(sectionTypeStart >= 0, navRules);

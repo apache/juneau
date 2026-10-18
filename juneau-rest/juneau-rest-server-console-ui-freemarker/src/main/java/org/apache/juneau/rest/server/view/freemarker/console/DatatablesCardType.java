@@ -20,6 +20,8 @@ import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.util.*;
 import java.util.logging.*;
+import java.util.regex.*;
+import java.util.stream.*;
 
 import org.apache.juneau.commons.beanquery.*;
 import org.apache.juneau.marshall.collections.*;
@@ -43,9 +45,16 @@ import org.apache.juneau.rest.server.widgets.*;
  *
  * @since 10.0.0
  */
+@SuppressWarnings({
+	"java:S1192", // Repeated literals are contract wire keys; named constants would obscure the contract shape.
+	"java:S3776" // Validation and rendering chains many independent guards; splitting them adds no clarity.
+})
 public final class DatatablesCardType implements CardTypeHandler {
 
 	private static final Logger LOG = Logger.getLogger(DatatablesCardType.class.getName());
+
+	/** A <c>{token}</c> placeholder in an endpoint template. */
+	private static final Pattern PLACEHOLDER = Pattern.compile("\\{[^}]+\\}");
 
 	/** Inline {@code rows} count above which a {@code WARNING} steers the author to {@code dataUrl}. */
 	private static final int ROWS_WARN_THRESHOLD = 1_000;
@@ -60,7 +69,9 @@ public final class DatatablesCardType implements CardTypeHandler {
 		"searchType", "searchOperators", "customOperators");
 
 	/** Public no-arg constructor, required by {@link java.util.ServiceLoader}. */
-	public DatatablesCardType() {}
+	public DatatablesCardType() {
+		// No state; instantiated by ServiceLoader.
+	}
 
 	/** The {@code cmd:<id>} ops the datatables JS handles, beyond the shell's {@code refresh}. */
 	static final Set<String> TABLE_OPS = Set.of(
@@ -267,7 +278,8 @@ public final class DatatablesCardType implements CardTypeHandler {
 	private static String columnIdent(Map<String,Object> col) {
 		var data = col.get("data");
 		var key = col.get("key");
-		return nn(data) ? data.toString() : (nn(key) ? key.toString() : null);
+		var fallback = nn(key) ? key.toString() : null;
+		return nn(data) ? data.toString() : fallback;
 	}
 
 	private static final Set<String> QUICK_STAT_KINDS = Set.of("tile", "meter", "segmented");
@@ -298,7 +310,8 @@ public final class DatatablesCardType implements CardTypeHandler {
 		if (type == null) {
 			if (hasSegments && hasMax)
 				throw source.error("quickStats item '%s': has both segments and max; set type.", id);
-			kind = hasSegments ? "segmented" : hasMax ? "meter" : "tile";
+			var unsegmented = hasMax ? "meter" : "tile";
+			kind = hasSegments ? "segmented" : unsegmented;
 		} else {
 			if (! (type instanceof String t) || ! QUICK_STAT_KINDS.contains(t))
 				throw source.error("quickStats item '%s': unknown type '%s'.", id, type);
@@ -409,10 +422,7 @@ public final class DatatablesCardType implements CardTypeHandler {
 	}
 
 	private static String knownSearchTypes() {
-		var names = new ArrayList<String>();
-		for (var t : SearchType.values())
-			names.add(t.wire());
-		return String.join(", ", names);
+		return Arrays.stream(SearchType.values()).map(SearchType::wire).collect(Collectors.joining(", "));
 	}
 
 	private static String knownOperators(Set<String> customNames) {
@@ -435,11 +445,11 @@ public final class DatatablesCardType implements CardTypeHandler {
 			return;
 		for (var raw : actions) {
 			var action = (Map<String,Object>) raw;
-			var mode = nn(action.get("mode")) ? action.get("mode") : action.get("bulkMode");
+			var mode = action.get(nn(action.get("mode")) ? "mode" : "bulkMode");
 			if (! eq("aggregate", mode))
 				continue;
 			var endpoint = str(action.get("endpoint"));
-			if (nn(endpoint) && endpoint.matches(".*\\{[^}]+\\}.*"))
+			if (nn(endpoint) && PLACEHOLDER.matcher(endpoint).find())
 				throw iaex(
 					"Bulk action '%s' has mode 'aggregate' but its endpoint '%s' contains a {field} token; "
 					+ "aggregate endpoints receive {ids} in the body.", action.get("id"), endpoint);

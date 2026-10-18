@@ -38,8 +38,11 @@ import org.apache.juneau.marshall.collections.*;
  */
 public final class BridgeDecl {
 
-	private final String id, transport, session;
-	private final List<String> downstream = new ArrayList<>(), upstream = new ArrayList<>();
+	private final String id;
+	private final String transport;
+	private final String session;
+	private final List<String> downstream = new ArrayList<>();
+	private final List<String> upstream = new ArrayList<>();
 	private Integer maxAttempts;
 
 	private BridgeDecl(String id, String transport, String session) {

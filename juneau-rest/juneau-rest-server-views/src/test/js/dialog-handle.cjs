@@ -140,7 +140,7 @@ const WIZARD = {
 	// Chrome registry.
 	{
 		const seen = [];
-		NS.dialogs.registerChrome('plain', function (parts, modal) { seen.push({ keys: Object.keys(parts).sort(), chrome: modal.chrome }); });
+		NS.dialogs.registerChrome('plain', function (parts, modal) { seen.push({ keys: Object.keys(parts).sort((a, b) => (a < b ? -1 : Number(a > b))), chrome: modal.chrome }); });
 		const before = NS.dialogs.depth();
 		const unknown = NS.dialogs.open({ title: 'x', chrome: 'missing' }, rc);
 		const h = NS.dialogs.open({ title: 'x', chrome: 'plain' }, rc);

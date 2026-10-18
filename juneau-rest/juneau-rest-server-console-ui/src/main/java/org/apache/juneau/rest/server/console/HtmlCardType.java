@@ -77,7 +77,8 @@ public final class HtmlCardType implements CardTypeHandler {
 	public JsonMap toFragment(CardSource source) {
 		if (source.hasJsonBody()) {
 			var body = source.body();
-			var preview = body == null ? "" : (body.length() <= 40 ? body : body.substring(0, 40));
+			var shortBody = body != null && body.length() > 40 ? body.substring(0, 40) : body;
+			var preview = body == null ? "" : shortBody;
 			throw source.error("type='%s' requires a %s body; got '%s'.", "html", "markup", preview);
 		}
 		var frag = new JsonMap();

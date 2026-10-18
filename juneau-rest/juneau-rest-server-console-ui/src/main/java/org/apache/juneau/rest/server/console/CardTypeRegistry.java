@@ -40,6 +40,9 @@ import org.apache.juneau.marshall.collections.*;
  *
  * @since 10.0.0
  */
+@SuppressWarnings({
+	"java:S1192" // Repeated literals are contract wire keys; named constants would obscure the contract shape.
+})
 public final class CardTypeRegistry {
 
 	/**
@@ -127,7 +130,9 @@ public final class CardTypeRegistry {
 		if (src != null && ! SafePathTemplate.isSameOriginPath(src))
 			throw source.error("type='%s' src must be a same-origin path (no absolute URL, '//', scheme, '..', backslash, control character, or leading/trailing space); got '%s'.",
 				source.type(), src);
-		Object visibleWhen = null, subscribes = null, publishes = null;
+		Object visibleWhen = null;
+		Object subscribes = null;
+		Object publishes = null;
 		if (source.hasJsonBody()) {
 			var body = source.json();
 			for (var key : body.keySet()) {

@@ -262,10 +262,13 @@ class CalendarEvent_Test extends TestBase {
 	}
 
 	@Test void e04_civilStart_andLastDay_unparseable_throw() {
-		assertThrows(IllegalArgumentException.class, () -> ev("nope", null).civilStart());
-		assertThrows(IllegalArgumentException.class, () -> ev("2026-03-02", "nope").civilEnd());
-		assertThrows(IllegalArgumentException.class, () -> ev("2026-03-02", "nope").lastDay());
-		assertThrows(IllegalArgumentException.class, () -> ev(null, null).civilStart());
+		var badStart = ev("nope", null);
+		var badEnd = ev("2026-03-02", "nope");
+		var noStart = ev(null, null);
+		assertThrows(IllegalArgumentException.class, badStart::civilStart);
+		assertThrows(IllegalArgumentException.class, badEnd::civilEnd);
+		assertThrows(IllegalArgumentException.class, badEnd::lastDay);
+		assertThrows(IllegalArgumentException.class, noStart::civilStart);
 	}
 
 	@Test void e05_lastDay_neverEarlierThanStart() {
@@ -309,7 +312,8 @@ class CalendarEvent_Test extends TestBase {
 	@Test void e10_validate_categoryId_blankIsIgnored_nullKnownSetRejectsAny() {
 		assertDoesNotThrow(() -> good().categoryId(" ").validate(CATS, 2026, 8));
 		assertDoesNotThrow(() -> good().categoryId(null).validate(null, 2026, 8));
-		assertThrows(IllegalArgumentException.class, () -> good().validate(null, 2026, 8));
+		var g = good();
+		assertThrows(IllegalArgumentException.class, () -> g.validate(null, 2026, 8));
 	}
 
 	@Test void e11_validate_blankHref_isIgnored() {

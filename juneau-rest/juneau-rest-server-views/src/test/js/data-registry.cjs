@@ -26,9 +26,9 @@ const f1 = { rowCount: 2, truncated: false, dims: [{ name: 'x', type: 'number' }
 const v1 = D.put('s', f1);
 out.a01_put_returnsVersion1 = v1;
 out.a02_get_sameColumnsByReference = D.get({ source: 's', version: 1, status: 'ready', dims: f1.dims }).columns.x === f1.columns.x;
-const v2 = D.put('s', Object.assign({}, f1));
+const v2 = D.put('s', { ...f1 });
 out.a03_previousHeldDuringSwap = D.get({ source: 's', version: 1, status: 'ready', dims: [] }) !== null && v2 === 2;
-D.put('s', Object.assign({}, f1));
+D.put('s', { ...f1 });
 out.a04_twoBackDropped = D.get({ source: 's', version: 1, status: 'ready', dims: [] }) === null;
 out.a05_unknownSource_null = D.get({ source: 'nope', version: 1, status: 'ready', dims: [] }) === null;
 D.building('s', f1);

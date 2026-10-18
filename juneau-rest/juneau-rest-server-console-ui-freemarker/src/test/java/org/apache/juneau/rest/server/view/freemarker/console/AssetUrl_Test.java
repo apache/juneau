@@ -34,7 +34,7 @@ import freemarker.template.Template;
 /** Tests for the {@code assetUrl(path)} adopter static-asset versioning hook ({@code Builder.adopterAssets}). */
 class AssetUrl_Test extends TestBase {
 
-	private static final String PROBE_CRC = "36b350df"; // CRC32 of src/test/resources/adopter-static/js/probe.js
+	private static final String PROBE_CRC = "e7d63129"; // CRC32 of src/test/resources/adopter-static/js/probe.js
 
 	private static String render(ConsoleFreemarkerMixin mixin, String ftl) throws Exception {
 		Configuration cfg = mixin.resolveConfiguration(request());
@@ -68,7 +68,7 @@ class AssetUrl_Test extends TestBase {
 			"/js/missing.js", "/js/probe.js?v=1", "https://cdn.example.com/x.js");
 	}
 
-	@Test void a04_devModeMissing_stillPassesThrough() throws Exception {
+	@Test void a04_devModeMissing_stillPassesThrough() {
 		var m = builder().devMode(true).adopterAssets(AssetUrl_Test.class.getClassLoader(), "adopter-static").build();
 		var out = new String[1];
 		var records = LogRecordCapture.quietly(AssetUrlMethodModel.class, () -> out[0] = render(m, "${assetUrl('/js/missing.js')}"));
@@ -82,7 +82,7 @@ class AssetUrl_Test extends TestBase {
 		assertNull(cfg.getSharedVariable(AssetUrlMethodModel.NAME));
 	}
 
-	@Test void a06_wrongArity_isRejected() throws Exception {
+	@Test void a06_wrongArity_isRejected() {
 		var m = builder().adopterAssets(AssetUrl_Test.class.getClassLoader(), "adopter-static").build();
 		assertThrows(Exception.class, () -> render(m, "${assetUrl()}"));
 	}
@@ -93,8 +93,13 @@ class AssetUrl_Test extends TestBase {
 			"first,second", "/js/probe.js?v=" + PROBE_CRC + ",/js/probe.js?v=" + PROBE_CRC);
 	}
 
+	@SuppressWarnings({
+		"resource" // The request in the try header is not itself closeable; the response is closed by the try.
+	})
 	private static RestRequest request() throws Exception {
-		MockRestClient.buildLax(Host.class).get("/x").run();
+		try (var c = MockRestClient.buildLax(Host.class); var r = c.get("/x").run()) {
+			assertNotNull(r);
+		}
 		return Host.CAPTURED.get();
 	}
 

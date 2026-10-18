@@ -53,7 +53,7 @@ sandbox.globalThis = sandbox;
 
 // NOSONAR javascript:S1523 -- the harness's purpose is to load the production runtime under test (a repo-local path
 // from argv) into an isolated VM sandbox.
-vm.runInNewContext(fs.readFileSync(path.resolve(viewsJsPath), 'utf8'), sandbox, { filename: 'juneau-views.js' });
+vm.runInNewContext(fs.readFileSync(path.resolve(viewsJsPath), 'utf8'), sandbox, { filename: 'juneau-views.js' }); // NOSONAR javascript:S1523 - loads the shipped script into a vm sandbox for the test
 
 const NS = window.JuneauViews;
 const corpus = JSON.parse(fs.readFileSync(path.join(__dirname, 'visibility-corpus.json'), 'utf8'));
@@ -74,6 +74,6 @@ out.noContractFailsClosed = NS.rules.testRow([{ field: 'facts.viewer.roles', op:
 
 const before = errors.length;
 out.unknownOp = NS.rules.test([{ field: 'a', op: 'bogus' }], { a: 1 });
-out.unknownOpLogged = errors.length === before + 1 && errors[errors.length - 1].includes('E-JS-73');
+out.unknownOpLogged = errors.length === before + 1 && errors.at(-1).includes('E-JS-73');
 
 process.stdout.write(JSON.stringify(out));

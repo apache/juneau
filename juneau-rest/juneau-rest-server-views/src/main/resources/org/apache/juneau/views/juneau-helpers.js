@@ -253,7 +253,7 @@
 					console.error("[juneau-helpers] E-JS-111: jobButton needs JuneauViews.jobs (juneau-views.js); nothing was sent.");
 					return;
 				}
-				const run = Object.assign({}, spec, { el: btn, trigger: btn });
+				const run = { ...spec, el: btn, trigger: btn };
 				delete run.label;
 				delete run.appearance;
 				delete run.tone;

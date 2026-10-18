@@ -54,7 +54,8 @@ class Topics_Test extends TestBase {
 		assertEquals(String.format(E40, "selection:a b"), e.getMessage());
 		e = assertThrows(IllegalArgumentException.class, () -> Topics.job(null));
 		assertEquals(String.format(E40, "job:null"), e.getMessage());
-		e = assertThrows(IllegalArgumentException.class, () -> Topics.cmd("x".repeat(129)));
+		var arg = "x".repeat(129);
+		e = assertThrows(IllegalArgumentException.class, () -> Topics.cmd(arg));
 		assertEquals(String.format(E40, "cmd:" + "x".repeat(129)), e.getMessage());
 	}
 

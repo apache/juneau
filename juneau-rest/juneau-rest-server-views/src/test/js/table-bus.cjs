@@ -47,13 +47,13 @@ const con = Object.assign(Object.create(console), {
 const env = makeEnv();
 env.window.console = con;
 // The fetch the sandboxed scripts see; a case swaps `fetchImpl` for the duration of the request it drives.
-let fetchImpl = function () { return Promise.reject(new Error('no network in table-bus.cjs')); };
+let fetchImpl = function (url) { return Promise.reject(new Error('no network in table-bus.cjs: ' + String(url))); };
 const sandbox = {
 	window: env.window, document: env.document, console: con,
 	setTimeout: setTimeout, clearTimeout: clearTimeout,
 	setInterval: function () { return 0; }, clearInterval: function () { /* no-op */ },
 	queueMicrotask: queueMicrotask, Promise: Promise,
-	fetch: function (...a) { return fetchImpl(...a); }
+	fetch: function (...a) { return fetchImpl(...a); } // NOSONAR javascript:S930 - forwards fetch's (url, init) to a one-arg stub
 };
 scripts.forEach(function (p) {
 	// NOSONAR javascript:S1523 -- loading the production sources into a VM sandbox is this harness's mechanism.
@@ -63,7 +63,7 @@ const NS = env.window.JuneauViews;
 const TB = NS.tableBus;
 const tick = () => new Promise(r => setImmediate(r));
 const J = v => JSON.stringify(v);
-const last = a => a[a.length - 1];
+const last = a => a.at(-1);
 
 // The live DataTables column array: a leading selection column, so every catalog index is shifted by one.
 const OPTS_COLUMNS = [
@@ -106,9 +106,9 @@ function fakeDt(rows, info, tableEl) {
 	const dt = {
 		log: log,
 		fixed: fixed,
-		on: function (evt, fn) { (handlers[evt] = handlers[evt] || []).push(fn); return dt; },
+		on: function (evt, fn) { handlers[evt] ||= []; handlers[evt].push(fn); return dt; },
 		fire: function (evt, e) { (handlers[evt] || []).forEach(function (fn) { fn(e); }); },
-		search: function (v) {
+		search: function (v) { // NOSONAR javascript:S3800 - mirrors the DataTables getter/setter API
 			if (arguments.length === 0) return global;
 			global = v; log.search.push(v); return dt;
 		},
@@ -118,7 +118,7 @@ function fakeDt(rows, info, tableEl) {
 				index: function () { return i; },
 				draw: function () { log.draws.push('column'); return dt; }
 			};
-			col.search = function (v, regex, smart) {
+			col.search = function (v, regex, smart) { // NOSONAR javascript:S3800 - mirrors the DataTables getter/setter API
 				if (arguments.length === 0) return colSearch[i] || '';
 				colSearch[i] = v;
 				log.columnSearch.push({ index: i, value: v, regex: !!regex, smart: smart !== false });
@@ -160,7 +160,7 @@ const ROWS = [
 function makeTable(mode, card, cardCtx, inline) {
 	const host = env.el('div');
 	const table = env.el('table');
-	table.setAttribute('data-juneau-view', 'changes');
+	table.dataset.juneauView = 'changes';
 	const tbody = env.el('tbody');
 	table.appendChild(tbody);
 	host.appendChild(table);
@@ -382,7 +382,7 @@ function recorder(cardId) {
 
 	// ---- I) a nested table never resolves its parent card's bus ----
 	const nested = env.el('table');
-	nested.setAttribute('data-juneau-view', 'inner');
+	nested.dataset.juneauView = 'inner';
 	const ntd = env.el('td');
 	ntd.appendChild(nested);
 	c.tbody.appendChild(ntd);
@@ -414,7 +414,7 @@ function recorder(cardId) {
 	const h = reg.length ? reg[0][1] : {};
 	out.handler = {
 		ops: J(Object.keys(h.ops || {})), roles: J(Object.keys(h.roles || {})),
-		implicitIsTableBus: h.implicit === TB.implicitTopics, filterRoleIsTableBus: (h.roles || {}).filter === TB.cardFilterRole
+		implicitIsTableBus: h.implicit === TB.implicitTopics, filterRoleIsTableBus: h.roles?.filter === TB.cardFilterRole
 	};
 	const realMount = NS.card.mountDatatables;
 	NS.card.mountDatatables = function () { return 'mounted'; };
@@ -525,9 +525,9 @@ function recorder(cardId) {
 		const mm = /^tbody (?:> )?tr(.*)$/.exec(sel);
 		return realQsa.call(this, mm ? 'tr' + mm[1] : sel);
 	};
-	o.table.setAttribute('data-juneau-csrf', 'tok');
+	o.table.dataset.juneauCsrf = 'tok';
 	const tpl = env.el('template');
-	tpl.setAttribute('data-juneau-row-detail', '');
+	tpl.dataset.juneauRowDetail = '';
 	tpl.dataset.juneauDetailUrl = '/api/changes/{id}/detail';
 	tpl.content.cloneNode = function () { return env.el('div'); };   // the shim's fragment has no cloneNode
 	o.host.appendChild(tpl);
@@ -577,7 +577,7 @@ function recorder(cardId) {
 	await tick();
 	const panel = r21.tr._juneauDetailPanel;
 	const safe = env.el('button');
-	safe.setAttribute('data-juneau-safe', 'collapse');
+	safe.dataset.juneauSafe = 'collapse';
 	panel.appendChild(safe);
 	click(safe);
 	await tick();
@@ -605,7 +605,10 @@ function recorder(cardId) {
 	out.clearLink = { selected: o.ctx.selectionState.selected.size, published: oSeen.selection.length - mark, last: J(last(oSeen.selection)) };
 
 	// runBulkAction, per-row: one success, one 409, one 404.
-	const statusOf = function (url) { return url.includes('c-21') ? 409 : (url.includes('c-30') ? 404 : 200); };
+	const statusOf = function (url) {
+		if (url.includes('c-21')) return 409;
+		return url.includes('c-30') ? 404 : 200;
+	};
 	fetchImpl = function (url) {
 		const st = statusOf(String(url));
 		return Promise.resolve({ status: st, ok: st < 300, text: function () { return Promise.resolve(''); } });
@@ -647,5 +650,5 @@ function recorder(cardId) {
 	out.errors = errors;
 	process.stdout.write(J(out));
 })().catch(function (e) {
-	process.stdout.write(J({ crash: String(e && e.stack || e) }));
+	process.stdout.write(J({ crash: String(e?.stack || e) }));
 });

@@ -201,14 +201,18 @@ class PageSpec_BadgesFacts_Test extends TestBase {
 	}
 
 	@Test void c01_badLeafType_isRejected() {
+		var target = PageSpec.create();
+		Map<String,Object> facts = Map.of("owner", new java.util.concurrent.atomic.AtomicInteger(1));
 		var e = assertThrows(IllegalArgumentException.class,
-			() -> PageSpec.create().facts(Map.of("owner", new java.util.concurrent.atomic.AtomicInteger(1))));
+			() -> target.facts(facts));
 		assertTrue(e.getMessage().contains("Fact 'owner' has unsupported value type 'AtomicInteger'"), e.getMessage());
 	}
 
 	@Test void c02_nestedLeafType_namesDottedPath() {
+		var target2 = PageSpec.create();
+		Map<String,Object> facts = Map.of("viewer", Map.of("roles", List.of("oncall", 42)));
 		var e = assertThrows(IllegalArgumentException.class,
-			() -> PageSpec.create().facts(Map.of("viewer", Map.of("roles", List.of("oncall", 42)))));
+			() -> target2.facts(facts));
 		assertTrue(e.getMessage().contains("Fact 'viewer.roles'"), e.getMessage());
 	}
 
@@ -218,7 +222,9 @@ class PageSpec_BadgesFacts_Test extends TestBase {
 	}
 
 	@Test void c04_badgeValidate_runsAtSetter() {
-		assertThrows(IllegalArgumentException.class, () -> PageSpec.create().badge(BadgeDef.create("x")));
+		var target3 = PageSpec.create();
+		var arg = BadgeDef.create("x");
+		assertThrows(IllegalArgumentException.class, () -> target3.badge(arg));
 	}
 
 	@Test void d01_navScopedBadge_unknownNavKey_isE68() throws Exception {
@@ -288,8 +294,10 @@ class PageSpec_BadgesFacts_Test extends TestBase {
 	}
 
 	@Test void e03_nullRules_areRejected() {
-		assertThrows(IllegalArgumentException.class, () -> CardSpec.html("c").visibleWhen((VisibilityRule[])null));
-		assertThrows(IllegalArgumentException.class, () -> CardSpec.html("c").visibleWhen((VisibilityRule)null));
+		var target4 = CardSpec.html("c");
+		assertThrows(IllegalArgumentException.class, () -> target4.visibleWhen((VisibilityRule[])null));
+		var target5 = CardSpec.html("c");
+		assertThrows(IllegalArgumentException.class, () -> target5.visibleWhen((VisibilityRule)null));
 	}
 
 	@SuppressWarnings("unchecked")

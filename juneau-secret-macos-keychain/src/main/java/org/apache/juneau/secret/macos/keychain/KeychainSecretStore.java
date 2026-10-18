@@ -33,7 +33,7 @@ import org.apache.juneau.commons.secret.*;
  * Each operation shells out to <c>/usr/bin/security</c>:
  * <ul>
  * 	<li>{@link #store} &rarr; <c>add-generic-password -U</c> (create or update).
- * 	<li>{@link #find} &rarr; <c>find-generic-password -w</c> (print the password).
+ * 	<li>{@link #find} &rarr; <c>find-generic-password -g</c> (print the password to stderr).
  * 	<li>{@link #exists} &rarr; <c>find-generic-password</c> (presence only, without the password).
  * 	<li>{@link #delete} &rarr; <c>delete-generic-password</c>.
  * </ul>
@@ -62,9 +62,18 @@ import org.apache.juneau.commons.secret.*;
  * for spaces, tabs, single and double quotes, backslashes, shell metacharacters, and non-ASCII text).  Neither
  * {@link #store} nor {@link #find} materializes the secret as a {@link String}: {@code store} encodes the
  * {@code char[]} directly to the stdin byte payload, and {@code find} decodes the retrieved bytes into a
- * {@code char[]}.  The value is never logged or {@code toString()}'d by this class.  Because the command is
+ * {@code char[]} (zeroing the intermediate buffers).  The value is never logged or {@code toString()}'d by this class.  Because the command is
  * newline-terminated, a key, service, or secret containing {@code '\n'} or {@code '\r'} cannot be delivered this way
  * (it would end or inject a command) and is rejected by {@link #store} before any process is started.
+ *
+ * <p>
+ * <b>Reading secrets.</b> {@link #find} deliberately does not use <c>-w</c>: for a secret holding a control character
+ * (such as a tab) or any non-ASCII byte, <c>-w</c> prints a bare hex dump of the bytes instead of the text, which
+ * cannot be told apart from a secret that merely looks like hex (e.g. <c>abcd</c>).  The <c>-g</c> flag instead writes
+ * one unambiguous line to stderr: <c>password: "text"</c> for a plain printable secret, <c>password: 0x<i>HEX</i>
+ * "<i>escaped</i>"</c> for anything else (including a secret containing <c>"</c> or <c>\</c>), or a bare
+ * <c>password: </c> for an empty secret.  The hex form is decoded to bytes and then as UTF-8.  The stdout of
+ * <c>-g</c> holds only the non-secret item attributes and is ignored.
  *
  * @since 10.0.0
  */
@@ -167,9 +176,14 @@ public class KeychainSecretStore implements SecretStore {
 	public Optional<char[]> find(String key) {
 		reqnn("key", key);
 		try {
-			var r = run(FIND_GENERIC_PASSWORD, "-a", key, "-s", service, "-w");
-			if (r.exit() == 0)
-				return o(decodeTrimmed(r.stdout()));
+			var r = run(FIND_GENERIC_PASSWORD, "-a", key, "-s", service, "-g");
+			if (r.exit() == 0) {
+				try {
+					return o(parsePassword(r.stderr()));
+				} finally {
+					Arrays.fill(r.stderr(), (byte) 0);
+				}
+			}
 			if (r.exit() == NOT_FOUND)
 				return oe();
 			throw backendFailure(FIND_GENERIC_PASSWORD, r);
@@ -242,7 +256,17 @@ public class KeychainSecretStore implements SecretStore {
 	@SuppressWarnings({
 		"java:S6218" // stdout can hold retrieved SECRET bytes; identity-based equals/hashCode/toString are intentional so a content-based toString can never surface the secret. Result instances are never compared or printed.
 	})
-	record Result(int exit, byte[] stdout, String stderr) {}
+	record Result(int exit, byte[] stdout, byte[] stderr) {
+
+		// stderr can hold the retrieved secret (find-generic-password -g), so it is kept as bytes that can be zeroed.
+		Result(int exit, byte[] stdout, String stderr) {
+			this(exit, stdout, stderr.getBytes(UTF_8));
+		}
+
+		String stderrText() {
+			return new String(stderr, UTF_8);
+		}
+	}
 
 	/** {@link CommandRunner} that shells out to the real {@code security} binary via {@link ProcessBuilder}. */
 	private static final class ProcessCommandRunner implements CommandRunner {
@@ -304,7 +328,7 @@ public class KeychainSecretStore implements SecretStore {
 	}
 
 	private static RuntimeException backendFailure(String subcommand, Result r) {
-		return isex("Keychain '%s' failed with exit code %s: %s", subcommand, r.exit(), r.stderr().strip());
+		return isex("Keychain '%s' failed with exit code %s: %s", subcommand, r.exit(), r.stderrText().strip());
 	}
 
 	private static boolean containsNewline(String s) {
@@ -357,16 +381,64 @@ public class KeychainSecretStore implements SecretStore {
 		return '"' + s.replace("\\", "\\\\").replace("\"", "\\\"") + '"';
 	}
 
-	/** Decodes UTF-8 stdout bytes into a char[], dropping a single trailing newline, without an intermediate String. */
-	private static char[] decodeTrimmed(byte[] bytes) {
-		var len = bytes.length;
-		if (len > 0 && bytes[len - 1] == '\n')
-			len--;
-		if (len > 0 && bytes[len - 1] == '\r')
-			len--;
-		var cb = UTF_8.decode(ByteBuffer.wrap(bytes, 0, len));
+	private static final byte[] PASSWORD_PREFIX = "password: ".getBytes(UTF_8);
+
+	/**
+	 * Extracts the secret from the stderr of <c>find-generic-password -g</c>.
+	 *
+	 * <p>
+	 * Finds the line starting with <c>password: </c> and decodes it per its form: <c>"text"</c> (the bytes between the
+	 * first and last quote), <c>0x<i>HEX</i></c> (hex digits up to the first non-hex character), or empty.  No
+	 * intermediate {@link String} is created, and the hex byte buffer is zeroed.
+	 */
+	@SuppressWarnings({
+		"java:S3776" // One scan with a branch per password form.
+	})
+	private static char[] parsePassword(byte[] err) {
+		var start = -1;
+		for (var i = 0; i + PASSWORD_PREFIX.length <= err.length && start < 0; i++)
+			if ((i == 0 || err[i - 1] == '\n') && Arrays.equals(err, i, i + PASSWORD_PREFIX.length, PASSWORD_PREFIX, 0, PASSWORD_PREFIX.length))
+				start = i + PASSWORD_PREFIX.length;
+		if (start < 0)
+			throw isex("Keychain '%s' succeeded but its output did not contain a password line.", FIND_GENERIC_PASSWORD);
+		var end = start;
+		while (end < err.length && err[end] != '\n')
+			end++;
+		if (end > start && err[end - 1] == '\r')
+			end--;
+		if (end == start)
+			return new char[0];
+		if (err[start] == '"') {
+			var close = end - 1;
+			while (close > start && err[close] != '"')
+				close--;
+			return decode(err, start + 1, close);
+		}
+		if (end - start > 2 && err[start] == '0' && err[start + 1] == 'x') {
+			var digits = 0;
+			while (start + 2 + digits < end && Character.digit(err[start + 2 + digits], 16) >= 0)
+				digits++;
+			if (digits % 2 != 0)
+				throw isex("Keychain '%s' returned a malformed hex password.", FIND_GENERIC_PASSWORD);
+			var bytes = new byte[digits / 2];
+			try {
+				for (var i = 0; i < bytes.length; i++)
+					bytes[i] = (byte)((Character.digit(err[start + 2 + 2 * i], 16) << 4) | Character.digit(err[start + 3 + 2 * i], 16));
+				return decode(bytes, 0, bytes.length);
+			} finally {
+				Arrays.fill(bytes, (byte) 0);
+			}
+		}
+		throw isex("Keychain '%s' returned an unrecognized password format.", FIND_GENERIC_PASSWORD);
+	}
+
+	/** Decodes UTF-8 bytes into a char[] without an intermediate String, zeroing the decoder's char buffer. */
+	private static char[] decode(byte[] bytes, int from, int to) {
+		var cb = UTF_8.decode(ByteBuffer.wrap(bytes, from, to - from));
 		var chars = new char[cb.remaining()];
 		cb.get(chars);
+		if (cb.hasArray())
+			Arrays.fill(cb.array(), '\0');
 		return chars;
 	}
 }

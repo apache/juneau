@@ -44,7 +44,7 @@ final class WsFrameSink implements FrameSink {
 	 * undeployed web application is not pinned.  Core equals max because a {@link ThreadPoolExecutor} with an
 	 * unbounded queue never grows past its core size.
 	 */
-	private static final Executor CLOSER = closerPool();
+	private static final Executor DEFAULT_CLOSER = closerPool();
 
 	private static Executor closerPool() {
 		var pool = new ThreadPoolExecutor(8, 8, 5, TimeUnit.SECONDS, new LinkedBlockingQueue<>(), r -> {
@@ -61,12 +61,13 @@ final class WsFrameSink implements FrameSink {
 	private final int maxQueued;
 	private final Executor closer;
 	private final ArrayDeque<String> queue = new ArrayDeque<>();
-	private boolean sending, closed;
+	private boolean sending;
+	private boolean closed;
 	private Thread pumpThread;
 	private String pending;
 
 	WsFrameSink(Session session, int maxQueued) {
-		this(session, maxQueued, CLOSER);
+		this(session, maxQueued, DEFAULT_CLOSER);
 	}
 
 	WsFrameSink(Session session, int maxQueued, Executor closer) {

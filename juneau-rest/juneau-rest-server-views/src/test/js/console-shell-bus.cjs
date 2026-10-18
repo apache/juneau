@@ -49,7 +49,7 @@ function patchElement(env, node) {
 			get() { return this.childNodes.map(c => c.className || '').join(' '); },
 			set(v) {
 				if (v !== '') throw new Error('harness: only innerHTML = "" is supported');
-				for (const c of this.childNodes.slice()) this.removeChild(c);
+				for (const c of this.childNodes.slice()) c.remove();
 			}
 		});
 	if (!node.dispatchEvent) node.dispatchEvent = function (ev) { env.document.dispatchEvent(ev); return true; };
@@ -73,7 +73,7 @@ async function page(contract, opts) {
 	const island = doc.createElement('script');
 	island.setAttribute('type', 'application/json');
 	island.id = 'juneau-page';
-	island.textContent = JSON.stringify(Object.assign({ contractVersion: '1', title: 'T', nav: [], activeNav: [] }, contract));
+	island.textContent = JSON.stringify({ contractVersion: '1', title: 'T', nav: [], activeNav: [], ...contract });
 	doc.body.appendChild(island);
 	doc.readyState = 'loading';
 	const fetches = [];
@@ -96,16 +96,16 @@ async function page(contract, opts) {
 	vm.createContext(sandbox);
 	const r = { env, doc, errors, warns, cardEvents, fetches, sandbox, threw: null, readyThrew: null };
 	try {
-		const loadBus = () => { if (!opts.noBus) vm.runInContext(busSrc, sandbox, { filename: 'juneau-bus.js' }); };
+		const loadBus = () => { if (!opts.noBus) vm.runInContext(busSrc, sandbox, { filename: 'juneau-bus.js' }); }; // NOSONAR javascript:S1523 - loads the shipped script into a vm sandbox for the test
 		if (!opts.shellFirst) loadBus();
 		if (opts.beforeShell) opts.beforeShell(sandbox, r);
-		vm.runInContext(shellSrc, sandbox, { filename: 'juneau-console.js' });
+		vm.runInContext(shellSrc, sandbox, { filename: 'juneau-console.js' }); // NOSONAR javascript:S1523 - loads the shipped script into a vm sandbox for the test
 		if (opts.shellFirst) loadBus();
 	} catch (e) {
 		r.threw = { code: e.code, message: e.message };
 	}
 	r.JC = env.window.JuneauConsole;
-	r.bus = env.window.JuneauViews && env.window.JuneauViews.bus;
+	r.bus = env.window.JuneauViews?.bus;
 	await tick();
 	if (opts.beforeReady) opts.beforeReady(r);
 	try {
@@ -120,15 +120,14 @@ async function page(contract, opts) {
 /** `sel` inside card `id` (the shim's selectors have no descendant combinator). */
 function q(r, id, sel) { const c = r.doc.getElementById(id); return c ? c.querySelector(sel) : null; }
 function text(r, id, sel) { const n = q(r, id, sel); return n ? n.textContent : null; }
-function codes(r, id) { return r.doc.getElementById(id).querySelectorAll('.jc-card-bus-error').map(n => n.getAttribute('data-juneau-error')); }
-function banner(r) { return r.doc.querySelectorAll('.jc-console-error-item').map(n => n.getAttribute('data-juneau-error')); }
-function get(r, topic) { const v = r.bus.get(topic); return v === undefined ? null : JSON.parse(JSON.stringify(v)); }
+function codes(r, id) { return r.doc.getElementById(id).querySelectorAll('.jc-card-bus-error').map(n => n.dataset.juneauError ?? null); }
+function banner(r) { return r.doc.querySelectorAll('.jc-console-error-item').map(n => n.dataset.juneauError ?? null); }
+function get(r, topic) { const v = r.bus.get(topic); return v === undefined ? null : structuredClone(v); }
 function owner(r, topic) { const e = r.bus.topics().find(t => t.topic === topic); return e ? e.owner : null; }
 
 /** A card type that records every call; `extra` adds roles / ops / implicit / publishes. */
 function recorder(log, extra) {
-	return Object.assign({
-		render(card, el, ctx) {
+	return { render(card, el, ctx) {
 			log.push('render:' + (card.src || card.id));
 			const p = ctx.document.createElement('p');
 			p.className = 'body';
@@ -136,8 +135,7 @@ function recorder(log, extra) {
 			el.appendChild(p);
 		},
 		refresh(card) { log.push('refresh:' + card.id); },
-		destroy(card) { log.push('destroy:' + card.id); }
-	}, extra || {});
+		destroy(card) { log.push('destroy:' + card.id); }, ...extra || {} };
 }
 
 const out = {};
@@ -257,7 +255,7 @@ async function main() {
 		});
 		r.bus.publish('app.pong', { n: 2 });
 		const ping = r.bus.history().filter(h => h.topic === 'app.ping').map(h => h.from);
-		out.s7 = { ping: ping, value: get(r, 'app.ping'), heard: JSON.parse(JSON.stringify(heard)), banner: banner(r) };
+		out.s7 = { ping: ping, value: get(r, 'app.ping'), heard: structuredClone(heard), banner: banner(r) };
 	}
 	// s8. The painter: banner codes, inline codes, console-only codes; validate's problems painted too.
 	{
@@ -305,7 +303,7 @@ async function main() {
 		});
 		r.bus.publish('app.pong', { n: 2 });
 		out.s10 = { threw: r.threw, readyThrew: r.readyThrew, busLoaded: !!r.bus, ping: r.bus.history().filter(h => h.topic === 'app.ping').map(h => h.from),
-			value: get(r, 'app.ping'), heard: JSON.parse(JSON.stringify(heard)), card: get(r, 'card:p').state, banner: banner(r), errors: r.errors };
+			value: get(r, 'app.ping'), heard: structuredClone(heard), card: get(r, 'card:p').state, banner: banner(r), errors: r.errors };
 	}
 	// s11. Destroyed before DOMContentLoaded: the buffered ctx.publish / ctx.subscribe of the dead card never run.
 	{
@@ -335,7 +333,7 @@ async function main() {
 		});
 		r.JC.destroyCard('g');
 		const mark = log.length;
-		try { r.bus.publish('cmd:g', { schemaVersion: 1, op: 'reload' }); } catch (e) { /* refused is fine too */ }
+		try { r.bus.publish('cmd:g', { schemaVersion: 1, op: 'reload' }); } catch (e) { /* refused is fine too */ } // NOSONAR javascript:S2486 - the failure is an expected outcome here and the fallback handles it
 		r.bus.publish('app.level', { level: 9 });
 		await tick();
 		out.s12 = { after: log.slice(mark) };
@@ -373,7 +371,7 @@ async function main() {
 			queue: [['boom', recorder(log, { implicit: () => { throw new Error('implicit kaput'); } })],
 				['grid', recorder(log, { implicit: card => ['selection:' + card.id] })]]
 		});
-		out.s14 = { readyThrew: r.readyThrew, okCard: (get(r, 'card:ok') || {}).state, badCard: (get(r, 'card:bad') || {}).state,
+		out.s14 = { readyThrew: r.readyThrew, okCard: get(r, 'card:ok')?.state, badCard: get(r, 'card:bad')?.state,
 			selectionOwner: owner(r, 'selection:ok'), badInline: codes(r, 'bad'), errors: r.errors.filter(e => e.indexOf('implicit kaput') >= 0).length };
 	}
 	// s15. as:"toString" is not a role: Object.prototype members are not handler roles.
@@ -392,7 +390,7 @@ async function main() {
 			queue: [['rec', recorder(log)]],
 			beforeReady: r => {
 				const real = r.bus.owner;
-				r.bus.owner = id => { const o = real(id); return Object.assign({}, o, { publish: (t, p) => { if (t === 'card:' + id && p.state === 'mounted') throw new Error('publish kaput'); return o.publish(t, p); } }); };
+				r.bus.owner = id => { const o = real(id); return { ...o, publish: (t, p) => { if (t === 'card:' + id && p.state === 'mounted') throw new Error('publish kaput'); return o.publish(t, p); } }; };
 			}
 		});
 		const before = r.cardEvents.length;
@@ -483,7 +481,7 @@ async function main() {
 		const seg = (doc, frag) => { const e = doc.createElement('p'); e.textContent = 'segment'; frag.appendChild(e); };
 		const withTpl = (r) => {
 			const t = r.doc.createElement('template');
-			t.setAttribute('data-card', 'b');
+			t.dataset.card = 'b';
 			seg(r.doc, t.content);
 			r.doc.body.appendChild(t);
 		};
@@ -541,7 +539,7 @@ async function main() {
 			beforeShell: sb => { sb.fetch = fakeFetch; } });
 		const main = r.doc.querySelector('.jc-main');
 		const texts = () => main.childNodes.filter(n => n.tagName === 'P').map(n => n.textContent);
-		const flush = async () => { while (gates.length) gates.shift()(); await tick(); };
+		const flush = async () => { while (gates.length) { gates.shift()(); } await tick(); };
 		await flush();
 		const first = texts();
 		const src = r.bus.owner('src');
@@ -568,7 +566,7 @@ async function main() {
 		}, { queue: [['rec', recorder([])]], beforeShell: sb => { sb.fetch = fakeFetch; } });
 		const main = r.doc.querySelector('.jc-main');
 		const texts = () => main.childNodes.filter(n => n.tagName === 'P').map(n => n.textContent);
-		const flush = async () => { while (gates.length) gates.shift()(); await tick(); };
+		const flush = async () => { while (gates.length) { gates.shift()(); } await tick(); };
 		await flush();
 		const first = texts();
 		r.bus.publish('cmd:b', { schemaVersion: 1, op: 'refresh' });
@@ -603,7 +601,7 @@ async function main() {
 		}, { queue: [['grid', recorder([], { implicit: card => ['selection:' + card.id] })]],
 			beforeShell: (sb, r0) => {
 				const t = r0.doc.createElement('template');
-				t.setAttribute('data-card', 'b');
+				t.dataset.card = 'b';
 				const e = r0.doc.createElement('p'); e.textContent = 'one'; t.content.appendChild(e);
 				r0.doc.body.appendChild(t);
 			} });
@@ -623,7 +621,7 @@ async function main() {
 	{
 		const tpl = (r0, id, text) => {
 			const t = r0.doc.createElement('template');
-			t.setAttribute('data-card', id);
+			t.dataset.card = id;
 			const e = r0.doc.createElement('p'); e.textContent = text; t.content.appendChild(e);
 			r0.doc.body.appendChild(t);
 		};
@@ -651,4 +649,4 @@ async function main() {
 
 main().then(
 	() => process.stdout.write(JSON.stringify(out)),
-	e => { process.stdout.write(JSON.stringify({ harnessError: String(e && e.stack || e), partial: out })); });
+	e => { process.stdout.write(JSON.stringify({ harnessError: String(e?.stack || e), partial: out })); });

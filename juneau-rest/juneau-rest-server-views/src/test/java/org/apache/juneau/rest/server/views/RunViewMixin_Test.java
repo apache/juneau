@@ -31,6 +31,9 @@ import org.apache.juneau.rest.server.servlet.*;
 import org.apache.juneau.rest.server.runreport.RunEvent.*;
 import org.junit.jupiter.api.*;
 
+@SuppressWarnings({
+	"resource" // The shared mock client lives for the whole test class, and the in-memory mock requests and responses hold no OS resources.
+})
 class RunViewMixin_Test extends TestBase {
 
 	@Rest

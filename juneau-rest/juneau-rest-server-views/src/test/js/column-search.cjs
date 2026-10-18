@@ -284,7 +284,7 @@ checkExtra('rt_iso_matchesParityWithRelativeLiteral', S.matches('$gte(-PT24H)', 
 	&& S.matches('$lt(P1D)', 86400000, 'numeric', null, T0) === false);
 
 if (process.argv[4]) {
-	const javaNames = JSON.parse(require('fs').readFileSync(process.argv[4], 'utf8'));
+	const javaNames = JSON.parse(require('node:fs').readFileSync(process.argv[4], 'utf8'));
 	report.helpMissing = javaNames.filter(n => ! S.SearchOperators.help(n));
 }
 

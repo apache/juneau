@@ -94,7 +94,7 @@ public final class AssetUrlMethodModel implements TemplateMethodModelEx {
 			return "";
 		}
 		if (devMode)
-			LOG.warning("assetUrl: no bundled resource '" + resource + "' for '" + path + "'; serving it unversioned.");
+			LOG.log(Level.WARNING, () -> "assetUrl: no bundled resource '" + resource + "' for '" + path + "'; serving it unversioned.");
 		return "";
 	}
 }

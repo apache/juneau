@@ -113,7 +113,9 @@ class JsonPatchMarshaller_Test extends TestBase {
 		}
 
 		@Override
-		public void close() {}
+		public void close() {
+			// no-op by design: test stub
+		}
 	}
 
 	private static final class FailingWriter extends Writer {
@@ -123,10 +125,14 @@ class JsonPatchMarshaller_Test extends TestBase {
 		}
 
 		@Override
-		public void flush() {}
+		public void flush() {
+			// no-op by design: test stub
+		}
 
 		@Override
-		public void close() {}
+		public void close() {
+			// no-op by design: test stub
+		}
 	}
 
 	@Test

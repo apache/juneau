@@ -51,7 +51,8 @@ public final class CardSpec {
 	private boolean sanitize;
 	private String cssClass;
 	private final Map<String,Object> body = new LinkedHashMap<>();
-	private final List<Map<String,Object>> publishes = new ArrayList<>(), subscribes = new ArrayList<>();
+	private final List<Map<String,Object>> publishes = new ArrayList<>();
+	private final List<Map<String,Object>> subscribes = new ArrayList<>();
 	private List<VisibilityRule> visibleWhen = List.of();
 
 	private CardSpec(String type, String id) {

@@ -57,7 +57,7 @@ out.hasResolveExportButtons = typeof probe.NS?.ribbon?.resolveExportButtons === 
 out.hasBuild = typeof probe.NS?.ribbon?.build === 'function';
 if (!out.hasResolveExportButtons || !out.hasBuild) { process.stdout.write(JSON.stringify(out)); process.exit(0); }
 
-function exportAction(extra) { return Object.assign({ type: 'export' }, extra || {}); }
+function exportAction(extra) { return { type: 'export', ...extra || {} }; }
 function resolve(scenario, action) {
 	const r = loadRibbon(scenario);
 	return r.NS.ribbon.resolveExportButtons(action, r.NS.ribbon.detectExportFeatures(r.env.window));

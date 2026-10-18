@@ -37,6 +37,8 @@ import org.apache.juneau.rest.server.util.*;
 import org.apache.juneau.rest.server.view.*;
 import org.apache.juneau.rest.server.view.freemarker.*;
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.params.*;
+import org.junit.jupiter.params.provider.*;
 
 /**
  * Golden-HTML tests for the {@code <@console>} document-shell directive and its capture slots
@@ -548,7 +550,9 @@ class ConsoleDirective_Test extends TestBase {
 		}
 	}
 
-	@Test void t05c_committedResponseOmitsSingleQuotedBodyToken() throws Exception {
+	@ParameterizedTest
+	@ValueSource(strings = {"/body-csrf-single", "/body-csrf-unquoted", "/body-csrf-upper"})
+	void t05c_committedResponseOmitsBodyToken(String path) throws Exception {
 		var logger = Logger.getLogger(ConsoleDirectiveModel.class.getName());
 		var records = new ArrayList<LogRecord>();
 		var handler = new Handler() {
@@ -563,61 +567,7 @@ class ConsoleDirective_Test extends TestBase {
 		try {
 			var res = new RecordingResponse();
 			res.committed = true;
-			var body = dispatch(ConsoleHost.class, "/body-csrf-single", res);
-			assertFalse(body.contains("spec-tok"), () -> body);
-			assertFalse(body.contains("data-juneau-csrf"), () -> body);
-			assertTrue(body.contains("data-spec-keep=\"kept\""), () -> body);
-			assertNull(res.writtenWhenCacheControlSet);
-			assertEquals(1, records.stream().filter(r -> r.getLevel() == Level.FINE).count());
-		} finally {
-			logger.removeHandler(handler);
-			logger.setLevel(oldLevel);
-		}
-	}
-
-	@Test void t05e_committedResponseOmitsUnquotedBodyToken() throws Exception {
-		var logger = Logger.getLogger(ConsoleDirectiveModel.class.getName());
-		var records = new ArrayList<LogRecord>();
-		var handler = new Handler() {
-			@Override public void publish(LogRecord r) { records.add(r); }
-			@Override public void flush() { /* no buffering */ }
-			@Override public void close() { /* nothing to release */ }
-		};
-		var oldLevel = logger.getLevel();
-		logger.setLevel(Level.FINE);
-		handler.setLevel(Level.FINE);
-		logger.addHandler(handler);
-		try {
-			var res = new RecordingResponse();
-			res.committed = true;
-			var body = dispatch(ConsoleHost.class, "/body-csrf-unquoted", res);
-			assertFalse(body.contains("spec-tok"), () -> body);
-			assertFalse(body.contains("data-juneau-csrf"), () -> body);
-			assertTrue(body.contains("data-spec-keep=\"kept\""), () -> body);
-			assertNull(res.writtenWhenCacheControlSet);
-			assertEquals(1, records.stream().filter(r -> r.getLevel() == Level.FINE).count());
-		} finally {
-			logger.removeHandler(handler);
-			logger.setLevel(oldLevel);
-		}
-	}
-
-	@Test void t05f_committedResponseOmitsUpperCaseBodyToken() throws Exception {
-		var logger = Logger.getLogger(ConsoleDirectiveModel.class.getName());
-		var records = new ArrayList<LogRecord>();
-		var handler = new Handler() {
-			@Override public void publish(LogRecord r) { records.add(r); }
-			@Override public void flush() { /* no buffering */ }
-			@Override public void close() { /* nothing to release */ }
-		};
-		var oldLevel = logger.getLevel();
-		logger.setLevel(Level.FINE);
-		handler.setLevel(Level.FINE);
-		logger.addHandler(handler);
-		try {
-			var res = new RecordingResponse();
-			res.committed = true;
-			var body = dispatch(ConsoleHost.class, "/body-csrf-upper", res);
+			var body = dispatch(ConsoleHost.class, path, res);
 			assertFalse(body.contains("spec-tok"), () -> body);
 			assertFalse(body.contains("data-juneau-csrf"), () -> body);
 			assertTrue(body.contains("data-spec-keep=\"kept\""), () -> body);

@@ -58,6 +58,9 @@ import org.apache.juneau.rest.server.views.*;
  *
  * @since 10.0.0
  */
+@SuppressWarnings({
+	"java:S1192" // Repeated literals are contract wire keys; named constants would obscure the contract shape.
+})
 public final class JobLogCardType implements CardTypeHandler {
 
 	/** The smallest accepted {@code height}, in pixels. */
@@ -67,7 +70,9 @@ public final class JobLogCardType implements CardTypeHandler {
 	private static final Pattern URL_PARAM = Pattern.compile("[A-Za-z][A-Za-z0-9_-]*");
 
 	/** Public no-arg constructor, required by {@link java.util.ServiceLoader}. */
-	public JobLogCardType() {}
+	public JobLogCardType() {
+		// No state; instantiated by ServiceLoader.
+	}
 
 	@Override
 	public String type() {

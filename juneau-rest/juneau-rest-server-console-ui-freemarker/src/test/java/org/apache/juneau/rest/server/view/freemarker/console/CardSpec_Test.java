@@ -38,7 +38,8 @@ class CardSpec_Test extends TestBase {
 
 	@Test void a02b_bareRefusedWhereSchemaHasNoBare() {
 		for (var type : List.of("run-view", "terminal")) {
-			var ex = assertThrows(IllegalArgumentException.class, () -> CardSpec.of(type, "x").bare(true));
+			var target = CardSpec.of(type, "x");
+			var ex = assertThrows(IllegalArgumentException.class, () -> target.bare(true));
 			assertTrue(ex.getMessage().contains("card 'x': a " + type + " card does not support bare."), ex.getMessage());
 			assertFalse(CardSpec.of(type, "x").bare(false).toMap().containsKey("bare"));
 		}

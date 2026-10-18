@@ -33,6 +33,9 @@ import org.junit.jupiter.api.*;
  *
  * @since 10.0.0
  */
+@SuppressWarnings({
+	"java:S8786" // test-only regex over a short CSS fixture
+})
 class DarkThemeCss_Test extends TestBase {
 
 	private static final String DARK_RESOURCE = "/org/apache/juneau/console/juneau-theme-dark.css";
@@ -136,7 +139,7 @@ class DarkThemeCss_Test extends TestBase {
 		m = VAR_WITH_FALLBACK.matcher(v);
 		if (m.matches()) {
 			var target = all.get(m.group(1));
-			return target != null ? isColour(target, all, depth + 1) : isColour(m.group(2), all, depth + 1);
+			return isColour(target != null ? target : m.group(2), all, depth + 1);
 		}
 		return COLOUR.matcher(v).matches();
 	}

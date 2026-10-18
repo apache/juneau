@@ -60,6 +60,10 @@ import org.apache.juneau.rest.server.*;
  *
  * @since 10.0.0
  */
+@SuppressWarnings({
+	"java:S1192", // Repeated literals are contract wire keys; named constants would obscure the contract shape.
+	"java:S3776" // Validation and rendering chains many independent guards; splitting them adds no clarity.
+})
 public final class SeriesAggregator {
 
 	/** The bucket units, finest first. */
@@ -137,6 +141,9 @@ public final class SeriesAggregator {
 	}
 
 	/** A rejected aggregate request: HTTP 400 with an E-75 message. */
+	@SuppressWarnings({
+		"java:S110" // The deep hierarchy comes from the REST framework's BadRequest exception chain, not from this class.
+	})
 	public static final class RequestException extends BadRequest {
 		private static final long serialVersionUID = 1L;
 
@@ -164,7 +171,8 @@ public final class SeriesAggregator {
 
 	/** A parsed aggregate request. */
 	public static final class Request {
-		private final Instant start, end;
+		private final Instant start;
+		private final Instant end;
 		private final String bucket;
 		private final List<String> groupBy;
 		private final List<Measure> measures;
@@ -324,6 +332,9 @@ public final class SeriesAggregator {
 		 * @param res The response.
 		 * @throws IOException If the writer fails.
 		 */
+		@SuppressWarnings({
+			"resource" // The response writer is owned and closed by the container.
+		})
 		public void writeTo(RestResponse res) throws IOException {
 			res.setContentType("application/json;charset=utf-8");
 			res.setHeader("X-Content-Type-Options", "nosniff");
@@ -339,6 +350,9 @@ public final class SeriesAggregator {
 	 * @return The result.
 	 * @throws RequestException If the request names a field that is not allowed.
 	 */
+	@SuppressWarnings({
+		"java:S135" // Guard clauses keep the row loop readable
+	})
 	public Result aggregate(Request req, Stream<? extends SeriesSource.Row> rows) {
 		var fields = new ArrayList<String>(req.groupBy);
 		req.measures.stream().map(Measure::field).filter(Objects::nonNull).forEach(fields::add);
@@ -385,7 +399,7 @@ public final class SeriesAggregator {
 		return new Result(List.copyOf(dims), List.copyOf(types), columns, truncated);
 	}
 
-	// acc[i] = {count, sum, min, max}
+	// Each acc[i] holds four slots in order: count, sum, min, max.
 	private static double[][] newAccumulators(int n) {
 		var a = new double[n][];
 		for (var i = 0; i < n; i++)
@@ -393,6 +407,9 @@ public final class SeriesAggregator {
 		return a;
 	}
 
+	@SuppressWarnings({
+		"java:S135" // Guard clauses keep the accumulation readable
+	})
 	private static void accumulate(List<Measure> measures, double[][] acc, SeriesSource.Row r) {
 		for (var i = 0; i < measures.size(); i++) {
 			var m = measures.get(i);

@@ -76,6 +76,9 @@ public class LogRecordCapture implements LogRecordListener, Closeable {
 	 * @param body The code to run.  Checked exceptions are rethrown wrapped in a {@link RuntimeException}.
 	 * @return The captured records, in the order logged.  Never <jk>null</jk>.
 	 */
+	@SuppressWarnings({
+		"java:S1181" // Snippet.run() throws Throwable; Errors are rethrown and checked exceptions wrapped
+	})
 	public static List<java.util.logging.LogRecord> quietly(String loggerName, Snippet body) {
 		var records = Collections.synchronizedList(new ArrayList<java.util.logging.LogRecord>());
 		var handler = new Handler() {
@@ -128,6 +131,9 @@ public class LogRecordCapture implements LogRecordListener, Closeable {
 	 * @param loggerClass The class whose logger is silenced.
 	 * @return A handle that restores the logger when closed.  Never <jk>null</jk>.
 	 */
+	@SuppressWarnings({
+		"resource" // The returned handle is owned by the caller, who closes it.
+	})
 	public static Quiet quiet(Class<?> loggerClass) {
 		return quiet(loggerClass.getName());
 	}

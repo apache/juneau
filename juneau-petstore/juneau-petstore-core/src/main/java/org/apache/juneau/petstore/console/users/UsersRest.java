@@ -50,7 +50,8 @@ import org.apache.juneau.rest.server.widgets.*;
  */
 @Rest(path="/users", title="Users")
 @SuppressWarnings({
-	"java:S110" // Inheritance depth comes from the BasicRestServlet hierarchy, not this page.
+	"java:S110", // Inheritance depth comes from the BasicRestServlet hierarchy, not this page.
+	"java:S1192" // Route paths and field names repeat as inline literals by design.
 })
 public class UsersRest extends PetstoreConsolePage {
 

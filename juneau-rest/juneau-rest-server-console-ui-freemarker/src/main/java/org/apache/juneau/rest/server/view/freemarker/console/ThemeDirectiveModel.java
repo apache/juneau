@@ -80,6 +80,9 @@ import freemarker.template.*;
  *
  * @since 10.0.0
  */
+@SuppressWarnings({
+	"java:S3776" // Validation and rendering chains many independent guards; splitting them adds no clarity.
+})
 public final class ThemeDirectiveModel implements TemplateDirectiveModel {
 
 	/** The shared-variable name this directive registers under. */
@@ -128,8 +131,8 @@ public final class ThemeDirectiveModel implements TemplateDirectiveModel {
 		// stray <@token> outside a <@theme> (e.g. in a sibling directive's body) fails its own "must be nested" guard.
 		// A nameless directive seeds from the page theme: console theme=, else the PageSpec theme, else the default.
 		if (! named) {
-			name = nn(cap.consoleTheme) ? cap.consoleTheme : nn(cap.themeOrNull()) ? cap.themeOrNull()
-				: ConsoleChromeMixin.BUILTIN_THEME_NAMES.get(0);
+			var pageTheme = nn(cap.themeOrNull()) ? cap.themeOrNull() : ConsoleChromeMixin.BUILTIN_THEME_NAMES.get(0);
+			name = nn(cap.consoleTheme) ? cap.consoleTheme : pageTheme;
 		}
 		var seed = ConsoleChromeMixin.stockTheme(name);
 		var themeBuilder = Theme.create(name);

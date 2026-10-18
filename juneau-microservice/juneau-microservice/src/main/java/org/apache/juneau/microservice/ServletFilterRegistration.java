@@ -19,6 +19,7 @@ package org.apache.juneau.microservice;
 import static org.apache.juneau.commons.utils.Shorts.*;
 
 import java.util.*;
+import java.util.stream.*;
 
 import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.rest.server.auth.*;
@@ -220,14 +221,32 @@ public final class ServletFilterRegistration {
 		public ServletFilterRegistration build() {
 			if (urlPatterns.isEmpty())
 				throw iaex("A servlet filter registration needs at least one URL pattern.");
-			var patterns = new LinkedHashSet<String>();
-			for (var p : urlPatterns)
-				patterns.add(validatePattern(p));
+			urlPatterns.forEach(Builder::validatePattern);
+			var patterns = new LinkedHashSet<>(urlPatterns);
 			if (dispatcherTypes.isEmpty())
 				throw iaex("A servlet filter registration needs at least one dispatcher type.");
 			if (dispatcherTypes.contains(null))
 				throw iaex("A dispatcher type must not be null.");
 			return new ServletFilterRegistration(this, List.copyOf(patterns), Collections.unmodifiableSet(EnumSet.copyOf(dispatcherTypes)));
+		}
+
+		private static void validatePattern(String p) {
+			if (p == null || (! p.isEmpty() && p.isBlank()))
+				throw iaex("A URL pattern must not be null or blank.");
+			if (p.isEmpty())
+				return;
+			if (p.startsWith("regex:") || p.startsWith("^") || p.startsWith("uri-template:"))
+				throw iaex("URL pattern '%s' uses container-specific path-spec syntax; use a path prefix, an extension or an exact path.", p);
+			if (p.equals("/"))
+				throw iaex("URL pattern '/' maps to the default servlet and is not accepted for a filter; use '/*'.");
+			var star = p.indexOf('*');
+			if (p.startsWith("/")) {
+				if (star < 0 || (star == p.length() - 1 && p.endsWith("/*")))
+					return;
+			} else if (p.startsWith("*.") && p.length() > 2 && star == 0 && p.lastIndexOf('*') == 0 && p.indexOf('/') < 0) {
+				return;
+			}
+			throw iaex("URL pattern '%s' is not valid: use a path prefix like '/console/*', an extension like '*.json', or an exact path like '/console'.", p);
 		}
 	}
 
@@ -263,9 +282,9 @@ public final class ServletFilterRegistration {
 	public static List<ServletFilterRegistration> collect(BeanStore store) {
 		if (store == null)
 			throw iaex("store must not be null.");
-		var entries = new ArrayList<Entry>();
-		for (var e : store.getBeansOfType(ServletFilterRegistration.class).entrySet())
-			entries.add(new Entry(e.getValue(), e.getKey()));
+		var entries = store.getBeansOfType(ServletFilterRegistration.class).entrySet().stream()
+			.map(e -> new Entry(e.getValue(), e.getKey()))
+			.collect(Collectors.toCollection(ArrayList::new));
 
 		store.getBean(AuthFilterChain.class).ifPresent(chain -> {
 			if (entries.stream().noneMatch(e -> e.registration.filter == chain))
@@ -300,25 +319,6 @@ public final class ServletFilterRegistration {
 		String describe() {
 			return registration.builtInAuth ? "the automatic AuthFilterChain mount" : "bean '" + beanName + "'";
 		}
-	}
-
-	private static String validatePattern(String p) {
-		if (p == null || (! p.isEmpty() && p.isBlank()))
-			throw iaex("A URL pattern must not be null or blank.");
-		if (p.isEmpty())
-			return p;
-		if (p.startsWith("regex:") || p.startsWith("^") || p.startsWith("uri-template:"))
-			throw iaex("URL pattern '%s' uses container-specific path-spec syntax; use a path prefix, an extension or an exact path.", p);
-		if (p.equals("/"))
-			throw iaex("URL pattern '/' maps to the default servlet and is not accepted for a filter; use '/*'.");
-		var star = p.indexOf('*');
-		if (p.startsWith("/")) {
-			if (star < 0 || (star == p.length() - 1 && p.endsWith("/*")))
-				return p;
-		} else if (p.startsWith("*.") && p.length() > 2 && star == 0 && p.lastIndexOf('*') == 0 && p.indexOf('/') < 0) {
-			return p;
-		}
-		throw iaex("URL pattern '%s' is not valid: use a path prefix like '/console/*', an extension like '*.json', or an exact path like '/console'.", p);
 	}
 
 	private final Filter filter;

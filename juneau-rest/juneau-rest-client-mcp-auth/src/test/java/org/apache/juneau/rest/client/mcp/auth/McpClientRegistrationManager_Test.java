@@ -168,7 +168,8 @@ class McpClientRegistrationManager_Test extends TestBase {
 		assertThrows(IllegalArgumentException.class, () -> b.clientName(" "));
 		assertThrows(IllegalArgumentException.class, () -> b.initialAccessToken(" "));
 		assertThrows(IllegalArgumentException.class, () -> b.httpTimeout(Duration.ZERO));
-		assertThrows(IllegalArgumentException.class, () -> b.httpTimeout(Duration.ofSeconds(-1)));
+		var negative = Duration.ofSeconds(-1);
+		assertThrows(IllegalArgumentException.class, () -> b.httpTimeout(negative));
 	}
 
 	/** Runs the real DCR path (no override) against a loopback stub, capturing the registration request. */
@@ -234,7 +235,7 @@ class McpClientRegistrationManager_Test extends TestBase {
 		var auth = new AtomicReference<String>();
 		server.createContext("/register", ex -> {
 			auth.set(ex.getRequestHeaders().getFirst("Authorization"));
-			ex.getRequestBody().readAllBytes();
+			try (var in = ex.getRequestBody()) { in.readAllBytes(); }
 			var b = "{\"client_id\":\"plain\",\"redirect_uris\":[\"http://127.0.0.1:3000/callback\"]}"
 				.getBytes(StandardCharsets.UTF_8);
 			ex.getResponseHeaders().add("Content-Type", "application/json");

@@ -57,19 +57,23 @@ class Subscription_Test extends TestBase {
 	}
 
 	@Test void b02_badRole() {
-		var e = assertThrows(IllegalArgumentException.class, () -> Subscription.to("cmd:x").as("Refresh"));
+		var target2 = Subscription.to("cmd:x");
+		var e = assertThrows(IllegalArgumentException.class, () -> target2.as("Refresh"));
 		assertEquals("subscription to 'cmd:x': role 'Refresh' must match ^[a-z][a-z0-9-]{0,31}$", e.getMessage());
 	}
 
 	@Test void b03_badMapPath() {
-		var e = assertThrows(IllegalArgumentException.class, () -> Subscription.to("cmd:x").as("params").map("id", "ids..0"));
+		var target3 = Subscription.to("cmd:x").as("params");
+		var e = assertThrows(IllegalArgumentException.class, () -> target3.map("id", "ids..0"));
 		assertEquals("subscription to 'cmd:x': map path 'ids..0' must be a dotted path such as 'ids.0'", e.getMessage());
-		e = assertThrows(IllegalArgumentException.class, () -> Subscription.to("cmd:x").as("params").map("", "ids.0"));
+		var target4 = Subscription.to("cmd:x").as("params");
+		e = assertThrows(IllegalArgumentException.class, () -> target4.map("", "ids.0"));
 		assertEquals("subscription to 'cmd:x': map target '' must be a dotted name", e.getMessage());
 	}
 
 	@Test void b04_toMapWithoutRole() {
-		var e = assertThrows(IllegalArgumentException.class, () -> Subscription.to("cmd:x").toMap());
+		var target5 = Subscription.to("cmd:x");
+		var e = assertThrows(IllegalArgumentException.class, target5::toMap);
 		assertEquals("subscription to 'cmd:x' needs as(role)", e.getMessage());
 	}
 }

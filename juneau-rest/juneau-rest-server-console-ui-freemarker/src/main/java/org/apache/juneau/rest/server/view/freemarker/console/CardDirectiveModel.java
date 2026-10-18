@@ -24,7 +24,6 @@ import java.util.regex.*;
 
 import org.apache.juneau.marshall.collections.*;
 import org.apache.juneau.marshall.json5.*;
-import org.apache.juneau.marshall.parser.*;
 import org.apache.juneau.rest.server.console.*;
 import org.apache.juneau.rest.server.views.*;
 
@@ -64,7 +63,8 @@ import freemarker.template.utility.*;
  * @since 10.0.0
  */
 @SuppressWarnings({
-	"java:S1192" // Duplicated literals read more clearly inline than as constants
+	"java:S1192", // Duplicated literals read more clearly inline than as constants
+	"java:S3776" // Validation and rendering chains many independent guards; splitting them adds no clarity.
 })
 public final class CardDirectiveModel implements TemplateDirectiveModel {
 
@@ -233,6 +233,9 @@ public final class CardDirectiveModel implements TemplateDirectiveModel {
 		}
 	}
 
+	@SuppressWarnings({
+		"java:S107" // Internal helper whose parameters are the render/validation context.
+	})
 	private static void htmlCard(PageCapture cap, String id, String title, String src, String template, String markup,
 			String cssClass, boolean sanitize, Object pubs, Object subs)
 			throws TemplateModelException {
@@ -272,6 +275,9 @@ public final class CardDirectiveModel implements TemplateDirectiveModel {
 	 * {@link CardTypeRegistry} (a registered handler such as {@code datatables}, {@code terminal} or {@code job-log}, or the
 	 * generic passthrough for an unregistered type).
 	 */
+	@SuppressWarnings({
+		"java:S107" // Internal helper whose parameters are the render/validation context.
+	})
 	private CardSpec registryCard(PageCapture cap, String type, String id, String title, String src, String template,
 			String markup, String cssClass, Object pubs, Object subs) throws TemplateModelException {
 		if (id.isEmpty())
@@ -376,6 +382,7 @@ public final class CardDirectiveModel implements TemplateDirectiveModel {
 	 * render. The shell mounts it through {@code JuneauViews.runView.mount}.
 	 */
 	@SuppressWarnings({
+		"java:S107", // Internal helper whose parameters are the render/validation context.
 		"unchecked" // JSON5 object keys are always strings.
 	})
 	private static void runViewCard(PageCapture cap, String id, String title, String src, String template,

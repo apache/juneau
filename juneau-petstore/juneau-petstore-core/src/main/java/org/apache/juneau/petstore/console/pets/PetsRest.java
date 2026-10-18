@@ -158,6 +158,9 @@ public class PetsRest extends PetstoreConsolePage {
 	}
 
 	/** The usable ids in a comma-separated value, or {@code null} if there are none (no filter). */
+	@SuppressWarnings({
+		"java:S1168" // null means no filter, distinct from an empty id set
+	})
 	private static Set<Long> parseIds(String value) {
 		if (value == null)
 			return null;

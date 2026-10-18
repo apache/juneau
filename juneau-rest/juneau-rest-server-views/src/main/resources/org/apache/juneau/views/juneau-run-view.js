@@ -55,7 +55,7 @@
 	 * (checked by ViewsJs_SameOriginPath_Test) and mirrors SafePathTemplate.isSameOriginPath.  Callers handle the empty string.
 	 */
 	function hasUnsafeUrlChars(s) {
-		return s.charCodeAt(0) <= 32 || s.charCodeAt(s.length - 1) <= 32 || /[\\\u0000-\u001f\u007f]/.test(s);
+		return s.codePointAt(0) <= 32 || s.codePointAt(s.length - 1) <= 32 || /[\\\u0000-\u001f\u007f]/.test(s);
 	}
 
 	/** A pure-string same-origin path check: non-blank, no "://", no "//" prefix, no scheme colon, no ".." segment. */

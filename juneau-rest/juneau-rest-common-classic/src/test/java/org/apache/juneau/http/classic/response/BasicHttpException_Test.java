@@ -264,7 +264,7 @@ class BasicHttpException_Test extends TestBase {
 	@Test void c09_equalsAndHashCode_distinguishContent() {
 		var x = new BasicHttpException(404).setHeader2("X-A", "1");
 		assertEquals(x, x);
-		assertNotEquals(x, "not an exception");
+		assertNotEquals("not an exception", x);
 		assertNotEquals(x, new BasicHttpException(404).setHeader2("X-A", "2"));
 		assertNotEquals(x, new BasicHttpException(500).setHeader2("X-A", "1"));
 		assertNotEquals(x, new BasicHttpException(404, "other").setHeader2("X-A", "1"));
@@ -278,7 +278,8 @@ class BasicHttpException_Test extends TestBase {
 		assertThrows(UnsupportedOperationException.class, () -> u.setParams(null));
 		assertThrows(UnsupportedOperationException.class, () -> u.setStatusLine(org.apache.http.HttpVersion.HTTP_1_1, 200));
 		assertThrows(UnsupportedOperationException.class, () -> u.setStatusLine(org.apache.http.HttpVersion.HTTP_1_1, 200, "OK"));
-		assertThrows(UnsupportedOperationException.class, () -> u.setStatusLine(new org.apache.http.message.BasicStatusLine(org.apache.http.HttpVersion.HTTP_1_1, 200, "OK")));
+		var statusLine = new org.apache.http.message.BasicStatusLine(org.apache.http.HttpVersion.HTTP_1_1, 200, "OK");
+		assertThrows(UnsupportedOperationException.class, () -> u.setStatusLine(statusLine));
 		assertEquals("1", u.getFirstHeader("X-A").getValue());
 	}
 }

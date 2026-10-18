@@ -32,6 +32,10 @@ import org.apache.juneau.rest.server.runreport.RunEvent.*;
  * is the file-level suite and does not contribute to the test name.  A <c>flaky</c> test (failed, then passed on retry)
  * is a pass.  A truncated file yields no tests and a warning.
  */
+@SuppressWarnings({
+	"java:S1192", // JSON keys of the Playwright report are protocol literals.
+	"java:S3776" // Walking the suite tree and folding retries is inherently branchy.
+})
 public final class PlaywrightJsonReportReader implements ReportReader {
 
 	private static final int MAX_DEPTH = 100;
@@ -66,6 +70,9 @@ public final class PlaywrightJsonReportReader implements ReportReader {
 	}
 
 	/** Returns <jk>false</jk> when the test limit stopped the walk. */
+	@SuppressWarnings({
+		"java:S107" // Internal recursive walker; parameters are the traversal state.
+	})
 	private boolean walk(Map<String,Object> suite, List<String> titles, String parentFile, int depth, ReportLimits lim, ReportBuilder out,
 			List<String> files, List<ReportTest> rows, List<String> rowFiles) {
 		if (depth > MAX_DEPTH)
@@ -133,7 +140,8 @@ public final class PlaywrightJsonReportReader implements ReportReader {
 				failing = rm;
 		}
 		var status = status(str(t.get("status")), last == null ? null : str(last.get("status")));
-		String msg = null, trace = null;
+		String msg = null;
+		String trace = null;
 		if (status == TestStatus.FAIL && failing != null) {
 			var text = errorText(failing);
 			if (text != null) {

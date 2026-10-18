@@ -60,7 +60,7 @@ const TB = NS.tableBus;
 const store = env.window.localStorage;
 const tick = () => new Promise(r => setImmediate(r));
 const J = v => JSON.stringify(v);
-const last = a => a[a.length - 1];
+const last = a => a.at(-1);
 
 // The live DataTables column array: a leading selection column, so every catalog index is shifted by one.
 const OPTS_COLUMNS = [
@@ -95,9 +95,9 @@ function fakeDt() {
 	let global = '';
 	const dt = {
 		log: log,
-		on: function (evt, fn) { (handlers[evt] = handlers[evt] || []).push(fn); return dt; },
+		on: function (evt, fn) { handlers[evt] ||= []; handlers[evt].push(fn); return dt; },
 		fire: function (evt, e) { (handlers[evt] || []).forEach(function (fn) { fn(e); }); },
-		search: function (v) { if (arguments.length === 0) return global; global = v; return dt; },
+		search: function (v) { if (arguments.length === 0) { return global; } global = v; return dt; },
 		column: function (i) {
 			if (cols[i]) return cols[i];
 			const col = { index: function () { return i; }, draw: function () { return dt; } };
@@ -125,7 +125,7 @@ function fakeDt() {
 function makeTable(def, card) {
 	const host = env.el('div');
 	const table = env.el('table');
-	table.setAttribute('data-juneau-view', def.id);
+	table.dataset.juneauView = def.id;
 	host.appendChild(table);
 	env.body.appendChild(host);
 	if (card) {
@@ -163,7 +163,7 @@ function routeCmds(id, t) {
 function buttons(bar) { return bar ? Array.from(bar.querySelectorAll('.juneau-view-ribbon-btn')) : []; }
 function btn(bar, label) { return buttons(bar).find(function (b) { return b.getAttribute('aria-label') === label; }) || null; }
 function pressed(bar, label) { const b = btn(bar, label); return b ? b.getAttribute('aria-pressed') : 'missing'; }
-async function click(bar, label) { const b = btn(bar, label); if (b) b.dispatch('click', {}); await tick(); return !!b; }
+async function click(bar, label) { const b = btn(bar, label); if (b) { b.dispatch('click', {}); } await tick(); return !!b; }
 
 (async function () {
 	const out = { hasTableBus: !!TB, hasPublishState: typeof TB?.publishState === 'function' };
@@ -360,5 +360,5 @@ async function click(bar, label) { const b = btn(bar, label); if (b) b.dispatch(
 	out.errors = errors;
 	process.stdout.write(J(out));
 })().catch(function (e) {
-	process.stdout.write(J({ crash: String(e && e.stack || e) }));
+	process.stdout.write(J({ crash: String(e?.stack || e) }));
 });

@@ -32,7 +32,6 @@ class CardSource_Test {
 	}
 
 	@Test void json_parsesJson5AndCaches() {
-		var calls = new int[1];
 		var src = CardSource.create("kpi", "k").body("{value:3, label:'N'}").build();
 		var m1 = src.json();
 		var m2 = src.json();

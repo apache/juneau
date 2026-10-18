@@ -33,7 +33,8 @@ import jakarta.servlet.*;
  * {@link ServletFilterRegistration#collect(BeanStore)}.
  */
 @SuppressWarnings({
-	"java:S1192" // Repeated URL pattern literals keep each test self-contained and readable.
+	"java:S1192", // Repeated URL pattern literals keep each test self-contained and readable.
+	"resource" // BasicBeanStore is a fluent AutoCloseable; the in-memory test stores hold nothing to close and addBean self-returns are not new resources.
 })
 class ServletFilterRegistration_Test extends TestBase {
 
@@ -81,8 +82,10 @@ class ServletFilterRegistration_Test extends TestBase {
 
 	@Test void a04_collections_unmodifiable() {
 		var r = ServletFilterRegistration.create(F).urlPatterns("/a/*").build();
-		assertThrows(UnsupportedOperationException.class, () -> r.getUrlPatterns().add("/x"));
-		assertThrows(UnsupportedOperationException.class, () -> r.getDispatcherTypes().add(DispatcherType.ERROR));
+		var patterns = r.getUrlPatterns();
+		var types = r.getDispatcherTypes();
+		assertThrows(UnsupportedOperationException.class, () -> patterns.add("/x"));
+		assertThrows(UnsupportedOperationException.class, () -> types.add(DispatcherType.ERROR));
 	}
 
 	@Test void a05_optionsRoundTrip() {
@@ -101,14 +104,19 @@ class ServletFilterRegistration_Test extends TestBase {
 	}
 
 	@Test void b02_noPatterns() {
-		assertThrows(IllegalArgumentException.class, () -> ServletFilterRegistration.create(F).build());
-		assertThrows(IllegalArgumentException.class, () -> ServletFilterRegistration.create(F).urlPatterns().build());
+		var none = ServletFilterRegistration.create(F);
+		var empty = ServletFilterRegistration.create(F).urlPatterns();
+		assertThrows(IllegalArgumentException.class, none::build);
+		assertThrows(IllegalArgumentException.class, empty::build);
 	}
 
 	@Test void b03_nullOrBlankPattern() {
-		assertThrows(IllegalArgumentException.class, () -> ServletFilterRegistration.create(F).urlPatterns((String)null).build());
-		assertThrows(IllegalArgumentException.class, () -> ServletFilterRegistration.create(F).urlPatterns("/a/*", " ").build());
-		assertThrows(IllegalArgumentException.class, () -> ServletFilterRegistration.create(F).urlPatterns("\t").build());
+		var nullPattern = ServletFilterRegistration.create(F).urlPatterns((String)null);
+		var blankPattern = ServletFilterRegistration.create(F).urlPatterns("/a/*", " ");
+		var tabPattern = ServletFilterRegistration.create(F).urlPatterns("\t");
+		assertThrows(IllegalArgumentException.class, nullPattern::build);
+		assertThrows(IllegalArgumentException.class, blankPattern::build);
+		assertThrows(IllegalArgumentException.class, tabPattern::build);
 	}
 
 	@Test void b03a_emptyPattern_isTheContextRoot() {
@@ -122,7 +130,8 @@ class ServletFilterRegistration_Test extends TestBase {
 
 	@Test void b05_invalidPatterns() {
 		for (var p : new String[]{"/", "console/*", "/console*", "/a/*/b", "*.", "*.a/b", "a*.x", "regex:/a.*", "^/a", "uri-template:/a/{x}", "/a/**", "*", "*.*", "*.a*"}) {
-			var ex = assertThrows(IllegalArgumentException.class, () -> ServletFilterRegistration.create(F).urlPatterns(p).build(), p);
+			var b = ServletFilterRegistration.create(F).urlPatterns(p);
+			var ex = assertThrows(IllegalArgumentException.class, b::build, p);
 			assertTrue(ex.getMessage().contains("'" + p + "'"), "Message should name the pattern: " + ex.getMessage());
 		}
 	}
@@ -139,11 +148,13 @@ class ServletFilterRegistration_Test extends TestBase {
 	}
 
 	@Test void b06_noDispatcherTypes() {
-		assertThrows(IllegalArgumentException.class, () -> ServletFilterRegistration.create(F).urlPatterns("/a/*").dispatcherTypes().build());
+		var b = ServletFilterRegistration.create(F).urlPatterns("/a/*").dispatcherTypes();
+		assertThrows(IllegalArgumentException.class, b::build);
 	}
 
 	@Test void b07_nullDispatcherType() {
-		assertThrows(IllegalArgumentException.class, () -> ServletFilterRegistration.create(F).urlPatterns("/a/*").dispatcherTypes(DispatcherType.REQUEST, null).build());
+		var b = ServletFilterRegistration.create(F).urlPatterns("/a/*").dispatcherTypes(DispatcherType.REQUEST, null);
+		assertThrows(IllegalArgumentException.class, b::build);
 	}
 
 	//-----------------------------------------------------------------------------------------------------------------

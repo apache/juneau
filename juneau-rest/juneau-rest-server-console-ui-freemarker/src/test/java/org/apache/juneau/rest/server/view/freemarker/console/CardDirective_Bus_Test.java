@@ -18,8 +18,6 @@ package org.apache.juneau.rest.server.view.freemarker.console;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import java.util.*;
-
 import org.apache.juneau.*;
 import org.apache.juneau.commons.inject.*;
 import org.apache.juneau.marshall.marshaller.*;

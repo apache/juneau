@@ -31,6 +31,8 @@ import org.apache.juneau.marshall.collections.*;
 import org.apache.juneau.rest.client.*;
 import org.apache.juneau.rest.client.mcp.*;
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.params.*;
+import org.junit.jupiter.params.provider.*;
 
 import com.sun.net.httpserver.*;
 
@@ -362,30 +364,15 @@ class McpClient_Coverage_Test extends TestBase {
 	// e - duplex pump early exits
 	//-----------------------------------------------------------------------------------------------------------------
 
-	@Test
-	void e01_pumpNextServerMessage_emptyStream_returnsWithoutDispatch() throws Exception {
+	@ParameterizedTest(name = "[{index}] stream={0}")
+	@ValueSource(strings = {
+		"", // empty stream
+		"event: other\n\n", // event without data
+		"data:\n\n" // empty data event
+	})
+	void e01_pumpNextServerMessage_noDispatchableMessage_returnsWithoutDispatch(String body) throws Exception {
 		var dispatched = new AtomicBoolean();
-		try (var c = client(sse(""))) {
-			c.setServerRequestHandler((request, ctx) -> { dispatched.set(true); return JsonMap.of(); });
-			c.pumpNextServerMessage();
-		}
-		assertFalse(dispatched.get());
-	}
-
-	@Test
-	void e02_pumpNextServerMessage_eventWithoutData_returnsWithoutDispatch() throws Exception {
-		var dispatched = new AtomicBoolean();
-		try (var c = client(sse("event: other\n\n"))) {
-			c.setServerRequestHandler((request, ctx) -> { dispatched.set(true); return JsonMap.of(); });
-			c.pumpNextServerMessage();
-		}
-		assertFalse(dispatched.get());
-	}
-
-	@Test
-	void e03_pumpNextServerMessage_emptyDataEvent_returnsWithoutDispatch() throws Exception {
-		var dispatched = new AtomicBoolean();
-		try (var c = client(sse("data:\n\n"))) {
+		try (var c = client(sse(body))) {
 			c.setServerRequestHandler((request, ctx) -> { dispatched.set(true); return JsonMap.of(); });
 			c.pumpNextServerMessage();
 		}

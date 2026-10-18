@@ -325,7 +325,8 @@ class MethodSafety_Test extends org.apache.juneau.TestBase {
 
 	@Test void f01_overrideHeadersOrderIsFrozen() {
 		assertEquals(List.of("X-Method", "X-HTTP-Method-Override", "X-HTTP-Method", "X-Method-Override"), MethodSafety.overrideHeaders());
-		assertThrows(UnsupportedOperationException.class, () -> MethodSafety.overrideHeaders().add("X-Other"));
+		var headers = MethodSafety.overrideHeaders();
+		assertThrows(UnsupportedOperationException.class, () -> headers.add("X-Other"));
 	}
 
 	@Test void f02_queryClaims_noClaims() {
@@ -404,6 +405,9 @@ class MethodSafety_Test extends org.apache.juneau.TestBase {
 		public String anything() { return "x"; }
 	}
 
+	@SuppressWarnings({
+		"java:S114" // Snake_case fixture interface names are intentional test-local naming
+	})
 	public interface Fix_RrpcInterface {
 		String echo(String x);
 	}
