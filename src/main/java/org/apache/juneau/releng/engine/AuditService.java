@@ -84,6 +84,9 @@ public class AuditService {
 		return out;
 	}
 
+	@SuppressWarnings({
+		"java:S1192" // "status" is the event wire key, repeated once per event kind; a constant would obscure the switch.
+	})
 	private static AuditEntry fromEvent(String run, int seq, String ev, Map<String,Object> e) {
 		return switch (ev) {
 			case "step" -> new AuditEntry(run, seq, ev, null, str(e.get("id")), str(e.get("status")), str(e.get("title")));

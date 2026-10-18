@@ -393,7 +393,8 @@ class ReleaseRunRestTest {
 	void b07d_startsWithoutAKeyAreNeverReplays(@TempDir Path dir) {
 		var rest = rest(dir);
 		rest.start(startRequest("9.2.1"));
-		assertEquals(409, assertThrows(Conflict.class, () -> rest.start(startRequest("9.2.1"))).getStatusCode());
+		var again = startRequest("9.2.1");
+		assertEquals(409, assertThrows(Conflict.class, () -> rest.start(again)).getStatusCode());
 	}
 
 	@Test

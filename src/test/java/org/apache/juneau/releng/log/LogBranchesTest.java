@@ -117,6 +117,9 @@ class LogBranchesTest {
 	}
 
 	@Test
+	@SuppressWarnings({
+		"resource" // Mock HttpServletResponse objects are never closed; that responsibility is on the caller/container.
+	})
 	void b01_writerFailureEndsTheStreamQuietly() throws Exception {
 		var servlet = new RunStateSseServlet(v -> Optional.empty(), v -> Optional.empty());
 		var resp = mock(HttpServletResponse.class);
@@ -142,6 +145,9 @@ class LogBranchesTest {
 	}
 
 	@Test
+	@SuppressWarnings({
+		"resource" // Mock HttpServletResponse object is never closed; that responsibility is on the caller/container.
+	})
 	void b03_noInitialSnapshotButABroadcasterTailsUntilInterrupted() throws Exception {
 		var resp = mock(HttpServletResponse.class);
 		when(resp.getWriter()).thenReturn(new PrintWriter(new StringWriter()));
@@ -159,6 +165,9 @@ class LogBranchesTest {
 	}
 
 	@Test
+	@SuppressWarnings({
+		"resource" // Mock HttpServletResponse object is never closed; that responsibility is on the caller/container.
+	})
 	void b04_unsubscribeFailureIsSwallowed() throws Exception {
 		var capture = new StringWriter();
 		var resp = mock(HttpServletResponse.class);

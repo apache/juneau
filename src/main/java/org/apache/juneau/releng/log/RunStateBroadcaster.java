@@ -22,7 +22,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.function.Consumer;
 
 /**
- * Per-run in-memory pub/sub of run/step-status snapshots, mirroring {@link LogBroadcaster}'s shape.
+ * Per-run in-memory pub/sub of run/step-status snapshots.
  * Subscribers are SSE connections to the run-state channel ({@code /events/{version}/state}); each
  * published payload is one JSON-serialized {@code RunStateSnapshot}. Publish is thread-safe since steps
  * run on a background thread while SSE connections read/write on request-handling threads.

@@ -56,6 +56,9 @@ public class StepOutputSources {
 	 * @param stepId The step id.
 	 * @return The source, or empty when there is no such run or step, or the step has not written a log yet.
 	 */
+	@SuppressWarnings({
+		"resource" // The FileTerminalSource returned is cached and managed by this class's sources map.
+	})
 	public Optional<TerminalSource> find(String version, String stepId) {
 		var step = store.load(version).map(rs -> rs.step(stepId)).orElse(null);
 		if (step == null || step.logRef == null)

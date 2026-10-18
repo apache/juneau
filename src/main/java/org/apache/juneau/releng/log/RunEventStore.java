@@ -258,21 +258,27 @@ public class RunEventStore {
 				for (var line : Files.readAllLines(file, StandardCharsets.UTF_8)) {
 					if (line.isBlank())
 						continue;
-					try {
-						@SuppressWarnings({
-							"unchecked" // Json parses an object line to a Map<String,Object>.
-						})
-						Map<String,Object> m = Json.DEFAULT.read(line, Map.class);
+					var m = parseEvent(file, line);
+					if (m != null)
 						out.add(m);
-					} catch (RuntimeException e) {
-						LOG.log(Level.WARNING, "Skipped an unreadable event in " + file.getFileName() + ": " + e.getMessage());
-					}
 				}
 			} catch (IOException e) {
 				LOG.log(Level.WARNING, "Cannot read " + file.getFileName() + ": " + e.getMessage());
 			}
 		}
 		return out;
+	}
+
+	@SuppressWarnings({
+		"unchecked" // Json parses an object line to a Map<String,Object>.
+	})
+	private static Map<String,Object> parseEvent(Path file, String line) {
+		try {
+			return Json.DEFAULT.read(line, Map.class);
+		} catch (RuntimeException e) {
+			LOG.log(Level.WARNING, "Skipped an unreadable event in " + file.getFileName() + ": " + e.getMessage());
+			return null;
+		}
 	}
 
 	private Path file(String version) {

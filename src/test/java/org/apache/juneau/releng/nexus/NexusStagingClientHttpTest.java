@@ -30,9 +30,6 @@ import org.junit.jupiter.api.Test;
  * Covers the real HTTP transport of {@link NexusStagingClient} against an in-process loopback server, plus
  * the JSON-shape handling in {@code findLatestRepo}/{@code getRepo}.
  */
-@SuppressWarnings({
-	"restriction" // com.sun.net.httpserver is the JDK-supported loopback test server.
-})
 class NexusStagingClientHttpTest {
 
 	private static String repos(String... items) {
@@ -40,6 +37,9 @@ class NexusStagingClientHttpTest {
 	}
 
 	@Test
+	@SuppressWarnings({
+		"resource" // HttpServer is stopped in finally block.
+	})
 	void a01_realTransportSendsAuthHeadersAndBody() throws Exception {
 		var seen = new AtomicReference<String>();
 		var server = HttpServer.create(new InetSocketAddress("127.0.0.1", 0), 0);
@@ -73,6 +73,9 @@ class NexusStagingClientHttpTest {
 	}
 
 	@Test
+	@SuppressWarnings({
+		"resource" // HttpServer is stopped in finally block.
+	})
 	void a02_nonSuccessStatusFails() throws Exception {
 		var server = HttpServer.create(new InetSocketAddress("127.0.0.1", 0), 0);
 		server.createContext("/", ex -> {
@@ -93,6 +96,9 @@ class NexusStagingClientHttpTest {
 	}
 
 	@Test
+	@SuppressWarnings({
+		"resource" // NexusStagingClient is never closed; it does not manage resources that need closing.
+	})
 	void a03_unreachableServerFails() {
 		var client = NexusStagingClient.create("http://127.0.0.1:1", "p", "u", "pw");
 		assertThrows(IllegalStateException.class, () -> client.promote("r1"));

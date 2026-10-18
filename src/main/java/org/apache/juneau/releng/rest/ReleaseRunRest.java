@@ -20,7 +20,6 @@ package org.apache.juneau.releng.rest;
 import static org.apache.juneau.commons.utils.Shorts.*;
 import static org.apache.juneau.commons.utils.StringUtils.escapeForScript;
 
-import java.io.IOException;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -31,12 +30,10 @@ import org.apache.juneau.http.Path;
 import org.apache.juneau.http.response.Conflict;
 import org.apache.juneau.http.response.NotFound;
 import org.apache.juneau.rest.server.Mutating;
-import org.apache.juneau.rest.server.OpSwagger;
 import org.apache.juneau.rest.server.Rest;
 import org.apache.juneau.rest.server.RestGet;
 import org.apache.juneau.rest.server.RestPost;
 import org.apache.juneau.rest.server.RestRequest;
-import org.apache.juneau.rest.server.RestResponse;
 import org.apache.juneau.rest.server.servlet.BasicRestResource;
 import org.apache.juneau.rest.server.staticfile.WebJarsMixin;
 import org.apache.juneau.rest.server.terminal.TerminalMixin;
@@ -85,9 +82,6 @@ public class ReleaseRunRest extends BasicRestResource implements RunViewMixin, T
 	 * Start key to the version of the run it started, in submission order. Kept in memory only: it exists to collapse a
 	 * double-submit of one form, not to survive a restart, so the persisted run format is unchanged.
 	 */
-	@SuppressWarnings({
-		"serial" // Anonymous LinkedHashMap subclass is never serialized.
-	})
 	private final Map<String, String> startedByKey = new LinkedHashMap<>() {
 		@Override
 		protected boolean removeEldestEntry(Map.Entry<String, String> eldest) {
