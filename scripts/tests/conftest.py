@@ -28,6 +28,12 @@ import pytest
 RUN_MODULE_PATH = Path(__file__).resolve().parent.parent.parent / "juneau-run" / "src" / "main" / "python" / "juneau_run.py"
 
 
+@pytest.fixture(autouse=True)
+def _no_nested_script_tests(monkeypatch):
+    """test.py's Script tests step runs this suite; a test that drives test.py's _main() must not launch it again."""
+    monkeypatch.setenv("JUNEAU_SCRIPT_TESTS_ACTIVE", "1")
+
+
 @pytest.fixture(scope="session", autouse=True)
 def _no_real_run_history():
     tmp = tempfile.mkdtemp(prefix="juneau-run-test-history-")

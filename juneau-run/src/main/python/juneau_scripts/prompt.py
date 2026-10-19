@@ -182,6 +182,20 @@ def _paused():
     return jr.paused() if jr is not None else contextlib.nullcontext()
 
 
+def _show(line):
+    """A line of inline prompt output, printed with the console view paused so its redraw can't overdraw it."""
+    with _paused():
+        print(line, flush=True)
+
+
+def _text_prompt(msg, default):
+    """msg as typed at the terminal: ' [default]: ' (or ': ') appended.  A msg with a colon-space in it or ending in a
+    colon or whitespace (a caller's finished prompt, even one ending in a typed-in prefix) is left alone, and an empty default shows nothing."""
+    if ": " in msg or msg.endswith(":") or msg[-1:].isspace():
+        return msg
+    return f"{msg} [{default}]: " if default else f"{msg}: "
+
+
 def _ask(msg):
     """One line from the terminal, or None on EOF."""
     jr = _base.jr()
@@ -229,8 +243,8 @@ def text(msg, *, default=None, key=None, title=None, error=None):
     chan = channel()
     if chan is None:
         if error:
-            print(error, flush=True)
-        answer = _ask(msg)
+            _show(error)
+        answer = _ask(_text_prompt(msg, default))
         return None if answer is None else (answer.strip() or default)
     with _paused():
         got = _ask_channel(chan, "text", msg, {"key": key, "title": title, "default": default, "error": error})
@@ -307,7 +321,7 @@ def choice(msg, options, *, default=None, key=None, title=None):
                 return answer
             if answer.isdigit() and 1 <= int(answer) <= len(values):
                 return values[int(answer) - 1]
-            print("Choose one of the listed options.", flush=True)
+            _show("Choose one of the listed options.")
 
     def check(value):
         return None if value in values else "Choose one of the listed options"
@@ -346,7 +360,7 @@ def _inline_field(f):
     suffix = f" [{f.default}]" if f.default is not None and not f.secret else ""
     while True:
         if f.multiline:
-            print(f"{f.label} (end with a line holding only '.'):", flush=True)
+            _show(f"{f.label} (end with a line holding only '.'):")
             lines = []
             while True:
                 line = _ask("> ")
@@ -365,7 +379,7 @@ def _inline_field(f):
         value, problem = _clean_field(f, raw)
         if problem is None:
             return value, False
-        print(problem, flush=True)
+        _show(problem)
 
 
 def form(msg, fields, *, key=None, title=None):

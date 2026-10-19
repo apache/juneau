@@ -201,3 +201,22 @@ jobs:
         echo '  Per-suite stderr: juneau-petstore/juneau-petstore-core/target/js/<suite>-stderr.txt'
         echo 'Terminal browser tests:'
         echo '  mvn -Pjs-tests -pl juneau-rest/juneau-rest-server-terminal -am test -Dtest="org.apache.juneau.rest.server.terminal.*_BrowserTest" -Dsurefire.failIfNoSpecifiedTests=false'
+
+  # The build and release tooling's own tests (scripts/tests).  Pure Python: no Maven, no JDK, and nothing from the
+  # network beyond pip itself.
+  script-tests:
+    name: Script tests (pytest)
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      with:
+        persist-credentials: false
+    - name: Set up Python
+      uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+      with:
+        python-version: '3.12'
+    - name: Install pytest
+      run: python -m pip install pytest
+    - name: Run script tests
+      run: python -m pytest -q scripts/tests

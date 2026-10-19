@@ -700,7 +700,7 @@ def test_push_hands_the_console_to_test_py(push_mod, gates, standalone, monkeypa
     monkeypatch.setattr(sys, "argv", ["push.py", "--test-only"])
     assert push_mod.main() == 0
     # the PGP row pauses first; the final line may pause again
-    assert calls[:5] == ["pause", "resume", "pause", ("test.py", "10"), "resume"]
+    assert calls[:5] == ["pause", "resume", "pause", ("test.py", "13"), "resume"]
 
 
 def test_push_ctrl_c_with_a_console_is_a_clean_cancel(push_mod, gates, standalone, monkeypatch):
@@ -1060,7 +1060,7 @@ def test_push_plain_ctrl_c_in_the_session_exits_130(push_mod, gates, monkeypatch
 
 
 @pytest.mark.parametrize("argv, expected", [
-    (["--test-only"], ["pgp", "container-tags", "bom", "build", "tests", "timing", "install", "starters"]),
+    (["--test-only"], ["pgp", "container-tags", "bom", "build", "tests", "py-tests", "js-tests", "timing", "install", "starters"]),
     (["Quick fix", "--skip-tests", "--tracker-audit"],
      ["prechecks", "pgp", "tracker", "tests", "install", "starters", "commit", "push"]),
 ])
@@ -1095,7 +1095,7 @@ def test_push_plan_puts_the_opt_in_gates_first_and_forced_browser_tests_after_te
     (tmp_path / "juneau-docs").mkdir()
     args = argparse.Namespace(sonarqube=True, tracker_audit=True, skip_tests=False, js_tests=True, test_only=False)
     assert [step_id for step_id, _ in push_mod.push_plan(args, script_dir, script_dir.parent, False)] == [
-        "prechecks", "sonar", "tracker", "bom", "build", "tests", "js-tests", "install", "starters", "commit", "push",
+        "prechecks", "sonar", "tracker", "bom", "build", "tests", "py-tests", "js-tests", "install", "starters", "commit", "push",
         "docs-smoke", "docs-commit", "docs-push"]    # no prompt-pgp-passphrase.py here, so no PGP row
 
 
@@ -1126,7 +1126,7 @@ def test_the_loader_reuses_an_already_loaded_juneau_run(juneau_loader, monkeypat
     assert juneau_loader.load()[0] is sentinel
 
 
-def test_the_loader_writes_no_bytecode_into_the_source_tree(tmp_path):
+def test_the_loader_writes_no_bytecode_into_the_source_tree(tmp_path, monkeypatch):
     """A fresh process, without -B, on a scratch copy of the tree: loading and the toolkit's late imports write no
     __pycache__ under juneau-run (the Maven build's RAT check scans it)."""
     python_src = SCRIPTS_DIR.parent / "juneau-run" / "src" / "main" / "python"
@@ -1137,7 +1137,10 @@ def test_the_loader_writes_no_bytecode_into_the_source_tree(tmp_path):
     shutil.copy(SCRIPTS_DIR / "_juneau.py", tree / "scripts" / "_juneau.py")
     code = ("import sys; sys.path.insert(0, sys.argv[1]); import _juneau; jr, js = _juneau.load(); "
             "from juneau_scripts import git, run, tools, notify, steps, state, prompt; print(jr.__file__)")
-    env = {k: v for k, v in os.environ.items() if k != "PYTHONDONTWRITEBYTECODE"}
+    # a push or test.py run exports where the real engine lives; the child must still find the copy beside _juneau.py
+    monkeypatch.setenv("JUNEAU_RUN_PY", str(python_src / "juneau_run.py"))
+    monkeypatch.setenv("JUNEAU_SCRIPTS_ZIP", str(python_src))
+    env = {k: v for k, v in os.environ.items() if k not in ("PYTHONDONTWRITEBYTECODE", "JUNEAU_RUN_PY", "JUNEAU_SCRIPTS_ZIP")}
     done = subprocess.run([sys.executable, "-c", code, str(tree / "scripts")], env=env, capture_output=True,
                           text=True, check=False)
     assert done.returncode == 0, done.stderr

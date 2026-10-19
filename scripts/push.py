@@ -1114,7 +1114,7 @@ def main():
 #: are test.py's rows; the others are this script's.
 PLAN_LABELS = {
     "prechecks": "Prechecks", "pgp": "PGP", "sonar": "Sonar", "tracker": "Tracker", "container-tags": "Tags",
-    "bom": "BOM", "build": "Compile", "tests": "Tests", "js-tests": "Browser tests", "timing": "Timing",
+    "bom": "BOM", "build": "Compile", "tests": "Tests", "py-tests": "Script tests", "js-tests": "Browser tests", "timing": "Timing",
     "install": "Install", "starters": "Starters", "commit": "Commit", "push": "Push", "docs-smoke": "Docs build",
     "docs-commit": "Docs", "docs-push": "Docs push",
 }
@@ -1136,7 +1136,7 @@ def push_plan(args, script_dir, juneau_root, console):
         ids += [step_id for step_id, name in (("container-tags", "check-container-tags.py"),
                                              ("bom", "check-bom-completeness.py")) if (script_dir / name).exists()]
         if (script_dir / "test.py").exists():
-            ids += ["build", "tests", *(["js-tests"] if args.js_tests else [])]
+            ids += ["build", "tests", "py-tests", "js-tests"]
         else:
             ids.append("tests")
         if console and (script_dir / "push-timings.py").exists():

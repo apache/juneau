@@ -2871,13 +2871,19 @@ class MavenParser(Parser):
     COMPILE_PATH = re.compile(r"^\[ERROR\] (\S+\.java):\[")
     SKIP_TESTS = re.compile(r"(?:^|\s)-D(?:skipTests|maven\.test\.skip)(?:=true)?(?=\s|$)")
     FILE_OPTION = re.compile(r"(?:^|\s)(?:-f|--file)(?:=|\s+)(\S+)")
-    CLASS_LINE = re.compile(
-        r"^(?:\[(?:INFO|WARNING|ERROR)\] )?Tests run: (\d+), Failures: (\d+), Errors: (\d+), Skipped: (\d+), "
-        r"Time elapsed: [\d.,]+ s(?: <<< (?:FAILURE|ERROR)!)? -- in (\S+)\s*$")
+    CLASS_LINE = re.compile(      # searched, not anchored: a verbose test run elsewhere can leave a line open for this one to land on
+        r"(?:\[(?:INFO|WARNING|ERROR)\] )?Tests run: (\d+), Failures: (\d+), Errors: (\d+), Skipped: (\d+), "
+        r"Time elapsed: [\d.,]+ s(?: <<< (?:FAILURE|ERROR)!)? -- in (.+?)\s*$")    # a @DisplayName can hold spaces
     CLASS_TIME = re.compile(r"Time elapsed: ([\d.,]+) s")      # kept apart from CLASS_LINE so its group numbers stay put
     FAILED_TEST = re.compile(r"^(?:\[(?:ERROR|WARNING)\] )?\S.+ <<< (?:FAILURE|ERROR)!\s*$")
     COMPILE_ERROR = re.compile(r"^\[ERROR\] \S+\.java:\[\d+,\d+\] .+")
     COMPILE_GOAL_FAILED = re.compile(r"^\[ERROR\] Failed to execute goal \S+:maven-compiler-plugin:\S+ \(.*\) on project ([^\s:]+)")
+    # A module can run a non-Surefire suite under the exec plugin (juneau-run's Python unittest).  Its summary counts
+    # only between that plugin's header and the next one, and only in unittest's own two-line shape.
+    EXEC_GOALS = ("exec", "exec-maven-plugin")
+    UNITTEST_RAN = re.compile(r"(?:^|\s)Ran (\d+) tests? in ([\d.]+)s\s*$")
+    UNITTEST_RESULT = re.compile(r"(?:^|\s)(?:OK(?: \(([^)]*)\))?|FAILED \(([^)]*)\))\s*$")
+    UNITTEST_COUNT = re.compile(r"(failures|errors|skipped)=(\d+)")
     STATUS = {"SUCCESS": "ok", "FAILURE": "fail", "SKIPPED": "skip"}
     FAILURE_TRACE_LINES = 10
     STALE_SLACK_SECONDS = 2.0
@@ -2896,6 +2902,8 @@ class MavenParser(Parser):
         self.sub_of = {}                 # display name -> sub id, so the Reactor Summary finds what Building opened
         self.header_artifact = None      # artifactId of the nearest preceding `< g:a >` header
         self.surefire_sub = None
+        self.exec_pending = []           # sub ids of exec unittest modules still owed their `Ran N tests` summary, oldest first
+        self.unittest_ran = None         # (tests, seconds) from a `Ran N tests` line still waiting for its result line
         self.surefire_s = {}             # sub id -> summed class seconds, for the history `series` entry
         self.class_cache = {}            # test class FQN -> artifactIds of the modules containing it
         self.packaging = {}              # artifactId -> packaging
@@ -2943,7 +2951,7 @@ class MavenParser(Parser):
 
     def _has_tests(self, artifact):
         d = self.dirs.get(artifact)
-        return d is None or (d / "src" / "test" / "java").is_dir()
+        return d is None or any((d / "src" / "test" / lang).is_dir() for lang in ("java", "python"))
 
     def _plugin_header(self, plugin, goal, artifact):
         """Advance one artifact's compile/test phase at a plugin header; returns compiled/tested events."""
@@ -3065,6 +3073,8 @@ class MavenParser(Parser):
     def _end_module(self, sub, status, seconds):
         """Close a module: exact per-module counts and reports from its report directories, then the sub_end."""
         events = []
+        if sub in self.exec_pending:
+            self.exec_pending.remove(sub)   # the module ended without a summary, so it is owed none
         artifact = self._artifact_of(sub)
         if self.phase.get(artifact) == "surefire":
             self.phase[artifact] = "tested"
@@ -3183,8 +3193,17 @@ class MavenParser(Parser):
             events += self._plugin_header(plugin, m.group(3), m.group(4))
             if plugin in ("surefire", "failsafe"):
                 self.surefire_sub = f"{self.step_id}/{m.group(4)}"
+            if plugin in self.EXEC_GOALS and m.group(3) == "exec":
+                sub = f"{self.step_id}/{m.group(4)}"
+                if sub not in self.exec_pending:
+                    self.exec_pending.append(sub)   # kept across other modules' headers: -T interleaves them before the summary
+            self.unittest_ran = None
             return events
-        m = self.CLASS_LINE.match(line)
+        if self.exec_pending:
+            events += self._unittest_line(line)
+            if events:
+                return events
+        m = self.CLASS_LINE.search(line)
         if m:
             t, f, e, s = (int(m.group(i)) for i in range(1, 5))
             self.total += t
@@ -3230,6 +3249,39 @@ class MavenParser(Parser):
             events.append(("cond", line))
             if line.startswith("[INFO] BUILD FAILURE"):
                 events += self._failure_note()
+        return events
+
+    def _unittest_line(self, line):
+        """Credits a unittest summary (`Ran N tests in Xs`, then `OK` or `FAILED (...)`) to the exec module."""
+        m = self.UNITTEST_RAN.search(line)
+        if m:
+            self.unittest_ran = (int(m.group(1)), float(m.group(2)))
+            return []
+        if self.unittest_ran is None or not line.strip():
+            return []
+        tests, secs = self.unittest_ran
+        self.unittest_ran = None
+        m = self.UNITTEST_RESULT.search(line)
+        if not m:
+            return []
+        found = {k: int(v) for k, v in self.UNITTEST_COUNT.findall(m.group(1) or m.group(2) or "")}
+        f, e, s = found.get("failures", 0), found.get("errors", 0), found.get("skipped", 0)
+        self.total += tests
+        self.fail += f
+        self.err += e
+        self.skip += s
+        sub = self.exec_pending.pop(0)
+        self.surefire_s[sub] = self.surefire_s.get(sub, 0.0) + secs
+        c = self._counts(sub)
+        c[0] += tests
+        c[1] += f
+        c[2] += e
+        c[3] += s
+        events = [("tests", self.step_id, self.total, self.fail, self.err, self.skip),
+                  ("series", self.step_id, "surefire_s", sub, round(self.surefire_s[sub], 3))]
+        if sub in self.open:
+            events.append(("tests", sub, *c))
+        events.append(("class_done", sub, "fail" if f + e else "skip" if tests and s == tests else "pass"))
         return events
 
     def _failure_note(self):

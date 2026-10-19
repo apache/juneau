@@ -168,3 +168,65 @@ def test_push_py_rejects_conflicting_flags(push_mod, monkeypatch, capsys):
         push_mod.main()
     assert e.value.code == 2
     assert "mutually exclusive" in capsys.readouterr().err
+
+
+# ---- the Browser tests row is always shown ---------------------------------------------------------------------------
+@pytest.fixture
+def skipped_rows(test_mod, monkeypatch):
+    rows = []
+    monkeypatch.setattr(test_mod, "skip_js_tests_row", rows.append)
+    return rows
+
+
+def test_no_js_changes_skips_the_row_with_the_force_hint(test_mod, skipped_rows):
+    assert test_mod.maybe_run_js_tests(False, False, ["a/src/X.java"], runner=lambda: (1, "")) == 0
+    assert skipped_rows == ["no JS changes since origin/master (--js-tests to force)"]
+
+
+def test_no_js_tests_flag_skips_the_row_with_the_flag(test_mod, skipped_rows):
+    assert test_mod.maybe_run_js_tests(False, True, ["a/src/x.js"], runner=lambda: (1, "")) == 0
+    assert skipped_rows == ["--no-js-tests"]
+
+
+def test_missing_node_skips_the_row_with_the_reason(test_mod, monkeypatch, skipped_rows):
+    monkeypatch.setattr(test_mod.shutil, "which", lambda t: None if t == "node" else "/bin/" + t)
+    assert test_mod.maybe_run_js_tests(False, False, ["a/src/x.js"], runner=lambda: (1, "")) == 0
+    assert len(skipped_rows) == 1 and "node not found on the PATH" in skipped_rows[0]
+
+
+def test_a_run_or_a_forced_failure_draws_no_skip_row(test_mod, monkeypatch, skipped_rows):
+    monkeypatch.setattr(test_mod, "js_prereq_problem", lambda: None)
+    assert test_mod.maybe_run_js_tests(True, False, [], runner=lambda: (0, "")) == 0
+    monkeypatch.setattr(test_mod, "js_prereq_problem", lambda: "node not found on the PATH")
+    assert test_mod.maybe_run_js_tests(True, False, [], runner=lambda: (0, "")) == 1
+    assert skipped_rows == []
+
+
+def test_skip_row_is_a_skipped_browser_tests_row(test_mod, monkeypatch):
+    seen = []
+
+    class FakeStep:
+        def skip(self, reason):
+            seen.append(("skip", reason))
+
+    class FakeRow:
+        def __enter__(self):
+            return FakeStep()
+
+        def __exit__(self, *exc):
+            return False
+
+    class FakeRun:
+        def row(self, step_id, title, label=None):
+            seen.append(("row", step_id, title, label))
+            return FakeRow()
+    monkeypatch.setattr(test_mod._juneau, "load", lambda: (FakeRun(),))
+    test_mod.skip_js_tests_row("why")
+    assert seen == [("row", "js-tests", "Browser tests", "Browser tests"), ("skip", "why")]
+
+
+@pytest.mark.parametrize("js_tests", [False, True])
+def test_push_always_plans_the_browser_tests_row(push_mod, js_tests):
+    args = argparse.Namespace(test_only=True, sonarqube=False, tracker_audit=False, skip_tests=False, js_tests=js_tests)
+    ids = [step_id for step_id, _ in push_mod.push_plan(args, SCRIPTS_DIR, SCRIPTS_DIR.parent, False)]
+    assert ids.index("js-tests") == ids.index("py-tests") + 1

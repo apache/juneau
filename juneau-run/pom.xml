@@ -75,7 +75,7 @@
 							<workingDirectory>${project.basedir}</workingDirectory>
 							<arguments>
 								<argument>-c</argument>
-								<argument>if command -v python3 &gt;/dev/null 2&gt;&amp;1; then exec python3 -B -m unittest discover -v -s src/test/python; else echo 'WARNING: python3 not found; skipping juneau-run unit tests'; fi</argument>
+								<argument>if command -v python3 &gt;/dev/null 2&gt;&amp;1; then exec python3 -B -m unittest discover -s src/test/python; else echo 'WARNING: python3 not found; skipping juneau-run unit tests'; fi</argument>
 							</arguments>
 						</configuration>
 					</execution>

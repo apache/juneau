@@ -45,7 +45,7 @@ class Stdout(io.StringIO):
 @pytest.fixture(autouse=True)
 def clean_env(monkeypatch):
     for variable in ("SANDBOX_RUNTIME", "JUNEAU_PUSH_NO_SOUND", "JUNEAU_RUN_ACTIVE", "JUNEAU_RUN_N_BASE",
-                     "JUNEAU_PUSH_ACTIVE"):
+                     "JUNEAU_PUSH_ACTIVE", "JUNEAU_RUN_SESSION"):
         monkeypatch.delenv(variable, raising=False)
 
 

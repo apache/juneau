@@ -177,6 +177,126 @@ class MavenParserTest(unittest.TestCase):
         mod_b = [e for e in kinds(events, "tests") if e[1] == "mvn/mod-b"][-1]
         self.assertEqual(mod_b, ("tests", "mvn/mod-b", 3, 1, 0, 1))
 
+    def _class_line_total(self, *lines):
+        parser = jr.MavenParser()
+        parser.step_id = "mvn"
+        parser.prepare(["mvn", "test"], None, "/nonexistent")
+        events = []
+        for line in lines:
+            events += parser.on_line(line)
+        return kinds(events, "tests")[-1][2:] if kinds(events, "tests") else None
+
+    def test_a_class_line_spliced_onto_an_open_line_still_counts(self):
+        spliced = ("test_env (test_scripts_git.ReadersTest.test_env) ... [INFO] Tests run: 11907, Failures: 0, "
+                   "Errors: 0, Skipped: 2, Time elapsed: 2.974 s -- in org.apache.juneau.foo.BarTest")
+        self.assertEqual(self._class_line_total(spliced), (11907, 0, 0, 2))
+
+    def test_a_class_line_with_a_display_name_still_counts(self):
+        named = "[INFO] Tests run: 13, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.006 s -- in R - Phase 4 general-purpose API"
+        self.assertEqual(self._class_line_total(named), (13, 0, 0, 0))
+
+    def test_a_display_name_class_line_attributes_to_the_current_module(self):
+        parser = jr.MavenParser()
+        parser.step_id = "mvn"
+        parser.prepare(["mvn", "test"], None, "/nonexistent")
+        parser.on_line("[INFO] --- surefire:3.2.5:test (default-test) @ mod-a ---")
+        events = parser.on_line("[INFO] Tests run: 13, Failures: 0, Errors: 1, Skipped: 0, Time elapsed: 0.006 s <<< FAILURE! -- in R - Phase 4 API")
+        self.assertIn(("class_done", "mvn/mod-a", "fail"), events)
+
+    def test_a_plain_class_line_still_attributes_to_its_module(self):
+        parser = jr.MavenParser()
+        parser.step_id = "mvn"
+        parser.prepare(["mvn", "test"], None, "/nonexistent")
+        parser.on_line("[INFO] --- surefire:3.2.5:test (default-test) @ mod-a ---")
+        events = parser.on_line("[INFO] Tests run: 4, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.01 s -- in x.CalcTest")
+        self.assertIn(("class_done", "mvn/mod-a", "pass"), events)
+        self.assertEqual(kinds(events, "tests")[-1][2:], (4, 0, 0, 0))
+
+    def _exec_module(self, header="[INFO] --- exec:3.5.0:exec (python-unittest) @ mod-a ---"):
+        parser = jr.MavenParser()
+        parser.step_id = "mvn"
+        parser.prepare(["mvn", "test"], None, "/nonexistent")
+        parser.on_line(header)
+        return parser
+
+    def _unittest(self, parser, *lines):
+        events = []
+        for line in lines:
+            events += parser.on_line(line)
+        return events
+
+    def test_a_unittest_summary_under_an_exec_header_counts_for_its_module(self):
+        parser = self._exec_module()
+        events = self._unittest(parser, "----------------------------------------------------------------------",
+                                "Ran 1100 tests in 12.345s", "", "OK")
+        self.assertEqual(kinds(events, "tests")[-1], ("tests", "mvn", 1100, 0, 0, 0))
+        self.assertIn(("class_done", "mvn/mod-a", "pass"), events)
+        self.assertIn(("series", "mvn", "surefire_s", "mvn/mod-a", 12.345), events)
+        self.assertEqual(parser.mod["mvn/mod-a"], [1100, 0, 0, 0])
+
+    def test_a_unittest_summary_with_skips_counts_them(self):
+        parser = self._exec_module("[INFO] --- exec-maven-plugin:3.1.0:exec (python-unittest) @ mod-a ---")
+        events = self._unittest(parser, "Ran 10 tests in 0.5s", "", "OK (skipped=3)")
+        self.assertEqual(kinds(events, "tests")[-1], ("tests", "mvn", 10, 0, 0, 3))
+
+    def test_a_failed_unittest_summary_marks_the_module_failed(self):
+        parser = self._exec_module()
+        events = self._unittest(parser, "Ran 20 tests in 1.0s", "", "FAILED (failures=2, errors=1, skipped=4)")
+        self.assertEqual(kinds(events, "tests")[-1], ("tests", "mvn", 20, 2, 1, 4))
+        self.assertIn(("class_done", "mvn/mod-a", "fail"), events)
+
+    def test_a_unittest_summary_spliced_onto_other_output_still_counts(self):
+        parser = self._exec_module()
+        events = self._unittest(parser, "[INFO] Running x.FooTest Ran 7 tests in 0.1s", "[INFO] OK")
+        self.assertEqual(kinds(events, "tests")[-1], ("tests", "mvn", 7, 0, 0, 0))
+
+    def test_a_unittest_summary_outside_an_exec_context_does_not_count(self):
+        parser = jr.MavenParser()
+        parser.step_id = "mvn"
+        parser.prepare(["mvn", "test"], None, "/nonexistent")
+        self.assertEqual(self._unittest(parser, "Ran 5 tests in 0.1s", "OK"), [])
+        parser.on_line("[INFO] --- surefire:3.2.5:test (default-test) @ mod-a ---")
+        self.assertEqual(self._unittest(parser, "Ran 5 tests in 0.1s", "OK"), [])
+
+    def test_a_unittest_summary_survives_other_modules_plugin_headers_under_a_parallel_build(self):
+        parser = self._exec_module()
+        for other in ("mod-b", "mod-c", "mod-d"):
+            for header in ("compiler:3.11.0:compile (default-compile)", "surefire:3.2.5:test (default-test)",
+                           "jar:3.3.0:jar (default-jar)"):
+                parser.on_line(f"[INFO] --- {header} @ {other} ---")
+                parser.on_line("[INFO] Nothing to do")
+        events = self._unittest(parser, "----------------------------------------------------------------------",
+                                "Ran 1107 tests in 93.334s", "", "OK (skipped=13)")
+        self.assertEqual(kinds(events, "tests")[-1], ("tests", "mvn", 1107, 0, 0, 13))
+        self.assertIn(("class_done", "mvn/mod-a", "pass"), events)
+        self.assertEqual(parser.mod["mvn/mod-a"], [1107, 0, 0, 13])
+
+    def test_pending_exec_modules_are_credited_in_order_and_each_only_once(self):
+        parser = self._exec_module()
+        parser.on_line("[INFO] --- exec:3.5.0:exec (python-unittest) @ mod-b ---")
+        parser.on_line("[INFO] --- jar:3.3.0:jar (default-jar) @ mod-c ---")
+        self._unittest(parser, "Ran 3 tests in 0.1s", "OK")
+        self._unittest(parser, "Ran 4 tests in 0.2s", "OK")
+        self.assertEqual(parser.mod["mvn/mod-a"], [3, 0, 0, 0])
+        self.assertEqual(parser.mod["mvn/mod-b"], [4, 0, 0, 0])
+        self.assertEqual(self._unittest(parser, "Ran 9 tests in 0.1s", "OK"), [])
+        self.assertEqual(parser.total, 7)
+
+    def test_a_ran_line_without_a_unittest_result_line_does_not_count(self):
+        parser = self._exec_module()
+        self.assertEqual(self._unittest(parser, "Ran 5 tests in 0.1s", "something else", "OK"), [])
+        self.assertEqual(parser.total, 0)
+
+    def test_a_module_with_only_python_tests_has_tests(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            (root / "py" / "src" / "test" / "python").mkdir(parents=True)
+            parser = jr.MavenParser()
+            parser.dirs = {"py": root / "py", "none": root / "none"}
+            (root / "none").mkdir()
+            self.assertTrue(parser._has_tests("py"))
+            self.assertFalse(parser._has_tests("none"))
+
     def test_plugin_lines_and_building_lines_share_one_id_scheme(self):
         parser, events = maven("maven-serial-success.log", cwd="/nonexistent")
         opened = {e[1] for e in kinds(events, "sub_start")}

@@ -43,6 +43,11 @@ Environment:
     JUNEAU_MVN_WRAPPER       Optional prefix for every mvn command (e.g. a lock script that serializes
                              concurrent runs on one checkout).
 
+Script tests:
+    After the Maven tests pass, scripts/tests (the tooling's own pytest suite) runs as its own row.  The launcher is
+    `python3 -m pytest` when pytest is importable, else `uv run --native-tls --with pytest` when uv is on the PATH; with neither,
+    the step prints a notice and skips.  Nothing is installed.
+
 Browser tests:
     The *_BrowserTest classes (juneau-rest-server-views, juneau-petstore-core, juneau-rest-server-terminal) are excluded from the main test
     pass, so it reports no skips for them; this step runs them with -Pjs-tests, as CI's js-tests and
@@ -605,6 +610,53 @@ def test(no_container=False):
 	return run_command(cmd, "tests", "Tests", label="Tests", summarize=_record_buckets)
 
 
+# Set in the pytest child so a test that reaches script_tests() again cannot launch the suite recursively.
+SCRIPT_TESTS_ACTIVE = "JUNEAU_SCRIPT_TESTS_ACTIVE"
+
+
+def script_tests_launcher():
+	"""The command prefix that runs pytest, or None.  `python3 -m pytest` when pytest is importable, else
+	`uv run --native-tls --with pytest` when uv is on the PATH.  Nothing is ever installed."""
+	python = shutil.which("python3") or sys.executable
+	try:
+		importable = subprocess.run([python, "-c", "import pytest"], capture_output=True).returncode == 0
+	except OSError:
+		importable = False
+	if importable:
+		return [python, "-m", "pytest"]
+	if shutil.which("uv"):
+		return ["uv", "run", "--native-tls", "--with", "pytest", "pytest"]
+	return None
+
+
+def script_tests_command(launcher):
+	return [*launcher, "-q", "-p", "no:cacheprovider", "scripts/tests"]
+
+
+def script_tests(launcher=None, runner=None):
+	"""The scripts/tests pytest suite as its own row.  Returns 0 on pass or skip, non-zero on failure."""
+	if os.environ.get(SCRIPT_TESTS_ACTIVE):
+		say("\n⚠️  Skipping Script tests: already running inside them (no recursion).", "warn")
+		return 0
+	launcher = launcher or script_tests_launcher()
+	if launcher is None:
+		say("\n⚠️  Skipping Script tests: neither pytest nor uv found (python3 -m pytest / uv run --native-tls --with pytest).", "warn")
+		return 0
+	cmd = script_tests_command(launcher)
+	say("\n🐍 Running Script tests (scripts/tests)...")
+	say(f"Running: {' '.join(cmd)}")
+	say("-" * 80)  # NOSONAR python:S1192 - the same banner rule as run_command
+	env = dict(os.environ, PYTHONDONTWRITEBYTECODE="1", **{SCRIPT_TESTS_ACTIVE: "1"})
+	if runner is not None:
+		code = runner(cmd, env)
+	else:
+		run = _juneau.load()[0]
+		code = run.run_tool(cmd, "pytest", "py-tests", "Script tests", n=next_step_number(), cwd=str(REPO_ROOT),
+			env=env, capture=True, label="Script tests").exit
+	say("\n✅ Script tests passed!" if code == 0 else "\n❌ Script tests failed!", "info" if code == 0 else "error")
+	return code
+
+
 # The modules whose *_BrowserTest classes the browser step runs, with the package-qualified -Dtest pattern that
 # selects each module's own suite (the same patterns as CI's js-tests, js-tests-petstore and js-tests-terminal jobs; a bare
 # '*_BrowserTest' would also match a sibling module's suite in the reactor).  Those classes are excluded from the
@@ -668,10 +720,19 @@ def js_tests(installed=False):  # NOSONAR python:S1172 -- kept so callers need n
 	return run_command(js_tests_command(), "js-tests", "Browser tests", label="Browser tests")
 
 
+def skip_js_tests_row(reason):
+	"""Draw the Browser tests row as skipped, with the reason as its text."""
+	with _juneau.load()[0].row("js-tests", "Browser tests", label="Browser tests") as row:
+		row.skip(reason)
+
+
 def maybe_run_js_tests(js_flag, no_js_flag, changed_files, runner=None, installed=False):
-	"""Run the JS harness if enabled.  Returns 0 on pass/skip, non-zero on failure."""
+	"""Run the JS harness if enabled.  Returns 0 on pass/skip, non-zero on failure.  A skipped harness still gets its
+	row, marked skipped with the reason."""
 	enabled, explicit = should_run_js_tests(js_flag, no_js_flag, changed_files)
 	if not enabled:
+		skip_js_tests_row("--no-js-tests" if no_js_flag
+			else "no JS changes since origin/master (--js-tests to force)")
 		return 0
 	problem = js_prereq_problem()
 	if problem:
@@ -679,6 +740,7 @@ def maybe_run_js_tests(js_flag, no_js_flag, changed_files, runner=None, installe
 			say(f"\n❌ --js-tests requested but cannot run: {problem}.", "error")
 			return 1
 		say(f"\n⚠️  JS files changed, but skipping Browser tests: {problem}. (CI will still run them.)", "warn")
+		skip_js_tests_row(problem.split(" (")[0])
 		return 0
 	say("\n🌐 Running Browser tests (-Pjs-tests)..." + ("" if explicit else " (auto: JS/CSS/FTL files changed)"))
 	code, _ = (runner or (lambda: js_tests(installed)))()
@@ -791,6 +853,9 @@ def _main():  # NOSONAR python:S3776 -- Cognitive complexity is acceptable for t
 		perf_exit = run_perf_guard(test_elapsed, PERF_BASELINE, module_times_, enforce=args.enforce_perf, unmapped=unmapped)
 		if perf_exit != 0:
 			return perf_exit
+		py_exit = script_tests()
+		if py_exit != 0:
+			return py_exit
 		js_changed = [] if (args.js_tests or args.no_js_tests) else changed_files_vs_origin()
 		js_exit = maybe_run_js_tests(args.js_tests, args.no_js_tests, js_changed, installed=full)
 		if js_exit != 0:

@@ -42,13 +42,13 @@ class PlainPromptTest(unittest.TestCase):
 
     def test_text(self):
         with mock.patch.object(builtins, "input", return_value="  hello  "):
-            self.assertEqual(prompt.text("Q: "), "hello")
+            self.assertEqual(prompt.text("Q"), "hello")
         with mock.patch.object(builtins, "input", return_value=""):
-            self.assertIsNone(prompt.text("Q: "))
-            self.assertEqual(prompt.text("Q: ", default="d"), "d")
+            self.assertIsNone(prompt.text("Q"))
+            self.assertEqual(prompt.text("Q", default="d"), "d")
         with mock.patch.object(builtins, "input", side_effect=eof):
-            self.assertIsNone(prompt.text("Q: "))
-            self.assertIsNone(prompt.text("Q: ", default="d"))
+            self.assertIsNone(prompt.text("Q"))
+            self.assertIsNone(prompt.text("Q", default="d"))
 
     def test_confirm(self):
         for answer, default, expected in (("y", False, True), ("YES", False, True), ("n", True, False),
@@ -79,7 +79,7 @@ class ConsolePromptTest(unittest.TestCase):
 
     def test_text_goes_through_ask(self):
         with mock.patch.object(builtins, "input", return_value="answer"):
-            self.assertEqual(prompt.text("Q: "), "answer")
+            self.assertEqual(prompt.text("Q"), "answer")
         self.assertIn(("ask", {"prompt": "Q: ", "answer": "answer"}), self.events)
 
     def test_secret_is_never_published(self):
@@ -102,6 +102,49 @@ class ConsolePromptTest(unittest.TestCase):
             prompt.secret("Password: ")
         console.pause.assert_called_once_with()
         console.resume.assert_called_once_with()
+
+
+class InlineVisibilityTest(unittest.TestCase):
+    """Inline prompts show their default and print labels and errors with the console view paused."""
+
+    def setUp(self):
+        reset_run_state()
+        self.addCleanup(reset_run_state)
+        prompt._reset()
+        sys.modules["juneau_run"] = jr
+
+    def test_text_shows_default_and_colon(self):
+        asked = []
+        with mock.patch.object(prompt, "_ask", side_effect=lambda m: asked.append(m) or ""):
+            prompt.text("Release branch", default="main")
+            prompt.text("Name")
+            prompt.text("Done: ", default="x")
+            prompt.text("Blank", default="")
+            prompt.text("Repo name: orgapache-", default="")
+        self.assertEqual(asked, ["Release branch [main]: ", "Name: ", "Done: ", "Blank: ", "Repo name: orgapache-"])
+
+    def test_multiline_label_and_error_print_while_paused(self):
+        console = mock.Mock()
+        state = {"paused": False}
+        console.pause.side_effect = lambda: state.update(paused=True)
+        console.resume.side_effect = lambda: state.update(paused=False)
+        seen = []
+        real_print = builtins.print
+
+        def spy(*a, **k):
+            seen.append((a[0] if a else "", state["paused"]))
+            real_print(*a, **k)
+
+        fields = [prompt.Field("count", "Count", type="int", required=True),
+                  prompt.Field("notes", "Summary", multiline=True)]
+        out = io.StringIO()
+        with mock.patch.object(jr, "_console", console), mock.patch.object(builtins, "print", spy), \
+                contextlib.redirect_stdout(out), \
+                mock.patch.object(builtins, "input", side_effect=["abc", "7", "a", "."]):
+            self.assertEqual(prompt.form("Details", fields), {"count": 7, "notes": "a"})
+        by_text = dict(seen)
+        self.assertTrue(by_text["Count must be a whole number"])
+        self.assertTrue(by_text["Summary (end with a line holding only '.'):"])
 
 
 class InlineKindsTest(unittest.TestCase):
