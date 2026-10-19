@@ -1068,6 +1068,21 @@ class ScriptApiTest(unittest.TestCase):
             jr.show("x" * (1 << 20), pager=True)
         self.assertEqual(out.getvalue(), "")
 
+    def test_a_pager_gone_before_the_final_flush_is_not_an_error(self):
+        pager, _ = self.pager("sys.exit(0)")
+        real_popen = subprocess.Popen
+
+        def popen_and_wait(*args, **kwargs):    # the pager has really exited before anything is flushed to it
+            proc = real_popen(*args, **kwargs)
+            proc.wait()
+            return proc
+
+        out = TTYOut()
+        with mock.patch.object(sys, "stdout", out), mock.patch.dict(os.environ, {"PAGER": pager}), \
+                mock.patch.object(subprocess, "Popen", popen_and_wait):
+            jr.show("short text", pager=True)  # under the buffer size: the write succeeds, the flush on close fails
+        self.assertEqual(out.getvalue(), "")
+
     def test_a_failed_write_to_the_pager_still_closes_and_waits_for_it(self):
         pager, _ = self.pager("sys.stdin.read()")
         procs = []

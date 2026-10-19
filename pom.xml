@@ -49,6 +49,11 @@
 		<argLine></argLine>
 		<!-- Extra surefire JVM args; Mockito modules set a -javaagent here. -->
 		<surefire.extraArgs></surefire.extraArgs>
+		<!-- Oldest Node the build supports.  No Node version is pinned in this repo (the Jenkins agent supplies its own),
+		     so this is the conservative assumption that the agent's Node lacks the Node 20+ builtins (toSorted, ...).
+		     src/test/js/node-floor-preload.cjs strips everything newer from the test JVM's node child processes;
+		     keep the two in step, and NodeFloorScan_Test too. -->
+		<juneau.node.floor>18</juneau.node.floor>
 		<jetty.version>12.1.13</jetty.version>
 		<jetty.ee.version>11</jetty.ee.version>
 		<tomcat.version>11.0.25</tomcat.version>
@@ -398,6 +403,10 @@
 					<configuration>
 						<!-- Sandbox-writable temp dir; @{argLine} carries jacoco's agent when it is active. -->
 						<argLine>@{argLine} -Djava.io.tmpdir=${project.build.directory} -Djava.util.logging.config.file=${maven.multiModuleProjectDirectory}/src/test/resources/logging.properties ${surefire.extraArgs}</argLine>
+						<!-- Every `node` a test launches inherits this and loads the floor preload first (see juneau.node.floor). -->
+						<environmentVariables>
+							<NODE_OPTIONS>--require="${maven.multiModuleProjectDirectory}/src/test/js/node-floor-preload.cjs"</NODE_OPTIONS>
+						</environmentVariables>
 						<systemPropertyVariables>
 							<logback.configurationFile>${maven.multiModuleProjectDirectory}/src/test/resources/logback-test.xml</logback.configurationFile>
 							<java.util.logging.config.file>${maven.multiModuleProjectDirectory}/src/test/resources/logging.properties</java.util.logging.config.file>

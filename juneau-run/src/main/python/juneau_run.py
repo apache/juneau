@@ -2133,11 +2133,11 @@ def _page(text):
     except ValueError:  # not the main thread
         previous = None
     try:
-        with proc:  # on every exit path, closes the pipe and waits for the pager, still under SIG_IGN
-            try:
+        try:
+            with proc:  # on every exit path, closes the pipe and waits for the pager, still under SIG_IGN
                 proc.stdin.write(text)
-            except BrokenPipeError:     # the pager was quit before it read everything
-                pass
+        except BrokenPipeError:     # the pager was quit before it read everything, on the write or the final flush
+            pass
     finally:
         if previous is not None:
             signal.signal(signal.SIGINT, previous)
