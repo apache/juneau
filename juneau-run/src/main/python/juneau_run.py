@@ -541,7 +541,7 @@ def overall_figures(elapsed, steps):
 
 
 def overall_text(o):
-    """The live region's first line: `Overall  42%  ~2:10 left  · 3 of 7 steps`."""
+    """The live region's last line: `Overall  42%  ~2:10 left  · 3 of 7 steps`."""
     left = f"  ~{fmt_elapsed(o.remaining * 1000)}{'+' if o.lower_bound else ''} left" if o.remaining > 0 or o.lower_bound else ""
     return f"Overall  {o.percent}%{left}  · {o.done} of {o.total} steps"
 
@@ -1654,9 +1654,10 @@ class LiveRenderer:
         self._draw()
 
     def region(self, board, cols, max_lines):
-        """Overall, the running rows in start order (each with its Setup row and sub-lines), then the pending rows in
-        plan order.  When it is taller than max_lines the pending rows fold first (into "○ +N more pending", kept
-        while anything is pending), then the module sub-lines (+N more running), then the bottom is cut."""
+        """The running rows in start order (each with its Setup row and sub-lines), then the pending rows in plan
+        order, then Overall.  When it is taller than max_lines the pending rows fold first (into "○ +N more pending",
+        kept while anything is pending), then the module sub-lines (+N more running), then the lines above Overall
+        are cut: Overall itself is never dropped."""
         running = board.running()
         inflight = [(r, m) for r in running for m in r.modules.values() if m.in_progress and m.id not in r.poms]
         subs = [(r, m) for r, m in inflight if m.outcomes or m.totals]
@@ -1687,7 +1688,7 @@ class LiveRenderer:
         while subs and sum(len(blocks[id(m)]) for _, m in subs) + len(folded) > budget:
             r, _ = subs.pop(0)
             folded[r.id] = folded.get(r.id, 0) + 1
-        lines = [_vcut(overall_text(overall), cols)] if overall else []
+        lines = []
         for r in running:
             if setup_running and board.setup.row == r.id:
                 lines.append(setup_line(board, self.glyphs, cols, self.clock(), self.color))
@@ -1698,17 +1699,27 @@ class LiveRenderer:
                 lines.append(f"    +{folded[r.id]} more running")
             lines += [line for owner, m in subs if owner is r for line in blocks[id(m)]]
         lines += pending_lines
-        return [part for line in lines for part in line.split("\n")][:max(1, max_lines)]
+        lines = [part for line in lines for part in line.split("\n")]
+        if not overall:
+            return lines[:max(1, max_lines)]
+        return lines[:max(0, max_lines - 1)] + [_vcut(overall_text(overall), cols)]
 
     def _sub_lines(self, m, cols):
-        """One line per module: the newest dots that fit, behind a "… +N " prefix counting the ones dropped."""
+        """One line per module: the newest dots that fit.  When they do not all fit, the last cells hold "+N", N being
+        the older results dropped (red if any of them failed, else green), so the strip keeps its full width."""
         prefix = f"    {_vcut(m.title, max(1, cols // 2))}  "
         per = max(1, cols - _vlen(prefix))
         cells = [self.dots[o] for o in m.outcomes]
         if len(cells) > per:
-            width = len(f"… +{len(cells)} ")
-            keep = max(1, per - width)
-            cells = list(f"… +{len(cells) - keep} ".ljust(width)) + cells[-keep:]
+            for digits in range(1, len(str(len(cells))) + 1):
+                hidden = len(cells) - (per - digits - 1)
+                if per - digits - 1 >= 0 and len(str(hidden)) == digits:
+                    break
+            else:
+                hidden = len(cells)                 # no room for the digits: the count is cut to the strip
+            text = _vcut(f"+{hidden}", per)
+            count = f"\x1b[{31 if 'fail' in m.outcomes[:hidden] else 32}m{text}\x1b[0m" if self.color else text
+            cells = cells[hidden:] + [count] if per > len(text) else [count]
         return [prefix + "".join(cells)]
 
     def _draw(self, force=False):
@@ -1768,7 +1779,8 @@ class Console:
     def __init__(self, sinks=None, detail=None, stream=None, clock=time.monotonic, size=shutil.get_terminal_size,
                  nested=False, repo="."):
         self.sinks = sinks or Sinks()
-        self._stream = stream
+        self._stdout = sys.stdout       # bound once: a caller that swaps sys.stdout later must not capture the view
+        self._stream = stream if stream is not None else self._stdout
         self.clock = clock
         self.size = size
         self.board = Board(resolve_detail(detail), nested=nested, full_log=self.sinks.full_path, clock=clock,
@@ -1786,7 +1798,7 @@ class Console:
 
     @property
     def stream(self):
-        return self._stream if self._stream is not None else sys.stdout
+        return self._stream
 
     def screen_mode(self):
         """live on a capable TTY in condensed mode, plain otherwise in condensed mode, None for full or none.  None
@@ -1811,7 +1823,7 @@ class Console:
     def _screen_write(self, text):
         self.stream.write(text)
         self.stream.flush()
-        if self.stream is sys.stdout and text:
+        if self._stream is self._stdout and text:
             _seen(text.endswith("\n"))
 
     def _log_write(self, text):

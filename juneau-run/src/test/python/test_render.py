@@ -431,23 +431,40 @@ class OverallDisplayTest(unittest.TestCase):
     def live(self):
         return jr.LiveRenderer(lambda text: None, size=lambda: os.terminal_size((80, 20)), clock=self.clock, color=False)
 
-    def test_first_line_is_overall_and_counts_in_max_lines(self):
+    def test_last_line_is_overall_and_counts_in_max_lines(self):
         b = self.board()
         lines = self.live().region(b, 79, 18)
-        self.assertEqual(lines[0], "Overall  25%  ~1:30 left  · 0 of 2 steps")       # 30 / (30 + 30 + 60)
-        self.assertTrue(lines[1][2:].startswith("A"))
+        self.assertEqual(lines[-1], "Overall  25%  ~1:30 left  · 0 of 2 steps")       # 30 / (30 + 30 + 60)
+        self.assertTrue(lines[0][2:].startswith("A"))
         self.assertEqual(len(self.live().region(b, 79, 1)), 1)                          # the budget still holds
+
+    def test_overall_survives_a_cut_and_the_line_above_it_goes(self):
+        b = self.board()
+        b.apply("reactor", dict(step="a", size=5, poms=["p0", "p1"], tests=False))
+        full = self.live().region(b, 79, 18)
+        self.assertGreater(len(full), 2)
+        for cap in range(1, len(full)):
+            with self.subTest(cap=cap):
+                lines = self.live().region(b, 79, cap)
+                self.assertEqual(len(lines), cap)
+                self.assertTrue(lines[-1].startswith("Overall"), lines)
+
+    def test_overall_sits_below_the_pending_rows(self):
+        b = self.board()
+        b.apply("plan", dict(ids=["a", "b"]))
+        lines = self.live().region(b, 79, 18)
+        self.assertTrue(lines[-1].startswith("Overall"), lines)
 
     def test_absent_without_a_plan_without_history_and_when_nested(self):
         for b in (self.board(plan=None), self.board(hist={}), self.board(nested=True)):
             self.assertTrue(self.live().region(b, 79, 18)[0][2:].startswith("A"))
 
-    def test_setup_row_sits_below_the_overall_line(self):
+    def test_setup_row_sits_above_the_overall_line(self):
         b = self.board()
         b.apply("reactor", dict(step="a", size=5, poms=["p0", "p1"], tests=False))
         lines = self.live().region(b, 79, 18)
-        self.assertTrue(lines[0].startswith("Overall"))
-        self.assertEqual(lines[1].split()[1], "Setup")
+        self.assertTrue(lines[-1].startswith("Overall"))
+        self.assertEqual(lines[0].split()[1], "Setup")
 
     def test_plain_heartbeat_gains_percent_and_remaining(self):
         out = []
@@ -837,17 +854,61 @@ class LiveTest(unittest.TestCase):
     def test_boxes_cap_at_one_line(self):
         self.dims = (40, 10)
         self.push(*start(), mod_start("a"), *[cls("a") for _ in range(200)])
-        self.assertEqual(self.live.region(self.board, 39, 8)[1:], ["    Mod A  … +179 " + "•" * 21])
+        self.assertEqual(self.live.region(self.board, 39, 8)[1:], ["    Mod A  " + "•" * 24 + "+176"])
 
-    def test_a_module_that_exactly_fits_has_no_prefix(self):
+    def test_a_module_that_exactly_fits_has_no_counter(self):
         self.dims = (40, 10)
         self.push(*start(), mod_start("a"), *[cls("a") for _ in range(28)])
         self.assertEqual(self.live.region(self.board, 39, 8)[1:], ["    Mod A  " + "•" * 28])
 
-    def test_a_module_one_over_shows_the_prefix(self):
+    def test_a_module_one_over_shows_the_counter_in_the_last_cells(self):
         self.dims = (40, 10)
         self.push(*start(), mod_start("a"), *[cls("a") for _ in range(29)])
-        self.assertEqual(self.live.region(self.board, 39, 8)[1:], ["    Mod A  … +7  " + "•" * 22])
+        self.assertEqual(self.live.region(self.board, 39, 8)[1:], ["    Mod A  " + "•" * 26 + "+3"])
+
+    def test_the_counter_keeps_the_strip_width_as_digits_grow(self):
+        self.dims = (40, 10)
+        for total in (29, 40, 126, 127, 128, 1000, 5000):
+            with self.subTest(total=total):
+                board = jr.Board(clock=lambda: 100.0)
+                feed(board, *start(), mod_start("a"), *[cls("a") for _ in range(total)])
+                live = jr.LiveRenderer(lambda text: None, size=lambda: os.terminal_size(self.dims), clock=lambda: 100.0,
+                                       color=False)
+                strip = live._sub_lines(next(iter(board.rows.values())).modules["tests/a"], 39)[0]
+                self.assertEqual(jr._vlen(strip), jr._vlen("    Mod A  ") + 28)
+                dots = strip[len("    Mod A  "):].lstrip("•")
+                self.assertRegex(dots, r"^\+\d+$")
+                self.assertEqual(int(dots[1:]), total - (28 - len(dots)))
+
+    def test_the_counter_is_green_without_a_hidden_failure_and_red_with_one(self):
+        self.dims = (40, 10)
+        def strip(first):
+            board = jr.Board(clock=lambda: 100.0)
+            feed(board, *start(), mod_start("a"), cls("a", first), *[cls("a") for _ in range(40)])
+            live = jr.LiveRenderer(lambda text: None, size=lambda: os.terminal_size(self.dims), clock=lambda: 100.0,
+                                   color=True)
+            return live._sub_lines(next(iter(board.rows.values())).modules["tests/a"], 39)[0]
+        self.assertTrue(strip("pass").endswith("\x1b[32m+16\x1b[0m"), repr(strip("pass")))
+        self.assertTrue(strip("skip").endswith("\x1b[32m+16\x1b[0m"), repr(strip("skip")))
+        self.assertTrue(strip("fail").endswith("\x1b[31m+16\x1b[0m"), repr(strip("fail")))
+
+    def test_a_failure_among_the_kept_dots_does_not_redden_the_counter(self):
+        board = jr.Board(clock=lambda: 100.0)
+        feed(board, *start(), mod_start("a"), *[cls("a") for _ in range(40)], cls("a", "fail"))
+        live = jr.LiveRenderer(lambda text: None, size=lambda: os.terminal_size((40, 10)), clock=lambda: 100.0, color=True)
+        strip = live._sub_lines(next(iter(board.rows.values())).modules["tests/a"], 39)[0]
+        self.assertIn("\x1b[32m+16\x1b[0m", strip)
+
+    def test_a_tiny_strip_still_fits(self):
+        board = jr.Board(clock=lambda: 100.0)
+        feed(board, *start(), mod_start("a"), *[cls("a") for _ in range(50)])
+        live = jr.LiveRenderer(lambda text: None, size=lambda: os.terminal_size((40, 10)), clock=lambda: 100.0, color=False)
+        module = next(iter(board.rows.values())).modules["tests/a"]
+        for cols in range(1, 20):
+            with self.subTest(cols=cols):
+                strip = live._sub_lines(module, cols)[0]
+                prefix = jr._vlen(f"    {jr._vcut(module.title, max(1, cols // 2))}  ")
+                self.assertEqual(jr._vlen(strip) - prefix, max(1, cols - prefix))
 
     def test_shrinking_the_region_clears_the_old_lines(self):
         self.push(*start(), mod_start("a"), mod_start("b"))
@@ -1094,6 +1155,17 @@ class LiveConsoleTest(unittest.TestCase):
         c("step_end", {"id": "tests", "status": "fail", "ms": 1, "exit": 1, "summary": None, "totals": None})
         self.assertNotIn("\x1b", out.getvalue())
         self.assertNotIn("\r", out.getvalue())
+
+    def test_default_stream_is_bound_once_so_a_later_stdout_swap_cannot_capture_frames(self):
+        original, swapped = io.StringIO(), io.StringIO()
+        with mock.patch.dict(os.environ, {"RUN_MARKERS": ""}), mock.patch.object(sys, "stdout", original):
+            c = jr.Console(jr.Sinks(console="condensed"), clock=Clock())
+            self.addCleanup(c.close)
+            with mock.patch.object(sys, "stdout", swapped):
+                c("step_start", {"id": "build", "n": 1, "title": "Build", "parent": None})
+                c("step_end", {"id": "build", "status": "ok", "ms": 5, "exit": 0, "summary": None, "totals": None})
+        self.assertIn("✔", original.getvalue())
+        self.assertEqual(swapped.getvalue(), "")
 
 
 class RobustnessTest(unittest.TestCase):
