@@ -223,8 +223,12 @@ def impl_map():
 def registry(deps, funcs):
     reg = deps.steps.Registry()
     reg._prog = "release.py"   # the resume hint's script name
+    from jrm_release import rc
     for s in inventory.STEPS:
-        reg.step(s.name, s.title, label=s.label)(funcs.get(s.name) or not_implemented(s.name))
+        if s.name in rc.CHECKS and hasattr(reg, "checks"):   # a bar of checks, which stays when they are all green
+            reg.checks(s.name, s.title, rc.CHECKS[s.name], label=s.label)
+        else:
+            reg.step(s.name, s.title, label=s.label)(funcs.get(s.name) or not_implemented(s.name))
     return reg
 
 

@@ -339,3 +339,12 @@ def test_runner_merge_err_appends_stderr():
     mod = SimpleNamespace(cmd=lambda argv, **kw: SimpleNamespace(ok=True, code=0, out="o", err="e"))
     assert Runner(mod).run(["x"], title="t", mutating=False).out == "o"
     assert Runner(mod).run(["x"], title="t", mutating=False, merge_err=True).out == "oe"
+
+
+def test_svnmucc_version_uses_no_quiet_flag_and_parses_its_banner(make_ctx, monkeypatch):
+    have(monkeypatch, *ALL)
+    ctx = make_ctx(with_details=False)
+    ctx.fake.script("svnmucc", "--version", out="svnmucc, version 1.15.0 (r1937767)\n   compiled Jan  1 2026\n")
+    ctx.fake.script("svn", "ls", out="x/\n")
+    assert prereqs.check(ctx) == []
+    assert ctx.fake.ran("svnmucc", "--version") == [["svnmucc", "--version"]]

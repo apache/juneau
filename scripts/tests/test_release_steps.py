@@ -65,23 +65,6 @@ def test_javadoc_not_accepted_fails(make_ctx):
         rc.javadoc_verify(ctx)
 
 
-def test_workspace_zips_skip_absent_modules(make_ctx):
-    ctx = make_ctx(answers={"review.workspaces": True})
-    zdir = ctx.ws / "juneau-examples" / "juneau-examples-core" / "target"
-    zdir.mkdir(parents=True)
-    (zdir / "juneau-examples-core-9.2.1-SNAPSHOT-bin.zip").write_bytes(b"z")
-    out = rc.FUNCS["test-workspace-verify"](ctx)
-    assert out == "1 workspaces checked"
-    assert len(ctx.fake.ran("unzip")) == 1
-    assert any("skip juneau-examples-mcp" in s for s in ctx.fake.said)
-
-
-def test_workspace_zips_fail_when_none_exist(make_ctx):
-    ctx = make_ctx(answers={"review.workspaces": True})
-    with pytest.raises(StepError, match="no workspace zips"):
-        rc.FUNCS["test-workspace-verify"](ctx)
-
-
 def test_gpg_unlock_passphrase_on_stdin_only(make_ctx):
     ctx = make_ctx()
     rc.gpg_unlock(ctx)
@@ -460,3 +443,143 @@ def test_details_bare_dev_version_gets_snapshot_suffix(make_ctx):
         **FORM, "version": "9.2.1", "developmentVersion": "9.2.2"}})
     ctx.fake.script("git", "-C", details.checkout(), "show", out=POM)
     assert details.ask(ctx)["developmentVersion"] == "9.2.2-SNAPSHOT"
+
+
+# --- R0047: honest dry-run results, review prompts that say what to look at -------------------------------------
+
+def test_dry_run_build_says_it_skipped(make_ctx):
+    ctx = make_ctx(dry_run=True)
+    assert rc.build_verify(ctx) == "skipped (dry run): would run mvn -B clean verify"
+    assert "would run: mvn -B clean verify" in ctx.fake.said
+
+
+def test_real_run_build_keeps_its_result(make_ctx):
+    assert rc.build_verify(make_ctx()) == "build verified"
+
+
+def test_dry_run_mixed_step_names_every_skipped_command(make_ctx):
+    out = rc.workspace(make_ctx(dry_run=True))
+    assert out.startswith("skipped (dry run): would run git clone --branch juneau-9.2.1-branch ")
+    assert "; +2 more" in out
+
+
+def test_dry_run_reviews_answer_themselves(make_ctx):
+    ctx = make_ctx(dry_run=True)   # no review.* answers: a prompt would raise
+    assert rc.javadoc_verify(ctx) == "skipped (dry run): would run mvn -B javadoc:aggregate; nothing to review"
+    assert rc.release_diff_review(ctx) == "skipped (dry run): no release commit to diff; nothing to review"
+    assert [a for a in ctx.prompt.asked if a[1].startswith("review.")] == []
+    assert sum("(dry run: nothing to review)" in s for s in ctx.fake.said) == 2
+    assert ["git", "-C", str(ctx.ws), "diff", "juneau-9.2.1-RC1^", "juneau-9.2.1-RC1"] not in ctx.fake.argvs()
+
+
+def test_dry_run_followups_do_not_prompt(make_ctx):
+    from jrm_release import promote
+    ctx = make_ctx(dry_run=True)
+    assert promote.followup_checklist(ctx) == "skipped (dry run): nothing to review"
+    assert not ctx.prompt.asked
+
+
+def test_irreversible_confirms_still_ask_in_dry_run(make_ctx):
+    from jrm_release import promote, revert
+    answers = {"confirm.nexus-release": True, "confirm.revert": True}
+    ctx = make_ctx(dry_run=True, answers=answers, state={"vote": {"outcome": "passed"}, "nexusRepoId": "r-1"})
+    promote.nexus_release(ctx)
+    other = make_ctx(dry_run=True, answers=answers)
+    revert.revert_check(other)
+    assert [a[1] for a in ctx.prompt.asked] == ["confirm.nexus-release"]
+    assert [a[1] for a in other.prompt.asked] == ["confirm.revert"]
+
+
+def test_javadoc_question_names_the_directory_and_hint(make_ctx):
+    ctx = make_ctx(answers={"review.javadoc": True})
+    rc.javadoc_verify(ctx)
+    msg = [a[2] for a in ctx.prompt.asked if a[1] == "review.javadoc"][0]
+    assert str(ctx.ws / "target" / "site" / "apidocs" / "index.html") in msg and msg.endswith("(y/n)")
+
+
+def test_diff_question_says_what_to_read(make_ctx):
+    ctx = make_ctx(answers={"review.diff": True})
+    rc.release_diff_review(ctx)
+    msg = [a[2] for a in ctx.prompt.asked if a[1] == "review.diff"][0]
+    assert "juneau-9.2.1-RC1^ to juneau-9.2.1-RC1" in msg and msg.endswith("(y/n)")
+
+
+def test_dist_verify_dry_run_does_not_claim_verified(make_ctx):
+    assert rc.dist_verify(make_ctx(dry_run=True)) == "skipped (dry run): nothing was staged to verify"
+
+
+def test_prerequisites_row_replays_the_early_verdicts_as_bar_cells(make_ctx, monkeypatch):
+    from jrm_release import prereqs
+    monkeypatch.setattr(prereqs.shutil, "which", lambda n: "/usr/bin/" + n if n != "gh" else None)
+    ctx = make_ctx(with_details=False)
+    failed = prereqs.check(ctx)
+    n = len(ctx.fake.calls)
+    cells = prereqs.checks(ctx)
+    assert len(ctx.fake.calls) == n and [c.name for c in cells][:3] == ["git", "mvn", "java"]
+    assert [c.name for c in cells if c.fn().status == "fail"] == ["gh"] and len(failed) == 1
+
+
+def test_release_checks_are_two_quiet_cells(make_ctx):
+    ctx = make_ctx()
+    ctx.fake.script("git", "ls-remote", "https://gitbox.apache.org/repos/asf/juneau.git", "refs/heads/juneau-9.2.1-branch",
+                    out="abc\trefs/heads/juneau-9.2.1-branch\n")
+    cells = rc.release_checks(ctx)
+    assert [c.name for c in cells] == ["branch exists", "rc tag absent"]
+    assert [c.fn().status for c in cells] == ["pass", "pass"]
+    assert all(c.get("quiet") for c in ctx.fake.calls if c["argv"][:2] == ["git", "ls-remote"])
+    ctx.fake.script("git", "ls-remote", "https://gitbox.apache.org/repos/asf/juneau.git", "refs/tags/juneau-9.2.1-RC1",
+                    out="abc\trefs/tags/x\n")
+    assert [c.fn().status for c in rc.release_checks(ctx)] == ["pass", "fail"]
+
+
+def test_registry_runs_both_check_groups_as_labelled_bars():
+    import release
+    from conftest import FakeRunner
+    reg = release.registry(release.Deps(run=FakeRunner(), steps=__import__("juneau_scripts.steps", fromlist=["x"]),
+                                        prompt=None, lock=None), release.impl_map())
+    assert reg._labels["prerequisites"] == "Prerequisites" and reg._labels["prechecks"] == "Release checks"
+    assert len(reg.names) == 25 and "test-workspace-verify" not in reg.names
+
+
+def test_dry_run_emails_answer_themselves(make_ctx):
+    from jrm_release import emails
+    ctx = make_ctx(dry_run=True)   # no email.* answer: a prompt would raise
+    assert emails.send(ctx, "propose", "dev@juneau.apache.org", "Subj", "Body") == "skipped (dry run): propose email not sent"
+    assert not ctx.prompt.asked and any("nothing is sent" in s for s in ctx.fake.said)
+    assert ctx.rf.get("emails") is None
+
+
+def test_dry_run_read_only_command_in_a_missing_workspace_is_not_run(make_ctx):
+    ctx = make_ctx(dry_run=True)
+    assert ctx.runner.run(["git", "-C", str(ctx.ws), "tag", "--list"], title="t", mutating=False).out == ""
+    assert ctx.runner.run(["git", "tag"], title="t", mutating=False, cwd=ctx.ws).ok
+    assert ctx.fake.calls == [] and ctx.runner.skipped == []
+    assert any("would run (dry run created no" in s for s in ctx.fake.said)
+    ctx.ws.mkdir(parents=True)   # a workspace from an earlier real run is used
+    ctx.runner.run(["git", "-C", str(ctx.ws), "tag", "--list"], title="t", mutating=False)
+    assert len(ctx.fake.calls) == 1
+    live = make_ctx()            # and a real run never skips it
+    live.runner.run(["git", "-C", str(live.ws / "nope"), "tag"], title="t", mutating=False)
+    assert len(live.fake.calls) == 1
+
+
+def test_dry_run_steps_touching_the_workspace_skip_cleanly(make_ctx):
+    from jrm_release import promote
+    ctx = make_ctx(dry_run=True, state={"rcCommit": "abc"})
+    assert rc.release_prepare(ctx).startswith("skipped (dry run): would run mvn")
+    promote.final_tag(ctx)
+    promote._release_tags(ctx)
+    assert not [a for a in ctx.fake.argvs() if "-C" in a and str(ctx.ws) in a]
+
+
+def test_retired_step_in_a_saved_run_resumes_after_the_previous_one(home):
+    import json
+    from jrm_release.runfile import RunFile
+    path = home / "runs" / "9.2.1" / "run.json"
+    path.parent.mkdir(parents=True)
+    path.write_text(json.dumps({"schema": 1, "phase": "rc", "last": "test-workspace-verify",
+                                "details": {"version": "9.2.1", "rc": 1, "branch": "b"}}))
+    rf = RunFile(path)
+    assert rf.last() == "javadoc-verify"
+    import release
+    assert release.plan_for(home, resume=True)[0] == "gpg-unlock"

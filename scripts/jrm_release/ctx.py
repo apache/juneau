@@ -42,6 +42,7 @@ class Ctx:
     now: Callable[[], Any] = _now
     creds: dict = field(default_factory=dict)
     prereq: Any = None        # failures list from prereqs.check, once the early check has run
+    prereq_verdicts: Any = None   # {check name: Verdict} from the same run
 
     @property
     def dry_run(self) -> bool:
@@ -69,6 +70,14 @@ class Ctx:
 
     def say(self, text="", level="info"):
         self.run.say(text, level)
+
+    def review(self, question, *, key, look_at):
+        """Ask the user to inspect something: look_at says what and where, and the (y/n) hint is part of the text
+        (the toolkit's confirm shows none inline).  Under --dry-run nothing was produced, so it answers itself."""
+        if self.dry_run:
+            self.say(f"(dry run: nothing to review) {question}")
+            return True
+        return self.prompt.confirm(f"{look_at}\n{question}  (y/n)", key=key)
 
     def fail(self, msg):
         raise StepError(msg)

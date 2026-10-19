@@ -32,8 +32,8 @@ def ensure_keyid(ctx):
         f"{ctx.creds['credential.apache.availid']}@apache.org" if ctx.creds.get("credential.apache.availid") else None)
     keys = []
     if email:
-        r = ctx.runner.run(["gpg", "--list-secret-keys", "--with-colons", "--keyid-format", "long"],
-                           title="List GPG keys", mutating=False)
+        r = ctx.runner.quiet(["gpg", "--list-secret-keys", "--with-colons", "--keyid-format", "long"],
+                             title="List GPG keys")
         keys = gpgkeys.candidates(gpgkeys.parse(r.out), email, ctx.now().timestamp()) if r.ok else []
     label = LABELS[key]
     if len(keys) > 1:
@@ -57,8 +57,10 @@ def _warn_unpublished(ctx, chosen):
         ctx.say(f"⚠ key {chosen.keyid} is not in {inventory.DOWNLOADS}/KEYS; add it before the vote", "warn")
 
 
-@step
-def prechecks(ctx):
+def release_checks(ctx):
+    """The Release checks row's checks, after the credential questions: the branch exists and the RC tag does not.
+    The ls-remote probes run quietly, so they are bar cells rather than rows of their own."""
+    from juneau_scripts import checks as ck
     cur = ctx.d
     ctx.cred("credential.apache.availid")
     ctx.cred("credential.apache.email")
@@ -66,23 +68,37 @@ def prechecks(ctx):
     tag = ctx.rc_tag
 
     def remote(ref):
-        return ctx.runner.run(["git", "ls-remote", inventory.GIT_URL, ref], title=f"ls-remote {ref}", mutating=False)
+        return ctx.runner.quiet(["git", "ls-remote", inventory.GIT_URL, ref], title=f"ls-remote {ref}").out.strip()
 
-    checks = [
-        ("branch exists", lambda c: (bool(remote(f"refs/heads/{cur['branch']}").out.strip()),
-                                     f"branch {cur['branch']} not on gitbox", "check the branch name")),
-        ("rc tag absent", lambda c: (not remote(f"refs/tags/{tag}").out.strip(),
-                                     f"tag {tag} already exists", "bump rc, or run --revert")),
-    ]
+    def branch():
+        return ck.PASS if remote(f"refs/heads/{cur['branch']}") else ck.Verdict(
+            "fail", f"branch {cur['branch']} not on gitbox", ("check the branch name",))
+
+    def rc_tag():
+        return ck.Verdict("fail", f"tag {tag} already exists", ("bump rc, or run --revert",)) \
+            if remote(f"refs/tags/{tag}") else ck.PASS
+    return [ck.Check("branch exists", branch), ck.Check("rc tag absent", rc_tag)]
+
+
+@step
+def prechecks(ctx):
+    """release_checks as a plain step: a ✔/❌ line each (the console row of release.py's registry shows a bar instead)."""
+    from juneau_scripts import checks as ck
+    found = release_checks(ctx)
     failed = []
-    for name, fn in checks:
-        ok, reason, hint = fn(ctx)
-        ctx.say(f"{'✔' if ok else '❌'} {name}", "info" if ok else "error")
-        if not ok:
-            failed.append(f"{name}: {reason} ({hint})")
+    for c in found:
+        v = ck.evaluate(c)
+        ctx.say(f"{'✔' if v.status == 'pass' else '❌'} {c.name}", "info" if v.status == "pass" else "error")
+        if v.status != "pass":
+            failed.append(f"{c.name}: {v.reason} ({v.hint[0]})")
     if failed:
         raise StepError("; ".join(failed))
-    return f"{len(checks)} checks passed"
+    return f"{len(found)} checks passed"
+
+
+# Steps that release.py's registry runs as a bar of checks (name -> fn(ctx) returning the checks); the FUNCS entry
+# of the same name is the plain version, for a run without a console.
+CHECKS = {"prerequisites": prereqs.checks, "prechecks": release_checks}
 
 
 @step
@@ -93,6 +109,7 @@ def compose_propose_email(ctx):
 
 @step
 def workspace(ctx):
+    mark = len(ctx.runner.skipped)
     d, ws = ctx.d, str(ctx.ws)
     R = ctx.runner.run
     if os.path.isdir(os.path.join(ws, ".git")):
@@ -106,7 +123,7 @@ def workspace(ctx):
       mutating=True)
     R(["git", "-C", ws, "config", "user.email", ctx.cred("credential.apache.email")], title="user.email",
       mutating=True)
-    return f"workspace on {d['branch']}"
+    return ctx.runner.skipped_note(mark, f"workspace on {d['branch']}")
 
 
 def _mvn(ctx, title, *args, tty=False, env=None):
@@ -118,45 +135,38 @@ def _mvn(ctx, title, *args, tty=False, env=None):
 
 @step
 def build_verify(ctx):
+    mark = len(ctx.runner.skipped)
     _mvn(ctx, "Build verify", "clean", "verify")
-    return "build verified"
+    return ctx.runner.skipped_note(mark, "build verified")
 
 
 @step
 def javadoc_verify(ctx):
+    mark = len(ctx.runner.skipped)
     _mvn(ctx, "Javadoc", "javadoc:aggregate")
-    if ctx.prompt.confirm("Does the javadoc output look clean?", key="review.javadoc") is not True:
+    look_at = f"Open {_javadoc_index(ctx)} in a browser and skim it for broken pages or warnings."
+    if ctx.review("Does the javadoc output look clean?", key="review.javadoc", look_at=look_at) is not True:
         raise StepError("javadoc not accepted")
-    return "javadoc accepted"
+    return _reviewed(ctx, ctx.runner.skipped_note(mark, "javadoc accepted"))
 
 
-ZIPS = (("juneau-examples/juneau-examples-core", "juneau-examples-core"),
-        ("juneau-examples/juneau-examples-mcp", "juneau-examples-mcp"),
-        ("juneau-petstore/juneau-petstore-jetty", "juneau-petstore-jetty"),
-        ("juneau-sc/juneau-sc-server", "juneau-sc-server"))
+def _reviewed(ctx, result):
+    """A review step's result; under --dry-run it says the question was not asked."""
+    return f"{result}; nothing to review" if ctx.dry_run else result
 
 
-@step(name="test-workspace-verify")
-def verify_test_workspaces(ctx):
-    snap = f"{ctx.version}-SNAPSHOT"
-    made = 0
-    for module, art in ZIPS:
-        zip_path = ctx.ws / module / "target" / f"{art}-{snap}-bin.zip"
-        if not ctx.dry_run and not zip_path.exists():
-            ctx.say(f"skip {art}: {zip_path.name} not built on this branch")
-            continue
-        ctx.runner.run(["unzip", "-o", str(zip_path), "-d", str(ctx.ws / "target" / "workspace" / art)],
-                       title=f"Unzip {art}", mutating=True)
-        made += 1
-    if not made and not ctx.dry_run:
-        raise StepError("no workspace zips were built; run build-verify first")
-    if ctx.prompt.confirm("Do the workspaces import cleanly into Eclipse?", key="review.workspaces") is not True:
-        raise StepError("workspaces not accepted")
-    return f"{made} workspaces checked"
+def _javadoc_index(ctx):
+    """Where javadoc:aggregate puts the combined site: the plugin's default, target/site/apidocs under the workspace
+    (the pom sets no output directory)."""
+    for sub in ("site/apidocs", "apidocs"):
+        if (ctx.ws / "target" / sub).is_dir():
+            return ctx.ws / "target" / sub / "index.html"
+    return ctx.ws / "target" / "site" / "apidocs" / "index.html"
 
 
 @step
 def gpg_unlock(ctx):
+    mark = len(ctx.runner.skipped)
     pw = ctx.cred("credential.gpg.passphrase", secret=True)
     key = ctx.cred("credential.gpg.keyid")
     tmp = ctx.run_dir / "gpg-prime.txt"
@@ -168,13 +178,14 @@ def gpg_unlock(ctx):
                        title="Prime gpg-agent", mutating=True, tool="gpg", input=(pw + "\n").encode())
     if not r.ok:
         raise StepError("gpg could not sign with that key and passphrase")
-    return "gpg agent primed"
+    return ctx.runner.skipped_note(mark, "gpg agent primed")
 
 
 @step
 def deploy_snapshot(ctx):
+    mark = len(ctx.runner.skipped)
     _mvn(ctx, "Deploy snapshot", "deploy", inventory.MVN_CHECKSUMS)
-    return "snapshot deployed"
+    return ctx.runner.skipped_note(mark, "snapshot deployed")
 
 
 def git_env(ctx):
@@ -187,6 +198,7 @@ def git_env(ctx):
 
 @step
 def release_prepare(ctx):
+    mark = len(ctx.runner.skipped)
     pom = ctx.ws / "pom.xml"
     if pom.exists():
         cur = details_mod.pom_version(pom.read_text())
@@ -199,15 +211,20 @@ def release_prepare(ctx):
     _mvn(ctx, "Release prepare", "release:prepare", "-DautoVersionSubmodules=true",
          f"-DreleaseVersion={d['version']}", f"-Dtag={ctx.rc_tag}", f"-DdevelopmentVersion={d['developmentVersion']}",
          env=git_env(ctx))
-    return f"prepared {ctx.rc_tag}"
+    return ctx.runner.skipped_note(mark, f"prepared {ctx.rc_tag}")
 
 
 @step
 def release_diff_review(ctx):
+    if ctx.dry_run:   # release:prepare did not run, so there is no RC tag to diff
+        ctx.review("Does the release diff look right?", key="review.diff", look_at="")
+        return "skipped (dry run): no release commit to diff; nothing to review"
     r = ctx.runner.run(["git", "-C", str(ctx.ws), "diff", f"{ctx.rc_tag}^", ctx.rc_tag], title="Release diff",
                        mutating=False)
     ctx.say(r.out)
-    if ctx.prompt.confirm("Does the release diff look right?", key="review.diff") is not True:
+    look_at = (f"Read the diff above, {ctx.rc_tag}^ to {ctx.rc_tag} in {ctx.ws}: it should change only the pom "
+               f"versions (to {ctx.version}) and the SCM tag.")
+    if ctx.review("Does the release diff look right?", key="review.diff", look_at=look_at) is not True:
         raise StepError("release diff not accepted")
     return "diff accepted"
 
@@ -224,6 +241,7 @@ def _listing(ctx):
 
 @step
 def release_perform(ctx):
+    mark = len(ctx.runner.skipped)
     listing = _listing(ctx)
     for repo in listing:
         if repo.get("state") in ("open", "closed"):
@@ -234,7 +252,7 @@ def release_perform(ctx):
     _mvn(ctx, "Release perform", "release:perform", inventory.MVN_CHECKSUMS, env=git_env(ctx))
     if ctx.dry_run:
         ctx.rf.set("nexusRepoId", DRY_REPO)   # a stand-in, so the later rows can print what they would do
-        return "performed (dry run)"
+        return ctx.runner.skipped_note(mark, "performed (dry run)")
     new = [r for r in ctx.nexus.repositories() if r["repositoryId"] not in before]
     if not new:
         raise StepError("no new Nexus staging repository after release:perform")
@@ -248,12 +266,13 @@ DRY_REPO = "orgapachejuneau-DRYRUN"
 
 @step
 def nexus_close(ctx):
+    mark = len(ctx.runner.skipped)
     rid = ctx.rf.get("nexusRepoId")
     if not rid:
         raise StepError("no Nexus staging repository recorded; run release-perform first")
     ctx.nexus.close(rid)
     if ctx.dry_run:
-        return f"would close {rid}"
+        return ctx.runner.skipped_note(mark, f"would close {rid}")
     for _ in range(60):
         r = ctx.nexus.repo(rid)
         if r["state"] == "closed":
@@ -284,6 +303,7 @@ def wanted_files(v):
 
 @step
 def dist_stage(ctx):
+    mark = len(ctx.runner.skipped)
     v, rid = ctx.version, ctx.rf.get("nexusRepoId")
     want = wanted_files(v)
     out = ctx.run_dir / "dist"
@@ -310,7 +330,7 @@ def dist_stage(ctx):
         kind = "source" if "-src." in new else "binaries"
         ops.append(("put", str(out / new), f"{dev_dir(ctx, kind)}/{new}"))
     ctx.svn.mucc(ctx.rc_tag, ops, title="Stage on dist/dev")
-    return f"staged {ctx.rc_tag}"
+    return ctx.runner.skipped_note(mark, f"staged {ctx.rc_tag}")
 
 
 def _digest_recorded(text):
@@ -321,11 +341,13 @@ def _digest_recorded(text):
 
 @step
 def dist_verify(ctx):
+    if ctx.dry_run:   # dist_stage committed nothing, so there is nothing on dist/dev to list or check
+        return "skipped (dry run): nothing was staged to verify"
     out, v = ctx.run_dir / "dist", ctx.version
     for kind, name in (("source", f"apache-juneau-{v}-src.zip"), ("binaries", f"apache-juneau-{v}-bin.zip")):
         listing = [e.rstrip("/") for e in ctx.svn.ls(dev_dir(ctx, kind) + "/") or []]
         for suffix in ("", ".asc", ".sha512"):
-            if (name + suffix) not in listing and not ctx.dry_run:
+            if (name + suffix) not in listing:
                 raise StepError(f"dist/dev {kind} lacks {name + suffix}")
         local = out / name
         if local.exists():

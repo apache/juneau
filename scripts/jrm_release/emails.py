@@ -15,7 +15,11 @@ def propose(d):
 
 
 def send(ctx, kind, to, subject, body, cc=()):
-    """Ask the prompt channel to open the mail.  Sent: recorded in run.json.  'Not yet': Pause(done=False)."""
+    """Ask the prompt channel to open the mail.  Sent: recorded in run.json.  'Not yet': Pause(done=False).  Under
+    --dry-run nothing is sent, so the mail is shown and the question answers itself."""
+    if ctx.dry_run:
+        ctx.say(f"(dry run: nothing is sent) {kind} email to {to}: {subject}\n\n{body}")
+        return f"skipped (dry run): {kind} email not sent"
     sent = ctx.prompt.email(to=to, subject=subject, body=body, cc=cc, key=f"email.{kind}")
     if sent is None:
         raise KeyboardInterrupt

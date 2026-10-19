@@ -109,10 +109,10 @@ def followup_checklist(ctx):
     items = ["Update the release notes / website (juneau-docs).", "Update the Docker/Maven badges if any.",
              "Close the release milestone / issues.", "Remove old releases from dist/release if policy requires."]
     ctx.say("Follow-up checklist:\n- " + "\n- ".join(items))
-    if ctx.prompt.confirm("Have you done these follow-ups?", key="confirm.followup") is not True:
+    if ctx.review("Have you done these follow-ups?", key="confirm.followup", look_at="The checklist above:") is not True:
         raise ctx.pause("Finish the follow-ups, then re-run with --resume.", done=False)
     ctx.rf.set("followup", {"done": True})
-    return "follow-ups done"
+    return "skipped (dry run): nothing to review" if ctx.dry_run else "follow-ups done"
 
 
 @step

@@ -8,10 +8,14 @@ class Svn:
     def __init__(self, runner, user, password):
         self.runner, self.user, self.password = runner, user, password
 
-    def ls(self, url):
-        """Entry names (trailing / kept), or None when the url cannot be listed."""
-        r = self.runner.run(["svn", "ls", *BASE, url], title=f"svn ls {url.rstrip('/').rsplit('/', 1)[-1]}",
-                            mutating=False, tool="svn")
+    def ls(self, url, *, quiet=False):
+        """Entry names (trailing / kept), or None when the url cannot be listed.  quiet keeps the listing off the
+        console and out of the log (it is not a row)."""
+        title = f"svn ls {url.rstrip('/').rsplit('/', 1)[-1]}"
+        if quiet:
+            r = self.runner.quiet(["svn", "ls", *BASE, url], title=title)
+        else:
+            r = self.runner.run(["svn", "ls", *BASE, url], title=title, mutating=False, tool="svn")
         return [line for line in r.out.splitlines() if line.strip()] if r.ok else None
 
     def mucc(self, message, ops, *, title="svnmucc commit"):

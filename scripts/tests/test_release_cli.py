@@ -140,7 +140,7 @@ def test_start_step_refusal_exits_2(home, capsys):
 
 def test_skip_step_only_skippable(home, capsys):
     code, out = run_main(["--skip-step", "build-verify"], home, capsys)
-    assert code == 2 and "javadoc-verify" in out and "test-workspace-verify" in out
+    assert code == 2 and "javadoc-verify" in out
 
 
 def test_lock_busy_message(home):
@@ -238,7 +238,7 @@ def test_failed_step_exits_1_and_hints_resume(home, capsys, tmp_path, monkeypatc
 
 def test_dry_run_goes_through_every_step_to_vote_gate(home, capsys, tmp_path, monkeypatch):
     answers = {"release.branch": "juneau-9.2.1-branch", "email.propose": True, "review.javadoc": True,
-               "review.workspaces": True, "review.diff": True, "email.vote": True,
+               "review.diff": True, "email.vote": True,
                "release.details": {"version": "9.2.1", "developmentVersion": "9.2.2-SNAPSHOT", "rc": 1,
                                    "summary": "Fixes."}}
     from conftest import FakeHttp

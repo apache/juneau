@@ -6,6 +6,8 @@ import tempfile
 from datetime import datetime
 from pathlib import Path
 
+from .inventory import RETIRED
+
 SCHEMA = 1
 
 
@@ -46,6 +48,8 @@ class RunFile:
                                    f"resumes from a guess.") from e
             if not isinstance(self.data, dict) or self.data.get("schema") != SCHEMA:
                 raise RunFileError(f"{self.path} is not a schema-{SCHEMA} run file")
+        if self.data.get("last") in RETIRED:   # saved by a version that still had the step
+            self.data["last"] = RETIRED[self.data["last"]]
         if dry_run:
             self.data = copy.deepcopy(self.data)
 

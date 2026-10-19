@@ -23,7 +23,7 @@ TOOLS = {
     "mvn": (["mvn", "-version"], (3, 6), "", "brew install maven"),
     "java": (["java", "-version"], (17, 0), "Juneau builds on Java 17", "brew install openjdk@17"),
     "svn": (["svn", "--version", "--quiet"], (1, 10), "needs --password-from-stdin", "brew install subversion"),
-    "svnmucc": (["svnmucc", "--version", "--quiet"], (1, 10), "needs --password-from-stdin",
+    "svnmucc": (["svnmucc", "--version"], (1, 10), "needs --password-from-stdin",
                 "brew install subversion"),
     "gpg": (["gpg", "--version"], (2, 1), "needs --pinentry-mode loopback", "brew install gnupg"),
     "gh": (["gh", "--version"], (2, 28), "needs release create --verify-tag and --latest=false", "brew install gh"),
@@ -67,7 +67,7 @@ def _java_failure(ctx):
     binary = java_binary()
     if binary == "java" and shutil.which("java") is None:
         return f"java: not on PATH ({TOOLS['java'][3]})"
-    out = ctx.runner.run([binary, "-version"], title="java version", mutating=False, merge_err=True).out
+    out = ctx.runner.quiet([binary, "-version"], title="java version", merge_err=True).out
     major = java_major(out)
     if major is None:
         return f"java: no version line in the output of {binary} -version; first line: {_first_line(out)}"
@@ -87,7 +87,7 @@ def _tool_failure(ctx, name):
         return f"{name}: not on PATH ({hint})"
     if minimum is None or argv is None:
         return None
-    out = ctx.runner.run(argv, title=f"{name} version", mutating=False).out
+    out = ctx.runner.quiet(argv, title=f"{name} version").out
     got = parse_version(out)
     if got is None:
         return f"{name}: cannot read a version from `{' '.join(argv)}`; output starts: {_first_line(out)}"
@@ -97,27 +97,44 @@ def _tool_failure(ctx, name):
     return None
 
 
-def check(ctx):
-    """Run every answer-independent check, say each ✔/❌ line, and return the failure strings (empty = all good).
-    The result is kept on ctx.prereq so the Prerequisites step reports it without running anything again."""
-    failed = []
+def _verdict(failure):
+    from juneau_scripts import checks   # the toolkit's gate-check model; on sys.path once release.py has bootstrapped
+    return checks.Verdict("fail", failure) if failure else checks.PASS
 
-    def report(name, failure):
-        ctx.say(f"{'❌' if failure else '✔'} {name}", "error" if failure else "info")
-        if failure:
-            failed.append(failure)
 
-    for name in TOOLS:
-        report(name, _tool_failure(ctx, name))
-    report("nexus reachable", None if ctx.http_ok(inventory.NEXUS_URL)
-           else f"nexus reachable: cannot reach {inventory.NEXUS_URL} (check your network or proxy)")
+def _plan(ctx):
+    """[(name, fn)] for every answer-independent check; fn() returns a failure string or None."""
+    plan = [(name, lambda name=name: _tool_failure(ctx, name)) for name in TOOLS]
+    plan.append(("nexus reachable", lambda: None if ctx.http_ok(inventory.NEXUS_URL)
+                 else f"nexus reachable: cannot reach {inventory.NEXUS_URL} (check your network or proxy)"))
     if shutil.which("svn") is None:
         ctx.say("- dist/dev reachable: skipped (svn is missing)")
     else:   # anonymous: no username, no password
-        report("dist/dev reachable", None if ctx.svn.ls(inventory.DIST_DEV + "/") is not None
-               else f"dist/dev reachable: cannot list {inventory.DIST_DEV} anonymously (check your network or proxy)")
-    ctx.prereq = failed
-    return failed
+        plan.append(("dist/dev reachable", lambda: None if ctx.svn.ls(inventory.DIST_DEV + "/", quiet=True) is not None
+                     else f"dist/dev reachable: cannot list {inventory.DIST_DEV} anonymously "
+                          "(check your network or proxy)"))
+    return plan
+
+
+def check(ctx):
+    """Run every answer-independent check and return the failure strings (empty = all good).  Nothing is drawn: the
+    Prerequisites row (checks() below) replays the verdicts, so its bar is the one that stays on the screen.  The
+    result is kept on ctx.prereq and ctx.prereq_verdicts so nothing runs twice."""
+    verdicts = {}
+    for name, fn in _plan(ctx):
+        verdicts[name] = _verdict(fn())
+    ctx.prereq_verdicts = verdicts
+    ctx.prereq = [v.reason for v in verdicts.values() if v.status == "fail"]
+    return ctx.prereq
+
+
+def checks(ctx):
+    """The Prerequisites row's checks, one bar cell each: the early result replayed (run now if release.py has not
+    run it)."""
+    from juneau_scripts import checks as ck
+    if ctx.prereq_verdicts is None:
+        check(ctx)
+    return [ck.Check(name, lambda v=v: v) for name, v in ctx.prereq_verdicts.items()]
 
 
 def step(ctx):
