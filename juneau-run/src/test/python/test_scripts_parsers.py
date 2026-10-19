@@ -177,6 +177,30 @@ class DetectTest(unittest.TestCase):
             with self.subTest(argv=argv):
                 self.assertIsNone(parsers.detect(argv, is_pytest=jr._is_pytest_command))
 
+    def test_pytest_behind_env_is_detected_as_juneau_run_sees_it(self):
+        for argv in (["env", "CI=1", "pytest"], ["env", "-u", "X", "python", "-m", "pytest"],
+                     ["env", "A=1", "uv", "run", "pytest"], ["npx", "pytest"]):
+            with self.subTest(argv=argv):
+                self.assertGreaterEqual(jr._pytest_index(argv), 0)
+                self.assertEqual(parsers.detect(argv, is_pytest=jr._is_pytest_command), "pytest")
+                if "uv" not in argv:   # the fallback check does not know runners such as uv
+                    self.assertEqual(parsers.detect(argv), "pytest")
+
+    def test_program_index_walks_past_launchers(self):
+        for argv, want in [(["gradle", "x"], 0), (["env", "A=1", "gradle"], 2), (["env", "-u", "A", "gradle"], 3),
+                           (["env", "-i", "-", "gradle"], 3), (["npx", "-y", "tsc"], 2), (["pnpm", "exec", "tsc"], 2),
+                           (["yarn", "tsc"], 1), (["npm", "exec", "--", "tsc"], 3), (["env", "A=1"], 2), ([], 0)]:
+            with self.subTest(argv=argv):
+                self.assertEqual(parsers.program_index(argv), want)
+
+    def test_juneau_run_walks_past_launchers_the_same_way(self):
+        for argv in [["gradle"], ["env", "A=1", "gradle"], ["env", "--unset=A", "-i", "mvn"], ["env", "-u"],
+                     ["/usr/bin/env", "A=1", "bazel"], ["npx", "-y", "tsc"], ["pnpm", "dlx", "x"], ["pnpm"],
+                     ["yarn", "run", "x"], ["npm", "exec", "--", "x"], ["npm", "exec"], ["npm", "test"], ["env"],
+                     ["env", "npx", "-p", "pkg", "tsc"], []]:
+            with self.subTest(argv=argv):
+                self.assertEqual(jr._program_index(argv), parsers.program_index(argv))
+
     def test_a_dash_m_pytest_needs_a_python_program(self):
         self.assertIsNone(parsers.detect(["git", "commit", "-m", "pytest"]))
         self.assertIsNone(parsers.detect(["git", "commit", "-m", "pytest"], is_pytest=jr._is_pytest_command))

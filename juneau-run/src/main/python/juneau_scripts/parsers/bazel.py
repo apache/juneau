@@ -28,6 +28,7 @@ from pathlib import Path
 from urllib.parse import unquote, urlparse
 
 from . import _BAZEL_COMMANDS as COMMANDS
+from . import program_index
 from . import _side
 
 FLAG = "--build_event_json_file"
@@ -41,9 +42,9 @@ _BARE_LEVEL = re.compile(r"^[A-Z]+:$")      # Bazel ends its output with a bare 
 
 
 def command_index(cmd):
-    """Index of the Bazel command word: the first argument after the program that is not a startup option; -1 if
-    none."""
-    for i in range(1, len(cmd)):
+    """Index of the Bazel command word: the first argument after the program (past any launcher in front of it) that is
+    not a startup option; -1 if none."""
+    for i in range(program_index(cmd) + 1, len(cmd)):
         if not cmd[i].startswith("-"):
             return i
     return -1

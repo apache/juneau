@@ -64,6 +64,25 @@ class InjectionTest(unittest.TestCase):
         cmd, _ = self.prep(["python3", "-m", "pytest", "-q"])
         self.assertEqual(cmd[:5], ["python3", "-m", "pytest", "-p", "juneau_run_pytest"])
 
+    def test_plugin_goes_after_pytest_behind_env(self):
+        cmd, _ = self.prep(["env", "NAME=v", "pytest", "-q"])
+        self.assertEqual(cmd[:5], ["env", "NAME=v", "pytest", "-p", "juneau_run_pytest"])
+        cmd, _ = self.prep(["env", "-u", "X", "python", "-m", "pytest", "-q"])
+        self.assertEqual(cmd[:8], ["env", "-u", "X", "python", "-m", "pytest", "-p", "juneau_run_pytest"])
+
+    def test_plugin_goes_after_pytest_behind_env_and_a_runner(self):
+        cmd, _ = self.prep(["env", "A=1", "uv", "run", "pytest", "t"])
+        self.assertEqual(cmd[:7], ["env", "A=1", "uv", "run", "pytest", "-p", "juneau_run_pytest"])
+
+    def test_plain_and_runner_forms_are_unchanged(self):
+        self.assertEqual(self.prep(["pytest", "t"])[0][:3], ["pytest", "-p", "juneau_run_pytest"])
+        self.assertEqual(self.prep(["uv", "run", "pytest"])[0][:5], ["uv", "run", "pytest", "-p", "juneau_run_pytest"])
+
+    def test_env_in_front_of_something_else_is_not_pytest(self):
+        for cmd in (["env", "A=1", "make", "pytest"], ["env", "A=1"], ["env", "-u", "X", "tox", "-e", "pytest"]):
+            self.assertEqual(jr._pytest_index(cmd), -1, cmd)
+            self.assertNotIn("juneau_run_pytest", self.prep(cmd)[0])
+
     def test_is_pytest_command(self):
         for cmd in (["pytest"], ["python", "-m", "pytest"], ["uv", "run", "pytest"],
                     ["uv", "run", "--with", "x", "pytest"], ["uv", "run", "--", "pytest"], ["/v/bin/py.test", "t"]):

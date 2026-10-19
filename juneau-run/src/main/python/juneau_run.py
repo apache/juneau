@@ -2681,6 +2681,41 @@ def strip_ansi(text):
     return ANSI_RE.sub("", text)
 
 
+def _program_index(cmd):
+    """Index of the real program in cmd, past the launchers in front of it (env with its options and NAME=value pairs,
+    npx/bunx, pnpm/yarn, npm exec); len(cmd) if nothing follows them.  A parser that edits argv inserts its options
+    after this program, not after cmd[0].  Kept here because juneau_run must run without juneau_scripts;
+    juneau_scripts.parsers.program_index is the same walk (a test holds them together)."""
+    i = 0
+    while i < len(cmd):
+        prog = os.path.basename(cmd[i].replace("\\", "/"))
+        if prog == "env":
+            i += 1
+            while i < len(cmd):
+                a = cmd[i]
+                if a in ("-i", "--ignore-environment", "-"):
+                    i += 1
+                elif a in ("-u", "--unset"):
+                    i += 2
+                elif a.startswith("--unset=") or ("=" in a and not a.startswith("-")):
+                    i += 1
+                else:
+                    break
+        elif prog in ("npx", "bunx"):
+            i += 1
+            while i < len(cmd) and cmd[i].startswith("-"):
+                i += 1
+        elif prog == "pnpm":
+            i += 2 if cmd[i + 1:i + 2] in (["exec"], ["dlx"]) else 1
+        elif prog == "yarn":
+            i += 2 if cmd[i + 1:i + 2] in (["run"], ["exec"], ["dlx"]) else 1
+        elif prog == "npm" and cmd[i + 1:i + 2] == ["exec"]:
+            i += 3 if cmd[i + 2:i + 3] == ["--"] else 2
+        else:
+            return i
+    return len(cmd)
+
+
 class Parser:
     """Base parser: no sub-steps, no counts.  step_id and interactive are set by the runner before prepare().
 
@@ -2874,7 +2909,8 @@ class MavenParser(Parser):
         self.started = time.time()
         self.cwd = Path(cwd) if cwd else Path.cwd()
         # A "sh -c" command is one string, so look for options at a word boundary rather than as whole arguments.
-        args = " ".join(cmd[1:])
+        at = _program_index(cmd) + 1
+        args = " ".join(cmd[at:])
         root = self.cwd
         m = self.FILE_OPTION.search(args)
         if m:
@@ -2882,7 +2918,7 @@ class MavenParser(Parser):
             root = pom.parent if pom.suffix == ".xml" else pom
         self.packaging = {}
         self.dirs, self.names = read_pom_tree(root, self.packaging)
-        self.parallel = any(re.search(r"(?:^|\s)(?:-T|--threads)", a) for a in cmd[1:])
+        self.parallel = any(re.search(r"(?:^|\s)(?:-T|--threads)", a) for a in cmd[at:])
         self.tests_mode = not self.SKIP_TESTS.search(args)
         return cmd, env
 
@@ -3239,9 +3275,14 @@ def _is_pytest_name(arg):
 def _pytest_index(cmd):
     """Index of the token that launches pytest (pytest, py.test, or the `pytest` after `-m`), or -1.  Only the program
     position counts: cmd[0], the program after a launcher's `run` (past its flags and their values, or after `--`), or
-    the module after `-m` -- so `tox -e pytest`, `make pytest` and `uv run --with pytest python -m foo` do not match."""
+    the module after `-m` -- so `tox -e pytest`, `make pytest` and `uv run --with pytest python -m foo` do not match.
+    Launchers in front of the program (env and its options and NAME=value pairs, npx) are looked through."""
     if not cmd:
         return -1
+    lead = _program_index(cmd)
+    if lead:
+        found = _pytest_index(cmd[lead:])
+        return found + lead if found >= 0 else -1
     if _is_pytest_name(cmd[0]):
         return 0
     for i in range(len(cmd) - 1):
@@ -3584,8 +3625,9 @@ class GradleParser(Parser):
         self.tail = collections.deque(maxlen=self.TAIL)
 
     def prepare(self, cmd, env, cwd):
-        if not any(a.startswith("--console") for a in cmd):
-            cmd = [cmd[0], "--console=plain", *cmd[1:]]
+        at = _program_index(cmd) + 1
+        if not any(a.startswith("--console") for a in cmd[at:]):
+            cmd = [*cmd[:at], "--console=plain", *cmd[at:]]
         return cmd, env
 
     def _close(self, status):

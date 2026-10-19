@@ -754,6 +754,43 @@ def gradle(text, exit_code=0, args=("build",)):
     return parser, cmd, feed(parser, text, exit_code)
 
 
+class GradleConsoleOptionTest(unittest.TestCase):
+    """--console=plain goes right after the program that is run, behind any launcher."""
+
+    def prepared(self, argv):
+        parser = jr.GradleParser()
+        parser.step_id = "g"
+        return parser.prepare(list(argv), None, "/nonexistent")[0]
+
+    def test_plain_gradle_gets_the_option_after_the_program(self):
+        self.assertEqual(self.prepared(["gradle", "build"]), ["gradle", "--console=plain", "build"])
+
+    def test_the_option_follows_env_assignments(self):
+        self.assertEqual(self.prepared(["env", "JAVA_HOME=/x", "gradle", "--version"]),
+                         ["env", "JAVA_HOME=/x", "gradle", "--console=plain", "--version"])
+
+    def test_the_option_follows_env_options(self):
+        self.assertEqual(self.prepared(["env", "-u", "X", "-i", "A=1", "./gradlew", "build"]),
+                         ["env", "-u", "X", "-i", "A=1", "./gradlew", "--console=plain", "build"])
+
+    def test_a_console_option_already_given_is_left_alone(self):
+        for argv in (["gradle", "--console=rich", "build"], ["env", "A=1", "gradle", "--console", "verbose", "build"]):
+            with self.subTest(argv=argv):
+                self.assertEqual(self.prepared(argv), argv)
+
+    def test_a_console_looking_value_in_an_env_assignment_does_not_count(self):
+        self.assertEqual(self.prepared(["env", "C=--console=rich", "gradle", "build"]),
+                         ["env", "C=--console=rich", "gradle", "--console=plain", "build"])
+
+    def test_the_maven_options_are_read_from_the_wrapped_programs_arguments(self):
+        parser = jr.MavenParser()
+        parser.step_id = "m"
+        parser.prepare(["env", "A=-T4", "mvn", "test"], None, "/nonexistent")
+        self.assertFalse(parser.parallel)
+        parser.prepare(["env", "A=1", "mvn", "test", "-T", "2"], None, "/nonexistent")
+        self.assertTrue(parser.parallel)
+
+
 class GradleStructureTest(unittest.TestCase):
     """GradleParser on inline lines, so the test run never needs Gradle."""
 

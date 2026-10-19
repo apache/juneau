@@ -290,6 +290,18 @@ class BazelParserTest(unittest.TestCase):
         self.assertTrue(cmd[2].startswith(bazel.FLAG + "="))
         self.assertIsNotNone(p.tmp)
 
+    def test_the_flag_goes_after_the_command_behind_a_launcher(self):
+        for argv in (["env", "A=1", "bazel", "build", "//..."], ["env", "-u", "A", "bazel", "build", "//..."]):
+            with self.subTest(argv=argv):
+                p = bazel.BazelParser(clock=FakeClock())
+                p.step_id = "t"
+                cmd, _ = p.prepare(list(argv), {}, ".")
+                self.addCleanup(p.close)
+                at = cmd.index("build") + 1
+                self.assertEqual(cmd[:at], argv[:at])
+                self.assertTrue(cmd[at].startswith(bazel.FLAG + "="))
+                self.assertEqual(cmd[at + 1:], ["//..."])
+
     def test_close_removes_the_temp_dir(self):
         p = bazel.BazelParser(clock=FakeClock())
         p.step_id = "t"

@@ -71,13 +71,16 @@ def _foreign_dash_m(args):
     return "-m" in args and prog not in ("pytest", "py.test", "env", *_LAUNCHERS) and not _PYTHON.match(prog)
 
 
-def _unwrap(args):
-    """args with the launchers in front of the real program removed: env (and its options and NAME=value pairs),
-    npx/bunx (and their flags), pnpm/yarn (and exec/dlx/run), npm exec (and an optional --)."""
-    while args:
-        prog = _program(args[0])
+def program_index(args):
+    """Index of the real program in args, past the launchers in front of it: env (and its options and NAME=value
+    pairs), npx/bunx (and their flags), pnpm/yarn (and exec/dlx/run), npm exec (and an optional --).  len(args) when
+    nothing follows the launchers.  juneau_run carries the same walk as _program_index, for a parser that runs without
+    this package."""
+    i = 0
+    while i < len(args):
+        prog = _program(args[i])
         if prog == "env":
-            i = 1
+            i += 1
             while i < len(args):
                 a = args[i]
                 if a in ("-i", "--ignore-environment", "-"):
@@ -88,21 +91,24 @@ def _unwrap(args):
                     i += 1
                 else:
                     break
-            args = args[i:]
         elif prog in ("npx", "bunx"):
-            i = 1
+            i += 1
             while i < len(args) and args[i].startswith("-"):
                 i += 1
-            args = args[i:]
         elif prog == "pnpm":
-            args = args[2:] if args[1:2] in (["exec"], ["dlx"]) else args[1:]
+            i += 2 if args[i + 1:i + 2] in (["exec"], ["dlx"]) else 1
         elif prog == "yarn":
-            args = args[2:] if args[1:2] in (["run"], ["exec"], ["dlx"]) else args[1:]
-        elif prog == "npm" and args[1:2] == ["exec"]:
-            args = args[3:] if args[2:3] == ["--"] else args[2:]
+            i += 2 if args[i + 1:i + 2] in (["run"], ["exec"], ["dlx"]) else 1
+        elif prog == "npm" and args[i + 1:i + 2] == ["exec"]:
+            i += 3 if args[i + 2:i + 3] == ["--"] else 2
         else:
-            return args
-    return args
+            return i
+    return len(args)
+
+
+def _unwrap(args):
+    """args with the launchers in front of the real program removed."""
+    return args[program_index(args):]
 
 
 def detect(argv, *, is_pytest=None):
