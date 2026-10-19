@@ -33,6 +33,9 @@ import org.apache.juneau.marshall.marshaller.Json;
  */
 public class RunStateStore {
 
+	// Step ids removed from the pipeline; saved runs that still carry them are remapped on load.
+	private static final List<String> RETIRED_STEP_IDS = List.of("test-workspace-verify");
+
 	private final Path stateDir;
 
 	// Invoked with the just-saved run after every save() — the single choke point the New-Release tab's
@@ -103,10 +106,29 @@ public class RunStateStore {
 		if (!Files.isRegularFile(f))
 			return Optional.empty();
 		try {
-			return Optional.of(Json.DEFAULT.read(Files.readString(f), RunState.class));
+			return Optional.of(dropRetiredSteps(Json.DEFAULT.read(Files.readString(f), RunState.class)));
 		} catch (IOException e) {
 			throw isex(e, "Unreadable run state: %s", f);
 		}
+	}
+
+	/**
+	 * Remaps a run saved by a version that still had a since-retired step: the step is removed, and a
+	 * {@code currentStepId} pointing at it moves to the step that followed it, so the run resumes there.
+	 */
+	static RunState dropRetiredSteps(RunState rs) {
+		for (var retired : RETIRED_STEP_IDS) {
+			var i = -1;
+			for (var k = 0; k < rs.steps.size(); k++)
+				if (retired.equals(rs.steps.get(k).id))
+					i = k;
+			if (i < 0)
+				continue;
+			rs.steps.remove(i);
+			if (retired.equals(rs.currentStepId))
+				rs.currentStepId = i < rs.steps.size() ? rs.steps.get(i).id : null;
+		}
+		return rs;
 	}
 
 	/**
@@ -122,7 +144,7 @@ public class RunStateStore {
 				return n.startsWith("release-") && n.endsWith(".json");
 			}).sorted().forEach(p -> {
 				try {
-					out.add(Json.DEFAULT.read(Files.readString(p), RunState.class));
+					out.add(dropRetiredSteps(Json.DEFAULT.read(Files.readString(p), RunState.class)));
 				} catch (IOException e) {
 					throw isex(e, "Unreadable run state: %s", p);
 				}

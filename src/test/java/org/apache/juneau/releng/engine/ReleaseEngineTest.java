@@ -93,7 +93,7 @@ class ReleaseEngineTest {
 	void a01_startCreatesRunSeededPending(@TempDir Path dir) {
 		var eng = engine(dir);
 		var rs = eng.start("9.2.1", null);
-		assertBean(rs, "branch,steps{length},rc", "juneau-9.2.1-branch,{23},1");
+		assertBean(rs, "branch,steps{length},rc", "juneau-9.2.1-branch,{22},1");
 		assertEquals(StepStatus.PENDING, rs.step("preflight").status);
 	}
 
@@ -320,9 +320,8 @@ class ReleaseEngineTest {
 		for (var s : rs.steps)
 			if (!s.id.equals("finalize-run"))
 				s.status = StepStatus.SUCCEEDED;
-		// javadoc-verify/test-workspace-verify are skippable; SKIPPED counts as terminal-success for them.
+		// javadoc-verify is skippable; SKIPPED counts as terminal-success for it.
 		rs.step("javadoc-verify").status = StepStatus.SKIPPED;
-		rs.step("test-workspace-verify").status = StepStatus.SKIPPED;
 		new RunStateStore(dir).save(rs);
 
 		var res = eng.apply("9.2.1", "finalize-run", Map.of());
@@ -357,7 +356,7 @@ class ReleaseEngineTest {
 	}
 
 	@Test
-	void f03_skipAndConfirmReviewEachPublishASnapshot(@TempDir Path dir) {
+	void f03_confirmReviewPublishesASnapshot(@TempDir Path dir) {
 		var eng = engine(dir);
 		eng.start("9.2.1", null);
 		satisfyAllPredecessorsOf(dir, "9.2.1", "javadoc-verify");
@@ -367,10 +366,6 @@ class ReleaseEngineTest {
 		eng.confirmReview("9.2.1", "javadoc-verify");
 		assertSize(1, seen);
 		assertEquals(StepStatus.SUCCEEDED, statusOf(seen.get(0), "javadoc-verify"));
-
-		eng.skip("9.2.1", "test-workspace-verify"); // a skippable step
-		assertSize(2, seen);
-		assertEquals(StepStatus.SKIPPED, statusOf(seen.get(1), "test-workspace-verify"));
 	}
 
 	@Test

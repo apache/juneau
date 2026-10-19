@@ -61,7 +61,7 @@ class DropRcServiceTest {
 		var ids = StepRegistry.standard(new BranchResolver(runner(), "/repo")).ids();
 		var rs = RunState.create("9.2.1", "juneau-9.2.1-branch", ids);
 		for (var id : List.of("preflight", "compose-propose-email", "workspace-setup", "build-verify", "javadoc-verify",
-				"test-workspace-verify", "deploy-snapshot", "release-prepare")) {
+				"deploy-snapshot", "release-prepare")) {
 			rs.step(id).status = StepStatus.SUCCEEDED;
 			rs.step(id).logRef = "logs/9.2.1-RC1-" + id + ".log"; // so the reset-clears-logRef test is meaningful
 		}

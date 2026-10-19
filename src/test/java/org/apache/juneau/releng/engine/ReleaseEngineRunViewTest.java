@@ -216,9 +216,9 @@ class ReleaseEngineRunViewTest {
 		var eng = engine(dir);
 		eng.start("9.2.1", null);
 
-		eng.skip("9.2.1", "test-workspace-verify");
+		eng.skip("9.2.1", "javadoc-verify");
 
-		assertEquals(List.of("step:test-workspace-verify", "end:test-workspace-verify:skip"), summary(eng));
+		assertEquals(List.of("step:javadoc-verify", "end:javadoc-verify:skip"), summary(eng));
 	}
 
 	@Test

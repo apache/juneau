@@ -115,11 +115,125 @@ def test_release_prepare_argv_and_askpass_env(make_ctx):
     assert call["env"]["JRM_ASKPASS_PASS"] == "s3cr3t-pw" and "s3cr3t-pw" not in " ".join(call["argv"])
 
 
-def test_release_diff_review_needs_acceptance(make_ctx):
-    ctx = make_ctx(answers={"review.diff": False})
+def ver(a, b):
+    return f"<version>{a}</version>", f"<version>{b}</version>"
+
+
+def _hunk(path, old, new, line=5):
+    return (f"diff --git a/{path} b/{path}\nindex 1..2 100644\n--- a/{path}\n+++ b/{path}\n@@ -{line} +{line} @@\n"
+            f"-{old}\n+{new}\n")
+
+
+REL = "[maven-release-plugin] prepare release juneau-9.2.1-RC1"
+NXT = "[maven-release-plugin] prepare for next development iteration"
+ROOT_POMS = {"pom.xml": "<module>a</module><version>9.2.1-SNAPSHOT</version>",
+             "a/pom.xml": "<version>9.2.1-SNAPSHOT</version>"}
+
+
+def _release_ctx(make_ctx, *, rel=None, nxt=None, rel_subject=REL, nxt_subject=NXT, poms=None, follow="abc123\n",
+                 answers=None):
+    ctx = make_ctx(answers=answers or {})
+    tag, ws = "juneau-9.2.1-RC1", str(ctx.ws)
+    rel = rel if rel is not None else (_hunk("pom.xml", *ver("9.2.1-SNAPSHOT", "9.2.1"))
+                                       + _hunk("a/pom.xml", *ver("9.2.1-SNAPSHOT", "9.2.1"))
+                                       + _hunk("pom.xml", "<tag>HEAD</tag>", f"<tag>{tag}</tag>", 9))
+    nxt = nxt if nxt is not None else (_hunk("pom.xml", *ver("9.2.1", "9.2.2-SNAPSHOT"))
+                                       + _hunk("a/pom.xml", *ver("9.2.1", "9.2.2-SNAPSHOT"))
+                                       + _hunk("pom.xml", f"<tag>{tag}</tag>", "<tag>HEAD</tag>", 9))
+    f = ctx.fake
+    f.script("git", "-C", ws, "diff", "-U0", f"{tag}^", tag, out=rel)
+    f.script("git", "-C", ws, "log", "-1", "--format=%s", tag, out=rel_subject)
+    f.script("git", "-C", ws, "log", "--reverse", "--ancestry-path", "--format=%H", f"{tag}..HEAD", out=follow)
+    f.script("git", "-C", ws, "diff", "-U0", f"{tag}..abc123", out=nxt)
+    f.script("git", "-C", ws, "log", "-1", "--format=%s", "abc123", out=nxt_subject)
+    for path, text in (poms if poms is not None else ROOT_POMS).items():
+        f.script("git", "-C", ws, "show", f"{tag}^:{path}", out=text)
+    return ctx
+
+
+def _asked_review(ctx):
+    return [a for a in ctx.prompt.asked if a[1] == "review.diff"]
+
+
+def test_release_diff_clean_passes_without_asking(make_ctx):
+    ctx = _release_ctx(make_ctx)   # no review.diff answer: a prompt would raise
+    out = rc.release_diff_review(ctx)
+    assert out == "diff clean: 2 poms 9.2.1-SNAPSHOT -> 9.2.1, tag juneau-9.2.1-RC1; next iteration 9.2.1 -> 9.2.2-SNAPSHOT"
+    assert not _asked_review(ctx)
+    assert all(c.get("quiet") for c in ctx.fake.calls if c["argv"][3] in ("diff", "log", "show"))
+
+
+def test_release_diff_tag_change_is_optional(make_ctx):
+    # juneau's branch pom already names the RC tag, so the real commits touch only versions
+    ctx = _release_ctx(make_ctx, rel=_hunk("pom.xml", *ver("9.2.1-SNAPSHOT", "9.2.1")) + _hunk("a/pom.xml", *ver("9.2.1-SNAPSHOT", "9.2.1")),
+                       nxt=_hunk("pom.xml", *ver("9.2.1", "9.2.2-SNAPSHOT")) + _hunk("a/pom.xml", *ver("9.2.1", "9.2.2-SNAPSHOT")))
+    assert rc.release_diff_review(ctx).startswith("diff clean")
+
+
+def test_release_diff_non_pom_file_asks_and_shows_it(make_ctx):
+    extra = _hunk("README.md", "old", "new")
+    ctx = _release_ctx(make_ctx, answers={"review.diff": True})
+    ctx.fake.script("git", "-C", str(ctx.ws), "diff", "-U0", "juneau-9.2.1-RC1^", "juneau-9.2.1-RC1",
+                    out=_hunk("pom.xml", "<version>9.2.1-SNAPSHOT</version>", "<version>9.2.1</version>")
+                    + _hunk("a/pom.xml", "<version>9.2.1-SNAPSHOT</version>", "<version>9.2.1</version>") + extra)
+    assert rc.release_diff_review(ctx) == "diff accepted"
+    assert len(_asked_review(ctx)) == 1
+    assert any("not a pom.xml: README.md" in s for s in ctx.fake.said)
+
+
+def test_release_diff_dependency_version_change_is_flagged(make_ctx):
+    ctx = _release_ctx(make_ctx, answers={"review.diff": False},
+                       rel=_hunk("pom.xml", "<version>9.2.1-SNAPSHOT</version>", "<version>9.2.1</version>")
+                       + _hunk("a/pom.xml", "<version>4.12</version>", "<version>4.13</version>"))
+    with pytest.raises(StepError, match="not accepted"):
+        rc.release_diff_review(ctx)
+    said = "\n".join(ctx.fake.said)
+    assert "-<version>4.12</version>" in said and "+<version>4.13</version>" in said
+    assert "9.2.1-SNAPSHOT" not in said.split("unexpected change")[1].split("[next")[0].replace("<version>9.2.1-SNAPSHOT", "")
+
+
+def test_release_diff_missing_module_is_flagged(make_ctx):
+    poms = {**ROOT_POMS, "b/pom.xml": "<version>9.2.1-SNAPSHOT</version>", "pom.xml": "<module>a</module><module>b</module><version>9.2.1-SNAPSHOT</version>"}
+    ctx = _release_ctx(make_ctx, poms=poms, answers={"review.diff": True})
+    rc.release_diff_review(ctx)
+    assert any("skipped by the release commit: b/pom.xml" in s for s in ctx.fake.said)
+
+
+def test_release_diff_pom_outside_reactor_is_ignored(make_ctx):
+    poms = {**ROOT_POMS, "orphan/pom.xml": "<version>9.2.1-SNAPSHOT</version>"}
+    assert rc.release_diff_review(_release_ctx(make_ctx, poms=poms)).startswith("diff clean")
+
+
+def test_release_diff_wrong_tag_is_flagged(make_ctx):
+    ctx = _release_ctx(make_ctx, answers={"review.diff": True},
+                       rel=_hunk("pom.xml", *ver("9.2.1-SNAPSHOT", "9.2.1")) + _hunk("a/pom.xml", *ver("9.2.1-SNAPSHOT", "9.2.1"))
+                       + _hunk("pom.xml", "<tag>HEAD</tag>", "<tag>juneau-9.2.1-RC2</tag>", 9))
+    rc.release_diff_review(ctx)
+    assert any("+<tag>juneau-9.2.1-RC2</tag>" in s for s in ctx.fake.said)
+
+
+def test_release_diff_next_iteration_mismatch_is_flagged(make_ctx):
+    ctx = _release_ctx(make_ctx, answers={"review.diff": True},
+                       nxt=_hunk("pom.xml", *ver("9.2.1", "9.3.0-SNAPSHOT")) + _hunk("a/pom.xml", *ver("9.2.1", "9.2.2-SNAPSHOT")))
+    rc.release_diff_review(ctx)
+    said = "\n".join(ctx.fake.said)
+    assert "[next-iteration commit] unexpected change" in said and "+<version>9.3.0-SNAPSHOT</version>" in said
+
+
+def test_release_diff_next_iteration_wrong_message_or_missing(make_ctx):
+    ctx = _release_ctx(make_ctx, nxt_subject="Fix a bug", answers={"review.diff": True})
+    rc.release_diff_review(ctx)
+    assert any("commit message is 'Fix a bug'" in s for s in ctx.fake.said)
+    none = _release_ctx(make_ctx, follow="", answers={"review.diff": True})
+    rc.release_diff_review(none)
+    assert any("none found after juneau-9.2.1-RC1" in s for s in none.fake.said)
+
+
+def test_release_diff_unscripted_git_asks(make_ctx):
+    ctx = make_ctx(answers={"review.diff": False})   # every probe answers empty: nothing to check, so ask
     with pytest.raises(StepError, match="diff"):
         rc.release_diff_review(ctx)
-    assert ["git", "-C", str(ctx.ws), "diff", "juneau-9.2.1-RC1^", "juneau-9.2.1-RC1"] in ctx.fake.argvs()
+    assert len(_asked_review(ctx)) == 1
 
 
 def test_release_perform_offers_stale_repo_drop(make_ctx):
@@ -469,7 +583,7 @@ def test_dry_run_reviews_answer_themselves(make_ctx):
     assert rc.release_diff_review(ctx) == "skipped (dry run): no release commit to diff; nothing to review"
     assert [a for a in ctx.prompt.asked if a[1].startswith("review.")] == []
     assert sum("(dry run: nothing to review)" in s for s in ctx.fake.said) == 2
-    assert ["git", "-C", str(ctx.ws), "diff", "juneau-9.2.1-RC1^", "juneau-9.2.1-RC1"] not in ctx.fake.argvs()
+    assert ctx.fake.ran("git", "-C", str(ctx.ws), "diff") == []
 
 
 def test_dry_run_followups_do_not_prompt(make_ctx):
@@ -498,7 +612,7 @@ def test_javadoc_question_names_the_directory_and_hint(make_ctx):
 
 
 def test_diff_question_says_what_to_read(make_ctx):
-    ctx = make_ctx(answers={"review.diff": True})
+    ctx = make_ctx(answers={"review.diff": True})   # nothing scripted, so the check finds problems and asks
     rc.release_diff_review(ctx)
     msg = [a[2] for a in ctx.prompt.asked if a[1] == "review.diff"][0]
     assert "juneau-9.2.1-RC1^ to juneau-9.2.1-RC1" in msg and msg.endswith("(y/n)")

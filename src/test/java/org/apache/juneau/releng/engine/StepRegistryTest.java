@@ -29,10 +29,10 @@ class StepRegistryTest {
 	}
 
 	@Test
-	void a01_hasTwentyThreeStepsInSpecOrder() {
+	void a01_hasTwentyTwoStepsInSpecOrder() {
 		var ids = registry().ids();
-		assertBean(ids, "length,0,1,2,14,15,22",
-			"23,preflight,compose-propose-email,workspace-setup,vote-gate,tally-vote-result,finalize-run");
+		assertBean(ids, "length,0,1,2,13,14,21",
+			"22,preflight,compose-propose-email,workspace-setup,vote-gate,tally-vote-result,finalize-run");
 		assertFalse(ids.contains("milestone-close"));
 	}
 

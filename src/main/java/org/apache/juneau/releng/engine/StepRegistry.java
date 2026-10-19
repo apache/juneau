@@ -21,7 +21,7 @@ import java.util.List;
 import org.apache.juneau.releng.engine.steps.*;
 
 /**
- * The ordered list of the 23 pipeline steps.
+ * The ordered list of the 22 pipeline steps.
  */
 public class StepRegistry {
 
@@ -35,7 +35,7 @@ public class StepRegistry {
 	}
 
 	/**
-	 * The canonical 23-step pipeline in pipeline order.
+	 * The canonical 22-step pipeline in pipeline order.
 	 */
 	public static StepRegistry standard(BranchResolver branches) {
 		return new StepRegistry(List.of(new PreflightStep(branches), // 1
@@ -43,24 +43,23 @@ public class StepRegistry {
 				new WorkspaceSetupStep(), // 3
 				new BuildVerifyStep(), // 4
 				new JavadocVerifyStep(), // 5
-				new TestWorkspaceVerifyStep(), // 6
-				new DeploySnapshotStep(), // 7
-				new ReleasePrepareStep(), // 8
-				new ReleaseDiffReviewStep(), // 9
-				new ReleasePerformStep(), // 10
-				new NexusStagingCloseStep(), // 11
-				new BinaryArtifactsStageStep(), // 12
-				new DevDistVerifyStep(), // 13
-				new ComposeVoteEmailStep(), // 14
-				new VoteGateStep(), // 15
-				new TallyVoteResultStep(), // 16
-				new ComposeResultEmailStep(), // 17
-				new NexusReleaseStep(), // 18
-				new DistPromoteStep(), // 19
-				new GithubReleaseCreateStep(), // 20
-				new ManualFollowupChecklistStep(), // 21
-				new ComposeAnnouncementEmailStep(), // 22
-				new FinalizeRunStep() // 23
+				new DeploySnapshotStep(), // 6
+				new ReleasePrepareStep(), // 7
+				new ReleaseDiffReviewStep(), // 8
+				new ReleasePerformStep(), // 9
+				new NexusStagingCloseStep(), // 10
+				new BinaryArtifactsStageStep(), // 11
+				new DevDistVerifyStep(), // 12
+				new ComposeVoteEmailStep(), // 13
+				new VoteGateStep(), // 14
+				new TallyVoteResultStep(), // 15
+				new ComposeResultEmailStep(), // 16
+				new NexusReleaseStep(), // 17
+				new DistPromoteStep(), // 18
+				new GithubReleaseCreateStep(), // 19
+				new ManualFollowupChecklistStep(), // 20
+				new ComposeAnnouncementEmailStep(), // 21
+				new FinalizeRunStep() // 22
 		));
 	}
 

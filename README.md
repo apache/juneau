@@ -67,6 +67,11 @@ JUNEAU_RUN_PY=~/git/apache/juneau/juneau-run/src/main/python/juneau_run.py \
   `origin/X.Y.x`, else `master`.
 - `--version` prefills the Version in the details form and derives the next development version from it.
 - Leave the development version blank to get the next patch; a bare `x.y.z` gets `-SNAPSHOT` appended.
+- **Release diff review** is automatic: it checks the release commit (`<rc tag>^..<rc tag>`) and the plugin's following
+  "prepare for next development iteration" commit (the tag's first descendant on the branch). Clean means every changed
+  file is a reactor `pom.xml` with only the X-SNAPSHOT -> X version (and `juneau.version`/SCM tag) changes, no reactor
+  pom was skipped, and the follow-up commit reverses them to the next SNAPSHOT; the step then passes with a one-line
+  summary and no prompt. Anything else prints just the offending hunks and asks the usual question (`no` fails).
 - A dry run logs to `~/.juneau-release-manager/attempts/dry-run/full.log` (the banner's `tail -f` target).
 
 ## License

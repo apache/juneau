@@ -4,7 +4,7 @@ import os
 from datetime import timedelta
 
 from . import details as details_mod
-from . import emails, gpgkeys, inventory, prereqs
+from . import diffcheck, emails, gpgkeys, inventory, prereqs
 from .ctx import LABELS, StepError
 
 FUNCS = {}
@@ -214,16 +214,47 @@ def release_prepare(ctx):
     return ctx.runner.skipped_note(mark, f"prepared {ctx.rc_tag}")
 
 
+def _git(ctx, *args, title):
+    """A read-only git probe in the workspace.  Quiet: a release diff is hundreds of lines, and the step prints only
+    what is unexpected."""
+    return ctx.runner.quiet(["git", "-C", str(ctx.ws), *args], title=title)
+
+
+def release_commits(ctx):
+    """Check the release commit and the plugin's follow-up (its first descendant on the branch) with diffcheck."""
+    tag = ctx.rc_tag
+    rel = _git(ctx, "diff", "-U0", f"{tag}^", tag, title="Release diff")
+    subj = _git(ctx, "log", "-1", "--format=%s", tag, title="Release subject").out.strip()
+    follow = _git(ctx, "log", "--reverse", "--ancestry-path", "--format=%H", f"{tag}..HEAD", title="Follow-up commit")
+    commit = follow.out.split()[0] if follow.out.split() else None
+    if commit:
+        nxt = _git(ctx, "diff", "-U0", f"{tag}..{commit}", title="Next-iteration diff").out
+        nsubj = _git(ctx, "log", "-1", "--format=%s", commit, title="Next-iteration subject").out.strip()
+    else:
+        nxt = nsubj = ""
+    def read(path):
+        r = _git(ctx, "show", f"{tag}^:{path}", title=f"Read {path}")
+        return r.out if r.ok else None
+    snap = diffcheck.reactor_snapshot_poms(read, ctx.version)
+    res = diffcheck.check_release(version=ctx.version, dev_version=ctx.d["developmentVersion"], rc_tag=tag,
+                                  release_diff=rel.out, release_subject=subj, next_diff=nxt, next_subject=nsubj,
+                                  snapshot_poms=snap)
+    if not commit:
+        res.problems.append(f"[next-iteration commit] none found after {tag} on this branch")
+    return res
+
+
 @step
 def release_diff_review(ctx):
     if ctx.dry_run:   # release:prepare did not run, so there is no RC tag to diff
         ctx.review("Does the release diff look right?", key="review.diff", look_at="")
         return "skipped (dry run): no release commit to diff; nothing to review"
-    r = ctx.runner.run(["git", "-C", str(ctx.ws), "diff", f"{ctx.rc_tag}^", ctx.rc_tag], title="Release diff",
-                       mutating=False)
-    ctx.say(r.out)
-    look_at = (f"Read the diff above, {ctx.rc_tag}^ to {ctx.rc_tag} in {ctx.ws}: it should change only the pom "
-               f"versions (to {ctx.version}) and the SCM tag.")
+    res = release_commits(ctx)
+    if res.clean:
+        return f"diff clean: {res.summary}"
+    ctx.say("Unexpected in the release commits:\n" + "\n".join(res.problems), "warn")
+    look_at = (f"Read the unexpected changes above ({ctx.rc_tag}^ to {ctx.rc_tag}, and the commit after it, in "
+               f"{ctx.ws}): the release should change only the pom versions (to {ctx.version}) and the SCM tag.")
     if ctx.review("Does the release diff look right?", key="review.diff", look_at=look_at) is not True:
         raise StepError("release diff not accepted")
     return "diff accepted"
@@ -320,7 +351,7 @@ def dist_stage(ctx):
     line = ".".join(v.split(".")[:2]) + "."
     ops = []
     for kind in ("source", "binaries"):
-        for entry in ctx.svn.ls(f"{inventory.DIST_DEV}/{kind}/") or []:
+        for entry in ctx.svn.ls(f"{inventory.DIST_DEV}/{kind}/", quiet=True) or []:
             name = entry.rstrip("/")
             if name.startswith(f"juneau-{line}") and not name.startswith("."):
                 ctx.say(f"remove old {kind}/{name}")

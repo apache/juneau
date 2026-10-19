@@ -50,6 +50,19 @@ class RunStateStoreTest {
 	}
 
 	@Test
+	void a04_runSavedWithRetiredStepIsRemappedToTheNextStep(@TempDir Path dir) {
+		var store = new RunStateStore(dir);
+		var rs = RunState.create("9.2.1", "b", List.of("javadoc-verify", "test-workspace-verify", "deploy-snapshot"));
+		rs.currentStepId = "test-workspace-verify";
+		store.save(rs);
+
+		var loaded = store.load("9.2.1").orElseThrow();
+		assertEquals(List.of("javadoc-verify", "deploy-snapshot"), loaded.steps.stream().map(s -> s.id).toList());
+		assertEquals("deploy-snapshot", loaded.currentStepId);
+		assertEquals("deploy-snapshot", store.loadAll().get(0).currentStepId);
+	}
+
+	@Test
 	void a03_loadMissingIsEmpty(@TempDir Path dir) {
 		assertTrue(new RunStateStore(dir).load("9.9.9").isEmpty());
 	}

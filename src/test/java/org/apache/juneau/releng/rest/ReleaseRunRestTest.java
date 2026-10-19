@@ -428,11 +428,9 @@ class ReleaseRunRestTest {
 
 		for (var stepId : List.of("preflight", "compose-propose-email", "workspace-setup", "build-verify"))
 			applyOk(rest, "9.2.1", stepId);
-		// javadoc-verify / test-workspace-verify: review-gate steps, resolved via confirm-review.
-		for (var stepId : List.of("javadoc-verify", "test-workspace-verify")) {
-			applyOk(rest, "9.2.1", stepId);
-			confirmOk(rest, "9.2.1", stepId);
-		}
+		// javadoc-verify: a review-gate step, resolved via confirm-review.
+		applyOk(rest, "9.2.1", "javadoc-verify");
+		confirmOk(rest, "9.2.1", "javadoc-verify");
 		for (var stepId : List.of("deploy-snapshot", "release-prepare"))
 			applyOk(rest, "9.2.1", stepId);
 		// release-diff-review: a required (non-skippable) review-gate step.

@@ -260,16 +260,6 @@ class StepApplyBranchesTest {
 	}
 
 	@Test
-	void a11_testWorkspaceVerify(@TempDir Path dir) {
-		var r = new Runner();
-		var c = ctx(r, dir, "9.2.1");
-		var s = new TestWorkspaceVerifyStep();
-		previewAndId(s, c);
-		assertTrue(s.apply(c).success);
-		assertEquals(4, r.cmds.stream().filter(x -> x.startsWith("unzip")).count());
-	}
-
-	@Test
 	void a12_workspaceSetup(@TempDir Path dir) throws Exception {
 		var r = new Runner();
 		var c = ctx(r, dir, "9.2.1");
