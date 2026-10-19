@@ -1596,6 +1596,14 @@ class RowCase(unittest.TestCase):
 
 
 class IconTest(RowCase):
+    def test_paused_row_icon(self):
+        b = self.board()
+        feed(b, step_start("build", "Build"), note("pause", "Wait for the vote", step="build"), step_end("build", "ok"))
+        row = b.rows["build"]
+        self.assertEqual(jr.row_state(row), "paused")
+        self.assertEqual(jr.row_icon(row, 0.0, False), jr.ICONS["paused"])
+        self.assertEqual(jr._vlen(jr.ICONS["paused"]), 1)
+
     def test_spinner_frame_follows_clock(self):
         frames = [jr.icon("running", 100.0 + i * jr.LiveRenderer.REDRAW_SECONDS + 0.01) for i in range(11)]
         self.assertEqual("".join(frames[:10]), "⠋⠙⠹⠸⠼⠴⠦⠧⠇⠏")

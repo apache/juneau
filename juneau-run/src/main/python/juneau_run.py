@@ -54,13 +54,15 @@ import tty as _tty
 import unicodedata
 import xml.etree.ElementTree as ET
 from collections import OrderedDict
-from contextlib import contextmanager
+from contextlib import contextmanager, suppress
 from pathlib import Path
 
 PREFIX = "##run "
 MAX_BYTES = 65536
 ACTIVE_ENV = "JUNEAU_RUN_ACTIVE"
 GRACE_SECONDS = 5.0
+PROMPTS_GRACE_SECONDS = 10.0   # --prompts stdio: SIGTERM to SIGKILL once the host has gone
+MAX_PROMPT_LINE = 1 << 20
 TESTS_INTERVAL = 0.5
 
 # ---------------------------------------------------------------------------------------------------------------------
@@ -176,6 +178,7 @@ class Step:
         self.exit = None
         self.summary = None
         self.warned = False
+        self.paused = False
 
     def fail(self, exit=None):  # NOSONAR python:S5806 - parameter names mirror protocol field names
         self.status = "fail"
@@ -193,6 +196,11 @@ class Step:
         note("warn", text, step=self.id)
         if not _console_owns_screen():
             _out(f"⚠ {text}\n")
+
+    def pause(self, text):
+        """The step ends ok but its row draws ⏸ with text: bus-only, no run-protocol marker."""
+        self.paused = True
+        publish("note", level="pause", text=text, href=None, step=self.id)
 
 
 @contextmanager
@@ -407,10 +415,10 @@ PENDING_ENV = "JUNEAU_RUN_PENDING"     # a parent session's labelled pending row
 # A row's icon (spec 5.2): a spinner while it runs, then its outcome: a coloured ● for ok, warn and fail, or ✔ ⚠ ✗
 # when colour is off.  No VS16 after ⚠: it must stay one column.
 SPINNER = "⠋⠙⠹⠸⠼⠴⠦⠧⠇⠏"
-ICONS = {"ok": "✔", "warn": "⚠", "skip": "⊘", "fail": "✗", "pending": "○"}
+ICONS = {"ok": "✔", "warn": "⚠", "skip": "⊘", "fail": "✗", "pending": "○", "paused": "⏸"}
 COLOR_ICONS = {**ICONS, "ok": "●", "warn": "●", "fail": "●"}   # with colour on, the hue carries the outcome
 _ICON_COLORS = {"running": "\x1b[36m", "ok": "\x1b[32m", "warn": "\x1b[33m", "skip": "\x1b[2m", "fail": "\x1b[31m",
-                "pending": "\x1b[2m"}
+                "pending": "\x1b[2m", "paused": "\x1b[36m"}
 
 
 def tint(text):
@@ -671,6 +679,7 @@ class _Row:
         self.order = []         # module ids, in the order their boxes were granted
         self.notes = []         # (level, text), held until the row ends: info ones for the screen at `all`, warn
                                 # and error ones (full text) for the condensed log
+        self.paused = False     # a pause note was attributed to it: ⏸ when ok
         self.warned = False     # a warn (or an error on a row that still ends ok) was attributed to it: ⚠ when ok
         self.reason = None      # the newest warn or error text's first line, cut only when drawn
         self.reason_level = None    # warn or error; an error reason is never replaced by a warn
@@ -1201,6 +1210,10 @@ class Board:
         row the note prints at once, filtered by the detail level."""
         level = f["level"]
         r = self._attribute(f.get("step"))
+        if level == "pause":
+            if r is not None:
+                r.paused = True
+            return []
         if r is not None and r.running:
             if level != "info":
                 self._reason(r, level, f["text"])
@@ -1277,13 +1290,14 @@ class Board:
 
 
 def row_state(row):
-    """running, ok, warn, skip or fail (spec 5.2): fail wins; a skip is always skip; ok with a warn is warn."""
+    """running, ok, warn, paused, skip or fail (spec 5.2): fail wins; a skip is always skip; ok with a pause is
+    paused, with a warn is warn."""
     if row.running:
         return "running"
     if row.status == "skip":
         return "skip"
     if row.status == "ok":
-        return "warn" if row.warned else "ok"
+        return "paused" if row.paused else "warn" if row.warned else "ok"
     return "fail"
 
 
@@ -4101,8 +4115,21 @@ def _tool_status(rc, statuses):
 POLL_INTERVAL = 0.1     # seconds between a parser's poll() calls in run_tool
 
 
+def _feed_stdin(proc, data):
+    """Write data to proc's stdin from a thread (so a full pipe cannot block the output loop), then close it."""
+    try:
+        proc.stdin.write(data)
+    except OSError:   # the child closed its stdin early
+        pass
+    finally:
+        try:
+            proc.stdin.close()
+        except OSError:
+            pass
+
+
 def run_tool(cmd, parser, step_id, title, *, n=None, parent=None, cwd=None, env=None, sinks=None, capture=False,
-             tty=False, watchdog=None, summarize=None, label=None, statuses=None):
+             tty=False, watchdog=None, summarize=None, label=None, statuses=None, input=None):
     """Run one tool as one step and return Result(exit, ms, summary).
 
     Pass-through mode (markers off, default sinks, no capture or summarize) hands the child the real terminal and no
@@ -4115,6 +4142,7 @@ def run_tool(cmd, parser, step_id, title, *, n=None, parent=None, cwd=None, env=
     SIGINT/SIGTERM unwind as a KeyboardInterrupt; the except block then takes down the child's whole process group,
     `end` is emitted with exit 130 and the KeyboardInterrupt is raised again.  A tool that cannot be started ends its
     step with exit 127 and the OSError is raised again.  Any other error ends the step as failed and is raised again.
+    input (bytes) is written to the child's stdin and stdin is closed; it is never recorded or published.  Not for tty.
     """
     sinks = sinks or Sinks()
     t0 = time.monotonic()
@@ -4124,7 +4152,7 @@ def run_tool(cmd, parser, step_id, title, *, n=None, parent=None, cwd=None, env=
         publish("step_start", id=step_id, n=n if n is not None else 1, title=title, parent=parent, **labelled)
         rc = 130
         try:
-            rc = subprocess.run(cmd, cwd=cwd, env=env).returncode
+            rc = subprocess.run(cmd, cwd=cwd, env=env, **({} if input is None else {"input": input})).returncode
         except OSError:
             rc = 127   # cannot start: as run_pty reports it, not as a Ctrl-C
             raise
@@ -4167,8 +4195,10 @@ def run_tool(cmd, parser, step_id, title, *, n=None, parent=None, cwd=None, env=
             fd = master
         else:
             proc = subprocess.Popen(cmd, cwd=cwd, env=env, stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
-                                    start_new_session=True)
+                                    stdin=subprocess.PIPE if input is not None else None, start_new_session=True)
             fd = proc.stdout.fileno()
+            if input is not None:
+                threading.Thread(target=_feed_stdin, args=(proc, input), daemon=True).start()
     except OSError:
         # Cannot start: end the step (as run_pty does) so its row is not left running, then let the caller see why.
         if master is not None:
@@ -4464,7 +4494,131 @@ def _set_ctty():
         pass
 
 
-def run_pty(cmd, parser, step_id, title, *, cols, rows, sinks, cwd=None, env=None, stdin_fd=None):
+class _LineBuffer:
+    """Splits a byte stream into lines of at most MAX_PROMPT_LINE bytes.  A longer line is dropped whole, with a warn
+    that names no content."""
+
+    def __init__(self, what):
+        self.what = what
+        self.buf = b""
+        self.skipping = False   # inside an oversize line, up to its newline
+
+    def feed(self, data):
+        lines = []
+        self.buf += data
+        while True:
+            i = self.buf.find(b"\n")
+            if i < 0:
+                if len(self.buf) > MAX_PROMPT_LINE:
+                    warn(f"{self.what} line over the 1 MiB limit dropped")
+                    self.skipping = True
+                if self.skipping:
+                    self.buf = b""
+                return lines
+            line, self.buf = self.buf[:i], self.buf[i + 1:]
+            if self.skipping:
+                self.skipping = False
+            elif len(line) > MAX_PROMPT_LINE:
+                warn(f"{self.what} line over the 1 MiB limit dropped")
+            else:
+                lines.append(line)
+
+
+class _PromptRelay:
+    """Two pipes between the job and this process's stdio: the job's prompt lines go to our stdout, our stdin lines
+    go to the job.  Nothing here is logged or recorded; a malformed line is dropped with a warn that names no
+    content, and a line is relayed as received, so the relay needs to know nothing of ids or kinds."""
+
+    def __init__(self):
+        self.out_r, self.out_w = os.pipe()     # job -> us
+        self.in_r, self.in_w = os.pipe()       # us -> job
+        os.set_blocking(self.out_r, False)
+        os.set_blocking(self.in_w, False)
+        self._from_job = _LineBuffer("prompt")
+        self._from_host = _LineBuffer("answer")
+        self._to_job = b""
+        self.eof = False                       # our stdin reached EOF: the host is gone
+        self._job_closed = False               # every writer of out_r has closed it
+
+    def env(self):
+        return {"JUNEAU_PROMPT_FD_OUT": str(self.out_w), "JUNEAU_PROMPT_FD_IN": str(self.in_r)}
+
+    def pass_fds(self):
+        return (self.out_w, self.in_r)
+
+    def after_spawn(self):
+        """The job has its ends: close ours of them."""
+        for fd in (self.out_w, self.in_r):
+            with suppress(OSError):
+                os.close(fd)
+
+    def read_fds(self):
+        return ([] if self._job_closed else [self.out_r]) + ([] if self.eof else [0])
+
+    def write_fds(self):
+        return [self.in_w] if self._to_job else []
+
+    def on_readable(self, fd):
+        try:
+            data = os.read(fd, 65536)
+        except BlockingIOError:
+            return
+        except OSError:
+            data = b""
+        if fd == 0:
+            if not data:
+                self.eof = True
+                return
+            for line in self._from_host.feed(data):
+                if self._valid(line, "answer"):
+                    self._to_job += line + b"\n"
+        elif data:
+            self._relay(data)
+        else:
+            self._job_closed = True
+
+    def _relay(self, data):
+        for line in self._from_job.feed(data):
+            if self._valid(line, "prompt"):
+                sys.stdout.buffer.write(line + b"\n")
+                sys.stdout.buffer.flush()
+
+    @staticmethod
+    def _valid(line, what):
+        try:
+            json.loads(line)
+        except ValueError:
+            warn(f"{what} line is not JSON ({len(line)} bytes), dropped")
+            return False
+        return True
+
+    def on_writable(self):
+        try:
+            n = os.write(self.in_w, self._to_job)
+            self._to_job = self._to_job[n:]
+        except BlockingIOError:
+            pass
+        except OSError:   # the job closed its end
+            self._to_job = b""
+
+    def drain(self):
+        """After the job exits: deliver whatever prompt lines are still buffered in the pipe."""
+        while True:
+            try:
+                data = os.read(self.out_r, 65536)
+            except OSError:   # BlockingIOError included: nothing more is buffered
+                break
+            if not data:
+                break
+            self._relay(data)
+
+    def close(self):
+        for fd in (self.out_r, self.in_w):
+            with suppress(OSError):
+                os.close(fd)
+
+
+def run_pty(cmd, parser, step_id, title, *, cols, rows, sinks, cwd=None, env=None, stdin_fd=None, prompts=None):
     """Run one tool under a cols x rows PTY as one step and return Result(exit, ms, summary).
 
     The tool's bytes go to the full log exactly as written (the PTY turns \\n into \\r\\n).  Each line is cleaned with
@@ -4474,6 +4628,10 @@ def run_pty(cmd, parser, step_id, title, *, cols, rows, sinks, cwd=None, env=Non
     With stdin_fd, bytes read from it are copied to the PTY master unchanged, so they reach the job through the
     terminal's line discipline (^C interrupts, ^D ends a read); they reach the log only if the terminal echoes them.
     EOF on stdin_fd stops the copying but not the job.
+
+    With prompts (a _PromptRelay), the job gets two extra pipes (JUNEAU_PROMPT_FD_OUT and _IN) relayed to this
+    process's stdout and stdin.  EOF on stdin then means the host is gone: the job's group gets SIGTERM, then SIGKILL
+    after PROMPTS_GRACE_SECONDS, and the run is cancelled.  Not combined with stdin_fd.
     """
     global _line_offset
     t0 = time.monotonic()
@@ -4485,6 +4643,8 @@ def run_pty(cmd, parser, step_id, title, *, cols, rows, sinks, cwd=None, env=Non
     env.pop("RUN_MARKERS", None)
     env.pop(ACTIVE_ENV, None)
     env["TERM"] = "xterm-256color"
+    if prompts is not None:
+        env.update(prompts.env())
     try:
         cmd, env = parser.prepare(cmd, env, cwd)
     except Exception as e:
@@ -4508,8 +4668,12 @@ def run_pty(cmd, parser, step_id, title, *, cols, rows, sinks, cwd=None, env=Non
         raise
     try:
         proc = subprocess.Popen(cmd, cwd=cwd, env=env, stdin=slave, stdout=slave, stderr=slave,
-                                start_new_session=True, preexec_fn=_set_ctty, close_fds=True)
+                                start_new_session=True, preexec_fn=_set_ctty, close_fds=True,
+                                pass_fds=prompts.pass_fds() if prompts is not None else ())
     except OSError as e:
+        if prompts is not None:
+            prompts.after_spawn()
+            prompts.close()
         os.close(master)
         os.close(slave)
         guard.close()
@@ -4519,6 +4683,8 @@ def run_pty(cmd, parser, step_id, title, *, cols, rows, sinks, cwd=None, env=Non
         emit("end", id=step_id, status="fail", ms=ms, exit=127)
         return Result(127, ms)
     os.close(slave)
+    if prompts is not None:
+        prompts.after_spawn()
     cancelled = []
     pending = bytearray()   # input read from stdin_fd but not yet written to the master
     in_fd = stdin_fd
@@ -4587,6 +4753,20 @@ def run_pty(cmd, parser, step_id, title, *, cols, rows, sinks, cwd=None, env=Non
                 in_fd = None
         return master in r
 
+    def pump_prompts():
+        """One select() turn with prompts on: relays both directions; returns True if the master is readable.
+        Stdin EOF cancels the run."""
+        r, w, _ = select.select([master] + prompts.read_fds(), prompts.write_fds(), [], 0.1)
+        for fd in r:
+            if fd != master:
+                prompts.on_readable(fd)
+        if w:
+            prompts.on_writable()
+        if prompts.eof:
+            cancelled.append(signal.SIGTERM)
+            raise KeyboardInterrupt
+        return master in r
+
     def drain(fd):
         """Reads whatever is still buffered on the PTY master without blocking, until it is empty or reports EIO."""
         while select.select([fd], [], [], 0)[0]:
@@ -4607,7 +4787,9 @@ def run_pty(cmd, parser, step_id, title, *, cols, rows, sinks, cwd=None, env=Non
         try:
             while True:
                 try:
-                    if stdin_fd is None:
+                    if prompts is not None:
+                        ready = pump_prompts()
+                    elif stdin_fd is None:
                         ready, _, _ = select.select([master], [], [], 0.1)
                     else:
                         ready = pump([master] + ([in_fd] if in_fd is not None and not pending else []),
@@ -4631,6 +4813,8 @@ def run_pty(cmd, parser, step_id, title, *, cols, rows, sinks, cwd=None, env=Non
                 sinks.write_full(chunk)
                 feed(chunk)
             proc.wait()
+            if prompts is not None:
+                prompts.drain()
             if line:
                 parse(line, line_start)
                 line_start += len(line)
@@ -4641,8 +4825,10 @@ def run_pty(cmd, parser, step_id, title, *, cols, rows, sinks, cwd=None, env=Non
                 cancelled.append(signal.SIGINT)
             for sig in previous:
                 signal.signal(sig, signal.SIG_IGN)
-            _terminate_group(proc)
+            _terminate_group(proc, PROMPTS_GRACE_SECONDS if prompts is not None else None)
     finally:
+        if prompts is not None:
+            prompts.close()
         if proc.poll() is None:   # an unexpected error escaped the read loop: do not leave the child running
             try:
                 os.killpg(proc.pid, signal.SIGKILL)
@@ -4680,6 +4866,10 @@ def _main_pty(ap, ns, cmd):
     global _events
     if ns.input and not ns.pty:
         ap.error("--input needs --pty")
+    if ns.prompts and not ns.pty:
+        ap.error("--prompts needs --pty")
+    if ns.prompts and ns.input:
+        ap.error("--prompts cannot be combined with --input")
     if not ns.pty:
         ap.error("--events and --size need --pty")
     if not ns.events:
@@ -4701,7 +4891,8 @@ def _main_pty(ap, ns, cmd):
     try:
         try:
             result = run_pty(cmd, ns.tool, ns.step or ns.tool, ns.title or " ".join(cmd[:2]),
-                             cols=cols, rows=rows, sinks=sinks, stdin_fd=0 if ns.input == "stdin" else None)
+                             cols=cols, rows=rows, sinks=sinks, stdin_fd=0 if ns.input == "stdin" else None,
+                             prompts=_PromptRelay() if ns.prompts == "stdio" else None)
         except KeyboardInterrupt:
             _events.write("done", {"status": "cancelled"})
             return 130
@@ -4747,13 +4938,15 @@ def main(argv=None):
     ap.add_argument("--size")
     ap.add_argument("--events")
     ap.add_argument("--input", choices=["stdin"], help="copy this process's stdin to the PTY (needs --pty)")
+    ap.add_argument("--prompts", choices=["stdio"],
+                    help="relay the job's prompt channel over this process's stdin and stdout (needs --pty)")
     ap.add_argument("tool", choices=_parser_names())
     ap.add_argument("cmd", nargs=argparse.REMAINDER)
     ns = ap.parse_args(argv)
     cmd = ns.cmd[1:] if ns.cmd[:1] == ["--"] else ns.cmd
     if not cmd:
         ap.error("no command given after --")
-    if ns.pty or ns.events or ns.size or ns.input:
+    if ns.pty or ns.events or ns.size or ns.input or ns.prompts:
         return _main_pty(ap, ns, cmd)
     history_start()
     sinks = Sinks(ns.console, ns.full_log, ns.condensed_log)

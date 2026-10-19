@@ -12,8 +12,18 @@
 # * specific language governing permissions and limitations under the License.
 """Named, numbered steps with --list-steps, --start-step, --skip-step and --resume."""
 
-from . import run
+from . import prompt, run
 from ._base import Result
+
+
+class Pause(Exception):  # NOSONAR python:S1165 - a control-flow signal, not an error
+    """Raised by a step to stop the run for a human wait.  message is shown on the step's ⏸ row; done=True records
+    the step as finished (a resume starts after it), done=False leaves it to run again."""
+
+    def __init__(self, message, *, done=True):
+        super().__init__(message)
+        self.message = message
+        self.done = done
 
 
 class Registry:
@@ -125,6 +135,7 @@ class Registry:
         first = 0 if show_unselected else start
         for n, (name, title, fn) in enumerate(self._steps[first:], first + 1):
             failed = None
+            paused = None
             earlier = n - 1 < start
             with run.step(name, title, n=n, label=self._labels.get(name)) as st:
                 if earlier or name in skip:
@@ -135,8 +146,13 @@ class Registry:
                         run.say(f"⏭  Skipping {n}. {title}")
                 else:
                     self._current = st
+                    prompt.current_step = name
                     try:
                         out = fn(ctx)
+                    except Pause as p:
+                        st.summary = p.message
+                        st.pause(p.message)
+                        paused = p
                     except Exception as e:  # NOSONAR python:S2221 - a step's error is reported, then the hint
                         st.fail()
                         run.say(f"❌ ERROR: {type(e).__name__}: {e}", "error")
@@ -151,9 +167,14 @@ class Registry:
                             failed = out
                         elif isinstance(out, str):
                             st.summary = out
+            prompt.current_step = None
             if failed is not None:
                 self._hint(name)
                 return Result(False, failed.code or 1, err=failed.err)
+            if paused is not None:
+                if checkpoint is not None and paused.done:
+                    checkpoint.set("last", name)
+                return Result(True, 0, out=paused.message, status="paused")
             if checkpoint is not None and not earlier:
                 checkpoint.set("last", name)
         return Result(True, 0)

@@ -82,6 +82,17 @@ class CmdPlainTest(PlainCase):
         self.assertEqual((r.ok, r.code, r.out, r.err), (False, 3, "o\n", "e\n"))
         self.assertIsInstance(r.ms, int)
 
+    def test_cmd_input_bytes_reach_stdin_not_log(self):
+        out = io.StringIO()
+        with redirect_stdout(out):
+            r = run.cmd([PY, "-c", "import sys; print(len(sys.stdin.buffer.read()))"], title="stdin", capture=True, input=b"s3cret-token")
+        self.assertEqual((r.ok, r.out.strip()), (True, "12"))
+        self.assertNotIn("s3cret-token", out.getvalue() + r.out + r.err)
+
+    def test_cmd_input_with_tty_rejected(self):
+        with self.assertRaises(ValueError):
+            run.cmd(["true"], title="x", tty=True, input=b"x")
+
     def test_cannot_start(self):
         r = run.cmd(["/nonexistent/tool"], title="t")
         self.assertEqual((r.ok, r.code), (False, 127))
@@ -184,6 +195,14 @@ class CmdConsoleNoneTest(ConsoleNoneCase):
         self.assertEqual(out.getvalue(), "")
         self.assertIn(b"child-line", self.log.read_bytes())
 
+    def test_cmd_input_not_in_full_log(self):
+        with redirect_stdout(io.StringIO()):
+            r = run.cmd([PY, "-c", "import sys; sys.stdout.write(str(len(sys.stdin.buffer.read())))"], title="stdin",
+                        input=b"s3cret-token")
+        self.assertTrue(r.ok)
+        self.assertIn(b"12", self.log.read_bytes())
+        self.assertNotIn(b"s3cret-token", self.log.read_bytes())
+
     def test_default_full_log_when_none_is_given(self):
         del os.environ["JUNEAU_RUN_FULL_LOG"]
         os.environ["JUNEAU_RUN_LOG_DIR"] = str(self.log.parent)
@@ -209,6 +228,11 @@ class CmdMarkersTest(MarkerCase):
         self.assertEqual((r.out, r.err), ("", ""))
         self.assertEqual(got[0], {"ev": "step", "id": "build-it", "n": 4, "title": "Build it"})
         self.assertEqual(got[-1], {"ev": "end", "id": "build-it", "status": "ok"})
+
+    def test_cmd_input_bytes_reach_stdin_not_log(self):
+        r, got, text = self.capture(run.cmd, [PY, "-c", "import sys; print(len(sys.stdin.buffer.read()))"], title="stdin", capture=True, input=b"s3cret-token")
+        self.assertEqual((r.ok, r.out.strip()), (True, "12"))
+        self.assertNotIn("s3cret-token", text + repr(got))
 
     def test_no_tool_detects_the_parser_from_the_command(self):
         with mock.patch.object(jr, "run_tool", wraps=jr.run_tool) as rt:

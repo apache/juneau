@@ -67,7 +67,16 @@ jobs:
       with:
         distribution: 'temurin'
         java-version: 17
-        
+
+    # Cache ~/.m2 so CodeQL runs don't refetch the OpenSAML jars live from build.shibboleth.net, the only host that
+    # serves them (and it times out).  Same scheme as maven.yml, with a per-job key.
+    - name: Cache Maven repository
+      uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9 # v6
+      with:
+        path: ~/.m2/repository
+        key: ${{ runner.os }}-maven-codeql-${{ hashFiles('**/pom.xml') }}
+        restore-keys: ${{ runner.os }}-maven-codeql-
+
     # Autobuild attempts to build any compiled languages  (C/C++, C#, or Java).
     # If this step fails, then you should remove it and run the build manually (see below)
     # - name: Autobuild

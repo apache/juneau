@@ -28,6 +28,7 @@ import java.nio.file.*;
 import java.util.*;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.*;
+import java.util.concurrent.locks.*;
 import java.util.logging.*;
 
 import org.apache.juneau.marshall.json.JsonSerializer;
@@ -69,6 +70,14 @@ import org.apache.juneau.rest.server.views.*;
  * {@link #acceptsInput()} is always false.
  *
  * <p>
+ * Started with a {@link TerminalPrompts}, the runner gets {@code --prompts stdio} and its stdout and stdin become the
+ * prompt channel: one daemon thread per process, named {@code terminal-prompts-<dir name>}, reads the stdout lines (at
+ * most {@value #PROMPT_LINE_LIMIT} bytes each; a longer one is dropped) and hands them to
+ * {@link TerminalPrompts#onLine(String)}, then calls {@link TerminalPrompts#onEnd()} once.  The runner's stderr goes to
+ * {@code runner.out}.  {@link #answer(String)} writes one line back.  Neither a prompt line nor an answer is ever
+ * logged.  Input and prompts are mutually exclusive.
+ *
+ * <p>
  * POSIX only: there is no Windows pseudo-terminal support.
  *
  * <h5 class='section'>Example:</h5>
@@ -103,6 +112,15 @@ public final class TerminalProcess implements AutoCloseable, TerminalSink {
 
 	/** The most input bytes waiting for the writer thread: queued bytes only, not the chunk being written. */
 	static final int INPUT_LIMIT = 64 * 1024;
+
+	/** The longest prompt line read from the runner, in bytes. */
+	static final int PROMPT_LINE_LIMIT = 1 << 20;
+
+	/** How long {@link #close()} lets a prompt-channel runner end by itself after its stdin closes, in milliseconds. */
+	static final int PROMPTS_CLOSE_GRACE_MS = 3000;
+
+	/** How long {@link #close()} waits for the prompt reader thread, in milliseconds. */
+	static final int PROMPTS_JOIN_MILLIS = 2000;
 
 	/** How often the nudge thread checks the log size, in milliseconds. */
 	static final int NUDGE_POLL_MILLIS = 100;
@@ -143,6 +161,12 @@ public final class TerminalProcess implements AutoCloseable, TerminalSink {
 	private boolean closed;
 	private final Thread writer;
 
+	// Prompt channel.  answerLock serializes answers; answersClosed is set once the channel can take no more.
+	private final TerminalPrompts prompts;
+	private final ReentrantLock answerLock = new ReentrantLock();
+	private volatile boolean answersClosed;
+	private final Thread promptThread;
+
 	// Nudges.  nudgeThread, nudgeSet and nudgeClosed are guarded by nudgeLock.
 	private final Object nudgeLock = new Object();
 	private Thread nudgeThread;
@@ -156,9 +180,10 @@ public final class TerminalProcess implements AutoCloseable, TerminalSink {
 		void ensureDone(Path events, int exitCode) throws IOException;
 	}
 
-	private TerminalProcess(Process process, Path log, Path events, DoneWriter doneWriter, boolean input) {
+	private TerminalProcess(Process process, Path log, Path events, DoneWriter doneWriter, boolean input, TerminalPrompts prompts, String name) {
 		this.process = process;
 		this.input = input;
+		this.prompts = prompts;
 		this.logFile = log;
 		this.events = events;
 		terminal = FileTerminalSource.create(log).terminal(done::get).build();
@@ -192,6 +217,44 @@ public final class TerminalProcess implements AutoCloseable, TerminalSink {
 			writer.start();
 		} else {
 			writer = null;
+		}
+		if (prompts != null) {
+			promptThread = new Thread(this::readPrompts, "terminal-prompts-" + name);
+			promptThread.setDaemon(true);
+			promptThread.start();
+		} else {
+			promptThread = null;
+		}
+	}
+
+	/** The prompt reader thread: hands each stdout line to the prompts, then reports the end exactly once. */
+	private void readPrompts() {
+		try (var in = new BufferedInputStream(process.getInputStream())) {
+			var line = new ByteArrayOutputStream();
+			var over = false;
+			for (var b = in.read(); b >= 0; b = in.read()) {
+				if (b == '\n') {
+					if (over)
+						LOG.log(Level.WARNING, "prompt line over limit dropped");
+					else
+						prompts.onLine(line.toString(UTF_8));
+					line.reset();
+					over = false;
+				} else if (! over) {
+					if (line.size() >= PROMPT_LINE_LIMIT) {
+						over = true;
+						line.reset();
+					} else {
+						line.write(b);
+					}
+				}
+			}
+		} catch (IOException e) {
+			// A closed pipe ends the channel; the exception text could hold a prompt, so it is not logged.
+			LOG.log(Level.FINE, "TerminalProcess prompt channel closed for '" + events + "'.");
+		} finally {
+			answersClosed = true;
+			prompts.onEnd();
 		}
 	}
 
@@ -299,6 +362,31 @@ public final class TerminalProcess implements AutoCloseable, TerminalSink {
 		return start(tool, cmd, cols, rows, dir, Host.system(), input);
 	}
 
+	/**
+	 * Starts a tool under a pseudo-terminal with a prompt channel.
+	 *
+	 * <p>
+	 * Same as {@link #start(String, List, int, int, Path)}, except that the runner gets {@code --prompts stdio}, the
+	 * script's prompt lines go to {@code prompts} and {@link #answer(String)} sends the replies.
+	 *
+	 * @param tool The juneau_run tool parser.
+	 * @param cmd The command and its arguments; at least one element.
+	 * @param cols The terminal width, 1-9999.
+	 * @param rows The terminal height, 1-9999.
+	 * @param dir The run directory; see {@link #start(String, List, int, int, Path)}.
+	 * @param prompts Receives the prompt lines; not <jk>null</jk>.
+	 * @return The running process.
+	 * @throws IOException If the directory could not be prepared or the process could not start.
+	 * @throws IllegalArgumentException If an argument is out of range.
+	 * @throws IllegalStateException If the script is not configured, {@code python3} is not on the {@code PATH}, or
+	 * 	the run directory already holds a run.
+	 * @throws UnsupportedOperationException On Windows.
+	 */
+	public static TerminalProcess start(String tool, List<String> cmd, int cols, int rows, Path dir, TerminalPrompts prompts) throws IOException {
+		Objects.requireNonNull(prompts, "prompts");
+		return start(tool, cmd, cols, rows, dir, Host.system(), TerminalProcess::ensureDone, false, prompts);
+	}
+
 	static TerminalProcess start(String tool, List<String> cmd, int cols, int rows, Path dir, Host host) throws IOException {
 		return start(tool, cmd, cols, rows, dir, host, false);
 	}
@@ -315,6 +403,15 @@ public final class TerminalProcess implements AutoCloseable, TerminalSink {
 		"java:S107" // internal entry point; the parameters are the process configuration
 	})
 	static TerminalProcess start(String tool, List<String> cmd, int cols, int rows, Path dir, Host host, DoneWriter doneWriter, boolean input) throws IOException {
+		return start(tool, cmd, cols, rows, dir, host, doneWriter, input, null);
+	}
+
+	@SuppressWarnings({
+		"java:S107" // internal entry point; the parameters are the process configuration
+	})
+	static TerminalProcess start(String tool, List<String> cmd, int cols, int rows, Path dir, Host host, DoneWriter doneWriter, boolean input, TerminalPrompts prompts) throws IOException {
+		if (input && prompts != null)
+			throw new IllegalArgumentException("input and prompts are mutually exclusive");
 		if (host.osName().toLowerCase(Locale.ROOT).startsWith("windows"))
 			throw new UnsupportedOperationException("TerminalProcess needs a POSIX pseudo-terminal; Windows is not supported.");
 		if (! TOOLS.contains(tool))
@@ -342,11 +439,17 @@ public final class TerminalProcess implements AutoCloseable, TerminalSink {
 			"--full-log", log.toString(), "--events", events.toString()));
 		if (input)
 			argv.addAll(List.of("--input", "stdin"));
+		if (prompts != null)
+			argv.addAll(List.of("--prompts", "stdio"));
 		argv.addAll(List.of(tool, "--"));
 		argv.addAll(cmd);
-		var pb = new ProcessBuilder(argv).directory(dir.toFile()).redirectErrorStream(true)
-			.redirectOutput(ProcessBuilder.Redirect.appendTo(dir.resolve("runner.out").toFile()));
-		return new TerminalProcess(pb.start(), log, events, doneWriter, input);
+		var runnerOut = ProcessBuilder.Redirect.appendTo(dir.resolve("runner.out").toFile());
+		var pb = new ProcessBuilder(argv).directory(dir.toFile());
+		if (prompts == null)
+			pb.redirectErrorStream(true).redirectOutput(runnerOut);
+		else
+			pb.redirectError(runnerOut);  // stdout stays a pipe: it is the prompt channel.
+		return new TerminalProcess(pb.start(), log, events, doneWriter, input, prompts, String.valueOf(dir.getFileName()));
 	}
 
 	/** Returns the first executable {@code name} in the {@code PATH} directories, or <jk>null</jk>. */
@@ -500,6 +603,38 @@ public final class TerminalProcess implements AutoCloseable, TerminalSink {
 	}
 
 	/**
+	 * Whether an answer can be sent right now.
+	 *
+	 * @return <jk>true</jk> only when a prompt channel is on, the process is alive and the channel has not ended or failed.
+	 */
+	public boolean acceptsAnswers() {
+		return prompts != null && ! answersClosed && process.isAlive();
+	}
+
+	/**
+	 * Writes one answer line to the script's prompt channel; never blocks behind another answer and never logs the line.
+	 *
+	 * @param jsonLine The answer as one JSON line, without a newline.
+	 * @return <jk>false</jk> when there is no channel, it has ended, the line holds a newline, another answer is being
+	 * 	written, or the write failed.
+	 */
+	public boolean answer(String jsonLine) {
+		if (jsonLine.indexOf('\n') >= 0 || ! acceptsAnswers() || ! answerLock.tryLock())
+			return false;
+		try {
+			var out = process.getOutputStream();
+			out.write((jsonLine + "\n").getBytes(UTF_8));
+			out.flush();
+			return true;
+		} catch (IOException e) {
+			answersClosed = true;
+			return false;
+		} finally {
+			answerLock.unlock();
+		}
+	}
+
+	/**
 	 * Polls the log's size every 100 ms and reports growth, then a final done, to a publisher.
 	 *
 	 * <p>
@@ -599,6 +734,16 @@ public final class TerminalProcess implements AutoCloseable, TerminalSink {
 		}
 		if (nudger != null)
 			nudger.interrupt();
+		if (prompts != null) {
+			// Closing stdin tells the runner the host is gone; it ends the job and writes done itself.
+			answersClosed = true;
+			closeQuietly(process.getOutputStream());
+			try {
+				process.waitFor(PROMPTS_CLOSE_GRACE_MS, TimeUnit.MILLISECONDS);
+			} catch (InterruptedException e) {
+				Thread.currentThread().interrupt();
+			}
+		}
 		if (input) {
 			synchronized (inLock) {
 				closed = true;
@@ -628,6 +773,15 @@ public final class TerminalProcess implements AutoCloseable, TerminalSink {
 			}
 			if (nudger.isAlive())
 				LOG.log(Level.WARNING, () -> "TerminalProcess nudge thread did not stop for '" + events + "'.");
+		}
+		if (promptThread != null) {
+			try {
+				promptThread.join(PROMPTS_JOIN_MILLIS);
+			} catch (InterruptedException e) {
+				Thread.currentThread().interrupt();
+			}
+			if (promptThread.isAlive())
+				LOG.log(Level.WARNING, () -> "TerminalProcess prompt thread did not stop for '" + events + "'.");
 		}
 		if (writer != null) {
 			try {

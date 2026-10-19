@@ -118,6 +118,10 @@ class _NullStep:
         """Mirrors juneau_run.Step.warn: in a plain run the text is printed."""
         print(f"⚠ {text}", flush=True)
 
+    def pause(self, text):
+        """Mirrors juneau_run.Step.pause: in a plain run the text is printed."""
+        print(f"⏸ {text}", flush=True)
+
 
 @contextlib.contextmanager
 def step(id, title, *, n=None, parent=None, label=None):  # NOSONAR python:S5806 - mirrors juneau_run.step
@@ -138,34 +142,45 @@ def _slug(title):
 
 
 def cmd(cmd, *, title, id=None, n=None, tool=None, cwd=None, env=None, capture=False, tty=False,  # NOSONAR python:S5806
-        summarize=None):
+        summarize=None, input=None):
     """Run cmd as one step.  Under markers or the console it goes through jr.run_tool with the named parser (or a
     jr.Parser instance); otherwise a plain subprocess.run.  A tool that can't start gives Result(False, 127, err).
     summarize(text) gives the step_end summary; it is called after the command exits, while its row is still open
     (so jr.history_series attaches to it).  With summarize, the command goes through run_tool whenever juneau_run is
     loaded, markers or not; without juneau_run, summarize is never called.  With no tool, the parser is detected from
     cmd (Maven, Gradle, pytest, npm, Playwright test, Bazel build/test/coverage, through env/npx/pnpm/yarn launchers);
-    anything else is generic."""
+    anything else is generic.  input (bytes) is written to the command's stdin, then stdin is closed; it never
+    reaches a log, a marker, an event or the command line, and cannot be combined with tty=True."""
+    if input is not None and tty:
+        raise ValueError("input= cannot be combined with tty=True")
     _base.remember(title)
     if routed() or (summarize is not None and _base.jr() is not None):
         return _routed(cmd, title=title, id=id or _slug(title), n=_next_n(n), parent=None, tool=tool, cwd=cwd,
-                       env=env, capture=capture, tty=tty, summarize=summarize)
+                       env=env, capture=capture, tty=tty, summarize=summarize, input=input)
     _next_n(n)
-    return _plain(cmd, cwd=cwd, env=env, capture=capture)
+    return _plain(cmd, cwd=cwd, env=env, capture=capture, input=input)
 
 
 _cmd = cmd  # gate()'s first parameter is also called cmd
 
 
-def _plain(cmd, *, cwd, env, capture):
+def _plain(cmd, *, cwd, env, capture, input=None):
     t0 = time.monotonic()
+    text = capture or None
     try:
-        done = subprocess.run(cmd, cwd=cwd, env=env, capture_output=capture, text=capture or None,
-                              errors="replace" if capture else None)
+        if input is None:
+            done = subprocess.run(cmd, cwd=cwd, env=env, capture_output=capture, text=text,
+                                  errors="replace" if capture else None)
+        else:   # bytes input needs a binary pipe; decode the captured streams ourselves
+            done = subprocess.run(cmd, cwd=cwd, env=env, capture_output=capture, input=input)
     except OSError as e:
         return Result(False, 127, err=str(e), ms=int((time.monotonic() - t0) * 1000))
-    return Result(done.returncode == 0, done.returncode, out=done.stdout or "", err=done.stderr or "",
-                  ms=int((time.monotonic() - t0) * 1000))
+    out, err = done.stdout or "", done.stderr or ""
+    if isinstance(out, bytes):
+        out = out.decode("utf-8", errors="replace")
+    if isinstance(err, bytes):
+        err = err.decode("utf-8", errors="replace")
+    return Result(done.returncode == 0, done.returncode, out=out, err=err, ms=int((time.monotonic() - t0) * 1000))
 
 
 def _parser_for(jr, cmd, tool):
@@ -181,12 +196,12 @@ def _parser_for(jr, cmd, tool):
 
 
 def _routed(cmd, *, title, id, n, parent, tool, cwd, env, capture, tty, statuses=None,  # NOSONAR python:S5806
-            summarize=None):
+            summarize=None, input=None):
     jr = _base.jr()
     parser = _parser_for(jr, cmd, tool)
     try:
         r = jr.run_tool(cmd, parser, id, title, n=n, parent=parent, cwd=cwd, env=env, capture=capture, tty=tty,
-                        statuses=statuses, summarize=summarize)
+                        statuses=statuses, summarize=summarize, input=input)
     except OSError as e:
         # run_tool has already ended the step with exit 127.  Close it again with no exit field, as Foundry does
         # (scripts/push.py:254-262), whose tests pin that marker.

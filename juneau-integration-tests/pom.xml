@@ -637,6 +637,57 @@
 				</plugins>
 			</build>
 		</profile>
+		<!--
+			Runtime micro-benchmark profile (org.apache.juneau.microbench.runtime).  Run it through
+			`scripts/microbench.py runtime`, or manually:
+
+			    mvn -pl juneau-integration-tests -Pmicrobench-runtime process-test-classes \
+			        -Dmicrobench.args="org.apache.juneau.microbench.runtime -prof gc"
+
+			Unlike the microbench profile this one builds through the reactor (-pl, with the also-make
+			flag from .mvn/maven.config), so it measures the checkout's own code and needs no prior
+			mvn install.  The benchmark runs in process-test-classes, right after test compilation, so
+			no tests run.  It launches org.openjdk.jmh.Main in a separate JVM with the test classpath
+			(exec:exec rather than exec:java), so JMH can fork and its profilers (gc, jfr) work.
+			microbench.args is passed to JMH as its command line.
+		-->
+		<profile>
+			<id>microbench-runtime</id>
+			<properties>
+				<microbench.args>org.apache.juneau.microbench.runtime</microbench.args>
+			</properties>
+			<build>
+				<plugins>
+					<!-- See the microbench profile: forces META-INF/BenchmarkList to be regenerated. -->
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-compiler-plugin</artifactId>
+						<configuration>
+							<proc>full</proc>
+						</configuration>
+					</plugin>
+					<plugin>
+						<groupId>org.codehaus.mojo</groupId>
+						<artifactId>exec-maven-plugin</artifactId>
+						<version>3.6.4</version>
+						<executions>
+							<execution>
+								<id>runtime-bench</id>
+								<phase>process-test-classes</phase>
+								<goals>
+									<goal>exec</goal>
+								</goals>
+								<configuration>
+									<executable>${java.home}/bin/java</executable>
+									<classpathScope>test</classpathScope>
+									<commandlineArgs>-classpath %classpath org.openjdk.jmh.Main ${microbench.args}</commandlineArgs>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
 	</profiles>
 
 	<build>

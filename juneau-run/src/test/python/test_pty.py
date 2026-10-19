@@ -274,6 +274,8 @@ class PtyTest(unittest.TestCase):
             ["--events", log + ".e", "--full-log", log, "generic", "--", "true"],       # no --pty
             ["--pty", "--size", "120", "--full-log", log, "--events", log + ".e", "generic", "--", "true"],
             ["--pty", "--size", "0x40", "--full-log", log, "--events", log + ".e", "generic", "--", "true"],
+            ["--prompts", "stdio", "--full-log", log, "--events", log + ".e", "generic", "--", "true"],   # no --pty
+            ["--pty", "--prompts", "bogus", "--full-log", log, "--events", log + ".e", "generic", "--", "true"],
         ]
         for args in cases:
             r = subprocess.run([sys.executable, str(SCRIPT), *args], capture_output=True, text=True)

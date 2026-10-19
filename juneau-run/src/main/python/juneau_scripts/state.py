@@ -46,10 +46,7 @@ class Checkpoint:
     def get(self, key, default=None):
         return self._load().get(key, default)
 
-    def set(self, key, value):
-        """Write key=value atomically: a temporary file in the same directory, then os.replace."""
-        data = self._load()
-        data[key] = value
+    def _write(self, data):
         self.path.parent.mkdir(parents=True, exist_ok=True)
         fd, tmp = tempfile.mkstemp(prefix=f".{self.path.name}.", dir=self.path.parent)
         try:
@@ -61,6 +58,22 @@ class Checkpoint:
             with contextlib.suppress(OSError):
                 os.unlink(tmp)
             raise
+
+    def set(self, key, value):
+        """Write key=value atomically: a temporary file in the same directory, then os.replace."""
+        data = self._load()
+        data[key] = value
+        self._write(data)
+
+    def update(self, mapping):
+        """Apply every key of mapping in one atomic write; a None value removes that key."""
+        data = self._load()
+        for key, value in mapping.items():
+            if value is None:
+                data.pop(key, None)
+            else:
+                data[key] = value
+        self._write(data)
 
     def clear(self):
         with contextlib.suppress(FileNotFoundError):

@@ -202,6 +202,25 @@ The modules: `git`, `run` (`session`, `cmd`, `gate`, `step`, `say`, `handoff`, `
 `testing` (`hermetic_git`, `bare_remote`, `clean_run_env`, `fake_tool`, and pytest fixtures through
 `pytest_plugins = ["juneau_scripts.testing.pytest_plugin"]`). Each module's docstring is its reference.
 
+### Prompts, pauses and stdin
+
+`prompt` has six kinds: `text`, `secret`, `confirm` (with `expect=` for a type-to-confirm), `choice`, `form` (a list of
+`Field`s) and `email` (shows a message to send from the user's own mail client, with a `mailto:` link). `None` always
+means cancelled. When a host starts the script with the two prompt descriptors, every prompt is a JSON line to the host
+and the answer comes back on the other descriptor; otherwise the prompts are inline on the terminal. A secret is never
+published, logged, checkpointed or put on a command line. See `docs/prompt-protocol-v1.md`.
+
+A step stops the run for a human wait by raising `steps.Pause(message, done=True)`. Its row draws ⏸ with the message,
+`Registry.run` returns `Result(True, 0, status="paused")`, and with `done=True` a `--resume` starts after the step.
+`state.Checkpoint.update({...})` writes several keys in one atomic write (a `None` value removes the key).
+
+`run.cmd(..., input=b"...")` writes the bytes to the command's stdin, then closes it. The bytes reach no log, marker or
+command line. It cannot be combined with `tty=True`.
+
+`juneau_run.py --pty --prompts stdio` runs the job with a prompt channel and relays it: the job's prompt lines go to this
+process's stdout and this process's stdin lines go to the job. EOF on stdin means the host is gone, and the job is
+cancelled. It cannot be combined with `--input`.
+
 The `load_juneau_run` snippet above still works for a single-file adopter that needs only `juneau_run`.
 
 ## In this repository

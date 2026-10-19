@@ -20,7 +20,7 @@ from dataclasses import dataclass
 @dataclass(frozen=True)
 class Result:
     """Outcome of a git or tool helper.  summary is juneau_run's tests totals for a tool run; status is set by gates
-    only ("pass", "fail", "skip" or "error")."""
+    ("pass", "fail", "skip" or "error") and by Registry.run ("paused")."""
 
     ok: bool
     code: int

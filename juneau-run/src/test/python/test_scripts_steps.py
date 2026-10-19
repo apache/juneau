@@ -46,6 +46,22 @@ class CheckpointTest(unittest.TestCase):
         self.assertFalse(self.path.exists())
         self.cp.clear()
 
+    def test_checkpoint_update_atomic_and_none_removes(self):
+        self.cp.set("a", 1)
+        self.cp.set("b", 2)
+        self.cp.update({"b": None, "c": 3, "d": "x"})
+        self.assertEqual(json.loads(self.path.read_text(encoding="utf-8")), {"a": 1, "c": 3, "d": "x"})
+        self.cp.update({"zzz": None})  # removing an absent key is a no-op
+        self.assertEqual(self.cp.get("c"), 3)
+
+    def test_update_is_one_write(self):
+        self.cp.set("a", 1)
+        with mock.patch("juneau_scripts.state.os.replace", side_effect=OSError("disk full")):
+            with self.assertRaises(OSError):
+                self.cp.update({"a": 2, "b": 3})
+        self.assertEqual(json.loads(self.path.read_text(encoding="utf-8")), {"a": 1})
+        self.assertEqual([p.name for p in self.path.parent.iterdir()], ["release.json"])
+
     def test_atomic_write_leaves_no_temporary_files(self):
         self.cp.set("last", "a")
         with mock.patch("juneau_scripts.state.os.replace", side_effect=OSError("disk full")):
@@ -93,6 +109,32 @@ class RegistryCase(unittest.TestCase):
         with redirect_stdout(out):
             r = self.reg.run(self.parser.parse_args(list(argv)), ctx={}, checkpoint=self.cp)
         return r, out.getvalue()
+
+
+class PauseTest(RegistryCase):
+    def pausing(self, name, done):
+        def fn(ctx):
+            self.ran.append(name)
+            raise steps.Pause("Wait for the vote", done=done)
+        i = self.reg.names.index(name)
+        self.reg._steps[i] = (name, self.reg._steps[i][1], fn)
+
+    def test_pause_done_records_last_and_stops(self):
+        self.pausing("build", done=True)
+        r, _ = self.go()
+        self.assertEqual(self.ran, ["prereqs", "build"])
+        self.assertEqual(self.cp.last(), "build")
+        self.assertTrue(r.ok)
+
+    def test_pause_not_done_keeps_last(self):
+        self.pausing("build", done=False)
+        self.go()
+        self.assertEqual(self.cp.last(), "prereqs")
+
+    def test_pause_result_status_paused(self):
+        self.pausing("build", done=True)
+        r, _ = self.go()
+        self.assertEqual((r.ok, r.code, r.status, r.out), (True, 0, "paused", "Wait for the vote"))
 
 
 class RegistryTest(RegistryCase):
