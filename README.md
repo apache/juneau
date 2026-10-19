@@ -45,6 +45,30 @@ mvn clean verify        # build + run tests + apache-rat license check
 ./stop.sh               # stop it
 ```
 
+## Release CLI
+
+`scripts/release.py` drives a release (RC, vote, promote) from the terminal. Smoke-test it with a dry run, which
+runs read-only commands, prints every mutation and writes no `runs/`:
+
+```bash
+JUNEAU_RUN_PY=~/git/apache/juneau/juneau-run/src/main/python/juneau_run.py \
+  uv run --native-tls python scripts/release.py --dry-run --version 9.2.1
+```
+
+- **Prerequisites run first**, before any prompt (branch, details, credentials), on a new run and on `--resume` alike,
+  dry run included. They check git, mvn (3.6+), java (17+), svn and svnmucc (1.10+), gpg (2.1+), gh and unzip on PATH,
+  plus credential-free reachability: Nexus, and an anonymous `svn ls` of dist/dev. Every failure is listed at once with
+  an install hint (for example `brew install subversion`), then release.py exits before asking anything. The
+  `prechecks` step that follows keeps only what depends on your answers (branch exists, RC tag absent).
+- The GPG key id prompt is prefilled from `gpg --list-secret-keys --with-colons` (read-only): the unexpired,
+  signing-capable key whose uid matches your Apache email (or `<availid>@apache.org`). Several matches become a
+  choice; none leaves the plain prompt. Outside a dry run it warns if the key is missing from the published KEYS file.
+- The release branch is asked first. With `--version`, its default is an existing `origin/juneau-X-branch` or
+  `origin/X.Y.x`, else `master`.
+- `--version` prefills the Version in the details form and derives the next development version from it.
+- Leave the development version blank to get the next patch; a bare `x.y.z` gets `-SNAPSHOT` appended.
+- A dry run logs to `~/.juneau-release-manager/attempts/dry-run/full.log` (the banner's `tail -f` target).
+
 ## License
 
 Apache License 2.0. See `LICENSE`.

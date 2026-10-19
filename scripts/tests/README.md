@@ -41,3 +41,26 @@ python3 -m venv .venv
 
 Do **not** `pip install --user pytest` / `pip install pytest` on a Homebrew-managed `python3`
 — PEP 668 ("externally managed environment") will refuse it.
+
+## Release CLI tests
+
+`test_release_*.py` cover `scripts/release.py` and the `scripts/jrm_release/` package. They use fakes only
+(`conftest.py`: FakeRunner, FakePrompts, FakeNexus, FakeHttp), so no network, Nexus, SVN, GitHub, gpg key or
+real release is touched.
+
+| File | Covers |
+|---|---|
+| `test_release_runfile.py` | the `run.json` checkpoint (atomic write, corrupt-file refusal) |
+| `test_release_steps.py` | each rc, vote and promote step against the fakes |
+| `test_release_emails.py` | vote, result and announce emails, `mailto:` length handling |
+| `test_release_revert.py` | `--revert` checks and actions |
+| `test_release_cli.py` | arguments, guards, lock, resume, exit codes (needs `JUNEAU_RUN_PY`) |
+| `test_release_dryrun.py` | `--dry-run` runs read-only commands only and never writes `run.json` |
+| `test_release_secrets.py` | no secret on argv, in `run.json` or in logs; `askpass.py` |
+
+`test_release_cli.py` loads the shared toolkit through `scripts/bootstrap.py`, so point it at the Juneau checkout:
+
+```bash
+export JUNEAU_RUN_PY=$HOME/git/apache/juneau/juneau-run/src/main/python/juneau_run.py
+uv run --offline --with pytest pytest -q -p no:cacheprovider scripts/tests/
+```
