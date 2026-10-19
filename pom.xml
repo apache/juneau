@@ -54,7 +54,7 @@
 		     src/test/js/node-floor-preload.cjs strips everything newer from the test JVM's node child processes;
 		     keep the two in step, and NodeFloorScan_Test too. -->
 		<juneau.node.floor>18</juneau.node.floor>
-		<jetty.version>12.1.13</jetty.version>
+		<jetty.version>12.1.14</jetty.version>
 		<jetty.ee.version>11</jetty.ee.version>
 		<tomcat.version>11.0.25</tomcat.version>
 		<spring.version>4.1.1</spring.version>
