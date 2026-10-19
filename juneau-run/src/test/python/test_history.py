@@ -242,6 +242,13 @@ class RecordTest(HistoryEnv, unittest.TestCase):
     def start(self, id="mvn", tool="maven", sig="abc", parent=None):
         self.pub("step_start", id=id, n=1, title=id, parent=parent, tool=tool, sig=sig)
 
+    def test_unit_events_without_units_record_kind_none(self):
+        self.start("t", "bazel", "sig")
+        for done in (1, 2, 3):
+            self.pub("unit", step="t", done=done, outcome="pass")
+        self.pub("step_end", id="t", status="ok", ms=10)
+        self.assertEqual(self.read()[-1]["units"], {"kind": None, "total": 3, "done": 3})
+
     def test_maven_record(self):
         self.pub("step_start", id="mvn", n=1, title="mvn verify", parent=None, tool="maven", sig="abc")
         self.pub("units", step="mvn", total=85, kind="modules")

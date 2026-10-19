@@ -26,7 +26,7 @@ import zipfile
 from pathlib import Path
 
 from scripts_support import (ASSEMBLY, BOOTSTRAP, MODULE_ROOT, PYTHON_SRC, SCRIPT, base_env, build_zip, markers,
-                             package_files, python)
+                             package_files, pycache_under, python)
 from juneau_scripts.testing import bare_remote, fake_tool, hermetic_git
 
 ASM = "{http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.3}"
@@ -219,6 +219,28 @@ class ZipEndToEndTest(unittest.TestCase):
                 if env:
                     self.assertEqual([m for m in markers(done.stdout) if m["ev"] == "done"],
                                      [{"ev": "done", "status": "fail"}])
+
+
+class ParsersPackagingTest(unittest.TestCase):
+    def test_the_zip_carries_the_parsers_package(self):
+        files = package_files()
+        for rel in ("juneau_scripts/parsers/__init__.py", "juneau_scripts/parsers/_side.py",
+                    "juneau_scripts/parsers/bazel.py"):
+            self.assertIn(rel, files)
+
+    def test_juneau_run_beside_its_zip_resolves_the_bazel_parser(self):
+        tmp = Path(tempfile.mkdtemp())
+        self.addCleanup(shutil.rmtree, tmp, True)
+        build_zip(tmp / "juneau-run.zip")
+        shutil.copy(SCRIPT, tmp / "juneau-run.py")
+        code = ("import importlib.util, sys\n"
+                "spec = importlib.util.spec_from_file_location('juneau_run', sys.argv[1])\n"
+                "jr = importlib.util.module_from_spec(spec); sys.modules['juneau_run'] = jr\n"
+                "spec.loader.exec_module(jr)\n"
+                "print(type(jr._resolve_parser('bazel')).__name__)\n")
+        r = python(["-I", "-c", code, str(tmp / "juneau-run.py")], cwd=str(tmp), env=base_env())
+        self.assertEqual((r.returncode, r.stdout), (0, "BazelParser\n"), r.stderr)
+        self.assertEqual(pycache_under(tmp), [])
 
 
 if __name__ == "__main__":

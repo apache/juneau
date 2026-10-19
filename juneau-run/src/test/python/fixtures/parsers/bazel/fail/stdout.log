@@ -1,0 +1,19 @@
+Computing main repo mapping: 
+Loading: 
+Loading: 0 packages loaded
+Analyzing: 3 targets (1 packages loaded, 0 targets configured)
+Analyzing: 3 targets (1 packages loaded, 0 targets configured)
+
+INFO: Analyzed 3 targets (1 packages loaded, 2 targets configured).
+FAIL: //fail:bad_test (see /work/bazel/root/7c555d183b941d37a778528f608dde06/execroot/jrbz/bazel-out/darwin_arm64-fastbuild/testlogs/fail/bad_test/test.log)
+INFO: Found 1 target and 2 test targets...
+INFO: Elapsed time: 0.555s, Critical Path: 0.47s
+INFO: 6 processes: 4 internal, 2 darwin-sandbox.
+INFO: Build completed, 1 test FAILED, 6 total actions
+INFO: 
+//ok:ok_test                                                    (cached) PASSED in 0.5s
+//fail:bad_test                                                          FAILED in 0.3s
+  /work/bazel/root/7c555d183b941d37a778528f608dde06/execroot/jrbz/bazel-out/darwin_arm64-fastbuild/testlogs/fail/bad_test/test.log
+
+Executed 1 out of 2 tests: 1 test passes and 1 fails locally.
+INFO: Build Event Protocol files produced successfully.

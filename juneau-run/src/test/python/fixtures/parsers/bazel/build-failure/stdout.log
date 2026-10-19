@@ -1,0 +1,18 @@
+Computing main repo mapping: 
+Loading: 
+Loading: 0 packages loaded
+Analyzing: target //broken:bad (1 packages loaded, 0 targets configured)
+Analyzing: target //broken:bad (1 packages loaded, 0 targets configured)
+
+INFO: Analyzed target //broken:bad (1 packages loaded, 1 target configured).
+ERROR: /work/bazel/ws/broken/BUILD:14:8: Executing genrule //broken:bad failed: (Exit 1): bash failed: error executing Genrule command (from target //broken:bad) /bin/bash -c 'source external/bazel_tools/tools/genrule/genrule-setup.sh; echo boom >&2; exit 1'
+
+Use --sandbox_debug to see verbose messages from the sandbox and retain the sandbox build root for debugging
+boom
+Target //broken:bad failed to build
+Use --verbose_failures to see the command lines of failed build steps.
+INFO: Elapsed time: 0.142s, Critical Path: 0.05s
+INFO: 2 processes: 2 internal.
+ERROR: Build did NOT complete successfully
+FAILED: 
+INFO: Build Event Protocol files produced successfully.

@@ -17,6 +17,7 @@ import errno
 import io
 import json
 import os
+import shutil
 import signal
 import subprocess
 import sys
@@ -75,6 +76,443 @@ class Events:
 
     def of(self, kind):
         return [f for k, f in self.events if k == kind]
+
+
+class OldStyle:
+    """A parser written before poll, close and render existed: only the original methods."""
+
+    name = "old"
+
+    def __init__(self):
+        self.step_id = None
+
+    def prepare(self, cmd, env, cwd):
+        return cmd, env
+
+    def on_line(self, line):
+        return []
+
+    def finish(self, exit_code):
+        return [("note", "info", "finished", self.step_id)]
+
+
+class IsolatedTest(unittest.TestCase):
+    def test_missing_optional_method_is_a_no_op_and_does_not_disable(self):
+        g = jr._Isolated(OldStyle())
+        with contextlib.redirect_stderr(io.StringIO()) as err:
+            self.assertEqual(g.call("poll"), [])
+            self.assertEqual(g.render("x"), "x")
+            g.close()
+        self.assertFalse(g.disabled)
+        self.assertEqual(g.call("finish", 0), [("note", "info", "finished", None)])
+        self.assertEqual(err.getvalue(), "")
+
+    def test_poll_error_disables(self):
+        class Bad(jr.Parser):
+            name = "bad"
+
+            def poll(self):
+                raise ValueError("no")
+
+        g = jr._Isolated(Bad())
+        with contextlib.redirect_stderr(io.StringIO()) as err:
+            self.assertEqual(g.call("poll"), [])
+            self.assertEqual(g.call("on_line", "x"), [])
+        self.assertTrue(g.disabled)
+        self.assertEqual(err.getvalue(), "juneau-run: parser bad disabled after error: ValueError('no')\n")
+
+    def test_close_runs_on_disabled_parser(self):
+        class Bad(jr.Parser):
+            name = "bad"
+            closed = 0
+
+            def handle(self, line):
+                raise ValueError("no")
+
+            def close(self):
+                self.closed += 1
+
+        p = Bad()
+        g = jr._Isolated(p)
+        with contextlib.redirect_stderr(io.StringIO()):
+            g.call("on_line", "x")
+        g.close()
+        g.close()
+        self.assertTrue(g.disabled)
+        self.assertEqual(p.closed, 1)
+
+    def test_close_error_is_warned_not_raised(self):
+        class Bad(jr.Parser):
+            name = "bad"
+
+            def close(self):
+                raise OSError("busy")
+
+        with contextlib.redirect_stderr(io.StringIO()) as err:
+            jr._Isolated(Bad()).close()
+        self.assertEqual(err.getvalue(), "juneau-run: parser bad close failed: OSError('busy')\n")
+
+    def test_render_falls_back_to_the_raw_line_on_error(self):
+        class Bad(jr.Parser):
+            name = "bad"
+
+            def render(self, line):
+                raise ValueError("no")
+
+        class NotText(jr.Parser):
+            name = "nottext"
+
+            def render(self, line):
+                return 42
+
+        g = jr._Isolated(Bad())
+        with contextlib.redirect_stderr(io.StringIO()):
+            self.assertEqual(g.render("raw"), "raw")
+        self.assertTrue(g.disabled)
+        self.assertEqual(g.render("next"), "next")
+        g2 = jr._Isolated(NotText())
+        self.assertEqual(g2.render("raw"), "raw")
+        self.assertFalse(g2.disabled)
+
+
+class Contract(jr.Parser):
+    """Records the contract calls: interactive at prepare time, how often poll ran, finish and close."""
+
+    name = "contract"
+
+    def __init__(self, poll_events=None):
+        super().__init__()
+        self.poll_events = poll_events or (lambda n: [])
+        self.polls = 0
+        self.calls = []
+        self.seen_interactive = None
+
+    def prepare(self, cmd, env, cwd):
+        self.seen_interactive = self.interactive
+        return cmd, env
+
+    def poll(self):
+        self.polls += 1
+        return self.poll_events(self.polls)
+
+    def finish(self, exit_code):
+        self.calls.append("finish")
+        return []
+
+    def close(self):
+        self.calls.append("close")
+
+
+class Rewriting(jr.Parser):
+    """Logs a JSON line's "text" instead of the line; sees the raw line."""
+
+    name = "rewriting"
+    rewrites_log = True
+
+    def __init__(self, boom=False):
+        super().__init__()
+        self.lines = []
+        self.boom = boom
+
+    def handle(self, line):
+        self.lines.append(line)
+        return []
+
+    def render(self, line):
+        if self.boom:
+            raise ValueError("render broke")
+        try:
+            return json.loads(line)["text"]
+        except (ValueError, TypeError, KeyError):
+            return line
+
+
+class RunToolContractTest(unittest.TestCase):
+    def setUp(self):
+        reset_run_state()
+        self.addCleanup(reset_run_state)
+        self.bus = jr.subscribe(Events())
+        self.tmp = tempfile.mkdtemp()
+        self.addCleanup(shutil.rmtree, self.tmp, True)
+        self.log = Path(self.tmp) / "o.log"
+        self.sinks = jr.Sinks("none", str(self.log))
+
+    def run_child(self, code, parser, **kw):
+        with mock.patch.dict(os.environ, {"RUN_MARKERS": ""}), contextlib.redirect_stdout(io.StringIO()):
+            return jr.run_tool(child(code), parser, "t", "T", sinks=self.sinks, **kw)
+
+    def test_interactive_is_false_in_piped_mode_and_true_under_tty(self):
+        for tty in (False, True):
+            with self.subTest(tty=tty):
+                p = Contract()
+                with mock.patch.object(jr, "_input_fd", return_value=None):
+                    self.run_child("pass", p, tty=tty)
+                self.assertIs(p.seen_interactive, tty)
+
+    def test_poll_drives_events_when_the_tool_prints_nothing(self):
+        p = Contract(lambda n: [("progress", "t", f"poll {n}")] if n == 3 else [])
+        self.run_child("import time; time.sleep(0.5)", p)
+        self.assertGreaterEqual(p.polls, 3)
+        self.assertEqual([f["text"] for f in self.bus.of("step_progress")], ["poll 3"])
+
+    def test_poll_drives_events_when_the_tool_prints_only_carriage_returns(self):
+        p = Contract(lambda n: [("progress", "t", f"poll {n}")] if n == 3 else [])
+        self.run_child("import sys, time\nfor i in range(10):\n    sys.stdout.write(f'\\r{i}'); sys.stdout.flush(); "
+                       "time.sleep(0.05)", p)
+        self.assertEqual([f["text"] for f in self.bus.of("step_progress")], ["poll 3"])
+
+    def test_close_runs_once_after_finish_on_a_normal_exit(self):
+        p = Contract()
+        self.run_child("print('x')", p)
+        self.assertEqual(p.calls, ["finish", "close"])
+
+    def test_close_runs_on_cancel(self):
+        def poll_events(n):
+            if n == 2:
+                raise KeyboardInterrupt
+            return []
+
+        p = Contract(poll_events)
+        with self.assertRaises(KeyboardInterrupt):
+            self.run_child("import time; time.sleep(30)", p)
+        self.assertEqual(p.calls, ["close"])
+
+    def test_close_runs_on_error(self):
+        class Boom(jr.Sinks):
+            def write_full(self, chunk):
+                raise RuntimeError("sink failed")
+
+        self.sinks = Boom("none", str(self.log))
+        p = Contract()
+        with self.assertRaises(RuntimeError):
+            self.run_child("print('x')", p)
+        self.assertEqual(p.calls, ["close"])
+
+    def test_close_runs_when_the_tool_cannot_start(self):
+        p = Contract()
+        with self.assertRaises(OSError), mock.patch.dict(os.environ, {"RUN_MARKERS": ""}), \
+                contextlib.redirect_stdout(io.StringIO()):
+            jr.run_tool(["/nonexistent/x"], p, "t", "T", sinks=self.sinks)
+        self.assertEqual(p.calls, ["close"])
+
+    def test_close_runs_when_the_sinks_cannot_open(self):
+        class NoOpen(jr.Sinks):
+            def open(self):
+                raise OSError("disk gone")
+
+        class Tmp(Contract):
+            def prepare(self, cmd, env, cwd):
+                self.made = Path(tempfile.mkdtemp())
+                return super().prepare(cmd, env, cwd)
+
+            def close(self):
+                shutil.rmtree(self.made, ignore_errors=True)
+                super().close()
+
+        self.sinks = NoOpen("none", str(self.log))
+        p = Tmp()
+        with self.assertRaises(OSError):
+            self.run_child("print('x')", p)
+        self.assertEqual(p.calls, ["close"])
+        self.assertFalse(p.made.exists())
+
+    def test_a_chatty_tool_does_not_poll_on_every_chunk(self):
+        p = Contract()
+        self.run_child("import sys\nfor i in range(3000):\n    sys.stdout.write(f'line {i}\\n'); sys.stdout.flush()", p)
+        self.assertLess(p.polls, 15)
+
+    def test_the_last_events_still_arrive_when_polling_is_throttled(self):
+        class Late(jr.Parser):
+            name = "late"
+
+            def __init__(self):
+                super().__init__()
+                self.lines = 0
+
+            def on_line(self, line):
+                self.lines += 1
+                return []
+
+            def poll(self):
+                return [("progress", "t", f"saw {self.lines}")] if self.lines >= 500 else []
+
+        self.run_child("import sys\nfor i in range(500):\n    sys.stdout.write(f'line {i}\\n'); sys.stdout.flush()",
+                       Late())
+        self.assertEqual([f["text"] for f in self.bus.of("step_progress")][-1:], ["saw 500"])
+
+    JSON_THEN_PLAIN = "print('{\"text\": \"hello\"}'); print('plain')"
+
+    def test_full_log_gets_rendered_lines(self):
+        p = Rewriting()
+        self.run_child(self.JSON_THEN_PLAIN, p)
+        self.assertEqual(self.log.read_bytes(), b"hello\nplain\n")
+        self.assertEqual(p.lines, ['{"text": "hello"}', "plain"])
+
+    def test_capture_and_summarize_get_rendered_text(self):
+        seen = []
+        r = self.run_child(self.JSON_THEN_PLAIN, Rewriting(), capture=True, summarize=lambda text: seen.append(text))
+        self.assertEqual(r.output, "hello\nplain\n")
+        self.assertEqual(seen, ["hello\nplain\n"])
+
+    def test_rewrites_log_is_ignored_under_tty(self):
+        with mock.patch.object(jr, "_input_fd", return_value=None):
+            self.run_child(self.JSON_THEN_PLAIN, Rewriting(), tty=True)
+        self.assertIn(b'{"text": "hello"}', self.log.read_bytes())
+
+    def test_a_failing_render_falls_back_to_raw_lines(self):
+        with contextlib.redirect_stderr(io.StringIO()) as err:
+            self.run_child(self.JSON_THEN_PLAIN, Rewriting(boom=True))
+        self.assertEqual(self.log.read_bytes(), b'{"text": "hello"}\nplain\n')
+        self.assertIn("parser rewriting disabled after error: ValueError('render broke')", err.getvalue())
+
+
+class FakeToolkit:
+    """Stands in for juneau_scripts.parsers: a name -> class map, with bind recorded (or failing)."""
+
+    def __init__(self, parsers=None, bind_error=None):
+        self.parsers = dict(parsers or {})
+        self.REGISTRY = {name: name for name in self.parsers}
+        self.bound = []
+        self.bind_error = bind_error
+
+    def bind(self, module):
+        self.bound.append(module)
+        if self.bind_error is not None:
+            raise self.bind_error
+
+    def known(self, name):
+        return name in self.parsers
+
+    def load(self, name):
+        return self.parsers[name]
+
+
+class Echo(jr.Parser):
+    name = "echo"
+
+
+NOPE_NOTE = "parser nope unavailable: not a registered parser; using generic"
+
+
+class ExternalParserTest(unittest.TestCase):
+    def setUp(self):
+        reset_run_state()
+        self.addCleanup(reset_run_state)
+        patcher = mock.patch.dict(sys.modules, {"juneau_run": jr})   # other tests may leave another copy registered
+        patcher.start()
+        self.addCleanup(patcher.stop)
+
+    def toolkit(self, **kw):
+        patcher = mock.patch.object(jr, "_toolkit_package", **kw)
+        self.addCleanup(patcher.stop)
+        return patcher.start()
+
+    def test_the_bytecode_flag_is_restored_after_an_import_that_fails(self):
+        saved = sys.dont_write_bytecode
+        self.addCleanup(setattr, sys, "dont_write_bytecode", saved)
+        sys.dont_write_bytecode = False
+        seen = []
+
+        def boom(name, *args):
+            seen.append(sys.dont_write_bytecode)
+            raise ImportError("broken")
+
+        with mock.patch.object(jr.importlib, "import_module", side_effect=boom), \
+                mock.patch.dict(sys.modules), mock.patch.object(sys, "path", list(sys.path)):
+            sys.modules.pop("juneau_scripts", None)
+            with mock.patch.object(jr.importlib.util, "find_spec", return_value=None):
+                with self.assertRaises(ImportError):
+                    jr._toolkit_package()
+        self.assertEqual(seen, [True])
+        self.assertIs(sys.dont_write_bytecode, False)
+
+    def test_the_package_beside_the_script_goes_last_on_the_path(self):
+        first = sys.path[0]
+        with mock.patch.dict(sys.modules), mock.patch.object(sys, "path", list(sys.path)), \
+                mock.patch.object(jr.importlib, "import_module", return_value=object()), \
+                mock.patch.object(jr.importlib.util, "find_spec", return_value=None):
+            sys.modules.pop("juneau_scripts", None)
+            jr._toolkit_package()
+            self.assertEqual(sys.path[0], first)
+            self.assertEqual(sys.path[-1], str(Path(jr.__file__).resolve().parent))
+
+    def test_builtin_names_never_touch_the_toolkit(self):
+        self.toolkit(side_effect=AssertionError("toolkit touched"))
+        self.assertIsInstance(jr._resolve_parser("maven"), jr.PARSERS["maven"])
+        self.assertIsInstance(jr._resolve_parser("generic"), jr.GenericParser)
+
+    def test_a_registered_name_loads_after_binding_juneau_run(self):
+        fake = FakeToolkit({"echo": Echo})
+        self.toolkit(return_value=fake)
+        self.assertIsInstance(jr._resolve_parser("echo"), Echo)
+        self.assertIsInstance(jr._resolve_parser("echo"), Echo)
+        self.assertEqual(fake.bound, [jr])   # bound once, to this module
+
+    def test_an_unknown_name_falls_back_with_one_note(self):
+        self.toolkit(return_value=FakeToolkit())
+        with contextlib.redirect_stderr(io.StringIO()) as err:
+            first = jr._resolve_parser("nope")
+            second = jr._resolve_parser("nope")
+        self.assertIsInstance(first, jr._FallbackParser)
+        first.step_id = "t"
+        self.assertEqual(first.poll(), [("note", "warn", NOPE_NOTE, "t")])
+        self.assertEqual(first.poll(), [])
+        self.assertEqual(first.finish(0), [])
+        self.assertIs(type(second), jr.GenericParser)
+        self.assertEqual(err.getvalue(), f"juneau-run: {NOPE_NOTE}\n")
+
+    def test_the_note_comes_with_finish_if_poll_never_ran(self):
+        self.toolkit(return_value=FakeToolkit())
+        with contextlib.redirect_stderr(io.StringIO()):
+            p = jr._resolve_parser("nope")
+        p.step_id = "t"
+        p.on_line("boom")
+        self.assertEqual(p.finish(1), [("note", "warn", NOPE_NOTE, "t"), ("cond", "boom"), ("failure", "boom", "t")])
+
+    def test_a_missing_toolkit_names_its_reason(self):
+        self.toolkit(side_effect=ImportError("no juneau_scripts beside juneau_run.py"))
+        with contextlib.redirect_stderr(io.StringIO()) as err:
+            p = jr._resolve_parser("bazel")
+        self.assertIsInstance(p, jr._FallbackParser)
+        self.assertEqual(err.getvalue(), "juneau-run: parser bazel unavailable: no juneau_scripts beside juneau_run.py; "
+                                         "using generic\n")
+
+    def test_a_failed_bind_is_cached_and_reported_per_name(self):
+        fake = FakeToolkit({"echo": Echo}, bind_error=RuntimeError("bad bind"))
+        self.toolkit(return_value=fake)
+        with contextlib.redirect_stderr(io.StringIO()) as err:
+            jr._resolve_parser("echo")
+            jr._resolve_parser("other")
+            jr._resolve_parser("echo")
+        self.assertEqual(len(fake.bound), 1)
+        self.assertEqual(err.getvalue().splitlines(),
+                         ["juneau-run: parser echo unavailable: bad bind; using generic",
+                          "juneau-run: parser other unavailable: bad bind; using generic"])
+
+    def test_known_parser_checks_without_binding(self):
+        fake = FakeToolkit({"echo": Echo})
+        self.toolkit(return_value=fake)
+        self.assertTrue(jr.known_parser("maven"))
+        self.assertTrue(jr.known_parser("echo"))
+        self.assertFalse(jr.known_parser("nope"))
+        self.assertEqual(fake.bound, [])
+        self.toolkit(side_effect=ImportError("gone"))
+        self.assertFalse(jr.known_parser("echo"))
+
+    def test_run_tool_publishes_the_note_once_and_keeps_it_out_of_the_log(self):
+        self.toolkit(return_value=FakeToolkit())
+        tmp = Path(tempfile.mkdtemp())
+        self.addCleanup(shutil.rmtree, tmp, True)
+        got = []
+        for step in ("t", "u"):
+            out = io.StringIO()
+            sinks = jr.Sinks("none", str(tmp / f"{step}.log"))
+            with mock.patch.dict(os.environ, {"RUN_MARKERS": "1"}), contextlib.redirect_stdout(out), \
+                    contextlib.redirect_stderr(io.StringIO()):
+                jr.run_tool(child("print('x')"), "nope", step, "T", sinks=sinks)
+            got.append([m for m in markers(out.getvalue()) if m["ev"] == "note"])
+            self.assertEqual((tmp / f"{step}.log").read_bytes(), b"x\n")
+        self.assertEqual(got, [[{"ev": "note", "level": "warn", "text": NOPE_NOTE, "step": "t"}], []])
 
 
 class RunToolConsoleTest(unittest.TestCase):

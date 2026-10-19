@@ -12,6 +12,8 @@
 # ***************************************************************************************************************************
 """PTY mode: raw bytes byte-exact in the log, the size sidecar, run-view events with byte offsets, exit codes."""
 
+import contextlib
+import io
 import json
 import os
 import signal
@@ -20,6 +22,7 @@ import sys
 import tempfile
 import unittest
 from pathlib import Path
+from unittest import mock
 
 from support import FIXTURES, SCRIPT, jr, reset_run_state
 
@@ -50,6 +53,128 @@ class PtyTest(unittest.TestCase):
     def setUp(self):
         reset_run_state()
         self.tmp = tempfile.mkdtemp()
+
+    def _run_in_process(self, code, parser):
+        jr._events = jr._EventsFile(Path(self.tmp) / "e.jsonl", "generic")
+        try:
+            sinks = jr.Sinks("none", str(Path(self.tmp) / "o.log"))
+            jr.run_pty(py(code), parser, "t", "T", cols=80, rows=24, sinks=sinks)
+        finally:
+            jr._events.close()
+            jr._events = None
+        log = (Path(self.tmp) / "o.log").read_bytes()
+        evs = [json.loads(x) for x in (Path(self.tmp) / "e.jsonl").read_text(encoding="utf-8").splitlines()]
+        return log, evs
+
+    def test_rewrites_log_never_changes_the_pty_log(self):
+        class Rewriting(jr.Parser):
+            name = "rewriting"
+            rewrites_log = True
+
+            def render(self, line):
+                return "rewritten"
+
+        log, _ = self._run_in_process("print('{\"text\": \"hello\"}')", Rewriting())
+        self.assertEqual(log, b'{"text": "hello"}\r\n')
+
+    def test_poll_and_close_run_under_the_pty(self):
+        class Sub(jr.Parser):
+            name = "sub"
+
+            def __init__(self):
+                super().__init__()
+                self.seen, self.sent, self.calls, self.seen_interactive = False, False, [], None
+
+            def prepare(self, cmd, env, cwd):
+                self.seen_interactive = self.interactive
+                return cmd, env
+
+            def handle(self, line):
+                self.seen = True
+                return []
+
+            def poll(self):
+                if self.seen and not self.sent:
+                    self.sent = True
+                    return [("sub_start", "t/sub", 1, "Sub")]
+                return []
+
+            def finish(self, exit_code):
+                self.calls.append("finish")
+                return []
+
+            def close(self):
+                self.calls.append("close")
+
+        p = Sub()
+        log, evs = self._run_in_process("import time; print('a', flush=True); time.sleep(0.5)", p)
+        sub = [e for e in evs if e["ev"] == "step" and e["title"] == "Sub"]
+        self.assertEqual(len(sub), 1)
+        self.assertEqual(sub[0]["rawOffset"], len(log))   # just past the only line (its PTY line end included)
+        self.assertEqual(p.calls, ["finish", "close"])
+        self.assertIs(p.seen_interactive, True)
+
+    def test_close_runs_when_the_tool_cannot_start_under_the_pty(self):
+        class Closing(jr.Parser):
+            name = "closing"
+
+            def __init__(self):
+                super().__init__()
+                self.calls = []
+
+            def finish(self, exit_code):
+                self.calls.append("finish")
+                return []
+
+            def close(self):
+                self.calls.append("close")
+
+        p = Closing()
+        sinks = jr.Sinks("none", str(Path(self.tmp) / "o.log"))
+        with contextlib.redirect_stdout(io.StringIO()), contextlib.redirect_stderr(io.StringIO()):
+            r = jr.run_pty(["/nonexistent/x"], p, "t", "T", cols=80, rows=24, sinks=sinks)
+        self.assertEqual(r.exit, 127)
+        self.assertEqual(p.calls.count("close"), 1)
+
+    def test_close_runs_when_the_sinks_cannot_open_under_the_pty(self):
+        class NoOpen(jr.Sinks):
+            def open(self):
+                raise OSError("disk gone")
+
+        class Closing(jr.Parser):
+            name = "closing"
+
+            def __init__(self):
+                super().__init__()
+                self.calls = []
+
+            def close(self):
+                self.calls.append("close")
+
+        p = Closing()
+        sinks = NoOpen("none", str(Path(self.tmp) / "o.log"))
+        with contextlib.redirect_stdout(io.StringIO()), self.assertRaises(OSError):
+            jr.run_pty([sys.executable, "-c", "pass"], p, "t", "T", cols=80, rows=24, sinks=sinks)
+        self.assertEqual(p.calls, ["close"])
+
+    def test_close_runs_when_the_pty_cannot_be_opened(self):
+        class Closing(jr.Parser):
+            name = "closing"
+
+            def __init__(self):
+                super().__init__()
+                self.calls = []
+
+            def close(self):
+                self.calls.append("close")
+
+        p = Closing()
+        sinks = jr.Sinks("none", str(Path(self.tmp) / "o.log"))
+        with contextlib.redirect_stdout(io.StringIO()), mock.patch.object(jr.os, "openpty", side_effect=OSError("none")), \
+                self.assertRaises(OSError):
+            jr.run_pty([sys.executable, "-c", "pass"], p, "t", "T", cols=80, rows=24, sinks=sinks)
+        self.assertEqual(p.calls, ["close"])
+        self.assertIsNone(sinks._full)
 
     def test_raw_bytes_reach_the_log_byte_exact(self):
         r, log, _ = pty(self.tmp, [sys.executable, str(SCREEN)])

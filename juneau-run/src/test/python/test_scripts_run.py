@@ -16,6 +16,7 @@ import io
 import os
 import sys
 import tempfile
+import types
 import unittest
 from contextlib import redirect_stdout
 from pathlib import Path
@@ -24,7 +25,7 @@ from unittest import mock
 import scripts_support
 from scripts_support import isolate_run_env, jr, markers, reset_run_state
 
-from juneau_scripts import run, testing
+from juneau_scripts import parsers, run, testing
 
 PY = sys.executable
 
@@ -124,6 +125,41 @@ class ExportConsoleTest(PlainCase):
         self.assertEqual(parser.parse_args(["--console", "none"]).console, "none")
 
 
+class ParserForTest(unittest.TestCase):
+    def test_consumer_commands_get_the_parser_they_had_or_the_detected_one(self):
+        cases = [
+            (["git", "push"], None, "generic"),
+            ([PY, "scripts/check.py"], None, "generic"),
+            (["mvn", "verify"], None, "maven"),
+            (["mvn", "-q", "verify"], None, "generic"),   # quiet Maven prints nothing the Maven parser reads
+            (["mvn", "-q", "verify"], "generic", "generic"),   # an explicit tool always wins
+            (["npm", "ci"], None, "npm"),
+            (["uv", "run", "--with", "pytest", "pytest", "-q"], None, "pytest"),
+            (["./gradlew", "build"], None, "gradle"),
+            (["bazel", "query", "//..."], None, "generic"),
+            ([PY, "-c", "pass"], "no-such-parser", "generic"),
+            ([PY, "-c", "pass"], "maven", "maven"),
+        ]
+        for cmd, tool, want in cases:
+            with self.subTest(cmd=cmd, tool=tool):
+                self.assertEqual(run._parser_for(jr, cmd, tool), want)
+
+    def test_a_parser_class_or_instance_passes_through(self):
+        p = jr.GenericParser()
+        self.assertIs(run._parser_for(jr, ["mvn"], p), p)
+        self.assertIs(run._parser_for(jr, ["mvn"], jr.GenericParser), jr.GenericParser)
+
+    def test_an_old_juneau_run_without_known_parser_keeps_the_builtin_check(self):
+        old = types.SimpleNamespace(PARSERS={"maven": object, "generic": object})
+        self.assertEqual(run._parser_for(old, ["mvn", "verify"], None), "maven")
+        self.assertEqual(run._parser_for(old, ["bazel", "build", "//..."], None), "generic")
+        self.assertEqual(run._parser_for(old, ["x"], "bazel"), "generic")
+
+    def test_bazel_build_commands_get_the_bazel_parser(self):
+        self.assertEqual(run._parser_for(jr, ["bazel", "test", "//..."], None), "bazel")
+        self.assertEqual(run._parser_for(jr, ["bazel", "query", "//..."], None), "generic")
+        self.assertEqual(run._parser_for(jr, ["x"], "bazel"), "bazel")
+
 class CmdMarkersTest(MarkerCase):
     def test_runs_through_run_tool_with_the_step_number(self):
         r, got, _ = self.capture(run.cmd, [PY, "-c", "print('x')"], title="Build it", n=4)
@@ -131,6 +167,17 @@ class CmdMarkersTest(MarkerCase):
         self.assertEqual((r.out, r.err), ("", ""))
         self.assertEqual(got[0], {"ev": "step", "id": "build-it", "n": 4, "title": "Build it"})
         self.assertEqual(got[-1], {"ev": "end", "id": "build-it", "status": "ok"})
+
+    def test_no_tool_detects_the_parser_from_the_command(self):
+        with mock.patch.object(jr, "run_tool", wraps=jr.run_tool) as rt:
+            r, _, _ = self.capture(run.cmd, ["/nonexistent/mvn", "verify"], title="mvn verify")
+        self.assertEqual(r.code, 127)
+        self.assertEqual(rt.call_args.args[1], "maven")
+
+    def test_an_explicit_tool_wins_over_detection(self):
+        with mock.patch.object(jr, "run_tool", wraps=jr.run_tool) as rt:
+            self.capture(run.cmd, ["/nonexistent/mvn", "verify"], title="mvn verify", tool="generic")
+        self.assertEqual(rt.call_args.args[1], "generic")
 
     def test_capture_returns_the_merged_output(self):
         r, _, _ = self.capture(run.cmd, [PY, "-c", "import sys; print('o'); print('e', file=sys.stderr)"],
@@ -169,6 +216,14 @@ class CmdMarkersTest(MarkerCase):
                                                    {"ev": "end", "id": "s", "status": "skip"}])
 
 
+class UnroutedDetectTest(PlainCase):
+    def test_unrouted_runs_never_detect(self):
+        with mock.patch.object(parsers, "detect", side_effect=AssertionError("detect ran")), \
+                redirect_stdout(io.StringIO()):
+            r = run.cmd([PY, "-c", "pass"], title="t")
+        self.assertTrue(r.ok)
+
+
 class GateTest(PlainCase):
     def gate(self, code, **kw):
         return run.gate([PY, "-c", f"import sys; sys.exit({code})"], title="Gate", **kw)
@@ -190,6 +245,11 @@ class GateTest(PlainCase):
 
 
 class GateMarkersTest(MarkerCase):
+    def test_a_gate_detects_the_parser_for_its_child_row(self):
+        with mock.patch.object(jr, "run_tool", wraps=jr.run_tool) as rt:
+            self.capture(run.gate, ["/nonexistent/mvn", "verify"], title="Sonar")
+        self.assertEqual(rt.call_args.args[1:3], ("maven", "sonar-run"))
+
     def test_skip_marks_the_parent_step_and_its_child_row_skipped(self):
         r, got, _ = self.capture(run.gate, [PY, "-c", "import sys; sys.exit(3)"], title="Sonar", n=6)
         self.assertEqual((r.ok, r.status), (True, "skip"))

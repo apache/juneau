@@ -757,6 +757,15 @@ class PolledTest(GitCase):
                          input=b"a\rb\0", binary=True)
         self.assertEqual(r.out, b"a\rb\0")
 
+    def test_input_survives_a_poll_timeout(self):
+        fake = self.TickingJr()
+        child = "import sys, time; time.sleep(0.4); sys.stdout.write(sys.stdin.read())"
+        with mock.patch.dict(sys.modules, {"juneau_run": fake}), mock.patch.object(git, "POLL_SECONDS", 0.05):
+            r = git._run([sys.executable, "-c", child], input="payload\n")
+        self.assertTrue(r.ok, r.err)
+        self.assertEqual(r.out, "payload\n")
+        self.assertGreaterEqual(fake.ticks, 2)
+
     def test_no_console_never_ticks(self):
         fake = self.TickingJr()
         fake.console_active = lambda: False

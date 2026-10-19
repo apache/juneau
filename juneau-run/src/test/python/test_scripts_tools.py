@@ -213,5 +213,19 @@ class GradleTest(ToolsCase):
         self.assertEqual(self.calls(), [["gradle", "--console=plain", "build"]])
 
 
+class BazelToolTest(unittest.TestCase):
+    def test_bazel_runs_through_run_cmd_with_the_bazel_parser(self):
+        with mock.patch.object(run, "cmd", return_value="r") as c:
+            self.assertEqual(tools.bazel(["test", "//..."], cwd="w", env={"A": "1"}), "r")
+        c.assert_called_once_with(["bazel", "test", "//..."], title="bazel test //...", tool="bazel", cwd="w",
+                                  env={"A": "1"})
+
+    def test_a_title_can_be_given(self):
+        with mock.patch.object(run, "cmd") as c:
+            tools.bazel(["build", "//a"], title="Build a")
+        self.assertEqual(c.call_args.kwargs["title"], "Build a")
+        self.assertEqual(c.call_args.kwargs["cwd"], ".")
+
+
 if __name__ == "__main__":
     unittest.main()

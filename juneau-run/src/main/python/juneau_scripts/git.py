@@ -83,6 +83,7 @@ def _polled(cmd, cwd, input, pipe, text, tick):
                 out, err = proc.communicate(input, timeout=POLL_SECONDS)
                 return proc.returncode, out, err
             except subprocess.TimeoutExpired:
+                input = None   # already being sent; a second communicate(input) raises ValueError
                 tick()
 
 

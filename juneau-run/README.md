@@ -1,7 +1,7 @@
 # juneau-run
 
 Build tooling, not a library dependency. It ships `juneau_run.py`, a stdlib-only Python script that wraps
-Maven, pytest, Playwright, Gradle and npm runs: it prints run-protocol v1 markers (`##run`) when `RUN_MARKERS=1`, routes the
+Maven, pytest, Playwright, Gradle, npm and Bazel runs: it prints run-protocol v1 markers (`##run`) when `RUN_MARKERS=1`, routes the
 full and condensed output to the console and log files, and parses tool output into sub-steps and test counts.
 The wire format is in [docs/run-protocol-v1.md](docs/run-protocol-v1.md).
 
@@ -50,6 +50,20 @@ if juneau_run:
 
 Adopters whose stdout is captured by a consumer must use `console="full"` so the consumer's raw log stays
 complete. Quiet Maven calls (`-q`) should use the `generic` parser.
+
+When a script calls `run.cmd` (or `run.gate`) without `tool=`, the parser is picked from the command: `mvn`/`mvnw`
+→ maven, `gradle`/`gradlew` → gradle, pytest (directly, `python -m pytest` or `uv run pytest`) → pytest, `npm` →
+npm, `playwright test` → playwright, and `bazel`/`bazelisk` `build`/`test`/`coverage` → bazel, looking through
+`env`, `npx`, `pnpm`, `yarn` and `npm exec`.  Quiet Maven (`-q`/`--quiet`) and anything else get the generic parser.
+Parsers other than the built-in ones live in `juneau_scripts.parsers`; if that package can't be found, juneau-run
+warns once and uses the generic parser.
+
+Parser notes:
+
+- **Bazel.** The Bazel parser adds `--build_event_json_file=<temp file>` after the command word.  If a `.bazelrc` also
+  sets that flag, the injected one overrides it (Bazel takes the last value), so the `.bazelrc` file is not written
+  during that run.  To keep it, pass the flag on the command line yourself: the parser then reads that file and
+  adds nothing.
 
 Progress on one line: `juneau_run.open_line("ORDERS: filling UID")`, then `dot()` or `append(text)` while working, and
 `close_line(" 1819 rows in 4s")` to finish. `set_tail(text)` rewrites everything after the head, as in a counter
@@ -234,5 +248,9 @@ The Maven fixtures in `src/test/python/fixtures/` are recorded output, not hand-
   class lines, the skipped-test summary and the Reactor Summary), with `/Users/<name>` replaced by `/home/user`.
 - `src/test/python/record-gradle-npm-fixtures.sh <scratch-dir> <fixtures-dir>` records the `gradle-*.log` and `npm-*.log`
   files from a throwaway two-project Gradle build and an offline npm project, with the same path scrubbing.
+- Bazel: `bash src/test/python/record-bazel-fixtures.sh <scratch> src/test/python/fixtures/parsers/bazel` (needs
+  bazelisk and network; `USE_BAZEL_VERSION` pins the release), then review each case with
+  `python3 src/test/python/parser_replay.py print <case>` and store it with `... expect <case>`.  The live test runs
+  only with `JUNEAU_PARSER_LIVE=1`.
 
 They are plain `.log` files, which RAT excludes. If a Maven upgrade changes its output, re-record, then fix the parser tests that fail.

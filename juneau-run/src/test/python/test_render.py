@@ -486,7 +486,7 @@ class SessionTest(unittest.TestCase):
             c = jr.session("🧪 Juneau test", ["master"])
         self.assertIs(jr._console, c)
         self.assertEqual(os.environ["JUNEAU_RUN_SESSION"], "1")
-        self.assertRegex(out.getvalue(), r"^🧪 Juneau test · master · tail -f \S+/test-\d{8}-\d{6}\.log\n$")
+        self.assertRegex(out.getvalue(), r"^🧪 Juneau test · master · tail -f \S+/test-\d{8}-\d{6}(-\d+)?\.log\n$")
 
     def test_a_console_that_fails_to_start_leaves_the_env_unset(self):
         with tempfile.TemporaryDirectory() as tmp:
@@ -1531,7 +1531,7 @@ class IconTest(RowCase):
         self.assertEqual(jr.icon("running", 100.01, color=True), "\x1b[36m⠋\x1b[0m")       # cyan
 
     def test_finished_icons_coloured(self):
-        for state, glyph, sgr in (("ok", "✔", "32"), ("warn", "⚠", "33"), ("fail", "✗", "31"), ("pending", "○", "2")):
+        for state, glyph, sgr in (("ok", "●", "32"), ("warn", "●", "33"), ("fail", "●", "31"), ("pending", "○", "2")):
             with self.subTest(state=state):
                 self.assertEqual(jr.icon(state, color=True), f"\x1b[{sgr}m{glyph}\x1b[0m")
 

@@ -10,7 +10,7 @@
 # * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
 # * specific language governing permissions and limitations under the License.
 # ***************************************************************************************************************************
-"""Runners for Maven, pytest, Playwright, npm and Gradle.  Each returns run.cmd's Result."""
+"""Runners for Maven, pytest, Playwright, npm, Gradle and Bazel.  Each returns run.cmd's Result."""
 
 import os
 import shutil
@@ -145,4 +145,10 @@ def gradle(args, *, cwd=".", java_home=None, **cmd_kwargs):
         env = _java_env(java_home, env)
     cmd = [*gradle_cmd(cwd), *args]
     return run.cmd(cmd, title=cmd_kwargs.pop("title", " ".join(["gradle", *args])), tool="gradle", cwd=cwd, env=env,
+                   **cmd_kwargs)
+
+
+def bazel(args, *, cwd=".", **cmd_kwargs):
+    """`bazel <args>` as one step with the Bazel parser (rows Analysis, Build, Test for build/test/coverage)."""
+    return run.cmd(["bazel", *args], title=cmd_kwargs.pop("title", " ".join(["bazel", *args])), tool="bazel", cwd=cwd,
                    **cmd_kwargs)

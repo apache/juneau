@@ -947,5 +947,23 @@ class ReactorBuildOrderTest(unittest.TestCase):
         self.assertEqual(last[2], ["mvn/demo-parent"])
 
 
+class ParserContractDefaultsTest(unittest.TestCase):
+    def test_new_members_are_inert(self):
+        p = jr.Parser()
+        self.assertIs(p.interactive, False)
+        self.assertIs(p.rewrites_log, False)
+        self.assertEqual(p.poll(), [])
+        self.assertIsNone(p.close())
+        self.assertEqual(p.render('{"a": 1}'), '{"a": 1}')
+
+    def test_builtin_parsers_inherit_inert_members(self):
+        for name, cls in jr.PARSERS.items():
+            with self.subTest(parser=name):
+                p = cls()
+                self.assertIs(p.rewrites_log, False)
+                self.assertEqual(p.poll(), [])
+                self.assertEqual(p.render("x"), "x")
+
+
 if __name__ == "__main__":
     unittest.main()

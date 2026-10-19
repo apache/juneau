@@ -101,6 +101,9 @@ for each run.
 - **Exit codes.** The tool's exit code passes through. A tool killed by signal *n* exits `128+n` and adds a `warn` note
   `<step> killed by SIG…`. A command that can't start exits 127.
 - **Stdout.** `--console` defaults to `none`; `--console full` also copies the raw bytes to stdout.
+- **Log bytes.**  Under `--pty` the full log is always the tool's own bytes.  Without a terminal, a parser may
+  rewrite what the full log and console show for each line (`rewrites_log`); the condensed log and the markers are
+  the same either way.
 
 **PTY input.** `--input stdin` (with `--pty`, before `<tool>`; without `--pty` it exits 2) copies the wrapper's stdin to the PTY
 master unchanged. EOF on stdin stops the copying but not the tool. The bytes reach `LOG` only if the terminal echoes them, so a
@@ -114,7 +117,7 @@ tool's terminal gets no input at all.
 ## Adopting it
 
 See `../README.md`: the bootstrap snippet that loads `juneau_run.py` from the pinned `org.apache.juneau:juneau-run` artifact, the output routing
-options (`JUNEAU_RUN_CONSOLE`, `JUNEAU_RUN_FULL_LOG`, `JUNEAU_RUN_CONDENSED_LOG`) and the parsers (`maven`, `pytest`, `playwright`, `gradle`, `npm`, `generic`; `gradle` adds `--console=plain` unless the command sets `--console`).
+options (`JUNEAU_RUN_CONSOLE`, `JUNEAU_RUN_FULL_LOG`, `JUNEAU_RUN_CONDENSED_LOG`) and the parsers (`maven`, `pytest`, `playwright`, `gradle`, `npm`, `bazel`, `generic`; `gradle` adds `--console=plain` unless the command sets `--console`).
 Reporter flags a parser adds, only when markers are on and `RUN_ARTIFACTS` is set:
 - pytest: `--junitxml=$RUN_ARTIFACTS/<step>-pytest.xml`
 - Playwright: `--reporter=line,json` with `PLAYWRIGHT_JSON_OUTPUT_NAME=$RUN_ARTIFACTS/<step>-playwright.json`

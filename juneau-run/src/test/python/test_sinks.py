@@ -66,6 +66,15 @@ class SinksTest(unittest.TestCase):
         self.assertNotRegex(name, r"\s")
         self.assertTrue(name.startswith("python3-m-unittest-"), name)
 
+    def test_default_full_log_is_unique_within_one_second(self):
+        os.environ["JUNEAU_RUN_LOG_DIR"] = str(self.tmp)
+        with mock.patch.object(jr.time, "strftime", return_value="20261018-173509"), \
+                mock.patch.object(jr.sys, "argv", ["/x/scripts/push.py"]):
+            paths = [jr.default_full_log() for _ in range(3)]
+        self.assertEqual([p.name for p in paths],
+                         ["push-20261018-173509.log", "push-20261018-173509-2.log", "push-20261018-173509-3.log"])
+        self.assertTrue(all(p.exists() for p in paths))
+
     def test_prune_keeps_the_newest_twenty_logs(self):
         os.environ["JUNEAU_RUN_LOG_DIR"] = str(self.tmp)
         for i in range(25):

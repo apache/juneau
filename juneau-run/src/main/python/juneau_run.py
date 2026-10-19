@@ -34,6 +34,8 @@ import collections
 import errno
 import fcntl
 import hashlib
+import importlib
+import importlib.util
 import json
 import os
 import re
@@ -46,6 +48,7 @@ import subprocess
 import sys
 import tempfile
 import termios
+import threading
 import time
 import tty as _tty
 import unicodedata
@@ -401,9 +404,11 @@ _MARK_COLORS = {"✓": "\x1b[32m✓\x1b[0m", "✗": "\x1b[31m✗\x1b[0m"}
 _MARK_RE = re.compile("(?<!m)[✓✗]")   # not one already coloured (right after an SGR escape)
 _NOTE_PREFIX = {"info": "ℹ", "warn": "⚠", "error": "✗"}
 PENDING_ENV = "JUNEAU_RUN_PENDING"     # a parent session's labelled pending rows, [[id, label], ...], for a nested one
-# A row's icon (spec 5.2): a spinner while it runs, then its outcome.  No VS16 after ⚠: it must stay one column.
+# A row's icon (spec 5.2): a spinner while it runs, then its outcome: a coloured ● for ok, warn and fail, or ✔ ⚠ ✗
+# when colour is off.  No VS16 after ⚠: it must stay one column.
 SPINNER = "⠋⠙⠹⠸⠼⠴⠦⠧⠇⠏"
 ICONS = {"ok": "✔", "warn": "⚠", "skip": "⊘", "fail": "✗", "pending": "○"}
+COLOR_ICONS = {**ICONS, "ok": "●", "warn": "●", "fail": "●"}   # with colour on, the hue carries the outcome
 _ICON_COLORS = {"running": "\x1b[36m", "ok": "\x1b[32m", "warn": "\x1b[33m", "skip": "\x1b[2m", "fail": "\x1b[31m",
                 "pending": "\x1b[2m"}
 
@@ -1270,16 +1275,18 @@ def row_state(row):
 
 
 def icon(state, now=0.0, color=False):
-    """The glyph for a row state (or "pending"): the spinner frame for `now` while running.  color adds its SGR."""
+    """The glyph for a row state (or "pending"): the spinner frame for `now` while running.  color adds its SGR and
+    draws ok, warn and fail as a ● of that colour."""
     if state == "running":
         glyph = SPINNER[int(now / LiveRenderer.REDRAW_SECONDS) % len(SPINNER)]
     else:
-        glyph = ICONS[state]
+        glyph = (COLOR_ICONS if color else ICONS)[state]
     return f"{_ICON_COLORS[state]}{glyph}\x1b[0m" if color else glyph
 
 
 def row_icon(row, now, color):
-    """The row's icon: a spinner (cyan) while it runs, then ✔ (green), ⚠ (yellow), ⊘ (dim) or ✗ (red)."""
+    """The row's icon: a spinner (cyan) while it runs, then ● (green, yellow or red) or, without
+    colour, ✔ ⚠ ✗; ⊘ (dim) when skipped."""
     return icon(row_state(row), now, color)
 
 
@@ -1369,7 +1376,7 @@ def hint_lines(block):
 
 
 def setup_line(board, glyphs, cols=None, now=0.0, color=False):
-    """The Setup row as a line: its icon (a spinner until every pom box is set or its owner ends, then ✔ or ✗), the
+    """The Setup row as a line: its icon (a spinner until every pom box is set or its owner ends, then ● or, without colour, ✔ or ✗), the
     label column, one box per pom module, and the totals text or, when a pom failed, `N failed: <pom>`."""
     setup = board.setup
     state = "running" if not setup.ended else "fail" if setup.failed else "ok"
@@ -2182,9 +2189,25 @@ def safe_name(text, fallback="run"):
 
 
 def default_full_log():
-    """<full_log_dir>/<tool>-<YYYYMMDD-HHMMSS>.log, <tool> being the running script's name (push, test, release)."""
+    """<full_log_dir>/<tool>-<YYYYMMDD-HHMMSS>.log, <tool> being the running script's name (push, test, release).
+    The file is created here, exclusively, so two runs in the same second get -2, -3, ... instead of one shared log."""
     tool = safe_name(Path(sys.argv[0]).stem) if sys.argv and sys.argv[0] else "run"
-    return full_log_dir() / f"{tool}-{time.strftime('%Y%m%d-%H%M%S')}.log"
+    base = f"{tool}-{time.strftime('%Y%m%d-%H%M%S')}"
+    directory = full_log_dir()
+    try:
+        directory.mkdir(parents=True, exist_ok=True)
+    except OSError:
+        return directory / f"{base}.log"
+    for n in range(1, 1000):
+        path = directory / (f"{base}.log" if n == 1 else f"{base}-{n}.log")
+        try:
+            os.close(os.open(path, os.O_WRONLY | os.O_CREAT | os.O_EXCL, 0o644))
+            return path
+        except FileExistsError:
+            continue
+        except OSError:
+            break
+    return directory / f"{base}.log"
 
 
 # --- History store (spec 4.1, 4.4) ---
@@ -2627,6 +2650,7 @@ class Sinks:
 #   ("progress", id, text)               bus only (step_progress), never a marker
 #   ("units", id, total, kind)           ("unit", id, done, outcome)   bus only (units / unit), never a marker
 #   ("unit_fix", id, index, outcome)     ("series", id, name, sub, value)   bus only (unit_fix / series)
+#   poll() and finish() return the same tuples; render(line) returns text, not events (see Parser.render)
 # ---------------------------------------------------------------------------------------------------------------------
 
 ANSI_RE = re.compile(r"\x1b\[[0-9;?]*[A-Za-z]|\x1b\][^\x07\x1b]*(?:\x07|\x1b\\)")
@@ -2637,15 +2661,21 @@ def strip_ansi(text):
 
 
 class Parser:
-    """Base parser: no sub-steps, no counts.  step_id is set by the runner before prepare()."""
+    """Base parser: no sub-steps, no counts.  step_id and interactive are set by the runner before prepare().
+
+    interactive is True when the tool runs under a terminal (tty=True or --pty): prepare() must not then change what the
+    tool prints (no --console=plain), only add side channels such as a report file.  A parser that sets rewrites_log
+    gets render() called for every complete output line in piped mode, and the full log holds what it returns."""
 
     name = "base"
+    interactive = False
+    rewrites_log = False
 
     def __init__(self):
         self.step_id = None
 
     def prepare(self, cmd, env, cwd):
-        """May adjust the command or environment; called only in piped mode."""
+        """May adjust the command or environment; called once before the tool starts, in piped, tty and PTY mode."""
         return cmd, env
 
     def on_line(self, line):
@@ -2654,8 +2684,22 @@ class Parser:
     def handle(self, line):
         return []
 
+    def poll(self):
+        """Called on every pass of the runner's read loop, output or not (at least every 0.1 s): events from a side
+        file the tool writes."""
+        return []
+
     def finish(self, exit_code):
         return []
+
+    def close(self):
+        """Called once after the step, however it ended (finish, cancel, error, the tool not starting): remove temp
+        files.  Called even after the parser was disabled by an error."""
+
+    def render(self, line):
+        """The full log's text for one output line (rewrites_log only, piped mode only).  The runner adds a newline
+        unless the text ends with one; "" drops the line.  Under a terminal the log is always the tool's own bytes."""
+        return line
 
 
 class GenericParser(Parser):
@@ -3651,21 +3695,56 @@ def _terminate_group(proc, grace=None):
 
 
 class _Isolated:
-    """Calls parser methods, disabling the parser after its first exception."""
+    """Calls parser methods, disabling the parser after its first exception.  A method the parser does not have (a
+    parser written before poll, close and render existed) is a no-op.  close() runs once, even on a disabled parser,
+    so its temp files go."""
 
     def __init__(self, parser):
         self.parser = parser
         self.disabled = False
+        self.closed = False
+
+    def _disable(self, e):
+        self.disabled = True
+        warn(f"parser {getattr(self.parser, 'name', '?')} disabled after error: {e!r}")
 
     def call(self, method, *args):
         if self.disabled:
             return []
-        try:
-            return getattr(self.parser, method)(*args) or []
-        except Exception as e:  # parsers are third-party code; the tool's output must keep flowing
-            self.disabled = True
-            warn(f"parser {getattr(self.parser, 'name', '?')} disabled after error: {e!r}")
+        fn = getattr(self.parser, method, None)
+        if fn is None:
             return []
+        try:
+            return fn(*args) or []
+        except Exception as e:  # parsers are third-party code; the tool's output must keep flowing
+            self._disable(e)
+            return []
+
+    def render(self, line):
+        """The parser's text for the full log, or the line itself if the parser is disabled, fails or returns no str."""
+        if self.disabled:
+            return line
+        fn = getattr(self.parser, "render", None)
+        if fn is None:
+            return line
+        try:
+            text = fn(line)
+        except Exception as e:
+            self._disable(e)
+            return line
+        return text if isinstance(text, str) else line
+
+    def close(self):
+        if self.closed:
+            return
+        self.closed = True
+        fn = getattr(self.parser, "close", None)
+        if fn is None:
+            return
+        try:
+            fn()
+        except Exception as e:
+            warn(f"parser {getattr(self.parser, 'name', '?')} close failed: {e!r}")
 
 
 class _Dispatcher:
@@ -3750,10 +3829,124 @@ class _Dispatcher:
             self.flush_tests(target)
 
 
+_bind_lock = threading.Lock()
+_toolkit = None            # juneau_scripts.parsers once bound to this module, or the exception that stopped it
+_fallback_noted = set()    # parser names already warned about: one note per name per process
+
+
+def _toolkit_package():
+    """juneau_scripts.parsers, imported but not bound: from the juneau_scripts already imported, else the one on
+    sys.path, else the one beside this script (juneau-run-<v>.zip, or a juneau_scripts/ directory; appended to sys.path,
+    so a juneau_scripts earlier on it still wins).  A directory source never gets bytecode written beside it
+    (sys.dont_write_bytecode, as bootstrap.py does), for the length of the import only."""
+    no_bytecode = False
+    pkg = sys.modules.get("juneau_scripts")
+    if pkg is not None:
+        no_bytecode = os.path.isfile(getattr(pkg, "__file__", None) or "")
+    else:
+        spec = importlib.util.find_spec("juneau_scripts")
+        if spec is None:
+            here = Path(__file__).resolve()
+            zipped = here.with_suffix(".zip")
+            if zipped.is_file():
+                source = zipped
+            elif (here.parent / "juneau_scripts" / "__init__.py").is_file():
+                source = here.parent
+                no_bytecode = True
+            else:
+                raise ImportError(f"no juneau_scripts beside {here.name} (looked for {zipped.name} and juneau_scripts/)")
+            sys.path.append(str(source))
+        elif spec.origin and os.path.isfile(spec.origin):
+            no_bytecode = True
+    saved = sys.dont_write_bytecode
+    sys.dont_write_bytecode = saved or no_bytecode
+    try:
+        return importlib.import_module("juneau_scripts.parsers")
+    finally:
+        sys.dont_write_bytecode = saved
+
+
+@contextmanager
+def _no_bytecode_beside_a_directory_toolkit():
+    """For the length of a parser module's import: no bytecode written if the imported juneau_scripts is a directory (a
+    zip is never written to)."""
+    pkg = sys.modules.get("juneau_scripts")
+    saved = sys.dont_write_bytecode
+    sys.dont_write_bytecode = saved or os.path.isfile(getattr(pkg, "__file__", None) or "")
+    try:
+        yield
+    finally:
+        sys.dont_write_bytecode = saved
+
+
+def _toolkit_parsers():
+    """juneau_scripts.parsers, bound to this module on first use.  The outcome, success or failure, is kept."""
+    global _toolkit
+    with _bind_lock:
+        if _toolkit is None:
+            try:
+                pkg = _toolkit_package()
+                pkg.bind(sys.modules[__name__])
+                _toolkit = pkg
+            except Exception as e:  # any failure means the generic parser, never a broken step
+                _toolkit = e
+    if isinstance(_toolkit, Exception):
+        raise ImportError(str(_toolkit)) from _toolkit
+    return _toolkit
+
+
+class _FallbackParser(GenericParser):
+    """The generic parser standing in for one that could not be loaded; its first poll or finish carries the note."""
+
+    def __init__(self, text):
+        super().__init__()
+        self.text = text
+
+    def _note(self):
+        text, self.text = self.text, None
+        return [("note", "warn", text, self.step_id)] if text else []
+
+    def poll(self):
+        return self._note()
+
+    def finish(self, exit_code):
+        return self._note() + super().finish(exit_code)
+
+
+def _load_external(name):
+    """A parser from juneau_scripts.parsers, or the generic parser: with a warn note the first time a name fails, and
+    silently after that."""
+    try:
+        pkg = _toolkit_parsers()
+        if not pkg.known(name):
+            raise LookupError("not a registered parser")
+        with _no_bytecode_beside_a_directory_toolkit():
+            return pkg.load(name)()
+    except Exception as e:
+        reason = str(e) or type(e).__name__
+    if name in _fallback_noted:
+        return GenericParser()
+    _fallback_noted.add(name)
+    text = f"parser {name} unavailable: {reason}; using generic"
+    warn(text)
+    return _FallbackParser(text)
+
+
 def _resolve_parser(parser):
     if isinstance(parser, str):
-        return PARSERS[parser]()
+        return PARSERS[parser]() if parser in PARSERS else _load_external(parser)
     return parser() if isinstance(parser, type) else parser
+
+
+def known_parser(name):
+    """True if name is a built-in parser or one registered in juneau_scripts.parsers.  Never binds or imports a
+    parser module."""
+    if name in PARSERS:
+        return True
+    try:
+        return bool(_toolkit_package().known(name))
+    except Exception:
+        return False
 
 
 def _parser_name(parser):
@@ -3832,6 +4025,9 @@ def _tool_status(rc, statuses):
     return status, (rc if status == "fail" else None)
 
 
+POLL_INTERVAL = 0.1     # seconds between a parser's poll() calls in run_tool
+
+
 def run_tool(cmd, parser, step_id, title, *, n=None, parent=None, cwd=None, env=None, sinks=None, capture=False,
              tty=False, watchdog=None, summarize=None, label=None, statuses=None):
     """Run one tool as one step and return Result(exit, ms, summary).
@@ -3867,15 +4063,22 @@ def run_tool(cmd, parser, step_id, title, *, n=None, parent=None, cwd=None, env=
 
     parser = _resolve_parser(parser)
     parser.step_id = step_id
+    parser.interactive = bool(tty)  # before prepare: under a terminal, a parser must not change what the tool prints
     guard = _Isolated(parser)
     try:
         cmd, env = parser.prepare(cmd, env, cwd)
     except Exception as e:
         warn(f"parser {getattr(parser, 'name', '?')} prepare failed ({e!r}); using the original command")
+    rewriting = bool(getattr(parser, "rewrites_log", False)) and not tty   # read once; under a terminal never
     dispatch = _Dispatcher(step_id, sinks)
-    emit("step", id=step_id, n=n if n is not None else 1, title=title, parent=parent)
-    publish("step_start", id=step_id, n=n if n is not None else 1, title=title, parent=parent, **labelled)
-    sinks.open()
+    try:
+        emit("step", id=step_id, n=n if n is not None else 1, title=title, parent=parent)
+        publish("step_start", id=step_id, n=n if n is not None else 1, title=title, parent=parent, **labelled)
+        sinks.open()
+    except BaseException:
+        guard.close()   # prepare() may have made files: the main try below is not reached
+        sinks.close()
+        raise
     master = None
     try:
         if tty:
@@ -3897,6 +4100,7 @@ def run_tool(cmd, parser, step_id, title, *, n=None, parent=None, cwd=None, env=
         # Cannot start: end the step (as run_pty does) so its row is not left running, then let the caller see why.
         if master is not None:
             os.close(master)
+        guard.close()
         sinks.close()
         ms = int((time.monotonic() - t0) * 1000)
         emit("end", id=step_id, status="fail", ms=ms, exit=127)
@@ -3925,21 +4129,30 @@ def run_tool(cmd, parser, step_id, title, *, n=None, parent=None, cwd=None, env=
     pending = ""
     captured = [] if capture or summarize is not None else None
 
+    def show(text, chunk=None):
+        """Output as the log, capture and watchdog see it: the tool's bytes, or a rewriting parser's rendered text."""
+        sinks.write_full(chunk if chunk is not None else text.encode("utf-8"))
+        if captured is not None:
+            captured.append(text)
+        watch.output(text)
+
     def feed(text):
         nonlocal pending
         pending += text
         while "\n" in pending:
             raw, pending = pending.split("\n", 1)
+            if rewriting:
+                shown = guard.render(raw)
+                if shown:
+                    show(shown if shown.endswith("\n") else shown + "\n")
             line = strip_ansi(raw) if tty else raw
             line = line.rstrip("\r").rsplit("\r", 1)[-1]
             dispatch.apply(guard.call("on_line", line))
 
     def take(chunk):
-        sinks.write_full(chunk)
         text = decoder.decode(chunk)
-        if captured is not None:
-            captured.append(text)
-        watch.output(text)
+        if not rewriting:
+            show(text, chunk)
         feed(text)
 
     def read(source):
@@ -3950,6 +4163,8 @@ def run_tool(cmd, parser, step_id, title, *, n=None, parent=None, cwd=None, env=
             if e.errno != errno.EIO:
                 raise
             return b""
+
+    next_poll = 0.0     # monotonic time of the next poll in the loop: a chatty tool must not cost one per chunk
 
     try:
         if keys is not None and os.isatty(keys):
@@ -3964,6 +4179,10 @@ def run_tool(cmd, parser, step_id, title, *, n=None, parent=None, cwd=None, env=
                     continue
                 if _console is not None:
                     _console.tick()     # every pass, not only on a timeout: a throttled redraw has no trailing edge
+                now = time.monotonic()
+                if now >= next_poll:    # every pass too, but at most every POLL_INTERVAL: a side-file parser has news
+                    next_poll = now + POLL_INTERVAL     # when the tool is silent
+                    dispatch.apply(guard.call("poll"))
                 if keys is not None and keys in ready:
                     typed = os.read(keys, 1024)
                     if typed:
@@ -3990,6 +4209,7 @@ def run_tool(cmd, parser, step_id, title, *, n=None, parent=None, cwd=None, env=
             proc.wait()
             if pending:
                 feed("\n")
+            dispatch.apply(guard.call("poll"))      # what the throttle held back
             dispatch.apply(guard.call("finish", proc.returncode))
         except KeyboardInterrupt:
             if not cancelled:
@@ -4012,6 +4232,7 @@ def run_tool(cmd, parser, step_id, title, *, n=None, parent=None, cwd=None, env=
             finally:
                 if proc.poll() is None:     # an error before the child was reaped (e.g. terminal setup) must not
                     _terminate_group(proc)  # orphan it; as above, no re-entry while its group is taken down
+                guard.close()
                 if master is not None:
                     os.close(master)
                 else:
@@ -4185,6 +4406,7 @@ def run_pty(cmd, parser, step_id, title, *, cols, rows, sinks, cwd=None, env=Non
     t0 = time.monotonic()
     parser = _resolve_parser(parser)
     parser.step_id = step_id
+    parser.interactive = True
     guard = _Isolated(parser)
     env = dict(os.environ if env is None else env)
     env.pop("RUN_MARKERS", None)
@@ -4195,19 +4417,29 @@ def run_pty(cmd, parser, step_id, title, *, cols, rows, sinks, cwd=None, env=Non
     except Exception as e:
         warn(f"parser {getattr(parser, 'name', '?')} prepare failed ({e!r}); using the original command")
     dispatch = _Dispatcher(step_id, sinks)
-    sinks.open()
-    base = sinks.full_path.stat().st_size
-    _line_offset = base
-    emit("step", id=step_id, n=1, title=title)
+    master = slave = None
+    try:
+        sinks.open()
+        base = sinks.full_path.stat().st_size
+        _line_offset = base
+        emit("step", id=step_id, n=1, title=title)
 
-    master, slave = os.openpty()
-    fcntl.ioctl(slave, termios.TIOCSWINSZ, struct.pack("HHHH", rows, cols, 0, 0))
+        master, slave = os.openpty()
+        fcntl.ioctl(slave, termios.TIOCSWINSZ, struct.pack("HHHH", rows, cols, 0, 0))
+    except BaseException:
+        for fd in (master, slave):
+            if fd is not None:
+                os.close(fd)
+        guard.close()   # prepare() may have made files: the try below is not reached
+        sinks.close()
+        raise
     try:
         proc = subprocess.Popen(cmd, cwd=cwd, env=env, stdin=slave, stdout=slave, stderr=slave,
                                 start_new_session=True, preexec_fn=_set_ctty, close_fds=True)
     except OSError as e:
         os.close(master)
         os.close(slave)
+        guard.close()
         sinks.close()
         warn(f"cannot start {cmd[0]}: {e}")
         ms = int((time.monotonic() - t0) * 1000)
@@ -4307,6 +4539,8 @@ def run_pty(cmd, parser, step_id, title, *, cols, rows, sinks, cwd=None, env=Non
                     else:
                         ready = pump([master] + ([in_fd] if in_fd is not None and not pending else []),
                                      [master] if pending else [])
+                    _line_offset = line_start               # a poll event's rawOffset is the end of the last line seen
+                    dispatch.apply(guard.call("poll"))
                     if not ready:
                         if proc.poll() is not None:
                             drain(master)   # the child may have written its last bytes after select() timed out
@@ -4342,6 +4576,7 @@ def run_pty(cmd, parser, step_id, title, *, cols, rows, sinks, cwd=None, env=Non
             except OSError:
                 proc.kill()
             proc.wait()
+        guard.close()
         for sig, handler in previous.items():
             signal.signal(sig, handler)
         os.close(master)
@@ -4418,6 +4653,16 @@ def _git(*args, cwd=None):
         return None
 
 
+def _parser_names():
+    """The CLI's parser choices: the built-ins plus any registered in juneau_scripts.parsers, if it can be found."""
+    names = set(PARSERS)
+    try:
+        names.update(_toolkit_package().REGISTRY)
+    except Exception:
+        pass
+    return sorted(names)
+
+
 def main(argv=None):
     ap = argparse.ArgumentParser(prog="juneau_run.py", description="Run one tool as one run-protocol step.")
     ap.add_argument("--console", choices=CONSOLE_MODES)
@@ -4429,7 +4674,7 @@ def main(argv=None):
     ap.add_argument("--size")
     ap.add_argument("--events")
     ap.add_argument("--input", choices=["stdin"], help="copy this process's stdin to the PTY (needs --pty)")
-    ap.add_argument("tool", choices=sorted(PARSERS))
+    ap.add_argument("tool", choices=_parser_names())
     ap.add_argument("cmd", nargs=argparse.REMAINDER)
     ns = ap.parse_args(argv)
     cmd = ns.cmd[1:] if ns.cmd[:1] == ["--"] else ns.cmd

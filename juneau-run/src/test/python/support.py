@@ -46,6 +46,8 @@ def reset_run_state():
     jr._pause_depth = 0
     jr._history = None
     jr._subscribers.clear()
+    jr._toolkit = None
+    jr._fallback_noted.clear()
     if getattr(jr, "_console", None) is not None:
         jr._console.close()
         jr._console = None

@@ -1,0 +1,19 @@
+Extracting Bazel installation...
+Starting local Bazel server and connecting to it...
+Computing main repo mapping: 
+Loading: 
+Loading: 0 packages loaded
+Analyzing: 2 targets (1 packages loaded, 0 targets configured)
+Analyzing: 2 targets (1 packages loaded, 0 targets configured)
+
+Analyzing: 2 targets (49 packages loaded, 223 targets configured)
+[2 / 2] no actions running
+Analyzing: 2 targets (49 packages loaded, 223 targets configured)
+[2 / 2] no actions running
+INFO: Analyzed 2 targets (54 packages loaded, 252 targets configured).
+INFO: Found 2 targets...
+INFO: Elapsed time: 8.121s, Critical Path: 0.25s
+INFO: 6 processes: 5 internal, 1 darwin-sandbox.
+INFO: Build completed successfully, 6 total actions
+INFO: 
+INFO: Build Event Protocol files produced successfully.

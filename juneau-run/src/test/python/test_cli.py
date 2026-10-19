@@ -17,6 +17,7 @@ import os
 import subprocess
 import sys
 import unittest
+from unittest import mock
 
 from support import SCRIPT, jr
 
@@ -68,6 +69,27 @@ class CliTest(unittest.TestCase):
     def test_no_command_is_a_usage_error(self):
         self.assertEqual(cli("generic").returncode, 2)
 
+
+class ParserChoicesTest(unittest.TestCase):
+    def test_help_lists_the_parsers(self):
+        r = cli("--help")
+        self.assertEqual(r.returncode, 0, r.stderr)
+        for name in ("generic", "maven", "npm"):
+            self.assertIn(name, r.stdout)
+
+    def test_choices_come_from_parser_names(self):
+        with mock.patch.object(jr, "_toolkit_package", return_value=mock.Mock(REGISTRY={"zz": "zz"})):
+            self.assertEqual(jr._parser_names(), sorted([*jr.PARSERS, "zz"]))
+        with mock.patch.object(jr, "_toolkit_package", side_effect=ImportError("gone")):
+            self.assertEqual(jr._parser_names(), sorted(jr.PARSERS))
+
+    def test_an_unknown_parser_is_a_usage_error(self):
+        r = cli("nope", "--", sys.executable, "-c", "pass")
+        self.assertEqual(r.returncode, 2)
+        self.assertIn("invalid choice: 'nope'", r.stderr)
+
+    def test_help_lists_registered_parsers(self):
+        self.assertIn("bazel", cli("--help").stdout)
 
 if __name__ == "__main__":
     unittest.main()

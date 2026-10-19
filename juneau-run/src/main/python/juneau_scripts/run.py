@@ -24,7 +24,7 @@ import subprocess
 import time
 from types import MappingProxyType
 
-from . import _base, git, notify
+from . import _base, git, notify, parsers
 from . import checks as _checks
 from ._base import Result
 
@@ -142,7 +142,9 @@ def cmd(cmd, *, title, id=None, n=None, tool=None, cwd=None, env=None, capture=F
     jr.Parser instance); otherwise a plain subprocess.run.  A tool that can't start gives Result(False, 127, err).
     summarize(text) gives the step_end summary; it is called after the command exits, while its row is still open
     (so jr.history_series attaches to it).  With summarize, the command goes through run_tool whenever juneau_run is
-    loaded, markers or not; without juneau_run, summarize is never called."""
+    loaded, markers or not; without juneau_run, summarize is never called.  With no tool, the parser is detected from
+    cmd (Maven, Gradle, pytest, npm, Playwright test, Bazel build/test/coverage, through env/npx/pnpm/yarn launchers);
+    anything else is generic."""
     _base.remember(title)
     if routed() or (summarize is not None and _base.jr() is not None):
         return _routed(cmd, title=title, id=id or _slug(title), n=_next_n(n), parent=None, tool=tool, cwd=cwd,
@@ -165,12 +167,22 @@ def _plain(cmd, *, cwd, env, capture):
                   ms=int((time.monotonic() - t0) * 1000))
 
 
+def _parser_for(jr, cmd, tool):
+    """The parser for a routed run: tool if given, else the one detected from cmd; a name juneau_run can't resolve
+    (an older juneau_run, or no such parser) is the generic one."""
+    if tool is None:
+        tool = parsers.detect(cmd, is_pytest=getattr(jr, "_is_pytest_command", None)) or "generic"
+    if isinstance(tool, str):
+        known = getattr(jr, "known_parser", None)
+        if not (known(tool) if known is not None else tool in jr.PARSERS):
+            return "generic"
+    return tool
+
+
 def _routed(cmd, *, title, id, n, parent, tool, cwd, env, capture, tty, statuses=None,  # NOSONAR python:S5806
             summarize=None):
     jr = _base.jr()
-    parser = tool if tool is not None else "generic"
-    if isinstance(parser, str) and parser not in jr.PARSERS:
-        parser = "generic"
+    parser = _parser_for(jr, cmd, tool)
     try:
         r = jr.run_tool(cmd, parser, id, title, n=n, parent=parent, cwd=cwd, env=env, capture=capture, tty=tty,
                         statuses=statuses, summarize=summarize)
@@ -195,7 +207,7 @@ def gate(cmd, *, title, codes=GATE_CODES, label=None, **cmd_kwargs):
     step_id = cmd_kwargs.get("id") or _slug(title)
     with step(step_id, title, n=cmd_kwargs.get("n"), label=label) as st:
         r = _routed(cmd, title=title, id=f"{step_id}-run", n=1, parent=step_id,
-                    tool=cmd_kwargs.get("tool") or "generic", cwd=cmd_kwargs.get("cwd"), env=cmd_kwargs.get("env"),
+                    tool=cmd_kwargs.get("tool"), cwd=cmd_kwargs.get("cwd"), env=cmd_kwargs.get("env"),
                     capture=cmd_kwargs.get("capture", False), tty=cmd_kwargs.get("tty", False),
                     statuses={code: _ROW_STATUS.get(status, "fail") for code, status in codes.items()})
         status = codes.get(r.code, "error")
