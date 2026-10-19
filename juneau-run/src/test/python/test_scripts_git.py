@@ -25,6 +25,7 @@ from pathlib import Path
 from unittest import mock
 
 import scripts_support  # noqa: F401
+from scripts_support import jr
 
 from juneau_scripts import git, testing
 from juneau_scripts.git import GitError
@@ -287,6 +288,53 @@ class ConsoleRelayTest(GitCase):
             r = git.commit_index("msg", self.work, capture=True)
         self.assertEqual(fake.said, [])
         self.assertIn("nothing to commit", r.out + r.err)
+
+
+class ConsoleNoneTest(GitCase):
+    """Under JUNEAU_RUN_CONSOLE=none with juneau_run loaded, a write's output goes to the full log, not the terminal."""
+
+    def setUp(self):
+        super().setUp()
+        self.log = self.tmp / "full.log"
+        patcher = mock.patch.dict(os.environ, {"JUNEAU_RUN_CONSOLE": "none", "JUNEAU_RUN_FULL_LOG": str(self.log)})
+        patcher.start()
+        self.addCleanup(patcher.stop)
+        modules = mock.patch.dict(sys.modules, {"juneau_run": jr})
+        modules.start()
+        self.addCleanup(modules.stop)
+
+    def test_failed_write_is_captured_and_logged(self):
+        real = git._run
+        captures = []
+
+        def spy(cmd, **kw):
+            captures.append(kw.get("capture"))
+            return real(cmd, **kw)
+
+        with mock.patch.object(git, "_run", spy):
+            r = git.commit_index("msg", self.work)
+        self.assertFalse(r.ok)
+        self.assertEqual((r.out, r.err), ("", ""))
+        self.assertEqual(captures, [True])
+        self.assertIn(b"nothing to commit", self.log.read_bytes())
+
+    def test_successful_write_is_logged(self):
+        self.write("a.txt")
+        self.g("add", "a.txt")
+        self.assertTrue(git.commit_index("logged commit", self.work).ok)
+        self.assertIn(b"logged commit", self.log.read_bytes())
+
+    def test_capture_still_returns_the_output_and_logs_nothing(self):
+        r = git.commit_index("msg", self.work, capture=True)
+        self.assertIn("nothing to commit", r.out + r.err)
+        self.assertFalse(self.log.exists() and b"nothing to commit" in self.log.read_bytes())
+
+    def test_warning_goes_to_the_log_not_stderr(self):
+        stderr = io.StringIO()
+        with contextlib.redirect_stderr(stderr):
+            git._warn("stash could not be dropped")
+        self.assertEqual(stderr.getvalue(), "")
+        self.assertIn(b"stash could not be dropped", self.log.read_bytes())
 
 
 class NeverAddOrForceTest(GitCase):

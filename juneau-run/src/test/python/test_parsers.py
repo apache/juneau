@@ -947,6 +947,24 @@ class ReactorBuildOrderTest(unittest.TestCase):
         self.assertEqual(last[2], ["mvn/demo-parent"])
 
 
+    def test_a_trailing_pom_is_not_a_setup_pom(self):
+        order = ["[INFO] Reactor Build Order:", "[INFO] ", "[INFO] Demo Module A  [jar]", "[INFO] Demo Module B  [war]",
+                 "[INFO] Demo Parent  [pom]", "[INFO] ", "[INFO] Building Demo Module A 1.0 [1/3]"]
+        last = self.reactor(order, packaging="pom")[-1]
+        self.assertEqual(last, ("reactor", 3, [], True, ["mvn/demo-parent"]))      # it rides in the optional fifth field
+
+    def test_only_the_poms_before_the_first_real_module_are_setup_poms(self):
+        order = ["[INFO] Reactor Build Order:", "[INFO] ", "[INFO] Demo Parent  [pom]", "[INFO] Demo Module A  [jar]",
+                 "[INFO] Demo Module B  [pom]", "[INFO] ", "[INFO] Building Demo Parent 1.0 [1/3]"]
+        last = self.reactor(order, packaging="pom")[-1]
+        self.assertEqual(last[2], ["mvn/demo-parent"])
+        self.assertEqual(last[4], ["mvn/mod-b"])
+
+    def test_the_reactor_event_keeps_four_fields_without_a_trailing_pom(self):
+        last = self.reactor(self.ORDER, packaging="pom")[-1]
+        self.assertEqual(len(last), 4)
+
+
 class ParserContractDefaultsTest(unittest.TestCase):
     def test_new_members_are_inert(self):
         p = jr.Parser()

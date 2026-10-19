@@ -160,6 +160,48 @@ class ParserForTest(unittest.TestCase):
         self.assertEqual(run._parser_for(jr, ["bazel", "query", "//..."], None), "generic")
         self.assertEqual(run._parser_for(jr, ["x"], "bazel"), "bazel")
 
+class ConsoleNoneCase(unittest.TestCase):
+    def setUp(self):
+        isolate_run_env(self)
+        reset_run_state()
+        self.addCleanup(reset_run_state)
+        sys.modules["juneau_run"] = jr
+        self.log = Path(tempfile.mkdtemp()) / "full.log"
+        os.environ["JUNEAU_RUN_CONSOLE"] = "none"
+        os.environ["JUNEAU_RUN_FULL_LOG"] = str(self.log)
+        run._n = 0
+
+
+class CmdConsoleNoneTest(ConsoleNoneCase):
+    def test_routed_under_none(self):
+        self.assertTrue(run.routed())
+
+    def test_child_output_goes_to_the_full_log_and_not_stdout(self):
+        out = io.StringIO()
+        with redirect_stdout(out):
+            r = run.cmd([PY, "-c", "print('child-line')"], title="Child")
+        self.assertTrue(r.ok)
+        self.assertEqual(out.getvalue(), "")
+        self.assertIn(b"child-line", self.log.read_bytes())
+
+    def test_default_full_log_when_none_is_given(self):
+        del os.environ["JUNEAU_RUN_FULL_LOG"]
+        os.environ["JUNEAU_RUN_LOG_DIR"] = str(self.log.parent)
+        out = io.StringIO()
+        with redirect_stdout(out):
+            run.cmd([PY, "-c", "print('child-line')"], title="Child")
+        self.assertEqual(out.getvalue(), "")
+        logs = list(self.log.parent.glob("*.log"))
+        self.assertEqual(len(logs), 1)
+        self.assertIn(b"child-line", logs[0].read_bytes())
+
+    def test_no_markers_under_none(self):
+        out = io.StringIO()
+        with redirect_stdout(out):
+            run.cmd([PY, "-c", "pass"], title="Quiet")
+        self.assertNotIn("##run", out.getvalue())
+
+
 class CmdMarkersTest(MarkerCase):
     def test_runs_through_run_tool_with_the_step_number(self):
         r, got, _ = self.capture(run.cmd, [PY, "-c", "print('x')"], title="Build it", n=4)

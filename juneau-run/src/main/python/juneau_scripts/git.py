@@ -17,8 +17,9 @@ isn't a repository they raise GitError, so an empty list means "nothing there" a
 "git failed".
 
 Writers return a Result and relay git's output as Foundry's push.py does: inherited by the terminal in a plain run
-(out and err stay empty), captured and shown as notes under a console view (info on success, error on failure), and
-captured into the Result in either mode with capture=True.
+(out and err stay empty), captured and shown as notes under a console view (info on success, error on failure),
+captured and written to the full log alone under the none console, and captured into the Result in every mode with
+capture=True.
 
 Under an active console every command is polled rather than waited on: the helpers call juneau_run's tick() every
 POLL_SECONDS, so the spinner and the elapsed time keep moving during a `git fetch` or `git push`.
@@ -290,9 +291,30 @@ def upstream_verdict(repo=".", *, git_cmd="git", fetch=True):
                             f"  {git_cmd} merge --ff-only @{{upstream}}"))
 
 
+def _quiet(jr):
+    """True when juneau_run is loaded and the console is none: nothing is drawn and output goes to the sinks."""
+    return jr is not None and os.environ.get("JUNEAU_RUN_CONSOLE") == "none"
+
+
+def _to_sinks(jr, text):
+    """Append text to the full log (the default one when none was given); nowhere else."""
+    if not text:
+        return
+    sinks = jr.Sinks(console="none")
+    sinks.open()
+    try:
+        sinks.write_full(text.encode("utf-8", errors="replace"))
+    finally:
+        sinks.close()
+
+
 def _write(cmd, repo, *, input=None, capture=False):
     _base.remember(" ".join(cmd[:2]))
     jr = _base.jr()
+    if _quiet(jr) and not capture:
+        result = _run(cmd, cwd=repo, input=input, capture=True)
+        _to_sinks(jr, result.out + result.err)
+        return Result(result.ok, result.code)
     console = jr is not None and jr.console_active()
     result = _run(cmd, cwd=repo, input=input, capture=capture or console)
     if console and not capture:
@@ -306,7 +328,9 @@ def _write(cmd, repo, *, input=None, capture=False):
 def _warn(text):
     """A warning: a warn note under a console view, else a line on stderr."""
     jr = _base.jr()
-    if jr is not None and jr.console_active():
+    if _quiet(jr):
+        _to_sinks(jr, text + "\n")
+    elif jr is not None and jr.console_active():
         jr.say(text, "warn")
     else:
         print(text, file=sys.stderr)

@@ -56,10 +56,11 @@ def _next_n(n=None, count=1):
 
 
 def routed():
-    """True when commands should go through juneau_run's run_tool: markers on, or a console view active.  Public
-    because Foundry's run_tests also needs it (Decision Q4, revised in the review triage)."""
+    """True when commands should go through juneau_run's run_tool: markers on, a console view active, or the none
+    console, where a child's output goes to the sinks and nothing is drawn.  Public because Foundry's run_tests also
+    needs it (Decision Q4, revised in the review triage)."""
     jr = _base.jr()
-    return jr is not None and (jr.enabled() or jr.console_active())
+    return jr is not None and (jr.enabled() or jr.console_active() or os.environ.get(CONSOLE_ENV) == "none")
 
 
 def console_requested():

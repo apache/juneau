@@ -1068,6 +1068,25 @@ class ScriptApiTest(unittest.TestCase):
             jr.show("x" * (1 << 20), pager=True)
         self.assertEqual(out.getvalue(), "")
 
+    def test_a_failed_write_to_the_pager_still_closes_and_waits_for_it(self):
+        pager, _ = self.pager("sys.stdin.read()")
+        procs = []
+        real_popen = subprocess.Popen
+
+        def spawn(*args, **kwargs):
+            procs.append(real_popen(*args, **kwargs))
+            return procs[-1]
+
+        previous = signal.getsignal(signal.SIGINT)
+        self.addCleanup(lambda: [p.kill() or p.wait() for p in procs if p.poll() is None])
+        with mock.patch.object(sys, "stdout", TTYOut()), mock.patch.dict(os.environ, {"PAGER": pager}), \
+                mock.patch.object(jr.subprocess, "Popen", side_effect=spawn):
+            with self.assertRaises(UnicodeEncodeError):
+                jr.show("bad \udcff text", pager=True)
+        self.assertEqual(len(procs), 1)
+        self.assertIsNotNone(procs[0].returncode, "the pager was left running")
+        self.assertIs(signal.getsignal(signal.SIGINT), previous)
+
     def test_show_with_a_missing_or_unparseable_PAGER_prints_the_text(self):
         for pager in ("/nonexistent/juneau-run-pager", 'less "unterminated'):
             with self.subTest(pager=pager):

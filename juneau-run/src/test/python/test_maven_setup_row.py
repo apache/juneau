@@ -314,13 +314,131 @@ class SetupRowTest(unittest.TestCase):
         self.assertIn("1/3", rest)
 
 
+class TrailingPomTest(unittest.TestCase):
+    """A pom built after a real module (an aggregator root) is on neither the Setup row nor the module bar."""
+
+    def board(self, poms, tail, total):
+        reset_run_state()
+        self.addCleanup(reset_run_state)
+        b = jr.Board("actionable", nested=False, full_log=None, clock=lambda: 100.0)
+        b.apply("step_start", dict(id="mvn", n=1, title="mvn", parent=None))
+        b.apply("reactor", dict(step="mvn", size=total, poms=poms, tail=tail, tests=False))
+        return b
+
+    def run_module(self, b, module, status="ok"):
+        b.apply("module_start", dict(step="mvn", module=module, title=module))
+        return b.apply("module_end", dict(step="mvn", module=module, status=status, ms=1, totals=None))
+
+    def test_jar_war_then_a_trailing_pom_has_no_setup_row_and_a_bar_of_two(self):
+        b = self.board([], ["mvn/app"], 3)
+        self.assertIsNone(b.setup)
+        self.assertEqual((b.rows["mvn"].units_total, b.rows["mvn"].unit_kind), (2, "modules"))
+        for m in ("mvn/app-api", "mvn/app-server", "mvn/app"):
+            self.run_module(b, m)
+        b.apply("step_end", dict(id="mvn", status="ok", ms=2000, exit=0, summary=None, totals=None))
+        r = b.rows["mvn"]
+        self.assertIsNone(b.setup)
+        self.assertEqual((r.units_total, r.units_done), (2, 2))
+        self.assertNotIn("mvn/app", r.order)
+
+    def test_a_trailing_pom_never_shows_as_in_flight_in_the_bar(self):
+        b = self.board([], ["mvn/app"], 3)
+        b.apply("module_start", dict(step="mvn", module="mvn/app", title="app"))
+        self.assertEqual(b.rows["mvn"].unit_view(), bytearray(2))
+
+    def test_leading_parent_and_trailing_aggregator_give_a_setup_row_of_one(self):
+        b = self.board(["mvn/parent"], ["mvn/agg"], 4)
+        self.assertEqual((b.setup.total, jr.setup_text(b.setup)), (1, "1 pom module"))
+        self.assertEqual(b.rows["mvn"].units_total, 2)
+        self.run_module(b, "mvn/parent")
+        self.assertEqual((b.setup.done, b.setup.ended), (1, True))
+
+    def test_a_resent_reactor_event_keeps_the_trailing_pom_out(self):
+        b = self.board(["mvn/parent"], ["mvn/agg"], 4)
+        b.apply("reactor", dict(step="mvn", size=4, poms=["mvn/parent"], tail=["mvn/agg"], tests=False))
+        self.assertEqual((b.setup.ids, b.rows["mvn"].units_total), (["mvn/parent"], 2))
+
+    def test_an_event_without_tail_behaves_as_before(self):
+        reset_run_state()
+        self.addCleanup(reset_run_state)
+        b = jr.Board("actionable", nested=False, full_log=None, clock=lambda: 100.0)
+        b.apply("step_start", dict(id="mvn", n=1, title="mvn", parent=None))
+        b.apply("reactor", dict(step="mvn", size=4, poms=["mvn/parent"], tests=False))
+        self.assertEqual((b.setup.total, b.rows["mvn"].units_total), (1, 3))
+
+    def test_a_failing_trailing_pom_fails_the_row_and_is_named(self):
+        b = self.board([], ["mvn/app"], 3)
+        self.run_module(b, "mvn/app-api")
+        self.run_module(b, "mvn/app-server")
+        self.run_module(b, "mvn/app", status="fail")
+        b.apply("step_end", dict(id="mvn", status="fail", ms=2000, exit=1, summary=None, totals=None))
+        r = b.rows["mvn"]
+        self.assertIsNone(b.setup)
+        self.assertEqual(r.failed_mods, ["mvn/app"])
+        self.assertEqual((r.units_total, r.units_done), (2, 2))
+        self.assertEqual(r.modules["mvn/app"].box, "fail")
+
+
+class TrailingPomGoldenTest(unittest.TestCase):
+    """The same rule end to end: the recorded jar, war, pom reactor order through the Maven parser."""
+
+    def tree(self, root):
+        from pathlib import Path
+        root = Path(root)
+
+        def write(d, artifact, packaging, modules=""):
+            (root / d).mkdir(exist_ok=True)
+            (root / d / "pom.xml").write_text(f"<project><artifactId>{artifact}</artifactId><name>{artifact}</name>"
+                                              f"<packaging>{packaging}</packaging>{modules}</project>", encoding="utf-8")
+        write(".", "app", "pom", "<modules><module>app-api</module><module>app-server</module></modules>")
+        write("app-api", "app-api", "jar")
+        write("app-server", "app-server", "war")
+
+    def run_log(self, text):
+        import tempfile
+        from test_parsers import feed
+        reset_run_state()
+        self.addCleanup(reset_run_state)
+        with tempfile.TemporaryDirectory() as tmp:
+            self.tree(tmp)
+            parser = jr.MavenParser()
+            parser.step_id = "mvn"
+            parser.prepare(["mvn", "test"], None, tmp)
+            events = feed(parser, text)
+        board = jr.Board("actionable", nested=False, full_log=None, clock=lambda: 100.0)
+        board.apply("step_start", dict(id="mvn", n=1, title="mvn", parent=None))
+        pump(board, events)
+        return board, board.rows["mvn"]
+
+    def fixture(self):
+        from support import FIXTURES
+        return (FIXTURES / "maven-trailing-pom.log").read_text(encoding="utf-8")
+
+    def test_the_recorded_order_has_no_setup_row_and_a_full_bar_of_two(self):
+        board, r = self.run_log(self.fixture())
+        board.apply("step_end", dict(id="mvn", status="ok", ms=3000, exit=0, summary=None, totals=None))
+        self.assertIsNone(board.setup)
+        self.assertEqual((r.units_total, r.units_done), (2, 2))
+
+    def test_the_recorded_order_with_a_failing_aggregator_names_it(self):
+        text = self.fixture().replace("app ................................................ SUCCESS",
+                                      "app ................................................ FAILURE").replace(
+                                          "BUILD SUCCESS", "BUILD FAILURE")
+        board, r = self.run_log(text)
+        board.apply("step_end", dict(id="mvn", status="fail", ms=3000, exit=1, summary=None, totals=None))
+        self.assertIsNone(board.setup)
+        self.assertEqual(r.failed_mods, ["app"])
+        self.assertEqual((r.units_total, r.units_done), (2, 2))
+
+
 def pump(board, events, step="mvn"):
     """Feed parser events to a board the way the dispatcher publishes them; returns the bar progress after each event."""
     seen, totals = [], {}
     for ev in events:
         kind = ev[0]
         if kind == "reactor":
-            board.apply("reactor", dict(step=step, size=ev[1], poms=list(ev[2]), tests=ev[3]))
+            board.apply("reactor", dict(step=step, size=ev[1], poms=list(ev[2]), tests=ev[3],
+                                        tail=list(ev[4]) if len(ev) > 4 else []))
         elif kind == "sub_start":
             board.apply("module_start", dict(step=step, module=ev[1], title=ev[3]))
         elif kind == "tests":
@@ -401,7 +519,8 @@ class MavenBoardGoldenTest(unittest.TestCase):
         # 96 modules less 16 poms is 80, but only juneau-commons ran tests: the other 79 dropped out of the bar
         self.assertEqual((r.units_total, r.unit_kind, r.units_dropped), (1, "modules", 79))
         self.assertEqual(r.units_done, 1)
-        self.assertEqual((board.setup.total, board.setup.done, jr.setup_text(board.setup)), (16, 16, "16 pom modules"))
+        # only the 3 poms ahead of the first jar are Setup poms; the 13 built after it are on neither the row nor the bar
+        self.assertEqual((board.setup.total, board.setup.done, jr.setup_text(board.setup)), (3, 3, "3 pom modules"))
         first_end = next(i for i, e in enumerate(seen) if e[0] == "sub_end")
         self.assertGreater(max(e[1] for e in seen[:first_end]), 0)
 

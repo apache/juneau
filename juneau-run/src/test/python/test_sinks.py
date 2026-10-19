@@ -41,13 +41,18 @@ class SinksTest(unittest.TestCase):
         self.assertEqual(os.environ["JUNEAU_RUN_FULL_LOG"], str(first.full_path))
         self.assertEqual(jr.Sinks(console="condensed").full_path, first.full_path)   # a nested run's Sinks
 
-    def test_only_condensed_gets_a_default_and_a_given_log_wins(self):
+    def test_condensed_and_none_get_a_default_and_a_given_log_wins(self):
         os.environ["JUNEAU_RUN_LOG_DIR"] = str(self.tmp)
         self.assertIsNone(jr.Sinks(console="full").full_path)
-        self.assertIsNone(jr.Sinks(console="none").full_path)
         self.assertEqual(jr.Sinks(console="condensed", full_log=str(self.tmp / "mine.log")).full_path,
                          self.tmp / "mine.log")
         self.assertNotIn("JUNEAU_RUN_FULL_LOG", os.environ)
+        self.assertEqual(jr.Sinks(console="none", full_log=str(self.tmp / "mine.log")).full_path,
+                         self.tmp / "mine.log")
+        self.assertNotIn("JUNEAU_RUN_FULL_LOG", os.environ)
+        default = jr.Sinks(console="none").full_path
+        self.assertRegex(str(default), rf"^{re.escape(str(self.tmp))}/.+-\d{{8}}-\d{{6}}\.log$")
+        self.assertEqual(os.environ["JUNEAU_RUN_FULL_LOG"], str(default))
 
     def test_safe_name_replaces_whitespace_and_punctuation(self):
         for raw, want in (("python3 -m unittest", "python3-m-unittest"),

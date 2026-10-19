@@ -614,7 +614,8 @@ class _Mod:
 
 
 class _Setup:
-    """The run's one Setup row: a box per pom module of the first Maven reactor that has any (spec 2.1)."""
+    """The run's one Setup row: a box per pom module built before the first real module of the first Maven reactor
+    that has any (spec 2.1).  A trailing pom (an aggregator root built last) is not on it."""
 
     def __init__(self, row, ids, t0):
         self.row = row              # id of the step row that owns it
@@ -677,7 +678,8 @@ class _Row:
         self.held_failure = False   # failure text is among the hints: they print however the row ends
         self.failed_mods = []   # titles of its failed modules, in failure order, for the row's text
         self.size = None        # reactor size N
-        self.poms = set()
+        self.poms = set()       # the Setup poms: built before the reactor's first real module
+        self.tail = set()       # poms built after a real module: on neither the Setup row nor the bar
         self.tests_mode = False
         self.quiet = 0          # seconds the tool has been silent, from the watchdog
         self.units_total = 0    # announced unit count (tests, files...) for the unit bar
@@ -693,6 +695,11 @@ class _Row:
     def running(self):
         return self.status is None
 
+    @property
+    def unbarred(self):
+        """Modules that never get a cell in the module bar: the Setup poms and the trailing ones."""
+        return self.poms | self.tail
+
     def boxes(self):
         return [self.modules[m].box for m in self.order]
 
@@ -704,7 +711,7 @@ class _Row:
         if self.unit_kind != "modules" or not self.running:
             return self.unit_cells
         running = sum(1 for m in self.modules.values()
-                      if m.started and m.status is None and m.unit_index is None and not m.dropped and m.id not in self.poms)
+                      if m.started and m.status is None and m.unit_index is None and not m.dropped and m.id not in self.unbarred)
         view = bytearray(self.unit_cells)
         for i in range(self.units_done, min(self.units_total, self.units_done + running)):
             view[i] = UNIT_RUN
@@ -939,15 +946,17 @@ class Board:
 
     def _on_reactor(self, f):
         """Sent at the first line (pom-tree size), again at the Reactor Build Order block and at the first Building
-        line.  The module bar counts the non-pom modules; the pom modules go to the run's Setup row (spec 2.1)."""
+        line.  The module bar counts the non-pom modules; the pom modules built before the first real module go to the
+        run's Setup row (spec 2.1).  A pom built after a real module (`tail`, an aggregator root) is on neither."""
         r = self._adopt(f["step"])
         if r is not None:
             r.size = f["size"]
             r.poms = set(f["poms"])
+            r.tail = set(f.get("tail") or ())     # absent from an older publisher: no trailing pom
             r.tests_mode = f["tests"]
             if r.size > 0:        # a reactor of no size says nothing: the row keeps the box bar
                 r.unit_kind = "modules"
-                r.units_total = max(0, r.size - len(r.poms) - r.units_dropped, r.units_done)    # set, not grown: the block shrinks the tree's size
+                r.units_total = max(0, r.size - len(r.poms) - len(r.tail) - r.units_dropped, r.units_done)    # set, not grown: the block shrinks the tree's size
                 del r.unit_cells[r.units_total:]
                 r.unit_cells.extend(bytes(r.units_total - len(r.unit_cells)))
             for pom in f["poms"]:
@@ -965,7 +974,7 @@ class Board:
 
     def _count_unit(self, r, m, outcome):
         """A real module of a Maven row counts once toward its module bar; a later failure turns its cell red."""
-        if r.unit_kind != "modules" or m.id in r.poms:
+        if r.unit_kind != "modules" or m.id in r.unbarred:
             return
         if m.dropped:
             if outcome != "fail":
@@ -987,7 +996,7 @@ class Board:
         The count of modules that will run tests is only known as modules end (--also-make pulls in many upstream
         modules with none), so the live bar starts at the reactor's size and N shrinks as those drop out.  The n/N
         and the bar therefore only ever lose cells that were never going to say anything."""
-        if r.unit_kind != "modules" or m.id in r.poms or m.dropped or m.unit_index is not None:
+        if r.unit_kind != "modules" or m.id in r.unbarred or m.dropped or m.unit_index is not None:
             return
         m.dropped = True
         r.units_dropped += 1
@@ -1056,8 +1065,8 @@ class Board:
         r, m = self._mod(f, create=True)
         if m is None:
             return []
-        if m.id in r.poms:
-            return []                 # pom modules live on the Setup row, never in a bar
+        if m.id in r.unbarred:
+            return []                 # pom modules live on the Setup row (or, trailing, nowhere), never in a bar
         if not f["ok"]:
             self._grant(r, m, "fail")
             if not r.tests_mode:
@@ -1069,7 +1078,7 @@ class Board:
 
     def _on_module_tested(self, f):
         r, m = self._mod(f, create=True)
-        if m is not None and m.id not in r.poms and m.box != "fail":
+        if m is not None and m.id not in r.unbarred and m.box != "fail":
             outcome = self._tests_outcome(m)
             self._grant(r, m, outcome)
             if r.tests_mode:      # under -T module_end waits for the Reactor Summary: count the unit when its tests end
@@ -1106,6 +1115,10 @@ class Board:
                 blocks = [("setup",)]     # it went permanent green at the pom's start: print it again, red
             else:
                 blocks = self._setup_settled()
+        elif m.id in r.tail:    # a trailing pom: no Setup box, no bar cell; its failure still fails the row and is named
+            m.box = "fail" if failed else "pass"
+            if failed and m.title not in r.failed_mods:
+                r.failed_mods.append(m.title)
         else:
             if failed:
                 self._grant(r, m, "fail")
@@ -1159,7 +1172,7 @@ class Board:
         if f.get("totals"):
             r.totals = _totals(f["totals"])
         for m in r.modules.values():   # never ended: it ran nothing we saw (close_children ends the open ones)
-            if m.box is None and m.id not in r.poms:
+            if m.box is None and m.id not in r.unbarred:
                 self._grant(r, m, "fail" if "fail" in m.outcomes else "pass" if m.outcomes else "skip")
                 if m.box == "fail" and m.title not in r.failed_mods:
                     r.failed_mods.append(m.title)
@@ -1446,7 +1459,7 @@ class PlainRenderer:
         totals = [r.totals for r in running if r.totals]
         total = sum(t[0] for t in totals)
         failed = sum(t[1] + t[2] for t in totals)
-        k = sum(1 for r in running for m in r.modules.values() if m.in_progress and m.id not in r.poms)
+        k = sum(1 for r in running for m in r.modules.values() if m.in_progress and m.id not in r.unbarred)
         overall = board.overall()
         figure = (f" · {overall.percent}% · ~{fmt_elapsed(overall.remaining * 1000)}"
                   f"{'+' if overall.lower_bound else ''} left") if overall else ""
@@ -1659,13 +1672,13 @@ class LiveRenderer:
         kept while anything is pending), then the module sub-lines (+N more running), then the lines above Overall
         are cut: Overall itself is never dropped."""
         running = board.running()
-        inflight = [(r, m) for r in running for m in r.modules.values() if m.in_progress and m.id not in r.poms]
+        inflight = [(r, m) for r in running for m in r.modules.values() if m.in_progress and m.id not in r.unbarred]
         subs = [(r, m) for r, m in inflight if m.outcomes or m.totals]
         collapsed = {}
         for r in running:
             names = [m.title for owner, m in inflight if owner is r and not (m.outcomes or m.totals)]
             if names:
-                prefix = common_prefix([m.title for m in r.modules.values() if m.id not in r.poms])
+                prefix = common_prefix([m.title for m in r.modules.values() if m.id not in r.unbarred])
                 collapsed[r.id] = "    " + collapse_names([t[len(prefix):] or t for t in names], cols - 2)
         blocks = {id(m): self._sub_lines(m, cols) for _, m in subs}
         setup_running = (board.setup is not None and not board.setup.ended
@@ -2120,15 +2133,11 @@ def _page(text):
     except ValueError:  # not the main thread
         previous = None
     try:
-        try:
-            proc.stdin.write(text)
-        except BrokenPipeError:     # the pager was quit before it read everything
-            pass
-        try:
-            proc.stdin.close()
-        except BrokenPipeError:
-            pass
-        proc.wait()
+        with proc:  # on every exit path, closes the pipe and waits for the pager, still under SIG_IGN
+            try:
+                proc.stdin.write(text)
+            except BrokenPipeError:     # the pager was quit before it read everything
+                pass
     finally:
         if previous is not None:
             signal.signal(signal.SIGINT, previous)
@@ -2576,15 +2585,15 @@ def prune_full_logs(keep=FULL_LOG_KEEP):
 
 class Sinks:
     """Where the full and condensed streams go.  Arguments beat JUNEAU_RUN_* environment variables.
-    A condensed console with no full log gets default_full_log()."""
+    A condensed or none console with no full log gets default_full_log()."""
 
     def __init__(self, console=None, full_log=None, condensed_log=None):
         self.console = console or os.environ.get("JUNEAU_RUN_CONSOLE") or "full"
         if self.console not in CONSOLE_MODES:
             raise ValueError(f"console must be one of {CONSOLE_MODES}, not {self.console!r}")
         full = full_log or os.environ.get("JUNEAU_RUN_FULL_LOG")
-        if not full and self.console == "condensed":
-            # Condensed mode always has a log to tail.  Exported, so later Sinks() and child scripts write the same one.
+        if not full and self.console in ("condensed", "none"):
+            # Condensed and none always have a log: to tail, and to recover the output nothing else shows.  Exported, so later Sinks() and child scripts write the same one.
             full = str(default_full_log())
             os.environ["JUNEAU_RUN_FULL_LOG"] = full
         self.full_path = self._resolve(full)
@@ -2658,7 +2667,7 @@ class Sinks:
 #   ("tests", id, total, fail, err, skip) ("report", id, kind, path)
 #   ("note", level, text, id)            ("cond", text)
 #   ("class_done", id, outcome)          ("compiled", id, ok)          ("tested", id)
-#   ("reactor", size, [pom sub ids], tests_mode)                    ("failure", text, id)
+#   ("reactor", size, [pom sub ids], tests_mode[, [trailing pom sub ids]])    ("failure", text, id)
 #   ("progress", id, text)               bus only (step_progress), never a marker
 #   ("units", id, total, kind)           ("unit", id, done, outcome)   bus only (units / unit), never a marker
 #   ("unit_fix", id, index, outcome)     ("series", id, name, sub, value)   bus only (unit_fix / series)
@@ -2841,7 +2850,8 @@ class MavenParser(Parser):
         self.surefire_s = {}             # sub id -> summed class seconds, for the history `series` entry
         self.class_cache = {}            # test class FQN -> artifactIds of the modules containing it
         self.packaging = {}              # artifactId -> packaging
-        self.order_poms = []             # sub ids of the pom-packaged members of the Reactor Build Order block
+        self.order_poms = []             # sub ids of the pom-packaged members built before the block's first real module
+        self.order_tail = []             # sub ids of the pom-packaged members built after it (an aggregator root)
         self.in_order = False            # inside the Reactor Build Order block
         self.order_members = []          # (title, packaging) rows read so far
         self.phase = {}                  # artifactId -> compile, testCompile, compiled, surefire, tested or done
@@ -2877,6 +2887,8 @@ class MavenParser(Parser):
         return cmd, env
 
     def _reactor(self, size):
+        if self.order_tail:     # the optional fifth field: absent when there is no trailing pom
+            return ("reactor", size, list(self.order_poms), self.tests_mode, list(self.order_tail))
         return ("reactor", size, list(self.order_poms), self.tests_mode)
 
     def _has_tests(self, artifact):
@@ -3057,8 +3069,14 @@ class MavenParser(Parser):
             if self.order_members and line.rstrip() == "[INFO]":
                 self.in_order = False
                 # a pom title absent from the pom tree stays in the module count but cannot be mapped to a sub id
-                self.order_poms = list(dict.fromkeys(f"{self.step_id}/{self.names[t]}" for t, pkg in self.order_members
-                                                     if pkg == "pom" and t in self.names))
+                # only the poms built before the first real module are Setup poms; one built after it (an aggregator
+                # root, last in the order) is on neither the Setup row nor the module bar
+                first_real = next((i for i, (_, pkg) in enumerate(self.order_members) if pkg != "pom"),
+                                  len(self.order_members))
+                poms = [(i < first_real, f"{self.step_id}/{self.names[t]}")
+                        for i, (t, pkg) in enumerate(self.order_members) if pkg == "pom" and t in self.names]
+                self.order_poms = list(dict.fromkeys(i for lead, i in poms if lead))
+                self.order_tail = list(dict.fromkeys(i for lead, i in poms if not lead))
                 events.append(self._reactor(len(self.order_members)))
                 return events
             if not self.order_members and line.rstrip() == "[INFO]":
@@ -3805,7 +3823,8 @@ class _Dispatcher:
             elif kind == "tested":
                 publish("module_tested", step=self.step_id, module=ev[1])
             elif kind == "reactor":
-                publish("reactor", step=self.step_id, size=ev[1], poms=list(ev[2]), tests=ev[3])
+                publish("reactor", step=self.step_id, size=ev[1], poms=list(ev[2]), tests=ev[3],
+                        **({"tail": list(ev[4])} if len(ev) > 4 else {}))   # `tail` only when there is one
             elif kind == "failure":
                 publish("failure", text=ev[1], step=ev[2])
             elif kind == "progress":

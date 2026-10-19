@@ -26,7 +26,7 @@ Where the toolkit comes from, in order:
   3. ~/.m2/repository/org/apache/juneau/juneau-run/<v>/juneau-run-<v>.{py,zip}, in place when both are there;
      otherwise `mvn dependency:copy` of both into cache_dir (a SNAPSHOT once per process, a release when missing).
 
-juneau_run is loaded only when run=True, or when run is None and RUN_MARKERS=1 or JUNEAU_RUN_CONSOLE=condensed.
+juneau_run is loaded only when run=True, or when run is None and RUN_MARKERS=1 or JUNEAU_RUN_CONSOLE=condensed or none.
 """
 
 import importlib
@@ -49,8 +49,9 @@ class BootstrapError(Exception):
 
 
 def run_requested():
-    """True when the environment asks for juneau_run: RUN_MARKERS=1 or JUNEAU_RUN_CONSOLE=condensed."""
-    return os.environ.get("RUN_MARKERS") == "1" or os.environ.get("JUNEAU_RUN_CONSOLE") == "condensed"
+    """True when the environment asks for juneau_run: RUN_MARKERS=1 or JUNEAU_RUN_CONSOLE=condensed or none.  Under
+    none juneau_run is loaded so a tool's output goes to the sinks and not the terminal."""
+    return os.environ.get("RUN_MARKERS") == "1" or os.environ.get("JUNEAU_RUN_CONSOLE") in ("condensed", "none")
 
 
 def _pom_version(pom):

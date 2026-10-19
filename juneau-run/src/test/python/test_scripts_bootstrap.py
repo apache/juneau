@@ -20,6 +20,7 @@ import sys
 import tempfile
 import textwrap
 import unittest
+import unittest.mock
 from pathlib import Path
 
 import scripts_support  # noqa: F401  (puts src/main/python on sys.path)
@@ -305,6 +306,17 @@ class ImportTest(BootstrapCase):
         self.assertNotIn("older than", self.stderr)
 
 
+class RunRequestedTest(unittest.TestCase):
+    def test_true_for_markers_condensed_and_none(self):
+        sys.path.insert(0, str(PYTHON_SRC))
+        self.addCleanup(sys.path.remove, str(PYTHON_SRC))
+        import bootstrap
+        for env, expected in (({}, False), ({"RUN_MARKERS": "1"}, True), ({"JUNEAU_RUN_CONSOLE": "condensed"}, True),
+                              ({"JUNEAU_RUN_CONSOLE": "none"}, True), ({"JUNEAU_RUN_CONSOLE": "full"}, False)):
+            with self.subTest(env=env), unittest.mock.patch.dict(os.environ, env, clear=True):
+                self.assertEqual(bootstrap.run_requested(), expected)
+
+
 class RunDecisionTest(BootstrapCase):
     def setUp(self):
         super().setUp()
@@ -319,6 +331,11 @@ class RunDecisionTest(BootstrapCase):
         self.env = {"RUN_MARKERS": "0", "JUNEAU_RUN_CONSOLE": "full"}
         self.assertIsNone(self.load()["jr"])
         self.env = {}
+        self.assertIsNone(self.load(run=False)["jr"])
+
+    def test_console_none_loads_juneau_run(self):
+        self.env = {"JUNEAU_RUN_CONSOLE": "none"}
+        self.assertIsNotNone(self.load()["jr"])
         self.assertIsNone(self.load(run=False)["jr"])
 
     def test_missing_juneau_run_warns_when_requested_and_raises_when_forced(self):

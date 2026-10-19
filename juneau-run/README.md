@@ -86,9 +86,9 @@ screen. `full` (the default) prints raw output as before; `none` draws nothing. 
 
 | Variable | Effect |
 |---|---|
-| `JUNEAU_RUN_CONSOLE=full\|condensed\|none` | Where tool output goes. `condensed` turns the view on. |
+| `JUNEAU_RUN_CONSOLE=full\|condensed\|none` | Where tool output goes. `condensed` turns the view on. `condensed` and `none` also make `bootstrap.load()` load juneau_run, so a tool's output goes to the logs and not the terminal; `none` draws nothing and emits no markers unless `RUN_MARKERS=1`. |
 | `JUNEAU_RUN_DETAIL=summary\|actionable\|modules\|all` | How much the view shows (default `actionable`). `--detail` on `push.py`, `test.py` and `release.py` wins. |
-| `JUNEAU_RUN_FULL_LOG`, `JUNEAU_RUN_CONDENSED_LOG` | The raw log, and the view's rows as plain text. The header prints `tail -f <full log>` to paste into another terminal. With `condensed` and no full log, the full log defaults to `~/.cache/juneau-run/<script>-<YYYYMMDD-HHMMSS>.log` (the newest 20 are kept); nested scripts share it. |
+| `JUNEAU_RUN_FULL_LOG`, `JUNEAU_RUN_CONDENSED_LOG` | The raw log, and the view's rows as plain text. The header prints `tail -f <full log>` to paste into another terminal. With `condensed` or `none` and no full log, the full log defaults to `~/.cache/juneau-run/<script>-<YYYYMMDD-HHMMSS>.log` (the newest 20 are kept); nested scripts share it. |
 | `JUNEAU_RUN_LOG_DIR` | Where that default full log goes (default `~/.cache/juneau-run`). The tests point it at a temp dir. |
 | `JUNEAU_RUN_LIVE=0` | Plain view: each row printed once, when it ends. Also used when stdout isn't a terminal or `TERM=dumb`. |
 | `NO_COLOR` | The live view without colour. |
