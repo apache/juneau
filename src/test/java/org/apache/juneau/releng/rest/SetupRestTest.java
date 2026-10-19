@@ -156,7 +156,8 @@ class SetupRestTest {
 						"JRM must not override Page Tab accent side; Juneau WORK-J0543 owns it: " + path);
 					assertFalse(text.contains("border-bottom: var(--jc-nav-indicator-width) solid var(--jc-accent)"),
 						"selected Page Tab must not carry a JRM thick bar: " + path);
-					assertTrue(text.contains("font-weight: 700"), "selected Page Tab keeps heavier type: " + path);
+					assertFalse(text.contains(".jc-nav-tab.active"),
+						"JRM must not override selected Page Tab type; Juneau stock chrome.css owns font-weight 700: " + path);
 					assertFalse(text.contains("th.sortable::after") || text.contains("th.sortable {"),
 						"JRM must not fork header sort onto the whole th; Juneau WORK-J0547 owns it: " + path);
 					assertFalse(text.contains(".dt-column-order:before") || text.contains(".dt-column-order:after"),

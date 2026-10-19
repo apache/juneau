@@ -31,12 +31,6 @@
    overridden by base.ftlh's nested <@token> declarations).
    ========================================================================== */
 
-/* Page Tabs: accent-on-top + wash fill are Juneau stock. Do not override
-   border-top / border-bottom here. Keep selected-tab type a bit heavier than the rest. */
-.jc-nav-tab.active {
-  font-weight: 700;
-}
-
 /* ==========================================================================
    Detail list (release detail page)
    ========================================================================== */
