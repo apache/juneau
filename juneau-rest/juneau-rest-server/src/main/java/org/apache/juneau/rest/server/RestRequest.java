@@ -297,7 +297,7 @@ public class RestRequest extends HttpServletRequestWrapper {
 
 		marshallingSession = opContext.getMarshallingContext().getSession();
 
-		partParserSession = opContext.getPartParser().getPartSession();
+		partParserSession = new LazyPartParserSession(opContext.getPartParser());
 
 		pathParams.parser(partParserSession);
 
@@ -2305,6 +2305,32 @@ public class RestRequest extends HttpServletRequestWrapper {
 	void close() {
 		if (nn(config)) {
 			config.close();
+		}
+	}
+
+	/**
+	 * Creates the underlying part-parser session only when a part actually has to be parsed.
+	 *
+	 * <p>
+	 * Most requests never parse a header, query, path or form value into a schema-typed object, so building the
+	 * (comparatively heavy) OpenAPI parser session up front is wasted work.
+	 */
+	private static final class LazyPartParserSession implements HttpPartParserSession {
+		private final HttpPartParser parser;
+		private volatile HttpPartParserSession session;
+
+		LazyPartParserSession(HttpPartParser parser) {
+			this.parser = parser;
+		}
+
+		@Override /* Overridden from HttpPartParserSession */
+		public <T> T read(HttpPartType partType, HttpPartSchema schema, String in, ClassMeta<T> toType) throws ParseException, SchemaValidationException {
+			var s = session;
+			if (s == null) {
+				s = parser.getPartSession();
+				session = s;
+			}
+			return s.read(partType, schema, in, toType);
 		}
 	}
 }

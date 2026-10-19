@@ -113,7 +113,7 @@ public class RestDebugPipeline {
 	 *
 	 * <p>
 	 * Resolves the operation logger when an operation was created, else the resource logger. Returns <jk>null</jk> when
-	 * access logging is off (no logger, or the logger is coarser than {@code INFO}), in which case nothing is emitted.
+	 * access logging is off (no logger, the logger is coarser than {@code INFO}, or no level finer than the root default was configured for it), in which case nothing is emitted.
 	 *
 	 * @param session The REST session. Must not be <jk>null</jk>.
 	 * @return The resolved snapshot, or <jk>null</jk> if access logging is off.
@@ -205,15 +205,35 @@ public class RestDebugPipeline {
 	 * Maps the resolved logger's effective level to the cumulative debug tier.
 	 *
 	 * @param logger The resolved logger.
-	 * @return {@code FINEST}/{@code FINE}/{@code INFO}, or <jk>null</jk> if the logger is coarser than {@code INFO}.
+	 * @return {@code FINEST}/{@code FINE}/{@code INFO}, or <jk>null</jk> if the logger is coarser than {@code INFO} or sits at the stock
+	 * root-inherited {@code INFO} (nothing configured for the resource).
 	 */
 	static Level resolveTier(Logger logger) {
 		if (logger.isLoggable(Level.FINEST))
 			return Level.FINEST;
 		if (logger.isLoggable(Level.FINE))
 			return Level.FINE;
-		if (logger.isLoggable(Level.INFO))
+		if (logger.isLoggable(Level.INFO) && isInfoConfigured(logger))
 			return Level.INFO;
 		return null;
+	}
+
+	/**
+	 * Returns <jk>true</jk> if an {@code INFO}-or-finer level was set explicitly on the logger or one of its ancestors
+	 * below the root logger.
+	 *
+	 * <p>
+	 * Stock JUL leaves the root logger at {@code INFO}, so every logger is "loggable at INFO" by default.  That default
+	 * must not turn on the per-request status line; only a level configured for the resource (or an enclosing logger
+	 * namespace) does.
+	 */
+	private static boolean isInfoConfigured(Logger logger) {
+		// A RichLogger is a wrapper outside the JUL hierarchy; its delegate is the logger that has parents.
+		for (var l = logger instanceof RichLogger r ? r.getDelegate() : logger; l != null && l.getParent() != null; l = l.getParent()) {
+			var level = l.getLevel();
+			if (level != null)
+				return level.intValue() <= Level.INFO.intValue();
+		}
+		return false;
 	}
 }

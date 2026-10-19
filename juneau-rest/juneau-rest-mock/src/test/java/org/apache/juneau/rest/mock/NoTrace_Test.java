@@ -69,9 +69,15 @@ class NoTrace_Test {
 	}
 
 	private static java.util.logging.LogRecord capture(java.util.function.Consumer<MockRestClient> call, MockRestClient client) {
+		var logger = java.util.logging.Logger.getLogger(A_Resource.class.getName());  // strong reference: LogManager holds loggers weakly
+		var previous = logger.getLevel();
+		// Stock JUL leaves the resource logger at the root's inherited INFO, which no longer emits the per-request record.
+		logger.setLevel(Level.INFO);
 		try (var c = RichLogger.getLogger(A_Resource.class).captureEvents(Level.FINEST)) {
 			call.accept(client);
 			return c.getRecords().stream().filter(r -> r.getLoggerName() != null && r.getLoggerName().startsWith(A_Resource.class.getName())).findFirst().orElseThrow();
+		} finally {
+			logger.setLevel(previous);
 		}
 	}
 

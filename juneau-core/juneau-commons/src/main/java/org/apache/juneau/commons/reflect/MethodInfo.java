@@ -661,13 +661,15 @@ public final class MethodInfo extends ExecutableInfo implements Comparable<Metho
 	 * @throws ExecutableException Exception occurred on invoked constructor/method/field.
 	 */
 	public <T> T invoke(Object obj, Object...args) throws ExecutableException {
-		return safe(() -> {
-			try {
-				return (T)inner.invoke(obj, args);
-			} catch (InvocationTargetException e) {
-				throw exex(e.getTargetException());
-			}
-		}, Shorts::exex);
+		try {
+			return (T)inner.invoke(obj, args);
+		} catch (InvocationTargetException e) {
+			throw exex(e.getTargetException());
+		} catch (RuntimeException e) {
+			throw e;
+		} catch (Exception | Error e) {
+			throw exex(e);
+		}
 	}
 
 	/**

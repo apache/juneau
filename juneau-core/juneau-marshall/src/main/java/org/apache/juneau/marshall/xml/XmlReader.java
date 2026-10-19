@@ -44,6 +44,8 @@ import org.apache.juneau.marshall.parser.*;
 })
 public class XmlReader implements XMLStreamReader, Positionable {
 
+	private static volatile Boolean shareable;
+
 	private final ParserPipe pipe;
 	private final XMLStreamReader sr;
 
@@ -63,24 +65,87 @@ public class XmlReader implements XMLStreamReader, Positionable {
 	 * @throws XMLStreamException Thrown by underlying XML stream.
 	 */
 	protected XmlReader(ParserPipe pipe, boolean validating, XMLReporter reporter, XMLResolver resolver, XMLEventAllocator eventAllocator) throws IOException, XMLStreamException {
+		this(pipe, () -> newFactory(validating, reporter, resolver, eventAllocator));
+	}
+
+	/**
+	 * Constructor that obtains a configured factory from the specified supplier.
+	 *
+	 * <p>
+	 * The supplier is called inside the same exception handling as the stream creation, so a failure to build the
+	 * factory is reported exactly as a failure to create the reader.  A shared factory must not be modified.
+	 *
+	 * @param pipe The parser input.
+	 * 	<br>Must not be <jk>null</jk>.
+	 * @param factory Supplies the fully-configured factory used to create the underlying stream reader.
+	 * 	<br>Must not be <jk>null</jk>.
+	 * @throws IOException Thrown by underlying I/O.
+	 * @throws XMLStreamException Thrown by underlying XML stream.
+	 */
+	XmlReader(ParserPipe pipe, java.util.function.Supplier<XMLInputFactory> factory) throws IOException, XMLStreamException {
 		this.pipe = pipe;
 		try {
 			Reader r = pipe.getBufferedReader();
-			var factory = SecureXMLInputFactory.newInstance();
-			factory.setProperty(XMLInputFactory.IS_VALIDATING, validating);
-			factory.setProperty(XMLInputFactory.IS_COALESCING, true);
-			if (factory.isPropertySupported(XMLInputFactory.REPORTER) && nn(reporter))
-				factory.setProperty(XMLInputFactory.REPORTER, reporter);
-			if (factory.isPropertySupported(XMLInputFactory.RESOLVER) && nn(resolver))
-				factory.setProperty(XMLInputFactory.RESOLVER, resolver);
-			if (factory.isPropertySupported(XMLInputFactory.ALLOCATOR) && nn(eventAllocator))
-				factory.setProperty(XMLInputFactory.ALLOCATOR, eventAllocator);
-		sr = factory.createXMLStreamReader(r);
-		sr.nextTag();
-		pipe.setPositionable(this);
-	} catch (Exception e) {
-		throw castException(IOException.class, e);
+			sr = factory.get().createXMLStreamReader(r);
+			sr.nextTag();
+			pipe.setPositionable(this);
+		} catch (Exception e) {
+			throw castException(IOException.class, e);
+		}
 	}
+
+	/**
+	 * Creates and configures a hardened input factory.
+	 *
+	 * @param validating The value for the {@link XMLInputFactory#IS_VALIDATING} setting.
+	 * @param reporter The value for the {@link XMLInputFactory#REPORTER} setting.  Can be <jk>null</jk>.
+	 * @param resolver The value for the {@link XMLInputFactory#RESOLVER} setting.  Can be <jk>null</jk>.
+	 * @param eventAllocator The value for the {@link XMLInputFactory#ALLOCATOR} setting.  Can be <jk>null</jk>.
+	 * @return A new factory.
+	 */
+	static XMLInputFactory newFactory(boolean validating, XMLReporter reporter, XMLResolver resolver, XMLEventAllocator eventAllocator) {
+		var factory = SecureXMLInputFactory.newInstance();
+		factory.setProperty(XMLInputFactory.IS_VALIDATING, validating);
+		factory.setProperty(XMLInputFactory.IS_COALESCING, true);
+		if (factory.isPropertySupported(XMLInputFactory.REPORTER) && nn(reporter))
+			factory.setProperty(XMLInputFactory.REPORTER, reporter);
+		if (factory.isPropertySupported(XMLInputFactory.RESOLVER) && nn(resolver))
+			factory.setProperty(XMLInputFactory.RESOLVER, resolver);
+		if (factory.isPropertySupported(XMLInputFactory.ALLOCATOR) && nn(eventAllocator))
+			factory.setProperty(XMLInputFactory.ALLOCATOR, eventAllocator);
+		return factory;
+	}
+
+	/**
+	 * Returns <jk>true</jk> if the StAX implementation that {@link SecureXMLInputFactory} wraps is known to allow
+	 * concurrent calls to <c>createXMLStreamReader</c> once the factory has been configured.
+	 *
+	 * <p>
+	 * The secure factory hides the implementation behind a wrapper, so the check is made against the factory that
+	 * {@link XMLInputFactory#newInstance()} returns, which is the one being wrapped.  The answer is computed once.
+	 *
+	 * @return <jk>true</jk> if the factory can be shared between threads.
+	 */
+	static boolean isShareable() {
+		var b = shareable;
+		if (b == null)
+			shareable = b = isShareable(XMLInputFactory.newInstance());
+		return b;
+	}
+
+	/**
+	 * Returns <jk>true</jk> if the specified factory is a known thread-safe implementation.
+	 *
+	 * <p>
+	 * Only the JDK's built-in implementation and Woodstox are known to be safe; any other StAX implementation is
+	 * assumed not to be and gets a fresh factory per parse.
+	 *
+	 * @param factory The factory to check.
+	 * @return <jk>true</jk> if the factory can be shared between threads.
+	 */
+	static boolean isShareable(XMLInputFactory factory) {
+		var n = factory.getClass().getName();
+		return n.startsWith("com.sun.xml.internal.stream.") || n.startsWith("com.ctc.wstx.");
 	}
 
 	@Override /* Overridden from XMLStreamReader */

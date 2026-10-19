@@ -337,6 +337,7 @@ public class XmlParser extends ReaderParser implements XmlMetaProvider, RecordRe
 	private final Map<BeanMeta<?>,XmlBeanMeta> xmlBeanMetas = new ConcurrentHashMap<>();
 	private final Map<BeanPropertyMeta,XmlBeanPropertyMeta> xmlBeanPropertyMetas = new ConcurrentHashMap<>();
 	private final Map<ClassMeta<?>,XmlClassMeta> xmlClassMetas = new ConcurrentHashMap<>();
+	private volatile XMLInputFactory validatingFactory, nonValidatingFactory;
 
 	/**
 	 * Constructor.
@@ -477,6 +478,30 @@ public class XmlParser extends ReaderParser implements XmlMetaProvider, RecordRe
 	 * 	The {@link XMLResolver} associated with this parser, or <jk>null</jk> if there isn't one.
 	 */
 	protected final XMLResolver getResolver() { return resolverImpl; }
+
+	/**
+	 * Returns the input factory used to create stream readers for this parser.
+	 *
+	 * <p>
+	 * The factory is built once per validating setting and then reused when the StAX implementation is known to be
+	 * thread-safe after configuration.  Otherwise a new factory is returned on every call.
+	 *
+	 * @param validating The validating setting to configure the factory with.
+	 * @return A configured factory.  Never <jk>null</jk>.
+	 */
+	XMLInputFactory getInputFactory(boolean validating) {
+		var f = validating ? validatingFactory : nonValidatingFactory;
+		if (nn(f))
+			return f;
+		f = XmlReader.newFactory(validating, reporterImpl, resolverImpl, eventAllocatorImpl);
+		if (! XmlReader.isShareable())
+			return f;
+		if (validating)
+			validatingFactory = f;
+		else
+			nonValidatingFactory = f;
+		return f;
+	}
 
 	/**
 	 * Preserve root element during generalized parsing.

@@ -653,6 +653,37 @@ class MethodInfo_Test extends TestBase {
 		assertNull(e.f);
 	}
 
+	public static class Thrower {
+		public void boom() throws java.io.IOException { throw new java.io.IOException("checked-boom"); }
+		public void rt() { throw new IllegalStateException("rt-boom"); }
+		public void err() { throw new AssertionError("err-boom"); }
+		public String two(String a) { return a; }
+	}
+
+	@Test
+	void a024b_invoke_targetExceptionsWrapped() throws Exception {
+		var o = new Thrower();
+		// Checked exception thrown by the target is wrapped with the target as the cause.
+		var e1 = assertThrows(ExecutableException.class, () -> MethodInfo.of(Thrower.class.getMethod("boom")).invoke(o));
+		assertInstanceOf(java.io.IOException.class, e1.getCause());
+		// Runtime exception thrown by the target is also wrapped (InvocationTargetException is unwrapped first).
+		var e2 = assertThrows(ExecutableException.class, () -> MethodInfo.of(Thrower.class.getMethod("rt")).invoke(o));
+		assertInstanceOf(IllegalStateException.class, e2.getCause());
+		// Errors thrown by the target are wrapped too.
+		var e3 = assertThrows(ExecutableException.class, () -> MethodInfo.of(Thrower.class.getMethod("err")).invoke(o));
+		assertInstanceOf(AssertionError.class, e3.getCause());
+	}
+
+	@Test
+	void a024c_invoke_reflectionRuntimeExceptionsPassThrough() throws Exception {
+		var mi = MethodInfo.of(Thrower.class.getMethod("two", String.class));
+		// Bad argument type: Method.invoke throws IllegalArgumentException, which is not wrapped.
+		assertThrows(IllegalArgumentException.class, () -> mi.invoke(new Thrower(), 123));
+		// Null target: NullPointerException is not wrapped.
+		assertThrows(NullPointerException.class, () -> mi.invoke(null, "x"));
+		assertEquals("x", mi.invoke(new Thrower(), "x"));
+	}
+
 	//====================================================================================================
 	// invokeLenient(Object, Object...)
 	//====================================================================================================

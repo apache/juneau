@@ -311,7 +311,9 @@ public class BeanMap<T> extends AbstractMap<String,Object> implements Delegate<T
 	 * @return This object.
 	 */
 	public BeanMap<T> forEachProperty(Predicate<BeanPropertyMeta> filter, Consumer<BeanPropertyMeta> action) {
-		meta.getProperties().values().stream().filter(filter).filter(this::isInActiveView).forEach(action);
+		for (var p : meta.getPropertyArray())
+			if (filter.test(p) && isInActiveView(p))
+				action.accept(p);
 		return this;
 	}
 

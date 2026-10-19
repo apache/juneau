@@ -27,6 +27,7 @@ import java.util.regex.*;
 import java.util.stream.*;
 
 import org.apache.juneau.*;
+import org.apache.juneau.rest.mock.classic.*;
 import org.junit.jupiter.api.*;
 
 /**
@@ -36,6 +37,12 @@ import org.junit.jupiter.api.*;
 	"resource" // MockRestClient is a no-op close.
 })
 class PetstoreVocabulary_Test extends TestBase {
+
+	private static MockRestClient client;
+
+	@BeforeAll static void startClient() {
+		client = client();
+	}
 
 	/** Terms that must never appear.  {@code uip} is matched as a whole word (it occurs inside ordinary words). */
 	static final List<Pattern> DENIED = Stream.of(
@@ -79,9 +86,8 @@ class PetstoreVocabulary_Test extends TestBase {
 	}
 
 	@Test void a02_servedPagesCarryNoDeniedTerms() throws Exception {
-		var c = client();
 		for (var path : PetstorePages_ContractTest.PAGE_PATHS)
-			assertEmpty(hits(page(c, path)));
+			assertEmpty(hits(page(client, path)));
 	}
 
 	@Test void a03_theGateIsNotVacuous() throws Exception {

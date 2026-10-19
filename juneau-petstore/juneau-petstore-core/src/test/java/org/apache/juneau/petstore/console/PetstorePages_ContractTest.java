@@ -26,6 +26,7 @@ import java.util.stream.*;
 
 import org.apache.juneau.*;
 import org.apache.juneau.marshall.collections.*;
+import org.apache.juneau.rest.mock.classic.*;
 import org.apache.juneau.rest.server.console.test.*;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.*;
@@ -105,6 +106,12 @@ public class PetstorePages_ContractTest extends TestBase {
 	/** Page paths for the vocabulary, asset-order and twin gates (the browser twin test reads it too). */
 	public static final List<String> PAGE_PATHS = PAGES.stream().map(Page::path).toList();
 
+	private static MockRestClient client;
+
+	@BeforeAll static void startClient() {
+		client = client();
+	}
+
 	static Stream<Page> pages() {
 		return PAGES.stream();
 	}
@@ -112,7 +119,7 @@ public class PetstorePages_ContractTest extends TestBase {
 	@ParameterizedTest(name="{0}")
 	@MethodSource("pages")
 	void a01_ftl(Page p) throws Exception {
-		var a = assertPage(page(client(), p.path())).isValid().hasContractVersion("1");
+		var a = assertPage(page(client, p.path())).isValid().hasContractVersion("1");
 		p.expect().accept(a);
 	}
 
@@ -125,13 +132,13 @@ public class PetstorePages_ContractTest extends TestBase {
 	@ParameterizedTest(name="{0}")
 	@MethodSource("builderPages")
 	void a03_builder(Page p) throws Exception {
-		var a = assertPage(page(client(), p.path() + "?builder")).isValid().hasContractVersion("1");
+		var a = assertPage(page(client, p.path() + "?builder")).isValid().hasContractVersion("1");
 		p.expect().accept(a);
 	}
 
 	@Test
 	void a02_p2Body() throws Exception {
-		var t = assertPage(page(client(), "/console/pets")).card("pets").getMap("table");
+		var t = assertPage(page(client, "/console/pets")).card("pets").getMap("table");
 		assertBean(t, "dataMode,dataUrl,selection{rowIdField,scope}", "server,/console/pets/query,{id,persistent}");
 		assertBean(t, "bulk{actions{#{id,bulkMode}}}", "{{[{sell,perRow}]}}");
 		var ribbon = t.getList("ribbon");

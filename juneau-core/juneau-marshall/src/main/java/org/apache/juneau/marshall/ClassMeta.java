@@ -168,6 +168,7 @@ public final class ClassMeta<T> extends BeanInfo<T> {
 	private final NullableSupplier<ConstructorInfo> stringConstructor;         // The X(String) constructor (if it has one).
 	private final Supplier<List<ObjectSwap<T,?>>> swaps;                       // The object POJO swaps associated with this bean (if it has any).
 	private final NullableSupplier<BeanMeta.BeanMetaValue<T>> beanMeta;
+	private final boolean nonStaticMemberClass;                                // Class.isMemberClass() is a native call, so it is evaluated once here.
 
 	private record KeyValueTypes(ClassMeta<?> keyType, ClassMeta<?> valueType) {
 		Optional<ClassMeta<?>> optKeyType() { return o(keyType()); }
@@ -183,6 +184,7 @@ public final class ClassMeta<T> extends BeanInfo<T> {
 	ClassMeta(Class<T> innerClass, MarshallingContext marshallingContext) {
 		super(innerClass);
 		this.marshallingContext = marshallingContext;
+		this.nonStaticMemberClass = isMemberClass() && isNotStatic();
 		this.cat = new Categories();
 
 		var ap = marshallingContext.getAnnotationProvider();
@@ -290,6 +292,7 @@ public final class ClassMeta<T> extends BeanInfo<T> {
 	ClassMeta(List<ClassMeta<?>> args) {
 		super((Class<T>)Object[].class);
 		this.args = args;
+		this.nonStaticMemberClass = false;
 		this.childSwaps = memoize(this::findChildSwaps);
 		this.childSwapMap = null;
 		this.childUnswapMap = null;
@@ -323,6 +326,7 @@ public final class ClassMeta<T> extends BeanInfo<T> {
 	 */
 	ClassMeta(ClassMeta<T> mainType, ClassMeta<?> keyType, ClassMeta<?> valueType, ClassMeta<?> elementType) {
 		super(mainType.inner());
+		this.nonStaticMemberClass = mainType.nonStaticMemberClass;
 		this.childSwaps = mainType.childSwaps;
 		this.childSwapMap = mainType.childSwapMap;
 		this.childUnswapMap = mainType.childUnswapMap;
@@ -363,7 +367,7 @@ public final class ClassMeta<T> extends BeanInfo<T> {
 		var bm = getBeanMeta();
 		if (bm == null || ! bm.hasConstructor())
 			return false;
-		if (isMemberClass() && isNotStatic())
+		if (nonStaticMemberClass)
 			return nn(outer) && bm.getConstructor().hasParameterTypes(outer.getClass());
 		return true;
 	}
@@ -375,7 +379,7 @@ public final class ClassMeta<T> extends BeanInfo<T> {
 	 */
 	@Override
 	public boolean canCreateNewInstance() {
-		if (isMemberClass() && isNotStatic())
+		if (nonStaticMemberClass)
 			return false;
 		var bm = getBeanMeta();
 		return noArgConstructor.isPresent() || (bm != null && bm.getBeanProxyInvocationHandler() != null) || (isArray() && elementType.get().canCreateNewInstance());
@@ -393,7 +397,7 @@ public final class ClassMeta<T> extends BeanInfo<T> {
 	 */
 	@Override
 	public boolean canCreateNewInstance(Object outer) {
-		if (isMemberClass() && isNotStatic())
+		if (nonStaticMemberClass)
 			return nn(outer) && noArgConstructor.map(x -> x.hasParameterTypes(outer.getClass())).orElse(false);
 		return canCreateNewInstance();
 	}
@@ -410,7 +414,7 @@ public final class ClassMeta<T> extends BeanInfo<T> {
 		if (fromStringMethod.isPresent())
 			return true;
 		if (stringConstructor.isPresent()) {
-			if (isMemberClass() && isNotStatic())
+			if (nonStaticMemberClass)
 				return nn(outer) && stringConstructor.map(x -> x.hasParameterTypes(outer.getClass(), String.class)).orElse(false);
 			return true;
 		}
@@ -1377,7 +1381,7 @@ public final class ClassMeta<T> extends BeanInfo<T> {
 	 * @throws ExecutableException Exception occurred on invoked constructor/method/field.
 	 */
 	public T newInstance(Object outer) throws ExecutableException {
-		if (isMemberClass() && isNotStatic() && noArgConstructor.isPresent())
+		if (nonStaticMemberClass && noArgConstructor.isPresent())
 			return noArgConstructor.get().<T>newInstance(outer);
 		return newInstance();
 	}
@@ -1415,7 +1419,7 @@ public final class ClassMeta<T> extends BeanInfo<T> {
 			return (T)fromStringMethod.get().invoke(null, arg);
 
 		if (stringConstructor.isPresent()) {
-			if (isMemberClass() && isNotStatic())
+			if (nonStaticMemberClass)
 				return stringConstructor.get().<T>newInstance(outer, arg);
 			return stringConstructor.get().<T>newInstance(arg);
 		}
@@ -1817,7 +1821,7 @@ public final class ClassMeta<T> extends BeanInfo<T> {
 		if (isAbstract())
 			return null;
 
-		var numParams = isMemberClass() && isNotStatic() ? 1 : 0;
+		var numParams = nonStaticMemberClass ? 1 : 0;
 		return getPublicConstructors()
 			.stream()
 			.filter(x -> x.isPublic() && x.isNotDeprecated() && x.hasNumParameters(numParams))
@@ -1909,7 +1913,7 @@ public final class ClassMeta<T> extends BeanInfo<T> {
 		if (isAbstract())
 			return null;
 
-		var numParams = isMemberClass() && isNotStatic() ? 2 : 1;
+		var numParams = nonStaticMemberClass ? 2 : 1;
 		return getPublicConstructors()
 			.stream()
 			.filter(x -> x.isPublic() && x.isNotDeprecated() && x.hasNumParameters(numParams))

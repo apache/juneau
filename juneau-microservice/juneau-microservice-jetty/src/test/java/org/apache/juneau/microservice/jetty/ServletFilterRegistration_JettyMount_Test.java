@@ -165,6 +165,8 @@ class ServletFilterRegistration_JettyMount_Test extends TestBase {
 	private static String get(Microservice ms, String path) throws Exception {
 		var port = ((ServerConnector)ms.getBeanStore().getBean(JettyServerComponent.class).orElseThrow().getServer().getConnectors()[0]).getLocalPort();
 		var conn = (HttpURLConnection)URI.create("http://localhost:" + port + path).toURL().openConnection();
+		// A kept-alive connection makes the graceful stop wait about 2s for it to drain on every test; close it with the response.
+		conn.setRequestProperty("Connection", "close");
 		conn.setConnectTimeout(5000);
 		conn.setReadTimeout(5000);
 		try {

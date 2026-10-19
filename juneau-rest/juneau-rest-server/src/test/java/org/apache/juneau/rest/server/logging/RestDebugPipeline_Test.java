@@ -67,6 +67,63 @@ class RestDebugPipeline_Test {
 		assertNull(RestDebugPipeline.resolveTier(newLogger(Level.OFF)));
 	}
 
+	@Test void a09_unconfiguredLogger_inheritsRootInfo_resolvesNull() {
+		// Stock JUL: no level on the logger or any ancestor below root, so the effective level is the root's INFO.
+		var l = Logger.getAnonymousLogger();
+		assertNull(l.getLevel());
+		assertTrue(l.isLoggable(Level.INFO));
+		assertNull(RestDebugPipeline.resolveTier(l));
+	}
+
+	@Test void a10_ancestorConfiguredInfo_resolvesInfo() {
+		var parent = Logger.getLogger("juneau.test.debugpipeline.a10");
+		var child = Logger.getLogger("juneau.test.debugpipeline.a10.Resource");
+		parent.setLevel(Level.INFO);
+		try {
+			assertEquals(Level.INFO, RestDebugPipeline.resolveTier(child));
+		} finally {
+			parent.setLevel(null);
+		}
+	}
+
+	@Test void a11_ancestorConfiguredFine_resolvesFine() {
+		var parent = Logger.getLogger("juneau.test.debugpipeline.a11");
+		var child = Logger.getLogger("juneau.test.debugpipeline.a11.Resource");
+		parent.setLevel(Level.FINE);
+		try {
+			assertEquals(Level.FINE, RestDebugPipeline.resolveTier(child));
+		} finally {
+			parent.setLevel(null);
+		}
+	}
+
+	@Test void a12_ancestorConfiguredWarning_resolvesNull() {
+		var parent = Logger.getLogger("juneau.test.debugpipeline.a12");
+		var child = Logger.getLogger("juneau.test.debugpipeline.a12.Resource");
+		parent.setLevel(Level.WARNING);
+		try {
+			assertNull(RestDebugPipeline.resolveTier(child));
+		} finally {
+			parent.setLevel(null);
+		}
+	}
+
+	@Test void a13_rootLoggerExplicitInfo_isNotCounted() {
+		// Stock logging.properties sets .level=INFO on the root logger explicitly; that must not enable the line.
+		var root = Logger.getLogger("");
+		var saved = root.getLevel();
+		root.setLevel(Level.INFO);
+		try {
+			var l = Logger.getLogger("juneau.test.debugpipeline.a13.Resource");
+			assertNull(l.getLevel());
+			assertEquals(Level.INFO, root.getLevel());
+			assertNull(RestDebugPipeline.resolveTier(l));
+			assertNull(RestDebugPipeline.resolveTier(Logger.getAnonymousLogger()));
+		} finally {
+			root.setLevel(saved);
+		}
+	}
+
 	// A null snapshot means access logging is off: the two-argument emit must short-circuit before touching the session,
 	// so even a null session is a safe no-op. Full rendering/thrown/INFO-level behavior is covered by the integration
 	// suites (RestDebugCapture_Test and the Jetty async/reactive harnesses).

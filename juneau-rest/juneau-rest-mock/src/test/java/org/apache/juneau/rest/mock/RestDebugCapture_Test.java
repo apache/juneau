@@ -45,6 +45,25 @@ class RestDebugCapture_Test {
 		reset();
 	}
 
+	/**
+	 * Sets a level on the named logger for the duration of a test.  Stock JUL leaves a resource logger at the root's
+	 * inherited {@code INFO}, which no longer emits the per-request line; a level must be configured explicitly.
+	 */
+	private static final class ConfiguredLevel implements AutoCloseable {
+		private final Logger logger;  // strong reference: LogManager holds loggers weakly
+		private final Level previous;
+
+		ConfiguredLevel(Class<?> c, Level level) {
+			logger = Logger.getLogger(c.getName());
+			previous = logger.getLevel();
+			logger.setLevel(level);
+		}
+
+		@Override public void close() {
+			logger.setLevel(previous);
+		}
+	}
+
 	@Rest(path="/api")
 	public static class A_Resource {
 
@@ -141,7 +160,8 @@ class RestDebugCapture_Test {
 	public static class B_HostB {}
 
 	@Test void b01_twoHostsComposingSameMixin_hostLevelCascadesAndHostsAreIsolated() throws Exception {
-		try (var ca = RichLogger.getLogger(B_HostA.class).captureEvents(Level.FINEST);
+		try (var lvl = new ConfiguredLevel(B_HostB.class, Level.INFO);
+				var ca = RichLogger.getLogger(B_HostA.class).captureEvents(Level.FINEST);
 				var cb = RichLogger.getLogger(B_HostB.class).captureEvents(Level.FINEST)) {
 
 			// .debug() raises ONLY B_HostA's own class logger to FINEST for the duration of the call.
@@ -189,7 +209,8 @@ class RestDebugCapture_Test {
 		var opOneLogger = Logger.getLogger(opOneName); // strong local ref -- avoids the LogManager weak-ref GC hazard
 		var prevLevel = opOneLogger.getLevel();
 		opOneLogger.setLevel(Level.FINEST);
-		try (var c = RichLogger.getLogger(C_Resource.class).captureEvents(Level.FINEST)) {
+		try (var lvl = new ConfiguredLevel(C_Resource.class, Level.INFO);
+				var c = RichLogger.getLogger(C_Resource.class).captureEvents(Level.FINEST)) {
 			var client = org.apache.juneau.rest.mock.classic.MockRestClient.create(C_Resource.class).build();
 
 			client.get("/one").run().assertStatus().asCode().is(200);
@@ -358,7 +379,8 @@ class RestDebugCapture_Test {
 	}
 
 	@Test void e01_resourceImplementsFormatter_beatsBeanRegisteredFormatter() throws Exception {
-		try (var c = RichLogger.getLogger(E_ResourceImplementsAndHasBean.class).captureEvents(Level.INFO)) {
+		try (var lvl = new ConfiguredLevel(E_ResourceImplementsAndHasBean.class, Level.INFO);
+				var c = RichLogger.getLogger(E_ResourceImplementsAndHasBean.class).captureEvents(Level.INFO)) {
 			var client = org.apache.juneau.rest.mock.classic.MockRestClient.create(E_ResourceImplementsAndHasBean.class).build();
 			client.get("/who").run().assertStatus().asCode().is(200);
 
@@ -369,7 +391,8 @@ class RestDebugCapture_Test {
 	}
 
 	@Test void e02_beanRegisteredFormatter_beatsDefaultFormatter() throws Exception {
-		try (var c = RichLogger.getLogger(E_BeanOnly.class).captureEvents(Level.INFO)) {
+		try (var lvl = new ConfiguredLevel(E_BeanOnly.class, Level.INFO);
+				var c = RichLogger.getLogger(E_BeanOnly.class).captureEvents(Level.INFO)) {
 			var client = org.apache.juneau.rest.mock.classic.MockRestClient.create(E_BeanOnly.class).build();
 			client.get("/who").run().assertStatus().asCode().is(200);
 
@@ -566,7 +589,8 @@ class RestDebugCapture_Test {
 	@Test void a08_proxyShapedResourceUsesUserClassLogger_nestedResourceNameRemainsDistinct() throws Exception {
 		var userName = A08_UserResource.class.getName() + ".who";
 		var proxyName = A08_UserResource$$SpringCGLIB$$.class.getName() + ".who";
-		try (var c = RichLogger.getLogger(A08_UserResource.class).captureEvents(Level.FINEST)) {
+		try (var lvl = new ConfiguredLevel(A08_UserResource.class, Level.INFO);
+				var c = RichLogger.getLogger(A08_UserResource.class).captureEvents(Level.FINEST)) {
 			var client = org.apache.juneau.rest.mock.classic.MockRestClient
 				.create(A08_UserResource$$SpringCGLIB$$.class)
 				.debug()
@@ -592,5 +616,55 @@ class RestDebugCapture_Test {
 			assertTrue(c.getRecords().stream().map(java.util.logging.LogRecord::getLoggerName).anyMatch(nestedName::equals),
 				"ordinary nested resource names must remain distinct and unnormalized");
 		}
+	}
+
+	/** Resource for the default-off tests: no logger level is ever configured for it unless a test sets one. */
+	@Rest(path="/defaultoff")
+	public static class E_Resource {
+		@RestGet(path="/who")
+		public String who() {
+			return "ok";
+		}
+	}
+
+	private List<java.util.logging.LogRecord> e_run(Level level) throws Exception {
+		var logger = Logger.getLogger(E_Resource.class.getName());
+		var prevLevel = logger.getLevel();
+		var prevUseParentHandlers = logger.getUseParentHandlers();
+		var handler = new D00_CollectingHandler();
+		try {
+			logger.setUseParentHandlers(false);
+			handler.setLevel(Level.ALL);
+			logger.addHandler(handler);
+			logger.setLevel(level);
+			org.apache.juneau.rest.mock.classic.MockRestClient.create(E_Resource.class).build().get("/who").run().assertStatus().asCode().is(200);
+			return new ArrayList<>(handler.records());
+		} finally {
+			logger.removeHandler(handler);
+			logger.setUseParentHandlers(prevUseParentHandlers);
+			logger.setLevel(prevLevel);
+		}
+	}
+
+	@Test void e01_stockJul_noLevelConfigured_emitsNoDebugRecord() throws Exception {
+		// Stock JUL: the resource logger inherits the root's INFO, which must not turn the per-request line on.
+		assertTrue(e_run(null).isEmpty());
+	}
+
+	@Test void e02_explicitInfo_emitsBasicLineOnly() throws Exception {
+		var records = e_run(Level.INFO);
+		assertEquals(1, records.size());
+		assertTrue(records.get(0).getMessage().contains("[200] HTTP GET /defaultoff/who"), records.get(0).getMessage());
+		assertFalse(records.get(0).getMessage().contains("---Request Headers---"));
+	}
+
+	@Test void e03_fine_emitsHeaders() throws Exception {
+		var records = e_run(Level.FINE);
+		assertEquals(1, records.size());
+		assertTrue(records.get(0).getMessage().contains("---Request Headers---"), records.get(0).getMessage());
+	}
+
+	@Test void e04_warning_emitsNothing() throws Exception {
+		assertTrue(e_run(Level.WARNING).isEmpty());
 	}
 }

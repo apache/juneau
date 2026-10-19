@@ -824,7 +824,7 @@ public class XmlParserSession extends ReaderParserSession implements RecordReada
 	 * @throws XMLStreamException Unexpected XML processing error.
 	 */
 	protected final XmlReader getXmlReader(ParserPipe pipe) throws IOException, XMLStreamException {
-		return new XmlReader(pipe, isValidating(), getReporter(), getResolver(), getEventAllocator());
+		return new XmlReader(pipe, () -> ctx.getInputFactory(validating));
 	}
 
 	/**

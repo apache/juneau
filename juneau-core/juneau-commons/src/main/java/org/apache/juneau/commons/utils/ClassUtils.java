@@ -420,36 +420,62 @@ public class ClassUtils {
 			return null;
 
 		var c = o.getClass();
-		var s = c.getName();
+		var r = PROXY_FOR.get(c);
 
-		// Quick exit: Most classes aren't proxies, and proxies typically have '$' in their name
-		if (s.indexOf('$') == -1)
+		if (r == NOT_PROXY)
 			return null;
 
-		// JDK Dynamic Proxy: Created via Proxy.newProxyInstance()
-		// These implement interfaces and are instances of Proxy
-		if (Proxy.isProxyClass(c)) {
-			var interfaces = c.getInterfaces();
-			return interfaces.length > 0 ? interfaces[0] : null;
-		}
-
-		// CGLIB Proxy: Spring's CGLIB enhancer creates subclasses
-		// Pattern: com.example.MyClass$$EnhancerBySpringCGLIB$$abc123
-		if (s.contains("$$EnhancerBySpringCGLIB$$")) {
+		if (r == CGLIB_PROXY) {
+			// CGLIB Proxy: Spring's CGLIB enhancer creates subclasses
+			// Pattern: com.example.MyClass$$EnhancerBySpringCGLIB$$abc123
 			// Try to invoke getTargetClass() if available (Spring specific)
 			var v = Holder.<Class<?>>empty();
 			info(c).getPublicMethods().stream().filter(m -> m.hasName("getTargetClass") && m.getParameterCount() == 0 && m.hasReturnType(Class.class)).forEach(m -> safe(() -> v.set(m.invoke(o)))); // HTT - Requires bytecode manipulation to create classes with $$EnhancerBySpringCGLIB$$ in name
 			return v.isPresent() ? v.get() : c.getSuperclass(); // HTT - Requires bytecode manipulation to create classes with $$EnhancerBySpringCGLIB$$ in name
 		}
 
-		// Javassist / ByteBuddy / Hibernate lazy association proxies: subclasses of the user type
-		if (s.contains("_$$_javassist") || s.contains("_$$_jvst") || s.contains("$ByteBuddy$") || s.contains("$HibernateProxy$")) {
-			return c.getSuperclass(); // HTT - Requires bytecode manipulation to create classes with _$$_javassist, _$$_jvst, $ByteBuddy$, or $HibernateProxy$ in name
-		}
-
-		// Not a recognized proxy type
-		return null;
+		return (Class<?>)r;
 	}
+
+	private static final Object NOT_PROXY = new Object();
+	private static final Object CGLIB_PROXY = new Object();
+
+	/**
+	 * Per-class proxy classification used by {@link #getProxyFor(Object)}.
+	 *
+	 * <p>
+	 * The value is {@link #NOT_PROXY}, {@link #CGLIB_PROXY} (which needs the instance to resolve the target class),
+	 * or the resolved underlying {@link Class}.
+	 */
+	private static final ClassValue<Object> PROXY_FOR = new ClassValue<>() {
+		@Override
+		protected Object computeValue(Class<?> c) {
+			var s = c.getName();
+
+			// Quick exit: Most classes aren't proxies, and proxies typically have '$' in their name
+			if (s.indexOf('$') == -1)
+				return NOT_PROXY;
+
+			// JDK Dynamic Proxy: Created via Proxy.newProxyInstance()
+			// These implement interfaces and are instances of Proxy
+			if (Proxy.isProxyClass(c)) {
+				var interfaces = c.getInterfaces();
+				return interfaces.length > 0 ? interfaces[0] : NOT_PROXY;
+			}
+
+			if (s.contains("$$EnhancerBySpringCGLIB$$"))
+				return CGLIB_PROXY;
+
+			// Javassist / ByteBuddy / Hibernate lazy association proxies: subclasses of the user type
+			if (s.contains("_$$_javassist") || s.contains("_$$_jvst") || s.contains("$ByteBuddy$") || s.contains("$HibernateProxy$")) {
+				var sc = c.getSuperclass(); // HTT - Requires bytecode manipulation to create classes with _$$_javassist, _$$_jvst, $ByteBuddy$, or $HibernateProxy$ in name
+				return sc == null ? NOT_PROXY : sc;
+			}
+
+			// Not a recognized proxy type
+			return NOT_PROXY;
+		}
+	};
 
 	/**
 	 * Returns <jk>false</jk> if the specific class is <jk>null</jk> or <c><jk>void</jk>.<jk>class</jk></c> or {@link Void} or has the simple name <js>"Void</js>.

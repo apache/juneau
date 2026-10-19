@@ -87,20 +87,72 @@ public class BasicBeanStore implements WritableBeanStore {
 	public static final BasicBeanStore INSTANCE = new BasicBeanStore();
 
 	private final ConcurrentHashMap<Class<?>,ConcurrentHashMap<String,Supplier<?>>> entries;
-	private final ConcurrentHashMap<Class<?>,ConcurrentHashMap<String,Supplier<?>>> defaults;
-	private final ConcurrentHashMap<Class<?>,ConcurrentHashMap<String,BeanSourceMeta>> entryMetadata;
-	private final ConcurrentHashMap<Class<?>,ConcurrentHashMap<String,BeanSourceMeta>> defaultMetadata;
-	private final ConcurrentHashMap<Class<?>,Class<?>> typeBindings;
-	private final List<Object> resolvedBeans;
-	private final Set<Object> resolvedIdentities;
-	private final Set<Class<?>> registeredConfigurations;
 	private final BeanStore parent;
 	private final BeanStore overridingParent;
 	@SuppressWarnings({
 		"java:S3077" // volatile is required here for correct double-checked-locking safe-publication of the lazily-created StackOverlay in pushOverlay(); the reference is publish-once and never compound-mutated.
 	})
 	private volatile StackOverlay overlayStack;
+	@SuppressWarnings({
+		"java:S3077" // volatile is required for safe publication of the lazily-created holder; the reference is publish-once and never compound-mutated.
+	})
+	private volatile Extras extras;
+	@SuppressWarnings({
+		"java:S3077" // volatile is required for safe publication of the lazily-created holder; the reference is publish-once and never compound-mutated.
+	})
+	private volatile Tracking tracking;
 	private volatile boolean closed;
+
+	/**
+	 * Rarely-used state, created on first write so a short-lived store that only holds a few entries (e.g. one per
+	 * request) doesn't allocate it.
+	 */
+	private static final class Extras {
+		final ConcurrentHashMap<Class<?>,ConcurrentHashMap<String,Supplier<?>>> defaults = new ConcurrentHashMap<>();
+		// Holds only non-default metadata (@Primary / @Order / priority); an absent entry means BeanSourceMeta.DEFAULT.
+		final ConcurrentHashMap<Class<?>,ConcurrentHashMap<String,BeanSourceMeta>> entryMetadata = new ConcurrentHashMap<>();
+		final ConcurrentHashMap<Class<?>,Class<?>> typeBindings = new ConcurrentHashMap<>();
+		final Set<Class<?>> registeredConfigurations = Collections.synchronizedSet(new HashSet<>());
+	}
+
+	/** Beans handed out by this store, in resolution order, for {@link #close()} callbacks.  Guarded by itself. */
+	private static final class Tracking {
+		final List<Object> beans = new ArrayList<>(4);
+		final Set<Object> identities = Collections.newSetFromMap(new IdentityHashMap<>(8));
+	}
+
+	private Extras extras() {
+		var x = extras;
+		if (x == null) {
+			synchronized (this) {
+				x = extras;
+				if (x == null) {
+					x = new Extras();
+					extras = x;
+				}
+			}
+		}
+		return x;
+	}
+
+	private ConcurrentHashMap<String,Supplier<?>> defaultTypeMap(Class<?> beanType) {
+		var x = extras;
+		return x == null ? null : x.defaults.get(beanType);
+	}
+
+	private void putEntryMeta(Class<?> beanType, String key, BeanSourceMeta meta) {
+		if (meta == BeanSourceMeta.DEFAULT) {
+			// Default metadata is represented by absence; drop any non-default value this key previously had.
+			var x = extras;
+			if (x != null) {
+				var m = x.entryMetadata.get(beanType);
+				if (m != null)
+					m.remove(key);
+			}
+		} else {
+			extras().entryMetadata.computeIfAbsent(beanType, k -> new ConcurrentHashMap<>()).put(key, meta);
+		}
+	}
 
 	/**
 	 * No-arg constructor.  Equivalent to {@code new BasicBeanStore(null)}.
@@ -147,13 +199,6 @@ public class BasicBeanStore implements WritableBeanStore {
 		this.parent = parent;
 		this.overridingParent = overridingParent;
 		entries = new ConcurrentHashMap<>();
-		defaults = new ConcurrentHashMap<>();
-		entryMetadata = new ConcurrentHashMap<>();
-		defaultMetadata = new ConcurrentHashMap<>();
-		typeBindings = new ConcurrentHashMap<>();
-		resolvedBeans = Collections.synchronizedList(new ArrayList<>());
-		resolvedIdentities = Collections.newSetFromMap(new IdentityHashMap<>());
-		registeredConfigurations = Collections.synchronizedSet(new HashSet<>());
 		addSupplier(BasicBeanStore.class, ()->this, null);
 		addSupplier(BeanStore.class, ()->this, null);
 		addSupplier(WritableBeanStore.class, ()->this, null);
@@ -249,7 +294,7 @@ public class BasicBeanStore implements WritableBeanStore {
 		var typeMap = entries.computeIfAbsent(beanType, k -> new ConcurrentHashMap<>());
 		var key = emptyIfNull(name);
 		typeMap.put(key, bean);
-		entryMetadata.computeIfAbsent(beanType, k -> new ConcurrentHashMap<>()).put(key, BeanSourceMeta.DEFAULT);
+		putEntryMeta(beanType, key, BeanSourceMeta.DEFAULT);
 		return this;
 	}
 
@@ -287,10 +332,9 @@ public class BasicBeanStore implements WritableBeanStore {
 	@Override
 	public <T> BasicBeanStore addDefaultSupplier(Class<T> beanType, Supplier<T> supplier, String name) {
 		checkOpen();
-		var typeMap = defaults.computeIfAbsent(beanType, k -> new ConcurrentHashMap<>());
+		var typeMap = extras().defaults.computeIfAbsent(beanType, k -> new ConcurrentHashMap<>());
 		var key = emptyIfNull(name);
 		typeMap.put(key, supplier);
-		defaultMetadata.computeIfAbsent(beanType, k -> new ConcurrentHashMap<>()).put(key, BeanSourceMeta.DEFAULT);
 		return this;
 	}
 
@@ -315,11 +359,10 @@ public class BasicBeanStore implements WritableBeanStore {
 	 */
 	public BasicBeanStore promoteDefaultsToLocalSuppliers() {
 		checkOpen();
-		defaults.forEach((beanType, typeMap) -> typeMap.forEach((name, supplier) -> {
-			var localTypeMap = entries.computeIfAbsent(beanType, k -> new ConcurrentHashMap<>());
-			localTypeMap.putIfAbsent(name, supplier);
-			entryMetadata.computeIfAbsent(beanType, k -> new ConcurrentHashMap<>()).putIfAbsent(name, BeanSourceMeta.DEFAULT);
-		}));
+		var x = extras;
+		if (x != null)
+			x.defaults.forEach((beanType, typeMap) -> typeMap.forEach((name, supplier) ->
+				entries.computeIfAbsent(beanType, k -> new ConcurrentHashMap<>()).putIfAbsent(name, supplier)));
 		return this;
 	}
 
@@ -370,10 +413,12 @@ public class BasicBeanStore implements WritableBeanStore {
 	public BasicBeanStore clear() {
 		checkOpen();
 		entries.clear();
-		defaults.clear();
-		entryMetadata.clear();
-		defaultMetadata.clear();
-		registeredConfigurations.clear();
+		var x = extras;
+		if (x != null) {
+			x.defaults.clear();
+			x.entryMetadata.clear();
+			x.registeredConfigurations.clear();
+		}
 		return this;
 	}
 
@@ -434,7 +479,7 @@ public class BasicBeanStore implements WritableBeanStore {
 		//   defaults (lowest) < parent < entries (local) < overridingParent < overlayStack (highest)
 		// Higher-priority maps overwrite lower-priority ones with the same name.
 		Map<String,T> result = map();
-		var defaultMap = defaults.get(beanType);
+		var defaultMap = defaultTypeMap(beanType);
 		if (nn(defaultMap))
 			defaultMap.forEach((name, supplier) -> result.put(name, (T)supplier.get()));
 		if (nn(parent))
@@ -480,7 +525,7 @@ public class BasicBeanStore implements WritableBeanStore {
 	 */
 	@Override
 	public boolean hasDefaultSupplier(Class<?> beanType, String name) {
-		var typeMap = defaults.get(beanType);
+		var typeMap = defaultTypeMap(beanType);
 		return nn(typeMap) && typeMap.containsKey(emptyIfNull(name));
 	}
 
@@ -516,7 +561,7 @@ public class BasicBeanStore implements WritableBeanStore {
 	 * @return The locally-registered default supplier, or {@link Optional#empty()} if not present.
 	 */
 	public <T> Optional<Supplier<T>> getDefaultSupplier(Class<T> beanType, String name) {
-		var typeMap = defaults.get(beanType);
+		var typeMap = defaultTypeMap(beanType);
 		if (typeMap == null)
 			return oe();
 		var supplier = typeMap.get(emptyIfNull(name));
@@ -555,13 +600,14 @@ public class BasicBeanStore implements WritableBeanStore {
 	@Override
 	public <T> WritableBeanStore addBeanType(Class<T> beanType, Class<? extends T> implType) {
 		checkOpen();
-		typeBindings.put(beanType, implType);
+		extras().typeBindings.put(beanType, implType);
 		return this;
 	}
 
 	@Override
 	public <T> Optional<Class<? extends T>> getBeanType(Class<T> beanType) {
-		var v = (Class<? extends T>) typeBindings.get(beanType);
+		var x = extras;
+		var v = x == null ? null : (Class<? extends T>) x.typeBindings.get(beanType);
 		if (nn(v))
 			return o(v);
 		if (nn(parent))
@@ -625,7 +671,7 @@ public class BasicBeanStore implements WritableBeanStore {
 				return fromParent;
 		}
 		// (4) Local default suppliers (memoizer-backed framework defaults).
-		var defaultMap = defaults.get(beanType);
+		var defaultMap = defaultTypeMap(beanType);
 		if (nn(defaultMap)) {
 			var key = emptyIfNull(name);
 			var supplier = defaultMap.get(key);
@@ -657,7 +703,7 @@ public class BasicBeanStore implements WritableBeanStore {
 		checkOpen();
 		if (configType == null)
 			return this;
-		registerConfiguration(configType, registeredConfigurations);
+		registerConfiguration(configType, extras().registeredConfigurations);
 		return this;
 	}
 
@@ -760,10 +806,12 @@ public class BasicBeanStore implements WritableBeanStore {
 			.a("bean", id(supplier.get()))
 			.a("name", name))));
 		var defaultList = list();
-		defaults.forEach((type, typeMap) -> typeMap.forEach((name, supplier) -> defaultList.add(filteredBeanPropertyMap()
-			.a("type", cns(type))
-			.a("bean", id(supplier.get()))
-			.a("name", name))));
+		var xd = extras;
+		if (xd != null)
+			xd.defaults.forEach((type, typeMap) -> typeMap.forEach((name, supplier) -> defaultList.add(filteredBeanPropertyMap()
+				.a("type", cns(type))
+				.a("bean", id(supplier.get()))
+				.a("name", name))));
 		Object overridingParentValue = null;
 		if (nn(overridingParent)) {
 			if (overridingParent instanceof BasicBeanStore overridingParent2)
@@ -790,7 +838,12 @@ public class BasicBeanStore implements WritableBeanStore {
 		closed = true;
 		var errors = new BeanCreationException("Errors while invoking @PreDestroy callbacks.");
 		boolean hasErrors = false;
-		var beans = new ArrayList<>(resolvedBeans);
+		var t = tracking;
+		List<Object> beans = new ArrayList<>();
+		if (t != null)
+			synchronized (t) {
+				beans.addAll(t.beans);
+			}
 		Collections.reverse(beans);
 		for (var bean : beans) {
 			for (var method : ClassInfo.of(bean).getAllMethods()) {
@@ -908,8 +961,9 @@ public class BasicBeanStore implements WritableBeanStore {
 
 	private boolean anyLocalBeanNamed(String name) {
 		var key = emptyIfNull(name);
+		var x = extras;
 		return entries.values().stream().anyMatch(m -> m.containsKey(key))
-			|| defaults.values().stream().anyMatch(m -> m.containsKey(key));
+			|| (x != null && x.defaults.values().stream().anyMatch(m -> m.containsKey(key)));
 	}
 
 	private String beanName(Bean bean) {
@@ -928,27 +982,38 @@ public class BasicBeanStore implements WritableBeanStore {
 		if (typeMap.containsKey(key))
 			throw new BeanCreationException("Duplicate bean: type=" + beanType.getName() + ", name=" + key);
 		typeMap.put(key, () -> bean);
-		entryMetadata.computeIfAbsent(beanType, k -> new ConcurrentHashMap<>()).put(key, meta);
+		putEntryMeta(beanType, key, meta);
 	}
 
 	private <T> T trackResolved(T bean) {
 		if (bean == null)
 			return null;
-		synchronized (resolvedIdentities) {
-			if (resolvedIdentities.add(bean))
-				resolvedBeans.add(bean);
+		var t = tracking;
+		if (t == null) {
+			synchronized (this) {
+				t = tracking;
+				if (t == null) {
+					t = new Tracking();
+					tracking = t;
+				}
+			}
+		}
+		synchronized (t) {
+			if (t.identities.add(bean))
+				t.beans.add(bean);
 		}
 		return bean;
 	}
 
 	private <T> Optional<T> selectPrimary(Class<T> beanType) {
 		// @Primary is a local-entry-only signal.  Default suppliers added via addDefaultSupplier()
-		// always carry BeanSourceMeta.DEFAULT (primary = false), so iterating defaultMetadata never
+		// always carry BeanSourceMeta.DEFAULT (primary = false), so default suppliers never
 		// contributes a primary candidate — only entryMetadata is consulted here.  Parent and
 		// overridingParent stores (including Spring-backed delegates) are similarly excluded because
 		// @Primary metadata only exists on beans this store registered itself.
 		Set<String> primaryNames = st();
-		var em = entryMetadata.get(beanType);
+		var x = extras;
+		var em = x == null ? null : x.entryMetadata.get(beanType);
 		if (nn(em))
 			em.forEach((name, meta) -> { if (meta.primary()) primaryNames.add(name); });
 		if (primaryNames.isEmpty())
@@ -962,9 +1027,10 @@ public class BasicBeanStore implements WritableBeanStore {
 	private int beanOrder(Class<?> type, String name) {
 		// @Order / priority is sourced from registered entries only.  Default suppliers always carry
 		// BeanSourceMeta.DEFAULT (which already returns Integer.MAX_VALUE/2), so we fall through to
-		// the same constant rather than consulting defaultMetadata redundantly.
+		// the same constant rather than tracking default-supplier metadata.
 		var key = emptyIfNull(name);
-		var m = entryMetadata.get(type);
+		var x = extras;
+		var m = x == null ? null : x.entryMetadata.get(type);
 		if (m != null)
 			return m.getOrDefault(key, BeanSourceMeta.DEFAULT).orderValue();
 		return Integer.MAX_VALUE / 2;

@@ -510,6 +510,19 @@ public class RichLogger extends java.util.logging.Logger {
 		delegate.setLevel(newLevel);
 	}
 
+	/**
+	 * Returns the wrapped JUL logger, which (unlike this wrapper) is linked into the JUL logger hierarchy.
+	 *
+	 * <p>
+	 * Use it to walk {@link java.util.logging.Logger#getParent() parent} loggers, e.g. to find where a level was
+	 * configured.
+	 *
+	 * @return The wrapped logger.  Never <jk>null</jk>.
+	 */
+	public java.util.logging.Logger getDelegate() {
+		return delegate;
+	}
+
 	@Override
 	public String getName() {
 		return delegate.getName();

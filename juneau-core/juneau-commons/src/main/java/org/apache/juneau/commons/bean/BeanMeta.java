@@ -377,6 +377,7 @@ public class BeanMeta<T> {
 	private final Map<String,BeanPropertyMeta> hiddenProperties;               // The hidden properties on the target class.
 	private final ConstructorInfo implClassConstructor;                        // Optional constructor to use if one cannot be found.
 	final String notABeanReason;                                       // Readable string explaining why this class wasn't a bean.
+	private final BeanPropertyMeta[] propertyArray;                           // The properties as an array, for allocation-free iteration.
 	private final Map<String,BeanPropertyMeta> properties;                     // The properties on the target class.
 	private final Map<Method,String> setterProps;                              // The setter properties on the target class.
 	private final List<String> requiredPropertyNames;                         // Names of @BeanProp(required=true) properties, in property order.
@@ -701,6 +702,7 @@ public class BeanMeta<T> {
 
 		notABeanReason = notABeanReasonTemp;
 		properties = u(propertiesValue.get());
+		propertyArray = properties == null ? new BeanPropertyMeta[0] : properties.values().toArray(new BeanPropertyMeta[0]);
 		hiddenProperties = u(hiddenPropertiesMap);
 		getterProps = u(getterPropsMap);
 		setterProps = u(setterPropsMap);
@@ -932,6 +934,16 @@ public class BeanMeta<T> {
 	 * @see #getHiddenProperties()
 	 */
 	public Map<String,BeanPropertyMeta> getProperties() { return properties; }
+
+	/**
+	 * Returns the properties as an array in property order.
+	 *
+	 * <p>
+	 * The returned array is shared and must not be modified.
+	 *
+	 * @return The properties array.
+	 */
+	BeanPropertyMeta[] getPropertyArray() { return propertyArray; }
 
 	/**
 	 * Returns metadata about the specified property.

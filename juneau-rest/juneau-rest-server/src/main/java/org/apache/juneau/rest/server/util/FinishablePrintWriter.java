@@ -39,7 +39,7 @@ public class FinishablePrintWriter extends PrintWriter implements Finishable {
 	 * @throws IOException Thrown by underlying stream.
 	 */
 	public FinishablePrintWriter(OutputStream out, String characterEncoding, boolean autoFlush) throws IOException {
-		super(new OutputStreamWriter(out, characterEncoding), autoFlush);
+		super(new BufferedEncodingWriter(out, characterEncoding), autoFlush);
 		f = (out instanceof Finishable out2 ? out2 : null);
 	}
 

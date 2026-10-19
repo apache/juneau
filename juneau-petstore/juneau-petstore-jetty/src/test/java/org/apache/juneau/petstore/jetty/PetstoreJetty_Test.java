@@ -28,6 +28,7 @@ import java.nio.file.*;
 import java.time.*;
 import java.util.*;
 import java.util.concurrent.*;
+import java.util.concurrent.atomic.*;
 import java.util.regex.*;
 
 import org.apache.juneau.*;
@@ -67,8 +68,24 @@ class PetstoreJetty_Test extends TestBase {
 	/** Every exit the shutdown resource asks for while this class runs; nothing here may stop the test JVM. */
 	private static final BlockingQueue<Integer> EXITS = new LinkedBlockingQueue<>();
 
+	/** Every exit the shutdown resource has asked for, including those drained from {@link #EXITS}. */
+	private static final AtomicInteger EXIT_COUNT = new AtomicInteger();
+
 	/** The shutdown resource mounted in place of the deployment's, so a shutdown is recorded instead of stopping the JVM. */
-	private static final ShutdownResource SHUTDOWN = new ShutdownResource(EXITS::add);
+	private static final ShutdownResource SHUTDOWN = new ShutdownResource(code -> {
+		EXIT_COUNT.incrementAndGet();
+		EXITS.add(code);
+	});
+
+	/** The exits that were expected, because a request the boundary admits was sent. */
+	private static final AtomicInteger EXPECTED_EXITS = new AtomicInteger();
+
+	/** A refused shutdown request has this long, from the moment it was sent, to show an exit: the resource exits about a second after it answers. */
+	private static final long EXIT_WINDOW_NANOS = TimeUnit.MILLISECONDS.toNanos(1500);
+
+	/** When the latest refused shutdown request was sent, and which requests were refused. */
+	private static volatile long lastRefusedNanos = System.nanoTime();
+	private static final List<String> REFUSED = new CopyOnWriteArrayList<>();
 
 	private static final HttpClient HTTP = HttpClient.newBuilder()
 		.connectTimeout(Duration.ofSeconds(5))
@@ -134,6 +151,27 @@ class PetstoreJetty_Test extends TestBase {
 	static void setUpServer() throws Exception {
 		warmUpServer();
 		mountTestShutdown();
+	}
+
+	/**
+	 * Records that a shutdown request which must not exit was just sent.
+	 *
+	 * <p>
+	 * The check that no exit follows is made once, in {@link #assertNoStrayExits()}, after the last of these has had its
+	 * full window; waiting out that window in every test would add it up, one test after another.
+	 */
+	private static void refusedShutdown(String what) {
+		REFUSED.add(what);
+		lastRefusedNanos = System.nanoTime();
+	}
+
+	/** Fails the class if any exit happened that an admitted request did not account for. */
+	@AfterAll
+	static void assertNoStrayExits() throws Exception {
+		var remaining = EXIT_WINDOW_NANOS - (System.nanoTime() - lastRefusedNanos);
+		if (remaining > 0)
+			TimeUnit.NANOSECONDS.sleep(remaining);
+		assertEquals(EXPECTED_EXITS.get(), EXIT_COUNT.get(), "Refused and GET requests must not schedule an exit; refused: " + REFUSED);
 	}
 
 	private static HttpResponse<String> get(String path, String accept) throws Exception {
@@ -583,7 +621,9 @@ class PetstoreJetty_Test extends TestBase {
 		assertEquals("SIMPLE_REQUEST_WITHOUT_ORIGIN", boundaryReason(simple));
 		var read = get("/shutdown", "application/json");
 		assertEquals(405, read.statusCode(), "body: " + read.body());
-		assertNull(EXITS.poll(1500, TimeUnit.MILLISECONDS), "Refused and GET requests must not schedule an exit");
+		refusedShutdown("g22 refused and GET requests");
+		assertTrue(EXITS.isEmpty(), "Refused and GET requests must not schedule an exit");
+		EXPECTED_EXITS.incrementAndGet();
 		var cli = send("POST", "/shutdown", "application/json", null, null, "");
 		assertEquals(200, cli.statusCode(), "body: " + cli.body());
 		assertNull(boundaryReason(cli));
@@ -598,7 +638,8 @@ class PetstoreJetty_Test extends TestBase {
 		var resp = HTTP.send(HttpRequest.newBuilder().uri(URI.create(self() + path)).timeout(Duration.ofSeconds(30))
 			.header("Content-Type", "application/x-www-form-urlencoded").POST(HttpRequest.BodyPublishers.ofString("")).build(), BodyHandlers.ofString());
 		assertTrue(resp.statusCode() >= 400 && resp.statusCode() < 500, path + " answered " + resp.statusCode() + ": " + resp.body());
-		assertNull(EXITS.poll(1500, TimeUnit.MILLISECONDS), path + " must not schedule an exit");
+		refusedShutdown(path);
+		assertTrue(EXITS.isEmpty(), path + " must not schedule an exit");
 	}
 
 	// Sends a GET with a Host header the HTTP client would not let us set, and returns "<status> <boundary reason>".

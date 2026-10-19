@@ -362,6 +362,15 @@ class ClassUtils_Test {
 
 		// Ordinary nested type still has $ but is not a proxy infix
 		assertNull(getProxyFor(new A_Nested()));
+
+		// Repeated lookups return the same (per-class cached) answers
+		for (var i = 0; i < 3; i++) {
+			assertEquals(List.class, getProxyFor(proxy));
+			assertNull(getProxyFor(proxy2));
+			assertEquals(A_User.class, getProxyFor(new A_User$HibernateProxy$1()));
+			assertNull(getProxyFor(new A_Nested()));
+			assertNull(getProxyFor("test"));
+		}
 	}
 
 	//====================================================================================================

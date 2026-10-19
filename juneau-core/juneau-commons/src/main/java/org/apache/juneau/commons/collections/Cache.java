@@ -587,6 +587,13 @@ public class Cache<K,V> {
 	 * @throws NullPointerException if no default supplier was configured.
 	 */
 	public V get(K key) {
+		if (! disableCaching) {
+			V v = getMap().get(mapKey(key));
+			if (v != null) {
+				cacheHits.increment();
+				return v;
+			}
+		}
 		return get(key, () -> supplier.apply(key));
 	}
 

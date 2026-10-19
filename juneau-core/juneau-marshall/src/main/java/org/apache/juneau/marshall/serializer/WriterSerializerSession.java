@@ -22,6 +22,7 @@ import java.io.*;
 import java.nio.charset.*;
 
 import org.apache.juneau.commons.collections.*;
+import org.apache.juneau.commons.io.*;
 
 /**
  * Subclass of {@link SerializerSession} for character-based serializers.
@@ -228,7 +229,7 @@ public class WriterSerializerSession extends SerializerSession {
 	 */
 	@Override /* Overridden from SerializerSession */
 	public final String write(Object o) throws SerializeException {
-		var w = new StringWriter();
+		var w = new StringBuilderWriter();
 		try {
 			write(o, w);
 		} catch (IOException e) {

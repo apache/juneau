@@ -1369,5 +1369,41 @@ class Cache_Test extends TestBase {
 			}
 		}
 	}
-}
 
+	@Test void z01_getSingleArg_hitDoesNotCallSupplier() {
+		var calls = new AtomicInteger();
+		var cache = Cache.of(String.class, String.class).supplier(k -> { calls.incrementAndGet(); return "v-" + k; }).build();
+		assertEquals("v-a", cache.get("a"));
+		assertEquals("v-a", cache.get("a"));
+		assertEquals("v-a", cache.get("a"));
+		assertEquals(1, calls.get());
+		assertEquals(2, cache.getCacheHits());
+		assertSize(1, cache);
+	}
+
+	@Test void z02_getSingleArg_nullResultNotCached() {
+		var calls = new AtomicInteger();
+		var cache = Cache.of(String.class, String.class).supplier(k -> { calls.incrementAndGet(); return null; }).build();
+		assertNull(cache.get("a"));
+		assertNull(cache.get("a"));
+		assertEquals(2, calls.get());
+		assertSize(0, cache);
+	}
+
+	@Test void z03_getSingleArg_disabledAlwaysCallsSupplier() {
+		var calls = new AtomicInteger();
+		var cache = Cache.of(String.class, String.class).cacheMode(CacheMode.NONE).supplier(k -> { calls.incrementAndGet(); return "v"; }).build();
+		cache.get("a");
+		cache.get("a");
+		assertEquals(2, calls.get());
+		assertEquals(0, cache.getCacheHits());
+	}
+
+	@Test void z04_getSingleArg_arrayKeysMatchByContent() {
+		var calls = new AtomicInteger();
+		var cache = Cache.of(String[].class, String.class).supplier(k -> { calls.incrementAndGet(); return String.join(",", k); }).build();
+		assertEquals("a,b", cache.get(new String[]{"a", "b"}));
+		assertEquals("a,b", cache.get(new String[]{"a", "b"}));
+		assertEquals(1, calls.get());
+	}
+}
