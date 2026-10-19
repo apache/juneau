@@ -67,6 +67,7 @@ def clean_run_env(monkeypatch):
     monkeypatch.delitem(sys.modules, "juneau_run", raising=False)
     # Pin the plain view: push.py itself now defaults to condensed; the tests below that want the default unset this.
     monkeypatch.setenv("JUNEAU_RUN_CONSOLE", "full")
+    monkeypatch.setenv("JRM_SCRIPT_TESTS_ACTIVE", "1")  # second line of defence against a nested suite run
     monkeypatch.setenv("JRM_PUSH_NO_BELL", "1")  # keep the main()-calling tests quiet under `pytest -s`
 
 
@@ -87,7 +88,12 @@ class _Push:
 @pytest.fixture
 def push_module():
     """A fresh root push.py module object (toolkit bound), loaded once per test."""
-    return _Push(_load_push_module())
+    module = _load_push_module()
+    # The Script tests step would launch this very suite from every main()-calling test (Juneau J0867: a runaway nested
+    # pytest), so stub it; TestScriptTests drives the real one through _real_script_tests.
+    module._real_script_tests = module._script_tests
+    module._script_tests = lambda *_a, **_k: True
+    return _Push(module)
 
 
 # ---------------------------------------------------------------------------------------
@@ -781,3 +787,126 @@ class TestPushTracked:
         _stage(repo)
         assert push_module.commit_and_push(repo, "msg", dry_run=True) == 0
         assert "git push origin HEAD:refs/heads/master" in capsys.readouterr().out
+
+
+# ---------------------------------------------------------------------------------------
+# The Script tests step: the scripts/tests pytest suite, run before the commit.
+# ---------------------------------------------------------------------------------------
+class _Result:
+    def __init__(self, code=0, out=""):
+        self.ok, self.code, self.out = code == 0, code, out
+
+
+class _FakeSession:
+    def __init__(self):
+        self.failed = None
+
+    def fail(self, text):
+        self.failed = text
+        raise SystemExit(1)
+
+
+class TestScriptTests:
+    @pytest.fixture(autouse=True)
+    def live_step(self, monkeypatch):
+        monkeypatch.delenv("JRM_SCRIPT_TESTS_ACTIVE", raising=False)
+
+    @pytest.fixture
+    def cmds(self, push_module, monkeypatch):
+        """Record run.cmd calls (cmd, env); answer them with the code in cmds.code."""
+        calls = []
+
+        class Calls(list):
+            code = 0
+            out = ""
+
+        calls = Calls()
+
+        def fake_cmd(cmd, **kwargs):
+            calls.append((list(cmd), kwargs))
+            return _Result(calls.code, calls.out)
+
+        monkeypatch.setattr(push_module.run, "cmd", fake_cmd)
+        return calls
+
+    def _launcher(self, push_module, monkeypatch, *, pytest_importable, uv):
+        monkeypatch.setattr(push_module.module.subprocess, "run",
+                            lambda *_a, **_k: subprocess.CompletedProcess([], 0 if pytest_importable else 1))
+        monkeypatch.setattr(push_module.module.shutil, "which",
+                            lambda name: f"/bin/{name}" if name == "python3" or (name == "uv" and uv) else None)
+        return push_module.script_tests_launcher()
+
+    def test_launcher_prefers_importable_pytest(self, push_module, monkeypatch):
+        assert self._launcher(push_module, monkeypatch, pytest_importable=True, uv=True) == ["/bin/python3", "-m", "pytest"]
+
+    def test_launcher_falls_back_to_uv(self, push_module, monkeypatch):
+        assert self._launcher(push_module, monkeypatch, pytest_importable=False, uv=True) == [
+            "uv", "run", "--native-tls", "--with", "pytest", "pytest"]
+
+    def test_launcher_is_none_without_pytest_or_uv(self, push_module, monkeypatch):
+        assert self._launcher(push_module, monkeypatch, pytest_importable=False, uv=False) is None
+
+    def test_command_runs_scripts_tests_quietly(self, push_module):
+        assert push_module.script_tests_command(["p"]) == ["p", "-q", "-p", "no:cacheprovider", "scripts/tests"]
+
+    def test_no_launcher_skips_with_a_notice(self, push_module, monkeypatch, cmds, capsys, tmp_path):
+        monkeypatch.setattr(push_module.module, "script_tests_launcher", lambda: None)
+        assert push_module._real_script_tests(_FakeSession(), tmp_path, False) is True
+        assert not cmds
+        assert "Skipping Script tests" in capsys.readouterr().out
+
+    def test_passing_suite_runs_in_the_repo_and_lets_the_push_continue(self, push_module, cmds, tmp_path):
+        assert push_module._real_script_tests(_FakeSession(), tmp_path, False, launcher=["pytest"]) is True
+        cmd, kwargs = cmds[0]
+        assert cmd == ["pytest", "-q", "-p", "no:cacheprovider", "scripts/tests"]
+        assert kwargs["cwd"] == str(tmp_path)
+
+    def test_failing_suite_refuses_the_push(self, push_module, cmds, tmp_path):
+        cmds.code = 1
+        s = _FakeSession()
+        with pytest.raises(SystemExit):
+            push_module._real_script_tests(s, tmp_path, False, launcher=["pytest"])
+        assert "nothing committed" in s.failed
+
+    def test_failing_suite_under_dry_run_is_a_would_refuse_warning(self, push_module, cmds, tmp_path, capsys):
+        cmds.code = 1
+        s = _FakeSession()
+        assert push_module._real_script_tests(s, tmp_path, True, launcher=["pytest"]) is False
+        assert s.failed is None
+        assert "Would refuse" in capsys.readouterr().out
+
+    def test_recursion_guard_skips_the_step(self, push_module, monkeypatch, cmds, tmp_path, capsys):
+        monkeypatch.setenv("JRM_SCRIPT_TESTS_ACTIVE", "1")
+        assert push_module._real_script_tests(_FakeSession(), tmp_path, False, launcher=["pytest"]) is True
+        assert not cmds
+        assert "no recursion" in capsys.readouterr().out
+
+    def test_child_env_carries_the_recursion_guard(self, push_module, monkeypatch):
+        monkeypatch.setenv("JUNEAU_RUN_PY", "/x/juneau_run.py")
+        env = push_module.script_tests_env()
+        assert env["JRM_SCRIPT_TESTS_ACTIVE"] == "1"
+        assert env["JUNEAU_RUN_PY"] == "/x/juneau_run.py"  # a set value is never replaced
+
+    def test_unset_juneau_run_py_is_exported_when_the_canonical_file_exists(self, push_module, monkeypatch, tmp_path):
+        fake = tmp_path / "juneau_run.py"
+        fake.write_text("", encoding="utf-8")
+        monkeypatch.delenv("JUNEAU_RUN_PY", raising=False)
+        monkeypatch.setattr(push_module.module, "JUNEAU_RUN_PY_DEFAULT", fake)
+        assert push_module.script_tests_env()["JUNEAU_RUN_PY"] == str(fake)
+
+    def test_unset_juneau_run_py_stays_unset_without_the_canonical_file(self, push_module, monkeypatch, tmp_path):
+        monkeypatch.delenv("JUNEAU_RUN_PY", raising=False)
+        monkeypatch.setattr(push_module.module, "JUNEAU_RUN_PY_DEFAULT", tmp_path / "missing.py")
+        assert "JUNEAU_RUN_PY" not in push_module.script_tests_env()
+
+    def test_failing_suite_commits_nothing_through_main(self, push_module, repo, remote_repo, monkeypatch):
+        (repo / "README.md").write_text("new content\n", encoding="utf-8")
+        _run(repo, "git", "add", "README.md")
+        head_before = _run(repo, "git", "rev-parse", "HEAD")
+        monkeypatch.setattr(push_module.module, "_script_tests", push_module._real_script_tests)
+        monkeypatch.setattr(push_module.module, "script_tests_launcher", lambda: ["pytest"])
+        monkeypatch.setattr(push_module.run, "cmd", lambda *_a, **_k: _Result(1, "boom"))
+
+        assert push_module.main(["msg"], repo_dir=repo) != 0
+        assert _run(repo, "git", "rev-parse", "HEAD") == head_before
+        assert _run(remote_repo, "git", "rev-parse", "master") == head_before

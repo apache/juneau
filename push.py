@@ -31,16 +31,23 @@ Usage:
     already in the environment; with neither, the default is condensed), exactly as scripts/test.py does in
     apache/juneau.  Condensed (the default, or RUN_MARKERS=1) makes this script load juneau_run, with the git output
     going to the full log; full and none leave it unloaded, so both give the plain output.  This script
-    has no Maven step, so the console view shows the Prechecks, Commit and Push steps only.
+    has no Maven step, so the console view shows the Prechecks, Script tests, Commit and Push steps only.
 
     When a run ends (success or failure) on a terminal, push.py rings the terminal bell.
     Set JRM_PUSH_NO_BELL=1 to silence it (it is also skipped when SANDBOX_RUNTIME=1).
 
-Steps: Prechecks, Commit, Push.  Prechecks is one row of four checks that all run, none stopping at the first
+Steps: Prechecks, Script tests, Commit, Push.  Prechecks is one row of four checks that all run, none stopping at the first
     failure: identity, unreviewed (the review gate), staged (a warning, "nothing staged", ends the run with nothing to
     do) and upstream.  The upstream check fetches and refuses (before the commit) when the branch is behind its
     upstream, since the push would be rejected anyway; a branch with no upstream proceeds (the push then sets it),
     and a fetch error fails closed.  Under --dry-run each failing check shows as a "would refuse" warning.
+    Script tests runs the scripts/tests pytest suite before the commit, so a push cannot ship a broken release CLI; a
+    failure refuses the push (nothing committed).  The launcher is `python3 -m pytest` when pytest is importable, else
+    `uv run --native-tls --with pytest pytest` when uv is on the PATH, else the step is skipped with a visible notice
+    (as in Juneau's scripts/test.py).  JUNEAU_RUN_PY is exported to the child when it is unset and the canonical Juneau
+    checkout has juneau_run.py, so the release CLI tests run instead of skipping.  JRM_SCRIPT_TESTS_ACTIVE is set in
+    the child and the step is skipped when it is already set, so tests that call main() cannot recurse.  Under --dry-run
+    the suite still runs (it only reads), and a failure is a "would refuse" warning.  Clean tree: no tests run.
 
 Safety:
     - Never uses --force or --no-verify.
@@ -62,10 +69,17 @@ bell helpers.
 
 import argparse
 import os
+import shutil
+import subprocess
 import sys
 from pathlib import Path
 
 REPO_DIR = Path(__file__).resolve().parent
+
+# Set in the pytest child so a test that reaches the Script tests step again cannot launch the suite recursively.
+SCRIPT_TESTS_ACTIVE = "JRM_SCRIPT_TESTS_ACTIVE"
+# Where the canonical Juneau checkout keeps juneau_run.py; test_release_cli.py skips without JUNEAU_RUN_PY.
+JUNEAU_RUN_PY_DEFAULT = Path.home() / "git" / "apache" / "juneau" / "juneau-run" / "src" / "main" / "python" / "juneau_run.py"
 
 sys.path.insert(0, str(REPO_DIR / "scripts"))  # push.py lives at the repo root; bootstrap.py is vendored under scripts/
 
@@ -157,6 +171,66 @@ def _prechecks(s, repo_dir, dry_run):
     ], dry_run=dry_run)
 
 
+def script_tests_launcher():
+    """The command prefix that runs pytest, or None.  `python3 -m pytest` when pytest is importable, else
+    `uv run --native-tls --with pytest pytest` when uv is on the PATH.  Nothing is ever installed."""
+    python = shutil.which("python3") or sys.executable
+    try:
+        importable = subprocess.run([python, "-c", "import pytest"], capture_output=True).returncode == 0
+    except OSError:
+        importable = False
+    if importable:
+        return [python, "-m", "pytest"]
+    if shutil.which("uv"):
+        return ["uv", "run", "--native-tls", "--with", "pytest", "pytest"]
+    return None
+
+
+def script_tests_command(launcher):
+    return [*launcher, "-q", "-p", "no:cacheprovider", "scripts/tests"]
+
+
+def script_tests_env():
+    """The child's environment: the recursion guard, no bytecode, and JUNEAU_RUN_PY when it is unset and findable."""
+    env = dict(os.environ, PYTHONDONTWRITEBYTECODE="1", **{SCRIPT_TESTS_ACTIVE: "1"})
+    if not env.get("JUNEAU_RUN_PY") and JUNEAU_RUN_PY_DEFAULT.is_file():
+        env["JUNEAU_RUN_PY"] = str(JUNEAU_RUN_PY_DEFAULT)
+    return env
+
+
+def _script_tests(s, repo_dir, dry_run, launcher=None):
+    """
+    The Script tests row: the scripts/tests pytest suite, run before the commit.  A failure refuses the push -- nothing
+    is committed -- except under --dry-run, where it is a "would refuse" warning.  Skipped, with a notice, when already
+    inside the suite (the recursion guard) or when neither pytest nor uv is available.  Returns True when the push may
+    go on.
+    """
+    if os.environ.get(SCRIPT_TESTS_ACTIVE):
+        say("⚠ Skipping Script tests: already running inside them (no recursion).")
+        return True
+    launcher = launcher or script_tests_launcher()
+    if launcher is None:
+        say("⚠ Skipping Script tests: neither pytest nor uv found (python3 -m pytest / uv run --native-tls --with pytest).")
+        run_markers.note("warn", "Script tests skipped: neither pytest nor uv found.")
+        return True
+    cmd = script_tests_command(launcher)
+    say("\n🐍 Running Script tests (scripts/tests)...")
+    say(f"Running: {' '.join(cmd)}")
+    r = run.cmd(cmd, title="Script tests", id="script-tests", tool="pytest", cwd=str(repo_dir), env=script_tests_env(),
+                capture=True)
+    if r.ok:
+        say("✅ Script tests passed!")
+        return True
+    if r.out:
+        say(r.out[-4000:])
+    if dry_run:
+        say(f"⚠ Would refuse to push: Script tests failed (exit code {r.code}).")
+        run_markers.note("warn", f"Dry run — would refuse to push: Script tests failed (exit code {r.code}).")
+        return False
+    s.fail(f"\n❌ ERROR: Script tests failed (exit code {r.code}); nothing committed.")
+    return False
+
+
 def _dry_run_report(staged, message, repo_dir):
     """The --dry-run report: what the commit and push would do."""
     plural = "" if len(staged) == 1 else "s"
@@ -215,8 +289,8 @@ def _push(s, repo_dir, sha):
 
 def commit_and_push(s, repo_dir, cli_message, *, dry_run=False):
     """
-    Run the Prechecks, then commit whatever is already staged in repo_dir and push, refusing to commit or push ANYTHING
-    if a precheck fails (identity, unreviewed content, behind upstream; see _prechecks()).
+    Run the Prechecks and the Script tests, then commit whatever is already staged in repo_dir and push, refusing to commit or push ANYTHING
+    if a precheck fails (identity, unreviewed content, behind upstream; see _prechecks()) or the Script tests fail.
 
     A fully CLEAN tree (nothing staged, nothing unreviewed) is a benign no-op, not a refusal: there is genuinely
     nothing to commit, and this repo has no push-only path.  --dry-run reports the real outcome and changes nothing;
@@ -232,6 +306,9 @@ def commit_and_push(s, repo_dir, cli_message, *, dry_run=False):
     if result.verdicts["staged"].status == "warn":
         say("⚠ Nothing to commit — working tree is clean. Nothing to do.")
         run_markers.note("warn", "Nothing to commit — working tree is clean.")
+        return
+
+    if not _script_tests(s, repo_dir, dry_run):
         return
 
     message = resolve_commit_message(s, cli_message)
@@ -270,8 +347,8 @@ Examples:
   ./push.py --dry-run "Would-be commit message"
   ./push.py --console full "Fix credential validator NPE"
 
-Steps: Prechecks (identity, review gate, staged, upstream: refuses when behind upstream, before committing), Commit,
-Push.
+Steps: Prechecks (identity, review gate, staged, upstream: refuses when behind upstream, before committing), Script
+tests (scripts/tests pytest; a failure refuses the push), Commit, Push.
         """,
     )
     parser.add_argument(
@@ -308,7 +385,7 @@ Push.
     with run.session("🚀 juneau-release-manager push", header=(git.current_branch(repo_dir) or "HEAD",), bell=True,
                      silence_env="JRM_PUSH_NO_BELL", mode="push", project="juneau-release-manager",
                      repo=repo_dir, exit=False,
-                     plan=[("prechecks", "Prechecks"), ("commit", "Commit"), ("push", "Push")]) as s:
+                     plan=[("prechecks", "Prechecks"), ("script-tests", "Script tests"), ("commit", "Commit"), ("push", "Push")]) as s:
         if not run_markers.console_active():
             say("=" * 70)
             say("📦 juneau-release-manager push")
