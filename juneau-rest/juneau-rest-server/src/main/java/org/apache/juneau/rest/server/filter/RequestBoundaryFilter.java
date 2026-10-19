@@ -302,6 +302,11 @@ public class RequestBoundaryFilter implements Filter {
 	 * has been fixed.
 	 *
 	 * <p>
+	 * The request body is never read, so the connection is marked {@code Connection: close}.  Without it, a client that has
+	 * not yet finished sending the body reuses the connection while the container is closing it, and the next request
+	 * on it fails with an empty response.
+	 *
+	 * <p>
 	 * The stream is written to but deliberately not closed: it belongs to the container, which commits and
 	 * releases it once the filter returns.  Closing it here would commit the response early and cut off any
 	 * outer filter that wraps it.
@@ -314,6 +319,7 @@ public class RequestBoundaryFilter implements Filter {
 		res.setStatus(result.status());
 		res.setHeader(REJECTION_HEADER, result.reason().name());
 		res.setHeader("Cache-Control", "no-store");
+		res.setHeader("Connection", "close");
 		res.setContentType("application/json;charset=utf-8");
 		var body = "{\"reason\":\"" + result.reason().name() + "\",\"message\":\"" + escape(result.message()) + "\"}";
 		var bytes = body.getBytes(StandardCharsets.UTF_8);

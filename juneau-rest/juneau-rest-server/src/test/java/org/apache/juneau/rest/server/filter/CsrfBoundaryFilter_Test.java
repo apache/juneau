@@ -321,6 +321,7 @@ class CsrfBoundaryFilter_Test extends TestBase {
 		verify(c.res()).setStatus(x.status());
 		assertEquals(List.of(reason.name()), c.header(RequestBoundaryFilter.REJECTION_HEADER));
 		assertEquals(List.of("no-store"), c.header("Cache-Control"));
+		assertEquals(List.of("close"), c.header("Connection"), "an unread request body must not leave the connection reusable");
 		for (var h : List.of("Expires", "ETag", "Last-Modified", "Set-Cookie"))
 			assertEquals(List.of(), c.header(h), h);
 		verify(req, never()).getSession(true);

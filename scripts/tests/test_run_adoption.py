@@ -260,7 +260,7 @@ def test_push_test_only_emits_mode_test_and_never_commits(push_mod, gates, monke
     events = markers(capsys.readouterr().out)
     project = Path(push_mod.__file__).resolve().parent.parent.name
     assert events[0] == {"ev": "run", "v": 1, "mode": "test", "project": project}
-    assert [e["id"] for e in events if e["ev"] == "step"] == ["pgp", "container-tags", "bom", "install", "starters"]
+    assert [e["id"] for e in events if e["ev"] == "step"] == ["container-tags", "bom", "install", "starters"]
     assert events[-2] == {"ev": "note", "level": "info", "text": "Test-only run: nothing was committed or pushed"}
     assert events[-1] == {"ev": "done", "status": "ok"}
     assert not {"identity", "commit", "docs"} & set(gates.calls)
@@ -310,9 +310,8 @@ def test_push_failed_gate_ends_the_run_with_done_fail(push_mod, gates, monkeypat
     monkeypatch.setattr(sys, "argv", ["push.py", "--test-only"])
     assert push_mod.main() == 1
     events = markers(capsys.readouterr().out)
-    assert events[1] == {"ev": "step", "id": "pgp", "n": 1, "title": "PGP passphrase"}
-    assert events[3] == {"ev": "step", "id": "container-tags", "n": 2, "title": "Container test tags"}
-    assert events[4]["status"] == "fail"
+    assert events[1] == {"ev": "step", "id": "container-tags", "n": 1, "title": "Container test tags"}
+    assert events[2]["status"] == "fail"
     assert events[-1] == {"ev": "done", "status": "fail"}
 
 
@@ -359,7 +358,7 @@ def test_push_reserves_step_numbers_for_the_steps_test_py_contributes(push_mod, 
     env = _capture_child_env(push_mod, monkeypatch, gates)
     monkeypatch.setattr(sys, "argv", ["push.py", "--test-only"])
     assert push_mod.main() == 0
-    assert env["JUNEAU_RUN_N_BASE"] == "3"    # after PGP, Tags and BOM
+    assert env["JUNEAU_RUN_N_BASE"] == "2"    # after Tags and BOM
 
 
 def test_push_test_only_fallback_runs_mvn_test_as_a_maven_step(push_mod, gates, monkeypatch, capsys):
@@ -443,7 +442,7 @@ def test_sigterm_ends_the_run_as_cancelled_and_leaves_no_orphan(script, tmp_path
     for variable in ("JUNEAU_RUN_ACTIVE", "JUNEAU_RUN_N_BASE", "JUNEAU_MVN_WRAPPER"):
         env.pop(variable, None)
     # A scratch tree holding only copies of the two scripts (and the real juneau-run), so push.py's other gates
-    # (container tags, BOM, PGP prompt) have nothing to run and nothing real is built.
+    # (container tags, BOM) have nothing to run and nothing real is built.
     root = tmp_path / "tree"
     (root / "scripts").mkdir(parents=True)
     for name in ("push.py", "test.py", "_juneau.py"):
@@ -665,29 +664,18 @@ def test_push_rejects_an_unknown_detail_level(push_mod, gates, monkeypatch, caps
     assert "actionable" in capsys.readouterr().err
 
 
-def test_push_identity_and_pgp_are_rows_not_header_marks(push_mod, gates, monkeypatch, capsys):
+def test_push_identity_is_a_row_not_a_header_mark(push_mod, gates, monkeypatch, capsys):
     monkeypatch.setenv("JUNEAU_RUN_CONSOLE", "condensed")
     events = push_mod._juneau.load()[0].subscribe(Events())
     monkeypatch.setattr(sys, "argv", ["push.py", "Quick fix", "--skip-tests"])
     assert push_mod.main() == 0
     [session] = events.of("session")
     assert session["title"] == "🚀 Juneau push · main"
-    assert not [line for line in session["header"] if "✓" in line or "PGP" in line]
-    assert [f["id"] for f in events.of("step_start")][:2] == ["prechecks", "pgp"]
+    assert not [line for line in session["header"] if "✓" in line]
+    assert [f["id"] for f in events.of("step_start")][:1] == ["prechecks"]
     out = capsys.readouterr().out
     assert "=" * 70 not in out
     assert "Juneau Build and Push Script" not in out
-
-
-def test_push_prompts_for_pgp_before_the_gates(push_mod, gates, monkeypatch):
-    order = []
-    monkeypatch.setattr(push_mod.subprocess, "run", lambda cmd, *a, **k: order.append(
-        "pgp" if "prompt-pgp-passphrase.py" in " ".join(map(str, cmd)) else "other") or
-        subprocess.CompletedProcess(cmd, 0, "", ""))
-    monkeypatch.setattr(push_mod, "run_sonarqube_gate", lambda root, n: order.append("sonar") or "pass")
-    monkeypatch.setattr(sys, "argv", ["push.py", "Quick fix", "--skip-tests", "--sonarqube"])
-    assert push_mod.main() == 0
-    assert order.index("pgp") < order.index("sonar")
 
 
 def test_push_hands_the_console_to_test_py(push_mod, gates, standalone, monkeypatch):
@@ -699,8 +687,8 @@ def test_push_hands_the_console_to_test_py(push_mod, gates, standalone, monkeypa
         ("test.py", env.get("JUNEAU_RUN_LABEL_WIDTH"))) or subprocess.CompletedProcess(cmd, 0))
     monkeypatch.setattr(sys, "argv", ["push.py", "--test-only"])
     assert push_mod.main() == 0
-    # the PGP row pauses first; the final line may pause again
-    assert calls[:5] == ["pause", "resume", "pause", ("test.py", "13"), "resume"]
+    # the final line may pause again
+    assert calls[:3] == ["pause", ("test.py", "13"), "resume"]
 
 
 def test_push_ctrl_c_with_a_console_is_a_clean_cancel(push_mod, gates, standalone, monkeypatch):
@@ -1000,7 +988,7 @@ def test_push_child_env_carries_push_active_and_n_base_under_markers(push_mod, g
     monkeypatch.setattr(sys, "argv", ["push.py", "--test-only"])
     assert push_mod.main() == 0
     assert env["JUNEAU_PUSH_ACTIVE"] == "1"
-    assert env["JUNEAU_RUN_N_BASE"] == "3"    # after PGP, Tags and BOM
+    assert env["JUNEAU_RUN_N_BASE"] == "2"    # after Tags and BOM
 
 
 def test_push_child_env_has_push_active_but_no_n_base_without_markers(push_mod, gates, monkeypatch):
@@ -1060,9 +1048,9 @@ def test_push_plain_ctrl_c_in_the_session_exits_130(push_mod, gates, monkeypatch
 
 
 @pytest.mark.parametrize("argv, expected", [
-    (["--test-only"], ["pgp", "container-tags", "bom", "build", "tests", "py-tests", "js-tests", "timing", "install", "starters"]),
+    (["--test-only"], ["container-tags", "bom", "build", "tests", "py-tests", "js-tests", "timing", "install", "starters"]),
     (["Quick fix", "--skip-tests", "--tracker-audit"],
-     ["prechecks", "pgp", "tracker", "tests", "install", "starters", "commit", "push"]),
+     ["prechecks", "tracker", "tests", "install", "starters", "commit", "push"]),
 ])
 def test_push_session_plan_lists_the_steps_this_run_will_take(push_mod, gates, standalone, monkeypatch, argv, expected):
     _, events, _ = standalone
@@ -1096,7 +1084,7 @@ def test_push_plan_puts_the_opt_in_gates_first_and_forced_browser_tests_after_te
     args = argparse.Namespace(sonarqube=True, tracker_audit=True, skip_tests=False, js_tests=True, test_only=False)
     assert [step_id for step_id, _ in push_mod.push_plan(args, script_dir, script_dir.parent, False)] == [
         "prechecks", "sonar", "tracker", "bom", "build", "tests", "py-tests", "js-tests", "install", "starters", "commit", "push",
-        "docs-smoke", "docs-commit", "docs-push"]    # no prompt-pgp-passphrase.py here, so no PGP row
+        "docs-smoke", "docs-commit", "docs-push"]  
 
 
 # The one loader push.py, test.py and release.py share (scripts/_juneau.py).

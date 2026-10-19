@@ -998,7 +998,6 @@ def _stub_push_flow(push_module, monkeypatch, *, tests_pass, test_py=True):
     calls = []
     for name in ("run_timing_report", "verify_starter_repos"):
         monkeypatch.setattr(push_module, name, lambda *a, **k: True)
-    monkeypatch.setattr(push_module, "prompt_pgp_passphrase", lambda *a, **k: None)
     monkeypatch.setattr(push_module, "run_command",
                         lambda cmd, *a, **k: tests_pass if cmd == ["mvn", "test"] else True)
     monkeypatch.setattr(push_module, "_append_test_run_history", lambda *a: calls.append(a))
@@ -1252,15 +1251,14 @@ def test_the_gates_go_through_the_toolkit_gate(push_module, monkeypatch):
 # Prechecks: unreviewed changes and a behind-upstream branch refuse before any gate runs.
 # ---------------------------------------------------------------------------------------
 class _PastPrechecks(Exception):
-    """Raised by the stubbed PGP row: the push got past its Prechecks to the first gate."""
+    """Raised by the stubbed first gate: the push got past its Prechecks to the first gate."""
 
 
 @pytest.fixture
 def flow(push_module, repo, monkeypatch):
     """_main() pointed at `repo` (scripts/ beside it) with a stand-in session: the real Prechecks run, and the push
-    stops at the PGP row.  `gates` records "pgp" and "session" when the push got that far."""
+    stops at the first gate.  `gates` records "gate" and "session" when the push got that far."""
     (repo / "scripts").mkdir()
-    (repo / "scripts" / push_module.PGP_PROMPT).write_text("", encoding="utf-8")
     monkeypatch.setattr(push_module, "__file__", str(repo / "scripts" / "push.py"))
     _run(repo, "git", "config", "user.email", push_module.REQUIRED_GIT_EMAIL)
     gates = []
@@ -1282,11 +1280,11 @@ def flow(push_module, repo, monkeypatch):
             gates.append("session")
             return 0
 
-    def pgp(script_dir):
-        gates.append("pgp")
+    def first_gate(*a, **k):
+        gates.append("gate")
         raise _PastPrechecks()
 
-    monkeypatch.setattr(push_module, "pgp_row", pgp)
+    monkeypatch.setattr(push_module, "maybe_run_tracker_audit_gate", first_gate)
     monkeypatch.setattr(push_module, "_in_session", in_session)
     monkeypatch.setattr(push_module, "resolve_commit_message", lambda m: m)
     monkeypatch.setattr(push_module, "current_branch", lambda root: "master")
@@ -1311,13 +1309,13 @@ def _push_from_elsewhere(tmp_path: Path, remote_repo: Path) -> None:
 class TestPrechecks:
     def test_up_to_date_and_clean_proceeds_to_the_gates(self, flow):
         assert flow("message") == 0
-        assert flow.gates == ["pgp", "session"]
+        assert flow.gates == ["gate", "session"]
 
     def test_behind_refuses_before_any_gate_with_ff_only_hint(self, flow, tmp_path, remote_repo, capsys):
         _push_from_elsewhere(tmp_path, remote_repo)
 
         assert flow("message") == 1
-        assert flow.gates == []    # no PGP prompt, no gate, mvn or test.py was reached
+        assert flow.gates == []    # no gate, mvn or test.py was reached
         out = capsys.readouterr().out
         assert "✗ upstream: 1 commit behind upstream" in out
         assert "git merge --ff-only @{upstream}" in out
@@ -1382,7 +1380,7 @@ class TestPrechecks:
         _push_from_elsewhere(tmp_path, remote_repo)
 
         assert flow("--test-only") == 0    # nothing is committed or pushed, so behind-upstream is irrelevant
-        assert flow.gates == ["pgp", "session"]
+        assert flow.gates == ["gate", "session"]
 
     def test_dry_run_reports_would_refuse_and_exits_zero(self, flow, tmp_path, repo, remote_repo, capsys):
         _push_from_elsewhere(tmp_path, remote_repo)

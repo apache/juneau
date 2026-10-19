@@ -120,6 +120,15 @@ def find_maven_module(path: Path) -> Path:
     return None
 
 
+def modules_to_test(module: Path) -> list[Path]:
+    """
+    The modules whose tests exercise `module`: the module itself, plus its sibling `<name>-tests` module when one
+    exists (a module whose tests moved out to a dedicated module has none of its own).
+    """
+    tests = module.parent / f"{module.name}-tests"
+    return [module, tests] if (tests / "pom.xml").exists() else [module]
+
+
 def path_to_jacoco_package(path: Path) -> tuple[str | None, str | None]:
     """
     Given a source path, return (jacoco_package, filename).
@@ -311,17 +320,17 @@ def jacoco_cli_jar() -> Path:
 
 
 def run_tests(module: Path):
-    """Re-run a single module's tests to refresh its .exec file.
+    """Re-run a module's tests (and those of its sibling `-tests` module, if any) to refresh the .exec files.
 
     Scoped to the owning module so single-file/class queries stay fast.  Other
     modules' existing execs are still merged in when the report is generated.
     Requires upstream module artifacts to be available in the local repo (from a
     prior full build, e.g. `mvn install -DskipTests`).
     """
-    rel = module.relative_to(REPO_ROOT)
-    print(f"Running tests for module {rel} to refresh coverage data...")
+    rels = ",".join(str(m.relative_to(REPO_ROOT)) for m in modules_to_test(module))
+    print(f"Running tests for module {rels} to refresh coverage data...")
     result = subprocess.run(
-        ["mvn", "-pl", str(rel), "test", "-Drat.skip=true", "-q"],
+        ["mvn", "-pl", rels, "test", "-Drat.skip=true", "-q"],
         cwd=REPO_ROOT,
         capture_output=True,
         text=True

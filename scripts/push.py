@@ -108,35 +108,6 @@ def run_gate(cmd, cwd, step_id, title, label):
                         label=label).exit
 
 
-PGP_PROMPT = "prompt-pgp-passphrase.py"
-
-
-def prompt_pgp_passphrase(script_dir):
-    """Run the dummy-sign prompt on the bare terminal: True or False for how it went, None if the script is absent."""
-    prompt_script = script_dir / PGP_PROMPT
-    if not prompt_script.exists():
-        return None
-    try:
-        # check=False: a failed prompt never stops the push; signing just prompts again later.
-        return subprocess.run([sys.executable, str(prompt_script)], check=False).returncode == 0
-    except Exception as e:
-        print(f"⚠ Could not run PGP passphrase prompt: {e}")
-        return False
-
-
-def pgp_row(script_dir):
-    """
-    The PGP row: the dummy-sign prompt, with the console paused so the prompt has the bare terminal.  A prompt that
-    fails warns on the row and the push goes on (signing just prompts again later).
-    """
-    run = toolkit("run")
-    with run.step("pgp", "PGP passphrase", label="PGP") as step:
-        with run.paused():
-            ok = prompt_pgp_passphrase(script_dir)
-        if ok is False:
-            step.warn("passphrase not cached; signing will prompt again")
-
-
 def aborted(text, *hint):
     """
     Stop the push after a failed row: text and the hint lines as error lines, or under a console view (where the
@@ -1113,7 +1084,7 @@ def main():
 #: Each step's row label, for the labelled plan (a pending row until the step starts).  build, tests and js-tests
 #: are test.py's rows; the others are this script's.
 PLAN_LABELS = {
-    "prechecks": "Prechecks", "pgp": "PGP", "sonar": "Sonar", "tracker": "Tracker", "container-tags": "Tags",
+    "prechecks": "Prechecks", "sonar": "Sonar", "tracker": "Tracker", "container-tags": "Tags",
     "bom": "BOM", "build": "Compile", "tests": "Tests", "py-tests": "Script tests", "js-tests": "Browser tests", "timing": "Timing",
     "install": "Install", "starters": "Starters", "commit": "Commit", "push": "Push", "docs-smoke": "Docs build",
     "docs-commit": "Docs", "docs-push": "Docs push",
@@ -1124,8 +1095,6 @@ def push_plan(args, script_dir, juneau_root, console):
     """The top-level steps this run will take, in order, as (id, label) pairs, for the console's pending rows and
     Overall figure."""
     ids = [] if args.test_only else ["prechecks"]
-    if (script_dir / PGP_PROMPT).exists():
-        ids.append("pgp")
     if args.sonarqube:
         ids.append("sonar")
     if args.tracker_audit:
@@ -1337,8 +1306,6 @@ def _main():  # NOSONAR python:S3776 -- Cognitive complexity is acceptable for t
                   "(unstaged/untracked) changes and the branch isn't behind upstream (git fetch + compare) -- juneau, and "
                   "juneau-docs when present -- before any gate runs; the last two are checked again before the commit")
             step_num += 1
-        print(f"  {step_num}. Prompt for PGP passphrase (dummy call)")
-        step_num += 1
         if args.sonarqube:
             _branch = current_branch(juneau_root)
             _branch_arg = f" --branch {_branch}" if _branch not in ("master", "unknown") else ""
@@ -1389,9 +1356,6 @@ def _push_steps(s, args, run, console, script_dir, juneau_root):  # NOSONAR pyth
         listed = prechecks(juneau_root)
         docs_prechecked = any(c.name == "docs identity" for c in listed)
         s.checks("prechecks", "Prechecks", listed)
-    # The PGP prompt gets the bare terminal (the console pauses for it), before the long gates.
-    if (script_dir / PGP_PROMPT).exists():
-        pgp_row(script_dir)
     if console and args.skip_tests:
         say("⚠ Tests will be SKIPPED (--skip-tests)", "warn")
 

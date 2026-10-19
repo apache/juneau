@@ -426,6 +426,7 @@ class PetstoreJetty_Test extends TestBase {
 		var resp = send("POST", "/petstore/pets", "application/json", self(), null, PET_JSON);
 		assertEquals(403, resp.statusCode(), "body: " + resp.body());
 		assertEquals("CSRF_TOKEN_MISSING", boundaryReason(resp));
+		assertEquals("close", resp.headers().firstValue("Connection").orElse(null), "a refusal leaves its body unread, so the pooled connection must not be reused");
 	}
 
 	// Shared-instance evidence, not presence evidence: the token the console boundary published is the one the API filter

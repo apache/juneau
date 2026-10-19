@@ -111,8 +111,10 @@ class QueryableSettings_Test {
 			assertSize(100, s.find(new BeanQuery()).rows());
 			assertSize(1000, s.find(new BeanQuery().setLimit(5000)).rows());
 		}
-		// Regex on a small set: the default regexTimeout is a wall-clock budget for the whole call, so 1200 rows can trip it under build load.
-		try (var s = ctx(QueryableSettings.DEFAULT).getSession(people(101))) {
+		// Regex is allowed by default.  The default regexTimeout is a 50ms wall-clock budget for the whole call, which build load
+		// can exceed, so widen it after DEFAULT is applied; DEFAULT itself sets no timeout.
+		var regexCtx = QueryableSettings.DEFAULT.applyTo(InMemoryBeanQueryContext.create(Person.class)).regexTimeout(Duration.ofSeconds(30)).build();
+		try (var s = regexCtx.getSession(people(101))) {
 			assertSize(100, s.find(new BeanQuery().setSearch("name=$regex(p.*)")).rows());
 		}
 	}
