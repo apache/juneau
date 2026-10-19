@@ -1765,5 +1765,7 @@ async function section(name, fn) {
 		return { held, after: h.runs.length, errors: r.errors };
 	});
 
-	process.stdout.write(JSON.stringify(out) + '\n');
+	// A decorator-timeout timer for a draw that never settles would hold the process for its full 10 s; exit once the
+	// output is flushed.
+	process.stdout.write(JSON.stringify(out) + '\n', () => process.exit(0));
 })();

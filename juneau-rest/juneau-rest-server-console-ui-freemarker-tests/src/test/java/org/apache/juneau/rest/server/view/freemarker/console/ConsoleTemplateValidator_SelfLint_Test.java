@@ -76,7 +76,7 @@ class ConsoleTemplateValidator_SelfLint_Test extends TestBase {
 
 	@Test void a02_shippedTemplates() {
 		var f = ConsoleTemplateValidator.create()
-			.templateRoot(basedir().resolve("src/main/resources"))
+			.templateRoot(basedir().resolve("../juneau-rest-server-console-ui-freemarker/src/main/resources"))
 			.validateAll();
 		assertTrue(f.isEmpty(), f::toString);
 	}

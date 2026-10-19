@@ -678,6 +678,36 @@ class BeanPropertyMeta_Marshalling_Coverage_Test extends TestBase {
 	}
 
 	@Test
+	void e10b_set_set_concreteType_noArgConstructor_createsNewInstancePerCall() throws Exception {
+		var pm = fieldProperty(SetFieldBean.class, "items")
+			.rawMetaType(new FakeBeanInfo<>(TreeSet.class).elementType(new FakeBeanInfo<>(Object.class)))
+			.build();
+		var bean1 = new SetFieldBean();
+		var bean2 = new SetFieldBean();
+		pm.set(mapOf(bean1), null, new ArrayList<>(List.of("a")));
+		pm.set(mapOf(bean2), null, new ArrayList<>(List.of("b")));
+		assertInstanceOf(TreeSet.class, bean1.items);
+		assertInstanceOf(TreeSet.class, bean2.items);
+		assertNotSame(bean1.items, bean2.items);
+		assertEquals(Set.of("a"), bean1.items);
+		assertEquals(Set.of("b"), bean2.items);
+	}
+
+	@Test
+	void e10c_set_deque_abstractType_factoryMemoizedAcrossBeans() throws Exception {
+		var pm = fieldProperty(DequeFieldBean.class, "items")
+			.rawMetaType(new FakeBeanInfo<>(Deque.class).canCreateNewInstance(false).elementType(new FakeBeanInfo<>(Object.class)))
+			.build();
+		var bean1 = new DequeFieldBean();
+		var bean2 = new DequeFieldBean();
+		pm.set(mapOf(bean1), null, new ArrayList<>(List.of("a")));
+		pm.set(mapOf(bean2), null, new ArrayList<>(List.of("b")));
+		assertInstanceOf(ArrayDeque.class, bean1.items);
+		assertInstanceOf(ArrayDeque.class, bean2.items);
+		assertNotSame(bean1.items, bean2.items);
+	}
+
+	@Test
 	void e11_set_deque_abstractType_fallsBackToArrayDeque() throws Exception {
 		var bean = new DequeFieldBean();
 		var pm = fieldProperty(DequeFieldBean.class, "items")

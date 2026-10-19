@@ -2451,7 +2451,7 @@ public class BeanInstantiator<T> {
 	}
 
 	private void log(String message, Object... args) {
-		if (silent && ! debug.isPresent())
+		if ((silent || ! logger.isLoggable(java.util.logging.Level.FINE)) && ! debug.isPresent())
 			return;
 		var prefix = description != null ? (description + " (" + beanType.getName() + ")") : beanType.getName();
 		logger.fine(prefix + ": " + message, args);

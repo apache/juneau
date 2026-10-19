@@ -62,7 +62,20 @@ class NodeFloorScan_Test {
 
 	private static final Set<String> SKIPPED_DIRS = Set.of("target", "node_modules", ".git", "vendor");
 
+	/** Logs the build agent's Node version once, so the real floor can be read off the CI log; never fails the test. */
+	private static void logNodeVersion() {
+		try {
+			var p = new ProcessBuilder("node", "--version").redirectErrorStream(true).start();
+			var out = new String(p.getInputStream().readAllBytes(), UTF_8).trim();
+			p.waitFor(10, java.util.concurrent.TimeUnit.SECONDS);
+			System.out.println("[NodeFloorScan] node --version: " + out);
+		} catch (Exception e) {
+			System.out.println("[NodeFloorScan] node --version unavailable: " + e);
+		}
+	}
+
 	@Test void a01_noBuiltinsNewerThanTheNodeFloor() throws IOException {
+		logNodeVersion();
 		var root = repoRoot();
 		assumeTrue(root != null, "repository root not found");
 		var hits = new ArrayList<String>();

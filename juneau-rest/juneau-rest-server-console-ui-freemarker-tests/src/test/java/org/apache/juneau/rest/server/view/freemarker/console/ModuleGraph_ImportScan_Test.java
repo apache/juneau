@@ -34,7 +34,7 @@ import org.junit.jupiter.api.*;
 class ModuleGraph_ImportScan_Test extends TestBase {
 
 	@Test void a01_mainSource_neverImportsDatatablesPackage() throws IOException {
-		var srcMain = new File(System.getProperty("user.dir"), "src/main/java").toPath();
+		var srcMain = new File(System.getProperty("user.dir"), "../juneau-rest-server-console-ui-freemarker/src/main/java").toPath().normalize();
 		assertTrue(Files.isDirectory(srcMain), () -> "Expected src/main/java not found: " + srcMain);
 		try (Stream<Path> files = Files.walk(srcMain)) {
 			var offenders = files

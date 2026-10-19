@@ -86,7 +86,7 @@ public class ArgsVar extends DefaultingVar {
 	 */
 	public ArgsVar() {
 		super(NAME);
-		this.source = new ArgsPropertySource(ArgsPropertySource::createDefaultArgs);
+		this.source = new ArgsPropertySource(ArgsPropertySource::getDefaultArgs);
 		this.stable = true;
 	}
 

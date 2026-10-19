@@ -41,9 +41,9 @@ import org.junit.jupiter.api.*;
 class JobsRest_Test extends TestBase {
 
 	/**
-	 * The shared host with a 12 s jobs hard timeout, so the timeout test does not take 30 s.  It sits between the two
-	 * timed cases with room on both sides: e04's hold (6 s after the effect) ends well before it, and e05's job (10 s
-	 * wait plus 10 s hold) runs well past it.
+	 * The shared host with a 1.5 s jobs hard timeout, so the timeout test does not take 30 s.  It sits between the two
+	 * timed cases with room on both sides: e04's hold (1 s after the effect) ends before it, and e05's job (0.5 s
+	 * wait plus 2 s hold) runs well past it.
 	 */
 	public static class Host extends PetstoreConsoleFixture.Host {
 		private static final long serialVersionUID = 1L;
@@ -54,7 +54,7 @@ class JobsRest_Test extends TestBase {
 		}
 	}
 
-	static final Duration HARD_TIMEOUT = Duration.ofSeconds(12);
+	static final Duration HARD_TIMEOUT = Duration.ofMillis(1500);
 
 	/** {@link ClockedHost}'s key-ledger clock; only g11 uses that host, so only g11 moves it. */
 	static final AtomicReference<Instant> KEY_NOW = new AtomicReference<>(Instant.now());
@@ -78,7 +78,7 @@ class JobsRest_Test extends TestBase {
 	}
 
 	private static JsonMap submit(MockRestClient c, String key) throws Exception {
-		return new JsonMap(c.post("/console/ops/jobs/restock", "{\"perSpecies\":{\"DOG\":2,\"CAT\":1},\"idempotencyKey\":\"" + key + "\"}")
+		return new JsonMap(c.post("/console/ops/jobs/restock", "{\"perSpecies\":{\"DOG\":2,\"CAT\":1},\"holdMs\":0,\"idempotencyKey\":\"" + key + "\"}")
 			.contentType("application/json").run().assertStatus(202).getContent().asString());
 	}
 
@@ -128,9 +128,9 @@ class JobsRest_Test extends TestBase {
 		assertBean(modal, "selfTargeted", "true");
 		var key = modal.getString("idempotencyKey");
 		c.post("/console/ops/jobs/restock", "{\"action\":\"restock\",\"targetId\":\"" + key + "\",\"idempotencyKey\":\"" + key
-			+ "\",\"fields\":{\"DOG\":\"1\",\"CAT\":\"0\",\"BIRD\":\"\"}}").contentType("application/json").run().assertStatus(202);
+			+ "\",\"holdMs\":0,\"fields\":{\"DOG\":\"1\",\"CAT\":\"0\",\"BIRD\":\"\"}}").contentType("application/json").run().assertStatus(202);
 		var ref = new JsonMap(c.post("/console/ops/jobs/restock", "{\"action\":\"restock\",\"targetId\":\"" + key + "\",\"idempotencyKey\":\"" + key
-			+ "\",\"fields\":{\"DOG\":\"1\",\"CAT\":\"0\",\"BIRD\":\"\"}}").contentType("application/json").run().assertStatus(202).getContent().asString());
+			+ "\",\"holdMs\":0,\"fields\":{\"DOG\":\"1\",\"CAT\":\"0\",\"BIRD\":\"\"}}").contentType("application/json").run().assertStatus(202).getContent().asString());
 		assertBean(await(c, ref.getString("jobId")), "state,result{message}", "DONE,{Restocked 1 pets}");
 	}
 
@@ -276,20 +276,20 @@ class JobsRest_Test extends TestBase {
 
 	@Test void e02_flatCardShapeIsAccepted() throws Exception {
 		var c = client();
-		var ref = post(c, "{\"DOG\":1,\"CAT\":null,\"slowMs\":0,\"idempotencyKey\":\"k-e02\"}");
+		var ref = post(c, "{\"DOG\":1,\"CAT\":null,\"slowMs\":0,\"holdMs\":0,\"idempotencyKey\":\"k-e02\"}");
 		assertBean(await(c, ref.getString("jobId")), "state,result{outcome,message}", "DONE,{success,Restocked 1 pets}");
 	}
 
 	@Test void e03_cancelBeforeTheEffectIsCancelled() throws Exception {
 		var c = client();
 		var before = petCount(c);
-		var slowMs = 1500;
+		var slowMs = 300;
 		var posted = System.nanoTime();
 		var ref = post(c, "{\"DOG\":1,\"slowMs\":" + slowMs + ",\"idempotencyKey\":\"k-e03\"}");
 		assertBean(cancel(c, ref), "outcome", "cancelled");
 		assertBean(await(c, ref.getString("jobId")), "state,result{outcome}", "DONE,{cancelled}");
 		// A worker that ignored the cancel would restock once its wait ran out, so look only after that point.
-		var left = Duration.ofMillis(slowMs + 500).minusNanos(System.nanoTime() - posted).toMillis();
+		var left = Duration.ofMillis(slowMs + 200).minusNanos(System.nanoTime() - posted).toMillis();
 		if (left > 0)
 			Thread.sleep(left);
 		assertString(String.valueOf(before), petCount(c));
@@ -298,9 +298,9 @@ class JobsRest_Test extends TestBase {
 	@Test void e04_cancelAfterTheEffectSaysSo() throws Exception {
 		var c = client();
 		var before = petCount(c);
-		// The hold keeps the job running for 6 s after its effect, ending 6 s short of the hard timeout, so the cancel
-		// lands in the hold whatever the timing; the pet count shows when the effect has happened.
-		var ref = post(c, "{\"DOG\":1,\"slowMs\":0,\"holdMs\":6000,\"idempotencyKey\":\"k-e04\"}");
+		// The hold keeps the job running for 1 s after its effect, ending half a second short of the hard timeout, so the
+		// cancel lands in the hold whatever the timing; the pet count shows when the effect has happened.
+		var ref = post(c, "{\"DOG\":1,\"slowMs\":0,\"holdMs\":1000,\"idempotencyKey\":\"k-e04\"}");
 		for (var i = 0; i < 200 && petCount(c) == before; i++)
 			Thread.sleep(10);
 		assertString(String.valueOf(before + 1), petCount(c));
@@ -309,10 +309,10 @@ class JobsRest_Test extends TestBase {
 
 	@Test void e05_slowJobHitsTheHardTimeout() throws Exception {
 		var c = client();
-		// The job would run 20 s; the 12 s timeout lands in its hold.  This passes even against a scheduler that fires
+		// The job would run 2.5 s; the 1.5 s timeout lands in its hold.  This passes even against a scheduler that fires
 		// its timeout task a little late; the early- and on-the-deadline firing it once hung on is pinned
 		// deterministically by AsyncJobRegistry_Test's k group.
-		var ref = post(c, "{\"DOG\":1,\"slowMs\":10000,\"holdMs\":10000,\"idempotencyKey\":\"k-e05\"}");
+		var ref = post(c, "{\"DOG\":1,\"slowMs\":500,\"holdMs\":2000,\"idempotencyKey\":\"k-e05\"}");
 		assertBean(await(c, ref.getString("jobId")), "state,result{outcome,message}", "DONE,{unknown,app:hard-timeout-exceeded}");
 	}
 
@@ -329,7 +329,7 @@ class JobsRest_Test extends TestBase {
 
 	@Test void e07_progressLinesAreStreamed() throws Exception {
 		var c = client();
-		var ref = post(c, "{\"DOG\":2,\"slowMs\":200,\"idempotencyKey\":\"k-e07\"}");
+		var ref = post(c, "{\"DOG\":2,\"slowMs\":200,\"holdMs\":0,\"idempotencyKey\":\"k-e07\"}");
 		await(c, ref.getString("jobId"));
 		c.get(ref.getString("streamUrl") + "?lastEventId=0").header("Accept", "text/event-stream").run().assertStatus(200)
 			.assertContent().isContains("event: progress", "Waiting 200 ms", "Restocking 2 pets", "Added DOG #", "event: result");

@@ -18,6 +18,7 @@ package org.apache.juneau.commons.settings;
 
 import static org.apache.juneau.commons.utils.Shorts.*;
 
+import java.util.concurrent.atomic.*;
 import java.util.function.*;
 
 import org.apache.juneau.commons.runtime.*;
@@ -44,9 +45,45 @@ public class ArgsPropertySource implements PropertySource {
 	 * @return A new source.
 	 */
 	public static ArgsPropertySource createDefault() {
-		return new ArgsPropertySource(ArgsPropertySource::createDefaultArgs);
+		return new ArgsPropertySource(ArgsPropertySource::getDefaultArgs);
 	}
 
+	/**
+	 * Returns the default command-line args, discovered and parsed once per JVM.
+	 *
+	 * @return The cached default args.
+	 */
+	public static Args getDefaultArgs() {
+		return DefaultArgsHolder.INSTANCE;
+	}
+
+	/**
+	 * Wraps a supplier so that it is invoked at most once, with the result reused on later calls.
+	 *
+	 * @param supplier The supplier to wrap.
+	 * @return A supplier that caches the first result.
+	 */
+	static Supplier<Args> memoize(Supplier<Args> supplier) {
+		var cache = new AtomicReference<Args>();
+		return () -> {
+			var v = cache.get();
+			if (v == null) {
+				cache.compareAndSet(null, supplier.get());
+				v = cache.get();
+			}
+			return v;
+		};
+	}
+
+	private static final class DefaultArgsHolder {
+		static final Args INSTANCE = createDefaultArgs();
+	}
+
+	/**
+	 * Discovers and parses the default command-line args without caching.
+	 *
+	 * @return A new args object.
+	 */
 	public static Args createDefaultArgs() {
 		var s = System.getProperty("sun.java.command");
 		if (ine(s)) {

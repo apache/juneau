@@ -551,6 +551,9 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 	private final MethodInfo setter;                                 // The bean property setter.
 	private final BeanInfo<?> typeMeta;                              // The transformed class type of the bean property.  Concrete instances are always {@code ClassMeta}; typed against the bean-modeling SPI seam.
 	private final BiFunction<BeanSession,Object,Object> writeTransform; // Applied to incoming value before raw setter; identity by default.  Typed against the commons.bean SPI seam.
+	private volatile Supplier<Collection<?>> abstractCollectionFactory;  // Memoized factory for abstract/interface collection property types.
+	private volatile Supplier<Collection<?>> concreteCollectionFactory;  // Memoized factory for concrete collection property types.
+	private volatile Supplier<Map<?,?>> mapFactory;  // Memoized factory for concrete map property types.
 	private final boolean writeOnly;                                 // True if this property is write-only.
 	private final Set<String> views;                                 // Named views this property belongs to; null = untagged (included in all views when defaultViewInclusion is enabled).
 
@@ -1240,7 +1243,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 					}
 				} else {
 					if (propMap == null) {
-						propMap = BeanInstantiator.of(Map.class).type(rawTypeMeta).preferZeroArgConstructor().run();
+						propMap = (Map)mapFactory().get();
 					} else {
 						propMap.clear();
 					}
@@ -1288,7 +1291,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 								// so Deque/Queue/SortedSet fields aren't handed an incompatible container.  (The source
 								// value can incidentally satisfy propertyClass.isInstance(...) — e.g. the parser's
 								// generic list is a LinkedList, which is-a Deque/Queue — yet still need coercion.)
-								Collection coerced = createDefaultCollectionForAbstractType(propertyClass);
+								Collection coerced = abstractCollectionFactory(propertyClass).get();
 								for (var v : valueList) {
 									var needsConversion = v == null ? elementType.isOptional() : ! elementType.isInstance(v);
 									coerced.add(needsConversion ? session.convertToType(v, elementType) : v);
@@ -1300,13 +1303,13 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 						}
 
 						// Robust best-effort-then-fallback materialization — never returns null (see helper Javadoc).
-						propList = createDefaultCollectionForAbstractType(propertyClass);
+						propList = abstractCollectionFactory(propertyClass).get();
 						invokeSetter(bean, pName, propList);
 					}
 					propList.clear();
 				} else {
 					if (propList == null) {
-						propList = BeanInstantiator.of(Collection.class).type(rawTypeMeta).preferZeroArgConstructor().run();
+						propList = (Collection)concreteCollectionFactory().get();
 						invokeSetter(bean, pName, propList);
 					} else {
 						propList.clear();
@@ -1459,24 +1462,85 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 	 * 		</ul>
 	 * </ol>
 	 *
+	 * <p>
+	 * The choice between the two is made once per property and memoized; each call to the returned supplier
+	 * creates a new, empty, concrete {@link Collection} instance (never <jk>null</jk>).
+	 *
 	 * @param propertyClass The declared (abstract or interface) collection type of the property.
-	 * @return A new, empty, concrete {@link Collection} instance.  Never <jk>null</jk>.
+	 * @return The memoized factory for new collections of this property.
 	 */
-	private Collection<?> createDefaultCollectionForAbstractType(Class<?> propertyClass) {
-		// Best-effort: try to materialize the declared type itself (handles concrete AbstractSet/AbstractList
-		// subclasses, registered defaults, etc.).  Never throws — degrades to the shape-based fallback on failure.
-		Collection declared = BeanInstantiator.of(Collection.class).type(info(propertyClass)).preferZeroArgConstructor().fallback(() -> null).run();
-		if (nn(declared))
-			return declared;
+	private Supplier<Collection<?>> abstractCollectionFactory(Class<?> propertyClass) {
+		var f = abstractCollectionFactory;
+		if (f == null) {
+			// Best-effort: try to materialize the declared type itself (handles concrete AbstractSet/AbstractList
+			// subclasses, registered defaults, etc.).  Never throws — degrades to the shape-based fallback on failure.
+			Supplier<Collection<?>> declared = () -> BeanInstantiator.of(Collection.class).type(info(propertyClass)).preferZeroArgConstructor().fallback(() -> null).run();
+			if (nn(declared.get()))
+				f = declared;
+			else
+				f = shapeDefaultCollectionFactory(propertyClass);
+			abstractCollectionFactory = f;
+		}
+		return f;
+	}
 
+	private static Supplier<Collection<?>> shapeDefaultCollectionFactory(Class<?> propertyClass) {
 		// Shape-based fallback for genuinely non-instantiable declared types.
 		if (SortedSet.class.isAssignableFrom(propertyClass) || NavigableSet.class.isAssignableFrom(propertyClass))
-			return new TreeSet<>();
+			return TreeSet::new;
 		if (Set.class.isAssignableFrom(propertyClass))
-			return st();
+			return LinkedHashSet::new;
 		if (Deque.class.isAssignableFrom(propertyClass) || Queue.class.isAssignableFrom(propertyClass))
-			return new ArrayDeque<>();
-		return l();  // List or raw Collection (and any other collection shape).
+			return ArrayDeque::new;
+		return ArrayList::new;  // List or raw Collection (and any other collection shape).
+	}
+
+	/**
+	 * Returns the memoized factory used to create a new collection for a concrete (instantiable) property type.
+	 *
+	 * <p>
+	 * Resolved once per property: a public no-arg constructor is cached when the type has one, otherwise each
+	 * call goes through the full {@link BeanInstantiator} pipeline.
+	 */
+	private Supplier<Collection<?>> concreteCollectionFactory() {
+		var f = concreteCollectionFactory;
+		if (f == null) {
+			var ctor = publicNoArgConstructor(rawTypeMeta);
+			if (nn(ctor))
+				f = () -> ctor.newInstance();
+			else
+				f = () -> BeanInstantiator.of(Collection.class).type(rawTypeMeta).preferZeroArgConstructor().run();
+			concreteCollectionFactory = f;
+		}
+		return f;
+	}
+
+	/**
+	 * Same as {@link #concreteCollectionFactory()} but for map-typed properties.
+	 */
+	private Supplier<Map<?,?>> mapFactory() {
+		var f = mapFactory;
+		if (f == null) {
+			var ctor = publicNoArgConstructor(rawTypeMeta);
+			if (nn(ctor))
+				f = () -> ctor.newInstance();
+			else
+				f = () -> BeanInstantiator.of(Map.class).type(rawTypeMeta).preferZeroArgConstructor().run();
+			mapFactory = f;
+		}
+		return f;
+	}
+
+	private static ConstructorInfo publicNoArgConstructor(ClassInfo ci) {
+		if (ci.isAbstract() || ci.isInterface())
+			return null;
+		return ci.getPublicConstructors().stream()
+			.filter(x -> x.isAll(ElementFlag.NOT_DEPRECATED))
+			.filter(x -> x.isDeclaringClass(ci))
+			.filter(x -> x.getParameterCount() == 0)
+			.findFirst()
+			.map(ConstructorInfo::accessible)
+			.orElse(null);
 	}
 
 	/**

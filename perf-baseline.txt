@@ -37,17 +37,117 @@
 #            scripts/microbench.py ([observability]).
 # ============================================================================
 
-# 2026-10-10 (WORK-J0654): the median of the last 20 pushes was 178s; 185 leaves headroom.
-suite = 185
+# 2026-10-19: set by --rebaseline from the median of the recent test.py runs.
+suite = 276.6
 
 [modules]
+juneau-bean = 0.1
+juneau-bean/juneau-bean-atom = 4.8
+juneau-bean/juneau-bean-common = 5.9
+juneau-bean/juneau-bean-hal = 4.4
+juneau-bean/juneau-bean-html5 = 10.8
+juneau-bean/juneau-bean-jsonapi = 4.7
+juneau-bean/juneau-bean-jsonpatch = 4.6
+juneau-bean/juneau-bean-jsonrpc = 4.4
+juneau-bean/juneau-bean-jsonschema = 5.9
+juneau-bean/juneau-bean-mcp-v20250618 = 3.5
+juneau-bean/juneau-bean-mcp-v20260728 = 3.5
+juneau-bean/juneau-bean-openapi-v3 = 3.7
+juneau-bean/juneau-bean-rfc7807 = 2.2
+juneau-bean/juneau-bean-swagger-v2 = 3.5
+juneau-bom = 0.1
+juneau-bundles = 0.1
+juneau-bundles/juneau-microservice-jetty-bundle = 0.1
+juneau-bundles/juneau-microservice-tomcat-bundle = 0.1
+juneau-bundles/juneau-observability-otlp-bundle = 0.1
+juneau-bundles/juneau-springboot-bundle = 0.1
+juneau-core = 0.1
+juneau-core/juneau-beanquery-postgres = 1
+juneau-core/juneau-beanquery-sql = 2.2
+juneau-core/juneau-commons = 9.4
+juneau-core/juneau-config = 9.1
+juneau-core/juneau-marshall = 26.2
+juneau-core/juneau-marshall-rdf = 20.5
+juneau-core/juneau-test = 3
+juneau-core/juneau-test-marshall-utils = 0.2
+juneau-core/juneau-test-utils = 0.4
+juneau-distrib = 0.1
+juneau-examples = 0.1
+juneau-examples/juneau-examples-core = 0.3
+juneau-examples/juneau-examples-mcp = 8.1
+juneau-integration-tests = 71
+juneau-microservice = 0.1
+juneau-microservice/juneau-microservice = 15.8
+juneau-microservice/juneau-microservice-examples = 29.1
+juneau-microservice/juneau-microservice-jetty = 42.1
+juneau-microservice/juneau-microservice-test = 3.2
+juneau-microservice/juneau-microservice-tomcat = 3.6
+juneau-petstore = 0.1
+juneau-petstore/juneau-petstore-core = 62
+juneau-petstore/juneau-petstore-jetty = 20.1
+juneau-petstore/juneau-petstore-springboot = 7.8
+juneau-rest = 0.1
+juneau-rest/juneau-rest-auth-oauth-flow = 1.4
+juneau-rest/juneau-rest-client = 10.6
+juneau-rest/juneau-rest-client-apache-httpclient-45 = 7.5
+juneau-rest/juneau-rest-client-apache-httpclient-50 = 9.5
+juneau-rest/juneau-rest-client-classic = 7.2
+juneau-rest/juneau-rest-client-jetty = 8.9
+juneau-rest/juneau-rest-client-mcp = 3.3
+juneau-rest/juneau-rest-client-mcp-auth = 2.9
+juneau-rest/juneau-rest-client-mcp-v20250618 = 2.1
+juneau-rest/juneau-rest-client-mcp-v20260728 = 3.3
+juneau-rest/juneau-rest-client-okhttp = 14.8
+juneau-rest/juneau-rest-common = 7.7
+juneau-rest/juneau-rest-common-classic = 4.5
+juneau-rest/juneau-rest-mock = 5
+juneau-rest/juneau-rest-server = 10.8
+juneau-rest/juneau-rest-server-auth-jwt = 6.4
+juneau-rest/juneau-rest-server-auth-oauth = 3.9
+juneau-rest/juneau-rest-server-auth-oidc-rp = 17.9
+juneau-rest/juneau-rest-server-auth-saml = 27
+juneau-rest/juneau-rest-server-bus = 12.6
+juneau-rest/juneau-rest-server-bus-websocket = 6.1
+juneau-rest/juneau-rest-server-console-ui = 10
+juneau-rest/juneau-rest-server-console-ui-freemarker = 35.2
+juneau-rest/juneau-rest-server-datatables = 10
+juneau-rest/juneau-rest-server-management-logging = 2.8
+juneau-rest/juneau-rest-server-mcp = 14.4
+juneau-rest/juneau-rest-server-mcp-v20250618 = 10.2
+juneau-rest/juneau-rest-server-mcp-v20260728 = 16.7
+juneau-rest/juneau-rest-server-metrics-micrometer = 12.1
+juneau-rest/juneau-rest-server-rdf = 0.5
+juneau-rest/juneau-rest-server-reactive = 8.9
+juneau-rest/juneau-rest-server-reactive-reactor = 4.6
+juneau-rest/juneau-rest-server-springboot = 11.1
+juneau-rest/juneau-rest-server-terminal = 15.7
+juneau-rest/juneau-rest-server-terminal-bus = 3.3
+juneau-rest/juneau-rest-server-tracing-otel = 11.2
+juneau-rest/juneau-rest-server-view-freemarker = 15.3
+juneau-rest/juneau-rest-server-view-jsp = 17.3
+juneau-rest/juneau-rest-server-view-mustache = 13.1
+juneau-rest/juneau-rest-server-view-thymeleaf = 13.6
+juneau-rest/juneau-rest-server-views = 39.8
+juneau-rest/juneau-rest-server-views-markdown = 1.3
+juneau-rest/juneau-rest-server-widgets = 15
+juneau-rest/juneau-run-report = 4.8
+juneau-run = 83.5
+juneau-sc = 0.1
+juneau-sc/juneau-sc-server = 1.9
+juneau-secret-macos-keychain = 4.4
+juneau-shaded = 0.1
+juneau-shaded/juneau-shaded-all = 0.1
+juneau-shaded/juneau-shaded-core = 0.1
+juneau-shaded/juneau-shaded-rest-client = 0.1
+juneau-shaded/juneau-shaded-rest-server = 0.1
+juneau-shaded/juneau-shaded-rest-server-springboot = 0.3
 
 # ─── [observability] ──────────────────────────────────────────────────────────
 [observability]
 #
 # Consumed by scripts/microbench.py — NOT by the per-module perf guard.
 #
-# Baseline for the JMH ObservabilityNoopBenchmark (TODO-116).
+# Baseline for the JMH ObservabilityNoopBenchmark.
 # Metric: gc.alloc.rate.norm = bytes allocated per benchmark invocation.
 # Assertion threshold: ≤ 8 bytes/op (see scripts/microbench.py --threshold).
 #

@@ -30,7 +30,7 @@ class CardTypeSpi_Test extends TestBase {
 	private static final String SPI = "META-INF/services/org.apache.juneau.rest.server.console.CardTypeHandler";
 
 	@Test void a01_mainServicesFileListsBothBuiltIns() throws Exception {
-		var lines = Files.readAllLines(Path.of(System.getProperty("basedir", "."), "target/classes", SPI));
+		var lines = Files.readAllLines(Path.of(System.getProperty("basedir", "."), "../juneau-rest-server-console-ui-freemarker/target/classes", SPI));
 		assertTrue(lines.contains(DatatablesCardType.class.getName()), lines::toString);
 		assertTrue(lines.contains(TerminalCardType.class.getName()), lines::toString);
 		assertTrue(lines.contains(ChartCardType.class.getName()), lines::toString);

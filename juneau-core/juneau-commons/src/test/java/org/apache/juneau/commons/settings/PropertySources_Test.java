@@ -177,6 +177,30 @@ class PropertySources_Test extends TestBase {
 	}
 
 	@Test
+	void c11_getDefaultArgs_isCached() {
+		assertSame(ArgsPropertySource.getDefaultArgs(), ArgsPropertySource.getDefaultArgs());
+	}
+
+	@Test
+	void c12_memoize_invokesSupplierOnce() {
+		var count = new java.util.concurrent.atomic.AtomicInteger();
+		var s = ArgsPropertySource.memoize(() -> {
+			count.incrementAndGet();
+			return new Args("a b");
+		});
+		assertSame(s.get(), s.get());
+		assertEquals(1, count.get());
+	}
+
+	@Test
+	void c13_injectedSupplier_stillInvokedEachTime() {
+		var count = new java.util.concurrent.atomic.AtomicInteger();
+		var src = new ArgsPropertySource(() -> new Args("v" + count.incrementAndGet()));
+		assertEquals("v1", src.get("0").value().orElse(null));
+		assertEquals("v2", src.get("0").value().orElse(null));
+	}
+
+	@Test
 	void c10_createDefaultArgs_bothAbsent() {
 		System.clearProperty("sun.java.command");
 		System.clearProperty("juneau.args");

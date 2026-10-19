@@ -882,6 +882,55 @@ class Cache_Test extends TestBase {
 		assertEquals("value1", cache.get(key2, () -> "should not be called"));
 	}
 
+	@Test void a49_arrayKeys_remove() {
+		var cache = Cache.of(String[].class, String.class).build();
+
+		cache.put(new String[]{"a", "b"}, "value1");
+		assertEquals("value1", cache.remove(new String[]{"a", "b"}));
+		assertSize(0, cache);
+	}
+
+	@Test void a50_primitiveArrayKeys_contentBasedEquality() {
+		var cache = Cache.of(int[].class, String.class).build();
+
+		cache.get(new int[]{1, 2}, () -> "value1");
+		assertEquals("value1", cache.get(new int[]{1, 2}, () -> "should not be called"));
+		assertEquals(1, cache.getCacheHits());
+		assertSize(1, cache);
+	}
+
+	@Test void a51_nonArrayKeys_hitCountingAcrossThreads() throws Exception {
+		var cache = Cache.of(String.class, String.class).build();
+		cache.get("k", () -> "v");
+
+		var threads = 4;
+		var perThread = 1000;
+		var pool = Executors.newFixedThreadPool(threads);
+		try {
+			var futures = new ArrayList<Future<?>>();
+			for (var i = 0; i < threads; i++)
+				futures.add(pool.submit(() -> {
+					for (var j = 0; j < perThread; j++)
+						assertEquals("v", cache.get("k", () -> "other"));
+				}));
+			for (var f : futures)
+				f.get();
+		} finally {
+			pool.shutdownNow();
+		}
+		assertEquals(threads * perThread, cache.getCacheHits());
+		assertSize(1, cache);
+	}
+
+	@Test void a52_nullKey_remove() {
+		var cache = Cache.of(String.class, String.class).build();
+
+		cache.put(null, "v");
+		assertTrue(cache.containsKey(null));
+		assertEquals("v", cache.remove(null));
+		assertFalse(cache.containsKey(null));
+	}
+
 	//====================================================================================================
 	// Null value handling
 	//====================================================================================================

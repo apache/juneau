@@ -346,9 +346,9 @@ class DatatablesCardType_Test extends TestBase {
 		assertTrue(ex.getMessage().contains("each customOperator must be an object."), ex.getMessage());
 	}
 
-	// The main sources live here; the test CWD is the module directory (surefire).
+	// The main sources live in the sibling module; the test CWD is this module's directory (surefire).
 	private static final Path MAIN =
-		Path.of("src/main/java/org/apache/juneau/rest/server/view/freemarker/console");
+		Path.of("../juneau-rest-server-console-ui-freemarker/src/main/java/org/apache/juneau/rest/server/view/freemarker/console");
 	private static final Path CONSOLE_UI_MAIN =
 		Path.of("../juneau-rest-server-console-ui/src/main/java/org/apache/juneau/rest/server/console");
 

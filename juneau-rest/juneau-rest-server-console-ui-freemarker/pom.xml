@@ -33,6 +33,8 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<freemarker.version>2.3.34</freemarker.version>
+		<!-- This module's tests live in juneau-rest-server-console-ui-freemarker-tests; read their coverage report. -->
+		<sonar.coverage.jacoco.xmlReportPaths>${maven.multiModuleProjectDirectory}/juneau-integration-tests/target/site/jacoco-aggregate/jacoco.xml,${project.basedir}/../juneau-rest-server-console-ui-freemarker-tests/target/site/jacoco-aggregate/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
 	</properties>
 
 	<dependencies>
@@ -92,26 +94,10 @@
 			<version>${webjars-echarts.version}</version>
 			<optional>true</optional>
 		</dependency>
-
-		<!-- Test scope -->
-		<dependency>
-			<groupId>org.junit.jupiter</groupId>
-			<artifactId>junit-jupiter</artifactId>
-			<version>${junit.version}</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.juneau</groupId>
-			<artifactId>juneau-test-utils</artifactId>
-			<version>${project.version}</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.juneau</groupId>
-			<artifactId>juneau-rest-mock</artifactId>
-			<version>${project.version}</version>
-			<scope>test</scope>
-		</dependency>
+		<!--
+			No tests here: they are in juneau-rest-server-console-ui-freemarker-tests, so that modules depending on
+			this one do not wait for them in a parallel reactor build.
+		-->
 	</dependencies>
 
 	<build>
