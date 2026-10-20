@@ -250,6 +250,19 @@ def test_rebaseline_value_is_the_windowed_median_without_outliers_rounded_up(tes
     assert test_mod.rebaseline_value([2.0, 2.0], window=20) == 2.0                   # an exact tenth stays
 
 
+def test_rebaseline_value_takes_p75_for_a_bimodal_series_only_when_asked(test_mod):
+    bimodal = [7.2, 7.4, 7.6, 7.5, 16.0, 16.5, 16.9, 7.3]
+    assert test_mod.rebaseline_value(bimodal, window=20) == 7.6                          # median by default
+    assert test_mod.rebaseline_value(bimodal, window=20, bimodal_p75=True) == 16.2      # p75 lands in the slow mode
+    steady = [7.2, 7.4, 7.6, 7.5, 7.3]
+    assert test_mod.rebaseline_value(steady, window=20, bimodal_p75=True) == 7.4         # median
+
+
+def test_rebaseline_value_bimodal_threshold_is_strictly_over_half(test_mod):
+    assert test_mod.rebaseline_value([10.0, 10.0, 10.0, 15.0], window=20, bimodal_p75=True) == 10.0   # exactly 0.5
+    assert test_mod.rebaseline_value([10.0, 10.0, 10.0, 15.1], window=20, bimodal_p75=True) == 11.3   # just over: p75
+
+
 def test_rebaseline_rewrites_suite_and_modules_and_keeps_everything_else(test_mod, tmp_path, capsys, history_record):
     baseline = tmp_path / "perf-baseline.txt"
     baseline.write_text(FILE, encoding="utf-8")

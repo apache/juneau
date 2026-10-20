@@ -67,6 +67,11 @@ class PluginTest(unittest.TestCase):
         self.assertEqual(late[0]["o"], "error")
         self.assertTrue(all(m["id"].startswith("test_s.py::") for m in tests))
 
+    def test_run_marker_names_each_test_file_once_as_it_starts(self):
+        Path(self.tmp, "test_t.py").write_text("def test_a(): pass\ndef test_b(): pass\n")
+        _, marks = run_pytest(self.tmp, suite="def test_a(): pass\ndef test_b(): pass\n")
+        self.assertEqual([m["f"] for m in marks if m["ev"] == "run"], ["test_s.py", "test_t.py"])
+
     def test_total_equals_collected_and_each_test_once(self):
         _, marks = run_pytest(self.tmp)
         ids = [m["id"] for m in marks if m["ev"] == "test" and not m.get("late")]

@@ -27,7 +27,8 @@ Options:
     --enforce-perf           Hard-fail on a perf-guard breach (see "Perf guard" below)
     --rebaseline             Rewrite perf-baseline.txt's suite line and [modules] from this repo's test.py run
                              history (~/.cache/juneau-run/history), then exit (no build)
-    --window <n>             --rebaseline: runs per key to take the median of (default 20)
+    --window <n>             --rebaseline: runs per key to take the median of (default 20); a module whose window
+                             spreads by more than 50% ((max - min) / min) takes the p75 instead (the suite keeps the median)
     --min-runs <n>           --rebaseline: skip keys with fewer runs than this (default 5)
     --js-tests               Also run the headless-browser JS harness (mvn -Pjs-tests, *_BrowserTest in
                              juneau-rest-server-views, juneau-petstore-core and juneau-rest-server-terminal).  Fails if Node/npm are missing.
@@ -470,6 +471,7 @@ def _perf_guard(test_elapsed, baseline_file, module_times, unmapped, enforce, ou
 
 SUITE_LINE = re.compile(r"^suite\s*=")
 OUTLIER_FACTOR = 3
+BIMODAL_SPREAD = 0.5
 
 
 def baseline_series(records) -> dict:
@@ -488,13 +490,19 @@ def baseline_series(records) -> dict:
 	return series
 
 
-def rebaseline_value(values: list, window: int) -> float:
+def rebaseline_value(values: list, window: int, bimodal_p75: bool = False) -> float:
 	"""The median of the last `window` values, after dropping any over 3× their median, rounded up to 0.1s (a
-	baseline is a ceiling)."""
+	baseline is a ceiling).  With `bimodal_p75`, a series whose kept values spread by more than BIMODAL_SPREAD
+	((max - min) / min) takes its 75th percentile instead of the median."""
 	recent = values[-window:]
 	median = statistics.median(recent)
 	kept = [v for v in recent if v <= OUTLIER_FACTOR * median]
-	return math.ceil(round(statistics.median(kept) * 10, 6)) / 10
+	pick = statistics.median(kept)
+	# A module that flips between a fast and a slow mode (CPU contention from neighbouring modules) has a median in
+	# the fast mode, so the guard would fire on every slow-mode run; the p75 sits in the slow mode.
+	if bimodal_p75 and len(kept) >= 2 and (max(kept) - min(kept)) / min(kept) > BIMODAL_SPREAD:
+		pick = statistics.quantiles(kept, n=4, method="inclusive")[2]
+	return math.ceil(round(pick * 10, 6)) / 10
 
 
 def rebaseline(baseline_file: Path, records, window: int = 20, min_runs: int = 5) -> int:
@@ -532,7 +540,7 @@ def rebaseline(baseline_file: Path, records, window: int = 20, min_runs: int = 5
 		if len(values[-window:]) < min_runs:
 			skipped[key] = len(values[-window:])
 		else:
-			fresh[key] = rebaseline_value(values, window)
+			fresh[key] = rebaseline_value(values, window, bimodal_p75=key != "suite")
 	modules = {k: v for k, v in before.items() if k != "suite" and k in skipped}
 	modules.update({k: v for k, v in fresh.items() if k != "suite"})
 

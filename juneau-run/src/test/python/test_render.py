@@ -431,6 +431,16 @@ class OverallDisplayTest(unittest.TestCase):
     def live(self):
         return jr.LiveRenderer(lambda text: None, size=lambda: os.terminal_size((80, 20)), clock=self.clock, color=False)
 
+    def test_bar_only_row_shows_its_current_file_under_it_until_it_ends(self):
+        b = self.board(plan=None)
+        feed(b, ("units", {"step": "a", "total": 3, "kind": "files"}),
+             ("step_progress", {"step": "a", "text": "test_x.py"}))
+        lines = self.live().region(b, 79, 18)
+        self.assertEqual(lines[1], "    test_x.py")
+        self.assertEqual(sum(1 for line in lines if "test_x.py" in line), 1)
+        feed(b, ("step_end", {"id": "a", "status": "ok", "ms": 1, "summary": None, "totals": None}))
+        self.assertFalse(any("test_x.py" in line for line in self.live().region(b, 79, 18)))
+
     def test_last_line_is_overall_and_counts_in_max_lines(self):
         b = self.board()
         lines = self.live().region(b, 79, 18)

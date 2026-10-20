@@ -34,6 +34,11 @@ def units(events):
 
 
 class PluginMarkersTest(unittest.TestCase):
+    def test_run_marker_becomes_progress_naming_the_file(self):
+        events = ev(new_parser(), ['##pytest {"ev":"hello","v":1}', '##pytest {"ev":"run","f":"test_a.py"}',
+                                   '##pytest {"ev":"run"}'])
+        self.assertEqual(events, [("progress", "p", "test_a.py")])
+
     def test_total_then_tests(self):
         events = ev(new_parser(), [
             '##pytest {"ev":"hello","v":1}', '##pytest {"ev":"total","n":3}',

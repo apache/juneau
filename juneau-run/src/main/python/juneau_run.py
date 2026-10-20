@@ -1711,12 +1711,14 @@ class LiveRenderer:
                 prefix = common_prefix([m.title for m in r.modules.values() if m.id not in r.unbarred])
                 collapsed[r.id] = "    " + collapse_names([t[len(prefix):] or t for t in names], cols - 2)
         blocks = {id(m): self._sub_lines(m, cols) for _, m in subs}
+        current = {r.id: "    " + _vcut(r.progress, max(1, cols - 4)) for r in running
+                   if r.progress and r.unit_kind in ("tests", "files")}   # what a bar-only row is running now
         setup_running = (board.setup is not None and not board.setup.ended
                          and any(r.id == board.setup.row for r in running))
         overall = board.overall()
         row_text_ = {r.id: self._row(board, r, cols, pending=True) for r in running}
         row_lines = sum(t.count("\n") + 1 for t in row_text_.values())     # a wrapped unit bar spans several lines
-        fixed = row_lines + len(collapsed) + (1 if setup_running else 0) + (1 if overall else 0)
+        fixed = row_lines + len(collapsed) + len(current) + (1 if setup_running else 0) + (1 if overall else 0)
         pending = board.pending()
         shown = len(pending)
         if pending and fixed + sum(len(b) for b in blocks.values()) + shown > max_lines:
@@ -1736,6 +1738,8 @@ class LiveRenderer:
             if setup_running and board.setup.row == r.id:
                 lines.append(setup_line(board, self.glyphs, cols, self.clock(), self.color))
             lines.append(row_text_[r.id])
+            if r.id in current:
+                lines.append(current[r.id])
             if r.id in collapsed:
                 lines.append(collapsed[r.id])
             if r.id in folded:
@@ -3484,6 +3488,9 @@ class PytestParser(Parser):
         if kind == "hello":
             self.plugin = True
             return []
+        if kind == "run":
+            name = m.get("f")
+            return [("progress", self.step_id, name[:400])] if isinstance(name, str) and name else []
         if kind == "total":
             n = m.get("n")
             if isinstance(n, int) and n >= 0:

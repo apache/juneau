@@ -87,6 +87,7 @@ def pytest_configure(config):
     _total_sent = -1
     _dead = False
     _durations.clear()
+    _current_file[0] = None
     _CONFIG[0] = None
     if config.pluginmanager.hasplugin("xdist"):
         config.pluginmanager.register(_XdistHooks(), "juneau_run_pytest_xdist")
@@ -126,6 +127,17 @@ def _total(config, n, files=None):
 
 
 _durations = {}
+_current_file = [None]
+
+
+def pytest_runtest_logstart(nodeid, location):
+    config = _CONFIG[0]
+    if config is None or _worker(config):
+        return
+    name = nodeid.split("::", 1)[0][:400]
+    if name != _current_file[0]:
+        _current_file[0] = name
+        _emit(config, {"ev": "run", "f": name})     # the test file now running, for the row's current-file line
 
 
 def pytest_runtest_logreport(report):
