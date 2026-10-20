@@ -21,6 +21,7 @@ import os
 import re
 import signal
 import subprocess
+import sys
 import time
 from types import MappingProxyType
 
@@ -53,6 +54,13 @@ def _next_n(n=None, count=1):
     first = _n + 1
     _n += count
     return first
+
+
+def next_n(count=1):
+    """The number for the next step, for a consumer that numbers steps without step() or cmd(): the session counter's
+    next value, which starts after JUNEAU_RUN_N_BASE (a parent's reservation).  count > 1 reserves that many numbers
+    and returns the first."""
+    return _next_n(count=count)
 
 
 def routed():
@@ -95,12 +103,35 @@ def paused():
 
 
 def say(text="", level="info", *, step=None):
-    """print() in a plain run; jr.say under markers or the console (a filtered note when the view owns the screen)."""
+    """print() in a plain run; jr.say under markers or the console (a filtered note when the view owns the screen,
+    plain text inside a paused() block)."""
     jr = _base.jr()
     if jr is None:
         print(text, flush=True)
     else:
         jr.say(text, level, step)
+
+
+def err(text=""):
+    """A failure line.  With a console view owning the screen it goes to the view as failure detail, shown at every
+    detail level; otherwise it goes to stderr."""
+    jr = _base.jr()
+    if jr is not None and jr.console_owns_screen():
+        jr.failure(text)
+    else:
+        print(text, file=sys.stderr, flush=True)
+
+
+def hint(lines):
+    """Lines that tell the user what to do about a failure.  With a console view owning the screen they go to the
+    view (beneath the running row, or at once); otherwise to stderr.  lines is a string or a list of strings."""
+    lines = [lines] if isinstance(lines, str) else list(lines)
+    jr = _base.jr()
+    if jr is not None and jr.console_owns_screen():
+        jr.hint(lines)
+    else:
+        for line in lines:
+            print(line, file=sys.stderr, flush=True)
 
 
 class _NullStep:
@@ -142,8 +173,9 @@ def _slug(title):
 
 
 def cmd(cmd, *, title, id=None, n=None, tool=None, cwd=None, env=None, capture=False, tty=False,  # NOSONAR python:S5806
-        summarize=None, input=None):
-    """Run cmd as one step.  Under markers or the console it goes through jr.run_tool with the named parser (or a
+        summarize=None, input=None, parent=None, label=None):
+    """Run cmd as one step.  parent (a step id) makes it a child row of that step; its n defaults to 1, as step()'s
+    does, and a plain run just runs it.  label is the row's short console label.  Under markers or the console it goes through jr.run_tool with the named parser (or a
     jr.Parser instance); otherwise a plain subprocess.run.  A tool that can't start gives Result(False, 127, err).
     summarize(text) gives the step_end summary; it is called after the command exits, while its row is still open
     (so jr.history_series attaches to it).  With summarize, the command goes through run_tool whenever juneau_run is
@@ -155,9 +187,11 @@ def cmd(cmd, *, title, id=None, n=None, tool=None, cwd=None, env=None, capture=F
         raise ValueError("input= cannot be combined with tty=True")
     _base.remember(title)
     if routed() or (summarize is not None and _base.jr() is not None):
-        return _routed(cmd, title=title, id=id or _slug(title), n=_next_n(n), parent=None, tool=tool, cwd=cwd,
-                       env=env, capture=capture, tty=tty, summarize=summarize, input=input)
-    _next_n(n)
+        num = (n if n is not None else 1) if parent is not None else _next_n(n)
+        return _routed(cmd, title=title, id=id or _slug(title), n=num, parent=parent, tool=tool, cwd=cwd,
+                       env=env, capture=capture, tty=tty, summarize=summarize, input=input, label=label)
+    if parent is None:
+        _next_n(n)
     return _plain(cmd, cwd=cwd, env=env, capture=capture, input=input)
 
 
@@ -196,12 +230,12 @@ def _parser_for(jr, cmd, tool):
 
 
 def _routed(cmd, *, title, id, n, parent, tool, cwd, env, capture, tty, statuses=None,  # NOSONAR python:S5806
-            summarize=None, input=None):
+            summarize=None, input=None, label=None):
     jr = _base.jr()
     parser = _parser_for(jr, cmd, tool)
     try:
         r = jr.run_tool(cmd, parser, id, title, n=n, parent=parent, cwd=cwd, env=env, capture=capture, tty=tty,
-                        statuses=statuses, summarize=summarize, input=input)
+                        statuses=statuses, summarize=summarize, input=input, label=label)
     except OSError as e:
         # run_tool has already ended the step with exit 127.  Close it again with no exit field, as Foundry does
         # (scripts/push.py:254-262), whose tests pin that marker.
@@ -461,6 +495,7 @@ def session(title, *, header=(), bell=False, sound=False, silence_env=(), mode=N
     s = _session = Session()
     previous = _NOT_INSTALLED
     status, code = "ok", 0
+    opened_view = False
     try:
         previous = _install_sigterm()
         try:
@@ -470,6 +505,7 @@ def session(title, *, header=(), bell=False, sound=False, silence_env=(), mode=N
             if jr is not None and jr.enabled():
                 jr.run(mode, project, git.current_branch(repo) or "HEAD", git.short_head(repo))
             if console_requested():
+                opened_view = not jr.session_open() if hasattr(jr, "session_open") else False
                 jr.session(title, header, repo=repo)
             if plan is not None:
                 s.plan(plan)
@@ -492,6 +528,8 @@ def session(title, *, header=(), bell=False, sound=False, silence_env=(), mode=N
             word = {"ok": "ok", "cancelled": "cancelled"}.get(status, f"failed, exit code {code}")
             say(f"{'✅' if status == 'ok' else '❌'} {title}: {word} ({time.monotonic() - started:.1f}s)")
         _done(status, s.commit)
+        if opened_view:     # the view this session started ends with it, not at process exit
+            jr.end_session()
         if not nested:
             if bell:
                 notify.bell(silence_env=silence_env)

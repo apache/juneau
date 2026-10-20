@@ -554,6 +554,16 @@ class SessionTest(unittest.TestCase):
             jr.say("⚠ dirty tree", level="warn")
         self.assertRegex(out.getvalue(), r"^t · tail -f \S+\.log\n⚠ dirty tree\n$")
 
+    def test_say_inside_a_paused_block_prints_as_is_once(self):
+        out = io.StringIO()
+        with contextlib.redirect_stdout(out):
+            jr.session("t")
+            with jr.paused():
+                jr.say("Running: mvn")          # info: hidden at actionable, but the screen is the plain terminal now
+                jr.say("⚠ dirty tree", level="warn")
+            jr.say("⚠ after", level="warn")
+        self.assertRegex(out.getvalue(), r"^t · tail -f \S+\.log\nRunning: mvn\n⚠ dirty tree\n⚠ after\n$")
+
     def test_with_markers_on_stdout_stays_the_marker_stream(self):
         os.environ["RUN_MARKERS"] = "1"
         out = io.StringIO()
@@ -1659,6 +1669,17 @@ class RowStatusTest(RowCase):
         b, r, blocks = self.finished(note("warn", "no docs checkout"), step_end("a", "skip", summary="(skipped)"))
         self.assertEqual((jr.row_icon(r, 0, False), r.reason), ("⊘", "no docs checkout"))
         self.assertIn("no docs checkout", plain(b, blocks, self.clock))
+
+    def test_detail_note_shows_beside_the_result_and_keeps_the_status(self):
+        b, r, blocks = self.finished(note("detail", "3 retried"), step_end("a", summary="12 files"))
+        out = plain(b, blocks, self.clock)
+        self.assertIn("12 files  3 retried", out)
+        self.assertEqual((r.status, jr.row_state(r), r.reason), ("ok", "ok", None))
+
+    def test_detail_note_does_not_replace_a_warn_reason_or_a_failure(self):
+        b, r, blocks = self.finished(note("detail", "extra"), note("warn", "careful"), step_end("a"))
+        self.assertEqual(r.reason, "careful")
+        self.assertIn("careful", plain(b, blocks, self.clock))
 
     def test_newest_warn_is_reason(self):
         b, r, blocks = self.finished(note("warn", "first"), note("warn", "second\nmore"), step_end("a"))

@@ -4949,7 +4949,8 @@ public class MarshallingContext extends Context implements ConversionFinder, Bea
 	public final <T> ClassMeta<T> getClassMetaForObject(T o) {
 		reqnn("o", o);
 		var unwrapped = getProxyFor(o);
-		return (ClassMeta<T>)getClassMeta(unwrapped != null ? unwrapped : o.getClass());
+		Class<?> k = unwrapped != null ? unwrapped : o.getClass();
+		return (ClassMeta<T>)getClassMeta(k);
 	}
 
 	/**

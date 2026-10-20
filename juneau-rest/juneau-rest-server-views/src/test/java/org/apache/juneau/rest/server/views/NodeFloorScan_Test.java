@@ -22,9 +22,9 @@ import static org.junit.jupiter.api.Assumptions.*;
 
 import java.io.*;
 import java.nio.file.*;
+import java.nio.file.attribute.*;
 import java.util.*;
 import java.util.regex.*;
-import java.util.stream.*;
 
 import org.junit.jupiter.api.*;
 
@@ -80,12 +80,30 @@ class NodeFloorScan_Test {
 		assumeTrue(root != null, "repository root not found");
 		var hits = new ArrayList<String>();
 		var scanned = new int[1];
-		try (Stream<Path> files = Files.walk(root)) {
-			files.filter(NodeFloorScan_Test::isScanned).forEach(f -> {
-				scanned[0]++;
-				scan(root, f, hits);
-			});
-		}
+		Files.walkFileTree(root, new SimpleFileVisitor<Path>() {
+			@Override
+			public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) {
+				// Never enter target/ and friends: sibling forks create and delete temp files there while this scan runs.
+				var name = dir.getFileName();
+				return !dir.equals(root) && name != null && SKIPPED_DIRS.contains(name.toString()) ? FileVisitResult.SKIP_SUBTREE : FileVisitResult.CONTINUE;
+			}
+
+			@Override
+			public FileVisitResult visitFile(Path f, BasicFileAttributes attrs) {
+				if (isScanned(f)) {
+					scanned[0]++;
+					scan(root, f, hits);
+				}
+				return FileVisitResult.CONTINUE;
+			}
+
+			@Override
+			public FileVisitResult visitFileFailed(Path f, IOException e) throws IOException {
+				if (e instanceof NoSuchFileException)
+					return FileVisitResult.CONTINUE;
+				throw e;
+			}
+		});
 		assertTrue(scanned[0] > 0, "no scripts found under " + root);
 		assertTrue(hits.isEmpty(), () -> "Builtins newer than the Node floor (the CI Node lacks them; use sort()/slice().sort() style equivalents, "
 			+ "or add a 'node-floor-ok: <reason>' comment on the line):\n  " + String.join("\n  ", hits));

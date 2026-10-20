@@ -18,6 +18,7 @@ package org.apache.juneau.commons.utils;
 
 import java.io.*;
 import java.nio.file.*;
+import java.nio.file.attribute.*;
 import java.util.*;
 import java.util.regex.*;
 
@@ -120,19 +121,34 @@ final class ScriptJsonSinkScanner {
 		var sinks = new ArrayList<Sink>();
 		var violations = new ArrayList<String>();
 		var mainJava = File.separator + "src" + File.separator + "main" + File.separator + "java" + File.separator;
-		var target = File.separator + "target" + File.separator;
-		try (var stream = Files.walk(repoRoot)) {
-			var files = stream
-				.filter(p -> p.toString().endsWith(".java"))
-				.filter(p -> p.toString().contains(mainJava))
-				.filter(p -> ! p.toString().contains(target))
-				.sorted()
-				.toList();
-			for (var f : files) {
-				var r = scan(repoRoot.relativize(f).toString(), Files.readString(f));
-				sinks.addAll(r.sinks());
-				violations.addAll(r.violations());
+		var files = new ArrayList<Path>();
+		Files.walkFileTree(repoRoot, new SimpleFileVisitor<Path>() {
+			@Override
+			public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) {
+				// Never enter target/: forks create and delete temp files there while this scan runs.
+				var name = dir.getFileName();
+				return !dir.equals(repoRoot) && name != null && name.toString().equals("target") ? FileVisitResult.SKIP_SUBTREE : FileVisitResult.CONTINUE;
 			}
+
+			@Override
+			public FileVisitResult visitFile(Path f, BasicFileAttributes attrs) {
+				if (f.toString().endsWith(".java") && f.toString().contains(mainJava))
+					files.add(f);
+				return FileVisitResult.CONTINUE;
+			}
+
+			@Override
+			public FileVisitResult visitFileFailed(Path f, IOException e) throws IOException {
+				if (e instanceof NoSuchFileException)
+					return FileVisitResult.CONTINUE;
+				throw e;
+			}
+		});
+		Collections.sort(files);
+		for (var f : files) {
+			var r = scan(repoRoot.relativize(f).toString(), Files.readString(f));
+			sinks.addAll(r.sinks());
+			violations.addAll(r.violations());
 		}
 		return new Result(sinks, violations);
 	}

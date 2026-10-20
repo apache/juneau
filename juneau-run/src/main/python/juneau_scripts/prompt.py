@@ -256,12 +256,19 @@ def text(msg, *, default=None, key=None, title=None, error=None):
         return value
 
 
+def yes_no_hint(default):
+    """The yes/no hint for a confirm: (y/N) when default is False, (Y/n) when True."""
+    return "(Y/n)" if default else "(y/N)"
+
+
 def confirm(msg, *, default=False, key=None, title=None, expect=None, danger=False):
     """True for y or yes (any case); an empty answer or EOF gives default; anything else is False.  With expect,
-    True only when the typed text equals expect (EOF or cancel then gives None)."""
+    True only when the typed text equals expect (EOF or cancel then gives None).  The yes/no hint, (y/N) or (Y/n),
+    follows msg on the terminal and rides in the channel's prompt body as hint; with expect there is none."""
     chan = channel()
+    hint = None if expect is not None else yes_no_hint(default)
     if chan is None:
-        answer = _ask(msg)
+        answer = _ask(msg if hint is None else f"{msg.rstrip()} {hint} ")
         if expect is not None:
             return None if answer is None else answer.strip() == expect
         if answer is None or not answer.strip():
@@ -269,7 +276,7 @@ def confirm(msg, *, default=False, key=None, title=None, expect=None, danger=Fal
         return answer.strip().lower() in ("y", "yes")
     with _paused():
         got = _ask_channel(chan, "confirm", msg, {"key": key, "title": title, "default": default, "expect": expect,
-                                                  "danger": True if danger else None})
+                                                  "hint": hint, "danger": True if danger else None})
         if got is None:
             return None
         value, source = got
@@ -448,7 +455,7 @@ def email(*, to, subject, body, cc=(), key=None, title=None):
     chan = channel()
     if chan is None:
         print(_email_block(to, cc, subject, body, mailto), flush=True)
-        return confirm("Sent it from your apache.org address? (y = sent, n = not yet)", default=False)
+        return confirm("Sent it from your apache.org address?", default=False)
     wire = {"to": to, "cc": cc, "subject": subject, "body": body, "mailto": mailto}
     with _paused():
         got = _ask_channel(chan, "email", f"Email: {subject}", {"key": key, "title": title, "email": wire})

@@ -365,7 +365,8 @@ public class MarshallingTraverseSession extends MarshallingSession {
 		} else {
 			// Unwrap recognized proxies (e.g. Hibernate $HibernateProxy$) so we serialize the entity, not the proxy subclass.
 			var unwrapped = getProxyFor(o);
-			cm = getClassMeta(unwrapped != null ? unwrapped : c);
+			Class<?> k = unwrapped != null ? unwrapped : c;
+			cm = getClassMeta(k);
 		}
 		if (cm.isCharSequence() || cm.isNumber() || cm.isBoolean())
 			return cm;

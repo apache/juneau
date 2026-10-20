@@ -202,6 +202,11 @@ class Step:
         self.paused = True
         publish("note", level="pause", text=text, href=None, step=self.id)
 
+    def detail(self, text):
+        """A line shown beside the row's result, not instead of it (unlike warn, whose text becomes the reason).
+        Bus-only, no run-protocol marker; the row's status is unchanged."""
+        publish("note", level="detail", text=text, href=None, step=self.id)
+
 
 @contextmanager
 def step(id, n, title, *, parent=None, label=None):  # NOSONAR python:S5806 - parameter names mirror protocol field names
@@ -297,10 +302,13 @@ def console_owns_screen():
 
 
 def say(text="", level="info", step=None):
-    """Script status text.  Printed as-is unless a console view owns the screen, which shows it as a filtered note."""
-    if not _console_owns_screen():
+    """Script status text.  Printed as-is unless a console view owns the screen, which shows it as a filtered note.
+    Inside a paused() block the view has cleared the screen, so the text is printed as-is and the view does not
+    repeat it."""
+    printed = _pause_depth > 0 and _console_owns_screen()
+    if printed or not _console_owns_screen():
         _out(text + "\n")
-    publish("say", text=text, level=level, step=step)
+    publish("say", text=text, level=level, step=step, **({"printed": True} if printed else {}))
 
 
 def failure(text, step=None):
@@ -681,6 +689,7 @@ class _Row:
                                 # and error ones (full text) for the condensed log
         self.paused = False     # a pause note was attributed to it: ⏸ when ok
         self.warned = False     # a warn (or an error on a row that still ends ok) was attributed to it: ⚠ when ok
+        self.detail = None      # a detail note's first line: drawn after the result, never in place of it
         self.reason = None      # the newest warn or error text's first line, cut only when drawn
         self.reason_level = None    # warn or error; an error reason is never replaced by a warn
         self.hints = []         # lines printed beneath the row when it ends failed (spec 5.1)
@@ -1214,6 +1223,11 @@ class Board:
             if r is not None:
                 r.paused = True
             return []
+        if level == "detail":
+            line = next((x.strip() for x in f["text"].splitlines() if x.strip()), None)
+            if r is not None and line:
+                r.detail = line
+            return []
         if r is not None and r.running:
             if level != "info":
                 self._reason(r, level, f["text"])
@@ -1259,7 +1273,7 @@ class Board:
             elif shows_note(self.detail, level):
                 r.notes.append(("say", f["text"]))
             return []
-        return [("text", f["text"])] if shows_note(self.detail, level) else []
+        return [("text", f["text"])] if shows_note(self.detail, level) and not f.get("printed") else []
 
     def _on_ask(self, f):
         return [("logonly", f"{f['prompt']}{f['answer']}")]
@@ -1364,6 +1378,8 @@ def row_text(row, glyphs, now, pending=False):
                                                                        expected)
         if row.status == "skip" and text and text.startswith("(") and text.endswith(")"):
             text = text[1:-1]       # "⊘ Install    done by Tests"
+        if row.detail:
+            text = f"{text}  {row.detail}" if text else row.detail
     return cells, "  ".join(parts), text or "", elapsed, cut
 
 
@@ -2066,6 +2082,18 @@ def plan(ids):
     if len(set(ids)) != len(ids):
         raise ValueError("duplicate step id in plan: " + ", ".join(sorted({i for i in ids if ids.count(i) > 1})))
     publish("plan", ids=ids, labels={e[0]: e[1] for e in entries if not isinstance(e, str) and e[1]})
+
+
+def session_open():
+    """True when this process has a console view (session() was called and the view has not been ended)."""
+    return _console is not None
+
+
+def end_session():
+    """Close this process's console view now, rather than at exit.  A no-op with no session; safe to call twice.  For a
+    caller that runs several sessions in one process (a script's own test suite)."""
+    atexit.unregister(_end_session)
+    _end_session()
 
 
 def _end_session():

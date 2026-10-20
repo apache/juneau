@@ -482,5 +482,74 @@ class SessionWithoutEngineTest(PlainCase):
         self.assertEqual(s.code, 0)
 
 
+class ErrAndHintPlainTest(PlainCase):
+    def test_err_and_hint_go_to_stderr_in_a_plain_run(self):
+        out, err = io.StringIO(), io.StringIO()
+        with redirect_stdout(out), mock.patch.object(sys, "stderr", err):
+            run.err("bad")
+            run.hint("try this")
+            run.hint(["a", "b"])
+        self.assertEqual(out.getvalue(), "")
+        self.assertEqual(err.getvalue(), "bad\ntry this\na\nb\n")
+
+
+class ErrAndHintConsoleTest(MarkerCase):
+    def test_err_and_hint_use_stderr_when_the_view_does_not_own_the_screen(self):
+        out, err = io.StringIO(), io.StringIO()
+        with redirect_stdout(out), mock.patch.object(sys, "stderr", err):
+            run.err("bad")
+            run.hint(["fix it"])
+        self.assertEqual(err.getvalue(), "bad\nfix it\n")
+
+    def test_err_and_hint_go_to_the_view_when_it_owns_the_screen(self):
+        with mock.patch.object(jr, "console_owns_screen", return_value=True), \
+                mock.patch.object(jr, "failure") as failure, mock.patch.object(jr, "hint") as hint:
+            run.err("bad")
+            run.hint("fix it")
+        failure.assert_called_once_with("bad")
+        hint.assert_called_once_with(["fix it"])
+
+
+class NextNTest(PlainCase):
+    def test_next_n_counts_and_reserves(self):
+        self.assertEqual(run.next_n(), 1)
+        self.assertEqual(run.next_n(count=3), 2)
+        self.assertEqual(run.next_n(), 5)
+
+    def test_next_n_follows_the_session_counter_and_its_base(self):
+        os.environ[run.N_BASE_ENV] = "7"
+        with redirect_stdout(io.StringIO()), run.session("t", exit=False):
+            self.assertEqual(run.next_n(), 8)
+            with run.step("s", "Step") as st:   # a step takes the next number too
+                pass
+            self.assertEqual(run.next_n(), 10)
+
+
+class CmdParentAndLabelTest(MarkerCase):
+    def test_cmd_with_a_parent_is_a_child_row_numbered_from_one(self):
+        out = io.StringIO()
+        with redirect_stdout(out):
+            with run.step("outer", "Outer"):
+                run.cmd([PY, "-c", "pass"], title="Inner", id="inner", parent="outer")
+            self.assertEqual(run.next_n(), 2)   # the child took no number from the session counter
+        got = markers(out.getvalue())
+        self.assertEqual(got[1], {"ev": "step", "id": "inner", "n": 1, "title": "Inner", "parent": "outer"})
+
+    def test_cmd_passes_label_to_the_row(self):
+        events = []
+        jr.subscribe(lambda kind, f: events.append((kind, f)))
+        with redirect_stdout(io.StringIO()):
+            run.cmd([PY, "-c", "pass"], title="Build everything", label="Build")
+        starts = [f for kind, f in events if kind == "step_start"]
+        self.assertEqual(starts[0]["label"], "Build")
+
+
+class CmdParentPlainTest(PlainCase):
+    def test_cmd_with_a_parent_in_a_plain_run_just_runs(self):
+        r = run.cmd([PY, "-c", "pass"], title="t", parent="outer")
+        self.assertTrue(r.ok)
+        self.assertEqual(run.next_n(), 1)
+
+
 if __name__ == "__main__":
     unittest.main()

@@ -320,6 +320,25 @@ class CondensedTest(SessionCase):
         self.assertEqual(str(jr.full_log_dir()), self.log_dir)    # hermetic: never the real ~/.cache
         self.assertNotRegex(out, r"✅ Demo: ok \(")    # the console's final line replaces the plain summary
 
+    def test_the_view_a_session_started_ends_with_the_session(self):
+        sys.modules["juneau_run"] = jr
+        with mock.patch.dict(os.environ, {"JUNEAU_RUN_CONSOLE": "condensed"}):
+            self.go(ok)
+            self.assertFalse(jr.session_open())
+            self.go(ok)     # a second session in the same process starts clean
+            self.assertFalse(jr.session_open())
+
+    def test_a_view_the_session_did_not_start_is_left_open(self):
+        sys.modules["juneau_run"] = jr
+        with mock.patch.dict(os.environ, {"JUNEAU_RUN_CONSOLE": "condensed"}):
+            with redirect_stdout(io.StringIO()):
+                jr.session("outer")
+            self.go(ok)
+            self.assertTrue(jr.session_open())
+            jr.end_session()
+            jr.end_session()    # twice is fine
+            self.assertFalse(jr.session_open())
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -143,7 +143,8 @@ public final class ParquetSchemaBuilder {
 		var typesInProgress = new HashMap<Class<?>,Integer>();
 		for (var key : keys) {
 			var val = map.get(key);
-			var cm = marshallingContext.getClassMeta(val != null ? val.getClass() : Object.class);
+			Class<?> valClass = val != null ? val.getClass() : Object.class;
+			var cm = marshallingContext.getClassMeta(valClass);
 			addSchemaElements(elements, cm, key, "root", false, null, typesInProgress);
 		}
 		return elements;
@@ -162,8 +163,10 @@ public final class ParquetSchemaBuilder {
 	public List<ParquetSchemaElement> buildSchemaForKeyValuePairs(Object keySample, Object valueSample) {
 		var elements = new ArrayList<ParquetSchemaElement>();
 		var typesInProgress = new HashMap<Class<?>,Integer>();
-		var keyCm = marshallingContext.getClassMeta(keySample != null ? keySample.getClass() : Object.class);
-		var valueCm = marshallingContext.getClassMeta(valueSample != null ? valueSample.getClass() : Object.class);
+		Class<?> keyClass = keySample != null ? keySample.getClass() : Object.class;
+		Class<?> valueClass = valueSample != null ? valueSample.getClass() : Object.class;
+		var keyCm = marshallingContext.getClassMeta(keyClass);
+		var valueCm = marshallingContext.getClassMeta(valueClass);
 		elements.add(new ParquetSchemaElement("root", null, null, null, 2, null, null, null, null, null));
 		addSchemaElements(elements, keyCm, "key", "root", false, null, typesInProgress);
 		addSchemaElements(elements, valueCm, "value", "root", false, null, typesInProgress);

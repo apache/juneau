@@ -1319,7 +1319,8 @@ public class MarshallingSession extends ContextSession implements ConverterSessi
 		if (o == null)
 			return def;
 		var unwrapped = getProxyFor(o);
-		return getClassMeta(unwrapped != null ? unwrapped : o.getClass());
+		Class<?> k = unwrapped != null ? unwrapped : o.getClass();
+		return getClassMeta(k);
 	}
 
 	/**

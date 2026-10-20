@@ -197,7 +197,7 @@ def main(args):
 4. Otherwise `mvn dependency:copy` of both into `target/juneau-run/`. A `-SNAPSHOT` is copied once per process, and a
    release only when it is missing.
 
-The modules: `git`, `run` (`session`, `cmd`, `gate`, `step`, `say`, `handoff`, `child_env`), `tools` (`maven`,
+The modules: `git`, `run` (`session`, `cmd`, `gate`, `step`, `say`, `err`, `hint`, `next_n`, `handoff`, `child_env`), `tools` (`maven`,
 `pytest`, `playwright`, `npm`, `gradle`), `notify`, `prompt`, `java`, `lock`, `proc`, `state`, `steps` and
 `testing` (`hermetic_git`, `bare_remote`, `clean_run_env`, `fake_tool`, and pytest fixtures through
 `pytest_plugins = ["juneau_scripts.testing.pytest_plugin"]`). Each module's docstring is its reference.
@@ -213,6 +213,13 @@ published, logged, checkpointed or put on a command line. See `docs/prompt-proto
 A step stops the run for a human wait by raising `steps.Pause(message, done=True)`. Its row draws ⏸ with the message,
 `Registry.run` returns `Result(True, 0, status="paused")`, and with `done=True` a `--resume` starts after the step.
 `state.Checkpoint.update({...})` writes several keys in one atomic write (a `None` value removes the key).
+
+`run.cmd(..., parent="step-id")` runs the command as a child row of that step (its `n` defaults to 1, and it takes no number
+from the session counter), and `label=` gives the row a short console label. `run.next_n(count=1)` hands out step numbers
+for a script that numbers steps itself; it starts after `JUNEAU_RUN_N_BASE`. `run.err(text)` and `run.hint(lines)` are the
+failure channel: they go to the console view when it owns the screen, and to stderr otherwise. Inside `run.paused()` the
+view is cleared, so `run.say` prints its text as-is. A session that opened the console view ends it when it ends (a
+process that runs several sessions starts each one clean); `juneau_run.end_session()` ends a view you opened yourself.
 
 `run.cmd(..., input=b"...")` writes the bytes to the command's stdin, then closes it. The bytes reach no log, marker or
 command line. It cannot be combined with `tty=True`.

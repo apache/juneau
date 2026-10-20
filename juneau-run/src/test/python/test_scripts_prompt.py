@@ -59,6 +59,21 @@ class PlainPromptTest(unittest.TestCase):
         with mock.patch.object(builtins, "input", side_effect=eof):
             self.assertIs(prompt.confirm("Go? ", default=True), True)
 
+    def test_confirm_shows_the_yes_no_hint_with_the_default_capitalized(self):
+        for default, hint in ((False, "(y/N)"), (True, "(Y/n)")):
+            with self.subTest(default=default), mock.patch.object(builtins, "input", return_value="y") as ask:
+                prompt.confirm("Go? ", default=default)
+            ask.assert_called_once_with(f"Go? {hint} ")
+        with mock.patch.object(builtins, "input", return_value="X") as ask:
+            prompt.confirm("Type X", expect="X")
+        ask.assert_called_once_with("Type X")
+
+    def test_email_confirm_uses_the_shared_hint(self):
+        with mock.patch.object(builtins, "input", return_value="y") as ask, \
+                contextlib.redirect_stdout(io.StringIO()):
+            prompt.email(to="a@x.org", subject="s", body="b")
+        ask.assert_called_once_with("Sent it from your apache.org address? (y/N) ")
+
     def test_secret(self):
         with mock.patch.object(prompt.getpass, "getpass", return_value="s3cret") as gp:
             self.assertEqual(prompt.secret("Password: "), "s3cret")
@@ -258,6 +273,7 @@ class ChannelTest(ChannelCase):
         self.assertEqual([p["id"] for p in prompts], ["p1", "p2", "p3", "p4", "p5", "p6"])
         self.assertTrue(all(p["v"] == 1 for p in prompts))
         self.assertEqual(prompts[0]["key"], "version")
+        self.assertEqual(prompts[1]["hint"], "(y/N)")
         self.assertIn("mailto:", prompts[5]["email"]["mailto"])
         self.assertEqual([f["kind"] for f in prompts[4]["fields"]], ["text", "int"])
 

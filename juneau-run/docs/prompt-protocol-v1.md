@@ -56,7 +56,7 @@ With no host, the same calls prompt on the terminal; nothing in this document ap
 | kind | `value` |
 |---|---|
 | `text` | string |
-| `confirm` | boolean; with `expect`, the typed string, which the script compares |
+| `confirm` | boolean (the prompt carries `hint`, `(y/N)` or `(Y/n)`, absent with `expect`); with `expect`, the typed string, which the script compares |
 | `secret` | string |
 | `choice` | one option `value` |
 | `form` | object of field name to string |
