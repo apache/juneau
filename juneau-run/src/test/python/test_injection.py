@@ -169,6 +169,30 @@ class InjectionTest(unittest.TestCase):
         self.assertEqual(where, f"{zpath}{os.sep}pytest_plugin")
         self._assert_plugin_only(where)
 
+    def test_finds_the_playwright_reporter_in_the_source_tree_and_extracts_it_from_a_zip_once(self):
+        source = support.MODULE_ROOT / "src" / "main" / "js" / "playwright_reporter" / "juneau_run_playwright.cjs"
+        self.assertEqual(jr.find_playwright_reporter(), str(source))
+        from scripts_support import build_zip
+        tmp = tempfile.mkdtemp()
+        self.addCleanup(shutil.rmtree, tmp, ignore_errors=True)
+        zpath = build_zip(Path(tmp) / "t.zip")
+        registered = []
+        with mock.patch.object(jr, "_engine_dir", return_value=Path("/nowhere")), \
+             mock.patch.object(jr, "_playwright_extracted", None), \
+             mock.patch.object(jr.atexit, "register", side_effect=lambda *a, **k: registered.append((a, k))), \
+             mock.patch.dict(sys.modules, {"juneau_scripts": types.SimpleNamespace(__file__=f"{zpath}/juneau_scripts/__init__.py")}):
+            first = jr.find_playwright_reporter()
+            self.assertEqual(jr.find_playwright_reporter(), first)
+        self.addCleanup(shutil.rmtree, str(Path(first).parent), ignore_errors=True)
+        self.assertEqual(Path(first).read_bytes(), source.read_bytes())
+        self.assertTrue(Path(first).parent.name.startswith("juneau-run-playwright-"))
+        self.assertEqual(registered, [((shutil.rmtree, str(Path(first).parent)), {"ignore_errors": True})])
+
+    def test_no_playwright_reporter_standalone(self):
+        with mock.patch.object(jr, "_engine_dir", return_value=Path("/nowhere")), \
+             mock.patch.dict(sys.modules, {"juneau_scripts": types.SimpleNamespace(__file__="/x/juneau_scripts/__init__.py")}):
+            self.assertIsNone(jr.find_playwright_reporter())
+
     @unittest.skipUnless(shutil.which("uv"), "uv not installed")
     def test_real_default_launcher_accepts_the_plugin(self):
         tmp = tempfile.mkdtemp()

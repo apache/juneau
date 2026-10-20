@@ -108,6 +108,102 @@ class MarkersTest(unittest.TestCase):
                     raise RuntimeError("boom")
         self.assertEqual(parse(capture(body))[-1], {"ev": "end", "id": "commit", "status": "fail", "ms": 0})
 
+    def test_unit_is_a_child_step_marker_and_one_bus_pair(self):
+        seen = []
+        jr.subscribe(lambda kind, fields: seen.append((kind, dict(fields))))
+        def body():
+            with jr.step("prechecks", 1, "Prechecks") as s:
+                with s.unit("Whitespace check", "Whitespace check") as u:
+                    u.dot("pass")
+        self.assertEqual(parse(capture(body)), [
+            {"ev": "step", "id": "prechecks", "n": 1, "title": "Prechecks"},
+            {"ev": "step", "id": "prechecks/whitespace-check", "n": 1, "title": "Whitespace check",
+             "parent": "prechecks"},
+            {"ev": "end", "id": "prechecks/whitespace-check", "status": "ok", "ms": 0},
+            {"ev": "end", "id": "prechecks", "status": "ok", "ms": 0}])
+        units = [(k, f) for k, f in seen if k.startswith("unit_")]
+        self.assertEqual([k for k, _ in units], ["unit_start", "unit_dot", "unit_end"])
+        self.assertEqual(units[0][1], {"step": "prechecks", "id": "Whitespace check", "title": "Whitespace check",
+                                       "src": "script"})
+        self.assertEqual({k: v for k, v in units[2][1].items() if k != "ms"},
+                         {"step": "prechecks", "id": "Whitespace check", "status": "ok", "src": "script"})
+        self.assertEqual([k for k, _ in seen].count("step_start"), 1)     # not a sub-step
+
+    def test_unit_fail_dot_and_fail_end_it_fail(self):
+        def body():
+            with jr.step("s", 1, "S") as s:
+                with s.unit("a", "A") as u:
+                    u.dot("fail")
+                with s.unit("b", "B") as u:
+                    u.fail()
+        ends = [m for m in parse(capture(body)) if m["ev"] == "end"]
+        self.assertEqual([(m["id"], m["status"]) for m in ends], [("s/a", "fail"), ("s/b", "fail"), ("s", "ok")])
+
+    def test_unit_exception_ends_it_fail_and_reraises(self):
+        def body():
+            with self.assertRaises(RuntimeError):
+                with jr.step("s", 1, "S") as s:
+                    with s.unit("a", "A"):
+                        raise RuntimeError("boom")
+        ends = [m for m in parse(capture(body)) if m["ev"] == "end"]
+        self.assertEqual([(m["id"], m["status"]) for m in ends], [("s/a", "fail"), ("s", "fail")])
+
+    def test_unit_ids_stay_within_64_characters_and_a_cut_collision_gets_a_number(self):
+        row = "r" * 40
+        def body():
+            with jr.step(row, 1, "R") as s:
+                for i in range(3):
+                    with s.unit("x" * 30 + str(i), "X"):
+                        pass
+        ids = [m["id"] for m in parse(capture(body)) if m["ev"] == "step"][1:]
+        self.assertEqual(ids, [f"{row}/{'x' * 23}", f"{row}/{'x' * 21}-2", f"{row}/{'x' * 21}-3"])
+        self.assertTrue(all(len(i) <= 64 for i in ids))
+
+    def test_unit_ids_stay_within_64_characters_when_the_row_leaves_one_to_three(self):
+        for size in (60, 61, 62):      # room 3, 2, 1
+            with self.subTest(size=size):
+                row = "r" * size
+                def body():
+                    with jr.step(row, 1, "R") as s:
+                        for i in range(3):
+                            with s.unit("abc" + str(i), "X"):
+                                pass
+                ids = [m["id"] for m in parse(capture(body)) if m["ev"] == "step"][1:]
+                self.assertTrue(all(len(i) <= 64 for i in ids), ids)
+                self.assertEqual(len(set(ids)), 3)
+
+    def test_a_row_with_room_for_one_character_raises_once_its_ids_run_out(self):
+        def body():
+            with jr.step("r" * 62, 1, "R") as s:
+                for i in range(9):
+                    with s.unit(f"a{i}", "A"):
+                        pass
+                with self.assertRaises(ValueError):
+                    with s.unit("a9", "A"):
+                        pass
+        ids = [m["id"] for m in parse(capture(body)) if m["ev"] == "step"][1:]
+        self.assertEqual([i.split("/")[1] for i in ids], ["a", "2", "3", "4", "5", "6", "7", "8", "9"])
+
+    def test_a_duplicate_open_unit_id_raises(self):
+        def body():
+            with jr.step("s", 1, "S") as s:
+                with s.unit("a", "A"):
+                    with self.assertRaises(ValueError):
+                        with s.unit("a", "A again"):
+                            pass
+                with s.unit("a", "A again"):       # closed: it may open again, as a new child step
+                    pass
+        steps = [m["id"] for m in parse(capture(body)) if m["ev"] == "step"]
+        self.assertEqual(steps, ["s", "s/a", "s/a-2"])
+
+    def test_a_row_id_of_63_characters_leaves_no_room_for_a_unit(self):
+        def body():
+            with jr.step("r" * 63, 1, "R") as s:
+                with self.assertRaises(ValueError):
+                    with s.unit("a", "A"):
+                        pass
+        capture(body)
+
     def test_step_works_when_disabled(self):
         with mock.patch.dict(os.environ):
             os.environ.pop("RUN_MARKERS")

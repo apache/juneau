@@ -267,13 +267,13 @@ class RecordTest(HistoryEnv, unittest.TestCase):
         self.assertRegex(r["ts"], r"^\d{4}-\d\d-\d\dT\d\d:\d\d:\d\dZ$")
         self.assertAlmostEqual(r["wall_s"], 101.4)
 
-    def test_maven_modules_counted_from_reactor_and_module_end(self):
+    def test_maven_modules_counted_from_reactor_and_unit_end(self):
         self.start()
         self.pub("reactor", step="mvn", size=4, poms=["mvn/parent"], tests=True)
-        self.pub("module_end", step="mvn", module="mvn/parent", status="ok", ms=100, totals=None)
-        self.pub("module_end", step="mvn", module="mvn/a", status="ok", ms=2500, totals=None)
-        self.pub("module_end", step="mvn", module="mvn/b", status="ok", ms=1500, totals=None)
-        self.pub("module_end", step="mvn", module="mvn/c", status="ok", ms=500, totals=None)
+        self.pub("unit_end", src="sub", step="mvn", id="mvn/parent", status="ok", ms=100, totals=None)
+        self.pub("unit_end", src="sub", step="mvn", id="mvn/a", status="ok", ms=2500, totals=None)
+        self.pub("unit_end", src="sub", step="mvn", id="mvn/b", status="ok", ms=1500, totals=None)
+        self.pub("unit_end", src="sub", step="mvn", id="mvn/c", status="ok", ms=500, totals=None)
         self.pub("step_end", id="mvn", status="ok", ms=5000)
         r = self.read()[-1]
         self.assertEqual(r["units"], {"kind": "modules", "total": 3, "done": 3})
@@ -282,17 +282,25 @@ class RecordTest(HistoryEnv, unittest.TestCase):
         self.assertEqual(len(r["subs"]), 4)
         self.assertTrue(all("/" not in k for k in r["subs"]))
 
-    def test_gradle_tasks_units_from_module_end(self):
+    def test_gradle_tasks_units_from_unit_end(self):
         self.start(id="g", tool="gradle")
-        self.pub("module_end", step="g", module="g/a", status="ok", ms=1000, totals=None)
-        self.pub("module_end", step="g", module="g/b", status="ok", ms=1000, totals=None)
+        self.pub("unit_end", src="sub", step="g", id="g/a", status="ok", ms=1000, totals=None)
+        self.pub("unit_end", src="sub", step="g", id="g/b", status="ok", ms=1000, totals=None)
         self.pub("step_end", id="g", status="ok", ms=3000)
         self.assertEqual(self.read()[-1]["units"], {"kind": "tasks", "total": 2, "done": 2})
+
+    def test_file_and_script_units_are_not_recorded(self):
+        self.start()
+        self.pub("unit_end", src="file", step="mvn", id="tests/test_a.py", status="ok", ms=1000)
+        self.pub("unit_end", src="script", step="mvn", id="identity", status="ok", ms=1000)
+        self.pub("unit_end", src="row", step="mvn", id="mvn/sub", status="ok", ms=1000)
+        self.pub("step_end", id="mvn", status="ok", ms=3000)
+        self.assertEqual(self.read()[-1].get("subs", {}), {})
 
     def test_subs_capped_at_400(self):
         self.start()
         for i in range(450):
-            self.pub("module_end", step="mvn", module=f"mvn/m{i}", status="ok", ms=1000, totals=None)
+            self.pub("unit_end", src="sub", step="mvn", id=f"mvn/m{i}", status="ok", ms=1000, totals=None)
         self.pub("step_end", id="mvn", status="ok", ms=1000)
         self.assertEqual(len(self.read()[-1].get("subs", {})), 400)
 

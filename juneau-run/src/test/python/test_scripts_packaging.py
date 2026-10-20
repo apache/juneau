@@ -69,6 +69,7 @@ class DescriptorTest(unittest.TestCase):
         sources = [f.findtext(f"{ASM}source") for f in self.root.findall(f"{ASM}files/{ASM}file")]
         self.assertEqual(sources, ["${project.basedir}/src/main/python/bootstrap.py",
                                    "${project.basedir}/src/main/python/pytest_plugin/juneau_run_pytest.py",
+                                   "${project.basedir}/src/main/js/playwright_reporter/juneau_run_playwright.cjs",
                                    "${project.basedir}/../LICENSE", "${project.basedir}/../NOTICE"])
         for s in sources:
             self.assertTrue(Path(s.replace("${project.basedir}", str(MODULE_ROOT))).is_file(), s)
@@ -77,7 +78,8 @@ class DescriptorTest(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp:
             with zipfile.ZipFile(build_zip(Path(tmp) / "t.zip")) as z:
                 names = sorted(z.namelist())
-        self.assertEqual(names, sorted(package_files() + ["LICENSE", "NOTICE", "bootstrap.py", "pytest_plugin/juneau_run_pytest.py"]))
+        self.assertEqual(names, sorted(package_files() + ["LICENSE", "NOTICE", "bootstrap.py", "pytest_plugin/juneau_run_pytest.py",
+                                                      "playwright_reporter/juneau_run_playwright.cjs"]))
 
 
 @unittest.skipUnless(os.environ.get("JUNEAU_SCRIPTS_CHECK_ZIP"), "set JUNEAU_SCRIPTS_CHECK_ZIP to a mvn package zip")
@@ -88,7 +90,8 @@ class RealZipTest(unittest.TestCase):
     def test_real_zip_holds_exactly_the_toolkit(self):
         with zipfile.ZipFile(os.environ["JUNEAU_SCRIPTS_CHECK_ZIP"]) as z:
             names = sorted(n for n in z.namelist() if not n.endswith("/"))
-        self.assertEqual(names, sorted(package_files() + ["LICENSE", "NOTICE", "bootstrap.py", "pytest_plugin/juneau_run_pytest.py"]))
+        self.assertEqual(names, sorted(package_files() + ["LICENSE", "NOTICE", "bootstrap.py", "pytest_plugin/juneau_run_pytest.py",
+                                                      "playwright_reporter/juneau_run_playwright.cjs"]))
 
 
 class PomTest(unittest.TestCase):

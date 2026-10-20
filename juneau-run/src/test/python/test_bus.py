@@ -150,14 +150,16 @@ class DispatcherBusTest(unittest.TestCase):
             ("failure", "boom", "tests"),
         ])
         self.assertEqual(self.rec.kinds(), [
-            "module_start", "reactor", "class_done", "module_compiled", "module_tested", "tests", "module_end",
+            "unit_start", "reactor", "unit_dot", "module_compiled", "module_tested", "tests", "unit_end",
             "failure"])
-        self.assertEqual(self.rec.of("module_start")[0], {"step": "tests", "module": "tests/a", "title": "Mod A"})
+        self.assertEqual(self.rec.of("unit_start")[0], {"step": "tests", "id": "tests/a", "title": "Mod A", "src": "sub"})
         self.assertEqual(self.rec.of("reactor")[0], {"step": "tests", "size": 3, "poms": ["tests/parent"], "tests": True})
-        self.assertEqual(self.rec.of("class_done")[0], {"step": "tests", "module": "tests/a", "outcome": "pass"})
+        self.assertEqual(self.rec.of("unit_dot")[0], {"step": "tests", "id": "tests/a", "outcome": "pass",
+                                                         "src": "sub"})
         self.assertEqual(self.rec.of("module_compiled")[0], {"step": "tests", "module": "tests/a", "ok": True})
-        self.assertEqual(self.rec.of("module_end")[0],
-                         {"step": "tests", "module": "tests/a", "status": "ok", "ms": 1200, "totals": (5, 0, 0, 1)})
+        self.assertEqual(self.rec.of("unit_end")[0],
+                         {"step": "tests", "id": "tests/a", "status": "ok", "ms": 1200, "totals": (5, 0, 0, 1),
+                          "src": "sub"})
         self.assertEqual(self.rec.of("failure")[0], {"text": "boom", "step": "tests"})
 
     def test_progress_publishes_step_progress_and_emits_no_marker(self):
@@ -183,12 +185,24 @@ class DispatcherBusTest(unittest.TestCase):
                          {"step": "s1", "name": "surefire_s", "sub": "core", "value": 4.5})
         self.assertEqual(out.getvalue(), "")      # never a ##run marker
 
-    def test_close_children_publishes_module_end_for_each_open_module(self):
+    def test_unit_tuples_publish_bus_unit_events_under_the_parsers_step_and_no_marker(self):
+        os.environ["RUN_MARKERS"] = "1"
+        out = io.StringIO()
+        with contextlib.redirect_stdout(out):
+            self.d.apply([("unit_start", "a.py", "a.py", "file"), ("unit_dot", "a.py", "fail"),
+                          ("unit_end", "a.py", "fail", "file")])
+        self.assertEqual(self.rec.kinds(), ["unit_start", "unit_dot", "unit_end"])
+        self.assertEqual(self.rec.of("unit_start")[0], {"step": "tests", "id": "a.py", "title": "a.py", "src": "file"})
+        self.assertEqual(self.rec.of("unit_dot")[0], {"step": "tests", "id": "a.py", "outcome": "fail"})
+        self.assertEqual(self.rec.of("unit_end")[0], {"step": "tests", "id": "a.py", "status": "fail", "src": "file"})
+        self.assertEqual(out.getvalue(), "")      # a file is a line, never a child step
+
+    def test_close_children_publishes_unit_end_for_each_open_module(self):
         self.d.apply([("sub_start", "tests/a", 1, "Mod A"), ("sub_start", "tests/b", 2, "Mod B"),
                       ("tests", "tests/b", 3, 1, 0, 0)])
         self.d.close_children("fail")
-        self.assertEqual([(f["module"], f["status"], f["totals"]) for f in self.rec.of("module_end")],
-                         [("tests/b", "fail", (3, 1, 0, 0)), ("tests/a", "fail", None)])
+        self.assertEqual([(f["id"], f["status"], f["totals"], f["src"]) for f in self.rec.of("unit_end")],
+                         [("tests/b", "fail", (3, 1, 0, 0), "sub"), ("tests/a", "fail", None, "sub")])
 
 
 if __name__ == "__main__":

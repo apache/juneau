@@ -153,6 +153,21 @@ class _NullStep:
         """Mirrors juneau_run.Step.pause: in a plain run the text is printed."""
         print(f"⏸ {text}", flush=True)
 
+    @contextlib.contextmanager
+    def unit(self, id, title):  # NOSONAR python:S5806 - mirrors juneau_run.Step.unit
+        """Mirrors juneau_run.Step.unit: in a plain run there is no line to draw."""
+        yield _NullUnit()
+
+
+class _NullUnit:
+    status = "ok"
+
+    def dot(self, outcome):
+        pass
+
+    def fail(self):
+        pass
+
 
 @contextlib.contextmanager
 def step(id, title, *, n=None, parent=None, label=None):  # NOSONAR python:S5806 - mirrors juneau_run.step
@@ -344,9 +359,11 @@ def drive_checks(id, st, checks, *, dry_run=False):  # NOSONAR python:S5806 - mi
     else:
         jr.publish("units", step=id, total=len(checks), kind="checks")
         for i, c in enumerate(checks):
-            jr.publish("step_progress", step=id, text=c.name)
-            jr.tick()
-            v = verdicts[c.name] = _checks.evaluate(c, dry_run=dry_run)
+            with _unit(st, _slug(c.name), c.name) as u:    # the check's line under the row, while it runs
+                jr.tick()
+                v = verdicts[c.name] = _checks.evaluate(c, dry_run=dry_run)
+                if v.status == "fail":
+                    u.fail()
             jr.publish("unit", step=id, done=i + 1, outcome=v.status)
             if v.status != "pass":
                 jr.emit("note", level="error" if v.status == "fail" else "warn",
@@ -363,6 +380,12 @@ def drive_checks(id, st, checks, *, dry_run=False):  # NOSONAR python:S5806 - mi
         st.fail()
     refused = any(v.status == "fail" or v.refused for v in verdicts.values())
     return CheckResult(level != "error", verdicts, refused)
+
+
+def _unit(st, id, title):  # NOSONAR python:S5806 - mirrors juneau_run.Step.unit
+    """st.unit(id, title), or a null unit when st comes from an older juneau_run whose Step has no unit()."""
+    unit = getattr(st, "unit", None)
+    return unit(id, title) if unit is not None else contextlib.nullcontext(_NullUnit())
 
 
 _run_checks = checks     # Session.checks's parameter of the same name hides it

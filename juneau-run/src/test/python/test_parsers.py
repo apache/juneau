@@ -12,6 +12,7 @@
 # ***************************************************************************************************************************
 """Parsers: pure line-to-event tests against recorded fixtures (see fixtures/ and the module README)."""
 
+import json
 import os
 import re
 import tempfile
@@ -824,25 +825,273 @@ class PlaywrightParserTest(unittest.TestCase):
         self.assertTrue(any("Expected: 2" in c for c in cond))
         self.assertIn("  2 passed (1.2s)", cond)
 
-    def test_prepare_adds_reporters_and_json_path_only_when_markers_are_on(self):
-        with mock.patch.dict(os.environ, {"RUN_MARKERS": "1", "RUN_ARTIFACTS": "/art"}):
-            os.environ.pop("PLAYWRIGHT_JSON_OUTPUT_NAME", None)
-            p = self.parser()
-            cmd, env = p.prepare(["npx", "playwright", "test"], {"A": "b"}, None)
-            self.assertEqual(cmd, ["npx", "playwright", "test", "--reporter=line,json"])
-            self.assertEqual(env["PLAYWRIGHT_JSON_OUTPUT_NAME"], "/art/pw-playwright.json")
-            self.assertEqual(env["A"], "b")
-        with mock.patch.dict(os.environ, {"RUN_ARTIFACTS": "/art"}):
-            os.environ.pop("RUN_MARKERS", None)
-            os.environ.pop("PLAYWRIGHT_JSON_OUTPUT_NAME", None)
-            cmd, env = self.parser().prepare(["npx", "playwright", "test"], {}, None)
-            self.assertEqual(cmd, ["npx", "playwright", "test"])
-            self.assertNotIn("PLAYWRIGHT_JSON_OUTPUT_NAME", env)
+    def prep(self, cmd, env=None, where="/r/juneau_run_playwright.cjs", console=True, interactive=False):
+        parser = self.parser()
+        parser.interactive = interactive
+        with mock.patch.object(jr, "find_playwright_reporter", return_value=where), \
+                mock.patch.object(jr, "_console", object() if console else None):
+            return parser.prepare(cmd, env, None)
 
-    def test_existing_reporter_is_respected(self):
-        with mock.patch.dict(os.environ, {"RUN_MARKERS": "1", "RUN_ARTIFACTS": "/art"}):
-            cmd, _ = self.parser().prepare(["playwright", "test", "--reporter=list"], {}, None)
-        self.assertEqual(cmd, ["playwright", "test", "--reporter=list"])
+    def clean_env(self, **values):
+        """os.environ with none of the variables prepare() reads, plus values."""
+        patch = mock.patch.dict(os.environ, values)
+        patch.start()
+        self.addCleanup(patch.stop)
+        for name in ("RUN_MARKERS", "RUN_ARTIFACTS", "PLAYWRIGHT_JSON_OUTPUT_NAME", "JUNEAU_RUN_PLAYWRIGHT_REPORTER",
+                     "PW_TEST_REPORTER", "JUNEAU_RUN_PLAYWRIGHT_JSON", "JUNEAU_RUN_PLAYWRIGHT_MARKERS",
+                     "PLAYWRIGHT_HTML_OPEN", "PW_TEST_HTML_REPORT_OPEN"):
+            if name not in values:
+                os.environ.pop(name, None)
+
+    def test_prepare_appends_the_reporter_through_the_environment_and_asks_it_for_json_under_markers(self):
+        self.clean_env(RUN_MARKERS="1", RUN_ARTIFACTS="/art")
+        cmd, env = self.prep(["npx", "playwright", "test"], {"A": "b"})
+        self.assertEqual(cmd, ["npx", "playwright", "test"])        # no --reporter: the config's reporters still run
+        self.assertEqual(env["PW_TEST_REPORTER"], "/r/juneau_run_playwright.cjs")
+        self.assertEqual(env["JUNEAU_RUN_PLAYWRIGHT_JSON"], str(Path("/art") / "pw-playwright.json"))
+        self.assertNotIn("JUNEAU_RUN_PLAYWRIGHT_MARKERS", env)
+        self.assertNotIn("PLAYWRIGHT_JSON_OUTPUT_NAME", env)      # would redirect a json reporter in the config
+        self.assertEqual(env["A"], "b")
+
+    def test_a_console_run_gets_the_reporter_and_no_json(self):
+        self.clean_env(RUN_ARTIFACTS="/art")
+        cmd, env = self.prep(["npx", "playwright", "test"], {})
+        self.assertEqual(cmd, ["npx", "playwright", "test"])
+        self.assertEqual(env["PW_TEST_REPORTER"], "/r/juneau_run_playwright.cjs")
+        self.assertNotIn("JUNEAU_RUN_PLAYWRIGHT_JSON", env)
+
+    def test_a_plain_run_with_no_session_or_markers_is_left_alone(self):
+        self.clean_env()
+        cmd, env = self.prep(["npx", "playwright", "test"], {}, console=False)
+        self.assertEqual((cmd, env), (["npx", "playwright", "test"], {}))
+
+    def test_an_interactive_run_keeps_playwrights_output_and_gets_only_the_json_under_markers(self):
+        self.clean_env(RUN_ARTIFACTS="/art")
+        self.assertEqual(self.prep(["playwright", "test"], {}, interactive=True), (["playwright", "test"], {}))
+        os.environ["RUN_MARKERS"] = "1"
+        cmd, env = self.prep(["playwright", "test"], {}, interactive=True)
+        self.assertEqual(cmd, ["playwright", "test"])
+        self.assertEqual((env["PW_TEST_REPORTER"], env["JUNEAU_RUN_PLAYWRIGHT_MARKERS"]),
+                         ("/r/juneau_run_playwright.cjs", "0"))      # prints nothing: only the report file is added
+        self.assertEqual(env["JUNEAU_RUN_PLAYWRIGHT_JSON"], str(Path("/art") / "pw-playwright.json"))
+        os.environ.pop("RUN_ARTIFACTS")
+        self.assertEqual(self.prep(["playwright", "test"], {}, interactive=True), (["playwright", "test"], {}))
+
+    def test_a_reporter_the_caller_names_is_respected(self):
+        self.clean_env(RUN_MARKERS="1", RUN_ARTIFACTS="/art")
+        for cmd in (["playwright", "test", "--reporter=list"], ["playwright", "test", "--reporter", "list"]):
+            self.assertEqual(self.prep(cmd, {}), (cmd, {}))
+        self.assertEqual(self.prep(["playwright", "test"], {"PW_TEST_REPORTER": "mine.js"})[1], {"PW_TEST_REPORTER": "mine.js"})
+
+    def test_a_json_path_the_caller_set_is_kept_and_reported(self):
+        self.clean_env(RUN_MARKERS="1", RUN_ARTIFACTS="/art")
+        parser = self.parser()
+        with mock.patch.object(jr, "find_playwright_reporter", return_value="/r/x.cjs"), mock.patch.object(jr, "_console", None):
+            env = parser.prepare(["playwright", "test"], {"JUNEAU_RUN_PLAYWRIGHT_JSON": "/mine.json"}, None)[1]
+        self.assertEqual((env["JUNEAU_RUN_PLAYWRIGHT_JSON"], parser.report_path), ("/mine.json", "/mine.json"))
+
+    def test_when_the_reporter_is_not_added_a_json_report_the_caller_asked_playwright_for_is_announced(self):
+        self.clean_env(RUN_MARKERS="1", RUN_ARTIFACTS="/art")
+        parser = self.parser()
+        with mock.patch.object(jr, "_console", None):
+            parser.prepare(["playwright", "test", "--reporter=json"], {"PLAYWRIGHT_JSON_OUTPUT_NAME": "/pw.json"}, None)
+        self.assertEqual(parser.report_path, "/pw.json")
+
+    def test_a_flag_that_only_starts_with_reporter_is_not_a_reporter(self):
+        self.clean_env()
+        self.assertEqual(self.prep(["playwright", "test", "--reporters-dir=x"], {})[1]["PW_TEST_REPORTER"],
+                         "/r/juneau_run_playwright.cjs")
+
+    def test_the_opt_out_or_a_missing_reporter_leaves_the_run_alone(self):
+        self.clean_env(JUNEAU_RUN_PLAYWRIGHT_REPORTER="0", RUN_MARKERS="1", RUN_ARTIFACTS="/art")
+        self.assertEqual(self.prep(["playwright", "test"], {}), (["playwright", "test"], {}))
+        os.environ.pop("JUNEAU_RUN_PLAYWRIGHT_REPORTER")
+        self.assertEqual(self.prep(["playwright", "test"], {}, where=None), (["playwright", "test"], {}))
+
+    def test_a_reporter_path_with_a_comma_is_fine(self):
+        self.clean_env()
+        self.assertEqual(self.prep(["playwright", "test"], {}, where="/a,b/r.cjs")[1]["PW_TEST_REPORTER"], "/a,b/r.cjs")
+
+    def test_an_injected_run_outside_a_terminal_never_opens_the_html_report(self):
+        # html's open-on-failure serves the report and waits whenever stdin is a terminal, which a console run's is
+        self.clean_env()
+        self.assertEqual(self.prep(["playwright", "test"], {})[1]["PLAYWRIGHT_HTML_OPEN"], "never")
+        for name in ("PLAYWRIGHT_HTML_OPEN", "PW_TEST_HTML_REPORT_OPEN"):
+            env = self.prep(["playwright", "test"], {name: "always"})[1]
+            self.assertEqual((env[name], env.get("PLAYWRIGHT_HTML_OPEN", "always")), ("always", "always"), name)
+        os.environ.update(RUN_MARKERS="1", RUN_ARTIFACTS="/art")
+        self.assertNotIn("PLAYWRIGHT_HTML_OPEN", self.prep(["playwright", "test"], {}, interactive=True)[1])
+
+    def test_an_injected_run_outside_a_terminal_drops_an_inherited_markers_off(self):
+        self.clean_env()
+        self.assertNotIn("JUNEAU_RUN_PLAYWRIGHT_MARKERS",
+                         self.prep(["playwright", "test"], {"JUNEAU_RUN_PLAYWRIGHT_MARKERS": "0"})[1])
+
+    def test_the_opt_out_is_read_from_the_commands_environment(self):
+        self.clean_env(RUN_MARKERS="1")
+        env = {"JUNEAU_RUN_PLAYWRIGHT_REPORTER": "0"}
+        self.assertEqual(self.prep(["playwright", "test"], env), (["playwright", "test"], env))
+        self.assertIn("PW_TEST_REPORTER", self.prep(["playwright", "test"], {"JUNEAU_RUN_PLAYWRIGHT_REPORTER": "1"})[1])
+
+    def test_a_leftover_report_is_removed_so_a_cancelled_run_announces_none(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            self.clean_env(RUN_MARKERS="1", RUN_ARTIFACTS=tmp)
+            old = Path(tmp) / "pw-playwright.json"
+            old.write_text("{}", encoding="utf-8")
+            parser = self.parser()
+            with mock.patch.object(jr, "find_playwright_reporter", return_value="/r/x.cjs"), \
+                    mock.patch.object(jr, "_console", None):
+                parser.prepare(["playwright", "test"], {}, None)
+            self.assertFalse(old.exists())
+            self.assertEqual(kinds(parser.finish(-15), "report"), [])
+
+    def test_interrupted_tests_in_the_summary_count_as_skipped(self):
+        p = self.parser()
+        events = [e for line in ("  1 failed", "  2 interrupted", "  3 passed") for e in p.on_line(line)]
+        self.assertEqual(kinds(events, "tests")[-1], ("tests", "pw", 6, 1, 0, 2))
+
+    def marker(self, ev, **fields):
+        return "##playwright " + json.dumps({"ev": ev, **fields})
+
+    def test_reporter_markers_open_dot_and_close_each_file(self):
+        p = self.parser()
+        lines = [self.marker("hello", v=1), self.marker("begin", f={"a.spec.ts": 2, "b.spec.ts": 1}),
+                 self.marker("start", f="a.spec.ts"), self.marker("test", f="a.spec.ts", o="pass"),
+                 self.marker("start", f="b.spec.ts"), self.marker("start", f="a.spec.ts"),
+                 self.marker("test", f="a.spec.ts", o="fail"), self.marker("test", f="b.spec.ts", o="skip")]
+        events = [e for line in lines for e in p.on_line(line) if e[0].startswith("unit_")]
+        self.assertEqual(events, [("unit_start", "a.spec.ts", "a.spec.ts", "file"), ("unit_dot", "a.spec.ts", "pass"),
+                                  ("unit_start", "b.spec.ts", "b.spec.ts", "file"), ("unit_dot", "a.spec.ts", "fail"),
+                                  ("unit_end", "a.spec.ts", "fail", "file"), ("unit_dot", "b.spec.ts", "skip"),
+                                  ("unit_end", "b.spec.ts", "ok", "file")])
+
+    def test_the_bar_counts_from_markers_once_the_reporter_says_hello(self):
+        p = self.parser()
+        self.assertEqual(p.on_line(self.marker("hello", v=1)), [])
+        self.assertEqual(p.on_line(self.marker("begin", f={"a.ts": 2, "b.ts": 1})), [("units", "pw", 3, "tests")])
+        self.assertEqual(p.on_line("[1/3] a.ts:3:1 › passes"), [])      # the line reporter's count is ignored
+        self.assertEqual(p.on_line(self.marker("test", f="a.ts", o="fail"))[:2],
+                         [("unit", "pw", 1, "fail"), ("tests", "pw", 1, 1, 0, 0)])
+        self.assertEqual(p.on_line(self.marker("test", f="b.ts", o="skip"))[:2],
+                         [("unit", "pw", 2, "skip"), ("tests", "pw", 2, 1, 0, 1)])
+        self.assertEqual(kinds(p.on_line("  1 failed"), "tests"), [("tests", "pw", 1, 1, 0, 0)])  # the summary still wins
+
+    def test_a_test_line_after_the_summary_moves_the_bar_but_leaves_the_summary_counts(self):
+        # the reporter's onEnd sends a test whose retry never ran after Playwright printed its summary
+        p = self.parser()
+        for line in (self.marker("hello", v=1), self.marker("begin", f={"a.ts": 1, "b.ts": 1}),
+                     self.marker("test", f="b.ts", o="fail"), "  1 failed", "  1 flaky"):
+            p.on_line(line)
+        events = p.on_line(self.marker("test", f="a.ts", o="pass"))
+        self.assertEqual((kinds(events, "unit"), kinds(events, "tests")), ([("unit", "pw", 2, "pass")], []))
+
+    def test_a_retried_test_counts_once(self):
+        p = self.parser()
+        lines = [self.marker("hello", v=1), self.marker("begin", f={"a.ts": 1}), self.marker("start", f="a.ts"),
+                 "[1/2] a.ts:3:1 › flaky", self.marker("start", f="a.ts"), "[2/2] a.ts:3:1 › flaky (retry #1)",
+                 self.marker("test", f="a.ts", o="pass")]
+        events = [e for line in lines for e in p.on_line(line)]
+        self.assertEqual(kinds(events, "unit"), [("unit", "pw", 1, "pass")])
+        self.assertEqual(kinds(events, "units"), [("units", "pw", 1, "tests")])
+
+    def test_a_test_with_no_file_still_counts(self):
+        p = self.parser()
+        for line in (self.marker("hello", v=1), self.marker("begin", f={"": 1})):
+            p.on_line(line)
+        self.assertEqual(p.on_line(self.marker("test", f="", o="pass")), [("unit", "pw", 1, "pass"), ("tests", "pw", 1, 0, 0, 0)])
+
+    def test_a_run_whose_reporter_never_said_hello_says_so_once(self):
+        with mock.patch.dict(os.environ, {"RUN_MARKERS": "1"}):
+            os.environ.pop("PW_TEST_REPORTER", None)
+            os.environ.pop("JUNEAU_RUN_PLAYWRIGHT_REPORTER", None)
+            for exit_code, text in ((0, "  2 passed"), (1, "  1 failed"), (1, "[1/2] a.ts:3:1 › passes")):
+                p = self.parser()
+                with mock.patch.object(jr, "find_playwright_reporter", return_value="/r/x.cjs"):
+                    p.prepare(["playwright", "test"], {}, None)
+                if text:
+                    p.on_line(text)
+                self.assertEqual(kinds(p.finish(exit_code), "note"),
+                                 [("note", "warn", "Playwright reporter not loaded: no per-file lines", "pw")])
+
+    def test_no_note_without_the_reporter_or_when_nothing_ran(self):
+        p = self.parser()                                   # not injected
+        self.assertEqual(kinds(p.finish(0), "note"), [])
+        with mock.patch.dict(os.environ, {"RUN_MARKERS": "1"}):
+            os.environ.pop("PW_TEST_REPORTER", None)
+            os.environ.pop("JUNEAU_RUN_PLAYWRIGHT_REPORTER", None)
+            p = self.parser()
+            with mock.patch.object(jr, "find_playwright_reporter", return_value="/r/x.cjs"):
+                p.prepare(["playwright", "test"], {}, None)
+            self.assertEqual(kinds(p.finish(1), "note"), [])  # a config error: Playwright stopped before any test
+            p = self.parser()
+            with mock.patch.object(jr, "find_playwright_reporter", return_value="/r/x.cjs"):
+                p.prepare(["playwright", "test", "--list"], {}, None)
+            p.on_line("Total: 3 tests in 1 file")
+            self.assertEqual(kinds(p.finish(0), "note"), [])  # --list, --help: no test ran, so no summary
+            p = self.parser()
+            with mock.patch.object(jr, "find_playwright_reporter", return_value="/r/x.cjs"):
+                p.prepare(["playwright", "test"], {}, None)
+            p.on_line(self.marker("hello", v=1))
+            self.assertEqual(kinds(p.finish(0), "note"), [])
+
+    def test_a_marker_after_test_output_with_no_newline_is_found(self):
+        p = self.parser()
+        p.on_line(self.marker("begin", f={"a.spec.ts": 3}))
+        events = p.on_line("[1/3] a.spec.ts:3:1 › passes" + self.marker("start", f="a.spec.ts"))
+        self.assertEqual(events, [("units", "pw", 3, "tests"), ("unit", "pw", 1, None), ("tests", "pw", 1, 0, 0, 0),
+                                  ("unit_start", "a.spec.ts", "a.spec.ts", "file")])
+        self.assertEqual(p.on_line("console.log text" + self.marker("test", f="a.spec.ts", o="pass")),
+                         [("unit_dot", "a.spec.ts", "pass")])
+
+    def test_a_test_line_before_its_start_opens_the_file(self):
+        p = self.parser()
+        p.on_line(self.marker("begin", f={"a.ts": 2}))
+        self.assertEqual(p.on_line(self.marker("test", f="a.ts", o="pass")),
+                         [("unit_start", "a.ts", "a.ts", "file"), ("unit_dot", "a.ts", "pass")])
+
+    def test_a_dot_on_a_closed_file_is_passed_on_without_reopening_it(self):
+        p = self.parser()
+        for line in (self.marker("begin", f={"a.ts": 1}), self.marker("test", f="a.ts", o="pass")):
+            p.on_line(line)
+        self.assertEqual(p.on_line(self.marker("start", f="a.ts")), [])
+        self.assertEqual(p.on_line(self.marker("test", f="a.ts", o="fail")), [("unit_dot", "a.ts", "fail")])
+        self.assertEqual(p.finish(1), [])
+
+    def test_a_file_missing_from_begin_closes_only_at_finish(self):
+        p = self.parser()
+        for line in (self.marker("begin", f={"a.ts": 1}), self.marker("start", f="b.ts"),
+                     self.marker("test", f="b.ts", o="pass"), self.marker("test", f="b.ts", o="pass")):
+            self.assertNotIn("unit_end", [e[0] for e in p.on_line(line)], line)
+        self.assertEqual(p.finish(0), [("unit_end", "b.ts", "ok", "file")])
+
+    def test_marker_lines_stay_out_of_the_condensed_log(self):
+        text = PLAYWRIGHT_FAIL.replace("    Error: expect(received).toBe(expected)",
+                                       "    Error: expect(received).toBe(expected)\n" + self.marker("start", f="x.ts"))
+        cond = [e[1] for e in kinds(feed(self.parser(), text, 1), "cond")]
+        self.assertFalse(any("##playwright" in c for c in cond))
+
+    def test_finish_closes_open_files_fail_only_with_a_fail_dot_whatever_the_exit_code(self):
+        for exit_code in (0, 1):
+            p = self.parser()
+            for line in (self.marker("begin", f={"a.ts": 5, "b.ts": 5}), self.marker("test", f="a.ts", o="fail"),
+                         self.marker("test", f="b.ts", o="pass")):
+                p.on_line(line)
+            self.assertEqual(p.finish(exit_code), [("unit_end", "a.ts", "fail", "file"), ("unit_end", "b.ts", "ok", "file")])
+
+    def test_an_interrupted_run_names_only_the_file_with_a_failure(self):
+        p = self.parser()
+        lines = [self.marker("hello", v=1), self.marker("begin", f={f"{c}.ts": 3 for c in "abcd"})]
+        lines += [self.marker("start", f=f"{c}.ts") for c in "abcd"]
+        lines += [self.marker("test", f="a.ts", o="fail")] + [self.marker("test", f=f"{c}.ts", o="skip") for c in "bcd"]
+        for line in lines:
+            p.on_line(line)
+        self.assertEqual(p.finish(1), [("unit_end", f"{c}.ts", "fail" if c == "a" else "ok", "file") for c in "abcd"])
+
+    def test_bad_markers_are_ignored(self):
+        p = self.parser()
+        for line in ("##playwright {", "##playwright []", self.marker("start"), self.marker("test", f="a.ts", o="odd"),
+                     self.marker("begin", f="a.ts")):
+            self.assertEqual(p.on_line(line), [], line)
 
     def test_report_is_emitted_when_the_json_file_exists(self):
         with tempfile.TemporaryDirectory() as tmp:

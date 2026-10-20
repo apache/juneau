@@ -45,9 +45,11 @@ import hashlib
 import importlib.util
 import inspect
 import io
+import json
 import os
 import pathlib
 import subprocess
+import sys
 from pathlib import Path
 
 import pytest
@@ -1474,3 +1476,38 @@ class TestConsoleDefault:
         with pytest.raises(SystemExit):
             push_module._main()
         assert "condensed (default)" in " ".join(capsys.readouterr().out.split())
+
+
+def test_prechecks_opens_a_unit_and_a_child_step_per_check(
+    push_module, docs_repo, juneau_root, monkeypatch, capsys
+):
+    """
+    The Prechecks row draws one line per check while it runs: on the bus each check is a script unit, and
+    under RUN_MARKERS=1 a prechecks/<check> child step.  A failed check leaves the row its reason text, not a unit name.
+    """
+    _local_only_commit(docs_repo)
+    _run(docs_repo, "git", "config", "--unset", "user.email")
+    listed = push_module.prechecks(juneau_root)
+
+    jr = sys.modules["juneau_run"]
+    seen = []
+    board = jr.Board()
+    monkeypatch.setattr(jr, "_subscribers", list(jr._subscribers))     # the subscribers below go with the test
+    jr.subscribe(lambda kind, fields: seen.append((kind, dict(fields))))
+    jr.subscribe(board.apply)
+    monkeypatch.setenv("RUN_MARKERS", "1")
+
+    push_module.toolkit("run").checks("prechecks", "Prechecks", listed)
+
+    starts = [f for k, f in seen if k == "unit_start"]
+    assert [(f["step"], f["title"], f["src"]) for f in starts] == [("prechecks", c.name, "script") for c in listed]
+    found = [json.loads(line[len("##run "):]) for line in capsys.readouterr().out.splitlines()
+             if line.startswith("##run ")]
+    children = [m["id"] for m in found if m["ev"] == "step" and m.get("parent") == "prechecks"]
+    assert children == ["prechecks/" + push_module.toolkit("run")._slug(c.name) for c in listed]
+    ends = {m["id"]: m["status"] for m in found if m["ev"] == "end"}
+    assert ends["prechecks/docs-identity"] == "fail"
+    row = board.rows["prechecks"]
+    text = jr.row_text(row, jr.PLAIN_GLYPHS, board.clock())[2]
+    assert (row.status, row.failed_units, text) == ("fail", [], row.reason)     # the check's text, not a unit's name
+    assert "user.email" in text

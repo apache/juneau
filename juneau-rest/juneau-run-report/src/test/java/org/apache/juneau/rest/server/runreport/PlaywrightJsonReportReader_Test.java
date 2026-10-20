@@ -79,4 +79,20 @@ class PlaywrightJsonReportReader_Test extends TestBase {
 		assertEquals(2, r.tests().size());
 		assertTrue(r.truncated());
 	}
+
+	//-----------------------------------------------------------------------------------------------------------------
+	// The report juneau-run's own Playwright reporter writes: juneau_run_playwright.test.cjs checks that its report of a
+	// fake suite equals playwright-juneau-run.json.
+	//-----------------------------------------------------------------------------------------------------------------
+
+	@Test void c01_juneauRunReporter() {
+		var r = new PlaywrightJsonReportReader().read(resource("playwright-juneau-run.json"));
+		assertEquals(List.of("fail", "skip", "pass", "pass"), statuses(r));
+		assertEquals(List.of("top [firefox]", "top [chromium]", "Login › works [chromium]", "Login › flaky one [chromium]"),
+			r.tests().stream().map(ReportTest::name).toList());
+		assertBean(r.tests().get(0), "suite,msg,ms", "tests/a.spec.ts,boom,14");
+		assertEquals("boom\nat a.spec.ts:11", r.tests().get(0).trace());
+		assertNull(r.tests().get(3).msg());
+		assertTrue(r.warnings().isEmpty());
+	}
 }

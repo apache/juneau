@@ -76,9 +76,29 @@ class ChecksTest(ConsoleCase):
         self.assertEqual([u["outcome"] for u in self.of("unit")], ["fail", "pass", "fail"])
         self.assertIn("F#F  3/3", self.screen())
 
-    def test_progress_text_is_check_name(self):
+    def test_one_script_unit_per_check_and_no_progress_text(self):
         run.checks("pre", "Prechecks", [IDENTITY, UPSTREAM, UNREVIEWED])
-        self.assertEqual([p["text"] for p in self.of("step_progress")], ["identity", "upstream", "unreviewed"])
+        self.assertEqual([(u["step"], u["id"], u["title"], u["src"]) for u in self.of("unit_start")],
+                         [("pre", "identity", "identity", "script"), ("pre", "upstream", "upstream", "script"),
+                          ("pre", "unreviewed", "unreviewed", "script")])
+        self.assertEqual([(u["id"], u["status"]) for u in self.of("unit_end")],
+                         [("identity", "fail"), ("upstream", "ok"), ("unreviewed", "fail")])
+        self.assertEqual(self.of("step_progress"), [])
+        row = jr._console.board.rows["pre"]
+        self.assertEqual((row.failed_units, row.reason), ([], "git user.email is not set +1"))   # keeps its reason
+
+    def test_a_step_from_an_older_juneau_run_with_no_unit_still_runs_the_checks(self):
+        class OldStep:
+            failed = False
+
+            def fail(self):
+                self.failed = True
+
+        st = OldStep()
+        result = run.drive_checks("pre", st, [UPSTREAM, IDENTITY])
+        self.assertEqual((result.ok, st.failed), (False, True))
+        self.assertEqual([u["outcome"] for u in self.of("unit")], ["pass", "fail"])
+        self.assertEqual(self.of("unit_start"), [])
 
     def test_fail_sets_reason_and_hint(self):
         result = run.checks("pre", "Prechecks", [UPSTREAM, IDENTITY])
@@ -145,7 +165,13 @@ class MarkersTest(unittest.TestCase):
         with redirect_stdout(out):
             run.checks("pre", "Prechecks", [IDENTITY, UPSTREAM, UNREVIEWED])
         found = markers(out.getvalue())
-        self.assertEqual([m["ev"] for m in found], ["step", "note", "note", "end"])
+        # each check is a v1 child step, <row>/<slug>; its error note follows its end
+        self.assertEqual([m["ev"] for m in found],
+                         ["step", "step", "end", "note", "step", "end", "step", "end", "note", "end"])
+        self.assertEqual([(m["id"], m["n"], m.get("parent")) for m in found if m["ev"] == "step"][1:],
+                         [("pre/identity", 1, "pre"), ("pre/upstream", 2, "pre"), ("pre/unreviewed", 3, "pre")])
+        self.assertEqual([(m["id"], m["status"]) for m in found if m["ev"] == "end"],
+                         [("pre/identity", "fail"), ("pre/upstream", "ok"), ("pre/unreviewed", "fail"), ("pre", "fail")])
         self.assertEqual([m["text"] for m in found if m["ev"] == "note"],
                          ["identity: git user.email is not set", "unreviewed: 2 unreviewed paths"])
         self.assertEqual({m.get("level") for m in found if m["ev"] == "note"}, {"error"})

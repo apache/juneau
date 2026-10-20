@@ -58,7 +58,7 @@ class PluginTest(unittest.TestCase):
     def test_markers_for_every_outcome(self):
         _, marks = run_pytest(self.tmp)
         self.assertEqual(marks[0], {"ev": "hello", "v": 1})
-        self.assertEqual(marks[1], {"ev": "total", "n": 7})
+        self.assertEqual(marks[1], {"ev": "total", "n": 7, "f": {"test_s.py": 7}})
         tests = [m for m in marks if m["ev"] == "test" and not m.get("late")]
         self.assertEqual(sorted(m["o"] for m in tests),
                          sorted(["passed", "failed", "skipped", "xfailed", "xpassed", "error", "passed"]))
@@ -67,10 +67,11 @@ class PluginTest(unittest.TestCase):
         self.assertEqual(late[0]["o"], "error")
         self.assertTrue(all(m["id"].startswith("test_s.py::") for m in tests))
 
-    def test_run_marker_names_each_test_file_once_as_it_starts(self):
+    def test_file_marker_names_each_test_file_once_as_it_starts(self):
         Path(self.tmp, "test_t.py").write_text("def test_a(): pass\ndef test_b(): pass\n")
         _, marks = run_pytest(self.tmp, suite="def test_a(): pass\ndef test_b(): pass\n")
-        self.assertEqual([m["f"] for m in marks if m["ev"] == "run"], ["test_s.py", "test_t.py"])
+        self.assertEqual([m["f"] for m in marks if m["ev"] == "file"], ["test_s.py", "test_t.py"])
+        self.assertEqual([m for m in marks if m["ev"] == "run"], [])
 
     def test_total_equals_collected_and_each_test_once(self):
         _, marks = run_pytest(self.tmp)
@@ -110,7 +111,7 @@ class PluginTest(unittest.TestCase):
     def test_without_xdist_the_plugin_loads_and_reports_the_total(self):
         p, marks = run_pytest(self.tmp, "-p", "no:xdist", suite="def test_a(): pass\n")
         self.assertEqual(p.returncode, 0, p.stdout + p.stderr)
-        self.assertIn({"ev": "total", "n": 1}, marks)
+        self.assertIn({"ev": "total", "n": 1, "f": {"test_s.py": 1}}, marks)
 
     def test_zero_collected_still_emits_total(self):
         _, marks = run_pytest(self.tmp, suite="x = 1\n")

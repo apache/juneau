@@ -29,8 +29,8 @@ def setup_events(poms=3, total=5, step="mvn"):
     events = [("step_start", dict(id=step, n=1, title="mvn", parent=None)),
               ("reactor", dict(step=step, size=total, poms=ids, tests=False))]
     for pid in ids:
-        events += [("module_start", dict(step=step, module=pid, title=pid)),
-                   ("module_end", dict(step=step, module=pid, status="ok", ms=1))]
+        events += [("unit_start", dict(step=step, id=pid, title=pid)),
+                   ("unit_end", dict(step=step, id=pid, status="ok", ms=1))]
     events.append(("step_end", dict(id=step, status="ok", ms=2000, exit=0, summary=None, totals=None)))
     return events
 
@@ -62,17 +62,17 @@ class SetupRowTest(unittest.TestCase):
     def test_k_over_n_counts_real_modules_only(self):
         b, ids = self.board(poms=2, total=5)
         for i, pid in enumerate(ids):                       # poms end first
-            b.apply("module_start", dict(step="mvn", module=pid, title=pid))
-            b.apply("module_end", dict(step="mvn", module=pid, status="ok", ms=1))
+            b.apply("unit_start", dict(step="mvn", id=pid, title=pid))
+            b.apply("unit_end", dict(step="mvn", id=pid, status="ok", ms=1))
         self.assertEqual(b.rows["mvn"].units_done, 0)
-        b.apply("module_start", dict(step="mvn", module="core", title="Core"))
-        b.apply("module_end", dict(step="mvn", module="core", status="ok", ms=1))
+        b.apply("unit_start", dict(step="mvn", id="core", title="Core"))
+        b.apply("unit_end", dict(step="mvn", id="core", status="ok", ms=1))
         self.assertEqual(b.rows["mvn"].units_done, 1)
 
     def test_setup_row_boxes_turn_green(self):
         b, ids = self.board(poms=3, total=5)
-        b.apply("module_start", dict(step="mvn", module=ids[0], title="p"))
-        b.apply("module_end", dict(step="mvn", module=ids[0], status="ok", ms=1))
+        b.apply("unit_start", dict(step="mvn", id=ids[0], title="p"))
+        b.apply("unit_end", dict(step="mvn", id=ids[0], status="ok", ms=1))
         s = b.setup
         self.assertEqual((s.total, s.done), (3, 1))
         self.assertEqual(jr.setup_text(s), "3 pom modules")
@@ -109,8 +109,8 @@ class SetupRowTest(unittest.TestCase):
 
     def test_gray_cell_for_real_module_without_tests_stays(self):
         b, _ = self.board(poms=0, total=2)
-        b.apply("module_start", dict(step="mvn", module="jar1", title="J"))
-        b.apply("module_end", dict(step="mvn", module="jar1", status="skip", ms=1))
+        b.apply("unit_start", dict(step="mvn", id="jar1", title="J"))
+        b.apply("unit_end", dict(step="mvn", id="jar1", status="skip", ms=1))
         self.assertEqual(b.rows["mvn"].units_done, 1)
         self.assertEqual(b.rows["mvn"].unit_cells[0], jr.UNIT_SKIP)
 
@@ -119,21 +119,21 @@ class SetupRowTest(unittest.TestCase):
         self.assertEqual(b.rows["mvn"].units_total, 0)
         self.assertEqual((b.setup.total, b.rows["mvn"].unit_kind), (3, "modules"))      # no fall back to the old bar
 
-    def test_compile_mode_unit_advances_on_module_compiled_tests_mode_on_module_end(self):
+    def test_compile_mode_unit_advances_on_module_compiled_tests_mode_on_unit_end(self):
         b, _ = self.board(poms=0, total=2)                    # the board() helper sends tests=False: compile mode
-        b.apply("module_start", dict(step="mvn", module="mvn/a", title="A"))
+        b.apply("unit_start", dict(step="mvn", id="mvn/a", title="A"))
         b.apply("module_compiled", dict(step="mvn", module="mvn/a", ok=True))
         self.assertEqual(b.rows["mvn"].units_done, 1)         # today's bar fills on compile in compile mode
-        b.apply("module_end", dict(step="mvn", module="mvn/a", status="ok", ms=1, totals=None))
+        b.apply("unit_end", dict(step="mvn", id="mvn/a", status="ok", ms=1, totals=None))
         self.assertEqual(b.rows["mvn"].units_done, 1)         # and the end does not count it twice
 
-    def test_tests_mode_unit_advances_on_module_end_only(self):
+    def test_tests_mode_unit_advances_on_unit_end_only(self):
         b, _ = self.board(poms=0, total=2)
         b.apply("reactor", dict(step="mvn", size=2, poms=[], tests=True))
-        b.apply("module_start", dict(step="mvn", module="mvn/a", title="A"))
+        b.apply("unit_start", dict(step="mvn", id="mvn/a", title="A"))
         b.apply("module_compiled", dict(step="mvn", module="mvn/a", ok=True))
         self.assertEqual(b.rows["mvn"].units_done, 0)
-        b.apply("module_end", dict(step="mvn", module="mvn/a", status="fail", ms=1, totals=None))
+        b.apply("unit_end", dict(step="mvn", id="mvn/a", status="fail", ms=1, totals=None))
         self.assertEqual(b.rows["mvn"].units_done, 1)
         self.assertEqual(b.rows["mvn"].unit_cells[0], jr.UNIT_FAIL)
 
@@ -147,7 +147,7 @@ class SetupRowTest(unittest.TestCase):
     def test_region_budget_takes_the_setup_line_off_the_sub_lines(self):
         b, _ = self.board(poms=2, total=40)
         for i in range(30):
-            b.apply("module_start", dict(step="mvn", module=f"m{i}", title=f"M{i}"))
+            b.apply("unit_start", dict(step="mvn", id=f"m{i}", title=f"M{i}"))
         lines = live_region_lines(b, rows=12, cols=100)
         self.assertLessEqual(len(lines), 10)
 
@@ -158,20 +158,20 @@ class SetupRowTest(unittest.TestCase):
 
 
     def test_tests_mode_counts_a_unit_when_its_tests_finish_not_only_at_the_summary(self):
-        b, _ = self.board(poms=0, total=2)                    # -T: module_end can wait for the Reactor Summary
+        b, _ = self.board(poms=0, total=2)                    # -T: unit_end can wait for the Reactor Summary
         b.apply("reactor", dict(step="mvn", size=2, poms=[], tests=True))
-        b.apply("module_start", dict(step="mvn", module="mvn/a", title="A"))
-        b.apply("class_done", dict(step="mvn", module="mvn/a", outcome="pass"))
+        b.apply("unit_start", dict(step="mvn", id="mvn/a", title="A"))
+        b.apply("unit_dot", dict(step="mvn", id="mvn/a", outcome="pass"))
         b.apply("module_tested", dict(step="mvn", module="mvn/a"))
         self.assertEqual(b.rows["mvn"].units_done, 1)
         self.assertEqual(b.rows["mvn"].unit_cells[0], jr.UNIT_PASS)
-        b.apply("module_end", dict(step="mvn", module="mvn/a", status="ok", ms=1, totals=None))
+        b.apply("unit_end", dict(step="mvn", id="mvn/a", status="ok", ms=1, totals=None))
         self.assertEqual(b.rows["mvn"].units_done, 1)         # counted once
 
     def test_tested_failure_and_a_module_without_tests(self):
         b, _ = self.board(poms=0, total=3)
         b.apply("reactor", dict(step="mvn", size=3, poms=[], tests=True))
-        b.apply("class_done", dict(step="mvn", module="mvn/a", outcome="fail"))
+        b.apply("unit_dot", dict(step="mvn", id="mvn/a", outcome="fail", src="sub"))     # the class_done translation
         b.apply("module_tested", dict(step="mvn", module="mvn/a"))
         b.apply("module_tested", dict(step="mvn", module="mvn/b"))
         r = b.rows["mvn"]
@@ -191,15 +191,15 @@ class SetupRowTest(unittest.TestCase):
         b, r = self.mk_tests_board(4)
         self.assertEqual(self.bar(r), jr.PENDING * 4)
         for m in ("a", "b"):                    # upstream modules from --also-make: compile only, no tests
-            b.apply("module_start", dict(step="mvn", module=f"mvn/{m}", title=m))
+            b.apply("unit_start", dict(step="mvn", id=f"mvn/{m}", title=m))
             b.apply("module_tested", dict(step="mvn", module=f"mvn/{m}"))
-            b.apply("module_end", dict(step="mvn", module=f"mvn/{m}", status="ok", ms=1, totals=None))
+            b.apply("unit_end", dict(step="mvn", id=f"mvn/{m}", status="ok", ms=1, totals=None))
         self.assertEqual((r.units_done, r.units_total, r.units_dropped), (0, 2, 2))    # N shrinks as they drop out
         self.assertEqual(self.bar(r), jr.PENDING * 2)
-        b.apply("module_start", dict(step="mvn", module="mvn/c", title="c"))
-        b.apply("class_done", dict(step="mvn", module="mvn/c", outcome="pass"))
+        b.apply("unit_start", dict(step="mvn", id="mvn/c", title="c"))
+        b.apply("unit_dot", dict(step="mvn", id="mvn/c", outcome="pass"))
         b.apply("module_tested", dict(step="mvn", module="mvn/c"))
-        b.apply("module_end", dict(step="mvn", module="mvn/c", status="ok", ms=1, totals=(1, 0, 0, 0)))
+        b.apply("unit_end", dict(step="mvn", id="mvn/c", status="ok", ms=1, totals=(1, 0, 0, 0)))
         self.assertEqual((r.units_done, r.units_total), (1, 2))
         self.assertEqual(self.bar(r), "#" + jr.PENDING)
         _, rest, _ = jr.row_cells(r, jr.PLAIN_GLYPHS, 100.0, False)
@@ -207,52 +207,52 @@ class SetupRowTest(unittest.TestCase):
 
     def test_a_dropped_module_survives_a_reactor_resend(self):
         b, r = self.mk_tests_board(4)
-        b.apply("module_start", dict(step="mvn", module="mvn/a", title="a"))
+        b.apply("unit_start", dict(step="mvn", id="mvn/a", title="a"))
         b.apply("module_tested", dict(step="mvn", module="mvn/a"))
         b.apply("reactor", dict(step="mvn", size=4, poms=[], tests=True))
         self.assertEqual(r.units_total, 3)
 
     def test_a_module_whose_tests_were_all_skipped_still_shows_skip(self):
         b, r = self.mk_tests_board(2)
-        b.apply("module_start", dict(step="mvn", module="mvn/a", title="a"))
-        b.apply("class_done", dict(step="mvn", module="mvn/a", outcome="skip"))
+        b.apply("unit_start", dict(step="mvn", id="mvn/a", title="a"))
+        b.apply("unit_dot", dict(step="mvn", id="mvn/a", outcome="skip"))
         b.apply("module_tested", dict(step="mvn", module="mvn/a"))
-        b.apply("module_end", dict(step="mvn", module="mvn/a", status="ok", ms=1, totals=(2, 0, 0, 2)))
+        b.apply("unit_end", dict(step="mvn", id="mvn/a", status="ok", ms=1, totals=(2, 0, 0, 2)))
         self.assertEqual((r.units_done, r.units_total), (1, 2))
         self.assertEqual(self.bar(r), "." + jr.PENDING)         # skip, not dropped
 
     def test_a_dropped_module_that_fails_counts_after_all(self):
         b, r = self.mk_tests_board(2)
-        b.apply("module_start", dict(step="mvn", module="mvn/a", title="a"))
+        b.apply("unit_start", dict(step="mvn", id="mvn/a", title="a"))
         b.apply("module_tested", dict(step="mvn", module="mvn/a"))
-        b.apply("module_end", dict(step="mvn", module="mvn/a", status="fail", ms=1, totals=None))
+        b.apply("unit_end", dict(step="mvn", id="mvn/a", status="fail", ms=1, totals=None))
         self.assertEqual((r.units_done, r.units_total, r.units_dropped), (1, 2, 0))
         self.assertEqual(self.bar(r), "F" + jr.PENDING)
 
     def test_compile_rows_still_count_every_module(self):
         b, _ = self.board(poms=0, total=3)
         r = b.rows["mvn"]
-        b.apply("module_start", dict(step="mvn", module="mvn/a", title="a"))
-        b.apply("module_end", dict(step="mvn", module="mvn/a", status="ok", ms=1, totals=None))
+        b.apply("unit_start", dict(step="mvn", id="mvn/a", title="a"))
+        b.apply("unit_end", dict(step="mvn", id="mvn/a", status="ok", ms=1, totals=None))
         self.assertEqual((r.units_done, r.units_total, r.units_dropped), (1, 3, 0))
 
     def test_started_modules_are_in_flight_until_they_end(self):
         b, r = self.mk_tests_board(5)
         for m in ("a", "b"):
-            b.apply("module_start", dict(step="mvn", module=f"mvn/{m}", title=m))
+            b.apply("unit_start", dict(step="mvn", id=f"mvn/{m}", title=m))
         self.assertEqual(self.bar(r), "~~" + jr.PENDING * 3)
         self.assertEqual(self.bar(r, jr.NO_COLOR_GLYPHS), "▒▒" + jr.PENDING * 3)
         self.assertEqual(self.bar(r, jr.COLOR_GLYPHS), "\x1b[33m█\x1b[0m" * 2 + jr.PENDING * 3)
-        b.apply("class_done", dict(step="mvn", module="mvn/a", outcome="pass"))
+        b.apply("unit_dot", dict(step="mvn", id="mvn/a", outcome="pass"))
         b.apply("module_tested", dict(step="mvn", module="mvn/a"))
         self.assertEqual(self.bar(r), "#~" + jr.PENDING * 3)        # a finished (counted), b still running
-        b.apply("module_end", dict(step="mvn", module="mvn/a", status="ok", ms=1, totals=(1, 0, 0, 0)))
+        b.apply("unit_end", dict(step="mvn", id="mvn/a", status="ok", ms=1, totals=(1, 0, 0, 0)))
         b.apply("step_end", dict(id="mvn", status="ok", ms=2000, exit=0, summary=None, totals=None))
         self.assertNotIn("~", self.bar(r))                           # a finished row shows no in-flight cells
 
-    def test_a_modules_bar_without_module_start_never_shows_in_flight(self):
+    def test_a_modules_bar_without_unit_start_never_shows_in_flight(self):
         b, r = self.mk_tests_board(3)
-        b.apply("class_done", dict(step="mvn", module="mvn/a", outcome="pass"))    # no module_start: no signal
+        b.apply("unit_dot", dict(step="mvn", id="mvn/a", outcome="pass", src="sub"))    # no unit_start: no signal
         self.assertEqual(self.bar(r), jr.PENDING * 3)
 
     def test_each_unit_keeps_its_own_cell_failed_or_in_flight(self):
@@ -263,15 +263,15 @@ class SetupRowTest(unittest.TestCase):
 
     def test_a_pom_box_turns_green_when_it_starts(self):
         b, ids = self.board(poms=3, total=5)
-        b.apply("module_start", dict(step="mvn", module=ids[1], title="p"))     # -T: its end waits for the summary
+        b.apply("unit_start", dict(step="mvn", id=ids[1], title="p"))     # -T: its end waits for the summary
         self.assertEqual((b.setup.done, b.setup.boxes[ids[1]]), (1, "pass"))
-        b.apply("module_end", dict(step="mvn", module=ids[1], status="fail", ms=1))
+        b.apply("unit_end", dict(step="mvn", id=ids[1], status="fail", ms=1))
         self.assertEqual(b.setup.boxes[ids[1]], "fail")
 
     def test_pom_modules_never_enter_the_row_order(self):
         b, ids = self.board(poms=1, total=3)
-        b.apply("module_start", dict(step="mvn", module=ids[0], title="p"))
-        b.apply("module_end", dict(step="mvn", module=ids[0], status="ok", ms=1))
+        b.apply("unit_start", dict(step="mvn", id=ids[0], title="p"))
+        b.apply("unit_end", dict(step="mvn", id=ids[0], status="ok", ms=1))
         b.apply("step_end", dict(id="mvn", status="ok", ms=2000, exit=0, summary=None, totals=None))
         self.assertEqual(b.rows["mvn"].order, [])
 
@@ -279,18 +279,18 @@ class SetupRowTest(unittest.TestCase):
         b, _ = self.board(poms=0, total=4)
         b.apply("reactor", dict(step="mvn", size=4, poms=["p", "p", "q"], tests=False))
         for pid in ("p", "q"):
-            b.apply("module_end", dict(step="mvn", module=pid, status="ok", ms=1))
+            b.apply("unit_end", dict(step="mvn", id=pid, status="ok", ms=1))
         self.assertEqual((b.setup.total, b.setup.done), (2, 2))
 
     def test_close_of_a_failed_module_by_finish_counts_a_fail_unit(self):
         b, _ = self.board(poms=0, total=2)
         b.apply("reactor", dict(step="mvn", size=2, poms=[], tests=False))
-        b.apply("module_start", dict(step="mvn", module="mvn/a", title="A"))
+        b.apply("unit_start", dict(step="mvn", id="mvn/a", title="A"))
         b.apply("module_compiled", dict(step="mvn", module="mvn/a", ok=False))      # box fail; compile mode counts it
-        b.apply("module_start", dict(step="mvn", module="mvn/b", title="B"))
+        b.apply("unit_start", dict(step="mvn", id="mvn/b", title="B"))
         b.apply("reactor", dict(step="mvn", size=2, poms=[], tests=True))
         b.apply("module_compiled", dict(step="mvn", module="mvn/b", ok=False))      # fail box, not counted in tests mode
-        b.apply("module_end", dict(step="mvn", module="mvn/b", status="skip", ms=1, totals=None))   # finish() closes it
+        b.apply("unit_end", dict(step="mvn", id="mvn/b", status="skip", ms=1, totals=None))   # finish() closes it
         r = b.rows["mvn"]
         self.assertEqual((r.units_done, r.unit_cells[1]), (2, jr.UNIT_FAIL))
 
@@ -306,8 +306,8 @@ class SetupRowTest(unittest.TestCase):
 
     def test_finished_row_with_some_units_keeps_its_bar(self):
         b, _ = self.board(poms=0, total=3)
-        b.apply("module_start", dict(step="mvn", module="mvn/a", title="A"))
-        b.apply("module_end", dict(step="mvn", module="mvn/a", status="ok", ms=1))
+        b.apply("unit_start", dict(step="mvn", id="mvn/a", title="A"))
+        b.apply("unit_end", dict(step="mvn", id="mvn/a", status="ok", ms=1))
         b.apply("step_end", dict(id="mvn", status="fail", ms=5000, exit=1, summary=None, totals=None))
         cells, rest, _ = jr.row_cells(b.rows["mvn"], jr.NO_COLOR_GLYPHS, 100.0, False)
         self.assertIsNotNone(cells)
@@ -326,8 +326,8 @@ class TrailingPomTest(unittest.TestCase):
         return b
 
     def run_module(self, b, module, status="ok"):
-        b.apply("module_start", dict(step="mvn", module=module, title=module))
-        return b.apply("module_end", dict(step="mvn", module=module, status=status, ms=1, totals=None))
+        b.apply("unit_start", dict(step="mvn", id=module, title=module))
+        return b.apply("unit_end", dict(step="mvn", id=module, status=status, ms=1, totals=None))
 
     def test_jar_war_then_a_trailing_pom_has_no_setup_row_and_a_bar_of_two(self):
         b = self.board([], ["mvn/app"], 3)
@@ -343,7 +343,7 @@ class TrailingPomTest(unittest.TestCase):
 
     def test_a_trailing_pom_never_shows_as_in_flight_in_the_bar(self):
         b = self.board([], ["mvn/app"], 3)
-        b.apply("module_start", dict(step="mvn", module="mvn/app", title="app"))
+        b.apply("unit_start", dict(step="mvn", id="mvn/app", title="app"))
         self.assertEqual(b.rows["mvn"].unit_view(), bytearray(2))
 
     def test_leading_parent_and_trailing_aggregator_give_a_setup_row_of_one(self):
@@ -374,9 +374,9 @@ class TrailingPomTest(unittest.TestCase):
         b.apply("step_end", dict(id="mvn", status="fail", ms=2000, exit=1, summary=None, totals=None))
         r = b.rows["mvn"]
         self.assertIsNone(b.setup)
-        self.assertEqual(r.failed_mods, ["mvn/app"])
+        self.assertEqual(r.failed_units, ["mvn/app"])
         self.assertEqual((r.units_total, r.units_done), (2, 2))
-        self.assertEqual(r.modules["mvn/app"].box, "fail")
+        self.assertEqual(r.units["mvn/app"].box, "fail")
 
 
 class TrailingPomGoldenTest(unittest.TestCase):
@@ -427,7 +427,7 @@ class TrailingPomGoldenTest(unittest.TestCase):
         board, r = self.run_log(text)
         board.apply("step_end", dict(id="mvn", status="fail", ms=3000, exit=1, summary=None, totals=None))
         self.assertIsNone(board.setup)
-        self.assertEqual(r.failed_mods, ["app"])
+        self.assertEqual(r.failed_units, ["app"])
         self.assertEqual((r.units_total, r.units_done), (2, 2))
 
 
@@ -440,19 +440,19 @@ def pump(board, events, step="mvn"):
             board.apply("reactor", dict(step=step, size=ev[1], poms=list(ev[2]), tests=ev[3],
                                         tail=list(ev[4]) if len(ev) > 4 else []))
         elif kind == "sub_start":
-            board.apply("module_start", dict(step=step, module=ev[1], title=ev[3]))
+            board.apply("unit_start", dict(step=step, id=ev[1], title=ev[3]))
         elif kind == "tests":
             totals[ev[1]] = ev[2:]
         elif kind == "sub_end":
             t = totals.get(ev[1])
-            board.apply("module_end", dict(step=step, module=ev[1], status=ev[2], ms=ev[3],
+            board.apply("unit_end", dict(step=step, id=ev[1], status=ev[2], ms=ev[3],
                                            totals=dict(total=t[0], fail=t[1], err=t[2], skip=t[3]) if t else None))
         elif kind == "compiled":
             board.apply("module_compiled", dict(step=step, module=ev[1], ok=ev[2]))
         elif kind == "tested":
             board.apply("module_tested", dict(step=step, module=ev[1]))
         elif kind == "class_done":
-            board.apply("class_done", dict(step=step, module=ev[1], outcome=ev[2]))
+            board.apply("unit_dot", dict(step=step, id=ev[1], outcome=ev[2], src="sub"))   # as _Dispatcher does
         seen.append((kind, board.rows[step].units_done, board.setup.done if board.setup else 0, ev[1]))
     return seen
 

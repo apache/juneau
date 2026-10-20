@@ -62,7 +62,7 @@ class DetailTest(unittest.TestCase):
                 with self.subTest(detail=detail, level=level):
                     self.assertEqual(jr.shows_note(detail, level), level in shown)
 
-    def test_module_rows_by_detail(self):
+    def test_finished_module_lines_by_detail(self):
         # (detail, failed, has_tests) -> shown
         table = {
             ("summary", True, True): False, ("summary", False, True): False,
@@ -107,19 +107,19 @@ def maven_events(step="tests", tests_mode=True):
     return [
         ("step_start", {"id": step, "n": 3, "title": "Tests", "parent": None}),
         ("reactor", {"step": step, "size": 3, "poms": [f"{step}/p"], "tests": tests_mode}),
-        ("module_start", {"step": step, "module": f"{step}/p", "title": "Parent"}),
+        ("unit_start", {"step": step, "id": f"{step}/p", "title": "Parent"}),
         ("module_compiled", {"step": step, "module": f"{step}/p", "ok": True}),
-        ("module_end", {"step": step, "module": f"{step}/p", "status": "ok", "ms": 100, "totals": None}),
-        ("module_start", {"step": step, "module": f"{step}/a", "title": "Mod A"}),
-        ("class_done", {"step": step, "module": f"{step}/a", "outcome": "pass"}),
+        ("unit_end", {"step": step, "id": f"{step}/p", "status": "ok", "ms": 100, "totals": None}),
+        ("unit_start", {"step": step, "id": f"{step}/a", "title": "Mod A"}),
+        ("unit_dot", {"step": step, "id": f"{step}/a", "outcome": "pass"}),
         ("module_compiled", {"step": step, "module": f"{step}/a", "ok": True}),
         ("module_tested", {"step": step, "module": f"{step}/a"}),
-        ("module_end", {"step": step, "module": f"{step}/a", "status": "ok", "ms": 41000, "totals": (7139, 0, 0, 0)}),
-        ("module_start", {"step": step, "module": f"{step}/b", "title": "Mod B"}),
-        ("class_done", {"step": step, "module": f"{step}/b", "outcome": "fail"}),
+        ("unit_end", {"step": step, "id": f"{step}/a", "status": "ok", "ms": 41000, "totals": (7139, 0, 0, 0)}),
+        ("unit_start", {"step": step, "id": f"{step}/b", "title": "Mod B"}),
+        ("unit_dot", {"step": step, "id": f"{step}/b", "outcome": "fail"}),
         ("module_compiled", {"step": step, "module": f"{step}/b", "ok": True}),
         ("module_tested", {"step": step, "module": f"{step}/b"}),
-        ("module_end", {"step": step, "module": f"{step}/b", "status": "fail", "ms": 2000, "totals": (10, 2, 0, 0)}),
+        ("unit_end", {"step": step, "id": f"{step}/b", "status": "fail", "ms": 2000, "totals": (10, 2, 0, 0)}),
     ]
 
 
@@ -206,7 +206,7 @@ class BoardTest(unittest.TestCase):
         b = self.board()
         feed(b, ("step_start", {"id": "build", "n": 3, "title": "Build", "parent": None}),
              ("reactor", {"step": "build", "size": 1, "poms": [], "tests": False}),
-             ("module_start", {"step": "build", "module": "build/a", "title": "Mod A"}),
+             ("unit_start", {"step": "build", "id": "build/a", "title": "Mod A"}),
              ("module_compiled", {"step": "build", "module": "build/a", "ok": True}),
              ("module_compiled", {"step": "build", "module": "build/a", "ok": False}))
         self.assertEqual(b.rows["build"].boxes(), ["fail"])
@@ -322,9 +322,9 @@ class BoardTest(unittest.TestCase):
         b = self.board()
         feed(b, ("step_start", {"id": "tests", "n": 3, "title": "Tests", "parent": None}),
              ("reactor", {"step": "tests", "size": 2, "poms": [], "tests": True}),
-             ("module_start", {"step": "tests", "module": "tests/a", "title": "Mod A"}),
-             ("class_done", {"step": "tests", "module": "tests/a", "outcome": "pass"}),
-             ("module_start", {"step": "tests", "module": "tests/b", "title": "Mod B"}),
+             ("unit_start", {"step": "tests", "id": "tests/a", "title": "Mod A"}),
+             ("unit_dot", {"step": "tests", "id": "tests/a", "outcome": "pass"}),
+             ("unit_start", {"step": "tests", "id": "tests/b", "title": "Mod B"}),
              ("step_end", {"id": "tests", "status": "fail", "ms": 1000, "exit": 1, "summary": None, "totals": None}))
         self.assertEqual(b.rows["tests"].boxes(), ["pass", "skip"])
 
@@ -383,7 +383,7 @@ class ConsoleTest(unittest.TestCase):
         out = io.StringIO()
         c = self.console(out, console="condensed")
         c("step_start", {"id": "tests", "n": 3, "title": "Tests", "parent": None})
-        c("module_start", {"step": "tests", "module": "tests/a", "title": "Mod A"})
+        c("unit_start", {"step": "tests", "id": "tests/a", "title": "Mod A"})
         c("tests", {"step": "tests", "total": 10, "fail": 1, "err": 0, "skip": 0})
         self.clock.advance(14)
         c.tick()
@@ -595,11 +595,11 @@ def start(step="tests", size=3, title="Tests"):
 
 
 def mod_start(name, step="tests"):
-    return ("module_start", {"step": step, "module": f"{step}/{name}", "title": f"Mod {name.upper()}"})
+    return ("unit_start", {"step": step, "id": f"{step}/{name}", "title": f"Mod {name.upper()}"})
 
 
 def cls(name, outcome="pass", step="tests"):
-    return ("class_done", {"step": step, "module": f"{step}/{name}", "outcome": outcome})
+    return ("unit_dot", {"step": step, "id": f"{step}/{name}", "outcome": outcome})
 
 
 class RowEstimateTest(unittest.TestCase):
@@ -733,9 +733,9 @@ class LiveTest(unittest.TestCase):
         self.push(cls("a"), cls("a", "fail"))
         self.assertEqual(self.screen.text(), "\n".join([
             (self.spin() + "Tests".ljust(10) + "  ▒░░  0/3").ljust(59 - 4) + "0:01",     # Mod A is in flight
-            "    Mod A  •F",
+            "    Mod A  •F".ljust(59 - 4) + "0:01",
         ]))
-        self.push(("module_end", {"step": "tests", "module": "tests/a", "status": "fail", "ms": 1000,
+        self.push(("unit_end", {"step": "tests", "id": "tests/a", "status": "fail", "ms": 1000,
                                   "totals": (2, 1, 0, 0)}))
         self.push(("step_end", {"id": "tests", "status": "fail", "ms": 4000, "exit": 1, "summary": None,
                                 "totals": None}))
@@ -864,8 +864,8 @@ class LiveTest(unittest.TestCase):
         self.push(*start(size=5), *[mod_start(n) for n in "abcde"], *[cls(n) for n in "abcde"])
         region = self.live.region(self.board, 59, 4)
         self.assertEqual(len(region), 4)
-        self.assertEqual(region[1], "    +3 more running")
-        self.assertTrue(region[2].startswith("    Mod D  ") and region[3].startswith("    Mod E  "), region)
+        self.assertTrue(region[1].startswith("    Mod A  ") and region[2].startswith("    Mod B  "), region)
+        self.assertEqual(region[3], "    C, D, E")              # the newest fold first, listed oldest first
         self.assertTrue(all(len(line) <= 59 for line in region), region)
         self.assertEqual(len(self.screen.text().splitlines()), 4)
         self.assertTrue(all(len(line) <= 59 for line in self.screen.lines), self.screen.lines)
@@ -874,31 +874,32 @@ class LiveTest(unittest.TestCase):
     def test_boxes_cap_at_one_line(self):
         self.dims = (40, 10)
         self.push(*start(), mod_start("a"), *[cls("a") for _ in range(200)])
-        self.assertEqual(self.live.region(self.board, 39, 8)[1:], ["    Mod A  " + "•" * 24 + "+176"])
+        self.assertEqual(self.live.region(self.board, 39, 8)[1:], ["    Mod A  " + "•" * 18 + "+182" + "  0:00"])
 
     def test_a_module_that_exactly_fits_has_no_counter(self):
         self.dims = (40, 10)
-        self.push(*start(), mod_start("a"), *[cls("a") for _ in range(28)])
-        self.assertEqual(self.live.region(self.board, 39, 8)[1:], ["    Mod A  " + "•" * 28])
+        self.push(*start(), mod_start("a"), *[cls("a") for _ in range(22)])
+        self.assertEqual(self.live.region(self.board, 39, 8)[1:], ["    Mod A  " + "•" * 22 + "  0:00"])
 
     def test_a_module_one_over_shows_the_counter_in_the_last_cells(self):
         self.dims = (40, 10)
-        self.push(*start(), mod_start("a"), *[cls("a") for _ in range(29)])
-        self.assertEqual(self.live.region(self.board, 39, 8)[1:], ["    Mod A  " + "•" * 26 + "+3"])
+        self.push(*start(), mod_start("a"), *[cls("a") for _ in range(23)])
+        self.assertEqual(self.live.region(self.board, 39, 8)[1:], ["    Mod A  " + "•" * 20 + "+3" + "  0:00"])
 
     def test_the_counter_keeps_the_strip_width_as_digits_grow(self):
         self.dims = (40, 10)
-        for total in (29, 40, 126, 127, 128, 1000, 5000):
+        for total in (23, 40, 126, 127, 128, 1000, 5000):
             with self.subTest(total=total):
                 board = jr.Board(clock=lambda: 100.0)
                 feed(board, *start(), mod_start("a"), *[cls("a") for _ in range(total)])
                 live = jr.LiveRenderer(lambda text: None, size=lambda: os.terminal_size(self.dims), clock=lambda: 100.0,
                                        color=False)
-                strip = live._sub_lines(next(iter(board.rows.values())).modules["tests/a"], 39)[0]
-                self.assertEqual(jr._vlen(strip), jr._vlen("    Mod A  ") + 28)
-                dots = strip[len("    Mod A  "):].lstrip("•")
+                strip = live._sub_lines(next(iter(board.rows.values())).units["tests/a"], 39)[0]
+                self.assertEqual(jr._vlen(strip), 39)                  # elapsed never moves
+                self.assertTrue(strip.endswith("  0:00"), strip)
+                dots = strip[len("    Mod A  "):-len("  0:00")].lstrip("•")
                 self.assertRegex(dots, r"^\+\d+$")
-                self.assertEqual(int(dots[1:]), total - (28 - len(dots)))
+                self.assertEqual(int(dots[1:]), total - (22 - len(dots)))
 
     def test_the_counter_is_green_without_a_hidden_failure_and_red_with_one(self):
         self.dims = (40, 10)
@@ -907,33 +908,57 @@ class LiveTest(unittest.TestCase):
             feed(board, *start(), mod_start("a"), cls("a", first), *[cls("a") for _ in range(40)])
             live = jr.LiveRenderer(lambda text: None, size=lambda: os.terminal_size(self.dims), clock=lambda: 100.0,
                                    color=True)
-            return live._sub_lines(next(iter(board.rows.values())).modules["tests/a"], 39)[0]
-        self.assertTrue(strip("pass").endswith("\x1b[32m+16\x1b[0m"), repr(strip("pass")))
-        self.assertTrue(strip("skip").endswith("\x1b[32m+16\x1b[0m"), repr(strip("skip")))
-        self.assertTrue(strip("fail").endswith("\x1b[31m+16\x1b[0m"), repr(strip("fail")))
+            return live._sub_lines(next(iter(board.rows.values())).units["tests/a"], 39)[0]
+        self.assertTrue(strip("pass").endswith("\x1b[32m+22\x1b[0m  0:00"), repr(strip("pass")))
+        self.assertTrue(strip("skip").endswith("\x1b[32m+22\x1b[0m  0:00"), repr(strip("skip")))
+        self.assertTrue(strip("fail").endswith("\x1b[31m+22\x1b[0m  0:00"), repr(strip("fail")))
 
     def test_a_failure_among_the_kept_dots_does_not_redden_the_counter(self):
         board = jr.Board(clock=lambda: 100.0)
         feed(board, *start(), mod_start("a"), *[cls("a") for _ in range(40)], cls("a", "fail"))
         live = jr.LiveRenderer(lambda text: None, size=lambda: os.terminal_size((40, 10)), clock=lambda: 100.0, color=True)
-        strip = live._sub_lines(next(iter(board.rows.values())).modules["tests/a"], 39)[0]
-        self.assertIn("\x1b[32m+16\x1b[0m", strip)
+        strip = live._sub_lines(next(iter(board.rows.values())).units["tests/a"], 39)[0]
+        self.assertIn("\x1b[32m+22\x1b[0m", strip)
 
     def test_a_tiny_strip_still_fits(self):
         board = jr.Board(clock=lambda: 100.0)
         feed(board, *start(), mod_start("a"), *[cls("a") for _ in range(50)])
         live = jr.LiveRenderer(lambda text: None, size=lambda: os.terminal_size((40, 10)), clock=lambda: 100.0, color=False)
-        module = next(iter(board.rows.values())).modules["tests/a"]
-        for cols in range(1, 20):
+        module = next(iter(board.rows.values())).units["tests/a"]
+        for cols in range(1, 41):
             with self.subTest(cols=cols):
-                strip = live._sub_lines(module, cols)[0]
-                prefix = jr._vlen(f"    {jr._vcut(module.title, max(1, cols // 2))}  ")
-                self.assertEqual(jr._vlen(strip) - prefix, max(1, cols - prefix))
+                line = live._sub_lines(module, cols)[0]
+                self.assertLessEqual(jr._vlen(line), cols)      # a wider line would wrap and leave a ghost line
+                if cols >= 4 + 1 + 2 + 1 + 2 + 4:       # room for a title column, one dot and elapsed: it fills cols
+                    self.assertEqual(jr._vlen(line), cols)
+                    self.assertTrue(line.endswith("  0:00"), line)
+
+    def test_an_elapsed_of_ten_minutes_keeps_the_line_at_cols(self):
+        clock = [100.0]
+        board = jr.Board(clock=lambda: clock[0])
+        feed(board, *start(), mod_start("a"), cls("a"))
+        live = jr.LiveRenderer(lambda text: None, size=lambda: os.terminal_size((40, 10)), clock=lambda: clock[0],
+                               color=False)
+        module = next(iter(board.rows.values())).units["tests/a"]
+        for cols in (15, 20, 39):     # 15: the narrowest line with a title column, a dot and a 5-column elapsed
+            with self.subTest(cols=cols):
+                clock[0] = 700.0
+                line = live._sub_lines(module, cols)[0]
+                self.assertEqual(jr._vlen(line), cols)
+                self.assertTrue(line.endswith("  10:00"), line)
+                self.assertIn("•", line)
+
+    def test_a_unit_with_no_dots_in_colour_is_its_title_then_elapsed(self):
+        board = jr.Board(clock=lambda: 100.0)
+        feed(board, *start(), mod_start("a"))
+        live = jr.LiveRenderer(lambda text: None, size=lambda: os.terminal_size((40, 10)), clock=lambda: 100.0, color=True)
+        line = live._sub_lines(next(iter(board.rows.values())).units["tests/a"], 39)[0]
+        self.assertEqual(line, "    Mod A".ljust(39 - 4) + "0:00")
 
     def test_shrinking_the_region_clears_the_old_lines(self):
         self.push(*start(), mod_start("a"), mod_start("b"))
-        self.push(("module_end", {"step": "tests", "module": "tests/a", "status": "ok", "ms": 1, "totals": None}),
-                  ("module_end", {"step": "tests", "module": "tests/b", "status": "ok", "ms": 1, "totals": None}))
+        self.push(("unit_end", {"step": "tests", "id": "tests/a", "status": "ok", "ms": 1, "totals": None}),
+                  ("unit_end", {"step": "tests", "id": "tests/b", "status": "ok", "ms": 1, "totals": None}))
         self.assertEqual(len(self.screen.text().splitlines()), 1)
 
     def test_colour_and_no_colour_glyphs(self):
@@ -1014,7 +1039,7 @@ class LiveTest(unittest.TestCase):
         self.push(*start(size=80))
         for i in range(80):
             name = f"m{i}"
-            self.push(mod_start(name), ("module_end", {"step": "tests", "module": f"tests/{name}", "status": "ok",
+            self.push(mod_start(name), ("unit_end", {"step": "tests", "id": f"tests/{name}", "status": "ok",
                                                        "ms": 1, "totals": (1, 0, 0, 0)}))
         self.push(("tests", {"step": "tests", "total": 7139, "fail": 2, "err": 0, "skip": 0}))
         lines = self.screen.text().splitlines()
@@ -1039,7 +1064,7 @@ class LiveTest(unittest.TestCase):
         self.assertEqual(jr._vcut("测试测试", 5), "测试")
         self.assertEqual(jr._vlen(jr._fit("测" * 40, "0:01", 30)), 30)
         self.dims = (40, 10)
-        self.push(*start(), ("module_start", {"step": "tests", "module": "tests/a", "title": "测试" * 20}),
+        self.push(*start(), ("unit_start", {"step": "tests", "id": "tests/a", "title": "测试" * 20}),
                   *[cls("a") for _ in range(100)])
         subs = self.live.region(self.board, 39, 8)[1:]
         self.assertEqual(len(subs), 1)
@@ -1056,7 +1081,7 @@ class LiveTest(unittest.TestCase):
         self.clock.advance(1)
         live.tick(self.board)
         self.assertEqual(len(writes), closed)
-        live.render(self.board, feed(self.board, ("module_end", {"step": "tests", "module": "tests/a",
+        live.render(self.board, feed(self.board, ("unit_end", {"step": "tests", "id": "tests/a",
                                                                  "status": "ok", "ms": 1, "totals": None}),
                                      ("step_end", {"id": "tests", "status": "ok", "ms": 0, "exit": None,
                                                    "summary": "late", "totals": None})))
@@ -1080,7 +1105,7 @@ class LiveTest(unittest.TestCase):
                      ("step_start", {"id": "verify.1", "n": 1, "title": "mvn", "parent": "verify"}))
                 if takes_over:
                     feed(b, ("reactor", {"step": "verify.1", "size": 1, "poms": [], "tests": True}),
-                         ("module_start", {"step": "verify.1", "module": "verify.1/a", "title": "Mod A"}))
+                         ("unit_start", {"step": "verify.1", "id": "verify.1/a", "title": "Mod A"}))
                 feed(b, ("quiet", {"step": "verify.1", "seconds": 25}))
                 self.assertEqual(b.rows["verify"].quiet, 25)
                 feed(b, ("step_end", {"id": "verify.1", "status": "ok", "ms": 30000, "exit": None, "summary": None,
@@ -1092,55 +1117,142 @@ class LiveTest(unittest.TestCase):
         self.assertIn(" · quiet 25s", self.screen.text())
 
 
-class CollapsedModuleLineTest(unittest.TestCase):
-    """Name-only in-flight modules share one comma-joined line under their row; modules with results keep sub-lines."""
+class UnitLinesTest(unittest.TestCase):
+    """Every running unit has a line under its row: its title padded to the row's longest, its dots, then its elapsed
+    time at the right edge.  When the region is short the newest fold onto one packed names line per row."""
 
     def setUp(self):
         reset_run_state()
         self.addCleanup(reset_run_state)
         self.board = jr.Board(clock=lambda: 100.0)
 
-    def region(self, *events, cols=60):
+    def region(self, *events, cols=60, rows=18):
         feed(self.board, *events)
-        live = jr.LiveRenderer(lambda text: None, size=lambda: os.terminal_size((cols + 1, 20)), clock=lambda: 100.0,
-                               color=False)
-        return live.region(self.board, cols, 18)
+        live = jr.LiveRenderer(lambda text: None, size=lambda: os.terminal_size((cols + 1, rows + 2)),
+                               clock=lambda: 100.0, color=False)
+        return live.region(self.board, cols, rows)
 
-    def test_name_only_modules_collapse_to_two_lines(self):
+    @staticmethod
+    def unit(id, title, step="tests"):
+        return ("unit_start", {"step": step, "id": f"{step}/{id}", "title": title})
+
+    def test_every_running_unit_has_its_own_line(self):
         for step in ("compile", "x-tool"):                      # data-driven: the step id does not matter
             with self.subTest(step=step):
                 reset_run_state()
                 self.board = jr.Board(clock=lambda: 100.0)
                 lines = self.region(*start(step, 4), mod_start("a", step), mod_start("b", step), mod_start("c", step))
-                self.assertEqual(len(lines), 2)
-                self.assertEqual(lines[1], "    A, B, C")
+                self.assertEqual(lines[1:], [f"    Mod {n}  ".ljust(60 - 4) + "0:00" for n in "ABC"])
 
-    def test_modules_with_results_keep_their_own_sub_lines(self):
-        lines = self.region(*start(), mod_start("a"), mod_start("b"), cls("a"), cls("a", "fail"))
-        self.assertEqual(len(lines), 3)
-        self.assertEqual(lines[1], "    B")                       # name-only first, then the detail sub-lines
-        self.assertTrue(lines[2].startswith("    Mod A  "))
+    def test_a_unit_with_results_keeps_its_start_order(self):
+        lines = self.region(*start(), mod_start("a"), mod_start("b"), cls("b"), cls("b", "fail"))
+        self.assertEqual(lines[1:], ["    Mod A  ".ljust(56) + "0:00", "    Mod B  •F".ljust(56) + "0:00"])
 
-    def test_a_module_with_a_first_result_leaves_the_collapsed_line_on_the_next_redraw(self):
-        lines = self.region(*start(), mod_start("a"), mod_start("b"))
-        self.assertEqual(lines[1], "    A, B")
-        lines = self.region(cls("b"))
-        self.assertEqual(lines[1], "    A")
-        self.assertTrue(lines[2].startswith("    Mod B  "))
+    def test_titles_pad_to_the_longest_in_the_row(self):
+        lines = self.region(*start(), self.unit("x", "X"), self.unit("y", "Longer Y"),
+                            ("unit_dot", {"step": "tests", "id": "tests/x", "outcome": "pass"}))
+        self.assertEqual(lines[1:], ["    " + "X".ljust(8) + "  •".ljust(44) + "0:00",
+                                     "    Longer Y  ".ljust(56) + "0:00"])
 
-    def test_pom_modules_are_never_on_the_collapsed_line(self):
+    def test_a_long_title_is_cut_at_half_the_line(self):
+        lines = self.region(*start(), self.unit("x", "x" * 50))
+        self.assertEqual(lines[1], "    " + "x" * 30 + "  ".ljust(22) + "0:00")
+
+    def test_pom_units_never_get_a_line(self):
         feed(self.board, ("step_start", {"id": "mvn", "n": 1, "title": "mvn", "parent": None}),
              ("reactor", {"step": "mvn", "size": 3, "poms": ["mvn/p"], "tests": False}),
-             ("module_start", {"step": "mvn", "module": "mvn/p", "title": "Mod P"}))
-        lines = self.region(("module_start", {"step": "mvn", "module": "mvn/a", "title": "Mod A"}),
-                            ("module_start", {"step": "mvn", "module": "mvn/b", "title": "Mod B"}))
-        self.assertEqual([line for line in lines if line.startswith("    ")], ["    A, B"])
+             ("unit_start", {"step": "mvn", "id": "mvn/p", "title": "Mod P"}))
+        lines = self.region(("unit_start", {"step": "mvn", "id": "mvn/a", "title": "Mod A"}),
+                            ("unit_start", {"step": "mvn", "id": "mvn/b", "title": "Mod B"}))
+        self.assertEqual([line for line in lines if line.startswith("    ")],
+                         ["    Mod A  ".ljust(56) + "0:00", "    Mod B  ".ljust(56) + "0:00"])
 
-    def test_the_prefix_uses_every_module_seen_not_only_those_in_flight(self):
-        lines = self.region(*start(), mod_start("a"), mod_start("b"), mod_start("c"),
-                            ("module_end", {"step": "tests", "module": "tests/b", "status": "ok", "ms": 1}),
-                            ("module_end", {"step": "tests", "module": "tests/c", "status": "ok", "ms": 1}))
-        self.assertEqual(lines[1], "    A")                      # still "Mod " stripped though only one is in flight
+    def test_the_newest_fold_onto_one_names_line(self):
+        lines = self.region(*start(), mod_start("a"), mod_start("b"), mod_start("c"), rows=3)
+        self.assertEqual(lines[1:], ["    Mod A  ".ljust(56) + "0:00", "    B, C"])
+
+    def test_the_slowest_unit_keeps_its_line(self):
+        clock = Clock()
+        self.board = jr.Board(clock=clock)
+        feed(self.board, *start(), mod_start("a"))
+        clock.advance(5)
+        feed(self.board, mod_start("b"))
+        clock.advance(5)
+        feed(self.board, mod_start("c"))
+        live = jr.LiveRenderer(lambda text: None, size=lambda: os.terminal_size((61, 5)), clock=clock, color=False)
+        self.assertEqual(live.region(self.board, 60, 3)[1:], ["    Mod A  ".ljust(56) + "0:10", "    B, C"])
+
+    def test_the_fold_prefix_uses_every_unit_seen_not_only_those_in_flight(self):
+        lines = self.region(*start(), mod_start("a"), mod_start("b"), mod_start("c"), mod_start("d"),
+                            ("unit_end", {"step": "tests", "id": "tests/b", "status": "ok", "ms": 1}), rows=3)
+        self.assertEqual(lines[2], "    C, D")                    # "Mod " stripped by all four, not only those folded
+
+    def test_a_tests_row_with_units_has_no_current_file_line(self):
+        lines = self.region(*start(), ("step_progress", {"step": "tests", "text": "test_x.py"}), mod_start("a"))
+        self.assertEqual(lines[1:], ["    Mod A  ".ljust(56) + "0:00"])
+
+    def test_a_tests_row_without_units_keeps_its_current_file_line(self):
+        lines = self.region(("step_start", {"id": "py", "n": 1, "title": "Py", "parent": None}),
+                            ("units", {"step": "py", "total": 3, "kind": "tests"}),
+                            ("step_progress", {"step": "py", "text": "test_x.py"}))
+        self.assertEqual(lines[1:], ["    test_x.py"])
+
+    def test_a_tests_row_whose_units_have_all_closed_shows_its_current_file_line_again(self):
+        lines = self.region(("step_start", {"id": "py", "n": 1, "title": "Py", "parent": None}),
+                            ("units", {"step": "py", "total": 3, "kind": "tests"}),
+                            ("unit_start", {"step": "py", "id": "a.py", "title": "a.py", "src": "file"}),
+                            ("unit_end", {"step": "py", "id": "a.py", "status": "ok", "src": "file"}),
+                            ("step_progress", {"step": "py", "text": "test_x.py"}))
+        self.assertEqual(lines[1:], ["    test_x.py"])     # "while it has a running unit" (D17)
+
+
+class StepEndClosesUnitsTest(unittest.TestCase):
+    """A unit still open when its step ends is closed there, so no unit line outlives its row."""
+
+    def setUp(self):
+        reset_run_state()
+        self.addCleanup(reset_run_state)
+        self.clock = Clock()
+        self.board = jr.Board(clock=self.clock)
+
+    def end(self, status, *events):
+        feed(self.board, *start(), mod_start("a"), *events)
+        self.clock.advance(2)
+        feed(self.board, ("step_end", {"id": "tests", "status": status, "ms": 2000, "exit": 0, "summary": None,
+                                       "totals": None}))
+        return self.board.rows["tests"].units["tests/a"]
+
+    def test_an_open_unit_closes_ok_with_its_elapsed(self):
+        unit = self.end("ok", cls("a"))
+        self.assertEqual((unit.status, unit.ms), ("ok", 2000))
+
+    def test_an_open_unit_with_a_fail_dot_closes_fail(self):
+        self.assertEqual(self.end("ok", cls("a", "fail")).status, "fail")
+
+    def test_an_open_unit_of_a_failed_row_closes_fail(self):
+        self.assertEqual(self.end("fail").status, "fail")
+
+    def test_an_ended_unit_is_left_alone(self):
+        unit = self.end("fail", ("unit_end", {"step": "tests", "id": "tests/a", "status": "ok", "ms": 7}))
+        self.assertEqual((unit.status, unit.ms), ("ok", 7))
+
+    def test_open_file_script_and_row_units_close_with_no_finished_module_line(self):
+        for status, dot in (("ok", "pass"), ("ok", "fail"), ("fail", "pass")):
+            with self.subTest(status=status, dot=dot):
+                board = jr.Board(detail="modules", clock=self.clock)
+                feed(board, ("step_start", {"id": "s", "n": 1, "title": "Script", "parent": None}),
+                     *[("unit_start", {"step": "s", "id": src, "title": src, "src": src}) for src in ("file", "script")],
+                     ("step_start", {"id": "s.1", "n": 1, "title": "row", "parent": "s"}),
+                     *[("unit_dot", {"step": "s", "id": i, "outcome": dot}) for i in ("file", "script", "s.1")])
+                self.clock.advance(2)
+                blocks = feed(board, ("step_end", {"id": "s", "status": status, "ms": 2000, "exit": 0,
+                                                   "summary": None, "totals": None}))
+                units = board.rows["s"].units
+                want = "fail" if "fail" in (status, dot) else "ok"
+                self.assertEqual({i: (u.src, u.status, u.in_progress) for i, u in units.items()},
+                                 {"file": ("file", want, False), "script": ("script", want, False),
+                                  "s.1": ("row", want, False)})
+                self.assertEqual([b for b in blocks if b[0] == "module"], [])
 
 
 class LiveConsoleTest(unittest.TestCase):
@@ -1725,8 +1837,8 @@ class RowStatusTest(RowCase):
         b = self.board()
         events = [step_start("a", "Build"), ("reactor", {"step": "a", "size": 3, "poms": [], "tests": False})]
         for name, status in (("x", "fail"), ("y", "ok"), ("z", "fail")):
-            events += [("module_start", {"step": "a", "module": name, "title": f"Mod {name.upper()}"}),
-                       ("module_end", {"step": "a", "module": name, "status": status, "ms": 1, "totals": None})]
+            events += [("unit_start", {"step": "a", "id": name, "title": f"Mod {name.upper()}"}),
+                       ("unit_end", {"step": "a", "id": name, "status": status, "ms": 1, "totals": None})]
         blocks = feed(b, *events, step_end("a", "fail", exit=1))
         self.assertIn("2 failed: Mod X +1", plain(b, blocks, self.clock))
 
@@ -1859,8 +1971,21 @@ class FoldTest(PendingCase):
     def test_then_module_lines_fold(self):
         region = self.live().region(self.busy(), 79, 5)
         self.assertEqual(len(region), 5)
-        self.assertIn("    +2 more running", region)
+        self.assertIn("    C, D", region)
         self.assertEqual(region[-1], "○ +6 more pending")
+
+    def test_folding_across_two_rows_takes_the_newest_first_wherever_it_runs(self):
+        b = self.planned([("one", "One"), ("two", "Two")])
+        feed(b, *start("one", size=2, title="One"), *start("two", size=2, title="Two"))
+        for step, name in (("one", "a"), ("two", "c"), ("one", "b"), ("two", "d")):     # started in this order
+            self.clock.advance(1)
+            feed(b, mod_start(name, step))
+        self.assertEqual(sum(line.startswith("    Mod ") for line in self.live().region(b, 79, 6)), 4)
+        region = self.live().region(b, 79, 5)
+        # three lines for units: D, B, then C fold (newest first, across both rows), each under its own row
+        self.assertEqual([line.split()[0] for line in region], ["⠋", "Mod", "B", "⠋", "C,"])
+        self.assertTrue(region[1].startswith("    Mod A "), region)
+        self.assertEqual((region[2], region[4]), ("    B", "    C, D"))
 
 
 class ModuleLinesTest(RowCase):
@@ -1875,21 +2000,21 @@ class ModuleLinesTest(RowCase):
         blocks = feed(b, *maven_events())
         self.assertIn("    F Mod B  0:02  10 tests, 2 failed\n", plain(b, blocks, self.clock))
 
-    def test_inflight_sub_line_unchanged(self):
+    def test_inflight_sub_line_ends_with_its_elapsed_time(self):
         b = self.board()
         feed(b, *start(), mod_start("a"), cls("a"), cls("a", "fail"))
         live = jr.LiveRenderer(lambda t: None, size=lambda: os.terminal_size((60, 10)), clock=self.clock, color=False)
-        self.assertEqual(live.region(b, 59, 8)[1:], ["    Mod A  •F"])
+        self.assertEqual(live.region(b, 59, 8)[1:], ["    Mod A  •F".ljust(59 - 4) + "0:00"])
 
 
 class SetupRowTest(RowCase):
     def events(self, pom_status="ok"):
         return [step_start("tests", "Tests"),
                 ("reactor", {"step": "tests", "size": 3, "poms": ["p0", "p1"], "tests": True}),
-                ("module_start", {"step": "tests", "module": "p0", "title": "Parent"}),
-                ("module_end", {"step": "tests", "module": "p0", "status": "ok", "ms": 1, "totals": None}),
-                ("module_start", {"step": "tests", "module": "p1", "title": "Bom"}),
-                ("module_end", {"step": "tests", "module": "p1", "status": pom_status, "ms": 1, "totals": None})]
+                ("unit_start", {"step": "tests", "id": "p0", "title": "Parent"}),
+                ("unit_end", {"step": "tests", "id": "p0", "status": "ok", "ms": 1, "totals": None}),
+                ("unit_start", {"step": "tests", "id": "p1", "title": "Bom"}),
+                ("unit_end", {"step": "tests", "id": "p1", "status": pom_status, "ms": 1, "totals": None})]
 
     def test_setup_finishes_when_poms_done(self):
         b = self.board()

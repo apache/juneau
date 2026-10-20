@@ -58,6 +58,7 @@ An adopting `push.py` accepts `--test-only`:
 - **`step.parent`** (optional) is the id of the enclosing step.
   - Sub-step ids are `<parent>/<child>`.
   - Sub-steps carry their own `n`, the reactor index, for ordering within the parent.
+  - A script's own units are sub-steps too: a Prechecks row emits one `prechecks/<check>` child step per check.
   - A consumer that ignores `parent` shows sub-steps as flat steps, which is still correct.
 - **`tests`:** `{ev:"tests", step, total, fail, err, skip}`.
   - The numbers are absolute cumulative totals for that step, not deltas. The latest event for a step supersedes earlier ones.
@@ -121,6 +122,26 @@ tool's terminal gets no input at all.
 
 See `../README.md`: the bootstrap snippet that loads `juneau_run.py` from the pinned `org.apache.juneau:juneau-run` artifact, the output routing
 options (`JUNEAU_RUN_CONSOLE`, `JUNEAU_RUN_FULL_LOG`, `JUNEAU_RUN_CONDENSED_LOG`) and the parsers (`maven`, `pytest`, `playwright`, `gradle`, `npm`, `bazel`, `generic`; `gradle` adds `--console=plain` unless the command sets `--console`).
-Reporter flags a parser adds, only when markers are on and `RUN_ARTIFACTS` is set:
-- pytest: `--junitxml=$RUN_ARTIFACTS/<step>-pytest.xml`
-- Playwright: `--reporter=line,json` with `PLAYWRIGHT_JSON_OUTPUT_NAME=$RUN_ARTIFACTS/<step>-playwright.json`
+Reporters a parser adds when markers are on:
+- pytest: `--junitxml=$RUN_ARTIFACTS/<step>-pytest.xml` (a temp directory when `RUN_ARTIFACTS` isn't set)
+- Playwright: no flag. juneau-run's own reporter (`juneau_run_playwright.cjs`) is named in `PW_TEST_REPORTER`, and
+  `JUNEAU_RUN_PLAYWRIGHT_JSON=$RUN_ARTIFACTS/<step>-playwright.json` when `RUN_ARTIFACTS` is set
+
+Playwright appends the `PW_TEST_REPORTER` reporter to the `reporter:` list in `playwright.config` (or to its default
+reporter), so the config's own reporters (html, junit, ...) still run and Playwright prints what a plain run prints,
+plus, outside a terminal, the reporter's `##playwright` lines. It sends one per test event, which draws one console line
+per running test file and counts the step's bar (once per test, however often it is retried), and writes the JSON report
+at the end in a subset of Playwright's json reporter format (suites, specs, tests, results). The bar's total is the
+number of tests at the start, so a run stopped by `--max-failures` ends short of it; a test whose retry never ran is
+counted at the end with its outcome so far. Outside a terminal `PLAYWRIGHT_HTML_OPEN=never` is set too (unless the
+command sets it or `PW_TEST_HTML_REPORT_OPEN`): the html reporter's default opens the report after a failure, serving it
+and waiting, whenever stdin is a terminal. `PW_TEST_REPORTER` is undocumented in Playwright: a version that ignores it
+runs as a plain run would, without the per-file lines or the JSON report, and once tests have run (not after `--list`,
+`--help` or a configuration error) the step notes "Playwright reporter not loaded"; the bar then counts the line
+reporter's `[n/N]` progress, when the config uses it. Under a terminal there is no such note.
+Without markers, the reporter is added only inside a script's console session that isn't interactive; a plain run keeps
+the command and environment as given. Under a terminal it is added only for the JSON report, with
+`JUNEAU_RUN_PLAYWRIGHT_MARKERS=0`, so it prints nothing; outside one an inherited `JUNEAU_RUN_PLAYWRIGHT_MARKERS=0` is
+dropped. `JUNEAU_RUN_PLAYWRIGHT_REPORTER=0`, in the command's environment or juneau-run's, leaves it out, and so does a
+command that names its own reporter (`--reporter x`, `--reporter=x`, or a `PW_TEST_REPORTER` already set). A report left
+at the JSON path by an earlier run is removed first, so a run cancelled before its end reports none.

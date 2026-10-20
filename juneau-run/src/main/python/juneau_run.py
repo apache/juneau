@@ -54,6 +54,7 @@ import time
 import tty as _tty
 import unicodedata
 import xml.etree.ElementTree as ET
+import zipfile
 from collections import OrderedDict
 from contextlib import contextmanager, suppress
 from pathlib import Path
@@ -180,6 +181,9 @@ class Step:
         self.summary = None
         self.warned = False
         self.paused = False
+        self._open_units = set()     # unit ids open in this step: a second open of one is a ValueError
+        self._marker_ids = set()     # child-step ids its units used, so a cut slug that repeats one gets -<n>
+        self._unit_n = 0
 
     def fail(self, exit=None):  # NOSONAR python:S5806 - parameter names mirror protocol field names
         self.status = "fail"
@@ -207,6 +211,68 @@ class Step:
         """A line shown beside the row's result, not instead of it (unlike warn, whose text becomes the reason).
         Bus-only, no run-protocol marker; the row's status is unchanged."""
         publish("note", level="detail", text=text, href=None, step=self.id)
+
+    @contextmanager
+    def unit(self, id, title):  # NOSONAR python:S5806 - parameter names mirror protocol field names
+        """One line under this step's row for one item of its work (a check, say): unit_start, the block, unit_end.
+        Not a sub-step: the board gets one unit, never a row.  Under markers it is also a v1 child step,
+        `<step id>/<slug>`.  Yields a UnitHandle; an exception ends the unit fail and propagates."""
+        if id in self._open_units:
+            raise ValueError(f"unit {id!r} is already open in step {self.id!r}")
+        marker = self._marker_id(id)
+        self._open_units.add(id)
+        self._unit_n += 1
+        emit("step", id=marker, n=self._unit_n, title=title, parent=self.id)
+        publish("unit_start", step=self.id, id=id, title=title, src="script")
+        u = UnitHandle(self.id, id)
+        t0 = time.monotonic()
+        try:
+            yield u
+        except BaseException:
+            u.status = "fail"
+            raise
+        finally:
+            ms = int((time.monotonic() - t0) * 1000)
+            self._open_units.discard(id)
+            emit("end", id=marker, status=u.status, ms=ms)
+            publish("unit_end", step=self.id, id=id, status=u.status, ms=ms, src="script")
+
+    def _marker_id(self, id):  # NOSONAR python:S5806 - parameter names mirror protocol field names
+        """`<step id>/<slug>`, within the 64-character step-id limit and unique within the step."""
+        room = 64 - len(self.id) - 1
+        if room < 1:
+            raise ValueError(f"step id {self.id!r} leaves no room for a unit's child-step id (64 characters at most)")
+        slug = (re.sub(r"[^a-z0-9]+", "-", str(id).lower()).strip("-") or "step")[:room]
+        candidate, n = slug, 1
+        while f"{self.id}/{candidate}" in self._marker_ids:
+            n += 1
+            tail = f"-{n}"
+            if len(tail) < room:
+                candidate = slug[:room - len(tail)] + tail
+            elif len(str(n)) <= room:
+                candidate = str(n)      # a row id of 61 or 62 characters leaves no room for a slug and a tail
+            else:
+                raise ValueError(f"step id {self.id!r} has no room left for another unit's child-step id")
+        self._marker_ids.add(f"{self.id}/{candidate}")
+        return f"{self.id}/{candidate}"
+
+
+class UnitHandle:
+    """What Step.unit() yields.  Its status defaults to ok; fail(), or any fail dot, ends the unit fail."""
+
+    def __init__(self, step, id):  # NOSONAR python:S5806 - parameter names mirror protocol field names
+        self.step = step
+        self.id = id
+        self.status = "ok"
+
+    def dot(self, outcome):
+        """One result (pass, fail or skip) on the unit's line."""
+        if outcome == "fail":
+            self.status = "fail"
+        publish("unit_dot", step=self.step, id=self.id, outcome=outcome)
+
+    def fail(self):
+        self.status = "fail"
 
 
 @contextmanager
@@ -311,7 +377,7 @@ def artifacts_dir():
 # Bus
 #
 # Everything the console view shows is an event published here.  Markers are not a subscriber: emit() keeps its own
-# call sites, so the v1 protocol cannot drift.  Events with no marker form (say, failure, class_done, ...) never reach
+# call sites, so the v1 protocol cannot drift.  Events with no marker form (say, failure, unit_dot, ...) never reach
 # emit().
 # ---------------------------------------------------------------------------------------------------------------------
 
@@ -653,20 +719,26 @@ def format_final(status, ms, failed_title, full_log):
     return "❌ Failed" + (f" at {failed_title}" if failed_title else "") + (f" · full log: {full_log}" if full_log else "")
 
 
-class _Mod:
-    """One reactor module under a step row."""
+BAR_SRCS = ("sub", "row")     # unit sources that keep Maven module-bar and Setup bookkeeping (boxes, cells, poms)
 
-    def __init__(self, id, title, t0):  # NOSONAR python:S5806 - parameter names mirror protocol field names
+
+class Unit:
+    """One running piece of work under a step row, drawn as a line while in progress.  src says where it came from:
+    sub (a parser child step: Maven module, Gradle task, Bazel target), row (a sub-row, step(..., parent=)), file (a
+    pytest or Playwright test file) or script (Step.unit())."""
+
+    def __init__(self, id, title, t0, src="sub"):  # NOSONAR python:S5806 - parameter names mirror protocol field names
         self.id = id
         self.title = title
         self.t0 = t0
-        self.outcomes = []      # class_done outcomes, in order
+        self.src = src
+        self.outcomes = []      # unit_dot outcomes, in order
         self.status = None      # None while running
         self.ms = None
         self.totals = None
         self.box = None         # pass, fail or skip once granted
         self.unit_index = None  # its cell in the row's module bar once counted
-        self.started = False    # a module_start arrived for it (the in-flight signal for the module bar)
+        self.started = False    # a unit_start arrived for it (the in-flight signal for the module bar)
         self.dropped = False    # a tests-mode module that ran no tests: left out of the bar and of its total
 
     @property
@@ -729,7 +801,7 @@ class _Row:
         self.ms = None
         self.summary = None
         self.totals = None
-        self.modules = OrderedDict()
+        self.units = OrderedDict()
         self.order = []         # module ids, in the order their boxes were granted
         self.notes = []         # (level, text), held until the row ends: info ones for the screen at `all`, warn
                                 # and error ones (full text) for the condensed log
@@ -740,7 +812,7 @@ class _Row:
         self.reason_level = None    # warn or error; an error reason is never replaced by a warn
         self.hints = []         # lines printed beneath the row when it ends failed (spec 5.1)
         self.held_failure = False   # failure text is among the hints: they print however the row ends
-        self.failed_mods = []   # titles of its failed modules, in failure order, for the row's text
+        self.failed_units = []  # titles of its failed units (modules, test files), in failure order, for its text
         self.size = None        # reactor size N
         self.poms = set()       # the Setup poms: built before the reactor's first real module
         self.tail = set()       # poms built after a real module: on neither the Setup row nor the bar
@@ -764,18 +836,28 @@ class _Row:
         """Modules that never get a cell in the module bar: the Setup poms and the trailing ones."""
         return self.poms | self.tail
 
+    @property
+    def bar_units(self):
+        """Whether any unit takes part in the module bar (file and script units never do)."""
+        return any(m.src in BAR_SRCS for m in self.units.values())
+
+    @property
+    def units_running(self):
+        """Whether any unit is still in progress (its line, not the row's progress text, is what draws)."""
+        return any(m.in_progress and m.id not in self.unbarred for m in self.units.values())
+
     def boxes(self):
-        return [self.modules[m].box for m in self.order]
+        return [self.units[m].box for m in self.order]
 
     def unit_view(self):
         """unit_cells for drawing: the modules that have started but not ended fill the cells right after the finished
         ones as UNIT_RUN.  A module bar fills in finish order, so an in-flight module has no cell of its own yet; this
-        shows how many are running, not which.  Only a Maven module bar has the signal (module_start); other unit
+        shows how many are running, not which.  Only a Maven module bar has the signal (unit_start); other unit
         kinds (tests, tasks, files) never show in-flight and keep PENDING for what has not finished."""
         if self.unit_kind != "modules" or not self.running:
             return self.unit_cells
-        running = sum(1 for m in self.modules.values()
-                      if m.started and m.status is None and m.unit_index is None and not m.dropped and m.id not in self.unbarred)
+        running = sum(1 for m in self.units.values() if m.src in BAR_SRCS and m.started and m.status is None
+                      and m.unit_index is None and not m.dropped and m.id not in self.unbarred)
         view = bytearray(self.unit_cells)
         for i in range(self.units_done, min(self.units_total, self.units_done + running)):
             view[i] = UNIT_RUN
@@ -802,7 +884,7 @@ class Board:
         self.clock = clock
         self.t0 = clock()
         self.rows = OrderedDict()
-        self.module_rows = {}       # module id -> its _Row
+        self.unit_rows = {}         # unit id -> its _Row
         self.failure_lines = set()  # stripped lines already shown by a failure event, so notes don't repeat them
         self.failed_title = None
         self.aliases = {}           # a run_tool sub-row's step id -> its parent row's id (parent=, release.py)
@@ -838,7 +920,7 @@ class Board:
     def setup_failed(self):
         """The titles of the Setup row's failed pom modules, in reactor order."""
         owner = self.rows.get(self.setup.row) if self.setup is not None else None
-        return [owner.modules[i].title if owner is not None and i in owner.modules else i
+        return [owner.units[i].title if owner is not None and i in owner.units else i
                 for i in self.setup.ids if self.setup.boxes[i] == "fail"] if self.setup is not None else []
 
     def _end_setup(self):
@@ -857,7 +939,7 @@ class Board:
         """The row a note, say, hint or failure belongs to: the step's (or its module's), else the newest running
         row."""
         if step_id:
-            r = self._target(step_id) or self.module_rows.get(step_id)
+            r = self._target(step_id) or self.unit_rows.get(step_id)
             if r is not None:
                 return r
         return self._latest_running()
@@ -898,24 +980,27 @@ class Board:
         return r if r is not None else self.rows.get(self.aliases.get(step_id))
 
     def _adopt(self, step_id):
-        """The row for a reactor or module_start event.  When a sub-row's tool sends the first one, that tool's
+        """The row for a reactor or unit_start event.  When a sub-row's tool sends the first one, that tool's
         modules take over the parent row's bar: the boxes the row's sub-rows had (one per command) are dropped."""
         r = self._target(step_id)
-        if r is not None and step_id in self.aliases and step_id in r.modules:
-            for sub in [m for m in r.modules if m in self.aliases]:
-                del r.modules[sub]
-                self.module_rows.pop(sub, None)
-            r.order = [m for m in r.order if m in r.modules]
+        if r is not None and step_id in self.aliases and step_id in r.units:
+            for sub in [m for m in r.units if m in self.aliases]:
+                del r.units[sub]
+                self.unit_rows.pop(sub, None)
+            r.order = [m for m in r.order if m in r.units]
         return r
 
-    def _mod(self, f, create=False):
+    def _unit(self, f, key="id", create=False, src="sub"):
+        """The row and unit an event names (by f[key]); create opens a missing one, of src, with its id as its
+        title."""
         r = self._target(f["step"])
         if r is None:
             return None, None
-        m = r.modules.get(f["module"])
+        m = r.units.get(f[key])
         if m is None and create:
-            m = r.modules[f["module"]] = _Mod(f["module"], f["module"], self.clock())
-            self.module_rows[f["module"]] = r
+            m = r.units[f[key]] = Unit(f[key], f[key], self.clock(), src)
+            if m.src in BAR_SRCS:
+                self.unit_rows[f[key]] = r      # file and script ids are only unique within their row
         return r, m
 
     @staticmethod
@@ -984,7 +1069,7 @@ class Board:
         parent = self.rows.get(f.get("parent"))
         if parent is not None:      # a sub-row: a box on its parent's row until its tool sends modules (_adopt)
             self.aliases[f["id"]] = parent.id
-            return self._on_module_start({"step": parent.id, "module": f["id"], "title": f["title"]})
+            return self._on_unit_start({"step": parent.id, "id": f["id"], "title": f["title"], "src": "row"})
         row = self.rows[f["id"]] = _Row(f["id"], f["n"], f["title"], f.get("label"), self.clock())
         if self.estimator is not None:
             try:
@@ -993,18 +1078,25 @@ class Board:
                 row.estimate = None
         return []
 
-    def _on_module_start(self, f):
-        r = self._adopt(f["step"])
+    def _on_unit_start(self, f):
+        src = f.get("src", "sub")
+        r = self._adopt(f["step"]) if src in BAR_SRCS else self._target(f["step"])
         if r is not None:
-            m = r.modules.get(f["module"])
-            if m is None:
-                r.modules[f["module"]] = _Mod(f["module"], f["title"], self.clock())
+            m = r.units.get(f["id"])
+            if m is None or (src not in BAR_SRCS and m.status is not None):
+                m = r.units[f["id"]] = Unit(f["id"], f["title"], self.clock(), src)    # new, or a closed file/script unit again
+            elif src in BAR_SRCS:
+                # a pom module, created by the reactor event, or a unit an orphan dot or end opened as a script unit
+                m.title, m.t0, m.src = f["title"], self.clock(), src
+                if m.status is not None:      # an orphan end closed it: running again
+                    m.status, m.ms, m.outcomes = None, None, []
             else:
-                m.title, m.t0 = f["title"], self.clock()     # a pom module, created by the reactor event
-            r.modules[f["module"]].started = True
-            self.module_rows[f["module"]] = r
-            if f["module"] in r.poms:     # a pom has no work to wait for; under -T its end only comes with the summary
-                self._setup_box(r, r.modules[f["module"]], "pass")
+                return []       # a file or script unit already open: keep its elapsed (xdist interleaving, retries)
+            m.started = True
+            if src in BAR_SRCS:
+                self.unit_rows[f["id"]] = r     # file and script ids are only unique within their row
+            if f["id"] in r.poms:     # a pom has no work to wait for; under -T its end only comes with the summary
+                self._setup_box(r, m, "pass")
                 return self._setup_settled()
         return []
 
@@ -1024,7 +1116,7 @@ class Board:
                 del r.unit_cells[r.units_total:]
                 r.unit_cells.extend(bytes(r.units_total - len(r.unit_cells)))
             for pom in f["poms"]:
-                self._mod({"step": r.id, "module": pom}, create=True)
+                self._unit({"step": r.id, "module": pom}, key="module", create=True)
             if r.poms and self.setup is None:
                 self.setup = _Setup(r.id, f["poms"], self.clock())
             elif self.setup is not None and self.setup.row == r.id:
@@ -1103,11 +1195,13 @@ class Board:
             r.unit_cells[f["index"]] = self.OUTCOME_BYTE.get(f["outcome"], UNIT_PASS)
         return []
 
-    def _on_class_done(self, f):
-        _, m = self._mod(f, create=True)
+    def _on_unit_dot(self, f):
+        _, m = self._unit(f, create=True, src=f.get("src", "script"))   # an orphan with no src gets no bar
         if m is not None:
             m.outcomes.append(f["outcome"])
             r = self._target(f["step"])
+            if m.src == "file" and m.status is not None and f["outcome"] == "fail":
+                self._fail_file(r, m)       # a late teardown error: named, not reopened, no line
             if m.dropped and r is not None:
                 self._undrop_unit(r, m)     # tests ran after all (module_tested only means "past its test phase")
                 self._count_unit(r, m, self._tests_outcome(m))
@@ -1125,9 +1219,16 @@ class Board:
             return "skip" if m.totals[3] == m.totals[0] else "pass"
         return "skip"
 
+    @staticmethod
+    def _fail_file(r, m):
+        """A failed file unit names its file in the row's text; a failed script unit never does (its row keeps the
+        check's reason)."""
+        if r is not None and m.title not in r.failed_units:
+            r.failed_units.append(m.title)
+
     def _on_module_compiled(self, f):
-        r, m = self._mod(f, create=True)
-        if m is None:
+        r, m = self._unit(f, key="module", create=True)
+        if m is None or m.src not in BAR_SRCS:
             return []
         if m.id in r.unbarred:
             return []                 # pom modules live on the Setup row (or, trailing, nowhere), never in a bar
@@ -1141,11 +1242,11 @@ class Board:
         return []
 
     def _on_module_tested(self, f):
-        r, m = self._mod(f, create=True)
-        if m is not None and m.id not in r.unbarred and m.box != "fail":
+        r, m = self._unit(f, key="module", create=True)
+        if m is not None and m.src in BAR_SRCS and m.id not in r.unbarred and m.box != "fail":
             outcome = self._tests_outcome(m)
             self._grant(r, m, outcome)
-            if r.tests_mode:      # under -T module_end waits for the Reactor Summary: count the unit when its tests end
+            if r.tests_mode:      # under -T unit_end waits for the Reactor Summary: count the unit when its tests end
                 if m.outcomes or (m.totals and m.totals[0]):
                     self._count_unit(r, m, outcome)     # all-skipped tests still count, as skip
                 else:
@@ -1156,15 +1257,21 @@ class Board:
         totals = _totals(f)
         if self._target(f["step"]) is not None:
             self._target(f["step"]).totals = totals
-        elif f["step"] in self.module_rows:
-            self.module_rows[f["step"]].modules[f["step"]].totals = totals
+        elif f["step"] in self.unit_rows:
+            self.unit_rows[f["step"]].units[f["step"]].totals = totals
         return []
 
-    def _on_module_end(self, f):
-        r, m = self._mod(f, create=True)
+    def _on_unit_end(self, f):
+        r, m = self._unit(f, create=True, src=f.get("src", "script"))   # an orphan with no src gets no bar, as a dot's
         if m is None:
             return []
-        m.status, m.ms = f["status"], f["ms"]
+        ms = f["ms"] if f.get("ms") is not None else int((self.clock() - m.t0) * 1000)
+        if m.src not in BAR_SRCS:       # a file or script unit: no bar cell, no Setup box, no finished line
+            m.status, m.ms = f["status"], ms
+            if m.src == "file" and (m.status == "fail" or "fail" in m.outcomes):
+                self._fail_file(r, m)
+            return []
+        m.status, m.ms = f["status"], ms
         if f.get("totals"):
             m.totals = _totals(f["totals"])
         failed = m.status == "fail" or bool(m.totals and m.totals[1] + m.totals[2])
@@ -1181,8 +1288,8 @@ class Board:
                 blocks = self._setup_settled()
         elif m.id in r.tail:    # a trailing pom: no Setup box, no bar cell; its failure still fails the row and is named
             m.box = "fail" if failed else "pass"
-            if failed and m.title not in r.failed_mods:
-                r.failed_mods.append(m.title)
+            if failed and m.title not in r.failed_units:
+                r.failed_units.append(m.title)
         else:
             if failed:
                 self._grant(r, m, "fail")
@@ -1190,8 +1297,8 @@ class Board:
                 self._grant(r, m, "skip" if m.status == "skip" else "pass")
             # a module already boxed red (compile or test failure) stays a failed unit when finish() closes it as skip
             failed = failed or m.box == "fail"
-            if failed and m.title not in r.failed_mods:
-                r.failed_mods.append(m.title)
+            if failed and m.title not in r.failed_units:
+                r.failed_units.append(m.title)
             if r.tests_mode and not failed and m.unit_index is None and not (m.outcomes or (m.totals and m.totals[0])):
                 self._drop_unit(r, m)       # ended without ever running a test (no module_tested, or a skipped module)
             else:
@@ -1211,12 +1318,12 @@ class Board:
         return []
 
     def _on_step_end(self, f):
-        if f["id"] not in self.rows and f["id"] in self.module_rows:
+        if f["id"] not in self.rows and f["id"] in self.unit_rows:
             if f["id"] in self.aliases:
-                self.module_rows[f["id"]].quiet = 0     # a sub-row's tool exited: its parent row is not silent
-                self.module_rows[f["id"]].progress = None
-            return self._on_module_end({"step": self.module_rows[f["id"]].id, "module": f["id"],
-                                        "status": f["status"], "ms": f["ms"], "totals": f.get("totals")})
+                self.unit_rows[f["id"]].quiet = 0     # a sub-row's tool exited: its parent row is not silent
+                self.unit_rows[f["id"]].progress = None
+            return self._on_unit_end({"step": self.unit_rows[f["id"]].id, "id": f["id"], "src": "row",
+                                      "status": f["status"], "ms": f["ms"], "totals": f.get("totals")})
         if f["id"] not in self.rows and f["id"] in self.aliases:
             r = self._target(f["id"])   # a sub-row whose tool took over the parent's bar; the parent ends later
             if r is not None:
@@ -1235,11 +1342,17 @@ class Board:
             r.summary = f["summary"]
         if f.get("totals"):
             r.totals = _totals(f["totals"])
-        for m in r.modules.values():   # never ended: it ran nothing we saw (close_children ends the open ones)
-            if m.box is None and m.id not in r.unbarred:
+        for m in r.units.values():   # never ended: it ran nothing we saw (close_children ends the open ones)
+            if m.src in BAR_SRCS and m.box is None and m.id not in r.unbarred:
                 self._grant(r, m, "fail" if "fail" in m.outcomes else "pass" if m.outcomes else "skip")
-                if m.box == "fail" and m.title not in r.failed_mods:
-                    r.failed_mods.append(m.title)
+                if m.box == "fail" and m.title not in r.failed_units:
+                    r.failed_units.append(m.title)
+        for m in r.units.values():     # still open: closed here, so no line outlives its row (no finished line)
+            if m.status is None:
+                m.status = "fail" if "fail" in m.outcomes or m.box == "fail" or r.status == "fail" else "ok"
+                m.ms = int((self.clock() - m.t0) * 1000)
+                if m.src == "file" and "fail" in m.outcomes:
+                    self._fail_file(r, m)   # only a file with a failed test: an interrupted run doesn't name them all
         if r.status == "fail" and self.failed_title is None:
             self.failed_title = r.label
         blocks = self._end_setup() if self.setup is not None and self.setup.row == r.id else []
@@ -1378,10 +1491,12 @@ def row_icon(row, now, color):
 
 
 def _failed_text(row, expected):
-    """A row with failed modules: `N failed: <first> [+N-1]`, or in tests mode the totals and `: <first> [+N-1]`."""
-    names = row.failed_mods[0] + (f" +{len(row.failed_mods) - 1}" if len(row.failed_mods) > 1 else "")
-    totals = fmt_totals(row.totals, False, expected) if row.tests_mode else ""
-    return f"{totals}: {names}" if totals else f"{len(row.failed_mods)} failed: {names}"
+    """A row with failed units: `N failed: <first> [+N-1]`, or in tests mode, or for failed test files, the totals and
+    `: <first> [+N-1]`."""
+    names = row.failed_units[0] + (f" +{len(row.failed_units) - 1}" if len(row.failed_units) > 1 else "")
+    files = row.totals and any(m.src == "file" and m.title in row.failed_units for m in row.units.values())
+    totals = fmt_totals(row.totals, False, expected) if row.tests_mode or files else ""
+    return f"{totals}: {names}" if totals else f"{len(row.failed_units)} failed: {names}"
 
 
 def row_text(row, glyphs, now, pending=False):
@@ -1390,11 +1505,11 @@ def row_text(row, glyphs, now, pending=False):
     time, and whether text may be cut to fit (a reason or failed-module text).  Elapsed is empty under a second, so
     instant rows (Install) show none."""
     cells, parts = None, []
-    # A module row can carry a unit bar too, hence the `row.modules` test below.  A unit bar's PENDING cells also
+    # A module row can carry a unit bar too, hence the `row.bar_units` test below.  A unit bar's PENDING cells also
     # show on a finished row whose units did not all report.
     unreported = not row.running and row.unit_kind == "modules" and not row.units_done
     # A finished module bar that never counted a unit (a -q build sends no module events) shows no bar at all.
-    if not unreported and (row.modules or row.size or row.units_total or row.unit_kind == "modules"):
+    if not unreported and (row.bar_units or row.size or row.units_total or row.unit_kind == "modules"):
         if row.unit_kind:
             cells = unit_bar(row.unit_view(), row.units_total, glyphs)
             parts.append(f"{row.units_done}/{row.units_total}")
@@ -1414,7 +1529,7 @@ def row_text(row, glyphs, now, pending=False):
             elapsed = timer_text(ms / 1000, total)
     expected = row.estimate.tests if row.running and row.estimate is not None else None
     cut = True
-    if row.failed_mods:
+    if row.failed_units:
         text = _failed_text(row, expected)
     elif row.reason:
         text = row.reason
@@ -1535,7 +1650,8 @@ class PlainRenderer:
         totals = [r.totals for r in running if r.totals]
         total = sum(t[0] for t in totals)
         failed = sum(t[1] + t[2] for t in totals)
-        k = sum(1 for r in running for m in r.modules.values() if m.in_progress and m.id not in r.unbarred)
+        k = sum(1 for r in running for m in r.units.values()
+                if m.src in BAR_SRCS and m.in_progress and m.id not in r.unbarred)
         overall = board.overall()
         figure = (f" · {overall.percent}% · ~{fmt_elapsed(overall.remaining * 1000)}"
                   f"{'+' if overall.lower_bound else ''} left") if overall else ""
@@ -1726,7 +1842,7 @@ class LiveRenderer:
         rest = "  ".join(p for p in (count, text) if p)
         if pending and r.quiet:
             rest += f" · quiet {r.quiet}s"
-        if r.running and r.progress and (not r.unit_kind or r.unit_kind == "checks"):
+        if r.running and r.progress and (not r.unit_kind or (r.unit_kind == "checks" and not r.units_running)):
             rest = f"{rest} · {r.progress}" if rest else r.progress
         return _fit_row(label, cells, rest, elapsed, cols, wrap=bool(r.unit_kind))
 
@@ -1743,42 +1859,40 @@ class LiveRenderer:
         self._draw()
 
     def region(self, board, cols, max_lines):
-        """The running rows in start order (each with its Setup row and sub-lines), then the pending rows in plan
-        order, then Overall.  When it is taller than max_lines the pending rows fold first (into "○ +N more pending",
-        kept while anything is pending), then the module sub-lines (+N more running), then the lines above Overall
-        are cut: Overall itself is never dropped."""
+        """The running rows in start order (each with its Setup row and a line per running unit), then the pending
+        rows in plan order, then Overall.  When it is taller than max_lines the pending rows fold first (into
+        "○ +N more pending", kept while anything is pending), then the unit lines, newest first, onto one packed
+        names line per row, then the lines above Overall are cut: Overall itself is never dropped."""
         running = board.running()
-        inflight = [(r, m) for r in running for m in r.modules.values() if m.in_progress and m.id not in r.unbarred]
-        subs = [(r, m) for r, m in inflight if m.outcomes or m.totals]
-        collapsed = {}
-        for r in running:
-            names = [m.title for owner, m in inflight if owner is r and not (m.outcomes or m.totals)]
-            if names:
-                prefix = common_prefix([m.title for m in r.modules.values() if m.id not in r.unbarred])
-                collapsed[r.id] = "    " + collapse_names([t[len(prefix):] or t for t in names], cols - 2)
-        blocks = {id(m): self._sub_lines(m, cols) for _, m in subs}
+        now = self.clock()
+        subs = [(r, m) for r in running for m in r.units.values() if m.in_progress and m.id not in r.unbarred]
         current = {r.id: "    " + _vcut(r.progress, max(1, cols - 4)) for r in running
-                   if r.progress and r.unit_kind in ("tests", "files")}   # what a bar-only row is running now
+                   if r.progress and r.unit_kind in ("tests", "files") and not r.units_running}   # no unit line to show
         setup_running = (board.setup is not None and not board.setup.ended
                          and any(r.id == board.setup.row for r in running))
         overall = board.overall()
         row_text_ = {r.id: self._row(board, r, cols, pending=True) for r in running}
         row_lines = sum(t.count("\n") + 1 for t in row_text_.values())     # a wrapped unit bar spans several lines
-        fixed = row_lines + len(collapsed) + len(current) + (1 if setup_running else 0) + (1 if overall else 0)
+        fixed = row_lines + len(current) + (1 if setup_running else 0) + (1 if overall else 0)
         pending = board.pending()
         shown = len(pending)
-        if pending and fixed + sum(len(b) for b in blocks.values()) + shown > max_lines:
-            shown = max(0, max_lines - fixed - sum(len(b) for b in blocks.values()) - 1)
+        if pending and fixed + len(subs) + shown > max_lines:
+            shown = max(0, max_lines - fixed - len(subs) - 1)
             if shown + 1 >= len(pending):
                 shown = len(pending)
         pending_lines = [_vcut(pending_line(label, self.color), cols) for _, label in pending[:shown]]
         if shown < len(pending):
             pending_lines.append(pending_line(f"+{len(pending) - shown} more pending", self.color))
         budget = max_lines - fixed - len(pending_lines)
-        folded = {}
-        while subs and sum(len(blocks[id(m)]) for _, m in subs) + len(folded) > budget:
-            r, _ = subs.pop(0)
-            folded[r.id] = folded.get(r.id, 0) + 1
+        folded = {}     # row id -> its folded units: the newest started go first, so the slow ones stay in view
+        gone = set()
+        # newest first; of units started at the same instant the one listed later (started later) folds first
+        for i in sorted(range(len(subs)), key=lambda i: (subs[i][1].t0, i), reverse=True):
+            if len(subs) - len(gone) + len(folded) <= budget:
+                break
+            gone.add(i)
+            folded.setdefault(subs[i][0].id, []).append(subs[i][1])
+        subs = [rm for i, rm in enumerate(subs) if i not in gone]
         lines = []
         for r in running:
             if setup_running and board.setup.row == r.id:
@@ -1786,22 +1900,30 @@ class LiveRenderer:
             lines.append(row_text_[r.id])
             if r.id in current:
                 lines.append(current[r.id])
-            if r.id in collapsed:
-                lines.append(collapsed[r.id])
+            mine = [m for owner, m in subs if owner is r]
+            width = max((_vlen(m.title) for m in mine), default=1)     # _sub_lines caps it
+            lines += [line for m in mine for line in self._sub_lines(m, cols, width, now)]
             if r.id in folded:
-                lines.append(f"    +{folded[r.id]} more running")
-            lines += [line for owner, m in subs if owner is r for line in blocks[id(m)]]
+                names = [m.title for m in reversed(folded[r.id])]     # folded newest first: listed oldest first
+                prefix = common_prefix([m.title for m in r.units.values() if m.id not in r.unbarred])
+                lines.append("    " + collapse_names([t[len(prefix):] or t for t in names], cols - 2))
         lines += pending_lines
         lines = [part for line in lines for part in line.split("\n")]
         if not overall:
             return lines[:max(1, max_lines)]
         return lines[:max(0, max_lines - 1)] + [_vcut(overall_text(overall), cols)]
 
-    def _sub_lines(self, m, cols):
-        """One line per module: the newest dots that fit.  When they do not all fit, the last cells hold "+N", N being
-        the older results dropped (red if any of them failed, else green), so the strip keeps its full width."""
-        prefix = f"    {_vcut(m.title, max(1, cols // 2))}  "
-        per = max(1, cols - _vlen(prefix))
+    def _sub_lines(self, m, cols, width=None, now=None):
+        """A unit's line: its title padded to width (its row's longest shown title, at most half the line and room for
+        a dot), the newest dots that fit, then its elapsed time ending at column cols.  When the dots do not all fit,
+        the last cells hold "+N", N being the older results dropped (red if any of them failed, else green), so the
+        strip keeps its full width and elapsed never moves.  The line is never wider than cols."""
+        elapsed = fmt_elapsed(((self.clock() if now is None else now) - m.t0) * 1000)
+        # 9: the indent, the gap after the title, one dot and the gap before elapsed
+        width = max(1, min(cols // 2, cols - 9 - len(elapsed), _vlen(m.title) if width is None else width))
+        title = _vcut(m.title, width)
+        prefix = "    " + title + " " * (width - _vlen(title)) + "  "
+        per = max(1, cols - _vlen(prefix) - len(elapsed) - 2)
         cells = [self.dots[o] for o in m.outcomes]
         if len(cells) > per:
             for digits in range(1, len(str(len(cells))) + 1):
@@ -1813,7 +1935,9 @@ class LiveRenderer:
             text = _vcut(f"+{hidden}", per)
             count = f"\x1b[{31 if 'fail' in m.outcomes[:hidden] else 32}m{text}\x1b[0m" if self.color else text
             cells = cells[hidden:] + [count] if per > len(text) else [count]
-        return [prefix + "".join(cells)]
+        strip = "".join(cells)
+        line = prefix + strip + " " * max(2, cols - _vlen(prefix) - _vlen(strip) - len(elapsed)) + elapsed
+        return [line if _vlen(line) <= cols else _vcut(line, cols)]     # a terminal too narrow for even one dot
 
     def _draw(self, force=False):
         if self.closed or self.paused or self.prompting or self.board is None:
@@ -2568,11 +2692,13 @@ class History:
         if row is not None:
             row["tests"] = f["total"]
 
-    def _on_module_end(self, f):
+    def _on_unit_end(self, f):
+        if f.get("src") != "sub":
+            return          # only parser child steps are recorded (sub-rows, files and script units are not)
         row = self._row(f["step"])
         if row is None:
             return
-        module = f["module"]
+        module = f["id"]
         key = self._key(f["step"], module)
         if key in row["subs"] or len(row["subs"]) < self.SUBS_CAP:
             row["subs"][key] = round(f["ms"] / 1000, 3)
@@ -2763,6 +2889,8 @@ class Sinks:
 #   ("progress", id, text)               bus only (step_progress), never a marker
 #   ("units", id, total, kind)           ("unit", id, done, outcome)   bus only (units / unit), never a marker
 #   ("unit_fix", id, index, outcome)     ("series", id, name, sub, value)   bus only (unit_fix / series)
+#   ("unit_start", unit, title, src)     ("unit_dot", unit, outcome)   ("unit_end", unit, status, src)
+#                                        bus only, under the parser's own step: a unit line, never a child step
 #   poll() and finish() return the same tuples; render(line) returns text, not events (see Parser.render)
 # ---------------------------------------------------------------------------------------------------------------------
 
@@ -3406,6 +3534,37 @@ def find_pytest_plugin():
     return None
 
 
+_PLAYWRIGHT_REPORTER = "juneau_run_playwright.cjs"
+_playwright_extracted = None       # the reporter extracted from the zip, once per process
+
+
+def find_playwright_reporter():
+    """The Playwright reporter file for --reporter, or None.  On disk it is playwright_reporter/ beside the engine, or
+    the source tree's src/main/js/playwright_reporter/.  Node can't load from inside a zip, so from the toolkit zip the
+    member is extracted once per process into a temp directory that is removed at exit."""
+    global _playwright_extracted
+    for where in (_engine_dir() / "playwright_reporter", _engine_dir().parent / "js" / "playwright_reporter"):
+        if (where / _PLAYWRIGHT_REPORTER).is_file():
+            return str(where / _PLAYWRIGHT_REPORTER)
+    scripts = sys.modules.get("juneau_scripts")
+    path = getattr(scripts, "__file__", None) or ""
+    marker = ".zip" + os.sep
+    if marker not in path:
+        return None
+    if _playwright_extracted is None:
+        try:
+            with zipfile.ZipFile(path[:path.index(marker) + len(".zip")]) as z:
+                data = z.read("playwright_reporter/" + _PLAYWRIGHT_REPORTER)
+        except (OSError, KeyError, zipfile.BadZipFile):
+            return None
+        directory = tempfile.mkdtemp(prefix="juneau-run-playwright-")
+        atexit.register(shutil.rmtree, directory, ignore_errors=True)
+        target = Path(directory) / _PLAYWRIGHT_REPORTER
+        target.write_bytes(data)
+        _playwright_extracted = str(target)
+    return _playwright_extracted
+
+
 _RUNNERS = ("uv", "poetry", "pipenv", "pdm", "hatch", "rye")
 # Launcher flags that take a separate value; their value (e.g. `--with pytest`) is not the program being run.
 _RUNNER_VALUE_FLAGS = {"--with", "--with-requirements", "--with-editable", "--python", "-p", "--project", "--directory",
@@ -3489,6 +3648,9 @@ class PytestParser(Parser):
         self.file_state = {}         # file -> [any failed, all skipped]
         self.file_cell = {}          # finished file -> its bar index
         self.files_done = 0
+        # File units (plugin file markers): one line per running test file, closed with its last test
+        self.unit_open = {}          # open file -> whether any of its tests failed so far
+        self.unit_closed = set()
 
     def prepare(self, cmd, env, cwd):
         existing = None
@@ -3534,9 +3696,9 @@ class PytestParser(Parser):
         if kind == "hello":
             self.plugin = True
             return []
-        if kind == "run":
+        if kind == "file":
             name = m.get("f")
-            return [("progress", self.step_id, name[:400])] if isinstance(name, str) and name else []
+            return self._open_unit(name[:400]) if isinstance(name, str) and name else []
         if kind == "total":
             n = m.get("n")
             if isinstance(n, int) and n >= 0:
@@ -3560,6 +3722,10 @@ class PytestParser(Parser):
             self.errors += 1
             events = []
             fname = self._file_of(m.get("id"))
+            if fname in self.unit_closed:
+                events.append(("unit_dot", fname, "fail"))     # names the file without reopening it
+            elif fname in self.unit_open:
+                self.unit_open[fname] = True
             if self.files is not None:
                 if fname in self.file_cell:
                     events.append(("unit_fix", self.step_id, self.file_cell[fname], "fail"))
@@ -3595,8 +3761,31 @@ class PytestParser(Parser):
                     self.files_done += 1
                     events.insert(0, ("unit", self.step_id, self.files_done,
                                       "fail" if state[0] else "skip" if state[1] else "pass"))
-            return events
-        return [("unit", self.step_id, self.done, unit), self._tests_event()]
+            return events + self._unit_dot(fname, unit)
+        return [("unit", self.step_id, self.done, unit), self._tests_event()] + self._unit_dot(self._file_of(m.get("id")), unit)
+
+    def _open_unit(self, fname):
+        """A file's unit line opens the first time the file is named (by its file marker, or by an orphan test)."""
+        if fname in self.unit_open or fname in self.unit_closed:
+            return []           # xdist names an interleaved file again: its elapsed keeps running
+        self.unit_open[fname] = False
+        return [("unit_start", fname, fname, "file")]
+
+    def _unit_dot(self, fname, unit):
+        """A finished test: a dot on its file's line, and the file's unit closes with its last test when the total
+        marker gave per-file counts (else in finish)."""
+        if fname in self.unit_closed:
+            return [("unit_dot", fname, unit)]
+        events = self._open_unit(fname)
+        events.append(("unit_dot", fname, unit))
+        self.unit_open[fname] = self.unit_open[fname] or unit == "fail"
+        if self.files is not None and self.file_seen.get(fname, 0) >= self.files.get(fname, float("inf")):
+            events.append(self._close_unit(fname))
+        return events
+
+    def _close_unit(self, fname):
+        self.unit_closed.add(fname)
+        return ("unit_end", fname, "fail" if self.unit_open.pop(fname) else "ok", "file")
 
     @staticmethod
     def _file_of(node_id):
@@ -3682,15 +3871,20 @@ class PytestParser(Parser):
         return events
 
     def finish(self, exit_code):
+        events = [self._close_unit(f) for f in list(self.unit_open)]   # no per-file counts, or the run stopped short
         if self.report_path and os.path.exists(self.report_path):
-            return [("report", self.step_id, "junitxml", self.report_path)]
-        return []
+            events.append(("report", self.step_id, "junitxml", self.report_path))
+        return events
 
 
 class PlaywrightParser(Parser):
-    """Playwright line reporter: JSON report plus counts from progress and the final summary."""
+    """Playwright: counts from the final summary, and from the juneau_run_playwright reporter's ##playwright markers,
+    which also draw one unit line per running test file, closed with its last test.  Without the reporter (it never
+    said hello) the bar counts the line reporter's [n/N] progress instead."""
 
     name = "playwright"
+    MARKER = "##playwright "
+    OUTCOMES = ("pass", "fail", "skip")
     PROGRESS = re.compile(r"^\[(\d+)/(\d+)\] ")
     FAILURE = re.compile(r"^\s+(\d+)\) ")
     SUMMARY = re.compile(r"^\s+(\d+) (passed|failed|skipped|flaky|interrupted|did not run)\b")
@@ -3704,21 +3898,60 @@ class PlaywrightParser(Parser):
         self.failures = 0
         self.block_left = 0
         self.final = {}
+        self.files = {}              # file -> tests it holds, from the reporter's begin marker
+        self.unit_seen = {}          # file -> tests finished so far
+        self.unit_open = {}          # open file -> whether any of its tests failed so far
+        self.unit_closed = set()
+        self.injected = False        # prepare() added the reporter with its markers on
+        self.hello = False           # the reporter said hello: the bar counts its final test lines
+        self.done = 0                # tests finished, from the reporter
+        self.failed = self.skipped = 0
 
     def prepare(self, cmd, env, cwd):
+        """Adds the juneau_run_playwright reporter through PW_TEST_REPORTER, which Playwright appends to the reporters
+        of the playwright.config (or to its default reporter), so they still run and print as in a plain run.  The
+        variable is undocumented: a Playwright that ignores it runs as plain, and finish() notes the missing reporter.
+        Only when something reads it: markers, or a session's Console when not interactive.  Not when the caller names
+        a reporter (--reporter, or a PW_TEST_REPORTER of its own), JUNEAU_RUN_PLAYWRIGHT_REPORTER=0, or it can't be
+        found.  Under markers with RUN_ARTIFACTS the reporter writes the JSON report too.  Under a terminal it prints no
+        markers and is added only for that report, so what Playwright prints is unchanged.  Outside one the html
+        reporter never opens its report: with stdin a terminal it would serve it and wait."""
         env = dict(env if env is not None else os.environ)
-        if enabled():
-            if not any(a.startswith("--reporter") for a in cmd):
-                cmd = list(cmd) + ["--reporter=line,json"]
-            directory = artifacts_dir()
-            if "PLAYWRIGHT_JSON_OUTPUT_NAME" not in env and directory is not None:
-                env["PLAYWRIGHT_JSON_OUTPUT_NAME"] = str(directory / f"{self.step_id.replace('/', '-')}-playwright.json")
-        self.report_path = env.get("PLAYWRIGHT_JSON_OUTPUT_NAME")
+        named = "PW_TEST_REPORTER" in env or any(a == "--reporter" or a.startswith("--reporter=") for a in cmd)
+        directory = artifacts_dir() if enabled() else None
+        wanted = directory is not None if self.interactive else enabled() or _console is not None
+        opt_out = env.get("JUNEAU_RUN_PLAYWRIGHT_REPORTER", os.environ.get("JUNEAU_RUN_PLAYWRIGHT_REPORTER")) == "0"
+        where = find_playwright_reporter() if wanted and not named and not opt_out else None
+        if where:
+            env["PW_TEST_REPORTER"] = where
+            if self.interactive:
+                env["JUNEAU_RUN_PLAYWRIGHT_MARKERS"] = "0"
+            else:
+                env.pop("JUNEAU_RUN_PLAYWRIGHT_MARKERS", None)      # an injected reporter is never silent
+                if "PLAYWRIGHT_HTML_OPEN" not in env and "PW_TEST_HTML_REPORT_OPEN" not in env:
+                    env["PLAYWRIGHT_HTML_OPEN"] = "never"
+            if directory is not None:
+                env.setdefault("JUNEAU_RUN_PLAYWRIGHT_JSON",
+                               str(directory / f"{self.step_id.replace('/', '-')}-playwright.json"))
+            self.injected = not self.interactive
+            self.report_path = env.get("JUNEAU_RUN_PLAYWRIGHT_JSON")
+            if self.report_path:
+                try:
+                    Path(self.report_path).unlink()    # a run cancelled before onEnd mustn't announce the last one's
+                except OSError:
+                    pass
+        else:
+            self.report_path = env.get("PLAYWRIGHT_JSON_OUTPUT_NAME") if enabled() else None   # the caller's own json
         return cmd, env
 
     def handle(self, line):
+        at = line.find(self.MARKER)
+        if at >= 0:     # a test's stdout with no trailing newline puts its text in front of the marker
+            return (self.handle(line[:at]) if at else []) + self._reporter_event(line[at + len(self.MARKER):])
         events = []
         m = self.PROGRESS.match(line)
+        if m and self.hello:
+            return []           # the reporter's test lines count, once per test however often it is retried
         if m:
             self.run_count = int(m.group(1))
             total = int(m.group(2))
@@ -3734,7 +3967,8 @@ class PlaywrightParser(Parser):
             self.block_left = 0
             events.append(("cond", line))
             total = sum(v for k, v in self.final.items() if k != "did not run")
-            events.append(("tests", self.step_id, total, self.final.get("failed", 0), 0, self.final.get("skipped", 0)))
+            skipped = self.final.get("skipped", 0) + self.final.get("interrupted", 0)    # as the reporter's skip dot
+            events.append(("tests", self.step_id, total, self.final.get("failed", 0), 0, skipped))
             return events
         if self.FAILURE.match(line):
             self.failures += 1
@@ -3746,10 +3980,75 @@ class PlaywrightParser(Parser):
             events.append(("cond", line))
         return events
 
-    def finish(self, exit_code):
-        if self.report_path and os.path.exists(self.report_path):
-            return [("report", self.step_id, "playwright-json", self.report_path)]
+    def _reporter_event(self, text):
+        try:
+            m = json.loads(text)
+        except ValueError:
+            return []
+        if not isinstance(m, dict):
+            return []
+        kind, name = m.get("ev"), m.get("f")
+        if kind == "hello":
+            self.hello = True
+            return []
+        if kind == "begin" and isinstance(name, dict):
+            self.files = {str(f)[:400]: n for f, n in name.items() if isinstance(n, int)}
+            total = sum(self.files.values())
+            if not self.hello or total == self.total:
+                return []
+            self.total = total
+            return [("units", self.step_id, total, "tests")]
+        if not isinstance(name, str):
+            return []
+        name = name[:400]
+        if kind == "start":
+            return self._open_unit(name) if name else []
+        if kind == "test" and m.get("o") in self.OUTCOMES:
+            return self._count(m["o"]) + (self._unit_dot(name, m["o"]) if name else [])
         return []
+
+    def _count(self, outcome):
+        if not self.hello:
+            return []
+        self.done += 1
+        self.failed += outcome == "fail"
+        self.skipped += outcome == "skip"
+        if self.final:      # onEnd's line for a test whose retry never ran comes after the summary, whose counts stand
+            return [("unit", self.step_id, self.done, outcome)]
+        return [("unit", self.step_id, self.done, outcome), ("tests", self.step_id, self.done, self.failed, 0, self.skipped)]
+
+    def _open_unit(self, name):
+        """A file's line opens with its first test; a retry's start, or a later test, doesn't reset its elapsed."""
+        if name in self.unit_open or name in self.unit_closed:
+            return []
+        self.unit_open[name] = False
+        return [("unit_start", name, name, "file")]
+
+    def _unit_dot(self, name, outcome):
+        if name in self.unit_closed:
+            return [("unit_dot", name, outcome)]
+        events = self._open_unit(name)
+        events.append(("unit_dot", name, outcome))
+        self.unit_open[name] = self.unit_open[name] or outcome == "fail"
+        self.unit_seen[name] = self.unit_seen.get(name, 0) + 1
+        if self.unit_seen[name] >= self.files.get(name, float("inf")):
+            events.append(self._close_unit(name))
+        return events
+
+    def _close_unit(self, name):
+        self.unit_closed.add(name)
+        return ("unit_end", name, "fail" if self.unit_open.pop(name) else "ok", "file")
+
+    def finish(self, exit_code):
+        # a file still open (interrupted, --max-failures, a crashed worker) fails only with a fail dot, as pytest's: the
+        # row fails from the exit code, and names only the files that failed
+        events = [self._close_unit(f) for f in list(self.unit_open)]
+        # tests ran (Playwright printed progress or a summary) yet no hello: not after a config error, --list or --help
+        if self.injected and not self.hello and (self.run_count or self.final):
+            events.append(("note", "warn", "Playwright reporter not loaded: no per-file lines", self.step_id))
+        if self.report_path and os.path.exists(self.report_path):
+            events.append(("report", self.step_id, "playwright-json", self.report_path))
+        return events
 
 
 class GradleParser(Parser):
@@ -3978,7 +4277,7 @@ class _Dispatcher:
         self.pending = {}                        # tests target -> latest totals not yet emitted
         self.last_sent = {}
         self.summary = {}
-        self.latest = {}   # tests target -> its latest totals, for module_end
+        self.latest = {}   # tests target -> its latest totals, for unit_end
 
     def apply(self, events):
         for ev in events:
@@ -3987,13 +4286,14 @@ class _Dispatcher:
                 _, sub, n, title = ev
                 self.open[sub] = time.monotonic()
                 emit("step", id=sub, n=n, title=title, parent=self.step_id)
-                publish("module_start", step=self.step_id, module=sub, title=title)
+                publish("unit_start", step=self.step_id, id=sub, title=title, src="sub")
             elif kind == "sub_end":
                 _, sub, status, ms = ev
                 self.flush_tests(sub)
                 self.open.pop(sub, None)
                 emit("end", id=sub, status=status, ms=ms)
-                publish("module_end", step=self.step_id, module=sub, status=status, ms=ms, totals=self.latest.get(sub))
+                publish("unit_end", step=self.step_id, id=sub, status=status, ms=ms, totals=self.latest.get(sub),
+                        src="sub")
             elif kind == "tests":
                 _, target, total, fail, err, skip = ev
                 if target == self.step_id:
@@ -4009,7 +4309,7 @@ class _Dispatcher:
                 _, level, text, target = ev
                 note(level, text, step=target)
             elif kind == "class_done":
-                publish("class_done", step=self.step_id, module=ev[1], outcome=ev[2])
+                publish("unit_dot", step=self.step_id, id=ev[1], outcome=ev[2], src="sub")
             elif kind == "compiled":
                 publish("module_compiled", step=self.step_id, module=ev[1], ok=ev[2])
             elif kind == "tested":
@@ -4027,6 +4327,12 @@ class _Dispatcher:
                 publish("unit", step=ev[1], done=ev[2], outcome=ev[3])
             elif kind == "unit_fix":
                 publish("unit_fix", step=ev[1], index=ev[2], outcome=ev[3])
+            elif kind == "unit_start":
+                publish("unit_start", step=self.step_id, id=ev[1], title=ev[2], src=ev[3])
+            elif kind == "unit_dot":
+                publish("unit_dot", step=self.step_id, id=ev[1], outcome=ev[2])
+            elif kind == "unit_end":
+                publish("unit_end", step=self.step_id, id=ev[1], status=ev[2], src=ev[3])    # no ms: the board times it
             elif kind == "series":
                 publish("series", step=ev[1], name=ev[2], sub=ev[3], value=ev[4])
             elif kind == "cond":
@@ -4040,13 +4346,14 @@ class _Dispatcher:
 
     def close_children(self, status):
         """Producer rule: every open child gets its `end`, children first, before the parent's.  The bus gets the
-        matching module_end."""
+        matching unit_end."""
         for sub in reversed(list(self.open)):
             started = self.open[sub]
             self.flush_tests(sub)
             ms = int((time.monotonic() - started) * 1000)
             emit("end", id=sub, status=status, ms=ms)
-            publish("module_end", step=self.step_id, module=sub, status=status, ms=ms, totals=self.latest.get(sub))
+            publish("unit_end", step=self.step_id, id=sub, status=status, ms=ms, totals=self.latest.get(sub),
+                    src="sub")
         self.open.clear()
         for target in list(self.pending):
             self.flush_tests(target)

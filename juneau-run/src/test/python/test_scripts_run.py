@@ -70,6 +70,14 @@ class SayAndStepTest(PlainCase):
             st.skip()
         self.assertEqual(out.getvalue(), "")
 
+    def test_a_null_steps_unit_yields_a_handle_that_does_nothing(self):
+        out = io.StringIO()
+        with redirect_stdout(out), run.step("s", "Step") as st:
+            with st.unit("a", "A") as u:
+                u.dot("fail")
+                u.fail()
+        self.assertEqual((out.getvalue(), st.status), ("", "ok"))
+
     def test_routed_and_console_requested_are_false(self):
         self.assertFalse(run.routed())
         self.assertFalse(run.console_requested())

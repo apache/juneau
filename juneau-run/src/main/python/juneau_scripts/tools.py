@@ -116,8 +116,8 @@ def playwright_ensure(directory):
 
 
 def playwright(args, *, cwd, **cmd_kwargs):
-    """npx playwright test <args> with the playwright parser, which adds its reporter flags to this command line.
-    A wrapper script that runs Playwright itself must use run.cmd instead."""
+    """npx playwright test <args> with the playwright parser, which adds its reporter through the environment
+    (PW_TEST_REPORTER), so a wrapper script that runs Playwright itself works too: run.cmd(..., tool="playwright")."""
     return run.cmd(["npx", "playwright", "test", *args], title=cmd_kwargs.pop("title", "playwright test"),
                    tool="playwright", cwd=cwd, **cmd_kwargs)
 

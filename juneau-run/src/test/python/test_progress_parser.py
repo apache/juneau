@@ -33,11 +33,69 @@ def units(events):
     return [e for e in events if e[0] in ("units", "unit")]
 
 
+def unit_events(events):
+    return [e for e in events if e[0] in ("unit_start", "unit_dot", "unit_end")]
+
+
 class PluginMarkersTest(unittest.TestCase):
-    def test_run_marker_becomes_progress_naming_the_file(self):
-        events = ev(new_parser(), ['##pytest {"ev":"hello","v":1}', '##pytest {"ev":"run","f":"test_a.py"}',
-                                   '##pytest {"ev":"run"}'])
-        self.assertEqual(events, [("progress", "p", "test_a.py")])
+    def test_file_marker_opens_the_files_unit_once(self):
+        events = ev(new_parser(), ['##pytest {"ev":"hello","v":1}', '##pytest {"ev":"file","f":"test_a.py"}',
+                                   '##pytest {"ev":"file","f":"test_a.py"}', '##pytest {"ev":"file"}',
+                                   '##pytest {"ev":"run","f":"test_b.py"}'])     # run is gone: nothing
+        # feed() ends with finish(), which closes the file left open
+        self.assertEqual(events, [("unit_start", "test_a.py", "test_a.py", "file"), ("unit_end", "test_a.py", "ok", "file")])
+
+    def test_one_dot_per_test_and_error_is_fail(self):
+        events = ev(new_parser(), ['##pytest {"ev":"hello","v":1}', '##pytest {"ev":"file","f":"a.py"}',
+                                   test_mark("passed", "a.py::t1"), test_mark("error", "a.py::t2"),
+                                   test_mark("skipped", "a.py::t3"), test_mark("xfailed", "a.py::t4")])
+        self.assertEqual(unit_events(events)[1:-1], [("unit_dot", "a.py", "pass"), ("unit_dot", "a.py", "fail"),
+                                                     ("unit_dot", "a.py", "skip"), ("unit_dot", "a.py", "skip")])
+
+    def test_a_file_closes_with_its_last_test(self):
+        events = ev(new_parser(), ['##pytest {"ev":"hello","v":1}', total_mark({"a.py": 2, "b.py": 1}),
+                                   '##pytest {"ev":"file","f":"a.py"}', test_mark("passed", "a.py::t1"),
+                                   test_mark("failed", "a.py::t2"), '##pytest {"ev":"file","f":"b.py"}',
+                                   test_mark("passed", "b.py::t1")])
+        self.assertEqual(unit_events(events), [
+            ("unit_start", "a.py", "a.py", "file"), ("unit_dot", "a.py", "pass"), ("unit_dot", "a.py", "fail"),
+            ("unit_end", "a.py", "fail", "file"),
+            ("unit_start", "b.py", "b.py", "file"), ("unit_dot", "b.py", "pass"), ("unit_end", "b.py", "ok", "file")])
+
+    def test_a_late_error_after_close_is_a_fail_dot_and_before_close_fails_the_file(self):
+        events = ev(new_parser(), ['##pytest {"ev":"hello","v":1}', total_mark({"a.py": 1, "b.py": 2}),
+                                   '##pytest {"ev":"file","f":"a.py"}', test_mark("passed", "a.py::t1"),
+                                   test_mark("error", "a.py::t1", late=True),
+                                   '##pytest {"ev":"file","f":"b.py"}', test_mark("passed", "b.py::t1"),
+                                   test_mark("error", "b.py::t1", late=True), test_mark("passed", "b.py::t2")])
+        self.assertEqual(unit_events(events), [
+            ("unit_start", "a.py", "a.py", "file"), ("unit_dot", "a.py", "pass"), ("unit_end", "a.py", "ok", "file"),
+            ("unit_dot", "a.py", "fail"),
+            ("unit_start", "b.py", "b.py", "file"), ("unit_dot", "b.py", "pass"), ("unit_dot", "b.py", "pass"),
+            ("unit_end", "b.py", "fail", "file")])
+
+    def test_without_per_file_counts_units_close_in_finish(self):
+        p = new_parser()
+        events = []
+        for line in ['##pytest {"ev":"hello","v":1}', '##pytest {"ev":"total","n":2}',
+                     '##pytest {"ev":"file","f":"a.py"}', test_mark("failed", "a.py::t1"),
+                     '##pytest {"ev":"file","f":"b.py"}', test_mark("passed", "b.py::t1")]:
+            events += p.on_line(line)
+        self.assertNotIn("unit_end", [e[0] for e in events])
+        self.assertEqual(unit_events(p.finish(1)), [("unit_end", "a.py", "fail", "file"), ("unit_end", "b.py", "ok", "file")])
+        self.assertEqual(unit_events(p.finish(1)), [])          # closed once
+
+    def test_xdist_interleaved_files_and_an_orphan_test(self):
+        events = ev(new_parser(), ['##pytest {"ev":"hello","v":1}', total_mark({"a.py": 2, "b.py": 2}),
+                                   '##pytest {"ev":"file","f":"a.py"}', test_mark("passed", "b.py::t1"),
+                                   '##pytest {"ev":"file","f":"b.py"}', test_mark("passed", "a.py::t1"),
+                                   '##pytest {"ev":"file","f":"a.py"}', test_mark("passed", "a.py::t2"),
+                                   test_mark("passed", "b.py::t2")])
+        self.assertEqual(unit_events(events), [
+            ("unit_start", "a.py", "a.py", "file"),
+            ("unit_start", "b.py", "b.py", "file"), ("unit_dot", "b.py", "pass"),     # the orphan test opens b.py
+            ("unit_dot", "a.py", "pass"), ("unit_dot", "a.py", "pass"), ("unit_end", "a.py", "ok", "file"),
+            ("unit_dot", "b.py", "pass"), ("unit_end", "b.py", "ok", "file")])
 
     def test_total_then_tests(self):
         events = ev(new_parser(), [

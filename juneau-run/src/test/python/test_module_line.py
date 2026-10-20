@@ -75,22 +75,23 @@ class CollapseTest(unittest.TestCase):
                 self.assertLessEqual(jr._vlen(line), max(0, cols - 2), (cols, line))
 
 
-class RegionCollapsedWidthTest(unittest.TestCase):
-    def test_collapsed_line_fills_but_never_exceeds_columns_minus_one(self):
+class RegionFoldWidthTest(unittest.TestCase):
+    def test_the_fold_line_fills_but_never_exceeds_columns_minus_one(self):
         reset_run_state()
         self.addCleanup(reset_run_state)
         b = jr.Board("actionable", nested=False, full_log=None, clock=lambda: 100.0)
         b.apply("step_start", dict(id="mvn", n=1, title="mvn", parent=None))
         for i in range(30):
-            b.apply("module_start", dict(step="mvn", module=f"m{i}", title=f"Module number {i:02d}"))
+            b.apply("unit_start", dict(step="mvn", id=f"m{i}", title=f"Module number {i:02d}"))
         live = jr.LiveRenderer(lambda t: None, size=lambda: os.terminal_size((60, 24)), clock=lambda: 100.0, color=False)
         size = live.size()
         lines = live.region(b, size.columns - 1, size.lines - 2)
-        collapsed = [l for l in lines if l.startswith("    ")][0]
-        self.assertLessEqual(jr._vlen(collapsed), 59)
-        names = [f"{i:02d}" for i in range(30)]
+        self.assertEqual(len(lines), 22)                    # the row, 20 unit lines, then the fold line
+        folded = lines[-1]
+        self.assertLessEqual(jr._vlen(folded), 59)
+        names = [f"{i:02d}" for i in range(20, 30)]         # the 10 newest fold, listed oldest first
         # region's cols already is columns - 1: no second -1; the 4-space indent takes two more than the default 2
-        self.assertEqual(collapsed, "    " + jr.collapse_names(names, 57))
+        self.assertEqual(folded, "    " + jr.collapse_names(names, 57))
 
 
 if __name__ == "__main__":

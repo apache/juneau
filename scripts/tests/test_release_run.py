@@ -923,3 +923,20 @@ def test_the_release_session_never_rings_the_bell_or_plays_a_sound(release, monk
     monkeypatch.setattr(notify, "bell", lambda **k: pytest.fail("bell"))
     monkeypatch.setattr(notify, "sound", lambda *a, **k: pytest.fail("sound"))
     script.run()
+
+
+def test_each_phase_command_is_a_sub_row_of_its_phase(release, monkeypatch, tmp_path):
+    """
+    A phase command runs as a sub-row (parent=) of its phase, so the phase row draws a unit line for it; a Maven
+    command (parser "maven") hands that line to its reactor's modules instead.  What each draws is pinned in
+    juneau-run's test_unit_model; this pins the call shape that selects it.
+    """
+    fake = FakeRun()
+    script = make(release, monkeypatch, fake)
+    script.current = "create_binary_artifacts"
+    script.run_command(["svn", "add", "source/x"], cwd=tmp_path)
+    script.current = "run_clean_verify"
+    script.run_command(["mvn", "clean", "verify"], cwd=tmp_path)
+    (svn_args, svn), (mvn_args, mvn) = fake.of("run_tool")
+    assert (svn_args[1], svn["parent"]) == ("generic", "create_binary_artifacts")
+    assert (mvn_args[1], mvn["parent"]) == ("maven", "run_clean_verify")

@@ -137,7 +137,7 @@ def pytest_runtest_logstart(nodeid, location):
     name = nodeid.split("::", 1)[0][:400]
     if name != _current_file[0]:
         _current_file[0] = name
-        _emit(config, {"ev": "run", "f": name})     # the test file now running, for the row's current-file line
+        _emit(config, {"ev": "file", "f": name})    # the test file now running: its unit line under the row
 
 
 def pytest_runtest_logreport(report):

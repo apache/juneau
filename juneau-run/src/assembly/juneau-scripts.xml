@@ -18,7 +18,8 @@
 <!--
 	The juneau_scripts toolkit as org.apache.juneau:juneau-run:<version>:zip.  Layout: juneau_scripts/** plus
 	bootstrap.py at the root (a zip on sys.path imports juneau_scripts) and the pytest plugin alone in pytest_plugin/ (the suite under test gets only
-	zip/pytest_plugin on PYTHONPATH), plus the repository's LICENSE and NOTICE.
+	zip/pytest_plugin on PYTHONPATH), the Playwright reporter in playwright_reporter/ (juneau_run.py extracts it, since node can't
+	load from a zip), plus the repository's LICENSE and NOTICE.
 -->
 <assembly
 	xmlns="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.3"
@@ -48,6 +49,10 @@
 		<file>
 			<source>${project.basedir}/src/main/python/pytest_plugin/juneau_run_pytest.py</source>
 			<outputDirectory>pytest_plugin</outputDirectory>
+		</file>
+		<file>
+			<source>${project.basedir}/src/main/js/playwright_reporter/juneau_run_playwright.cjs</source>
+			<outputDirectory>playwright_reporter</outputDirectory>
 		</file>
 		<file>
 			<source>${project.basedir}/../LICENSE</source>
