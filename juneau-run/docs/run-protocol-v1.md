@@ -18,7 +18,10 @@ results and notable events. Markers are additive: they never replace human-reada
 - A marker longer than 65536 bytes (UTF-8, including the prefix) is not emitted.
 - Report files a script generates itself go under `$RUN_ARTIFACTS`, never inside the repo. A report
   that a build already writes to a gitignored directory (e.g. `target/surefire-reports`) is
-  referenced in place.
+  referenced in place when `$RUN_ARTIFACTS` is unset. When it is set, juneau-run copies the report
+  to `$RUN_ARTIFACTS/reports/<step>/` and announces the copy, so a later `clean` cannot take it away.
+  A name that is already taken there (another module, a rerun) gets a `-2`, `-3`, ... suffix.
+  `run.cmd(..., reports=False)` (`run_tool(..., reports=False)`) announces no reports at all.
 
 ## Events
 

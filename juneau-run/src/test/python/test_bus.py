@@ -114,7 +114,8 @@ class BusTest(unittest.TestCase):
         self.assertEqual(self.rec.events, [])
 
     def test_run_tool_pass_through_publishes_start_and_end(self):
-        with mock.patch.object(jr.subprocess, "run", return_value=mock.Mock(returncode=4)):
+        with mock.patch.object(jr, "_foreground_tty", return_value=None), \
+                mock.patch.object(jr.subprocess, "Popen", return_value=mock.Mock(**{"wait.return_value": 4})):
             jr.run_tool(["mvn", "test"], "generic", "tests", "Tests", n=3, cwd="/x")
         self.assertEqual(self.rec.of("step_start"),
                          [{"id": "tests", "n": 3, "title": "Tests", "parent": None, "tool": "generic",

@@ -33,6 +33,7 @@ import codecs
 import collections
 import errno
 import fcntl
+import glob
 import hashlib
 import importlib
 import importlib.util
@@ -227,9 +228,54 @@ def step(id, n, title, *, parent=None, label=None):  # NOSONAR python:S5806 - pa
         publish("step_end", id=id, status=s.status, ms=ms, exit=s.exit, summary=s.summary, totals=None)
 
 
-def report(step, kind, path):
-    """Point the runner at a step's test results (kind: surefire, junitxml, jest-json, playwright-json)."""
-    emit("report", step=step, kind=kind, path=str(path))
+def report(step, kind, path, *, cwd=None):
+    """Point the runner at a step's test results (kind: surefire, junitxml, jest-json, playwright-json).  With markers
+    on and $RUN_ARTIFACTS set, results outside it are copied under it and the copy is announced, so a later `clean`
+    cannot take them away.  A relative path is taken from cwd (default the current directory)."""
+    path = str(path)
+    if enabled() and _events is None and artifacts_dir() is not None:
+        path = _keep_report(step, kind, path, cwd)
+    emit("report", step=step, kind=kind, path=path)
+
+
+def _keep_report(step, kind, path, cwd):
+    """Copy a report under $RUN_ARTIFACTS/reports/<step>/ (a glob's matches into a directory named for kind) and return
+    the copy's path.  path itself when it is already under $RUN_ARTIFACTS, matches nothing, or cannot be copied (with
+    a warning).  A name another module or a rerun has taken gets a -2, -3, ... suffix."""
+    art = artifacts_dir()
+    src = Path(cwd or ".") / path   # an absolute path stays as it is
+    if src.resolve().is_relative_to(art.resolve()):
+        return path
+    sources = [src] if src.exists() else [Path(p) for p in sorted(glob.glob(str(src)))]
+    if not sources:
+        return path
+    dest = _free_path(art / "reports" / _event_id(step) / (src.name if sources == [src] else kind))
+    try:
+        if sources == [src]:
+            _copy_report(src, dest)
+        else:
+            for source in sources:
+                _copy_report(source, _free_path(dest / source.name))
+    except OSError as e:    # shutil.Error is one
+        warn(f"could not copy the {kind} report {path} to {dest}: {e}")
+        return path
+    return str(dest)
+
+
+def _copy_report(src, dest):
+    if src.is_dir():
+        shutil.copytree(src, dest)
+    else:
+        dest.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copy2(src, dest)
+
+
+def _free_path(p):
+    """p, or the first of p-2, p-3, ... (before its suffix) that does not exist."""
+    candidate, i = p, 2
+    while candidate.exists():
+        candidate, i = p.with_name(f"{p.stem}-{i}{p.suffix}"), i + 1
+    return candidate
 
 
 def note(level, text, href=None, step=None):
@@ -3923,9 +3969,11 @@ class _Isolated:
 class _Dispatcher:
     """Turns parser events into markers and condensed lines for one step."""
 
-    def __init__(self, step_id, sinks):
+    def __init__(self, step_id, sinks, *, cwd=None, reports=True):
         self.step_id = step_id
         self.sinks = sinks
+        self.cwd = cwd             # where a parser's relative report paths are taken from
+        self.reports = reports     # False drops report events
         self.open = collections.OrderedDict()   # sub id -> start time
         self.pending = {}                        # tests target -> latest totals not yet emitted
         self.last_sent = {}
@@ -3955,7 +4003,8 @@ class _Dispatcher:
                     self.flush_tests(target)
             elif kind == "report":
                 _, target, rkind, path = ev
-                emit("report", step=target, kind=rkind, path=path)
+                if self.reports:
+                    report(target, rkind, path, cwd=self.cwd)
             elif kind == "note":
                 _, level, text, target = ev
                 note(level, text, step=target)
@@ -4215,12 +4264,108 @@ def _feed_stdin(proc, data):
             pass
 
 
+# A process group of the child's own; preexec_fn before 3.11, which has no process_group.
+_OWN_GROUP = {"process_group": 0} if sys.version_info >= (3, 11) else {"preexec_fn": os.setpgrp}
+
+
+def _foreground_tty():
+    """0 when stdin is our controlling terminal and our process group holds its foreground, else None."""
+    try:
+        return 0 if os.isatty(0) and os.tcgetpgrp(0) == os.getpgrp() else None
+    except OSError:
+        return None
+
+
+def _foreground_of(fd):
+    """The process group holding the terminal fd's foreground, or None once the terminal has gone."""
+    try:
+        return os.tcgetpgrp(fd)
+    except OSError:
+        return None
+
+
+def _set_foreground(fd, pgid):
+    """Give the terminal fd's foreground to pgid, with SIGTTOU blocked so our group, once in the background, can take
+    it back without being stopped.  A terminal that has gone is left as it is."""
+    mask = signal.pthread_sigmask(signal.SIG_BLOCK, {signal.SIGTTOU})
+    try:
+        os.tcsetpgrp(fd, pgid)
+    except OSError:
+        pass
+    finally:
+        signal.pthread_sigmask(signal.SIG_SETMASK, mask)
+
+
+def _wait_in_foreground(proc, fd):
+    """Wait for a child whose group holds the terminal fd and return its exit code.  A stop for touching the terminal
+    while it holds the foreground (it read before the handoff) only resumes it.  Any other stop (^Z) is passed on:
+    the terminal comes back to our group, which stops too (a stop an orphaned group discards); resumed, the child
+    gets the terminal again if we hold it, and is resumed either way."""
+    while True:
+        _, status = os.waitpid(proc.pid, os.WUNTRACED)
+        if not os.WIFSTOPPED(status):
+            proc.returncode = os.waitstatus_to_exitcode(status)
+            return proc.returncode
+        if os.WSTOPSIG(status) not in (signal.SIGTTIN, signal.SIGTTOU) or _foreground_of(fd) != proc.pid:
+            _set_foreground(fd, os.getpgrp())
+            os.killpg(os.getpgrp(), signal.SIGTSTP)
+            if _foreground_of(fd) == os.getpgrp():
+                _set_foreground(fd, proc.pid)
+        os.killpg(proc.pid, signal.SIGCONT)
+
+
+def _run_in_foreground(cmd, cwd, env, input):
+    """Pass-through run_tool's child (see run_tool) and its exit code.  SIGINT and SIGTERM unwind as a
+    KeyboardInterrupt once the child's group is taken down."""
+    fd = _foreground_tty()
+
+    def on_signal(signum, frame):
+        raise KeyboardInterrupt
+
+    previous = {}
+    try:
+        for sig in (signal.SIGINT, signal.SIGTERM):
+            previous[sig] = signal.signal(sig, on_signal)
+    except ValueError:  # not the main thread; no signal handling is possible
+        previous = {}
+    proc = None
+    try:
+        proc = subprocess.Popen(cmd, cwd=cwd, env=env, **({} if input is None else {"stdin": subprocess.PIPE}),
+                                **_OWN_GROUP)
+        try:
+            if input is not None:
+                threading.Thread(target=_feed_stdin, args=(proc, input), daemon=True).start()
+            if fd is None:
+                rc = proc.wait()
+            else:
+                _set_foreground(fd, proc.pid)
+                rc = _wait_in_foreground(proc, fd)
+        except BaseException:
+            for sig in previous:   # no re-entry while the child's group is taken down
+                signal.signal(sig, signal.SIG_IGN)
+            if proc.poll() is None or _group_alive(proc.pid):    # what the child started may outlive it
+                _terminate_group(proc)
+            raise
+    finally:
+        if fd is not None and proc is not None:
+            _set_foreground(fd, os.getpgrp())
+        for sig, handler in previous.items():
+            signal.signal(sig, handler)
+    if fd is not None and rc in (130, -signal.SIGINT):
+        raise KeyboardInterrupt     # the ^C reached only the child's group
+    return rc
+
+
 def run_tool(cmd, parser, step_id, title, *, n=None, parent=None, cwd=None, env=None, sinks=None, capture=False,
-             tty=False, watchdog=None, summarize=None, label=None, statuses=None, input=None):
+             tty=False, watchdog=None, summarize=None, label=None, statuses=None, input=None, reports=True):
     """Run one tool as one step and return Result(exit, ms, summary).
 
     Pass-through mode (markers off, default sinks, no capture or summarize) hands the child the real terminal and no
-    parser runs.  Piped mode merges stdout and stderr, feeds the parser and honours the sinks; with tty=True the
+    parser runs.  The child gets a process group of its own, so a cancel takes all of it down; when stdin is our
+    controlling terminal and our group holds its foreground, the child's group holds it while the child runs, and it
+    comes back to ours however the child ends.  A ^C that ends the child (exit 130, or killed by SIGINT) then cancels,
+    as it did when the ^C reached us too.  A ^Z that stops the child stops us as well; resumed in the foreground, we
+    give the child the terminal again and resume it.  Piped mode merges stdout and stderr, feeds the parser and honours the sinks; with tty=True the
     child runs under a PTY and our keystrokes are forwarded to it.  GPG_TTY then names the PTY, so a terminal
     pinentry prompts through it (with echo off) instead of racing us for the real terminal.  watchdog=<s> publishes a
     silent partial line as a prompt, or the silence as quiet.  summarize(text) becomes the step_end summary.
@@ -4230,6 +4375,8 @@ def run_tool(cmd, parser, step_id, title, *, n=None, parent=None, cwd=None, env=
     `end` is emitted with exit 130 and the KeyboardInterrupt is raised again.  A tool that cannot be started ends its
     step with exit 127 and the OSError is raised again.  Any other error ends the step as failed and is raised again.
     input (bytes) is written to the child's stdin and stdin is closed; it is never recorded or published.  Not for tty.
+    A parser's report events go through report() (copied under $RUN_ARTIFACTS when it is set, relative paths taken
+    from cwd); reports=False drops them.
     """
     sinks = sinks or Sinks()
     t0 = time.monotonic()
@@ -4239,7 +4386,7 @@ def run_tool(cmd, parser, step_id, title, *, n=None, parent=None, cwd=None, env=
         publish("step_start", id=step_id, n=n if n is not None else 1, title=title, parent=parent, **labelled)
         rc = 130
         try:
-            rc = subprocess.run(cmd, cwd=cwd, env=env, **({} if input is None else {"input": input})).returncode
+            rc = _run_in_foreground(cmd, cwd, env, input)
         except OSError:
             rc = 127   # cannot start: as run_pty reports it, not as a Ctrl-C
             raise
@@ -4258,7 +4405,7 @@ def run_tool(cmd, parser, step_id, title, *, n=None, parent=None, cwd=None, env=
     except Exception as e:
         warn(f"parser {getattr(parser, 'name', '?')} prepare failed ({e!r}); using the original command")
     rewriting = bool(getattr(parser, "rewrites_log", False)) and not tty   # read once; under a terminal never
-    dispatch = _Dispatcher(step_id, sinks)
+    dispatch = _Dispatcher(step_id, sinks, cwd=cwd, reports=reports)
     try:
         emit("step", id=step_id, n=n if n is not None else 1, title=title, parent=parent)
         publish("step_start", id=step_id, n=n if n is not None else 1, title=title, parent=parent, **labelled)

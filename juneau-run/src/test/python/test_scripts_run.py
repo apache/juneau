@@ -93,6 +93,9 @@ class CmdPlainTest(PlainCase):
         with self.assertRaises(ValueError):
             run.cmd(["true"], title="x", tty=True, input=b"x")
 
+    def test_reports_false_is_accepted_in_a_plain_run(self):
+        self.assertTrue(run.cmd([PY, "-c", "pass"], title="t", reports=False).ok)
+
     def test_cannot_start(self):
         r = run.cmd(["/nonexistent/tool"], title="t")
         self.assertEqual((r.ok, r.code), (False, 127))
@@ -240,6 +243,16 @@ class CmdMarkersTest(MarkerCase):
         self.assertEqual(r.code, 127)
         self.assertEqual(rt.call_args.args[1], "maven")
 
+    def test_reports_false_reaches_run_tool(self):
+        with mock.patch.object(jr, "run_tool", wraps=jr.run_tool) as rt:
+            self.capture(run.cmd, [PY, "-c", "pass"], title="t", reports=False)
+        self.assertIs(rt.call_args.kwargs["reports"], False)
+
+    def test_reports_left_on_is_not_passed_so_an_older_juneau_run_still_works(self):
+        with mock.patch.object(jr, "run_tool", wraps=jr.run_tool) as rt:
+            self.capture(run.cmd, [PY, "-c", "pass"], title="t")
+        self.assertNotIn("reports", rt.call_args.kwargs)
+
     def test_an_explicit_tool_wins_over_detection(self):
         with mock.patch.object(jr, "run_tool", wraps=jr.run_tool) as rt:
             self.capture(run.cmd, ["/nonexistent/mvn", "verify"], title="mvn verify", tool="generic")
@@ -333,6 +346,11 @@ class GateMarkersTest(MarkerCase):
         _, got, _ = self.capture(run.gate, [PY, "-c", "pass"], title="Sonar")
         self.assertEqual(got[-2:], [{"ev": "end", "id": "sonar-run", "status": "ok"},
                                     {"ev": "end", "id": "sonar", "status": "ok"}])
+
+    def test_reports_false_reaches_the_gates_child_row(self):
+        with mock.patch.object(jr, "run_tool", wraps=jr.run_tool) as rt:
+            self.capture(run.gate, [PY, "-c", "pass"], title="Sonar", reports=False)
+        self.assertIs(rt.call_args.kwargs["reports"], False)
 
     def test_the_label_names_the_gates_row(self):
         with mock.patch.object(jr, "step", wraps=jr.step) as step:

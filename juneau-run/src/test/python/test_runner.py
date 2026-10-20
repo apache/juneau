@@ -799,12 +799,83 @@ class RunnerTest(unittest.TestCase):
     def test_pass_through_when_markers_off_and_sinks_default(self):
         os.environ.pop("RUN_MARKERS")
         parser = mock.Mock()
-        with mock.patch.object(jr.subprocess, "run", return_value=mock.Mock(returncode=7)) as run, \
-                mock.patch.object(jr.subprocess, "Popen", side_effect=AssertionError("must not pipe")):
+        with mock.patch.object(jr, "_foreground_tty", return_value=None), \
+                mock.patch.object(jr.subprocess, "Popen", return_value=mock.Mock(**{"wait.return_value": 7})) as popen:
             result = jr.run_tool(["mvn", "test"], parser, "t", "T", cwd="/x")
         self.assertEqual(result.exit, 7)
-        run.assert_called_once_with(["mvn", "test"], cwd="/x", env=None)   # no stdout/stderr: the child inherits the terminal
+        # no stdout/stderr: the child inherits the terminal, in a process group of its own
+        popen.assert_called_once_with(["mvn", "test"], cwd="/x", env=None, **jr._OWN_GROUP)
         parser.assert_not_called()
+
+    def test_pass_through_without_a_terminal_never_hands_one_over(self):
+        os.environ.pop("RUN_MARKERS")
+        with mock.patch.object(jr.os, "isatty", return_value=False), \
+                mock.patch.object(jr.os, "tcsetpgrp", side_effect=AssertionError("tcsetpgrp")):
+            result = jr.run_tool(child("import os, sys; sys.exit(os.getpgrp() == os.getpid() and 5)"), "generic",
+                                 "t", "T")
+        self.assertEqual(result.exit, 5)    # its own group all the same
+
+    def test_pass_through_input_reaches_the_tools_stdin(self):
+        os.environ.pop("RUN_MARKERS")
+        result = jr.run_tool(child("import sys; sys.exit(len(sys.stdin.buffer.read()))"), "generic", "t", "T",
+                             input=b"s3cret")
+        self.assertEqual(result.exit, 6)
+
+    def test_pass_through_on_a_terminal_hands_the_foreground_over_and_takes_it_back(self):
+        os.environ.pop("RUN_MARKERS")
+        handed = []
+        with mock.patch.object(jr, "_foreground_tty", return_value=0), \
+                mock.patch.object(jr, "_set_foreground", side_effect=lambda fd, pgid: handed.append(pgid)), \
+                mock.patch.object(jr, "_wait_in_foreground", side_effect=lambda proc, fd: proc.wait()):
+            result = jr.run_tool(child("import sys; sys.exit(4)"), "generic", "t", "T")
+        self.assertEqual(result.exit, 4)
+        self.assertEqual(len(handed), 2)
+        self.assertNotEqual(handed[0], os.getpgrp())
+        self.assertEqual(handed[1], os.getpgrp())
+
+    def test_pass_through_takes_the_foreground_back_when_the_wait_fails(self):
+        os.environ.pop("RUN_MARKERS")
+        handed = []
+        with mock.patch.object(jr, "_foreground_tty", return_value=0), \
+                mock.patch.object(jr, "_set_foreground", side_effect=lambda fd, pgid: handed.append(pgid)), \
+                mock.patch.object(jr, "_wait_in_foreground", side_effect=RuntimeError("wait")), \
+                self.assertRaises(RuntimeError):
+            jr.run_tool(child("import time; time.sleep(30)"), "generic", "t", "T")
+        self.assertEqual(handed[-1], os.getpgrp())
+
+    def test_a_ctrl_c_that_ends_the_tool_on_a_terminal_cancels(self):
+        os.environ.pop("RUN_MARKERS")
+        bus = jr.subscribe(Events())
+        for code in ("import sys; sys.exit(130)", "import os, signal; os.kill(os.getpid(), signal.SIGINT)"):
+            with self.subTest(code=code), mock.patch.object(jr, "_foreground_tty", return_value=0), \
+                    mock.patch.object(jr, "_set_foreground"), \
+                    mock.patch.object(jr, "_wait_in_foreground", side_effect=lambda proc, fd: proc.wait()), \
+                    self.assertRaises(KeyboardInterrupt):
+                jr.run_tool(child(code), "generic", "t", "T")
+            self.assertEqual(bus.of("step_end")[-1]["exit"], 130)
+
+    def test_a_stopped_tool_stops_the_runner_and_is_resumed_with_the_terminal(self):
+        calls = []
+        proc = mock.Mock(pid=4242, returncode=None)
+        stopped = (signal.SIGTSTP << 8) | 0x7f   # the wait status of a child stopped by SIGTSTP
+        with mock.patch.object(jr.os, "waitpid", side_effect=[(4242, stopped), (4242, 0)]), \
+                mock.patch.object(jr.os, "getpgrp", return_value=99), \
+                mock.patch.object(jr, "_foreground_of", return_value=99), \
+                mock.patch.object(jr, "_set_foreground", side_effect=lambda fd, pgid: calls.append(("fg", pgid))), \
+                mock.patch.object(jr.os, "killpg", side_effect=lambda pgid, sig: calls.append((pgid, sig))):
+            self.assertEqual(jr._wait_in_foreground(proc, 0), 0)
+        self.assertEqual(calls, [("fg", 99), (99, signal.SIGTSTP), ("fg", 4242), (4242, signal.SIGCONT)])
+
+    def test_a_tool_stopped_for_reading_before_the_handoff_is_only_resumed(self):
+        calls = []
+        proc = mock.Mock(pid=4242, returncode=None)
+        ttin = (signal.SIGTTIN << 8) | 0x7f      # stopped by SIGTTIN, though the tool holds the terminal
+        with mock.patch.object(jr.os, "waitpid", side_effect=[(4242, ttin), (4242, 3 << 8)]), \
+                mock.patch.object(jr, "_foreground_of", return_value=4242), \
+                mock.patch.object(jr, "_set_foreground", side_effect=lambda fd, pgid: calls.append(("fg", pgid))), \
+                mock.patch.object(jr.os, "killpg", side_effect=lambda pgid, sig: calls.append((pgid, sig))):
+            self.assertEqual(jr._wait_in_foreground(proc, 0), 3)
+        self.assertEqual(calls, [(4242, signal.SIGCONT)])
 
     def test_markers_on_selects_piped_mode(self):
         result, out, _ = self.go(child("print('hi')"), Recording())
@@ -851,8 +922,7 @@ class RunnerTest(unittest.TestCase):
     def test_statuses_reach_the_bus_in_pass_through_mode(self):
         os.environ.pop("RUN_MARKERS")
         bus = jr.subscribe(Events())
-        with mock.patch.object(jr.subprocess, "run", return_value=mock.Mock(returncode=3)):
-            result = jr.run_tool(["gate"], "generic", "t", "T", statuses={3: "skip"})
+        result = jr.run_tool(child("import sys; sys.exit(3)"), "generic", "t", "T", statuses={3: "skip"})
         self.assertEqual(result.exit, 3)
         self.assertEqual([(f["status"], f["exit"]) for f in bus.of("step_end")], [("skip", None)])
 
@@ -985,6 +1055,117 @@ class RunnerTest(unittest.TestCase):
         before = (signal.getsignal(signal.SIGINT), signal.getsignal(signal.SIGTERM))
         self.go(child("pass"), Recording())
         self.assertEqual((signal.getsignal(signal.SIGINT), signal.getsignal(signal.SIGTERM)), before)
+
+
+class Reporting(jr.Parser):
+    """Announces each line it is given as a report: "<step> <kind> <path>"."""
+
+    name = "reporting"
+
+    def handle(self, line):
+        target, kind, path = line.split(" ", 2)
+        return [("report", target, kind, path)]
+
+
+class ReportCopyTest(unittest.TestCase):
+    """With markers on and $RUN_ARTIFACTS set, a report is copied under it and the copy announced (J0877)."""
+
+    def setUp(self):
+        reset_run_state()
+        self.addCleanup(reset_run_state)
+        self.tmp = Path(tempfile.mkdtemp())
+        self.addCleanup(shutil.rmtree, self.tmp, True)
+        self.art = self.tmp / "art"
+        patcher = mock.patch.dict(os.environ, {"RUN_MARKERS": "1", "RUN_ARTIFACTS": str(self.art)})
+        patcher.start()
+        self.addCleanup(patcher.stop)
+        self.surefire = self.tmp / "mod" / "target" / "surefire-reports"
+        self.surefire.mkdir(parents=True)
+        (self.surefire / "TEST-a.xml").write_text("<testsuite tests='1'/>", encoding="utf-8")
+
+    def reports(self, fn, *args, **kwargs):
+        """The report markers fn prints, and its stderr."""
+        out, err = io.StringIO(), io.StringIO()
+        with contextlib.redirect_stdout(out), contextlib.redirect_stderr(err):
+            fn(*args, **kwargs)
+        return [m for m in markers(out.getvalue()) if m["ev"] == "report"], err.getvalue()
+
+    def test_a_directory_is_copied_and_the_copy_announced_so_clean_cannot_take_it(self):
+        got, _ = self.reports(jr.report, "mvn/mod", "surefire", self.surefire)
+        copy = self.art / "reports" / "mvn.mod" / "surefire-reports"
+        self.assertEqual(got, [{"ev": "report", "step": "mvn/mod", "kind": "surefire", "path": str(copy)}])
+        shutil.rmtree(self.tmp / "mod")     # mvn clean
+        self.assertEqual((copy / "TEST-a.xml").read_text(encoding="utf-8"), "<testsuite tests='1'/>")
+
+    def test_a_relative_file_is_taken_from_cwd_and_copied(self):
+        (self.tmp / "out.json").write_text("{}", encoding="utf-8")
+        got, _ = self.reports(jr.report, "js", "jest-json", "out.json", cwd=self.tmp)
+        copy = self.art / "reports" / "js" / "out.json"
+        self.assertEqual(got[0]["path"], str(copy))
+        self.assertEqual(copy.read_text(encoding="utf-8"), "{}")
+
+    def test_a_glob_has_its_matches_copied_into_one_directory(self):
+        (self.surefire / "TEST-b.xml").write_text("<testsuite/>", encoding="utf-8")
+        got, _ = self.reports(jr.report, "t", "surefire", self.surefire / "TEST-*.xml")
+        copy = self.art / "reports" / "t" / "surefire"
+        self.assertEqual(got[0]["path"], str(copy))
+        self.assertEqual(sorted(p.name for p in copy.iterdir()), ["TEST-a.xml", "TEST-b.xml"])
+
+    def test_modules_and_reruns_never_overwrite_each_other(self):
+        other = self.tmp / "other" / "target" / "surefire-reports"
+        other.mkdir(parents=True)
+        got, _ = self.reports(lambda: (jr.report("mvn/a", "surefire", self.surefire),
+                                       jr.report("mvn/b", "surefire", other),
+                                       jr.report("mvn/a", "surefire", self.surefire)))
+        base = self.art / "reports"
+        self.assertEqual([m["path"] for m in got], [str(base / "mvn.a" / "surefire-reports"),
+                                                    str(base / "mvn.b" / "surefire-reports"),
+                                                    str(base / "mvn.a" / "surefire-reports-2")])
+
+    def test_a_report_already_under_run_artifacts_is_announced_in_place(self):
+        xml = self.art / "t-pytest.xml"
+        self.art.mkdir()
+        xml.write_text("<testsuites/>", encoding="utf-8")
+        got, _ = self.reports(jr.report, "t", "junitxml", xml)
+        self.assertEqual(got[0]["path"], str(xml))
+        self.assertFalse((self.art / "reports").exists())
+
+    def test_a_path_that_matches_nothing_is_announced_as_given(self):
+        got, err = self.reports(jr.report, "t", "surefire", self.tmp / "missing")
+        self.assertEqual(got[0]["path"], str(self.tmp / "missing"))
+        self.assertEqual(err, "")
+
+    def test_a_failed_copy_warns_and_announces_the_original(self):
+        with mock.patch.object(jr.shutil, "copytree", side_effect=OSError("disk full")):
+            got, err = self.reports(jr.report, "t", "surefire", self.surefire)
+        self.assertEqual(got[0]["path"], str(self.surefire))
+        self.assertIn("disk full", err)
+
+    def test_without_run_artifacts_the_path_is_announced_unchanged_and_nothing_copied(self):
+        os.environ.pop("RUN_ARTIFACTS")
+        got, _ = self.reports(jr.report, "t", "surefire", "target/surefire-reports")
+        self.assertEqual(got, [{"ev": "report", "step": "t", "kind": "surefire", "path": "target/surefire-reports"}])
+        self.assertFalse(self.art.exists())
+
+    def test_without_markers_nothing_is_copied(self):
+        os.environ.pop("RUN_MARKERS")
+        jr.report("t", "surefire", self.surefire)
+        self.assertFalse(self.art.exists())
+
+    def test_run_tool_copies_a_parsers_reports(self):
+        got, _ = self.reports(jr.run_tool, child(f"print('t surefire {self.surefire}')"), Reporting(), "t", "T")
+        self.assertEqual(got[0]["path"], str(self.art / "reports" / "t" / "surefire-reports"))
+
+    def test_run_tool_takes_a_parsers_relative_report_from_its_cwd(self):
+        got, _ = self.reports(jr.run_tool, child("print('t surefire mod/target/surefire-reports')"), Reporting(),
+                              "t", "T", cwd=str(self.tmp))
+        self.assertEqual(got[0]["path"], str(self.art / "reports" / "t" / "surefire-reports"))
+
+    def test_run_tool_reports_false_drops_report_markers_and_copies_nothing(self):
+        got, _ = self.reports(jr.run_tool, child(f"print('t surefire {self.surefire}')"), Reporting(), "t", "T",
+                              reports=False)
+        self.assertEqual(got, [])
+        self.assertFalse(self.art.exists())
 
 
 class TTYOut(io.StringIO):

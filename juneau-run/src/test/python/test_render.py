@@ -1442,13 +1442,21 @@ class RobustnessTest(unittest.TestCase):
         console("say", {"text": "x", "level": "warn", "step": None})
         self.assertIn("Passphrase: \n⚠ console view stopped", out.getvalue())
 
+    @staticmethod
+    def _recording_kill():
+        """A _terminate_group stand-in that records "kill", then still takes the child down, so it is reaped and no
+        ResourceWarning is left."""
+        terminate = jr._terminate_group
+        return lambda record, p, grace: (record.append("kill"), terminate(p, grace))
+
     def test_ctrl_c_in_run_tool_pauses_the_console_first(self):
+        kill = self._recording_kill()
         console = mock.Mock()
         console.sinks.console = "none"
         order = []
         console.pause.side_effect = lambda: order.append("pause")
         with mock.patch.object(jr, "_console", console), \
-                mock.patch.object(jr, "_terminate_group", side_effect=lambda p, grace=None: order.append("kill")), \
+                mock.patch.object(jr, "_terminate_group", side_effect=lambda p, grace=None: kill(order, p, grace)), \
                 mock.patch.object(jr.select, "select", side_effect=KeyboardInterrupt), \
                 self.assertRaises(KeyboardInterrupt):
             jr.run_tool([sys.executable, "-c", "pass"], "generic", "t", "T",
@@ -1456,6 +1464,7 @@ class RobustnessTest(unittest.TestCase):
         self.assertEqual(order[:2], ["pause", "kill"])
 
     def test_ctrl_c_pauses_with_signals_ignored_and_a_failing_pause_still_kills_the_child(self):
+        kill = self._recording_kill()
         console = self.live_console(TTY())
         seen = []
 
@@ -1466,7 +1475,7 @@ class RobustnessTest(unittest.TestCase):
         console.screen.pause = pause
         before = (signal.getsignal(signal.SIGINT), signal.getsignal(signal.SIGTERM))
         with mock.patch.object(jr, "_console", console), \
-                mock.patch.object(jr, "_terminate_group", side_effect=lambda p, grace=None: seen.append("kill")), \
+                mock.patch.object(jr, "_terminate_group", side_effect=lambda p, grace=None: kill(seen, p, grace)), \
                 mock.patch.object(jr.select, "select", side_effect=KeyboardInterrupt), \
                 self.assertRaises(KeyboardInterrupt):
             jr.run_tool([sys.executable, "-c", "pass"], "generic", "t", "T", sinks=jr.Sinks(console="none"))

@@ -173,7 +173,7 @@ def _slug(title):
 
 
 def cmd(cmd, *, title, id=None, n=None, tool=None, cwd=None, env=None, capture=False, tty=False,  # NOSONAR python:S5806
-        summarize=None, input=None, parent=None, label=None):
+        summarize=None, input=None, parent=None, label=None, reports=True):
     """Run cmd as one step.  parent (a step id) makes it a child row of that step; its n defaults to 1, as step()'s
     does, and a plain run just runs it.  label is the row's short console label.  Under markers or the console it goes through jr.run_tool with the named parser (or a
     jr.Parser instance); otherwise a plain subprocess.run.  A tool that can't start gives Result(False, 127, err).
@@ -182,14 +182,17 @@ def cmd(cmd, *, title, id=None, n=None, tool=None, cwd=None, env=None, capture=F
     loaded, markers or not; without juneau_run, summarize is never called.  With no tool, the parser is detected from
     cmd (Maven, Gradle, pytest, npm, Playwright test, Bazel build/test/coverage, through env/npx/pnpm/yarn launchers);
     anything else is generic.  input (bytes) is written to the command's stdin, then stdin is closed; it never
-    reaches a log, a marker, an event or the command line, and cannot be combined with tty=True."""
+    reaches a log, a marker, an event or the command line, and cannot be combined with tty=True.  The parser's test
+    reports are announced (with $RUN_ARTIFACTS set, as copies under it, so a later `clean` cannot take them away);
+    reports=False announces none."""
     if input is not None and tty:
         raise ValueError("input= cannot be combined with tty=True")
     _base.remember(title)
     if routed() or (summarize is not None and _base.jr() is not None):
         num = (n if n is not None else 1) if parent is not None else _next_n(n)
         return _routed(cmd, title=title, id=id or _slug(title), n=num, parent=parent, tool=tool, cwd=cwd,
-                       env=env, capture=capture, tty=tty, summarize=summarize, input=input, label=label)
+                       env=env, capture=capture, tty=tty, summarize=summarize, input=input, label=label,
+                       reports=reports)
     if parent is None:
         _next_n(n)
     return _plain(cmd, cwd=cwd, env=env, capture=capture, input=input)
@@ -230,12 +233,13 @@ def _parser_for(jr, cmd, tool):
 
 
 def _routed(cmd, *, title, id, n, parent, tool, cwd, env, capture, tty, statuses=None,  # NOSONAR python:S5806
-            summarize=None, input=None, label=None):
+            summarize=None, input=None, label=None, reports=True):
     jr = _base.jr()
     parser = _parser_for(jr, cmd, tool)
     try:
         r = jr.run_tool(cmd, parser, id, title, n=n, parent=parent, cwd=cwd, env=env, capture=capture, tty=tty,
-                        statuses=statuses, summarize=summarize, input=input, label=label)
+                        statuses=statuses, summarize=summarize, input=input, label=label,
+                        **({} if reports else {"reports": False}))   # an older juneau_run has no reports=
     except OSError as e:
         # run_tool has already ended the step with exit 127.  Close it again with no exit field, as Foundry does
         # (scripts/push.py:254-262), whose tests pin that marker.
@@ -259,7 +263,8 @@ def gate(cmd, *, title, codes=GATE_CODES, label=None, **cmd_kwargs):
         r = _routed(cmd, title=title, id=f"{step_id}-run", n=1, parent=step_id,
                     tool=cmd_kwargs.get("tool"), cwd=cmd_kwargs.get("cwd"), env=cmd_kwargs.get("env"),
                     capture=cmd_kwargs.get("capture", False), tty=cmd_kwargs.get("tty", False),
-                    statuses={code: _ROW_STATUS.get(status, "fail") for code, status in codes.items()})
+                    statuses={code: _ROW_STATUS.get(status, "fail") for code, status in codes.items()},
+                    reports=cmd_kwargs.get("reports", True))
         status = codes.get(r.code, "error")
         if status == "skip":
             st.skip()
