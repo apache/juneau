@@ -109,8 +109,6 @@ class MavenSettingsCredentialsTest {
 				"<settings><servers><server><id>s</id><username>u</username><password>p</password></server></servers></settings>");
 			System.setProperty("user.home", dir.toString());
 			assertEquals("u", MavenSettingsCredentials.resolve("s").username());
-			var client = NexusStagingClient.create("http://127.0.0.1:1", "prof", "s");
-			assertNotNull(client);
 		} finally {
 			System.setProperty("user.home", old);
 		}

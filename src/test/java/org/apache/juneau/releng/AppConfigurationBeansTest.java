@@ -26,9 +26,8 @@ import java.util.Map;
 import java.util.Optional;
 
 import org.apache.juneau.commons.secret.SecretStore;
-import org.apache.juneau.releng.config.TargetProfile;
 import org.apache.juneau.releng.credential.CredentialSpec;
-import org.apache.juneau.releng.engine.ReleaseEngine;
+import org.apache.juneau.releng.run.RunFiles;
 import org.apache.juneau.releng.util.DefaultProcessRunner;
 import org.apache.juneau.rest.server.filter.SynchronizerToken;
 import org.junit.jupiter.api.Test;
@@ -104,9 +103,6 @@ class AppConfigurationBeansTest {
 		assertNotNull(cfg.milestoneService());
 		assertNotNull(cfg.githubPrSource(runner, "apache/juneau"));
 		assertNotNull(cfg.targetProfile());
-		assertNotNull(cfg.branchResolver(runner, dir.toString()));
-		assertNotNull(cfg.emailService(runner, dir.toString()));
-		assertNotNull(cfg.stepRegistry(cfg.branchResolver(runner, dir.toString())));
 	}
 
 	@Test
@@ -135,8 +131,7 @@ class AppConfigurationBeansTest {
 	@Test
 	void c02_releaseAndMilestoneWiring(@TempDir Path dir) {
 		var runner = cfg.processRunner();
-		var store = cfg.runStateStore(dir.toString());
-		var svc = cfg.releaseListService(runner, dir.toString(), "apache/juneau", store);
+		var svc = cfg.releaseListService(runner, dir.toString(), "apache/juneau", new RunFiles(dir, p -> false));
 		assertNotNull(svc);
 		assertNotNull(cfg.releaseRest(svc));
 		assertNotNull(cfg.milestoneRest(cfg.milestoneService(), cfg.githubPrSource(runner, "apache/juneau"), runner,
@@ -152,87 +147,26 @@ class AppConfigurationBeansTest {
 	}
 
 	@Test
-	void d01_secretResolverReadsStoresAndAccounts(@TempDir Path dir) {
-		var stores = mapStores();
-		var accounts = cfg.accountStore(dir.toString());
-		accounts.put(CredentialSpec.APACHE_LDAP, "jbognar");
-		accounts.put(CredentialSpec.GPG, "ABCD1234");
-		stores.get(CredentialSpec.APACHE_LDAP).store("jbognar", "ldap-pw".toCharArray());
-		stores.get(CredentialSpec.GPG).store("ABCD1234", "gpg-pw".toCharArray());
-		stores.get(CredentialSpec.GITHUB).store("token", "ghp".toCharArray());
-
-		var resolver = cfg.secretResolver(stores, accounts, TargetProfile.prodDefault());
-		assertEquals("jbognar", resolver.availid());
-		assertEquals("ldap-pw", resolver.ldapPassword());
-		assertEquals("ABCD1234", resolver.gpgKeyId());
-		assertEquals("gpg-pw", resolver.gpgPassphrase());
-		assertEquals("ghp", resolver.githubToken());
-		// Both Keychain-style credentials present, so the live Nexus client is built without touching settings.xml.
-		assertNotNull(resolver.nexus());
-	}
-
-	@Test
-	void d02_secretResolverIsEmptyWhenNothingStored(@TempDir Path dir) {
-		var resolver = cfg.secretResolver(mapStores(), cfg.accountStore(dir.toString()), TargetProfile.prodDefault());
-		assertEquals("", resolver.availid());
-		assertEquals("", resolver.ldapPassword());
-		assertEquals("", resolver.gpgKeyId());
-		assertEquals("", resolver.gpgPassphrase());
-		assertEquals("", resolver.githubToken());
-	}
-
-	@Test
-	void d03_secretResolverSystemPropertiesOverrideAccounts(@TempDir Path dir) {
-		var oldId = System.getProperty("rm.availid");
-		var oldKey = System.getProperty("rm.gpg.keyid");
+	void e01_releaseTabWiring(@TempDir Path dir) throws Exception {
+		var answers = cfg.credentialAnswers(mapStores(), cfg.accountStore(dir.toString()), "x@apache.org");
+		var events = cfg.runEvents();
+		var previousScript = System.getProperty("juneau.run.script");
+		var processes = cfg.releaseProcessService(dir.toString(), dir.toString(), "/nonexistent/juneau_run.py", answers, events);
 		try {
-			System.setProperty("rm.availid", "sysuser");
-			System.setProperty("rm.gpg.keyid", "SYSKEY");
-			var accounts = cfg.accountStore(dir.toString());
-			accounts.put(CredentialSpec.APACHE_LDAP, "stored");
-			accounts.put(CredentialSpec.GPG, "STOREDKEY");
-			var resolver = cfg.secretResolver(mapStores(), accounts, TargetProfile.prodDefault());
-			assertEquals("sysuser", resolver.availid());
-			assertEquals("SYSKEY", resolver.gpgKeyId());
-		} finally {
-			restore("rm.availid", oldId);
-			restore("rm.gpg.keyid", oldKey);
-		}
-	}
-
-	private static void restore(String key, String value) {
-		if (value == null)
-			System.clearProperty(key);
-		else
-			System.setProperty(key, value);
-	}
-
-	@Test
-	void e01_engineDropRcAndSseWiring(@TempDir Path dir) {
-		var runner = cfg.processRunner();
-		var state = dir.resolve("state").toString();
-		var staging = dir.resolve("staging").toString();
-		var store = cfg.runStateStore(state);
-		var branches = cfg.branchResolver(runner, dir.toString());
-		var registry = cfg.stepRegistry(branches);
-		var secrets = new ReleaseEngine.SecretResolver() {
-			@Override public String availid() { return "u"; }
-			@Override public String ldapPassword() { return "p"; }
-			@Override public String gpgKeyId() { return "k"; }
-			@Override public String gpgPassphrase() { return "g"; }
-			@Override public String githubToken() { return "t"; }
-			@Override public org.apache.juneau.releng.nexus.NexusStagingClient nexus() {
-				return org.apache.juneau.releng.nexus.NexusStagingClient.forTests((m, p, b) -> "");
+			assertEquals("/nonexistent/juneau_run.py", System.getProperty("juneau.run.script"));
+			var runFiles = cfg.runFiles(dir.toString(), new org.springframework.beans.factory.support.StaticListableBeanFactory(
+				java.util.Map.of("p", processes)).getBeanProvider(org.apache.juneau.releng.run.ReleaseProcessService.class));
+			assertNotNull(cfg.releaseRunRest(runFiles, processes));
+			assertEquals(java.util.List.of("/events/*"), new java.util.ArrayList<>(cfg.runEventsRegistration(events).getUrlMappings()));
+			try (var w = cfg.runFileWatcher(dir.toString(), events)) {
+				assertNotNull(w);
 			}
-		};
-		var target = cfg.targetProfile();
-		var engine = cfg.releaseEngine(store, registry, runner, branches, cfg.emailService(runner, state),
-			cfg.milestoneService(), secrets, target, state, staging, dir.toString(), "x@apache.org");
-		assertNotNull(engine);
-		var dropRc = cfg.dropRcService(store, registry, runner, secrets, engine, target, staging, state);
-		assertNotNull(dropRc);
-		assertNotNull(cfg.releaseRunRest(engine, dropRc));
-		var sse = cfg.sseLogRegistration(engine, store);
-		assertTrue(sse.getUrlMappings().contains("/events/*"));
+		} finally {
+			if (previousScript == null)
+				System.clearProperty("juneau.run.script");
+			else
+				System.setProperty("juneau.run.script", previousScript);
+			processes.shutdown();
+		}
 	}
 }

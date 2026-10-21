@@ -1,0 +1,38 @@
+/*
+ * Licensed to the Apache Software Foundation (ASF) under one or more
+ * contributor license agreements.  See the NOTICE file distributed with
+ * this work for additional information regarding copyright ownership.
+ * The ASF licenses this file to You under the Apache License, Version 2.0
+ * (the "License"); you may not use this file except in compliance with
+ * the License.  You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+.rl-head { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 0.75rem; }
+.rl-head [hidden] { display: none !important; } /* .jc-btn's display would otherwise override the hidden attribute */
+.rl-summary { font-weight: 600; }
+.rl-actions { display: flex; align-items: center; gap: 0.5rem; }
+.rl-dry { display: inline-flex; align-items: center; gap: 0.25rem; margin-left: 0.5rem; }
+.rl-terminal-title { font-weight: 600; margin-bottom: 0.5rem; }
+#rl-terminal { min-height: 24rem; }
+.rl-history tr.selected { background: var(--jc-accent-wash); }
+.rl-dry-tag { margin-left: 0.25rem; }
+.rl-dialog { max-width: 56rem; width: 90vw; border: 1px solid var(--jc-border); border-radius: var(--jc-radius); background: var(--jc-card-bg); color: var(--jc-text); padding: 1rem 1.25rem; }
+.rl-dialog::backdrop { background: rgba(0, 0, 0, 0.35); }
+.rl-dialog h2 { margin-top: 0; }
+.rl-error { color: var(--jc-danger); }
+.rl-input, .rl-field textarea, .rl-field input { width: 100%; box-sizing: border-box; }
+.rl-field { display: block; margin: 0.5rem 0; }
+.rl-field > span { display: block; font-weight: 600; margin-bottom: 0.25rem; }
+.rl-choices label { display: block; margin: 0.25rem 0; }
+.rl-email-row { display: grid; grid-template-columns: 5rem 1fr auto; gap: 0.5rem; align-items: start; margin: 0.4rem 0; }
+.rl-email-label { font-weight: 600; padding-top: 0.25rem; }
+.rl-email-field { width: 100%; box-sizing: border-box; font-family: monospace; }
+.rl-dialog-buttons { display: flex; justify-content: flex-end; gap: 0.5rem; margin-top: 1rem; }

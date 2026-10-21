@@ -33,10 +33,7 @@ Each item: a one-line rule, then **Applied** or **N/A** (with rationale).
   compile classpath (transitive via `juneau-commons 10.0.0-SNAPSHOT`); migrated 32 throw sites across 11
   files. Note: `Shorts` routes through `StringUtils.format`, which is **pure printf** — single quotes are
   literal, so do **not** double them (`''` is only for the MessageFormat `mf()`/`mfs()` path). Leftover
-  pass (2026-09-13): three remaining `throw new` sites are all test mock fault injectors
-  (`NexusMockRestHttpTest` wrapping a caught `Exception`, `SseLogServletTest` simulated broken-pipe
-  `IOException`, `RunStateBroadcasterTest` `"dead client"` subscriber) — constructors stay; `rex`/`ioex`
-  would not be clearer there.
+  pass (2026-09-13): the remaining `throw new` sites were test mock fault injectors, since deleted.
 - **Always-suppress Sonar rules.** JRM uses the always-suppress table in `@code-conventions` (S1192, S3776, S6539, S6541, S110, S115, S9149; `java:`, `python:` and `javascript:` keys alike). When one fires, suppress it; don't refactor to satisfy it. **`java:S1192`: inline and suppress, never extract.** Do not add `private static final String PROJECT = "project";`-style constants for duplicated literals. Keep the literal inline and suppress `java:S1192` once at class level, with a rationale (James 2026-10-09).
 - **Everyday `Shorts` idioms** — In new and touched code, use the Shorts forms from `@juneau-code-conventions` → "Shorts for everyday idioms" (`b(x)` for `Boolean.TRUE.equals(x)`, `eq`/`neq`, `ie`/`ine`, `ib`/`inb`, `sw`/`ew`/`co`, `lc`/`uc`/`tr`, `ein`/`nie`, `s`, `f`, `or`, `o`/`oo`, `u`, `cn`/`cns`, `rnn`) instead of the JDK spelling (James 2026-10-09).
 - **Collection factories (`Shorts` `l`/`m`/`tl`/`los`/`cp`)** — **Applied** at real candidates only
@@ -96,14 +93,12 @@ and re-swept 2026-09-13 (WORK-R0008 leftover pass):
 
 - **Null/blank guards (`Shorts.ib`/`Shorts.inb`)** — **Applied.** Collapsed `x == null || x.isBlank()` /
   `x != null && !x.isBlank()` to `ib(x)` / `inb(x)` (`import static
-  org.apache.juneau.commons.utils.Shorts.*;`) at all 8 sites found: `ReleasePrepareStep`,
-  `SseLogServlet`, `NexusStagingClient`, `VoteDeadlineTimer`, `NexusMockModel` (the `ib` guards), and
-  `EmailService` (×2), `NexusStagingCloseStep` (the `inb` guards). Reconfirmed 2026-09-13: 0 remaining
+  org.apache.juneau.commons.utils.Shorts.*;`) at all 8 sites found (the classes involved have since
+  been deleted). Reconfirmed 2026-09-13: 0 remaining
   `== null || …isBlank()` / `!= null && !…isBlank()` sites.
 - **First-non-null coalesce (`Shorts.or(...)`)** — **N/A (not a null-safe mapper).** Re-triaged
-  2026-09-13: ~12 `x == null ? null : f(x)` ternaries remain in `src/main` (`EmailService`,
-  `NexusStagingClient`, `MilestoneService`, `ReleaseRunRest`, `ReleaseEngine`, `DistPromoteStep`,
-  `MavenSettingsCredentials`, `GithubReleaseSource`). Each is a null-safe mapper; use `nm(x, X::f)` in new and touched code.
+  2026-09-13: ~12 `x == null ? null : f(x)` ternaries remained in `src/main` (now `MilestoneService`,
+  `ReleaseRunRest`, `MavenSettingsCredentials`, `GithubReleaseSource` among others). Each is a null-safe mapper; use `nm(x, X::f)` in new and touched code.
   `or()` returns its first non-null argument, so `or(x, f(x))` returns `x`, not `f(x)`. It also
   evaluates `f(x)` when `x` is null.
 - **Injectable wall-clock `Clock`** — **N/A (none found).** Reconfirmed 2026-09-13: no direct
@@ -209,7 +204,6 @@ trailing comment.
 |------|-------|-----------|
 | `java:S110` (inheritance depth) | `RootRest` | Depth is imposed by the Juneau REST servlet base-class hierarchy; flattening isn't appropriate. Class-level. |
 | `java:S6539` (Monster Class / too many deps) | `AppConfiguration` | A Spring `@Configuration` legitimately aggregates bean wiring; splitting fragments cohesive wiring. Juneau suppresses S6539 unconditionally. Class-level. |
-| `java:S107` (too many params) | `ReleaseEngine` constructor | Constructor-injected collaborators; a parameter object would obscure the DI wiring. Suppress at the constructor only when a holder/record refactor would read worse than plain constructor injection (document the choice). |
 | `java:S1192` (duplicate literals) | — | **Always** suppress at class level; never extract a constant to satisfy it (James 2026-10-09, overriding the earlier "extract ordinary literals" rule). |
 | `java:S115` (constant naming) | — | Suppress at **class** level (never on the field) for `UPPER_camelCase` constants or constants mirroring an external-protocol literal. |
 | `unchecked` (parsed-JSON casts) | JSON parse sites | Assigning a raw `Json.DEFAULT.read(…, List.class/Map.class)` result to its known parameterized shape is an unchecked conversion; keep the multiline-form suppression with a rationale. |
@@ -220,7 +214,7 @@ trailing comment.
 - `java:S1845` — rename to remove a method/field name clash (prefer renaming the field): `CredentialSpec.name`→`id`, `StepResult.ok` field→`success` (keeping the `ok(…)`/`fail(…)` factory pair). Update all references + tests; keep behavior identical.
 - `java:S1172` — remove unused parameters and simplify callers/tests.
 - `java:S1905` — drop redundant casts; where a `var` + cast only supplied the generic type, switch to an explicit typed declaration.
-- `java:S3400` — replace a method that always returns a constant with a declared constant (e.g. `SseLogServlet.HEARTBEAT`).
+- `java:S3400` — replace a method that always returns a constant with a declared constant.
 - `java:S2589` / `java:S1125` — remove always-true expressions and unnecessary boolean literals (`while (x || true)` → a real loop condition).
 - `java:S135` — reduce a loop to ≤1 `break`/`continue` (combine conditions; use a boolean loop flag).
 - `java:S1989` — never let a servlet method leak a checked `IOException`; catch and handle it (a broken SSE pipe just ends the stream).

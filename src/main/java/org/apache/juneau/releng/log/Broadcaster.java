@@ -20,8 +20,7 @@ package org.apache.juneau.releng.log;
 import java.util.function.Consumer;
 
 /**
- * Subscribe shape of {@link RunStateBroadcaster} (run/step status snapshots), as consumed by
- * {@link RunStateSseServlet}'s tail loop.
+ * Subscribe shape of {@link EventBroadcaster}, as consumed by {@link RunEventsSseServlet}'s tail loop.
  */
 public interface Broadcaster {
 

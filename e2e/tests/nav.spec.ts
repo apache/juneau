@@ -25,9 +25,7 @@ import { test, expect, type Page } from '@playwright/test';
 const NAV_TABS: { name: string; path: string; heading: string | RegExp | null }[] = [
   { name: 'Setup', path: '/rest/setup', heading: 'Probes' },
   { name: 'Releases', path: '/rest/releases', heading: 'All Releases' },
-  // New Release has no single fixed heading — its Input-vs-Execution subtab starts on whichever one matches
-  // current run state (state-dependent), so it's asserted separately below via the always-present subtab bar.
-  { name: 'New Release', path: '/rest/runs', heading: null },
+  { name: 'Release', path: '/rest/runs', heading: 'Release' },
 ];
 
 function topNav(page: Page) {
@@ -46,11 +44,7 @@ test.describe('Top navigation', () => {
       const response = await page.goto(tab.path);
       expect(response?.status()).toBe(200);
 
-      if (tab.name === 'New Release') {
-        const nav = topNav(page);
-        await expect(nav.getByRole('link', { name: 'Input', exact: true })).toBeVisible();
-        await expect(nav.getByRole('link', { name: 'Execution', exact: true })).toBeVisible();
-      } else if (tab.heading instanceof RegExp) {
+      if (tab.heading instanceof RegExp) {
         await expect(page.getByText(tab.heading).first()).toBeVisible();
       } else if (tab.heading) {
         await expect(page.getByRole('heading', { name: tab.heading })).toBeVisible();

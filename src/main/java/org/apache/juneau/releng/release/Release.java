@@ -33,12 +33,12 @@ public class Release {
 	public static final String JIRA_PROJECT_URL = "https://issues.apache.org/jira/browse/JUNEAU";
 
 	/**
-	 * Dist-release prefix used by {@code EmailService} announcement drafts.
+	 * Dist-release prefix used by release.py's announcement drafts.
 	 */
 	public static final String DIST_RELEASE_PREFIX = "https://dist.apache.org/repos/dist/release/juneau/";
 
 	/**
-	 * Release-notes landing used by {@code EmailService} announcement drafts.
+	 * Release-notes landing used by release.py's announcement drafts.
 	 */
 	public static final String RELEASE_NOTES_URL = "https://juneau.apache.org/#release-notes";
 
@@ -99,7 +99,7 @@ public class Release {
 	}
 
 	/**
-	 * Apache dist/release directory for this version, matching {@code EmailService} announcement copy.
+	 * Apache dist/release directory for this version, matching release.py's announcement copy.
 	 *
 	 * @return The dist URL when this row is {@code RELEASED}, otherwise {@code null}.
 	 */

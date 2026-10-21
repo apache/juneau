@@ -1,4 +1,16 @@
 #!/usr/bin/env python3
+# ***************************************************************************************************************************
+# * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+# * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+# * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+# * with the License.  You may obtain a copy of the License at
+# *
+# *  http://www.apache.org/licenses/LICENSE-2.0
+# *
+# * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+# * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+# * specific language governing permissions and limitations under the License.
+# ***************************************************************************************************************************
 """
 Apache Juneau release, from a terminal: release candidate, vote, promote.
 
@@ -252,17 +264,26 @@ def _execute(args, deps, ctx, attempt):
         run_args = argparse.Namespace(list_steps=False, start_step=None, resume=False, skip_step=[])
     else:
         reg, checkpoint, run_args = registry(deps, impl_map()), rf, args
-    rf.attempt_start(attempt, _command(args))
+    from juneau_scripts import prompt
+    origin = "ui" if prompt.channel() else "cli"
+    rf.attempt_start(attempt, _command(args), origin=origin, pid=os.getpid())
+
+    def stopped_at():
+        cur = getattr(reg, "_current", None)
+        return getattr(cur, "id", None) or rf.last()
+
     try:
         result = reg.run(run_args, ctx, checkpoint, show_unselected=not args.revert)
     except KeyboardInterrupt:
-        rf.attempt_end("cancelled")
+        rf.attempt_end("cancelled", step=stopped_at(), exit=130)
         raise
     except BaseException:
-        rf.attempt_end("failed")
+        rf.attempt_end("failed", step=stopped_at(), exit=1)
         raise
-    rf.attempt_end("paused" if result.status == "paused" else "ok" if result.ok else "failed")
-    return 0 if result.ok else (result.code or 1)
+    code = 0 if result.ok else (result.code or 1)
+    rf.attempt_end("paused" if result.status == "paused" else "ok" if result.ok else "failed",
+                   step=stopped_at(), exit=code)
+    return code
 
 
 def _locked(args, deps, ctx, attempt):

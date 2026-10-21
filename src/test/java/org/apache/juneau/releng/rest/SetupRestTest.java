@@ -85,12 +85,10 @@ class SetupRestTest {
 					.hasActiveNav("setup")
 					.hasNavHref("setup", "/rest/setup")
 					.hasNavHref("releases", "/rest/releases")
-					.hasNavHref("audit", "/rest/audit")
-					.hasNavHref("new", "/rest/runs")
-					.hasNavChildren("new", "input", "exec")
+					.hasNavHref("release", "/rest/runs")
 					.hasFooterText("Apache Juneau Release Manager — loopback tool for cutting Apache Juneau releases.");
-				assertEquals(4, page.contract().getList("nav").size(),
-					() -> "Setup, Releases, Audit, and New Release must be the four sections: " + body);
+				assertEquals(3, page.contract().getList("nav").size(),
+					() -> "Setup, Releases, and Release must be the three sections: " + body);
 				assertTrue(body.contains("juneau-views.css"),
 					"Setup now pulls the views toolkit so the probes can adopt the Juneau probe helper: " + body);
 				assertTrue(body.contains("/juneau-console/chrome.css"), body);
@@ -166,24 +164,6 @@ class SetupRestTest {
 						"JRM must not restyle DT search; Juneau WORK-J0546 owns --jc-control-border: " + path);
 					assertFalse(text.contains("\n.jc-card {"),
 						"JRM must not fork content-card padding/shadow; Juneau WORK-J0544/J0545 own them: " + path);
-				}
-			}
-		}
-	}
-
-	@Test
-	void a05_newReleaseConsumesJuneauWellWithoutPageCanvas() throws IOException {
-		for (var path : List.of("/templates/new-release.ftlh", "/static/css/new-release.css")) {
-			try (var in = SetupRestTest.class.getResourceAsStream(path)) {
-				assertNotNull(in, path);
-				var text = new String(IoUtils.readBytes(in), StandardCharsets.UTF_8);
-				assertFalse(text.contains("rm-page-canvas"), path);
-				assertFalse(text.contains("slds-"), path);
-				assertFalse(text.contains("ssc-"), path);
-				if (path.endsWith("new-release.ftlh")) {
-					assertTrue(text.contains("class=\"jc-page-header\""), text);
-					assertTrue(text.contains("<h1>New Release</h1>"), text);
-					assertTrue(text.contains("jc-page-sub"), text);
 				}
 			}
 		}

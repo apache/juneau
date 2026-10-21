@@ -121,10 +121,4 @@ class DefaultProcessRunnerTest {
 		assertFalse(nullOut.run(List.of("z"), null, null, sink::add).ok());
 		assertTrue(fake.runStreamingDefault(List.of("x"), null, null, null).ok());
 	}
-
-	@Test
-	void e01_svnArgsLiterals() {
-		assertEquals("--username", SvnArgs.USERNAME);
-		assertEquals("--password-from-stdin", SvnArgs.PASSWORD_FROM_STDIN);
-	}
 }

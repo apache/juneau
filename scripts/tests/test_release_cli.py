@@ -1,3 +1,15 @@
+# ***************************************************************************************************************************
+# * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+# * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+# * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+# * with the License.  You may obtain a copy of the License at
+# *
+# *  http://www.apache.org/licenses/LICENSE-2.0
+# *
+# * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+# * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+# * specific language governing permissions and limitations under the License.
+# ***************************************************************************************************************************
 import json
 import os
 import sys
@@ -225,6 +237,17 @@ def test_resume_runs_to_vote_gate_and_pauses_with_exit_0(home, capsys, tmp_path,
     # the lock file exists but is no longer held: a second run is not refused
     code2, out2 = run_main(["--resume"], home, capsys, deps=deps)
     assert "Another release.py" not in out2
+
+
+def test_attempt_record_has_origin_pid_step_exit(home, capsys, tmp_path, monkeypatch):
+    seed(home, {**ACTIVE, "last": "dist-verify"})
+    fake, prompts, nexus, deps = setup_deps(tmp_path, monkeypatch, {"email.vote": True})
+    code, out = run_main(["--resume"], home, capsys, deps=deps)
+    att = read_run(home)["attempts"][-1]
+    assert att["origin"] == "cli"            # no prompt channel in the test env
+    assert isinstance(att["pid"], int)
+    assert att["exit"] == code               # the exit code main() returned
+    assert att["step"]                       # the step the attempt stopped in
 
 
 def test_failed_step_exits_1_and_hints_resume(home, capsys, tmp_path, monkeypatch):

@@ -18,6 +18,7 @@
 import { defineConfig, devices } from '@playwright/test';
 import path from 'node:path';
 import os from 'node:os';
+import fs from 'node:fs';
 
 /**
  * Dedicated test port for the Spring Boot app this suite boots for itself. MUST NOT be 8790 — that port is
@@ -34,6 +35,16 @@ const BASE_URL = LIVE_URL ?? `http://127.0.0.1:${TEST_PORT}`;
 
 // The app repo root is the parent of this e2e/ directory.
 const APP_ROOT = path.resolve(__dirname, '..');
+
+// A fresh rm.home per suite run, so History starts empty. The main process picks it and exports it as
+// JRM_E2E_HOME (workers inherit the env and tests/release-home.ts reads it); workers must not reset it.
+if (!LIVE_URL && process.env.TEST_WORKER_INDEX === undefined && !process.env.JRM_E2E_HOME) {
+  process.env.JRM_E2E_HOME = fs.mkdtempSync(path.join(os.tmpdir(), 'jrm-e2e-'));
+}
+const RELEASE_HOME = process.env.JRM_E2E_HOME ?? path.join(os.tmpdir(), 'jrm-e2e-home');
+// JRM_E2E_REUSE=1 reuses a server already on the test port (the Release page specs then skip: they need the fixture).
+const REUSE = process.env.JRM_E2E_REUSE === '1';
+const FAKE_SCRIPTS = path.join(APP_ROOT, 'src', 'test', 'resources', 'fake-scripts');
 
 // Personal JDK layout used across this workspace: ~/jdk/default -> current JDK 17 install.
 const JAVA_HOME = process.env.JAVA_HOME ?? path.join(os.homedir(), 'jdk', 'default');
@@ -69,20 +80,22 @@ export default defineConfig({
   // 8790. `spring-boot.run.arguments=--server.port=...` passes a command-line argument to the forked app JVM,
   // which Spring's property-source precedence honors over the server.port=8790 baked into
   // application.properties. Maven dependency resolution can be slow on a cold cache, but the app itself starts
-  // in ~1s once the classpath is resolved — 120s covers both. `reuseExistingServer: !CI` lets a developer who
-  // already has a local instance running on 8791 skip the (re)boot; it never touches 8790 either way.
+  // in ~1s once the classpath is resolved — 120s covers both. `reuseExistingServer` is off by default so a stray
+  // instance on 8791 fails fast instead of silently running the real release.py; JRM_E2E_REUSE=1 opts in.
+  // rm.home / rm.scripts.dir: scratch run files and the fake release.py fixture, so no real release can start.
   webServer: LIVE_URL
     ? undefined
     : {
         command:
-          `mvn -q spring-boot:run -Dspring-boot.run.arguments=--server.port=${TEST_PORT}`,
+          `mvn -q spring-boot:run "-Dspring-boot.run.arguments=--server.port=${TEST_PORT} --rm.home=${RELEASE_HOME} --rm.scripts.dir=${FAKE_SCRIPTS}"`,
         url: BASE_URL + '/rest/setup',
         cwd: APP_ROOT,
         timeout: 120_000,
-        reuseExistingServer: !process.env.CI,
+        reuseExistingServer: REUSE, // default: fail fast on a stray server on the test port
         env: {
           ...process.env,
           JAVA_HOME,
+          JUNEAU_RUN_PY: process.env.JUNEAU_RUN_PY ?? path.join(os.homedir(), 'git/apache/juneau/juneau-run/src/main/python/juneau_run.py'),
           PATH: `${path.join(JAVA_HOME, 'bin')}:${process.env.PATH}`,
         },
       },

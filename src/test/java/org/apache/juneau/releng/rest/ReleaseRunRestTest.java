@@ -14,594 +14,285 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package org.apache.juneau.releng.rest;
 
-import static org.apache.juneau.test.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.mock;
-import java.io.IOException;
+import static org.mockito.Mockito.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.List;
-import java.util.Map;
+import java.util.Optional;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import org.apache.juneau.http.response.BadRequest;
 import org.apache.juneau.http.response.Conflict;
-import org.apache.juneau.http.response.NotFound;
-import org.apache.juneau.releng.config.TargetProfile;
-import org.apache.juneau.releng.email.EmailService;
-import org.apache.juneau.releng.engine.BranchResolver;
-import org.apache.juneau.releng.engine.DropRcService;
-import org.apache.juneau.releng.engine.ReleaseEngine;
-import org.apache.juneau.releng.engine.RunStateStore;
-import org.apache.juneau.releng.engine.RunStatus;
-import org.apache.juneau.releng.engine.StepRegistry;
-import org.apache.juneau.releng.engine.StepStatus;
-import org.apache.juneau.releng.milestone.MilestoneService;
-import org.apache.juneau.releng.nexus.NexusMockModel;
-import org.apache.juneau.releng.nexus.NexusMockRest;
-import org.apache.juneau.releng.nexus.NexusStagingClient;
-import org.apache.juneau.releng.util.ProcessRunner;
+import org.apache.juneau.http.response.InternalServerError;
+import org.apache.juneau.releng.log.EventBroadcaster;
+import org.apache.juneau.releng.run.PromptBroker;
+import org.apache.juneau.releng.run.ReleaseProcessService;
+import org.apache.juneau.releng.run.RunFiles;
+import org.apache.juneau.marshall.collections.JsonMap;
+import org.apache.juneau.rest.server.terminal.TerminalProcess;
+import org.apache.juneau.rest.server.views.IdempotencyKey;
 import org.apache.juneau.rest.server.view.freemarker.FreemarkerView;
+import org.apache.juneau.commons.inject.StackOverlay;
+import org.apache.juneau.commons.utils.IoUtils;
+import org.apache.juneau.rest.mock.MockRestClient;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
 import jakarta.servlet.http.HttpServletRequest;
 
-/**
- * Direct unit tests of {@link ReleaseRunRest}'s no-such-run/single-active-run status mapping.
- *
- * <p>These tests call the {@code @RestGet}/{@code @RestPost} methods directly rather than through an
- * in-process HTTP round trip — no serialization boundary is under test here (unlike, e.g.,
- * {@code NexusMockRestHttpTest}, which does need {@code juneau-rest-mock}'s real HTTP dispatch to catch a
- * handler-return-type bug that a direct call can't see).
- */
 class ReleaseRunRestTest {
 
-	private ProcessRunner okRunner() {
-		return new ProcessRunner() {
-			@Override
-			public List<String> runLines(List<String> c) {
-				return List.of();
-			}
-
-			@Override
-			public String runText(List<String> c) {
-				return "";
-			}
-
-			@Override
-			public ProcResult run(List<String> c, String s, Map<String, String> e) {
-				if (c.contains("ls-remote"))
-					return new ProcResult(0, "sha\trefs/heads/juneau-9.2.1-branch\n");
-				return new ProcResult(0, "ok");
-			}
-
-			@Override
-			public ProcResult run(List<String> c, String s, Map<String, String> e,
-					java.util.function.Consumer<String> k) {
-				return run(c, s, e);
-			}
-		};
+	static void runJson(Path home, String phase, int rc, String attemptDir, String status) throws Exception {
+		var d = Files.createDirectories(home.resolve("runs/9.2.1"));
+		Files.writeString(d.resolve("run.json"), "{\"schema\":1,\"details\":{\"version\":\"9.2.1\",\"rc\":" + rc + "},\"phase\":\""
+			+ phase + "\",\"attempts\":[{\"n\":1,\"dir\":\"" + attemptDir + "\",\"command\":\"start\",\"origin\":\"cli\","
+			+ "\"status\":\"" + status + "\",\"started\":\"20261020-100000\",\"pid\":1}]}");
 	}
 
-	private ReleaseRunRest rest(Path dir) {
-		var runner = okRunner();
-		var branches = new BranchResolver(runner, "/repo");
-		var store = new RunStateStore(dir);
-		var registry = StepRegistry.standard(branches);
-		var engine = ReleaseEngine.forTests(store, registry, runner, branches, dir);
-		var dropRc = new DropRcService(store, registry, runner, dir.resolve("staging/git/juneau"), dir,
-				NexusStagingClient.forTests((m, p, b) -> ""), TargetProfile.prodDefault());
-		return new ReleaseRunRest(engine, dropRc);
+	ReleaseRunRest rest(Path home, ReleaseProcessService svc) {
+		return new ReleaseRunRest(new RunFiles(home, svc::isLiveDir), svc);
 	}
 
-	private ReleaseRunRest.StartRequest startRequest(String version) {
-		var body = new ReleaseRunRest.StartRequest();
-		body.version = version;
-		return body;
+	static final String HELLO = "{\"v\":1,\"type\":\"hello\",\"pid\":4242}";
+	static final String PROMPT = "{\"v\":1,\"type\":\"prompt\",\"id\":\"p1\",\"kind\":\"text\",\"key\":\"release.branch\",\"message\":\"m\"}";
+
+	static ReleaseProcessService.Live live(String attemptId, boolean hello, boolean prompt) {
+		var broker = new PromptBroker(k -> Optional.empty(), new EventBroadcaster(), java.util.Map.of());
+		broker.attach(line -> true);
+		if (hello)
+			broker.onLine(HELLO);
+		if (prompt)
+			broker.onLine(PROMPT);
+		var proc = mock(TerminalProcess.class);
+		when(proc.terminal()).thenReturn(mock(org.apache.juneau.rest.server.terminal.FileTerminalSource.class));
+		return new ReleaseProcessService.Live(attemptId, java.nio.file.Path.of("x"), "start", true, proc, broker);
 	}
 
-	/**
-	 * Like {@link #rest(Path)}, but wired with a real {@link NexusStagingClient} backed by an in-memory
-	 * {@link NexusMockModel} via {@link NexusMockRest#route}, so {@code nexus-release} (Tier A) can
-	 * run its real discover/close/promote flow against the loopback mock — no HTTP dispatch or
-	 * {@code MockRestClient} needed (see {@code NexusMockRestHttpTest}'s per-class {@code RestContext}
-	 * caching gotcha, which that route-level path sidesteps entirely).
-	 */
-	private ReleaseRunRest restWithNexus(Path dir, NexusMockModel model) {
-		var runner = okRunner();
-		var branches = new BranchResolver(runner, "/repo");
-		var store = new RunStateStore(dir);
-		var registry = StepRegistry.standard(branches);
-		var nexus = NexusStagingClient.forTests((m, p, b) -> NexusMockRest.route(model, m, p, b),
-				NexusStagingClient.JUNEAU_PROFILE_ID);
-		var secrets = new ReleaseEngine.SecretResolver() {
-			@Override
-			public String availid() {
-				return "test";
-			}
+	@Test
+	void a01_terminalSourceLiveThenFile(@TempDir Path home) throws Exception {
+		var dir = Files.createDirectories(home.resolve("attempts/20261020-100000-001"));
+		Files.writeString(dir.resolve("terminal.log"), "hello\n");
+		var svc = mock(ReleaseProcessService.class);
+		when(svc.live()).thenReturn(Optional.empty());
+		var r = rest(home, svc);
+		assertTrue(r.terminalSource("attempt-20261020-100000-001", null).isPresent(), "replay from terminal.log");
+		assertTrue(r.terminalSource("attempt-nope", null).isEmpty());
+		assertTrue(r.terminalSource("attempt-..", null).isEmpty(), "no traversal");
+		Files.delete(dir.resolve("terminal.log"));
+		Files.writeString(dir.resolve("full.log"), "older attempt\n");
+		assertTrue(r.terminalSource("attempt-20261020-100000-001", null).isPresent(), "falls back to full.log");
 
-			@Override
-			public String ldapPassword() {
-				return "";
-			}
-
-			@Override
-			public String gpgKeyId() {
-				return "";
-			}
-
-			@Override
-			public String gpgPassphrase() {
-				return "";
-			}
-
-			@Override
-			public String githubToken() {
-				return "";
-			}
-
-			@Override
-			public NexusStagingClient nexus() {
-				return nexus;
-			}
-		};
-		var engine = new ReleaseEngine(store, registry, runner, branches, dir, dir.resolve("staging"), "/repo",
-				"test@apache.org", new EmailService(dir, runner), new MilestoneService(), secrets,
-				TargetProfile.prodDefault());
-		var dropRc = new DropRcService(store, registry, runner, dir.resolve("staging/git/juneau"), dir, nexus,
-				TargetProfile.prodDefault());
-		return new ReleaseRunRest(engine, dropRc);
+		var l = live("attempt-20261020-100000-009", false, false);
+		when(svc.live()).thenReturn(Optional.of(l));
+		assertSame(l.process().terminal(), r.terminalSource("attempt-20261020-100000-009", null).orElseThrow(), "live branch");
+		assertTrue(r.terminalSource("attempt-20261020-100000-008", null).isEmpty(), "another attempt is not the live one");
 	}
 
-	/**
-	 * Marks every step before {@code stepId} (in registry order) SUCCEEDED, so a test can exercise
-	 * {@code stepId} in isolation under the strict forward-apply guard without needing every predecessor's
-	 * own apply() to succeed for real. Writes straight through a fresh store pointed at the same
-	 * {@code dir}, since {@link RunStateStore} is a stateless file-backed reader/writer.
-	 */
-	private void satisfyAllPredecessorsOf(Path dir, String version, String stepId) {
-		var store = new RunStateStore(dir);
-		var rs = store.load(version).orElseThrow();
-		var ids = StepRegistry.standard(new BranchResolver(okRunner(), "/repo")).ids();
-		var idx = ids.indexOf(stepId);
-		for (var i = 0; i < idx; i++)
-			rs.step(ids.get(i)).status = StepStatus.SUCCEEDED;
-		store.save(rs);
+	@Test
+	void a02_dropRcRequiresTypedRc(@TempDir Path home) throws Exception {
+		runJson(home, "vote", 2, home.resolve("attempts/a").toString(), "ok");
+		var svc = mock(ReleaseProcessService.class);
+		when(svc.live()).thenReturn(Optional.empty());
+		var r = rest(home, svc);
+		assertThrows(BadRequest.class, () -> r.dropRc(body("RC1", false)));
+		verify(svc, never()).dropRc(anyString(), anyBoolean());
+		when(svc.dropRc("RC2", false)).thenReturn(null);
+		assertThrows(NullPointerException.class, () -> r.dropRc(body("RC2", false)), "reached the service");
+		verify(svc).dropRc("RC2", false);
 	}
 
-	private void seedDistDevFiles(Path dir, String version, int rc) throws IOException {
-		var rcDir = "juneau-" + version + "-RC" + rc;
-		for (var kind : List.of("src", "bin")) {
-			var sub = "src".equals(kind) ? "source" : "binaries";
-			var d = dir.resolve("dist").resolve(sub).resolve(rcDir);
-			Files.createDirectories(d);
-			for (var ext : List.of("", ".asc", ".sha512"))
-				Files.writeString(d.resolve("apache-juneau-" + version + "-" + kind + ".zip" + ext), "content");
+	@Test
+	void a03_dropRcRefusedAtPromote(@TempDir Path home) throws Exception {
+		runJson(home, "promote", 2, home.resolve("attempts/a").toString(), "ok");
+		var svc = mock(ReleaseProcessService.class);
+		when(svc.live()).thenReturn(Optional.empty());
+		assertThrows(Conflict.class, () -> rest(home, svc).dropRc(body("RC2", false)));
+	}
+
+	@Test
+	void a04_startRefusedWhileRunActiveOrLive(@TempDir Path home) throws Exception {
+		var svc = mock(ReleaseProcessService.class);
+		when(svc.live()).thenReturn(Optional.empty());
+		when(svc.start(anyBoolean())).thenThrow(new ReleaseProcessService.BusyException("x"));
+		var r = rest(home, svc);
+		var e = assertThrows(Conflict.class, () -> r.start(start(false, null)));
+		assertTrue(e.getMessage().contains("already running"));
+		runJson(home, "rc", 1, home.resolve("attempts/a").toString(), "failed");
+		var svc2 = mock(ReleaseProcessService.class);
+		when(svc2.live()).thenReturn(Optional.empty());
+		assertThrows(Conflict.class, () -> rest(home, svc2).start(start(false, null)), "an active run must be resumed");
+		verify(svc2, never()).start(anyBoolean());
+	}
+
+	@Test
+	void a05_resumeNeedsActiveRun(@TempDir Path home) {
+		var svc = mock(ReleaseProcessService.class);
+		when(svc.live()).thenReturn(Optional.empty());
+		assertThrows(Conflict.class, () -> rest(home, svc).resume(new ReleaseRunRest.DryRunRequest()));
+	}
+
+	@Test
+	void a06_answerIsNeverLogged() {
+		assertEquals(Level.OFF, Logger.getLogger(ReleaseRunRest.class.getName() + ".answer").getLevel());
+	}
+
+	@Test
+	void a07_pageCarriesStartKey(@TempDir Path home) {
+		var svc = mock(ReleaseProcessService.class);
+		var view = (FreemarkerView) rest(home, svc).page(mock(HttpServletRequest.class));
+		assertEquals("release", view.getTemplateName());
+		assertNotNull(view.getAttributes().get("startKey"));
+		assertEquals("release", view.getAttributes().get("navTab"));
+	}
+
+	@Test
+	void a08_otherLaunchFailuresAre500NotConflict(@TempDir Path home) throws Exception {
+		var svc = mock(ReleaseProcessService.class);
+		when(svc.live()).thenReturn(Optional.empty());
+		when(svc.start(anyBoolean())).thenThrow(new IllegalStateException("python3 not found"));
+		var r = rest(home, svc);
+		var e = assertThrows(InternalServerError.class, () -> r.start(start(false, null)));
+		assertTrue(e.getMessage().contains("python3 not found"));
+		when(svc.resume(anyBoolean())).thenThrow(new IllegalStateException("dir already holds a run"));
+		runJson(home, "rc", 1, home.resolve("attempts/a").toString(), "failed");
+		assertThrows(InternalServerError.class, () -> rest(home, svc).resume(new ReleaseRunRest.DryRunRequest()));
+	}
+
+	@Test
+	void a09_startKeyReplayReturnsTheLiveAttempt(@TempDir Path home) {
+		var svc = mock(ReleaseProcessService.class);
+		var l = live("attempt-20261020-100000-001", true, false);
+		when(svc.start(false)).thenReturn(l);
+		when(svc.live()).thenReturn(Optional.of(l));
+		var r = rest(home, svc);
+		var key = IdempotencyKey.mintSelfTargeted(ReleaseRunRest.START_ACTION).value();
+		assertEquals("attempt-20261020-100000-001", r.start(start(false, key)).get("attemptId"));
+		assertEquals("attempt-20261020-100000-001", r.start(start(false, key)).get("attemptId"));
+		verify(svc, times(1)).start(false);
+	}
+
+	@Test
+	void a10_currentShape(@TempDir Path home) throws Exception {
+		var svc = mock(ReleaseProcessService.class);
+		when(svc.live()).thenReturn(Optional.empty());
+		var idle = rest(home, svc).current();
+		assertEquals(java.util.Set.of("history"), idle.keySet());
+
+		runJson(home, "rc", 1, home.resolve("attempts/a").toString(), "failed");
+		var withPrompt = live("attempt-a", true, true);
+		when(svc.live()).thenReturn(Optional.of(withPrompt));
+		var m = rest(home, svc).current();
+		assertEquals(java.util.Set.of("active", "live", "pending", "history"), m.keySet());
+		@SuppressWarnings("unchecked")
+		var lv = (java.util.Map<String, Object>)m.get("live");
+		assertEquals("attempt-a", lv.get("attemptId"));
+		assertEquals("start", lv.get("command"));
+		assertEquals(true, lv.get("dryRun"));
+		assertEquals(4242L, lv.get("pid"));
+
+		var quiet = live("attempt-a", false, false);
+		when(svc.live()).thenReturn(Optional.of(quiet));
+		assertFalse(rest(home, svc).current().containsKey("pending"));
+		assertDoesNotThrow(() -> rest(home, svc).current(), "a live process that has not said hello has no pid yet");
+	}
+
+	@Test
+	void a11_cancelDelegates(@TempDir Path home) {
+		var svc = mock(ReleaseProcessService.class);
+		assertTrue(rest(home, svc).cancel().isEmpty());
+		verify(svc).cancel();
+	}
+
+	@Test
+	void a12_dropRcWhileBusyIs409(@TempDir Path home) throws Exception {
+		runJson(home, "rc", 2, home.resolve("attempts/a").toString(), "failed");
+		var svc = mock(ReleaseProcessService.class);
+		when(svc.live()).thenReturn(Optional.empty());
+		when(svc.dropRc("RC2", false)).thenThrow(new ReleaseProcessService.BusyException("x"));
+		assertThrows(Conflict.class, () -> rest(home, svc).dropRc(body("RC2", false)));
+	}
+
+	@Test
+	void a13_answerMapsErrors(@TempDir Path home) {
+		var svc = mock(ReleaseProcessService.class);
+		var r = rest(home, svc);
+		var value = new JsonMap().append("value", "x");
+		when(svc.live()).thenReturn(Optional.empty());
+		assertThrows(Conflict.class, () -> r.answer("p1", value), "no live process");
+
+		var withPrompt = live("attempt-a", true, true);
+		when(svc.live()).thenReturn(Optional.of(withPrompt));
+		assertThrows(Conflict.class, () -> r.answer("nope", value), "not the pending prompt");
+		assertThrows(BadRequest.class, () -> r.answer("p1", new JsonMap()), "neither value nor cancel");
+		assertThrows(BadRequest.class, () -> r.answer("p1", null), "no body");
+		assertTrue(r.answer("p1", value).isEmpty());
+	}
+
+	@Test
+	void a14_nullBodiesAndMissingRc(@TempDir Path home) throws Exception {
+		var svc = mock(ReleaseProcessService.class);
+		when(svc.live()).thenReturn(Optional.empty());
+		var r = rest(home, svc);
+		assertThrows(BadRequest.class, () -> r.start(null));
+		assertThrows(BadRequest.class, () -> r.dropRc(null));
+		runJson(home, "rc", 0, home.resolve("attempts/a").toString(), "failed");
+		var e = assertThrows(BadRequest.class, () -> rest(home, svc).dropRc(body(null, false)));
+		assertFalse(e.getMessage().contains("RCnull"), e.getMessage());
+		verify(svc, never()).dropRc(any(), anyBoolean());
+	}
+
+	@Test
+	void a15_pageRendersThroughRestWithoutTemplateErrors(@TempDir Path home) throws Exception {
+		var svc = mock(ReleaseProcessService.class);
+		when(svc.live()).thenReturn(Optional.empty());
+		try (var client = MockRestClient.builder(rest(home, svc)).overridingBeanStore(new StackOverlay()).build();
+			var resp = client.request("GET", "/").run()) {
+			assertEquals(200, resp.getStatusCode());
+			var body = resp.getBodyAsString();
+			assertTrue(body.contains("<h1>Release</h1>"), body);
+			assertTrue(body.contains("class=\"jc-page-header\""), body);
+			assertTrue(body.contains("id=\"rl-terminal\""), body);
+			assertTrue(body.matches("(?s).*data-start-key=\"[^\"]+\".*"), body);
+			assertTrue(body.matches("(?s).*/js/release\\.js\\?v=[0-9a-f]{8}.*"), body);
+			assertTrue(body.matches("(?s).*/css/release\\.css\\?v=[0-9a-f]{8}.*"), body);
+			assertFalse(body.contains("slds-"), body);
+			assertFalse(body.contains("ssc-"), body);
+			assertFalse(body.contains("FreeMarker template error"), body);
 		}
 	}
 
-	/**
-	 * Applies {@code stepId} with no form input and asserts it succeeded.
-	 */
-	private void applyOk(ReleaseRunRest rest, String version, String stepId) {
-		applyOk(rest, version, stepId, Map.of());
-	}
-
-	/**
-	 * Applies {@code stepId} with {@code form} and asserts it succeeded.
-	 */
-	private void applyOk(ReleaseRunRest rest, String version, String stepId, Map<String, String> form) {
-		var r = rest.apply(version, stepId, form);
-		assertTrue(r.success, stepId + ": " + r.message);
-	}
-
-	/**
-	 * Confirms a review-gate {@code stepId} and asserts the confirm succeeded.
-	 */
-	private void confirmOk(ReleaseRunRest rest, String version, String stepId) {
-		var c = rest.confirmReview(version, stepId);
-		assertTrue(c.success, stepId + " confirm-review: " + c.message);
-	}
-
 	@Test
-	void a01_getStateForNonexistentRunIs404(@TempDir Path dir) {
-		var rest = rest(dir);
-		var ex = assertThrows(NotFound.class, () -> rest.state("9.9.9"));
-		assertEquals(404, ex.getStatusCode());
+	void a16_releasePageAssetsConsumeJuneauWellWithoutPageCanvas() throws Exception {
+		for (var path : java.util.List.of("/templates/release.ftlh", "/static/css/release.css", "/static/js/release.js")) {
+			try (var in = ReleaseRunRestTest.class.getResourceAsStream(path)) {
+				assertNotNull(in, path);
+				var text = new String(IoUtils.readBytes(in), java.nio.charset.StandardCharsets.UTF_8);
+				assertFalse(text.contains("rm-page-canvas"), path);
+				assertFalse(text.contains("slds-"), path);
+				assertFalse(text.contains("ssc-"), path);
+				if (path.endsWith(".ftlh")) {
+					assertTrue(text.contains("class=\"jc-page-header\""), text);
+					assertTrue(text.contains("<h1>Release</h1>"), text);
+					assertTrue(text.contains("jc-page-sub"), text);
+					assertTrue(text.contains("toolkit=\"terminal\""), text);
+				}
+			}
+		}
 	}
 
-	@Test
-	void a03_applyAgainstNonexistentRunIs404(@TempDir Path dir) {
-		var rest = rest(dir);
-		Map<String, String> form = Map.of();
-		var ex = assertThrows(NotFound.class, () -> rest.apply("9.9.9", "preflight", form));
-		assertEquals(404, ex.getStatusCode());
+	static ReleaseRunRest.DropRcRequest body(String confirm, boolean dryRun) {
+		var b = new ReleaseRunRest.DropRcRequest();
+		b.confirm = confirm;
+		b.dryRun = dryRun;
+		return b;
 	}
 
-	@Test
-	void a04_skipAgainstNonexistentRunIs404(@TempDir Path dir) {
-		var rest = rest(dir);
-		var ex = assertThrows(NotFound.class, () -> rest.skip("9.9.9", "preflight"));
-		assertEquals(404, ex.getStatusCode());
-	}
-
-	@Test
-	void a05_dropRcPreviewAgainstNonexistentRunIs404(@TempDir Path dir) {
-		var rest = rest(dir);
-		var ex = assertThrows(NotFound.class, () -> rest.dropRcPreview("9.9.9"));
-		assertEquals(404, ex.getStatusCode());
-	}
-
-	@Test
-	void b02_startPersistsFormSuppliedRc(@TempDir Path dir) {
-		var rest = rest(dir);
-		var body = startRequest("9.2.1");
-		body.rc = 42;
-		var rs = rest.start(body);
-		assertEquals(42, rs.rc);
-	}
-
-	@Test
-	void b03_startPersistsNarrativeFields(@TempDir Path dir) {
-		var rest = rest(dir);
-		var body = startRequest("9.2.1");
-		body.releaseSummary = "Patch release.";
-		body.highlights = "- One\n- Two";
-		body.knownIssues = "- A known thing";
-		body.acknowledgements = "Thanks all.";
-		rest.start(body);
-
-		var rs = rest.state("9.2.1");
-		assertBean(rs, "releaseSummary,highlights,knownIssues,acknowledgements",
-			"Patch release.,- One\n- Two,- A known thing,Thanks all.");
-	}
-
-	@Test
-	void c01_detailsEndpointUpdatesNarrativeFieldsOnActiveRun(@TempDir Path dir) {
-		var rest = rest(dir);
-		rest.start(startRequest("9.2.1"));
-
-		var body = new ReleaseRunRest.DetailsRequest();
-		body.releaseSummary = "Revised summary.";
-		body.highlights = "- Updated highlight";
-		body.knownIssues = "- Updated issue";
-		body.acknowledgements = "Updated thanks.";
-		var updated = rest.details("9.2.1", body);
-
-		assertBean(updated, "releaseSummary,highlights", "Revised summary.,- Updated highlight");
-		// Reload from the store to confirm the update was persisted, not just returned.
-		var reloaded = rest.state("9.2.1");
-		assertBean(reloaded, "knownIssues,acknowledgements", "- Updated issue,Updated thanks.");
-	}
-
-	@Test
-	void c03_detailsEndpointUpdatesIdentityFieldsOnActiveRun(@TempDir Path dir) {
-		var rest = rest(dir);
-		var start = startRequest("9.2.1");
-		start.developmentVersion = "9.2.2-SNAPSHOT";
-		start.rc = 7;
-		rest.start(start);
-
-		var body = new ReleaseRunRest.DetailsRequest();
-		body.version = "9.2.1";
-		body.developmentVersion = "9.2.3-SNAPSHOT";
-		body.rc = 11;
-		body.releaseSummary = "Keep summary.";
-		var updated = rest.details("9.2.1", body);
-
-		assertBean(updated, "version,developmentVersion,rc,releaseSummary", "9.2.1,9.2.3-SNAPSHOT,11,Keep summary.");
-		var reloaded = rest.state("9.2.1");
-		assertBean(reloaded, "developmentVersion,rc", "9.2.3-SNAPSHOT,11");
-	}
-
-	@Test
-	void c04_detailsEndpointRenamesRunWhenVersionChanges(@TempDir Path dir) {
-		var rest = rest(dir);
-		rest.start(startRequest("9.2.1"));
-
-		var body = new ReleaseRunRest.DetailsRequest();
-		body.version = "9.2.2";
-		body.developmentVersion = "9.2.3-SNAPSHOT";
-		var renamed = rest.details("9.2.1", body);
-
-		assertBean(renamed, "version,branch", "9.2.2,juneau-9.2.2-branch");
-		assertThrows(NotFound.class, () -> rest.state("9.2.1"));
-		assertEquals("9.2.3-SNAPSHOT", rest.state("9.2.2").developmentVersion);
-	}
-
-	@Test
-	void a06_detailsAgainstNonexistentRunIs404(@TempDir Path dir) {
-		var rest = rest(dir);
-		var body = new ReleaseRunRest.DetailsRequest();
-		var ex = assertThrows(NotFound.class, () -> rest.details("9.9.9", body));
-		assertEquals(404, ex.getStatusCode());
-	}
-
-	@Test
-	void a07_confirmReviewAgainstNonexistentRunIs404(@TempDir Path dir) {
-		var rest = rest(dir);
-		var ex = assertThrows(NotFound.class, () -> rest.confirmReview("9.9.9", "javadoc-verify"));
-		assertEquals(404, ex.getStatusCode());
-	}
-
-	@Test
-	void c02_confirmReviewAdvancesAReviewGateStepHeldAtAwaitingReview(@TempDir Path dir) {
-		var rest = rest(dir);
-		rest.start(startRequest("9.2.1"));
-		satisfyAllPredecessorsOf(dir, "9.2.1", "javadoc-verify");
-		rest.apply("9.2.1", "javadoc-verify", Map.of());
-		assertEquals(StepStatus.AWAITING_REVIEW, rest.state("9.2.1").step("javadoc-verify").status);
-
-		var res = rest.confirmReview("9.2.1", "javadoc-verify");
-
-		assertTrue(res.success);
-		assertEquals(StepStatus.SUCCEEDED, rest.state("9.2.1").step("javadoc-verify").status);
-	}
-
-	@Test
-	void b07_secondConcurrentStartIs409(@TempDir Path dir) {
-		var rest = rest(dir);
-		rest.start(startRequest("9.2.1"));
-
-		var second = startRequest("9.2.2");
-		var ex = assertThrows(Conflict.class, () -> rest.start(second));
-		assertEquals(409, ex.getStatusCode());
-		assertTrue(ex.getMessage().contains("9.2.1"));
-	}
-
-	@Test
-	void b07a_sameStartKeyTwiceReturnsTheSameRun(@TempDir Path dir) {
-		var rest = rest(dir);
-		var first = startRequest("9.2.1");
-		first.idempotencyKey = "k1";
-		var a = rest.start(first);
-
-		var again = startRequest("9.2.1");
-		again.idempotencyKey = "k1";
-		var b = rest.start(again);
-
-		assertEquals(a.version, b.version);
-		assertEquals(a.createdAt, b.createdAt);
-	}
-
-	@Test
-	void b07b_differentStartKeyWhileARunIsActiveIs409(@TempDir Path dir) {
-		var rest = rest(dir);
-		var first = startRequest("9.2.1");
-		first.idempotencyKey = "k1";
-		rest.start(first);
-
-		var other = startRequest("9.2.2");
-		other.idempotencyKey = "k2";
-		assertEquals(409, assertThrows(Conflict.class, () -> rest.start(other)).getStatusCode());
-	}
-
-	@Test
-	void b07c_aReplayedKeyIsNotCountedAsASecondRunEvenForADifferentBody(@TempDir Path dir) {
-		var rest = rest(dir);
-		var first = startRequest("9.2.1");
-		first.idempotencyKey = "k1";
-		rest.start(first);
-
-		var replay = startRequest("9.9.9");
-		replay.idempotencyKey = "k1";
-		assertEquals("9.2.1", rest.start(replay).version);
-	}
-
-	@Test
-	void b07d_startsWithoutAKeyAreNeverReplays(@TempDir Path dir) {
-		var rest = rest(dir);
-		rest.start(startRequest("9.2.1"));
-		var again = startRequest("9.2.1");
-		assertEquals(409, assertThrows(Conflict.class, () -> rest.start(again)).getStatusCode());
-	}
-
-	@Test
-	void b07e_theFormIsRenderedWithAFreshStartKeyPerPage(@TempDir Path dir) {
-		var rest = rest(dir);
-		var req = mock(HttpServletRequest.class);
-		assertNotEquals(startKeyOf(rest, req), startKeyOf(rest, req));
-	}
-
-	private static Object startKeyOf(ReleaseRunRest rest, HttpServletRequest req) {
-		return ((FreemarkerView)rest.page(req)).getAttributes().get("startKey");
-	}
-
-	/**
-	 * End to end under the strict forward-apply guard: {@code POST /{version}/vote-result} records a passing
-	 * tally (applied as the {@code tally-vote-result} step), and the run then proceeds through every remaining
-	 * required step, in order — including {@code nexus-release}, {@code manual-followup-checklist}, and
-	 * {@code compose-announcement-email} — to {@code finalize-run}, with no operator intervention beyond each
-	 * step's own apply or confirm-review.
-	 */
-	@SuppressWarnings({
-		"java:S5961" // Deliberately one continuous end-to-end run through every required pipeline step, in order, on a single mutable run; splitting into separate @Test methods would re-derive (or fake) the intermediate run state each time and weaken exactly the regression this test exists to catch -- that the SAME run legitimately clears every required step.
-	})
-	@Test
-	void d01_voteResultAdvancesGateAndPipelineReachesFinalize(@TempDir Path dir) throws IOException {
-		var model = new NexusMockModel(NexusStagingClient.JUNEAU_PROFILE_ID);
-		var rest = restWithNexus(dir, model);
-		var start = startRequest("9.2.1");
-		start.rc = 1;
-		rest.start(start);
-
-		for (var stepId : List.of("preflight", "compose-propose-email", "workspace-setup", "build-verify"))
-			applyOk(rest, "9.2.1", stepId);
-		// javadoc-verify: a review-gate step, resolved via confirm-review.
-		applyOk(rest, "9.2.1", "javadoc-verify");
-		confirmOk(rest, "9.2.1", "javadoc-verify");
-		for (var stepId : List.of("deploy-snapshot", "release-prepare"))
-			applyOk(rest, "9.2.1", stepId);
-		// release-diff-review: a required (non-skippable) review-gate step.
-		applyOk(rest, "9.2.1", "release-diff-review");
-		confirmOk(rest, "9.2.1", "release-diff-review");
-
-		applyOk(rest, "9.2.1", "release-perform");
-
-		// Seeds+closes the mock staging repo so nexus-release has a CLOSED repo to promote.
-		applyOk(rest, "9.2.1", "nexus-staging-close");
-		assertEquals("closed", model.currentState());
-
-		applyOk(rest, "9.2.1", "binary-artifacts-stage");
-
-		// Mocked wget/mkdir never materialize dist files; seed the six ASF-convention artifacts
-		// so the live verify step can pass.
-		seedDistDevFiles(dir, "9.2.1", 1);
-
-		// dev-dist-verify: a required (non-skippable) review-gate step.
-		applyOk(rest, "9.2.1", "dev-dist-verify");
-		confirmOk(rest, "9.2.1", "dev-dist-verify");
-
-		applyOk(rest, "9.2.1", "compose-vote-email");
-
-		// Opening the vote only sets AWAITING_VOTE — re-applying vote-gate never advances on its own.
-		rest.apply("9.2.1", "vote-gate", Map.of());
-		rest.apply("9.2.1", "vote-gate", Map.of());
-		assertEquals(StepStatus.AWAITING_VOTE, rest.state("9.2.1").step("vote-gate").status);
-
-		// Records a passing tally via the dedicated vote-result endpoint.
-		var voteBody = new ReleaseRunRest.VoteResultRequest();
-		voteBody.outcome = "passed";
-		voteBody.tally = "Simulated passing vote (no real tally read).";
-		var voted = rest.voteResult("9.2.1", voteBody);
-		assertTrue(voted.success, voted.message);
-		assertEquals(StepStatus.SUCCEEDED, rest.state("9.2.1").step("tally-vote-result").status);
-		assertEquals(StepStatus.SUCCEEDED, rest.state("9.2.1").step("vote-gate").status,
-				"a passing tally must flip vote-gate to a terminal status");
-
-		applyOk(rest, "9.2.1", "compose-result-email");
-
-		applyOk(rest, "9.2.1", "nexus-release", Map.of("confirmVersion", "9.2.1"));
-		assertEquals("released", model.currentState());
-
-		applyOk(rest, "9.2.1", "dist-promote");
-		applyOk(rest, "9.2.1", "github-release-create");
-
-		// manual-followup-checklist: a required (non-skippable) review-gate step — must be confirmed for
-		// finalize-run's strict prerequisite gate to be satisfiable. Its own apply() requires every
-		// checklist item's text present in the "checklist" form input.
-		var checklist = "Update juneau-docs release-notes page + site; Publish aggregate Javadoc; "
-				+ "Update the download page; Edit the Confluence release wiki";
-		applyOk(rest, "9.2.1", "manual-followup-checklist", Map.of("checklist", checklist));
-		confirmOk(rest, "9.2.1", "manual-followup-checklist");
-
-		applyOk(rest, "9.2.1", "compose-announcement-email");
-
-		// finalize-run is reached and completes; the run is RELEASED end to end.
-		applyOk(rest, "9.2.1", "finalize-run");
-		assertEquals(StepStatus.SUCCEEDED, rest.state("9.2.1").step("finalize-run").status);
-		assertEquals(RunStatus.RELEASED, rest.state("9.2.1").status);
-	}
-
-	/**
-	 * finalize-run must refuse — and must NOT set RunStatus to RELEASED — when a required step
-	 * ({@code nexus-release}) was never run and another required step ({@code manual-followup-checklist})
-	 * failed, even though every step before {@code vote-gate} legitimately succeeded.
-	 */
-	@Test
-	void d02_finalizeRunRefusesAndListsOffendingStepsWhenRequiredStepsAreUnresolved(@TempDir Path dir) {
-		var rest = rest(dir);
-		rest.start(startRequest("9.2.1"));
-		satisfyAllPredecessorsOf(dir, "9.2.1", "finalize-run");
-		var store = new RunStateStore(dir);
-		var rs = store.load("9.2.1").orElseThrow();
-		rs.step("nexus-release").status = StepStatus.PENDING;
-		rs.step("manual-followup-checklist").status = StepStatus.FAILED;
-		store.save(rs);
-
-		var res = rest.apply("9.2.1", "finalize-run", Map.of());
-
-		assertFalse(res.success);
-		assertTrue(res.message.contains("nexus-release"), res.message);
-		assertTrue(res.message.contains("manual-followup-checklist"), res.message);
-		assertNotEquals(RunStatus.RELEASED, rest.state("9.2.1").status);
-	}
-
-	@Test
-	void d03_applyUnknownStepReturnsJsonFailRatherThanThrowing(@TempDir Path dir) {
-		var rest = rest(dir);
-		rest.start(startRequest("9.2.1"));
-		var res = assertDoesNotThrow(() -> rest.apply("9.2.1", "nexus-staging-release", Map.of()));
-		assertFalse(res.success);
-		assertTrue(res.message.contains("Unknown step"), res.message);
-	}
-
-	/**
-	 * A rejected vote-result still records the tally and forks away from the linear step list.
-	 */
-	@Test
-	void d04_voteResultWithRejectedOutcomeDoesNotAdvanceButRecordsTheOutcome(@TempDir Path dir) {
-		var rest = rest(dir);
-		rest.start(startRequest("9.2.1"));
-		satisfyAllPredecessorsOf(dir, "9.2.1", "vote-gate");
-		rest.apply("9.2.1", "vote-gate", Map.of());
-
-		var voteBody = new ReleaseRunRest.VoteResultRequest();
-		voteBody.outcome = "rejected";
-		voteBody.tally = "Binding -1: 1 (blocking issue found).";
-		var voted = rest.voteResult("9.2.1", voteBody);
-
-		assertTrue(voted.success, voted.message); // recording the outcome itself always succeeds
-		assertEquals(StepStatus.SUCCEEDED, rest.state("9.2.1").step("tally-vote-result").status);
-		assertEquals(StepStatus.PENDING, rest.state("9.2.1").step("nexus-release").status,
-				"a rejected vote must not advance the linear pipeline");
-	}
-
-	// -----------------------------------------------------------------------------------------------------------
-	// nr-step-meta <script> sidecar: break-out neutralization
-	// -----------------------------------------------------------------------------------------------------------
-
-	/**
-	 * A step title carrying a {@code </script>} break-out must be neutralized by
-	 * {@link ReleaseRunRest#stepMetaJson(Iterable)} (no raw {@code <} survives) yet remain valid,
-	 * round-trippable JSON. Asserts the neutralization, not merely that a benign title round-trips.
-	 */
-	@Test
-	void e01_stepMetaJsonNeutralizesScriptBreakoutInAStepTitle() throws Exception {
-		var evilTitle = "</script><script>alert(1)</script>\u2028x";
-		var step = new org.apache.juneau.releng.engine.ReleaseStep() {
-			@Override public String id() { return "evil"; }
-			@Override public String title() { return evilTitle; }
-			@Override public boolean mutating() { return true; }
-			@Override public org.apache.juneau.releng.engine.Preview preview(org.apache.juneau.releng.engine.StepContext c) { return null; }
-			@Override public org.apache.juneau.releng.engine.StepResult apply(org.apache.juneau.releng.engine.StepContext c) { return null; }
-		};
-
-		var json = ReleaseRunRest.stepMetaJson(List.of(step));
-
-		// Break-out neutralized: no raw '<' or raw U+2028 can survive to close the raw-text <script> element early.
-		assertFalse(json.contains("<"), () -> "raw '<' survived into the <script> sidecar: " + json);
-		assertFalse(json.contains("\u2028"), () -> "raw U+2028 survived into the <script> sidecar: " + json);
-		assertTrue(json.contains("\\u003c"), () -> "expected escaped '<' (\\u003c) in sidecar: " + json);
-
-		// Still valid, round-trippable JSON: a JSON parser decodes \u003c back to the original title verbatim
-		// (this is exactly what FreeMarker's HTML entity-encoding would have corrupted).
-		var parsed = org.apache.juneau.marshall.marshaller.Json.to(json, Map.class);
-		@SuppressWarnings({
-			"unchecked" // Assigning a raw Json.to(..., Map.class) result to its known parameterized shape.
-		})
-		var entry = (Map<String,Object>) parsed.get("evil");
-		assertEquals(evilTitle, entry.get("title"));
-		assertEquals(Boolean.TRUE, entry.get("mutating"));
-	}
-
-	@Test
-	void f01_explicitTabInputSelectsInput() {
-		assertEquals("input", ReleaseRunRest.resolveSubtab("input"));
-		assertEquals("input", ReleaseRunRest.resolveSubtab("INPUT"));
-	}
-
-	@Test
-	void f02_explicitTabExecSelectsExecution() {
-		assertEquals("exec", ReleaseRunRest.resolveSubtab("exec"));
-		assertEquals("exec", ReleaseRunRest.resolveSubtab("execution"));
-	}
-
-	@Test
-	void f03_defaultSubtabIsInputWhenTabIsAbsentOrUnknown() {
-		assertEquals("input", ReleaseRunRest.resolveSubtab(null));
-		assertEquals("input", ReleaseRunRest.resolveSubtab(""));
-		assertEquals("input", ReleaseRunRest.resolveSubtab("nope"));
+	static ReleaseRunRest.StartRequest start(boolean dryRun, String key) {
+		var b = new ReleaseRunRest.StartRequest();
+		b.dryRun = dryRun;
+		b.idempotencyKey = key;
+		return b;
 	}
 }

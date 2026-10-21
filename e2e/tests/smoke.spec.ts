@@ -28,15 +28,13 @@ function collectConsoleErrors(page: Page): string[] {
 }
 
 test.describe('Smoke: primary content renders without console errors', () => {
-  test('New Release page renders its primary content', async ({ page }) => {
+  test('Release page renders its primary content', async ({ page }) => {
     const errors = collectConsoleErrors(page);
     const response = await page.goto('/rest/runs');
     expect(response?.status()).toBe(200);
 
-    // Input/Execution are Page Subtabs under New Release (nested <@node> links).
-    const nav = page.locator('nav.juneau-page-nav');
-    await expect(nav.getByRole('link', { name: 'Input', exact: true })).toBeVisible();
-    await expect(nav.getByRole('link', { name: 'Execution', exact: true })).toBeVisible();
+    await expect(page.getByRole('heading', { name: 'Release', exact: true })).toBeVisible();
+    await expect(page.locator('#rl-history')).toBeVisible();
 
     expect(errors, `console errors on /rest/runs: ${errors.join('; ')}`).toEqual([]);
   });

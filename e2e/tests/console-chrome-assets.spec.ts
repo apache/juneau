@@ -21,7 +21,7 @@ import { test, expect, type Page } from '@playwright/test';
  * Nested-path console chrome CSS. A relative or page-prefixed
  * `juneau-console/chrome.css` href on `/rest/setup` 404s (the browser asks for
  * `/rest/setup/juneau-console/...`) and the page paints as unstyled run-on tabs
- * ("SetupReleasesNew Release"). Root-absolute `/juneau-console/chrome.css` is
+ * ("SetupReleasesRelease"). Root-absolute `/juneau-console/chrome.css` is
  * 200 and the chrome paints. This spec fails if that regression ships again.
  * The same applies to the console shell `/juneau-console/juneau-console.js`, which draws the nav this
  * test paints.
@@ -60,8 +60,11 @@ test.describe('Console chrome assets on a nested page', () => {
     expect(response?.status()).toBe(200);
 
     const chrome = hits.filter((h) => h.pathname.endsWith('/juneau-console/chrome.css'));
-    const theme = hits.filter((h) =>
-      /\/juneau-console\/themes\/juneau-theme-[a-z0-9-]+\.css$/.test(h.pathname),
+    // The shared dark layer (juneau-theme-dark.css) loads next to the one selected theme, so count only the latter.
+    const theme = hits.filter(
+      (h) =>
+        /\/juneau-console\/themes\/juneau-theme-[a-z0-9-]+\.css$/.test(h.pathname) &&
+        !/\/juneau-theme-dark\.css$/.test(h.pathname),
     );
     expect(chrome, `chrome.css requests on /rest/setup: ${JSON.stringify(hits)}`).toHaveLength(1);
     expect(theme, `theme CSS requests on /rest/setup: ${JSON.stringify(hits)}`).toHaveLength(1);
@@ -94,7 +97,7 @@ test.describe('Console chrome assets on a nested page', () => {
     const nav = page.locator('nav.juneau-page-nav').first();
     await expect(nav.getByRole('link', { name: 'Setup', exact: true })).toBeVisible();
     await expect(nav.getByRole('link', { name: 'Releases', exact: true })).toBeVisible();
-    await expect(nav.getByRole('link', { name: 'New Release', exact: true })).toBeVisible();
+    await expect(nav.getByRole('link', { name: 'Release', exact: true })).toBeVisible();
 
     const sections = nav.locator('.juneau-page-nav-sections').first();
     expect(

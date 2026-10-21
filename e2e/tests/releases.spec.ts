@@ -16,6 +16,9 @@
  */
 
 import { test, expect, type Locator, type Page } from '@playwright/test';
+import fs from 'node:fs';
+import path from 'node:path';
+import { RELEASE_HOME } from './release-home';
 
 /**
  * The Releases tab renders a `<@card type="datatables" id="releases">`: `juneau-console.js` mounts a
@@ -287,6 +290,18 @@ test.describe('Releases Copy link', () => {
 });
 
 test.describe('Releases server-side search', () => {
+  // The suite's scratch rm.home has no in-progress release, so seed one (a VOTING row) for the precondition below
+  // and remove it afterwards, so the Release page specs still see an idle app.
+  // Serial: the seeded run is shared state for the tests in this block (and removed in afterAll).
+  test.describe.configure({ mode: 'serial' });
+  const seeded = path.join(RELEASE_HOME, 'runs', '9.9.9');
+  test.beforeAll(() => {
+    fs.mkdirSync(seeded, { recursive: true });
+    fs.writeFileSync(path.join(seeded, 'run.json'),
+      JSON.stringify({ schema: 1, details: { version: '9.9.9', rc: 1 }, phase: 'vote', attempts: [] }));
+  });
+  test.afterAll(() => fs.rmSync(seeded, { recursive: true, force: true }));
+
   test('column header search on Status issues a POST to /rest/releases/data and only RELEASED rows remain', async ({ page }) => {
     await page.goto('/rest/releases');
     await expect(releasesTable(page).getByText('9.2.0', { exact: true }).first()).toBeVisible();

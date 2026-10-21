@@ -19,70 +19,45 @@ package org.apache.juneau.releng.release;
 
 import static org.apache.juneau.test.bct.BctAssertions.*;
 import static org.junit.jupiter.api.Assertions.*;
+import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.List;
-import org.apache.juneau.releng.engine.RunState;
-import org.apache.juneau.releng.engine.RunStateStore;
-import org.apache.juneau.releng.engine.RunStatus;
+import java.util.Map;
+import org.apache.juneau.releng.run.RunFiles;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
 /**
- * Reproduces the "Unknown property 'branch'" parse failure: a persisted {@link RunState} file (which has
- * {@code branch}, {@code steps}, etc.) must not be re-parsed directly as a {@link Release} bean.
+ * Releases-tab rows built from {@code release.py}'s run files.
  */
 class LocalStateReleaseSourceTest {
 
-	@Test
-	void a01_mapsRunningRunStateToAnInProgressReleaseRowWithoutParseError(@TempDir Path dir) {
-		var store = new RunStateStore(dir);
-		var rs = RunState.create("9.2.1", "juneau-9.2.1-branch", List.of("preflight", "javadoc-verify"));
-		store.save(rs);
-
-		var rows = assertDoesNotThrow(() -> new LocalStateReleaseSource(store).list());
-
-		assertSize(1, rows);
-		var row = rows.get(0);
-		assertBean(row, "version,rc,status,stage,source", "9.2.1,RC1,DRAFT,Building,state");
+	private static void run(Path home, String version, String phase, String deadline) throws Exception {
+		var d = Files.createDirectories(home.resolve("runs").resolve(version));
+		Files.writeString(d.resolve("run.json"), "{\"schema\":1,\"details\":{\"version\":\"" + version
+			+ "\",\"rc\":2},\"phase\":\"" + phase + "\"" + (deadline == null ? "" : ",\"voteDeadline\":\"" + deadline + "\"") + "}");
 	}
 
 	@Test
-	void a02_mapsAwaitingVoteRunStateToAVotingRow(@TempDir Path dir) {
-		var store = new RunStateStore(dir);
-		var rs = RunState.create("9.2.1", "juneau-9.2.1-branch", List.of("preflight"));
-		rs.status = RunStatus.AWAITING_VOTE;
-		rs.voteDeadline = "2026-08-20T00:00:00Z";
-		store.save(rs);
-
-		var rows = new LocalStateReleaseSource(store).list();
-
-		assertSize(1, rows);
-		assertBean(rows.get(0), "status,stage,voteCloses", "VOTING,Awaiting vote,2026-08-20T00:00:00Z");
-	}
-
-	@Test
-	void a03_emptyStateDirYieldsNoRows(@TempDir Path dir) {
-		var rows = new LocalStateReleaseSource(new RunStateStore(dir)).list();
-		assertTrue(rows.isEmpty());
-	}
-
-	@Test
-	void a04_mapsEveryStatusToItsRowStatusAndStage(@TempDir Path dir) {
-		var expected = java.util.Map.of(
-			RunStatus.RUNNING, "DRAFT,Building",
-			RunStatus.FAILED, "DRAFT,Failed",
-			RunStatus.RELEASED, "RELEASED,Distributed",
-			RunStatus.DROPPED, "DROPPED,Cancelled");
+	void a01_phaseToStage(@TempDir Path dir) throws Exception {
+		var expected = Map.of(
+			"rc", "DRAFT,Building RC2,—",
+			"vote", "VOTING,Voting (closes 2026-10-23T12:00:00-04:00),2026-10-23T12:00:00-04:00",
+			"vote-failed", "DRAFT,Vote failed,—",
+			"promote", "DRAFT,Promoting,—",
+			"released", "RELEASED,Released,—");
 		var n = 0;
 		for (var e : expected.entrySet()) {
-			var sub = dir.resolve("s" + n++);
-			var store = new RunStateStore(sub);
-			var rs = RunState.create("9.2." + n, "b", List.of("preflight"));
-			rs.status = e.getKey();
-			store.save(rs);
-			var rows = new LocalStateReleaseSource(store).list();
+			var home = dir.resolve("h" + n++);
+			run(home, "9.2.1", e.getKey(), "vote".equals(e.getKey()) ? "2026-10-23T12:00:00-04:00" : null);
+			var rows = new LocalStateReleaseSource(new RunFiles(home, p -> false)).list();
 			assertSize(1, rows);
-			assertBean(rows.get(0), "status,stage,voteCloses", e.getValue() + ",—");
+			assertBean(rows.get(0), "version,rc,source", "9.2.1,RC2,state");
+			assertBean(rows.get(0), "status,stage,voteCloses", e.getValue());
 		}
+	}
+
+	@Test
+	void a02_noRunsYieldsNoRows(@TempDir Path home) {
+		assertTrue(new LocalStateReleaseSource(new RunFiles(home, p -> false)).list().isEmpty());
 	}
 }

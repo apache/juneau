@@ -1,3 +1,15 @@
+# ***************************************************************************************************************************
+# * Licensed to the Apache Software Foundation (ASF) under one or more contributor license agreements.  See the NOTICE file
+# * distributed with this work for additional information regarding copyright ownership.  The ASF licenses this file
+# * to you under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance
+# * with the License.  You may obtain a copy of the License at
+# *
+# *  http://www.apache.org/licenses/LICENSE-2.0
+# *
+# * Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an
+# * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.  See the License for the
+# * specific language governing permissions and limitations under the License.
+# ***************************************************************************************************************************
 """<home>/runs/<version>/run.json (schema 1) and the per-attempt log directories."""
 import copy
 import json
@@ -92,13 +104,19 @@ class RunFile:
         """Start the file over (in memory only; the next update saves it)."""
         self.data = {"schema": SCHEMA}
 
-    def attempt_start(self, d, command=None):
+    def attempt_start(self, d, command=None, origin="cli", pid=None):
         a = list(self.data.get("attempts", []))
-        a.append({"n": len(a) + 1, "dir": str(d), "command": command, "status": "running", "started": stamp()})
+        a.append({"n": len(a) + 1, "dir": str(d), "command": command, "origin": origin,
+                  "pid": os.getpid() if pid is None else pid, "status": "running", "started": stamp()})
         self.update({"attempts": a})
 
-    def attempt_end(self, status):
+    def attempt_end(self, status, step=None, exit=None):  # NOSONAR python:S5806 - "exit" mirrors the record field
         a = list(self.data.get("attempts", []))
         if a:
-            a[-1] = {**a[-1], "status": status, "ended": stamp()}
+            rec = {**a[-1], "status": status, "ended": stamp()}
+            if step is not None:
+                rec["step"] = step
+            if exit is not None:
+                rec["exit"] = exit
+            a[-1] = rec
             self.update({"attempts": a})

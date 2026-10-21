@@ -74,6 +74,20 @@ JUNEAU_RUN_PY=~/git/apache/juneau/juneau-run/src/main/python/juneau_run.py \
   summary and no prompt. Anything else prints just the offending hunks and asks the usual question (`no` fails).
 - A dry run logs to `~/.juneau-release-manager/attempts/dry-run/full.log` (the banner's `tail -f` target).
 
+## Release page
+
+The **Release** page (`/rest/runs`) runs `scripts/release.py` for you and streams its terminal. It starts
+`python3 scripts/release.py --console condensed --home <rm.home> --attempt-dir ...`, answers the script's prompts
+through dialogs, and lists past attempts (real runs and dry runs) under **History**, where each can be replayed.
+
+- **Properties.** `rm.home` (default `~/.juneau-release-manager`) is where `runs/` and attempt directories live.
+  `rm.scripts.dir` (default `<working dir>/scripts`) holds `release.py`. `rm.juneau.run.script` is the
+  `juneau_run.py` the script runs under; it defaults to the `juneau-run` script in `~/.m2`, and the `JUNEAU_RUN_PY`
+  environment variable overrides it.
+- **Credentials.** Stored credentials answer the script's `credential.*` prompts automatically; anything not stored is
+  asked in a dialog.
+- **Stopping JRM.** Stopping JRM stops a live run. It then shows as "interrupted (JRM stopped)" and can be resumed.
+
 ## License
 
 Apache License 2.0. See `LICENSE`.

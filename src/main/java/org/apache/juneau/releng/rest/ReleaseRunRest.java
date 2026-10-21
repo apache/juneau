@@ -14,21 +14,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package org.apache.juneau.releng.rest;
 
 import static org.apache.juneau.commons.utils.Shorts.*;
-import static org.apache.juneau.commons.utils.StringUtils.escapeForScript;
 
+import java.nio.file.Files;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Optional;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import java.util.regex.Pattern;
 import org.apache.juneau.commons.inject.Bean;
-import org.apache.juneau.marshall.marshaller.Json;
 import org.apache.juneau.http.Content;
 import org.apache.juneau.http.Path;
+import org.apache.juneau.http.response.BadRequest;
 import org.apache.juneau.http.response.Conflict;
-import org.apache.juneau.http.response.NotFound;
+import org.apache.juneau.http.response.InternalServerError;
+import org.apache.juneau.marshall.collections.JsonMap;
 import org.apache.juneau.rest.server.Mutating;
 import org.apache.juneau.rest.server.Rest;
 import org.apache.juneau.rest.server.RestGet;
@@ -36,37 +39,33 @@ import org.apache.juneau.rest.server.RestPost;
 import org.apache.juneau.rest.server.RestRequest;
 import org.apache.juneau.rest.server.servlet.BasicRestResource;
 import org.apache.juneau.rest.server.staticfile.WebJarsMixin;
+import org.apache.juneau.rest.server.terminal.FileTerminalSource;
 import org.apache.juneau.rest.server.terminal.TerminalMixin;
 import org.apache.juneau.rest.server.terminal.TerminalSource;
-import org.apache.juneau.rest.server.views.RunViewMixin;
-import org.apache.juneau.rest.server.views.RunViewSource;
 import org.apache.juneau.rest.server.views.IdempotencyKey;
 import org.apache.juneau.rest.server.views.ViewsMixin;
 import org.apache.juneau.rest.server.view.View;
 import org.apache.juneau.rest.server.view.freemarker.FreemarkerMixin;
 import org.apache.juneau.rest.server.view.freemarker.FreemarkerViewRenderer;
 import org.apache.juneau.rest.server.view.freemarker.console.ConsoleFreemarkerMixin;
-import org.apache.juneau.releng.engine.DropRcService;
-import org.apache.juneau.releng.engine.Preview;
-import org.apache.juneau.releng.engine.ReleaseEngine;
-import org.apache.juneau.releng.engine.RunState;
-import org.apache.juneau.releng.engine.StepResult;
+import org.apache.juneau.releng.run.ReleaseProcessService;
+import org.apache.juneau.releng.run.RunFiles;
 
 import jakarta.servlet.http.HttpServletRequest;
 
 /**
- * New Release tab: pipeline control panel (View) plus JSON run/step/vote/drop-RC actions.
+ * Release tab: runs {@code scripts/release.py} under a terminal, brokers its prompts, and replays past attempts.
  *
  * <p>{@code disableContentParam} is set for the reason given on {@code CredentialRest}: Juneau's default lets a
  * {@code POST} body arrive in a {@code &content=} query parameter, which puts every action payload into browser
- * history and access logs. The boundary refuses that shape from a hostile page; this closes the accidental use of it.
+ * history and access logs. That matters most here, where a prompt answer can be a secret.
  */
-@Rest(path = "/runs", title = "New Release", responseProcessors = FreemarkerViewRenderer.class,
+@Rest(path = "/runs", title = "Release", responseProcessors = FreemarkerViewRenderer.class,
 	disableContentParam = "true", mixins = { ViewsMixin.class, WebJarsMixin.class })
-public class ReleaseRunRest extends BasicRestResource implements RunViewMixin, TerminalMixin {
+public class ReleaseRunRest extends BasicRestResource implements TerminalMixin {
 
 	/**
-	 * The action id every start-run key is minted for.
+	 * The action id every start key is minted for.
 	 */
 	static final String START_ACTION = "start-run";
 
@@ -75,12 +74,24 @@ public class ReleaseRunRest extends BasicRestResource implements RunViewMixin, T
 	 */
 	private static final int MAX_START_KEYS = 100;
 
-	private final ReleaseEngine engine;
-	private final DropRcService dropRc;
+	private static final Pattern ATTEMPT_ID = Pattern.compile("attempt-([0-9]{8}-[0-9]{6}-[0-9]{3})");
 
 	/**
-	 * Start key to the version of the run it started, in submission order. Kept in memory only: it exists to collapse a
-	 * double-submit of one form, not to survive a restart, so the persisted run format is unchanged.
+	 * The per-call logger of {@link #answer}, held so its level stays pinned: a prompt answer can be a secret, and
+	 * Juneau logs a call's body on {@code <resource logger>.<java method>} at {@code FINEST}.
+	 */
+	private static final Logger ANSWER_CALL_LOG = Logger.getLogger(ReleaseRunRest.class.getName() + ".answer");
+
+	static {
+		ANSWER_CALL_LOG.setLevel(Level.OFF);
+	}
+
+	private final RunFiles runFiles;
+	private final ReleaseProcessService processes;
+
+	/**
+	 * Start key to the attempt it started, in submission order. Kept in memory only: it collapses a double-submitted
+	 * Start, and nothing more.
 	 */
 	private final Map<String, String> startedByKey = new LinkedHashMap<>() {
 		@Override
@@ -90,11 +101,11 @@ public class ReleaseRunRest extends BasicRestResource implements RunViewMixin, T
 	};
 
 	/**
-	 * Wires the release engine and Drop-RC service this resource's endpoints delegate to.
+	 * Wires the run-file reader and the process service this resource's endpoints delegate to.
 	 */
-	public ReleaseRunRest(ReleaseEngine engine, DropRcService dropRc) {
-		this.engine = engine;
-		this.dropRc = dropRc;
+	public ReleaseRunRest(RunFiles runFiles, ReleaseProcessService processes) {
+		this.runFiles = runFiles;
+		this.processes = processes;
 	}
 
 	/**
@@ -111,232 +122,144 @@ public class ReleaseRunRest extends BasicRestResource implements RunViewMixin, T
 	}
 
 	/**
-	 * Human page — the pipeline control panel for the active run (or an empty start form).
+	 * Human page. Everything on it is loaded from {@link #current()} and kept fresh from {@code /events/runs}.
 	 */
 	@RestGet("/")
 	public View page(HttpServletRequest req) {
-		var active = engine.displayRun().orElse(null);
-		var subtab = resolveSubtab(req.getParameter("tab"));
-		var view = ConsolePage.of("new-release", req).attr("stepMeta", stepMetaJson(engine.registry().steps()))
-				.attr("startKey", IdempotencyKey.mintSelfTargeted(START_ACTION).value()).attr("subtab", subtab).attr("navTab", "new/" + subtab);
-		// FreemarkerView.attr() rejects null values by design; the template only checks run??
-		// (attribute presence), so omit the attribute entirely when there's no displayable run.
-		return active == null ? view : view.attr("run", active);
+		return ConsolePage.of("release", req).attr("navTab", "release")
+			.attr("startKey", IdempotencyKey.mintSelfTargeted(START_ACTION).value());
 	}
 
 	/**
-	 * Resolves the New Release Page Subtab. An explicit {@code ?tab=exec} selects Execution;
-	 * {@code ?tab=input}, a missing {@code tab} query, and any unrecognized value select Input.
+	 * The page's state: the active run, the live process, the pending prompt, and the attempt history.
 	 */
-	static String resolveSubtab(String requested) {
-		if (requested != null) {
-			var t = requested.strip().toLowerCase();
-			if ("exec".equals(t) || "execution".equals(t))
-				return "exec";
-		}
-		return "input";
+	@RestGet("/current")
+	public Map<String, Object> current() {
+		Map<String, Object> m = new LinkedHashMap<>();
+		runFiles.active().ifPresent(r -> m.put("active", r));
+		processes.live().ifPresent(l -> {
+			m.put("live", m("attemptId", l.attemptId(), "command", l.command(), "dryRun", l.dryRun(), "pid", l.broker().pid()));
+			l.broker().pending().ifPresent(p -> m.put("pending", p));
+		});
+		m.put("history", runFiles.history());
+		return m;
 	}
 
 	/**
-	 * Serializes the step registry's {@code {id: {title, mutating}}} map for the {@code nr-step-meta} sidecar.
-	 *
-	 * <p>Built and escaped Java-side rather than interpolated in the {@code .ftlh}: the block is the raw-text content
-	 * of a {@code <script type="application/json">} element, for which FreeMarker's HTML auto-escaping is the wrong
-	 * escaper (it entity-encodes {@code &}/{@code <}/{@code "} into forms {@code JSON.parse} reads verbatim) and its
-	 * incidental {@code </script>} break-out protection depends only on the file extension. This serializes with the
-	 * repo's JSON marshaller and hands the result to {@link org.apache.juneau.commons.utils.StringUtils#escapeForScript(String)}
-	 * &mdash; the same shared, hardened escaper the framework's {@code ViewTable}/{@code PageTable} sidecars use
-	 * &mdash; so a step title containing {@code </script>} cannot terminate the element early.
-	 *
-	 * @param steps The registry's steps.
-	 * @return The break-out-safe, {@code JSON.parse}-able sidecar payload.
+	 * Starts a new run. A repeat of the key that started the live attempt returns that attempt, so a double-submit is
+	 * a replay.
 	 */
-	static String stepMetaJson(Iterable<? extends org.apache.juneau.releng.engine.ReleaseStep> steps) {
-		Map<String, Object> meta = m();
-		for (var step : steps)
-			meta.put(step.id(), m("title", step.title(), "mutating", Boolean.valueOf(step.mutating())));
-		return escapeForScript(Json.of(meta));
-	}
-
-	/**
-	 * The run-view events of a run, served by {@link RunViewMixin}. The run id is the version with its dots written as
-	 * underscores, since a run id has no dots.
-	 */
-	@Override /* RunViewMixin */
-	public Optional<RunViewSource> runViewSource(String runId, RestRequest req) {
-		return engine.runViewSource(runId);
-	}
-
-	/**
-	 * A step's terminal output. The terminal id is the run id and the step id joined by {@code --}, for example
-	 * {@code 9_2_1--preflight}, and the step's own log file is the source, so the terminal reads the same bytes after a
-	 * restart as during the run.
-	 */
-	@Override /* TerminalMixin */
-	public Optional<TerminalSource> terminalSource(String id, RestRequest req) {
-		var i = id.indexOf("--");
-		if (i < 0)
-			return Optional.empty();
-		return engine.stepOutput(id.substring(0, i), id.substring(i + 2));
-	}
-
-	/**
-	 * JSON RunState for polling / initial page data.
-	 */
-	@RestGet("/{version}")
-	public RunState state(@Path("version") String version) {
-		return requireRun(version);
-	}
-
-	/**
-	 * Start a new run. Body: {version, developmentVersion?, rc?, idempotencyKey?}. {@code rc} is the release-candidate
-	 * integer from the Input form (tags {@code juneau-{version}-RC{rc}}); omitted or non-positive leaves
-	 * the default {@code 1}. Rejects a second concurrent run with 409.
-	 *
-	 * <p>The {@code idempotencyKey} is the self-targeted key the New Release form was rendered with. A repeat of a key
-	 * that already started a run returns that run instead of the 409 a second start would get, so a double-submitted
-	 * form is a replay. A different key while a run is active is still a 409. A call with no key is never a replay.
-	 */
-	@Mutating("creates a run and writes its state to disk")
-	@RestPost("/")
-	public RunState start(@Content StartRequest body) {
+	@Mutating("spawns scripts/release.py, which builds and stages a release candidate")
+	@RestPost("/start")
+	public Map<String, Object> start(@Content StartRequest body) {
+		if (body == null)
+			throw new BadRequest("A request body is required");
 		var key = ine(body.idempotencyKey) ? IdempotencyKey.of(body.idempotencyKey, START_ACTION, body.idempotencyKey).value() : null;
 		synchronized (startedByKey) {
 			if (key != null) {
 				var prior = startedByKey.get(key);
-				var replay = prior == null ? null : engine.state(prior);
-				if (replay != null)
-					return replay;
-				// No such run any more (dropped, or its version was edited): the key starts a fresh run.
+				var live = processes.live();
+				if (prior != null && live.isPresent() && live.get().attemptId().equals(prior))
+					return m("attemptId", prior);
 				startedByKey.remove(key);
 			}
-			try {
-				var rs = engine.start(body.version, body.developmentVersion, body.rc);
-				var started = engine.updateDetails(rs.version, body.releaseSummary, body.highlights, body.knownIssues,
-						body.acknowledgements);
-				if (key != null)
-					startedByKey.put(key, started.version);
-				return started;
-			} catch (IllegalStateException e) {
-				throw new Conflict(e.getMessage());
-			}
+			if (runFiles.active().isPresent())
+				throw new Conflict("A release is in progress: resume it or drop its RC");
+			var id = launch(() -> processes.start(body.dryRun));
+			if (key != null)
+				startedByKey.put(key, id);
+			return m("attemptId", id);
 		}
 	}
 
 	/**
-	 * Update the active run's Input-form fields (version, development version, release candidate, and the four
-	 * narrative fields) so they can be edited after start. Returns the updated run. A version change
-	 * renames the persisted run file; a colliding version is a 409. A missing or non-positive {@code rc}
-	 * leaves the stored candidate number unchanged.
+	 * Resumes the active run.
 	 */
-	@Mutating("updates the run's persisted identity and narrative fields")
-	@RestPost("/{version}/details")
-	public RunState details(@Path("version") String version, @Content DetailsRequest body) {
-		requireRun(version);
-		var b = body == null ? new DetailsRequest() : body;
+	@Mutating("spawns scripts/release.py --resume")
+	@RestPost("/resume")
+	public Map<String, Object> resume(@Content DryRunRequest body) {
+		if (runFiles.active().isEmpty())
+			throw new Conflict("No active release to resume");
+		return m("attemptId", launch(() -> processes.resume(body != null && body.dryRun)));
+	}
+
+	/**
+	 * Drops the active run's RC. The typed {@code RC<n>} is checked here and is the answer to the script's own
+	 * confirm.
+	 */
+	@Mutating("spawns scripts/release.py --revert, which drops the RC from Nexus and dist SVN")
+	@RestPost("/drop-rc")
+	public Map<String, Object> dropRc(@Content DropRcRequest body) {
+		if (body == null)
+			throw new BadRequest("A request body is required");
+		var active = runFiles.active().orElseThrow(() -> new Conflict("No active release"));
+		if ("promote".equals(active.phase) || "released".equals(active.phase))
+			throw new Conflict("The release is past the vote; its RC cannot be dropped");
+		if (active.rc <= 0)
+			throw new BadRequest("The active run records no RC number, so there is nothing to confirm against");
+		if (neq(body.confirm, "RC" + active.rc))
+			throw new BadRequest("Type RC%s to confirm", active.rc);
+		return m("attemptId", launch(() -> processes.dropRc(body.confirm, body.dryRun)));
+	}
+
+	/**
+	 * Cancels the live process. release.py records the attempt {@code cancelled}.
+	 */
+	@Mutating("stops the running scripts/release.py")
+	@RestPost("/cancel")
+	public Map<String, Object> cancel() {
+		processes.cancel();
+		return m();
+	}
+
+	/**
+	 * Answers the pending prompt. The body is never logged (see {@link #ANSWER_CALL_LOG}).
+	 */
+	@Mutating("answers a release.py prompt")
+	@RestPost("/prompts/{id}")
+	public Map<String, Object> answer(@Path("id") String id, @Content JsonMap body) {
+		var live = processes.live().orElseThrow(() -> new Conflict("No release process is running"));
 		try {
-			return engine.updateDetails(version, b.releaseSummary, b.highlights, b.knownIssues, b.acknowledgements,
-					b.version, b.developmentVersion, b.rc);
+			live.broker().answer(id, body == null ? new JsonMap() : body);
 		} catch (IllegalStateException e) {
 			throw new Conflict(e.getMessage());
+		} catch (IllegalArgumentException e) {
+			throw new BadRequest(e.getMessage());
 		}
+		return m();
 	}
 
 	/**
-	 * Executes one release step, applying its {@code form} data; the irreversible {@code nexus-release} step requires typing the version to confirm.
+	 * An attempt's terminal. The id is {@code attempt-<attempt dir name>}: the live process's own source while it
+	 * runs, then the dir's {@code terminal.log}, then (for a CLI attempt run without one) its {@code full.log}.
 	 */
-	@Mutating("executes a release step; this mutates git, SVN, Nexus, GitHub or mailing lists")
-	@RestPost("/{version}/steps/{stepId}/apply")
-	public StepResult apply(@Path("version") String version, @Path("stepId") String stepId,
-			@Content Map<String, String> form) {
-		requireRun(version);
-		// Extra friction for the irreversible nexus-release.
-		if (stepId.equals("nexus-release")) {
-			var confirm = form == null ? null : form.get("confirmVersion");
-			if (neq(confirm, version))
-				return StepResult.fail("Type the version string to confirm this irreversible release.");
+	@Override /* TerminalMixin */
+	public Optional<TerminalSource> terminalSource(String id, RestRequest req) {
+		var live = processes.live();
+		if (live.isPresent() && live.get().attemptId().equals(id))
+			return Optional.of(live.get().process().terminal());
+		var mt = ATTEMPT_ID.matcher(id);
+		if (! mt.matches())
+			return Optional.empty();
+		var dir = runFiles.home().resolve("attempts").resolve(mt.group(1));
+		for (var name : new String[] { "terminal.log", "full.log" }) {
+			var f = dir.resolve(name);
+			if (Files.isRegularFile(f))
+				return Optional.of(FileTerminalSource.create(f).terminal(() -> true).build());
 		}
-		return engine.apply(version, stepId, form == null ? Map.of() : form);
+		return Optional.empty();
 	}
 
-	/**
-	 * Resume (a failed step) or Re-run (an already-succeeded/skipped step) — both are the same call:
-	 * re-invoke that step's apply() from scratch, overwriting status and log in place with no separate
-	 * history. The UI picks the button label from the step's current status; the engine doesn't care which
-	 * label was clicked.
-	 */
-	@Mutating("re-executes a release step, overwriting its status and log in place")
-	@RestPost("/{version}/steps/{stepId}/resume")
-	public StepResult resume(@Path("version") String version, @Path("stepId") String stepId,
-			@Content Map<String, String> form) {
-		requireRun(version);
-		return engine.apply(version, stepId, form == null ? Map.of() : form);
-	}
-
-	/**
-	 * Marks a step skipped without executing it.
-	 */
-	@Mutating("marks a step skipped in the persisted run state")
-	@RestPost("/{version}/steps/{stepId}/skip")
-	public StepResult skip(@Path("version") String version, @Path("stepId") String stepId) {
-		requireRun(version);
-		return engine.skip(version, stepId);
-	}
-
-	/**
-	 * Advance a review-gate step held in {@code AWAITING_REVIEW} once the human has confirmed the read-only work.
-	 */
-	@Mutating("advances a held review-gate step")
-	@RestPost("/{version}/steps/{stepId}/confirm-review")
-	public StepResult confirmReview(@Path("version") String version, @Path("stepId") String stepId) {
-		requireRun(version);
-		return engine.confirmReview(version, stepId);
-	}
-
-	/**
-	 * Record the vote outcome; 'rejected' triggers Drop-RC.
-	 */
-	@Mutating("records the vote outcome and runs the tally step")
-	@RestPost("/{version}/vote-result")
-	public StepResult voteResult(@Path("version") String version, @Content VoteResultRequest body) {
-		requireRun(version);
-		return engine.apply(version, "tally-vote-result",
-				Map.of("voteOutcome", body.outcome, "tally", body.tally == null ? "" : body.tally));
-		// UI reads outcome; if 'rejected', UI then calls drop-rc/preview + apply.
-	}
-
-	/**
-	 * Previews what a Drop-RC would remove, without changing anything.
-	 */
-	@RestPost("/{version}/drop-rc/preview")
-	public Preview dropRcPreview(@Path("version") String version) {
-		requireRun(version);
-		return dropRc.preview(version);
-	}
-
-	/**
-	 * Drops the current release candidate; requires typing the RC identifier (e.g. {@code RC1}) to confirm.
-	 */
-	@Mutating("drops the release candidate from Nexus and dist SVN, and bumps the RC number")
-	@RestPost("/{version}/drop-rc/apply")
-	public StepResult dropRcApply(@Path("version") String version, @Content DropRcRequest body) {
-		var rs = requireRun(version);
-		if (neq(body.confirmRc, "RC" + rs.rc))
-			return StepResult.fail("Type the RC identifier (e.g. RC1) to confirm this destructive action.");
-		var secrets = engine.secrets();
-		dropRc.apply(version, body.reason, secrets::availid, secrets::ldapPassword);
-		return StepResult.ok("RC dropped; bumped to the next RC.");
-	}
-
-	/**
-	 * All run-scoped endpoints 404 (rather than the engine's raw {@code IllegalStateException} propagating
-	 * as a 500) when there's no persisted run for {@code version}.
-	 */
-	private RunState requireRun(String version) {
-		var rs = engine.state(version);
-		if (rs == null)
-			throw new NotFound("No run for %s", version);
-		return rs;
+	private static String launch(java.util.function.Supplier<ReleaseProcessService.Live> spawn) {
+		try {
+			return spawn.get().attemptId();
+		} catch (ReleaseProcessService.BusyException e) {
+			throw new Conflict(e.getMessage());
+		} catch (IllegalStateException e) {
+			// Not the single-process conflict: the runner script is missing or the attempt dir already holds a run.
+			// Other runtime failures propagate and Juneau answers 500 for them too.
+			throw new InternalServerError(e, "Could not launch the release process: %s", e.getMessage());
+		}
 	}
 
 	/**
@@ -344,41 +267,21 @@ public class ReleaseRunRest extends BasicRestResource implements RunViewMixin, T
 	 */
 	public static class StartRequest {
 		public String idempotencyKey;
-		public String version;
-		public String developmentVersion;
-		public Integer rc;
-		public String releaseSummary;
-		public String highlights;
-		public String knownIssues;
-		public String acknowledgements;
+		public boolean dryRun;
 	}
 
 	/**
-	 * Body for {@link #details(String, DetailsRequest)}.
+	 * Body for {@link #resume(DryRunRequest)}.
 	 */
-	public static class DetailsRequest {
-		public String version;
-		public String developmentVersion;
-		public Integer rc;
-		public String releaseSummary;
-		public String highlights;
-		public String knownIssues;
-		public String acknowledgements;
+	public static class DryRunRequest {
+		public boolean dryRun;
 	}
 
 	/**
-	 * Body for {@link #voteResult(String, VoteResultRequest)}.
-	 */
-	public static class VoteResultRequest {
-		public String outcome;
-		public String tally;
-	}
-
-	/**
-	 * Body for {@link #dropRcApply(String, DropRcRequest)}.
+	 * Body for {@link #dropRc(DropRcRequest)}.
 	 */
 	public static class DropRcRequest {
-		public String reason;
-		public String confirmRc;
+		public String confirm;
+		public boolean dryRun;
 	}
 }

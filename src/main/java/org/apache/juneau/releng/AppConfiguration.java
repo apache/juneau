@@ -20,9 +20,6 @@ package org.apache.juneau.releng;
 import java.nio.file.Path;
 import java.util.EnumMap;
 import java.util.Map;
-import java.util.Optional;
-import java.util.function.Function;
-import java.util.function.Supplier;
 import org.apache.juneau.commons.secret.SecretStore;
 import org.apache.juneau.releng.credential.AccountStore;
 import org.apache.juneau.releng.credential.ApacheLdapValidator;
@@ -31,19 +28,11 @@ import org.apache.juneau.releng.credential.CredentialSpec;
 import org.apache.juneau.releng.credential.GithubTokenValidator;
 import org.apache.juneau.releng.credential.GpgValidator;
 import org.apache.juneau.releng.credential.Validator;
-import org.apache.juneau.releng.email.EmailService;
 import org.apache.juneau.releng.config.TargetProfile;
-import org.apache.juneau.releng.engine.BranchResolver;
-import org.apache.juneau.releng.engine.AuditService;
-import org.apache.juneau.releng.engine.DropRcService;
-import org.apache.juneau.releng.engine.ReleaseEngine;
-import org.apache.juneau.releng.engine.RunStateStore;
-import org.apache.juneau.releng.engine.StepRegistry;
-import org.apache.juneau.releng.log.RunStateBroadcaster;
-import org.apache.juneau.releng.log.RunStateSseServlet;
+import org.apache.juneau.releng.log.EventBroadcaster;
+import org.apache.juneau.releng.log.RunEventsSseServlet;
 import org.apache.juneau.releng.milestone.GithubPrSource;
 import org.apache.juneau.releng.milestone.MilestoneService;
-import org.apache.juneau.releng.nexus.NexusStagingClient;
 import org.apache.juneau.releng.release.GitTagReleaseSource;
 import org.apache.juneau.releng.release.GithubReleaseSource;
 import org.apache.juneau.releng.release.LocalStateReleaseSource;
@@ -51,17 +40,22 @@ import org.apache.juneau.releng.release.ReleaseListService;
 import org.apache.juneau.releng.rest.CredentialRest;
 import org.apache.juneau.releng.rest.HomeRest;
 import org.apache.juneau.releng.rest.MilestoneRest;
-import org.apache.juneau.releng.rest.AuditRest;
 import org.apache.juneau.releng.rest.SetupRest;
 import org.apache.juneau.releng.setup.SetupProbeService;
 import org.apache.juneau.releng.rest.ReleaseRest;
 import org.apache.juneau.releng.rest.ReleaseRunRest;
+import org.apache.juneau.releng.run.CredentialAnswers;
+import org.apache.juneau.releng.run.ReleaseProcessService;
+import org.apache.juneau.releng.run.RunFileWatcher;
+import org.apache.juneau.releng.run.RunFiles;
 import org.apache.juneau.releng.util.DefaultProcessRunner;
 import org.apache.juneau.releng.util.ProcessRunner;
 import org.apache.juneau.rest.server.filter.LoopbackBoundary;
 import org.apache.juneau.rest.server.filter.LoopbackBoundaryFilter;
 import org.apache.juneau.rest.server.filter.SynchronizerToken;
+import org.apache.juneau.rest.server.terminal.TerminalProcess;
 import org.apache.juneau.secret.macos.keychain.KeychainSecretStore;
+import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.boot.web.servlet.ServletRegistrationBean;
@@ -136,11 +130,23 @@ public class AppConfiguration {
 	 */
 	@Bean
 	public ReleaseListService releaseListService(ProcessRunner runner, @Value("${rm.repo.dir}") String repoDir,
-			@Value("${rm.repo.slug}") String repoSlug, RunStateStore runStateStore) {
+			@Value("${rm.repo.slug}") String repoSlug, RunFiles runFiles) {
 		var tags = new GitTagReleaseSource(runner, repoDir);
 		var github = new GithubReleaseSource(runner, repoSlug);
-		var state = new LocalStateReleaseSource(runStateStore);
+		var state = new LocalStateReleaseSource(runFiles);
 		return new ReleaseListService(tags::list, github::list, state::list);
+	}
+
+	/**
+	 * Reads release.py's run files under {@code rm.home}. Liveness of a sidecar-only attempt is asked of the
+	 * {@link ReleaseProcessService}.
+	 */
+	@Bean
+	public RunFiles runFiles(@Value("${rm.home}") String home, ObjectProvider<ReleaseProcessService> processes) {
+		return new RunFiles(Path.of(home), dir -> {
+			var p = processes.getIfAvailable();
+			return p != null && p.isLiveDir(dir);
+		});
 	}
 
 	/**
@@ -271,7 +277,7 @@ public class AppConfiguration {
 	}
 
 	// ==========================================================================================
-	// Release-orchestration engine and New Release tab wiring.
+	// Release tab wiring.
 	// ==========================================================================================
 
 	/**
@@ -284,177 +290,56 @@ public class AppConfiguration {
 	}
 
 	/**
-	 * The {@link RunStateStore} that persists per-version run state under {@code rm.state.dir}.
+	 * Stored answers for release.py's {@code credential.*} prompts.
 	 */
 	@Bean
-	public RunStateStore runStateStore(@Value("${rm.state.dir}") String stateDir) {
-		return new RunStateStore(Path.of(stateDir));
+	public CredentialAnswers credentialAnswers(Map<CredentialSpec, SecretStore> stores, AccountStore accounts,
+			@Value("${rm.git.committer.email}") String committerEmail) {
+		return new CredentialAnswers(stores, accounts, committerEmail);
 	}
 
 	/**
-	 * The {@link BranchResolver} used to derive release/maintenance branch names from the repo.
+	 * The Release page's event bus: run-file changes, process start/end, and prompts.
 	 */
 	@Bean
-	public BranchResolver branchResolver(ProcessRunner runner, @Value("${rm.repo.dir}") String repoDir) {
-		return new BranchResolver(runner, repoDir);
+	public EventBroadcaster runEvents() {
+		return new EventBroadcaster();
 	}
 
 	/**
-	 * The {@link EmailService} used to draft and send release-vote emails.
+	 * Runs {@code scripts/release.py}, one process at a time. On shutdown, a live process's attempt is marked
+	 * {@code jrm-stopped} before it is closed, so History can say why it ended.
 	 */
-	@Bean
-	public EmailService emailService(ProcessRunner runner, @Value("${rm.state.dir}") String stateDir) {
-		return new EmailService(Path.of(stateDir), runner);
+	@Bean(destroyMethod = "shutdown")
+	public ReleaseProcessService releaseProcessService(@Value("${rm.home}") String home,
+			@Value("${rm.scripts.dir}") String scriptsDir, @Value("${rm.juneau.run.script}") String runScript,
+			CredentialAnswers credentials, EventBroadcaster runEvents) {
+		System.setProperty(TerminalProcess.SCRIPT_PROPERTY, runScript);
+		return new ReleaseProcessService(Path.of(home), Path.of(scriptsDir), credentials::lookup, runEvents);
 	}
 
 	/**
-	 * Resolves live secrets from CredentialService's stores per mutating action.
+	 * Publishes a {@code run} event when any {@code run.json} changes, CLI runs included.
 	 */
-	@Bean
-	public ReleaseEngine.SecretResolver secretResolver(Map<CredentialSpec, SecretStore> stores, AccountStore accounts,
-			TargetProfile target) {
-		return new ReleaseEngine.SecretResolver() {
-			private String read(CredentialSpec spec, String account) {
-				return stores.get(spec).find(account).map(String::new).orElse("");
-			}
-
-			// Precedence: the rm.availid/rm.gpg.keyid system property (headless/testing override) wins when
-			// set, else the AccountStore-persisted value (survives restart), else "".
-			@Override
-			public String availid() {
-				var sys = System.getProperty("rm.availid", "");
-				return !sys.isBlank() ? sys : accounts.get(CredentialSpec.APACHE_LDAP).orElse("");
-			}
-
-			@Override
-			public String ldapPassword() {
-				return read(CredentialSpec.APACHE_LDAP, availid());
-			}
-
-			@Override
-			public String gpgKeyId() {
-				var sys = System.getProperty("rm.gpg.keyid", "");
-				return !sys.isBlank() ? sys : accounts.get(CredentialSpec.GPG).orElse("");
-			}
-
-			@Override
-			public String gpgPassphrase() {
-				return read(CredentialSpec.GPG, gpgKeyId());
-			}
-
-			@Override
-			public String githubToken() {
-				return read(CredentialSpec.GITHUB, "token");
-			}
-
-			// Nexus credentials are the committer's Apache LDAP identity — the same Keychain-backed
-			// SecretStore entry as ldapPassword() above, because an encrypted <password> in settings.xml
-			// cannot be used directly. Falls back to ~/.m2/settings.xml only when that Keychain entry
-			// hasn't been stored yet.
-			@Override
-			public NexusStagingClient nexus() {
-				return nexusClient(target, availid(), ldapPassword(), () -> NexusStagingClient
-						.create(target.nexusBaseUrl(), target.nexusProfileId(), "apache.releases.https"));
-			}
-		};
-	}
-
-	/**
-	 * Builds the LIVE Nexus client from Keychain-backed credentials (via the {@link SecretStore} SPI, per
-	 * {@code availid}/{@code ldapPassword} above) when both are present, else defers to
-	 * {@code settingsXmlFallback}. The base URL + profile id come from {@link TargetProfile}.
-	 * Package-private for {@code AppConfigurationTest}.
-	 */
-	static NexusStagingClient nexusClient(TargetProfile target, String availid, String ldapPassword,
-			Supplier<NexusStagingClient> settingsXmlFallback) {
-		if (availid.isBlank() || ldapPassword.isBlank())
-			return settingsXmlFallback.get();
-		return NexusStagingClient.create(target.nexusBaseUrl(), target.nexusProfileId(), availid, ldapPassword);
-	}
-
-	/**
-	 * The {@link StepRegistry} of standard release steps, wired to {@code branches}.
-	 */
-	@Bean
-	public StepRegistry stepRegistry(BranchResolver branches) {
-		return StepRegistry.standard(branches);
-	}
-
-	/**
-	 * The {@link ReleaseEngine} that drives release runs, recovering any run left mid-flight on boot.
-	 */
-	@Bean
-	@SuppressWarnings({
-		"java:S107" // Constructor-injected collaborators; a parameter object would obscure the wiring.
-	})
-	public ReleaseEngine releaseEngine(RunStateStore store, StepRegistry registry, ProcessRunner runner,
-			BranchResolver branches, EmailService email, MilestoneService milestone,
-			ReleaseEngine.SecretResolver secrets, TargetProfile target,
-			@Value("${rm.state.dir}") String stateDir, @Value("${rm.staging.dir}") String stagingDir,
-			@Value("${rm.repo.dir}") String repoDir, @Value("${rm.git.committer.email}") String committerEmail) {
-		var engine = new ReleaseEngine(store, registry, runner, branches, Path.of(stateDir), Path.of(stagingDir),
-				repoDir, committerEmail, email, milestone, secrets, target);
-		engine.recoverOnBoot(); // Demote runs left mid-flight by a previous process on restart.
-		return engine;
-	}
-
-	/**
-	 * The {@link DropRcService} that drops a staged release candidate and unwinds its RC branch/tag.
-	 */
-	@Bean
-	public DropRcService dropRcService(RunStateStore store, StepRegistry registry, ProcessRunner runner,
-			ReleaseEngine.SecretResolver secrets, ReleaseEngine engine, TargetProfile target,
-			@Value("${rm.staging.dir}") String stagingDir,
-			@Value("${rm.state.dir}") String stateDir) {
-		return new DropRcService(store, registry, runner, Path.of(stagingDir).resolve("git/juneau"), Path.of(stateDir),
-				secrets.nexus(), target, engine.runEvents());
+	@Bean(initMethod = "start", destroyMethod = "close")
+	public RunFileWatcher runFileWatcher(@Value("${rm.home}") String home, EventBroadcaster runEvents) {
+		return new RunFileWatcher(Path.of(home), runEvents);
 	}
 
 	/**
 	 * The {@link ReleaseRunRest} resource.
 	 */
 	@Bean
-	public ReleaseRunRest releaseRunRest(ReleaseEngine engine, DropRcService dropRc) {
-		return new ReleaseRunRest(engine, dropRc);
+	public ReleaseRunRest releaseRunRest(RunFiles runFiles, ReleaseProcessService processes) {
+		return new ReleaseRunRest(runFiles, processes);
 	}
 
 	/**
-	 * The {@link AuditService} that reads the run events and dropped-RC history the engine already persists.
+	 * The SSE servlet: a plain HttpServlet registered alongside RootRest, serving the Release page's one channel at
+	 * {@code /events/runs}.
 	 */
 	@Bean
-	public AuditService auditService(RunStateStore store, ReleaseEngine engine) {
-		return new AuditService(store, engine.runEvents());
-	}
-
-	/**
-	 * The {@link AuditRest} resource.
-	 */
-	@Bean
-	public AuditRest auditRest(AuditService audit) {
-		return new AuditRest(audit);
-	}
-
-	/**
-	 * The SSE servlet — a plain HttpServlet, registered alongside RootRest. Serves the run-state channel keyed
-	 * by {@code version} (trailing segment {@code state}) that pushes rail-status snapshots to every connected
-	 * New-Release tab. Step output is not streamed; the terminal region polls it from
-	 * {@link ReleaseRunRest}.
-	 */
-	@Bean
-	public ServletRegistrationBean<Servlet> sseLogRegistration(ReleaseEngine engine, RunStateStore store) {
-		var servlet = new RunStateSseServlet(engine::snapshotJson, stateBroadcasterForVersion(engine, store));
-		return new ServletRegistrationBean<>(servlet, "/events/*");
-	}
-
-	/**
-	 * That version's live {@link RunStateBroadcaster}, or empty when there's no persisted run for
-	 * {@code version}. Returning empty (rather than always minting a broadcaster via
-	 * {@code engine.stateBroadcaster()}'s {@code computeIfAbsent}) lets {@code RunStateSseServlet} take its immediate
-	 * "(no active run …)" branch for a bogus version instead of blocking a worker thread for the full heartbeat interval.
-	 * Package-private for {@code AppConfigurationTest}.
-	 */
-	static Function<String, Optional<RunStateBroadcaster>> stateBroadcasterForVersion(ReleaseEngine engine,
-			RunStateStore store) {
-		return version -> store.load(version).map(rs -> engine.stateBroadcaster(version));
+	public ServletRegistrationBean<Servlet> runEventsRegistration(EventBroadcaster runEvents) {
+		return new ServletRegistrationBean<>(new RunEventsSseServlet(runEvents), "/events/*");
 	}
 }

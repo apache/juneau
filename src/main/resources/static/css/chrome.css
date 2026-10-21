@@ -73,7 +73,7 @@
 }
 .jc-btn-warning:hover { filter: brightness(0.97); }
 
-/* Compact button modifier for dense action rows (e.g. the New-Release rail's
+/* Compact button modifier for dense action rows (e.g. the Release page's
    per-step Dry-run/Run/Resume buttons). */
 .jc-btn-sm {
   font-size: 0.75rem;
