@@ -212,6 +212,15 @@ class RepoArgumentTest(HistoryEnv, unittest.TestCase):
             jr.Console(jr.Sinks(console="none"), repo=self.repo).close()
         self.assertEqual(me.call_args.args[0], self.repo)
 
+    def test_history_key_overrides_the_repo_key_so_separate_clones_share_one_history(self):
+        other = self._git_repo()
+        os.environ["JUNEAU_RUN_HISTORY_KEY"] = "acme app/1"
+        a, b = jr.HistoryStore(self.repo, "push"), jr.HistoryStore(other, "push")
+        self.assertEqual(a.path, Path(self.dir) / "acme-app-1" / "push.jsonl")      # sanitized like a script name
+        self.assertEqual(a.path, b.path)
+        del os.environ["JUNEAU_RUN_HISTORY_KEY"]
+        self.assertNotEqual(jr.HistoryStore(self.repo, "push").path, jr.HistoryStore(other, "push").path)
+
 
 class FakeClock:
     def __init__(self):
@@ -404,6 +413,87 @@ class RecordTest(HistoryEnv, unittest.TestCase):
         with jr.row("bom", "BOM"):
             pass
         self.assertEqual(jr.HistoryStore(self.repo, jr.script_name()).read()[-1]["step"], "bom")
+
+
+# A one-module build: no Reactor Build Order, no [k/n] on its Building line and no Reactor Summary.
+SINGLE_MODULE_LOG = """\
+[INFO] Scanning for projects...
+[INFO]
+[INFO] -------------------------< com.example:solo >--------------------------
+[INFO] Building Solo 1.0
+[INFO]   from pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO]
+[INFO] --- maven-compiler-plugin:3.13.0:compile (default-compile) @ solo ---
+[INFO] --- maven-compiler-plugin:3.13.0:testCompile (default-testCompile) @ solo ---
+[INFO] --- maven-surefire-plugin:3.2.5:test (default-test) @ solo ---
+[INFO] Tests run: 4, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.2 s -- in com.example.SoloTest
+[INFO]
+[INFO] Tests run: 4, Failures: 0, Errors: 0, Skipped: 0
+[INFO]
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+"""
+
+
+class SingleModuleMavenTest(HistoryEnv, unittest.TestCase):
+    """A one-module Maven build counts its module, so its record is complete and a later run can estimate from it."""
+
+    def setUp(self):
+        super().setUp()
+        support.reset_run_state()
+        self.addCleanup(support.reset_run_state)
+        os.environ.pop("RUN_MARKERS", None)
+        self.tree = self._mk("jr-solo-")
+        Path(self.tree, "pom.xml").write_text("<project><artifactId>solo</artifactId><name>Solo</name></project>",
+                                              encoding="utf-8")
+        self.store = jr.HistoryStore(self.repo, "push")
+        jr.subscribe(jr.History(self.store))
+
+    def build(self, text=SINGLE_MODULE_LOG, exit_code=0, args=("verify",)):
+        """Run `text` through the Maven parser and the dispatcher as one top-level row; returns its history record."""
+        parser = jr.MavenParser()
+        parser.step_id = "tests"
+        parser.prepare(["mvn", *args], None, self.tree)
+        d = jr._Dispatcher("tests", jr.Sinks(console="none"))
+        jr.publish("step_start", id="tests", n=1, title="Tests", parent=None, tool="maven", sig="s")
+        for line in text.splitlines():
+            d.apply(parser.on_line(line))
+        d.apply(parser.finish(exit_code))
+        jr.publish("step_end", id="tests", status="ok" if exit_code == 0 else "fail", ms=60000)
+        return self.store.read()[-1]
+
+    def test_a_successful_build_records_its_lone_module_done(self):
+        r = self.build()
+        self.assertEqual(r["units"], {"kind": "modules", "total": 1, "done": 1})
+        self.assertTrue(r["complete"])
+        self.assertEqual(r["tests"], 4)
+
+    def test_a_skip_tests_build_records_its_lone_module_done(self):
+        self.assertTrue(self.build(args=("clean", "test-compile", "-DskipTests"))["complete"])
+
+    def test_a_failed_build_stays_incomplete(self):
+        r = self.build(SINGLE_MODULE_LOG.replace("BUILD SUCCESS", "BUILD FAILURE"), exit_code=1)
+        self.assertEqual(r["units"]["done"], 0)
+        self.assertFalse(r["complete"])
+
+    def test_a_later_run_gets_a_percent_from_it(self):
+        for _ in range(3):
+            self.build()
+        est = jr.make_estimator(self.repo, "push", self.store)("tests", "maven", "s")
+        self.assertIsNotNone(est)
+        self.assertEqual((est.wall_s, est.units, est.tests), (60.0, 1, 4))
+        t = [100.0]
+        b = jr.Board("actionable", nested=False, full_log=None, clock=lambda: t[0],
+                     estimator=lambda step, tool, sig=None: est)
+        b.apply("step_start", dict(id="tests", n=1, title="Tests", parent=None, tool="maven", sig="s"))
+        b.apply("reactor", dict(step="tests", size=1, poms=[], tests=True))
+        b.apply("tests", dict(step="tests", total=1, fail=0, err=0, skip=0))
+        t[0] += 15
+        _, rest, elapsed = jr.row_cells(b.rows["tests"], jr.PLAIN_GLYPHS, t[0])
+        self.assertIn("~25%", rest)                 # 1 of the 4 tests history expects
+        self.assertIn("/ ~", elapsed)               # and an estimated total beside the elapsed time
 
 
 if __name__ == "__main__":

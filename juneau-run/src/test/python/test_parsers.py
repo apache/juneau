@@ -63,6 +63,31 @@ class MavenParserTest(unittest.TestCase):
             ("sub_start", "mvn/mod-c"), ("sub_end", "mvn/mod-c")])
         self.assertEqual([e[2] for e in kinds(events, "sub_start")], [1, 2, 3, 4])
 
+    def test_a_one_module_success_counts_its_module_at_finish(self):
+        from test_history import SINGLE_MODULE_LOG
+        with tempfile.TemporaryDirectory() as tmp:
+            (Path(tmp) / "pom.xml").write_text("<project><artifactId>solo</artifactId></project>", encoding="utf-8")
+            parser = jr.MavenParser()
+            parser.step_id = "mvn"
+            parser.prepare(["mvn", "verify"], None, tmp)
+            ok = feed(parser, SINGLE_MODULE_LOG)
+            parser = jr.MavenParser()
+            parser.step_id = "mvn"
+            parser.prepare(["mvn", "verify"], None, tmp)
+            failed = feed(parser, SINGLE_MODULE_LOG.replace("BUILD SUCCESS", "BUILD FAILURE"), exit_code=1)
+        self.assertEqual(kinds(ok, "reactor")[0][1], 1)
+        self.assertEqual(kinds(ok, "unit"), [("unit", "mvn", 1, "pass")])
+        self.assertEqual(kinds(failed, "unit"), [])           # a failed build leaves its module uncounted
+
+    def test_a_multi_module_build_is_counted_by_its_modules_alone(self):
+        for fixture, args in (("maven-serial-success.log", ("test",)), ("maven-parallel-success.log", ("test", "-T", "2"))):
+            with tempfile.TemporaryDirectory() as tmp:
+                write_demo_tree(Path(tmp))
+                _, events = maven(fixture, args, cwd=tmp)
+            self.assertEqual(kinds(events, "unit"), [], fixture)
+        _, events = maven("maven-serial-success.log")              # no pom tree: no reactor, nothing to count
+        self.assertEqual(kinds(events, "unit"), [])
+
     def test_titles_and_reactor_index(self):
         _, events = maven("maven-serial-success.log")
         self.assertEqual(kinds(events, "sub_start")[1], ("sub_start", "mvn/mod-a", 2, "Demo Module A"))

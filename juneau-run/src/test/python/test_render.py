@@ -658,6 +658,15 @@ class RowEstimateTest(unittest.TestCase):
         self.assertEqual("".join(cells), jr.PLAIN_GLYPHS["fail"])
         self.assertIn("1/1", rest)
 
+    def test_a_single_module_reactor_counted_at_the_end_finishes_with_a_full_bar(self):
+        b = self.board(lambda step, tool, sig=None: self.est)
+        b.apply("reactor", dict(step="s", size=1, poms=[], tests=True))
+        b.apply("unit", dict(step="s", done=1, outcome="pass"))     # the Maven parser's finish on a success
+        b.apply("step_end", dict(id="s", status="ok", ms=26000, exit=0, summary=None, totals=None))
+        cells, rest, elapsed = self.cells(b)
+        self.assertEqual("".join(cells), jr.PLAIN_GLYPHS["pass"])
+        self.assertIn("1/1", rest)
+
     def test_finished_row_shows_elapsed_only(self):
         b = self.board(lambda step, tool, sig=None: self.est)
         b.apply("units", dict(step="s", total=100, kind="modules"))

@@ -668,10 +668,16 @@ def overall_figures(elapsed, steps):
     return Overall(percent, remaining, lower_bound, done, total)
 
 
+def overall_percent(o):
+    """`42%`, or `~42%` under a lower bound: a step still to run has no figure, so the percent is only a ceiling."""
+    return f"{'~' if o.lower_bound else ''}{o.percent}%"
+
+
 def overall_text(o):
-    """The live region's last line: `Overall  42%  ~2:10 left  · 3 of 7 steps`."""
+    """The live region's last line: `Overall  42%  ~2:10 left  · 3 of 7 steps` (`~42%  ~2:10+ left` under a lower
+    bound)."""
     left = f"  ~{fmt_elapsed(o.remaining * 1000)}{'+' if o.lower_bound else ''} left" if o.remaining > 0 or o.lower_bound else ""
-    return f"Overall  {o.percent}%{left}  · {o.done} of {o.total} steps"
+    return f"Overall  {overall_percent(o)}{left}  · {o.done} of {o.total} steps"
 
 
 UNIT_PASS, UNIT_FAIL, UNIT_SKIP = 1, 2, 3     # bytes in a row's unit_cells; 0 is "not finished"
@@ -1676,7 +1682,7 @@ class PlainRenderer:
         k = sum(1 for r in running for m in r.units.values()
                 if m.src in BAR_SRCS and m.in_progress and m.id not in r.unbarred)
         overall = board.overall()
-        figure = (f" · {overall.percent}% · ~{fmt_elapsed(overall.remaining * 1000)}"
+        figure = (f" · {overall_percent(overall)} · ~{fmt_elapsed(overall.remaining * 1000)}"
                   f"{'+' if overall.lower_bound else ''} left") if overall else ""
         self._write(f"… {total:,} tests, {failed} failed · {k} module{'' if k == 1 else 's'} running  "
                     f"{fmt_elapsed((now - board.t0) * 1000)}{figure}\n")
@@ -2526,7 +2532,8 @@ class HistoryStore:
     @property
     def path(self):
         if self._path is None:
-            self._path = history_root() / repo_key(self._repo) / f"{self._script}.jsonl"
+            key = os.environ.get("JUNEAU_RUN_HISTORY_KEY")     # lets separate clones of one repo share a history
+            self._path = history_root() / (safe_name(key) if key else repo_key(self._repo)) / f"{self._script}.jsonl"
         return self._path
 
     def _lock(self, lock):
@@ -3540,6 +3547,10 @@ class MavenParser(Parser):
             events += self._end_module(sub, "skip", time.monotonic() - self.open[sub][1])
         if self.total:
             events.append(("tests", self.step_id, self.total, self.fail, self.err, self.skip))
+        # A one-module build prints no [k/n] Building suffix and no Reactor Summary, so nothing above counted its
+        # module: a success counts it here, or its bar never fills and its history record is never complete.
+        if exit_code == 0 and self.reactor_sent and len(self.dirs) == 1 and not self.structure_seen:
+            events.append(("unit", self.step_id, 1, "pass"))
         if not self.structure_seen and exit_code != 0:
             self.generic.step_id = self.step_id
             events += self.generic.finish(exit_code)

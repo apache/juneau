@@ -40,8 +40,13 @@ class OverallTest(unittest.TestCase):
     def test_cap_99_and_text(self):
         f = self.fig(elapsed=1000, steps=[("a", "running", 1000, (1001.0, 1000.0))])
         self.assertEqual(f.percent, 99)
-        self.assertEqual(jr.overall_text(jr.Overall(percent=42, remaining=130, lower_bound=True, done=3, total=7)),
-                         "Overall  42%  ~2:10+ left  · 3 of 7 steps")
+        self.assertEqual(jr.overall_text(jr.Overall(percent=42, remaining=130, lower_bound=False, done=3, total=7)),
+                         "Overall  42%  ~2:10 left  · 3 of 7 steps")
+
+    def test_a_lower_bound_shows_its_percent_as_approximate(self):
+        # a step with no figure still to run: the time left is a floor, so the percent is only a ceiling
+        self.assertEqual(jr.overall_text(jr.Overall(percent=96, remaining=130, lower_bound=True, done=3, total=7)),
+                         "Overall  ~96%  ~2:10+ left  · 3 of 7 steps")
 
     def test_a_running_step_without_history_contributes_nothing_and_is_unknown(self):
         f = self.fig(elapsed=10, steps=[("a", "running", None, None), ("b", "pending", 30, None)])
