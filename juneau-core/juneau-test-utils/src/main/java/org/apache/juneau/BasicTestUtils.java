@@ -22,7 +22,10 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.io.*;
 import java.net.*;
+import java.nio.file.*;
+import java.time.*;
 import java.util.*;
+import java.util.function.*;
 import java.util.stream.*;
 
 import org.apache.juneau.commons.utils.*;
@@ -45,6 +48,9 @@ import org.junit.jupiter.api.*;
 	"java:S5960" // test-support utility shipped as main source; assertions are intentional
 })
 public abstract class BasicTestUtils extends Shorts {
+
+	/** How long {@link #await(BooleanSupplier, Duration)} sleeps between checks of its condition. */
+	private static final long AWAIT_INTERVAL_MS = 25;
 
 	private static final ThreadLocal<TimeZone> SYSTEM_TIME_ZONE = new ThreadLocal<>();
 
@@ -180,6 +186,46 @@ public abstract class BasicTestUtils extends Shorts {
 	 */
 	public static URL url(String value) {
 		return safe(()->new URI(value).toURL());
+	}
+
+	/**
+	 * Polls a condition until it holds or the timeout elapses.
+	 *
+	 * <p>
+	 * For tests that wait on state with no signal to block on, such as a file another process writes.  Use this
+	 * instead of a hand-rolled sleep loop.  The condition is checked once more after the last sleep, so one that comes
+	 * true right at the deadline still counts.
+	 *
+	 * @param condition The condition to wait for.  Must not be <jk>null</jk>.
+	 * @param timeout How long to wait.  Must not be <jk>null</jk>.
+	 * @return <jk>true</jk> once the condition holds, or <jk>false</jk> if it still does not hold after the timeout.
+	 * @throws InterruptedException If the thread is interrupted while waiting.
+	 */
+	@SuppressWarnings({
+		"java:S2925" // The one shared bounded poll; the state it waits on has no signal to block on.
+	})
+	public static boolean await(BooleanSupplier condition, Duration timeout) throws InterruptedException {
+		var deadline = System.nanoTime() + timeout.toNanos();
+		while (! condition.getAsBoolean()) {
+			var left = deadline - System.nanoTime();
+			if (left <= 0)
+				return false;
+			Thread.sleep(Math.min(AWAIT_INTERVAL_MS, Duration.ofNanos(left).toMillis() + 1));
+		}
+		return true;
+	}
+
+	/**
+	 * Waits until a file exists or the timeout elapses.
+	 *
+	 * @param path The file to wait for.  Must not be <jk>null</jk>.
+	 * @param timeout How long to wait.  Must not be <jk>null</jk>.
+	 * @return <jk>true</jk> once the file exists, or <jk>false</jk> if it still does not exist after the timeout.
+	 * @throws InterruptedException If the thread is interrupted while waiting.
+	 * @see #await(BooleanSupplier, Duration)
+	 */
+	public static boolean awaitFile(Path path, Duration timeout) throws InterruptedException {
+		return await(() -> Files.exists(path), timeout);
 	}
 
 	/**

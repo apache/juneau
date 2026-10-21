@@ -16,10 +16,12 @@
  */
 package org.apache.juneau.rest.server.terminal;
 
+import static org.apache.juneau.BasicTestUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.nio.file.*;
 import java.nio.file.attribute.*;
+import java.time.*;
 import java.util.*;
 import java.util.concurrent.*;
 
@@ -33,9 +35,6 @@ import org.junit.jupiter.api.io.*;
 /**
  * {@link TerminalProcess} nudges, over a fake {@code python3} runner.
  */
-@SuppressWarnings({
-	"java:S2925" // Timing-dependent process/file test; it polls or waits on real time
-})
 @DisabledOnOs(OS.WINDOWS)
 class TerminalProcessNudge_Test extends TestBase {
 
@@ -71,10 +70,7 @@ class TerminalProcessNudge_Test extends TestBase {
 		var seen = new CopyOnWriteArrayList<Nudged>();
 		try (var p = start()) {
 			p.nudges("t1", (id, end, done) -> seen.add(new Nudged(id, end, done)));
-			var deadline = System.nanoTime() + TimeUnit.SECONDS.toNanos(5);
-			while (seen.stream().noneMatch(Nudged::done) && System.nanoTime() < deadline)
-				Thread.sleep(25);
-			assertTrue(seen.stream().anyMatch(Nudged::done), "no done nudge: " + seen);
+			assertTrue(await(() -> seen.stream().anyMatch(Nudged::done), Duration.ofSeconds(5)), () -> "no done nudge: " + seen);
 			assertEquals(1, seen.stream().filter(Nudged::done).count());
 			var ends = seen.stream().filter(n -> ! n.done()).mapToLong(Nudged::end).toArray();
 			for (var i = 1; i < ends.length; i++)
@@ -108,6 +104,9 @@ class TerminalProcessNudge_Test extends TestBase {
 		awaitDead(t, 2000);
 	}
 
+	@SuppressWarnings({
+		"java:S2925" // Deliberate delay: the fake exit hook is slow on purpose, so close() has a wait to observe.
+	})
 	@Test void a03b_closeStopsWatcherFirst() throws Exception {
 		fakePython("exec sleep 30");
 		// The exit hook is slow, so close() waits about two seconds for it; the watcher must not run through that wait.
@@ -157,12 +156,8 @@ class TerminalProcessNudge_Test extends TestBase {
 				});
 				try {
 					assertEquals(0, p.waitFor(30, TimeUnit.SECONDS));
-					var deadline = System.nanoTime() + TimeUnit.SECONDS.toNanos(5);
-					Thread t;
-					while ((t = Thread.getAllStackTraces().keySet().stream().filter(x -> x.getName().startsWith("juneau-terminal-nudge-")
-						&& x.isAlive()).findFirst().orElse(null)) != null && System.nanoTime() < deadline)
-						t.join(50);
-					assertNull(t, "the watcher thread did not exit");
+					assertTrue(await(() -> Thread.getAllStackTraces().keySet().stream().noneMatch(x -> x.getName().startsWith("juneau-terminal-nudge-")
+						&& x.isAlive()), Duration.ofSeconds(5)), "the watcher thread did not exit");
 				} catch (Exception e) {
 					throw new AssertionError(e);
 				}

@@ -17,10 +17,12 @@
 package org.apache.juneau.rest.server.terminal;
 
 import static java.nio.charset.StandardCharsets.*;
+import static org.apache.juneau.BasicTestUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assumptions.*;
 
 import java.nio.file.*;
+import java.time.*;
 import java.util.*;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.*;
@@ -142,14 +144,10 @@ class TerminalProcessPrompts_Test extends TestBase {
 			() -> TerminalProcess.start("generic", cmd, 80, 24, run, (TerminalPrompts)null));
 	}
 
-	@SuppressWarnings({
-		"java:S2925" // Bounded poll for the runner's log file, which has no signal to wait on.
-	})
 	@Test void a05_closeEndsRunnerCancelled() throws Exception {
 		var sink = new Sink();
 		var p = startReal(List.of("python3", "-c", "import time; time.sleep(60)"), sink);
-		for (var i = 0; i < 2400 && ! Files.exists(p.log()); i++)
-			Thread.sleep(25);
+		awaitFile(p.log(), Duration.ofSeconds(60));
 		var t0 = System.nanoTime();
 		p.close();
 		assertTrue(System.nanoTime() - t0 < TimeUnit.SECONDS.toNanos(10), "close() took too long");

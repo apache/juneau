@@ -17,11 +17,14 @@
 package org.apache.juneau.rest.server.terminal;
 
 import static java.nio.charset.StandardCharsets.*;
+import static org.apache.juneau.BasicTestUtils.*;
+import static org.apache.juneau.commons.utils.ThrowableUtils.*;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assumptions.*;
 
 import java.nio.file.*;
 import java.nio.file.attribute.*;
+import java.time.*;
 import java.util.*;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.*;
@@ -36,9 +39,6 @@ import org.junit.jupiter.api.io.*;
  * {@link TerminalProcess} input mode, over a fake {@code python3} runner, and over the real {@code juneau_run.py} for
  * the bytes reaching the job.
  */
-@SuppressWarnings({
-	"java:S2925" // Timing-dependent process/file test; it polls or waits on real time
-})
 @DisabledOnOs(OS.WINDOWS)
 class TerminalProcessInput_Test extends TestBase {
 
@@ -67,9 +67,7 @@ class TerminalProcessInput_Test extends TestBase {
 	}
 
 	private long awaitPid() throws Exception {
-		for (var i = 0; i < 200 && ! Files.exists(pidFile); i++)
-			Thread.sleep(25);
-		assertTrue(Files.exists(pidFile), "the fake runner never got ready");
+		assertTrue(awaitFile(pidFile, Duration.ofSeconds(5)), "the fake runner never got ready");
 		return Long.parseLong(Files.readString(pidFile).trim());
 	}
 
@@ -159,9 +157,7 @@ class TerminalProcessInput_Test extends TestBase {
 	 * soon as the marker shows, so the limit only matters when something is really wrong.
 	 */
 	private static void awaitLog(TerminalProcess p, String marker) throws Exception {
-		for (var i = 0; i < 2400 && ! log(p).contains(marker); i++)
-			Thread.sleep(25);
-		assertTrue(log(p).contains(marker), () -> "never printed " + marker + ": " + uncheckedLog(p));
+		assertTrue(await(() -> safe(() -> log(p).contains(marker)), Duration.ofSeconds(60)), () -> "never printed " + marker + ": " + uncheckedLog(p));
 	}
 
 	private static String uncheckedLog(TerminalProcess p) {
@@ -241,6 +237,9 @@ class TerminalProcessInput_Test extends TestBase {
 		}
 	}
 
+	@SuppressWarnings({
+		"java:S2925" // Deliberate pause after close(): it gives the writer thread time to try a write that must fail.
+	})
 	@Test void a09_writeDuringClose() throws Exception {
 		sleepingRunner("");
 		try (var p = start(true)) {
@@ -276,9 +275,7 @@ class TerminalProcessInput_Test extends TestBase {
 				assertTrue(busy.await(10, TimeUnit.SECONDS), "the buffer never filled");
 				p.close();
 				closed.set(true);
-				for (var i = 0; i < 40 && writer.isAlive(); i++)
-					Thread.sleep(25);
-				assertFalse(writer.isAlive(), "the writer thread outlived close() by 1 s");
+				assertTrue(await(() -> ! writer.isAlive(), Duration.ofSeconds(1)), "the writer thread outlived close() by 1 s");
 				Thread.sleep(100);
 			} finally {
 				stop.set(true);
@@ -295,9 +292,7 @@ class TerminalProcessInput_Test extends TestBase {
 			awaitPid();
 			assertTrue(p.acceptsInput());
 			assertTrue(p.write(new byte[]{'x'}), "the write is queued; the broken pipe is the writer thread's to find");
-			for (var i = 0; i < 200 && p.acceptsInput(); i++)
-				Thread.sleep(25);
-			assertFalse(p.acceptsInput(), "a broken pipe turns input off");
+			assertTrue(await(() -> ! p.acceptsInput(), Duration.ofSeconds(5)), "a broken pipe turns input off");
 			assertFalse(p.write(new byte[]{'y'}));
 		}
 	}

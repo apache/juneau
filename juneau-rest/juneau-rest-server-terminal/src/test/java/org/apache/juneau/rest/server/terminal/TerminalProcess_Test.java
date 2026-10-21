@@ -21,6 +21,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.nio.file.*;
 import java.nio.file.attribute.*;
+import java.time.*;
 import java.util.*;
 import java.util.concurrent.*;
 
@@ -33,9 +34,6 @@ import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.condition.*;
 import org.junit.jupiter.api.io.*;
 
-@SuppressWarnings({
-	"java:S2925" // Timing-dependent process/file test; it polls or waits on real time
-})
 class TerminalProcess_Test extends TestBase {
 
 	@TempDir Path dir;
@@ -221,15 +219,12 @@ class TerminalProcess_Test extends TestBase {
 		var p = TerminalProcess.start("generic", List.of("true"), 80, 24, run, host("/x.py", null));
 		long pid = -1;
 		try {
-			for (var i = 0; i < 200 && ! Files.exists(pidFile); i++)
-				Thread.sleep(50);
-			assertTrue(Files.exists(pidFile), "the grandchild never started");
+			assertTrue(awaitFile(pidFile, Duration.ofSeconds(10)), "the grandchild never started");
 			pid = Long.parseLong(Files.readString(pidFile).trim());
-			assertTrue(ProcessHandle.of(pid).map(ProcessHandle::isAlive).orElse(false), "the grandchild should be running");
+			var grandchild = ProcessHandle.of(pid);
+			assertTrue(grandchild.map(ProcessHandle::isAlive).orElse(false), "the grandchild should be running");
 			p.close();
-			for (var i = 0; i < 100 && ProcessHandle.of(pid).map(ProcessHandle::isAlive).orElse(false); i++)
-				Thread.sleep(50);
-			assertFalse(ProcessHandle.of(pid).map(ProcessHandle::isAlive).orElse(false), "the grandchild survived close()");
+			assertTrue(await(() -> ! grandchild.map(ProcessHandle::isAlive).orElse(false), Duration.ofSeconds(5)), "the grandchild survived close()");
 		} finally {
 			if (pid > 0)
 				ProcessHandle.of(pid).ifPresent(ProcessHandle::destroyForcibly);
