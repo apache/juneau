@@ -43,8 +43,11 @@ def test_missing_tools_reported_all_at_once_with_hints(make_ctx, monkeypatch):
     ctx = make_ctx(with_details=False)
     failed = prereqs.check(ctx)
     text = "\n".join(failed)
-    assert "svn" in text and "svnmucc" in text and "gh" in text
-    assert "brew install subversion" in text and "brew install gh" in text
+    assert "svn" in text
+    assert "svnmucc" in text
+    assert "gh" in text
+    assert "brew install subversion" in text
+    assert "brew install gh" in text
     assert len([f for f in failed if f.startswith(("svn:", "svnmucc:", "gh:"))]) == 3
     assert ctx.fake.ran("svn", "ls") == []        # no svn, so no anonymous listing to try
 
@@ -55,7 +58,10 @@ def test_old_svn_fails_with_minimum(make_ctx, monkeypatch):
     ctx.fake.script("svn", "--version", out="1.9.7\n")
     ctx.fake.script("svn", "ls", out="x/\n")
     failed = prereqs.check(ctx)
-    assert len(failed) == 1 and failed[0].startswith("svn:") and "1.10" in failed[0] and "1.9.7" in failed[0]
+    assert len(failed) == 1
+    assert failed[0].startswith("svn:")
+    assert "1.10" in failed[0]
+    assert "1.9.7" in failed[0]
 
 
 def test_unparseable_version_fails_naming_tool_and_output(make_ctx, monkeypatch):
@@ -64,7 +70,9 @@ def test_unparseable_version_fails_naming_tool_and_output(make_ctx, monkeypatch)
     ctx.fake.script("svn", "--version", out="garbled nonsense\n")
     ctx.fake.script("svn", "ls", out="x/\n")
     failed = prereqs.check(ctx)
-    assert len(failed) == 1 and failed[0].startswith("svn:") and "garbled nonsense" in failed[0]
+    assert len(failed) == 1
+    assert failed[0].startswith("svn:")
+    assert "garbled nonsense" in failed[0]
 
 
 @pytest.mark.parametrize("tool,argv", [("mvn", ("mvn", "-version")), ("gpg", ("gpg", "--version")),
@@ -75,7 +83,9 @@ def test_unparseable_output_fails_for_every_versioned_tool(make_ctx, monkeypatch
     ctx.fake.script(*argv, out="no digits here\n")
     ctx.fake.script("svn", "ls", out="x/\n")
     failed = prereqs.check(ctx)
-    assert len(failed) == 1 and failed[0].startswith(tool + ":") and "no digits here" in failed[0]
+    assert len(failed) == 1
+    assert failed[0].startswith(tool + ":")
+    assert "no digits here" in failed[0]
 
 
 BANNER = "Some vendor banner line\nFind more information at example.invalid\n"
@@ -97,7 +107,10 @@ def test_java_old_behind_a_banner_fails(make_ctx, monkeypatch):
     ctx.fake.script("java", "-version", out=BANNER + 'java version "1.8.0_392"\n')
     ctx.fake.script("svn", "ls", out="x/\n")
     failed = prereqs.check(ctx)
-    assert len(failed) == 1 and failed[0].startswith("java:") and "17" in failed[0] and "1.8.0_392" in failed[0]
+    assert len(failed) == 1
+    assert failed[0].startswith("java:")
+    assert "17" in failed[0]
+    assert "1.8.0_392" in failed[0]
 
 
 def test_java_without_a_version_line_fails_naming_binary_and_first_line(make_ctx, monkeypatch):
@@ -107,7 +120,9 @@ def test_java_without_a_version_line_fails_naming_binary_and_first_line(make_ctx
     ctx.fake.script("java", "-version", out=BANNER)
     ctx.fake.script("svn", "ls", out="x/\n")
     failed = prereqs.check(ctx)
-    assert len(failed) == 1 and "java" in failed[0] and "Some vendor banner line" in failed[0]
+    assert len(failed) == 1
+    assert "java" in failed[0]
+    assert "Some vendor banner line" in failed[0]
 
 
 def test_java_home_binary_wins_and_is_reported(make_ctx, monkeypatch, tmp_path):
@@ -122,7 +137,8 @@ def test_java_home_binary_wins_and_is_reported(make_ctx, monkeypatch, tmp_path):
     ctx.fake.script(str(exe), "-version", out='openjdk version "21.0.1"\n')
     ctx.fake.script("svn", "ls", out="x/\n")
     assert prereqs.check(ctx) == []
-    assert ctx.fake.ran(str(exe), "-version") and not ctx.fake.ran("java", "-version")
+    assert ctx.fake.ran(str(exe), "-version")
+    assert not ctx.fake.ran("java", "-version")
     assert any(str(exe) in s and "21" in s for s in ctx.fake.said)
 
 
@@ -150,7 +166,9 @@ def test_old_java_fails(make_ctx, monkeypatch):
     ctx.fake.script("java", "-version", out='openjdk version "11.0.2" 2019-01-15\n')
     ctx.fake.script("svn", "ls", out="x/\n")
     failed = prereqs.check(ctx)
-    assert len(failed) == 1 and failed[0].startswith("java:") and "17" in failed[0]
+    assert len(failed) == 1
+    assert failed[0].startswith("java:")
+    assert "17" in failed[0]
 
 
 def test_unreachable_nexus_and_dist_dev(make_ctx, monkeypatch):
@@ -182,7 +200,8 @@ def test_step_raises_with_every_failure(make_ctx, monkeypatch):
     ctx = make_ctx(with_details=False)
     with pytest.raises(StepError) as e:
         rc.FUNCS["prerequisites"](ctx)
-    assert "svn" in str(e.value) and "gh" in str(e.value)
+    assert "svn" in str(e.value)
+    assert "gh" in str(e.value)
 
 
 def test_step_reuses_the_early_result(make_ctx, monkeypatch):
@@ -203,7 +222,9 @@ def test_prechecks_keeps_only_answer_dependent_checks(make_ctx, monkeypatch):
     assert out == "2 checks passed"
     assert ctx.fake.ran("svn") == []
     said = "\n".join(ctx.fake.said)
-    assert "branch exists" in said and "rc tag absent" in said and "svn" not in said
+    assert "branch exists" in said
+    assert "rc tag absent" in said
+    assert "svn" not in said
 
 
 # ---- GPG key id prefill -------------------------------------------------------------------------------------
@@ -278,18 +299,21 @@ def test_keyid_choice_with_several(make_ctx):
     ctx = gpg_ctx(make_ctx, MINE + two, {"credential.gpg.keyid": "3333333333333333"})
     assert rc.ensure_keyid(ctx) == "3333333333333333"
     kind, _, _, kw = ctx.prompt.asked[0]
-    assert kind == "choice" and [o[0] for o in kw["options"]] == ["36292BD2BA7D3A86", "3333333333333333"]
+    assert kind == "choice"
+    assert [o[0] for o in kw["options"]] == ["36292BD2BA7D3A86", "3333333333333333"]
 
 
 def test_keyid_plain_prompt_with_none(make_ctx):
     ctx = gpg_ctx(make_ctx, OTHER, {"credential.gpg.keyid": "TYPED"})
     assert rc.ensure_keyid(ctx) == "TYPED"
-    assert ctx.prompt.asked[0][0] == "text" and ctx.prompt.asked[0][3]["default"] is None
+    assert ctx.prompt.asked[0][0] == "text"
+    assert ctx.prompt.asked[0][3]["default"] is None
 
 
 def test_keyid_not_asked_twice(make_ctx):
     ctx = make_ctx()
-    assert rc.ensure_keyid(ctx) == "ABCD1234" and ctx.prompt.asked == []
+    assert rc.ensure_keyid(ctx) == "ABCD1234"
+    assert ctx.prompt.asked == []
 
 
 def test_keyid_uses_availid_when_no_email_credential(make_ctx):

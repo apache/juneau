@@ -39,7 +39,9 @@ def test_list_steps_phased_with_done_marks(home, capsys):
     seed(home, {"phase": "rc", "last": "build-verify", "details": {"version": "9.2.1", "rc": 1}})
     code, out = run_main(["--list-steps", "--version", "9.2.1"], home, capsys)
     assert code == 0
-    assert "Release candidate" in out and "Vote" in out and "Promote" in out
+    assert "Release candidate" in out
+    assert "Vote" in out
+    assert "Promote" in out
     assert "✔" in out.split("build-verify")[0].splitlines()[-1] + "build-verify"
     assert out.index("prerequisites") < out.index("prechecks") < out.index("vote-tally") < out.index("finalize")
 
@@ -96,8 +98,11 @@ def test_new_run_checks_prerequisites_before_any_prompt(home, capsys, tmp_path, 
     fake, prompts, deps = new_run_setup(tmp_path, monkeypatch, {})
     monkeypatch.setattr(prereqs.shutil, "which", lambda n: None if n in ("svn", "svnmucc") else "/usr/bin/" + n)
     code, out = run_main(["--dry-run"], home, capsys, deps=deps)
-    assert code == 1 and prompts.asked == []
-    assert "svn: not on PATH" in out and "svnmucc: not on PATH" in out and "brew install subversion" in out
+    assert code == 1
+    assert prompts.asked == []
+    assert "svn: not on PATH" in out
+    assert "svnmucc: not on PATH" in out
+    assert "brew install subversion" in out
 
 
 def test_resume_checks_prerequisites_before_any_prompt(home, capsys, tmp_path, monkeypatch):
@@ -106,7 +111,10 @@ def test_resume_checks_prerequisites_before_any_prompt(home, capsys, tmp_path, m
     fake, prompts, deps = new_run_setup(tmp_path, monkeypatch, {})
     monkeypatch.setattr(prereqs.shutil, "which", lambda n: None if n == "gh" else "/usr/bin/" + n)
     code, out = run_main(["--resume"], home, capsys, deps=deps)
-    assert code == 1 and prompts.asked == [] and "gh: not on PATH" in out and "brew install gh" in out
+    assert code == 1
+    assert prompts.asked == []
+    assert "gh: not on PATH" in out
+    assert "brew install gh" in out
 
 
 def test_start_step_nonexistent_prechecks_move_with_prerequisites_first():
@@ -116,12 +124,15 @@ def test_start_step_nonexistent_prechecks_move_with_prerequisites_first():
 def test_refuses_new_run_when_active(home, capsys):
     seed(home, {"phase": "rc", "last": "workspace", "details": {"version": "9.2.1", "rc": 1}})
     code, out = run_main([], home, capsys)
-    assert code == 2 and "--resume" in out and "9.2.1" in out
+    assert code == 2
+    assert "--resume" in out
+    assert "9.2.1" in out
 
 
 def test_resume_without_run_fails(home, capsys):
     code, out = run_main(["--resume"], home, capsys)
-    assert code == 2 and "No active release" in out
+    assert code == 2
+    assert "No active release" in out
 
 
 def test_resume_after_last(home, capsys):
@@ -147,12 +158,14 @@ def test_start_step_refusal_exits_2(home, capsys):
     seed(home, {"phase": "promote", "last": "nexus-release", "vote": {"outcome": "passed"},
                 "details": {"version": "9.2.1", "rc": 1}})
     code, out = run_main(["--start-step", "build-verify"], home, capsys)
-    assert code == 2 and "nexus-release" in out
+    assert code == 2
+    assert "nexus-release" in out
 
 
 def test_skip_step_only_skippable(home, capsys):
     code, out = run_main(["--skip-step", "build-verify"], home, capsys)
-    assert code == 2 and "javadoc-verify" in out
+    assert code == 2
+    assert "javadoc-verify" in out
 
 
 def test_lock_busy_message(home):
@@ -175,7 +188,8 @@ def test_second_process_is_refused_while_lock_held(home, capsys, tmp_path, monke
         code, out = run_main(["--resume"], home, capsys, deps=deps)
     finally:
         os.close(fd)
-    assert code == 1 and "Another release.py is running this release (pid 4242, attempt #3)." in out
+    assert code == 1
+    assert "Another release.py is running this release (pid 4242, attempt #3)." in out
 
 
 def setup_deps(tmp_path, monkeypatch, answers, opener=None):
@@ -206,15 +220,20 @@ def test_revert_end_to_end(home, capsys, tmp_path, monkeypatch):
     assert code == 0, out
     assert ("drop", "r-1") in nexus.posts
     data = read_run(home)
-    assert data["details"]["rc"] == 2 and data["phase"] == "rc" and "last" not in data
-    assert data["attempts"][-1]["status"] == "ok" and data["attempts"][-1]["command"] == "revert"
+    assert data["details"]["rc"] == 2
+    assert data["phase"] == "rc"
+    assert "last" not in data
+    assert data["attempts"][-1]["status"] == "ok"
+    assert data["attempts"][-1]["command"] == "revert"
 
 
 def test_revert_refused_in_promote_exits_1(home, capsys, tmp_path, monkeypatch):
     seed(home, {**ACTIVE, "phase": "promote"})
     fake, prompts, nexus, deps = setup_deps(tmp_path, monkeypatch, {})
     code, out = run_main(["--revert"], home, capsys, deps=deps)
-    assert code == 1 and "public" in out and nexus.posts == []
+    assert code == 1
+    assert "public" in out
+    assert nexus.posts == []
 
 
 def test_cancel_exits_130(home, capsys, tmp_path, monkeypatch):
@@ -222,7 +241,8 @@ def test_cancel_exits_130(home, capsys, tmp_path, monkeypatch):
     fake, prompts, nexus, deps = setup_deps(tmp_path, monkeypatch, {"confirm.revert": None})
     prompts.confirm = lambda *a, **k: (_ for _ in ()).throw(KeyboardInterrupt())
     code, out = run_main(["--revert"], home, capsys, deps=deps)
-    assert code == 130 and read_run(home)["attempts"][-1]["status"] == "cancelled"
+    assert code == 130
+    assert read_run(home)["attempts"][-1]["status"] == "cancelled"
 
 
 def test_resume_runs_to_vote_gate_and_pauses_with_exit_0(home, capsys, tmp_path, monkeypatch):
@@ -231,7 +251,9 @@ def test_resume_runs_to_vote_gate_and_pauses_with_exit_0(home, capsys, tmp_path,
     code, out = run_main(["--resume"], home, capsys, deps=deps)
     assert code == 0, out
     data = read_run(home)
-    assert data["last"] == "vote-gate" and data["phase"] == "vote" and data["voteDeadline"]
+    assert data["last"] == "vote-gate"
+    assert data["phase"] == "vote"
+    assert data["voteDeadline"]
     assert data["attempts"][-1]["status"] == "paused"
     assert "release.py --resume" in out
     # the lock file exists but is no longer held: a second run is not refused
@@ -255,8 +277,11 @@ def test_failed_step_exits_1_and_hints_resume(home, capsys, tmp_path, monkeypatc
     fake, prompts, nexus, deps = setup_deps(tmp_path, monkeypatch, {})
     fake.script("mvn", "-B", ok=False)
     code, out = run_main(["--resume"], home, capsys, deps=deps)
-    assert code == 1 and "Build verify failed" in out and "--start-step build-verify" in out
-    assert read_run(home)["last"] == "workspace" and read_run(home)["attempts"][-1]["status"] == "failed"
+    assert code == 1
+    assert "Build verify failed" in out
+    assert "--start-step build-verify" in out
+    assert read_run(home)["last"] == "workspace"
+    assert read_run(home)["attempts"][-1]["status"] == "failed"
 
 
 def test_dry_run_goes_through_every_step_to_vote_gate(home, capsys, tmp_path, monkeypatch):
@@ -272,13 +297,18 @@ def test_dry_run_goes_through_every_step_to_vote_gate(home, capsys, tmp_path, mo
     code, out = run_main(["--dry-run"], home, capsys, deps=deps)
     assert code == 0, out
     assert not (home / "runs").exists()                       # nothing persisted
-    assert http.requests and all(r[0] == "GET" for r in http.requests)      # no Nexus POST
-    assert not fake.ran("svnmucc", "--non-interactive") and not fake.ran("mvn", "-B") and not fake.ran("gpg", "--batch")
+    assert http.requests
+    assert all(r[0] == "GET" for r in http.requests)  # no Nexus POST
+    assert not fake.ran("svnmucc", "--non-interactive")
+    assert not fake.ran("mvn", "-B")
+    assert not fake.ran("gpg", "--batch")
     for word in ("would run: mvn -B clean verify", "would run: git clone", "would run: svnmucc"):
         assert word in out
-    assert "s3cr3t-pw" not in out and "s3cr3t-gpg" not in out
+    assert "s3cr3t-pw" not in out
+    assert "s3cr3t-gpg" not in out
     asked = [a[1] for a in prompts.asked]
-    assert "credential.apache.password" not in asked and "credential.gpg.passphrase" not in asked
+    assert "credential.apache.password" not in asked
+    assert "credential.gpg.passphrase" not in asked
     assert "Vote is open" in out
 
 
@@ -290,7 +320,8 @@ def test_version_flag_prefills_new_run(home, capsys, tmp_path, monkeypatch):
     run_main(["--dry-run", "--version", "9.2.1"], home, capsys, deps=deps)
     assert prompts.asked[0][3]["default"] == "juneau-9.2.1-branch"
     f = {x.name: x.default for x in prompts.asked[1][3]["fields"]}
-    assert f["version"] == "9.2.1" and f["developmentVersion"] == "9.2.2-SNAPSHOT"
+    assert f["version"] == "9.2.1"
+    assert f["developmentVersion"] == "9.2.2-SNAPSHOT"
 
 
 def test_dry_run_creates_attempt_full_log_but_no_runs(home, capsys, tmp_path, monkeypatch):
@@ -304,4 +335,5 @@ def test_dry_run_creates_attempt_full_log_but_no_runs(home, capsys, tmp_path, mo
 
 def test_version_flag_must_look_like_x_y_z(home, capsys):
     code, out = run_main(["--dry-run", "--version", "9.2"], home, capsys)
-    assert code == 2 and "x.y.z" in out
+    assert code == 2
+    assert "x.y.z" in out

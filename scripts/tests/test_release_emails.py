@@ -24,7 +24,8 @@ FACTS = dict(src_sha="aaa", bin_sha="bbb", commit="abc123", repo="orgapachejunea
 
 def test_vote_body_matches_juneau_text():
     to, sub, body = emails.vote(D, FACTS)
-    assert to == "dev@juneau.apache.org" and sub == "[VOTE] Release Apache Juneau 9.2.1 RC1"
+    assert to == "dev@juneau.apache.org"
+    assert sub == "[VOTE] Release Apache Juneau 9.2.1 RC1"
     for line in ["I am pleased to be calling this vote for the source release of Apache Juneau 9.2.1 RC1.",
                  "https://dist.apache.org/repos/dist/dev/juneau/binaries/juneau-9.2.1-RC1/",
                  "https://dist.apache.org/repos/dist/dev/juneau/source/juneau-9.2.1-RC1/",
@@ -41,23 +42,27 @@ def test_vote_body_matches_juneau_text():
 
 def test_optional_sections_omitted():
     _, _, plain = emails.vote(D, FACTS)
-    assert "Highlights" not in plain and "Known issues" not in plain
+    assert "Highlights" not in plain
+    assert "Known issues" not in plain
     _, _, rich = emails.vote({**D, "highlights": "Faster.", "knownIssues": "None much."}, FACTS)
     first_para_end = rich.index("RC1.") + 4
-    assert rich.index("Highlights") > first_para_end and rich.index("Known issues") > rich.index("Highlights")
+    assert rich.index("Highlights") > first_para_end
+    assert rich.index("Known issues") > rich.index("Highlights")
 
 
 def test_mailto_drops_long_body():
     assert emails.mailto_url("a@b", "s", "x" * 100).endswith("x" * 100)
     long = emails.mailto_url("a@b", "s", "x" * 3000)
-    assert "body=" not in long and len(long) < 1800
+    assert "body=" not in long
+    assert len(long) < 1800
 
 
 def test_not_yet_pauses_without_recording(make_ctx):
     ctx = make_ctx(answers={"email.propose": False})
     with pytest.raises(ctx.pause) as e:
         emails.send(ctx, "propose", "dev@juneau.apache.org", "s", "b")
-    assert e.value.done is False and not ctx.rf.get("emails")
+    assert e.value.done is False
+    assert not ctx.rf.get("emails")
 
 
 def test_sent_is_recorded(make_ctx):
@@ -74,8 +79,11 @@ def test_cancelled_email_is_ctrl_c(make_ctx):
 
 def test_result_and_announce_text():
     to, sub, body = emails.result(D, "passed", "Binding +1: 3 (A, B, C)")
-    assert sub == "[RESULT][VOTE] Release Apache Juneau 9.2.1 RC1" and "has passed" in body
+    assert sub == "[RESULT][VOTE] Release Apache Juneau 9.2.1 RC1"
+    assert "has passed" in body
     to, sub, body = emails.announce({**D, "acknowledgements": "Thanks all."}, "https://github.com/x/y")
-    assert to == "announce@apache.org" and sub == "[ANNOUNCE] Apache Juneau 9.2.1 released"
+    assert to == "announce@apache.org"
+    assert sub == "[ANNOUNCE] Apache Juneau 9.2.1 released"
     assert "https://downloads.apache.org/juneau/9.2.1/" in body or "dist/release/juneau/9.2.1/" in body
-    assert "https://github.com/x/y" in body and "Thanks all." in body
+    assert "https://github.com/x/y" in body
+    assert "Thanks all." in body

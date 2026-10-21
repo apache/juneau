@@ -26,7 +26,8 @@ def test_attempt_running_then_outcome(home):
     assert rf.get("attempts")[-1]["status"] == "running"
     rf.attempt_end("failed")
     a = rf.get("attempts")[-1]
-    assert a["status"] == "failed" and a["dir"] == str(d)
+    assert a["status"] == "failed"
+    assert a["dir"] == str(d)
     assert json.loads(rf.path.read_text())["attempts"][-1]["status"] == "failed"
 
 
@@ -36,7 +37,8 @@ def test_attempt_dir_numbering_race(home, monkeypatch):
     (home / "attempts").mkdir(parents=True)
     (home / "attempts" / f"{stamp}-001").mkdir()      # a concurrent run already took 001
     d = new_attempt_dir(home)
-    assert d.name == f"{stamp}-002" and d.is_dir()
+    assert d.name == f"{stamp}-002"
+    assert d.is_dir()
 
 
 def test_corrupt_run_json_fails_never_guesses(home):
@@ -65,4 +67,5 @@ def test_attempt_defaults_to_cli_and_this_pid(home):
     rf = RunFile(home / "runs" / "9.2.1" / "run.json")
     rf.attempt_start(new_attempt_dir(home), "resume")
     a = rf.get("attempts")[-1]
-    assert a["origin"] == "cli" and a["pid"] == os.getpid()
+    assert a["origin"] == "cli"
+    assert a["pid"] == os.getpid()

@@ -40,8 +40,8 @@ def ensure_keyid(ctx):
     key = "credential.gpg.keyid"
     if key in ctx.creds:
         return ctx.creds[key]
-    email = ctx.creds.get("credential.apache.email") or (
-        f"{ctx.creds['credential.apache.availid']}@apache.org" if ctx.creds.get("credential.apache.availid") else None)
+    email = ctx.creds.get("credential.apache.email") or (  # NOSONAR python:S1192 - credential keys read more clearly inline
+        f"{ctx.creds['credential.apache.availid']}@apache.org" if ctx.creds.get("credential.apache.availid") else None)  # NOSONAR python:S1192 - credential keys read more clearly inline
     keys = []
     if email:
         r = ctx.runner.quiet(["gpg", "--list-secret-keys", "--with-colons", "--keyid-format", "long"],
@@ -339,13 +339,13 @@ def wanted_files(v):
     """{Nexus file name: dist file name} for the two archives and their .asc / .sha512."""
     out = {}
     for old, new in renamed(v).items():
-        for suffix in ("", ".asc", ".sha512"):
+        for suffix in ("", ".asc", ".sha512"):  # NOSONAR python:S1192 - file suffixes read more clearly inline
             out[old + suffix] = new + suffix
     return out
 
 
 @step
-def dist_stage(ctx):
+def dist_stage(ctx):  # NOSONAR python:S3776 - one linear staging sequence; splitting it would scatter the steps
     mark = len(ctx.runner.skipped)
     v, rid = ctx.version, ctx.rf.get("nexusRepoId")
     want = wanted_files(v)
@@ -379,11 +379,13 @@ def dist_stage(ctx):
 def _digest_recorded(text):
     """The hex digest in a .sha512 file, whether it holds just the digest or 'digest  name' or a path then lines."""
     lines = text.splitlines()
-    return "".join(lines[1:]) if len(lines) > 1 else (lines[0].split()[0] if lines and lines[0].split() else "")
+    if len(lines) > 1:
+        return "".join(lines[1:])
+    return lines[0].split()[0] if lines and lines[0].split() else ""
 
 
 @step
-def dist_verify(ctx):
+def dist_verify(ctx):  # NOSONAR python:S3776 - one check per staged file; splitting it would scatter the checks
     if ctx.dry_run:   # dist_stage committed nothing, so there is nothing on dist/dev to list or check
         return "skipped (dry run): nothing was staged to verify"
     out, v = ctx.run_dir / "dist", ctx.version
@@ -417,8 +419,8 @@ def compose_vote_email(ctx):
     commit = r.out.strip() or "COMMIT_HASH_NOT_FOUND"
     deadline = ctx.now() + timedelta(hours=72)
     ctx.rf.update({"rcCommit": commit, "voteDeadline": deadline.isoformat()})
-    facts = dict(src_sha=sha(f"apache-juneau-{v}-src.zip"), bin_sha=sha(f"apache-juneau-{v}-bin.zip"), commit=commit,
-                 repo=ctx.rf.get("nexusRepoId") or "REPO_NOT_FOUND",
-                 deadline=deadline.astimezone().strftime("%d-%b-%Y %-I:%M%p %Z"))
+    facts = {"src_sha": sha(f"apache-juneau-{v}-src.zip"), "bin_sha": sha(f"apache-juneau-{v}-bin.zip"), "commit": commit,
+             "repo": ctx.rf.get("nexusRepoId") or "REPO_NOT_FOUND",
+             "deadline": deadline.astimezone().strftime("%d-%b-%Y %-I:%M%p %Z")}
     to, sub, body = emails.vote(ctx.d, facts)
     return emails.send(ctx, "vote", to, sub, body)

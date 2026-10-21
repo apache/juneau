@@ -36,6 +36,9 @@ import org.apache.juneau.rest.server.terminal.TerminalPrompts;
  * prompt becomes the single pending prompt and is pushed to the page. Answer values are never logged and are held
  * only until written.
  */
+@SuppressWarnings({
+	"java:S1192" // Prompt event keys read more clearly inline than as constants.
+})
 public class PromptBroker implements TerminalPrompts {
 
 	/** Stored credential values by prompt key (for example {@link CredentialAnswers#lookup}). */

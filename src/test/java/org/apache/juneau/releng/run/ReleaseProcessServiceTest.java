@@ -76,6 +76,7 @@ class ReleaseProcessServiceTest {
 		await(() -> live.process().isDone(), 20);
 		await(() -> readRun(runJson).contains("\"cancelled\""), 10);
 		await(() -> s.live().isEmpty(), 10);
+		assertTrue(readRun(runJson).contains("\"cancelled\""), readRun(runJson));
 	}
 
 	@Test

@@ -25,7 +25,8 @@ def test_dry_run_runs_read_only_only(make_ctx):
 def test_dry_run_prints_every_mutation(make_ctx):
     ctx = make_ctx(dry_run=True)
     r = ctx.runner.run(["mvn", "-B", "deploy"], title="w", mutating=True, tool="maven")
-    assert r.ok and r.code == 0
+    assert r.ok
+    assert r.code == 0
     assert any(s == "would run: mvn -B deploy" for s in ctx.fake.said)
 
 
@@ -42,9 +43,11 @@ def test_dry_run_masks_secrets(make_ctx):
     ctx.creds["credential.apache.password"] = "real-pw"          # as if a real run had cached it
     ctx.runner.secrets = lambda: ["real-pw"]
     ctx.runner.run(["svnmucc", "--password", "real-pw"], title="x", mutating=True)
-    assert all("real-pw" not in s for s in ctx.fake.said) and any("********" in s for s in ctx.fake.said)
+    assert all("real-pw" not in s for s in ctx.fake.said)
+    assert any("********" in s for s in ctx.fake.said)
     asked = [a[1] for a in ctx.prompt.asked]
-    assert "credential.apache.password" not in asked and "credential.gpg.passphrase" not in asked
+    assert "credential.apache.password" not in asked
+    assert "credential.gpg.passphrase" not in asked
 
 
 def test_dry_run_does_not_ask_for_secrets(make_ctx):
@@ -62,7 +65,9 @@ def test_dry_run_stops_at_vote_gate(make_ctx):
     ctx = make_ctx(dry_run=True)
     with pytest.raises(ctx.pause) as e:
         vote.vote_gate(ctx)
-    assert ctx.rf.get("phase") == "vote" and not ctx.rf.path.exists() and e.value.done is True
+    assert ctx.rf.get("phase") == "vote"
+    assert not ctx.rf.path.exists()
+    assert e.value.done is True
 
 
 def test_nexus_post_is_gated_by_dry_run(make_ctx):
@@ -71,7 +76,8 @@ def test_nexus_post_is_gated_by_dry_run(make_ctx):
     http = FakeHttp({("POST", "/bulk/promote"): (201, b"")})
     ctx = make_ctx(dry_run=True)
     Nexus(ctx.runner, lambda: ("u", "p"), opener=http).promote("r-1")
-    assert http.requests == [] and any(s.startswith("would run: POST") for s in ctx.fake.said)
+    assert http.requests == []
+    assert any(s.startswith("would run: POST") for s in ctx.fake.said)
     live = make_ctx()
     Nexus(live.runner, lambda: ("u", "p"), opener=http).promote("r-1")
     assert [r[0] for r in http.requests] == ["POST"]

@@ -96,7 +96,7 @@ class AppConfigurationBeansTest {
 	}
 
 	@Test
-	void b01_simpleResourceBeans(@TempDir Path dir) {
+	void b01_simpleResourceBeans() {
 		var runner = cfg.processRunner();
 		assertNotNull(cfg.rootRest());
 		assertNotNull(cfg.homeRest());

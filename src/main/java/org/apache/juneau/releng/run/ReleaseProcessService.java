@@ -21,7 +21,6 @@ import java.io.UncheckedIOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -41,6 +40,9 @@ import org.apache.juneau.rest.server.terminal.TerminalProcess;
  * {@link TerminalProcess} dir, the script's {@code --attempt-dir}, and the home of JRM's {@code jrm-attempt.json}
  * sidecar.
  */
+@SuppressWarnings({
+	"java:S1192" // Event and sidecar keys read more clearly inline than as constants.
+})
 public class ReleaseProcessService {
 
 	private static final Logger LOG = Logger.getLogger(ReleaseProcessService.class.getName());
@@ -165,7 +167,7 @@ public class ReleaseProcessService {
 		if (l == null || l.process().isDone())
 			return;
 		try {
-			Files.writeString(l.dir().resolve(RunFiles.STOPPED_MARKER), LocalDateTime.now().format(AttemptDirs.STAMP));
+			Files.writeString(l.dir().resolve(RunFiles.STOPPED_MARKER), AttemptDirs.stamp());
 		} catch (IOException e) {
 			LOG.log(Level.WARNING, "cannot write the jrm-stopped marker", e);
 		}
@@ -186,31 +188,13 @@ public class ReleaseProcessService {
 			sidecar.put("command", command);
 			sidecar.put("origin", "ui");
 			sidecar.put("dryRun", dryRun);
-			sidecar.put("startedAt", LocalDateTime.now().format(AttemptDirs.STAMP));
+			sidecar.put("startedAt", AttemptDirs.stamp());
 			writeSidecar(dir, sidecar);
 			var broker = new PromptBroker(stored, events, autoAnswers);
 			var attemptId = "attempt-" + dir.getFileName();
 			// Published before the process starts so the page sees "started" before any prompt the process raises.
 			events.publish("process", Map.of("state", "started", "attempt", attemptId));
-			TerminalProcess proc;
-			try {
-				proc = TerminalProcess.start("generic", cmd, 120, 40, dir, broker);
-			} catch (RuntimeException e) {
-				// Nothing ran: drop the sidecar (and the dir, if empty) so History shows no phantom attempt.
-				try {
-					Files.deleteIfExists(dir.resolve(RunFiles.SIDECAR));
-					Files.deleteIfExists(dir.resolve(RunFiles.SIDECAR + ".tmp"));
-					Files.deleteIfExists(dir);
-				} catch (@SuppressWarnings("unused") IOException | RuntimeException cleanup) {
-					// non-empty dir or unreadable: leave it
-				}
-				var failed = new LinkedHashMap<String, Object>();
-				failed.put("state", "ended");
-				failed.put("attempt", attemptId);
-				failed.put("exit", null);
-				events.publish("process", failed);
-				throw e;
-			}
+			var proc = startProcess(cmd, dir, broker, attemptId);
 			broker.attach(proc::answer);
 			var l = new Live(attemptId, dir, command, dryRun, proc, broker);
 			live = l;
@@ -223,6 +207,31 @@ public class ReleaseProcessService {
 		}
 	}
 
+	private TerminalProcess startProcess(List<String> cmd, Path dir, PromptBroker broker, String attemptId) throws IOException {
+		try {
+			return TerminalProcess.start("generic", cmd, 120, 40, dir, broker);
+		} catch (RuntimeException e) {
+			// Nothing ran: drop the sidecar (and the dir, if empty) so History shows no phantom attempt.
+			discardAttemptDir(dir);
+			var failed = new LinkedHashMap<String, Object>();
+			failed.put("state", "ended");
+			failed.put("attempt", attemptId);
+			failed.put("exit", null);
+			events.publish("process", failed);
+			throw e;
+		}
+	}
+
+	private static void discardAttemptDir(Path dir) {
+		try {
+			Files.deleteIfExists(dir.resolve(RunFiles.SIDECAR));
+			Files.deleteIfExists(dir.resolve(RunFiles.SIDECAR + ".tmp"));
+			Files.deleteIfExists(dir);
+		} catch (@SuppressWarnings("unused") IOException | RuntimeException cleanup) {
+			// non-empty dir or unreadable: leave it
+		}
+	}
+
 	private void awaitExit(Live l, Map<String, Object> sidecar) {
 		Integer exit = null;
 		try {
@@ -232,7 +241,7 @@ public class ReleaseProcessService {
 		} catch (Exception e) {
 			LOG.log(Level.WARNING, "release.py wait failed", e);
 		}
-		sidecar.put("endedAt", LocalDateTime.now().format(AttemptDirs.STAMP));
+		sidecar.put("endedAt", AttemptDirs.stamp());
 		if (exit != null)
 			sidecar.put("exit", exit);
 		try {

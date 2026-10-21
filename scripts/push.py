@@ -223,7 +223,7 @@ def script_tests_env():
 
 def _skip_script_tests(why, short):
     """The Python tests row, opened and skipped, so it does not stay pending."""
-    with run.step("script-tests", "Python tests") as st:
+    with run.step("script-tests", "Python tests") as st:  # NOSONAR python:S1192 - a step title reads more clearly inline
         say(f"⚠ Skipping Python tests: {why}.")
         run_markers.note("warn", f"Python tests skipped: {short}.")
         st.skip(short)

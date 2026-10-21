@@ -91,7 +91,8 @@ class PromptBrokerTest {
 	void a03_wrongIdRejected() {
 		var b = broker(Map.of(), Map.of());
 		b.onLine(prompt("p1", "text", "release.rc"));
-		assertThrows(IllegalStateException.class, () -> b.answer("p9", json("{\"value\":\"1\"}")));
+		var body = json("{\"value\":\"1\"}");
+		assertThrows(IllegalStateException.class, () -> b.answer("p9", body));
 		assertTrue(written.isEmpty());
 		assertTrue(b.pending().isPresent(), "the real prompt stays pending");
 	}
@@ -101,8 +102,8 @@ class PromptBrokerTest {
 		var records = new ArrayList<LogRecord>();
 		var h = new Handler() {
 			@Override public void publish(LogRecord r) { records.add(r); }
-			@Override public void flush() {}
-			@Override public void close() {}
+			@Override public void flush() { /* no-op: records are held in memory */ }
+			@Override public void close() { /* no-op: nothing to release */ }
 		};
 		var root = Logger.getLogger("org.apache.juneau.releng");
 		var old = root.getLevel();
@@ -138,7 +139,8 @@ class PromptBrokerTest {
 		b.onEnd();
 		assertTrue(b.pending().isEmpty());
 		assertTrue(events.get(events.size() - 1).contains("\"prompt-resolved\""));
-		assertThrows(IllegalStateException.class, () -> b.answer("p1", json("{\"value\":\"1\"}")));
+		var body = json("{\"value\":\"1\"}");
+		assertThrows(IllegalStateException.class, () -> b.answer("p1", body));
 	}
 
 	@Test
@@ -176,7 +178,8 @@ class PromptBrokerTest {
 	void a10_bodyWithoutValueOrCancelRejectedAndPromptStaysPending() {
 		var b = broker(Map.of(), Map.of());
 		b.onLine(prompt("p1", "text", "release.rc"));
-		var ex = assertThrows(IllegalArgumentException.class, () -> b.answer("p1", json("{}")));
+		var body = json("{}");
+		var ex = assertThrows(IllegalArgumentException.class, () -> b.answer("p1", body));
 		assertEquals("value or cancel required", ex.getMessage());
 		assertTrue(written.isEmpty());
 		assertTrue(b.pending().isPresent());

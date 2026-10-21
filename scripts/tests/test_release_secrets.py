@@ -68,7 +68,8 @@ def test_secrets_absent_from_run_json_and_full_log(make_ctx, home):
     text = ctx.rf.path.read_text()
     said = "\n".join(ctx.fake.said)
     for s in (PW, GPG, GH):
-        assert s not in text and s not in said
+        assert s not in text
+        assert s not in said
 
 
 def test_askpass_answers_from_environment_only():

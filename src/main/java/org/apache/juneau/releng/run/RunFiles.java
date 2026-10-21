@@ -16,6 +16,8 @@
  */
 package org.apache.juneau.releng.run;
 
+import static org.apache.juneau.commons.utils.Shorts.*;
+
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -112,13 +114,12 @@ public class RunFiles {
 		active().ifPresent(r -> r.attempts.stream().filter(a -> a.dir != null).forEach(a -> byDir.put(a.dir, a)));
 		for (var dir : attemptDirs()) {
 			var side = dir.resolve(SIDECAR);
-			if (! Files.isRegularFile(side))
+			var parsed = Files.isRegularFile(side) ? parse(side) : Optional.<JsonMap>empty();
+			if (parsed.isEmpty())
 				continue;
-			var m = parse(side);
-			if (m == null)
-				continue;
+			var m = parsed.get();
 			var a = byDir.computeIfAbsent(dir.toString(), k -> sidecarOnly(dir, m));
-			a.dryRun = Boolean.TRUE.equals(m.get("dryRun"));
+			a.dryRun = b(m.get("dryRun"));
 			if (a.exit == null && m.get("exit") instanceof Number x)
 				a.exit = x.intValue();
 		}
@@ -136,7 +137,14 @@ public class RunFiles {
 		a.started = m.getString("startedAt");
 		a.ended = m.getString("endedAt");
 		var exit = m.get("exit") instanceof Number x ? Integer.valueOf(x.intValue()) : null;
-		a.status = exit == null ? "running" : exit == 0 ? "ok" : exit == 130 ? "cancelled" : "failed";
+		if (exit == null)
+			a.status = "running";
+		else
+			a.status = switch (exit) {
+				case 0 -> "ok";
+				case 130 -> "cancelled";
+				default -> "failed";
+			};
 		return a;
 	}
 
@@ -168,9 +176,10 @@ public class RunFiles {
 	}
 
 	private Optional<RunFile> read(Path file) {
-		var m = parse(file);
-		if (m == null)
+		var parsed = parse(file);
+		if (parsed.isEmpty())
 			return Optional.empty();
+		var m = parsed.get();
 		try {
 			var r = new RunFile();
 			r.path = file;
@@ -209,13 +218,13 @@ public class RunFiles {
 		return a;
 	}
 
-	private static JsonMap parse(Path file) {
+	private static Optional<JsonMap> parse(Path file) {
 		try {
-			return Json.to(Files.readString(file), JsonMap.class);
+			return Optional.ofNullable(Json.to(Files.readString(file), JsonMap.class));
 		} catch (IOException | RuntimeException e) {
 			// A release never resumes from a guess: a corrupt file is shown as absent and logged, never repaired.
 			LOG.warning(() -> "cannot read " + file + ": " + e.getMessage());
-			return null;
+			return Optional.empty();
 		}
 	}
 

@@ -49,7 +49,10 @@ public class Attempt {
 	public String step;
 
 	/** {@code YYYYMMDD-HHMMSS}. */
-	public String started, ended;
+	public String started;
+
+	/** {@code YYYYMMDD-HHMMSS}. */
+	public String ended;
 
 	/** The script's process id, or {@code null}. */
 	public Long pid;

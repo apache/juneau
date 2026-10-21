@@ -21,6 +21,7 @@ import java.nio.file.FileAlreadyExistsException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 
 /**
@@ -41,7 +42,12 @@ public final class AttemptDirs {
 	 * @throws IOException If it cannot be created.
 	 */
 	public static Path create(Path home) throws IOException {
-		return create(home, LocalDateTime.now().format(STAMP));
+		return create(home, stamp());
+	}
+
+	/** The current local time as a {@link #STAMP}, the zone {@code release.py} stamps with too. */
+	static String stamp() {
+		return LocalDateTime.now(ZoneId.systemDefault()).format(STAMP);
 	}
 
 	static Path create(Path home, String stamp) throws IOException {

@@ -65,5 +65,6 @@ class RunFileWatcherTest {
 			Files.setLastModifiedTime(f, FileTime.fromMillis(Files.getLastModifiedTime(f).toMillis() + 5000));
 			RunnerFixture.await(() -> attempts.get() >= 2, 10);
 		}
+		assertTrue(attempts.get() >= 2, "the schedule survived the failed poll");
 	}
 }

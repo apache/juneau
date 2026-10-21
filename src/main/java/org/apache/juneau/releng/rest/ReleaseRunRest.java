@@ -60,6 +60,9 @@ import jakarta.servlet.http.HttpServletRequest;
  * {@code POST} body arrive in a {@code &content=} query parameter, which puts every action payload into browser
  * history and access logs. That matters most here, where a prompt answer can be a secret.
  */
+@SuppressWarnings({
+	"java:S1192" // JSON response keys read more clearly inline than as constants.
+})
 @Rest(path = "/runs", title = "Release", responseProcessors = FreemarkerViewRenderer.class,
 	disableContentParam = "true", mixins = { ViewsMixin.class, WebJarsMixin.class })
 public class ReleaseRunRest extends BasicRestResource implements TerminalMixin {
@@ -74,7 +77,7 @@ public class ReleaseRunRest extends BasicRestResource implements TerminalMixin {
 	 */
 	private static final int MAX_START_KEYS = 100;
 
-	private static final Pattern ATTEMPT_ID = Pattern.compile("attempt-([0-9]{8}-[0-9]{6}-[0-9]{3})");
+	private static final Pattern ATTEMPT_ID = Pattern.compile("attempt-(\\d{8}-\\d{6}-\\d{3})");
 
 	/**
 	 * The per-call logger of {@link #answer}, held so its level stays pinned: a prompt answer can be a secret, and

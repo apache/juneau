@@ -46,10 +46,16 @@ TOOL_NAMES = tuple(TOOLS)
 
 def parse_version(text):
     """(major, minor, dotted) from a tool's version output, or None.  A java banner's quoted version wins."""
-    m = re.search(r'version "(\d+)(?:\.(\d+))?[^"]*"', text or "") or re.search(r"(\d+)\.(\d+)(?:\.\d+)*", text or "")
+    text = text or ""
+    # The closing quote is found with str.find rather than a trailing [^"]*", which would backtrack over the digits.
+    m = re.search(r'version "(\d+)(?:\.(\d+))?', text)
+    close = text.find('"', m.end()) if m else -1
+    if close >= 0:
+        return int(m[1]), int(m[2] or 0), text[m.start():close + 1]
+    m = re.search(r"(?<!\d)(\d+)\.(\d+)(?:\.\d+)*", text)
     if not m:
         return None
-    return int(m[1]), int(m[2] or 0), m[0]
+    return int(m[1]), int(m[2]), m[0]
 
 
 def java_major(text):

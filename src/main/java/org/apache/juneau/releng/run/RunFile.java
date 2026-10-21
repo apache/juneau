@@ -19,6 +19,7 @@ package org.apache.juneau.releng.run;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
+import org.apache.juneau.commons.bean.BeanIgnore;
 
 /**
  * One {@code <rm.home>/runs/<version>/run.json}, read-only. {@code release.py} is its only writer.
@@ -40,8 +41,9 @@ public class RunFile {
 	/** The vote deadline, or {@code null}. */
 	public String voteDeadline;
 
-	/** The file. */
-	public transient Path path;
+	/** The file (kept out of the JSON state, which must not expose local paths). */
+	@BeanIgnore
+	public Path path;
 
 	/** The attempts recorded in the file, oldest first. */
 	public List<Attempt> attempts = new ArrayList<>();

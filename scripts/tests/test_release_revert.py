@@ -32,7 +32,8 @@ def test_revert_typed_rc_confirm(make_ctx):
     ctx = make_ctx(state=RC, answers={"confirm.revert": False})
     with pytest.raises(StepError):
         revert.revert_check(ctx)
-    assert ctx.prompt.asked[-1][3]["expect"] == "RC1" and ctx.prompt.asked[-1][3]["danger"] is True
+    assert ctx.prompt.asked[-1][3]["expect"] == "RC1"
+    assert ctx.prompt.asked[-1][3]["danger"] is True
 
 
 def test_revert_skips_absent_remote_state(make_ctx):
@@ -42,7 +43,8 @@ def test_revert_skips_absent_remote_state(make_ctx):
     ctx.fake.script("git", "-C", str(ctx.ws), "ls-remote", out="")      # tag absent
     ctx.fake.script("git", "-C", str(ctx.ws), "status", out="")
     revert.run_all(ctx)
-    assert nx.posts == [] and not ctx.fake.ran("svnmucc")
+    assert nx.posts == []
+    assert not ctx.fake.ran("svnmucc")
     assert not [a for a in ctx.fake.argvs() if "push" in a]
 
 
@@ -64,8 +66,10 @@ def test_revert_versions_commit_and_push_after_confirm(make_ctx):
 def test_revert_record_bumps_rc_and_resets_last(make_ctx):
     ctx = make_ctx(state={**RC, "rcHistory": []})
     revert.revert_record(ctx)
-    assert ctx.rf.get("details")["rc"] == 2 and ctx.rf.get("last") is None
-    assert ctx.rf.get("nexusRepoId") is None and ctx.rf.get("rcHistory")[-1]["rc"] == 1
+    assert ctx.rf.get("details")["rc"] == 2
+    assert ctx.rf.get("last") is None
+    assert ctx.rf.get("nexusRepoId") is None
+    assert ctx.rf.get("rcHistory")[-1]["rc"] == 1
     assert ctx.rf.get("phase") == "rc"
 
 

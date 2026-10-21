@@ -34,14 +34,22 @@ class Result:
         return not self.problems
 
 
+def _git_header(line):
+    """(old path, new path) of a `diff --git a/<old> b/<new>` line, splitting at the last " b/", else None."""
+    if not line.startswith("diff --git a/"):
+        return None
+    old, sep, new = line[len("diff --git a/"):].rpartition(" b/")
+    return (old, new) if sep else None
+
+
 def parse(diff):
     """{path: {'flags': [str], 'hunks': [(header, removed, added)]}} from a unified diff (any context size)."""
     files, cur, hunk = {}, None, None
     for line in diff.splitlines():
-        m = re.match(r"diff --git a/(.*) b/(.*)$", line)
+        m = _git_header(line)
         if m:
-            cur, hunk = files.setdefault(m.group(2), {"flags": [], "hunks": []}), None
-            if m.group(1) != m.group(2):
+            cur, hunk = files.setdefault(m[1], {"flags": [], "hunks": []}), None
+            if m[0] != m[1]:
                 cur["flags"].append("renamed")
         elif cur is None:
             continue
@@ -52,9 +60,9 @@ def parse(diff):
         elif line.startswith("@@"):
             hunk = (line, [], [])
             cur["hunks"].append(hunk)
-        elif hunk is not None and line[:1] == "-":
+        elif hunk is not None and line.startswith("-"):
             hunk[1].append(line[1:].strip())
-        elif hunk is not None and line[:1] == "+":
+        elif hunk is not None and line.startswith("+"):
             hunk[2].append(line[1:].strip())
     return files
 
@@ -69,7 +77,7 @@ def _hunk_text(path, hunk):
     return "\n".join([f"  {path} {hunk[0]}"] + [f"  -{r}" for r in hunk[1]] + [f"  +{a}" for a in hunk[2]])
 
 
-def check_commit(diff, subject, subject_part, old_version, new_version, old_tag, new_tag):
+def check_commit(diff, subject, subject_part, old_version, new_version, old_tag, new_tag):  # NOSONAR python:S3776 - one pass of per-file checks; splitting it would scatter them
     """(changed pom paths, tag changes seen, problems) for one commit's diff."""
     problems = []
     if subject_part not in (subject or ""):

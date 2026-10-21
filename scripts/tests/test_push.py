@@ -684,7 +684,8 @@ class TestUpstreamGate:
         assert push_module.commit_and_push(repo, "msg") == 1
         out = capsys.readouterr().out
         assert "git stash push && git pull --rebase && git stash pop --index" in out
-        assert "--ff-only" not in out and "--autostash" not in out
+        assert "--ff-only" not in out
+        assert "--autostash" not in out
 
     def test_up_to_date_proceeds(self, push_module, repo, remote_repo):
         _stage(repo)
@@ -719,7 +720,8 @@ class TestUpstreamGate:
         head = _run(repo, "git", "rev-parse", "HEAD")
         assert push_module.commit_and_push(repo, "msg", dry_run=True) == 0
         out = capsys.readouterr().out
-        assert "would refuse" in out and "1 commit behind" in out
+        assert "would refuse" in out
+        assert "1 commit behind" in out
         assert _run(repo, "git", "rev-parse", "HEAD") == head
 
 
@@ -735,8 +737,10 @@ class TestPrechecks:
         assert push_module.commit_and_push(repo, "msg") == 1
 
         out = capsys.readouterr().out
-        assert "✗ unreviewed" in out and "✗ upstream" in out
-        assert "scratch.txt" in out and "git merge --ff-only @{upstream}" in out
+        assert "✗ unreviewed" in out
+        assert "✗ upstream" in out
+        assert "scratch.txt" in out
+        assert "git merge --ff-only @{upstream}" in out
 
     def test_a_missing_identity_fails_with_the_config_command_and_never_sets_it(self, push_module, repo, capsys, git_spy):
         _run(repo, "git", "config", "--unset", "user.email")
@@ -753,7 +757,8 @@ class TestPrechecks:
     def test_a_clean_tree_warns_nothing_staged(self, push_module, repo, capsys):
         assert push_module.commit_and_push(repo, "msg") == 0
         out = capsys.readouterr().out
-        assert "⚠ staged" in out and "Nothing to commit" in out
+        assert "⚠ staged" in out
+        assert "Nothing to commit" in out
 
     def test_dry_run_with_a_dirty_tree_still_reports_every_would_refuse(self, push_module, repo, capsys):
         _stage(repo)
@@ -763,7 +768,8 @@ class TestPrechecks:
         assert push_module.commit_and_push(repo, "msg", dry_run=True) == 0
 
         out = capsys.readouterr().out
-        assert "⚠ unreviewed: would refuse" in out and "⚠ upstream: would refuse" in out
+        assert "⚠ unreviewed: would refuse" in out
+        assert "⚠ upstream: would refuse" in out
         assert "DRY RUN" not in out  # no would-commit report when a check would refuse
 
 
@@ -789,7 +795,8 @@ class TestPushTracked:
         assert push_module.commit_and_push(repo, "msg") == 1
 
         out = capsys.readouterr().out
-        assert "tracks a local branch" in out and "push did not complete" in out
+        assert "tracks a local branch" in out
+        assert "push did not complete" in out
 
     def test_dry_run_reports_the_real_push_command(self, push_module, repo, capsys):
         _stage(repo)
@@ -995,9 +1002,11 @@ class TestBuildGates:
     def test_a_failure_refuses_the_push(self, push_module, cmds, tmp_path, gate, title):
         cmds.code = 1
         s = _FakeSession()
+        run_gate = getattr(push_module, gate)
         with pytest.raises(SystemExit):
-            getattr(push_module, gate)(s, tmp_path, False)
-        assert f"{title} failed" in s.failed and "nothing committed" in s.failed
+            run_gate(s, tmp_path, False)
+        assert f"{title} failed" in s.failed
+        assert "nothing committed" in s.failed
 
     @pytest.mark.parametrize("gate, title", [("_real_compile", "Compile"), ("_real_maven_tests", "Java tests")])
     def test_dry_run_reports_would_run_and_runs_nothing(self, push_module, cmds, tmp_path, capsys, gate, title):
@@ -1095,7 +1104,8 @@ class TestE2EGate:
         s = _FakeSession()
         with pytest.raises(SystemExit):
             push_module._real_e2e(s, tmp_path, False)
-        assert "E2E failed" in s.failed and "nothing committed" in s.failed
+        assert "E2E failed" in s.failed
+        assert "nothing committed" in s.failed
 
     def test_a_failed_install_fails_the_gate_before_the_suite(self, push_module, cmds, monkeypatch, tmp_path):
         monkeypatch.setattr(push_module.module.shutil, "which", lambda name: f"/bin/{name}")
@@ -1111,12 +1121,14 @@ class TestE2EGate:
         monkeypatch.setattr(push_module.module.shutil, "which", lambda _name: None)
         s = _FakeSession()
         push_module._real_e2e(s, tmp_path, False)
-        assert s.failed is None and not cmds
+        assert s.failed is None
+        assert not cmds
         assert "Skipping E2E: npx not found" in capsys.readouterr().out
 
     def test_dry_run_reports_would_run_and_runs_nothing(self, push_module, cmds, npx, tmp_path, capsys):
         push_module._real_e2e(_FakeSession(), tmp_path, True)
-        assert not cmds and not npx
+        assert not cmds
+        assert not npx
         assert "Would run E2E: npx playwright test" in capsys.readouterr().out
 
 
@@ -1268,8 +1280,10 @@ class TestFlagCombinations:
     def test_dry_run_skips_the_commit_and_push_rows(self, push_module, repo, rows):
         _stage(repo)
         assert push_module.main(["--dry-run", "msg"], repo_dir=repo) == 0
-        assert rows["commit"] == "dry run" and rows["push"] == "dry run"
+        assert rows["commit"] == "dry run"
+        assert rows["push"] == "dry run"
 
     def test_test_only_dry_run_opens_no_commit_or_push_row(self, push_module, repo, rows):
         assert push_module.main(["--test-only", "--dry-run"], repo_dir=repo) == 0
-        assert "commit" not in rows and "push" not in rows
+        assert "commit" not in rows
+        assert "push" not in rows

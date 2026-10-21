@@ -22,7 +22,9 @@ import static org.mockito.Mockito.*;
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.util.Map;
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Consumer;
 import org.junit.jupiter.api.Test;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -31,7 +33,15 @@ class RunEventsSseServletTest {
 
 	@Test
 	void a01_streamsPublishedEventsAsSseData() throws Exception {
-		var bc = new EventBroadcaster();
+		var subscribed = new CountDownLatch(1);
+		var bc = new EventBroadcaster() {
+			@Override
+			public AutoCloseable subscribe(Consumer<String> sink) {
+				var subscription = super.subscribe(sink);
+				subscribed.countDown();
+				return subscription;
+			}
+		};
 		var out = new StringWriter();
 		var pw = new PrintWriter(out, true) {
 			@Override
@@ -45,11 +55,7 @@ class RunEventsSseServletTest {
 		when(resp.getWriter()).thenReturn(pw);
 		var t = new Thread(() -> new RunEventsSseServlet(bc).doGet(req, resp));
 		t.start();
-		var deadline = System.nanoTime() + TimeUnit.SECONDS.toNanos(5);
-		while (bc.subscribers() == 0) {
-			assertTrue(System.nanoTime() < deadline, "servlet never subscribed");
-			Thread.sleep(10);
-		}
+		assertTrue(subscribed.await(5, TimeUnit.SECONDS), "servlet never subscribed");
 		bc.publish("process", Map.of("state", "ended"));
 		t.join(TimeUnit.SECONDS.toMillis(5));
 		assertFalse(t.isAlive());

@@ -96,7 +96,7 @@ def find_run(home, version=None, active_only=False):
     active_only), else (None, {}).  A corrupt file raises RunFileError."""
     runs = home / "runs"
     if version:
-        paths = [runs / version / "run.json"]
+        paths = [runs / version / "run.json"]  # NOSONAR python:S1192 - a file name reads more clearly inline
     else:
         paths = sorted(runs.glob("*/run.json"), key=lambda p: p.stat().st_mtime, reverse=True) if runs.is_dir() else []
     for path in paths:
@@ -147,7 +147,12 @@ def precondition(args, active):
     """(message, exit code) when the arguments cannot run against the active run's state, else None."""
     d = active.get("details") or {}
     if (args.revert or args.resume or args.start_step) and not active:
-        what = "revert" if args.revert else "resume" if args.resume else "restart"
+        if args.revert:
+            what = "revert"
+        elif args.resume:
+            what = "resume"
+        else:
+            what = "restart"
         return f"No active release to {what}; start one with: release.py", 2
     if args.start_step:
         problem = guard_start(args.start_step, active)
@@ -253,7 +258,13 @@ def revert_registry(deps):
 
 
 def _command(args):
-    return "revert" if args.revert else "resume" if args.resume else "start-step" if args.start_step else "start"
+    if args.revert:
+        return "revert"
+    if args.resume:
+        return "resume"
+    if args.start_step:
+        return "start-step"
+    return "start"
 
 
 def _execute(args, deps, ctx, attempt):
@@ -281,8 +292,11 @@ def _execute(args, deps, ctx, attempt):
         rf.attempt_end("failed", step=stopped_at(), exit=1)
         raise
     code = 0 if result.ok else (result.code or 1)
-    rf.attempt_end("paused" if result.status == "paused" else "ok" if result.ok else "failed",
-                   step=stopped_at(), exit=code)
+    if result.status == "paused":
+        status = "paused"
+    else:
+        status = "ok" if result.ok else "failed"
+    rf.attempt_end(status, step=stopped_at(), exit=code)
     return code
 
 
@@ -319,10 +333,7 @@ def _drive(args, deps, ctx, attempt, new):
         if code:
             return code
     if new:
-        try:
-            d = details.ask(ctx, version=args.version)
-        except KeyboardInterrupt:
-            raise
+        d = details.ask(ctx, version=args.version)
         rf = RunFile(args.home / "runs" / d["version"] / "run.json", dry_run=args.dry_run)
         rf.reset()
         rf.update({"details": d, "phase": "rc"})
@@ -363,7 +374,7 @@ def run_release(args, deps, path, active):
 def main(argv=None, deps=None):
     try:
         args = parse(argv)
-    except SystemExit as e:
+    except SystemExit as e:  # NOSONAR python:S5754 - argparse's exit (--help, a usage error) becomes main's return code
         return e.code if isinstance(e.code, int) else 2
     try:
         if args.list_steps:

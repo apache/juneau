@@ -30,9 +30,11 @@ def test_details_branch_first_then_pom_defaults(make_ctx):
     d = details.ask(ctx)
     assert [a[0] for a in ctx.prompt.asked] == ["text", "form"]
     form = {f.name: f.default for f in ctx.prompt.asked[1][3]["fields"]}
-    assert form["version"] == "9.2.1" and form["developmentVersion"] == "9.2.2-SNAPSHOT"
+    assert form["version"] == "9.2.1"
+    assert form["developmentVersion"] == "9.2.2-SNAPSHOT"
     assert ["git", "-C", details.checkout(), "show", "origin/juneau-9.2.1-branch:pom.xml"] in ctx.fake.argvs()
-    assert d["branch"] == "juneau-9.2.1-branch" and ctx.rf.get("details")["rc"] == 1
+    assert d["branch"] == "juneau-9.2.1-branch"
+    assert ctx.rf.get("details")["rc"] == 1
 
 
 def test_details_validation_rejects_bad_versions():
@@ -81,7 +83,8 @@ def test_gpg_unlock_passphrase_on_stdin_only(make_ctx):
     ctx = make_ctx()
     rc.gpg_unlock(ctx)
     call = ctx.fake.calls[0]
-    assert call["argv"][:2] == ["gpg", "--batch"] and "--passphrase-fd" in call["argv"]
+    assert call["argv"][:2] == ["gpg", "--batch"]
+    assert "--passphrase-fd" in call["argv"]
     assert call["input"] == b"s3cr3t-gpg\n"
     assert "s3cr3t-gpg" not in " ".join(call["argv"])
 
@@ -124,7 +127,8 @@ def test_release_prepare_argv_and_askpass_env(make_ctx):
                             "-DdevelopmentVersion=9.2.2-SNAPSHOT"]
     assert call["env"]["GIT_ASKPASS"].endswith("jrm_release/askpass.py")
     assert call["env"]["GIT_TERMINAL_PROMPT"] == "0"
-    assert call["env"]["JRM_ASKPASS_PASS"] == "s3cr3t-pw" and "s3cr3t-pw" not in " ".join(call["argv"])
+    assert call["env"]["JRM_ASKPASS_PASS"] == "s3cr3t-pw"
+    assert "s3cr3t-pw" not in " ".join(call["argv"])
 
 
 def ver(a, b):
@@ -200,7 +204,8 @@ def test_release_diff_dependency_version_change_is_flagged(make_ctx):
     with pytest.raises(StepError, match="not accepted"):
         rc.release_diff_review(ctx)
     said = "\n".join(ctx.fake.said)
-    assert "-<version>4.12</version>" in said and "+<version>4.13</version>" in said
+    assert "-<version>4.12</version>" in said
+    assert "+<version>4.13</version>" in said
     assert "9.2.1-SNAPSHOT" not in said.split("unexpected change")[1].split("[next")[0].replace("<version>9.2.1-SNAPSHOT", "")
 
 
@@ -229,7 +234,8 @@ def test_release_diff_next_iteration_mismatch_is_flagged(make_ctx):
                        nxt=_hunk("pom.xml", *ver("9.2.1", "9.3.0-SNAPSHOT")) + _hunk("a/pom.xml", *ver("9.2.1", "9.2.2-SNAPSHOT")))
     rc.release_diff_review(ctx)
     said = "\n".join(ctx.fake.said)
-    assert "[next-iteration commit] unexpected change" in said and "+<version>9.3.0-SNAPSHOT</version>" in said
+    assert "[next-iteration commit] unexpected change" in said
+    assert "+<version>9.3.0-SNAPSHOT</version>" in said
 
 
 def test_release_diff_next_iteration_wrong_message_or_missing(make_ctx):
@@ -298,7 +304,8 @@ def test_dist_stage_lists_entries_no_glob(make_ctx):
     mucc = ctx.fake.ran("svnmucc")[0]
     flat = " ".join(mucc)
     assert "rm https://dist.apache.org/repos/dist/dev/juneau/source/juneau-9.2.0-RC1" in flat
-    assert "juneau-9.1.0-RC2" not in flat and ".hidden" not in flat      # other lines are left alone
+    assert "juneau-9.1.0-RC2" not in flat
+    assert ".hidden" not in flat  # other lines are left alone
 
 
 def test_dist_stage_renames_and_drops_sha1_md5(make_ctx):
@@ -310,8 +317,10 @@ def test_dist_stage_renames_and_drops_sha1_md5(make_ctx):
                      "apache-juneau-9.2.1-bin.zip.sha512", "apache-juneau-9.2.1-src.zip",
                      "apache-juneau-9.2.1-src.zip.asc", "apache-juneau-9.2.1-src.zip.sha512"]
     mucc = ctx.fake.ran("svnmucc")[0]
-    assert mucc.count("put") == 6 and mucc.count("mkdir") == 2
-    assert "--password-from-stdin" in mucc and "s3cr3t-pw" not in " ".join(mucc)
+    assert mucc.count("put") == 6
+    assert mucc.count("mkdir") == 2
+    assert "--password-from-stdin" in mucc
+    assert "s3cr3t-pw" not in " ".join(mucc)
     call = next(c for c in ctx.fake.calls if c["argv"][0] == "svnmucc")
     assert call["input"] == b"s3cr3t-pw\n"
 
@@ -361,10 +370,13 @@ def test_compose_vote_email_facts(make_ctx):
     ctx.fake.script("git", "-C", str(ctx.ws), "rev-parse", out="abc123\n")
     assert rc.compose_vote_email(ctx) == "vote email sent"
     kind, key, subject, kw = ctx.prompt.asked[-1]
-    assert key == "email.vote" and subject == "[VOTE] Release Apache Juneau 9.2.1 RC1"
-    assert "h=abc123" in kw["body"] and "orgapachejuneau-1002" in kw["body"]
+    assert key == "email.vote"
+    assert subject == "[VOTE] Release Apache Juneau 9.2.1 RC1"
+    assert "h=abc123" in kw["body"]
+    assert "orgapachejuneau-1002" in kw["body"]
     assert "SHA512_NOT_FOUND" not in kw["body"]
-    assert ctx.rf.get("rcCommit") == "abc123" and ctx.rf.get("voteDeadline")
+    assert ctx.rf.get("rcCommit") == "abc123"
+    assert ctx.rf.get("voteDeadline")
 
 
 # ---- vote phase
@@ -378,7 +390,8 @@ def test_vote_gate_pauses_phase_vote(make_ctx):
     ctx = make_ctx()
     with pytest.raises(ctx.pause) as e:
         vote.vote_gate(ctx)
-    assert ctx.rf.get("phase") == "vote" and e.value.done is True
+    assert ctx.rf.get("phase") == "vote"
+    assert e.value.done is True
     assert "--resume" in e.value.message
 
 
@@ -429,10 +442,12 @@ def test_nexus_release_needs_typed_version(make_ctx):
     with pytest.raises(StepError):
         promote.nexus_release(ctx)
     assert nx.posts == []
-    assert ctx.prompt.asked[-1][3]["expect"] == "9.2.1" and ctx.prompt.asked[-1][3]["danger"] is True
+    assert ctx.prompt.asked[-1][3]["expect"] == "9.2.1"
+    assert ctx.prompt.asked[-1][3]["danger"] is True
     ctx2 = make_ctx(nexus=nx, state=PASSED, answers={"confirm.nexus-release": True})
     promote.nexus_release(ctx2)
-    assert nx.posts == [("promote", "r-1")] and ctx2.rf.get("phase") == "promote"
+    assert nx.posts == [("promote", "r-1")]
+    assert ctx2.rf.get("phase") == "promote"
 
 
 def test_nexus_release_refuses_without_passed_vote(make_ctx):
@@ -441,7 +456,8 @@ def test_nexus_release_refuses_without_passed_vote(make_ctx):
     ctx = make_ctx(nexus=nx, state={"nexusRepoId": "r-1"}, answers={"confirm.nexus-release": True})
     with pytest.raises(StepError, match="vote"):
         promote.nexus_release(ctx)
-    assert nx.posts == [] and not ctx.prompt.asked
+    assert nx.posts == []
+    assert not ctx.prompt.asked
 
 
 def test_dist_promote_single_svnmucc_with_prior_rm(make_ctx):
@@ -482,10 +498,12 @@ def test_github_release_on_final_tag(make_ctx):
     ctx.fake.script("gh", "release", "create", out="https://github.com/apache/juneau/releases/tag/juneau-9.2.1\n")
     promote.github_release(ctx)
     call = ctx.fake.ran("gh")[0]
-    assert call[:4] == ["gh", "release", "create", "juneau-9.2.1"] and "--verify-tag" in call
+    assert call[:4] == ["gh", "release", "create", "juneau-9.2.1"]
+    assert "--verify-tag" in call
     assert "--latest=false" in call            # 10.0.0 exists and is higher
     gh = next(c for c in ctx.fake.calls if c["argv"][0] == "gh")
-    assert gh["env"]["GH_TOKEN"] == "s3cr3t-gh" and "s3cr3t-gh" not in " ".join(gh["argv"])
+    assert gh["env"]["GH_TOKEN"] == "s3cr3t-gh"
+    assert "s3cr3t-gh" not in " ".join(gh["argv"])
     assert ctx.rf.get("githubReleaseUrl").endswith("juneau-9.2.1")
 
 
@@ -502,7 +520,8 @@ def test_announce_waits_for_downloads(make_ctx):
     ctx = make_ctx(state=PASSED, answers={"email.announce": True},
                    http_ok=lambda u: (seen.append(u), next(results))[1])
     promote.compose_announce_email(ctx)
-    assert len(seen) == 3 and seen[0] == "https://downloads.apache.org/juneau/9.2.1/"
+    assert len(seen) == 3
+    assert seen[0] == "https://downloads.apache.org/juneau/9.2.1/"
 
 
 def test_followup_pause_on_no(make_ctx):
@@ -515,7 +534,8 @@ def test_followup_pause_on_no(make_ctx):
 def test_finalize_marks_released(make_ctx):
     ctx = make_ctx(state=PASSED)
     assert "released" in promote.finalize(ctx)
-    assert ctx.rf.get("phase") == "released" and ctx.rf.get("last") == "finalize"
+    assert ctx.rf.get("phase") == "released"
+    assert ctx.rf.get("last") == "finalize"
 
 
 REFS = "origin/master\norigin/juneau-9.2.1-branch\norigin/9.3.x\n"
@@ -531,8 +551,10 @@ def test_details_version_prefills_form_and_derives_dev(make_ctx):
     ctx.fake.script("git", "-C", details.checkout(), "show", out="<version>10.0.0-SNAPSHOT</version>")
     d = details.ask(ctx, version="9.2.1")
     f = _fields(ctx)
-    assert f["version"].default == "9.2.1" and f["developmentVersion"].default == "9.2.2-SNAPSHOT"
-    assert d["version"] == "9.2.1" and d["developmentVersion"] == "9.2.2-SNAPSHOT"
+    assert f["version"].default == "9.2.1"
+    assert f["developmentVersion"].default == "9.2.2-SNAPSHOT"
+    assert d["version"] == "9.2.1"
+    assert d["developmentVersion"] == "9.2.2-SNAPSHOT"
 
 
 @pytest.mark.parametrize("refs,want", [
@@ -544,7 +566,8 @@ def test_details_version_picks_branch_default(make_ctx, refs, want):
     ctx = make_ctx(with_details=False, answers={"release.branch": want, "release.details": dict(FORM)})
     ctx.fake.script("git", "-C", details.checkout(), "for-each-ref", out=refs)
     details.ask(ctx, version="9.2.1")
-    assert ctx.prompt.asked[0][0] == "text" and ctx.prompt.asked[0][3]["default"] == want
+    assert ctx.prompt.asked[0][0] == "text"
+    assert ctx.prompt.asked[0][3]["default"] == want
 
 
 def test_details_blank_dev_derives_from_entered_version(make_ctx):
@@ -620,14 +643,16 @@ def test_javadoc_question_names_the_directory_and_hint(make_ctx):
     ctx = make_ctx(answers={"review.javadoc": True})
     rc.javadoc_verify(ctx)
     msg = [a[2] for a in ctx.prompt.asked if a[1] == "review.javadoc"][0]
-    assert str(ctx.ws / "target" / "site" / "apidocs" / "index.html") in msg and msg.endswith("(y/n)")
+    assert str(ctx.ws / "target" / "site" / "apidocs" / "index.html") in msg
+    assert msg.endswith("(y/n)")
 
 
 def test_diff_question_says_what_to_read(make_ctx):
     ctx = make_ctx(answers={"review.diff": True})   # nothing scripted, so the check finds problems and asks
     rc.release_diff_review(ctx)
     msg = [a[2] for a in ctx.prompt.asked if a[1] == "review.diff"][0]
-    assert "juneau-9.2.1-RC1^ to juneau-9.2.1-RC1" in msg and msg.endswith("(y/n)")
+    assert "juneau-9.2.1-RC1^ to juneau-9.2.1-RC1" in msg
+    assert msg.endswith("(y/n)")
 
 
 def test_dist_verify_dry_run_does_not_claim_verified(make_ctx):
@@ -641,8 +666,10 @@ def test_prerequisites_row_replays_the_early_verdicts_as_bar_cells(make_ctx, mon
     failed = prereqs.check(ctx)
     n = len(ctx.fake.calls)
     cells = prereqs.checks(ctx)
-    assert len(ctx.fake.calls) == n and [c.name for c in cells][:3] == ["git", "mvn", "java"]
-    assert [c.name for c in cells if c.fn().status == "fail"] == ["gh"] and len(failed) == 1
+    assert len(ctx.fake.calls) == n
+    assert [c.name for c in cells][:3] == ["git", "mvn", "java"]
+    assert [c.name for c in cells if c.fn().status == "fail"] == ["gh"]
+    assert len(failed) == 1
 
 
 def test_release_checks_are_two_quiet_cells(make_ctx):
@@ -663,15 +690,18 @@ def test_registry_runs_both_check_groups_as_labelled_bars():
     from conftest import FakeRunner
     reg = release.registry(release.Deps(run=FakeRunner(), steps=__import__("juneau_scripts.steps", fromlist=["x"]),
                                         prompt=None, lock=None), release.impl_map())
-    assert reg._labels["prerequisites"] == "Prerequisites" and reg._labels["prechecks"] == "Release checks"
-    assert len(reg.names) == 25 and "test-workspace-verify" not in reg.names
+    assert reg._labels["prerequisites"] == "Prerequisites"
+    assert reg._labels["prechecks"] == "Release checks"
+    assert len(reg.names) == 25
+    assert "test-workspace-verify" not in reg.names
 
 
 def test_dry_run_emails_answer_themselves(make_ctx):
     from jrm_release import emails
     ctx = make_ctx(dry_run=True)   # no email.* answer: a prompt would raise
     assert emails.send(ctx, "propose", "dev@juneau.apache.org", "Subj", "Body") == "skipped (dry run): propose email not sent"
-    assert not ctx.prompt.asked and any("nothing is sent" in s for s in ctx.fake.said)
+    assert not ctx.prompt.asked
+    assert any("nothing is sent" in s for s in ctx.fake.said)
     assert ctx.rf.get("emails") is None
 
 
@@ -679,7 +709,8 @@ def test_dry_run_read_only_command_in_a_missing_workspace_is_not_run(make_ctx):
     ctx = make_ctx(dry_run=True)
     assert ctx.runner.run(["git", "-C", str(ctx.ws), "tag", "--list"], title="t", mutating=False).out == ""
     assert ctx.runner.run(["git", "tag"], title="t", mutating=False, cwd=ctx.ws).ok
-    assert ctx.fake.calls == [] and ctx.runner.skipped == []
+    assert ctx.fake.calls == []
+    assert ctx.runner.skipped == []
     assert any("would run (dry run created no" in s for s in ctx.fake.said)
     ctx.ws.mkdir(parents=True)   # a workspace from an earlier real run is used
     ctx.runner.run(["git", "-C", str(ctx.ws), "tag", "--list"], title="t", mutating=False)

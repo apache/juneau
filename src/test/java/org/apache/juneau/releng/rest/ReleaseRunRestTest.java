@@ -31,6 +31,7 @@ import org.apache.juneau.releng.run.PromptBroker;
 import org.apache.juneau.releng.run.ReleaseProcessService;
 import org.apache.juneau.releng.run.RunFiles;
 import org.apache.juneau.marshall.collections.JsonMap;
+import org.apache.juneau.marshall.marshaller.Json;
 import org.apache.juneau.rest.server.terminal.TerminalProcess;
 import org.apache.juneau.rest.server.views.IdempotencyKey;
 import org.apache.juneau.rest.server.view.freemarker.FreemarkerView;
@@ -66,7 +67,8 @@ class ReleaseRunRestTest {
 		if (prompt)
 			broker.onLine(PROMPT);
 		var proc = mock(TerminalProcess.class);
-		when(proc.terminal()).thenReturn(mock(org.apache.juneau.rest.server.terminal.FileTerminalSource.class));
+		var source = mock(org.apache.juneau.rest.server.terminal.FileTerminalSource.class);
+		when(proc.terminal()).thenReturn(source);
 		return new ReleaseProcessService.Live(attemptId, java.nio.file.Path.of("x"), "start", true, proc, broker);
 	}
 
@@ -96,10 +98,12 @@ class ReleaseRunRestTest {
 		var svc = mock(ReleaseProcessService.class);
 		when(svc.live()).thenReturn(Optional.empty());
 		var r = rest(home, svc);
-		assertThrows(BadRequest.class, () -> r.dropRc(body("RC1", false)));
+		var rc1 = body("RC1", false);
+		assertThrows(BadRequest.class, () -> r.dropRc(rc1));
 		verify(svc, never()).dropRc(anyString(), anyBoolean());
 		when(svc.dropRc("RC2", false)).thenReturn(null);
-		assertThrows(NullPointerException.class, () -> r.dropRc(body("RC2", false)), "reached the service");
+		var rc2 = body("RC2", false);
+		assertThrows(NullPointerException.class, () -> r.dropRc(rc2), "reached the service");
 		verify(svc).dropRc("RC2", false);
 	}
 
@@ -108,7 +112,9 @@ class ReleaseRunRestTest {
 		runJson(home, "promote", 2, home.resolve("attempts/a").toString(), "ok");
 		var svc = mock(ReleaseProcessService.class);
 		when(svc.live()).thenReturn(Optional.empty());
-		assertThrows(Conflict.class, () -> rest(home, svc).dropRc(body("RC2", false)));
+		var r = rest(home, svc);
+		var req = body("RC2", false);
+		assertThrows(Conflict.class, () -> r.dropRc(req));
 	}
 
 	@Test
@@ -117,12 +123,15 @@ class ReleaseRunRestTest {
 		when(svc.live()).thenReturn(Optional.empty());
 		when(svc.start(anyBoolean())).thenThrow(new ReleaseProcessService.BusyException("x"));
 		var r = rest(home, svc);
-		var e = assertThrows(Conflict.class, () -> r.start(start(false, null)));
+		var req = start(false, null);
+		var e = assertThrows(Conflict.class, () -> r.start(req));
 		assertTrue(e.getMessage().contains("already running"));
 		runJson(home, "rc", 1, home.resolve("attempts/a").toString(), "failed");
 		var svc2 = mock(ReleaseProcessService.class);
 		when(svc2.live()).thenReturn(Optional.empty());
-		assertThrows(Conflict.class, () -> rest(home, svc2).start(start(false, null)), "an active run must be resumed");
+		var r2 = rest(home, svc2);
+		var req2 = start(false, null);
+		assertThrows(Conflict.class, () -> r2.start(req2), "an active run must be resumed");
 		verify(svc2, never()).start(anyBoolean());
 	}
 
@@ -130,7 +139,9 @@ class ReleaseRunRestTest {
 	void a05_resumeNeedsActiveRun(@TempDir Path home) {
 		var svc = mock(ReleaseProcessService.class);
 		when(svc.live()).thenReturn(Optional.empty());
-		assertThrows(Conflict.class, () -> rest(home, svc).resume(new ReleaseRunRest.DryRunRequest()));
+		var r = rest(home, svc);
+		var req = new ReleaseRunRest.DryRunRequest();
+		assertThrows(Conflict.class, () -> r.resume(req));
 	}
 
 	@Test
@@ -153,11 +164,14 @@ class ReleaseRunRestTest {
 		when(svc.live()).thenReturn(Optional.empty());
 		when(svc.start(anyBoolean())).thenThrow(new IllegalStateException("python3 not found"));
 		var r = rest(home, svc);
-		var e = assertThrows(InternalServerError.class, () -> r.start(start(false, null)));
+		var req = start(false, null);
+		var e = assertThrows(InternalServerError.class, () -> r.start(req));
 		assertTrue(e.getMessage().contains("python3 not found"));
 		when(svc.resume(anyBoolean())).thenThrow(new IllegalStateException("dir already holds a run"));
 		runJson(home, "rc", 1, home.resolve("attempts/a").toString(), "failed");
-		assertThrows(InternalServerError.class, () -> rest(home, svc).resume(new ReleaseRunRest.DryRunRequest()));
+		var r2 = rest(home, svc);
+		var resumeReq = new ReleaseRunRest.DryRunRequest();
+		assertThrows(InternalServerError.class, () -> r2.resume(resumeReq));
 	}
 
 	@Test
@@ -185,6 +199,9 @@ class ReleaseRunRestTest {
 		when(svc.live()).thenReturn(Optional.of(withPrompt));
 		var m = rest(home, svc).current();
 		assertEquals(java.util.Set.of("active", "live", "pending", "history"), m.keySet());
+		var activeJson = Json.of(m.get("active"));
+		assertTrue(activeJson.contains("\"phase\":\"rc\""), activeJson);
+		assertFalse(activeJson.contains("\"path\""), activeJson);
 		@SuppressWarnings("unchecked")
 		var lv = (java.util.Map<String, Object>)m.get("live");
 		assertEquals("attempt-a", lv.get("attemptId"));
@@ -211,7 +228,9 @@ class ReleaseRunRestTest {
 		var svc = mock(ReleaseProcessService.class);
 		when(svc.live()).thenReturn(Optional.empty());
 		when(svc.dropRc("RC2", false)).thenThrow(new ReleaseProcessService.BusyException("x"));
-		assertThrows(Conflict.class, () -> rest(home, svc).dropRc(body("RC2", false)));
+		var r = rest(home, svc);
+		var req = body("RC2", false);
+		assertThrows(Conflict.class, () -> r.dropRc(req));
 	}
 
 	@Test
@@ -238,7 +257,9 @@ class ReleaseRunRestTest {
 		assertThrows(BadRequest.class, () -> r.start(null));
 		assertThrows(BadRequest.class, () -> r.dropRc(null));
 		runJson(home, "rc", 0, home.resolve("attempts/a").toString(), "failed");
-		var e = assertThrows(BadRequest.class, () -> rest(home, svc).dropRc(body(null, false)));
+		var r2 = rest(home, svc);
+		var noRc = body(null, false);
+		var e = assertThrows(BadRequest.class, () -> r2.dropRc(noRc));
 		assertFalse(e.getMessage().contains("RCnull"), e.getMessage());
 		verify(svc, never()).dropRc(any(), anyBoolean());
 	}

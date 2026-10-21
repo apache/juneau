@@ -46,6 +46,9 @@ final class RunnerFixture {
 		return Path.of(RunnerFixture.class.getResource("/fake-scripts/release.py").toURI()).getParent();
 	}
 
+	@SuppressWarnings({
+		"java:S2925" // This is the bounded poll helper: the conditions it waits on raise no signal.
+	})
 	static void await(BooleanSupplier condition, int seconds) throws InterruptedException {
 		var end = System.nanoTime() + TimeUnit.SECONDS.toNanos(seconds);
 		while (! condition.getAsBoolean()) {
