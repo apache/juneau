@@ -469,6 +469,13 @@ class OverallDisplayTest(unittest.TestCase):
         for b in (self.board(plan=None), self.board(hist={}), self.board(nested=True)):
             self.assertTrue(self.live().region(b, 79, 18)[0][2:].startswith("A"))
 
+    def test_nested_board_with_a_parent_overall_ends_on_the_overall_line(self):
+        env = {"JUNEAU_RUN_OVERALL": json.dumps({"elapsed": 30, "done": 1, "pending": [["install", 60.0]]})}
+        with mock.patch.dict(os.environ, env):
+            b = self.board(nested=True)
+        lines = self.live().region(b, 79, 18)
+        self.assertEqual(lines[-1], "Overall  28%  ~2:30 left  · 1 of 4 steps")      # 60 / (60 + 150): a and b + install, 30s + 30s of parent time
+
     def test_setup_row_sits_above_the_overall_line(self):
         b = self.board()
         b.apply("reactor", dict(step="a", size=5, poms=["p0", "p1"], tests=False))
@@ -628,14 +635,14 @@ class RowEstimateTest(unittest.TestCase):
         self.assertIn("26/100  26%", rest)
         self.assertEqual(elapsed, "0:26 / ~1:45")
 
-    def test_a_single_module_reactor_has_no_module_bar_and_a_percent_from_tests_run(self):
+    def test_a_single_module_reactor_has_one_in_flight_cell_and_a_percent_from_tests_run(self):
         b = self.board(lambda step, tool, sig=None: jr.Estimate(wall_s=100.0, units=1, rate=1.0, runs=5, tests=4000))
         b.apply("reactor", dict(step="s", size=1, poms=[], tests=True))
         b.apply("unit_start", dict(step="s", id="s/a", title="A", src="sub"))
         b.apply("tests", dict(step="s", total=1000, fail=0, err=0, skip=0))
         self.clock.advance(10)
         cells, rest, elapsed = self.cells(b)
-        self.assertIsNone(cells)
+        self.assertEqual(cells, [jr.PLAIN_GLYPHS["run"]])
         self.assertNotIn("0/1", rest)
         self.assertIn("~25%", rest)
         self.assertIn("1,000 / ~4,000 tests", rest)
@@ -645,8 +652,28 @@ class RowEstimateTest(unittest.TestCase):
         b.apply("reactor", dict(step="s", size=1, poms=[], tests=True))
         self.clock.advance(40)
         cells, rest, elapsed = self.cells(b)
-        self.assertIsNone(cells)
+        self.assertEqual(cells, [jr.PLAIN_GLYPHS["run"]])
         self.assertIn("~40%", rest)
+
+    def test_a_running_single_module_reactor_draws_one_in_flight_cell_in_every_glyph_set(self):
+        b = self.board(lambda step, tool, sig=None: jr.Estimate(wall_s=100.0, units=1, rate=1.0, runs=5))
+        b.apply("reactor", dict(step="s", size=1, poms=[], tests=True))
+        self.clock.advance(40)
+        for glyphs in (jr.PLAIN_GLYPHS, jr.NO_COLOR_GLYPHS, jr.COLOR_GLYPHS):
+            cells, rest, elapsed = jr.row_cells(b.rows["s"], glyphs, self.clock())
+            self.assertEqual(cells, [glyphs["run"]])
+            self.assertNotIn("0/1", rest)
+
+    def test_a_running_single_module_reactor_without_an_estimate_has_just_the_cell_and_the_tests(self):
+        b = self.board(None)
+        b.apply("reactor", dict(step="s", size=1, poms=[], tests=True))
+        b.apply("unit_start", dict(step="s", id="s/a", title="A", src="sub"))
+        b.apply("tests", dict(step="s", total=182, fail=0, err=0, skip=0))
+        self.clock.advance(18)
+        cells, rest, elapsed = self.cells(b)
+        self.assertEqual("".join(cells), jr.PLAIN_GLYPHS["run"])
+        self.assertEqual(rest, "182 tests")
+        self.assertEqual(elapsed, "0:18")
 
     def test_a_single_module_reactor_draws_its_cell_once_the_module_ends(self):
         b = self.board(lambda step, tool, sig=None: self.est)

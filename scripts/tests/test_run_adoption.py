@@ -107,7 +107,7 @@ def markers(text):
 def test_test_py_default_path_records_history_through_run_tool(test_mod, fake_mvn, run_history, tmp_path, capfd):
     """Markers off and default sinks: a step-id command still goes through run_tool, so its row is recorded."""
     run_history.start(tmp_path)
-    code, out = test_mod.run_command("mvn test", "tests", "Tests")
+    code, out = test_mod.run_command("mvn test", "tests", "Java tests")
     assert (code, out) == (0, "fake mvn: test\n")
     assert "##run" not in capfd.readouterr().out
     records = run_history.store("test", repo=tmp_path).read()
@@ -115,7 +115,7 @@ def test_test_py_default_path_records_history_through_run_tool(test_mod, fake_mv
 
 
 def test_test_py_default_path_output_is_unchanged(test_mod, fake_mvn, capfd):
-    code, _ = test_mod.run_command("mvn test", "tests", "Tests")
+    code, _ = test_mod.run_command("mvn test", "tests", "Java tests")
     assert code == 0
     assert capfd.readouterr().out == "Running: mvn test\n" + "-" * 80 + "\nfake mvn: test\n"
 
@@ -123,7 +123,7 @@ def test_test_py_default_path_output_is_unchanged(test_mod, fake_mvn, capfd):
 def test_mvn_wrapper_with_and_still_runs_through_the_shell(test_mod, monkeypatch):
     monkeypatch.setenv("JUNEAU_MVN_WRAPPER", "echo first &&")
     monkeypatch.setattr(test_mod._juneau.load()[0], "run_tool", _counting_run_tool(test_mod._juneau.load()[0].run_tool))
-    _, out = test_mod.run_command("mvn --version", "tests", "Tests")
+    _, out = test_mod.run_command("mvn --version", "tests", "Java tests")
     assert out.startswith("first\n")  # the && part ran in the same shell as the rest of the command
     assert test_mod._juneau.load()[0].run_tool.calls == 1
 
@@ -146,12 +146,12 @@ def _counting_run_tool(real):
 
 def test_test_py_markers_on_runs_the_command_as_a_step(test_mod, fake_mvn, monkeypatch, capfd):
     monkeypatch.setenv("RUN_MARKERS", "1")
-    code, out = test_mod.run_command("mvn test -T1C -Dtest='A B'", "tests", "Tests")
+    code, out = test_mod.run_command("mvn test -T1C -Dtest='A B'", "tests", "Java tests")
     assert code == 0
     assert out == "fake mvn: test -T1C -Dtest=A B\n"
     shown = capfd.readouterr().out
     assert markers(shown) == [
-        {"ev": "step", "id": "tests", "n": 1, "title": "Tests"},
+        {"ev": "step", "id": "tests", "n": 1, "title": "Java tests"},
         {"ev": "end", "id": "tests", "status": "ok"},
     ]
     assert "fake mvn: test" in shown
@@ -160,14 +160,14 @@ def test_test_py_markers_on_runs_the_command_as_a_step(test_mod, fake_mvn, monke
 def test_test_py_step_numbers_continue_after_n_base(test_mod, fake_mvn, monkeypatch, capfd):
     monkeypatch.setenv("RUN_MARKERS", "1")
     monkeypatch.setenv("JUNEAU_RUN_N_BASE", "3")
-    test_mod.run_command("mvn test", "tests", "Tests")
+    test_mod.run_command("mvn test", "tests", "Java tests")
     assert markers(capfd.readouterr().out)[0]["n"] == 4
 
 
 def test_test_py_failure_exit_code_is_returned_and_marked(test_mod, fake_mvn, monkeypatch, capfd):
     monkeypatch.setenv("RUN_MARKERS", "1")
     monkeypatch.setenv("FAKE_MVN_EXIT", "3")
-    code, _ = test_mod.run_command("mvn test", "tests", "Tests")
+    code, _ = test_mod.run_command("mvn test", "tests", "Java tests")
     assert code == 3
     assert markers(capfd.readouterr().out)[-1] == {"ev": "end", "id": "tests", "status": "fail", "exit": 3}
 
@@ -176,7 +176,7 @@ def test_test_py_routing_flags_work_without_markers(test_mod, fake_mvn, monkeypa
     log = tmp_path / "full.log"
     monkeypatch.setenv("JUNEAU_RUN_CONSOLE", "none")
     monkeypatch.setenv("JUNEAU_RUN_FULL_LOG", str(log))
-    code, out = test_mod.run_command("mvn test", "tests", "Tests")
+    code, out = test_mod.run_command("mvn test", "tests", "Java tests")
     assert code == 0 and out == "fake mvn: test\n"
     assert log.read_text() == "fake mvn: test\n"
     assert "fake mvn" not in capfd.readouterr().out
@@ -185,7 +185,7 @@ def test_test_py_routing_flags_work_without_markers(test_mod, fake_mvn, monkeypa
 def test_test_py_wrapper_prefix_stays_in_the_command(test_mod, monkeypatch, capfd):
     monkeypatch.setenv("RUN_MARKERS", "1")
     monkeypatch.setenv("JUNEAU_MVN_WRAPPER", "echo wrapped")
-    _, out = test_mod.run_command("mvn test", "tests", "Tests")
+    _, out = test_mod.run_command("mvn test", "tests", "Java tests")
     assert out == "wrapped mvn test\n"
 
 
@@ -394,7 +394,7 @@ def test_run_test_script_markers_on_gives_the_child_its_own_session(push_mod, mo
 def test_test_py_wrapper_with_and_and_markers_on_runs_through_a_shell(test_mod, monkeypatch):
     monkeypatch.setenv("RUN_MARKERS", "1")
     monkeypatch.setenv("JUNEAU_MVN_WRAPPER", "echo first &&")
-    code, out = test_mod.run_command("mvn --version", "tests", "Tests")
+    code, out = test_mod.run_command("mvn --version", "tests", "Java tests")
     assert out.startswith("first\n")  # the && part ran in the same shell as the rest of the command
 
 
@@ -566,7 +566,7 @@ def test_the_skipped_install_shows_done_by_tests(push_mod, gates, standalone, mo
     monkeypatch.setattr(sys, "argv", ["push.py", "--test-only"])
     assert push_mod.main() == 0
     [install] = [f for f in events.of("step_end") if f["id"] == "install"]
-    assert (install["status"], install["summary"]) == ("skip", "done by Tests")
+    assert (install["status"], install["summary"]) == ("skip", "done by Java tests")
 
 
 class FakeTimings:

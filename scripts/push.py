@@ -1039,7 +1039,7 @@ def main():
 #: are test.py's rows; the others are this script's.
 PLAN_LABELS = {
     "prechecks": "Prechecks", "sonar": "Sonar", "tracker": "Tracker", "container-tags": "Tags",
-    "bom": "BOM", "build": "Compile", "tests": "Tests", "py-tests": "Script tests", "js-tests": "Browser tests", "timing": "Timing",
+    "bom": "BOM", "build": "Compile", "tests": "Java tests", "py-tests": "Python tests", "js-tests": "Browser tests", "timing": "Timing",
     "install": "Install", "commit": "Commit", "push": "Push", "docs-smoke": "Docs build",
     "docs-commit": "Docs", "docs-push": "Docs push",
 }
@@ -1382,7 +1382,7 @@ def _push_steps(s, args, run, console, script_dir, juneau_root):  # NOSONAR pyth
                 _test_start = time.time()
                 test_cmd = build_test_command(test_script, args)
                 installed_by_tests = "--full" in test_cmd
-                # The child draws its own Compile/Tests/Browser tests/Perf rows; ours closes until it exits.  Its
+                # The child draws its own Compile/Java tests/Browser tests/Perf rows; ours closes until it exits.  Its
                 # environment carries JUNEAU_PUSH_ACTIVE (test.py then leaves the end-of-run bell to us) and, with
                 # markers on, JUNEAU_RUN_N_BASE reserving the numbers of the steps it contributes so the whole run
                 # stays in order.  Neither is set in our own environment, so later children don't inherit them.
@@ -1391,7 +1391,7 @@ def _push_steps(s, args, run, console, script_dir, juneau_root):  # NOSONAR pyth
                 _test_wall_sec = int(time.time() - _test_start)
                 if result.returncode != 0:
                     return aborted("\n❌ Build process aborted due to test failures.")
-                say(f"✅ Step {step_num}: Tests passed")
+                say(f"✅ Step {step_num}: Java tests passed")
                 _append_test_run_history(juneau_root, _test_wall_sec)
             except Exception as e:
                 say(f"\n❌ Error running tests: {e}", "error")
@@ -1400,7 +1400,7 @@ def _push_steps(s, args, run, console, script_dir, juneau_root):  # NOSONAR pyth
             # Fallback to direct mvn test if test.py doesn't exist
             _test_start = time.time()
             _mvn_ok = run_marked(
-                "tests", "Tests",
+                "tests", "Java tests",
                 ["mvn", "test"],
                 f"🧪 Step {step_num}: Running tests...",
                 juneau_root,
@@ -1423,7 +1423,7 @@ def _push_steps(s, args, run, console, script_dir, juneau_root):  # NOSONAR pyth
         step_num += 1
     else:
         say(f"\n⏭️  Step {step_num}: Skipping tests (--skip-tests flag)")
-        with run.row("tests", "Tests", label="Tests") as tests_row:
+        with run.row("tests", "Java tests", label="Java tests") as tests_row:
             tests_row.skip("--skip-tests")
         step_num += 1
     
@@ -1432,7 +1432,7 @@ def _push_steps(s, args, run, console, script_dir, juneau_root):  # NOSONAR pyth
     if installed_by_tests:
         # Still the protocol step `install` (end status skip), so the release manager's step list doesn't change.
         with marked_step("install", "Build and install", label="Install") as install_step:
-            install_step.skip("done by Tests")
+            install_step.skip("done by Java tests")
         if not console:
             say(f"\n⏭️  Step {step_num}: Build and install already done by test.py --full")
     elif not run_marked(

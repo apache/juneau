@@ -53,7 +53,7 @@ def reset_run_state():
         jr._console = None
     for key in (jr.ACTIVE_ENV, "JUNEAU_RUN_FULL_LOG", "JUNEAU_RUN_SESSION", "JUNEAU_RUN_DETAIL", "JUNEAU_RUN_LABEL_WIDTH",
                 "JUNEAU_RUN_LIVE", "JUNEAU_RUN_CONSOLE", "RUN_MARKERS", "JUNEAU_RUN_CONDENSED_LOG",
-                "JUNEAU_RUN_PENDING"):
+                "JUNEAU_RUN_PENDING", "JUNEAU_RUN_OVERALL"):
         os.environ.pop(key, None)
 
 

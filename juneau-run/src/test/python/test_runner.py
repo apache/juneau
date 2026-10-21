@@ -1184,6 +1184,7 @@ class ScriptApiTest(unittest.TestCase):
         self.console.board.width.return_value = 9
         self.console.board.detail = "modules"
         self.console.board.pending.return_value = []
+        self.console.board.overall_handoff.return_value = None
         patcher = mock.patch.object(jr, "_console", self.console)
         patcher.start()
         self.addCleanup(patcher.stop)
@@ -1340,6 +1341,12 @@ class ScriptApiTest(unittest.TestCase):
         self.console.board.pending.return_value = [("release", "Release")]
         with jr.handoff() as env:
             self.assertEqual(json.loads(env["JUNEAU_RUN_PENDING"]), [["release", "Release"]])
+
+    def test_handoff_exports_the_overall(self):
+        self.console.board.overall_handoff.return_value = {"elapsed": 12.5, "done": 2, "pending": [["install", 30.0]]}
+        with jr.handoff() as env:
+            self.assertEqual(json.loads(env["JUNEAU_RUN_OVERALL"]),
+                             {"elapsed": 12.5, "done": 2, "pending": [["install", 30.0]]})
 
     def test_console_active(self):
         self.assertTrue(jr.console_active())

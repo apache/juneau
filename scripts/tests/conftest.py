@@ -30,7 +30,7 @@ RUN_MODULE_PATH = Path(__file__).resolve().parent.parent.parent / "juneau-run" /
 
 @pytest.fixture(autouse=True)
 def _no_nested_script_tests(monkeypatch):
-    """test.py's Script tests step runs this suite; a test that drives test.py's _main() must not launch it again."""
+    """test.py's Python tests step runs this suite; a test that drives test.py's _main() must not launch it again."""
     monkeypatch.setenv("JUNEAU_SCRIPT_TESTS_ACTIVE", "1")
 
 

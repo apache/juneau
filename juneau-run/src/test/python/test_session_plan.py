@@ -12,7 +12,10 @@
 # ***************************************************************************************************************************
 """The whole-run plan: Overall arithmetic (pure), plan() and the Board's plan state (spec 6)."""
 
+import json
+import os
 import unittest
+from unittest import mock
 
 from support import jr, reset_run_state
 
@@ -140,6 +143,40 @@ class BoardPlanTest(unittest.TestCase):
 
     def test_nested_board_has_no_overall(self):
         self.assertIsNone(self.board(nested=True).overall())
+
+    def nested_board(self, overall, plan=("a", "b", "c")):
+        env = {"JUNEAU_RUN_OVERALL": overall if isinstance(overall, str) else json.dumps(overall)}
+        with mock.patch.dict(os.environ, env):
+            return self.board(plan=plan, nested=True)
+
+    def test_nested_board_with_a_parent_overall_adds_the_parents_steps(self):
+        b = self.nested_board({"elapsed": 40, "done": 2, "pending": [["install", 20.0], ["push", None]]})
+        o = b.overall()
+        self.assertEqual((o.done, o.total), (2, 7))             # the parent's 2 done, the child's 3, 2 pending
+        self.assertTrue(o.lower_bound)                          # push has no figure
+        self.assertEqual(o.remaining, 225)                      # 60 + 100 + 40 + 20, shown on the 15s step
+        self.assertEqual(o.percent, 15)                         # the parent's 40s count as elapsed: 40 / (40 + 225)
+
+    def test_the_parents_pending_steps_the_child_plans_are_not_counted_twice(self):
+        o = self.nested_board({"elapsed": 0, "done": 0, "pending": [["b", 100.0], ["commit", 5.0]]}).overall()
+        self.assertEqual(o.total, 4)                            # a, b, c and commit
+
+    def test_malformed_parent_overall_is_ignored(self):
+        for bad in ("not json", "[1]", '{"elapsed": "x"}', '{"elapsed": 1, "done": 1, "pending": [[1]]}'):
+            self.assertIsNone(self.nested_board(bad).overall(), bad)
+
+    def test_the_parent_overall_is_ignored_by_a_top_level_board(self):
+        with mock.patch.dict(os.environ, {"JUNEAU_RUN_OVERALL": json.dumps({"elapsed": 40, "done": 2, "pending": []})}):
+            self.assertEqual(self.board().overall().total, 3)
+
+    def test_overall_handoff_carries_elapsed_done_and_pending(self):
+        b = self.board()
+        b.apply(*start("a")); self.clock.advance(20); b.apply(*end("a"))
+        b.apply(*start("b")); self.clock.advance(5)
+        self.assertEqual(b.overall_handoff(), {"elapsed": 25.0, "done": 1, "pending": [["c", 40.0]]})
+
+    def test_overall_handoff_without_a_plan_is_none(self):
+        self.assertIsNone(self.board(plan=None).overall_handoff())
 
     def test_running_step_on_the_live_units_path(self):
         b = self.board()

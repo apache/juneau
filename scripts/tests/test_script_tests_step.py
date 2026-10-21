@@ -11,7 +11,7 @@
 # * specific language governing permissions and limitations under the License.
 # ***************************************************************************************************************************
 """
-Tests for the Script tests step in scripts/test.py (the scripts/tests pytest suite as its own row): launcher choice,
+Tests for the Python tests step in scripts/test.py (the scripts/tests pytest suite as its own row): launcher choice,
 the skip notice, the pass/fail result, and the row in push.py's plan.  Nothing here runs pytest, mvn or push.py's main().
 """
 
@@ -86,7 +86,7 @@ def test_skips_with_visible_notice_when_no_launcher(monkeypatch, test_mod):
     said = []
     monkeypatch.setattr(test_mod, "say", lambda text, level="info": said.append((text, level)))
     assert test_mod.script_tests() == 0
-    assert any("Skipping Script tests" in text and level == "warn" for text, level in said)
+    assert any("Skipping Python tests" in text and level == "warn" for text, level in said)
 
 
 @pytest.mark.parametrize("code", [0, 1])
@@ -112,7 +112,7 @@ def test_default_runner_is_its_own_pytest_row(monkeypatch, test_mod):
             return type("R", (), {"exit": 0})()
     monkeypatch.setattr(test_mod._juneau, "load", lambda: (FakeRun(),))
     assert test_mod.script_tests(launcher=["pytest"]) == 0
-    assert calls == [("pytest", "py-tests", "Script tests", "Script tests")]
+    assert calls == [("pytest", "py-tests", "Python tests", "Python tests")]
 
 
 def test_skips_when_already_running_inside_the_suite(monkeypatch, test_mod):
@@ -137,4 +137,4 @@ def test_push_plan_lists_the_row_after_tests(push_mod):
     args = argparse.Namespace(test_only=True, sonarqube=False, tracker_audit=False, skip_tests=False, js_tests=False)
     ids = [step_id for step_id, _ in push_mod.push_plan(args, SCRIPTS_DIR, SCRIPTS_DIR.parent, False)]
     assert ids.index("py-tests") == ids.index("tests") + 1
-    assert push_mod.PLAN_LABELS["py-tests"] == "Script tests"
+    assert push_mod.PLAN_LABELS["py-tests"] == "Python tests"

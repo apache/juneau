@@ -44,7 +44,7 @@ Environment:
     JUNEAU_MVN_WRAPPER       Optional prefix for every mvn command (e.g. a lock script that serializes
                              concurrent runs on one checkout).
 
-Script tests:
+Python tests:
     After the Maven tests pass, scripts/tests (the tooling's own pytest suite) runs as its own row.  The launcher is
     `python3 -m pytest` when pytest is importable, else `uv run --native-tls --with pytest` when uv is on the PATH; with neither,
     the step prints a notice and skips.  Nothing is installed.
@@ -615,7 +615,7 @@ def test(no_container=False):
 	cmd = f"mvn test {PARALLELISM} -Drat.skip=true"
 	if no_container:
 		cmd += " -DexcludedGroups=container"
-	return run_command(cmd, "tests", "Tests", label="Tests", summarize=_record_buckets)
+	return run_command(cmd, "tests", "Java tests", label="Java tests", summarize=_record_buckets)
 
 
 # Set in the pytest child so a test that reaches script_tests() again cannot launch the suite recursively.
@@ -644,14 +644,14 @@ def script_tests_command(launcher):
 def script_tests(launcher=None, runner=None):
 	"""The scripts/tests pytest suite as its own row.  Returns 0 on pass or skip, non-zero on failure."""
 	if os.environ.get(SCRIPT_TESTS_ACTIVE):
-		say("\n⚠️  Skipping Script tests: already running inside them (no recursion).", "warn")
+		say("\n⚠️  Skipping Python tests: already running inside them (no recursion).", "warn")
 		return 0
 	launcher = launcher or script_tests_launcher()
 	if launcher is None:
-		say("\n⚠️  Skipping Script tests: neither pytest nor uv found (python3 -m pytest / uv run --native-tls --with pytest).", "warn")
+		say("\n⚠️  Skipping Python tests: neither pytest nor uv found (python3 -m pytest / uv run --native-tls --with pytest).", "warn")
 		return 0
 	cmd = script_tests_command(launcher)
-	say("\n🐍 Running Script tests (scripts/tests)...")
+	say("\n🐍 Running Python tests (scripts/tests)...")
 	say(f"Running: {' '.join(cmd)}")
 	say("-" * 80)  # NOSONAR python:S1192 - the same banner rule as run_command
 	env = dict(os.environ, PYTHONDONTWRITEBYTECODE="1", **{SCRIPT_TESTS_ACTIVE: "1"})
@@ -659,9 +659,9 @@ def script_tests(launcher=None, runner=None):
 		code = runner(cmd, env)
 	else:
 		run = _juneau.load()[0]
-		code = run.run_tool(cmd, "pytest", "py-tests", "Script tests", n=next_step_number(), cwd=str(REPO_ROOT),
-			env=env, capture=True, label="Script tests").exit
-	say("\n✅ Script tests passed!" if code == 0 else "\n❌ Script tests failed!", "info" if code == 0 else "error")
+		code = run.run_tool(cmd, "pytest", "py-tests", "Python tests", n=next_step_number(), cwd=str(REPO_ROOT),
+			env=env, capture=True, label="Python tests").exit
+	say("\n✅ Python tests passed!" if code == 0 else "\n❌ Python tests failed!", "info" if code == 0 else "error")
 	return code
 
 
@@ -851,11 +851,11 @@ def _main():  # NOSONAR python:S3776 -- Cognitive complexity is acceptable for t
 		if exit_code != 0:
 			_, failures, errors = parse_test_results(last_test_output)
 			if failures is not None and errors is not None:
-				say(f"\n❌ Tests failed! ({failures + errors} failed: {failures} failures, {errors} errors)", "error")
+				say(f"\n❌ Java tests failed! ({failures + errors} failed: {failures} failures, {errors} errors)", "error")
 			else:
-				say("\n❌ Tests failed!", "error")
+				say("\n❌ Java tests failed!", "error")
 		else:
-			say("\n✅ Tests passed!")
+			say("\n✅ Java tests passed!")
 		if exit_code != 0:
 			return exit_code
 		perf_exit = run_perf_guard(test_elapsed, PERF_BASELINE, module_times_, enforce=args.enforce_perf, unmapped=unmapped)

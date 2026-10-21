@@ -17,7 +17,7 @@ remains here is a juneau-only script with no counterpart elsewhere.
 
 ## Running
 
-The suite must also pass under a push-like environment (`JUNEAU_RUN_SESSION`, `JUNEAU_PUSH_ACTIVE`, `JUNEAU_RUN_ACTIVE`, `JUNEAU_RUN_N_BASE` set), because `push.py`'s Script tests step runs it that way; any test that depends on those variables being unset must clear them itself.
+The suite must also pass under a push-like environment (`JUNEAU_RUN_SESSION`, `JUNEAU_PUSH_ACTIVE`, `JUNEAU_RUN_ACTIVE`, `JUNEAU_RUN_N_BASE` set), because `push.py`'s Python tests step runs it that way; any test that depends on those variables being unset must clear them itself.
 
 `pytest` is not vendored anywhere in this repo (it's pure-stdlib elsewhere in `scripts/` on
 purpose). Two easy ways to run this suite without installing anything globally:

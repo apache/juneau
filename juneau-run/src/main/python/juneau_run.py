@@ -532,6 +532,7 @@ _MARK_COLORS = {"✓": "\x1b[32m✓\x1b[0m", "✗": "\x1b[31m✗\x1b[0m"}
 _MARK_RE = re.compile("(?<!m)[✓✗]")   # not one already coloured (right after an SGR escape)
 _NOTE_PREFIX = {"info": "ℹ", "warn": "⚠", "error": "✗"}
 PENDING_ENV = "JUNEAU_RUN_PENDING"     # a parent session's labelled pending rows, [[id, label], ...], for a nested one
+OVERALL_ENV = "JUNEAU_RUN_OVERALL"     # a parent session's {elapsed, done, pending: [[id, hist_wall_s], ...]}, for a nested one
 # A row's icon (spec 5.2): a spinner while it runs, then its outcome: a coloured ● for ok, warn and fail, or ✔ ⚠ ✗
 # when colour is off.  No VS16 after ⚠: it must stay one column.
 SPINNER = "⠋⠙⠹⠸⠼⠴⠦⠧⠇⠏"
@@ -879,6 +880,18 @@ def _parent_pending():
         return []
 
 
+def _parent_overall():
+    """JUNEAU_RUN_OVERALL as (elapsed, done, [(id, hist_wall_s or None)]), or None when it is unset or malformed."""
+    try:
+        value = json.loads(os.environ.get(OVERALL_ENV) or "null")
+        if value is None:
+            return None
+        pending = [(str(i), None if hist is None else float(hist)) for i, hist in value["pending"]]
+        return float(value["elapsed"]), int(value["done"]), pending
+    except (ValueError, TypeError, KeyError):
+        return None
+
+
 class Board:
     """The run's state for the console view.  apply(kind, fields) returns the blocks that event produces."""
 
@@ -898,6 +911,7 @@ class Board:
         self.plan = None            # the planned top-level step ids, in order (spec 6), or None
         self.plan_labels = {}       # planned step id -> label, for the ones that draw a pending row
         self.parent_pending = _parent_pending() if nested else []     # a parent session's pending rows, (id, label)
+        self.parent_overall = _parent_overall() if nested else None   # a parent session's Overall inputs (OVERALL_ENV)
         self.finished = False       # the done event arrived: nothing is pending any more
         self.shown_end = None       # the Overall figure's projected end (session seconds) last displayed, held by damp_total
         self.plan_estimates = {}    # planned step id -> history wall_s or None, asked of the estimator once per plan
@@ -1039,14 +1053,16 @@ class Board:
             self.plan_estimates[step_id] = est.wall_s if est else None
         return self.plan_estimates[step_id]
 
-    def overall(self):
-        """The whole-run Overall figure, or None: no plan, a nested session, or nothing known (spec 6.2, 6.3)."""
-        if not self.plan or self.nested:
-            return None
-        # Parallel planned steps each add their remaining time, so a plan that runs steps concurrently is an overestimate.
-        now = self.clock()
-        last_started = max((i for i, sid in enumerate(self.plan) if sid in self.rows), default=-1)
+    def _overall_steps(self, now):
+        """The plan's steps as overall_figures() takes them, after a parent session's (OVERALL_ENV): its done steps,
+        and its pending ones that this plan and these rows do not already cover."""
         steps = []
+        if self.parent_overall is not None:
+            _, done, pending = self.parent_overall
+            steps = [("", "done", None, None)] * done
+            steps += [(sid, "pending", hist, None) for sid, hist in pending
+                      if sid not in (self.plan or ()) and sid not in self.rows]
+        last_started = max((i for i, sid in enumerate(self.plan) if sid in self.rows), default=-1)
         for i, sid in enumerate(self.plan):
             r = self.rows.get(sid)
             if r is None:
@@ -1063,13 +1079,36 @@ class Board:
                               (total, e) if total is not None else None))
             elif r.status != "skip":
                 steps.append((sid, "done", None, None))
-        o = overall_figures(now - self.session_t0, steps)
+        return steps
+
+    def _overall_elapsed(self, now):
+        return now - self.session_t0 + (self.parent_overall[0] if self.parent_overall is not None else 0)
+
+    def overall(self):
+        """The whole-run Overall figure, or None: no plan, a nested session without its parent's (OVERALL_ENV), or
+        nothing known (spec 6.2, 6.3)."""
+        if not self.plan or (self.nested and self.parent_overall is None):
+            return None
+        # Parallel planned steps each add their remaining time, so a plan that runs steps concurrently is an overestimate.
+        now = self.clock()
+        elapsed = self._overall_elapsed(now)
+        o = overall_figures(elapsed, self._overall_steps(now))
         if o is None or o.remaining <= 0:
             return o
-        elapsed = now - self.session_t0       # damp the projected end like a row's total, then show what is left of it
+        # damp the projected end like a row's total, then show what is left of it
         self.shown_end = damp_total(self.shown_end, elapsed + o.remaining, elapsed, rounded=False)
         left = max(self.shown_end - elapsed, 0)
         return o._replace(remaining=round_estimate(left) if left > 0 else left)
+
+    def overall_handoff(self):
+        """What a child session needs to carry on the Overall figure (OVERALL_ENV), or None with no plan: the seconds
+        elapsed, the steps done, and the steps still pending with their history, as [id, wall_s or None]."""
+        if not self.plan:
+            return None
+        now = self.clock()
+        steps = self._overall_steps(now)
+        return {"elapsed": self._overall_elapsed(now), "done": sum(1 for _, state, _, _ in steps if state == "done"),
+                "pending": [[sid, hist] for sid, state, hist, _ in steps if state == "pending"]}
 
     def _on_step_start(self, f):
         parent = self.rows.get(f.get("parent"))
@@ -1527,12 +1566,12 @@ def row_text(row, glyphs, now, pending=False):
     # show on a finished row whose units did not all report.
     unreported = not row.running and row.unit_kind == "modules" and not row.units_done
     # A finished module bar that never counted a unit (a -q build sends no module events) shows no bar at all.
-    # A running reactor of one barred module has nothing to count: its one cell would sit at 0/1 until the end, so
-    # the row shows the test count and a percent from the tests run against history's expected count instead.
+    # A running reactor of one barred module has nothing to count (no module-start event): it shows one in-flight
+    # cell and no 0/1, and the percent comes from the tests run against history's expected count instead.
     single = row.running and row.unit_kind == "modules" and row.units_total + row.units_dropped == 1 \
         and not row.units_done
     if single:
-        cells = None
+        cells = [glyphs["run"]]
     elif not unreported and (row.bar_units or row.size or row.units_total or row.unit_kind == "modules"):
         if row.unit_kind:
             cells = unit_bar(row.unit_view(), row.units_total, glyphs)
@@ -2423,7 +2462,7 @@ def passthrough(cmd, step_id, title, *, n=None, parent=None, cwd=None, env=None,
 def handoff():
     """Give the terminal to a child session (push.py running test.py) for the block.  Yields the env the child needs
     so its rows line up with ours (label width, detail level) and our pending rows stay visible under its own
-    (JUNEAU_RUN_PENDING); empty with no session."""
+    (JUNEAU_RUN_PENDING) and its Overall line carries on (JUNEAU_RUN_OVERALL); empty with no session."""
     if _console is None:
         yield {}
         return
@@ -2431,6 +2470,9 @@ def handoff():
     pending = list(_console.board.pending())
     if pending:
         env[PENDING_ENV] = json.dumps([[i, label] for i, label in pending])
+    overall = _console.board.overall_handoff()
+    if overall:
+        env[OVERALL_ENV] = json.dumps(overall)
     with _paused():
         yield env
 

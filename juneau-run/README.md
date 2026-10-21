@@ -96,6 +96,7 @@ off a terminal (`TERM=dumb` and `JUNEAU_RUN_LIVE=0` count as off) it prints the 
 | `JUNEAU_RUN_LIVE=0` | Plain view: each row printed once, when it ends. Also used when stdout isn't a terminal or `TERM=dumb`. |
 | `NO_COLOR` | The live view without colour. |
 | `JUNEAU_RUN_LABEL_WIDTH` | Minimum width of the row labels (default 10). A parent sets it for a nested script so the rows line up. |
+| `JUNEAU_RUN_PENDING`, `JUNEAU_RUN_OVERALL` | Set by a parent for a nested script: the parent's pending rows, and its elapsed time, done steps and pending steps. With the second, the nested view keeps drawing the whole run's Overall line; without it a nested view draws none. |
 | `JUNEAU_RUN_HISTORY=0` | Turns off recording and estimating run history (default on). Without history the view shows no percent, time estimates or Overall line. |
 | `JUNEAU_RUN_HISTORY_DIR` | Replaces `~/.cache/juneau-run/history`, where per-repository run history is kept. The tests point it at a temp dir. |
 | `JUNEAU_RUN_HISTORY_KEY` | Replaces the per-repository key under that directory (`<name>-<hash>` of the git common dir, which linked worktrees already share), so separate clones of one repository can share one history. Made file-name safe. |

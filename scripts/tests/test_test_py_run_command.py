@@ -81,7 +81,7 @@ def test_a_step_id_command_still_streams_in_plain_mode(test_mod, monkeypatch, tm
     monkeypatch.setattr("sys.stdout", Recorder())
     code, out = test_mod.run_command(
         f"echo first; for i in $(seq 50); do [ -f '{marker}' ] && echo second && exit 0; sleep 0.1; done; exit 1",
-        "tests", "Tests")
+        "tests", "Java tests")
     assert code == 0
     assert out == "first\nsecond\n"
     assert any("second" in s for s in seen)
