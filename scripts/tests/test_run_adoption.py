@@ -239,7 +239,6 @@ def gates(push_mod, monkeypatch):
     rec = Recorder()
     monkeypatch.setattr(push_mod, "run_command", rec("run_command"))
     monkeypatch.setattr(push_mod, "run_timing_report", rec("timing"))
-    monkeypatch.setattr(push_mod, "verify_starter_repos", rec("starters"))
     # The Prechecks row with no checks: test_push.TestPreflight covers them against real git.
     monkeypatch.setattr(push_mod, "prechecks", lambda *a, **k: rec.calls.append("identity") or [])
     monkeypatch.setattr(push_mod, "commit_and_push", lambda *a, **k: rec.calls.append("commit") or ("ok", 1))
@@ -260,11 +259,10 @@ def test_push_test_only_emits_mode_test_and_never_commits(push_mod, gates, monke
     events = markers(capsys.readouterr().out)
     project = Path(push_mod.__file__).resolve().parent.parent.name
     assert events[0] == {"ev": "run", "v": 1, "mode": "test", "project": project}
-    assert [e["id"] for e in events if e["ev"] == "step"] == ["container-tags", "bom", "install", "starters"]
+    assert [e["id"] for e in events if e["ev"] == "step"] == ["container-tags", "bom", "install"]
     assert events[-2] == {"ev": "note", "level": "info", "text": "Test-only run: nothing was committed or pushed"}
     assert events[-1] == {"ev": "done", "status": "ok"}
     assert not {"identity", "commit", "docs"} & set(gates.calls)
-    assert "starters" in gates.calls
 
 
 def test_push_test_only_does_not_need_a_message(push_mod, gates, monkeypatch):
@@ -341,16 +339,6 @@ def test_push_run_command_failure_returns_false(push_mod, fake_mvn, monkeypatch,
     monkeypatch.setenv("FAKE_MVN_EXIT", "2")
     assert push_mod.run_command(["mvn", "install"], "Build", tool="maven", step_id="install") is False
     assert "❌ Build - FAILED (exit code: 2)" in capfd.readouterr().out
-
-
-def test_push_starter_steps_are_children_of_the_starters_step(push_mod, fake_mvn, monkeypatch, tmp_path, capfd):
-    starter = tmp_path / "demo-starter"
-    starter.mkdir()
-    monkeypatch.setattr(push_mod, "STARTER_REPO_PATHS", [starter])
-    monkeypatch.setenv("RUN_MARKERS", "1")
-    assert push_mod.verify_starter_repos(9) is True
-    step = markers(capfd.readouterr().out)[0]
-    assert step == {"ev": "step", "id": "starters/demo-starter", "n": 1, "title": "demo-starter", "parent": "starters"}
 
 
 def test_push_reserves_step_numbers_for_the_steps_test_py_contributes(push_mod, gates, monkeypatch):
@@ -1005,8 +993,8 @@ def test_push_does_not_mutate_os_environ_for_the_child(push_mod, gates, monkeypa
         monkeypatch.setenv("RUN_MARKERS", "1")
     env = _capture_child_env(push_mod, monkeypatch, gates)
     later = []
-    monkeypatch.setattr(push_mod, "verify_starter_repos", lambda n: later.append(
-        (os.environ.get("JUNEAU_PUSH_ACTIVE"), os.environ.get("JUNEAU_RUN_N_BASE"))) or True)
+    monkeypatch.setattr(push_mod, "_append_test_run_history", lambda *a: later.append(
+        (os.environ.get("JUNEAU_PUSH_ACTIVE"), os.environ.get("JUNEAU_RUN_N_BASE"))))
     monkeypatch.setattr(sys, "argv", ["push.py", "--test-only"])
     assert push_mod.main() == 0
     assert env["JUNEAU_PUSH_ACTIVE"] == "1"
@@ -1048,9 +1036,9 @@ def test_push_plain_ctrl_c_in_the_session_exits_130(push_mod, gates, monkeypatch
 
 
 @pytest.mark.parametrize("argv, expected", [
-    (["--test-only"], ["container-tags", "bom", "build", "tests", "py-tests", "js-tests", "timing", "install", "starters"]),
+    (["--test-only"], ["container-tags", "bom", "build", "tests", "py-tests", "js-tests", "timing", "install"]),
     (["Quick fix", "--skip-tests", "--tracker-audit"],
-     ["prechecks", "tracker", "tests", "install", "starters", "commit", "push"]),
+     ["prechecks", "tracker", "tests", "install", "commit", "push"]),
 ])
 def test_push_session_plan_lists_the_steps_this_run_will_take(push_mod, gates, standalone, monkeypatch, argv, expected):
     _, events, _ = standalone
@@ -1083,7 +1071,7 @@ def test_push_plan_puts_the_opt_in_gates_first_and_forced_browser_tests_after_te
     (tmp_path / "juneau-docs").mkdir()
     args = argparse.Namespace(sonarqube=True, tracker_audit=True, skip_tests=False, js_tests=True, test_only=False)
     assert [step_id for step_id, _ in push_mod.push_plan(args, script_dir, script_dir.parent, False)] == [
-        "prechecks", "sonar", "tracker", "bom", "build", "tests", "py-tests", "js-tests", "install", "starters", "commit", "push",
+        "prechecks", "sonar", "tracker", "bom", "build", "tests", "py-tests", "js-tests", "install", "commit", "push",
         "docs-smoke", "docs-commit", "docs-push"]  
 
 

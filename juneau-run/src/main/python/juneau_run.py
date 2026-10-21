@@ -5468,6 +5468,16 @@ def _parser_names():
     return sorted(names)
 
 
+def _cli_view(sinks):
+    """True when the CLI draws the live console view itself, as a script's session would: condensed, markers off, not
+    inside another session, on a terminal that can redraw.  Its row then gets unit lines (pytest and Playwright files),
+    and Playwright the reporter that feeds them.  Elsewhere the condensed console prints the parser's lines as before."""
+    if sinks.console != "condensed" or enabled() or os.environ.get(SESSION_ENV) == "1":
+        return False
+    return (getattr(sys.stdout, "isatty", lambda: False)() and os.environ.get("TERM") != "dumb"
+            and os.environ.get(LIVE_ENV) != "0")
+
+
 def main(argv=None):
     ap = argparse.ArgumentParser(prog="juneau_run.py", description="Run one tool as one run-protocol step.")
     ap.add_argument("--console", choices=CONSOLE_MODES)
@@ -5495,15 +5505,23 @@ def main(argv=None):
     if owner:
         run(mode="test", project=Path.cwd().name, branch=_git("rev-parse", "--abbrev-ref", "HEAD"),
             head=_git("rev-parse", "--short", "HEAD"))
+    title = ns.title or " ".join(cmd[:2])
+    view = _cli_view(sinks)
+    if view:
+        session(title, sinks=sinks)
     try:
-        result = run_tool(cmd, ns.tool, ns.step or ns.tool, ns.title or " ".join(cmd[:2]), sinks=sinks)
-    except KeyboardInterrupt:
-        if owner:
-            done("cancelled")
-        return 130
-    if owner:
-        done("ok" if result.exit == 0 else "fail")
-    return result.exit
+        try:
+            result = run_tool(cmd, ns.tool, ns.step or ns.tool, title, sinks=sinks)
+        except KeyboardInterrupt:
+            if owner or view:
+                done("cancelled")       # with a view, its final line
+            return 130
+        if owner or view:
+            done("ok" if result.exit == 0 else "fail")
+        return result.exit
+    finally:
+        if view:
+            end_session()
 
 
 if __name__ == "__main__":

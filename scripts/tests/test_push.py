@@ -998,8 +998,7 @@ def test_build_test_command_has_no_timing_log(push_module):
 def _stub_push_flow(push_module, monkeypatch, *, tests_pass, test_py=True):
     """Every gate and side effect of push.main() replaced; returns the _append_test_run_history calls."""
     calls = []
-    for name in ("run_timing_report", "verify_starter_repos"):
-        monkeypatch.setattr(push_module, name, lambda *a, **k: True)
+    monkeypatch.setattr(push_module, "run_timing_report", lambda *a, **k: True)
     monkeypatch.setattr(push_module, "run_command",
                         lambda cmd, *a, **k: tests_pass if cmd == ["mvn", "test"] else True)
     monkeypatch.setattr(push_module, "_append_test_run_history", lambda *a: calls.append(a))

@@ -38,8 +38,8 @@ results and notable events. Markers are additive: they never replace human-reada
 ## `--test-only`
 
 An adopting `push.py` accepts `--test-only`:
-- It runs only the build and test gates: the container-tags and BOM checks, the test run, the install build and the
-  starter verification. There is no identity check, commit, push or docs follow-up, and the commit message is optional.
+- It runs only the build and test gates: the container-tags and BOM checks, the test run and the install build.
+  There is no identity check, commit, push or docs follow-up, and the commit message is optional.
 - It emits `run` with `mode: "test"`.
 - It cannot be combined with `--docs-only`, `--sonarqube`, `--tracker-audit` or `--skip-tests`.
 
@@ -139,9 +139,9 @@ and waiting, whenever stdin is a terminal. `PW_TEST_REPORTER` is undocumented in
 runs as a plain run would, without the per-file lines or the JSON report, and once tests have run (not after `--list`,
 `--help` or a configuration error) the step notes "Playwright reporter not loaded"; the bar then counts the line
 reporter's `[n/N]` progress, when the config uses it. Under a terminal there is no such note.
-Without markers, the reporter is added only inside a script's console session that isn't interactive; a plain run keeps
-the command and environment as given. Under a terminal it is added only for the JSON report, with
-`JUNEAU_RUN_PLAYWRIGHT_MARKERS=0`, so it prints nothing; outside one an inherited `JUNEAU_RUN_PLAYWRIGHT_MARKERS=0` is
-dropped. `JUNEAU_RUN_PLAYWRIGHT_REPORTER=0`, in the command's environment or juneau-run's, leaves it out, and so does a
+Without markers, the reporter is added only inside a console session that isn't interactive (a script's, or the one
+`juneau_run.py --console condensed` draws on a terminal); a plain run keeps the command and environment as given.
+Under a terminal it is added only for the JSON report, with `JUNEAU_RUN_PLAYWRIGHT_MARKERS=0`, so it prints nothing;
+outside one an inherited `JUNEAU_RUN_PLAYWRIGHT_MARKERS=0` is dropped. `JUNEAU_RUN_PLAYWRIGHT_REPORTER=0`, in the command's environment or juneau-run's, leaves it out, and so does a
 command that names its own reporter (`--reporter x`, `--reporter=x`, or a `PW_TEST_REPORTER` already set). A report left
 at the JSON path by an earlier run is removed first, so a run cancelled before its end reports none.

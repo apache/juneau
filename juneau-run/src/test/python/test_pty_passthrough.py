@@ -30,7 +30,8 @@ DEADLINE = 10.0
 
 # A job-control shell in miniature: it leads the PTY's session and runs its arguments as one job in a process group of
 # its own, in the foreground.  When the job stops it takes the terminal back, prints "SH stopped" and waits for a line
-# (the test's "fg"), then gives the job the terminal again and resumes it.
+# (the test's "fg"), then gives the job the terminal again and resumes it.  Only the job sets its group: the usual
+# parent-and-child pair of setpgid calls races on macOS, where the losing child's call can fail with EPERM.
 SHELL = r"""
 import os, signal, sys
 signal.signal(signal.SIGTTOU, signal.SIG_IGN)
@@ -40,10 +41,6 @@ if pid == 0:
     os.tcsetpgrp(0, os.getpgrp())
     signal.signal(signal.SIGTTOU, signal.SIG_DFL)
     os.execv(sys.executable, [sys.executable, *sys.argv[1:]])
-try:
-    os.setpgid(pid, pid)
-except OSError:
-    pass
 while True:
     _, status = os.waitpid(pid, os.WUNTRACED)
     if not os.WIFSTOPPED(status):

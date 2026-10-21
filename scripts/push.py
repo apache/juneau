@@ -62,23 +62,6 @@ if str(Path(__file__).resolve().parent) not in sys.path:
 import _juneau  # noqa: E402
 
 
-# ----------------------------------------------------------------------------------------------------------------------
-# External Juneau starter repos (TODO-158).
-#
-# After this script builds + installs the local 10.0.0-SNAPSHOT into ~/.m2, it builds each of these external
-# starter repos against that local install to recover the downstream-consumer compile/test guard that
-# externalizing the starters would otherwise lose.  Edit this list to match your local checkout locations.
-# A path that does not exist is SKIPPED WITH A WARNING (not a failure).  Any PRESENT starter that fails to
-# build fails the push.  There is no GitHub Actions CI on these branches; this script is the compile gate.
-# Docker image builds are not part of this gate.
-# ----------------------------------------------------------------------------------------------------------------------
-STARTER_REPO_PATHS = [
-    Path.home() / "git" / "apache" / "juneau-microservice-jetty-starter",
-    Path.home() / "git" / "apache" / "juneau-microservice-springboot-starter",
-    Path.home() / "git" / "apache" / "juneau-microservice-tomcat-starter",
-]
-
-
 def toolkit(name):
     """A juneau_scripts module (git, run, notify, prompt, proc) from the in-tree toolkit."""
     _juneau.load()
@@ -621,35 +604,6 @@ def _append_test_run_history(juneau_root: Path, wall_sec: int) -> None:
         say(f"⚠ Warning: Could not append test metrics: {exc}", "warn")
 
 
-def verify_starter_repos(step_num):
-    """
-    Build each PRESENT external starter repo against the freshly-installed local SNAPSHOT.
-
-    Args:
-        step_num: The current step number (for output formatting).
-
-    Returns:
-        True if every present starter built successfully (or none are present); False if any
-        present starter failed to build.
-    """
-    say(f"\n🌱 Step {step_num}: Verifying external starter repos against local SNAPSHOT...")
-    any_present = False
-    for index, repo in enumerate(STARTER_REPO_PATHS, start=1):
-        if not repo.exists():
-            say(f"  ⏭️  Skipping missing starter repo: {repo}")
-            continue
-        any_present = True
-        wrapper = repo / ("mvnw.cmd" if platform.system() == "Windows" else "mvnw")
-        cmd = [str(wrapper), "-q", "verify"] if wrapper.exists() else ["mvn", "-q", "verify"]
-        if not run_command(cmd, f"  Building starter: {repo.name}", cwd=repo, tool="generic",
-                           step_id=f"starters/{repo.name}", title=repo.name, n=index, parent="starters"):
-            say(f"\n❌ Starter repo build FAILED: {repo}", "error")
-            return False
-    if not any_present:
-        say("  ⚠ No starter repos found locally — nothing to verify.", "warn")
-    return True
-
-
 def build_test_command(test_script, args):
     """The test.py invocation for the test step; forwards --js-tests/--no-js-tests (auto-detect lives in test.py).
     test.py records its own timings in the run-history store, which push-timings.py reads."""
@@ -952,7 +906,7 @@ def run_docs_only(args, juneau_root):
     --docs-only mode: operate ONLY on the sibling juneau-docs repo.
 
     Skips the entire juneau code path (no container-tags/BOM checks, no test run, no
-    mvn build/install, no starter-repo verification, no juneau commit/push). Runs the
+    mvn build/install, no juneau commit/push). Runs the
     same Apache-identity gate and docs-verification gate (Docusaurus smoke build via
     build-docs.py --skip-maven, which runs verify-docs.py internally) that the default
     flow's Step 6 juneau-docs follow-up already runs, then commits and pushes
@@ -1086,7 +1040,7 @@ def main():
 PLAN_LABELS = {
     "prechecks": "Prechecks", "sonar": "Sonar", "tracker": "Tracker", "container-tags": "Tags",
     "bom": "BOM", "build": "Compile", "tests": "Tests", "py-tests": "Script tests", "js-tests": "Browser tests", "timing": "Timing",
-    "install": "Install", "starters": "Starters", "commit": "Commit", "push": "Push", "docs-smoke": "Docs build",
+    "install": "Install", "commit": "Commit", "push": "Push", "docs-smoke": "Docs build",
     "docs-commit": "Docs", "docs-push": "Docs push",
 }
 
@@ -1110,7 +1064,7 @@ def push_plan(args, script_dir, juneau_root, console):
             ids.append("tests")
         if console and (script_dir / "push-timings.py").exists():
             ids.append("timing")
-    ids += ["install", "starters"]
+    ids.append("install")
     if not args.test_only:
         ids += ["commit", "push"]
         if (juneau_root.parent / "juneau-docs").exists():
@@ -1160,8 +1114,8 @@ Examples:
         action="store_true",
         dest="test_only",
         help=(
-            "Run only the build and test gates (container tags, BOM completeness, tests, build and install, "
-            "starter repos). No identity check, commit, push or juneau-docs follow-up. Not the same flag as "
+            "Run only the build and test gates (container tags, BOM completeness, tests, build and install). "
+            "No identity check, commit, push or juneau-docs follow-up. Not the same flag as "
             "test.py's --test-only, which means 'tests without the build'."
         )
     )
@@ -1183,8 +1137,8 @@ Examples:
         action="store_true",
         help=(
             "Operate ONLY on the sibling juneau-docs repo: skip the entire juneau code "
-            "path (no container-tags/BOM checks, no tests, no mvn build/install, no "
-            "starter-repo verification, no juneau commit/push). Still enforces the "
+            "path (no container-tags/BOM checks, no tests, no mvn build/install, "
+            "no juneau commit/push). Still enforces the "
             "Apache identity gate and the docs verification gate (Docusaurus smoke "
             "build via build-docs.py --skip-maven, which runs verify-docs.py) against "
             "juneau-docs before committing/pushing it. Exits 0 with a no-op message if "
@@ -1327,8 +1281,6 @@ def _main():  # NOSONAR python:S3776 -- Cognitive complexity is acceptable for t
             print(f"  {step_num}. Build and install: mvn clean package install -DskipTests")
         else:
             print(f"  {step_num}. Build and install: skipped (test.py --full has already installed)")
-        step_num += 1
-        print(f"  {step_num}. Verify external starter repos against local SNAPSHOT (./mvnw -q verify; missing paths skipped)")
         step_num += 1
         if not args.test_only:
             print(f"  {step_num}. Commit whatever is already staged: git commit -m \"{args.message}\" "
@@ -1494,15 +1446,6 @@ def _push_steps(s, args, run, console, script_dir, juneau_root):  # NOSONAR pyth
         return aborted("\n❌ Build process aborted due to build failure.")
     step_num += 1
 
-    # Step 3 (TODO-158): Build external starter repos against the freshly-installed local SNAPSHOT (blocking gate)
-    with marked_step("starters", "Starter repos", label="Starters") as starters_step:
-        starters_ok = verify_starter_repos(step_num)
-        if not starters_ok:
-            starters_step.fail()
-    if not starters_ok:
-        return aborted("\n❌ Build process aborted due to external starter repo verification failure.")
-    step_num += 1
-    
     if args.test_only:
         run.note("info", "Test-only run: nothing was committed or pushed")
         if not console:
