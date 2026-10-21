@@ -16,7 +16,7 @@
 Tests for scripts/push.py: the end-of-run terminal bell (TestEndOfRunBell), the
 refuse-on-unreviewed-changes gate, ported from the already-reviewed gate in apache/juneau's
 scripts/push.py and sandbox-support-console's scripts/push.py, and the build gates (Compile,
-Tests, Script tests, E2E) with their skip flags, --test-only and --dry-run. The review-gate tests cover:
+Java tests, Python tests, E2E) with their skip flags, --test-only and --dry-run. The review-gate tests cover:
 the toolkit's path readers as push.py uses them, and the refuse / no-op / proceed decision (the
 three refusal shapes plus the allowed staged-only case). push.py is built on the juneau_scripts
 toolkit; the tests drive it through main(argv, repo_dir) and read the exit code.
@@ -90,7 +90,7 @@ class _Push:
 def push_module():
     """A fresh scripts/push.py module object (toolkit bound), loaded once per test."""
     module = _load_push_module()
-    # The Script tests step would launch this very suite from every main()-calling test (Juneau J0867: a runaway nested
+    # The Python tests step would launch this very suite from every main()-calling test (Juneau J0867: a runaway nested
     # pytest), so stub it; TestScriptTests drives the real one through _real_script_tests.
     module.gate_calls = []
     module._real_script_tests = module._script_tests
@@ -798,7 +798,7 @@ class TestPushTracked:
 
 
 # ---------------------------------------------------------------------------------------
-# The Script tests step: the scripts/tests pytest suite, run before the commit.
+# The Python tests step: the scripts/tests pytest suite, run before the commit.
 # ---------------------------------------------------------------------------------------
 class _Result:
     def __init__(self, code=0, out=""):
@@ -886,7 +886,7 @@ class TestScriptTests:
         monkeypatch.setattr(push_module.module, "script_tests_launcher", lambda: None)
         assert push_module._real_script_tests(_FakeSession(), tmp_path, False) is True
         assert not cmds
-        assert "Skipping Script tests" in capsys.readouterr().out
+        assert "Skipping Python tests" in capsys.readouterr().out
         assert rows["script-tests"]  # the row is opened and skipped, not left pending
 
     def test_passing_suite_runs_in_the_repo_and_lets_the_push_continue(self, push_module, cmds, tmp_path):
@@ -969,7 +969,7 @@ class TestLocation:
 
 
 # ---------------------------------------------------------------------------------------
-# The Compile and Tests rows: mvn clean test-compile, then mvn verify; never install.
+# The Compile and Java tests rows: mvn clean test-compile, then mvn verify; never install.
 # ---------------------------------------------------------------------------------------
 class TestBuildGates:
     def test_compile_runs_clean_test_compile_in_the_repo(self, push_module, cmds, tmp_path):
@@ -983,7 +983,7 @@ class TestBuildGates:
         push_module._real_maven_tests(_FakeSession(), tmp_path, False)
         cmd, kwargs = cmds[0]
         assert cmd == ["mvn", "verify"]
-        assert (kwargs["cwd"], kwargs["id"], kwargs["title"]) == (str(tmp_path), "tests", "Tests")
+        assert (kwargs["cwd"], kwargs["id"], kwargs["title"]) == (str(tmp_path), "tests", "Java tests")
 
     def test_neither_row_ever_installs(self, push_module, cmds, tmp_path):
         push_module._real_compile(_FakeSession(), tmp_path, False)
@@ -991,7 +991,7 @@ class TestBuildGates:
         assert len(cmds) == 2
         assert all("install" not in cmd for cmd, _ in cmds)
 
-    @pytest.mark.parametrize("gate, title", [("_real_compile", "Compile"), ("_real_maven_tests", "Tests")])
+    @pytest.mark.parametrize("gate, title", [("_real_compile", "Compile"), ("_real_maven_tests", "Java tests")])
     def test_a_failure_refuses_the_push(self, push_module, cmds, tmp_path, gate, title):
         cmds.code = 1
         s = _FakeSession()
@@ -999,7 +999,7 @@ class TestBuildGates:
             getattr(push_module, gate)(s, tmp_path, False)
         assert f"{title} failed" in s.failed and "nothing committed" in s.failed
 
-    @pytest.mark.parametrize("gate, title", [("_real_compile", "Compile"), ("_real_maven_tests", "Tests")])
+    @pytest.mark.parametrize("gate, title", [("_real_compile", "Compile"), ("_real_maven_tests", "Java tests")])
     def test_dry_run_reports_would_run_and_runs_nothing(self, push_module, cmds, tmp_path, capsys, gate, title):
         getattr(push_module, gate)(_FakeSession(), tmp_path, True)
         assert not cmds
@@ -1148,7 +1148,7 @@ class TestPlannedSteps:
 
     def test_the_labels(self, push_module):
         assert dict(push_module.planned_steps(push_module.build_parser().parse_args(["msg"]))) == {
-            "prechecks": "Prechecks", "compile": "Compile", "tests": "Tests", "script-tests": "Script tests",
+            "prechecks": "Prechecks", "compile": "Compile", "tests": "Java tests", "script-tests": "Python tests",
             "e2e": "E2E", "commit": "Commit", "push": "Push"}
 
     @pytest.mark.parametrize("flag, removed", [("--skip-pytest", ["script-tests"]),
@@ -1180,8 +1180,8 @@ class TestGatesThroughMain:
         assert push_module.gate_calls == []
 
     @pytest.mark.parametrize("flag, expected, line", [
-        ("--skip-pytest", ["compile", "tests", "e2e"], "Skipping Script tests (--skip-pytest)"),
-        ("--skip-tests", ["script-tests", "e2e"], "Skipping Compile and Tests (--skip-tests)"),
+        ("--skip-pytest", ["compile", "tests", "e2e"], "Skipping Python tests (--skip-pytest)"),
+        ("--skip-tests", ["script-tests", "e2e"], "Skipping Compile and Java tests (--skip-tests)"),
         ("--skip-e2e", ["compile", "tests", "script-tests"], "Skipping E2E (--skip-e2e)"),
     ])
     def test_each_skip_flag_skips_exactly_its_gates_and_says_so(self, push_module, repo, capsys, flag, expected,

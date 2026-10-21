@@ -7,7 +7,7 @@ release-manager`), with tests alongside at `~/Project Work/scripts/tests/`. See
 `@todo-and-waves` and `~/agents/AGENTS.md`.
 
 This repo's `scripts/push.py` (moved here from the repo root, matching `apache/juneau` and
-`sandbox-support-console`) runs the build and test gates before it commits: Prechecks, Compile (`mvn clean test-compile`), Tests (`mvn verify`), Script tests
+`sandbox-support-console`) runs the build and test gates before it commits: Prechecks, Compile (`mvn clean test-compile`), Java tests (`mvn verify`), Python tests
 (this suite), E2E (`npx playwright test` in `e2e/`), Commit, Push. The suite never writes the real run history:
 `conftest.py` points `JUNEAU_RUN_HISTORY_DIR` at a temp dir and sets `JUNEAU_RUN_HISTORY=0`. Its review gate refuses to commit or push **anything** when the working tree has
 any unstaged modification to a tracked file, or any untracked file that isn't gitignored (`_prechecks()` /

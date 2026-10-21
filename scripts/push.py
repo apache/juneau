@@ -32,32 +32,32 @@ Usage:
     already in the environment; with neither, the default is condensed), exactly as scripts/test.py does in
     apache/juneau.  Condensed (the default, or RUN_MARKERS=1) makes this script load juneau_run, with the git output
     going to the full log; full and none leave it unloaded, so both give the plain output.  The console view shows
-    the Prechecks, Compile, Tests, Script tests, E2E, Commit and Push rows.
+    the Prechecks, Compile, Java tests, Python tests, E2E, Commit and Push rows.
 
     When a run ends (success or failure) on a terminal, push.py rings the terminal bell.
     Set JRM_PUSH_NO_BELL=1 to silence it (it is also skipped when SANDBOX_RUNTIME=1).
 
-Steps: Prechecks, Compile, Tests, Script tests, E2E, Commit, Push.  Prechecks is one row of four checks that all run,
+Steps: Prechecks, Compile, Java tests, Python tests, E2E, Commit, Push.  Prechecks is one row of four checks that all run,
     none stopping at the first failure: identity, unreviewed (the review gate), staged (a warning, "nothing staged",
     ends the run with nothing to do, before any gate) and upstream.  The upstream check fetches and refuses (before the
     commit) when the branch is behind its upstream, since the push would be rejected anyway; a branch with no upstream
     proceeds (the push then sets it), and a fetch error fails closed.  Under --dry-run each failing check shows as a
     "would refuse" warning.
-    Script tests runs the scripts/tests pytest suite, so a push cannot ship a broken release CLI.  The launcher is
+    Python tests runs the scripts/tests pytest suite, so a push cannot ship a broken release CLI.  The launcher is
     `python3 -m pytest` when pytest is importable, else `uv run --native-tls --with pytest pytest` when uv is on the
     PATH, else the step is skipped with a visible notice (as in Juneau's scripts/test.py).  JUNEAU_RUN_PY is exported
     to the child when it is unset and the canonical Juneau checkout has juneau_run.py, so the release CLI tests run
     instead of skipping.  JRM_SCRIPT_TESTS_ACTIVE is set in the child and the step is skipped when it is already set,
     so tests that call main() cannot recurse.  Under --dry-run the suite still runs (it only reads), and a failure is
     a "would refuse" warning.
-    Compile runs `mvn clean test-compile` and Tests runs `mvn verify` (the Java tests and Apache RAT); never
+    Compile runs `mvn clean test-compile` and Java tests runs `mvn verify` (the Java tests and Apache RAT); never
     `install`, since this repo only consumes the Juneau snapshot already in ~/.m2.  JAVA_HOME defaults to
     ~/jdk/default when unset.  E2E runs the full Playwright suite (`npx playwright test` in e2e/), whose webServer
     boots the app on the test port itself; JRM_E2E_REUSE, JRM_E2E_BASE_URL and JRM_E2E_HOME are removed from its
     environment and PLAYWRIGHT_HTML_OPEN defaults to never.  Without npx on the PATH, E2E is skipped with a warning.  A failing gate refuses the push
-    (nothing committed).  Under --dry-run, Compile, Tests and E2E are shown as "would run" and not executed.
+    (nothing committed).  Under --dry-run, Compile, Java tests and E2E are shown as "would run" and not executed.
     --test-only runs every gate that is not skipped, with no Prechecks, commit or push, so it works on a dirty tree.
-    --skip-pytest, --skip-tests (Compile and Tests) and --skip-e2e each remove their steps.
+    --skip-pytest, --skip-tests (Compile and Java tests) and --skip-e2e each remove their steps.
 
 Safety:
     - Never uses --force or --no-verify.
@@ -86,7 +86,7 @@ from pathlib import Path
 
 REPO_DIR = Path(__file__).resolve().parent.parent
 
-# Set in the pytest child so a test that reaches the Script tests step again cannot launch the suite recursively.
+# Set in the pytest child so a test that reaches the Python tests step again cannot launch the suite recursively.
 SCRIPT_TESTS_ACTIVE = "JRM_SCRIPT_TESTS_ACTIVE"
 # Where the canonical Juneau checkout keeps juneau_run.py; test_release_cli.py skips without JUNEAU_RUN_PY.
 JUNEAU_RUN_PY_DEFAULT = Path.home() / "git" / "apache" / "juneau" / "juneau-run" / "src" / "main" / "python" / "juneau_run.py"
@@ -222,16 +222,16 @@ def script_tests_env():
 
 
 def _skip_script_tests(why, short):
-    """The Script tests row, opened and skipped, so it does not stay pending."""
-    with run.step("script-tests", "Script tests") as st:
-        say(f"⚠ Skipping Script tests: {why}.")
-        run_markers.note("warn", f"Script tests skipped: {short}.")
+    """The Python tests row, opened and skipped, so it does not stay pending."""
+    with run.step("script-tests", "Python tests") as st:
+        say(f"⚠ Skipping Python tests: {why}.")
+        run_markers.note("warn", f"Python tests skipped: {short}.")
         st.skip(short)
 
 
 def _script_tests(s, repo_dir, dry_run, launcher=None):
     """
-    The Script tests row: the scripts/tests pytest suite, run before the commit.  A failure refuses the push -- nothing
+    The Python tests row: the scripts/tests pytest suite, run before the commit.  A failure refuses the push -- nothing
     is committed -- except under --dry-run, where it is a "would refuse" warning.  Skipped, with a notice, when already
     inside the suite (the recursion guard) or when neither pytest nor uv is available.  Returns True when the push may
     go on.
@@ -245,20 +245,20 @@ def _script_tests(s, repo_dir, dry_run, launcher=None):
                            "neither pytest nor uv found")
         return True
     cmd = script_tests_command(launcher)
-    say("\n🐍 Running Script tests (scripts/tests)...")
+    say("\n🐍 Running Python tests (scripts/tests)...")
     say(f"Running: {' '.join(cmd)}")
-    r = run.cmd(cmd, title="Script tests", id="script-tests", tool="pytest", cwd=str(repo_dir), env=script_tests_env(),
+    r = run.cmd(cmd, title="Python tests", id="script-tests", tool="pytest", cwd=str(repo_dir), env=script_tests_env(),
                 capture=True)
     if r.ok:
-        say("✅ Script tests passed!")
+        say("✅ Python tests passed!")
         return True
     if r.out:
         say(r.out[-4000:])
     if dry_run:
-        say(f"⚠ Would refuse to push: Script tests failed (exit code {r.code}).")
-        run_markers.note("warn", f"Dry run — would refuse to push: Script tests failed (exit code {r.code}).")
+        say(f"⚠ Would refuse to push: Python tests failed (exit code {r.code}).")
+        run_markers.note("warn", f"Dry run — would refuse to push: Python tests failed (exit code {r.code}).")
         return False
-    s.fail(f"\n❌ ERROR: Script tests failed (exit code {r.code}); nothing committed.")
+    s.fail(f"\n❌ ERROR: Python tests failed (exit code {r.code}); nothing committed.")
     return False
 
 
@@ -325,8 +325,8 @@ def _compile(s, repo_dir, dry_run):
 
 
 def _maven_tests(s, repo_dir, dry_run):
-    """The Tests row: `mvn verify`, the Java tests plus Apache RAT.  No clean: Compile just ran it."""
-    _maven_gate(s, repo_dir, dry_run, ["verify"], "tests", "Tests")
+    """The Java tests row: `mvn verify`, the Java tests plus Apache RAT.  No clean: Compile just ran it."""
+    _maven_gate(s, repo_dir, dry_run, ["verify"], "tests", "Java tests")
 
 
 def e2e_env():
@@ -439,17 +439,17 @@ def _skipped(flag, what):
 
 def _gates(s, repo_dir, args):
     """
-    Compile, Tests, Script tests and E2E, in that order (every test step after Compile), each unless its skip flag is
-    set.  A failing gate ends the session with nothing committed.  Returns False only for a Script tests "would refuse" under --dry-run;
+    Compile, Java tests, Python tests and E2E, in that order (every test step after Compile), each unless its skip flag is
+    set.  A failing gate ends the session with nothing committed.  Returns False only for a Python tests "would refuse" under --dry-run;
     otherwise True.
     """
     if args.skip_tests:
-        _skipped("--skip-tests", "Compile and Tests")
+        _skipped("--skip-tests", "Compile and Java tests")
     else:
         _compile(s, repo_dir, args.dry_run)
         _maven_tests(s, repo_dir, args.dry_run)
     if args.skip_pytest:
-        _skipped("--skip-pytest", "Script tests")
+        _skipped("--skip-pytest", "Python tests")
     elif not _script_tests(s, repo_dir, args.dry_run):
         return False
     if args.skip_e2e:
@@ -461,7 +461,7 @@ def _gates(s, repo_dir, args):
 
 def commit_and_push(s, repo_dir, args):
     """
-    Run the Prechecks and the gates (Compile, Tests, Script tests, E2E), then commit whatever is already staged in
+    Run the Prechecks and the gates (Compile, Java tests, Python tests, E2E), then commit whatever is already staged in
     repo_dir and push, refusing to commit or push ANYTHING if a precheck fails (identity, unreviewed content, behind
     upstream; see _prechecks()) or a gate fails.
 
@@ -523,8 +523,8 @@ def planned_steps(args):
     figure.  A skip flag removes its steps; --test-only has no Prechecks, Commit or Push."""
     steps = [] if args.test_only else [("prechecks", "Prechecks")]
     steps += [(step_id, label) for step_id, label, skipped in (("compile", "Compile", args.skip_tests),
-                                                               ("tests", "Tests", args.skip_tests),
-                                                               ("script-tests", "Script tests", args.skip_pytest),
+                                                               ("tests", "Java tests", args.skip_tests),
+                                                               ("script-tests", "Python tests", args.skip_pytest),
                                                                ("e2e", "E2E", args.skip_e2e)) if not skipped]
     if not args.test_only:
         steps += [("commit", "Commit"), ("push", "Push")]
@@ -544,8 +544,8 @@ Examples:
   python3 scripts/push.py --skip-e2e "Doc-only change"
   python3 scripts/push.py --console full "Fix credential validator NPE"
 
-Steps: Prechecks (identity, review gate, staged, upstream: refuses when behind upstream, before committing), Script
-tests (scripts/tests pytest), Compile (mvn clean test-compile), Tests (mvn verify: Java tests and RAT), E2E (npx
+Steps: Prechecks (identity, review gate, staged, upstream: refuses when behind upstream, before committing), Python
+tests (scripts/tests pytest), Compile (mvn clean test-compile), Java tests (mvn verify: Java tests and RAT), E2E (npx
 playwright test in e2e/), Commit, Push.  A failing gate refuses the push; nothing is committed.
         """,
     )
@@ -558,16 +558,16 @@ playwright test in e2e/), Commit, Push.  A failing gate refuses the push; nothin
     parser.add_argument(
         "--dry-run",
         action="store_true",
-        help="Show what would be done without making any changes (Compile, Tests and E2E are shown, not run).",
+        help="Show what would be done without making any changes (Compile, Java tests and E2E are shown, not run).",
     )
     parser.add_argument(
         "--test-only",
         action="store_true",
         help="Run the gates only: no Prechecks, no commit, no push (works on a dirty tree).",
     )
-    parser.add_argument("--skip-tests", action="store_true", help="Skip Compile and Tests (the Maven build).")
+    parser.add_argument("--skip-tests", action="store_true", help="Skip Compile and Java tests (the Maven build).")
     parser.add_argument("--skip-e2e", action="store_true", help="Skip E2E (the Playwright suite).")
-    parser.add_argument("--skip-pytest", action="store_true", help="Skip Script tests (the scripts/tests suite).")
+    parser.add_argument("--skip-pytest", action="store_true", help="Skip Python tests (the scripts/tests suite).")
     parser.add_argument(
         "--console",
         choices=("full", "condensed", "none"),
