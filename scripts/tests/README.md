@@ -6,21 +6,28 @@ This repo's `scripts/todo-next-id.py` and `scripts/todo-status-audit.py` (and th
 release-manager`), with tests alongside at `~/Project Work/scripts/tests/`. See
 `@todo-and-waves` and `~/agents/AGENTS.md`.
 
-This repo's own `push.py` (at the repo root, not under `scripts/`) is a bare commit/push
-helper with one gate worth testing (WORK-R0006): it refuses to commit or push **anything**
-when the working tree has any unstaged modification to a tracked file, or any untracked file
-that isn't gitignored (`_review()` / `commit_and_push()`, built on the `juneau_scripts` toolkit's `git` and `run` modules, loaded through the vendored `scripts/bootstrap.py`, which needs juneau-run 10.0.0-SNAPSHOT in `~/.m2` -- build Juneau first; the tests drive `push.main(argv, repo_dir)` and read its exit code).
+This repo's `scripts/push.py` (moved here from the repo root, matching `apache/juneau` and
+`sandbox-support-console`) runs the build and test gates before it commits: Prechecks, Script tests (this
+suite), Compile (`mvn clean test-compile`), Tests (`mvn verify`), E2E (`npx playwright test` in `e2e/`),
+Commit, Push. Its review gate refuses to commit or push **anything** when the working tree has
+any unstaged modification to a tracked file, or any untracked file that isn't gitignored (`_prechecks()` /
+`commit_and_push()`, built on the `juneau_scripts` toolkit's `git`, `run` and `tools` modules, loaded through
+the vendored `scripts/bootstrap.py`, which needs juneau-run 10.0.0-SNAPSHOT in `~/.m2` -- build Juneau first;
+the tests drive `push.main(argv, repo_dir)` and read its exit code).
 A staged path is the operator's record of having reviewed it, so `push.py` commits the index
 exactly as it finds it and never runs `git add`. `test_push.py` covers the three refusal
 shapes (nothing-staged-while-dirty, staged+unstaged-tracked, staged+untracked-non-ignored)
 plus the allowed staged-only case, the genuine-clean-tree no-op, and `--dry-run`'s real-outcome
-reporting, against real temporary git repositories (a bare repo standing in for the remote).
+reporting, against real temporary git repositories (a bare repo standing in for the remote). It also
+covers the gates: step order, the skip flags, `--test-only`, `--dry-run`'s "would run", and each gate's
+command and environment. Maven and Playwright are stubbed in these tests; only a real
+`python3 scripts/push.py --test-only` runs them.
 
 This repo's `push.py` is its own thing — deliberately **not** carried byte-for-byte to
 `apache/juneau` or `sandbox-support-console`. Those two repos have their own, independently
 maintained `push.py` and `test_push.py` covering the same underlying gate (same three refusal
-shapes) plus their own repo-specific build/test machinery that this repo's helper does not
-have; this repo also has no `reset-side-clones.py` or `repin-consumers.py` of its own
+shapes) plus their own repo-specific machinery (SSC's rebase and push lock, Juneau's reactor install) that
+this repo's does not need; this repo also has no `reset-side-clones.py` or `repin-consumers.py` of its own
 (juneau's `test_reset_side_clones.py` / `test_repin_consumers.py` cover those, and stay in
 juneau since the scripts they test do too).
 

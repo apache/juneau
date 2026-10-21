@@ -13,13 +13,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 """
-Tests for the root push.py: the end-of-run terminal bell (TestEndOfRunBell) and the
-refuse-on-unreviewed-changes gate, ported from the
-already-reviewed gate in apache/juneau's scripts/push.py and sandbox-support-console's
-scripts/push.py. This repo's push.py is a bare add/commit/push helper with no other gates, so
-the gate tests cover: the toolkit's path readers as push.py uses them, and the refuse / no-op /
-proceed decision (the three refusal shapes plus the allowed staged-only case). push.py is built on
-the juneau_scripts toolkit; the tests drive it through main(argv, repo_dir) and read the exit code.
+Tests for scripts/push.py: the end-of-run terminal bell (TestEndOfRunBell), the
+refuse-on-unreviewed-changes gate, ported from the already-reviewed gate in apache/juneau's
+scripts/push.py and sandbox-support-console's scripts/push.py, and the build gates (Script tests,
+Compile, Tests, E2E) with their skip flags, --test-only and --dry-run. The review-gate tests cover:
+the toolkit's path readers as push.py uses them, and the refuse / no-op / proceed decision (the
+three refusal shapes plus the allowed staged-only case). push.py is built on the juneau_scripts
+toolkit; the tests drive it through main(argv, repo_dir) and read the exit code.
 
 Real temp git repos, real git -- no mocked subprocess. A bare repo stands in for the remote and
 a real clone is the working tree; every test asserts REAL effects (did the remote ref actually
@@ -28,9 +28,9 @@ an exit code, which a mocked subprocess would let pass while proving nothing. Id
 isolated via environment variables (GIT_AUTHOR_*/GIT_COMMITTER_*), never `git config --global`.
 Nothing here touches the real release-manager checkout or a real remote.
 
-Structural difference from the juneau/ssc references: this repo's
-push.py lives at the repo ROOT, not under scripts/, so the module is loaded from
-Path(__file__).resolve().parents[2] / "push.py" rather than SCRIPTS_DIR / "push.py".
+The Maven and Playwright gates are stubbed in the push_module fixture (the real ones stay reachable
+as _real_compile, _real_maven_tests and _real_e2e, and their tests answer run.cmd through the cmds
+fixture), so no test here builds or boots the app.
 """
 
 from __future__ import annotations
@@ -47,8 +47,8 @@ REPO_ROOT = Path(__file__).resolve().parents[2]
 
 
 def _load_push_module():
-    """Load the root push.py as a fresh module object."""
-    path = REPO_ROOT / "push.py"
+    """Load scripts/push.py as a fresh module object."""
+    path = REPO_ROOT / "scripts" / "push.py"
     spec = importlib.util.spec_from_file_location("_undertest_push", path)
     module = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(module)
@@ -87,12 +87,19 @@ class _Push:
 
 @pytest.fixture
 def push_module():
-    """A fresh root push.py module object (toolkit bound), loaded once per test."""
+    """A fresh scripts/push.py module object (toolkit bound), loaded once per test."""
     module = _load_push_module()
     # The Script tests step would launch this very suite from every main()-calling test (Juneau J0867: a runaway nested
     # pytest), so stub it; TestScriptTests drives the real one through _real_script_tests.
+    module.gate_calls = []
     module._real_script_tests = module._script_tests
-    module._script_tests = lambda *_a, **_k: True
+    module._script_tests = lambda *_a, **_k: module.gate_calls.append("script-tests") or True
+    # The Maven and E2E gates would build and boot the real app from every main()-calling test: stub them, recording the
+    # order they ran in.  The real ones stay reachable as _real_compile, _real_maven_tests and _real_e2e.
+    module._real_compile, module._compile = module._compile, lambda *_a, **_k: module.gate_calls.append("compile")
+    module._real_maven_tests, module._maven_tests = (
+        module._maven_tests, lambda *_a, **_k: module.gate_calls.append("tests"))
+    module._real_e2e, module._e2e = module._e2e, lambda *_a, **_k: module.gate_calls.append("e2e")
     return _Push(module)
 
 
@@ -806,28 +813,53 @@ class _FakeSession:
         raise SystemExit(1)
 
 
+@pytest.fixture
+def cmds(push_module, monkeypatch):
+    """Record run.cmd calls (cmd, kwargs); answer them with the code in cmds.code.  tools.maven and tools.playwright
+    go through run.cmd, so this sees them too."""
+
+    class Calls(list):
+        code = 0
+        out = ""
+
+    calls = Calls()
+
+    def fake_cmd(cmd, **kwargs):
+        calls.append((list(cmd), kwargs))
+        return _Result(calls.code, calls.out)
+
+    monkeypatch.setattr(push_module.run, "cmd", fake_cmd)
+    return calls
+
+
+@pytest.fixture
+def rows(push_module, monkeypatch):
+    """Record the rows run.step opens, as {id: skip reason or None}."""
+    import contextlib
+
+    seen = {}
+
+    @contextlib.contextmanager
+    def fake_step(step_id, title, *_a, **_k):
+        class St:
+            def skip(self, reason=None):
+                seen[step_id] = reason
+
+            def fail(self, *_a, **_k):
+                seen[step_id] = "failed"
+
+        seen.setdefault(step_id, None)
+        yield St()
+
+    monkeypatch.setattr(push_module.run, "step", fake_step)
+    return seen
+
+
 class TestScriptTests:
     @pytest.fixture(autouse=True)
     def live_step(self, monkeypatch):
         monkeypatch.delenv("JRM_SCRIPT_TESTS_ACTIVE", raising=False)
 
-    @pytest.fixture
-    def cmds(self, push_module, monkeypatch):
-        """Record run.cmd calls (cmd, env); answer them with the code in cmds.code."""
-        calls = []
-
-        class Calls(list):
-            code = 0
-            out = ""
-
-        calls = Calls()
-
-        def fake_cmd(cmd, **kwargs):
-            calls.append((list(cmd), kwargs))
-            return _Result(calls.code, calls.out)
-
-        monkeypatch.setattr(push_module.run, "cmd", fake_cmd)
-        return calls
 
     def _launcher(self, push_module, monkeypatch, *, pytest_importable, uv):
         monkeypatch.setattr(push_module.module.subprocess, "run",
@@ -849,11 +881,12 @@ class TestScriptTests:
     def test_command_runs_scripts_tests_quietly(self, push_module):
         assert push_module.script_tests_command(["p"]) == ["p", "-q", "-p", "no:cacheprovider", "scripts/tests"]
 
-    def test_no_launcher_skips_with_a_notice(self, push_module, monkeypatch, cmds, capsys, tmp_path):
+    def test_no_launcher_skips_with_a_notice(self, push_module, monkeypatch, cmds, capsys, tmp_path, rows):
         monkeypatch.setattr(push_module.module, "script_tests_launcher", lambda: None)
         assert push_module._real_script_tests(_FakeSession(), tmp_path, False) is True
         assert not cmds
         assert "Skipping Script tests" in capsys.readouterr().out
+        assert rows["script-tests"]  # the row is opened and skipped, not left pending
 
     def test_passing_suite_runs_in_the_repo_and_lets_the_push_continue(self, push_module, cmds, tmp_path):
         assert push_module._real_script_tests(_FakeSession(), tmp_path, False, launcher=["pytest"]) is True
@@ -875,11 +908,20 @@ class TestScriptTests:
         assert s.failed is None
         assert "Would refuse" in capsys.readouterr().out
 
-    def test_recursion_guard_skips_the_step(self, push_module, monkeypatch, cmds, tmp_path, capsys):
+    def test_recursion_guard_skips_the_step(self, push_module, monkeypatch, cmds, tmp_path, capsys, rows):
         monkeypatch.setenv("JRM_SCRIPT_TESTS_ACTIVE", "1")
         assert push_module._real_script_tests(_FakeSession(), tmp_path, False, launcher=["pytest"]) is True
         assert not cmds
         assert "no recursion" in capsys.readouterr().out
+        assert rows["script-tests"]
+
+    def test_child_env_drops_the_parent_runs_protocol_variables(self, push_module, monkeypatch):
+        for name in ("JUNEAU_RUN_CONSOLE", "JUNEAU_RUN_SESSION", "RUN_MARKERS", "RUN_ARTIFACTS"):
+            monkeypatch.setenv(name, "x")
+        monkeypatch.setenv("JUNEAU_RUN_PY", "/x/juneau_run.py")
+        env = push_module.script_tests_env()
+        assert not {"JUNEAU_RUN_CONSOLE", "JUNEAU_RUN_SESSION", "RUN_MARKERS", "RUN_ARTIFACTS"} & set(env)
+        assert env["JUNEAU_RUN_PY"] == "/x/juneau_run.py"  # kept: the release CLI tests need it
 
     def test_child_env_carries_the_recursion_guard(self, push_module, monkeypatch):
         monkeypatch.setenv("JUNEAU_RUN_PY", "/x/juneau_run.py")
@@ -910,3 +952,309 @@ class TestScriptTests:
         assert push_module.main(["msg"], repo_dir=repo) != 0
         assert _run(repo, "git", "rev-parse", "HEAD") == head_before
         assert _run(remote_repo, "git", "rev-parse", "master") == head_before
+
+
+# ---------------------------------------------------------------------------------------
+# Location: push.py lives under scripts/, like apache/juneau's and sandbox-support-console's.
+# ---------------------------------------------------------------------------------------
+class TestLocation:
+    def test_push_lives_under_scripts_with_no_root_copy(self):
+        assert (REPO_ROOT / "scripts" / "push.py").is_file()
+        assert not (REPO_ROOT / "push.py").exists()
+
+    def test_repo_dir_is_the_repo_root(self, push_module):
+        assert push_module.REPO_DIR == REPO_ROOT
+        assert (push_module.REPO_DIR / "pom.xml").is_file()
+
+
+# ---------------------------------------------------------------------------------------
+# The Compile and Tests rows: mvn clean test-compile, then mvn verify; never install.
+# ---------------------------------------------------------------------------------------
+class TestBuildGates:
+    def test_compile_runs_clean_test_compile_in_the_repo(self, push_module, cmds, tmp_path):
+        push_module._real_compile(_FakeSession(), tmp_path, False)
+        cmd, kwargs = cmds[0]
+        assert cmd == ["mvn", "clean", "test-compile"]
+        assert (kwargs["cwd"], kwargs["tool"], kwargs["id"], kwargs["title"]) == (str(tmp_path), "maven", "compile",
+                                                                                   "Compile")
+
+    def test_tests_runs_verify_without_clean(self, push_module, cmds, tmp_path):
+        push_module._real_maven_tests(_FakeSession(), tmp_path, False)
+        cmd, kwargs = cmds[0]
+        assert cmd == ["mvn", "verify"]
+        assert (kwargs["cwd"], kwargs["id"], kwargs["title"]) == (str(tmp_path), "tests", "Tests")
+
+    def test_neither_row_ever_installs(self, push_module, cmds, tmp_path):
+        push_module._real_compile(_FakeSession(), tmp_path, False)
+        push_module._real_maven_tests(_FakeSession(), tmp_path, False)
+        assert len(cmds) == 2
+        assert all("install" not in cmd for cmd, _ in cmds)
+
+    @pytest.mark.parametrize("gate, title", [("_real_compile", "Compile"), ("_real_maven_tests", "Tests")])
+    def test_a_failure_refuses_the_push(self, push_module, cmds, tmp_path, gate, title):
+        cmds.code = 1
+        s = _FakeSession()
+        with pytest.raises(SystemExit):
+            getattr(push_module, gate)(s, tmp_path, False)
+        assert f"{title} failed" in s.failed and "nothing committed" in s.failed
+
+    @pytest.mark.parametrize("gate, title", [("_real_compile", "Compile"), ("_real_maven_tests", "Tests")])
+    def test_dry_run_reports_would_run_and_runs_nothing(self, push_module, cmds, tmp_path, capsys, gate, title):
+        getattr(push_module, gate)(_FakeSession(), tmp_path, True)
+        assert not cmds
+        assert f"Would run {title}: mvn" in capsys.readouterr().out
+
+    def test_java_home_defaults_to_the_personal_jdk_when_unset(self, push_module, monkeypatch, tmp_path):
+        monkeypatch.delenv("JAVA_HOME", raising=False)
+        monkeypatch.setattr(push_module.module, "DEFAULT_JAVA_HOME", tmp_path)
+        assert push_module.build_env()["JAVA_HOME"] == str(tmp_path)
+
+    def test_a_set_java_home_is_kept(self, push_module, monkeypatch):
+        monkeypatch.setenv("JAVA_HOME", "/opt/jdk")
+        assert push_module.build_env()["JAVA_HOME"] == "/opt/jdk"
+
+    def test_the_maven_child_gets_java_home_and_its_bin_on_the_path(self, push_module, cmds, monkeypatch, tmp_path):
+        monkeypatch.setenv("JAVA_HOME", "/opt/jdk")
+        push_module._real_compile(_FakeSession(), tmp_path, False)
+        env = cmds[0][1]["env"]
+        assert env["JAVA_HOME"] == "/opt/jdk"
+        assert env["PATH"].startswith("/opt/jdk/bin")
+
+    def test_the_default_jdk_is_passed_to_maven_when_java_home_is_unset(self, push_module, cmds, monkeypatch,
+                                                                         tmp_path):
+        monkeypatch.delenv("JAVA_HOME", raising=False)
+        monkeypatch.setattr(push_module.module, "DEFAULT_JAVA_HOME", tmp_path)
+        push_module._real_compile(_FakeSession(), tmp_path, False)
+        env = cmds[0][1]["env"]
+        assert env["JAVA_HOME"] == str(tmp_path)
+        assert env["PATH"].startswith(str(tmp_path / "bin"))
+
+    def test_a_missing_default_jdk_leaves_the_environment_alone(self, push_module, cmds, monkeypatch, tmp_path):
+        monkeypatch.delenv("JAVA_HOME", raising=False)
+        monkeypatch.setattr(push_module.module, "DEFAULT_JAVA_HOME", tmp_path / "missing")
+        assert push_module.java_home() is None
+        assert "JAVA_HOME" not in push_module.build_env()
+        push_module._real_compile(_FakeSession(), tmp_path, False)
+        assert "JAVA_HOME" not in (cmds[0][1].get("env") or {})
+
+    def test_the_toolkit_cache_is_outside_target(self, push_module):
+        # Compile runs `mvn clean`, which would delete a copy extracted under <repo>/target.
+        assert push_module.REPO_DIR / "target" not in [push_module.TOOLKIT_CACHE_DIR,
+                                                       *push_module.TOOLKIT_CACHE_DIR.parents]
+
+    def test_maven_parser_is_none_without_a_run_view(self, push_module, monkeypatch):
+        monkeypatch.delitem(sys.modules, "juneau_run", raising=False)
+        assert push_module.maven_parser() is None
+
+
+# ---------------------------------------------------------------------------------------
+# The E2E row: the full Playwright suite in e2e/, through the playwright parser.
+# ---------------------------------------------------------------------------------------
+class TestE2EGate:
+    @pytest.fixture
+    def npx(self, push_module, monkeypatch):
+        """npx on the PATH, and a playwright_ensure that installs nothing; returns the directories it was asked for."""
+        monkeypatch.setattr(push_module.module.shutil, "which", lambda name: f"/bin/{name}")
+        ensured = []
+        monkeypatch.setattr(push_module.tools, "playwright_ensure", lambda d: ensured.append(d) or _Result(0))
+        return ensured
+
+    def test_runs_the_full_suite_in_e2e_with_the_playwright_parser(self, push_module, cmds, npx, tmp_path):
+        push_module._real_e2e(_FakeSession(), tmp_path, False)
+        cmd, kwargs = cmds[0]
+        assert cmd == ["npx", "playwright", "test"]
+        assert (kwargs["tool"], kwargs["id"], kwargs["title"]) == ("playwright", "e2e", "E2E")
+        assert kwargs["cwd"] == str(tmp_path / "e2e")
+        assert not any(a.startswith("--reporter") for a in cmd)
+        assert npx == [tmp_path / "e2e"]
+
+    def test_the_html_report_never_opens_by_default(self, push_module, cmds, npx, monkeypatch, tmp_path):
+        monkeypatch.delenv("PLAYWRIGHT_HTML_OPEN", raising=False)
+        push_module._real_e2e(_FakeSession(), tmp_path, False)
+        assert cmds[0][1]["env"]["PLAYWRIGHT_HTML_OPEN"] == "never"
+
+    def test_a_set_html_open_is_kept(self, push_module, cmds, npx, monkeypatch, tmp_path):
+        monkeypatch.setenv("PLAYWRIGHT_HTML_OPEN", "on-failure")
+        push_module._real_e2e(_FakeSession(), tmp_path, False)
+        assert cmds[0][1]["env"]["PLAYWRIGHT_HTML_OPEN"] == "on-failure"
+
+    @pytest.mark.parametrize("name", ["JRM_E2E_REUSE", "JRM_E2E_BASE_URL", "JRM_E2E_HOME"])
+    def test_variables_that_redirect_the_suite_are_removed(self, push_module, cmds, npx, monkeypatch, tmp_path, name):
+        monkeypatch.setenv(name, "1")
+        push_module._real_e2e(_FakeSession(), tmp_path, False)
+        assert name not in cmds[0][1]["env"]
+
+    def test_the_e2e_child_gets_java_home(self, push_module, cmds, npx, monkeypatch, tmp_path):
+        monkeypatch.setenv("JAVA_HOME", "/opt/jdk")
+        push_module._real_e2e(_FakeSession(), tmp_path, False)
+        assert cmds[0][1]["env"]["JAVA_HOME"] == "/opt/jdk"
+
+    def test_a_failing_suite_refuses_the_push(self, push_module, cmds, npx, tmp_path):
+        cmds.code = 1
+        s = _FakeSession()
+        with pytest.raises(SystemExit):
+            push_module._real_e2e(s, tmp_path, False)
+        assert "E2E failed" in s.failed and "nothing committed" in s.failed
+
+    def test_a_failed_install_fails_the_gate_before_the_suite(self, push_module, cmds, monkeypatch, tmp_path):
+        monkeypatch.setattr(push_module.module.shutil, "which", lambda name: f"/bin/{name}")
+        monkeypatch.setattr(push_module.tools, "playwright_ensure", lambda _d: _Result(1))
+        s = _FakeSession()
+        with pytest.raises(SystemExit):
+            push_module._real_e2e(s, tmp_path, False)
+        assert "E2E setup failed" in s.failed
+        assert not cmds
+
+    def test_missing_npx_skips_with_a_warning_and_lets_the_push_continue(self, push_module, cmds, monkeypatch,
+                                                                          tmp_path, capsys):
+        monkeypatch.setattr(push_module.module.shutil, "which", lambda _name: None)
+        s = _FakeSession()
+        push_module._real_e2e(s, tmp_path, False)
+        assert s.failed is None and not cmds
+        assert "Skipping E2E: npx not found" in capsys.readouterr().out
+
+    def test_dry_run_reports_would_run_and_runs_nothing(self, push_module, cmds, npx, tmp_path, capsys):
+        push_module._real_e2e(_FakeSession(), tmp_path, True)
+        assert not cmds and not npx
+        assert "Would run E2E: npx playwright test" in capsys.readouterr().out
+
+
+# ---------------------------------------------------------------------------------------
+# The step plan, the skip flags, --test-only and the gate order through main().
+# ---------------------------------------------------------------------------------------
+ALL_GATES = ["script-tests", "compile", "tests", "e2e"]
+
+
+class TestPlannedSteps:
+    def _plan(self, push_module, *argv):
+        return [step for step, _ in push_module.planned_steps(push_module.build_parser().parse_args(list(argv)))]
+
+    def test_a_push_plans_every_step_in_order(self, push_module):
+        assert self._plan(push_module, "msg") == ["prechecks", *ALL_GATES, "commit", "push"]
+
+    def test_the_labels(self, push_module):
+        assert dict(push_module.planned_steps(push_module.build_parser().parse_args(["msg"]))) == {
+            "prechecks": "Prechecks", "script-tests": "Script tests", "compile": "Compile", "tests": "Tests",
+            "e2e": "E2E", "commit": "Commit", "push": "Push"}
+
+    @pytest.mark.parametrize("flag, removed", [("--skip-pytest", ["script-tests"]),
+                                               ("--skip-tests", ["compile", "tests"]),
+                                               ("--skip-e2e", ["e2e"])])
+    def test_each_skip_flag_removes_exactly_its_steps(self, push_module, flag, removed):
+        full = ["prechecks", *ALL_GATES, "commit", "push"]
+        assert self._plan(push_module, flag, "msg") == [s for s in full if s not in removed]
+
+    def test_test_only_plans_the_gates_alone(self, push_module):
+        assert self._plan(push_module, "--test-only") == ALL_GATES
+
+
+class TestGatesThroughMain:
+    def test_a_push_runs_the_gates_in_order_then_commits_and_pushes(self, push_module, repo, remote_repo):
+        _stage(repo)
+        assert push_module.main(["msg"], repo_dir=repo) == 0
+        assert push_module.gate_calls == ALL_GATES
+        assert _run(remote_repo, "git", "rev-parse", "master") == _run(repo, "git", "rev-parse", "HEAD")
+
+    def test_a_clean_tree_runs_no_gate(self, push_module, repo):
+        assert push_module.main(["msg"], repo_dir=repo) == 0
+        assert push_module.gate_calls == []
+
+    def test_a_refused_precheck_runs_no_gate(self, push_module, repo):
+        _stage(repo)
+        (repo / "scratch.txt").write_text("not staged\n", encoding="utf-8")
+        assert push_module.main(["msg"], repo_dir=repo) == 1
+        assert push_module.gate_calls == []
+
+    @pytest.mark.parametrize("flag, expected, line", [
+        ("--skip-pytest", ["compile", "tests", "e2e"], "Skipping Script tests (--skip-pytest)"),
+        ("--skip-tests", ["script-tests", "e2e"], "Skipping Compile and Tests (--skip-tests)"),
+        ("--skip-e2e", ["script-tests", "compile", "tests"], "Skipping E2E (--skip-e2e)"),
+    ])
+    def test_each_skip_flag_skips_exactly_its_gates_and_says_so(self, push_module, repo, capsys, flag, expected,
+                                                                 line):
+        _stage(repo)
+        assert push_module.main([flag, "msg"], repo_dir=repo) == 0
+        assert push_module.gate_calls == expected
+        assert line in capsys.readouterr().out
+
+    @pytest.mark.parametrize("gate, step, ran", [("_compile", "compile", ["script-tests", "compile"]),
+                                                 ("_maven_tests", "tests", ["script-tests", "compile", "tests"]),
+                                                 ("_e2e", "e2e", ALL_GATES)])
+    def test_a_failing_gate_commits_nothing_and_runs_no_later_gate(self, push_module, repo, remote_repo,
+                                                                   monkeypatch, gate, step, ran):
+        _stage(repo)
+        head = _run(repo, "git", "rev-parse", "HEAD")
+
+        def failing(s, *_a, **_k):
+            push_module.gate_calls.append(step)
+            s.fail(f"❌ ERROR: {step} failed (exit code 1); nothing committed.")
+
+        monkeypatch.setattr(push_module.module, gate, failing)
+        assert push_module.main(["msg"], repo_dir=repo) == 1
+        assert push_module.gate_calls == ran
+        assert _run(repo, "git", "rev-parse", "HEAD") == head
+        assert _run(remote_repo, "git", "rev-parse", "master") == head
+        assert _run(repo, "git", "diff", "--cached", "--name-only") == "README.md"  # the reviewed index is untouched
+
+    def test_dry_run_reaches_every_build_gate_as_a_dry_run(self, push_module, repo, monkeypatch):
+        _stage(repo)
+        seen = []
+        for name in ("_compile", "_maven_tests", "_e2e"):
+            monkeypatch.setattr(push_module.module, name,
+                                lambda _s, _repo, dry_run, _name=name: seen.append((_name, dry_run)))
+        assert push_module.main(["--dry-run", "msg"], repo_dir=repo) == 0
+        assert seen == [("_compile", True), ("_maven_tests", True), ("_e2e", True)]
+
+
+class TestTestOnly:
+    def test_runs_every_gate_on_a_dirty_tree_and_commits_nothing(self, push_module, repo, remote_repo, git_spy):
+        _stage(repo)
+        (repo / "scratch.txt").write_text("not staged\n", encoding="utf-8")
+        head = _run(repo, "git", "rev-parse", "HEAD")
+        git_spy.clear()
+
+        assert push_module.main(["--test-only"], repo_dir=repo) == 0
+
+        assert push_module.gate_calls == ALL_GATES
+        assert _run(repo, "git", "rev-parse", "HEAD") == head
+        assert _run(remote_repo, "git", "rev-parse", "master") == head
+        assert not any(argv[:2] in (["git", "commit"], ["git", "push"]) for argv in git_spy)
+
+    def test_runs_the_gates_on_a_clean_tree_too(self, push_module, repo):
+        assert push_module.main(["--test-only"], repo_dir=repo) == 0
+        assert push_module.gate_calls == ALL_GATES
+
+    def test_says_nothing_was_committed(self, push_module, repo, capsys):
+        assert push_module.main(["--test-only"], repo_dir=repo) == 0
+        assert "nothing committed or pushed" in capsys.readouterr().out
+
+    def test_skip_flags_still_apply(self, push_module, repo):
+        assert push_module.main(["--test-only", "--skip-e2e"], repo_dir=repo) == 0
+        assert push_module.gate_calls == ["script-tests", "compile", "tests"]
+
+
+class TestFlagCombinations:
+    def test_all_three_skips_run_the_prechecks_then_commit_and_push(self, push_module, repo, remote_repo):
+        _stage(repo)
+        assert push_module.main(["--skip-pytest", "--skip-tests", "--skip-e2e", "msg"], repo_dir=repo) == 0
+        assert push_module.gate_calls == []
+        assert _run(remote_repo, "git", "rev-parse", "master") == _run(repo, "git", "rev-parse", "HEAD")
+        assert _run(repo, "git", "log", "-1", "--format=%s") == "msg"
+
+    def test_test_only_with_dry_run_never_commits_or_pushes(self, push_module, repo, remote_repo, git_spy):
+        _stage(repo)
+        head = _run(repo, "git", "rev-parse", "HEAD")
+        git_spy.clear()
+        assert push_module.main(["--test-only", "--dry-run"], repo_dir=repo) == 0
+        assert _run(repo, "git", "rev-parse", "HEAD") == head
+        assert _run(remote_repo, "git", "rev-parse", "master") == head
+        assert not any(argv[:2] in (["git", "commit"], ["git", "push"]) for argv in git_spy)
+
+    def test_dry_run_skips_the_commit_and_push_rows(self, push_module, repo, rows):
+        _stage(repo)
+        assert push_module.main(["--dry-run", "msg"], repo_dir=repo) == 0
+        assert rows["commit"] == "dry run" and rows["push"] == "dry run"
+
+    def test_test_only_dry_run_opens_no_commit_or_push_row(self, push_module, repo, rows):
+        assert push_module.main(["--test-only", "--dry-run"], repo_dir=repo) == 0
+        assert "commit" not in rows and "push" not in rows
