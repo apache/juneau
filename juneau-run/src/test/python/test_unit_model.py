@@ -316,6 +316,17 @@ class HeartbeatTest(unittest.TestCase):
         plain.tick(board)
         self.assertIn("· 2 modules running", "".join(out))
 
+    def test_the_heartbeat_uses_the_singular_for_one_module(self):
+        clock = Clock()
+        board = jr.Board(clock=clock)
+        board.apply("step_start", {"id": "s", "n": 1, "title": "Tests", "parent": None})
+        board.apply("unit_start", {"step": "s", "id": "sub", "title": "sub", "src": "sub"})
+        out = []
+        plain = jr.PlainRenderer(out.append, heartbeat=True, clock=clock)
+        clock.t += jr.HEARTBEAT_SECONDS
+        plain.tick(board)
+        self.assertIn("· 1 module running", "".join(out))
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -375,8 +375,31 @@ class TrailingPomTest(unittest.TestCase):
         r = b.rows["mvn"]
         self.assertIsNone(b.setup)
         self.assertEqual(r.failed_units, ["mvn/app"])
-        self.assertEqual((r.units_total, r.units_done), (2, 2))
         self.assertEqual(r.units["mvn/app"].box, "fail")
+        # a trailing pom has no cell until it fails: then it draws a red one, so the bar never reads all green
+        self.assertEqual((r.units_total, r.units_done, list(r.unit_cells)), (3, 3, [jr.UNIT_PASS, jr.UNIT_PASS, jr.UNIT_FAIL]))
+
+    def test_a_trailing_pom_that_fails_before_the_other_modules_end_still_draws_a_red_cell(self):
+        b = self.board([], ["mvn/app"], 3)          # -T: the summary can end the failed module first
+        self.run_module(b, "mvn/app", status="fail")
+        self.run_module(b, "mvn/app-api")
+        self.run_module(b, "mvn/app-server")
+        self.assertEqual(list(b.rows["mvn"].unit_cells), [jr.UNIT_FAIL, jr.UNIT_PASS, jr.UNIT_PASS])
+
+    def test_a_module_that_passed_its_tests_then_fails_a_later_goal_ends_red(self):
+        reset_run_state()
+        self.addCleanup(reset_run_state)
+        b = jr.Board("actionable", nested=False, full_log=None, clock=lambda: 100.0)
+        b.apply("step_start", dict(id="mvn", n=1, title="mvn", parent=None))
+        b.apply("reactor", dict(step="mvn", size=2, poms=[], tail=["mvn/run"], tests=True))
+        for m in ("mvn/a", "mvn/run"):              # run is a pom-packaged wrapper whose exec goal runs more tests
+            b.apply("unit_start", dict(step="mvn", id=m, title=m, src="sub"))
+            b.apply("unit_dot", dict(step="mvn", id=m, outcome="pass", src="sub"))
+            b.apply("module_tested", dict(step="mvn", module=m))
+        b.apply("unit_end", dict(step="mvn", id="mvn/run", status="fail", ms=1, totals=None, src="sub"))
+        b.apply("unit_end", dict(step="mvn", id="mvn/a", status="ok", ms=1, totals=None, src="sub"))
+        r = b.rows["mvn"]
+        self.assertEqual((r.failed_units, list(r.unit_cells)), (["mvn/run"], [jr.UNIT_PASS, jr.UNIT_FAIL]))
 
 
 class TrailingPomGoldenTest(unittest.TestCase):
@@ -428,7 +451,7 @@ class TrailingPomGoldenTest(unittest.TestCase):
         board.apply("step_end", dict(id="mvn", status="fail", ms=3000, exit=1, summary=None, totals=None))
         self.assertIsNone(board.setup)
         self.assertEqual(r.failed_units, ["app"])
-        self.assertEqual((r.units_total, r.units_done), (2, 2))
+        self.assertEqual((r.units_total, r.units_done, r.unit_cells[2]), (3, 3, jr.UNIT_FAIL))     # the failed aggregator gets a red cell
 
 
 def pump(board, events, step="mvn"):

@@ -390,7 +390,7 @@ class ConsoleTest(unittest.TestCase):
         self.assertEqual(out.getvalue(), "")
         self.clock.advance(1)
         c.tick()
-        self.assertEqual(out.getvalue(), "… 10 tests, 1 failed · 1 modules running  0:15\n")
+        self.assertEqual(out.getvalue(), "… 10 tests, 1 failed · 1 module running  0:15\n")
 
     def test_close_still_closes_the_condensed_log_when_the_screen_fails_to_close(self):
         with tempfile.TemporaryDirectory() as tmp:
@@ -627,6 +627,36 @@ class RowEstimateTest(unittest.TestCase):
         cells, rest, elapsed = self.cells(b)
         self.assertIn("26/100  26%", rest)
         self.assertEqual(elapsed, "0:26 / ~1:45")
+
+    def test_a_single_module_reactor_has_no_module_bar_and_a_percent_from_tests_run(self):
+        b = self.board(lambda step, tool, sig=None: jr.Estimate(wall_s=100.0, units=1, rate=1.0, runs=5, tests=4000))
+        b.apply("reactor", dict(step="s", size=1, poms=[], tests=True))
+        b.apply("unit_start", dict(step="s", id="s/a", title="A", src="sub"))
+        b.apply("tests", dict(step="s", total=1000, fail=0, err=0, skip=0))
+        self.clock.advance(10)
+        cells, rest, elapsed = self.cells(b)
+        self.assertIsNone(cells)
+        self.assertNotIn("0/1", rest)
+        self.assertIn("~25%", rest)
+        self.assertIn("1,000 / ~4,000 tests", rest)
+
+    def test_a_single_module_reactor_without_a_test_history_falls_back_to_elapsed_over_wall(self):
+        b = self.board(lambda step, tool, sig=None: jr.Estimate(wall_s=100.0, units=1, rate=1.0, runs=5))
+        b.apply("reactor", dict(step="s", size=1, poms=[], tests=True))
+        self.clock.advance(40)
+        cells, rest, elapsed = self.cells(b)
+        self.assertIsNone(cells)
+        self.assertIn("~40%", rest)
+
+    def test_a_single_module_reactor_draws_its_cell_once_the_module_ends(self):
+        b = self.board(lambda step, tool, sig=None: self.est)
+        b.apply("reactor", dict(step="s", size=1, poms=[], tests=True))
+        b.apply("unit_start", dict(step="s", id="s/a", title="A", src="sub"))
+        b.apply("unit_dot", dict(step="s", id="s/a", outcome="fail", src="sub"))
+        b.apply("unit_end", dict(step="s", id="s/a", status="fail", ms=1, totals=None, src="sub"))
+        cells, rest, elapsed = self.cells(b)
+        self.assertEqual("".join(cells), jr.PLAIN_GLYPHS["fail"])
+        self.assertIn("1/1", rest)
 
     def test_finished_row_shows_elapsed_only(self):
         b = self.board(lambda step, tool, sig=None: self.est)

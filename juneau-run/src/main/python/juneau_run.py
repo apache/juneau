@@ -1142,6 +1142,16 @@ class Board:
         elif outcome == "fail":
             self._on_unit_fix({"step": r.id, "index": m.unit_index, "outcome": "fail"})
 
+    def _count_extra_unit(self, r, m, outcome):
+        """A module outside the bar's total (a trailing pom, built after a real module) that fails still draws its red
+        cell, so the bar never reads all green over a failed build."""
+        if r.unit_kind != "modules" or m.unit_index is not None:
+            return
+        m.unit_index = r.units_done
+        r.units_total += 1
+        self._resize_cells(r)
+        self._on_unit({"step": r.id, "done": r.units_done + 1, "outcome": outcome})
+
     @staticmethod
     def _resize_cells(r):
         del r.unit_cells[r.units_total:]
@@ -1290,6 +1300,8 @@ class Board:
             m.box = "fail" if failed else "pass"
             if failed and m.title not in r.failed_units:
                 r.failed_units.append(m.title)
+            if failed:
+                self._count_extra_unit(r, m, "fail")
         else:
             if failed:
                 self._grant(r, m, "fail")
@@ -1509,7 +1521,13 @@ def row_text(row, glyphs, now, pending=False):
     # show on a finished row whose units did not all report.
     unreported = not row.running and row.unit_kind == "modules" and not row.units_done
     # A finished module bar that never counted a unit (a -q build sends no module events) shows no bar at all.
-    if not unreported and (row.bar_units or row.size or row.units_total or row.unit_kind == "modules"):
+    # A running reactor of one barred module has nothing to count: its one cell would sit at 0/1 until the end, so
+    # the row shows the test count and a percent from the tests run against history's expected count instead.
+    single = row.running and row.unit_kind == "modules" and row.units_total + row.units_dropped == 1 \
+        and not row.units_done
+    if single:
+        cells = None
+    elif not unreported and (row.bar_units or row.size or row.units_total or row.unit_kind == "modules"):
         if row.unit_kind:
             cells = unit_bar(row.unit_view(), row.units_total, glyphs)
             parts.append(f"{row.units_done}/{row.units_total}")
@@ -1522,6 +1540,11 @@ def row_text(row, glyphs, now, pending=False):
     elapsed = fmt_elapsed(ms) if ms >= 1000 else ""
     if row.running and row.estimate is not None:
         pct, total, approx = eta_figures(ms / 1000, row.units_done, row.units_total, row.estimate)
+        if single:
+            total, approx = (row.estimate.wall_s if row.estimate.wall_s and row.estimate.wall_s > ms / 1000
+                             else None), True
+            pct = (min(99, int(100 * row.totals[0] / row.estimate.tests)) if row.totals and row.estimate.tests
+                   else min(99, int(100 * ms / 1000 / row.estimate.wall_s)) if row.estimate.wall_s else None)
         total = row.shown_total = damp_total(row.shown_total, total, ms / 1000)
         if pct is not None and ms >= 1000:
             parts.append(("~" if approx else "") + f"{pct}%")
@@ -1655,7 +1678,7 @@ class PlainRenderer:
         overall = board.overall()
         figure = (f" · {overall.percent}% · ~{fmt_elapsed(overall.remaining * 1000)}"
                   f"{'+' if overall.lower_bound else ''} left") if overall else ""
-        self._write(f"… {total:,} tests, {failed} failed · {k} modules running  "
+        self._write(f"… {total:,} tests, {failed} failed · {k} module{'' if k == 1 else 's'} running  "
                     f"{fmt_elapsed((now - board.t0) * 1000)}{figure}\n")
 
     def pause(self):
@@ -1776,6 +1799,13 @@ def _fit_row(label, cells, rest, elapsed, cols, wrap=False):
     return _fit(label + "  …" + "".join(cells[len(cells) - (room - 1):]) + "  " + rest, elapsed, cols)
 
 
+def terminal_size():
+    """shutil.get_terminal_size() with Python 3.11's fallback: before 3.11 a terminal that reports no size (a fresh PTY,
+    Docker, a CI agent) yields 0 columns or lines instead of 80x24."""
+    size = shutil.get_terminal_size()
+    return os.terminal_size((size.columns or 80, size.lines or 24))
+
+
 # Known limitations: narrowing a reflowing terminal can leave stale fragments above the region, because the cursor-up
 # count is the number of lines drawn at the old width and the terminal has rewrapped them into more.
 class LiveRenderer:
@@ -1784,7 +1814,7 @@ class LiveRenderer:
 
     REDRAW_SECONDS = 0.1
 
-    def __init__(self, write, size=shutil.get_terminal_size, clock=time.monotonic, color=True):
+    def __init__(self, write, size=terminal_size, clock=time.monotonic, color=True):
         self.write = write
         self.size = size
         self.clock = clock
@@ -1993,7 +2023,7 @@ class LiveRenderer:
 class Console:
     """The bus subscriber for a session: one Board, a screen renderer (live, plain or none) and the condensed log."""
 
-    def __init__(self, sinks=None, detail=None, stream=None, clock=time.monotonic, size=shutil.get_terminal_size,
+    def __init__(self, sinks=None, detail=None, stream=None, clock=time.monotonic, size=terminal_size,
                  nested=False, repo="."):
         self.sinks = sinks or Sinks()
         self._stdout = sys.stdout       # bound once: a caller that swaps sys.stdout later must not capture the view
@@ -4726,7 +4756,7 @@ def run_tool(cmd, parser, step_id, title, *, n=None, parent=None, cwd=None, env=
         if tty:
             master, slave = os.openpty()
             try:
-                size = shutil.get_terminal_size()
+                size = terminal_size()
                 fcntl.ioctl(slave, termios.TIOCSWINSZ, struct.pack("HHHH", size.lines, size.columns, 0, 0))
                 env = {**(os.environ if env is None else env), "GPG_TTY": os.ttyname(slave)}
                 proc = subprocess.Popen(cmd, cwd=cwd, env=env, stdin=slave, stdout=slave, stderr=slave,

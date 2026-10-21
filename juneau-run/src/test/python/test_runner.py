@@ -555,7 +555,9 @@ class RunToolConsoleTest(unittest.TestCase):
                 self.assertEqual(len(self.bus.of("prompt_end")), 1)
                 self.assertTrue(all(f["step"] == "t" for k in ("prompt", "prompt_echo", "prompt_end")
                                     for f in self.bus.of(k)))
-                self.assertEqual(self.bus.of("quiet"), [])
+                # a slow child start can trip a quiet notice before the prompt text arrives; none may follow it
+                kinds = [k for k, _ in self.bus.events]
+                self.assertNotIn("quiet", kinds[kinds.index("prompt"):])
 
     def test_the_watchdog_shows_quiet_when_there_is_no_partial_line(self):
         self.run_child("import time\nprint('start', flush=True)\ntime.sleep(0.6)\nprint('end')", watchdog=0.2)

@@ -12,11 +12,14 @@
 # ***************************************************************************************************************************
 """CLI: run as a subprocess; exit codes pass through and run/done are emitted only by the outermost process."""
 
+import fcntl
 import io
 import json
 import os
+import struct
 import subprocess
 import sys
+import termios
 import unittest
 from unittest import mock
 
@@ -32,6 +35,14 @@ def cli(*args, env=None):
 
 def evs(stdout):
     return [json.loads(line[len(jr.PREFIX):])["ev"] for line in stdout.splitlines() if line.startswith(jr.PREFIX)]
+
+
+class TerminalSizeTest(unittest.TestCase):
+    def test_a_zero_size_falls_back_to_80_by_24_as_python_3_11_does(self):
+        for reported, expected in (((0, 0), (80, 24)), ((0, 30), (80, 30)), ((100, 0), (100, 24)), ((120, 40), (120, 40))):
+            with self.subTest(reported=reported), \
+                    mock.patch.object(jr.shutil, "get_terminal_size", return_value=os.terminal_size(reported)):
+                self.assertEqual(tuple(jr.terminal_size()), expected)
 
 
 class CliTest(unittest.TestCase):
@@ -116,13 +127,16 @@ print("  2 passed (1.0s)", flush=True)
 """
 
 
-def cli_on_terminal(*args, env=None):
-    """cli() with stdout and stderr on a fresh PTY: (exit code, everything that reached the screen)."""
+def cli_on_terminal(*args, env=None, window=(40, 120)):
+    """cli() with stdout and stderr on a fresh PTY: (exit code, everything that reached the screen). The PTY gets a
+    (rows, columns) window, or stays 0x0 as a fresh one is when window is None."""
     import pty
     import select
     full_env = {k: v for k, v in os.environ.items() if not k.startswith(("RUN_", "JUNEAU_RUN_")) or k == "JUNEAU_RUN_LOG_DIR"}
     full_env.update({"JUNEAU_RUN_HISTORY": "0", "TERM": "xterm", **(env or {})})
     master, slave = pty.openpty()
+    if window:
+        fcntl.ioctl(slave, termios.TIOCSWINSZ, struct.pack("HHHH", *window, 0, 0))
     try:
         proc = subprocess.Popen([sys.executable, str(SCRIPT), *args], stdin=subprocess.DEVNULL, stdout=slave,
                                 stderr=slave, env=full_env)
@@ -157,11 +171,11 @@ class CondensedPlaywrightTest(unittest.TestCase):
         self.seen = os.path.join(self.tmp.name, "seen")
         self.log_dir = {"JUNEAU_RUN_LOG_DIR": self.tmp.name}
 
-    def run_playwright(self, *extra, terminal=True, env=None):
+    def run_playwright(self, *extra, terminal=True, env=None, window=(40, 120)):
         args = ("--console", "condensed", "--step", "e2e", "--title", "E2E", "playwright", "--",
                 sys.executable, "-c", FAKE_PLAYWRIGHT, self.seen, *extra)
         if terminal:
-            return cli_on_terminal(*args, env={**self.log_dir, **(env or {})})
+            return cli_on_terminal(*args, env={**self.log_dir, **(env or {})}, window=window)
         r = cli(*args, env={**self.log_dir, **(env or {})})
         return r.returncode, r.stdout
 
@@ -178,6 +192,11 @@ class CondensedPlaywrightTest(unittest.TestCase):
         self.assertRegex(screen, r"tests/a\.spec\.ts\s+\S*•")    # the file's line with its first dot
         self.assertIn("E2E", screen)
         self.assertNotIn("##playwright", screen)                  # the markers go to the full log only
+
+    def test_a_terminal_that_reports_no_size_still_draws_real_rows(self):
+        rc, screen = self.run_playwright(window=None)
+        self.assertEqual(rc, 0, screen)
+        self.assertRegex(screen, r"tests/a\.spec\.ts\s+\S*•")
 
     def test_on_a_terminal_the_opt_outs_still_leave_the_reporter_out(self):
         for extra, env in ((("--reporter=line",), None), ((), {"JUNEAU_RUN_PLAYWRIGHT_REPORTER": "0"}),
