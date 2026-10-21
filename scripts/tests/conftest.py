@@ -12,7 +12,9 @@
 # ***************************************************************************************************************************
 import dataclasses
 import os
+import shutil
 import sys
+import tempfile
 from argparse import Namespace
 from pathlib import Path
 
@@ -26,6 +28,26 @@ from jrm_release.ctx import Ctx  # noqa: E402
 from jrm_release.runfile import RunFile  # noqa: E402
 from jrm_release.runner import Outcome, Runner  # noqa: E402
 from jrm_release.svn import Svn  # noqa: E402
+
+
+@pytest.fixture(scope="session", autouse=True)
+def _no_real_run_history():
+    """Keep the suite out of ~/.cache/juneau-run/history: main()-calling tests would otherwise record their stub
+    steps beside the real push and release records.  No fixture may strip these two variables."""
+    tmp = tempfile.mkdtemp(prefix="juneau-run-test-history-")
+    names = ("JUNEAU_RUN_HISTORY", "JUNEAU_RUN_HISTORY_DIR")
+    saved = {n: os.environ.get(n) for n in names}
+    os.environ["JUNEAU_RUN_HISTORY"] = "0"
+    os.environ["JUNEAU_RUN_HISTORY_DIR"] = tmp
+    try:
+        yield
+    finally:
+        for n, v in saved.items():
+            if v is None:
+                os.environ.pop(n, None)
+            else:
+                os.environ[n] = v
+        shutil.rmtree(tmp, ignore_errors=True)
 
 
 class PauseExc(Exception):
@@ -170,7 +192,7 @@ class FakeNexus:
 def clean_env(monkeypatch):
     """Scrub JUNEAU_RUN_* for the release tests (each opts in with pytestmark; test_push has its own scrub)."""
     for k in list(os.environ):
-        if k.startswith("JUNEAU_RUN_") and k != "JUNEAU_RUN_PY":
+        if k.startswith("JUNEAU_RUN_") and k not in ("JUNEAU_RUN_PY", "JUNEAU_RUN_HISTORY", "JUNEAU_RUN_HISTORY_DIR"):
             monkeypatch.delenv(k)
     monkeypatch.delenv("RUN_MARKERS", raising=False)
     monkeypatch.setenv("JUNEAU_RUN_CONSOLE", "full")

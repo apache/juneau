@@ -32,12 +32,12 @@ Usage:
     already in the environment; with neither, the default is condensed), exactly as scripts/test.py does in
     apache/juneau.  Condensed (the default, or RUN_MARKERS=1) makes this script load juneau_run, with the git output
     going to the full log; full and none leave it unloaded, so both give the plain output.  The console view shows
-    the Prechecks, Script tests, Compile, Tests, E2E, Commit and Push rows.
+    the Prechecks, Compile, Tests, Script tests, E2E, Commit and Push rows.
 
     When a run ends (success or failure) on a terminal, push.py rings the terminal bell.
     Set JRM_PUSH_NO_BELL=1 to silence it (it is also skipped when SANDBOX_RUNTIME=1).
 
-Steps: Prechecks, Script tests, Compile, Tests, E2E, Commit, Push.  Prechecks is one row of four checks that all run,
+Steps: Prechecks, Compile, Tests, Script tests, E2E, Commit, Push.  Prechecks is one row of four checks that all run,
     none stopping at the first failure: identity, unreviewed (the review gate), staged (a warning, "nothing staged",
     ends the run with nothing to do, before any gate) and upstream.  The upstream check fetches and refuses (before the
     commit) when the branch is behind its upstream, since the push would be rejected anyway; a branch with no upstream
@@ -439,19 +439,19 @@ def _skipped(flag, what):
 
 def _gates(s, repo_dir, args):
     """
-    Script tests, Compile, Tests and E2E, in that order (cheapest first), each unless its skip flag is set.  A failing
-    gate ends the session with nothing committed.  Returns False only for a Script tests "would refuse" under --dry-run;
+    Compile, Tests, Script tests and E2E, in that order (every test step after Compile), each unless its skip flag is
+    set.  A failing gate ends the session with nothing committed.  Returns False only for a Script tests "would refuse" under --dry-run;
     otherwise True.
     """
-    if args.skip_pytest:
-        _skipped("--skip-pytest", "Script tests")
-    elif not _script_tests(s, repo_dir, args.dry_run):
-        return False
     if args.skip_tests:
         _skipped("--skip-tests", "Compile and Tests")
     else:
         _compile(s, repo_dir, args.dry_run)
         _maven_tests(s, repo_dir, args.dry_run)
+    if args.skip_pytest:
+        _skipped("--skip-pytest", "Script tests")
+    elif not _script_tests(s, repo_dir, args.dry_run):
+        return False
     if args.skip_e2e:
         _skipped("--skip-e2e", "E2E")
     else:
@@ -461,7 +461,7 @@ def _gates(s, repo_dir, args):
 
 def commit_and_push(s, repo_dir, args):
     """
-    Run the Prechecks and the gates (Script tests, Compile, Tests, E2E), then commit whatever is already staged in
+    Run the Prechecks and the gates (Compile, Tests, Script tests, E2E), then commit whatever is already staged in
     repo_dir and push, refusing to commit or push ANYTHING if a precheck fails (identity, unreviewed content, behind
     upstream; see _prechecks()) or a gate fails.
 
@@ -522,9 +522,9 @@ def planned_steps(args):
     """The top-level steps this run will take, in order, as (id, label), for the console's pending rows and Overall
     figure.  A skip flag removes its steps; --test-only has no Prechecks, Commit or Push."""
     steps = [] if args.test_only else [("prechecks", "Prechecks")]
-    steps += [(step_id, label) for step_id, label, skipped in (("script-tests", "Script tests", args.skip_pytest),
-                                                               ("compile", "Compile", args.skip_tests),
+    steps += [(step_id, label) for step_id, label, skipped in (("compile", "Compile", args.skip_tests),
                                                                ("tests", "Tests", args.skip_tests),
+                                                               ("script-tests", "Script tests", args.skip_pytest),
                                                                ("e2e", "E2E", args.skip_e2e)) if not skipped]
     if not args.test_only:
         steps += [("commit", "Commit"), ("push", "Push")]

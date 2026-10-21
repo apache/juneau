@@ -15,8 +15,8 @@
 """
 Tests for scripts/push.py: the end-of-run terminal bell (TestEndOfRunBell), the
 refuse-on-unreviewed-changes gate, ported from the already-reviewed gate in apache/juneau's
-scripts/push.py and sandbox-support-console's scripts/push.py, and the build gates (Script tests,
-Compile, Tests, E2E) with their skip flags, --test-only and --dry-run. The review-gate tests cover:
+scripts/push.py and sandbox-support-console's scripts/push.py, and the build gates (Compile,
+Tests, Script tests, E2E) with their skip flags, --test-only and --dry-run. The review-gate tests cover:
 the toolkit's path readers as push.py uses them, and the refuse / no-op / proceed decision (the
 three refusal shapes plus the allowed staged-only case). push.py is built on the juneau_scripts
 toolkit; the tests drive it through main(argv, repo_dir) and read the exit code.
@@ -39,6 +39,7 @@ import importlib.util
 import os
 import subprocess
 import sys
+import tempfile
 from pathlib import Path
 
 import pytest
@@ -59,7 +60,7 @@ def _load_push_module():
 def clean_run_env(monkeypatch):
     """Keep the developer's shell (e.g. JUNEAU_RUN_CONSOLE=condensed) out of every push test, and forget any
     juneau_run a previous test loaded.  JUNEAU_RUN_PY / JUNEAU_SCRIPTS_ZIP stay: they locate the toolkit."""
-    keep = {"JUNEAU_RUN_PY"}
+    keep = {"JUNEAU_RUN_PY", "JUNEAU_RUN_HISTORY", "JUNEAU_RUN_HISTORY_DIR"}  # the history pair is the conftest's guard
     for key in [k for k in os.environ if k.startswith("JUNEAU_RUN_") and k not in keep]:
         monkeypatch.delenv(key)
     monkeypatch.delenv("RUN_MARKERS", raising=False)
@@ -1122,7 +1123,20 @@ class TestE2EGate:
 # ---------------------------------------------------------------------------------------
 # The step plan, the skip flags, --test-only and the gate order through main().
 # ---------------------------------------------------------------------------------------
-ALL_GATES = ["script-tests", "compile", "tests", "e2e"]
+ALL_GATES = ["compile", "tests", "script-tests", "e2e"]
+
+
+class TestRunHistoryGuard:
+    def test_the_suite_never_points_at_the_real_run_history(self):
+        assert os.environ.get("JUNEAU_RUN_HISTORY") == "0"
+        history = Path(os.environ["JUNEAU_RUN_HISTORY_DIR"]).resolve()
+        assert history != (Path.home() / ".cache" / "juneau-run" / "history").resolve()
+        assert history.is_relative_to(Path(tempfile.gettempdir()).resolve())
+
+    def test_a_push_run_keeps_the_guard_in_place(self, push_module, repo):
+        assert push_module.main(["--dry-run", "msg"], repo_dir=repo) == 0
+        assert os.environ.get("JUNEAU_RUN_HISTORY") == "0"
+        assert "juneau-run-test-history-" in os.environ["JUNEAU_RUN_HISTORY_DIR"]
 
 
 class TestPlannedSteps:
@@ -1134,7 +1148,7 @@ class TestPlannedSteps:
 
     def test_the_labels(self, push_module):
         assert dict(push_module.planned_steps(push_module.build_parser().parse_args(["msg"]))) == {
-            "prechecks": "Prechecks", "script-tests": "Script tests", "compile": "Compile", "tests": "Tests",
+            "prechecks": "Prechecks", "compile": "Compile", "tests": "Tests", "script-tests": "Script tests",
             "e2e": "E2E", "commit": "Commit", "push": "Push"}
 
     @pytest.mark.parametrize("flag, removed", [("--skip-pytest", ["script-tests"]),
@@ -1168,7 +1182,7 @@ class TestGatesThroughMain:
     @pytest.mark.parametrize("flag, expected, line", [
         ("--skip-pytest", ["compile", "tests", "e2e"], "Skipping Script tests (--skip-pytest)"),
         ("--skip-tests", ["script-tests", "e2e"], "Skipping Compile and Tests (--skip-tests)"),
-        ("--skip-e2e", ["script-tests", "compile", "tests"], "Skipping E2E (--skip-e2e)"),
+        ("--skip-e2e", ["compile", "tests", "script-tests"], "Skipping E2E (--skip-e2e)"),
     ])
     def test_each_skip_flag_skips_exactly_its_gates_and_says_so(self, push_module, repo, capsys, flag, expected,
                                                                  line):
@@ -1177,8 +1191,9 @@ class TestGatesThroughMain:
         assert push_module.gate_calls == expected
         assert line in capsys.readouterr().out
 
-    @pytest.mark.parametrize("gate, step, ran", [("_compile", "compile", ["script-tests", "compile"]),
-                                                 ("_maven_tests", "tests", ["script-tests", "compile", "tests"]),
+    @pytest.mark.parametrize("gate, step, ran", [("_compile", "compile", ["compile"]),
+                                                 ("_maven_tests", "tests", ["compile", "tests"]),
+                                                 ("_script_tests", "script-tests", ["compile", "tests", "script-tests"]),
                                                  ("_e2e", "e2e", ALL_GATES)])
     def test_a_failing_gate_commits_nothing_and_runs_no_later_gate(self, push_module, repo, remote_repo,
                                                                    monkeypatch, gate, step, ran):
@@ -1230,7 +1245,7 @@ class TestTestOnly:
 
     def test_skip_flags_still_apply(self, push_module, repo):
         assert push_module.main(["--test-only", "--skip-e2e"], repo_dir=repo) == 0
-        assert push_module.gate_calls == ["script-tests", "compile", "tests"]
+        assert push_module.gate_calls == ["compile", "tests", "script-tests"]
 
 
 class TestFlagCombinations:
