@@ -592,6 +592,9 @@ public final class ConsoleTemplateValidator {
 		return sb.toString();
 	}
 
+	@SuppressWarnings({
+		"javabugs:S2259" // False positive: validate() throws on a null load() result via n(src), which Sonar's flow analysis does not track as a null guard.
+	})
 	private static int[] lineStarts(String s) {
 		var starts = new ArrayList<Integer>();
 		starts.add(0);

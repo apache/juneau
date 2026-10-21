@@ -301,10 +301,8 @@ async function main() {
 	}
 
 	// --- attachBridges registers no pagehide listener when nothing was attached ---
-	{
-		out.noListener = { empty: count({}), noBridges: count({ bridges: [] }),
-			unknownOnly: count({ bridges: [{ id: 'odd', transport: 'carrier-pigeon', session: '/x', downstream: ['app.a'] }] }) };
-	}
+	out.noListener = { empty: count({}), noBridges: count({ bridges: [] }),
+		unknownOnly: count({ bridges: [{ id: 'odd', transport: 'carrier-pigeon', session: '/x', downstream: ['app.a'] }] }) };
 
 	// --- detach while the session POST is in flight: no socket is ever constructed ---
 	{

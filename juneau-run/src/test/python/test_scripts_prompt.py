@@ -400,6 +400,13 @@ class ChannelFallbackTest(unittest.TestCase):
         self.assertNotIn("JUNEAU_PROMPT_FD_OUT", os.environ)
         self.assertNotIn("notanumber", err.getvalue())
 
+    def test_second_open_failure_closes_first(self):
+        out = io.StringIO()
+        with mock.patch.object(prompt.os, "fdopen", side_effect=[out, OSError("boom")]), \
+                self.assertRaises(OSError):
+            prompt._Channel(7, 8)
+        self.assertTrue(out.closed)
+
 
 if __name__ == "__main__":
     unittest.main()

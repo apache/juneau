@@ -390,7 +390,7 @@ async function main() {
 			queue: [['rec', recorder(log)]],
 			beforeReady: r => {
 				const real = r.bus.owner;
-				r.bus.owner = id => { const o = real(id); return { ...o, publish: (t, p) => { if (t === 'card:' + id && p.state === 'mounted') throw new Error('publish kaput'); return o.publish(t, p); } }; };
+				r.bus.owner = id => { const o = real(id); return { ...o, publish: (t, p) => { if (t === 'card:' + id && p.state === 'mounted') { throw new Error('publish kaput'); } return o.publish(t, p); } }; };
 			}
 		});
 		const before = r.cardEvents.length;

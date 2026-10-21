@@ -215,11 +215,9 @@ function sessionCookie(cookies) {
 			const response = await postTo(page, 'a05', () => page.goto(attacker + '/attack/sandboxed'));
 			report.a05 = { status: response.status() };
 		}
-		{
-			await page.goto(attacker + '/attack/json');
-			await page.waitForFunction(() => window.attackDone != null, null, { timeout: 15000 });
-			report.a06 = { result: await page.evaluate(() => window.attackDone) };
-		}
+		await page.goto(attacker + '/attack/json');
+		await page.waitForFunction(() => window.attackDone != null, null, { timeout: 15000 });
+		report.a06 = { result: await page.evaluate(() => window.attackDone) };
 
 		// The application on its own site, then the attacker on another site, in one browser context.
 		const sites = await chromium.launch({ channel: 'chromium', args: [

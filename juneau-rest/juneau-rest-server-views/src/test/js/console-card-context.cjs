@@ -142,6 +142,29 @@ const out = {};
 		.then(a => settle(ctxRef.fetchJson('/b')).then(b => settle(ctxRef.fetchJson('/c')).then(c => [a, b, c])));
 }
 
+// 3b. A body read that fails after the headers: only a parse failure on an ok response resolves null; an abort
+//     rejects with something ctx.isAbort recognizes; a transport failure (what a navigation mid-body gives) rejects
+//     with 'Request failed' on an ok response and keeps 'HTTP <status>' on an error response.
+{
+	let ctxRef = null;
+	const bodies = {
+		'/ok-abort': [200, 'AbortError'], '/ok-transport': [200, 'TypeError'], '/ok-parse': [200, 'SyntaxError'],
+		'/err-abort': [503, 'AbortError'], '/err-transport': [503, 'TypeError'], '/err-parse': [503, 'SyntaxError']
+	};
+	const r = load(url => {
+		const [status, name] = bodies[url];
+		const e = Object.assign(new Error('body read failed'), { name });
+		return Promise.resolve({ ok: status === 200, status, json: () => Promise.reject(e) });
+	}, {});
+	r.JC.registerCard('kpi', { render(card, el, ctx) { ctxRef = ctx; } });
+	r.JC.mount(C({ cards: [{ id: 'k1', type: 'kpi' }] }), { root: r.doc.body, document: r.doc });
+	const settle = p => p.then(v => ({ value: v }), e => ({ error: e.message, abort: ctxRef.isAbort(e) }));
+	// Sequential: a second concurrent call would supersede (abort) the first.
+	out.bodyFailures = Object.keys(bodies).reduce(
+		(p, url) => p.then(acc => settle(ctxRef.fetchJson(url)).then(v => Object.assign(acc, { [url]: v }))),
+		Promise.resolve({}));
+}
+
 // 4. paintLoading/paintError roles.
 {
 	let ctxRef = null;
@@ -309,9 +332,10 @@ const out = {};
 	out.onDestroy = { ran };
 }
 
-Promise.all([out.supersede, out.csrf, out.errorPrecedence]).then(([supersede, csrf, errorPrecedence]) => {
+Promise.all([out.supersede, out.csrf, out.errorPrecedence, out.bodyFailures]).then(([supersede, csrf, errorPrecedence, bodyFailures]) => {
 	out.supersede = supersede;
 	out.csrf = csrf;
 	out.errorPrecedence = errorPrecedence;
+	out.bodyFailures = bodyFailures;
 	process.stdout.write(JSON.stringify(out));
 });

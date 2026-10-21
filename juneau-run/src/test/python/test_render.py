@@ -674,6 +674,20 @@ class RowEstimateTest(unittest.TestCase):
         self.assertEqual(rest, "0/1  182 tests")
         self.assertEqual(elapsed, "0:18")
 
+    def test_a_reactor_resized_to_one_project_draws_one_in_flight_cell(self):
+        b = self.board(lambda step, tool, sig=None: jr.Estimate(wall_s=100.0, units=1, rate=1.0, runs=5))
+        b.apply("reactor", dict(step="s", size=4, poms=[], tests=True))
+        b.apply("units", dict(step="s", total=1, kind="modules"))     # -pl: the Maven parser at its lone Building line
+        self.clock.advance(40)
+        cells, rest, elapsed = self.cells(b)
+        self.assertEqual(cells, [jr.PLAIN_GLYPHS["run"]])
+        self.assertEqual(rest, "0/1  ~40%")
+        b.apply("unit", dict(step="s", done=1, outcome="pass"))     # its finish on a success
+        b.apply("step_end", dict(id="s", status="ok", ms=60000, exit=0, summary=None, totals=None))
+        cells, rest, elapsed = self.cells(b)
+        self.assertEqual("".join(cells), jr.PLAIN_GLYPHS["pass"])
+        self.assertIn("1/1", rest)
+
     def test_a_single_module_reactor_draws_its_cell_once_the_module_ends(self):
         b = self.board(lambda step, tool, sig=None: self.est)
         b.apply("reactor", dict(step="s", size=1, poms=[], tests=True))
@@ -2267,6 +2281,49 @@ class LogTest(RowCase):
         text = self.run_log(("plan", {"ids": ["a", "b"], "labels": {"a": "A", "b": "B"}}), step_start("a", "A"),
                             step_end("a"))
         self.assertNotIn("○", text)
+
+
+class CompileOnlyMavenRowTest(unittest.TestCase):
+    """A build whose goals stop before Surefire never reaches a module's tests, so its modules count at their end."""
+
+    def setUp(self):
+        reset_run_state()
+        self.addCleanup(reset_run_state)
+        self.board = jr.Board("actionable", nested=False, full_log=None, clock=lambda: 100.0)
+        jr.subscribe(self.board.apply)
+
+    def build(self, args):
+        from test_parsers import write_demo_tree
+        from support import FIXTURES
+        log = (FIXTURES / "maven-serial-success.log").read_text(encoding="utf-8")
+        log = re.sub(r"\[INFO\] --- surefire:.*?\n(?=\[INFO\] -+< |\[INFO\] -+\n\[INFO\] Reactor Summary)", "", log,
+                     flags=re.S)    # no test phase
+        with tempfile.TemporaryDirectory() as tmp:
+            write_demo_tree(Path(tmp), packaging="pom")
+            for m in "abc":
+                (Path(tmp) / f"mod-{m}" / "src" / "test" / "java").mkdir(parents=True)
+            parser = jr.MavenParser()
+            parser.step_id = "s"
+            parser.prepare(["mvn", *args], None, tmp)
+            d = jr._Dispatcher("s", jr.Sinks(console="none"))
+            jr.publish("step_start", id="s", n=1, title="Compile", parent=None, tool="maven", sig="s")
+            for line in log.splitlines():
+                d.apply(parser.on_line(line))
+            d.apply(parser.finish(0))
+            jr.publish("step_end", id="s", status="ok", ms=13000, exit=0, summary=None, totals=None)
+        return self.board.rows["s"]
+
+    def test_a_finished_test_compile_row_counts_every_module_and_keeps_its_bar(self):
+        row = self.build(["test-compile"])
+        self.assertEqual((row.units_total, row.units_done), (3, 3))
+        cells, _, text, _, _ = jr.row_text(row, jr.PLAIN_GLYPHS, 100.0)
+        self.assertEqual("".join(cells), jr.PLAIN_GLYPHS["pass"] * 3)
+        self.assertEqual(text, "")
+
+    def test_a_clean_compile_row_counts_every_module_too(self):
+        row = self.build(["-pl", "mod-a,mod-b,mod-c", "clean", "compile"])
+        self.assertEqual((row.units_total, row.units_done), (3, 3))
+        self.assertNotIn("no tests run", jr.row_text(row, jr.PLAIN_GLYPHS, 100.0)[2])
 
 
 if __name__ == "__main__":

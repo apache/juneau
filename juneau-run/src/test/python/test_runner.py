@@ -760,6 +760,34 @@ class RunToolConsoleTest(unittest.TestCase):
                 self.assertEqual((signal.getsignal(signal.SIGINT), signal.getsignal(signal.SIGTERM)), before)
 
 
+class TerminateGroupTest(unittest.TestCase):
+    """macOS answers killpg with EPERM, not ESRCH, for a group that is exiting (only a zombie leader left)."""
+
+    def test_eperm_on_sigterm_is_ignored(self):
+        calls = []
+        proc = mock.Mock(pid=4242, returncode=None)
+        proc.poll.side_effect = lambda: setattr(proc, "returncode", 0)
+
+        def killpg(pgid, sig):
+            calls.append(sig)
+            raise PermissionError(errno.EPERM, "Operation not permitted") if sig else ProcessLookupError()
+        with mock.patch.object(jr.os, "killpg", side_effect=killpg):
+            jr._terminate_group(proc, grace=5)
+        self.assertEqual(calls, [signal.SIGTERM, 0])
+
+    def test_eperm_on_sigkill_is_ignored_and_the_child_is_reaped(self):
+        calls = []
+        proc = mock.Mock(pid=4242, returncode=None)
+
+        def killpg(pgid, sig):
+            calls.append(sig)
+            raise PermissionError(errno.EPERM, "Operation not permitted")
+        with mock.patch.object(jr.os, "killpg", side_effect=killpg):
+            jr._terminate_group(proc, grace=0.1)
+        self.assertEqual((calls[0], calls[-1]), (signal.SIGTERM, signal.SIGKILL))
+        proc.wait.assert_called_once_with()
+
+
 class Exploding(jr.Parser):
     name = "exploding"
 

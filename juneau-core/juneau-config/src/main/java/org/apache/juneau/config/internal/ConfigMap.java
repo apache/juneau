@@ -488,12 +488,12 @@ public class ConfigMap implements ConfigStoreListener {
 	 */
 	public Set<String> getSections() {
 		var st = state;
-		var s = st.imports().isEmpty() ? st.entries().keySet() : setOfType(String.class);
-		if (! st.imports().isEmpty()) {
-			st.imports().forEach(y -> s.addAll(y.getConfigMap().getSections()));
-			s.addAll(st.entries().keySet());
-		}
+		if (st.imports().isEmpty())
+			return u(cp(st.entries().keySet()));
 		// Order-preserving immutable snapshot merging local + imported sections.
+		var s = setOfType(String.class);
+		st.imports().forEach(y -> s.addAll(y.getConfigMap().getSections()));
+		s.addAll(st.entries().keySet());
 		return u(cp(s));
 	}
 

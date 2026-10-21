@@ -103,7 +103,7 @@ const out = {};
 		const goodLink = () => I.encodeLink(P, topicMap());
 		const HASH = [
 			// [name, bad, make]
-			['randomBytes', true, () => { let s = '#s='; for (let i = int(60); i > 0; i--) s += String.fromCodePoint(int(256)); return s; }],
+			['randomBytes', true, () => { let s = '#s='; for (let i = int(60); i > 0; i--) { s += String.fromCodePoint(int(256)); } return s; }],
 			['truncatedBase64', true, () => { const g = goodLink(); return g.slice(0, 3 + int(Math.max(1, g.length - 4))) + pick(['', '=', '%', '*']); }],
 			['notJson', true, () => '#s=' + b64(pick(['{', '{"v":2,', 'undefined', "{'v':2}", '[1,]']) + word())],
 			['wrongType', true, () => '#s=' + b64(JSON.stringify(pick([[1], 'x', 3, null, true, { v: 2, ns: 'app.dash', t: [1] }, { v: 2, ns: 'app.dash' }, { v: 2, ns: 'app.dash', t: 'x' }])))],

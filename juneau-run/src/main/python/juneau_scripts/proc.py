@@ -36,7 +36,10 @@ def run_group(cmd, *, cwd=None, env=None, grace=30):
             child.send_signal(signal.SIGTERM)
             child.wait(timeout=grace)
         except subprocess.TimeoutExpired:
-            os.killpg(child.pid, signal.SIGKILL)
+            try:
+                os.killpg(child.pid, signal.SIGKILL)
+            except (ProcessLookupError, PermissionError):   # the group is already gone, or (macOS) exiting
+                pass
             child.wait()
         raise
     return Result(code == 0, code, ms=int((time.monotonic() - t0) * 1000))

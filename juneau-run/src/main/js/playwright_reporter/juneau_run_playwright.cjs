@@ -28,8 +28,8 @@
 // With JUNEAU_RUN_PLAYWRIGHT_JSON set, onEnd writes a report there in the shape of Playwright's json reporter (suites,
 // specs, tests, results).  No dependencies.
 
-const fs = require("fs");
-const path = require("path");
+const fs = require("node:fs");
+const path = require("node:path");
 
 const PREFIX = "##playwright ";
 
@@ -58,7 +58,7 @@ class JuneauRunReporter {
   }
 
   file(test) {
-    const file = (test.location && test.location.file) || "";
+    const file = test.location?.file || "";
     return file && path.relative(this.rootDir, file).split(path.sep).join("/"); // "" draws no line
   }
 
@@ -91,12 +91,17 @@ class JuneauRunReporter {
       return; // serial mode reruns the group's passed tests on a retry: the first final result stands
     }
     this.ended.add(test.id);
-    const outcome = status === "skipped" || status === "interrupted" ? "skip" : ok ? "pass" : "fail";
+    let outcome;
+    if (status === "skipped" || status === "interrupted") {
+      outcome = "skip";
+    } else {
+      outcome = ok ? "pass" : "fail";
+    }
     this.emit({ ev: "test", f: this.file(test), o: outcome });
   }
 
   onError(error) {
-    this.errors.push({ message: (error && error.message) || String(error) });
+    this.errors.push({ message: error?.message || String(error) });
   }
 
   onEnd(result) {
@@ -106,7 +111,12 @@ class JuneauRunReporter {
       if ((test.results || []).length && !this.ended.has(test.id)) {
         this.ended.add(test.id);
         const outcome = test.outcome();
-        const o = outcome === "unexpected" ? "fail" : outcome === "skipped" ? "skip" : "pass";
+        let o = "pass";
+        if (outcome === "unexpected") {
+          o = "fail";
+        } else if (outcome === "skipped") {
+          o = "skip";
+        }
         this.emit({ ev: "test", f: this.file(test), o });
       }
     }
@@ -156,9 +166,9 @@ class JuneauRunReporter {
       const outcome = test.outcome();
       spec.ok = spec.ok && outcome !== "unexpected";
       stats[outcome] = (stats[outcome] || 0) + 1;
-      const project = test.parent && test.parent.project && test.parent.project();
+      const project = test.parent?.project?.();
       spec.tests.push({
-        projectName: (project && project.name) || "",
+        projectName: project?.name || "",
         expectedStatus: test.expectedStatus,
         status: outcome,
         retries: test.retries,
@@ -178,7 +188,7 @@ class JuneauRunReporter {
 // The titles of the describe blocks around a test, outermost first.
 function describes(test) {
   const titles = [];
-  for (let s = test.parent; s && s.type === "describe"; s = s.parent) {
+  for (let s = test.parent; s?.type === "describe"; s = s.parent) {
     titles.unshift(s.title);
   }
   return titles;

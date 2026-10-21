@@ -1678,7 +1678,7 @@
 
 	function setOverlay(st, handle) {
 		if (!st.overlay) return;
-		if (!handle || handle.status !== "loading") {
+		if (handle?.status !== "loading") {
 			st.overlay.hidden = true;
 			st.overlay.textContent = "";
 			return;
@@ -1917,7 +1917,7 @@
 		const st = states.get(el);
 		if (!st || st.destroyed || handle == null) return undefined;
 		const data = window.JuneauViews?.data;
-		if (!data || !data.isHandle(handle) || handle.source !== String(card.source).slice(5)) {
+		if (!data?.isHandle(handle) || handle.source !== String(card.source).slice(5)) {
 			log(chartError("E-JS-95", card.source, JSON.stringify(handle)));
 			return undefined;
 		}

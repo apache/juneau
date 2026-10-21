@@ -79,22 +79,39 @@ class MavenParserTest(unittest.TestCase):
         self.assertEqual(kinds(ok, "unit"), [("unit", "mvn", 1, "pass")])
         self.assertEqual(kinds(failed, "unit"), [])           # a failed build leaves its module uncounted
 
-    def test_one_project_of_a_multi_module_tree_is_resized_to_one_and_counted_at_finish(self):
+    def test_one_project_of_a_multi_module_tree_is_resized_to_one_at_its_building_line_and_counted_at_finish(self):
         from test_history import PL_MODULE_LOG
         with tempfile.TemporaryDirectory() as tmp:
             write_demo_tree(Path(tmp), packaging="pom")
             parser = jr.MavenParser()
             parser.step_id = "mvn"
             parser.prepare(["mvn", "verify", "-pl", "mod-b"], None, tmp)
-            ok = feed(parser, PL_MODULE_LOG)
+            lines = PL_MODULE_LOG.splitlines()
+            at = next(i for i, line in enumerate(lines) if line.startswith("[INFO] Building "))
+            before = [e for line in lines[:at] for e in parser.on_line(line)]
+            building = parser.on_line(lines[at])
+            rest = [e for line in lines[at + 1:] for e in parser.on_line(line)] + parser.finish(0)
             parser = jr.MavenParser()
             parser.step_id = "mvn"
             parser.prepare(["mvn", "verify", "-pl", "mod-b"], None, tmp)
             failed = feed(parser, PL_MODULE_LOG.replace("BUILD SUCCESS", "BUILD FAILURE"), exit_code=1)
-        self.assertEqual(kinds(ok, "reactor")[0][1], 4)           # sized from the pom tree
-        self.assertEqual(kinds(ok, "units"), [("units", "mvn", 1, "modules")])
-        self.assertEqual(kinds(ok, "unit"), [("unit", "mvn", 1, "pass")])
-        self.assertEqual(kinds(failed, "units") + kinds(failed, "unit"), [])    # a failed build is left as it was
+        self.assertEqual(kinds(before, "reactor")[0][1], 4)       # sized from the pom tree
+        self.assertEqual(kinds(before, "units"), [])
+        self.assertEqual(kinds(building, "units"), [("units", "mvn", 1, "modules")])
+        self.assertEqual(kinds(rest, "units"), [])                # sent once, not again at finish
+        self.assertEqual(kinds(rest, "unit"), [("unit", "mvn", 1, "pass")])
+        self.assertEqual(kinds(failed, "units"), [("units", "mvn", 1, "modules")])
+        self.assertEqual(kinds(failed, "unit"), [])               # a failed build leaves its project uncounted
+
+    def test_a_one_module_tree_is_resized_only_by_its_reactor(self):
+        from test_history import SINGLE_MODULE_LOG
+        with tempfile.TemporaryDirectory() as tmp:
+            (Path(tmp) / "pom.xml").write_text("<project><artifactId>solo</artifactId></project>", encoding="utf-8")
+            parser = jr.MavenParser()
+            parser.step_id = "mvn"
+            parser.prepare(["mvn", "verify"], None, tmp)
+            events = feed(parser, SINGLE_MODULE_LOG)
+        self.assertEqual(kinds(events, "units"), [("units", "mvn", 1, "modules")])     # finish's, as before
 
     def test_a_multi_module_tree_needs_a_single_project_building_line_to_be_counted_as_one(self):
         from test_history import QUIET_LOG
@@ -518,6 +535,24 @@ class MavenParserTest(unittest.TestCase):
             with self.subTest(cmd=cmd):
                 parser = jr.MavenParser()
                 parser.prepare(cmd, None, "/nonexistent")
+                self.assertEqual(parser.tests_mode, expected)
+
+    def test_goals_that_stop_before_surefire_are_not_tests_mode(self):
+        for args, expected in ((["test-compile"], False), (["compile"], False), (["clean", "compile"], False),
+                               (["-pl", "foo", "test-compile"], False), (["-T", "1C", "-P", "x", "process-classes"], False),
+                               (["-D", "a=b", "-f", "mod-b/pom.xml", "test-compile"], False),
+                               (["test"], True), (["install"], True), (["surefire:test"], True),
+                               (["clean", "install"], True), (["compile", "test"], True), ([], True), (["-pl", "foo"], True),
+                               (["-DskipTests", "install"], False)):
+            with self.subTest(args=args):
+                parser = jr.MavenParser()
+                parser.prepare(["mvn", *args], None, "/nonexistent")
+                self.assertEqual(parser.tests_mode, expected)
+        for line, expected in (("lock.sh mvn -pl foo test-compile", False), ("lock.sh mvn -T1C clean test-compile", False),
+                               ("lock.sh mvn -pl compile test", True), ("lock.sh mvn test-compile && ./after.sh", True)):
+            with self.subTest(line=line):
+                parser = jr.MavenParser()
+                parser.prepare(["/bin/sh", "-c", line], None, "/nonexistent")
                 self.assertEqual(parser.tests_mode, expected)
 
     def test_the_reactor_event_comes_from_the_tree_size_then_the_build_order_block(self):

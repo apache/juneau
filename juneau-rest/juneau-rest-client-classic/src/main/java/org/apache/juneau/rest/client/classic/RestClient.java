@@ -6103,7 +6103,7 @@ public class RestClient extends MarshallingContextable implements HttpClient, Cl
 
 		private static String[] splitSystemProperty(String name) {
 			var v = System.getProperty(name);
-			return ib(v) ? null : v.split(" *+, *+");
+			return ib(v) ? null : splita(v);
 		}
 
 		// The pool settings, applied as Apache HttpClientBuilder applies them to its own connection manager.  The

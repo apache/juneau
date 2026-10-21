@@ -345,7 +345,7 @@ async function tick(h) {
 			h.NS.mount([{ id: 'pending', src: '/p', refreshes: ['tasks'] }]);
 			await flush();
 			report.bus_badge_first = badgeMsgs[0] || null;
-			report.bus_badge_from = (bus.history().find(e => e.topic === 'badge:pending') || {}).from || null;
+			report.bus_badge_from = bus.history().find(e => e.topic === 'badge:pending')?.from || null;
 			report.bus_cmd_afterFirst = cmdMsgs.length;
 			await tick(h);
 			report.bus_badge_second = badgeMsgs[1] || null;

@@ -166,20 +166,19 @@ class BufferedEncodingWriter extends Writer {
 		var bb = ByteBuffer.allocate(Math.max(32, (int)Math.ceil(count * (double)encoder.maxBytesPerChar()) + 16));
 		// The encoder keeps its own state across calls (BOMs, shift sequences), so encode incrementally rather than per chunk.
 		while (encoder.encode(in, bb, last).isOverflow())
-			bb = flushBytes(bb);
+			flushBytes(bb);
 		if (last)
 			while (encoder.flush(bb).isOverflow())
-				bb = flushBytes(bb);
+				flushBytes(bb);
 		flushBytes(bb);
 		var leftover = in.remaining();
 		System.arraycopy(buf, in.position(), buf, 0, leftover);
 		count = leftover;
 	}
 
-	private ByteBuffer flushBytes(ByteBuffer bb) throws IOException {
+	private void flushBytes(ByteBuffer bb) throws IOException {
 		if (bb.position() > 0)
 			out.write(bb.array(), bb.arrayOffset(), bb.position());
 		bb.clear();
-		return bb;
 	}
 }

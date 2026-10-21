@@ -667,7 +667,8 @@ public final class MethodInfo extends ExecutableInfo implements Comparable<Metho
 			throw exex(e.getTargetException());
 		} catch (RuntimeException e) {
 			throw e;
-		} catch (Exception | Error e) {
+		} catch (Exception | ExceptionInInitializerError e) {
+			// Method.invoke() throws ExceptionInInitializerError directly when it triggers a failing static initializer.
 			throw exex(e);
 		}
 	}

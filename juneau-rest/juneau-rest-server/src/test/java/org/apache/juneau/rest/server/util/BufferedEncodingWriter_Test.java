@@ -111,9 +111,10 @@ class BufferedEncodingWriter_Test {
 	}
 
 	@Test void a06_unsupportedEncoding() {
-		assertThrows(UnsupportedEncodingException.class, () -> new BufferedEncodingWriter(new ByteArrayOutputStream(), "no-such-charset"));
-		assertThrows(UnsupportedEncodingException.class, () -> new BufferedEncodingWriter(new ByteArrayOutputStream(), "bad name!"));
-		assertThrows(NullPointerException.class, () -> new BufferedEncodingWriter(new ByteArrayOutputStream(), null));
+		var bos = new ByteArrayOutputStream();
+		assertThrows(UnsupportedEncodingException.class, () -> new BufferedEncodingWriter(bos, "no-such-charset"));
+		assertThrows(UnsupportedEncodingException.class, () -> new BufferedEncodingWriter(bos, "bad name!"));
+		assertThrows(NullPointerException.class, () -> new BufferedEncodingWriter(bos, null));
 	}
 
 	@Test void a07_writeAfterCloseThrows() throws IOException {

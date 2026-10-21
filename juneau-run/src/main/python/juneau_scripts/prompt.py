@@ -66,8 +66,10 @@ def _warn(text):
 
 class _Channel:
     def __init__(self, fd_out, fd_in):
-        self.out = os.fdopen(fd_out, "w", encoding="utf-8", buffering=1)
-        self.inp = os.fdopen(fd_in, "r", encoding="utf-8", errors="replace")
+        with contextlib.ExitStack() as stack:   # if the second open fails, close the first
+            self.out = stack.enter_context(os.fdopen(fd_out, "w", encoding="utf-8", buffering=1))
+            self.inp = stack.enter_context(os.fdopen(fd_in, "r", encoding="utf-8", errors="replace"))
+            stack.pop_all()
         self.n = 0
         self.dead = False
         self.hello_sent = False

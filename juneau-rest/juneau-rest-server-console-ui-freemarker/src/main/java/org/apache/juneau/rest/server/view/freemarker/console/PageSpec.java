@@ -70,7 +70,8 @@ import freemarker.template.*;
  */
 @SuppressWarnings({
 	"java:S1845", // Fluent-builder setters intentionally mirror field names (Juneau DSL convention)
-	"java:S3776" // Validation and rendering chains many independent guards; splitting them adds no clarity.
+	"java:S3776", // Validation and rendering chains many independent guards; splitting them adds no clarity.
+	"javabugs:S2259" // False positive: each card.accept(c) is guarded by nn(card), which Sonar's flow analysis does not track as a null guard.
 })
 public final class PageSpec {
 

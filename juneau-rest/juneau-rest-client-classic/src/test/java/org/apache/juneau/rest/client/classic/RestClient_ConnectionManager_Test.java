@@ -797,6 +797,15 @@ class RestClient_ConnectionManager_Test {
 		});
 	}
 
+	@Test void g02b_useSystemProperties_httpsProtocols_listTrimmed() throws Exception {
+		withSystemProperty("https.protocols", "TLSv1.2 , TLSv1.3", () -> {
+			try (var c = RestClient.create().useSystemProperties().sslContext(trustingContext).build()) {
+				for (var pool : pools(c))
+					assertArrayEquals(new String[]{"TLSv1.2","TLSv1.3"}, (String[])field(httpsFactory(pool), "supportedProtocols"));
+			}
+		});
+	}
+
 	@Test void g03_withoutUseSystemProperties_httpsProtocolsIgnored() throws Exception {
 		withSystemProperty("https.protocols", "TLSv1.2", () -> {
 			try (var c = RestClient.create().sslContext(trustingContext).build()) {

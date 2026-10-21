@@ -97,7 +97,7 @@ function fakeDt() {
 		log: log,
 		on: function (evt, fn) { handlers[evt] ||= []; handlers[evt].push(fn); return dt; },
 		fire: function (evt, e) { (handlers[evt] || []).forEach(function (fn) { fn(e); }); },
-		search: function (v) { if (arguments.length === 0) { return global; } global = v; return dt; },
+		search: function (v) { if (arguments.length === 0) { return global; } global = v; return dt; }, // NOSONAR javascript:S3800 - mirrors the DataTables search() getter/setter overload
 		column: function (i) {
 			if (cols[i]) return cols[i];
 			const col = { index: function () { return i; }, draw: function () { return dt; } };

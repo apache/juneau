@@ -815,8 +815,17 @@
 			opts.signal = controller.signal;
 			return fetch(url, opts).then(function (r) {
 				if (state.inflight === controller) state.inflight = null;
-				if (r.ok) return r.json ? r.json().catch(function () { return null; }) : null;
-				const parsed = r.json ? r.json().catch(function () { return null; }) : Promise.resolve(null);
+				// Only a SyntaxError means the body is not JSON.  The body read can also fail after the headers: an abort,
+				// or a transport TypeError when a navigation tears the page down mid-body.  Neither is an empty result.
+				if (r.ok) return r.json ? r.json().catch(function (e) {
+					if (e && e.name === "SyntaxError") return null;
+					if (isAbort(e)) throw e;
+					throw new Error("Request failed");
+				}) : null;
+				const parsed = r.json ? r.json().catch(function (e) {
+					if (isAbort(e)) throw e;
+					return null;
+				}) : Promise.resolve(null);
 				return parsed.then(function (body) {
 					const msg = (body && body.message) || ("HTTP " + r.status);
 					throw new Error(msg);

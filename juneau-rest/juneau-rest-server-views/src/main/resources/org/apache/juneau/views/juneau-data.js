@@ -307,10 +307,12 @@
 		if (signal) init.signal = signal;
 		return Promise.resolve().then(() => f(url, init)).then(res => {
 			if (!res?.ok) {
+				let cancelled;
 				try {
 					if (res?.body && typeof res.body.cancel === "function")
-						Promise.resolve(res.body.cancel()).catch(() => { /* the stream is already closed */ });
+						cancelled = res.body.cancel();
 				} catch (error_) { /* the stream is already closed */ } // NOSONAR javascript:S2486 - the failure is an expected outcome here and the fallback handles it
+				Promise.resolve(cancelled).catch(() => { /* the stream is already closed */ });
 				throw dataError("E-JS-62", id, "HTTP " + (res ? res.status : "no response"));
 			}
 			return res;

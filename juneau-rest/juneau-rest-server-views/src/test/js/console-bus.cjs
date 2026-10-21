@@ -176,7 +176,7 @@ const SCENARIOS = {
 		let changesBefore = P.fetches(P.isChangesFetch).length;
 		const rolesBefore = T.roleCalls.length;
 		out.mineClicked = P.clickControl('changes', 'Mine only');
-		await P.waitFor(() => { const f = bus.get('filter:changes'); return f?.options && f.options.mine === true; });
+		await P.waitFor(() => { const f = bus.get('filter:changes'); return f?.options?.mine === true; });
 		await P.settle();
 		const byOwner = T.roleCalls.slice(rolesBefore).filter(c => c.card === 'byOwner' && c.role === 'filter');
 		out.mine = {

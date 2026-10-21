@@ -7552,7 +7552,7 @@
 			return "Must be at most " + max + " characters.";
 		if (pat) {
 			let re = null;
-			try { re = new RegExp(pat); } catch (e) { re = null; }   // FAIL-OPEN on a Java-only pattern // NOSONAR javascript:S2486 -- fail-open on a pattern the browser regex engine cannot compile (Java-only syntax)
+			try { re = new RegExp(pat); } catch (e) { re = null; }   // NOSONAR javascript:S2486 -- FAIL-OPEN on a pattern the browser regex engine cannot compile (Java-only syntax)
 			if (re && ! re.test(value)) return "Value is not in the expected format.";
 		}
 		return null;

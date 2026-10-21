@@ -622,8 +622,50 @@ class OneProjectOfManyMavenTest(HistoryEnv, unittest.TestCase):
 
     def test_a_failed_build_stays_incomplete(self):
         r = self.build(PL_MODULE_LOG.replace("BUILD SUCCESS", "BUILD FAILURE"), exit_code=1)
-        self.assertEqual(r["units"], {"kind": "modules", "total": 4, "done": 0})
+        self.assertEqual(r["units"], {"kind": "modules", "total": 1, "done": 0})     # resized at its Building line
         self.assertFalse(r["complete"])
+
+    def run_until(self, text, stop, args=("verify", "-pl", "mod-b")):
+        """Feed `text` up to and including the first line starting with `stop`, leaving the row running."""
+        parser = jr.MavenParser()
+        parser.step_id = "tests"
+        parser.prepare(["mvn", *args], None, self.tree)
+        d = jr._Dispatcher("tests", jr.Sinks(console="none"))
+        jr.publish("step_start", id="tests", n=1, title="Tests", parent=None, tool="maven", sig="s")
+        for line in text.splitlines():
+            d.apply(parser.on_line(line))
+            if line.startswith(stop):
+                break
+
+    def test_the_running_row_keeps_the_pom_tree_bar_until_the_building_line(self):
+        self.run_until(PL_MODULE_LOG, "[INFO] -----")             # the project's header
+        self.assertEqual(self.bar()[0], (4, 0))
+
+    def test_the_running_row_switches_to_one_in_flight_cell_at_the_building_line(self):
+        self.run_until(PL_MODULE_LOG, "[INFO] Building ")
+        units, cells, rest = self.bar()
+        self.assertEqual(units, (1, 0))
+        self.assertEqual(cells, jr.PLAIN_GLYPHS["run"])
+        self.assertTrue(rest.startswith("0/1"), rest)
+
+    def test_the_running_row_keeps_one_in_flight_cell_while_its_tests_run(self):
+        self.run_until(PL_MODULE_LOG, "[INFO] --- maven-surefire-plugin")
+        units, cells, rest = self.bar()
+        self.assertEqual(cells, jr.PLAIN_GLYPHS["run"])
+        self.assertTrue(rest.startswith("0/1"), rest)
+
+    def test_a_running_quiet_build_keeps_the_pom_tree_bar(self):
+        self.run_until(QUIET_LOG + "[INFO] Building jar: /tmp/mod-a/target/mod-a-1.0.jar\n", "[INFO] Building jar",
+                       args=("-q", "verify"))
+        units, cells, rest = self.bar()
+        self.assertEqual(units, (4, 0))
+        self.assertTrue(rest.startswith("0/4"), rest)
+
+    def test_a_running_also_make_build_keeps_its_reactor_bar(self):
+        self.run_until(PL_ALSO_MAKE_LOG, "[INFO] Building Demo Module A", args=("verify", "-pl", "mod-b", "-am"))
+        units, cells, rest = self.bar()
+        self.assertEqual(units[0], 2)
+        self.assertTrue(rest.startswith("0/2"), rest)
 
     def test_a_quiet_build_of_the_whole_tree_counts_nothing(self):
         r = self.build(QUIET_LOG, args=("-q", "verify"))

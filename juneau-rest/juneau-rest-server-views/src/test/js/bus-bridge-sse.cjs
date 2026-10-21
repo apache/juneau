@@ -426,9 +426,7 @@ async function main() {
 
 	// --- the DEFAULT fetch must survive being called as env.fetch(...): a browser's fetch throws "Illegal invocation"
 	// unless `this` is the window, so the stub throws unless it is; a caller-supplied fetch is used as given ---
-	{
-		out.defaultFetch = { unsupplied: await run(false), supplied: await run(true) };
-	}
+	out.defaultFetch = { unsupplied: await run(false), supplied: await run(true) };
 
 	process.stdout.write(JSON.stringify(out));
 }

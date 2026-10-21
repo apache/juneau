@@ -130,6 +130,9 @@ public abstract class ConfigStore extends Context implements Closeable {
 	 * @return The parsed configuration.
 	 * @throws IOException Thrown by underlying stream.
 	 */
+	@SuppressWarnings({
+		"javabugs:S2259" // False positive: 'format2' is never null; a null 'format' defaults to the static final IniConfigFormat.INSTANCE.
+	})
 	public synchronized ConfigMap getMap(String name, ConfigFormat format) throws IOException {
 		name = resolveName(name);
 		var format2 = format == null ? IniConfigFormat.INSTANCE : format;

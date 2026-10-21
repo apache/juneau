@@ -196,6 +196,16 @@ class RunGroupTest(unittest.TestCase):
         killpg.assert_not_called()
         os.kill(int(self.ready.read_text()), signal.SIGKILL)   # the grandchild ignores SIGTERM; tidy it up
 
+    def test_eperm_from_killpg_still_reaps_the_child(self):
+        # macOS answers killpg with EPERM, not ESRCH, for a group that is exiting (only a zombie leader left)
+        child = mock.Mock(pid=4242)
+        child.wait.side_effect = [KeyboardInterrupt(), subprocess.TimeoutExpired("t", 0.1), 0]
+        with mock.patch.object(proc.subprocess, "Popen", return_value=child), \
+                mock.patch.object(proc.os, "killpg", side_effect=PermissionError(1, "Operation not permitted")), \
+                self.assertRaises(KeyboardInterrupt):
+            proc.run_group(["t"], grace=0.1)
+        self.assertEqual(child.wait.call_count, 3)
+
     def test_windows(self):
         with mock.patch.object(_base.os, "name", "nt"), self.assertRaises(NotImplementedError):
             proc.run_group(["true"])

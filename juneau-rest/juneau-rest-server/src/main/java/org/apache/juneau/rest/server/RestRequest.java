@@ -36,6 +36,7 @@ import java.time.*;
 import java.time.format.*;
 import java.time.temporal.*;
 import java.util.*;
+import java.util.concurrent.atomic.*;
 import java.util.function.*;
 import java.util.stream.*;
 
@@ -2317,7 +2318,7 @@ public class RestRequest extends HttpServletRequestWrapper {
 	 */
 	private static final class LazyPartParserSession implements HttpPartParserSession {
 		private final HttpPartParser parser;
-		private volatile HttpPartParserSession session;
+		private final AtomicReference<HttpPartParserSession> session = new AtomicReference<>();
 
 		LazyPartParserSession(HttpPartParser parser) {
 			this.parser = parser;
@@ -2325,10 +2326,10 @@ public class RestRequest extends HttpServletRequestWrapper {
 
 		@Override /* Overridden from HttpPartParserSession */
 		public <T> T read(HttpPartType partType, HttpPartSchema schema, String in, ClassMeta<T> toType) throws ParseException, SchemaValidationException {
-			var s = session;
+			var s = session.get();
 			if (s == null) {
 				s = parser.getPartSession();
-				session = s;
+				session.set(s);
 			}
 			return s.read(partType, schema, in, toType);
 		}

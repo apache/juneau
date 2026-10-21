@@ -149,7 +149,7 @@ const all = (r, id, sel) => { const h = host(r, id); return h ? Array.from(h.que
 const one = (r, id, sel) => all(r, id, sel)[0] || null;
 const text = (r, id, sel) => { const n = one(r, id, sel); return n ? n.textContent : null; };
 const tick = r => r.intervals.filter(x => x.live).forEach(x => x.fn());
-const inst = (r, id) => r.fake.instances.findLast(i => i.el && host(r, id) && host(r, id).contains(i.el) && !i.disposed) || null;
+const inst = (r, id) => r.fake.instances.findLast(i => i.el && host(r, id)?.contains(i.el) && !i.disposed) || null;
 const lastOption = i => i ? JSON.parse(JSON.stringify(i.options.at(-1))) : null; // NOSONAR javascript:S7784 - JSON round-trip deliberately normalizes to plain JSON (options may carry functions)
 // A column of the bound dataset (typed arrays do not survive JSON).
 const col = (i, name) => Array.from(i.options.at(-1).dataset[0].source[name]);

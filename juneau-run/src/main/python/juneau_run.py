@@ -3200,6 +3200,16 @@ class MavenParser(Parser):
     COMPILE_PATH = re.compile(r"^\[ERROR\] (\S+\.java):\[")
     SKIP_TESTS = re.compile(r"(?:^|\s)-D(?:skipTests|maven\.test\.skip)(?:=true)?(?=\s|$)")
     FILE_OPTION = re.compile(r"(?:^|\s)(?:-f|--file)(?:=|\s+)(\S+)")
+    # Goals that stop before Surefire: a build of only these has no tests to count, so its modules count at their end.
+    PRE_TEST_GOALS = frozenset((
+        "clean", "validate", "initialize", "generate-sources", "process-sources", "generate-resources",
+        "process-resources", "compile", "process-classes", "generate-test-sources", "process-test-sources",
+        "generate-test-resources", "process-test-resources", "test-compile", "process-test-classes"))
+    VALUE_OPTIONS = frozenset((   # options whose value can follow as the next word
+        "-pl", "--projects", "-f", "--file", "-T", "--threads", "-P", "--activate-profiles", "-D", "--define",
+        "-s", "--settings", "-gs", "--global-settings", "-t", "--toolchains", "-rf", "--resume-from",
+        "-l", "--log-file", "-b", "--builder"))
+    MAVEN_PROGRAMS = ("mvn", "mvnw", "mvn.cmd", "mvnw.cmd")
     CLASS_LINE = re.compile(      # searched, not anchored: a verbose test run elsewhere can leave a line open for this one to land on
         r"(?:\[(?:INFO|WARNING|ERROR)\] )?Tests run: (\d+), Failures: (\d+), Errors: (\d+), Skipped: (\d+), "
         r"Time elapsed: [\d.,]+ s(?: <<< (?:FAILURE|ERROR)!)? -- in (.+?)\s*$")    # a @DisplayName can hold spaces
@@ -3256,6 +3266,7 @@ class MavenParser(Parser):
         self.structure_seen = False
         self.after_header = False        # the previous line was a `< g:a >` header
         self.lone_building_seen = False  # a header's Building line had no [k/n]: Maven is building one project
+        self.lone_sized = False          # the reactor was re-sized to that one project at its Building line
         self.generic = GenericParser()
 
     def prepare(self, cmd, env, cwd):
@@ -3272,8 +3283,24 @@ class MavenParser(Parser):
         self.packaging = {}
         self.dirs, self.names = read_pom_tree(root, self.packaging)
         self.parallel = any(re.search(r"(?:^|\s)(?:-T|--threads)", a) for a in cmd[at:])
-        self.tests_mode = not self.SKIP_TESTS.search(args)
+        self.tests_mode = not self.SKIP_TESTS.search(args) and not self._pre_test_goals(args)
         return cmd, env
+
+    def _pre_test_goals(self, args):
+        """True when every goal in args is a lifecycle phase before test (or clean); no goals at all is False."""
+        words = args.split()
+        prog = next((i for i, w in enumerate(words) if os.path.basename(w) in self.MAVEN_PROGRAMS), None)
+        if prog is not None:     # a "sh -c" string: the goals follow the mvn word, not the launchers before it
+            words = words[prog + 1:]
+        goals, skip = [], False
+        for w in words:
+            if skip:
+                skip = False
+            elif w.startswith("-"):
+                skip = w in self.VALUE_OPTIONS
+            else:
+                goals.append(w)
+        return bool(goals) and all(g in self.PRE_TEST_GOALS for g in goals)
 
     def _reactor(self, size):
         if self.order_tail:     # the optional fifth field: absent when there is no trailing pom
@@ -3496,6 +3523,11 @@ class MavenParser(Parser):
             return events
         if after_header and self.LONE_BUILDING.match(line):
             self.lone_building_seen = True
+            # one project of a bigger tree (-pl without --also-make): the running row is re-sized to it now, so it
+            # draws as a one-module build (one in-flight cell, 0/1) rather than as the pom tree's bar until finish
+            if len(self.dirs) > 1 and self.reactor_sent and not self.building_seen and not self.lone_sized:
+                self.lone_sized = True
+                events.append(("units", self.step_id, 1, "modules"))
         if self.SUMMARY_HEAD.match(line):
             self.in_summary = True
             self.structure_seen = True
@@ -3641,12 +3673,13 @@ class MavenParser(Parser):
             events.append(("tests", self.step_id, self.total, self.fail, self.err, self.skip))
         # A build of one project (a one-module tree, or -pl without --also-make in a bigger one) prints no [k/n]
         # Building suffix and no Reactor Summary, so nothing above counted it and the reactor is still the pom tree's
-        # size: a success re-sizes it to the one project and counts it here, or its bar never fills and its history
-        # record is never complete.  A bigger tree needs the project's own Building line as well: a -q build of every
-        # module prints no structure either.
+        # size: a success re-sizes it to the one project (unless its Building line already did) and counts it here,
+        # or its bar never fills and its history record is never complete.  A bigger tree needs the project's own
+        # Building line as well: a -q build of every module prints no structure either.
         one = len(self.dirs) == 1 or (len(self.dirs) > 1 and self.lone_building_seen)
         if exit_code == 0 and self.reactor_sent and one and not self.structure_seen:
-            events.append(("units", self.step_id, 1, "modules"))
+            if not self.lone_sized:
+                events.append(("units", self.step_id, 1, "modules"))
             events.append(("unit", self.step_id, 1, "pass"))
         if not self.structure_seen and exit_code != 0:
             self.generic.step_id = self.step_id
@@ -4379,7 +4412,7 @@ def _terminate_group(proc, grace=None):
     pgid = proc.pid
     try:
         os.killpg(pgid, signal.SIGTERM)
-    except ProcessLookupError:
+    except (ProcessLookupError, PermissionError):   # macOS gives EPERM, not ESRCH, for a group that is exiting
         pass
     deadline = time.monotonic() + grace
     while time.monotonic() < deadline:
@@ -4389,7 +4422,7 @@ def _terminate_group(proc, grace=None):
         time.sleep(0.05)
     try:
         os.killpg(pgid, signal.SIGKILL)
-    except ProcessLookupError:
+    except (ProcessLookupError, PermissionError):
         pass
     proc.wait()
 

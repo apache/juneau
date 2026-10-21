@@ -294,6 +294,16 @@ class ConsoleCards_Shell_Test extends TestBase {
 		assertEquals(List.of("bad input", "HTTP 500", "Request failed"), contextReport == null ? null : contextReport.get("errorPrecedence"));
 	}
 
+	@Test void b03b_bodyReadFailureAfterHeaders() {
+		var c = context("bodyFailures");
+		assertEquals(Map.of("error", "body read failed", "abort", true), c.get("/ok-abort"));
+		assertEquals(Map.of("error", "Request failed", "abort", false), c.get("/ok-transport"));
+		assertEquals(Collections.singletonMap("value", null), c.get("/ok-parse"));
+		assertEquals(Map.of("error", "body read failed", "abort", true), c.get("/err-abort"));
+		assertEquals(Map.of("error", "HTTP 503", "abort", false), c.get("/err-transport"));
+		assertEquals(Map.of("error", "HTTP 503", "abort", false), c.get("/err-parse"));
+	}
+
 	@Test void b04_paintLoadingThenPaintError() {
 		var c = context("paint");
 		assertEquals("status", c.get("loadingRole"));

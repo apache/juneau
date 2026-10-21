@@ -31,6 +31,7 @@ import java.lang.annotation.*;
 import java.lang.reflect.*;
 import java.net.*;
 import java.util.*;
+import java.util.concurrent.atomic.*;
 import java.util.function.*;
 import java.util.stream.*;
 
@@ -551,9 +552,9 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 	private final MethodInfo setter;                                 // The bean property setter.
 	private final BeanInfo<?> typeMeta;                              // The transformed class type of the bean property.  Concrete instances are always {@code ClassMeta}; typed against the bean-modeling SPI seam.
 	private final BiFunction<BeanSession,Object,Object> writeTransform; // Applied to incoming value before raw setter; identity by default.  Typed against the commons.bean SPI seam.
-	private volatile Supplier<Collection<?>> abstractCollectionFactory;  // Memoized factory for abstract/interface collection property types.
-	private volatile Supplier<Collection<?>> concreteCollectionFactory;  // Memoized factory for concrete collection property types.
-	private volatile Supplier<Map<?,?>> mapFactory;  // Memoized factory for concrete map property types.
+	private final AtomicReference<Supplier<Collection<?>>> abstractCollectionFactory = new AtomicReference<>();  // Memoized factory for abstract/interface collection property types.
+	private final AtomicReference<Supplier<Collection<?>>> concreteCollectionFactory = new AtomicReference<>();  // Memoized factory for concrete collection property types.
+	private final AtomicReference<Supplier<Map<?,?>>> mapFactory = new AtomicReference<>();  // Memoized factory for concrete map property types.
 	private final boolean writeOnly;                                 // True if this property is write-only.
 	private final Set<String> views;                                 // Named views this property belongs to; null = untagged (included in all views when defaultViewInclusion is enabled).
 
@@ -1243,7 +1244,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 					}
 				} else {
 					if (propMap == null) {
-						propMap = (Map)mapFactory().get();
+						propMap = mapFactory().get();
 					} else {
 						propMap.clear();
 					}
@@ -1309,7 +1310,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 					propList.clear();
 				} else {
 					if (propList == null) {
-						propList = (Collection)concreteCollectionFactory().get();
+						propList = concreteCollectionFactory().get();
 						invokeSetter(bean, pName, propList);
 					} else {
 						propList.clear();
@@ -1470,7 +1471,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 	 * @return The memoized factory for new collections of this property.
 	 */
 	private Supplier<Collection<?>> abstractCollectionFactory(Class<?> propertyClass) {
-		var f = abstractCollectionFactory;
+		var f = abstractCollectionFactory.get();
 		if (f == null) {
 			// Best-effort: try to materialize the declared type itself (handles concrete AbstractSet/AbstractList
 			// subclasses, registered defaults, etc.).  Never throws — degrades to the shape-based fallback on failure.
@@ -1479,7 +1480,7 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 				f = declared;
 			else
 				f = shapeDefaultCollectionFactory(propertyClass);
-			abstractCollectionFactory = f;
+			abstractCollectionFactory.set(f);
 		}
 		return f;
 	}
@@ -1503,14 +1504,14 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 	 * call goes through the full {@link BeanInstantiator} pipeline.
 	 */
 	private Supplier<Collection<?>> concreteCollectionFactory() {
-		var f = concreteCollectionFactory;
+		var f = concreteCollectionFactory.get();
 		if (f == null) {
 			var ctor = publicNoArgConstructor(rawTypeMeta);
 			if (nn(ctor))
-				f = () -> ctor.newInstance();
+				f = ctor::newInstance;
 			else
 				f = () -> BeanInstantiator.of(Collection.class).type(rawTypeMeta).preferZeroArgConstructor().run();
-			concreteCollectionFactory = f;
+			concreteCollectionFactory.set(f);
 		}
 		return f;
 	}
@@ -1519,14 +1520,14 @@ public class BeanPropertyMeta implements Comparable<BeanPropertyMeta> {
 	 * Same as {@link #concreteCollectionFactory()} but for map-typed properties.
 	 */
 	private Supplier<Map<?,?>> mapFactory() {
-		var f = mapFactory;
+		var f = mapFactory.get();
 		if (f == null) {
 			var ctor = publicNoArgConstructor(rawTypeMeta);
 			if (nn(ctor))
-				f = () -> ctor.newInstance();
+				f = ctor::newInstance;
 			else
 				f = () -> BeanInstantiator.of(Map.class).type(rawTypeMeta).preferZeroArgConstructor().run();
-			mapFactory = f;
+			mapFactory.set(f);
 		}
 		return f;
 	}

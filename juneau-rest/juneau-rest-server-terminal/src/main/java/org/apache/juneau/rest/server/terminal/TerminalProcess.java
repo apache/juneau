@@ -251,7 +251,7 @@ public final class TerminalProcess implements AutoCloseable, TerminalSink {
 			}
 		} catch (IOException e) {
 			// A closed pipe ends the channel; the exception text could hold a prompt, so it is not logged.
-			LOG.log(Level.FINE, "TerminalProcess prompt channel closed for '" + events + "'.");
+			LOG.log(Level.FINE, () -> "TerminalProcess prompt channel closed for '" + events + "'.");
 		} finally {
 			answersClosed = true;
 			prompts.onEnd();
@@ -260,7 +260,7 @@ public final class TerminalProcess implements AutoCloseable, TerminalSink {
 
 	/** The writer thread: copies pending chunks to stdin, never holding {@link #inLock} while writing. */
 	@SuppressWarnings({
-		"java:S3626" // The return exits the while(true) loop after a failed write; removing it would spin forever.
+		"java:S3626" // The early return is what ends the endless writer loop after a failed write.
 	})
 	private void pump() {
 		var out = process.getOutputStream();

@@ -534,11 +534,8 @@ public class Cache<K,V> {
 	 * Only has an effect if this cache was created with thread-local mode enabled.
 	 */
 	public void cleanup() {
-		if (isThreadLocal) {
-			if (threadLocalMap != null) {
-				threadLocalMap.remove();
-			}
-		}
+		if (isThreadLocal && threadLocalMap != null)
+			threadLocalMap.remove();
 	}
 
 	/**
@@ -701,11 +698,8 @@ public class Cache<K,V> {
 	 */
 	public V put(K key, V value) {
 		var m = getMap();
-		if (value == null) {
-			var wrapped = mapKey(key);
-			V result = m.remove(wrapped);
-			return result;
-		}
+		if (value == null)
+			return m.remove(mapKey(key));
 		return m.put(mapKey(key), value);
 	}
 
@@ -716,10 +710,7 @@ public class Cache<K,V> {
 	 * @return The previous value associated with the key, or <jk>null</jk> if there was no mapping.
 	 */
 	public V remove(K key) {
-		var m = getMap();
-		var wrapped = mapKey(key);
-		V result = m.remove(wrapped);
-		return result;
+		return getMap().remove(mapKey(key));
 	}
 
 	/**

@@ -23,6 +23,7 @@ import static org.apache.juneau.commons.utils.ThrowableUtils.*;
 import java.io.*;
 import java.util.*;
 import java.util.concurrent.*;
+import java.util.concurrent.atomic.*;
 
 import javax.xml.stream.*;
 import javax.xml.stream.util.*;
@@ -337,7 +338,8 @@ public class XmlParser extends ReaderParser implements XmlMetaProvider, RecordRe
 	private final Map<BeanMeta<?>,XmlBeanMeta> xmlBeanMetas = new ConcurrentHashMap<>();
 	private final Map<BeanPropertyMeta,XmlBeanPropertyMeta> xmlBeanPropertyMetas = new ConcurrentHashMap<>();
 	private final Map<ClassMeta<?>,XmlClassMeta> xmlClassMetas = new ConcurrentHashMap<>();
-	private volatile XMLInputFactory validatingFactory, nonValidatingFactory;
+	private final AtomicReference<XMLInputFactory> validatingFactory = new AtomicReference<>();
+	private final AtomicReference<XMLInputFactory> nonValidatingFactory = new AtomicReference<>();
 
 	/**
 	 * Constructor.
@@ -490,16 +492,13 @@ public class XmlParser extends ReaderParser implements XmlMetaProvider, RecordRe
 	 * @return A configured factory.  Never <jk>null</jk>.
 	 */
 	XMLInputFactory getInputFactory(boolean validating) {
-		var f = validating ? validatingFactory : nonValidatingFactory;
+		var ref = validating ? validatingFactory : nonValidatingFactory;
+		var f = ref.get();
 		if (nn(f))
 			return f;
 		f = XmlReader.newFactory(validating, reporterImpl, resolverImpl, eventAllocatorImpl);
-		if (! XmlReader.isShareable())
-			return f;
-		if (validating)
-			validatingFactory = f;
-		else
-			nonValidatingFactory = f;
+		if (XmlReader.isShareable())
+			ref.set(f);
 		return f;
 	}
 

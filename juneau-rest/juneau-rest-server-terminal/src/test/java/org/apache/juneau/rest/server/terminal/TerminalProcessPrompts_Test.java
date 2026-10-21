@@ -133,12 +133,18 @@ class TerminalProcessPrompts_Test extends TestBase {
 	}
 
 	@Test void a04_inputAndPromptsRejected() {
+		List<String> cmd = List.of("true");
+		var host = realHost();
+		var sink = new Sink();
 		assertThrows(IllegalArgumentException.class,
-			() -> TerminalProcess.start("generic", List.of("true"), 80, 24, run, realHost(), TerminalProcess::ensureDone, true, new Sink()));
+			() -> TerminalProcess.start("generic", cmd, 80, 24, run, host, TerminalProcess::ensureDone, true, sink));
 		assertThrows(NullPointerException.class,
-			() -> TerminalProcess.start("generic", List.of("true"), 80, 24, run, (TerminalPrompts)null));
+			() -> TerminalProcess.start("generic", cmd, 80, 24, run, (TerminalPrompts)null));
 	}
 
+	@SuppressWarnings({
+		"java:S2925" // Bounded poll for the runner's log file, which has no signal to wait on.
+	})
 	@Test void a05_closeEndsRunnerCancelled() throws Exception {
 		var sink = new Sink();
 		var p = startReal(List.of("python3", "-c", "import time; time.sleep(60)"), sink);
