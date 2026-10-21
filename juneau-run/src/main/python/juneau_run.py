@@ -554,7 +554,8 @@ def fmt_elapsed(ms):
     return f"{h}:{m:02d}:{s:02d}" if h else f"{m}:{s:02d}"
 
 
-Estimate = collections.namedtuple("Estimate", "wall_s units rate runs tests", defaults=(None,))
+# kinds: {unit kind: (median units total, median wall_s per unit)} over the records of that kind, or None
+Estimate = collections.namedtuple("Estimate", "wall_s units rate runs tests kinds", defaults=(None, None))
 
 
 def _median(xs):
@@ -573,11 +574,28 @@ def estimate_from(records, sig):
         return None
     withunits = [r for r in use if (r.get("units") or {}).get("total")]
     withtests = [r for r in use if isinstance(r.get("tests"), (int, float)) and r["tests"] > 0]
+    bykind = {}
+    for r in withunits:
+        if r["units"].get("kind") is not None:
+            bykind.setdefault(r["units"]["kind"], []).append(r)
+    kinds = {kind: (_median([r["units"]["total"] for r in rs]), _median([r["wall_s"] / r["units"]["total"] for r in rs]))
+             for kind, rs in bykind.items()}
     return Estimate(_median([r["wall_s"] for r in use]),
                     _median([r["units"]["total"] for r in withunits]) if withunits else None,
                     _median([r["wall_s"] / r["units"]["total"] for r in withunits]) if withunits else None,
                     len(use),
-                    _median([r["tests"] for r in withtests]) if withtests else None)
+                    _median([r["tests"] for r in withtests]) if withtests else None,
+                    kinds or None)
+
+
+def estimate_for_kind(est, kind):
+    """est with units and rate from the records of the bar's unit kind only (a per-test record's rate means nothing to a
+    file bar); both None for a kind with no records.  est unchanged when it is None, has no kinds (an estimator stub),
+    or the kind is not known yet (a unit before any units)."""
+    if est is None or not est.kinds or kind is None:
+        return est
+    units, rate = est.kinds.get(kind, (None, None))
+    return est._replace(units=units, rate=rate)
 
 
 def eta_figures(e, k, n, est):
@@ -857,14 +875,20 @@ class _Row:
         return [self.units[m].box for m in self.order]
 
     def unit_view(self):
-        """unit_cells for drawing: the modules that have started but not ended fill the cells right after the finished
-        ones as UNIT_RUN.  A module bar fills in finish order, so an in-flight module has no cell of its own yet; this
-        shows how many are running, not which.  Only a Maven module bar has the signal (unit_start); other unit
-        kinds (tests, tasks, files) never show in-flight and keep PENDING for what has not finished."""
-        if self.unit_kind != "modules" or not self.running:
+        """unit_cells for drawing: the units that have started but not ended fill the cells right after the finished
+        ones as UNIT_RUN, Maven modules on a module bar and test files on a file bar.  Both bars fill in finish order,
+        so an in-flight unit has no cell of its own yet; this shows how many are running, not which.  Only those two
+        bars have the signal (unit_start); other unit kinds (tests, tasks) never show in-flight and keep PENDING for
+        what has not finished."""
+        if not self.running:
             return self.unit_cells
-        running = sum(1 for m in self.units.values() if m.src in BAR_SRCS and m.started and m.status is None
-                      and m.unit_index is None and not m.dropped and m.id not in self.unbarred)
+        if self.unit_kind == "modules":
+            running = sum(1 for m in self.units.values() if m.src in BAR_SRCS and m.started and m.status is None
+                          and m.unit_index is None and not m.dropped and m.id not in self.unbarred)
+        elif self.unit_kind == "files":
+            running = sum(1 for m in self.units.values() if m.src == "file" and m.in_progress)
+        else:
+            return self.unit_cells
         view = bytearray(self.unit_cells)
         for i in range(self.units_done, min(self.units_total, self.units_done + running)):
             view[i] = UNIT_RUN
@@ -1228,6 +1252,7 @@ class Board:
             # an explicit count replaces the total (a later, authoritative count beats an earlier estimate), but never
             # below the units already done, so no finished cell is lost
             r.units_total, r.unit_kind = max(r.units_done, f["total"] - r.units_dropped), f["kind"]
+            r.estimate = estimate_for_kind(r.estimate, f["kind"])
             del r.unit_cells[r.units_total:]
             r.unit_cells.extend(bytes(r.units_total - len(r.unit_cells)))
         return []
@@ -1237,7 +1262,7 @@ class Board:
         if r is not None:
             done = f["done"]
             if done > r.units_total:                      # more units than announced (a resend lagging, -x absent)
-                self._on_units({"step": f["step"], "total": done, "kind": r.unit_kind})
+                self._on_units({"step": f["step"], "total": done + r.units_dropped, "kind": r.unit_kind})
             byte = self.OUTCOME_BYTE.get(f["outcome"], UNIT_PASS)
             if done > r.units_done:                       # cumulative: a jump fills every skipped unit
                 r.unit_cells[r.units_done:done] = bytes([byte]) * (done - r.units_done)
@@ -1567,11 +1592,12 @@ def row_text(row, glyphs, now, pending=False):
     unreported = not row.running and row.unit_kind == "modules" and not row.units_done
     # A finished module bar that never counted a unit (a -q build sends no module events) shows no bar at all.
     # A running reactor of one barred module has nothing to count (no module-start event): it shows one in-flight
-    # cell and no 0/1, and the percent comes from the tests run against history's expected count instead.
+    # cell and a fixed 0/1 count, and the percent comes from the tests run against history's expected count instead.
     single = row.running and row.unit_kind == "modules" and row.units_total + row.units_dropped == 1 \
         and not row.units_done
     if single:
         cells = [glyphs["run"]]
+        parts.append("0/1")
     elif not unreported and (row.bar_units or row.size or row.units_total or row.unit_kind == "modules"):
         if row.unit_kind:
             cells = unit_bar(row.unit_view(), row.units_total, glyphs)
@@ -1584,7 +1610,18 @@ def row_text(row, glyphs, now, pending=False):
     ms = row.ms if row.ms is not None else int((now - row.t0) * 1000)
     elapsed = fmt_elapsed(ms) if ms >= 1000 else ""
     if row.running and row.estimate is not None:
-        pct, total, approx = eta_figures(ms / 1000, row.units_done, row.units_total, row.estimate)
+        run, hist = (row.totals[0] if row.totals else 0), row.estimate.tests
+        if row.unit_kind == "files" and hist and 0 < run < hist:
+            # a file bar moves in file-sized steps: the percent and total follow the tests run, at a per-test rate
+            est = row.estimate._replace(rate=row.estimate.wall_s / hist if row.estimate.wall_s else None)
+            pct, total, _ = eta_figures(ms / 1000, run, hist, est)
+            approx = True           # hist is history's median, not an announced count
+        elif row.unit_kind == "files" and hist and run >= hist:
+            # past history's count the tests said ~99%: hold it there rather than drop back to the file percent
+            pct, total, _ = eta_figures(ms / 1000, row.units_done, row.units_total, row.estimate)
+            pct, approx = max(pct or 0, 99), True
+        else:
+            pct, total, approx = eta_figures(ms / 1000, row.units_done, row.units_total, row.estimate)
         if single:
             total, approx = (row.estimate.wall_s if row.estimate.wall_s and row.estimate.wall_s > ms / 1000
                              else None), True
@@ -3020,11 +3057,16 @@ class Parser:
 
     interactive is True when the tool runs under a terminal (tty=True or --pty): prepare() must not then change what the
     tool prints (no --console=plain), only add side channels such as a report file.  A parser that sets rewrites_log
-    gets render() called for every complete output line in piped mode, and the full log holds what it returns."""
+    gets render() called for every complete output line in piped mode, and the full log holds what it returns.
+
+    BARS names the bar units a caller may pick with run_tool(..., bar=); bar is the one picked (None: the parser's
+    default), set by the runner before prepare() like step_id."""
 
     name = "base"
     interactive = False
     rewrites_log = False
+    BARS = ()
+    bar = None
 
     def __init__(self):
         self.step_id = None
@@ -3145,7 +3187,9 @@ class MavenParser(Parser):
     """Reactor-aware Maven output: module sub-steps, Surefire counts, reports and failure notes."""
 
     name = "maven"
+    BARS = ("modules",)
     BUILDING = re.compile(r"^\[INFO\] Building (.+?) (\S+)\s+\[(\d+)/(\d+)\]\s*$")
+    LONE_BUILDING = re.compile(r"^\[INFO\] Building \S")     # only right under a header: the jar plugin has its own
     SUMMARY_HEAD = re.compile(r"^\[INFO\] Reactor Summary")
     # Maven drops the dot leader when the name fills the column, so the dots are optional.
     SUMMARY_ROW = re.compile(r"^\[INFO\] (.+?)(?: \.+)? (SUCCESS|FAILURE|SKIPPED)(?: \[\s*([^\]]+?)\s*\])?\s*$")
@@ -3210,6 +3254,8 @@ class MavenParser(Parser):
         self.cond_window = 0
         self.first_error = None
         self.structure_seen = False
+        self.after_header = False        # the previous line was a `< g:a >` header
+        self.lone_building_seen = False  # a header's Building line had no [k/n]: Maven is building one project
         self.generic = GenericParser()
 
     def prepare(self, cmd, env, cwd):
@@ -3399,6 +3445,7 @@ class MavenParser(Parser):
     def handle(self, line):
         self.generic.handle(line)
         events = []
+        after_header, self.after_header = self.after_header, False
         if not self.reactor_sent:
             self.reactor_sent = True
             if self.dirs:
@@ -3430,6 +3477,7 @@ class MavenParser(Parser):
         m = self.HEADER.match(line)
         if m:
             self.header_artifact = m.group(2)
+            self.after_header = True
             return events
         m = self.BUILDING.match(line)
         if m:
@@ -3446,6 +3494,8 @@ class MavenParser(Parser):
             self.open[sub] = (name, time.monotonic())
             events.append(("sub_start", sub, n, name))
             return events
+        if after_header and self.LONE_BUILDING.match(line):
+            self.lone_building_seen = True
         if self.SUMMARY_HEAD.match(line):
             self.in_summary = True
             self.structure_seen = True
@@ -3589,9 +3639,14 @@ class MavenParser(Parser):
             events += self._end_module(sub, "skip", time.monotonic() - self.open[sub][1])
         if self.total:
             events.append(("tests", self.step_id, self.total, self.fail, self.err, self.skip))
-        # A one-module build prints no [k/n] Building suffix and no Reactor Summary, so nothing above counted its
-        # module: a success counts it here, or its bar never fills and its history record is never complete.
-        if exit_code == 0 and self.reactor_sent and len(self.dirs) == 1 and not self.structure_seen:
+        # A build of one project (a one-module tree, or -pl without --also-make in a bigger one) prints no [k/n]
+        # Building suffix and no Reactor Summary, so nothing above counted it and the reactor is still the pom tree's
+        # size: a success re-sizes it to the one project and counts it here, or its bar never fills and its history
+        # record is never complete.  A bigger tree needs the project's own Building line as well: a -q build of every
+        # module prints no structure either.
+        one = len(self.dirs) == 1 or (len(self.dirs) > 1 and self.lone_building_seen)
+        if exit_code == 0 and self.reactor_sent and one and not self.structure_seen:
+            events.append(("units", self.step_id, 1, "modules"))
             events.append(("unit", self.step_id, 1, "pass"))
         if not self.structure_seen and exit_code != 0:
             self.generic.step_id = self.step_id
@@ -3694,9 +3749,11 @@ def _is_pytest_command(cmd):
 
 
 class PytestParser(Parser):
-    """pytest: junitxml report plus counts from the final summary line."""
+    """pytest: junitxml report plus counts from the final summary line.  With the plugin's per-file counts the bar has a
+    cell per test file (bar="tests": a cell per test, the files still closing their lines)."""
 
     name = "pytest"
+    BARS = ("files", "tests")
     SUMMARY = re.compile(r"^(?:=+ )?((?:\d+ [a-z]+(?:, )?)+) in [\d.]+s(?: \(\d+:\d+:\d+\))?(?: =+)?\s*$")
     ITEM = re.compile(r"(\d+) (passed|failed|skipped|errors?|xfailed|xpassed|deselected|warnings?)")
     SHORT = re.compile(r"^=+ short test summary info =+\s*$")
@@ -3790,8 +3847,9 @@ class PytestParser(Parser):
                 if isinstance(files, dict) and files and all(isinstance(v, int) for v in files.values()):
                     changed = self.files is None or len(files) != len(self.files)
                     self.files = files
-                    return [("units", self.step_id, len(files), "files")] if changed else []
-                if self.files is not None:
+                    if self._by_file():
+                        return [("units", self.step_id, len(files), "files")] if changed else []
+                elif self._by_file():
                     return []
                 return [("units", self.step_id, n, "tests")]
             return []
@@ -3809,7 +3867,7 @@ class PytestParser(Parser):
                 events.append(("unit_dot", fname, "fail"))     # names the file without reopening it
             elif fname in self.unit_open:
                 self.unit_open[fname] = True
-            if self.files is not None:
+            if self._by_file():
                 if fname in self.file_cell:
                     events.append(("unit_fix", self.step_id, self.file_cell[fname], "fail"))
                 elif fname in self.files:
@@ -3832,20 +3890,25 @@ class PytestParser(Parser):
             self.errors += 1
         elif unit == "skip":
             self.skipped += 1
-        if self.files is not None:
-            events = [self._tests_event()]
-            fname = self._file_of(m.get("id"))
-            if fname in self.files:
-                self._file_note(fname, outcome)
-                self.file_seen[fname] = self.file_seen.get(fname, 0) + 1
-                if self.file_seen[fname] >= self.files[fname] and fname not in self.file_cell:
-                    state = self.file_state[fname]
-                    self.file_cell[fname] = self.files_done
-                    self.files_done += 1
-                    events.insert(0, ("unit", self.step_id, self.files_done,
-                                      "fail" if state[0] else "skip" if state[1] else "pass"))
-            return events + self._unit_dot(fname, unit)
-        return [("unit", self.step_id, self.done, unit), self._tests_event()] + self._unit_dot(self._file_of(m.get("id")), unit)
+        fname = self._file_of(m.get("id"))
+        if self.files is not None and fname in self.files:
+            self.file_seen[fname] = self.file_seen.get(fname, 0) + 1     # closes the file's line, whatever the bar
+        if not self._by_file():
+            return [("unit", self.step_id, self.done, unit), self._tests_event()] + self._unit_dot(fname, unit)
+        events = [self._tests_event()]
+        if fname in self.files:
+            self._file_note(fname, outcome)
+            if self.file_seen[fname] >= self.files[fname] and fname not in self.file_cell:
+                state = self.file_state[fname]
+                self.file_cell[fname] = self.files_done
+                self.files_done += 1
+                events.insert(0, ("unit", self.step_id, self.files_done,
+                                  "fail" if state[0] else "skip" if state[1] else "pass"))
+        return events + self._unit_dot(fname, unit)
+
+    def _by_file(self):
+        """The bar counts test files: the plugin gave per-file counts and the caller didn't pick bar="tests"."""
+        return self.files is not None and self.bar != "tests"
 
     def _open_unit(self, fname):
         """A file's unit line opens the first time the file is named (by its file marker, or by an orphan test)."""
@@ -3962,10 +4025,12 @@ class PytestParser(Parser):
 
 class PlaywrightParser(Parser):
     """Playwright: counts from the final summary, and from the juneau_run_playwright reporter's ##playwright markers,
-    which also draw one unit line per running test file, closed with its last test.  Without the reporter (it never
-    said hello) the bar counts the line reporter's [n/N] progress instead."""
+    which also draw one unit line per running test file, closed with its last test.  With the reporter the bar has a
+    cell per test file, added when its last test finishes (bar="tests": a cell per test).  Without it (it never said
+    hello) the bar counts the line reporter's [n/N] progress instead."""
 
     name = "playwright"
+    BARS = ("files", "tests")
     MARKER = "##playwright "
     OUTCOMES = ("pass", "fail", "skip")
     PROGRESS = re.compile(r"^\[(\d+)/(\d+)\] ")
@@ -3985,6 +4050,8 @@ class PlaywrightParser(Parser):
         self.unit_seen = {}          # file -> tests finished so far
         self.unit_open = {}          # open file -> whether any of its tests failed so far
         self.unit_closed = set()
+        self.file_tally = {}         # file -> (tests finished, any failed, all skipped), for its bar cell
+        self.file_cell = set()       # files whose bar cell is in
         self.injected = False        # prepare() added the reporter with its markers on
         self.hello = False           # the reporter said hello: the bar counts its final test lines
         self.done = 0                # tests finished, from the reporter
@@ -4076,29 +4143,54 @@ class PlaywrightParser(Parser):
             return []
         if kind == "begin" and isinstance(name, dict):
             self.files = {str(f)[:400]: n for f, n in name.items() if isinstance(n, int)}
-            total = sum(self.files.values())
+            unit = "files" if self._by_file() else "tests"
+            total = len(self._bar_files()) if unit == "files" else sum(self.files.values())
             if not self.hello or total == self.total:
                 return []
             self.total = total
-            return [("units", self.step_id, total, "tests")]
+            return [("units", self.step_id, total, unit)]
         if not isinstance(name, str):
             return []
         name = name[:400]
         if kind == "start":
             return self._open_unit(name) if name else []
         if kind == "test" and m.get("o") in self.OUTCOMES:
-            return self._count(m["o"]) + (self._unit_dot(name, m["o"]) if name else [])
+            return self._count(name, m["o"]) + (self._unit_dot(name, m["o"]) if name else [])
         return []
 
-    def _count(self, outcome):
+    def _count(self, name, outcome):
         if not self.hello:
             return []
         self.done += 1
         self.failed += outcome == "fail"
         self.skipped += outcome == "skip"
+        unit = self._file_cell(name, outcome) if self._by_file() else [("unit", self.step_id, self.done, outcome)]
         if self.final:      # onEnd's line for a test whose retry never ran comes after the summary, whose counts stand
-            return [("unit", self.step_id, self.done, outcome)]
-        return [("unit", self.step_id, self.done, outcome), ("tests", self.step_id, self.done, self.failed, 0, self.skipped)]
+            return unit
+        return unit + [("tests", self.step_id, self.done, self.failed, 0, self.skipped)]
+
+    def _file_cell(self, name, outcome):
+        """A file's bar cell, with its last test: failed when any of its tests failed, skipped when all were, else
+        passed.  No cell for a file begin didn't list or gave no tests, nor a second one for results past the count
+        begin gave it (a repeated or late marker)."""
+        if self.files.get(name, 0) <= 0 or name in self.file_cell:
+            return []
+        seen, failed, skipped = self.file_tally.get(name, (0, False, True))
+        seen, failed, skipped = seen + 1, failed or outcome == "fail", skipped and outcome == "skip"
+        self.file_tally[name] = (seen, failed, skipped)
+        if seen < self.files[name]:
+            return []
+        self.file_cell.add(name)
+        return [("unit", self.step_id, len(self.file_cell), "fail" if failed else "skip" if skipped else "pass")]
+
+    def _bar_files(self):
+        """The files begin listed with tests in them: one bar cell each."""
+        return [f for f, n in self.files.items() if n > 0]
+
+    def _by_file(self):
+        """The bar counts test files: begin gave files with tests in them and the caller didn't pick bar="tests".
+        Otherwise (no begin, or an empty one) it counts tests, as without per-file counts."""
+        return self.bar != "tests" and any(n > 0 for n in self.files.values())
 
     def _open_unit(self, name):
         """A file's line opens with its first test; a retry's start, or a later test, doesn't reset its elapsed."""
@@ -4126,6 +4218,13 @@ class PlaywrightParser(Parser):
         # a file still open (interrupted, --max-failures, a crashed worker) fails only with a fail dot, as pytest's: the
         # row fails from the exit code, and names only the files that failed
         events = [self._close_unit(f) for f in list(self.unit_open)]
+        if exit_code == 0 and self.hello and self._by_file():
+            # a clean run with files whose tests never reported (filtered out, never reached): their cells are skips,
+            # so the bar ends full.  A failed run leaves them pending.
+            for f in self._bar_files():
+                if f not in self.file_cell:
+                    self.file_cell.add(f)
+                    events.append(("unit", self.step_id, len(self.file_cell), "skip"))
         # tests ran (Playwright printed progress or a summary) yet no hello: not after a config error, --list or --help
         if self.injected and not self.hello and (self.run_count or self.final):
             events.append(("note", "warn", "Playwright reporter not loaded: no per-file lines", self.step_id))
@@ -4567,6 +4666,18 @@ def _parser_name(parser):
     return parser if isinstance(parser, str) else getattr(parser, "name", None)
 
 
+def _check_bar(parser, bar):
+    """Raises ValueError unless bar is None or one of the parser's BARS.  Reads BARS from PARSERS for a name, from the
+    class or the instance's class otherwise, so it never imports a toolkit parser (whose name allows no bar)."""
+    if bar is None:
+        return
+    cls = PARSERS.get(parser) if isinstance(parser, str) else parser if isinstance(parser, type) else type(parser)
+    bars = tuple(getattr(cls, "BARS", ()) or ())
+    if bar not in bars:
+        raise ValueError(f"bar={bar!r} is not supported by the {_parser_name(parser) or '?'} parser "
+                         f"(allowed: {', '.join(bars) or 'none'})")
+
+
 def _input_fd():
     """The terminal whose keystrokes tty=True forwards to the child, or None when stdin is not a terminal."""
     try:
@@ -4747,7 +4858,7 @@ def _run_in_foreground(cmd, cwd, env, input):
 
 
 def run_tool(cmd, parser, step_id, title, *, n=None, parent=None, cwd=None, env=None, sinks=None, capture=False,
-             tty=False, watchdog=None, summarize=None, label=None, statuses=None, input=None, reports=True):
+             tty=False, watchdog=None, summarize=None, label=None, statuses=None, input=None, reports=True, bar=None):
     """Run one tool as one step and return Result(exit, ms, summary).
 
     Pass-through mode (markers off, default sinks, no capture or summarize) hands the child the real terminal and no
@@ -4767,7 +4878,11 @@ def run_tool(cmd, parser, step_id, title, *, n=None, parent=None, cwd=None, env=
     input (bytes) is written to the child's stdin and stdin is closed; it is never recorded or published.  Not for tty.
     A parser's report events go through report() (copied under $RUN_ARTIFACTS when it is set, relative paths taken
     from cwd); reports=False drops them.
+    bar picks the unit a block of the row's bar stands for: "files" or "tests" for pytest and Playwright (files by
+    default), "modules" for Maven (its only one); None is the parser's default.  A value the parser does not offer
+    raises ValueError before the command starts, in pass-through mode too.
     """
+    _check_bar(parser, bar)
     sinks = sinks or Sinks()
     t0 = time.monotonic()
     labelled = {"label": label} if label else {}
@@ -4789,6 +4904,8 @@ def run_tool(cmd, parser, step_id, title, *, n=None, parent=None, cwd=None, env=
     parser = _resolve_parser(parser)
     parser.step_id = step_id
     parser.interactive = bool(tty)  # before prepare: under a terminal, a parser must not change what the tool prints
+    if bar is not None:
+        parser.bar = bar
     guard = _Isolated(parser)
     try:
         cmd, env = parser.prepare(cmd, env, cwd)

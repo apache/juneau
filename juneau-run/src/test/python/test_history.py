@@ -496,5 +496,147 @@ class SingleModuleMavenTest(HistoryEnv, unittest.TestCase):
         self.assertIn("/ ~", elapsed)               # and an estimated total beside the elapsed time
 
 
+# `mvn -pl mod-b` without --also-make in a multi-module tree: Maven builds the one project and prints what a one-module
+# build prints, though the pom tree has four.
+PL_MODULE_LOG = SINGLE_MODULE_LOG.replace("com.example:solo", "com.example:mod-b").replace(
+    "Building Solo 1.0", "Building Demo Module B 1.0").replace("from pom.xml", "from mod-b/pom.xml").replace(
+    "@ solo", "@ mod-b").replace("SoloTest", "ModBTest")
+
+# `mvn -pl mod-b -am`: the parent and mod-a come along, so the build has a Build Order, [k/n] and a Reactor Summary.
+PL_ALSO_MAKE_LOG = """\
+[INFO] Scanning for projects...
+[INFO] ------------------------------------------------------------------------
+[INFO] Reactor Build Order:
+[INFO]
+[INFO] Demo Parent                                                        [pom]
+[INFO] Demo Module A                                                      [jar]
+[INFO] Demo Module B                                                      [jar]
+[INFO]
+[INFO] -----------------------< com.example:demo-parent >-----------------------
+[INFO] Building Demo Parent 1.0                                           [1/3]
+[INFO] --------------------------------[ pom ]---------------------------------
+[INFO]
+[INFO] --------------------------< com.example:mod-a >--------------------------
+[INFO] Building Demo Module A 1.0                                         [2/3]
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] --- maven-compiler-plugin:3.13.0:compile (default-compile) @ mod-a ---
+[INFO] --- maven-compiler-plugin:3.13.0:testCompile (default-testCompile) @ mod-a ---
+[INFO] --- maven-surefire-plugin:3.2.5:test (default-test) @ mod-a ---
+[INFO] Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.1 s -- in com.example.ModATest
+[INFO]
+[INFO] --------------------------< com.example:mod-b >--------------------------
+[INFO] Building Demo Module B 1.0                                         [3/3]
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] --- maven-compiler-plugin:3.13.0:compile (default-compile) @ mod-b ---
+[INFO] --- maven-compiler-plugin:3.13.0:testCompile (default-testCompile) @ mod-b ---
+[INFO] --- maven-surefire-plugin:3.2.5:test (default-test) @ mod-b ---
+[INFO] Tests run: 4, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.2 s -- in com.example.ModBTest
+[INFO] ------------------------------------------------------------------------
+[INFO] Reactor Summary for Demo Parent 1.0:
+[INFO]
+[INFO] Demo Parent ........................................ SUCCESS [  0.1 s]
+[INFO] Demo Module A ...................................... SUCCESS [  0.5 s]
+[INFO] Demo Module B ...................................... SUCCESS [  0.6 s]
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+"""
+
+
+# `mvn -q verify` over the whole tree: no header, no Building line and no Reactor Summary, though every module built.
+QUIET_LOG = """\
+[WARNING] Using platform encoding (UTF-8 actually) to copy filtered resources
+"""
+
+class OneProjectOfManyMavenTest(HistoryEnv, unittest.TestCase):
+    """`mvn -pl X` without --also-make builds one project of a multi-module tree.  A success counts it as the build's
+    one module, so the record is complete and the finished row's bar is 1/1, though the pom tree sized the reactor."""
+
+    def setUp(self):
+        super().setUp()
+        support.reset_run_state()
+        self.addCleanup(support.reset_run_state)
+        os.environ.pop("RUN_MARKERS", None)
+        from test_parsers import write_demo_tree
+        self.tree = self._mk("jr-tree-")
+        write_demo_tree(Path(self.tree), packaging="pom")
+        self.store = jr.HistoryStore(self.repo, "push")
+        jr.subscribe(jr.History(self.store))
+        self.board = jr.Board("actionable", nested=False, full_log=None, clock=lambda: 100.0)
+        jr.subscribe(self.board.apply)
+
+    def build(self, text=PL_MODULE_LOG, exit_code=0, args=("verify", "-pl", "mod-b")):
+        """Run `text` through the Maven parser and the dispatcher as one top-level row; returns its history record."""
+        parser = jr.MavenParser()
+        parser.step_id = "tests"
+        parser.prepare(["mvn", *args], None, self.tree)
+        d = jr._Dispatcher("tests", jr.Sinks(console="none"))
+        jr.publish("step_start", id="tests", n=1, title="Tests", parent=None, tool="maven", sig="s")
+        for line in text.splitlines():
+            d.apply(parser.on_line(line))
+        d.apply(parser.finish(exit_code))
+        jr.publish("step_end", id="tests", status="ok" if exit_code == 0 else "fail", ms=60000, exit=exit_code,
+                   summary=None, totals=None)
+        return self.store.read()[-1]
+
+    def bar(self):
+        r = self.board.rows["tests"]
+        cells, rest, _ = jr.row_cells(r, jr.PLAIN_GLYPHS, 100.0)
+        return (r.units_total, r.units_done), "".join(cells), rest
+
+    def test_a_successful_build_records_its_one_project_done(self):
+        r = self.build()
+        self.assertEqual(r["units"], {"kind": "modules", "total": 1, "done": 1})
+        self.assertTrue(r["complete"])
+        self.assertEqual(r["tests"], 4)
+
+    def test_the_finished_row_has_a_full_bar_of_one(self):
+        self.build()
+        units, cells, rest = self.bar()
+        self.assertEqual(units, (1, 1))
+        self.assertEqual(cells, jr.PLAIN_GLYPHS["pass"])
+        self.assertIn("1/1", rest)
+        self.assertIsNone(self.board.setup)
+
+    def test_a_project_that_ran_no_tests_still_finishes_one_of_one(self):
+        log = "\n".join(l for l in PL_MODULE_LOG.splitlines() if "Tests run" not in l and "surefire" not in l)
+        r = self.build(log)
+        self.assertEqual(r["units"], {"kind": "modules", "total": 1, "done": 1})
+        units, cells, rest = self.bar()
+        self.assertEqual(units, (1, 1))
+        self.assertEqual(cells, jr.PLAIN_GLYPHS["pass"])
+
+    def test_a_skip_tests_build_records_its_one_project_done(self):
+        r = self.build(args=("clean", "test-compile", "-pl", "mod-b", "-DskipTests"))
+        self.assertEqual(r["units"], {"kind": "modules", "total": 1, "done": 1})
+        self.assertEqual(self.bar()[0], (1, 1))
+
+    def test_a_pom_project_built_alone_is_the_one_unit_and_has_no_setup_row(self):
+        log = PL_MODULE_LOG.replace("com.example:mod-b", "com.example:demo-parent").replace(
+            "Building Demo Module B 1.0", "Building Demo Parent 1.0").replace("[ jar ]", "[ pom ]")
+        log = "\n".join(l for l in log.splitlines() if "@ mod-b" not in l and "Tests run" not in l)
+        r = self.build(log, args=("verify", "-pl", "."))
+        self.assertEqual(r["units"], {"kind": "modules", "total": 1, "done": 1})
+        self.assertEqual(self.bar()[0], (1, 1))
+        self.assertIsNone(self.board.setup)
+
+    def test_a_failed_build_stays_incomplete(self):
+        r = self.build(PL_MODULE_LOG.replace("BUILD SUCCESS", "BUILD FAILURE"), exit_code=1)
+        self.assertEqual(r["units"], {"kind": "modules", "total": 4, "done": 0})
+        self.assertFalse(r["complete"])
+
+    def test_a_quiet_build_of_the_whole_tree_counts_nothing(self):
+        r = self.build(QUIET_LOG, args=("-q", "verify"))
+        self.assertEqual(r["units"], {"kind": "modules", "total": 4, "done": 0})
+        self.assertFalse(r["complete"])
+        self.assertEqual(self.board.rows["tests"].units_done, 0)
+
+    def test_an_also_make_build_is_counted_by_its_reactor(self):
+        r = self.build(PL_ALSO_MAKE_LOG, args=("verify", "-pl", "mod-b", "-am"))
+        self.assertEqual(r["units"], {"kind": "modules", "total": 2, "done": 2})
+        self.assertTrue(r["complete"])
+        self.assertEqual(self.bar()[0], (2, 2))
+        self.assertIsNotNone(self.board.setup)          # the parent, built first, is on the Setup row
+
 if __name__ == "__main__":
     unittest.main()

@@ -104,6 +104,9 @@ class CmdPlainTest(PlainCase):
     def test_reports_false_is_accepted_in_a_plain_run(self):
         self.assertTrue(run.cmd([PY, "-c", "pass"], title="t", reports=False).ok)
 
+    def test_bar_is_ignored_in_a_plain_run(self):
+        self.assertTrue(run.cmd([PY, "-c", "pass"], title="t", bar="tests").ok)
+
     def test_cannot_start(self):
         r = run.cmd(["/nonexistent/tool"], title="t")
         self.assertEqual((r.ok, r.code), (False, 127))
@@ -261,6 +264,21 @@ class CmdMarkersTest(MarkerCase):
             self.capture(run.cmd, [PY, "-c", "pass"], title="t")
         self.assertNotIn("reports", rt.call_args.kwargs)
 
+    def test_bar_reaches_run_tool(self):
+        with mock.patch.object(jr, "run_tool", return_value=jr.Result(0, 1)) as rt:
+            self.capture(run.cmd, ["pytest"], title="t", tool="pytest", bar="tests")
+        self.assertEqual(rt.call_args.kwargs["bar"], "tests")
+
+    def test_no_bar_is_not_passed_so_an_older_juneau_run_still_works(self):
+        with mock.patch.object(jr, "run_tool", return_value=jr.Result(0, 1)) as rt:
+            self.capture(run.cmd, ["pytest"], title="t", tool="pytest")
+        self.assertNotIn("bar", rt.call_args.kwargs)
+
+    def test_a_bar_the_detected_parser_does_not_offer_raises_before_the_command_runs(self):
+        with mock.patch.object(jr.subprocess, "Popen") as popen, self.assertRaises(ValueError):
+            self.capture(run.cmd, [PY, "-c", "pass"], title="t", bar="tests")     # detected: generic
+        popen.assert_not_called()
+
     def test_an_explicit_tool_wins_over_detection(self):
         with mock.patch.object(jr, "run_tool", wraps=jr.run_tool) as rt:
             self.capture(run.cmd, ["/nonexistent/mvn", "verify"], title="mvn verify", tool="generic")
@@ -359,6 +377,11 @@ class GateMarkersTest(MarkerCase):
         with mock.patch.object(jr, "run_tool", wraps=jr.run_tool) as rt:
             self.capture(run.gate, [PY, "-c", "pass"], title="Sonar", reports=False)
         self.assertIs(rt.call_args.kwargs["reports"], False)
+
+    def test_bar_reaches_the_gates_child_row(self):
+        with mock.patch.object(jr, "run_tool", return_value=jr.Result(0, 1)) as rt:
+            self.capture(run.gate, ["pytest"], title="Tests", tool="pytest", bar="tests")
+        self.assertEqual(rt.call_args.kwargs["bar"], "tests")
 
     def test_the_label_names_the_gates_row(self):
         with mock.patch.object(jr, "step", wraps=jr.step) as step:

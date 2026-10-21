@@ -1377,5 +1377,77 @@ class ScriptApiWithoutConsoleTest(unittest.TestCase):
             self.assertIn("Continue? y", log.read_text(encoding="utf-8"))
 
 
+class Barred(jr.Parser):
+    """A parser that offers two bar units and records the one it was given at prepare time."""
+
+    name = "barred"
+    BARS = ("files", "tests")
+
+    def __init__(self):
+        super().__init__()
+        self.seen_bar = "unset"
+
+    def prepare(self, cmd, env, cwd):
+        self.seen_bar = self.bar
+        return cmd, env
+
+
+class BarOptionTest(unittest.TestCase):
+    """run_tool(..., bar=): checked against the parser's BARS before the command runs, then handed to the parser."""
+
+    def setUp(self):
+        reset_run_state()
+        self.addCleanup(reset_run_state)
+        patcher = mock.patch.dict(os.environ, {"RUN_MARKERS": "1"})
+        patcher.start()
+        self.addCleanup(patcher.stop)
+
+    def go(self, parser, bar):
+        with contextlib.redirect_stdout(io.StringIO()):
+            return jr.run_tool(child("pass"), parser, "t", "T", bar=bar)
+
+    def test_the_built_in_parsers_name_their_bar_units(self):
+        self.assertEqual(jr.Parser.BARS, ())
+        self.assertIsNone(jr.Parser.bar)
+        self.assertEqual(jr.MavenParser.BARS, ("modules",))
+        self.assertEqual((jr.PytestParser.BARS, jr.PlaywrightParser.BARS), (("files", "tests"), ("files", "tests")))
+        for name in ("gradle", "npm", "generic"):
+            self.assertEqual(jr.PARSERS[name].BARS, (), name)
+
+    def test_an_unsupported_bar_raises_before_the_command_starts(self):
+        cases = [("maven", "files"), ("pytest", "modules"), ("playwright", "modules"), ("generic", "tests"),
+                 ("gradle", "modules"), ("pytest", "rows"), ("bazel", "tests"), (jr.MavenParser, "tests"),
+                 (jr.GenericParser(), "files")]
+        for parser, bar in cases:
+            with self.subTest(parser=parser, bar=bar), mock.patch.object(jr.subprocess, "Popen") as popen, \
+                    mock.patch.object(jr, "_load_external", side_effect=AssertionError("imported")):
+                with self.assertRaises(ValueError) as caught:
+                    self.go(parser, bar)
+                popen.assert_not_called()
+                self.assertIn(f"bar={bar!r}", str(caught.exception))
+
+    def test_the_message_names_the_parser_and_what_it_allows(self):
+        with self.assertRaises(ValueError) as caught:
+            self.go("maven", "files")
+        self.assertEqual(str(caught.exception), "bar='files' is not supported by the maven parser (allowed: modules)")
+        with self.assertRaises(ValueError) as caught:
+            self.go("generic", "tests")
+        self.assertEqual(str(caught.exception), "bar='tests' is not supported by the generic parser (allowed: none)")
+
+    def test_an_unsupported_bar_raises_in_pass_through_mode_too(self):
+        os.environ.pop("RUN_MARKERS")
+        with mock.patch.object(jr.subprocess, "Popen") as popen, self.assertRaises(ValueError):
+            jr.run_tool(["mvn", "test"], "maven", "t", "T", bar="tests")
+        popen.assert_not_called()
+
+    def test_none_and_every_allowed_value_reach_the_parser(self):
+        for bar in (None, "files", "tests"):
+            with self.subTest(bar=bar):
+                p = Barred()
+                self.assertEqual(self.go(p, bar).exit, 0)
+                self.assertEqual(p.seen_bar, bar)
+        self.assertEqual(self.go("maven", "modules").exit, 0)
+
+
 if __name__ == "__main__":
     unittest.main()

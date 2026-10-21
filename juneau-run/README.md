@@ -131,14 +131,16 @@ Script API (all of it works with no session too, printing as before):
   full, or pipes it to `$PAGER` (`less -R`) on a terminal. Ctrl-C in the pager is the pager's; quitting it returns.
 - `passthrough(cmd, step_id, title, …)`: runs an interactive command on the real terminal as a row. No capture,
   nothing in the full log.
-- `run_tool(…, tty=False, watchdog=None, capture=False, summarize=None, label=None, statuses=None)`: `tty=True`
+- `run_tool(…, tty=False, watchdog=None, capture=False, summarize=None, label=None, statuses=None, bar=None)`: `tty=True`
   runs the tool under a PTY so gpg, git or svn can prompt, and forwards your keystrokes. It points `GPG_TTY` at the
   PTY, so a terminal pinentry prompts through the row's watchdog prompt, with echo off; a GUI pinentry (pinentry-mac)
   is unaffected. `watchdog=<s>` shows a partial line that has sat silent for `<s>` seconds as a prompt, or
   `quiet <n>s` on the row when there is no partial line. `capture=True` returns the text in `Result.output`.
   `summarize(text)` sets the row's summary. `statuses` maps an exit code to the row's status (`ok`, `fail` or
   `skip`); other codes are `ok` for 0 and `fail` otherwise, so a gate script's skip exit can show as a skip. 127
-  (cannot start) and 130 (interrupted) always end as `fail`, whatever `statuses` says.
+  (cannot start) and 130 (interrupted) always end as `fail`, whatever `statuses` says. `bar` picks what one block of
+  the row's bar stands for (see "Test rows" below); a value the parser doesn't offer raises `ValueError` before the
+  command starts.
 - `handoff()`: gives the terminal to a child script for a block and yields the env it needs (label width, detail).
   `console_active()`: True when a view owns the terminal.
 - `export_detail(flag)`: resolves `--detail` over `JUNEAU_RUN_DETAIL`, exports it for children, and raises
@@ -207,6 +209,24 @@ The modules: `git`, `run` (`session`, `cmd`, `gate`, `step`, `say`, `err`, `hint
 `pytest`, `playwright`, `npm`, `gradle`), `notify`, `prompt`, `java`, `lock`, `proc`, `state`, `steps` and
 `testing` (`hermetic_git`, `bare_remote`, `clean_run_env`, `fake_tool`, and pytest fixtures through
 `pytest_plugins = ["juneau_scripts.testing.pytest_plugin"]`). Each module's docstring is its reference.
+
+### Test rows: a block per file
+
+A test row's bar has one block per unit of its tool's default size, and `bar=` on `run.cmd`, `run.gate`, `tools.pytest`
+or `tools.playwright` picks another:
+
+| Parser | Block by default | `bar=` values |
+|---|---|---|
+| `maven` | a module | `"modules"` |
+| `pytest` | a test file (with the plugin's per-file counts) | `"files"`, `"tests"` |
+| `playwright` | a test file (with the reporter) | `"files"`, `"tests"` |
+| any other | (none) | none: any value raises `ValueError` |
+
+A file's block is added when its last test finishes. It fails if any test in the file failed, it is skipped if every
+test was skipped, and it passes otherwise. Files still running show as in-flight blocks after the finished ones. On a
+file bar the percent and the `~M:SS` total follow the tests run against the history's expected test count, so they
+move with every test while the count reads files (`7/32  ~25%`). `bar="tests"` gives one block per test. Without the
+pytest plugin's counts or the Playwright reporter, both bars count tests.
 
 ### Prompts, pauses and stdin
 

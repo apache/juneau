@@ -63,9 +63,9 @@ class ArithmeticTest(unittest.TestCase):
 
 
 class EstimateFromRecordsTest(unittest.TestCase):
-    def rec(self, wall, sig="a", ok=True, complete=True, total=10):
+    def rec(self, wall, sig="a", ok=True, complete=True, total=10, kind="modules"):
         return {"v": 1, "step": "s", "tool": "t", "sig": sig, "ok": ok, "complete": complete,
-                "wall_s": wall, "units": {"kind": "modules", "total": total, "done": total}}
+                "wall_s": wall, "units": {"kind": kind, "total": total, "done": total}}
 
     def test_median_odd_even(self):
         self.assertEqual(jr.estimate_from([self.rec(w) for w in (10, 30, 20)], "a").wall_s, 20)
@@ -87,6 +87,44 @@ class EstimateFromRecordsTest(unittest.TestCase):
 
     def test_no_records(self):
         self.assertIsNone(jr.estimate_from([], "a"))
+
+    def mixed(self):
+        """Two runs counted per file and one per test, as a Playwright step's history reads after the default changed."""
+        return jr.estimate_from([self.rec(80, total=8, kind="files"), self.rec(120, total=8, kind="files"),
+                                 self.rec(100, total=32, kind="tests")], "a")
+
+    def test_kinds_hold_each_kinds_medians(self):
+        self.assertEqual(self.mixed().kinds, {"files": (8, 12.5), "tests": (32, 3.125)})
+
+    def test_the_other_figures_still_use_every_record(self):
+        est = self.mixed()
+        self.assertEqual((est.wall_s, est.units, est.rate, est.runs), (100, 8, 10.0, 3))
+
+    def test_a_record_with_no_unit_kind_joins_no_kind(self):
+        est = jr.estimate_from([self.rec(80, total=8, kind="files"), self.rec(100, total=4, kind=None)], "a")
+        self.assertEqual(est.kinds, {"files": (8, 10.0)})
+
+    def test_records_without_units_give_no_kinds(self):
+        self.assertIsNone(jr.estimate_from([{"ok": True, "complete": True, "wall_s": 5.0}], None).kinds)
+
+
+class EstimateForKindTest(unittest.TestCase):
+    def setUp(self):
+        self.est = Est(wall_s=100, units=8, rate=10.0, runs=3, tests=40, kinds={"files": (8, 12.5), "tests": (32, 3.125)})
+
+    def test_the_kinds_pair_replaces_units_and_rate(self):
+        self.assertEqual(jr.estimate_for_kind(self.est, "tests"), self.est._replace(units=32, rate=3.125))
+
+    def test_a_kind_with_no_history_has_no_units_or_rate_and_the_figures_fall_back_to_wall(self):
+        est = jr.estimate_for_kind(self.est, "modules")
+        self.assertEqual((est.units, est.rate, est.wall_s, est.tests, est.runs), (None, None, 100, 40, 3))
+        self.assertEqual(jr.eta_figures(30.0, 3, 0, est), (30, 100, True))
+
+    def test_unchanged_without_an_estimate_kinds_or_a_kind(self):
+        stub = Est(wall_s=100, units=8, rate=10.0, runs=3)
+        self.assertIsNone(jr.estimate_for_kind(None, "files"))
+        self.assertIs(jr.estimate_for_kind(stub, "files"), stub)
+        self.assertIs(jr.estimate_for_kind(self.est, None), self.est)     # a unit before any units: no kind yet
 
 
 class MakeEstimatorTest(unittest.TestCase):

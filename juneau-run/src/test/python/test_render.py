@@ -643,8 +643,7 @@ class RowEstimateTest(unittest.TestCase):
         self.clock.advance(10)
         cells, rest, elapsed = self.cells(b)
         self.assertEqual(cells, [jr.PLAIN_GLYPHS["run"]])
-        self.assertNotIn("0/1", rest)
-        self.assertIn("~25%", rest)
+        self.assertTrue(rest.startswith("0/1  ~25%"), rest)
         self.assertIn("1,000 / ~4,000 tests", rest)
 
     def test_a_single_module_reactor_without_a_test_history_falls_back_to_elapsed_over_wall(self):
@@ -653,7 +652,7 @@ class RowEstimateTest(unittest.TestCase):
         self.clock.advance(40)
         cells, rest, elapsed = self.cells(b)
         self.assertEqual(cells, [jr.PLAIN_GLYPHS["run"]])
-        self.assertIn("~40%", rest)
+        self.assertEqual(rest, "0/1  ~40%")
 
     def test_a_running_single_module_reactor_draws_one_in_flight_cell_in_every_glyph_set(self):
         b = self.board(lambda step, tool, sig=None: jr.Estimate(wall_s=100.0, units=1, rate=1.0, runs=5))
@@ -662,7 +661,7 @@ class RowEstimateTest(unittest.TestCase):
         for glyphs in (jr.PLAIN_GLYPHS, jr.NO_COLOR_GLYPHS, jr.COLOR_GLYPHS):
             cells, rest, elapsed = jr.row_cells(b.rows["s"], glyphs, self.clock())
             self.assertEqual(cells, [glyphs["run"]])
-            self.assertNotIn("0/1", rest)
+            self.assertTrue(rest.startswith("0/1"), rest)
 
     def test_a_running_single_module_reactor_without_an_estimate_has_just_the_cell_and_the_tests(self):
         b = self.board(None)
@@ -672,7 +671,7 @@ class RowEstimateTest(unittest.TestCase):
         self.clock.advance(18)
         cells, rest, elapsed = self.cells(b)
         self.assertEqual("".join(cells), jr.PLAIN_GLYPHS["run"])
-        self.assertEqual(rest, "182 tests")
+        self.assertEqual(rest, "0/1  182 tests")
         self.assertEqual(elapsed, "0:18")
 
     def test_a_single_module_reactor_draws_its_cell_once_the_module_ends(self):
@@ -693,6 +692,17 @@ class RowEstimateTest(unittest.TestCase):
         cells, rest, elapsed = self.cells(b)
         self.assertEqual("".join(cells), jr.PLAIN_GLYPHS["pass"])
         self.assertIn("1/1", rest)
+
+    def test_a_single_module_reactor_whose_module_ran_no_tests_finishes_one_of_one(self):
+        b = self.board(lambda step, tool, sig=None: self.est)
+        b.apply("reactor", dict(step="s", size=1, poms=[], tests=True))
+        b.apply("module_tested", dict(step="s", module="s/a"))     # no tests ran: it drops out of the bar
+        b.apply("units", dict(step="s", total=1, kind="modules"))  # the Maven parser's finish on a success
+        b.apply("unit", dict(step="s", done=1, outcome="pass"))
+        b.apply("step_end", dict(id="s", status="ok", ms=26000, exit=0, summary=None, totals=None))
+        cells, rest, elapsed = self.cells(b)
+        self.assertEqual((b.rows["s"].units_total, b.rows["s"].units_done), (1, 1))
+        self.assertEqual("".join(cells), jr.PLAIN_GLYPHS["pass"])
 
     def test_finished_row_shows_elapsed_only(self):
         b = self.board(lambda step, tool, sig=None: self.est)
@@ -774,6 +784,112 @@ class RowEstimateTest(unittest.TestCase):
                 c.board.apply("step_start", dict(id="other", n=2, title="o", parent=None, tool=None, sig=""))
                 self.assertIsNone(c.board.rows["other"].estimate)
                 c.close()
+
+
+class FileBarTest(unittest.TestCase):
+    """A file bar (pytest's per-file counts, Playwright's reporter): a cell in flight per running file, and the percent
+    and `~total` from the tests run against history's expected count (spec 4.3, 4.4)."""
+
+    def setUp(self):
+        reset_run_state()
+        self.addCleanup(reset_run_state)
+        self.clock = Clock()
+
+    def board(self, est=jr.Estimate(wall_s=100.0, units=32, rate=100 / 32, runs=5, tests=4000), kind="files", total=32):
+        b = jr.Board("actionable", nested=False, full_log=None, clock=self.clock,
+                     estimator=None if est is None else lambda step, tool, sig=None: est)
+        b.apply("step_start", dict(id="s", n=1, title="Tests", parent=None, tool="pytest", sig=""))
+        b.apply("units", dict(step="s", total=total, kind=kind))
+        return b
+
+    def rest(self, b):
+        return jr.row_cells(b.rows["s"], jr.PLAIN_GLYPHS, self.clock())[1:]
+
+    def run_files(self, b, done, tests):
+        self.clock.advance(50)
+        b.apply("unit", dict(step="s", done=done, outcome="pass"))
+        b.apply("tests", dict(step="s", total=tests, fail=0, err=0, skip=0))
+
+    def test_the_count_is_files_and_the_percent_and_total_come_from_the_tests_run(self):
+        b = self.board()
+        self.run_files(b, 7, 1000)
+        rest, elapsed = self.rest(b)
+        self.assertTrue(rest.startswith("7/32  ~25%"), rest)    # 7 of 32 files is 21%: the tests say 25%
+        self.assertIn("1,000 / ~4,000 tests", rest)
+        self.assertEqual(elapsed, "0:50 / ~2:30")
+
+    def test_the_total_follows_the_tests_not_the_files(self):
+        b = self.board()
+        self.run_files(b, 7, 3000)
+        rest, elapsed = self.rest(b)
+        self.assertTrue(rest.startswith("7/32  ~75%"), rest)
+        self.assertEqual(elapsed, "0:50 / ~1:15")
+
+    def test_past_the_expected_test_count_the_percent_holds_at_99_rather_than_drop_to_the_files(self):
+        b = self.board()
+        self.run_files(b, 7, 4100)                  # 7 of 32 files is 21%
+        self.assertTrue(self.rest(b)[0].startswith("7/32  ~99%"), self.rest(b)[0])
+
+    def test_past_the_expected_test_count_with_every_file_in_the_percent_is_99_until_the_step_ends(self):
+        b = self.board()
+        self.run_files(b, 32, 4100)
+        self.assertTrue(self.rest(b)[0].startswith("32/32  ~99%"), self.rest(b)[0])
+        b.apply("step_end", dict(id="s", status="ok", ms=50000, exit=0, summary=None, totals=None))
+        self.assertNotIn("99%", self.rest(b)[0])
+
+    def test_without_an_expected_test_count_the_percent_is_from_files(self):
+        b = self.board(jr.Estimate(wall_s=100.0, units=32, rate=100 / 32, runs=5))
+        self.run_files(b, 7, 1000)
+        self.assertTrue(self.rest(b)[0].startswith("7/32  21%"), self.rest(b)[0])
+
+    def test_before_any_test_reports_the_percent_is_from_files(self):
+        b = self.board()
+        self.clock.advance(50)
+        b.apply("unit", dict(step="s", done=7, outcome="pass"))
+        self.assertTrue(self.rest(b)[0].startswith("7/32  21%"), self.rest(b)[0])
+
+    def test_a_tests_bar_keeps_its_own_figures(self):
+        b = self.board(jr.Estimate(wall_s=100.0, units=4000, rate=100 / 4000, runs=5, tests=4000), kind="tests",
+                       total=4000)
+        self.run_files(b, 1000, 1000)
+        self.assertTrue(self.rest(b)[0].startswith("1000/4000  25%"), self.rest(b)[0])
+
+    def test_a_module_bar_keeps_its_own_figures(self):
+        b = self.board(kind="modules")
+        self.run_files(b, 7, 1000)
+        self.assertTrue(self.rest(b)[0].startswith("7/32  21%"), self.rest(b)[0])
+
+    def start(self, b, *names):
+        for name in names:
+            b.apply("unit_start", dict(step="s", id=name, title=name, src="file"))
+
+    def end(self, b, name):
+        b.apply("unit_end", dict(step="s", id=name, status="ok", src="file"))
+
+    def test_each_running_file_has_a_cell_in_flight_after_the_finished_ones(self):
+        b = self.board(None, total=5)
+        self.start(b, "a", "b", "c", "d")
+        self.end(b, "a")
+        b.apply("unit", dict(step="s", done=1, outcome="pass"))       # a's cell comes as its line closes
+        self.assertEqual(bytes(b.rows["s"].unit_view()), bytes([jr.UNIT_PASS] + [jr.UNIT_RUN] * 3 + [0]))
+
+    def test_in_flight_cells_stop_at_the_total(self):
+        b = self.board(None, total=3)
+        self.start(b, "a", "b", "c", "d")
+        self.end(b, "a")
+        b.apply("unit", dict(step="s", done=1, outcome="fail"))
+        self.assertEqual(bytes(b.rows["s"].unit_view()), bytes([jr.UNIT_FAIL, jr.UNIT_RUN, jr.UNIT_RUN]))
+
+    def test_a_tests_bar_has_no_cells_in_flight(self):
+        b = self.board(None, kind="tests", total=4)
+        self.start(b, "a", "b")
+        self.assertEqual(bytes(b.rows["s"].unit_view()), bytes(4))
+
+    def test_a_finished_file_bar_has_no_cells_in_flight(self):
+        b = self.board(None, total=2)
+        self.start(b, "a")
+        b.apply("step_end", dict(id="s", status="fail", ms=1, exit=1, summary=None, totals=None))
+        self.assertEqual(bytes(b.rows["s"].unit_view()), bytes(2))
 
 
 class LiveTest(unittest.TestCase):

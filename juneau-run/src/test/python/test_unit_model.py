@@ -146,12 +146,17 @@ class UnitModelTest(unittest.TestCase):
                                       "totals": None})
         self.assertEqual((self.row.units["f"].status, self.row.failed_units), ("ok", []))
 
-    def feed_playwright(self, lines):
-        """The unit events a PlaywrightParser makes of lines, then of its finish(1), applied to the board."""
+    def feed_playwright(self, lines, cells=False):
+        """The unit events a PlaywrightParser makes of lines, then of its finish(1), applied to the board; with cells
+        its bar events too."""
         parser = jr.PlaywrightParser()
         parser.step_id = "s"
         for ev in [e for line in lines for e in parser.on_line(line)] + parser.finish(1):
-            if ev[0] == "unit_start":
+            if cells and ev[0] == "units":
+                self.board.apply("units", {"step": "s", "total": ev[2], "kind": ev[3]})
+            elif cells and ev[0] == "unit":
+                self.apply("unit", done=ev[2], outcome=ev[3])
+            elif ev[0] == "unit_start":
                 self.apply("unit_start", id=ev[1], title=ev[2], src=ev[3])
             elif ev[0] == "unit_dot":
                 self.apply("unit_dot", id=ev[1], outcome=ev[2])
@@ -170,6 +175,14 @@ class UnitModelTest(unittest.TestCase):
         self.assertEqual(self.row.failed_units, ["a.ts"])
         self.assertEqual(self.row.status, "fail")
         self.assertEqual(jr.row_text(self.row, jr.PLAIN_GLYPHS, self.clock())[2], "4 tests, 1 failed: a.ts")
+
+    def test_an_interrupted_playwright_run_keeps_a_pending_cell_for_each_open_file(self):
+        lines = ['##playwright {"ev":"hello","v":1}', '##playwright {"ev":"begin","f":{"a.ts":1,"b.ts":3}}',
+                 '##playwright {"ev":"test","f":"a.ts","o":"pass"}', '##playwright {"ev":"test","f":"b.ts","o":"pass"}']
+        self.feed_playwright(lines, cells=True)
+        self.assertEqual((self.row.unit_kind, self.row.units_total, self.row.units_done), ("files", 2, 1))
+        self.assertEqual(bytes(self.row.unit_cells), bytes([jr.UNIT_PASS, 0]))      # b.ts never finished: pending
+        self.assertEqual(self.row.units["b.ts"].status, "ok")                         # its line closed all the same
 
     def test_a_playwright_test_whose_retry_never_ran_names_its_file(self):
         # --max-failures stopped the run with a.ts's retry queued: the reporter's onEnd sends its outcome so far

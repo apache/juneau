@@ -144,7 +144,11 @@ class Terminal:
 
     def close(self):
         if self.proc.poll() is None:
-            os.killpg(self.proc.pid, signal.SIGKILL)
+            # The group can exit between the poll and the kill; macOS then raises EPERM rather than ESRCH.
+            try:
+                os.killpg(self.proc.pid, signal.SIGKILL)
+            except (ProcessLookupError, PermissionError):
+                pass
         self.proc.wait()
         os.close(self.master)
 

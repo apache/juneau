@@ -68,6 +68,17 @@ class BoardUnitsTest(unittest.TestCase):
         self.b.apply("unit", dict(step="s", done=3, outcome=None))
         self.assertEqual(list(self.b.rows["s"].unit_cells), [1, 1, 1, 0])
 
+    def test_units_take_the_estimate_of_their_kind(self):
+        est = jr.Estimate(wall_s=100.0, units=32, rate=3.125, runs=3, tests=32, kinds={"files": (8, 12.5)})
+        b = jr.Board("actionable", nested=False, full_log=None, clock=lambda: 100.0,
+                     estimator=lambda step, tool, sig=None: est)
+        b.apply("step_start", dict(id="s", n=1, title="Playwright", parent=None, tool="playwright"))
+        self.assertEqual(b.rows["s"].estimate, est)           # every kind's figures until the bar says its kind
+        b.apply("units", dict(step="s", total=8, kind="files"))
+        self.assertEqual((b.rows["s"].estimate.units, b.rows["s"].estimate.rate), (8, 12.5))
+        b.apply("units", dict(step="s", total=9, kind="files"))    # a resend: the same kind, the same figures
+        self.assertEqual((b.rows["s"].estimate.units, b.rows["s"].estimate.rate), (8, 12.5))
+
     def test_resend_grows_the_cells(self):
         self.b.apply("units", dict(step="s", total=2, kind="tests"))
         self.b.apply("unit", dict(step="s", done=2, outcome="pass"))

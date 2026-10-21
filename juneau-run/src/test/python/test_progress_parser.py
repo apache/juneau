@@ -261,5 +261,38 @@ class FileGrainTest(unittest.TestCase):
         self.assertEqual(units(events)[0], ("units", "p", 6, "tests"))
 
 
+class BarTestsTest(unittest.TestCase):
+    """bar="tests" on pytest: one cell per test even when the plugin's total marker carries per-file counts."""
+
+    def parser(self):
+        p = new_parser()
+        p.bar = "tests"
+        return p
+
+    def test_a_file_map_still_announces_and_counts_tests(self):
+        events = ev(self.parser(), ['##pytest {"ev":"hello","v":1}', total_mark({"a.py": 2, "b.py": 1}),
+                                    test_mark("passed", "a.py::t1"), test_mark("failed", "b.py::t1"),
+                                    test_mark("passed", "a.py::t2")])
+        self.assertEqual(units(events), [("units", "p", 3, "tests"), ("unit", "p", 1, "pass"), ("unit", "p", 2, "fail"),
+                                         ("unit", "p", 3, "pass")])
+
+    def test_each_file_line_still_closes_with_its_last_test(self):
+        events = ev(self.parser(), [total_mark({"a.py": 2, "b.py": 1}), test_mark("passed", "a.py::t1"),
+                                    test_mark("passed", "b.py::t1"), test_mark("failed", "a.py::t2")])
+        ends = [e for e in unit_events(events) if e[0] == "unit_end"]
+        self.assertEqual(ends, [("unit_end", "b.py", "ok", "file"), ("unit_end", "a.py", "fail", "file")])
+
+    def test_a_late_error_corrects_its_tests_cell(self):
+        events = ev(self.parser(), [total_mark({"a.py": 2}), test_mark("passed", "a.py::t1"),
+                                    test_mark("passed", "a.py::t2"), test_mark("error", "a.py::t1", late=True)])
+        self.assertIn(("unit_fix", "p", 0, "fail"), events)
+
+    def test_bar_files_without_a_file_map_falls_back_to_tests(self):
+        p = new_parser()
+        p.bar = "files"
+        events = ev(p, ['##pytest {"ev":"total","n":3}', test_mark("passed", "a.py::t1")])
+        self.assertEqual(units(events), [("units", "p", 3, "tests"), ("unit", "p", 1, "pass")])
+
+
 if __name__ == "__main__":
     unittest.main()

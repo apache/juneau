@@ -79,14 +79,43 @@ class MavenParserTest(unittest.TestCase):
         self.assertEqual(kinds(ok, "unit"), [("unit", "mvn", 1, "pass")])
         self.assertEqual(kinds(failed, "unit"), [])           # a failed build leaves its module uncounted
 
+    def test_one_project_of_a_multi_module_tree_is_resized_to_one_and_counted_at_finish(self):
+        from test_history import PL_MODULE_LOG
+        with tempfile.TemporaryDirectory() as tmp:
+            write_demo_tree(Path(tmp), packaging="pom")
+            parser = jr.MavenParser()
+            parser.step_id = "mvn"
+            parser.prepare(["mvn", "verify", "-pl", "mod-b"], None, tmp)
+            ok = feed(parser, PL_MODULE_LOG)
+            parser = jr.MavenParser()
+            parser.step_id = "mvn"
+            parser.prepare(["mvn", "verify", "-pl", "mod-b"], None, tmp)
+            failed = feed(parser, PL_MODULE_LOG.replace("BUILD SUCCESS", "BUILD FAILURE"), exit_code=1)
+        self.assertEqual(kinds(ok, "reactor")[0][1], 4)           # sized from the pom tree
+        self.assertEqual(kinds(ok, "units"), [("units", "mvn", 1, "modules")])
+        self.assertEqual(kinds(ok, "unit"), [("unit", "mvn", 1, "pass")])
+        self.assertEqual(kinds(failed, "units") + kinds(failed, "unit"), [])    # a failed build is left as it was
+
+    def test_a_multi_module_tree_needs_a_single_project_building_line_to_be_counted_as_one(self):
+        from test_history import QUIET_LOG
+        jar = "[INFO] Building jar: /tmp/mod-a/target/mod-a-1.0.jar\n"     # the jar plugin's line, not a project's
+        for text in (QUIET_LOG, QUIET_LOG + jar):
+            with tempfile.TemporaryDirectory() as tmp:
+                write_demo_tree(Path(tmp), packaging="pom")
+                parser = jr.MavenParser()
+                parser.step_id = "mvn"
+                parser.prepare(["mvn", "-q", "verify"], None, tmp)
+                events = feed(parser, text)
+            self.assertEqual(kinds(events, "units") + kinds(events, "unit"), [], text)
+
     def test_a_multi_module_build_is_counted_by_its_modules_alone(self):
         for fixture, args in (("maven-serial-success.log", ("test",)), ("maven-parallel-success.log", ("test", "-T", "2"))):
             with tempfile.TemporaryDirectory() as tmp:
                 write_demo_tree(Path(tmp))
                 _, events = maven(fixture, args, cwd=tmp)
-            self.assertEqual(kinds(events, "unit"), [], fixture)
+            self.assertEqual(kinds(events, "units") + kinds(events, "unit"), [], fixture)
         _, events = maven("maven-serial-success.log")              # no pom tree: no reactor, nothing to count
-        self.assertEqual(kinds(events, "unit"), [])
+        self.assertEqual(kinds(events, "units") + kinds(events, "unit"), [])
 
     def test_titles_and_reactor_index(self):
         _, events = maven("maven-serial-success.log")
@@ -990,16 +1019,126 @@ class PlaywrightParserTest(unittest.TestCase):
                                   ("unit_end", "a.spec.ts", "fail", "file"), ("unit_dot", "b.spec.ts", "skip"),
                                   ("unit_end", "b.spec.ts", "ok", "file")])
 
-    def test_the_bar_counts_from_markers_once_the_reporter_says_hello(self):
+    def test_the_bar_counts_files_from_markers_once_the_reporter_says_hello(self):
         p = self.parser()
         self.assertEqual(p.on_line(self.marker("hello", v=1)), [])
-        self.assertEqual(p.on_line(self.marker("begin", f={"a.ts": 2, "b.ts": 1})), [("units", "pw", 3, "tests")])
+        self.assertEqual(p.on_line(self.marker("begin", f={"a.ts": 2, "b.ts": 1})), [("units", "pw", 2, "files")])
         self.assertEqual(p.on_line("[1/3] a.ts:3:1 › passes"), [])      # the line reporter's count is ignored
+        events = p.on_line(self.marker("test", f="a.ts", o="fail"))    # a.ts has a test to go: no cell yet
+        self.assertEqual((kinds(events, "unit"), kinds(events, "tests")), ([], [("tests", "pw", 1, 1, 0, 0)]))
+        self.assertEqual(p.on_line(self.marker("test", f="b.ts", o="skip"))[:2],
+                         [("unit", "pw", 1, "skip"), ("tests", "pw", 2, 1, 0, 1)])
+        self.assertEqual(p.on_line(self.marker("test", f="a.ts", o="pass"))[:2],
+                         [("unit", "pw", 2, "fail"), ("tests", "pw", 3, 1, 0, 1)])
+        self.assertEqual(kinds(p.on_line("  1 failed"), "tests"), [("tests", "pw", 1, 1, 0, 0)])  # the summary still wins
+
+    def test_bar_tests_counts_one_cell_per_test(self):
+        p = self.parser()
+        p.bar = "tests"
+        self.assertEqual(p.on_line(self.marker("hello", v=1)), [])
+        self.assertEqual(p.on_line(self.marker("begin", f={"a.ts": 2, "b.ts": 1})), [("units", "pw", 3, "tests")])
         self.assertEqual(p.on_line(self.marker("test", f="a.ts", o="fail"))[:2],
                          [("unit", "pw", 1, "fail"), ("tests", "pw", 1, 1, 0, 0)])
         self.assertEqual(p.on_line(self.marker("test", f="b.ts", o="skip"))[:2],
                          [("unit", "pw", 2, "skip"), ("tests", "pw", 2, 1, 0, 1)])
-        self.assertEqual(kinds(p.on_line("  1 failed"), "tests"), [("tests", "pw", 1, 1, 0, 0)])  # the summary still wins
+        events = p.on_line(self.marker("test", f="a.ts", o="pass"))
+        self.assertEqual(kinds(events, "unit"), [("unit", "pw", 3, "pass")])
+        self.assertIn(("unit_end", "a.ts", "fail", "file"), events)      # the file's line still closes with its last test
+
+    def file_cells(self, begin, tests):
+        """The unit events of a reporter run: hello, begin, then a test marker per (file, outcome)."""
+        p = self.parser()
+        lines = [self.marker("hello", v=1), self.marker("begin", f=begin)]
+        lines += [self.marker("test", f=f, o=o) for f, o in tests]
+        return [e for line in lines for e in p.on_line(line) if e[0] in ("units", "unit")]
+
+    def test_a_file_cell_fails_with_any_failure_skips_only_when_all_skipped_and_else_passes(self):
+        events = self.file_cells({"a.ts": 2, "b.ts": 2, "c.ts": 2},
+                                 [("a.ts", "pass"), ("a.ts", "fail"), ("b.ts", "skip"), ("b.ts", "skip"),
+                                  ("c.ts", "skip"), ("c.ts", "pass")])
+        self.assertEqual(events, [("units", "pw", 3, "files"), ("unit", "pw", 1, "fail"), ("unit", "pw", 2, "skip"),
+                                  ("unit", "pw", 3, "pass")])
+
+    def test_a_flaky_test_is_one_pass_result_and_passes_its_file(self):
+        # the reporter sends one test marker per test, with its final outcome: a retry that passed is "pass"
+        self.assertEqual(self.file_cells({"a.ts": 1}, [("a.ts", "pass")])[1:], [("unit", "pw", 1, "pass")])
+
+    def test_files_take_cells_in_the_order_they_finish(self):
+        events = self.file_cells({"a.ts": 2, "b.ts": 1}, [("a.ts", "fail"), ("b.ts", "pass"), ("a.ts", "pass")])
+        self.assertEqual(events[1:], [("unit", "pw", 1, "pass"), ("unit", "pw", 2, "fail")])
+
+    def test_a_file_cell_is_added_once_however_many_results_its_file_gets(self):
+        # results past the count begin gave the file (a repeated or late marker) add nothing: its cell is in
+        events = self.file_cells({"a.ts": 1}, [("a.ts", "pass"), ("a.ts", "fail")])
+        self.assertEqual(events[1:], [("unit", "pw", 1, "pass")])
+
+    def test_a_test_whose_file_is_not_in_begin_gets_no_cell(self):
+        events = self.file_cells({"a.ts": 1}, [("b.ts", "pass"), ("a.ts", "pass")])
+        self.assertEqual(events[1:], [("unit", "pw", 1, "pass")])
+
+    def test_a_second_begin_resends_the_units_only_when_the_file_count_changes(self):
+        p = self.parser()
+        for line in (self.marker("hello", v=1), self.marker("begin", f={"a.ts": 1})):
+            p.on_line(line)
+        self.assertEqual(p.on_line(self.marker("begin", f={"b.ts": 3})), [])
+        self.assertEqual(p.on_line(self.marker("begin", f={"b.ts": 3, "c.ts": 1})), [("units", "pw", 2, "files")])
+
+    def test_a_second_begin_with_the_same_files_adds_no_cells(self):
+        p = self.parser()
+        for line in (self.marker("hello", v=1), self.marker("begin", f={"a.ts": 1, "b.ts": 1})):
+            p.on_line(line)
+        self.assertEqual(kinds(p.on_line(self.marker("test", f="a.ts", o="pass")), "unit"), [("unit", "pw", 1, "pass")])
+        self.assertEqual(p.on_line(self.marker("begin", f={"a.ts": 1, "b.ts": 1})), [])
+        self.assertEqual(kinds(p.on_line(self.marker("test", f="a.ts", o="pass")), "unit"), [])
+        self.assertEqual(kinds(p.on_line(self.marker("test", f="b.ts", o="pass")), "unit"), [("unit", "pw", 2, "pass")])
+
+    def test_a_file_with_no_tests_in_begin_gets_no_cell(self):
+        events = self.file_cells({"a.ts": 1, "b.ts": 0}, [("a.ts", "pass")])
+        self.assertEqual(events, [("units", "pw", 1, "files"), ("unit", "pw", 1, "pass")])
+
+    def test_a_clean_run_ends_the_cells_of_files_that_never_reported_as_skips(self):
+        p = self.parser()
+        for line in (self.marker("hello", v=1), self.marker("begin", f={"a.ts": 1, "b.ts": 2, "c.ts": 1}),
+                     self.marker("test", f="a.ts", o="pass"), self.marker("test", f="b.ts", o="pass")):
+            p.on_line(line)
+        events = p.finish(0)
+        self.assertEqual(kinds(events, "unit"), [("unit", "pw", 2, "skip"), ("unit", "pw", 3, "skip")])
+        self.assertEqual(kinds(events, "unit_end"), [("unit_end", "b.ts", "ok", "file")])
+
+    def test_a_failed_run_leaves_the_cells_of_files_that_never_reported_pending(self):
+        p = self.parser()
+        for line in (self.marker("hello", v=1), self.marker("begin", f={"a.ts": 1, "c.ts": 1}),
+                     self.marker("test", f="a.ts", o="pass")):
+            p.on_line(line)
+        self.assertEqual(kinds(p.finish(1), "unit"), [])
+
+    def test_bar_tests_adds_no_cells_at_the_end_of_a_clean_run(self):
+        p = self.parser()
+        p.bar = "tests"
+        for line in (self.marker("hello", v=1), self.marker("begin", f={"a.ts": 1, "c.ts": 1}),
+                     self.marker("test", f="a.ts", o="pass")):
+            p.on_line(line)
+        self.assertEqual(kinds(p.finish(0), "unit"), [])
+
+    def test_hello_without_a_usable_begin_counts_one_cell_per_test(self):
+        for begin in ([], {}, {"a.ts": 0}, None):
+            with self.subTest(begin=begin):
+                p = self.parser()
+                lines = [self.marker("hello", v=1)] + ([] if begin is None else [self.marker("begin", f=begin)])
+                self.assertEqual([e for line in lines for e in p.on_line(line)], [])
+                self.assertEqual(kinds(p.on_line(self.marker("test", f="a.ts", o="pass")), "unit"),
+                                 [("unit", "pw", 1, "pass")])
+                self.assertEqual(kinds(p.on_line(self.marker("test", f="b.ts", o="fail")), "unit"),
+                                 [("unit", "pw", 2, "fail")])
+                self.assertEqual(kinds(p.finish(0), "unit"), [])
+
+    def test_an_interrupted_run_closes_its_open_files_and_adds_no_cell_for_them(self):
+        p = self.parser()
+        for line in (self.marker("hello", v=1), self.marker("begin", f={"a.ts": 1, "b.ts": 3}),
+                     self.marker("test", f="a.ts", o="pass"), self.marker("test", f="b.ts", o="pass")):
+            p.on_line(line)
+        events = p.finish(1)
+        self.assertEqual((kinds(events, "unit"), kinds(events, "unit_end")), ([], [("unit_end", "b.ts", "ok", "file")]))
 
     def test_a_test_line_after_the_summary_moves_the_bar_but_leaves_the_summary_counts(self):
         # the reporter's onEnd sends a test whose retry never ran after Playwright printed its summary
@@ -1017,12 +1156,13 @@ class PlaywrightParserTest(unittest.TestCase):
                  self.marker("test", f="a.ts", o="pass")]
         events = [e for line in lines for e in p.on_line(line)]
         self.assertEqual(kinds(events, "unit"), [("unit", "pw", 1, "pass")])
-        self.assertEqual(kinds(events, "units"), [("units", "pw", 1, "tests")])
+        self.assertEqual(kinds(events, "units"), [("units", "pw", 1, "files")])
 
     def test_a_test_with_no_file_still_counts(self):
         p = self.parser()
         for line in (self.marker("hello", v=1), self.marker("begin", f={"": 1})):
             p.on_line(line)
+        # its file "" gets a cell like any other, and no line
         self.assertEqual(p.on_line(self.marker("test", f="", o="pass")), [("unit", "pw", 1, "pass"), ("tests", "pw", 1, 0, 0, 0)])
 
     def test_a_run_whose_reporter_never_said_hello_says_so_once(self):
