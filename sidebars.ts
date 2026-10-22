@@ -2418,6 +2418,11 @@ const sidebars: SidebarsConfig = {
 							},
 						},
 						{
+							type: 'doc',
+							id: 'topics/22.JuneauRun',
+							label: '22. juneau-run',
+						},
+						{
 							type: 'category',
 							label: '23. juneau-shaded',
 							collapsed: true,

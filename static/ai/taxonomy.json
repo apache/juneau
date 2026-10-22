@@ -73,6 +73,7 @@
     "JuneauExamples": 1,
     "JuneauMicroserviceTomcat": 1,
     "JuneauRest": 1,
+    "JuneauRun": 1,
     "StarterProjects": 1,
     "V10MigrationGuide": 1,
     "V9MigrationGuide": 1,
@@ -83,6 +84,6 @@
   "source_types": {
     "api-metadata": 16,
     "release-note": 84,
-    "topic": 466
+    "topic": 467
   }
 }

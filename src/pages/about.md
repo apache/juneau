@@ -32,6 +32,8 @@ The Juneau ecosystem consists of the following parts. A few rows are **grouped f
 |-----------|-------------|
 | **juneau-core** | |
 | [juneau-commons](/docs/topics/JuneauCommons) | Bean metadata framework, SVL string-variable resolution, and shared utilities (I/O, reflection, HTTP, collections) used across Juneau modules. |
+| [juneau-beanquery-sql](/docs/topics/JuneauCommonsBeanQuery#sql-dialects) | Dialect-agnostic JDBC `BeanQuery` context that runs bean queries against a SQL database. |
+| [juneau-beanquery-postgres](/docs/topics/JuneauCommonsBeanQuery#postgresdialect-behaviour) | PostgreSQL dialect for juneau-beanquery-sql above. |
 | [juneau-marshall](/docs/topics/JuneauMarshall) | POJO marshalling for 26+ wire formats — JSON/JSON5/JSONL/JSON5L/JCS, XML/SOAP, HTML, YAML/TOML/HOCON/HJSON/INI, CBOR/BSON/MessagePack, Protobuf/Prototext, UON/URL-encoding, CSV, Parquet, Markdown, SSE, OpenAPI, and PlainText — plus a token-streaming API; no external dependencies required. |
 | [juneau-marshall-rdf](/docs/topics/JuneauMarshallRdf) | Extended marshalling support for 12 RDF variants — RDF/XML, RDF/XML-Abbrev, N3, N-Triple, N-Quads, Turtle, TriG, TriX, JSON-LD, RDF/JSON, RDF/Proto, and RDF/Thrift (requires Apache Jena). |
 | [juneau-config](/docs/topics/JuneauConfig) | Multi-format (INI and YAML) configuration file API with POJO support, variable resolution, and real-time file watching. |
@@ -67,6 +69,16 @@ The Juneau ecosystem consists of the following parts. A few rows are **grouped f
 | [juneau-rest-server-tracing-otel](/docs/topics/RestServerOtelTracing) | OpenTelemetry tracing integration for REST server. |
 | [juneau-rest-server-management-logging](/docs/topics/RestServerManagementLogging) | Management and logging surface — dynamic log-level control, log tail, and audit logging. |
 | [juneau-rest-server-datatables](/docs/topics/Converters#datatables-server-side-processing) | DataTables server-side-processing query protocol adapter (opt-in). |
+| [juneau-rest-server-views](/docs/topics/RichTableViews) | Rich table-view toolkit: declarative view definitions plus the browser runtime that renders them (opt-in). |
+| [juneau-rest-server-views-markdown](/docs/topics/MarkdownViewRendering) | Optional Markdown-to-HTML rendering for juneau-rest-server-views, with a pluggable parser SPI and a commonmark-java default. |
+| [juneau-rest-server-widgets](/docs/topics/DeclarativeWidgets) | Reusable widget primitives (`ActionBar` and the shared widget contract) used by the views and console modules. |
+| [juneau-rest-server-console-ui](/docs/topics/AdminConsoleChrome) | Themeable, engine-agnostic admin-console chrome — themes, tags, `chrome.css`, and the console chrome mixin (opt-in). |
+| [juneau-rest-server-console-ui-freemarker](/docs/topics/AdminConsoleChrome#freemarker-directive-reference) | FreeMarker delivery for juneau-rest-server-console-ui above — base template, `<@tag>` macro, and shared page and card directives. |
+| [juneau-run-report](/docs/topics/RunViewRegion) | Run-view events and test-report readers (Surefire and JUnit XML, Jest JSON, Playwright JSON); no dependency on the REST server. |
+| [juneau-rest-server-terminal](/docs/topics/TerminalRegion) | Terminal region: a command's raw output rendered by xterm.js, fed by a byte-offset endpoint (opt-in). |
+| [juneau-rest-server-terminal-bus](/docs/topics/TerminalRegion#input) | Bridge that connects terminal input to the server message bus (opt-in). |
+| [juneau-rest-server-bus](/docs/topics/TerminalRegion#bus-nudges) | Server half of the console message bus — `ServerBus`, `BusPolicy`, and the session POST and SSE stream (opt-in). |
+| [juneau-rest-server-bus-websocket](/docs/topics/TerminalRegion#wiring) | Jakarta WebSocket transport for juneau-rest-server-bus above; the servlet container supplies the WebSocket implementation. |
 | [juneau-rest-server-rdf](/docs/topics/RestServerRdf) | Predefined REST resource config adding RDF (Jena) marshalling support. |
 | [juneau-rest-server-reactive](/docs/topics/RestServerReactive) | Reactive (Project Reactor / RxJava) endpoint support. |
 | [juneau-rest-server-reactive-reactor](/docs/topics/RestServerReactive) | Project Reactor / RxJava 3 / Reactive-Streams `Publisher` adapters layered on juneau-rest-server-reactive. |
@@ -93,6 +105,8 @@ The Juneau ecosystem consists of the following parts. A few rows are **grouped f
 | [juneau-sc-server](/docs/topics/ScServerOverview) | Centralized configuration server exposing juneau-config files over REST. |
 | **juneau-secret-macos-keychain** | |
 | [juneau-secret-macos-keychain](/docs/topics/JuneauCommonsSettings#os-keychain-backed-store) | Opt-in module providing a macOS `security`-CLI-backed `KeychainSecretStore` implementation of the `SecretStore` SPI. |
+| **juneau-run** | |
+| [juneau-run](/docs/topics/JuneauRun) | Build tooling: the `juneau_run.py` wrapper that adds run markers and condensed output to Maven, pytest, Playwright, Gradle, and npm runs. Attached as `.py` and `.zip` artifacts; not a library dependency. |
 | **juneau-shaded** | |
 | [juneau-shaded-core](/docs/topics/JuneauShadedCore) | Shaded uber-jar of the juneau-core modules for zero-conflict dependency management. |
 | [juneau-shaded-rest-client](/docs/topics/JuneauShadedRestClient) | Shaded uber-jar of juneau-rest-client and its dependencies. |

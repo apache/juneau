@@ -32,7 +32,8 @@ Steps performed:
 Usage:
     python3 scripts/build-docs.py [--skip-npm] [--skip-maven] [--skip-copy]
                                   [--skip-verify] [--staging] [--dry-run] [--verbose]
-    
+                                  [--juneau-root DIR]
+
 Options:
     --skip-npm      Skip npm install and Docusaurus build
     --skip-maven    Skip Maven compilation and site generation
@@ -41,6 +42,8 @@ Options:
     --staging       Build for staging (sets SITE_URL to juneau.staged.apache.org)
     --dry-run       Print the commands that would run; perform no work
     --verbose       Print full per-stage banner output (default: one line per stage)
+    --juneau-root   Juneau source checkout to build against (default: $JUNEAU_ROOT, then
+                    sibling ../master, then sibling ../juneau)
 """
 
 import argparse
@@ -53,47 +56,56 @@ from datetime import datetime
 from pathlib import Path
 
 
-def find_master_branch_sibling(script_dir, allow_missing=False):
+def find_juneau_root(script_dir, juneau_root_arg=None, allow_missing=False):
     """
-    Find the master branch sibling folder.
+    Resolve the Juneau source checkout that the build runs against.
 
-    The docs branch and master branch should be sibling folders:
-    - /git/apache/juneau/docs/
-    - /git/apache/juneau/master/
+    Order: --juneau-root, then the JUNEAU_ROOT environment variable, then the legacy
+    sibling layout (../master next to the docs folder), then ../juneau next to the
+    docs folder (the same fallbacks check-topic-links.py uses).
 
     Args:
         script_dir: Path to the scripts directory (should be in docs/scripts)
-        allow_missing: If True (e.g. during --dry-run), return the expected path
-            even when it doesn't exist instead of aborting.
+        juneau_root_arg: Path from --juneau-root, or None
+        allow_missing: If True (e.g. during --dry-run or --skip-maven), return the
+            expected ../master path when no sibling checkout is found instead of
+            aborting. An explicit --juneau-root / JUNEAU_ROOT is still validated
+            unless this is a dry run.
 
     Returns:
-        Path to the master branch folder
+        Path to the Juneau source checkout
 
     Raises:
-        SystemExit: If the master branch sibling folder doesn't exist and
-            allow_missing is False.
+        SystemExit: If no valid checkout can be found and allow_missing is False,
+            or an explicit path is not a Juneau checkout.
     """
-    # Get the parent of the docs folder (should be /git/apache/juneau/)
     docs_dir = script_dir.parent  # docs/
-    parent_dir = docs_dir.parent  # /git/apache/juneau/
-    master_dir = parent_dir / 'master'
+    parent_dir = docs_dir.parent  # /git/apache/
+
+    explicit, source = juneau_root_arg, '--juneau-root'
+    if explicit is None and os.environ.get('JUNEAU_ROOT'):
+        explicit, source = Path(os.environ['JUNEAU_ROOT']).expanduser(), 'JUNEAU_ROOT'
+    if explicit is not None:
+        juneau_root = Path(explicit).resolve()
+        if not DRY_RUN and not (juneau_root / 'pom.xml').is_file():
+            print(f"ERROR: {source} {juneau_root} is not a Juneau checkout (no pom.xml)")
+            sys.exit(1)
+        return juneau_root
+
+    candidates = [parent_dir / 'master', parent_dir / 'juneau']
+    for candidate in candidates:
+        if candidate.is_dir() and (candidate / '.git').exists():
+            return candidate
 
     if allow_missing:
-        return master_dir
+        return candidates[0]
 
-    if not master_dir.exists():
-        print(f"ERROR: Master branch sibling folder not found at {master_dir}")
-        print(f"Expected structure:")
-        print(f"  {parent_dir}/docs/  (current)")
-        print(f"  {parent_dir}/master/  (missing)")
-        print("\nPlease ensure the master branch is cloned as a sibling folder.")
-        sys.exit(1)
-    
-    if not (master_dir / '.git').exists():
-        print(f"ERROR: {master_dir} exists but is not a git repository")
-        sys.exit(1)
-    
-    return master_dir
+    print("ERROR: Could not locate the Juneau source checkout.")
+    print("Looked for:")
+    for candidate in candidates:
+        print(f"  {candidate}")
+    print("\nPass --juneau-root /path/to/juneau (or set JUNEAU_ROOT) to specify it explicitly.")
+    sys.exit(1)
 
 # Module-level toggle flipped from main() so every run_command/stage_banner sees the choice.
 DRY_RUN = False
@@ -563,7 +575,7 @@ def check_topic_links(master_root, docs_dir):
     
     # The checker script needs both master_root and docs_dir
     # It will scan master_root for links and docs_dir for topics
-    run_command(['python3', str(checker_script)], cwd=docs_dir)
+    run_command(['python3', str(checker_script), '--juneau-root', str(master_root)], cwd=docs_dir)
 
 def verify_docs_integrity(docs_dir):
     """Run the documentation-integrity checker (verify-docs.py).
@@ -583,7 +595,7 @@ def verify_docs_integrity(docs_dir):
     # CalledProcessError and fails the build in main()'s handler.
     run_command(['python3', str(checker_script)], cwd=docs_dir)
 
-def check_ai_artifacts(docs_dir):
+def check_ai_artifacts(master_root, docs_dir):
     """Run AI artifact drift checks."""
     stage_banner("Checking AI artifacts")
     script_dir = Path(__file__).parent
@@ -591,7 +603,7 @@ def check_ai_artifacts(docs_dir):
     if not checker_script.exists():
         print(f"WARNING: AI artifact checker not found at {checker_script}")
         return
-    run_command(['python3', str(checker_script)], cwd=docs_dir)
+    run_command(['python3', str(checker_script), '--juneau-root', str(master_root)], cwd=docs_dir)
 
 def main():
     global DRY_RUN, VERBOSE
@@ -604,19 +616,21 @@ def main():
     parser.add_argument('--staging', action='store_true', help='Build for staging (sets SITE_URL to juneau.staged.apache.org)')
     parser.add_argument('--dry-run', action='store_true', help='Print every command/copy that would run; perform no work')
     parser.add_argument('--verbose', action='store_true', help='Print full per-stage banner output (default: one line per stage)')
+    parser.add_argument('--juneau-root', type=Path, default=None,
+                        help='Juneau source checkout to build against (default: $JUNEAU_ROOT, then sibling ../master, then ../juneau)')
 
     args = parser.parse_args()
     DRY_RUN = args.dry_run
     VERBOSE = args.verbose
 
-    # Determine script directory and find master branch sibling
+    # Determine script directory and find the Juneau source checkout
     script_dir = Path(__file__).parent.absolute()
     docs_dir = script_dir.parent  # docs/
-    # When --skip-maven is set, the master branch is not needed; treat it as allowed-missing
-    # so CI runners (which have no sibling master checkout) can still run the Docusaurus smoke.
-    master_root = find_master_branch_sibling(script_dir, allow_missing=DRY_RUN or args.skip_maven)
+    # When --skip-maven is set, the Juneau checkout is not needed; treat it as allowed-missing
+    # so CI runners (which have no sibling checkout) can still run the Docusaurus smoke.
+    master_root = find_juneau_root(script_dir, args.juneau_root, allow_missing=DRY_RUN or args.skip_maven)
     
-    print(f"Master branch root: {master_root}")
+    print(f"Juneau source root: {master_root}")
     print(f"Docs directory: {docs_dir}")
     if DRY_RUN:
         print("DRY-RUN: no commands will be executed")
@@ -745,7 +759,7 @@ def main():
         # where only the docs repo is checked out.
         if not args.skip_maven:
             check_topic_links(master_root, docs_dir)
-            check_ai_artifacts(docs_dir)
+            check_ai_artifacts(master_root, docs_dir)
 
         print("\n=== Documentation build complete ===")
         print(f"Documentation is available in: {docs_dir / 'build'}")
